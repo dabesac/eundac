@@ -1,0 +1,43 @@
+<form name="<?php echo $this->fm->getName(); ?>" action="<?php echo $this->fm->getAction(); ?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+
+<div class="datos-columna span6">
+
+   <div class="control-group">    
+            
+        
+            <label class='control-label'>NuevaClave</label>
+                <div class="controls"> 
+                     <?php echo $this->fm->ncla; ?>
+                </div>  
+    </div>
+                
+    <div class="control-group">    
+            <label class='control-label'>RepitaClave</label>
+                <div class="controls"> 
+                    <?php echo $this->fm->rcla; ?>
+                </div>
+    </div>                          
+
+    <div class="control-group">
+        <div class="controls"> 
+            <b><p class="text-error">
+            <?php echo $this->mensaje; ?>
+            </p></b>
+        </div>
+    </div>
+     
+
+    <div class="control-group">    
+            <label class='control-label'></label>
+                <div class="controls"> 
+                    <?php echo $this->fm->guardar; ?>
+                </div>
+    </div> 
+
+
+    
+    <div style="clear:both" ></div>
+</div>
+</div>
+
+    </form>

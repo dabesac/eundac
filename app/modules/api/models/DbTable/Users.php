@@ -64,4 +64,82 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 		}
 		
 	}
+
+	public function _getUserXRidXUid($where=null){
+        try{
+            if ($where['uid']=="" || $where['rid']=="" || $where['eid']=="" || $where['oid']=="" ) return false;
+			
+			$select = $this->_db->select()
+			->from(array('p' => 'base_person'),array('p.pid','p.typedoc','numdoc','p.last_name0','p.last_name1','p.first_name','p.birthday','p.photografy'))
+				->join(array('u' => 'base_users'),'u.eid= p.eid and u.pid=p.pid', 
+						array('u.uid','u.uid','u.escid','u.eid','u.oid','u.subid'))
+				->where('u.eid = ?', $where['eid'])
+				->where('u.oid = ?', $where['oid'])
+				->where('u.uid = ?', $where['uid'])
+				->where('u.rid = ?', $where['rid'])
+				->order('last_name0');
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;         
+        }  catch (Exception $ex){
+            print "Error: Obteniendo datos de un usuario deacuerdo a su codigo y a su rol".$ex->getMessage();
+        }
+    }
+
+    public function _getUserXUid($where=null){
+        try{
+            if ($where['uid']=="" || $where['eid']=="" || $where['oid']=="" ) return false;
+			
+			$select = $this->_db->select()
+			->from(array('p' => 'base_person'),array('p.pid','p.typedoc','numdoc','p.last_name0','p.last_name1','p.first_name','p.birthday','p.photografy'))
+				->join(array('u' => 'base_users'),'u.eid= p.eid and u.pid=p.pid', 
+						array('u.uid','u.uid','u.escid','u.eid','u.oid','u.subid'))
+				->where('u.eid = ?', $where['eid'])
+				->where('u.oid = ?', $where['oid'])
+				->where('u.uid = ?', $where['uid'])
+				->order('last_name0');
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;         
+        }  catch (Exception $ex){
+            print "Error: Obteniendo datos de un usuario deacuerdo a su codigo y a su rol".$ex->getMessage();
+        }
+    }
+  /*FALTA */
+     public function _getUsuarioXNombre($nom='',$rid='',$eid='',$oid=''){
+        try{
+            $sql=$this->_db->query("
+               select ape_pat || ' ' || ape_mat || ', ' || nombres as nombrecompleto
+               ,u.uid,u.rid,u.sedid,u.eid,u.oid,u.escid,u.pid,p.nombres,p.ape_pat,p.ape_mat,u.escid,u.categoria_doc,u.condision_doc,u.dedicasion_doc,u.estado from usuario as u
+               inner join persona as p
+               on u.pid=p.pid and u.eid=p.eid and u.oid=p.oid
+               where u.eid='$eid' and u.oid ='$oid' and u.rid='$rid' AND upper(ape_pat) || ' ' || upper(ape_mat) || ', ' || upper(nombres) like '%$nom%'
+               order by p.ape_pat,p.ape_mat,p.nombres
+            ");
+            $row=$sql->fetchAll();
+           return $row;  
+        }catch (Exception $ex) {
+            print "Error: Retornando los datos del alumno deacuerdo a una palabra ingresada".$ex->getMessage();
+        }
+    }
+    /*FALTA */
+    public function _getUsuarioXNombreXsinRol($nom='',$eid='',$oid=''){
+        try{
+            $sql=$this->_db->query("
+               select ape_pat || ' ' || ape_mat || ', ' || nombres as nombrecompleto
+               ,u.uid,u.rid,u.sedid,u.eid,u.oid,u.escid,u.pid,p.nombres,p.ape_pat,p.ape_mat,u.escid from usuario as u
+               inner join persona as p
+               on u.pid=p.pid and u.eid=p.eid and u.oid=p.oid 
+               where u.eid='$eid' and u.oid ='$oid' and (u.rid<>'AL' and u.rid<>'DC') and u.estado='A' and upper(ape_pat) || ' ' || upper(ape_mat) || ', ' || upper(nombres) like '%$nom%'
+               order by p.ape_pat,p.ape_mat,p.nombres
+            ");
+            $row=$sql->fetchAll();
+           return $row;  
+        }catch (Exception $ex) {
+            print "Error: Retornando los datos del alumno deacuerdo a una palabra ingresada".$ex->getMessage();
+        }
+    }
+
 }
