@@ -1,0 +1,42 @@
+<div>
+	<table class="table table-hover span10">
+		<tr>
+			<th colspan="4" style="font-size:15px"><center>GESTIÓN CURRÍCULA</center></th>
+		</tr>
+		<tr>
+			<th>Facultad:</th>
+			<td>
+				<select id="facid" class="form-control" style="width:280px">
+					<option value="">- Seleccione -</option>
+					<?php
+					if ($this->facultad) { 
+						foreach ($this->facultad as $facultad) { ?>
+							<option value="<?php echo $facultad['facid']?>"><?php echo $facultad['name']?></option>
+						<?php
+						}
+					}?>
+				</select>
+			</td>
+			<th>Escuela:</th>
+			<td>
+				<select id="escid" class="form-control" style="width:280px">
+					<option value="">- Seleccione -</option>
+				</select>
+			</td>
+		</tr>
+	</table>
+</div>
+<div id="curriculas"></div>
+
+<script type="text/javascript">
+$("#facid").change(function(){
+	var facid=$(this).val();
+	$("#escid").load("/rcentral/curricula/schools/facid/"+facid);
+});
+
+$("#escid").change(function(){
+	var escid=$(this).val();
+	var tmp=escid.split('--');
+	$("#curriculas").load("/rcentral/curricula/curriculas/escid/"+tmp[0]+"/subid/"+tmp[1]);
+});
+</script>

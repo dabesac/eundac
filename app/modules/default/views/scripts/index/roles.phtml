@@ -1,0 +1,14 @@
+<?php 
+$roles = $this->roles;
+if ($roles){
+	foreach ($roles as $key => $rol){
+		?>
+		<option value='<?php echo base64_encode($rol['rid'])?>'><?php echo $rol['name']?></option>	
+		<?php 
+	}
+}else {
+	?>
+	<option value=''>Ninguno</option>
+	<?php 
+}
+?>

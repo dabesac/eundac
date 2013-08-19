@@ -1,0 +1,77 @@
+<table class="table">
+	<tr>
+		<td class="span2">
+   		<img src="/img/circulo-verde.png"><b>ACTIVO</b>
+   	</td>
+  	<td class="span2">
+  		<img src="/img/circulo-rojo.png"><b>INACTIVO/CERRADO</b>
+  	</td>
+  	<td class="span2">
+  		<img src="/img/circulo-amarillo.png"><b>TEMPORAL</b>
+  	</td>
+  	<td class="span2">
+  		<img src="/img/circulo-azul.png"><b>BORRADOR</b>
+   	</td>
+   	<td style="text-align: right">
+			<a href="#"  class="btn btn-primary" onclick="javascript: window.open('/admin/periods/new/','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=600,height=600')"><i class="icon-pencil"></i>Nuevo</a>
+   	</td>   				
+	</tr>
+</table>
+<table class="table table-bordered table-striped table-condensed">
+  <tr>
+    <th class="span1"><center>#</center></th>
+    <th class="span1"><center>Cod. Periodo</center></th>
+    <th class="span1"><center>Nombre Periodo</center></th>
+    <th class="span1"><center>F. Inicio Clases</center></th>
+    <th class="span1"><center>F. Fin Clases</center></th>
+    <th class="span1"><center>Resoluciones</center></th>
+    <th class="span1"><center>Estado</center></th>
+    <th class="span1" colspan='2'><center>Operaciones</center></th>
+  </tr>
+  <?php
+    $r=0;
+    foreach ($this->data as $periods) {
+      $r++;
+      $perid=$periods['perid'];
+      $name=$periods['name'];
+      $start=$periods['class_start_date'];
+      $end=$periods['class_end_date'];
+      $document=$periods['document_auth'];
+      $state=$periods['state'];
+  ?>
+  <tr id="tr_<?php echo $perid.$r?>">
+    <td><center><?php echo $r?></center></td>
+    <td><center><?php echo $perid?></center></td>
+    <td><?php echo $name?></td>
+    <td><?php echo $start?></td>
+    <td><?php echo $end?></td>
+    <td><?php echo $document?></td>
+    <td>
+      <?php 
+        switch ($state) {
+          case 'A':?> <img src="/img/circulo-verde.png">
+          <?php
+          break;
+          case 'B':?> <img src="/img/circulo-azul.png">
+          <?php
+          break;
+          case 'C':?> <img src="/img/circulo-rojo.png">
+          <?php
+          break;
+          case 'I':?> <img src="/img/circulo-rojo.png">
+          <?php
+          break;
+          case 'T':?> <img src="/img/circulo-amarillo.png">
+          <?php            
+          break;
+        }
+      ?>
+    </td>
+    <td>
+      <a title='Modificar un registro' href='/soporte/periods/update/perid/<?php echo base64_encode($perid)?>'> <i class="icon-pencil"></i>modificar</a>
+    </td>
+  </tr>
+<?php
+}
+?>
+</table>

@@ -1,0 +1,135 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+  font-family: 'Abel', Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 20px;
+  background-color: #363637;
+  background-image:url(img/textura_02.jpg);
+  background-repeat:repeat-x;
+  color: #666;
+  padding:0px;
+  margin:0px;
+  -webkit-font-smoothing: antialiased;
+  
+}
+
+h3{font-weight: normal;}
+a{ color: #0044CC;
+	height:30px;
+	display:block;
+	font-size:14px;
+	text-decoration: none;
+ }
+.wrapper{
+	position: relative;
+	top: 110px;
+	margin:0 auto;
+	background: #e0e0e0;
+ 	width:830px;
+ 	height:380px;
+ 	border-radius: 5px;
+}
+
+.container-izquierda{
+	
+	float:left;
+	/*background-image:url(img/img3_05.png);
+	background-repeat:no-repeat;*/
+	width:50%;
+	height:100%;
+}
+.container-izquierda .logo{
+	margin:-2px 15px;
+    position: absolute;
+    z-index: 2;}
+
+  
+.container-derecha{
+	float: right;
+	width:50%;
+	height:100%;
+	border-radius: 5px;
+	text-align:center;
+	padding-top:10px;}
+
+.container-derecha p{
+	text-align: left;
+	width: 383px;
+	margin-left: 15px;
+}
+
+.datos{
+	padding-top:10px;
+	margin: 0 auto;
+	}
+
+.datos input[type='text']{
+	background: url("../img/icono1_03.gif") no-repeat scroll left #cdcccc;
+	
+    }
+
+.datos input[type='password']{
+	background:url("../img/icono2_03.gif") no-repeat scroll left #cdcccc;
+
+    }
+.datos input[type='submit']{
+  background:linear-gradient(to bottom, #0088CC, #0044CC);
+  background-color: #F07575; /* fallback color if gradients are not supported */
+  background-image: -webkit-linear-gradient(to bottom, #0088CC, #0044CC); /* For Chrome and Safari */
+  background-image:    -moz-linear-gradient(to bottom, #0088CC, #0044CC); /* For old Fx (3.6 to 15) */
+  background-image:     -ms-linear-gradient(to bottom, #0088CC, #0044CC); /* For pre-releases of IE 10*/
+  background-image:      -o-linear-gradient(to bottom, #0088CC, #0044CC); /* For old Opera (11.1 to 12.0) */ 
+	border-radius: 5px;
+	color: #fff;
+	
+
+}	
+
+.datos input[type='text'], .datos input[type='password'] {
+	display: block;
+	
+	padding:5px 20px;
+	margin-left: 22%;
+	border-radius: 5px;
+	
+}
+
+.datos select {
+	display: block;
+	margin-bottom: 10px;
+	padding: 5px 10px;
+	margin-left: 22%;
+	border-radius: 5px;
+	border: 1px solid #555;
+}
+
+.datos input[type='submit']{
+	width: 120px;
+	padding: 7px 9px;
+}
+.datos p a{
+	display: block;
+	text-align: center;
+	width: 390px;}
+
+/* Basic jQuery Slider essential styles */
+
+ul.bjqs{position:relative; list-style:none;padding:0;margin:0;overflow:hidden; display:none;}
+li.bjqs-slide{position:absolute; display:none;}
+ul.bjqs-controls{list-style:none;margin:0;padding:0;z-index:9999;}
+ul.bjqs-controls.v-centered li a{position:absolute;}
+ul.bjqs-controls.v-centered li.bjqs-next a{right:0; display: none;}/*modificado*/
+ul.bjqs-controls.v-centered li.bjqs-prev a{left:0; display: none;}/*modificado*/
+ol.bjqs-markers{list-style: none; padding: 0; margin: 0; width:100%;}
+ol.bjqs-markers.h-centered{text-align: center; display: none;}/*modificado*/
+ol.bjqs-markers li{display:inline;}
+ol.bjqs-markers li a{display:inline-block;}
+p.bjqs-caption{display:block;width:96%;margin:0;padding:2%;position:absolute;bottom:0;}
+
+.errors li{
+   color:red;
+   list-style: none;
+   font-size:10px;
+}

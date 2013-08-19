@@ -1,0 +1,85 @@
+<form name="<?php echo $this->form->getName(); ?>" id ="formFilDoc" action="/rfacultad/condition/getstudent/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+
+<table class="span 8">
+	<tr>
+		<td><b><center>Condición de Matricula | Periodo <?php echo $this->perid?></center></b></td>
+	</tr>
+	<tr>
+		<td>Escuela</td>
+		<td><select name="escid" id="escid">
+            <option value="">-Seleccione-</option>
+			<?php
+            	if ($this->getEsp){
+                foreach ($this->getEsp as $esp){?>
+                	<option value="<?php echo $esp['escid']?>"><?php echo $esp['name']?></option>
+            <?php }
+            }?>			
+		</select></td>
+	</tr>
+	 <tr>
+        <td>Codigo</td>
+        <td>Apellidos Paterno</td>
+        <td>Apellidos Materno</td>
+        <td>Nombres</td>
+    	<td>Condición</td>
+    </tr>
+    <tr> 
+        <td><?php echo $this->form->uid; ?></td>    
+        <td><?php echo $this->form->ap; ?></td>
+        <td><?php echo $this->form->am; ?></td>
+        <td><?php echo $this->form->name; ?></td>
+		<td><?php echo $this->form->cond; ?></td>    	            
+    </tr>
+
+</table>
+
+</form>
+
+
+
+
+<div style="width: 100%" class="float"></div>    
+
+<div style="width: 98%" id="cargadata_" class="float"></div>    
+<script>
+    $("#name, #ap, #am, #uid").keypress(function (e) {
+        
+        if(e == 13 || e.which==13 || e.which==0){
+            $('#cargadata_').html("<img src='/img/spinner.gif'> Cargando....");
+            $("#formFilDoc").submit();
+        }
+    });
+    
+    $("#formFilDoc").submit(function(){
+        $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(data) {                        
+            $('#cargadata_').html(data);                                 
+            }
+        }); 
+        return false;
+    });
+    
+        
+
+    $("#cond").change(function () {
+        $("#cond option:selected").each(function () {
+            condicion = $(this).val();
+
+            $('#cargadata_').html("<img src='/img/spinner.gif'> Cargando....");
+            $("#formFilDoc").submit();
+        });
+    });
+
+    $("#escid").change(function () {
+        $("#escid option:selected").each(function () {
+            escuela = $(this).val();
+            alert(escuela);           
+            $('#cargadatoa_').html("<img src='/img/spinner.gif'> Cargando....");
+            $("#formFilDoc").submit();
+
+        });
+    });
+</script>

@@ -1,0 +1,136 @@
+<?php 
+$sesion  = Zend_Auth::getInstance();
+if(!$sesion->hasIdentity() ){
+	echo "ingreso no permitido";
+	header ("Location: /");
+}
+// Set ACL for ROL
+$login = $sesion->getStorage()->read();
+
+switch ($login->infouser['typedoc']){
+	case "D": $typedoc = "DNI";break;	
+	case "P": $typedoc = "Pasaporte";break;
+	case "O": $typedoc = "Otros";break;
+}
+//print_r($login);
+$fullname= $login->infouser['fullname'];
+$numberdoc= $login->infouser['numdoc'];
+$speciality = $login->speciality->name;
+$code= $login->uid;
+?>
+
+<?php echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+    <head>
+        <?php echo $this->headMeta(); ?>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headLink(); ?>
+        <?php echo $this->headScript(); ?> 
+        <?php echo $this->headTitle(); ?>
+		
+   		<!-- JQuery UI-->
+   		<script src="/external/jquery/jquery-1.9.1.js"></script>
+   		<script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
+   		<script src="/external/jquery/external/globalize.js"></script>
+   		<script src="/external/jquery/external/jquery.mousewheel.js"></script>
+   		<script src="/external/jquery/external/jshint.js"></script>
+   		<script src="/external/jquery/external/qunit.js"></script>
+   		
+   		<link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
+   		
+   		
+   		<!-- Bootstrap -->
+   		<script src="/external/bootstrap/js/bootstrap.min.js"></script>
+   		<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+   		
+   		<!-- JS  -->
+   		
+   		
+   		<!-- CSS  Generic-->
+   		<link rel="stylesheet" type="text/css" href="/css/style.css">
+                    
+        
+   	
+    </head>
+ <body>
+<!--[if IE]>
+	<div class="mensaje">
+                Estas utilizando una version obsoleta del navegador Internet Explorer el sitema no se vera
+                correctamente. Actualiza o descarga un nuevo navegador como este <a href="https://www.google.com/chrome?hl=es">Google Chrome</a>.
+    </div>
+<?php //exit();?>
+<![endif]-->
+<div class="navbar bg">
+	<a class="navbar-brand " href="#" ><img src="/img/logo2_03.png"> Universidad Nacional Daniel Alcides Carrión</a>
+	<div class="nav-collapse collapse navbar-responsive-collapse">
+    	<ul class="nav navbar-nav pull-right">
+        	<li><a href="#"></a></li>
+  			<li class='dropdown'>
+	  			<div class="btn-group" style="margin-top: 10px;">
+					<button class="btn btn-info" style="padding-top: 5px;padding-bottom: 5px;">
+					<img src="img/img2_03.jpg" class="img-rounded">
+					MI PERFIL</button>
+				  	<button class="btn btn-info dropdown-toggle" data-toggle="dropdown" 
+				  		style="padding-top: 8px;padding-bottom: 10px;">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" >
+						<li><a href="/index/changepassword">Cambiar Contraseña</a></li>
+						<li><a href="#">Ver mi perfil</a></li>
+						<li><a href="#"></a></li>
+						<li class="divider"></li>
+						<li><a href="/index/salir">Salir</a></li>
+					</ul>
+					<a class="btn btn-danger" style="padding-top: 7px;padding-bottom: 6px;margin-left: 2px" 
+					href="/index/salir">SALIR <img src="img/salir-bto_03.png" class="img-rounded"></a>
+				</div>
+			</li>
+        	
+		</ul>
+	</div>
+</div>
+<div class='wrapper'>
+	<div class="row">
+    	<div id='menu-right' class="col-lg-2">
+        	<ul class="list-group">
+				<li id='logo' class="list-group-item"><img src="img/logo_03.png"></li>
+				<li class="list-group-item activo"><i><img src="img/home_03.png"></i>Inicio</li>
+				<li class="list-group-item"><i><img src="img/actas_03.png"></i>Actas</li>
+				<li class="list-group-item"><i><img src="img/gestion_03.png"></i>Gestion Plataforma</li>
+				<li class="list-group-item"><i><img src="img/reportes_03.png"></i>Reportes</li>
+				<li class="list-group-item"><i><img src="img/matricula_03.png"></i>Matricula</li>
+				<li class="list-group-item"><i><img src="img/egresados_03.png"></i>Egresados</li>
+			</ul>
+		</div>
+		<div id='controles-datos' class="col-lg-10">
+			<div id='control-top' class="row">
+				<div class="media col-lg-6">
+					<a class="pull-left" href="#"><img class="media-object" src="img/img_03.jpg"></a>
+					<div class="media-body">
+						<h4 class="media-heading"><?php echo $fullname?></em></h4>
+						<p><strong><?php echo $typedoc?></strong> : <?php echo $numberdoc?></p>
+						<p><strong>CÓDIGO</strong> : <?php echo $code?></p>
+						<p><strong>ADSCRITO</strong> : <?php echo $speciality?></p>
+					</div>
+				</div>
+				<div id='docs' class="col-lg-3">
+					<button type="button" class="btn-reglamento">Reglamento UNDAC</button>
+					
+				</div>
+				<div class="col-lg-3">
+					<button type="button" class="btn-lateral">Matriculas</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div id='contenido' class='panel'>
+              			<?php print $this->layout()->content; ?>  
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+

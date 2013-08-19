@@ -1,0 +1,32 @@
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+     <script type="text/javascript">
+      google.load('visualization', '1.0', {'packages':['corechart']});
+      google.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+       <?php 
+        $where['facid'] = $this->facid;
+        $where['oid'] = $this->oid;
+        $where['eid'] = $this->eid;
+        $dbfaculty = new Api_Model_DbTable_Faculty();
+        $faculty  = $dbfaculty->_getOne($where);
+        $namefaculty = $faculty ['name']; ?>
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+       <?php
+       foreach ($this->lescuelas as $datos) {
+           $nombre=$datos['name'];
+           $cantidad=$datos['conteo']; ?>
+        ['<?php print $nombre?>' , <?php print $cantidad?>],
+         <?php  }?>
+        ]);
+        var options = {'title':'MATRICULADOS DE LA FACULTAD DE <?php print strtoupper($namefaculty)?>'};
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+
+      
+     </script>
+     <div id="chart_div" style="width:100% ;height:100%"></div>

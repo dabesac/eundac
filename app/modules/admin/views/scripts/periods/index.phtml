@@ -1,0 +1,28 @@
+<h3><center>Módulo Gestión de Períodos</center></h3>
+<div id="barra-admin">
+	<p class="admin-title" style="font-size:14px">Seleccione Año:</p>
+	<p class="admin-accion">
+		<select id="lanios" name="anios" class="form-control" style="width:150px">
+			<option value="">Seleccione..</option>
+			<?php 
+			$anio=date('Y');
+			for($a=($anio+1);$a>=1991;$a--){
+				if($anio==$a) $l=" selected ";
+				else $l=""; 
+			?>
+			<option value="<?php echo $a?>"<?php echo $l?>><?php echo $a?></option>
+			<?php } ?>
+			
+		</select>
+	</p>
+	<div id="peri"></div>
+</div>
+
+<script>
+  $('#lanios').change(function(){
+    var anio = $(this).val();
+    $("#peri").load("/admin/periods/getperiods/anio/"+anio); 
+  });
+    var anio_="<?php echo $anio?>";
+    $("#peri").load("/admin/periods/getperiods/anio/"+anio_);
+</script>

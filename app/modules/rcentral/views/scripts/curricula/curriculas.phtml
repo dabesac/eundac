@@ -1,0 +1,55 @@
+<?php
+if ($this->curriculas) { ?>
+	<div>
+		<div style="margin-bottom:10px">
+			<center>
+				<a href="#" class="btn btn-info"><i class="icon-pencil icon-white"></i>Nueva Currícula</a>
+			</center>
+		</div>
+		<table class="table table-hover">
+			<tr>
+				<th>#</th>
+				<th>Codigo</th>
+				<th>Nombre Currícula</th>
+				<th>Año</th>
+				<th colspan="3">Operaciones</th>
+			</tr>
+			<?php
+			$c=1;
+			foreach ($this->curriculas as $curriculas) { ?>
+				<tr>
+					<td><?php echo $c?></td>
+					<td><?php echo $curriculas['curid']?></td>
+					<td><?php echo $curriculas['name']?></td>
+					<td><?php echo $curriculas['year']?></td>
+					<td>
+						<?php
+						if ($curriculas['state']=="B" || $curriculas['state']=="A") { ?>
+							<a href="/rcentral/curricula/modifycurricula/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>/accion/M" title="Modificar la Currícula"><i class="icon icon-pencil"></i>Modificar</a>	
+							<?php
+						}else{ ?>
+							<a href="/rcentral/curricula/modifycurricula/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>/accion/V" title="Ver la Currícula"><i class="icon icon-book"></i>Ver</a>
+							<?php
+						}?>
+					</td>
+					<td>
+						<?php
+						if ($curriculas['state']=="B") { ?>
+							<a href="#" title="Eliminar la Currícula"><i class="icon icon-trash"></i>Eliminar</a>
+							<?php
+						}else{ ?>
+							<a href="#" title="No se elimina la Currícula"><i class="icon icon-remove"></i>No Eliminar</a>
+						<?php
+						}?>
+					</td>
+					<td>
+						<a href="#" title="Imprimir la Currícula"><i class="icon icon-print"></i>Imprimir</a>
+					</td>
+				</tr>
+				<?php
+				$c++;
+			}?>
+		</table>
+	</div>
+	<?php
+}?>

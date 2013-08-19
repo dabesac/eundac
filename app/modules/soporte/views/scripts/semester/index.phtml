@@ -1,0 +1,29 @@
+<div style="padding-right:60px">
+	 <a style="float:right" rel="tooltip" title='Agregue Nuevo registro' href="/soporte/semester/new"  class="btn btn-primary">
+    <i class="icon-pencil"></i>Nuevo</a>
+</div>
+<table class="table table-bordered table-striped table-condensed span10">
+    <tr>
+        <th class="span1"><center>#</center></th>
+        <th class="span1"><center>Cod.</center></th>   
+        <th class="span1"><center>Nombre</center></th>    
+        <th class="span1" colspan="2"><center>Operaciones</center></th>         
+    </tr>
+<?php
+    $r=0;
+    foreach ($this->data as $semester){
+        $r++;
+        $semid=$semester['semid'];
+        $name=$semester['name'];
+        ?>       
+            <tr id="tr_<?php echo $semid.$r?>">
+                <td ><center><?php echo $r?></center></td>                    
+                <td ><center><?php echo $semid?></center></td>
+                <td ><?php echo $name?></td>                
+                <td><a title='Modificar un registro' href='/soporte/semester/update/semid/<?php echo base64_encode($semid)?>'><i class="icon-pencil"></i>modificar</a></td>
+                <td><a title='Eliminar un registro' href='/soporte/semester/delete/semid/<?php echo base64_encode($semid)?>' onclick="return confirm('Esta Seguro que desea eliminar el registro?');">eliminar</a></td> 
+            </tr>
+          <?php 
+        }
+?>
+</table>

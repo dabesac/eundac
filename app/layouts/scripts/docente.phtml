@@ -1,0 +1,115 @@
+<?php echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+    <head>
+        <?php echo $this->headMeta(); ?>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headLink(); ?>
+        <?php echo $this->headScript(); ?> 
+        <?php echo $this->headTitle(); ?>
+		
+   		<!-- JQuery UI-->
+   		<script src="/external/jquery/jquery-1.9.1.js"></script>
+   		<script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
+   		<script src="/external/jquery/external/globalize.js"></script>
+   		<script src="/external/jquery/external/jquery.mousewheel.js"></script>
+   		<script src="/external/jquery/external/jshint.js"></script>
+   		<script src="/external/jquery/external/qunit.js"></script>
+   		
+   		<link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
+   		
+   		
+   		<!-- Bootstrap -->
+   		<script src="/external/bootstrap/js/bootstrap.min.js"></script>
+   		<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+   		
+   		<!-- JS  -->
+   		
+   		
+   		<!-- CSS  Generic-->
+   		<link rel="stylesheet" type="text/css" href="/css/style.css">
+                    
+        
+   	
+    </head>
+ <body>
+<!--[if IE]>
+	<div class="mensaje">
+                Estas utilizando una version obsoleta del navegador Internet Explorer el sitema no se vera
+                correctamente. Actualiza o descarga un nuevo navegador como este <a href="https://www.google.com/chrome?hl=es">Google Chrome</a>.
+    </div>
+<![endif]-->
+<div class="navbar bg">
+      <a class="navbar-brand" href="#"><img src="img/logo2_03.png"><span>Universidad Daniel Alcides Carrión</span></a>
+      <div class="nav-collapse collapse navbar-responsive-collapse">
+      <ul class="nav navbar-nav pull-right">
+        <li><a href="#"><img src="img/img2_03.jpg"></a></li>
+        <li class='dropdown'>
+          <a id='change-key' class="dropdown-toggle" data-toggle="dropdown" href="#">Cambiar clave<b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action 1</a></li>
+            <li><a href="#">Action 2</a></li>
+            <li><a href="#">Action 3</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Action 4</a></li>
+          </ul>
+        </li>
+
+        <li><a id='on-off' href="#"><img src="img/salir-bto_03.png" width='36' height="31"></a></li>
+      </ul>
+      </div>
+    </div>
+
+    <div class='wrapper'>
+      <div class="row">
+        <div id='menu-right' class="col-lg-2">
+          <ul class="list-group">
+            <li id='logo' class="list-group-item"><img src="img/logo_03.png"></li>
+            <li class="list-group-item activo"><i><img src="img/home_03.png"></i>Inicio</li>
+            <li class="list-group-item"><i><img src="img/actas_03.png"></i>Actas</li>
+            <li class="list-group-item"><i><img src="img/gestion_03.png"></i>Gestion Plataforma</li>
+            <li class="list-group-item"><i><img src="img/reportes_03.png"></i>Reportes</li>
+            <li class="list-group-item"><i><img src="img/matricula_03.png"></i>Matricula</li>
+            <li class="list-group-item"><i><img src="img/egresados_03.png"></i>Egresados</li>
+          </ul>
+
+        </div>
+        <div id='controles-datos' class="col-lg-10">
+          <div id='control-top' class="row">
+            <div id='datos' class="col-lg-6">
+              <div class="media">
+                <a class="pull-left" href="#">
+                  <img class="media-object" src="img/img_03.jpg">
+                </a>
+                <div class="media-body">
+                  <h4 class="media-heading">Garcia Ruiz <em>Jhon Henry</em></h4>
+                  <p><strong>DNI</strong> : 41951064</p>
+                  <p><strong>CODIGO DE MATRICULA</strong> : 41951064RC</p>
+                  <p><strong>ESCUELA</strong> : Todas las escuelas</p>
+                </div>
+              </div>
+              <button type="button" class="boton pull-right">Ver perfil</button>
+            </div>
+            <div id='docs' class="col-lg-3">
+              <button type="button" class="btn-reglamento">Reglamento UNDAC</button>
+              <button type="button" class="btn-directorio">Directorio UNDAC</button>
+            </div>
+            <div class="col-lg-3">
+              <button type="button" class="btn-lateral">Matriculas</button>
+              <button type="button" class="btn-lateral">Encuentas</button>
+              <button type="button" class="btn-lateral">Notas</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div id='contenido' class='panel'>
+              <?php print $this->layout()->content; ?>  
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
+

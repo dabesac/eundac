@@ -1,0 +1,16 @@
+<?php
+if ($this->data ){    
+?>
+  <option value="">- Seleccione Escuelas -</option>
+  <?php
+    foreach ($this->data  as $speciality){
+        ?>
+        <option value="<?php echo $speciality['escid']?>"><?php echo $speciality['escid']." | ".$speciality['name']?></option>
+        <?php
+    }
+}else{
+    ?>
+        <option value="">No tienen ninguna escuela</option>
+    <?php
+}
+?>     

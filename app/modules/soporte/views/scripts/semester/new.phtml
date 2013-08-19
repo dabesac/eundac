@@ -1,0 +1,27 @@
+<form id="<?php echo $this->form->getName();?>" name="<?php echo $this->form->getName();?>" action="<?php echo $this->form->getAction();?>"method="Post" enctype="application/x-www-form-urlencode">
+<div style="padding-right:60px">
+      <div style="float:right; margin-left:10px"><?php echo $this->form->send?></div><br>
+      <a style="float:right" class="btn btn-danger" href="/soporte/semester/">Cancelar</a>
+</div>
+	<div class="span10 flotacarajo">
+		<table class="table table-hover span9">
+			<tr>
+				<td style="font-size:20px; color:red"><br>
+					NUEVO SEMESTRE
+				</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="span10 flotacarajo">
+      <table class="table table-striped table-hover span9">
+      <tr>
+            <td>Cod.Semestre:</td>
+            <td><?php echo $this->form->semid?></td>
+      </tr>      
+      <tr>
+      	<td>Nombre:</td>
+      	<td><?php echo $this->form->name?></td>
+      </tr>
+      </table>
+	</div>	
+</form>

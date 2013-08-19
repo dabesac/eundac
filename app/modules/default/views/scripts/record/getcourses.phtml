@@ -1,0 +1,39 @@
+<table class="table span10">
+	<?php if ($this->courses){?>
+	    <tr>
+	        <th class="span1"><center>Num</center></th>
+	        <th class="span1"><center>Sem</center></th>   
+	        <th class="span1"><center>Curricula</center></th>        
+	        <th class="span1"><center>Codigo</center></th>
+	        <th ><center>Curso</center></th>
+	        <th class="span1"><center>Turno</center></th>         
+	        <th class="span1"><center>Calificación</center></th>
+	        <th class="span1"><center>Num Mat</center></th>
+	        <?php if ($rid!='DC'){?>
+	        	<th class="span1"><center>Fecha Acta</center></th>
+	        	<th class="span1"><center>Estado</center></th>
+	        <?php } ?>
+	    </tr>
+	 	<?php $c=1;
+	 	foreach ($this->courses as $crs){?>
+	 		<tr align="center">
+	 			<td><?php echo $c ?></td>
+	 			<td><?php echo $crs['semid'] ?></td>
+	 			<td><?php echo $crs['curid'] ?></td>
+	 			<td><?php echo $crs['courseid'] ?></td>
+	 			<td><?php echo $crs['name']?></td>
+	 			<td><?php echo $crs['turno'] ?></td>
+	 			<?php if ($crs['type_rate']=="O") {?>
+	 				<td>Objetivo</td>
+	 			<?php }else{?>
+					<td>Competitivo</td>
+				<?php }?>
+	 			<td>numMat</td>
+	 			<td><?php echo $crs['closure_date'] ?></td>
+	 			<td><?php echo $crs['state'] ?></td>	 		
+	 		</tr>
+	 	<?php $c++;	
+	 	 }?>	
+
+	<?php } ?>
+</table>

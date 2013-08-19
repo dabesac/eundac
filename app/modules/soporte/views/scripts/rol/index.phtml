@@ -1,0 +1,35 @@
+<div style="padding-right:60px">
+	 <a style="float:right" rel="tooltip" title='Agregue Nuevo registro' href="/soporte/rol/new"  class="btn btn-primary">
+    <i class="icon-pencil"></i>Nuevo</a>
+</div>
+<table class="table table-bordered table-striped table-condensed span10">
+    <tr>
+        <th class="span1"><center>#</center></th>
+        <th class="span1"><center>Cod.</center></th>   
+        <th class="span1"><center>Nombre</center></th>        
+        <th class="span1"><center>Estado</center></th>
+        <th class="span1"><center>Modulo</center></th>
+        <th class="span1" colspan="2"><center>Operaciones</center></th>         
+    </tr>
+<?php
+    $r=0;
+    foreach ($this->data as $rol){
+        $r++;
+        $rid=$rol['rid'];
+        $name=$rol['name'];
+        $estado=$rol['state'];
+        $module=$rol['module'];
+        ?>       
+            <tr id="tr_<?php echo $rid.$r?>">
+                <td ><center><?php echo $r?></center></td>                    
+                <td ><center><?php echo $rid?></center></td>
+                <td ><?php echo $name?></td>                
+                <td ><center><?php echo $estado?></center></td>
+                <td><?php echo $module?></td>
+                <td><a title='Modificar un registro' href='/soporte/rol/update/rid/<?php echo base64_encode($rid)?>'><i class="icon-pencil"></i>modificar</a></td>
+                <td><a title='Eliminar un registro' href='/soporte/rol/delete/rid/<?php echo base64_encode($rid)?>' onclick="return confirm('Esta Seguro que desea eliminar el registro?');">eliminar</a></td> 
+            </tr>
+          <?php 
+        }
+?>
+</table>

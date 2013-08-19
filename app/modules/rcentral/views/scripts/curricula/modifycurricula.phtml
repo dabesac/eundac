@@ -1,0 +1,27 @@
+<form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+	<table class="table table-hover">
+		<tr>
+			<th colspan="4"><center>MODIFICAR CURRÍCULA</center></th>
+		</tr>
+		<tr>
+			<th>Código</th>
+			<th>Año</th>
+			<th>Tipo Currícula</th>
+			<th>Estado</th>
+		</tr>
+		<tr>
+			<td>
+				<div class="col-lg-5"><?php echo $this->form->curid?></div>
+			</td>
+			<td>
+				<div class="col-lg-8"><?php echo $this->form->year?></div>
+			</td>
+			<td>
+				<div class="col-lg-8"><?php echo $this->form->type?></div>
+			</td>
+			<td>
+				<div class="col-lg-8"><?php echo $this->form->state?></div>
+			</td>
+		</tr>
+	</table>
+</form>

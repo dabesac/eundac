@@ -1,0 +1,30 @@
+<table class="table span6">
+	<tr style="font-size: 18px">
+		<td><b>Organizaciones</b></td>
+		<th><a href="/admin/org/new" class="btn btn-primary" style="float:right;margin-right" align="right"><i class="icon-pencil icon-white"></i>Nuevo</a></th>
+	</tr>
+	<?php print_r($dataorg)?>
+	<?php
+	if ($this->dataorg) {?>
+		<tr>
+				<td><b>Num</b></td>
+				<td><b>Codigo</b></td>
+				<td><b>Nombre</b></td>
+		</tr>		
+		<?php		
+		$c=1;
+		foreach ($this->dataorg as $org) {
+			?>	
+			<tr>
+				<td><?php echo $c; ?></td>
+				<td><?php echo $org['oid']; ?></td>
+				<td><?php echo $org['name']; ?></td>
+				<td> <a href="/admin/org/update/oid/<?php print $org['oid']?>">Modificar</a></td>
+        		<td> <a href="/admin/org/delete/oid/<?php print $org['oid']?>"onclick="return confirm('Esta Seguro que desea eliminar la sede?');">Eliminar</a></td>
+        	</tr>
+		<?php
+		$c++;
+		}
+	}
+	?>
+</table>

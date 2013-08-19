@@ -1,0 +1,32 @@
+<table class="table span6">
+	<tr style="font-size: 18px">
+		<td><b>Sedes</b></td>
+		<th><a href="/soporte/subsidiary/new" class="btn btn-primary" style="float:right;margin-right" align="right"><i class="icon-pencil icon-white"></i>Nuevo</a></th>
+	</tr>
+	<?php
+	if ($this->datasub) {?>
+		<tr>
+				<td><b>Num</b></td>
+				<td><b>Codigo</b></td>
+				<td><b>Sede</b></td>
+				<td><b>Estado</b></td>
+		</tr>		
+		<?php		
+		$c=1;
+		foreach ($this->datasub as $sub) {
+			?>	
+			<tr>
+				<td><?php echo $c; ?></td>
+				<td><?php echo $sub['subid']; ?></td>
+				<td><?php echo $sub['name']; ?></td>
+				<td><?php echo $sub['state']; ?></td>
+				<td> <a href="/soporte/subsidiary/update/subid/<?php print $sub['subid']?>">Modificar</a></td>
+        		<td> <a href="/soporte/subsidiary/delete/subid/<?php print $sub['subid']?>"onclick="return confirm('Esta Seguro que desea eliminar la sede?');">Eliminar</a></td>
+        	</tr>
+		<?php
+		$c++;
+		}
+	}
+	?>
+</table>
+

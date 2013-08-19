@@ -1,0 +1,177 @@
+<?php
+$tipo=($this->periodocurso['type_rate']=="O")? "OBJETIVOS": "COMPETENCIAS"; ?>
+
+<style type="text/css">
+.fondo{background-color: #f5f5f5;}
+.fondo2{background-color: white;}
+</style>
+
+<div>
+	<center>
+		<h4>UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRIÓN</h4>
+		<h5>Facultad de <?php echo $this->facultad['name']?></h5>
+		<h5>Escuela de Formación Profesional de <?php echo $this->escuelas['name']?></h5>
+		<h5>SILABO</h5>
+		<h5><?php echo $this->curso['name']?></h5>
+	</center>
+</div>
+<div>
+	<h5>I. DATOS GENERALES:</h5>
+	<div class="panel" style="margin: 0px 80px 0px 80px">
+	  	<table style="width: 100%">
+	  		<tr>
+	  			<?php 
+	  			if ($this->periodocurso['type_rate']=="C") { ?>
+		  			<th>ÁREA:</th>
+		  			<td><?php echo $tipo ?></td>
+	  			<?php
+	  			}?>
+	  			<th>CÓDIGO:</th>
+	  			<td><?php echo $this->curso['courseid']?></td>
+	  		</tr>
+	  		<tr>
+	  			<th>PRE-REQUISITO:</th>
+	  			<td><?php echo $this->curso['req_1']?> <?php echo $this->curso['req_2']?> <?php echo $this->curso['req_3']?></td>
+	  			<th>SECCIÓN:</th>
+	  			<td><?php echo $this->turno?></td>
+	  		</tr>
+	  		<tr>
+	  			<th>CREDITOS:</th>
+	  			<td><?php echo $this->curso['credits']?></td>
+	  			<th>EXTENSIÓN HORARIA:</th>
+	  			<td>HT: <?php echo $this->docente['hours_t']?>	HP: <?php echo $this->docente['hours_p']?> TH: <?php echo $this->docente['hours_total']?></td>
+	  		</tr>
+	  		<tr>
+	  			<th>SEMESTRE:</th>
+	  			<td><?php echo $this->curso['semid']?></td>
+	  			<th>DURACIÓN:</th>
+	  			<td>Desde: <?php echo $this->periodo['class_start_date']?>	Hasta: <?php echo $this->periodo['class_end_date']?></td>
+	  		</tr>
+	  		<tr>
+	  			<th>DOCENTE:</th>
+	  			<td><?php echo $this->persona['last_name0']." ".$this->persona['last_name1'].", ".$this->persona['first_name']?></td>
+	  			<th>E-MAIL:</th>
+	  			<td><?php echo $this->persona['mail_person']?></td>
+	  		</tr>
+	  	</table>
+	</div>
+</div>
+<?php
+if ($this->syllabus['state']=="B") { ?>
+	<div style="margin:20px">
+		<center>
+			<a href="#" class="btn btn-success">Guardar Avance</a>
+			<a href="#" class="btn btn-danger" style="margin:0px 80px 0px 80px">Cerrar Enviar</a>
+			<a href="#" class="btn btn-info">Vista Preliminar</a>
+		</center>
+	</div>
+
+	<div class="accordion" id="accordion2" style="margin: 0px 80px 0px 80px">
+      	<div class="accordion-group fondo">
+        	<div class="accordion-heading">
+        		<h6 class="panel-title" style="font-size:14px; margin:3px">
+	             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapseO">
+	                	II. SUMILLA
+	              	</a>
+        		</h6>
+        	</div>
+        	<div id="collapseO" class="accordion-body collapse fondo2">
+              	<div class="accordion-inner">
+		        	Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                
+              	</div>
+         	</div>
+      	</div>
+      	<div class="accordion-group fondo">
+        	<div class="accordion-heading">
+        		<h6 class="panel-title" style="font-size:14px; margin:3px">
+	             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse1">
+	             		<?php 
+	             		if ($this->periodocurso['type_rate']=='C') { 
+	             			echo "III. COMPETENCIA Y CAPACIDADES";
+	             			}
+	             		if ($this->periodocurso['type_rate']=='O') { 
+	             			echo "III. OBJETIVOS";
+	             			}
+	             		?>
+	              	</a>
+        		</h6>
+        	</div>
+        	<div id="collapse1" class="accordion-body collapse fondo2">
+              	<div class="accordion-inner">
+		        	Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                
+              	</div>
+         	</div>
+      	</div>
+      	<div class="accordion-group fondo">
+        	<div class="accordion-heading">
+        		<h6 class="panel-title" style="font-size:14px; margin:3px">
+	             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse2">
+	                	IV. PROGRAMACIÓN DE CONTENIDOS
+	              	</a>
+        		</h6>
+        	</div>
+        	<div id="collapse2" class="accordion-body collapse fondo2">
+              	<div class="accordion-inner">
+		        	Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                
+              	</div>
+         	</div>
+      	</div>
+      	<div class="accordion-group fondo">
+        	<div class="accordion-heading">
+        		<h6 class="panel-title" style="font-size:14px; margin:3px">
+	             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse3">
+	                	V. MEDIOS Y MATERIALES
+	              	</a>
+        		</h6>
+        	</div>
+        	<div id="collapse3" class="accordion-body collapse fondo2">
+              	<div class="accordion-inner">
+		        	Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                
+              	</div>
+         	</div>
+      	</div>
+      	<div class="accordion-group fondo">
+        	<div class="accordion-heading">
+        		<h6 class="panel-title" style="font-size:14px; margin:3px">
+	             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse4">
+	                	VI. SISTEMA DE EVALUCIÓN
+	              	</a>
+        		</h6>
+        	</div>
+        	<div id="collapse4" class="accordion-body collapse fondo2">
+              	<div class="accordion-inner">
+		        	Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                
+              	</div>
+         	</div>
+      	</div>
+      	<div class="accordion-group fondo">
+        	<div class="accordion-heading">
+        		<h6 class="panel-title" style="font-size:14px; margin:3px">
+	             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse5">
+	                	VII. FUENTES DE INFORMACIÓN
+	              	</a>
+        		</h6>
+        	</div>
+        	<div id="collapse5" class="accordion-body collapse fondo2">
+              	<div class="accordion-inner">
+		        	Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                
+              	</div>
+         	</div>
+      	</div>
+    </div>
+	<?php
+}elseif($this->syllabus['state']=="C"){ ?>
+	<div style="margin:20px">
+		<center>
+			<a href="#" class="btn btn-warning">Atras</a>
+			<a href="#" class="btn btn-primary" style="margin-left:150px">Imprimir</a>
+		</center>
+	</div>
+	<?php
+}?>
