@@ -111,12 +111,12 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
      public function _getUsuarioXNombre($nom='',$rid='',$eid='',$oid=''){
         try{
             $sql=$this->_db->query("
-               select ape_pat || ' ' || ape_mat || ', ' || nombres as nombrecompleto
-               ,u.uid,u.rid,u.sedid,u.eid,u.oid,u.escid,u.pid,p.nombres,p.ape_pat,p.ape_mat,u.escid,u.categoria_doc,u.condision_doc,u.dedicasion_doc,u.estado from usuario as u
-               inner join persona as p
-               on u.pid=p.pid and u.eid=p.eid and u.oid=p.oid
-               where u.eid='$eid' and u.oid ='$oid' and u.rid='$rid' AND upper(ape_pat) || ' ' || upper(ape_mat) || ', ' || upper(nombres) like '%$nom%'
-               order by p.ape_pat,p.ape_mat,p.nombres
+               select last_name0 || ' ' || last_name1 || ', ' || first_name as nombrecompleto
+               ,u.uid,u.rid,u.subid,u.eid,u.oid,u.escid,u.pid,p.first_name,p.last_name0,p.last_name1,u.escid from base_users as u
+               inner join base_person as p
+               on u.pid=p.pid and u.eid=p.eid
+               where u.eid='$eid' and u.oid ='$oid' and u.rid='$rid' AND upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nom%'
+               order by p.last_name0,p.last_name1,p.first_name
             ");
             $row=$sql->fetchAll();
            return $row;  
@@ -128,12 +128,12 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
     public function _getUsuarioXNombreXsinRol($nom='',$eid='',$oid=''){
         try{
             $sql=$this->_db->query("
-               select ape_pat || ' ' || ape_mat || ', ' || nombres as nombrecompleto
-               ,u.uid,u.rid,u.sedid,u.eid,u.oid,u.escid,u.pid,p.nombres,p.ape_pat,p.ape_mat,u.escid from usuario as u
-               inner join persona as p
-               on u.pid=p.pid and u.eid=p.eid and u.oid=p.oid 
-               where u.eid='$eid' and u.oid ='$oid' and (u.rid<>'AL' and u.rid<>'DC') and u.estado='A' and upper(ape_pat) || ' ' || upper(ape_mat) || ', ' || upper(nombres) like '%$nom%'
-               order by p.ape_pat,p.ape_mat,p.nombres
+               select last_name0 || ' ' || last_name1 || ', ' || first_name as nombrecompleto
+               ,u.uid,u.rid,u.subid,u.eid,u.oid,u.escid,u.pid,p.first_name,p.last_name0,p.last_name1,u.escid from base_users as u
+               inner join base_person as p
+               on u.pid=p.pid and u.eid=p.eid
+               where u.eid='$eid' and u.oid ='$oid' and (u.rid<>'AL' and u.rid<>'DC') and u.state='A' and upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nom%'
+               order by p.last_name0,p.last_name1,p.first_name
             ");
             $row=$sql->fetchAll();
            return $row;  
@@ -141,5 +141,28 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
             print "Error: Retornando los datos del alumno deacuerdo a una palabra ingresada".$ex->getMessage();
         }
     }
+
+
+
+    public function _getFilter($where=null,$attrib=null,$orders=null){
+		try{
+			if($where['eid']=='' || $where['oid']=='') return false;
+				$select = $this->_db->select();
+				if ($attrib=='') $select->from("base_users");
+				else $select->from("base_users",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				foreach ($orders as $key => $order) {
+						$select->order($order);
+				}
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+		}catch (Exception $e){
+			print "Error: Read Filter Curricula ".$e->getMessage();
+		}
+	}
 
 }

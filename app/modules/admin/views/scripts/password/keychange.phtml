@@ -1,43 +1,37 @@
 <form name="<?php echo $this->fm->getName(); ?>" action="<?php echo $this->fm->getAction(); ?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
 
-<div class="datos-columna span6">
-
-   <div class="control-group">    
-            
-        
-            <label class='control-label'>NuevaClave</label>
-                <div class="controls"> 
-                     <?php echo $this->fm->ncla; ?>
-                </div>  
+  <div class="form-group">
+    <label for="inputEmail1" class="col-lg-2 control-label">Nueva Clave</label>
+    <div class="col-lg-10">
+      <?php echo $this->fm->ncla; ?>
     </div>
-                
-    <div class="control-group">    
-            <label class='control-label'>RepitaClave</label>
-                <div class="controls"> 
-                    <?php echo $this->fm->rcla; ?>
-                </div>
-    </div>                          
+  </div>
 
-    <div class="control-group">
-        <div class="controls"> 
-            <b><p class="text-error">
-            <?php echo $this->mensaje; ?>
-            </p></b>
-        </div>
+  <div class="form-group">
+    <label for="inputEmail1" class="col-lg-2 control-label">Repita Clave</label>
+    <div class="col-lg-10">
+      <?php echo $this->fm->rcla; ?>
     </div>
-     
+  </div>
+                   
 
-    <div class="control-group">    
-            <label class='control-label'></label>
-                <div class="controls"> 
-                    <?php echo $this->fm->guardar; ?>
-                </div>
-    </div> 
+    <div class="form-group">
+    <div class="col-lg-10">
+      <h5><p class="text-danger text-center"><?php echo $this->mensaje; ?></p></h5>
+    </div>
+  <div>        
+             
+       
+    <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <?php echo $this->fm->guardar; ?>
+    </div>
+  </div>
 
 
     
     <div style="clear:both" ></div>
-</div>
+
 </div>
 
     </form>

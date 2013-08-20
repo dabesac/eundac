@@ -24,7 +24,7 @@
                 <td><?php echo $datos['uid'];?></td>
                 <td><?php echo $datos['last_name0']." ".$datos['last_name1'].", ".$datos['first_name'];?></td>
                 <td><?php echo $datos['escid']?></td>
-                <td><a href="/admin/password/keychange/uid/<?php echo $datos['uid'];?>/eid/<?php echo $datos['eid'];?>/oid/<?php echo $datos['oid'];?>/pid/<?php echo $datos['pid'];?>/escid/<?php echo $datos['escid'];?>/subid/<?php echo $datos['subid'];?>">cambiar</a></td>
+                <td><a href="/admin/password/keychange/uid/<?php echo base64_encode($datos['uid']);?>/eid/<?php echo base64_encode($datos['eid']);?>/oid/<?php echo base64_encode($datos['oid']);?>/pid/<?php echo base64_encode($datos['pid']);?>/escid/<?php echo base64_encode($datos['escid']);?>/subid/<?php echo base64_encode($datos['subid']);?>">cambiar</a></td>
             </tr>
            <?php
         }
