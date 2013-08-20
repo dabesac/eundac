@@ -1,10 +1,10 @@
 <form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded">
 
-<table class="table span8">
-		<th style="font-size: 20px" class="span8">Nueva Sede</th>
-       		 <td><a><?php print $this->form->save;?></a></td>
-      	   <td><br><a href="/soporte/subsidiary"  class="btn btn-info" >Cancelar</a></td>	
-</table>
+<div class="row">
+  <div class="col-sm-8"><h2>Nueva Sede</h2></div>
+  <div class="col-sm-2"><?php print $this->form->save;?></div>
+  <div class="col-sm-1"><br><a href="/soporte/subsidiary"  class="btn btn-danger  " >Cancelar</a></br></div>
+</div>
 
 <table class="table span6 table-striped table-bordered">
 	<tr>

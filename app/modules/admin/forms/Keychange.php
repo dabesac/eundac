@@ -51,7 +51,7 @@ class Admin_Form_Keychange extends Zend_Form{
         // }
 
         $submit1 = new Zend_Form_Element_Submit('guardar');
-        $submit1->setAttrib('class', 'btn btn-primary');
+        $submit1->setAttrib('class', 'btn btn-success');
         $submit1->setLabel('Guardar');
         $submit1->removeDecorator("HtmlTag")->removeDecorator("Label");
 

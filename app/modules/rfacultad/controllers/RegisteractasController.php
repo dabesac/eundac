@@ -142,10 +142,15 @@ class Rfacultad_RegisteractasController extends Zend_Controller_Action
             $this->view->perid=$perid;
             $this->view->courseid=$courseid;
             $this->view->turno=$turno;        
-            $this->view->uid=$uid;        
+            $this->view->uid=$uid;
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['rid']=$rid;
+            $where['uid']=$uid;
+            $where['escid']=$escid;
             $al = new Api_Model_DbTable_Users();
-            // $dato = $al->_getUsuarioxPersonaXEscuela($uid,$rid,$eid,$oid,$escid);
-            // $this->view->dato=$dato;
+            $dato = $al->_getUserXUidXEscidXRid($where);
+            $this->view->dato=$dato;
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
