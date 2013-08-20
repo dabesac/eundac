@@ -8,110 +8,87 @@ body, html{
 .clear{
 	clear:both;
 }
+.logo{
+	background: #555;
+	margin: 0px; 
+	padding: 0px;
+}
 
-.bg{
-	background-color: #1e83cb !important;
-	border-radius: 0 !important;
-	margin-bottom: 0;
+.control-top{
+	background-color: #ccc !important;
+	padding: 0px;
+	margin: 0px;
+	border-right: 1px solid #fff;
+	/*min-height: 580px;*/
+}
+
+.control-info{
+	color: #555;
+	padding: 10px;
+}
+
+.layout-right{
 	color: #fff;
+	
 }
-.navbar-brand,
-.navbar-brand a,
-.navbar-brand a:visited,
-.navbar-brand a:focus, 
-.navbar-brand a:link,
-.navbar-brand a:hover{
-	color: #fff;	
-} 
-
-.wrapper{
-	padding: 0 15px 0 0;
+.list-group li{background: #979797;}
+.layout-right a{
+	color: #555;
+	width: 110%;
+	margin-left: -10px;
+	text-decoration:none;
+	display: block;
+	
 }
 
-#menu-right{
-	padding-right: 0;
-}
-#menu-right .list-group .list-group-item:first-child{
-	padding-top: 20px;
-	padding-bottom: 22px;
-	background-color: #424242 !important;
-}
-#menu-right .list-group .list-group-item{
-	font-size: 16px;
-	border-radius: 0;
-	border: 1px solid #424242;
-	padding-top: 20px;
-	padding-bottom: 20px;
-}
-#menu-right .list-group .list-group-item i{padding-right: 10px;}
-#menu-right .list-group .list-group-item:hover,
-.activo{
-	background: url(../img/tri_07.png) no-repeat scroll 310px center #979797 !important;
+.layout-right a:hover,
+.layout-right .activo {	
+	background: url(../img/tri_07.png) no-repeat scroll 215px center #979797 !important;
 	border-left: 5px solid #1E83CB !important;
 	border-right: 0 !important;
 	border-bottom: 0 !important;
 	color: #fff;
- }
+	font-size: 13px;
+}
 
-.list-group li{background: #979797;}
-#logo{background-color: #424242; text-align: center;}
 
-#controles-datos{
+.header-top{
+	background-color: #1e83cb !important;
+	color: #fff;
+	height: 60px;
+	padding-top: 10px;
+	border-bottom: 2px solid #555;
+}
+
+.header-middle{
+	background-color: #e0e0e0 !important;
+	height: 50px;
+	padding-top: 10px;
+	border-bottom: 2px solid #1e83cb;
+}
+
+.header-center{
+	color: #000;
+	margin-top: 10px;
+	padding: 20px;
+	margin-bottom: 20px;
 	
 }
 
-#control-top{
-	background-color: #e0e0e0;
-    padding-top: 15px;
-    height: 130px;
- }
 
-.boton{
-	background: url(../img/boton-perfil_03.gif)no-repeat; 
-	border: 0; 
-	width: 101px; 
-	height: 36px; 
-	color: #fff; 
-	padding-right: 25px; 
-	font-size: 12px;
-	position: relative;
-	top:-110px;
+.footer{
+	height: 30px;
+	background-color: #1e83cb !important;
+	color: #fff;
+	border-top: 2px solid #555;
+	padding: 5px;
+	text-align: center;
+	position:fixed;
+   	bottom:0;
+	
 }
 
-
-#docs{
-	margin-top: -15px;
-	padding-top: 30px;
-	padding-bottom: 7px;
-	border-left: 1px solid #b4b4b4;
-	border-right: 1px solid #b4b4b4;
+.footer a{
+	color: #fff;
+	
 }
-.btn-reglamento, .btn-directorio{
-	width: 216px;
-	height: 45px;
-	border:0;
-	padding-right: 53px;
-	margin-bottom: 20px;
-}
-.btn-reglamento{
-	background: url(../img/regla-bto_03.jpg);	
-}
-
-.btn-directorio{
-	background: url(../img/direc-bto_03.jpg);
-}
-
-.btn-lateral{
-	width: 196px;
-	height: 37px;
-	background: url(../img/bto-lateral_03.jpg);
-	border:0;
-	padding-right: 53px;
-	margin-bottom: 20px;
-}
-
-.input-group{
-	margin-bottom: 20px;
-}
-
-#contenido{margin-top: 20px}

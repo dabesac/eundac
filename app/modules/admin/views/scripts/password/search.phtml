@@ -1,0 +1,57 @@
+<form id="cambiaclave" name="<?php echo $this->fm->getName(); ?>" action="<?php echo $this->fm->getAction(); ?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+        
+ 
+<center>
+<table class="table span9 ">
+<tr >
+    <th >Codigo</th>
+     <td ><?php echo $this->fm->uid; ?></td>
+</tr>
+<tr >
+    <th >Apellidos y Nombres</th>
+    <td ><?php echo $this->fm->nom; ?></td>
+    <!-- <td><input type="text" name="nom" id="nom" ></td> -->
+</tr>
+<tr >
+    <th >Rol</th>
+     <td > <?php echo $this->fm->chrol; ?></td>
+</tr>
+<tr >
+    <td colspan='2'> <?php echo $this->fm->buscar; ?></td>
+</tr>
+
+</table>
+</center>
+
+<div id="datos"></div>
+</form>
+<!-- <div class="datos" id="datos-tabla"></div> -->
+<!-- <input type='text' id='rol'  readonly='readonly' style='border:none;display:none'  /> -->
+
+<script>
+
+$("#buscar").click(function(){
+    if ($("#uid").val() || $("#nom").val()) {
+        vuid = $("#uid").val();
+        vnom = $("#nom").val();
+
+        
+        url="/admin/password/list/uid/" + vuid +"/nom/" + vnom + "/rol/" + rol;
+        $("#datos").load(url);
+        return false;
+    }else{
+        //alert ("Escriba el Codigo o Apellidos y Nombres");
+    };
+});
+rol='';
+$("#chrol-docente").change(function(){
+    rol = $(this).val();
+    $("#rol").attr("value",rol);
+   });
+
+$("#chrol-alumno").change(function(){
+    rol = $(this).val();
+    $("#rol").attr("value",rol);
+   });
+
+</script>
