@@ -108,6 +108,39 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getCourseTeacher($where=null){
+		try {
+				$select = $this->_db->select()
+									->distinct()
+									->from(array('ct'=>'base_course_x_teacher'),
+												array('ct.uid','s.facid','ct.escid','ct.courseid',
+													'ct.curid','ct.subid','ct.oid','ct.perid',
+													  'ct.semid','f.name','s.name','c.name','ct.turno',
+													  'pc.type_rate'))
+									->join(array('pc'=>'base_periods_courses'),
+												'ct.oid=pc.oid and ct.eid=pc.eid and ct.escid=pc.escid and 
+												  ct.subid=pc.subid and ct.curid=pc.curid and ct.perid=pc.perid and
+												  ct.courseid=pc.courseid and ct.turno=pc.turno')
+									->join(array('c'=>'base_courses'),
+												'ct.courseid = c.courseid and ct.escid=c.escid and ct.curid=c.curid and 
+												pc.courseid=c.courseid and pc.escid=c.escid and pc.curid=c.curid')
+									->join(array('u'=>'base_users'),'ct.uid=u.uid')
+									->join(array('s'=>'base_speciality'),'c.escid=s.escid')
+									->join(array('f'=>'base_faculty'),'s.facid=f.facid')
+									->where('ct.is_main = ?',$where['is_main'])
+									->where('ct.uid = ?',$where['uid'])
+									->where('ct.perid = ?',$where['perid'])
+									->where('u.rid = ?',$where['rid'])
+									->order('f.facid');
+
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+		} catch (Exception $e) {
+			print "Error: Read Course_Teacher";
+		}
+	}
 
 	
 }
