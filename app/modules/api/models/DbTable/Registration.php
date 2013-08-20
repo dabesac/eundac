@@ -65,22 +65,29 @@ class Api_Model_DbTable_Registration extends Zend_Db_Table_Abstract
 		}
 	}
 
-	   //CANTIDAD DE ALUMNOS DE LAS ESCUELAS DE UNA DETERMINADA FACULTAD 
-           public function _getTodasEscuelasconunt($eid,$oid,$perid,$facid){  
-        try{
-            $sql=$this->_db->query(" select e.name,count(*) conteo from base_registration as m  inner join base_speciality as e 
-               on  e.eid=m.eid and e.oid=m.oid and m.escid=e.escid and m.state='M'
-               where perid='$perid' and facid='$facid' and m.eid='$eid' and m.oid='$oid' 
-               group by (e.name)
-               ");
 
-            return $sql->fetchAll(); 
-            }  catch (Exception $ex){
-                print $ex->getMessage();
-            }            
-        }
+ public function _totalSchoolEnrollment($where=null)
+	{
+		try{
+			if ($where['eid']=='' ||  $where['oid']=='' || $where['perid']=='' || $where['facid']=='') return false;
+			 $select = $this->_db->select()
+			->from(array('m' => 'base_registration'),array('e.name'))
+				->join(array('e' => 'base_speciality'),'e.eid=m.eid and e.oid=m.oid and m.escid=e.escid', 
+						array('conteo' => 'COUNT(*)'))
+				->where('perid = ?', $where['perid'])->where('facid = ?', $where['facid'])->where('m.state = ?','M')
+				->where('m.oid = ?', $where['oid'])->where('m.eid = ?', $where['eid'])
+				->group('e.name');
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;	
+		}catch (Exception $e){
+			print "Error: Read UserInfo ".$e->getMessage();
+		}
+		
+	}
+       
 
-        
 
 
 }

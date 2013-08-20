@@ -11,7 +11,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 
 <div style="padding: 10px;margin-top: 40px; ">
-	<table class="table table-condensed" style='font-size: 21px; margin-bottom: 10px'>
+	<table class="table table-condensed" style='font-size: 19px; margin-bottom: 10px'>
 		<th style="text-align: center">
 			Universidad Nacional Daniel Alcides Carrion 
 			<br>Facultad de <?php echo $this->fac?></br>
@@ -53,15 +53,48 @@
 	</table>
 
 	<table class="table" style='font-size: 12px;'>
-		<?php if ("1"=="1"){?>
+		<?php if ($this->infotchr){?>
 			<tr aling="center">
 				<th>#</th>
 				<th>DNI</th>
 				<th>Docente</th>
+				<th>Principal</th>
 				<th>Estado</th>
 				<th>Compromiso</th>
 			</tr>
+		<?php $c=0;
+		foreach ($this->infotchr as $infot) {?>
+			<tr aling="center">
+				<th><?php echo $c+1?></th>
+				<th><?php echo $this->infotchr[$c]['uid']?></th>
+				<th><?php echo $this->infotchr2[$c][0]['last_name0']." ".$this->infotchr2[$c][0]['last_name1']." ".$this->infotchr2[$c][0]['first_name']?></th>
+				<th><?php if($this->infotchr[$c]['is_main']=="S"){
+						echo 'Si';
+					}else{
+						echo 'No';
+					}?>
+				</th>
+				<th><?php if($this->infotchr[$c]['state']=="A"){
+						echo 'Activo';
+					}else{
+						echo 'Jefe Practica';
+					}?>
+				</th>
+				<th><?php if($this->infotchr[$c]['is_com']=="S"){
+						echo 'Si';
+					}else{
+						echo 'No';
+					}?>
+				</th>
+			</tr>
 			
+		<?php $c++;
+		}?>
+			
+		<?php }else{?>
+			<th style="text-align: center">
+			No existen Docentes para este curso. Por favor agregue un docente Principal
+			</th>
 		<?php }?>
 	</table>
 </div>
