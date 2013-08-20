@@ -2,7 +2,8 @@
 $sesion  = Zend_Auth::getInstance();
 if(!$sesion->hasIdentity() ){
 	echo "ingreso no permitido";
-	header ("Location: /");
+	Header ("Location: /");
+	exit();
 }
 // Set ACL for ROL
 $login = $sesion->getStorage()->read();
@@ -48,11 +49,13 @@ $code= $login->uid;
    		<!-- Bootstrap -->
    		<script src="/external/bootstrap/js/bootstrap.min.js"></script>
    		<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+   		<link href="/external/bootstrap/css/bootstrap-glyphicons.css" rel="stylesheet">
    		
    		<!-- JS  -->
    		
    		
    		<!-- CSS  Generic-->
+   		
    		<link rel="stylesheet" type="text/css" href="/css/style.css">
     
     </head>
@@ -77,23 +80,7 @@ $code= $login->uid;
 						<button class="btn btn-info" style="margin:0px;margin-left:15px; padding-top: 5px;padding-bottom: 5px;">
 						<img src="/img/img2_03.jpg" class="img-rounded">
 						MI PERFIL</button>
-						
-						<button class="btn btn-info dropdown-toggle" data-toggle="dropdown" 
-							style="margin:0px; padding-top: 8px;padding-bottom: 10px;">
-							<span class="caret"></span>
-						</button>
-						
-						<ul class="dropdown-menu" >
-							<li><a href="/index/changepassword">Cambiar Contraseña</a></li>
-							<li><a href="#">Ver mi perfil</a></li>
-							<li><a href="#"></a></li>
-							<li class="divider"></li>
-							<li><a href="/index/salir">Salir</a></li>
-						</ul>
-						
 					</div>
-			
-		   
 			</div>
     	</div>    	
     	<div class="layout-right">
@@ -118,8 +105,6 @@ $code= $login->uid;
 		  		<li class='dropdown'>
 			  		<div class="btn-group">
 						<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-							
-							 
 							<span class="glyphicon glyphicon-cog"></span>
 						</button>
 						<ul class="dropdown-menu" >
@@ -142,20 +127,20 @@ $code= $login->uid;
     	<div class='pull-right'>
     	<?php 
 		if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
-			 
 			<form name="buscausuario" class="form-inline" role="form" action="/reportes/buscarusuario/index">
-			
-				<div class="col-lg-6"> 
+				<div class="col-lg-6" style="margin:0px;padding: 0px;"> 
 			        <input type="text" name="nombre" class="form-control input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" >
 			    </div>
-			    <div class="col-lg-3">
+			    <div class="col-lg-4" style="margin:0px;padding: 0px;">
 			        <select name="rid" class="form-control " >
 			        	<option value="AL">Alumno</option>
 			        	<option value="DC">Docente</option>
 			        	<option value="EG">Egresado</option>
 			      	</select>
-			  	</div> 
-			        <input type="submit"  class="btn btn-success" >
+			  	</div>
+			  	<div class="col-lg-2" style="margin:0px;padding: 0px;">
+			    <input type="submit"  class="btn btn-success" >
+			    </div>
 			</form>			
 			
 		<?php } ?>
