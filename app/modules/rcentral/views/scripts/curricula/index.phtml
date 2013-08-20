@@ -29,14 +29,18 @@
 <div id="curriculas"></div>
 
 <script type="text/javascript">
-$("#facid").change(function(){
-	var facid=$(this).val();
-	$("#escid").load("/rcentral/curricula/schools/facid/"+facid);
-});
+	$("#facid").change(function(){
+		$("#facid option:selected").each(function(){
+			var facid=$(this).val();
+			$.get('/rcentral/curricula/schools',{facid:facid},function(data){
+				$("#escid").html(data);
+			});
+		})
+	});
 
-$("#escid").change(function(){
-	var escid=$(this).val();
-	var tmp=escid.split('--');
-	$("#curriculas").load("/rcentral/curricula/curriculas/escid/"+tmp[0]+"/subid/"+tmp[1]);
-});
+	$("#escid").change(function(){
+		var escid=$(this).val();
+		var tmp=escid.split('--');
+		$("#curriculas").load("/rcentral/curricula/curriculas/escid/"+tmp[0]+"/subid/"+tmp[1]);
+	});
 </script>

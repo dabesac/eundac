@@ -33,15 +33,24 @@ class Api_Model_DbTable_Speciality extends Zend_Db_Table_Abstract
 		}
 	}
 
-	public function _getFilter($where=array()){
+	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
-			//print_r($where);
-			$wherestr="eid='".$where['eid']."' and oid='".$where['oid']."' and facid= '".$where['facid']."' and subid= '".$where['subid']."' and state = '".$where['state']."'";
-			$row = $this->fetchAll($wherestr);
-			if($row) return $row->toArray();
-			return false;
+			if($where['eid']=='' || $where['oid']=='') return false;
+				$select = $this->_db->select();
+				if ($attrib=='') $select->from("base_speciality");
+				else $select->from("base_speciality",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				foreach ($orders as $key => $order) {
+						$select->order($order);
+				}
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
 		}catch (Exception $e){
-			print "Error: Read Filter Faculty".$e->getMessage();
+			print "Error: Read Filter Course ".$e->getMessage();
 		}
 	}
 

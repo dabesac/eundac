@@ -2,17 +2,25 @@
 class Rcentral_CurriculaController extends Zend_Controller_Action
 {
 	public function init(){
+           $sesion  = Zend_Auth::getInstance();
+            if(!$sesion->hasIdentity() ){
+                  $this->_helper->redirector('index',"index",'default');
+            }
+            $login = $sesion->getStorage()->read();
+            if (!$login->rol['module']=="docente"){
+                  $this->_helper->redirector('index','index','default');
+            }
+            $this->sesion = $login;
 	}
 
 	public function indexAction(){
 		try {
-			$eid="20154605046";
-            $oid="1";
-            $where['eid']=$eid;
-            $where['oid']=$oid;
-            $fac= new Api_Model_DbTable_Faculty();
-            $facultad=$fac->_getAll($where,$order='',$start=0,$limit=0);
-            $this->view->facultad=$facultad;
+			$eid=$this->sesion->eid;
+                  $oid=$this->sesion->oid;
+                  $where=array('eid'=>$eid,'oid'=>$oid);
+                  $fac= new Api_Model_DbTable_Faculty();
+                  $facultad=$fac->_getAll($where);
+                  $this->view->facultad=$facultad;
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
@@ -20,17 +28,17 @@ class Rcentral_CurriculaController extends Zend_Controller_Action
 
 	public function schoolsAction(){
 		try {
+
 			$this->_helper->layout()->disableLayout();
-			$eid="20154605046";
-            $oid="1";
-            $facid=$this->_getParam('facid');
-            $where['eid']=$eid;
-            $where['oid']=$oid;
-            $where['facid']=$facid;
-            $where['state']='A';
-            $esc= new Api_Model_DbTable_Speciality();
-            $escuelas=$esc->_getFilter($where);
-            $this->view->escuelas=$escuelas;
+                  $facid=$this->_getParam('facid');
+                  $eid=$this->sesion->eid;
+                  $oid=$this->sesion->oid;
+                  $where= array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid,'state'=>'A');
+                  $attrib=array('escid','name');
+                  $esc= new Api_Model_DbTable_Speciality();
+                  $escuelas=$esc->_getFilter($where,$attrib);
+                  $this->view->escuelas=$escuelas;
+
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
@@ -40,15 +48,15 @@ class Rcentral_CurriculaController extends Zend_Controller_Action
 		try {
 			$this->_helper->layout()->disableLayout();
 			$eid="20154605046";
-            $oid="1";
-            $escid=$this->_getParam('escid');
-            $subid=$this->_getParam('subid');
-            $where['eid']=$eid;
-            $where['oid']=$oid;
-            $where['escid']=$escid;
-            $where['subid']=$subid;
-            $curr= new Api_Model_DbTable_Curricula();
-            $curriculas=$curr->_getFilter($where);
+                  $oid="1";
+                  $escid=$this->_getParam('escid');
+                  $subid=$this->_getParam('subid');
+                  $where['eid']=$eid;
+                  $where['oid']=$oid;
+                  $where['escid']=$escid;
+                  $where['subid']=$subid;
+                  $curr= new Api_Model_DbTable_Curricula();
+                  $curriculas=$curr->_getFilter($where);
             $this->view->curriculas=$curriculas;
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
