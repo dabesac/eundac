@@ -5,7 +5,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$this->eid='20154605046';
 		$this->oid='1';
 		$this->perid='13A';
-		$this->uid='04000119DC';
+		$this->uid='04072415DC';
 		$this->rid='DC';
 		$this->is_main='S';
 
@@ -18,7 +18,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$where['is_main']=$this->is_main;
 		$docente = new Api_Model_DbTable_PeriodsCourses();
 		$data = $docente->_getCourseTeacher($where);
-		print_r($data);
+		// print_r($data);
 		$l=count($data);
 		$faculty=array();
 		$a=0;
