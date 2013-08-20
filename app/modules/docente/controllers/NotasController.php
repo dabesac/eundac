@@ -5,7 +5,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$this->eid='20154605046';
 		$this->oid='1';
 		$this->perid='13A';
-		$this->uid='04072415DC';
+		$this->uid='04000119DC';
 		$this->rid='DC';
 		$this->is_main='S';
 
