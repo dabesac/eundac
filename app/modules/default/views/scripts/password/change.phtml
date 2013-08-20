@@ -1,0 +1,41 @@
+<form  name="<?php echo $this->fm->getName(); ?>" action="<?php echo $this->fm->getAction(); ?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+
+    <div class="form-group">
+    <label for="inputEmail1" class="col-lg-2 control-label">Ingrese clave anterior</label>
+    <div class="col-lg-10">
+      <?php echo $this->fm->acla; ?>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="inputPassword1" class="col-lg-2 control-label">Ingrese Nueva clave</label>
+    <div class="col-lg-10">
+      <?php echo $this->fm->ncla; ?>
+    </div>
+  </div>
+
+   <div class="form-group">
+    <label for="inputPassword1" class="col-lg-2 control-label">Repita la Clave</label>
+    <div class="col-lg-10">
+      <?php echo $this->fm->rcla; ?>
+    </div>
+  <div>
+    
+  <div class="form-group">
+    <div class="col-lg-10">
+      <h5><p class="text-danger text-center"><?php echo $this->mensaje; ?></p></h5>
+    </div>
+  <div>        
+             
+       
+    <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <?php echo $this->fm->guardar; ?>
+    </div>
+  </div>
+
+       
+    <div style="clear:both" ></div>
+
+</form>
+<div id="carga"></div>
