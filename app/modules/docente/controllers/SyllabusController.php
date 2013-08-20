@@ -293,7 +293,7 @@ class Docente_SyllabusController extends Zend_Controller_Action {
             $pk['courseid'] = base64_decode($this->_getParam("courseid"));
             $pk['turno'] = base64_decode($this->_getParam("turno"));
             $tipo_cali = base64_decode($this->_getParam("tipo_cali"));
-            $formData['units'] = $this->_getParam("units");
+            $units = $this->_getParam("units");
             $numunidad = $this->_getParam("numunidad");
             $this->view->turno=$pk['turno'];
             $this->view->perid=$pk['perid'];
@@ -302,8 +302,9 @@ class Docente_SyllabusController extends Zend_Controller_Action {
             $this->view->escid=$pk['escid'];
             $this->view->subid=$pk['subid'];
             $this->view->tipo_cali=$tipo_cali;
-            $this->view->units=$formData['units'];
+            $this->view->units=$units;
             $this->view->numunidad=$numunidad;
+            $mod=0;
 
             $form= new Docente_Form_Syllabusunitcontent();
             $this->view->form=$form;
@@ -329,20 +330,88 @@ class Docente_SyllabusController extends Zend_Controller_Action {
                     $frmdata['curid']=$pk['curid'];
                     $frmdata['escid']=$pk['escid'];
                     $frmdata['courseid']=$pk['courseid'];
-                    $frmdata['sedid']=$pk['subid'];
+                    $frmdata['subid']=$pk['subid'];
                     $frmdata['turno']=$pk['turno'];
                     $frmdata['unit']=$numunidad;
-                    $sylconte = new Docente_Model_DbTable_Sylabusunidadcontenidos();
+                    $sylconte = new Api_Model_DbTable_Syllabusunitcontent();
                     // print_r($frmdata);
-                    $sylconte->_guardar($frmdata);
-                    if ($sylconte) {
-                        $mod=1;
-                    }
+                    $sylconte->_save($frmdata);
+                    if ($sylconte) $mod=1;
                 }
             }
             if ($mod==1) {
-                $url="perid/".base64_encode($perid)."/escid/".base64_encode($escid)."/curid/".base64_encode($curid)."/cursoid/".base64_encode($cursoid)."/turno/".base64_encode($turno)."/tipo_cali/".base64_encode($tipo_cali)."/unidad/".$unidad."/numunidad/".$numunidad;
-                $this->_redirect("/docente/sylabus/unidades/".$url);                
+                $url="perid/".base64_encode($pk['perid'])."/subid/".base64_encode($pk['subid'])."/escid/".base64_encode($pk['escid'])."/curid/".base64_encode($pk['curid'])."/courseid/".base64_encode($pk['courseid'])."/turno/".base64_encode($pk['turno'])."/tipo_cali/".base64_encode($tipo_cali)."/units/".$units."/numunidad/".$numunidad;
+                $this->_redirect("/docente/syllabus/units/".$url);                
+            }
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function modifycontentAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $where['eid'] = "20154605046";
+            $where['oid'] = "1";
+            $where['subid'] = base64_decode($this->_getParam("subid"));
+            $where['perid'] = base64_decode($this->_getParam("perid"));
+            $where['curid'] = base64_decode($this->_getParam("curid"));
+            $where['escid'] = base64_decode($this->_getParam("escid"));
+            $where['courseid'] = base64_decode($this->_getParam("courseid"));
+            $where['turno'] = base64_decode($this->_getParam("turno"));
+            $where['unit'] = $this->_getParam("numunidad");
+            $where['session'] = $this->_getParam("session");
+            $tipo_cali = base64_decode($this->_getParam("tipo_cali"));
+            $units = $this->_getParam("units");
+            $this->view->turno=$where['turno'];
+            $this->view->perid=$where['perid'];
+            $this->view->courseid=$where['courseid'];
+            $this->view->curid=$where['curid'];
+            $this->view->escid=$where['escid'];
+            $this->view->subid=$where['subid'];
+            $this->view->tipo_cali=$tipo_cali;
+            $this->view->units=$units;
+            $this->view->numunidad=$where['unit'];
+
+            $conten= new Api_Model_DbTable_Syllabusunitcontent();
+            $datacont=$conten->_getOne($where);
+
+            $form= new Docente_Form_Syllabusunitcontent();
+            $form->populate($datacont);
+            $this->view->form=$form;
+
+            if ($this->getRequest()->isPost())
+            {
+                $frmdata=$this->getRequest()->getPost();
+                if ($form->isValid($frmdata))
+                { 
+                    unset($frmdata['guardar']);
+                    trim($frmdata['week']);
+                    trim($frmdata['session']);
+                    trim($frmdata['obj_content']);
+                    trim($frmdata['obj_strategy']);
+                    trim($frmdata['com_conceptual']);
+                    trim($frmdata['com_procedimental']);
+                    trim($frmdata['com_actitudinal']);
+                    trim($frmdata['com_indicators']);
+                    trim($frmdata['com_instruments']);
+                    $pk['eid']=$where['eid'];
+                    $pk['oid']=$where['oid'];
+                    $pk['perid']=$where['perid'];
+                    $pk['curid']=$where['curid'];
+                    $pk['escid']=$where['escid'];
+                    $pk['courseid']=$where['courseid'];
+                    $pk['subid']=$where['subid'];
+                    $pk['turno']=$where['turno'];
+                    $pk['unit']=$where['unit'];
+                    $pk['session']=$where['session'];
+                    $sylconte = new Api_Model_DbTable_Syllabusunitcontent();
+                    // print_r($frmdata);
+                    if ($sylconte->_update($frmdata,$pk)) {
+                        $url="perid/".base64_encode($where['perid'])."/subid/".base64_encode($where['subid'])."/escid/".base64_encode($where['escid'])."/curid/".base64_encode($where['curid'])."/courseid/".base64_encode($where['courseid'])."/turno/".base64_encode($where['turno'])."/tipo_cali/".base64_encode($tipo_cali)."/units/".$units."/numunidad/".$where['unit'];
+                        $this->_redirect("/docente/syllabus/units/".$url);                
+                    }
+                }
             }
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
