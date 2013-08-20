@@ -11,26 +11,26 @@ class Rfacultad_Form_Getcond extends Zend_Form{
         $uid= new Zend_Form_Element_Text("uid");
         $uid->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $uid->setAttrib("maxlength", "10");
-        $uid->setAttrib("class", "input-small");
+        $uid->setAttrib("class", "form-control col-lg-1");
         $uid->setRequired(true)->addErrorMessage('Este campo es requerido');
        
         $apepat= new Zend_Form_Element_Text("ap");
         $apepat->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $apepat->setAttrib("maxlength", "40")->setAttrib("size", "40");
-        $apepat->setAttrib("class", "input-medium");
+        $apepat->setAttrib("class", "form-control col-lg-1");
         $apepat->setRequired(true)->addErrorMessage('Este campo es requerido');
         
         $apemat= new Zend_Form_Element_Text("am");
         $apemat->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $apemat->setAttrib("maxlength", "40")->setAttrib("size", "40");
         $apemat->setRequired(true)->addErrorMessage('Este campo es requerido');
-        $apemat->setAttrib("class", "input-medium");
+        $apemat->setAttrib("class", "form-control col-lg-1");
         
         $name= new Zend_Form_Element_Text("name");
         $name->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $name->setAttrib("maxlength", "40")->setAttrib("size", "40");
         $name->setRequired(true)->addErrorMessage('Este campo es requerido');
-        $name->setAttrib("class", "input-medium");
+        $name->setAttrib("class", "form-control col-lg-1");
         $name->setAttrib("title","Nombre");
 
         
@@ -63,6 +63,8 @@ class Rfacultad_Form_Getcond extends Zend_Form{
         $cond->removeDecorator('HtmlTag')->setAttrib("class", "input-medium");        
         $cond->addMultiOption('S','Sin Condicion');
         $cond->addMultiOption('C','Con Condicion');
+        $cond->setAttrib("class", "form-control");
+
                 
         
         $submit = new Zend_Form_Element_Submit('send');
