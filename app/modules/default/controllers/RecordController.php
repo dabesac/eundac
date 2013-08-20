@@ -132,6 +132,23 @@ class RecordController extends Zend_Controller_Action {
             $this->view->infocrs1=$infocrs1;
             $this->view->infocrs2=$infocrs2;
 
+
+            $dbinfotchr = new Api_Model_DbTable_Coursexteacher();
+            $where = array("eid"=>$eid,"oid"=>$oid,"courseid"=>$courseid,"curid"=>$curid,"escid"=>$escid,"turno"=>$turno);
+            $attrib=array('uid','pid','state','is_main');
+            $infotchr=$dbinfotchr->_getFilter($where,$attrib);
+            //print_r($infotchr);
+            $this->view->infotchr=$infotchr;
+
+            $c=0;
+            foreach ($infotchr as $infot) {
+                $where = array("eid"=>$eid,"oid"=>$oid,"escid"=>$escid,"subid"=>$subid,"pid"=>$infotchr[$c]['pid'],"uid"=>$infotchr[$c]['uid']);
+                $infotchr2[$c]=$dbinfotchr->_getinfoTeacher($where,$attrib);
+                $c++;
+            }
+            print_r($infotchr2);
+            $this->view->infotchr2=$infotchr2;
+
         }catch(exception $ex){
             print "Error en listar Cursos".$ex; 
         }       
