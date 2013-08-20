@@ -108,22 +108,20 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
         }
     }
   /*FALTA */
-     public function _getUsuarioXNombre($nom='',$rid='',$eid='',$oid=''){
-        try{
-            $sql=$this->_db->query("
-               select last_name0 || ' ' || last_name1 || ', ' || first_name as nombrecompleto
-               ,u.uid,u.rid,u.subid,u.eid,u.oid,u.escid,u.pid,p.first_name,p.last_name0,p.last_name1,u.escid from base_users as u
-               inner join base_person as p
-               on u.pid=p.pid and u.eid=p.eid
-               where u.eid='$eid' and u.oid ='$oid' and u.rid='$rid' AND upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nom%'
-               order by p.last_name0,p.last_name1,p.first_name
-            ");
-            $row=$sql->fetchAll();
-           return $row;  
-        }catch (Exception $ex) {
-            print "Error: Retornando los datos del alumno deacuerdo a una palabra ingresada".$ex->getMessage();
-        }
-    }
+    //  public function _getUsuarioXNombre($where=null){
+    //     try{
+    //     	if ($where['eid']=="" || $where['oid']=="" || $where['uid']=="" || $where['rid']="" || $where['nom'] ) return false;
+
+    //         $select = $this->_db->select()
+    //         ->from(array('u' => 'base_users'),array('u.uid','u.rid','u.subid','u.eid','u.oid','u.escid','u.state'))
+    //         	->join(array('p' => 'base_person'),'u.pid=p.pid and u.eid=p.eid ',array('p.first_name','p.last_name0','p.last_name1'))
+
+    //         $row=$sql->fetchAll();
+    //        return $row;  
+    //     }catch (Exception $ex) {
+    //         print "Error: Retornando los datos del alumno deacuerdo a una palabra ingresada".$ex->getMessage();
+    //     }
+    // }
     /*FALTA */
     public function _getUsuarioXNombreXsinRol($nom='',$eid='',$oid=''){
         try{
