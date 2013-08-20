@@ -1,0 +1,8 @@
+lib/Zend
+lib/pdf
+app/conf/application.ini
+html/xml
+html/fotos
+.project
+.buildpath
+.settings/

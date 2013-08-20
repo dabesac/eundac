@@ -2,7 +2,8 @@
 $sesion  = Zend_Auth::getInstance();
 if(!$sesion->hasIdentity() ){
 	echo "ingreso no permitido";
-	header ("Location: /");
+	Header ("Location: /");
+	exit();
 }
 // Set ACL for ROL
 $login = $sesion->getStorage()->read();
@@ -35,6 +36,8 @@ $code= $login->uid;
    		<script src="/external/jquery/external/jquery.mousewheel.js"></script>
    		<script src="/external/jquery/external/jshint.js"></script>
    		<script src="/external/jquery/external/qunit.js"></script>
+   		<script src="/external/jquery/external/base64/jquery.base64.min.js"></script>
+
    		
    		<link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
    		
@@ -48,11 +51,13 @@ $code= $login->uid;
    		<!-- Bootstrap -->
    		<script src="/external/bootstrap/js/bootstrap.min.js"></script>
    		<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+   		<link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
    		
    		<!-- JS  -->
    		
    		
    		<!-- CSS  Generic-->
+   		
    		<link rel="stylesheet" type="text/css" href="/css/style.css">
     
     </head>
@@ -68,10 +73,17 @@ $code= $login->uid;
     <div class="col-lg-2 control-top">
     	<div class="logo"><img src="/img/logo_03.png" ></div>
     	<div class="control-info">
-	    	<center><img class="img-polaroid" src="/img/img_03.jpg"></center><br>
-		    <p class="media-heading"><strong><?php echo $fullname?></strong><br>
+	    	<div class="alert alert-info" style="margin:0px; padding: 5px;">
+	    	 <p class="media-heading"><strong><?php echo $fullname?></strong><br><br>
 		    <?php echo $typedoc?>: <strong><?php echo $numberdoc?></strong>  <br>
 			CÓDIGO<strong> : <?php echo $code?></strong>  </p>
+			<br>
+			  		<div class="btn-group">
+						<button class="btn btn-info" style="margin:0px;margin-left:15px; padding-top: 5px;padding-bottom: 5px;">
+						<img src="/img/img2_03.jpg" class="img-rounded">
+						MI PERFIL</button>
+					</div>
+			</div>
     	</div>    	
     	<div class="layout-right">
     		<ul class="list-group">
@@ -89,31 +101,29 @@ $code= $login->uid;
     	</div>
 	</div>
     <div class="col-lg-10 header-top">
-		<div class="nav-collapse collapse navbar-responsive-collapse">
-	    	<h5 class="nav pull-left" href="#" >Universidad Nacional Daniel Alcides Carrión</h5>
-		    <ul class="nav navbar-nav pull-right">
+	    <h5 class="nav pull-left" href="#" >Universidad Nacional Daniel Alcides Carrión</h5>
+		<ul class="nav navbar-nav pull-right">
 		  		<li class='dropdown'>
 			  		<div class="btn-group">
-						<button class="btn btn-info" style="padding-top: 5px;padding-bottom: 5px;">
-						<img src="/img/img2_03.jpg" class="img-rounded">
-						MI PERFIL</button>
-						<button class="btn btn-info dropdown-toggle" data-toggle="dropdown" 
-							style="padding-top: 8px;padding-bottom: 10px;">
-							<span class="caret"></span>
+						<button class="dropdown-toggle btn btn-info" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-cog"></span>
 						</button>
-						<ul class="dropdown-menu" >
+						<ul class="dropdown-menu" style="margin-left: -130px;" >
 							<li><a href="/index/changepassword">Cambiar Contraseña</a></li>
 							<li><a href="#">Ver mi perfil</a></li>
 							<li><a href="#"></a></li>
 							<li class="divider"></li>
 							<li><a href="/index/salir">Salir</a></li>
 						</ul>
-						<a class="btn btn-danger" style="padding-top: 7px;padding-bottom: 6px;margin-left: 2px" 
-							href="/index/salir">SALIR <img src="/img/salir-bto_03.png" class="img-rounded"></a>
 					</div>
 				</li>
-			</ul>
-		</div>
+				<li>
+					<div class="btn-group">
+					<a class="btn btn-danger" href="/index/salir">Salir <span class="glyphicon glyphicon-log-out"></span></a>
+					</div>
+				</li>
+			</ul>    
+			
     </div>
     
     <div class="col-lg-10 header-middle">
@@ -121,16 +131,22 @@ $code= $login->uid;
     	<div class='pull-right'>
     	<?php 
 		if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
-			<form name="buscausuario" class="form-inline" action="/reportes/buscarusuario/index">
-				Buscar por 
-			        <input type="text" name="nombre" class="input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" >
-			        <select name="rid" >
+			<form name="buscausuario" class="form-inline" role="form" action="/reportes/buscarusuario/index">
+				<div class="col-lg-6" style="margin:0px;padding: 0px;"> 
+			        <input type="text" name="nombre" class="form-control input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" >
+			    </div>
+			    <div class="col-lg-4" style="margin:0px;padding: 0px;">
+			        <select name="rid" class="form-control " >
 			        	<option value="AL">Alumno</option>
 			        	<option value="DC">Docente</option>
 			        	<option value="EG">Egresado</option>
-			      	</select> 
-			        <input type="submit"  class="btn btn-success" >
+			      	</select>
+			  	</div>
+			  	<div class="col-lg-2" style="margin:0px;padding: 0px;">
+			    <input type="submit"  class="btn btn-success" >
+			    </div>
 			</form>			
+			
 		<?php } ?>
     	</div>
 	</div>
