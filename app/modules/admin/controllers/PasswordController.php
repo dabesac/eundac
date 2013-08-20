@@ -120,7 +120,7 @@ class Admin_PasswordController extends Zend_Controller_Action
                  unset($formData["enviar"]);
                 if (($formData["ncla"]==($formData["rcla"])) && ($formData["ncla"]<>"" || $formData["rcla"]<>""))
                 {
-                    $data['password']=$formData["ncla"];
+                    $data['password']=md5($formData["ncla"]);
                     $pk['uid']=$uid;
                     $pk['eid']=$eid;
                     $pk['oid']=$oid;

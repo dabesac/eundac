@@ -58,7 +58,7 @@
         </td>
         <th>Curso:</th>
         <td class="col-lg-5">
-            <select id='cursoid' class="form-control">
+            <select id='courseid' class="form-control">
                 <option value="">- Seleccione -</option>
             </select>
         </td>
@@ -66,12 +66,11 @@
 </table>
 <div style="margin-bottom:15px">
     <center>
-        <a id="registrar" class="btn btn-success">Ver Acta</a>
-        <a class='btn btn-info' id='agregaracta'><i class='icon-book icon-white'></i>Crear Acta</a>
+        <a id="registrar" class="btn btn-success"><span class="glyphicon glyphicon-th-list"></span>Ver Acta</a>
+        <a class='btn btn-info' id='agregaracta'><span class="glyphicon glyphicon-list"></span>Crear Acta</a>
     </center>
 </div>
-   
-<div id="datos" class="flotacarajo"></div>
+<div id="datos"></div>
 
 <script>
     $("#perid").load("/rfacultad/registeractas/lperiods/anio/"+<?php echo $anio?>);
@@ -81,44 +80,9 @@
         $("#perid").load("/rfacultad/registeractas/lperiods/anio/"+anio);
     });
 
-
-
-
-    
-    $("#perid").change(function(){
-        var perid = $(this).val();
-        var semid = $("#semid").val();
-        var curid = $("#curid").val();
-        var escid = $("#escid").val();
-        if (semid!="" && curid!="" && escid!="") {
-            $("#cursoid").load("/default/llenadoactas/cursosxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
-        };
-    });
-
-
     $("#escid").change(function(){
         var escid = $(this).val();
-        $("#curid").load("/default/llenadoactas/lcurricula/escid/"+escid);
-    });
-
-    $("#semid").change(function(){
-        var semid = $(this).val();
-        var curid = $("#curid").val();
-        var escid = $("#escid").val();
-        var perid = $("#perid").val();
-        if (escid=="") {
-            alert("Seleccione una Escuela.");
-            return false;
-        };
-        if (curid=="") {
-            alert("Seleccione una Currícula.");
-            return false;
-        };
-        if (perid=="") {
-            alert("Seleccione un Periodo.");
-            return false;
-        };
-        $("#cursoid").load("/default/llenadoactas/cursosxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+        $("#curid").load("/rfacultad/registeractas/lcurricula/escid/"+escid);
     });
 
     $("#curid").change(function(){
@@ -138,28 +102,63 @@
             alert("Seleccione un Periodo.");
             return false;
         };
-        $("#cursoid").load("/default/llenadoactas/cursosxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+        $("#courseid").load("/rfacultad/registeractas/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
     });
 
+    $("#perid").change(function(){
+        var perid = $(this).val();
+        var semid = $("#semid").val();
+        var curid = $("#curid").val();
+        var escid = $("#escid").val();
+        if (semid!="" && curid!="" && escid!="") {
+            $("#courseid").load("/rfacultad/registeractas/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+        };
+    });
+
+    $("#semid").change(function(){
+        var semid = $(this).val();
+        var curid = $("#curid").val();
+        var escid = $("#escid").val();
+        var perid = $("#perid").val();
+        if (escid=="") {
+            alert("Seleccione una Escuela.");
+            return false;
+        };
+        if (curid=="") {
+            alert("Seleccione una Currícula.");
+            return false;
+        };
+        if (perid=="") {
+            alert("Seleccione un Periodo.");
+            return false;
+        };
+        $("#courseid").load("/rfacultad/registeractas/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+    });
 
     $("#registrar").click(function(){
         var curid = $("#curid").val();
         var escid = $("#escid").val();
         var perid = $("#perid").val();
-        var curso = $("#cursoid").val();
+        var curso = $("#courseid").val();
         var tmp=curso.split(";--;");
-        var cursoid=tmp[0];
+        var courseid=tmp[0];
         var turno=tmp[1];
-        var sedid=tmp[2];
+        var subid=tmp[2];
         if (curso=="") {
             alert("Seleccione un Curso.");
             return false;
         };
-        var url="/default/llenadoactas/registrar/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/cursoid/"+cursoid+"/turno/"+turno+"/sedid/"+sedid;
+        var url="/rfacultad/registeractas/register/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/courseid/"+courseid+"/turno/"+turno+"/subid/"+subid;
         // alert(url);
         $("#datos").html("<img src='/img/spinner.gif'>Cargando...");
         $("#datos").load(url);
     });
+
+
+
+
+
+
 
     $("#agregaracta").click(function(){
         var curid = $("#curid").val();

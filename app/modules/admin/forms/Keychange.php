@@ -9,20 +9,25 @@ class Admin_Form_Keychange extends Zend_Form{
         $uid= new Zend_Form_Element_Text('uid');
         $uid->removeDecorator('Label')->removeDecorator('HtmlTag'); 
         $uid->setAttrib("maxlength", "10");
+        $uid->setAttrib('class', 'form-control');
+
         
         $acla= new Zend_Form_Element_Password("acla");
         $acla->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $acla->setAttrib("maxlength", "30")->setAttrib("size", "30");
+        $acla->setAttrib('class', 'form-control');
         $acla->setRequired(true)->addErrorMessage('Este campo es requerido');
 
         $ncla= new Zend_Form_Element_Password("ncla");
         $ncla->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $ncla->setAttrib("maxlength", "30")->setAttrib("size", "30");
+        $ncla->setAttrib('class', 'form-control');
         $ncla->setRequired(true)->addErrorMessage('Este campo es requerido');
 
         $rcla= new Zend_Form_Element_Password("rcla");
         $rcla->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $rcla->setAttrib("maxlength", "30")->setAttrib("size", "30");
+        $rcla->setAttrib('class', 'form-control');
         $rcla->setRequired(true)->addErrorMessage('Este campo es requerido');
 
         // $rol= new Zend_Form_Element_Select('rid');

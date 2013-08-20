@@ -1,0 +1,46 @@
+<?php
+if ($this->dato) { ?>
+<table class="table table-bordered table-striped table-condensed">
+    <tr>
+        <th class="span2">Código</th>
+        <th class="span1">DNI</th>
+        <th>Apellidos y Nombres</th>
+        <th class="span2">Agregar</th>
+    </tr>
+    <tr>
+        <td><?php echo $this->dato[0]['uid']; ?></td>
+        <td><?php echo $this->dato[0]['pid']; ?></td>
+        <td><?php echo $this->dato[0]['ape_pat']." ".$this->dato[0]['ape_mat'].", ".$this->dato[0]['nombres']; ?></td>      
+        <td><a class='btn btn-info' id='agregaralumno'><i class="icon-pencil icon-white"></i>Agregar</a></td>
+    </tr>
+</table>
+<?php
+}else{ ?>
+    <div class="alert alert-danger" style="margin-left:25px">
+        <b>Aviso: </b> El alumno no se encuentra registrado en el Sistema, ó no pertenece a la Escuela seleccionada.
+    </div>
+<?php
+}?>
+<div id="gagregaralumno" class="flotacarajo"></div>
+<div class="modal hide" id="cargaalumno">
+    <div class="modal-body">
+        <p>Agregando datos del Alumno.</p>
+    </div>
+</div>
+
+<script>
+$("#agregaralumno").click(function(){
+    var uid="<?php echo $this->uid ?>";
+    var pid="<?php echo $this->dato[0]['pid'] ?>";
+    var subid="<?php echo $this->subid ?>";
+    var curid="<?php echo $this->curid ?>";
+    var escid="<?php echo $this->escid ?>";
+    var perid="<?php echo $this->perid ?>";
+    var courseid="<?php echo $this->courseid ?>";
+    var turno="<?php echo $this->turno ?>";
+    var url="/default/llenadoactas/agregaralumno/curid/"+curid+"/escid/"+escid+"/courseid/"+courseid+"/turno/"+turno+"/perid/"+perid+"/uid/"+uid+"/pid/"+pid+"/subid/"+subid;
+    // alert(url);
+    $('#cargaalumno').modal('show');
+    $("#gagregaralumno").load(url);
+});
+</script>

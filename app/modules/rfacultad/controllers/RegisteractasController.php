@@ -49,4 +49,105 @@ class Rfacultad_RegisteractasController extends Zend_Controller_Action
 			print "Error: ".$e->getMessage();
 		}
 	}
+
+	public function lcurriculaAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+    		$eid= $this->sesion->eid;
+	        $oid= $this->sesion->oid;
+	        $escid = $this->_getParam("escid");
+	        $where['eid']=$eid;
+	        $where['oid']=$oid;
+	        $where['escid']=$escid;
+	        $curricula = new Api_Model_DbTable_Curricula();
+	        $lista=$curricula->_getFilter($where,$attrib=null,$orders=null);
+            $this->view->lista=$lista;
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function coursesxcurriculaAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+            $curid= $this->_getParam("curid");
+            $escid= $this->_getParam("escid");
+            $semid= $this->_getParam("semid");
+            $perid= $this->_getParam("perid");
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['curid']=$curid;
+            $where['escid']=$escid;
+            $where['semid']=$semid;
+            $where['perid']=$perid;
+            $dbcurso = new Api_Model_DbTable_PeriodsCourses();
+            $curso = $dbcurso->_getAllcoursesXescidXsemester($where);
+            $this->view->cursito=$curso;  
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function registerAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+            $curid= $this->_getParam("curid");
+            $escid= $this->_getParam("escid");
+            $perid= $this->_getParam("perid");
+            $courseid= $this->_getParam("courseid");
+            $turno= $this->_getParam("turno");
+            $subid= $this->_getParam("subid");
+            $this->view->curid=$curid;
+            $this->view->subid=$subid;
+            $this->view->escid=$escid;
+            $this->view->perid=$perid;
+            $this->view->courseid=$courseid;
+            $this->view->turno=$turno;
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['curid']=$curid;
+            $where['escid']=$escid;
+            $where['perid']=$perid;
+            $where['courseid']=$courseid;
+            $where['turno']=$turno;
+            $where['subid']=$subid;
+            $dbalumnos = new Api_Model_DbTable_Registrationxcourse();
+            $datos = $dbalumnos->_getStudentXcoursesXescidXperiods($where);
+            $this->view->datos=$datos;
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function searchuserAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+            $rid='AL';
+            $uid= $this->_getParam("uid");
+            $curid= $this->_getParam("curid");
+            $escid= $this->_getParam("escid");
+            $perid= $this->_getParam("perid");
+            $courseid= $this->_getParam("courseid");
+            $turno= $this->_getParam("turno");
+            $subid= $this->_getParam("subid");   
+            $this->view->curid=$curid;
+            $this->view->subid=$subid;
+            $this->view->escid=$escid;
+            $this->view->perid=$perid;
+            $this->view->courseid=$courseid;
+            $this->view->turno=$turno;        
+            $this->view->uid=$uid;        
+            $al = new Api_Model_DbTable_Users();
+            // $dato = $al->_getUsuarioxPersonaXEscuela($uid,$rid,$eid,$oid,$escid);
+            // $this->view->dato=$dato;
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
 }
