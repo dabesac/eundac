@@ -7,6 +7,7 @@ class RecordController extends Zend_Controller_Action {
        	$this->oid= "1";
       	$this->perid="13A";
       	$this->rid="RC";        
+        $this->subid="1901";
     }
 		
     public function indexAction()
@@ -66,7 +67,7 @@ class RecordController extends Zend_Controller_Action {
             //print_r($perid);
             $curso = new Api_Model_DbTable_PeriodsCourses();
             $where= array("eid"=>$eid,"oid"=>$oid,"escid"=>$escid,"perid"=>$perid);
-            $atrib = array('courseid','turno','semid','closure_date','curid','type_rate','state');
+            $atrib = array('courseid','turno','semid','closure_date','curid','type_rate','state','subid');
             $order = array('courseid  ASC','turno asc','semid asc');
             $data= $curso->_getFilter($where,$atrib,$order);
             //print_r($data);
@@ -81,11 +82,59 @@ class RecordController extends Zend_Controller_Action {
                 $info_curso[$key]['type_rate']=$curs['type_rate'];
                 $info_curso[$key]['closure_date']=$curs['closure_date'];
                 $info_curso[$key]['state']=$curs['state'];
+                $info_curso[$key]['subid']=$curs['subid'];                
             }
             $this->view->courses=$info_curso;
+            $this->view->perid=$perid;
+            $this->view->escid=$escid;
         }catch(exception $ex){
-            print "Error en listar Periodo";    
+            print "Error en listar Periodo".$ex;    
         }
+    }
+
+    public function courseteacherAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
+            $eid=$this->eid;
+            $oid=$this->oid;
+            $subid=$this->subid;
+            $perid=base64_decode($this->_getParam("perid"));
+            $curid=base64_decode($this->_getParam("curid"));
+            $courseid=base64_decode($this->_getParam("courseid"));
+            $turno=base64_decode($this->_getParam("turno"));
+            $escid=base64_decode($this->_getParam("escid"));
+
+            $dbesp = new Api_Model_DbTable_Speciality();
+            $where = array('eid'=>$eid,"oid"=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $esp = $dbesp->_getOne($where);
+
+            $dbfac = new Api_Model_DbTable_Faculty();
+            $where = array('eid'=>$eid,"oid"=>$oid,'facid'=>$esp['facid']);
+            $fac = $dbfac->_getOne($where);
+                      
+            $this->view->esp=$esp['name'];
+            $this->view->fac=$fac['name'];
+
+            $dbinfocrs=new Api_Model_DbTable_PeriodsCourses();
+            $where = array('eid'=>$eid,"oid"=>$oid,'courseid'=>$courseid);
+            $attrib=array('name','courseid');
+            $infocrs1=$dbinfocrs->_getinfoCourse($where,$attrib);
+
+            $where = array("eid"=>$eid,"oid"=>$oid,"escid"=>$escid,"perid"=>$perid,"courseid"=>$courseid);
+            $attrib=array('state','closure_date','state','type_rate');
+            $infocrs2=$dbinfocrs->_getFilter($where,$attrib);
+            
+            $infocrs2['perid']=$perid;
+            $infocrs2['curid']=$curid;
+            $infocrs2['turno']=$turno;
+            //print_r($infocrs);
+            $this->view->infocrs1=$infocrs1;
+            $this->view->infocrs2=$infocrs2;
+
+        }catch(exception $ex){
+            print "Error en listar Cursos".$ex; 
+        }       
     }
 
 

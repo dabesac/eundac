@@ -18,7 +18,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$where['is_main']=$this->is_main;
 		$docente = new Api_Model_DbTable_PeriodsCourses();
 		$data = $docente->_getCourseTeacher($where);
-		print_r($data);
+		// print_r($data);
 		$l=count($data);
 		$faculty=array();
 		$a=0;

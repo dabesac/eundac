@@ -1,3 +1,36 @@
+<style>
+.curso{
+    float: left;
+    width: 360px;
+    margin-right: 20px;
+    padding: 5px;
+    
+    border-radius: 5px;
+    border: 1px solid #000000;  
+    margin-bottom: 20px;
+    border: 1px solid rgb(212, 212, 212);
+    box-shadow: 0px 0px 7px #343434;
+  opacity: 1.0;
+  
+}
+
+.curso:hover{
+  background-color: rgb(223, 230, 244);
+    z-index:999;
+      -webkit-transform: scale(1);  
+      -moz-transform: scale(1);  
+      -ms-transform: scale(1);   
+      -o-transform: scale(1);   
+    transform: scale(1);  
+}
+.curso div {
+    float: left;
+}
+.curso > div {
+    width: 348px; 
+}
+
+</style>
 <h2 class="text-info"><center>Asignaturas</center></h2>
 <?php 
   $c=0;
@@ -7,46 +40,56 @@
    	
 ?>
 <div class="panel-group" id="accordion">
-  <div class="panel">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-        	<h5><?php echo $fname?></h5>    	
-        </a>
-      </h4>
-    </div>
-    <div id="collapseOne" class="panel-collapse collapse in">
-      <div class="panel-body">
-        <?php
-        	$b=0;
-        	foreach ($this->data as $courses) {
-        		$b++;
-        		$where['eid']=$courses['eid'];
-        		$where['oid']=$courses['oid'];
-        		$where['curid']=$courses['curid'];
-        		$where['escid']=$courses['escid'];
-        		$where['subid']=$courses['subid'];
-        		$where['courseid']=$courses['courseid'];
-        		$list= new Api_Model_DbTable_Course();
-	        	$course=$list->_getOne($where);
-        		if ($number['facid']==$courses['facid']) { ?>
-        		<div>
-        			<div>
-        				<?php 
-        				echo $course['courseid'];
-        				echo $course['name'];
-        				?>
+    <div class="panel">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+        	        <h5><?php
+                    echo $fname?>
+                    </h5>    	
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body" style="height:250px">
+                <?php
+        	       $b=0;
+        	       foreach ($this->data as $courses) {
+        		      $b++;
+        		      $where['eid']=$courses['eid'];
+        		      $where['oid']=$courses['oid'];
+        		      $where['curid']=$courses['curid'];
+        		      $where['escid']=$courses['escid'];
+        		      $where['subid']=$courses['subid'];
+        		      $where['courseid']=$courses['courseid'];
+        		      $list= new Api_Model_DbTable_Course();
+	        	      $course=$list->_getOne($where);
+        		      if ($number['facid']==$courses['facid']) { ?>
+        			<div class='curso'>
+                        <div style='height: 40px'>
+                           <b><?php echo $course['courseid']." - ".$course['name'];?></b> 
+                        </div>
+                        <div>
+                            <div style='margin-right:5px;'>
+                                <b>Curricula:</b>
+                            </div>
+                                <?php echo $courses['curid']?>
+                            <div style='float:right;'>
+                                <b>Turno:</b>
+                                <?php echo $courses['turno']?> 
+                            </div>
+                        </div>
+                        <a class="btn btn-default">Notas</a>
+                        <a class="btn btn-default">Asistencia</a>
+                        <a class="btn btn-default">Silabo</a>
+                        <a class="btn btn-default">Imprimir</a>
         			</div>
-        			<div class="col-xs-6"><?php ?></div>
-           		</div>
-        <?php			
+            <?php			
         		}
         	}
-
         ?>
-
-      </div>
-    </div>
+            </div>
+        </div>
   </div>
 </div>
 <?php 

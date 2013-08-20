@@ -5,7 +5,7 @@ class Soporte_Form_Speciality extends Zend_Form{
 
         $facid= new Zend_Form_Element_Select('facid');
         $facid->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $facid->setAttrib("class","input-large");
+        $facid->setAttrib('class','form-control');
         $where['eid']="20154605046";
         $where['oid']="1";
         $bdfaculty = new Api_Model_DbTable_Faculty();
@@ -21,6 +21,7 @@ class Soporte_Form_Speciality extends Zend_Form{
         $subid= new Zend_Form_Element_Select('subid');
         $subid->removeDecorator('Label');
         $subid->removeDecorator('HtmlTag');
+        $subid->setAttrib('class','form-control');
         $where['eid']="20154605046";
         $where['oid']="1";
         $bdsubsidiary = new Api_Model_DbTable_Subsidiary();
@@ -34,28 +35,33 @@ class Soporte_Form_Speciality extends Zend_Form{
         $escid= new Zend_Form_Element_Text('escid');
         $escid->removeDecorator('Label')->removeDecorator("HtmlTag");
         $escid->setAttrib("maxlength","15")->removeDecorator('Label');
+        $escid->setAttrib('class','form-control');
         $escid->setRequired(true)->addErrorMessage('Este campo es requerido.');
         $escid->setAttrib("title","Ingrese un Codigo");
         
         $name= new Zend_Form_Element_Text('name');
         $name->removeDecorator('Label')->removeDecorator("HtmlTag");
-        $name->setAttrib("maxlength", "150")->setAttrib("class","input-medium");
+        $name->setAttrib("maxlength", "150");
+        $name->setAttrib('class','form-control');
         $name->setRequired(true)->addErrorMessage('Este campo es requerido.');
         $name->setAttrib("title","Ingrese Nombre");
 
         $abbreviation= new Zend_Form_Element_Text('abbreviation');
         $abbreviation->removeDecorator('Label')->removeDecorator("HtmlTag");
-        $abbreviation->setAttrib("maxlength", "20")->setAttrib("class","input-medium");
+        $abbreviation->setAttrib("maxlength", "20");
+        $abbreviation->setAttrib('class','form-control');
         $abbreviation->setAttrib("title","Ingrese una Abreviación");
 
         $parent= new Zend_Form_Element_Select('parent');
         $parent->removeDecorator('Label');
         $parent->removeDecorator('HtmlTag');
+        $parent->setAttrib('class','form-control');
         $parent->setRegisterInArrayValidator(false);
         $parent->addMultiOption("","- Selecione la Escuela -");
 
         $state = new Zend_Form_Element_Select('state');
-        $state->removeDecorator('HtmlTag')->removeDecorator('Label');     
+        $state->removeDecorator('HtmlTag')->removeDecorator('Label');
+        $state->setAttrib('class','form-control');     
         $state->setRequired(true)->addErrorMessage('Es necesario que selecciones un estado.');
         $state->addMultiOption("","- Seleccione Estado -");
         $state->addMultiOption("A","Activo");
@@ -63,7 +69,7 @@ class Soporte_Form_Speciality extends Zend_Form{
 
 
         $submit = new Zend_Form_Element_Submit('send');
-        $submit->setAttrib('class', 'btn btn-primary');
+        $submit->setAttrib('class', 'btn btn-info');
         $submit->setLabel('Guardar');
         $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
 

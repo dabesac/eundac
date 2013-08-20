@@ -1,0 +1,67 @@
+<script src="/external/jquery/jquery-1.9.1.js"></script>
+<script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
+<script src="/external/jquery/external/globalize.js"></script>
+<script src="/external/jquery/external/jquery.mousewheel.js"></script>
+<script src="/external/jquery/external/jshint.js"></script>
+<script src="/external/jquery/external/qunit.js"></script>
+<link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
+<script src="/external/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+<div style="padding: 10px;margin-top: 40px; ">
+	<table class="table table-condensed" style='font-size: 21px; margin-bottom: 10px'>
+		<th style="text-align: center">
+			Universidad Nacional Daniel Alcides Carrion 
+			<br>Facultad de <?php echo $this->fac?></br>
+			Escuela de <?php echo $this->esp?>
+		</th>
+		
+		<center><th></th></center>
+	</table>
+</div>
+
+<div>
+	<table class="table" style='font-size: 12px;'>
+		<?php if ($this->infocrs1 && $this->infocrs2){?>
+			<tr aling="center">
+				<th>Periodo</th>
+				<th>Curricula</th>
+				<th>Curso</th>
+				<th>Turno</th>
+				<th>Calificacion</th>
+				<th>Fecha</th>
+				<th>Estado</th>
+			</tr>
+			<tr>
+				<th><?php echo $this->infocrs2['perid']?></th>
+				<th><?php echo $this->infocrs2['curid']?></th>
+				<th><?php echo $this->infocrs1[0]['courseid']." | ".$this->infocrs1[0]['name']?></th>
+				<th><?php echo $this->infocrs2['turno']?></th>
+				<th><?php if($this->infocrs1['type_rate']=="O"){
+						echo "Objetivo";
+					}else{
+						echo "Competitivo";
+					}?></th>
+				<th><?php echo $this->infocrs2[0]['closure_date']?></th>
+				<th><?php echo $this->infocrs2[0]['state']?></th>
+			</tr>
+		<?php }else{?>
+			<th>No existe informacion</th>
+		<?php }?>
+	</table>
+
+	<table class="table" style='font-size: 12px;'>
+		<?php if ("1"=="1"){?>
+			<tr aling="center">
+				<th>#</th>
+				<th>DNI</th>
+				<th>Docente</th>
+				<th>Estado</th>
+				<th>Compromiso</th>
+			</tr>
+			
+		<?php }?>
+	</table>
+</div>
