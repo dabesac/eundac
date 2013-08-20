@@ -15,6 +15,15 @@
  	}
 
  	public function indexAction(){
+ 		try {
+ 			$this->sesion->eid;
+ 			$this->sesion->oid;
+ 			$this->sesion->rid;
+ 			
+ 		} catch (Exception $e) {
+ 			print ('Error: Mostrar datos'. $e->getMessage());
+ 			
+ 		}
 
  	}
  }
