@@ -9,7 +9,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
     		$this->_helper->redirector('index',"index",'default');
     	}
     	$login = $sesion->getStorage()->read();
-    	if (!$login->modulo=="alumno"){
+    	if (!$login->rol['module']=="alumno"){
     		$this->_helper->redirector('index','index','default');
     	}
     	$this->sesion = $login;

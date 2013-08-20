@@ -20,10 +20,10 @@
     		<form id="<?php  print $this->form->getname()?>"  name="<?php print $this->form->getname()?>" action="<?php print $this->form->getaction()?>" method="POST" enctype="application/x-www-form-urlencoded">
 		    	<?php //print $this->form->eid ?>
 		        <?php //print $this->form->oid ?>
-		        <?php print $this->form->rid ?>		    
-	    		<?php print $this->form->usuario ?>
-	    		<?php print $this->form->clave?>
-				<?php print $this->form->enviar?>
+		        <div class="col-lg-8"><?php print $this->form->rid ?></div>		    
+	    		<div class="col-lg-8"><?php print $this->form->usuario ?></div>
+	    		<div class="col-lg-8"><?php print $this->form->clave?></div>
+				<div class="col-lg-8"><?php print $this->form->enviar?></div>
 	    		 
         	</form>
         	<?php if ($this->msgerror){?>
