@@ -38,6 +38,12 @@ $code= $login->uid;
    		
    		<link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
    		
+   		<!-- Texto Enriquecido-->
+   		<link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
+        <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
    		
    		<!-- Bootstrap -->
    		<script src="/external/bootstrap/js/bootstrap.min.js"></script>
@@ -62,10 +68,33 @@ $code= $login->uid;
     <div class="col-lg-2 control-top">
     	<div class="logo"><img src="/img/logo_03.png" ></div>
     	<div class="control-info">
-	    	<center><img class="img-polaroid" src="/img/img_03.jpg"></center><br>
-		    <p class="media-heading"><strong><?php echo $fullname?></strong><br>
+	    	<div class="alert alert-info" style="margin:0px; padding: 5px;">
+	    	 <p class="media-heading"><strong><?php echo $fullname?></strong><br><br>
 		    <?php echo $typedoc?>: <strong><?php echo $numberdoc?></strong>  <br>
 			CÓDIGO<strong> : <?php echo $code?></strong>  </p>
+			<br>
+			  		<div class="btn-group">
+						<button class="btn btn-info" style="margin:0px;margin-left:15px; padding-top: 5px;padding-bottom: 5px;">
+						<img src="/img/img2_03.jpg" class="img-rounded">
+						MI PERFIL</button>
+						
+						<button class="btn btn-info dropdown-toggle" data-toggle="dropdown" 
+							style="margin:0px; padding-top: 8px;padding-bottom: 10px;">
+							<span class="caret"></span>
+						</button>
+						
+						<ul class="dropdown-menu" >
+							<li><a href="/index/changepassword">Cambiar Contraseña</a></li>
+							<li><a href="#">Ver mi perfil</a></li>
+							<li><a href="#"></a></li>
+							<li class="divider"></li>
+							<li><a href="/index/salir">Salir</a></li>
+						</ul>
+						
+					</div>
+			
+		   
+			</div>
     	</div>    	
     	<div class="layout-right">
     		<ul class="list-group">
@@ -88,12 +117,10 @@ $code= $login->uid;
 		    <ul class="nav navbar-nav pull-right">
 		  		<li class='dropdown'>
 			  		<div class="btn-group">
-						<button class="btn btn-info" style="padding-top: 5px;padding-bottom: 5px;">
-						<img src="/img/img2_03.jpg" class="img-rounded">
-						MI PERFIL</button>
-						<button class="btn btn-info dropdown-toggle" data-toggle="dropdown" 
-							style="padding-top: 8px;padding-bottom: 10px;">
-							<span class="caret"></span>
+						<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+							
+							 
+							<span class="glyphicon glyphicon-cog"></span>
 						</button>
 						<ul class="dropdown-menu" >
 							<li><a href="/index/changepassword">Cambiar Contraseña</a></li>
@@ -115,16 +142,22 @@ $code= $login->uid;
     	<div class='pull-right'>
     	<?php 
 		if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
-			<form name="buscausuario" class="form-inline" action="/reportes/buscarusuario/index">
-				Buscar por 
-			        <input type="text" name="nombre" class="input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" >
-			        <select name="rid" >
+			 
+			<form name="buscausuario" class="form-inline" role="form" action="/reportes/buscarusuario/index">
+			
+				<div class="col-lg-6"> 
+			        <input type="text" name="nombre" class="form-control input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" >
+			    </div>
+			    <div class="col-lg-3">
+			        <select name="rid" class="form-control " >
 			        	<option value="AL">Alumno</option>
 			        	<option value="DC">Docente</option>
 			        	<option value="EG">Egresado</option>
-			      	</select> 
+			      	</select>
+			  	</div> 
 			        <input type="submit"  class="btn btn-success" >
 			</form>			
+			
 		<?php } ?>
     	</div>
 	</div>
