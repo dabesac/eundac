@@ -1,0 +1,31 @@
+<div id="data">
+    <table class="table span9 table-bordered">
+        <thead>
+        <tr>
+                <th ><center>DNI</center></th>
+                <th ><center>Codigo<center></th>
+                <th ><center>Apellidos y Nombres</center></th>
+                <th ><center>Escuela</center></th>
+                <th ><center>Record</center></th>
+        </tr>
+        </thead>
+    <?php
+    if ($this->data){
+       foreach ($this->data as $info){
+           ?>
+            <tr>
+                <td><center><?php echo $info['pid'];?></center></td>
+                <td><center><?php echo $info['uid'];?></center></td>
+                <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
+                <td><?php echo $info['escid']?></td>
+                <td><center><a>Imprimir</a></center></td>
+            </tr>
+           <?php
+        }
+    }
+     ?>
+            
+
+    </table>
+        <div style="clear:both"></div>  
+</div>

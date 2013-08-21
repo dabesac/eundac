@@ -1,0 +1,70 @@
+<div id="listaalumnos">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <td>
+                <center>
+                    <h5 class="col-lg-3 col-md-offset-2">Código del Alumno:</h5>
+                    <div class="col-lg-2"><input id="uid" type="text" maxlength="10" onkeypress="return validNumber(event);" class="form-control"></div>
+                    <a id="buscar" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>Buscar</a>
+                </center>
+            </td>
+        </tr>
+    </table>
+
+    <div id="buscando" class="flotacarajo span10"></div>
+    <?php
+    if ($this->datos) { ?>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>#</th>
+            <th>Cód. Mat.</th>
+            <th>DNI.</th>
+            <th>Apellidos y Nombres</th>
+            <th>Nota</th>
+        </tr>
+        <?php
+            $c=1;
+            foreach ($this->datos as $datosal) { ?>  
+                <tr>
+                    <td><?php echo $c; ?></td>
+                    <td><?php echo $datosal['uid']; ?></td>
+                    <td><?php echo $datosal['pid']; ?></td>
+                    <td><?php echo $datosal['last_name0']." ".$datosal['last_name1'].", ".$datosal['first_name']; ?></td>
+                    <td><?php echo $datosal['notafinal']; ?></td>
+                </tr>
+            <?php
+            $c++;
+            } ?>
+    </table>
+        <?php
+    }else{ ?>
+        <div class="alert alert-info">
+            <b>INFORMACIÓN: </b>No hay alumnos registrados en este Curso.
+        </div>
+    <?php
+    }?>
+</div>
+<script>
+    function validNumber(e) {
+    var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
+    return ((tecla > 47 && tecla < 58) || tecla == 8);
+    }
+</script>
+<script>
+   $("#buscar").click(function(){
+        var uid = $("#uid").val();
+        var subid="<?php echo $this->subid ?>";
+        var curid="<?php echo $this->curid ?>";
+        var escid="<?php echo $this->escid ?>";
+        var perid="<?php echo $this->perid ?>";
+        var courseid="<?php echo $this->courseid ?>";
+        var turno="<?php echo $this->turno ?>";
+        if (uid=="") {
+            alert("Ingrese el Código del Alumno.");
+            return false;
+        };
+        var url="/rfacultad/registeractas/searchuser/uid/"+uid+"/escid/"+escid+"/subid/"+subid+"/curid/"+curid+"/perid/"+perid+"/courseid/"+courseid+"/turno/"+turno;
+        // alert(url);
+        $("#buscando").load(url);
+    });
+</script>

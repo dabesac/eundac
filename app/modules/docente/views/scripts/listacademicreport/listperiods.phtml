@@ -1,0 +1,8 @@
+<option value="">Periodo</option>
+<?php 
+	foreach ($this->listper as $p) {
+	print_r($p['perid']);?>
+        <option value="<?php echo $p['perid']?>"><?php echo $p['perid']." | ".$p['name']?></option>
+        <?php
+	}
+?>
