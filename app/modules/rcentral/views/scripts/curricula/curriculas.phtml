@@ -28,10 +28,20 @@ if ($this->curriculas) { ?>
 					<td>
 						<?php
 						if ($curriculas['state']=="B" || $curriculas['state']=="A") { ?>
-							<a href="/rcentral/curricula/modifycurricula/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>/accion/M" title="Modificar la Currícula"><i class="icon icon-pencil"></i>Modificar</a>	
+							<a href="#modifyc_curricula"
+								curid='<?php echo base64_encode($curriculas['curid'])?>'
+								escid='<?php echo base64_encode($curriculas['escid'])?>'
+								subid='<?php echo base64_encode($curriculas['subid'])?>'
+								title="Modificar la Currícula" 
+								data-toggle="modal" role="button" class='modifycur'>Modificar</a>
+
+							<a href="/rcentral/curricula/listcourses/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>/accion/V" title="Ver la Currícula" data-toggle="modal" role="button" class='modifycur'>Anañir Cursos</a>
+
 							<?php
 						}else{ ?>
-							<a href="/rcentral/curricula/modifycurricula/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>/accion/V" title="Ver la Currícula" data-toggle="modal" >Ver</a>
+							<a href="/rcentral/curricula/modifycurricula/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>/accion/V" title="Ver la Currícula" data-toggle="modal" role="button" class='modifycur'>Ver</a>
+
+							<a href="/rcentral/curricula/addcourses	/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>/accion/V" title="Ver la Currícula" data-toggle="modal" role="button" class='modifycur'>Visualizar Cursos</a>
 							<?php
 						}?>
 					</td>
@@ -75,6 +85,25 @@ if ($this->curriculas) { ?>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<div class="modal fade" id="modifyc_curricula" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close " data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Modificar Curricula</h4>
+        </div>
+        <div class="modal-body cont_mod_cur">
+          
+        </div>
+        <div class="modal-footer">
+          	
+          	
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script >
 	$(".new_cur").click(function(){
 		var escid=$.base64.encode($(this).attr('escid'));
@@ -86,4 +115,22 @@ if ($this->curriculas) { ?>
 				$(".cont_new_cur").html(data);
 		});
 	});	
+
+	$(".modifycur").on('click',function(){
+		// var url = ;
+		var curid = $(this).attr('curid');
+		var escid = $(this).attr('escid');
+		var subid = $(this).attr('subid');
+
+		$.get('/rcentral/curricula/modifycurricula',
+			{curid:curid,escid:escid,subid:subid},
+			function(data){
+				$(".cont_mod_cur").html(data);
+				// alert(data);
+			});
+
+		// alert(curid);
+	});
+
+	
 </script>

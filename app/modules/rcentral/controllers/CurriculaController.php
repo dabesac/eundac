@@ -129,6 +129,7 @@ class Rcentral_CurriculaController extends Zend_Controller_Action
 
 	public function modifycurriculaAction(){
 		try {
+                  $this->_helper->layout()->disableLayout();
                   $eid=$this->sesion->eid;
                   $oid=$this->sesion->oid;
                   $curid=base64_decode($this->_getParam('curid'));
@@ -142,12 +143,117 @@ class Rcentral_CurriculaController extends Zend_Controller_Action
                         'subid'=>$subid);
                   $curr= new Api_Model_DbTable_Curricula();
                   $curricula=$curr->_getOne($where);
+                  // print_r($curricula); exit();
                   $form = new Rcentral_Form_Curricula();
-                  $form->populate($curricula);
-                  $form->year->setAttrib("readonly",true);
-                  $this->view->form=$form;
+                  $form->year->setAttrib("disabled",'disabled');
+                  if ($this->getRequest()->isPost()) {
+                        $formData = $this->getRequest()->getPost();
+                              // print_r($formData);
+                        if ($form->isValid($formData)) {
+                              $pk=array(
+                                    'eid'=>$this->sesion->eid,
+                                    'oid'=>$this->sesion->oid,
+                                    'escid'=>$formData['escid_cur'],
+                                    'curid'=>$formData['curid'],
+                                    'subid'=>$formData['subid'],
+                                    );
+                              $formData['updated']=date('Y-m-d h:m:s');
+                              $formData['modified']=$this->sesion->uid;
+                              unset($formData['escid_cur']);
+
+                              $base_curricula      = new Api_Model_DbTable_Curricula();
+                              
+                                    if ($base_curricula->_update($formData,$pk)) {
+                                          // echo "vdv";exit();
+                                          $json = array(
+                                                        'status' => true,
+                                                        'tmp' => $pk['escid']."--".$pk['subid'],
+
+                                                    );
+                                          $this->_response->setHeader('Content-Type', 'application/json');  
+                                          $this->view->data = $json;
+                                         
+                                    }
+                                    else
+                                    {
+                                          
+                                          $json = array(
+                                                        'status' => false
+                                                    );
+                                          $this->_response->setHeader('Content-Type', 'application/json');  
+                                          $this->view->data = $json;
+                                         
+
+                                    }
+
+                        }
+                        else{
+                              $form->populate($formData);
+                              $this->view->form=$form;
+                              
+                        }
+                  }
+                  else
+                  {
+                        $form->escid_cur->setvalue($curricula['escid']);
+                        $form->populate($curricula);
+                        $this->view->form=$form;
+                  }
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
 	}
+      public function listcoursesAction(){
+            try {
+                  $eid=$this->sesion->eid;
+                  $oid=$this->sesion->oid;
+                  $curid=base64_decode($this->_getParam('curid'));
+                  $escid=base64_decode($this->_getParam('escid'));
+                  $subid=base64_decode($this->_getParam('subid'));
+                  $where=array(
+                              'eid'=>$eid,'oid'=>$oid,
+                              'curid'=>$curid,'escid'=>$escid,
+                              'subid'=>$subid,
+                        );
+
+                  // $order=" semid ASC";
+                  $base_course= new Api_Model_DbTable_Curricula();
+                  $data_course = $base_course->_getAmountCourses($curid,$subid,$escid,$oid,$eid);
+                  // $data_course = $base_course->_getAll($where,$order);
+
+                  // if ($data_course){
+                  //       $base_semestre = new Api_Model_DbTable_Semester();
+                  //       foreach ($data_course as $key => $data) {
+                  //             // echo $data['semid'];
+                  //             $where=array('eid'=>$eid,'oid'=>$oid,'semid'=>$data['semid']);
+                  //             $nom_sem=$base_semestre->_getOne($where);
+                  //             $data_course[$key]['name_sem']=$nom_sem['name'];
+                  //             // print_r($nom_sem);
+                  //             // $data_course[$key]['name_sem']=$nom_sem[0];
+                  //       }
+                  // }
+
+                  // $this->view->data_course=$data_course;
+                  print_r($data_course);
+
+            } catch (Exception $e) {
+                  print "Error: listcourses ".$e->getMessage();
+            }
+      }
+
+      public function addcoursesAction(){
+            try {
+                  $eid=$this->sesion->eid;
+                  $oid=$this->sesion->oid;
+                  $curid=base64_decode($this->_getParam('curid'));
+                  $escid=base64_decode($this->_getParam('escid'));
+                  $subid=base64_decode($this->_getParam('subid'));
+                  
+                  $form= new Rcentral_Form_Course();
+
+                  $this->view->form->$formData;
+            } catch (Exception $e) {
+                  print "Error : in addcourse".$e->getMessage();
+            }
+      }
 }
