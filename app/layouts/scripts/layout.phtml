@@ -31,7 +31,15 @@ $code= $login->uid;
 		
    		<!-- JQuery UI-->
    		<script src="/external/jquery/jquery-1.9.1.js"></script>
+   		<script src="/external/jquery/additional-methods.min.js"></script>
+   		<script src="/external/jquery/jquery.validate.min.js"></script>
+   		<script src="/external/jquery/messages_es.js"></script>
+   		
+   		
+   		<script src="/external/jquery/ui/minified/i18n/jquery.ui.datepicker-es.min.js"></script>
    		<script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
+   		
+   		
    		<script src="/external/jquery/external/globalize.js"></script>
    		<script src="/external/jquery/external/jquery.mousewheel.js"></script>
    		<script src="/external/jquery/external/jshint.js"></script>
@@ -48,8 +56,9 @@ $code= $login->uid;
    		
    		<!-- Bootstrap -->
    		<script src="/external/bootstrap/js/bootstrap.min.js"></script>
-   		<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
-   		<link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+   		
+   		<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.min.css">
+   		<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap-theme.min.css">
    		
    		<!-- JS  -->
    		
@@ -131,7 +140,7 @@ $code= $login->uid;
 		if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
 			<form name="buscausuario" class="form-inline" role="form" action="/reportes/buscarusuario/index">
 				<div class="col-lg-6" style="margin:0px;padding: 0px;"> 
-			        <input type="text" name="nombre" class="form-control input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" >
+			        <input type="text" name="nombre" class="form-control input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" required>
 			    </div>
 			    <div class="col-lg-4" style="margin:0px;padding: 0px;">
 			        <select name="rid" class="form-control " >

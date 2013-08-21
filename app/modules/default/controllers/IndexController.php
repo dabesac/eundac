@@ -112,6 +112,19 @@ class IndexController extends Zend_Controller_Action {
     					$msg = "Error nose especifico un rol para el usuario";
     					$this->_redirect("/error/msg/msg/'$msg'");
     				}
+    				// Select infoteacher
+    				$datate['eid']= $data->eid;
+    				$datate['oid']= $data->oid;
+    				$datate['uid']= $data->uid;
+    				$datate['pid']= $data->pid;
+    				$datate['escid']= $data->escid;
+    				$datate['subid']= $data->subid;
+    				$teacher = new Api_Model_DbTable_Infoteacher();
+    				$rowteacher = $teacher->_getOne($datate);
+    				if ($rowteacher) $data->infouser['teacher']=$rowteacher;
+    				
+    				
+    				
     				// Register access
     				$clientIp = $this->getRequest()->getClientIp();
     				$log = new Api_Model_DbTable_Logs();
