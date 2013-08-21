@@ -1,0 +1,46 @@
+<?php
+$year=date('Y');
+?>
+<div class="col-md-12"><h2 class="text-left">Reporte Academico</h2><h3></h3></div>
+<div class="row">
+<div class="col-xs-8">
+    <center><select id="anho" name="anho" class="input-sm">
+        <option>Año</option>
+        <?php for ($i=$year;$i>=1990;$i--) {?>
+              <option value="<?php echo $i;?>"><?php echo $i;?></option>
+        <?php }?>
+    </select>
+
+    <select id="perid" name="perid" class="input-sm" rel="tooltip" title="Periodo">
+        <option value="">Periodo</option>
+   	</select></center>
+</div>    
+<div class="col-xs-4">
+    <a href="" class="btn btn-info">Reportes</a>
+    <h3></h3>
+</div>
+</div> 
+ 
+
+<div id="list_teachers" class="col-md-12"></div>
+
+<script>
+$("#anho").change(function(){
+	$("#anho option:selected").each(function(){
+    	var anio=$(this).val(); 
+    	$.get('listacademicreport/listperiods',{anio:anio},function(data){
+    		$("#perid").html(data);
+    	});
+    });
+});
+
+$("#perid").change(function(){
+    $("#perid option:selected").each(function(){
+        var perid=$(this).val();
+        $.get('listacademicreport/listteachers',{perid:perid},function(data){
+            $("#list_teachers").html(data);
+        })
+    })
+})
+
+</script>

@@ -1,0 +1,54 @@
+<div id="data">
+
+    <table class="table span9 table-bordered">
+        <thead>
+        <tr>
+                
+                <th >DNI</th>
+                <th >USUARIO</th>
+                <th >Nombres</th>
+                <th >Escuela</th>
+                <th >Record</th>
+        </tr>
+        </thead>
+
+    <?php
+    if ($this->data)
+    {
+       foreach ($this->data as $info)    
+        {
+            $data=null;
+            $facid=$this->facid;
+            $facaulm = new Api_Model_DbTable_Speciality();
+            $data['eid'] = $info['eid'];
+            $data['oid'] = $info['oid'];
+            $data['escid'] = $info['escid'];
+            $data['subid'] = $info['subid'];
+
+            $rfacaulm = $facaulm->_getOne($data);
+            
+            if ($rfacaulm) $vfacalum= $rfacaulm['facid'];
+    ?>
+            <tr>
+                <td><?php echo $info['pid'];?></td>
+                <td><?php echo $info['uid'];?></td>
+                <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
+                <td><?php echo $info['escid']?></td>
+                <td>
+                    <?php 
+                    if ($facid==$vfacalum || $facid=="TODO"){
+                        ?>
+                    <center><a href="/rcentral/recordnotas/print/uid/<?php echo base64_encode($info['uid'])?>/escid/<?php echo base64_encode($info['escid'])?>"><img src="/img/pdf.png"></a></center></td>
+                    <?php 
+                    }
+                    ?>
+                    
+            </tr>
+          <?php 
+            
+        }    
+    }
+    ?>
+    </table>
+        <div style="clear:both"></div>  
+</div>

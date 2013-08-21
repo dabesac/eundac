@@ -4,7 +4,8 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
 
     public function init()
     {
-       
+
+     
     }
 
     public function indexAction()
@@ -32,8 +33,6 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
             $form=new Rfacultad_Form_Getcond();
             $form->send->setLabel("Buscar");
             $this->view->form=$form;
-
-
         }  
         catch (Exception $ex)
         {
@@ -41,40 +40,6 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
         }
 
     }
-
-    //  public function getspecAction()
-    // {
-    //  try
-    //     {
-    //         $this->_helper->layout()->disableLayout();
-    //         $eid="20154605046";
-    //      $oid="1";
-    //      $subid = "1901";
-    //      $facid="4";
-    //      $state="A";
-    //      $where['eid']=$eid;
-    //      $where['oid']=$oid;
-    //      $where['facid']=$facid;
-    //      $where['state']=$state;
-    //         $db_esp = new Api_Model_DbTable_Especiality();
-    //         if ($subid == '1901')
-    //         {
-    //             $esp = $db_esp->_getFilter($where);
-    //             $this->view->esp = $esp;
-    //         }
-    //         else
-    //         {
-    //             $escuelas = $db_esc->_getEscuelaXSede($eid,$oid,$sedid);
-    //             $this->view->escuelas = $escuelas;
-    //         }
-
-    //     }
-    //     catch (Exception $ex)
-    //     {
-    //         print "Error : ".$ex->getMessage();
-    //     }
-
-    // }
 
     public function getstudentAction()
     {
@@ -89,7 +54,7 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
             $am = trim(strtoupper($this->_getParam('am')));        
             $code = $this->_getParam('uid');        
             $escid = $this->_getParam('escid');   
-            $condi = $this->_getParam('cond');
+            $cond = $this->_getParam('cond');
             $this->view->name=$name;
             $this->view->ap=$ap;
             $this->view->am=$am;
@@ -98,33 +63,26 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
             $this->view->perid= $perid;
             $where['oid']=$oid;
             $where['eid']=$eid;
-            $where['escid']=$oid;
-            $where['perid']=$oid;
+            $where['escid']=$escid;
+            $where['perid']=$perid;
             $where['name']=$name;
             $where['ap']=$ap;
             $where['am']=$am;
 
-
-
-
-            $bdu = new Api_Model_DbTable_Condition();        
-            if ($condi=='C')
+           $bdu = new Api_Model_DbTable_Condition();        
+            if ($cond=='C')
             {
                 $str = " and (p.last_name0 like '%$ap%' and p.last_name1 like '%$am%' and ca.uid like '$code%' and upper(p.first_name) like '%$name%' )";            
                 $datos= $bdu->_getUsercCondition($eid,$oid,$str,$escid,$perid);
-
             }
 
-            if ($condi=='S')
+            if ($cond=='S')
             {
-                // $str = " and (p.ape_pat like '%$ap%' and p.ape_mat like '%$am%' and u.uid like '$codigo%' and upper(p.nombres) like '%$nombre%' ) and uid not in (select uid from condicion_alumno
-                // where perid='$perid' AND eid='$eid' 
-                // and oid='$oid' and escid='$escid')";
                 $datos= $bdu->_getUsersCondition($where);
             }
 
             $this->view->bdu=$bdu;
-            $this->view->condicion=$condi;          
+            $this->view->condicion=$cond;          
             $this->view->datos=$datos;
                         
         }  
@@ -134,4 +92,196 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
         }
 
     }
+
+     public function detailAction()
+    {
+        try
+        {
+            $this->_helper->getHelper('layout')->disableLayout();
+            $uid = base64_decode($this->_getParam('uid'));
+            $pid = base64_decode($this->_getParam('pid'));
+            $escid = base64_decode($this->_getParam('escid'));
+            $subid = base64_decode($this->_getParam('subid'));
+            $condi = base64_decode($this->_getParam('condi'));
+
+            $listacursos = ($this->_getParam('listacursos'));
+            // $this->view->listacursos=$listacursos; 
+            $form=new Rfacultad_Form_Condition();
+            $perid="13A";//$this->sesion->perid;
+            $eid = "20154605046";//$this->sesion->eid;        
+            $oid = "1";//$this->sesion->oid;
+            $uidreg = " 04056889RF";// $this->sesion->uid;
+            $this->view->perid=$perid;
+            $this->view->eid=$eid;
+            $this->view->oid=$oid; 
+            $this->view->condi=$condi; 
+            $this->view->escid=$escid;
+            $this->view->subid=$subid; 
+            $this->view->uid=$uid; 
+            $this->view->pid=$pid; 
+
+            if ($this->getRequest()->isPost())
+            {
+                $formData = $this->getRequest()->getPost(); 
+                $condi = $formData['condi'];
+                $formData['perid']=$perid;
+                $formData['eid']=$eid;
+                $formData['oid']=$oid;
+                unset($formData['condi']);
+                if (!($condi=='S' &&  $formData['semester']=="" && $formData['credits']=="" && $formData['num_registration']==""))
+                {
+                    $formData1= $formData;
+                    $bdcondiciones = new Api_Model_DbTable_Condition();  
+                    if ($condi == 'C' || $condi == 'S')
+                    {
+                        if ($formData['semester']=="") unset($formData['semester']);
+                        if ($formData['credits']=="") unset($formData['credits']);
+                        if ($formData['num_registration']=="") unset($formData['num_registration']);
+                        $formData['register']=$uidreg; 
+                        unset($formData['guardar']);  
+                        unset($formData['listacursos']);            
+                        $dato=$bdcondiciones->_guardar($formData);
+                        if($listacursos){
+                            if($dato){              
+                                 $condicion = new Api_Model_DbTable_Studentcondition();                                
+                                        
+                                 for ($i=0; $i < count($listacursos) ; $i++) {
+                                        $dato['cnid']=trim($dato['cnid']);
+                                        $dato['temid']=time();  
+                                        $dato['courseid']=$listacursos[$i];
+                                        $dato=$condicion->_guardar($dato);
+                                 }
+                            }
+                        }                     
+                    }
+                $this->view->g_reg = "Se guardo Correctamente";
+                }
+            }
+            else
+            {
+                $this->view->uid=$uid;
+                $this->view->pid=$pid;
+                $this->view->escid=$escid;
+                $this->view->sedid=$sedid;
+
+                $this->view->condicion=$condi;
+                $rid='AL';
+
+                $where['eid']=$eid;
+                $where['oid']=$oid;
+                $where['pid']=$pid;
+                $where['escid']=$escid;
+                $where['uid']=$uid;
+                $where['perid']=$perid;
+                $where['subid']=$subid;
+                
+                if ($condi=='C')
+                {
+                    $bdalumno = new Api_Model_DbTable_Condition();        
+                    $datos= $bdalumno->_getFilter($where);
+                    // print_r($datos);
+                    $this->view->datos=$datos;
+                    $dataform = array();
+                    $dataform['uid'] = $datos['uid'];
+                    $dataform['pid'] = $datos['pid'];
+                    $dataform['escid'] = $datos['escid'];
+                    $dataform['subid'] = $datos['subid'];
+                    $dataform['condi'] = $condi;                    
+                    $dataform['doc_authorize'] = $datos['doc_authorize'];
+                    $dataform['nsemestre'] = $datos['nsemestre'];
+                    $dataform['ncreditos'] = $datos['ncreditos'];
+                    $dataform['vmatricula'] = $datos['vmatricula'];
+                    $dataform['comments'] = $datos['comments'];
+                //     // $form->populate($dataform);
+                }
+            }
+            $this->view->form=$form;
+        }
+        catch(Exception $ex )
+        {
+            print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
+        } 
+    }
+
+
+          public function listcourseAction()
+      {
+        try{
+                     $this->_helper->getHelper('layout')->disableLayout();
+                     $where['eid']="20154605046";//$this->sesion->eid;
+                     $where['oid']='1';//$this->sesion->oid;
+                     $where['uid']=$this->_getParam("uid");
+                     $this->view->uid=$uid; 
+
+                     $where['perid']=$this->_getParam("perid");
+                     $this->view->perid=$perid; 
+
+                     $where['escid']=$this->_getParam("escid");
+                     $this->view->escid=$escid; 
+
+                     $where['pid']=$this->_getParam("pid");
+                     $this->view->pid=$pid; 
+
+                     $where['subid']=$this->_getParam("subid");
+                     $this->view->sedid=$sedid; 
+
+                     $dbcurricula=new Api_Model_DbTable_Studentxcurricula();
+                     $datcur=$dbcurricula->_getOne($where);
+                     $where['curid']=$datcur['curid'];
+                     $this->view->curid=$curid; 
+
+
+                    require_once 'Zend/Loader.php';
+                    Zend_Loader::loadClass('Zend_Rest_Client');
+                     $base_url = 'http://localhost:8080/';
+                     $endpoint = '/s1st3m4s/und4c/delete_course';
+                     $data = array('uid' => $where['uid'], 'pid' => $where['pid'], 'escid' => $where['escid'],'subid' =>$where['subid'],'eid' =>$where['eid'],'oid' =>$where['oid'],'perid'=>$where['perid'],'curid'=>$where['curid']);
+                     $client = new Zend_Rest_Client($base_url);
+                     $httpClient = $client->getHttpClient();
+                     $httpClient->setConfig(array("timeout" => 680));
+                     $response = $client->restget($endpoint,$data);
+                     $lista=$response->getBody();
+                      // print_r($lista);
+                     $data = Zend_Json::decode($lista);
+                     $this->view->cursos=$data; 
+
+                     // print_r($data);                 
+          }   
+                  
+         catch (Exception $ex)
+          {
+            print "Error : eliminar".$ex->getMessage();
+          }
+      }
+
+
+          public function deleteAction()
+      {
+        try{
+                        $this->_helper->getHelper('layout')->disableLayout();
+                        $where['eid']="20154605046";//$this->sesion->eid;
+                        $where['oid']='1';//$this->sesion->oid;
+                        $where['uid']=$this->_getParam("uid");
+                        $where['perid']=$this->_getParam("perid");
+                        $where['escid']=$this->_getParam("escid");
+                        $where['cnid']=$this->_getParam("cnid");
+                        $where['pid']=$this->_getParam("pid");
+                        $where['subid']=$this->_getParam("subid");
+                        $condicion = new Api_Model_DbTable_Studentcondition();
+                        $condi= new Api_Model_DbTable_Condition();
+                        $condicion->_delete($where);
+                        $condi->_delete($where);
+                        if ($condi && $condicion) { ?>
+                               <script type="text/javascript">
+                            window.location.reload();
+                               </script>
+                         <?php }
+          }   
+                  
+         catch (Exception $ex)
+          {
+            print "Error : eliminar".$ex->getMessage();
+          }
+      }
+
 }

@@ -66,8 +66,7 @@
 
     $("#escid").change(function () {
         $("#escid option:selected").each(function () {
-            escuela = $(this).val();
-            alert(escuela);           
+            escuela = $(this).val();          
             $('#cargadatoa_').html("<img src='/img/spinner.gif'> Cargando....");
             $("#formFilDoc").submit();
 

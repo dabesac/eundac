@@ -86,4 +86,140 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
 			print "Error: Read Course ";
 		}
 	}
+
+    public function _getAmountCourses($curid="",$subid="",$escid="",$oid="",$eid=""){
+        try {
+                $sql = $this->_db->query("
+                    SELECT DISTINCT CAST (c.SEMID AS INTEGER),s.name FROM base_courses as c
+                    inner join base_semester as s
+                    on c.semid=s.semid and c.eid=s.eid and c.oid=s.oid
+                    WHERE CURID='$curid' and escid='$escid' and subid='$subid' and c.state='A'
+                    ORDER BY CAST(c.SEMID AS INTEGER)
+                ");
+                if ($sql) return $sql->fetchAll();
+                return false;  
+        } catch (Exception $e) {
+            print "Error: Read AmountCourses".$e->getMessage();
+        }
+    }
+
+
+//FALTA
+   //      public function _getPerformance($where=null){
+   //       try{
+			//  $sub_select = $select = $this->_db->select()
+			// ->from(array('MC' => 'BASE_REGISTRATION_COURSE'))
+			// 	->join(array('M' => 'BASE_REGISTRATION'),'MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE="M" AND MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE="M" AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) > 10', 
+			// 			array('COUNT' => 'COUNT(*)')); 
+			 
+
+			//  $select = $this->_db->select()->distinct()
+			// ->from(array('PC' => 'BASE_PERIODS_COURSES'),array('PC.SEMID','NAME','PC.COURSEID'),array('APROBADOS'=>$sub_select))
+			// 	->join(array('C' => 'BASE_COURSES'),'PC.COURSEID=C.COURSEID AND PC.ESCID=C.ESCID AND PC.CURID=C.CURID AND PC.OID=C.OID AND PC.EID=C.EID AND PC.SUBID=C.SUBID')
+			// 	->where('PERID = ?', $where['PERID'])->where('PC.ESCID = ?', $where['ESCID'])->where('PC.CURID = ?', $where['CURID'])
+			// 	->where("u.uid NOT IN ?", $sub_select) ;
+			// $results = $select->query();			
+			// $rows = $results->fetchAll();
+			// if($rows) return $rows;
+			// return false;	
+   //       }catch (Exception $ex) {
+   //           print $ex->getMessage();
+   //       }
+   //   }
+
+	 public function _getPerformance($escid,$curid,$perid,$eid,$oid){
+            try{
+               if ($escid=="" || $curid=="" || $perid=="" || $eid=="" || $oid=="") return false;
+               else
+               {
+                $sql=$this->_db->query(" 
+			SELECT DISTINCT PC.SEMID,NAME,PC.COURSEID,
+                (
+                    SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
+                    INNER JOIN BASE_REGISTRATION AS M
+                    ON MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE='M'
+                    WHERE MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE='M' AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) > 10
+                ) AS APROBADOS,
+                ROUND(
+                    (
+                    SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
+                    INNER JOIN BASE_REGISTRATION AS M
+                    ON MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE='M'
+                    WHERE MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE='M' AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) > 10
+                    ) /
+                    ((
+                    SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
+                    INNER JOIN BASE_REGISTRATION AS M
+                    ON MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE='M'
+                    WHERE MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE='M'
+                    ) * 0.01),2
+                ) AS PORC_AP,
+                (
+                    SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
+                    INNER JOIN BASE_REGISTRATION AS M
+                    ON MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE='M'
+                    WHERE MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE='M' AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) <= 10 AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) <= 10 AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) >= 0
+                ) AS DESAPROBADOS,
+                ROUND(
+                    (
+                    SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
+                    INNER JOIN BASE_REGISTRATION AS M
+                    ON MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE='M'
+                    WHERE MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE='M' AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) <= 10 AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) <= 10 AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) >= 0
+                    ) /
+                    ((
+                    SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
+                    INNER JOIN BASE_REGISTRATION AS M
+                    ON MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE='M'
+                    WHERE MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE='M'
+                    )*0.01),2
+                ) AS PORC_DESAP,
+                (
+                    SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
+                    INNER JOIN BASE_REGISTRATION AS M
+                    ON MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE='M'
+                    WHERE MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE='M' AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) = -3
+                ) AS RETIRADOS,
+                ROUND(
+                    (
+                    SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
+                    INNER JOIN BASE_REGISTRATION AS M
+                    ON MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE='M'
+                    WHERE MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE='M' AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) = -3
+                    ) /
+                    ((
+                    SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
+                    INNER JOIN BASE_REGISTRATION AS M
+                    ON MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE='M'
+                    WHERE MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE='M'
+                    ) * 0.01),2
+                ) AS PORC_RET,
+                (
+                    SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
+                    INNER JOIN BASE_REGISTRATION AS M
+                    ON MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE='M'
+                    WHERE MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE='M'
+                ) AS TOTALES
+                FROM BASE_PERIODS_COURSES AS PC
+                INNER JOIN BASE_COURSES AS C
+                ON PC.COURSEID=C.COURSEID AND PC.ESCID=C.ESCID AND PC.CURID=C.CURID AND PC.OID=C.OID AND PC.EID=C.EID AND PC.SUBID=C.SUBID
+                WHERE PERID='$PERID' AND PC.ESCID='$ESCID' AND PC.CURID='$CURID' AND
+                (
+                (
+                    SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
+                    INNER JOIN BASE_REGISTRATION AS M
+                    ON MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE='M'
+                    WHERE MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE='M'
+                )>0 
+                )
+                ORDER BY SEMID,COURSEID
+            ");
+            return $sql->fetchAll(); 
+               }
+            }  catch (Exception $ex){
+                print "Error: Lecturando cursos con estadisticas de rendimientos ".$ex->getMessage();
+            }
+        }
+
+
 }

@@ -1,8 +1,15 @@
+
+<div>
+	<h4>
+		<span class="glyphicon glyphicon-th-list"></span> 
+		GESTIÓN CURRÍCULA
+	</h4>
+	<nav>
+		
+	</nav>
+</div>
 <div>
 	<table class="table table-hover span10">
-		<tr>
-			<th colspan="4" style="font-size:15px"><center>GESTIÓN CURRÍCULA</center></th>
-		</tr>
 		<tr>
 			<th>Facultad:</th>
 			<td>
@@ -28,15 +35,29 @@
 </div>
 <div id="curriculas"></div>
 
-<script type="text/javascript">
-$("#facid").change(function(){
-	var facid=$(this).val();
-	$("#escid").load("/rcentral/curricula/schools/facid/"+facid);
-});
 
-$("#escid").change(function(){
-	var escid=$(this).val();
-	var tmp=escid.split('--');
-	$("#curriculas").load("/rcentral/curricula/curriculas/escid/"+tmp[0]+"/subid/"+tmp[1]);
-});
+<style type="text/css">
+	.modal-dialog
+	{
+		width: 880px;
+	}
+</style>
+
+<script type="text/javascript">
+	$("#facid").change(function(){
+		$("#facid option:selected").each(function(){
+			var facid=$.base64.encode($(this).val());
+			$.get('/rcentral/curricula/schools',{facid:facid},function(data){
+				$("#escid").html(data);
+			});
+		})
+	});
+	$("#escid").change(function(){
+		$("#escid option:selected").each(function(){
+			var tmp=$.base64.encode($(this).val());
+			$.get('/rcentral/curricula/curriculas',{escid:tmp},function(data){
+				$("#curriculas").html(data);
+			});
+		})
+	});
 </script>

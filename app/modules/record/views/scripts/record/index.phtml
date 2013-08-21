@@ -1,0 +1,81 @@
+<?php
+$year=date('Y');
+?>
+
+<div><h2>Actas</h2></div>
+<div class="row">
+<table class="table span12 table-striped">
+<tr>
+	<th class="span2">
+    	<select id="anho" name="anho" class="input-sm">
+        <?php for ($i=$year;$i>=1990;$i--) {?>
+              <option value="<?php echo $i;?>"><?php echo $i;?></option>
+        <?php }?>
+        </select>
+    </th>
+    <th class="span3">
+    	<select id="perid" name="perid" class="input-sm" rel="tooltip" title="Periodo">
+    	   <option value="">Periodo</option>
+    	</select>               
+    </th>
+    <th class="coolspan3"> 
+        <select id="escid" name="escid" class="input-sm" rel="tooltip" title="<Escuela" <?php if($rid=='DC') {?> disabled="disabled" <?php }?>>
+        	<?php if ($this->listspec){
+            	if ( $rid!='DC')
+                {
+                	echo '<option value="">Escuela...</option>';
+                }
+                foreach ($this->listspec as $spec){
+                	?>
+                	<option value="<?php echo $spec['escid']?>"><?php echo $spec['name']?></option>
+                <?php } 
+                }else{ ?>
+                	<option value="">No tienen ninguna escuela</option>
+                <?php
+            }?>
+        </select>
+  	</th>
+  	<th>
+    	<input type="text" name='name' id="name"  size="35"  class="input-sm" rel="tooltip" title="Curso a filtrar">
+    </th>
+    <th style='vertical-align: middle'><a href="#" id="seerecords" class="btn btn-info">Ver</th>
+</tr>
+
+
+</table>
+</div>
+<div id="detail_course" class="span12"></div>
+
+<script>
+	var year=$("#anho").val();
+	$.get('record/listperiod/',{anio:year},function(data){
+    			$("#perid").html(data);
+    		});
+    $("#anho").change(function(){
+    	$("#anho option:selected").each(function (){
+    		var anio=$(this).val(); 
+    		$.get('/record/listperiod/',{anio:anio},function(data){
+    			$("#perid").html(data);
+    		});    		
+    	});
+    });
+    
+    
+    $("#seerecords").click(function(){           
+        $("#escid option:selected").each(function(){
+            var escid=$(this).val();
+                if (escid!=""){
+                    anio=$("#anho").val();
+                    perid=$("#perid").val();
+                    $.get('record/getcourses/',{perid:perid,escid:escid},function(data){
+                            //alert(data);
+                            $("#detail_course").html(data);
+                    }); 
+                }else{
+                    alert("Seleccione una Escuela");
+                }       
+        });    
+    })
+         
+   
+ </script>

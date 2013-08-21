@@ -1,0 +1,55 @@
+<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+<link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+<table class="table span9 table-striped table-bordered table-condensed" border="1">
+        <tr>
+            <th class="span1">Sem.</th>
+            <th class="span1">Per.</th>
+            <th class="span1">Cod. Curso</th>
+            <th>Nombre Curso</th>
+            <th class="span1">Turno</th>
+            <th class="span1">Creditos</th>
+            <th class="span1">Prom. Final</th>
+        </tr>
+    <?php
+    foreach ($this->data as $nota){
+    ?>
+        <tr>
+            <td><?php print $nota['semid'] ?></td>
+            <td><?php print $nota['perid'] ?></td>
+            <td><?php print $nota['courseid']?></td>
+            <td><?php print $nota['name']?></td>
+            <td><?php print $nota['turno']?></td>
+            <td><?php print $nota['creditos']?></td>
+            <td><?php           
+            if ($nota['nota']=='' )
+            {
+              print "-";
+            }
+            else
+            {
+              if ($nota['nota']=='-3' )
+                    {
+                     print "R";
+                    }
+                        else
+                        {       
+
+                            if ($nota['nota']=='-2' )
+                                {
+                                    print "N. P.";
+                                }
+                                else
+                                    {
+                
+                                        print $nota['nota'];
+                                    }
+                        }
+            }
+            ?></td>
+        </tr>        
+    <?php
+    }
+    ?>       
+    </table>

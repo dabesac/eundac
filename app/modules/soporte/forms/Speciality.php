@@ -56,7 +56,7 @@ class Soporte_Form_Speciality extends Zend_Form{
         $parent->removeDecorator('Label');
         $parent->removeDecorator('HtmlTag');
         $parent->setAttrib('class','form-control');
-        $parent->setRegisterInArrayValidator(false);
+        // $parent->setRegisterInArrayValidator(false);
         $parent->addMultiOption("","- Selecione la Escuela -");
 
         $state = new Zend_Form_Element_Select('state');
@@ -69,7 +69,7 @@ class Soporte_Form_Speciality extends Zend_Form{
 
 
         $submit = new Zend_Form_Element_Submit('send');
-        $submit->setAttrib('class', 'btn btn-info');
+        $submit->setAttrib('class', 'btn btn-success');
         $submit->setLabel('Guardar');
         $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
 

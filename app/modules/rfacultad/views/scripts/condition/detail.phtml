@@ -1,0 +1,159 @@
+<?php
+$escid= $this->escid;
+$subid= $this->subid;
+$uid=$this->uid;
+$pid=$this->pid;
+$perid=$this->perid;
+$oid=$this->oid;
+$eid=$this->eid;
+$condi=$this->condi;
+    ?>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+        <script src="/external/jquery/jquery-1.9.1.js"></script>
+        <script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
+        <script src="/external/jquery/external/globalize.js"></script>
+        <script src="/external/jquery/external/jquery.mousewheel.js"></script>
+        <script src="/external/jquery/external/jshint.js"></script>
+        <script src="/external/jquery/external/qunit.js"></script>
+        <script src="/external/jquery/external/base64/jquery.base64.min.js"></script>
+
+        
+        <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
+        
+        <!-- Texto Enriquecido-->
+        <link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
+        <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
+        
+        <!-- Bootstrap -->
+        <script src="/external/bootstrap/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+        <link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+        
+        <!-- JS  -->
+        
+        
+        <!-- CSS  Generic-->
+        
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+<?php
+if ($this->g_reg){?>
+	<center>
+	<div class="alert alert-success"><?php echo $this->g_reg?></div>
+	<a href="#" class="btn btn-danger" onclick="javascrit: window.close();">Cerrar Ventana</a>
+	</center>	
+<?php }else{?>
+	
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getName(); ?>" action="/rfacultad/condition/detail" method="POST" enctype="application/x-www-form-urlencoded">
+    <table class="table  table-striped table-bordered table-condensed " style='font-size: 12px'>
+        <tr class='alert-danger'>
+            <th colspan="4"><center><span><h4><b>CONDICION PARA MATRICULA<b/></h4></span></center></th>
+        </tr>
+        <tr >
+            <th class="span3 bloke" >Aumentar créditos</th>
+            <th class="span3 bloke">Aumentar Numero de Veces Matricula</th>
+            <th class="span3 bloke"> Cantidad de Semestres:</th>  
+            <th class="span3 bloke"> Quitar cursos:</th>        
+        </tr>
+        <tr>
+            <td><?php print $this->form->credits; ?></td>
+            <td><?php print $this->form->num_registration; ?></td>
+            <td><?php print $this->form->semester; ?></td>
+            <td ><center><a id="quitar">
+                 <img src="/img/course.png"  rel="tooltip" title="Quitar Cursos" /></a>
+             </center>
+             </td>
+        </tr>
+        <tr class='alert-success'>       
+            <td colspan="4" ><div id='cursos' class='flotacarajo span10'>                     
+            </div></td>
+        </tr>
+		<tr class='alert-success'>
+			<th>Documento Autorización</th>
+			<td colspan="3" ><?php print $this->form->doc_authorize->setAttrib("title","Resolución"); ?></td>
+		</tr>
+        <tr style="font-size: 12px" class='alert-success' >
+            <th >Detalles</th>
+            <td colspan="3">
+                <?php print $this->form->uid->setvalue($uid); ?>
+                <?php print $this->form->pid->setvalue($pid); ?>
+                <?php print $this->form->subid->setvalue($subid); ?>
+                <?php print $this->form->escid->setvalue($escid); ?>
+                <?php print $this->form->condi->setvalue($condi); ?>
+                <?php print $this->form->comments; ?>
+            </td>
+        </tr> 
+        <tr>
+			<td colspan="4"><center>
+            <?php print $this->form->guardar; ?>
+        	</center></td>
+        </tr>        
+    </table>
+</form>
+
+<script>
+     //cargamos los cursos pendientes 
+    $("#quitar").click(function(){
+
+        $("#cursos").html("<img scr='/img/spinner.gif' />Cargando...");
+        var url="/rfacultad/condition/listcourse/perid/<?php print $perid?>/escid/<?php print $escid?>/uid/<?php print $uid?>/pid/<?php print $pid?>/subid/<?php print $subid?>";
+        // alert(url);
+        $("#cursos").load(url);
+            });
+</script>
+<?php 
+if (($this->condi)=='C'){ ?>
+   <table class="table  table-striped table-bordered table-condensed " style='font-size: 12px'>
+        <tr class='alert-susses'>
+            <th colspan="4"><center><span><h4>HISTORIAL DE CONDICIONES</h4></span></center></th>
+        </tr>
+        <tr >
+            <th class="bloke" >#</th>
+            <th class="span4 bloke" >Resoluciòn</th>
+            <th class="span5 bloke">Detalle Resoluciòn</th>
+            <th class="span1 bloke">Eliminar</th>                   
+        </tr>
+        <?php 
+
+        $i=1;
+       foreach ($this->datos as $condi)    
+        { ?>
+         <tr>
+        <div id='det1'></div>
+        <td> <?php print $i?> </td>
+        <td> <?php print $condi['doc_authorize']?> </td>
+        <td> <?php print $condi['comments']?> </td>       
+        <td> <a id="<?php echo $condi["cnid"] ?>">
+            <img src="/img/delete.ico"  rel="tooltip" title="Eliminar" />
+              </a>
+                    <script>                   
+                        $("#<?php echo $condi['cnid'] ?>").click(function(){    
+                            if (confirm('Esta Seguro que desea eliminar la condicion?'))
+                            {
+                                url="/rfacultad/condition/delete/cnid/<?php print $condi['cnid']?>/perid/<?php print $condi['perid']?>/escid/<?php print $condi['escid']?>/uid/<?php print $condi['uid']?>/pid/<?php print $condi['pid']?>/subid/<?php print $condi['subid']?>";
+                                $("#det1").load(url);
+                            }
+                            else
+                            return false;
+                        });
+                    </script>
+        </td>       
+        </tr>         
+           <?php
+            $i++;
+        }?>
+</table>
+<?php }?>
+<style type="text/css">
+    #nsemestre {width:128px;}
+    #ncreditos{width:128px;}
+    #vmatricula{width:125px;}
+    #detalles{width:300px;}
+</style>
+<?php }
+?>
+
+

@@ -1,0 +1,12 @@
+<?php 
+if ($this->curriculas) { ?>
+	<option value="">- Seleccione Currícula -</option>
+	<?php
+	foreach ($this->curriculas as $curriculas) { ?>
+		<option value="<?php echo $curriculas['curid']?>"><?php echo $curriculas['curid']." | ".$curriculas['name']?></option>	
+	<?php
+	}
+}else{ ?>
+	<option value="">No tiene ninguna Currícula.</option>
+<?php
+}?>

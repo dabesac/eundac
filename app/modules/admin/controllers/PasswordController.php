@@ -103,15 +103,15 @@ class Admin_PasswordController extends Zend_Controller_Action
     {
         try 
         {
-          $eid = $this->_getParam("eid");
-          $oid = $this->_getParam("oid");
-           $uid = $this->_getParam("uid");
-           $escid = $this->_getParam("escid");
-           $pid = $this->_getParam("pid");
-           $subid = $this->_getParam("subid");
-            $fm=new Admin_Form_Keychange();
-            $fm->guardar->setLabel("Guardar");
-            $this->view->fm=$fm;
+          $eid = base64_decode($this->_getParam("eid"));
+          $oid = base64_decode($this->_getParam("oid"));
+          $uid = base64_decode($this->_getParam("uid"));
+          $escid = base64_decode($this->_getParam("escid"));
+          $pid = base64_decode($this->_getParam("pid"));
+          $subid = base64_decode($this->_getParam("subid"));
+          $fm=new Admin_Form_Keychange();
+          $fm->guardar->setLabel("Guardar");
+          $this->view->fm=$fm;
 
              if ($this->getRequest()->isPost())
              {
