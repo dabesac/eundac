@@ -1,0 +1,180 @@
+<table class="table table-striped table-condensed">
+    <tr>
+        <th colspan="6" style="font-size:16px"><center>REGISTRO DE ACTAS ANTERIORES</center></th>
+    </tr>
+    <tr>
+        <th>Año:</th>
+        <td class="col-lg-2">
+            <select id="anho" class="form-control">
+                <?php
+                $anio=date('Y');
+                for ($i=$anio; $i>=1963; $i--) { ?>
+                    <option value="<?php echo $i;?>"><?php echo $i;?></option>
+                <?php 
+                } ?>
+            </select>
+        </td>
+        <th>Periodo:</th>
+        <td class="col-lg-4">
+            <select id="perid" class="form-control">
+                <option value="">- Seleccione -</option>
+            </select>
+        </td>
+        <th>Escuela:</th>
+        <td class="col-lg-5">
+            <select id='escid' class="form-control">
+                <?php
+                if ($this->lescuelas) { ?>
+                    <option value="">- Seleccione -</option>
+                <?php
+                    foreach ($this->lescuelas as $escuela){ ?>
+                        <option value="<?php echo $escuela['escid']?>"><?php echo $escuela['name']?></option>
+                    <?php
+                    }
+                } ?>     
+            </select>
+        </td>
+    </tr>    
+    <tr>
+        <th>Semestre:</th>
+        <td class="col-lg-2">
+            <select id='semid' class="form-control">
+                <?php
+                if ($this->lsemestre) { ?>
+                <option value="">- Seleccione -</option>
+                <?php
+                foreach ($this->lsemestre as $semestre){ ?>
+                    <option value="<?php echo $semestre['semid']?>"><?php echo $semestre['name']?></option>
+                <?php
+                    }
+                } ?>  
+            </select>
+        </td>
+        <th>Currícula:</th>
+        <td class="col-lg-4">
+            <select id='curid' class="form-control">
+                <option>- Seleccione -</option>
+            </select>
+        </td>
+        <th>Curso:</th>
+        <td class="col-lg-5">
+            <select id='courseid' class="form-control">
+                <option value="">- Seleccione -</option>
+            </select>
+        </td>
+    </tr>
+</table>
+<div style="margin-bottom:15px">
+    <center>
+        <a id="registrar" class="btn btn-success"><span class="glyphicon glyphicon-th-list"></span>Ver Acta</a>
+        <a class='btn btn-info' id='agregaracta'><span class="glyphicon glyphicon-list"></span>Crear Acta</a>
+    </center>
+</div>
+<div id="datos"></div>
+
+<script>
+    $("#perid").load("/rfacultad/registeractas/lperiods/anio/"+<?php echo $anio?>);
+
+    $("#anho").change(function(){
+        var anio = $(this).val();
+        $("#perid").load("/rfacultad/registeractas/lperiods/anio/"+anio);
+    });
+
+    $("#escid").change(function(){
+        var escid = $(this).val();
+        $("#curid").load("/rfacultad/registeractas/lcurricula/escid/"+escid);
+    });
+
+    $("#curid").change(function(){
+        var curid = $(this).val();
+        var semid = $("#semid").val();
+        var escid = $("#escid").val();
+        var perid = $("#perid").val();
+        if (escid=="") {
+            alert("Seleccione una Escuela.");
+            return false;
+        };
+        if (semid=="") {
+            alert("Seleccione un Semestre.");
+            return false;
+        };
+        if (perid=="") {
+            alert("Seleccione un Periodo.");
+            return false;
+        };
+        $("#courseid").load("/rfacultad/registeractas/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+    });
+
+    $("#perid").change(function(){
+        var perid = $(this).val();
+        var semid = $("#semid").val();
+        var curid = $("#curid").val();
+        var escid = $("#escid").val();
+        if (semid!="" && curid!="" && escid!="") {
+            $("#courseid").load("/rfacultad/registeractas/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+        };
+    });
+
+    $("#semid").change(function(){
+        var semid = $(this).val();
+        var curid = $("#curid").val();
+        var escid = $("#escid").val();
+        var perid = $("#perid").val();
+        if (escid=="") {
+            alert("Seleccione una Escuela.");
+            return false;
+        };
+        if (perid=="") {
+            alert("Seleccione un Periodo.");
+            return false;
+        };
+        if (semid!="" && curid!="" && escid!=""  && perid!="") {
+            $("#courseid").load("/rfacultad/registeractas/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+        };
+    });
+
+    $("#registrar").click(function(){
+        var curid = $("#curid").val();
+        var escid = $("#escid").val();
+        var perid = $("#perid").val();
+        var curso = $("#courseid").val();
+        var tmp=curso.split(";--;");
+        var courseid=tmp[0];
+        var turno=tmp[1];
+        var subid=tmp[2];
+        if (curso=="") {
+            alert("Seleccione un Curso.");
+            return false;
+        };
+        var url="/rfacultad/registeractas/register/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/courseid/"+courseid+"/turno/"+turno+"/subid/"+subid;
+        // alert(url);
+        $("#datos").html("<img src='/img/spinner.gif'>Cargando...");
+        $("#datos").load(url);
+    });
+
+    $("#agregaracta").click(function(){
+        var curid = $("#curid").val();
+        var escid = $("#escid").val();
+        var perid = $("#perid").val();
+        var semid = $("#semid").val();
+        if (escid=="") {
+            alert("Seleccione una Escuela.");
+            return false;
+        };
+        if (curid=="") {
+            alert("Seleccione una Currícula.");
+            return false;
+        };
+        if (perid=="") {
+            alert("Seleccione un Periodo.");
+            return false;
+        };
+        if (semid=="") {
+            alert("Seleccione un Semestre.");
+            return false;
+        };
+        var url="/rfacultad/registeractas/addcourse/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/semid/"+semid;
+        $("#datos").html("<img src='/img/spinner.gif'>Cargando...");
+        $("#datos").load(url);
+   });
+</script>

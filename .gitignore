@@ -1,8 +1,6 @@
 lib/Zend
 lib/pdf
-app/conf/application.ini
+app/conf
 html/xml
 html/fotos
 .project
-.buildpath
-.settings/

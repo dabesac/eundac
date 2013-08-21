@@ -1,0 +1,13 @@
+<?php 
+if ($this->cursito){ ?>
+    <option value="">- Seleccione -</option>
+<?php
+    foreach ($this->cursito  as $curso) { ?>
+        <option value="<?php echo $curso['courseid'].";--;".$curso['turno'].";--;".$curso['subid']?>"><?php echo $curso['courseid']." | ".$curso['name']." - ".$curso['turno']?> </option>
+    <?php 
+    }
+}
+else { ?> 
+    <option value="">No tiene ningun CURSO</option>
+    <?php
+} ?>    
