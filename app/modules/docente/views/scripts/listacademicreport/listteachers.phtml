@@ -4,15 +4,19 @@
 	        <th><center>Num</center></th>
 	        <th><center>Codigo</center></th>
 	        <th ><center>Docente</center></th>
+	        <th ><center>Imprimir</center></th>	        
 	    </tr>
 	<?php $c=0; 
-	foreach ($this->packdatat as $pdt) {?>
-		<tr>
-			<td><center><?php echo $c+1 ?></center></td>
-			<td><center><?php echo $this->packdatat[$c][0]['uid']?></center></td>
-			<td><center><?php echo $this->packdatat[$c][0]['last_name0']." ".$this->packdatat[$c][0]['last_name1']." ".$this->packdatat[$c][0]['first_name'];?></center></td>
-		</tr>
-	<?php $c++;
-	}?>    
+		foreach ($this->packdatat as $pdt) {?>
+			<tr>
+				<td><center><?php echo $c+1 ?></center></td>
+				<td><center><?php echo $this->packdatat[$c][0]['uid']?></center></td>
+				<td><center><?php echo $this->packdatat[$c][0]['last_name0']." ".$this->packdatat[$c][0]['last_name1']." ".$this->packdatat[$c][0]['first_name'];?></center></td>
+				<td><center><a href=""><span class="glyphicon glyphicon-print"></span></a></center></td>
+			</tr>
+		<?php $c++;
+		}
+	}else{?>
+		<center>No Existen Datos</center>
 	<?php } ?>
 </table>

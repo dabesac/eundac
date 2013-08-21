@@ -1,0 +1,13 @@
+<script type="text/javascript">
+var flag="<?php echo $this->flag?>";
+if (flag=="1") {
+	var escid="<?php echo $this->escid?>";
+	var curid="<?php echo $this->curid?>";
+	var courseid="<?php echo $this->courseid?>";
+	var perid="<?php echo $this->perid?>";
+	var turno="<?php echo $this->turno?>";
+	var subid="<?php echo $this->subid?>";
+	$('#modalloader').modal('hide');
+	$("#alumnos").load("/default/registernotesactas/students/curid/"+curid+"/escid/"+escid+"/courseid/"+courseid+"/perid/"+perid+"/turno/"+turno+"/subid/"+subid);
+};
+</script>
