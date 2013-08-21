@@ -1,6 +1,6 @@
 <?php
 
-class Admin_IndexController extends Zend_Controller_Action {
+class Admin_ResourceController extends Zend_Controller_Action {
 
     public function init()
     {
@@ -13,13 +13,18 @@ class Admin_IndexController extends Zend_Controller_Action {
     		$this->_helper->redirector('index','index','default');
     	}
     	$this->sesion = $login;*/
+    	$this->eid='20154605046';
+		$this->oid='1';
        
     }
     public function indexAction()
     {
-    
+    	$eid=$this->eid;
+    	$oid=$this->oid;
+		$dbresource=new Api_Model_DbTable_Resource();
+    	$allresources=$dbresource->_getAll($where);
+    	print_r($resource);
+    	$this->view->allresources=$allresources;
     	
-    	
-
     }
 }

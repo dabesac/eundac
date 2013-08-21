@@ -18,7 +18,7 @@ class Docente_ListacademicreportController extends Zend_Controller_Action {
     
     public function indexAction()
     {
-   	    print_r($this->sesion);
+   	    //print_r($this->sesion);
     }
 
      public function listperiodsAction()
@@ -45,7 +45,7 @@ class Docente_ListacademicreportController extends Zend_Controller_Action {
     public function listteachersAction()
     {
     	try{
-    		//$this->_helper->layout()->disableLayout();
+    		$this->_helper->layout()->disableLayout();
     		$eid=$this->sesion->eid;
     		$oid=$this->sesion->oid;
     		$where['eid']=$eid;
@@ -72,12 +72,17 @@ class Docente_ListacademicreportController extends Zend_Controller_Action {
     				$uidtchr[$c+1]=$teachers[$c2]['uid'];
     				$pidtchr[$c+1]=$teachers[$c2]['pid'];
     				$where = array("eid"=>$eid,"oid"=>$oid,"escid"=>$escid,"subid"=>$subid,"pid"=>$pidtchr[$c+1],"uid"=>$uidtchr[$c+1]);
- 					$packdatat[$c]=$dbteachers->_getinfoTeacher($where,$attrib);
- 					$c++;
-    			}
-    			$c2++;
-    		}  
-    		//print_r($packdatat);  
+ 					$pack[$c]=$dbteachers->_getinfoTeacher($where,$attrib);
+                    if($pack[$c][0]['pid']<>""){
+                        //print_r($pack[$c][0]['first_name']);
+                        //print_r("  ");        
+                        $packdatat[$c]=$dbteachers->_getinfoTeacher($where,$attrib);
+                        $c++;
+                    }
+                }
+             $c2++;
+            }  
+            //print_r($packdatat);  
     		$this->view->packdatat=$packdatat;		
     		
     	}catch(exception $ex){
