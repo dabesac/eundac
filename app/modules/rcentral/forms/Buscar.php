@@ -12,6 +12,7 @@ class Rcentral_Form_Buscar extends Zend_Form{
         $uid->removeDecorator('Label')->removeDecorator('HtmlTag')->removeDecorator('Label');
         $uid->setAttrib('maxlength','10')->setAttrib('size','10');
         $uid->setAttrib('class','form-control');
+        $uid->setAttrib('onkeypress','return validNumber(event)');
         $uid->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
 
         // $pid= new Zend_Form_element_Text('pid');
