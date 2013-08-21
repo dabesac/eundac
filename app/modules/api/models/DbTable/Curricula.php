@@ -87,6 +87,22 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
 		}
 	}
 
+    public function _getAmountCourses($curid="",$subid="",$escid="",$oid="",$eid=""){
+        try {
+                $sql = $this->_db->query("
+                    SELECT DISTINCT CAST (c.SEMID AS INTEGER),s.name FROM base_courses as c
+                    inner join base_semester as s
+                    on c.semid=s.semid and c.eid=s.eid and c.oid=s.oid
+                    WHERE CURID='$curid' and escid='$escid' and subid='$subid' and c.state='A'
+                    ORDER BY CAST(c.SEMID AS INTEGER)
+                ");
+                if ($sql) return $sql->fetchAll();
+                return false;  
+        } catch (Exception $e) {
+            print "Error: Read AmountCourses".$e->getMessage();
+        }
+    }
+
 
 //FALTA
    //      public function _getPerformance($where=null){
