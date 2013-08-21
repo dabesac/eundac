@@ -1,0 +1,30 @@
+<div class="form-group">
+	<h2>Recursos
+	<div class="pull-right"><a href="/admin/org/new" class="btn btn-info">Nuevo</a>
+	</div></h2>
+</div>
+
+<table class="table span6">
+	<?php if ($this->allresources) {?>
+		<tr>
+				<td><b>Num</b></td>
+				<td><b>Codigo</b></td>
+				<td><b>Nombre</b></td>
+		</tr>		
+		<?php		
+		$c=1;
+		foreach ($this->allresources as $res) {
+			?>	
+			<tr>
+				<td><?php echo $c; ?></td>
+				<td><?php echo $res['reid']; ?></td>
+				<td><?php echo $res['name']; ?></td>
+				<td> <a href="/admin/resource/update/reid/<?php print $org['oid']?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
+        		<td> <a href="/admin/resource/delete/reid/<?php print $org['oid']?>"onclick="return confirm('Esta Seguro que desea eliminar la sede?');"><span class="glyphicon glyphicon-remove"></span></a></td>
+        	</tr>
+		<?php
+		$c++;
+		}
+	}
+	?>
+</table>

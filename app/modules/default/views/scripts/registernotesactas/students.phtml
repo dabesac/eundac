@@ -1,0 +1,177 @@
+<?php
+if ($this->alumnos) { 
+	if ($this->periodocurso['state_record']=="A") {
+	?>
+	<div class="alert alert-success span9">
+		<b>NOTA: </b>Ingrese y guarde las notas, si un alumno esta retirado click en el icono <span class="glyphicon glyphicon-eye-open"></span>
+	</div>
+	<?php
+	}?>
+	<div>
+		<form name="frmActasanteriores" id="frmActasanteriores" action="/default/registernotesactas/savenotes/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+		<?php
+		if ($this->periodocurso['state_record']=="A") { ?>
+		<div style="margin-bottom:20px">
+			<center>
+				<a href="#" id="guardarnotas" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>Guardar</a>
+				<a href="#" id="closeacta" class="btn btn-danger"><span class="glyphicon glyphicon-list"></span>Cerrar Acta</a>
+			</center>
+		</div>
+		<?php
+		}?>
+		<table class="table table-condensed table-striped">
+			<tr>
+				<th>#</th>
+				<th>Cod. Mat.</th>
+				<th>Apellidos y Nombres</th>
+				<th>Nota</th>
+				<?php
+				if ($this->periodocurso['state_record']=="A") { ?>
+				<th>Retirado</th>
+				<?php
+				}?>
+			</tr>
+			<?php
+			$c=1;
+			foreach ($this->alumnos as $alumnos) { ?>
+				<tr>
+					<td><?php echo $c?></td>
+					<td><?php echo $alumnos['uid']?></td>
+					<td><?php echo $alumnos['last_name0']." ".$alumnos['last_name1'].", ".$alumnos['first_name']?></td>
+					<?php
+					if ($this->periodocurso['state_record']=="A") { ?>
+						<td><input type="text" id="<?php echo $c?>" name="notafinal[]" class="form-control" style="width:50px" value="<?php echo $alumnos['notafinal']?>" maxlength="2" onkeypress="return soloNumero(event)" onblur="verifica(this.value,this.id)"></td>
+					<?php
+					}else{ ?>
+						<td><?php echo $alumnos['notafinal']?></td>
+					<?php
+					}
+					if ($this->periodocurso['state_record']=="A") { ?>
+					<td>
+						<span class="glyphicon glyphicon-eye-open" id="noretirado_<?php echo $c?>" onclick="retira(this)" style="cursor: pointer; cursor: hand" value="<?php echo $c?>" band="0"></span>
+						<span class="glyphicon glyphicon-eye-close" id="retirado_<?php echo $c?>" onclick="retira(this)" style="cursor: pointer; cursor: hand; display: none" value="<?php echo $c?>" band="1"></span>
+					</td>
+					<?php
+					}?>
+					<input type="hidden" value="<?php echo $alumnos['regid'];?>" name="regid[]">
+				    <input type="hidden" value="<?php echo $alumnos['curid'];?>" name="curid[]">
+				    <input type="hidden" value="<?php echo $alumnos['courseid'];?>" name="courseid[]">
+				    <input type="hidden" value="<?php echo $alumnos['perid'];?>" name="perid[]"> 
+				    <input type="hidden" value="<?php echo $alumnos['subid'];?>" name="subid[]"> 
+				    <input type="hidden" value="<?php echo $alumnos['escid'];?>" name="escid[]"> 
+				    <input type="hidden" value="<?php echo $alumnos['turno'];?>" name="turno[]"> 
+				    <input type="hidden" value="<?php echo $alumnos['pid'];?>" name="pid[]"> 
+				    <input type="hidden" value="<?php echo $alumnos['uid'];?>" name="uid[]"> 
+				    <input type="hidden" value="<?php echo $alumnos['oid'];?>" name="oid[]"> 
+				    <input type="hidden" value="<?php echo $alumnos['eid'];?>" name="eid[]">
+				</tr>
+				<script type="text/javascript">
+				var nota="<?php echo $alumnos['notafinal']?>";
+				var indi="<?php echo $c?>";
+				if (nota=="-3") {
+					$("#"+indi).attr("readonly",true);
+					$("#retirado_"+indi).show();
+					$("#noretirado_"+indi).hide();
+				};
+				</script>
+				<?php
+				$c++;
+			}?>
+		</table>
+		</form>
+	</div>
+	<?php
+}else{ ?>
+	<div class="alert alert-info">
+		<b>INFORMACIÓN: </b>No hay alumnos registrados en este Curso.
+	</div>
+<?php
+}?>
+<div id="alum"></div>
+
+<div class="modal fade" id="modalloader">
+    <div class="modal-dialog">
+      	<div class="modal-content">
+        	<div class="modal-body">
+          		<p>Enviando datos al Servidor.</p>
+        	</div>
+      	</div>
+    </div>
+</div>
+
+<script type="text/javascript">
+function retira(obj){
+	$icon = $(obj);
+    var ind = $icon.attr("value");
+    var band = $icon.attr("band");
+	if (band=="0") {
+		$("#"+ind).attr("readonly",true);
+		$("#"+ind).val("-3");
+		$("#retirado_"+ind).show();
+		$("#noretirado_"+ind).hide();
+	}else{
+		$("#"+ind).attr("readonly",false);
+		$("#"+ind).val("");
+		$("#retirado_"+ind).hide();
+		$("#noretirado_"+ind).show();
+	};
+};
+
+$("#closeacta").click(function(){
+	var escid="<?php echo $this->escid?>";
+	var curid="<?php echo $this->curid?>";
+	var courseid="<?php echo $this->courseid?>";
+	var perid="<?php echo $this->perid?>";
+	var turno="<?php echo $this->turno?>";
+	var subid="<?php echo $this->subid?>";
+	$('#modalloader').modal('show');
+	$("#alum").load("/default/registernotesactas/closeacta/subid/"+subid+"/escid/"+escid+"/curid/"+curid+"/courseid/"+courseid+"/perid/"+perid+"/turno/"+turno);
+});
+
+$("#guardarnotas").click(function(){
+	$("#frmActasanteriores").submit();
+	$('#modalloader').modal('show');
+});
+
+$('#frmActasanteriores').submit(function() {  
+	$.ajax({
+	    type: 'POST',
+	    url: $(this).attr('action'),
+	    data: $(this).serialize(),
+	    success: function(data) { 
+	        $('#alum').html(data);  
+	    }
+	});         
+	return false;
+});
+
+function verifica(valor,id)
+{
+	if(valor!="")
+	{
+		if(valor>20) 
+		{
+			$("#"+id).val("");
+			$("#"+id).focus();
+		}
+	}
+}
+
+function soloNumero(e){
+	key = e.keyCode || e.which;
+	tecla = String.fromCharCode(key).toLowerCase();
+	letras = "0123456789";
+	especiales = [8,37,39,46];
+
+	tecla_especial = false
+	for(var i in especiales){
+	    if(key == especiales[i]){
+			tecla_especial = true;
+	  		break;
+	    } 
+	}
+	 
+    if(letras.indexOf(tecla)==-1 && !tecla_especial)
+    return false;
+};
+</script>

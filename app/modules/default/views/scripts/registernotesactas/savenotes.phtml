@@ -1,0 +1,19 @@
+<?php if ($this->bandera==1) {?>
+	<div class="modal fade" id="modalloader2">
+	    <div class="modal-dialog">
+	      	<div class="modal-content">
+	        	<div class="modal-body">
+	          		<p style="font-size:14px">Los Datos se registraron Satisfactoriamente!!!</p>
+            		<button class="btn btn-success" data-dismiss="modal" aria-hidden="true" style="float:right"><span class="glyphicon glyphicon-ok"></span>Aceptar</button><br><br>
+	        	</div>
+	      	</div>
+	    </div>
+	</div>
+<?php } ?>
+<script type="text/javascript">
+	var band="<?php echo $this->bandera?>";
+	if (band=="1") {
+		$('#modalloader').modal('hide');
+		$('#modalloader2').modal('show');
+	};
+</script>

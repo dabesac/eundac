@@ -4,6 +4,7 @@ class Api_Model_DbTable_Condition extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'base_condition';
 	protected $_primary = array("cnid","pid","escid","uid","perid","eid","oid","subid");
+	protected $_sequence ="s_conditions"; 
 
 	public function _getFilter($where=array())
 	{
@@ -17,6 +18,16 @@ class Api_Model_DbTable_Condition extends Zend_Db_Table_Abstract
 		}
 	}
 
+  /*Guarda un registro en la tabla CondicionXAlumno*/
+     public function _guardar($data){
+        try{
+             	// if ($data['eid']=='' || $data['oid']=='' ||  $data['escid']=='' || $data['subid']=='' || $data['perid']=='' || $data['uid'] || $data['pid']) return false;
+            if($data=='')return false;
+            return $this->insert($data);
+        }catch (Exception $e){
+            print "Error: Al momento de insertar condicion de alumno ".$e->getMessage();
+        }
+    } 
 
 	 public function _getUsercCondition($eid='',$oid='',$str='',$escid='',$perid='')
 	{
@@ -57,6 +68,19 @@ class Api_Model_DbTable_Condition extends Zend_Db_Table_Abstract
              print $ex->getMessage();
          }
      }
+
+
+     public function _delete($data)
+	{
+		try{
+			if ($data['eid']=='' ||  $data['oid']=='' || $data['uid']=='' || $data['perid']=='' || $data['escid']=='' || $data['cnid']=='' || $data['pid']==''|| $data['subid']=='') return false;
+			$where = 	"eid = '".$data['eid']."' and oid='".$data['oid']."' and uid='".$data['uid']."' and perid='".$data['perid']."' and escid='".$data['escid']."' and cnid='".$data['cnid']."' and pid='".$data['pid']."'  and subid='".$data['subid']."' ";			
+			return $this->delete($where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Delete Condition".$e->getMessage();
+		}
+	}
 
 
 
