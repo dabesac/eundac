@@ -16,17 +16,12 @@ if ($this->dato) { ?>
 </table>
 <?php
 }else{ ?>
-    <div class="alert alert-danger" style="margin-left:25px">
+    <div class="alert alert-danger">
         <b>Aviso: </b> El alumno no se encuentra registrado en el Sistema, ó no pertenece a la Escuela seleccionada.
     </div>
 <?php
 }?>
 <div id="gagregaralumno" class="flotacarajo"></div>
-<div class="modal hide" id="cargaalumno">
-    <div class="modal-body">
-        <p>Agregando datos del Alumno.</p>
-    </div>
-</div>
 
 <script>
 $("#agregaralumno").click(function(){
@@ -38,9 +33,8 @@ $("#agregaralumno").click(function(){
     var perid="<?php echo $this->perid ?>";
     var courseid="<?php echo $this->courseid ?>";
     var turno="<?php echo $this->turno ?>";
-    var url="/default/llenadoactas/agregaralumno/curid/"+curid+"/escid/"+escid+"/courseid/"+courseid+"/turno/"+turno+"/perid/"+perid+"/uid/"+uid+"/pid/"+pid+"/subid/"+subid;
+    var url="/rfacultad/registeractas/addstudent/curid/"+curid+"/escid/"+escid+"/courseid/"+courseid+"/turno/"+turno+"/perid/"+perid+"/uid/"+uid+"/pid/"+pid+"/subid/"+subid;
     // alert(url);
-    $('#cargaalumno').modal('show');
     $("#gagregaralumno").load(url);
 });
 </script>

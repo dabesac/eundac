@@ -154,12 +154,6 @@
         $("#datos").load(url);
     });
 
-
-
-
-
-
-
     $("#agregaracta").click(function(){
         var curid = $("#curid").val();
         var escid = $("#escid").val();
@@ -181,7 +175,7 @@
             alert("Seleccione un Semestre.");
             return false;
         };
-        var url="/default/llenadoactas/agregarcurso/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/semid/"+semid;
+        var url="/rfacultad/registeractas/addcourse/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/semid/"+semid;
         $("#datos").html("<img src='/img/spinner.gif'>Cargando...");
         $("#datos").load(url);
    });

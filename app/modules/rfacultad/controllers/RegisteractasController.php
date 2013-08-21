@@ -155,4 +155,130 @@ class Rfacultad_RegisteractasController extends Zend_Controller_Action
 			print "Error: ".$e->getMessage();
 		}
 	}
+
+	public function addstudentAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+            $uid= $this->_getParam("uid");
+            $pid= $this->_getParam("pid");
+            $curid= $this->_getParam("curid");
+            $escid= $this->_getParam("escid");
+            $perid= $this->_getParam("perid");
+            $courseid= $this->_getParam("courseid");
+            $turno= $this->_getParam("turno");
+            $subid= $this->_getParam("subid");
+            $this->view->curid=$curid;
+            $this->view->subid=$subid;
+            $this->view->escid=$escid;
+            $this->view->perid=$perid;
+            $this->view->courseid=$courseid;
+            $this->view->turno=$turno; 
+            $regid=$uid.$perid;
+            $wherereg['eid']=$eid;
+            $wherereg['oid']=$oid;
+            $wherereg['escid']=$escid;
+            $wherereg['subid']=$subid;
+            $wherereg['regid']=$regid;
+            $wherereg['pid']=$pid;
+            $wherereg['uid']=$uid;
+            $wherereg['perid']=$perid;
+            $mat = new Api_Model_DbTable_Registration();
+            $datmat=$mat->_getOne($wherereg);
+            if (!$datmat) {
+                $datamat['eid']=$eid;
+                $datamat['oid']=$oid;
+                $datamat['regid']=$regid;
+                $datamat['pid']=$pid;
+                $datamat['escid']=$escid;
+                $datamat['uid']=$uid;
+                $datamat['perid']=$perid;
+                $datamat['subid']=$subid;
+                $datamat['semid']='0';
+                $datamat['credits']='0';
+                $datamat['date_register']=date('Y-m-d');
+                $datamat['register']=$this->sesion->uid;
+                $datamat['created']=date('Y-m-d');
+                $datamat['state']='M';
+                $mat->_save($datamat);
+            }
+            $exiswhere['eid']=$eid;
+            $exiswhere['oid']=$oid;
+            $exiswhere['escid']=$escid;
+            $exiswhere['subid']=$subid;
+            $exiswhere['courseid']=$courseid;
+            $exiswhere['curid']=$curid;
+            $exiswhere['regid']=$regid;
+            $exiswhere['turno']=$turno;
+            $exiswhere['pid']=$pid;
+            $exiswhere['uid']=$uid;
+            $exiswhere['perid']=$perid;
+            
+            $matcur= new Api_Model_DbTable_Registrationxcourse();
+            $exismat=$matcur->_getOne($exiswhere);
+            if ($exismat) $this->view->bandera=0;
+            else{
+            	$data=$exiswhere;
+            	$data['created']=date('Y-m-d');
+            	$data['register']=$this->sesion->uid;
+            	$data['state']='M';
+            	$matcur->_save($data);
+            	$this->view->bandera=1;
+            }
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function addcourseAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+            $curid= $this->_getParam("curid");
+            $escid= $this->_getParam("escid");
+            $semid= $this->_getParam("semid");
+            $perid= $this->_getParam("perid");
+            $this->view->eid=$eid;
+            $this->view->oid=$oid;
+            $this->view->curid=$curid;
+            $this->view->escid=$escid;
+            $this->view->semid=$semid;
+            $this->view->perid=$perid;
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['escid']=$escid;
+            $where['curid']=$curid;
+            $dbcurso = new Api_Model_DbTable_Course();
+            $curso = $dbcurso->_getFilter($where,$attrib=null,$orders='courseid');
+            $this->view->curso=$curso;
+            $wherespe['eid']=$eid;
+            $wherespe['oid']=$oid;
+            $escuelas = new Api_Model_DbTable_Speciality();
+            $lescuelas = $escuelas->_getAll($wherespe,$order="escid asc",$start=0,$limit=0);
+            $this->view->lescuelas=$lescuelas;
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function lteachersAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+            $escid = $this->_getParam("escid");
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['escid']=$escid;
+            $where['rid']="DC";
+            $where['estado']="A";
+            $docentes = new Api_Model_DbTable_Users();
+            $lista=$docentes->_getUserXRidXUid($where);
+            $this->view->lista=$lista;
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
 }
