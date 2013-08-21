@@ -68,4 +68,29 @@ class Api_Model_DbTable_Semester extends Zend_Db_Table_Abstract
 			print "Error: Read All semester ".$e->getMessage();
 		}
 	}
+
+	public function _getSemesterXPeriodsXEscid($where=null){
+        try{
+            if ($where['escid']=="" || $where['perid']=="" || $where['eid']=="" || $where['oid']=="" ) return false;
+			$select = $this->_db->select()
+			->from(array('p' => 'base_person'),array('p.pid','p.typedoc','numdoc','p.last_name0','p.last_name1','p.first_name','p.birthday','p.photografy'))
+				->join(array('u' => 'base_users'),'u.eid= p.eid and u.pid=p.pid', 
+						array('u.uid','u.uid','u.escid','u.eid','u.oid','u.subid'))
+				->where('u.eid = ?', $where['eid'])
+				->where('u.oid = ?', $where['oid'])
+				->where('u.uid = ?', $where['uid'])
+				->where('u.rid = ?', $where['rid'])
+				->order('last_name0');
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;         
+        }  catch (Exception $ex){
+            print "Error: Obteniendo semestres".$ex->getMessage();
+        }
+    }
+	// select * from semestre
+ // where semid in (select SEMID from periodos_cursos
+ // where perid='$perid' and escid='$escid' and eid='$eid' and oid='$oid') 
+ // ORDER BY cast(semid as integer) 
 }
