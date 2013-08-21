@@ -45,7 +45,7 @@
 			<th>Currículas:</th>
 			<td>
 				<select id="curid" class="form-control">
-					<option value="">- Seleccione -</option>
+					<option value="">- Seleccione Currícula -</option>
 				</select>
 			</td>
 			<th>Cursos:</th>
@@ -57,7 +57,7 @@
 		</tr>
 		<tr>
 			<td colspan="6">
-				<center><a href="#" id="listar" class="btn btn-info">Listar Alumnos</a></center>
+				<center><a href="#" id="listar" class="btn btn-info"><span class='glyphicon glyphicon-list-alt'></span>Listar Alumnos</a></center>
 			</td>
 		</tr>
 	</table>
@@ -81,15 +81,12 @@ $("#perid").change(function(){
 	};
 });
 
-
-
-
 $("#escid").change(function(){
 	var escid=$(this).val();
 	var perid=$("#perid").val();
-	$("#curid").load("/default/llenadonotasactas/lcurriculas/escid/"+escid);
+	$("#curid").load("/default/registernotesactas/lcurriculas/escid/"+escid);
 	if (perid!="") {
-		$("#semid").load("/default/llenadonotasactas/lsemestres/escid/"+escid+"/perid/"+perid);
+		$("#semid").load("/default/registernotesactas/lsemester/escid/"+escid+"/perid/"+perid);
 	}else{
 		alert("Seleccione el Periodo.");
 	};
@@ -103,7 +100,7 @@ $("#curid").change(function(){
 	if (semid=="") {
 		alert("Seleccione un Semestre Académico.");
 	}else{
-		$("#courseid").load("/default/llenadonotasactas/lcursos/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+		$("#courseid").load("/default/registernotesactas/lcourses/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
 	};
 });
 
@@ -113,7 +110,7 @@ $("#semid").change(function(){
 	var curid=$("#curid").val();
 	var perid=$("#perid").val();
 	if (curid!="") {
-		$("#courseid").load("/default/llenadonotasactas/lcursos/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+		$("#courseid").load("/default/registernotesactas/lcourses/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
 	};
 });
 
@@ -125,7 +122,7 @@ $("#listar").click(function(){
 	var tmp=curso.split('--');
 	if (curso!="") {
 		$("#alumnos").html("<img src='/img/spinner.gif'>Cargando...");
-		$("#alumnos").load("/default/llenadonotasactas/alumnos/curid/"+curid+"/escid/"+escid+"/courseid/"+tmp[0]+"/perid/"+perid+"/turno/"+tmp[1]+"/sedid/"+tmp[2]);
+		$("#alumnos").load("/default/registernotesactas/students/curid/"+curid+"/escid/"+escid+"/courseid/"+tmp[0]+"/perid/"+perid+"/turno/"+tmp[1]+"/subid/"+tmp[2]);
 	}else{
 		alert("Seleccione un Curso.");
 	};
