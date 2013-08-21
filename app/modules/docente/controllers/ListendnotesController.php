@@ -1,25 +1,23 @@
 <?php
 
-class Admin_IndexController extends Zend_Controller_Action {
+class Docente_ListendnotesController extends Zend_Controller_Action {
 
     public function init()
     {
-    	/*$sesion  = Zend_Auth::getInstance();
+    	$sesion  = Zend_Auth::getInstance();
     	if(!$sesion->hasIdentity() ){
     		$this->_helper->redirector('index',"index",'default');
     	}
     	$login = $sesion->getStorage()->read();
-    	if (!$login->modulo=="admin"){
+    	if (!$login->rol['module']=="docente"){
     		$this->_helper->redirector('index','index','default');
     	}
-    	$this->sesion = $login;*/
-       
+    	$this->sesion = $login;
+    
     }
+    
     public function indexAction()
     {
-    
-    	
-    	
-
+   	 	print_r("Listar Notas Finales");
     }
 }
