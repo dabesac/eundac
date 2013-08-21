@@ -56,8 +56,28 @@
         	}
      }catch(Exception $ex ){
         print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
-    } 
+    	} 
+ 	}
 
+ 	public function printAction(){
+ 		try {
+ 			$this->_helper->layout()->disableLayout();
+ 			$uid = $this->_getParam('uid');
+ 			$eid = $this->_getParam('eid');
+ 			$oid = $this->_getParam('oid');
+ 			$pid = $this->_getParam('pid');
+ 			$escid = $this->_getParam('escid');
+ 			$subid = $this->_getParam('subid');
+ 			$this->view->escid=$escid;
+ 			$this->view->eid->$eid;
+ 			$this->view->oid->$oid;
+ 			$this->view->pid->$pid;
+ 			// echo $pid;
+ 			
+ 			
+ 		} catch (Exception $e) {
+ 			print ("Error: Imprimir Notas: ".$e->getMessage());
+ 		}
 
  	}
  }

@@ -23,7 +23,7 @@
                 <td><?php echo $info['uid'];?></td>
                 <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
                 <td><?php echo $info['escid']?></td>
-                <td><center><a href="/rcentral/recordnotas"><img src="/img/pdf.png"></a></center></td>
+                <td><center><a href="/rcentral/recordnotas/print/uid/<?php echo $info['uid'];?>/eid/<?php echo $info['eid']?>/oid/<?php echo $info['oid']?>/pid/<?php echo $info['pid']?>/escid/<?php $info['escid']?>/subid/<?php echo $info['subid']?>"><img src="/img/pdf.png"></a></center></td>
             </tr>
            <?php
         }
