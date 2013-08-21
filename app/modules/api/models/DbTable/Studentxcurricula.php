@@ -43,8 +43,8 @@ class Api_Model_DbTable_Studentxcurricula extends Zend_Db_Table_Abstract
 	
 	public function _getOne($where=array()){
 		try{
-			if ($where['eid']=='' ||  $where['oid']=='' || $where['escid']=='' || $where['subid']=='' || $where['curid']=='' || $where['uid']=='' || $where['pid']=='') return false;
-			$wherestr = "eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and subid='".$where['subid']."' and curid='".$where['curid']."' and uid='".$where['uid']."' and pid='".$where['pid']."'";
+			if ($where['eid']=='' ||  $where['oid']=='' || $where['escid']=='' || $where['subid']=='' ||  $where['uid']=='' || $where['pid']=='') return false;
+			$wherestr = "eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and subid='".$where['subid']."' and state='A' and uid='".$where['uid']."' and pid='".$where['pid']."'";
 			$row = $this->fetchRow($wherestr);
 			if($row) return $row->toArray();
 			return false;

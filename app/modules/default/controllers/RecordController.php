@@ -46,9 +46,8 @@ class RecordController extends Zend_Controller_Action {
 	        if ($eid=="" || $oid==""||$anio=="") return false;
 	        $anior = substr($anio, 2, 4);
     		$where['year']=$anior;
-	        $periods = new Api_Model_DbTable_Periods();
-	        $per=$periods->_getPeriodsxYears($where);
-    		//print_r($per);
+    		$periods = new Api_Model_DbTable_Periods();
+            $per=$periods->_getPeriodsxYears($where);
 	        $this->view->listper=$per;
 			//$this->view->perid=$this->perid;
     	}catch(exception $ex){
