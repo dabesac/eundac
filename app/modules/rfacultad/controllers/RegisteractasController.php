@@ -273,10 +273,84 @@ class Rfacultad_RegisteractasController extends Zend_Controller_Action
             $where['oid']=$oid;
             $where['escid']=$escid;
             $where['rid']="DC";
-            $where['estado']="A";
+            $where['state']="A";
             $docentes = new Api_Model_DbTable_Users();
-            $lista=$docentes->_getUserXRidXUid($where);
+            $lista=$docentes->_getUsersXEscidXRidXState($where);
             $this->view->lista=$lista;
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function savecourseAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+            $escid = $this->_getParam("escid");
+            $courseid = $this->_getParam("courseid");
+            $turno = $this->_getParam("turno");
+            $tipo = $this->_getParam("tipo");
+            $recibo = $this->_getParam("recibo");
+            $p_uid = $this->_getParam("uid");
+            $p_pid = $this->_getParam("pid");
+            $curid = $this->_getParam("curid");
+            $semid = $this->_getParam("semid");
+            $perid = $this->_getParam("perid");
+            $subid = $this->_getParam("subid");
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['courseid']=$courseid;
+            $where['escid']=$escid;
+            $where['perid']=$perid;
+            $where['turno']=$turno;
+            $where['subid']=$subid;
+            $where['curid']=$curid;
+            $vpercurso = new Api_Model_DbTable_PeriodsCourses();
+            $lcurso= $vpercurso->_getOne($where);
+            if ($lcurso){
+                $this->view->msg=0;
+            }else{
+                $data['eid']=$eid;
+                $data['oid']=$oid;
+                $data['perid']=$perid;
+                $data['curid']=$curid;
+                $data['turno']=$turno;
+                $data['courseid']=$courseid;
+                $data['semid']=$semid;
+                $data['escid']=$escid;
+                $data['subid']=$subid;                                                                          
+                $data['type_rate']=$tipo;
+                $data['receipt']=$recibo;
+                $data['state_record']='A';
+                $data['register']=$this->sesion->uid;
+                $data['created']=date('Y-m-d');
+                $data['state']='A';
+                $vpercurso->_save($data);
+                $curexis= $vpercurso->_getOne($where);
+                if ($curexis) {
+                    $datadocente['subid']=$subid;
+                    $datadocente['eid']=$eid;
+                    $datadocente['oid']=$oid;
+                    $datadocente['escid']=$escid;
+                    $datadocente['turno']=$turno;
+                    $datadocente['courseid']=$courseid;
+                    $datadocente['curid']=$curid;
+                    $datadocente['perid']=$perid;
+                    $datadocente['uid']=$p_uid;
+                    $datadocente['pid']=$p_pid;
+                    $datadocente['state']="A";
+                    $datadocente['is_main']="S";
+                    $datadocente['semid']=$semid;
+                    $docentecurso = new Api_Model_DbTable_Coursexteacher();
+                    $docentecurso->_save($datadocente);
+                    $wheredoc=$where;
+                    $wheredoc['uid']=$p_uid;
+                    $wheredoc['pid']=$p_pid;
+                    $regdoc = $docentecurso->_getOne($wheredoc);
+                    if ($regdoc) $this->view->msg=1;
+                }
+            }
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}

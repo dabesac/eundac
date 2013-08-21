@@ -3,7 +3,7 @@ if ($this->lista){ ?>
 	 <option value="">- Seleccione Docente -</option>
    <?php 
     foreach ($this->lista  as $docente){ ?>
-        <option value="<?php echo $docente['uid']."--".$docente['pid']?>"><?php echo $docente['nombrecompleto']?></option>
+        <option value="<?php echo $docente['uid']."--".$docente['pid']?>"><?php echo $docente['last_name0']." ".$docente['last_name1'].", ".$docente['first_name']?></option>
         <?php
     }
 }else{ ?>

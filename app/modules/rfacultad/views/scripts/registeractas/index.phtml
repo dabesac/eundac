@@ -124,15 +124,13 @@
             alert("Seleccione una Escuela.");
             return false;
         };
-        if (curid=="") {
-            alert("Seleccione una Currícula.");
-            return false;
-        };
         if (perid=="") {
             alert("Seleccione un Periodo.");
             return false;
         };
-        $("#courseid").load("/rfacultad/registeractas/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+        if (semid!="" && curid!="" && escid!=""  && perid!="") {
+            $("#courseid").load("/rfacultad/registeractas/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+        };
     });
 
     $("#registrar").click(function(){

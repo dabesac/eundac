@@ -120,7 +120,7 @@
         };
         var temp=curso.split('--');
         var tempdoce=docente.split('--');
-        var url="/default/llenadoactas/cursoguardar/cursoid/"+temp[0]+"/turno/"+turno+"/tipo/"+tipo+"/recibo/"+recibo+"/uid/"+tempdoce[0]+"/pid/"+tempdoce[1]+"/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid+"/sedid/"+temp[1];
+        var url="/rfacultad/registeractas/savecourse/courseid/"+temp[0]+"/turno/"+turno+"/tipo/"+tipo+"/recibo/"+recibo+"/uid/"+tempdoce[0]+"/pid/"+tempdoce[1]+"/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid+"/subid/"+temp[1];
          // alert(url);
          $("#cargadatoss").load(url);
     });
