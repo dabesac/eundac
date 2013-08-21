@@ -1,0 +1,131 @@
+<?php
+ $escid=$this->escid;
+ $semid=$this->semid;
+ $perid=$this->perid;
+?>
+<table class="table table-striped table-condensed">
+    <tr>
+        <th colspan="4" style="font-size:15px"><center>INFORMACIÓN DEL CURSO</center></th>
+    </tr>
+    <tr>
+        <th class="col-lg-3">Seleccione Curso:</th>
+        <td><div class="col-lg-11">
+            <select id="cursoid1" class="form-control">
+            <?php
+            if ($this->curso) { ?>
+                <option value="">- Seleccione Curso -</option>
+                <?php
+                foreach ($this->curso as $lcurso){ ?>
+                    <option value="<?php echo $lcurso['courseid']."--".$lcurso['subid']?>"><?php echo $lcurso['courseid']." | ".$lcurso['name']?></option>
+                <?php
+                } 
+            }else{ ?>    
+                <option value="">Ningun Curso en la Currícula.</option>
+            <?php }?>
+            </select></div>
+        </td>
+        <th class="col-lg-3">Turno:</th>
+        <td>
+            <select id='turno' class="form-control">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>Tipo de Calificación:</th>
+        <td><div class="col-lg-4">
+            <select id='tipo' class="form-control">
+                <option value="O">Objetivo</option>
+                <option value="C">Competencia</option>
+            </select></div>
+        </td>
+        <th>Requiere Recibo:</th>
+        <td>
+            <select id='recibo' class="form-control">
+                <option value="">Seleccione</option>
+                <option value="S">Si</option>
+                <option value="N">No</option>
+            </select>
+        </td>
+    </tr>
+</table>
+
+<table class="table table-striped table-condensed">
+    <tr>
+        <th colspan="4" style="font-size:15px"><center>INFORMACIÓN DEL DOCENTE</center></th>
+    </tr>
+    <tr>
+        <th class="col-lg-2">Escuela:</th>
+        <td class="col-lg-4">
+            <select id='escid1' class="form-control">
+            <?php
+            if ($this->lescuelas) { ?>
+                <option value="">- Seleccione Escuela -</option>
+            <?php
+                foreach ($this->lescuelas as $escuela){ ?>
+                    <option value="<?php echo $escuela['escid']?>"><?php echo $escuela['name']?></option>
+                    <?php
+                } 
+            }?>     
+            </select>
+        </td>
+        <th class="col-lg-2">Docente:</th>
+        <td class="col-lg-4">
+            <select id='docente' class="form-control">
+                <option value="">- Seleccione Docente -</option>
+            </select>   
+        </td>
+    </tr>
+</table>
+
+<div>
+    <center><a class='btn btn-info' id='guardarcurso'>Guardar</a></center>
+</div>
+<div id="cargadatoss" class="flotacarajo"></div>
+
+<script>
+    $("#escid1").change(function(){
+        var escid = $(this).val();
+        var url="/rfacultad/registeractas/lteachers/escid/"+escid;
+        $("#docente").load(url);
+    });
+
+    $("#guardarcurso").click(function(){
+        var curso = $("#cursoid1").val();
+        var turno = $("#turno").val();
+        var tipo = $("#tipo").val();
+        var recibo = $("#recibo").val();
+        var docente = $("#docente").val();
+        var curid = "<?php echo $this->curid?>";
+        var escid = "<?php echo $this->escid?>";
+        var perid = "<?php echo $this->perid?>";
+        var semid = "<?php echo $this->semid?>";
+        if (curso=="") {
+            alert("Seleccione el Curso.");
+            return false;
+        };
+        if (recibo=="") {
+            alert("Seleccione si Requiere Recibo.");
+            return false;
+        };
+        if (docente=="") {
+            alert("Seleccione el Docente del Curso.");
+            return false;
+        };
+        var temp=curso.split('--');
+        var tempdoce=docente.split('--');
+        var url="/rfacultad/registeractas/savecourse/courseid/"+temp[0]+"/turno/"+turno+"/tipo/"+tipo+"/recibo/"+recibo+"/uid/"+tempdoce[0]+"/pid/"+tempdoce[1]+"/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid+"/subid/"+temp[1];
+         // alert(url);
+         $("#cargadatoss").load(url);
+    });
+ </script>
+
+
+
+

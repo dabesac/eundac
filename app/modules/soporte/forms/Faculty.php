@@ -38,7 +38,7 @@ class Soporte_Form_Faculty extends Zend_Form{
         $state->setAttrib("class","input-medium");
 
         $submit = new Zend_Form_Element_Submit('save');
-        $submit->setAttrib('class', 'btn btn-info');
+        $submit->setAttrib('class','btn btn-info');
         $submit->setLabel('Guardar');
         $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
 

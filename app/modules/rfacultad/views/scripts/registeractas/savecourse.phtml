@@ -1,0 +1,33 @@
+<div id="msgerror" class="modal fade" id="myModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>El Curso ya existe en el Periodo seleccionado, verifique los datos.</p>
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" style="float:right"><span class="glyphicon glyphicon-ok"></span>Aceptar</button><br><br>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="msgcorrecto" class="modal fade" id="myModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>El Acta fue registrada Correctamente!!!</p>
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" style="float:right"><span class="glyphicon glyphicon-ok"></span>Aceptar</button><br><br>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+var msg="<?php echo $this->msg?>"
+if (msg=="0") {
+	$("#msgerror").modal('show');
+}else{
+	if(msg=="1"){
+		$("#msgcorrecto").modal('show');
+		window.location.reload();
+	}
+};
+</script>
