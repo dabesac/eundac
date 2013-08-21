@@ -62,18 +62,23 @@
  	public function printAction(){
  		try {
  			$this->_helper->layout()->disableLayout();
- 			$uid = $this->_getParam('uid');
- 			$eid = $this->_getParam('eid');
- 			$oid = $this->_getParam('oid');
- 			$pid = $this->_getParam('pid');
- 			$escid = $this->_getParam('escid');
- 			$subid = $this->_getParam('subid');
- 			$this->view->escid=$escid;
- 			$this->view->eid->$eid;
- 			$this->view->oid->$oid;
- 			$this->view->pid->$pid;
+ 			// $uid = $this->_getParam('uid');
+ 			// $eid = $this->_getParam('eid');
+ 			// $oid = $this->_getParam('oid');
+ 			// $pid = $this->_getParam('pid');
+ 			// $escid = $this->_getParam('escid');
+ 			// $subid = $this->_getParam('subid');
+ 			// $this->view->escid=$escid;
+ 			// $this->view->eid->$eid;
+ 			// $this->view->oid->$oid;
+ 			// $this->view->pid->$pid;
+ 			$escid='4SI';
+ 			$uid='0514403019';
+ 			$record = new Api_Model_DbTable_Registrationxcourse();
+ 			$data = $record->_getRecordNotasAlumno($escid,$uid);
+ 			print_r($data);
  			// echo $pid;
- 			
+
  			
  		} catch (Exception $e) {
  			print ("Error: Imprimir Notas: ".$e->getMessage());

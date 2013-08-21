@@ -86,4 +86,31 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 			print "Error: Read UserInfo ".$e->getMessage();
 		}
 	}
+
+	   /*Devuelve el record segun la funcion Record de Notas */
+    public function _getRecordNotasAlumno($escid,$uid){
+         try{    
+            $sql = $this->_db->query("
+                
+                select * from record_notes('$escid','$uid') AS 
+                (
+                    ".'escid'." character varying,
+                    ".'matid'." character varying,
+                    ".'perid'." character varying,
+                    ".'courseid'." character varying,
+                    ".'turno'." character varying, 
+                    ".'name'." character varying,
+                    ".'nota'." character varying,
+                    ".'semid'." integer,
+                    ".'curid'." character varying,
+                    ".'creditos'." double precision,
+                    ".'requisito'." character varying
+                    )               
+                ");
+            if ($sql) return $sql->fetchAll();
+            return false;           
+        }  catch (Exception $ex){
+            print "Error: Obteniendo datos de tabla 'Matricula Curso'".$ex->getMessage();
+        }
+    }
 }
