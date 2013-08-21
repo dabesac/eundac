@@ -77,7 +77,7 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 	}
 
 
-	public function _getInfoTeacher($where=null,$attrib=null,$order=null){
+	public function _getinfoTeacher($where=null,$attrib=null,$order=null){
 		try {
 			if ($where=='' && $attrib=='' ) return false;
 				$base_teacher = new Api_Model_DbTable_Users();
