@@ -69,6 +69,7 @@ class Api_Model_DbTable_Semester extends Zend_Db_Table_Abstract
 		}
 	}
 
+
 	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
 			if($where['eid']=='' || $where['oid']=='') return false;
@@ -90,3 +91,26 @@ class Api_Model_DbTable_Semester extends Zend_Db_Table_Abstract
 		}
 	}
 }
+
+	public function _getSemesterXPeriodsXEscid($where=null){
+        try{
+            if ($where['escid']=="" || $where['perid']=="" || $where['eid']=="" || $where['oid']=="" ) return false;
+			$sub_select=$this->_db->select()
+				->from(array('pc' => 'base_periods_courses'),array('semid'))
+					->where("eid = ?",$where['eid'])->where("oid = ?",$where['oid'])
+					->where("perid = ?",$where['perid'])->where("escid = ?",$where['escid']);
+			$select=$this->_db->select()
+				->from(array('s' => 'base_semester'),array('s.*'))
+					->where('s.semid IN ?',$sub_select)
+					->order('cast(semid as integer)');
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;         
+        }  catch (Exception $ex){
+            print "Error: Obteniendo semestres".$ex->getMessage();
+        }
+    }
+
+}
+
