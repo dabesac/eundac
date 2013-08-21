@@ -21,7 +21,7 @@ class Rfacultad_Form_Condition extends Zend_Form
         $condi->removeDecorator('Label')->removeDecorator("HtmlTag");
 
 
-        $resolucion = new Zend_Form_Element_Text('resolucion');
+        $resolucion = new Zend_Form_Element_Text('doc_authorize');
     //    $resolucion->setAttrib("class","span2");
         $resolucion->removeDecorator("HtmlTag")->removeDecorator("Label");
         $resolucion->setAttrib("maxlength", "300");
@@ -33,7 +33,7 @@ class Rfacultad_Form_Condition extends Zend_Form
 
         //$resolucion->setIsArray(true);
 
-        $nsemestre = new Zend_Form_Element_Select('nsemestre');
+        $nsemestre = new Zend_Form_Element_Select('semester');
         $nsemestre->setAttrib("class","span1");
         $nsemestre->removeDecorator("HtmlTag")->removeDecorator("Label");
         $nsemestre->setAttrib("maxlength", "2");
@@ -45,7 +45,7 @@ class Rfacultad_Form_Condition extends Zend_Form
 
         
 
-        $ncreditos = new Zend_Form_Element_Select('ncreditos');
+        $ncreditos = new Zend_Form_Element_Select('credits');
         $ncreditos->setAttrib("class","span1");
         $ncreditos->removeDecorator("HtmlTag")->removeDecorator("Label");
         $ncreditos->setAttrib("maxlength", "1");
@@ -61,7 +61,7 @@ class Rfacultad_Form_Condition extends Zend_Form
 
 
         
-        $vmatricula = new Zend_Form_Element_Select('vmatricula');
+        $vmatricula = new Zend_Form_Element_Select('num_registration');
         $vmatricula->setAttrib("class","span1");
         $vmatricula->removeDecorator("HtmlTag")->removeDecorator("Label");
         $vmatricula->setAttrib("class", "form-control col-lg-1");
@@ -75,7 +75,7 @@ class Rfacultad_Form_Condition extends Zend_Form
 
     
 
-        $detalles = new Zend_Form_Element_Textarea('detalles');
+        $detalles = new Zend_Form_Element_Textarea('comments');
         
         $detalles->removeDecorator("HtmlTag")->removeDecorator("Label");
         $detalles->setAttrib("maxlength", "200")->setAttrib("rows", "2");

@@ -31,9 +31,11 @@
 
  	public function getstudentuidAction(){
  		try{
-
        		$this->_helper->getHelper('layout')->disableLayout();
-       		$uid= $this->_getParam('uid');
+          $facid=$this->sesion->faculty->facid;
+          $this->view->facid=$facid;
+          // print ($facid);
+          $uid= $this->_getParam('uid');
        		if($uid){
        			$where['uid'] = $uid;
         		$where['eid'] = $this->sesion->eid;
@@ -50,9 +52,12 @@
         		$where['nom'] = trim(strtoupper($nom));
         		$where['nom'] = mb_strtoupper($where['nom'],'UTF-8');
         		$bdu = new Api_Model_DbTable_Users();
-        		$data = $bdu->_getUsuarioXNombre($where);
-        		 // print_r($data);	
-        		$this->view->data=$data;
+        		$da = $bdu->_getUsuarioXNombre($where);
+            $where['rid'] = 'EG';            
+            $dat = $bdu->_getUsuarioXNombre($where);
+            $data = array_merge($da,$dat);
+            $this->view->data=$data;
+            // print_r($data);  
         	}
      }catch(Exception $ex ){
         print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
@@ -62,21 +67,22 @@
  	public function printAction(){
  		try {
  			$this->_helper->layout()->disableLayout();
- 			// $uid = $this->_getParam('uid');
- 			// $eid = $this->_getParam('eid');
- 			// $oid = $this->_getParam('oid');
- 			// $pid = $this->_getParam('pid');
- 			// $escid = $this->_getParam('escid');
+ 			$uid=base64_decode($this->_getParam('uid'));
+      $escid=base64_decode($this->_getParam('escid'));
+      // $escid = $this->_getParam('escid');
  			// $subid = $this->_getParam('subid');
  			// $this->view->escid=$escid;
  			// $this->view->eid->$eid;
  			// $this->view->oid->$oid;
  			// $this->view->pid->$pid;
- 			$escid='4SI';
- 			$uid='0514403019';
+ 			// $escid='4SI';
+ 			// $uid='0514403019';
+      // echo $uid;
+      // echo $escid;
  			$record = new Api_Model_DbTable_Registrationxcourse();
  			$data = $record->_getRecordNotasAlumno($escid,$uid);
- 			print_r($data);
+ 			// print_r($data);
+      // $this->view->data=$data;
  			// echo $pid;
 
  			

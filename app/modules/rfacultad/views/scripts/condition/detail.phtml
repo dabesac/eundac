@@ -16,10 +16,28 @@ $condi=$this->condi;
         <script src="/external/jquery/external/jshint.js"></script>
         <script src="/external/jquery/external/qunit.js"></script>
         <script src="/external/jquery/external/base64/jquery.base64.min.js"></script>
+
+        
         <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
+        
+        <!-- Texto Enriquecido-->
+        <link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
+        <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
+        
+        <!-- Bootstrap -->
         <script src="/external/bootstrap/js/bootstrap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
         <link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+        
+        <!-- JS  -->
+        
+        
+        <!-- CSS  Generic-->
+        
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
 <?php
 if ($this->g_reg){?>
 	<center>
@@ -41,9 +59,9 @@ if ($this->g_reg){?>
             <th class="span3 bloke"> Quitar cursos:</th>        
         </tr>
         <tr>
-            <td><?php print $this->form->ncreditos; ?></td>
-            <td><?php print $this->form->vmatricula; ?></td>
-            <td><?php print $this->form->nsemestre; ?></td>
+            <td><?php print $this->form->credits; ?></td>
+            <td><?php print $this->form->num_registration; ?></td>
+            <td><?php print $this->form->semester; ?></td>
             <td ><center><a id="quitar">
                  <img src="/img/course.png"  rel="tooltip" title="Quitar Cursos" /></a>
              </center>
@@ -55,7 +73,7 @@ if ($this->g_reg){?>
         </tr>
 		<tr class='alert-success'>
 			<th>Documento Autorización</th>
-			<td colspan="3" ><?php print $this->form->resolucion->setAttrib("title","Resolución"); ?></td>
+			<td colspan="3" ><?php print $this->form->doc_authorize->setAttrib("title","Resolución"); ?></td>
 		</tr>
         <tr style="font-size: 12px" class='alert-success' >
             <th >Detalles</th>
@@ -65,7 +83,7 @@ if ($this->g_reg){?>
                 <?php print $this->form->subid->setvalue($subid); ?>
                 <?php print $this->form->escid->setvalue($escid); ?>
                 <?php print $this->form->condi->setvalue($condi); ?>
-                <?php print $this->form->detalles; ?>
+                <?php print $this->form->comments; ?>
             </td>
         </tr> 
         <tr>
@@ -108,14 +126,14 @@ if (($this->condi)=='C'){ ?>
         <td> <?php print $i?> </td>
         <td> <?php print $condi['doc_authorize']?> </td>
         <td> <?php print $condi['comments']?> </td>       
-        <td> <a id="<?php echo $condi["conid"] ?>">
+        <td> <a id="<?php echo $condi["cnid"] ?>">
             <img src="/img/delete.ico"  rel="tooltip" title="Eliminar" />
               </a>
-                    <script>
-                        $("#<?php echo $condi['conid'] ?>").click(function(){                           
+                    <script>                   
+                        $("#<?php echo $condi['cnid'] ?>").click(function(){    
                             if (confirm('Esta Seguro que desea eliminar la condicion?'))
                             {
-                                url="/rfacultad/condicionalumno/eliminar/conid/<?php print $condi['conid']?>/perid/<?php print $condi['perid']?>/escid/<?php print $condi['escid']?>/uid/<?php print $condi['uid']?>/pid/<?php print $condi['pid']?>/sedid/<?php print $condi['sedid']?>";
+                                url="/rfacultad/condition/delete/cnid/<?php print $condi['cnid']?>/perid/<?php print $condi['perid']?>/escid/<?php print $condi['escid']?>/uid/<?php print $condi['uid']?>/pid/<?php print $condi['pid']?>/subid/<?php print $condi['subid']?>";
                                 $("#det1").load(url);
                             }
                             else

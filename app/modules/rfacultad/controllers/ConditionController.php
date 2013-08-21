@@ -41,8 +41,6 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
 
     }
 
-
-
     public function getstudentAction()
     {
         try
@@ -95,7 +93,6 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
 
     }
 
-
      public function detailAction()
     {
         try
@@ -131,40 +128,31 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                 $formData['eid']=$eid;
                 $formData['oid']=$oid;
                 unset($formData['condi']);
-                if (!($condi=='S' &&  $formData['nsemestre']=="" && $formData['ncreditos']=="" && $formData['vmatricula']==""))
+                if (!($condi=='S' &&  $formData['semester']=="" && $formData['credits']=="" && $formData['num_registration']==""))
                 {
                     $formData1= $formData;
                     $bdcondiciones = new Api_Model_DbTable_Condition();  
                     if ($condi == 'C' || $condi == 'S')
                     {
-
-                        if ($formData['nsemestre']=="") unset($formData['nsemestre']);
-                        if ($formData['ncreditos']=="") unset($formData['ncreditos']);
-                        if ($formData['vmatricula']=="") unset($formData['vmatricula']);
-                    //     $formData['uid_reg']=$uidreg;
-                    //     $formData['f_reg']=date('Y-m-d h:m:s');   
-                    //     unset($formData['guardar']);  
-                    //     unset($formData['listacursos']);             
-                    //     $dato=$bdcondiciones->_guardar($formData);
-                    //     if($listacursos){
-                    //     if($dato){                      
-                    //     $Data['conid']=$dato['conid'];
-                    //     $Data['eid']=$eid;
-                    //     $Data['oid']=$oid;
-                    //     $Data['escid']=$escid;
-                    //     $Data['sedid']=$sedid;
-                    //     $Data['perid']=$perid;
-                    //     $Data['uid']=$uid;
-                    //     $Data['pid']=$pid;
-                    //      $condicion = new Admin_Model_DbTable_Condicionalumnotemporal();
-                    //      for ($i=0; $i < count($listacursos) ; $i++) { 
-                    //     $Data['cursoid']=$listacursos[$i];
-                    //     $dato=$condicion->_guardar($Data);
-                    //      }
-
-                    //     }
-
-                    //     }                     
+                        if ($formData['semester']=="") unset($formData['semester']);
+                        if ($formData['credits']=="") unset($formData['credits']);
+                        if ($formData['num_registration']=="") unset($formData['num_registration']);
+                        $formData['register']=$uidreg; 
+                        unset($formData['guardar']);  
+                        unset($formData['listacursos']);            
+                        $dato=$bdcondiciones->_guardar($formData);
+                        if($listacursos){
+                            if($dato){              
+                                 $condicion = new Api_Model_DbTable_Studentcondition();                                
+                                        
+                                 for ($i=0; $i < count($listacursos) ; $i++) {
+                                        $dato['cnid']=trim($dato['cnid']);
+                                        $dato['temid']=time();  
+                                        $dato['courseid']=$listacursos[$i];
+                                        $dato=$condicion->_guardar($dato);
+                                 }
+                            }
+                        }                     
                     }
                 $this->view->g_reg = "Se guardo Correctamente";
                 }
@@ -186,17 +174,12 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                 $where['uid']=$uid;
                 $where['perid']=$perid;
                 $where['subid']=$subid;
-
-                // $form->uid->setValue($uid);
-                // $form->pid->setValue($pid);
-                // $form->escid->setValue($escid);
-                // $form->sedid->setValue($sedid);
-                // $form->condi->setValue($condi);
                 
                 if ($condi=='C')
                 {
                     $bdalumno = new Api_Model_DbTable_Condition();        
                     $datos= $bdalumno->_getFilter($where);
+                    // print_r($datos);
                     $this->view->datos=$datos;
                     $dataform = array();
                     $dataform['uid'] = $datos['uid'];
@@ -270,4 +253,35 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
             print "Error : eliminar".$ex->getMessage();
           }
       }
+
+
+          public function deleteAction()
+      {
+        try{
+                        $this->_helper->getHelper('layout')->disableLayout();
+                        $where['eid']="20154605046";//$this->sesion->eid;
+                        $where['oid']='1';//$this->sesion->oid;
+                        $where['uid']=$this->_getParam("uid");
+                        $where['perid']=$this->_getParam("perid");
+                        $where['escid']=$this->_getParam("escid");
+                        $where['cnid']=$this->_getParam("cnid");
+                        $where['pid']=$this->_getParam("pid");
+                        $where['subid']=$this->_getParam("subid");
+                        $condicion = new Api_Model_DbTable_Studentcondition();
+                        $condi= new Api_Model_DbTable_Condition();
+                        $condicion->_delete($where);
+                        $condi->_delete($where);
+                        if ($condi && $condicion) { ?>
+                               <script type="text/javascript">
+                            window.location.reload();
+                               </script>
+                         <?php }
+          }   
+                  
+         catch (Exception $ex)
+          {
+            print "Error : eliminar".$ex->getMessage();
+          }
+      }
+
 }

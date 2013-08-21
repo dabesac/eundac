@@ -1,6 +1,6 @@
 <?php
 
-class Curricula_IndexController extends Zend_Controller_Action {
+class Register_IndexController extends Zend_Controller_Action {
 
     public function init()
     {
@@ -9,15 +9,15 @@ class Curricula_IndexController extends Zend_Controller_Action {
     		$this->_helper->redirector('index',"index",'default');
     	}
     	$login = $sesion->getStorage()->read();
-    	if (!$login->modulo=="curricula"){
-    		$this->_helper->redirector('index','index','default');
-    	}
+    	//if (!$login->modulo=="register"){
+   		//$this->_helper->redirector('index','index','default');
+  	//}
     	$this->sesion = $login;
-       
     }
     public function indexAction()
     {
     
+    	
 
     }
 }
