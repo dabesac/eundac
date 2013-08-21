@@ -1,0 +1,26 @@
+<?php if ($this->bandera=="1") { ?>
+    <div class="alert alert-info">
+        Se Matriculó correctamente al alumno en el Curso seleccionado.
+    </div>
+<?php 
+}elseif ($this->bandera=="0") { ?>
+    <div class="alert alert-danger">
+        El alumno ya se encuentra Matriculado en el Curso.
+    </div>
+    <?php
+}?>
+
+<script type="text/javascript">
+var band="<?php echo $this->bandera?>";
+if (band=="1") {
+    var subid="<?php echo $this->subid ?>";
+    var curid="<?php echo $this->curid ?>";
+    var escid="<?php echo $this->escid ?>";
+    var perid="<?php echo $this->perid ?>";
+    var courseid="<?php echo $this->courseid ?>";
+    var turno="<?php echo $this->turno ?>";
+    var url="/rfacultad/registeractas/register/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/courseid/"+courseid+"/turno/"+turno+"/subid/"+subid;
+        // alert(url);
+    $("#listaalumnos").load(url);
+};
+</script>

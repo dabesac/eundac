@@ -124,15 +124,13 @@
             alert("Seleccione una Escuela.");
             return false;
         };
-        if (curid=="") {
-            alert("Seleccione una Currícula.");
-            return false;
-        };
         if (perid=="") {
             alert("Seleccione un Periodo.");
             return false;
         };
-        $("#courseid").load("/rfacultad/registeractas/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+        if (semid!="" && curid!="" && escid!=""  && perid!="") {
+            $("#courseid").load("/rfacultad/registeractas/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid);
+        };
     });
 
     $("#registrar").click(function(){
@@ -153,12 +151,6 @@
         $("#datos").html("<img src='/img/spinner.gif'>Cargando...");
         $("#datos").load(url);
     });
-
-
-
-
-
-
 
     $("#agregaracta").click(function(){
         var curid = $("#curid").val();
@@ -181,7 +173,7 @@
             alert("Seleccione un Semestre.");
             return false;
         };
-        var url="/default/llenadoactas/agregarcurso/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/semid/"+semid;
+        var url="/rfacultad/registeractas/addcourse/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/semid/"+semid;
         $("#datos").html("<img src='/img/spinner.gif'>Cargando...");
         $("#datos").load(url);
    });
