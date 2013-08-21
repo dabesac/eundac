@@ -1,6 +1,6 @@
 <?php
 
-class Vacademico_IndexController extends Zend_Controller_Action {
+class Curricula_IndexController extends Zend_Controller_Action {
 
     public function init()
     {

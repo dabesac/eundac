@@ -41,6 +41,7 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 		}
 	}
 
+
 	public function _getAll($where=array()){
 		try{
 			if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["subid"] =='' || $where["courseid"]=='' || $where["curid"] =='' || $where["turno"] =='' || $where["perid"]=='') return false;
@@ -53,6 +54,7 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 			print "Error: Read All Course ".$e->getMessage();
 		}
 	}
+
 
 
 	public function _getFilter($where=null,$attrib=null,$orders=null){
@@ -86,6 +88,7 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 			return false;
 		} catch (Exception $e) {
 			print "Error: Read info Course ";
+
 		}
 	}
 
