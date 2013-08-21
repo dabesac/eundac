@@ -29,24 +29,32 @@
 
  	}
 
- 	public function getstudentnameAction(){
- 			$this->_helper->getHelper('layout')->disableLayout();
-
- 	}
-
  	public function getstudentuidAction(){
  		try{
 
        		$this->_helper->getHelper('layout')->disableLayout();
-       		$where['uid'] = $this->_getParam('uid');
-        	// $where['uid'] = '1234567890';
-        	$where['eid'] = $this->sesion->eid;
-        	$where['oid'] = $this->sesion->oid;
-        	$bdu = new Api_Model_DbTable_Users();
-        	$data = $bdu->_getUserXUid($where);
-        	$this->view->data=$data;
-
-    }catch(Exception $ex ){
+       		$uid= $this->_getParam('uid');
+       		if($uid){
+       			$where['uid'] = $uid;
+        		$where['eid'] = $this->sesion->eid;
+        		$where['oid'] = $this->sesion->oid;
+        		$bdu = new Api_Model_DbTable_Users();
+        		$data = $bdu->_getUserXUid($where);
+        		$this->view->data=$data;
+       		}
+       		$nom = $this->_getParam('last_name0');
+       		if($nom){
+        		$where['eid'] = $this->sesion->eid;
+        		$where['oid'] = $this->sesion->oid;
+        		$where['rid'] = 'AL';
+        		$where['nom'] = trim(strtoupper($nom));
+        		$where['nom'] = mb_strtoupper($where['nom'],'UTF-8');
+        		$bdu = new Api_Model_DbTable_Users();
+        		$data = $bdu->_getUsuarioXNombre($where);
+        		 // print_r($data);	
+        		$this->view->data=$data;
+        	}
+     }catch(Exception $ex ){
         print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
     } 
 
