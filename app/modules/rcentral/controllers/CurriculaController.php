@@ -30,11 +30,11 @@ class Rcentral_CurriculaController extends Zend_Controller_Action
 		try {
 
 			$this->_helper->layout()->disableLayout();
-                  $facid=$this->_getParam('facid');
+                  $facid=base64_decode($this->_getParam('facid'));
                   $eid=$this->sesion->eid;
                   $oid=$this->sesion->oid;
                   $where= array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid,'state'=>'A');
-                  $attrib=array('escid','name');
+                  $attrib=array('escid','name','subid');
                   $esc= new Api_Model_DbTable_Speciality();
                   $escuelas=$esc->_getFilter($where,$attrib);
                   $this->view->escuelas=$escuelas;
@@ -47,41 +47,105 @@ class Rcentral_CurriculaController extends Zend_Controller_Action
 	public function curriculasAction(){
 		try {
 			$this->_helper->layout()->disableLayout();
-			$eid="20154605046";
-                  $oid="1";
-                  $escid=$this->_getParam('escid');
-                  $subid=$this->_getParam('subid');
-                  $where['eid']=$eid;
-                  $where['oid']=$oid;
-                  $where['escid']=$escid;
-                  $where['subid']=$subid;
+			$eid=$this->sesion->eid;
+                  $oid=$this->sesion->oid;
+                  $get=split('--', base64_decode($this->_getParam('escid')));
+                  $escid=$get[0];
+                  $subid=$get[1];
+                  $this->view->escid=$escid;
+                  $this->view->subid=$subid;
+                  $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
                   $curr= new Api_Model_DbTable_Curricula();
                   $curriculas=$curr->_getFilter($where);
-            $this->view->curriculas=$curriculas;
+                  $this->view->curriculas=$curriculas;
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
 	}
 
+      public function newcurriculaAction(){
+            try {
+                  $this->_helper->layout()->disableLayout();
+                  $eid=$this->sesion->eid;
+                  $oid=$this->sesion->oid;
+                  $escid=base64_decode($this->_getParam('escid'));
+                  $subid=base64_decode($this->_getParam('subid')); 
+                  $form = new Rcentral_Form_Curricula();
+                  $form->subid->setvalue($subid);
+                  $form->escid_cur->setvalue($escid);
+                  if ($this->getRequest()->isPost()) {
+                        $formData = $this->getRequest()->getPost();
+                        if ($form->isValid($this->getRequest()->getPost()))
+                        {
+                              $formData['eid']=$eid;
+                              $formData['oid']=$oid;
+                              $formData['created']=date('Y-m-d h:m:s');
+                              $formData['register']=$this->sesion->uid;
+                              $formData['escid']=$formData['escid_cur'];
+
+                              unset($formData['escid_cur']);
+                              // print_r($formData);
+                              // echo"asfs";
+                              $base_curricula      = new Api_Model_DbTable_Curricula();
+                              // $base_curricula->save($formData);
+                              
+                                    if ($base_curricula->_save($formData)) {
+                                          $json = array(
+                                                        'status' => true,
+                                                        'tmp' => $formData['escid']."--".$formData['subid'],
+
+                                                    );
+                                          $this->_response->setHeader('Content-Type', 'application/json');  
+                                          $this->view->data = $json;
+                                         
+                                    }
+                                    else
+                                    {
+                                          
+                                          $json = array(
+                                                        'status' => false
+                                                    );
+                                          $this->_response->setHeader('Content-Type', 'application/json');  
+                                          $this->view->data = $json;
+                                         
+
+                                    }
+                       }
+                       else
+                       {
+                              $this->view->form=$form;
+                       }
+                  }
+                  else
+                  {
+                        $this->view->form=$form;
+                  }
+                  
+                  
+            } catch (Exception $e) {
+                  print "Error:".$e->getMessage();
+            }
+      }
+
 	public function modifycurriculaAction(){
 		try {
-			$eid="20154605046";
-            $oid="1";
-            $curid=base64_decode($this->_getParam('curid'));
-            $escid=base64_decode($this->_getParam('escid'));
-            $subid=base64_decode($this->_getParam('subid'));
-            $accion=$this->_getParam('accion');
-            $where['eid']=$eid;
-            $where['oid']=$oid;
-            $where['escid']=$escid;
-            $where['curid']=$curid;
-            $where['subid']=$subid;
-            $curr= new Api_Model_DbTable_Curricula();
-            print_r($curricula=$curr->_getOne($where));
-            $form = new Rcentral_Form_Curricula();
-            $form->populate($curricula);
-            $form->year->setAttrib("readonly",true);
-            $this->view->form=$form;
+                  $eid=$this->sesion->eid;
+                  $oid=$this->sesion->oid;
+                  $curid=base64_decode($this->_getParam('curid'));
+                  $escid=base64_decode($this->_getParam('escid'));
+                  $subid=base64_decode($this->_getParam('subid'));
+                  $accion=$this->_getParam('accion');
+                  $where=array('eid'=>$eid,
+                        'oid'=>$oid,
+                        'escid'=>$escid,
+                        'curid'=>$curid,
+                        'subid'=>$subid);
+                  $curr= new Api_Model_DbTable_Curricula();
+                  $curricula=$curr->_getOne($where);
+                  $form = new Rcentral_Form_Curricula();
+                  $form->populate($curricula);
+                  $form->year->setAttrib("readonly",true);
+                  $this->view->form=$form;
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}

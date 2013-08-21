@@ -1,0 +1,155 @@
+<?php if ($this->form) { ?>
+	<form role='form' method='post' action='/rcentral/curricula/newcurricula'  id='form_new_cur'>
+	<?php echo $this->form->subid?>
+	<?php echo $this->form->escid_cur?>
+
+<div class='row'>
+ 	<div class='col-lg-2'>
+		<div class="input-group">
+			<label>Codigo Generado</label>
+			<?php echo $this->form->curid?>
+			<?php echo $this->escid?>
+
+	 	</div>
+	</div>
+ 	<div class='col-lg-2'>
+		<div class="input-group">
+			<label>Año</label>
+			<?php echo $this->form->year?>
+		</div>
+	</div>
+	<div class='col-lg-2'>
+		<div class="input-group">
+			<label>Tipo Periodo</label>
+			<?php echo $this->form->type_periods?>
+		</div>
+	</div>
+	<div class='col-lg-2'>
+		<div class="input-group">
+			<label>Periodo</label>
+			<?php echo $this->form->cur_per_ant?>
+		</div>
+	</div>
+	<div class='col-lg-2'>
+		<div class="input-group">
+				<label>Tipo Curricula</label>
+				<?php echo $this->form->type?>
+		</div>
+	</div>
+</div>
+<div class='row'>
+	<div class='col-lg-2'>
+		<div class="input-group">
+				<label>Estado</label>
+				<?php echo $this->form->state?>
+		</div>
+	</div>
+	<div class='col-lg-2'>
+		<div class="input-group">
+				<label>Nombre de Plan Curricula</label>
+				<?php echo $this->form->name?>
+		</div>
+	</div>
+	<div class='col-lg-2'>
+		<div class="input-group">
+				<label>Alias de Plan Curricular</label>
+				<?php echo $this->form->alias?>
+		</div>
+	</div>
+
+	<div class='col-lg-2'>
+		<div class="input-group">
+				<label>Nro Periodosgmgm</label>
+				<?php echo $this->form->number_periods?>
+		</div>
+	</div>
+
+	<div class='col-lg-2'>
+		<div class="input-group">
+				<label>Nro Cursos Obligatorios</label>
+				<?php echo $this->form->mandatory_course?>
+		</div>
+	</div>
+</div>
+<div class='row'>
+	<div class='col-lg-2'>
+		<div class="input-group">
+				<label>Nro Cursos Electivos</label>
+				<?php echo $this->form->elective_course?>
+		</div>
+	</div>
+	<div class='col-lg-2'>
+		<div class="input-group">
+				<label>Nro Creditos Obligatorios</label>
+				<?php echo $this->form->mandatory_credits?>
+		</div>
+	</div>
+	<div class='col-lg-2'>
+		<div class="input-group">
+			<label>Nro Creditos Electivos</label>
+			<?php echo $this->form->elective_credits?>
+		</div>
+	</div>
+</div>
+
+</form >
+
+<script>
+	var escid=$('#escid_cur').val();
+	$("#year").change(function(){
+		$("#year option:selected").each(function(){
+			var type=$("#type_periods").val();
+			var year=$(this).val();
+			if (year!='')
+				$('#curid').val(year+type+escid);
+	            $("#cur_per_ant").val(year+type);
+
+		});
+	});
+
+	$("#type_periods").change(function(){
+		$("#type_periods option:selected").each(function(){
+			var type=$(this).val();
+			var year=$("#year").val();
+			if (type!='')
+				$('#curid').val(year+type+escid);
+	            $("#cur_per_ant").val(year+type);
+
+		});
+	});
+
+	$(".save_curri").click(function(){
+			$("#form_new_cur").submit();
+
+	});
+	$("#form_new_cur").submit(function(){
+			$.ajax({
+            	type: 'POST',
+	            url: $(this).attr('action'),
+	            data: $(this).serialize(),
+            	success: function(data) { 
+            		if (data.status==true)
+        			{
+        				var tmp=$.base64.encode(data.tmp);
+        				$.get('/rcentral/curricula/curriculas',{escid:tmp},function(data){
+							$("#curriculas").html(data);
+							$('#myModal').hide();
+							$('#myModal').modal('hide');
+						});
+    					$('.close_new_cur').click();
+
+        			}
+        			else
+        			{
+        				$(".cont_new_cur").html(data);
+        			}
+                }
+                
+	        }); 
+	        return false;
+    });
+</script>
+<?php } else{
+	echo json_encode($this->data);
+}?>
+
