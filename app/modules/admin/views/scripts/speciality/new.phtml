@@ -1,0 +1,55 @@
+<form id="<?php echo $this->form->getName();?>" name="<?php echo $this->form->getName();?>" action="<?php echo $this->form->getAction();?>"method="Post" enctype="application/x-www-form-urlencode">  
+  <div class="span10 flotacarajo">
+    <table class="table table-hover span9">
+      <tr>
+        <th style="font-size:20px;"><br>
+            NUEVA ESCUELA
+              <div style="float:right; margin-left:10px"><?php echo $this->form->send?></div><br>
+              <a style="float:right" class="btn btn-danger" href="/admin/speciality/">Cancelar</a>
+        </th>
+      </tr>
+    </table>
+  </div>	
+	<div class="span10 flotacarajo">
+      <table class="table table-striped table-hover span9">
+      <tr>
+            <td>Facultades:</td>
+            <td><div style='width: 200px'><?php echo $this->form->facid?></td>
+      </tr>
+      <tr>
+            <td>Sedes:</td>
+            <td><div style='width: 200px'><?php echo $this->form->subid?></td>
+      </tr>
+      <tr>
+      	<td>Pariente:</td>
+            <td><div style='width: 200px'><?php echo $this->form->parent?></td>
+      </tr>	
+      <tr>
+            <td>Cod.Escuela:</td>
+            <td><div style='width: 200px'><?php echo $this->form->escid?></td>
+      </tr>      
+      <tr>
+            <td>Nombre:</td>
+            <td><div style='width: 200px'><?php echo $this->form->name?></td>
+      </tr>
+      <tr>
+            <td>Abreviacion:</td>
+            <td><div style='width: 200px'><?php echo $this->form->abbreviation?></td>
+      </tr>
+      <tr>
+            <td>Estado:</td>
+            <td><div style='width: 200px'><?php echo $this->form->state?></td>
+      </tr>
+	  </table>
+	</div>	
+</form>
+
+<script type="text/javascript">
+    $("#facid").change(function(){
+    var facid=$(this).val();
+    // alert(escid);
+    url="/admin/speciality/getfaculty/facid/"+facid;
+    $("#parent").load(url);// alert(url);
+});
+</script> 
+

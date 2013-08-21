@@ -1,0 +1,37 @@
+<form id="<?php echo $this->form->getName();?>" name="<?php echo $this->form->getName();?>" action="<?php echo $this->form->getAction();?>" method="Post" enctype="application/x-www-form-urlencode">
+	<div class="span10 flotacarajo">
+    	<table class="table table-hover span9">
+        	<tr>
+            	<th style="font-size:20px;"><br>
+                	MODIFICAR EL ROL
+                  	<div style="float:right; margin-left:10px"><?php echo $this->form->send?></div><br>
+                  	<a style="float:right" class="btn btn-danger" href="/admin/rol/">Cancelar</a>
+            	</th>
+        	</tr>
+    	</table>
+	</div>
+	<div class="span10 flotacarajo">
+	<table class="table table-hover span9">
+		<tr>
+		      <td>Cod.Rol:</td>
+		      <td><div style='width: 200px'><?php echo $this->form->rid?></div></td>
+		</tr>      
+		<tr>
+			<td>Nombre:</td>
+			<td><div style='width: 200px'><?php echo $this->form->name?></div></td>
+		</tr>
+		<tr>
+			<td>Prefijo:</td>
+			<td><div style='width: 100px'><?php echo $this->form->prefix?></div></td>
+		</tr>
+		<tr>
+			<td>Modulo:</td>
+		      <td><div style='width: 200px'><?php echo $this->form->module?></div></td>
+		</tr>	
+		<tr>
+		      <td>Estado:</td>
+		      <td><div style='width: 200px'><?php echo $this->form->state?></div></td>
+		</tr>
+	</table>
+	</div>
+</form>
