@@ -1,0 +1,72 @@
+<form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded">
+
+<div class="row">
+  <div class="col-sm-8"><h2>Nueva Facultad</h2></div>
+  <div class="col-sm-2"><?php print $this->form->save;?></div>
+  <div class="col-sm-1"><br><a href="/admin/faculty"  class="btn btn-danger  " >Cancelar</a></br></div>
+</div>
+
+
+
+<div>
+<table class="table span6 table-striped table-bordered">
+	<tr>
+        <div class="control-group">
+          <td class="span4"><label class="control-label">Codigo:</label></td>
+          <td class="span4"><div class="controls">
+            <?php print $this->form->facid;?>
+          </div></td>
+        </div>
+    </tr>
+
+    <tr>
+        <div class="control-group">
+          <td><label class="control-label">Nombre:</label></td>
+          <td><div class="controls">
+            <?php print $this->form->name;?>
+          </div></td>
+        </div>
+    </tr>
+
+	<tr>
+        <div class="control-group">
+          <td><label class="control-label">Nombre Abreviado:</label></td>
+          <td><div class="controls">
+            <?php print $this->form->abbreviation;?>
+          </div></td>
+        </div>
+    </tr>
+
+	<tr>
+        <div class="control-group">
+          <td><label class="control-label">Fecha de Creacion:</label></td>
+          <td><div class="controls">
+            <?php print $this->form->created;?>
+          </div></td>
+        </div>
+    </tr>
+
+
+    <tr>
+        <div class="control-group">
+          <td><label class="control-label">Estado:</label></td>
+          <td><div class="controls">
+            <?php print $this->form->state;?>
+          </div></td>
+        </div>
+    </tr>
+</table>
+</div>
+</form>
+
+
+<script>
+    $(function() 
+    {
+        $( "#created" ).datepicker({
+            changeYear: true,
+            changeMonth: true,
+            dateFormat: 'yy/mm/dd',
+        });
+    });
+</script>

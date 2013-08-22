@@ -2,9 +2,15 @@
 class Docente_NotasController extends Zend_Controller_Action{
 
 	public function init(){
-		$this->eid='20154605046';
-		$this->oid='1';
-		$this->perid='13A';
+		$sesion  = Zend_Auth::getInstance();
+ 		if(!$sesion->hasIdentity() ){
+ 			$this->_helper->redirector('index',"index",'default');
+ 		}
+ 		$login = $sesion->getStorage()->read();
+ 		if (!$login->rol['module']=="docente"){
+ 			$this->_helper->redirector('index','index','default');
+ 		}
+ 		$this->sesion = $login;
 		$this->uid='04000119DC';
 		$this->rid='DC';
 		$this->is_main='S';
@@ -13,9 +19,10 @@ class Docente_NotasController extends Zend_Controller_Action{
 
 	public function indexAction(){
 		$where['uid']=$this->uid;
-		$where['perid']=$this->perid;
+		$where['perid']=$this->sesion->period->perid;
 		$where['rid']=$this->rid;
 		$where['is_main']=$this->is_main;
+		// print_r($where);
 		$docente = new Api_Model_DbTable_PeriodsCourses();
 		$data = $docente->_getCourseTeacher($where);
 		// print_r($data);
