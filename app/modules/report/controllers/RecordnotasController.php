@@ -23,7 +23,7 @@
 			$this->view->fm=$fm;
  			
  		} catch (Exception $e) {
- 			print ('Error: Mostrar datos'. $e->getMessage());
+ 			print ('Error: get datos'. $e->getMessage());
  			
  		}
 
@@ -31,7 +31,7 @@
 
  	public function getstudentuidAction(){
  		try{
-       		$this->_helper->getHelper('layout')->disableLayout();
+       		$this->_helper->layout()->disableLayout();
           $facid=$this->sesion->faculty->facid;
           $this->view->facid=$facid;
           // print ($facid);
@@ -60,7 +60,7 @@
             // print_r($data);  
         	}
      }catch(Exception $ex ){
-        print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
+        print ("Error Controller get Datos: ".$ex->getMessage());
     	} 
  	}
 
@@ -87,7 +87,7 @@
 
  			
  		} catch (Exception $e) {
- 			print ("Error: Imprimir Notas: ".$e->getMessage());
+ 			print ("Error: Print Notas: ".$e->getMessage());
  		}
 
  	}
