@@ -1,0 +1,162 @@
+<script src="/external/jquery/jquery-1.9.1.js"></script>
+<script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
+<script src="/external/jquery/external/globalize.js"></script>
+<script src="/external/jquery/external/jquery.mousewheel.js"></script>
+<script src="/external/jquery/external/jshint.js"></script>
+<script src="/external/jquery/external/qunit.js"></script>
+<link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
+<script src="/external/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+<?php 
+$turno=$this->turno;
+$perid=$this->perid;
+$courseid=$this->courseid;
+$curid=$this->curid;
+$escid=$this->escid;
+$subid=$this->subid;
+$tipo_cali=$this->tipo_cali;
+$units=$this->units;
+$numunidad=$this->numunidad;
+$tipo = ($tipo_cali=="O")?"Objetivos:":"Capacidad:";
+switch ($numunidad) {
+	case '1': $numroma="I"; break;
+	case '2': $numroma="II"; break;
+	case '3': $numroma="III"; break;
+	case '4': $numroma="IV"; break;
+	case '5': $numroma="V"; break;
+	case '6': $numroma="VI"; break;
+	case '7': $numroma="VII"; break;
+	case '8': $numroma="VIII"; break;
+	case '9': $numroma="IX"; break;
+	case '10': $numroma="X"; break;
+}
+$nunidad=$numunidad-1;
+?>
+<div class="alert alert-info" style="font-size: 14px"><b>Información: </b>Primero debe ingresar y guardar los datos de la Unidad, luego agregar los contenidos.</div>
+<div style="width:100%; text-align:center;font-size:22px; margin-bottom:20px">
+	<b>PROGRAMACIÓN DE UNIDADES</b>
+	<a id="cerrar" class="btn btn-danger" style="margin-left:100px"><span class="glyphicon glyphicon-eject"></span>Cerrar</a>
+</div>
+<form name="<?php echo $this->form->getName(); ?>" id='<?php echo $this->form->getName(); ?>' action="<?php echo $this->form->getAction(); ?>" method="post" enctype="multipart/form-data">
+
+	<table class="table table-bordered table-striped" style="width:95%; margin-left:20px">
+	    <tr>
+	        <th style="font-size:20px; width:150px">UNIDAD <?php echo $numroma ?>:</th>
+	        <td><?php echo $this->form->name?></td>
+	    </tr>
+	    <tr>
+	        <th style="font-size:13px"><?php echo $tipo?></th>
+	        <td><?php echo $this->form->objetive?></td>
+	    </tr>
+		<tr>
+			<td colspan="2">
+				<center><a href="/syllabus/syllabus/content/perid/<?php echo base64_encode($perid)?>/subid/<?php echo base64_encode($subid)?>/escid/<?php echo base64_encode($escid)?>/curid/<?php echo base64_encode($curid)?>/courseid/<?php echo base64_encode($courseid)?>/turno/<?php echo base64_encode($turno)?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $numunidad?>" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span>Agregar Contenidos</a></center>
+			</td>
+		</tr>
+		<tr style="height:150px; background-color:#FAF6CC">
+			<td colspan="2">
+		<?php if ($tipo_cali=="O") { ?>
+		<div id="contobjetivos">
+			<table class="table table-striped table-condensed table-bordered" style="width:95%; margin-left:20px;font-size:12px">
+				<tr>
+					<th style="width:40px">Semana</th>
+					<th style="width:40px">Sesión</th>
+					<th>Contenidos</th>
+					<th>Estrategias</th>
+					<th colspan="2">Operaciones</th>
+				</tr>
+				<?php 
+				if ($this->conte) {
+					foreach ($this->conte as $conte) { ?>
+						<tr>
+							<td><?php echo $conte['week']?></td>
+							<td><?php echo $conte['session']?></td>
+							<td><?php echo $conte['obj_content']?></td>
+							<td><?php echo $conte['obj_strategy']?></td>
+							<td style="width:20px">
+								<a href="/syllabus/syllabus/modifycontent/perid/<?php echo base64_encode($conte['perid'])?>/subid/<?php echo base64_encode($conte['subid'])?>/escid/<?php echo base64_encode($conte['escid'])?>/curid/<?php echo base64_encode($conte['curid'])?>/courseid/<?php echo base64_encode($conte['courseid'])?>/turno/<?php echo base64_encode($conte['turno'])?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $conte['unit']?>/session/<?php echo $conte['session']?>" title="Modificar"><span class="glyphicon glyphicon-pencil"></span></a>
+							</td>
+							<td style="width:20px">
+								<a href="/syllabus/syllabus/deletecontent/perid/<?php echo base64_encode($conte['perid']) ?>/subid/<?php echo base64_encode($conte['subid'])?>/escid/<?php echo base64_encode($conte['escid'])?>/curid/<?php echo base64_encode($conte['curid'])?>/courseid/<?php echo base64_encode($conte['courseid'])?>/turno/<?php echo base64_encode($conte['turno'])?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $conte['unit']?>/session/<?php echo $conte['session']?>" onclick="return confirm('Esta seguro de Eliminar el registro.')" title="Eliminar"><span class="glyphicon glyphicon-trash"></span></a>
+							</td>
+						</tr>
+					<?php	
+					}
+				}
+				?>
+			</table>
+		</div>
+		<?php }elseif($tipo_cali=="C"){ ?>
+		<div id="contobjetivos">
+			<table class="table table-striped table-condensed table-bordered" style="width:95%; margin-left:20px;font-size:12px">
+				<tr><th colspan="9"><center>CONTENIDOS DE APRENDIZAJE</center></th></tr>
+				<tr>
+					<th style="width:40px">Semana</th>
+					<th style="width:40px">Sesión</th>
+					<th>Conceptual</th>
+					<th>Procedimental</th>
+					<th>Actitudinal</th>
+					<th>Indicadores de Desempeño</th>
+					<th>Instrumentos de Evaluación</th>
+					<th colspan="2">Operaciones</th>
+				</tr>
+				<?php 
+				if ($this->conte) {
+					foreach ($this->conte as $conte) { ?>
+						<tr>
+							<td><?php echo $conte['week']?></td>
+							<td><?php echo $conte['session']?></td>
+							<td><?php echo $conte['com_conceptual']?></td>
+							<td><?php echo $conte['com_procedimental']?></td>
+							<td><?php echo $conte['com_actitudinal']?></td>
+							<td><?php echo $conte['com_indicators']?></td>
+							<td><?php echo $conte['com_instruments']?></td>
+							<td style="width:20px">
+								<a href="/syllabus/syllabus/modifycontent/perid/<?php echo base64_encode($conte['perid'])?>/subid/<?php echo base64_encode($conte['subid'])?>/escid/<?php echo base64_encode($conte['escid'])?>/curid/<?php echo base64_encode($conte['curid'])?>/courseid/<?php echo base64_encode($conte['courseid'])?>/turno/<?php echo base64_encode($conte['turno'])?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $conte['unit']?>/session/<?php echo $conte['session']?>" title="Modificar"><span class="glyphicon glyphicon-pencil"></span></a>
+							</td>
+							<td style="width:20px">
+								<a href="/syllabus/syllabus/deletecontent/perid/<?php echo base64_encode($conte['perid']) ?>/subid/<?php echo base64_encode($conte['subid'])?>/escid/<?php echo base64_encode($conte['escid'])?>/curid/<?php echo base64_encode($conte['curid'])?>/courseid/<?php echo base64_encode($conte['courseid'])?>/turno/<?php echo base64_encode($conte['turno'])?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $conte['unit']?>/session/<?php echo $conte['session']?>" onclick="return confirm('Esta seguro de Eliminar el registro.')" title="Eliminar"><span class="glyphicon glyphicon-trash"></span></a>
+							</td>
+						</tr>
+					<?php	
+					}
+				}
+				?>
+			</table>
+		</div>
+		<?php } ?>
+			</td>
+		</tr>
+		<?php if ($tipo_cali=="O") { ?>
+		    <tr>
+		        <th style="font-size:13px; width:150px">Lectura:</th>
+		        <td><?php echo $this->form->reading?></td>
+		    </tr>
+		<?php }?>
+		<tr>
+		    <th style="font-size:13px">Actividades:</th>
+		    <td><?php echo $this->form->activity?></td>
+		</tr>
+	</table>
+	<div style="width:100%; text-align:center; margin-top:20px">
+		<a id="atras" href="/syllabus/syllabus/units/perid/<?php echo base64_encode($perid)?>/subid/<?php echo base64_encode($subid)?>/escid/<?php echo base64_encode($escid)?>/curid/<?php echo base64_encode($curid)?>/courseid/<?php echo base64_encode($courseid)?>/turno/<?php echo base64_encode($turno)?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $nunidad?>" class="btn btn-info"><span class="glyphicon glyphicon-arrow-left"></span> Atras</a>
+		<?php echo $this->form->guardar ?>
+	</div><br><br>
+</form>
+
+<script type="text/javascript">
+	var numunidad="<?php echo $this->numunidad?>";
+	if (numunidad==1) {
+		$("#atras").attr('disabled',true);
+		$("#atras").click(function(){
+			return false;
+		});
+	};
+
+	$("#cerrar").click(function(){
+			window.close();
+	});
+</script>

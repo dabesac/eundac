@@ -1,0 +1,23 @@
+<div>
+	<h4><span class='glyphicon glyphicon-list'></span> Cursos</h4>
+</div>
+
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <?php foreach ($this->data_course as $key => $value) { ?>
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $value['semid']?>">
+                  Cursos <?php echo $value['name']?>
+                </a>
+              </h4>
+            </div>
+            <div id="collapse<?php echo $value['semid']?>" class="panel-collapse collapse in">
+              <div class="panel-body">
+                    <?php echo $value['name']?>
+              </div>
+            </div>
+        <?php }?>
+     </div>
+</div>
+
