@@ -1,6 +1,6 @@
 <?php
 
-class Pedagogia_ErrorController extends Zend_Controller_Action
+class Horary_ErrorController extends Zend_Controller_Action
 {
 
     public function noaccessAction(){}

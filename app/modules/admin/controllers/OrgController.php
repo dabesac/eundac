@@ -62,9 +62,7 @@ class Admin_OrgController extends Zend_Controller_Action
                 {
                     echo "Ingrese Nuevamente";
                 }
-            }
-            
-            
+            }            
         } 
         catch (Exception $ex) 
         {
