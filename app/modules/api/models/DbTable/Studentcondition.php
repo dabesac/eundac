@@ -4,14 +4,13 @@ class Api_Model_DbTable_Studentcondition extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'base_student_condition';
 	protected $_primary = array("temid","eid","oid","escid","subid","perid","uid","pid");
+	protected $_sequence ="s_conditionstudent"; 
 
 
     
     /*Guarda un registro en la tabla CondicionXAlumno*/
      public function _guardar($datos){
      	        try{
-     	        	print_r($datos);
-            // if($data=='')return false;
             return $this->insert($datos);
         }catch (Exception $e){
             print "Error: Al momento de insertar condicion de alumno temporal ".$e->getMessage();

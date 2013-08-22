@@ -1,0 +1,15 @@
+<div><h2>ACL</h2></div>
+<div class="row">
+	<div class="col-md-11 pull-right"><h4>Rol</h4><select name="rol" id="rol" class="input-sm">
+			<option value="h">Selecione..</option>
+			<?php if($this->rols){
+				$c=0;
+				foreach ($this->rols as $rls) {?>
+					<option value="<?php echo $rls['rid'];?>"><?php echo $rls['name']?></option>		
+				<?php $c++;
+				}
+			}?>
+		</select>
+	<div class="col-md-7 pull-right"><a href="" class="btn btn-info">Nuevo</a></div>
+	</div>
+</div>
