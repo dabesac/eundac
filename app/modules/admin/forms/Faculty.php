@@ -1,10 +1,10 @@
 <?php
-class Admin_Form_Subsidiary extends Zend_Form{    
+class Admin_Form_Faculty extends Zend_Form{    
     public function init(){
         
-        $code= new Zend_Form_Element_Text('subid');
+        $code= new Zend_Form_Element_Text('facid');
         $code->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $code->setAttrib("maxlength", "4")->setAttrib("size", "10");
+        $code->setAttrib("maxlength", "2")->setAttrib("size", "10");
         $code->setRequired(true)->addErrorMessage('Este campo es requerido');
         $code->setAttrib("title","Codigo");
         $code->setAttrib("class","input-sm");
@@ -17,6 +17,19 @@ class Admin_Form_Subsidiary extends Zend_Form{
         $name->setAttrib("title","Nombre");
         $name->setAttrib("class","input-sm");
         
+        $abrev = new Zend_Form_Element_Text('abbreviation');
+        $abrev->removeDecorator('Label')->removeDecorator('HtmlTag');     
+        $abrev->setAttrib("maxlength", "15")->setAttrib("size", "40");
+        $abrev->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        $abrev->setAttrib("title","Abreviatura");
+        $abrev->setAttrib("class","input-sm");
+
+        $datcre = new Zend_Form_Element_Text('created');
+        $datcre->setRequired(true)->addErrorMessage('Este campo es requerido');
+        $datcre->setAttrib("class","input-sm");
+        $datcre->removeDecorator('Label')->removeDecorator("HtmlTag");
+
+
         $state = new Zend_Form_Element_Select('state');
         $state->removeDecorator('HtmlTag')->removeDecorator('Label');     
         $state->setRequired(true)->addErrorMessage('Es necesario que selecciones el estado.');
@@ -25,7 +38,7 @@ class Admin_Form_Subsidiary extends Zend_Form{
         $state->setAttrib("class","input-sm");
 
         $submit = new Zend_Form_Element_Submit('save');
-        $submit->setAttrib('class', 'btn btn-info');
+        $submit->setAttrib('class','btn btn-info');
         $submit->setLabel('Guardar');
         $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
 
@@ -34,6 +47,6 @@ class Admin_Form_Subsidiary extends Zend_Form{
         $submitup->setLabel('Actualizar');
         $submitup->removeDecorator("HtmlTag")->removeDecorator("Label");
 
-        $this->addElements(array($code,$name,$state,$submit,$submitup));        
+        $this->addElements(array($code,$name,$abrev,$datcre,$state,$submit,$submitup));        
     }
 }
