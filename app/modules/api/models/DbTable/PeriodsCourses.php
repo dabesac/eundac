@@ -163,4 +163,24 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getInfocourseXescidXperidXcourseXturno($where=null)
+	{
+		try{
+			if ($where['eid']=="" || $where['oid'] =="" ||  $where['curid'] =="" || $where['perid']=="" || $where['escid']=="" || $where['courseid']=="" || $where['turno']=="") return false;
+			$select = $this->_db->select()
+			->from(array('pc' => 'base_periods_courses'),array('pc.perid','pc.turno','pc.escid','pc.subid','pc.state_record','pc.state','pc.type_rate'))
+				->join(array('c' => 'base_courses'),'pc.courseid=c.courseid and pc.eid=c.eid and pc.oid=c.oid and pc.escid=c.escid and pc.curid=c.curid and pc.subid=c.subid', array('c.*'))
+				->where('pc.eid = ?', $where['eid'])->where('pc.oid = ?', $where['oid'])
+				->where('pc.escid = ?', $where['escid'])->where('pc.curid = ?', $where['curid'])
+				->where('pc.perid = ?', $where['perid'])->where('pc.courseid = ?', $where['courseid'])
+				->where('pc.turno = ?', $where['turno']);
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;
+		}catch (Exception $e){
+			print "Error: Read Info ".$e->getMessage();
+		}
+	}
+
 }
