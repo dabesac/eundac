@@ -29,8 +29,8 @@
 .curso > div {
     width: 348px; 
 }
-
 </style>
+
 <h2 class="text-info"><center>Asignaturas</center></h2>
 <?php 
   $c=0;
@@ -40,22 +40,22 @@
    	
 ?>
 <div class="panel-group" id="accordion">
-    <div class="panel">
+    <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $c?>">
         	        <h5><?php
                     echo $fname?>
                     </h5>    	
                 </a>
             </h4>
         </div>
-        <div id="collapseOne" class="panel-collapse collapse in">
-            <div class="panel-body" style="height:250px">
+        <div id="collapse<?php echo $c?>" class="panel-collapse collapse in">
+            <div class="panel-body" >
                 <?php
-        	       $b=0;
+        	       
         	       foreach ($this->data as $courses) {
-        		      $b++;
+        		      
         		      $where['eid']=$courses['eid'];
         		      $where['oid']=$courses['oid'];
         		      $where['curid']=$courses['curid'];

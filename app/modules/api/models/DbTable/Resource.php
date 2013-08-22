@@ -23,13 +23,23 @@ class Api_Model_DbTable_Resource extends Zend_Db_Table_Abstract
 			print "Error: Read All Faculty".$e->getMessage();			
 		}
 	}
-	/*
+
+
+	public function _save($data){
+		try{
+			if ($data['eid']=='' || $data['oid']=='' || $data['reid']=='') return false;
+			return $this->insert($data);
+			return false;
+		}catch (Exception $e){
+			print "Error al Guardar Recurso ".$e->getMessage();
+		}
+	}
+
+
 	public function _getOne($where=null){
 		try{
-			
-			if ($where['eid']=="" || $where['oid']=="" || $where['facid']=="") return false;
-			
-			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and facid = '".$where['facid']."'";
+			if ($where['eid']=="" || $where['oid']=="" || $where['reid']=="") return false;
+			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and reid = '".$where['reid']."'";
 			$row = $this->fetchRow($wherestr);
 			if($row) return $row->toArray();
 			return false;
@@ -39,38 +49,27 @@ class Api_Model_DbTable_Resource extends Zend_Db_Table_Abstract
 	}
 
 
-	public function _save($data){
-		try{
-			if ($data['eid']=='' || $data['oid']=='' || $data['register']=='') return false;
-			return $this->insert($data);
-			return false;
-		}catch (Exception $e){
-			print "Error al Guardar Facultad ".$e->getMessage();
-		}
-	}
 	
-
 	public function _update($data,$pk){
 		try{
-			if ($pk['oid']=='' || $pk['eid']=='' || $pk['facid']=='') return false;
-			$where = "eid = '".$pk['eid']."'and oid = '".$pk['oid']."' and facid = '".$pk['facid']."'";
+			if ($pk['oid']=='' || $pk['eid']=='' || $pk['reid']=='') return false;
+			$where = "eid = '".$pk['eid']."'and oid = '".$pk['oid']."' and reid = '".$pk['reid']."'";
 			return $this->update($data, $where);
 			return false;
 		}catch (Exception $e){
 			print "Error: Update Organization ".$e->getMessage();
 		}
 	}
-	
-	
+
 	public function _delete($pk){
 		try{
-			if ($pk['oid']=='' || $pk['eid']=='' || $pk['facid']=='') return false;
-			$where = "eid = '".$pk['eid']."'and oid = '".$pk['oid']."' and facid = '".$pk['facid']."'";
+			if ($pk['oid']=='' || $pk['eid']=='' || $pk['reid']=='') return false;
+			$where = "eid = '".$pk['eid']."'and oid = '".$pk['oid']."' and reid = '".$pk['reid']."'";
 			return $this->delete($where);
 			return false;
 		}catch (Exception $e){
 			print "Error: Delete Organization ".$e->getMessage();
 		}
 	}
-*/
+
 }

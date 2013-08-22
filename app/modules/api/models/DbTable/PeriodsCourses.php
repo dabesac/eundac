@@ -110,6 +110,8 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 
 	public function _getCourseTeacher($where=null){
 		try {
+			if ($where['perid']=='' || $where['rid']=='' || $where['uid']=='' || $where['is_main']=='') return false; 
+
 				$select = $this->_db->select()
 									->distinct()
 									->from(array('ct'=>'base_course_x_teacher'),

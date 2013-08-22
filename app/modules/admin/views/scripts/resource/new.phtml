@@ -1,0 +1,28 @@
+<form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded">
+
+	<div class="row">
+	  <div class="col-sm-8"><h2>Nuevo Recurso</h2></div>
+	  <div class="col-sm-2"><?php print $this->form->save;?></div>
+	  <div class="col-sm-1"><br><a href="/admin/resource"  class="btn btn-danger  " >Cancelar</a></br></div>
+	</div>
+
+	<table class="table span7 table-striped table-bordered">
+		
+		<tr>
+				<div class="control-group">
+					<td class="span4"><label class="control-label">Codigo:</label></td>
+					<td class="span4"><div class="controls">
+						<?php print $this->form->reid; ?>
+					</div></td>
+				</div>
+		</tr>
+		<tr>
+				<div class="control-group">
+					<td class="span4"><label class="control-label">Nombre:</label></td>
+					<td class="span4"><div class="controls">
+						<?php print $this->form->name; ?>
+					</div></td>
+				</div>
+		</tr>
+	</table>
+</form>

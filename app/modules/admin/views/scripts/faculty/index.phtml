@@ -1,0 +1,33 @@
+<div class="form-group">
+	<h2>Facultad
+	<div class="pull-right"><a href="/admin/faculty/new" class="btn btn-info">Nuevo</a>
+	</div></h2>
+</div>
+
+<table class="table span12">
+	<?php
+	if ($this->datafac) {?>
+		<tr>
+				<td><b>Num</b></td>
+				<td><b>Codigo</b></td>
+				<td><b>Nombre</b></td>
+				<td><b>Estado</b></td>
+		</tr>		
+		<?php		
+		$c=1;
+		foreach ($this->datafac as $fac) {
+			?>	
+			<tr>
+				<td><?php echo $c; ?></td>
+				<td><?php echo $fac['facid']; ?></td>
+				<td><?php echo $fac['name']; ?></td>
+				<td><?php echo $fac['state']; ?></td>
+				<td> <a href="/admin/faculty/update/facid/<?php print $fac['facid']?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
+        		<td> <a href="/admin/faculty/delete/facid/<?php print $fac['facid']?>"onclick="return confirm('Esta Seguro que desea eliminar la Facultad?');"><span class="glyphicon glyphicon-remove"></span></a></td>
+        	</tr>
+		<?php
+		$c++;
+		}
+	}
+	?>
+</table>
