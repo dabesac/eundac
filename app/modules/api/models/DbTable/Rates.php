@@ -34,7 +34,7 @@ class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract
 			return $this->insert($data);
 			return false;
 		}catch (Exception $e){
-				print "Error: Save User ".$e->getMessage();
+				print "Error: Save rates ".$e->getMessage();
 		}
 	}
 
@@ -67,7 +67,7 @@ class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract
 			if($row) return $row->toArray();
 			return false;
 		}catch (Exception $e){
-			print "Error: Read One Rol".$e->getMessage();
+			print "Error: Read One rates".$e->getMessage();
 		}
 	}
 	public function _update($data,$str='')
@@ -79,9 +79,21 @@ class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract
         }
         catch (Exception $ex)
         {
-            print "Error: Guardar Tasa".$ex->getMessage();
+            print "Error: Guardar rates".$ex->getMessage();
         }
     }
+
+    public function _delete($data)
+	{
+		try{
+			if ($data['eid']=='' ||  $data['oid']=='' || $data['ratid']=='' || $data['perid']=='') return false;
+			$where = "eid = '".$data['eid']."' and oid='".$data['oid']."' and ratid='".$data['ratid']."' and perid='".$data['perid']."'";
+			return $this->delete($where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Delete rates".$e->getMessage();
+		}
+	}
 
 
 
