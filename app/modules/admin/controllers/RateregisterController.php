@@ -97,15 +97,32 @@ class Admin_RateregisterController extends Zend_Controller_Action {
         }
     public function deleteAction()
         {
-          try
-        {
-                
+           try 
+        {            
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $ratid=($this->_getParam("ratid"));
+            $perid=($this->_getParam("perid"));
+            $del=new Api_Model_DbTable_Rates();
+                $where['eid']=$eid;
+                $where['oid']=$oid;
+                $where['ratid']=$ratid;
+                $where['perid']=$perid;
+
+            if ($del->_delete($where))
+            {
+                $this->_helper->_redirector("index");
+            }
+            else
+            {
+                echo "error al eliminar";
+            }
         }
-         catch (Exception $ex) 
+        catch (Exception $ex)
         {
-          print "Error listar TasasController: ".$ex->getMessage();
-          
+            print "Error al Eliminar la tasa".$ex->getMessage();
         }
+    
         }
     public function updateAction()
     {
