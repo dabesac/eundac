@@ -22,16 +22,11 @@ class Rfacultad_Form_Condition extends Zend_Form
 
 
         $resolucion = new Zend_Form_Element_Text('doc_authorize');
-    //    $resolucion->setAttrib("class","span2");
         $resolucion->removeDecorator("HtmlTag")->removeDecorator("Label");
         $resolucion->setAttrib("maxlength", "300");
-         $resolucion->setAttrib("class", "form-control");
-         
-         $resolucion->setAttrib("style","height:35px;width:500px ");
-         //$resolucion->setAttrib("style","width:400px");
-         $resolucion->setRequired(true)->addErrorMessage('Este campo es requerido');
-
-        //$resolucion->setIsArray(true);
+        $resolucion->setAttrib("class", "form-control");
+        $resolucion->setAttrib("style","height:35px;width:500px ");
+        $resolucion->setRequired(true)->addErrorMessage('Este campo es requerido');
 
         $nsemestre = new Zend_Form_Element_Select('semester');
         $nsemestre->setAttrib("class","span1");
@@ -41,9 +36,7 @@ class Rfacultad_Form_Condition extends Zend_Form
         $nsemestre->setAttrib("class", "form-control col-lg-1");
         $nsemestre->addMultiOption("0","Semestre");
         $nsemestre->addMultiOption("3","3");
-        $nsemestre->addMultiOption("4","4");  
-
-        
+        $nsemestre->addMultiOption("4","4");       
 
         $ncreditos = new Zend_Form_Element_Select('credits');
         $ncreditos->setAttrib("class","span1");
@@ -58,8 +51,6 @@ class Rfacultad_Form_Condition extends Zend_Form
         $ncreditos->addMultiOption("4","4");
         $ncreditos->addMultiOption("5","5");
         $ncreditos->addMultiOption("6","6");
-
-
         
         $vmatricula = new Zend_Form_Element_Select('num_registration');
         $vmatricula->setAttrib("class","span1");
@@ -73,16 +64,11 @@ class Rfacultad_Form_Condition extends Zend_Form
         $vmatricula->addMultiOption("5","5");
         $vmatricula->addMultiOption("6","6");
 
-    
-
         $detalles = new Zend_Form_Element_Textarea('comments');
-        
         $detalles->removeDecorator("HtmlTag")->removeDecorator("Label");
         $detalles->setAttrib("maxlength", "200")->setAttrib("rows", "2");
-         // $detalles->setAttrib("style","width:300px");
         $detalles->setAttrib("style","height:80px;width:500px ");
-         $detalles->setAttrib("class", "form-control");
-        //$detalles->setIsArray(true);
+        $detalles->setAttrib("class", "form-control");
 
         $enviar=new Zend_Form_Element_Submit('guardar');
         $enviar->setLabel("Guardar");
