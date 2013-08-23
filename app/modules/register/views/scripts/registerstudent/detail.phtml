@@ -1,0 +1,337 @@
+<?php
+$eid=$this->eid;
+$oid=$this->oid;
+$escid= $this->escid;
+$matricula = $this->matricula_;
+$estadomatricula=trim($matricula['estado']);
+$fecha_act = date('Y-m-d');
+$finimat = $this->finimat;
+$ffinmat =  $this->ffinmat ;
+$fin= strtotime($finimat." 11:59:00");
+$ffn= strtotime($ffinmat." 11:59:00");
+$urlmatri="uid/".base64_encode($matricula['uid'])."/pid/".base64_encode($matricula['pid'])."/escid/".base64_encode($matricula['escid'])."/sedid/".base64_encode($matricula['sedid']);
+?>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+        <script src="/external/jquery/jquery-1.9.1.js"></script>
+        <script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
+        <script src="/external/jquery/external/globalize.js"></script>
+        <script src="/external/jquery/external/jquery.mousewheel.js"></script>
+        <script src="/external/jquery/external/jshint.js"></script>
+        <script src="/external/jquery/external/qunit.js"></script>
+        <script src="/external/jquery/external/base64/jquery.base64.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">      
+        <!-- Texto Enriquecido-->
+        <link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
+        <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
+        
+        <!-- Bootstrap -->
+        <script src="/external/bootstrap/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+        <link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+        
+        <!-- JS  -->    
+        
+        <!-- CSS  Generic-->
+        
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+
+<table class="table table-bordered table-condensed span alert-info" style="margin-left: 0px;margin-right: 15px; font-size: 12px; " >
+    <tr>
+        <th rowspan="3" class="span4">
+            <center>
+                    <p>                
+                    <span style="font-size: 13px">PROCESO MATRICULA 13A
+
+                    </span><br/>
+                    <span style="font-size: 12px">FACULTAD DE 
+                        <?php print(strtoupper($this->facultad));?>
+                    </span><br/> 
+                    <span style="font-size: 12px">ESCUELA DE 
+                        <?php echo $this->escuela;?> 
+                    </span><br/>
+                    <?php if ($this->especialidad<>""){?>
+                        <span style="font-size: 12px">ESPECIALIDAD DE 
+                            <?php echo $this->especialidad; ?>
+                        </span>
+                    <?php 
+                    }
+                    ?>
+                    </center>
+        </th>
+        <th colspan="6">
+            <span style="font-size: 14px"><?php print($matricula['uid']);?>  - <?php echo $this->alumno?></span>
+        </th>        
+    </tr>
+    <tr>
+        <th class="span1">Semestre</th>
+        <th class="span1">F.Pago</th>
+        <th class="span1">Monto</th>
+        <th class="span1">Condiciones</th>
+        <th class="span1" rowspan="2">
+            <a href="/default/recordnotas/imprimir/uid/<?php echo $matricula['uid'];?>/pid/<?php echo $matricula['pid'];?>/escid/<?php echo $matricula['escid']?>/sedid/<?php echo $matricula['sedid'];?>/eid/<?php echo $matricula['eid']?>/oid/<?php echo $matricula['oid'];?>" class="btn btn-info" target="_black">
+            <i class="  icon-list-alt icon-white"></i><br/>Record</a>
+        </th>
+        <th class="span1"  rowspan="2">
+            <?php if ($estadomatricula=="M"){?>
+            <a href="/rfacultad/matricula/imprimir/<?php echo $urlmatri?> " class="btn btn-danger" >
+            <i class=" icon-print icon-white"></i><br/>Imprimir</a>
+            <?php }else{?>
+                <a href="" class="btn btn-danger" style='color: #ccc' atls="Valide la matricula para imprimir" title="Valide la matricula para imprimir"/>
+                <i class=" icon-print icon-white"></i><br/>Imprimir</a>
+            <?php }?>
+        </th>
+    </tr>
+    <tr>
+        <td ><?php print($matricula['semid']);?></td>
+        <td >
+        <?php
+        $titulo="Fecha de Pagos";
+        if ($this->pagosrealizados){
+
+            $ff_2="";
+            foreach ($this->pagosrealizados as $fepa){
+                $tf = split(" ",$fepa['date_payment']);
+                $ff_2.="Pago S/. ".$fepa['amount']." el ".$tf[0]." OPE: ".$fepa['operation']."\t";
+            }
+        }
+        $contenido=$ff_2;
+        $f = split(" ",$this->fechapago);
+        $ft_ = split("-",$f[0]);
+        $ft = $ft_[2]."/".$ft_[1]."/".$ft_[0];
+        ?>
+        <span class="label label-info" id="mostrartexto" rel="popover" data-placement="bottom" data-original-title="<?php echo $titulo?>" data-content="<?php echo $contenido?>">
+        <?php echo $ft?></span>
+        </td>    
+        <td >
+            <?php
+            $titulo="Tasa de Pagos";        
+            $contenido="Monto que le corresponde: <b> S/. ".$this->montoapagar." </b> por la fecha de pago<b>".$this->fechapago."</b>";
+            ?>
+            <span class="label label-info" id="mostrartexto1" rel="popover" data-placement='bottom' data-original-title="<?php echo $titulo?>" data-content="<?php echo $contenido?>" >
+            S/. <?php echo $this->montopagado?></span>
+        </td>    
+        <td ><center> 
+            <?php
+            if ($this->condision){
+                 $titulo="Condiciones del Alumno";  
+                 $cont="Este Alumno Dispone de CONDICIÓN";
+                ?>
+                <span id="mostrartexto2" rel="popover" data-placement='bottom' data-original-title="<?php echo $titulo?>" data-content="<?php 
+                    foreach ($this->condision as $con) {
+                            $cred = $con['credits'];
+                            $vmat = $con['num_registration'];
+                            $sem = $con['semester'];
+                            echo $cont;
+                        if ($cred !=0 or $cred !='0'){
+                            echo "Tiene permitido llevar ". $cond['credits']." créditos mas con resolución" . $cond['doc_authorize'];
+                        }
+
+                         if ($vmat !=0 or $vmat !='0'){
+                            echo "Tiene permitido llevar Matricula por". $cond['num_registration']." vez con resolución" . $cond['doc_authorize'];
+                        }
+
+                        if ($sem !=0 or $sem !='0'){
+                            echo "Tiene permitido llevar Matricula en". $cond['sem']." semestres con resolución" . $cond['doc_authorize'];
+                        }
+                    }?>" >
+                    <img src="/img/circulo-verde.png"  width="25" height="25"/>
+                </span>
+            <?php } 
+            else{
+                    $tit="Condiciones del Alumno";
+                    $cont="No dispone de alguna CONDICIÓN"; ?>
+                    <span id="mostrartexto3" rel="popover" data-placement='bottom' data-original-title="<?php echo $tit?>" data-content="<?php echo $cont?>" >
+                    <img src="/img/circulo-rojo.png"   width="25" height="25"/>
+                </span>
+           <?php }
+            ?>
+
+             &nbsp;
+            </center>
+        </td>     
+        
+    </tr>
+</table>
+<script type="text/javascript">
+$(function(){
+    $("#mostrartexto,#mostrartexto1,#mostrartexto2,#mostrartexto3").popover({placement:'bottom',trigger:'hover'});
+});
+</script>
+        <div style="display: block; float: left;width: 720px; height: 200px; overflow: auto;margin: 0px;" >
+            <table class="table table-bordered table-condensed" style="width: 700px;font-size: 11px; margin-left: 5px;margin-right: 0px; margin-bottom: 0px;">
+
+                <thead>
+                <tr style="position: fixed;background: #000; color: #fff;">    
+                        <th style="width:25px">#</th>
+                        <th style="width:45px">Cod. </th>
+                        <th style="width:250px">Nombre Curso</th>
+                        <th style="width:27px">Turno</th>
+                        <th style="width:30px">Sem.</th>
+                        <th style="width:25px">Cre.</th>
+                        <th style="width:155px">Docente</th>
+                        <th style="width:15px">Veces</th>                
+                        <th style="width:30px" colspan="2">  Operación.</th>
+                </tr>
+                </thead>
+               
+                <?php
+                
+                $a=1;
+                if ($this->listacurso)
+                {
+                foreach ($this->listacurso as $datos){
+                        $eid_=$datos['eid'];
+                        $oid_=$datos['oid'];
+                        $uid_=$datos['uid'];
+                        $pid_=$datos['pid'];
+                        $cursoid_=$datos['cursoid'];
+                        $curid_=$datos['curid'];
+                        $perid_=$datos['perid'];
+                        $escid_=$datos['escid'];
+                        $sedid_=$datos['sedid'];
+                        $turno_ =$datos['turno'];
+                        $semid_ =$datos['semid'];
+                        $veces_ =$datos['veces'];
+                        $creditos_ =$datos['creditos'];
+                        $nombrecurso = $datos['nombrecurso'];
+                        $docentes = $datos['docentes'];
+                        $nummat = $datos['nunmatriculados'];
+                        $numpremat = $datos['nunmapretriculados'];
+                        $texto="rel='popover' data-original-title='$nummat'";
+                        $str=base64_encode("eid ='$eid_' and oid='$oid_' and cursoid='$cursoid_' and curid='$curid_' and perid='$perid_' and escid='$escid_' and sedid='$sedid_' and turno='$turno_' and uid='$uid_' and pid='$pid_'");
+                ?>
+                        <tr id="tr_<?php echo $cursoid_.$a;?>" style="font-size: 10px" rel='popover' data-original-title=' Hay <?php echo ($nummat=="")?"0":$nummat?> alumnos matriculados y <?php echo $numpremat?> prematriculados en ese curso'>
+                            <td style="width:25px"><?php echo $a;?></td>
+                            <td style="width:40px"><?php echo $cursoid_;?></td>
+                            <td style="width:205px"><?php echo $nombrecurso ;?></td>
+                            <td style="width:25px"><?php echo $turno_;?></td>
+                            <td style="width:29px"><?php echo $semid_?></td>
+                            <td style="width:25px"><?php echo $creditos_;?></td>
+                            <td style="width:140px">
+                                <?php                     
+                                $j=count($docentes);
+                                for ($i=0;$i<$j;$i++){
+                                        echo $docentes[$i];
+                                        if($j>0 && $i>=0 && ($j-1)<>$i)echo "<br>";
+                                    } 
+                                ?>
+                                &nbsp;
+                            </td>                        
+                            <td style="width:25px" >
+                                <?php
+                                if ($estadomatricula=="M"){
+                                    $veces_ = $veces_;
+                                }else{
+                                    $veces_ = ($veces_+1);
+                                }
+                                echo $veces_;
+                                if (($veces_)>2){ ?>
+                                <script>$("#tr_<?php echo $cursoid_.$a;?>").css("background","#F79F81");</script>
+                                <?php } ?>
+                            </td>
+                            <td style="width:15px">
+                                
+                            <?php 
+                            //Verifica si esta dentro de la fecha de matricula
+                            //if ($fecha_act>=$finimat && $fecha_act<= $ffinmat){
+                                if ($estadomatricula=='I' ) {
+                                    $urlcurso = "uid/".base64_encode($uid_)."/pid/".base64_encode($pid_)."/escid/".base64_encode($escid_)."/sedid/".base64_encode($sedid_)."/cursoid/".base64_encode($cursoid_)."/curid/".base64_encode($curid_);
+                                    ?>
+                                    <a id='eliminar' href="/rfacultad/matricula/eliminarcurso/<?php echo $urlcurso;?>" onclick="return confirm('Esta Seguro que desea eliminar esta matricula?');"  >
+                                        <i class="icon-remove"></i>
+                                    </a>   
+                                <?php }?>
+                                </td>
+                                <td style="width:15px">
+                                    <?php if ($estadomatricula=='I' ) {?>
+                                    <a id="editar_<?php echo $cursoid_.$a?>" rel="popover"  >
+                                        <i class="icon-pencil"></i>
+                                    </a>   
+                                    <?php }
+                            //}
+                            ?>
+                            </td>
+
+                        </tr>
+                        <?php
+                        if ($estadomatricula<>"M")
+                        {?>
+                            <tr id="formu_<?php echo $cursoid_.$a;?>" style="font-size: 10px">
+                                <td ><?php echo $a;?></td>
+                                <td ><?php echo $cursoid_;?></td>
+                                <td><?php echo $nombrecurso;?></td>
+                                <td >
+                                    <select name="turno" id="turno_<?php echo $cursoid_.$a;?>" style="width:50px">
+                                    <?php 
+                                    $listar = new Admin_Model_DbTable_Periodoscursos();
+                                    $list= $listar->_getCursosXTurnos($perid_,$eid_,$oid_,$sedid_,$escid_,$curid_,$cursoid_);
+                                    foreach ($list as $turno1_){
+                                        if ($turno1_['turno']==$turno) $s = "selected";
+                                        else $s="";
+                                    ?>
+                                        <option value="<?php echo $turno1_['turno']?>" <?php echo $s;?>><?php echo $turno1_['turno']?></option>
+                                    <?php } ?>
+                                    </select>
+
+                                </td>
+                                <td ><?php echo $semid_;?>
+                                </td>
+                                <td ><?php echo $creditos_;?>
+                                </td>
+                                <td>
+                                <?php                     
+                                    $j=count($docentes);
+                                    for ($i=0;$i<$j;$i++){
+                                            echo $docentes[$i];
+                                            if($j>0 && $i>=0 && ($j-$i)<>$i)echo "<br>";
+                                        } 
+                                    ?>
+                                   
+                                </td>
+                                <td ><?php echo $veces_;?></td>
+                                <td ><a href="#"  id="enviar_<?php echo $cursoid_.$a;?>"><i class="icon-ok"></i></a> </td>
+                                <td ><a href="#" id="ocultar_<?php echo $cursoid_.$a;?>"><i class="icon-remove"><i></a></td>                
+                            </tr>
+                            
+                            <script>
+                                $("#formu_<?php echo $cursoid_.$a;?>").hide();
+                                $("#editar_<?php echo $cursoid_.$a; ?>").click(function (){  
+                                    $("#tr_<?php echo $cursoid_.$a?>").hide();
+                                    $("#formu_<?php echo $cursoid_.$a?>").show();
+                                });
+                                $("#ocultar_<?php echo $cursoid_.$a;?>").click(function(){
+                                    $("#tr_<?php echo $cursoid_.$a?>").show();
+                                    $("#formu_<?php echo $cursoid_.$a?>").hide();
+                                });
+                                $("#enviar_<?php echo $cursoid_.$a?>").click(function (){ 
+                                var str = "<?php echo $str;?>";           
+                                var tu= $("#turno_<?php echo $cursoid_.$a?>").val();
+                                var url = "/rfacultad/matricula/turno/t/"+tu+"/str/"+str+"/nro/"+<?php echo $a;?>+"/";
+                                $("#tr_<?php echo $cursoid_.$a?>").load(url);
+                                $("#tr_<?php echo $cursoid_.$a?>").show();
+                                $("#formu_<?php echo $cursoid_.$a?>").hide(); 
+                                });
+                            </script>            
+                    <?php
+                       }
+                    $a++;
+                    }
+                }
+                ?>
+                <tr style="font-size: 10px">
+                    <td colspan='4'>&nbsp; </td>
+                    <td> Cre. </td>
+                    <td> <?php echo $matricula['total_creditos']; ?></td>
+                    <td colspan='4'> &nbsp;</td>  
+                </tr>
+            </table>
+        </div>        
+ 
+
+
+
+
+

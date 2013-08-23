@@ -5,7 +5,7 @@ class Api_Model_DbTable_Condition extends Zend_Db_Table_Abstract
 	protected $_name = 'base_condition';
 	protected $_primary = array("cnid","pid","escid","uid","perid","eid","oid","subid");
 	protected $_sequence ="s_conditions";
-	public function _getFilter($where=array())
+	public function _getlist($where=array())
 	{
 		try{
 			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."' and pid='".$where['pid']."' and uid='".$where['uid']."' and perid='".$where['perid']."' and subid='".$where['subid']."'";
@@ -57,7 +57,7 @@ class Api_Model_DbTable_Condition extends Zend_Db_Table_Abstract
 			->from(array('u' => 'base_users'),array('u.eid','u.oid','u.subid','u.uid','u.escid','u.pid','p.first_name','p.last_name0','p.last_name1'))
 				->join(array('p' => 'base_person'),'u.pid=p.pid and u.eid=p.eid')
 				->where('u.state = ?', 'A')->where('u.oid = ?', $where['oid'])->where('u.oid = ?', $where['oid'])->where('u.escid = ?',$where['escid'])->where('u.rid = ?','AL')
-				 ->where('(p.last_name0 LIKE ?)', '%'.$where['ap'].'%')->where('(p.last_name1 LIKE ?)', '%'.$where['am'].'%')->where('(upper(p.first_name) LIKE ?)', '%'.$where['am'].'%')
+				 ->where('(p.last_name0 LIKE ?)', '%'.$where['ap'].'%')->where('(p.last_name1 LIKE ?)', '%'.$where['am'].'%')->where('(upper(p.first_name) LIKE ?)', '%'.$where['am'].'%')->where('(u.uid LIKE ?)', '%'.$where['uid'].'%')
 				->where("u.uid NOT IN ?", $sub_select) ;
 			$results = $select->query();			
 			$rows = $results->fetchAll();
@@ -80,6 +80,8 @@ class Api_Model_DbTable_Condition extends Zend_Db_Table_Abstract
 			print "Error: Delete Condition".$e->getMessage();
 		}
 	}
+
+
 
 
 

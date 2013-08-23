@@ -1,0 +1,259 @@
+ <?php 
+ $perid=$this->perid; ?>
+ <form name="<?php echo $this->fm->getName(); ?>" action="<?php echo $this->fm->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded">
+
+<table class="table table-striped table-bordered ">
+    <tr>
+        <td ><H4 class="titulopagina">NUEVO REGISTRO TASAS MATRICULA</H4></td>
+        <td><center>
+        <a style="float:left"><?php echo $this->fm->guardar?></a>
+        <a style="float:left" href="/admin/rateregister" class="btn btn-danger " id="nuevo">Cancelar</a>
+       </center></td>  
+
+    </tr>
+</table>
+ <table class="table span10 table-striped table-bordered table-condensed">
+                        <tr>
+                            
+                            <td>
+                                 
+                                <label class="control-label">Periodo:</label>
+                                <div class="controls"><?php print $this->fm->perid->setvalue($perid);?></div>                                 
+                                <label class="control-label">Codigo tasa matricula (#):</label>
+                                <div class="controls"><?php print $this->fm->ratid;?></div>
+                                
+
+                                 
+                                <label class="control-label">Nombre Tasa:</label>
+                                <div class="controls"><?php print $this->fm->name;?></div>
+                               
+
+                               
+                                <label class="control-label">Nombre Resolucion:</label>
+                                <div class="controls"><?php print $this->fm->resolucion;?></div>
+                                
+
+                                
+                                <label class="control-label">Tasa Normal:</label>
+                                <div class="controls"><?php print $this->fm->t_normal;?></div>
+                                
+
+                                
+                                <label class="control-label">Fecha Inicio:</label>
+                                <div class="controls"><?php print  $this->fm->f_ini_tn;?></div>
+                                
+
+                                
+                                <label class="control-label">Fecha Final:</label>
+                                <div class="controls"><?php print $this->fm->f_fin_tnd;?></div>
+                                
+            
+                            </td> 
+
+                            <td>
+
+                                
+                                <label class="control-label">Incremento 1:  (%)</label>
+                                <div class="controls"><?php print $this->fm->v_t_incremento1;?></div>
+                               
+                                <label class="control-label">Monto a Pagar 1:</label>
+                                <div class="controls"><?php print $this->fm->t_incremento1?></div>
+                                
+                                <label class="control-label">Fecha Final 1:</label>
+                                <div class="controls"><?php print $this->fm->f_fin_ti1;?></div>
+                                
+                            </td>
+                            <td>
+                                
+                                <label class="control-label">Incremento 2:  (%) </label>
+                                <div class="controls"><?php print $this->fm->v_t_incremento2;?></div>
+                              
+                                <label class="control-label">Monto a Pagar 2:</label>
+                                <div class="controls"><?php print $this->fm->t_incremento2;?></div>
+                               
+                                <label class="control-label">Fecha Final 2:</label>
+                                <div class="controls"><?php print $this->fm->f_fin_ti2;?></div>
+                                
+                            </td>
+                            <td>
+                                
+                                <label class="control-label">Incremento 3: (%)</label>
+                                <div class="controls"><?php print $this->fm->v_t_incremento3;?></div>
+                             
+                                <label class="control-label">Monto a Pagar 3:</label>
+                                <div class="controls"><?php print $this->fm->t_incremento3;?></div>
+                              
+                                <label class="control-label">Fecha Final 3:</label>
+                                <div class="controls"><?php print $this->fm->f_fin_ti3;?></div>
+                                
+                                
+                            </td> 
+                        </tr>
+                            
+                   
+                </table>
+            
+            </form>
+
+<head>  
+    <link rel="stylesheet" type="text/css" href="/css/jquery/redmond/jquery-ui-1.8.23.custom.css"> 
+</head>
+
+<script type="text/javascript">
+    $('.dropdown-toggle').dropdown()
+</script>
+
+<script type="text/javascript">
+    $('.dropdown-toggle').dropdown()
+</script>
+
+<script>
+    $(function() {
+        $( "#f_ini_tn" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy/mm/dd',
+        });
+    });
+</script>
+
+<script>
+    $(function() {
+        $( "#f_fin_tnd" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy/mm/dd',
+        });
+    });
+</script>
+
+<script>
+    $(function() {
+        $( "#f_fin_ti1" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy/mm/dd',
+        });
+    });
+</script>
+<script>
+    $(function() {
+        $( "#f_fin_ti2" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy/mm/dd',
+        });
+    });
+</script>
+
+<script>
+    $(function() {
+        $( "#f_fin_ti3" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy/mm/dd',
+        });
+    });
+</script>
+<script>
+
+        $("#ratid").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v))
+        {
+        $(".msg").html("solo escriba numero");
+        $("#ratid").val("");
+        }
+        else
+        {
+        $(".msg").html("");}
+        });
+
+
+        $("#t_normal").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v))
+        {
+        $(".msg").html("solo escriba numero");
+        $("#t_normal").val("");
+        }
+        else
+        {
+        $(".msg").html("");}
+        });
+
+        $("#v_t_incremento1").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v))
+        {
+        $(".msg").html("solo escriba numero");
+        $("#v_t_incremento1").val("");
+        }
+        else
+        {
+        $(".msg").html("");}
+        });
+
+        $("#v_t_incremento2").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v))
+        {
+        $(".msg").html("solo escriba numero");
+        $("#v_t_incremento2").val("");
+        }
+        else
+        {
+        $(".msg").html("");}
+        });
+
+        $("#v_t_incremento3").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v))
+        {
+        $(".msg").html("solo escriba numero");
+        $("#v_t_incremento3").val("");
+        }
+        else
+        {
+        $(".msg").html("");}
+        });
+
+        $("#t_incremento1").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v))
+        {
+        $(".msg").html("solo escriba numero");
+        $("#t_incremento1").val("");
+        }
+        else
+        {
+        $(".msg").html("");}
+        });
+
+        $("#t_incremento2").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v))
+        {
+        $(".msg").html("solo escriba numero");
+        $("#t_incremento2").val("");
+        }
+        else
+        {
+        $(".msg").html("");}
+        });
+
+        $("#t_incremento3").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v))
+        {
+        $(".msg").html("solo escriba numero");
+        $("#t_incremento3").val("");
+        }
+        else
+        {
+        $(".msg").html("");}
+        });
+
+
+
+ </script>
