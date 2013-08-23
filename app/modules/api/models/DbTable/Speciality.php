@@ -18,6 +18,19 @@ class Api_Model_DbTable_Speciality extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getspeciality($where=array()){
+		try{
+			if ($where['eid']=="" || $where['oid']=="" || $where['facid']=="" || $where['subid']=="") return false;
+			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and facid = '".$where['facid']."' and state = 'A' and subid='".$where['subid']."'";
+			$row = $this->fetchAll($wherestr);
+			if($row) return $row->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read One Speciality ".$e->getMessage();
+		}
+	}
+
+
 	public function _getAll($where=null,$order='',$start=0,$limit=0)
 	{
 		try{
@@ -88,4 +101,23 @@ class Api_Model_DbTable_Speciality extends Zend_Db_Table_Abstract
 			print "Error: Delete Rol".$e->getMessage();
 		}
 	}
+
+
+	public function _getFacspeciality($where=null){
+        try{
+            if ($where['oid']=="" || $where['eid']=="" || $where['escid']=="" ) return false;
+			
+			$select = $this->_db->select()
+			->from(array('e' => 'base_speciality'),array('e.facid','e.subid','e.escid','e.abbreviation','e.parent'))
+				->join(array('f' => 'base_faculty'),'e.eid= f.eid and e.oid=f.oid and e.facid=f.facid', array('f.name as nomfac'))
+				->join(array('s' => 'base_subsidiary'),'e.subid=s.subid ', array('s.name as nomsed','e.name as nomesc'))
+				->where('e.escid = ?', $where['escid']);
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;         
+        }  catch (Exception $ex){
+            print "Error: Obteniendo datos de un usuario deacuerdo a su codigo y a su rol".$ex->getMessage();
+        }
+    }
 }

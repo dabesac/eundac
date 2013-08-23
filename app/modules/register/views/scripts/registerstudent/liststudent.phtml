@@ -1,0 +1,48 @@
+<table class="table table-condensed ">
+    <thead>
+    <tr>    
+            <th style="width: 25px" >Nro</th>               
+            <th class="span1">Codigo</th>
+            <th >Apellidos y Nombres</th>
+            <th class="span1">Escuela</th>
+            <th class="span1">Semestre</th>
+            <th class="span1">T.Cred.</th>
+            <th class="span1">Condicion</th>
+            <th class="span1">Matricular</th>
+    </tr>
+    </thead>
+<?php
+$i=1;
+if ($this->datos){
+    foreach ($this->datos as $datos){
+        switch (trim($datos['estmat'])){
+            case 'M': $estadomat_="Matriculado"; break;
+            case 'B': $estadomat_="Borrador"; break;
+            case 'I': $estadomat_="Iniciado"; break;
+            case 'C': $estadomat_="Cerrado"; break;
+            case 'R': $estadomat_="Reservado"; break;
+            case 'O': $estadomat_="Observado"; break;
+        }
+        ?>
+        <tr>
+            <td><?php echo $i;?></td>
+            <td><?php echo $datos['uid'];?></td>                
+            <td><?php echo $datos['last_name0']." ".$datos['last_name1'].", ".$datos['first_name'];?></td>
+            <td><?php echo $datos['escid']?></td>
+            <td><?php echo $datos['semid']?></td>
+            <td><?php echo $datos['credits']?></td>
+            <td><?php echo $estadomat_;?></td>
+            <td>                    
+            <?php
+                $url= "uid/".base64_encode($datos['uid'])."/pid/".base64_encode($datos['pid'])."/escid/".base64_encode($datos['escid'])."/subid/".base64_encode($datos['subid']);
+            ?>  
+                <a href="#"  onclick="javascript: window.open('/register/registerstudent/detail/<?php echo $url?>','Matricula Alumno','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=830,height=600')">
+                <img src="/img/ir.png" title="Realizar / Ver Matricula "></i>
+                </a>
+            </td>
+        </tr>
+        <?php
+        $i++;
+        }
+    }?>
+</table>
