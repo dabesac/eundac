@@ -168,7 +168,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             //  $this->view->listacurso = $listacurso1;
             //obtenemos los pagos realizados
             $pagos = new Api_Model_DbTable_Payments();
-            $rpagos = $pagos->_getpaymentstudent($where);
+            $rpagos = $pagos->_getOne($where);
             
             if ($rpagos){
                 //verificamos fechas de pago y tiempo de pago
@@ -217,8 +217,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             if ($rcondision) $this->view->condision = $rcondision;
             
             //Sacamos la lista de pagos del alumno
-            $listapagos = new Api_Model_DbTable_Paymentsdetail();
-            $reg = $listapagos->_getPayments($where);
+            $listapagos = new Api_Model_DbTable_PaymentsDetail();
+            $reg = $listapagos->_getAll($where);
 
             if ($reg) $this->view->pagosrealizados = $reg;
 
