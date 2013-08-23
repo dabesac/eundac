@@ -49,4 +49,15 @@ class Api_Model_DbTable_Syllabusunits extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getAllXSyllabus($where=array()){
+		try{
+			if ($where['eid']=='' || $where['oid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='' || $where['curid']=='' || $where['courseid']=='' || $where['turno']=='') return false;
+			$wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and subid='".$where['subid']."' and perid='".$where['perid']."' and escid='".$where['escid']."' and curid='".$where['curid']."' and courseid='".$where['courseid']."' and turno='".$where['turno']."'";
+			$row = $this->fetchAll($wherestr);
+			if($row) return $row->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read One SyllabusUnits ".$e->getMessage();
+		}
+	}
 }

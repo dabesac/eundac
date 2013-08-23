@@ -1,0 +1,45 @@
+<?php
+ $state = $this->state;
+ $perid = $this->perid;
+?>
+<div class="datos">
+</div>
+    <table class="table table-bordered">
+        <thead>
+       <tr>
+        <th>#</th>
+        <th>Nombre de la Tasa:</th>
+        <th>Codigo de Tasa:</th>
+        <th>Tasa Normal</th>
+        <th>Tasa Incremento N°1  |%|</th>
+        <th>Tasa Incremento N°2  |%|</th>
+        <?php if ($state=='A' || $state=='I'){?>
+        <th>Modificar</th>
+        <th>Eliminar</th>
+         <?php } ?>
+    </tr>
+        </thead>
+    <?php
+    if ($this->tasas)
+    {$i=1;
+       foreach ($this->tasas as $tasa)    
+        { ?>
+         <tr>
+        <td> <?php print $i?> </td>
+        <td> <?php print $tasa['name']?> </td>
+        <td> <?php print $tasa['ratid']?> </td>
+        <td> <?php print $tasa['t_normal']?> </td>
+        <td> <?php print $tasa['t_incremento1']?> </td>
+        <td> <?php print $tasa['t_incremento2']?> </td>
+        <?php if ($state=='A' || $state=='I'){?>
+        <td> <a href="/admin/rateregister/update/ratid/<?php print $tasa['ratid']?>/perid/<?php print $tasa['perid']?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
+        <td> <a href="/admin/rateregister/delete/ratid/<?php print $tasa['ratid']?>/perid/<?php print $tasa['perid']?>"onclick="return confirm('Esta Seguro que desea eliminar el registro?');"><span class="glyphicon glyphicon-trash"></span></a></td>
+        <?php } ?>
+        </tr>
+          
+           <?php
+            $i++;
+        }
+    }
+    ?>
+    </table>

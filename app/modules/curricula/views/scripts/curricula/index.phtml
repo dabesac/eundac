@@ -1,0 +1,65 @@
+
+<div>
+	<h4>
+		<span class="glyphicon glyphicon-th-list"></span> 
+		GESTIÓN CURRÍCULA
+	</h4>
+	<nav>
+		
+	</nav>
+</div>
+<div>
+	<table class="table table-hover span10">
+		<tr>
+			<th>Facultad:</th>
+			<td>
+				<select id="facid" class="form-control" style="width:280px">
+					<option value="">- Seleccione -</option>
+					<?php
+					if ($this->facultad) { 
+						foreach ($this->facultad as $facultad) { ?>
+							<option value="<?php echo $facultad['facid']?>"><?php echo $facultad['name']?></option>
+						<?php
+						}
+					}?>
+				</select>
+			</td>
+			<th>Escuela:</th>
+			<td>
+				<select id="escid" class="form-control" style="width:280px">
+					<option value="">- Seleccione -</option>
+				</select>
+			</td>
+		</tr>
+	</table>
+</div>
+<div id="curriculas"></div>
+
+
+<style type="text/css">
+	.modal-dialog
+	{
+		width: 880px;
+	}
+</style>
+
+<script type="text/javascript">
+	$("#facid").change(function(){
+		$("#facid option:selected").each(function(){
+			var facid=$.base64.encode($(this).val());
+			$.get('/curricula/curricula/schools',{facid:facid},function(data){
+				$("#escid").html(data);
+				// alert(data);
+			});
+		})
+	});
+	$("#escid").change(function(){
+		$("#escid option:selected").each(function(){
+			var tmp=$.base64.encode($(this).val());
+			$.get('/curricula/curricula/curriculas',{escid:tmp},function(data){
+				$("#curriculas").html(data);
+				// alert(data);
+			});
+		})
+	});
+</script>

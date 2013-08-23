@@ -1,0 +1,42 @@
+<div class="span8 flotacarajo" style="font-size:20px;color:red;text-align:center;margin-bottom:3%">
+	<b>LISTA DE DOCENTES PARA CREAR HORARIOS</b>
+</div>
+<div class=" flotacarajo">
+	<center><a href="" class="btn btn-info"><i class="icon icon-arrow-left icon-white"></i>Regresar</a></center><br>
+</div>
+<?php 
+if ($this->docente) {
+?>
+<div class="flotacarajo">
+	<table class="table table-striped table-condensed">
+		<tr>
+			<th class="span1">#</th>
+			<th class="span1">Cod. Docente</th>
+			<th>Nombre</th>
+			<th class="span1">Turno</th>
+			<th class="span1">Principal</th>
+			<th class="span1">Horario</th>
+		</tr>
+		<?php
+			$c=1;
+			foreach ($this->docente as $docen) { 
+				if ($docen['is_main']=="S") $prin="SI";
+				else $prin="NO";
+				?>
+				<tr>
+					<td><?php echo $c ?></td>
+					<td><?php echo $docen['uid'] ?></td>
+					<td><?php echo $docen['last_name0']?> <?php echo $docen['last_name1']?>, <?php echo $docen['first_name']?></td>
+					<td><?php echo $docen['turno'] ?></td>
+					<td><?php echo $prin ?></td>
+					<td><a href=""><span class="glyphicon glyphicon-pencil"></span></a></td>
+				</tr>
+			<?php
+			$c++;				
+			}
+		?>
+	</table>
+</div>
+<?php }else{ ?>
+<div class="alert alert-info">Debe llenar su carga Académica para poder ingresar los horarios de los docentes.</div>
+<?php } ?>

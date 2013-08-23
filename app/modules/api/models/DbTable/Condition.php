@@ -4,8 +4,7 @@ class Api_Model_DbTable_Condition extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'base_condition';
 	protected $_primary = array("cnid","pid","escid","uid","perid","eid","oid","subid");
-	protected $_sequence ="s_conditions"; 
-
+	protected $_sequence ="s_conditions";
 	public function _getFilter($where=array())
 	{
 		try{
