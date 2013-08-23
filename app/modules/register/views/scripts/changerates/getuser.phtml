@@ -18,34 +18,22 @@
     if ($this->data)
     {
         $c=0;
+        $a=0;
        foreach ($this->data as $info)    
         {
-            $c++;
-            $data=null;
-            $facid=$this->facid;
-            $facaulm = new Api_Model_DbTable_Speciality();
-            $data['eid'] = $info['eid'];
-            $data['oid'] = $info['oid'];
-            $data['escid'] = $info['escid'];
-            $data['subid'] = $info['subid'];
-            $rfacaulm = $facaulm->_getOne($data);
-            // print_r($rfacaulm);            
+            $c++;      
             ?>
             <tr>
                 <td><?php echo $c?></td>
                 <td><?php echo $info['uid'];?></td>
                 <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
-                <td><?php echo $rfacaulm['name']?></td>
-                <td><?php echo $info['uid'];?></td>
+                <td><?php echo $this->rfacaulm['name']?></td>
+                <td></td>
+                <td><?php echo $this->dlist[$a]['date_payment']?></td>
+                <td><?php echo $this->dlist[$a]['amount']?></td>
+                <td><?php echo $this->dlist[$a]['document_auth']?></td>
                 <td>
-                    <?php 
-                    if ($facid==$vfacalum || $facid=="TODO"){
-                        ?>
                     <center><a href="/report/recordnotas/print/uid/<?php echo base64_encode($info['uid'])?>/escid/<?php echo base64_encode($info['escid'])?>"><img src="/img/pdf.png"></a></center></td>
-                    <?php 
-                    }
-                    ?>
-                    
             </tr>
           <?php 
             
