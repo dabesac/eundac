@@ -54,21 +54,31 @@ class Register_ChangeratesController extends Zend_Controller_Action{
             $where['oid']=$this->sesion->oid;
             $where['perid']=$perid;
             $where['uid']=$data[0]['uid'];
-            // print_r($where); exit();
             $list= new Api_Model_DbTable_Payments();
             $dlist=$list->_getFilter($where);
-            print_r($dlist);
-        	// print_r($rfacaulm);
 
-        	// print_r($data);
-        	$this->view->rfacaulm=$rfacaulm;
+            $whered['eid']=$this->sesion->eid;
+            $whered['oid']=$this->sesion->oid;
+            $whered['perid']=$perid;
+            $whered['ratid']=$dlist[0]['ratid'];
+            $rates= new Api_Model_DbTable_Rates();
+            $dblist=$rates->_getOne($whered);
+            
+            $this->view->rfacaulm=$rfacaulm;
         	$this->view->data=$data;
         	$this->view->dlist=$dlist;
+        	$this->view->dblist=$dblist;
 			
 		} catch (Exception $e) {
 			print ('Error: get data user'.$e->getMessage());
 		}
 
+	}
+
+	public function changerateAction(){
+		$this->_helper->layout()->disableLayout();
+		$fm=new Register_Form_Changerate();
+		$this->view->fm=$fm;		
 	}
 
 }

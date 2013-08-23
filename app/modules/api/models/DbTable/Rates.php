@@ -38,6 +38,25 @@ class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getAll($where=null,$order='',$start=0,$limit=0){
+
+		try {
+			if($where['eid']=='' || $where['oid']=='' || $where['perid']='')
+				$wherestr= null;
+			else
+				$wherestr="eid='".$where['eid']."' and oid='".$where['oid']."' and perid='".$where['perid']."'";
+			if($limit==0) $limit=null;	
+			if($start==0) $start=null;
+
+			$rows=$this->fetchAll($wherestr,$order,$start,$limit);
+			if($rows) return $rows->toArray();
+			return false;
+
+		} catch (Exception $e) {
+			print "Error: Read All Rates".$e->getMessage();			
+		}
+	}
+
 	public function _getOne($where=array())
 	{
 		try{

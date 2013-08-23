@@ -1,0 +1,43 @@
+ <form name="<?php echo $this->fm->getName(); ?>" action="<?php echo $this->fm->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded">
+
+                              
+                <br>
+                <table class="table span9 table-striped table-bordered table-condensed">
+                    <tbody>
+                        <tr>
+                            
+                           
+                            <td>   
+                                <div class="control-group">
+                                <div class='bloke'><label class="control-label">Tasa para Asignar:</label>
+                                </div><div class="controls"><?php echo $this->fm->ratid?></div>
+                                </div>
+
+                                   <div class="control-group">
+                                <div class='bloke'><label class="control-label">Fecha de Pago:</label>
+                                </div>
+                                <div class="controls"><?php print $this->fm->date_payment->setAttrib("readonly","true");?></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="control-group">
+                                <div class='bloke'><label class="control-label">Documento de Autorizacion:</label>
+                                 </div>
+                                 <div class="controls"><?php print $this->fm->documnet_auth;?></div>
+                                </div>
+
+                                <div class="control-group">
+                                <div class='bloke'><label class="control-label">Usuario que Registra:</label>
+                                </div>
+                                <div class="controls"><?php print $this->fm->register;?></div>
+                                </div>
+                            </td> 
+                        </tr>
+                        <tr>
+                            <td colspan="2"><center><?php echo $this->fm->guardar?></center></td>
+                          
+                        </tr>
+                    </tbody>
+                </table>
+            <div style="clear:both"></div>
+    </form>
