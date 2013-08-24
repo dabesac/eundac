@@ -5,15 +5,63 @@ class Api_Model_DbTable_Condition extends Zend_Db_Table_Abstract
 	protected $_name = 'base_condition';
 	protected $_primary = array("cnid","pid","escid","uid","perid","eid","oid","subid");
 	protected $_sequence ="s_conditions";
-	public function _getlist($where=array())
+
+
+	public function _getOne($where=array()){
+		try {
+			if ($where["cnid"]=='' || $where["pid"]=='' || $where["escid"]=='' || $where["uid"]=='' || 
+				$where["perid"]=='' || $where["eid"]=='' || $where["oid"]=='' || $where["subid"]=='') return false;
+				
+				$wherestr= "cnid = '".$where['cnid']."' and pid = '".$where['pid']."' 
+				 and escid = '".$where['escid']."' and uid = '".$where['uid']."' and perid = '".$where['perid']."' 
+				 and eid = '".$where['eid']."' and oid = '".$where['oid']."' and subid = '".$where['subid']."' ";
+
+				$row = $this->fetchRow($wherestr);
+				if($row) return $row->toArray();
+				return false;
+		} catch (Exception $e) {
+			print "Error: Read One Condition".$e->getMessage();
+		}
+	}
+
+	public function _getAll($where=null,$order='',$start=0,$limit=0){
+		try {
+			if ( $where["pid"]=='' || $where["escid"]=='' || $where["uid"]=='' || $where["perid"]=='' ||
+				 $where["eid"]=='' || $where["oid"]=='' || $where["subid"]=='') return false;
+				
+				$wherestr= "pid = '".$where['pid']."' and escid = '".$where['escid']."' and uid = '".$where['uid']."' and perid = '".$where['perid']."' 
+				and eid = '".$where['eid']."' and oid = '".$where['oid']."' and subid = '".$where['subid']."' ";
+				if ($limit==0) $limit=null;
+				if ($start==0) $start=null;
+				
+				$rows=$this->fetchAll($wherestr,$order,$start,$limit);
+				if($rows) return $rows->toArray();
+				return false;
+		} catch (Exception $e) {
+			print "Error: Read All Condition".$e->getMessage();
+		}
+	}
+
+	public function _getFilter($where=null,$attrib=null,$orders=null)
 	{
 		try{
-			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."' and pid='".$where['pid']."' and uid='".$where['uid']."' and perid='".$where['perid']."' and subid='".$where['subid']."'";
-			$row = $this->fetchAll($wherestr);
-			if($row) return $row->toArray();
-			return false;
+			if($where['eid']=='' || $where['oid']=='') return false;
+				$select = $this->_db->select();	
+				if ($attrib=='') $select->from("base_condition");
+				else $select->from("base_condition",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				foreach ($orders as $key => $order) {
+						$select->order($order);
+				}
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+
 		}catch (Exception $e){
-			print "Error: Read Filter Curricula".$e->getMessage();
+			print "Error: Read Filter Condition".$e->getMessage();
 		}
 	}
 
@@ -57,7 +105,7 @@ class Api_Model_DbTable_Condition extends Zend_Db_Table_Abstract
 			->from(array('u' => 'base_users'),array('u.eid','u.oid','u.subid','u.uid','u.escid','u.pid','p.first_name','p.last_name0','p.last_name1'))
 				->join(array('p' => 'base_person'),'u.pid=p.pid and u.eid=p.eid')
 				->where('u.state = ?', 'A')->where('u.oid = ?', $where['oid'])->where('u.oid = ?', $where['oid'])->where('u.escid = ?',$where['escid'])->where('u.rid = ?','AL')
-				 ->where('(p.last_name0 LIKE ?)', '%'.$where['ap'].'%')->where('(p.last_name1 LIKE ?)', '%'.$where['am'].'%')->where('(upper(p.first_name) LIKE ?)', '%'.$where['am'].'%')->where('(u.uid LIKE ?)', '%'.$where['uid'].'%')
+				 ->where('(p.last_name0 LIKE ?)', '%'.$where['ap'].'%')->where('(p.last_name1 LIKE ?)', '%'.$where['am'].'%')->where('(upper(p.first_name) LIKE ?)', '%'.$where['am'].'%')
 				->where("u.uid NOT IN ?", $sub_select) ;
 			$results = $select->query();			
 			$rows = $results->fetchAll();
@@ -80,8 +128,6 @@ class Api_Model_DbTable_Condition extends Zend_Db_Table_Abstract
 			print "Error: Delete Condition".$e->getMessage();
 		}
 	}
-
-
 
 
 

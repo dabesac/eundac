@@ -9,7 +9,9 @@ class Api_Model_DbTable_Payments extends Zend_Db_Table_Abstract
 	public function _save($data)
 	{
 		try{
-			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']=='' || $data['pid']=='' || $data['uid']=='' || $data['perid']=='') return false;
+			if ($data['eid']=='' || $data['oid']=='' || $data['uid']=='' || $data['pid']=='' ||
+				$data['escid']=='' || $data['subid']=='' || $data['perid']=='') return false;
+			
 			return $this->insert($data);
 			return false;
 		}catch (Exception $e){
