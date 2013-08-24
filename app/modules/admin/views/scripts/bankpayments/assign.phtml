@@ -1,0 +1,135 @@
+<?php 
+$code_student=$this->datarec[0]['code_student'];
+$num_ope=$this->datarec[0]['operation'];
+$perid=$this->datarec[0]['perid'];
+?>
+
+<!-- <div style="float:left; margin-left:10px" class="row">
+	<div style="float:left" class="col-md-5">
+		<table class="table table-striped table-condensed table-bordered ">
+			<tr>
+				<th style="font-size:20px"><center>Información de Pago</center></th>
+			</tr>
+		</table>
+	</div> -->
+	<div style="float:left" class="col-md-5">
+		<table class="table table-striped table-condensed " style="font-size:13px">
+			<tr>
+				<th>Cod. Matricula:</th>
+				<td><?php echo $code_student ?>
+					<input type="hidden" value="<?php echo $code_student ?>" id="code_student">
+				</td>
+			</tr>
+			<tr>
+				<th>Nombres:</th>
+				<td><?php echo $this->nomalum[0]['last_name0'] ?> <?php echo $this->nomalum[0]['last_name1'] ?> <?php echo $this->nomalum[0]['first_name'] ?></td>
+			</tr>
+			<tr>
+				<th>Periodo:</th>
+				<td><?php echo $perid ?>
+					<input type="hidden" value="<?php echo $perid ?>" id="perid">
+				</td>
+			</tr>
+			<tr>
+				<th>Num. Operación:</th>
+				<td><?php echo $num_ope ?>
+					<input type="hidden" value="<?php echo $num_ope ?>" id="num_ope">
+				</td>
+			</tr>
+			<tr>
+				<th>Concepto:</th>
+				<td><?php echo $this->datarec[0]['concept']?></td>
+			</tr>
+			<tr>
+				<th>Monto:</th>
+				<td><?php echo $this->datarec[0]['amount']?></td>
+			</tr>
+			<tr>
+				<th>Fecha de Pago:</th>
+				<td><?php echo $this->datarec[0]['payment_date']?></td>
+			</tr>
+			<tr>
+				<td colspan="2"></td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div style="float:left" class="col-md-5">
+	<table class="table table-striped table-condensed table-bordered ">
+		<tr>
+			<th style="font-size:20px"><center>Asigna a:</center></th>
+		</tr>
+	</table>
+	<table class="table table-striped table-condensed span5" style="font-size:13px">
+		<tr>
+			<th>Periodo:</th>
+			<td>
+				<select id="periodo">
+					<option value="">-Seleccione -</option>
+						<?php 
+						if ($this->lper ){
+						    foreach ($this->lper  as $perio){
+						        ?>
+						        <option value="<?php echo $perio['perid']?>"><?php echo $perio['perid']." | ".$perio['name']?></option>
+						        <?php
+						    }
+						}else{
+						    ?>
+						        <option value="">No tienen ningun periodo</option>
+						    <?php
+						}
+						?>    
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>Cod. Matricula:</th>
+			<td>
+				<input id="codigo" type="text">
+				<a id="busca" href="#" class="btn btn-success" style="margin-left:20px">Buscar</a>
+			</td>
+		</tr>
+		<tr id="mielemento1" style="display:none;">
+			<th>Nombres:</th>
+			<td><div id="datalumno"></div></td>
+		</tr>
+		<tr id="mielemento2" style="display:none;">
+			<th colspan="2"><center><a id="asigna" href="#" class="btn btn-info">Asignar</a></center></th>
+		</tr>
+		<tr>
+			<th colspan="2"><center><a class="btn btn-danger" href="/admin/bankpayments/">Cancelar</a></center></th>
+		</tr>
+		<tr>
+			<td colspan="2"></td>
+		</tr>
+	</table>
+</div>
+<div id="carga"></div>
+
+<script type="text/javascript">
+$("#busca").click(function(){
+	var uid=$("#codigo").val();
+	var perid=$("#periodo").val();
+	if (perid=='' || uid=='') {
+		alert("Debe seleccionar un periodo e ingresar el codigo de matricula.");
+		return false;
+	};
+	
+	var url="/admin/bankpayments/verify/uid/"+uid+"/perid/"+perid;
+	// alert(url);
+	$("#datalumno").load(url);
+	$("#mielemento1").show();
+	$("#mielemento2").show();
+});
+
+$("#asigna").click(function(){
+	var auid=$("#codigo").val();
+	var aperid=$("#periodo").val();
+	var code_student=$("#code_student").val();
+	var perid=$("#perid").val();
+	var num_ope=$("#num_ope").val();
+	
+	var url="/admin/bankpayments/assigned/auid/"+auid+"/aperid/"+aperid+"/cod_mat/"+code_student+"/perid/"+perid+"/num_ope/"+num_ope;
+	$("#carga").load(url);
+});
+</script>
