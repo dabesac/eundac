@@ -56,7 +56,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	
  public function _getFilter($where=array()){
 		try{
-			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."' and subid='".$where['subid']."'";
+			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."'";
 			$row = $this->fetchAll($wherestr);
 			if($row) return $row->toArray();
 			return false;
@@ -113,4 +113,17 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
             print "Error: Obteniendo datos de tabla 'Matricula Curso'".$ex->getMessage();
         }
     }
+
+    public function _getInfoCourse($where=null,$attrib=null,$order=null){
+		try {
+			if ($where=='' && $attrib=='' ) return false;
+				$base_course = new Api_Model_DbTable_Course();
+				$data_course = $base_course->_getFilter($where,$attrib,$order);
+			if($data_course) return $data_course;
+			return false;
+		} catch (Exception $e) {
+			print "Error: Read info Course ";
+
+		}
+	}
 }
