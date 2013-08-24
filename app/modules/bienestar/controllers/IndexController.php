@@ -1,6 +1,6 @@
 <?php
 
-class Pedagogia_IndexController extends Zend_Controller_Action {
+class Bienestar_IndexController extends Zend_Controller_Action {
 
     public function init()
     {

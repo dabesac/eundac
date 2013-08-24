@@ -72,9 +72,11 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 				foreach ($where as $atri=>$value){
 					$select->where("$atri = ?", $value);
 				}
-				foreach ($orders as $key => $order) {
-						$select->order($order);
+				if ($orders<>null || $orders<>"") {
+					if (is_array($orders))
+						$select->order($orders);
 				}
+				
 				$results = $select->query();
 				$rows = $results->fetchAll();
 				if ($rows) return $rows;
@@ -225,6 +227,28 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 			print "Error: Read Info ".$e->getMessage();
 		}
 	}
+
+
+
+	    /* Devuelve los turnos de un curso($cursoid) de una escuela($escid) en un periodo($perid) */
+    public function _getCourseXTur($where=null){
+      try{
+          // if($where['perid']==""||$where['eid']==""||$where['oid']==""||$where['subid']==""||$where['escid']==""||$where['curid']=="") return false;
+          			$select = $this->_db->select()->distinct()
+			->from(array('pc' => 'base_periods_courses'),array('turno'))
+				->where('perid = ?', $where['perid'])->where('curid = ?', $where['curid'])
+				->where('escid = ?', $where['escid'])->where('courseid = ?', $where['courseid'])
+				->where('eid = ?', $where['eid'])->where('oid = ?', $where['oid'])
+				->where('subid = ?', $where['subid']);
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;
+            
+      }catch (Exception $ex){
+          print "Error: Obteniendo turnos de un curso establecido".$ex->getMessage();
+      }
+    } 
 
 
 }

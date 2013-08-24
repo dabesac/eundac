@@ -22,6 +22,8 @@ class Api_Model_DbTable_Payments extends Zend_Db_Table_Abstract
 		try{
 			if ($pk['eid']=='' ||   $pk['oid']=='' ||  $pk['escid']=='' ||  $pk['subid']=='' || $pk['pid']=='' || $pk['uid']=='' || $pk['perid']=='') return false;
 			$where = "eid = '".$pk['eid']."' and pid='".$pk['pid']."' and oid = '".$pk['oid']."' and escid = '".$pk['escid']."' and uid = '".$pk['uid']."' and subid = '".$pk['subid']."' and perid = '".$pk['perid']."'";
+				// print_r($where);
+				// print_r($data);exit();
 			return $this->update($data, $where);
 			return false;
 		}catch (Exception $e){
