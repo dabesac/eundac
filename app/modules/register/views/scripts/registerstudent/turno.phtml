@@ -1,0 +1,39 @@
+<?php $datos = $this->reg;
+$curso = new Api_Model_DbTable_Course();
+$list_curso = $curso -> _getOne($datos);
+print_r($datos);
+?>
+<td>
+    <?php echo $this->nro;?>
+</td>
+<td>
+    <?php echo $datos['courseid'];?>
+</td>
+                <td><?php echo $list_curso['name'];?></td>
+                <td><?php echo $datos['turno'];?></td>
+                <td><?php echo $list_curso['semid'];?></td>
+                <td><?php echo $list_curso['credits'];?> </td>
+                <td>
+                    <?php 
+                $bdprofesores = new Api_Model_DbTable_Coursexteacher();        
+                $datosss= $bdprofesores->_getinfoDoc($datos);
+                echo $ndoc=$datosss[0]['nameteacher'];
+
+                    ?>
+                </td>
+                <td>
+                    <?php 
+                    // $veces = new Admin_Model_DbTable_Cursos();
+                    // $listusuario = $veces ->_getCursosXAlumnoXVeces($escid=$datos['escid'],$uid=$this->uid,$curid=$datos['curid'],$cursoid=$datos['cursoid']); 
+                    // echo ($listusuario['0']['veces']+1)              ;
+                    ?>
+                </td>
+                <td>
+         
+                    <a id='eliminar' href="/register/registerstudent/deletecourse/uid/<?php echo base64_encode($datos['uid']);?>/pid/<?php echo base64_encode($datos['pid']);?>/escid/<?php echo base64_encode($datos['escid']);?>/subid/<?php echo base64_encode($datos['subid']);?>/courseid/<?php echo base64_encode($datos['courseid']);?>/curid/<?php echo base64_encode($datos['curid']);?>/turno/<?php echo base64_encode($datos['turno']);?>" onclick="return confirm('Esta Seguro que desea eliminar esta matricula?');"  > <i class="glyphicon glyphicon-remove"></i></a>   
+                </td>
+                <td>
+                      <a id="editar_<?php echo $courseid_.$a?>" rel="popover"  title="Editar Turno"><i class="glyphicon glyphicon-pencil"></i></a>  
+                </td>
+
+

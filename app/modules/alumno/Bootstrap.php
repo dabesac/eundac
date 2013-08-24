@@ -2,9 +2,7 @@
 
 class Alumno_Bootstrap extends Zend_Application_Module_Bootstrap 
 {
-	
-	/*
-   	protected function _initAutoload()
+	protected function _initAutoload()
     {
         $autoloader = new Zend_Application_Module_Autoloader(array(
             'namespace' => 'Alumno_',
@@ -22,7 +20,7 @@ class Alumno_Bootstrap extends Zend_Application_Module_Bootstrap
         ));
         return $autoloader;
     }
-    */
+    
    
 }
 

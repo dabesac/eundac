@@ -19,7 +19,7 @@ class Register_StudentController extends Zend_Controller_Action {
     {
         // print_r($this->sesion);
         try {
-            // print_r($this->sesion->infouser['pid']);
+            print_r($this->sesion->infouser['pid']);
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $uid=$this->sesion->uid;
@@ -36,7 +36,7 @@ class Register_StudentController extends Zend_Controller_Action {
                         'perid'=>$perid);
             
             $base_registration = new Api_Model_DbTable_Registration();
-            $base_payment= new Api_Model_DbTable_Payments();
+            // $base_payment= new Api_Model_DbTable_Payments();
         
 
             if (!$base_registration->_getOne($where)) {
@@ -50,16 +50,16 @@ class Register_StudentController extends Zend_Controller_Action {
                     $regid=base64_encode($uid.$perid);
             }
 
-            unset($where['regid']);
-            if (!$base_payment->_getOne($where)) {
+            // unset($where['regid']);
+            // if (!$base_payment->_getOne($where)) {
 
-                $where['ratid']=39;
-                $where['amount']=0;
-                $where['register']=$uid;
-                $where['created']=date("Y-m-d");
-                if ($base_payment->_save($where))
-                    $regid=base64_encode($uid.$perid);
-            }
+            //     $where['ratid']=39;
+            //     $where['amount']=0;
+            //     $where['register']=$uid;
+            //     $where['created']=date("Y-m-d");
+            //     if ($base_payment->_save($where))
+            //         $regid=base64_encode($uid.$perid);
+            // }
             
             $regid=base64_encode($uid.$perid);
 
@@ -320,7 +320,7 @@ class Register_StudentController extends Zend_Controller_Action {
                         'uid'=>$uid,'register'=>$uid,
                         'created'=>date('Y-m-d H:m:s'),
                         'state'=>'B');
-            // print_r($data);exit();
+            // // print_r($data);exit();
             try {
 
                 $where=array(
@@ -360,44 +360,44 @@ class Register_StudentController extends Zend_Controller_Action {
                                     'total_credits'=>$credits_register['credits'],
                                     'semester'=>$credits_register['semid'],
                                     'credits_assing'=>$credits_assing[0]['semester_credits'],
-                                    'credits'=>$credits_asing;
+                                    'credits'=>$credits_asing
                                     );
 
                     }
-                //         // if ($base_registration_subjet->_save($data)) {
+            //     //         // if ($base_registration_subjet->_save($data)) {
 
-                //         //     $credits_register = $base_registration -> _getOne($where);
+            //     //         //     $credits_register = $base_registration -> _getOne($where);
 
-                //         //         if($credits_register['semid']!=0 && $veces < 2)
-                //         //             $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
-                //         //         else{
-                //         //             if($credits_register['semid']==0){
-                //         //                 $credits_assing[0]['semester_credits']='0';
-                //         //             }
-                //         //             elseif ($veces >= 2) {
-                //         //                 $credits_assing[0]['semester_credits']=11;
-                //         //             }
-                //         //         }
+            //     //         //         if($credits_register['semid']!=0 && $veces < 2)
+            //     //         //             $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
+            //     //         //         else{
+            //     //         //             if($credits_register['semid']==0){
+            //     //         //                 $credits_assing[0]['semester_credits']='0';
+            //     //         //             }
+            //     //         //             elseif ($veces >= 2) {
+            //     //         //                 $credits_assing[0]['semester_credits']=11;
+            //     //         //             }
+            //     //         //         }
 
                                 
-                //         // }
-                //     }
+            //     //         // }
+            //     //     }
                 
-                // else{
+            //     // else{
 
-                //     $credits = $base_registration -> _getOne($where);
-                //     if($credits['semid']!=0)
-                //         $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits['semid']);
-                //     else
-                //         $credits_assing[0]['semester_credits']='0';
+            //     //     $credits = $base_registration -> _getOne($where);
+            //     //     if($credits['semid']!=0)
+            //     //         $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits['semid']);
+            //     //     else
+            //     //         $credits_assing[0]['semester_credits']='0';
 
-                //     $json   =   array(  
-                //                         'status'=>false,
-                //                         'total_credits'=>$credits['credits'],
-                //                         'semester'=>$credits['semid'],
-                //                         'credits_assing'=>$credits_assing[0]['semester_credits'],
-                //                         'credits'=>$credits_asing);
-                // }
+            //     //     $json   =   array(  
+            //     //                         'status'=>false,
+            //     //                         'total_credits'=>$credits['credits'],
+            //     //                         'semester'=>$credits['semid'],
+            //     //                         'credits_assing'=>$credits_assing[0]['semester_credits'],
+            //     //                         'credits'=>$credits_asing);
+            //     // }
                 
             } catch (Exception $e) {
                 $json = array(

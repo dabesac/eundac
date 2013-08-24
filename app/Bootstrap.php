@@ -9,7 +9,22 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $view = $layout->getView();
             $view->doctype('XHTML1_STRICT');
             $view->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
-            //$view->headMeta()->appendHttpEquiv('Cache-Control', 'no-cache');
+            
+            $view->headLink()->prependStylesheet('/external/bootstrap/css/bootstrap.min.css')
+            ->headLink()->appendStylesheet('/external/bootstrap/css/bootstrap-theme.min.css')
+            ->headLink()->appendStylesheet('/external/jquery/themes/redmond/jquery-ui.css');
+            //->headLink()->appendStylesheet('/css/style.css');
+            
+            $view->headScript()->prependFile('/external/jquery/jquery-1.9.1.js')
+            ->headScript()->appendFile('/external/jquery/additional-methods.min.js')
+            ->headScript()->appendFile('/external/jquery/jquery.validate.min.js')
+            ->headScript()->appendFile('/external/jquery/messages_es.js')
+            ->headScript()->appendFile('/external/jquery/ui/minified/i18n/jquery.ui.datepicker-es.min.js')
+            ->headScript()->appendFile('/external/jquery/ui/minified/jquery-ui.custom.min.js')
+            ->headScript()->appendFile('/external/bootstrap/js/bootstrap.min.js')
+            ->headScript()->appendFile('/external/jquery/external/base64/jquery.base64.min.js');
+            
+            
             $view->headTitle()->setSeparator(' - ');
             $view->headTitle('e-UNDAC - Sistema Academico UNDAC 2.0');
             Zend_Session::start();

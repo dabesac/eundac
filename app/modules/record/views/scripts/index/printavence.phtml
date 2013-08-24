@@ -1,0 +1,99 @@
+<?php 
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start();
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<div class="center">
+FACULTAD DE <?php echo strtoupper($this->faculty['name'])?><br> 
+ESCUELA DE <?php echo strtoupper($this->speciality['name'])?><br>
+<?php if($this->speciality1){
+	echo "ESPECIALIDAD DE ".strtoupper($this->speciality1['name'])."<br>";
+}
+?>
+INFORME DE AVANCE DE NOTAS <?php echo $this->perid?>
+</div>
+<br/>
+	<table>
+		<tr >
+			<th class="small">#</th>
+			<th class="small-50">Semestre</th>
+			<th class="small-70">Curricula </th> 
+			<th class="small-70">Código Asig.</th>
+			<th class="small-300">Nombre Asignatura </th>
+			<th class="small-50">Turno</th>
+			<th class="small-50">Tipo Asig.</th>
+			<th class="small-50"># Matri.</th>
+			<th class="small-70">Primer Parcial</th>
+			<th class="small-70">Segundo Parcial</th>
+		</tr>
+		
+		<?php 
+		$courses =$this->courses;
+		
+		if ($courses){
+			$i=0;
+			foreach ($courses as $course){
+				$i++;
+				$counregister=0;
+				$courseid=($course['courseid']);
+				$semid=($course['semid']);
+				$courseid_cr=base64_encode($course['courseid']);
+				$name=($course['course']);
+				$escid=($course['escid']);
+				$turno=($course['turno']);
+				$curid=($course['curid']);
+				$date=($course['closure_date']);
+				$type = ($course['type_rate']=="O")?"Objetivo":"Competencia";
+				$stater = $course['state_record'];
+				$state = $course['state'];
+				if ($state=="S" && ($stater=="C" || $stater=="A")){
+					$sp = "SI";
+					$pp = "SI";
+				}else{
+					$sp="NO";
+					$pp = ($state=="P" && $stater=="A")?"SI":"NO";
+				}
+				$counregister = $course['numregister'];
+				?>
+		<tr >
+			<td class="center"><?php echo $i;?></td>
+			<td class="center"><?php echo $semid?></td>
+			<td><?php echo $curid?></td>
+			<td><?php echo $courseid?></td>
+			<td><?php echo $name?></td>
+			<td class="center"><?php echo $turno?></td>
+			<td><?php echo $type;?></td>
+			<td class="center"><?php echo $counregister;?></td>
+			<td class="center"><?php echo $pp?></td>
+			<td class="center"><?php echo $sp?> </td>
+		</tr>	
+				<?php 
+				}
+		}else{
+		?>
+		<tr><th colspan="10">No hay registros</th></tr>		
+		<?php } ?>
+	</table>
+<?php 
+
+  $html = ob_get_contents();
+  //$mpdf=new mPDF('win-1252','A4','','',15,15,2,12,5,7);
+	$mpdf=new mPDF('win-1252','A4','','');
+  $mpdf->SetHTMLHeader($this->printheader);
+  //$mpdf->SetFooter(' ');
+  
+  $mpdf->SetFooter($this->printfooter);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('avence-'.$this->perid.'.pdf','D');
+  
+?>
+
+
+
+
+
+
+

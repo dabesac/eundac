@@ -123,6 +123,7 @@ public function _getPaymentsStudent($where=null,$attrib=null,$order=null){
 			$row=$sql->fetchAll();
 			if ($row) return $row;
 	       	return false;
+	      	// if ($sql) ; ;
 
     	} catch (Exception $e) {
     		print "Error: Credits Asignated".$e->getMessage();

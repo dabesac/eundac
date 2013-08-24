@@ -10,9 +10,27 @@ class Admin_SpecialityController extends Zend_Controller_Action{
 		try {
 			$where['eid']=$this->eid;
 			$where['oid']=$this->oid;
-			$list=new Api_Model_DbTable_Speciality();
-			$data=$list->_getAll($where);
-			$this->view->data=$data;			
+			$form= new Admin_Form_Speciality();
+			$this->view->form=$form;
+			// $list=new Api_Model_DbTable_Speciality();
+			// $data=$list->_getAll($where);
+		} catch (Exception $e) {
+			print "Error: get Speciality".$e->getMessage();
+		}
+
+	}
+
+	public function getspecialityAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+			$where['eid']=$this->eid;
+			$where['oid']=$this->oid;
+			$where['facid']=$this->_getParam('facid');
+			$where['state']='A';
+			$filter=new Api_Model_DbTable_Speciality();
+			$data=$filter->_getFilter($where);
+			// print_r($data);
+			$this->view->data=$data;
 		} catch (Exception $e) {
 			print "Error: get Speciality".$e->getMessage();
 		}
