@@ -83,7 +83,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $where['perid'] = $this->sesion->period->perid;
             $where['eid'] = $this->sesion->eid;    
             $where['oid'] = $this->sesion->oid;        
-            $rid='AL';
+       
             // Obtener fecha periodo
             $infoper = new Api_Model_DbTable_Periods();
             $infoperiodo = $infoper->_getOne($where);
@@ -216,11 +216,11 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 }                
             }
 
-            //obtenemos las condiciones de la matricula registradas
-            $condi = new Api_Model_DbTable_Condition();
-            $rcondision=$condi->_getlist($where);
-            // print_r($rcondision);
-            if ($rcondision) $this->view->condision = $rcondision;
+            // //obtenemos las condiciones de la matricula registradas
+            // $condi = new Api_Model_DbTable_Condition();
+            // $rcondision=$condi->_getlist($where);
+            // // print_r($rcondision);
+            // if ($rcondision) $this->view->condision = $rcondision;
             
             //Sacamos la lista de pagos del alumno
             $listapagos = new Api_Model_DbTable_PaymentsDetail();
