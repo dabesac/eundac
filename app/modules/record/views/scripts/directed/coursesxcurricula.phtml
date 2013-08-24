@@ -1,0 +1,11 @@
+<?php
+if ($this->cursos) { ?>
+	<option value="">- Seleccione Asignatura -</option>
+	<?foreach ($this->cursos as $cursos) { ?>
+		<option value="<?php echo $cursos['courseid']."--".$cursos['curid']."--".$cursos['semid']."--".$cursos['credits']?>"><?php echo $cursos['courseid']." | ".$cursos['name']." - Creditos: ".$cursos['credits']?></option>
+	<?php
+	}
+}else{ ?>
+	<option value="">No tiene Ninguna Asignatura.</option>
+<?php
+}?>

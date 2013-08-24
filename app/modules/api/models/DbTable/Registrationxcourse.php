@@ -54,14 +54,24 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	}
 
 	
- public function _getFilter($where=array()){
+ 	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
-			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."' and subid='".$where['subid']."'";
-			$row = $this->fetchAll($wherestr);
-			if($row) return $row->toArray();
-			return false;
+			if($where['eid']=='' || $where['oid']=='') return false;
+				$select = $this->_db->select();
+				if ($attrib=='') $select->from("base_registration_course");
+				else $select->from("base_registration_course",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				foreach ($orders as $key => $order) {
+						$select->order($order);
+				}
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
 		}catch (Exception $e){
-			print "Error: Read Filter Registration".$e->getMessage();
+			print "Error: Read Filter REgister_Course ".$e->getMessage();
 		}
 	}
 
