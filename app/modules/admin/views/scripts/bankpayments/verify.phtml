@@ -1,0 +1,14 @@
+<?php 
+if ($this->datusu) {
+	echo $this->datusu[0]['last_name0']; 
+	echo " "; 
+	echo $this->datusu[0]['last_name1'];
+	echo " "; 
+	echo $this->datusu[0]['first_name'];
+}else{ ?>
+	<div class="success">
+		El Alumno no se encuentra registrado, debe ingresar al sistema para realizar su pre-matricula.
+	</div>
+	<?php
+}
+?>

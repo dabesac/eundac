@@ -1,0 +1,52 @@
+<form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltro" action="/register/changerates/getuser/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+
+    <table class="table table-condensed table-striped">
+        <tr>
+            <th style="font-size:25px;" colspan='2'><center>CAMBIO DE TASAS PERIODO <?php echo $this->perid?></center></th>
+        </tr>
+        <tr>
+            <td class='col-lg-5'><p style='float:right'>Codigo del Alumno: </p></td>                            
+            <td class='col-lg-7'><div style='width: 200px'><?php echo $this->fm->uid ?></td>
+        </tr>
+    </table>
+</form>
+<div id="cargadata"></div>
+
+<script>
+    $("#uid").keypress(function (e) {
+    	    var codi =  $(this).val();
+    	    // alert(codi);
+        if(e == 13 || e.which==13 || e.which==0){
+            var codi =  $('#uid').val();
+            // var nom =  $('#last_name0').val();
+            count=codi.length;
+            if (count==10 || count==0)
+            {
+                $('#cargadata').html("<img src='/img/spinner.gif'> Cargando....");
+                $("#frmFiltro").submit();
+            }
+            else
+            {
+                alert("Ingrese un codigo valido");
+                $('#uid').val('');
+            }
+        }
+    });
+    
+    $("#frmFiltro").submit(function(){
+        $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(data) {                        
+            $('#cargadata').html(data);                                 
+            }
+        }); 
+        return false;
+    });
+
+function validNumber(e) {
+    var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
+    return ((tecla > 47 && tecla < 58) || tecla == 8);
+    }    
+</script>

@@ -48,7 +48,6 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 			$wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and subid='".$where['subid']."' and courseid='".$where['courseid']."' and curid='".$where['curid']."' and turno='".$where['turno']."' and perid='".$where['perid']."'";
 			$rows = $this->fetchAll($wherestr);
 			if($rows) return $rows->toArray();
-			print_r($rows);
 			return false;
 		}catch (Exception $e){
 			print "Error: Read All Course ".$e->getMessage();
@@ -91,5 +90,34 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 
 		}
 	}
+
+
+	 /* Retorna los datos del docente asignado a la escuela($escid), curso($cursoid) y turno($turno), */
+    public function _getinfoDoc($where=null){
+        try{
+            if ($where['eid']=='' || $where['oid']=='' || $where['escid']=='' || $where['perid']=='' || $where['courseid']=='' || $where['turno']=='') return false;
+            $eid=$where['eid'];
+            $oid=$where['oid'];
+            $perid=$where['perid'];
+            $escid=$where['escid'];
+            $turno=$where['turno'];
+            $subid=$where['subid'];
+            $courseid=$where['courseid'];
+            $curid=$where['curid'];
+            $str=" select last_name0 || ' ' || last_name1 || ', ' || first_name as nameteacher,            
+            pc.pid from base_course_x_teacher as pc
+            inner join base_person as p on pc.pid=p.pid and pc.eid=p.eid 
+            where p.eid='$eid' and pc.oid ='$oid' and pc.perid = '$perid' and pc.escid='$escid' and pc.turno='$turno'
+            and pc.subid='$subid' and pc.courseid='$courseid' and pc.curid='$curid' 
+            and pc.is_main='S' and  not p.pid='TEMP01' order by pc.is_main desc";
+
+            $sql=$this->_db->query($str);
+                return $sql->fetchAll(); 
+            return false;        
+        }  catch (Exception $ex){
+            print "Error: lista Docentes  ".$ex->getMessage();
+        }
+
+    }
 
 }

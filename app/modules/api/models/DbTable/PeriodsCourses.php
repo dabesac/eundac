@@ -72,9 +72,11 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 				foreach ($where as $atri=>$value){
 					$select->where("$atri = ?", $value);
 				}
-				foreach ($orders as $key => $order) {
-						$select->order($order);
+				if ($orders<>null || $orders<>"") {
+					if (is_array($orders))
+						$select->order($orders);
 				}
+				
 				$results = $select->query();
 				$rows = $results->fetchAll();
 				if ($rows) return $rows;
@@ -165,6 +167,47 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 		}
 	}
 
+
+	public function _getTeacherXPeridXEscid($eid,$oid,$escid,$perid){
+        try{
+            $sql=$this->_db->query("
+             select distinct on(DC.uid)DC.uid,DC.pid,PC.courseid,PC.perid,PC.curid,PC.escid,PC.turno,DC.is_main,DC.is_com,P.last_name0, P.last_name1, P.first_name from base_periods_courses PC inner join base_course_x_teacher DC 
+            on PC.perid=DC.perid and PC.escid=DC.escid and PC.eid=DC.eid  and PC.oid=DC.oid and PC.curid=DC.curid and PC.courseid=DC.courseid inner join base_person P
+            on DC.pid=P.pid and P.eid=DC.eid where PC.eid='$eid' and PC.oid='$oid' and PC.perid='$perid' and PC.escid='$escid'order by DC.uid ASC
+             ");          
+            return $sql->fetchAll(); 
+            }  catch (Exception $ex){
+                print $ex->getMessage();
+            }            
+        }
+     public function _getTeacherXPeridXEscid1($where=null){
+         try{
+             if ($where['perid']=='' || $where['escid']=='' || $where['oid']=='' || $where['eid']=='') return false; 
+                 $select = $this->_db->select()
+									->distinct()
+									->from(array('pc'=>'base_periods_courses'),
+												array('pc.courseid','pc.perid','pc.escid','pc.turno'))
+									->join(array('ct'=>'base_course_x_teacher'),'ct.oid=pc.oid and ct.eid=pc.eid and ct.perid=pc.perid and 
+												  ct.escid=pc.escid and ct.curid=pc.curid and ct.courseid=pc.courseid',
+												  array('ct.uid','ct.pid','ct.is_main','ct.is_com'))
+									->join(array('p'=>'base_person'),'ct.pid = p.pid and ct.eid=p.eid',
+										array('p.last_name0','p.last_name1','p.first_name'))											
+									
+									->where('pc.eid = ?',$where['eid'])
+									->where('pc.oid = ?',$where['oid'])
+									->where('pc.perid = ?',$where['perid'])
+									->where('pc.escid = ?',$where['escid'])
+									->order('ct.uid');
+
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				 if ($rows) return $rows;
+				return false;      
+         }  catch (Exception $ex){
+             print "Error: Obteniendo datos de un Docente que dicta un curso".$ex->getMessage();
+         }
+     }
+
 	public function _getInfocourseXescidXperidXcourseXturno($where=null)
 	{
 		try{
@@ -185,4 +228,28 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 		}
 	}
 
+
+
+	    /* Devuelve los turnos de un curso($cursoid) de una escuela($escid) en un periodo($perid) */
+    public function _getCourseXTur($where=null){
+      try{
+          // if($where['perid']==""||$where['eid']==""||$where['oid']==""||$where['subid']==""||$where['escid']==""||$where['curid']=="") return false;
+          			$select = $this->_db->select()->distinct()
+			->from(array('pc' => 'base_periods_courses'),array('turno'))
+				->where('perid = ?', $where['perid'])->where('curid = ?', $where['curid'])
+				->where('escid = ?', $where['escid'])->where('courseid = ?', $where['courseid'])
+				->where('eid = ?', $where['eid'])->where('oid = ?', $where['oid'])
+				->where('subid = ?', $where['subid']);
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;
+            
+      }catch (Exception $ex){
+          print "Error: Obteniendo turnos de un curso establecido".$ex->getMessage();
+      }
+    } 
+
+
 }
+

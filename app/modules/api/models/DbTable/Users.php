@@ -210,7 +210,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 				if ($rows) return $rows;
 				return false;
 		}catch (Exception $e){
-			print "Error: Read Filter Curricula ".$e->getMessage();
+			print "Error: Read Filter Users ".$e->getMessage();
 		}
 	}
 

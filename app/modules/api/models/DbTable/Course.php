@@ -65,8 +65,10 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
 				foreach ($where as $atri=>$value){
 					$select->where("$atri = ?", $value);
 				}
-				foreach ($orders as $key => $order) {
+				if($orders){
+					foreach ($orders as $key => $order) {
 						$select->order($order);
+					}
 				}
 				$results = $select->query();
 				$rows = $results->fetchAll();
@@ -76,4 +78,14 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
 			print "Error: Read Filter Course ".$e->getMessage();
 		}
 	}
+
+	    /* Retorna el nro de veces que llevo un curso un alumno  */
+    public function _getCoursesXStudentXV($where=null){
+        if ($where['escid']==''|| $where['uid']==''|| $where['curid']=='' || $where['courseid']=='') return false;
+            $sql=$this->_db->query("
+                    select llevo_course('".$where['escid']."','".$where['uid']."','".$where['curid']."','".$where['courseid']."') as veces          
+               ");
+        $r = $sql->fetchAll();
+        return $r;
+    }
 }

@@ -1,0 +1,46 @@
+<script src="/external/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+<form name="<?php echo $this->fm->getName(); ?>" action="/register/changerates/changerate/" method="post" enctype="application/x-www-form-urlencoded">
+                <br>
+                <table class="table span9 table-striped table-bordered table-condensed">
+                    <tbody>
+                        <tr>                      
+                            <td colspan="2">   
+                                <div class="control-group">
+                                <div><label class="control-label">Tasa para Asignar:</label>
+                                </div><div style='width: 500px'><?php echo $this->fm->ratid?></div>
+                                </div>
+                            </td>
+                        </tr> 
+                        <tr>       
+                            <td>
+                                <div class="control-group">
+                                    <div><label class="control-label">Documento de Autorizacion:</label></div>
+                                    <div ><?php echo $this->fm->document_auth;?></div>
+                                </div>
+                            </td>
+                            <td>                           
+                                <div class="control-group">
+                                    <div><label class="control-label">Fecha de Pago:</label></div>
+                                    <div><?php echo $this->fm->date_payment;?></div>
+                                </div>
+                            </td> 
+                        </tr>    
+                        <tr>
+                            <td colspan="2"><center><?php echo $this->fm->guardar?></center></td>
+                          
+                        </tr>
+                        <input type="hidden" name='eid' value='<?php echo $this->eid?>'>
+                        <input type="hidden" name='oid' value='<?php echo $this->oid?>'>
+                        <input type="hidden" name='uid' value='<?php echo $this->uid?>'>
+                        <input type="hidden" name='pid' value='<?php echo $this->pid?>'>
+                        <input type="hidden" name='escid' value='<?php echo $this->escid?>'>
+                        <input type="hidden" name='subid' value='<?php echo $this->subid?>'>
+                        <input type="hidden" name='perid' value='<?php echo $this->perid?>'>
+                    </tbody>
+                </table>
+            <div style="clear:both"></div>
+    </form>
+
+
+
