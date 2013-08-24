@@ -1,0 +1,12 @@
+<?php 
+if ($this->docentes){ ?>
+    <option value="">- Seleccione Docente -</option>
+<?php
+    foreach ($this->docentes  as $docen){ ?>
+        <option value="<?php echo $docen['uid'].";--;".$docen['pid']?>"><?php echo $docen['last_name0']." ".$docen['last_name1'].", ".$docen['first_name']?></option>
+    <?php
+    }
+}else{ ?>
+    <option value="">No tienen ningun Docente</option>
+    <?php
+} ?>    

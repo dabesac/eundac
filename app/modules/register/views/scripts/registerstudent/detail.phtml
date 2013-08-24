@@ -74,7 +74,7 @@ $urlmatri="uid/".($matricula['uid'])."/pid/".($matricula['pid'])."/escid/".($mat
         <th style="color: #D2F6F9;" class="span1">Monto</th>
         <th style="color: #D2F6F9;" class="span1">Condiciones</th>
         <th class="span1" rowspan="2">
-            <a href="/default/recordnotas/imprimir/uid/<?php echo $matricula['uid'];?>/pid/<?php echo $matricula['pid'];?>/escid/<?php echo $matricula['escid']?>/sedid/<?php echo $matricula['sedid'];?>/eid/<?php echo $matricula['eid']?>/oid/<?php echo $matricula['oid'];?>" class="btn btn-info" target="_black">
+            <a href="/report/recordnotas/print/uid/<?php echo $matricula['uid'];?>/pid/<?php echo $matricula['pid'];?>/escid/<?php echo $matricula['escid']?>/sedid/<?php echo $matricula['sedid'];?>/eid/<?php echo $matricula['eid']?>/oid/<?php echo $matricula['oid'];?>" class="btn btn-info" target="_black">
             <i class="glyphicon glyphicon-list-alt glyphicon-white"></i><br/>Record</a>
         </th>
         <th class="span1"  rowspan="2">
@@ -285,11 +285,11 @@ $(function(){
                                 if ($estadomatricula=="M"){
                                     $veces_ = $veces_;
                                 }else{
-                                    $veces_ = ($veces_+1);
+                                    $veces_ = ($veces_);
                                 }
                                 echo $veces_;
                                 if (($veces_)>2){ ?>
-                                <script>$("#tr_<?php echo $courseid_.$a;?>").css("background","#FD6868");</script>
+                                <script>$("#formu_<?php echo $courseid_.$a;?>").css("background","#FD6868");</script>
                                 <?php } ?>
                                 </td>
                                 <td ><a href="#" title="No hacer Ningun Cambio" id="ocultar_<?php echo $courseid_.$a;?>"><i class="glyphicon glyphicon-remove-circle"><i></a></td>                
@@ -333,61 +333,64 @@ $(function(){
 
  <div style="width: 45px;margin: 0px; text-align: center;float: right; margin-right: 50px;" >          
             <?php if ($estadomatricula=='I' ) {?>
-            <a id='valida' href="/rfacultad/matricula/validar/<?php echo $urlmatri;?>/flag/<?php echo base64_encode("M");?>" onclick="return confirm('Esta Seguro que desea validar esta matricula?');"  class="btn btn-success" style="width:80px" >
+            <a id='valida' href="/register/registerstudent/validate/<?php echo $urlmatri;?>/flag/<?php echo base64_encode("M");?>" onclick="return confirm('Esta Seguro que desea validar esta matricula?');"  class="btn btn-success" style="width:80px" >
             <i class="glyphicon glyphicon-ok glyphicon-white"></i><br/>Validar</a><br />
 
-            <a id='observa' href="/rfacultad/matricula/validar/<?php echo $urlmatri;?>/flag/<?php echo base64_encode("E");?>" onclick="return confirm('Esta Seguro que desea Eliminar esta matricula?');" class="btn  btn-success " style="width:80px" >
+            <a id='observa' href="/register/registerstudent/validate/<?php echo $urlmatri;?>/flag/<?php echo base64_encode("E");?>" onclick="return confirm('Esta Seguro que desea Eliminar esta matricula?');" class="btn  btn-success " style="width:80px" >
             <i class="glyphicon glyphicon-trash glyphicon-white"></i><br/>Eliminar</a><br />  
 
-            <a id='observa' href="/rfacultad/matricula/validar/<?php echo $urlmatri;?>/flag/<?php echo base64_encode("R");?>" onclick="return confirm('Esta Seguro que desea Reservar esta matricula?');" class="btn  btn-success " style="width:80px" >
+            <a id='observa' href="/register/registerstudent/validate/<?php echo $urlmatri;?>/flag/<?php echo base64_encode("R");?>" onclick="return confirm('Esta Seguro que desea Reservar esta matricula?');" class="btn  btn-success " style="width:80px" >
             <i class="glyphicon glyphicon-hand-down glyphicon-white"></i><br/>Reservar</a><br />
             
             <?php } 
             if ($estadomatricula=='O' || $estadomatricula=='M'){?>
-                <a id='observa' href="/rfacultad/matricula/validar/<?php echo $urlmatri;?>/flag/<?php echo base64_encode("E");?>" onclick="return confirm('Esta Seguro que desea Eliminar esta matricula?');" class="btn  btn-success " style="width:80px" >
-                    <i class="glyphicon glyphicon-trash glyphicon-white"></i><br/>Eliminar</a><br />                
-        <a id='observa' href="/rfacultad/matricula/validar/<?php echo $urlmatri;?>/flag/<?php echo base64_encode("R");?>" onclick="return confirm('Esta Seguro que que desea Eliminar esta matricula?');" class="btn  btn-success " style="width:50px" >
+            <a id='observa' href="/register/registerstudent/validate/<?php echo $urlmatri;?>/flag/<?php echo base64_encode("E");?>" onclick="return confirm('Esta Seguro que desea Eliminar esta matricula?');" class="btn  btn-success " style="width:80px" >
+            <i class="glyphicon glyphicon-trash glyphicon-white"></i><br/>Eliminar</a><br />                
+            <a id='observa' href="/register/registerstudent/validate/<?php echo $urlmatri;?>/flag/<?php echo base64_encode("R");?>" onclick="return confirm('Esta Seguro que que desea Eliminar esta matricula?');" class="btn  btn-success " style="width:80px" >
                 <i class="glyphicon glyphicon-hand-down glyphicon-white"></i><br/>Reservar</a><br />
             <?php }?>
 </div>
-    <?php
-    //}else{
-//      echo "Matricula Cerrada";
-    //}
-    ?>
-
 
 <div style="clear:both" ></div>
 
 <div style="width: 100%" class="flotacarajo"></div>
 <?php if ($estadomatricula=="O"){?>
-<div class="alert alert-danger flotacarajo">
-    <h3>LA MATRICULA FUE OBSERVADA</h3>
+<div class="alert alert-warning flotacarajo">
+    <h3><CENTER>LA MATRICULA FUE OBSERVADA</CENTER></h3>
 </div>
 <?php }
 if ($estadomatricula=="R"){?>
 <div class="alert alert-info  flotacarajo">
-    <h3>LA MATRICULA FUE RESERVADA</h3>
+    <h3><CENTER>LA MATRICULA FUE RESERVADA</CENTER></h3>
 </div>
 <?php }
-?>
+if ($estadomatricula=="M"){?>
+<div class="alert alert-danger  flotacarajo">
+    <h3><CENTER>LA MATRICULA FUE VALIDADA<CENTER></h3>
+</div>
+<?php }
+
+if ($estadomatricula=="B"){?>
+<div class="alert alert-success  flotacarajo">
+    <h3><CENTER>EL ALUMNO NO REALIZA SU PREMATRICULA<CENTER></h3>
+</div>
+<?php } ?>
 <br><br><br>
+ <?php if ($estadomatricula=='I' || $estadomatricula=='M'){?>
 <center><a href="#" class="btn btn-danger" id="clickeaki"> <i class="glyphicon glyphicon-list glyphicon-white"></i><b>Click para ver detalles de los cursos llevados según su currícula</b></a>
 </center><br>
+<?php } ?>
 <div id="pendientes" class="flotacarajo" style="overflow: auto; float: left; height: 200px;width: 750px;">
 </div>
 <script>
 $(function(){
     $("tr[rel=popover]").popover({placement:'bottom',trigger:'hover'});
 });
-</script>
-
-<script>
     //cargamos los cursos pendientes 
-    $("#clickeaki").click(function(){
-        $("#pendientes").html("<img scr='/img/spinner.gif' />Cargando...");
-        var urls="/register/registerstudent/listcoursependient/<?php echo $urlmatri?>/curid/<? echo $this->listacurso[0][curid]?>";
-        $("#pendientes").load("/register/registerstudent/listcoursependient/<?php echo $urlmatri?>/curid/<? echo $this->listacurso[0][curid]?>");
+$("#clickeaki").click(function(){
+$("#pendientes").html("<img scr='/img/spinner.gif' />Cargando...");
+var urls="/register/registerstudent/listcoursependient/<?php echo $urlmatri?>/curid/<? echo $this->listacurso[0][curid]?>";
+$("#pendientes").load("/register/registerstudent/listcoursependient/<?php echo $urlmatri?>/curid/<? echo $this->listacurso[0][curid]?>");
     });    
 </script>
 
