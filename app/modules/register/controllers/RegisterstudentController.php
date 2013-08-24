@@ -216,11 +216,18 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 }                
             }
 
-            // //obtenemos las condiciones de la matricula registradas
-            // $condi = new Api_Model_DbTable_Condition();
-            // $rcondision=$condi->_getlist($where);
-            // // print_r($rcondision);
-            // if ($rcondision) $this->view->condision = $rcondision;
+            //obtenemos las condiciones de la matricula registradas
+            $condi = new Api_Model_DbTable_Condition();
+            $date['eid']=$where['eid'];
+            $date['oid']=$where['oid'];
+            $date['pid']=$where['pid'];
+            $date['uid']=$where['uid'];
+            $date['escid']=$where['escid'];
+            $date['perid']=$where['perid'];
+            $date['subid']=$where['subid'];
+            $rcondision=$condi->_getFilter($date);
+            // print_r($rcondision);
+            if ($rcondision) $this->view->condision = $rcondision;
             
             //Sacamos la lista de pagos del alumno
             $listapagos = new Api_Model_DbTable_PaymentsDetail();
