@@ -33,7 +33,6 @@ class Record_IndexController extends Zend_Controller_Action {
 			$formData['eid'] = $this->sesion->eid;
 			$formData['oid'] = $this->sesion->oid;
 			$tmpescid = split(";--;",$formData['escid']);
-			
 			$formData['escid'] = base64_decode($tmpescid[0]);
 			$formData['subid'] = base64_decode($tmpescid[1]);
 			$formData['perid'] = base64_decode($formData['perid']);
@@ -41,62 +40,70 @@ class Record_IndexController extends Zend_Controller_Action {
 			$periods = new Api_Model_DbTable_Periods();
 			$rowperiod = $periods->_getOne($formData);
 			if ($rowperiod ) $this->view->stateperiod=$rowperiod['state'];
-			$formData['coursename'] = ($formData['coursename']);
 			unset($formData['year']);
-			if ($formData['coursename']=="") unset($formData['coursename']);
-			$records = new Api_Model_DbTable_PeriodsCourses();
-			$attris = array("eid","oid","perid","courseid","escid","subid","curid","turno",
-					"curid","semid","type_rate","closure_date","state_record","state");
-			$orders = array("eid","curid","courseid","turno");
-			$rows = $records->_getFilter($formData,$attris,$orders);
-			if ($rows) {
-				foreach ($rows as $row){
-					$course = new Api_Model_DbTable_Course();
-					$where=null;
-					$where['eid']=$row['eid'];
-					$where['oid']=$row['oid'];
-					$where['escid']=$row['escid'];
-					$where['curid']=$row['curid'];
-					$where['courseid']=$row['courseid'];
-					
-					// get info course
-					$rowcourse = $course->_getFilter($where,array('name'));
-					if ($rowcourse) $row['course']= $rowcourse[0]['name'];
-					// get count register course
-					$where['subid']=$row['subid'];
-					$where['perid']=$row['perid'];
-					$where['turno']=$row['turno'];
-					$register = new Api_Model_DbTable_Registrationxcourse();
-					$countregister = $register->_getCountRegisterCourse($where);
-					$row['numregister'] = ($countregister)?$countregister:0;
-					$lscourses[]=$row;
-				}
-			}
-			$this->view->courses = $lscourses;
+			$this->view->courses = $this->_loadCourses($formData);
 			
 		}
 				 
 		
 	}
-	
+	private function _loadCourses($formData=null){		
+		$formData['coursename'] = ($formData['coursename']);
+		if ($formData['coursename']=="") unset($formData['coursename']);
+		
+		
+		$records = new Api_Model_DbTable_PeriodsCourses();
+		$attris = array("eid","oid","perid","courseid","escid","subid","curid","turno",
+				"curid","semid","type_rate","closure_date","state_record","state");
+		$orders = array("eid","curid","courseid","turno");
+		$rows = $records->_getFilter($formData,$attris,$orders);
+		if ($rows) {
+			foreach ($rows as $row){
+				$course = new Api_Model_DbTable_Course();
+				$where=null;
+				$where['eid']=$row['eid'];
+				$where['oid']=$row['oid'];
+				$where['escid']=$row['escid'];
+				$where['curid']=$row['curid'];
+				$where['courseid']=$row['courseid'];
+					
+				// get info course
+				$rowcourse = $course->_getFilter($where,array('name'));
+				if ($rowcourse) $row['course']= $rowcourse[0]['name'];
+				// get count register course
+				$where['subid']=$row['subid'];
+				$where['perid']=$row['perid'];
+				$where['turno']=$row['turno'];
+				$register = new Api_Model_DbTable_Registrationxcourse();
+				$countregister = $register->_getCountRegisterCourse($where);
+				$row['numregister'] = ($countregister)?$countregister:0;
+				$lscourses[]=$row;
+			}
+		}
+		return $lscourses;
+	}
 	public function printavenceAction()
 	{
 		$this->_helper->layout()->disableLayout();		
 		$formData['eid'] = $this->sesion->eid;
 		$formData['oid'] = $this->sesion->oid;
-		$tmpescid = split(";--;",$this->getParam(['escid']));
+		$tmpescid = split(";--;",$this->getParam('escid'));
 		$formData['escid'] = base64_decode($tmpescid[0]);
 		$formData['subid'] = base64_decode($tmpescid[1]);
 		$formData['perid'] = base64_decode($this->getParam('perid'));
+		$this->view->courses = $this->_loadCourses($formData);
+		$this->view->perid = $formData['perid'];
+		$speciality = new Api_Model_DbTable_Speciality();
+		$rows = $speciality->_getOne($formData);
+		if ($rows) $this->view->speciality = $rows;
 		
-		
+		$this->view->printheader = $this->sesion->org['header_print'];
+		$this->view->printfooter = $this->sesion->org['footer_print	'];
 	}
 	
 	public function periodsAction()
 	{
 		$this->_helper->layout()->disableLayout();
-		
-		
 		$year = base64_decode($this->_getParam("year"));
 		$periods = new Api_Model_DbTable_Periods();
 		$data['eid'] = $this->sesion->eid;

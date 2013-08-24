@@ -60,12 +60,13 @@ class IndexController extends Zend_Controller_Action {
     				// set value Period System
     				$data  = $authAdapter->getResultRowObject(array('eid','oid','uid','escid','pid','rid','subid'));
     				$userinfo  = $authAdapter->getResultRowObject(array('eid','oid','uid','escid','pid','rid','subid'));
-    				// Begin Variables
+    				// Begin Var
     				$data->period = new stdClass();
     				$data->faculty = new stdClass();
     				$data->speciality = new stdClass();
     				$data->infouser = new stdClass();
     				$data->rol = new stdClass();
+    				$data->org = new stdClass();
     				
     				$data->period->perid = $period;
     				$data->period->name = $name_period;
@@ -122,8 +123,13 @@ class IndexController extends Zend_Controller_Action {
     				$teacher = new Api_Model_DbTable_Infoteacher();
     				$rowteacher = $teacher->_getOne($datate);
     				if ($rowteacher) $data->infouser['teacher']=$rowteacher;
+
+    				// Set ACL
     				
-    				
+    				// Set Header and Footer Print Org
+    				$orgs = new Api_Model_DbTable_Org();
+    				$rorg = $orgs->_getOne(array("eid" => $data->eid,"oid"=>$data->oid));
+    				if ($rorg) $data->org = $rorg;
     				
     				// Register access
     				$clientIp = $this->getRequest()->getClientIp();

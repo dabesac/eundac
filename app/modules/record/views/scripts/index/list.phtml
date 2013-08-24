@@ -85,7 +85,7 @@ $strprint = "/record/index/printavence/"
 			}
 	}else{
 	?>
-		<option value="">Selección una escuela</option>
+		Ni hay ningun dato
 	<?php } ?>
 </table>
 <script>
@@ -93,7 +93,7 @@ $strprint = "/record/index/printavence/"
 		var perid=$("#perid").val();
 		var escid=$("#escid").val();
 		var url = "<?php echo $strprint?>perid/"+perid+"/escid/"+escid;
-		window.open(url,'Detalle de Asignatura','width=800,height=600,menubar=no,resizable=no,resizable=no')    
+		window.open(url,'Detalle de Asignatura','width=800,height=600,menubar=no,resizable=yes,toolbar=no,scrollbars=yes')    
 	});
 	$(".txthover").tooltip({
 	    placement: "left"

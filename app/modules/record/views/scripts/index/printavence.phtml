@@ -1,90 +1,110 @@
+<?php 
+$dir = APPLICATION_LIBRARY."/pdf/MPDF54/mpdf.php";
+include_once($dir);
+ob_start();
+
+?>
+<?php echo $this->doctype(); ?>
 <?php echo $this->headLink(); ?>
 <?php echo $this->headScript(); ?> 
-        
-<form id="formRecord" name="formRecord" action="/record/index/list/" method="post">
-	<table class="table table-hover table-condensed">
-		<tr>
-			<th class="col-lg-1">Año</th>
-			<th class="col-lg-2">Periodo</th>
-			<th class="col-lg-2">Escuela(s)</th>
-			<th class="col-lg-2">Nombre Curso</th>
-			<th class="col-lg-1">Operaciones</th>
+
+<div class="panel">
+	<center>
+	FACULTAD DE</br> 
+	ESCUELA DE <?php echo $this->speciality['name']?><br>
+	INFORME DE AVANCE DE NOTAS <?php echo $this->perid?>
+	</center>
+	<table class="table table-bordered table-condensed">
+		<tr class="">
+			<th >#</th>
+			<th class="col-lg-1">Semestre</th>
+			<th class="col-lg-1">Curricula </th> 
+			<th class="col-lg-1">Código Asig.</th>
+			<th>Nombre Asignatura </th>
+			<th class="col-lg-1">Turno</th>
+			<th class="col-lg-1">Tipo Asiganatura</th>
+			<th class="col-lg-1"># Matriculados</th>
+			<th class="col-lg-1">Primer Parcial</th>
+			<th class="col-lg-1">Segundo Parcial</th>
 		</tr>
-		<tr>
-			<td>
-				<select name="year" id="year" class="form-control">
-				<?php 
-				for($i=date('Y')+1;$i>=1965;$i--){
-				$txt="";
-				if ($i==date('Y')) $txt = "selected";
-				?>
-					<option value="<?php echo base64_encode($i)?>" <?php echo $txt?>><?php echo $i?></option>
-					<?php 
+		
+		<?php 
+		$courses =$this->courses;
+		
+		if ($courses){
+			$i=0;
+			foreach ($courses as $course){
+				$i++;
+				$counregister=0;
+				$courseid=($course['courseid']);
+				$semid=($course['semid']);
+				$courseid_cr=base64_encode($course['courseid']);
+				$name=($course['course']);
+				$escid=($course['escid']);
+				$turno=($course['turno']);
+				$curid=($course['curid']);
+				$date=($course['closure_date']);
+				$type = ($course['type_rate']=="O")?"Objetivo":"Competencia";
+				$stater = $course['state_record'];
+				switch ($stater){
+					case "A": $txtstate = "class='success'";break;
+					case "C": $txtstate = "class='danger'";break;
+					default: $txtstate = "";break;
 				}
-				?>
-				</select>
-			</td>
-			<td>
-				<select id="perid" name="perid" class="form-control">
-					<option value="">Selección un periodo</option>
-				</select>
-			</td>
-			<td>
-				<select id="escid" name="escid" class="form-control">
-				<?php 
-				$specialitys =$this->specialitys;
-				if ($specialitys){
-					foreach ($specialitys as $esc){
-						$escid=base64_encode($esc['escid']);
-						$subid_cryp=base64_encode($esc['subid']);
-						$name=($esc['name']);
-					?>
-					<option value="<?php echo $escid.";--;".$subid_cryp?>"><?php echo $name?></option>
-					<?php 
-					}
+				$state = $course['state'];
+				if ($state=="S" && ($stater=="C" || $stater=="A")){
+					$sp = "glyphicon-ok";
+					$pp = "glyphicon-ok";
 				}else{
+					$sp="glyphicon-remove";
+					$pp = ($state=="P" && $stater=="A")?"glyphicon-ok":"glyphicon-remove";
+				}
+				$counregister = $course['numregister'];
 				?>
-					<option value="">Selección una escuela</option>
-				<?php } ?>
-				</select>
-			</td>
-			<td>
-				<input type="text" name="coursename" id="coursename" class="form-control">
-			</td>
-			<td><input type="submit" name="send" id="sendform" value="Buscar" class="form-control btn btn-success"></td>
-		</tr>
-
+		<tr >
+			<td ><?php echo $i;?></td>
+			<td><?php echo $semid?></td>
+			<td><?php echo $curid?></td>
+			<td><?php echo $courseid?></td>
+			<td><?php echo $name?></td>
+			<td><?php echo $turno?></td>
+			<td><?php echo $type;?></td>
+			<td><?php echo $counregister;?></td>
+			<td><span class="glyphicon <?php echo $pp?> txthover" 
+			data-toggle="tooltip" title="Estado del Primer parcial"
+			></span></td>
+			<td><span class="glyphicon <?php echo $sp?> txthover"
+			data-toggle="tooltip" title="Estado del segundo parcial"></span></td>
+		</tr>	
+				<?php 
+				}
+		}else{
+		?>
+		<tr><th colspan="10">No hay registros</th></tr>		
+		<?php } ?>
 	</table>
-</form>
-<div class="panel panel-default">
-	<div class="loadcourses">Espacio para mostrar las asignaturas	</div>
-  	
 </div>
+<?php
+  $html = ob_get_contents();
+  $mpdf=new mPDF('win-1252','A4','','',15,15,2,12,5,7);
+  //$mpdf->SetHTMLHeader($this->printheader);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  //$mpdf->SetFooter($this->printfooter);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html,0);
+  $mpdf->Output('avance-'.$this->perid.'.pdf','D');
+  
 
-<script>
-$(function() {
-	var year_a="<?php echo base64_encode(date('Y'));?>";
-	$("#year").change(function(){
-		var year =$("#year").val();
-		$("#perid").html("<option value=''>Cargando...</option>");
-		$("#perid").load("/record/index/periods/year/"+year);		
-	});
-	$("#perid").load("/record/index/periods/year/"+year_a);
-	$("#sendform").click(function(e){
-		e.preventDefault();
-		
-		$.ajax({
-	        type: "POST",
-	        url: $("#formRecord").attr("action"),
-	        data: $("#formRecord").serialize(),
-	        success: function(data){
-	        	$(".loadcourses").html("cargando...");
-	       		$(".loadcourses").html(data);
-	      	}		
-		});
-		return false;
-		
-	});
-	
-});
-</script>
+/*$mpdf=new mPDF();
+$mpdf->Bookmark('Start of the document');
+$mpdf->WriteHTML('<div>Section 1 text</div>');
+$mpdf->Output();
+?>
+
+
+
+
+
+
+
+
