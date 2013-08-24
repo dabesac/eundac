@@ -27,6 +27,21 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 			print "Error: Update Registration".$e->getMessage();
 		}
 	}
+
+
+		public function _updatestateregister($data,$pk)
+	{
+		try{
+			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']==''   || $pk['regid']==''  || $pk['pid']=='' || $pk['uid']=='' || $pk['perid']=='') return false;
+			$where = "eid = '".$pk['eid']."' and oid = '".$pk['oid']."' and pid='".$pk['pid']."'  and escid = '".$pk['escid']."' and subid = '".$pk['subid']."' and regid = '".$pk['regid']."' and uid = '".$pk['uid']."'  and perid = '".$pk['perid']."'";
+			return $this->update($data, $where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Update State Registration Course".$e->getMessage();
+		}
+	}
+	
+
 	
 	public function _delete($data=array())
 	{
@@ -41,6 +56,17 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _deletecorseregister($pk)
+	{
+		try{
+			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']==''   || $pk['regid']==''  || $pk['pid']=='' || $pk['uid']=='' || $pk['perid']=='') return false;
+			$where = "eid = '".$pk['eid']."' and oid = '".$pk['oid']."' and pid='".$pk['pid']."'  and escid = '".$pk['escid']."' and subid = '".$pk['subid']."' and regid = '".$pk['regid']."' and uid = '".$pk['uid']."'  and perid = '".$pk['perid']."'";
+			return $this->delete($where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Update State Registration Course".$e->getMessage();
+		}
+	}
 	
 	
 	public function _getOne($where=array()){
