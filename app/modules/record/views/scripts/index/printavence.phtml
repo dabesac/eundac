@@ -5,7 +5,6 @@ ob_start();
 ?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
-<script src="/external/bootstrap/js/bootstrap.min.js"></script> 
 <div class="center">
 FACULTAD DE <?php echo strtoupper($this->faculty['name'])?><br> 
 ESCUELA DE <?php echo strtoupper($this->speciality['name'])?><br>
@@ -88,7 +87,7 @@ INFORME DE AVANCE DE NOTAS <?php echo $this->perid?>
   $mpdf->SetFooter($this->printfooter);
   ob_end_clean();
   $mpdf -> WriteHTML($html);
-  $mpdf->Output('avance-'.$this->perid.'.pdf','D');
+  $mpdf->Output('avence-'.$this->perid.'.pdf','D');
   
 ?>
 

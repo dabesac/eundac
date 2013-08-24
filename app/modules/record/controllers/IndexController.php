@@ -18,11 +18,18 @@ class Record_IndexController extends Zend_Controller_Action {
 		$where['eid'] = $this->sesion->eid;
 		$where['oid'] = $this->sesion->oid;
 		$where['state'] ='A';
+		if (isset($this->sesion->teacher)){
+			if ($this->sesion->teacher['is_director']=='N'){
+				$where['escid']=$this->sesion->escid;
+				$where['subid']=$this->sesion->subid;
+			}
+		}
 		$data= array("escid","subid","name");
 		$rows = $speciality->_getFilter($where,$data);
 		if ($rows) $this->view->specialitys=$rows;
+		// set speciality for director
 		
-
+		
 	}
 	
 	public function listAction()
@@ -47,16 +54,16 @@ class Record_IndexController extends Zend_Controller_Action {
 				 
 		
 	}
+	
 	private function _loadCourses($formData=null){		
-		$formData['coursename'] = ($formData['coursename']);
-		if ($formData['coursename']=="") unset($formData['coursename']);
-		
-		
 		$records = new Api_Model_DbTable_PeriodsCourses();
 		$attris = array("eid","oid","perid","courseid","escid","subid","curid","turno",
 				"curid","semid","type_rate","closure_date","state_record","state");
 		$orders = array("eid","curid","courseid","turno");
+		$coursename = ($formData['coursename']);
+		unset($formData['coursename']);
 		$rows = $records->_getFilter($formData,$attris,$orders);
+		$lscourses=null;
 		if ($rows) {
 			foreach ($rows as $row){
 				$course = new Api_Model_DbTable_Course();
@@ -66,7 +73,6 @@ class Record_IndexController extends Zend_Controller_Action {
 				$where['escid']=$row['escid'];
 				$where['curid']=$row['curid'];
 				$where['courseid']=$row['courseid'];
-					
 				// get info course
 				$rowcourse = $course->_getFilter($where,array('name'));
 				if ($rowcourse) $row['course']= $rowcourse[0]['name'];
@@ -74,13 +80,21 @@ class Record_IndexController extends Zend_Controller_Action {
 				$where['subid']=$row['subid'];
 				$where['perid']=$row['perid'];
 				$where['turno']=$row['turno'];
+				if ($row['closure_date']<>""){
+					$date = new Zend_Date($row['closure_date']);
+					$row['closure_date']=$date->toString('dd-MM-Y');
+				}
 				$register = new Api_Model_DbTable_Registrationxcourse();
 				$countregister = $register->_getCountRegisterCourse($where);
 				$row['numregister'] = ($countregister)?$countregister:0;
-				$lscourses[]=$row;
+				if ($coursename){
+					if (stristr($row['course'],$coursename)<>"")
+						$lscourses[]=$row;
+				}else
+					$lscourses[]=$row;
 			}
 		}
-		return $lscourses;
+		if ($lscourses)return $lscourses;
 	}
 	public function printavenceAction()
 	{
