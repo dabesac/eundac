@@ -91,3 +91,11 @@ body, html{
 	color: #fff;
 	
 }
+
+.found {
+
+background-image: url(../img/fondo.gif);
+display: block; 
+overflow: auto;
+margin: 0px;
+}

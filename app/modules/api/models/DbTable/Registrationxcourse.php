@@ -53,15 +53,24 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		}
 	}
 
-	
- public function _getFilter($where=array()){
+	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
-			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."' and subid='".$where['subid']."'";
-			$row = $this->fetchAll($wherestr);
-			if($row) return $row->toArray();
-			return false;
+			if($where['eid']=='' || $where['oid']=='') return false;
+				$select = $this->_db->select();
+				if ($attrib=='') $select->from("base_registration_course");
+				else $select->from("base_registration_course",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				foreach ($orders as $key => $order) {
+						$select->order($order);
+				}
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
 		}catch (Exception $e){
-			print "Error: Read Filter Registration".$e->getMessage();
+			print "Error: Read Filter Periods_Courses ".$e->getMessage();
 		}
 	}
 
@@ -113,4 +122,39 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
             print "Error: Obteniendo datos de tabla 'Matricula Curso'".$ex->getMessage();
         }
     }
+
+
+
+         /* Retorna la cantidad de alumnos matriculados deacuerdo a la escuela, curso, turno */
+    public function _getCantRegistration($where=null){
+         try{
+                   // if ($where['eid']=='' || $where['oid']==''  || $where['courseid']=='' || $where['curid']=='' || $where['perid']=='' || $where['escid']=='' || $where['subid']=='' || $where['turno']) return false;
+
+            $wherestr = "eid = '".$where['eid']."' and oid='".$where['oid']."' and courseid = '".$where['courseid']."'
+             and curid = '".$where['curid']."' and perid = '".$where['perid']."' and escid = '".$where['escid']."'  
+             and subid = '".$where['subid']."'  and turno = '".$where['turno']."' and  (state = 'M' or state = 'C')";
+
+            $r = $this->fetchAll($wherestr);
+            if ($r) return count($r->toArray());
+            return false;
+         }  catch (Exception $ex){
+             print "Error en retornar la cantidad de alumnos matriculados".$ex->getMessage();
+         }
+    } 
+      /* Retorna la cantidad de alumnos prematriculados deacuerdo a la escuela, curso, turno */
+    public function _getCantiPreResgistration($eid='',$oid='',$cursoid='',$curid='',$perid='',$escid='',$sedid='',$turno=''){
+         try{
+            // if ($where['eid']=='' || $where['oid']==''|| $where['courseid']==''||$where['curid']==''||$where['perid']==''||$where['escid']==''||$where['subid']==''||$where['turno']=='') return false;
+            $wherestr = "eid = '".$where['eid']."' and oid='".$where['oid']."' and courseid = '".$where['courseid']."'
+             and curid = '".$where['curid']."' and perid = '".$where['perid']."' and escid = '".$where['escid']."'  
+             and subid = '".$where['subid']."'  and turno = '".$where['turno']."' and  (state = 'I')";
+
+            $r = $this->fetchAll($wherestr);
+            if ($r) return count($r->toArray());
+            return false;
+         }  catch (Exception $ex){
+             print "Error en retornar la cantidad de alumnos Pre matriculados";
+         }
+     } 
+
 }

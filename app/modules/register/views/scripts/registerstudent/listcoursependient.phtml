@@ -1,0 +1,186 @@
+<?php
+  if ($this->datos)
+    {
+      echo "<table border=0 width=930 style='font-size:10px; background: #333;'  class='table table-condensed'>";
+  echo "<thead class='bloke'>";
+    echo "<tr>";  
+    echo "<th>";        
+        echo "#";
+      echo "</th>";      
+      echo "<th>";        
+        echo "Semestre";
+      echo "</th>";
+      echo "<th>";        
+        echo "Codigo Curso";
+      echo "</th>";
+      echo "<th>";        
+        echo "Nombre Curso";
+      echo "</th>";
+      echo "<th>";        
+        echo "Creditos";
+      echo "</th>";
+      echo "<th>";        
+        echo "Veces LLevo";
+      echo "</th>";
+    echo "</tr>";
+    echo "</thead>";
+   echo "<tbody>";
+     $i=1;
+  foreach ($this->datos as $s) {
+    if ($s['llevo']=='2')
+    {
+      echo "<tr style='background-color:#B40404; color:white'>";
+      echo "<td>";        
+          print_r($i);
+        echo "</td>";
+        echo "<td>";        
+          print_r($s['semid']);
+        echo "</td>";
+        echo "<td>";        
+          print_r($s['courseid']);
+        echo "</td>";
+        echo "<td>";        
+          print_r($s['name']);
+        echo "</td>";
+        echo "<td>";        
+          print_r($s['credits']);
+        echo "</td>";
+        echo "<td>";        
+          print_r($s['veces']);
+        echo "</td>";
+      echo "</tr>";
+    }
+    if ($s['llevo']=='0')
+    {
+      echo "<tr style='background-color:#58FA58; color:black'>";
+        echo "<td>";        
+          print_r($i);
+        echo "</td>";
+        echo "<td>";        
+          print_r($s['semid']);
+        echo "</td>";
+        echo "<td>";        
+          print_r($s['courseid']);
+        echo "</td>";
+        echo "<td>";        
+          print_r($s['name']);
+        echo "</td>";
+        echo "<td>";        
+          print_r($s['credits']);
+        echo "</td>";
+        echo "<td>";        
+          print_r($s['veces']);
+        echo "</td>";
+      echo "</tr>";
+    }
+    $i++;
+  }
+
+    echo "</tbody>";
+    echo "</table>";
+    }
+  else
+    {
+      echo "Carga en error de datos, consulte con el administrador dle sistema.";
+    }
+  
+?>
+
+
+ <?php
+
+// require_once 'Zend/Loader.php';
+// Zend_Loader::loadClass('Zend_Rest_Client');
+
+// try {
+
+//   $base_url = 'http://localhost:8080/';
+//   $endpoint = '/demo/demo/validacion';
+//   $data = array('uid' => $this->uid, 'pid' => $this->pid, 'escid' => $this->escid,'sedid' =>$this->sedid,'eid' =>'20154605046','oid' =>'1','perid'=>$this->perid,'curid'=>$this->curid);
+//   $client = new Zend_Rest_Client($base_url);
+//   $httpClient = $client->getHttpClient();
+//   $httpClient->setConfig(array(
+//     "timeout" => 680
+//   ));
+//   $response = $client->restget($endpoint,$data);
+//   $lista=$response->getBody();
+//   if ($lista)
+//     {
+//       echo "<table border=0 width=950 style='font-size:10px' class='table table-condensed'>";
+//   echo "<thead class='bloke'>";
+//     echo "<tr>";        
+//       echo "<th>";        
+//         echo "Semestre";
+//       echo "</th>";
+//       echo "<th>";        
+//         echo "Codigo Curso";
+//       echo "</th>";
+//       echo "<th>";        
+//         echo "Nombre Curso";
+//       echo "</th>";
+//       echo "<th>";        
+//         echo "Creditos";
+//       echo "</th>";
+//       echo "<th>";        
+//         echo "Veces LLevo";
+//       echo "</th>";
+//     echo "</tr>";
+//   echo "</thead>";
+//   echo "<tbody>";
+//   $i=1;
+//   $data = Zend_Json::decode($lista);
+//   foreach ($data as $s) {
+//     if ($s['llevo']=='2')
+//     {
+//       echo "<tr style='background-color:#B40404; color:white'>";
+//         echo "<td>";        
+//           print_r($s['semid']);
+//         echo "</td>";
+//         echo "<td>";        
+//           print_r($s['cursoid']);
+//         echo "</td>";
+//         echo "<td>";        
+//           print_r($s['nombre_curso']);
+//         echo "</td>";
+//         echo "<td>";        
+//           print_r($s['creditos']);
+//         echo "</td>";
+//         echo "<td>";        
+//           print_r($s['veces']);
+//         echo "</td>";
+//       echo "</tr>";
+//     }
+//     if ($s['llevo']=='0')
+//     {
+//       echo "<tr style='background-color:#58FA58; color:black'>";
+//         echo "<td>";        
+//           print_r($s['semid']);
+//         echo "</td>";
+//         echo "<td>";        
+//           print_r($s['cursoid']);
+//         echo "</td>";
+//         echo "<td>";        
+//           print_r($s['nombre_curso']);
+//         echo "</td>";
+//         echo "<td>";        
+//           print_r($s['creditos']);
+//         echo "</td>";
+//         echo "<td>";        
+//           print_r($s['veces']);
+//         echo "</td>";
+//       echo "</tr>";
+//     }
+//     $i++;
+//   }
+// echo "</tbody>";
+// echo "</table>";
+//     }
+//   else
+//     {
+//       echo "Carga en error de datos, consulte con el administrador dle sistema.";
+//     }
+  
+// } catch (Exception $e) {
+//   die('ERRORES: ' . $e->getMessage());
+// }
+// ?>
