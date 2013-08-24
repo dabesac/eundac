@@ -65,8 +65,10 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
 				foreach ($where as $atri=>$value){
 					$select->where("$atri = ?", $value);
 				}
-				foreach ($orders as $key => $order) {
+				if($orders){
+					foreach ($orders as $key => $order) {
 						$select->order($order);
+					}
 				}
 				$results = $select->query();
 				$rows = $results->fetchAll();
