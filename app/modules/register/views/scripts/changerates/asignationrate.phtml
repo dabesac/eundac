@@ -1,33 +1,27 @@
 <script src="/external/bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
-<form name="<?php echo $this->fm->getName(); ?>" action="/register/changerates/changerate/" method="post" enctype="application/x-www-form-urlencoded">
+<form name="<?php echo $this->fm->getName(); ?>" action="/register/changerates/asignationrate/" method="post" enctype="application/x-www-form-urlencoded">
                 <br>
                 <table class="table span9 table-striped table-bordered table-condensed">
-                    <tbody>
+                    <tbody >
                         <tr>                      
-                            <td colspan="2">   
+                            <td>   
                                 <div class="control-group">
-                                <div><label class="control-label">Tasa para Asignar:</label>
-                                </div><div style='width: 500px'><?php echo $this->fm->ratid?></div>
+                                    <center><label class="control-label">Seleccione la Tasa :</label></center>
+                                    <center><div style='width: 400px'><?php echo $this->fm->ratid?></center></div>
                                 </div>
                             </td>
                         </tr> 
                         <tr>       
                             <td>
                                 <div class="control-group">
-                                    <div><label class="control-label">Documento de Autorizacion:</label></div>
-                                    <div ><?php echo $this->fm->document_auth;?></div>
+                                    <div><center><label class="control-label">Documento de Autorizacion:</label></center></div>
+                                    <div ><center><div style='width: 300px'><?php echo $this->fm->document_auth;?></center></div>
                                 </div>
                             </td>
-                            <td>                           
-                                <div class="control-group">
-                                    <div><label class="control-label">Fecha de Pago:</label></div>
-                                    <div><?php echo $this->fm->date_payment;?></div>
-                                </div>
-                            </td> 
                         </tr>    
                         <tr>
-                            <td colspan="2"><center><?php echo $this->fm->guardar?></center></td>
+                            <td><center><?php echo $this->fm->guardar?></center></td>
                           
                         </tr>
                         <input type="hidden" name='eid' value='<?php echo $this->eid?>'>
@@ -41,6 +35,3 @@
                 </table>
             <div style="clear:both"></div>
     </form>
-
-
-
