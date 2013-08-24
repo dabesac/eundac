@@ -96,6 +96,45 @@ class Record_IndexController extends Zend_Controller_Action {
 		}
 		if ($lscourses)return $lscourses;
 	}
+	
+	public function detailAction()
+	{
+		$this->_helper->layout()->disableLayout();
+		// PK
+		$formData['eid'] = $this->sesion->eid;
+		$formData['oid'] = $this->sesion->oid;
+		$formData['escid'] = base64_decode($this->getParam("escid"));
+		$formData['subid'] = base64_decode($this->getParam("subid"));
+		$formData['perid'] = base64_decode($this->getParam('perid'));
+		$formData['courseid'] = base64_decode($this->getParam('courseid'));
+		$formData['curid'] = base64_decode($this->getParam('curid'));
+		$formData['turno'] = base64_decode($this->getParam('turno'));
+		//get Course x Period
+		$course = new Api_Model_DbTable_PeriodsCourses();
+		$rows = $course->_getOne($formData);
+		if ($rows) {
+			$rows['type_rate'] = ($rows['type_rate']=="C")?"Competencia":"Objetivo"; 
+			$name = new Api_Model_DbTable_Course();
+			$rname = $name->_getOne($rows);
+			if ($rname) $rows['name'] = $rname['name'];  
+			$teachers = new Api_Model_DbTable_Coursexteacher();
+			$lteachers= $teachers->_getAll($formData);
+			if ($lteachers) {
+				foreach ($lteachers as $teaches){
+					$userinfo = new Api_Model_DbTable_Users();
+					$ruser = $userinfo->_getInfoUser($teaches);
+					if ($ruser) $rows['teachers'][]=$ruser['last_name0']." ".$ruser['last_name1'].", ".$ruser['first_name'];
+				}	
+			}
+			$register = new Api_Model_DbTable_Registrationxcourse();
+			$countregister = $register->_getCountRegisterCourse($formData);
+			$rows['numregister'] = ($countregister)?$countregister:0;
+			$this->view->course = $rows;
+		}
+		
+		
+	}
+	
 	public function printavenceAction()
 	{
 		$this->_helper->layout()->disableLayout();		

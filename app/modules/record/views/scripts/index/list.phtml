@@ -18,7 +18,7 @@ $strprint = "/record/index/printavence/"
 		<th class="col-lg-1">Código Asig.</th>
 		<th>Nombre Asignatura </th>
 		<th class="col-lg-1">Turno</th>
-		<th class="col-lg-1">Tipo Asiganatura</th>
+		<th class="col-lg-1">Calificación</th>
 		<th class="col-lg-1"># Matriculados</th>
 		<th class="col-lg-1">Primer Parcial</th>
 		<th class="col-lg-1">Segundo Parcial</th>
@@ -34,13 +34,23 @@ $strprint = "/record/index/printavence/"
 		foreach ($courses as $course){
 			$i++;
 			$counregister=0;
-			$courseid=($course['courseid']);
 			$semid=($course['semid']);
-			$courseid_cr=base64_encode($course['courseid']);
 			$name=($course['course']);
+			//PK
+			$courseid=($course['courseid']);
+			$courseid_cr=base64_encode($course['courseid']);
 			$escid=($course['escid']);
+			$escid_cy=base64_encode($course['escid']);
+			$subid=($course['subid']);
+			$subid_cy=base64_encode($course['subid']);
 			$turno=($course['turno']);
+			$turno_cy=base64_encode($course['turno']);
 			$curid=($course['curid']);
+			$curid_cy=base64_encode($course['curid']);
+			$perid=($course['perid']);
+			$perid_cy=base64_encode($course['perid']);
+			
+			$urldetaul = "perid/$perid_cy/escid/$escid_cy/subid/$subid_cy/courseid/$courseid_cr/curid/$curid_cy/turno/$turno_cy";
 			$date=($course['closure_date']);
 			$type = ($course['type_rate']=="O")?"Objetivo":"Competencia";
 			$stater = $course['state_record'];
@@ -74,8 +84,15 @@ $strprint = "/record/index/printavence/"
 		<td><span class="glyphicon <?php echo $sp?> txthover"
 		data-toggle="tooltip" title="Estado del segundo parcial"></span></td>
 		<td><?php echo $date;?></td>
-		<td><span class="glyphicon glyphicon-folder-open txthover" 
-		data-toggle="tooltip" title="Ver detalles del acta"></span></td>
+		<td>
+		<a href="#" onclick=" javascript:
+				window.open('/record/index/detail/<?php echo $urldetaul?>',
+				'Detalle de Asignatura',
+				'width=800,height=600,menubar=no,resizable=yes,toolbar=no,scrollbars=yes');
+			">
+		<span class="glyphicon glyphicon-folder-open txthover" 
+		data-toggle="tooltip" title="Ver detalles del acta"></span>
+		</a></td>
 	</tr>	
 	<tr>
 		<th >OPERACIONES</th>
@@ -94,7 +111,6 @@ $strprint = "/record/index/printavence/"
 		var escid=$("#escid").val();
 		var url = "<?php echo $strprint?>perid/"+perid+"/escid/"+escid;
 		open(url);
-		//window.open(url,'Detalle de Asignatura','width=800,height=600,menubar=no,resizable=yes,toolbar=no,scrollbars=yes')    
 	});
 	$(".txthover").tooltip({
 	    placement: "left"
