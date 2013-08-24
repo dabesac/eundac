@@ -1,0 +1,136 @@
+<?php 
+    if ($this->data)
+    {
+        
+        if ($this->dlist) {
+            
+?>        
+<div id="data">
+    <table class="table span9 table-bordered">
+        <thead>
+        <tr>
+                <th >#</th>
+                <th >Código</th>
+                <th >Apellidos y Nombres</th>
+                <th >Escuela</th>
+                <th >Tasa Actual</th>
+                <th >Fecha de Pago</th>
+                <th >Monto  S/.</th>
+                <th >Doc. Reg. Autorización</th>
+                <th >Operación</th>
+        </tr>
+        </thead>
+
+    <?php
+        $c=0;
+        $a=0;
+       foreach ($this->data as $info)    
+        {
+            $c++;
+            // print_r($info);
+            // print_r($this->dblist);
+            // print_r($this->rfacaulm);
+            // print_r($this->dfacu);
+            // print_r($this->dlist);       
+            ?>
+            <tr>
+                <td><?php echo $c?></td>
+                <td><?php echo $info['uid'];?></td>
+                <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
+                <td><?php echo $this->rfacaulm['name']?></td>
+                <td><?php echo $this->dblist['name']?></td>
+                <td><?php echo $this->dlist[$a]['date_payment']?></td>
+                <td><?php echo $this->dlist[$a]['amount']?></td>
+                <td><?php echo $this->dlist[$a]['document_auth']?></td>
+                <td><a id='loading'data-toggle="modal" href="#myModal"><span class="glyphicon glyphicon-pencil"></span></a></td>              
+            </tr>
+          <?php             
+            }    
+        }
+        else{
+            ?>
+            <div class="alert alert-info">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>EL ALUMNO </strong> no tiene una tasa asignada, para asignarle <strong> CLICK AQUI </strong><span class="glyphicon glyphicon-hand-right"></span>
+            <button id='load'data-toggle="modal" href="#Modal" class="btn btn-primary">ASIGNAR</button>
+            </div>
+        <?php    
+        }
+    }
+    else{
+        ?>
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <strong>¡¡ ATENCION !!</strong> El alumno no se encuentra registrado en el <strong>SISTEMA </strong>
+        </div>
+        <?php 
+        }
+        ?>
+    </table>
+        <div style="clear:both"></div>  
+</div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <center><h3 class="modal-title" style='color:blue' >CAMBIO DE TASA</h3></center>
+          <b><center style='font-size:16px'>Alumno(a): <?php echo $info['uid']." - ".$info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></center></b>
+          <h5><center>FACULTAD DE <?php echo strtoupper(($this->dfacu['name']));?></center></h5>
+          <h6><center>ESCUELA DE <?php echo strtoupper(($this->rfacaulm['name']));?></center></h6>
+        </div>
+        <div class="modal-body">
+            <div id='list'></div>
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" href='/register/changerates/'>Cerrar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <center><h3 class="modal-title" style='color:blue' >ASIGNACIÓN DE TASA</h3></center>
+          <b><center style='font-size:16px'>Alumno(a): <?php echo $this->data[0]['uid']." - ".$this->data[0]['last_name0']." ".$this->data[0]['last_name1'].", ".$this->data[0]['first_name'];?></center></b>
+          <h5><center>FACULTAD DE <?php echo strtoupper(($this->dfacu['name']));?></center></h5>
+          <h6><center>ESCUELA DE <?php echo strtoupper(($this->rfacaulm['name']));?></center></h6>
+        </div>
+        <div class="modal-body">
+            <div id='change'></div>
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" href='/register/changerates/'>Cancelar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+<script type="text/javascript">
+
+$("#loading").click(function(){
+    var escid=$(this).val();
+    
+    url="/register/changerates/changerate/eid/<?php echo base64_encode($info['eid'])?>/oid/<?php echo base64_encode($info['oid'])?>/uid/<?php echo base64_encode($info['uid'])?>/pid/<?php echo base64_encode($info['pid'])?>/escid/<?php echo base64_encode($info['escid'])?>/subid/<?php echo base64_encode($info['subid'])?>/perid/<?php echo base64_encode($this->perid)?>/ratid/<?php echo base64_encode($this->dblist['ratid'])?>/date_payment/<?php echo base64_encode($this->dlist[$a]['date_payment'])?>/document_auth/<?php echo base64_encode($this->dlist[$a]['document_auth'])?>";
+    
+    // alert(url);
+    $("#list").load(url);
+});
+
+$("#load").click(function(){
+    var escid=$(this).val();
+    
+    url="/register/changerates/asignationrate/eid/<?php echo base64_encode($this->data[0]['eid'])?>/oid/<?php echo base64_encode($this->data[0]['oid'])?>/uid/<?php echo base64_encode($this->data[0]['uid'])?>/pid/<?php echo base64_encode($this->data[0]['pid'])?>/escid/<?php echo base64_encode($this->data[0]['escid'])?>/subid/<?php echo base64_encode($this->data[0]['subid'])?>/perid/<?php echo base64_encode($this->perid)?>";
+    
+    // alert(url);
+    $("#change").load(url);
+});
+
+</script>

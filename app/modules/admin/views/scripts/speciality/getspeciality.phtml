@@ -1,0 +1,54 @@
+	<table class="table table-bordered table-striped table-condensed span10">
+		<tr>
+			<th class="span1"><center>#</center></th>
+			<th class="span1"><center>Cod.</center></th>
+			<th class="span1"><center>Nombre</center></th>
+			<th class="span1"><center>Sede</center></th>
+			<th class="span1"><center>Estado</center></th>
+			<th class="span1" colspan='2'><center>Operaciones</center></th>
+		</tr>
+		<?php
+			$r=0;
+			foreach ($this->data as $speciality) {
+				$r++;
+				$escid=$speciality['escid'];
+				$subid=$speciality['subid'];
+				$name=$speciality['name'];
+				$state=$speciality['state'];
+		?>
+		<tr id="tr_<?php echo $escid.$r?>">
+			<td><center><?php echo $r?></center></td>
+			<td><center><?php echo $escid?></center></td>
+			<td><?php echo $name?></td>
+			<td><?php
+			$where['eid']=$speciality['eid'];
+			$where['oid']=$speciality['oid'];
+			$where['subid']=$speciality['subid'];
+			$subsi=new Api_Model_DbTable_Subsidiary();
+			$dat=$subsi->_getOne($where);
+			print_r($dat['name'])?></td>
+			<td>
+				<?php 	
+					switch ($state) {
+	          			case 'A':?> <img src="/img/circulo-verde.png">
+	          			<?php
+	          			break;
+	          			case 'I':?> <img src="/img/circulo-amarillo.png">
+	          			<?php
+	          			break;
+	          			case 'B':?> <img src="/img/circulo-rojo.png">
+	          			<?php
+	          			break;         
+	        		}
+	      		?>
+
+			</td>
+			<td>
+				<a title='Modificar un registro' href='/admin/speciality/update/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>'><span class="glyphicon glyphicon-pencil"></span></a>
+			</td>
+	        <td><a title='Eliminar un registro' href='/admin/speciality/delete/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>' onclick="return confirm('Esta Seguro que desea eliminar el registro?');"><span class="glyphicon glyphicon-trash"></span></a></td>
+		</tr>
+	<?php
+	}
+	?>
+	</table>
