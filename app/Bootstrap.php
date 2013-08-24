@@ -12,8 +12,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             
             $view->headLink()->prependStylesheet('/external/bootstrap/css/bootstrap.min.css')
             ->headLink()->appendStylesheet('/external/bootstrap/css/bootstrap-theme.min.css')
-            ->headLink()->appendStylesheet('/external/jquery/themes/redmond/jquery-ui.css')
-            ->headLink()->appendStylesheet('/css/style.css');
+            ->headLink()->appendStylesheet('/external/jquery/themes/redmond/jquery-ui.css');
+            //->headLink()->appendStylesheet('/css/style.css');
             
             $view->headScript()->prependFile('/external/jquery/jquery-1.9.1.js')
             ->headScript()->appendFile('/external/jquery/additional-methods.min.js')
