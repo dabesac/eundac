@@ -100,6 +100,93 @@ public function _getPaymentsStudent($where=null,$attrib=null,$order=null){
 		}
 		
 	}
+
+      /*Retorna el registro de un usuario activo segun la org y entidad*/
+    public function _getRegister($where=null){
+        try{
+            $wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and uid = '".$where['uid']."' and escid = '".$where['escid']."' and perid = '".$where['perid']."' and subid='".$where['subid']."'";
+			$row = $this->fetchRow($wherestr);
+			if($row) return $row->toArray();
+			return false;
+        }  catch (Exception $ex){
+            print "Error: Leer informacion de Register ".$ex->getMessage();
+        }
+     }
+
+
+    public function _get_Credits_Asignated($escid='',$curid='',$perid='',$semid=''){
+    	try {
+
+    		if ($escid==''|| $curid==''|| $perid==''|| $semid=='') return false;
+
+	 		$sql = $this->_db->query(" select semester_credits ('4SI','94A4SI','13B','4') ");
+			$row=$sql->fetchAll();
+			if ($row) return $row;
+	       	return false;
+
+    	} catch (Exception $e) {
+    		print "Error: Credits Asignated".$e->getMessage();
+    	}
+    }
+
+        /* Retorna los alumnos deacuerdo a un estado de matricula($estados), de toda una escuela($escidd) en un periodo($perid) */
+    public function _getAlumnosXMatriculaXTodasescuelasXEstado($eid='', $oid='',$str='',$escid='',$perid='',$estados=''){
+    try {
+        if ($eid==''|| $oid==''|| $perid=='' || $str=='') return false;
+            $sql=$this->_db->query("
+            select 
+            m.regid,m.semid,m.credits,m.date_register, m.state as estmat,m.perid,
+            u.subid,u.uid,u.eid,u.oid,u.escid,u.pid,p.first_name,
+            p.last_name0,p.last_name1
+            from base_registration as m
+            inner join base_users as u
+            on m.uid=u.uid and m.escid=u.escid and m.pid=u.pid and m.eid=u.eid and m.oid=u.oid
+            and m.subid=u.subid
+            inner join base_person as p
+            on u.pid=p.pid and u.eid=p.eid 
+            where u.eid='$eid' and u.oid ='$oid' and u.rid='AL'  and m.perid = '$perid' and m.escid like '$escid%' and m.state = '$estados' $str
+            order by u.escid,m.date_register, m.semid,m.credits 
+            ");
+        $r = $sql->fetchAll();
+        return $r;
+        }  catch (Exception $ex){
+            print "Error: Retornando los alumnos de una escuela en un periodo".$ex->getMessage();
+        }
+    }
+      
+
+          /* Retorna los alumnos deacuerdo a su estado de matricula($estados), escuela($escid) y periodo($perid) */
+    public function _getAlumnosXMatriculaXEstado($eid='',$oid='',$str='',$escid='',$perid='',$estados=''){
+    try {
+        if ($eid==''|| $oid==''|| $perid=='' || $str=='') return false;
+            $sql=$this->_db->query("
+            select 
+            m.regid,m.semid,m.credits,m.date_register, m.state as estmat,m.perid,
+            u.subid,u.uid,u.eid,u.oid,u.escid,u.pid,p.first_name,
+            p.last_name0,p.last_name1
+            from base_registration as m
+            inner join base_users as u
+            on m.uid=u.uid and m.escid=u.escid and m.pid=u.pid and m.eid=u.eid and m.oid=u.oid
+            and m.subid=u.subid
+            inner join base_person as p
+            on u.pid=p.pid and u.eid=p.eid
+            where u.eid='$eid' and u.oid ='$oid' and u.rid='AL'  and m.perid = '$perid' and m.escid='$escid' and m.state = '$estados' $str
+            order by u.escid,m.semid,m.credits 
+            ");
+        $r = $sql->fetchAll();
+        return $r;
+        }  catch (Exception $ex){
+            print "Error: Retornando los alumnos deacuerdo al estado de matricula ingresado, escuela y periodo".$ex->getMessage();
+        }
+    }
+
+    
+    
+  
+
+
+
+
        
 
 

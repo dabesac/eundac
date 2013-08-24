@@ -31,18 +31,19 @@ class Api_Model_DbTable_Payments extends Zend_Db_Table_Abstract
 		}
 	}
 
-	public function _getOne($where=array())
-	{
-		try{
-			if ($where['eid']=='' ||  $where['oid']=='' || $where['escid']=='' || $where['subid']==''  || $where['pid']=='' || $where['uid']=='' || $where['perid']=='') return false;
-			$wherestr = "eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and subid='".$where['subid']."'  and pid='".$where['pid']."' and uid='".$where['uid']."' and perid='".$where['perid']."'";
-			$row = $this->fetchRow($wherestr);
-			if($row) return $row->toArray();
-			return false;
-		}catch (Exception $e){
-			print "Error: Read One Payments".$e->getMessage();
-		}
-	}
+
+	   public function _getOne($data=null){
+            try{               
+                if ($data['eid']==''|| $data['oid']==''||$data['escid']==''|| $data['perid']==''||$data['subid']==''|| $data['uid']==''||$data['pid']=='') return false;
+              	$str ="eid='".$data['eid']."' and oid='".$data['oid']."' and escid='".$data['escid']."' 
+                    and perid='".$data['perid']."' and subid='".$data['subid']."' and uid='".$data['uid']."'
+                    and pid='".$data['pid']."'";
+                $row = $this->fetchRow($str);
+            if($row) return $row->toArray();
+            }  catch (Exception $ex){
+                print "Error Generar el registro de su pago".$ex->getMessage();
+            }
+        }
 
 	public function _getAll($where=null,$order='',$start=0,$limit=0)
 	{
@@ -81,6 +82,9 @@ class Api_Model_DbTable_Payments extends Zend_Db_Table_Abstract
 			print "Error: Read Filter Payments ".$e->getMessage();
 		}
 	}
+
+
+
 
 
 

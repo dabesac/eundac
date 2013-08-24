@@ -28,10 +28,11 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	public function _delete($data)
+	public function _delete($data=array())
 	{
 		try{
 			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']=='' || $data['courseid']=='' || $data['curid']=='' || $data['regid']=='' || $data['turno']=='' || $data['pid']=='' || $data['uid']=='' || $data['perid']=='') return false;
+			// print_r($data); exit();
 			$where = "eid = '".$data['eid']."' and pid='".$data['pid']."' and oid = '".$data['oid']."' and escid = '".$data['escid']."' and uid = '".$data['uid']."' and subid = '".$data['subid']."' and regid = '".$data['regid']."' and perid = '".$data['perid']."' and turno = '".$data['turno']."' and curid = '".$data['curid']."' and courseid = '".$data['courseid']."'";			
 			return $this->delete($where);
 			return false;
@@ -53,8 +54,32 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getAll($where=null,$order='',$start=0,$limit=0){
+		try {
+
+			if ($where['eid']=='' ||  $where['oid']=='' || $where['escid']=='' || $where['subid']=='' 
+				|| $where['curid']=='' || $where['regid']=='' || $where['pid']=='' || $where['uid']=='' || $where['perid']=='') $wherestr=null;
+			else{
+			$wherestr = "eid = '".$where['eid']."' and pid='".$where['pid']."' and oid = '".
+				$where['oid']."' and escid = '".$where['escid']."' and uid = '".$where['uid']."' 	
+				and subid = '".$where['subid']."' and perid = '".$where['perid']."' and curid = '".$where['curid']."'"; 
+			}
+			// print_r($wherestr); exit();
+
+			if ($limit==0) $limit=null;
+			if ($start==0) $start=null;
+
+			$rows = $this->fetchAll($wherestr,$order,$start,$limit);
+			if($rows) return $rows->toArray();
+			return false;
+			
+		} catch (Exception $e) {
+			print "Error: Read All Registration Subject".$e->getMessage();
+		}
+	}
+
 	
- public function _getFilter($where=array()){
+ 	public function _getFilter($where=array()){
 		try{
 			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."' and subid='".$where['subid']."'";
 			$row = $this->fetchAll($wherestr);

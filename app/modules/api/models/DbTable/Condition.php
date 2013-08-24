@@ -42,15 +42,26 @@ class Api_Model_DbTable_Condition extends Zend_Db_Table_Abstract
 		}
 	}
 
-	public function _getFilter($where=array())
+	public function _getFilter($where=null,$attrib=null,$orders=null)
 	{
 		try{
-			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."' and pid='".$where['pid']."' and uid='".$where['uid']."' and perid='".$where['perid']."' and subid='".$where['subid']."'";
-			$row = $this->fetchAll($wherestr);
-			if($row) return $row->toArray();
-			return false;
+			if($where['eid']=='' || $where['oid']=='') return false;
+				$select = $this->_db->select();	
+				if ($attrib=='') $select->from("base_condition");
+				else $select->from("base_condition",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				foreach ($orders as $key => $order) {
+						$select->order($order);
+				}
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+
 		}catch (Exception $e){
-			print "Error: Read Filter Curricula".$e->getMessage();
+			print "Error: Read Filter Condition".$e->getMessage();
 		}
 	}
 

@@ -73,6 +73,8 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
             $where['name']=$name;
             $where['ap']=$ap;
             $where['am']=$am;
+            $where['uid']=$code;
+
 
            $bdu = new Api_Model_DbTable_Condition();        
             if ($cond=='C')

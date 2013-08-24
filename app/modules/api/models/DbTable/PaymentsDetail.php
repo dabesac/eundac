@@ -67,6 +67,7 @@ class Api_Model_DbTable_PaymentsDetail extends Zend_Db_Table_Abstract
 		}
 	}
 
+
 	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
 			if($where['eid']=='' || $where['oid']=='') return false;
@@ -87,6 +88,8 @@ class Api_Model_DbTable_PaymentsDetail extends Zend_Db_Table_Abstract
 			print "Error: Read Filter Payments Detail".$e->getMessage();
 		}
 	}
+
+
 
 
 

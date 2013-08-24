@@ -1,7 +1,9 @@
+<?php print_r($this->formdata)?>
+
 <div><h2>ACL</h2></div>
 <div class="row">
 	<div class="col-md-11 pull-right"><h4>Rol</h4><select name="rol" id="rol" class="input-sm">
-			<option value="h">Selecione..</option>
+			<option value="">Selecione..</option>
 			<?php if($this->rols){
 				$c=0;
 				foreach ($this->rols as $rls) {?>
@@ -10,6 +12,66 @@
 				}
 			}?>
 		</select>
-	<div class="col-md-7 pull-right"><a href="" class="btn btn-info">Nuevo</a></div>
+	<div class="col-md-7 pull-right"><a class="btn btn-info" id="new">Nuevo</a></div>
 	</div>
 </div>
+
+<div id="list_acl" name="list_acl"></div>
+
+<form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded">
+			<div class="row">
+
+<div class="modal fade" id="enternewdata">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        		<h3 class="modal-title">Nuevo ACL</h3>
+      		</div>
+      		<div class="modal-body">
+        		<tr>
+        			<td><label class="control-label">Nombre</label></td>
+        			<td><?php print $this->form->reid?></td>
+        		</tr>
+        		<br>
+        		<tr>
+        			<td><label class="control-label">Estado</label></td>
+        			<td><?php print $this->form->state?></td>
+        		</tr>
+      		</div>
+      		<div class="modal-footer">
+        		<tr><?php print $this->form->save?></tr>
+      		</div>
+		</div>
+  	</div>
+</div>
+<input id='ridd' name='rid' type="hidden" value='rid'>
+</form>
+<script>
+	var rid=$("#rol").val();
+	$("#rol").change(function(){
+		$("#ridd").val(rid);
+		$("#rol option:selected").each(function (){
+			var rid=$(this).val();
+			$("#ridd").val(rid);
+			$.get("acl/listacl",{rid:rid},function(data){
+				$("#list_acl").html(data);
+								
+			})
+		})
+	})	
+
+	$("#new").click(function(){
+		var rid=$("#rol").val();
+		if(rid){
+			$("#enternewdata").modal("show")
+			$("#list_acl").load('acl/listacl',{reid:reid});
+		}else{
+			alert("Elija un Rol!")
+		}
+	})
+
+
+	
+
+</script>

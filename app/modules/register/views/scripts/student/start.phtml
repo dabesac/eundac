@@ -1,0 +1,224 @@
+<style type="text/css">
+	.glyphicon{
+		cursor: pointer;
+	}
+</style>
+<script type="text/javascript">
+
+		function register_subject($this){
+			var $register={};
+			
+			$register[$.base64.encode('curid')] = $.base64.encode($.trim($($this).attr('curid'))); 
+			$register[$.base64.encode('courseid')] = $.base64.encode($.trim($($this).attr('courseid'))); 
+			$register[$.base64.encode('turno')] = $.base64.encode($.trim($($this).attr('turno')));
+			$register[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
+			$register[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
+			$register[$.base64.encode('regid')] = $.base64.encode($.trim($($this).attr('regid')));
+			$register[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
+			$register[$.base64.encode('veces')] = $.base64.encode($.trim($($this).attr('veces')));
+			$register[$.base64.encode('credits')] = $.base64.encode($.trim($($this).attr('credits')));
+
+
+			var result='';
+
+			for(var pro in $register){
+				result += '' + pro + '/' + $register[pro]+ '/';
+			}
+	        result = result.substring(0, result.length-1);
+	        var $url = '/register/student/createdregister/'+ result;
+	        
+
+	        $.ajax({
+	            url:$url,
+	            success:function($data){
+	            		var courseid=$($this).attr('courseid');
+	            		var turno=$($this).attr('turno');
+
+	            		alert($data.credits);
+	                    if($data.status == true){
+	                    	// alert($data.credits_assing);
+	                    	// if (parseInt($data.credits) >= parseInt($data.credits_assing)){
+	                    	// 	alert("escid");
+	                    	// 	$(".btn-register").prop('disabled',true);
+	                    	// 	$(".register"+'-'+courseid+'-'+turno).prop('disabled',true);
+	                    	// }     		
+	                    	$('#assign_credist').html($data.credits_assing);
+	                    	$('#assign_semester').html($data.semester);
+	                    	$('#total_credits').html($data.total_credits);
+	                    	$(".register"+'-'+courseid+'-'+turno).hide();
+	                    	$(".modified"+'-'+courseid+'-'+turno).show();
+	                    	
+	                        // window.location.href=window.location.href;
+	                    }else{
+	                        //Pintar Fracaso
+		                    alert('Erro al Guardar');
+
+	                        mensajeria('error','El registro no se Guardado ');
+	                    }
+	                    // $('#modalloader').modal('hide');
+	            },
+	            error:function($data){
+	                    //Pintar el error
+	                    mensajeria('error','Se produjo un error no controlado, comunicarse con el administrador');
+	                    $('#modalloader').modal('hide');
+	            }
+        	});
+		}
+
+		function modifiedsubjet($this){
+			var $register={};
+			
+			$register[$.base64.encode('curid')] = $.base64.encode($.trim($($this).attr('curid'))); 
+			$register[$.base64.encode('courseid')] = $.base64.encode($.trim($($this).attr('courseid'))); 
+			$register[$.base64.encode('turno')] = $.base64.encode($.trim($($this).attr('turno')));
+			$register[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
+			$register[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
+			$register[$.base64.encode('regid')] = $.base64.encode($.trim($($this).attr('regid')));
+			$register[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
+
+
+			var result='';
+
+			for(var pro in $register){
+				result += '' + pro + '/' + $register[pro]+ '/';
+			}
+	        result = result.substring(0, result.length-1);
+	        var $url = '/register/student/removeregister/'+ result;
+	        
+    		var courseid=$($this).attr('courseid');
+    		var turno=$($this).attr('turno');
+	        $.ajax({
+	            url:$url,
+	            success:function($data){
+
+	                    if($data.status == true){
+	                    	
+	                    	$('#assign_credist').html($data.credits_assing);
+	                    	$('#assign_semester').html($data.semester);
+	                    	$('#total_credits').html($data.credits);
+	                    	$(".modified"+'-'+courseid+'-'+turno).hide();
+	                    	$(".register"+'-'+courseid+'-'+turno).show();
+	                    	
+	                        // window.location.href=window.location.href;
+	                    }else{
+	                        //Pintar Fracaso
+
+	                    	alert('Erro al Eliminar');
+	                        mensajeria('error','El registro no se Guardado ');
+	                    }
+	                    // $('#modalloader').modal('hide');
+	            },
+	            error:function($data){
+	                    //Pintar el error
+	                    	alert('Erro al Elminar');
+	                    mensajeria('error','Se produjo un error no controlado, comunicarse con el administrador');
+	                    $('#modalloader').modal('hide');
+	            }
+        	});
+		}
+	
+</script>
+<div >
+	<h4><span class='glyphicon glyphicon-book'></span> Pre Matricula</h4>
+</div>
+
+<div class="table-responsive col-md-4">
+	<table class='table'>
+		<tr>
+			<td>Número de Créditos Permitidos</td>
+			<td><div id='assign_credist'><?php echo $this->assign_credist?></div></td>
+			<td>Semestre de matrícula</td>
+			<td><div id='assign_semester'><?php echo $this->assign_semester?></div></td>
+		</tr>
+		<tr>
+			<td>Usted pagó el monto de</td>
+			<td><?php echo $this->payment_amount?></td>
+			<td>Usted debe de pagar el monto de</td>
+			<td><?php echo $this->assingn_amount?></td>
+		</tr>
+	</table>
+</div>
+
+<div class='col-md-5'>
+	<table class=' table table-hover '>
+		<thead>
+		<tr>
+			<th>Código Curso</th>
+			<th>Nombre Curso</th>
+			<th>Condición</th>
+			<th>Crédito</th>
+			<th>Semestre</th>
+			<th>Matriculas</th>
+			<th>Turno</th>
+			<th>Docente</th>
+		</tr>
+		</thead>
+		<tbody class='table-striped'>
+		<?php foreach ($this->subjects as $key => $subject) { ?>
+
+			<?php 
+				if($subject['veces'] >= 2)
+					$class='danger';
+				else $class='';
+			?>
+			<tr class='<?php echo $class?>'>
+				<td><?php echo $subject['courseid']?></td>
+				<td><?php echo $subject['name']?></td>
+				<td><?php 
+						if (trim($subject['type_rate'])=='O') 
+								echo "Obligatorio";
+						if (trim($subject['type_rate'])=='E')
+								echo "Electivo";	
+				?></td>
+				<td><?php echo $subject['credits']?></td>
+				<td><?php echo $subject['semid'] ?></td>
+				<td><?php echo $subject['veces'] ?></td>
+				<td><?php echo $subject['turno'] ?></td>
+				<td><?php echo $subject['veces'] ?></td>
+				<td><?php echo $subject['docente'] ?></td>
+				<td>
+					<?php if($subject['register'] !=''){
+							$display_reg="display:none";
+							$display_mod="";
+						}
+						 else{
+							$display_reg="";
+							$display_mod="display:none";
+						 }
+
+					?>
+					<button class='btn-register register-<?php echo $subject['courseid']?>-<?php echo $subject['turno']?>'
+							
+							courseid='<?php echo $subject['courseid']?>'
+							curid='<?php echo $subject['curid']?>'
+							turno='<?php echo $subject['turno']?>'
+							credits='<?php echo $subject['credits']?>'
+							regid='<?php echo $this->regid?>'
+							escid='<?php echo $this->escid?>'
+							subid='<?php echo $this->subid?>'
+							perid='<?php echo $this->perid?>'
+							veces='<?php print_r ($this->veces)?>'
+							style='<?php echo $display_reg?>'
+						 	onclick='register_subject(this)'>
+							<span 	class='glyphicon glyphicon-ok'></span>
+					</button>
+
+					<button class='modified-<?php echo $subject['courseid']?>-<?php echo $subject['turno']?>' 
+							courseid='<?php echo $subject['courseid']?>'
+							curid='<?php echo $subject['curid']?>'
+							turno='<?php echo $subject['turno']?>'
+							regid='<?php echo $this->regid?>'
+							escid='<?php echo $this->escid?>'
+							subid='<?php echo $this->subid?>'
+							veces='<?php print_r($this->veces)?>'
+							perid='<?php echo $this->perid?>'
+							onclick='modifiedsubjet(this)' 
+							style='<?php echo $display_mod ?>'>
+						<span class='glyphicon glyphicon-remove'></span></button>
+				</td>
+			</tr>
+		<?php }?>
+		<tr><td></td><td></td><td>Total</td><td><div id='total_credits'><?php echo $this->total_credits?></div></td></tr>
+		</tbody>
+	</table>
+</div>
