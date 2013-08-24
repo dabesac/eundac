@@ -162,11 +162,11 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	}
 
 	   /*Devuelve el record segun la funcion Record de Notas */
-    public function _getRecordNotasAlumno($escid,$uid){
+    public function _getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid){
          try{    
             $sql = $this->_db->query("
                 
-                select * from record_notes('$escid','$uid') AS 
+                select * from record_notes('$escid','$uid','$eid','$oid','$subid','$pid') AS 
                 (
                     ".'escid'." character varying,
                     ".'matid'." character varying,
