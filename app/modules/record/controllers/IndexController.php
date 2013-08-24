@@ -95,10 +95,23 @@ class Record_IndexController extends Zend_Controller_Action {
 		$this->view->perid = $formData['perid'];
 		$speciality = new Api_Model_DbTable_Speciality();
 		$rows = $speciality->_getOne($formData);
-		if ($rows) $this->view->speciality = $rows;
+		if ($rows){
+			if ($rows->parent){
+				$rows->escid=$rows->parent;
+				$erows = $speciality->_getOne($rows);
+				$this->view->speciality = $erows;
+				$this->view->speciality1 = $rows;
+			}				
+			else
+				$this->view->speciality = $rows;
+		}
+		
+		$faculty = new Api_Model_DbTable_Faculty();
+		$frows = $faculty->_getOne($rows);
+		if ($frows) $this->view->faculty = $frows;
 		
 		$this->view->printheader = $this->sesion->org['header_print'];
-		$this->view->printfooter = $this->sesion->org['footer_print	'];
+		$this->view->printfooter = $this->sesion->org['footer_print'];
 	}
 	
 	public function periodsAction()
