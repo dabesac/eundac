@@ -24,8 +24,6 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $this->view->perid=$where['perid'];
             $fm=new Register_Form_Buscar();
             $pfac='T'.$escid['1'];
-            // $fm->enviar->setLabel("Buscar");
-            // $fm->escid->setvalue($pfac);
             $this->view->fm=$fm;
             $escuelas = new Api_Model_DbTable_Speciality();
             $lesc = $escuelas->_getspeciality($where);
@@ -147,10 +145,9 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $cursomas['namecourse'] = $rcus['name'];
 
                 //Obteniendo numero de veces matrocula a un curso
-                //$usuario = new Admin_Model_DbTable_Usuario();
-                // $veces = new Api_Model_DbTable_Course();
-                // $listusuario = $veces ->_getCursosXAlumnoXVeces($escid,$uid,$cursomas['curid'], $cursomas['cursoid']); 
-                // $cursomas['veces'] = intval($listusuario[0]['veces']);
+                $veces = new Api_Model_DbTable_Course();
+                $listusuario = $veces ->_getCoursesXStudentXV($cursomas); 
+                $cursomas['veces'] = intval($listusuario[0]['veces']);
 
                 //Sacamos los docentes por curso
                 $bdprofesores = new Api_Model_DbTable_Coursexteacher();        
@@ -325,6 +322,68 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $this->_helper->_redirector("detail","registerstudent","register",array('uid' => base64_encode($where['uid']) ,'pid' => base64_encode($where['pid']),'escid' => base64_encode($where['escid']),'subid' => base64_encode($where['subid'])));
 
 
+        }catch(Exception $ex ){
+            print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
+        } 
+    }
+
+        public function validateAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
+            $where['uid'] = ($this->_getParam('uid'));
+            $where['pid'] = ($this->_getParam('pid'));
+            $where['escid'] = ($this->_getParam('escid'));
+            $where['subid'] = ($this->_getParam('subid'));
+            $where['perid'] = $this->sesion->period->perid;
+            $flag = base64_decode($this->_getParam('flag'));
+            $where['regid']=$where['uid'].$where['perid'];
+            $where['eid'] = $this->sesion->eid;        
+            $where['oid'] = $this->sesion->oid;        
+
+            $bdmatricula_curso = new Api_Model_DbTable_Registrationxcourse();        
+            $bdmatricula = new Api_Model_DbTable_Registration(); 
+            $data= $bdmatricula->_getOne($where);
+            //Verifico que la matricula exista
+            if ($data){
+                // Creo el STR que ira despues del WHERE
+                $str=" eid='".$where['eid']."' and oid=''".$where['oid']."' and subid='".$where['subid']."' and escid='".$where['escid']."' and uid='".$where['uid']."' and pid='".$where['pid']."' and perid='".$where['perid']."' and regid= '".$where['regid']."' ";
+                //Si el Valor es E se eliminar
+                    if (trim($flag)=="E"){
+                        if($bdmatricula_curso->_deletecorseregister($where)){
+                            $DataUsuario['state']="B";
+                            $DataUsuario['updated']=date("Y-m-d h:m:s");
+                            $DataUsuario['modified']=$this->sesion->uid; 
+                            if ($bdmatricula->_update($DataUsuario,$where)){
+                                $bdmatricula->_delete($where);
+                                $this->view->msgeliminar="La matricula fue eliminada correctamente";} 
+                        } 
+                        else{
+                            $DataUsuario['state']="B";
+                            $DataUsuario['updated']=date("Y-m-d h:m:s");
+                            $DataUsuario['modified']=$this->sesion->uid; 
+                            if ($bdmatricula->_update($DataUsuario,$where)){
+                            $bdmatricula->_delete($where);
+                            $this->view->msgeliminar="La matricula fue eliminada correctamente";} 
+                        }                 
+                    }
+                    else{
+                        //Asigno los valores al array para la modiciacion
+                        $DataUsuario['state']=trim($flag);
+                        $DataUsuario['updated']=date("Y-m-d h:m:s");
+                        $DataUsuario['modified']=$this->sesion->uid; 
+                        if ($bdmatricula->_update($DataUsuario,$where)){
+                            //si actualizo correctamente la matricula, ahora actualizo los cursos de la matricula       
+                            if ($bdmatricula_curso->_updatestateregister($DataUsuario,$where)){
+                                $this->_helper->_redirector("detail","registerstudent","register",array('uid' => base64_encode($where['uid']) ,'pid' => base64_encode($where['pid']),'escid' => base64_encode($where['escid']),'subid' => base64_encode($where['subid'])));
+                                }else{
+                                    print "No se pudo actualizar los cursos de la matricula";
+                                }
+                        }else{
+                            print "No se pudo actualizar la matricula";
+                        }
+                    }
+            }
         }catch(Exception $ex ){
             print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
         } 

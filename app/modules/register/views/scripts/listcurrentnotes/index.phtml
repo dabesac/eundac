@@ -1,0 +1,136 @@
+<div class="col-md-12"><center><h2><span class="glyphicon glyphicon-stats"></span> | Notas Actuales | Periodo 13B</h2></center></div>
+<?php if($this->courses){?>
+<br><br>
+
+<div class="col-sm-12">
+			
+	<?php $c=0;
+	foreach ($this->courses as $courses) {?>
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h5 align="left"><b><?php echo $courses[0]['name'];?></b></h5>
+		</div>
+		<div class="panel-body">
+			<div class="col-sm-2">
+				<br><br><br>
+				<h5>
+					Codigo <b><?php echo $courses[0]['courseid']?></b><br>
+					Turno <b>A</b><br>
+					Semestre <b><?php echo $courses[0]['semid']?></b><br>
+					Creditos <b><?php echo $courses[0]['credits']?></b><br>
+				</h5>
+			</div>
+			
+			<?php if ($courses[0]['type']=="O"){
+				for ($i=1; $i<=2 ; $i++) {?>
+				<div class="col-sm-6">
+					<table class="table">
+						<tr>
+							<h5>Detalle Unidad <?php echo $i;?></h5>
+						</tr>
+						<tr>
+						<?php for($ci=1; $ci<9 ;$ci++) {
+							if($i==1){
+								$index="nota".$ci."_i";?>
+								<td><?php echo $this->notes[$c][$index];?></td>
+							<?php }else{
+								$index="nota".$ci."_ii";?>
+								<td><?php echo $this->notes[$c][$index];?></td>
+						<?php } 
+						}?>
+						</tr>
+					</table>
+				</div>
+				<div class="col-sm-2">
+					<table class="table">
+						<tr>
+							<h5>Promedio</h5>
+						</tr>
+						<tr>
+							<td><?php echo $this->notes[$c]['promedio'.$i]?></td>
+						</tr>
+					</table>
+				</div>
+			<?php }?>
+			<div class="col-sm-2 pull-right">
+					<table class="table">
+						<tr>
+							<h5 align="center"><b>Promedio Final</b></h5>
+						</tr>
+						<tr>
+							<td><b><center><?php echo $this->notes[$c]['notafinal']?></center></b></td>
+						</tr>
+					</table>
+				</div>
+			<?php }else{
+				for ($i=1; $i<=4 ; $i++) {?>
+				<div class="col-sm-3">
+					<table class="table">
+						<tr>
+							<h5>Detalle Unidad <?php echo $i;?></h5>
+						</tr>
+						<tr>
+						<?php for($ci=1; $ci<=3 ;$ci++) {
+							if($i==1){
+								$index="nota".$ci."_i";?>
+								<td><?php echo $this->notes[$c][$index];?></td>
+							<?php }elseif($i==2){
+								$index="nota".($ci+5)."_i";?>
+								<td><?php echo $this->notes[$c][$index];?></td>
+							<?php }elseif($i==3){
+								$index="nota".($ci)."_ii";?>
+								<td><?php echo $this->notes[$c][$index];?></td>
+							<?php }elseif($i==4){
+								$index="nota".($ci+5)."_ii";?>
+								<td><?php echo $this->notes[$c][$index];?></td>
+							<?php }  
+						}?>
+						</tr>
+					</table>
+				</div>
+				<div class="col-sm-2">
+					<table class="table">
+						<tr>
+							<h5>Promedio</h5>
+						</tr>
+						<tr>
+							<?php if($i==1){
+								$index="nota4_i";?>
+								<td><?php echo $this->notes[$c][$index];?></td>
+							<?php }elseif($i==2){
+								$index="nota9_i";?>
+								<td><?php echo $this->notes[$c][$index];?></td>
+							<?php }elseif($i==3){
+								$index="nota4_ii";?>
+								<td><?php echo $this->notes[$c][$index];?></td>
+							<?php }elseif($i==4){
+								$index="nota9_ii";?>
+								<td><?php echo $this->notes[$c][$index];?></td>
+							<?php }?>
+						</tr>
+					</table>
+				</div>
+			<?php }?>
+			<div class="col-sm-2 pull-right">
+					<table class="table">
+						<tr>
+							<h5 align="center"><b>Promedio Final</b></h5>
+						</tr>
+						<tr>
+							<td><b><center><?php echo $this->notes[$c]['notafinal']?></center></b></td>
+						</tr>
+					</table>
+				</div>
+			<?php }?>
+		</div>
+		
+	</div>
+	<?php $c++;
+	}?>
+				
+<?php }?>
+</div>
+
+
+
+
