@@ -23,6 +23,9 @@ print_r($datos);
                 </td>
                 <td>
                     <?php 
+                    $veces = new Api_Model_DbTable_Course();
+                    $listusuario = $veces ->_getCoursesXStudentXV($datos); 
+                    echo ($listusuario['0']['veces']+1) 
                     // $veces = new Admin_Model_DbTable_Cursos();
                     // $listusuario = $veces ->_getCursosXAlumnoXVeces($escid=$datos['escid'],$uid=$this->uid,$curid=$datos['curid'],$cursoid=$datos['cursoid']); 
                     // echo ($listusuario['0']['veces']+1)              ;
