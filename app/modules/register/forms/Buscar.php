@@ -29,5 +29,3 @@ class Register_Form_Buscar extends Zend_Form{
 
 }
 
-}
-

@@ -67,25 +67,36 @@
  	public function printAction(){
  		try {
  			$this->_helper->layout()->disableLayout();
+      $footer=$this->sesion->org['footer_print'];
+      $this->view->footer=$footer;
  			$uid=base64_decode($this->_getParam('uid'));
+      $this->view->uid=$uid;
       $escid=base64_decode($this->_getParam('escid'));
-      // $escid = $this->_getParam('escid');
- 			// $subid = $this->_getParam('subid');
- 			// $this->view->escid=$escid;
- 			// $this->view->eid->$eid;
- 			// $this->view->oid->$oid;
- 			// $this->view->pid->$pid;
- 			// $escid='4SI';
- 			// $uid='0514403019';
-      // echo $uid;
-      // echo $escid;
- 			$record = new Api_Model_DbTable_Registrationxcourse();
- 			$data = $record->_getRecordNotasAlumno($escid,$uid);
- 			// print_r($data);
-      $this->view->data=$data;
- 			// echo $pid;
-
- 			
+      $eid=base64_decode($this->_getParam('eid'));
+      $oid=base64_decode($this->_getParam('oid'));
+      $subid=base64_decode($this->_getParam('subid'));
+      $pid=base64_decode($this->_getParam('pid'));
+      $record = new Api_Model_DbTable_Registrationxcourse();
+ 			$data = $record->_getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid);
+ 			$this->view->data=$data;
+      $where['eid']=$eid;
+      $where['oid']=$oid;
+      $where['escid']=$escid;
+      $where['subid']=$subid;
+      $dbspeciality = new Api_Model_DbTable_Speciality();
+      $speciality = $dbspeciality ->_getOne($where);
+      $this->view->speciality=$speciality;
+      $whered['eid']=$eid;
+      $whered['oid']=$oid;
+      $whered['facid']= $speciality['facid'];
+      $dbfaculty = new Api_Model_DbTable_Faculty();
+      $faculty = $dbfaculty ->_getOne($whered);
+      $this->view->faculty=$faculty;      
+      $wheres['eid']=$eid;
+      $wheres['pid']=$pid;
+      $dbperson = new Api_Model_DbTable_Person();
+      $person= $dbperson ->_getOne($wheres);
+      $this->view->person=$person;
  		} catch (Exception $e) {
  			print ("Error: Print Notas: ".$e->getMessage());
  		}

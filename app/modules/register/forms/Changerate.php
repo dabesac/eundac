@@ -65,5 +65,5 @@ class Register_Form_Changerate extends Zend_Form{
         $submit->setAttrib('class', 'btn btn-success');
 
         $this->addElements(array($perid,$pid,$uid,$escid,$ratid,$doc,$comments,$date_payment,$submit)); 
-    // }
+    }
 }        
