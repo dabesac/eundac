@@ -1,0 +1,40 @@
+<?php 
+if ($this->cursitoutilizado){ ?>
+<div id="datos">
+    <div><center><h5>Alumnos Matriculados en el Curso <?php echo $this->datacourse['courseid']." - ".$this->datacourse['name']?></h5></center></div>
+    <div>
+        <table class="table table-hover">
+            <tr style="background: #006aba; color: #000;">
+                <th>#</th> 
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Currícula</th>
+                <th>Turno</th>
+                <th>Resolución</th>   
+            </tr>
+            <?php
+            if ($this->cursitoutilizado){
+                $i=1;
+                foreach ($this->cursitoutilizado as $students){ ?>
+                    <tr>
+                        <td><?php echo $i;?></td>
+                        <td><?php echo $students['uid'];?></td>
+                        <td><?php echo $students['fullname'];?></td>
+                        <td><?php echo $students['curid'];?></td>
+                        <td><?php echo $students['turno'];?></td>
+                        <td><?php echo $students['resolucion'];?></td>
+                    </tr>
+                   <?php
+                    $i++;
+                }
+            }?>
+        </table>      
+    </div>
+</div>
+<?php
+}else{ ?>
+<script type="text/javascript">
+    alert("No hay alumnos Matriculados en este Curso.");
+</script>
+<?php
+}?>
