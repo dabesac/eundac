@@ -1,0 +1,102 @@
+<?php 
+$stateperiod = $this->stateperiod;
+$strprint = "/record/index/printavence/"
+?>
+
+<div class="alert alert-info " style="margin:0px; padding:3px;">
+<?php if ($stateperiod=="A"){?>
+	<a class="btn btn-primary " href="#">Agregar Asignatura</a>
+<?php } ?>
+	<a class="btn btn-primary " href="#" id="openwindows">Reporte Avance de Notas</a>
+</div>
+
+<table class="table table-border table-condensed">
+	<tr>
+		<th >#</th>
+		<th class="col-lg-1">Semestre</th>
+		<th class="col-lg-1">Curricula </th> 
+		<th class="col-lg-1">Código Asig.</th>
+		<th>Nombre Asignatura </th>
+		<th class="col-lg-1">Turno</th>
+		<th class="col-lg-1">Tipo Asiganatura</th>
+		<th class="col-lg-1"># Matriculados</th>
+		<th class="col-lg-1">Primer Parcial</th>
+		<th class="col-lg-1">Segundo Parcial</th>
+		<th class="col-lg-1">Fecha Cierre Acta</th>
+		<th ></th>
+	</tr>
+	
+	<?php 
+	$courses =$this->courses;
+	
+	if ($courses){
+		$i=0;
+		foreach ($courses as $course){
+			$i++;
+			$counregister=0;
+			$courseid=($course['courseid']);
+			$semid=($course['semid']);
+			$courseid_cr=base64_encode($course['courseid']);
+			$name=($course['course']);
+			$escid=($course['escid']);
+			$turno=($course['turno']);
+			$curid=($course['curid']);
+			$date=($course['closure_date']);
+			$type = ($course['type_rate']=="O")?"Objetivo":"Competencia";
+			$stater = $course['state_record'];
+			switch ($stater){
+				case "A": $txtstate = "class='success'";break;
+				case "C": $txtstate = "class='danger'";break;
+				default: $txtstate = "";break;
+			}
+			$state = $course['state'];
+			if ($state=="S" && ($stater=="C" || $stater=="A")){
+				$sp = "glyphicon-ok";
+				$pp = "glyphicon-ok";
+			}else{
+				$sp="glyphicon-remove";
+				$pp = ($state=="P" && $stater=="A")?"glyphicon-ok":"glyphicon-remove";
+			}
+			$counregister = $course['numregister'];
+			?>
+	<tr >
+		<td rowspan="2" style="vertical-align:middle"><?php echo $i;?></td>
+		<td><?php echo $semid?></td>
+		<td><?php echo $curid?></td>
+		<td><?php echo $courseid?></td>
+		<td><?php echo $name?></td>
+		<td><?php echo $turno?></td>
+		<td><?php echo $type;?></td>
+		<td><?php echo $counregister;?></td>
+		<td><span class="glyphicon <?php echo $pp?> txthover" 
+		data-toggle="tooltip" title="Estado del Primer parcial"
+		></span></td>
+		<td><span class="glyphicon <?php echo $sp?> txthover"
+		data-toggle="tooltip" title="Estado del segundo parcial"></span></td>
+		<td><?php echo $date;?></td>
+		<td><span class="glyphicon glyphicon-folder-open txthover" 
+		data-toggle="tooltip" title="Ver detalles del acta"></span></td>
+	</tr>	
+	<tr>
+		<th >OPERACIONES</th>
+		<td colspan="10" >skjdlksjfkld</td>
+	</tr>		
+			<?php 
+			}
+	}else{
+	?>
+		Ni hay ningun dato
+	<?php } ?>
+</table>
+<script>
+	$("#openwindows").click(function (){
+		var perid=$("#perid").val();
+		var escid=$("#escid").val();
+		var url = "<?php echo $strprint?>perid/"+perid+"/escid/"+escid;
+		window.open(url,'Detalle de Asignatura','width=800,height=600,menubar=no,resizable=yes,toolbar=no,scrollbars=yes')    
+	});
+	$(".txthover").tooltip({
+	    placement: "left"
+	});
+	
+</script>

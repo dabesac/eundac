@@ -1,0 +1,110 @@
+<?php 
+$dir = APPLICATION_LIBRARY."/pdf/MPDF54/mpdf.php";
+include_once($dir);
+ob_start();
+
+?>
+<?php echo $this->doctype(); ?>
+<?php echo $this->headLink(); ?>
+<?php echo $this->headScript(); ?> 
+
+<div class="panel">
+	<center>
+	FACULTAD DE</br> 
+	ESCUELA DE <?php echo $this->speciality['name']?><br>
+	INFORME DE AVANCE DE NOTAS <?php echo $this->perid?>
+	</center>
+	<table class="table table-bordered table-condensed">
+		<tr class="">
+			<th >#</th>
+			<th class="col-lg-1">Semestre</th>
+			<th class="col-lg-1">Curricula </th> 
+			<th class="col-lg-1">Código Asig.</th>
+			<th>Nombre Asignatura </th>
+			<th class="col-lg-1">Turno</th>
+			<th class="col-lg-1">Tipo Asiganatura</th>
+			<th class="col-lg-1"># Matriculados</th>
+			<th class="col-lg-1">Primer Parcial</th>
+			<th class="col-lg-1">Segundo Parcial</th>
+		</tr>
+		
+		<?php 
+		$courses =$this->courses;
+		
+		if ($courses){
+			$i=0;
+			foreach ($courses as $course){
+				$i++;
+				$counregister=0;
+				$courseid=($course['courseid']);
+				$semid=($course['semid']);
+				$courseid_cr=base64_encode($course['courseid']);
+				$name=($course['course']);
+				$escid=($course['escid']);
+				$turno=($course['turno']);
+				$curid=($course['curid']);
+				$date=($course['closure_date']);
+				$type = ($course['type_rate']=="O")?"Objetivo":"Competencia";
+				$stater = $course['state_record'];
+				switch ($stater){
+					case "A": $txtstate = "class='success'";break;
+					case "C": $txtstate = "class='danger'";break;
+					default: $txtstate = "";break;
+				}
+				$state = $course['state'];
+				if ($state=="S" && ($stater=="C" || $stater=="A")){
+					$sp = "glyphicon-ok";
+					$pp = "glyphicon-ok";
+				}else{
+					$sp="glyphicon-remove";
+					$pp = ($state=="P" && $stater=="A")?"glyphicon-ok":"glyphicon-remove";
+				}
+				$counregister = $course['numregister'];
+				?>
+		<tr >
+			<td ><?php echo $i;?></td>
+			<td><?php echo $semid?></td>
+			<td><?php echo $curid?></td>
+			<td><?php echo $courseid?></td>
+			<td><?php echo $name?></td>
+			<td><?php echo $turno?></td>
+			<td><?php echo $type;?></td>
+			<td><?php echo $counregister;?></td>
+			<td><span class="glyphicon <?php echo $pp?> txthover" 
+			data-toggle="tooltip" title="Estado del Primer parcial"
+			></span></td>
+			<td><span class="glyphicon <?php echo $sp?> txthover"
+			data-toggle="tooltip" title="Estado del segundo parcial"></span></td>
+		</tr>	
+				<?php 
+				}
+		}else{
+		?>
+		<tr><th colspan="10">No hay registros</th></tr>		
+		<?php } ?>
+	</table>
+</div>
+<?php
+  $html = ob_get_contents();
+  $mpdf=new mPDF('win-1252','A4','','',15,15,2,12,5,7);
+  //$mpdf->SetHTMLHeader($this->printheader);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  //$mpdf->SetFooter($this->printfooter);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html,0);
+  $mpdf->Output('avance-'.$this->perid.'.pdf','D');
+  
+
+/*$mpdf=new mPDF();
+$mpdf->Bookmark('Start of the document');
+$mpdf->WriteHTML('<div>Section 1 text</div>');
+$mpdf->Output();
+?>
+
+
+
+
+
+
+
+

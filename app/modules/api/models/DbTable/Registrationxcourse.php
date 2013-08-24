@@ -113,4 +113,20 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
             print "Error: Obteniendo datos de tabla 'Matricula Curso'".$ex->getMessage();
         }
     }
+    
+    public function _getCountRegisterCourse($where=null){
+    	try{
+    		
+    		if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where['curid']=="" || 
+    			$where['escid']=="" || $where['courseid']=='' || $where['turno']==''|| $where['subid']=='') return false;
+    		$sql= "eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."' 
+    				and subid = '".$where['subid']."' and perid = '".$where['perid']."' and turno = '".$where['turno']."' 
+    				and curid = '".$where['curid']."' and courseid = '".$where['courseid']."' and state='M'";
+    		$rows = $this->fetchAll($sql);
+    		if($rows) return count($rows->toArray());
+    		return false;
+    	}catch (Exception $ex){
+    		print " Error : ".$ex->getMessage();
+    	}
+    }
 }

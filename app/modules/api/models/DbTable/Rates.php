@@ -1,9 +1,10 @@
 <?php
 
-class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract
-{
+
+class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract{
 	protected $_name = 'base_rates';
 	protected $_primary = array("eid","oid","ratid","perid");
+
 
 	
 	public function _getFilter($where=null,$attrib=null,$orders=null){
@@ -38,6 +39,26 @@ class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getAll($where=null,$order='',$start=0,$limit=0){
+
+		try {
+			if($where['eid']=='' || $where['oid']=='')
+				$wherestr= null;
+			else
+				$wherestr="eid='".$where['eid']."' and oid='".$where['oid']."'";
+			if($limit==0) $limit=null;	
+			if($start==0) $start=null;
+
+			$rows=$this->fetchAll($wherestr,$order,$start,$limit);
+			if($rows) return $rows->toArray();
+				// print_r($rows->toArray);
+			return false;
+
+		} catch (Exception $e) {
+			print "Error: Read All Rates".$e->getMessage();			
+		}
+	}
+
 	public function _getOne($where=array())
 	{
 		try{
@@ -51,6 +72,8 @@ class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract
 			print "Error: Read One rates".$e->getMessage();
 		}
 	}
+      
+
 	public function _update($data,$str='')
     {
         try
@@ -75,8 +98,6 @@ class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract
 			print "Error: Delete rates".$e->getMessage();
 		}
 	}
-
-
 
 
 
