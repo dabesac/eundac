@@ -162,9 +162,10 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $numat = $cantmatr->_getCantRegistration($where);
 
                 if ($numat)
-                  $cursomas['nunmatriculados'] = $numat;
+                  $cursomas['nunmatriculados'] = $numat;    
                 
                 $nupremat = $cantmatr->_getCantiPreResgistration($where);
+
                 if ($nupremat)
                     $cursomas['nunmapretriculados'] = $nupremat;
                 
@@ -265,10 +266,68 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $lista=$response->getBody();
         if ($lista){
         $data = Zend_Json::decode($lista);
-        print_r($data);
         $this->view->datos=$data; 
         }
 
+    }
+
+        public function turnoAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
+            $str = base64_decode($this->_getParam('str'));
+            if ($str=="") return false;
+            $turno = trim($this->_getParam('t'));
+            $nro = $this->_getParam('nro');
+            $perid = $this->sesion->period->perid;
+            //$perid='12B';
+            $eid = $this->sesion->eid;        
+            $oid = $this->sesion->oid;        
+            // $rid='AL';
+            $data['turno']=$turno;
+            $data['updated']=date("Y-m-d h:m:s");
+            $bdmatricula_curso = new Api_Model_DbTable_Registrationxcourse();  
+            $g=$bdmatricula_curso->fetchRow($str);
+            if ($g){                
+                if ($bdmatricula_curso->_updatestr($data,$str)){
+                    $str1="eid ='$eid' and oid='$oid' and courseid='".$g['courseid']."' and curid='".$g['curid']."' and perid='$perid' and escid='".$g['escid']."' and subid='".$g['subid']."' and turno='$turno' and uid='".$g['uid']."' and pid='".$g['pid']."'";
+                    $bdmatricula_curso1 = new Api_Model_DbTable_Registrationxcourse(); 
+                     $gg=$bdmatricula_curso1->fetchRow($str1);
+                     $regq = $gg->toArray();
+                     if ($gg) $this->view->reg = $gg->toArray();
+                     $this->view->nro=$nro;                
+                }
+            }
+                // $this->_helper->_redirector("detail","registerstudent","register",array('uid' => base64_encode($g['uid']) ,'pid' => base64_encode($g['pid']),'escid' => base64_encode($g['escid']),'subid' => base64_encode($g['subid'])));
+        }catch(Exception $ex ){
+            print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
+        } 
+    }
+
+        public function deletecourseAction()
+    {
+        try{
+
+            $where['perid']= $this->sesion->period->perid;
+            $where['uid'] = base64_decode($this->_getParam('uid'));
+            $where['pid'] = base64_decode($this->_getParam('pid'));
+            $where['escid'] = base64_decode($this->_getParam('escid'));
+            $where['subid'] = base64_decode($this->_getParam('subid'));
+            $where['courseid'] = base64_decode($this->_getParam('courseid'));
+            $where['curid'] = base64_decode($this->_getParam('curid'));
+            $where['turno'] = base64_decode($this->_getParam('turno'));
+            $where['eid'] = $this->sesion->eid;        
+            $where['oid'] = $this->sesion->oid;
+            $where['regid']=$where['uid'].$where['perid'];
+            $bdmatricula_curso = new Api_Model_DbTable_Registrationxcourse();  
+            $bdmatricula_curso ->_delete($where);        
+
+            $this->_helper->_redirector("detail","registerstudent","register",array('uid' => base64_encode($where['uid']) ,'pid' => base64_encode($where['pid']),'escid' => base64_encode($where['escid']),'subid' => base64_encode($where['subid'])));
+
+
+        }catch(Exception $ex ){
+            print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
+        } 
     }
 
 }

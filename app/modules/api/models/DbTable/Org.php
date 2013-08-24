@@ -39,8 +39,8 @@ class Api_Model_DbTable_Org extends Zend_Db_Table_Abstract
 	
 	public function _getOne($where=array()){
 		try{
-			if ($where['oid']=="") return false;
-			$wherestr="oid = '".$where['oid']."'";
+			if ($where['eid']=="" || $where['oid']=="") return false;
+			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."'";
 			$row = $this->fetchRow($wherestr);
 			if($row) return $row->toArray();
 			return false;

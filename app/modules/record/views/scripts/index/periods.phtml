@@ -1,0 +1,17 @@
+<?php
+$periods = $this->periods;
+if ($periods){
+	foreach ($periods as $period){
+		$perid=($period['perid']);
+		$perid_cryp=base64_encode($period['perid']);
+		$name=$period['name'];
+		?>
+		<option value="<?php echo $perid_cryp?>" ><?php echo $perid." - ".$name?></option>
+		<?php 
+	}
+}else{
+	?>
+	<option value="" >Sin registros</option>
+<?php 
+}
+?>

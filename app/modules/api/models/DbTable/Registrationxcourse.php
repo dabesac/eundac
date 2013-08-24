@@ -41,6 +41,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	}
 
 	
+	
 	public function _getOne($where=array()){
 		try{
 			if ($where['eid']=='' ||  $where['oid']=='' || $where['escid']=='' || $where['subid']=='' || $where['courseid']=='' || $where['curid']=='' || $where['regid']=='' || $where['turno']=='' || $where['pid']=='' || $where['uid']=='' || $where['perid']=='') return false;
@@ -73,6 +74,16 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 			print "Error: Read Filter Periods_Courses ".$e->getMessage();
 		}
 	}
+
+	     public function _updatestr($data,$str)
+    {
+    try
+        {  if ($data=="") return false;
+            return $this->update($data,$str); }
+    catch (Exception $ex){
+            print "Error: Actualizar RegisterCourse".$ex->getMessage();
+        }
+    }
 
 	public function _getStudentXcoursesXescidXperiods($where=null)
 	{
@@ -142,9 +153,9 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
          }
     } 
       /* Retorna la cantidad de alumnos prematriculados deacuerdo a la escuela, curso, turno */
-    public function _getCantiPreResgistration($eid='',$oid='',$cursoid='',$curid='',$perid='',$escid='',$sedid='',$turno=''){
+    public function _getCantiPreResgistration($where=null){
          try{
-            // if ($where['eid']=='' || $where['oid']==''|| $where['courseid']==''||$where['curid']==''||$where['perid']==''||$where['escid']==''||$where['subid']==''||$where['turno']=='') return false;
+             // if ($where['eid']=='' || $where['oid']==''|| $where['courseid']==''||$where['curid']==''||$where['perid']==''||$where['escid']==''||$where['subid']==''||$where['turno']=='') return false;
             $wherestr = "eid = '".$where['eid']."' and oid='".$where['oid']."' and courseid = '".$where['courseid']."'
              and curid = '".$where['curid']."' and perid = '".$where['perid']."' and escid = '".$where['escid']."'  
              and subid = '".$where['subid']."'  and turno = '".$where['turno']."' and  (state = 'I')";
@@ -156,5 +167,22 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
              print "Error en retornar la cantidad de alumnos Pre matriculados";
          }
      } 
+
+
+    public function _getCountRegisterCourse($where=null){
+    	try{
+    		
+    		if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where['curid']=="" || 
+    			$where['escid']=="" || $where['courseid']=='' || $where['turno']==''|| $where['subid']=='') return false;
+    		$sql= "eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."' 
+    				and subid = '".$where['subid']."' and perid = '".$where['perid']."' and turno = '".$where['turno']."' 
+    				and curid = '".$where['curid']."' and courseid = '".$where['courseid']."' and state='M'";
+    		$rows = $this->fetchAll($sql);
+    		if($rows) return count($rows->toArray());
+    		return false;
+    	}catch (Exception $ex){
+    		print " Error : ".$ex->getMessage();
+    	}
+    }
 
 }

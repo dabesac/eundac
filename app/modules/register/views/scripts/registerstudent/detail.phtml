@@ -9,7 +9,7 @@ $finimat = $this->finimat;
 $ffinmat =  $this->ffinmat ;
 $fin= strtotime($finimat." 11:59:00");
 $ffn= strtotime($ffinmat." 11:59:00");
-echo $urlmatri="uid/".($matricula['uid'])."/pid/".($matricula['pid'])."/escid/".($matricula['escid'])."/subid/".($matricula['subid']);
+$urlmatri="uid/".($matricula['uid'])."/pid/".($matricula['pid'])."/escid/".($matricula['escid'])."/subid/".($matricula['subid']);
 ?>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
         <script src="/external/jquery/jquery-1.9.1.js"></script>
@@ -166,7 +166,7 @@ $(function(){
 
         <div class='found'>
         <div style="display: block; float: left;width: 720px; height: 200px; overflow: auto;margin: 0px;" >
-            <table class="table table-bordered table-condensed" style="width: 700px;font-size: 11px; margin-left: 5px;margin-right: 0px; margin-bottom: 0px; ">
+            <table class="table table-bordered table-condensed" style="width: 700px;font-size: 11px; margin-left: 5px;margin-right: 0px; margin-bottom: 0px;">
 
                 <thead>
                 <tr style="background: #333; color: #fff;">    
@@ -205,9 +205,9 @@ $(function(){
                         $nummat = $datos['nunmatriculados'];
                         $numpremat = $datos['nunmapretriculados'];
                         $texto="rel='popover' data-original-title='$nummat'";
-                        $str=base64_encode("eid ='$eid_' and oid='$oid_' and courseid='$courseid_' and curid='$curid_' and perid='$perid_' and escid='$escid_' and subid='$subid_' and turno='$turno_' and uid='$uid_' and pid='$pid_'");
+                       $str=base64_encode("eid ='$eid_' and oid='$oid_' and courseid='$courseid_' and curid='$curid_' and perid='$perid_' and escid='$escid_' and subid='$subid_' and turno='$turno_' and uid='$uid_' and pid='$pid_'");
                 ?>
-                        <tr id="tr_<?php echo $courseid_.$a;?>" style="font-size: 10px" rel='popover' data-original-title=' Hay <?php echo ($nummat=="")?"0":$nummat?> alumnos matriculados y <?php echo $numpremat?> prematriculados en ese curso'>
+                        <tr id="tr_<?php echo $courseid_.$a;?>" style="font-size: 10px" rel='popover' data-original-title=' Hay <?php echo ($nummat=="")?"0":$nummat?> alumnos matriculados y <?php echo ($numpremat=="")?"0":$numpremat?> prematriculados en ese curso'>
                             <td style="width:20px"><?php echo $a;?></td>
                             <td style="width:10px"><?php echo $courseid_;?></td>
                             <td style="width:181px"><?php echo $nombrecurso ;?></td>
@@ -230,28 +230,92 @@ $(function(){
                             <td style="width:15px " >
                                 
                             <?php 
-                            //Verifica si esta dentro de la fecha de matricula
-                            //if ($fecha_act>=$finimat && $fecha_act<= $ffinmat){
+
                                 if ($estadomatricula=='I' ) {
                                    
-                                    $urlcurso = "uid/".base64_encode($uid_)."/pid/".base64_encode($pid_)."/escid/".base64_encode($escid_)."/sedid/".base64_encode($sedid_)."/cursoid/".base64_encode($cursoid_)."/curid/".base64_encode($curid_);
+                                    $urlcurso = "uid/".base64_encode($uid_)."/pid/".base64_encode($pid_)."/escid/".base64_encode($escid_)."/subid/".base64_encode($subid_)."/courseid/".base64_encode($courseid_)."/curid/".base64_encode($curid_)."/turno/".base64_encode($turno_);
                                     ?>
-                                    <a id='eliminar' href="/rfacultad/matricula/eliminarcurso/<?php echo $urlcurso;?>" onclick="return confirm('Esta Seguro que desea eliminar esta matricula?');"  >
+                                    <a id='eliminar' href="/register/registerstudent/deletecourse/<?php echo $urlcurso;?>" onclick="return confirm('Esta Seguro que desea eliminar esta matricula?');"  >
                                         <i class="glyphicon glyphicon-remove"></i>
                                     </a>   
                                 <?php }?>
                                 </td>
                                 <td style="width:15px">
                                     <?php if ($estadomatricula=='I' ) {?>
-                                    <a id="editar_<?php echo $courseid_.$a?>" rel="popover"  >
+                                    <a id="editar_<?php echo $courseid_.$a?>" rel="popover"  title="Editar Turno">
                                         <i class="glyphicon glyphicon-pencil"></i>
                                     </a>   
                                     <?php }
-                            //}
                             ?>
                             </td>
                        </tr>
                         <?php
+                        if ($estadomatricula<>"M"){ ?>
+
+                            <tr id="formu_<?php echo $courseid_.$a;?>" style="font-size: 10px; color: #000;" data-original-title=' Guardar el Cambio de turno para saber la Cantidad de Matriculados del curso'>
+                                <td ><?php echo $a;?></td>
+                                <td ><?php echo $courseid_;?></td>
+                                <td><?php echo $nombrecurso ;?></td>
+                                <td >  
+                                <select  name="turno" id="turno_<?php echo $courseid_.$a;?>" style='height:25px;width:50px;color: #000;vertical-align: middle;border: 1px solid #cccccc;border-radius: 4px;background-color: #ffffff;'>
+                                    <?php 
+                                    $listar = new Api_Model_DbTable_PeriodsCourses();
+                                    $where['perid']=$perid_;
+                                    $where['eid']=$eid_;
+                                    $where['oid']=$oid_;
+                                    $where['subid']=$subid_;
+                                    $where['escid']=$escid_;
+                                    $where['curid']=$curid_;
+                                    $where['courseid']=$courseid_;
+                                    $list= $listar->_getCourseXTur($where);
+                                    foreach ($list as $turno1_){
+                                        if ($turno1_['turno']==$turno) $s = "selected";
+                                        else $s="";
+                                    ?>
+                                        <option  value="<?php echo $turno1_['turno']?>" <?php echo $s;?>><?php echo $turno1_['turno']?></option>
+                                    <?php } ?>
+                                </select>
+
+                                </td>
+                                <td ><?php echo $semid_?></td>
+                                <td ><?php echo $creditos_;?></td>
+                                <td><?php echo $docentes;?></td>
+                                <td >
+                                <?php
+                                if ($estadomatricula=="M"){
+                                    $veces_ = $veces_;
+                                }else{
+                                    $veces_ = ($veces_+1);
+                                }
+                                echo $veces_;
+                                if (($veces_)>2){ ?>
+                                <script>$("#tr_<?php echo $courseid_.$a;?>").css("background","#FD6868");</script>
+                                <?php } ?>
+                                </td>
+                                <td ><a href="#" title="No hacer Ningun Cambio" id="ocultar_<?php echo $courseid_.$a;?>"><i class="glyphicon glyphicon-remove-circle"><i></a></td>                
+                                <td ><a href="#" title="Guardar el cambio de Turno" id="enviar_<?php echo $courseid_.$a;?>"><i class="glyphicon glyphicon-ok"></i></a> </td>
+                            </tr>
+                                <script>
+                                $("#formu_<?php echo $courseid_.$a;?>").hide();
+                                $("#editar_<?php echo $courseid_.$a; ?>").click(function (){  
+                                    $("#tr_<?php echo $courseid_.$a?>").hide();
+                                    $("#formu_<?php echo $courseid_.$a?>").show();
+                                });
+                                $("#ocultar_<?php echo $courseid_.$a;?>").click(function(){
+                                    $("#tr_<?php echo $courseid_.$a?>").show();
+                                    $("#formu_<?php echo $courseid_.$a?>").hide();
+                                });
+                                $("#enviar_<?php echo $courseid_.$a?>").click(function (){ 
+                                var str = "<?php echo $str;?>";           
+                                var tu= $("#turno_<?php echo $courseid_.$a?>").val();
+                                var url = "/register/registerstudent/turno/t/"+tu+"/str/"+str+"/nro/"+<?php echo $a;?>+"/";
+                                $("#tr_<?php echo $courseid_.$a?>").load(url);
+                                $("#tr_<?php echo $courseid_.$a?>").show();
+                                $("#formu_<?php echo $courseid_.$a?>").hide(); 
+                                });
+                            </script>  
+
+                       <?php }
    
                     $a++;
                     }
