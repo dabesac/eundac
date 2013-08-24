@@ -26,4 +26,8 @@ class Register_Form_Buscar extends Zend_Form{
 
         $this->addElements(array($uid,$nombre,$submit));        
     }
+
 }
+
+}
+
