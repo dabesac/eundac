@@ -8,7 +8,7 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
 	public function _getOne($where=array()){
 		try{
 			if ($where['eid']=="" || $where['oid']=="" || $where['perid']=="") return false;
-			$wherestr="eid='".$where['eid']."' and oid='".$where['oid']."' and perid='".$where['perid']."'";
+			$wherestr="eid='".$where['eid']."' and oid='".$where['oid']."' and perid='".$where['perid']."' and (state='I' or state='A')";
 			$row = $this->fetchRow($wherestr);
 			if($row) return $row->toArray();
 			return false;
@@ -69,6 +69,10 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
 			print "Error: Read All Periods x Years" .$e->getMessage();
 		}
 	}
+
+
+
+
 	
 	
 }

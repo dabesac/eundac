@@ -1,9 +1,10 @@
 <?php
 
-class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract
-{
+
+class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract{
 	protected $_name = 'base_rates';
 	protected $_primary = array("eid","oid","ratid","perid");
+
 
 	
 	public function _getFilter($where=null,$attrib=null,$orders=null){
@@ -71,6 +72,8 @@ class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract
 			print "Error: Read One rates".$e->getMessage();
 		}
 	}
+      
+
 	public function _update($data,$str='')
     {
         try
@@ -95,8 +98,6 @@ class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract
 			print "Error: Delete rates".$e->getMessage();
 		}
 	}
-
-
 
 
 
