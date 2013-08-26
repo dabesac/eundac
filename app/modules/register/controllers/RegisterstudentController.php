@@ -83,7 +83,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $where['perid'] = $this->sesion->period->perid;
             $where['eid'] = $this->sesion->eid;    
             $where['oid'] = $this->sesion->oid;        
-            $rid='AL';
+       
             // Obtener fecha periodo
             $infoper = new Api_Model_DbTable_Periods();
             $infoperiodo = $infoper->_getOne($where);
@@ -218,7 +218,14 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
 
             //obtenemos las condiciones de la matricula registradas
             $condi = new Api_Model_DbTable_Condition();
-            $rcondision=$condi->_getlist($where);
+            $date['eid']=$where['eid'];
+            $date['oid']=$where['oid'];
+            $date['pid']=$where['pid'];
+            $date['uid']=$where['uid'];
+            $date['escid']=$where['escid'];
+            $date['perid']=$where['perid'];
+            $date['subid']=$where['subid'];
+            $rcondision=$condi->_getFilter($date);
             // print_r($rcondision);
             if ($rcondision) $this->view->condision = $rcondision;
             

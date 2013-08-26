@@ -82,6 +82,29 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	}
 
 
+	
+ 	public function _getFilter($where=null,$attrib=null,$orders=null){
+ 		try {
+ 			if($where['eid']=='' || $where['oid']=='') return false;
+				$select = $this->_db->select();
+				if ($attrib=='') $select->from("base_registration_course");
+				else $select->from("base_registration_course",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				foreach ($orders as $key => $order) {
+						$select->order($order);
+				}
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+		}catch (Exception $e){
+			print "Error: Read Filter REgister_Course ".$e->getMessage();
+		}
+	}
+
+
 	public function _getAll($where=null,$order='',$start=0,$limit=0){
 		try {
 
@@ -105,29 +128,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 			print "Error: Read All Registration Subject".$e->getMessage();
 		}
 	}
-
-	public function _getFilter($where=null,$attrib=null,$orders=null){
-
-		try{
-			if($where['eid']=='' || $where['oid']=='') return false;
-				$select = $this->_db->select();
-				if ($attrib=='') $select->from("base_registration_course");
-				else $select->from("base_registration_course",$attrib);
-				foreach ($where as $atri=>$value){
-					$select->where("$atri = ?", $value);
-				}
-				foreach ($orders as $key => $order) {
-						$select->order($order);
-				}
-				$results = $select->query();
-				$rows = $results->fetchAll();
-				if ($rows) return $rows;
-				return false;
-
-		}catch (Exception $e){
-			print "Error: Read Filter Periods_Courses ".$e->getMessage();
-		}
-	}
+			
 
 	     public function _updatestr($data,$str)
     {
@@ -142,7 +143,8 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	public function _getStudentXcoursesXescidXperiods($where=null)
 	{
 		try{
-			if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where['curid']=="" || $where['escid']=="" || $where['courseid']=='' || $where['turno']=='') return false;
+			if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where['curid']=="" ||
+				 $where['escid']=="" || $where['subid']=="" || $where['courseid']=='' || $where['turno']=='') return false;
 			$select = $this->_db->select()
 			->from(array('p' => 'base_person'),array('p.last_name0','p.last_name1','p.first_name'))
 				->join(array('rc' => 'base_registration_course'),'rc.pid=p.pid and p.eid=rc.eid', array('rc.*'))
@@ -150,7 +152,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 				->where('rc.subid = ?', $where['subid'])->where('rc.escid = ?', $where['escid'])
 				->where('rc.curid = ?', $where['curid'])->where('rc.perid = ?', $where['perid'])
 				->where('rc.courseid = ?', $where['courseid'])->where('rc.turno = ?', $where['turno'])
-				->where('rc.state = ?','M')->orwhere('rc.state = ?','C')
+				->where('rc.state = ?','M')
 				->order('p.last_name0');
 			$results = $select->query();			
 			$rows = $results->fetchAll();

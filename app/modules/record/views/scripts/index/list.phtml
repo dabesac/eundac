@@ -10,20 +10,20 @@ $strprint = "/record/index/printavence/"
 	<a class="btn btn-primary " href="#" id="openwindows">Reporte Avance de Notas</a>
 </div>
 
-<table class="table table-border table-condensed">
+<table class="table table-striped table-hover table-bordered table-condensed">
 	<tr>
-		<th >#</th>
-		<th class="col-lg-1">Semestre</th>
-		<th class="col-lg-1">Curricula </th> 
-		<th class="col-lg-1">Código Asig.</th>
-		<th>Nombre Asignatura </th>
-		<th class="col-lg-1">Turno</th>
-		<th class="col-lg-1">Tipo Asiganatura</th>
-		<th class="col-lg-1"># Matriculados</th>
-		<th class="col-lg-1">Primer Parcial</th>
-		<th class="col-lg-1">Segundo Parcial</th>
-		<th class="col-lg-1">Fecha Cierre Acta</th>
-		<th ></th>
+		<th class="small">#</th>
+		<th class="small">Sem.</th>
+		<th class="col-sm-1">Curricula </th> 
+		<th class="col-sm-1">Código Asig.</th>
+		<th class="col-sm-4">Nombre Asignatura </th>
+		<th class="small">Turno</th>
+		<th class="col-sm-1">Calificación</th>
+		<th class="col-sm-1"># Matric.</th>
+		<th class="col-sm-1">Primer Parcial</th>
+		<th class="col-sm-1">Segundo Parcial</th>
+		<th class="col-sm-2">Fecha Cierre Acta</th>
+		<th class="small">Estado</th>
 	</tr>
 	
 	<?php 
@@ -34,13 +34,23 @@ $strprint = "/record/index/printavence/"
 		foreach ($courses as $course){
 			$i++;
 			$counregister=0;
-			$courseid=($course['courseid']);
 			$semid=($course['semid']);
-			$courseid_cr=base64_encode($course['courseid']);
 			$name=($course['course']);
+			//PK
+			$courseid=($course['courseid']);
+			$courseid_cr=base64_encode($course['courseid']);
 			$escid=($course['escid']);
+			$escid_cy=base64_encode($course['escid']);
+			$subid=($course['subid']);
+			$subid_cy=base64_encode($course['subid']);
 			$turno=($course['turno']);
+			$turno_cy=base64_encode($course['turno']);
 			$curid=($course['curid']);
+			$curid_cy=base64_encode($course['curid']);
+			$perid=($course['perid']);
+			$perid_cy=base64_encode($course['perid']);
+			
+			$urldetaul = "perid/$perid_cy/escid/$escid_cy/subid/$subid_cy/courseid/$courseid_cr/curid/$curid_cy/turno/$turno_cy";
 			$date=($course['closure_date']);
 			$type = ($course['type_rate']=="O")?"Objetivo":"Competencia";
 			$stater = $course['state_record'];
@@ -61,25 +71,41 @@ $strprint = "/record/index/printavence/"
 			?>
 	<tr >
 		<td rowspan="2" style="vertical-align:middle"><?php echo $i;?></td>
-		<td><?php echo $semid?></td>
-		<td><?php echo $curid?></td>
-		<td><?php echo $courseid?></td>
+		<td class="center"><?php echo $semid?></td>
+		<td class="center"><?php echo $curid?></td>
+		<td class="center"><?php echo $courseid?></td>
 		<td><?php echo $name?></td>
-		<td><?php echo $turno?></td>
-		<td><?php echo $type;?></td>
-		<td><?php echo $counregister;?></td>
-		<td><span class="glyphicon <?php echo $pp?> txthover" 
+		<td class="center"><?php echo $turno?></td>
+		<td class="center"><?php echo $type;?></td>
+		<td class="center"><?php echo $counregister;?></td>
+		<td class="center"><span class="glyphicon <?php echo $pp?> txthover" 
 		data-toggle="tooltip" title="Estado del Primer parcial"
 		></span></td>
-		<td><span class="glyphicon <?php echo $sp?> txthover"
+		<td class="center"><span class="glyphicon <?php echo $sp?> txthover"
 		data-toggle="tooltip" title="Estado del segundo parcial"></span></td>
 		<td><?php echo $date;?></td>
-		<td><span class="glyphicon glyphicon-folder-open txthover" 
-		data-toggle="tooltip" title="Ver detalles del acta"></span></td>
+		<td class="center">
+		<a href="#" onclick=" javascript:
+				window.open('/record/index/detail/<?php echo $urldetaul?>',
+				'Detalle de Asignatura',
+				'width=800,height=600,menubar=no,resizable=yes,toolbar=no,scrollbars=yes');
+			">
+		<span class="glyphicon glyphicon-folder-open txthover" 
+		data-toggle="tooltip" title="Ver detalles del acta"></span>
+		</a></td>
+		<td class="center"  rowspan="2">
+			<?php 
+			switch ($course['state_record']){
+				case "A": $img="verde";break;	
+				case "C": $img="rojo";break;
+				default: $img="azul";break;
+			}?>
+			<img src="/img/circulo-<?php echo $img?>.png">
+		</td>
 	</tr>	
 	<tr>
-		<th >OPERACIONES</th>
-		<td colspan="10" >skjdlksjfkld</td>
+		<th colspan="2">OPERACIONES</th>
+		<td colspan="9" >skjdlksjfkld</td>
 	</tr>		
 			<?php 
 			}
@@ -94,7 +120,6 @@ $strprint = "/record/index/printavence/"
 		var escid=$("#escid").val();
 		var url = "<?php echo $strprint?>perid/"+perid+"/escid/"+escid;
 		open(url);
-		//window.open(url,'Detalle de Asignatura','width=800,height=600,menubar=no,resizable=yes,toolbar=no,scrollbars=yes')    
 	});
 	$(".txthover").tooltip({
 	    placement: "left"
