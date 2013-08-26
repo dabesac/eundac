@@ -9,7 +9,7 @@ $finimat = $this->finimat;
 $ffinmat =  $this->ffinmat ;
 $fin= strtotime($finimat." 11:59:00");
 $ffn= strtotime($ffinmat." 11:59:00");
-$urlmatri="uid/".($matricula['uid'])."/pid/".($matricula['pid'])."/escid/".($matricula['escid'])."/subid/".($matricula['subid']);
+$urlmatri="uid/".base64_encode($matricula['uid'])."/pid/".base64_encode($matricula['pid'])."/escid/".base64_encode($matricula['escid'])."/subid/".base64_encode($matricula['subid']);
 ?>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
         <script src="/external/jquery/jquery-1.9.1.js"></script>
@@ -74,12 +74,12 @@ $urlmatri="uid/".($matricula['uid'])."/pid/".($matricula['pid'])."/escid/".($mat
         <th style="color: #D2F6F9;" class="span1">Monto</th>
         <th style="color: #D2F6F9;" class="span1">Condiciones</th>
         <th class="span1" rowspan="2">
-            <a href="/report/recordnotas/print/uid/<?php echo $matricula['uid'];?>/pid/<?php echo $matricula['pid'];?>/escid/<?php echo $matricula['escid']?>/sedid/<?php echo $matricula['sedid'];?>/eid/<?php echo $matricula['eid']?>/oid/<?php echo $matricula['oid'];?>" class="btn btn-info" target="_black">
+            <a href="/report/recordnotas/print/uid/<?php echo $matricula['uid'];?>/pid/<?php echo $matricula['pid'];?>/escid/<?php echo $matricula['escid']?>/subid/<?php echo $matricula['subid'];?>/eid/<?php echo $matricula['eid']?>/oid/<?php echo $matricula['oid'];?>" class="btn btn-info" target="_black">
             <i class="glyphicon glyphicon-list-alt glyphicon-white"></i><br/>Record</a>
         </th>
         <th class="span1"  rowspan="2">
             <?php if ($estadomatricula=="M"){?>
-            <a href="/rfacultad/matricula/imprimir/<?php echo $urlmatri?> " class="btn btn-danger" >
+            <a href="/register/registerstudent/print/<?php echo $urlmatri?> " class="btn btn-danger" >
             <i class="glyphicon glyphicon-print glyphicon-white"></i><br/>Imprimir</a>
             <?php }else{?>
                 <a href="" class="btn btn-danger" style='color: #ccc' atls="Valide la matricula para imprimir" title="Valide la matricula para imprimir"/>
