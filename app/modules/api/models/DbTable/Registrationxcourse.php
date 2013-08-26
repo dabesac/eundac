@@ -143,7 +143,8 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	public function _getStudentXcoursesXescidXperiods($where=null)
 	{
 		try{
-			if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where['curid']=="" || $where['escid']=="" || $where['courseid']=='' || $where['turno']=='') return false;
+			if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where['curid']=="" ||
+				 $where['escid']=="" || $where['subid']=="" || $where['courseid']=='' || $where['turno']=='') return false;
 			$select = $this->_db->select()
 			->from(array('p' => 'base_person'),array('p.last_name0','p.last_name1','p.first_name'))
 				->join(array('rc' => 'base_registration_course'),'rc.pid=p.pid and p.eid=rc.eid', array('rc.*'))
@@ -151,7 +152,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 				->where('rc.subid = ?', $where['subid'])->where('rc.escid = ?', $where['escid'])
 				->where('rc.curid = ?', $where['curid'])->where('rc.perid = ?', $where['perid'])
 				->where('rc.courseid = ?', $where['courseid'])->where('rc.turno = ?', $where['turno'])
-				->where('rc.state = ?','M')->orwhere('rc.state = ?','C')
+				->where('rc.state = ?','M')
 				->order('p.last_name0');
 			$results = $select->query();			
 			$rows = $results->fetchAll();
