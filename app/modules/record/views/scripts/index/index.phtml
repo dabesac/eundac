@@ -69,13 +69,12 @@ $(function() {
 	$("#perid").load("/record/index/periods/year/"+year_a);
 	$("#sendform").click(function(e){
 		e.preventDefault();
-		
+		$(".loadcourses").html("<img src='/img/spinner.gif'>Cargando....");
 		$.ajax({
 	        type: "POST",
 	        url: $("#formRecord").attr("action"),
 	        data: $("#formRecord").serialize(),
 	        success: function(data){
-	        	$(".loadcourses").html("cargando...");
 	       		$(".loadcourses").html(data);
 	      	}		
 		});
