@@ -1,30 +1,50 @@
-<div class="form-group">
-	<h2>Recursos
-	<div class="pull-right"><a href="/admin/resource/new" class="btn btn-info">Nuevo</a>
-	</div></h2>
+<div class="menu-botones">
+	<div class="pull-left"><h4>Lista Recursos</h4></div>
+	<div class="pull-right"><a href="/admin/resource/new" class="btn btn-info">NUEVO</a></div>
 </div>
 
 <table class="table span6">
-	<?php if ($this->allresources) {?>
-		<tr>
-				<td><b>Num</b></td>
-				<td><b>Codigo</b></td>
-				<td><b>Nombre</b></td>
-		</tr>		
-		<?php		
-		$c=1;
+<?php if ($this->allresources) {?>
+	<tr>
+		<th class="col-lg-1 center">#</th>
+		<th class="col-lg-1  center">Codigo</th>
+		<th class="col-lg-3">Nombre</th>
+		<th class="col-lg-3">Modulo</th>
+		<th class="col-lg-3">Icono</th>
+		<th class="col-lg-3">Estado</th>
+		<th class="col-lg-2">Operación</th>
+	</tr>		
+	<?php		
+	$c=1;
+	if ($this->allresources){
 		foreach ($this->allresources as $res) {
-			?>	
-			<tr>
-				<td><?php echo $c; ?></td>
-				<td><?php echo $res['reid']; ?></td>
-				<td><?php echo $res['name']; ?></td>
-				<td> <a href="/admin/resource/update/reid/<?php print $res['reid']?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
-        		<td> <a href="/admin/resource/delete/reid/<?php print $res['reid']?>"onclick="return confirm('Esta Seguro que desea eliminar el Recurso?');"><span class="glyphicon glyphicon-remove"></span></a></td>
-        	</tr>
+			$modulo = new Api_Model_DbTable_Module();
+			$rmods = $modulo->_getOne(array("eid"=>$res['eid'],"oid"=>$res['oid'],"mid"=>$res['mid']));
+			$mid="";
+			if ($rmods) $mid = $rmods['name'];
+			$icon = $res['imgicon'];
+			$estado= $res['state'];
+		?>
+		<tr>
+			<td class="center"><?php echo $c; ?></td>
+			<td class="center"><?php echo $res['reid']; ?></td>
+			<td><?php echo $res['name']; ?></td>
+			<td><?php echo $mid; ?></td>
+			<td><?php echo $icon; ?></td>
+			<td><img src="/img/circulo-<?php echo ($estado=="A")?"verde":"rojo";?>.png">
+			</td>
+			<td class="center"> <a href="/admin/resource/update/reid/<?php print base64_encode($res['reid'])?>">
+				<span class="glyphicon glyphicon-pencil"></span></a> | 
+	        	<a href="/admin/resource/delete/reid/<?php print $res['reid']?>"
+	        		onclick="return confirm('Esta Seguro que desea eliminar el Recurso?');">
+	        	<span class="glyphicon glyphicon-remove"></span>
+	        	</a>
+	        </td>
+		</tr>
 		<?php
 		$c++;
-		}
+		}	
 	}
-	?>
+}
+?>
 </table>

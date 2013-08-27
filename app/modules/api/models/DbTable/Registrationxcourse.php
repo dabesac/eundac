@@ -19,8 +19,14 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	public function _update($data,$pk)
 	{
 		try{
-			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' || $pk['courseid']=='' || $pk['curid']=='' || $pk['regid']=='' || $pk['turno']=='' || $pk['pid']=='' || $pk['uid']=='' || $pk['perid']=='') return false;
-			$where = "eid = '".$pk['eid']."' and pid='".$pk['pid']."' and oid = '".$pk['oid']."' and escid = '".$pk['escid']."' and uid = '".$pk['uid']."' and subid = '".$pk['subid']."' and regid = '".$pk['regid']."' and perid = '".$pk['perid']."' and turno = '".$pk['turno']."' and curid = '".$pk['curid']."' and courseid = '".$pk['courseid']."'";
+
+			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' ||
+				 $pk['regid']=='' || $pk['pid']=='' || $pk['uid']=='' || 
+				$pk['perid']=='') return false;
+			$where = "eid = '".$pk['eid']."' and pid='".$pk['pid']."' and oid = '".$pk['oid']
+			."' and escid = '".$pk['escid']."' and uid = '".$pk['uid']."' and subid = '"
+			.$pk['subid']."' and regid = '".$pk['regid']."' and perid = '".$pk['perid']
+			."' ";
 			return $this->update($data, $where);
 			return false;
 		}catch (Exception $e){
@@ -46,13 +52,40 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	public function _delete($data=array())
 	{
 		try{
-			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']=='' || $data['courseid']=='' || $data['curid']=='' || $data['regid']=='' || $data['turno']=='' || $data['pid']=='' || $data['uid']=='' || $data['perid']=='') return false;
+			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']=='' 
+				|| $data['courseid']=='' || $data['curid']=='' || $data['regid']=='' 
+				|| $data['turno']=='' || $data['pid']=='' || $data['uid']=='' 
+				|| $data['perid']=='') return false;
 			// print_r($data); exit();
-			$where = "eid = '".$data['eid']."' and pid='".$data['pid']."' and oid = '".$data['oid']."' and escid = '".$data['escid']."' and uid = '".$data['uid']."' and subid = '".$data['subid']."' and regid = '".$data['regid']."' and perid = '".$data['perid']."' and turno = '".$data['turno']."' and curid = '".$data['curid']."' and courseid = '".$data['courseid']."'";			
+			$where = "eid = '".$data['eid']."' and pid='".$data['pid']."' and oid = '".$data['oid'].
+			"' and escid = '".$data['escid']."' and uid = '".$data['uid']."' and subid = '".
+			$data['subid']."' and regid = '".$data['regid']."' and perid = '".
+			$data['perid']."' and turno = '".$data['turno']."' and curid = '".
+			$data['curid']."' and courseid = '".$data['courseid']."'";			
 			return $this->delete($where);
 			return false;
 		}catch (Exception $e){
 			print "Error: Delete Registration".$e->getMessage();
+		}
+	}
+
+	public function _deleteAll($data=array()){
+		try {
+			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']=='' 
+				|| $data['regid']=='' || $data['pid']=='' || $data['uid']=='' 
+				|| $data['perid']=='') return false;
+
+			$where = "eid = '".$data['eid']."' and pid='".$data['pid']."' and oid = '".$data['oid'].
+			"' and escid = '".$data['escid']."' and uid = '".$data['uid']."' and subid = '".
+			$data['subid']."' and regid = '".$data['regid']."' and perid = '".
+			$data['perid']."'";
+
+			return $this->delete($where);
+			return false;
+
+			
+		} catch (Exception $e) {
+			
 		}
 	}
 
@@ -111,9 +144,11 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 			if ($where['eid']=='' ||  $where['oid']=='' || $where['escid']=='' || $where['subid']=='' 
 				|| $where['curid']=='' || $where['regid']=='' || $where['pid']=='' || $where['uid']=='' || $where['perid']=='') $wherestr=null;
 			else{
+
 			$wherestr = "eid = '".$where['eid']."' and pid='".$where['pid']."' and oid = '".
 				$where['oid']."' and escid = '".$where['escid']."' and uid = '".$where['uid']."' 	
-				and subid = '".$where['subid']."' and perid = '".$where['perid']."' and curid = '".$where['curid']."'"; 
+				and subid = '".$where['subid']."' and perid = '".$where['perid']."' and curid = '"
+				.$where['curid']."'"; 
 			}
 			// print_r($wherestr); exit();
 
@@ -131,14 +166,14 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 			
 
 	     public function _updatestr($data,$str)
-    {
-    try
-        {  if ($data=="") return false;
-            return $this->update($data,$str); }
-    catch (Exception $ex){
-            print "Error: Actualizar RegisterCourse".$ex->getMessage();
-        }
-    }
+	    {
+	    try
+	        {  if ($data=="") return false;
+	            return $this->update($data,$str); }
+	    catch (Exception $ex){
+	            print "Error: Actualizar RegisterCourse".$ex->getMessage();
+	        }
+	    }
 
 	public function _getStudentXcoursesXescidXperiods($where=null)
 	{
