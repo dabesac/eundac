@@ -16,6 +16,7 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
         $this->eid="20154605046";
         $this->oid="1";
         $this->escid="4SI";
+        $this->subid="1901";
 
     }
     public function indexAction()
@@ -76,21 +77,24 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
     public function listcoursesAction()
     {
         try{
+            $this->_helper->layout()->disableLayout();
             $eid=$this->eid;
             $oid=$this->oid;
             $escid=$this->escid;
+            $subid=$this->subid;
             $year=$this->_getParam("year");
-
+            $perid=$this->_getParam("perid");
+            $semid=$this->_getParam("semid");
             $dbcourses=new Api_Model_DbTable_PeriodsCourses();
+            $dbsyllabus=new Api_Model_DbTable_Syllabus();
 
-            if($year){
+            if($year<>"" && $perid=="" && $semid==""){
                 $dbperiods=new Api_Model_DbTable_Periods();
                 $where=array("eid"=>$eid,"oid"=>$oid,"year"=>substr($year,2,4));
                 $periods=$dbperiods->_getPeriodsxYears($where);
                 $cc=0;
                 $cp=0;
                 foreach ($periods as $period) {
-                    print_r($period['curid']);
                     $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "perid"=>$period['perid']);
                     $attrib=array("courseid","perid","semid","turno");
                     $order=array("semid");
@@ -100,16 +104,54 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
                         $attrib=array("name","courseid");
                         //print_r($where);
                         $coursesname[$cp]=$dbcourses->_getinfoCourse($where,$attrib);
+                        $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cxy['courseid'],"turno"=>$cxy['turno'],"subid"=>$subid,"perid"=>$period['perid']);
+                        $coursesstate[$cp]=$dbsyllabus->_getAll($where);
                         $cp++;
                     }
                     //print_r($where);
                     $cc++;
                 }
-                //print_r($coursesperyear);
-                //print_r($coursesname);
-                $this->view->coursesname=$coursesname;
-                $this->view->coursesperyear=$coursesperyear;
+                $allcourses=$coursesperyear;
+            }elseif($year<>"" && $perid<>"" && $semid==""){
+                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "perid"=>$perid);
+                $attrib=array("courseid","perid","semid","turno");
+                $order=array("semid");
+                $coursesperperiod=$dbcourses->_getFilter($where,$attrib,$order);
+                $cp=0;
+                foreach ($coursesperperiod as $cxy) {
+                        $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cxy['courseid']);
+                        $attrib=array("name","courseid");
+                        //print_r($where);
+                        $coursesname[$cp]=$dbcourses->_getinfoCourse($where,$attrib);
+                        $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cxy['courseid'],"turno"=>$cxy['turno'],"subid"=>$subid,"perid"=>$perid);
+                        $coursesstate[$cp]=$dbsyllabus->_getAll($where);
+                        $cp++;
+                    }
+                $filcourses=$coursesperperiod;
+            }elseif($year<>"" && $perid<>"" && $semid<>""){
+                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "perid"=>$perid,"semid"=>$semid);
+                $attrib=array("courseid","perid","semid","turno");
+                $order=array("semid");
+                $coursespersemester=$dbcourses->_getFilter($where,$attrib,$order);
+                $cp=0;
+                foreach ($coursespersemester as $cxy) {
+                        $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cxy['courseid']);
+                        $attrib=array("name","courseid");
+                        //print_r($where);
+                        $coursesname[$cp]=$dbcourses->_getinfoCourse($where,$attrib);
+                        $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cxy['courseid'],"turno"=>$cxy['turno'],"subid"=>$subid,"perid"=>$perid);
+                        $coursesstate[$cp]=$dbsyllabus->_getAll($where);
+                        $cp++;
+                    }
+                $filcourses=$coursespersemester;
             }
+
+                //print_r($coursesstate);
+                //print_r($coursesname);
+                $this->view->allcourses=$allcourses;
+                $this->view->filcourses=$filcourses;
+                $this->view->coursesname=$coursesname;
+                $this->view->coursesstate=$coursesstate;
         
         }catch(exception $e){
             print "Error :".$e->getMessage();
