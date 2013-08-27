@@ -5,7 +5,7 @@ class Admin_Form_Acl extends Zend_Form
 	{
 		$sesion  = Zend_Auth::getInstance();
 		$this->setName("frmAcl");
-		$this->setAction("/admin/acl/save/");
+		$this->setAction("/admin/acl/save");
     	if(!$sesion->hasIdentity() ){
     		$this->_helper->redirector('index',"index",'default');
     	}
@@ -13,11 +13,6 @@ class Admin_Form_Acl extends Zend_Form
         $eid=$login->eid;
         $oid=$login->oid;
 
-        $rid = new Zend_Form_Element_Hidden('rid');
-        $rid->setAttrib("class","form-control");
-        $rid->setAttrib("required","true");
-        $rid->setAttrib("readonly","true");
-        
         
         $reid = new Zend_Form_Element_Select('reid');
         $reid->setAttrib("class","form-control");
@@ -34,7 +29,7 @@ class Admin_Form_Acl extends Zend_Form
         $recxacl=$dbrecxacl->_getAll($where);
         $mid->addMultiOption("","Selecciona un modulo");
         foreach ($recxacl as $recnm) {
-            $mid->addMultiOption(base64_encode($recnm['mid']),$recnm['name']);
+            $mid->addMultiOption($recnm['mid'],$recnm['name']);
         }
 
 
@@ -51,6 +46,6 @@ class Admin_Form_Acl extends Zend_Form
         $submit->removeDecorator("DtDdWrapper");
         $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
 
-        $this->addElements(array($reid, $state,$rid, $mid,$submit));
+        $this->addElements(array($reid, $state, $mid,$submit));
 	}
 }
