@@ -2,17 +2,14 @@
 class Admin_AclController extends Zend_Controller_Action{
 
 	public function init(){
-        /*$sesion  = Zend_Auth::getInstance();
+       	$sesion  = Zend_Auth::getInstance();
         if(!$sesion->hasIdentity() ){
             $this->_helper->redirector('index',"index",'default');
         }
         $login = $sesion->getStorage()->read();
-        if (!$login->modulo=="admin"){
-            $this->_helper->redirector('index','index','default');
-        }
-        $this->sesion = $login;*/
-		$this->eid='20154605046';
-		$this->oid='1';
+        $this->sesion = $login;
+		$this->eid=$login->eid;
+		$this->oid=$login->oid;
 	}
 
 	 public function indexAction() 
@@ -21,17 +18,13 @@ class Admin_AclController extends Zend_Controller_Action{
         {
             $eid=$this->eid;
             $oid=$this->oid;
-
             $dbrol=new Api_Model_DbTable_Rol();
             $where=array("eid"=>$eid,"oid"=>$oid);
             $order=array("name");
             $rols=$dbrol->_getAll($where,$order);
-            //print_r($rols);
             $this->view->rols=$rols;
-
             //New Acl
-            //print_r($rid);
-            $form=new Admin_Form_Acl();
+            $form= new Admin_Form_Acl();
             $form->save->setLabel("Guardar");
             $this->view->form=$form;
             if ($this->getRequest()->isPost()){
@@ -41,9 +34,10 @@ class Admin_AclController extends Zend_Controller_Action{
                     unset($formdata['save']);
                     $formdata['eid']=$eid;
                     $formdata['oid']=$oid;
-                    trim($formdata['reid']);
+                    $formdata['reid']=base64_decode(trim($formdata['reid']));
+                    $formdata['mid']=base64_decode(trim($formdata['mid']));
                     trim($formdata['state']);
-                    //print_r($formdata);
+                    print_r($formdata);
                     $dbacl=new Api_Model_DbTable_Acl();
                     $saveacl=$dbacl->_save($formdata);
                     //$this->view->formdata=$formdata;
@@ -57,6 +51,23 @@ class Admin_AclController extends Zend_Controller_Action{
         }
 
     }
+    
+    public  function listrAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$data['eid']=$this->eid;
+    	$data['oid']=$this->oid;
+    	$mid=trim(base64_decode($this->_getParam("mid")));
+    	if (!$mid) return false;
+    	$data['mid']=$mid;
+    	$data['state']="A";
+    	
+    	$resources = new Api_Model_DbTable_Resource();
+    	$attr = array("eid","oid","mid","reid","state","name");
+    	$rows = $resources->_getFilter($data,$attr);
+    	print_r($rows);
+    	if($rows) $this->view->data = $rows;
+    }
 
 
     public function listaclAction()
@@ -69,15 +80,13 @@ class Admin_AclController extends Zend_Controller_Action{
             $dbacl=new Api_Model_DbTable_Acl();
             $where=array("eid"=>$eid,"oid"=>$oid,"rid"=>$rid);
             $acl=$dbacl->_getFilter($where);
-            //print_r($acl);
             $c=0;
-            $attrib=array("name","reid");
+            $attrib=array("name","reid","mid");
             foreach ($acl as $a) {
                 $where=array("eid"=>$eid,"oid"=>$oid,"reid"=>$a['reid']);
                 $recxacl[$c]=$dbacl->_getinfoResource($where,$attrib);
                 $c++;
             }
-            //print_r($recxacl);
             $this->view->rid=$rid;
             $this->view->aclname=$recxacl;
 

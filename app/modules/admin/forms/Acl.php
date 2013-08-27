@@ -3,27 +3,28 @@ class Admin_Form_Acl extends Zend_Form
 {
 	public function init()
 	{
-		//----------------
-			$eid="20154605046";
-			$oid="1";
-
-		//-----------------
-
+		$sesion  = Zend_Auth::getInstance();
+    	if(!$sesion->hasIdentity() ){
+    		$this->_helper->redirector('index',"index",'default');
+    	}
+    	$login = $sesion->getStorage()->read();
+        $eid=$login->eid;
+        $oid=$login->oid;
             
         $reid = new Zend_Form_Element_Select('reid');
-        $reid->removeDecorator('HtmlTag')->removeDecorator('Label');     
-        $reid->setRequired(true)->addErrorMessage('Es necesario que selecciones el estado.');
-        $reid->addMultiOption("","Resource");
         $reid->setAttrib("class","form-control");
-
-		$dbrecxacl=new Api_Model_DbTable_Acl();
+        
+        $mid = new Zend_Form_Element_Select('mid');
+        $mid->removeDecorator('HtmlTag')->removeDecorator('Label');     
+        $mid->setRequired(true)->addErrorMessage('Es necesario que selecciones el estado.');
+        $mid->setAttrib("class","form-control");
+        
+		$dbrecxacl=new Api_Model_DbTable_Module();
         $where=array("eid"=>$eid,"oid"=>$oid);
-        $attrib=array("name","reid");
-        $recxacl=$dbrecxacl->_getinfoResource($where,$attrib);
-        $c=0;
+        $recxacl=$dbrecxacl->_getAll($where);
+        $mid->addMultiOption("","Selecciona un modulo");
         foreach ($recxacl as $recnm) {
-            $reid->addMultiOption($recnm['reid'],$recnm['name']);
-        	$c++;
+            $mid->addMultiOption(base64_encode($recnm['mid']),$recnm['name']);
         }
 
 
@@ -39,6 +40,6 @@ class Admin_Form_Acl extends Zend_Form
         $submit->setLabel('Guardar');
         $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
 
-        $this->addElements(array($reid, $state, $submit));
+        $this->addElements(array($reid, $state, $mid,$submit));
 	}
 }
