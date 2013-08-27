@@ -70,9 +70,15 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
 		}
 	}
 
-
-
-
-	
-	
+  //Retorna dos periodos respectivos
+  public function _getPeriodsXAyB($where){
+            try{
+            if ($where['eid']=="" || $where['oid']=="" || $where['p1']=="" || $where['p2']=="") return false;
+			$wherestr="eid='".$where['eid']."' and oid='".$where['oid']."' and (perid='".$where['p1']."' or perid='".$where['p2']."')";
+             $r = $this->fetchAll($wherestr);
+                if ($r) return $r->toArray ();
+                return false;
+        }  catch (Exception $ex){
+            phpsage(); }
+  }	
 }

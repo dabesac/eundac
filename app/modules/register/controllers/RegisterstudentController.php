@@ -417,7 +417,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $dataescid=$escuela->_getFacspeciality($where);
             // print_r($dataescid);
             if ($dataescid) {
-              $this->view->facultad =$dataescid[0]['nomfac']; 
+              $nomfac=strtoupper($dataescid[0]['nomfac']); 
+              $this->view->facultad=$nomfac;
             }
             //Obteniendo la escuela y especialidad(si lo tuviera)
             if ($dataescid['parent']==""){

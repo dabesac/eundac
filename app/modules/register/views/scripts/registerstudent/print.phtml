@@ -2,11 +2,12 @@
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start(); 
-?>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" /> 
-<table class="encabezado" style="font-size:11px;margin-left: 90px; margin-bottom: 82px;" >     
-    <tr >
-    	<td ><?php echo $nomfacu;?></td>         
+?> 
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<br><br><br><br>
+<table  style="font-size:11px; margin-left: 150px; margin-bottom: 0px; " >     
+    <tr>
+    	<td ><?php echo $this->facultad;?></td>         
     </tr>
     <tr>
     	<td  ><?php echo $this->escuela;?></td>
@@ -25,7 +26,7 @@ ob_start();
         <td></td>
     </tr>
 </table>
-<table class="table span11  table-condensed" style="font-size:14px;margin-left: 50px; margin-bottom: 85px;" >
+<table  style="font-size:14px;margin-left: 110px; margin-bottom: 50px;" >
     <tr>
         <td style="width: 100px" ><?php print($this->cod_matri); ?></td>
         <td style="width:370px" ><?php echo $this->alumno;?></td>
@@ -34,7 +35,7 @@ ob_start();
     </tr>
 </table>
 <div id="datos">
-    <table class="table span11 table-condensed" style="font-size:12px">
+    <table  style="font-size:12px;margin-left: 60px;">
 		<tr style="   height: 20px"><td></td>
 		</tr>
     <?php
@@ -50,12 +51,12 @@ ob_start();
             $veces_ =$datos['veces'];
         ?>
             <tr>
-                <td style="width:25px ;margin-bottom:100px;"><?php echo $a;?></td>
-                <td style="width:60px"><?php echo "<b>";echo $cursoid_;echo "</b>";?></td>
+                <td style="width:20px ;margin-bottom:100px;"><?php echo $a;?></td>
+                <td style="width:50px"><?php echo "<b>";echo $cursoid_;echo "</b>";?></td>
                 <td style="width:25px"><?php echo "<b>";echo $turno_;echo "</b>";?></td>
                 <td style="width:250px"><?php echo "<b>";echo $nombrecurso ;echo "</b>";?></td>
-                <td style="width:29px"><?php echo "<b>";echo $semid_;echo "</b>";?></td>
-                <td style="width:25px"><?php echo "<b>";echo $creditos_;echo "</b>";?></td>
+                <td style="width:27px"><?php echo "<b>";echo $semid_;echo "</b>";?></td>
+                <td style="width:22px"><?php echo "<b>";echo $creditos_;echo "</b>";?></td>
                 <td style="width:250px"><?php echo "<b>";echo $docente;echo "</b>";?></td>
                 <td><?php echo $veces_;?></td>
             </tr>
@@ -73,39 +74,36 @@ ob_start();
         </tr>
     </table>
     <div style="clear:both"></div>  <br/>
-    <table width="700px" style="font-size:11px;margin-left: 90px;">
+    <table width="700px" style="font-size:11px;margin-left: 147px;">
         <tr>
             <td>Semestre : <?php echo $this->semestre?></td>
-            <td  width='200px' ></td>
-            <td width='300px' style="float:right">
+            <td  width='100px' ></td>
+            <td width='400px' style="float:right">
                 <?php echo (trim($this->estadomatricula)<>"M")?"":"VALIDADO";?>
             </td>
         </tr>
     </table>
 </div>
 
- <h1 class="pie" style="margin-left: 20%;"> 
+ <h1  style="margin-right: 130px;"> 
 <?php echo "<b><center>";echo "<span style='font-size: 12px'>Usted imprimio la matricula el  ".date('d/m/Y') ." a las  ".date('H:m:s')."</span>";echo "</b></center>";?>
 </h1> 
 
 
-<style type="text/css">
-body{
-    font-family: "Courier New", Courier, monospace;
-}
-</style>
+
 
 <?php 
-
-  $html = ob_get_contents();
-  
+  // $html = ob_get_contents();
   $mpdf=new mPDF('win-1252','A4','','',15,15,40);
-  // $mpdf->SetHTMLHeader($header);
-  // $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-  
   $mpdf->SetFooter($this->footer);
   ob_end_clean();
   $mpdf -> WriteHTML($html);
   $mpdf->Output('RecordNotas-'.$this->person['pid'].'.pdf','D');
   
 ?>
+
+<style type="text/css">
+/* body{
+    font-family: "Courier New", Courier, monospace;
+} */
+</style>

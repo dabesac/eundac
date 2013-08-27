@@ -1,0 +1,99 @@
+<?php
+$sesion1  = Zend_Auth::getInstance();
+$sesion = $sesion1->getStorage()->read();  
+$eid = $this->eid;
+$oid = $this->oid;
+$perid = $this->perid;
+$escid = $this->escid;   
+
+$dir = APPLICATION_LIBRARY."/pdf/MPDF54/mpdf.php";
+include($dir);
+ob_start();
+    $dbescuela = new Admin_Model_DbTable_Escuela();
+    $escuela = $dbescuela ->_getEscuela($eid,$oid,$escid);
+    $infoescuela = $escuela['nom_escuela'];
+    $infofacultad= $escuela['facid'];
+    $dbfacultad = new Admin_Model_DbTable_Facultad();
+    $facu = $dbfacultad ->_getFacultad($eid,$oid,$infofacultad);
+    $infonombrefacultad = $facu['nom_facultad'];
+
+    $header='
+
+  <table style="width: 100%;" border="1">
+    <tr>
+          <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+          <th style="text-align: center; font-size: 11px;">
+           FACULTAD DE  '.strtoupper($infonombrefacultad).'<br/>
+            ESCUELA DE  '.strtoupper($infoescuela).' 
+               
+          </th>        
+      </tr>
+    <tr>
+      <th style="border: 1px solid #000;"> ESTADISTICA DE RENDIMIENTO </th>
+      </tr>
+  </table>
+
+<table style="font-size: 11px;float: left; width: 100%; border-bottom: 2px solid #000;" >     
+      <tr>    
+          <th style="width: 50px;text-align: left;">Periodo</th>
+          <td style="text-align: left;">'.strtoupper($this->perid).'</td>
+      </tr>   
+  </table>'
+?>
+<link rel="stylesheet" type="text/css" href="/css/impresion.css">
+<link rel="stylesheet" type="text/css" href="/css/bootstrap/bootstrap-responsive.min.css">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" /> 
+        <table class="table span11 table-striped table-bordered table-condensed fuente">
+            <tbody>
+              <tr ></tr>
+             <tr class='bloke'>
+              <td ><center><b>SEM</b></center></td>
+              <td ><center><b>ASIGNATURAS</b></center></td>
+              <td colspan="2"><center><b>APROBADOS</b></center></td>
+              <td colspan="2"><center><b>DESAPROBADOS</b></center></td>
+              <td colspan="2"><center><b>RETIRADOS</b></center></td>
+              <td colspan="2"><center><b>TOTALES</b></center></td>
+            </tr>         
+             <tr>
+              <td ></td>
+              <td ></td>
+              <td>N°</td>
+              <td>%</td>
+              <td>N°</td>
+              <td>%</td>
+              <td>N°</td>
+              <td>%</td>
+              <td>N°</td>
+              <td>%</td>            
+            </tr>
+            <?php foreach ($this->rep_rendimiento as $dr) {?>
+        <tr>  
+            <td><?php echo $dr['semid']?></td>
+            <td><?php echo $dr['nombre_curso']?></td>
+           
+              <td><?php echo $dr['aprobados']?></td>
+              <td><?php echo $dr['porc_ap']?></td>
+              <td><?php echo $dr['desaprobados']?></td>              
+              <td><?php echo $dr['porc_desap']?></td>
+              <td><?php echo $dr['retirados']?></td>
+              <td><?php echo $dr['porc_ret']?></td>
+              <td><?php echo $dr['totales']?></td>
+              <td><?php echo '100'?></td>
+                         
+        </tr>
+      <?php }?>
+        
+          </tbody>
+        </table>
+  <?
+  $html = ob_get_contents();
+  $mpdf=new mPDF('win-1252','A4','','',15,15,2,12,5,7);
+  $mpdf->SetHTMLHeader($header);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('Rendimiento'.'.pdf','D');
+?>
+        
+
+   

@@ -1,0 +1,107 @@
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+        <script src="/external/jquery/jquery-1.9.1.js"></script>
+        <script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
+        <script src="/external/jquery/external/globalize.js"></script>
+        <script src="/external/jquery/external/jquery.mousewheel.js"></script>
+        <script src="/external/jquery/external/jshint.js"></script>
+        <script src="/external/jquery/external/qunit.js"></script>
+        <script src="/external/jquery/external/base64/jquery.base64.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">      
+        <!-- Texto Enriquecido-->
+        <link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
+        <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
+        
+        <!-- Bootstrap -->
+        <script src="/external/bootstrap/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+        <link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">        
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+<table class ='table  table-condensed' style="margin-left: 0px;margin-right: 15px; font-size: 12px; background: #428bca; color: #D2F6F9;" align= "center">
+    <tr>
+        <th rowspan="5" class="col-lg-7">
+            <center>
+                    <p>                
+                    <span style="font-size: 14px">REPORTE CUADRO DE MERITOS</span><br/>
+                    
+                    <span style="font-size: 12px">ESCUELA DE FORMACION PROFESIONAL DE 
+                        <?php echo $this->nom_escuela;?> 
+                    </span><br/>
+                    <span style="font-size: 11px"> PERIODO  
+                        <?php echo $this->perid;?> 
+                       
+                    </span><br/>
+                    
+                    <?php if ($this->especialidad<>""){?>
+                        <span style="font-size: 13px">ESPECIALIDAD DE 
+                            <?php echo $this->especialidad; ?>
+                        </span>
+                    <?php 
+                    }
+                    ?>
+                    </center>
+        </th>
+        <th colspan="6">
+            <span style="font-size: 11px"><?php print $this->nomcurricula;?></span>
+        </th>        
+    </tr>
+    <tr>  
+        <th class="span1">Fecha</th>
+        <th class="span1"  rowspan="2">
+                <a href="/reportes/reportealumnos/imprimirprimerospuestos/perid/<?php echo $this->perid;?>/escid/<?php echo $this->escid;?>/curid/<?php echo $this->curid;?>/semid/<?php echo $this->semid?>" class="btn btn-danger" style='color: #ccc' atls="Valide la matricula para imprimir" title="Valide la matricula para imprimir"/>
+                 <b> <i class="glyphicon glyphicon-list-alt glyphicon-white"></i><br/>Imprimir</b></a>
+        </th>
+    </tr>
+    <tr>
+          
+      <td ><span class="label label-info" data-placement="bottom">
+        <?php echo date("Y/m/d"); ?></span></td>     
+        
+        
+    </tr>
+</table>
+
+<table  align= "center" class="table table-striped table-condensed ">
+                        <tr >
+                           <td class='success' style="font-size: 14px; color:#468847;" colspan="<?php echo $this->nrorepsemestre ?>"><center><b>SEMESTRES:</b></center></td>
+                        </tr>                       
+                        <tr>
+                          <?php foreach ($this->rep_semestre as $rs) { ?>
+                              <td>  
+                                <div class='alert alert-success'>
+                                <center><a class="btn btn-success" href="/report/performance/primerospuestos/semid/<?php echo ($rs['semid'])?>/escid/<?php echo base64_encode($rs['escid'])?>/curid/<?php echo base64_encode($rs['curid'])?>/perid/<?php echo base64_encode($rs['perid'])?>"><i class="icon-refresh icon-white" ></i><?php echo $rs['semid']?></a></center>
+                              </div>
+                              </td>
+                          <?php 
+                        }?>
+                        </tr>
+                        <tr>
+                          <td class='success' style="font-size: 14px; color:#468847;" colspan="<?php echo $this->nrorepsemestre ?>"><h5><center><b> <?php echo $this->semestre ?> </b></center></h5></td>
+                        </tr>                    
+</table>
+<table class="table col-lg-11 table-bordered table-condensed  table-striped" style="font-size: 12px">
+                          <tbody>
+                          <tr ></tr>
+                          <tr style="background: #333; color: #fff;">
+                            <td>N°</td>
+                            <td>Apellidos y Nombres</td>
+                            <td>Cred. Aprobados</td>
+                            <td>Promedio Ponderado</td>
+                          </tr>
+
+                          <?php $i=0; ?>  
+                          <?php foreach ($this->rep_alumnos as $ra) { $i=$i + 1;?>
+                      <tr>
+                          <td><?php echo $i; ?>  </td>
+                          <td><?php echo $ra['nom']?></td>
+                          <td><?php if ($ra['cred_apr']=='') { echo 0; } else { echo $ra['cred_apr'];}?></td>
+                          <td><?php echo round($ra['prom_pon'],2)?></td>
+                      </tr>
+                    <?php }?>
+                      
+                        </tbody>
+</table>
+               
+   

@@ -74,7 +74,7 @@ $urlmatri="uid/".base64_encode($matricula['uid'])."/pid/".base64_encode($matricu
         <th style="color: #D2F6F9;" class="span1">Monto</th>
         <th style="color: #D2F6F9;" class="span1">Condiciones</th>
         <th class="span1" rowspan="2">
-            <a href="/report/recordnotas/print/uid/<?php echo $matricula['uid'];?>/pid/<?php echo $matricula['pid'];?>/escid/<?php echo $matricula['escid']?>/subid/<?php echo $matricula['subid'];?>/eid/<?php echo $matricula['eid']?>/oid/<?php echo $matricula['oid'];?>" class="btn btn-info" target="_black">
+            <a href="/report/recordnotas/print/uid/<?php echo base64_encode($matricula['uid']);?>/pid/<?php echo base64_encode($matricula['pid']);?>/escid/<?php echo base64_encode($matricula['escid'])?>/subid/<?php echo base64_encode($matricula['subid']);?>/eid/<?php echo base64_encode($matricula['eid'])?>/oid/<?php echo base64_encode($matricula['oid']);?>" class="btn btn-info" target="_black">
             <i class="glyphicon glyphicon-list-alt glyphicon-white"></i><br/>Record</a>
         </th>
         <th class="span1"  rowspan="2">
