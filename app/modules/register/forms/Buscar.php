@@ -1,5 +1,4 @@
 <?php
-
 class Register_Form_Buscar extends Zend_Form{    
     public function init(){
         
@@ -27,4 +26,6 @@ class Register_Form_Buscar extends Zend_Form{
 
         $this->addElements(array($uid,$nombre,$submit));        
     }
+
 }
+

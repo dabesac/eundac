@@ -43,8 +43,11 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 
 	public function _getAll($where=array()){
 		try{
-			if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["subid"] =='' || $where["courseid"]=='' || $where["curid"] =='' || $where["turno"] =='' || $where["perid"]=='') return false;
-			$wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and subid='".$where['subid']."' and courseid='".$where['courseid']."' and curid='".$where['curid']."' and turno='".$where['turno']."' and perid='".$where['perid']."'";
+			if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["subid"] =='' || 
+				$where["courseid"]=='' || $where["curid"] =='' || $where["turno"] =='' || $where["perid"]=='') return false;
+			$wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".
+					$where['escid']."' and subid='".$where['subid']."' and courseid='".$where['courseid']."' 
+					and curid='".$where['curid']."' and turno='".$where['turno']."' and perid='".$where['perid']."'";
 			$rows = $this->fetchAll($wherestr);
 			if($rows) return $rows->toArray();
 			return false;

@@ -1,0 +1,69 @@
+<?php
+if ($this->user) { 
+	$whereesc['eid']=$this->user['eid'];
+	$whereesc['oid']=$this->user['oid'];
+	$whereesc['escid']=$this->user['escid'];
+	$whereesc['subid']=$this->user['subid'];
+	$esc= new Api_Model_DbTable_Speciality();
+	$datesc=$esc->_getOne($whereesc);
+	$wheresub['eid']=$this->user['eid'];
+	$wheresub['oid']=$this->user['oid'];
+	$wheresub['subid']=$this->user['subid'];
+	$sub= new Api_Model_DbTable_Subsidiary();
+	$datsub=$sub->_getOne($wheresub)?>
+<table class="table">
+	<tr>
+		<th>Cod. Mat.</th>
+		<th>DNI</th>
+		<th>Apellidos y Nombres</th>
+		<th>Escuela</th>
+		<th>Sede</th>
+		<th>Seleccione Periodo</th>
+		<th>Agregar</th>
+	</tr>
+	<tr>
+		<td><?php echo $this->user['uid']?></td>
+		<td><?php echo $this->user['pid']?></td>
+		<td><?php echo $this->user['last_name0']." ".$this->user['last_name1'].", ".$this->user['first_name']?></td>
+		<td><?php echo $datesc['name']?></td>
+		<td><?php echo $datsub['name']?></td>
+		<td class="col-lg-3">
+			<select id="perid" class="form-control">
+				<?php
+				if ($this->periods) { ?>
+					<option value="">- Seleccione -</option>
+					<?php
+					foreach ($this->periods as $periods) { ?>
+						<option value="<?php echo $periods['perid']?>"><?php echo $periods['perid']." | ".$periods['name']?></option>
+					<?php
+					}
+				}else{ ?>
+					<option value="">No hay periodos.</option>
+				<?php 
+				}?>
+			</select>
+		</td>
+		<td><a id="addcourse" href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
+	</tr>
+</table>
+<?php
+}else{ ?>
+<div class="alert alert-info">
+	<b>Información: </b>El alumno no se encuentra registrado en el sistema o ingreso el Código de Matricula erróneo.
+</div>
+<?php
+}?>
+<div id="registration"></div>
+
+<script type="text/javascript">
+$("#addcourse").click(function(){
+	var perid=$("#perid").val();
+	if (perid=="") {
+		alert("Seleccione un Periodo.");
+		return false;
+	};
+	var url="/record/directed/register/perid/"+perid+"/uid/<?php echo $this->user['uid']?>/pid/<?php echo $this->user['pid']?>/subid/<?php echo $this->user['subid']?>/escid/<?php echo $this->user['escid']?>";
+	$("#registration").html("<img src='/img/spinner.gif'>Cargando...");
+	$("#registration").load(url);
+});
+</script>

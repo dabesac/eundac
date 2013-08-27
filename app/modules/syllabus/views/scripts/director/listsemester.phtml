@@ -1,0 +1,9 @@
+<?php print_r($this->semesters);
+if($this->semesters){?>
+	<option value="">Filtre por Semestre</option>
+	<?php foreach ($this->semesters as $semester) {?>
+		<option value="<?php echo $semester['semid']?>"><?php echo $semester['name']?></option>
+<?php }
+}else{?>
+	<option value="">No Existe Semestres, Raro no?</option>
+<?php }?>
