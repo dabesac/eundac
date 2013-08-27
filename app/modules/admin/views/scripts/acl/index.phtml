@@ -6,7 +6,7 @@
 			<?php if($this->rols){
 				$c=0;
 				foreach ($this->rols as $rls) {?>
-					<option value="<?php echo base64_encode($rls['rid']);?>"><?php echo $rls['name']?></option>		
+					<option value="<?php echo $rls['rid']?>"><?php echo $rls['name']?></option>		
 				<?php $c++;
 				}
 			}?>
@@ -17,7 +17,7 @@
 
 <div id="list_acl" name="list_acl"></div>
 
-<form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" 
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" 
 	method="post" enctype="application/x-www-form-urlencoded">
 <div class="modal fade" id="enternewdata">
 	<div class="modal-dialog">
@@ -29,9 +29,9 @@
       		<div class="modal-body">
 	      		<table class="table">
 	        		<tr>
+	        			<input type="hidden" name="rid" id="rid">
 	        			<td>Modulo</td>
-	        			<td><?php print $this->form->rid?>
-	        			<?php print $this->form->mid?></td>
+	        			<td><?php print $this->form->mid?></td>
 	        		</tr>
 	        		<tr>
 	        			<td>Nombre</td>
@@ -60,27 +60,28 @@
 	});
 	
 	$("#new").click(function(){
-		var rid=$.base64.encode($("#rol").val());
-		var rid_=($("#rol").val());
-		$("#rid").val(rid_);
+		var rid=($("#rol").val());
+		$("#rid").val(rid);
 		if(rid){
 			$("#enternewdata").modal("show")
 		}else{
 			alert("Elija un Rol!")
 		}
 	});
+
 	$("#mid").change(function(){
 	var mid = ""+$("#mid").val();
 	var url = "/admin/acl/listr/mid/"+mid;
 	$("#reid").load(url);
 
-	$("#save").submit(function(){
+	$("#new").click(function(){
+		alert("work");
 		e.preventDefault();
 		$("#list_acl").html("<img src='/img/spinner.gif'>Cargando....");
 		$.ajax({
 	        type: "POST",
-	        url: $("#formRecord").attr("action"),
-	        data: $("#formRecord").serialize(),
+	        url: $("#frmAcl").attr("action"),
+	        data: $("#frmAcl").serialize(),
 	        success: function(data){
 	       		$("#list_acl").html(data);
 	      	}		

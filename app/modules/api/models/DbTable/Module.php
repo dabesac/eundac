@@ -11,7 +11,7 @@ class Api_Model_DbTable_Module extends Zend_Db_Table_Abstract
 			return $this->insert($data);
 			return false;
 		}catch (Exception $e){
-				print "Error: Save Organization ".$e->getMessage();
+				print "Error: Save Module ".$e->getMessage();
 		}
 	}
 	
@@ -22,7 +22,7 @@ class Api_Model_DbTable_Module extends Zend_Db_Table_Abstract
 			return $this->update($data, $where);
 			return false;
 		}catch (Exception $e){
-			print "Error: Update Organization ".$e->getMessage();
+			print "Error: Update Module ".$e->getMessage();
 		}
 	}
 	
@@ -33,7 +33,7 @@ class Api_Model_DbTable_Module extends Zend_Db_Table_Abstract
 			return $this->delete($where);
 			return false;
 		}catch (Exception $e){
-			print "Error: Delete Organization ".$e->getMessage();
+			print "Error: Delete Module ".$e->getMessage();
 		}
 	}
 	
@@ -45,7 +45,7 @@ class Api_Model_DbTable_Module extends Zend_Db_Table_Abstract
 			if($row) return $row->toArray();
 			return false;
 		}catch (Exception $e){
-			print "Error: Read One Organization ".$e->getMessage();
+			print "Error: Read One Module ".$e->getMessage();
 		}
 	}
 	
@@ -62,7 +62,7 @@ class Api_Model_DbTable_Module extends Zend_Db_Table_Abstract
 			if($rows) return $rows->toArray();
 			return false;
 		}catch (Exception $e){
-			print "Error: Read All Course ".$e->getMessage();
+			print "Error: Read All Modules ".$e->getMessage();
 		}
 	}
 }
