@@ -26,10 +26,4 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
 		}
 	}
 
-	/*  La funcion suma los dias de una fecha indicada */
-	public function _getsumdate($date,$numday){
-		$sql=$this->_db->query("select date('$date') + integer '$numday' as dia");
-        $row=$sql->fetchAll();
-        return $row;
-	}
  }
