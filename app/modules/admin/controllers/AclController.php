@@ -2,60 +2,50 @@
 class Admin_AclController extends Zend_Controller_Action{
 
 	public function init(){
-        /*$sesion  = Zend_Auth::getInstance();
+       	$sesion  = Zend_Auth::getInstance();
         if(!$sesion->hasIdentity() ){
             $this->_helper->redirector('index',"index",'default');
         }
         $login = $sesion->getStorage()->read();
-        if (!$login->modulo=="admin"){
-            $this->_helper->redirector('index','index','default');
-        }
-        $this->sesion = $login;*/
-		$this->eid='20154605046';
-		$this->oid='1';
+        $this->sesion = $login;
+		$this->eid=$login->eid;
+		$this->oid=$login->oid;
 	}
 
-	 public function indexAction() 
+	public function indexAction() 
     {   
         try 
         {
             $eid=$this->eid;
             $oid=$this->oid;
-
             $dbrol=new Api_Model_DbTable_Rol();
             $where=array("eid"=>$eid,"oid"=>$oid);
             $order=array("name");
             $rols=$dbrol->_getAll($where,$order);
-            //print_r($rols);
             $this->view->rols=$rols;
-
-            //New Acl
-            //print_r($rid);
-            $form=new Admin_Form_Acl();
-            $form->save->setLabel("Guardar");
+            $form= new Admin_Form_Acl();
             $this->view->form=$form;
-            if ($this->getRequest()->isPost()){
-                $formdata=$this->getRequest()->getPost();
-                //print_r($formdata);
-                if($form->isValid($formdata)){
-                    unset($formdata['save']);
-                    $formdata['eid']=$eid;
-                    $formdata['oid']=$oid;
-                    trim($formdata['reid']);
-                    trim($formdata['state']);
-                    //print_r($formdata);
-                    $dbacl=new Api_Model_DbTable_Acl();
-                    $saveacl=$dbacl->_save($formdata);
-                    //$this->view->formdata=$formdata;
-                }
-            }
-
         } 
         catch (Exception $ex) 
         {
             print "Error listando al Crear Roles: ".$ex->getMessage();
         }
 
+    }
+    
+    public  function listrAction()
+    {
+    	$this->_helper->layout()->disableLayout();
+    	$data['eid']=$this->eid;
+    	$data['oid']=$this->oid;
+    	$mid=base64_decode(trim($this->_getParam("mid")));
+    	if (!$mid) return false;
+    	$data['mid']=$mid;
+    	$data['state']="A";    	
+    	$resources = new Api_Model_DbTable_Resource();
+    	$attr = array("eid","oid","mid","reid","state","name");
+    	$rows = $resources->_getFilter($data,$attr);
+    	if($rows) $this->view->data = $rows;
     }
 
 
@@ -65,19 +55,17 @@ class Admin_AclController extends Zend_Controller_Action{
             $this->_helper->layout()->disableLayout();
             $eid=$this->eid;
             $oid=$this->oid;
-            $rid=$this->_getParam("rid");
+            $rid=base64_decode($this->_getParam("rid"));
             $dbacl=new Api_Model_DbTable_Acl();
             $where=array("eid"=>$eid,"oid"=>$oid,"rid"=>$rid);
             $acl=$dbacl->_getFilter($where);
-            //print_r($acl);
             $c=0;
-            $attrib=array("name","reid");
+            $attrib=array("name","reid","mid");
             foreach ($acl as $a) {
                 $where=array("eid"=>$eid,"oid"=>$oid,"reid"=>$a['reid']);
                 $recxacl[$c]=$dbacl->_getinfoResource($where,$attrib);
                 $c++;
             }
-            //print_r($recxacl);
             $this->view->rid=$rid;
             $this->view->aclname=$recxacl;
 

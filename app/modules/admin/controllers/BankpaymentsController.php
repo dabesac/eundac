@@ -38,9 +38,10 @@ class Admin_BankpaymentsController extends Zend_Controller_Action {
         $dat=new Api_Model_DbTable_Bankreceipts();
         if ($uid=="") {
             $drec=$dat->_getBankreceiptsBetween2Dates($fini,$ffin);
+
         }else{
             $drec=$dat->_getBankreceiptsBetween2DatesXuid($fini,$ffin,$uid);
-        }
+         }
         if ($drec) {
             $this->view->drecibo=$drec;
         }else{
@@ -152,14 +153,17 @@ class Admin_BankpaymentsController extends Zend_Controller_Action {
             $reg=new Api_Model_DbTable_PaymentsDetail();
             if ($reg->_save($dato)) {
                 $recibo['processed']="S";
-                $str=array();
-                $str="operation='$num_ope' and code_student='$cod_mat'";
+                $str['operation']=$num_ope;
+                $str['code_student']=$cod_mat;
                 if ($data->_update($recibo,$str)) {
                     ?>
                     <script type="text/javascript">
                         alert("Se asigno el pago!!!");
+
                     </script>
+
                     <?php
+
                 }
             }
         }else{
@@ -170,6 +174,24 @@ class Admin_BankpaymentsController extends Zend_Controller_Action {
                 </script>
                 <?php
          }
+    }
+
+    public function removeAction(){
+        $this->_helper->layout()->disableLayout();
+        $uid = $this->_getParam('uid');
+        $operation = $this->_getParam('num_operacion');
+        $pag = new Api_Model_DbTable_PaymentsDetail();
+        $pk['uid']=$uid;
+        $pk['operation']=$operation;
+        if ($pag->_delete($pk)) {
+            $recban= new Api_Model_DbTable_Bankreceipts();
+            $str['operation']=$operation ;
+            $str['code_student']=$uid;
+            $datos['processed']="N";
+            if ($recban->_update($datos,$str)) { 
+                $this->_helper->redirector("index");
+            }
+        }
     }
 
    

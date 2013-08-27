@@ -19,6 +19,7 @@ class Api_Model_DbTable_Registration extends Zend_Db_Table_Abstract
 	public function _update($data,$pk)
 	{
 		try{
+
 			if ($pk['eid']=='' ||   $pk['oid']=='' ||  $pk['escid']=='' ||  $pk['regid']=='' || $pk['subid']=='' || $pk['pid']=='' || $pk['uid']=='' || $pk['perid']=='') return false;
 			$where = "eid = '".$pk['eid']."' and pid='".$pk['pid']."' and oid = '".$pk['oid']."' and escid = '".$pk['escid']."' and uid = '".$pk['uid']."' and subid = '".$pk['subid']."' and regid = '".$pk['regid']."' and perid = '".$pk['perid']."'";
 			return $this->update($data, $where);
@@ -28,13 +29,18 @@ class Api_Model_DbTable_Registration extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	public function _delete($data)
+	public function _delete($data=array())
 	{
 		try{
-			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']=='' || $data['regid']==''|| $data['pid']==''|| $data['uid']=='' || $data['perid']=='') return false;
-			$where = 	"eid = '".$data['eid']."' and oid='".$data['oid']."' and escid='".$data['escid']."' and subid='".$data['subid']."' and regid='".$data['regid']."' and pid='".$data['pid']."' and uid='".$data['uid']."' and perid='".$data['perid']."'";			
+			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']=='' || 
+				$data['regid']==''|| $data['pid']==''|| $data['uid']=='' || $data['perid']=='') return false;
+			$where = 	"eid = '".$data['eid']."' and oid='".$data['oid']."' and escid='".
+			$data['escid']."' and subid='".$data['subid']."' and regid='".$data['regid'].
+			"' and pid='".$data['pid']."' and uid='".$data['uid']."' and perid='".$data['perid']."'";			
+			
 			return $this->delete($where);
 			return false;
+			
 		}catch (Exception $e){
 			print "Error: Delete Registration".$e->getMessage();
 		}
@@ -119,7 +125,7 @@ public function _getPaymentsStudent($where=null,$attrib=null,$order=null){
 
     		if ($escid==''|| $curid==''|| $perid==''|| $semid=='') return false;
 
-	 		$sql = $this->_db->query(" select semester_credits ('4SI','94A4SI','13B','4') ");
+	 		$sql = $this->_db->query(" select semester_credits ('$escid','$curid','$perid','$semid') ");
 			$row=$sql->fetchAll();
 			if ($row) return $row;
 	       	return false;
