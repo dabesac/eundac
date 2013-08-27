@@ -242,6 +242,42 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
             }
         }
 
+    public function _getSemesterXCurricula($curid="",$subid="",$escid="",$oid="",$eid="")
+    {
+        try
+        {            
+            $sql = $this->_db->query("
+            SELECT DISTINCT CAST (c.SEMID AS INTEGER),s.name FROM base_courses as c
+            inner join base_semester as s
+            on c.semid=s.semid and c.eid=s.eid and c.oid=s.oid
+            WHERE CURID='$curid' and escid='$escid' and subid='$subid' and c.eid='$eid' and c.oid='$oid' and c.state='A'
+            ORDER BY CAST(c.SEMID AS INTEGER)
+            ");
+            if ($sql) return $sql->fetchAll();
+            return false;           
+        }  
+        catch (Exception $ex)
+        {
+            print "Error: Obteniendo datos de tabla 'Matricula Curso'".$ex->getMessage();
+        }
+    }
+
+    public function _getCurriculaAnterior($curid="",$escid="")
+    {
+        try
+        {            
+            $sql = $this->_db->query("
+            select curricula_ant('$curid','$escid');
+            ");
+            if ($sql) return $sql->fetchAll();
+            return false;           
+        }  
+        catch (Exception $ex)
+        {
+            print "Error: Obteniendo Curricula anterior".$ex->getMessage();
+        }
+    }
+
 
     //Lista las curriculas usadas por escuela de un determinado periodo
     public function _getCurriculasXSchool($where=null)

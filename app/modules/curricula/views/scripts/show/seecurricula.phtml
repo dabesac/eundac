@@ -1,0 +1,141 @@
+
+
+<script>
+$('#myTab a').click(function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
+
+</script>
+
+
+<?php 
+$curricula=$this->curricula;
+$eid=$this->eid;
+$oid=$this->oid;
+$subid=$this->subid;
+$escid=$this->escid; 
+$curid=$this->curid; 
+$curidant=$this->curidant;
+$rid=$this->rid; 
+?>
+<div class="flotacarajo">
+    <table class="table table-hover table-condensed" style="margin:10px">
+        <tr>
+            <th style="font-size:16px"><center>Escuela de Formación Profesional de <?php echo $this->escuela[0]['name']?></center></th>
+        </tr>
+        <tr>
+            <th style="font-size:15px"><center><?php echo $curricula['name']?></center></th>
+        </tr>
+        <tr>
+            <th style="font-size:14px"><center>SEMESTRES ACADÉMICOS</center></th>
+        </tr>
+    </table>
+</div>
+<div class="flotacarajo" style="margin:10px">
+    
+    <center><a href="/curricula/show" class="btn btn-danger"><span class="glyphicon glyphicon-arrow-left"></span>
+Regresar</a></center>
+</div>
+<div class="flotacarajo" style="margin:10px">
+    
+        <td><a href="/curricula/show/print/<?php echo base64_encode($subid)?>/escid/<?php echo base64_encode($escid)?>/curid/<?php echo base64_encode($curid)?>/state/<?php echo base64_encode($state)?>" class="btn btn-info" id="llamar">Imprimir</a></td>
+        
+</div>
+<?php 
+if ($this->semestre) { ?>
+<div class="flotacarajo" style="margin:10px">    
+    <ul class="nav nav-tabs" id="myTab">
+        <?php
+        foreach ($this->semestre as $semestre) { ?>
+          <li><a href="#sem<?php echo $semestre['semid']?>"><?php echo $semestre['name']?></a>
+          </li>
+         <?php
+        }?>
+   </ul>
+   
+  
+</div>
+<div class="tab-content">
+<?php
+foreach ($this->semestre as $semestre) { ?>
+    <div class="tab-pane" id="sem<?php echo $semestre['semid']?>">
+     <?php if ($this->cursos) { ?>
+                        <table class="table table-hover table-striped span9">
+                            <tr>
+                                <th colspan="4"><center>CURSOS ACTIVOS <?php echo $curid?></center></th>
+                                <th colspan="3"><center>CURSOS DE EQUIVALENCIA <?php echo $curidant?></center></th>
+                            </tr>
+                            <tr>
+                                <th>#</th>
+                                <th>Codigo</th>
+                                <th>Nombre</th>
+                                <th>Creditos</th>
+                                <th>Codigo</th>
+                                <th>Nombre</th>
+                                <th>Creditos</th>    
+                            </tr>
+                        <?php
+                        $i=1;
+                        foreach ($this->cursos as $cursos) { 
+                            $equi=new Api_Model_DbTable_Course();
+                            if ($semestre['semid']==$cursos['semid']) {
+                                $where['eid']=$eid;
+                                $where['oid']=$oid;
+                                $where['escid']=$escid;
+                                $where['subid']=$subid;
+                                $where['courseid']=$cursos['course_equivalence'];
+                                $where['curid']=$curidant;
+                                $cursoequi=$equi->_getOne($where);
+                                if ($cursoequi) {
+                                    $cursoidequi=$cursoequi['courseid'];
+                                    $nombreequi=$cursoequi['name'];
+                                    $creditosequi=$cursoequi['credits'];
+                                }else{
+                                    $cursoidequi="-";
+                                    $nombreequi="Ninguno";
+                                    $creditosequi="-";
+                                }
+                                ?>
+                            <tr>
+                                <td><?php echo $i?></td>
+                                <td><?php echo $cursos['courseid']?></td>
+                                <td><?php echo $cursos['name']?></td>
+                                <td><?php echo $cursos['credits']?></td>
+                                <td><?php echo $cursoidequi?></td>
+                                <td><?php echo $nombreequi?></td>
+                                <td><?php echo $creditosequi?></td>
+                            </tr>
+                        <?php
+                            $i++;
+                            }
+                        } ?>
+                        </table>
+                        <?php
+                    }?>
+
+
+    </div>
+
+  
+<?php
+        }?>
+</div> 
+
+
+<?php
+}?>
+<script>
+$('#myTab a').click(function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
+
+</script>
+
+
+
+
+
+
+
