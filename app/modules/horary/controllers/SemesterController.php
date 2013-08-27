@@ -19,11 +19,9 @@
  		try {
  			$eid=$this->sesion->eid;
  			$oid=$this->sesion->oid;
- 			// $escid=$this->sesion->escid;
- 			// $uid=$this->sesion->uid;
- 			$escid='4SI';
- 			$uid='0924401019';
- 			// $pid=$this->sesion->pid;
+ 			$escid=$this->sesion->escid;
+ 			$uid=$this->sesion->uid;
+ 			$pid=$this->sesion->pid;
  			$subid=$this->sesion->subid;
  			$perid=$this->sesion->period->perid;
 			$base_url = 'http://localhost:8080/';
@@ -47,14 +45,10 @@
  		try {
  			$eid=$this->sesion->eid;
 	        $oid=$this->sesion->oid;
-	        $escid='4SI';
-	        $facid='4';
-	        $uid='0924401019';
-	        $pid='70773974';
-	        // $escid=$this->sesion->escid;
-	        // $facid=$this->sesion->facid;
-	        // $uid=$this->sesion->uid;
-	        // $pid=$this->sesion->pid;
+	        $escid=$this->sesion->escid;
+	        $facid=$this->sesion->facid;
+	        $uid=$this->sesion->uid;
+	        $pid=$this->sesion->pid;
 	        $subid=$this->sesion->subid;
 	        $perid=$this->sesion->period->perid;
 	        $this->view->uid=$uid;
