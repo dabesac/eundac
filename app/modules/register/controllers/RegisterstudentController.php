@@ -24,8 +24,6 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $this->view->perid=$where['perid'];
             $fm=new Register_Form_Buscar();
             $pfac='T'.$escid['1'];
-            // $fm->enviar->setLabel("Buscar");
-            // $fm->escid->setvalue($pfac);
             $this->view->fm=$fm;
             $escuelas = new Api_Model_DbTable_Speciality();
             $lesc = $escuelas->_getspeciality($where);
@@ -45,7 +43,6 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
 
             if ($tipo=="vertodo")
             {
-
                 $escid = $this->sesion->escid;
                 $pfac='T'.$escid['1'];
                 $estados='I';
@@ -86,7 +83,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $where['perid'] = $this->sesion->period->perid;
             $where['eid'] = $this->sesion->eid;    
             $where['oid'] = $this->sesion->oid;        
-            $rid='AL';
+       
             // Obtener fecha periodo
             $infoper = new Api_Model_DbTable_Periods();
             $infoperiodo = $infoper->_getOne($where);
@@ -119,8 +116,9 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             // //Obtenemos el valor de la matricula
             $matri = new Api_Model_DbTable_Registration();
             $rmatri = $matri->_getRegister($where);
+            // print_r($rmatri);
             if(!$rmatri) return false;
-            $matid=$rmatri['matid'];
+            $where['regid']=$rmatri['regid'];
             $this->view->matricula_ = $rmatri;
             
             //Obteniendo los datos del alumno
@@ -129,43 +127,51 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             if ($ralum) $this->view->alumno = $ralum['last_name0']." ".$ralum['last_name1'].", ".$ralum['first_name'];
             
             // //Obtenemos los cursos matriculados
-            // $lcursos = new Admin_Model_DbTable_Matriculacurso();
-            // $listacurso =$lcursos->_getCursosXAlumno($eid, $oid, $escid, $uid, $pid, $perid, $sedid, $matid);
-            // foreach ($listacurso as $cursomas){
-            //     //Agregar valores al registro de matricula curso para mandar a la vista
-            //     $nuevoreg = new Admin_Model_DbTable_Cursos();
-            //     $rcus = $nuevoreg->_getCurso($eid, $oid, $escid, $sedid, $cursomas['cursoid'], $cursomas['curid']);
-            //     $cursomas['semid'] = $rcus['semid'];
-            //     $cursomas['creditos'] = $rcus['creditos'];
-            //     $cursomas['nombrecurso'] = $rcus['nombre_curso'];
-            //     //Obteniendo numero de veces matrocula a un curso
-            //     //$usuario = new Admin_Model_DbTable_Usuario();
-            //     $veces = new Admin_Model_DbTable_Cursos();
-            //     $listusuario = $veces ->_getCursosXAlumnoXVeces($escid,$uid,$cursomas['curid'], $cursomas['cursoid']); 
-            //     $cursomas['veces'] = intval($listusuario[0]['veces']);
-            //     //Sacamos los docentes por curso
-            //     $bdprofesores = new Admin_Model_DbTable_Docentexcursos();        
-            //     $datosss= $bdprofesores->_getCursoXDocente($eid,$oid,$escid,$perid,$cursomas['cursoid'],$cursomas['turno'],$cursomas['curid'],$sedid);
-            //     $ndoc=array();
-            //     foreach ($datosss as $doct){
-            //         $persona = new Admin_Model_DbTable_Persona();
-            //         $rper = $persona->_getPersona($eid, $oid, $doct['pid']);
-            //         $ndoc[]=$rper['ape_pat']." ".$rper['ape_mat'].", ".$rper['nombres'];
-            //     }
-            //     $cursomas['docentes'] = $ndoc;
-            //     $cantmatr = new Admin_Model_DbTable_Matriculacurso();
-            //     $numat = $cantmatr->_getCantidadMatriculados($eid,$oid,$cursomas['cursoid'],$cursomas['curid'],$perid,$cursomas['escid'],$cursomas['sedid'],$cursomas['turno']);
-            //     if ($numat)
-            //         $cursomas['nunmatriculados'] = $numat;
+            $lcursos = new Api_Model_DbTable_Registrationxcourse();
+            $listacurso =$lcursos->_getFilter($where);
+            // print_r($listacurso);
+
+            foreach ($listacurso as $cursomas){
+                //Agregar valores al registro de matricula curso para mandar a la vista
+                $where['courseid']=$cursomas['courseid'];
+                $where['curid']=$cursomas['curid'];
+                $where['turno']=$cursomas['turno'];
+
+                $nuevoreg = new Api_Model_DbTable_Course();
+                $rcus = $nuevoreg->_getOne($where);
+                // print_r($rcus);
+                $cursomas['semid'] = $rcus['semid'];
+                $cursomas['credits'] = $rcus['credits'];
+                $cursomas['namecourse'] = $rcus['name'];
+
+                //Obteniendo numero de veces matrocula a un curso
+                $veces = new Api_Model_DbTable_Course();
+                $listusuario = $veces ->_getCoursesXStudentXV($cursomas); 
+                $cursomas['veces'] = intval($listusuario[0]['veces']);
+
+                //Sacamos los docentes por curso
+                $bdprofesores = new Api_Model_DbTable_Coursexteacher();        
+                $datosss= $bdprofesores->_getinfoDoc($where);
+                $ndoc=$datosss[0]['nameteacher'];
+                $cursomas['teacherp'] = $ndoc;
+                // print_r($cursomas);      
+                $cantmatr = new Api_Model_DbTable_Registrationxcourse();
+                $numat = $cantmatr->_getCantRegistration($where);
+
+                if ($numat)
+                  $cursomas['nunmatriculados'] = $numat;    
                 
-            //     $cantmatr = new Admin_Model_DbTable_Matriculacurso();
-            //     $nupremat = $cantmatr->_getCantidadPreMatriculados($eid,$oid,$cursomas['cursoid'],$cursomas['curid'],$perid,$cursomas['escid'],$cursomas['sedid'],$cursomas['turno']);
-            //     if ($nupremat)
-            //         $cursomas['nunmapretriculados'] = $nupremat;
+                $nupremat = $cantmatr->_getCantiPreResgistration($where);
+
+                if ($nupremat)
+                    $cursomas['nunmapretriculados'] = $nupremat;
                 
-            //     $listacurso1[]= $cursomas;
-            // }            
-            //  $this->view->listacurso = $listacurso1;
+                $listacurso1[]= $cursomas;
+            }      
+            // print_r($listacurso1);      
+             $this->view->listacurso = $listacurso1;
+
+
             //obtenemos los pagos realizados
             $pagos = new Api_Model_DbTable_Payments();
             $rpagos = $pagos->_getOne($where);
@@ -212,7 +218,14 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
 
             //obtenemos las condiciones de la matricula registradas
             $condi = new Api_Model_DbTable_Condition();
-            $rcondision=$condi->_getlist($where);
+            $date['eid']=$where['eid'];
+            $date['oid']=$where['oid'];
+            $date['pid']=$where['pid'];
+            $date['uid']=$where['uid'];
+            $date['escid']=$where['escid'];
+            $date['perid']=$where['perid'];
+            $date['subid']=$where['subid'];
+            $rcondision=$condi->_getFilter($date);
             // print_r($rcondision);
             if ($rcondision) $this->view->condision = $rcondision;
             
@@ -225,6 +238,159 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
 
 
 
+        }catch(Exception $ex ){
+            print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
+        } 
+    }
+
+
+        public function listcoursependientAction()
+    {
+            $this->_helper->getHelper('layout')->disableLayout();
+           
+            $subid = ($this->_getParam('subid'));
+            $pid = ($this->_getParam('pid'));
+            $uid = ($this->_getParam('uid'));
+            $escid = ($this->_getParam('escid'));
+            $curid = ($this->_getParam('curid'));
+
+            $eid = $this->sesion->eid;    
+            $oid = $this->sesion->oid;
+            $perid= $this->sesion->period->perid;
+    
+        require_once 'Zend/Loader.php';
+        Zend_Loader::loadClass('Zend_Rest_Client');
+        $base_url = 'http://localhost:8080/';
+        $endpoint = '/s1st3m4s/und4c/validate';
+        $data = array('uid' => $uid, 'pid' => $pid, 'escid' => $escid,'subid' =>$subid,'eid' =>$eid,'oid' =>$oid,'perid'=>$perid,'curid'=>$curid);
+        $client = new Zend_Rest_Client($base_url);
+        $httpClient = $client->getHttpClient();
+        $httpClient->setConfig(array("timeout" => 680));
+        $response = $client->restget($endpoint,$data);
+        $lista=$response->getBody();
+        if ($lista){
+        $data = Zend_Json::decode($lista);
+        $this->view->datos=$data; 
+        }
+
+    }
+
+        public function turnoAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
+            $str = base64_decode($this->_getParam('str'));
+            if ($str=="") return false;
+            $turno = trim($this->_getParam('t'));
+            $nro = $this->_getParam('nro');
+            $perid = $this->sesion->period->perid;
+            //$perid='12B';
+            $eid = $this->sesion->eid;        
+            $oid = $this->sesion->oid;        
+            // $rid='AL';
+            $data['turno']=$turno;
+            $data['updated']=date("Y-m-d h:m:s");
+            $bdmatricula_curso = new Api_Model_DbTable_Registrationxcourse();  
+            $g=$bdmatricula_curso->fetchRow($str);
+            if ($g){                
+                if ($bdmatricula_curso->_updatestr($data,$str)){
+                    $str1="eid ='$eid' and oid='$oid' and courseid='".$g['courseid']."' and curid='".$g['curid']."' and perid='$perid' and escid='".$g['escid']."' and subid='".$g['subid']."' and turno='$turno' and uid='".$g['uid']."' and pid='".$g['pid']."'";
+                    $bdmatricula_curso1 = new Api_Model_DbTable_Registrationxcourse(); 
+                     $gg=$bdmatricula_curso1->fetchRow($str1);
+                     $regq = $gg->toArray();
+                     if ($gg) $this->view->reg = $gg->toArray();
+                     $this->view->nro=$nro;                
+                }
+            }
+                // $this->_helper->_redirector("detail","registerstudent","register",array('uid' => base64_encode($g['uid']) ,'pid' => base64_encode($g['pid']),'escid' => base64_encode($g['escid']),'subid' => base64_encode($g['subid'])));
+        }catch(Exception $ex ){
+            print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
+        } 
+    }
+
+        public function deletecourseAction()
+    {
+        try{
+
+            $where['perid']= $this->sesion->period->perid;
+            $where['uid'] = base64_decode($this->_getParam('uid'));
+            $where['pid'] = base64_decode($this->_getParam('pid'));
+            $where['escid'] = base64_decode($this->_getParam('escid'));
+            $where['subid'] = base64_decode($this->_getParam('subid'));
+            $where['courseid'] = base64_decode($this->_getParam('courseid'));
+            $where['curid'] = base64_decode($this->_getParam('curid'));
+            $where['turno'] = base64_decode($this->_getParam('turno'));
+            $where['eid'] = $this->sesion->eid;        
+            $where['oid'] = $this->sesion->oid;
+            $where['regid']=$where['uid'].$where['perid'];
+            $bdmatricula_curso = new Api_Model_DbTable_Registrationxcourse();  
+            $bdmatricula_curso ->_delete($where);        
+
+            $this->_helper->_redirector("detail","registerstudent","register",array('uid' => base64_encode($where['uid']) ,'pid' => base64_encode($where['pid']),'escid' => base64_encode($where['escid']),'subid' => base64_encode($where['subid'])));
+
+
+        }catch(Exception $ex ){
+            print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
+        } 
+    }
+
+        public function validateAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
+            $where['uid'] = ($this->_getParam('uid'));
+            $where['pid'] = ($this->_getParam('pid'));
+            $where['escid'] = ($this->_getParam('escid'));
+            $where['subid'] = ($this->_getParam('subid'));
+            $where['perid'] = $this->sesion->period->perid;
+            $flag = base64_decode($this->_getParam('flag'));
+            $where['regid']=$where['uid'].$where['perid'];
+            $where['eid'] = $this->sesion->eid;        
+            $where['oid'] = $this->sesion->oid;        
+
+            $bdmatricula_curso = new Api_Model_DbTable_Registrationxcourse();        
+            $bdmatricula = new Api_Model_DbTable_Registration(); 
+            $data= $bdmatricula->_getOne($where);
+            //Verifico que la matricula exista
+            if ($data){
+                // Creo el STR que ira despues del WHERE
+                $str=" eid='".$where['eid']."' and oid=''".$where['oid']."' and subid='".$where['subid']."' and escid='".$where['escid']."' and uid='".$where['uid']."' and pid='".$where['pid']."' and perid='".$where['perid']."' and regid= '".$where['regid']."' ";
+                //Si el Valor es E se eliminar
+                    if (trim($flag)=="E"){
+                        if($bdmatricula_curso->_deletecorseregister($where)){
+                            $DataUsuario['state']="B";
+                            $DataUsuario['updated']=date("Y-m-d h:m:s");
+                            $DataUsuario['modified']=$this->sesion->uid; 
+                            if ($bdmatricula->_update($DataUsuario,$where)){
+                                $bdmatricula->_delete($where);
+                                $this->view->msgeliminar="La matricula fue eliminada correctamente";} 
+                        } 
+                        else{
+                            $DataUsuario['state']="B";
+                            $DataUsuario['updated']=date("Y-m-d h:m:s");
+                            $DataUsuario['modified']=$this->sesion->uid; 
+                            if ($bdmatricula->_update($DataUsuario,$where)){
+                            $bdmatricula->_delete($where);
+                            $this->view->msgeliminar="La matricula fue eliminada correctamente";} 
+                        }                 
+                    }
+                    else{
+                        //Asigno los valores al array para la modiciacion
+                        $DataUsuario['state']=trim($flag);
+                        $DataUsuario['updated']=date("Y-m-d h:m:s");
+                        $DataUsuario['modified']=$this->sesion->uid; 
+                        if ($bdmatricula->_update($DataUsuario,$where)){
+                            //si actualizo correctamente la matricula, ahora actualizo los cursos de la matricula       
+                            if ($bdmatricula_curso->_updatestateregister($DataUsuario,$where)){
+                                $this->_helper->_redirector("detail","registerstudent","register",array('uid' => base64_encode($where['uid']) ,'pid' => base64_encode($where['pid']),'escid' => base64_encode($where['escid']),'subid' => base64_encode($where['subid'])));
+                                }else{
+                                    print "No se pudo actualizar los cursos de la matricula";
+                                }
+                        }else{
+                            print "No se pudo actualizar la matricula";
+                        }
+                    }
+            }
         }catch(Exception $ex ){
             print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
         } 

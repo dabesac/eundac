@@ -1,0 +1,48 @@
+<div>
+	<table class="table table-hover">
+		<tr>
+			<th colspan="3"><center style="font-size:15px">SUBSANACIÓN Y DIRIGIDOS</center></th>
+		</tr>
+		<tr>
+			<td><p style="float:right; padding-right: 20px">Ingrese Código de Matricula:</p></td>
+			<td class="col-lg-3">
+				<div class="col-lg-9">
+					<input id="uid" type="text" class="form-control" maxlength="10"  onkeypress="return soloNumero(event)" placeholder="Ingrese Código">
+				</div>
+			</td>
+			<td class="col-lg-4">
+				<a id="search" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</a>
+			</td>
+		</tr>
+	</table>
+</div>
+<div id="student"></div>
+
+<script type="text/javascript">
+$("#search").click(function(){
+	var uid=$("#uid").val();
+	if (uid!="") {
+		$("#student").html("<img src='/img/spinner.gif'>Cargando...");
+		$("#student").load("/record/directed/student/uid/"+uid);
+	}else{
+		alert("Ingrese el Código de Matricula.");
+		return false;
+	};
+});
+
+function soloNumero(e){
+	key = e.keyCode || e.which;
+	tecla = String.fromCharCode(key).toLowerCase();
+	letras = "0123456789";
+	especiales = [8,37,39,46];
+	tecla_especial = false
+	for(var i in especiales){
+	    if(key == especiales[i]){
+			tecla_especial = true;
+	  		break;
+	    } 
+	}
+    if(letras.indexOf(tecla)==-1 && !tecla_especial)
+    return false;
+};
+</script>

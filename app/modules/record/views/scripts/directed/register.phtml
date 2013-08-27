@@ -1,0 +1,383 @@
+<div id="Datos">
+    <table class="table table-hover">
+        <tr>
+            <th><center>Currículas</center></th>
+            <th><center>Asignatura</center></th>
+            <th colspan="3"><center>Reportes</center></th>
+        </tr>
+        <tr>
+            <td>
+                <select id="curid" class="form-control">
+                    <option value="">-Seleccione-</option>
+                    <?php
+                    foreach ($this->curriculas  as $curricula){ ?>
+                        <option value="<?php echo $curricula['curid']."--".$curricula['escid']."--".$curricula['subid']?>"><?php echo $curricula['curid']?></option>
+                        <?php
+                    }?>
+                </select>
+            </td>
+            <td>
+                <select id="courseid" class="form-control">
+                    <option value="">- Seleccione Asignatura -</option>
+                </select>
+            </td>
+            <td>
+                <center>
+                    <a href="#" class="btn btn-default" id="vermatriculadoscurso"><span class="glyphicon glyphicon-list-alt"></span> Matriculados en la Asignatura</a>
+                </center>
+            </td>
+            <td>
+                <a href="#" class="btn btn-default" onclick="javascript: window.open('/rfacultad/subsanacion/cursospendientes/curid/<?php echo $curricula['curid'];?>/escid/<?php echo $this->escid;?>/perid/<?php echo $this->perid;?>/uid/<?php echo $this->uid;?>/pid/<?php echo $this->pid;?>','Convalidacion Alumno','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=800,height=600')"><span class="glyphicon glyphicon-list"></span> Cursos Pendientes</a>
+            </td>
+            <td>
+                <a href="#" class="btn btn-default"  onclick="javascript: window.open('/reportes/historialalumno/cursosalumno/escid/<?php echo base64_encode($this->escid);?>/sedid/<?php echo base64_encode($this->sedid);?>/uid/<?php echo base64_encode($this->uid);?>/pid/<?php echo base64_encode($this->pid);?>/eid/<?php echo base64_encode($this->eid);?>/oid/<?php echo base64_encode($this->oid);?>','Subsanacion Alumno','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=800,height=600')"><span class="glyphicon glyphicon-book"></span> Matriculas Totales</a>
+            </td>
+        </tr>
+        <tr>
+            <th class="col-lg-3"><center>Ingrese la Nota</center></th>
+            <th class="col-lg-7"><center>Recibo</center></th>
+            <th colspan="3"><center>Resolución</center></th>
+        </tr>
+        <tr>
+            <td>
+                <center>
+                    <input type="text" id="nota" class="form-control" style="width:50px"><label class="msg text-error"></label>
+                </center>
+            </td>
+            <td>
+                <center>
+                    <input type="text" id="recibo" class="form-control" onBlur="CheckUserName(this);" style="width:200px">
+                </center>
+            </td>
+            <td colspan="3">
+                <center>
+                    <input type="text" id="resolucion" class="form-control" style="width:350px">
+                </center>
+            </td>
+        </tr>
+        <tr>
+            <th><center>Seleccione el Turno</center></th>
+            <th><center>Seleccione Escuela / Docente</center></th>
+            <th colspan="3"><center>Seleccione el Docente</center></th>
+        </tr>
+        <tr>
+            <td>
+                <center>
+                    <select id="turno" class="form-control" style="width:80px">
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="H">H</option>
+                        <option value="I">I</option>
+                        <option value="J">J</option>
+                        <option value="K">K</option>
+                        <option value="L">L</option>
+                        <option value="M">M</option>
+                        <option value="N">N</option>
+                        <option value="O">O</option>
+                        <option value="P">P</option>
+                        <option value="R">R</option>
+                        <option value="S">S</option>
+                    </select>
+                </center>
+            </td>
+            <td>
+                <select id="escid" class="form-control">
+                    <option value="">- Seleccione Escuela -</option>
+                    <?php 
+                    if ($this->lescuelas){
+                        foreach ($this->lescuelas as $escu){ ?>
+                            <option value="<?php echo $escu['escid'].";--;".$escu['subid']?>"><?php echo $escu['name']?></option>
+                        <?php                                 
+                        }
+                    } ?>
+                </select>
+            </td>
+            <td colspan="3">
+                <center>
+                    <select id='docente_reg' class="form-control" style="width:350px">
+                        <option value="">- Seleccione Docente -</option>
+                    </select>
+                </center>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <center>
+                    <a href="#" class="btn btn-info" id="registerstudent"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar Curso</a>
+                </center>
+            </td>
+        </tr>
+    </table>
+    <div id="header_cursos"></div>
+    <div id="header_alumnos"></div>
+    <div id="header_modify"></div>
+</div>
+
+<?php
+if ($this->cursosconvalidados){ ?>
+<div id="lista">
+    <div><h5><center><b>CURSOS REALIZADOS</b></center></h5></div>
+    <div>
+        <div style="display: block; height: 150px; overflow: auto;margin: 0px;" >
+            <table class="table table-hover">
+                <tr style="background: #ccc; color: #000000;">
+                    <th>#</th> 
+                    <th>Currícula</th>
+                    <th>Código</th>
+                    <th>Nombre Curso</th>
+                    <th>Creditos</th>
+                    <th>Turno</th>
+                    <th>Resolución</th>
+                    <th>Recibo</th>
+                    <th>Notafinal</th>
+                    <th>Pre-registro</th>
+                    <th>Modificar</th>
+                </tr>
+                <?php
+                    $i=1;
+                    foreach ($this->cursosconvalidados as $convalidado){ ?>
+                        <tr>
+                            <td><?php echo $i;?></td>
+                            <td><center><?php echo $convalidado['curid'];?></center></td>
+                            <td><center><?php echo $convalidado['courseid'];?></center></td>
+                            <td><?php echo $convalidado['name_course'];?></td>
+                            <td><center><?php echo $convalidado['credits'];?></center></td>
+                            <td><center><?php echo $convalidado['turno'];?></center></td>
+                            <td><?php echo $convalidado['document_auth'];?></td>
+                            <td size="12px"><?php echo $convalidado['receipt'];?></td>
+                            <td><center><?php echo $convalidado['notafinal'];?></center></td>
+                            <td>
+                                <center>
+                                    <!-- <a target="black" style="float:right" href="/rfacultad/subsanacion/imprimir/perid/<?php echo $this->perid ?>/escid/<?php echo $this->escid ?>/subid/<?php echo $this->subid ?>/uid/<?php echo $this->uid ?>/pid/<?php echo $this->pid ?>/courseid/<?php echo $convalidado['courseid'] ?>/curid/<?php echo $convalidado['curid']?>/turno/<?php echo $convalidado['turno'] ?> "><img src="/img/pdf.png"></a> -->
+                                </center>
+                            </td>
+                            <?php  
+                             if ($convalidado['state']<>'C'){ ?>
+                            <td>
+                                <a id="modifyregister_<?php echo $i?>" data-toggle="modal" href="#modify" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
+                            </td>
+                            <script type="text/javascript">
+                            $("#modifyregister_<?php echo $i?>").click(function(){
+                                $("#notamodify").val("<?php echo $this->cursosconvalidados[$i-1]['notafinal']?>");
+                                $("#recibomodify").val("<?php echo $this->cursosconvalidados[$i-1]['receipt']?>");
+                                $("#resolmodify").val("<?php echo $this->cursosconvalidados[$i-1]['document_auth']?>");
+                                $("#regidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['regid']?>");
+                                $("#courseidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['courseid']?>");
+                                $("#namecourseidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['name_course']?>");
+                                $("#curidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['curid']?>");
+                                $("#escidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['escid']?>");
+                                $("#peridmodify").val("<?php echo $this->cursosconvalidados[$i-1]['perid']?>");
+                                $("#turnomodify").val("<?php echo $this->cursosconvalidados[$i-1]['turno']?>");
+                                $("#subidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['subid']?>");
+                                $("#uidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['uid']?>");
+                                $("#pidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['pid']?>");
+                            });
+                            </script>
+                            <?php 
+                            } ?>
+                        </tr>
+                        <?php
+                        $i++;
+                    } ?>
+            </table>
+        </div>        
+    </div> 
+</div>
+<?php
+} ?>
+
+<div class="modal fade" id="modify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<form id="frmmodifyregister" name="frmmodifyregister" action="/record/directed/modifyregister" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">MODIFICAR REGISTRO</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr>
+                        <th>Currícula:</th>
+                        <td>
+                            <input id="curidmodify" name="curid" type="text" class="form-control" readonly>
+                        </td>
+                        <th>Turno:</th>
+                        <td>
+                            <input id="turnomodify" name="turno" type="text" class="form-control" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Asignatura:</th>
+                        <td colspan="3">
+                            <input id="namecourseidmodify" type="text" class="form-control" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nota:</th>
+                        <td>
+                            <input id="notamodify" name="notafinal" type="text" class="form-control" style="width:50px">
+                        </td>
+                        <th>Recibo:</th>
+                        <td>
+                            <input id="recibomodify" name="receipt" type="text" class="form-control" style="width:200px">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Resolución:</th>
+                        <td colspan="3">
+                            <input id="resolmodify" name="resolution" type="text" class="form-control" style="width:350px">
+                        </td>
+                    </tr>
+                </table>
+                <input id="regidmodify" name="regid" type="hidden">
+                <input id="courseidmodify" name="courseid" type="hidden">
+                <input id="escidmodify" name="escid" type="hidden">
+                <input id="peridmodify" name="perid" type="hidden">
+                <input id="subidmodify" name="subid" type="hidden">
+                <input id="uidmodify" name="uid" type="hidden">
+                <input id="pidmodify" name="pid" type="hidden">
+            </div>
+            <div class="modal-footer">
+                <a href="#" id="savemodify" class="btn btn-success">Guardar</a>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+
+<script>
+$("#savemodify").click(function(){
+    $("#frmmodifyregister").submit();
+});
+
+$('#frmmodifyregister').submit(function() {  
+    $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(data) { 
+            $('#header_modify').html(data);  
+        }
+    });          
+    return false;
+});
+
+ $("#curid").change(function(){
+    var curricula = $(this).val();
+    if (curricula=="") {
+        alert("Seleccione Currícula");
+        return false;
+    };
+    var tmp = curricula.split('--');
+    var curid= tmp[0];
+    var escid= tmp[1];
+    var subid= tmp[2];
+    var url="/record/directed/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/subid/"+subid;
+    $("#courseid").load(url);
+}); 
+
+$("#vermatriculadoscurso").click(function(){    
+    var curso = $("#courseid").val();
+    if (curso=="") {
+        alert("Seleccione un Curso.");
+        return false;
+    };
+    var perid = "<?php echo $this->perid?>";
+    var subid = "<?php echo $this->subid?>";
+    var escid = "<?php echo $this->escid?>";
+    var tmp=curso.split("--");
+    var cursoid=tmp[0];
+    var curid=tmp[1];
+    var url = "/record/directed/viewregisteredcourse/subid/"+subid+"/escid/"+escid+"/curid/"+curid+"/courseid/"+cursoid+"/perid/"+perid;
+    $("#header_cursos").html("<img src='/img/spinner.gif'>Cargando..."); 
+    $("#header_cursos").load(url);
+});
+
+$("#escid").change(function(){
+    var escuela = $(this).val();
+    if (escuela=="") {
+        alert("Seleccione una Escuela.");
+        return false;
+    };
+    tmp=escuela.split(';--;');
+    escid=tmp[0];
+    $("#docente_reg").load("/record/directed/teacherxschool/escid/"+escid);
+});
+
+$("#registerstudent").click(function(){
+    var perid = "<?php echo $this->perid?>";
+    var subid = "<?php echo $this->subid?>";
+    var escid = "<?php echo $this->escid?>";
+    var uid = "<?php echo $this->uid?>";
+    var pid = "<?php echo $this->pid?>";
+    var nota = $("#nota").val();
+    var recibo = $("#recibo").val();
+    var reso = $("#resolucion").val();
+    var turno = $("#turno").val();
+
+    var course = $("#courseid").val();
+    var tmpp = course.split('--');
+    var courseid = tmpp[0];
+    var curid = tmpp[1];
+    var semid = tmpp[2];
+    var credits = tmpp[3];
+
+    var docente = $("#docente_reg").val();
+    var tmp=docente.split(";--;");
+    var uid_doc=tmp[0];
+    var pid_doc=tmp[1];
+
+    if (course!='' && nota!='' && reso!='' && recibo!='' && turno!='' && docente!=''){
+        $("#header_cursos").hide();
+        $("#lista").hide();
+        $("#listam").hide();
+        $("#listag").hide();
+        var url = "/record/directed/savedirected/subid/"+subid+"/escid/"+escid+"/uid/"+uid+"/pid/"+pid+"/curid/"+curid+"/courseid/"+courseid+"/semid/"+semid+"/credits/"+credits+"/nota/"+nota+"/reso/"+reso+"/perid/"+perid+"/turno/"+turno+"/uid_doc/"+uid_doc+"/pid_doc/"+pid_doc+"/recibo/"+recibo;
+        // alert(url);
+        $("#header_alumnos").html("<img src='/img/spinner.gif'>Cargando..."); 
+        $("#header_alumnos").load(url);
+    }else{
+        alert("Ingrese todos los datos Obligatorios.");
+        return false;
+    };
+});
+
+$("#nota").blur(function(){
+    var vnota = $(this).val();
+    if ( vnota > 20 || vnota < -3 ){
+        $("#nota").val("");
+        $(".msg").html("* Ingrese de 0 a 20");
+    }                   
+});
+
+var total_letras_notas = 2;
+$('#nota').keyup(function(){
+    var longitud = $(this).val().length;
+    var resto = total_letras_notas - longitud;
+    $('#numero').html(resto);
+    if(resto <= 0) $('#nota').attr("maxlength", 2);
+});
+
+var total_letras_recibo = 12;
+$('#recibo').keyup(function(){
+    var longi = $(this).val().length;
+    var rest = total_letras_recibo - longi;
+    $('#numero').html(rest);
+    if(rest <= 0) $('#recibo').attr("maxlength", 12);
+});
+
+$("#resolucion").keyup(function(){
+    var r = $(this).val();
+    $("#resolucion").val(r.toUpperCase());
+});
+
+function CheckUserName(ele) {
+    if (/\s/.test(ele.value)) alert("No se permiten espacios en blanco.");
+}
+</script>

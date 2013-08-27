@@ -122,15 +122,13 @@ class IndexController extends Zend_Controller_Action {
     				$datate['subid']= $data->subid;
     				$teacher = new Api_Model_DbTable_Infoteacher();
     				$rowteacher = $teacher->_getOne($datate);
-    				if ($rowteacher) $data->infouser['teacher']=$rowteacher;
-
-    				// Set ACL
+    				if ($rowteacher) $data->infouser->teacher=$rowteacher;
+					// Set ACL
     				
     				// Set Header and Footer Print Org
     				$orgs = new Api_Model_DbTable_Org();
     				$rorg = $orgs->_getOne(array("eid" => $data->eid,"oid"=>$data->oid));
     				if ($rorg) $data->org = $rorg;
-    				
     				// Register access
     				$clientIp = $this->getRequest()->getClientIp();
     				$log = new Api_Model_DbTable_Logs();
@@ -166,7 +164,6 @@ class IndexController extends Zend_Controller_Action {
     					//echo "Existe otra sesion abierta en algun otro lugar";exit();
     					$this->_redirect("/index/cerrar");
     				}
-    				
     				$urlmod = base64_decode($data->rol['module']);
     				$this->_redirect($urlmod);
     				//Falta direccionar

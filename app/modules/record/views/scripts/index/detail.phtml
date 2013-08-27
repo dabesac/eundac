@@ -1,0 +1,162 @@
+<?php
+$urlprint = $this->urlprint;
+$typeprint = $this->typeprint;
+if ($typeprint=="pre" || $typeprint=="adv"){
+	$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+	include_once($dir);
+	ob_start();
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<?php 
+}else{
+?>
+<?php echo $this->doctype(); ?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<?php echo $this->headScript(); ?> 
+<?php echo $this->headLink(); ?>
+<link rel="stylesheet" type="text/css" href="/css/style.css">  
+<?php
+} 
+$course = $this->course;
+$students = $this->students;
+?>
+<div class="panel ">
+	<b><p class="center">UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRIÓN<br>
+	FACULTAD DE <?php echo  $this->faculty['name']?><BR>
+	ESCUELA DE <?php echo  $this->speciality['name']?>
+	<?php if ($this->speciality1) echo " - ESPECIALIDAD DE ".$this->speciality1['name']; 
+	 ?> 
+	</p>
+	</b>
+	
+	<table class="table table-striped table-condensed">
+		<tr>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-70":"col-sm-1"?> center">Periodo</th>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-70":"col-sm-1"?> center">Curricula </th> 
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-400":"col-lg-1"?>">Código y Nombre Asignatura </th>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-50":"col-sm-1"?> center">Turno</th>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-70":"col-sm-1"?>">Calificación</th>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-70":"col-sm-2"?>">Fecha Cierre</th>
+			<?php
+			if (!($typeprint=="pre" || $typeprint=="adv")){
+			?>
+			<th rowspan="3" class="center">
+			<?php 
+			switch ($course['state_record']){
+				case "A": $img="verde";break;	
+				case "C": $img="rojo";break;
+				default: $img="azul";break;
+			}?>
+			<img src="/img/circulo-<?php echo $img?>.png">
+			</th>
+			<?php } ?>
+		</tr>
+		<tr>
+			<td class="center"><?php echo $course['perid']?></td>
+			<td class="center"><?php echo $course['curid']?></td>
+			<td ><?php echo $course['courseid']." - ".$course['name']?></td>
+			<td class="center"><?php echo $course['turno']?></td>
+			<td class="center"><?php echo ($course['type_rate']=="C")?"Competencia":"Objetivo";?></td>
+			<td class="center"><?php echo $course['closure_date']?></td>
+		</tr>
+		<tr>
+			<th class="center">Profs.</th>
+			<th colspan="3"><?php echo implode(" | ",$course['teachers'])?></th>
+			<th ># Alumnos</th>
+			<td class="center"><?php echo $course['numregister']?></th>
+		</tr>
+	</table>
+	<hr>
+	<?php 
+	$type = $course['type_rate'];
+	?>
+	<table class="table table-bordered table-hover table-condensed">
+		<tr>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small":"col-sm-1"?> center">#</th>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-70":"col-sm-1"?> center">Cod. Mat.</th> 
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-400":"col-sm-1"?>">Alumno</th>
+			
+			<?php
+			if ($type=="O"){
+			?>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-70":"col-sm-1"?> center">Primer Parcial</th>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-70":"col-sm-1"?> center">Segundo Parcial</th>
+			<?php 
+			} else{ ?>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-50":"col-sm-1"?> center">I Unidad</th>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-50":"col-sm-1"?> center">II Unidad</th>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-50":"col-sm-1"?> center">III Unidad</th>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-50":"col-sm-1"?> center">IV Unidad</th>			
+			<?php  
+			}
+			?>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-70":"col-sm-1"?> center">Promedio Final</th>
+			<th class="<?php echo ($typeprint=="pre" || $typeprint=="adv")?"small-50":"col-sm-1"?> center"># Recibo</th>
+		</tr>
+		<?php
+		if ($students ){
+			$i=0;
+			foreach ($students as $student){
+			$fullname = $student['last_name0']." ".$student['last_name1'].", ".$student['first_name'];
+			$uid = $student['uid'];
+			$pp = ($type=="O")?$student['promedio1']:$student['nota4_i'];
+			$sp = (($type=="O"))?$student['promedio2']:$student['nota8_i'];
+			$pf = $student['notafinal'];
+			$tu = $student['nota4_ii'];
+			$cu = $student['nota8_ii'];
+			$receipt = $student['receipt'];
+			$i++;
+			?>
+			<tr>	
+				<td class="center"><?php echo $i?></td>
+				<td class="center"><?php echo $uid?></td>
+				<td ><?php echo $fullname?></td>
+				<?php
+				if ($type=="O"){
+				?>
+				<td class="center"><?php echo $pp?></td>
+				<td class="center"><?php echo $sp?></td>
+				<?php 
+				} else{ ?>
+				<td class="center"><?php echo $pp?></td>
+				<td class="center"><?php echo $sp?></td>
+				<td class="center"><?php echo $tu?></td>
+				<td class="center"><?php echo $cu?></td>			
+				<?php  
+				}
+				?>
+				
+				<td class="center"><?php echo $pf?></td>		
+				<td class="center"><?php echo $receipt?></td>
+			</tr>		
+			<?php 
+			} 
+		}?>
+	</table>
+</div>
+</div>
+<?php if (!($typeprint=="pre" || $typeprint=="adv")){ ?>
+<hr>
+<div class="footer" style="width: 100%; height: 40px;padding:2px;">
+	<a href="<?php echo $urlprint."/print/".base64_encode("verdad")."/type/".base64_encode("pre")?>" class="btn btn-warning pull-left" >Pre-registro</a>
+	<a href="<?php echo $urlprint."/print/".base64_encode("verdad")."/type/".base64_encode("adv")?>?>" class="btn btn-warning pull-left" >Avance Notas</a>
+	<a href="<?php echo $urlprint?>" class="btn btn-warning pull-left" >Cerrar</a>
+	<a href="#" class="btn btn-danger pull-right" onclick="javascript: window.close()">Cerrar</a>
+</div>
+<?php }?>
+
+<?php 
+if ($typeprint=="pre" || $typeprint=="adv"){ 
+  $html = ob_get_contents();
+  $mpdf=new mPDF('win-1252','A4','','',15,15,2,12,5,7);
+	//$mpdf=new mPDF('win-1252','A4','','');
+  $mpdf->SetHTMLHeader($this->printheader);
+  //$mpdf->SetFooter(' ');
+  
+  $mpdf->SetFooter($this->printfooter);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('avence-'.$this->perid.'.pdf','D');
+}
+?>

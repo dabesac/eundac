@@ -1,0 +1,28 @@
+<?php 
+if($this->coursesperyear){
+	//print_r($this->coursesname)?>
+	<table class="table">
+		<tr>
+			<th>#</th>
+			<th>Sem</th>
+			<th>Curso</th>
+			<th>Turno</th>
+		</tr>
+	
+		<?php $c=0;
+		foreach ($this->coursesperyear as $coursesxyear) {
+			$cp=0;
+			foreach ($coursesxyear as $coursesxper) {?>
+				<tr>
+					<th><?php echo $c+1;?></th>
+					<th><?php echo $coursesxper['semid'];?></th>
+					<th><?php echo $this->coursesname[$c][$cp]['name']?></th>
+					<th><?php echo $coursesxper['turno'];?></th>
+				</tr>
+				
+			<?php $c++;
+			}
+			$cp++;		 
+		}?>
+	</table>
+<?php }?>

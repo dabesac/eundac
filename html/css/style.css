@@ -13,6 +13,21 @@ body, html{
 	margin: 0px; 
 	padding: 0px;
 }
+.center {
+	text-align: center;
+}
+
+td.center {
+	vertical-align:middle;	
+	valign:middle;
+}
+
+.small{
+	width:50px;
+}
+.verde {
+background: url(../img/circulo-verde.png) no-repeat;	
+}
 
 input.error {
 	color: red;
@@ -98,4 +113,12 @@ input.error {
 .footer a{
 	color: #fff;
 	
+}
+
+.found {
+
+background-image: url(../img/fondo.gif);
+display: block; 
+overflow: auto;
+margin: 0px;
 }

@@ -1,0 +1,47 @@
+<form id="<?php  print $this->form->getname()?>"  name="<?php print $this->form->getname()?>" action="<?php print $this->form->getaction()?>" method="POST" enctype="application/x-www-form-urlencoded">
+<div class="menu-botones">
+	<div class="pull-left"><h4>Crear Distribución</h4></div>
+	<div class="pull-right">
+	<?php print $this->form->save?>
+	<a href="/distribution/distribution/" class="btn btn-danger" >CANCELAR</a>
+	</a>
+	
+	</div>
+</div>
+
+	<div class="table-responsive">					
+		<?php print $this->form->eid ?>
+		<?php print $this->form->oid ?>
+		<?php print $this->form->escid ?>
+		<?php print $this->form->subid ?>
+		<?php print $this->form->distid ?>
+	</div>
+	<table class="table"> 
+		<tr>
+			<th class="col-md-2">Periodo</th>
+			<th class="col-md-2" >Numero</th>
+			<th class="col-md-2">Fecha Presentación</th>
+			<th class="col-md-2">Fecha Aprobación</th>
+			<th class="col-md-2">Fecha Aprobación</th>
+		</tr>
+		<tr>
+			<td ><?php print $this->form->perid?></td>
+			<td ><?php print $this->form->number?></td>
+			<td ><?php print $this->form->datepress?></td>
+			<td ><?php print $this->form->dateaccept?></td>
+			<td ><?php print $this->form->state?></td>
+		</tr>
+	</table>
+</form>
+<script>
+	$(function() {
+		$("#datepress").datepicker();
+		$("#dateaccept").datepicker();
+		$("#sendform").click(function(){
+			$("#frmDistribution").submit();
+		});
+		
+		
+	});
+	
+</script>

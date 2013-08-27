@@ -17,22 +17,21 @@ $fullname= $login->infouser['fullname'];
 $numberdoc= $login->infouser['numdoc'];
 $speciality = $login->speciality->name;
 $code= $login->uid;
-//$rid= $login->rid;
+$rid= $login->rid;
 ?>
 
 <?php echo $this->doctype(); ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+
     <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <?php echo $this->headMeta(); ?>
         <?php echo $this->headTitle(); ?>
         <?php echo $this->headScript(); ?> 
         <?php echo $this->headLink(); ?>
         
-        
-		
-   		
    		<link rel="stylesheet" type="text/css" href="/css/maquetacion.css">
-   		
+   		<link rel="stylesheet" type="text/css" href="/css/style.css">
    		<!-- Texto Enriquecido-->
    		<link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
         <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>

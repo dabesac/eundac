@@ -1,0 +1,72 @@
+<?php
+if ($this->cursosconvalidados){ ?>
+<div id="listag">
+    <div><h5><center><b>CURSOS REALIZADOS</b></center></h5></div>
+    <div>
+        <div style="display: block; height: 150px; overflow: auto;margin: 0px;" >
+            <table class="table table-hover">
+                <tr style="background: #ccc; color: #000000;">
+                    <th>#</th> 
+                    <th>Currícula</th>
+                    <th>Código</th>
+                    <th>Nombre Curso</th>
+                    <th>Creditos</th>
+                    <th>Turno</th>
+                    <th>Resolución</th>
+                    <th>Recibo</th>
+                    <th>Notafinal</th>
+                    <th>Pre-registro</th>
+                    <th>Modificar</th>
+                </tr>
+                <?php
+                    $i=1;
+                    foreach ($this->cursosconvalidados as $convalidado){ ?>
+                        <tr>
+                            <td><?php echo $i;?></td>
+                            <td><center><?php echo $convalidado['curid'];?></center></td>
+                            <td><center><?php echo $convalidado['courseid'];?></center></td>
+                            <td><?php echo $convalidado['name_course'];?></td>
+                            <td><center><?php echo $convalidado['credits'];?></center></td>
+                            <td><center><?php echo $convalidado['turno'];?></center></td>
+                            <td><?php echo $convalidado['document_auth'];?></td>
+                            <td size="12px"><?php echo $convalidado['receipt'];?></td>
+                            <td><center><?php echo $convalidado['notafinal'];?></center></td>
+                            <td>
+                                <center>
+                                    <!-- <a target="black" style="float:right" href="/rfacultad/subsanacion/imprimir/perid/<?php echo $this->perid ?>/escid/<?php echo $this->escid ?>/subid/<?php echo $this->subid ?>/uid/<?php echo $this->uid ?>/pid/<?php echo $this->pid ?>/courseid/<?php echo $convalidado['courseid'] ?>/curid/<?php echo $convalidado['curid']?>/turno/<?php echo $convalidado['turno'] ?> "><img src="/img/pdf.png"></a> -->
+                                </center>
+                            </td>
+                            <?php  
+                             if ($convalidado['state']<>'C'){ ?>
+                            <td>
+                                <a id="modifyregister_<?php echo $i?>" data-toggle="modal" href="#modify" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
+                            </td>
+                            <script type="text/javascript">
+                            $("#modifyregister_<?php echo $i?>").click(function(){
+                                $("#notamodify").val("<?php echo $this->cursosconvalidados[$i-1]['notafinal']?>");
+                                $("#recibomodify").val("<?php echo $this->cursosconvalidados[$i-1]['receipt']?>");
+                                $("#resolmodify").val("<?php echo $this->cursosconvalidados[$i-1]['document_auth']?>");
+                                $("#regidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['regid']?>");
+                                $("#courseidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['courseid']?>");
+                                $("#namecourseidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['name_course']?>");
+                                $("#curidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['curid']?>");
+                                $("#escidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['escid']?>");
+                                $("#peridmodify").val("<?php echo $this->cursosconvalidados[$i-1]['perid']?>");
+                                $("#turnomodify").val("<?php echo $this->cursosconvalidados[$i-1]['turno']?>");
+                                $("#subidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['subid']?>");
+                                $("#uidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['uid']?>");
+                                $("#pidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['pid']?>");
+                            });
+                            </script>
+                            <?php 
+                            } ?>
+                        </tr>
+                        <?php
+                        $i++;
+                    } ?>
+            </table>
+        </div>        
+    </div> 
+</div>
+<?php
+} ?>
