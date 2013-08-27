@@ -1,0 +1,74 @@
+<?php
+$ldistri =$this->ldistribution;
+?>
+<div class="menu-botones">
+	<div class="pull-left"><h4>Lista Distribuciones</h4></div>
+	<div class="pull-right"><a href="/distribution/distribution/new" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span> NUEVO</a></div>
+</div>
+<div class="table-responsive">
+<table class="table table-striped table-hover table-condensed"> 
+	<tr>
+		<th class="col-md-1">#</th>
+		<th class="col-md-1">Periodo</th>
+		<th >Numero</th>
+		<th class="col-md-2">Fecha Aprobación</th>
+		<th class="col-md-1">Estado</th>
+		<th class="col-md-3" colspan="4"><center>Operaciones</center></th>
+	</tr>
+	<?php 
+	if ($ldistri)
+	{		
+		$i=0;
+		foreach ($ldistri as $distri)
+		{
+		$periodo = $distri['perid'];
+		$num = $distri['number'];
+		$approv = $distri['dateaccept'];
+		$distid = base64_encode($distri['distid']);
+		$perid = base64_encode($distri['perid']);
+		$state="";
+		$state = ($distri['state']=='A')?"class='success'":"";
+		$i++; 
+	?>
+	<tr <?php echo $state;?>>
+		<td><?php echo $i;?></td>	
+		<td><?php echo $periodo ;?></td>
+		<td><?php echo $num;?></td>
+		<td><?php echo $approv;?></td>
+		<td><?php echo $distri['state'];?></td>
+		<td>
+			<center>
+				<a href="#"><span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Imprimir Distribución"></span></a>
+			</center>
+		</td>
+		<td>
+			<center>
+				<a href="/distribution/distribution/edit/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Modificar Distribución"></span></a>
+			</center>
+		</td>
+		<td>
+			<center>
+				<a href="/distribution/distribution/delete/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" title="Eliminar Distribución"></span></a>
+			</center>
+		</td>
+		<td><center>
+			<?php
+			if ($distri['state']=='C') { ?>
+				<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Distribución Cerrado"></span></a>
+				<?php
+			}elseif ($distri['state']=="A" || $distri['state']=="B") { ?>
+				<a href="/distribution/distribution/academicload/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>/escid/<?php echo base64_encode($distri['escid'])?>/subid/<?php echo base64_encode($distri['subid'])?>"><span class="glyphicon glyphicon-arrow-right" data-toggle="tooltip" title="Carga Académica Distribución"></span></a>
+				<?php
+			}?>
+			</center>
+		</td>
+	</tr>		
+	<?php }
+	}
+	?>
+</table>
+</div>
+<script>
+$('.glyphicon').tooltip();
+
+</script>

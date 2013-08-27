@@ -16,6 +16,18 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
 			print "Error: Read One Entity ".$e->getMessage();
 		}
 	}
+
+	public function _getOnePeriod($where=array()){
+		try{
+			if ($where['eid']=="" || $where['oid']=="" || $where['perid']=="") return false;
+			$wherestr="eid='".$where['eid']."' and oid='".$where['oid']."' and perid='".$where['perid']."'";
+			$row = $this->fetchRow($wherestr);
+			if($row) return $row->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read One Entity ".$e->getMessage();
+		}
+	}
 	
 	public function _getPeriodsCurrent($data=null)
 	{

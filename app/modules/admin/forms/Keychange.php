@@ -2,9 +2,13 @@
 
 class Admin_Form_Keychange extends Zend_Form{    
     public function init(){
-        
-        $eid='20154605046';
-        $oid='1';
+    	$sesion  = Zend_Auth::getInstance();
+    	if(!$sesion->hasIdentity() ){
+    		$this->_helper->redirector('index',"index",'default');
+    	}
+    	$login = $sesion->getStorage()->read();
+        $eid=$login->eid;
+        $oid=$login->oid;
         $this->setName("frmcambioclave");
         $uid= new Zend_Form_Element_Text('uid');
         $uid->removeDecorator('Label')->removeDecorator('HtmlTag'); 

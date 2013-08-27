@@ -25,4 +25,5 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
 			print "Error: Read Filter Curricula ".$e->getMessage();
 		}
 	}
+
  }

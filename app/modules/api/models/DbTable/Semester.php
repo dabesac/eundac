@@ -91,6 +91,7 @@ class Api_Model_DbTable_Semester extends Zend_Db_Table_Abstract
 		}
 	}
 
+
 	public function _getSemesterXPeriodsXEscid($where=null){
         try{
             if ($where['escid']=="" || $where['perid']=="" || $where['eid']=="" || $where['oid']=="" ) return false;
