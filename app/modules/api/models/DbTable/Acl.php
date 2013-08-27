@@ -66,6 +66,23 @@ class Api_Model_DbTable_Acl extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getACL($data){
+		try{
+			if ($where['eid']=="" || $where['oid']=="" || $where['rid']=="" ) return false;
+			$select = $this->_db->select()
+			->from(array('r' => 'base_resource'),array('r.name','r.mid','r.controller','r.imgicon'))
+			->join(array('a' => 'base_acl'),"a.eid= r.eid and a.oid=r.poid and a.reid=r.reid and a.mid=r.mid and a.state= 'A'")
+				->where('a.eid = ?', $where['eid'])->where('a.oid = ?', $where['oid'])
+				->where('a.rid = ?', $where['rid'])
+				->order('a.mid');
+			$results = $select->query();
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;
+		}catch (Exception $ex){
+			print "Error: Load ACL ".$ex->getMessage();
+		}
+	}
 	/*public function _getOne($where=null){
 		try{
 			if ($where['eid']=="" || $where['oid']=="" || $where['reid']=="") return false;
