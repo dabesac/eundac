@@ -60,7 +60,8 @@
 	            },
 	            error:function($data){
 	                    //Pintar el error
-	                    alert('Error al guardar');
+                    $("#modal").modal('show');
+                	$("#error_").html("Error en el Servidor");
 	                    
 	            }
         	});	
@@ -96,19 +97,19 @@
 	            url:$url,
 	            success:function($data){
 
-	                    if($data.status == true){
+				        if($data.status == true){
 
 	                    	$('#assign_credist').html($data.credits_assing);
 	                    	$('#assign_semester').html($data.semester);
-	                    	$('#total_credits').html($data.credits);
-	                    	$("#pre_register").attr('total',$data.credits);
+	                    	$('#total_credits').html($data.total_credits);
+	                    	$("#pre_register").attr('total',$data.total_credits);
 	                    	$(".modified"+'-'+courseid+'-'+turno).hide();
 	                    	$(".register"+'-'+courseid+'-'+turno).show();
                     		$(".btn-register").prop('disabled',false);
 	                    	
-	                        // window.location.href=window.location.href;
+	                    //     // window.location.href=window.location.href;
 	                    }else{
-	                        //Pintar Fracaso
+	                    //     //Pintar Fracaso
 	                    		$("#modal").modal('show');
 	                    		$("#error_").html("Error Al Eliminar Curso");
 	                    }
@@ -116,9 +117,8 @@
 	            },
 	            error:function($data){
 	                    //Pintar el error
-	                    	alert('Erro al Elminar');
-	                    mensajeria('error','Se produjo un error no controlado, comunicarse con el administrador');
-	                    $('#modalloader').modal('hide');
+	                $("#modal").modal('show');
+                	$("#error_").html("Error en el Servidor");
 	            }
         	});
 		}
@@ -145,21 +145,20 @@
 	            url:$url,
 	            success:function($data){
 							         
-	                    if($data.status == true){
-        					window.location.reload(true);
-	                    }else{
-	                        //Pintar Fracaso
-	                    	$("#modal").modal('show');
-	                    	$("#error_").html("Selecione al menos una asignatura para realizar su Pre- Matrícula");
-	                        // mensajeria('error','El registro no se Guardado ');
-	                    }
-	                    // $('#modalloader').modal('hide');
+                    if($data.status == true){
+    					window.location.reload(true);
+                    }else{
+                        //Pintar Fracaso
+                    	$("#modal").modal('show');
+                    	$("#error_").html("Selecione al menos una asignatura para realizar su Pre- Matrícula");
+                        // mensajeria('error','El registro no se Guardado ');
+                    }
+                    // $('#modalloader').modal('hide');
 	            },
 	            error:function($data){
 	                    //Pintar el error
-	                    	alert("erororororo");
-	                    // mensajeria('error','Se produjo un error no controlado, comunicarse con el administrador');
-	                    // $('#modalloader').modal('hide');
+                    $("#modal").modal('show');
+                	$("#error_").html("Error en el Servidor");
 	            }
         	});
 		}
@@ -199,9 +198,8 @@
 	            },
 	            error:function($data){
 	                    //Pintar el error
-	                    	alert("error");
-	                    // mensajeria('error','Se produjo un error no controlado, comunicarse con el administrador');
-	                    // $('#modalloader').modal('hide');
+	                $("#modal").modal('show');
+                	$("#error_").html("Error en el Servidor");
 	            }
         	});
 		}
@@ -254,8 +252,15 @@
 					<!-- <a href="#" class='btn btn-success'><span class='glyphicon glyphicon-repeat'></span> Actulizar Pago</a> -->
 				<?php }?>
 			
-				<?php if ($this->state == "I") { ?>
-					<a href="#" class='btn btn-primary'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
+				<?php if ($this->state == "I") { 
+					$url = "/register/Student/printregister/".
+						"escid/".base64_encode($this->escid).
+						"/subid/".base64_encode($this->subid).
+						"/regid/".base64_encode($this->regid).
+						"/perid/".base64_encode($this->perid).
+						"/curid/".base64_encode($this->curid);						;
+					?>
+					<a href="<?php echo $url ?>" class='btn btn-primary'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
 
 					<a href="#" class='btn btn-danger'
 						regid='<?php echo $this->regid?>'
@@ -308,7 +313,7 @@
 				<span id='total_credits' class='label label-primary'> <?php echo $this->total_credits?></span>
 			</h4>
 		</div>
-		<table class=' table table-hover '>
+		<table class=' table table-hover text-center'>
 			<thead>
 			<tr>
 				<th>Código Curso</th>
@@ -335,6 +340,7 @@
 					}
 
 					if($subject['veces_cur']==1 ){
+
 						$veces_cur='veces_cur';
 						$content_veces=$subject['veces']+1;
 						$content="Requisito: Debe presentar una solicitud a Decanura de su Facultar  y Compromiso";
@@ -353,17 +359,22 @@
 					 	
 						$display_reg="";
 						$display_mod="display:none";
-
-						// if ($this->state != "B" ) {
-						// 		$style_reg='display:none';
-						// 	}
 					 }
+
+					 if($subject['register'] == 1  && $this->state != "B" ){
+							$style_reg="";
+						}
+					 elseif ($this->state !="B") {
+							$style_reg="display:none";
+					 }
+					 
 				?>
 
 				<tr class='<?php echo $class?>' id='<?php echo $veces_cur?>' 
 					rel="popover" data-placement='bottom' 
 					data-original-title="Matricula por <?php echo $content_veces ?> Vez" 
 					data-content="<?php echo $content?>" data-trigger='hover'
+
 					style="<?php echo $style_reg?>"
 					>
 					<td><?php echo $subject['courseid']?></td>

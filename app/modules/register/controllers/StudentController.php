@@ -8,10 +8,10 @@ class Register_StudentController extends Zend_Controller_Action {
         if(!$sesion->hasIdentity() ){
             $this->_helper->redirector('index',"index",'default');
         }
-        $login = $sesion->getStorage()->read();
-   //   if (!$login->modulo=="alumno"){
-   //       $this->_helper->redirector('index','index','default');
-    // }
+         $login = $sesion->getStorage()->read();
+        if (!$login->rol['module']=="alumno"){
+              $this->_helper->redirector('index','index','default');
+        }
         $this->sesion = $login;
         
     }
@@ -55,7 +55,7 @@ class Register_StudentController extends Zend_Controller_Action {
             unset($where['regid']);
             if (!$base_payment->_getOne($where)) {
 
-                $where['ratid']=39;
+                $where['ratid']=20;
                 $where['amount']=0;
                 $where['register']=$uid;
                 $where['created']=date("Y-m-d");
@@ -249,8 +249,8 @@ class Register_StudentController extends Zend_Controller_Action {
                         
                     }
 
-                    $this->view->subjects=$subject;
-
+                    $this->view->subjects = $subject;
+                    $this->view->curid = $curid;
 
                     // print_r($subject);
                 }
@@ -498,13 +498,16 @@ class Register_StudentController extends Zend_Controller_Action {
             $subid=$this->sesion->subid;
 
 
+
             $where = array(
                         'uid' => $uid, 'pid' => $pid,
                         'escid' => $escid,'subid' =>$subid,
                         'eid' =>$eid,'oid' =>$oid,
                         'perid'=>$perid,'curid'=>$curid,
                         'semestre'=>$semester);
-            
+        
+
+
             require_once 'Zend/Loader.php';
             Zend_Loader::loadClass('Zend_Rest_Client');
             $base_url = 'http://localhost:8080/';
@@ -761,34 +764,36 @@ class Register_StudentController extends Zend_Controller_Action {
 
                 if ($base_registration_subjet->_delete($where_subjet)) {
                     
-                    $credits_register = $base_registration -> _getOne($where);
+                            $credits_register = $base_registration -> _getOne($where);
 
-                    if($veces >= 2 ){
+                            if($credits_register['semid']!= 0 && $veces < 2){
 
-                        $credits_assing[0]['semester_credits']=11+$condition_credits;
-                    }
-                    else{
+                                $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
 
+                                $credits_assing[0]['semester_credits']=intVal($credits_assing[0]['semester_credits'])+$condition_credits+$created_resolu;
+                            }
+                            else{
 
-                        if($credits_register['semid'] != 0 && $veces < 2){
-                            $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
-                            $credits_assing[0]['semester_credits']=intVal($credits_assing[0]['semester_credits'])+$condition_credits+$created_resolu;
-                        }
+                                if($credits_register['semid']==0){
+                                        $credits_assing[0]['semester_credits']=0;
+                                    }
+                                elseif($veces >= 2)
+                                {
+                                    $credits_assing[0]['semester_credits']=11+$condition_credits; 
+                                }
 
-                        if( $credits_register['semid'] == 0 )
-                        {
-                            $credits_assing[0]['semester_credits']=0;
-                        }
-                        
-                    }
+                            }
 
-                        $json   =   array(  
-                                        'status'=>true,
-                                        'credits'=>$credits_register['credits'],
-                                        'semester'=>$credits_register['semid'],
-                                        'credits_assing'=>$credits_assing[0]['semester_credits']);
+                            $json   =   array(  
+                                'status'=>true,
+                                'total_credits'=>$credits_register['credits'],
+                                'semester'=>$credits_register['semid'],
+                                'credits_assing'=>$credits_assing[0]['semester_credits'],
+                                'suma'=>$credits_val
+                                );
                 }
-               
+
+             
                 
             } catch (Exception $e) {
                 $json = array(
@@ -801,6 +806,83 @@ class Register_StudentController extends Zend_Controller_Action {
             $this->_response->setHeader('Content-Type', 'application/json');   
             $this->view->data = $json;
         
+    }
+
+    public function printregisterAction()
+    {
+        try {
+                $eid = $this->sesion->eid;
+                $oid = $this->sesion->oid;
+                $pid = $this->sesion->infouser['pid'];
+                $uid = $this->sesion->uid;
+                
+                $faculty = $this->sesion->faculty->name;
+                $speciality = $this->sesion->speciality->name;
+                $fullname = $this->sesion->infouser['fullname'];
+
+                $this->view->fullname   = $fullname;
+                $this->view->faculty   = $faculty;
+                $this->view->speciality   = $speciality;
+                $this->view->uid = $uid;
+                $escid = base64_decode($this->_getParam('escid'));
+                $subid = base64_decode($this->_getParam('subid'));
+                $regid = base64_decode($this->_getParam('regid'));
+                $perid = base64_decode($this->_getParam('perid'));
+                $curid = base64_decode($this->_getParam('curid'));
+
+                $where = array(
+                    'eid'=>$eid,'oid'=>$oid,
+                    'escid'=>$escid,'subid'=>$subid,
+                    'pid'=>$pid,'uid'=>$uid,
+                    'regid'=>$regid,'perid'=>$perid,
+                    'curid'=>$curid,
+                    );
+                $order = "courseid ASC";
+                $base_registration_subjet = new Api_Model_DbTable_Registrationxcourse();
+                $base_subjets_teacher = new Api_Model_DbTable_Coursexteacher();
+                $base_subjets = new Api_Model_DbTable_Course();
+                $base_person = new Api_Model_DbTable_Person();
+
+                $data_subjects = $base_registration_subjet->_getAll($where,$order);
+
+
+                // $attrib =array('pid','last_name0');
+
+                foreach ($data_subjects as $key => $value) {
+                    $where = array(
+                        'eid'=>$eid,'oid'=>$oid,
+                        'curid'=>$value['curid'],
+                        'escid'=>$value['escid'],
+                        'subid'=>$value['subid'],
+                        'courseid'=>$value['courseid'],
+                        'turno' =>$value['turno'],
+                        'perid' => $perid,);
+
+                    $info_subjects =  $base_subjets->_getOne($where);
+                    $data_subjects [$key]['name'] = $info_subjects['name'];
+                    $data_subjects [$key]['type'] = $info_subjects['type'];
+                    $data_subjects  [$key]['credits'] = $info_subjects['credits'];
+                    $data_subjects [$key]['semid'] = $info_subjects['semid'];
+
+                    $data_pid_teacher = $base_subjets_teacher ->_getFilter($where);
+
+                    $where['pid'] = $data_pid_teacher[0]['pid'];
+
+                    $name_teacher = $base_person->_getOne($where);
+                    $data_subjects [$key]['name_t'] = $name_teacher['last_name0'].
+                                                        " ".$name_teacher['last_name1'].
+                                                        ", ".$name_teacher['first_name'];
+
+                } 
+
+                $this->view->data_subjects  =   $data_subjects;
+                $this->_helper->layout->disableLayout();
+
+                // print_r($data_subjects);
+
+        } catch (Exception $e) {
+            print "Error: print register".$e->getMessage();
+        }
     }
 
     
