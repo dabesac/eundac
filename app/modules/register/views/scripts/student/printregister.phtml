@@ -1,0 +1,68 @@
+<?php
+    $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+    include_once($dir);
+    ob_start(); 
+
+$header='
+<table style="width: 100%;" border="1">
+    <tr>
+        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+        <th style="text-align: center; font-size: 11px;">
+        FACULTAD DE '.strtoupper($this->faculty).'<br/>
+        ESCUELA DE  '.strtoupper($this->speciality).' 
+        </th>        
+    </tr>
+    <tr>
+        <th style="border: 1px solid #000;"> PRE-MATRICULA </th>
+    </tr>
+</table>
+
+    <tr>
+        <td style="text-align: left;">Codigo: '.strtoupper($this->uid).'</td>
+    </tr>
+    <tr>
+        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+    <tr>   
+        <td style="text-align: left;">Alumno:'.strtoupper($this->fullname).'</td>
+    </tr>   
+
+'    
+?>
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+
+<table style="width:100%; text-align:center;" border="1">
+        <tr>
+            <th class='small'>Codigo Curso</th>
+            <th >Nombre Curso</th>
+            <th class='small'>Condición</th>
+            <th class='small'>Creditos</th>
+            <th class='small'>Semestre</th>
+            <th class='small'>Turno</th>
+            <th class=''>Docente</th>
+        </tr>
+        <?php foreach ($this->data_subjects as $key => $value) { ?>
+            <tr>
+                <td><?php echo $value['courseid']?></td>
+                <td><?php echo $value['name']?></td>
+                <td><?php echo $value['type']?></td>
+                <td><?php echo $value['credits']?></td>
+                <td><?php echo $value['semid']?></td>
+                <td><?php echo $value['turno']?></td>
+                <td><?php echo $value['name_t']?></td>
+            </tr>
+        <?php }?>
+      
+</table>
+
+<?php 
+    $html = ob_get_contents();
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40);
+    $mpdf->SetHTMLHeader($header);
+    $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('Pre-Matricula-'.$this->uid.'.pdf','D');
+?>
