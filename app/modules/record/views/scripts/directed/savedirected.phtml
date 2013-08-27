@@ -1,6 +1,6 @@
 <?php
 if ($this->cursosconvalidados){ ?>
-<div id="lista">
+<div id="listag">
     <div><h5><center><b>CURSOS REALIZADOS</b></center></h5></div>
     <div>
         <div style="display: block; height: 150px; overflow: auto;margin: 0px;" >
@@ -39,8 +39,25 @@ if ($this->cursosconvalidados){ ?>
                             <?php  
                              if ($convalidado['state']<>'C'){ ?>
                             <td>
-                                <a href="#" onclick="javascript: window.open('/record/directed/modifyregister/regid/<?php echo base64_encode($convalidado['regid'])?>/courseid/<?php echo base64_encode($convalidado['courseid'])?>/curid/<?php echo base64_encode($convalidado['curid'])?>/escid/<?php echo base64_encode($convalidado['escid'])?>/perid/<?php echo base64_encode($convalidado['perid'])?>/uid/<?php echo base64_encode($convalidado['uid'])?>/pid/<?php echo base64_encode($convalidado['pid'])?>/turno/<?php echo base64_encode($convalidado['turno'])?>/subid/<?php echo base64_encode($convalidado['subid'])?>','Modificación Alumno','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=700,height=600')"><i class="icon-pencil"></i></a>
+                                <a id="modifyregister_<?php echo $i?>" data-toggle="modal" href="#modify" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
                             </td>
+                            <script type="text/javascript">
+                            $("#modifyregister_<?php echo $i?>").click(function(){
+                                $("#notamodify").val("<?php echo $this->cursosconvalidados[$i-1]['notafinal']?>");
+                                $("#recibomodify").val("<?php echo $this->cursosconvalidados[$i-1]['receipt']?>");
+                                $("#resolmodify").val("<?php echo $this->cursosconvalidados[$i-1]['document_auth']?>");
+                                $("#regidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['regid']?>");
+                                $("#courseidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['courseid']?>");
+                                $("#namecourseidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['name_course']?>");
+                                $("#curidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['curid']?>");
+                                $("#escidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['escid']?>");
+                                $("#peridmodify").val("<?php echo $this->cursosconvalidados[$i-1]['perid']?>");
+                                $("#turnomodify").val("<?php echo $this->cursosconvalidados[$i-1]['turno']?>");
+                                $("#subidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['subid']?>");
+                                $("#uidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['uid']?>");
+                                $("#pidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['pid']?>");
+                            });
+                            </script>
                             <?php 
                             } ?>
                         </tr>

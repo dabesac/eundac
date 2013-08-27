@@ -1,0 +1,9 @@
+<?php //print_r($this->periods);
+if($this->periods){?>
+	<option value="">Filtre por Periodos</option>
+	<?php foreach ($this->periods as $prds) {?>
+		<option value="<?php echo $prds['perid']?>"><?php echo $prds['perid']." | ".$prds['name']?></option>
+<?php }
+}else{?>
+	<option value="">No Existe Registros</option>
+<?php }?>

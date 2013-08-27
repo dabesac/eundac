@@ -115,6 +115,7 @@
     </table>
     <div id="header_cursos"></div>
     <div id="header_alumnos"></div>
+    <div id="header_modify"></div>
 </div>
 
 <?php
@@ -158,8 +159,25 @@ if ($this->cursosconvalidados){ ?>
                             <?php  
                              if ($convalidado['state']<>'C'){ ?>
                             <td>
-                                <a id="modifyregister" data-toggle="modal" href="#modify" onclick="javascript: $('#loadingmodify').load('/record/directed/modifyregister/regid/<?php echo base64_encode($convalidado['regid'])?>/courseid/<?php echo base64_encode($convalidado['courseid'])?>/curid/<?php echo base64_encode($convalidado['curid'])?>/escid/<?php echo base64_encode($convalidado['escid'])?>/perid/<?php echo base64_encode($convalidado['perid'])?>/uid/<?php echo base64_encode($convalidado['uid'])?>/pid/<?php echo base64_encode($convalidado['pid'])?>/turno/<?php echo base64_encode($convalidado['turno'])?>/subid/<?php echo base64_encode($convalidado['subid'])?>')" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a id="modifyregister_<?php echo $i?>" data-toggle="modal" href="#modify" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
                             </td>
+                            <script type="text/javascript">
+                            $("#modifyregister_<?php echo $i?>").click(function(){
+                                $("#notamodify").val("<?php echo $this->cursosconvalidados[$i-1]['notafinal']?>");
+                                $("#recibomodify").val("<?php echo $this->cursosconvalidados[$i-1]['receipt']?>");
+                                $("#resolmodify").val("<?php echo $this->cursosconvalidados[$i-1]['document_auth']?>");
+                                $("#regidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['regid']?>");
+                                $("#courseidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['courseid']?>");
+                                $("#namecourseidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['name_course']?>");
+                                $("#curidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['curid']?>");
+                                $("#escidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['escid']?>");
+                                $("#peridmodify").val("<?php echo $this->cursosconvalidados[$i-1]['perid']?>");
+                                $("#turnomodify").val("<?php echo $this->cursosconvalidados[$i-1]['turno']?>");
+                                $("#subidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['subid']?>");
+                                $("#uidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['uid']?>");
+                                $("#pidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['pid']?>");
+                            });
+                            </script>
                             <?php 
                             } ?>
                         </tr>
@@ -174,24 +192,82 @@ if ($this->cursosconvalidados){ ?>
 } ?>
 
 <div class="modal fade" id="modify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<form id="frmmodifyregister" name="frmmodifyregister" action="/record/directed/modifyregister" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Modal title</h4>
+                <h4 class="modal-title">MODIFICAR REGISTRO</h4>
             </div>
             <div class="modal-body">
-                <div id="loadingmodify"></div>
+                <table class="table">
+                    <tr>
+                        <th>Currícula:</th>
+                        <td>
+                            <input id="curidmodify" name="curid" type="text" class="form-control" readonly>
+                        </td>
+                        <th>Turno:</th>
+                        <td>
+                            <input id="turnomodify" name="turno" type="text" class="form-control" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Asignatura:</th>
+                        <td colspan="3">
+                            <input id="namecourseidmodify" type="text" class="form-control" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nota:</th>
+                        <td>
+                            <input id="notamodify" name="notafinal" type="text" class="form-control" style="width:50px">
+                        </td>
+                        <th>Recibo:</th>
+                        <td>
+                            <input id="recibomodify" name="receipt" type="text" class="form-control" style="width:200px">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Resolución:</th>
+                        <td colspan="3">
+                            <input id="resolmodify" name="resolution" type="text" class="form-control" style="width:350px">
+                        </td>
+                    </tr>
+                </table>
+                <input id="regidmodify" name="regid" type="hidden">
+                <input id="courseidmodify" name="courseid" type="hidden">
+                <input id="escidmodify" name="escid" type="hidden">
+                <input id="peridmodify" name="perid" type="hidden">
+                <input id="subidmodify" name="subid" type="hidden">
+                <input id="uidmodify" name="uid" type="hidden">
+                <input id="pidmodify" name="pid" type="hidden">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <a href="#" id="savemodify" class="btn btn-success">Guardar</a>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
+</form>
 </div>
 
 <script>
+$("#savemodify").click(function(){
+    $("#frmmodifyregister").submit();
+});
+
+$('#frmmodifyregister').submit(function() {  
+    $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(data) { 
+            $('#header_modify').html(data);  
+        }
+    });          
+    return false;
+});
+
  $("#curid").change(function(){
     var curricula = $(this).val();
     if (curricula=="") {
@@ -260,6 +336,8 @@ $("#registerstudent").click(function(){
     if (course!='' && nota!='' && reso!='' && recibo!='' && turno!='' && docente!=''){
         $("#header_cursos").hide();
         $("#lista").hide();
+        $("#listam").hide();
+        $("#listag").hide();
         var url = "/record/directed/savedirected/subid/"+subid+"/escid/"+escid+"/uid/"+uid+"/pid/"+pid+"/curid/"+curid+"/courseid/"+courseid+"/semid/"+semid+"/credits/"+credits+"/nota/"+nota+"/reso/"+reso+"/perid/"+perid+"/turno/"+turno+"/uid_doc/"+uid_doc+"/pid_doc/"+pid_doc+"/recibo/"+recibo;
         // alert(url);
         $("#header_alumnos").html("<img src='/img/spinner.gif'>Cargando..."); 

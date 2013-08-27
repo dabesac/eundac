@@ -1,0 +1,22 @@
+<table class="table">
+	<tr>
+		<th>Currícula:</th>
+		<td>
+			<select id="curid" class="form-control">
+				<option value="">- Seleccione -</option>
+			</select>
+		</td>
+		<th>Asignatura:</th>
+		<td>
+			<select id="courseid" class="form-control">
+				<option value="">- Seleccione -</option>
+			</select>
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript">
+$("#curid").change(function(){
+	var curid=$(this).val();
+});
+</script>
