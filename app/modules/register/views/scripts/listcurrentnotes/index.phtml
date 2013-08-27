@@ -11,16 +11,6 @@
 			<h5 align="left"><b><?php echo $courses[0]['name'];?></b></h5>
 		</div>
 		<div class="panel-body">
-			<div class="col-sm-2">
-				<br><br><br>
-				<h5>
-					Codigo <b><?php echo $courses[0]['courseid']?></b><br>
-					Turno <b>A</b><br>
-					Semestre <b><?php echo $courses[0]['semid']?></b><br>
-					Creditos <b><?php echo $courses[0]['credits']?></b><br>
-				</h5>
-			</div>
-			
 			<?php if ($courses[0]['type']=="O"){
 				for ($i=1; $i<=2 ; $i++) {?>
 				<div class="col-sm-6">
@@ -123,7 +113,23 @@
 				</div>
 			<?php }?>
 		</div>
-		
+		<div class="panel-footer">
+
+			<div class="col-sm-3">
+				<center><h5>Codigo <b><?php echo $courses[0]['courseid']?></b></h5></center>
+					
+			</div>
+			<div class="col-sm-3">
+				<center><h5>Semestre <b><?php echo $courses[0]['semid']?></b></h5></center>
+			</div>
+			<div class="col-sm-3">
+				<center><h5>Turno <b>A</b></h5></center>
+			</div>
+			<div class="col-sm-3">
+				<center><h5>Creditos <b><?php echo $courses[0]['credits']?></b></h5></center>
+			</div><br>
+					
+		</div>
 	</div>
 	<?php $c++;
 	}?>

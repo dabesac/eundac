@@ -90,7 +90,7 @@ class Api_Model_DbTable_Semester extends Zend_Db_Table_Abstract
 			print "Error: Read Filter Semester ".$e->getMessage();
 		}
 	}
-}
+
 
 	public function _getSemesterXPeriodsXEscid($where=null){
         try{
