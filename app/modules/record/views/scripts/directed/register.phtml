@@ -115,6 +115,7 @@
     </table>
     <div id="header_cursos"></div>
     <div id="header_alumnos"></div>
+    <div id="header_modify"></div>
 </div>
 
 <?php
@@ -158,23 +159,23 @@ if ($this->cursosconvalidados){ ?>
                             <?php  
                              if ($convalidado['state']<>'C'){ ?>
                             <td>
-                                <a id="modifyregister" data-toggle="modal" href="#modify" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a id="modifyregister_<?php echo $i?>" data-toggle="modal" href="#modify" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
                             </td>
                             <script type="text/javascript">
-                            $("#modifyregister").click(function(){
-                                $("#notamodify").val("<?php echo $convalidado['notafinal']?>");
-                                $("#recibomodify").val("<?php echo $convalidado['receipt']?>");
-                                $("#resolmodify").val("<?php echo $convalidado['document_auth']?>");
-                                $("#regidmodify").val("<?php echo $convalidado['regid']?>");
-                                $("#courseidmodify").val("<?php echo $convalidado['courseid']?>");
-                                $("#namecourseidmodify").val("<?php echo $convalidado['name_course']?>");
-                                $("#curidmodify").val("<?php echo $convalidado['curid']?>");
-                                $("#escidmodify").val("<?php echo $convalidado['escid']?>");
-                                $("#peridmodify").val("<?php echo $convalidado['perid']?>");
-                                $("#turnomodify").val("<?php echo $convalidado['turno']?>");
-                                $("#subidmodify").val("<?php echo $convalidado['subid']?>");
-                                $("#uidmodify").val("<?php echo $convalidado['uid']?>");
-                                $("#pidmodify").val("<?php echo $convalidado['pid']?>");
+                            $("#modifyregister_<?php echo $i?>").click(function(){
+                                $("#notamodify").val("<?php echo $this->cursosconvalidados[$i-1]['notafinal']?>");
+                                $("#recibomodify").val("<?php echo $this->cursosconvalidados[$i-1]['receipt']?>");
+                                $("#resolmodify").val("<?php echo $this->cursosconvalidados[$i-1]['document_auth']?>");
+                                $("#regidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['regid']?>");
+                                $("#courseidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['courseid']?>");
+                                $("#namecourseidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['name_course']?>");
+                                $("#curidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['curid']?>");
+                                $("#escidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['escid']?>");
+                                $("#peridmodify").val("<?php echo $this->cursosconvalidados[$i-1]['perid']?>");
+                                $("#turnomodify").val("<?php echo $this->cursosconvalidados[$i-1]['turno']?>");
+                                $("#subidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['subid']?>");
+                                $("#uidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['uid']?>");
+                                $("#pidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['pid']?>");
                             });
                             </script>
                             <?php 
@@ -191,7 +192,7 @@ if ($this->cursosconvalidados){ ?>
 } ?>
 
 <div class="modal fade" id="modify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<form name="frmmodifyregister" action="/record/directed/modifyregister" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+<form id="frmmodifyregister" name="frmmodifyregister" action="/record/directed/modifyregister" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -242,7 +243,7 @@ if ($this->cursosconvalidados){ ?>
                 <input id="pidmodify" name="pid" type="hidden">
             </div>
             <div class="modal-footer">
-                <button id="savemodify" type="button" class="btn btn-success">Guardar</button>
+                <a href="#" id="savemodify" class="btn btn-success">Guardar</a>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
@@ -252,7 +253,19 @@ if ($this->cursosconvalidados){ ?>
 
 <script>
 $("#savemodify").click(function(){
-    $("#modify").modal('hide');
+    $("#frmmodifyregister").submit();
+});
+
+$('#frmmodifyregister').submit(function() {  
+    $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(data) { 
+            $('#header_modify').html(data);  
+        }
+    });          
+    return false;
 });
 
  $("#curid").change(function(){
@@ -323,6 +336,8 @@ $("#registerstudent").click(function(){
     if (course!='' && nota!='' && reso!='' && recibo!='' && turno!='' && docente!=''){
         $("#header_cursos").hide();
         $("#lista").hide();
+        $("#listam").hide();
+        $("#listag").hide();
         var url = "/record/directed/savedirected/subid/"+subid+"/escid/"+escid+"/uid/"+uid+"/pid/"+pid+"/curid/"+curid+"/courseid/"+courseid+"/semid/"+semid+"/credits/"+credits+"/nota/"+nota+"/reso/"+reso+"/perid/"+perid+"/turno/"+turno+"/uid_doc/"+uid_doc+"/pid_doc/"+pid_doc+"/recibo/"+recibo;
         // alert(url);
         $("#header_alumnos").html("<img src='/img/spinner.gif'>Cargando..."); 

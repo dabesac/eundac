@@ -387,20 +387,48 @@ class Record_DirectedController extends Zend_Controller_Action {
             $receipt=$this->_getParam("receipt");
             $resolution=$this->_getParam("resolution");
 
-            // $whereregcour['eid']=$eid;
-            // $whereregcour['oid']=$oid;
-            // $whereregcour['escid']=$escid;
-            // $whereregcour['subid']=$subid;
-            // $whereregcour['courseid']=$courseid;
-            // $whereregcour['curid']=$curid;
-            // $whereregcour['regid']=$regid;
-            // $whereregcour['turno']=$turno;
-            // $whereregcour['pid']=$pid;
-            // $whereregcour['uid']=$uid;
-            // $whereregcour['perid']=$perid;
-            // $bdmatricurso=new Api_Model_DbTable_Registrationxcourse();
-            // $datmatcourse=$bdmatricurso->_getOne($whereregcour);
-            // print_r($datmatcourse);
+            $pk['eid']=$eid;
+            $pk['oid']=$oid;
+            $pk['escid']=$escid;
+            $pk['subid']=$subid;
+            $pk['courseid']=$courseid;
+            $pk['curid']=$curid;
+            $pk['regid']=$regid;
+            $pk['turno']=$turno;
+            $pk['pid']=$pid;
+            $pk['uid']=$uid;
+            $pk['perid']=$perid;
+            $data['notafinal']=$notafinal;
+            $data['receipt']=$receipt;
+            $data['document_auth']=$resolution;
+            $bdmatricurso=new Api_Model_DbTable_Registrationxcourse();
+            if ($bdmatricurso->_update($data,$pk)) {
+                $this->view->msg=1;
+                $wheresub['eid']=$eid;
+                $wheresub['oid']=$oid;
+                $wheresub['subid']=$subid;
+                $wheresub['escid']=$escid;
+                $wheresub['uid']=$uid;
+                $wheresub['pid']=$pid;
+                $wheresub['perid']=$perid;
+                $convalidados = $bdmatricurso->_getFilter($wheresub,$attrib=null,$orders='courseid');
+                if ($convalidados) {
+                    $tamm=count($convalidados);
+                    $wherecourse['eid']=$eid;
+                    $wherecourse['oid']=$oid;
+                    $wherecourse['escid']=$escid;
+                    $wherecourse['subid']=$subid;
+                    for ($i=0; $i < $tamm; $i++) { 
+                        $wherecourse['curid']=$convalidados[$i]['curid'];
+                        $wherecourse['courseid']=$convalidados[$i]['courseid'];
+                        $cours= new Api_Model_DbTable_Course();
+                        $dbcourse=$cours->_getOne($wherecourse);
+                        $convalidados[$i]['name_course']=$dbcourse['name'];
+                        $convalidados[$i]['credits']=$dbcourse['credits'];
+                    }
+                }
+                $this->view->cursosconvalidados = $convalidados;
+            }
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
