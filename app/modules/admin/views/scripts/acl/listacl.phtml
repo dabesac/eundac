@@ -1,7 +1,6 @@
 <table class="table">
 	<?php 
-	if($this->aclname){
-	?>
+	if($this->aclname){?>
 	<tr>
 		<th>Lista de Control de Acceso</th>
 	</tr>
@@ -11,7 +10,7 @@
 	?>
 	<tr class="col-md-4">
 		<td class="col-md-5"><?php echo $aclnm[0]['name']?></td>
-		<td class="col-md-1"><a href="/admin/acl/delete/reid/<?php echo $aclnm[0]['reid']?>/rid/<?php echo $this->rid?>" class="pull-left" onclick="return confirm('Esta Seguro que desea eliminar!')"><span class="glyphicon glyphicon-remove"></span></a></td>
+		<td class="col-md-1"><a href="/admin/acl/delete/reid/<?php echo $aclnm[0]['reid']?>/rid/<?php echo $this->rid?>/mid/<?php echo $aclnm[0]['mid']?>" class="pull-left" onclick="return confirm('Esta Seguro que desea eliminar!')"><span class="glyphicon glyphicon-remove"></span></a></td>
 	</tr>
 	<?php }
 	}else{?>

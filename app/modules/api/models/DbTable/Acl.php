@@ -44,8 +44,7 @@ class Api_Model_DbTable_Acl extends Zend_Db_Table_Abstract
 
 	public function _save($data){
 		try{
-			if ($data['eid']=='' || $data['oid']=='' || $data['reid']=='' 
-				|| $data['rid']=='' || $data['mid']=='') return false;
+			if ($data['eid']=='' || $data['oid']=='' || $data['reid']=='' || $data['rid']=='' || $data['mid']=='') return false;
 			return $this->insert($data);
 			return false;
 		}catch (Exception $e){
@@ -55,8 +54,7 @@ class Api_Model_DbTable_Acl extends Zend_Db_Table_Abstract
 
 	public function _delete($pk){
 		try{
-			if ($pk['oid']=='' || $pk['eid']=='' || $pk['reid']=='' 
-					|| $pk['rid']=='' || $data['mid']=='') return false;
+			if ($pk['oid']=='' || $pk['eid']=='' || $pk['reid']=='' || $pk['rid']=='' || $pk['mid']=='') return false;
 			$where = "eid = '".$pk['eid']."'and oid = '".$pk['oid']."' and reid = '".$pk['reid']."' 
 					and rid = '".$pk['rid']."' and mid = '".$pk['mid']."'";
 			return $this->delete($where);

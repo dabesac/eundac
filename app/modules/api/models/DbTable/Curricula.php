@@ -127,9 +127,30 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
    //       }
    //   }
 
-	 public function _getPerformance($escid,$curid,$perid,$eid,$oid){
+        public function _getSemesterXcurr($where=null)
+        {
+            //print(utf8_encode($perid).utf8_decode($escid).utf8_decode($curid).$eid.$oid);
             try{
-               if ($escid=="" || $curid=="" || $perid=="" || $eid=="" || $oid=="") return false;
+                if ($where['perid']=="" || $where['escid']=="" || $where['curid']=="" || $where['eid']=="" || $where['oid']=="") return false;
+                else
+                {
+                    $sql=$this->_db->query(" 
+                    select distinct curid,cast(semid as integer),perid,escid from base_periods_courses
+                    where perid='".$where['perid']."' AND ESCID='".$where['escid']."' AND CURID='".$where['curid']."'  AND eid='".$where['eid']."' AND oid='".$where['oid']."'
+                    ORDER BY SEMID asc
+                    ");
+               return $sql->fetchAll(); 
+                }
+            }  catch (Exception $ex){
+                print "Error: Lecturando semestre de curricula ".$ex->getMessage();
+            }   
+                       
+        }
+
+
+	 public function _getPerformance($where=null){
+            try{
+               if ($where['escid']=="" || $where['curid']=="" || $where['perid']=="" || $where['eid']=="" || $where['oid']=="") return false;
                else
                {
                 $sql=$this->_db->query(" 
@@ -203,7 +224,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                 FROM BASE_PERIODS_COURSES AS PC
                 INNER JOIN BASE_COURSES AS C
                 ON PC.COURSEID=C.COURSEID AND PC.ESCID=C.ESCID AND PC.CURID=C.CURID AND PC.OID=C.OID AND PC.EID=C.EID AND PC.SUBID=C.SUBID
-                WHERE PERID='$PERID' AND PC.ESCID='$ESCID' AND PC.CURID='$CURID' AND
+                WHERE PERID='".$where['perid']."' AND PC.ESCID='".$where['escid']."' AND PC.CURID='".$where['curid']."' AND
                 (
                 (
                     SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
@@ -256,6 +277,288 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
             print "Error: Obteniendo Curricula anterior".$ex->getMessage();
         }
     }
+
+
+    //Lista las curriculas usadas por escuela de un determinado periodo
+    public function _getCurriculasXSchool($where=null)
+    {
+        try
+        {
+            if ($where['escid']=="" || $where['perid']=="" || $where['eid']=="" || $where['oid']=="") return false;
+            $sql=$this->_db->query(" 
+                select curid,name,escid,state from base_curricula 
+                where escid='".$where['escid']."'  and curid in (select curid from base_periods_courses
+                where perid='".$where['perid']."' and escid='".$where['escid']."')
+            ");
+            return $sql->fetchAll(); 
+        }  
+        catch (Exception $ex)
+        {
+            print $ex->getMessage();
+        }
+    }
+
+
+            public function _get3superiorXcurricula($where=null)
+        {
+            //print(utf8_encode($perid).utf8_decode($escid).utf8_decode($curid).$eid.$oid);
+            try{
+                if ($where['perid']=="" || $where['escid']==""|| $where['eid']==""|| $where['oid']=="") return false;
+                else
+                {
+                    $sql=$this->_db->query(" 
+                   SELECT REGID,M.UID,LAST_NAME0,LAST_NAME1,FIRST_NAME,SEMID,
+                    ROUND(
+                    (
+                    SELECT SUM(CAST((CASE WHEN NOTAFINAL='-3' THEN '0' WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) * CREDITS) from BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
+                    ) /
+                    (
+                    SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
+                    )
+                    ) AS PROM_POND,
+                    (
+                    SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND CAST((CASE WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) > 10
+                    ) AS CRED_APROB
+                    FROM BASE_REGISTRATION AS M
+                    INNER JOIN BASE_PERSON AS P
+                    ON M.PID=P.PID AND M.STATE='M' INNER JOIN BASE_STUDENT_CURRICULA AS AC
+                    ON M.UID=AC.UID AND M.ESCID=AC.ESCID
+                    WHERE PERID='".$where['PERID']."' AND M.ESCID='".$where['ESCID']."' AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND 
+                    CAST((CASE WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) > 10)>=(SELECT sum(credits) FROM BASE_COURSES WHERE ESCID=M.ESCID AND cast(semid as integer)=m.semid AND CURID=AC.CURID )
+                    AND ROUND(
+                    (
+                    SELECT SUM(CAST((CASE WHEN NOTAFINAL='-3' THEN '0' WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) * CREDITS) from BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
+                    ) /
+                    (
+                    SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
+                    )
+                    ) > 12
+                    ORDER BY PROM_POND DESC ,LAST_NAME0,LAST_NAME1,FIRST_NAME  LIMIT (SELECT ROUND(COUNT(*)*0.3) FROM BASE_REGISTRATION AS M
+                    INNER JOIN BASE_PERSON AS P
+                    ON M.PID=P.PID AND M.STATE='M' INNER JOIN BASE_STUDENT_CURRICULA AS AC
+                    ON M.UID=AC.UID AND M.ESCID=AC.ESCID
+                    WHERE PERID='".$where['PERID']."' AND M.ESCID='".$where['ESCID']."'  
+                    AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND 
+                    CAST((CASE WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) > 10)>=(SELECT sum(credits) FROM BASE_COURSES WHERE ESCID=M.ESCID AND cast(semid as integer)=m.semid AND CURID=AC.CURID ) AND
+                    ROUND(
+                    (
+                    SELECT SUM(CAST((CASE WHEN NOTAFINAL='-3' THEN '0' WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) * CREDITS) from BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
+                    ) /
+                    (
+                    SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
+                    )
+                    ) > 12)
+                    OFFSET 0            
+           
+
+                    ");
+               return $sql->fetchAll(); 
+                }
+            }  catch (Exception $ex){
+                ///print "Error: Lecturando semestre de curricula ".$ex->getMessage();
+                ?> 
+                <script type="text/javascript"> 
+                        alert("Para mostrar registro Falta ingresar notas de los direrentes cursos"); 
+                </script> 
+                <?php
+            }   
+                       
+        }
+
+
+        public function _get5superiorXcurricula($where=null)
+        {
+            //print(utf8_encode($perid).utf8_decode($escid).utf8_decode($curid).$eid.$oid);
+            try{
+                if ($where['perid']=="" || $where['escid']==""|| $where['eid']==""|| $where['oid']=="") return false;
+                else
+                {
+                    $sql=$this->_db->query(" 
+                   SELECT REGID,M.UID,LAST_NAME0,LAST_NAME1,FIRST_NAME,SEMID,
+                    ROUND(
+                    (
+                    SELECT SUM(CAST((CASE WHEN NOTAFINAL='-3' THEN '0' WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) * CREDITS) from BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
+                    ) /
+                    (
+                    SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
+                    )
+                    ) AS PROM_POND,
+                    (
+                    SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND CAST((CASE WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) > 10
+                    ) AS CRED_APROB
+                    FROM BASE_REGISTRATION AS M
+                    INNER JOIN BASE_PERSON AS P
+                    ON M.PID=P.PID AND M.STATE='M' INNER JOIN BASE_STUDENT_CURRICULA AS AC
+                    ON M.UID=AC.UID AND M.ESCID=AC.ESCID
+                    WHERE PERID='".$where['PERID']."' AND M.ESCID='".$where['ESCID']."' AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND 
+                    CAST((CASE WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) > 10)>=(SELECT sum(credits) FROM BASE_COURSES WHERE ESCID=M.ESCID AND cast(semid as integer)=m.semid AND CURID=AC.CURID )
+                    AND ROUND(
+                    (
+                    SELECT SUM(CAST((CASE WHEN NOTAFINAL='-3' THEN '0' WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) * CREDITS) from BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
+                    ) /
+                    (
+                    SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
+                    )
+                    ) > 12
+                    ORDER BY PROM_POND DESC ,LAST_NAME0,LAST_NAME1,FIRST_NAME  LIMIT (SELECT ROUND(COUNT(*)*0.5) FROM BASE_REGISTRATION AS M
+                    INNER JOIN BASE_PERSON AS P
+                    ON M.PID=P.PID AND M.STATE='M' INNER JOIN BASE_STUDENT_CURRICULA AS AC
+                    ON M.UID=AC.UID AND M.ESCID=AC.ESCID
+                    WHERE PERID='".$where['PERID']."' AND M.ESCID='".$where['ESCID']."'  
+                    AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND 
+                    CAST((CASE WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) > 10)>=(SELECT sum(credits) FROM BASE_COURSES WHERE ESCID=M.ESCID AND cast(semid as integer)=m.semid AND CURID=AC.CURID ) AND
+                    ROUND(
+                    (
+                    SELECT SUM(CAST((CASE WHEN NOTAFINAL='-3' THEN '0' WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) * CREDITS) from BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
+                    ) /
+                    (
+                    SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    INNER JOIN BASE_COURSES AS C1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
+                    )
+                    ) > 12)
+                    OFFSET 0            
+           
+
+                    ");
+               return $sql->fetchAll(); 
+                }
+            }  catch (Exception $ex){
+                ///print "Error: Lecturando semestre de curricula ".$ex->getMessage();
+                ?> 
+                <script type="text/javascript"> 
+                        alert("Para mostrar registro Falta ingresar notas de los direrentes cursos"); 
+                </script> 
+                <?php
+            }   
+                       
+        }
+
+
+
+                public function _getPrimerospuestos($where=null)
+        {
+            try{
+                if ($where['perid']=="" || $where['escid']=="" || $where['curid']=="" || $where['semid']=="" || $where['eid']=="" || $where['oid']="") return false;
+                else
+                {
+                $perid=$where['perid'];
+                $escid=$where['escid'];
+                $curid=$where['curid'];
+                $semid=$where['semid'];
+                $sql=$this->_db->query(" 
+               select m.UID,LAST_NAME0 || ' ' || LAST_NAME1 || ', ' || FIRST_NAME AS nom,m.semid,mc.regid,mc.curid,sum(c.credits),
+                (
+                    select sum(credits) from base_registration_course  as mc1
+                    inner join base_courses as c1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    where regid=mc.regid and cast(semid as integer)=m.semid and mc1.curid=mc.curid and mc1.perid=mc.perid
+                    and cast(notafinal as integer) > 10
+                ) as cred_apr,
+                ((
+                (
+                    select sum(cast((CASE WHEN notafinal='-3' THEN '0' ELSE NOTAFINAL END) as integer) * credits) from base_registration_course  as mc1
+                    inner join base_courses as c1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    where regid=mc.regid and cast(semid as integer)=m.semid and mc1.curid=mc.curid and mc1.perid=mc.perid
+                ) /
+                (
+                    select sum(credits) from base_registration_course  as mc1
+                    inner join base_courses as c1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    where regid=mc.regid and cast(semid as integer)=m.semid and mc1.curid=mc.curid and mc1.perid=mc.perid
+                ) 
+                )) as prom_pon
+                 from base_registration as m inner join base_registration_course as mc
+                on m.regid=mc.regid and m.perid=mc.perid 
+                inner join base_person  p
+                on m.pid = p.pid 
+                INNER JOIN base_courses AS C
+                ON MC.CURID=C.CURID AND MC.COURSEID=C.COURSEID AND MC.ESCID=C.ESCID
+                where mc.curid='$curid' and mc.perid='$perid' and mc.escid='$escid' and m.semid='$semid' and m.state='M'
+
+                                group by m.uid,nom,m.semid,mc.regid,mc.curid,mc.perid
+                                order by semid,case when 
+                                (
+                    select sum(credits) from base_registration_course  as mc1
+                    inner join base_courses as c1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID
+                    where regid=mc.regid and cast(semid as integer)=m.semid and mc1.curid=mc.curid and mc1.perid=mc.perid
+                    and cast(notafinal as integer) > 10
+                )
+                                 is null then 0 else (
+                    select sum(credits) from base_registration_course  as mc1
+                    inner join base_courses as c1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    where regid=mc.regid  and cast(semid as integer)=m.semid and mc1.curid=mc.curid and mc1.perid=mc.perid
+                    and cast(notafinal as integer) > 10 
+                ) end desc,prom_pon desc
+                
+                    ");
+               return $sql->fetchAll();
+                }
+            }  catch (Exception $ex){
+                // print "Error:Para mostrar registro Falta ingresar notas de los direrentes cursos";
+                ?> 
+                <script type="text/javascript"> 
+                        alert("Para mostrar registro Falta ingresar notas de los direrentes cursos"); 
+                    </script> 
+                <?php 
+            }   
+                       
+        }
 
 
 }
