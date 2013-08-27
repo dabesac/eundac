@@ -1,0 +1,86 @@
+<div class="panel panel-default" style="margin-top:15px">
+  	<div class="panel-body">
+    	<b style="font-size:20px"><span class="glyphicon glyphicon-tasks"></span> - LISTA DE ASIGNATURAS</b>
+    	<a id="addcourses" href="#addcourse" data-toggle="modal" class="btn btn-info" style="float:right"><span class="glyphicon glyphicon-pencil"></span> <b>Agregar Asignatura</b></a>
+  	</div>
+</div>
+<?php if ($this->courses) { ?>
+	<div id="courses">
+		<table class="table table-hover table-condensed table-striped">
+			<tr class="active">
+				<th>#</th>
+				<th><center>Currícula</center></th>
+				<th><center>Código</center></th>
+				<th><center>Nombre Asignatura</center></th>
+				<th><center>Turno</center></th>
+				<th><center>Tipo Asignatura</center></th>
+				<th><center>Semestre</center></th>
+				<th><center>Tipo Calificación</center></th>
+				<th><center>Eliminar</center></th>
+			</tr>
+			<?php 
+			$i=1;
+			foreach ($this->courses as $courses) { 
+				$type=($courses['type']=="O")? "Obligatorio":"Electivo"; ?>
+				<tr>
+					<td><?php echo $i?></td>
+					<td><center><?php echo $courses['curid']?></center></td>
+					<td><center><?php echo $courses['courseid']?></center></td>
+					<td><?php echo $courses['name']?></td>
+					<td><center><?php echo $courses['turno']?></center></td>
+					<td><center><?php echo $type?></center></td>
+					<td><center><?php echo $courses['semid']?></center></td>
+					<td>
+						<select id="typecalification" class="form-control">
+							<option value="">- Seleccione -</option>
+							<option value="O">Objetivos</option>
+							<option value="C">Competencias</option>
+						</select>
+					</td>
+					<td>
+						<center>
+							<a href="#" id="deletecourse"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" title="Eliminar Asignatura"></span></a>
+						</center>
+					</td>
+				</tr>
+				<?php
+				$i++;
+			}?>
+		</table>
+	</div>
+	<?php
+}else{ ?>
+<div class="alert alert-info">
+	<b>INFORMACIÓN: </b>No hay Asignaturas registradas en este Periodo, para agregar las Asignaturas hacer click en "AGREGAR ASIGNATURA".
+</div>
+<?php
+}?>
+<div class="modal fade" id="addcourse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      	<div class="modal-content">
+        	<div class="modal-header">
+          		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          		<h4 class="modal-title">AGREGAR ASIGNATURAS</h4>
+        	</div>
+        	<div class="modal-body">
+          		<div id="loadingcourses"></div>
+        	</div>
+        	<!-- <div class="modal-footer">
+          		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          		<button type="button" class="btn btn-primary">Save changes</button>
+        	</div> -->
+      	</div>
+    </div>
+</div>
+
+<script>
+$("#addcourses").click(function(){
+	var perid="<?php echo $this->perid?>";
+	var escid="<?php echo $this->escid?>";
+	var subid="<?php echo $this->subid?>";
+	var distid="<?php echo $this->distid?>";
+	$("#loadingcourses").load("/distribution/distribution/addcourses/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/distid/"+distid);
+});
+
+$('.glyphicon').tooltip();
+</script>

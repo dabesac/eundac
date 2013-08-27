@@ -88,6 +88,16 @@ class Api_Model_DbTable_PaymentsDetail extends Zend_Db_Table_Abstract
 			print "Error: Read Filter Payments Detail".$e->getMessage();
 		}
 	}
+	public function _delete($pk){
+		try{
+			if ($pk['operation']=='' || $pk['uid']=='') return false;
+			$where = "operation = '".$pk['operation']."'and uid = '".$pk['uid']."'";
+			return $this->delete($where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Delete Organization ".$e->getMessage();
+		}
+	}
 
 
 
