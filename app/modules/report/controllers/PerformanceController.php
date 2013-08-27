@@ -205,11 +205,11 @@ public function listcurriculaAction()
           $data['oid']=$where['oid'];
           $data['escid']=$where['escid'];
 
-          $this->view->escid=$escid;
-          $this->view->curid=$curid;
-          $this->view->eid=$eid;
-          $this->view->oid=$oid;
-          $this->view->perid=$perid; 
+          $this->view->escid=$where['escid'];
+          $this->view->curid=$where['curid'];
+          $this->view->eid=$where['eid'];
+          $this->view->oid=$where['oid'];
+          $this->view->perid=$where['perid']; 
 
           $bdescuela =new Api_Model_DbTable_Speciality();
           $escuela=$bdescuela->_getFilter($data);      
@@ -230,31 +230,15 @@ public function listcurriculaAction()
     public function printrendimientoAction(){
       try{
           $this->_helper->layout()->disableLayout();
-          $eid = $this->sesion->eid;
-          $oid = $this->sesion->oid;
-          $escid = ($this->_getParam("escid"));
-          $curid = ($this->_getParam("curid"));
-          $perid = $this->_getParam("perid");
-          $this->view->eid=$eid;
-          $this->view->oid=$oid;
-          $this->view->escid=$escid;
-          $this->view->perid=$perid;
-          $this->view->curid=$curid;
-
-          // $nomcur = ($this->_getParam("nomcur"));
-          // $this->view->nomcurricula=$nomcur;  
-          
-          // $bdescuela =new Admin_Model_DbTable_Escuela();
-          // $escuela=$bdescuela->_getEscuela($eid,$oid,$escid);
-        
-          // $nom_escuela = strtoupper($escuela['nom_escuela']);
-          // $this->view->nom_escuela=$nom_escuela;   
-
-          
-          // $db_rendimiento = new Docente_Model_DbTable_Curricula();
-
-          // $rep_rendimiento = $db_rendimiento->_getRendimiento($escid,$curid,$perid,$eid,$oid);
-          // $this->view->rep_rendimiento=$rep_rendimiento;
+          $where['eid'] = $this->sesion->eid;
+          $where['oid'] = $this->sesion->oid;
+          $where['escid'] = base64_decode($this->_getParam("escid"));
+          $where['curid'] = base64_decode($this->_getParam("curid"));
+          $where['perid'] = base64_decode($this->_getParam("perid"));
+          $this->view->data=$where;
+          $db_rendimiento = new Api_Model_DbTable_Curricula();
+          $rep_rendimiento= $db_rendimiento->_getPerformance($where);
+          $this->view->rep_rendimiento=$rep_rendimiento;
 
       }
       catch (Exception $ex) {
@@ -305,6 +289,31 @@ public function listcurriculaAction()
       }
     }
 
+    public function printprimerospuestosAction(){
+      try{
+         $this->_helper->layout()->disableLayout();
+          $where['escid'] = base64_decode($this->_getParam("escid"));
+          $where['curid'] = base64_decode($this->_getParam("curid"));
+          $where['perid'] = base64_decode($this->_getParam("perid"));
+          $where['eid'] = $this->sesion->eid;
+          $where['oid'] = $this->sesion->oid;
+  
+          $where['semid'] = ($this->_getParam("semid"));
+          $db_sem = new Api_Model_DbTable_Semester();
+          $lissem = $db_sem->_getOne($where);
+          $this->view->semestre=strtoupper($lissem['name']); 
+          $bdcurri = new Api_Model_DbTable_Curricula();
+          $rep_alumnos= $bdcurri->_getPrimerospuestos($where);
+          $this->view->rep_alumnos=$rep_alumnos;
+          $this->view->data=$where;
+
+      }
+      catch (Exception $ex) 
+      {
+          print "Error rendimiento: ".$ex->getMessage();
+      }
+    }
+
     public function superiorAction(){
       try{
           $this->_helper->layout()->disableLayout();
@@ -343,6 +352,39 @@ public function listcurriculaAction()
          $this->view->rep_superior=$rep_superior;
          $this->view->superior=$superior;
          $this->view->escid=$where['escid'];
+         $this->view->perid=$where['perid'];
+
+      }
+      catch (Exception $ex) {
+          print "Error rendimiento: ".$ex->getMessage();
+        }
+    }
+
+
+        public function printsuperiorAction(){
+      try{
+          $this->_helper->layout()->disableLayout();
+          $where['escid'] = base64_decode($this->_getParam("escid"));
+          $where['perid'] = base64_decode($this->_getParam("perid"));
+          $where['superior'] = $this->_getParam("superior");
+          $where['oid'] = $this->sesion->oid;
+          $where['eid'] = $this->sesion->eid;
+          $this->view->data=$where;
+      
+         $db_35superior = new Api_Model_DbTable_Curricula();
+       
+          if ($superior=='3')
+          {
+            $rep_superior= $db_35superior->_get3superiorXcurricula($where);
+          }
+         
+          if ($superior=='5')
+          {
+            $rep_superior= $db_35superior->_get5superiorXcurricula($where);
+          }
+         
+         $this->view->rep_superior=$rep_superior;
+    
       }
       catch (Exception $ex) {
           print "Error rendimiento: ".$ex->getMessage();

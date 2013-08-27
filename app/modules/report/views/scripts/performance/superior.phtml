@@ -47,7 +47,7 @@
        
         <th class="span1">Fecha</th>
         <th class="span1"  rowspan="2">              
-                <a href="/reportes/reportealumnos/imprimirsuperior/escid/<?php echo $this->escid;?>/superior/<?php echo $this->superior;?>/perid/<?php echo $this->perid?>"  class="btn btn-danger" style='color: #ccc' atls="imprimir" />
+                <a href="/report/performance/printsuperior/escid/<?php echo base64_encode($this->escid);?>/superior/<?php echo $this->superior;?>/perid/<?php echo base64_encode($this->perid)?>"  class="btn btn-danger" style='color: #ccc' atls="imprimir" />
                <b> <i class="glyphicon glyphicon-list-alt glyphicon-white"></i><br/>Imprimir</b></a>
            
         </th>
@@ -82,11 +82,11 @@
                     <td><?php echo $dr['prom_pond']?></td>              
                       <td><?php echo $dr['cred_aprob']?></td>
                 </tr>
-      <?php $i=$i+1; }?>
+              <?php $i=$i+1; }?>
         
         </center>
           </tbody>
-      </table>
+</table>
 
    
 

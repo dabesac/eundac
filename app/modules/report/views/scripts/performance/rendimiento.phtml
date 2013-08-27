@@ -48,7 +48,7 @@
        
         <th class="col-lg-1">Fecha</th>  
         <th class="col-lg-1"  rowspan="2">
-             <a href="/reportes/reportealumnos/imprimirrendimiento/escid/<?php echo $this->escid;?>/curid/<?php echo $this->curid;?>/perid/<?php echo $this->perid?>" class="btn btn-danger" style='color: #ccc' atls="Valide la matricula para imprimir" title="Valide la matricula para imprimir"/>
+             <a href="/report/performance/printrendimiento/escid/<?php echo base64_encode($this->escid);?>/curid/<?php echo base64_encode($this->curid);?>/perid/<?php echo base64_encode($this->perid)?>" class="btn btn-danger" style='color: #ccc'/>
                <b> <i class="glyphicon glyphicon-list-alt glyphicon-white"></i><br/>Imprimir</b></a>
            
         </th>
