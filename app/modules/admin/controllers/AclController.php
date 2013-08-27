@@ -12,7 +12,7 @@ class Admin_AclController extends Zend_Controller_Action{
 		$this->oid=$login->oid;
 	}
 
-	 public function indexAction() 
+	public function indexAction() 
     {   
         try 
         {
@@ -23,27 +23,8 @@ class Admin_AclController extends Zend_Controller_Action{
             $order=array("name");
             $rols=$dbrol->_getAll($where,$order);
             $this->view->rols=$rols;
-            //New Acl
             $form= new Admin_Form_Acl();
-            $form->save->setLabel("Guardar");
             $this->view->form=$form;
-            if ($this->getRequest()->isPost()){
-                $formdata=$this->getRequest()->getPost();
-                //print_r($formdata);
-                if($form->isValid($formdata)){
-                    unset($formdata['save']);
-                    $formdata['eid']=$eid;
-                    $formdata['oid']=$oid;
-                    $formdata['reid']=base64_decode(trim($formdata['reid']));
-                    $formdata['mid']=base64_decode(trim($formdata['mid']));
-                    trim($formdata['state']);
-                    print_r($formdata);
-                    $dbacl=new Api_Model_DbTable_Acl();
-                    $saveacl=$dbacl->_save($formdata);
-                    //$this->view->formdata=$formdata;
-                }
-            }
-
         } 
         catch (Exception $ex) 
         {
@@ -57,15 +38,13 @@ class Admin_AclController extends Zend_Controller_Action{
     	$this->_helper->layout()->disableLayout();
     	$data['eid']=$this->eid;
     	$data['oid']=$this->oid;
-    	$mid=trim(base64_decode($this->_getParam("mid")));
+    	$mid=base64_decode(trim($this->_getParam("mid")));
     	if (!$mid) return false;
     	$data['mid']=$mid;
-    	$data['state']="A";
-    	
+    	$data['state']="A";    	
     	$resources = new Api_Model_DbTable_Resource();
     	$attr = array("eid","oid","mid","reid","state","name");
     	$rows = $resources->_getFilter($data,$attr);
-    	print_r($rows);
     	if($rows) $this->view->data = $rows;
     }
 
@@ -76,7 +55,7 @@ class Admin_AclController extends Zend_Controller_Action{
             $this->_helper->layout()->disableLayout();
             $eid=$this->eid;
             $oid=$this->oid;
-            $rid=$this->_getParam("rid");
+            $rid=base64_decode($this->_getParam("rid"));
             $dbacl=new Api_Model_DbTable_Acl();
             $where=array("eid"=>$eid,"oid"=>$oid,"rid"=>$rid);
             $acl=$dbacl->_getFilter($where);
