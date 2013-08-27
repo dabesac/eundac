@@ -1,0 +1,44 @@
+
+        <table class="table table-striped  table-condensed">
+            <thead>
+            <tr>
+                <th class="col-lg-1">CURRICULA</th>
+                <th><center>NOMBRE</center></th>
+                <th class="col-lg-1"><center>TIPO CURRICULA</center></th>
+                <th colspan="5"><center>REPORTES</center></th>
+            </tr>
+            </thead>            
+            <tbody>
+            <?php
+            foreach ($this->listacurricula as $lc){            
+            ?>
+            <tr>
+                <td><?php echo $lc['curid']?></td>
+                <td><?php echo $lc['name']?></td>
+                <td><center><?php echo $lc['state']?></center></td>
+               
+                <td>
+                    <a class="btn btn-primary" href="#" onclick="javascript:window.open('/report/performance/rendimiento/escid/<?php echo  base64_encode($lc['escid'])?>/curid/<?php echo base64_encode($lc['curid'])?>/perid/<?php echo base64_encode($this->perid)?>','RENDIMIENTO','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=640,height=640')" ><i class="glyphicon glyphicon-list-alt glyphicon-white" ></i><br>RENDIMIENTO</a>
+                </td>
+
+                <td>
+                <a class="btn btn-info" href="#" onclick="javascript:window.open('/report/performance/primerospuestos/escid/<?php echo  base64_encode($lc['escid'])?>/curid/<?php echo base64_encode($lc['curid'])?>/nomcur/<?php echo  base64_encode($lc['name'])?>/perid/<?php echo base64_encode($this->perid)?>','PRIMEROS PUESTOS','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=640,height=640')" ><i class="glyphicon glyphicon-user glyphicon-white" ></i><i class="glyphicon glyphicon-user glyphicon-white" ></i><br>PRIMEROS PUESTOS</a>  
+                </td>
+
+                <td>
+                     <a class="btn btn-success" href="#" onclick="javascript:window.open('/report/performance/superior/escid/<?php echo base64_encode($lc['escid'])?>/nomcur/<?php echo base64_encode($lc['name'])?>/superior/<?php echo '3' ?>/perid/<?php echo base64_encode($this->perid)?>','3° SUPERIOR','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=640,height=640')" ><i class="glyphicon glyphicon-file glyphicon-white" ></i><br>3° SUPERIOR</a>
+                </td>
+                <td>
+
+                <a class="btn btn-danger" href="#" onclick="javascript:window.open('/report/performance/superior/escid/<?php echo base64_encode($lc['escid'])?>/nomcur/<?php echo base64_encode($lc['name'])?>/superior/<?php echo '5' ?>/perid/<?php echo base64_encode($this->perid)?>','5° SUPERIOR','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=640,height=640')" ><i class="glyphicon glyphicon-list glyphicon-white" ></i><br>5° SUPERIOR</a>
+
+
+
+                </td>
+            </tr>    
+            <?php 
+            }
+            ?>
+            </tbody>
+        </table>
+     

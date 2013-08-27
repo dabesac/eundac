@@ -122,4 +122,18 @@ class Api_Model_DbTable_Speciality extends Zend_Db_Table_Abstract
             print "Error: Obteniendo datos de un usuario deacuerdo a su codigo y a su rol".$ex->getMessage();
         }
     }
+
+            //muestra escuela x facultad x sede de la facultad de educacion
+        public  function _getSchoolXSecundaria($data=null){
+            try{
+                if ($data['eid']=='' ||  $data['oid']=='' || $data['facid']=='' || $data['subid']=='' ) return false;
+                $where = "eid = '".$data['eid']."' and oid='".$data['oid']."' and facid='".$data['facid']."' and subid='".$data['subid']."' and (parent='2ES' or parent='')";
+   				$row = $this->fetchAll($where);
+				if($row) return $row->toArray();
+				return false;
+                }catch (Exception $ex){
+                print "Error: Leer todas las escuelas por facultad ".$ex->getMessage();
+            }   
+        }
+
 }
