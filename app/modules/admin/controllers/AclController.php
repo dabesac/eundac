@@ -38,14 +38,14 @@ class Admin_AclController extends Zend_Controller_Action{
     	$this->_helper->layout()->disableLayout();
     	$data['eid']=$this->eid;
     	$data['oid']=$this->oid;
-    	$mid=base64_decode(trim($this->_getParam("mid")));
-    	if (!$mid) return false;
-    	$data['mid']=$mid;
-    	$data['state']="A";    	
-    	$resources = new Api_Model_DbTable_Resource();
-    	$attr = array("eid","oid","mid","reid","state","name");
-    	$rows = $resources->_getFilter($data,$attr);
-    	if($rows) $this->view->data = $rows;
+        $mid=trim($this->_getParam("mid"));
+        if (!$mid) return false;
+        $data['mid']=$mid;
+        $data['state']="A";   
+        $resources = new Api_Model_DbTable_Resource();
+        $attr = array("eid","oid","mid","reid","state","name");
+        $rows = $resources->_getFilter($data,$attr);
+        if($rows) $this->view->data = $rows;
     }
 
 
@@ -55,7 +55,7 @@ class Admin_AclController extends Zend_Controller_Action{
             $this->_helper->layout()->disableLayout();
             $eid=$this->eid;
             $oid=$this->oid;
-            $rid=base64_decode($this->_getParam("rid"));
+            $rid=$this->_getParam("rid");
             $dbacl=new Api_Model_DbTable_Acl();
             $where=array("eid"=>$eid,"oid"=>$oid,"rid"=>$rid);
             $acl=$dbacl->_getFilter($where);
@@ -80,12 +80,13 @@ class Admin_AclController extends Zend_Controller_Action{
      public function deleteAction()
     {
         try{
-            $rid=$this->_getParam("rid");
             $eid=$this->eid;
             $oid=$this->oid;
+            $rid=$this->_getParam("rid");
             $reid=$this->_getParam("reid");
-            $where=array("eid"=>$eid, "oid"=>$oid, "reid"=>$reid, "rid"=>$rid);
-            print_r($where);
+            $mid=$this->_getParam("mid");
+            $where=array("eid"=>$eid, "oid"=>$oid, "reid"=>$reid, "rid"=>$rid, "mid"=>$mid);
+            //print_r($where);
             $dbdelacl=new Api_Model_DbTable_Acl();
             if($dbdelacl->_delete($where)){
                 $this->_helper->_redirector("index");
@@ -97,6 +98,32 @@ class Admin_AclController extends Zend_Controller_Action{
         catch (Exception $ex) 
         {
             print "Error al guardar: ".$ex->getMessage();
+        }
+    }
+
+    public function saveAction()
+    {
+        try{
+            $eid=$this->eid;
+            $oid=$this->oid;
+            $form= new Admin_Form_Acl();
+            if ($this->getRequest()->isPost())
+            {
+                $formdata = $this->getRequest()->getPost();
+                $rid=$this->_getParam("rolid");
+                unset($formdata['save']);
+                $formdata['eid']=$eid;
+                $formdata['oid']=$oid;
+                trim($formdata['mid']);
+                trim($formdata['reid']);
+                trim($formdata['state']);
+                $dbacl=new Api_Model_DbTable_Acl();
+                $newacl=$dbacl->_save($formdata);
+                $this->_redirect("/admin/acl");
+             
+            }  
+        }catch(exception $e){
+            print ("Error : ").$e->getMessage();
         }
     }
 
