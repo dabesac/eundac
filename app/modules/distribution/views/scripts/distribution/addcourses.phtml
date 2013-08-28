@@ -1,22 +1,68 @@
-<table class="table">
-	<tr>
-		<th>Currícula:</th>
-		<td>
-			<select id="curid" class="form-control">
-				<option value="">- Seleccione -</option>
-			</select>
-		</td>
-		<th>Asignatura:</th>
-		<td>
-			<select id="courseid" class="form-control">
-				<option value="">- Seleccione -</option>
-			</select>
-		</td>
-	</tr>
-</table>
+<div>
+	<table class="table">
+		<tr>
+			<th>Currícula:</th>
+			<td>
+				<select id="curid" class="form-control">
+					<?php if ($this->curriculas) { ?>
+						<option value="">- Seleccione Currícula -</option>
+						<?php 
+						foreach ($this->curriculas as $curriculas) { ?>
+							<option value="<?php echo $curriculas['curid']."--".$curriculas['escid']?>"><?php echo $curriculas['curid']." | ".$curriculas['name']?></option>
+							<?php
+						}?>
+						<?php
+					}?>
+				</select>
+			</td>
+			<th>Semestre:</th>
+			<td>
+				<select id="semid" class="form-control" style="width:80px">
+					<option value="">Seleccione</option>
+					<?php
+					for ($i=1; $i <= 12; $i++) { ?>
+						<option value="<?php echo $i?>"><?php echo $i?></option>
+						<?php
+					}?>
+				</select>
+			</td>
+		</tr>
+	</table>
+</div>
+<div id="listcourses"></div>
 
 <script type="text/javascript">
+$("#semid").change(function(){
+	var perid="<?php echo $this->perid?>";
+	var distid="<?php echo $this->distid?>";
+	var semid=$(this).val();
+	if (semid=="") {
+		alert("Seleccione un Semestre.");
+		return false;
+	};
+	var curricula=$("#curid").val();
+	if (curricula=="") {
+		alert("Seleccione una Currícula.");
+		return false;
+	};
+	var tmp=curricula.split('--');
+	var curid = tmp[0];
+	var escid = tmp[1];
+	$("#listcourses").html("<img src='/img/spinner.gif'>Cargando...");
+	$("#listcourses").load("/distribution/distribution/listcourses/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid+"/distid/"+distid);
+});
+
 $("#curid").change(function(){
-	var curid=$(this).val();
+	var perid="<?php echo $this->perid?>";
+	var distid="<?php echo $this->distid?>";
+	var semid=$("#semid").val();
+	var curricula=$(this).val();
+	var tmp=curricula.split('--');
+	var curid = tmp[0];
+	var escid = tmp[1];
+	if (semid!="") {
+		$("#listcourses").html("<img src='/img/spinner.gif'>Cargando...");
+		$("#listcourses").load("/distribution/distribution/listcourses/curid/"+curid+"/escid/"+escid+"/semid/"+semid+"/perid/"+perid+"/distid/"+distid);
+	};
 });
 </script>

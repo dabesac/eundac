@@ -1,0 +1,5 @@
+<?php if ($this->teachers){foreach ($this->teachers as $key => $teacher) { ?>
+	<option value='<?php echo $teacher['uid']?>'><?php echo $teacher['full_name']?></option>
+<?php }}else{ ?>
+	<option value=''>Sin Registro</option>
+<?php }?>
