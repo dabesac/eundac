@@ -127,9 +127,28 @@ class IndexController extends Zend_Controller_Action {
     				$acl = new Api_Model_DbTable_Acl();
     				$data_ = array("eid"=>$data->eid,"oid"=>$data->oid,"rid"=>$data->rid);
     				$rowacl = $acl->_getACL($data_);
-    				//print_r($rowacl);exit();
+    				
     				if ($rowacl) {
-    					$data->acl =$rowacl; 
+    					$modules = new Api_Model_DbTable_Module();
+    					$rmodules = $modules->_getAll(array("eid"=>$data->eid,"oid"=>$data->oid));
+    					if ($rmodules){
+    						$f=0;
+    						$dataacl=null;
+    						foreach ($rmodules as $mod){
+    							$mod['acls']=null;
+    							foreach ($rowacl as $mods){
+    								if ($mod['mid']==$mods['mid']){
+    									 $mod['acls'][]=$mods;
+    									 $dataresource[] = $mods;
+    								}
+    							}
+    							if ($mod['acls']<>null){
+    								$dataacl[]=$mod;    								
+    							} 
+    						}
+    						$data->acls =$dataacl;
+    					}
+    					
     				}
     				// Set Header and Footer Print Org
     				$orgs = new Api_Model_DbTable_Org();

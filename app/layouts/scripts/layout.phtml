@@ -18,6 +18,8 @@ $numberdoc= $login->infouser['numdoc'];
 $speciality = $login->speciality->name;
 $code= $login->uid;
 $rid= $login->rid;
+$acls = $login->acls;
+
 ?>
 
 <?php echo $this->doctype(); ?>
@@ -39,7 +41,22 @@ $rid= $login->rid;
         <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
         <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
    		
-    
+    <script type="text/javascript">
+<!--
+/*jQuery time*/
+$(document).ready(function(){
+	$("#accordian h3").click(function(){
+		//slide up all the link lists
+		$("#accordian ul ul").slideUp();
+		//slide down the link list below the h3 clicked - only if its closed
+		if(!$(this).next().is(":visible"))
+		{
+			$(this).next().slideDown();
+		}
+	})
+})
+//-->
+</script>
     </head>
  <body>
 <!--[if IE]>
@@ -53,56 +70,76 @@ $rid= $login->rid;
     <div class="col-lg-2 control-top">
     	<div class="logo"><img src="/img/logo_03.png" ></div>
     	<div class="control-info">
-	    	<div class="alert alert-info" style="margin:0px; padding: 5px;">
-	    	 <p class="media-heading"><strong><?php echo $fullname?></strong><br><br>
-		    <?php echo $typedoc?>: <strong><?php echo $numberdoc?></strong>  <br>
-			CÓDIGO<strong> : <?php echo $code?></strong>  </p>
-			<br>
-			  		<div class="btn-group">
-						<button class="btn btn-info" style="margin:0px;margin-left:15px; padding-top: 5px;padding-bottom: 5px;">
-						<img src="/img/img2_03.jpg" class="img-rounded">
-						MI PERFIL</button>
-					</div>
-			</div>
+	    	<div id="accordian">
+	    		<ul>
+	    			<li>
+	    				<h3><img src="/img/img2_03.jpg" class="img-rounded"> MI PERFIL</h3>
+					</li>
+					<li>
+						<div style="padding: 5px;padding-top:0px">
+							<h5><strong style="color: #fff; font-size: 17px"><?php echo $fullname?></strong></h5>
+			    			<?php echo $typedoc?>: <strong><?php echo $numberdoc?></strong>  <br>
+							CÓDIGO<strong> : <?php echo $code?></strong>
+						</div>  
+					</li>
+				</ul>
+	    	</div>	    	
     	</div>    	
+    	<?php 
+    	if ($acls){
+    	?>
     	<div class="layout-right">
-    		<ul class="list-group">
-				<li class="list-group-item activo"><a href=""><img src="/img/home_03.png">
-				Inicio</a></li>
-				<li class="list-group-item"><a href=""><img src="/img/actas_03.png">
-				Actas</a></li>
-				<li class="list-group-item"><a href="#"><img src="/img/gestion_03.png">
-				Gestion Plataforma</a></li>				
-				<li class="list-group-item"><a href=""><img src="/img/reportes_03.png">
-				Reportes</a></li>
-				<li class="list-group-item"><a href=""><img src="/img/matricula_03.png">Matricula</a></li>
-				<li class="list-group-item"><a href=""><img src="/img/egresados_03.png">Egresados</a></li>
-			</ul>
+    		<div id="accordian">
+	    		<ul>
+			  	<?php 
+	    		foreach ($acls as $acl){
+				$module = $acl['module'];
+	    		?>
+		    		<li>
+					<h3><span class="icon-dashboard"></span><?php echo $acl['name']?></h3>
+						<ul>
+							<?php
+				    		$tacls = $acl['acls'];
+				    		foreach ($tacls as $tacl){
+							$resource = $tacl['controller'];
+							?>
+				    			<li><a href="<?php echo "/$module/$resource"?>"><?php echo $tacl['name']?></a></li>
+							<?php 
+							} 
+						?>
+						</ul>
+					</li>
+	    		<?php 
+				}
+	    		?>
+	    			
+				</ul>
+			</div>
     	</div>
+    	<?php } ?>
 	</div>
     <div class="col-lg-10 header-top">
-	    <h5 class="nav pull-left" href="#" >Universidad Nacional Daniel Alcides Carrión</h5>
-		<ul class="nav navbar-nav pull-right">
-		  		<li class='dropdown'>
-			  		<div class="btn-group">
-						<button class="dropdown-toggle btn btn-info" data-toggle="dropdown">
-							<span class="glyphicon glyphicon-cog"></span>
-						</button>
-						<ul class="dropdown-menu" style="margin-left: -130px;" >
-							<li><a href="/index/changepassword">Cambiar Contraseña</a></li>
-							<li><a href="#">Ver mi perfil</a></li>
-							<li><a href="#"></a></li>
-							<li class="divider"></li>
-							<li><a href="/index/salir">Salir</a></li>
-						</ul>
-					</div>
-				</li>
-				<li>
-					<div class="btn-group">
+	    <h3 class="nav pull-left" >Universidad Nacional Daniel Alcides Carrión</h3>
+		<ul class="nav navbar-nav pull-right" style="padding-top: 10px">
+		  	<li class='dropdown'>
+				<div class="btn-group">
+					<button class="dropdown-toggle btn btn-info" data-toggle="dropdown">
+						<span class="glyphicon glyphicon-cog"></span>
+					</button>
+					<ul class="dropdown-menu" style="margin-left: -130px;" >
+						<li><a href="/index/changepassword">Cambiar Contraseña</a></li>
+						<li><a href="#">Ver mi perfil</a></li>
+						<li><a href="#"></a></li>
+						<li class="divider"></li>
+					</ul>
+				</div>
+			</li>
+			<li>
+				<div class="btn-group">
 					<a class="btn btn-danger" href="/index/salir">Salir <span class="glyphicon glyphicon-log-out"></span></a>
-					</div>
-				</li>
-			</ul>    
+				</div>
+			</li>
+		</ul>    
 			
     </div>
     
@@ -141,6 +178,6 @@ $rid= $login->rid;
 Universidad Nacional Daniel Alcides Carrión - Cerro de Pasco - Perú | 
 Oficina de Informáctica y Estadística - <a href="mail: informatica@undac.edu.pe">informatica@undac.edu.pe</a>
 </div>
-
 </body>
 </html>
+
