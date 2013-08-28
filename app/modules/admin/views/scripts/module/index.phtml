@@ -1,0 +1,42 @@
+<div class="menu-botones">
+	<div class="pull-left"><h4>Lista Modulos</h4></div>
+	<div class="pull-right"><a href="/admin/module/new" class="btn btn-info">NUEVO</a></div>
+</div>
+<?php if ($this->data){?>
+<table class="table table-bordered table-striped table-condensed ">
+    <tr>
+    	<th class="col-lg-1 center">#</th>
+    	<th class="col-lg-2 center">Nombre</th>
+    	<th class="col-lg-1 center">Icono</th>
+    	<th class="col-sm-1 center">Modulo</th>
+    	<th class="col-lg-1 center">Estado</th>
+    	<th class="col-lg-1 center">Operaciones</th>
+    </tr>
+	    <?php $r=0;
+	    foreach ($this->data as $module){
+	        $r++;
+	        $mid= $module['mid'];
+	        $name= $module['name'];
+	        $estado= $module['state'];
+	        $module_= $module['module'];
+	        $icon= $module["imgicon"];
+	               
+	        ?>       
+	<tr >
+		<td class="center"><?php echo $r?></td>
+		<td class="center"><?php echo $name?></td>                    
+	    <td class="center"><?php echo $icon?></td>
+	    <td class="center"><?php echo $module_?></td>                
+	    <td class="center"><?php echo $estado?></td>
+		<td class="center"><a title='Modificar un registro' href='/admin/module/edit/mid/<?php echo base64_encode($mid)?>'>
+		<span class="glyphicon glyphicon-edit"></span></a> | 
+		<a title='Eliminar un registro' href='/admin/module/delete/mid/<?php echo base64_encode($mid)?>' onclick="return confirm('Esta Seguro que desea eliminar el registro?');">
+		<span class="glyphicon glyphicon-remove"></span>
+		</a>
+		</td> 
+	</tr>
+	<?php }?>
+</table>
+<?php }else{?>
+	<center><h4>No existen datos!!!</h4></center>
+<?php }?>

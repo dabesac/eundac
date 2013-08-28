@@ -1,6 +1,9 @@
 <?php $year=date('Y')+1;?>
 <div class="col-sm-12"  align="center">
+	<table class="table">
+
 	<h2>Lista de Silabus</h2>
+
 	<div class="col-sm-3">
 		<label for="">Año</label>
 		<select name="Year" id="year" class="form-control">
@@ -11,18 +14,22 @@
 			<?php }?>
 		</select>
 	</div>
+
 	<div class="col-sm-5">
 		<label>Periodo</label>
 		<select name="Period" id="perid" class="form-control">
 			<option value="">Periodo</option>
 		</select>
 	</div>
+
 	<div class="col-sm-4">
 		<label>Semestre</label>
-		<select name="Semester" id="semester" class="form-control">
-			<option value="2013">Seleccione un Periodo</option>
+		<select name="Semester" id="semid" class="form-control">
+			<option value="">Seleccione un Periodo</option>
 		</select>
 	</div>
+	
+	</table>
 </div>
 
 <div class="cl-sm-12" id="get_courses"></div>
@@ -32,22 +39,40 @@
 	var year=$("#year").val();
 	$("#perid").html("<option value=''>Cargando...</option>");
 	$("#perid").load("/syllabus/director/listperiods/year/"+year);
-	
+	$("#get_courses").html("<center><h5>Cargando....</h5></center>");
+	$("#get_courses").load("/syllabus/director/listcourses/year/"+year);
+
 	$("#year").change(function(){
 		$("#year option:selected").each(function(){
 			var year=$(this).val();
 			$("#semester").html("<option value=''>Seleccione un Periodo</option>");
 			$("#perid").html("<option value=''>Cargando...</option>");
 			$("#perid").load("/syllabus/director/listperiods/year/"+year);
+			$("#get_courses").html("<center><h5>Cargando....</h5></center>");
+			$("#get_courses").load("/syllabus/director/listcourses/year/"+year);
 		})
 	})
 
 
 	$("#perid").change(function(){
 		$("#perid option:selected").each(function(){
+			var year=$("#year").val();
 			var perid=$(this).val();
-			$("#semester").html("<option value=''>Cargando...</option>");
-			$("#semester").load("/syllabus/director/listsemester/perid/"+perid);
+			$("#semid").html("<option value=''>Cargando...</option>");
+			$("#semid").load("/syllabus/director/listsemester/perid/"+perid);
+			$("#get_courses").html("<center><h5>Cargando....</h5></center>");
+			$("#get_courses").load("/syllabus/director/listcourses/year/"+year+"/perid/"+perid);
+		})
+	})
+
+
+	$("#semid").change(function(){
+		$("#semid option:selected").each(function(){
+			var year=$("#year").val();
+			var perid=$("#perid").val();
+			var semid=$(this).val();
+			$("#get_courses").html("<center><h5>Cargando....</h5></center>");
+			$("#get_courses").load("/syllabus/director/listcourses/year/"+year+"/perid/"+perid+"/semid/"+semid);
 		})
 	})
 </script>

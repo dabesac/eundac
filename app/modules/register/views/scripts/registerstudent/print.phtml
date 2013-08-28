@@ -1,0 +1,107 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+?> 
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<table  style="font-size:11px; margin-left: 90px; margin-bottom: 0px; " >     
+    <tr>
+    	<td ><?php echo $this->facultad;?></td>         
+    </tr>
+    <tr>
+    	<td  ><?php echo $this->escuela;?></td>
+    </tr>
+    <tr>
+    	<td >
+        <?php if ($this->especialidad<>""){?>
+            <?php echo $this->especialidad;?>
+        <?php }?>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+    </tr>
+    <tr style=" height:100px">
+        <td></td>
+    </tr>
+</table>
+<table  style="font-size:14px;margin-left: 110px; margin-bottom: 50px;" >
+    <tr>
+        <td style="width: 100px" ><?php print($this->cod_matri); ?></td>
+        <td style="width:370px" ><?php echo $this->alumno;?></td>
+        <td style="width:100px"><?php echo $this->curricula; ?></td>
+        <td style="width:20px"><?php echo $this->perid; ?></td>
+    </tr>
+</table>
+<div id="datos">
+    <table  style="font-size:12px;margin-left: 60px;">
+		<tr style="   height: 20px"><td></td>
+		</tr>
+    <?php
+    $a=1;
+    if ($this->listacurso){
+       foreach ($this->listacurso as $datos){
+            $cursoid_=$datos['courseid'];
+            $turno_ =$datos['turno'];
+            $nombrecurso = $datos['namecourse'];
+            $semid_ =$datos['semid'];
+            $creditos_ =$datos['credits'];
+            $docente = $datos['teacherp'];
+            $veces_ =$datos['veces'];
+        ?>
+            <tr>
+                <td style="width:20px ;margin-bottom:100px;"><?php echo $a;?></td>
+                <td style="width:50px"><?php echo "<b>";echo $cursoid_;echo "</b>";?></td>
+                <td style="width:25px"><?php echo "<b>";echo $turno_;echo "</b>";?></td>
+                <td style="width:250px"><?php echo "<b>";echo $nombrecurso ;echo "</b>";?></td>
+                <td style="width:27px"><?php echo "<b>";echo $semid_;echo "</b>";?></td>
+                <td style="width:22px"><?php echo "<b>";echo $creditos_;echo "</b>";?></td>
+                <td style="width:250px"><?php echo "<b>";echo $docente;echo "</b>";?></td>
+                <td><?php echo $veces_;?></td>
+            </tr>
+           <?php
+        $a++;  
+        }
+       
+    }
+    ?>  <tr>
+            <td colspan='3'> </td>
+            <td> <b>Total Creditos</b> </td>
+            <td> </td>
+            <td> <?php echo "<b>";echo $this->total_creditos;echo "</b>"; ?></td>
+            <td colspan='2'> </td>  
+        </tr>
+    </table>
+    <div style="clear:both"></div>  <br/>
+    <table width="700px" style="font-size:11px;margin-left: 147px;">
+        <tr>
+            <td>Semestre : <?php echo $this->semestre?></td>
+            <td  width='100px' ></td>
+            <td width='400px' style="float:right">
+                <?php echo (trim($this->estadomatricula)<>"M")?"":"VALIDADO";?>
+            </td>
+        </tr>
+    </table>
+</div>
+
+ <h1  style="margin-right: 130px;"> 
+<?php echo "<b><center>";echo "<span style='font-size: 12px'>Usted imprimio la matricula el  ".date('d/m/Y') ." a las  ".date('H:m:s')."</span>";echo "</b></center>";?>
+</h1> 
+
+
+
+
+<?php 
+
+  $html = ob_get_contents();
+  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('Matricula-'.'.pdf','D');
+  
+?>
+<style type="text/css">
+/* body{
+    font-family: "Courier New", Courier, monospace;
+} */
+</style>

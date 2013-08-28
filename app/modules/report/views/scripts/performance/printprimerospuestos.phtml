@@ -1,0 +1,77 @@
+<?php
+$dat = $this->data;
+$where['oid']=$dat['oid'];
+$where['eid']=$dat['eid'];
+$where['escid']=$dat['escid'];
+
+$dbescuela = new Api_Model_DbTable_Speciality();
+$escuela = $dbescuela ->_getFilter($where);
+$infoescuela = $escuela[0]['name'];
+$dat['facid']= $escuela[0]['facid'];
+$dbfacultad = new Api_Model_DbTable_Faculty();
+$facu = $dbfacultad ->_getOne($dat);
+$infonombrefacultad = $facu['name'];
+
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+$header='
+<table style="width: 100%;" border="1">
+    <tr>
+        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+        <th style="text-align: center; font-size: 11px;">
+        FACULTAD DE '.strtoupper($infonombrefacultad).'<br/>
+        ESCUELA DE  '.strtoupper($infoescuela).' 
+        </th>        
+    </tr>
+    <tr>
+        <th style="border: 1px solid #000;"> CUADRO DE MERITO <br> &nbsp;'.strtoupper($this->semestre).' &nbsp; SEMESTRE </th>
+    </tr>
+</table>
+
+    <tr>
+        <td style="text-align: left;">Periodo: '.strtoupper($dat['perid']).'</td>
+    </tr>
+    <tr>
+        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+        <td style="text-align: left;">Curricula: '.strtoupper($dat['curid']).'</td>
+    </tr>
+'    
+?>
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<table style="width:100%;" border="1">
+                         
+                          <tr ></tr>
+                          <tr >
+                            <td>N°</td>
+                            <td>Apellidos y Nombres</td>
+                            <td>Cred. Aprobados</td>
+                            <td>Promedio Ponderado</td>
+                          </tr>
+
+                          <?php $i=0; ?>  
+                          <?php foreach ($this->rep_alumnos as $ra) { $i=$i + 1;?>
+                      <tr>
+                          <td><?php echo $i; ?>  </td>
+                          <td><?php echo $ra['nom']?></td>
+                          <td><?php if ($ra['cred_apr']=='') { echo 0; } else { echo $ra['cred_apr'];}?></td>
+                          <td><?php echo round($ra['prom_pon'],2)?></td>
+                      </tr>
+                    <?php }?>          
+</table>
+<?php 
+  $html = ob_get_contents(); 
+  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
+  $mpdf->SetHTMLHeader($header);
+  $mpdf->SetFooter($this->footer);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('Merito-'.$infoescuela.$dat['perid'].'.pdf','D');
+?>
+        
+
+   

@@ -49,4 +49,23 @@ class Api_Model_DbTable_Syllabus extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getAll($where=null,$order='',$start=0,$limit=0){
+
+        try {
+            if($where['eid']=='' || $where['oid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='' || $where['courseid']=='' || $where['turno']=='')
+                $wherestr= null;
+            else
+                $wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and subid='".$where['subid']."' and perid='".$where['perid']."' and escid='".$where['escid']."' and courseid='".$where['courseid']."' and turno='".$where['turno']."'";
+            if($limit==0) $limit=null;  
+            if($start==0) $start=null;
+
+            $rows=$this->fetchAll($wherestr,$order,$start,$limit);
+            if($rows) return $rows->toArray();
+            return false;
+
+        } catch (Exception $e) {
+            print "Error: Leer las facultades".$e->getMessage();           
+        }
+    }
+
 }

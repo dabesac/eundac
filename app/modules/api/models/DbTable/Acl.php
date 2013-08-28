@@ -3,20 +3,23 @@
 class Api_Model_DbTable_Acl extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'base_acl';
-	protected $_primary = array("eid","oid","reid","rid");
+	protected $_primary = array("eid","oid","reid","rid","mid");
 
 	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
-			if($where['eid']=='' || $where['oid']=='' || $where['rid']=='') return false;
+			if($where['eid']=='' || $where['oid']=='' ) return false;
 				$select = $this->_db->select();
 				if ($attrib=='') $select->from("base_acl");
 				else $select->from("base_acl",$attrib);
 				foreach ($where as $atri=>$value){
 					$select->where("$atri = ?", $value);
 				}
-				foreach ($orders as $key => $order) {
+				if($orders){
+					foreach ($orders as $key => $order) {
 						$select->order($order);
+					}	
 				}
+				
 				$results = $select->query();
 				$rows = $results->fetchAll();
 				if ($rows) return $rows;
@@ -41,7 +44,7 @@ class Api_Model_DbTable_Acl extends Zend_Db_Table_Abstract
 
 	public function _save($data){
 		try{
-			if ($data['eid']=='' || $data['oid']=='' || $data['reid']=='' || $data['rid']=='') return false;
+			if ($data['eid']=='' || $data['oid']=='' || $data['reid']=='' || $data['rid']=='' || $data['mid']=='') return false;
 			return $this->insert($data);
 			return false;
 		}catch (Exception $e){
@@ -51,8 +54,9 @@ class Api_Model_DbTable_Acl extends Zend_Db_Table_Abstract
 
 	public function _delete($pk){
 		try{
-			if ($pk['oid']=='' || $pk['eid']=='' || $pk['reid']=='' || $pk['rid']=='') return false;
-			$where = "eid = '".$pk['eid']."'and oid = '".$pk['oid']."' and reid = '".$pk['reid']."' and rid = '".$pk['rid']."'";
+			if ($pk['oid']=='' || $pk['eid']=='' || $pk['reid']=='' || $pk['rid']=='' || $pk['mid']=='') return false;
+			$where = "eid = '".$pk['eid']."'and oid = '".$pk['oid']."' and reid = '".$pk['reid']."' 
+					and rid = '".$pk['rid']."' and mid = '".$pk['mid']."'";
 			return $this->delete($where);
 			return false;
 		}catch (Exception $e){
