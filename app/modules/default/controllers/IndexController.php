@@ -16,7 +16,7 @@ class IndexController extends Zend_Controller_Action {
     	$sesion1  = Zend_Auth::getInstance();
     	if($sesion1->hasIdentity()){
     		$sesion = $sesion1->getStorage()->read();
-    		$this->_helper->redirector('index','index',base64_decode($sesion->rol['module']));
+    		//$this->_helper->redirector('index','index',base64_decode($sesion->rol['module']));
     	}
     	
     	$form = new Default_Form_Login();
@@ -124,7 +124,32 @@ class IndexController extends Zend_Controller_Action {
     				$rowteacher = $teacher->_getOne($datate);
     				if ($rowteacher) $data->infouser->teacher=$rowteacher;
 					// Set ACL
+    				$acl = new Api_Model_DbTable_Acl();
+    				$data_ = array("eid"=>$data->eid,"oid"=>$data->oid,"rid"=>$data->rid);
+    				$rowacl = $acl->_getACL($data_);
     				
+    				if ($rowacl) {
+    					$modules = new Api_Model_DbTable_Module();
+    					$rmodules = $modules->_getAll(array("eid"=>$data->eid,"oid"=>$data->oid));
+    					if ($rmodules){
+    						$f=0;
+    						$dataacl=null;
+    						foreach ($rmodules as $mod){
+    							$mod['acls']=null;
+    							foreach ($rowacl as $mods){
+    								if ($mod['mid']==$mods['mid']){
+    									 $mod['acls'][]=$mods;
+    									 $dataresource[] = $mods;
+    								}
+    							}
+    							if ($mod['acls']<>null){
+    								$dataacl[]=$mod;    								
+    							} 
+    						}
+    						$data->acls =$dataacl;
+    					}
+    					
+    				}
     				// Set Header and Footer Print Org
     				$orgs = new Api_Model_DbTable_Org();
     				$rorg = $orgs->_getOne(array("eid" => $data->eid,"oid"=>$data->oid));
