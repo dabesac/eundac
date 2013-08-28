@@ -1,0 +1,173 @@
+<?php
+if ($this->courses){ ?>
+<form id="frmcourses" name="frmcourses" action="/distribution/distribution/savecourse/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+    <table class="table table-condensed table-bordered table-striped table-hover">
+        <tr>
+            <th>#</th>
+            <th>Codigo</th>
+            <th>Nombre Asignatura</th>
+            <th><center>Tipo</center></th>
+            <th colspan="6" style="width:360px"><center>Turnos</center></th>       
+        </tr>
+        <?php           
+            $i=0;
+            foreach ($this->courses as $courses){ 
+                $wherecour['eid']=$courses['eid'];
+                $wherecour['oid']=$courses['oid'];
+                $wherecour['courseid']=$courses['courseid'];
+                $wherecour['curid']=$courses['curid'];
+                $wherecour['escid']=$courses['escid'];
+                $wherecour['subid']=$courses['subid'];
+                $wherecour['perid']=$this->perid;
+                $orders = array('courseid ASC','turno ASC');
+                $percursos = new Api_Model_DbTable_PeriodsCourses();
+                $percourse=$percursos->_getFilter($wherecour,$attrib=null,$orders);
+                $turnexis=array();
+                if ($percourse) {
+                    $tam=count($percourse);
+                    $turn = array('A','B','C','D','E','F');
+                    $ct=0;
+                    for ($ii=0; $ii < $tam; $ii++) {
+                        for ($j=0; $j < 6; $j++) { 
+                            if ($turn[$j]==$percourse[$ii]['turno']) {
+                                $turnexis[$turn[$j]]=$turn[$j];
+                                $j=6;
+                                $ct++;
+                            }
+                        }
+                    }
+                }
+                // print_r($turnexis);
+                ?>
+                <tr>
+                    <td><?php echo $i+1?></td>
+                    <td><center><?php echo $courses['courseid']?></center></td>
+                    <td><?php echo $courses['name']?></td>
+                    <td>
+                        <center><?php echo ($courses['type']=='O')? "Obligatorio":"Electivo";?></center>
+                    </td>
+                    <td>
+                        <?php
+                        if ($turnexis['A']=="A") { ?>
+                            <input type="checkbox" id="A" name="turno[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."A".";--;".$courses['subid']?>" <?php echo ($courses['turno']=="A")?"":"checked";?> >A
+                            <?php
+                        }else{ ?>
+                            <input type="checkbox" id="A" name="turno[<?php echo $i?>]" value="A">A
+                        <?php
+                        }?>
+                    </td>
+                    <td>
+                        <?php
+                        if ($turnexis['B']=="B") { ?>
+                            <input type="checkbox" id="B" name="turno1[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."B".";--;".$courses['subid']?>" checked>B
+                        <?php
+                        }else{ ?>
+                            <input type="checkbox" id="B" name="turno1[<?php echo $i?>]" value="B">B
+                        <?php
+                        }?>
+                    </td>
+                    <td>
+                        <?php
+                        if ($turnexis['C']=="C") { ?>
+                            <input type="checkbox" id="C" name="turno2[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."C".";--;".$courses['subid']?>" checked>C
+                        <?php
+                        }else{ ?>
+                            <input type="checkbox" id="C" name="turno2[<?php echo $i?>]" value="C">C
+                        <?php
+                        }?>
+                    </td>
+                    <td>
+                        <?php
+                        if ($turnexis['D']=="D") { ?>
+                            <input type="checkbox" id="D" name="turno3[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."D".";--;".$courses['subid']?>" checked>D
+                        <?php
+                        }else{ ?>
+                            <input type="checkbox" id="D" name="turno3[<?php echo $i?>]" value="D">D
+                        <?php
+                        }?>
+                    </td>
+                    <td>
+                        <?php
+                        if ($turnexis['E']=="E") { ?>
+                            <input type="checkbox" id="E" name="turno4[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."E".";--;".$courses['subid']?>" checked>E
+                        <?php
+                        }else{ ?>
+                            <input type="checkbox" id="E" name="turno4[<?php echo $i?>]" value="E">E
+                        <?php
+                        }?>
+                    </td>
+                    <td>
+                        <?php
+                        if ($turnexis['F']=="F") { ?>
+                            <input type="checkbox" id="F" name="turno5[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."F".";--;".$courses['subid']?>" checked>F
+                        <?php
+                        }else{ ?>
+                            <input type="checkbox" id="F" name="turno5[<?php echo $i?>]" value="F">F
+                        <?php
+                        }?>
+                    </td>
+                </tr>
+                <input type="hidden" value="<?php echo $courses['courseid'];?>" name="courseid[]">
+                <input type="hidden" value="<?php echo $courses['curid'];?>" name="curid">
+                <input type="hidden" value="<?php echo $courses['subid'];?>" name="subid">
+                <input type="hidden" value="<?php echo $this->semid;?>" name="semid">
+                <input type="hidden" value="<?php echo $this->perid;?>" name="perid">
+                <input type="hidden" value="<?php echo $this->distid;?>" name="distid">
+                <input type="hidden" value="<?php echo $this->escid;?>" name="escid">
+                <?php                
+               $i++;  
+               } ?>
+        <tr>
+            <th colspan="10">
+                <center>
+                    <a id="savecourses" href="#" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</a>
+                </center>
+            </th>
+        </tr>
+    </table>
+</form>
+    <?php              
+}else{ ?>
+<div class="alert alert-info">
+    <b>INFORMACIÓN: </b>No hay Asignaturas registradas en este semestre.
+</div>
+<?php
+}?>
+<div id="loadcourses"></div>
+
+<script type="text/javascript">
+$("#savecourses").click(function(){
+    $("#frmcourses").submit();
+});
+
+$('#frmcourses').submit(function() {  
+    $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(data) { 
+            $('#loadcourses').html(data);  
+        }
+    });         
+    return false;
+});
+
+$("input:checkbox").change(function(){ 
+        var id = $(this).attr('id');
+        var valores = $(this).attr('value');
+        tmp=valores.split(";--;");
+        courseid=tmp[0];
+        curid=tmp[1];
+        escid=tmp[2];
+        semid=tmp[3];
+        perid=tmp[4];
+        turno=tmp[5];
+        subid=tmp[6];
+        if (id!=valores){
+            $(this).attr('value',id);
+            url="/distribution/distribution/deletecourse/courseid/"+courseid+"/semid/"+semid+"/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/turno/"+turno+"/subid/"+subid;
+            alert(url);
+            // $("#loadcourses").load(url);
+        }
+    });
+ </script>
