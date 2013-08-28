@@ -1,0 +1,186 @@
+<div style="margin-top:20px">
+    <table class="table table-condensed table-bordered table-striped table-hover">
+        <tr>
+            <th><center>#</center></th>       
+            <th><center>Código</center></th>
+            <th>Apellidos y Nombres</th>
+            <th><center>Estado</center></th>
+            <th><center>Categoria</center></th>       
+            <th><center>Condición</center></th>       
+            <th><center>Dedicación</center></th>       
+            <th><center>Asignar Curso</center></th>
+        </tr>
+        <?php
+        $i=1;
+        if ($this->teacher){                
+            foreach ($this->teacher as $teacher){ ?>
+                <tr>
+                    <td style="font-size:12px"><center><?php echo $i?></center></td>    
+                    <td style="font-size:12px"><center><?php echo $teacher['uid']?></center></td>
+                    <td style="font-size:12px"><?php echo $teacher['last_name0']." ".$teacher['last_name1'].", ".$teacher['first_name']?></td>
+                    <?php 
+                    if($teacher['estado']=='A' ){ ?>
+                        <td>
+                            <center><a href="#"  id='estado' onclick="javascript: window.open('/distribucion/distribucion/desactivardocente/perid/<?php echo $this->perid?>/escid/<?php echo $docente['escid']?>/uid/<?php echo $docente['uid']?>/pid/<?php echo $docente['pid']?>')">
+                            <img src="/img/correcto.png" width="20" height="20" rel="tooltip" title="C"/></a></center>
+                        </td>
+                    <?php
+                    }else{ ?> 
+                        <td><center><a href="#"  id='estado' onclick="javascript: window.open('/distribucion/distribucion/activardocente/perid/<?php echo $this->perid?>/escid/<?php echo $docente['escid']?>/uid/<?php echo $docente['uid']?>/pid/<?php echo $docente['pid']?>')">
+                          <img src="/img/delete.png" width="20" height="20" rel="tooltip" title="C"/></a></center></td>
+                    <?php 
+                    } ?>
+                    <td>
+                        <center>
+                        <select  id="tipocalif_<?php echo $i?>" name="tipocateg" class="form-control">
+                            <option  >Seleccione...</option> 
+                            <?php 
+                            if($docente['categoria_doc']=='ASOCIADO'){ ?>  
+                                <option  selected="selected" value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."ASOCIADO"?>">Asociado</option>
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."PRINCIPAL"?>">Principal</option>
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."AUXILIAR"?>">Auxiliar</option>
+                            <?php
+                            } ?> 
+                            <?php 
+                            if($docente['categoria_doc']=='PRINCIPAL'){ ?>  
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."ASOCIADO"?>">Asociado</option>
+                                <option  selected="selected" value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."PRINCIPAL"?>">Principal</option>
+                                <option    value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."AUXILIAR"?>">Auxiliar</option>
+                            <?php
+                            } ?> 
+                            <?php 
+                            if($docente['categoria_doc']=='AUXILIAR'){ ?>  
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."ASOCIADO"?>">Asociado</option>
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."PRINCIPAL"?>">Principal</option>
+                                <option   selected="selected" value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."AUXILIAR"?>">Auxiliar</option>
+                            <?php
+                            } ?>   
+                            <?php 
+                            if($docente['categoria_doc']=='' OR $docente['categoria_doc']=='NULL' or $docente['categoria_doc']=='PRNCIPAL'){ ?>  
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."ASOCIADO"?>">Asociado</option>
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."PRINCIPAL"?>">Principal</option>
+                                <option   value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."AUXILIAR"?>">Auxiliar</option>  
+                            <?php
+                            } ?>
+                        </select>
+                        </center>
+                    </td> 
+                    <script>
+                        $("#tipocalif_<?php echo $i?>").change(function(){
+                            var tipo = $(this).val();
+                            tmp=tipo.split(";--;");
+                            // alert(tmp);
+                            uid=tmp[0];
+                            escid=tmp[1];
+                            pid=tmp[2];
+                            sedid=tmp[3];
+                            categ=tmp[4];                                         
+                            var url="/distribucion/distribucion/modificarcategoria/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/sedid/"+sedid+"/categ/"+categ;
+                                // alert(url);
+                            $("#calif").load(url); 
+                        });
+                    </script>
+                    <td>
+                        <center>
+                        <select  id="tipocondi_<?php echo $i?>" name="tipocateg" class="form-control">
+                            <option  >Seleccione...</option> 
+                            <?php 
+                            if($docente['condision_doc']=='CONTRATADO'){ ?>  
+                                <option  selected="selected" value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."CONTRATADO"?>">Contratado</option>
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."ORDINARIO"?>">Ordinario</option>
+                            <?php
+                            } ?> 
+                            <?php 
+                            if($docente['condision_doc']=='ORDINARIO'){ ?>  
+                                <option  selected="selected" value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."ORDINARIO"?>">Ordinario</option>
+                                <option   value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."CONTRATADO"?>">Contratado</option>
+                            <?php
+                            } ?> 
+                            <?php 
+                            if($docente['condision_doc']=='' or $docente['condision_doc']=='NULL' ){ ?>  
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."ORDINARIO"?>">Ordinario</option>
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."CONTRATADO"?>">Contratado</option>                           
+                            <?php
+                            } ?>
+                        </select>
+                        </center>
+                    </td>
+                    <script>
+                        $("#tipocondi_<?php echo $i?>").change(function(){
+                            var tipo = $(this).val();
+                            tmp=tipo.split(";--;");
+                            // alert(tmp);
+                            uid=tmp[0];
+                            escid=tmp[1];
+                            pid=tmp[2];
+                            sedid=tmp[3];
+                            condi=tmp[4];
+                            var url="/distribucion/distribucion/modificarcondicion/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/sedid/"+sedid+"/condi/"+condi;
+                                // alert(url);
+                            $("#calif2").load(url); 
+                        });
+                    </script>
+                    <td>
+                        <center>
+                        <select  id="dedicacion_<?php echo $i?>" name="dedicacion" class="form-control">
+                            <option  >Seleccione...</option> 
+                            <?php 
+                            if($docente['dedicasion_doc']=='TIEMPOCOMPLETO'){ ?>  
+                                <option  selected="selected" value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."TIEMPOCOMPLETO"?>">Tiempo Completo</option>
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."DEDICACIONEXCLUSIVA"?>">Dedicacion Exclusiva</option>
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."TIEMPOPARCIAL"?>">Tiempo Parcial</option>
+                            <?php
+                            } ?> 
+                            <?php 
+                            if($docente['dedicasion_doc']=='DEDICACIONEXCLUSIVA'){ ?>  
+                                <option  selected="selected" value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."DEDICACIONEXCLUSIVA"?>">Dedicacion exclusiva</option>
+                                <option   value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."TIEMPOCOMPLETO"?>">Tiempo completo</option>
+                                <option   value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."TIEMPOPARCIAL"?>">Tiempo Parcial</option> 
+                            <?php
+                            } ?>
+                            <?php 
+                            if($docente['dedicasion_doc']=='TIEMPOPARCIAL'){ ?>  
+                                <option  selected="selected" value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."TIEMPOPARCIAL"?>">Tiempo Parcial</option>
+                                <option   value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."DEDICACIONEXCLUSIVA"?>">Dedicacion exclusiva</option>
+                                <option   value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."TIEMPOCOMPLETO"?>">Tiempo completo</option>
+                            <?php
+                            } ?> 
+                            <?php 
+                            if($docente['dedicasion_doc']=='' or $docente['dedicasion_doc']=='NULL' ){ ?>  
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."DEDICACIONEXCLUSIVA"?>">Dedicacion exclusiva</option>
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."TIEMPOCOMPLETO"?>">Tiempo completo</option>                           
+                                <option  value="<?php echo $docente['uid'].";--;".$docente['escid'].";--;".$docente['pid'].";--;".$docente['sedid'].";--;"."TIEMPOPARCIAL"?>">Tiempo Parcial</option>
+                            <?php
+                            } ?>
+                        </select>
+                        </center>
+                    </td> 
+                    <script>
+                        $("#dedicacion_<?php echo $i?>").change(function(){
+                            var tipo = $(this).val();
+                            tmp=tipo.split(";--;");
+                            // alert(tmp);
+                            uid=tmp[0];
+                            escid=tmp[1];
+                            pid=tmp[2];
+                            sedid=tmp[3];
+                            dedi=tmp[4];                                         
+                            var url="/distribucion/distribucion/modificardedicacion/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/sedid/"+sedid+"/dedi/"+dedi;
+                            // alert(url);
+                            $("#calif3").load(url); 
+                        });
+                    </script>
+                    <td  style="font-size:12px">
+                        <center><a href="#"  onclick="javascript: window.open('/distribucion/distribucion/asignacioncursos/uid/<?php print $docente['uid']?>/pid/<?php print $docente['pid'] ?>/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid?>/sedid/<?php echo $this->sedid?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=900,height=720')"><i class="icon-pencil"></i>Asignar</a></center>
+                    </td>
+                </tr>
+                <?php
+            $i++;   
+            }
+        } ?>
+    </table>
+</div>
+<div id='calif'></div>
+<div id='calif2'></div>
+<div id='calif3'></div>
+<div id='estado'></div>

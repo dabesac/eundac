@@ -5,7 +5,7 @@
   	</div>
 </div>
 <?php if ($this->courses) { ?>
-	<div id="courses">
+	<div id="coursesss">
 		<table class="table table-hover table-condensed table-striped">
 			<tr class="active">
 				<th>#</th>
@@ -39,9 +39,26 @@
 					</td>
 					<td>
 						<center>
-							<a href="#" id="deletecourse"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" title="Eliminar Asignatura"></span></a>
+							<a href="#" id="deletecourse_<?php echo $i?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" title="Eliminar Asignatura"></span></a>
 						</center>
 					</td>
+					<script type="text/javascript">
+						$("#deletecourse_<?php echo $i?>").click(function(){
+							var perid="<?php echo $this->perid?>";
+							var escid="<?php echo $this->escid?>";
+							var subid="<?php echo $this->subid?>";
+							var distid="<?php echo $this->distid?>";
+							var courseid="<?php echo $courses['courseid']?>";
+							var curid="<?php echo $courses['curid']?>";
+							var semid="<?php echo $courses['semid']?>";
+							var turno="<?php echo $courses['turno']?>";
+							var url="/distribution/distribution/deletecourse/courseid/"+courseid+"/semid/"+semid+"/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/turno/"+turno+"/subid/"+subid;
+	            			$("#loadingg").load(url);
+	            			$("#datcourses").html("<img src='/img/spinner.gif'>Cargando...");
+							var url2="/distribution/distribution/courses/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid;
+							$("#datcourses").load(url2);
+						});
+					</script>
 				</tr>
 				<?php
 				$i++;
@@ -55,20 +72,17 @@
 </div>
 <?php
 }?>
-<div class="modal fade" id="addcourse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="loadingg"></div>
+<div class="modal fade" id="addcourse" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       	<div class="modal-content">
         	<div class="modal-header">
-          		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          		<button id="closemodal" type="button" class="close" aria-hidden="true">&times;</button>
           		<h4 class="modal-title"><span class="glyphicon glyphicon-tasks"></span> - AGREGAR ASIGNATURAS</h4>
         	</div>
         	<div class="modal-body">
           		<div id="loadingcourses"></div>
         	</div>
-        	<!-- <div class="modal-footer">
-          		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          		<button type="button" class="btn btn-primary">Save changes</button>
-        	</div> -->
       	</div>
     </div>
 </div>
@@ -80,6 +94,11 @@ $("#addcourses").click(function(){
 	var subid="<?php echo $this->subid?>";
 	var distid="<?php echo $this->distid?>";
 	$("#loadingcourses").load("/distribution/distribution/addcourses/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/distid/"+distid);
+});
+
+$("#closemodal").click(function(){
+	$("#addcourse").modal('hide');
+	window.location.reload();
 });
 
 $('.glyphicon').tooltip();

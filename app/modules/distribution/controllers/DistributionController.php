@@ -143,7 +143,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $subid = $this->_getParam("subid"); 
             $distid = $this->_getParam("distid");
             $this->view->escid=$escid;
-            $this->view->sedid=$sedid;
+            $this->view->subid=$subid;
             $this->view->perid=$perid;
             $this->view->distid=$distid;
 
@@ -247,61 +247,160 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $curid=$this->_getParam("curid");
             $semid=$this->_getParam("semid");
             $distid=$this->_getParam("distid");
-            print_r($turno_ = $this->_getParam("turno"));
-            print_r($turno1_ = $this->_getParam("turno1"));
-            print_r($turno2_ = $this->_getParam("turno2"));
-            print_r($turno3_ = $this->_getParam("turno3"));
-            print_r($turno4_ = $this->_getParam("turno4"));
-            print_r($turno5_ = $this->_getParam("turno5"));
+            $turno_ = $this->_getParam("turno");
+            $turno1_ = $this->_getParam("turno1");
+            $turno2_ = $this->_getParam("turno2");
+            $turno3_ = $this->_getParam("turno3");
+            $turno4_ = $this->_getParam("turno4");
+            $turno5_ = $this->_getParam("turno5");
+            $this->view->subid=$subid;
+            $this->view->escid=$escid;
+            $this->view->perid=$perid;
+            $this->view->distid=$distid;
             $tam=count($courseid);
-
+            
             $reg = new Api_Model_DbTable_PeriodsCourses();
-            $data['eid'] = $eid;
-            $data['oid'] = $oid;
-            $data['perid'] = $perid;
-            $data['curid'] = $curid;
-            $data['escid'] = $escid;
+            $where['eid'] = $data['eid'] = $eid;
+            $where['oid'] = $data['oid'] = $oid;
+            $where['perid'] = $data['perid'] = $perid;
+            $where['curid'] = $data['curid'] = $curid;
+            $where['escid'] = $data['escid'] = $escid;
+            $where['subid'] = $data['subid'] = $subid;
             $data['semid'] = $semid;
-            $data['subid'] = $subid;
             $data['distid'] = $distid;
-            for($i=0; $i<=$tam; $i++){
-                $data['courseid'] = $courseid[$i];
+            for($i=0; $i<$tam; $i++){
+                $where['courseid'] = $data['courseid'] = $courseid[$i];
                 $data['state_record'] = 'A';
+                $data['state'] = 'A';
                 $data['receipt'] = 'N';
                 $data['register'] = $uid;
                 $data['type_rate'] = '';
                 $data['created'] = date("Y-m-d h:m:s");
                 
                 if($turno_[$i]=="A"){
+                    $where['turno']= $turno_[$i];
                     $data['turno'] = $turno_[$i];
-                    $reg-> _save($data);
+                    $datpercour=$reg->_getOne($where);
+                    if (!$datpercour) $reg-> _save($data);
                 }
 
                 if($turno1_[$i]=="B"){
+                    $where['turno']= $turno1_[$i];
                     $data['turno'] = $turno1_[$i];
-                    $reg-> _save($data);
+                    $datpercour=$reg->_getOne($where);
+                    if (!$datpercour) $reg-> _save($data);
                 }
 
                 if($turno2_[$i]=="C"){
+                    $where['turno']= $turno2_[$i];
                     $data['turno'] = $turno2_[$i];
-                    $reg-> _save($data);
+                    $datpercour=$reg->_getOne($where);
+                    if (!$datpercour) $reg-> _save($data);
                 }
 
                 if($turno3_[$i]=="D"){
+                    $where['turno']= $turno3_[$i];
                     $data['turno'] = $turno3_[$i];
-                    $reg-> _save($data);
+                    $datpercour=$reg->_getOne($where);
+                    if (!$datpercour) $reg-> _save($data);
                 }
 
                 if($turno4_[$i]=="E"){
+                    $where['turno']= $turno4_[$i];
                     $data['turno'] = $turno4_[$i];
-                    $reg-> _save($data);
+                    $datpercour=$reg->_getOne($where);
+                    if (!$datpercour) $reg-> _save($data);
                 }
 
                 if($turno5_[$i]=="F"){
+                    $where['turno']= $turno5_[$i];
                     $data['turno'] = $turno5_[$i];
-                    $reg-> _save($data);
+                    $datpercour=$reg->_getOne($where);
+                    if (!$datpercour) $reg-> _save($data);
                 }
+                if ($i==($tam-1)) $this->view->msg=1;
             }
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function deletecourseAction(){
+        try {
+            $this->_helper->layout()->disablelayout();          
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $courseid=$this->_getParam("courseid");
+            $semid=$this->_getParam("semid");
+            $curid=$this->_getParam("curid");
+            $escid=$this->_getParam("escid");
+            $perid=$this->_getParam("perid");
+            $turno=$this->_getParam("turno");
+            $subid=$this->_getParam("subid");
+            $this->view->subid=$subid;
+            $this->view->escid=$escid;
+            $this->view->perid=$perid;
+
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['escid']=$escid;
+            $where['perid']=$perid;
+            $where['curid']=$curid;
+            $where['courseid']=$courseid;
+            $where['subid']=$subid;
+            $where['turno']=$turno;
+            $percourses = new Api_Model_DbTable_PeriodsCourses();
+            $datpercour=$percourses->_getOne($where);
+            $doccour= new Api_Model_DbTable_Coursexteacher();
+            $datadoccour=$doccour->_getFilter($where,$attrib=null,$orders=null);
+            if (!$datadoccour) {
+                $percourses->_delete($where);
+                $datpercourse=$percourses->_getOne($where);
+                if($datpercourse) $this->view->exis=1;
+            }else $this->view->exis=1;
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function teachersAction(){
+        try {
+            $this->_helper->layout()->disablelayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $perid = $this->_getParam("perid"); 
+            $escid = $this->_getParam("escid"); 
+            $subid = $this->_getParam("subid"); 
+            $distid = $this->_getParam("distid");
+            $this->view->escid=$escid;
+            $this->view->subid=$subid;
+            $this->view->perid=$perid;
+            $this->view->distid=$distid;
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function primaryteacherAction(){
+        try {
+            $this->_helper->layout()->disablelayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $perid = $this->_getParam("perid"); 
+            $escid = $this->_getParam("escid"); 
+            $subid = $this->_getParam("subid"); 
+            $distid = $this->_getParam("distid");
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['escid']=$escid;
+            $where['rid']='DC';
+            $where['state']='A';            
+            $doc = new Api_Model_DbTable_Users();
+            $teacher = $doc->_getUsersXEscidXRidXState($where);
+            $where['state']='I';
+            $teacher1 = $doc->_getUsersXEscidXRidXState($where);
+            $datateacher=array_merge($teacher,$teacher1);
+            $this->view->teacher=$datateacher;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
