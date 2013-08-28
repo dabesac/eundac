@@ -1,3 +1,41 @@
+<style type="text/css">
+	.modal-dialog
+	{
+		width: 900px;
+	}
+</style>
+<script >
+	function modified_record($this){
+		var $record = {};
+
+		$record[$.base64.encode('courseid')] = $.base64.encode($.trim($($this).attr('courseid')));
+		$record[$.base64.encode('turno')] = $.base64.encode($.trim($($this).attr('turno')));
+		$record[$.base64.encode('curid')] = $.base64.encode($.trim($($this).attr('curid')));
+		$record[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
+		$record[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
+		$record[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
+		$record[$.base64.encode('state')] = $.base64.encode($.trim($($this).attr('state')));
+		$record[$.base64.encode('closure')] = $.base64.encode($.trim($($this).attr('closure')));
+		$record[$.base64.encode('typea')] = $.base64.encode($.trim($($this).attr('typea')));
+
+		var result='';
+
+		for(var pro in $record){
+			result += '' + pro + '/' + $record[pro]+ '/';
+		}
+        result = result.substring(0, result.length-1);
+        var $url = '/record/index/modifiedrecord/'+ result;
+        $("#modal").modal('show');
+        $(".modal-dialog").load($url);
+	}
+</script>
+
+<div class="modal fade" id='modal'>
+  <div class="modal-dialog">
+    
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <?php 
 $stateperiod = $this->stateperiod;
 $strprint = "/record/index/printavence/"
@@ -105,7 +143,22 @@ $strprint = "/record/index/printavence/"
 	</tr>	
 	<tr>
 		<th colspan="2">OPERACIONES</th>
-		<td colspan="9" >skjdlksjfkld</td>
+		<td colspan="9" >
+			<button type="button" 
+			class="btn btn-primary btn-xs"
+			courseid="<?php echo $course['courseid']?>"
+			turno="<?php echo $course['turno']?>"
+			curid="<?php echo $course['curid']?>"
+			escid="<?php echo $course['escid']?>"
+			subid="<?php echo $course['subid']?>"
+			perid="<?php echo $course['perid']?>"
+			state="<?php echo $course['state_record']?>"
+			closure="<?php echo $course['closure_date']?>"
+			typea="<?php echo $course['type_rate']?>"
+			onclick="modified_record(this)"
+			>
+			<span class='glyphicon glyphicon-edit'></span> Modificar Acta</button>
+		</td>
 	</tr>		
 			<?php 
 			}
@@ -114,6 +167,7 @@ $strprint = "/record/index/printavence/"
 		Ni hay ningun dato
 	<?php } ?>
 </table>
+
 <script>
 	$("#openwindows").click(function (){
 		var perid=$("#perid").val();

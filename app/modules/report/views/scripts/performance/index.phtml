@@ -20,7 +20,7 @@
                              }
                         if ( $this->rid=='DC' && $this->esdirector=='S')
                         {?>
-                            <select id="facu"><option><?php echo $this->nom_fac?></option></select>
+                            <select class='form-control' style='height:35px;width:350px' id="facu"><option><?php echo $this->nom_fac?></option></select>
                             <script type="text/javascript">
                                 $("#facu").attr("disabled",true);
                             </script>
@@ -35,7 +35,7 @@
             <td colspan="2"><?php 
             if ( $this->rid=='DC' && $this->esdirector=='S' && $this->escid!='2ESTY')
             {?>
-                <select id="escu" name="escu"><option value="<?php echo $this->escid?>"><?php echo $this->nom_escuela?></option>
+                <select style='height:35px;width:350px' class='form-control' id="escu" name="escu"><option value="<?php echo $this->escid?>"><?php echo $this->nom_escuela?></option>
                 </select>
                 <script type="text/javascript">
                     $("#escu").attr("disabled",true);
@@ -100,19 +100,18 @@
         return false;
     });
     
-    // $("#facid").change(function () {
-    //     $("#facid option:selected").each(function () {
-    //         alert("sdfgh");
-    //         facultad = $(this).val();
+     $("#facid").change(function () {
+         $("#facid option:selected").each(function () {
+             facultad = $(this).val();
 
-    //         $('#escuela').html('<div class="controls"> <img src="/img/spinner.gif" /> Procesando...</div>');
-    //         $.post("/report/performance/listshool/", { facid: facultad }, function(data){
-    //             $('#escuela').html("<select id='escid' name='escid'><option value=''>- Seleccione la Escuela -</option></select>");
-    //             $("#escid").html(data);
-    //         });
-    //         //$('#especialidad').hide();
-    //     });
-    // });
+             $('#escuela').html('<div class="controls"> <img src="/img/spinner.gif" /> Procesando...</div>');
+             $.post("/report/performance/listshool/", { facid: facultad }, function(data){
+                 $('#escuela').html("<select id='escid' name='escid'><option value=''>- Seleccione la Escuela -</option></select>");
+                 $("#escid").html(data);
+             });
+             //$('#especialidad').hide();
+        });
+    });
 
     
     $("#escid").change(function () {

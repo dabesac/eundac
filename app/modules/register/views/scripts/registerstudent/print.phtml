@@ -4,8 +4,7 @@ include_once($dir);
 ob_start(); 
 ?> 
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<br><br><br><br>
-<table  style="font-size:11px; margin-left: 150px; margin-bottom: 0px; " >     
+<table  style="font-size:11px; margin-left: 90px; margin-bottom: 0px; " >     
     <tr>
     	<td ><?php echo $this->facultad;?></td>         
     </tr>
@@ -93,15 +92,14 @@ ob_start();
 
 
 <?php 
-  // $html = ob_get_contents();
+
+  $html = ob_get_contents();
   $mpdf=new mPDF('win-1252','A4','','',15,15,40);
-  $mpdf->SetFooter($this->footer);
   ob_end_clean();
   $mpdf -> WriteHTML($html);
-  $mpdf->Output('RecordNotas-'.$this->person['pid'].'.pdf','D');
+  $mpdf->Output('Matricula-'.'.pdf','D');
   
 ?>
-
 <style type="text/css">
 /* body{
     font-family: "Courier New", Courier, monospace;

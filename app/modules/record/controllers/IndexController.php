@@ -206,4 +206,139 @@ class Record_IndexController extends Zend_Controller_Action {
 		$rows_periods = $periods->_getPeriodsxYears($data);
 		if ($rows_periods) $this->view->periods=$rows_periods;
 	}
+
+	public function modifiedrecordAction(){
+		try {
+
+			$params = $this->getRequest()->getParams();
+            $paramsdecode = array();
+            foreach ( $params as $key => $value ){
+                if($key!="module" && $key!="controller" && $key!="action"){
+                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+                }
+            }
+
+            $eid =	$this->sesion->eid;
+            $oid =	$this->sesion->oid;
+
+            $params = $paramsdecode;
+            $courseid =	trim($params['courseid']);
+            $turno =	trim($params['turno']);
+            $curid =	trim($params['curid']);
+            $escid =	trim($params['escid']);
+            $subid =	trim($params['subid']);
+            $perid =	trim($params['perid']);
+            $state =	trim($params['state']);
+            $closure =	trim($params['closure']);
+            $type =	trim($params['typea']);
+
+
+            $this->view->turno = $turno;
+
+            $where = array(
+            	'eid'=>$eid,'oid'=>$oid,
+            	'courseid'=>$courseid,'turno'=>$turno,
+            	'curid'=>$curid,'escid'=>$escid,
+            	'subid'=>$subid,'perid'=>$perid,);
+            $base_course_x_teacher =	new Api_Model_DbTable_Coursexteacher();
+            $base_speciality = new Api_Model_DbTable_Speciality();
+            $base_course =	new Api_Model_DbTable_Course();
+            $base_person = new Api_Model_DbTable_Person();
+            $info_couser = $base_course->_getOne($where);
+            $info_teacher = $base_course_x_teacher->_getFilter($where);
+            $speciality = $base_speciality->_getAll($where);
+
+            foreach ($info_teacher as $key => $value) {
+            	$where1= array(
+            		'eid' => $value['eid'],
+            		'oid' => $value['oid'],
+            		'pid' => $value['pid']);
+            	$name_teacher = $base_person->_getOne($where1);
+            	$info_teacher[$key]['name']=$name_teacher['last_name0'].
+            								" ".$name_teacher['last_name1'].
+            								",".$name_teacher['first_name']; 
+            }
+
+            $this->view->state = $state;
+            $this->view->closure = $closure;
+            $this->view->type = $type;
+            $this->view->perid =$perid;
+            $this->view->info_couser = $info_couser;
+            $this->view->info_teacher = $info_teacher;
+            $this->view->speciality = $speciality;
+			$this->_helper->layout()->disableLayout();		
+
+
+						 
+		} catch (Exception $e) {
+			print "Error modified record".$e->getMessage();
+		}
+	}
+
+	public function teachersAction(){
+		try {
+            $eid =	$this->sesion->eid;
+            $oid =	$this->sesion->oid;
+            $escid = base64_decode($this->_getParam('escid'));
+            $state = base64_decode($this->_getParam('state'));
+            $date_record = base64_decode($this->_getParam('state'));
+            $where = array(
+            	'eid'=> $eid,
+            	'oid' => $oid,'escid'=>$escid,
+            	'rid'=>'DC','state'=>'A');
+            $attrib = array('pid','uid','subid');
+            $base_user = new Api_Model_DbTable_Users();
+            $info_users = $base_user->_getFilter($where,$attrib);
+
+            foreach ($info_users as $key => $value) {
+            	$where['pid']=$value['pid'];
+            	$where['uid']=$value['uid'];
+            	$where['subid']=$value['subid'];
+            	$info_user = $base_user->_getInfoUser($where);
+            	$info_users [$key]['full_name'] = $info_user[0]['last_name0'].
+            									' '.$info_user[0]['last_name1'].
+            									", ".$info_user[0]['first_name']; 
+            }
+
+            $this->view->state=$state;
+            $this->view->date_record=$date_record;
+            $this->view->teachers = $info_users;
+			$this->_helper->layout()->disableLayout();		
+		} catch (Exception $e) {
+			print "Error modified teacher".$e->getMessage();
+		}
+	}
+
+	public function savemodifiedrecordAction()
+	{
+		try {
+				$params = $this->getRequest()->getParams();
+	            $paramsdecode = array();
+	            foreach ( $params as $key => $value ){
+	                if($key!="module" && $key!="controller" && $key!="action"){
+	                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+	                }
+	            }
+
+	            $eid =	$this->sesion->eid;
+	            $oid =	$this->sesion->oid;
+
+	            $params = $paramsdecode;
+	            print_r($params);exit();
+	            
+	            $courseid =	trim($params['courseid']);
+	            $turno =	trim($params['turno']);
+	            $curid =	trim($params['curid']);
+	            $escid =	trim($params['escid']);
+	            $subid =	trim($params['subid']);
+	            $perid =	trim($params['perid']);
+	            $state =	trim($params['state']);
+	            $closure =	trim($params['closure']);
+	            $type =	trim($params['typea']);
+
+
+		} catch (Exception $e) {
+			print "Error modified teacher".$e->getMessage();
+		}
+	}
 }

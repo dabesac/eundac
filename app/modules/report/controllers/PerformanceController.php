@@ -170,15 +170,9 @@ public function listcurriculaAction()
           $where['escid'] = $this->_getParam('escid');
           $where['uid'] = $this->sesion->uid;
           $where['pid'] = $this->sesion->pid;
-          $infodoc =new Api_Model_DbTable_Infoteacher();
-          $doc=$infodoc->_getOne($where);
-          $direc=$doc['is_director'];
-          if ($direc=="S") {
-              $where['escid']=$this->sesion->escid;
-            }  
-          if ($escuela=="2ESTY") {
-              $where['escid'] = $this->_getParam('escid'); 
-            } 
+          if(!$where['escid']){
+            $where['escid']=$this->sesion->escid;   
+          }
           $this->view->escid=$where['escid'];
           $this->view->perid=$where['perid'];          
           $bdescuela = new Api_Model_DbTable_Speciality();
