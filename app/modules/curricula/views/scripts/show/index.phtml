@@ -1,0 +1,58 @@
+<div>
+	<table class="table table-striped table-condensed span9">
+		<tr>
+			<th style="font-size:20px" colspan='4'><center>CURRICULAS</center></th>
+		</tr>
+		<tr>
+			<th>Facultad:</th>
+			<td>
+				<select id="facid">
+					<option value="">- Seleccione Facultad -</option>
+					<?php if ($this->facultad) {
+						foreach ($this->facultad as $facultad) { 
+							 if ($this->facid) $str = ($this->facid==$facultad['facid'])?"selected ":""; ?>
+							<option <?php echo $str?> value="<?php echo $facultad['facid']?>"><?php echo $facultad['name']?></option>		
+						<?php
+						}
+					} ?>
+				</select>
+			</td>
+			<th>Escuela:</th>
+			<td>
+				<select id='escid'>
+					<option>- Seleccione Escuela -</option>
+				</select>
+			</td>
+		</tr>
+	</table>
+</div>
+<div id="datos" class="flotacarajo span9"></div>
+
+<script type="text/javascript">
+//var rid="<?php echo $this->rid?>";
+// if (rid=="RF" || rid=="DIREC") {
+// 	$("#facid").attr("disabled",true);
+// 	var facid="<?php echo $this->facid?>";
+// 	$("#escid").load("/vercurricula/lescuelas/facid/"+facid);
+// 	if (rid=="DIREC") {
+// 		$("#escid").attr("disabled",true);
+// 		var escid="<?php echo $this->escid?>";
+// 		var url="/vercurricula/curriculas/escid/"+escid;
+// 		$("#datos").html("<img src='/img/spinner.gif'>Cargando...");
+// 		$("#datos").load(url);
+// 	};
+// };
+
+$("#facid").change(function(){
+	var facid=$(this).val();
+	var url = "/curricula/show/lschools/facid/"+facid;
+	$("#escid").load("/curricula/show/lschools/facid/"+facid);
+});
+
+$("#escid").change(function(){
+	var escid=$(this).val();
+	var url="/curricula/show/curriculas/escid/"+escid;
+	$("#datos").html("<img src='/img/spinner.gif'>Cargando...");
+	$("#datos").load(url);
+});
+</script>

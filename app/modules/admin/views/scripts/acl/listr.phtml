@@ -1,8 +1,6 @@
-<?php 
-if($this->data){
-	foreach ($this->data as $re){
-	?>
-	<option value="<?php echo base64_encode($re['reid'])?>"><?php echo $re['name']?></option>
+<?php if($this->data){
+	foreach ($this->data as $re){?>
+	<option value="<?php echo $re['reid']?>"><?php echo $re['name']?></option>
 	<?php
 	} 
 }else{
