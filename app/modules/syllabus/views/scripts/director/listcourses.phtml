@@ -1,28 +1,56 @@
-<?php 
-if($this->coursesperyear){
-	//print_r($this->coursesname)?>
+<?php //print_r($this->coursesname);
+if($this->allcourses){?>
 	<table class="table">
 		<tr>
 			<th>#</th>
 			<th>Sem</th>
 			<th>Curso</th>
 			<th>Turno</th>
+			<th>Estado</th>
 		</tr>
 	
 		<?php $c=0;
-		foreach ($this->coursesperyear as $coursesxyear) {
+		foreach ($this->allcourses as $courses) {
 			$cp=0;
-			foreach ($coursesxyear as $coursesxper) {?>
+			foreach ($courses as $coursesxper) {?>
 				<tr>
-					<th><?php echo $c+1;?></th>
-					<th><?php echo $coursesxper['semid'];?></th>
-					<th><?php echo $this->coursesname[$c][$cp]['name']?></th>
-					<th><?php echo $coursesxper['turno'];?></th>
-				</tr>
-				
+					<td><b><?php echo $c+1;?></b></td>
+					<td><?php echo $coursesxper['semid'];?></td>
+					<td><?php echo $this->coursesname[$c][$cp]['name']?></td>
+					<td><?php echo $coursesxper['turno'];?></td>
+					<td><?php echo $this->coursesstate[$c][$cp]['state']?></td>
+					<td><a href="#"><span class="glyphicon glyphicon-print"></span></a></td>
+				</tr>				
 			<?php $c++;
 			}
 			$cp++;		 
 		}?>
 	</table>
+<?php }elseif($this->filcourses){?>
+	<table class="table">
+		<tr>
+			<th>#</th>
+			<th>Sem</th>
+			<th>Curso</th>
+			<th>Turno</th>
+			<th>Estado</th>
+		</tr>
+	
+		<?php $c=0;
+		foreach ($this->filcourses as $courses) {?>
+			<tr>
+				<td><b><?php echo $c+1;?></b></td>
+				<td><?php echo $courses['semid'];?></td>
+				<td><?php echo $this->coursesname[$c][0]['name']?></td>
+				<td><?php echo $courses['turno'];?></td>
+				<td><?php echo $this->coursesstate[$c][0]['state']?></td>
+				<td><a href="#"><span class="glyphicon glyphicon-print"></span></a></td>
+			</tr>				
+			<?php $c++;
+			}
+			$cp++;		 
+		?>
+	</table>
+<?php }else{?>
+	<center><h4>No Existen Datos</h4></center>
 <?php }?>

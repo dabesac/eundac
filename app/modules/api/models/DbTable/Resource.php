@@ -3,7 +3,7 @@
 class Api_Model_DbTable_Resource extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'base_resource';
-	protected $_primary = array("eid","oid","reid");
+	protected $_primary = array("eid","oid","reid","mid");
 
 	public function _getAll($where=null,$order='',$start=0,$limit=0){
 
@@ -33,9 +33,12 @@ class Api_Model_DbTable_Resource extends Zend_Db_Table_Abstract
 				foreach ($where as $atri=>$value){
 					$select->where("$atri = ?", $value);
 				}
-				foreach ($orders as $key => $order) {
+				if ($orders ){
+					foreach ($orders as $key => $order) {
 						$select->order($order);
+					}	
 				}
+				
 				$results = $select->query();
 				$rows = $results->fetchAll();
 				if ($rows) return $rows;

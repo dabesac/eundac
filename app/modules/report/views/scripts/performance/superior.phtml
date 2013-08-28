@@ -1,0 +1,92 @@
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+        <script src="/external/jquery/jquery-1.9.1.js"></script>
+        <script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
+        <script src="/external/jquery/external/globalize.js"></script>
+        <script src="/external/jquery/external/jquery.mousewheel.js"></script>
+        <script src="/external/jquery/external/jshint.js"></script>
+        <script src="/external/jquery/external/qunit.js"></script>
+        <script src="/external/jquery/external/base64/jquery.base64.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">      
+        <!-- Texto Enriquecido-->
+        <link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
+        <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
+        
+        <!-- Bootstrap -->
+        <script src="/external/bootstrap/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+        <link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">        
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+   <table class="table  table-condensed " style="margin-left: 0px;margin-right: 15px; font-size: 12px; background: #428bca; color: #D2F6F9;">
+    <tr>
+        <th rowspan="5" class="col-lg-7">
+            <center>
+                    <p>                
+                    <span style="font-size: 15px">REPORTE <?php echo $this->superior; ?>° SUPERIOR</span><br/>
+                    
+                    <span style="font-size: 14px">ESCUELA DE FORMACION PROFESIONAL DE 
+                        <?php echo $this->nom_escuela;?> 
+                       
+                    </span><br/>
+                    <?php if ($this->especialidad<>""){?>
+                        <span style="font-size: 14px">ESPECIALIDAD DE 
+                            <?php echo $this->especialidad; ?>
+                        </span>
+                    <?php 
+                    }
+                    ?>
+                    </center>
+        </th>
+        <th colspan="6">
+            <span style="font-size: 14px"><?php print $this->nomcurricula;?></span>
+        </th>        
+    </tr>
+    <tr>
+       
+        <th class="span1">Fecha</th>
+        <th class="span1"  rowspan="2">              
+                <a href="/report/performance/printsuperior/escid/<?php echo base64_encode($this->escid);?>/superior/<?php echo $this->superior;?>/perid/<?php echo base64_encode($this->perid)?>"  class="btn btn-danger" style='color: #ccc' atls="imprimir" />
+               <b> <i class="glyphicon glyphicon-list-alt glyphicon-white"></i><br/>Imprimir</b></a>
+           
+        </th>
+    </tr>
+    <tr>      
+        <td ><span class="label label-info" data-placement="bottom">
+        <?php echo date("Y/m/d"); ?></span></td>     
+        
+    </tr>
+</table>    
+
+<table class="table col-lg-11 table-bordered table-condensed table-striped" style="font-size: 12px">
+               <tbody>
+                <center>
+                <tr ></tr>
+                <tr style="background: #333; color: #fff;">
+                  <td >Nro</td>
+                  <td >Codigo</td>
+                  <td >Apellidos y Nombres</td>
+                  <td >Semestre</td>
+                  <td >Promedio Pond</td>
+                  <td >Creditos Aprobados</td>
+                </tr>
+          
+            <?php $i=1; 
+            foreach ($this->rep_superior as $dr) {?>
+                <tr>
+                    <td><?php echo $i ?></td>
+                    <td><?php echo $dr['uid']?></td>
+                    <td ><?php echo $dr['last_name0'].' '.$dr['last_name1'].', '.$dr['first_name'] ?></td>
+                    <td><?php echo $dr['semid']?></td>
+                    <td><?php echo $dr['prom_pond']?></td>              
+                      <td><?php echo $dr['cred_aprob']?></td>
+                </tr>
+              <?php $i=$i+1; }?>
+        
+        </center>
+          </tbody>
+</table>
+
+   
+
