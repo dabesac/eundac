@@ -1,0 +1,178 @@
+<script type="text/javascript">
+	function save_modified_record($this){
+		var $record = {};
+
+		$record[$.base64.encode('hola')] = $.base64.encode($.trim($($this).attr('hola')));
+		$record[$.base64.encode('aaf')] = $.base64.encode($.trim($($this).attr('aaf')));
+		$record[$.base64.encode('courseid')] = $.base64.encode($.trim($($this).attr('courseid')));
+		$record[$.base64.encode('turno')] = $.base64.encode($.trim($($this).attr('turno')));
+		$record[$.base64.encode('curid')] = $.base64.encode($.trim($($this).attr('curid')));
+		$record[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
+		$record[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
+		$record[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
+		$record[$.base64.encode('state')] = $.base64.encode($.trim($($this).attr('state')));
+		$record[$.base64.encode('closure')] = $.base64.encode($.trim($($this).attr('closure')));
+		$record[$.base64.encode('closure')] = $.base64.encode($.trim($($this).attr('closure')));
+
+		var result='';
+		for(var pro in $record){
+			result += '' + pro + '/' + $record[pro]+ '/';
+		}
+        result = result.substring(0, result.length-1);
+        var $url = '/record/index/savemodifiedrecord/'+ result;
+       $.ajax({
+	            url:$url,
+	            success:function($data){
+					alert($data);  
+	            },
+	            error:function($data){
+	                    //Pintar el error
+	            }
+        	});
+	};
+</script>
+
+<div class="modal-content">
+    <div class="modal-body">
+        	<div class='row'>
+        		<div class='col-md-12'>
+        			<div class='row'>
+        				<div class="panel panel-primary">
+						  <div class="panel-heading">
+						  	<h5 class="panel-title">
+						  	<span class='glyphicon glyphicon-edit'></span><strong> <?php echo $this->info_couser['name']?> TURNO <?php echo $this->turno?></strong>
+						  </h5>
+						</div>
+							  <table class="table">
+							  	<tr>
+							  		<th>Curricula</th>
+							  		<th>Tipo de Calificacion</th>
+							  		<th>Fecha de Cierre de Acta </th>
+							  		<th>Estado del Acta</th>
+							  	</tr>
+							  	<tr>
+							  		<td><?php echo $this->info_couser['curid']?></td>
+							  		<td><?php if($this->type =="O") echo "Objetivo";
+							  				 else echo "Compencia";?>
+							  		</td>
+							  		<td><?php echo $this->closure?></td>
+							  		<td><?php 
+										switch ($this->state){
+											case "A": $img="verde";break;	
+											case "C": $img="rojo";break;
+											default: $img="azul";break;
+										}?>
+										<img src="/img/circulo-<?php echo $img?>.png"></td>
+							  	</tr>
+							  </table>
+						</div>
+        				<div class="panel panel-primary">
+						  <div class="panel-heading"><h5 class="panel-title">Docentes Asignados</h5></div>
+							  <table class="table">
+							  	<tr>
+							  		<th>DNI</th>
+							  		<th>Apellidos y Nombres</th>
+							  		<th>Estado</th>
+							  		<th>Principal</th>
+							  		<th>Compromiso</th>
+							  		<th>Eliminar</th>
+							  	</tr>
+							  	<?php foreach ($this->info_teacher as $key => $teacher) { ?>
+							  		<tr>
+							  			<td><?php echo $teacher['pid']?></td>
+							  			<td><?php echo $teacher['name']?></td>
+							  			<td><?php echo $teacher['state']?></td>
+							  			<td><?php if ($teacher['is_main']=='S')
+							  						echo "SI";
+							  					else echo "NO";
+							  			?></td>
+							  			<td><?php if($teacher['is_com']=='S') echo "SI";
+							  						else echo "NO";?></td>
+							  			<td><a href="#"><span class='glyphicon glyphicon-trash'></span></a></td>
+							  		</tr>
+							  	<?php }?>
+							  </table>
+						</div>
+					
+						<div class="panel panel-primary">
+						  <div class="panel-heading">
+						    <h3 class="panel-title">Asignar Nuevo Docentes</h3>
+						  </div>
+						  <div class="panel-body">
+						    <div class="row">
+							  <div class="col-lg-3">
+							  	<strong>Escuela de procedencia:</strong>
+							    <select class="form-control" id="speciality">
+							    	<option value=''>Seleccione Escuela</option>
+							    	<?php foreach ($this->speciality as  $value) { ?>
+							    		<option value='<?php echo $value['escid']?>'><?php echo $value['name']?></option>
+							    	<?php  }?>
+							    </select>
+							  </div>
+							  <div class="col-lg-3">
+							    <label>Docente</label>
+							    <select class="form-control" id='teachers'>
+							    	<option value='' >Seleccione Docente</option>
+							    </select>
+							  </div>
+							  <div class="col-lg-2">
+							    <strong>Estado</strong>
+							    <select class="form-control" id='state'>
+							    	<option Value='A'>Activo</option>
+							    	<option Value='L'>Licencia</option>
+							    	<option Value='P'>Jefe Practica</option>
+							    </select>
+							  </div>
+							  <div class="col-lg-2">
+							    <strong>Compromiso</strong>
+							    <select class="form-control" id='iscom'>
+							    	<option Value='N'>No</option>
+							    	<option Value='S'>Si</option>
+							    </select>
+							  </div>
+							  <div class="col-lg-2">
+							    <strong>Principal</strong>
+							    <select class="form-control" id='ismain'>
+							    	<option Value='S'>Si</option>
+							    	<option Value='N'>No</option>
+							    </select>
+							  </div>
+							</div>
+						  </div>
+						</div>
+        			</div>
+        		</div>
+        	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-floppy-remove'></span> Cancelar</button>
+        <button type="button" class="btn btn-success"
+			courseid="<?php echo $this->info_couser['courseid']?>"
+			turno="<?php echo $this->turno['turno']?>"
+			curid="<?php echo $this->info_couser['curid']?>"
+			escid="<?php echo $this->info_couser['escid']?>"
+			subid="<?php echo $this->info_couser['subid']?>"
+			perid="<?php echo $this->perid?>"
+			onclick='save_modified_record(this)'
+        	id='save_modified'><span class='glyphicon glyphicon-floppy-disk'>
+     	</span> Guardar</button>
+      </div>
+</div><!-- /.modal-content -->
+
+<script type="text/javascript">
+	$("#speciality").change(function(){
+		$("#speciality").each(function(){
+			var escid = $(this).val();
+			var url = "/record/index/teachers/";
+			if (escid != ""){
+				$.get(url,{escid:$.base64.encode(escid)},function(data){
+				$("#teachers").html(data);
+				});
+			}
+			else{
+				alert("slecion Escuela");
+				$(".alert").alert();
+			}
+		});
+	});
+</script>
