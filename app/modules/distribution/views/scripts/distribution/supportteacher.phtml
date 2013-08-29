@@ -1,0 +1,30 @@
+<form name="<?php //echo $this->fm->getName(); ?>" id="frmsearching" action="/distribution/distribution/procesar/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid?>/sedid/<?php echo $this->sedid?>/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+    <table class="table">
+        <tr>
+            <td class="span3" style="text-align:right" title="Busqueda por Apellidos"><br>
+                <?php //echo $this->fm->nom; ?>
+            </td>
+            <td class="span3" style="text-align:right" title="Ingrese su DNI"><br>         
+                <?php //echo $this->fm->pid; ?>
+            </td>                 
+            <td class="span1" style="text-align:right">       
+                <?php //echo $this->fm->guardar; ?>
+            </td>     
+        </tr>
+    </table>
+</form>
+<div id="chargesupport"></div>
+
+<script type="text/javascript">
+    $("#frmsearching").submit(function(){
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function(data) {                        
+                $('#chargesupport').html(data);
+            }
+        }); 
+        return false;
+    });
+</script>

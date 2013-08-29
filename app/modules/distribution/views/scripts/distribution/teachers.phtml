@@ -1,0 +1,39 @@
+<div class="panel panel-default" style="margin-top:15px">
+  	<div class="panel-body">
+    	<b style="font-size:20px"><span class="glyphicon glyphicon-user"></span> - LISTA DE DOCENTES</b>
+  	</div>
+</div>
+<div>
+	<ul class="nav nav-tabs" id="listteachers">
+	  	<li class="active"><a href="#primaryteacher">Docentes</a></li>
+	  	<li><a href="#practiceteacher">Jefes de Práctica</a></li>
+	  	<li><a href="#supportteacher">Docente de Apoyo</a></li>	  	
+	</ul>
+
+	<div class="tab-content">
+	  	<div class="tab-pane active" id="primaryteacher"></div>
+	  	<div class="tab-pane" id="practiceteacher"></div>
+	  	<div class="tab-pane" id="supportteacher"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+var perid="<?php echo $this->perid?>";
+var escid="<?php echo $this->escid?>";
+var subid="<?php echo $this->subid?>";
+var distid="<?php echo $this->distid?>";
+
+$("#primaryteacher").html("<img src='/img/spinner.gif'>Cargando...");
+$("#primaryteacher").load("/distribution/distribution/primaryteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
+
+$("#practiceteacher").html("<img src='/img/spinner.gif'>Cargando...");
+$("#practiceteacher").load("/distribution/distribution/practiceteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
+
+$("#supportteacher").html("<img src='/img/spinner.gif' />Cargando....");
+$("#supportteacher").load("/distribution/distribution/supportteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
+
+$('#listteachers a').click(function (e) {
+  	e.preventDefault()
+  	$(this).tab('show')
+});
+</script>
