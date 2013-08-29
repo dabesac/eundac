@@ -99,68 +99,82 @@ class Record_IndexController extends Zend_Controller_Action {
 	
 	public function detailAction()
 	{
-		$this->_helper->layout()->disableLayout();
-		// PK
-		$formData['eid'] = $this->sesion->eid;
-		$formData['oid'] = $this->sesion->oid;
-		$formData['escid'] = base64_decode($this->getParam("escid"));
-		$formData['subid'] = base64_decode($this->getParam("subid"));
-		$formData['perid'] = base64_decode($this->getParam('perid'));
-		$formData['courseid'] = base64_decode($this->getParam('courseid'));
-		$formData['curid'] = base64_decode($this->getParam('curid'));
-		$formData['turno'] = base64_decode($this->getParam('turno'));
-		$this->view->print = base64_decode($this->getParam('print'));
-		$this->view->typeprint = base64_decode($this->getParam('type'));
-		$this->view->urlprint="/record/index/detail/escid/".$this->getParam("escid")."/subid/".$this->getParam("subid").
-				"/perid/".$this->getParam("perid")."/courseid/".$this->getParam("courseid")."/curid/".
-				$this->getParam("curid")."/turno/".$this->getParam("turno");
-		//get Course x Period
-		$course = new Api_Model_DbTable_PeriodsCourses();
-		$rows = $course->_getOne($formData);
-		if ($rows) {
-			if ($rows['closure_date']<>""){
-				$date = new Zend_Date($rows['closure_date']);
-				$rows['closure_date']=$date->toString('dd/MM/Y');
-			}
-			$name = new Api_Model_DbTable_Course();
-			$rname = $name->_getOne($rows);
-			if ($rname) $rows['name'] = $rname['name'];  
-			$teachers = new Api_Model_DbTable_Coursexteacher();
-			$lteachers= $teachers->_getAll($formData);
-			if ($lteachers) {
-				foreach ($lteachers as $teaches){
-					$userinfo = new Api_Model_DbTable_Users();
-					$ruser = $userinfo->_getInfoUser($teaches);
-					if ($ruser) $rows['teachers'][]=$ruser['last_name0']." ".$ruser['last_name1'].", ".$ruser['first_name'];
-				}	
-			}
-			$register = new Api_Model_DbTable_Registrationxcourse();
-			$countregister = $register->_getCountRegisterCourse($formData);
-			$rows['numregister'] = ($countregister)?$countregister:0;
-			$this->view->course = $rows;
-			// get students
-			$student = new Api_Model_DbTable_Registrationxcourse();
-			$students=$student->_getStudentXcoursesXescidXperiods($formData);
-			if ($students) $this->view->students = $students;
-			$speciality = new Api_Model_DbTable_Speciality();
-			$rows = $speciality->_getOne($formData);
-			if ($rows){
-				if ($rows->parent){
-					$rows->escid=$rows->parent;
-					$erows = $speciality->_getOne($rows);
-					$this->view->speciality = $erows;
-					$this->view->speciality1 = $rows;
-				}
-				else
-					$this->view->speciality = $rows;
-			}
-			
-			$faculty = new Api_Model_DbTable_Faculty();
-			$frows = $faculty->_getOne($rows);
-			if ($frows) $this->view->faculty = $frows;
-			
-		}
-		
+
+			$params = $this->getRequest()->getParams();
+	            $paramsdecode = array();
+	            foreach ( $params as $key => $value ){
+	                if($key!="module" && $key!="controller" && $key!="action"){
+	                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+	                }
+	        }
+
+			$eid = $this->sesion->eid;
+			$oid = $this->sesion->oid;
+			$params = $paramsdecode;
+            $courseid =	trim($params['courseid']);
+            $turno =	trim($params['turno']);
+            $curid =	trim($params['curid']);
+            $escid =	trim($params['escid']);
+            $subid =	trim($params['subid']);
+            $perid =	trim($params['perid']);
+            $state =	trim($params['state']);
+            $closure =	trim($params['closure']);
+            $type =	trim($params['typea']);    
+
+            $this->view->turno = $turno;
+
+            $where = array(
+            	'eid'=>$eid,'oid'=>$oid,
+            	'courseid'=>$courseid,'turno'=>$turno,
+            	'curid'=>$curid,'escid'=>$escid,
+            	'subid'=>$subid,'perid'=>$perid,);
+            $base_course_x_teacher =	new Api_Model_DbTable_Coursexteacher();
+            $base_register_course = new Api_Model_DbTable_Registrationxcourse();
+            $base_speciality = new Api_Model_DbTable_Speciality();
+            $base_course =	new Api_Model_DbTable_Course();
+            $base_person = new Api_Model_DbTable_Person();
+            $info_couser = $base_course->_getOne($where);
+            $info_teacher = $base_course_x_teacher->_getFilter($where);
+            $speciality = $base_speciality->_getAll($where);
+            $data_students = $base_register_course->_getFilter($where);
+            foreach ($data_students as $key => $value) {
+            	$where2= array(
+            		'eid' => $value['eid'],
+            		'oid' => $value['oid'],
+            		'pid' => $value['pid']); 
+
+            	$name_student=$base_person->_getOne($where2);
+            	$data_students [$key]['name'] = $name_student['last_name0'].' '.
+            					$name_student['last_name1'].", ".
+            					$name_student['first_name'];
+            }
+            foreach ($info_teacher as $key => $value) {
+            	$where1= array(
+            		'eid' => $value['eid'],
+            		'oid' => $value['oid'],
+            		'pid' => $value['pid']);
+            	$name_teacher = $base_person->_getOne($where1);
+            	$info_teacher[$key]['name']=$name_teacher['last_name0'].
+            								" ".$name_teacher['last_name1'].
+            								",".$name_teacher['first_name']; 
+            }
+
+            if ($data_students) {
+            	$num_register = count($data_students);
+            }
+            else $num_register =0;
+            
+            $this->view->numregister = $num_register;
+            $this->view->data_students = $data_students;
+            $this->view->state = $state;
+            $this->view->closure = $closure;
+            $this->view->type = $type;
+            $this->view->perid =$perid;
+            $this->view->subid =$subid;
+            $this->view->info_couser = $info_couser;
+            $this->view->info_teacher = $info_teacher;
+            $this->view->speciality = $speciality;
+			$this->_helper->layout()->disableLayout();		
 	}
 	
 	public function printavenceAction()
@@ -206,4 +220,123 @@ class Record_IndexController extends Zend_Controller_Action {
 		$rows_periods = $periods->_getPeriodsxYears($data);
 		if ($rows_periods) $this->view->periods=$rows_periods;
 	}
+
+	public function modifiedrecordAction(){
+		try {
+
+			$params = $this->getRequest()->getParams();
+            $paramsdecode = array();
+            foreach ( $params as $key => $value ){
+                if($key!="module" && $key!="controller" && $key!="action"){
+                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+                }
+            }
+
+            $eid =	$this->sesion->eid;
+            $oid =	$this->sesion->oid;
+
+            $params = $paramsdecode;
+            $courseid =	trim($params['courseid']);
+            $turno =	trim($params['turno']);
+            $curid =	trim($params['curid']);
+            $escid =	trim($params['escid']);
+            $subid =	trim($params['subid']);
+            $perid =	trim($params['perid']);
+            $state =	trim($params['state']);
+            $closure =	trim($params['closure']);
+            $type =	trim($params['typea']);
+
+
+            $this->view->turno = $turno;
+
+            $where = array(
+            	'eid'=>$eid,'oid'=>$oid,
+            	'courseid'=>$courseid,'turno'=>$turno,
+            	'curid'=>$curid,'escid'=>$escid,
+            	'subid'=>$subid,'perid'=>$perid,);
+            $base_course_x_teacher =	new Api_Model_DbTable_Coursexteacher();
+            $base_speciality = new Api_Model_DbTable_Speciality();
+            $base_course =	new Api_Model_DbTable_Course();
+            $base_person = new Api_Model_DbTable_Person();
+            $info_couser = $base_course->_getOne($where);
+            $info_teacher = $base_course_x_teacher->_getFilter($where);
+            $speciality = $base_speciality->_getAll($where);
+
+            foreach ($info_teacher as $key => $value) {
+            	$where1= array(
+            		'eid' => $value['eid'],
+            		'oid' => $value['oid'],
+            		'pid' => $value['pid']);
+            	$name_teacher = $base_person->_getOne($where1);
+            	$info_teacher[$key]['name']=$name_teacher['last_name0'].
+            								" ".$name_teacher['last_name1'].
+            								",".$name_teacher['first_name']; 
+            }
+
+            $this->view->state = $state;
+            $this->view->closure = $closure;
+            $this->view->type = $type;
+            $this->view->perid =$perid;
+            $this->view->subid =$subid;
+            $this->view->info_couser = $info_couser;
+            $this->view->info_teacher = $info_teacher;
+            $this->view->speciality = $speciality;
+			$this->_helper->layout()->disableLayout();		
+
+
+						 
+		} catch (Exception $e) {
+			print "Error modified record".$e->getMessage();
+		}
+	}
+	public function printconstancyAction(){
+		try {
+			$eid=$this->sesion->eid;
+			$oid=$this->sesion->oid;
+
+			$escid=base64_decode($this->_getParam('escid'));
+			$perid=base64_decode($this->_getParam('perid'));
+			$subid=base64_decode($this->_getParam('subid'));
+			$courseid=base64_decode($this->_getParam('courseid'));
+			$curid=base64_decode($this->_getParam('curid'));
+			$turno=base64_decode($this->_getParam('turno'));
+			
+			$base_faculty 	=	new Api_Model_DbTable_Faculty();
+			$base_speciality = 	new Api_Model_DbTable_Speciality();
+			$base_course = 	new Api_Model_DbTable_Course();
+			$base_course_x_teacher = 	new Api_Model_DbTable_Coursexteacher();
+			$base_register_course = 	new Api_Model_DbTable_Registrationxcourse();
+			
+			$where = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,); 
+			
+			$info_speciality = 	$base_speciality->_getOne($where);
+
+			if ($info_speciality['parent'] != "") {
+				$where['escid']=$info_speciality['escid'];
+				$name_speciality = $base_speciality->_getOne($where);
+				$info_speciality['speciality'] = $name_speciality['name'];
+			}
+
+			$where ['facid'] = $info_speciality['facid'];
+			$name_faculty = $base_faculty->_getOne($where);
+			$info_speciality['name_faculty'] = $name_faculty['name'];
+
+			$this->view->info_speciality = $info_speciality;
+			$this->_helper->layout()->disableLayout();		
+		} catch (Exception $e) {
+			print "Error print constancy".$e->getMessage();
+		}
+	}
+	public function printrecordAction(){
+		try {
+			
+		} catch (Exception $e) {
+			print "Error print record".$e->getMessage();
+		}
+	}
+
 }

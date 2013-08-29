@@ -100,7 +100,9 @@ class Curricula_ShowController extends Zend_Controller_Action
             $where['escid']=$escid;
             $where['subid']=$subid;
             $where['curid']=$curid;
+
             $curricula=$cur->_getOne($where);
+            
             $this->view->curricula=$curricula;
             $curidant=$cur->_getCurriculaAnterior($curid,$escid);
             $this->view->curidant=$curidant[0]['curricula_ant'];
@@ -122,6 +124,45 @@ class Curricula_ShowController extends Zend_Controller_Action
 
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function printAction() 
+    {
+        try
+        {
+            //$this->_helper->layout()->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $uid_update = $this->sesion->uid;
+            $f_update = date("Y-m-d");
+
+            $escid=base64_decode($this->_getParam('escid'));
+            $subid=base64_decode($this->_getParam('subid'));
+            $curid=base64_decode($this->_getParam('curid'));
+            $state=base64_decode($this->_getParam('state'));
+
+            $this->view->eid=$eid;
+            $this->view->oid=$oid;
+            $this->view->escid=$escid;
+            $this->view->subid=$subid;
+            $this->view->curid=$curid;
+            $this->view->state=$state;
+            $bdcurricula = new Api_Model_DbTable_Curricula();
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['escid']=$escid;
+            $where['subid']=$subid;
+            $where['curid']=$curid;
+            $lcurricula=$bdcurricula->_getOne($where);
+            $this->view->nombre_curricula=$lcurricula["name"];
+
+            $semestre=$bdcurricula->_getSemesterXCurricula($curid,$subid,$escid,$oid,$eid);
+           $this->view->semestre=$semestre;  
+        }
+        catch (Exception $ex)
+        {
+            print "Error: Cargar Curriculas".$ex->getMessage();
         }
     }
 

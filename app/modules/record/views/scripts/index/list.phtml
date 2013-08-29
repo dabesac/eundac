@@ -1,3 +1,51 @@
+<style type="text/css">
+	.modal-dialog
+	{
+		width: 900px;
+	}
+</style>
+<script >
+	function detalle_acta($this){
+		var $record = {};
+
+		$record[$.base64.encode('courseid')] = $.base64.encode($.trim($($this).attr('courseid')));
+		$record[$.base64.encode('turno')] = $.base64.encode($.trim($($this).attr('turno')));
+		$record[$.base64.encode('curid')] = $.base64.encode($.trim($($this).attr('curid')));
+		$record[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
+		$record[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
+		$record[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
+		$record[$.base64.encode('state')] = $.base64.encode($.trim($($this).attr('state')));
+		$record[$.base64.encode('closure')] = $.base64.encode($.trim($($this).attr('closure')));
+		$record[$.base64.encode('typea')] = $.base64.encode($.trim($($this).attr('typea')));
+
+		var result='';
+
+		for(var pro in $record){
+			result += '' + pro + '/' + $record[pro]+ '/';
+		}
+        result = result.substring(0, result.length-1);
+        var $url = '/record/index/detail/'+ result;
+        $("#modal").modal('show');
+        $(".modal-body").load($url);
+	}
+</script>
+
+<div class="modal fade" id='modal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Salir</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <?php 
 $stateperiod = $this->stateperiod;
 $strprint = "/record/index/printavence/"
@@ -51,6 +99,7 @@ $strprint = "/record/index/printavence/"
 			$perid_cy=base64_encode($course['perid']);
 			
 			$urldetaul = "perid/$perid_cy/escid/$escid_cy/subid/$subid_cy/courseid/$courseid_cr/curid/$curid_cy/turno/$turno_cy";
+
 			$date=($course['closure_date']);
 			$type = ($course['type_rate']=="O")?"Objetivo":"Competencia";
 			$stater = $course['state_record'];
@@ -84,15 +133,22 @@ $strprint = "/record/index/printavence/"
 		<td class="center"><span class="glyphicon <?php echo $sp?> txthover"
 		data-toggle="tooltip" title="Estado del segundo parcial"></span></td>
 		<td><?php echo $date;?></td>
-		<td class="center">
-		<a href="#" onclick=" javascript:
-				window.open('/record/index/detail/<?php echo $urldetaul?>',
-				'Detalle de Asignatura',
-				'width=800,height=600,menubar=no,resizable=yes,toolbar=no,scrollbars=yes');
-			">
-		<span class="glyphicon glyphicon-folder-open txthover" 
-		data-toggle="tooltip" title="Ver detalles del acta"></span>
-		</a></td>
+		<td>
+			<button type="button" 
+			class="btn btn-primary btn-xs"
+			courseid="<?php echo $course['courseid']?>"
+			turno="<?php echo $course['turno']?>"
+			curid="<?php echo $course['curid']?>"
+			escid="<?php echo $course['escid']?>"
+			subid="<?php echo $course['subid']?>"
+			perid="<?php echo $course['perid']?>"
+			state="<?php echo $course['state_record']?>"
+			closure="<?php echo $course['closure_date']?>"
+			typea="<?php echo $course['type_rate']?>"
+			onclick="detalle_acta(this)"
+			>
+			<span class='glyphicon glyphicon-edit'></span> Detalle Acta</button>
+		</td>
 		<td class="center"  rowspan="2">
 			<?php 
 			switch ($course['state_record']){
@@ -104,8 +160,33 @@ $strprint = "/record/index/printavence/"
 		</td>
 	</tr>	
 	<tr>
-		<th colspan="2">OPERACIONES</th>
-		<td colspan="9" >skjdlksjfkld</td>
+		<th colspan="7" class='text-right'>
+			OPERACIONES
+		</th>
+		<td colspan='4'>
+			<div class="btn-group pull-right" >
+			  <button type="button" class="btn btn-xs btn-info">
+			  	<span class='glyphicon glyphicon-print'>
+			  </span> Impreciones</button>
+			  <button type="button" class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown">
+			    <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" role="menu">
+			    <li><a href="<?php echo $urldetaul?>" >Resumen de Notas</a></li>
+			    <li><a href="/record/index/printconstancy/<?php echo $urldetaul?>">Constancia</a></li>
+			    <li class="divider"></li>
+			    <li><a href="<?php echo $urldetaul?>">Acta</a></li>
+			    <li><a href="<?php echo $urldetaul?>">Acta Reverso</a></li>
+			    <li><a href="<?php echo $urldetaul?>">Acta sin Notas</a></li>
+			    <li class="divider"></li>
+			    <li><a href="<?php echo $urldetaul?>">Registro</a></li>
+			    <li><a href="<?php echo $urldetaul?>">Regitro Reverso</a></li>
+			    <li><a href="<?php echo $urldetaul?>">Registro sin Notas</a></li>
+			    <li><a href="<?php echo $urldetaul?>">Registro sin Procentaje	</a></li>
+
+			  </ul>
+			</div>
+		</td>
 	</tr>		
 			<?php 
 			}
@@ -114,6 +195,7 @@ $strprint = "/record/index/printavence/"
 		Ni hay ningun dato
 	<?php } ?>
 </table>
+
 <script>
 	$("#openwindows").click(function (){
 		var perid=$("#perid").val();

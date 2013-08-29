@@ -46,7 +46,7 @@ if ($this->nodata=="1") { ?>
 						<a href="/admin/bankpayments/assign/uid/<?php echo $recibos['code_student'] ?>/perid/<?php echo $recibos['perid'] ?>/num_operacion/<?php echo $recibos['operation'] ?>"><span class="glyphicon glyphicon-pencil"></span></a>
 					<?php
 					}else{ ?>
-						<a id="desasignar" href="/admin/bankpayments/remove/uid/<?php echo $recibos['code_student']?>/num_operacion/<?php echo $recibos['operation']?>" onclick="return confirm('Esta seguro de anular la asignación del pago.')"><span class="glyphicon glyphicon-pencil"></a>
+						<a id="desasignar" href="/admin/bankpayments/remove/uid/<?php echo $recibos['code_student']?>/num_operacion/<?php echo $recibos['operation']?>" onclick="return confirm('Esta seguro de anular la asignación del pago.')"><span class="glyphicon glyphicon-remove"></a>
 					<?php }
 					?>
 				</td>
