@@ -77,7 +77,46 @@ class Profile_PublicController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            print_r("Work Controller");
+
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+
+    public function studentacademicAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
+
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+
+    public function studentstatisticAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
+
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+
+    public function studentlaboralAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
+
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+
+    public function studentinterestAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
 
         }catch(exception $e){
             print "Error : ".$e->getMessage();

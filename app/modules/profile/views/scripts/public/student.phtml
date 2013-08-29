@@ -27,9 +27,7 @@
 
   <div class="tab-content" id="tabcon">
     <div class="tab-pane active" id="info">
-      <div id="datastudent">
-
-      </div>
+      
     </div><!-- tab info -->
 
     <div class="tab-pane" id="signin">
@@ -49,26 +47,10 @@
 <script>
   $("#info").load("/profile/public/studentinfo");
   $('#profileTab a').click(function (e) {
+    $("#info").load("/profile/public/studentinfo");
     e.preventDefault()
     $(this).tab('show')
     $("#masinfoTab a:last").tab('show')
-  })
-
-  $("#btnfamily").click(function(){
-    $("#datastudent").html("");
-    $("#datastudent").html("<h4>Work Academic</h4>");
-  })
-
-  $("#btnacademic").click(function(){
-    $("#datastudent").html("<h4>Work Academic</h4>");
-  })
-
-  $("#btnlaboral").click(function(){
-    $("#datastudent").html("<h4>Work Laboral</h4>");
-  })
-
-  $("#btninters").click(function(){
-    $("#datastudent").html("<h4>Work Intersting</h4>");
   })
 </script>
 
