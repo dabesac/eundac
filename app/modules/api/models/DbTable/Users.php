@@ -44,7 +44,6 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 	public function _getInfoUser($where=null)
 	{
 		try{
-			// print_r($where); exit();	
 			if ($where['eid']=="" || $where['oid']=="" || $where['escid']=="" || $where['subid']=="" 
 				|| $where['uid']=="" || $where['pid']=="") return false;
 			
