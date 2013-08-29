@@ -1,0 +1,139 @@
+<div style="margin-top:20px">
+    <table class="table table-condensed table-striped table-hover">
+        <tr>
+            <th><center>#</center></th>       
+            <th><center>Código</center></th>
+            <th>Apellidos y Nombres</th>
+            <th><center>Estado</center></th>
+            <th><center>Categoria</center></th>       
+            <th><center>Condición</center></th>       
+            <th><center>Dedicación</center></th>       
+            <th><center>Asignar Curso</center></th>
+        </tr>
+        <?php
+        $i=1;
+        if ($this->teachers){                
+            foreach ($this->teachers as $teachers){ ?>
+                <tr>
+                    <td><center><?php echo $i?></center></td>    
+                    <td><center><?php echo $teachers['uid']?></center></td>
+                    <td>
+                        <?php echo $teachers['last_name0']." ".$teachers['last_name1'].", ".$teachers['first_name']?>
+                    </td>
+                    <td>
+                        <center>
+                        <?php 
+                        if($teachers['state']=='A'){ ?>
+                            <a href="#" id='stateprac_<?php echo $i?>' dat="<?php echo $teachers['uid'].";--;".$teachers['escid'].";--;".$teachers['pid'].";--;".$teachers['subid'].";--;I"?>">
+                                <img src="/img/circulo-verde.png" width="20" height="20" rel="tooltip" title="Inhabilitar Docente">
+                            </a>
+                        <?php
+                        }else{ ?> 
+                            <a href="#" id='stateprac_<?php echo $i?>' dat="<?php echo $teachers['uid'].";--;".$teachers['escid'].";--;".$teachers['pid'].";--;".$teachers['subid'].";--;A"?>">
+                                <img src="/img/circulo-rojo.png" width="20" height="20" rel="tooltip" title="Habilitar Docente">
+                            </a>
+                        <?php 
+                        } ?>
+                        </center>
+                        <script type="text/javascript">
+                            $("#stateprac_<?php echo $i?>").click(function(){
+                                var distid="<?php echo $this->distid?>";
+                                var perid="<?php echo $this->perid?>";
+                                var tipo=$(this).attr('dat');
+                                var tmp=tipo.split(";--;");
+                                var uid=tmp[0];
+                                var escid=tmp[1];
+                                var pid=tmp[2];
+                                var subid=tmp[3];
+                                var content=tmp[4];
+                                var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/STA";
+                                // alert(url);
+                                $("#chargepracticeteacher").load(url);
+                            });
+                        </script>
+                    </td>
+                    <td><?php echo $teachers['category']?></td>
+                    <td>
+                        <select id="condisionprac_<?php echo $i?>" class="form-control">
+                            <option value="">- Seleccione -</option> 
+                            <?php 
+                            $condi = array('Contratado','Ordinario');
+                            for ($c=0; $c < 2; $c++) { 
+                                $selected=($teachers['condision']==strtoupper($condi[$c]))? "selected":"";?>
+                                <option value="<?php echo $teachers['uid'].";--;".$teachers['escid'].";--;".$teachers['pid'].";--;".$teachers['subid'].";--;".strtoupper($condi[$c])?>" <?php echo $selected?>><?php echo $condi[$c]?></option>
+                                <?php
+                            }?>
+                        </select>
+                    </td>
+                    <script>
+                        $("#condisionprac_<?php echo $i?>").change(function(){
+                            var distid="<?php echo $this->distid?>";
+                            var perid="<?php echo $this->perid?>";
+                            var tipo = $(this).val();
+                            if (tipo=="") {
+                                alert("Seleccione una Condición.");
+                                return false;
+                            };
+                            var tmp=tipo.split(";--;");
+                            var uid=tmp[0];
+                            var escid=tmp[1];
+                            var pid=tmp[2];
+                            var subid=tmp[3];
+                            var content=tmp[4];
+                            var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/CON";
+                            // alert(url);
+                            $("#chargepracticeteacher").load(url); 
+                        });
+                    </script>
+                    <td>
+                        <select id="dedicacionprac_<?php echo $i?>" class="form-control">
+                            <option value="">- Seleccione -</option> 
+                            <?php
+                            $dedi[0]['val']='TIEMPOCOMPLETO';
+                            $dedi[0]['name']='Tiempo Completo';
+                            $dedi[1]['val']='DEDICACIONEXCLUSIVA';
+                            $dedi[1]['name']='Dedicación Exclusiva';
+                            $dedi[2]['val']='TIEMPOPARCIAL';
+                            $dedi[2]['name']='Tiempo Parcial';
+                            for ($c=0; $c < 3; $c++) { 
+                                $selected=($teachers['dedication']==strtoupper($dedi[$c]['val']))? "selected":"";?>
+                                <option value="<?php echo $teachers['uid'].";--;".$teachers['escid'].";--;".$teachers['pid'].";--;".$teachers['subid'].";--;".$dedi[$c]['val']?>" <?php echo $selected?>><?php echo $dedi[$c]['name']?></option>
+                                <?php
+                            } ?>
+                        </select>
+                    </td> 
+                    <script>
+                        $("#dedicacionprac_<?php echo $i?>").change(function(){
+                            var distid="<?php echo $this->distid?>";
+                            var perid="<?php echo $this->perid?>";
+                            var tipo = $(this).val();
+                            if (tipo=="") {
+                                alert("Seleccione una Dedicación.");
+                                return false;
+                            };
+                            var tmp=tipo.split(";--;");
+                            var uid=tmp[0];
+                            var escid=tmp[1];
+                            var pid=tmp[2];
+                            var subid=tmp[3];
+                            var content=tmp[4];                                         
+                            var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/DED";
+                            // alert(url);
+                            $("#chargepracticeteacher").load(url); 
+                        });
+                    </script>
+                    <td>
+                        <center><a href="#" onclick="javascript: window.open('/distribution/distribution/asignacioncursos/uid/<?php print $teachers['uid']?>/pid/<?php print $teachers['pid'] ?>/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid?>/subid/<?php echo $this->subid?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=900,height=720')"  rel="tooltip" title="Asignar Asignaturas"><span class="glyphicon glyphicon-edit"></span></a></center>
+                    </td>
+                </tr>
+                <?php
+            $i++;   
+            }
+        } ?>
+    </table>
+</div>
+<div id='chargepracticeteacher'></div>
+<script type="text/javascript">
+$('img[rel=tooltip]').tooltip();
+$('a[rel=tooltip]').tooltip();
+</script>

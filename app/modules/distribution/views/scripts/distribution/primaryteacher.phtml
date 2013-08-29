@@ -1,0 +1,170 @@
+<div style="margin-top:20px">
+    <table class="table table-condensed table-striped table-hover">
+        <tr>
+            <th><center>#</center></th>       
+            <th><center>Código</center></th>
+            <th>Apellidos y Nombres</th>
+            <th><center>Estado</center></th>
+            <th><center>Categoria</center></th>       
+            <th><center>Condición</center></th>       
+            <th><center>Dedicación</center></th>       
+            <th><center>Asignar Curso</center></th>
+        </tr>
+        <?php
+        $i=1;
+        if ($this->teacher){                
+            foreach ($this->teacher as $teacher){ ?>
+                <tr>
+                    <td><center><?php echo $i?></center></td>    
+                    <td><center><?php echo $teacher['uid']?></center></td>
+                    <td>
+                        <?php echo $teacher['last_name0']." ".$teacher['last_name1'].", ".$teacher['first_name']?>
+                    </td>
+                    <td>
+                        <center>
+                        <?php 
+                        if($teacher['state']=='A'){ ?>
+                            <a href="#" id='state_<?php echo $i?>' dat="<?php echo $teacher['uid'].";--;".$teacher['escid'].";--;".$teacher['pid'].";--;".$teacher['subid'].";--;I"?>">
+                                <img src="/img/circulo-verde.png" width="20" height="20" rel="tooltip" title="Inhabilitar Docente">
+                            </a>
+                        <?php
+                        }else{ ?> 
+                            <a href="#" id='state_<?php echo $i?>' dat="<?php echo $teacher['uid'].";--;".$teacher['escid'].";--;".$teacher['pid'].";--;".$teacher['subid'].";--;A"?>">
+                                <img src="/img/circulo-rojo.png" width="20" height="20" rel="tooltip" title="Habilitar Docente">
+                            </a>
+                        <?php 
+                        } ?>
+                        </center>
+                        <script type="text/javascript">
+                            $("#state_<?php echo $i?>").click(function(){
+                                var distid="<?php echo $this->distid?>";
+                                var perid="<?php echo $this->perid?>";
+                                var tipo=$(this).attr('dat');
+                                var tmp=tipo.split(";--;");
+                                var uid=tmp[0];
+                                var escid=tmp[1];
+                                var pid=tmp[2];
+                                var subid=tmp[3];
+                                var content=tmp[4];
+                                var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/STA";
+                                // alert(url);
+                                $("#chargeteacher").load(url);
+                            });
+                        </script>
+                    </td>
+                    <td>
+                        <select id="category_<?php echo $i?>" class="form-control">
+                            <option value="">- Seleccione -</option> 
+                            <?php
+                            $catego = array('Asociado','Principal','Auxiliar');
+                            for ($c=0; $c < 3; $c++) { 
+                                $selected=($teacher['category']==strtoupper($catego[$c]))? "selected":""; ?>
+                                <option value="<?php echo $teacher['uid'].";--;".$teacher['escid'].";--;".$teacher['pid'].";--;".$teacher['subid'].";--;".strtoupper($catego[$c])?>" <?php echo $selected?>><?php echo $catego[$c]?></option>
+                                <?php
+                            }?>
+                        </select>
+                    </td> 
+                    <script>
+                        $("#category_<?php echo $i?>").change(function(){
+                            var distid="<?php echo $this->distid?>";
+                            var perid="<?php echo $this->perid?>";
+                            var tipo = $(this).val();
+                            if (tipo=="") {
+                                alert("Seleccione una Categoria.");
+                                return false;
+                            };
+                            var tmp=tipo.split(";--;");
+                            var uid=tmp[0];
+                            var escid=tmp[1];
+                            var pid=tmp[2];
+                            var subid=tmp[3];
+                            var content=tmp[4];                                         
+                            var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/CAT";
+                            // alert(url);
+                            $("#chargeteacher").load(url);
+                        });
+                    </script>
+                    <td>
+                        <select id="condision_<?php echo $i?>" class="form-control">
+                            <option value="">- Seleccione -</option> 
+                            <?php 
+                            $condi = array('Contratado','Ordinario');
+                            for ($c=0; $c < 2; $c++) { 
+                                $selected=($teacher['condision']==strtoupper($condi[$c]))? "selected":"";?>
+                                <option value="<?php echo $teacher['uid'].";--;".$teacher['escid'].";--;".$teacher['pid'].";--;".$teacher['subid'].";--;".strtoupper($condi[$c])?>" <?php echo $selected?>><?php echo $condi[$c]?></option>
+                                <?php
+                            }?>
+                        </select>
+                    </td>
+                    <script>
+                        $("#condision_<?php echo $i?>").change(function(){
+                            var distid="<?php echo $this->distid?>";
+                            var perid="<?php echo $this->perid?>";
+                            var tipo = $(this).val();
+                            if (tipo=="") {
+                                alert("Seleccione una Condición.");
+                                return false;
+                            };
+                            var tmp=tipo.split(";--;");
+                            var uid=tmp[0];
+                            var escid=tmp[1];
+                            var pid=tmp[2];
+                            var subid=tmp[3];
+                            var content=tmp[4];
+                            var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/CON";
+                            // alert(url);
+                            $("#chargeteacher").load(url); 
+                        });
+                    </script>
+                    <td>
+                        <select id="dedicacion_<?php echo $i?>" class="form-control">
+                            <option value="">- Seleccione -</option> 
+                            <?php
+                            $dedi[0]['val']='TIEMPOCOMPLETO';
+                            $dedi[0]['name']='Tiempo Completo';
+                            $dedi[1]['val']='DEDICACIONEXCLUSIVA';
+                            $dedi[1]['name']='Dedicación Exclusiva';
+                            $dedi[2]['val']='TIEMPOPARCIAL';
+                            $dedi[2]['name']='Tiempo Parcial';
+                            for ($c=0; $c < 3; $c++) { 
+                                $selected=($teacher['dedication']==strtoupper($dedi[$c]['val']))? "selected":"";?>
+                                <option value="<?php echo $teacher['uid'].";--;".$teacher['escid'].";--;".$teacher['pid'].";--;".$teacher['subid'].";--;".$dedi[$c]['val']?>" <?php echo $selected?>><?php echo $dedi[$c]['name']?></option>
+                                <?php
+                            } ?>
+                        </select>
+                    </td> 
+                    <script>
+                        $("#dedicacion_<?php echo $i?>").change(function(){
+                            var distid="<?php echo $this->distid?>";
+                            var perid="<?php echo $this->perid?>";
+                            var tipo = $(this).val();
+                            if (tipo=="") {
+                                alert("Seleccione una Dedicación.");
+                                return false;
+                            };
+                            var tmp=tipo.split(";--;");
+                            var uid=tmp[0];
+                            var escid=tmp[1];
+                            var pid=tmp[2];
+                            var subid=tmp[3];
+                            var content=tmp[4];                                         
+                            var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/DED";
+                            // alert(url);
+                            $("#chargeteacher").load(url); 
+                        });
+                    </script>
+                    <td>
+                        <center><a href="#" onclick="javascript: window.open('/distribution/distribution/assigncourses/uid/<?php print base64_encode($teacher['uid'])?>/pid/<?php print base64_encode($teacher['pid'])?>/escid/<?php print base64_encode($teacher['escid'])?>/distid/<?php echo base64_encode($this->distid)?>/perid/<?php echo base64_encode($this->perid)?>/subid/<?php echo base64_encode($this->subid)?>','Asignación Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=900,height=720')"  rel="tooltip" title="Asignar Asignaturas"><span class="glyphicon glyphicon-edit"></span></a></center>
+                    </td>
+                </tr>
+                <?php
+            $i++;   
+            }
+        } ?>
+    </table>
+</div>
+<div id='chargeteacher'></div>
+<script type="text/javascript">
+$('img[rel=tooltip]').tooltip();
+$('a[rel=tooltip]').tooltip();
+</script>

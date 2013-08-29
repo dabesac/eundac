@@ -1,0 +1,11 @@
+<?php 
+if ($this->courses) { ?>
+    <option value="">Seleccione Asignatura</option><?php
+    foreach ($this->courses  as $curso){ ?>
+        <option value="<?php echo $curso['courseid'].";--;".$curso['semid'].";--;".$curso['turno']?>"><?php echo $curso['courseid']." | ".$curso['name']." | ".$curso['turno']?> </option>
+        <?php 
+    }
+}else { ?>
+    <option value="">Ninguna Asignatura</option>
+<?php
+}?>

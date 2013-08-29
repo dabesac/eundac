@@ -19,8 +19,8 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 	public function _update($data,$pk)
 	{
 		try{
-			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' || $pk['pid']=='' ) return false;
-			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and pid='".$pk['pid']."'";
+			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' || $pk['pid']==''  || $pk['uid']=='') return false;
+			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and pid='".$pk['pid']."' and uid='".$pk['uid']."'";
 			return $this->update($data, $where);
 			return false;
 		}catch (Exception $e){
@@ -44,7 +44,6 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 	public function _getInfoUser($where=null)
 	{
 		try{
-			// print_r($where); exit();	
 			if ($where['eid']=="" || $where['oid']=="" || $where['escid']=="" || $where['subid']=="" 
 				|| $where['uid']=="" || $where['pid']=="") return false;
 			
@@ -136,7 +135,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
             if ($where['eid']=="" || $where['oid']=="" || $where['rid']=="" || $where['escid']=="" || $where['state']=="") return false;
 			$select = $this->_db->select()
 			->from(array('p' => 'base_person'),array('p.pid','numdoc','p.last_name0','p.last_name1','p.first_name','p.birthday'))
-				->join(array('u' => 'base_users'),'u.eid= p.eid and u.pid=p.pid', array('u.uid','u.escid','u.eid','u.oid','u.subid'))
+				->join(array('u' => 'base_users'),'u.eid= p.eid and u.pid=p.pid', array('u.uid','u.escid','u.eid','u.oid','u.subid','u.state'))
 				->where('u.eid = ?', $where['eid'])
 				->where('u.oid = ?', $where['oid'])
 				->where('u.state = ?', $where['state'])

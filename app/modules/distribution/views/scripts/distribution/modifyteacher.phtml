@@ -1,0 +1,14 @@
+<script type="text/javascript">
+var state="<?php echo $this->state?>";
+if (state=="1") {
+	var perid="<?php echo $this->perid?>";
+	var escid="<?php echo $this->escid?>";
+	var subid="<?php echo $this->subid?>";
+	var distid="<?php echo $this->distid?>";
+
+	$("#primaryteacher").html("<img src='/img/spinner.gif'>Cargando...");
+	$("#primaryteacher").load("/distribution/distribution/primaryteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
+	$("#practiceteacher").html("<img src='/img/spinner.gif'>Cargando...");
+	$("#practiceteacher").load("/distribution/distribution/practiceteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
+};
+</script>

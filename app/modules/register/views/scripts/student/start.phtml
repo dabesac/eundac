@@ -241,7 +241,7 @@
 			<div class='col-md-6'>
 				<?php if ($this->state == "B") { ?> 
 					
-					<a href="#" class='btn btn-success pull-left' id='pre_register'
+					<a href="#" class='btn btn-success' id='pre_register'
 					   	total="<?php echo $this->total_credits?>"
 					   	regid='<?php echo $this->regid?>'
 						escid='<?php echo $this->escid?>'
@@ -249,7 +249,8 @@
 						perid='<?php echo $this->perid?>'
 						onclick='registration(this)'
 					><span class='glyphicon glyphicon-ok'></span> Guardar Pre Matricula</a>
-					<!-- <a href="#" class='btn btn-success'><span class='glyphicon glyphicon-repeat'></span> Actulizar Pago</a> -->
+
+					<a href="/register/student" class='btn btn-success'><span class='glyphicon glyphicon-repeat'></span> Actulizar Pago</a>
 				<?php }?>
 			
 				<?php if ($this->state == "I") { 
