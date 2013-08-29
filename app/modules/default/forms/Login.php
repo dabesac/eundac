@@ -37,7 +37,7 @@ class Default_Form_Login extends Zend_Form
         $rid->removeDecorator('HtmlTag')->addFilters(array('StringTrim', 'StripTags'));
         $rid->setAttrib("class","form-control");
         $rids = new Api_Model_DbTable_Rol();
-        $rrows_oids=$rids->_getAll($data);
+        $rrows_oids=$rids->_getAllACL($data);
         if ($rrows_oids){
         	foreach ($rrows_oids as $_rid ){
         		$rid->addMultiOption(base64_encode($_rid['rid']).";--;".$_rid['prefix'],$_rid['name']);

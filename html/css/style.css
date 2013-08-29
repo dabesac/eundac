@@ -34,12 +34,7 @@ input.error {
 	font-size: 10px;
 }
 
-.control-top{
-	background: url(../img/left.png) !important;
-	padding: 0px;
-	margin: 0px;
-	min-height: 580px;
-}
+
 
 .control-info{
 	color: #e0e0e0;
@@ -101,12 +96,19 @@ margin: 0px;
 /*Basic reset*/
 * {margin: 0; padding: 0;}
 
+.control-top{
+	background: #AEB7DB;/*url(../img/left.png) !important;*/
+	padding: 0px;
+	margin: 0px;
+	min-height: 580px;
+	
+}
 
 #accordian {
-	background: #2f2f3f;
+	background: #939AB5;
 	width: 210px;
 	margin : auto;
-	color: white;
+	color: #fff;
 	/*Some cool shadow and glow effect*/
 	box-shadow: 
 		0 5px 15px 1px rgba(0, 0, 0, 0.6), 
@@ -117,10 +119,11 @@ margin: 0px;
 	font-size: 12px;
 	line-height: 34px;
 	padding: 0 10px;
+	
 	cursor: pointer;
 	/*fallback for browsers not supporting gradients*/
-	background: #1d1d1d; 
-	background: linear-gradient(#1d1d1d, #070707);
+	background: #003545; 
+	background: linear-gradient(#003545, #1F4E5B);
 }
 /*heading hover effect*/
 #accordian h3:hover {
@@ -139,7 +142,7 @@ margin: 0px;
 #accordian ul ul li a {
 	color: white;
 	text-decoration: none;
-	font-size: 11px;
+	font-size: 12px;
 	line-height: 27px;
 	display: block;
 	padding: 0 15px;

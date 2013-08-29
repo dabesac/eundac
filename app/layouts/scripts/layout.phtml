@@ -73,7 +73,7 @@ $(document).ready(function(){
 	    	<div id="accordian">
 	    		<ul>
 	    			<li>
-	    				<h3><img src="/img/img2_03.jpg" class="img-rounded"> MI PERFIL</h3>
+	    				<h3><img src="/img/img2_03.jpg" class="img-rounded"> <b>MI PERFIL</b></h3>
 					</li>
 					<li>
 						<div style="padding: 5px;padding-top:0px">
@@ -96,14 +96,17 @@ $(document).ready(function(){
 				$module = $acl['module'];
 	    		?>
 		    		<li>
-					<h3><span class="icon-dashboard"></span><?php echo $acl['name']?></h3>
+					<h3><span class="icon-dashboard"></span><b>
+					<?php echo strtoupper($acl['name'])?></b></h3>
 						<ul>
 							<?php
 				    		$tacls = $acl['acls'];
 				    		foreach ($tacls as $tacl){
 							$resource = $tacl['controller'];
 							?>
-				    			<li><a href="<?php echo "/$module/$resource"?>"><?php echo $tacl['name']?></a></li>
+				    			<li><a href="<?php echo "/$module/$resource"?>">
+				    			<?php echo strtoupper($tacl['name'])?>
+				    			</a></li>
 							<?php 
 							} 
 						?>
