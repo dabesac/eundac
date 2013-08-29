@@ -1,0 +1,147 @@
+<table class="table table-condensed table-striped">
+  <thead>
+  <tr>
+    <td>
+        <tr> 
+          <div class='alert alert-success ' style="font-family:arial;font-size:20px;">
+          <center><b>HISTORIAL - FECHAS SUBIDAS</b></center> </div>
+          <center><div id="fechas" name="fechas" > </div></center>
+        </tr>
+    </td>
+  </tr>
+    <tr>
+         <td>
+        <center>
+    <a href="#myModal11" role="button" class="btn btn-primary new_cur" data-toggle="modal"
+    ><span class='glyphicon glyphicon-plus'></span> Cargar Recibos</a> </center>
+        </td>
+    </tr>
+  </thead>
+</table>
+<?php
+$i=0;
+array($a);
+    foreach ( $this->listarrecibos as $recibo) {
+        $a[$i]=$recibo['payment_date'];
+        $i++;
+    }
+?>
+
+
+<div class="modal fade" id="myModal11" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close " data-dismiss="modal" aria-hidden="true"></button>
+          <h4 class="modal-title"><center><b>CARGA DE RECIBOS:</b></center></h4>
+        </div>
+        <div class="modal-body cont_new_cur">
+          <table class="table table-striped">
+  <tr>
+    <th>Fecha a Subir:
+      <td>
+        <input id="fecha" type="text" name="fecha" class="form-control" title="Fecha Recibo Banco">
+      </td>
+    </th>
+
+  </tr>
+  <tr>
+    <th >Turno :
+      <td>
+      <select id="turno" class="form-control">
+        <option value="1">Mañana</option>
+        <option value="2">Tarde</option>
+      </select>
+    </td>
+    </th>
+    
+  </tr>
+  <tr>
+    <td colspan="2">
+      <div id='cargar'></div>
+    </td>
+  </tr>
+
+</table>
+          
+        </div>
+        <div style='background: #333; color:#fff;' class="modal-footer">
+            <button type="button" class="btn btn-danger close_new_cur" data-dismiss="modal"><span  class='glyphicon glyphicon-remove'></span></button>
+            <button id="load" type="button" class="btn btn-success save_curri">
+        <span  class='glyphicon glyphicon-floppy-disk'></span>
+       </button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script>
+
+    $(function() {
+        $( "#fechas" ).datepicker({
+            inline:true,
+            minDate: new Date(2013, 0, 1),
+            maxDate: new Date(2013, 9, 31),
+            dateFormat: 'yy-mm-dd',
+            beforeShowDay: fechitas
+        })
+            .bind(
+            'dateSelected',
+            function(e,selectedDate, $td)
+            {
+                console.log('esta es la fecha' + selectedDate);
+            }
+        );
+    });
+var events=<?php echo json_encode($a);?>;
+
+function fechitas(date) {
+    var current = $.datepicker.formatDate('yy-mm-dd', date);
+    return jQuery.inArray(current, events) == -1 ? [true, 'ui-state-hover', 'ui-state-highlight'] : [false, '', 'Unavailable'];
+}
+
+$(function() {
+        $( "#fecha" ).datepicker({
+            inline:true,
+            minDate: new Date(2013, 0, 1),
+            maxDate: new Date(2013, 9, 31),
+            dateFormat: 'yy-mm-dd',
+            beforeShowDay: fechitas
+        })
+            .bind(
+            'dateSelected',
+            function(e,selectedDate, $td)
+            {
+                console.log('esta es la fecha' + selectedDate);
+            }
+        );
+    });
+var events=<?php echo json_encode($a);?>;
+
+function fechitas(date) {
+    var current = $.datepicker.formatDate('yy-mm-dd', date);
+    return jQuery.inArray(current, events) == -1 ? [true, 'ui-state-hover', 'ui-state-highlight'] : [false, '', 'Unavailable'];
+}
+
+$("#load").click(function() 
+{     
+
+  var fecha = $("#fecha").val();  
+  var turno = $("#turno").val();  
+      $("#cargar").html("<img src='/img/spinner.gif'>Cargando...");
+      $("#cargar").load("/admin/receiptsup/loadreceipts/fecha/"+fecha+"/turno/"+turno);
+
+      // alert("Se cargo los recibos correctamente.")     
+      // $("#myModal").hide();
+      // $('#myModal').modal('hide');  
+      });  
+
+</script>>
+
+
+ 
+
+
+
+
