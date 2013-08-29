@@ -146,7 +146,6 @@ $perid=$this->perid;
                 var grupos= eval($("#grupos").val());
                 var ht= eval($("#hteoria").val());
                 var hp= eval($("#hpractica").val());
-                // alert(ht);
                 // alert(hp);
                 var tt=grupos*hp+ht;
                 //alert(tt);
@@ -215,8 +214,8 @@ $perid=$this->perid;
                      $cursoid=$cursos['cursoid'];
                      $curid=$cursos['curid'];
                      $escid=$cursos['escid'];
-                     $cursill = new Admin_Model_DbTable_Cursos();
-                     $list_curso = $cursill ->_getnombreXcurso($escid,$cursoid,$curid);
+                     // $cursill = new Admin_Model_DbTable_Cursos();
+                     // $list_curso = $cursill ->_getnombreXcurso($escid,$cursoid,$curid);
                      $infocurso = $list_curso['nombre_curso']; ?>
                 <tr>
                     <td style="font-size:14px"><?php echo $i?></td>            
@@ -271,7 +270,7 @@ $perid=$this->perid;
             </li>
         </ul>
     </div>
-        <form name="<?php echo $this->fm->getName(); ?>" id="hsadmin" action="/distribucion/distribucion/guardarhorasadmin/uid/<?php echo $this->uid?>/pid/<?php echo $this->pid?>/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid?>/escid/<?php echo $this->escid?>/sedid/<?php echo $this->sedid?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+        <form name="<?php //echo $this->fm->getName(); ?>" id="hsadmin" action="/distribucion/distribucion/guardarhorasadmin/uid/<?php echo $this->uid?>/pid/<?php echo $this->pid?>/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid?>/escid/<?php echo $this->escid?>/sedid/<?php echo $this->sedid?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
         <center>
             <table style="width:90%" class="table table-condensed table-striped">
                 <tr>
@@ -280,9 +279,9 @@ $perid=$this->perid;
                      <td></td>
                 </tr>
                 <tr>
-                    <td><?php echo $this->fm->labor;?></td> 
-                    <td><?php echo $this->fm->horas;?></td> 
-                    <td><?php echo $this->fm->enviar;?></td>      
+                    <td><?php //echo $this->fm->labor;?></td> 
+                    <td><?php //echo $this->fm->horas;?></td> 
+                    <td><?php //echo $this->fm->enviar;?></td>      
                 </tr>
             </table>
         <center>
@@ -331,8 +330,8 @@ $perid=$this->perid;
     <center style="padding-left:70%">
          <table border="1" width="65%">
                <?php
-                    $distdoc = new Distribucion_Model_DbTable_Distribuciondocente();
-                    $ldistdoc = $distdoc ->_getDistribucionXDocenteXPeriodo($perid,$eid,$oid,$uid);
+                    // $distdoc = new Distribucion_Model_DbTable_Distribuciondocente();
+                    // $ldistdoc = $distdoc ->_getDistribucionXDocenteXPeriodo($perid,$eid,$oid,$uid);
                     $infothacad = $ldistdoc['t_h_acad'];
                     $infothadmin = $ldistdoc['t_h_adm'];
                     // $infothoras = $ldistdoc['nombre_curso'];
@@ -367,18 +366,16 @@ $perid=$this->perid;
             </tr>
         </table>
 </center>
-<script type="text/javascript">
+<script>
  	$("#curid").change(function(){
         var curid = $(this).val();  
-        var escid= "<?php echo $this->escid;?>";   
-        var perid= "<?php echo $this->perid;?>";   
-        var url="/distribution/distribution/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/perid/"+perid;
-        alert(url);
-        // $("#courseid").load(url);
+        var escid = "<?php echo $this->escid?>";   
+        var perid = "<?php echo $this->perid?>";   
+        var url = "/distribution/distribution/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/perid/"+perid;
+        // alert(url);
+        $("#courseid").load(url);
     }); 
-</script>
 
-<script>
 $("#agregar").click(function(){
         $("#vercursosasig").hide();
         var curid=$("#curid").val();

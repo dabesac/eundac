@@ -27,6 +27,38 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
 			print "Error: Update Curricula".$e->getMessage();
 		}
 	}
+
+    // public function _getCurriculasXSchoolXstateAT($eid='',$oid='',$escid='')
+    // {
+    //     try
+    //     {
+    //         if ($oid=="" || $eid=="" ||  $escid=="" ) return false;
+    //         $f = $this->fetchAll("eid='$eid' and oid='$oid' and escid='$escid' and (estado='A' or estado='T') ");
+    //         if ($f) return $f->toArray ();
+    //         return false;
+    //     }
+    //     catch (Exception $e)
+    //     {
+    //         print "Error: Al momento de leer las curriculas de escuela con estado A y T".$e->getMessage();
+    //     }
+    // }
+
+    public function _getCurriculasXSchoolXstateAT($where=null,$order='',$start=0,$limit=0){
+        try{
+            if($where['eid']=='' || $where['oid']=='' || $where['escid']=='')
+                $wherestr=null;
+            else
+                $wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and (state='A' or state='T')";
+            if ($limit==0) $limit=null;
+            if ($start==0) $start=null;
+            
+            $rows=$this->fetchAll($wherestr,$order,$start,$limit);
+            if($rows) return $rows->toArray();
+            return false;
+        }catch (Exception $e){
+            print "Error: Read All Course ".$e->getMessage();
+        }
+    }
 	
 	public function _delete($data)
 	{

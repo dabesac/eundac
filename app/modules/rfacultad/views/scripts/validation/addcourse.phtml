@@ -1,0 +1,109 @@
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="POST" enctype="application/x-www-form-urlencoded">
+    
+    <center><table class="table span8 table-hover">
+        <thead>
+        <tr>
+            <th class="span7"><center>BUSQUEDA DE ALUMNOS</center></th>
+        </tr>
+        <tr>
+            <td>Ingrese Codigo del Alumno que Convalidara</td>
+        </tr>
+        </thead>
+        <tr>
+            <td><?php echo $this->form->uid; ?></td>
+         </tr>
+    </table></center>
+
+
+
+    <table class="table span10 table-hover">
+        <thead>
+            <tr>
+                <th class="span1">Codigo</th>
+                <th class="span1">DNI</th>
+                <th class="span2">Nombre</th>
+                <th class="span2">Escuela</th>
+                <th class="span1">Sede</th>
+                <th class="span1">Agregar curso</th>
+                <th class="span1">Cursos Convalidados</th>
+            </tr>
+        </thead>
+  
+    <?php
+        $perids=$this->perid;
+        if ($this->usuario)
+            {
+            $i=1;
+            
+                        $pid=$this->usuario[0]['pid'];
+                        $eid=$this->usuario[0]['eid'];
+                        $oid=$this->usuario[0]['oid'];
+                        $uid=$this->usuario[0]['uid'];
+                        $escid=$this->usuario[0]['escid'];
+                        $subid=$this->usuario[0]['subid'];
+                        $where['eid']=$eid;
+                        $where['oid']=$oid;
+                        $where['escid']=$escid;
+                        $where['subid']=$subid;                    
+
+                        $dbescuela = new Api_Model_DbTable_Speciality();
+                        $escuela = $dbescuela ->_getOne($where);   
+                        $infoescuela = $escuela['name'];
+
+                        $persona = new Api_Model_DbTable_Person();
+                        $data['eid']=$eid;
+                        $data['pid']=$pid;
+                        
+                        $list_p = $persona ->_getOne($data);
+                        $info2 = $list_p['last_name0']." ".$list_p['last_name1']." ".$list_p['first_name'];
+
+            ?>  <td><?php echo $uid;?></td>
+                <td><?php echo $pid?></td>
+                <td><?php echo $info2;?></td>
+  
+                <td><?php echo $infoescuela;?></td>
+                
+                <td><?php echo $subid;?></td>
+
+               
+              
+              <td><a href="#" value= "<?php echo $this->usuario[0]['uid']?>" id="agregados"><center><span class="glyphicon glyphicon-pencil"></span></center></a></td>
+
+               <th><center><a target="black" style="float:right" class="btn btn-primary"  href="/rfacultad/validation/print/perid/<?php echo $this->perid ?>/escid/<?php echo $escid ?>/subid/<?php echo $subid ?>/uid/<?php echo $uid ?>/pid/<?php echo $pid ?>  ">Imprimir</a></center></th>
+            <?php
+    }
+    ?>
+    </table>
+    <table>
+        
+    </table>
+   
+    
+
+</form>
+
+<div id="carga_periodos_">
+  
+</div>
+        <div id="guardar"></div>
+
+
+   <script>
+    $("#agregados").click(function(){
+      var url = "/rfacultad/validation/lcontainer/uid/<?php echo $uid."/subid/".$subid."/escid/".$escid."/pid/".$pid?>/nota/<?php echo $this->nota?>/perid/<?php echo $this->perid?>/temp/<?php echo $this->temp?>";
+      $("#guardar").load(url);
+
+    });
+
+    $("#uid").keyup(function () {
+        var vuid = $(this).val();
+        if (isNaN(vuid))
+        {
+          $(this).val("");
+        }
+    });
+
+  </script>
+
+
