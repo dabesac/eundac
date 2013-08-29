@@ -65,4 +65,18 @@ class Api_Model_DbTable_Bankreceipts extends Zend_Db_Table_Abstract
 		}
 	}
 
+	   public function _getbankreceiptsXAnio($anio='')
+    {
+        try 
+        {
+            if($anio=='') return false;    
+            $sql=$this->_db->query("
+                select distinct payment_date from base_bankreceipts where extract(year from payment_date )='$anio' order by payment_date
+                ");
+            return $sql->fetchAll();
+        } catch (Exception $ex) {
+            print "Error: Lecturando el registro de Recibos".$ex->getMessage();
+        }
+    }
+
 }

@@ -83,7 +83,7 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
 	}
 
   //Retorna dos periodos respectivos
-  public function _getPeriodsXAyB($where){
+     public function _getPeriodsXAyB($where){
             try{
             if ($where['eid']=="" || $where['oid']=="" || $where['p1']=="" || $where['p2']=="") return false;
 			$wherestr="eid='".$where['eid']."' and oid='".$where['oid']."' and (perid='".$where['p1']."' or perid='".$where['p2']."')";
@@ -92,5 +92,28 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
                 return false;
         }  catch (Exception $ex){
             phpsage(); }
-  }	
+    }
+
+    public function _getFilter($where=null,$attrib=null,$orders=null){
+		try{
+			if($where['eid']=='' || $where['oid']=='') return false;
+				$select = $this->_db->select();
+				if ($attrib=='') $select->from("base_periods");
+				else $select->from("base_periods",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				foreach ($orders as $key => $order) {
+						$select->order($order);
+				}
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+		}catch (Exception $e){
+			print "Error: Read Filter Curricula ".$e->getMessage();
+		}
+	}
+
+
 }

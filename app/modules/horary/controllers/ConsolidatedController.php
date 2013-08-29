@@ -13,6 +13,8 @@
  		$this->sesion = $login;
  		require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
+        $this->sesion->escid='4SI';
+        $this->sesion->uid='0924401019';
  	}
 
  	public function indexAction(){
@@ -41,7 +43,7 @@
  		}
  	}
 
- 	public function printhoraryAction(){
+ 	public function printconsolidatedAction(){
  		try {
  			$eid=$this->sesion->eid;
 	        $oid=$this->sesion->oid;

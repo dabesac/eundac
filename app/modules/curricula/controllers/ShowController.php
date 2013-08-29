@@ -100,7 +100,9 @@ class Curricula_ShowController extends Zend_Controller_Action
             $where['escid']=$escid;
             $where['subid']=$subid;
             $where['curid']=$curid;
+
             $curricula=$cur->_getOne($where);
+            
             $this->view->curricula=$curricula;
             $curidant=$cur->_getCurriculaAnterior($curid,$escid);
             $this->view->curidant=$curidant[0]['curricula_ant'];
