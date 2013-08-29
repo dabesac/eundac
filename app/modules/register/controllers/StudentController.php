@@ -19,7 +19,7 @@ class Register_StudentController extends Zend_Controller_Action {
     {
         // print_r($this->sesion);
         try {
-            print_r($this->sesion->infouser['pid']);
+            
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $uid=$this->sesion->uid;
@@ -39,7 +39,9 @@ class Register_StudentController extends Zend_Controller_Action {
             $base_payment= new Api_Model_DbTable_Payments();
         
 
-            if (!$base_registration->_getOne($where)) {
+            if ($base_registration->_getOne($where)) {
+            }
+            else{
                 $where['semid']=0;
                 $where['credits']=0;
                 $where['register']=$uid;
@@ -53,8 +55,10 @@ class Register_StudentController extends Zend_Controller_Action {
             }
 
             unset($where['regid']);
-            if (!$base_payment->_getOne($where)) {
-
+            if ($base_payment->_getOne($where)) {
+            }
+            else{
+                
                 $where['ratid']=20;
                 $where['amount']=0;
                 $where['register']=$uid;
@@ -300,10 +304,10 @@ class Register_StudentController extends Zend_Controller_Action {
                             $amount_assing = $t_normal;
                             break;
                         case ($f_fin_tn < $date_payment && $date_payment < $f_fin_ti1):
-                            $amount_assing = $assign_payment['v_t_incremento1'];
+                            $amount_assing = $assign_payment['t_incremento1'];
                             break;
                         case ($f_fin_ti1 < $date_payment && $date_payment < $f_fin_ti2):
-                            $amount_assing = $assign_payment['v_t_incremento2'];
+                            $amount_assing = $assign_payment['t_incremento2'];
                             break;
                         default:
                             $amount_assing = "Monto no Aceptado";
