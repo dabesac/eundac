@@ -13,8 +13,9 @@
  		$this->sesion = $login;
  		require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
-        $this->sesion->escid='4SI';
-        $this->sesion->uid='0924401019';
+        // $this->sesion->escid='2ESCL';
+        // $this->sesion->facid='2';
+        // $this->sesion->uid='0924401019';
  	}
 
  	public function indexAction(){
@@ -35,7 +36,7 @@
 	        $response = $client->restget($endpoint,$data);
 	        $lista=$response->getBody();
 	        $data = Zend_Json::decode($lista);
-        	// print_r($data);
+        	// print_r($data);exit();
         	$this->view->horarys=$data; 
  			
  		} catch (Exception $e) {
@@ -66,10 +67,24 @@
 	        $data = Zend_Json::decode($lista);
         	$this->view->horarys=$data;
         	// print_r($data);
+        	$spe=array();
         	$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
         	$esc = new Api_Model_DbTable_Speciality();
         	$desc = $esc->_getOne($where);
-        	$this->view->desc=$desc;
+        	$parent=$desc['parent'];
+        	$wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+        	$parentesc= $esc->_getOne($wher);
+        	if ($parentesc) {
+        		$pala='ESPECIALIDAD DE ';
+      			$spe['esc']=$parentesc['name'];
+      			$spe['parent']=$pala.$desc['name'];
+        		$this->view->spe=$spe;
+        	}
+        	else{
+        		$spe['esc']=$desc['name'];
+        		$spe['parent']=''; 	
+        		$this->view->spe=$spe;
+        	}
 
         	$whered=array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid);
         	$fac= new Api_Model_DbTable_Faculty();

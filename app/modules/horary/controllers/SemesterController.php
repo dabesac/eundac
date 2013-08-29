@@ -13,6 +13,8 @@ class Horary_SemesterController extends Zend_Controller_Action{
  		$this->sesion = $login;
  		require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
+   //      	$this->sesion->facid='2';
+			// $this->sesion->escid='2ESCL';
 	}
 
 	public function indexAction(){
@@ -20,8 +22,8 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		try {
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
-			// $escid=$this->sesion->escid;
-			$escid='4SI';
+			$escid=$this->sesion->escid;
+			// $escid='4SI';
 			// $perid='13B';
 			$perid=$this->sesion->period->perid;
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'perid'=>$perid);
@@ -41,9 +43,8 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			$this->view->eid=$eid;
 			$oid=$this->sesion->oid;
 			$this->view->oid=$oid;
-			// $escid=$this->sesion->escid;
+			$escid=$this->sesion->escid;
 			$semid=$this->_getParam('semid');
-			$escid='4SI';
 			// $semid='3';
 			$subid=$this->sesion->subid;
 			$perid=$this->sesion->period->perid;
@@ -87,10 +88,10 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		$this->_helper->layout()->disableLayout();
 		$eid=$this->sesion->eid;
 		$oid=$this->sesion->oid;
-		// $escid=$this->sesion->escid;
-		// $facid=$this->sesion->facid;
-		$facid='4';
-		$escid='4SI';
+		$escid=$this->sesion->escid;
+		$facid=$this->sesion->facid;
+		// $facid='4';
+		// $escid='4SI';
 		$semid=base64_decode($this->_getParam('semid'));
 		$subid=$this->sesion->subid;
 		$perid=$this->sesion->period->perid;
@@ -108,11 +109,25 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	    $data = Zend_Json::decode($lista);
      
         $this->view->horarys=$data;
-
+        $spe=array();
         $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
         $esc = new Api_Model_DbTable_Speciality();
         $desc = $esc->_getOne($where);
         $this->view->desc=$desc;
+        $parent=$desc['parent'];
+        	$wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+        	$parentesc= $esc->_getOne($wher);
+        	if ($parentesc) {
+        		$pala='ESPECIALIDAD DE ';
+      			$spe['esc']=$parentesc['name'];
+      			$spe['parent']=$pala.$desc['name'];
+        		$this->view->spe=$spe;
+        	}
+        	else{
+        		$spe['esc']=$desc['name'];
+        		$spe['parent']=''; 	
+        		$this->view->spe=$spe;
+        	}
 
         $whered=array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid);
         $fac= new Api_Model_DbTable_Faculty();
