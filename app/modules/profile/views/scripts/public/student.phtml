@@ -1,14 +1,74 @@
 <div class="col-sm-12">
-  <div class="col-sm-3">
+  <div class="col-sm-3" align="center">
     <img src="/img/img_03.jpg" title="">
   </div>
   <div class="col-sm-7">
-    <h4><?php echo $this->datos[0]['fullname']?></h4>
-    <h5>Codigo <?php echo $this->datos[0]['uid']?></h5>
-    <h5>Facultad de <?php echo $this->datos[1][0]['nomfac']." Escuela de ".$this->datos[1][0]['nomesc']?></h5>
+    <h3><?php echo $this->datos[0]['fullname']?></h3>
+    <h5>Codigo <b><?php echo $this->datos[0]['uid']?></b></h5>
+    <h4>Facultad de <?php echo $this->datos[1][0]['nomfac']." Escuela de ".$this->datos[1][0]['nomesc']?></h4>
     </div>
     <div class="col-sm-1">
       <a href="#" class="btn btn-info">Record</a>
     </div>
+    <br><br><br><br>
+    <br><br><br><br>
 </div>
+
+<div class="col-sm-9">
+  <br>
+  <ul class="nav nav-tabs" id="profileTab">
+    <li class="active"><a href="#info"><h4>Informacion</h4></a></li>
+    <li><a href="#signin"><h4>Matricula</h4></a></li>
+    <li><a href="#another"><h4>Un Tab por aqui</h4></a></li>
+    <li><a href="#andanother"><h4>Otro por aqui</h4></a></li>
+    <li><a class="hidden"></a></li>
+  </ul>
+</div>
+
+  <div class="tab-content" id="tabcon">
+    <div class="tab-pane active" id="info">
+      <div id="datastudent">
+
+      </div>
+    </div><!-- tab info -->
+
+    <div class="tab-pane" id="signin">
+      2
+    </div>
+
+    <div class="tab-pane" id="another">
+      3
+    </div>
+
+    <div class="tab-pane" id="andanother">
+      4
+    </div>
+  </div><!-- tab content -->
+
+
+<script>
+  $("#info").load("/profile/public/studentinfo");
+  $('#profileTab a').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+    $("#masinfoTab a:last").tab('show')
+  })
+
+  $("#btnfamily").click(function(){
+    $("#datastudent").html("");
+    $("#datastudent").html("<h4>Work Academic</h4>");
+  })
+
+  $("#btnacademic").click(function(){
+    $("#datastudent").html("<h4>Work Academic</h4>");
+  })
+
+  $("#btnlaboral").click(function(){
+    $("#datastudent").html("<h4>Work Laboral</h4>");
+  })
+
+  $("#btninters").click(function(){
+    $("#datastudent").html("<h4>Work Intersting</h4>");
+  })
+</script>
 
