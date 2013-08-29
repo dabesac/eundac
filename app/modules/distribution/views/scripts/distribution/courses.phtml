@@ -31,11 +31,39 @@
 					<td><center><?php echo $type?></center></td>
 					<td><center><?php echo $courses['semid']?></center></td>
 					<td>
-						<select id="typecalification" class="form-control">
+						<select id="typerate_<?php echo $i?>" class="form-control">
 							<option value="">- Seleccione -</option>
-							<option value="O">Objetivos</option>
-							<option value="C">Competencias</option>
+							<?php 
+							$types[0]['val']="C";
+							$types[0]['name']="Competencias";
+							$types[1]['val']="O";
+							$types[1]['name']="Objetivos";
+							for ($n=0; $n < 2; $n++) { 
+								$selected =($courses['type_rate']==$types[$n]['val'])? "selected":"";?>
+								<option value="<?php echo $courses['courseid'].";--;".$courses['escid'].";--;".$courses['curid'].";--;".$courses['subid'].";--;".$courses['turno'].";--;".$courses['perid'].";--;".$types[$n]['val']?>" <?php echo $selected?>><?php echo $types[$n]['name']?></option>
+								<?php
+							} ?>
 						</select>
+						<script>
+		                    $("#typerate_<?php echo $i?>").change(function(){
+		                        var tipo = $(this).val();
+		                        var tmp=tipo.split(";--;");
+		                        if (tipo=="") {
+                                	alert("Seleccione un Tipo de Calificación.");
+                                	return false;
+                            	};
+		                        var courseid=tmp[0];
+		                        var escid=tmp[1];
+		                        var curid=tmp[2];
+		                        var subid=tmp[3];
+		                        var turno=tmp[4];
+		                        var perid=tmp[5];
+		                        var type=tmp[6];
+		                        var url="/distribution/distribution/modifytypecourse/courseid/"+courseid+"/escid/"+escid+"/curid/"+curid+"/subid/"+subid+"/turno/"+turno+"/perid/"+perid+"/type/"+type;
+		                        // alert(url);
+		                        $("#loadingg").load(url); 
+		                   });
+		                  </script>
 					</td>
 					<td>
 						<center>

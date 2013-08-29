@@ -1,7 +1,6 @@
 <div class="panel panel-default" style="margin-top:15px">
   	<div class="panel-body">
     	<b style="font-size:20px"><span class="glyphicon glyphicon-user"></span> - LISTA DE DOCENTES</b>
-    	<a id="add" href="#" class="btn btn-info" style="float:right"><span class="glyphicon glyphicon-pencil"></span> <b>Agregar Asignatura</b></a>
   	</div>
 </div>
 <div>
@@ -27,13 +26,14 @@ var distid="<?php echo $this->distid?>";
 $("#primaryteacher").html("<img src='/img/spinner.gif'>Cargando...");
 $("#primaryteacher").load("/distribution/distribution/primaryteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
 
-//   $("#tab2").html("<img src='/img/spinner.gif' />Cargando....");
-//   $("#tab2").load("/distribucion/distribucion/jefepractica/escid/<?php echo $this->escid;?>/sedid/<?php echo $this->sedid;?>/perid/<?php echo $this->perid;?>/distid/<?php echo $this->distid;?>");
+$("#practiceteacher").html("<img src='/img/spinner.gif'>Cargando...");
+$("#practiceteacher").load("/distribution/distribution/practiceteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
 
-//   $("#tab3").html("<img src='/img/spinner.gif' />Cargando....");
-//   $("#tab3").load("/distribucion/distribucion/agregardocentesdistribucion/escid/<?php echo $this->escid;?>/sedid/<?php echo $this->sedid;?>/perid/<?php echo $this->perid;?>/distid/<?php echo $this->distid;?>/sedid/<?php echo $this->sedid;?>");
+$("#supportteacher").html("<img src='/img/spinner.gif' />Cargando....");
+$("#supportteacher").load("/distribution/distribution/supportteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
+
 $('#listteachers a').click(function (e) {
-  e.preventDefault()
-  $(this).tab('show')
+  	e.preventDefault()
+  	$(this).tab('show')
 });
 </script>
