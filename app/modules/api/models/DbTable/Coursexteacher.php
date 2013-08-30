@@ -65,6 +65,7 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 				foreach ($where as $atri=>$value){
 					$select->where("$atri = ?", $value);
 				}
+				
 				foreach ($orders as $key => $order) {
 						$select->order($order);
 				}
