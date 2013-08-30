@@ -83,9 +83,24 @@
       $where['oid']=$oid;
       $where['escid']=$escid;
       $where['subid']=$subid;
+      
+      $spe=array();
       $dbspeciality = new Api_Model_DbTable_Speciality();
       $speciality = $dbspeciality ->_getOne($where);
-      $this->view->speciality=$speciality;
+      $parent=$speciality['parent'];
+      $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+      $parentesc= $dbspeciality->_getOne($wher);
+        if ($parentesc) {
+          $pala='ESPECIALIDAD DE ';
+          $spe['esc']=$parentesc['name'];
+          $spe['parent']=$pala.$speciality['name'];
+          $this->view->spe=$spe;
+        }
+        else{
+          $spe['esc']=$speciality['name'];
+          $spe['parent']='';  
+          $this->view->spe=$spe;
+        }
       $whered['eid']=$eid;
       $whered['oid']=$oid;
       $whered['facid']= $speciality['facid'];
