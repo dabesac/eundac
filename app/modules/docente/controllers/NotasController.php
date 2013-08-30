@@ -12,19 +12,14 @@ class Docente_NotasController extends Zend_Controller_Action{
  		}
  		
  		$this->sesion = $login;
-		$this->uid='04000119DC';
-		$this->rid='DC';
-		$this->is_main='S';
-
 	}
 
 	public function indexAction(){
 
-		$where['uid']=$this->uid;
+		$where['uid']=$this->sesion->uid;
 		$where['perid']=$this->sesion->period->perid;
-		$where['rid']=$this->rid;
-		$where['is_main']=$this->is_main;
-		// print_r($where);
+		$where['rid']=$this->sesion->rid;
+		$where['is_main']='S';
 
 		$docente = new Api_Model_DbTable_PeriodsCourses();
 		$data = $docente->_getCourseTeacher($where);

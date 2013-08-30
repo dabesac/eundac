@@ -166,8 +166,7 @@ $("input:checkbox").change(function(){
         if (id!=valores){
             $(this).attr('value',id);
             url="/distribution/distribution/deletecourse/courseid/"+courseid+"/semid/"+semid+"/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/turno/"+turno+"/subid/"+subid;
-            alert(url);
-            // $("#loadcourses").load(url);
+            $("#loadcourses").load(url);
         }
     });
  </script>

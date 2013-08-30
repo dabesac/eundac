@@ -153,6 +153,7 @@ class Admin_BankpaymentsController extends Zend_Controller_Action {
             $reg=new Api_Model_DbTable_PaymentsDetail();
             if ($reg->_save($dato)) {
                 $recibo['processed']="S";
+                $recibo['code_rect']=$auid;
                 $str['operation']=$num_ope;
                 $str['code_student']=$cod_mat;
                 if ($data->_update($recibo,$str)) {

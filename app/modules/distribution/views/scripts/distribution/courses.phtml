@@ -5,7 +5,7 @@
   	</div>
 </div>
 <?php if ($this->courses) { ?>
-	<div id="courses">
+	<div id="coursesss">
 		<table class="table table-hover table-condensed table-striped">
 			<tr class="active">
 				<th>#</th>
@@ -31,17 +31,62 @@
 					<td><center><?php echo $type?></center></td>
 					<td><center><?php echo $courses['semid']?></center></td>
 					<td>
-						<select id="typecalification" class="form-control">
+						<select id="typerate_<?php echo $i?>" class="form-control">
 							<option value="">- Seleccione -</option>
-							<option value="O">Objetivos</option>
-							<option value="C">Competencias</option>
+							<?php 
+							$types[0]['val']="C";
+							$types[0]['name']="Competencias";
+							$types[1]['val']="O";
+							$types[1]['name']="Objetivos";
+							for ($n=0; $n < 2; $n++) { 
+								$selected =($courses['type_rate']==$types[$n]['val'])? "selected":"";?>
+								<option value="<?php echo $courses['courseid'].";--;".$courses['escid'].";--;".$courses['curid'].";--;".$courses['subid'].";--;".$courses['turno'].";--;".$courses['perid'].";--;".$types[$n]['val']?>" <?php echo $selected?>><?php echo $types[$n]['name']?></option>
+								<?php
+							} ?>
 						</select>
+						<script>
+		                    $("#typerate_<?php echo $i?>").change(function(){
+		                        var tipo = $(this).val();
+		                        var tmp=tipo.split(";--;");
+		                        if (tipo=="") {
+                                	alert("Seleccione un Tipo de Calificación.");
+                                	return false;
+                            	};
+		                        var courseid=tmp[0];
+		                        var escid=tmp[1];
+		                        var curid=tmp[2];
+		                        var subid=tmp[3];
+		                        var turno=tmp[4];
+		                        var perid=tmp[5];
+		                        var type=tmp[6];
+		                        var url="/distribution/distribution/modifytypecourse/courseid/"+courseid+"/escid/"+escid+"/curid/"+curid+"/subid/"+subid+"/turno/"+turno+"/perid/"+perid+"/type/"+type;
+		                        // alert(url);
+		                        $("#loadingg").load(url); 
+		                   });
+		                  </script>
 					</td>
 					<td>
 						<center>
-							<a href="#" id="deletecourse"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" title="Eliminar Asignatura"></span></a>
+							<a href="#" id="deletecourse_<?php echo $i?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" title="Eliminar Asignatura"></span></a>
 						</center>
 					</td>
+					<script type="text/javascript">
+						$("#deletecourse_<?php echo $i?>").click(function(){
+							var perid="<?php echo $this->perid?>";
+							var escid="<?php echo $this->escid?>";
+							var subid="<?php echo $this->subid?>";
+							var distid="<?php echo $this->distid?>";
+							var courseid="<?php echo $courses['courseid']?>";
+							var curid="<?php echo $courses['curid']?>";
+							var semid="<?php echo $courses['semid']?>";
+							var turno="<?php echo $courses['turno']?>";
+							var url="/distribution/distribution/deletecourse/courseid/"+courseid+"/semid/"+semid+"/curid/"+curid+"/escid/"+escid+"/perid/"+perid+"/turno/"+turno+"/subid/"+subid;
+	            			$("#loadingg").load(url);
+	            			$("#datcourses").html("<img src='/img/spinner.gif'>Cargando...");
+							var url2="/distribution/distribution/courses/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid;
+							$("#datcourses").load(url2);
+						});
+					</script>
 				</tr>
 				<?php
 				$i++;
@@ -55,20 +100,17 @@
 </div>
 <?php
 }?>
-<div class="modal fade" id="addcourse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="loadingg"></div>
+<div class="modal fade" id="addcourse" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       	<div class="modal-content">
         	<div class="modal-header">
-          		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          		<button id="closemodal" type="button" class="close" aria-hidden="true">&times;</button>
           		<h4 class="modal-title"><span class="glyphicon glyphicon-tasks"></span> - AGREGAR ASIGNATURAS</h4>
         	</div>
         	<div class="modal-body">
           		<div id="loadingcourses"></div>
         	</div>
-        	<!-- <div class="modal-footer">
-          		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          		<button type="button" class="btn btn-primary">Save changes</button>
-        	</div> -->
       	</div>
     </div>
 </div>
@@ -80,6 +122,11 @@ $("#addcourses").click(function(){
 	var subid="<?php echo $this->subid?>";
 	var distid="<?php echo $this->distid?>";
 	$("#loadingcourses").load("/distribution/distribution/addcourses/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/distid/"+distid);
+});
+
+$("#closemodal").click(function(){
+	$("#addcourse").modal('hide');
+	window.location.reload();
 });
 
 $('.glyphicon').tooltip();

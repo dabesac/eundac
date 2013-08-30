@@ -1,0 +1,14 @@
+<script type="text/javascript">
+var msg="<?php echo $this->msg?>";
+if (msg=="1") {
+	alert("Los Datos se registraron Correctamente!!!");
+	if (confirm("Desea seguir Agregando Asignaturas.")) ;
+	else{
+		$("#addcourse").modal('hide');
+		window.location.reload();
+		// $("#datcourses").html("<img src='/img/spinner.gif'>Cargando...");
+		// var url="/distribution/distribution/courses/escid/<?php echo $this->escid?>/subid/<?php echo $this->subid?>/perid/<?php echo $this->perid?>/distid/<?php echo $this->distid?>";
+		// $("#datcourses").load(url);
+	};
+};
+</script>
