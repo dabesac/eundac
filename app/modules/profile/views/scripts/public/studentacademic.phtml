@@ -1,0 +1,38 @@
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h2>Datos Academicos</h2>
+  </div>
+
+  <div class="panel-body">
+    <?php if($this->acadata){?>
+      <?php foreach ($this->acadata as $academic) {?>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4><b><?php echo $academic['institution']?></b></h4>
+          </div>
+          <div class="panel-body">
+            <table class="table">
+              <tr>
+                <td><h5>Tipo de Institucion</h5> 
+                  <?php if($academic['type']=="ES"){?>
+                    <h4><b>Estatal</b></h4>
+                  <?php }elseif($academic['type']=="PA"){?>
+                    <h4><b>Particular</b></h4>
+                  <?php }elseif($academic['type']=="PQ"){?>
+                    <h4><b>Parroquial</b></h4>
+                  <?php }?>
+                </td>
+                <td><h5>Nivel de Estudio</h5> <h4><b><?php echo $academic['title']?></b></h4></td>
+              </tr>
+              <tr>
+                <td><h5>Año de Finalizacion</h5> <h4><b><?php echo $academic['year_end']?></b></h4></td>
+                <td><h5>Localizacion</h5> <h4><b>Francia</b></h4></td>
+              </tr>
+            </table>
+          </div>        
+        </div>
+      <?php }
+    }?>
+  </div>
+
+</div>
