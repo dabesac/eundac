@@ -77,6 +77,21 @@ class Profile_PublicController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $pid=$this->sesion->pid;
+
+            $dbfam=new Api_Model_DbTable_Relationship();
+            $where=array("eid"=>$eid,"pid"=>$pid);
+            $famrel=$dbfam->_getFilter($where);
+            $c=0;
+            foreach ($famrel as $f) {
+                $where=array("eid"=>$eid, "famid"=>$f['famid']);
+                $famdata[$c]=$dbfam->_getInfoFamiliars($where);
+                $c++;
+            }
+            //print_r($famdata);
+            $this->view->famrel=$famrel;
+            $this->view->famdata=$famdata;
 
         }catch(exception $e){
             print "Error : ".$e->getMessage();
@@ -87,6 +102,14 @@ class Profile_PublicController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $pid=$this->sesion->pid;
+
+            $dbacadata=new Api_Model_DbTable_Academicrecord();
+            $where=array("eid"=>$eid,"pid"=>$pid);
+            $acadata=$dbacadata->_getFilter($where);
+            //print_r($acadata);
+            $this->view->acadata=$acadata;
 
         }catch(exception $e){
             print "Error : ".$e->getMessage();
@@ -107,7 +130,14 @@ class Profile_PublicController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $pid=$this->sesion->pid;
 
+            $dblaboral=new Api_Model_DbTable_Jobs();
+            $where=array("eid"=>$eid,"pid"=>$pid);
+            $laboral=$dblaboral->_getFilter($where);
+            print_r($laboral);
+            $this->view->laboral=$laboral;
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
@@ -117,6 +147,14 @@ class Profile_PublicController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $pid=$this->sesion->pid;
+
+            $dbinteres=new Api_Model_DbTable_Interes();
+            $where=array("eid"=>$eid,"pid"=>$pid);
+            $interes=$dbinteres->_getFilter($where);
+            //print_r($interes);
+            $this->view->interes=$interes;
 
         }catch(exception $e){
             print "Error : ".$e->getMessage();

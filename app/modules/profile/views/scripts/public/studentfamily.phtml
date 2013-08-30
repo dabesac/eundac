@@ -4,24 +4,63 @@
   </div>
 
   <div class="panel-body">
-    <table class="table">
-    	<tr>
-    		<td><h5>Nombre</h5></td>
-    		<td><h5>DNI</h5></td>
-    	</tr>
-    	<tr>
-    		<td><h5>Sex</h5></td>
-    		<td><h5>Ocupacion</h5></td>
-    	</tr>
-    	<tr>
-    		<td><h5>Vive?</h5></td>
-    		<td><h5>Fecha de Nacimiento</h5></td>
-    	</tr>
-    	<tr>
-    		<td><h5>Telefono/Celular</h5></td>
-    		<td><h5>Direccion</h5></td>
-    	</tr>
-    </table>
+    <?php if($this->famdata){
+    	$c=0;?>
+    	<?php foreach ($this->famdata as $fam) {?>
+    	<div class="panel panel-default">
+    		<div class="panel-heading">
+    			<h5>Nombre</h5> <h4><b><?php echo $fam[0]['lastname']." ".$fam[0]['firtsname']?></b></h4>
+  			</div>
+    		<div class="panel-body">
+    		<table class="table">
+		    	<tr>
+		    		<td><h5>Parentesco</h5>
+		    		<?php if($this->famrel[$c]['type']=="P"){?>
+		    			<h4><b>Padre</b></h4>
+		    		<?php }elseif($this->famrel[$c]['type']=="M"){?>
+						<h4><b>Madre</b></h4>
+		    		<?php }
+		    		$c++;?>
+		    		</td>
+		    		<?php if($fam[0]['typedoc']=="D"){?>
+		    			<td><h5>DNI</h5> <h4><b><?php echo $fam[0]['numdoc']?></b></h4></td>
+		    		<?php }else{?>
+						<td><h5>Pasaporte</h5> <h4><b><?php echo $fam[0]['numdoc']?></b></h4></td>
+		    		<?php }?>
+		    	</tr>
+		    	<tr>
+		    		<td><h5>Ocupacion</h5> <h4><b><?php echo $fam[0]['ocupacy']?></b></h4></td>
+		    		<td><h5>Fecha de Nacimiento</h5> <h4><b><?php echo $fam[0]['birthday']?></b></h4></td>
+		    	</tr>
+		    	<tr>
+		    		<td><h5>Telefono/Celular</h5> <h4><b><?php echo $fam[0]['phone']?></b></h4></td>
+		    		<td><h5>Direccion</h5> <h4><b><?php echo $fam[0]['address']?></b></h4></td>
+		    	</tr>
+		    	<tr>
+		    		<td>
+		    			<h5>Vive?</h5>
+		    			<?php if($fam[0]['live']=="S"){?>
+		    				<h4><b>Si</b></h4></td>
+		    			<?php }else{?>
+							<h4><b>No</b></h4>
+		    			<?php }?>
+		    		</td>
+		    		<td>
+	    				<?php if($fam[0]['live']=="S"){?>
+		    			<h5>Sufre de alguna Enfermedad</h5> 
+							<?php if($fam[0]['health']=="S"){?>
+		    					<h4><b>Si</b></h4>
+		    				<?php }else{?>
+								<h4><b>No</b></h4>
+		    				<?php }
+		    			}?>		    		
+		    		</td>
+		    	</tr>
+    		</table>
+    		</div>
+		</div>
+		<?php }?>
+    <?php }?>
   </div>
 
 </div>

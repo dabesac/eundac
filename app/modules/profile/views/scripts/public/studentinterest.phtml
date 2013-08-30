@@ -5,9 +5,23 @@
   </div>
 
   <div class="panel-body">
-    <table class="table">
-    	
-    </table>
+    <?php if($this->interes){
+  		foreach ($this->interes as $int) {?>
+		    <div class="panel panel-default">
+		    	<div class="panel-heading">
+		    		<h4><b><?echo $int['discipline']?></b></h4>
+		    	</div>
+		    	<div class="panel-body">
+		    		<table class="table">
+		    			<tr>
+		    				<th><h5>Club</h5> <h4><b><?echo $int['club']?></b></h4></th>
+		    				<th><h5>Dedicacion</h5> <h4><b><?echo $int['title']?></b></h4></th>
+		    			</tr>
+		    		</table>
+		    	</div>
+		    </div>
+  		<?php }?>
+  	<?php }?>
   </div>
 
 </div>

@@ -5,9 +5,25 @@
   </div>
 
   <div class="panel-body">
-    <table class="table">
-    	
-    </table>
+  	<?php if($this->laboral){
+  		foreach ($this->laboral as $lab) {?>
+		    <div class="panel panel-default">
+		    	<div class="panel-heading">
+		    		<h4><b><?echo $lab['company']?></b></h4>
+		    	</div>
+		    	<div class="panel-body">
+		    		<table class="table">
+		    			<tr>
+		    				<th><h5>Area</h5> <h4><b><?echo $lab['industry']?></b></h4></th>
+		    				<th><h5>Condicion</h5> <h4><b><?echo $lab['condition']?></b></h4></th>
+		    				<th><h5>Salario Mensual</h5> <h4><b>S/. <?echo $lab['salary']?></b></h4></th>
+		    			</tr>
+		    		</table>
+		    	</div>
+		    </div>
+  		<?php }?>
+
+  	<?php }?>
   </div>
 
 </div>
