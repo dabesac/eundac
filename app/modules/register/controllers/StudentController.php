@@ -271,6 +271,7 @@ class Register_StudentController extends Zend_Controller_Action {
             $data_payment=$base_payment->_getOne($where);
             unset($where['perid']);
             $register_paymnets = $base_payment->_getAll($where);
+
             $this->view->register_paymnets=$register_paymnets;
             if ($data_payment) {
 
@@ -343,8 +344,15 @@ class Register_StudentController extends Zend_Controller_Action {
                         $this->view->message_paymnet="Caso contrario debe hacer el deposito de la diferencia " .$diferencia. " Soles a la Cuenta 00000072 del Banco de la Nacion";
                     }
                 }
+
                 $this->view->name_reates=$data_payment['name'];
             }
+            else
+            {
+                $this->view->message_paymnet = "Error Las Tasas no Existen";
+            }
+            
+
 
 
         } catch (Exception $e) {

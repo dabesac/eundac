@@ -1,0 +1,177 @@
+<style type="text/css">
+	.nota{
+		width: 53px;
+		text-align: center;
+	}
+	.presented{
+		cursor: pointer;
+	}
+</style>
+<script type="text/javascript">
+
+	function not_present (obj) {
+		var $icon = $(obj);
+		var $subject = $icon.parent();
+		var $subject = $subject.parent();
+		var $action = $(obj).attr('action');
+		
+		var $index =$icon.attr("index");
+
+		if($action == "0")
+		{
+			$icon.removeClass('glyphicon-eye-open');
+			$icon.addClass('glyphicon-eye-close');
+			$subject.css('color','#FC4141');
+        	$icon.attr("action","1");
+		}
+		else{
+
+			$icon.removeClass('glyphicon-eye-close');
+			$icon.addClass('glyphicon-eye-open');
+			$subject.css('color','#000');
+        	$icon.attr("action","0");
+		}
+
+		$notas = {};
+    	$notas[$.base64.encode('courseid')]        = $.base64.encode($.trim($subject.attr("courseid")));
+    	$notas[$.base64.encode('curid')]        = $.base64.encode($.trim($subject.attr("curid")));
+    	$notas[$.base64.encode('turno')]        = $.base64.encode($.trim($subject.attr("turno")));
+    	$notas[$.base64.encode('perid')]        = $.base64.encode($.trim($subject.attr("perid")));
+    	$notas[$.base64.encode('escid')]        = $.base64.encode($.trim($subject.attr("escid")));
+    	$notas[$.base64.encode('subid')]        = $.base64.encode($.trim($subject.attr("subid")));
+    	$notas[$.base64.encode('regid')]        = $.base64.encode($.trim($subject.attr("regid")));
+    	$notas[$.base64.encode('uid')]        = $.base64.encode($.trim($subject.attr("uid")));
+    	
+
+		$($subject[0].children).each(function (){
+			if (this.firstElementChild != null) {
+				if (this.firstElementChild.nodeName == "INPUT" || this.firstElementChild.nodeName =='SELECT') {
+
+					$input= $(this.firstElementChild);
+                    $name = $input.attr("name");
+
+                    if ($action == "0") {
+                    	$input.attr('disabled',true);
+                        $($input).css("color", "#FC4141");
+                        $notas[$.base64.encode("receipt")] = $.base64.encode("");
+                        $notas[$.base64.encode("notafinal")] = $.base64.encode("-2");
+                        if ($name == "notafinal") {
+                        	$input.val("NP");	
+                        }
+                    }
+                    else
+                    {	
+                        $notas[$.base64.encode("receipt")] = $.base64.encode("");
+                    	$notas[$.base64.encode("notafinal")]=$.base64.encode("");
+                    	$input.css("color","#000");
+                    	$input.attr('disabled',false);
+                    }
+				}
+			}
+		});
+		
+
+	    result = "";
+	    for (var prop in $notas ) {
+	        result += '' + prop + '/' + $notas[prop]  + '/'; 
+	    }
+	    result = result.substring(0, result.length-1);
+	    var $url = '/register/deferred/loadnotas/' + result;
+	    $('#modalloader').modal('show');
+	    $temporaindex = $index;
+
+	    $.ajax({
+	        url:$url,
+	        success:function($data){
+	        		alert($data);
+	                // if($data.status == true){
+	                //     //Pintar el exito
+	                   
+	                //     $("#comprobacion_" + $temporaindex).attr("src","/img/correcto.png");
+	                //     $subject.css("color", "none");
+	                // }else{
+	                //     //Pintar Fracaso
+	                //     mensajeria('error','El registro no se guardo correctamente');
+	                //     $("#comprobacion_" + $temporaindex).attr("src","");
+	                //     $subject.css("color", "#FC4141");
+	                // }
+	                // $('#modalloader').modal('hide');
+	        },
+	        error:function($data){
+	        	alert("error");
+	                //Pintar el error
+	                // $parent.css("color", "#FC4141");
+	                // $("#comprobacion_" + $indice).attr("src","");
+	                // mensajeria('error','Se produjo un error no controlado, comunicarse con el administrador');
+	                // $('#modalloader').modal('hide');
+	        }
+	    });
+		$notas = {};
+    	return true;
+
+	}
+</script>
+<div class="row">
+  <div class="col-xs-12 col-sm-6 col-md-8"><h4><span class='glyphicon glyphicon-pencil' ></span> Llenado de Aplazados <?php echo $this->infocurso['name']?></h4></div>
+  <div class="col-xs-6 col-sm-6 col-md-4">
+  	<button class='btn btn-success'>Guardar</button>
+  	<button class='btn btn-success'>Cerrar Acta</button>
+  </div>
+</div>
+
+<?php if ($this->students_register) { ?>
+<div class='row'>
+	<div class='col-md-8 col-md-offset-1'>
+	<table class='table'>
+		<tr>
+			<th>#</th>
+			<th>Coodigo</th>
+			<th>Apellidos y Nombres</th>
+			<th class='success'>Recibo</th>
+			<th class='success'>Nota</th>
+		</tr>
+		<?php foreach ($this->students_register as $key => $registro) { ?>
+		<tr 	courseid='<?php echo $registro['courseid']?>'
+				curid='<?php echo $registro['curid']?>'
+				turno='<?php echo $registro['turno']?>'
+				perid='<?php echo $registro['perid']?>'
+				escid='<?php echo $registro['escid']?>'
+				subid='<?php echo $registro['subid']?>'
+				regid='<?php echo $registro['regid']?>'
+				uid='<?php echo $registro['uid']?>'
+                edicion="false"
+                style="color:<?php echo ($registro['notafinal'] != -2)?'#000':'#FC4141'; ?>;"
+
+		>
+			
+			<td><?php echo $key+1?></td>
+			<td><?php echo $registro['uid']?></td>
+			<td><?php echo  $registro['name'] ?></td>
+			<td>
+			
+					<select class='form-control' index='<?php echo $key ?>'name='receipt' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?> >
+						<option>Seleccione</option>
+						<?php foreach ($registro['receipt'] as $key => $value) { ?>
+						<option value='<?php echo $value['operation']?>'><?php echo $value['operation']?></option>
+						<?php }?>
+					</select>
+				
+			</td>
+			<td><input type='text'  name='notafinal' maxlength='2' style="color:<?php echo ($registro['notafinal'] != -2)?'#000':'#FC4141'; ?>;" class='form-control nota' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?> value='<?php echo ($registro['notafinal'] != -2)?$registro['notafinal']:'NP'; ?>'></td>
+			<td class='success'>
+				<?php if ($registro['notafinal'] != -2) { ?>
+					<span class='glyphicon glyphicon-eye-open presented' 
+						action='0' onclick='not_present(this);'
+						index='<?php echo $key?>'></span>
+				<?php }else{ ?>
+					<span class='glyphicon glyphicon-eye-close presented' 
+						action='1' onclick='not_present(this);' 
+						index='<?php echo $key?>'></span>
+				<?php }?>
+			</td>
+		</tr>
+		<?php }?>
+	</table>
+	</div>
+</div>
+<?php }?>
