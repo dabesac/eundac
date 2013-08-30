@@ -38,9 +38,14 @@
                     <?php 
                     if ($facid==$vfacalum || $facid=="TODO"){
                         ?>
-                    <center><a href="/report/recordnotas/print/uid/<?php echo base64_encode($info['uid'])?>/escid/<?php echo base64_encode($info['escid'])?>/eid/<?php echo base64_encode($info['eid'])?>/oid/<?php echo base64_encode($info['oid'])?>/subid/<?php echo base64_encode($info['subid'])?>/pid/<?php echo base64_encode($info['pid'])?>"><img src="/img/pdf.png"></a></center></td>
+                    <center><a href="/report/recordnotas/print/uid/<?php echo base64_encode($info['uid'])?>/escid/<?php echo base64_encode($info['escid'])?>/eid/<?php echo base64_encode($info['eid'])?>/oid/<?php echo base64_encode($info['oid'])?>/subid/<?php echo base64_encode($info['subid'])?>/pid/<?php echo base64_encode($info['pid'])?>"><span class='glyphicon glyphicon-print'></span></a></center></td>
                     <?php 
                     }
+                    else{ ?>
+                        <center><a><span class='glyphicon glyphicon-remove' style='color:red'></span></a></center>
+                    <?php    
+                    }
+
                     ?>
                     
             </tr>
