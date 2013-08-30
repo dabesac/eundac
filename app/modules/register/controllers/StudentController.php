@@ -273,6 +273,7 @@ class Register_StudentController extends Zend_Controller_Action {
             $register_paymnets = $base_payment->_getAll($where);
 
             $this->view->register_paymnets=$register_paymnets;
+
             if ($data_payment) {
 
                 if ($data_payment['amount']==0) {
@@ -282,22 +283,21 @@ class Register_StudentController extends Zend_Controller_Action {
 
                 $ratid  =   $data_payment['ratid'];
                 $amount_payment = $data_payment['amount'];
-                $date_payments = $date_payment['date_payment'];
+                $date_payments = $data_payment['date_payment'];
                 $base_rates = new Api_Model_DbTable_Rates();
                 $where_payment  =   array(
                                     'eid'=>$eid,'oid'=>$oid,
                                     'ratid'=>$ratid,'perid'=>$perid);
                 $assign_payment =   $base_rates->_getOne($where_payment);
 
-            // print_r($assign_payment);
                 if ($assign_payment) {
 
                     $t_normal   =   $assign_payment['t_normal'];
 
                     $date_payment=strtotime($date_payments);
-                    $f_fin_tn  =   strftime($assign_payment['f_fin_tn'].'11:59:00');
-                    $f_fin_ti1  =   strftime($assign_payment['f_fin_ti1'].'11:59:00'); 
-                    $f_fin_ti2  =   strftime($assign_payment['f_fin_ti2'].'11:59:00');
+                    $f_fin_tn  =   strtotime($assign_payment['f_fin_tnd'].'11:59:00');
+                    $f_fin_ti1  =   strtotime($assign_payment['f_fin_ti1'].'11:59:00'); 
+                    $f_fin_ti2  =   strtotime($assign_payment['f_fin_ti2'].'11:59:00');
 
                     switch ($date_payment) {
 
@@ -622,7 +622,6 @@ class Register_StudentController extends Zend_Controller_Action {
             $credits_cur = trim($params['credits']);
             $condition_credits = intVal(trim($params['condition']));
             
-            // // print_r($data);exit();
             $created_resolu=1;
             try {
 
@@ -632,6 +631,7 @@ class Register_StudentController extends Zend_Controller_Action {
                         'regid'=>$regid,
                         'pid'=>$pid,'uid'=>$uid,
                         'perid'=>$perid);
+            
 
                 $base_registration_subjet = new Api_Model_DbTable_Registrationxcourse();
                 $base_registration = new Api_Model_DbTable_Registration();
@@ -671,6 +671,7 @@ class Register_StudentController extends Zend_Controller_Action {
                             'perid'=>$perid,'turno'=>$turno,
                             'regid'=>$regid,'pid'=>$pid,
                             'uid'=>$uid,'register'=>$uid,
+                            'approved'=>$uid,
                             'created'=>date('Y-m-d H:m:s'),
                             'state'=>'B');
 
