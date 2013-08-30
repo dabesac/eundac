@@ -7,7 +7,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
          $this->_helper->redirector('index',"index",'default');
         }
         $login = $sesion->getStorage()->read();
-        // if (!$login->modulo=="bienestar"){
+        // if (!$login->modulo=="syllabus"){
         //  $this->_helper->redirector('index','index','default');
         // }
         $this->sesion = $login;
@@ -17,12 +17,12 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
         try {
             $where['eid']=$this->sesion->eid;
             $where['oid']=$this->sesion->oid;
-            $where['escid']="4SI";
-            $where['curid']="94A4SI";
-            $where['courseid']="94501";
-            $where['turno']="A";
-            $where['subid']="1901";
-            $where['perid']="13A";
+            $where['escid']=base64_decode($this->_getParam('escid'));
+            $where['curid']=base64_decode($this->_getParam('curid'));
+            $where['courseid']=base64_decode($this->_getParam('courseid'));
+            $where['turno']=base64_decode($this->_getParam('turno'));
+            $where['subid']=base64_decode($this->_getParam('subid'));
+            $where['perid']=base64_decode($this->_getParam('perid'));
             $this->view->turno=$where['turno'];
             $syl= new Api_Model_DbTable_Syllabus();
             $datsyl=$syl->_getOne($where);

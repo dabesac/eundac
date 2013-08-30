@@ -1,0 +1,65 @@
+<?php //echo $this->temp;
+$eid=$this->eid;
+$oid=$this->oid;
+$subid=$this->subid;
+?>
+
+<div id="datos">
+    <table>
+    <table class="table table-hover">
+        <thead>
+        <tr style="background: #ccc; color: #000000;">
+                 
+                <th>#</th> 
+                <th>CURRICULA</th>
+                <th>CODIGO</th>
+                <th>CURSOS</th>
+                <th>TURNO</th>
+                <th>RESOLUCION</th>
+                <th>NOTA</th>                           
+        </tr>
+        </thead>
+
+    <?php
+    if ($this->cursosconvalidados)
+    {
+        $i=1;
+       foreach ($this->cursosconvalidados as $convalidado)    
+        {
+            $escid=$convalidado['escid'];
+            $courseid=$convalidado['courseid'];
+            $curid=$convalidado['curid'];
+            $curso = new Api_Model_DbTable_Course();
+            $dat['eid']=$eid;
+            $dat['oid']=$oid;
+            $dat['subid']=$subid;
+            $dat['escid']=$escid;
+            $dat['courseid']=$courseid;
+            $dat['curid']=$curid;
+            //print_r($dat);
+            $list_curso = $curso ->_getOne($dat);
+            $info = $list_curso['name'];
+
+           
+           ?>
+            <tr>
+                <td><?php echo $i;?></td>
+                <td class="input-mini"><center><?php echo $convalidado['curid'];?></center></td>
+                <td class="input-mini"><center><?php echo $convalidado['courseid'];?></center></td>
+                <td><?php echo $info;?></td>
+                <td class="input-mini"><?php echo $convalidado['turno'];?></td>
+                <td class="span2"><?php echo $convalidado['document_auth'];?></td>
+                <td class="input-mini"><?php echo $convalidado['notafinal'];?></td>               
+                
+            </tr>
+           <?php
+             $i++;
+        }
+    }
+   
+    ?>
+    </table>
+    </table>
+          
+      <div style="clear:both"></div>  
+</div>

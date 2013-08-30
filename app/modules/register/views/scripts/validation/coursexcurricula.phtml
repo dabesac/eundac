@@ -1,0 +1,8 @@
+<option value="">Seleccione curso</option><?php
+    foreach ($this->cursito  as $curso){
+        ?>
+      
+          <option value="<?php echo $curso['courseid'].";--;".$curso['semid'].";--;".$curso['credits']?>"><?php echo $curso['courseid']." | ".$curso['name']." | ".$curso['credits']?> </option>
+        <?php  
+        }
+?>

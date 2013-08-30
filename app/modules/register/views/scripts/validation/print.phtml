@@ -1,0 +1,128 @@
+
+<?php
+
+     $escid=$this->escid;
+     $turnos=$this->turno;
+     $perid=$this->perid;
+     $subid=$this->subid;
+     $uid=$this->uid;
+     $pid=$this->pid;
+     $eid=$this->eid;
+     $oid=$this->oid;   
+     $dbescuela = new Api_Model_DbTable_Speciality();
+     $esc['eid']=$eid;
+     $esc['oid']=$oid;
+     $esc['escid']=$escid;
+     $esc['subid']=$subid;
+     $escuela = $dbescuela ->_getOne($esc);
+     $infoescuela = $escuela['name'];
+     $infofacultad= $escuela['facid'];  
+     $dbfacultad = new Api_Model_DbTable_Faculty();
+     $fac['eid']=$eid;
+     $fac['oid']=$oid;
+     $fac['facid']=$infofacultad;
+     $facu = $dbfacultad ->_getOne($fac);
+     $infonombrefacultad = $facu['name'];     
+
+     $persona = new Api_Model_DbTable_Person();
+     $data['eid']=$eid;
+     $data['pid']=$pid;
+     $list_p = $persona ->_getOne($data);
+     $info2 = $list_p['last_name0']." ".$list_p['last_name1']." ".$list_p['first_name'];  
+
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start();       
+
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<table style="width: 100%;" border="1">
+    <tr>
+          <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+          <th style="text-align: center; font-size: 11px;">
+            FACULTAD DE  <?php echo strtoupper($infonombrefacultad)?><br/>
+            ESCUELA DE  <?php echo strtoupper($infoescuela)?>
+               
+          </th>        
+      </tr>
+    <tr>
+      <th style="border: 1px solid #000;"> REGISTRO DE NOTAS - PERIODO <?php echo strtoupper($perid)?></th>
+      </tr>
+  </table>
+
+<table style="font-size: 11px;float: left; width: 100%; border-bottom: 2px solid #000;" >     
+      <tr>
+        <th > Alumno</th>
+        <td ><?php echo strtoupper($info2)?></td>
+      </tr>    
+  </table>
+<table style='float:left; font-size: 11px; width:100%'>
+        <thead>
+        <tr style="background: #ccc; color; #ffffff;">
+                <th style="width:20px;">#</th> 
+                <th style="text-align: center;">Curriculas</th>
+                <th style="text-align: center;">Codigo</th>
+                <th style="text-align: center;">Cursos</th>
+                <th >Turno</th>
+                <th >Resolucion</th>
+                <th >Notafinal</th>
+                
+               
+        </tr>
+        </thead>
+
+     <?php
+    if ($this->cursosconvalidados)
+    {
+        $i=1;
+       foreach ($this->cursosconvalidados as $convalidado)    
+        {
+            $escid=$convalidado['escid'];
+            $courseid=$convalidado['courseid'];
+            $curid=$convalidado['curid'];
+            $curso = new Api_Model_DbTable_Course();
+            $dat['eid']=$eid;
+            $dat['oid']=$oid;
+            $dat['subid']=$subid;
+            $dat['escid']=$escid;
+            $dat['courseid']=$courseid;
+            $dat['curid']=$curid;
+            // print_r($dat);
+            $list_curso = $curso ->_getOne($dat);
+            $info = $list_curso['name'];
+
+           
+           ?>
+            <tr>
+                <td><?php echo $i;?></td>
+                <td class="input-mini"><center><?php echo $convalidado['curid'];?></center></td>
+                <td class="input-mini"><center><?php echo $convalidado['courseid'];?></center></td>
+                <td><?php echo $info;?></td>
+                <td class="input-mini"><?php echo $convalidado['turno'];?></td>
+                <td class="span2"><?php echo $convalidado['document_auth'];?></td>
+                <td class="input-mini"><?php echo $convalidado['notafinal'];?></td>               
+                
+            </tr>
+           <?php
+             $i++;
+        }
+    }
+    ?>     
+
+    </table>
+  <?php 
+
+  $html = ob_get_contents();
+  
+  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
+  $mpdf->SetHTMLHeader($header);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  
+  $mpdf->SetFooter($this->footer);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('Preregistro-'.$uid.'.pdf','D');
+  
+?>
+   
