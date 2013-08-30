@@ -3,7 +3,7 @@
 class Distribution_Model_DbTable_DistributionTeacher extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'base_distribution_teacher';
-	protected $_primary = array("eid","oid","distid","escid","subid","perid","uid","pid","admdistid");
+	protected $_primary = array("eid","oid","distid","escid","subid","perid","uid","pid");
 
 	public function _save($data)
 	{
@@ -13,7 +13,7 @@ class Distribution_Model_DbTable_DistributionTeacher extends Zend_Db_Table_Abstr
 			return $this->insert($data);
 			return false;
 		}catch (Exception $e){
-				print "Error: Save DistributionAdmin ".$e->getMessage();
+				print "Error: Save DistributionTeacher ".$e->getMessage();
 		}
 	}
 	
@@ -21,12 +21,12 @@ class Distribution_Model_DbTable_DistributionTeacher extends Zend_Db_Table_Abstr
 	{
 		try{
 			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' 
-			|| $pk['distid']=='' || $pk['perid']=='' || $pk['uid']=='' || $pk['pid']=='' || $pk['admdistid']=='') return false;
-			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and distid='".$pk['distid']."' and perid='".$pk['perid']."' and uid='".$pk['uid']."' and pid='".$pk['pid']."' and admdistid='".$pk['admdistid']."'";
+			|| $pk['distid']=='' || $pk['perid']=='' || $pk['uid']=='' || $pk['pid']=='') return false;
+			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and distid='".$pk['distid']."' and perid='".$pk['perid']."' and uid='".$pk['uid']."' and pid='".$pk['pid']."'";
 			return $this->update($data, $where);
 			return false;
 		}catch (Exception $e){
-			print "Error: Update DistributionAdmin ".$e->getMessage();
+			print "Error: Update DistributionTeacher ".$e->getMessage();
 		}
 	}
 	
@@ -34,12 +34,12 @@ class Distribution_Model_DbTable_DistributionTeacher extends Zend_Db_Table_Abstr
 	{
 		try{
 			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' 
-			|| $pk['distid']=='' || $pk['perid']=='' || $pk['uid']=='' || $pk['pid']=='' || $pk['admdistid']=='') return false;
-			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and distid='".$pk['distid']."' and perid='".$pk['perid']."' and uid='".$pk['uid']."' and pid='".$pk['pid']."' and admdistid='".$pk['admdistid']."'";
+			|| $pk['distid']=='' || $pk['perid']=='' || $pk['uid']=='' || $pk['pid']=='') return false;
+			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and distid='".$pk['distid']."' and perid='".$pk['perid']."' and uid='".$pk['uid']."' and pid='".$pk['pid']."'";
 			return $this->delete( $where);
 			return false;
 		}catch (Exception $e){
-			print "Error: Update DistributionAdmin ".$e->getMessage();
+			print "Error: Update DistributionTeacher ".$e->getMessage();
 		}
 	}
 	
@@ -47,13 +47,13 @@ class Distribution_Model_DbTable_DistributionTeacher extends Zend_Db_Table_Abstr
 	{
 		try{
 			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' 
-			|| $pk['distid']=='' || $pk['perid']=='' || $pk['uid']=='' || $pk['pid']=='' || $pk['admdistid']=='') return false;
-			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and distid='".$pk['distid']."' and perid='".$pk['perid']."' and uid='".$pk['uid']."' and pid='".$pk['pid']."' and admdistid='".$pk['admdistid']."'";
+			|| $pk['distid']=='' || $pk['perid']=='' || $pk['uid']=='' || $pk['pid']=='') return false;
+			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and distid='".$pk['distid']."' and perid='".$pk['perid']."' and uid='".$pk['uid']."' and pid='".$pk['pid']."'";
 			$row = $this->fetchRow($where);
 			if ($row) return $row->toArray();
 			return false;
 		}catch (Exception $ex){
-			print "Error: Get Info DistributionAdmin ".$ex->getMessage();
+			print "Error: Get Info DistributionTeacher ".$ex->getMessage();
 		}
 	}
 	
@@ -61,8 +61,8 @@ class Distribution_Model_DbTable_DistributionTeacher extends Zend_Db_Table_Abstr
 	{
 		try{
 			if ($pk['eid']=='' || $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' 
-			|| $pk['distid']=='' || $pk['perid']=='' || $pk['uid']=='' || $pk['pid']=='') return false;
-			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and distid='".$pk['distid']."' and perid='".$pk['perid']."' and uid='".$pk['uid']."' and pid='".$pk['pid']."'";
+			|| $pk['distid']=='' || $pk['perid']=='') return false;
+			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and distid='".$pk['distid']."' and perid='".$pk['perid']."'";
 			$row = $this->fetchAll($where);
 			if ($row) return $row->toArray();
 			return false;
@@ -74,7 +74,7 @@ class Distribution_Model_DbTable_DistributionTeacher extends Zend_Db_Table_Abstr
 	public function _getFilter($where=null,$atrib=array()){
 		try{
 			if ($where['eid']=='' || $where['oid']=='') return false;
-			$select = $this->select()->from('base_distribution_admin',$atrib); 
+			$select = $this->select()->from('base_distribution_teacher',$atrib); 
 			foreach ($where as $key => $value){
 				$select->where("$key = ?", $value);
 			}
@@ -82,7 +82,7 @@ class Distribution_Model_DbTable_DistributionTeacher extends Zend_Db_Table_Abstr
 			if($rows) return $rows->toArray();
 			return false;
 		}catch (Exception $e){
-			print "Error: Read Filter DistributionAdmin ".$e->getMessage();
+			print "Error: Read Filter DistributionTeacher ".$e->getMessage();
 		}
 	}
 

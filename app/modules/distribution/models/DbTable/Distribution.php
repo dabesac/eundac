@@ -84,7 +84,7 @@ class Distribution_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 			if($rows) return $rows->toArray();
 			return false;
 		}catch (Exception $e){
-			print "Error: Read Filter Organization ".$e->getMessage();
+			print "Error: Read Filter Distribution ".$e->getMessage();
 		}
 	}
 

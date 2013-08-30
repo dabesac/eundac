@@ -1,0 +1,60 @@
+<?php
+    $i=1;
+    if ($this->cursosasignados){  ?>
+    <table id="vercursosasig" style="width:96%; margin:0px" class="table table-bordered table-condensed table-striped">
+        <tr>
+            <th>#</th>
+            <th>Código</th>
+            <th>Nombre Asignatura</th>
+            <th><center>Turno</center></th>
+            <th><center>Sem</center></th>
+            <th><center>Compromiso</center></th>
+            <th><center>Grupos</center></th>
+            <th><center>#H.T.</center></th>
+            <th><center>#H.P.</center></th>
+            <th><center>#T.T.</center></th>
+            <th><center>Eliminar</center></th>       
+        </tr>
+        <?php              
+            foreach ($this->cursosasignados as $cursos){ ?>
+                <tr>
+                    <td><?php echo $i?></td>            
+                    <td><?php echo $cursos['courseid']?></td>
+                    <td><?php echo $cursos['name']?></td>
+                    <td><?php echo $cursos['turno']?></td>
+                    <td><center><?php echo $cursos['semid']?></center></td>
+                    <td>
+                        <center>
+                            <?php 
+                            if($cursos['is_com']=='S') echo "SI";
+                            elseif($cursos['is_com']=='N') echo "NO"; ?>
+                        </center>
+                    </td>
+                    <?php 
+                        // if($cursos['is_com']=='S') $cursos['hours_total']=0;
+                        $yy=$cursos['hours_total'];
+                        $temporalh=$temporalh+$yy;
+                    ?>
+                    <td><center><?php echo $cursos['groups']?></center></td>
+                    <td><center><?php echo $cursos['hours_t']?></center></td>
+                    <td><center><?php echo $cursos['hours_p']?></center></td>
+                    <td><center><?php echo $cursos['hours_total']?></center></td>
+                    <td>
+                        <center><a href="/distribucion/distribucion/eliminarcursoasignado/perid/<?php echo $this->perid?>/sedid/<?php echo $this->sedid?>/escid/<?php echo $cursos['escid'];?>/cursoid/<?php echo $cursos['cursoid'];?>/turno/<?php echo $cursos['turno']?>/curid/<?php echo $cursos['curid']?>/pid/<?php echo $this->pid;?>/uid/<?php echo $this->uid;?>/distid/<?php echo $this->distid?>/escidorigen/<?php echo $this->escidorigen?>/temp/<?php echo $this->temp?>/temp2/<?php echo $this->temp2?>" rel="tooltip" title="Eliminar Asignatura"><span class="glyphicon glyphicon-trash"></span></a></center>
+                    </td>
+                </tr>
+            <?php
+            $i++;
+            }?>
+            <tr>
+                <td colspan='9'>Total Horas Académicas</td>
+                <td><center><?php echo $temporalh;?></center></td>
+                <td></td>
+            </tr>
+    </table>
+    <?php }
+    ?>
+
+<script type="text/javascript">
+$('a[rel=tooltip]').tooltip();
+</script>

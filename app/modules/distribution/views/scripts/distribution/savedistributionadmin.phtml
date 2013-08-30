@@ -1,0 +1,38 @@
+<?php
+        $i=1;
+        if ($this->administrativas){ ?>
+        <table id="labores" style="width:90%; margin:0px" class="table table-bordered table-condensed table-striped">
+            <tr>
+                <th><center>#</center></th>
+                <th>Labor Administrativa</th>
+                <th><center># Horas</center></th>
+                <th><center>Eliminar</center></th>        
+            </tr>
+                <?php
+                foreach ($this->administrativas as $admin){ 
+                        $y=$admin['hours'];
+                        $temporalad=$temporalad+$y;
+                        $temporal=$temporal+$y;
+                        $tt=$temporal; ?>
+                    <tr>
+                        <td><center><?php echo $i?></center></td>
+                        <td><?php echo $admin['work']?></td>
+                        <td><center><?php echo $admin['hours']?></center></td>
+                        <td><center><a  href="/distribution/distribution/eliminarlaboradmin/labor/<?php echo $admin['labor']?>/uid/<?php echo $this->uid;?>/pid/<?php echo $this->pid;?>/escid/<?php echo $this->escid;?>/sedid/<?php echo $this->sedid;?>/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid;?>/escidorigen/<?php echo $this->escidorigen?>/temp/<?php echo $this->temp?>/temp2/<?php echo $this->temp2?>" rel="tooltip" title="Eliminar Labor Administrativa"><span class="glyphicon glyphicon-trash"></span></a></td>
+                    
+                    </tr>
+            <?php
+            $i++;   
+            } ?>
+            <tr>
+                <td colspan='2' >Total Horas Administrativas</td>
+                <td><center><?php echo $temporalad?></center></td>
+                <td></td>
+            </tr>
+        </table>
+        <?php 
+        } ?>  
+
+<script type="text/javascript">
+$('a[rel=tooltip]').tooltip();
+</script>

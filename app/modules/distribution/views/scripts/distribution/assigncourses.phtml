@@ -117,7 +117,7 @@ th, td{
                             }
                         }else{
                             $i=0; ?>
-                            <option value="<?php echo $i?>"><?php echo $i?></option>
+                            <option value="<?php echo $i?>" selected><?php echo $i?></option>
                             <?php
                         }?>
                     </select>
@@ -158,6 +158,7 @@ th, td{
             <th>#</th>
             <th>Código</th>
             <th>Nombre Asignatura</th>
+            <th><center>Turno</center></th>
             <th><center>Sem</center></th>
             <th><center>Compromiso</center></th>
             <th><center>Grupos</center></th>
@@ -172,6 +173,7 @@ th, td{
                     <td><?php echo $i?></td>            
                     <td><?php echo $cursos['courseid']?></td>
                     <td><?php echo $cursos['name']?></td>
+                    <td><center><?php echo $cursos['turno']?></center></td>
                     <td><center><?php echo $cursos['semid']?></center></td>
                     <td>
                         <center>
@@ -181,9 +183,7 @@ th, td{
                         </center>
                     </td>
                     <?php 
-                        // if($cursos['is_com']=='S') $cursos['hours_total']=0;
-                        $yy=$cursos['hours_total'];
-                        $temporalh=$temporalh+$yy;
+                        $temporalh=$temporalh+$cursos['hours_total'];
                     ?>
                     <td><center><?php echo $cursos['groups']?></center></td>
                     <td><center><?php echo $cursos['hours_t']?></center></td>
@@ -197,7 +197,7 @@ th, td{
             $i++;
             }?>
             <tr>
-                <td colspan='8' >Total Horas Académicas</td>
+                <td colspan='9'>Total Horas Académicas</td>
                 <td><center><?php echo $temporalh;?></center></td>
                 <td></td>
             </tr>
@@ -212,7 +212,7 @@ th, td{
         <h5 style="color: silver"><center><b>ADMINISTRATIVA</b></center></h5>
     </div>
     <center>
-        <form name="<?php echo $this->form->getName();?>" id="hsadmin" action="/distribution/distribution/savedistributionadmin/uid/<?php echo $this->uid?>/pid/<?php echo $this->pid?>/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid?>/escid/<?php echo $this->escid?>/subiddoc/<?php echo $this->subiddoc?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+        <form name="<?php echo $this->form->getName();?>" id="hsadmin" action="/distribution/distribution/savedistributionadmin/uid/<?php echo $this->uid?>/pid/<?php echo $this->pid?>/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid?>/esciddoc/<?php echo $this->esciddoc?>/subiddoc/<?php echo $this->subiddoc?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
             <table style="width:90%" class="table table-condensed table-striped">
                 <tr>
                     <th>Labor Administrativa</th>
@@ -359,8 +359,11 @@ th, td{
             return false;
         };
 
-        if(hteoria>0) estado='A';
         if(compromiso=='S') totalhoras=0;
+        if(hteoria>0) {
+            estado='A';
+            principal='S';
+        };
         
         if(hteoria==0){
             if(hpractica==0 && grupos==0){
@@ -386,23 +389,20 @@ th, td{
         var url="/distribution/distribution/saveasigncourse/curid/"+curid+"/courseid/"+courseid+"/turno/"+turno+"/semid/"+semid+"/grupos/"+grupos+"/hteoria/"+hteoria+"/hpractica/"+hpractica+"/totalhoras/"+totalhoras+"/compromiso/"+compromiso+"/uid/"+uid+"/pid/"+pid+"/distid/"+distid+"/perid/"+perid+"/principal/"+principal+"/estado/"+estado+"/esciddoc/"+esciddoc+"/subiddoc/"+subiddoc;
         // alert(url);
         $("#guardarcursosasig").load(url);
-
     });
 
-    // $("#hsadmin").submit(function(){
-    //     $("#labores").hide();        
-    //     $.ajax({
-    //     type: 'POST',
-    //     url: $(this).attr('action'),
-    //     data: $(this).serialize(),
-    //     //data: cadena, 
-
-    //     success: function(data) {                        
-    //         $('#ghorasadmin').html(data);                                 
-    //         }
-    //     }); 
-    //     return false;
-    // });
+    $("#hsadmin").submit(function(){
+        $("#labores").hide();        
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function(data) {                        
+                $('#ghorasadmin').html(data);                                 
+            }
+        }); 
+        return false;
+    });
     $('a[rel=tooltip]').tooltip();
 </script>
 

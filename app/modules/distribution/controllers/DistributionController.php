@@ -505,6 +505,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $subid = $this->_getParam("subid"); 
             $distid = $this->_getParam("distid");
             $this->view->perid=$perid;
+            $this->view->subid=$subid;
             $this->view->distid=$distid;
             $where['eid']=$eid;
             $where['oid']=$oid;
@@ -734,25 +735,25 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             // $this->view->temp=$temp; 
             // $this->view->temp2=$temp2; 
 
-            $wheredoc['eid'] = $data['eid'] = $eid;
-            $wheredoc['oid'] = $data['oid'] = $oid;
-            $wheredoc['escid'] = $data['escid'] = $escid;
-            $wheredoc['subid'] = $data['subid'] = $subid;
-            $wheredoc['courseid'] = $data['courseid'] = $courseid;
-            $wheredoc['curid'] = $data['curid'] = $curid;
-            $wheredoc['turno'] = $data['turno'] = $turno;
-            $wheredoc['perid'] = $data['perid'] = $perid;
-            $data['uid'] = $uid;
-            $data['pid'] = $pid;
-            $data['hours_t'] = $hteoria;
-            $data['hours_p'] = $hpractica;
-            $data['is_com'] = $compromiso;
-            $data['distid'] = $distid;
-            $data['hours_total'] = $totalhoras;
-            $data['groups'] = $grupos;
-            $data['state'] = $estado;
-            $data['semid'] = $semid;
-            $data['is_main'] = $principal;
+            $wheredoc['eid'] = $datadoccour['eid'] = $eid;
+            $wheredoc['oid'] = $datadoccour['oid'] = $oid;
+            $wheredoc['escid'] = $datadoccour['escid'] = $escid;
+            $wheredoc['subid'] = $datadoccour['subid'] = $subid;
+            $wheredoc['courseid'] = $datadoccour['courseid'] = $courseid;
+            $wheredoc['curid'] = $datadoccour['curid'] = $curid;
+            $wheredoc['turno'] = $datadoccour['turno'] = $turno;
+            $wheredoc['perid'] = $datadoccour['perid'] = $perid;
+            $datadoccour['uid'] = $uid;
+            $datadoccour['pid'] = $pid;
+            $datadoccour['hours_t'] = $hteoria;
+            $datadoccour['hours_p'] = $hpractica;
+            $datadoccour['is_com'] = $compromiso;
+            $datadoccour['distid'] = $distid;
+            $datadoccour['hours_total'] = $totalhoras;
+            $datadoccour['groups'] = $grupos;
+            $datadoccour['state'] = $estado;
+            $datadoccour['semid'] = $semid;
+            $datadoccour['is_main'] = $principal;
             $doccourse = new Api_Model_DbTable_Coursexteacher();
             $exiscour=$doccourse->_getFilter($wheredoc,$attrib=null,$orders=null);
             if($exiscour and $principal=="S"){ ?>
@@ -770,61 +771,70 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                     </script>
                     <?php
                 }else{
-                    $doccourse->_save($data);                    
-                    $estado='A';
-                    // $usuario = new Admin_Model_DbTable_Usuario();
-                    // $list_p1 = $usuario ->_getUsuarioXEstado($eid,$oid,$uid,$estado);
-                    $verescuela = $list_p1['escid'];
-                    $versedid = $list_p1['sedid'];
+                    $doccourse->_save($datadoccour);
+                    $pkdistdoc['eid'] = $datadistdoc['eid'] = $eid;
+                    $pkdistdoc['oid'] = $datadistdoc['oid'] = $oid;
+                    $pkdistdoc['perid'] = $datadistdoc['perid'] = $perid;
+                    $pkdistdoc['uid'] = $datadistdoc['uid'] = $uid;
+                    $pkdistdoc['pid'] = $datadistdoc['pid'] = $pid;
+                    $datadistdoc['total_hour_admin'] = 0;
+                    $distdoc = new Distribution_Model_DbTable_DistributionTeacher();
                     if($esciddoc==$escid){
-                        $distdoc = new Distribucion_Model_DbTable_Distribuciondocente();
-                        if($doc=$distdoc->_getDistribucionDocente($perid,$eid,$oid,$distid,$sedid,$pid,$escid,$uid))
-                        {
-                            //print_r($doc);
-                        }else{
-                            $data1['eid'] = $eid;
-                            $data1['oid'] = $oid;
-                            $data1['distid'] = $distid;
-                            $data1['perid'] = $perid;
-                            $data1['sedid'] = $sedid;
-                            $data1['pid'] = $pid;
-                            $data1['escid'] = $escid;    
-                            $data1['uid'] = $uid;
-                            $data1['t_h_acad'] = $totalhoras;
-                                      
-                            $distdoc = new Distribucion_Model_DbTable_Distribuciondocente();
-                            $distdoc-> _guardar($data1);
+                        $pkdistdoc['distid'] = $datadistdoc['distid'] = $distid;
+                        $pkdistdoc['subid'] = $datadistdoc['subid'] = $subid;
+                        $pkdistdoc['escid'] = $datadistdoc['escid'] = $escid;
+                        $exisdistdoc=$distdoc->_getOne($pkdistdoc);
+                        if(!$exisdistdoc){
+                            $datadistdoc['total_hour_acad'] = $totalhoras;
+                            $datadistdoc['register'] = $this->sesion->uid;
+                            $datadistdoc['created'] = date('Y-m-d');
+                            $distdoc->_save($datadistdoc);
                         }
                     }else{
-                        $dist = new Admin_Model_DbTable_Distribucion();
-                        $list_distid=$dist->_getDistribucionEscuela($eid,$oid,$verescuela,$perid);
-                        $traerdistid=$list_distid['distid'];
-                        // echo $traerdistid;
-
-                        $distdoc = new Distribucion_Model_DbTable_Distribuciondocente();
-                        if($distdoc->_getDistribucionDocente($perid,$eid,$oid,$traerdistid,$versedid,$pid,$verescuela,$uid))
-                        {
-                        }else{
-                            $data1['eid'] = $eid;
-                            $data1['oid'] = $oid;
-                            $data1['distid'] = $traerdistid;
-                            $data1['perid'] = $perid;
-                            $data1['sedid'] = $versedid;
-                            $data1['pid'] = $pid;
-                            $data1['escid'] = $verescuela;    
-                            $data1['uid'] = $uid;
-                            $data1['t_h_acad'] = $totalhoras;
-                                          
-                            $distdoc = new Distribucion_Model_DbTable_Distribuciondocente();
-                            $distdoc-> _guardar($data1);
+                        $wheredis['eid']=$eid;
+                        $wheredis['oid']=$oid;
+                        $wheredis['escid']=$esciddoc;
+                        $wheredis['perid']=$perid;
+                        $dist = new Distribution_Model_DbTable_Distribution();
+                        $distiddoc=$dist->_getFilter($wheredis,$atrib=array());
+                        
+                        $pkdistdoc['distid'] = $datadistdoc['distid'] = $distiddoc[0]['distid'];
+                        $pkdistdoc['subid'] = $datadistdoc['subid'] = $subiddoc;
+                        $pkdistdoc['escid'] = $datadistdoc['escid'] = $esciddoc;
+                        $exisdistdoc=$distdoc->_getOne($pkdistdoc);
+                        if(!$exisdistdoc){
+                            $datadistdoc['total_hour_acad'] = $totalhoras;
+                            $datadistdoc['register'] = $this->sesion->uid;
+                            $datadistdoc['created'] = date('Y-m-d');
+                            $distdoc->_save($datadistdoc);
                         }
                     }                    
                 }
             }
-            $cursosasignados = new Admin_Model_DbTable_Docentexcursos();
-            $curasig=$cursosasignados->_getCursosXDocenteXPeriodoXDistribucion($eid, $oid,$uid,$pid,$perid,$distid);
-            //print_r($curasig);
-            $this->view->cursosasignados=$curasig;
+
+            $wheretea['eid']=$eid;
+            $wheretea['oid']=$oid;
+            $wheretea['uid']=$uid;
+            $wheretea['pid']=$pid;
+            $wheretea['perid']=$perid;
+            $wheretea['distid']=$distid;
+            $courasig = $doccourse->_getFilter($wheretea,$attrib=null,$orders=null);
+            if ($courasig) {
+                $tam=count($courasig);
+                $wherecourse['eid']=$eid;
+                $wherecourse['oid']=$oid;
+                $wherecourse['escid']=$escid;
+                $wherecourse['subid']=$subid;
+                $cours= new Api_Model_DbTable_Course();
+                for ($i=0; $i < $tam; $i++) { 
+                    $wherecourse['curid']=$courasig[$i]['curid'];
+                    $wherecourse['courseid']=$courasig[$i]['courseid'];
+                    $dbcourse=$cours->_getOne($wherecourse);
+                    $courasig[$i]['name']=$dbcourse['name'];
+                    $courasig[$i]['credits']=$dbcourse['credits'];
+                }
+            }
+            $this->view->cursosasignados=$courasig;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -832,10 +842,57 @@ class Distribution_DistributionController extends Zend_Controller_Action {
 
     public function savedistributionadminAction(){
         try {
+            $this->_helper->layout()->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $escid = $this->sesion->escid;
+            $subid = $this->sesion->subid;
+            $perid = $this->_getParam("perid");
+            $uid = $this->_getParam("uid");
+            $pid = $this->_getParam("pid");
+            $distid = $this->_getParam("distid");
+            $subiddoc = $this->_getParam("subiddoc"); 
+            $esciddoc = $this->_getParam("esciddoc");
+            $work = $this->_getParam("work");            
+            $hours = $this->_getParam("hours");
+            $this->view->escid=$escid;
+            $this->view->subid=$subid;
+            $this->view->esciddoc=$esciddoc;
+            $this->view->subiddoc=$subiddoc;
+            $this->view->uid=$uid;
+            $this->view->pid=$pid;
+            $this->view->eid=$eid;
+            $this->view->oid=$oid;
+            $this->view->distid=$distid;
+            $this->view->perid=$perid; 
+
+            if(substr($esciddoc,0,3)=='2ES' and $esciddoc<>'2ESTY'){
+                // $dis=new Admin_Model_DbTable_Distribucion();
+                // $dist=$dis->_getDistribucionEscuela($eid,$oid,'2ES',$perid);
+                // $distid=$dist['distid'];
+                // $sedid=$dist['sedid'];
+                // $escid=$dist['escid'];
+            }
+
+            $datadistadm['eid'] = $pk['eid'] = $eid;
+            $datadistadm['oid'] = $pk['oid'] = $oid;
+            $datadistadm['uid'] = $pk['uid'] = $uid;
+            $datadistadm['pid'] = $pk['pid'] = $pid;
+            $datadistadm['escid'] = $pk['escid'] = $esciddoc;
+            $datadistadm['subid'] = $pk['subid'] = $subiddoc;
+            $datadistadm['distid'] = $pk['distid'] = $distid;
+            $datadistadm['perid'] = $pk['perid'] = $perid;            
+            $datadistadm['work'] = $work;
+            $datadistadm['hours'] = $hours;
             
+            $distadm = new Distribution_Model_DbTable_DistributionAdmin();
+            $distadm->_save($datadistadm);
+
+            $distadm = new Distribution_Model_DbTable_DistributionAdmin();
+            $labor=$distadm->_getAll($pk);
+            $this->view->administrativas=$labor;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
     }
 }
-
