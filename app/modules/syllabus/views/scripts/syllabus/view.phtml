@@ -52,7 +52,7 @@ $total=$curso['hours_theoretical']+$curso['hours_practical']; ?>
         </tr>
         <tr>
             <th>1.<?php echo $num=$num+1 ?> SECCIÓN:</th>
-            <td><?php echo strtoupper($turno)?></td>
+            <td><?php echo strtoupper($this->turno)?></td>
         </tr>
         <tr>
             <th>1.<?php echo $num=$num+1 ?> CREDITOS:</th>
@@ -81,7 +81,7 @@ $total=$curso['hours_theoretical']+$curso['hours_practical']; ?>
         </tr>
     </table>
 </div>
-
+<div>
 <?php if($this->silabo) { 
     $silabo=$this->silabo;?>
         <div style="margin-left:30px">
@@ -241,3 +241,4 @@ $total=$curso['hours_theoretical']+$curso['hours_practical']; ?>
             <div class="detalle"><?php echo $silabo['sources']?></div>
         </div>
 <?php }?>
+</div>
