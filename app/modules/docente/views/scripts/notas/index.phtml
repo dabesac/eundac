@@ -65,26 +65,27 @@
         		      $list= new Api_Model_DbTable_Course();
 	        	      $course=$list->_getOne($where);
         		      if ($number['facid']==$courses['facid']) { ?>
-        			<div class='curso'>
-                        <div style='height: 40px'>
-                           <b><?php echo $course['courseid']." - ".$course['name'];?></b> 
-                        </div>
-                        <div>
-                            <div style='margin-right:5px;'>
-                                <b>Curricula:</b>
+        			    <div class='curso'>
+                                <div style='height: 40px'>
+                                    <b><?php echo $course['courseid']." - ".$course['name'];?></b> 
                             </div>
-                                <?php echo $courses['curid']?>
-                            <div style='float:right;'>
-                                <b>Turno:</b>
-                                <?php echo $courses['turno']?> 
+                            <div>
+                                <div style='margin-right:5px;'>
+                                    <b>Curricula:</b>
+                                </div>
+                                    <?php echo $courses['curid']?>
+                                <div style='float:right;'>
+                                    <b>Turno:</b>
+                                    <?php echo $courses['turno']?> 
+                                </div>
                             </div>
-                        </div>
-                        <a class="btn btn-default">Notas</a>
-                        <a class="btn btn-default">Asistencia</a>
-                        <a class="btn btn-default">Silabo</a>
-                        <a class="btn btn-default">Aplazados</a>
-                        <a class="btn btn-default"><img src="/img/icono_imprimir.png"></a>
-        			</div>
+
+                            <a class="btn btn-default" href="">Notas</a>
+                            <a class="btn btn-default" href="">Asistencia</a>
+                            <a id='silabo' href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>" class="btn btn-default">Silabo</a>
+                            <a class="btn btn-default" href="">Aplazados</a>
+                            <a class="btn btn-default" href=""><img src="/img/icono_imprimir.png"></a>
+        			    </div>
             <?php			
         		}
         	}
@@ -96,3 +97,4 @@
 <?php 
 } 
 ?>
+

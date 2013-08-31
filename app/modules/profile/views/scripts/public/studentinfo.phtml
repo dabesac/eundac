@@ -1,5 +1,5 @@
 <div class="col-sm-9">
-
+<div id="maininfo">
 <div class="panel panel-default">
   <div class="panel-body">
   <table class="table">
@@ -23,7 +23,7 @@
   </div>
 </div>
 
-<div class="panel panel-danger">
+<div class="panel panel-info">
   <div class="panel-heading"><h3>Datos de Ingreso</h3></div>
   <div class="panel-body">
     <div class="col-sm-4">
@@ -122,14 +122,65 @@
     </div>  
   </div><!-- panel body -->
 </div><!--panel danger -->
+</div><!-- main info -->
+<div id="datastudent"></div>
+
 </div><!-- div col 9 -->
 
 <div class="col-sm-3">
+<ul class="nav nav-pills nav-stacked" id="backprofileTab">
+  <li><a href="#" id="btnprofile"><h4>Volver al Perfil</h4></a></li>
+</ul>
+<br><br>
 <ul class="nav nav-pills nav-stacked" id="masinfoTab">
   <li><a href="#" id="btnfamily"><h4>Familia</h4></a></li>
-  <li><a href="#" id="btnacademic"><h4>Academico</h4></a></li>
+  <li><a href="#" id="btnacademic"><h4>Datos Academico</h4></a></li>
+  <li><a href="#" id="btnstadistic"><h4>Datos Estadistico</h4></a></li>
   <li><a href="#" id="btnlaboral"><h4>Laboral</h4></a></li>
   <li><a href="#" id="btninters"><h4>Intereses</h4></a></li>
-  <li><a class="hidden"></a></li>
+  <li class="hidden"><a></a></li>
 </ul>
 </div>
+
+<script>
+   $("#btnprofile").addClass("hidden")
+
+  $('#masinfoTab a').click(function (e) {
+    e.preventDefault()
+    $("#maininfo").addClass("hidden")
+    $("#datastudent").removeClass("hidden")
+    $("#btnprofile").removeClass("hidden")
+    $(this).tab('show')
+  })
+
+  $('#backprofileTab a').click(function (e) {
+    e.preventDefault()
+    $('#masinfoTab a:last').tab('show')
+  })
+
+  $("#btnfamily").click(function(){
+    $("#datastudent").load("/profile/public/studentfamily");
+  })
+
+  $("#btnacademic").click(function(){
+    $("#datastudent").load("/profile/public/studentacademic");
+  })
+
+  $("#btnstadistic").click(function(){
+    $("#datastudent").load("/profile/public/studentstatistic");
+  })
+
+  $("#btnlaboral").click(function(){
+    $("#datastudent").load("/profile/public/studentlaboral");
+  })
+
+  $("#btninters").click(function(){
+    $("#datastudent").load("/profile/public/studentinterest");
+  })
+
+  $("#btnprofile").click(function(){
+    $("#datastudent").addClass("hidden")
+    $("#maininfo").removeClass("hidden")
+    $("#btnprofile").addClass("hidden")
+  })
+</script>

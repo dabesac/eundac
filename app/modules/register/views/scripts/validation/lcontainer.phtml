@@ -1,0 +1,225 @@
+<!-- <div id="barra-admin"> -->
+<?php
+$eid=$this->eid;
+$oid=$this->oid;
+$subid=$this->subid;
+
+
+?>
+<table><div id="Datos">
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th><center>Curricula</center></th>
+            <th colspan="2"><center>Curso</center></th>
+
+            <th ><center>Ingrese la Nota</center></th>
+            <th ><center>Resolucion</center></th>
+        </tr>
+    </thead>
+    <tr>
+        <td>
+            <center>
+                <select  id="curid" name="curid" class="input-medium">
+                    <option  value="">Seleccione..</option>
+                    <?php
+                    foreach ($this->curriculas  as $curricula){
+                        ?>
+                        <option value="<?php echo $curricula['curid']?>"><?php echo $curricula['curid']?></option>
+                        <?php
+                    }?>
+                </select>
+            </center>
+        </td>
+
+        <td colspan="2"<center>
+            <center>
+            <select  id="cursoid" name="cursoid" class="input-xlarge">
+                <option  value="">Seleccione</option>
+            </select></center>
+        </td>  
+
+        <td><center>
+        <input type="text" id="nota" aling="center" class="input-mini" value="<?php echo $this->nota ?>"  name="firstname" /><label class="msg text-error"></label></center></td>
+        
+        <td><center>
+        <input type="text" id="resolucion" class="input-large" onBlur="CheckUserName(this);"  value="" name="firstname" /></center></td>
+
+                                              
+    </tr>
+
+    <tr>       
+        <input type="hidden" id="uidreg" class="input-small" value="<?php echo $this->user ?>" disabled='true' name="firstname" />
+    </tr>
+
+   <tr>
+        <td colspan="5"><center><a href="#" class="btn btn-info" id="agregaralumnoxx">Guardar Curso</a></center></td>
+        
+    </tr>
+    
+</table>
+
+    <div id="header_alumnos"></div>
+</div>
+</center>
+
+<table>
+<div >
+<center><table id="lista" class="table span12 table-hover">
+        <thead>
+        <tr style="background: #ccc; color: #000000;">
+                <th>#</th> 
+                <th >CURRICULA</th>
+                <th >CODIGO</th>
+                <th >CURSO</th>
+                <th >TURNO</th>
+                <th >RESOLUCION</th>
+                <th >NOTA</th>
+        </tr>
+        </thead>
+    <?php
+    if ($this->cursosconvalidados)
+    {
+        $i=1;
+       foreach ($this->cursosconvalidados as $convalidado)    
+        {
+            $escid=$convalidado['escid'];
+            $courseid=$convalidado['courseid'];
+            $curid=$convalidado['curid'];
+
+            $curso = new Api_Model_DbTable_Course();
+            $dat['eid']=$eid;
+            $dat['oid']=$oid;
+            $dat['subid']=$subid;
+            $dat['escid']=$escid;
+            $dat['courseid']=$courseid;
+            $dat['curid']=$curid;
+            //print_r($dat);
+            $list_curso = $curso ->_getOne($dat);
+            $info = $list_curso['name'];
+           ?>
+            <tr>
+                <td><?php echo $i;?></td>
+         
+                <td class="input-mini"><center><?php echo $convalidado['curid'];?></center></td>
+                <td class="input-mini"><center><?php echo $convalidado['courseid'];?></center></td>
+                <td><?php echo $info;?></td>
+                <td class="input-mini"><?php echo $convalidado['turno'];?></td>
+                <td class="span2"><?php echo $convalidado['document_auth'];?></td>
+                <td class="input-mini"><?php echo $convalidado['notafinal'];?></td>
+              </tr>
+           <?php
+             $i++;
+        }
+    }
+    ?>
+    </table>
+</div>
+<table>
+
+
+
+</table>
+
+<script>
+ $("#curid").change(function(){
+        var curid = $(this).val();        
+        var escid= "<?php echo $curricula['escid'];?>";   
+        var subid= "<?php echo $curricula['subid'];?>";   
+
+        url="/register/validation/coursexcurricula/curid/"+curid+"/escid/"+escid+"/subid/"+subid+"/uid/<?php echo $this->uid?>/pid/<?php echo $this->pid ?>/nota/<?php echo $this->nota?>";
+
+        $("#cursoid").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#cursoid").load(url);
+    }); 
+</script>
+
+<script>
+    $("#agregaralumnoxx").click(function(){
+        
+        var curricula = $("#curid").val();
+        var cursos = $("#cursoid").val();
+        var nota = $("#nota").val();
+        var reso = $("#resolucion").val();
+        var uidreg = $("#uidreg").val();
+
+        var tmp=cursos.split(";--;");
+        var courseid=tmp[0];
+        var semid=tmp[1];
+        var creditos=tmp[2];
+         if (curricula!='' && cursos!='' && nota!='' && reso!='')
+         {
+            $("#lista").hide();
+            var url = "/register/validation/save/subid/<?php echo $curricula['subid'] ?>/escid/<?php echo $curricula['escid']?>/perid/<?php echo $this->perid ?>/uid/<?php echo $this->uid ?>/pid/<?php echo $this->pid ?>/temp/<?php echo $this->temp ?>"+"/curid/"+curricula+"/courseid/"+courseid+"/semid/"+semid+"/credi/"+creditos+"/nota/"+nota+"/reso/"+reso+"/uidreg/"+uidreg;
+            //alert(url);
+            $("#header_alumnos").load(url);
+            $("#header_alumnos").html("Cargando..."); 
+        }
+        else
+        {
+            alert("Ingrese todos los datos obligatorios");
+            return false;
+        }
+    });
+</script>
+
+<script>
+function CheckUserName(ele) {
+if (/\s/.test(ele.value)) { alert("no se permiten espacios en blanco"); }
+}
+</script>
+
+<script>
+    $("#nota").keyup(function()
+    {
+        var v = $(this).val();
+        if (isNaN(v))
+        {
+            $("#nota").val("");
+            $(".msg").html("* solo se permite números");
+        }
+        else
+        {
+            if ((v > 20 || v < 1))
+            {
+                $("#nota").val("");
+                $(".msg").html("* Ingrese de 0 a 20");
+            }
+            else
+            {
+                $(".msg").html("");
+            }
+        }
+
+    });
+
+    $("#nota").blur(function()
+    {
+        var vnota = $(this).val();
+        if (vnota<11 && vnota>1)
+        {
+            $("#nota").focus();
+            $("#nota").val("");
+            $(".msg").html("* CONVALIDACION: notas aprobatorias");
+        }
+    });
+
+    $("#resolucion").keyup(function()
+    {
+        var r = $(this).val();
+        $("#resolucion").val(r.toUpperCase());
+    });
+</script>
+
+<script>
+var total_letras = 2;
+$('#nota').keyup(function() 
+{
+    var longitud = $(this).val().length;
+    var resto = total_letras - longitud;
+    $('#numero').html(resto);
+    if(resto <= 0){
+        $('#nota').attr("maxlength", 2);
+    }
+});
+</script>

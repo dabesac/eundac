@@ -87,4 +87,29 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
         $r = $sql->fetchAll();
         return $r;
     }
+
+    public function _getCoursesXCurriculaXShool($eid='',$oid='',$curid='',$escid='')
+    {
+        try
+        {
+            if ($eid=='' || $oid=='' || $curid=='' || $escid=='') return false;
+            $str="eid='$eid' and oid='$oid' and escid='$escid' and curid='$curid' and state='A'";
+            $r = $this->fetchAll($str,"cast(semid as integer),courseid");
+            if ($r) return $r->toArray ();
+            return false;
+        }  
+        catch (Exception $ex)
+        {
+            print "Error: Leer todos los cursos de una curricula ".$ex->getMessage();
+        }
+    }
+
+    public function _getCourseLlevo($where=null){
+        if ($where['escid']==''|| $where['uid']==''|| $where['curid']=='' || $where['courseid']=='') return false;
+            $sql=$this->_db->query("
+                    select state_llevo('".$where['escid']."','".$where['uid']."','".$where['curid']."','".$where['courseid']."') as apto          
+               ");
+        $r = $sql->fetchAll();
+        return $r;
+    }
 }
