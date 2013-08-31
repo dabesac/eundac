@@ -16,7 +16,7 @@ class IndexController extends Zend_Controller_Action {
     	$sesion1  = Zend_Auth::getInstance();
     	if($sesion1->hasIdentity()){
     		$sesion = $sesion1->getStorage()->read();
-    		//$this->_helper->redirector('index','index',base64_decode($sesion->rol['module']));
+    		$this->_helper->redirector('index','index',($sesion->rol['module']));
     	}
     	
     	$form = new Default_Form_Login();
@@ -185,11 +185,11 @@ class IndexController extends Zend_Controller_Action {
     				$logdata['oid']=$oid;
     				$logdata['uid']=$cod;
     				$rlogs = $logs->_getConnect($logdata);
-    				if (count($rlogs)>1){
+    				if (count($rlogs)>2){
     					//echo "Existe otra sesion abierta en algun otro lugar";exit();
     					$this->_redirect("/index/cerrar");
     				}
-    				$urlmod = base64_decode($data->rol['module']);
+    				$urlmod = $data->rol['module'];
     				$this->_redirect($urlmod);
     				//Falta direccionar
     			}else {
@@ -262,5 +262,7 @@ class IndexController extends Zend_Controller_Action {
     	}
     	
     }
+    
+
     
 }
