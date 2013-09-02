@@ -37,7 +37,7 @@ class Default_Form_Login extends Zend_Form
         $rid->removeDecorator('HtmlTag')->addFilters(array('StringTrim', 'StripTags'));
         $rid->setAttrib("class","form-control");
         $rids = new Api_Model_DbTable_Rol();
-        $rrows_oids=$rids->_getAll($data);
+        $rrows_oids=$rids->_getAllACL($data);
         if ($rrows_oids){
         	foreach ($rrows_oids as $_rid ){
         		$rid->addMultiOption(base64_encode($_rid['rid']).";--;".$_rid['prefix'],$_rid['name']);
@@ -53,8 +53,8 @@ class Default_Form_Login extends Zend_Form
         $usuario->setAttrib("title","Código de Matricula o DNI ");
         $usuario->removeDecorator('Label');
         $usuario->setAttrib("class","form-control");
-        $usuario->removeDecorator('HtmlTag');
-        
+        $usuario->setAttrib("maxlength","10");
+        $usuario->removeDecorator('HtmlTag');        
 		$usuario->setAttrib("rel","tooltip");
 		$usuario->setAttrib("placeholder","Código de Matricula o DNI");
 		
