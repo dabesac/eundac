@@ -9,9 +9,6 @@ class Register_StudentController extends Zend_Controller_Action {
             $this->_helper->redirector('index',"index",'default');
         }
          $login = $sesion->getStorage()->read();
-        if (!$login->rol['module']=="alumno"){
-              $this->_helper->redirector('index','index','default');
-        }
         $this->sesion = $login;
         
     }
@@ -411,7 +408,7 @@ class Register_StudentController extends Zend_Controller_Action {
                         );
                 // }
 
-                print_r($where); exit();
+                //print_r($where); exit();
               
             }
             else{
@@ -437,14 +434,13 @@ class Register_StudentController extends Zend_Controller_Action {
 
 
     }
+    
+    
     public function registartionAction(){
-
-
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $pid=$this->sesion->infouser['pid'];
             $uid=$this->sesion->uid;
-
             $params = $this->getRequest()->getParams();
             $paramsdecode = array();
             foreach ( $params as $key => $value ){
@@ -452,7 +448,6 @@ class Register_StudentController extends Zend_Controller_Action {
                     $paramsdecode[base64_decode($key)] = base64_decode($value);
                 }
             }
-
             $params = $paramsdecode;
             $escid=trim($params['escid']);
             $subid=trim($params['subid']);
