@@ -65,6 +65,22 @@ class Api_Model_DbTable_Bankreceipts extends Zend_Db_Table_Abstract
 		}
 	}
 
+    public function _update_x_periods_x_receipt($data,$pk)
+    {
+        try {
+
+            if ($pk['operation']=='' || $pk['code_student']=='') return false;
+            $where = "operation = '".$pk['operation']."'and code_student = '".$pk['code_student']."' 
+                        and  perid='".$pk['perid']."' and concept='".$pk['concept']."'";
+
+            return $this->update($data, $where);
+            return false;
+            
+        } catch (Exception $e) {
+            print "Error: Update receipt por periods ".$e->getMessage();
+            
+        }
+    }
 	   public function _getbankreceiptsXAnio($anio='')
     {
         try 

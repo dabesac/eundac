@@ -46,7 +46,7 @@
 	                    	$(".modified"+'-'+courseid+'-'+turno).show();
 	                    	$(".modified"+'-'+courseid+'-'+turno).addClass('btn-success');
 
-	                        // window.location.href=window.location.href;
+	                        window.location.href=window.location.href;
 	                    }else{
 	                        //Pintar Fracaso
 	                    		$("#modal").modal('show');
@@ -107,7 +107,7 @@
 	                    	$(".register"+'-'+courseid+'-'+turno).show();
                     		$(".btn-register").prop('disabled',false);
 	                    	
-	                    //     // window.location.href=window.location.href;
+	                        window.location.href=window.location.href;
 	                    }else{
 	                    //     //Pintar Fracaso
 	                    		$("#modal").modal('show');
@@ -146,7 +146,9 @@
 	            success:function($data){
 							         
                     if($data.status == true){
-    					window.location.reload(true);
+                    	
+	                    window.location.href=window.location.href;
+
                     }else{
                         //Pintar Fracaso
                     	$("#modal").modal('show');
@@ -187,7 +189,7 @@
 	            success:function($data){
 	            	// alert($data.de+" "+$data.deleted);
                     if($data.status == true){
-        				window.location.reload(true);
+	                    window.location.href=window.location.href;
                     }else{
                         //Pintar Fracaso
                     	$("#modal").modal('show');
@@ -241,14 +243,14 @@
 			<div class='col-md-6'>
 				<?php if ($this->state == "B") { ?> 
 					
-					<a href="#" class='btn btn-success' id='pre_register'
+					<buttom  class='btn btn-success' id='pre_register'
 					   	total="<?php echo $this->total_credits?>"
 					   	regid='<?php echo $this->regid?>'
 						escid='<?php echo $this->escid?>'
 						subid='<?php echo $this->subid?>'
 						perid='<?php echo $this->perid?>'
 						onclick='registration(this)'
-					><span class='glyphicon glyphicon-ok'></span> Guardar Pre Matricula</a>
+					><span class='glyphicon glyphicon-ok'></span> Guardar Pre Matricula</buttom>
 
 					<a href="/register/student" class='btn btn-success'><span class='glyphicon glyphicon-repeat'></span> Actualizar Pago</a>
 				<?php }?>
@@ -263,14 +265,14 @@
 					?>
 					<a href="<?php echo $url ?>" class='btn btn-primary'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
 
-					<a href="#" class='btn btn-danger'
+					<buttom  class='btn btn-danger'
 						regid='<?php echo $this->regid?>'
 						escid='<?php echo $this->escid?>'
 						subid='<?php echo $this->subid?>'
 						perid='<?php echo $this->perid?>'
 						deleted='<?php echo $this->deleted?>'
 						onclick='delete_pre_register(this)'
-					><span class='glyphicon glyphicon-remove'></span> Eliminar Pre-Matricula</a>
+					><span class='glyphicon glyphicon-remove'></span> Eliminar Pre-Matricula</buttom>
 				<?php }?>
 			</div>
 				
