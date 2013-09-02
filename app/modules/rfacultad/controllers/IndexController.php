@@ -37,6 +37,7 @@ class Rfacultad_IndexController extends Zend_Controller_Action {
             $this->view->oid=$where['oid'];
             $db_esc = new Api_Model_DbTable_Registration();
             $lschool= $db_esc->_totalSchoolEnrollment($where);
+            print_r($lschool);
             $this->view->lschool=$lescuelas;  
         }
         catch(Exception $ex)

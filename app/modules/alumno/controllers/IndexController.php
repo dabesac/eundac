@@ -39,8 +39,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $where['pid']=$this->sesion->pid;
             $where['escid']=$this->sesion->escid;
             $where['subid']=$this->sesion->subid;
-        $perid = $this->sesion->period->perid;
-
             $this->view->escid = $escid;
             $this->view->perid = $perid;
             $this->view->uid = $uid;
@@ -52,11 +50,9 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $this->view->curid = $curid;
             $dbcursos=new Api_Model_DbTable_Course();
             $datcursos=$dbcursos->_getCountCoursesxSemester($where);
-            // print_r($datcursos);
             $this->view->data=$datcursos;
             $cur=$dbcursos->_getCountCoursesxApproved($where);
-            // print_r($cur);
-            $this->view->cursos=$cur;     
+            $this->view->cursos=utf8_encode($cur);     
         }
         catch(Exception $ex)
         {

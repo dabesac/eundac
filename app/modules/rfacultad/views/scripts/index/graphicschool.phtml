@@ -16,7 +16,7 @@
         data.addColumn('number', 'Slices');
         data.addRows([
        <?php
-       foreach ($this->lescuelas as $datos) {
+       foreach ($this->cursos as $datos) {
            $nombre=$datos['name'];
            $cantidad=$datos['conteo']; ?>
         ['<?php print $nombre?>' , <?php print $cantidad?>],
