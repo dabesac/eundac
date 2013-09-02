@@ -6,6 +6,8 @@
 <script type="text/javascript">
 
 		function register_subject($this){
+
+
 			var $register={};
 			
 			$register[$.base64.encode('curid')] = $.base64.encode($.trim($($this).attr('curid'))); 
@@ -35,7 +37,7 @@
 	            		var courseid=$($this).attr('courseid');
 	            		var turno=$($this).attr('turno');
 
-	            		
+	            		// alert($data);
 	                    if($data.status == true){
 
 	                    	$('#assign_credist').html($data.credits_assing);
@@ -45,8 +47,7 @@
 	                    	$(".register"+'-'+courseid+'-'+turno).hide();
 	                    	$(".modified"+'-'+courseid+'-'+turno).show();
 	                    	$(".modified"+'-'+courseid+'-'+turno).addClass('btn-success');
-
-	                        window.location.href=window.location.href;
+	                    	$("#modal").modal('hide');
 	                    }else{
 	                        //Pintar Fracaso
 	                    		$("#modal").modal('show');
@@ -56,7 +57,7 @@
 	                    		$(".register"+'-'+courseid+'-'+turno).prop('disabled',true);
 
 	                    }
-	                    // $('#modalloader').modal('hide');
+	                    $('#modalloader').modal('hide');
 	            },
 	            error:function($data){
 	                    //Pintar el error
@@ -68,7 +69,8 @@
 			// return false;
 		}
 
-		function modifiedsubjet($this){
+		function modified_subjet($this){
+
 			var $register={};
 			
 			$register[$.base64.encode('curid')] = $.base64.encode($.trim($($this).attr('curid'))); 
@@ -97,6 +99,7 @@
 	            url:$url,
 	            success:function($data){
 
+
 				        if($data.status == true){
 
 	                    	$('#assign_credist').html($data.credits_assing);
@@ -107,13 +110,12 @@
 	                    	$(".register"+'-'+courseid+'-'+turno).show();
                     		$(".btn-register").prop('disabled',false);
 	                    	
-	                        window.location.href=window.location.href;
 	                    }else{
 	                    //     //Pintar Fracaso
 	                    		$("#modal").modal('show');
 	                    		$("#error_").html("Error Al Eliminar Curso");
 	                    }
-	                    // $('#modalloader').modal('hide');
+	                    $('#modalloader').modal('hide');
 	            },
 	            error:function($data){
 	                    //Pintar el error
@@ -123,9 +125,10 @@
         	});
 		}
 
-		function registration($this){
-			var $objets={};
+		function save_registration($this){
 
+			var $objets={};
+			$("#save_register").attr('disabled');
 			// alert();
 			$objets[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
 			$objets[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
@@ -144,7 +147,7 @@
 	        $.ajax({
 	            url:$url,
 	            success:function($data){
-							         
+
                     if($data.status == true){
                     	
 	                    window.location.href=window.location.href;
@@ -155,10 +158,10 @@
                     	$("#error_").html("Selecione al menos una asignatura para realizar su Pre- Matrícula");
                         // mensajeria('error','El registro no se Guardado ');
                     }
-                    // $('#modalloader').modal('hide');
 	            },
 	            error:function($data){
 	                    //Pintar el error
+	                alert("Error");
                     $("#modal").modal('show');
                 	$("#error_").html("Error en el Servidor");
 	            }
@@ -188,6 +191,7 @@
 	            url:$url,
 	            success:function($data){
 	            	// alert($data.de+" "+$data.deleted);
+	            	
                     if($data.status == true){
 	                    window.location.href=window.location.href;
                     }else{
@@ -195,7 +199,7 @@
                     	$("#modal").modal('show');
                     	$("#error_").html("A exedido los Cantidad de Eliminar Pre Matrícula");
                     }
-	                    // $('#modalloader').modal('hide');
+	                    $('#modalloader').modal('hide');
         				
 	            },
 	            error:function($data){
@@ -243,13 +247,13 @@
 			<div class='col-md-6'>
 				<?php if ($this->state == "B") { ?> 
 					
-					<buttom  class='btn btn-success' id='pre_register'
+					<buttom  class='btn btn-success' id='save_register'
 					   	total="<?php echo $this->total_credits?>"
 					   	regid='<?php echo $this->regid?>'
 						escid='<?php echo $this->escid?>'
 						subid='<?php echo $this->subid?>'
 						perid='<?php echo $this->perid?>'
-						onclick='registration(this)'
+						onclick='save_registration(this)'
 					><span class='glyphicon glyphicon-ok'></span> Guardar Pre Matricula</buttom>
 
 					<a href="/register/student" class='btn btn-success'><span class='glyphicon glyphicon-repeat'></span> Actualizar Pago</a>
@@ -427,9 +431,10 @@
 								veces='<?php print_r($this->veces)?>'
 								perid='<?php echo $this->perid?>'
 								condition='<?php echo $this->condition_credits?>'
-								onclick='modifiedsubjet(this)' 
+								onclick='modified_subjet(this)' 
 								style='<?php echo $display_mod ?>'>
-							<span class='glyphicon glyphicon-check'></span></button>
+							<span class='glyphicon glyphicon-check'></span>
+						</button>
 						<?php }}?>
 					</td>
 				</tr>
