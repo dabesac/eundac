@@ -16,7 +16,7 @@ class IndexController extends Zend_Controller_Action {
     	$sesion1  = Zend_Auth::getInstance();
     	if($sesion1->hasIdentity()){
     		$sesion = $sesion1->getStorage()->read();
-    		//$this->_helper->redirector('index','index',base64_decode($sesion->rol['module']));
+    		$this->_helper->redirector('index','index',($sesion->rol['module']));
     	}
     	
     	$form = new Default_Form_Login();
@@ -30,7 +30,7 @@ class IndexController extends Zend_Controller_Action {
     			$rid = base64_decode($rid_[0]);
     			$prefix = trim($rid_[1]);
     			$cod = ($uid = $form->getValue('usuario').$prefix);    			
-    			$pass = $form->getValue('clave');
+    			$pass = md5($form->getValue('clave'));
     			$dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
     			$authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter,'base_users','uid','password');
     			$authAdapter->getDbSelect()->where("state = 'A' and eid='$eid' and oid='$oid'");
@@ -124,6 +124,7 @@ class IndexController extends Zend_Controller_Action {
     				$rowteacher = $teacher->_getOne($datate);
     				if ($rowteacher) $data->infouser->teacher=$rowteacher;
 					// Set ACL
+    				$data->acls=null;
     				$acl = new Api_Model_DbTable_Acl();
     				$data_ = array("eid"=>$data->eid,"oid"=>$data->oid,"rid"=>$data->rid);
     				$rowacl = $acl->_getACL($data_);
@@ -139,7 +140,7 @@ class IndexController extends Zend_Controller_Action {
     							foreach ($rowacl as $mods){
     								if ($mod['mid']==$mods['mid']){
     									 $mod['acls'][]=$mods;
-    									 $dataresource[] = $mods;
+    									 $dataresource[] = $mods['controller'];
     								}
     							}
     							if ($mod['acls']<>null){
@@ -147,6 +148,7 @@ class IndexController extends Zend_Controller_Action {
     							} 
     						}
     						$data->acls =$dataacl;
+    						$data->resources = $dataresource;
     					}
     					
     				}
@@ -174,24 +176,26 @@ class IndexController extends Zend_Controller_Action {
     				
     				$userAgent = new Zend_Http_UserAgent();
     				$device = $userAgent->getDevice();
-    				$datalog['browser'] = $device->getBrowser();
+    				$datalog['browse'] = $device->getBrowser();
     				$datalog['vbrowser'] = $device->getBrowserVersion();
     				$datalog['browserinfo'] = $device->getUserAgent();
-    				$log->_save($datalog);
-    				$auth->getStorage()->write($data);
-    				//Verify unique user connect
-    				$logs = new Api_Model_DbTable_Logs();
-    				$logdata['eid']=$eid;
-    				$logdata['oid']=$oid;
-    				$logdata['uid']=$cod;
-    				$rlogs = $logs->_getConnect($logdata);
-    				if (count($rlogs)>1){
-    					//echo "Existe otra sesion abierta en algun otro lugar";exit();
-    					$this->_redirect("/index/cerrar");
+    				if ($log->_save($datalog)){
+    					$auth->getStorage()->write($data);
+    					//Verify unique user connect
+    					$logdata=null;
+    					$logs = new Api_Model_DbTable_Logs();
+    					$logdata['eid']=$eid;
+    					$logdata['oid']=$oid;
+    					$logdata['uid']=$cod;
+    					$rlogs = $logs->_getConnect($logdata);
+    					if (count($rlogs)>2){
+    						//echo "Existe otra sesion abierta en algun otro lugar";exit();
+    						$this->_redirect("/index/cerrar");
+    					}
+    					$urlmod = $data->rol['module'];
+    					$this->_redirect($urlmod);
+    					//Falta direccionar
     				}
-    				$urlmod = base64_decode($data->rol['module']);
-    				$this->_redirect($urlmod);
-    				//Falta direccionar
     			}else {
 					switch ($result->getCode()) {
 						case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
@@ -228,6 +232,7 @@ class IndexController extends Zend_Controller_Action {
     {
     	$sesion  = Zend_Auth::getInstance();    
     	$sesion_ = $sesion->getStorage()->read();
+    	//print_r($sesion_);
     	$log = new Api_Model_DbTable_Logs();
     	$data['eid'] =$sesion_->eid;
     	$data['oid']=$sesion_->oid;
@@ -261,6 +266,5 @@ class IndexController extends Zend_Controller_Action {
     		$this->_redirect("/");
     	}
     	
-    }
-    
+    } 
 }

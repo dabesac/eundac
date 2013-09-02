@@ -68,4 +68,19 @@ class Api_Model_DbTable_Rol extends Zend_Db_Table_Abstract
 			print "Error: Read All Rol ".$e->getMessage();
 		}
 	}
+	
+	public function _getAllACL($where=null,$order='',$start=0,$limit=0)
+	{
+		try{
+			if ($where['eid']=='' ||  $where['oid']=='') return false;
+			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and state='A'";
+			if ($limit==0) $limit=null;
+			if ($start==0) $start=null;
+			$rows=$this->fetchAll($wherestr,$order,$start,$limit);
+			if($rows) return $rows->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read All Rol ".$e->getMessage();
+		}
+	}
 }
