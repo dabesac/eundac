@@ -5,8 +5,15 @@ class Admin_PasswordController extends Zend_Controller_Action
     public function init() 
     {
 
-      $this->eid='20154605046';
-      $this->oid='1';
+    	$sesion  = Zend_Auth::getInstance();
+    	if(!$sesion->hasIdentity() ){
+    		$this->_helper->redirector('index',"index",'default');
+    	}
+    	$login = $sesion->getStorage()->read();
+    	 
+    	$this->sesion = $login;
+      $this->eid=$login->eid;
+      $this->$login->eid;
     }
     
     public function indexAction() 
