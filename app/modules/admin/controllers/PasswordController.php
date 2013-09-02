@@ -12,8 +12,8 @@ class Admin_PasswordController extends Zend_Controller_Action
     	$login = $sesion->getStorage()->read();
     	 
     	$this->sesion = $login;
-      $this->eid=$login->eid;
-      $this->$login->eid;
+      	$this->eid=$login->eid;
+      	$this->oid=$login->eid;
     }
     
     public function indexAction() 
