@@ -7,25 +7,30 @@ if ($this->datalog) { ?>
 		<tr>
 			<th><center>#</center></th>
 			<th><center>Navegador</center></th>
-			<th><center>Fecha</center></th>
+			<th><center>IP</center></th>
+			<th><center>Fecha Inicio</center></th>
+			<th><center>Fecha Fin</center></th>
 			<th><center>H. Inicio</center></th>
 			<th><center>H. Fin</center></th>
 			<th><center>Estado</center></th>
 		</tr>
 		<?php
 		$c=1;
+		$datalog=$this->datalog;
 		for ($i=0; $i < 50; $i++) { 
-			$datalog=$this->datalog;
-			$fecha=substr($datalog[$i]['datestart'], 0,10); 
-			if ($datalog[$i]['state']=="A") $img="/img/circulo-verde.png";
-			else $img="/img/circulo-rojo.png";?>
+			$f_ini = split('[-./]', substr($datalog[$i]['datestart'], 0,10));
+			$f_fin = split('[-./]', substr($datalog[$i]['dateend'], 0,10));
+			if ($datalog[$i]['state']=="A") $img="<img src='/img/circulo-verde.png' width='20' rel='tooltip' title='Sesión Activa'>";
+			else $img="<img src='/img/circulo-rojo.png' width='20' rel='tooltip' title='Sesión Cerrada'>";?>
 			<tr>
 				<td><center><?php echo $c?></center></td>
 				<td><center><?php echo $datalog[$i]['browse']?></center></td>
-				<td><center><?php echo $fecha?></center></td>
+				<td><center><?php echo $datalog[$i]['ip']?></center></td>
+				<td><center><?php echo $f_ini[2]."/".$f_ini[1]."/".$f_ini[0]?></center></td>
+				<td><center><?php echo $f_fin[2]."/".$f_fin[1]."/".$f_fin[0]?></center></td>
 				<td><center><?php echo $datalog[$i]['horai']?></center></td>
 				<td><center><?php echo $datalog[$i]['horaf']?></center></td>
-				<td><center><img src="<?php echo $img?>" width='20'></center></td>
+				<td><center><?php echo $img?></center></td>
 			</tr>
 			<?php
 			$c++;
@@ -33,3 +38,7 @@ if ($this->datalog) { ?>
 	</table>
 	<?php
 }?>
+
+<script type="text/javascript">
+$('img[rel=tooltip]').tooltip();
+</script>
