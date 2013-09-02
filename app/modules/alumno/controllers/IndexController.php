@@ -16,7 +16,11 @@ class Alumno_IndexController extends Zend_Controller_Action {
     }
     public function indexAction()
     {
-    	
-
+    	try {
+            $pid=$this->sesion->pid;
+            $this->view->pid=$pid;
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
     }
 }

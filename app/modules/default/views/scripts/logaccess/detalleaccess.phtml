@@ -1,0 +1,35 @@
+<?php
+if ($this->datalog) { ?>
+	<div class="panel panel-default">
+		<h4><center><b>DETALLE ACCESOS AL SISTEMA</b></center></h4>
+	</div>
+	<table class="table table-hover table-striped">
+		<tr>
+			<th><center>#</center></th>
+			<th><center>Navegador</center></th>
+			<th><center>Fecha</center></th>
+			<th><center>H. Inicio</center></th>
+			<th><center>H. Fin</center></th>
+			<th><center>Estado</center></th>
+		</tr>
+		<?php
+		$c=1;
+		for ($i=0; $i < 50; $i++) { 
+			$datalog=$this->datalog;
+			$fecha=substr($datalog[$i]['datestart'], 0,10); 
+			if ($datalog[$i]['state']=="A") $img="/img/circulo-verde.png";
+			else $img="/img/circulo-rojo.png";?>
+			<tr>
+				<td><center><?php echo $c?></center></td>
+				<td><center><?php echo $datalog[$i]['browse']?></center></td>
+				<td><center><?php echo $fecha?></center></td>
+				<td><center><?php echo $datalog[$i]['horai']?></center></td>
+				<td><center><?php echo $datalog[$i]['horaf']?></center></td>
+				<td><center><img src="<?php echo $img?>" width='20'></center></td>
+			</tr>
+			<?php
+			$c++;
+		}?>
+	</table>
+	<?php
+}?>
