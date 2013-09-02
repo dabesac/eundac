@@ -9,9 +9,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
     		$this->_helper->redirector('index',"index",'default');
     	}
     	$login = $sesion->getStorage()->read();
-    	// if (($login->rol['module']<>"docente") && ($login->infouser['teacher']['is_director']=="S")){
-    	// 	$this->_helper->redirector('index','index','default');
-    	// }
+    	if (($login->rol['module']<>"docente") && ($login->infouser['teacher']['is_director']=="S")){
+    		$this->_helper->redirector('index','index','default');
+    	}
     	$this->sesion = $login;
     }
     

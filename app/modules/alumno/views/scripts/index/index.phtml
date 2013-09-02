@@ -1,0 +1,56 @@
+	<div class="row">
+		<div class="fila1 col-md-4 col-md-push-1 sombras">
+			<h4 style="font-family:Arial, Helvetica, sans-serif;color: #DF0101;"><center>Ofertas Laborales</center></h4>
+			<div id="noticias" class="fila1dentro"></div>
+			<div style="font-size: 13px; font-style: italic; float:right; text-transform: capitalize">
+				<a href="http://www.undac.edu.pe/noticias" TARGET="_blank">Leer más...</a>
+			</div>
+		</div>
+
+		<div class="col-md-4 col-md-push-3 fila1 sombras">
+			<h4 style="font-family:Arial, Helvetica, sans-serif;color: #DF0101;"><center>Ultimos Accesos</center></h4>
+			<div id="laboral" class="fila1dentro"></div>
+			<div style="font-size: 13px; font-style: italic; float:right; text-transform: capitalize">
+				<a href="http://laboral.undac.edu.pe/" TARGET="_blank">Leer más...</a>
+			</div>
+		</div>
+
+		<div class="fila1 col-md-10 col-md-offset-1 sombras">
+			<h4 style="font-family:Arial, Helvetica, sans-serif; color: #DF0101;"><center>Gráfica Rendimiento Académico</center></h4>
+			<!-- <div class="fila1dentro" style="height: 335px;">
+                <iframe name="iFrame1" width="99.5%" height="97.3%" src="/alumno/index/graficocursos"></iframe>
+            </div><br> -->
+		</div>
+	</div>
+
+<script type="text/javascript">
+	$("#noticias").load("/widget/index/rssnoticias/");
+	$("#laboral").load("/widget/index/rsslaboral/");
+</script>
+
+<style type="text/css">
+.fila1{
+    border-radius: 5px;
+    border: 1px solid #000000;  
+    margin-bottom: 20px;
+    padding: 5px;
+    border: 1px solid rgb(212, 212, 212);
+    height: 320px;
+    background-image: url("/img/circles.png");
+    background-repeat: repeat;
+    opacity: 0.85;
+}
+.fila1dentro{
+	background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(212, 212, 212);
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    width: 100%;
+    height: 260px;
+    overflow: auto;
+}
+.sombras:hover{
+	box-shadow: 0px 0px 7px #343434;
+	opacity: 1.0;
+}
+</style>
