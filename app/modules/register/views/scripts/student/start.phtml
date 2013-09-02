@@ -418,7 +418,6 @@ if($this->error_cur){ ?>
 			$objets[$.base64.encode('regid')] = $.base64.encode($.trim($($this).attr('regid')));
 			$objets[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
 			$objets[$.base64.encode('total')] = $.base64.encode($.trim($("#total_credits").attr('value')));
-			alert($("#total_credits").attr('value'));
 			var result='';
 
 			for(var pro in $objets){
