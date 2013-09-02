@@ -376,11 +376,13 @@
 
 	});
 </script>
+<?php if ($this->state=='C') $disabled="disabled";?>
+
 <div class="row">
   <div class="col-xs-12 col-sm-6 col-md-8"><h4><span class='glyphicon glyphicon-pencil' ></span> Llenado de Aplazados <?php echo $this->infocurso['name']?></h4></div>
   <div class="col-xs-6 col-sm-6 col-md-4">
   	<button class='btn btn-success' id='save_notas' disabled >Guardar</button>
-  	<button class='btn btn-success' id='closed_record'   >Cerrar Acta</button>
+  	<button class='btn btn-success' id='closed_record'  <?php echo $disabled?> >Cerrar Acta</button>
   </div>
 </div>
 
@@ -415,7 +417,7 @@
 			<td><?php echo  $registro['name'] ?></td>
 			<td class='td_select_<?php echo $key?> td_select'>
 			
-					<select class='form-control select_receipt' index='<?php echo $key ?>' name='receipt' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?> >
+					<select class='form-control select_receipt' index='<?php echo $key ?>' name='receipt' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?>  <?php echo $disabled?> >
 						<option value="<?php echo $registro['receipt']?>"><?php echo ($registro['receipt'] != "")?$registro['receipt']:'Seleccione'; ?></option>
 						<?php foreach ($registro['receipts'] as $key => $value) { ?>
 						<option value='<?php echo $value['operation']?>'><?php echo $value['operation']?></option>
@@ -424,17 +426,19 @@
 				
 			</td>
 			<td class='td_input_<?php echo $key?> td_input' >
-				<input type='text'  name='notafinal' maxlength='2' style="color:<?php echo ($registro['notafinal'] != -2)?'#000':'#FC4141'; ?>;" class='form-control nota' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?> value='<?php echo ($registro['notafinal'] != -2)?$registro['notafinal']:'NP'; ?>' index='<?php echo $key?>'></td>
+				<input type='text'  name='notafinal' maxlength='2' style="color:<?php echo ($registro['notafinal'] != -2)?'#000':'#FC4141'; ?>;" class='form-control nota' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?> value='<?php echo ($registro['notafinal'] != -2)?$registro['notafinal']:'NP'; ?>' index='<?php echo $key?>'  <?php echo $disabled?> ></td>
 			<td class='success'>
-				<?php if ($registro['notafinal'] != -2) { ?>
-					<span class='glyphicon glyphicon-eye-open presented' 
-						action='0' onclick='not_present(this);'
-						index='<?php echo $key?>'></span>
-				<?php }else{ ?>
-					<span class='glyphicon glyphicon-eye-close presented' 
-						action='1' onclick='not_present(this);' 
-						index='<?php echo $key?>'></span>
-				<?php }?>
+				<?php
+					if ($this->state != "C") {
+					if ($registro['notafinal'] != -2) { ?>
+						<span class='glyphicon glyphicon-eye-open presented' 
+							action='0' onclick='not_present(this);'
+							index='<?php echo $key?>'></span>
+					<?php }else{ ?>
+						<span class='glyphicon glyphicon-eye-close presented' 
+							action='1' onclick='not_present(this);' 
+							index='<?php echo $key?>'></span>
+					<?php }}?>
 			</td>
 		</tr>
 		<?php }?>

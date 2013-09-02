@@ -38,7 +38,9 @@ class Register_DeferredController extends Zend_Controller_Action {
             $turno= trim($params['turno']);
             $perid = trim($params['perid']);
             $curid = trim($params['curid']);
+            $state = trim($params['state']);
 
+            $this->view->state=$state;
             $where = array(
                 'eid' => $eid, 'oid' => $oid,
                 'escid' => $escid,'subid' => $subid,
