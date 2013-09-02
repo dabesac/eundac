@@ -38,7 +38,9 @@ class Register_DeferredController extends Zend_Controller_Action {
             $turno= trim($params['turno']);
             $perid = trim($params['perid']);
             $curid = trim($params['curid']);
+            $state = trim($params['state']);
 
+            $this->view->state=$state;
             $where = array(
                 'eid' => $eid, 'oid' => $oid,
                 'escid' => $escid,'subid' => $subid,
@@ -63,7 +65,7 @@ class Register_DeferredController extends Zend_Controller_Action {
                     'code_student'=>$student['uid'],
                     'perid'=>$perid,'processed'=>'N');
                 $receipts = $base_bankreceipts->_getFilter($where1);
-                $students_register[$key]['receipt']= $receipts; 
+                $students_register[$key]['receipts']= $receipts; 
                 } 
             }
             else
@@ -75,8 +77,6 @@ class Register_DeferredController extends Zend_Controller_Action {
             $this->view->students_register=$students_register;
             $this->view->infocurso = $infocurso;
             $this->view->perid = $perid;
-            // print_r($students_register);
-            echo md5("123456");
         } catch (Exception $e) {
             print "Error index Registration ".$e->$getMessage();
         }
@@ -95,6 +95,10 @@ class Register_DeferredController extends Zend_Controller_Action {
                 $params = $paramsdecode;
             }
 
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+
+            /****parametros get***/
             $courseid = trim($params['courseid']);
             $curid =    trim($params['curid']);
             $turno  =   trim($params['turno']);
@@ -103,26 +107,192 @@ class Register_DeferredController extends Zend_Controller_Action {
             $subid  =   trim($params['subid']);
             $regid =    trim($params['regid']);
             $uid   =    trim($params['uid']);
+            $pid   =    trim($params['pid']);
 
-            /** notas **/
+            /** data **/
+            $receipt    = ((isset($params['receipt']) == true && (!empty($params['receipt']) || 
+                            (intval($params['receipt'])== 0) ) )?trim($params['receipt']):'');
 
-            $receipt    = ((isset($params['receipt']) == true && (!empty($params['receipt']) || (intval($params['receipt'])== 0) ) )?trim($params['receipt']):'');
-            $notafinal    = ((isset($params['notafinal']) == true && (!empty($params['notafinal']) || (intval($params['notafinal'])== 0) ) )?trim($params['notafinal']):'');
+            $notafinal    = ((isset($params['notafinal']) == true && (!empty($params['notafinal']) || 
+                            (intval($params['notafinal'])== 0) ) )?trim($params['notafinal']):'');
             
-            print($receipt); exit();
+            $data =null;
+            $data2 =null;
+
+            $data = array(
+                'receipt' =>$receipt,
+                'notafinal' => $notafinal,
+                );
+            $where =  
+                " eid='$eid' and oid= '$oid' and 
+                courseid= '$courseid' and curid= '$curid' and
+                turno= '$turno' and perid = '$perid' and 
+                escid = '$escid' and  subid= '$subid' and
+                regid= '$regid' and  uid = '$uid' and 
+                pid = '$pid'
+                 ";
+
+            $data2 = array(
+                'state'=>'B',
+                'updated'=>date('Y-m-d H:m:s'),
+                'modified' => $this->sesion->uid,
+                );
+
+            $where1 = array(
+                'eid'=>$eid , 'oid'=>$oid,
+                'courseid'=>$courseid, 'curid'=>$curid,
+                'turno'=>$turno,'perid'=>$perid,
+                'escid'=>$escid, 'subid'=>$subid,
+                );
 
 
-            // $
+                try {
+
+                    $base_courses_registration = new Api_Model_DbTable_Registrationxcourse();
+                    $base_periods_courses = new Api_Model_DbTable_PeriodsCourses();
+
+                    if ($base_courses_registration->_updatestr($data,$where)) {
+                        if ($base_periods_courses->_update($data2,$where1)) {
+                            $json = array(
+                                'status' =>true,
+                                );
+                        }                        
+                    }
+
+                    
+                } catch (Exception $e) {
+                    $json = array(
+                        'status'=>false,
+                        );
+                    
+                }
 
             $this->_helper->layout->disableLayout();
             $this->_response->setHeader('Content-Type', 'application/json');   
             $this->view->data = $json; 
-        try {
-            
-        } catch (Exception $e) {
-            
-        }
     }
     
+    public function closerecordAction()
+    {
+        $params = $this->getRequest()->getParams();
+        if(count($params) > 3){
+            $paramsdecode = array();
+            foreach ( $params as $key => $value ){
+                if($key!="module" && $key!="controller" && $key!="action"){
+                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+                }
+            }
+            $params = $paramsdecode;
+        }
 
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        /****parametros get***/
+        $courseid = trim($params['courseid']);
+        $curid =    trim($params['curid']);
+        $turno  =   trim($params['turno']);
+        $perid  =   trim($params['perid']);
+        $escid =    trim($params['escid']);
+        $subid  =   trim($params['subid']);
+
+        $where = array(
+            'eid' => $eid, 'oid' => $oid,
+            'escid' => $escid,'subid' => $subid,
+            'courseid' => $courseid,'turno' => $turno,
+            'perid' => $perid,'curid'=>$curid,);
+
+        $base_courses_registration = new Api_Model_DbTable_Registrationxcourse();
+        $students_register = $base_courses_registration->_getFilter($where);
+
+
+        $i=0;
+        $j=0;
+        $k=0;
+        $total=count($students_register);
+
+        foreach ($students_register as $key => $value) {
+                $nota= intval($value['notafinal']);
+                $receipt = intval($value['receipt']);
+                // $nota = 
+                switch ($nota) {
+                    case $nota == -2 || $nota >= 0 :
+                        $i += 1;
+                        if ($nota == -2) {
+                            $k++;
+                        }
+                        break;
+                }
+                switch ($receipt) {
+                    case $receipt >= 0:
+                        $j += 1;
+                        break;
+                }
+        }
+
+        $j=$j+$k;
+
+           try {
+
+                 if ( $i==$j && $total==$i && $total==$j) {
+
+                $base_periods_courses = new Api_Model_DbTable_PeriodsCourses();
+                $base_bankreceipts = new Api_Model_DbTable_Bankreceipts();
+
+                $data1 = array(
+                    'state'=>'S',
+                    'state_record'=>'C',
+                    'closure_date'=>date('Y-m-d'),
+                    'updated'=>date('Y-m-d H:m:s'),
+                    'modified' => $this->sesion->uid,
+                    );
+
+                $where1 = array(
+                    'eid'=>$eid , 'oid'=>$oid,
+                    'courseid'=>$courseid, 'curid'=>$curid,
+                    'turno'=>$turno,'perid'=>$perid,
+                    'escid'=>$escid, 'subid'=>$subid,
+                    );
+
+                if ($base_periods_courses->_update($data1,$where1)) {
+
+                        foreach ($students_register as $key => $value) {
+
+                            $where_bank['code_student']=$value['uid'];
+                            $where_bank['perid'] = $perid;
+                            $where_bank['concept']= "00000021";
+                            $where_bank['operation']=$value['receipt'];
+
+                            $data = array('processed'=>'S');    
+                            $base_bankreceipts ->_update($data,$where_bank);
+
+                        }
+                            $json = array(
+                                'status'=>true,
+                                );
+                    # code...
+                }
+
+            }
+            else{
+                    
+                    $json = array(
+                        'status'=>false,
+                        );
+            }
+               
+           } catch (Exception $e) {
+               
+               $json = array(
+                'status'=>false,
+                );
+           }
+
+
+        
+        $this->_helper->layout->disableLayout();
+        $this->_response->setHeader('Content-Type', 'application/json');   
+        $this->view->data = $json; 
+
+    }
 }

@@ -53,10 +53,10 @@ $ldistri =$this->ldistribution;
 		</td>
 		<td><center>
 			<?php
-			if ($distri['state']=='C') { ?>
+			if ($distri['state']=='C' || $distri['state']=='I') { ?>
 				<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Distribución Cerrado"></span></a>
 				<?php
-			}elseif ($distri['state']=="A" || $distri['state']=="B") { ?>
+			}elseif ($distri['state']=="A" || $distri['state']=="B" || $distri['state']=='O') {?>
 				<a href="/distribution/distribution/academicload/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>/escid/<?php echo base64_encode($distri['escid'])?>/subid/<?php echo base64_encode($distri['subid'])?>"><span class="glyphicon glyphicon-arrow-right" data-toggle="tooltip" title="Carga Académica Distribución"></span></a>
 				<?php
 			}?>
