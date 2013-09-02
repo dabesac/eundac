@@ -190,7 +190,7 @@ th, td{
                     <td><center><?php echo $cursos['hours_p']?></center></td>
                     <td><center><?php echo $cursos['hours_total']?></center></td>
                     <td>
-                        <center><a href="/distribucion/distribucion/eliminarcursoasignado/perid/<?php echo $this->perid?>/sedid/<?php echo $this->sedid?>/escid/<?php echo $cursos['escid'];?>/cursoid/<?php echo $cursos['cursoid'];?>/turno/<?php echo $cursos['turno']?>/curid/<?php echo $cursos['curid']?>/pid/<?php echo $this->pid;?>/uid/<?php echo $this->uid;?>/distid/<?php echo $this->distid?>/escidorigen/<?php echo $this->escidorigen?>/temp/<?php echo $this->temp?>/temp2/<?php echo $this->temp2?>" rel="tooltip" title="Eliminar Asignatura"><span class="glyphicon glyphicon-trash"></span></a></center>
+                        <center><a href="/distribution/distribution/deleteasigncourse/perid/<?php echo base64_encode($this->perid)?>/subiddoc/<?php echo base64_encode($this->subiddoc)?>/esciddoc/<?php echo base64_encode($this->esciddoc)?>/courseid/<?php echo base64_encode($cursos['courseid'])?>/turno/<?php echo base64_encode($cursos['turno'])?>/curid/<?php echo base64_encode($cursos['curid'])?>/pid/<?php echo base64_encode($this->pid)?>/uid/<?php echo base64_encode($this->uid)?>/distid/<?php echo base64_encode($this->distid)?>" rel="tooltip" title="Eliminar Asignatura"><span class="glyphicon glyphicon-trash"></span></a></center>
                     </td>
                 </tr>
             <?php
@@ -235,19 +235,19 @@ th, td{
                 <th><center># Horas</center></th>
                 <th><center>Eliminar</center></th>        
             </tr>
-                <?php
-                foreach ($this->administrativas as $admin){ 
-                        $y=$admin['hours'];
-                        $temporalad=$temporalad+$y;
-                        $temporal=$temporal+$y;
-                        $tt=$temporal; ?>
-                    <tr>
-                        <td><center><?php echo $i?></center></td>
-                        <td><?php echo $admin['work']?></td>
-                        <td><center><?php echo $admin['hours']?></center></td>
-                        <td><center><a  href="/distribution/distribution/eliminarlaboradmin/labor/<?php echo $admin['labor']?>/uid/<?php echo $this->uid;?>/pid/<?php echo $this->pid;?>/escid/<?php echo $this->escid;?>/sedid/<?php echo $this->sedid;?>/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid;?>/escidorigen/<?php echo $this->escidorigen?>/temp/<?php echo $this->temp?>/temp2/<?php echo $this->temp2?>" rel="tooltip" title="Eliminar Labor Administrativa"><span class="glyphicon glyphicon-trash"></span></a></td>
-                    
-                    </tr>
+            <?php
+            foreach ($this->administrativas as $admin){ 
+                $y=$admin['hours'];
+                $temporalad=$temporalad+$y;
+                $temporal=$temporal+$y;?>
+                <tr>
+                    <td><center><?php echo $i?></center></td>
+                    <td><?php echo $admin['work']?></td>
+                    <td><center><?php echo $admin['hours']?></center></td>
+                    <td>
+                        <center><a href="/distribution/distribution/deletedistributionadmin/admdistid/<?php echo base64_encode($admin['admdistid'])?>/uid/<?php echo base64_encode($this->uid)?>/pid/<?php echo base64_encode($this->pid)?>/esciddoc/<?php echo base64_encode($this->esciddoc)?>/subiddoc/<?php echo base64_encode($this->subiddoc)?>/distid/<?php echo base64_encode($this->distid)?>/perid/<?php echo base64_encode($this->perid)?>" rel="tooltip" title="Eliminar Labor Administrativa"><span class="glyphicon glyphicon-trash"></span></a>
+                    </td>
+                </tr>
             <?php
             $i++;   
             } ?>
@@ -267,44 +267,55 @@ th, td{
     <div class="cuadro col-lg-4">
         <table class="table table-hover table-bordered table-condensed" style="margin:0px">
             <?php
-            // $distdoc = new Distribucion_Model_DbTable_Distribuciondocente();
-            // $ldistdoc = $distdoc ->_getDistribucionXDocenteXPeriodo($perid,$eid,$oid,$uid);
-            $infothacad = $ldistdoc['t_h_acad'];
-            $infothadmin = $ldistdoc['t_h_adm'];
-            // $infothoras = $ldistdoc['nombre_curso'];
-            $thoras=$infothacad+$infothadmin;
+            $whereteach['eid']=$this->eid;
+            $whereteach['oid']=$this->oid;
+            $whereteach['uid']=$this->uid;
+            $whereteach['pid']=$this->pid;
+            $whereteach['perid']=$this->perid;
+            $distdoc = new Distribution_Model_DbTable_DistributionTeacher();
+            $datadistdoc = $distdoc->_getFilter($whereteach,$atrib=array());
+            $infothacad = $datadistdoc[0]['total_hour_acad'];
+            $infothadmin = $datadistdoc[0]['total_hour_admin'];
+            $thoras = $infothacad+$infothadmin;
             if($infothacad>=30){ ?>   
                 <script> 
-                    alert('Sus horas teoricas exceden a 30\n Revise sus horas');
+                    alert('Sus Horas Teóricas exceden a 30\n Revise sus horas.');
                 </script> 
             <?php
             }
             if($thoras>40) { ?>   
                 <script> 
-                    alert('Sus horas totales exceden a 40\n Revise sus horas');
+                    alert('Sus Horas Totales exceden a 40\n Revise sus horas.');
                 </script> 
             <?php
             } ?>
             <tr>
-                <th>T.H. Academicas:</th>
+                <th>T.H. Académicas:</th>
                 <td><center><?php echo $infothacad?></center></td>
             </tr>
             <tr>
-                <th>T.H. Administrativas:</th>       
+                <th>T.H. Administrativas:</th>
                 <td><center><?php echo $infothadmin?></center></td>
             </tr>
             <tr>
                 <th>Total Horas:</th>       
-                <td><center><?php echo $infothacad+$infothadmin?></center></td>
+                <td><center><?php echo $thoras?></center></td>
             </tr>
             <tr>
-                <td colspan='2' ><a style="float:right" href="/distribucion/distribucion/asignacioncursos/uid/<?php echo $this->uid?>/pid/<?php echo $this->pid?>/escid/<?php echo $this->escid?>/sedid/<?php echo $this->sedid?>/perid/<?php echo $this->perid?>/distid/<?php echo $this->distid?>/temp/<?php echo $this->temp?>/temp2/<?php echo $this->temp2?>/escidorigen/<?php echo $this->escidorigen?>" class="btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Actualizar</a></td>
+                <td colspan='2'><a id="updatepag" style="float:right" href="#" class="btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Actualizar</a></td>
             </tr>
         </table>
     </div>
 </center>
 </body>
+
 <script>
+    var support = "<?php echo $this->support?>";
+    if (support==1) {
+        $("#administrativo").hide();
+        $("#labores").hide();
+    };
+
  	$("#curid").change(function(){
         var curid = $(this).val();  
         var escid = "<?php echo $this->escid?>";   
@@ -350,9 +361,6 @@ th, td{
         var totalhoras=$("#totalhoras").val();
         var compromiso=$("#compromiso").val();
         var princ=$("#princ").val();
-        // var temp="<?php echo $this->temp?>";
-        // var temp2="<?php echo $this->temp2?>";
-        // var principal="<?php echo $this->principal?>";        
         
         if (curso=='' || hteoria=='' || hpractica=='') {
             alert("Seleccione un Curso, Horas Teóricas y Horas Prácticas.");
@@ -403,19 +411,10 @@ th, td{
         }); 
         return false;
     });
+
+    $("#updatepag").click(function(){
+        window.location.reload();
+    });
+
     $('a[rel=tooltip]').tooltip();
 </script>
-
-<?php 
- $temp=$this->temp;
- $temp2=$this->temp2;
- if($temp==1 and $temp2==0)
- {
-    ?>
-    <script>
-        $("#administrativo").hide();
-        $("#labores").hide();
-    </script>
-    <?php
- }
-?>

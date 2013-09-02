@@ -1,0 +1,58 @@
+<?php
+if ($this->usuarios){ 
+$dbescid = new Api_Model_DbTable_Speciality();
+$dbinfotea = new Api_Model_DbTable_UserInfoTeacher();?>
+<table class="table table-condensed table-striped table-hover">
+    <tr>
+        <th><center>#</center></th>
+        <th><center>Código</center></th>
+        <th><center>Apellidos y Nombres</center></th>
+        <th><center>Escuela</center></th>
+        <th><center>Categoria</center></th>
+        <th><center>Condición</center></th>       
+        <th><center>Dedicación</center></th>       
+        <th><center>Gestionar</center></th>
+    </tr>
+    <?php
+    $i=1;
+    foreach ($this->usuarios as $user){
+        $rid=substr($user['uid'], 8,2);
+        if($user['state']=='A'){
+            if($rid=='DC' or $rid=='JP'){ 
+                $whereesc['eid'] = $whereinfo['eid'] = $user['eid'];
+                $whereesc['oid'] = $whereinfo['oid'] = $user['oid'];
+                $whereesc['escid'] = $whereinfo['escid'] = $user['escid'];
+                $escuela = $dbescid->_getFilter($whereesc,$attrib=null,$orders=null);
+                $whereinfo['subid'] = $user['subid'];
+                $whereinfo['uid'] = $user['uid'];
+                $whereinfo['pid'] = $user['pid'];
+                $datainfotea = $dbinfotea->_getOne($whereinfo);?>
+                <tr>
+                    <td><center><?php echo $i?></center></td>
+                    <td><center><?php echo $user['uid']?></center></td>
+                    <td><?php echo $user['last_name0']." ".$user['last_name1'].", ".$user['first_name']?></td>
+                    <td><center><?php echo $escuela[0]['name']?></center></td>
+                    <td><center><?php echo $datainfotea['category']?></center></td>
+                    <td><center><?php echo $datainfotea['condision']?></center></td>
+                    <td><center><?php echo $datainfotea['dedication']?></center></td>
+                    <td>
+                        <center><a href="#" onclick="javascript: window.open('/distribution/distribution/assigncourses/uid/<?php print base64_encode($user['uid'])?>/pid/<?php print base64_encode($user['pid'])?>/escid/<?php print base64_encode($user['escid'])?>/distid/<?php echo base64_encode($this->distid)?>/perid/<?php echo base64_encode($this->perid)?>/subid/<?php echo base64_encode($user['subid'])?>','Asignación Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=900,height=720')" rel="tooltip" title="Asignar Asignaturas"><span class="glyphicon glyphicon-edit"></span></a></center>
+                    </td>
+                </tr>
+            <?php  
+            $i++; 
+            }
+        }
+    } ?>
+</table>
+<?php
+}else{ ?>
+<div class="alert alert-info">
+    <b>Información: </b>El Docente no se encuentra registrado en el Sistema.
+</div>
+<?php
+}?>
+
+<script type="text/javascript">
+$('a[rel=tooltip]').tooltip();
+</script>

@@ -43,7 +43,7 @@ class Api_Model_DbTable_UserInfoTeacher extends Zend_Db_Table_Abstract
 	public function _getOne($where=array()){
 		try{
 			if ($where['eid']=='' ||  $where['oid']=='' || $where['escid']=='' || $where['subid']=='' || $where['pid']=='' || $where['uid']=='') return false;
-			$wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and subid='".$where['subid']."'	and pid='".$where['pid']."' and uid='".$where['uid']."'";
+			$wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and subid='".$where['subid']."' and pid='".$where['pid']."' and uid='".$where['uid']."'";
 			$row = $this->fetchRow($wherestr);
 			if($row) return $row->toArray();
 			return false;

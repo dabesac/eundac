@@ -75,14 +75,22 @@ class Distribution_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 	
 	public function _getFilter($where=null,$atrib=array()){
 		try{
-			if ($where['eid']=='' || $where['oid']=='') return false;
-			$select = $this->select()->from('base_distribution',$atrib); 
-			foreach ($where as $key => $value){
-				$select->where("$key = ?", $value);
-			}
-			$rows = $this->fetchAll($select);
-			if($rows) return $rows->toArray();
-			return false;
+			if($where['eid']=='' || $where['oid']=='') return false;
+				$select = $this->_db->select();
+				if ($attrib=='') $select->from("base_distribution");
+				else $select->from("base_distribution",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				if ($orders<>null || $orders<>"") {
+					if (is_array($orders))
+						$select->order($orders);
+				}
+				
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
 		}catch (Exception $e){
 			print "Error: Read Filter Distribution ".$e->getMessage();
 		}
