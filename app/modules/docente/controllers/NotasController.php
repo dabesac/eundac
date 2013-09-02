@@ -7,9 +7,6 @@ class Docente_NotasController extends Zend_Controller_Action{
  			$this->_helper->redirector('index',"index",'default');
  		}
  		$login = $sesion->getStorage()->read();
- 		if (!$login->rol['module']=="docente"){
- 			$this->_helper->redirector('index','index','default');
- 		}
  		
  		$this->sesion = $login;
 	}
@@ -20,10 +17,9 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$where['perid']=$this->sesion->period->perid;
 		$where['rid']=$this->sesion->rid;
 		$where['is_main']='S';
-
+		$this->view->perid= $this->sesion->period->perid;
 		$docente = new Api_Model_DbTable_PeriodsCourses();
 		$data = $docente->_getCourseTeacher($where);
-		// print_r($data);
 		$l=count($data);
 		$faculty=array();
 

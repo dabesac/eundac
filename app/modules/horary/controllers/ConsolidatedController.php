@@ -6,10 +6,7 @@
  		if(!$sesion->hasIdentity() ){
  			$this->_helper->redirector('index',"index",'default');
  		}
- 		$login = $sesion->getStorage()->read();
- 		if (!$login->rol['module']=="alumno"){
- 			$this->_helper->redirector('index','index','default');
- 		}
+ 		
  		$this->sesion = $login;
  		require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');

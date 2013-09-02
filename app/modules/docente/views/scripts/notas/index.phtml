@@ -10,12 +10,12 @@
     margin-bottom: 20px;
     border: 1px solid rgb(212, 212, 212);
     box-shadow: 0px 0px 7px #343434;
-  opacity: 1.0;
+  opacity: 0.6;
   
 }
 
 .curso:hover{
-  background-color: rgb(223, 230, 244);
+  opacity: 1.0;
     z-index:999;
       -webkit-transform: scale(1);  
       -moz-transform: scale(1);  
@@ -27,11 +27,13 @@
     float: left;
 }
 .curso > div {
-    width: 348px; 
+    width: 360px; 
 }
 </style>
 
-<h2 class="text-info"><center>Asignaturas</center></h2>
+<spam class="alert " style="display: block; font-size: 16px; margin: 3px; padding: 5px; text-align: center">
+<b>ASIGNATURAS A CARGO PERIODO - <?php  echo $this->perid?></b>
+</spam>
 <?php 
   $c=0;
   foreach ($this->faculty as $number) {
@@ -79,12 +81,23 @@
                                     <?php echo $courses['turno']?> 
                                 </div>
                             </div>
-
-                            <a class="btn btn-default" href="">Notas</a>
-                            <a class="btn btn-default" href="">Asistencia</a>
-                            <a id='silabo' href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>" class="btn btn-default">Silabo</a>
-                            <a class="btn btn-default" href="">Aplazados</a>
-                            <a class="btn btn-default" href=""><img src="/img/icono_imprimir.png"></a>
+							
+	                            <a class="btn btn-primary disabled" href="#">
+	                            Notas
+	                            </a>
+	                            <a class="btn btn-primary disabled" href="#">
+	                            Asistencia
+	                            </a>
+	                            <a class="btn btn-primary" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>" >
+	                            Silabo
+	                            </a>
+	                            <a class="btn btn-primary disabled" href="#">
+	                            Aplazados
+	                            </a>
+	                            <a class="btn btn-primary disabled" href="#">
+	                            <img src="/img/icono_imprimir.png">
+	                            </a>
+                            
         			    </div>
             <?php			
         		}
