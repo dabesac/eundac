@@ -12,21 +12,23 @@ class Admin_PasswordController extends Zend_Controller_Action
     	$login = $sesion->getStorage()->read();
     	 
     	$this->sesion = $login;
-      	$this->eid=$login->eid;
+
+		$this->eid=$login->eid;
       	$this->oid=$login->eid;
     }
     
     public function indexAction() 
     {
         $this->_helper->redirector("search");
+        //echo "sdasdsad";
     }
 
     public function searchAction()
     {
         try
         {
-            $eid = $this->sesion->eid;
-            $oid = $this->sesion->oid;
+          	$eid = $this->sesion->eid;
+          	$oid = $this->sesion->oid;
             $fm=new Admin_Form_Password();
             $this->view->fm=$fm;
         }
@@ -71,7 +73,7 @@ class Admin_PasswordController extends Zend_Controller_Action
                 if ($uid=='' && $nom<>'')
                 {
                     $datos = $bdu->_getUsuarioXNombre(strtoupper($nom),$rid,$eid,$oid);
-                    //print_r($datos);
+                    
                 }
                 if ($uid<>'' && $nom=='')
                 {
