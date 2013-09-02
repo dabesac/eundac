@@ -10,12 +10,12 @@
     margin-bottom: 20px;
     border: 1px solid rgb(212, 212, 212);
     box-shadow: 0px 0px 7px #343434;
-  opacity: 1.0;
+  opacity: 0.6;
   
 }
 
 .curso:hover{
-  background-color: rgb(223, 230, 244);
+  opacity: 1.0;
     z-index:999;
       -webkit-transform: scale(1);  
       -moz-transform: scale(1);  
@@ -27,11 +27,13 @@
     float: left;
 }
 .curso > div {
-    width: 348px; 
+    width: 360px; 
 }
 </style>
 
-<h2 class="text-info"><center>Asignaturas</center></h2>
+<spam class="alert " style="display: block; font-size: 16px; margin: 3px; padding: 5px; text-align: center">
+<b>ASIGNATURAS A CARGO PERIODO - <?php  echo $this->perid?></b>
+</spam>
 <?php 
   $c=0;
   foreach ($this->faculty as $number) {
@@ -79,12 +81,23 @@
                                     <?php echo $courses['turno']?> 
                                 </div>
                             </div>
-
-                            <a class="btn btn-default" href="">Notas</a>
-                            <a class="btn btn-default" href="">Asistencia</a>
-                            <a id='silabo' href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>" class="btn btn-default">Silabo</a>
-                            <a class="btn btn-default" href="">Aplazados</a>
-                            <a class="btn btn-default" href=""><img src="/img/icono_imprimir.png"></a>
+							
+	                            <a class="btn btn-primary disabled" href="#">
+	                            Notas
+	                            </a>
+	                            <a class="btn btn-primary disabled" href="#">
+	                            Asistencia
+	                            </a>
+	                            <a class="btn btn-primary" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>" >
+	                            Silabo
+	                            </a>
+	                            <a class="btn btn-primary disabled" href="#">
+	                            Aplazados
+	                            </a>
+	                            <a class="btn btn-primary disabled" href="#">
+	                            <img src="/img/icono_imprimir.png">
+	                            </a>
+                            
         			    </div>
             <?php			
         		}
@@ -98,3 +111,88 @@
 } 
 ?>
 
+<div class="alert alert-danger" style="margin-top:20px;">
+El Sistema para llenar aplazados estara vigente SOLO el día 02/08/2013 a partir de las 11:00a.m. hasta las 5:00pm.  
+</div>
+
+
+
+<spam class="alert " style="display: block; font-size: 16px; margin: 3px; padding: 5px; text-align: center">
+<b>ASIGNATURAS A CARGO PERIODO - 13A</b>
+</spam>
+<?php 
+  $c=0;
+  foreach ($this->faculty_ as $number_) {
+   	$c++;
+   	$fname=$number_['name'];
+   	
+?>
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $c?>">
+        	        <h5><?php
+                    echo $fname?>
+                    </h5>    	
+                </a>
+            </h4>
+        </div>
+        <div id="collapse<?php echo $c?>" class="panel-collapse collapse in">
+            <div class="panel-body" >
+                <?php
+                $where=null;
+        	       foreach ($this->data_ as $courses_) {
+        		      
+        		      $where['eid']=$courses_['eid'];
+        		      $where['oid']=$courses_['oid'];
+        		      $where['curid']=$courses_['curid'];
+        		      $where['escid']=$courses_['escid'];
+        		      $where['subid']=$courses_['subid'];
+        		      $where['courseid']=$courses_['courseid'];
+        		      $list= new Api_Model_DbTable_Course();
+	        	      $course_=$list->_getOne($where);
+        		      if ($number_['facid']==$courses_['facid']) { ?>
+        			    <div class='curso'>
+                                <div style='height: 40px'>
+                                    <b><?php echo $course_['courseid']." - ".$course_['name'];?></b> 
+                            </div>
+                            <div>
+                                <div style='margin-right:5px;'>
+                                    <b>Curricula:</b>
+                                </div>
+                                    <?php echo $courses_['curid']?>
+                                <div style='float:right;'>
+                                    <b>Turno:</b>
+                                    <?php echo $courses_['turno']?> 
+                                </div>
+                            </div>
+							
+	                            <a class="btn btn-primary disabled" href="#">
+	                            Notas
+	                            </a>
+	                            <a class="btn btn-primary disabled" href="#">
+	                            Asistencia
+	                            </a>
+	                            <a class="btn btn-primary disabled" href="#">
+	                            Silabo
+	                            </a>
+	                            <a class="btn btn-primary disabled" href="#">
+	                            Aplazados
+	                            </a>
+	                            <a class="btn btn-primary disabled" href="#">
+	                            <img src="/img/icono_imprimir.png">
+	                            </a>
+                            
+        			    </div>
+            <?php			
+        		}
+        	}
+        ?>
+            </div>
+        </div>
+  </div>
+</div>
+<?php 
+} 
+?>

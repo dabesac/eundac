@@ -1,15 +1,18 @@
-<form name="<?php //echo $this->fm->getName(); ?>" id="frmsearching" action="/distribution/distribution/procesar/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid?>/sedid/<?php echo $this->sedid?>/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
-    <table class="table">
+<form name="<?php echo $this->form->getName(); ?>" id="frmsearching" action="/distribution/distribution/listsupportteacher/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+    <table class="table table-striped" style="margin-top:20px">
         <tr>
-            <td class="span3" style="text-align:right" title="Busqueda por Apellidos"><br>
-                <?php //echo $this->fm->nom; ?>
+            <th colspan="5"><center>BUSQUEDA DE DOCENTES</center></th>
+        </tr>
+        <tr>
+            <th>Ingrese Apellidos:</th>
+            <td title="Busqueda por Apellidos">
+                <?php echo $this->form->name;?>
             </td>
-            <td class="span3" style="text-align:right" title="Ingrese su DNI"><br>         
-                <?php //echo $this->fm->pid; ?>
-            </td>                 
-            <td class="span1" style="text-align:right">       
-                <?php //echo $this->fm->guardar; ?>
-            </td>     
+            <th>Ingrese DNI:</th>
+            <td style="width:150px"title="Ingrese su DNI">
+                <?php echo $this->form->pid;?>
+            </td>
+            <td><?php echo $this->form->enviar?></td>
         </tr>
     </table>
 </form>
@@ -27,4 +30,40 @@
         }); 
         return false;
     });
+
+    function soloLetras(e){
+        key = e.keyCode || e.which;
+        tecla = String.fromCharCode(key).toLowerCase();
+        letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+        especiales = [8,37,39,46];
+
+        tecla_especial = false
+        for(var i in especiales){
+            if(key == especiales[i]){
+                tecla_especial = true;
+                break;
+            } 
+        }
+         
+        if(letras.indexOf(tecla)==-1 && !tecla_especial)
+            return false;
+        };
+
+    function soloNumero(e){
+        key = e.keyCode || e.which;
+        tecla = String.fromCharCode(key).toLowerCase();
+        letras = "0123456789";
+        especiales = [8,37,39,46];
+
+        tecla_especial = false
+        for(var i in especiales){
+            if(key == especiales[i]){
+                tecla_especial = true;
+                break;
+            } 
+        }
+ 
+        if(letras.indexOf(tecla)==-1 && !tecla_especial)
+            return false;
+        };
 </script>
