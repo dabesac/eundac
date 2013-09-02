@@ -143,6 +143,8 @@ El Sistema para llenar aplazados estara vigente SOLO el día 02/08/2013 a partir
                 <?php
                 $where=null;
         	       foreach ($this->data_ as $courses_) {
+
+                    $urlAp ="/".base64_encode('escid')."/".base64_encode($courses_['escid'])."/".base64_encode('subid')."/".base64_encode($courses_['subid'])."/".base64_encode('courseid')."/".base64_encode($courses_['courseid'])."/".base64_encode('turno')."/".base64_encode($courses_['turno'])."/".base64_encode('perid')."/".base64_encode($courses_['perid'])."/".base64_encode('curid')."/".base64_encode($courses_['curid'])."/".base64_encode('state')."/".base64_encode($courses_['state_record'])."";
         		      
         		      $where['eid']=$courses_['eid'];
         		      $where['oid']=$courses_['oid'];
@@ -177,7 +179,7 @@ El Sistema para llenar aplazados estara vigente SOLO el día 02/08/2013 a partir
 	                            <a class="btn btn-primary disabled" href="#">
 	                            Silabo
 	                            </a>
-	                            <a class="btn btn-primary disabled" href="#">
+	                            <a class="btn btn-primary " href="/register/deferred/index<?php echo $urlAp ?>">
 	                            Aplazados
 	                            </a>
 	                            <a class="btn btn-primary disabled" href="#">
