@@ -1,10 +1,16 @@
-<?php 
+<?php
+$acls=null; 
 $sesion  = Zend_Auth::getInstance();
 if(!$sesion->hasIdentity() ){
 	echo "ingreso no permitido";
 	Header ("Location: /");
 	exit();
 }
+
+$moduleName = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+$controllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+$url = "$moduleName/$controllerName";
+//print_r($controllerName);
 // Set ACL for ROL
 $login = $sesion->getStorage()->read();
 
@@ -19,7 +25,25 @@ $speciality = $login->speciality->name;
 $code= $login->uid;
 $rid= $login->rid;
 $acls = $login->acls;
+//if (!in_array($url, $login->resources)) header("Location: /error/");
 
+
+/*
+ * 
+ * /report/recordnotas/print/
+ * uid/<?php echo base64_encode($info['uid'])?>/
+ * escid/<?php echo base64_encode($info['escid'])?>/
+ * eid/<?php echo base64_encode($info['eid'])?>/
+ * oid/<?php echo base64_encode($info['oid'])?>/
+ * subid/<?php echo base64_encode($info['subid'])?>/
+ * pid/<?php echo base64_encode($info['pid'])?>
+ */
+/*foreach ($acls as $a){
+	$racls = $a['acls'];
+	foreach ($racls as $ff){
+		if (!in_array($url, $ff)) header("Location: /");
+	}
+}*/
 ?>
 
 <?php echo $this->doctype(); ?>
@@ -104,7 +128,7 @@ $(document).ready(function(){
 				    		foreach ($tacls as $tacl){
 							$resource = $tacl['controller'];
 							?>
-				    			<li><a href="<?php echo "/$module/$resource"?>">
+				    			<li><a href="<?php echo "/$resource"?>">
 				    			<?php echo strtoupper($tacl['name'])?>
 				    			</a></li>
 							<?php 

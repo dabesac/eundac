@@ -53,8 +53,8 @@ class Default_Form_Login extends Zend_Form
         $usuario->setAttrib("title","Código de Matricula o DNI ");
         $usuario->removeDecorator('Label');
         $usuario->setAttrib("class","form-control");
-        $usuario->removeDecorator('HtmlTag');
-        
+        $usuario->setAttrib("maxlength","10");
+        $usuario->removeDecorator('HtmlTag');        
 		$usuario->setAttrib("rel","tooltip");
 		$usuario->setAttrib("placeholder","Código de Matricula o DNI");
 		
