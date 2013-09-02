@@ -5,6 +5,7 @@
   </div>
 
   <div class="panel-body">
+  	<?if($this->statistic){?>
     <table class="table">
     	<tr>
 			<td><h4>Conocimiento en Computacion</h4></td>
@@ -33,6 +34,9 @@
 			<td><h4>Costo Diario de Alimentos</h4></td>
 		</tr>
     </table>
+    <?php }else{?>
+      <center><h5>No tiene Datos Por favor Actualize su Perfil</h5></center>
+    <?}?>
   </div>
 
 </div>

@@ -17,9 +17,9 @@
         <link rel="stylesheet" type="text/css" href="/css/style.css">
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <div class="alert alert-success"><center>"PARA LOGRAR UN RENDIMIENTO AL 100% DEBEN COINCIDIR LA CANTIDAD DE CURSOS POR SEMESTRE Y LA CANTIDAD DE CURSOS APROBADOS"</center></div> 
-    <center><table class="table  table-bordered table-striped table-condensed" style="float:left; margin-left:200px;font-size:11px; width:800px">
+   <table class="table  table-bordered table-striped table-condensed" style="float:left; margin-left:150px;font-size:11px; width:600px">
       <tr>
-         <th style='color:'>Semestres</th>
+         <th style='color:#222863;width:200px'>Semestres</th>
             <?php $cont=1;  
             while ( $cont<= 12) {
             foreach ($this->data as $datos) {           
@@ -38,15 +38,13 @@
                             $cant=0;
                           }                    
                     ?>  
-
-
              <td><center><span class="label label-info" id="mostrartexto" rel="popover" data-placement="bottom" style="float:left;font-size:11px;">
-        <?php print $nombre?> </span></center></td>        
+        <?php print $nombre?> </span></td>        
            <?php  }}
            $cont=$cont +1; }?>
            </tr>
            <tr>
-         <th>Cant.Cursos Pendientes</th>
+         <th style='color:#F0184E'>Cant.Cursos Pendientes</th>
          <?php $cont=1;  
             while ( $cont<= 12) {
             foreach ($this->data as $datos) {           
@@ -106,9 +104,10 @@
          $cont=$cont +1; }?>
         ]);
         var options = {
-          title: 'GRAFICA DE RENDIMIENTO ACADEMICO HASTA LA ACTUALIDAD',
-          hAxis: {title: 'SEMESTRES',  titleTextStyle: {color: 'red'}},
-          vAxis: {title: "CANTIDAD DE CURSOS",  titleTextStyle: {color: 'red'}}
+          title: 'RENDIMIENTO ACADEMICO HASTA LA ACTUALIDAD',
+          titleTextStyle: {color: '#0567B1'},
+          hAxis: {title: 'SEMESTRES',  titleTextStyle: {color: '#019B20'}},
+          vAxis: {title: "TOTAL CURSOS",  titleTextStyle: {color: '#019B20'}}
         };
         var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
         chart.draw(data, options);
@@ -116,7 +115,7 @@
     </script>   
   </head>
   <body>
-    <div id="chart_div" style="width: 100%; height: 85%;"></div>
+    <div id="chart_div" style="width: 100%; height: 90%;"></div>
   </body>
 </html>
 

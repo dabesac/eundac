@@ -16,7 +16,7 @@ class IndexController extends Zend_Controller_Action {
     	$sesion1  = Zend_Auth::getInstance();
     	if($sesion1->hasIdentity()){
     		$sesion = $sesion1->getStorage()->read();
-    		$this->_helper->redirector('index','index',($sesion->rol['module']));
+    		//$this->_helper->redirector('index','index',($sesion->rol['module']));
     	}
     	
     	$form = new Default_Form_Login();
@@ -122,7 +122,8 @@ class IndexController extends Zend_Controller_Action {
     				$datate['subid']= $data->subid;
     				$teacher = new Api_Model_DbTable_Infoteacher();
     				$rowteacher = $teacher->_getOne($datate);
-    				if ($rowteacher) $data->infouser->teacher=$rowteacher;
+    				
+    				$data->infouser['teacher']=$rowteacher;
 					// Set ACL
     				$data->acls=null;
     				$acl = new Api_Model_DbTable_Acl();

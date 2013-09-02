@@ -18,7 +18,8 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 
 	public function _update($data,$pk){
 		try {
-				if ($pk["eid"]=='' || $pk["oid"]=='' ||  $pk["perid"]=='' ||  $pk["courseid"] =='' || $pk["escid"]=='' || $pk["subid"] =='' || $pk["curid"] =='' || $pk["turno"]=='') return false;
+				if ($pk["eid"]=='' || $pk["oid"]=='' ||  $pk["perid"]=='' ||  $pk["courseid"] =='' || 
+					$pk["escid"]=='' || $pk["subid"] =='' || $pk["curid"] =='' || $pk["turno"]=='') return false;
 				$where="eid = '".$pk['eid']."' and oid='".$pk['oid']."' 
 						and courseid='".$pk['courseid']."' and escid='".$pk['escid']."' 
 						and perid='".$pk['perid']."' and turno='".$pk['turno']."' and subid='".$pk['subid']."' and curid='".$pk['curid']."' ";
