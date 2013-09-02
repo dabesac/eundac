@@ -391,17 +391,27 @@ class Register_StudentController extends Zend_Controller_Action {
                 'pid'=>$pid,'uid'=>$uid,
                 'escid'=>$escid,'subid'=>$subid,
                 'perid'=>$perid,'regid'=>$regid,);
+
+
                 $deleted = $deleted1+1;
+
                 $data=array('count'=>$deleted);
+
+
                 $base_registration = new Api_Model_DbTable_Registration();
-                if ($base_registration->_update($data,$where)) {
+
+                // if ($base_registration->_update($data,$where)) {
+
                     $n = $base_registration->_delete($where);
+                        
                         $json = array(
                             'status'=>true,
                             'de'=>$deleted,
                             'deleted'=>$deleted1,
                         );
-                }
+                // }
+
+                print_r($where); exit();
               
             }
             else{
@@ -454,20 +464,25 @@ class Register_StudentController extends Zend_Controller_Action {
                 'eid'=>$eid,'oid'=>$oid,
                 'pid'=>$pid,'uid'=>$uid,
                 'escid'=>$escid,'subid'=>$subid,
-                'perid'=>$subid,'perid'=>$perid,
-                'regid'=>$regid,);
-            $data=array('state'=>"I");
+                'perid'=>$perid,'regid'=>$regid,
+                'uid'=>$uid,'pid'=>$pid);
+
+            $data=array('state'=>"I",'approved'=>$uid,);
+            
 
             try {
 
                 $base_registration =  new Api_Model_DbTable_Registration();
                 $base_registration_subjet =new Api_Model_DbTable_Registrationxcourse();
 
+
+                
                 if ($total > 0) {
 
                     if($base_registration_subjet->_update($data,$pk)){
 
-                        if ($base_registration->_update($data,$pk)) {
+                        $data1 = array('state'=>'I');
+                        if ($base_registration->_update($data1,$pk)) {
 
                                 $json = array(
                                     'status'=> true,
@@ -475,7 +490,10 @@ class Register_StudentController extends Zend_Controller_Action {
 
                         }
                     }
+
                 }
+
+
                 else{
 
                     $json = array(
@@ -483,6 +501,7 @@ class Register_StudentController extends Zend_Controller_Action {
                         'total'=>$total
                         );
                 }
+
 
             } catch (Exception $e) {
                 $json = array(
@@ -510,7 +529,27 @@ class Register_StudentController extends Zend_Controller_Action {
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
 
+            $name_cache='register'.$uid;
+            $frontendOptions = array(
+                'lifetime' => 3600, // tiempo de vida de caché de 2 horas
+            'automatic_serialization' => true
+            );
 
+            $ruta = "/tmp/mat/";
+            if (!is_dir($ruta)){
+                if (!mkdir($ruta, 0777)){
+                    $ruta=$ruta;
+                }
+            }
+
+            $backendOptions = array(
+                'cache_dir' => "$ruta" // Carpeta donde alojar los archivos de caché
+            );
+
+            $cache = Zend_Cache::factory('Core',
+                'File',
+            $frontendOptions,
+            $backendOptions);
 
             $where = array(
                         'uid' => $uid, 'pid' => $pid,
@@ -519,18 +558,21 @@ class Register_StudentController extends Zend_Controller_Action {
                         'perid'=>$perid,'curid'=>$curid,
                         'semestre'=>$semester);
         
+            if(!$subject = $cache->load("$name_cache")) {
 
+                require_once 'Zend/Loader.php';
+                Zend_Loader::loadClass('Zend_Rest_Client');
+                $base_url = 'http://localhost:8080/';
+                $route = '/s1st3m4s/und4c/pendig_absolute';
+                $client = new Zend_Rest_Client($base_url);
+                $httpClient = $client->getHttpClient();
+                $httpClient->setConfig(array("timeout" => 680));
+                $response = $client->restget($route,$where);
+                $lista=$response->getBody();
+                $subject = Zend_Json::decode($lista);
+                $cache->save($subject,$name_cache);
 
-            require_once 'Zend/Loader.php';
-            Zend_Loader::loadClass('Zend_Rest_Client');
-            $base_url = 'http://localhost:8080/';
-            $route = '/s1st3m4s/und4c/pendig_absolute';
-            $client = new Zend_Rest_Client($base_url);
-            $httpClient = $client->getHttpClient();
-            $httpClient->setConfig(array("timeout" => 680));
-            $response = $client->restget($route,$where);
-            $lista=$response->getBody();
-            $subject = Zend_Json::decode($lista);
+            }
 
             return $subject;
             
@@ -539,62 +581,6 @@ class Register_StudentController extends Zend_Controller_Action {
         }
     }
 
-    public function _deleteSubjets($perid='',$curid=''){
-        try {
-
-            if($perid=='' || $curid=='' )return false;
-            $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;
-            $uid=$this->sesion->uid;
-            $pid=$this->sesion->infouser['pid'];
-            $escid=$this->sesion->escid;
-            $subid=$this->sesion->subid;
-
-            $data = array(
-                'uid' => $uid, 'pid' => $pid, 
-                'escid' => $escid,
-                'subid' =>$subid,'eid' =>$eid,
-                'oid' =>$oid,
-                'perid'=>$perid,
-                'curid'=>$curid);
-
-            require_once 'Zend/Loader.php';
-            Zend_Loader::loadClass('Zend_Rest_Client');
-            $base_url = 'http://localhost:8080/';
-            $endpoint = '/s1st3m4s/und4c/delete_course';
-            $client = new Zend_Rest_Client($base_url);
-            $httpClient = $client->getHttpClient();
-            $httpClient->setConfig(array("timeout" => 680));
-            $response = $client->restget($endpoint,$data);
-            $lista=$response->getBody();
-              // print_r($lista);
-            $data = Zend_Json::decode($lista);
-            // $this->view->cursos=$data;
-            $semesters = new Api_Model_DbTable_Semester();
-            $where = array(
-                'eid'=>$eid,'oid'=>$oid);
-            $attrib=array('semid');
-            $data_semester  = $semesters-> _getAll($where,$attrib);
-            $count = count($data_semester);
-            // $count_semid=null;
-            foreach ($data as $key => $value) {
-                // $k=0;
-                for ($i=0; $i < $count; $i++) { 
-
-                    if($value['semid'] == $data_semester[$i]['semid']){
-                        // $k= $k+1;
-                        $count_semid[$value['semid']]   = $k ;
-                    }        
-                }
-            }
-            $data['count']=$count_semid;
-            $data['semesters']=$data_semester;
-            return $data; 
-            
-        } catch (Exception $e) {
-            print "Error: in load dejar subject".$e->getMessage();
-        }
-    }
 
     public function createdregisterAction(){
 
@@ -676,35 +662,40 @@ class Register_StudentController extends Zend_Controller_Action {
                             'created'=>date('Y-m-d H:m:s'),
                             'state'=>'B');
 
+
                         if ($base_registration_subjet->_save($data)) {
 
                             $credits_register = $base_registration -> _getOne($where);
 
-                            if($credits_register['semid']!= 0 && $veces < 2){
-                                $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
+                           if($veces >= 2 ){
 
-                                $credits_assing[0]['semester_credits']=intVal($credits_assing[0]['semester_credits'])+$condition_credits+$created_resolu;
+                                $credits_assing[0]['semester_credits']=11+$condition_credits;
                             }
                             else{
 
-                                if($credits_register['semid']==0){
-                                        $credits_assing[0]['semester_credits']=0;
-                                    }
-                                elseif($veces >= 2)
-                                {
-                                    $credits_assing[0]['semester_credits']=11+$condition_credits; 
+
+                                if($credits_register['semid'] != 0 && $veces < 2){
+
+                                    $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
+
+                                    $credits_assing[0]['semester_credits']=intVal($credits_assing[0]['semester_credits'])+$condition_credits+$created_resolu;
+
                                 }
 
+                                if( $credits_register['semid'] == 0 )
+                                {
+                                    $credits_assing[0]['semester_credits']=22;
+                                }
+                                
                             }
-
-                            $json   =   array(  
-                                'status'=>true,
-                                'total_credits'=>$credits_register['credits'],
-                                'semester'=>$credits_register['semid'],
-                                'credits_assing'=>$credits_assing[0]['semester_credits'],
-                                'suma'=>$credits_val
+                                $json   =   array(  
+                                    'status'=>true,
+                                    'total_credits'=>$credits_register['credits'],
+                                    'semester'=>$credits_register['semid'],
+                                    'credits_assing'=>$credits_assing[0]['semester_credits'],
+                                    'suma'=>$credits_val
                                 );
-                        }
+                    }
                     }
                     else{
 
