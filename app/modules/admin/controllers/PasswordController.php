@@ -49,8 +49,8 @@ class Admin_PasswordController extends Zend_Controller_Action
              $uid=$this->_getParam('uid');
              $nom=$this->_getParam('nom');
              $nombre=$this->_getParam('nombre');
-             $data['eid']= $this->eid;
-             $data['oid']= $this->oid;
+             $data['eid']= $eid;
+             $data['oid']= $oid;
              $data['uid']= $uid;
 
             if ($rid=='docente')
@@ -72,13 +72,15 @@ class Admin_PasswordController extends Zend_Controller_Action
             if ($rid<>'') {
                 if ($uid=='' && $nom<>'')
                 {
-                    $datos = $bdu->_getUsuarioXNombre(strtoupper($nom),$rid,$eid,$oid);
-                    
+                    $datos = $bdu->_getUsersXNombre(strtoupper($nom),$rid,$eid,$oid);
+
+
                 }
                 if ($uid<>'' && $nom=='')
                 {
                     
                     $data['rid']= $rid;
+                    // print_r($data);
                     $datos = $bdu->_getUserXRidXUid($data);
                                         
                 }
