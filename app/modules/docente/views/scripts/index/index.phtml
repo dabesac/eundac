@@ -1,0 +1,17 @@
+<div class="row">
+	<div class="col-md-4 col-md-push-1 boxbody sombras">
+		<h5>
+			<span class="glyphicon glyphicon-user"></span> - ULTIMOS ACCESOS
+			<a href="/default/logaccess/detalleaccess/pid/<?php echo base64_encode($this->pid)?>" TARGET="_blank" rel="tooltip" title="Ver Detalle de Accesos al Sistema" style="float:right;color:white"><span class="glyphicon glyphicon-comment"></span></a>
+		</h5>
+		<div id="access" class="boxcontent"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var pid = "<?php echo $this->pid?>";
+	$("#access").html("<img src='/img/carga.gif' width='340'>");
+	$("#access").load("/logaccess/index/pid/"+pid);
+
+	$('a[rel=tooltip]').tooltip();
+</script>

@@ -112,4 +112,60 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
         $r = $sql->fetchAll();
         return $r;
     }
+
+
+        public function _getCountCoursesxSemester($where)
+    {
+       try
+       {
+       	    if ($where['escid']==''|| $where['curid']=='') return false;
+
+            $sql=$this->_db->query("
+			SELECT C.SEMID,
+            ((SELECT COUNT(*) CANTIDAD_CURSOS FROM BASE_COURSES
+            WHERE ESCID='".$where['escid']."' AND CURID='".$where['curid']."' AND STATE='A' AND TYPE='O' AND SEMID=C.SEMID
+            )+
+            (CASE WHEN (SELECT COUNT(*) FROM BASE_COURSES 
+            WHERE ESCID='".$where['escid']."' AND CURID='".$where['curid']."' AND TYPE='E'  AND STATE='A' AND SEMID=C.SEMID
+            )>1 THEN 1 ELSE (SELECT COUNT(*) FROM BASE_COURSES 
+            WHERE ESCID='".$where['escid']."' AND CURID='".$where['curid']."' AND TYPE='E'  AND STATE='A' AND SEMID=C.SEMID
+            ) END)) AS CANTIDAD_CURSOS
+            FROM BASE_COURSES AS C INNER JOIN BASE_SEMESTER AS S
+            on C.EID=S.EID AND C.OID=S.OID AND  C.SEMID=S.SEMID  AND C.STATE='A'
+            where C.ESCID='".$where['escid']."' AND C.CURID='".$where['curid']."' 
+            group by C.SEMID order by C.SEMID
+           ");
+           
+           $row=$sql->fetchAll();
+           return $row;  
+        } 
+        catch (Exception $ex)
+        {
+            // print "Error: Leer todos los cursos de una curricula ".$ex->getMessage();
+        }
+    }
+
+
+        public function _getCountCoursesxApproved($where)
+    {
+       try
+       {
+       	    if ($where['uid']==''|| $where['curid']=='') return false;
+
+            $sql=$this->_db->query("
+			SELECT C.SEMID, COUNT(*) CANTIDAD_CURSOS FROM BASE_COURSES AS C
+            INNER JOIN  BASE_REGISTRATION_COURSE AS MC
+            ON C.EID=MC.EID AND C.OID=MC.OID AND C.ESCID=MC.ESCID AND C.COURSEID=MC.COURSEID AND C.CURID=MC.CURID 
+            WHERE UID='".$where['uid']."' AND CAST((CASE WHEN  NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) > 10 AND MC.CURID='".$where['curid']."'
+            GROUP BY C.SEMID ORDER BY C.SEMID
+           ");
+           
+           $row=$sql->fetchAll();
+           return $row;  
+        } 
+        catch (Exception $ex)
+        {
+            // print "Error: Leer todos los cursos de una curricula ".$ex->getMessage();
+        }
+    }
 }

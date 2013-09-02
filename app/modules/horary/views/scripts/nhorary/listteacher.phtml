@@ -29,7 +29,7 @@ if ($this->docente) {
 					<td><?php echo $docen['last_name0']?> <?php echo $docen['last_name1']?>, <?php echo $docen['first_name']?></td>
 					<td><?php echo $docen['turno'] ?></td>
 					<td><?php echo $prin ?></td>
-					<td><a href=""><span class="glyphicon glyphicon-pencil"></span></a></td>
+					<td><a href="/horary/nhorary/fillhorary/uid/<?php echo base64_encode($docen['uid']) ?>/pid/<?php echo base64_encode($docen['pid']) ?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
 				</tr>
 			<?php
 			$c++;				

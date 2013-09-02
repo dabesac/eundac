@@ -25,6 +25,7 @@ $code= $login->uid;
 $rid= $login->rid;
 $acls = $login->acls;
 $resource1 = $login->resources;
+
 $resource1[]="index/salir";
 $resource1[]="index/cerrar";
 $resource1[]="docente/index";
@@ -33,6 +34,7 @@ $resource1[]="rfacultad/index";
 $resource1[]="syllabus/syllabus";
 $resource1[]="register/deferred";
 $resource1[]="report/recordnotas";
+$resource1[]="default/logaccess";
 
 //print_r($resource1);
 if (!in_array($url, $resource1)) header("Location: /error/");
