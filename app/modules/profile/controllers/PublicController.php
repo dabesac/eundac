@@ -29,9 +29,9 @@ class Profile_PublicController extends Zend_Controller_Action {
             $fullname=$this->sesion->infouser['fullname'];
             $dateborn=$this->sesion->infouser['birthday'];
 
-            $datos[0]=array("fullname"=>$fullname, "uid"=>$uid, "pid"=>$pid, "birthday"=>$dateborn);
+            $datos[0]=array("eid"=>$eid,"oid"=>$oid,"fullname"=>$fullname, "uid"=>$uid, "pid"=>$pid, "birthday"=>$dateborn, "escid"=>$escid, "subid"=>$subid);
 
-            $where=array("eid"=>$eid, "oid"=>$eid, "escid"=>$escid);
+            $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid);
             //print_r($where);
             $dbfacesp=new Api_Model_DbTable_Speciality();
             $datos[1]=$dbfacesp->_getFacspeciality($where);
