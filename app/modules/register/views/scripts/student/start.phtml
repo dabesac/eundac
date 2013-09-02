@@ -3,214 +3,6 @@
 		cursor: pointer;
 	}
 </style>
-<script type="text/javascript">
-
-		function register_subject($this){
-			var $register={};
-			
-			$register[$.base64.encode('curid')] = $.base64.encode($.trim($($this).attr('curid'))); 
-			$register[$.base64.encode('courseid')] = $.base64.encode($.trim($($this).attr('courseid'))); 
-			$register[$.base64.encode('turno')] = $.base64.encode($.trim($($this).attr('turno')));
-			$register[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
-			$register[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
-			$register[$.base64.encode('regid')] = $.base64.encode($.trim($($this).attr('regid')));
-			$register[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
-			$register[$.base64.encode('veces')] = $.base64.encode($.trim($($this).attr('veces')));
-			$register[$.base64.encode('credits')] = $.base64.encode($.trim($($this).attr('credits')));
-			$register[$.base64.encode('condition')] = $.base64.encode($.trim($($this).attr('condition')));
-
-
-			var result='';
-
-			for(var pro in $register){
-				result += '' + pro + '/' + $register[pro]+ '/';
-			}
-	        result = result.substring(0, result.length-1);
-	        var $url = '/register/student/createdregister/'+ result;
-	        
-
-	        $.ajax({
-	            url:$url,
-	            success:function($data){
-	            		var courseid=$($this).attr('courseid');
-	            		var turno=$($this).attr('turno');
-
-	            		
-	                    if($data.status == true){
-
-	                    	$('#assign_credist').html($data.credits_assing);
-	                    	$('#assign_semester').html($data.semester);
-	                    	$('#total_credits').html($data.total_credits);
-	                    	$("#pre_register").attr('total',$data.total_credits);
-	                    	$(".register"+'-'+courseid+'-'+turno).hide();
-	                    	$(".modified"+'-'+courseid+'-'+turno).show();
-	                    	$(".modified"+'-'+courseid+'-'+turno).addClass('btn-success');
-
-	                        window.location.href=window.location.href;
-	                    }else{
-	                        //Pintar Fracaso
-	                    		$("#modal").modal('show');
-	                    		$("#error_").html("A exedido en Numero de Creditos Permitidos");
-
-	                    		$(".btn-register").prop('disabled',true);
-	                    		$(".register"+'-'+courseid+'-'+turno).prop('disabled',true);
-
-	                    }
-	                    // $('#modalloader').modal('hide');
-	            },
-	            error:function($data){
-	                    //Pintar el error
-                    $("#modal").modal('show');
-                	$("#error_").html("Error en el Servidor");
-	                    
-	            }
-        	});	
-			// return false;
-		}
-
-		function modifiedsubjet($this){
-			var $register={};
-			
-			$register[$.base64.encode('curid')] = $.base64.encode($.trim($($this).attr('curid'))); 
-			$register[$.base64.encode('courseid')] = $.base64.encode($.trim($($this).attr('courseid'))); 
-			$register[$.base64.encode('turno')] = $.base64.encode($.trim($($this).attr('turno')));
-			$register[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
-			$register[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
-			$register[$.base64.encode('regid')] = $.base64.encode($.trim($($this).attr('regid')));
-			$register[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
-			$register[$.base64.encode('veces')] = $.base64.encode($.trim($($this).attr('veces')));
-			$register[$.base64.encode('credits')] = $.base64.encode($.trim($($this).attr('credits')));
-			$register[$.base64.encode('condition')] = $.base64.encode($.trim($($this).attr('condition')));
-
-
-			var result='';
-
-			for(var pro in $register){
-				result += '' + pro + '/' + $register[pro]+ '/';
-			}
-	        result = result.substring(0, result.length-1);
-	        var $url = '/register/student/removeregister/'+ result;
-	        
-    		var courseid=$($this).attr('courseid');
-    		var turno=$($this).attr('turno');
-	        $.ajax({
-	            url:$url,
-	            success:function($data){
-
-				        if($data.status == true){
-
-	                    	$('#assign_credist').html($data.credits_assing);
-	                    	$('#assign_semester').html($data.semester);
-	                    	$('#total_credits').html($data.total_credits);
-	                    	$("#pre_register").attr('total',$data.total_credits);
-	                    	$(".modified"+'-'+courseid+'-'+turno).hide();
-	                    	$(".register"+'-'+courseid+'-'+turno).show();
-                    		$(".btn-register").prop('disabled',false);
-	                    	
-	                        window.location.href=window.location.href;
-	                    }else{
-	                    //     //Pintar Fracaso
-	                    		$("#modal").modal('show');
-	                    		$("#error_").html("Error Al Eliminar Curso");
-	                    }
-	                    // $('#modalloader').modal('hide');
-	            },
-	            error:function($data){
-	                    //Pintar el error
-	                $("#modal").modal('show');
-                	$("#error_").html("Error en el Servidor");
-	            }
-        	});
-		}
-
-		function registration($this){
-			var $objets={};
-
-			// alert();
-			$objets[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
-			$objets[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
-			$objets[$.base64.encode('regid')] = $.base64.encode($.trim($($this).attr('regid')));
-			$objets[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
-			$objets[$.base64.encode('total')] = $.base64.encode($.trim($($this).attr('total')));
-
-			var result='';
-
-			for(var pro in $objets){
-				result += '' + pro + '/' + $objets[pro]+ '/';
-			}
-	        result = result.substring(0, result.length-1);
-	        var $url = '/register/student/registartion/'+ result;
-	        
-	        $.ajax({
-	            url:$url,
-	            success:function($data){
-							         
-                    if($data.status == true){
-                    	
-	                    window.location.href=window.location.href;
-
-                    }else{
-                        //Pintar Fracaso
-                    	$("#modal").modal('show');
-                    	$("#error_").html("Selecione al menos una asignatura para realizar su Pre- Matrícula");
-                        // mensajeria('error','El registro no se Guardado ');
-                    }
-                    // $('#modalloader').modal('hide');
-	            },
-	            error:function($data){
-	                    //Pintar el error
-                    $("#modal").modal('show');
-                	$("#error_").html("Error en el Servidor");
-	            }
-        	});
-		}
-
-		function delete_pre_register($this){
-			var $objets={};
-
-			// alert();
-			$objets[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
-			$objets[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
-			$objets[$.base64.encode('regid')] = $.base64.encode($.trim($($this).attr('regid')));
-			$objets[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
-			$objets[$.base64.encode('deleted')] = $.base64.encode($.trim($($this).attr('deleted')));
-
-			var result='';
-
-			for(var pro in $objets){
-				result += '' + pro + '/' + $objets[pro]+ '/';
-			}
-
-	        result = result.substring(0, result.length-1);
-	        var $url = '/register/student/regiterdeleted/'+ result;
-	        
-	        $.ajax({
-	            url:$url,
-	            success:function($data){
-	            	// alert($data.de+" "+$data.deleted);
-                    if($data.status == true){
-	                    window.location.href=window.location.href;
-                    }else{
-                        //Pintar Fracaso
-                    	$("#modal").modal('show');
-                    	$("#error_").html("A exedido los Cantidad de Eliminar Pre Matrícula");
-                    }
-	                    // $('#modalloader').modal('hide');
-        				
-	            },
-	            error:function($data){
-	                    //Pintar el error
-	                $("#modal").modal('show');
-                	$("#error_").html("Error en el Servidor");
-	            }
-        	});
-		}
-
-
-	$(function(){
-    	$("#veces_cur").popover();
-	});
-</script>
 
 <div class="modal fade" id='modal'>
   <div class="modal-dialog">
@@ -243,20 +35,23 @@
 			<div class='col-md-6'>
 				<?php if ($this->state == "B") { ?> 
 					
-					<buttom  class='btn btn-success' id='pre_register'
+					<buttom  class='btn btn-primary' id='save_register'
 					   	total="<?php echo $this->total_credits?>"
 					   	regid='<?php echo $this->regid?>'
 						escid='<?php echo $this->escid?>'
 						subid='<?php echo $this->subid?>'
 						perid='<?php echo $this->perid?>'
-						onclick='registration(this)'
-					><span class='glyphicon glyphicon-ok'></span> Guardar Pre Matricula</buttom>
+						onclick='save_registration(this)'
+					>
+					<span class='glyphicon glyphicon-ok'></span> Guardar Pre Matricula</buttom>
 
-					<a href="/register/student" class='btn btn-success'><span class='glyphicon glyphicon-repeat'></span> Actualizar Pago</a>
+					<a href="/register/student" class='btn btn-success'>
+					<span class='glyphicon glyphicon-repeat'></span> Actualizar Pago
+					</a>
 				<?php }?>
 			
 				<?php if ($this->state == "I") { 
-					$url = "/register/Student/printregister/".
+					$url = "/register/student/printregister/".
 						"escid/".base64_encode($this->escid).
 						"/subid/".base64_encode($this->subid).
 						"/regid/".base64_encode($this->regid).
@@ -284,19 +79,21 @@
 <div class='row'>
 	<div class='col-md-12'>
 		<div class='row'>
-			<div class="table-responsive col-md-5 col-md-offset-1">
-				<table class='table text-center'>
+			<div class="table-responsive col-md-7 ">
+				<table class='table text-center alert-'>
 					<tr>
-						<td><h5>Número de Créditos Permitidos</h5></td>
-						<td><h4><span class='label label-default' id='assign_credist'><?php echo $this->assign_credist?></span></h4></td>
-						<td><h5>Semestre de Matrícula</h5></td>
-						<td><h4><span class='label label-default' id='assign_semester'><?php echo $this->assign_semester?></span></h4></td>
+						<th>Número de Créditos Permitidos</th>
+						<td><span class='label label-default' id='assign_credist' style="font-size: 16px; valing: middle;">
+						<?php echo $this->assign_credist?></span></td>
+						<th>Semestre de Matrícula</h5></th>
+						<td><span class='label label-default' id='assign_semester' style="font-size: 16px; valing: middle;">
+						<?php echo $this->assign_semester?></span></td>
 					</tr>
 					<tr>
-						<td>Usted pagó el monto de</td>
-						<td><?php echo $this->amount_payment?></td>
-						<td>Usted debe de pagar el monto de</td>
-						<td><?php echo $this->amount_assing?></td>
+						<th>Usted pagó el monto de</th>
+						<td>S/. <?php echo $this->amount_payment?></td>
+						<th>Usted debe de pagar el monto de</th>
+						<td>S/. <?php echo $this->amount_assing?></td>
 					</tr>
 				</table>
 			</div>
@@ -311,30 +108,29 @@
 		
 	<div class ='col-md-12'>
 	<div class='row'>
-	
-	<div class='col-md-8 col-md-offset-1'>
-		<div class='col-md-4 col-md-offset-9'>
-			<h4>Total Creditos
-				<span id='total_credits' class='label label-primary'> <?php echo $this->total_credits?></span>
+	<div class='col-md-9 '>
+		<div class='col-md-6 col-md-offset-9'>
+			<h4>Total Créditos
+				<span id='total_credits' class='label label-primary' value="<?php echo $this->total_credits?>"> <?php echo $this->total_credits?></span>
 			</h4>
 		</div>
-		<table class=' table table-hover text-center'>
-			<thead>
+		<table class=' table table-hover '>
+			
 			<tr>
-				<th>Código Curso</th>
-				<th>Nombre Curso</th>
-				<th>Condición</th>
-				<th>Crédito</th>
-				<th>Semestre</th>
-				<th>Matriculas</th>
-				<th>Turno</th>
-				<th>Docente</th>
+				<th class="small">Código Asig.</th>
+				<th class="small-100">Nombre Asignatura</th>
+				<th class="small-50 center">Tipo</th>
+				<th class="small center"># Cred.</th>
+				<th class="small center">Semes.</th>
+				<th class="small center"># Matri.</th>
+				<th class="small center">Turno</th>
+				<th class="small-200" colspan="2">Docente</th>
 			</tr>
-			</thead>
-			<tbody class='table-striped'>
+			
 			<?php foreach ($this->subjects as $key => $subject) { ?>
 
 				<?php 
+					
 					if($subject['veces'] >= 2){
 						$class='danger';
 						$addClass = 'btn-danger';
@@ -345,7 +141,6 @@
 					}
 
 					if($subject['veces_cur']==1 ){
-
 						$veces_cur='veces_cur';
 						$content_veces=$subject['veces']+1;
 						$content="Requisito: Debe presentar una solicitud a Decanura de su Facultar  y Compromiso";
@@ -382,18 +177,18 @@
 
 					style="<?php echo $style_reg?>"
 					>
-					<td><?php echo $subject['courseid']?></td>
+					<td class="center"><?php echo $subject['courseid']?></td>
 					<td><?php echo $subject['name']?></td>
-					<td><?php 
+					<td class="center"><?php 
 							if (trim($subject['type_rate'])=='O') 
 									echo "Obligatorio";
 							if (trim($subject['type_rate'])=='E')
 									echo "Electivo";	
 					?></td>
-					<td><?php echo $subject['credits']?></td>
-					<td><?php echo $subject['semid'] ?></td>
-					<td><?php echo $subject['veces'] ?></td>
-					<td><?php echo $subject['turno'] ?></td>
+					<td class="center"><?php echo $subject['credits']?></td>
+					<td class="center"><?php echo $subject['semid'] ?></td>
+					<td class="center"><?php echo $subject['veces'] ?></td>
+					<td class="center"><?php echo $subject['turno'] ?></td>
 					<td><?php echo $subject['docente'] ?></td>
 					<td>
 						
@@ -427,17 +222,22 @@
 								veces='<?php print_r($this->veces)?>'
 								perid='<?php echo $this->perid?>'
 								condition='<?php echo $this->condition_credits?>'
-								onclick='modifiedsubjet(this)' 
+								onclick='modified_subjet(this)' 
 								style='<?php echo $display_mod ?>'>
-							<span class='glyphicon glyphicon-check'></span></button>
+							<span class='glyphicon glyphicon-check'></span>
+						</button>
 						<?php }}?>
 					</td>
 				</tr>
 			<?php }?>
-			</tbody>
+			
 		</table>
 	
-<?php }} else { ?>
+<?php }
+	else {
+	 echo "Debe de realizar el pago, antes de proceder con la matricula.";
+	}
+} else { ?>
 	<div class='row'>
 		<div class='alert alert-block alert-danger fade in col-md-5 col-md-offset-1' >
 			<button type="button" class="close" data-dismiss="alert-danger" aria-hidden="true">×</button>
@@ -445,7 +245,8 @@
 			<p> <?php echo $this->message_paymnet?></p>
 		</div>	
 	</div>
-<?php } if($this->error_cur){ ?>
+<?php } 
+if($this->error_cur){ ?>
 	<div class='row'>
 		<div class='alert alert-block alert-danger fade in col-md-5 col-md-offset-1' >
 			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -495,3 +296,198 @@
 	</div>
 </div>
 </div>
+<script type="text/javascript">
+		function register_subject($this){
+			var $register={};
+			$register[$.base64.encode('curid')] = $.base64.encode($.trim($($this).attr('curid'))); 
+			$register[$.base64.encode('courseid')] = $.base64.encode($.trim($($this).attr('courseid'))); 
+			$register[$.base64.encode('turno')] = $.base64.encode($.trim($($this).attr('turno')));
+			$register[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
+			$register[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
+			$register[$.base64.encode('regid')] = $.base64.encode($.trim($($this).attr('regid')));
+			$register[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
+			$register[$.base64.encode('veces')] = $.base64.encode($.trim($($this).attr('veces')));
+			$register[$.base64.encode('credits')] = $.base64.encode($.trim($($this).attr('credits')));
+			$register[$.base64.encode('condition')] = $.base64.encode($.trim($($this).attr('condition')));
+			var result='';
+			for(var pro in $register){
+				result += '' + pro + '/' + $register[pro]+ '/';
+			}
+	        result = result.substring(0, result.length-1);
+	        var $url = '/register/student/createdregister/'+ result;
+	        $.ajax({
+	            url:$url,
+	            success:function($data){
+	            		var courseid=$($this).attr('courseid');
+	            		var turno=$($this).attr('turno');
+	                    if($data.status == true){
+
+	                    	$('#assign_credist').html($data.credits_assing);
+	                    	$('#assign_semester').html($data.semester);
+	                    	$('#total_credits').attr("value",$data.total_credits);
+	                    	$('#total_credits').html($data.total_credits);
+	                    	$("#pre_register").attr('total',$data.total_credits);
+	                    	$(".register"+'-'+courseid+'-'+turno).hide();
+	                    	$(".modified"+'-'+courseid+'-'+turno).show();
+	                    	$(".modified"+'-'+courseid+'-'+turno).addClass('btn-success');
+	                    	$("#modal").modal('hide');
+	                    }else{
+	                        //Pintar Fracaso
+	                    		$("#modal").modal('show');
+	                    		$("#error_").html("A exedido en Numero de Creditos Permitidos");
+
+	                    		$(".btn-register").prop('disabled',true);
+	                    		$(".register"+'-'+courseid+'-'+turno).prop('disabled',true);
+
+	                    }
+	                    $('#modalloader').modal('hide');
+	            },
+	            error:function($data){
+	                    //Pintar el error
+                    $("#modal").modal('show');
+                	$("#error_").html("Error en el Servidor");
+	                    
+	            }
+        	});	
+			// return false;
+		}
+
+		function modified_subjet($this){
+
+			var $register={};
+			
+			$register[$.base64.encode('curid')] = $.base64.encode($.trim($($this).attr('curid'))); 
+			$register[$.base64.encode('courseid')] = $.base64.encode($.trim($($this).attr('courseid'))); 
+			$register[$.base64.encode('turno')] = $.base64.encode($.trim($($this).attr('turno')));
+			$register[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
+			$register[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
+			$register[$.base64.encode('regid')] = $.base64.encode($.trim($($this).attr('regid')));
+			$register[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
+			$register[$.base64.encode('veces')] = $.base64.encode($.trim($($this).attr('veces')));
+			$register[$.base64.encode('credits')] = $.base64.encode($.trim($($this).attr('credits')));
+			$register[$.base64.encode('condition')] = $.base64.encode($.trim($($this).attr('condition')));
+
+
+			var result='';
+
+			for(var pro in $register){
+				result += '' + pro + '/' + $register[pro]+ '/';
+			}
+	        result = result.substring(0, result.length-1);
+	        var $url = '/register/student/removeregister/'+ result;
+	        
+    		var courseid=$($this).attr('courseid');
+    		var turno=$($this).attr('turno');
+	        $.ajax({
+	            url:$url,
+	            success:function($data){
+
+
+				        if($data.status == true){
+
+	                    	$('#assign_credist').html($data.credits_assing);
+	                    	$('#assign_semester').html($data.semester);
+	                    	$('#total_credits').html($data.total_credits);
+	                    	$("#pre_register").attr('total',$data.total_credits);
+	                    	$(".modified"+'-'+courseid+'-'+turno).hide();
+	                    	$(".register"+'-'+courseid+'-'+turno).show();
+                    		$(".btn-register").prop('disabled',false);
+	                    	
+	                    }else{
+	                    //     //Pintar Fracaso
+	                    		$("#modal").modal('show');
+	                    		$("#error_").html("Error Al Eliminar Curso");
+	                    }
+	                    $('#modalloader').modal('hide');
+	            },
+	            error:function($data){
+	                    //Pintar el error
+	                $("#modal").modal('show');
+                	$("#error_").html("Error en el Servidor");
+	            }
+        	});
+		}
+
+		function save_registration($this){
+
+			var $objets={};
+			$("#save_register").attr('disabled');
+			// alert();
+			$objets[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
+			$objets[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
+			$objets[$.base64.encode('regid')] = $.base64.encode($.trim($($this).attr('regid')));
+			$objets[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
+			$objets[$.base64.encode('total')] = $.base64.encode($.trim($("#total_credits").attr('value')));
+			var result='';
+
+			for(var pro in $objets){
+				result += '' + pro + '/' + $objets[pro]+ '/';
+			}
+	        result = result.substring(0, result.length-1);
+	        var $url = '/register/student/registartion/'+ result;
+	        
+	        $.ajax({
+	            url:$url,
+	            success:function($data){
+                    if($data.status == true){                    	
+	                    window.location.href=window.location.href;
+                    }else{
+                        //Pintar Fracaso
+                    	$("#modal").modal('show');
+                    	$("#error_").html("Selecione al menos una asignatura para realizar su Pre- Matrícula");
+                        // mensajeria('error','El registro no se Guardado ');
+                    }
+	            },
+	            error:function($data){
+	                    //Pintar el error
+	                alert("Error");
+                    $("#modal").modal('show');
+                	$("#error_").html("Error en el Servidor");
+	            }
+        	});
+		}
+
+		function delete_pre_register($this){
+			var $objets={};
+
+			// alert();
+			$objets[$.base64.encode('escid')] = $.base64.encode($.trim($($this).attr('escid')));
+			$objets[$.base64.encode('subid')] = $.base64.encode($.trim($($this).attr('subid')));
+			$objets[$.base64.encode('regid')] = $.base64.encode($.trim($($this).attr('regid')));
+			$objets[$.base64.encode('perid')] = $.base64.encode($.trim($($this).attr('perid')));
+			$objets[$.base64.encode('deleted')] = $.base64.encode($.trim($($this).attr('deleted')));
+
+			var result='';
+
+			for(var pro in $objets){
+				result += '' + pro + '/' + $objets[pro]+ '/';
+			}
+
+	        result = result.substring(0, result.length-1);
+	        var $url = '/register/student/regiterdeleted/'+ result;
+	        
+	        $.ajax({
+	            url:$url,
+	            success:function($data){
+	            	// alert($data.de+" "+$data.deleted);
+                    if($data.status == true){
+	                    window.location.href=window.location.href;
+                    }else{
+                        //Pintar Fracaso
+                    	$("#modal").modal('show');
+                    	$("#error_").html("A exedido los Cantidad de Eliminar Pre Matrícula");
+                    }
+	                    $('#modalloader').modal('hide');
+        				
+	            },
+	            error:function($data){
+	                    //Pintar el error
+	                $("#modal").modal('show');
+                	$("#error_").html("Error en el Servidor");
+	            }
+        	});
+		}
+	$(function(){
+    	$("#veces_cur").popover();
+	});
+</script>

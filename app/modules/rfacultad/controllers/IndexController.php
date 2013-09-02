@@ -16,8 +16,8 @@ class Rfacultad_IndexController extends Zend_Controller_Action {
             }
     public function indexAction()
     {
-    
-
+        $perid=$this->sesion->period->perid;
+        $this->view->perid=$perid;
     }
 
 

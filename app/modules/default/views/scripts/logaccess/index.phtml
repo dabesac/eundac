@@ -1,0 +1,35 @@
+<?php
+if ($this->datalog) { ?>
+	<table class="table table-hover">
+		<tr>
+			<th>#</th>
+			<th><center>IP</center></th>
+			<th><center>F. Inicio</center></th>
+			<th><center>F. Fin</center></th>
+			<th><center>Est</center></th>
+		</tr>
+		<?php
+		$c=1;
+		$datalog=$this->datalog;
+		for ($i=0; $i < 10; $i++) { 
+			$f_ini = split('[-./]', substr($datalog[$i]['datestart'], 0,10));
+			$f_fin = split('[-./]', substr($datalog[$i]['dateend'], 0,10));
+			if ($datalog[$i]['state']=="A") $img="<img src='/img/circulo-verde.png' width='20' rel='tooltip' title='Sesión Activa'>";
+			else $img="<img src='/img/circulo-rojo.png' width='20' rel='tooltip' title='Sesión Cerrada'>";?>
+			<tr>
+				<td><?php echo $c?></td>
+				<td><center><?php echo $datalog[$i]['ip']?></center></td>
+				<td><center><?php echo $f_ini[2]."/".$f_ini[1]."/".$f_ini[0]?></center></td>
+				<td><center><?php echo $f_fin[2]."/".$f_fin[1]."/".$f_fin[0]?></center></td>
+				<td><center><?php echo $img?></center></td>
+			</tr>
+			<?php
+			$c++;
+		}?>
+	</table>
+	<?php
+}?>
+
+<script type="text/javascript">
+$('img[rel=tooltip]').tooltip();
+</script>

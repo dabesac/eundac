@@ -52,7 +52,7 @@
 						</tr>
 					</table>
 				</div>
-			<?php }else{
+			<?php }elseif ($courses[0]['type']=="C"){
 				for ($i=1; $i<=4 ; $i++) {?>
 				<div class="col-sm-3">
 					<table class="table">
@@ -134,7 +134,10 @@
 	<?php $c++;
 	}?>
 				
-<?php }?>
+<?php }else{?>
+	<br><br>
+	<h4 align="center">Aun no se Matricula a este Periodo</h4>
+<?}?>
 </div>
 
 
