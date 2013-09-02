@@ -75,6 +75,7 @@ class Register_StudentController extends Zend_Controller_Action {
             print "Error index Registration ".$e->$getMessage();
         }
     }
+    
     public function startAction(){
         try {
 

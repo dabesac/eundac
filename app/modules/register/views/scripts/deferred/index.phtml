@@ -6,8 +6,19 @@
 	.presented{
 		cursor: pointer;
 	}
+	.error-input
+	{
+		background-color: red;
+	}
 </style>
 <script type="text/javascript">
+
+	var $indicefa = -1;
+	var $notas = {};
+	//var $td = null;
+	var $tr = null;
+	var $strnota = '';
+	var $grillaedicion = false;
 
 	function not_present (obj) {
 		var $icon = $(obj);
@@ -41,6 +52,7 @@
     	$notas[$.base64.encode('subid')]        = $.base64.encode($.trim($subject.attr("subid")));
     	$notas[$.base64.encode('regid')]        = $.base64.encode($.trim($subject.attr("regid")));
     	$notas[$.base64.encode('uid')]        = $.base64.encode($.trim($subject.attr("uid")));
+    	$notas[$.base64.encode('pid')]        = $.base64.encode($.trim($subject.attr("pid")));
     	
 
 		$($subject[0].children).each(function (){
@@ -65,6 +77,7 @@
                     	$notas[$.base64.encode("notafinal")]=$.base64.encode("");
                     	$input.css("color","#000");
                     	$input.attr('disabled',false);
+                    	$input.val('');
                     }
 				}
 			}
@@ -77,52 +90,304 @@
 	    }
 	    result = result.substring(0, result.length-1);
 	    var $url = '/register/deferred/loadnotas/' + result;
-	    $('#modalloader').modal('show');
+	    // $('#modalloader').modal('show');
 	    $temporaindex = $index;
 
 	    $.ajax({
 	        url:$url,
 	        success:function($data){
-	        		alert($data);
-	                // if($data.status == true){
-	                //     //Pintar el exito
-	                   
-	                //     $("#comprobacion_" + $temporaindex).attr("src","/img/correcto.png");
-	                //     $subject.css("color", "none");
-	                // }else{
-	                //     //Pintar Fracaso
-	                //     mensajeria('error','El registro no se guardo correctamente');
-	                //     $("#comprobacion_" + $temporaindex).attr("src","");
-	                //     $subject.css("color", "#FC4141");
-	                // }
+	                if($data.status == true){
+	                    //Pintar el exito
+	                    $("#edit_nota_" + $temporaindex).addClass('glyphicon-ok-circle');
+	                    $subject.css("color", "none");
+	                }else{
+	                    //Pintar Fracaso
+	                    $("#edit_nota_" + $temporaindex).attr("src","");
+	                    $subject.css("color", "#FC4141");
+	                }
 	                // $('#modalloader').modal('hide');
 	        },
 	        error:function($data){
-	        	alert("error");
-	                //Pintar el error
-	                // $parent.css("color", "#FC4141");
-	                // $("#comprobacion_" + $indice).attr("src","");
-	                // mensajeria('error','Se produjo un error no controlado, comunicarse con el administrador');
-	                // $('#modalloader').modal('hide');
+	        	$subject.css("color", "#FC4141");
+                $("#edit_nota_" + $index).attr("src","");
 	        }
 	    });
 		$notas = {};
     	return true;
-
 	}
+
+	function savefile(){
+		var result = '' ;
+        var resultdecode = '';
+        var $numnotas   =  0;
+        var $suma = 0
+
+        for (var prop in $notas ) {
+            resultdecode += '' + $.base64.decode(prop) + '/' + $.base64.decode($notas[prop])  + '/'; 
+        }
+
+    
+        
+        if($notas[$.base64.encode('receipt')]){ 
+        	$notas[$.base64.encode('receipt')]=$notas[$.base64.encode('receipt')];
+        }
+        if($notas[$.base64.encode('notafinal')]){ 
+        	$notas[$.base64.encode('notafinal')]=$notas[$.base64.encode('notafinal')];
+        }
+  		
+        for (var prop in $notas ) {
+            result += '' + prop + '/' + $notas[prop]  + '/'; 
+        }
+      	result = result.substring(0, result.length-1);
+	    var $url = '/register/deferred/loadnotas/' + result;
+
+        if (resultdecode.toLowerCase().indexOf("nota") >= 0){
+	    	$temporaindex = $indicefa;
+        	$.ajax({
+	        url:$url,
+            async:false,
+	        success:function($data){
+	                if($data.status == true){
+	                    //Pintar el exito
+	                    $("#edit_nota_" + $temporaindex).addClass('glyphicon-ok-circle');
+	                    $tr.css("color", "none");
+
+	                }else{
+	                    //Pintar Fracaso
+	                    $("#edit_nota_" + $temporaindex).attr("src","");
+	                    $tr.css("color", "#FC4141");
+	                }
+                    $tr.attr("edicion",false); 
+
+	                // $('#modalloader').modal('hide');
+	        },
+	        error:function($data){
+	        	$tr.css("color", "#FC4141");
+                $("#edit_nota_" + $temporaindex).attr("src","");
+                $tr.attr("edicion",false); 
+	        }
+	    	});
+        }
+
+        $notas = {};
+    	return true;
+	}
+
+</script>	
+<script type="text/javascript">
+	$(document).ready(function() {
+	    $(".notas input[type='text']").focusout(function(e){
+        	$strnota = '';
+    	});
+
+    	$(".notas input[type='text']").click(function(){
+            $(this).removeClass('error-input');
+    	});
+
+   //  	$(".notas .select_receipt").change(function(){
+
+			// $(".select_receipt").each(function(){
+			// 	alert($(this).val());
+			// 	if ($(this).val() !="") {
+
+			// 		$(".td_select").removeClass('has-error');
+			// 	};		
+			// });
+
+   //  	});
+
+
+		$(".notas input[type='text']").keypress(function(e){
+            
+            var charCode = (e.which) ? e.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57)){
+                e.preventDefault();
+            }else{
+                if(e.which != 8){
+                    var chr = String.fromCharCode( e.which );
+                    $strnota = '' + $strnota + chr + '';
+                    if($strnota != ''){$nota = Number($strnota);}
+                    else{$nota='';}
+                    if(($nota < 0 || $nota >20) && ($nota!=-3) && ($nota!='')){
+                        $strnota = '';
+                        $(this).val('');
+                        e.preventDefault();
+                    }
+                }
+                
+                var td = $(this).parent();
+                var tr  = td.parent();
+                $tr = $(tr);
+
+                $tr.attr("edicion",true); 
+                
+                $index = $(this).attr("index");
+
+                $("#edit_nota_" + $index).addClass("glyphicon-edit");
+
+                $("#save_notas").attr("disabled",false);
+            }
+    	});
+
+    	$("#save_notas").click(function(){
+    		$indicefa = -2;
+            var $envioserver = false;
+            $("#tbnotas tr").each(function(){
+                $indicefa = parseInt($indicefa)  + 1;
+                $tr = $(this);
+                $action = $tr.attr('edicion');
+                if($action == "true") {
+
+    	          	if ($envioserver == false ) {
+                		$envioserver = true;
+                	}
+
+                	$notas ={};
+                	$notas[$.base64.encode('courseid')]= $.base64.encode($.trim($tr.attr("courseid")));
+			    	$notas[$.base64.encode('curid')]   = $.base64.encode($.trim($tr.attr("curid")));
+			    	$notas[$.base64.encode('turno')]    = $.base64.encode($.trim($tr.attr("turno")));
+			    	$notas[$.base64.encode('perid')]     = $.base64.encode($.trim($tr.attr("perid")));
+			    	$notas[$.base64.encode('escid')]     = $.base64.encode($.trim($tr.attr("escid")));
+			    	$notas[$.base64.encode('subid')]     = $.base64.encode($.trim($tr.attr("subid")));
+			    	$notas[$.base64.encode('regid')]     = $.base64.encode($.trim($tr.attr("regid")));
+			    	$notas[$.base64.encode('uid')]        = $.base64.encode($.trim($tr.attr("uid")));
+			    	$notas[$.base64.encode('pid')]        = $.base64.encode($.trim($tr.attr("pid")));
+
+			    	$informacion = false;
+			    	$($tr[0].children).each(function () {
+			    		if (this.firstElementChild != null) {
+			    			if (this.firstElementChild.nodeName == "INPUT" || this.firstElementChild.nodeName =='SELECT') {
+
+			    				$input= $(this.firstElementChild);
+                    			$name = $input.attr("name");
+                    			$valor = $input.val();
+
+                    			if($valor != '')
+                    			{
+                    				$informacion = true;
+                    				$notas[$.base64.encode($name)] = $.base64.encode($.trim($valor));
+                    			}
+                    			else
+                    			{
+                    				if ($name == 'receipt') 
+                					{
+                						$(".td_select_"+$indicefa).addClass('has-error');
+                					};
+                    				if ($name == 'notafinal') 
+                					{
+                						$($input).addClass('error-input');
+                					};
+                    			}
+			    			}
+			    		}
+			    	});
+
+			    	if($informacion){
+			    		savefile();
+			    	}
+   	
+                }
+
+            });
+
+            if($envioserver==true){
+	            $("#save_notas").attr("disabled",true);
+            }
+    	});
+		
+		$("#closed_record").click(function (){
+			
+			var $record = {};
+
+			// alert($("#recordcourseid").val());
+			$record[$.base64.encode('courseid')] = $.base64.encode($("#record-courseid").val());
+			$record[$.base64.encode('turno')] = $.base64.encode($("#record-turno").val());
+			$record[$.base64.encode('curid')] = $.base64.encode($("#record-curid").val());
+			$record[$.base64.encode('escid')] = $.base64.encode($("#record-escid").val());
+			$record[$.base64.encode('subid')] = $.base64.encode($("#record-subid").val());
+			$record[$.base64.encode('perid')] = $.base64.encode($("#record-perid").val());
+			
+			var result = '';
+
+			for( var prop in $record){
+                result += '' + prop + '/' + $record[prop]  + '/'; 
+			}
+            result = result.substring(0, result.length-1);
+            var $url = '/register/deferred/closerecord/' + result;
+
+    	    $.ajax({
+		        url:$url,
+		        success:function($data){
+
+		        	alert($data);
+	                if($data.status == true){
+	                    //Pintar el exito
+	                    alert("exito");
+	                    // $("#edit_nota_" + $temporaindex).addClass('glyphicon-ok-circle');
+	                    // $subject.css("color", "none");
+	                }else{
+	                    
+                			$("#tbnotas tr").each(function(){
+			                $indicefa = parseInt($indicefa)  + 1;
+			                $tr = $(this);
+			                $action = $tr.attr('edicion');
+			                if($action == "false"){
+
+					    	$informacion = false;
+						    	$($tr[0].children).each(function () {
+						    		if (this.firstElementChild != null) {
+						    			if (this.firstElementChild.nodeName == "INPUT" || this.firstElementChild.nodeName =='SELECT') {
+
+						    				$input= $(this.firstElementChild);
+			                    			$name = $input.attr("name");
+			                    			$valor = $input.val();
+			                    			if($valor != "")
+			                    			{
+
+			                    			}
+			                    			else
+			                    			{
+			                    				if ($name == 'receipt') 
+			                					{
+			                						$(".td_select_"+$indicefa).addClass('has-error');
+			                					};
+			                    				if ($name == 'notafinal') 
+			                					{
+			                						$($input).addClass('error-input');
+			                					};
+
+			                    			}
+			                    			
+						    			}
+						    		}
+						    	});
+			                }
+
+			            });
+	                }
+		                // $('#modalloader').modal('hide');
+		        },
+		        error:function($data){
+		        	alert("error");
+		        }
+	   		});
+
+		});
+
+	});
 </script>
 <div class="row">
   <div class="col-xs-12 col-sm-6 col-md-8"><h4><span class='glyphicon glyphicon-pencil' ></span> Llenado de Aplazados <?php echo $this->infocurso['name']?></h4></div>
   <div class="col-xs-6 col-sm-6 col-md-4">
-  	<button class='btn btn-success'>Guardar</button>
-  	<button class='btn btn-success'>Cerrar Acta</button>
+  	<button class='btn btn-success' id='save_notas' disabled >Guardar</button>
+  	<button class='btn btn-success' id='closed_record'   >Cerrar Acta</button>
   </div>
 </div>
 
 <?php if ($this->students_register) { ?>
-<div class='row'>
+<div class='row notas' >
 	<div class='col-md-8 col-md-offset-1'>
-	<table class='table'>
+	<table class='table' id='tbnotas'>
 		<tr>
 			<th>#</th>
 			<th>Coodigo</th>
@@ -139,25 +404,27 @@
 				subid='<?php echo $registro['subid']?>'
 				regid='<?php echo $registro['regid']?>'
 				uid='<?php echo $registro['uid']?>'
+				pid='<?php echo $registro['pid']?>'
                 edicion="false"
                 style="color:<?php echo ($registro['notafinal'] != -2)?'#000':'#FC4141'; ?>;"
-
 		>
 			
-			<td><?php echo $key+1?></td>
+			<td><?php echo $key+1?> <span id='edit_nota_<?php echo $key?>' class='text-success glyphicon'></span>
+			</td>
 			<td><?php echo $registro['uid']?></td>
 			<td><?php echo  $registro['name'] ?></td>
-			<td>
+			<td class='td_select_<?php echo $key?> td_select'>
 			
-					<select class='form-control' index='<?php echo $key ?>'name='receipt' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?> >
-						<option>Seleccione</option>
-						<?php foreach ($registro['receipt'] as $key => $value) { ?>
+					<select class='form-control select_receipt' index='<?php echo $key ?>' name='receipt' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?> >
+						<option value="<?php echo $registro['receipt']?>"><?php echo ($registro['receipt'] != "")?$registro['receipt']:'Seleccione'; ?></option>
+						<?php foreach ($registro['receipts'] as $key => $value) { ?>
 						<option value='<?php echo $value['operation']?>'><?php echo $value['operation']?></option>
 						<?php }?>
 					</select>
 				
 			</td>
-			<td><input type='text'  name='notafinal' maxlength='2' style="color:<?php echo ($registro['notafinal'] != -2)?'#000':'#FC4141'; ?>;" class='form-control nota' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?> value='<?php echo ($registro['notafinal'] != -2)?$registro['notafinal']:'NP'; ?>'></td>
+			<td class='td_input_<?php echo $key?> td_input' >
+				<input type='text'  name='notafinal' maxlength='2' style="color:<?php echo ($registro['notafinal'] != -2)?'#000':'#FC4141'; ?>;" class='form-control nota' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?> value='<?php echo ($registro['notafinal'] != -2)?$registro['notafinal']:'NP'; ?>' index='<?php echo $key?>'></td>
 			<td class='success'>
 				<?php if ($registro['notafinal'] != -2) { ?>
 					<span class='glyphicon glyphicon-eye-open presented' 
@@ -174,4 +441,12 @@
 	</table>
 	</div>
 </div>
+
+<input type='hidden' id='record-courseid' name='courseid' value='<?php echo $this->students_register[0]['courseid']?>'>
+<input type='hidden' id='record-turno' name='turno' value='<?php echo $this->students_register[0]['turno']?>'>
+<input type='hidden' id='record-curid' name='curid' value='<?php echo $this->students_register[0]['curid']?>'>
+<input type='hidden' id='record-escid' name='escid' value='<?php echo $this->students_register[0]['escid']?>'>
+<input type='hidden' id='record-subid' name='subid' value='<?php echo $this->students_register[0]['subid']?>'>
+<input type='hidden' id='record-perid' name='perid' value='<?php echo $this->students_register[0]['perid']?>'>
 <?php }?>
+

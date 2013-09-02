@@ -30,7 +30,7 @@ class IndexController extends Zend_Controller_Action {
     			$rid = base64_decode($rid_[0]);
     			$prefix = trim($rid_[1]);
     			$cod = ($uid = $form->getValue('usuario').$prefix);    			
-    			$pass = $form->getValue('clave');
+    			$pass = md5($form->getValue('clave'));
     			$dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
     			$authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter,'base_users','uid','password');
     			$authAdapter->getDbSelect()->where("state = 'A' and eid='$eid' and oid='$oid'");
