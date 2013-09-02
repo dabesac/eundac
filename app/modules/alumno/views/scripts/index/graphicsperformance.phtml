@@ -16,10 +16,10 @@
         <link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="/css/style.css">
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<div class="alert alert-success">"PARA LOGRAR UN RENDIMIENTO AL 100% DEBEN COINCIDIR LA CANTIDAD DE CURSOS POR SEMESTRE Y LA CANTIDAD DE CURSOS APROBADOS" </div> 
+<div class="alert alert-success"><center>"PARA LOGRAR UN RENDIMIENTO AL 100% DEBEN COINCIDIR LA CANTIDAD DE CURSOS POR SEMESTRE Y LA CANTIDAD DE CURSOS APROBADOS"</center></div> 
     <center><table class="table  table-bordered table-striped table-condensed" style="float:left; margin-left:200px;font-size:11px; width:800px">
       <tr>
-         <th>Semestres</th>
+         <th style='color:'>Semestres</th>
             <?php $cont=1;  
             while ( $cont<= 12) {
             foreach ($this->data as $datos) {           
@@ -37,8 +37,11 @@
                           {
                             $cant=0;
                           }                    
-                    ?>         
-             <td><font color="blue"> <?php print $nombre?> </font></td>        
+                    ?>  
+
+
+             <td><center><span class="label label-info" id="mostrartexto" rel="popover" data-placement="bottom" style="float:left;font-size:11px;">
+        <?php print $nombre?> </span></center></td>        
            <?php  }}
            $cont=$cont +1; }?>
            </tr>
@@ -62,7 +65,7 @@
                             $cant=0;
                           }                    
                     ?>
-         <td><font color="red"><?php print ($total-$cant)?></font></td>
+         <td><font color="red"><b><?php print ($total-$cant)?></b></font></td>
          <?php  }}
            $cont=$cont +1; }?>
         </tr> 
