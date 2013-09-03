@@ -1,5 +1,6 @@
 <div class="col-md-12"><center><h2><span class="glyphicon glyphicon-stats"></span> | Notas Actuales | Periodo 13B</h2></center></div>
-<?php if($this->courses){?>
+<?php if($this->courses){
+	//print_r($this->typerate);?>
 <br><br>
 
 <div class="col-sm-12">
@@ -11,12 +12,16 @@
 			<h5 align="left"><b><?php echo $courses[0]['name'];?></b></h5>
 		</div>
 		<div class="panel-body">
-			<?php if ($courses[0]['type']=="O"){
-				for ($i=1; $i<=2 ; $i++) {?>
+			<?php if ($this->typerate[$c][0]['type_rate']=="O"){?>
+				<div class="col-sm-1">
+					<br><br><br>
+					<br><br><br>
+				</div>
+				<?for ($i=1; $i<=2 ; $i++) {?>
 				<div class="col-sm-6">
 					<table class="table">
 						<tr>
-							<h5>Detalle Unidad <?php echo $i;?></h5>
+							<h5><b>Detalle Unidad <?php echo $i;?></b></h5>
 						</tr>
 						<tr>
 						<?php for($ci=1; $ci<9 ;$ci++) {
@@ -34,7 +39,7 @@
 				<div class="col-sm-2">
 					<table class="table">
 						<tr>
-							<h5>Promedio</h5>
+							<h5><b>Promedio</b></h5>
 						</tr>
 						<tr>
 							<td><?php echo $this->notes[$c]['promedio'.$i]?></td>
@@ -52,7 +57,7 @@
 						</tr>
 					</table>
 				</div>
-			<?php }elseif ($courses[0]['type']=="C"){
+			<?php }elseif ($this->typerate[$c][0]['type_rate']=="C"){
 				for ($i=1; $i<=4 ; $i++) {?>
 				<div class="col-sm-3">
 					<table class="table">
@@ -81,7 +86,7 @@
 				<div class="col-sm-2">
 					<table class="table">
 						<tr>
-							<h5>Promedio</h5>
+							<h5><b>Promedio</b></h5>
 						</tr>
 						<tr>
 							<?php if($i==1){
@@ -123,7 +128,7 @@
 				<center><h5>Semestre <b><?php echo $courses[0]['semid']?></b></h5></center>
 			</div>
 			<div class="col-sm-3">
-				<center><h5>Turno <b>A</b></h5></center>
+				<center><h5>Turno <b><?php echo $this->notes[$c]['turno']?></b></h5></center>
 			</div>
 			<div class="col-sm-3">
 				<center><h5>Creditos <b><?php echo $courses[0]['credits']?></b></h5></center>
