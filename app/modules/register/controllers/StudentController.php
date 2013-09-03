@@ -114,8 +114,9 @@ class Register_StudentController extends Zend_Controller_Action {
                 $condition_semester='3';
 
                 if ($data_condition) {
+                	$cont_conmment=null;
                     foreach ($data_condition  as $condition) {
-
+						
                         if ($condition['num_registration'] !='') {
                             $cont_conmment['num_registration']="Usted esta Permitido llevar 
                                         un curso por  ". $condition['num_registration'].
@@ -201,13 +202,9 @@ class Register_StudentController extends Zend_Controller_Action {
                             }
 
                         }
-
                         $this->view->veces = $veces;
-                 
                         $this->view->veces_subject=$veces_subject;
-                        
-
-                    }
+                   	}
                     else{
                         $cantidad =count($subject);
 
@@ -344,6 +341,7 @@ class Register_StudentController extends Zend_Controller_Action {
                 }
 
                 $this->view->name_reates=$data_payment['name'];
+                //print_r($data_payment);
             }
             else
             {

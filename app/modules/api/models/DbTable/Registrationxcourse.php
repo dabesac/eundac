@@ -202,11 +202,11 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     public function _getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid){
          try{    
             $sql = $this->_db->query("
-                
+            	                
                 select * from record_notes('$escid','$uid','$eid','$oid','$subid','$pid') AS 
                 (
                     ".'escid'." character varying,
-                    ".'matid'." character varying,
+                    ".'regid'." character varying,
                     ".'perid'." character varying,
                     ".'courseid'." character varying,
                     ".'turno'." character varying, 
@@ -218,6 +218,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
                     ".'requisito'." character varying
                     )               
                 ");
+            print_r($sql);
             if ($sql) return $sql->fetchAll();
             return false;           
         }  catch (Exception $ex){
@@ -226,6 +227,30 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     }
 
 
+    /*Devuelve el record segun la funcion Record de Notas */
+    public function _getRecordNotasAlumno_H($escid,$uid,$eid,$oid,$subid,$pid){
+    	try{
+    		$sql = $this->_db->query("
+    				 select c.semid, c.name,rc.regid,rc.courseid, rc.curid, rc.perid, rc.turno, rc.notafinal as nota,
+						c.credits as creditos
+					from base_registration_course rc, base_courses c
+					where 
+					rc.eid=c.eid and rc.oid=c.oid and rc.escid=c.escid and rc.subid=c.subid 
+    				and rc.courseid = c.courseid and rc.curid=c.curid and 
+					rc.uid='$uid' and rc.escid='$escid' and rc.pid='$pid' and rc.subid='$subid'
+					and rc.eid='$eid' and rc.oid='$oid' and (rc.state='M' or rc.state='C')
+					order by c.semid, c.courseid, c.name
+    				");
+    				print_r($sql);
+            if ($sql) return $sql->fetchAll();
+            return false;
+        }  catch (Exception $ex){
+                		print "Error: Obteniendo datos de tabla 'Matricula Curso'".$ex->getMessage();
+    	}
+    	}
+    /*
+     * 
+     * */
     public function _getInfoCourse($where=null,$attrib=null,$order=null){
 		try {
 			if ($where=='' && $attrib=='' ) return false;
