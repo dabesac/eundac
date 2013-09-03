@@ -16,13 +16,16 @@
         data.addColumn('number', 'Slices');
         data.addRows([
        <?php
-       foreach ($this->lescuelas as $datos) {
+       foreach ($this->lschool as $datos) {
            $nombre=$datos['name'];
            $cantidad=$datos['conteo']; ?>
         ['<?php print $nombre?>' , <?php print $cantidad?>],
          <?php  }?>
         ]);
-        var options = {'title':'MATRICULADOS DE LA FACULTAD DE <?php print strtoupper($namefaculty)?>'};
+       var options = {
+          title: 'MATRICULADOS DE LA FACULTAD DE <?php print strtoupper($namefaculty)?>',
+          titleTextStyle: {color: '#0476D4'}
+        };
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
@@ -30,3 +33,4 @@
       
      </script>
      <div id="chart_div" style="width:100% ;height:100%"></div>
+

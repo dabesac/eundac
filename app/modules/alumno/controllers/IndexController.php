@@ -28,14 +28,14 @@ class Alumno_IndexController extends Zend_Controller_Action {
     {
         try
         {
-        $this->_helper->layout()->disableLayout();         
+            $this->_helper->layout()->disableLayout();         
             $where['uid']=$this->sesion->uid;
             $where['eid']=$this->sesion->eid;
             $where['oid']=$this->sesion->oid;
             $where['pid']=$this->sesion->pid;
             $where['escid']=$this->sesion->escid;
             $where['subid']=$this->sesion->subid;
-        	$perid = $this->sesion->period->perid;
+            $perid = $this->sesion->period->perid;
 
             $this->view->escid = $where['escid'];
             $this->view->perid = $perid;
@@ -52,7 +52,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $this->view->data=$datcursos;
             $cur=$dbcursos->_getCountCoursesxApproved($where);
             // print_r($cur);
-            $this->view->cursos=$cur;     
+            $this->view->cursos=$cur;
         }
         catch(Exception $ex)
         {
