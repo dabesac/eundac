@@ -12,6 +12,7 @@ body, html{
 	background: #555;
 	margin: 0px; 
 	padding: 0px;
+	display: block;
 }
 .center {
 	text-align: center;
@@ -36,18 +37,12 @@ input.error {
 
 
 
-.control-info{
-	color: #e0e0e0;
-	padding: 0px;
-	margin: 0px;
-}
 
 .control-top{
-	background: url(../img/left.png) #AEB7DB !important ;
+	background: url(../img/left.png) #AEB7DB ;
 	padding: 0px;
-	margin: 0px;
-	min-height: 580px;
-	
+	margin: 0px;	
+	height:1000px;	
 }
 
 .header-top{
@@ -59,7 +54,7 @@ input.error {
 
 .header-middle{
 	background-color: #e0e0e0 !important;
-	height: 50px;
+	height: 40px;
 	padding-top: 10px;
 	border-bottom: 2px solid #1e83cb;
 }
@@ -102,7 +97,7 @@ margin: 0px;
 }
 
 /* WIDGETS */
-h5{
+.titlebox{
 	color: white;
 	padding-left:20px;
 	padding-right:20px;
@@ -143,10 +138,9 @@ h5{
 /*Basic reset*/
 * {margin: 0; padding: 0;}
 
-
 #accordian {
 	background: #939AB5;
-	
+	width: 95%;
 	margin : auto;
 	color: #fff;
 	/*Some cool shadow and glow effect*/
