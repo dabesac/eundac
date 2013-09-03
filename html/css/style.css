@@ -97,8 +97,8 @@ margin: 0px;
 }
 
 /* WIDGETS */
-h5{
-	color: #000;
+.titlebox{
+	color: white;
 	padding-left:20px;
 	padding-right:20px;
 }

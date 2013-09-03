@@ -35,10 +35,8 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $where['pid']=$this->sesion->pid;
             $where['escid']=$this->sesion->escid;
             $where['subid']=$this->sesion->subid;
-            $perid = $this->sesion->period->perid;
-
             $this->view->escid = $where['escid'];
-            $this->view->perid = $perid;
+
             $this->view->uid = $where['uid'];
             $this->view->oid = $where['oid'];
             $this->view->eid = $where['eid'];
