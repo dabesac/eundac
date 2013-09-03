@@ -35,7 +35,7 @@ $resource1[]="syllabus/syllabus";
 $resource1[]="register/deferred";
 
 //print_r($resource1);
-$resource1[]="register/registerealized";
+
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
 $urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
