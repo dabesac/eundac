@@ -13,7 +13,7 @@ $header='
         </th>        
     </tr>
     <tr>
-        <th style="border: 1px solid #000;"> MATRICULAS REALIZADAS </th>
+        <th style="border: 1px solid #000;"> MATRICULA </th>
     </tr>
 </table>
 
@@ -25,7 +25,7 @@ $header='
     </tr>
     <tr>   
         <td style="text-align: left;">Alumno: '.strtoupper($this->person[0]['last_name0']." ".$this->person[0]['last_name1'].", ".$this->person[0]['first_name']).'</td>
-    <tr>   
+    </tr>   
 
 '    
 ?>
@@ -34,12 +34,11 @@ $header='
 
 <div>
         <?php
-        // print_r($this->newperiod);exit();
-        foreach ($this->newperiod as $period) {
-            $perid=$period['perid'];
-            $pname=$period['name'];
+        // print_r($this->dataperiod);exit();
+            $perid=$this->dataperiod[0]['perid'];
+            $pname=$this->dataperiod[0]['name'];
             ?>
-        <table style="width:100%; margin-top:15px" border="1">
+        <table style="width:100%;" border="1">
             <tr>
                 <th colspan='7'><?php echo " ".$perid." - ".$pname?></th>
             </tr>       
@@ -56,12 +55,10 @@ $header='
         $a=0;
         $c=1;
         foreach ($this->data as $registrationcourses) {
-            $perid1=$registrationcourses['perid'];
             $courseid=$this->datacourse[$a]['courseid'];
             $courseid1=$registrationcourses['courseid'];
-            if($perid==$perid1){ 
             // print_r($this->datacourse);exit();
-                if ($courseid=$courseid1) {
+            if ($courseid=$courseid1) {
                 ?>
                 <tr>
                     <td class='small'><center><?php echo $c?></center></td>
@@ -86,18 +83,15 @@ $header='
                     <td class='small'><center><?php echo $this->datacourse[$a]['credits']?></center></td>
                 </tr>
                 <?php
-                }
             }
             else{
                 $c=0;
             }
         $a++;
         $c++;   
-        } ?>
-    </table>
-    <?php
-    }
+        }
         ?>
+    </table>
 </div>
 <?php 
 
@@ -110,6 +104,6 @@ $header='
   $mpdf->SetFooter($this->footer);
   ob_end_clean();
   $mpdf -> WriteHTML($html);
-  $mpdf->Output('Matriculas Realizadas-'.$this->person['pid'].'.pdf','D');
+  $mpdf->Output('Matricula-'.$this->dataperiod[0]['name'].'.pdf','D');
   
 ?>
