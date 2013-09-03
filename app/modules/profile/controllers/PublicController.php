@@ -203,6 +203,15 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
+    public function studentsignpercurAction()
+    {
+        try{
+            //$this->_helper->layout()->disableLayout();
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+
     public function studentsignrealizedAction()
     {
         try{
@@ -212,12 +221,4 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
-    public function studentsignpercurAction()
-    {
-        try{
-            $this->_helper->layout()->disableLayout();
-        }catch(exception $e){
-            print "Error : ".$e->getMessage();
-        }
-    }
 }
