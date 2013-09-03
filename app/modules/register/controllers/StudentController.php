@@ -341,7 +341,7 @@ class Register_StudentController extends Zend_Controller_Action {
                 }
 
                 $this->view->name_reates=$data_payment['name'];
-                print_r($data_payment);
+                //print_r($data_payment);
             }
             else
             {
