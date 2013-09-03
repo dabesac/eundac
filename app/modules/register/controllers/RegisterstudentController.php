@@ -26,7 +26,16 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $pfac='T'.$escid['1'];
             $this->view->fm=$fm;
             $escuelas = new Api_Model_DbTable_Speciality();
-            $lesc = $escuelas->_getspeciality($where);
+            if($where['subid']<>'1901'){
+                $data['eid']=$where['eid'];
+                $data['oid']=$where['oid'];
+                $data['subid']=$where['subid'];
+                $data['state']='A';
+               $lesc = $escuelas->_getFilter($data); 
+            }
+            else{
+            $lesc = $escuelas->_getspeciality($where); 
+            }
             if ($lesc ) $this->view->escuelas=$lesc;
         }catch (Exception $ex){
             print "Error: Cargar ".$ex->getMessage();
