@@ -38,6 +38,7 @@ $resource1[]="record/directed";
 //$resource1[]="admin/password";
 
 //print_r($resource1);
+
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
 $urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
@@ -98,7 +99,7 @@ $(document).ready(function(){
 <?php //exit();?>
 <![endif]-->
 <div class="row-fluid">
-    <div class="col-lg-2 control-top">
+    <div class="col-sm-2 control-top">
     	<div class="logo"><a href="/"><img src="/img/logo_03.png" ></a></div>
     	<div class="control-info">
 	    	<div id="accordian">
@@ -162,7 +163,7 @@ $(document).ready(function(){
     	</div>
     	<?php } ?>
 	</div>
-    <div class="col-lg-10 header-top">
+    <div class="col-sm-10 header-top">
 	    <h3 class="nav pull-left" >Universidad Nacional Daniel Alcides Carrión</h3>
 		<ul class="nav navbar-nav pull-right" style="padding-top: 10px">
 		  	<li class='dropdown'>
@@ -187,7 +188,7 @@ $(document).ready(function(){
 		</ul>			
     </div>
     
-    <div class="col-lg-10 header-middle">
+    <div class="col-sm-10 header-middle">
     	<div class='pull-left'><p><strong>ADSCRITO A </strong> <?php echo mb_strtoupper($speciality, 'UTF-8');?></p></div>
     	<div class='pull-right'>
     	<?php 
@@ -211,13 +212,13 @@ $(document).ready(function(){
 		<?php } ?>
     	</div>
 	</div>
-	<div class="col-lg-10 header-center">
+	<div class="col-sm-10 header-center">
 		<div class="panel panel-default">
 		    <?php print $this->layout()->content; ?>
 		</div>
 	</div>
 </div>
-<div class="col-lg-12 footer">
+<div class="col-sm-12 footer">
 Universidad Nacional Daniel Alcides Carrión - Cerro de Pasco - Perú | 
 Oficina de Informáctica y Estadística - <a href="mail: informatica@undac.edu.pe">informatica@undac.edu.pe</a>
 </div>

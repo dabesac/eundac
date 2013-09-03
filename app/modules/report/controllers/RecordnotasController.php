@@ -7,18 +7,12 @@
  			$this->_helper->redirector('index',"index",'default');
  		}
  		$login = $sesion->getStorage()->read();
- 		if (!$login->rol['module']=="report"){
- 			$this->_helper->redirector('index','index','default');
- 		}
  		$this->sesion = $login;
 
  	}
 
  	public function indexAction(){
  		try {
- 			$this->sesion->eid;
- 			$this->sesion->oid;
- 			$this->sesion->rid;
  			$fm=new Report_Form_Buscar();
 			$this->view->fm=$fm;
  			
@@ -67,51 +61,54 @@
  	public function printAction(){
  		try {
  			$this->_helper->layout()->disableLayout();
-      $footer=$this->sesion->org['footer_print'];
-      $this->view->footer=$footer;
+      		$footer=$this->sesion->org['footer_print'];
+      		$this->view->footer=$footer;
  			$uid=base64_decode($this->_getParam('uid'));
-      $this->view->uid=$uid;
-      $escid=base64_decode($this->_getParam('escid'));
-      $eid=base64_decode($this->_getParam('eid'));
-      $oid=base64_decode($this->_getParam('oid'));
-      $subid=base64_decode($this->_getParam('subid'));
-      $pid=base64_decode($this->_getParam('pid'));
-      $record = new Api_Model_DbTable_Registrationxcourse();
- 			$data = $record->_getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid);
+      		$this->view->uid=$uid;	
+      		$escid=base64_decode($this->_getParam('escid'));
+      		$eid=base64_decode($this->_getParam('eid'));
+      		$oid=base64_decode($this->_getParam('oid'));
+      		$subid=base64_decode($this->_getParam('subid'));
+      		$pid=base64_decode($this->_getParam('pid'));
+      		$record = new Api_Model_DbTable_Registrationxcourse();
+ 			//$data = $record->_getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid);
+ 			$data = $record->_getRecordNotasAlumno_H($escid,$uid,$eid,$oid,$subid,$pid);
+ 			//print_r($data);
+ 			//exit();
  			$this->view->data=$data;
-      $where['eid']=$eid;
-      $where['oid']=$oid;
-      $where['escid']=$escid;
-      $where['subid']=$subid;
-      
-      $spe=array();
-      $dbspeciality = new Api_Model_DbTable_Speciality();
-      $speciality = $dbspeciality ->_getOne($where);
-      $parent=$speciality['parent'];
-      $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
-      $parentesc= $dbspeciality->_getOne($wher);
-        if ($parentesc) {
-          $pala='ESPECIALIDAD DE ';
-          $spe['esc']=$parentesc['name'];
-          $spe['parent']=$pala.$speciality['name'];
-          $this->view->spe=$spe;
-        }
-        else{
-          $spe['esc']=$speciality['name'];
-          $spe['parent']='';  
-          $this->view->spe=$spe;
-        }
-      $whered['eid']=$eid;
-      $whered['oid']=$oid;
-      $whered['facid']= $speciality['facid'];
-      $dbfaculty = new Api_Model_DbTable_Faculty();
-      $faculty = $dbfaculty ->_getOne($whered);
-      $this->view->faculty=$faculty;      
-      $wheres['eid']=$eid;
-      $wheres['pid']=$pid;
-      $dbperson = new Api_Model_DbTable_Person();
-      $person= $dbperson ->_getOne($wheres);
-      $this->view->person=$person;
+      		$where['eid']=$eid;
+      		$where['oid']=$oid;
+      		$where['escid']=$escid;
+      		$where['subid']=$subid;
+		      
+			$spe=array();
+		    $dbspeciality = new Api_Model_DbTable_Speciality();
+		    $speciality = $dbspeciality ->_getOne($where);
+		    $parent=$speciality['parent'];
+		    $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+		    $parentesc= $dbspeciality->_getOne($wher);
+        	if ($parentesc) {
+	          $pala='ESPECIALIDAD DE ';
+	          $spe['esc']=$parentesc['name'];
+	          $spe['parent']=$pala.$speciality['name'];
+	          $this->view->spe=$spe;
+	        }
+        	else{
+	          $spe['esc']=$speciality['name'];
+	          $spe['parent']='';  
+	          $this->view->spe=$spe;
+        	}
+      		$whered['eid']=$eid;
+      		$whered['oid']=$oid;
+      		$whered['facid']= $speciality['facid'];
+      		$dbfaculty = new Api_Model_DbTable_Faculty();
+      		$faculty = $dbfaculty ->_getOne($whered);
+      		$this->view->faculty=$faculty;      
+      		$wheres['eid']=$eid;
+      		$wheres['pid']=$pid;
+      		$dbperson = new Api_Model_DbTable_Person();
+      		$person= $dbperson ->_getOne($wheres);
+      		$this->view->person=$person;
  		} catch (Exception $e) {
  			print ("Error: Print Notas: ".$e->getMessage());
  		}

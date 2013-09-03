@@ -1,0 +1,115 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+$header='
+<table style="width: 100%;" border="1">
+    <tr>
+        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+        <th style="text-align: center; font-size: 11px;">
+        FACULTAD DE '.strtoupper($this->faculty['name']).'<br/>
+        ESCUELA DE  '.strtoupper($this->spe['esc']).'<br/>
+        '.strtoupper($this->spe['parent']).' 
+        </th>        
+    </tr>
+    <tr>
+        <th style="border: 1px solid #000;"> MATRICULAS REALIZADAS </th>
+    </tr>
+</table>
+
+    <tr>
+        <td style="text-align: left;">Codigo: '.strtoupper($this->uid).'</td>
+    </tr>
+    <tr>
+        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+    <tr>   
+        <td style="text-align: left;">Alumno: '.strtoupper($this->person[0]['last_name0']." ".$this->person[0]['last_name1'].", ".$this->person[0]['first_name']).'</td>
+    <tr>   
+
+'    
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+
+<div>
+        <?php
+        // print_r($this->newperiod);exit();
+        foreach ($this->newperiod as $period) {
+            $perid=$period['perid'];
+            $pname=$period['name'];
+            ?>
+        <table style="width:100%; margin-top:15px" border="1">
+            <tr>
+                <th colspan='7'><?php echo " ".$perid." - ".$pname?></th>
+            </tr>       
+        <tr>
+            <th class='small'><center>#</center></th>
+            <th class='small'><center>Código</center></th>
+            <th class='small-400'>Curso</th>
+            <th class='small'><center>Nota</center></th>
+            <th class='small'><center>Turno</center></th>
+            <th class='small'><center>Semestre</center></th>
+            <th class='small'><center>Créditos</center></th>
+        </tr>   
+        <?php
+        $a=0;
+        $c=1;
+        foreach ($this->data as $registrationcourses) {
+            $perid1=$registrationcourses['perid'];
+            $courseid=$this->datacourse[$a]['courseid'];
+            $courseid1=$registrationcourses['courseid'];
+            if($perid==$perid1){ 
+            // print_r($this->datacourse);exit();
+                if ($courseid=$courseid1) {
+                ?>
+                <tr>
+                    <td class='small'><center><?php echo $c?></center></td>
+                    <td class='small'><center><?php echo $this->datacourse[$a]['courseid']?></center></td>    
+                    <td class='small-400'><?php echo $this->datacourse[$a]['name']?></td>
+                    <td class='small'><center>
+                        <?php
+                        if($registrationcourses['notafinal']==-2){ 
+                            echo 'N.S.P';
+                        }
+                        else{
+                            if($registrationcourses['notafinal']==-3){
+                                echo "Ret.";
+                            }
+                            else{
+                                echo $registrationcourses['notafinal'];
+                            }
+                        }
+                    ?></center></td>
+                    <td class='small'><center><?php echo $registrationcourses['turno']?></center></td>
+                    <td class='small'><center><?php echo $this->datacourse[$a]['semid']?></center></td>
+                    <td class='small'><center><?php echo $this->datacourse[$a]['credits']?></center></td>
+                </tr>
+                <?php
+                }
+            }
+            else{
+                $c=0;
+            }
+        $a++;
+        $c++;   
+        } ?>
+    </table>
+    <?php
+    }
+        ?>
+</div>
+<?php 
+
+  $html = ob_get_contents();
+  
+  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
+  $mpdf->SetHTMLHeader($header);
+  // $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  
+  $mpdf->SetFooter($this->footer);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('Matriculas Realizadas-'.$this->person['pid'].'.pdf','D');
+  
+?>

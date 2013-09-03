@@ -9,9 +9,6 @@ class Register_StudentController extends Zend_Controller_Action {
             $this->_helper->redirector('index',"index",'default');
         }
          $login = $sesion->getStorage()->read();
-        if (!$login->rol['module']=="alumno"){
-              $this->_helper->redirector('index','index','default');
-        }
         $this->sesion = $login;
         
     }
@@ -117,8 +114,9 @@ class Register_StudentController extends Zend_Controller_Action {
                 $condition_semester='3';
 
                 if ($data_condition) {
+                	$cont_conmment=null;
                     foreach ($data_condition  as $condition) {
-
+						
                         if ($condition['num_registration'] !='') {
                             $cont_conmment['num_registration']="Usted esta Permitido llevar 
                                         un curso por  ". $condition['num_registration'].
@@ -204,13 +202,9 @@ class Register_StudentController extends Zend_Controller_Action {
                             }
 
                         }
-
                         $this->view->veces = $veces;
-                 
                         $this->view->veces_subject=$veces_subject;
-                        
-
-                    }
+                   	}
                     else{
                         $cantidad =count($subject);
 
@@ -347,6 +341,7 @@ class Register_StudentController extends Zend_Controller_Action {
                 }
 
                 $this->view->name_reates=$data_payment['name'];
+                //print_r($data_payment);
             }
             else
             {
@@ -411,7 +406,7 @@ class Register_StudentController extends Zend_Controller_Action {
                         );
                 // }
 
-                print_r($where); exit();
+                //print_r($where); exit();
               
             }
             else{
@@ -437,14 +432,13 @@ class Register_StudentController extends Zend_Controller_Action {
 
 
     }
+    
+    
     public function registartionAction(){
-
-
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $pid=$this->sesion->infouser['pid'];
             $uid=$this->sesion->uid;
-
             $params = $this->getRequest()->getParams();
             $paramsdecode = array();
             foreach ( $params as $key => $value ){
@@ -452,7 +446,6 @@ class Register_StudentController extends Zend_Controller_Action {
                     $paramsdecode[base64_decode($key)] = base64_decode($value);
                 }
             }
-
             $params = $paramsdecode;
             $escid=trim($params['escid']);
             $subid=trim($params['subid']);
