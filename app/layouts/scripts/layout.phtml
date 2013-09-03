@@ -33,6 +33,7 @@ $resource1[]="alumno/index";
 $resource1[]="rfacultad/index";
 $resource1[]="syllabus/syllabus";
 $resource1[]="register/deferred";
+$resource1[]="default/logaccess";
 
 
 //print_r($resource1);
@@ -96,7 +97,7 @@ $(document).ready(function(){
 <?php //exit();?>
 <![endif]-->
 <div class="row-fluid">
-    <div class="col-lg-2 control-top">
+    <div class="col-xs-2 control-top">
     	<div class="logo"><a href="/"><img src="/img/logo_03.png" ></a></div>
     	<div class="control-info">
 	    	<div id="accordian">
@@ -160,7 +161,7 @@ $(document).ready(function(){
     	</div>
     	<?php } ?>
 	</div>
-    <div class="col-lg-10 header-top">
+    <div class="col-xs-10 header-top">
 	    <h3 class="nav pull-left" >Universidad Nacional Daniel Alcides Carrión</h3>
 		<ul class="nav navbar-nav pull-right" style="padding-top: 10px">
 		  	<li class='dropdown'>
@@ -185,7 +186,7 @@ $(document).ready(function(){
 		</ul>			
     </div>
     
-    <div class="col-lg-10 header-middle">
+    <div class="col-xs-10 header-middle">
     	<div class='pull-left'><p><strong>ADSCRITO A </strong> <?php echo mb_strtoupper($speciality, 'UTF-8');?></p></div>
     	<div class='pull-right'>
     	<?php 
@@ -209,13 +210,13 @@ $(document).ready(function(){
 		<?php } ?>
     	</div>
 	</div>
-	<div class="col-lg-10 header-center">
+	<div class="col-xs-10 header-center">
 		<div class="panel panel-default">
 		    <?php print $this->layout()->content; ?>
 		</div>
 	</div>
 </div>
-<div class="col-lg-12 footer">
+<div class="col-xs-12 footer">
 Universidad Nacional Daniel Alcides Carrión - Cerro de Pasco - Perú | 
 Oficina de Informáctica y Estadística - <a href="mail: informatica@undac.edu.pe">informatica@undac.edu.pe</a>
 </div>

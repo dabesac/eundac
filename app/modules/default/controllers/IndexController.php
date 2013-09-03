@@ -87,7 +87,9 @@ class IndexController extends Zend_Controller_Action {
     					if ($esc['parent']) {
     						$data->speciality->name=  ($esc['name']);
     						$data->speciality->escid=  ($esc['escid']);
-    						$te = $escuela->_getOne(array("eid"=>$eid,"oid"=>$oid,"escid"=>$esc['parent']));
+    						$escuela = new Api_Model_DbTable_Speciality();
+    						$tmpo = array("eid"=>$eid,"oid"=>$oid,"escid"=>$esc['parent'],"subid"=>$esc['subid']);
+    						$te = $escuela->_getOne($tmpo);
     						if ($te){
     							$data->speciality->name=$te['name'];
     							$data->speciality->escid=  ($esc['escid']);
@@ -106,7 +108,6 @@ class IndexController extends Zend_Controller_Action {
     				$data->infouser=$row[0];
     				$rols_ = new Api_Model_DbTable_Rol();
     				$rol_ = $rols_->_getOne(array("eid"=>$data->eid,"oid"=>$data->oid,"rid"=>$data->rid));
-    				
     				if ($rol_)
     					$data->rol = $rol_;
     				else{ 

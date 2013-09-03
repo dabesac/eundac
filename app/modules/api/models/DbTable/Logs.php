@@ -66,6 +66,29 @@ class Api_Model_DbTable_Logs extends Zend_Db_Table_Abstract
 		}
 	}
 	
+	public function _getAccess($where=null,$orders=null,$limit=0)
+	{
+		try{
+			if($where['eid']=='' || $where['oid']=='') return false;
+			$select = $this->_db->select();
+			$select->from("logaccess");
+			if ($orders){
+				if ($orders<>null || $orders<>"") {
+					if (is_array($orders))
+						$select->order($orders);
+				}	
+			}
+			
+			$select->limit($limit);
+			$results = $select->query();
+			$rows = $results->fetchAll();
+			if ($rows) return $rows;
+			return false;
+		}catch (Exception $e ){
+			print "Error Get Filter ".$e->getMessage();
+		}
+	}
+	
 	public function _getConnect($data)
 	{
 		try{
