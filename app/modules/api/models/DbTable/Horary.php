@@ -26,4 +26,11 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
 		}
 	}
 
+	/*La función suma los minutos de una hora indicada*/
+    public function _getsumminutes($hora,$nummin){
+        $sql=$this->_db->query("select time '$hora' + interval '$nummin minutes' as hora");
+        $row=$sql->fetchAll();
+        return $row;
+    }
+
  }

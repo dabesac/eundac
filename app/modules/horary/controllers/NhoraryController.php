@@ -81,6 +81,52 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $dathora=$hora->_getFilter($wher);
         if ($dathora) $this->view->dathora=1;
     }
+    public function validatetimeAction()
+    {    
+        $this->_helper->layout()->disableLayout();
+        $eid=$this->sesion->eid;
+        $oid=$this->sesion->oid;
+        $perid=$this->sesion->period->perid;
+        $escid=$this->sesion->escid;
+        $subid=$this->sesion->subid;
+        $courseid=$this->_getParam('courseid');
+        $curid=$this->_getParam('curid');
+        $turno=$this->_getParam('turno');
+        $semid=$this->_getParam('semid');
+        $uid=$this->_getParam('uid');
+        $pid=$this->_getParam('pid');
+        $hora_ini=$this->_getParam('hora_ini');  
+        $hora_acad=$this->_getParam('hora_acad');
+        $dia=$this->_getParam('dia');
+        $tipo_clase=$this->_getParam('tipoclase');
+
+        //Obtenemos un array con todas las horas academicas establecidas.
+        $hora=new Api_Model_DbTable_Horary();
+        $valhoras[0]='06:20:00';
+        for ($k=0; $k < 20; $k++) { 
+            $dho=$hora->_getsumminutes($valhoras[$k],'50');
+            $valhoras[$k+1]=$dho[0]['hora'];
+        }
+
+        // valida que la hora de inicio sea multiplo de 50 min.
+        for ($zz=0; $zz < 20; $zz++) { 
+            if ($hora_ini==$valhoras[$zz]) {
+                $valini=1;
+            }
+        }
+        if ($valini=="1") {
+            //Sacamos de hora de finalizacion deacuerdo a la cantidad de horas academicas.
+            $hora_fin[0]['hora']=$hora_ini;
+            for ($x=0; $x < $hora_acad; $x++) { 
+                $hora_fin=$hora->_getsumminutes($hora_fin[0]['hora'],'50');
+            }
+            $hora_fin=$hora_fin[0]['hora'];
+        }
+
+
+     
+
+    }
 
     public function horaryteacherAction()
     {    

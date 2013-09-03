@@ -58,11 +58,12 @@ if ($this->cursos) {
         $where['curid']=$curso['curid'];
 		$ncur=$n->_getOne($where);
 		?>
-		<a id="codcursos" href="#" onclick="cargarPopup(this);" cursoid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
+		<buttom id="codcursos" onclick="cargarPopup(this);" courseid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
+
 			<div class="nomdoc cajacurso" style="background-color:<?php echo $curso["color"] ?>">
-                <?php echo $ncur['name'];?> - <?php echo $curso['turno'];?>
+                <?php echo $ncur['name'];?> - <?php echo $curso['turno'];?> - <?php echo $curso['courseid'];?>
             </div>
-		</a>
+		</buttom>
 
 	<?php	
 	}
@@ -178,6 +179,7 @@ if ($this->cursos) {
     </div>
     <div class="modal-footer">
             <a id="guardarhora" href="#" class="btn btn-primary">Guardar</a>
+
             <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancelar</button>
     </div>  
      
@@ -200,20 +202,15 @@ if (dathora=="1") {
     $("#horariocurso").load(url);
 };
 // var curso;
-function cargarPopup(curso){
+function cargarPopup($curso){
     $("#mymodalhorasclase").show();
     $('#mymodalhorasclase').modal('show');
-}
-
-$("#codcursos").live('click',function(){
-	$this=$(this);
-	curso=$this.attr('cursoid');
-    // alert(curso);
-	turno=$this.attr('turno');
+    $this=$($curso);
+    courseid=$this.attr('courseid');
+    turno=$this.attr('turno');
     curid=$this.attr('curid');
-	semid=$this.attr('semid');
-});
-
+    semid=$this.attr('semid');
+}
 $("#guardarhora").click(function(){
 	var dia=$("#dia").val();
 	var h_ini=$("#hora_ini").val();
@@ -223,6 +220,8 @@ $("#guardarhora").click(function(){
 	var uid="<?php echo $this->usuario[0]['uid'] ?>";
 	var pid="<?php echo $this->usuario[0]['pid'] ?>";
 	var hora_ini=h_ini+":"+m_ini+":00";
+    //alert(pid);
+    
     if (tipo_clase=="") {
         alert("Debe seleccionar el tipo de clase.");
         return false;
@@ -234,10 +233,10 @@ $("#guardarhora").click(function(){
     if (hacad=="0") {
         alert("Debe seleccionar la cantidad de horas académicas.");
         return false;
-    }else{
-		var url="/docente/nhorario/valihora/uid/"+uid+"/pid/"+pid+"/dia/"+dia+"/hora_ini/"+hora_ini+"/hora_acad/"+hacad+"/cursoid/"+curso+"/turno/"+turno+"/curid/"+curid+"/semid/"+semid+"/tipoclase/"+tipo_clase;
-		// alert(url);
-        $("#cargaaqui").load(url);
+    }
+    else{
+		var url="/horary/nhorary/validatetime/uid/"+uid+"/pid/"+pid+"/dia/"+dia+"/hora_ini/"+hora_ini+"/hora_acad/"+hacad+"/courseid/"+courseid+"/turno/"+turno+"/curid/"+curid+"/semid/"+semid+"/tipoclase/"+tipo_clase;
+		 $("#cargaaqui").load(url);
 	}
 });
 </script>
