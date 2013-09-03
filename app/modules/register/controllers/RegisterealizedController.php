@@ -11,9 +11,6 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
  			$this->_helper->redirector('index','index','default');
  		}
  		$this->sesion = $login;
- 		// print_r($this->sesion = $login);
- 		// exit();
-
 	}
 
 	public function indexAction(){
@@ -21,11 +18,10 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
 			$perid=$this->sesion->period->perid;
-			// $escid=$this->sesion->escid;
+			$escid=$this->sesion->escid;
 			$subid=$this->sesion->subid;
-			// $uid=$this->sesion->uid;
-			$escid='4SI';
- 			$uid='0924403185';
+			$uid=$this->sesion->uid;
+
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'uid'=>$uid);
 			$attrib=array('escid','perid','courseid','turno','notafinal','state');
 			$orders=array('perid','courseid');	

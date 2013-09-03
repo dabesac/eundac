@@ -203,11 +203,11 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     public function _getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid){
          try{    
             $sql = $this->_db->query("
-                
+            	                
                 select * from record_notes('$escid','$uid','$eid','$oid','$subid','$pid') AS 
                 (
                     ".'escid'." character varying,
-                    ".'matid'." character varying,
+                    ".'regid'." character varying,
                     ".'perid'." character varying,
                     ".'courseid'." character varying,
                     ".'turno'." character varying, 
