@@ -1,0 +1,105 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start();
+$header='<table style="width: 100%;" border="1">
+    <tr>
+        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+        <th style="text-align: center; font-size: 11px;">
+            FACULTAD DE  '.strtoupper($this->faculty['name']).'<br/>
+            ESCUELA DE  '.strtoupper($this->especiality['name']).'    
+        </th>        
+    </tr>
+    <tr>
+      <th style="border: 1px solid #000;"> REGISTRO DE NOTAS - PERIODO '.strtoupper($this->perid).'</th>
+    </tr>
+</table>
+'
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" /> 
+
+<?php 
+	$fecha=$this->periodcourse['closure_date'];
+	$nfe=split("-", $fecha);
+	$fecha=$nfe[2]."/".$nfe[1]."/".$nfe[0];
+?>      
+<table style="font-size: 11px;float: left; width: 100%; border-bottom: 2px solid #000;" >   
+      <tr>                
+          	<th style="width: 50px;text-align: left;">Curso:</th>
+          	<td style="text-align: left;">
+                <?php echo $this->course['courseid']." - ".$this->course['name'] ?>
+            </td>
+          	<th>Semestre:</th>
+        	<td><?php echo $this->course['semid']?></td>
+          	<th style="width: 40px;text-align: left">Turno:</th>
+          	<td style="width: 40px;text-align: center"><?php echo $this->turno?></td>
+      </tr>
+      <tr>
+        	<th>Docente:</th>
+        	<td>
+                <?php echo $this->person[0]['last_name0']." ".$this->person[0]['last_name1'].", ".$this->person[0]['first_name']?>
+            </td>
+        	<th>Creditos:</th>
+          	<td><?php echo $this->course['credits']?></td>
+          	<th>Fecha:</th>
+          	<td><?php echo $fecha ?></td>
+      </tr>    
+</table>
+<table style="font-size:11px; width: 100%;float: left;border-bottom: 2px solid #000; margin-bottom: 10px">
+		<tr>
+			<th>#</th>
+			<th>Cod. Mat.</th>
+			<th>Apellidos y Nombres</th>
+			<th>Recibo</th>
+			<th>Nota Final</th>
+		</tr>
+		<?php
+        $ca=0;
+        $cd=0;
+        $cn=0;
+		if ($this->datastudent) {
+			$c=1;
+			foreach ($this->datastudent as $datos) {
+				if ($datos['notafinal']=="-2") {
+					$notafinal="N.S.P.";
+                    $cn++;
+				}else{
+					$notafinal=$datos['notafinal'];
+                    if ($notafinal>10) $ca++;
+                    else $cd++;
+				}?>
+				<tr>
+					<td style="text-align: center"><?php echo $c?></td>
+					<td style="text-align: center"><?php echo $datos['uid']?></td>
+					<td ><?php echo $datos['fullname']?></td>
+					<td style="text-align: center"><?php echo $datos['receipt']?></td>
+					<td style="text-align: center"><?php echo $notafinal ?></td>
+				</tr>
+			<?php
+			$c++;
+            }
+		} ?>
+</table>
+<table>
+    <tr>
+        <td># Aprobados: <?php echo $ca?></td>
+    </tr>
+    <tr>
+        <td># Desaprobados: <?php echo $cd?></td>
+    </tr>
+    <tr>
+        <td># No se Presentaron: <?php echo $cn?></td>
+    </tr>
+    <tr>
+        <td># Total: <?php echo $c-1 ?></td>
+    </tr>
+</table>
+<?php
+    $html = ob_get_contents();
+    $mpdf = new mPDF('win-1252','A4','','',15,15,40);
+    $mpdf->SetHTMLHeader($header);
+    $mpdf->SetFooter('{DATE j/m/Y}|Página {PAGENO}|'.$this->uid.' - Sistema de Gestión e-UNDAC');
+    ob_end_clean();
+    $mpdf->WriteHTML($html);
+    $mpdf->Output('Registro'.$this->course['courseid'].'.pdf','D');
+?>

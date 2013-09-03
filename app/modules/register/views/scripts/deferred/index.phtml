@@ -383,6 +383,9 @@
   <div class="col-xs-6 col-sm-6 col-md-4">
   	<button class='btn btn-success' id='save_notas' disabled >Guardar</button>
   	<button class='btn btn-success' id='closed_record'  <?php echo $disabled?> >Cerrar Acta</button>
+  	<?php if ($this->state=='C') { ?>
+  		<a href="/register/deferred/printdeferred/curid/<?php echo base64_encode($this->infocurso['curid'])?>/escid/<?php echo base64_encode($this->infocurso['escid'])?>/subid/<?php echo base64_encode($this->infocurso['subid'])?>/courseid/<?php echo base64_encode($this->infocurso['courseid'])?>/turno/<?php echo base64_encode($this->students_register[0]['turno'])?>/perid/<?php echo base64_encode($this->students_register[0]['perid'])?>" class='btn btn-primary'><span class="glyphicon glyphicon-print"></span> Imprimir</a>
+  	<?php }?>
   </div>
 </div>
 

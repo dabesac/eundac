@@ -26,7 +26,16 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $pfac='T'.$escid['1'];
             $this->view->fm=$fm;
             $escuelas = new Api_Model_DbTable_Speciality();
-            $lesc = $escuelas->_getspeciality($where);
+            if($where['subid']<>'1901'){
+                $data['eid']=$where['eid'];
+                $data['oid']=$where['oid'];
+                $data['subid']=$where['subid'];
+                $data['state']='A';
+               $lesc = $escuelas->_getFilter($data); 
+            }
+            else{
+            $lesc = $escuelas->_getspeciality($where); 
+            }
             if ($lesc ) $this->view->escuelas=$lesc;
         }catch (Exception $ex){
             print "Error: Cargar ".$ex->getMessage();
@@ -82,8 +91,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $where['subid'] = base64_decode($this->_getParam('subid'));
             $where['perid'] = $this->sesion->period->perid;
             $where['eid'] = $this->sesion->eid;    
-            $where['oid'] = $this->sesion->oid;        
-       
+            $where['oid'] = $this->sesion->oid;      
+            $this->view->perid=$where['perid'];        
             // Obtener fecha periodo
             $infoper = new Api_Model_DbTable_Periods();
             $infoperiodo = $infoper->_getOne($where);
