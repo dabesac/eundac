@@ -1,1 +1,71 @@
-	
+<div style="margin-bottom:30px">
+	<a href="/register/registerealized/registerprint/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/uid/<?php echo base64_encode($this->uid)?>" class='btn btn-success' style='float:right'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
+</div></br>
+<div>
+	<table class="table table-striped">
+		<?php
+		// print_r($this->newperiod);exit();
+		foreach ($this->newperiod as $period) {
+			$perid=$period['perid'];
+			$pname=$period['name'];
+			?>
+		<thead>
+			<tr style="background: #1e83cb; color: #fff;">
+				<th style='font-size:15px'colspan='7'><span class="glyphicon glyphicon-list"></span><?php echo " ".$perid." - ".$pname?><a href="" class='btn btn-info' style='float:right'><span class="glyphicon glyphicon-download-alt"></span> PDF</a></th>
+			</tr>		
+		</thead>
+		<tr>
+			<th class="col-md-1"><center>#</center></th>
+			<th class="col-md-1"><center>Código</center></th>
+			<th>Curso</th>
+			<th class="clo-md-1"><center>Nota</center></th>
+			<th class="col-md-1"><center>Turno</center></th>
+			<th class="col-md-1"><center>Semestre</center></th>
+			<th class="col-md-1"><center>Créditos</center></th>
+		</tr>	
+		<?php
+		$a=0;
+		$c=1;
+		foreach ($this->data as $registrationcourses) {
+			$perid1=$registrationcourses['perid'];
+			$courseid=$this->datacourse[$a]['courseid'];
+			$courseid1=$registrationcourses['courseid'];
+			if($perid==$perid1){ 
+			// print_r($this->datacourse);exit();
+				if ($courseid=$courseid1) {
+				?>
+				<tr>
+					<td><center><?php echo $c?></center></td>
+					<td><center><?php echo $this->datacourse[$a]['courseid']?></center></td>	
+					<td><?php echo $this->datacourse[$a]['name']?></td>
+					<td><center>
+						<?php
+						if($registrationcourses['notafinal']==-2){ 
+							echo 'N.S.P';
+						}
+						else{
+							if($registrationcourses['notafinal']==-3){
+								echo "Ret.";
+							}
+							else{
+								echo $registrationcourses['notafinal'];
+							}
+						}
+					?></center></td>
+					<td><center><?php echo $registrationcourses['turno']?></center></td>
+					<td><center><?php echo $this->datacourse[$a]['semid']?></center></td>
+					<td><center><?php echo $this->datacourse[$a]['credits']?></center></td>
+				</tr>
+				<?php
+				}
+			}
+			else{
+				$c=0;
+			}
+		$a++;
+		$c++;	
+		}
+	}
+		?>
+  	</table>
+</div>
