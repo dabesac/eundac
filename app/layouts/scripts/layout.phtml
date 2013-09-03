@@ -33,12 +33,10 @@ $resource1[]="alumno/index";
 $resource1[]="rfacultad/index";
 $resource1[]="syllabus/syllabus";
 $resource1[]="register/deferred";
-/*---Eliminar*/
-$resource1[]="profile/public";
-$resource1[]="register/listcurrentnotes";
-$resource1[]="admin/resource";
+
 
 //print_r($resource1);
+
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
 $urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
