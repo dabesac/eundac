@@ -39,6 +39,7 @@ $resource1[]="default/logaccess";
 //print_r($resource1);
 $resource1[]="register/registerealized";
 $resource1[]="report/recordnotas";
+$resource1[]="register/registerealized/registerprint";
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
 $urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
