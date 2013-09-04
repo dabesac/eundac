@@ -11,7 +11,7 @@
 			?>
 		<thead>
 			<tr style="background: #1e83cb; color: #fff;">
-				<th style='font-size:15px'colspan='7'><span class="glyphicon glyphicon-list"></span><?php echo " ".$perid." - ".$pname?><a href="" class='btn btn-info' style='float:right'><span class="glyphicon glyphicon-download-alt"></span> PDF</a></th>
+				<th style='font-size:15px'colspan='7'><span class="glyphicon glyphicon-list"></span><?php echo " ".$perid." - ".$pname?><a href="/register/registerealized/printperiod/perid/<?php echo base64_encode($perid)?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/uid/<?php echo base64_encode($this->uid)?>" class='btn btn-info' style='float:right'><span class="glyphicon glyphicon-download-alt"></span> PDF</a></th>
 			</tr>		
 		</thead>
 		<tr>

@@ -27,8 +27,8 @@ a{ color: #0044CC;
 	top: 110px;
 	margin:0 auto;
 	background: #e0e0e0;
- 	width:830px;
- 	height:380px;
+ 	width:730px;
+ 	height:335px;
  	border-radius: 5px;
 }
 
@@ -61,16 +61,18 @@ a{ color: #0044CC;
 }
 
 .datos{
-	padding-top:10px;
 	margin: 0 auto;
 	}
 
 .datos input[type='text']{
 	background: url("../img/icono1_03.gif") no-repeat scroll right #fff;
+	width: 220px;
+	margin-bottom: 10px;
 }
 
 .datos input[type='password']{
 	background:url("../img/icono2_03.gif") no-repeat scroll right #fff;
+	width: 220px;
 }
 
 .datos input[type='text'], .datos input[type='password'] {
@@ -84,11 +86,12 @@ a{ color: #0044CC;
 	margin-bottom: 10px;
 	margin-left: 22%;
 	border-radius: 5px;
+	width: 220px;
 }
 
 .datos input[type='submit']{
-	width: 120px;
-	
+	width: 220px;
+	margin-left: 22%;
 }
 
 

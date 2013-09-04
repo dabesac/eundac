@@ -295,4 +295,86 @@ class Register_DeferredController extends Zend_Controller_Action {
         $this->view->data = $json; 
 
     }
+
+    public function printdeferredAction(){
+        try {
+            $this->_helper->layout->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $uid = $this->sesion->uid;
+            $perid = base64_decode($this->_getParam('perid'));
+            $curid = base64_decode($this->_getParam('curid'));
+            $escid = base64_decode($this->_getParam('escid'));
+            $subid = base64_decode($this->_getParam('subid'));
+            $courseid = base64_decode($this->_getParam('courseid'));
+            $turno = base64_decode($this->_getParam('turno'));
+            $this->view->turno=$turno;
+            $this->view->perid=$perid;
+            $this->view->uid=$uid;
+
+            $where = array(
+                'eid' => $eid, 'oid' => $oid,
+                'escid' => $escid,'subid' => $subid,
+                'courseid' => $courseid,'turno' => $turno,
+                'perid' => $perid,'curid'=>$curid);
+
+            $wherefac['eid'] = $whereesc['eid'] = $eid;
+            $wherefac['oid'] = $whereesc['oid'] = $oid;
+            $whereesc['escid'] = $escid;
+            $whereesc['subid'] = $subid;
+            $esc = new Api_Model_DbTable_Speciality();
+            $dataesc = $esc->_getOne($whereesc);
+            $this->view->speciality = $dataesc;
+
+            $wherefac['facid'] = substr($escid, 0, 1);
+            $fac = new Api_Model_DbTable_Faculty();
+            $datafac = $fac->_getOne($wherefac);
+            $this->view->faculty = $datafac;
+
+            $whereuser['eid'] = $eid;
+            $whereuser['oid'] = $oid;
+            $whereuser['uid'] = $uid;
+            $user = new Api_Model_DbTable_Users();
+            $datauser = $user->_getUserXUid($whereuser);
+            $this->view->person = $datauser;
+
+            $wherecour['eid']=$eid;
+            $wherecour['oid']=$oid;
+            $wherecour['curid']=$curid;
+            $wherecour['escid']=$escid;
+            $wherecour['subid']=$subid;
+            $wherecour['courseid']=$courseid;
+            $cour = new Api_Model_DbTable_Course();
+            $datacour = $cour->_getOne($wherecour);
+            $this->view->course = $datacour;
+
+            $wherepercour['eid']=$eid;
+            $wherepercour['oid']=$oid;
+            $wherepercour['courseid']=$courseid;
+            $wherepercour['escid']=$escid;
+            $wherepercour['perid']=$perid;
+            $wherepercour['turno']=$turno;
+            $wherepercour['subid']=$subid;
+            $wherepercour['curid']=$curid;
+            $percour = new Api_Model_DbTable_PeriodsCourses();
+            $datapercour = $percour->_getOne($wherepercour);
+            $this->view->periodcourse = $datapercour;
+
+            $bdregcourse = new Api_Model_DbTable_Registrationxcourse();
+            $dataregcour = $bdregcourse->_getFilter($where);
+            if ($dataregcour) {
+                $tam=count($dataregcour);
+                $wherestu['eid']=$eid;
+                $wherestu['oid']=$oid;
+                for ($i=0; $i < $tam; $i++) { 
+                    $wherestu['uid']=$dataregcour[$i]['uid'];
+                    $datstudent = $user->_getUserXUid($wherestu);
+                    $dataregcour[$i]['fullname'] = $datstudent[0]['last_name0']." ".$datstudent[0]['last_name1'].", ".$datstudent[0]['first_name'];
+                }
+            }
+            $this->view->datastudent=$dataregcour;
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
 }

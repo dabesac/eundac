@@ -21,7 +21,7 @@ class LogaccessController extends Zend_Controller_Action{
             $where['pid']=$pid;
             $order=array("datestart desc");
             $log = new Api_Model_DbTable_Logs();
-            $data = $log->_getFilter($where,$attrib=null,$order);
+            $data = $log->_getAccess($where,$order,50);
             $this->view->datalog=$data;
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
@@ -38,7 +38,7 @@ class LogaccessController extends Zend_Controller_Action{
             $where['pid']=$pid;
             $order=array("datestart desc");
             $log = new Api_Model_DbTable_Logs();
-            $data = $log->_getFilter($where,$attrib=null,$order);
+            $data = $log->_getAccess($where,$order,50);
             $this->view->datalog=$data;
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();

@@ -33,8 +33,13 @@ $resource1[]="alumno/index";
 $resource1[]="rfacultad/index";
 $resource1[]="syllabus/syllabus";
 $resource1[]="register/deferred";
+$resource1[]="profile/search";
+
+
+
 
 //print_r($resource1);
+
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
 $urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
@@ -94,86 +99,62 @@ $(document).ready(function(){
     </div>
 <?php //exit();?>
 <![endif]-->
-<div class="row-fluid">
-    <div class="col-lg-2 control-top">
-    	<div class="logo"><a href="/"><img src="/img/logo_03.png" ></a></div>
-    	<div class="control-info">
-	    	<div id="accordian">
-	    		<ul>
-	    			<li>
-	    				<h3>
-	    				<img src="/img/img2_03.jpg" class="img-rounded"> <b>MI PERFIL</b>
-	    				</h3>
+
+<div class="row" style="padding: 0px; margin: 0px" >
+	<div class="col-sm-2 control-top">
+		<div class="logo"><a href="/"><img src="/img/logo_03.png" ></a></div>
+		<div id="accordian">
+		    	<ul>
+		    		<li>
+		    			<h3>
+		    			<img src="/img/img2_03.jpg" class="img-rounded"> <b>MI PERFIL</b>
+		    			</h3>
 					</li>
 					<li>
-						<div style="padding: 5px;padding-top:0px">
-							<h5><strong style="color: #fff; font-size: 17px"><?php echo $fullname?></strong></h5>
-			    			<?php echo $typedoc?>: <strong><?php echo $numberdoc?></strong>  <br>
-							CÓDIGO<strong> : <?php echo $code?></strong>
-						</div>  
+						<h5><strong style="color: #fff; font-size: 17px"><?php echo $fullname?></strong></h5>
 					</li>
-					<?php if ($rid=='AL') {
-					?>
-					<li><H3>
-					<a href="<?php echo $urlrecord?>" style="color: #fff">Record Notas</a>
-					</li></H3>
-					<?php 
-					}
-					?>
+					<li style="margin-left:10px">
+					<?php echo $typedoc?>: <strong><?php echo $numberdoc?></strong>  <br>
+					CÓDIGO<strong> : <?php echo $code?></strong>
 					
-				</ul>
-	    	</div>	    	
-    	</div>  
-    	<?php 
-    	if ($acls){
-    	?>
-    	<div class="layout-right">
-    		<div id="accordian">
-    			<ul>
-			  	<?php 
-	    		foreach ($acls as $acl){
-				$module = $acl['module'];
-	    		?>
-		    		<li>
-					<h3><span class="icon-dashboard"></span><b>
-					<?php echo strtoupper($acl['name'])?></b></h3>
-						<ul>
-							<?php
-				    		$tacls = $acl['acls'];
-				    		foreach ($tacls as $tacl){
-							$resource = $tacl['controller'];
-							?>
-				    			<li><a href="<?php echo "/$resource"?>">
-				    			<?php echo strtoupper($tacl['name'])?>
-				    			</a></li>
-							<?php 
-							} 
-						?>
-						</ul>
 					</li>
-	    		<?php 
-				}
-	    		?>	    			
+						<?php if ($rid=='AL') {
+						?>
+						<li><H3>
+						<a href="<?php echo $urlrecord?>" style="color: #fff">Record Notas</a>
+						</li></H3>
+						<?php 
+						}
+						?>
 				</ul>
-			</div>
-    	</div>
-    	<?php } ?>
-	</div>
-    <div class="col-lg-10 header-top">
-	    <h3 class="nav pull-left" >Universidad Nacional Daniel Alcides Carrión</h3>
-		<ul class="nav navbar-nav pull-right" style="padding-top: 10px">
-		  	<li class='dropdown'>
-				<div class="btn-group">
-					<button class="dropdown-toggle btn btn-info" data-toggle="dropdown">
-						<span class="glyphicon glyphicon-cog"></span>
-					</button>
-					<ul class="dropdown-menu" style="margin-left: -130px;" >
-						<!-- <li><a href="/index/changepassword">Cambiar Contraseña</a></li>
-						<li><a href="#">Ver mi perfil</a></li>
-						<li><a href="#"></a></li>
-						<li class="divider"></li>
-						 -->
+		</div>	 
+		
+	    <?php 
+	    if ($acls){
+	    ?>
+	    <div id="accordian">
+	    	<ul>
+			<?php 
+		    foreach ($acls as $acl){
+			$module = $acl['module'];
+		    ?>
+				<li>
+					<h3><span class="icon-dashboard"></span><b>
+				<?php echo strtoupper($acl['name'])?></b></h3>
+					<ul>
+					<?php
+					$tacls = $acl['acls'];
+					foreach ($tacls as $tacl){
+						$resource = $tacl['controller'];
+						?>
+					    <li><a href="<?php echo "/$resource"?>">
+					    <?php echo strtoupper($tacl['name'])?>
+					    </a></li>
+						<?php 
+					} 
+					?>
 					</ul>
+<<<<<<< HEAD
 				</div>
 			</li>
 			<li>
@@ -189,7 +170,7 @@ $(document).ready(function(){
     	<div class='pull-right'>
     	<?php 
 		if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
-			<form name="buscausuario" class="form-inline" role="form" action="/reportes/buscarusuario/index">
+			<form name="buscausuario" class="form-inline" role="form" action="/profile/search/index">
 				<div class="col-lg-6" style="margin:0px;padding: 0px;"> 
 			        <input type="text" name="nombre" class="form-control input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" required>
 			    </div>
@@ -207,17 +188,79 @@ $(document).ready(function(){
 			
 		<?php } ?>
     	</div>
+=======
+				</li>
+		    <?php 
+			}
+		    ?>	    			
+			</ul>
+		</div>
+	    <?php } ?>
+>>>>>>> e776db9d586fab3010768d9ec62842a9aad96431
 	</div>
-	<div class="col-lg-10 header-center">
-		<div class="panel panel-default">
-		    <?php print $this->layout()->content; ?>
+	<div class="col-sm-10" style="margin:0px; padding: 0px">
+		<div class="col-sm-12 header-top" > 
+			<h3 class="nav pull-left" >Universidad Nacional Daniel Alcides Carrión</h3>
+			<ul class="nav navbar-nav pull-right" style="padding-top: 10px">
+			  	<li class='dropdown'>
+					<div class="btn-group">
+						<button class="dropdown-toggle btn btn-info" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-cog"></span>
+						</button>
+						<ul class="dropdown-menu" style="margin-left: -130px;" >
+							<!-- <li><a href="/index/changepassword">Cambiar Contraseña</a></li>
+							<li><a href="#">Ver mi perfil</a></li>
+							<li><a href="#"></a></li>
+							<li class="divider"></li>
+							 -->
+						</ul>
+					</div>
+				</li>
+				<li>
+					<div class="btn-group">
+						<a class="btn btn-danger" href="/index/salir">Salir <span class="glyphicon glyphicon-log-out"></span></a>
+					</div>
+				</li>
+			</ul>	
+		</div>
+		<div class="col-sm-12 header-middle" > 
+			<div class='pull-left'><p><strong>ADSCRITO A </strong> <?php echo mb_strtoupper($speciality, 'UTF-8');?></p></div>
+	    	<div class='pull-right'>
+	    	<?php 
+			if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
+				<form name="buscausuario" class="form-inline" role="form" action="/reportes/buscarusuario/index">
+					<div class="col-lg-6" style="margin:0px;padding: 0px;"> 
+				        <input type="text" name="nombre" class="form-control input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" required>
+				    </div>
+				    <div class="col-lg-4" style="margin:0px;padding: 0px;">
+				        <select name="rid" class="form-control " >
+				        	<option value="AL">Alumno</option>
+				        	<option value="DC">Docente</option>
+				        	<option value="EG">Egresado</option>
+				      	</select>
+				  	</div>
+				  	<div class="col-lg-2" style="margin:0px;padding: 0px;">
+				    <input type="submit"  class="btn btn-success" >
+				    </div>
+				</form>			
+				
+			<?php } ?>
+	    	</div>
+		</div>
+		<div class="col-sm-12 header-center"> 
+			<div class="panel panel-default">
+		    	<?php print $this->layout()->content; ?>
+			</div>
 		</div>
 	</div>
 </div>
-<div class="col-lg-12 footer">
+
+
+<div class="col-sm-12 footer">
 Universidad Nacional Daniel Alcides Carrión - Cerro de Pasco - Perú | 
 Oficina de Informáctica y Estadística - <a href="mail: informatica@undac.edu.pe">informatica@undac.edu.pe</a>
 </div>
+
 </body>
 </html>
 

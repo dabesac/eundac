@@ -2,7 +2,7 @@
     $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
     include_once($dir);
     ob_start(); 
-
+$perid=$this->perid;
 $header='
 <table style="width: 100%;" border="1">
     <tr>
@@ -13,29 +13,28 @@ $header='
         </th>        
     </tr>
     <tr>
-        <th style="border: 1px solid #000;"> PRE-MATRICULA </th>
+        <th style="border: 1px solid #000;"> PRE-MATRICULA '.$perid.'</th>
     </tr>
 </table>
-
+<table style="width: 100%;margin-top:10px;" border="0">
     <tr>
-        <td style="text-align: left;">Codigo: '.strtoupper($this->uid).'</td>
-    </tr>
-    <tr>
-        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
-    </tr>
-    <tr>   
-        <td style="text-align: left;">Alumno:'.strtoupper($this->fullname).'</td>
+        <th style="text-align: left;">Código:</th>
+        <th style="text-align: left;">'.strtoupper($this->uid).'</th>
+        <th style="text-align: left;">Alumno:</th>
+        <th style="text-align: left;">'.strtoupper($this->fullname).'</th>
+        <th style="text-align: left;">Semestre :</th>
+        <th style="text-align: left;">'.strtoupper($this->semid).'</th>
     </tr>   
-
+</table>
 '    
 ?>
 
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
 
-<table style="width:100%; text-align:center;" border="1">
+<table style="width:100%; text-align:center; margin-top: 10px;" border="1">
         <tr>
-            <th class='small'>Codigo Curso</th>
+            <th class='small'>Código Curso</th>
             <th >Nombre Curso</th>
             <th class='small'>Condición</th>
             <th class='small'>Creditos</th>
@@ -65,4 +64,5 @@ $header='
     ob_end_clean();
     $mpdf -> WriteHTML($html);
     $mpdf->Output('Pre-Matricula-'.$this->uid.'.pdf','D');
+   
 ?>
