@@ -33,9 +33,8 @@ $resource1[]="alumno/index";
 $resource1[]="rfacultad/index";
 $resource1[]="syllabus/syllabus";
 $resource1[]="register/deferred";
+$resource1[]="curricula/curricula";
 $resource1[]="profile/search";
-
-
 
 
 //print_r($resource1);
@@ -154,40 +153,6 @@ $(document).ready(function(){
 					} 
 					?>
 					</ul>
-				</div>
-			</li>
-			<li>
-				<div class="btn-group">
-					<a class="btn btn-danger" href="/index/salir">Salir <span class="glyphicon glyphicon-log-out"></span></a>
-				</div>
-			</li>
-		</ul>			
-    </div>
-    
-    <div class="col-lg-10 header-middle">
-    	<div class='pull-left'><p><strong>ADSCRITO A </strong> <?php echo mb_strtoupper($speciality, 'UTF-8');?></p></div>
-    	<div class='pull-right'>
-    	<?php 
-		if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
-			<form name="buscausuario" class="form-inline" role="form" action="/profile/search/index">
-				<div class="col-lg-6" style="margin:0px;padding: 0px;"> 
-			        <input type="text" name="nombre" class="form-control input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" required>
-			    </div>
-			    <div class="col-lg-4" style="margin:0px;padding: 0px;">
-			        <select name="rid" class="form-control " >
-			        	<option value="AL">Alumno</option>
-			        	<option value="DC">Docente</option>
-			        	<option value="EG">Egresado</option>
-			      	</select>
-			  	</div>
-			  	<div class="col-lg-2" style="margin:0px;padding: 0px;">
-			    <input type="submit"  class="btn btn-success" >
-			    </div>
-			</form>			
-			
-		<?php } ?>
-    	</div>
-
 				</li>
 		    <?php 
 			}
@@ -195,7 +160,6 @@ $(document).ready(function(){
 			</ul>
 		</div>
 	    <?php } ?>
-
 	</div>
 	<div class="col-sm-10" style="margin:0px; padding: 0px">
 		<div class="col-sm-12 header-top" > 
@@ -227,7 +191,7 @@ $(document).ready(function(){
 	    	<div class='pull-right'>
 	    	<?php 
 			if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
-				<form name="buscausuario" class="form-inline" role="form" action="/reportes/buscarusuario/index">
+				<form name="buscausuario" class="form-inline" role="form" action="/profile/search">
 					<div class="col-lg-6" style="margin:0px;padding: 0px;"> 
 				        <input type="text" name="nombre" class="form-control input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" required>
 				    </div>
@@ -262,4 +226,3 @@ Oficina de Informáctica y Estadística - <a href="mail: informatica@undac.edu.p
 
 </body>
 </html>
-
