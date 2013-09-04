@@ -1,0 +1,65 @@
+<div>
+	<table class="table table-striped table-condensed flotacarajo">
+		<tr>
+			<th style="font-size:20px"><center>CAMBIO DE CURRICULA</center></th>
+		</tr>
+		<tr>
+			<th style="font-size:15px">
+				<center>Escuela de Formación Profesional de <?php if ($this->escuela) echo $this->escuela?></center>
+			</th>
+		</tr>
+		<tr>
+			<th style="font-size:15px">
+				<center><?php if ($this->persona) echo $this->persona[0]['last_name0']?> <?php if ($this->persona) echo $this->persona[0]['last_name1']?> <?php if ($this->persona) echo $this->persona[0]['first_name']?></center>
+			</th>
+		</tr>
+	</table>
+	<table class="table table-striped table-condensed flotacarajo">
+		<tr>
+			<th ><center>Currícula Actual</center></th>
+			<td ></td>
+			<th ><center>Currícula Activa</center></th>
+		</tr>
+		<tr>
+			<td>
+				<center><input value="<?php if ($this->curricula) echo $this->curricula?>" type="text" class="input-small " disabled></center>
+			</td>
+			<th><center>Cambiar a:</center></th>
+			<td><center>
+				<select id="curid" class="input-xlarge">
+					<option value="">- Seleccione la Currícula -</option>
+					<?php 
+					if ($this->curriactiva) {
+						foreach ($this->curriactiva as $curactiva) { ?>
+							<option value="<?php echo $curactiva['curid']?>"><?php echo $curactiva['name']?></option>	
+						<?php
+						}
+					}
+					?>
+				</select>
+				</center>
+			</td>
+		</tr>	
+		<tr>
+			<td colspan="3">
+				<center><a id="cambio" href="#" class="btn btn-info"><i class="icon-refresh icon-white"></i>Cambiar</a></center>
+			</td>
+		</tr>
+	</table>
+</div>
+<div id="cargadato" class="flotacarajo"></div>
+
+<script type="text/javascript">
+$("#cambio").click(function(){
+	var uid="<?php echo $this->uid?>";
+	var curid=$("#curid").val();
+	 if (curid=="") {
+		alert("Seleccione la Currícula para realizar el cambio.");
+		return false;
+	}
+	var url="/profile/changecurricula/update/uid/"+uid+"/curid/"+curid;
+	// alert(url);
+	$("#cargadato").html("<img src='/img/spinner.gif'>Cargando...");
+	$("#cargadato").load(url);
+})
+</script>

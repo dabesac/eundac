@@ -822,12 +822,13 @@ class Register_StudentController extends Zend_Controller_Action {
                 $this->view->faculty   = $faculty;
                 $this->view->speciality   = $speciality;
                 $this->view->uid = $uid;
+                
                 $escid = base64_decode($this->_getParam('escid'));
                 $subid = base64_decode($this->_getParam('subid'));
                 $regid = base64_decode($this->_getParam('regid'));
                 $perid = base64_decode($this->_getParam('perid'));
                 $curid = base64_decode($this->_getParam('curid'));
-
+                $this->view->perid = $perid;
                 $where = array(
                     'eid'=>$eid,'oid'=>$oid,
                     'escid'=>$escid,'subid'=>$subid,
@@ -842,7 +843,16 @@ class Register_StudentController extends Zend_Controller_Action {
                 $base_person = new Api_Model_DbTable_Person();
 
                 $data_subjects = $base_registration_subjet->_getAll($where,$order);
+				$matricula = new Api_Model_DbTable_Registration();
+				$wheremat = array(
+						'eid'=>$eid,'oid'=>$oid,
+						'escid'=>$escid,'subid'=>$subid,
+						'pid'=>$pid,'uid'=>$uid,
+						'regid'=>$regid,'perid'=>$perid,
+				);
+				$regmatr = $matricula->_getRegister($wheremat);
 
+				if ($regmatr) $this->view->semid = $regmatr['semid'];
 
                 // $attrib =array('pid','last_name0');
 
@@ -876,7 +886,7 @@ class Register_StudentController extends Zend_Controller_Action {
                 $this->view->data_subjects  =   $data_subjects;
                 $this->_helper->layout->disableLayout();
 
-                // print_r($data_subjects);
+                
 
         } catch (Exception $e) {
             print "Error: print register".$e->getMessage();
