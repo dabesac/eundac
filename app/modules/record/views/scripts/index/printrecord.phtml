@@ -1,0 +1,181 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include ($dir);
+ob_start();
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<style>
+	body{
+        font-family: "Arial";
+        font-size: 12px;
+    }
+</style>
+<?php
+$speciality = $this->info_speciality;
+
+if ($speciality['parent']!= '') {
+	$name_esc = $speciality['speciality'];
+	$name_speciality=$speciality['name'];
+}
+else{
+	$name_esc=$speciality['name'];
+}
+$sudid=$this->sudid;
+$perid=$this->perid;
+$course = $this->info_couser;
+$students = $this->students;
+$mpdf->mirrorMargins = 1;
+
+$header = '
+<table style="width: 100%;font-weight: bold;" border="0">
+	<tr >
+		<td rowspan="3" style="width: 500px" height="35px">&nbsp;</td>
+		<td colspan="3" style="width: 500px;text-align: center;font-size:11px;">'.strtoupper($speciality['name_faculty']).'</td>
+	</tr>
+	<tr >
+		<td style="width: 200px;text-align: center" height="25px">&nbsp;</td>
+		<td style="width: 100px;text-align: center">&nbsp;</td>
+		<td style="width: 50px;text-align: center">&nbsp;</td>
+	</tr>
+	<tr >
+		<td height="35px" style="padding-left: 30px;font-size:10px;"><center>'.$perid['name'].'</center></td>
+		<td style="font-size:10px;">'.$perid['perid'].'</td>
+		<td >&nbsp;</td>
+	</tr>
+	<tr >
+		<td height="15px">&nbsp;</td>
+		<td >&nbsp;</td>
+		<td >&nbsp;</td>
+	</tr>
+</table>
+
+
+<table style="width: 100%; font-weight: bold;">
+	<tr >
+		<td style="width: 100px;text-align: center;font-size:10px;" height="35px">'.$course['name_semester'].'</td>
+		<td style="width: 70px;text-align: center;font-size:10px;">'.$subid['name'].'</td>
+		<td style="width: 70px;text-align: center;font-size:10px;">'.$course['turno'].'</td>
+		<td style="width: 270px;text-align: center;font-size:10px;">'.$name_esc.'</td>
+		<td style="text-align: center;font-size:10px;">'.$name_speciality.'</td>
+	</tr>
+	<tr >
+		<td height="5px">&nbsp;</td>
+		<td >&nbsp;</td>
+		<td >&nbsp;</td>
+		<td >&nbsp;</td>
+		<td >&nbsp;</td>
+	</tr>
+</table>
+<table style="width: 100%;font-weight: bold;">
+	<tr >
+		<td height="20px" style="width: 50px;text-align: left;font-size:10px;">'.$course['courseid'].'</td>
+		<td style="width: 300px;text-align: left;font-size:10px;">'.$course['name'].'</td>
+		<td style="width: 100px;text-align: left;font-size:10px;">'.$course['credits'].'</td>
+		<td style="width: 300px;font-size:10px;">'.$course['name_teacher'].'</td>
+	</tr>
+	
+</table>
+<table>
+<tr >
+		<td height="85px">&nbsp;</td>
+		<td >&nbsp;</td>
+		<td >&nbsp;</td>
+		<td >&nbsp;</td>
+	
+</tr>
+	
+</table>
+';
+?>
+	<table style="float: left; font-size:11px; width: 750px; margin-top:1200px;" border="0">
+		<?php if ($students) {
+			$r=0;
+			foreach ($students as $key => $student) { 
+				$r++;
+				$tamano = "24px";
+				if ($r==32)
+				{
+					$tamano = "23px";
+				}
+				
+				if ($r==64)
+				{
+					$tamano = "23px";
+				}
+		?>
+			<tr>
+				<td height="<?php echo $tamano?>" width="50px" ><center><?php echo $r?></center></td>
+				<td width="150px"><center><?php echo $student['uid']?></center></td>
+				<td><?php echo $student['last_name0']." ".$student['last_name1'].", ".$student['first_name']?></td>
+				<?php 
+					switch ($student['notafinal']) {
+							case '-2':
+								$nf ="N.S.P.";
+								$retirados++;
+								break;
+							case '-3':
+								$nf ="RETIRADO";
+								$retirados++;
+								break;
+							default:
+								$nf= $student['notafinal'];
+								if ($nf<=10){
+									$jalados++;	
+								}else{
+									$jalado = "";
+									$aprobados++;
+								}
+								
+								break;
+						}
+						switch ($student['notafinal']) {
+							case -3: $notatexto = "RETIRADO";break;
+							case -2: $notatexto = "N.S.P.";break;
+							case 0: $notatexto = "CERO";break;
+							case 1: $notatexto = "UNO";break;
+							case 2: $notatexto = "DOS";break;
+							case 3: $notatexto = "TRES";break;
+							case 4: $notatexto = "CUATRO";break;
+							case 5: $notatexto = "CINCO";break;
+							case 6: $notatexto = "SEIS";break;
+							case 7: $notatexto = "SIETE";break;
+							case 8: $notatexto = "OCHO";break;
+							case 9: $notatexto = "NUEVE";break;
+							case 10: $notatexto = "DIEZ";break;
+							case 11: $notatexto = "ONCE";break;
+							case 12: $notatexto = "DOCE";break;
+							case 13: $notatexto = "TRECE";break;
+							case 14: $notatexto = "CATORCE";break;
+							case 15: $notatexto = "QUINCE";break;
+							case 16: $notatexto = "DIECISEIS";break;
+							case 17: $notatexto = "DIECISIETE";break;
+							case 18: $notatexto = "DIECIOCHO";break;
+							case 19: $notatexto = "DIECINUEVE";break;
+							case 20: $notatexto = "VEINTE";break;
+						}
+						if (strlen($nf)==1) $nf="0".$nf; 					
+						?>
+					<td width="100px"><center><?php echo $notatexto?></center></td>
+					<td width="100px"><center><?php echo $nf?></center></td>
+
+			</tr>
+
+		<?php }		
+		} 
+		?>
+	</table>
+	<hr style="height: 2px; color: #000000 ; margin-top: 10px">
+
+<?php 
+
+$html = ob_get_contents();
+  
+$mpdf=new mPDF('utf-8','A4','','',15,15,75,15,15);
+
+$mpdf->SetHTMLHeader($header);
+$mpdf->SetHTMLFooter('');
+ob_end_clean();
+$mpdf -> WriteHTML($html);
+$mpdf->Output('Acta-'.$course['courseid'].'turno'.$course['turno'].'.pdf','D');
+  
+?>

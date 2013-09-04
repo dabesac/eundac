@@ -1,0 +1,97 @@
+<?php
+	$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+	include ($dir);
+	ob_start();
+	$students = $this->students;
+	$subsidiary= $this->subid;
+	$periods = $this->perid;
+	$month_t = split('-', $periods['closure_date']);
+	$month = $month_t[1];
+	switch ($month) {
+		case 1: $month_ = "Enero";break;
+		case 2: $month_ = "Febrero";break;
+		case 3: $month_ = "Marzo";break;
+		case 4: $month_ = "Abril";break;
+		case 5: $month_ = "Mayo";break;
+		case 6: $month_ = "Junio";break;
+		case 7: $month_ = "Julio";break;
+		case 8: $month_ = "Agosto";break;
+		case 9: $month_ = "Setiembre";break;
+		case 10: $month_ = "Octubre";break;
+		case 11: $month_ = "Noviembre";break;
+		case 12: $month_ = "Diciembre";break;
+	}
+
+	$tota_students = $this->tota_students;
+	$total_approved = $this->total_approved;
+	$total_disapp = $this->total_disapp;
+	$total_retired = $this->total_retired;
+	$total_NSP = $this->total_NSP;
+
+	$percentage_apro = $this->percentage_apro;
+	$percentage_desapro = $this->percentage_desapro;
+	$percentage_retir = $this->percentage_retir;
+	$percentage_nsp = $this->percentage_nsp;
+   
+?>
+<style type="text/css">
+.normal-td
+{
+	padding-left: 100px;
+
+}
+table {
+	font-family: "Arial";
+	font-size:11px; 
+	text-align: center;
+	margin-left:62%;
+}
+p{
+	font-family: "Arial";
+	font-size: 11px;
+	margin-left: 50%;
+	margin-top: 100px;
+}
+</style>
+	<table >
+		<tr>
+			<td ><?php echo $tota_students ?></td>
+			<td class='normal-td'><?php echo "100%" ?></td>
+		</tr>
+		<tr>
+			<td ><?php echo $total_approved ?></td>
+			<td class='normal-td'><?php echo $percentage_apro ?></td>
+		</tr>
+		<tr>
+			<td ><?php echo $total_disapp ?></td>
+			<td class='normal-td'><?php echo $percentage_desapro ?></td>
+		</tr>
+		<tr>
+			<td ><?php echo "0" ?></td>
+			<td class='normal-td'><?php echo "0" ?></td>
+		</tr>
+		<tr>
+			<td ><?php echo $total_NSP ?></td>
+			<td class='normal-td' ><?php echo $percentage_nsp ?></td>
+		</tr>
+		<tr>
+			<td > <?php echo $total_retired ?></td>
+			<td class='normal-td'><?php echo $percentage_retir ?></td>
+		</tr>
+		<tr>
+			<td ><?php echo $tota_students ?></td>
+			<td class='normal-td'><?php echo "100%" ?></td>
+		</tr>
+	</table>
+	<p><?php echo  $subsidiary['name'].", ". $month_t[2]." de ".$month_." del ".$month_t[0]?></p>
+
+<?php
+	$html = ob_get_contents();
+	$mpdf=new mPDF('utf-8','A4','','',15,40,53,15,15);
+	$mpdf->SetHTMLHeader($header);
+	$mpdf->SetHTMLFooter('');
+	ob_end_clean();
+	$mpdf -> WriteHTML($html);
+	$mpdf->Output('Acta-'.$course['courseid'].'turno'.$course['turno'].'.pdf','D'); 
+?>
+
