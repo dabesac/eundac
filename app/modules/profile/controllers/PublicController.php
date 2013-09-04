@@ -11,7 +11,7 @@ class Profile_PublicController extends Zend_Controller_Action {
     	$login = $sesion->getStorage()->read();
     	$this->sesion = $login;
             
-        $this->sesion->perid="13A";
+        //$this->sesion->perid="13A";
     }
 
     public function indexAction()
@@ -172,15 +172,15 @@ class Profile_PublicController extends Zend_Controller_Action {
             $uid=$this->sesion->uid;
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
-            $perid=$this->sesion->perid;
+            $perid=$this->sesion->next;
 
             
-            //print_r($where);
 
             $dbcuract=new Api_Model_DbTable_Registrationxcourse();
             $dbtyperate=new Api_Model_DbTable_PeriodsCourses();
 
-            $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "perid"=>$perid);
+            //$where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "perid"=>$perid);
+            //print_r($this->sesion);
             $curact=$dbcuract->_getFilter($where, $attrib);
             //print_r($curact);
             $nc=0;
@@ -203,6 +203,51 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
+    public function studentsignpercurAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $pid=$this->sesion->pid;
+            $uid=$this->sesion->uid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
+            $perid="13B";
+            //print_r($this->sesion);
+
+            $dbcur=new Api_Model_DbTable_Studentxcurricula();
+            $dbcourxcur=new Api_Model_DbTable_Course();
+            $dbcourlle=new Api_Model_DbTable_Registrationxcourse();
+
+
+            $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "uid"=>$uid, "pid"=>$pid);
+            //print_r($where);
+            $cur=$dbcur->_getOne($where);
+            //print_r($cur);
+            $courpercur=$dbcourxcur->_getCoursesXCurriculaXShool($eid,$oid,$cur['curid'],$escid);
+            $c=0;
+            foreach ($courpercur as $cour) {
+                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);
+                $attrib=array("courseid","notafinal","perid");
+                //print_r($where);
+                $courlle[$c]=$dbcourlle->_getFilter($where, $attrib);
+                $c++;
+            }
+            //print_r($courpercur);
+            $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid,"pid"=>$pid,"uid"=>$uid,"perid"=>$perid);
+            $attrib=array("courseid","state");
+            $courlleact=$dbcourlle->_getFilter($where,$attrib);
+            //print_r($courlleact);
+
+            $this->view->courpercur=$courpercur;
+            $this->view->courlleact=$courlleact;
+            $this->view->courlle=$courlle;
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+
     public function studentsignrealizedAction()
     {
         try{
@@ -212,12 +257,4 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
-    public function studentsignpercurAction()
-    {
-        try{
-            $this->_helper->layout()->disableLayout();
-        }catch(exception $e){
-            print "Error : ".$e->getMessage();
-        }
-    }
 }

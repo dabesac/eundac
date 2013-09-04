@@ -3,8 +3,103 @@
 		<h4><b>Matricula Por Curricula</b></h4>
 	</div>
 	<div class="panel-body">
-		<table>
-			
-		</table>
+		<?if($this->courpercur){
+			//print_r($this->courlleact);?>
+		<div class="panel panel-default">
+			<? $semid=0;
+			$c=0;
+			foreach ($this->courpercur as $sem) {
+				if($sem['semid']<>$semid){?>
+					<div class="panel-heading">
+						<b>SEMESTRE <?echo $sem['semid']?></b>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<tr>
+								<th><center>Codigo</center></th>
+								<th>Cursos</th>
+								<?if($sem['semid']<>"1"){?>
+									<th><center>Requisito</center></th>
+								<?}else{?>
+									<th></th>
+								<?}?>
+								<th><center>Creditos</center></th>
+								<th>Nota</th>
+								<th>Estado</th>
+							</tr>
+							
+					<? $semid=$sem['semid'];
+						foreach ($this->courpercur as $courses) {
+							if($courses['semid']==$semid) {?>
+								<tr>
+									<td align="center"><?echo $courses['courseid']?></td>
+									<td><?echo $courses['name']?></td>
+									<td align="center">
+										<?if($sem['semid']<>"1"){
+											$exreq=0;
+											for($i=1; $i<=3 ; $i++){
+												if($courses['req_'.$i]){
+													echo $courses['req_'.$i]." ";
+													$exreq=1;
+												}
+											}
+											if($exreq==0){
+												echo "Ninguno";
+											}
+										}?>
+									</td>
+									<td align="center"><?echo $courses['credits']?></td>
+									<td><!-- Imprimir mayor nota -->
+										<?if($this->courlle[$c]){
+											$notafinal=$this->courlle[$c]['notafinal'];
+											foreach ($this->courlle[$c] as $notaf) {
+												if($notaf['notafinal']>=$notafinal){
+													$notafinal=$notaf['notafinal'];
+												}
+											}
+										echo $notafinal;
+										}else{
+											$est=1;
+										}?>
+									</td>
+									<td>
+										<?if($est<>1){
+											if($notafinal>=11){?>
+												<img src="/img/circulo-verde.png">
+											<?}else{
+												$pinto=0;
+												foreach ($this->courlleact as $cact) {
+													if($this->courlle[$c][0]['courseid']==$cact['courseid']){
+														if($cact['state']=="M"){?>
+															<img src="/img/circulo-amarillo.png">
+														<?$pinto=1;
+														}else{?>
+															<img src="/img/circulo-rojo.png">
+														<?$pinto=1;
+														}
+													}
+												}
+												if($pinto==0){?>
+													<img src="/img/circulo-rojo.png">
+												<?}
+											}
+										}elseif($est==1){
+											$est=0;?>
+											<img src="/img/circulo-rojo.png">
+										<?}?>
+									</td>
+								</tr>
+							<?$c++;
+							}
+						}?>
+						</table>
+					</div>
+				<? 
+				}?>
+			<?}?>
+		</div><!-- Panel de Semestres -->
+		<?}else{?>
+			<h4 align="center">No Existen Datos</h4>
+		<?}?>
 	</div>
 </div>

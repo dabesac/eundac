@@ -96,7 +96,7 @@ $header='<table style="width: 100%;" border="1">
 </table>
 <?php
     $html = ob_get_contents();
-    $mpdf = new mPDF('win-1252','A4','','',15,15,40);
+    $mpdf = new mPDF('win-1252','A4','','',15,15,30);
     $mpdf->SetHTMLHeader($header);
     $mpdf->SetFooter('{DATE j/m/Y}|Página {PAGENO}|'.$this->uid.' - Sistema de Gestión e-UNDAC');
     ob_end_clean();
