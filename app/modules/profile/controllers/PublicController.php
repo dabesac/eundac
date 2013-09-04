@@ -207,12 +207,14 @@ class Profile_PublicController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;
+            
             $pid=$this->sesion->pid;
             $uid=$this->sesion->uid;
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
+         
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;            
             $perid="13B";
             //print_r($this->sesion);
 

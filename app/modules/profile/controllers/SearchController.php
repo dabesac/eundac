@@ -79,15 +79,51 @@
  	}
 
 
-    public function cambiocurriculaAction(){
-      try {
-
-          
+   public function studentsignpercurAction()
+    {
+        try{
+            //$this->_helper->layout()->disableLayout();
             
+            $uid =$this->_getParam('uid');
+            $pid =$this->_getParam('pid');
+            $subid =$this->_getParam('subid');
+            $escid =$this->_getParam('escid');
+         
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;            
+            $perid="13B";
+            //print_r($this->sesion);
 
-      } catch (Exception $e) {
-        print "Error: get Horary".$e->getMessage();
-      }
+            $dbcur=new Api_Model_DbTable_Studentxcurricula();
+            $dbcourxcur=new Api_Model_DbTable_Course();
+            $dbcourlle=new Api_Model_DbTable_Registrationxcourse();
+
+
+            $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "uid"=>$uid, "pid"=>$pid);
+            //print_r($where);
+            $cur=$dbcur->_getOne($where);
+            //print_r($cur);
+            $courpercur=$dbcourxcur->_getCoursesXCurriculaXShool($eid,$oid,$cur['curid'],$escid);
+            $c=0;
+            foreach ($courpercur as $cour) {
+                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);
+                $attrib=array("courseid","notafinal","perid");
+                //print_r($where);
+                $courlle[$c]=$dbcourlle->_getFilter($where, $attrib);
+                $c++;
+            }
+            //print_r($courpercur);
+            $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid,"pid"=>$pid,"uid"=>$uid,"perid"=>$perid);
+            $attrib=array("courseid","state");
+            $courlleact=$dbcourlle->_getFilter($where,$attrib);
+            //print_r($courlleact);
+
+            $this->view->courpercur=$courpercur;
+            $this->view->courlleact=$courlleact;
+            $this->view->courlle=$courlle;
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
     }
 
  	

@@ -9,8 +9,9 @@
                 <th >NOMBRE</th>
                 <th >ESCUELA</th>
                 <th >RECORD</th>
+               
+                <th >CURRICULA</th>
                 <th >HISTORIAL</th>
-                <th >Currícula</th>
         </tr>
         </thead>
 
@@ -52,12 +53,15 @@
                     }
                     ?>
                 </td>
-                <td>
-                    <a><span href="/admin/search/cambiocurricula/uid/<?php echo base64_encode($info['uid'])?>/escid/<?php echo base64_encode($info['escid'])?>/eid/<?php echo base64_encode($info['eid'])?>/oid/<?php echo base64_encode($info['oid'])?>/subid/<?php echo base64_encode($info['subid'])?>/pid/<?php echo base64_encode($info['pid'])?>" class='glyphicon glyphicon-remove' style='color:red'></span></a>                  
-                </td>
+             
                 <td>
                     <center><a href="/profile/changecurricula/change/uid/<?php echo base64_encode($info['uid'])?>/pid/<?php echo base64_encode($info['pid'])?>"><span class='glyphicon glyphicon-pencil'></span></a></center>                
                 </td>
+
+                <td>
+                    <center><a href="/profile/search/studentsignpercur/uid/<?php echo $info['uid']?>/pid/<?php echo $info['pid']?>/escid/<?php echo $info['escid']?>/subid/<?php echo $info['subid']?>"><span class='glyphicon glyphicon-pencil'></span></a></center>                
+                </td>
+
 
             </tr>
           <?php 
