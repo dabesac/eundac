@@ -91,8 +91,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $where['subid'] = base64_decode($this->_getParam('subid'));
             $where['perid'] = $this->sesion->period->perid;
             $where['eid'] = $this->sesion->eid;    
-            $where['oid'] = $this->sesion->oid;        
-       
+            $where['oid'] = $this->sesion->oid;      
+            $this->view->perid=$where['perid'];        
             // Obtener fecha periodo
             $infoper = new Api_Model_DbTable_Periods();
             $infoperiodo = $infoper->_getOne($where);

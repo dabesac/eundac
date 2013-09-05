@@ -1,0 +1,70 @@
+<div id="data">
+
+    <table class="table span9 table-bordered">
+        <thead>
+        <tr>
+                
+                <th >DNI</th>
+                <th >USUARIO</th>
+                <th >NOMBRE</th>
+                <th >ESCUELA</th>
+                <th >RECORD</th>
+                <th >HISTORIAL</th>
+                <th >Currícula</th>
+        </tr>
+        </thead>
+
+    <?php
+    if ($this->data)
+    {
+       foreach ($this->data as $info)    
+        {
+            
+            $data=null;
+            $facid=$this->facid;
+            $facaulm = new Api_Model_DbTable_Speciality();
+            $data['eid'] = $info['eid'];
+            $data['oid'] = $info['oid'];
+            $data['escid'] = $info['escid'];
+            $data['subid'] = $info['subid'];
+
+            $rfacaulm = $facaulm->_getOne($data);
+            if ($rfacaulm) $vfacalum= $rfacaulm['facid'];
+
+          
+  
+    ?>
+            <tr>
+                <td><?php echo $info['pid'];?></td>
+                <td><?php echo $info['uid'];?></td>    
+                <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
+                <td><?php echo $info['escid']?></td> 
+                <td>
+                    <?php 
+                    if ($facid==$vfacalum || $facid=="TODO"){
+                        ?>
+                    <center><a href="/report/recordnotas/print/uid/<?php echo base64_encode($info['uid'])?>/escid/<?php echo base64_encode($info['escid'])?>/eid/<?php echo base64_encode($info['eid'])?>/oid/<?php echo base64_encode($info['oid'])?>/subid/<?php echo base64_encode($info['subid'])?>/pid/<?php echo base64_encode($info['pid'])?>"><span class='glyphicon glyphicon-print'></span></a></center>
+                    <?php 
+                    }
+                    else{ ?>
+                        <center><a><span class='glyphicon glyphicon-remove' style='color:red'></span></a></center>
+                    <?php    
+                    }
+                    ?>
+                </td>
+                <td>
+                    <a><span href="/admin/search/cambiocurricula/uid/<?php echo base64_encode($info['uid'])?>/escid/<?php echo base64_encode($info['escid'])?>/eid/<?php echo base64_encode($info['eid'])?>/oid/<?php echo base64_encode($info['oid'])?>/subid/<?php echo base64_encode($info['subid'])?>/pid/<?php echo base64_encode($info['pid'])?>" class='glyphicon glyphicon-remove' style='color:red'></span></a>                  
+                </td>
+                <td>
+                    <center><a href="/profile/changecurricula/change/uid/<?php echo base64_encode($info['uid'])?>/pid/<?php echo base64_encode($info['pid'])?>"><span class='glyphicon glyphicon-pencil'></span></a></center>                
+                </td>
+
+            </tr>
+          <?php 
+            
+        }    
+    }
+    ?>
+    </table>
+        <div style="clear:both"></div>  
+</div>

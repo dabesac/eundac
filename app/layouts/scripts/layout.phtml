@@ -35,6 +35,8 @@ $resource1[]="syllabus/syllabus";
 $resource1[]="register/deferred";
 $resource1[]="curricula/curricula";
 $resource1[]="syllabus/print";
+$resource1[]="profile/search";
+$resource1[]="profile/changecurricula";
 
 //print_r($resource1);
 
@@ -190,7 +192,7 @@ $(document).ready(function(){
 	    	<div class='pull-right'>
 	    	<?php 
 			if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
-				<form name="buscausuario" class="form-inline" role="form" action="/reportes/buscarusuario/index">
+				<form name="buscausuario" class="form-inline" role="form" action="/profile/search">
 					<div class="col-lg-6" style="margin:0px;padding: 0px;"> 
 				        <input type="text" name="nombre" class="form-control input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" required>
 				    </div>
@@ -225,4 +227,3 @@ Oficina de Informáctica y Estadística - <a href="mail: informatica@undac.edu.p
 
 </body>
 </html>
-
