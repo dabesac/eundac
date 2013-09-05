@@ -80,11 +80,33 @@
         $where2['uid']=$uid;
         $where2['escid']=$dat[0]['escid'];
         $where2['pid']=$dat[0]['pid'];
+
         $data['curid']=$curid;
+        
         $al= new Api_Model_DbTable_Studentxcurricula ();
-        if ($al->_update($data,$where2)) {
-        $this->view->band=1;
+        $existe=$al->_getsearch($where2);
+        
+        if($existe){
+            if ($al->_update($data,$where2)) {
+            $this->view->band=1;
+            }
+
+        }else{
+            $where3['eid']=$eid;
+            $where3['oid']=$oid;
+            $where3['subid']=$subid;
+            $where3['uid']=$uid;
+            $where3['escid']=$dat[0]['escid'];
+            $where3['pid']=$dat[0]['pid'];
+            $where3['curid']=$curid;
+            $where3['state']='A';
+
+            if ($al->_save($where3)) {
+            $this->view->band=1;
+           }
         }
+
+        
         }
        catch (Exception $e) {
         print "Error: ".$e->getMessage();
