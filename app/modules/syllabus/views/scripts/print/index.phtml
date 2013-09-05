@@ -1,0 +1,296 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start();
+?>
+<style type="text/css">
+div{
+    font-size: 12px; 
+}
+.indent { 
+    margin-left: 30px;
+}
+.detalle { 
+    font-size: 12px; 
+    text-align: justify; 
+    margin-left: 30px;
+}
+td, th{
+    padding-right: 10px;
+}
+</style>
+
+<?php
+$curso=$this->curso[0];
+$total=$curso['hours_theoretical']+$curso['hours_practical']; 
+$tmps = split("-",$this->silabo['created']);
+$mes =$tmps[1];
+$tmps[2]=substr($tmps[2], 0,2);
+switch ($mes) {
+    case 1: $strm = "Enero";break;
+    case 2: $strm = "Febrero";break;
+    case 3: $strm = "Marzo";break;
+    case 4: $strm = "Abril";break;
+    case 5: $strm = "Mayo";break;
+    case 6: $strm = "Junio";break;
+    case 7: $strm = "Julio";break;
+    case 8: $strm = "Agosto";break;
+    case 9: $strm = "Setiembre";break;
+    case 10: $strm = "Octubre";break;
+    case 11: $strm = "Noviembre";break;
+    case 12: $strm = "Diciembre";break;
+} 
+?>
+<div style="width:100%;text-align: center;">
+    <b>FACULTAD DE <?php echo strtoupper($this->facu['name'])?><br>
+    ESCUELA DE FORMACIÓN PROFESIONAL DE <?php echo strtoupper($this->escuela['name'])?></b>
+</div>
+<div>
+    <h4 style="text-align: center; font-size: 15px;">SILABO</h4>
+    <h4 style="text-align: center; font-size: 14px;"><?php echo $curso['name']?></h4>
+</div>
+<div style="margin-left:30px">
+    <h5 style="text-align: left;">I. DATOS GENERALES</h5>
+</div>
+<div>
+    <table style="margin-left: 20%;text-align: left; font-size: 12px">
+    <?php if ($curso["type_rate"]=='C') {
+        $num=0; ?>
+        <tr>
+            <td><b>1.<?php echo $num=$num+1 ?> AREA:</b></td>
+            <td ><?php echo $tipo?></td>          
+        </tr>
+    <?php }?>
+        <tr>
+            <td><b>1.<?php echo $num=$num+1 ?> CÓDIGO:</b></td>
+            <td><?php echo $curso['courseid']?></td>
+        </tr>
+        <tr>
+            <td><b>1.<?php echo $num=$num+1 ?> PREQUISITO:</b></td>
+            <td>
+                <?php echo ($curso["req_1"] || $curso["req_2"] || $curso["req_3"])? $curso["req_1"]." ".$curso["req_2"]." ".$curso["req_3"]:"NINGUNO";?>
+            </td>
+        </tr>
+        <tr>
+            <td><b>1.<?php echo $num=$num+1 ?> SECCIÓN:</b></td>
+            <td><?php echo strtoupper($this->turno)?></td>
+        </tr>
+        <tr>
+            <td><b>1.<?php echo $num=$num+1 ?> CREDITOS:</b></td>
+            <td> <?php echo $curso['credits']?></td>   
+        </tr>
+        <tr>
+            <td><b>1.<?php echo $num=$num+1 ?> EXTENSIÓN HORARIA:</b></td>
+            <td> <?php echo "HT: ".$curso['hours_theoretical']."  "."HP: ". $curso['hours_practical']." "."TH: ".$total?></td>
+        </tr>
+        <tr>
+            <td><b>1.<?php echo $num=$num+1 ?> SEMESTRE ACADÉMICO:</b></td>
+            <td><?php echo strtoupper($curso['semid'])?></td>
+            
+        </tr>
+        <tr>
+            <td><b>1.<?php echo $num=$num+1 ?> DURACIÓN:</b></td>
+            <td><?php echo "Desde: ".$this->periods['class_start_date']."  "."Hasta: ".$this->periods['class_end_date']?></td>
+        </tr>
+        <tr>
+            <td><b>1.<?php echo $num=$num+1 ?> DOCENTE:</b></td>
+            <td><?php echo $this->infouser['fullname']?></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><strong>e-mail:</strong> <?php echo $this->persona['mail_person']?></td>
+        </tr>
+    </table>
+</div>
+<div>
+<?php if($this->silabo) { 
+    $silabo=$this->silabo;?>
+        <div style="margin-left:30px; margin-bottom:20px">
+            <h5>II. SUMILLA</h5>
+            <div class='detalle'><?php echo $silabo['sumilla']?></div>
+        </div>
+        <?php if ($curso["type_rate"]=="C") {?>
+        <div style="margin-left:30px; margin-bottom:20px">
+            <h5>III. COMPETENCIAS Y CAPACIDADES</h5>
+            <h5 class='indent'>3.1 COMPETENCIAS</h5>
+            <div class='detalle'><?php echo $silabo['competency']?></div>
+            <h5 class='indent'>3.2 CAPACIDADES</h5>
+            <div class='detalle'><?php echo $silabo['capacity']?></div>
+        </div>
+        <?php } elseif ($curso["type_rate"]=="O") { ?>
+        <div style="margin-left:30px; margin-bottom:20px">
+            <h5>III. OBJETIVOS</h5>
+            <h5 class='indent'>3.1 OBJETIVO GENERAL</h5>
+            <div class='detalle'><?php echo $silabo['competency']?></div>
+            <h5 class='indent'>3.2 OBJETIVOS ESPECÍFICOS</h5>
+            <div class='detalle'><?php echo $silabo['capacity']?></div>
+        </div>
+        <div>
+        <?php }
+        if ($curso["type_rate"]=="C") { ?>
+            <h5 style="margin-left:30px; margin-bottom:20px">IV. PROGRAMACIÓN DE UNIDADES</h5>
+        <?php } elseif ($curso["type_rate"]=="O") { ?>
+            <h5 style="margin-left:30px; margin-bottom:20px">IV. PROGRAMACIÓN DE CONTENIDOS</h5>
+        <?php } ?>
+        </div>
+        <?php
+        if ($this->datunidades) {
+            $unicon = new Api_Model_DbTable_Syllabusunitcontent();
+            if ($curso["type_rate"]=="O") {
+                foreach ($this->datunidades as $unidades) { 
+                    $wherecont['eid']=$unidades['eid'];
+                    $wherecont['oid']=$unidades['oid'];
+                    $wherecont['perid']=$unidades['perid'];
+                    $wherecont['escid']=$unidades['escid'];
+                    $wherecont['subid']=$unidades['subid'];
+                    $wherecont['courseid']=$unidades['courseid'];
+                    $wherecont['curid']=$unidades['curid'];
+                    $wherecont['turno']=$unidades['turno'];
+                    $wherecont['unit']=$unidades['unit'];
+                    $contenidos=$unicon->_getAllXUnit($wherecont); ?>
+                    <div>
+                        <table style="margin-left:60px; margin-bottom:20px; font-size:12px; width:100%; border: solid 0.50px #000;border-collapse:collapse;">
+                            <tr>
+                                <td colspan='4' style="border: solid 0.50px #000; border-collapse: collapse"><b>UNIDAD <?php echo $unidades['unit']?>:</b> <?php echo $unidades['name']?></td>
+                            </tr>
+                            <tr>
+                                <td colspan='4' style="border: solid 0.50px #000; border-collapse: collapse"><b>Objetivo Específico:</b> <?php echo $unidades['objetive']?></td>
+                            </tr>
+                            <?php if ($contenidos) { ?>
+                            <tr>
+                                <th style="width:30px;text-align: center; border: solid 0.50px #000; border-collapse: collapse">Semana</th>
+                                <th style="width:30px;text-align: center; border: solid 0.50px #000; border-collapse: collapse">Sesión</th>
+                                <th style="border: solid 0.50px #000; border-collapse: collapse">Contenidos</th>
+                                <th style="border: solid 0.50px #000; border-collapse: collapse">Estrategias</th>
+                            </tr>
+                            <?php
+                            foreach ($contenidos as $uniconte) { ?>
+                            <tr>
+                                <td style="text-align: center; border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['week']?></td>
+                                <td style="text-align: center; border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['session']?></td>
+                                <td style="border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['obj_content']?></td>
+                                <td style="border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['obj_strategy']?></td>
+                            </tr>
+                            <?php }
+                            }?>
+                            <tr>
+                                <td colspan='4' style="border: solid 0.50px #000; border-collapse: collapse"><b>Lectura:</b> <?php echo $unidades['reading']?></td>
+                            </tr>
+                            <?php if ($unidades['activity']<>"") { ?>
+                            <tr>
+                                <td colspan="4" style="border: solid 0.50px #000; border-collapse: collapse"><b>Actividad:</b> <?php echo $unidades['activity']?></td>
+                            </tr> 
+                            <?php
+                        }?>
+                        </table>
+                    </div><br>
+            <?php }
+            }elseif ($curso["type_rate"]=="C") { 
+                foreach ($this->datunidades as $unidades) {  
+                    $wherecont['eid']=$unidades['eid'];
+                    $wherecont['oid']=$unidades['oid'];
+                    $wherecont['perid']=$unidades['perid'];
+                    $wherecont['escid']=$unidades['escid'];
+                    $wherecont['subid']=$unidades['subid'];
+                    $wherecont['courseid']=$unidades['courseid'];
+                    $wherecont['curid']=$unidades['curid'];
+                    $wherecont['turno']=$unidades['turno'];
+                    $wherecont['unit']=$unidades['unit'];
+                    $contenidos=$unicon->_getAllXUnit($wherecont); ?>
+                    <div>
+                        <table style="margin-left:60px; margin-bottom:20px; font-size:12px; width:100%; border: solid 0.50px #000;border-collapse:collapse">
+                            <tr>
+                                <td colspan='7' style="border: solid 0.50px #000; border-collapse: collapse"><b>UNIDAD <?php echo $unidades['unit']?>:</b> <?php echo $unidades['name']?></td>
+                            </tr>
+                            <tr>
+                                <td colspan='7' style="border: solid 0.50px #000; border-collapse: collapse"><b>Capacidad:</b> <?php echo $unidades['objetive']?></td>
+                            </tr>
+                            <tr>
+                                <th colspan='7' style="border: solid 0.50px #000; border-collapse: collapse"><center>CONTENIDOS DE APRENDIZAJE</center></th>
+                            </tr>
+                            <?php if ($contenidos) { ?>
+                            <tr>
+                                <th style="width:30px; text-align: center; border: solid 0.50px #000; border-collapse: collapse">Semana</th>
+                                <th style="width:30px; text-align: center; border: solid 0.50px #000; border-collapse: collapse">Sesión</th>
+                                <th style="border: solid 0.50px #000; border-collapse: collapse">Conceptual</th>
+                                <th style="border: solid 0.50px #000; border-collapse: collapse">Procedimental</th>
+                                <th style="border: solid 0.50px #000; border-collapse: collapse">Actitudinal</th>
+                                <th style="border: solid 0.50px #000; border-collapse: collapse">Indicadores de Desempeño</th>
+                                <th style="border: solid 0.50px #000; border-collapse: collapse">Instrumentos de Evaluación</th>
+                            </tr>
+                            <?php
+                            foreach ($contenidos as $uniconte) { ?>
+                            <tr>
+                                <td style="text-align: center; border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['week']?></td>
+                                <td style="text-align: center; border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['session']?></td>
+                                <td style="border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['com_conceptual']?></td>
+                                <td style="border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['com_procedimental']?></td>
+                                <td style="border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['com_actitudinal']?></td>
+                                <td style="border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['com_indicators']?></td>
+                                <td style="border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['com_instruments']?></td>
+                            </tr>
+                            <?php }
+                            }?>
+                            <tr>
+                                <td colspan='7' style="border: solid 0.50px #000; border-collapse: collapse"><b>Lectura:</b> <?php echo $unidades['reading']?></td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" style="border: solid 0.50px #000; border-collapse: collapse"><b>Actividad:</b> <?php echo $unidades['activity']?></td>
+                            </tr> 
+                        </table>
+                    </div><br>
+                <?php
+                }
+            }
+        }?>
+
+      <?php if ($curso['type_rate']=='C') {
+        $rom="I"; ?>
+        <div style="margin-left:30px; float:left; margin-bottom:20px">
+            <h5>V. ESTRATEGIAS METODÓLOGICAS</h5>
+            <div class="detalle"><?php echo $silabo['methodology']?></div>
+        </div> 
+      <?php }?>
+        <div style="margin-left:30px; float:left">
+            <h5 style="margin-bottom:20px">V<?php echo $rom?>. MEDIOS Y MATERIALES</h5>
+            <div class="detalle" style="margin-bottom:30px"><?php echo $silabo['media']?></div>
+
+            <h5 style="margin-bottom:20px">VI<?php echo $rom?>. SISTEMA DE EVALUACIÓN</h5>
+            <div class="detalle" style="margin-bottom:30px"><?php echo $silabo['evaluation']?></div>
+
+            <h5 style="margin-bottom:20px">VII<?php echo $rom?>. FUENTES DE INFORMACIÓN</h5>
+            <div class="detalle" style="margin-bottom:30px"><?php echo $silabo['sources']?></div>
+        </div>
+        <div style="text-align: right; margin-top: 30px">Cerro de Pasco, <?php echo $tmps[2]." de ".$strm." del ".$tmps[0]?>.</div>
+<?php }?>
+</div>
+<br>
+<table style="margin-top:120px; width: 100%">
+    <tr>
+        <td style='text-align: center'>
+            <p style='width: 400px; border-top: solid 1px #000'>
+                <?php echo $this->infouser['fullname']?><br>
+                <span style="border: none; font-weight: bold;">DOCENTE</span>
+            </p>
+        </td>
+        <td style='text-align: center'>
+            <p style='width: 400px; border-top: solid 1px #000'>
+                <?php echo $this->director['last_name0']." ".$this->director['last_name1'].", ".$this->director['first_name'];?><br>
+                <span style="border: none; font-weight: bold;">DIRECTOR</span>
+            </p>
+        </td>
+    </tr>
+</table>
+<div style='text-align: center; margin-left: 30%; margin-top:100px'>
+    <p style='width:200px ;border-top: solid 1px #000; font-weight: bold'>V° B° Comisión de Silado</p>
+</div>
+<?php 
+  $html = ob_get_contents();
+  $mpdf=new mPDF('win-1252','A4','','',15,15,12,12,5,7);
+  $mpdf->SetFooter(' Impresion {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  $mpdf->SetFooter($this->footer);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('SILABO -'.$curso['courseid'].'.pdf','D');
+  
+?>
