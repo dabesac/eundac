@@ -351,13 +351,15 @@ class Record_IndexController extends Zend_Controller_Action {
 			$this->view->perid=$perid;
 
 
-			$this->_helper->layout()->disableLayout();			
+			$this->_helper->layout()->disableLayout();	
+
 		} catch (Exception $e) {
 			print "Error print constancy".$e->getMessage();
 		}
 	}
 	public function printrecordAction(){
 		try {
+
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
 
@@ -503,7 +505,7 @@ class Record_IndexController extends Zend_Controller_Action {
 			$this->view->total_disapp=$total_disapp1;
 			$this->view->total_retired=$total_retired1;
 			$this->view->total_NSP=$total_NSP1;
-			
+
 			$this->view->perid=$data_period_course;
 			$this->view->subid=$data_subsidiary;
 
@@ -517,6 +519,204 @@ class Record_IndexController extends Zend_Controller_Action {
 		} catch (Exception $e) {
 			print "Error back record".$e->getMessage();
 		}		
+	}
+
+	public function printregisterAction()
+	{
+		try {
+
+			$eid=$this->sesion->eid;
+			$oid=$this->sesion->oid;
+
+			$escid=base64_decode($this->_getParam('escid'));
+			$perid=base64_decode($this->_getParam('perid'));
+			$subid=base64_decode($this->_getParam('subid'));
+			$courseid=base64_decode($this->_getParam('courseid'));
+			$curid=base64_decode($this->_getParam('curid'));
+			$turno=base64_decode($this->_getParam('turno'));
+			$type=base64_decode($this->_getParam('type'));
+			
+			$base_faculty 	=	new Api_Model_DbTable_Faculty();
+			$base_speciality = 	new Api_Model_DbTable_Speciality();
+			$base_course = 	new Api_Model_DbTable_Course();
+			$base_course_x_teacher = 	new Api_Model_DbTable_Coursexteacher();
+			$base_register_course = 	new Api_Model_DbTable_Registrationxcourse();
+			$base_person =	new Api_Model_DbTable_Person();
+			$base_CourseCompetency = new Api_Model_DbTable_CourseCompetency();
+			$base_semester = new Api_Model_DbTable_Semester();
+
+			$where = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,); 
+
+			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
+
+			if ($type=="C") {
+				$data_Competecy = $base_CourseCompetency->_getOne($where);
+				$this->view->data_Competecy = $data_Competecy;
+			}
+
+			$info_couser = $base_course->_getOne($where);
+			$info_couser['turno'] = $turno;
+
+			$where_semester = array(
+				'eid'=>$eid,'oid'=>$oid,
+				'semid'=>$info_couser['semid'],
+				);
+
+			$data_semester = $base_semester->_getOne($where_semester);
+			$info_couser['name_semester']=$data_semester['name'];
+
+			$dni_teacher = $base_course_x_teacher->_getFilter($where);
+			$info_couser['uid']=$dni_teacher[0]['uid'];
+
+			$where1 = array(
+				'eid'=>$eid,'oid'=>$oid,
+				'pid'=> $dni_teacher[0]['pid']);
+
+			$info_teacher = $base_person->_getOne($where1);
+			$info_couser ['name_teacher'] = $info_teacher['last_name0']." ".
+											$info_teacher['last_name1'].", ".
+											$info_teacher['first_name'];
+			$info_speciality = 	$base_speciality->_getOne($where);
+
+
+			if ($info_speciality['parent'] != "") {
+				$where['escid']=$info_speciality['parent'];
+				$name_speciality = $base_speciality->_getOne($where);
+				$info_speciality['speciality'] = $name_speciality['name'];
+			}
+
+
+			$where ['facid'] = $info_speciality['facid'];
+			$name_faculty = $base_faculty->_getOne($where);
+			$info_speciality['name_faculty'] = $name_faculty['name'];
+
+			
+			$this->view->info_speciality = $info_speciality;
+			$this->view->info_couser = $info_couser;
+			$this->view->students=$data_students;
+			$this->view->perid=$perid;
+			$this->view->type=$type;
+
+			$this->_helper->layout()->disableLayout();
+			
+		} catch (Exception $e) {
+			print "Error: print register ".$e->getMessage();
+			
+		}
+	}
+
+	public function backregisterAction(){
+		try {
+			$eid=$this->sesion->eid;
+			$oid=$this->sesion->oid;
+
+			$escid=base64_decode($this->_getParam('escid'));
+			$perid=base64_decode($this->_getParam('perid'));
+			$subid=base64_decode($this->_getParam('subid'));
+			$courseid=base64_decode($this->_getParam('courseid'));
+			$curid=base64_decode($this->_getParam('curid'));
+			$turno=base64_decode($this->_getParam('turno'));
+			$type=base64_decode($this->_getParam('type'));
+			
+			$base_faculty 	=	new Api_Model_DbTable_Faculty();
+			$base_speciality = 	new Api_Model_DbTable_Speciality();
+			$base_course = 	new Api_Model_DbTable_Course();
+			$base_course_x_teacher = 	new Api_Model_DbTable_Coursexteacher();
+			$base_register_course = 	new Api_Model_DbTable_Registrationxcourse();
+			$base_person =	new Api_Model_DbTable_Person();
+			$base_CourseCompetency = new Api_Model_DbTable_CourseCompetency();
+			$base_semester = new Api_Model_DbTable_Semester();
+
+			$where = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,); 
+
+			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
+
+			$tota_students = $base_register_course->_get_total_students_x_course($where);
+			$total_approved = $base_register_course->_get_approved($where);
+			$total_disapp = $base_register_course->_get_disapproved_x_course($where);
+			$total_retired = $base_register_course->_get_retired_x_course($where);
+			$total_NSP = $base_register_course->_get_NSP_x_course($where);
+
+			$tota_students1 = intval($tota_students[0]['count']);
+			$total_approved1= intval($total_approved[0]['count']);
+			$total_disapp1 = $total_disapp[0]['count'];
+			$total_retired1 = $total_retired[0]['count'];
+			$total_NSP1 = $total_NSP[0]['count'];
+			
+			$percentage_apro = round((($total_approved1/$tota_students1)*100),2);
+			$percentage_desapro = round((($total_disapp1/$tota_students1)*100),2);
+			$percentage_retir = round((($total_retired1/$tota_students1)*100),2);
+			$percentage_nsp = round((($total_NSP1/$tota_students1)*100),2);
+
+
+			$info_couser = $base_course->_getOne($where);
+			$info_couser['turno'] = $turno;
+
+			$where_semester = array(
+				'eid'=>$eid,'oid'=>$oid,
+				'semid'=>$info_couser['semid'],
+				);
+			
+			$data_semester = $base_semester->_getOne($where_semester);
+			$info_couser['name_semester']=$data_semester['name'];
+
+			$dni_teacher = $base_course_x_teacher->_getFilter($where);
+			$info_couser['uid']=$dni_teacher[0]['uid'];
+
+			$where1 = array(
+				'eid'=>$eid,'oid'=>$oid,
+				'pid'=> $dni_teacher[0]['pid']);
+
+			$info_teacher = $base_person->_getOne($where1);
+			$info_couser ['name_teacher'] = $info_teacher['last_name0']." ".
+											$info_teacher['last_name1'].", ".
+											$info_teacher['first_name'];
+			$info_speciality = 	$base_speciality->_getOne($where);
+
+
+			if ($info_speciality['parent'] != "") {
+				$where['escid']=$info_speciality['parent'];
+				$name_speciality = $base_speciality->_getOne($where);
+				$info_speciality['speciality'] = $name_speciality['name'];
+			}
+
+
+			$where ['facid'] = $info_speciality['facid'];
+			$name_faculty = $base_faculty->_getOne($where);
+			$info_speciality['name_faculty'] = $name_faculty['name'];
+
+			
+			$this->view->info_speciality = $info_speciality;
+			$this->view->info_couser = $info_couser;
+			$this->view->students=$data_students;
+			$this->view->perid=$perid;
+			$this->view->type=$type;
+
+			$this->view->tota_students=$tota_students1;
+			$this->view->total_approved=$total_approved1;
+			$this->view->total_disapp=$total_disapp1;
+			$this->view->total_retired=$total_retired1;
+			$this->view->total_NSP=$total_NSP1;
+
+			$this->view->percentage_apro=$percentage_apro;
+			$this->view->percentage_desapro=$percentage_desapro;
+			$this->view->percentage_retir=$percentage_retir;
+			$this->view->percentage_nsp=$percentage_nsp;
+
+			$this->_helper->layout()->disableLayout();
+
+		} catch (Exception $e) {
+			print "Error: print back register ".$e->getMessage();
+			
+		}
 	}
 
 }

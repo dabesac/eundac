@@ -37,20 +37,30 @@
 <style type="text/css">
 .normal-td
 {
-	padding-left: 100px;
+	padding-left: 57px;
 
 }
 table {
 	font-family: "Arial";
 	font-size:11px; 
 	text-align: center;
-	margin-left:62%;
+	margin-left:52%;
 }
-p{
+.date_record{
 	font-family: "Arial";
 	font-size: 11px;
-	margin-left: 50%;
-	margin-top: 100px;
+	margin-left: 30%;
+	margin-top: 136px;
+}
+.acuerdo {
+
+	font-family: "Arial";
+	font-size: 11px;
+	text-align: left;
+}
+.magno{
+	
+	margin-top: 65%;
 }
 </style>
 	<table >
@@ -83,13 +93,18 @@ p{
 			<td class='normal-td'><?php echo "100%" ?></td>
 		</tr>
 	</table>
-	<p><?php echo  $subsidiary['name'].", ". $month_t[2]." de ".$month_." del ".$month_t[0]?></p>
+	<p class='date_record'><?php echo  $subsidiary['name'].", ". $month_t[2]." de ".$month_." del ".$month_t[0]?></p>
 
+	<p class='acuerdo magno'>Por acuerdo del Magno Consejo Universitario y la incorporación del nuevo Sistema Académico Digital se obvia el párrafo </p>
+
+	<p class='acuerdo'>3 de la nota adjunta a este documento, según Resolución de Consejo Universitario Nº 1462-2009-UNDAC-C.U.</p>
+
+	
 <?php
+
 	$html = ob_get_contents();
-	$mpdf=new mPDF('utf-8','A4','','',15,40,53,15,15);
+	$mpdf=new mPDF('utf-8','A4','','',15,15,55,15,15);
 	$mpdf->SetHTMLHeader($header);
-	$mpdf->SetHTMLFooter('');
 	ob_end_clean();
 	$mpdf -> WriteHTML($html);
 	$mpdf->Output('Acta-'.$course['courseid'].'turno'.$course['turno'].'.pdf','D'); 

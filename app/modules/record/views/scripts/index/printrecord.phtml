@@ -38,7 +38,7 @@ $header = '
 		<td style="width: 50px;text-align: center">&nbsp;</td>
 	</tr>
 	<tr >
-		<td height="35px" style="padding-left: 30px;font-size:10px;"><center>'.$perid['name'].'</center></td>
+		<td height="35px" style="padding-left: 60px;font-size:10px;"><center>'.$perid['name'].'</center></td>
 		<td style="font-size:10px;">'.$perid['perid'].'</td>
 		<td >&nbsp;</td>
 	</tr>
@@ -170,7 +170,7 @@ $header = '
 
 $html = ob_get_contents();
   
-$mpdf=new mPDF('utf-8','A4','','',15,15,75,15,15);
+$mpdf=new mPDF('utf-8','A4','','',3,5,79,15,15);
 
 $mpdf->SetHTMLHeader($header);
 $mpdf->SetHTMLFooter('');
