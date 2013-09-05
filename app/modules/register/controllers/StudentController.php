@@ -187,7 +187,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
                             $N=count($course_reg);
                             for ($i=0; $i < $N; $i++) { 
-                                if($course['courseid']==$course_reg[$i]['courseid']){
+                                if($course['courseid']==$course_reg[$i]['courseid'] && $course['turno']== $course_reg[$i]['turno']){
                                     $subject[$key]['register']=1;
                                 }
                             }
