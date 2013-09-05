@@ -49,11 +49,14 @@ $(function(){
 	});
 	
 	$("#usuario").keydown(function(event) {
+		//alert(event.keyCode);
 		if(event.shiftKey)
 		{
 			event.preventDefault();
 		}
-		if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 13 )    {
+		if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 13 
+				|| event.keyCode == 84 || event.keyCode == 77 || event.keyCode == 69 || event.keyCode == 80
+				)    {
 		}
 		else {
 			if (event.keyCode < 95) {

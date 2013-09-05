@@ -2,7 +2,7 @@
 	<div id="mainsign">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h4><b>Matricula Actual | Periodo <?print_r($this->curact[0]['perid'])?></b></h4>
+				<h4><b>Matricula Actual | Periodo 13B</b></h4>
 			</div>
 			<div class="panel-body">
 				<?if($this->curact){?>
@@ -46,6 +46,8 @@
 						$c++;
 					}?>
 				</table>
+				<?}else{?>
+					<h4 align="center">No Tiene Matricula Actual | Validelo en Registro de Facultad</h4>
 				<?}?>
 			</div>
 		</div>
