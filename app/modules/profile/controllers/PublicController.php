@@ -238,7 +238,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid,"pid"=>$pid,"uid"=>$uid,"perid"=>$perid);
             $attrib=array("courseid","state");
             $courlleact=$dbcourlle->_getFilter($where,$attrib);
-            print_r($courlleact);
+            //print_r($courlleact);
 
             $this->view->courpercur=$courpercur;
             $this->view->courlleact=$courlleact;
