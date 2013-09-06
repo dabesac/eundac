@@ -187,7 +187,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
                             $N=count($course_reg);
                             for ($i=0; $i < $N; $i++) { 
-                                if($course['courseid']==$course_reg[$i]['courseid']){
+                                if($course['courseid']==$course_reg[$i]['courseid'] && $course['turno']== $course_reg[$i]['turno']){
                                     $subject[$key]['register']=1;
                                 }
                             }
@@ -852,7 +852,7 @@ class Register_StudentController extends Zend_Controller_Action {
 				);
 				$regmatr = $matricula->_getRegister($wheremat);
 
-				if ($regmatr) $this->view->semid = $regmatr['semid'];
+				if ($regmatr) $this->view->regmatr = $regmatr;
 
                 // $attrib =array('pid','last_name0');
 
