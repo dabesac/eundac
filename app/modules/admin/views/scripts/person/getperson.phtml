@@ -1,0 +1,44 @@
+<div id="idperson">
+    <?php
+    if ($this->dataperson and $this->dataperson[0]){ 
+        
+    ?>
+
+    <table class="table span9 table-bordered">
+        <thead>
+        <tr>
+                <th><center>#</center></th>
+                <th class='col-md-2'><center>DNI</center></th>
+                <th>Apellidos y Nombres</th>
+                <th><center>Dirección</center></th>
+                <th colspan='2'><center>Operación</center></th>
+        </tr>
+        </thead>
+    <?php
+        $c=0;
+        foreach ($this->dataperson as $info) {
+            // print_r($info);exit();
+            $c++;
+          ?>
+            <tr>
+                <td><center><?php echo $c?></center></td>
+                <td class='col-md-2'><center><?php echo $info['pid'];?></center></td>
+                <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
+                <td><center><?php echo $info['address']?></center></td>
+                <td><center><a href=""><span class='glyphicon glyphicon-pencil'></span></a></center></td>
+                <td><center><a href=""><span class='glyphicon glyphicon-trash'></span></a></center></td>
+
+            </tr>
+          <?php  
+        }  
+    }
+    else{
+    ?>
+    <div class="alert alert-info" style='font-size:15px'><b>La persona no se ENCUENTRA registrado en el SISTEMA....</b></div>
+    <?php
+    exit();
+    }
+    ?>
+    </table>
+          
+</div>

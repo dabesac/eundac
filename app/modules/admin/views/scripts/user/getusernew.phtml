@@ -1,0 +1,43 @@
+<div id="idperson">
+    <?php
+    if ($this->datauser){ 
+            // print_r($this->datauser);exit();
+        
+    ?>
+
+    <table class="table span9 table-bordered table-striped">
+        <thead>
+            <div>Lista de usuarios <?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?> </div>
+        </thead>
+        <tr>
+                <th><center>#</center></th>
+                <th><center>Código</center></th>
+                <th><center>Rol</center></th>
+                <th><center>Escuela</center></th>
+                <th><center>Estado</center></th>
+        </tr>
+    <?php
+        $c=0;
+        foreach ($this->datauser as $info) {
+            $c++;
+          ?>
+            <tr>
+                <td><center><?php echo $c?></center></td>
+                <td><center><?php echo $info['uid']?></center></td>
+                <td><center><?php echo $info['rid']?></center></td>
+                <td><center><?php echo $info['escid']?></center></td>
+                <td><center><?php echo $info['state']?></center></td>
+            </tr>
+          <?php  
+        }  
+    }
+    else{
+    ?>
+    <div class="alert alert-info" style='font-size:15px'><b>No encuentra usuarios en el SISTEMA....</b></div>
+    <?php
+    exit();
+    }
+    ?>
+    </table>
+          
+</div>

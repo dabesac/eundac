@@ -883,17 +883,9 @@ class Register_StudentController extends Zend_Controller_Action {
 
                 } 
 
-                foreach ($data_subjects as $key => $value) {
-
-                   for ($i=1; $i < 13 ; $i++) { 
-                        if ($i==$value['semid']) {
-                        $data_subjects1[$key] = $data_subjects[$i];
-                    }
-                   }
-                }
 
 
-                $this->view->data_subjects  =   $data_subjects1;
+                $this->view->data_subjects  =   $data_subjects;
                 $this->_helper->layout->disableLayout();
 
                 

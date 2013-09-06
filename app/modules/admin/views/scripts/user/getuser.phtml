@@ -1,0 +1,51 @@
+<div id="idperson">
+    <?php
+    if ($this->datauser || $this->datauser[0]){ 
+            // print_r($this->datauser);exit();
+        
+    ?>
+
+    <table class="table span9 table-bordered">
+        <thead>
+        <tr>
+                <th><center>#</center></th>
+                <th><center>Código</center></th>
+                <th><center>DNI</center></th>
+                <th>Apellidos y Nombres</th>
+                <th><center>Rol</center></th>
+                <th><center>Escuela</center></th>
+                <th><center>Estado</center></th>
+                <th colspan='2'><center>Operación</center></th>
+        </tr>
+        </thead>
+    <?php
+        $c=0;
+        foreach ($this->datauser as $info) {
+            $c++;
+          ?>
+            <tr>
+                <td><center><?php echo $c?></center></td>
+                <td><center><?php echo $info['uid']?></center></td>
+                <td><center><?php echo $info['pid']?></center></td>
+                <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
+                <td><center><?php echo $info['rid']?></center></td>
+                <td><center><?php echo $info['escid']?></center></td>
+                <td><center><?php echo $info['state']?></center></td>
+                <td><center><a href=""><span class='glyphicon glyphicon-pencil'></span></a></center></td>
+                <td><center><a href=""><span class='glyphicon glyphicon-trash'></span></a></center></td>
+
+            </tr>
+          <?php  
+        }  
+    }
+    else{
+    ?>
+    <div class="alert alert-info" style='font-size:15px'><b>El usuario no se ENCUENTRA registrado en el SISTEMA...
+        Registrar en el módulo Gestion Persona.</b></div>
+    <?php
+    exit();
+    }
+    ?>
+    </table>
+          
+</div>
