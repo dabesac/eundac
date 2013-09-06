@@ -287,6 +287,7 @@ class Register_ValidationController extends Zend_Controller_Action
                                           $da2['document_auth']= $reso;
                                           $da2['curid']= $curid;
                                           $da2['state']= 'M';
+                                          $da2['approved']= $uidreg;
 // print_r($datas2);
                                         
 
@@ -379,6 +380,8 @@ class Register_ValidationController extends Zend_Controller_Action
                                           $da6['document_auth']= $reso;
                                           $da6['curid']= $curid;
                                           $da6['state']= 'M';
+                                          $da6['approved']= $uidreg;
+
 
                                            $dbmatriculacurso = new Api_Model_DbTable_Registrationxcourse();
                                         $escuela = $dbmatriculacurso->_save($da6);
@@ -421,6 +424,7 @@ class Register_ValidationController extends Zend_Controller_Action
                                   $da8['is_main']= 'S';
                                   $da8['state']= 'A';
 
+
                    
                                  $dbdocente = new Api_Model_DbTable_Coursexteacher();
                                  $docente = $dbdocente->_save($da8);
@@ -448,6 +452,7 @@ class Register_ValidationController extends Zend_Controller_Action
                 $da9['document_auth']= $reso;
                 $da9['date_register']= date("Y-m-d");
                 $da9['created']= date("Y-m-d");
+                $da9['count']= 0;
 
               $dbmatricula = new Api_Model_DbTable_Registration();
               $dbmatricula->_save($da9);
@@ -493,6 +498,7 @@ class Register_ValidationController extends Zend_Controller_Action
                                   $da10['document_auth']= $reso;
                                   $da10['curid']= $curid;
                                   $da10['state']= 'M';
+                                  $da10['approved']= $uidreg;
 
                                    
                                 $dbmatriculacurso = new Api_Model_DbTable_Registrationxcourse();
@@ -581,6 +587,8 @@ class Register_ValidationController extends Zend_Controller_Action
                                   $da14['document_auth']= $reso;
                                   $da14['curid']= $curid;
                                   $da14['state']= 'M';
+                                  $da14['approved']= $uidreg;
+
 
                                 $dbmatriculacurso = new Api_Model_DbTable_Registrationxcourse ();
                                 $escuela = $dbmatriculacurso->_save($da14);
