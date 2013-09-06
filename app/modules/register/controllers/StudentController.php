@@ -237,7 +237,7 @@ class Register_StudentController extends Zend_Controller_Action {
                                 $assign_credist =   $base_registration->_get_Credits_Asignated($escid,$curid,$perid,$data_register['semid']);
                                 $this->view->assign_semester=$data_register['semid'];
                                 $this->view->total_credits=$data_register['credits'];
-                                $this->view->assign_credist=intval($assign_credist[0]['semester_credits'])+$condition_credits+$created_resolu;
+                                $this->view->assign_credist=intval($assign_credist[0]['semester_creditsz'])+$condition_credits+$created_resolu;
                         }
                     }
                     else{
@@ -621,24 +621,24 @@ class Register_StudentController extends Zend_Controller_Action {
 
                     if($veces >= 2 ){
 
-                        $credits_assing[0]['semester_credits']=11+$condition_credits;
+                        $credits_assing[0]['semester_creditsz']=11+$condition_credits;
                     }
                     else{
 
 
                         if($credits_register['semid'] != 0 && $veces < 2){
                             $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
-                            $credits_assing[0]['semester_credits']=intVal($credits_assing[0]['semester_credits'])+$condition_credits+$created_resolu;
+                            $credits_assing[0]['semester_creditsz']=intVal($credits_assing[0]['semester_creditsz'])+$condition_credits+$created_resolu;
                         }
 
                         if( $credits_register['semid'] == 0 )
                         {
-                            $credits_assing[0]['semester_credits']=22;
+                            $credits_assing[0]['semester_creditsz']=22;
                         }
                         
                     }
                     
-                    $credits_asing= intval($credits_assing[0]['semester_credits']);
+                    $credits_asing= intval($credits_assing[0]['semester_creditsz']);
                     $credits_val = intval($credits_register['credits']) + intval($credits_cur);
 
 
@@ -662,7 +662,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
                            if($veces >= 2 ){
 
-                                $credits_assing[0]['semester_credits']=11+$condition_credits;
+                                $credits_assing[0]['semester_creditsz']=11+$condition_credits;
                             }
                             else{
 
@@ -671,13 +671,13 @@ class Register_StudentController extends Zend_Controller_Action {
 
                                     $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
 
-                                    $credits_assing[0]['semester_credits']=intVal($credits_assing[0]['semester_credits'])+$condition_credits+$created_resolu;
+                                    $credits_assing[0]['semester_creditsz']=intVal($credits_assing[0]['semester_creditsz'])+$condition_credits+$created_resolu;
 
                                 }
 
                                 if( $credits_register['semid'] == 0 )
                                 {
-                                    $credits_assing[0]['semester_credits']=22;
+                                    $credits_assing[0]['semester_creditsz']=22;
                                 }
                                 
                             }
@@ -685,7 +685,7 @@ class Register_StudentController extends Zend_Controller_Action {
                                     'status'=>true,
                                     'total_credits'=>$credits_register['credits'],
                                     'semester'=>$credits_register['semid'],
-                                    'credits_assing'=>$credits_assing[0]['semester_credits'],
+                                    'credits_assing'=>$credits_assing[0]['semester_creditsz'],
                                     'suma'=>$credits_val
                                 );
                     }
@@ -768,16 +768,16 @@ class Register_StudentController extends Zend_Controller_Action {
 
                                 $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
 
-                                $credits_assing[0]['semester_credits']=intVal($credits_assing[0]['semester_credits'])+$condition_credits+$created_resolu;
+                                $credits_assing[0]['semester_creditsz']=intVal($credits_assing[0]['semester_creditsz'])+$condition_credits+$created_resolu;
                             }
                             else{
 
                                 if($credits_register['semid']==0){
-                                        $credits_assing[0]['semester_credits']=0;
+                                        $credits_assing[0]['semester_creditsz']=0;
                                     }
                                 elseif($veces >= 2)
                                 {
-                                    $credits_assing[0]['semester_credits']=11+$condition_credits; 
+                                    $credits_assing[0]['semester_creditsz']=11+$condition_credits; 
                                 }
 
                             }
@@ -852,7 +852,7 @@ class Register_StudentController extends Zend_Controller_Action {
 				);
 				$regmatr = $matricula->_getRegister($wheremat);
 
-				if ($regmatr) $this->view->semid = $regmatr['semid'];
+				if ($regmatr) $this->view->regmatr = $regmatr;
 
                 // $attrib =array('pid','last_name0');
 
@@ -883,7 +883,17 @@ class Register_StudentController extends Zend_Controller_Action {
 
                 } 
 
-                $this->view->data_subjects  =   $data_subjects;
+                foreach ($data_subjects as $key => $value) {
+
+                   for ($i=1; $i < 13 ; $i++) { 
+                        if ($i==$value['semid']) {
+                        $data_subjects1[$key] = $data_subjects[$i];
+                    }
+                   }
+                }
+
+
+                $this->view->data_subjects  =   $data_subjects1;
                 $this->_helper->layout->disableLayout();
 
                 

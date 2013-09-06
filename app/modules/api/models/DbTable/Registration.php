@@ -125,7 +125,7 @@ public function _getPaymentsStudent($where=null,$attrib=null,$order=null){
 
     		if ($escid==''|| $curid==''|| $perid==''|| $semid=='') return false;
 
-	 		$sql = $this->_db->query(" select semester_credits ('$escid','$curid','$perid','$semid') ");
+	 		$sql = $this->_db->query(" select semester_creditsz('$escid','$curid','$perid','$semid') ");
 			$row=$sql->fetchAll();
 			if ($row) return $row;
 	       	return false;

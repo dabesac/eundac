@@ -405,7 +405,7 @@ class Record_DirectedController extends Zend_Controller_Action {
             $data['receipt']=$receipt;
             $data['document_auth']=$resolution;
             $bdmatricurso=new Api_Model_DbTable_Registrationxcourse();
-            if ($bdmatricurso->_update($data,$pk)) {
+            if ($bdmatricurso->_updatenoteregister($data,$pk)) {
                 $this->view->msg=1;
                 $wheresub['eid']=$eid;
                 $wheresub['oid']=$oid;

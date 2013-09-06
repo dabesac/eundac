@@ -44,6 +44,9 @@ class Record_IndexController extends Zend_Controller_Action {
 			$formData['escid'] = base64_decode($tmpescid[0]);
 			$formData['subid'] = base64_decode($tmpescid[1]);
 			$formData['perid'] = base64_decode($formData['perid']);
+			$this->view->escid=$formData['escid'];
+			$this->view->subid=$formData['subid'];
+			$this->view->perid=$formData['perid'];
 			//verify status period
 			$periods = new Api_Model_DbTable_Periods();
 			$rowperiod = $periods->_getOne($formData);
@@ -679,6 +682,7 @@ class Record_IndexController extends Zend_Controller_Action {
 			$info_couser ['name_teacher'] = $info_teacher['last_name0']." ".
 											$info_teacher['last_name1'].", ".
 											$info_teacher['first_name'];
+
 			$info_speciality = 	$base_speciality->_getOne($where);
 
 
@@ -719,4 +723,74 @@ class Record_IndexController extends Zend_Controller_Action {
 		}
 	}
 
+	public function recordcontrolAction()
+	{
+		try {	
+
+			$eid=$this->sesion->eid;
+			$oid=$this->sesion->oid;
+
+			$escid=base64_decode($this->_getParam('escid'));
+			$perid=base64_decode($this->_getParam('perid'));
+			$subid=base64_decode($this->_getParam('subid'));
+			
+			$where = array(
+				'eid'=>$eid, 'oid' =>$oid,
+				'escid'=>$escid, 'subid'=>$subid,
+				'perid'=>$perid,
+				);
+
+
+			$courses = $this->_loadCourses($where);			
+
+			$base_faculty 	=	new Api_Model_DbTable_Faculty();
+			$base_speciality = 	new Api_Model_DbTable_Speciality();
+			$base_course_x_teacher = 	new Api_Model_DbTable_Coursexteacher();
+			$base_person =	new Api_Model_DbTable_Person();
+
+			$info_speciality = 	$base_speciality->_getOne($where);
+
+			if ($info_speciality['parent'] != "") {
+				$where['escid']=$info_speciality['parent'];
+				$name_speciality = $base_speciality->_getOne($where);
+				$info_speciality['speciality'] = $name_speciality['name'];
+			}
+
+
+			$where ['facid'] = $info_speciality['facid'];
+			$name_faculty = $base_faculty->_getOne($where);
+			$info_speciality['name_faculty'] = $name_faculty['name'];
+
+			foreach ($courses as $key => $value) {
+
+				$where1=null;
+				$where1['eid']=$value['eid'];
+				$where1['oid']=$value['oid'];
+				$where1['escid']=$value['escid'];
+				$where1['subid']=$value['subid'];
+				$where1['courseid']=$value['courseid'];
+				$where1['turno']=$value['turno'];
+				$where1['perid']=$value['perid'];
+
+				$dni_teacher = $base_course_x_teacher->_getFilter($where1);
+				$where2 = array(
+					'eid'=>$eid,'oid'=>$oid,
+					'pid'=> $dni_teacher[0]['pid']);
+
+				$info_teacher = $base_person->_getOne($where2);
+				$courses[$key]['name_teacher'] = $info_teacher['last_name0']." ".
+												$info_teacher['last_name1'].", ".
+												$info_teacher['first_name'];
+
+			}
+
+
+			$this->view->info_speciality = $info_speciality;
+			$this->view->info_couser=$courses;
+			$this->view->perid=$perid;
+
+		} catch (Exception $e) {
+			print "Error: print record control ".$e->getMessage();
+		}
+	}
 }

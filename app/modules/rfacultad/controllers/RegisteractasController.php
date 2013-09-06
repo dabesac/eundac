@@ -201,6 +201,7 @@ class Rfacultad_RegisteractasController extends Zend_Controller_Action
                 $datamat['register']=$this->sesion->uid;
                 $datamat['created']=date('Y-m-d');
                 $datamat['state']='M';
+                $datamat['count']=0;
                 $mat->_save($datamat);
             }
             $exiswhere['eid']=$eid;
@@ -223,6 +224,7 @@ class Rfacultad_RegisteractasController extends Zend_Controller_Action
             	$data['created']=date('Y-m-d');
             	$data['register']=$this->sesion->uid;
             	$data['state']='M';
+                $data['approved']=$this->sesion->uid;
             	$matcur->_save($data);
             	$this->view->bandera=1;
             }
