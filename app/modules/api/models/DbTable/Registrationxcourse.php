@@ -34,6 +34,18 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _updatenoteregister($data,$pk)
+	{
+		try{
+			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' || $pk['courseid']=='' || $pk['curid']=='' || $pk['regid']=='' || $pk['turno']=='' || $pk['pid']=='' || $pk['uid']=='' || $pk['perid']=='') return false;
+			$where = "eid = '".$pk['eid']."' and pid='".$pk['pid']."' and oid = '".$pk['oid']."' and escid = '".$pk['escid']."' and uid = '".$pk['uid']."' and subid = '".$pk['subid']."' and regid = '".$pk['regid']."' and perid = '".$pk['perid']."' and turno = '".$pk['turno']."' and curid = '".$pk['curid']."' and courseid = '".$pk['courseid']."'";
+			return $this->update($data, $where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Update Registration".$e->getMessage();
+		}
+	}
+
 
 		public function _updatestateregister($data,$pk)
 	{
