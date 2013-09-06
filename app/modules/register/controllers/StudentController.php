@@ -768,16 +768,16 @@ class Register_StudentController extends Zend_Controller_Action {
 
                                 $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
 
-                                $credits_assing[0]['semester_credits']=intVal($credits_assing[0]['semester_credits'])+$condition_credits+$created_resolu;
+                                $credits_assing[0]['semester_creditsz']=intVal($credits_assing[0]['semester_creditsz'])+$condition_credits+$created_resolu;
                             }
                             else{
 
                                 if($credits_register['semid']==0){
-                                        $credits_assing[0]['semester_credits']=0;
+                                        $credits_assing[0]['semester_creditsz']=0;
                                     }
                                 elseif($veces >= 2)
                                 {
-                                    $credits_assing[0]['semester_credits']=11+$condition_credits; 
+                                    $credits_assing[0]['semester_creditsz']=11+$condition_credits; 
                                 }
 
                             }
