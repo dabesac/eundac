@@ -24,6 +24,11 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $where['subid']=base64_decode($this->_getParam('subid'));
             $where['perid']=base64_decode($this->_getParam('perid'));
             $this->view->turno=$where['turno'];
+            $this->view->escid=$where['escid'];
+            $this->view->curid=$where['curid'];
+            $this->view->courseid=$where['courseid'];
+            $this->view->subid=$where['subid'];
+            $this->view->perid=$where['perid'];
             $syl= new Api_Model_DbTable_Syllabus();
             $datsyl=$syl->_getOne($where);
             if (!$datsyl) {

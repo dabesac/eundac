@@ -97,6 +97,8 @@ $strprint = "/record/index/printavence/"
 			$curid_cy=base64_encode($course['curid']);
 			$perid=($course['perid']);
 			$perid_cy=base64_encode($course['perid']);
+			$type_cy=base64_encode($course['type_rate']);
+
 			
 			$urldetaul = "perid/$perid_cy/escid/$escid_cy/subid/$subid_cy/courseid/$courseid_cr/curid/$curid_cy/turno/$turno_cy";
 
@@ -175,12 +177,12 @@ $strprint = "/record/index/printavence/"
 			    <li><a href="<?php echo $urldetaul?>" >Resumen de Notas</a></li>
 			    <li><a href="/record/index/printconstancy/<?php echo $urldetaul?>">Constancia</a></li>
 			    <li class="divider"></li>
-			    <li><a href="<?php echo $urldetaul?>">Acta</a></li>
-			    <li><a href="<?php echo $urldetaul?>">Acta Reverso</a></li>
+			    <li><a href="/record/index/printrecord/<?php echo $urldetaul?>">Acta</a></li>
+			    <li><a href="/record/index/backrecord/<?php echo $urldetaul?>">Acta Reverso</a></li>
 			    <li><a href="<?php echo $urldetaul?>">Acta sin Notas</a></li>
 			    <li class="divider"></li>
-			    <li><a href="<?php echo $urldetaul?>">Registro</a></li>
-			    <li><a href="<?php echo $urldetaul?>">Regitro Reverso</a></li>
+			    <li><a href="/record/index/printregister/<?php echo $urldetaul?>/type/<?php echo $type_cy?>">Registro</a></li>
+			    <li><a href="/record/index/backregister/<?php echo $urldetaul?>">Regitro Reverso</a></li>
 			    <li><a href="<?php echo $urldetaul?>">Registro sin Notas</a></li>
 			    <li><a href="<?php echo $urldetaul?>">Registro sin Procentaje	</a></li>
 

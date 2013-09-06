@@ -51,4 +51,27 @@ class Api_Model_DbTable_UserInfoTeacher extends Zend_Db_Table_Abstract
 			print "Error: Read One UserInfo ".$e->getMessage();
 		}
 	}
+
+	public function _getFilter($where=null,$attrib=null,$orders=null){
+		try{
+			if($where['eid']=='' || $where['oid']=='') return false;
+				$select = $this->_db->select();
+				if ($attrib=='') $select->from("base_user_infoteacher");
+				else $select->from("base_user_infoteacher",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				if ($orders<>null || $orders<>"") {
+					if (is_array($orders))
+						$select->order($orders);
+				}
+				
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+		}catch (Exception $e){
+			print "Error: Read Filter UserInfo ".$e->getMessage();
+		}
+	}
 }

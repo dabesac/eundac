@@ -1,0 +1,230 @@
+<?php
+$acls=null; 
+$sesion  = Zend_Auth::getInstance();
+if(!$sesion->hasIdentity() ){
+	echo "ingreso no permitido";
+	Header ("Location: /");
+	exit();
+}
+
+$moduleName = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+$controllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+$url = strtolower("$moduleName/$controllerName");
+// Set ACL for ROL
+$login = $sesion->getStorage()->read();
+
+switch ($login->infouser['typedoc']){
+	case "D": $typedoc = "DNI";break;	
+	case "P": $typedoc = "Pasaporte";break;
+	case "O": $typedoc = "Otros";break;
+}
+$fullname= $login->infouser['fullname'];
+$numberdoc= $login->infouser['numdoc'];
+$speciality = $login->speciality->name;
+$code= $login->uid;
+$rid= $login->rid;
+$acls = $login->acls;
+$resource1 = $login->resources;
+
+$resource1[]="index/salir";
+$resource1[]="index/cerrar";
+$resource1[]="docente/index";
+$resource1[]="alumno/index";
+$resource1[]="rfacultad/index";
+$resource1[]="syllabus/syllabus";
+$resource1[]="register/deferred";
+$resource1[]="curricula/curricula";
+$resource1[]="profile/search";
+$resource1[]="profile/changecurricula";
+
+
+
+//print_r($resource1);
+
+if (!in_array($url, $resource1)) header("Location: /error/");
+$info = $login;
+$urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
+escid/".base64_encode($info->escid)."/eid/".base64_encode($info->eid)."/
+oid/".base64_encode($info->oid)."/subid/".base64_encode($info->subid)."/
+pid/".base64_encode($info->pid);
+ 
+/*foreach ($acls as $a){
+	$racls = $a['acls'];
+	foreach ($racls as $ff){
+		if (!in_array($url, $ff)) header("Location: /");
+	}
+}*/
+?>
+
+<?php echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+
+    <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <?php echo $this->headMeta(); ?>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headScript(); ?> 
+        <?php echo $this->headLink(); ?>
+        
+   		<link rel="stylesheet" type="text/css" href="/css/maquetacion.css">
+   		<link rel="stylesheet" type="text/css" href="/css/style.css">
+   		<!-- Texto Enriquecido-->
+   		<link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
+        <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
+   		
+    <script type="text/javascript">
+<!--
+/*jQuery time*/
+$(document).ready(function(){
+	$("#accordian h3").click(function(){
+		//slide up all the link lists
+		$("#accordian ul ul").slideUp();
+		//slide down the link list below the h3 clicked - only if its closed
+		if(!$(this).next().is(":visible"))
+		{
+			$(this).next().slideDown();
+		}
+	})
+})
+//-->
+</script>
+    </head>
+ <body>
+<!--[if IE]>
+	<div class="mensaje">
+                Estas utilizando una version obsoleta del navegador Internet Explorer el sitema no se vera
+                correctamente. Actualiza o descarga un nuevo navegador como este <a href="https://www.google.com/chrome?hl=es">Google Chrome</a>.
+    </div>
+<?php //exit();?>
+<![endif]-->
+
+<div class="row" style="padding: 0px; margin: 0px" >
+	<div class="col-sm-2 control-top">
+		<div class="logo"><a href="/"><img src="/img/logo_03.png" ></a></div>
+		<div id="accordian">
+		    	<ul>
+		    		<li>
+		    			<h3>
+		    			<img src="/img/img2_03.jpg" class="img-rounded"> <b>MI PERFIL</b>
+		    			</h3>
+					</li>
+					<li>
+						<h5><strong style="color: #fff; font-size: 17px"><?php echo $fullname?></strong></h5>
+					</li>
+					<li style="margin-left:10px">
+					<?php echo $typedoc?>: <strong><?php echo $numberdoc?></strong>  <br>
+					CÓDIGO<strong> : <?php echo $code?></strong>
+					
+					</li>
+						<?php if ($rid=='AL') {
+						?>
+						<li><H3>
+						<a href="<?php echo $urlrecord?>" style="color: #fff">Record Notas</a>
+						</li></H3>
+						<?php 
+						}
+						?>
+				</ul>
+		</div>	 
+		
+	    <?php 
+	    if ($acls){
+	    ?>
+	    <div id="accordian">
+	    	<ul>
+			<?php 
+		    foreach ($acls as $acl){
+			$module = $acl['module'];
+		    ?>
+				<li>
+					<h3><span class="icon-dashboard"></span><b>
+				<?php echo strtoupper($acl['name'])?></b></h3>
+					<ul>
+					<?php
+					$tacls = $acl['acls'];
+					foreach ($tacls as $tacl){
+						$resource = $tacl['controller'];
+						?>
+					    <li><a href="<?php echo "/$resource"?>">
+					    <?php echo strtoupper($tacl['name'])?>
+					    </a></li>
+						<?php 
+					} 
+					?>
+					</ul>
+				</li>
+		    <?php 
+			}
+		    ?>	    			
+			</ul>
+		</div>
+	    <?php } ?>
+	</div>
+	<div class="col-sm-10" style="margin:0px; padding: 0px">
+		<div class="col-sm-12 header-top" > 
+			<h3 class="nav pull-left" >Universidad Nacional Daniel Alcides Carrión</h3>
+			<ul class="nav navbar-nav pull-right" style="padding-top: 10px">
+			  	<li class='dropdown'>
+					<div class="btn-group">
+						<button class="dropdown-toggle btn btn-info" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-cog"></span>
+						</button>
+						<ul class="dropdown-menu" style="margin-left: -130px;" >
+							<!-- <li><a href="/index/changepassword">Cambiar Contraseña</a></li>
+							<li><a href="#">Ver mi perfil</a></li>
+							<li><a href="#"></a></li>
+							<li class="divider"></li>
+							 -->
+						</ul>
+					</div>
+				</li>
+				<li>
+					<div class="btn-group">
+						<a class="btn btn-danger" href="/index/salir">Salir <span class="glyphicon glyphicon-log-out"></span></a>
+					</div>
+				</li>
+			</ul>	
+		</div>
+		<div class="col-sm-12 header-middle" > 
+			<div class='pull-left'><p><strong>ADSCRITO A </strong> <?php echo mb_strtoupper($speciality, 'UTF-8');?></p></div>
+	    	<div class='pull-right'>
+	    	<?php 
+			if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
+				<form name="buscausuario" class="form-inline" role="form" action="/profile/search">
+					<div class="col-lg-6" style="margin:0px;padding: 0px;"> 
+				        <input type="text" name="nombre" class="form-control input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" required>
+				    </div>
+				    <div class="col-lg-4" style="margin:0px;padding: 0px;">
+				        <select name="rid" class="form-control " >
+				        	<option value="AL">Alumno</option>
+				        	<option value="DC">Docente</option>
+				        	<option value="EG">Egresado</option>
+				      	</select>
+				  	</div>
+				  	<div class="col-lg-2" style="margin:0px;padding: 0px;">
+				    <input type="submit"  class="btn btn-success" >
+				    </div>
+				</form>			
+				
+			<?php } ?>
+	    	</div>
+		</div>
+		<div class="col-sm-12 header-center"> 
+			<div class="panel panel-default">
+		    	<?php print $this->layout()->content; ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="col-sm-12 footer">
+Universidad Nacional Daniel Alcides Carrión - Cerro de Pasco - Perú | 
+Oficina de Informáctica y Estadística - <a href="mail: informatica@undac.edu.pe">informatica@undac.edu.pe</a>
+</div>
+
+</body>
+</html>
