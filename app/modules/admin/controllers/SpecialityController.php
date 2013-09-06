@@ -46,7 +46,6 @@ class Admin_SpecialityController extends Zend_Controller_Action{
 			$where['state']='A';
 			$filter=new Api_Model_DbTable_Speciality();
 			$data=$filter->_getFilter($where);
-			// $data=$filter->_getFilter(array("eid" => $eid, "oid" => $oid,"facid" =>$facid,"state" =>$state));
 			$this->view->data=$data;			
 		} catch (Exception $e) {
 			print "Error: get Faculty".$e->getMessage();
