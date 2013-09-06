@@ -37,6 +37,7 @@ class Admin_Form_Personnew extends Zend_Form{
         $typedoc->setLabel("Ingrese el Tipo de Documento: ");
         $typedoc->removeDecorator('Label');
         $typedoc->setAttrib('class','form-control');
+        $typedoc->addMultiOption('','- Seleccione -');
         $typedoc->addMultiOption('D',"DNI");
         $typedoc->addMultiOption('P',"Pasaporte");
 
@@ -55,6 +56,7 @@ class Admin_Form_Personnew extends Zend_Form{
         $civil =new Zend_Form_Element_Select('civil');
         $civil->setRequired(true)->addErrorMessage('Este campo es requerido');
         $civil->setAttrib('class','form-control');
+        $civil->addMultiOption('','- Seleccione -');
         $civil->addMultiOption("S","Soltero");
         $civil->addMultiOption("C","Casado");
         $civil->addMultiOption("V","Viudo");
@@ -65,8 +67,9 @@ class Admin_Form_Personnew extends Zend_Form{
         $sex =new Zend_Form_Element_Select('sex');
         $sex->setRequired(true)->addErrorMessage('Este campo es requerido');
         $sex->setAttrib('class','form-control');
-        $sex->addMultiOption("F","Femenino");
+        $sex->addMultiOption('','- Seleccione -');
         $sex->addMultiOption("M","Masculino");
+        $sex->addMultiOption("F","Femenino");
         $sex->removeDecorator('Label')->removeDecorator("HtmlTag");
 
         $mail_person = new Zend_Form_Element_Text('mail_person');
@@ -99,19 +102,19 @@ class Admin_Form_Personnew extends Zend_Form{
         $address->setAttrib("title","Ingrese su dirección")->addValidator("alpha",true);
 
         $photografy  = new Zend_Form_Element_File('photografy');
-        $photografy ->setLabel('subir foto');
         $photografy->setAttrib('class','form-control');
+        $photografy->setAttrib("size", "10");
         $photografy ->addValidator('Extension',false,'jpg,png,gif,jpeg,plain,doc,docx');
         $photografy->addValidator('Size', false, '10024000');
-        $photografy->setAttrib("size", "10");
+        $photografy ->setLabel('subir foto');
     
-        $send = new Zend_Form_Element_Submit('send');
+        $send = new Zend_Form_Element_Submit('Guardar');
         $send->removeDecorator('HtmlTag');
         $send->removeDecorator('Label')->removeDecorator('DtDdWrapper');
         $send->removeDecorator('Label')->removeDecorator("HtmlTag");
         $send->setAttrib('class', 'btn btn-success');
         
-        $this->addElements(array($pid,$first_name,$last_name0,$last_name1,$typedoc,$numdoc,$birthday,$sex,$civil,$mail_person,$mail_work,$phone,$cellular,$address,$send)); 
+        $this->addElements(array($pid,$first_name,$last_name0,$last_name1,$typedoc,$numdoc,$birthday,$sex,$civil,$mail_person,$mail_work,$phone,$cellular,$address,$photografy,$send)); 
 
     }
 }

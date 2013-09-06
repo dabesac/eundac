@@ -97,7 +97,7 @@ ob_start();
   $mpdf=new mPDF('win-1252','A4','','',15,15,40);
   ob_end_clean();
   $mpdf -> WriteHTML($html);
-  $mpdf->Output('Matricula-'.'.pdf','D');
+  // $mpdf->Output('Matricula-'.'.pdf','D');
   
 ?>
 <style type="text/css">

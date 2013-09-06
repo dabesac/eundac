@@ -48,8 +48,35 @@ class Admin_PersonController extends Zend_Controller_Action{
 
  	public function newAction(){
  		try {
+ 			$eid=$this->sesion->eid;
+ 			$oid=$this->sesion->oid;
+ 			$register=$this->sesion->uid;
  			$fm=new Admin_Form_Personnew();
  			$this->view->fm=$fm;
+ 			if ($this->getRequest()->isPost())
+            {
+                $frmdata=$this->getRequest()->getPost();
+                // print_r($frmdata);
+                    print_r($frmdata);exit();
+                if ($fm->isValid($frmdata))
+                {                    
+                    unset($frmdata['send']);
+                    trim($frmdata['last_name0']);
+                    trim($frmdata['last_name1']);
+                    trim($frmdata['first_name']);
+                    $frmdata['eid']=$eid;
+                    $frmdata['oid']=$oid;
+                    $frmdata['created']=date('Y-m-d h:m:s'); 
+                    $frmdata['register']=$register;                  
+                    $reg_= new Api_Model_DbTable_Person();
+                    $reg_->_save($frmdata);
+                    $this->_redirect("/admin/person/");                           
+                }
+                else
+                {
+                    echo "Ingrese nuevamente por favor";
+                }
+            }
  			
  		} catch (Exception $e) {
  			print "Error: new Person".$e->getMessage();

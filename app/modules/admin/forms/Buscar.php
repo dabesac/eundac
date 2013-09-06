@@ -17,8 +17,13 @@ class Admin_Form_Buscar extends Zend_Form{
         $name->removeDecorator('Label')->removeDecorator('HtmlTag')->removeDecorator('Label');
         $name->setAttrib('maxlength'.'40')->setAttrib('size','40');
         $name->setAttrib('class','form-control');
+
+        $uid= new Zend_Form_Element_Text('uid');
+        $uid->removeDecorator('Label')->removeDecorator('HtmlTag')->removeDecorator('Label');
+        $uid->setAttrib('maxlength'.'40')->setAttrib('size','40');
+        $uid->setAttrib('class','form-control');
         // $name->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
 
-        $this->addElements(array($pid,$name));
+        $this->addElements(array($pid,$name,$uid));
     }
 }
