@@ -175,7 +175,7 @@ class RegisternotesactasController extends Zend_Controller_Action{
 				$pk['perid']=$perid[$i];
 				$data['notafinal']=$notafinal[$i];
 				$mat= new Api_Model_DbTable_Registrationxcourse();
-				$mat->_update($data,$pk);
+				$mat->_updatenoteregister($data,$pk);
 				if ($i==$tam-1) $this->view->bandera=1;
 			}
 		} catch (Exception $e) {
