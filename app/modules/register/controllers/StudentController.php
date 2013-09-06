@@ -852,7 +852,7 @@ class Register_StudentController extends Zend_Controller_Action {
 				);
 				$regmatr = $matricula->_getRegister($wheremat);
 
-				if ($regmatr) $this->view->semid = $regmatr['semid'];
+				if ($regmatr) $this->view->regmatr = $regmatr;
 
                 // $attrib =array('pid','last_name0');
 
