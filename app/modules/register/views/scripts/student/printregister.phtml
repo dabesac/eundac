@@ -9,7 +9,7 @@ $header='
         <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
         <th style="text-align: center; font-size: 11px;">
         FACULTAD DE '.strtoupper($this->faculty).'<br/>
-        ESCUELA DE  '.strtoupper($this->speciality).' 
+        ESCUELA DE  '.strtoupper($this->speciality).'<br/> 
         </th>        
     </tr>
     <tr>
@@ -23,7 +23,7 @@ $header='
         <th style="text-align: left;">Alumno:</th>
         <th style="text-align: left;">'.strtoupper($this->fullname).'</th>
         <th style="text-align: left;">Semestre :</th>
-        <th style="text-align: left;">'.strtoupper($this->semid).'</th>
+        <th style="text-align: left;">'.strtoupper($this->regmatr['semid']).'</th>
     </tr>   
 </table>
 '    
@@ -32,7 +32,7 @@ $header='
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
 
-<table style="width:100%; text-align:center; margin-top: 10px;" border="1">
+<table style="width:100%; text-align:center; margin-top: 10px;">
         <tr>
             <th class='small'>Código Curso</th>
             <th >Nombre Curso</th>
@@ -46,14 +46,20 @@ $header='
             <tr>
                 <td><?php echo $value['courseid']?></td>
                 <td><?php echo $value['name']?></td>
-                <td><?php echo $value['type']?></td>
+                <td><?php if ($value['type']=='O') echo "Obligatorio";
+                            elseif ($value['type']=='E') echo "Electivo";?></td>
                 <td><?php echo $value['credits']?></td>
                 <td><?php echo $value['semid']?></td>
                 <td><?php echo $value['turno']?></td>
                 <td><?php echo $value['name_t']?></td>
             </tr>
         <?php }?>
-      
+        <tr >
+            <td style='border: 0px; solid #fff;'></td>
+            <td style='border: 0px; solid #fff'></td>
+            <td border='0'>Total</td>
+            <td border='0'><strong><?php echo $this->regmatr['credits']?></strong></td>
+        </tr>
 </table>
 
 <?php 

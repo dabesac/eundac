@@ -2,14 +2,18 @@
 class Admin_SpecialityController extends Zend_Controller_Action{
 
 	public function init(){
-		$this->eid='20154605046';
-		$this->oid='1';
-	}
+ 		$sesion  = Zend_Auth::getInstance();
+ 		if(!$sesion->hasIdentity() ){
+ 			$this->_helper->redirector('index',"index",'default');
+ 		}
+ 		$login = $sesion->getStorage()->read();
+ 		$this->sesion = $login;
+ 	}
 
 	public function indexAction(){
 		try {
-			$where['eid']=$this->eid;
-			$where['oid']=$this->oid;
+			$where['eid']=$this->sesion->eid;
+			$where['oid']=$this->sesion->oid;
 			$form= new Admin_Form_Speciality();
 			$this->view->form=$form;
 			// $list=new Api_Model_DbTable_Speciality();
@@ -23,8 +27,8 @@ class Admin_SpecialityController extends Zend_Controller_Action{
 	public function getspecialityAction(){
 		try {
 			$this->_helper->layout()->disableLayout();
-			$where['eid']=$this->eid;
-			$where['oid']=$this->oid;
+			$where['eid']=$this->sesion->eid;
+			$where['oid']=$this->sesion->oid;
 			$where['facid']=$this->_getParam('facid');
 			$where['state']='A';
 			$filter=new Api_Model_DbTable_Speciality();
@@ -40,13 +44,12 @@ class Admin_SpecialityController extends Zend_Controller_Action{
 	public function getfacultyAction(){
 		try {
 			$this->_helper->layout()->disableLayout();
-			$where['eid']=$this->eid;
-			$where['oid']=$this->oid;
+			$where['eid']=$this->sesion->eid;
+			$where['oid']=$this->sesion->oid;
 			$where['facid']=$this->_getParam('facid');
 			$where['state']='A';
 			$filter=new Api_Model_DbTable_Speciality();
 			$data=$filter->_getFilter($where);
-			// $data=$filter->_getFilter(array("eid" => $eid, "oid" => $oid,"facid" =>$facid,"state" =>$state));
 			$this->view->data=$data;			
 		} catch (Exception $e) {
 			print "Error: get Faculty".$e->getMessage();
@@ -55,8 +58,9 @@ class Admin_SpecialityController extends Zend_Controller_Action{
 
 	public function newAction(){
 		try {
-			$eid=$this->eid;
-			$oid=$this->oid;
+			$eid=$this->sesion->eid;
+			$oid=$this->sesion->oid;
+			$register=$this->sesion->uid;
 			$form= new Admin_Form_Speciality();
 			$this->view->form=$form;
             if ($this->getRequest()->isPost())
@@ -72,7 +76,7 @@ class Admin_SpecialityController extends Zend_Controller_Action{
                     $frmdata['eid']=$eid;
                     $frmdata['oid']=$oid;
                     $frmdata['created']=date('Y-m-d h:m:s'); 
-                    $frmdata['register']='000XXX';                  
+                    $frmdata['register']=$register;                  
                     $reg_= new Api_Model_DbTable_Speciality();
                     // print_r($frmdata);
                     $reg_->_save($frmdata);
@@ -92,8 +96,9 @@ class Admin_SpecialityController extends Zend_Controller_Action{
 
 	public function updateAction(){
 		try {
-			$eid=$this->eid;
-			$oid=$this->oid;
+			$eid=$this->sesion->eid;
+			$oid=$this->sesion->oid;
+			$modified=$this->sesion->uid;
 			$escid=base64_decode($this->_getParam('escid'));
 			$subid=base64_decode($this->_getParam('subid'));
 			$spc=new Api_Model_DbTable_Speciality();
@@ -115,7 +120,7 @@ class Admin_SpecialityController extends Zend_Controller_Action{
                     trim($frmdata['name']);
                     trim($frmdata['abbreviation']);
                     $frmdata['updated']=date('Y-m-d h:m:s'); 
-                    $frmdata['modified']='000XXX';
+                    $frmdata['modified']=$modified;
                     $pk['eid']=$eid;
                     $pk['oid']=$oid; 
                     $pk['escid']=$escid;
@@ -137,8 +142,8 @@ class Admin_SpecialityController extends Zend_Controller_Action{
 	}
 
 	public function deleteAction(){
-		$eid=$this->eid;
-		$oid=$this->oid;
+		$eid=$this->sesion->eid;
+		$oid=$this->sesion->oid;
 		$escid=base64_decode($this->_getParam('escid'));
 		$subid=base64_decode($this->_getParam('subid'));
 		$data['eid']=$eid;

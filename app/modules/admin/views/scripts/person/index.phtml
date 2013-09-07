@@ -1,0 +1,57 @@
+<form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/admin/person/getperson" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+    <table class="table span9 table-striped table-bordered table-condensed">
+        <tr >
+            <td colspan="2" style='font-size:25px; background: #1e83cb; color: #fff;'><center>GESTIÓN PERSONA</center></td>
+        </tr>
+    </table>
+    <table class="table span9 table-striped table-bordered table-condensed">
+        <tr>
+            <td colspan='2'><a href="/admin/person/new" style='float:right' class='btn btn-info'><span class='glyphicon glyphicon-pencil'></span> Nueva Persona</a></td>
+        </tr>
+        <tr>
+            <td><center>DNI</center></td>
+            <td><center>Nombres y Apellidos</center></td>
+        </tr>
+        <tr>                    
+            <td><center><div style='width: 200px'><?php echo $this->fm->pid ?></center></td>
+            <td><center><div style='width: 400px'><?php echo $this->fm->name ?></center></td>
+        </tr>
+    </table>
+</form>
+<div  id="cargadatos_"></div> 
+<script>
+    $("#name, #pid").keypress(function (e) {
+        if(e == 13 || e.which==13 || e.which==0){
+            var codi =  $('#pid').val();
+            var nom =  $('#name').val();
+            count=codi.length;
+            if (count==8 || count==0)
+            {
+                $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
+                $("#frmFiltroDoc").submit();
+            }
+            else
+            {
+                alert("Ingrese un DNI valido");
+                $('#pid').val('');
+            }
+        }
+    });
+    
+    $("#frmFiltroDoc").submit(function(){
+        $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(data) {                        
+            $('#cargadatos_').html(data);                                 
+            }
+        }); 
+        return false;
+    });
+
+function validNumber(e) {
+    var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
+    return ((tecla > 47 && tecla < 58) || tecla == 8);
+    }    
+</script>

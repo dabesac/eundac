@@ -89,7 +89,7 @@ $header='
   
   $mpdf=new mPDF('win-1252','A4','','',15,15,40);
   $mpdf->SetHTMLHeader($header);
-  // $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
   
   $mpdf->SetFooter($this->footer);
   ob_end_clean();

@@ -94,7 +94,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 			$select = $this->_db->select()
 			->from(array('p' => 'base_person'),array('p.pid','p.typedoc','numdoc','p.last_name0','p.last_name1','p.first_name','p.birthday','p.photografy'))
 				->join(array('u' => 'base_users'),'u.eid= p.eid and u.pid=p.pid', 
-						array('u.uid','u.uid','u.escid','u.eid','u.oid','u.subid'))
+						array('u.uid','u.escid','u.eid','u.oid','u.subid','u.rid','u.state'))
 				->where('u.eid = ?', $where['eid'])
 				->where('u.oid = ?', $where['oid'])
 				->where('u.uid = ?', $where['uid'])
@@ -222,6 +222,24 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
                inner join base_person as p
                on u.pid=p.pid and u.eid=p.eid
                where u.eid='$eid' and u.oid ='$oid' and (u.rid<>'AL' and u.rid<>'DC') and u.state='A' and upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nom%'
+               order by p.last_name0,p.last_name1,p.first_name
+            ");
+            $row=$sql->fetchAll();
+           return $row;  
+        }catch (Exception $ex) {
+            print "Error: Retornando los datos del alumno deacuerdo a una palabra ingresada".$ex->getMessage();
+        }
+    }
+
+    /*PENDIENTE */
+    public function _getUserXnameXsinRolAll($nom='',$eid='',$oid=''){
+        try{
+            $sql=$this->_db->query("
+               select last_name0 || ' ' || last_name1 || ', ' || first_name as nombrecompleto
+               ,u.uid,u.rid,u.state,u.subid,u.eid,u.oid,u.escid,u.pid,p.first_name,p.last_name0,p.last_name1,u.escid from base_users as u
+               inner join base_person as p
+               on u.pid=p.pid and u.eid=p.eid
+               where u.eid='$eid' and u.oid ='$oid' and upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nom%'
                order by p.last_name0,p.last_name1,p.first_name
             ");
             $row=$sql->fetchAll();

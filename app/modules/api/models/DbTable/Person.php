@@ -79,6 +79,21 @@ public function _getAll($where,$order='',$start=0,$limit=0){
 		}
 	}
 
+	/*------------------PENDIENTE--------------------------*/
+	public function _getPersonxname($nom='',$eid=''){
+        try{
+            if ($eid=='' || $nom=='') return false;
+            $sql=$this->_db->query("
+               select eid,pid,first_name,last_name0,last_name1,address from base_person 
+               where eid='$eid' AND upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nom%'
+            ");
+           $row=$sql->fetchAll();
+           return $row;  
+        }catch (Exception $ex) {
+            print "Error: get Person".$ex->getMessage();
+        }
+    }
+
 
 	// public function _getFilter($atrib=array()){
 	// 	try{
