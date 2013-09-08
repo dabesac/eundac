@@ -35,9 +35,6 @@ input.error {
 	font-size: 10px;
 }
 
-
-
-
 .control-top{
 	background: url(../img/left.png) #AEB7DB ;
 	padding: 0px;
@@ -55,7 +52,7 @@ input.error {
 .header-middle{
 	background-color: #e0e0e0 !important;
 	height: 40px;
-	padding-top: 10px;
+	padding-top: 5px;
 	border-bottom: 2px solid #1e83cb;
 }
 
