@@ -13,13 +13,16 @@ class Docente_NotasController extends Zend_Controller_Action{
 
 	public function indexAction(){
 		// Periods Now
+		$where['eid']=$this->sesion->eid;
+		$where['oid']=$this->sesion->oid;
 		$where['uid']=$this->sesion->uid;
+		$where['pid']=$this->sesion->pid;
 		$where['perid']=$this->sesion->period->perid;
-		$where['rid']=$this->sesion->rid;
 		$where['is_main']='S';
 		$this->view->perid= $this->sesion->period->perid;
 		$docente = new Api_Model_DbTable_PeriodsCourses();
 		$data = $docente->_getCourseTeacher($where);
+		
 		$l=count($data);
 		$faculty=array();
 
@@ -40,11 +43,10 @@ class Docente_NotasController extends Zend_Controller_Action{
 		// Periods Later
 		$where['uid']=$this->sesion->uid;
 		$where['perid']="13D";
-		$where['rid']=$this->sesion->rid;
 		$where['is_main']='S';
 		$docente_ = new Api_Model_DbTable_PeriodsCourses();
 		$data_ = $docente_->_getCourseTeacher($where);
-		$l_=count($data_);
+		 $l_=count($data_);
 		$faculty_=array();
 		
 		$a_=0;

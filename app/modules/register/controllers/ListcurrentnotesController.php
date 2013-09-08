@@ -21,7 +21,7 @@ class Register_ListcurrentnotesController extends Zend_Controller_Action {
     		$subid=$this->sesion->subid;
     		$pid=$this->sesion->pid;
     		$uid=$this->sesion->uid;
-    		$perid="12A";$this->sesion->period->perid;
+    		$perid=$this->sesion->period->perid;
     		$dbcoursescp=new Api_Model_DbTable_Registrationxcourse();
             $dbtyperate=new Api_Model_DbTable_PeriodsCourses();
     		$where=array("eid"=>$eid, "state"=>"M",
