@@ -105,7 +105,9 @@ class IndexController extends Zend_Controller_Action {
     								"pid"=>$data->pid,"escid"=>$data->escid,"subid"=>$data->subid));
     				$full = $row[0]['last_name0']." ".$row[0]['last_name1'].", ".$row[0]['first_name'];
     				$row[0]['fullname']=$full;
+    				$data->sex=$row[0]['sex'];
     				$data->infouser=$row[0];
+    				
     				$rols_ = new Api_Model_DbTable_Rol();
     				$rol_ = $rols_->_getOne(array("eid"=>$data->eid,"oid"=>$data->oid,"rid"=>$data->rid));
     				if ($rol_)

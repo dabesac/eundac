@@ -23,6 +23,7 @@ $numberdoc= $login->infouser['numdoc'];
 $speciality = $login->speciality->name;
 $code= $login->uid;
 $rid= $login->rid;
+$sex= $login->sex;
 $acls = $login->acls;
 $resource1 = $login->resources;
 
@@ -37,9 +38,9 @@ $resource1[]="curricula/curricula";
 $resource1[]="profile/search";
 $resource1[]="profile/changecurricula";
 $resource1[]="admin/user";
+$resource1[]="default/logaccess";
+$resource1[]="default/rss";
 $resource1[]="admin/person";
-
-//print_r($resource1);
 
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
@@ -105,31 +106,17 @@ $(document).ready(function(){
 	<div class="col-sm-2 control-top">
 		<div class="logo"><a href="/"><img src="/img/logo_03.png" ></a></div>
 		<div id="accordian">
-		    	<ul>
-		    		<li>
-		    			<h3>
-		    			<img src="/img/img2_03.jpg" class="img-rounded"> <b>MI PERFIL</b>
-		    			</h3>
-					</li>
-					<li>
-						<h5><strong style="color: #fff; font-size: 17px"><?php echo $fullname?></strong></h5>
-					</li>
-					<li style="margin-left:10px">
-					<?php echo $typedoc?>: <strong><?php echo $numberdoc?></strong>  <br>
-					CÓDIGO<strong> : <?php echo $code?></strong>
-					
-					</li>
-						<?php if ($rid=='AL') {
-						?>
-						<li><H3>
-						<a href="<?php echo $urlrecord?>" style="color: #fff">Record Notas</a>
-						</li></H3>
-						<?php 
-						}
-						?>
-				</ul>
-		</div>	 
-		
+			<ul>
+		    	<li><h3><a href="/" style="color: #fff">INICIO</a></h3></li>
+		    	
+	    	<?php if ($rid=='AL') {
+			?>
+				<li><h3><a href="<?php echo $urlrecord?>" style="color: #fff">Record Notas</a></h3></li>
+			<?php 
+			}
+			?>
+			</ul>
+		</div>		
 	    <?php 
 	    if ($acls){
 	    ?>
@@ -189,8 +176,14 @@ $(document).ready(function(){
 			</ul>	
 		</div>
 		<div class="col-sm-12 header-middle" > 
-			<div class='pull-left'><p><strong>ADSCRITO A </strong> <?php echo mb_strtoupper($speciality, 'UTF-8');?></p></div>
+			<div class='pull-left'>
+				<p> <img src="/img/<?php echo $sex?>.jpg" class="img-rounded">
+				<strong style="color: #24348D; font-size: 17px;"><?php echo mb_strtoupper($fullname, 'UTF-8')?> | </strong>
+				<strong style="color: #000; font-size: 16px;"> ADSCRITO ESCUELA 
+				<?php echo mb_strtoupper($speciality, 'UTF-8');?> </strong></p>
+			</div>
 	    	<div class='pull-right'>
+	    	
 	    	<?php 
 			if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
 				<form name="buscausuario" class="form-inline" role="form" action="/profile/search">
