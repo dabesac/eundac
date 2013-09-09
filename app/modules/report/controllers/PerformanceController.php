@@ -7,9 +7,9 @@
  			$this->_helper->redirector('index',"index",'default');
  		}
  		$login = $sesion->getStorage()->read();
- 		if (!$login->rol['module']=="report"){
- 			$this->_helper->redirector('index','index','default');
- 		}
+ 		if (($login->infouser['teacher']['is_director']<>"S")){
+    		$this->_helper->redirector('index','error','default');
+    	}
     $this->sesion = $login;
  	}
 

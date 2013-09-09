@@ -41,6 +41,7 @@ $resource1[]="admin/user";
 $resource1[]="default/logaccess";
 $resource1[]="default/rss";
 $resource1[]="admin/person";
+$resource1[]="profile/index";
 
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
@@ -74,8 +75,7 @@ pid/".base64_encode($info->pid);
         <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
         <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
         <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
-        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
-   		
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>  		
     <script type="text/javascript">
 <!--
 /*jQuery time*/
@@ -101,54 +101,67 @@ $(document).ready(function(){
     </div>
 <?php //exit();?>
 <![endif]-->
-
 <div class="row" style="padding: 0px; margin: 0px" >
 	<div class="col-sm-2 control-top">
-		<div class="logo"><a href="/"><img src="/img/logo_03.png" ></a></div>
-		<div id="accordian">
-			<ul>
-		    	<li><h3><a href="/" style="color: #fff">INICIO</a></h3></li>
-		    	
-	    	<?php if ($rid=='AL') {
-			?>
-				<li><h3><a href="<?php echo $urlrecord?>" style="color: #fff">Record Notas</a></h3></li>
-			<?php 
-			}
-			?>
-			</ul>
-		</div>		
-	    <?php 
+		<div class="logo">
+			<a href="/"><img src="/img/logo_03.png" ></a>
+		</div>
+			
+		<?php 
 	    if ($acls){
 	    ?>
-	    <div id="accordian">
-	    	<ul>
+	    <hr>
+		<div id="slider">
+			<ul>
+				<li class="titulo">
+					<span class="glyphicon glyphicon-home"></span>
+					<a href="/">INICIO</a>
+				</li>
+				<?php 
+				if ($rid=='AL') {
+				?>
+				<li>
+				<a href="<?php echo $urlrecord?>" class="titulo">
+				<span class="glyphicon glyphicon-file"></span>
+				Record Notas
+				</a>
+				</li>
+				<?php 
+				}
+				?>
 			<?php 
 		    foreach ($acls as $acl){
 			$module = $acl['module'];
 		    ?>
-				<li>
-					<h3><span class="icon-dashboard"></span><b>
-				<?php echo strtoupper($acl['name'])?></b></h3>
-					<ul>
-					<?php
+		    	<li>
+		        	<a href="#" class="titulo">
+		        		<span class="glyphicon glyphicon-<?php echo ($acl['imgicon'])?>"></span>
+		        		<?php echo strtoupper($acl['name'])?>
+		        	</a>
+		        	<?php
 					$tacls = $acl['acls'];
 					foreach ($tacls as $tacl){
 						$resource = $tacl['controller'];
 						?>
-					    <li><a href="<?php echo "/$resource"?>">
-					    <?php echo strtoupper($tacl['name'])?>
-					    </a></li>
+						<ul class="cuerpo">
+							<li>
+							<a href="<?php echo "/$resource"?>">
+							<span class="glyphicon glyphicon-<?php echo ($tacl['imgicon'])?>"></span>
+					    	<?php echo strtoupper($tacl['name'])?></a>
+					    	</li>
+					    </ul>
 						<?php 
 					} 
-					?>
-					</ul>
+					?>	
 				</li>
-		    <?php 
+			<?php 
 			}
-		    ?>	    			
+		    ?>
 			</ul>
 		</div>
-	    <?php } ?>
+	    <?php 
+		} 
+		?>
 	</div>
 	<div class="col-sm-10" style="margin:0px; padding: 0px">
 		<div class="col-sm-12 header-top" > 
@@ -176,34 +189,38 @@ $(document).ready(function(){
 			</ul>	
 		</div>
 		<div class="col-sm-12 header-middle" > 
-			<div class='pull-left'>
-				<p> <img src="/img/<?php echo $sex?>.jpg" class="img-rounded">
-				<strong style="color: #24348D; font-size: 17px;"><?php echo mb_strtoupper($fullname, 'UTF-8')?> | </strong>
-				<strong style="color: #000; font-size: 16px;"> ADSCRITO ESCUELA 
-				<?php echo mb_strtoupper($speciality, 'UTF-8');?> </strong></p>
+			<div class='col-sm-6 pull-left'>
+				<p> 
+					<img src="/img/<?php echo $sex?>.jpg" class="img-rounded photoprofile"
+					align="left">					
+					<strong style="color: #24348D; font-size: 17px;"><?php echo mb_strtoupper($fullname, 'UTF-8')?> </strong><br>
+					<strong style="color: #000; font-size: 16px;"> ADSCRITO ESCUELA 
+					<?php echo mb_strtoupper($speciality, 'UTF-8');?> </strong>
+				</p>
 			</div>
-	    	<div class='pull-right'>
 	    	
 	    	<?php 
 			if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
+			<div class='pull-right' style="margin-top: 8px">
 				<form name="buscausuario" class="form-inline" role="form" action="/profile/search">
 					<div class="col-lg-6" style="margin:0px;padding: 0px;"> 
-				        <input type="text" name="nombre" class="form-control input-medium search-query" placeholder="Codigo / Apellidos" title="Codigo / Apellidos" required>
+				        <input type="text" name="nombre" class="form-control input-medium search-query" 
+				        	placeholder="Codigo / Apellidos" title="Codigo / Apellidos" required>
 				    </div>
-				    <div class="col-lg-4" style="margin:0px;padding: 0px;">
+				    <div class="col-lg-3" style="margin: 0px; padding: 0px">
 				        <select name="rid" class="form-control " >
 				        	<option value="AL">Alumno</option>
 				        	<option value="DC">Docente</option>
 				        	<option value="EG">Egresado</option>
 				      	</select>
 				  	</div>
-				  	<div class="col-lg-2" style="margin:0px;padding: 0px;">
-				    <input type="submit"  class="btn btn-success" >
+				  	<div class="col-lg-2" style="margin: 2px; padding: 0px">
+				    <input type="submit"  class="btn btn-success" value="Buscar">
 				    </div>
 				</form>			
-				
+			</div>	
 			<?php } ?>
-	    	</div>
+	    	
 		</div>
 		<div class="col-sm-12 header-center"> 
 			<div class="panel panel-default">
