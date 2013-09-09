@@ -38,7 +38,16 @@ $resource1[]="register/deferred";
 $resource1[]="profile/search";
 $resource1[]="default/logaccess";
 $resource1[]="default/rss";
+
 $resource1[]="default/password";
+
+$resource1[]="report/recordnotas";
+
+
+//print_r($resource1);
+$resource1[]="profile/index";
+
+
 
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
