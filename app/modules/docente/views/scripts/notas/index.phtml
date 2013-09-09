@@ -42,13 +42,12 @@
    	
 ?>
 <div class="panel-group" id="accordion">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $c?>">
-        	        <h5><?php
-                    echo $fname?>
-                    </h5>    	
+    <div class="panel panel-info">
+        <div class="panel-heading ">
+            <h4 class="panel-title ">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $c?>"
+                style="font-size: 18px;">
+        	        <b>FACULTAD <?php echo strtoupper($fname)?></b>                        	
                 </a>
             </h4>
         </div>
@@ -66,6 +65,7 @@
         		      $where['courseid']=$courses['courseid'];
         		      $list= new Api_Model_DbTable_Course();
 	        	      $course=$list->_getOne($where);
+	        	      $urlcampus = "http://campus.undac.edu.pe/";
         		      if ($number['facid']==$courses['facid']) { ?>
         			    <div class='curso'>
                                 <div style='height: 40px'>
@@ -81,23 +81,24 @@
                                     <?php echo $courses['turno']?> 
                                 </div>
                             </div>
-							
-	                            <a class="btn btn-primary disabled" href="#">
+                            <div>
+	                            <a class="btn btn-primary disabled" href="#" data-toggle="tooltip" title="Registrar las Notas">
 	                            Notas
 	                            </a>
-	                            <a class="btn btn-primary disabled" href="#">
+	                            <a class="btn btn-primary disabled" href="#" data-toggle="tooltip" title="Registrar Control de Asistencia">
 	                            Asistencia
 	                            </a>
-	                            <a class="btn btn-primary" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>" >
-	                            Silabo
+	                            <a class="btn btn-primary" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>"
+	                            data-toggle="tooltip" title="Registro del Sílabo" >
+	                            Sílabo
 	                            </a>
-	                            <a class="btn btn-primary disabled" href="#">
-	                            Aplazados
+	                            <a class="btn btn-primary" href="<?php echo $urlcampus?>" target="black" data-toggle="tooltip" title="Ir Campus Virtual eUNDAC">
+	                            Campus
 	                            </a>
-	                            <a class="btn btn-primary disabled" href="#">
+	                            <a class="btn btn-primary disabled" href="#" data-toggle="tooltip" title="Imprimir Registro de Notas">
 	                            <img src="/img/icono_imprimir.png">
 	                            </a>
-                            
+	                      	</div>
         			    </div>
             <?php			
         		}
@@ -108,7 +109,8 @@
   </div>
 </div>
 <?php 
-} 
+}
+/* 
 ?>
 
 <div class="alert alert-danger" style="margin-top:20px;">
@@ -197,4 +199,10 @@ El Sistema para llenar aplazados estara vigente SOLO el día 02/08/2013 a partir
 </div>
 <?php 
 } 
+*/
 ?>
+<script>
+$(function () {
+	$('[data-toggle=tooltip]').tooltip({ placement: 'bottom' }) ;
+});
+</script>

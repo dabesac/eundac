@@ -41,6 +41,7 @@ $resource1[]="admin/user";
 $resource1[]="default/logaccess";
 $resource1[]="default/rss";
 $resource1[]="admin/person";
+$resource1[]="profile/index";
 
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
@@ -74,8 +75,7 @@ pid/".base64_encode($info->pid);
         <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
         <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
         <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
-        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
-   		
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>  		
     <script type="text/javascript">
 <!--
 /*jQuery time*/
@@ -101,54 +101,58 @@ $(document).ready(function(){
     </div>
 <?php //exit();?>
 <![endif]-->
-
 <div class="row" style="padding: 0px; margin: 0px" >
 	<div class="col-sm-2 control-top">
-		<div class="logo"><a href="/"><img src="/img/logo_03.png" ></a></div>
-		<div id="accordian">
-			<ul>
-		    	<li><h3><a href="/" style="color: #fff">INICIO</a></h3></li>
-		    	
-	    	<?php if ($rid=='AL') {
+		<div class="logo">
+			<a href="/"><img src="/img/logo_03.png" ></a>
+		</div>
+			<?php if ($rid=='AL') {
 			?>
 				<li><h3><a href="<?php echo $urlrecord?>" style="color: #fff">Record Notas</a></h3></li>
 			<?php 
 			}
 			?>
-			</ul>
-		</div>		
-	    <?php 
+		<?php 
 	    if ($acls){
 	    ?>
-	    <div id="accordian">
-	    	<ul>
+	    <hr>
+		<div id="slider">
+			<ul>
+				<li class="titulo">
+					<span class="glyphicon glyphicon-home"></span>
+					<a href="/">INICIO</a>
+				</li>
 			<?php 
 		    foreach ($acls as $acl){
 			$module = $acl['module'];
 		    ?>
-				<li>
-					<h3><span class="icon-dashboard"></span><b>
-				<?php echo strtoupper($acl['name'])?></b></h3>
-					<ul>
-					<?php
+		    	<li>
+		        	<a href="#" class="titulo"> <img src="/img/matricula_03.png">
+		        		<?php echo strtoupper($acl['name'])?>
+		        	</a>
+		        	<?php
 					$tacls = $acl['acls'];
 					foreach ($tacls as $tacl){
 						$resource = $tacl['controller'];
 						?>
-					    <li><a href="<?php echo "/$resource"?>">
-					    <?php echo strtoupper($tacl['name'])?>
-					    </a></li>
+						<ul class="cuerpo">
+							<li>
+							<a href="<?php echo "/$resource"?>"><img src="/img/reportes_03.png">
+					    	<?php echo strtoupper($tacl['name'])?></a>
+					    	</li>
+					    </ul>
 						<?php 
 					} 
-					?>
-					</ul>
+					?>	
 				</li>
-		    <?php 
+			<?php 
 			}
-		    ?>	    			
+		    ?>
 			</ul>
 		</div>
-	    <?php } ?>
+	    <?php 
+		} 
+		?>
 	</div>
 	<div class="col-sm-10" style="margin:0px; padding: 0px">
 		<div class="col-sm-12 header-top" > 
