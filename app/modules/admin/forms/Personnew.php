@@ -9,7 +9,7 @@ class Admin_Form_Personnew extends Zend_Form{
         $pid->setAttrib("maxlength", "8");
         $pid->setAttrib('class','form-control');
         $pid->setAttrib("title","Ingrese Dni")->addValidator("digits",true);
-        $pid->setAttrib("onkeypress","return soloNumero(event)");
+        $pid->setAttrib("onkeypress","return validNumber(event)");
     
         $first_name = new Zend_Form_Element_Text('first_name');
         $first_name->setRequired(true)->addErrorMessage('Este campo es requerido');
@@ -46,12 +46,12 @@ class Admin_Form_Personnew extends Zend_Form{
         $numdoc->setAttrib("maxlength", "15");
         $numdoc->setAttrib('class','form-control');
         $numdoc->setAttrib("title","Ingrese el documento")->addValidator("digits",true);
-        $numdoc->setAttrib("onkeypress","return soloNumero(event)");
+        $numdoc->setAttrib("onkeypress","return validNumber(event)");
 
         $birthday = new Zend_Form_Element_Text('birthday');
         $birthday->removeDecorator('Label')->removeDecorator("HtmlTag");
         $birthday->setAttrib('class','form-control');
-        $birthday->setAttrib("title","Dia-mes-año")->addValidator("alpha",true);
+        $birthday->setRequired(true)->addErrorMessage('Este campo es requerido');
 
         $civil =new Zend_Form_Element_Select('civil');
         $civil->setRequired(true)->addErrorMessage('Este campo es requerido');
@@ -87,14 +87,14 @@ class Admin_Form_Personnew extends Zend_Form{
         $phone->setAttrib("title","# de teléfono")->addValidator("digits",true);
         $phone->removeDecorator('Label')->removeDecorator("HtmlTag");
         $phone->setAttrib('class','form-control');
-        $phone->setAttrib("onkeypress","return soloNumero(event)");        
+        $phone->setAttrib("onkeypress","return validNumber(event)");        
 
         $cellular = new Zend_Form_Element_Text('cellular');
         $cellular->setAttrib("maxlength", "15");
         $cellular->setAttrib("title","# de celular")->addValidator("digits",true);
         $cellular->removeDecorator('Label')->removeDecorator("HtmlTag");
         $cellular->setAttrib('class','form-control');
-        $cellular->setAttrib("onkeypress","return soloNumero(event)");
+        $cellular->setAttrib("onkeypress","return validNumber(event)");
 
         $address = new Zend_Form_Element_Text('address');
         $address->removeDecorator('Label')->removeDecorator("HtmlTag");
@@ -114,7 +114,7 @@ class Admin_Form_Personnew extends Zend_Form{
         $send->removeDecorator('Label')->removeDecorator("HtmlTag");
         $send->setAttrib('class', 'btn btn-success');
         
-        $this->addElements(array($pid,$first_name,$last_name0,$last_name1,$typedoc,$numdoc,$birthday,$sex,$civil,$mail_person,$mail_work,$phone,$cellular,$address,$photografy,$send)); 
+        $this->addElements(array($pid,$first_name,$last_name0,$last_name1,$typedoc,$numdoc,$birthday,$sex,$civil,$mail_person,$mail_work,$phone,$cellular,$address,$send)); 
 
     }
 }

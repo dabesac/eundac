@@ -23,9 +23,9 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and pid='".$pk['pid']."' and uid='".$pk['uid']."'";
 			if ($this->update($data, $where)){
 				$campus = new Api_Model_DbTable_Campususer();
-				$where['username']=$pk['uid'];
-				$datac['password'] = $data['password'];
-				if ($campus->_update($where,$data)) return true;
+				$where_ = array("username"=>$pk['uid']);
+				$datac = array("password"=> $data['password']);
+				if ($campus->_update($where_,$datac)) return true;
 			}
 			return false;
 		}catch (Exception $e){
