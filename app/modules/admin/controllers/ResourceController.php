@@ -96,6 +96,7 @@ class Admin_ResourceController extends Zend_Controller_Action {
             	$where=array("eid"=>$eid,"oid"=>$oid,"reid"=>$reid);
             	$dbrec=new Api_Model_DbTable_Resource();
             	$rec=$dbrec->_getOne($where);
+            	$rec['mid']=base64_encode($rec['mid']);
             	if ($rec) $form->populate($rec);
             }
             $this->view->form=$form;

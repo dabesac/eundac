@@ -34,14 +34,11 @@ $resource1[]="alumno/index";
 $resource1[]="rfacultad/index";
 $resource1[]="syllabus/syllabus";
 $resource1[]="register/deferred";
-$resource1[]="curricula/curricula";
+
 $resource1[]="profile/search";
-$resource1[]="profile/changecurricula";
-$resource1[]="admin/user";
 $resource1[]="default/logaccess";
 $resource1[]="default/rss";
-$resource1[]="admin/person";
-$resource1[]="profile/index";
+$resource1[]="default/password";
 
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
@@ -173,7 +170,7 @@ $(document).ready(function(){
 							<span class="glyphicon glyphicon-cog"></span>
 						</button>
 						<ul class="dropdown-menu" style="margin-left: -130px;" >
-							<!-- <li><a href="/index/changepassword">Cambiar Contraseña</a></li>
+							<li><a href="/default/password/change">Cambiar Contraseña</a></li>
 							<li><a href="#">Ver mi perfil</a></li>
 							<li><a href="#"></a></li>
 							<li class="divider"></li>
