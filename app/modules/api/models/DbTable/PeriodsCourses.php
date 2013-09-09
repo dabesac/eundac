@@ -127,7 +127,7 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 
 	public function _getCourseTeacher($where=null){
 		try {
-			if ($where['perid']=='' || $where['rid']=='' || $where['uid']=='' || $where['is_main']=='') return false; 
+			if ($where['perid']=='' || $where['uid']=='' || $where['is_main']=='') return false; 
 
 				$select = $this->_db->select()
 									->distinct()
@@ -143,15 +143,15 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 									->join(array('c'=>'base_courses'),
 												'ct.courseid = c.courseid and ct.escid=c.escid and ct.curid=c.curid and 
 												pc.courseid=c.courseid and pc.escid=c.escid and pc.curid=c.curid')
-									->join(array('u'=>'base_users'),'ct.uid=u.uid')
 									->join(array('s'=>'base_speciality'),'c.escid=s.escid')
 									->join(array('f'=>'base_faculty'),'s.facid=f.facid')
 									->where('ct.is_main = ?',$where['is_main'])
-									->where('ct.uid = ?',$where['uid'])
+									->where('ct.pid = ?',$where['pid'])
+									->where('ct.eid = ?',$where['eid'])
+									->where('ct.oid = ?',$where['oid'])
 									->where('ct.perid = ?',$where['perid'])
-									->where('u.rid = ?',$where['rid'])
 									->order('f.facid');
-
+				
 				$results = $select->query();
 				$rows = $results->fetchAll();
 				if ($rows) return $rows;

@@ -4,7 +4,7 @@ include_once($dir);
 ob_start(); 
 ?> 
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<table  style="font-size:11px; margin-left: 90px; margin-bottom: 0px; " >     
+<table  style="font-size:11px; margin-left: 125px; margin-bottom:85px" >     
     <tr>
     	<td ><?php echo $this->facultad;?></td>         
     </tr>
@@ -21,11 +21,8 @@ ob_start();
     <tr>
         <td></td>
     </tr>
-    <tr style=" height:100px">
-        <td></td>
-    </tr>
 </table>
-<table  style="font-size:14px;margin-left: 110px; margin-bottom: 50px;" >
+<table  style="font-size:14px;margin-left: 100px; margin-bottom: 48px;" >
     <tr>
         <td style="width: 100px" ><?php print($this->cod_matri); ?></td>
         <td style="width:370px" ><?php echo $this->alumno;?></td>
@@ -34,7 +31,7 @@ ob_start();
     </tr>
 </table>
 <div id="datos">
-    <table  style="font-size:12px;margin-left: 60px;">
+    <table  style="font-size:12px;margin-left:35px;">
 		<tr style="   height: 20px"><td></td>
 		</tr>
     <?php
@@ -50,7 +47,7 @@ ob_start();
             $veces_ =$datos['veces'];
         ?>
             <tr>
-                <td style="width:20px ;margin-bottom:100px;"><?php echo $a;?></td>
+                <td style="width:20px ;margin-bottom:100px; padding-rigth:12px;"><?php echo $a;?></td>
                 <td style="width:50px"><?php echo "<b>";echo $cursoid_;echo "</b>";?></td>
                 <td style="width:25px"><?php echo "<b>";echo $turno_;echo "</b>";?></td>
                 <td style="width:250px"><?php echo "<b>";echo $nombrecurso ;echo "</b>";?></td>
@@ -84,7 +81,7 @@ ob_start();
     </table>
 </div>
 
- <h1  style="margin-right: 130px;"> 
+ <h1  style="margin-left: 130px;"> 
 <?php echo "<b><center>";echo "<span style='font-size: 12px'>Usted imprimio la matricula el  ".date('d/m/Y') ." a las  ".date('H:m:s')."</span>";echo "</b></center>";?>
 </h1> 
 
@@ -94,7 +91,7 @@ ob_start();
 <?php 
 
   $html = ob_get_contents();
-  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
+  $mpdf=new mPDF('win-1252','A4','','','','',22);
   ob_end_clean();
   $mpdf -> WriteHTML($html);
   $mpdf->Output('Matricula-'.'.pdf','D');

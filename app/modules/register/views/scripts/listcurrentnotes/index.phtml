@@ -1,143 +1,166 @@
-<div class="col-md-12"><center><h2><span class="glyphicon glyphicon-stats"></span> | Notas Actuales | Periodo 13B</h2></center></div>
-<?php if($this->courses){
-	//print_r($this->typerate);?>
-<br><br>
-
+<div class="col-md-12">
+<center>
+<h3><span class="glyphicon glyphicon-stats"></span> | Notas Periodo <?php echo $this->perid?></h3>
+</center></div>
+<?php if($this->courses){ ?>
 <div class="col-sm-12">
-			
-	<?php $c=0;
-	foreach ($this->courses as $courses) {?>
-	<div class="panel panel-primary">
-		<div class="panel-heading">
-			<h5 align="left"><b><?php echo $courses[0]['name'];?></b></h5>
+	<?php 
+	$c=0;
+	foreach ($this->courses as $courses) {
+	?>
+	<div class="panel panel-primary" style="padding: 0px;">
+		<div class="panel-heading" style="padding-top: 5px;padding-bottom: 0px;">
+			<p style="font-size:14px"><b><?php echo $courses[0]['courseid']?> | <?php echo $courses[0]['name'];?></b></p>
 		</div>
-		<div class="panel-body">
-			<?php if ($this->typerate[$c][0]['type_rate']=="O"){?>
-				<div class="col-sm-1">
-					<br><br><br>
-					<br><br><br>
-				</div>
-				<?for ($i=1; $i<=2 ; $i++) {?>
-				<div class="col-sm-6">
-					<table class="table">
-						<tr>
-							<h5><b>Detalle Unidad <?php echo $i;?></b></h5>
-						</tr>
-						<tr>
-						<?php for($ci=1; $ci<9 ;$ci++) {
-							if($i==1){
-								$index="nota".$ci."_i";?>
-								<td><?php echo $this->notes[$c][$index];?></td>
-							<?php }else{
-								$index="nota".$ci."_ii";?>
-								<td><?php echo $this->notes[$c][$index];?></td>
-						<?php } 
-						}?>
-						</tr>
-					</table>
-				</div>
-				<div class="col-sm-2">
-					<table class="table">
-						<tr>
-							<h5><b>Promedio</b></h5>
-						</tr>
-						<tr>
-							<td><?php echo $this->notes[$c]['promedio'.$i]?></td>
-						</tr>
-					</table>
-				</div>
-			<?php }?>
-			<div class="col-sm-2 pull-right">
-					<table class="table">
-						<tr>
-							<h5 align="center"><b>Promedio Final</b></h5>
-						</tr>
-						<tr>
-							<td><b><center><?php echo $this->notes[$c]['notafinal']?></center></b></td>
-						</tr>
-					</table>
-				</div>
-			<?php }elseif ($this->typerate[$c][0]['type_rate']=="C"){
-				for ($i=1; $i<=4 ; $i++) {?>
-				<div class="col-sm-3">
-					<table class="table">
-						<tr>
-							<h5>Detalle Unidad <?php echo $i;?></h5>
-						</tr>
-						<tr>
-						<?php for($ci=1; $ci<=3 ;$ci++) {
-							if($i==1){
-								$index="nota".$ci."_i";?>
-								<td><?php echo $this->notes[$c][$index];?></td>
-							<?php }elseif($i==2){
-								$index="nota".($ci+5)."_i";?>
-								<td><?php echo $this->notes[$c][$index];?></td>
-							<?php }elseif($i==3){
-								$index="nota".($ci)."_ii";?>
-								<td><?php echo $this->notes[$c][$index];?></td>
-							<?php }elseif($i==4){
-								$index="nota".($ci+5)."_ii";?>
-								<td><?php echo $this->notes[$c][$index];?></td>
-							<?php }  
-						}?>
-						</tr>
-					</table>
-				</div>
-				<div class="col-sm-2">
-					<table class="table">
-						<tr>
-							<h5><b>Promedio</b></h5>
-						</tr>
-						<tr>
-							<?php if($i==1){
-								$index="nota4_i";?>
-								<td><?php echo $this->notes[$c][$index];?></td>
-							<?php }elseif($i==2){
-								$index="nota9_i";?>
-								<td><?php echo $this->notes[$c][$index];?></td>
-							<?php }elseif($i==3){
-								$index="nota4_ii";?>
-								<td><?php echo $this->notes[$c][$index];?></td>
-							<?php }elseif($i==4){
-								$index="nota9_ii";?>
-								<td><?php echo $this->notes[$c][$index];?></td>
-							<?php }?>
-						</tr>
-					</table>
-				</div>
-			<?php }?>
-			<div class="col-sm-2 pull-right">
-					<table class="table">
-						<tr>
-							<h5 align="center"><b>Promedio Final</b></h5>
-						</tr>
-						<tr>
-							<td><b><center><?php echo $this->notes[$c]['notafinal']?></center></b></td>
-						</tr>
-					</table>
-				</div>
-			<?php }?>
-		</div>
-		<div class="panel-footer">
-
-			<div class="col-sm-3">
-				<center><h5>Codigo <b><?php echo $courses[0]['courseid']?></b></h5></center>
-					
-			</div>
-			<div class="col-sm-3">
-				<center><h5>Semestre <b><?php echo $courses[0]['semid']?></b></h5></center>
-			</div>
-			<div class="col-sm-3">
-				<center><h5>Turno <b><?php echo $this->notes[$c]['turno']?></b></h5></center>
-			</div>
-			<div class="col-sm-3">
-				<center><h5>Creditos <b><?php echo $courses[0]['credits']?></b></h5></center>
-			</div><br>
-					
+		<div class="panel-body" style="padding: 0px;">
+			<table class="table table-bordered" style="margin: 0px">
+				<tr>
+					<td class="col-sm-1" style="padding: 0px; margin:0px">
+						<table  style="padding: 0px; margin:0px">
+							<tr>
+								<td>Semestre</td>							
+								<th><?php echo $courses[0]['semid']?></th>
+							</tr>
+							<tr>
+								<td>Turno </td>
+								<th><?php echo $this->notes[$c]['turno']?></th>
+							</tr>
+							<tr>
+								<td>Creditos </td>
+								<th><?php echo $courses[0]['credits']?></th>
+							</tr>
+						</table>
+					</td>
+					<td class="col-sm-5" style="margin: 0px; padding: 0px">
+						<table class="table table-bordered table-striped" style="margin: 0px; padding: 0px">
+							<tr>
+								<?php 
+								$numcol=9;
+								$numuni = 1;
+								$txtuni = " Parcial ";
+								$tipo_=$this->typerate[$c][0]['type_rate'];
+								if ($tipo_=="C"){
+									$numcol=8;
+									$numuni = 2; 
+									$txtuni = " Unidad";
+								}
+								?>
+								<?php for ($ii = 1; $ii <=$numuni;$ii++) {
+									?>
+									<th class="center" colspan="<?php echo $numcol/$numuni?>">Notas <?php echo $ii ." ".$txtuni?> </th>
+									<?php 
+								}?>
+								<?php if ($tipo_=="O"){?>
+								<th class="center"></th>
+								<?php }?>
+							</tr>
+							<tr >
+								<?php 
+								for($rcr = 1;$rcr<=$numcol;$rcr++){
+								$txtmp=$rcr;
+								if ($tipo_ =="C"){
+									if ($rcr>4) $txtmp = $rcr- 4 ;
+									if($rcr==4 || $rcr==8) $txtmp ="Pr.";
+								}
+								?>
+								<td class="center"><?php echo $txtmp?></td>
+								<?php 
+								}
+								?>
+								<?php if ($tipo_=="O"){?>
+								<td class="center">Pr.</td>
+								<?php }?>
+							</tr>
+							<tr class="success ">
+								<?php for($rcr = 1;$rcr<=$numcol;$rcr++){
+									$index="nota".$rcr."_i";
+									$nota_ = $this->notes[$c][$index];
+								?>
+								<th class="center <?php echo ($nota_<11 && $nota_<>"")?"danger":"";?>">
+									<?php echo $this->notes[$c][$index];?>
+								</th>
+								<?php } ?>
+								<?php 
+								if ($tipo_=="O"){ 
+								$prom_ = trim($this->notes[$c]['promedio1']);
+								?>
+								<th class="center <?php echo ($prom_<11)?"danger":""?>">
+									<?php echo $prom_;?>
+								 </th>
+								 <?php  } ?>
+							</tr>
+						</table>		
+					</td>
+					<td class="col-sm-5" style="margin: 0px; padding: 0px">
+						<table class="table table-bordered table-striped" style="margin: 0px; padding: 0px">
+							<tr>
+								<?php 
+								$suma=($tipo_=="O")?1:2;
+								for ($ii = 1; $ii <=$numuni;$ii++) {
+									?>
+									<th class="center" colspan="<?php echo ($numcol/$numuni)?>">Notas <?php echo $ii+$suma ." ".$txtuni?> </th>
+									<?php 
+								}?>
+								<?php if ($tipo_=="O"){?>
+								<th class="center"></th>
+								<?php }?>
+							</tr>
+							<tr>
+								<?php 
+								for($rcr = 1;$rcr<=$numcol;$rcr++){
+								$txtmp=$rcr;
+								if ($tipo_ =="C"){
+									if ($rcr>4) $txtmp = $rcr- 4 ;
+									if($rcr==4 || $rcr==8) $txtmp ="Pr.";
+								}
+								?>
+								<td class="center"><?php echo $txtmp?></td>
+								<?php 
+								}
+								?>
+								<?php if ($tipo_=="O"){?>
+								<td class="center">Pr.</td>
+								<?php }?>
+							</tr>
+							<tr class="success center">
+								<?php for($rcr = 1;$rcr<=$numcol;$rcr++){
+									$index="nota".$rcr."_ii";
+									$nota_ = $this->notes[$c][$index];
+								?>
+								<th class="center <?php echo ($nota_<11 && $nota_<>"")?"danger":"";?>">
+									<?php echo $this->notes[$c][$index];?>
+								</th>
+								<?php } ?>
+								<?php if ($tipo_=="O"){ 
+								$prom = $this->notes[$c]['promedio2'];
+								?>
+								<th class="center <?php echo ($prom<11)?"danger":""?>">
+									<?php echo $prom;?>
+								 </th>
+								 <?php  } ?>
+							</tr>
+						
+						</table>
+					</td>
+					<?php 
+					$final = $this->notes[$c]['notafinal'];
+					?>
+					<th class="col-sm-1 center <?php echo ($final<11)?"danger":"success"?>" style="margin: 0px; padding: 0px" >
+					<P>PROMEDIO FINAL <br><br>
+					<span class="label label-<?php echo ($final<11)?"danger":"success"?>" 
+						style="font-size: 22px">
+						<?php echo $final?>
+					</span>
+					</P>
+					</th>
+				</tr>
+			</table>
 		</div>
 	</div>
-	<?php $c++;
-	}?>
+	<?php 
+	$c++;
+	}
+	?>
 				
 <?php }else{?>
 	<br><br>

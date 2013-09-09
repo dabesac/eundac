@@ -48,7 +48,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 				|| $where['uid']=="" || $where['pid']=="") return false;
 			
 			$select = $this->_db->select()
-			->from(array('p' => 'base_person'),array('p.pid','p.typedoc','numdoc','p.last_name0','p.last_name1','p.first_name','p.birthday','p.photografy'))
+			->from(array('p' => 'base_person'),array('p.pid','p.typedoc','numdoc','p.last_name0','p.last_name1','p.first_name','p.birthday','p.photografy','p.sex'))
 				->join(array('u' => 'base_users'),'u.eid= p.eid and u.pid=p.pid', 
 						array('u.uid','u.uid'))
 				->where('u.eid = ?', $where['eid'])->where('u.oid = ?', $where['oid'])
