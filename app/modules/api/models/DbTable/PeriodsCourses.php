@@ -58,6 +58,20 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getState($where=array()){
+		try{
+			if ($where['eid']=="" || $where['oid']=="" || $where['courseid']=="" || $where['escid']=='' || $where['perid']==""  || $where['turno']=='' || $where['subid']=='' || $where['curid']=='') return false;
+			$wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' 
+						and courseid='".$where['courseid']."' and escid='".$where['escid']."' 
+						and perid='".$where['perid']."' and turno='".$where['turno']."' and subid='".$where['subid']."' and curid='".$where['curid']."' and state='A' and state_record='A'";
+			$row = $this->fetchRow($wherestr);
+			if($row) return $row->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read One Periods_Courses ".$e->getMessage();
+		}
+	}
+
 	
 	public function _getAll($where=null,$order='',$start=0,$limit=0)
 	{
