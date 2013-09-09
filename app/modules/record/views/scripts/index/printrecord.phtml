@@ -170,7 +170,7 @@ $header = '
 
 $html = ob_get_contents();
   
-$mpdf=new mPDF('utf-8','A4','','',3,5,79,15,15);
+$mpdf=new mPDF('utf-8','A4','','',3,5,79,10,15);
 
 $mpdf->SetHTMLHeader($header);
 $mpdf->SetHTMLFooter('');
