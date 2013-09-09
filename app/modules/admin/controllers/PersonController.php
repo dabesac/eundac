@@ -56,19 +56,21 @@ class Admin_PersonController extends Zend_Controller_Action{
  			if ($this->getRequest()->isPost())
             {
                 $frmdata=$this->getRequest()->getPost();
-                // print_r($frmdata);
-                    print_r($frmdata);exit();
+                
                 if ($fm->isValid($frmdata))
                 {                    
-                    unset($frmdata['send']);
+                    unset($frmdata['Guardar']);
                     trim($frmdata['last_name0']);
                     trim($frmdata['last_name1']);
                     trim($frmdata['first_name']);
+                    strtoupper($frmdata['last_name0']);
+                    strtoupper($frmdata['last_name1']);
                     $frmdata['eid']=$eid;
-                    $frmdata['oid']=$oid;
-                    $frmdata['created']=date('Y-m-d h:m:s'); 
+                    $frmdata['location']='-';
+                    $frmdata['created']=date('Y-m-d h:m:s');
                     $frmdata['register']=$register;                  
                     $reg_= new Api_Model_DbTable_Person();
+                    // print_r($frmdata);exit();
                     $reg_->_save($frmdata);
                     $this->_redirect("/admin/person/");                           
                 }
