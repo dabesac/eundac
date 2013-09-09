@@ -45,7 +45,7 @@ input.error {
 
 .header-middle{
 	background-color: #e0e0e0 !important;
-	height: 40px;
+	height: 60px;
 	padding-top: 5px;
 	border-bottom: 2px solid #1e83cb;
 }
@@ -56,6 +56,13 @@ input.error {
 	padding: 10px;
 	margin-bottom: 20px;
 	
+}
+
+.photoprofile{
+	width: 45px;
+	height: 40px;
+	text-align: left;
+	margin: 5px;
 }
 
 .panel{
