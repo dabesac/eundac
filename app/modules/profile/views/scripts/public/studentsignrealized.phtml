@@ -3,8 +3,21 @@
 		<h4><b>Matriculas Realizadas</b></h4>
 	</div>
 	<div class="panel-body">
-		<table>
 
-		</table>
-	</div>
+		<?if($this->namper){?>
+		<div class="panel panel-default">
+			<?foreach ($this->namper as $namper) {?>
+			<div class="panel-heading">
+				<?echo $namper[0]['name'];?>
+			</div>
+				
+			<div class="panel-body">
+				SOy el cuerpo
+			</div>
+			<?}?>
+
+
+		</div>
+		<?}?>
+	</div
 </div>

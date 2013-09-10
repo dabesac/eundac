@@ -251,7 +251,42 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studentsignrealizedAction()
     {
         try{
-            $this->_helper->layout()->disableLayout();
+            //$this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $pid=$this->sesion->pid;
+            $uid=$this->sesion->uid;
+
+            $dbsignr=new Api_Model_DbTable_Registrationxcourse();
+            $dbnamper=new Api_Model_DbTable_Periods();
+
+            $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid);
+            $attrib=array("perid","courseid");
+            $order=array("perid");
+            $signr=$dbsignr->_getFilter($where, $attrib, $order);
+            //print_r($signr);
+            $per="0";
+            $c=0;
+
+            $attrib=array("name");
+            foreach ($signr as $sperid) {
+                if($sperid['perid']<>$per){
+                    $where=array("eid"=>$eid, "oid"=>$oid, "perid"=>$sperid['perid']);
+                    $namper[$c]=$dbnamper->_getFilter($where,$attrib);
+
+
+                    $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "perid"=>$sperid['perid']);
+                    print_r($where);
+                    //$courxper[$c]=$dbsignr->_getFilter($where);
+
+                    $per=$sperid['perid'];
+                    $c++;
+                }
+            }
+            //print_r($namper);
+
+            $this->view->namper=$namper;
+
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
