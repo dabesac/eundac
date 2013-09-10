@@ -154,10 +154,26 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $cursomas['namecourse'] = $rcus['name'];
 
                 //Obteniendo numero de veces matrocula a un curso
-                $veces = new Api_Model_DbTable_Course();
-                $listusuario = $veces ->_getCoursesXStudentXV($cursomas); 
-                $cursomas['veces'] = intval($listusuario[0]['veces']);
+                // $veces = new Api_Model_DbTable_Course();
+                // $listusuario = $veces ->_getCoursesXStudentXV($cursomas); 
+                // $cursomas['veces'] = intval($listusuario[0]['veces']);
 
+                // $db = Zend_Registry::get('Adaptador1');
+                // $sql2="select courseid,turno,perid from base_registration_course where uid='".$where['uid']."' and perid!='".$where['perid']."' and notafinal!='-3' and notafinal!='-2'";
+                // $curmat = $db->fetchAll($sql2);   
+
+                $curmat =$lcursos->_register($where);
+                $i=0;
+                foreach ($curmat as $row2) {
+                    if($where['courseid']==$row2['courseid']){
+                        $periodo=$row2['perid'];
+                        $p=substr($periodo,2,3);
+                        if($p=='A' or $p=='B' or $p=='N' or $p=='V'){
+                         $i=$i+1;  
+                         }               
+                     }
+                 }
+                $cursomas['veces'] = intval($i);
                 //Sacamos los docentes por curso
                 $bdprofesores = new Api_Model_DbTable_Coursexteacher();        
                 $datosss= $bdprofesores->_getinfoDoc($where);
@@ -180,11 +196,9 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             // print_r($listacurso1);      
              $this->view->listacurso = $listacurso1;
 
-
             //obtenemos los pagos realizados
             $pagos = new Api_Model_DbTable_Payments();
             $rpagos = $pagos->_getOne($where);
-            
             if ($rpagos){
                 //verificamos fechas de pago y tiempo de pago
                 $this->view->fechapago = $rpagos['date_payment'];
@@ -369,22 +383,13 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $str=" eid='".$where['eid']."' and oid=''".$where['oid']."' and subid='".$where['subid']."' and escid='".$where['escid']."' and uid='".$where['uid']."' and pid='".$where['pid']."' and perid='".$where['perid']."' and regid= '".$where['regid']."' ";
                 //Si el Valor es E se eliminar
                     if (trim($flag)=="E"){
-                        if($bdmatricula_curso->_deletecorseregister($where)){
-                            $DataUsuario['state']="B";
-                            $DataUsuario['updated']=date("Y-m-d h:m:s");
-                            $DataUsuario['modified']=$this->sesion->uid; 
-                            if ($bdmatricula->_update($DataUsuario,$where)){
-                                $bdmatricula->_delete($where);
-                                $this->view->msgeliminar="La matricula fue eliminada correctamente";} 
-                        } 
-                        else{
+
                             $DataUsuario['state']="B";
                             $DataUsuario['updated']=date("Y-m-d h:m:s");
                             $DataUsuario['modified']=$this->sesion->uid; 
                             if ($bdmatricula->_update($DataUsuario,$where)){
                             $bdmatricula->_delete($where);
-                            $this->view->msgeliminar="La matricula fue eliminada correctamente";} 
-                        }                 
+                            $this->view->msgeliminar="La matricula fue eliminada correctamente";}             
                     }
                     else{
                         //Asigno los valores al array para la modiciacion
@@ -392,8 +397,13 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         $DataUsuario['updated']=date("Y-m-d h:m:s");
                         $DataUsuario['modified']=$this->sesion->uid; 
                         if ($bdmatricula->_update($DataUsuario,$where)){
-                            //si actualizo correctamente la matricula, ahora actualizo los cursos de la matricula       
-                            if ($bdmatricula_curso->_updatestateregister($DataUsuario,$where)){
+                            //si actualizo correctamente la matricula, ahora actualizo los cursos de la matricula  
+                                $DataUsuario1['state']=trim($flag);
+                                $DataUsuario1['updated']=date("Y-m-d h:m:s");
+                                $DataUsuario1['modified']=$this->sesion->uid;
+                                $DataUsuario1['approved']=$this->sesion->uid; 
+                                $DataUsuario1['approved_date']=date("Y-m-d h:m:s");                                  
+                            if ($bdmatricula_curso->_updatestateregister($DataUsuario1,$where)){
                                 $this->_helper->_redirector("detail","registerstudent","register",array('uid' => base64_encode($where['uid']) ,'pid' => base64_encode($where['pid']),'escid' => base64_encode($where['escid']),'subid' => base64_encode($where['subid'])));
                                 }else{
                                     print "No se pudo actualizar los cursos de la matricula";

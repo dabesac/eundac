@@ -58,6 +58,20 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getState($where=array()){
+		try{
+			if ($where['eid']=="" || $where['oid']=="" || $where['courseid']=="" || $where['escid']=='' || $where['perid']==""  || $where['turno']=='' || $where['subid']=='' || $where['curid']=='') return false;
+			$wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' 
+						and courseid='".$where['courseid']."' and escid='".$where['escid']."' 
+						and perid='".$where['perid']."' and turno='".$where['turno']."' and subid='".$where['subid']."' and curid='".$where['curid']."' and state='A' and state_record='A'";
+			$row = $this->fetchRow($wherestr);
+			if($row) return $row->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read One Periods_Courses ".$e->getMessage();
+		}
+	}
+
 	
 	public function _getAll($where=null,$order='',$start=0,$limit=0)
 	{
@@ -127,7 +141,7 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 
 	public function _getCourseTeacher($where=null){
 		try {
-			if ($where['perid']=='' || $where['rid']=='' || $where['uid']=='' || $where['is_main']=='') return false; 
+			if ($where['perid']=='' || $where['uid']=='' || $where['is_main']=='') return false; 
 
 				$select = $this->_db->select()
 									->distinct()
@@ -143,15 +157,15 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 									->join(array('c'=>'base_courses'),
 												'ct.courseid = c.courseid and ct.escid=c.escid and ct.curid=c.curid and 
 												pc.courseid=c.courseid and pc.escid=c.escid and pc.curid=c.curid')
-									->join(array('u'=>'base_users'),'ct.uid=u.uid')
 									->join(array('s'=>'base_speciality'),'c.escid=s.escid')
 									->join(array('f'=>'base_faculty'),'s.facid=f.facid')
 									->where('ct.is_main = ?',$where['is_main'])
-									->where('ct.uid = ?',$where['uid'])
+									->where('ct.pid = ?',$where['pid'])
+									->where('ct.eid = ?',$where['eid'])
+									->where('ct.oid = ?',$where['oid'])
 									->where('ct.perid = ?',$where['perid'])
-									->where('u.rid = ?',$where['rid'])
 									->order('f.facid');
-
+				
 				$results = $select->query();
 				$rows = $results->fetchAll();
 				if ($rows) return $rows;

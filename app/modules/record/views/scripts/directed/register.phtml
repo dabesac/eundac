@@ -41,12 +41,12 @@
         <tr>
             <td>
                 <center>
-                    <input type="text" id="nota" class="form-control" style="width:50px"><label class="msg text-error"></label>
+                    <input type="text" id="nota" class="form-control" style="width:50px" onkeypress="return soloNumero(event)"><label class="msg text-error"></label>
                 </center>
             </td>
             <td>
                 <center>
-                    <input type="text" id="recibo" class="form-control" onBlur="CheckUserName(this);" style="width:200px">
+                    <input type="text" id="recibo" class="form-control" onBlur="CheckUserName(this);" style="width:200px" onkeypress="return soloNumero(event)">
                 </center>
             </td>
             <td colspan="3">
@@ -380,4 +380,20 @@ $("#resolucion").keyup(function(){
 function CheckUserName(ele) {
     if (/\s/.test(ele.value)) alert("No se permiten espacios en blanco.");
 }
+
+function soloNumero(e){
+    key = e.keyCode || e.which;
+    tecla = String.fromCharCode(key).toLowerCase();
+    letras = "0123456789";
+    especiales = [8,37,39,46];
+    tecla_especial = false
+    for(var i in especiales){
+        if(key == especiales[i]){
+            tecla_especial = true;
+            break;
+        } 
+    }
+    if(letras.indexOf(tecla)==-1 && !tecla_especial)
+    return false;
+};
 </script>

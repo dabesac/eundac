@@ -21,7 +21,12 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 		try{
 			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' || $pk['pid']==''  || $pk['uid']=='') return false;
 			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and pid='".$pk['pid']."' and uid='".$pk['uid']."'";
-			return $this->update($data, $where);
+			if ($this->update($data, $where)){
+				$campus = new Api_Model_DbTable_Campususer();
+				$where_ = array("username"=>$pk['uid']);
+				$datac = array("password"=> $data['password']);
+				if ($campus->_update($where_,$datac)) return true;
+			}
 			return false;
 		}catch (Exception $e){
 			print "Error: Update User".$e->getMessage();
@@ -48,7 +53,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 				|| $where['uid']=="" || $where['pid']=="") return false;
 			
 			$select = $this->_db->select()
-			->from(array('p' => 'base_person'),array('p.pid','p.typedoc','numdoc','p.last_name0','p.last_name1','p.first_name','p.birthday','p.photografy'))
+			->from(array('p' => 'base_person'),array('p.pid','p.typedoc','numdoc','p.last_name0','p.last_name1','p.first_name','p.birthday','p.photografy','p.sex'))
 				->join(array('u' => 'base_users'),'u.eid= p.eid and u.pid=p.pid', 
 						array('u.uid','u.uid'))
 				->where('u.eid = ?', $where['eid'])->where('u.oid = ?', $where['oid'])
