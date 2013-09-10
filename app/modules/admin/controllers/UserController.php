@@ -77,10 +77,24 @@ class Admin_UserController extends Zend_Controller_Action{
 				$where=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid);
 				$dbuser=new Api_Model_DbTable_Users();
 				$datauser=$dbuser->_getUserXPid($where);
+				$c=0;
+				foreach ($datauser as $inforol) {
+					$info[$c]=$inforol['rid'];
+					$c++;
+				}
+				$this->view->inforol=$info;
 				$this->view->datauser=$datauser;
 			}			
  		} catch (Exception $e) {
  			print "Error: get Person".$e->getMessage();
  		}
  	}
+ 	 public function newrolAction(){
+ 	 		$this->_helper->layout()->disableLayout();
+ 	 		$fm= new Admin_Form_Usernew();
+ 	 		$this->view->fm=$fm;
+ 	 		$info=$this->_getParam('$this->inforol');
+ 	 		print_r($info);
+
+ 	 }
 }
