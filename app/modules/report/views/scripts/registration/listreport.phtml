@@ -1,4 +1,4 @@
-<div id="datos">
+<div>
 	<?php
 		$eid=$this->eid;
 		$oid=$this->oid;
@@ -12,7 +12,9 @@
 		$res = $this->res;
 		$total=0;
 	?>
-
+<div>
+    <center><a href="/report/registration/print/perid/<?php echo $perid ?>/x/<?php echo $x ?>/mat/<?php echo $mat ?>/premat/<?php echo $premat ?>/npremat/<?php echo $npremat ?>/obs/<?php echo $obs ?>/res/<?php echo $res ?>" target="_blank" id="imprimir" style="float:center" class="btn btn-success"><i class="glyphicon glyphicon-print glyphicon-white"></i>Imprimir</a><center>
+</div> 
 	<table class="table table-hover table-striped ">
 		<thead>
 			<tr> 
@@ -25,7 +27,7 @@
 				</th>
 			</tr>
 			<tr> 
-				<th class="input-xlarge">
+				<th class="col-lg-10">
 					<center>
 						<?php
 						if ($this->busqx == 'xfac') echo "FACULTADES";
@@ -38,7 +40,7 @@
 			{
 				$tot_ver_mat=0;	
 			?>
-				<th class="input-mini" style="font-size: 10px;">
+				<th  style="font-size: 10px;">
 					<center>TOTAL MATRICULADOS</center>
 				</th>
 			<?php
@@ -47,7 +49,7 @@
 			{
 				$tot_ver_premat=0;	
 				?>
-				<th class="input-mini" style="font-size: 10px;">
+				<th  style="font-size: 10px;">
 					<center>TOTAL PREMATRICULADOS</center>
 				</th>
 			<?php
@@ -56,7 +58,7 @@
 			{
 				$tot_ver_npremat=0;	
 				?>
-				<th class="input-mini" style="font-size: 10px;">
+				<th style="font-size: 10px;">
 					<center>TOTAL NO MATRICULADOS</center>
 				</th>
 			<?php
@@ -65,7 +67,7 @@
 			{
 				$tot_ver_obs=0;	
 				?>
-				<th class="input-mini" style="font-size: 10px;">
+				<th style="font-size: 10px;">
 					<center>TOTAL OBSERVADOS</center>
 				</th>
 			<?php
@@ -74,13 +76,13 @@
 			{
 				$tot_ver_res=0;	
 				?>
-				<th class="input-mini" style="font-size: 10px;">
+				<th style="font-size: 10px;">
 					<center>TOTAL RESERVADOS</center>
 				</th>
 			<?php
 			}
 			?>
-				<th class="input-mini" >
+				<th  >
 					<center>TOTAL</center>
 				</th>
 			</tr>
@@ -323,9 +325,7 @@
         </tbody>
     </table>  
 </div>
-<div style="clear:both" ></div>
-<div class="botones-editar">
-    <center><a href="/report/registration/print/perid/<?php echo $perid ?>/x/<?php echo $x ?>/mat/<?php echo $mat ?>/premat/<?php echo $premat ?>/npremat/<?php echo $npremat ?>/obs/<?php echo $obs ?>/res/<?php echo $res ?>" target="_blank" id="imprimir" style="float:center" class="btn btn-success"><i class="icon-print icon-white"></i>Imprimir</a><center>
-</div> 
+
+
 
 
