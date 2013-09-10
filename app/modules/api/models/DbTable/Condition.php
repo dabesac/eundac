@@ -105,7 +105,7 @@ class Api_Model_DbTable_Condition extends Zend_Db_Table_Abstract
 			->from(array('u' => 'base_users'),array('u.eid','u.oid','u.subid','u.uid','u.escid','u.pid','p.first_name','p.last_name0','p.last_name1'))
 				->join(array('p' => 'base_person'),'u.pid=p.pid and u.eid=p.eid')
 				->where('u.state = ?', 'A')->where('u.oid = ?', $where['oid'])->where('u.oid = ?', $where['oid'])->where('u.escid = ?',$where['escid'])->where('u.rid = ?','AL')
-				 ->where('(p.last_name0 LIKE ?)', '%'.$where['ap'].'%')->where('(p.last_name1 LIKE ?)', '%'.$where['am'].'%')->where('(upper(p.first_name) LIKE ?)', '%'.$where['am'].'%')
+				 ->where('(p.last_name0 LIKE ?)', '%'.$where['ap'].'%')->where('(p.last_name1 LIKE ?)', '%'.$where['am'].'%')->where('(upper(p.first_name) LIKE ?)', '%'.$where['am'].'%')->where('(u.uid LIKE ?)', '%'.$where['uid'].'%')
 				->where("u.uid NOT IN ?", $sub_select) ;
 			$results = $select->query();			
 			$rows = $results->fetchAll();

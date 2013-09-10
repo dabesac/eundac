@@ -15,10 +15,12 @@ class LogaccessController extends Zend_Controller_Action{
             $this->_helper->layout()->disableLayout();
 			$eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
-            $pid = $this->getParam('pid');
+            $pid = $this->sesion->pid;
+            $uid= $this->sesion->uid;
             $where['eid']=$eid;
             $where['oid']=$oid;
             $where['pid']=$pid;
+            $where['uid']=$uid;
             $order=array("datestart desc");
             $log = new Api_Model_DbTable_Logs();
             $data = $log->_getAccess($where,$order,50);
@@ -32,10 +34,13 @@ class LogaccessController extends Zend_Controller_Action{
 		try {
 			$eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
-            $pid = base64_decode($this->getParam('pid'));
+            $pid = $this->sesion->pid;
+            $uid = $this->sesion->uid;
+
             $where['eid']=$eid;
             $where['oid']=$oid;
             $where['pid']=$pid;
+            $where['uid']=$uid;
             $order=array("datestart desc");
             $log = new Api_Model_DbTable_Logs();
             $data = $log->_getAccess($where,$order,50);

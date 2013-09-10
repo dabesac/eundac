@@ -72,13 +72,16 @@ class Api_Model_DbTable_Logs extends Zend_Db_Table_Abstract
 			if($where['eid']=='' || $where['oid']=='') return false;
 			$select = $this->_db->select();
 			$select->from("logaccess");
+			foreach ($where as $atri=>$value){
+				$select->where("$atri = ?", $value);
+			}
 			if ($orders){
 				if ($orders<>null || $orders<>"") {
 					if (is_array($orders))
 						$select->order($orders);
 				}	
 			}
-			
+						
 			$select->limit($limit);
 			$results = $select->query();
 			$rows = $results->fetchAll();

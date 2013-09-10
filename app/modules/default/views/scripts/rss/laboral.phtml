@@ -1,0 +1,23 @@
+<table class="table">
+	<tr>
+		<th class="col-sm-1 center">#</th>
+		<th class="small">Oferta Laboral</th>
+	</tr>
+	<?php 
+	if ($this->rss){
+		$i=0;
+		foreach ($this->rss as $item) {
+			$i++;
+			$title = strtoupper($item->title());
+			$link = $item->link();
+			?>
+	<tr>
+		<td class="center"><?php echo $i?></td>
+		<td ><a href="<?php echo $link?>" target="_black"><?php echo $title?></a></td>
+	</tr>	
+	<?php 
+		}
+	}
+?>
+</table>
+	

@@ -405,33 +405,41 @@ class Record_DirectedController extends Zend_Controller_Action {
             $data['receipt']=$receipt;
             $data['document_auth']=$resolution;
             $bdmatricurso=new Api_Model_DbTable_Registrationxcourse();
-            if ($bdmatricurso->_updatenoteregister($data,$pk)) {
-                $this->view->msg=1;
-                $wheresub['eid']=$eid;
-                $wheresub['oid']=$oid;
-                $wheresub['subid']=$subid;
-                $wheresub['escid']=$escid;
-                $wheresub['uid']=$uid;
-                $wheresub['pid']=$pid;
-                $wheresub['perid']=$perid;
-                $convalidados = $bdmatricurso->_getFilter($wheresub,$attrib=null,$orders='courseid');
-                if ($convalidados) {
-                    $tamm=count($convalidados);
-                    $wherecourse['eid']=$eid;
-                    $wherecourse['oid']=$oid;
-                    $wherecourse['escid']=$escid;
-                    $wherecourse['subid']=$subid;
-                    for ($i=0; $i < $tamm; $i++) { 
-                        $wherecourse['curid']=$convalidados[$i]['curid'];
-                        $wherecourse['courseid']=$convalidados[$i]['courseid'];
-                        $cours= new Api_Model_DbTable_Course();
-                        $dbcourse=$cours->_getOne($wherecourse);
-                        $convalidados[$i]['name_course']=$dbcourse['name'];
-                        $convalidados[$i]['credits']=$dbcourse['credits'];
+            $statecourse= new Api_Model_DbTable_PeriodsCourses();
+            if ($statecourse->_getState($pk)) {
+                if ($bdmatricurso->_updatenoteregister($data,$pk)) {
+                    $this->view->msg=1;
+                    $wheresub['eid']=$eid;
+                    $wheresub['oid']=$oid;
+                    $wheresub['subid']=$subid;
+                    $wheresub['escid']=$escid;
+                    $wheresub['uid']=$uid;
+                    $wheresub['pid']=$pid;
+                    $wheresub['perid']=$perid;
+                    $convalidados = $bdmatricurso->_getFilter($wheresub,$attrib=null,$orders='courseid');
+                    if ($convalidados) {
+                        $tamm=count($convalidados);
+                        $wherecourse['eid']=$eid;
+                        $wherecourse['oid']=$oid;
+                        $wherecourse['escid']=$escid;
+                        $wherecourse['subid']=$subid;
+                        for ($i=0; $i < $tamm; $i++) { 
+                            $wherecourse['curid']=$convalidados[$i]['curid'];
+                            $wherecourse['courseid']=$convalidados[$i]['courseid'];
+                            $cours= new Api_Model_DbTable_Course();
+                            $dbcourse=$cours->_getOne($wherecourse);
+                            $convalidados[$i]['name_course']=$dbcourse['name'];
+                            $convalidados[$i]['credits']=$dbcourse['credits'];
+                        }
                     }
+                    $this->view->cursosconvalidados = $convalidados;
                 }
-                $this->view->cursosconvalidados = $convalidados;
-            }
+        }
+        else{ ?> 
+                 <script type="text/javascript"> 
+                         alert("EL ACTA SE ENCUENTRA CERRADA NO PUEDE HACER MODIFICACIONES"); 
+                 </script> 
+        <?php }
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }

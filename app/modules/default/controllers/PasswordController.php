@@ -35,9 +35,7 @@ class PasswordController extends Zend_Controller_Action{
 
             $dantclave = $antclave->_getFilter($where);
             $pass=$dantclave[0]['password'];
-             
-            
-             if ($this->getRequest()->isPost())
+			if ($this->getRequest()->isPost())
             {
                 $formData = $this->getRequest()->getPost();
        
@@ -50,35 +48,30 @@ class PasswordController extends Zend_Controller_Action{
 
                     {
                       
-                      $data['password']=md5($formData["ncla"]);
-                      $pk['uid']=$uid;
-                      $pk['eid']=$eid;
-                      $pk['oid']=$oid;
-                      $pk['pid']=$pid;
-                      $pk['escid']=$escid;
-                      $pk['subid']=$subid;
-                      $bdu = new Api_Model_DbTable_Users();
-                    //print($uid.$pid.$eid.$oid.$escid.$pass);
+                     $data['password']=md5($formData["ncla"]);
+                     $pk['uid']=$uid;
+                     $pk['eid']=$eid;
+                     $pk['oid']=$oid;
+                     $pk['pid']=$pid;
+                     $pk['escid']=$escid;
+                     $pk['subid']=$subid;
+                     $bdu = new Api_Model_DbTable_Users();
                      $datos = $bdu->_update($data,$pk);           
                      if ($datos)
                      {
-                        $this->view->mensaje="Contraseña guadada correctamente";
-                           
-                        
+                        $this->view->mensaje="<pre class='alert alert-success' style='margin:0px;padding:0px'>Contraseña guadada correctamente</pre>";
                      }
                     }
                     else
                     {
-                      $this->view->mensaje="Contraseñas no coinciden";
+                      $this->view->mensaje="<pre class='alert alert-danger' style='margin:0px;padding:0px'>Contraseñas no coinciden</pre>";
 
                     }
 
-
-                }
+                   }
                 else
-                { $this->view->mensaje="La contraseña anterior es incorrecta";
-
-
+                { 
+                	$this->view->mensaje="<pre class='alert alert-danger' style='margin:0px;padding:0px'>La contraseña anterior es incorrecta</pre>";
                 }
 
             }

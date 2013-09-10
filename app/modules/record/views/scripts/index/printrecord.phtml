@@ -87,7 +87,7 @@ $header = '
 </table>
 ';
 ?>
-	<table style="float: left; font-size:11px; width: 750px; margin-top:1200px;" border="0">
+	<table style=" font-size:11px; width: 750px;" border="0">
 		<?php if ($students) {
 			$r=0;
 			foreach ($students as $key => $student) { 
@@ -170,7 +170,7 @@ $header = '
 
 $html = ob_get_contents();
   
-$mpdf=new mPDF('utf-8','A4','','',3,5,79,15,15);
+$mpdf=new mPDF('utf-8','A4','','',3,5,79,10,15);
 
 $mpdf->SetHTMLHeader($header);
 $mpdf->SetHTMLFooter('');

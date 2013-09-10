@@ -125,7 +125,7 @@ public function _getPaymentsStudent($where=null,$attrib=null,$order=null){
 
     		if ($escid==''|| $curid==''|| $perid==''|| $semid=='') return false;
 
-	 		$sql = $this->_db->query(" select semester_credits('$escid','$curid','$perid','$semid') ");
+	 		$sql = $this->_db->query(" select semester_creditsz('$escid','$curid','$perid','$semid') ");
 			$row=$sql->fetchAll();
 			if ($row) return $row;
 	       	return false;
@@ -187,9 +187,123 @@ public function _getPaymentsStudent($where=null,$attrib=null,$order=null){
         }
     }
 
+        
+    public function _getSpecialityXPeriodsXMat($where=null)
+    {
+        try
+        {
+            $sql=$this->_db->query("
+            select m.escid,name from base_registration as m inner join base_speciality as e
+            on m.escid=e.escid where perid='".$where['perid']."' and m.eid='".$where['eid']."' and m.oid='".$where['oid']."'
+            group by m.escid,name order by m.escid;
+           ");
+           
+           $row=$sql->fetchAll();
+           return $row;  
+        }
+        catch (Exception $ex) 
+        {
+            print $ex->getMessage();
+        }
+    }
+
+
+    public function _getFacultyXPeriodsXMat($where=null)
+    {
+        try
+        {
+            $sql=$this->_db->query("
+            select left(m.escid,1) as facid,name from base_registration as m inner join base_faculty as f
+            on left(m.escid,1)=f.facid  where perid='".$where['perid']."' and m.eid='".$where['eid']."' and m.oid='".$where['oid']."'
+            group by left(m.escid,1),name order by left(m.escid,1);
+           ");
+           
+           $row=$sql->fetchAll();
+           return $row;  
+        }
+        catch (Exception $ex) 
+        {
+            print $ex->getMessage();
+        }
+    }
     
-    
+        public function _getSubsidiaryXPeriodsXMat($where=null)
+    {
+        try
+        {
+            $sql=$this->_db->query("
+            select m.subid,name from base_registration as m inner join base_subsidiary as s on m.subid=s.subid
+            where perid='".$where['perid']."' and m.eid='".$where['eid']."' and m.oid='".$where['oid']."'
+            group by m.subid,name order by m.subid;
+           ");
+           $row=$sql->fetchAll();
+           return $row;  
+        }
+        catch (Exception $ex) 
+        {
+            print $ex->getMessage();
+        }
+    }
   
+
+      public function _getTotalMatXFacultadesXPerXEst($eid='',$oid='',$state='',$perid='',$facid='')
+    {
+        try
+        {
+             $select = $this->_db->select()
+            ->from(array('m' => 'base_registration'),array('COUNT(*) as totmat'))
+                ->where('perid = ?', $perid)->where('state = ?', $state)->where('left(escid,1) = ?',$facid)
+                ->where('oid = ?', $oid)->where('eid = ?', $eid);
+            $results = $select->query();            
+            $rows = $results->fetchAll();
+            if($rows) return $rows;
+            return false;   
+        }
+        catch (Exception $ex) 
+        {
+            print $ex->getMessage();
+        }
+    }
+
+
+        public function _getTotalMatXEscuelasXPerXEst($eid='',$oid='',$state='',$perid='',$escid='')
+    {
+        try
+        {
+            $select = $this->_db->select()
+            ->from(array('m' => 'base_registration'),array('COUNT(*) as totmat'))
+                ->where('perid = ?', $perid)->where('state = ?', $state)->where('escid = ?',$escid)
+                ->where('oid = ?', $oid)->where('eid = ?', $eid);
+            $results = $select->query();            
+            $rows = $results->fetchAll();
+            if($rows) return $rows;
+            return false;    
+        }
+        catch (Exception $ex) 
+        {
+            print $ex->getMessage();
+        }
+    }
+
+
+        public function _getTotalMatXSedesXPerXEst($eid='',$oid='',$state='',$perid='',$subid='')
+    {
+        try
+        {
+             $select = $this->_db->select()
+            ->from(array('m' => 'base_registration'),array('COUNT(*) as totmat'))
+                ->where('perid = ?', $perid)->where('state = ?', $state)->where('subid = ?',$subid)
+                ->where('oid = ?', $oid)->where('eid = ?', $eid);
+            $results = $select->query();            
+            $rows = $results->fetchAll();
+            if($rows) return $rows;
+            return false;   
+        }
+        catch (Exception $ex) 
+        {
+            print $ex->getMessage();
+        }
+    }
 
 
 

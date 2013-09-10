@@ -1,0 +1,50 @@
+<form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/admin/user/getusernew" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+    <table class="table span9 table-striped table-bordered table-condensed">
+        <tr>
+            <td>
+                <p style='font-size: 15px; float:left; margin-right:20px'>Buscar Usuario con su numero de DNI: <div style='width: 250px;float:left'><?php echo $this->fm->pid?></p>
+            </td>
+            <td>
+            <center><a href="/admin/user" class="btn btn-danger" >Cancelar</a></center>
+            </td>
+        </tr>
+        <tr>
+        </tr>   
+    </table>
+</form>
+<div  id="cargadatos_"></div> 
+<script>
+    $("#pid").keypress(function (e) {
+        if(e == 13 || e.which==13 || e.which==0){
+            var codi =  $('#pid').val();
+            count=codi.length;
+            if (count==8 || count==0)
+            {
+                $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
+                $("#frmFiltroDoc").submit();
+            }
+            else
+            {
+                alert("Ingrese un DNI valido");
+                $('#pid').val('');
+            }
+        }
+    });
+    
+    $("#frmFiltroDoc").submit(function(){
+        $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(data) {                        
+            $('#cargadatos_').html(data);                                 
+            }
+        }); 
+        return false;
+    });
+
+function validNumber(e) {
+    var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
+    return ((tecla > 47 && tecla < 58) || tecla == 8);
+    }    
+</script> 
