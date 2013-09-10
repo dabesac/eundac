@@ -1,0 +1,347 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+if ($this->busqx == 'xfac') $a= "POR FACULTADES";  
+if ($this->busqx == 'xesc') $a= "POR ESCUELAS";
+if ($this->busqx == 'xsed') $a="POR SEDES";
+$header='
+<table style="width: 100%;" border="1">
+    <tr>
+        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+        <th style="text-align: center; font-size: 11px;">
+        NRO DE ALUMNOS MATRICULADOS PERIODO '.strtoupper($this->perid).'
+        </th>        
+    </tr>
+    <tr>
+        <th style="border: 1px solid #000;"> REPORTE GENERADO '.strtoupper($a).'</th>
+    </tr>
+</table>
+ 
+'    
+?>
+
+<div id="datos">
+	<?php
+		$eid=$this->eid;
+		$oid=$this->oid;
+		$perid=$this->perid;
+		$total=0;
+	?>
+	<br></br>
+	<table style='float:left; font-size: 11px; width:100%'>
+		<thead>
+			<tr style="background: #ccc; color; #ffffff;">
+				<th>
+					<center>
+						<?php
+						if ($this->busqx == 'xfac') echo "FACULTADES";
+						if ($this->busqx == 'xesc') echo "ESCUELAS";
+						if ($this->busqx == 'xsed') echo "SEDES";
+						?>
+					</center>
+				</th>
+			<?php if ($this->mat == '1') 
+			{
+				$tot_ver_mat=0;	
+			?>
+				<th style="font-size: 10px;">
+					<center>TOTAL MATRICULADOS</center>
+				</th>
+			<?php
+			}
+			if ($this->premat == '1') 
+			{
+				$tot_ver_premat=0;	
+				?>
+				<th style="font-size: 10px;">
+					<center>TOTAL PREMATRICULADOS</center>
+				</th>
+			<?php
+			}
+			if ($this->npremat == '1') 
+			{
+				$tot_ver_npremat=0;	
+				?>
+				<th style="font-size: 10px;">
+					<center>TOTAL NO MATRICULADOS</center>
+				</th>
+			<?php
+			}
+			if ($this->obs == '1') 
+			{
+				$tot_ver_obs=0;	
+				?>
+				<th style="font-size: 10px;">
+					<center>TOTAL OBSERVADOS</center>
+				</th>
+			<?php
+			}
+			if ($this->res == '1') 
+			{
+				$tot_ver_res=0;	
+				?>
+				<th  style="font-size: 10px;">
+					<center>TOTAL RESERVADOS</center>
+				</th>
+			<?php
+			}
+			?>
+				<th >
+					<center>TOTAL</center>
+				</th>
+			</tr>
+
+		</thead>
+               <tbody>
+        	<?php
+            $bdmatricula = new Api_Model_DbTable_Registration();
+
+            foreach ($this->reporte as $report)
+            {
+            ?>
+        		<tr>
+                    <?php if ($this->busqx == 'xfac' && ($this->rid=='RC' or $this->rid=='VA' or $this->rid=='PD') )
+
+                    {
+                    	$tot_hor=0;	
+                    ?>
+                    	<td><?php echo $report["name"]  ?>
+                    	</td>
+        				<?php 
+        				if ($this->mat == '1') 
+						{
+							$matricula1 =$bdmatricula->_getTotalMatXFacultadesXPerXEst($eid,$oid,'M',$perid,$report["facid"]);
+							$tot_ver_mat = $tot_ver_mat + $matricula1[0]["totmat"]; 	
+							$tot_hor = $tot_hor + $matricula1[0]["totmat"];	
+							?>
+							<td><center><?php echo ($matricula1[0]["totmat"])?></center></td>
+						<?php
+						}
+						
+						if ($this->premat == '1') 
+						{
+							$matricula2 =$bdmatricula->_getTotalMatXFacultadesXPerXEst($eid,$oid,'I',$perid,$report["facid"]);
+							$tot_ver_premat = $tot_ver_premat + $matricula2[0]["totmat"]; 	
+							$tot_hor = $tot_hor + $matricula2[0]["totmat"];	
+							?>
+							<td><center><?php echo ($matricula2[0]["totmat"])?></center></td>
+						<?php
+						}
+						
+						if ($this->npremat == '1') 
+						{
+							$matricula3 =$bdmatricula->_getTotalMatXFacultadesXPerXEst($eid,$oid,'B',$perid,$report["facid"]);
+							$tot_ver_npremat = $tot_ver_npremat + $matricula3[0]["totmat"]; 	
+							$tot_hor = $tot_hor + $matricula3[0]["totmat"];	
+							?>
+							<td><center><?php echo ($matricula3[0]["totmat"])?></center></td>
+						<?php
+						}
+						
+						if ($this->obs == '1') 
+						{
+							$matricula4 =$bdmatricula->_getTotalMatXFacultadesXPerXEst($eid,$oid,'O',$perid,$report["facid"]);
+							$tot_ver_obs = $tot_ver_obs + $matricula4[0]["totmat"]; 	
+							$tot_hor = $tot_hor + $matricula4[0]["totmat"];	
+							?>
+							<td><center><?php echo ($matricula4[0]["totmat"])?></center></td>
+						<?php
+						}
+						
+
+						if ($this->res == '1') 
+						{
+							$matricula5 =$bdmatricula->_getTotalMatXFacultadesXPerXEst($eid,$oid,'R',$perid,$report["facid"]);
+							$tot_ver_res = $tot_ver_res + $matricula5[0]["totmat"]; 	
+							$tot_hor = $tot_hor + $matricula5[0]["totmat"];	
+							?>
+							<td><center><?php echo ($matricula5[0]["totmat"])?></center></td>
+						<?php
+						} ?>
+						<td><center><b><?php echo $tot_hor; ?></b></center></td>
+					<?php 
+					} ?>
+
+                   <?php if ($this->busqx == 'xesc')
+                    {
+                    	if ($this->facid =='TODO') $facidm='TODO';
+                    	else $facidm = mb_substr($report["escid"],0,1);
+                    	if ($facidm == $this->facid)
+                    	{	
+	                    	$tot_hor=0;	
+	                    	?>
+	                    	<td><?php echo $report["name"]  ?></td>
+	                    	
+	                    	<?php if ($this->mat == '1') 
+							{
+								$matricula21 =$bdmatricula->_getTotalMatXEscuelasXPerXEst($eid,$oid,'M',$perid,$report["escid"]);
+								$tot_ver_mat = $tot_ver_mat + $matricula21[0]["totmat"]; 
+								$tot_hor = $tot_hor + $matricula21[0]["totmat"];	
+								?>
+								<td><center><?php echo $matricula21[0]["totmat"]?></center></td>
+							<?php
+							}
+							if ($this->premat == '1') 
+							{
+								$matricula22 =$bdmatricula->_getTotalMatXEscuelasXPerXEst($eid,$oid,'I',$perid,$report["escid"]);
+								$tot_ver_premat = $tot_ver_premat + $matricula22[0]["totmat"];
+								$tot_hor = $tot_hor + $matricula22[0]["totmat"];	
+								?>
+								<td><center><?php echo $matricula22[0]["totmat"]?></center></td>
+							<?php
+							}
+							if ($this->npremat == '1') 
+							{
+								$matricula23 =$bdmatricula->_getTotalMatXEscuelasXPerXEst($eid,$oid,'B',$perid,$report["escid"]);
+								$tot_ver_npremat = $tot_ver_npremat + $matricula23[0]["totmat"];
+								$tot_hor = $tot_hor + $matricula23[0]["totmat"];	
+								?>
+								<td><center><?php echo $matricula23[0]["totmat"]?></center></td>
+							<?php
+							}
+							if ($this->obs == '1') 
+							{
+								$matricula24 =$bdmatricula->_getTotalMatXEscuelasXPerXEst($eid,$oid,'O',$perid,$report["escid"]);
+								$tot_ver_obs = $tot_ver_obs + $matricula24[0]["totmat"];
+								$tot_hor = $tot_hor + $matricula24[0]["totmat"];	
+								?>
+								<td><center><?php echo $matricula24[0]["totmat"]?></center></td>
+							<?php
+							}
+							if ($this->res == '1') 
+							{
+								$matricula25 =$bdmatricula->_getTotalMatXEscuelasXPerXEst($eid,$oid,'R',$perid,$report["escid"]);
+								$tot_ver_res = $tot_ver_res + $matricula25[0]["totmat"];
+								$tot_hor = $tot_hor + $matricula25[0]["totmat"];	
+								?>
+								<td><center><?php echo $matricula25[0]["totmat"]?></center></td>
+							<?php
+							} ?>
+							<td><center><b><?php echo $tot_hor; ?></b></center></td>
+						<?php 
+						}
+					} ?>
+
+
+                                      <?php if ($this->busqx == 'xsed')
+                    {
+                    	$tot_hor=0;	
+                    	?>
+                    	<td><?php echo $report["name"]  ?></td>
+                    	
+                    	<?php if ($this->mat == '1') 
+						{
+							$matricula31 =$bdmatricula->_getTotalMatXSedesXPerXEst($eid,$oid,'M',$perid,$report["subid"]);
+							$tot_ver_mat = $tot_ver_mat + $matricula31[0]["totmat"];
+							$tot_hor = $tot_hor + $matricula31[0]["totmat"];
+							?>
+							<td><center><?php echo $matricula31[0]["totmat"]?></center></td>
+						<?php
+						}
+						if ($this->premat == '1') 
+						{
+							$matricula32 =$bdmatricula->_getTotalMatXSedesXPerXEst($eid,$oid,'I',$perid,$report["subid"]);
+							$tot_ver_premat = $tot_ver_premat + $matricula32[0]["totmat"];
+							$tot_hor = $tot_hor + $matricula32[0]["totmat"];
+							?>
+							<td><center><?php echo $matricula32[0]["totmat"]?></center></td>
+
+						<?php
+						}
+						if ($this->npremat == '1') 
+						{
+							$matricula33 =$bdmatricula->_getTotalMatXSedesXPerXEst($eid,$oid,'B',$perid,$report["subid"]);
+							$tot_ver_npremat = $tot_ver_npremat + $matricula33[0]["totmat"];
+							$tot_hor = $tot_hor + $matricula33[0]["totmat"];
+							?>
+							<td><center><?php echo $matricula33[0]["totmat"]?></center></td>
+						<?php
+						}
+						if ($this->obs == '1') 
+						{
+							$matricula34 =$bdmatricula->_getTotalMatXSedesXPerXEst($eid,$oid,'O',$perid,$report["subid"]);
+							$tot_ver_obs = $tot_ver_obs + $matricula34[0]["totmat"];
+							$tot_hor = $tot_hor + $matricula34[0]["totmat"];
+							?>
+							<td><center><?php echo $matricula34[0]["totmat"]?></center></td>
+						<?php
+						}
+						if ($this->res == '1') 
+						{
+							$matricula35 =$bdmatricula->_getTotalMatXSedesXPerXEst($eid,$oid,'R',$perid,$report["subid"]);
+							$tot_ver_res = $tot_ver_res + $matricula35[0]["totmat"];
+							$tot_hor = $tot_hor + $matricula35[0]["totmat"];
+							?>
+							<td><center><?php echo $matricula35[0]["totmat"]?></center></td>
+						<?php
+						} ?>
+						<td><center><b><?php echo $tot_hor; ?></b></center></td>
+					<?php	
+					} ?>
+	        	</tr>
+        	<?php 
+        	}
+            ?>
+           <tr style="background: #ccc; color; #ffffff;">
+            	<td><center><b>TOTAL</b></center></td>
+        				<?php 
+        				if ($this->mat == '1') 
+						{
+							$total=$total + $tot_ver_mat;
+							?>
+							<td><center><b><?php echo $tot_ver_mat; ?></b></center></td>
+						<?php
+						}
+						
+						if ($this->premat == '1') 
+						{
+							$total=$total + $tot_ver_premat;
+							?>
+							<td><center><b><?php echo $tot_ver_premat; ?></b></center></td>
+						<?php
+						}
+						
+						if ($this->npremat == '1') 
+						{
+							$total=$total + $tot_ver_npremat;
+							?>
+							<td><center><b><?php echo $tot_ver_npremat; ?></b></center></td>
+						<?php
+						}
+						
+						if ($this->obs == '1') 
+						{
+							$total=$total + $tot_ver_obs;
+							?>
+							<td><center><b><?php echo $tot_ver_obs; ?></b></center></td>
+						<?php
+						}
+						
+
+						if ($this->res == '1') 
+						{
+							$total=$total + $tot_ver_res;
+							?>
+							<td><center><b><?php echo $tot_ver_res; ?></b></center></td>
+						<?php
+						} ?>
+						<td style="font-size: 15px;"><center><b><?php echo $total; ?></b></center></td>
+            </tr>
+        </tbody>
+    </table>  
+</div>
+<?php 
+
+  $html = ob_get_contents();
+  
+  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
+  $mpdf->SetHTMLHeader($header);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  
+  $mpdf->SetFooter($this->footer);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('RecordNotas-'.$this->person['pid'].'.pdf','D');
+  
+?>

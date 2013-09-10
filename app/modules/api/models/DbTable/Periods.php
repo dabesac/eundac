@@ -116,4 +116,23 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
 	}
 
 
+	  public function _getAniosPerids($where=null)
+    {
+       try
+       {
+            $sql=$this->_db->query("
+                select distinct left(perid,2) as anioid,case when cast(left(perid,2)as integer)>40 then '19' || left(perid,2) else '20' || left(perid,2) end  as anio  from base_periods
+                where eid='".$where['eid']."'
+                order by anio desc
+           ");  
+           $row=$sql->fetchAll();
+           return $row;  
+        } 
+        catch (Exception $ex)
+        {
+            print "Al momento de Filtrar todos los anios existentes de periodos ".$ex->getMessage();
+        }
+    }
+
+
 }
