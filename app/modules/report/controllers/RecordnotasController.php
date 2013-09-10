@@ -60,10 +60,10 @@
 
  	public function printAction(){
  		try {
- 			$this->_helper->layout()->disableLayout();
+ 			    $this->_helper->layout()->disableLayout();
       		$footer=$this->sesion->org['footer_print'];
       		$this->view->footer=$footer;
- 			$uid=base64_decode($this->_getParam('uid'));
+ 			    $uid=base64_decode($this->_getParam('uid'));
       		$this->view->uid=$uid;	
       		$escid=base64_decode($this->_getParam('escid'));
       		$eid=base64_decode($this->_getParam('eid'));

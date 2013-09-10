@@ -16,6 +16,7 @@ class Profile_PublicController extends Zend_Controller_Action {
 
     public function indexAction()
     {
+        echo "fsfs";
     }
 
     public function studentAction()
@@ -207,12 +208,14 @@ class Profile_PublicController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;
+            
             $pid=$this->sesion->pid;
             $uid=$this->sesion->uid;
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
+         
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;            
             $perid="13B";
             //print_r($this->sesion);
 
@@ -256,6 +259,8 @@ class Profile_PublicController extends Zend_Controller_Action {
             $oid=$this->sesion->oid;
             $pid=$this->sesion->pid;
             $uid=$this->sesion->uid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
 
             $dbsignr=new Api_Model_DbTable_Registrationxcourse();
             $dbnamper=new Api_Model_DbTable_Periods();
@@ -269,6 +274,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $c=0;
 
             $attrib=array("name");
+            $attribcour=array("courseid");
             foreach ($signr as $sperid) {
                 if($sperid['perid']<>$per){
                     $where=array("eid"=>$eid, "oid"=>$oid, "perid"=>$sperid['perid']);
@@ -276,15 +282,23 @@ class Profile_PublicController extends Zend_Controller_Action {
 
 
                     $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "perid"=>$sperid['perid']);
-                    print_r($where);
-                    //$courxper[$c]=$dbsignr->_getFilter($where);
+                    //print_r($where);
+                    $courxper=$dbsignr->_getFilter($where,$attribcour);
+                    $x=0;
+                    foreach ($courxper as $cour) {
+                        $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid']);
+                        //print_r($where);
+                        $courname[$c][$x]=$dbsignr->_getInfoCourse($where, $attrib);
+                        $x++;
+                    }
 
                     $per=$sperid['perid'];
                     $c++;
                 }
             }
-            //print_r($namper);
+            //print_r($courname);
 
+            $this->view->courname=$courname;
             $this->view->namper=$namper;
 
         }catch(exception $e){

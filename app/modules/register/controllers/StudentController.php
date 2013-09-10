@@ -98,6 +98,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
             $base_registration= new Api_Model_DbTable_Registration();
             $data_register = $base_registration->_getOne($where);
+
             $state = trim($data_register['state']);
             $deleted = trim($data_register['count']);
             $this->view->deleted=$deleted;
@@ -113,8 +114,10 @@ class Register_StudentController extends Zend_Controller_Action {
                 $condition_credits=0;
                 $condition_semester='3';
 
+            	$cont_conmment=null;
+
                 if ($data_condition) {
-                	$cont_conmment=null;
+
                     foreach ($data_condition  as $condition) {
 						
                         if ($condition['num_registration'] !='') {
@@ -139,7 +142,10 @@ class Register_StudentController extends Zend_Controller_Action {
                     }
                 }
 
-                $this->view->cont_conmment=$cont_conmment;
+                if ($cont_conmment) {
+                    $this->view->cont_conmment=$cont_conmment;
+                }
+
                 $this->view->condition_register=$condition_register;
                 $this->view->condition_credits=$condition_credits;
                 // echo $condition_semester;
@@ -179,17 +185,26 @@ class Register_StudentController extends Zend_Controller_Action {
                     $where['curid']=$curid;
                     // $order="s";
                     $course_reg=$base_registration_subjet->_getAll($where);
-                    $veces = 1 ;
 
+                    $veces = 1 ;
+                    $veces_subject = false;
                     if ($course_reg) {
 
-                        foreach ($subject as $key => $course) {
+                        if ($subject) {
+                             foreach ($subject as $key => $course) {
 
+                            $subject[$key]['veces_cur'] = null;
+                            $subject[$key]['register']=0;
+
+                            // $subject[$key]['veces'];
                             $N=count($course_reg);
-                            for ($i=0; $i < $N; $i++) { 
-                                if($course['courseid']==$course_reg[$i]['courseid']){
+
+                            for ($i=0; $i < $N; $i++) {
+
+                                if($course['courseid'] == $course_reg[$i]['courseid'] && $course['turno'] == $course_reg[$i]['turno']){
                                     $subject[$key]['register']=1;
                                 }
+                               
                             }
 
                             if($course['veces'] >= 2)
@@ -201,6 +216,8 @@ class Register_StudentController extends Zend_Controller_Action {
                                 $veces = $course['veces'];
                             }
 
+
+                        }
                         }
                         $this->view->veces = $veces;
                         $this->view->veces_subject=$veces_subject;
@@ -237,7 +254,7 @@ class Register_StudentController extends Zend_Controller_Action {
                                 $assign_credist =   $base_registration->_get_Credits_Asignated($escid,$curid,$perid,$data_register['semid']);
                                 $this->view->assign_semester=$data_register['semid'];
                                 $this->view->total_credits=$data_register['credits'];
-                                $this->view->assign_credist=intval($assign_credist[0]['semester_credits'])+$condition_credits+$created_resolu;
+                                $this->view->assign_credist=intval($assign_credist[0]['semester_creditsz'])+$condition_credits+$created_resolu;
                         }
                     }
                     else{
@@ -264,6 +281,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
             $base_payment = new Api_Model_DbTable_Payments();
             $data_payment=$base_payment->_getOne($where);
+
             unset($where['perid']);
             $register_paymnets = $base_payment->_getAll($where);
 
@@ -340,7 +358,7 @@ class Register_StudentController extends Zend_Controller_Action {
                     }
                 }
 
-                $this->view->name_reates=$data_payment['name'];
+                $this->view->name_reates=$assign_payment['name'];
                 //print_r($data_payment);
             }
             else
@@ -621,24 +639,24 @@ class Register_StudentController extends Zend_Controller_Action {
 
                     if($veces >= 2 ){
 
-                        $credits_assing[0]['semester_credits']=11+$condition_credits;
+                        $credits_assing[0]['semester_creditsz']=11+$condition_credits;
                     }
                     else{
 
 
                         if($credits_register['semid'] != 0 && $veces < 2){
                             $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
-                            $credits_assing[0]['semester_credits']=intVal($credits_assing[0]['semester_credits'])+$condition_credits+$created_resolu;
+                            $credits_assing[0]['semester_creditsz']=intVal($credits_assing[0]['semester_creditsz'])+$condition_credits+$created_resolu;
                         }
 
                         if( $credits_register['semid'] == 0 )
                         {
-                            $credits_assing[0]['semester_credits']=22;
+                            $credits_assing[0]['semester_creditsz']=22;
                         }
                         
                     }
                     
-                    $credits_asing= intval($credits_assing[0]['semester_credits']);
+                    $credits_asing= intval($credits_assing[0]['semester_creditsz']);
                     $credits_val = intval($credits_register['credits']) + intval($credits_cur);
 
 
@@ -662,7 +680,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
                            if($veces >= 2 ){
 
-                                $credits_assing[0]['semester_credits']=11+$condition_credits;
+                                $credits_assing[0]['semester_creditsz']=11+$condition_credits;
                             }
                             else{
 
@@ -671,13 +689,13 @@ class Register_StudentController extends Zend_Controller_Action {
 
                                     $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
 
-                                    $credits_assing[0]['semester_credits']=intVal($credits_assing[0]['semester_credits'])+$condition_credits+$created_resolu;
+                                    $credits_assing[0]['semester_creditsz']=intVal($credits_assing[0]['semester_creditsz'])+$condition_credits+$created_resolu;
 
                                 }
 
                                 if( $credits_register['semid'] == 0 )
                                 {
-                                    $credits_assing[0]['semester_credits']=22;
+                                    $credits_assing[0]['semester_creditsz']=22;
                                 }
                                 
                             }
@@ -685,7 +703,7 @@ class Register_StudentController extends Zend_Controller_Action {
                                     'status'=>true,
                                     'total_credits'=>$credits_register['credits'],
                                     'semester'=>$credits_register['semid'],
-                                    'credits_assing'=>$credits_assing[0]['semester_credits'],
+                                    'credits_assing'=>$credits_assing[0]['semester_creditsz'],
                                     'suma'=>$credits_val
                                 );
                     }
@@ -768,16 +786,16 @@ class Register_StudentController extends Zend_Controller_Action {
 
                                 $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
 
-                                $credits_assing[0]['semester_credits']=intVal($credits_assing[0]['semester_credits'])+$condition_credits+$created_resolu;
+                                $credits_assing[0]['semester_creditsz']=intVal($credits_assing[0]['semester_creditsz'])+$condition_credits+$created_resolu;
                             }
                             else{
 
                                 if($credits_register['semid']==0){
-                                        $credits_assing[0]['semester_credits']=0;
+                                        $credits_assing[0]['semester_creditsz']=0;
                                     }
                                 elseif($veces >= 2)
                                 {
-                                    $credits_assing[0]['semester_credits']=11+$condition_credits; 
+                                    $credits_assing[0]['semester_creditsz']=11+$condition_credits; 
                                 }
 
                             }
@@ -786,8 +804,7 @@ class Register_StudentController extends Zend_Controller_Action {
                                 'status'=>true,
                                 'total_credits'=>$credits_register['credits'],
                                 'semester'=>$credits_register['semid'],
-                                'credits_assing'=>$credits_assing[0]['semester_credits'],
-                                'suma'=>$credits_val
+                                'credits_assing'=>$credits_assing[0]['semester_creditsz']
                                 );
                 }
 
@@ -852,7 +869,7 @@ class Register_StudentController extends Zend_Controller_Action {
 				);
 				$regmatr = $matricula->_getRegister($wheremat);
 
-				if ($regmatr) $this->view->semid = $regmatr['semid'];
+				if ($regmatr) $this->view->regmatr = $regmatr;
 
                 // $attrib =array('pid','last_name0');
 
@@ -882,6 +899,8 @@ class Register_StudentController extends Zend_Controller_Action {
                                                         ", ".$name_teacher['first_name'];
 
                 } 
+
+
 
                 $this->view->data_subjects  =   $data_subjects;
                 $this->_helper->layout->disableLayout();

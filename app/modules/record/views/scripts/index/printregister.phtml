@@ -1,0 +1,437 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+$speciality = $this->info_speciality;
+if ($speciality['parent']!= '') {
+	$name_esc = $speciality['speciality'];
+	$name_speciality= $speciality['name'];
+}
+else{
+	$name_esc=$speciality['name'];
+	$name_speciality= $speciality['name'];
+}
+
+$type = $this->type;
+$perid=$this->perid;
+$course = $this->info_couser;
+$students = $this->students;
+$mpdf->mirrorMargins = 1;
+$header='
+	<table width="760px" cellpadding="1" cellspacing="2" >
+  		<tr>
+    	<td> 
+   			<table width="380px" cellpadding="1" cellspacing="2"  style="border: 1px;font-size: 10px;">
+			<tr>
+        		<td  style="border: 0.20px solid #000;width: 90px;" >FACULTAD</td>
+        		<td  style="border: 0.20px solid #000;"colspan="5" >'.ucwords(strtolower($speciality['name_faculty'])).'</td>
+      		</tr>
+			<tr>
+          		<td style=" border: 0.20px solid #000; width: 90px;">ESCUELA</td>
+          		<td style=" border: 0.20px solid #000;" colspan="5" >'.$name_esc.'</td>
+        	</tr>
+        	<tr>
+          		<td style=" border: 0.20px solid #000; width: 90px;">ESPECIALIDAD</td>
+          		<td style=" border: 0.20px solid #000; "colspan="5" >'.$name_speciality.'</td>
+        	</tr> 
+      		<tr >
+          		<td style=" border: 0.20px solid #000; width: 90px;">ASIGNATURA</td>
+          		<td style=" border: 0.20px solid #000;"colspan="5" >'.$course['name'].'</td>
+        	</tr>
+      		<tr >
+          		<td style=" border: 0.20px solid #000; width: 90px;">DOCENTE</td>
+          		<td style=" border: 0.20px solid #000;" colspan="5" >'.$course['name_teacher'].'</td>
+        	</tr>
+      		<tr>
+          		<td style=" border: 0.20px solid #000; width: 90px;">SEMESTRE</td>
+          		<td style="width: 100px; border: 0.20px solid #000;">'.$course['name_semester'].'</td>
+          		<td style="width: 40px; border: 0.20px solid #000;">AULA</td>
+          		<td style="width: 50px; border: 0.20px solid #000;">'.$course['turno'].'</td>
+          		<td style="width: 60px; border: 0.20px solid #000;">CRÉDITOS</td>
+          		<td style="width: 50px; border: 0.20px solid #000;">'.$course['credits'].'</td>
+         	</tr>
+        	</table>
+		</td>
+		<td> 
+    	<table width="380px" cellpadding="1" cellspacing="2"  style="border: 1px;font-size: 10px; float: right;">
+        	<tr>
+				<td style="font-size: 12px;font-family: Verdana;font-weight: bold;" colspan="5" >
+				<center>Universidad Nacional</center>
+				<center>Daniel Alcides Carrion</center>
+				<center><img width="60px" src="/img/UNDAC.png"></center>
+				</td>
+			</tr>
+    	</table>
+    	</td>
+    	</tr>
+</table>	
+';
+?>
+<style type="text/css">
+	.normal-td{
+		border: 0.25px solid #000;
+	}
+</style>
+<?php if ($type == "O") { ?>
+	<table width="750px" cellpadding="1" cellspacing="1"  style="border: 1px;font-size: 10px;">
+		<tr>
+			<td style="border: 0.5px solid #000; font-size: 14px;" width="350px" colspan="3"><center>REGISTRO DE EVALUACIÓN - <?php echo $perid?> </center></td>
+			<td width="160px" style='border: 0.5px solid #000' colspan="10"><center>PRIMER PARCIAL</center></td>
+			<td width="160px" style='border: 0.5px solid #000' colspan="10"><center>SEGUNDO PARCIAL</center></td>
+			<td width="80px" style='border: 0.5px solid #000' colspan="2"><center>PROM. FINAL</center></td>
+		</tr>
+		<tr>
+			<td class='normal-td' height="10px" width="20px" ><center>Nº<center></td>
+			<td class='normal-td' width="75px"><center>CODIGO</center></td>
+			<td class='normal-td' width="255px"><center>APELLIDOS Y NOMBRES</center></td>
+			<td class='normal-td' height="10px" width="15.5px" ><center>A</center></td>
+			<td class='normal-td' width="15.5px"><center>B</center></td>
+			<td class='normal-td' width="15.5px"><center>C</center></td>
+			<td class='normal-td' width="15.5px"><center>D</center></td>
+			<td class='normal-td' width="15.5px"><center>E</center></td>
+			<td class='normal-td' width="15.5px"><center>F</center></td>
+			<td class='normal-td' width="15.5px"><center>G</center></td>
+			<td class='normal-td' width="15.5px"><center>H</center></td>
+			<td class='normal-td' width="15.5px"><center>I</center></td>
+			<td class='normal-td' width="15.5px"><center>1</center></td>
+			<td class='normal-td' height="10px" width="15.5px" ><center>A</center></td>
+			<td class='normal-td' width="15px"><center>B</center></td>
+			<td class='normal-td' width="15px"><center>C</center></td>
+			<td class='normal-td' width="15px"><center>D</center></td>
+			<td class='normal-td' width="15px"><center>E</center></td>
+			<td class='normal-td' width="15px"><center>F</center></td>
+			<td class='normal-td' width="15px"><center>G</center></td>
+			<td class='normal-td' width="15px"><center>H</center></td>
+			<td class='normal-td' width="15px"><center>I</center></td>
+			<td class='normal-td' width="15px"><center>2</center></td>
+			<td class='normal-td' height="10px" width="25px" ><center>LITERAL</center></td>
+			<td class='normal-td' width="15px"><center>Nº</center></td>
+		</tr>
+		<?php if ($students) {
+			foreach ($students as $key => $student) {
+
+				($student['nota1_i'] <= 10) ? ($color='red') : ($color='blue');
+				($student['nota2_i'] <= 10) ? ($color2='red') : ($color2='blue');
+				($student['nota3_i'] <= 10) ? ($color3='red') : ($color3='blue');
+				($student['nota4_i'] <= 10) ? ($color4='red') : ($color4='blue');
+				($student['nota5_i'] <= 10) ? ($color5='red') : ($color5='blue');
+				($student['nota6_i'] <= 10) ? ($color6='red') : ($color6='blue');
+				($student['nota7_i'] <= 10) ? ($color7='red') : ($color7='blue');
+				($student['nota8_i'] <= 10) ? ($color8='red') : ($color8='blue');
+				($student['nota9_i'] <= 10) ? ($color9='red') : ($color9='blue');
+				($student['promedio1'] <= 10) ? ($color10='red') : ($color10='blue');
+				($student['nota1_ii'] <= 10) ? ($color11='red') : ($color11='blue');
+				($student['nota2_ii'] <= 10) ? ($color12='red') : ($color12='blue');
+				($student['nota3_ii'] <= 10) ? ($color13='red') : ($color13='blue');
+				($student['nota4_ii'] <= 10) ? ($color14='red') : ($color14='blue');
+				($student['nota5_ii'] <= 10) ? ($color15='red') : ($color15='blue');
+				($student['nota6_ii'] <= 10) ? ($color16='red') : ($color16='blue');
+				($student['nota7_ii'] <= 10) ? ($color17='red') : ($color17='blue');
+				($student['nota8_ii'] <= 10) ? ($color18='red') : ($color18='blue');
+				($student['nota9_ii'] <= 10) ? ($color19='red') : ($color19='blue');
+				($student['promedio2'] <= 10) ? ($color20='red') : ($color20='blue');
+				($student['notafinal'] <= 10) ? ($color22='red') : ($color22='blue');
+				($student['notafinal'] <= 10) ? ($color21='red') : ($color21='blue');
+
+				$promedio1 = $student['promedio1'];
+				$promedio2 = $student['promedio2'];
+				$nota_f = $student['notafinal'];
+
+				switch (trim($nota_f)) {
+					case -3: $notatexto = "RETIRADO";break;
+					case 0: $notatexto = "CERO";break;
+					case 1: $notatexto = "UNO";break;
+					case 2: $notatexto = "DOS";break;
+					case 3: $notatexto = "TRES";break;
+					case 4: $notatexto = "CUATRO";break;
+					case 5: $notatexto = "CINCO";break;
+					case 6: $notatexto = "SEIS";break;
+					case 7: $notatexto = "SIETE";break;
+					case 8: $notatexto = "OCHO";break;
+					case 9: $notatexto = "NUEVE";break;
+					case 10: $notatexto = "DIEZ";break;
+					case 11: $notatexto = "ONCE";break;
+					case 12: $notatexto = "DOCE";break;
+					case 13: $notatexto = "TRECE";break;
+					case 14: $notatexto = "CATORCE";break;
+					case 15: $notatexto = "QUINCE";break;
+					case 16: $notatexto = "DIECISEIS";break;
+					case 17: $notatexto = "DIECISIETE";break;
+					case 18: $notatexto = "DIECIOCHO";break;
+					case 19: $notatexto = "DIECINUEVE";break;
+					case 20: $notatexto = "VEINTE";break;
+				}
+
+				if (strlen($nota_f) == 1) {
+					$nota_f = "0".$nota_f;
+				}
+				if ($nota_f == -3 ) {
+					$nota_f = "R";
+				}
+				if ($promedio1 == -3 ) {
+					$promedio1 = "R";
+				}
+				if ($promedio2 == -3 ) {
+					$promedio2 = "R";
+				} ?>
+				<tr>
+					<td class='normal-td' height="10px" width="20px" ><center><?php echo $key+1?><center></td>
+					<td class='normal-td'  width="75px"><center><?php echo $student['uid']?></center></td>
+					<td class='normal-td' width="255px"><?php echo $student['last_name0']." ".$student['last_name1'].", ".$student['first_name']?></td>
+					<td class='normal-td' style='color:<?php echo $color  ?>' height="10px" width="15.5px" ><center><?php echo $student['nota1_i']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color2 ?>' width="15.5px"><center><?php echo $student['nota2_i']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color3 ?>' width="15.5px"><center><?php echo $student['nota3_i']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color4 ?>' width="15.5px"><center><?php echo $student['nota4_i']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color5 ?>' width="15.5px"><center><?php echo $student['nota5_i']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color6 ?>' width="15.5px"><center><?php echo $student['nota6_i']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color7 ?>' width="15.5px"><center><?php echo $student['nota7_i']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color8 ?>' width="15.5px"><center><?php echo $student['nota8_i']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color9 ?>' width="15.5px"><center><?php echo $student['nota9_i']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color10 ?>' width="15.5px"><center><?php echo $promedio1?></center></td>
+					<td class='normal-td' style='color:<?php echo $color11 ?>' height="10px" width="15.5px" ><center><?php echo $student['nota1_ii']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color12 ?>' width="15px"><center><?php echo $student['nota2_ii']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color13 ?>' width="15px"><center><?php echo $student['nota3_ii']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color14 ?>' width="15px"><center><?php echo $student['nota4_ii']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color15 ?>' width="15px"><center><?php echo $student['nota5_ii']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color16 ?>' width="15px"><center><?php echo $student['nota6_ii']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color17 ?>' width="15px"><center><?php echo $student['nota7_ii']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color18 ?>' width="15px"><center><?php echo $student['nota8_ii']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color19 ?>' width="15px"><center><?php echo $student['nota9_ii']?></center></td>
+					<td class='normal-td' style='color:<?php echo $color20 ?>' width="15px"><center><?php echo $promedio2?></center></td>
+					<td class='normal-td' style='color:<?php echo $color21 ?>' height="10px" width="25px" ><center><?php echo $notatexto?></center></td>
+					<td class='normal-td' style='color:<?php echo $color22 ?>' width="15px"><center><?php echo $student['notafinal']?></center></td>
+				</tr>
+		<?php }
+		}?>
+	</table>
+<?php }?>
+<?php 
+	if ($type == 'C') { $tam = "16px";?>
+
+
+		<table width="750px" cellpadding="1" cellspacing="1"  style="border: 1px;font-size: 10px;">
+			<tr>
+				<td class='normal-td' style="border: 0.5px solid #000;font-size: 14px; float: right;" colspan="3"><center>REGISTRO DE EVALUACIÓN - <?php echo $perid?></center></td>
+				<td class='normal-td' colspan="4"><center>UNIDAD 1</center></td>
+				<td class='normal-td' colspan="4"><center>UNIDAD 2</center></td>
+				<td class='normal-td' colspan="4"><center>UNIDAD 3</center></td>
+				<td class='normal-td' colspan="4"><center>UNIDAD 4</center></td>
+				<td class='normal-td' colspan="2"><center>PROM. FINAL</center></td>
+			</tr>
+			<?php if ($students) {
+				$percentaje=$this->data_Competecy; ?>
+			<tr >
+				<td rowspan="2" style="border: 1px solid #000; padding: 2px;"  height="3px" width="20px" ><center>Nº<center></td>
+				<td class='normal-td' rowspan="2" width="80px"><center>CODIGO</center></td>
+				<td class='normal-td' rowspan="2" width="260px"><center>APELLIDOS Y NOMBRES</center></td>
+					
+				<td class='normal-td' style="font-size: 6px;" height="3px" width="<?php echo $tam?>" ><center><?php echo $percentaje['porc1_u1'].'%'?></center></td>
+				<td class='normal-td' class='normal-td' style="font-size: 6px;" width="<?php echo $tam?>"><center><?php echo $percentaje['porc2_u1'].'%'?></center></td>
+				<td class='normal-td' style="font-size: 6px;" width="<?php echo $tam?>"><center><?php echo $percentaje['porc3_u1'].'%'?></center></td>
+				<td class='normal-td' rowspan="2" width="<?php echo $tam?>"><center>U1</center></td>
+				<td class='normal-td' style="font-size: 6px;" width="<?php echo $tam?>"><center><?php echo $percentaje['porc1_u2'].'%'?></center></td>
+				<td class='normal-td' style="font-size: 6px;" width="<?php echo $tam?>"><center><?php echo $percentaje['porc2_u2'].'%'?></center></td>
+				<td class='normal-td' style="font-size: 6px;" width="<?php echo $tam?>"><center><?php echo $percentaje['porc3_u2'].'%'?></center></td>
+				<td class='normal-td' rowspan="2" width="<?php echo $tam?>"><center>U2</center></td>
+				
+				<td class='normal-td' style="font-size: 6px;" height="3px" width="<?php echo $tam?>" ><center><?php echo $percentaje['porc1_u3'].'%'?></center></td>
+				<td class='normal-td' style="font-size: 6px;" width="<?php echo $tam?>"><center><?php echo $percentaje['porc2_u3'].'%'?></center></td>
+				<td class='normal-td' style="font-size: 6px;" width="<?php echo $tam?>"><center><?php echo $percentaje['porc3_u3'].'%'?></center></td>
+				<td class='normal-td' rowspan="2" width="<?php echo $tam?>"><center>U3</center></td>
+				<td class='normal-td' style="font-size: 6px;" width="<?php echo $tam?>"><center><?php echo $percentaje['porc1_u4'].'%'?></center></td>
+				<td class='normal-td' style="font-size: 6px;" width="<?php echo $tam?>"><center><?php echo $percentaje['porc2_u4'].'%'?></center></td>
+				<td class='normal-td' style="font-size: 6px;" width="<?php echo $tam?>"><center><?php echo $percentaje['porc3_u4'].'%'?></center></td>
+				<td class='normal-td' rowspan="2" width="<?php echo $tam?>"><center>U4</center></td>
+				
+				<td class='normal-td' rowspan="2" height="3px" width="<?php echo $tam?>" ><center>LITERAL</center></td>
+				<td class='normal-td' rowspan="2" width="<?php echo $tam?>"<center>>Nº</center></td>
+				
+			</tr>
+			<tr >
+				<td height="3px" class='normal-td' width="<?php echo $tam?>" ><center>C</center></td>
+				<td class='normal-td' width="<?php echo $tam?>"><center>P</center></td>
+				<td class='normal-td' width="<?php echo $tam?>"><center>A</center></td>
+				
+				<td class='normal-td' width="<?php echo $tam?>"><center>C</center></td>
+				<td class='normal-td' width="<?php echo $tam?>"><center>P</center></td>
+				<td class='normal-td' width="<?php echo $tam?>"><center>A</center></td>
+				
+				<td height="3px" class='normal-td' width="20px" ><center>C</center></td>
+				<td class='normal-td' width="<?php echo $tam?>"><center>P</center></td>
+				<td class='normal-td' width="<?php echo $tam?>"><center>A</center></td>
+				
+				<td class='normal-td' width="<?php echo $tam?>"><center>C</center></td>
+				<td class='normal-td' width="<?php echo $tam?>"><center>P</center></td>
+				<td class='normal-td' width="<?php echo $tam?>"><center>A</center></td>
+			</tr>
+			<?php foreach ($students as $key => $student) {
+
+				($student['nota1_i'] <= 10) ? ($color='red') : ($color='blue');
+				($student['nota2_i'] <= 10) ? ($color2='red') : ($color2='blue');
+				($student['nota3_i'] <= 10) ? ($color3='red') : ($color3='blue');
+				($student['nota4_i'] <= 10) ? ($color4='red') : ($color4='blue');
+				($student['nota5_i'] <= 10) ? ($color5='red') : ($color5='blue');
+				($student['nota6_i'] <= 10) ? ($color6='red') : ($color6='blue');
+				($student['nota7_i'] <= 10) ? ($color7='red') : ($color7='blue');
+				($student['nota8_i'] <= 10) ? ($color8='red') : ($color8='blue');
+				($student['nota9_i'] <= 10) ? ($color9='red') : ($color9='blue');
+				($student['promedio1'] <= 10) ? ($color10='red') : ($color10='blue');
+				($student['nota1_ii'] <= 10) ? ($color11='red') : ($color11='blue');
+				($student['nota2_ii'] <= 10) ? ($color12='red') : ($color12='blue');
+				($student['nota3_ii'] <= 10) ? ($color13='red') : ($color13='blue');
+				($student['nota4_ii'] <= 10) ? ($color14='red') : ($color14='blue');
+				($student['nota5_ii'] <= 10) ? ($color15='red') : ($color15='blue');
+				($student['nota6_ii'] <= 10) ? ($color16='red') : ($color16='blue');
+				($student['nota7_ii'] <= 10) ? ($color17='red') : ($color17='blue');
+				($student['nota8_ii'] <= 10) ? ($color18='red') : ($color18='blue');
+				($student['nota9_ii'] <= 10) ? ($color19='red') : ($color19='blue');
+				($student['promedio2'] <= 10) ? ($color20='red') : ($color20='blue');
+				($student['notafinal'] <= 10) ? ($color22='red') : ($color22='blue');
+				($student['notafinal'] <= 10) ? ($color21='red') : ($color21='blue');
+
+				$nota_f = $student['notafinal'];
+
+				$nota4_i = $student['nota4_i'];
+				$nota9_i = $student['nota9_i'];
+
+				$nota4_ii = $student['nota4_ii'];
+				$nota9_ii = $student['nota9_ii'];
+
+								switch (trim($nota_f)) {
+					case -3: $notatexto = "RETIRADO";break;
+					case 0: $notatexto = "CERO";break;
+					case 1: $notatexto = "UNO";break;
+					case 2: $notatexto = "DOS";break;
+					case 3: $notatexto = "TRES";break;
+					case 4: $notatexto = "CUATRO";break;
+					case 5: $notatexto = "CINCO";break;
+					case 6: $notatexto = "SEIS";break;
+					case 7: $notatexto = "SIETE";break;
+					case 8: $notatexto = "OCHO";break;
+					case 9: $notatexto = "NUEVE";break;
+					case 10: $notatexto = "DIEZ";break;
+					case 11: $notatexto = "ONCE";break;
+					case 12: $notatexto = "DOCE";break;
+					case 13: $notatexto = "TRECE";break;
+					case 14: $notatexto = "CATORCE";break;
+					case 15: $notatexto = "QUINCE";break;
+					case 16: $notatexto = "DIECISEIS";break;
+					case 17: $notatexto = "DIECISIETE";break;
+					case 18: $notatexto = "DIECIOCHO";break;
+					case 19: $notatexto = "DIECINUEVE";break;
+					case 20: $notatexto = "VEINTE";break;
+				}
+
+				if (strlen($nota_f) == 1) {
+					$nota_f = "0".$nota_f;
+				}
+				if ($nota_f == -3 ) {
+					$nota_f = "R";
+				}
+				if ($nota4_i == -3 ) {
+					$nota4_i = "R";
+				}
+				if ($nota9_i == -3 ) {
+					$nota9_i = "R";
+				}
+				if ($nota4_ii == -3 ) {
+					$nota4_ii = "R";
+				}
+				if ($nota9_ii == -3 ) {
+					$nota9_ii = "R";
+				} ?>
+			<tr>
+				<td class='normal-td' style="border: 0.5px solid #000; padding: 1.5px;"  height="10px" width="20px" ><center><?php echo $key+1?></center></td>
+				<td class='normal-td' width="70px"><center><?php echo $student['uid']?></center></td>
+				<td class='normal-td' width="240px"><?php echo $student['last_name0']." ".$student['last_name1'].", ".$student['first_name']?></td>
+				
+				<td class='normal-td' style="color:<?php echo $color?>;"><center><?php echo $student['nota1_i']?></center></td>		
+				<td class='normal-td' style="color:<?php echo $color2?>;"><center><?php echo $student['nota2_i']?></center></td>
+				<td class='normal-td' style="color:<?php echo $color3?>;"><center><?php echo $student['nota3_i']?></center></td>
+				<td class='normal-td' style="color:<?php echo $color4?>;"><center><?php echo $nota4_i?></center></td>
+				
+				<td class='normal-td' style="color:<?php echo $color6?>;"><center><?php echo $student['nota6_i']?></center></td>
+				<td class='normal-td' style="color:<?php echo $color7?>;"><center><?php echo $student['nota7_i']?></center></td>
+				<td class='normal-td' style="color:<?php echo $color8?>;"><center><?php echo $student['nota8_i']?></center></td>
+				<td class='normal-td' style="color:<?php echo $color9?>;"><center><?php echo $nota9_i?></center></td>
+				
+				
+				<td class='normal-td' style="color:<?php echo $color11?>;"><center><?php echo $student['nota1_ii']?></center></td>		
+				<td class='normal-td' style="color:<?php echo $color12?>;"><center><?php echo $student['nota2_ii']?></center></td>
+				<td class='normal-td' style="color:<?php echo $color13?>;"><center><?php echo $student['nota3_ii']?></center></td>
+				<td class='normal-td' style="color:<?php echo $color14?>;"><center><?php echo $nota4_ii?></center></td>
+				
+				<td class='normal-td' style="color:<?php echo $color16?>;"><center><?php echo $student['nota6_ii']?></center></td>
+				<td class='normal-td' style="color:<?php echo $color17?>;"><center><?php echo $student['nota7_ii']?></center></td>
+				<td class='normal-td' style="color:<?php echo $color18?>;"><center><?php echo $student['nota8_ii']?></center></td>
+				<td class='normal-td' style="color:<?php echo $color19?>;"><center><?php echo $nota9_ii?></center></td>
+				
+				
+				<td class='normal-td' style="color:<?php echo $color21?>;"><center><?php echo $notatexto?></center></td>
+				<td class='normal-td' style="color:<?php echo $color22?>;"><center><?php echo $nota_f?></center></td>
+			</tr>	
+			<?php }?>
+			</table>		
+<?php	} }
+?>
+<?php
+$t_footer = count($students);
+
+if ($t_footer>50 and $t_footer<=100)
+{
+	$footer ='
+	<table style="font-size:10px" width="100%" >
+		<tr>
+			<td width="50%"></td>
+			<td style="font-size:10px" width="50%" ><center>______________________________________________</center></td>
+		</tr>
+		<tr>
+			<td width="50%" sytle="margin-left:30px;">'.date('d/m/Y').'<br>
+			Registro de Evaluación  {PAGENO} de 2</td>
+			<td style="font-size:10px" width="50%" ><center>'.$course['name_teacher'].'</center></td>
+		</tr>
+	</table>';
+}
+
+
+if ($t_footer>0 and $t_footer<=50)
+{
+	$footer ='
+	<table style="font-size:10px" width="100%" >
+		<tr>
+			<td width="50%"></td>
+			<td style="font-size:10px" width="50%" ><center>______________________________________________</center></td>
+		</tr>
+		<tr>
+			<td width="50%" sytle="margin-left:30px;" >'.date('d/m/Y').'<br>
+			Registro de Evaluación  {PAGENO} de 1</td>
+			<td style="font-size:10px" width="50%" ><center>'.$course['name_teacher'].'</center></td>
+		</tr>
+	</table>';
+}
+
+if ($t_footer>100 and $t_footer<=150)
+{
+	$footer ='
+	<table style="font-size:10px" width="100%" >
+		<tr>
+			<td width="50%"></td>
+			<td style="font-size:10px" width="50%" ><center>______________________________________________</center></td>
+		</tr>
+		<tr>
+			<td width="50%" sytle="margin-left:30px;" >'.date('d/m/Y').'<br>
+			Registro de Evaluación  {PAGENO} de 3</td>
+			<td style="font-size:10px" width="50%" ><center>'.$course['name_teacher'].'</center></td>
+		</tr>
+	</table>';
+}
+$html = ob_get_contents();
+// $mpdf=new mPDF('utf-8','A4','','',15,15,75,15,15);
+$mpdf = new mPDF('utf-8','A4','','',5,5,40,25,8,8);
+$mpdf->SetHTMLHeader($header);
+$mpdf->SetHTMLFooter($footer);
+ob_end_clean();
+$mpdf -> WriteHTML($html);
+$mpdf->Output('Registro-'.$course['courseid'].'turno'.$course['turno'].'.pdf','D');
+  
+?>

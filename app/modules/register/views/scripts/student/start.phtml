@@ -130,7 +130,12 @@
 			<?php foreach ($this->subjects as $key => $subject) { ?>
 
 				<?php 
-					
+					$content_veces = null;
+					$content = null;
+					$style_reg = null;
+					$disabled_reg = null;
+					$btnsuccess = null;
+
 					if($subject['veces'] >= 2){
 						$class='danger';
 						$addClass = 'btn-danger';
@@ -141,11 +146,12 @@
 					}
 
 					if($subject['veces_cur']==1 ){
+
 						$veces_cur='veces_cur';
 						$content_veces=$subject['veces']+1;
 						$content="Requisito: Debe presentar una solicitud a Decanura de su Facultar  y Compromiso";
 					}
-					else $veces_cur='';
+					else {$veces_cur='';}
 
 				?>
 				<?php if($subject['register'] == 1  ){
@@ -153,12 +159,15 @@
 							$display_reg="display:none";
 							$btnsuccess='btn-success';
 							$display_mod="";
+							// $style_reg="";
 							
 						}
 					 else{
 					 	
 						$display_reg="";
 						$display_mod="display:none";
+						// $disabled_reg = "disabled";
+						// $style_reg="display:none";
 					 }
 
 					 if($subject['register'] == 1  && $this->state != "B" ){
@@ -170,7 +179,7 @@
 					 
 				?>
 
-				<tr class='<?php echo $class?>' id='<?php echo $veces_cur?>' 
+				<tr class='<?php echo $class?> tr-<?php echo $subject['courseid']?> tr-<?php echo $subject['courseid'].$subject['turno']?>' id='<?php echo $veces_cur?>' 
 					rel="popover" data-placement='bottom' 
 					data-original-title="Matricula por <?php echo $content_veces ?> Vez" 
 					data-content="<?php echo $content?>" data-trigger='hover'
@@ -180,9 +189,9 @@
 					<td class="center"><?php echo $subject['courseid']?></td>
 					<td><?php echo $subject['name']?></td>
 					<td class="center"><?php 
-							if (trim($subject['type_rate'])=='O') 
+							if (trim($subject['type'])=='O') 
 									echo "Obligatorio";
-							if (trim($subject['type_rate'])=='E')
+							if (trim($subject['type'])=='E')
 									echo "Electivo";	
 					?></td>
 					<td class="center"><?php echo $subject['credits']?></td>
@@ -208,6 +217,7 @@
 								veces='<?php print_r ($this->veces)?>'
 								condition='<?php echo $this->condition_credits?>'
 								style='<?php echo $display_reg?>'
+								<?php echo $disabled_reg;?>
 							 	onclick='register_subject(this)'>
 								<span 	class='glyphicon glyphicon-unchecked'></span>
 						</button>
@@ -322,6 +332,8 @@ if($this->error_cur){ ?>
 	            		var turno=$($this).attr('turno');
 	                    if($data.status == true){
 
+	                    	$(".tr-"+courseid).hide();
+	                    	$(".tr-"+courseid+turno).show();
 	                    	$('#assign_credist').html($data.credits_assing);
 	                    	$('#assign_semester').html($data.semester);
 	                    	$('#total_credits').attr("value",$data.total_credits);
@@ -331,6 +343,7 @@ if($this->error_cur){ ?>
 	                    	$(".modified"+'-'+courseid+'-'+turno).show();
 	                    	$(".modified"+'-'+courseid+'-'+turno).addClass('btn-success');
 	                    	$("#modal").modal('hide');
+
 	                    }else{
 	                        //Pintar Fracaso
 	                    		$("#modal").modal('show');
@@ -385,6 +398,7 @@ if($this->error_cur){ ?>
 
 				        if($data.status == true){
 
+	                    	$(".tr-"+courseid).show();
 	                    	$('#assign_credist').html($data.credits_assing);
 	                    	$('#assign_semester').html($data.semester);
 	                    	$('#total_credits').html($data.total_credits);

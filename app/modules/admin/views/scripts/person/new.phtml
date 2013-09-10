@@ -1,0 +1,88 @@
+<form id="<?php echo $this->fm->getName();?>" name="<?php echo $this->fm->getName();?>" action="<?php echo $this->fm->getAction();?>"method="Post" enctype="application/x-www-fm-urlencode">  
+  <div>
+    <table class="table table-hover span9">
+      <tr>
+        <th style="font-size:20px;"><br>
+            NUEVA PERSONA
+              <div style="float:right; margin-left:10px"><?php echo $this->fm->Guardar?></div>
+              <a style="float:right" class="btn btn-danger" href="/admin/person/">Cancelar</a>
+        </th>
+      </tr>
+    </table>
+  </div> 
+  <div >
+      <table class="table table-striped table-hover span9">
+      <tr>
+            <td>DNI:</td>
+            <td><div style='width: 150px'><?php echo $this->fm->pid?></td>
+            <td>Tipo Doc :</td>
+            <td><div style='width: 150px'><?php echo $this->fm->typedoc?></td>
+            <td>Numero de Doc :</td>
+            <td><div style='width: 150px'><?php echo $this->fm->numdoc?></td>
+      </tr>
+      <tr>
+            <td>Apellido Paterno:</td>
+            <td><div style='width: 180px'><?php echo $this->fm->last_name0?></td>
+            <td>Apellido Materno:</td>
+            <td><div style='width: 180px'><?php echo $this->fm->last_name1?></td>
+            <td>Nombres:</td>
+            <td><div style='width: 200px'><?php echo $this->fm->first_name?></td>
+      </tr> 
+      <tr>
+            <td>Dirección:</td>
+            <td><div style='width: 250px'><?php echo $this->fm->address?></td>
+            <td>Teléfono:</td>
+            <td><div style='width: 150px'><?php echo $this->fm->phone?></td>
+            <td>Celular:</td>
+            <td><div style='width: 150px'><?php echo $this->fm->cellular?></td>
+      </tr>
+      <tr>
+            <td>Fecha de Nacimiento:</td>
+            <td><div style='width: 150px'><?php echo $this->fm->birthday?></td>
+            <td>Estado Civil:</td>
+            <td><div style='width: 150px'><?php echo $this->fm->civil?></td>
+            <td>Sexo:</td>
+            <td><div style='width: 150px'><?php echo $this->fm->sex?></td>
+      </tr> 
+      <tr>
+            <td>E-mail Personal</td>
+            <td><div style='width: 200'><?php echo $this->fm->mail_person?></td>
+            <td>E-mail de Trabajo</td>
+            <td><div style='width: 200'><?php echo $this->fm->mail_work?></td>
+      </tr>
+    </table>
+  </div> 
+</form>
+<script>
+  $(function() {
+    $("#birthday").datepicker();
+    $("#dateaccept").datepicker();
+    $("#sendform").click(function(){
+      $("#frmDistribution").submit();
+    });
+    
+    
+  });
+  function validNumber(e) {
+    var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
+    return ((tecla > 47 && tecla < 58) || tecla == 8);
+    } 
+  function soloLetras(e){
+       key = e.keyCode || e.which;
+       tecla = String.fromCharCode(key).toLowerCase();
+       letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+       especiales = [8,37,39,46];
+
+       tecla_especial = false
+       for(var i in especiales){
+            if(key == especiales[i]){
+                tecla_especial = true;
+                break;
+            }
+        }
+
+        if(letras.indexOf(tecla)==-1 && !tecla_especial){
+            return false;
+        }
+    }
+</script>

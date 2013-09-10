@@ -1,0 +1,341 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+
+$speciality = $this->info_speciality;
+if ($speciality['parent']!= '') {
+	$name_esc = $speciality['speciality'];
+	$name_speciality= $speciality['name'];
+}
+else{
+	$name_esc=$speciality['name'];
+	$name_speciality= $speciality['name'];
+}
+
+$perid=$this->perid;
+$course = $this->info_couser;
+$students = $this->students;
+
+$tota_students = $this->tota_students;
+$total_approved = $this->total_approved;
+$total_disapp = $this->total_disapp;
+$total_retired = $this->total_retired;
+$total_NSP = $this->total_NSP;
+
+$percentage_apro = $this->percentage_apro;
+$percentage_desapro = $this->percentage_desapro;
+$percentage_retir = $this->percentage_retir;
+$percentage_nsp = $this->percentage_nsp;
+
+$header='
+	<div  style="float:right; width:380px; font-family: Verdana; margin-left:55px;" >
+       	<div style=" text-align:center;">
+			<h4 style="font-size: 23px; font-weight: bold;">
+				<center>UNIVERSIDAD NACIONAL</center>
+				<center>DANIEL ALCIDES CARRION</center>
+				<p style="font-size:9px; font-weight: none;" >"LA MÁS ALTA DEL MUNDO, CON EXCELENCIA ACADÉMICA Y RESPONSABILIDAD SOCIAL"</p>
+				<center><img src="/img/UNDAC.png"></center>
+			</h4>
+		</div>
+	
+		<h4 style="font-size: 20px; text-align:center; font-weight: none; border: 0.5px solid #000000; width:300px; height:5px; margin-left:55px;" >REGISTRO DE EVALUACIÓN</h4>
+
+		<table  cellpadding="1" cellspacing="2"  style="border:1px;font-size:10px; margin-left:20px;">
+			<tr>
+        		<td  style="border: 0.20px solid #000;width: 90px;" >FACULTAD</td>
+        		<td  style="border: 0.20px solid #000;"colspan="5" >'.ucwords(strtolower($speciality['name_faculty'])).'</td>
+      		</tr>
+			<tr>
+          		<td style=" border: 0.20px solid #000; width: 90px;">ESCUELA</td>
+          		<td style=" border: 0.20px solid #000;" colspan="5" >'.$name_esc.'</td>
+        	</tr>
+        	<tr>
+          		<td style=" border: 0.20px solid #000; width: 90px;">ESPECIALIDAD</td>
+          		<td style=" border: 0.20px solid #000; "colspan="5" >'.$name_speciality.'</td>
+        	</tr> 
+      		<tr >
+          		<td style=" border: 0.20px solid #000; width: 90px;">ASIGNATURA</td>
+          		<td style=" border: 0.20px solid #000;"colspan="5" >'.$course['name'].'</td>
+        	</tr>
+      		<tr >
+          		<td style=" border: 0.20px solid #000; width: 90px;">DOCENTE</td>
+          		<td style=" border: 0.20px solid #000;" colspan="5" >'.$course['name_teacher'].'</td>
+        	</tr>
+      		<tr>
+          		<td style=" border: 0.20px solid #000; width: 90px;">SEMESTRE</td>
+          		<td style="width: 100px; border: 0.20px solid #000;">'.$course['name_semester'].'</td>
+          		<td style="width: 40px; border: 0.20px solid #000;">AULA</td>
+          		<td style="width: 50px; border: 0.20px solid #000;">'.$course['turno'].'</td>
+          		<td style="width: 60px; border: 0.20px solid #000;">CRÉDITOS</td>
+          		<td style="width: 50px; border: 0.20px solid #000;">'.$course['credits'].'</td>
+         	</tr>
+    	</table>
+
+    	<table style="margin-left:77px; margin-top:20px;border:1px solid #000;font-size: 10px;font-family: Verdana;">
+    		<tr>
+          		<td style="border: 0.20px solid #000;font-size: 14px;font-weight: bold;"  colspan="3" ><center>CUADRO ESTADISTICO</center>  </td>
+	        </tr>
+	        <tr>
+	          	<td width="120px" style="border: 0.20px solid #000;" ><center>Condición</center></td>
+	          	<td width="25px" style="border: 0.20px solid #000;" >Cantidad</td>
+	          	<td width="25px" style="border: 0.20px solid #000;" >Porcentaje</td>
+	        </tr>
+	        <tr>
+		        <td  style="border: 0.20px solid #000;" width="50px" >Matriculados  </td>
+		        <td  style="border: 0.20px solid #000;" width="20px" ><center>'.$tota_students.'</center></td>
+		        <td  style="border: 0.20px solid #000;" width="20px" ><center>100%</center></td>
+        	</tr>
+        	<tr>
+	          <td  style="border: 0.20px solid #000;" width="50px" >Aprobados </td>
+	          <td  style="border: 0.20px solid #000;" width="20px" ><center>'.$total_approved.'</center></td>
+	          <td  style="border: 0.20px solid #000;" width="20px" ><center>'.$percentage_apro.'%</center></td>
+        	</tr>
+        	<tr>
+	          <td  style="border: 0.20px solid #000;" width="50px" >Desaprobados </td>
+	          <td  style="border: 0.20px solid #000;" width="20px" ><center>'.$total_disapp.'</center></td>
+	          <td  style="border: 0.20px solid #000;" width="20px" ><center>'.$percentage_desapro.'%</center></td>
+        	</tr>
+        	<tr>
+	          <td  style="border: 0.20px solid #000;" width="50px" >Convalidados </td>
+	          <td  style="border: 0.20px solid #000;" width="20px" ><center>0</center></td>
+	          <td  style="border: 0.20px solid #000;" width="20px" ><center>0%</center></td>
+        	</tr>
+        	<tr>
+	          <td  style="border: 0.20px solid #000;" width="50px" >Retirados </td>
+	          <td  style="border: 0.20px solid #000;" width="20px" ><center>'.$total_retired.'</center></td>
+	          <td  style="border: 0.20px solid #000;" width="20px" ><center>'.$percentage_retir.'</center></td>
+        	</tr>
+    	</table>
+    	<p style="font-size:8px; margin-left:52px;" >Indicaciones</p>
+    	<table width="320px" style="border: 1px solid #000; margin-left:50px;"  >
+    		<tr>
+      			<td style="font-size: 8px;" colspan="3" >Anotar el criterio de evaluación de acuerdo a la naturaleza del curso a su cargo, en las áreas de Teoría, Prácticas o Investigación según sea el caso, que acontinuación indicamos:</td>
+    		</tr>
+    		<tr>    
+			    <td style="font-size: 6px;" colspan="2">TEORÍA </td>  
+			    <td  ></td>
+    		</tr>
+    		<tr>    
+			    <td  width="20px"></td>
+			    <td style="font-size: 6px;" colspan="2"> A. PRUEBAS ESCRITAS</td>
+		    </tr>
+		    <tr>    
+			    <td  width="20px"></td>
+			    <td style="font-size: 6px;" colspan="2"> D. PRUEBAS ORALES</td>
+		    </tr>
+		    <tr>    
+			    <td  width="20px"></td>
+			    <td style="font-size: 6px;" colspan="2"> F. PRUEBAS DE EJECUCIÓN</td>
+		    </tr>
+		    <tr>
+		    	<td height="20px" colspan="3"> </td>
+		    </tr>
+		  	<tr>  
+		      <td  style="font-size: 6px;" colspan="2">PRÁCTICAS</td>
+		      <td> </td>
+		    </tr>
+		    <tr>    
+		    <td  width="20px"></td>
+		    <td style="font-size: 6px;" colspan="2"> B. DE CAMPO</td>
+		    </tr>
+		    <tr>    
+		    <td  width="20px"></td>
+		    <td style="font-size: 6px;" colspan="2"> E. TÉCNICAS PARTICIPATIVAS</td>
+		    </tr>
+		    <tr>    
+			    <td  width="20px"></td>
+			    <td style="font-size: 6px;" colspan="2"> H. ELABORACIÓN DE MÓDULOS Y OTROS</td>
+		    </tr>
+		    <tr>
+			    <td height="20px" colspan="3"> </td>
+		    </tr>
+		    <tr>      
+			    <td  style="font-size: 6px;" colspan="2">INVESTIGACIÓN</td>
+		    </tr>
+		    <tr>    
+			    <td  width="20px"></td>
+			    <td style="font-size: 6px;" colspan="2"> C. ELABORACIÓN DE PROYECTOS E INSTRUMENTOS DE INVESTIGACIÓN</td>
+		    </tr>
+		    <tr>    
+			    <td  width="20px"></td>
+			    <td style="font-size: 6px;" colspan="2"> F. APLICACION DE TÉCNICAS E INSTRUMENTO</td>
+		    </tr>
+		    <tr>    
+			    <td  width="20px"></td>
+			    <td style="font-size: 6px;"  colspan="2"> I. ELABORACIÓN DE INFORMES DE INVESTIGACIÓN Y OTROS</td>
+		    </tr>
+		    <tr>
+		    <td height="20px" colspan="3"> </td>
+		    </tr>
+    	</table>
+    	<h4 style="margin-left:35%;">CERRO DE PASCO</h4>
+
+</div>	
+';
+?>
+<style type="text/css">
+	.normal-td{
+		width: 6px;
+		height: 30px;
+		border: 0.50px solid #000;
+		font-size: 10px;
+	}
+	.normal-td-1{
+		width: 6px;
+		height: 18px;
+		border: 0.50px solid #000;
+		font-size: 10px;
+	}
+	.normal-td-R{
+		width: 240px;
+		height: 18px;
+		border: 0.50px solid #000;
+		font-size: 10px;
+	}
+</style>
+ <table width="380px" style="float:left;" >
+       	<tr>
+			 <td style="border: 0.20px solid #000;font-size: 18px; margin-bottom:20px;" colspan="35"><center>CONTROL DE ASISTENCIA </center></td>
+		</tr>
+		<tr>
+			<td style='height:20px;' ></td>
+		</tr>
+		<tr>
+			<td class='normal-td' ><center>Nº</center></td>
+          	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+	      	<td class='normal-td' ><center></center></td>
+		</tr>
+		<?php foreach ($students as $key => $student) {?>
+			<tr>
+				<td class='normal-td-1' ><center><?php echo $key+1?></center></td>
+	          	<?php if($student['notafinal']=='-3'){ ?>
+          		<td class='normal-td-R'  colspan="34"><center>RETIRADO</center></td>
+	          	<?php }else{ ?>
+          		<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+		      	<td class='normal-td-1' ><center></center></td>
+	         <?php }?>
+			</tr>
+		<?php if ($key+1 == 50 || $key+1 == 100 || $key+1 == 150) { ?>
+			<tr>
+				 <td style="border: 0.20px solid #000;font-size: 18px; margin-bottom:20px;" colspan="35"><center>CONTROL DE ASISTENCIA </center></td>
+			</tr>
+			<tr>
+			<td style='height:20px;' ></td>
+			</tr>
+			<tr>
+				<td class='normal-td' ><center>Nº</center></td>
+	          	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+		      	<td class='normal-td' ><center></center></td>
+			</tr>
+		<?php } 
+		}?>
+
+</table>
+
+<?php
+	$html = ob_get_contents();
+	// $mpdf=new mPDF('utf-8','A4','','',15,15,75,15,15);
+	$mpdf = new mPDF('utf-8','A4','','',5,5,10,25,8,8);
+	$mpdf->SetHTMLHeader($header);
+	$mpdf->SetHTMLFooter($footer);
+	ob_end_clean();
+	$mpdf -> WriteHTML($html);
+	$mpdf->Output('Registro-'.$course['courseid'].'turno'.$course['turno'].'.pdf','D');
+?>

@@ -34,6 +34,18 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _updatenoteregister($data,$pk)
+	{
+		try{
+			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' || $pk['courseid']=='' || $pk['curid']=='' || $pk['regid']=='' || $pk['turno']=='' || $pk['pid']=='' || $pk['uid']=='' || $pk['perid']=='') return false;
+			$where = "eid = '".$pk['eid']."' and pid='".$pk['pid']."' and oid = '".$pk['oid']."' and escid = '".$pk['escid']."' and uid = '".$pk['uid']."' and subid = '".$pk['subid']."' and regid = '".$pk['regid']."' and perid = '".$pk['perid']."' and turno = '".$pk['turno']."' and curid = '".$pk['curid']."' and courseid = '".$pk['courseid']."'";
+			return $this->update($data, $where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Update Registration".$e->getMessage();
+		}
+	}
+
 
 		public function _updatestateregister($data,$pk)
 	{
@@ -314,6 +326,165 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     		print " Error : ".$ex->getMessage();
     	}
     }
+
+    public function _get_total_students_x_course($where=array())
+    {
+	    try {
+
+	    	if ($where['eid']== '' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
+	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
+	    	$sql = $this->_db->query("
+                        select count(*) from base_registration_course AS MC
+                        inner join base_registration as m
+                        on mc.regid=m.regid and mc.pid =m.pid and mc.escid=m.escid and
+                        mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and
+                         mc.oid=m.oid and mc.subid=m.subid
+                        where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and
+                         MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."' and 
+                         MC.escid='".$where['escid']."' and MC.courseid='".$where['courseid']."' and 
+                         MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' 
+                        AND M.state='M' 
+                    ");
+
+            if ($sql) return $sql->fetchAll();
+            return false;
+
+	    } catch (Exception $e) {
+    		print " Error : _get_total_students_x_course ".$ex->getMessage();
+	 	   	
+	    }
+    }
+
+    public function _get_approved($where=array())
+    {
+	    try {
+	    	if ($where['eid']=='' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
+	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
+	    	
+	    	$sql = $this->_db
+                    ->query("
+                            select count(*) from base_registration_course AS MC
+							inner join base_registration as m
+							 on mc.regid=m.regid and mc.pid =m.Pid and mc.escid=m.escid and 
+							 mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and mc.oid=m.oid
+							  and mc.subid=m.subid 
+							  where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and 
+							  MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."' and MC.escid='".$where['escid']."' and 
+							  MC.courseid='".$where['courseid']."' and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' 
+							 AND M.state='M' 
+							and (cast((case when notafinal='' or notafinal is null then '0' else 
+							notafinal end) as integer)>10)        
+                    ");
+                if ($sql) return $sql->fetchAll();
+            return false;
+
+	    } catch (Exception $e) {
+    		print " Error :  _get_disapproved_x_course".$ex->getMessage();
+	 	   	
+	    }
+    }
+
+    public function _get_disapproved_x_course($where=array())
+    {
+	    try {
+	    	if ($where['eid']=='' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
+	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
+	    	
+	    	$sql = $this->_db
+                    ->query("
+                            select count(*) from base_registration_course AS MC
+							inner join base_registration as m
+							on mc.regid=m.regid and mc.pid =m.Pid and mc.escid=m.escid and
+							 mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and 
+							 mc.oid=m.oid and mc.subid=m.subid
+							where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and MC.perid='".$where['perid']."' and 
+							MC.curid='".$where['curid']."' and MC.escid='".$where['escid']."' and MC.courseid='".$where['courseid']."'
+							and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."'  AND M.state='M' and 
+							(cast((case when notafinal='' or notafinal is null then '0'
+							 else notafinal end) as integer)<=10) and not (cast((case when 
+							 notafinal='' or notafinal is null then '0' else notafinal end) 
+							 as integer)=-3)              
+                    ");
+                if ($sql) return $sql->fetchAll();
+            return false;
+
+	    } catch (Exception $e) {
+    		print " Error :  _get_disapproved_x_course".$ex->getMessage();
+	 	   	
+	    }
+    }
+
+    public function _get_retired_x_course($where=array())
+    {
+	    try {
+	    	if ($where['eid']=='' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
+	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
+	    	
+	    	$sql = $this->_db
+                    ->query("
+                   		select count(*) from base_registration_course AS MC
+						inner join base_registration as m
+						on mc.regid=m.regid and mc.pid =m.Pid and mc.escid=m.escid and 
+						mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and mc.oid=m.oid and 
+						mc.subid=m.subid 
+						where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and 
+						MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."'
+					    and MC.escid='".$where['escid']."' and MC.courseid='".$where['courseid']."'
+					    and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' AND M.state='M' 
+						and (cast((case when notafinal='' or notafinal is null then '0' else notafinal end) as integer)=-3)  
+                    ");
+                if ($sql) return $sql->fetchAll();
+            return false;
+
+	    } catch (Exception $e) {
+    		print " Error :  _get_disapproved_x_course".$ex->getMessage();
+	 	   	
+	    }
+    }
+
+     public function _get_NSP_x_course($where=array())
+    {
+	    try {
+	    	if ($where['eid']=='' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
+	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
+	    	
+	    	$sql = $this->_db
+                    ->query("
+                         select count(*) from base_registration_course AS MC
+						inner join base_registration as m
+						on mc.regid=m.regid and mc.pid =m.Pid and mc.escid=m.escid and 
+						mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and mc.oid=m.oid and 
+						mc.subid=m.subid 
+						where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and 
+						MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."'
+					    and MC.escid='".$where['escid']."' and MC.courseid='".$where['courseid']."'
+					    and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' AND M.state='M' 
+						and (cast((case when notafinal='' or notafinal is null then '0' else notafinal end) as integer)=-2)
+                    ");
+                if ($sql) return $sql->fetchAll();
+            return false;
+
+	    } catch (Exception $e) {
+    		print " Error :  _get_disapproved_x_course".$ex->getMessage();
+	 	   	
+	    }
+    }
+
+        public function _register($where=null){
+         try{
+			 $select = $this->_db->select()
+			 	->from(array('mc' => 'base_registration_course'),array('courseid','turno','perid'))
+                ->where("perid != ?", $where['perid'])->where("uid = ?", $where['uid'])->where("notafinal != ?", '-2')->where("notafinal != ?", '-3'); 
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;	
+         }catch (Exception $ex) {
+             print $ex->getMessage();
+         }
+     }
+
+
 
 
 }

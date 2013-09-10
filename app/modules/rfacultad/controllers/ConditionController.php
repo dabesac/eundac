@@ -32,8 +32,18 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
             $this->view->perid=$perid;
             $this->view->subid=$subid;
             $this->view->facid=$facid;
+
             $esp = new Api_Model_DbTable_Speciality();
-            $gesp = $esp->_getFilter($where);
+            if($where['subid']<>'1901'){
+                $data['eid']=$where['eid'];
+                $data['oid']=$where['oid'];
+                $data['subid']=$where['subid'];
+                $data['state']='A';
+               $gesp = $esp->_getFilter($data); 
+            }
+            else{
+            $gesp = $esp->_getspeciality($where); 
+            }
             if ($gesp ) $this->view->getEsp=$gesp;
             $form=new Rfacultad_Form_Getcond();
             $form->send->setLabel("Buscar");

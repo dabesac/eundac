@@ -51,13 +51,15 @@ $stateperiod = $this->stateperiod;
 $strprint = "/record/index/printavence/"
 ?>
 
-<div class="alert alert-info " style="margin:0px; padding:3px;">
-<?php if ($stateperiod=="A"){?>
+<div class="panel panel-default" >
+<div class="panel-heading" >
+	<?php if ($stateperiod=="A"){?>
 	<a class="btn btn-primary " href="#">Agregar Asignatura</a>
 <?php } ?>
 	<a class="btn btn-primary " href="#" id="openwindows">Reporte Avance de Notas</a>
+	<a class="btn btn-info " href="/record/index/recordcontrol/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid) ?>/perid/<?php echo base64_encode($this->perid)?>" >
+		<span class='glyphicon glyphicon-print'></span> Control de Actas</a>
 </div>
-
 <table class="table table-striped table-hover table-bordered table-condensed">
 	<tr>
 		<th class="small">#</th>
@@ -97,6 +99,8 @@ $strprint = "/record/index/printavence/"
 			$curid_cy=base64_encode($course['curid']);
 			$perid=($course['perid']);
 			$perid_cy=base64_encode($course['perid']);
+			$type_cy=base64_encode($course['type_rate']);
+
 			
 			$urldetaul = "perid/$perid_cy/escid/$escid_cy/subid/$subid_cy/courseid/$courseid_cr/curid/$curid_cy/turno/$turno_cy";
 
@@ -172,17 +176,17 @@ $strprint = "/record/index/printavence/"
 			    <span class="caret"></span>
 			  </button>
 			  <ul class="dropdown-menu" role="menu">
-			    <li><a href="<?php echo $urldetaul?>" >Resumen de Notas</a></li>
 			    <li><a href="/record/index/printconstancy/<?php echo $urldetaul?>">Constancia</a></li>
 			    <li class="divider"></li>
-			    <li><a href="<?php echo $urldetaul?>">Acta</a></li>
-			    <li><a href="<?php echo $urldetaul?>">Acta Reverso</a></li>
-			    <li><a href="<?php echo $urldetaul?>">Acta sin Notas</a></li>
+			    <li><a href="/record/index/printrecord/<?php echo $urldetaul?>">Acta</a></li>
+			    <li><a href="/record/index/backrecord/<?php echo $urldetaul?>">Acta Reverso</a></li>
+			    <li><a href="/record/index/recordnotnota/<?php echo $urldetaul?>">Acta sin Notas</a></li>
+			    <li><a href="/record/index/recordnotpercentaje/<?php echo $urldetaul?>">Acta sin Porcentaje</a></li>
 			    <li class="divider"></li>
-			    <li><a href="<?php echo $urldetaul?>">Registro</a></li>
-			    <li><a href="<?php echo $urldetaul?>">Regitro Reverso</a></li>
-			    <li><a href="<?php echo $urldetaul?>">Registro sin Notas</a></li>
-			    <li><a href="<?php echo $urldetaul?>">Registro sin Procentaje	</a></li>
+			    <li><a href="/record/index/printregister/<?php echo $urldetaul?>/type/<?php echo $type_cy?>">Registro</a></li>
+			    <li><a href="/record/index/backregister/<?php echo $urldetaul?>">Regitro Reverso</a></li>
+			    <li><a href="/record/index/registronotnota/<?php echo $urldetaul?>/type/<?php echo $type_cy?>">Registro sin Notas</a></li>
+			    <li><a href="/record/index/registernotpercentage/<?php echo $urldetaul?>">Registro sin Porcentaje</a></li>
 
 			  </ul>
 			</div>
@@ -195,6 +199,7 @@ $strprint = "/record/index/printavence/"
 		Ni hay ningun dato
 	<?php } ?>
 </table>
+</div>
 
 <script>
 	$("#openwindows").click(function (){
