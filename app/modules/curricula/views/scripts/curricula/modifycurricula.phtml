@@ -1,47 +1,38 @@
 <?php if ($this->form) { ?>
-	<form role='form' method='post' action='/curricula/curricula/modifycurricula'  id='form_mod_cur'>
-	<?php echo $this->form->subid?>
-	<?php echo $this->form->escid_cur?>
+	<form role='form' method='post' action='/curricula/curricula/modifycurricula' id='form_mod_cur'>
+	<?php echo $this->form->subid ?>
+	<?php echo $this->form->escid_cur ?>
 
-	<div class='row'>
- 		<div class='col-lg-2'>
-		<div class="input-group">
-			<label>Codigo Generado</label>
-			<?php echo $this->form->curid?>
-			<?php echo $this->escid?>
-
-	 	</div>
-	</div>
- 	<div class='col-lg-2'>
-		<div class="input-group">
-			<label>Año</label>
-			<?php echo $this->form->year?>
-		</div>
-	</div>
+	<table class="table">
+		<tr>
+			<th><center>Codigo Generado</center></th>
+			<th><center>Año</center></th>
+			<th><center>Periodo</center></th>
+			<th><center>Tipo Curricula</center></th>
+			<th><center>Estado</center></th>
+		</tr>
+		<tr>
+			<td style="width:100px">
+				<?php echo $this->form->curid?>
+			</td>
+			<td>
+				<?php echo $this->form->year?>
+			</td>
+			<td style="width:80px">
+				<?php echo $this->form->cur_per_ant?>
+			</td>
+			<td>
+				<?php echo $this->form->type?>
+			</td>
+			<td>
+				<?php echo $this->form->state?>
+			</td>
+		</tr>
+	</table>
 	<div class='col-lg-2'>
 		<div class="input-group">
 			<label>Tipo Periodo</label>
 			<?php echo $this->form->type_periods?>
-		</div>
-	</div>
-	<div class='col-lg-2'>
-		<div class="input-group">
-			<label>Periodo</label>
-			<?php echo $this->form->cur_per_ant?>
-		</div>
-	</div>
-	<div class='col-lg-2'>
-		<div class="input-group">
-				<label>Tipo Curricula</label>
-				<?php echo $this->form->type?>
-		</div>
-	</div>
-</div>
-<div class='row'>
-	<div class='col-lg-2'>
-		<div class="input-group">
-				<label>Estado</label>
-				<?php echo $this->form->state?>
 		</div>
 	</div>
 	<div class='col-lg-2'>
@@ -154,7 +145,5 @@
 	        return false;
     });
 </script>
-<?php } else{
-	echo json_encode($this->data);
-}?>
-
+<?php 
+} ?>

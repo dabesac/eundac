@@ -10,7 +10,6 @@ class Rcentral_Form_Curricula extends Zend_Form{
         $curid->setRequired(true)->addErrorMessage('Este campo es requerido');      
         $curid->setAttrib("maxlength", "10");
         $curid->setAttrib("class","form-control");
-        // $curid->setAttrib("style","text-align:center");
         $curid->setAttrib('readonly',true);
 
         $subid= new Zend_Form_Element_Hidden('subid');

@@ -119,7 +119,6 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                         'curid'=>$curid, 'subid'=>$subid);
             $curr= new Api_Model_DbTable_Curricula();
             $curricula=$curr->_getOne($where);
-            // print_r($curricula); exit();
             $form = new Rcentral_Form_Curricula();
             $form->year->setAttrib("disabled",'disabled');
             if ($this->getRequest()->isPost()) {
@@ -136,15 +135,6 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                     unset($formData['escid_cur']);
                     $base_curricula = new Api_Model_DbTable_Curricula();
                     if ($base_curricula->_update($formData,$pk)) {
-                        // echo "vdv";exit();
-                        $json = array('status' => true,
-                                        'tmp' => $pk['escid']."--".$pk['subid']);
-                        $this->_response->setHeader('Content-Type', 'application/json');  
-                        $this->view->data = $json;
-                    }else{
-                        $json = array('status' => false);
-                        $this->_response->setHeader('Content-Type', 'application/json');  
-                        $this->view->data = $json;
                     }
                 }else{
                     $form->populate($formData);
