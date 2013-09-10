@@ -87,7 +87,7 @@ $header = '
 </table>
 ';
 ?>
-	<table style=" font-size:11px; width: 750px;" border="0">
+	<table style="font-size:11px; width: 750px;" border="0">
 		<?php if ($students) {
 			$r=0;
 			foreach ($students as $key => $student) { 
@@ -107,56 +107,8 @@ $header = '
 				<td height="<?php echo $tamano?>" width="50px" ><center><?php echo $r?></center></td>
 				<td width="150px"><center><?php echo $student['uid']?></center></td>
 				<td><?php echo $student['last_name0']." ".$student['last_name1'].", ".$student['first_name']?></td>
-				<?php 
-					switch ($student['notafinal']) {
-							case '-2':
-								$nf ="N.S.P.";
-								$retirados++;
-								break;
-							case '-3':
-								$nf ="RETIRADO";
-								$retirados++;
-								break;
-							default:
-								$nf= $student['notafinal'];
-								if ($nf<=10){
-									$jalados++;	
-								}else{
-									$jalado = "";
-									$aprobados++;
-								}
-								
-								break;
-						}
-						switch ($student['notafinal']) {
-							case -3: $notatexto = "RETIRADO";break;
-							case -2: $notatexto = "N.S.P.";break;
-							case 0: $notatexto = "CERO";break;
-							case 1: $notatexto = "UNO";break;
-							case 2: $notatexto = "DOS";break;
-							case 3: $notatexto = "TRES";break;
-							case 4: $notatexto = "CUATRO";break;
-							case 5: $notatexto = "CINCO";break;
-							case 6: $notatexto = "SEIS";break;
-							case 7: $notatexto = "SIETE";break;
-							case 8: $notatexto = "OCHO";break;
-							case 9: $notatexto = "NUEVE";break;
-							case 10: $notatexto = "DIEZ";break;
-							case 11: $notatexto = "ONCE";break;
-							case 12: $notatexto = "DOCE";break;
-							case 13: $notatexto = "TRECE";break;
-							case 14: $notatexto = "CATORCE";break;
-							case 15: $notatexto = "QUINCE";break;
-							case 16: $notatexto = "DIECISEIS";break;
-							case 17: $notatexto = "DIECISIETE";break;
-							case 18: $notatexto = "DIECIOCHO";break;
-							case 19: $notatexto = "DIECINUEVE";break;
-							case 20: $notatexto = "VEINTE";break;
-						}
-						if (strlen($nf)==1) $nf="0".$nf; 					
-						?>
-					<td width="100px"><center><?php echo $notatexto?></center></td>
-					<td width="100px"><center><?php echo $nf?></center></td>
+				<td width="100px"><center></center></td>
+				<td width="100px"><center></center></td>
 
 			</tr>
 

@@ -56,6 +56,8 @@
                 <?php
         	       
         	       foreach ($this->data as $courses) {
+
+                    $urlAsist ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($courses['perid'])."/".base64_encode('curid')."/".base64_encode($courses['curid'])."/".base64_encode('state')."/".base64_encode($courses['state_record'])."";
         		      
         		      $where['eid']=$courses['eid'];
         		      $where['oid']=$courses['oid'];
@@ -85,7 +87,11 @@
 	                            <a class="btn btn-primary disabled" href="#" data-toggle="tooltip" title="Registrar las Notas">
 	                            Notas
 	                            </a>
+<<<<<<< HEAD
+	                            <a class="btn btn-primary" href="/assistance/student/index<?php echo $urlAsist?>">
+=======
 	                            <a class="btn btn-primary disabled" href="#" data-toggle="tooltip" title="Registrar Control de Asistencia">
+>>>>>>> 6eb8d5b45ffc046f9b2d9ab8986ec0fca848da3a
 	                            Asistencia
 	                            </a>
 	                            <a class="btn btn-primary" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>"
