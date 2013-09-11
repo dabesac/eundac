@@ -1,100 +1,93 @@
 <?php if ($this->form) { ?>
-	<form role='form' method='post' action='/curricula/curricula/newcurricula'  id='form_new_cur'>
+	<form role='form' method='post' action='/curricula/curricula/newcurricula' id='form_new_cur'>
 	<?php echo $this->form->subid?>
 	<?php echo $this->form->escid_cur?>
 
-<div class='row'>
- 	<div class='col-lg-2'>
-		<div class="input-group">
-			<label>Codigo Generado</label>
-			<?php echo $this->form->curid?>
-			<?php echo $this->escid?>
-
-	 	</div>
-	</div>
- 	<div class='col-lg-2'>
-		<div class="input-group">
-			<label>Año</label>
-			<?php echo $this->form->year?>
-		</div>
-	</div>
-	<div class='col-lg-2'>
-		<div class="input-group">
-			<label>Tipo Periodo</label>
-			<?php echo $this->form->type_periods?>
-		</div>
-	</div>
-	<div class='col-lg-2'>
-		<div class="input-group">
-			<label>Periodo</label>
-			<?php echo $this->form->cur_per_ant?>
-		</div>
-	</div>
-	<div class='col-lg-2'>
-		<div class="input-group">
-				<label>Tipo Curricula</label>
+	<table class="table">
+		<tr>
+			<th colspan="6"><center>Código Generado</center></th>
+		</tr>
+		<tr>
+			<td colspan="6">
+				<center>
+					<div style="width:100px"><?php echo $this->form->curid?></div>
+				</center>
+			</td>
+		</tr>
+		<tr>
+			<th><center>Año</center></th>
+			<th><center>Tipo Periodo</center></th>
+			<th><center>Periodo</center></th>
+			<th><center>Tipo Curricula</center></th>
+			<th><center>Estado</center></th>
+		</tr>
+		<tr>
+			<td style="width:100px">
+				<?php echo $this->form->year?>
+			</td>
+			<td>
+				<?php echo $this->form->type_periods?>
+			</td>
+			<td style="width:80px">
+				<?php echo $this->form->cur_per_ant?>
+			</td>
+			<td>
 				<?php echo $this->form->type?>
-		</div>
-	</div>
-</div>
-<div class='row'>
-	<div class='col-lg-2'>
-		<div class="input-group">
-				<label>Estado</label>
+			</td>
+			<td style="width:110px">
 				<?php echo $this->form->state?>
-		</div>
-	</div>
-	<div class='col-lg-2'>
-		<div class="input-group">
-				<label>Nombre de Plan Curricula</label>
+			</td>
+		</tr>
+		<tr>
+			<th colspan="3"><center>Nombre de Plan Curricular</center></th>
+			<th colspan="2"><center>Alias de Plan Curricular</center></th>
+		</tr>
+		<tr>
+			<td colspan="3">
 				<?php echo $this->form->name?>
-		</div>
-	</div>
-	<div class='col-lg-2'>
-		<div class="input-group">
-				<label>Alias de Plan Curricular</label>
+			</td>
+			<td colspan="2">
 				<?php echo $this->form->alias?>
-		</div>
-	</div>
-
-	<div class='col-lg-2'>
-		<div class="input-group">
-				<label>Nro Periodosgmgm</label>
+			</td>
+		</tr>
+		<tr>
+			<th><center>N° Periodos</center></th>
+			<th><center>N° Cursos Obligatorios</center></th>
+			<th><center>N° Cursos Electivos</center></th>
+			<th><center>N° Créditos Obligatorios</center></th>
+			<th><center>N° Créditos Electivos</center></th>
+		</tr>
+		<tr>
+			<td>
 				<?php echo $this->form->number_periods?>
-		</div>
-	</div>
-
-	<div class='col-lg-2'>
-		<div class="input-group">
-				<label>Nro Cursos Obligatorios</label>
+			</td>
+			<td>
 				<?php echo $this->form->mandatory_course?>
-		</div>
-	</div>
-</div>
-<div class='row'>
-	<div class='col-lg-2'>
-		<div class="input-group">
-				<label>Nro Cursos Electivos</label>
+			</td>
+			<td>
 				<?php echo $this->form->elective_course?>
-		</div>
-	</div>
-	<div class='col-lg-2'>
-		<div class="input-group">
-				<label>Nro Creditos Obligatorios</label>
+			</td>
+			<td>
 				<?php echo $this->form->mandatory_credits?>
-		</div>
-	</div>
-	<div class='col-lg-2'>
-		<div class="input-group">
-			<label>Nro Creditos Electivos</label>
-			<?php echo $this->form->elective_credits?>
-		</div>
-	</div>
-</div>
-
-</form >
+			</td>
+			<td>
+				<?php echo $this->form->elective_credits?>
+			</td>
+		</tr>
+	</table>
+	</form>
+<?php }
+?>
+<div id="loadnewcurr"></div>
 
 <script>
+	var act="<?php echo $this->act?>";
+	if (act==1) {
+		window.location.reload();
+		var escu="<?php echo $this->escid?>--<?php echo $this->subid?>";
+		$("#curriculass").load("/curricula/curricula/curriculas/escid/"+$.base64.encode(escu));
+	};
+
 	var escid=$('#escid_cur').val();
 	$("#year").change(function(){
 		$("#year option:selected").each(function(){
@@ -118,38 +111,20 @@
 		});
 	});
 
-	$(".save_curri").click(function(){
+	$("#save_curri").click(function(){
 			$("#form_new_cur").submit();
-
 	});
+
 	$("#form_new_cur").submit(function(){
 			$.ajax({
             	type: 'POST',
 	            url: $(this).attr('action'),
 	            data: $(this).serialize(),
             	success: function(data) { 
-            		if (data.status==true)
-        			{
-        				var tmp=$.base64.encode(data.tmp);
-        				$.get('/curricula/curricula/curriculas',{escid:tmp},function(data){
-							$("#curriculas").html(data);
-							$('#myModal').hide();
-							$('#myModal').modal('hide');
-						});
-    					$('.close_new_cur').click();
-
-        			}
-        			else
-        			{
-        				$(".cont_new_cur").html(data);
-        			}
+					// $('#curr_new').modal('hide');
+        			$("#loadnewcurr").html(data);
                 }
-                
 	        }); 
 	        return false;
     });
 </script>
-<?php } else{
-	echo json_encode($this->data);
-}?>
-

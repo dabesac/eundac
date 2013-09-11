@@ -309,6 +309,7 @@ class Record_DirectedController extends Zend_Controller_Action {
                 $datareg['credits']= $credits;
                 $datareg['date_register']= date("Y-m-d");
                 $datareg['register']= $uidreg;
+                $datareg['modified']= $uidreg;
                 $datareg['created']= date("Y-m-d");
                 $datareg['state']= "M";
                 $datareg['document_auth']= $reso;
@@ -338,7 +339,7 @@ class Record_DirectedController extends Zend_Controller_Action {
                 $dataregcourse['created']= date("Y-m-d");
                 $dataregcourse['state']= 'M';
                 $dataregcourse['approved']= $this->sesion->uid;
-                $dataregcourse['approved_date']= date("Y-m-d");
+                $dataregcourse['approved_date']= date("Y-m-d h:m:s");
                 $dbregistercourse->_save($dataregcourse);
             }
 
