@@ -11,7 +11,7 @@
             <b><h4><center>Listado de usuarios de <?php echo $this->datauser[0]['last_name0']." ".$this->datauser[0]['last_name1'].", ".$this->datauser[0]['first_name'];?> con DNI Nº <?php echo $this->datauser[0]['pid']?></center></b></h4>
             </th>
             <th>
-                <center><a id='loading'data-toggle="modal" href="#myModal" class='btn btn-info'><span class="glyphicon glyphicon-pencil"></span>Agregar Usuario</a></center>   
+                <center><a id='loading'data-toggle="modal" href="/admin/user/newuser/pid/<?php echo base64_encode($this->datauser[0]['pid'])?>" class='btn btn-info'><span class="glyphicon glyphicon-pencil"></span>Agregar Usuario</a></center>   
             </th>    
 
         </tr>
@@ -30,9 +30,28 @@
             <tr>
                 <td><center><?php echo $c?></center></td>
                 <td><center><?php echo $info['uid']?></center></td>
-                <td><center><?php echo $info['rid']?></center></td>
-                <td><center><?php echo $info['escid']?></center></td>
-                <td ><center><?php echo $info['state']?></center></td>
+                <td><center><?php echo $this->inforol[$c-1]['name']?></center></td>
+                <td><center><?php echo $this->infoesc[$c-1]['name']?></center></td>
+                <?php
+                switch ($info['state']) {
+                    case 'A':
+                        ?><td ><center>ACTIVO</center></td><?php
+                        break;
+                    case 'I':
+                        ?><td ><center>INACTIVO</center></td><?php
+                        break;
+                    case 'B':
+                        ?><td ><center>BOQUEADO</center></td><?php
+                        break;
+                    case 'S':
+                        ?><td ><center>SUSPENDIDO</center></td><?php
+                        break;
+                        break;
+                    case 'E':
+                        ?><td ><center>BAJA</center></td><?php
+                        break;                            
+                }
+                ?>
             </tr>
           <?php  
         }  
@@ -46,14 +65,15 @@
     ?>
     </table>          
 </div>
-
+ 
 <!-- Modal -->
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <center><h3 class="modal-title" style='color:blue' >NUEVO USUARIO</h3></center>
+          <center><h3 class="modal-title" style='color:blue' >AGREGAR USUARIO</h3></center>
+          <center><h4><?php echo $this->datauser[0]['last_name0']." ".$this->datauser[0]['last_name1'].", ".$this->datauser[0]['first_name'];?> con DNI Nº <?php echo $this->datauser[0]['pid']?></h4></center>
         </div>
         <div class="modal-body">
             <div id='list'></div>
@@ -69,9 +89,8 @@
   <script type="text/javascript">
 
 $("#loading").click(function(){
-    var escid=$(this).val();
-    
-    url="/admin/user/newrol/$this->inforol";
+       
+    url="/admin/user/newuser/pid/<?php echo base64_encode($this->datauser[0]['pid'])?>";
     
     // alert(url);
     $("#list").load(url);

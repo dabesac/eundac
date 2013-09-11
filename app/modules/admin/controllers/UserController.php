@@ -15,7 +15,7 @@ class Admin_UserController extends Zend_Controller_Action{
  			$fm=new Admin_Form_Buscar();
 			$this->view->fm=$fm;
  		} catch (Exception $e) {
- 			print "Error: Person".$e->getMessage();
+ 			print "Error: User".$e->getMessage();
  		}
 	}
 
@@ -29,7 +29,6 @@ class Admin_UserController extends Zend_Controller_Action{
 				$where=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid);
 				$dbuser=new Api_Model_DbTable_Users();
 				$datauser=$dbuser->_getUserXPid($where);
-				$this->view->datauser=$datauser;
 			}
 			$name = $this->_getParam('name');
        		if($name){
@@ -40,7 +39,6 @@ class Admin_UserController extends Zend_Controller_Action{
         		$dbuser=new Api_Model_DbTable_Users();
         		$datauser=$dbuser->_getUserXnameXsinRolAll($name,$eid,$oid);
 				// print_r($datauser);exit();        		           
-            	$this->view->datauser=$datauser; 
         	}
         	$uid = $this->_getParam('uid');
         	if ($uid) {
@@ -48,12 +46,31 @@ class Admin_UserController extends Zend_Controller_Action{
         		$where['eid'] = $this->sesion->eid;
         		$where['oid'] = $this->sesion->oid;
         		$bduser = new Api_Model_DbTable_Users();
-        		$datauser = $bduser->_getUserXUid($where);
-			// print_r($datauser);exit();
-        		$this->view->datauser=$datauser;			
-        	}			
+        		$datauser = $bduser->_getUserXUid($where);       					
+        	}
+            $c=0;
+            $whered=array('eid'=>$eid,'oid'=>$oid);
+            $wheres=array('eid'=>$eid,'oid'=>$oid);
+            foreach ($datauser as $info) {
+                $rid=$info['rid'];
+                $subid=$info['subid'];
+                $escid=$info['escid'];
+                $wheres['subid']=$subid;
+                $wheres['escid']=$escid;
+                $whered['rid']=$rid;
+                $dbrol=new Api_Model_DbTable_Rol();
+                $inforol[$c]= $dbrol->_getOne($whered);
+                $dbesc= new Api_Model_DbTable_Speciality();
+                $infoesc[$c]= $dbesc->_getOne($wheres);
+                $info[$c]=$inforol['rid'];
+                $c++;
+            }
+            // print_r($datauser);
+            $this->view->datauser=$datauser;
+            $this->view->infoesc=$infoesc;
+            $this->view->inforol=$inforol;			
  		} catch (Exception $e) {
- 			print "Error: get Person".$e->getMessage();
+ 			print "Error: get User".$e->getMessage();
  		}
  	}
 
@@ -77,24 +94,93 @@ class Admin_UserController extends Zend_Controller_Action{
 				$where=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid);
 				$dbuser=new Api_Model_DbTable_Users();
 				$datauser=$dbuser->_getUserXPid($where);
-				$c=0;
-				foreach ($datauser as $inforol) {
-					$info[$c]=$inforol['rid'];
-					$c++;
-				}
-				$this->view->inforol=$info;
+                $c=0;
+                $whered=array('eid'=>$eid,'oid'=>$oid);
+                $wheres=array('eid'=>$eid,'oid'=>$oid);
+                foreach ($datauser as $info) {
+                    $rid=$info['rid'];
+                    $subid=$info['subid'];
+                    $escid=$info['escid'];
+                    $wheres['subid']=$subid;
+                    $wheres['escid']=$escid;
+                    $whered['rid']=$rid;
+                    $dbrol=new Api_Model_DbTable_Rol();
+                    $inforol[$c]= $dbrol->_getOne($whered);
+                    $dbesc= new Api_Model_DbTable_Speciality();
+                    $infoesc[$c]= $dbesc->_getOne($wheres);
+                    $info[$c]=$inforol['rid'];
+                    $c++;
+                }
+				// print_r($datauser);
+                $this->view->infoesc=$infoesc;
+                $this->view->inforol=$inforol;
 				$this->view->datauser=$datauser;
 			}			
  		} catch (Exception $e) {
  			print "Error: get Person".$e->getMessage();
  		}
  	}
- 	 public function newrolAction(){
- 	 		$this->_helper->layout()->disableLayout();
- 	 		$fm= new Admin_Form_Usernew();
+ 	public function newuserAction(){
+ 	 		// $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $pid=base64_decode($this->_getParam('pid'));
+            // print_r($pid);exit();
+            $fm= new Admin_Form_Usernew();
  	 		$this->view->fm=$fm;
- 	 		$info=$this->_getParam('$this->inforol');
- 	 		print_r($info);
+            $escid=new Zend_Form_Element_Select('escid');
+            $escid->removeDecorator('Label')->removeDecorator('HtmlTag');
+            $escid->setAttrib('class','form-control');
+            $escid->setRequired(true)->addErrorMessage('Este campo es requerido');
+            $escid->setAttrib('title','Seleccione una escuela');
+            $escid->addMultiOption("",'- Seleccione una Sede -');
+            $this->view->escid=$escid;
+            $register=$this->sesion->uid;
+            if ($this->getRequest()->isPost())
+            {
+                $frmdata=$this->getRequest()->getPost();
+                if ($fm->isValid($frmdata))
+                {                    
+                    unset($frmdata['Guardar']);
+                    $rid=$frmdata['rid'];
+                    $frmdata['eid']=$eid;
+                    $frmdata['oid']=$oid;
+                    $frmdata['pid']=$pid;
+                    $where=array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid);
+                    $dbrol=new Api_Model_DbTable_Rol();
+                    $datarol=$dbrol->_getOne($where);
+                    $prefix=$datarol['prefix'];                
+                    $frmdata['uid']=$pid.$prefix;
+                
+                    $frmdata['created']=date('Y-m-d h:m:s');
+                    $frmdata['register']=$register;
+                    $frmdata['password']=md5($frmdata['uid']);                  
+                    $reg_= new Api_Model_DbTable_Users();
+                    $reg_->_save($frmdata);
+                    $this->_redirect("/admin/user/new");                           
+                }
+                else
+                {
+                    echo "Ingrese nuevamente por favor";
+                }
+            }
+ 	}
 
- 	 }
+ 	public function filterspecialityAction(){
+    try{
+        $this->_helper->layout()->disableLayout();
+        $subid = $this->_getParam('subid');
+        // print ('hola');
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $where=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid);
+        $attrib=array('escid','name','state');
+        $dbesc = new Api_Model_DbTable_Speciality();
+        $data = $dbesc->_getFilter($where);
+		print_r($data);
+        $this->view->data = $data;         
+    }catch (Exception $ex){
+        print "Error : get Filter".$ex->getMessage();
+    }
+}
 }

@@ -66,7 +66,7 @@ class Admin_SpecialityController extends Zend_Controller_Action{
             if ($this->getRequest()->isPost())
             {
                 $frmdata=$this->getRequest()->getPost();
-                // print_r($frmdata);
+                // print_r($frmdata);exit();
                 if ($form->isValid($frmdata))
                 {                    
                     unset($frmdata['send']);
