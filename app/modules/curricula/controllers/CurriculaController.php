@@ -67,13 +67,14 @@ class Curricula_CurriculaController extends Zend_Controller_Action
             $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $escid=base64_decode($this->_getParam('escid'));
-            $subid=base64_decode($this->_getParam('subid')); 
+            $escid = base64_decode($this->_getParam('escid'));
+            $subid = base64_decode($this->_getParam('subid')); 
             $form = new Rcentral_Form_Curricula();
             $form->subid->setvalue($subid);
             $form->escid_cur->setvalue($escid);
             if ($this->getRequest()->isPost()) {
                 $formData = $this->getRequest()->getPost();
+                unset($formData['type_periods']);
                 if ($form->isValid($this->getRequest()->getPost())){
                     $formData['eid']=$eid;
                     $formData['oid']=$oid;
@@ -81,19 +82,11 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                     $formData['register']=$this->sesion->uid;
                     $formData['escid']=$formData['escid_cur'];
                     unset($formData['escid_cur']);
-                    // print_r($formData);
-                    // echo"asfs";
                     $base_curricula = new Api_Model_DbTable_Curricula();
-                    // $base_curricula->save($formData);
                     if ($base_curricula->_save($formData)) {
-                        $json = array('status' => true,
-                                'tmp' => $formData['escid']."--".$formData['subid']);
-                        $this->_response->setHeader('Content-Type', 'application/json');  
-                        $this->view->data = $json;
-                    }else{
-                        $json = array('status' => false);
-                        $this->_response->setHeader('Content-Type', 'application/json');  
-                        $this->view->data = $json;
+                        $this->view->escid=$formData['escid'];
+                        $this->view->subid=$formData['subid'];
+                        $this->view->act=1;
                     }
                 }else{
                     $this->view->form=$form;
@@ -111,39 +104,45 @@ class Curricula_CurriculaController extends Zend_Controller_Action
             $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $curid=base64_decode($this->_getParam('curid'));
-            $escid=base64_decode($this->_getParam('escid'));
-            $subid=base64_decode($this->_getParam('subid'));
-            $accion=$this->_getParam('accion');
-            $where=array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid,
+            $curid = base64_decode($this->_getParam('curid'));
+            $escid = base64_decode($this->_getParam('escid'));
+            $subid = base64_decode($this->_getParam('subid'));
+            $accion = base64_decode($this->_getParam('opti'));
+            $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid,
                         'curid'=>$curid, 'subid'=>$subid);
             $curr= new Api_Model_DbTable_Curricula();
             $curricula=$curr->_getOne($where);
-            $form = new Rcentral_Form_Curricula();
-            $form->year->setAttrib("disabled",'disabled');
-            if ($this->getRequest()->isPost()) {
-                $formData = $this->getRequest()->getPost();
-                // print_r($formData);
-                if ($form->isValid($formData)) {
-                    $pk=array('eid'=>$this->sesion->eid,
-                                'oid'=>$this->sesion->oid,
-                                'escid'=>$formData['escid_cur'],
-                                'curid'=>$formData['curid'],
+
+            if ($accion=="V") {
+                $this->view->option=$accion;
+                $this->view->curricula=$curricula;
+            }else{
+                $form = new Rcentral_Form_Curricula();
+                $form->year->setAttrib("disabled",'disabled');
+                if ($this->getRequest()->isPost()) {
+                    $formData = $this->getRequest()->getPost();
+                    if ($form->isValid($formData)) {
+                        $pk=array('eid'=>$this->sesion->eid, 'oid'=>$this->sesion->oid,
+                                'escid'=>$formData['escid_cur'], 'curid'=>$formData['curid'],
                                 'subid'=>$formData['subid']);
-                    $formData['updated']=date('Y-m-d h:m:s');
-                    $formData['modified']=$this->sesion->uid;
-                    unset($formData['escid_cur']);
-                    $base_curricula = new Api_Model_DbTable_Curricula();
-                    if ($base_curricula->_update($formData,$pk)) {
+                        $formData['updated']=date('Y-m-d h:m:s');
+                        $formData['modified']=$this->sesion->uid;
+                        unset($formData['escid_cur']);
+                        $base_curricula = new Api_Model_DbTable_Curricula();
+                        if ($base_curricula->_update($formData,$pk)) {
+                            $this->view->escid=$pk['escid'];
+                            $this->view->subid=$pk['subid'];
+                            $this->view->act=1;
+                        }
+                    }else{
+                        $form->populate($formData);
+                        $this->view->form=$form;
                     }
                 }else{
-                    $form->populate($formData);
+                    $form->escid_cur->setvalue($curricula['escid']);
+                    $form->populate($curricula);
                     $this->view->form=$form;
                 }
-            }else{
-                $form->escid_cur->setvalue($curricula['escid']);
-                $form->populate($curricula);
-                $this->view->form=$form;
             }
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
@@ -156,26 +155,19 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                 $curid=base64_decode($this->_getParam('curid'));
                 $escid=base64_decode($this->_getParam('escid'));
                 $subid=base64_decode($this->_getParam('subid'));
+                $action=$this->_getParam('accion');
+                $this->view->action=$action;
+                $this->view->eid=$eid;
+                $this->view->oid=$oid;
+                $this->view->escid=$escid;
+                $this->view->curid=$curid;
+                $this->view->subid=$subid;
                 $where=array('eid'=>$eid,'oid'=>$oid,
                               'curid'=>$curid,'escid'=>$escid,
                               'subid'=>$subid);
-                // $order=" semid ASC";
                 $base_course= new Api_Model_DbTable_Curricula();
                 $data_course = $base_course->_getAmountCourses($curid,$subid,$escid,$oid,$eid);
-                // $data_course = $base_course->_getAll($where,$order);
-                // if ($data_course){
-                //       $base_semestre = new Api_Model_DbTable_Semester();
-                //       foreach ($data_course as $key => $data) {
-                //             // echo $data['semid'];
-                //             $where=array('eid'=>$eid,'oid'=>$oid,'semid'=>$data['semid']);
-                //             $nom_sem=$base_semestre->_getOne($where);
-                //             $data_course[$key]['name_sem']=$nom_sem['name'];
-                //             // print_r($nom_sem);
-                //             // $data_course[$key]['name_sem']=$nom_sem[0];
-                //       }
-                // }
                 $this->view->data_course=$data_course;
-                // print_r($data_course);
             } catch (Exception $e) {
                   print "Error: listcourses ".$e->getMessage();
             }
@@ -183,15 +175,120 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 
       public function addcoursesAction(){
             try {
-                  $eid=$this->sesion->eid;
-                  $oid=$this->sesion->oid;
-                  $curid=base64_decode($this->_getParam('curid'));
-                  $escid=base64_decode($this->_getParam('escid'));
-                  $subid=base64_decode($this->_getParam('subid'));
-                  $form= new Rcentral_Form_Course();
-                  $this->view->form->$formData;
+                $this->_helper->layout()->disableLayout();
+                $eid=$this->sesion->eid;
+                $oid=$this->sesion->oid;
+                $curid=$this->_getParam('curid');
+                $escid=$this->_getParam('escid');
+                $subid=$this->_getParam('subid');
+                $this->view->escid=$escid;
+                $this->view->curid=$curid;
+                $this->view->subid=$subid;
+                if ($escid) {
+                    $base_cur= new Api_Model_DbTable_Curricula();
+                    $curant=$base_cur->_getCurriculaAnterior($curid,$escid);
+                    $wherecour=array('eid'=>$eid,'oid'=>$oid,
+                                  'curid'=>$curant[0]['curricula_ant'],'escid'=>$escid,
+                                  'subid'=>$subid, 'state'=>"A");
+                    $course = new Api_Model_DbTable_Course();
+                    $datacourses_ant=$course->_getFilter($wherecour,$attrib=null,$orders=array('semid','courseid asc'));
+                    $wherecour['curid']=$curid;
+                    $datacourses=$course->_getFilter($wherecour,$attrib=null,$orders=array('semid','courseid asc'));
+                }
+                $form = new Rcentral_Form_Course();
+                foreach ($datacourses_ant as $datacourses_ant) {
+                    $form->course_equivalence->addMultiOption($datacourses_ant['courseid'],$datacourses_ant['courseid']." | ".$datacourses_ant['name']);
+                    $form->course_equivalence_2->addMultiOption($datacourses_ant['courseid'],$datacourses_ant['courseid']." | ".$datacourses_ant['name']);
+                }
+                foreach ($datacourses as $datacourses) {
+                    $form->req_1->addMultiOption($datacourses['courseid'],$datacourses['courseid']." | ".$datacourses['name']);
+                    $form->req_2->addMultiOption($datacourses['courseid'],$datacourses['courseid']." | ".$datacourses['name']);
+                    $form->req_3->addMultiOption($datacourses['courseid'],$datacourses['courseid']." | ".$datacourses['name']);
+                }
+                if ($this->getRequest()->isPost()) {
+                    $formData = $this->getRequest()->getPost();
+                    if ($form->isValid($formData)) {
+                        $formData['eid']=$eid;
+                        $formData['oid']=$oid;
+                        $formData['created']=date('Y-m-d h:m:s');
+                        $formData['register']=$this->sesion->uid;
+                        $base_course = new Api_Model_DbTable_Course();
+                        $base_course->_save($formData);
+                        $this->view->msg=1;
+                    }else{
+                        $this->view->form=$form;
+                    }
+                }else{
+                    $this->view->form=$form;
+                }
             } catch (Exception $e) {
                   print "Error : in addcourse".$e->getMessage();
             }
+      }
+
+      public function modifycoursesAction(){
+        try {
+                $this->_helper->layout()->disableLayout();
+                $eid=$this->sesion->eid;
+                $oid=$this->sesion->oid;
+                $curid=$this->_getParam('curid');
+                $escid=$this->_getParam('escid');
+                $subid=$this->_getParam('subid');
+                $courseid=$this->_getParam('courseid');
+                $this->view->escid=$escid;
+                $this->view->curid=$curid;
+                $this->view->subid=$subid;
+                $this->view->courseid=$courseid;
+                if ($courseid) {
+                    $base_cur= new Api_Model_DbTable_Curricula();
+                    $curant=$base_cur->_getCurriculaAnterior($curid,$escid);
+                    $wherecour=array('eid'=>$eid,'oid'=>$oid,
+                                  'curid'=>$curant[0]['curricula_ant'],'escid'=>$escid,
+                                  'subid'=>$subid, 'state'=>"A");
+
+                    $course = new Api_Model_DbTable_Course();
+                    $wherecourse=array('eid'=>$eid,'oid'=>$oid,
+                                  'curid'=>$curid,'escid'=>$escid,
+                                  'subid'=>$subid,'courseid'=>$courseid);
+                    $coursedata=$course->_getOne($wherecourse);
+
+                    $datacourses_ant=$course->_getFilter($wherecour,$attrib=null,$orders=array('semid','courseid asc'));
+                    $wherecour['curid']=$curid;
+                    $datacourses=$course->_getFilter($wherecour,$attrib=null,$orders=array('semid','courseid asc'));
+                }
+                $form= new Rcentral_Form_Course();
+                foreach ($datacourses_ant as $datacourses_ant) {
+                    $form->course_equivalence->addMultiOption($datacourses_ant['courseid'],$datacourses_ant['courseid']." | ".$datacourses_ant['name']);
+                    $form->course_equivalence_2->addMultiOption($datacourses_ant['courseid'],$datacourses_ant['courseid']." | ".$datacourses_ant['name']);
+                }
+                foreach ($datacourses as $datacourses) {
+                    $form->req_1->addMultiOption($datacourses['courseid'],$datacourses['courseid']." | ".$datacourses['name']);
+                    $form->req_2->addMultiOption($datacourses['courseid'],$datacourses['courseid']." | ".$datacourses['name']);
+                    $form->req_3->addMultiOption($datacourses['courseid'],$datacourses['courseid']." | ".$datacourses['name']);
+                }
+                $form->courseid->setAttrib('readonly','readonly');
+                if ($this->getRequest()->isPost()) {
+                    $formData = $this->getRequest()->getPost();
+                    if ($form->isValid($formData)) {
+                        $pk=array('eid'=>$this->sesion->eid, 'oid'=>$this->sesion->oid,
+                                'escid'=>$formData['escid'], 'curid'=>$formData['curid'],
+                                'subid'=>$formData['subid'], 'courseid'=>$formData['courseid']);
+                        $formData['updated']=date('Y-m-d h:m:s');
+                        $formData['modified']=$this->sesion->uid;
+                        $base_cour = new Api_Model_DbTable_Course();
+                        if ($base_cour->_update($formData,$pk)) {
+                            $this->view->msg=1;
+                        }
+                    }else{
+                        $form->populate($formData);
+                        $this->view->form=$form;
+                    }
+                }else{
+                    $form->populate($coursedata);
+                    $this->view->form=$form;
+                }
+        } catch (Exception $e) {
+              print "Error : in modifycourse".$e->getMessage();
+        }
       }
 }

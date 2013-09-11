@@ -1,23 +1,144 @@
-<div>
-	<h4><span class='glyphicon glyphicon-list'></span> Cursos</h4>
+<div class="panel panel-default">
+	<b style="font-size:24px"><span class='glyphicon glyphicon-list'></span> Asignaturas</b>
+    <a id="btnnewcourse" href="#new_course" class="btn btn-info" style="float:right" data-toggle="modal"><span class='glyphicon glyphicon-pencil'></span> Nueva Asignatura</a>
 </div>
-
-<div class="panel-group" id="accordion">
-    <div class="panel panel-default">
-        <?php foreach ($this->data_course as $key => $value) { ?>
+<div>
+    <div class="panel-group" id="accordion">
+        <?php 
+        $cour = new Api_Model_DbTable_Course();
+        $wherecour['eid']=$this->eid;
+        $wherecour['oid']=$this->oid;
+        $wherecour['escid']=$this->escid;
+        $wherecour['subid']=$this->subid;
+        $wherecour['curid']=$this->curid;
+        foreach ($this->data_course as $value) { 
+            $wherecour['semid']=$value['semid'];
+            $datacourse = $cour->_getFilter($wherecour,$attrib=null,$orders=array('courseid asc')); ?>
+        <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $value['semid']?>">
-                  Cursos <?php echo $value['name']?>
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $value['semid']?>"><?php echo $value['name']?>
                     </a>
                 </h4>
             </div>
-            <div id="collapse<?php echo $value['semid']?>" class="panel-collapse collapse in">
+            <div id="collapse<?php echo $value['semid']?>" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <?php echo $value['name']?>
+                    <table class="table table-condensed">
+                        <tr>
+                            <th>#</th>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th><center>Créditos</center></th>
+                            <th><center>Tipo</center></th>
+                            <th><center>Pre-Requisito</center></th>
+                            <th><center>Estado</center></th>
+                            <?php
+                            if ($this->action=="A") { ?>
+                                <th><center>Operaciones</center></th>
+                                <?php
+                            }?>
+                        </tr>
+                        <?php 
+                        $c=1;
+                        foreach ($datacourse as $courses) { 
+                            if ($courses['state']=="A") $img="/img/circulo-verde.png";
+                            else $img="/img/circulo-rojo.png"; ?>
+                            <tr>
+                                <td><?php echo $c?></td>
+                                <td><?php echo $courses['courseid']?></td>
+                                <td><?php echo $courses['name']?></td>
+                                <td><center><?php echo $courses['credits']?></center></td>
+                                <td>
+                                    <center><?php echo ($courses['type']=="O")? "Obligatorio":"Electivo";?></center>
+                                </td>
+                                <td>
+                                    <center>
+                                        <?php 
+                                        if ($courses['req_1']) {
+                                            echo $courses['req_1'];
+                                            if ($courses['req_2']) echo " - ".$courses['req_2'];
+                                            if ($courses['req_3']) echo " - ".$courses['req_3'];
+                                        }
+                                        else echo "Ninguno"; ?>
+                                    </center>
+                                </td>
+                                <td>
+                                    <center><img src="<?php echo $img?>"></center>
+                                </td>
+                                <?php
+                                if ($this->action=="A") { ?>
+                                    <td>
+                                        <center>
+                                        <a id="btnmodifycourse_<?php echo $courses['courseid']?>" href="#modify_course" title="Modificar Asignatura" data-toggle="modal" rel="tooltip"><span class='glyphicon glyphicon-pencil'></span></a>
+                                        </center>
+                                    </td>
+                                    <?php
+                                }?>
+                            </tr>
+                            <script type="text/javascript">
+                            $("#btnmodifycourse_<?php echo $courses['courseid']?>").click(function(){
+                                var escid="<?php echo $this->escid?>";
+                                var subid="<?php echo $this->subid?>";
+                                var curid="<?php echo $this->curid?>";
+                                var courseid="<?php echo $courses['courseid']?>";
+                                $("#loadmodifycourse").load("/curricula/curricula/modifycourses/escid/"+escid+"/curid/"+curid+"/subid/"+subid+"/courseid/"+courseid);
+                            });
+                            </script>
+                            <?php
+                            $c++;
+                        }?>
+                    </table>
                 </div>
             </div>
-        <?php }?>
+        </div>
+        <?php 
+        }?>
     </div>
 </div>
 
+<div class="modal fade" id="new_course" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Nueva Asignatura</h4>
+            </div>
+            <div id="loadnewcourse" class="modal-body"></div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+                <a href="#" id="save_newcourse" class="btn btn-success">
+                    <span class='glyphicon glyphicon-floppy-disk'></span> Guardar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modify_course" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Modificar Asignatura</h4>
+            </div>
+            <div id="loadmodifycourse" class="modal-body"></div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+                <a href="#" id="save_modifycourses" class="btn btn-success">
+                    <span class='glyphicon glyphicon-floppy-disk'></span> Guardar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#btnnewcourse").click(function(){
+        var escid="<?php echo $this->escid?>";
+        var subid="<?php echo $this->subid?>";
+        var curid="<?php echo $this->curid?>";
+        $("#loadnewcourse").load("/curricula/curricula/addcourses/escid/"+escid+"/curid/"+curid+"/subid/"+subid);
+    });
+
+    $('a[rel=tooltip]').tooltip();
+</script>
