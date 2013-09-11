@@ -39,8 +39,11 @@ class Assistance_StudentController extends Zend_Controller_Action {
 
         $base_courses = new Api_Model_DbTable_Course();
         $base_person = new Api_Model_DbTable_Person();
-        
+        $base_assistance = new Api_Model_DbTable_StudentAssistance();
         $where = null;
+        $infocurso = null;
+        $infoassist = null;
+
         $where = array(
                 'eid' => $eid, 'oid' => $oid,
                 'escid' => $escid,'subid' => $subid,
@@ -50,7 +53,21 @@ class Assistance_StudentController extends Zend_Controller_Action {
         if ($base_courses->_getOne($where)) {
             $infocurso = $base_courses->_getOne($where);
         }
+        $where['coursoid']=$courseid;
         
+        $infoassist = $base_assistance ->_getAll($where);
+        if ($infoassist) {
+            foreach ($infoassist as $key => $value) {
+                $where['pid']=$value['pid'];
+                $info_student = $base_person->_getOne($where);
+                $infoassist[$key]['name'] = $info_student['last_name0']." ".
+                                            $info_student['last_name1'].", ".
+                                            $info_student['first_name'];
+            }
+        }
+        $this->view->infocurso = $infocurso;
+        $this->view->infoassist = $infoassist;
 
+        $this->view->turno = $turno;
     }
 }
