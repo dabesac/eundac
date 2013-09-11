@@ -313,7 +313,7 @@ class IndexController extends Zend_Controller_Action {
     			$acls = null;
     			break;
     		}
-    		case "SO":{
+    		case "SP":{
     			$modules[0] = array ("name" =>"Administración Plataforma", "imgicon"=>"book");
     			$acls[]= array("controller"=>"admin/receipts","name"=>"Cargar Recibos","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/password/search","name"=>"Cambiar Clave","imgicon"=>"calendar");
