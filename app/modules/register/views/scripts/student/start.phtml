@@ -130,7 +130,12 @@
 			<?php foreach ($this->subjects as $key => $subject) { ?>
 
 				<?php 
-					
+					$content_veces = null;
+					$content = null;
+					$style_reg = null;
+					$disabled_reg = null;
+					$btnsuccess = null;
+
 					if($subject['veces'] >= 2){
 						$class='danger';
 						$addClass = 'btn-danger';
@@ -141,11 +146,12 @@
 					}
 
 					if($subject['veces_cur']==1 ){
+
 						$veces_cur='veces_cur';
 						$content_veces=$subject['veces']+1;
 						$content="Requisito: Debe presentar una solicitud a Decanura de su Facultar  y Compromiso";
 					}
-					else $veces_cur='';
+					else {$veces_cur='';}
 
 				?>
 				<?php if($subject['register'] == 1  ){
@@ -162,7 +168,6 @@
 						$display_mod="display:none";
 						// $disabled_reg = "disabled";
 						// $style_reg="display:none";
-
 					 }
 
 					 if($subject['register'] == 1  && $this->state != "B" ){
