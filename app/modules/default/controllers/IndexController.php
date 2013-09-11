@@ -291,7 +291,7 @@ class IndexController extends Zend_Controller_Action {
     	
     	switch ($rid){
     		case "AD":{
-    			$modules[0] = array ("name" =>"Administración Plataforma", "imgicon"=>"book");
+    			$modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
     			$acls[]= array("controller"=>"admin/receipts","name"=>"Cargar Recibos","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/password","name"=>"Cambiar Clave","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/bankpayments","name"=>"Pagos del Banco","imgicon"=>"calendar");
@@ -314,7 +314,7 @@ class IndexController extends Zend_Controller_Action {
     			break;
     		}
     		case "SP":{
-    			$modules[0] = array ("name" =>"Administración Plataforma", "imgicon"=>"book");
+    			$modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
     			$acls[]= array("controller"=>"admin/receipts","name"=>"Cargar Recibos","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/password/search","name"=>"Cambiar Clave","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/bankpayments","name"=>"Pagos del Banco","imgicon"=>"calendar");
@@ -420,11 +420,11 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"rfacultad/condition","name"=>"Condición Matricula","imgicon"=>"saved");
     			$acls[]= array("controller"=>"record/directed","name"=>"Subsanación/Dirigido.","imgicon"=>"file");
     			$acls[]= array("controller"=>"register/registerstudent","name"=>"Validación Matricula.","imgicon"=>"ok");
-    			$acls[]= array("controller"=>"register/validation/addcourse","name"=>"Convalidación.","imgicon"=>"file");
+    			$acls[]= array("controller"=>"register/validation","name"=>"Convalidación.","imgicon"=>"file");
     			$resource1[]="rfacultad/condition";
     			$resource1[]="record/directed";
     			$resource1[]="register/registerstudent";
-    			$resource1[]="register/validation/addcourse";
+    			$resource1[]="register/validation";
     			$modules[1]['acls'] = $acls;
     			$acls = null;
     			
