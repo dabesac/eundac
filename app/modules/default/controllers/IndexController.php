@@ -293,9 +293,11 @@ class IndexController extends Zend_Controller_Action {
     		case "AL": {
     			$resource1[]="alumno/index";    			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
+    			$acls[]= array("controller"=>"register/listcurrentnotes","name"=>"Asignaturas Actuales","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"horary/consolidated","name"=>"Ver Horario","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"horary/semester","name"=>"Horarios Semes.","imgicon"=>"calendar");
     			$resource1[]="horary/consolidated";
+    			$resource1[]="register/listcurrentnotes";
     			$resource1[]="horary/semester";
     			$modules[0]['acls'] = $acls;
     			$acls = null;
