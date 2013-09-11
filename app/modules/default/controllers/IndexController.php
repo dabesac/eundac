@@ -335,7 +335,7 @@ class IndexController extends Zend_Controller_Action {
     			$acls = null;
     			break;
     		}
-    		case "SO": {
+    		case "SP": {
     			$resource1[]="soporte/index";
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"register/listcurrentnotes","name"=>"Asignaturas Actuales","imgicon"=>"calendar");
@@ -384,6 +384,7 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"register/student","name"=>"Prematricula","imgicon"=>"edit");
     			$resource1[]="register/student";
     			$modules[1]['acls'] = $acls;
+    			$acls = null;
     			break;
     		}
     		case "DC":{
