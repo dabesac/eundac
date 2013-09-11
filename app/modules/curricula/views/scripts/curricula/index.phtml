@@ -37,16 +37,19 @@
 			var facid=$.base64.encode($(this).val());
 			$.get('/curricula/curricula/schools',{facid:facid},function(data){
 				$("#escid").html(data);
-				// alert(data);
 			});
 		})
 	});
 	$("#escid").change(function(){
 		$("#escid option:selected").each(function(){
 			var tmp=$.base64.encode($(this).val());
+			if (tmp=="") {
+				alert("Seleccione una Escuela.");
+				return false;
+			};
+			$("#curriculas").html("<img src='/img/spinner.gif'>Cargando...");
 			$.get('/curricula/curricula/curriculas',{escid:tmp},function(data){
 				$("#curriculas").html(data);
-				// alert(data);
 			});
 		})
 	});

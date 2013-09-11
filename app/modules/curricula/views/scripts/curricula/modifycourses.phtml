@@ -1,4 +1,4 @@
-<form role='form' method='post' action='/curricula/curricula/addcourses' id='formcourses'>
+<form role='form' method='post' action='/curricula/curricula/modifycourses' id='formcoursesmodify'>
 	<table class="table table-condensed">
 		<tr>
 			<th><center>Código</center></th>
@@ -64,17 +64,17 @@
         window.location.reload();
 	};
 
-    $("#save_newcourse").click(function(){
-        $("#formcourses").submit();
+    $("#save_modifycourses").click(function(){
+        $("#formcoursesmodify").submit();
     });
 
-    $("#formcourses").submit(function(){
+    $("#formcoursesmodify").submit(function(){
             $.ajax({
                 type: 'POST',
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
                 success: function(data) { 
-                    $("#loadnewcourse").html(data);
+                    $("#loadmodifycourse").html(data);
                 }
             }); 
             return false;

@@ -25,42 +25,19 @@ $code= $login->uid;
 $rid= $login->rid;
 $sex= $login->sex;
 $acls = $login->acls;
+$info = $login;
 $resource1 = $login->resources;
+$urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
+		escid/".base64_encode($info->escid)."/eid/".base64_encode($info->eid)."/
+		oid/".base64_encode($info->oid)."/subid/".base64_encode($info->subid)."/
+		pid/".base64_encode($info->pid);
 
-$resource1[]="index/salir";
-$resource1[]="index/cerrar";
-$resource1[]="docente/index";
-$resource1[]="alumno/index";
-$resource1[]="rfacultad/index";
-$resource1[]="syllabus/syllabus";
-$resource1[]="register/deferred";
-
-$resource1[]="profile/search";
-$resource1[]="profile/changecurricula";
-
-$resource1[]="admin/user";
-$resource1[]="assistance/student";
-$resource1[]="admin/person";
-
-//print_r($resource1);
-
-$resource1[]="default/logaccess";
-$resource1[]="default/rss";
-$resource1[]="default/logaccess";
-$resource1[]="default/rss";
-$resource1[]="default/password";
-//print_r($resource1);
-$resource1[]="profile/index";
-$resource1[]="report/registration";
 
 
 
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
-$urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
-escid/".base64_encode($info->escid)."/eid/".base64_encode($info->eid)."/
-oid/".base64_encode($info->oid)."/subid/".base64_encode($info->subid)."/
-pid/".base64_encode($info->pid);
+
  
 /*foreach ($acls as $a){
 	$racls = $a['acls'];
@@ -186,7 +163,13 @@ $(document).ready(function(){
 						</button>
 						<ul class="dropdown-menu" style="margin-left: -130px;" >
 							<li><a href="/default/password/change">Cambiar Contraseña</a></li>
-							<li><a href="#">Ver mi perfil</a></li>
+							<?php if ($rid=="AL"){
+								$profile = "/profile/public/student";
+							}
+							?>
+							<?php php 
+							?>}?>
+							<li><a href="<?php echo $profile?>">Ver mi perfil</a></li>
 							<li><a href="#"></a></li>
 							<li class="divider"></li>
 							 -->

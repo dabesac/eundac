@@ -3,13 +3,13 @@
     <img src="/img/img_03.jpg" title="">
   </div>
   <div class="col-sm-7">
-    <h3><?php echo $this->datos[0]['fullname']?></h3>
-    <h5>Codigo <b><?php echo $this->datos[0]['uid']?></b></h5>
-    <h4>Facultad de <?php echo $this->datos[1][0]['nomfac']." Escuela de ".$this->datos[1][0]['nomesc']?></h4>
+    <h4><?php echo $this->datos[0]['fullname']?></h43>
+    <h6>Codigo <b><?php echo $this->datos[0]['uid']?></b></h6>
+    <h5>Facultad de <?php echo $this->datos[1][0]['nomfac']." Escuela de ".$this->datos[1][0]['nomesc']?></h5>
     </div>
     <div class="col-sm-1">
       <?//print ($this->datos);?>
-      <a href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos['uid'])?>/escid/<?php echo base64_encode($this->datos['escid'])?>/eid/<?php echo base64_encode($this->datos['eid'])?>/oid/<?php echo base64_encode($this->datos['oid'])?>/subid/<?php echo base64_encode($this->datos['subid'])?>/pid/<?php echo base64_encode($this->datos['pid'])?>" class="btn btn-success">Record</a>
+      <a href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>" class="btn btn-success">Record</a>
     </div>
     <br><br><br><br>
     <br><br><br><br>
@@ -18,8 +18,8 @@
 <div class="col-sm-9">
   <br>
   <ul class="nav nav-tabs" id="profileTab">
-    <li class="active"><a href="#info" id="btnmaininfo"><h4>Informacion</h4></a></li>
-    <li><a href="#signin" id="btnmainsignin"><h4>Matricula</h4></a></li>
+    <li class="active"><a href="#info" id="btnmaininfo"><h5>Informacion</h5></a></li>
+    <li><a href="#signin" id="btnmainsignin"><h5>Matricula</h5></a></li>
     <li><a class="hidden"></a></li>
   </ul>
 </div>
