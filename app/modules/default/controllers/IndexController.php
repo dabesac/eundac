@@ -295,6 +295,8 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"admin/receipts","name"=>"Cargar Recibos","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/password/search","name"=>"Cambiar Clave","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/bankpayments","name"=>"Pagos del Banco","imgicon"=>"calendar");
+    			$acls[]= array("controller"=>"admin/rateregister","name"=>"Adm. Tasas","imgicon"=>"calendar");
+    			
     			$resource1[]="admin/receipts";
     			$resource1[]="admin/password/search";
     			$resource1[]="admin/bankpayments";
@@ -308,11 +310,13 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"admin/receipts","name"=>"Cargar Recibos","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/password/search","name"=>"Cambiar Clave","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/bankpayments","name"=>"Pagos del Banco","imgicon"=>"calendar");
-    			$acls[]= array("controller"=>"admin/rateregister","name"=>"Cambio de Tasas","imgicon"=>"calendar");
+    			$acls[]= array("controller"=>"admin/rateregister","name"=>"Adm. Tasas","imgicon"=>"calendar");
+    			$acls[]= array("controller"=>"register/changerates","name"=>"Cambio de Tasas","imgicon"=>"calendar");
     			$resource1[]="admin/receipts";
     			$resource1[]="admin/password/search";
     			$resource1[]="admin/bankpayments";
     			$resource1[]="admin/rateregister";
+    			$resource1[]="register/changerates";
     			$modules[0]['acls'] = $acls;
     			$acls = null;
     			
@@ -341,9 +345,11 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"register/listcurrentnotes","name"=>"Asignaturas Actuales","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"horary/consolidated","name"=>"Ver Horario","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"horary/semester","name"=>"Horarios Semes.","imgicon"=>"calendar");
+    			$acls[]= array("controller"=>"register/changerates","name"=>"Cambio de Tasas","imgicon"=>"calendar");
     			$resource1[]="horary/consolidated";
     			$resource1[]="register/listcurrentnotes";
     			$resource1[]="horary/semester";
+    			$resource1[]="register/changerates";
     			$modules[0]['acls'] = $acls;
     			$acls = null;
     			 
