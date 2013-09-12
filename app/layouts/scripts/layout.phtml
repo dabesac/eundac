@@ -32,6 +32,9 @@ $urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
 		oid/".base64_encode($info->oid)."/subid/".base64_encode($info->subid)."/
 		pid/".base64_encode($info->pid);
 
+
+
+
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
 
