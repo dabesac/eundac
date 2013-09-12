@@ -7,15 +7,18 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 
 	public function _save($data){
 		try {
-			if($data["eid"]=='' || $data["oid"]=='' ||  $data["perid"]=='' ||  $data["courseid"] =='' || $data["escid"]=='' || $data["subid"] =='' || $data["curid"] =='' || $data["turno"]=='')
-				return false;
-				return $this->insert($data);
-				return false;
+			if($data["eid"]=='' || $data["oid"]=='' ||  $data["perid"]=='' ||  
+			$data["courseid"] =='' || $data["escid"]=='' || $data["subid"] =='' || 
+			$data["curid"] =='' || $data["turno"]=='') return false;
+			if ($this->insert($data)){
+				return true;
+			}
+			return false;
 		} catch (Exception $e) {
 			print "Error: Save Periods_Courses ".$e->getMessage();
 		}
 	}
-
+	
 	public function _update($data,$pk){
 		try {
 				if ($pk["eid"]=='' || $pk["oid"]=='' ||  $pk["perid"]=='' ||  $pk["courseid"] =='' || 

@@ -5,12 +5,10 @@ class Register_ValidationController extends Zend_Controller_Action
 	{
 		$sesion  = Zend_Auth::getInstance();
     	if(!$sesion->hasIdentity() ){
-    		//$this->_helper->redirector('index',"index",'default');
+    		$this->_helper->redirector('index',"index",'default');
     	}
     	$login = $sesion->getStorage()->read();
-    	if (!$login->rol['module']=="register"){
-    		//$this->_helper->redirector('index','index','default');
-    	}
+    	
     	$this->sesion = $login;
 	}
 
@@ -107,25 +105,20 @@ class Register_ValidationController extends Zend_Controller_Action
 
     public function coursexcurriculaAction() 
     {
-       
         $this->_helper->layout()->disableLayout();
         $eid= $this->sesion->eid;
         $oid= $this->sesion->oid;
-         // $eid= '123456';
-         // $oid= "1";
         $curid= $this->_getParam("curid");
         $escid= $this->_getParam("escid");
         $subid= $this->_getParam("subid");
         $uid= $this->_getParam("uid");
         $pid= $this->_getParam("pid");
         $nota= $this->_getParam("nota");
-        //$this->view->perid = $perid;
-
-      $dbcurso = new Api_Model_DbTable_Course();       //admin
-      $curso=  $dbcurso->_getCoursesXCurriculaXShool($eid,$oid,$curid,$escid);
-      //print_r($curso);//break;
-      $this->view->cursito = $curso;
-      $this->view->eid = $eid;
+      	$dbcurso = new Api_Model_DbTable_Course();       //admin
+      	$curso=  $dbcurso->_getCoursesXCurriculaXShool($eid,$oid,$curid,$escid);
+	
+      	$this->view->cursito = $curso;
+      	$this->view->eid = $eid;
       $this->view->oid = $oid;
       $this->view->subid = $subid;
    }

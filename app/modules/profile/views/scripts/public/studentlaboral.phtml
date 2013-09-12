@@ -1,7 +1,7 @@
 <div class="panel panel-info">
 
   <div class="panel-heading">
-    <h2>Datos Laborales</h2>
+    <h4>Datos Laborales</h4>
   </div>
 
   <div class="panel-body">
@@ -9,14 +9,14 @@
   		foreach ($this->laboral as $lab) {?>
 		    <div class="panel panel-default">
 		    	<div class="panel-heading">
-		    		<h4><b><?echo $lab['company']?></b></h4>
+		    		<h5><b><?echo $lab['company']?></b></h5>
 		    	</div>
 		    	<div class="panel-body">
 		    		<table class="table">
 		    			<tr>
-		    				<th><h5>Area</h5> <h4><b><?echo $lab['industry']?></b></h4></th>
-		    				<th><h5>Condicion</h5> <h4><b><?echo $lab['condition']?></b></h4></th>
-		    				<th><h5>Salario Mensual</h5> <h4><b>S/. <?echo $lab['salary']?></b></h4></th>
+		    				<th>Area <h5><b><?echo $lab['industry']?></b></h5></th>
+		    				<th>Condicion <h5><b><?echo $lab['condition']?></b></h5></th>
+		    				<th>Salario Mensual <h5><b>S/. <?echo $lab['salary']?></b></h5></th>
 		    			</tr>
 		    		</table>
 		    	</div>

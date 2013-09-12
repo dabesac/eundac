@@ -1,6 +1,6 @@
 <?php
 
-class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
+class Api_Model_DbTable_StudentAssistance extends Zend_Db_Table_Abstract
 {
     protected $_name = 'base_student_assistance';
     protected $_primary = array('eid', 'oid', 'escid', 'subid', 'perid', 'coursoid', 'curid', 'turno', 'uid', 'pid', 'regid');
@@ -43,7 +43,11 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 
     public function _getOne($where=array()){
         try{
-            if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["subid"] =='' || $where["courseid"]=='' || $where["curid"] =='' || $where["turno"] =='' || $where["perid"]=='' || $where["uid"]=='' || $where["pid"]=='') return false;
+            if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  
+                $where["subid"] =='' || $where["courseid"]=='' || $where["curid"] =='' || 
+                $where["turno"] =='' || $where["perid"]=='' || $where["uid"]=='' || 
+                $where["pid"]=='') return false;
+
             $wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and subid='".$where['subid']."' and courseid='".$where['courseid']."' and curid='".$where['curid']."' and turno='".$where['turno']."' and perid='".$where['perid']."' and uid='".$where['uid']."' and pid='".$where['pid']."'";
             $row = $this->fetchRow($wherestr);
             if($row) return $row->toArray();
@@ -56,15 +60,16 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
     public function _getAll($where=array()){
         try{
             if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["subid"] =='' || 
-                $where["courseid"]=='' || $where["curid"] =='' || $where["turno"] =='' || $where["perid"]=='') return false;
+                $where["coursoid"]=='' || $where["curid"] =='' || $where["turno"] =='' || $where["perid"]=='') return false;
+
             $wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".
-                    $where['escid']."' and subid='".$where['subid']."' and courseid='".$where['courseid']."' 
+                    $where['escid']."' and subid='".$where['subid']."' and coursoid='".$where['coursoid']."' 
                     and curid='".$where['curid']."' and turno='".$where['turno']."' and perid='".$where['perid']."'";
             $rows = $this->fetchAll($wherestr);
             if($rows) return $rows->toArray();
             return false;
         }catch (Exception $e){
-            print "Error: Read All Course ".$e->getMessage();
+            print "Error: Read All Assistance ".$e->getMessage();
         }
     }
 
