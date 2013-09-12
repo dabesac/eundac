@@ -1,11 +1,48 @@
-<?php 
-$infocourse = $this->infocurso
-?>
 <style type="text/css">
-	table{
-		font-size: 10px;
+	.retired{
+		cursor: pointer;
+	}
+	.close-red{
+		display: none;
 	}
 </style>
+<script >
+	var partial = <?php echo $this->partial?>;
+	var $assist = {};
+
+	function retired_assist (obj) {
+		var $icon = $(obj);
+		var $parent = $(obj).parent();
+		var $parent = $parent.parent();
+		var $action = $(obj).attr('action');
+
+		var $index = $icon.attr('index');
+
+		if($action == "0")
+		{
+			$icon.removeClass('glyphicon-eye-open');
+			$icon.addClass('glyphicon-eye-close');
+			$parent.css('color','#FC4141');
+        	$icon.attr("action","1");
+		}
+		else{
+
+			$icon.removeClass('glyphicon-eye-close');
+			$icon.addClass('glyphicon-eye-open');
+			$parent.css('color','#000');
+        	$icon.attr("action","0");
+		}
+
+		$assist = {};
+		alert($parent.attr("curid"));
+	}
+
+	
+</script>
+<?php 
+	$infocourse = $this->infocurso;
+	$partial = $this->partial;
+?>
 <div class='row'>
 	<div class='col-xs-12 col-sm-6 col-md-8'>
 		<h4> <span class='glyphicon glyphicon-calendar'></span> Asistencia <?php echo $infocourse['name']?> Turno <?php echo $this->turno?></h4>
@@ -15,46 +52,152 @@ $infocourse = $this->infocurso
 	</div>
 </div>
 <div class='row'>
-	<div class='col-md-9'>
+	<div class='col-md-12'>
 		<table class='table'>
 			<thead>
 				<tr>
 					<th>#</th>
 					<th>Apellidos y Nombres</th>
-					<th>1 <input type='checkbox' name='select-all-1' index='1'></th>
-					<th>2 <input type='checkbox' name='select-all-2' index='2'></th>
-					<th>3 <input type='checkbox' name='select-all-3' index='3'></th>
-					<th>4 <input type='checkbox' name='select-all-4' index='4'></th>
-					<th>5 <input type='checkbox' name='select-all-5' index='5'></th>
-					<th>6 <input type='checkbox' name='select-all-6' index='6'></th>
-					<th>7 <input type='checkbox' name='select-all-7' index='7'></th>
-					<th>8 <input type='checkbox' name='select-all-8' index='8'></th>
-					<th>9 <input type='checkbox' name='select-all-9' index='9'></th>
-					<th>10 <input type='checkbox' name='select-all-10' index='10'></th>
-					<th>11 <input type='checkbox' name='select-all-11' index='11'></th>
-					<th>12 <input type='checkbox' name='select-all-12' index='12'></th>
-					<th>13 <input type='checkbox' name='select-all-13' index='13'></th>
-					<th>14 <input type='checkbox' name='select-all-14' index='14'></th>
-					<th>15 <input type='checkbox' name='select-all-15' index='15'></th>
-					<th>16 <input type='checkbox' name='select-all-16' index='16'></th>
-					<th>17 <input type='checkbox' name='select-all-17' index='17'></th>
-					<th>18 <input type='checkbox' name='select-all-18' index='18'></th>
-					<th>19 <input type='checkbox' name='select-all-19' index='19'></th>
-					<th>20 <input type='checkbox' name='select-all-20' index='20'></th>
-					<th>21 <input type='checkbox' name='select-all-21' index='21'></th>
-					<th>22 <input type='checkbox' name='select-all-22' index='22'></th>
-					<th>23 <input type='checkbox' name='select-all-23' index='23'></th>
-					<th>24 <input type='checkbox' name='select-all-24' index='24'></th>
-					<th>25 <input type='checkbox' name='select-all-25' index='25'></th>
-					<th>26 <input type='checkbox' name='select-all-26' index='26'></th>
-					<th>27 <input type='checkbox' name='select-all-27' index='27'></th>
-					<th>28 <input type='checkbox' name='select-all-28' index='28'></th>
-					<th>29 <input type='checkbox' name='select-all-29' index='29'></th>
-					<th>30 <input type='checkbox' name='select-all-30' index='30'></th>
-					<th>31 <input type='checkbox' name='select-all-31' index='31'></th>
-					<th>32 <input type='checkbox' name='select-all-32' index='32'></th>
-					<th>33 <input type='checkbox' name='select-all-33' index='33'></th>
-					<th>34 <input type='checkbox' name='select-all-34' index='34'></th>
+					<?php if ($partial == 1) { ?>
+						<th class='success'>1
+							<div>
+								<input type='checkbox' name='select-all-1' index='1'></th>
+							</div>
+						<th class='success'>2 
+							<div>
+								<input type='checkbox' name='select-all-3' index='2'></th>
+							</div>
+						<th class='success'>3 
+							
+							<div>
+								<input type='checkbox' name='select-all-3' index='3'></th>
+							</div>
+						<th class='success'>4 
+							<div>
+								<input type='checkbox' name='select-all-4' index='4'></th>
+							</div>
+						<th class='success'>5 
+							<div>
+								<input type='checkbox' name='select-all-5' index='5'></th>
+							</div>
+						<th class='success'>6 
+							<div>
+								<input type='checkbox' name='select-all-6' index='6'></th>
+							</div>
+						<th class='success'>7 
+							<div>
+								<input type='checkbox' name='select-all-7' index='7'></th>
+							</div>
+						<th class='success'>8 
+							<div>
+								<input type='checkbox' name='select-all-8' index='8'></th>
+							</div>
+						<th class='success'>9 
+							<div>
+								<input type='checkbox' name='select-all-9' index='9'></th>
+							</div>
+						<th class='success'>10 
+							<div>
+								<input type='checkbox' name='select-all-10' index='10'></th>
+							</div>
+						<th class='success'>11 
+							<div>
+								<input type='checkbox' name='select-all-11' index='11'></th>
+							</div>
+						<th class='success'>12 
+							<div>
+								<input type='checkbox' name='select-all-12' index='12'></th>
+							</div>
+						<th class='success'>13 
+							<div>
+								<input type='checkbox' name='select-all-13' index='13'></th>
+							</div>
+						<th class='success'>14 
+							<div>
+								<input type='checkbox' name='select-all-14' index='14'></th>
+							</div>
+						<th class='success'>15 
+							<div>
+								<input type='checkbox' name='select-all-15' index='15'></th>
+							</div>
+						<th class='success'>16 
+							<div>
+								<input type='checkbox' name='select-all-16' index='16'></th>
+							</div>
+						<th class='success'>17 
+							<div>
+								<input type='checkbox' name='select-all-17' index='17'></th>
+							</div>
+					<?php }else{ ?>
+						<th class='success'>18 
+							<div>
+								<input type='checkbox' name='select-all-18' index='18'></th>
+							</div>
+						<th class='success'>19 
+							<div>
+								<input type='checkbox' name='select-all-19' index='19'></th>
+							</div>
+						<th class='success'>20 
+							<div>
+								<input type='checkbox' name='select-all-20' index='20'></th>
+							</div>
+						<th class='success'>21 
+							<div>
+								<input type='checkbox' name='select-all-21' index='21'></th>
+							</div>
+						<th class='success'>22 
+							<div>
+								<input type='checkbox' name='select-all-22' index='22'></th>
+							</div>
+						<th class='success'>23 
+							<div>
+								<input type='checkbox' name='select-all-23' index='23'></th>
+							</div>
+						<th class='success'>24 
+							<div>
+								<input type='checkbox' name='select-all-24' index='24'></th>
+							</div>
+						<th class='success'>25 
+							<div>
+								<input type='checkbox' name='select-all-25' index='25'></th>
+							</div>
+						<th class='success'>26 
+							<div>
+								<input type='checkbox' name='select-all-26' index='26'></th>
+							</div>
+						<th class='success'>27 
+							<div>
+								<input type='checkbox' name='select-all-27' index='27'></th>
+							</div>
+						<th class='success'>28 
+							<div>
+								<input type='checkbox' name='select-all-28' index='28'></th>
+							</div>
+						<th class='success'>29 
+							<div>
+								<input type='checkbox' name='select-all-29' index='29'></th>
+							</div>
+						<th class='success'>30 
+							<div>
+								<input type='checkbox' name='select-all-30' index='30'></th>
+							</div>
+						<th class='success'>31 
+							<div>
+								<input type='checkbox' name='select-all-31' index='31'></th>
+							</div>
+						<th class='success'>32 
+							<div>
+								<input type='checkbox' name='select-all-32' index='32'></th>
+							</div>
+						<th class='success'>33 
+							<div>
+								<input type='checkbox' name='select-all-33' index='33'></th>
+							</div>
+						<th class='success'>34 
+							<div>
+								<input type='checkbox' name='select-all-34' index='34'></th>
+							</div>
+					<?php }?>
 				</tr>
 
 			</thead>
@@ -62,45 +205,137 @@ $infocourse = $this->infocurso
 			<tbody>
 				<?php if ($this->infoassist) { 
 					foreach ($this->infoassist as $key => $register) { ?>
-						<tr >
-							<td><?php echo $key+1 ?></td>
+							<tr  courseid='<?php echo $register['coursoid']?>'
+							curid='<?php echo $register['curid']?>'
+							turno='<?php echo $register['turno']?>'
+							perid='<?php echo $register['perid']?>'
+							escid='<?php echo $register['escid']?>'
+							subid='<?php echo $register['subid']?>'
+							regid='<?php echo $register['regid']?>'
+							uid='<?php echo $register['uid']?>'
+							pid='<?php echo $register['pid']?>'
+			                edition="false">
+							<td><?php echo $key+1 ?> <span id='edit-assist-<?php echo $key?>' class='text-success glyphicon'></span></td>
 							<td><?php echo $register['name']?></td>
-							<td><input type='checkbox' name='a_sesion_1' ></td>	
-							<td><input type='checkbox' name='a_sesion_2' ></td>	
-							<td><input type='checkbox' name='a_sesion_3' ></td>	
-							<td><input type='checkbox' name='a_sesion_4' ></td>	
-							<td><input type='checkbox' name='a_sesion_5' ></td>	
-							<td><input type='checkbox' name='a_sesion_6' ></td>	
-							<td><input type='checkbox' name='a_sesion_7' ></td>	
-							<td><input type='checkbox' name='a_sesion_8' ></td>	
-							<td><input type='checkbox' name='a_sesion_9' ></td>	
-							<td><input type='checkbox' name='a_sesion_10' ></td>	
-							<td><input type='checkbox' name='a_sesion_11' ></td>	
-							<td><input type='checkbox' name='a_sesion_12' ></td>	
-							<td><input type='checkbox' name='a_sesion_13' ></td>	
-							<td><input type='checkbox' name='a_sesion_14' ></td>	
-							<td><input type='checkbox' name='a_sesion_15' ></td>	
-							<td><input type='checkbox' name='a_sesion_16' ></td>	
-							<td><input type='checkbox' name='a_sesion_17' ></td>	
-							<td><input type='checkbox' name='a_sesion_18' ></td>	
-							<td><input type='checkbox' name='a_sesion_19' ></td>	
-							<td><input type='checkbox' name='a_sesion_20' ></td>	
-							<td><input type='checkbox' name='a_sesion_21' ></td>	
-							<td><input type='checkbox' name='a_sesion_22' ></td>	
-							<td><input type='checkbox' name='a_sesion_23' ></td>	
-							<td><input type='checkbox' name='a_sesion_24' ></td>	
-							<td><input type='checkbox' name='a_sesion_25' ></td>	
-							<td><input type='checkbox' name='a_sesion_26' ></td>	
-							<td><input type='checkbox' name='a_sesion_27' ></td>	
-							<td><input type='checkbox' name='a_sesion_28' ></td>	
-							<td><input type='checkbox' name='a_sesion_29' ></td>	
-							<td><input type='checkbox' name='a_sesion_30' ></td>	
-							<td><input type='checkbox' name='a_sesion_31' ></td>	
-							<td><input type='checkbox' name='a_sesion_32' ></td>	
-							<td><input type='checkbox' name='a_sesion_33' ></td>	
-							<td><input type='checkbox' name='a_sesion_34' ></td>	
-							<td><input type='checkbox' name='retirado' ></td>	
-						</tr>
+						<?php if ($partial==1) { ?>
+							<td>
+								<input <?php echo ($register['a_sesion_1'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_1' >
+							</td>	
+							<td >
+								<input <?php echo ($register['a_sesion_2'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_2' >
+							</td>	
+							<td>
+								<input <?php echo ($register['a_sesion_3'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_3' >
+							</td>	
+							<td>
+								<input <?php echo ($register['a_sesion_4'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_4' >
+							</td>	
+							<td>
+								<input <?php echo ($register['a_sesion_5'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_5' >
+							</td>	
+							<td>
+								<input <?php echo ($register['a_sesion_6'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_6' >
+							</td>	
+							<td>
+								<input <?php echo ($register['a_sesion_7'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_7' >
+							</td>	
+							<td>
+								<input <?php echo ($register['a_sesion_8'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_8' >
+							</td>	
+							<td>
+								<input <?php echo ($register['a_sesion_9'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_9' >
+							</td>	
+							<td>
+								<input <?php echo ($register['a_sesion_10'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_10' >
+							</td>	
+							<td>
+								<input <?php echo ($register['a_sesion_11'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_11' >
+							</td>	
+							<td>
+								<input <?php echo ($register['a_sesion_12'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_12' >
+							</td>	
+							<td><input <?php echo ($register['a_sesion_13'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_13' >
+							</td>
+
+							<td>
+								<input <?php echo ($register['a_sesion_14'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_14' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_15'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_15' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_16'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_16' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_17'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_17' >
+							</td>			
+						<?php }if($partial == 2){ ?>
+							<td>
+								<input <?php echo ($register['a_sesion_18'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_18' >
+							</td>							
+							<td>
+								<input <?php echo ($register['a_sesion_19'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_19' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_20'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_20' >
+							</td>							
+							<td>
+								<input <?php echo ($register['a_sesion_21'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_21' >
+							</td>							
+							<td>
+								<input <?php echo ($register['a_sesion_22'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_22' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_23'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_23' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_24'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_24' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_25'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_25' >
+							</td>	
+							<td>
+								<input <?php echo ($register['a_sesion_26'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_26' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_27'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_27' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_28'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_28' >
+							</td>	
+							<td>
+								<input <?php echo ($register['a_sesion_29'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_29' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_30'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_30' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_31'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_31' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_32'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_32' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_33'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_33' >
+							</td>
+							<td>
+								<input <?php echo ($register['a_sesion_34'] != 'R')?'':'disabled' ?> type='checkbox' name='a_sesion_34' >
+							</td>	
+						<?php }
+						if ($register['a_sesion_17'] != 'R' || $register['a_sesion_34'] !='R') { ?>
+							<td class='success'>
+								<h5><span class='glyphicon glyphicon-eye-open retired' 
+											action='0' onclick='retired_assist(this);' 
+											index='<?php echo $key?>'></span></h5>
+							</td>
+						<?php }else{ ?>
+							<td class='success'>
+								<h5><span class='glyphicon glyphicon-eye-close retired'
+											action='1' onclick='retired_assist(this);'
+											index='<?php echo $key?>'></span></h5>
+							</td>
+						<?php }?>
+
 				<?php }}?>
 			</tbody>
 		</table>
