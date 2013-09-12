@@ -22,11 +22,11 @@
 		</tr>
 		<tr>
 			<td>
-				<center><input value="<?php if ($this->curricula) echo $this->curricula?>" type="text" class="input-small " disabled></center>
+				<center><input value="<?php if ($this->curricula) echo $this->curricula?>" type="text" class='form-control' style='height:35px;width:200px' disabled></center>
 			</td>
 			<th><center>Cambiar a:</center></th>
 			<td><center>
-				<select id="curid" class="input-xlarge">
+				<select id="curid" class='form-control' style='height:35px;width:350px'>
 					<option value="">- Seleccione la Currícula -</option>
 					<?php 
 					if ($this->curriactiva) {
