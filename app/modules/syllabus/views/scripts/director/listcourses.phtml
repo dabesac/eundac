@@ -1,12 +1,12 @@
 <?php //print_r($this->coursesname);
 if($this->allcourses){?>
-	<table class="table">
+	<table class="table table-striped">
 		<tr>
 			<th>#</th>
-			<th>Sem</th>
+			<th><center>Sem</center></th>
 			<th>Curso</th>
-			<th>Turno</th>
-			<th>Estado</th>
+			<th><center>Turno</center></th>
+			<th><center>Estado</center></th>
 		</tr>
 	
 		<?php $c=0;
@@ -15,10 +15,16 @@ if($this->allcourses){?>
 			foreach ($courses as $coursesxper) {?>
 				<tr>
 					<td><b><?php echo $c+1;?></b></td>
-					<td><?php echo $coursesxper['semid'];?></td>
+					<td align="center"><?php echo $coursesxper['semid'];?></td>
 					<td><?php echo $this->coursesname[$c][$cp]['name']?></td>
-					<td><?php echo $coursesxper['turno'];?></td>
-					<td><?php echo $this->coursesstate[$c][$cp]['state']?></td>
+					<td align="center"><?php echo $coursesxper['turno'];?></td>
+					<td align="center">
+						<?php if($this->coursesstate[$c][$cp]['state']=="C"){?>
+							<img src="/img/circulo-verde.png">
+						<?}else{?>
+							<img src="/img/circulo-rojo.png">
+						<?}?>
+					</td>
 					<td><a href="#"><span class="glyphicon glyphicon-print"></span></a></td>
 				</tr>				
 			<?php $c++;
@@ -27,7 +33,7 @@ if($this->allcourses){?>
 		}?>
 	</table>
 <?php }elseif($this->filcourses){?>
-	<table class="table">
+	<table class="table table-striped">
 		<tr>
 			<th>#</th>
 			<th>Sem</th>
@@ -43,7 +49,13 @@ if($this->allcourses){?>
 				<td><?php echo $courses['semid'];?></td>
 				<td><?php echo $this->coursesname[$c][0]['name']?></td>
 				<td><?php echo $courses['turno'];?></td>
-				<td><?php echo $this->coursesstate[$c][0]['state']?></td>
+				<td>
+					<?php if($this->coursesstate[$c][0]['state']=="C"){?>
+						<img src="/img/circulo-verde.png">
+					<?}else{?>
+						<img src="/img/circulo-rojo.png">
+					<?}?>
+				</td>
 				<td><a href="#"><span class="glyphicon glyphicon-print"></span></a></td>
 			</tr>				
 			<?php $c++;
