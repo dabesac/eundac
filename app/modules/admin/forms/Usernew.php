@@ -36,6 +36,18 @@ public function init(){
         $subid->addMultiOption($datasub['subid'],$datasub['name']);
     }
 
+    $escid=new Zend_Form_Element_Select('escid');
+    $escid->removeDecorator('Label')->removeDecorator('HtmlTag');
+    $escid->setAttrib('class','form-control');
+    $escid->setRequired(true)->addErrorMessage('Este campo es requerido');
+    $escid->setAttrib('title','Seleccione una escuela');
+    $escid->addMultiOption("",'- Seleccione una Sede -');
+    $dbesc= new Api_Model_DbTable_Speciality();
+    $datas= $dbesc->_getAll($where);
+    foreach ($datas as $datae){
+        $escid->addMultiOption($datae['escid'],$datae['name']);
+    }
+
     $state= new Zend_Form_Element_Select('state');
     $state->removeDecorator('Label')->removeDecorator('HtmlTag');
     $state->setAttrib('class','form-control');
@@ -56,6 +68,11 @@ public function init(){
     $send->removeDecorator('Label')->removeDecorator("HtmlTag");
     $send->setAttrib('class', 'btn btn-success');
 
-    $this->addElements(array($rid,$subid,$state,$comments,$send));
+    $update= new Zend_Form_Element_Submit('Actualizar');
+    $update->removeDecorator('Label')->removeDecorator('DtDdWrapper');
+    $update->removeDecorator('Label')->removeDecorator("HtmlTag");
+    $update->setAttrib('class', 'btn btn-success');
+
+    $this->addElements(array($rid,$subid,$escid,$state,$comments,$send,$update));
 }
 }

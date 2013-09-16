@@ -11,7 +11,7 @@
             <b><h4><center>Listado de usuarios de <?php echo $this->datauser[0]['last_name0']." ".$this->datauser[0]['last_name1'].", ".$this->datauser[0]['first_name'];?> con DNI Nº <?php echo $this->datauser[0]['pid']?></center></b></h4>
             </th>
             <th>
-                <center><a id='loading'data-toggle="modal" href="/admin/user/newuser/pid/<?php echo base64_encode($this->datauser[0]['pid'])?>" class='btn btn-info'><span class="glyphicon glyphicon-pencil"></span>Agregar Usuario</a></center>   
+                <center><a id='loading'data-toggle="modal" href="#myModal" class='btn btn-info'><span class="glyphicon glyphicon-pencil"></span>Agregar Usuario</a></center>   
             </th>    
 
         </tr>
@@ -90,7 +90,7 @@
 
 $("#loading").click(function(){
        
-    url="/admin/user/newuser/pid/<?php echo base64_encode($this->datauser[0]['pid'])?>";
+    url="/admin/user/newuser";
     
     // alert(url);
     $("#list").load(url);

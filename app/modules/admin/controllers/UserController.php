@@ -121,11 +121,10 @@ class Admin_UserController extends Zend_Controller_Action{
  		}
  	}
  	public function newuserAction(){
- 	 		// $this->_helper->layout()->disableLayout();
+ 	 		$this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $pid=base64_decode($this->_getParam('pid'));
-            // print_r($pid);exit();
             $fm= new Admin_Form_Usernew();
  	 		$this->view->fm=$fm;
             $escid=new Zend_Form_Element_Select('escid');
@@ -150,8 +149,7 @@ class Admin_UserController extends Zend_Controller_Action{
                     $dbrol=new Api_Model_DbTable_Rol();
                     $datarol=$dbrol->_getOne($where);
                     $prefix=$datarol['prefix'];                
-                    $frmdata['uid']=$pid.$prefix;
-                
+                    $frmdata['uid']=$pid.$prefix;                
                     $frmdata['created']=date('Y-m-d h:m:s');
                     $frmdata['register']=$register;
                     $frmdata['password']=md5($frmdata['uid']);                  
@@ -167,20 +165,66 @@ class Admin_UserController extends Zend_Controller_Action{
  	}
 
  	public function filterspecialityAction(){
-    try{
-        $this->_helper->layout()->disableLayout();
-        $subid = $this->_getParam('subid');
-        // print ('hola');
-        $eid = $this->sesion->eid;
-        $oid = $this->sesion->oid;
-        $where=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid);
-        $attrib=array('escid','name','state');
-        $dbesc = new Api_Model_DbTable_Speciality();
-        $data = $dbesc->_getFilter($where);
-		print_r($data);
-        $this->view->data = $data;         
-    }catch (Exception $ex){
-        print "Error : get Filter".$ex->getMessage();
+        try{
+            $this->_helper->layout()->disableLayout();
+            $subid = $this->_getParam('subid');
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $where=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid);
+            $attrib=array('escid','name','state');
+            $dbesc = new Api_Model_DbTable_Speciality();
+            $data = $dbesc->_getFilter($where);
+            $this->view->data = $data;         
+        }catch (Exception $ex){
+            print "Error : get Filter".$ex->getMessage();
+        }
     }
-}
-}
+
+
+    public function updateuserAction(){
+        try {
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $uid = base64_decode($this->_getParam('uid'));
+            $pid = base64_decode($this->_getParam('pid'));
+            $escid = base64_decode($this->_getParam('escid'));
+            $subid = base64_decode($this->_getParam('subid'));
+            $where=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid);
+            $attrib=array('uid','escid','subid','pid','rid','state','comments');
+            $dbuser = new Api_Model_DbTable_Users();
+            $fm= new Admin_Form_Usernew();
+            $data = $dbuser->_getFilter($where,$attrib);
+            $rid = $data[0]['rid'];
+            $this->view->rid=$rid;
+            $fm->populate($data[0]);
+            $fm->rid->setAttrib('disable',true);
+            $this->view->fm=$fm;
+            if ($this->getRequest()->isPost())
+            {
+                $frmdata=$this->getRequest()->getPost();
+                if ($fm->isValid($frmdata))
+                {                    
+                    unset($frmdata['Actualizar']);
+                    trim($frmdata['comments']);
+                    $pk['eid']=$eid;
+                    $pk['oid']=$oid;
+                    $pk['pid']=$pid;
+                    $pk['escid']=$escid;
+                    $pk['subid']=$subid;
+                    $pk['uid']=$uid;                                               
+                    $reg_= new Api_Model_DbTable_Users();
+                    $reg_->_update($frmdata,$pk);
+                    $this->_redirect("/admin/user");                           
+                }
+                else
+                {
+                    echo "Ingrese nuevamente por favor";
+                }
+            }
+
+
+        } catch (Exception $e) {
+            print "Error: update User".$ex->getMessage();
+        }
+    }
+}    

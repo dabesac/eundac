@@ -13,8 +13,6 @@ class Horary_SemesterController extends Zend_Controller_Action{
  		$this->sesion = $login;
  		require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
-   //      	$this->sesion->facid='2';
-			// $this->sesion->escid='2ESCL';
 	}
 
 	public function indexAction(){
@@ -22,10 +20,10 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		try {
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
-			$escid=$this->sesion->escid;
-			// $escid='4SI';
-			// $perid='13B';
-			$perid=$this->sesion->period->perid;
+			// $escid=$this->sesion->escid;
+			$escid='4SI';
+			$perid='13A';
+			// $perid=$this->sesion->period->perid;
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'perid'=>$perid);
 			$sem= new Api_Model_DbTable_Semester();
 			$dsem=$sem->_getSemesterXPeriodsXEscid($where);
@@ -45,9 +43,10 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			$this->view->oid=$oid;
 			$escid=$this->sesion->escid;
 			$semid=$this->_getParam('semid');
-			// $semid='3';
+			// $semid='8';
 			$subid=$this->sesion->subid;
-			$perid=$this->sesion->period->perid;
+			// $perid=$this->sesion->period->perid;
+			$perid='13A';
 			$this->view->semid=$semid;
 
 			$base_url = 'http://localhost:8080/';
@@ -59,6 +58,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	        $response = $client->restget($endpoint,$data);
 	        $lista=$response->getBody();
 	        $data = Zend_Json::decode($lista);
+	        // print_r($data);exit();
         	$this->view->horarys=$data; 
 
         	$where=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
@@ -94,7 +94,8 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		// $escid='4SI';
 		$semid=base64_decode($this->_getParam('semid'));
 		$subid=$this->sesion->subid;
-		$perid=$this->sesion->period->perid;
+		// $perid=$this->sesion->period->perid;
+		$perid='13A';
 		$this->view->semid=$semid;
 
 		$base_url = 'http://localhost:8080/';
