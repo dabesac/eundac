@@ -651,7 +651,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
                         if( $credits_register['semid'] == 0 )
                         {
-                            $credits_assing[0]['semester_creditsz']=22;
+                            $credits_assing[0]['semester_creditsz']=26;
                         }
                         
                     }
@@ -765,6 +765,9 @@ class Register_StudentController extends Zend_Controller_Action {
                         'uid'=>$uid,
                         );
             $created_resolu=1;
+
+
+
             try {
 
                 $where=array(

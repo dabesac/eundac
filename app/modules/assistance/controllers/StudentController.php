@@ -100,8 +100,8 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 $params = $paramsdecode;
             }
         $where = null;
-        $eid = $this->$sesion->eid;
-        $oid = $this->$sesion->oid;
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
         $coursoid = trim($params['courseid']);
         $curid = trim($params['curid']);
         $turno = trim($params['turno']);
@@ -153,32 +153,104 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $a_sesion_34     = ((isset($params['a_sesion_34']) == true && (!empty($params['a_sesion_34']) ) )?trim($params['a_sesion_34']):'');
 
         /***********************************keeping-assistance**********************************************/
-        $base_assistance = new Api_Model_DbTable_StudentAssistance();
 
-        $coursoid = trim($params['courseid']);
-        $curid = trim($params['curid']);
-        $turno = trim($params['turno']);
-        $regid = trim($params['regid']);
-        $uid = trim($params['uid']);
-        $pid = trim($params['pid']);
-        $escid = trim($params['escid']);
-        $subid = trim($params['subid']);
-        $perid = trim($params['perid']);
-        $partial = trim($params['partial']);
+        $data = null;         
+        if ($partial==1) {
+            $data = array(
+                'a_sesion_1' => $a_sesion_1,
+                'a_sesion_2' => $a_sesion_2,
+                'a_sesion_3' => $a_sesion_3,
+                'a_sesion_4' => $a_sesion_4,
+                'a_sesion_5' => $a_sesion_5,
+                'a_sesion_6' => $a_sesion_6,
+                'a_sesion_7' => $a_sesion_7,
+                'a_sesion_8' => $a_sesion_8,
+                'a_sesion_9' => $a_sesion_9,
+                'a_sesion_10' => $a_sesion_10,
+                'a_sesion_11' => $a_sesion_11,
+                'a_sesion_12' => $a_sesion_12,
+                'a_sesion_13' => $a_sesion_13,
+                'a_sesion_14' => $a_sesion_14,
+                'a_sesion_15' => $a_sesion_15,
+                'a_sesion_16' => $a_sesion_16,
+                'a_sesion_17' => $a_sesion_17,
+                'a_sesion_18' => $a_sesion_18,
+                'a_sesion_19' => $a_sesion_19,
+                'a_sesion_20' => $a_sesion_20,
+                'a_sesion_21' => $a_sesion_21,
+                'a_sesion_23' => $a_sesion_23,
+                'a_sesion_24' => $a_sesion_24,
+                'a_sesion_25' => $a_sesion_25,
+                'a_sesion_26' => $a_sesion_26,
+                'a_sesion_27' => $a_sesion_27,
+                'a_sesion_28' => $a_sesion_28,
+                'a_sesion_29' => $a_sesion_29,
+                'a_sesion_30' => $a_sesion_30,
+                'a_sesion_31' => $a_sesion_31,
+                'a_sesion_32' => $a_sesion_32,
+                'a_sesion_33' => $a_sesion_33,
+                'a_sesion_34' => $a_sesion_34,
+                );
+        }
+        if ($partial == 2) {
+            $data = array(
+                'a_sesion_18' => $a_sesion_18,
+                'a_sesion_19' => $a_sesion_19,
+                'a_sesion_20' => $a_sesion_20,
+                'a_sesion_21' => $a_sesion_21,
+                'a_sesion_22' => $a_sesion_22,
+                'a_sesion_23' => $a_sesion_23,
+                'a_sesion_24' => $a_sesion_24,
+                'a_sesion_25' => $a_sesion_25,
+                'a_sesion_26' => $a_sesion_26,
+                'a_sesion_27' => $a_sesion_27,
+                'a_sesion_28' => $a_sesion_28,
+                'a_sesion_29' => $a_sesion_29,
+                'a_sesion_30' => $a_sesion_30,
+                'a_sesion_31' => $a_sesion_31,
+                'a_sesion_32' => $a_sesion_32,
+                'a_sesion_33' => $a_sesion_33,
+                'a_sesion_34' => $a_sesion_34,
+                );
+            
+        }
+        if ($data) {
 
+            try {
 
+                $pk = array( 
+                'eid' => $eid,'oid'=>$oid,
+                'coursoid' =>$coursoid, 'turno' => $turno,
+                'curid' =>$curid, 'regid' => $regid,
+                'uid' => $uid, 'pid' =>$pid,
+                'escid'=>$escid, 'subid'=>$subid,
+                'perid'=>$perid,
+                );
+                $base_assistance = new Api_Model_DbTable_StudentAssistance();
+                if ($base_assistance->_update($data,$pk)) {
+                    $json = array(
+                        'status'=>true,
+                        );   
+                }
+                else{
+                    $json = array(
+                        'status'=>false,
+                        );
+                }
+                
+            } catch (Exception $ex) {
+                $json = array(
+                    'status' => false,
+                    'error' => $ex, 
+                    );
+            }
+        }
+        else{
 
-
-
-
-
-        $where = array( 
-            'eid' => $eid,'oid'=>$oid,
-            'coursoid' =>$coursoid, 'turno' => $turno,
-            'curid' =>$curid, 'regid' => $regid,
-            'uid' => $uid, 'pid' =>$pid, 
-            );
-
+            $json = array(
+                    'status'=>false,
+                );
+        }
 
         // $a_sesion_1 = trim($params['']);
         $this->_helper->layout->disableLayout();
