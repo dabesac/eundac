@@ -125,8 +125,9 @@ class Admin_UserController extends Zend_Controller_Action{
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $pid=base64_decode($this->_getParam('pid'));
+            $this->view->pid=$pid;
             $fm= new Admin_Form_Usernew();
- 	 		$this->view->fm=$fm;
+            $this->view->fm=$fm;
             $escid=new Zend_Form_Element_Select('escid');
             $escid->removeDecorator('Label')->removeDecorator('HtmlTag');
             $escid->setAttrib('class','form-control');
@@ -143,17 +144,17 @@ class Admin_UserController extends Zend_Controller_Action{
                     unset($frmdata['Guardar']);
                     $rid=$frmdata['rid'];
                     $frmdata['eid']=$eid;
-                    $frmdata['oid']=$oid;
-                    $frmdata['pid']=$pid;
+                    $frmdata['oid']=$oid;                 
                     $where=array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid);
                     $dbrol=new Api_Model_DbTable_Rol();
                     $datarol=$dbrol->_getOne($where);
                     $prefix=$datarol['prefix'];                
-                    $frmdata['uid']=$pid.$prefix;                
+                    $frmdata['uid']=$frmdata['pid'].$prefix;                
                     $frmdata['created']=date('Y-m-d h:m:s');
                     $frmdata['register']=$register;
                     $frmdata['password']=md5($frmdata['uid']);                  
                     $reg_= new Api_Model_DbTable_Users();
+                    // print_r($frmdata);exit();
                     $reg_->_save($frmdata);
                     $this->_redirect("/admin/user/new");                           
                 }
