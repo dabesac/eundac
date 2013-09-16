@@ -254,7 +254,7 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studentsignrealizedAction()
     {
         try{
-            //$this->_helper->layout()->disableLayout();
+            $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $pid=$this->sesion->pid;

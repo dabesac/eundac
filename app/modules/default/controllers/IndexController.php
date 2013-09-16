@@ -288,14 +288,16 @@ class IndexController extends Zend_Controller_Action {
     	$resource1[]="profile/public";
     	$resource1[]="report/recordnotas";
     	$resource1[]="default/password";
+    	$resource1[]="register/registerealized";
     	
     	switch ($rid){
     		case "AD":{
+    			$resource1[]="assistance/student";
     			$modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
-    			$acls[]= array("controller"=>"admin/receipts","name"=>"Cargar Recibos","imgicon"=>"calendar");
+    			$acls[]= array("controller"=>"admin/receiptsup","name"=>"Cargar Recibos","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/password","name"=>"Cambiar Clave","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/bankpayments","name"=>"Pagos del Banco","imgicon"=>"calendar");
-    			$resource1[]="admin/receipts";
+    			$resource1[]="admin/receiptsup";
     			$resource1[]="admin/password";
     			$resource1[]="admin/bankpayments";
     			$modules[0]['acls'] = $acls;
@@ -371,6 +373,7 @@ class IndexController extends Zend_Controller_Action {
     		case "DC":{
     			$resource1[]="docente/index";
     			$resource1[]="syllabus/syllabus";
+    			$resource1[]="assistance/student";
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"docente/notas","name"=>"Asignaturas a Cargo","imgicon"=>"list");

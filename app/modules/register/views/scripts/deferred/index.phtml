@@ -319,12 +319,10 @@
 		        url:$url,
 		        success:function($data){
 
-		        	alert($data);
 	                if($data.status == true){
 	                    //Pintar el exito
-	                    alert("exito");
-	                    // $("#edit_nota_" + $temporaindex).addClass('glyphicon-ok-circle');
-	                    // $subject.css("color", "none");
+	                    $("#edit_nota_" + $temporaindex).addClass('glyphicon-ok-circle');
+	                    $subject.css("color", "none");
 	                }else{
 	                    
                 			$("#tbnotas tr").each(function(){

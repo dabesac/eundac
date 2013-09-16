@@ -27,10 +27,15 @@ $sex= $login->sex;
 $acls = $login->acls;
 $info = $login;
 $resource1 = $login->resources;
+
+
 $urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
 		escid/".base64_encode($info->escid)."/eid/".base64_encode($info->eid)."/
 		oid/".base64_encode($info->oid)."/subid/".base64_encode($info->subid)."/
 		pid/".base64_encode($info->pid);
+
+
+
 
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
@@ -221,8 +226,6 @@ $(document).ready(function(){
 		</div>
 	</div>
 </div>
-
-
 <div class="col-sm-12 footer">
 Universidad Nacional Daniel Alcides Carrión - Cerro de Pasco - Perú | 
 Oficina de Informáctica y Estadística - <a href="mail: informatica@undac.edu.pe">informatica@undac.edu.pe</a>

@@ -1,8 +1,9 @@
+<div class="row">
 <div class="col-sm-9">
 	<div id="mainsign">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h4><b>Matricula Actual | Periodo 13B</b></h4>
+				<h5><b>Matricula Actual | Periodo 13B</b></h5>
 			</div>
 			<div class="panel-body">
 				<?if($this->curact){?>
@@ -47,7 +48,7 @@
 					}?>
 				</table>
 				<?}else{?>
-					<h4 align="center">No Tiene Matricula Actual | Validelo en Registro de Facultad</h4>
+					<h5 align="center">No Tiene Matricula Actual | Validelo en Registro de Facultad</h5>
 				<?}?>
 			</div>
 		</div>
@@ -58,16 +59,16 @@
 
 <div class="col-sm-3">
 <ul class="nav nav-pills nav-stacked" id="backsigninTab">
-  <li><a href="#" id="btncurrentsign"><h4>Volver a Matricula Actual</h4></a></li>
+  <li><a href="#" id="btncurrentsign"><h5>Volver a Matricula Actual</h5></a></li>
 </ul>
 <br><br>
 <ul class="nav nav-pills nav-stacked" id="masinfosignTab">
-  <li><a href="#" id="btncurri"><h4>Matricula Por Curricula</h4></a></li>
-  <li><a href="#" id="btnrea"><h4>Matriculas Realizados</h4></a></li>
+  <li><a href="#" id="btncurri"><h5>Matricula Por Curricula</h5></a></li>
+  <li><a href="#" id="btnrea"><h5>Matriculas Realizados</h5></a></li>
   <li class="hidden"><a></a></li>
 </ul>
 </div>
-
+</div>
 <script>
    $("#btncurrentsign").addClass("hidden")
 
@@ -94,6 +95,6 @@
 
   $("#btnrea").click(function(){
     $("#datasign").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datasign").load("/profile/public/studentsignrealized");
+    $("#datasign").load("/register/registerealized/index");
   })
 </script>

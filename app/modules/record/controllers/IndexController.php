@@ -740,13 +740,51 @@ class Record_IndexController extends Zend_Controller_Action {
 				'perid'=>$perid,
 				);
 
-
-			$courses = $this->_loadCourses($where);			
-
 			$base_faculty 	=	new Api_Model_DbTable_Faculty();
 			$base_speciality = 	new Api_Model_DbTable_Speciality();
 			$base_course_x_teacher = 	new Api_Model_DbTable_Coursexteacher();
 			$base_person =	new Api_Model_DbTable_Person();
+			$records = new Api_Model_DbTable_PeriodsCourses();
+
+			$attris = array("eid","oid","perid","courseid","escid","subid","curid","turno",
+					"curid","semid","type_rate","closure_date","state_record","state");
+			$orders = array("eid","curid","courseid","turno");
+			$rows = $records->_getFilter($where,$attris,$orders);
+			$lscourses=null;
+
+			if ($rows) {
+				foreach ($rows as $key => $row){
+					$course = new Api_Model_DbTable_Course();
+					$where=null;
+					$where['eid']=$row['eid'];
+					$where['oid']=$row['oid'];
+					$where['escid']=$row['escid'];
+					$where['curid']=$row['curid'];
+					$where['courseid']=$row['courseid'];
+					// get info course
+					$rowcourse = $course->_getFilter($where,array('name'));
+					if ($rowcourse) $rows[$key]['course']= $rowcourse[0]['name'];
+
+					// get count register course
+					$where['subid']=$row['subid'];
+					$where['perid']=$row['perid'];
+					$where['turno']=$row['turno'];
+					$register = new Api_Model_DbTable_Registrationxcourse();
+					$countregister = $register->_getCountRegisterCourse($where);
+					$rows[$key]['numregister'] = ($countregister)?$countregister:0;
+
+					$dni_teacher = $base_course_x_teacher->_getFilter($where);
+					$where2 = array(
+						'eid'=>$eid,'oid'=>$oid,
+						'pid'=> $dni_teacher[0]['pid']);
+
+					$info_teacher = $base_person->_getOne($where2);
+					$rows[$key]['name_teacher'] = $info_teacher['last_name0']." ".
+													$info_teacher['last_name1'].", ".
+													$info_teacher['first_name'];
+					
+				}
+			}
 
 			$info_speciality = 	$base_speciality->_getOne($where);
 
@@ -761,32 +799,11 @@ class Record_IndexController extends Zend_Controller_Action {
 			$name_faculty = $base_faculty->_getOne($where);
 			$info_speciality['name_faculty'] = $name_faculty['name'];
 
-			foreach ($courses as $key => $value) {
+			
 
-				$where1=null;
-				$where1['eid']=$value['eid'];
-				$where1['oid']=$value['oid'];
-				$where1['escid']=$value['escid'];
-				$where1['subid']=$value['subid'];
-				$where1['courseid']=$value['courseid'];
-				$where1['turno']=$value['turno'];
-				$where1['perid']=$value['perid'];
-
-				$dni_teacher = $base_course_x_teacher->_getFilter($where1);
-				$where2 = array(
-					'eid'=>$eid,'oid'=>$oid,
-					'pid'=> $dni_teacher[0]['pid']);
-
-				$info_teacher = $base_person->_getOne($where2);
-				$courses[$key]['name_teacher'] = $info_teacher['last_name0']." ".
-												$info_teacher['last_name1'].", ".
-												$info_teacher['first_name'];
-
-			}
-
-
+			// print_r($rows); exit();
 			$this->view->info_speciality = $info_speciality;
-			$this->view->info_couser=$courses;
+			$this->view->info_couser=$rows;
 			$this->view->perid=$perid;
 
 		} catch (Exception $e) {
