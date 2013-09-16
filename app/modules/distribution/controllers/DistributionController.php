@@ -428,8 +428,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $where['eid']=$eid;
             $where['oid']=$oid;
             $where['escid']=$escid;
+            $where['subid']=$subid;
             $where['rid']='DC';
-            $where['state']='A';            
+            $where['state']='A';  
             $doc = new Api_Model_DbTable_Users();
             $teacher = $doc->_getUserXRidXEscidAll($where);
             $where['state']='I';
@@ -510,6 +511,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $where['eid']=$eid;
             $where['oid']=$oid;
             $where['escid']=$escid;
+            $where['subid']=$subid;
             $where['rid']='JP';
             $where['state']='A';            
             $doc = new Api_Model_DbTable_Users();
