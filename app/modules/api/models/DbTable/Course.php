@@ -8,7 +8,7 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
 
 	public function _save($data){
 		try {
-				if ($data['eid']=='' || $data['oid']=='' || $data['curid']=='' || $data['escid']=='' || $data['subid']=='' || $data['courseid']=='' || $data['semid']) return false;
+				if ($data['eid']=='' || $data['oid']=='' || $data['curid']=='' || $data['escid']=='' || $data['subid']=='' || $data['courseid']=='' || $data['semid']=='') return false;
 				return $this->insert($data);
 				return false;			
 		} catch (Exception $e) {

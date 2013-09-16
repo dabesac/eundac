@@ -98,6 +98,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
             $base_registration= new Api_Model_DbTable_Registration();
             $data_register = $base_registration->_getOne($where);
+
             $state = trim($data_register['state']);
             $deleted = trim($data_register['count']);
             $this->view->deleted=$deleted;
@@ -113,8 +114,10 @@ class Register_StudentController extends Zend_Controller_Action {
                 $condition_credits=0;
                 $condition_semester='3';
 
+            	$cont_conmment=null;
+
                 if ($data_condition) {
-                	$cont_conmment=null;
+
                     foreach ($data_condition  as $condition) {
 						
                         if ($condition['num_registration'] !='') {
@@ -139,7 +142,10 @@ class Register_StudentController extends Zend_Controller_Action {
                     }
                 }
 
-                $this->view->cont_conmment=$cont_conmment;
+                if ($cont_conmment) {
+                    $this->view->cont_conmment=$cont_conmment;
+                }
+
                 $this->view->condition_register=$condition_register;
                 $this->view->condition_credits=$condition_credits;
                 // echo $condition_semester;
@@ -179,17 +185,26 @@ class Register_StudentController extends Zend_Controller_Action {
                     $where['curid']=$curid;
                     // $order="s";
                     $course_reg=$base_registration_subjet->_getAll($where);
-                    $veces = 1 ;
 
+                    $veces = 1 ;
+                    $veces_subject = false;
                     if ($course_reg) {
 
-                        foreach ($subject as $key => $course) {
+                        if ($subject) {
+                             foreach ($subject as $key => $course) {
 
+                            $subject[$key]['veces_cur'] = null;
+                            $subject[$key]['register']=0;
+
+                            // $subject[$key]['veces'];
                             $N=count($course_reg);
-                            for ($i=0; $i < $N; $i++) { 
-                                if($course['courseid']==$course_reg[$i]['courseid'] && $course['turno']== $course_reg[$i]['turno']){
+
+                            for ($i=0; $i < $N; $i++) {
+
+                                if($course['courseid'] == $course_reg[$i]['courseid'] && $course['turno'] == $course_reg[$i]['turno']){
                                     $subject[$key]['register']=1;
                                 }
+                               
                             }
 
                             if($course['veces'] >= 2)
@@ -201,6 +216,8 @@ class Register_StudentController extends Zend_Controller_Action {
                                 $veces = $course['veces'];
                             }
 
+
+                        }
                         }
                         $this->view->veces = $veces;
                         $this->view->veces_subject=$veces_subject;
@@ -264,6 +281,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
             $base_payment = new Api_Model_DbTable_Payments();
             $data_payment=$base_payment->_getOne($where);
+
             unset($where['perid']);
             $register_paymnets = $base_payment->_getAll($where);
 
@@ -340,7 +358,7 @@ class Register_StudentController extends Zend_Controller_Action {
                     }
                 }
 
-                $this->view->name_reates=$data_payment['name'];
+                $this->view->name_reates=$assign_payment['name'];
                 //print_r($data_payment);
             }
             else
@@ -786,8 +804,7 @@ class Register_StudentController extends Zend_Controller_Action {
                                 'status'=>true,
                                 'total_credits'=>$credits_register['credits'],
                                 'semester'=>$credits_register['semid'],
-                                'credits_assing'=>$credits_assing[0]['semester_credits'],
-                                'suma'=>$credits_val
+                                'credits_assing'=>$credits_assing[0]['semester_creditsz']
                                 );
                 }
 

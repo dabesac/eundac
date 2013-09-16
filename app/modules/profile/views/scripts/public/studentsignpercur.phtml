@@ -4,8 +4,8 @@
 	</div>
 	<div class="panel-body">
 		<?if($this->courpercur){
-			//print_r($this->courlleact);?>
-		<div class="panel panel-default">
+			//print_r($this->courpercur);?>
+		<div class="panel panel-primary">
 			<? $semid=0;
 			$c=0;
 			foreach ($this->courpercur as $sem) {
@@ -18,12 +18,13 @@
 							<tr>
 								<th><center>Codigo</center></th>
 								<th>Cursos</th>
+								<th><center>Creditos</center></th>
+								<th><center>Tipo</center></th>
 								<?if($sem['semid']<>"1"){?>
 									<th><center>Requisito</center></th>
 								<?}else{?>
 									<th></th>
 								<?}?>
-								<th><center>Creditos</center></th>
 								<th>Nota</th>
 								<th>Estado</th>
 							</tr>
@@ -34,6 +35,13 @@
 								<tr>
 									<td align="center"><?echo $courses['courseid']?></td>
 									<td><?echo $courses['name']?></td>
+									<td align="center"><?echo $courses['credits']?></td>
+									<td align="center"><?if($courses['type']=='O'){
+											echo "Obligatorio";
+										}else{
+											echo "Electivo";
+										}?>
+									</td>
 									<td align="center">
 										<?if($sem['semid']<>"1"){
 											$exreq=0;
@@ -48,8 +56,7 @@
 											}
 										}?>
 									</td>
-									<td align="center"><?echo $courses['credits']?></td>
-									<td><!-- Imprimir mayor nota -->
+									<td align='center'><!-- Imprimir mayor nota -->
 										<?if($this->courlle[$c]){
 											$notafinal=$this->courlle[$c]['notafinal'];
 											foreach ($this->courlle[$c] as $notaf) {
@@ -62,7 +69,7 @@
 											$est=1;
 										}?>
 									</td>
-									<td>
+									<td align='center'>
 										<?if($est<>1){
 											if($notafinal>=11){?>
 												<img src="/img/circulo-verde.png">

@@ -15,7 +15,8 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 
 	public function indexAction(){
 		try {
-			$eid=$this->sesion->eid;
+			$this->_helper->layout()->disableLayout();
+           	$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
 			$perid=$this->sesion->period->perid;
 			$escid=$this->sesion->escid;

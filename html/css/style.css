@@ -137,7 +137,9 @@ margin: 0px;
 	background: url(../img/left.png) #AEB7DB ;
 	padding: 0px;
 	margin: 0px;	
-	min-height: 600px;
+	
+    height: auto !important;
+    min-height: 100%;
 	
 }
 

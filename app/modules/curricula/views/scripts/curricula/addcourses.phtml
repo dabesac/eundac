@@ -1,4 +1,82 @@
-
-<form>
-
+<form role='form' method='post' action='/curricula/curricula/addcourses' id='formcourses'>
+	<table class="table table-condensed">
+		<tr>
+			<th><center>Código</center></th>
+			<th><center>Año</center></th>
+			<th><center>Semestre</center></th>
+			<th><center>Tipo</center></th>
+		</tr>
+		<tr>
+			<td style="width:150px"><?php echo $this->form->courseid?></td>
+			<td><?php echo $this->form->year_course?></td>
+			<td style="width:140px"><?php echo $this->form->semid?></td>
+			<td style="width:120px"><?php echo $this->form->type?></td>
+		</tr>
+		<tr>
+			<th colspan="2"><center>Nombre Asignatura</center></th>
+			<th colspan="2"><center>Abreviatura Asignatura</center></th>
+		</tr>
+		<tr>
+			<td colspan="2"><?php echo $this->form->name?></td>
+			<td colspan="2"><?php echo $this->form->abbreviation?></td>
+		</tr>
+		<tr>
+			<th><center>Horas Teóricas</center></th>
+			<th><center>Horas Prácticas</center></th>
+			<th><center>Créditos</center></th>
+			<th><center>Estado</center></th>
+		</tr>
+		<tr>
+			<td style="width:150px"><?php echo $this->form->hours_theoretical?></td>
+			<td><?php echo $this->form->hours_practical?></td>
+			<td style="width:140px"><?php echo $this->form->credits?></td>
+			<td style="width:120px"><?php echo $this->form->state?></td>
+		</tr>
+		<tr>
+			<th>Requisito 1:</th>
+			<td colspan="3"><?php echo $this->form->req_1?></td>
+		</tr>
+		<tr>
+			<th>Requisito 2:</th>
+			<td colspan="3"><?php echo $this->form->req_2?></td>
+		</tr>
+		<tr>
+			<th>Requisito 3:</th>
+			<td colspan="3"><?php echo $this->form->req_3?></td>
+		</tr>
+		<tr>
+			<th>Equivalente:</th>
+			<td colspan="3"><?php echo $this->form->course_equivalence?></td>
+		</tr>
+		<tr>
+			<th>Convalidación:</th>
+			<td colspan="3"><?php echo $this->form->course_equivalence_2?></td>
+		</tr>
+		<input type="hidden" name="escid" value="<?php echo $this->escid?>">
+		<input type="hidden" name="curid" value="<?php echo $this->curid?>">
+		<input type="hidden" name="subid" value="<?php echo $this->subid?>">
+	</table>
 </form>
+
+<script type="text/javascript">
+	var msg="<?php echo $this->msg?>";
+	if (msg==1) {
+        window.location.reload();
+	};
+
+    $("#save_newcourse").click(function(){
+        $("#formcourses").submit();
+    });
+
+    $("#formcourses").submit(function(){
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function(data) { 
+                    $("#loadnewcourse").html(data);
+                }
+            }); 
+            return false;
+    });
+</script>

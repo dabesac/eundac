@@ -10,7 +10,6 @@ class Rcentral_Form_Curricula extends Zend_Form{
         $curid->setRequired(true)->addErrorMessage('Este campo es requerido');      
         $curid->setAttrib("maxlength", "10");
         $curid->setAttrib("class","form-control");
-        // $curid->setAttrib("style","text-align:center");
         $curid->setAttrib('readonly',true);
 
         $subid= new Zend_Form_Element_Hidden('subid');
@@ -38,7 +37,6 @@ class Rcentral_Form_Curricula extends Zend_Form{
         $year->removeDecorator('Label')->removeDecorator("HtmlTag");  
         $year->setAttrib("class","form-control");
         $anioactual = (int)Date("Y");
-
         $year->addMultiOption("","Año");
         for ($i=$anioactual;$i>=1990;$i--){
                 $year->addMultiOption((mb_substr((string)$i,2,2)),$i);
@@ -69,9 +67,7 @@ class Rcentral_Form_Curricula extends Zend_Form{
         $cur_per_ant->setRequired(true)->addErrorMessage('Este campo es requerido');      
         $cur_per_ant->setAttrib("maxlength", "3");
         $cur_per_ant->setAttrib("class","form-control");
-        // $cur_per_ant->setAttrib("style","text-align:center");
-        $cur_per_ant->setAttrib('readonly',true);
-        //$cur_per_ant->setAttrib("title","Periodo Curricular");
+        $cur_per_ant->setAttrib('readonly',true);        
 
         $name= new Zend_Form_Element_Text("name");
         $name->removeDecorator('Label')->removeDecorator("HtmlTag");  
@@ -92,7 +88,6 @@ class Rcentral_Form_Curricula extends Zend_Form{
         $number_periods->setRequired(true)->addErrorMessage('Este campo es requerido');      
         $number_periods->setAttrib("maxlength", "2");
         $number_periods->setAttrib("class","form-control");
-        // $number_periods->setAttrib("style","text-align:center");
         $number_periods->setAttrib("title","Total Periodos");        
                 
         $mandatory_credits = new Zend_Form_Element_Text("mandatory_credits");

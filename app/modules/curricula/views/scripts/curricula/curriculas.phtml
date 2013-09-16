@@ -1,7 +1,7 @@
+<div id="curriculass">
 <div style="margin-bottom:10px">
 	<center>
-		<a id="new_cur" href="#myModal" role="button" class="btn btn-info" data-toggle="modal"
-			escid='<?php echo $this->escid?>' subid='<?php echo $this->subid?>'>
+		<a id="new_cur" href="#curr_new" role="button" class="btn btn-info" data-toggle="modal" escid='<?php echo $this->escid?>' subid='<?php echo $this->subid?>'>
 			<span class='glyphicon glyphicon-plus'></span> Nueva Currícula</a>
 	</center>
 </div>
@@ -30,7 +30,7 @@ if ($this->curriculas) { ?>
 							<a id="modify_cur_<?php echo $c?>" href="#modifyc_curricula" curid='<?php echo base64_encode($curriculas['curid'])?>' escid='<?php echo base64_encode($curriculas['escid'])?>' subid='<?php echo base64_encode($curriculas['subid'])?>' opti='<?php echo base64_encode("M")?>'title="Modificar la Currícula" data-toggle="modal" rel="tooltip"><span class="glyphicon glyphicon-pencil"></span></a>
 						</td>
 						<td>
-							<a href="/curricula/curricula/listcourses/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>/accion/V" title="Agregar Asignaturas" rel="tooltip" data-toggle="modal"><span class="glyphicon glyphicon-edit"></span></a>
+							<a href="/curricula/curricula/listcourses/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>/accion/A" title="Agregar Asignaturas" rel="tooltip" data-toggle="modal" target="_blank"><span class="glyphicon glyphicon-edit"></span></a>
 						</td>
 							<?php
 						}else{ ?>
@@ -38,7 +38,7 @@ if ($this->curriculas) { ?>
 							<a id="modify_cur_<?php echo $c?>" href="#modifyc_curricula" curid='<?php echo base64_encode($curriculas['curid'])?>' escid='<?php echo base64_encode($curriculas['escid'])?>' subid='<?php echo base64_encode($curriculas['subid'])?>' opti='<?php echo base64_encode("V")?>' title="Ver la Currícula" data-toggle="modal" rel="tooltip"><span class="glyphicon glyphicon-book"></span></a>
 						</td>
 						<td>
-							<a href="/curricula/curricula/addcourses/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>/accion/V" title="Ver las Asignaturas" data-toggle="modal" rel="tooltip"><span class="glyphicon glyphicon-list-alt"></span></a>
+							<a href="/curricula/curricula/listcourses/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>/accion/V" title="Ver las Asignaturas" data-toggle="modal" rel="tooltip" target="_blank"><span class="glyphicon glyphicon-list-alt"></span></a>
 						</td>
 							<?php
 						}?>
@@ -64,7 +64,7 @@ if ($this->curriculas) { ?>
 						var subid = $(this).attr('subid');
 						var opti = $(this).attr('opti');
 						$.get('/curricula/curricula/modifycurricula',
-							{curid:curid,escid:escid,subid:subid},
+							{curid:curid,escid:escid,subid:subid,opti:opti},
 							function(data){
 								$("#cont_mod_cur").html("<img src='/img/spinner.gif'>Cargando...");
 								$("#cont_mod_cur").html(data);
@@ -79,19 +79,19 @@ if ($this->curriculas) { ?>
 	<?php
 }?>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="curr_new" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       	<div class="modal-content">
         	<div class="modal-header">
-          		<button type="button" class="close " data-dismiss="modal" aria-hidden="true">&times;</button>
-          		<h4 class="modal-title">Nueva Curricula</h4>
+          		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          		<h4 class="modal-title">Nueva Currícula</h4>
         	</div>
         	<div id="cont_new_cur" class="modal-body"></div>
         	<div class="modal-footer">
-          		<button type="button" class="btn btn-default close_new_cur" data-dismiss="modal">Close</button>
-          		<button type="button" class="btn btn-success save_curri">
+          		<a href="#" id="close_new_cur" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+          		<a href="#" id="save_curri" class="btn btn-success">
 					<span class='glyphicon glyphicon-floppy-disk'></span> Guardar
-				</button>
+				</a>
         	</div>
       	</div>
     </div>
@@ -101,17 +101,14 @@ if ($this->curriculas) { ?>
     <div class="modal-dialog">
       	<div class="modal-content">
         	<div class="modal-header">
-          		<button type="button" class="close " data-dismiss="modal" aria-hidden="true">&times;</button>
-          		<h4 class="modal-title">Modificar Curricula</h4>
+          		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          		<h4 class="modal-title">Modificar Currícula</h4>
         	</div>
-        	<div id="cont_mod_cur" class="modal-body">
-        	</div>
-        	<div class="modal-footer">
-        	</div>
+        	<div id="cont_mod_cur" class="modal-body"></div>
       	</div>
     </div>
 </div>
-
+</div>
 <script>
 	$("#new_cur").click(function(){
 		var escid=$.base64.encode($(this).attr('escid'));

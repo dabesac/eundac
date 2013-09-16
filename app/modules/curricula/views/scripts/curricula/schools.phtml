@@ -1,6 +1,6 @@
 <?php
 if ($this->escuelas) { ?>
-	<option>- Seleccione -</option>
+	<option value="">- Seleccione -</option>
 	<?php
 	foreach ($this->escuelas as $escuelas) { ?>
 		<option value="<?php echo $escuelas['escid'].'--'.$escuelas['subid']?>"><?php echo $escuelas['name']?></option>
