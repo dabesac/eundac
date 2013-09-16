@@ -28,10 +28,29 @@
                 <td><center><?php echo $info['uid']?></center></td>
                 <td><center><?php echo $info['pid']?></center></td>
                 <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
-                <td><center><?php echo $info['rid']?></center></td>
-                <td><center><?php echo $info['escid']?></center></td>
-                <td><center><?php echo $info['state']?></center></td>
-                <td><center><a href=""><span class='glyphicon glyphicon-pencil'></span></a></center></td>
+                <td><center><?php echo $this->inforol[$c-1]['name']?></center></td>
+                <td><center><?php echo $this->infoesc[$c-1]['name']?></center></td>
+                <?php
+                switch ($info['state']) {
+                    case 'A':
+                        ?><td ><center>ACTIVO</center></td><?php
+                        break;
+                    case 'I':
+                        ?><td ><center>INACTIVO</center></td><?php
+                        break;
+                    case 'B':
+                        ?><td ><center>BOQUEADO</center></td><?php
+                        break;
+                    case 'S':
+                        ?><td ><center>SUSPENDIDO</center></td><?php
+                        break;
+                        break;
+                    case 'E':
+                        ?><td ><center>BAJA</center></td><?php
+                        break;                            
+                }
+                ?>
+                <td><center><a href="/admin/user/updateuser/uid/<?php echo base64_encode($info['uid'])?>/pid/<?php echo base64_encode($info['pid'])?>/escid/<?php echo base64_encode($info['escid'])?>/subid/<?php echo base64_encode($info['subid'])?>"><span class='glyphicon glyphicon-pencil'></span></a></center></td>
                 <td><center><a href=""><span class='glyphicon glyphicon-trash'></span></a></center></td>
 
             </tr>
@@ -41,7 +60,7 @@
     else{
     ?>
     <div class="alert alert-info" style='font-size:15px'><b>El usuario no se ENCUENTRA registrado en el SISTEMA...
-        Registrar en el módulo Gestion Persona.</b></div>
+        Registrar Aqui </b><a class='btn btn-info' href="/admin/person/new"><span class='glyphicon glyphicon-pencil'>Nuevo</a></div>
     <?php
     exit();
     }
