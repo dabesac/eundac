@@ -384,11 +384,13 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="assistance/student";
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
+    			$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
     			$acls[]= array("controller"=>"docente/notas","name"=>"Asignaturas a Cargo","imgicon"=>"list");
     			$acls[]= array("controller"=>"horary/semester","name"=>"Ver Horarios Sem.","imgicon"=>"calendar");
     			$resource1[]="docente/notas";
     			$resource1[]="horary/semester";
-
+    			$resource1[]="record/index";
+    			
     			if (($login->infouser['teacher']['is_director']=="S")){
     				$acls[]= array("controller"=>"horary/nhorary","name"=>"Crear Horario","imgicon"=>"file");
     				$resource1[]="horary/nhorary";
@@ -397,12 +399,15 @@ class IndexController extends Zend_Controller_Action {
     			$acls = null;
     			    			
     			$modules[1] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
-    			$acls[]= array("controller"=>"#","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
-    			$resource1[]="report/performance";
     			if (($login->infouser['teacher']['is_director']=="S")){    	
+    				$acls[]= array("controller"=>"syllabus/director/listsyllabus","name"=>"Llenado Silabus","imgicon"=>"edit");
+    				$resource1[]="syllabus/director";    				
     				$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     				$resource1[]="report/performance";
+    				
     			}
+    			$acls[]= array("controller"=>"#","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
+    			$resource1[]="report/performance";
     			$modules[1]['acls'] = $acls;
     			$acls = null;
     			
@@ -450,6 +455,7 @@ class IndexController extends Zend_Controller_Action {
     			$acls = null;
     			break;
     		}
+    		
     		case "RC":{
     			$resource1[]="rcentral/index";
     			$resource1[]="profile/search";
