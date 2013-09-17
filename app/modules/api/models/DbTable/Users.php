@@ -130,7 +130,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 			if($rows) return $rows;
 			return false;         
         }  catch (Exception $ex){
-            print "Error: Obteniendo datos de un usuario deacuerdo a su codigo y a su rol".$ex->getMessage();
+            print "Error: get User".$ex->getMessage();
         }
     }
 
@@ -285,7 +285,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 				$whereesch['escid']=$where['escid'];
              	$esch = new Api_Model_DbTable_Speciality();
              	$dataesch = $esch->_getFilter($whereesch,$attrib=null,$orders=null);
-             	if ($dataesch) $where['escid'] = ($dataesch[0]['parent']<>"")? $dataesch[0]['parent']: $where['escid'];
+             	if ($dataesch) $where['escid'] = ($dataesch[0]['parent']<>"" and $where['subid']=='1901')? $dataesch[0]['parent']: $where['escid'];
 				$select = $this->_db->select()
 				->from(array('p' => 'base_person'),array('p.pid','numdoc','p.last_name0','p.last_name1','p.first_name','p.birthday'))
 				->join(array('u' => 'base_users'),'u.eid= p.eid and u.pid=p.pid', array('u.uid','u.escid','u.eid','u.oid','u.subid','u.state'))

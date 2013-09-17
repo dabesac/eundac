@@ -37,7 +37,7 @@ if ($this->cursosconvalidados){ ?>
                                 </center>
                             </td>
                             <?php  
-                             if ($convalidado['state']<>'C'){ ?>
+                             if ($convalidado['state']<>'C' and $convalidado['state_record']<>'C'){ ?>
                             <td>
                                 <a id="modifyregister_<?php echo $i?>" data-toggle="modal" href="#modify" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
                             </td>
@@ -59,7 +59,12 @@ if ($this->cursosconvalidados){ ?>
                             });
                             </script>
                             <?php 
-                            } ?>
+                            }else{ ?>
+                            <td>
+                                <a href="#" title="No se puede Modificar el Registro."><span class="glyphicon glyphicon-ban-circle"></span></a>
+                            </td>
+                            <?php
+                            }?>
                         </tr>
                         <?php
                         $i++;
@@ -74,8 +79,10 @@ if ($this->cursosconvalidados){ ?>
 <script type="text/javascript">
 var msg="<?php echo $this->msg?>";
 if (msg=="1") {
-    $("#lista").hide();
-	$("#listag").hide();
+ //    $("#lista").hide();
+ //    $("#listag").hide();
+	// $("#listam").hide();
+ //    $("#header_cursos").hide();
 	$("#modify").modal('hide');
 };
 </script>
