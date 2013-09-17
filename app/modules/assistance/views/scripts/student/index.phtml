@@ -159,8 +159,37 @@
 		$("#save_assistance").attr('disabled',false);
 		$(".popover").remove();
 	}
-	/****************asignar por columna**************************/
-	function assigned_all_assistance($objet){
+	/****************cierre de asistencia**************************/
+	function closureassistance($objet){
+
+		var result ='';
+		$assist = {};
+		$assist[$.base64.encode('courseid')]=$.base64.encode($.trim($("#coursoid").attr('coursoid'));
+		$assist[$.base64.encode('curid')]=$.base64.encode($.trim($("#curid").attr('curid')));
+		$assist[$.base64.encode('turno')]=$.base64.encode($.trim($("#turno").attr('turno')));
+		$assist[$.base64.encode('perid')]=$.base64.encode($.trim($("#perid").attr('perid')));
+		$assist[$.base64.encode('escid')]=$.base64.encode($.trim($("#escid").attr('escid')));
+		$assist[$.base64.encode('subid')]=$.base64.encode($.trim($("#subid").attr('subid')));
+
+		// for (var prop in $assist){
+		// 	result += '' + prop + '/' + $assist[prop] + '/';
+		// }
+
+		// result = result + '/' + $.base64.encode('partial') + '/' + $.base64.encode($partial);
+		// var $url = '/assistance/student/closureassistance/' + result;
+		// $.ajax({
+  //       	url:$url,
+	 //        async:false,
+	 //        success:function($data){
+
+	 //               alert($data);
+	 //        },
+	 //        error:function($data){
+	 //                //Pintar el error
+	 //        }
+  //       });
+
+		// $assist = {};
 
 	}
 	/***************************guardar-archivo*****************************************/
@@ -320,7 +349,6 @@
 </script>	
 <?php 
 	$infocourse = $this->infocurso;
-	print_r($infocourse);
 ?>
 
 <div class='row'>
@@ -330,7 +358,14 @@
 	<div class="col-md-4">
 		<buttom  class='btn btn-info ' id='save_assistance' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
 		
-		<buttom  class='btn btn-danger' id='closure-assistance' ><span class='glyphicon  glyphicon-log-out'></span> Cerrar Asistencia</buttom>
+		<buttom  class='btn btn-danger' id='closure-assistance' onclick='closureassistance(this);'
+				courseid='<?php echo $infocourse['courseid']?>'
+				escid='<?php echo $infocourse['escid']?>'
+				curid='<?php echo $infocourse['curid']?>'
+				escid='<?php echo $infocourse['escid']?>'
+				turno='<?php echo $this->turno?>'
+				perid='<?php echo $this->perid?>'
+		><span class='glyphicon  glyphicon-log-out'></span> Cerrar Asistencia</buttom>
 	</div>
 </div>
 
@@ -2828,7 +2863,14 @@ if ($this->infoassist) { ?>
 	</div>
 </div>
 <?php }?>
-<input type='hidden' id='coursoid' coursoid='<?php ?>'>
+
+<input type='hidden' id='coursoid' coursoid='<?php echo $infocourse['courseid'] ?>'>
+<input type='hidden' id='curid' curid='<?php echo $infocourse['curid'] ?>'>
+<input type='hidden' id='turno' turno='<?php echo $this->turno ?>'>
+<input type='hidden' id='escid' escid='<?php echo $infocourse['escid'] ?>'>
+<input type='hidden' id='subid' subid='<?php echo $infocourse['subid'] ?>'>
+<input type='hidden' id='perid' perid='<?php echo $this->perid ?>'>
+
 <div class="modal fade" id='toserver'>
   <div class="modal-dialog">
     <div class="modal-content">

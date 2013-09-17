@@ -37,6 +37,8 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $curid = trim($params['curid']);
         $state = trim($params['state']);
 
+        $this->view->turno = $turno;
+        $this->view->perid = $perid;
         $base_courses = new Api_Model_DbTable_Course();
         $base_person = new Api_Model_DbTable_Person();
         $base_assistance = new Api_Model_DbTable_StudentAssistance();
@@ -273,12 +275,10 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $where = null;
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
+
         $coursoid = trim($params['courseid']);
         $curid = trim($params['curid']);
         $turno = trim($params['turno']);
-        $regid = trim($params['regid']);
-        $uid = trim($params['uid']);
-        $pid = trim($params['pid']);
         $escid = trim($params['escid']);
         $subid = trim($params['subid']);
         $perid = trim($params['perid']);
@@ -290,7 +290,8 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 'escid' => $escid,'subid' => $subid,
                 'courseid' => $courseid,'turno' => $turno,
                 'perid' => $perid,'curid'=>$curid,);
-
+        print_r($where); exit();
+        
         $infoassist = $base_assistance ->_getAll($where);
         if ($infoassist) {
             $count = count($infoassist); 
