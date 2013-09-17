@@ -892,14 +892,9 @@ class Register_StudentController extends Zend_Controller_Action {
                     $data_subjects  [$key]['credits'] = $info_subjects['credits'];
                     $data_subjects [$key]['semid'] = $info_subjects['semid'];
 
-                    $data_pid_teacher = $base_subjets_teacher ->_getFilter($where);
+                    $data_pid_teacher = $base_subjets_teacher ->_getinfoDoc($where);
 
-                    $where['pid'] = $data_pid_teacher[0]['pid'];
-
-                    $name_teacher = $base_person->_getOne($where);
-                    $data_subjects [$key]['name_t'] = $name_teacher['last_name0'].
-                                                        " ".$name_teacher['last_name1'].
-                                                        ", ".$name_teacher['first_name'];
+                   $data_subjects [$key]['name_t']  = $data_pid_teacher[0]['nameteacher'];
 
                 } 
 
