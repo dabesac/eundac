@@ -11,6 +11,7 @@ class Register_StudentController extends Zend_Controller_Action {
          $login = $sesion->getStorage()->read();
         $this->sesion = $login;
         
+        
     }
     public function indexAction()
     {
@@ -649,10 +650,18 @@ class Register_StudentController extends Zend_Controller_Action {
                             $credits_assing[0]['semester_creditsz']=intVal($credits_assing[0]['semester_creditsz'])+$condition_credits+$created_resolu;
                         }
 
-                        if( $credits_register['semid'] == 0 )
+                        if( $credits_register['semid'] == 0 || $credits_register['semid']=="" )
                         {
+<<<<<<< HEAD
                             $credits_assing[0]['semester_creditsz']=26;
+=======
+                        	if($this->sesion->escid=='3OB' || $this->sesion->escid=='3OT')
+                        		$credits_assing[0]['semester_creditsz']=26;
+                        	else
+                            	$credits_assing[0]['semester_creditsz']=22;
+>>>>>>> 2145d53851430c02885f6a3717d23d3ca4036a1d
                         }
+                        
                         
                     }
                     
@@ -695,7 +704,10 @@ class Register_StudentController extends Zend_Controller_Action {
 
                                 if( $credits_register['semid'] == 0 )
                                 {
-                                    $credits_assing[0]['semester_creditsz']=22;
+                                    if ($this->sesion->escid=='3OB' || $this->sesion->escid=='3OT')
+                                		$credits_assing[0]['semester_creditsz']=26;
+                                    else
+                                    	$credits_assing[0]['semester_creditsz']=22;
                                 }
                                 
                             }

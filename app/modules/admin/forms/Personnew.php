@@ -15,21 +15,21 @@ class Admin_Form_Personnew extends Zend_Form{
         $first_name->setRequired(true)->addErrorMessage('Este campo es requerido');
         $first_name->removeDecorator('Label')->removeDecorator("HtmlTag");
         $first_name->setAttrib('class','form-control');
-        $first_name->setAttrib("title","Ingrese Nombre")->addValidator("alpha",true);
+        $first_name->setAttrib("title","Ingrese Nombre");
         $first_name->setAttrib("onkeypress","return soloLetras(event)");
 
         $last_name0 =new Zend_Form_Element_Text('last_name0');
         $last_name0->setRequired(true)->addErrorMessage('Este campo es requerido');
         $last_name0->removeDecorator('Label')->removeDecorator("HtmlTag");
         $last_name0->setAttrib('class','form-control');
-        $last_name0->setAttrib("title","Ingrese Apellido Paterno")->addValidator("alpha",true);
+        $last_name0->setAttrib("title","Ingrese Apellido Paterno");
         $last_name0->setAttrib("onkeypress","return soloLetras(event)");
 
         $last_name1 =new Zend_Form_Element_Text('last_name1');
         $last_name1->setRequired(true)->addErrorMessage('Este campo es requerido');
         $last_name1->removeDecorator('Label')->removeDecorator("HtmlTag");
         $last_name1->setAttrib('class','form-control');
-        $last_name1->setAttrib("title","Ingrese Apellido Materno")->addValidator("alpha",true);
+        $last_name1->setAttrib("title","Ingrese Apellido Materno");
         $last_name1->setAttrib("onkeypress","return soloLetras(event)");
         
         $typedoc = new Zend_Form_Element_Select('typedoc');
@@ -99,7 +99,7 @@ class Admin_Form_Personnew extends Zend_Form{
         $address = new Zend_Form_Element_Text('address');
         $address->removeDecorator('Label')->removeDecorator("HtmlTag");
         $address->setAttrib('class','form-control');
-        $address->setAttrib("title","Ingrese su dirección")->addValidator("alpha",true);
+        $address->setAttrib("title","Ingrese su dirección");
 
         $photografy  = new Zend_Form_Element_File('photografy');
         $photografy->setAttrib('class','form-control');
@@ -109,7 +109,6 @@ class Admin_Form_Personnew extends Zend_Form{
         $photografy ->setLabel('subir foto');
     
         $send = new Zend_Form_Element_Submit('Guardar');
-        $send->removeDecorator('HtmlTag');
         $send->removeDecorator('Label')->removeDecorator('DtDdWrapper');
         $send->removeDecorator('Label')->removeDecorator("HtmlTag");
         $send->setAttrib('class', 'btn btn-success');
