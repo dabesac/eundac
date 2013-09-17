@@ -27,7 +27,10 @@ $sex= $login->sex;
 $acls = $login->acls;
 $info = $login;
 $resource1 = $login->resources;
-
+$resource1[]="profile/public";
+$resource1[]="register/registerealized";
+$resource1[]="report/recordnotas";
+$resource1[]="syllabus/director";
 
 $urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
 		escid/".base64_encode($info->escid)."/eid/".base64_encode($info->eid)."/
