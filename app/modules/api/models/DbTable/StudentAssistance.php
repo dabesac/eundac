@@ -1,6 +1,6 @@
 <?php
 
-class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
+class Api_Model_DbTable_StudentAssistance extends Zend_Db_Table_Abstract
 {
     protected $_name = 'base_student_assistance';
     protected $_primary = array('eid', 'oid', 'escid', 'subid', 'perid', 'coursoid', 'curid', 'turno', 'uid', 'pid', 'regid');
@@ -8,7 +8,7 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 
     public function _save($data){
         try {
-            if($data["eid"]=='' || $data["oid"]=='' ||  $data["escid"]=='' ||  $data["subid"] =='' || $data["courseid"] =='' || $data["curid"] =='' 
+            if($data["eid"]=='' || $data["oid"]=='' ||  $data["escid"]=='' ||  $data["subid"] =='' || $data["coursoid"] =='' || $data["curid"] =='' 
                 | $data["turno"]=='' || $data["perid"]=='' || $data["uid"]=='' || $data["pid"]=='')
                 return false;
                 return $this->insert($data);
@@ -17,12 +17,17 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
             print "Error: Save cours ".$e->getMessage();
         }
     }
-
-
     public function _update($data,$pk){
         try{
-            if ($pk["eid"]=='' || $pk["oid"]=='' ||  $pk["escid"]=='' ||  $pk["subid"] =='' || $pk["courseid"]=='' || $pk["curid"] =='' || $pk["turno"] =='' || $pk["perid"]=='' || $pk["uid"]=='' || $pk["pid"]=='') return false;
-            $where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and courseid='".$pk['courseid']."' and curid='".$pk['curid']."' and turno='".$pk['turno']."' and perid='".$pk['perid']."' and uid='".$pk['uid']."' and pid='".$pk['pid']."'";
+            if ($pk["eid"]=='' || $pk["oid"]=='' ||  $pk["escid"]=='' ||  $pk["subid"] =='' || 
+                $pk["coursoid"]=='' || $pk["curid"] =='' || $pk["turno"] =='' || $pk["perid"]=='' || 
+                $pk["uid"]=='' || $pk["pid"]=='' || $pk['regid']=='') return false;
+
+                $where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' 
+                    and subid='".$pk['subid']."' and courseid='".$pk['courseid']."' and curid='".$pk['curid']."'
+                    and turno='".$pk['turno']."' and perid='".$pk['perid']."' and uid='".$pk['uid']."' 
+                    and pid='".$pk['pid']."' and regid='".$pk['regid']."'";
+                    
             return $this->update($data, $where);
             return false;
         }catch (Exception $e){
@@ -43,7 +48,11 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 
     public function _getOne($where=array()){
         try{
-            if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["subid"] =='' || $where["courseid"]=='' || $where["curid"] =='' || $where["turno"] =='' || $where["perid"]=='' || $where["uid"]=='' || $where["pid"]=='') return false;
+            if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  
+                $where["subid"] =='' || $where["courseid"]=='' || $where["curid"] =='' || 
+                $where["turno"] =='' || $where["perid"]=='' || $where["uid"]=='' || 
+                $where["pid"]=='') return false;
+
             $wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and subid='".$where['subid']."' and courseid='".$where['courseid']."' and curid='".$where['curid']."' and turno='".$where['turno']."' and perid='".$where['perid']."' and uid='".$where['uid']."' and pid='".$where['pid']."'";
             $row = $this->fetchRow($wherestr);
             if($row) return $row->toArray();
@@ -56,15 +65,16 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
     public function _getAll($where=array()){
         try{
             if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["subid"] =='' || 
-                $where["courseid"]=='' || $where["curid"] =='' || $where["turno"] =='' || $where["perid"]=='') return false;
+                $where["coursoid"]=='' || $where["curid"] =='' || $where["turno"] =='' || $where["perid"]=='') return false;
+
             $wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".
-                    $where['escid']."' and subid='".$where['subid']."' and courseid='".$where['courseid']."' 
+                    $where['escid']."' and subid='".$where['subid']."' and coursoid='".$where['coursoid']."' 
                     and curid='".$where['curid']."' and turno='".$where['turno']."' and perid='".$where['perid']."'";
             $rows = $this->fetchAll($wherestr);
             if($rows) return $rows->toArray();
             return false;
         }catch (Exception $e){
-            print "Error: Read All Course ".$e->getMessage();
+            print "Error: Read All Assistance ".$e->getMessage();
         }
     }
 

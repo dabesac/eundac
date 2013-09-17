@@ -500,9 +500,22 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $cursomas['namecourse'] = $rcus['name'];
 
                 //Obteniendo numero de veces matrocula a un curso
-                $veces = new Api_Model_DbTable_Course();
-                $listusuario = $veces ->_getCoursesXStudentXV($cursomas); 
-                $cursomas['veces'] = intval($listusuario[0]['veces']);
+               // $veces = new Api_Model_DbTable_Course();
+                //$listusuario = $veces ->_getCoursesXStudentXV($cursomas); 
+                //$cursomas['veces'] = intval($listusuario[0]['veces']);
+
+                $curmat =$lcursos->_register($where);
+                $i=0;
+                foreach ($curmat as $row2) {
+                    if($where['courseid']==$row2['courseid']){
+                        $periodo=$row2['perid'];
+                        $p=substr($periodo,2,3);
+                        if($p=='A' or $p=='B' or $p=='N' or $p=='V'){
+                         $i=$i+1;  
+                         }               
+                     }
+                 }
+                $cursomas['veces'] = intval($i);
 
                 //Sacamos los docentes por curso
                 $bdprofesores = new Api_Model_DbTable_Coursexteacher();        

@@ -714,10 +714,63 @@ class Register_ValidationController extends Zend_Controller_Action
 
           }
 
+  public function updateAction(){
+      try {
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+            $escid = ($this->_getParam("escid"));
+            $subid = ($this->_getParam("subid"));
+            $uid = ($this->_getParam("uid"));
+            $pid = ($this->_getParam("pid"));
+            $perid = ($this->_getParam("perid"));
+            $regid = ($this->_getParam("regid"));
+            $courseid = ($this->_getParam("courseid"));
+            $curid = ($this->_getParam("curid"));
+            $turno = ($this->_getParam("turno"));
+            $this->view->uid=$uid;
+            $this->view->curid=$curid;
+            $this->view->courseid=$courseid;
+            $d['eid']=$eid;
+            $d['oid']=$oid;
+            $d['escid']=$escid;
+            $d['subid']=$subid;
+            $d['uid']=$uid;
+            $d['pid']=$pid;
+            $d['perid']=$perid;
+            $d['regid']=$regid;
+            $d['courseid']=$courseid;
+            $d['curid']=$curid;
+            $d['turno']=$turno;
+            $dblista = new Api_Model_DbTable_Registrationxcourse();
+            $lista = $dblista ->_getOne($d);
+            $form=new Register_Form_Changenotes;
+            $form->populate($lista);
+            $this->view->form=$form;
+            if ($this->getRequest()->isPost()) {
+              $frmdata=$this->getRequest()->getPost();
+                if ($form->isValid($frmdata)) {
+                  unset($frmdata['Guardar']);
+                   $frmdata['modified']=$this->sesion->uid;
+                               
+                    $reg_= new Api_Model_DbTable_Registrationxcourse();
+                    $reg_->_updatenoteregister($frmdata,$d);
+                    $this->_redirect("/register/validation");
+                }
+                    else
+                {
+                    echo "Ingrese nuevamente por favor";
+                }
+      }
 
 
 
+            
 
+          }catch (Exception $e) {
+            print "Error index Registration ".$e->$getMessage();
+        }          
+
+     }
 
 
 	

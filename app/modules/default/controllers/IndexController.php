@@ -288,16 +288,22 @@ class IndexController extends Zend_Controller_Action {
     	$resource1[]="profile/public";
     	$resource1[]="report/recordnotas";
     	$resource1[]="default/password";
+    	$resource1[]="register/registerealized";
     	
     	switch ($rid){
     		case "AD":{
+    			$resource1[]="assistance/student";
     			$modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
     			$acls[]= array("controller"=>"admin/receiptsup","name"=>"Cargar Recibos","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/password","name"=>"Cambiar Clave","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/bankpayments","name"=>"Pagos del Banco","imgicon"=>"calendar");
+    			$acls[]= array("controller"=>"admin/person","name"=>"Crear Personas","imgicon"=>"user");
+    			$acls[]= array("controller"=>"admin/user","name"=>"Crear Usuario","imgicon"=>"user");
     			$resource1[]="admin/receiptsup";
     			$resource1[]="admin/password";
     			$resource1[]="admin/bankpayments";
+    			$resource1[]="admin/person";
+    			$resource1[]="admin/user";
     			$modules[0]['acls'] = $acls;
     			$acls = null;
     			
@@ -320,11 +326,15 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"admin/bankpayments","name"=>"Pagos del Banco","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/rateregister","name"=>"Adm. Tasas","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"register/changerates","name"=>"Cambio de Tasas","imgicon"=>"calendar");
+    			$acls[]= array("controller"=>"admin/person","name"=>"Crear Personas","imgicon"=>"user");
+    			$acls[]= array("controller"=>"admin/user","name"=>"Crear Usuario","imgicon"=>"user");
     			$resource1[]="admin/receipts";
     			$resource1[]="admin/password";
     			$resource1[]="admin/bankpayments";
     			$resource1[]="admin/rateregister";
     			$resource1[]="register/changerates";
+    			$resource1[]="admin/person";
+    			$resource1[]="admin/user";
     			$modules[0]['acls'] = $acls;
     			$acls = null;
     			
@@ -371,6 +381,7 @@ class IndexController extends Zend_Controller_Action {
     		case "DC":{
     			$resource1[]="docente/index";
     			$resource1[]="syllabus/syllabus";
+    			$resource1[]="assistance/student";
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"docente/notas","name"=>"Asignaturas a Cargo","imgicon"=>"list");

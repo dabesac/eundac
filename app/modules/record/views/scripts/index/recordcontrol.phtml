@@ -1,8 +1,8 @@
 <?php
-$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
-include_once($dir);
-ob_start(); 
+
 $speciality = $this->info_speciality;
+$name_esc = null;
+$name_speciality = null;
 if ($speciality['parent']!= '') {
 	$name_esc = $speciality['speciality'];
 	$name_speciality='ESPECIALIDAD'.$speciality['name'];
@@ -10,13 +10,12 @@ if ($speciality['parent']!= '') {
 else{
 	$name_esc=$speciality['name'];
 }
+
 $perid=$this->perid;
 $courses = $this->info_couser;
 
-$mpdf->mirrorMargins = 1;	// Use different Odd/Even headers and footers and mirror margins
-
 $header = '
-<table width="100%" style="border: 1px solid #000;font-family: serif;  color: #000; ">
+	<table width="100%" style="border: 1px solid #000; font-family: serif;">
 	<tr style="text-align:center; padding-left: 100px; ">
     	<td  rowspan="2" width="340px" style="border: 1px solid #000 "><img src="/img/header_imprimir.jpg">
     	</td>
@@ -28,20 +27,40 @@ $header = '
     	</td>
 	</tr>
 	<tr>
-		<td style="text-align:center; font-size:10px; border: 1px solid #000 " >ACTA EVALUACIÓN - PERIODO '.$perid.' </td>
+		<td style="text-align:center; font-size:10px; border: 1px solid #000 " > CONTROL DE DOCUMENTOS OFICIALES '.$perid.' </td>
 	</tr>
 </table>
 ';
 
-?>
-<style type="text/css">
-.normal-td
-{
+$conntent = '';
+if ($courses) {
+	$i=0;
+	foreach ($courses as $course) {
+		$i++;
+		$courseid=$course['courseid'];
+		$course_n=$course['course'];
+		$turno=$course['turno'];
+		$semid=$course['semid'];
+		$name_teacher=$course['name_teacher'];
+		$numregister = $course['numregister'];
+		$conntent = $conntent .
+		'<tr >
+			<td height="25px">'.$i.'</td>
+			<td>'.$courseid.'</td>
+			<td>'.$course_n.'</td>
+			<td>'.$turno.'</td>
+			<td>'.$semid.'</td>
+			<td>'.$name_teacher.'<t/d>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>'.$numregister.'</td>
+		</tr>';
+	}
 }
-</style>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 
-<table style='font-size:14px; font-family: Courier, monospace ; width:100%; text-align:none; ' border='1'>
+$html = '
+	<table style="font-size:14px; font-family: Courier , monospace; width:100%;" border="1">
 	<tr height="30px">
         <th width="30px" ><center>Nº</center></th>
 		<th width="50px"><center>Codigo</center></th>
@@ -49,37 +68,53 @@ $header = '
         <th width="30px"><center>Turno</center></th>
         <th width="30px"><center>Sem.</center></th>         
         <th width="350px"><center>Docente</center></th>
-        <th  width="70px"><center>Actas</center></th>
+        <th width="70px"><center>Actas</center></th>
         <th width="70px"><center>Registro</center></th>
-        <th  width="50px"><center>R. N.</center></th>
+        <th width="50px"><center>R. N.</center></th>
         <th width="30px"><center># Mat.</center></th>	
 	</tr>
-	<?php 
-		foreach ($courses as $key => $course) {?>
-		<tr >
-			<td height="25px"><?php echo $key+1?></td>
-			<td><?php echo $course['courseid']?></td>
-			<td><?php echo $course['course']?></td>
-			<td><?php echo $course['turno'] ?></td>
-			<td><?php echo $course['semid'] ?></td>
-			<td><?php echo $course['name_teacher'] ?></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td><?php echo $course['numregister']?></td>
-		</tr>	
-	<?php }?>
-</table>
+	'.$conntent.'
+	</table>
+	<table style="width: 100%; margin-top:100px;" >
+    <tr >
+        <td height="90px">&nbsp;</td>
+        <td></td> 
+      </tr>
+      <tr>
+    	<td><center>_____________________________</center></td>
+    	<td><center>_____________________________</center></td>
+      
+      </tr>
+    <tr>
+    	<td><center>Entregue Conforme</center></td>
+    	<td><center>Recibi Conforme</center></td>
+      
+      </tr>
+  	</table>
+';
+ ?>
 
-<?php 
 
-$html = ob_get_contents();
-  
-$mpdf=new mPDF('win-1252','A4','','','','',23,'','');
-  
+
+<?php
+//==============================================================
+//==============================================================
+//==============================================================
+
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+
+$mpdf=new mPDF(); 
+$mpdf=new mPDF('utf-8','A4',0,0,0,0,21,'',''); 
 $mpdf->SetHTMLHeader($header);
-ob_end_clean();
-$mpdf -> WriteHTML($html);
-$mpdf->Output('Control-Acta'.'.pdf','D');
-  
+$mpdf->WriteHTML($html);
+$mpdf->Output('Control'.'.pdf','D');
+
+exit();
+//==============================================================
+//==============================================================
+//==============================================================
+
+
 ?>
