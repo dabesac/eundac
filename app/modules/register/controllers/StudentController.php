@@ -652,10 +652,14 @@ class Register_StudentController extends Zend_Controller_Action {
 
                         if( $credits_register['semid'] == 0 || $credits_register['semid']=="" )
                         {
+
+                            $credits_assing[0]['semester_creditsz']=26;
+
                         	if($this->sesion->escid=='3OB' || $this->sesion->escid=='3OT')
                         		$credits_assing[0]['semester_creditsz']=26;
                         	else
                             	$credits_assing[0]['semester_creditsz']=22;
+
                         }
                         
                         
@@ -773,6 +777,9 @@ class Register_StudentController extends Zend_Controller_Action {
                         'uid'=>$uid,
                         );
             $created_resolu=1;
+
+
+
             try {
 
                 $where=array(
@@ -897,14 +904,9 @@ class Register_StudentController extends Zend_Controller_Action {
                     $data_subjects  [$key]['credits'] = $info_subjects['credits'];
                     $data_subjects [$key]['semid'] = $info_subjects['semid'];
 
-                    $data_pid_teacher = $base_subjets_teacher ->_getFilter($where);
+                    $data_pid_teacher = $base_subjets_teacher ->_getinfoDoc($where);
 
-                    $where['pid'] = $data_pid_teacher[0]['pid'];
-
-                    $name_teacher = $base_person->_getOne($where);
-                    $data_subjects [$key]['name_t'] = $name_teacher['last_name0'].
-                                                        " ".$name_teacher['last_name1'].
-                                                        ", ".$name_teacher['first_name'];
+                   $data_subjects [$key]['name_t']  = $data_pid_teacher[0]['nameteacher'];
 
                 } 
 
