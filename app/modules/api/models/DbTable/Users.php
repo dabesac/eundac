@@ -130,7 +130,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 			if($rows) return $rows;
 			return false;         
         }  catch (Exception $ex){
-            print "Error: Obteniendo datos de un usuario deacuerdo a su codigo y a su rol".$ex->getMessage();
+            print "Error: get User".$ex->getMessage();
         }
     }
 

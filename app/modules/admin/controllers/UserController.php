@@ -24,30 +24,41 @@ class Admin_UserController extends Zend_Controller_Action{
 			$this->_helper->layout()->disableLayout();
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
-			$pid=$this->_getParam('pid');
-			if ($pid) {
-				$where=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid);
-				$dbuser=new Api_Model_DbTable_Users();
-				$datauser=$dbuser->_getUserXPid($where);
-			}
-			$name = $this->_getParam('name');
-       		if($name){
-        		$eid = $this->sesion->eid;
-        		$oid = $this->sesion->oid;
-        		$name = trim(strtoupper($name));
-        		$name = mb_strtoupper($name,'UTF-8');
-        		$dbuser=new Api_Model_DbTable_Users();
-        		$datauser=$dbuser->_getUserXnameXsinRolAll($name,$eid,$oid);
-				// print_r($datauser);exit();        		           
-        	}
-        	$uid = $this->_getParam('uid');
-        	if ($uid) {
-        		$where['uid'] = $uid;
-        		$where['eid'] = $this->sesion->eid;
-        		$where['oid'] = $this->sesion->oid;
-        		$bduser = new Api_Model_DbTable_Users();
-        		$datauser = $bduser->_getUserXUid($where);       					
-        	}
+            $pid=$this->_getParam('pid');
+            if ($pid) {
+                $where=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid);
+                $dbuser=new Api_Model_DbTable_Users();
+                $datauser=$dbuser->_getUserXPid($where);
+                if ($datauser==false) {
+                    $where=array('eid'=>$eid,'pid'=>$pid);
+                    $dbper=new Api_Model_DbTable_Person();
+                    $datauser[0]=$dbper->_getOne($where);
+                }
+            }
+            $name = $this->_getParam('name');
+            if($name){
+                $eid = $this->sesion->eid;
+                $oid = $this->sesion->oid;
+                $name = trim(strtoupper($name));
+                $name = mb_strtoupper($name,'UTF-8');
+                $dbuser=new Api_Model_DbTable_Users();
+                $datauser=$dbuser->_getUserXnameXsinRolAll($name,$eid,$oid);
+                if ($datauser==false) {
+                    $eid = $this->sesion->eid;
+                    $name = trim(strtoupper($name));
+                    $name = mb_strtoupper($name,'UTF-8');
+                    $bdp=new Api_Model_DbTable_Person();
+                    $datauser[0]=$bdp->_getPersonxname($name,$eid);                
+                }
+            }
+            $uid = $this->_getParam('uid');
+            if ($uid) {
+                $where['uid'] = $uid;
+                $where['eid'] = $this->sesion->eid;
+                $where['oid'] = $this->sesion->oid;
+                $bduser = new Api_Model_DbTable_Users();
+                $datauser = $bduser->_getUserXUid($where);                          
+            }
             $c=0;
             $whered=array('eid'=>$eid,'oid'=>$oid);
             $wheres=array('eid'=>$eid,'oid'=>$oid);
@@ -65,21 +76,20 @@ class Admin_UserController extends Zend_Controller_Action{
                 $info[$c]=$inforol['rid'];
                 $c++;
             }
-            // print_r($datauser);
             $this->view->datauser=$datauser;
             $this->view->infoesc=$infoesc;
-            $this->view->inforol=$inforol;			
- 		} catch (Exception $e) {
- 			print "Error: get User".$e->getMessage();
- 		}
- 	}
+            $this->view->inforol=$inforol;          
+        } catch (Exception $e) {
+            print "Error: get User".$e->getMessage();
+        }
+    }
 
- 	public function newAction(){
- 		try {
- 			$fm= new Admin_Form_Buscar();
- 			$this->view->fm=$fm;
- 			
- 		} catch (Exception $e) {
+    public function newAction(){
+        try {
+            $fm= new Admin_Form_Buscar();
+            $this->view->fm=$fm;
+            
+        } catch (Exception $e) {
  			print "Error: User new".$e->getMessage();
  		}
  	}
@@ -94,6 +104,11 @@ class Admin_UserController extends Zend_Controller_Action{
 				$where=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid);
 				$dbuser=new Api_Model_DbTable_Users();
 				$datauser=$dbuser->_getUserXPid($where);
+                if ($datauser==false) {
+                    $where=array('eid'=>$eid,'pid'=>$pid);
+                    $dbper=new Api_Model_DbTable_Person();
+                    $datauser[0]=$dbper->_getOne($where);
+                }
                 $c=0;
                 $whered=array('eid'=>$eid,'oid'=>$oid);
                 $wheres=array('eid'=>$eid,'oid'=>$oid);
@@ -125,8 +140,9 @@ class Admin_UserController extends Zend_Controller_Action{
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $pid=base64_decode($this->_getParam('pid'));
+            $this->view->pid=$pid;
             $fm= new Admin_Form_Usernew();
- 	 		$this->view->fm=$fm;
+            $this->view->fm=$fm;
             $escid=new Zend_Form_Element_Select('escid');
             $escid->removeDecorator('Label')->removeDecorator('HtmlTag');
             $escid->setAttrib('class','form-control');
@@ -143,17 +159,17 @@ class Admin_UserController extends Zend_Controller_Action{
                     unset($frmdata['Guardar']);
                     $rid=$frmdata['rid'];
                     $frmdata['eid']=$eid;
-                    $frmdata['oid']=$oid;
-                    $frmdata['pid']=$pid;
+                    $frmdata['oid']=$oid;                 
                     $where=array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid);
                     $dbrol=new Api_Model_DbTable_Rol();
                     $datarol=$dbrol->_getOne($where);
                     $prefix=$datarol['prefix'];                
-                    $frmdata['uid']=$pid.$prefix;                
+                    $frmdata['uid']=$frmdata['pid'].$prefix;                
                     $frmdata['created']=date('Y-m-d h:m:s');
                     $frmdata['register']=$register;
                     $frmdata['password']=md5($frmdata['uid']);                  
                     $reg_= new Api_Model_DbTable_Users();
+                    // print_r($frmdata);exit();
                     $reg_->_save($frmdata);
                     $this->_redirect("/admin/user/new");                           
                 }

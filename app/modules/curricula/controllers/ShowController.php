@@ -19,6 +19,7 @@ class Curricula_ShowController extends Zend_Controller_Action
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $rid=$this->sesion->rid;
+            $escid=$this->sesion->escid;
             $facu=new Api_Model_DbTable_Faculty();
             $where['eid']=$eid;
             $where['oid']=$oid;
@@ -29,7 +30,10 @@ class Curricula_ShowController extends Zend_Controller_Action
             //     $escid=$this->sesion->escid;
             //     $this->view->escid=$escid;
             // }
-			
+			if ($rid=="RF"){
+                $facid=$this->sesion->faculty->facid;
+                $this->view->facid=$facid;
+            }
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}

@@ -408,6 +408,25 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                                 }else{
                                     print "No se pudo actualizar los cursos de la matricula";
                                 }
+
+                        $usercampus = new Api_Model_DbTable_Campususer();
+                        $usercursoscampus = new Api_Model_DbTable_Campususerxcourse();
+                        $wheres['username']= $where['uid'];
+                        $data = $usercampus->_getOne($wheres);
+                        $datx['user_id'] = $data['user_id'];
+                        $datx['status'] = '5';
+                        
+
+                        $datos= $bdmatricula_curso->_getFilter($where);
+                        foreach ($datos as $cursos) {
+                                 $courseid=$cursos['courseid'];
+                                 $curid=$cursos['curid'];
+                                 $turno=$cursos['turno'];
+                                 $datx['course_code']=$curid.$courseid.$turno;
+                                 $save = $usercursoscampus->_save($datx);
+                                 // print_r($save);
+                        }
+                    
                         }else{
                             print "No se pudo actualizar la matricula";
                         }

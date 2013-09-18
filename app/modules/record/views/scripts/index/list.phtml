@@ -57,8 +57,10 @@ $strprint = "/record/index/printavence/"
 	<a class="btn btn-primary " href="#">Agregar Asignatura</a>
 <?php } ?>
 	<a class="btn btn-primary " href="#" id="openwindows">Reporte Avance de Notas</a>
-	<a class="btn btn-info " href="/record/index/recordcontrol/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid) ?>/perid/<?php echo base64_encode($this->perid)?>" >
+	<?php if ($this->rid == 'RC') { ?>
+		<a class="btn btn-info " href="/record/index/recordcontrol/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid) ?>/perid/<?php echo base64_encode($this->perid)?>" >
 		<span class='glyphicon glyphicon-print'></span> Control de Actas</a>
+	<?php }?>
 </div>
 <table class="table table-striped table-hover table-bordered table-condensed">
 	<tr>
@@ -168,35 +170,37 @@ $strprint = "/record/index/printavence/"
 			OPERACIONES
 		</th>
 		<td colspan='4'>
-			<div class="btn-group pull-right" >
-			  <button type="button" class="btn btn-xs btn-info">
-			  	<span class='glyphicon glyphicon-print'>
-			  </span> Impreciones</button>
-			  <button type="button" class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown">
-			    <span class="caret"></span>
-			  </button>
-			  <ul class="dropdown-menu" role="menu">
-			    <li><a href="/record/index/printconstancy/<?php echo $urldetaul?>">Constancia</a></li>
-			    <li class="divider"></li>
-			    <li><a href="/record/index/printrecord/<?php echo $urldetaul?>">Acta</a></li>
-			    <li><a href="/record/index/backrecord/<?php echo $urldetaul?>">Acta Reverso</a></li>
-			    <li><a href="/record/index/recordnotnota/<?php echo $urldetaul?>">Acta sin Notas</a></li>
-			    <li><a href="/record/index/recordnotpercentaje/<?php echo $urldetaul?>">Acta sin Porcentaje</a></li>
-			    <li class="divider"></li>
-			    <li><a href="/record/index/printregister/<?php echo $urldetaul?>/type/<?php echo $type_cy?>">Registro</a></li>
-			    <li><a href="/record/index/backregister/<?php echo $urldetaul?>">Regitro Reverso</a></li>
-			    <li><a href="/record/index/registronotnota/<?php echo $urldetaul?>/type/<?php echo $type_cy?>">Registro sin Notas</a></li>
-			    <li><a href="/record/index/registernotpercentage/<?php echo $urldetaul?>">Registro sin Porcentaje</a></li>
+			<?php if ($this->rid == "RC") { ?>
+				<div class="btn-group pull-right" >
+				  	<button type="button" class="btn btn-xs btn-info">
+				  	<span class='glyphicon glyphicon-print'>
+				  </span> Impreciones</button>
+				  <button type="button" class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown">
+				    <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu" role="menu">
+				    <li><a href="/record/index/printconstancy/<?php echo $urldetaul?>">Constancia</a></li>
+				    <li class="divider"></li>
+				    <li><a href="/record/index/printrecord/<?php echo $urldetaul?>">Acta</a></li>
+				    <li><a href="/record/index/backrecord/<?php echo $urldetaul?>">Acta Reverso</a></li>
+				    <li><a href="/record/index/recordnotnota/<?php echo $urldetaul?>">Acta sin Notas</a></li>
+				    <li><a href="/record/index/recordnotpercentaje/<?php echo $urldetaul?>">Acta sin Porcentaje</a></li>
+				    <li class="divider"></li>
+				    <li><a href="/record/index/printregister/<?php echo $urldetaul?>/type/<?php echo $type_cy?>">Registro</a></li>
+				    <li><a href="/record/index/backregister/<?php echo $urldetaul?>">Regitro Reverso</a></li>
+				    <li><a href="/record/index/registronotnota/<?php echo $urldetaul?>/type/<?php echo $type_cy?>">Registro sin Notas</a></li>
+				    <li><a href="/record/index/registernotpercentage/<?php echo $urldetaul?>">Registro sin Porcentaje</a></li>
 
-			  </ul>
+				  </ul>
 			</div>
+			<?php }?>
 		</td>
 	</tr>		
 			<?php 
 			}
 	}else{
 	?>
-		Ni hay ningun dato
+		No hay ningun dato
 	<?php } ?>
 </table>
 </div>

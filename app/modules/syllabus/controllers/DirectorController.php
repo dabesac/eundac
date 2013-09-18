@@ -87,6 +87,8 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
             $semid=$this->_getParam("semid");
             $dbcourses=new Api_Model_DbTable_PeriodsCourses();
             $dbsyllabus=new Api_Model_DbTable_Syllabus();
+            $dbismain=new Api_Model_DbTable_Coursexteacher();
+            $dbteachers=new Api_Model_DbTable_Person();
 
             if($year<>"" && $perid=="" && $semid==""){
                 $dbperiods=new Api_Model_DbTable_Periods();
@@ -94,6 +96,7 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
                 $periods=$dbperiods->_getPeriodsxYears($where);
                 $cc=0;
                 $cp=0;
+                $cont=0;
                 foreach ($periods as $period) {
                     $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "perid"=>$period['perid']);
                     $attrib=array("courseid","perid","semid","turno");
@@ -106,9 +109,20 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
                         $coursesname[$cp]=$dbcourses->_getinfoCourse($where,$attrib);
                         $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cxy['courseid'],"turno"=>$cxy['turno'],"subid"=>$subid,"perid"=>$period['perid']);
                         $coursesstate[$cp]=$dbsyllabus->_getAll($where);
+                        $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cxy['courseid'],"perid"=>$period['perid'],"is_main"=>"S");
+                        $attrib=array("courseid","pid","is_main");
+                        $ismain=$dbismain->_getFilter($where,$attrib);
+                        if($ismain[0]['is_main']=="S"){
+                            //print_r($ismain);
+                            $where=array("eid"=>$eid,"pid"=>$ismain[0]['pid']);
+                            $attrib=array("last_name0","last_name1","first_name");
+                            $teachers[$cp]=$dbteachers->_getFilter($where, $attrib);
+                            $cont++;
+                            //print_r($teachers[$cp]);
+                            
+                        }
                         $cp++;
                     }
-                    //print_r($where);
                     $cc++;
                 }
                 $allcourses=$coursesperyear;
@@ -125,6 +139,17 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
                         $coursesname[$cp]=$dbcourses->_getinfoCourse($where,$attrib);
                         $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cxy['courseid'],"turno"=>$cxy['turno'],"subid"=>$subid,"perid"=>$perid);
                         $coursesstate[$cp]=$dbsyllabus->_getAll($where);
+                        $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cxy['courseid'],"perid"=>$perid,"is_main"=>"S");
+                        $attrib=array("pid","is_main");
+                        $ismain=$dbismain->_getFilter($where,$attrib);
+                        if($ismain[0]['is_main']=="S"){
+                            //print_r($ismain);
+                            $where=array("eid"=>$eid,"pid"=>$ismain[0]['pid']);
+                            $attrib=array("last_name0","last_name1","first_name");
+                            $teachers[$cp]=$dbteachers->_getFilter($where, $attrib);
+                            //print_r($teachers[$cp]);
+                            
+                        }
                         $cp++;
                     }
                 $filcourses=$coursesperperiod;
@@ -141,6 +166,16 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
                         $coursesname[$cp]=$dbcourses->_getinfoCourse($where,$attrib);
                         $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cxy['courseid'],"turno"=>$cxy['turno'],"subid"=>$subid,"perid"=>$perid);
                         $coursesstate[$cp]=$dbsyllabus->_getAll($where);
+                        $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cxy['courseid'],"perid"=>$perid,"is_main"=>"S");
+                        $attrib=array("pid","is_main");
+                        $ismain=$dbismain->_getFilter($where,$attrib);
+                        if($ismain[0]['is_main']=="S"){
+                            $where=array("eid"=>$eid,"pid"=>$ismain[0]['pid']);
+                            $attrib=array("last_name0","last_name1","first_name");
+                            $teachers[$cp]=$dbteachers->_getFilter($where, $attrib);
+                            //print_r($teachers[$cp]);
+                            
+                        }
                         $cp++;
                     }
                 $filcourses=$coursespersemester;
@@ -148,11 +183,11 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
 
                 //print_r($coursesstate);
                 //print_r($coursesname);
+                $this->view->teachers=$teachers;
                 $this->view->allcourses=$allcourses;
                 $this->view->filcourses=$filcourses;
                 $this->view->coursesname=$coursesname;
                 $this->view->coursesstate=$coursesstate;
-        
         }catch(exception $e){
             print "Error :".$e->getMessage();
         }

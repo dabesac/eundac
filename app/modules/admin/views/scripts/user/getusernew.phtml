@@ -90,7 +90,7 @@
 
 $("#loading").click(function(){
        
-    url="/admin/user/newuser";
+    url="/admin/user/newuser/pid/<?php echo base64_encode($this->datauser[0]['pid'])?>";
     
     // alert(url);
     $("#list").load(url);

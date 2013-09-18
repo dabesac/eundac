@@ -1,3 +1,7 @@
+<?php
+$facid=$this->facid;
+
+?>
 <div>
 	<table class="table table-striped table-condensed span9">
 		<tr>
@@ -6,20 +10,35 @@
 		<tr>
 			<th>Facultad:</th>
 			<td>
-				<select id="facid">
+				<select class='form-control' style='height:35px;width:350px' id="facid">
+
 					<option value="">- Seleccione Facultad -</option>
 					<?php if ($this->facultad) {
 						foreach ($this->facultad as $facultad) { 
+							if($facid){
+								if($facid==$facultad['facid']){
+									if ($this->facid) $str = ($this->facid==$facultad['facid'])?"selected ":""; 
+									?>
+									<option <?php echo $str?> value="<?php echo $facultad['facid']?>"><?php echo $facultad['name']?></option>	
+									<script type="text/javascript">
+                                        $("#facid").attr("disabled",true);
+                                    </script>
+
+								<?php
+								}
+							}else{
+
 							 if ($this->facid) $str = ($this->facid==$facultad['facid'])?"selected ":""; ?>
 							<option <?php echo $str?> value="<?php echo $facultad['facid']?>"><?php echo $facultad['name']?></option>		
 						<?php
+					     }
 						}
 					} ?>
 				</select>
 			</td>
 			<th>Escuela:</th>
 			<td>
-				<select id='escid'>
+				<select class='form-control' style='height:35px;width:350px' id='escid'>
 					<option>- Seleccione Escuela -</option>
 				</select>
 			</td>
@@ -29,22 +48,12 @@
 <div id="datos" class="flotacarajo span9"></div>
 
 <script type="text/javascript">
-//var rid="<?php echo $this->rid?>";
-// if (rid=="RF" || rid=="DIREC") {
-// 	$("#facid").attr("disabled",true);
-// 	var facid="<?php echo $this->facid?>";
-// 	$("#escid").load("/vercurricula/lescuelas/facid/"+facid);
-// 	if (rid=="DIREC") {
-// 		$("#escid").attr("disabled",true);
-// 		var escid="<?php echo $this->escid?>";
-// 		var url="/vercurricula/curriculas/escid/"+escid;
-// 		$("#datos").html("<img src='/img/spinner.gif'>Cargando...");
-// 		$("#datos").load(url);
-// 	};
-// };
-
+$("#escid").load("/curricula/show/lschools/facid/"+<?php echo $facid?>);
+</script>
+<script type="text/javascript">
 $("#facid").change(function(){
 	var facid=$(this).val();
+	alert(facid);
 	var url = "/curricula/show/lschools/facid/"+facid;
 	$("#escid").load("/curricula/show/lschools/facid/"+facid);
 });
