@@ -68,14 +68,24 @@ public function _getAll($where,$order='',$start=0,$limit=0){
 		}
 	}
 	
-	public function _getFilter($where=array()){
+	 public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
-			$wherestr="eid = '".$where['eid']."' and state = '".$where['state']."'";
-			$row = $this->fetchAll($wherestr);
-			if($row) return $row->toArray();
-			return false;
+			if($where['eid']=='' || $where['pid']=='') return false;
+				$select = $this->_db->select();
+				if ($attrib=='') $select->from("base_person");
+				else $select->from("base_person",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				foreach ($orders as $key => $order) {
+						$select->order($order);
+				}
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
 		}catch (Exception $e){
-			print "Error: Read Filter Persom ".$e->getMessage();
+			print "Error: Read Filter Person ".$e->getMessage();
 		}
 	}
 

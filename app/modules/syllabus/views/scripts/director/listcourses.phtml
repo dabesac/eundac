@@ -4,7 +4,9 @@ if($this->allcourses){?>
 		<tr>
 			<th>#</th>
 			<th><center>Sem</center></th>
+			<th><center>Codigo</center></th>
 			<th>Curso</th>
+			<th>Docente</th>
 			<th><center>Turno</center></th>
 			<th><center>Estado</center></th>
 		</tr>
@@ -16,7 +18,9 @@ if($this->allcourses){?>
 				<tr>
 					<td><b><?php echo $c+1;?></b></td>
 					<td align="center"><?php echo $coursesxper['semid'];?></td>
+					<td align="center"><?php echo $this->coursesname[$c][$cp]['courseid']?></td>
 					<td><?php echo $this->coursesname[$c][$cp]['name']?></td>
+					<td><?php echo $this->teachers[$c][$cp]['last_name0']." ".$this->teachers[$c][$cp]['last_name1']." ".$this->teachers[$c][$cp]['first_name']?></td>
 					<td align="center"><?php echo $coursesxper['turno'];?></td>
 					<td align="center">
 						<?php if($this->coursesstate[$c][$cp]['state']=="C"){?>
@@ -37,7 +41,9 @@ if($this->allcourses){?>
 		<tr>
 			<th>#</th>
 			<th>Sem</th>
+			<th>Codigo</th>
 			<th>Curso</th>
+			<th>Docente</th>
 			<th>Turno</th>
 			<th>Estado</th>
 		</tr>
@@ -47,7 +53,9 @@ if($this->allcourses){?>
 			<tr>
 				<td><b><?php echo $c+1;?></b></td>
 				<td><?php echo $courses['semid'];?></td>
+				<td align="center"><?php echo $this->coursesname[$c][0]['courseid']?></td>
 				<td><?php echo $this->coursesname[$c][0]['name']?></td>
+				<td><?php echo $this->teachers[$c][0]['last_name0']." ".$this->teachers[$c][0]['last_name1']." ".$this->teachers[$c][0]['first_name']?></td>
 				<td><?php echo $courses['turno'];?></td>
 				<td>
 					<?php if($this->coursesstate[$c][0]['state']=="C"){?>
