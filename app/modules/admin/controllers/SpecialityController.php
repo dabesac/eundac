@@ -66,7 +66,6 @@ class Admin_SpecialityController extends Zend_Controller_Action{
             if ($this->getRequest()->isPost())
             {
                 $frmdata=$this->getRequest()->getPost();
-                // print_r($frmdata);
                 if ($form->isValid($frmdata))
                 {                    
                     unset($frmdata['send']);
@@ -78,7 +77,6 @@ class Admin_SpecialityController extends Zend_Controller_Action{
                     $frmdata['created']=date('Y-m-d h:m:s'); 
                     $frmdata['register']=$register;                  
                     $reg_= new Api_Model_DbTable_Speciality();
-                    // print_r($frmdata);
                     $reg_->_save($frmdata);
                     $this->_redirect("/admin/speciality/");                           
                 }
@@ -126,7 +124,6 @@ class Admin_SpecialityController extends Zend_Controller_Action{
                     $pk['escid']=$escid;
                     $pk['subid']=$subid;                  
                     $reg_= new Api_Model_DbTable_Speciality();
-                    // print_r($frmdata);
                     $reg_->_update($frmdata,$pk);
                     $this->_redirect("/admin/speciality/");
 				}

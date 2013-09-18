@@ -1,54 +1,47 @@
-<div class="col-sm-12">
-  <div class="col-sm-3" align="center">
-    <img src="/img/img_03.jpg" title="">
+<div style="display: block; height: 120px; width: 100%; ">
+  <div class="img-thumbnail pull-left">
+    <img src="/fotos/<?php echo $this->datos[0]['uid']?>.jpg" title="">
   </div>
-  <div class="col-sm-7">
-    <h4><?php echo $this->datos[0]['fullname']?></h43>
-    <h6>Codigo <b><?php echo $this->datos[0]['uid']?></b></h6>
-    <h5>Facultad de <?php echo $this->datos[1][0]['nomfac']." Escuela de ".$this->datos[1][0]['nomesc']?></h5>
+  <div class="pull-left" style="padding: 8px;">
+    <p style="font-size: 18px"><b><?php echo $this->datos[0]['fullname']?></b><br>
+    Código <b><?php echo $this->datos[0]['uid']?></b><br>
+    Facultad de <?php echo $this->datos[1][0]['nomfac']." Escuela de ".$this->datos[1][0]['nomesc']?></p>
+   </div>
+   <div class="pull-right">
+      <a href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>" class="btn btn-success">
+      Record Notas
+      </a>
     </div>
-    <div class="col-sm-1">
-      <?//print ($this->datos);?>
-      <a href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>" class="btn btn-success">Record</a>
-    </div>
-    <br><br><br><br>
-    <br><br><br><br>
 </div>
 
-<div class="col-sm-9">
-  <br>
-  <ul class="nav nav-tabs" id="profileTab">
-    <li class="active"><a href="#info" id="btnmaininfo"><h5>Informacion</h5></a></li>
-    <li><a href="#signin" id="btnmainsignin"><h5>Matricula</h5></a></li>
-    <li><a class="hidden"></a></li>
-  </ul>
+<div style="display: block; width: 100%; ">
+	<ul class="nav nav-tabs" id="profileTab">
+		<li class="active"><a href="#info" id="btnmaininfo"><h5>Informacion</h5></a></li>
+		<li><a href="#signin" id="btnmainsignin"><h5>Matricula</h5></a></li>
+		<li><a class="hidden"></a></li>
+	</ul>
+	<div class="tab-content" style="margin: 0px; padding: 0px; min-height: 500px;" >
+		<div class="tab-pane active" id="info" ></div>
+		<div class="tab-pane" id="signin"></div>
+	</div>
 </div>
-
-  <div class="tab-content" id="tabcon">
-    <div class="tab-pane active" id="info">
-     
-    </div><!-- tab info -->
-
-    <div class="tab-pane" id="signin">
-      
-    </div>
-  </div><!-- tab content -->
-
-
 <script>
-  $("#info").load("/profile/public/studentinfo");
-  $("#signin").load("/profile/public/studentsigncurrent");
-  $('#profileTab a').click(function (e) {
-    e.preventDefault()
-    $(this).tab('show')
-  })
-  $("#btnmaininfo").click(function(){
-    $("#signin").load("/profile/public/studentsigncurrent");
-    $("#masinfosignTab a:last").tab('show')
-  })
-  $("#btnmainsignin").click(function(){
-    $("#info").load("/profile/public/studentinfo");
-    $("#masinfoTab a:last").tab('show')
-  })
+$(function () {
+	$("#info").load("/profile/public/studentinfo");
+	$("#signin").load("/profile/public/studentsigncurrent");
+	$('#profileTab a').click(function (e) {
+		e.preventDefault()
+	    $(this).tab('show')
+	});
+	  
+	$("#btnmaininfo").click(function(){
+		$("#signin").load("/profile/public/studentsigncurrent");
+		$("#masinfosignTab a:last").tab('show')
+	});
+	$("#btnmainsignin").click(function(){
+		$("#info").load("/profile/public/studentinfo");
+		$("#masinfoTab a:last").tab('show')
+	});
+});
 </script>
 

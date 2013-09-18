@@ -157,7 +157,7 @@ if ($this->cursosconvalidados){ ?>
                                 </center>
                             </td>
                             <?php  
-                             if ($convalidado['state']<>'C'){ ?>
+                             if ($convalidado['state']<>'C' and $convalidado['state_record']<>'C'){ ?>
                             <td>
                                 <a id="modifyregister_<?php echo $i?>" data-toggle="modal" href="#modify" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
                             </td>
@@ -179,7 +179,12 @@ if ($this->cursosconvalidados){ ?>
                             });
                             </script>
                             <?php 
-                            } ?>
+                            }else{ ?>
+                            <td>
+                                <a href="#" title="No se puede Modificar el Registro."><span class="glyphicon glyphicon-ban-circle"></span></a>
+                            </td>
+                            <?php
+                            }?>
                         </tr>
                         <?php
                         $i++;
@@ -192,7 +197,7 @@ if ($this->cursosconvalidados){ ?>
 } ?>
 
 <div class="modal fade" id="modify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<form id="frmmodifyregister" name="frmmodifyregister" action="/record/directed/modifyregister" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+<form id="frmmodifyregister" name="frmmodifyregister" action="/record/directed/modifyregister/option/M" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -233,6 +238,12 @@ if ($this->cursosconvalidados){ ?>
                             <input id="resolmodify" name="resolution" type="text" class="form-control" style="width:350px">
                         </td>
                     </tr>
+                    <tr>
+                        <th>Fecha Acta:</th>
+                        <td colspan="3">
+                            <input id="f_acta" name="f_acta" type="text" class="form-control" style="width:150px">
+                        </td>
+                    </tr>
                 </table>
                 <input id="regidmodify" name="regid" type="hidden">
                 <input id="courseidmodify" name="courseid" type="hidden">
@@ -244,6 +255,7 @@ if ($this->cursosconvalidados){ ?>
             </div>
             <div class="modal-footer">
                 <a href="#" id="savemodify" class="btn btn-success">Guardar</a>
+                <a href="#" id="closerecord" class="btn btn-warning">Cerrar Acta</a>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
@@ -252,7 +264,13 @@ if ($this->cursosconvalidados){ ?>
 </div>
 
 <script>
+$("#f_acta").datepicker();
+
 $("#savemodify").click(function(){
+    $("#header_cursos").hide();
+    $("#lista").hide();
+    $("#listam").hide();
+    $("#listag").hide();
     $("#frmmodifyregister").submit();
 });
 
@@ -338,7 +356,7 @@ $("#registerstudent").click(function(){
         $("#lista").hide();
         $("#listam").hide();
         $("#listag").hide();
-        var url = "/record/directed/savedirected/subid/"+subid+"/escid/"+escid+"/uid/"+uid+"/pid/"+pid+"/curid/"+curid+"/courseid/"+courseid+"/semid/"+semid+"/credits/"+credits+"/nota/"+nota+"/reso/"+reso+"/perid/"+perid+"/turno/"+turno+"/uid_doc/"+uid_doc+"/pid_doc/"+pid_doc+"/recibo/"+recibo;
+        var url = "/record/directed/savedirected/subid/"+subid+"/escid/"+escid+"/uid/"+uid+"/pid/"+pid+"/curid/"+curid+"/courseid/"+courseid+"/semid/"+semid+"/credits/"+credits+"/nota/"+nota+"/reso/"+$.base64.encode(reso)+"/perid/"+perid+"/turno/"+turno+"/uid_doc/"+uid_doc+"/pid_doc/"+pid_doc+"/recibo/"+recibo;
         // alert(url);
         $("#header_alumnos").html("<img src='/img/spinner.gif'>Cargando..."); 
         $("#header_alumnos").load(url);
@@ -346,6 +364,32 @@ $("#registerstudent").click(function(){
         alert("Ingrese todos los datos Obligatorios.");
         return false;
     };
+});
+
+$("#closerecord").click(function(){
+    var f_acta = $("#f_acta").val();
+    var perid = $("#peridmodify").val();
+    var courseid = $("#courseidmodify").val();
+    var escid = $("#escidmodify").val();
+    var subid = $("#subidmodify").val();
+    var curid = $("#curidmodify").val();
+    var turno = $("#turnomodify").val();
+    var uid = $("#uidmodify").val();
+    var pid = $("#pidmodify").val();
+    if (f_acta=="") {
+        alert("Seleccione la fecha de Cierre de Acta.");
+        return false;
+    };
+    var tmp = f_acta.split("/");
+    var f_acta = tmp[2]+"-"+tmp[1]+"-"+tmp[0];
+    var url = "/record/directed/modifyregister/courseid/"+courseid+"/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/curid/"+curid+"/turno/"+turno+"/uid/"+uid+"/pid/"+pid+"/f_acta/"+f_acta+"/option/C";
+    // alert(url);
+    $("#header_cursos").hide();
+    $("#lista").hide();
+    $("#listam").hide();
+    $("#listag").hide();
+    $("#header_alumnos").html("<img src='/img/spinner.gif'>Cargando..."); 
+    $("#header_alumnos").load(url);
 });
 
 $("#nota").blur(function(){

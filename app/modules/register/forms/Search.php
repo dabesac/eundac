@@ -19,7 +19,8 @@ class Register_Form_Search extends Zend_Form{
         $uid->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $uid->setAttrib("maxlength", "10")->setAttrib("size", "10");
         $uid->setAttrib("title","Codigo");
-		$uid->setAttrib("class","input-small");
+		$uid->setAttrib("class", "form-control");
+        $uid->setAttrib("style","height:35px;width:130px ");
 		$uid->setRequired(true)->addErrorMessage('Este campo es requerido');
 
 

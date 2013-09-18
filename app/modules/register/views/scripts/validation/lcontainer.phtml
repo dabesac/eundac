@@ -20,7 +20,7 @@ $subid=$this->subid;
     <tr>
         <td>
             <center>
-                <select  id="curid" name="curid" class="input-medium">
+                <select  id="curid" name="curid" class='form-control' style='height:35px;width:100px'>
                     <option  value="">Seleccione..</option>
                     <?php
                     foreach ($this->curriculas  as $curricula){
@@ -32,18 +32,18 @@ $subid=$this->subid;
             </center>
         </td>
 
-        <td colspan="2"<center>
+        <td colspan="2">
             <center>
-            <select  id="cursoid" name="cursoid" class="input-xlarge">
+            <select  id="cursoid" name="cursoid" class='form-control' style='height:35px;width:400px'>
                 <option  value="">Seleccione</option>
             </select></center>
         </td>  
 
         <td><center>
-        <input type="text" id="nota" aling="center" class="input-mini" value="<?php echo $this->nota ?>"  name="firstname" /><label class="msg text-error"></label></center></td>
+        <input type="text" id="nota" aling="center" class='form-control' style='height:35px;width:50px' value="<?php echo $this->nota ?>"  name="firstname" /><label class="msg text-error"></label></center></td>
         
         <td><center>
-        <input type="text" id="resolucion" class="input-large" onBlur="CheckUserName(this);"  value="" name="firstname" /></center></td>
+        <input type="text" id="resolucion" class='form-control' style='height:35px;width:400px' onBlur="CheckUserName(this);"  value="" name="firstname" /></center></td>
 
                                               
     </tr>
@@ -75,17 +75,27 @@ $subid=$this->subid;
                 <th >TURNO</th>
                 <th >RESOLUCION</th>
                 <th >NOTA</th>
+                <th >MODIFICAR</th>
         </tr>
         </thead>
     <?php
+    //print_r($this->cursosconvalidados);
     if ($this->cursosconvalidados)
     {
         $i=1;
        foreach ($this->cursosconvalidados as $convalidado)    
         {
+            $eid=$convalidado['eid'];
+            $oid=$convalidado['oid'];
             $escid=$convalidado['escid'];
             $courseid=$convalidado['courseid'];
             $curid=$convalidado['curid'];
+            $turno=$convalidado['turno'];
+            $regid=$convalidado['regid'];
+            $pid=$convalidado['pid'];
+            $uid=$convalidado['uid'];
+            $perid=$convalidado['perid'];
+            $subid=$convalidado['subid'];
 
             $curso = new Api_Model_DbTable_Course();
             $dat['eid']=$eid;
@@ -97,6 +107,19 @@ $subid=$this->subid;
             //print_r($dat);
             $list_curso = $curso ->_getOne($dat);
             $info = $list_curso['name'];
+            
+            $bestado = new Api_Model_DbTable_PeriodsCourses();
+            $dat1['eid']=$eid;
+            $dat1['oid']=$oid;
+            $dat1['courseid']=$courseid;
+            $dat1['escid']=$escid;
+            $dat1['perid']=$convalidado['perid'];
+            $dat1['turno']=$convalidado['turno'];
+            $dat1['subid']=$convalidado['subid'];
+            $dat1['curid']=$convalidado['curid'];
+            //print_r($dat1);
+            $infor = $bestado ->_getOne($dat1);
+            $estadoacta=$infor['state_record'];
            ?>
             <tr>
                 <td><?php echo $i;?></td>
@@ -107,6 +130,14 @@ $subid=$this->subid;
                 <td class="input-mini"><?php echo $convalidado['turno'];?></td>
                 <td class="span2"><?php echo $convalidado['document_auth'];?></td>
                 <td class="input-mini"><?php echo $convalidado['notafinal'];?></td>
+
+                <?php
+                 if ($estadoacta=='A'){
+                ?>
+                  <td><a href="/register/validation/update/escid/<?php print $escid?>/subid/<?php print $subid?>/regid/<?php print $regid?>/pid/<?php print $pid?>/uid/<?php print $uid?>/perid/<?php print $perid?>/courseid/<?php print $courseid?>/curid/<?php print $curid?>/turno/<?php print $turno?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <?php
+                 }
+                ?>
               </tr>
            <?php
              $i++;
