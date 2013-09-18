@@ -19,15 +19,16 @@ class Api_Model_DbTable_StudentAssistance extends Zend_Db_Table_Abstract
     }
     public function _update($data,$pk){
         try{
+
             if ($pk["eid"]=='' || $pk["oid"]=='' ||  $pk["escid"]=='' ||  $pk["subid"] =='' || 
                 $pk["coursoid"]=='' || $pk["curid"] =='' || $pk["turno"] =='' || $pk["perid"]=='' || 
                 $pk["uid"]=='' || $pk["pid"]=='' || $pk['regid']=='') return false;
 
                 $where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' 
-                    and subid='".$pk['subid']."' and courseid='".$pk['courseid']."' and curid='".$pk['curid']."'
+                    and subid='".$pk['subid']."' and coursoid='".$pk['coursoid']."' and curid='".$pk['curid']."'
                     and turno='".$pk['turno']."' and perid='".$pk['perid']."' and uid='".$pk['uid']."' 
                     and pid='".$pk['pid']."' and regid='".$pk['regid']."'";
-                    
+
             return $this->update($data, $where);
             return false;
         }catch (Exception $e){
