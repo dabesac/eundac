@@ -125,7 +125,6 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $a_sesion_7     = ((isset($params['a_sesion_7']) == true && (!empty($params['a_sesion_7']) ) )?trim($params['a_sesion_7']):'');
         $a_sesion_8     = ((isset($params['a_sesion_8']) == true && (!empty($params['a_sesion_8']) ) )?trim($params['a_sesion_8']):'');
         $a_sesion_9     = ((isset($params['a_sesion_9']) == true && (!empty($params['a_sesion_9']) ) )?trim($params['a_sesion_9']):'');
-        $a_sesion_9     = ((isset($params['a_sesion_9']) == true && (!empty($params['a_sesion_9']) ) )?trim($params['a_sesion_9']):'');
         $a_sesion_10     = ((isset($params['a_sesion_10']) == true && (!empty($params['a_sesion_10']) ) )?trim($params['a_sesion_10']):'');
         $a_sesion_11     = ((isset($params['a_sesion_11']) == true && (!empty($params['a_sesion_11']) ) )?trim($params['a_sesion_11']):'');
         $a_sesion_12     = ((isset($params['a_sesion_12']) == true && (!empty($params['a_sesion_12']) ) )?trim($params['a_sesion_12']):'');
@@ -255,6 +254,287 @@ class Assistance_StudentController extends Zend_Controller_Action {
         }
 
         // $a_sesion_1 = trim($params['']);
+        $this->_helper->layout->disableLayout();
+        $this->_response->setHeader('Content-Type', 'application/json');                   
+        $this->view->data = $json; 
+    }
+    public function retiredstudentAction()
+    {
+        $params = $this->getRequest()->getParams();
+            if(count($params) > 3){
+                $paramsdecode = array();
+                foreach ( $params as $key => $value ){
+                    if($key!="module" && $key!="controller" && $key!="action"){
+                        $paramsdecode[base64_decode($key)] = base64_decode($value);
+                    }
+                }
+                $params = $paramsdecode;
+            }
+        $where = null;
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $coursoid = trim($params['courseid']);
+        $curid = trim($params['curid']);
+        $turno = trim($params['turno']);
+        $regid = trim($params['regid']);
+        $uid = trim($params['uid']);
+        $pid = trim($params['pid']);
+        $escid = trim($params['escid']);
+        $subid = trim($params['subid']);
+        $perid = trim($params['perid']);
+        $partial = trim($params['partial']);
+        $action = trim($params['action']);
+
+        /***********sesion partial 1*******************/
+        $data = null;
+        $data_1 = null;
+        $type_course_1 = null;
+        $attib = array(
+            'type_rate'
+        );
+        $where = array( 
+                'eid' => $eid,'oid'=>$oid,
+                'courseid' =>$coursoid, 'turno' => $turno,
+                'curid' =>$curid, 
+                'escid'=>$escid, 'subid'=>$subid,
+                'perid'=>$perid,
+            );
+        $base_period_course = new Api_Model_DbTable_PeriodsCourses();
+        $type_course = $base_period_course->_getFilter($where,$attib);
+        $type_course_1 = $type_course[0]['type_rate']; 
+        if ($partial==1 && $action == 0) {
+            $data = array(
+                'a_sesion_1' => "R",
+                'a_sesion_2' => "R",
+                'a_sesion_3' => "R",
+                'a_sesion_4' => "R",
+                'a_sesion_5' => "R",
+                'a_sesion_6' => "R",
+                'a_sesion_7' => "R",
+                'a_sesion_8' => "R",
+                'a_sesion_9' => "R",
+                'a_sesion_10' => "R",
+                'a_sesion_11' => "R",
+                'a_sesion_12' => "R",
+                'a_sesion_13' => "R",
+                'a_sesion_14' => "R",
+                'a_sesion_15' => "R",
+                'a_sesion_16' => "R",
+                'a_sesion_17' => "R",
+                'a_sesion_18' => "R",
+                'a_sesion_19' => "R",
+                'a_sesion_20' => "R",
+                'a_sesion_21' => "R",
+                'a_sesion_23' => "R",
+                'a_sesion_24' => "R",
+                'a_sesion_25' => "R",
+                'a_sesion_26' => "R",
+                'a_sesion_27' => "R",
+                'a_sesion_28' => "R",
+                'a_sesion_29' => "R",
+                'a_sesion_30' => "R",
+                'a_sesion_31' => "R",
+                'a_sesion_32' => "R",
+                'a_sesion_33' => "R",
+                'a_sesion_34' => "R",
+                );
+            if ($type_course_1) {
+                if ($type_course_1 == 'O') {
+                    $data_1 = array(
+                        'promedio1'=>'-3',
+                        'promedio2'=>'-3',
+                        'notafinal'=>'-3',
+                    );
+                }
+            if ($type_course_1 == 'C') {
+                    $data_1 = array(
+                        'nota4_i'=>'-3',
+                        'nota9_i'=>'-3',
+                        'nota4_ii'=>'-3',
+                        'nota9_ii'=>'-3',
+                        'notafinal'=>'-3',
+                    );
+                }
+            }
+
+        }
+        if ($partial==1 && $action == 1) {
+            $data = array(
+                'a_sesion_1' => "",
+                'a_sesion_2' => "",
+                'a_sesion_3' => "",
+                'a_sesion_4' => "",
+                'a_sesion_5' => "",
+                'a_sesion_6' => "",
+                'a_sesion_7' => "",
+                'a_sesion_8' => "",
+                'a_sesion_9' => "",
+                'a_sesion_10' => "",
+                'a_sesion_11' => "",
+                'a_sesion_12' => "",
+                'a_sesion_13' => "",
+                'a_sesion_14' => "",
+                'a_sesion_15' => "",
+                'a_sesion_16' => "",
+                'a_sesion_17' => "",
+                'a_sesion_18' => "",
+                'a_sesion_19' => "",
+                'a_sesion_20' => "",
+                'a_sesion_21' => "",
+                'a_sesion_23' => "",
+                'a_sesion_24' => "",
+                'a_sesion_25' => "",
+                'a_sesion_26' => "",
+                'a_sesion_27' => "",
+                'a_sesion_28' => "",
+                'a_sesion_29' => "",
+                'a_sesion_30' => "",
+                'a_sesion_31' => "",
+                'a_sesion_32' => "",
+                'a_sesion_33' => "",
+                'a_sesion_34' => "",
+                );
+            if ($type_course_1) {
+                if ($type_course_1 == 'O') {
+                    $data_1 = array(
+                        'promedio1'=>"",
+                        'promedio2'=>"",
+                        'notafinal'=>"",
+                    );
+                }
+            if ($type_course_1 == 'C') {
+                    $data_1 = array(
+                        'nota4_i'=>"",
+                        'nota9_i'=>"",
+                        'nota4_ii'=>"",
+                        'nota9_ii'=>"",
+                        'notafinal'=>"",
+                    );
+                }
+            }
+        }
+        if ($partial == 2 && $action == 0) {
+            $data = array(
+                'a_sesion_18' => "R",
+                'a_sesion_19' => "R",
+                'a_sesion_20' => "R",
+                'a_sesion_21' => "R",
+                'a_sesion_22' => "R",
+                'a_sesion_23' => "R",
+                'a_sesion_24' => "R",
+                'a_sesion_25' => "R",
+                'a_sesion_26' => "R",
+                'a_sesion_27' => "R",
+                'a_sesion_28' => "R",
+                'a_sesion_29' => "R",
+                'a_sesion_30' => "R",
+                'a_sesion_31' => "R",
+                'a_sesion_32' => "R",
+                'a_sesion_33' => "R",
+                'a_sesion_34' => "R",
+                );
+            if ($type_course_1) {
+                if ($type_course_1 == 'O') {
+                    $data_1 = array(
+                        'promedio2'=>'-3',
+                        'notafinal'=>'-3',
+                    );
+                }
+            if ($type_course_1 == 'C') {
+                    $data_1 = array(
+                        'nota4_ii'=>'-3',
+                        'nota9_ii'=>'-3',
+                        'notafinal'=>'-3',
+                    );
+                }
+            }
+        }
+        if ($partial == 2 && $action == 1) {
+            $data = array(
+                'a_sesion_18' => "",
+                'a_sesion_19' => "",
+                'a_sesion_20' => "",
+                'a_sesion_21' => "",
+                'a_sesion_22' => "",
+                'a_sesion_23' => "",
+                'a_sesion_24' => "",
+                'a_sesion_25' => "",
+                'a_sesion_26' => "",
+                'a_sesion_27' => "",
+                'a_sesion_28' => "",
+                'a_sesion_29' => "",
+                'a_sesion_30' => "",
+                'a_sesion_31' => "",
+                'a_sesion_32' => "",
+                'a_sesion_33' => "",
+                'a_sesion_34' => "",
+                );
+            if ($type_course_1) {
+                if ($type_course_1 == 'O') {
+                    $data_1 = array(
+                        'promedio2'=>"",
+                        'notafinal'=>"",
+                    );
+                }
+            if ($type_course_1 == 'C') {
+                    $data_1 = array(
+                        'nota4_ii'=>"",
+                        'nota9_ii'=>"",
+                        'notafinal'=>"",
+                    );
+                }
+            }
+        }
+
+        if ($data) {
+
+            try {
+
+                $pk = array( 
+                'eid' => $eid,'oid'=>$oid,
+                'coursoid' =>$coursoid, 'turno' => $turno,
+                'curid' =>$curid, 'regid' => $regid,
+                'uid' => $uid, 'pid' =>$pid,
+                'escid'=>$escid, 'subid'=>$subid,
+                'perid'=>$perid,
+                );
+                $pk_1 = array( 
+                    'eid' => $eid,'oid'=>$oid,
+                    'courseid' =>$coursoid, 'turno' => $turno,
+                    'curid' =>$curid, 'regid' => $regid,
+                    'uid' => $uid, 'pid' =>$pid,
+                    'escid'=>$escid, 'subid'=>$subid,
+                    'perid'=>$perid,
+                );
+                $base_assistance = new Api_Model_DbTable_StudentAssistance();
+                $base_registration = new Api_Model_DbTable_Registrationxcourse();
+                if ($base_registration->_updatenoteregister($data_1,$pk_1)) {
+                    if ($base_assistance->_update($data,$pk)) {
+                        $json = array(
+                            'status'=>true,
+                        );  
+                     } 
+                }
+                else{
+                    $json = array(
+                        'status'=>false,
+                        );
+                }
+                
+            } catch (Exception $ex) {
+                $json = array(
+                    'status' => false,
+                    'error' => $ex, 
+                    );
+            }
+        }
+        else{
+
+            $json = array(
+                    'status'=>false,
+                );
+        }
+
         $this->_helper->layout->disableLayout();
         $this->_response->setHeader('Content-Type', 'application/json');                   
         $this->view->data = $json; 
