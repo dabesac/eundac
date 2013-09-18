@@ -35,7 +35,6 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $turno= trim($params['turno']);
         $perid = trim($params['perid']);
         $curid = trim($params['curid']);
-        $state = trim($params['state']);
 
         $this->view->turno = $turno;
         $this->view->perid = $perid;
@@ -70,12 +69,13 @@ class Assistance_StudentController extends Zend_Controller_Action {
                                             $info_student['first_name'];
             }
             $this->view->infoassist = $infoassist;
+            $this->view->state=$infoassist[0]['state'];
         }
 
         $data_period = $base_period->_getOne($where);
         if ($data_period) {
             $time = time();
-            //primer parcial
+            //primer pa
             if($time >= strtotime($data_period['start_register_note_p'])  && $time <= strtotime($data_period['end_register_note_p'])){
                $this->view->partial = 1;
             }else{
@@ -288,14 +288,12 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $where = array(
                 'eid' => $eid, 'oid' => $oid,
                 'escid' => $escid,'subid' => $subid,
-                'courseid' => $courseid,'turno' => $turno,
+                'coursoid' => $coursoid,'turno' => $turno,
                 'perid' => $perid,'curid'=>$curid,);
-        print_r($where); exit();
-        
-        $infoassist = $base_assistance ->_getAll($where);
-        if ($infoassist) {
-            $count = count($infoassist); 
 
+        $infoassist_t = $base_assistance ->_getAll($where);
+        if ($infoassist_t) {
+            $count = count($infoassist_t); 
             $assist_1 = 0; $assist_2 = 0; $assist_3 = 0;$assist_4 = 0;$assist_5 = 0;
             $assist_6 = 0; $assist_7 = 0; $assist_8 = 0;$assist_9 = 0;$assist_10 = 0;
             $assist_11 = 0; $assist_12 = 0; $assist_13 = 0;$assist_14 = 0;$assist_15 = 0;
@@ -304,9 +302,9 @@ class Assistance_StudentController extends Zend_Controller_Action {
             $assist_25 = 0; $assist_27 = 0; $assist_28 = 0;$assist_29 = 0;$assist_30 = 0;
             $assist_31 = 0; $assist_32 = 0; $assist_33 = 0;$assist_34 = 0;
 
-            foreach ($infoassist as $key => $value) {
+            foreach ($infoassist_t as $key => $infoassist) {
 
-                if ($parcial==1) {
+                if ($partial==1) {
                     if ($infoassist['a_sesion_1']=='R' || $infoassist['a_sesion_1']=='A' || $infoassist['a_sesion_1']=='F' || $infoassist['a_sesion_1']=='T') {
                         $assist_1++;
                     }
@@ -405,7 +403,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 if (
                     $count == $assist_18 && $count == $assist_19 && $count == $assist_20 && $count == $assist_21 &&
                     $count == $assist_22 && $count == $assist_23 && $count == $assist_24 && $count == $assist_25 &&
-                    $count == $assist_26 && $count == $assist_27 && $count == $assist_28 && $count == $assist_17 && 
+                    $count == $assist_26 && $count == $assist_27 && $count == $assist_28 && $count == $assist_29 && 
                     $count == $assist_30 && $count == $assist_31 && $count == $assist_32 && $count == $assist_33 && 
                     $count == $assist_34
                     ) {
@@ -414,17 +412,22 @@ class Assistance_StudentController extends Zend_Controller_Action {
                             );   
                     }
             }
-
             if ($data) {
                 try {
-                    if ($base_assistance->_update($data,$where)) {
+                    if ($base_assistance->_updateAll($data,$where)) {
                         $json = array(
                             'status' => true,
+                            );
+                    }
+                    else{
+                        $json = array(
+                            'status' => false,
                             );
                     }
                 } catch (Exception $e) {
                     $json = array(
                         'status'=>false,
+
                         );
                 }
             }else{
