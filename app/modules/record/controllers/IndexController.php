@@ -8,11 +8,12 @@ class Record_IndexController extends Zend_Controller_Action {
 		if(!$sesion->hasIdentity() ){
     		$this->_helper->redirector('index',"index",'default');
 		}
-    		$login = $sesion->getStorage()->read();
-    	$this->sesion = $login;
-    	if (isset($this->sesion->teacher)){
-    		$this->is_director=$this->sesion->teacher['is_director'];
+		$login = $sesion->getStorage()->read();
+		$this->is_director='N';
+    	if (($login->infouser['teacher']['is_director']=='S')){
+    		$this->is_director=$login->infouser['teacher']['is_director'];
     	}
+    	$this->sesion = $login;
     }
     
     public function indexAction()
@@ -53,6 +54,8 @@ class Record_IndexController extends Zend_Controller_Action {
 			if ($rowperiod ) $this->view->stateperiod=$rowperiod['state'];
 			unset($formData['year']);
 			$this->view->courses = $this->_loadCourses($formData);
+			$this->view->rid =$this->sesion->rid;
+
 		}
 				 
 		
