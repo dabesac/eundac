@@ -17,8 +17,11 @@
 	var $assist = {};
 	var $indicefa = -1;
 	var $tr = null;
+
 	/********************retirar-alumno*******************************/
 	function retired_assist (obj) {
+		$("#toserver").modal('show');
+
 		var $icon = $(obj);
 		var $parent = $(obj).parent();
 		var $parent = $parent.parent();
@@ -51,6 +54,7 @@
 		$assist[$.base64.encode('perid')]=$.base64.encode($.trim($parent.attr('perid')));
 		$assist[$.base64.encode('escid')]=$.base64.encode($.trim($parent.attr('escid')));
 		$assist[$.base64.encode('subid')]=$.base64.encode($.trim($parent.attr('subid')));
+		$assist[$.base64.encode('action')]=$.base64.encode($.trim($action));
 
 		$($parent[0].children).each(function(){
 	        if(this.firstElementChild != null){
@@ -64,16 +68,13 @@
                     	$checkbox.removeClass();
                     	$checkbox.addClass('inputassist  glyphicon glyphicon-registration-mark');
                     	$checkbox.attr('assistance','');
-                		$assist[$.base64.encode($name)]=$.base64.encode("R");
                     }
                     else
                     {
-                		$assist[$.base64.encode($name)]=$.base64.encode("");
                     	$checkbox.attr('disabled',false);
                     	$checkbox.removeClass();
                     	$checkbox.addClass('inputassist  glyphicon glyphicon-unchecked');
                     	$checkbox.attr('assistance','');
-                    	// $checkbox
                     }
 	            }
 	        }
@@ -85,23 +86,23 @@
 	    }
     	result = result.substring(0, result.length-1);
     	result = result + '/' + $.base64.encode('partial') + '/' + $.base64.encode($partial);
-    	var $url = '/assistance/student/savefile/' + result;
+    	var $url = '/assistance/student/retiredstudent/' + result;
     	$.ajax({
 	        url:$url,
 	        success:function($data){
-	        	// alert($data);
-	                if ($data.status == true) {
-	                	if ($action == '0'){
+                if ($data.status == true) {
+                	$(".modal-title").html("El Alumno fue Retirado");
+                }
+                else
+                {
+                	$(".modal-title").html("Error al Eliminar al Alumno");
+                }
 
-	                	}
-	                	if ($action == '1'){
-
-	                	}
-	                }
 	        },
 	        error:function($data){
 	                //Pintar el error
-	                alert($data.status)
+                	$(".modal-title").html("Erro en el Servidor");
+	                
 	        }
 	    });
     	$assist = {};
@@ -119,19 +120,26 @@
 		if ($value_1=="A"){
 			$("#index-"+$indexall+"-"+$index).removeClass("glyphicon-ok-circle");
 			$("#index-"+$indexall+"-"+$index).removeClass("text-primary");
+		}
+		else
+		{
+			$("#index-"+$indexall+"-"+$index).removeClass("glyphicon-unchecked");
 
 		}
 		if ($value_1=="F"){
 			$("#index-"+$indexall+"-"+$index).removeClass("glyphicon-remove-circle");
 			$("#index-"+$indexall+"-"+$index).removeClass("text-danger");
+		}else{
+			$("#index-"+$indexall+"-"+$index).removeClass("glyphicon-unchecked");
+
 		}
 		if ($value_1=="T"){
 			$("#index-"+$indexall+"-"+$index).removeClass("glyphicon-copyright-mark");
 			$("#index-"+$indexall+"-"+$index).removeClass("text-success");
-		}
-		if ($value_1==" "){
+		}else{
 			$("#index-"+$indexall+"-"+$index).removeClass("glyphicon-unchecked");
 		}
+		
 		/*********add class*********/
 
 		if ($value == "A"){
@@ -367,14 +375,14 @@
 			<?if($this->partial==2){
 				echo "Segundo Parcial";
 			}?>
-			
+
 			<?php echo $infocourse['name']?> Turno <?php echo $this->turno?> 
 			
 		</h4>
 
 	</div>
 	<div class="col-md-4">
-		<?php if ($this->state != 'C') { ?>
+		<?php if ($this->state == 'A' || $this->state=='P') { ?>
 			<buttom  class='btn btn-info ' id='save_assistance' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
 		
 		<buttom  class='btn btn-danger' id='closure-assistance' onclick='closureassistance(this);'
@@ -3450,6 +3458,7 @@ if ($this->infoassist) { ?>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
+      	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title">Enviado al Servidor</h4>
       </div>
     </div><!-- /.modal-content -->
