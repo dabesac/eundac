@@ -16,7 +16,7 @@ class Profile_PublicController extends Zend_Controller_Action {
 
     public function indexAction()
     {
-        echo "fsfs";
+
     }
 
     public function studentAction()
@@ -61,7 +61,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $datos[0]=array("fullname"=>$fullname, "uid"=>$uid, "pid"=>$pid, "birthday"=>$dateborn);
             
             $dbperson=new Api_Model_DbTable_Person();
-            $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid);
+            $where=array("eid"=>$eid, "pid"=>$pid);
             $datos[3]=$dbperson->_getOne($where);
            
             $dbdetingreso=new Api_Model_DbTable_Studentsignin();
@@ -72,6 +72,50 @@ class Profile_PublicController extends Zend_Controller_Action {
             $this->view->datos=$datos;
         }catch(exception $e){
             print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function studenteditinfoAction(){
+        try{
+            $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $pid=$this->sesion->pid;
+
+            $dbperson=new Api_Model_DbTable_Person();
+            $where=array("eid"=>$eid, "pid"=>$pid);
+            $person=$dbperson->_getOne($where);
+            //print_r($person);
+
+            $form= new Profile_Form_Userinfo();
+            $this->view->form=$form;
+            $form->populate($person);
+
+            if ($this->getRequest()->isPost())
+            {
+                $formdata = $this->getRequest()->getPost();
+                if ($form->isValid($formdata))
+                { 
+                    unset($formdata['save']);
+                    trim($formdata['numdoc']);
+                    trim($formdata['birthday']);
+                    trim($formdata['sex']);
+                    trim($formdata['civil']);
+                    trim($formdata['mail_person']);
+                    trim($formdata['mail_work']);
+                    trim($formdata['phone']);
+                    trim($formdata['cellular']);
+                    //print_r($formdata);
+                    $upduser=$dbperson->_update($formdata, $where);
+                    $this->_redirect("/profile/public/student");
+                }
+                else
+                {
+                    echo "Ingrese Nuevamente";
+                }
+            }
+
+        }catch(exception $e){
+            print "Error ".$e->getMessage();
         }
     }
 

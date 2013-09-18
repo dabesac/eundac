@@ -20,10 +20,10 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		try {
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
-			// $escid=$this->sesion->escid;
-			$escid='4SI';
-			$perid='13A';
-			// $perid=$this->sesion->period->perid;
+			$escid=$this->sesion->escid;
+			// $escid='4SI';
+			// $perid='13A';
+			$perid=$this->sesion->period->perid;
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'perid'=>$perid);
 			$sem= new Api_Model_DbTable_Semester();
 			$dsem=$sem->_getSemesterXPeriodsXEscid($where);

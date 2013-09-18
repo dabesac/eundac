@@ -384,14 +384,16 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="assistance/student";
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
-    			$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
+    			
     			$acls[]= array("controller"=>"docente/notas","name"=>"Asignaturas a Cargo","imgicon"=>"list");
     			$acls[]= array("controller"=>"horary/semester","name"=>"Ver Horarios Sem.","imgicon"=>"calendar");
     			$resource1[]="docente/notas";
     			$resource1[]="horary/semester";
-    			$resource1[]="record/index";
+    			
     			
     			if (($login->infouser['teacher']['is_director']=="S")){
+    				$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
+    				$resource1[]="record/index";
     				$acls[]= array("controller"=>"horary/nhorary","name"=>"Crear Horario","imgicon"=>"file");
     				$resource1[]="horary/nhorary";
     			}
