@@ -69,7 +69,11 @@ class Record_DirectedController extends Zend_Controller_Action {
             $cur0=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
             $wherecur['state']="T";
             $cur1=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
-            $cur=array_merge($cur0,$cur1);
+            if ($cur0) {
+                if ($cur1) $cur=array_merge($cur0,$cur1);
+                else $cur=$cur0;
+            }
+            elseif ($cur1) $cur=$cur1;
             $this->view->curriculas=$cur;
 
             $wheresc['eid']=$eid;
@@ -211,21 +215,44 @@ class Record_DirectedController extends Zend_Controller_Action {
             $eid= $this->sesion->eid;
             $oid= $this->sesion->oid;
             $uidreg= $this->sesion->uid;
-            $uid = $this->_getParam("uid");
-            $pid = $this->_getParam("pid");
-            $escid = $this->_getParam("escid");
-            $subid = $this->_getParam("subid");
-            $perid = $this->_getParam("perid");
-            $curid = $this->_getParam("curid");
-            $nota = $this->_getParam("nota");
-            $semid = $this->_getParam("semid");
-            $reso = base64_decode($this->_getParam("reso"));
-            $recibo = $this->_getParam("recibo");
-            $courseid = $this->_getParam("courseid");
-            $turno = $this->_getParam("turno");
-            $credits = $this->_getParam("credits");
-            $uid_doc = $this->_getParam("uid_doc");
-            $pid_doc = $this->_getParam("pid_doc");
+            if ($this->getRequest()->isPost())
+            {
+                $formdata = $this->getRequest()->getPost();
+                $uid = $formdata['uid'];
+                $pid = $formdata['pid'];
+                $escid = $formdata['escid'];
+                $subid = $formdata['subid'];
+                $perid = $formdata['perid'];
+                $turno = $formdata['turno'];
+                $nota = $formdata['nota'];
+                $recibo = $formdata['recibo'];
+                $reso = $formdata['resolucion'];
+
+                $tmpcourseid = split('--', $formdata['courseid']);
+                $courseid = $tmpcourseid[0];
+                $curid = $tmpcourseid[1];
+                $semid = $tmpcourseid[2];
+                $credits = $tmpcourseid[3];
+
+                $tmpdocente_reg = split(';--;', $formdata['docente_reg']);
+                $uid_doc = $tmpdocente_reg[0];
+                $pid_doc = $tmpdocente_reg[1];
+            }
+            // $uid = $this->_getParam("uid");
+            // $pid = $this->_getParam("pid");
+            // $escid = $this->_getParam("escid");
+            // $subid = $this->_getParam("subid");
+            // $perid = $this->_getParam("perid");
+            // $curid = $this->_getParam("curid");
+            // $nota = $this->_getParam("nota");
+            // $semid = $this->_getParam("semid");
+            // $reso = base64_decode($this->_getParam("reso"));
+            // $recibo = $this->_getParam("recibo");
+            // $courseid = $this->_getParam("courseid");
+            // $turno = $this->_getParam("turno");
+            // $credits = $this->_getParam("credits");
+            // $uid_doc = $this->_getParam("uid_doc");
+            // $pid_doc = $this->_getParam("pid_doc");
          
             $regid=$uid.$perid;
             $this->view->uid = $uid;

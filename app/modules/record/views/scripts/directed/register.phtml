@@ -1,4 +1,5 @@
 <div id="Datos">
+    <form id="frmdirected" name="frmdirected" action="/record/directed/savedirected/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
     <table class="table table-hover">
         <tr>
             <th><center>Currículas</center></th>
@@ -17,7 +18,7 @@
                 </select>
             </td>
             <td>
-                <select id="courseid" class="form-control">
+                <select id="courseid" name="courseid" class="form-control">
                     <option value="">- Seleccione Asignatura -</option>
                 </select>
             </td>
@@ -41,17 +42,17 @@
         <tr>
             <td>
                 <center>
-                    <input type="text" id="nota" class="form-control" style="width:50px" onkeypress="return soloNumero(event)"><label class="msg text-error"></label>
+                    <input type="text" id="nota" name="nota" class="form-control" style="width:50px" onkeypress="return soloNumero(event)"><label class="msg text-error"></label>
                 </center>
             </td>
             <td>
                 <center>
-                    <input type="text" id="recibo" class="form-control" onBlur="CheckUserName(this);" style="width:200px" onkeypress="return soloNumero(event)">
+                    <input type="text" id="recibo" name="recibo" class="form-control" onBlur="CheckUserName(this);" style="width:200px" onkeypress="return soloNumero(event)">
                 </center>
             </td>
             <td colspan="3">
                 <center>
-                    <input type="text" id="resolucion" class="form-control" style="width:350px">
+                    <input type="text" id="resolucion" name="resolucion" class="form-control" style="width:350px">
                 </center>
             </td>
         </tr>
@@ -63,7 +64,7 @@
         <tr>
             <td>
                 <center>
-                    <select id="turno" class="form-control" style="width:80px">
+                    <select id="turno" name="turno" class="form-control" style="width:80px">
                         <option value="A">A</option>
                         <option value="B">B</option>
                         <option value="C">C</option>
@@ -99,7 +100,7 @@
             </td>
             <td colspan="3">
                 <center>
-                    <select id='docente_reg' class="form-control" style="width:350px">
+                    <select id='docente_reg' name='docente_reg' class="form-control" style="width:350px">
                         <option value="">- Seleccione Docente -</option>
                     </select>
                 </center>
@@ -112,7 +113,13 @@
                 </center>
             </td>
         </tr>
+        <input type="hidden" name="perid" value="<?php echo $this->perid?>">
+        <input type="hidden" name="subid" value="<?php echo $this->subid?>">
+        <input type="hidden" name="escid" value="<?php echo $this->escid?>">
+        <input type="hidden" name="uid" value="<?php echo $this->uid?>">
+        <input type="hidden" name="pid" value="<?php echo $this->pid?>">
     </table>
+    </form>
     <div id="header_cursos"></div>
     <div id="header_alumnos"></div>
     <div id="header_modify"></div>
@@ -267,7 +274,7 @@ if ($this->cursosconvalidados){ ?>
 $("#f_acta").datepicker();
 
 $("#savemodify").click(function(){
-    $("#header_cursos").hide();
+    // $("#header_cursos").hide();
     $("#lista").hide();
     $("#listam").hide();
     $("#listag").hide();
@@ -280,7 +287,7 @@ $('#frmmodifyregister').submit(function() {
         url: $(this).attr('action'),
         data: $(this).serialize(),
         success: function(data) { 
-            $('#header_modify').html(data);  
+            $('#header_cursos').html(data);  
         }
     });          
     return false;
@@ -329,42 +336,63 @@ $("#escid").change(function(){
 });
 
 $("#registerstudent").click(function(){
-    var perid = "<?php echo $this->perid?>";
-    var subid = "<?php echo $this->subid?>";
-    var escid = "<?php echo $this->escid?>";
-    var uid = "<?php echo $this->uid?>";
-    var pid = "<?php echo $this->pid?>";
-    var nota = $("#nota").val();
-    var recibo = $("#recibo").val();
-    var reso = $("#resolucion").val();
-    var turno = $("#turno").val();
-
-    var course = $("#courseid").val();
-    var tmpp = course.split('--');
-    var courseid = tmpp[0];
-    var curid = tmpp[1];
-    var semid = tmpp[2];
-    var credits = tmpp[3];
-
-    var docente = $("#docente_reg").val();
-    var tmp=docente.split(";--;");
-    var uid_doc=tmp[0];
-    var pid_doc=tmp[1];
-
-    if (course!='' && nota!='' && reso!='' && recibo!='' && turno!='' && docente!=''){
-        $("#header_cursos").hide();
-        $("#lista").hide();
-        $("#listam").hide();
-        $("#listag").hide();
-        var url = "/record/directed/savedirected/subid/"+subid+"/escid/"+escid+"/uid/"+uid+"/pid/"+pid+"/curid/"+curid+"/courseid/"+courseid+"/semid/"+semid+"/credits/"+credits+"/nota/"+nota+"/reso/"+$.base64.encode(reso)+"/perid/"+perid+"/turno/"+turno+"/uid_doc/"+uid_doc+"/pid_doc/"+pid_doc+"/recibo/"+recibo;
-        // alert(url);
-        $("#header_alumnos").html("<img src='/img/spinner.gif'>Cargando..."); 
-        $("#header_alumnos").load(url);
-    }else{
-        alert("Ingrese todos los datos Obligatorios.");
-        return false;
-    };
+    $("#header_alumnos").html("<img src='/img/spinner.gif'>Cargando..."); 
+    $('#frmdirected').submit();
 });
+
+$('#frmdirected').submit(function() {  
+    $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(data) { 
+            $("#header_cursos").hide();
+            $("#lista").hide();
+            $("#listam").hide();
+            $("#listag").hide();
+            $('#header_alumnos').html(data);
+        }
+    });          
+    return false;
+});
+
+// $("#registerstudent").click(function(){
+//     var perid = "<?php echo $this->perid?>";
+//     var subid = "<?php echo $this->subid?>";
+//     var escid = "<?php echo $this->escid?>";
+//     var uid = "<?php echo $this->uid?>";
+//     var pid = "<?php echo $this->pid?>";
+//     var nota = $("#nota").val();
+//     var recibo = $("#recibo").val();
+//     var reso = $("#resolucion").val();
+//     var turno = $("#turno").val();
+
+//     var course = $("#courseid").val();
+//     var tmpp = course.split('--');
+//     var courseid = tmpp[0];
+//     var curid = tmpp[1];
+//     var semid = tmpp[2];
+//     var credits = tmpp[3];
+
+//     var docente = $("#docente_reg").val();
+//     var tmp=docente.split(";--;");
+//     var uid_doc=tmp[0];
+//     var pid_doc=tmp[1];
+
+//     if (course!='' && nota!='' && reso!='' && recibo!='' && turno!='' && docente!=''){
+//         $("#header_cursos").hide();
+//         $("#lista").hide();
+//         $("#listam").hide();
+//         $("#listag").hide();
+//         var url = "/record/directed/savedirected/subid/"+subid+"/escid/"+escid+"/uid/"+uid+"/pid/"+pid+"/curid/"+curid+"/courseid/"+courseid+"/semid/"+semid+"/credits/"+credits+"/nota/"+nota+"/reso/"+$.base64.encode(reso)+"/perid/"+perid+"/turno/"+turno+"/uid_doc/"+uid_doc+"/pid_doc/"+pid_doc+"/recibo/"+recibo;
+//         // alert(url);
+//         $("#header_alumnos").html("<img src='/img/spinner.gif'>Cargando..."); 
+//         $("#header_alumnos").load(url);
+//     }else{
+//         alert("Ingrese todos los datos Obligatorios.");
+//         return false;
+//     };
+// });
 
 $("#closerecord").click(function(){
     var f_acta = $("#f_acta").val();
@@ -384,7 +412,7 @@ $("#closerecord").click(function(){
     var f_acta = tmp[2]+"-"+tmp[1]+"-"+tmp[0];
     var url = "/record/directed/modifyregister/courseid/"+courseid+"/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/curid/"+curid+"/turno/"+turno+"/uid/"+uid+"/pid/"+pid+"/f_acta/"+f_acta+"/option/C";
     // alert(url);
-    $("#header_cursos").hide();
+    // $("#header_cursos").hide();
     $("#lista").hide();
     $("#listam").hide();
     $("#listag").hide();
@@ -392,7 +420,7 @@ $("#closerecord").click(function(){
     $("#header_alumnos").load(url);
 });
 
-$("#nota").blur(function(){
+$("#nota, #notamodify").blur(function(){
     var vnota = $(this).val();
     if ( vnota > 20 || vnota < -3 ){
         $("#nota").val("");
@@ -401,24 +429,24 @@ $("#nota").blur(function(){
 });
 
 var total_letras_notas = 2;
-$('#nota').keyup(function(){
+$('#nota, #notamodify').keyup(function(){
     var longitud = $(this).val().length;
     var resto = total_letras_notas - longitud;
     $('#numero').html(resto);
-    if(resto <= 0) $('#nota').attr("maxlength", 2);
+    if(resto <= 0) $('#nota, #notamodify').attr("maxlength", 2);
 });
 
 var total_letras_recibo = 12;
-$('#recibo').keyup(function(){
+$('#recibo, #recibomodify').keyup(function(){
     var longi = $(this).val().length;
     var rest = total_letras_recibo - longi;
     $('#numero').html(rest);
-    if(rest <= 0) $('#recibo').attr("maxlength", 12);
+    if(rest <= 0) $('#recibo, #recibomodify').attr("maxlength", 12);
 });
 
-$("#resolucion").keyup(function(){
+$("#resolucion, #resolmodify").keyup(function(){
     var r = $(this).val();
-    $("#resolucion").val(r.toUpperCase());
+    $("#resolucion, #resolmodify").val(r.toUpperCase());
 });
 
 function CheckUserName(ele) {
