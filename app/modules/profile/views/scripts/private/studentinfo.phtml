@@ -142,37 +142,6 @@
 </div><!-- main info -->
 
 <div id="datastudent"></div>
-<div id="editform"></div>
-
-<div class="col-sm-9" align="center" id="editdata"><!-- Botones para Editar los datos -->
-  <br><br>
-  <div class="col-sm-3"></div>
-    <div class="col-sm-6">
-        <table class="table">
-            <tr>
-                <th>Editar</th>
-            </tr>
-            <td>
-                <ul class="nav nav-pills nav-stacked" id="editpalBtns">
-                    <li><a href="#" id="editmaininfo" class="btn btn-block"><h5>Informacion Principal</h5></a></li>
-                    <li><a href="" id="editacadata" class="btn btn-block"><h5>Datos Academicos</h5></a></li>
-                     <li><a href="" id="#" class="btn btn-block"><h5>Datos Laborales</h5></a></li>
-                     <li class="hidden"><a></a></li>
-                </ul>
-            </td>
-            <td>
-                <ul class="nav nav-pills nav-stacked" id="editpalBtns2">
-                    <li><a href="" id="editfamily" class="btn btn-block"><h5>Familia</h5></a></li>
-                    <li><a href="" id="" class="btn btn-block"><h5>Datos Estadisticos</h5></a></li>
-                    <li><a href="" id="" class="btn btn-block"><h5>Intereses</h5></a></li>
-                    <li class="hidden"><a></a></li>
-                </ul>
-            </td>
-        </table>
-    </div>
-    <div class="col-sm-3"></div>
-</div>
-
 </div><!-- div col 9 -->
 
 <div class="col-sm-3">
@@ -190,74 +159,53 @@
     <li class="hidden"><a></a></li>
   </ul>
   <br>
-  <ul class="nav nav-pills nav-stacked" id="editprofileTab">
-    <li><a href="#" id="btneditdata">Actualizar Perfil</a></li>
-    <li class="hidden"><a></a></li>
-  </ul>
 </div>
 </div><!-- div row -->
 
 <script>
   $("#btnprofile").addClass("hidden")
-  $("#editdata").addClass("hidden")
 
   $('#masinfoTab a').click(function (e) {
     e.preventDefault()
     $("#maininfo").addClass("hidden")
-    $('#editprofileTab a:last').tab('show')
     $('#editpalBtns a:last').tab('show')
     $('#editpalBtns2 a:last').tab('show')
     $("#datastudent").removeClass("hidden")
-    $("#editdata").addClass("hidden")
-    $("#editform").html("")
     $("#btnprofile").removeClass("hidden")
     $(this).tab('show')
   })
 
   $('#backprofileTab a').click(function (e) {
     e.preventDefault()
-    $("#editdata").addClass("hidden")
-    $("#editform").html("")
     $('#masinfoTab a:last').tab('show')
     $('#editpalBtns a:last').tab('show')
     $('#editpalBtns2 a:last').tab('show')
-    $('#editprofileTab a:last').tab('show')
   })
 
-  $('#editprofileTab a').click(function (e) {
-    e.preventDefault()
-    $("#btnprofile").removeClass("hidden")
-    $('#masinfoTab a:last').tab('show')
-    $("#maininfo").addClass("hidden")
-    $("#datastudent").html("")
-    $("#editdata").removeClass("hidden")
-    $(this).tab('show')
-  })
-
-
+ 
   $("#btnfamily").click(function(){
     $("#datastudent").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datastudent").load("/profile/public/studentfamily");
+    $("#datastudent").load("/profile/private/studentfamily/eid/<?echo $this->data['eid']?>/pid/<?echo $this->data['pid']?>");
   })
 
   $("#btnacademic").click(function(){
     $("#datastudent").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datastudent").load("/profile/public/studentacademic");
+    $("#datastudent").load("/profile/private/studentacademic/eid/<?echo $this->data['eid']?>/pid/<?echo $this->data['pid']?>");
   })
 
   $("#btnstadistic").click(function(){
     $("#datastudent").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datastudent").load("/profile/public/studentstatistic");
+    $("#datastudent").load("/profile/private/studentstatistic");
   })
 
   $("#btnlaboral").click(function(){
     $("#datastudent").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datastudent").load("/profile/public/studentlaboral");
+    $("#datastudent").load("/profile/private/studentlaboral/eid/<?echo $this->data['eid']?>/pid/<?echo $this->data['pid']?>");
   })
 
   $("#btninters").click(function(){
     $("#datastudent").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datastudent").load("/profile/public/studentinterest");
+    $("#datastudent").load("/profile/private/studentinterest/eid/<?echo $this->data['eid']?>/pid/<?echo $this->data['pid']?>");
   })
 
   $("#btnprofile").click(function(){
@@ -265,31 +213,5 @@
     $("#maininfo").removeClass("hidden")
     $("#btnprofile").addClass("hidden")
   })
-
-  //Editar Informacion
-
-  $('#editpalBtns a').click(function (e) {
-    e.preventDefault()
-    $(this).tab('show')
-  })
-  $('#editpalBtns2 a').click(function (e) {
-    e.preventDefault()
-    $(this).tab('show')
-  })
-
- 
-
-  $("#editmaininfo").click(function(){
-    $("#editdata").addClass("hidden")
-    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#editform").load("/profile/public/studenteditinfo")
-  })
-
-   $("#editfamily").click(function(){
-    $("#editdata").addClass("hidden")
-    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#editform").load("/profile/public/studenteditfamily")
-  })
-
 
 </script>
