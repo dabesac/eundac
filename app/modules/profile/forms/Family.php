@@ -14,14 +14,14 @@ class Profile_Form_Family extends Zend_Form{
         
         $last_name= new Zend_Form_Element_Text('last_name');
         $last_name->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $last_name->setAttrib("maxlength", "30")->setAttrib("size", "50");
+        $last_name->setAttrib("maxlength", "30")->setAttrib("size", "30");
         $last_name->setRequired(true)->addErrorMessage('Este campo es requerido');
         $last_name->setAttrib("title","Apellidos");
         $last_name->setAttrib("class","input-sm");
 
         $first_name= new Zend_Form_Element_Text('first_name');
         $first_name->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $first_name->setAttrib("maxlength", "30")->setAttrib("size", "50");
+        $first_name->setAttrib("maxlength", "30")->setAttrib("size", "30");
         $first_name->setRequired(true)->addErrorMessage('Este campo es requerido');
         $first_name->setAttrib("title","Nombres");
         $first_name->setAttrib("class","input-sm");
@@ -58,14 +58,14 @@ class Profile_Form_Family extends Zend_Form{
 
         $birthday= new Zend_Form_Element_Text("birthday");
         $birthday->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $birthday->setAttrib("maxlength", "10")->setAttrib("size", "50");
+        $birthday->setAttrib("maxlength", "10")->setAttrib("size", "30");
         $birthday->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $birthday->setAttrib("title","Birthday");
         $birthday->setAttrib("class","input-sm");
 
         $ocupacy= new Zend_Form_Element_Text('ocupacy');
         $ocupacy->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $ocupacy->setAttrib("maxlength", "30")->setAttrib("size", "50");
+        $ocupacy->setAttrib("maxlength", "30")->setAttrib("size", "30");
         $ocupacy->setRequired(true)->addErrorMessage('Este campo es requerido');
         $ocupacy->setAttrib("title","Ocupacion");
         $ocupacy->setAttrib("class","input-sm");
@@ -79,14 +79,14 @@ class Profile_Form_Family extends Zend_Form{
 
         $phone= new Zend_Form_Element_Text('phone');
         $phone->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $phone->setAttrib("maxlength", "9")->setAttrib("size", "50");
+        $phone->setAttrib("maxlength", "9")->setAttrib("size", "30");
         $phone->setRequired(true)->addErrorMessage('Este campo es requerido');
         $phone->setAttrib("title","phone");
         $phone->setAttrib("class","input-sm");
 
         $address= new Zend_Form_Element_Text('address');
         $address->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $address->setAttrib("maxlength", "30")->setAttrib("size", "50");
+        $address->setAttrib("maxlength", "30")->setAttrib("size", "30");
         $address->setRequired(true)->addErrorMessage('Este campo es requerido');
         $address->setAttrib("title","Direccion");
         $address->setAttrib("class","input-sm");

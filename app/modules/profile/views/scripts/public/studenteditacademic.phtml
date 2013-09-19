@@ -5,4 +5,35 @@
 <form name="<?php echo $this->form->getName(); ?>" action="/profile/public/studenteditacademic" method="post" enctype="application/x-www-form-urlencoded">
 
 <div class="col-sm-12">
-	<h4>Informacion Academica</h4>
+	<h4>Informacion Familiar</h4>
+	<table class="table">
+		<tr>
+			<td><label>Parentesco</label><?print $this->form->type?></td>
+		</tr>
+		
+	</table>
+</div>
+
+<script>
+	$("#moreinfo").addClass("hidden");
+	$("#live").change(function(){
+		$("#live option:selected").each(function(){
+			var livevar=$(this).val();
+		if (livevar=="S") {
+			$("#moreinfo").removeClass("hidden");
+		};
+		if (livevar=="N") {
+			$("#moreinfo").addClass("hidden");
+		};
+		})
+	})
+	
+	$('#backeditBtn a').click(function (e) {
+    	e.preventDefault()
+      	$("#editform").html("")
+      	$("#editdata").removeClass("hidden")
+      	$('#editpalBtns a:last').tab('show')
+      	$('#editpalBtns2 a:last').tab('show')
+  	})
+   
+</script>
