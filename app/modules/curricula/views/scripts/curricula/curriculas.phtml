@@ -54,7 +54,11 @@ if ($this->curriculas) { ?>
 						}?>
 					</td>
 					<td>
-						<a href="#" title="Imprimir la Currícula" rel="tooltip"><i class="icon icon-print"></i><span class="glyphicon glyphicon-print"></span></a>
+						<a href="/curricula/show/print/curid/<?php echo base64_encode($curriculas['curid'])?>
+						/escid/<?php echo base64_encode($curriculas['escid'])?>
+						/subid/<?php echo base64_encode($curriculas['subid'])?>" title="Imprimir la Currícula" rel="tooltip">
+						<i class="icon icon-print"></i><span class="glyphicon glyphicon-print"></span>
+						</a>
 					</td>
 				</tr>
 				<script type="text/javascript">

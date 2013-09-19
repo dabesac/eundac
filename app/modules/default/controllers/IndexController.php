@@ -290,9 +290,12 @@ class IndexController extends Zend_Controller_Action {
     	$resource1[]="default/password";
     	$resource1[]="register/registerealized";
     	
+    	
     	switch ($rid){
     		case "AD":{
-    			$resource1[]="assistance/student";
+    			$resource1[]="profile/search";
+    			$resource1[]="profile/changecurricula";
+    			
     			$modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
     			$acls[]= array("controller"=>"admin/receiptsup","name"=>"Cargar Recibos","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/password","name"=>"Cambiar Clave","imgicon"=>"calendar");
@@ -320,6 +323,9 @@ class IndexController extends Zend_Controller_Action {
     			break;
     		}
     		case "SP":{
+    			$resource1[]="profile/search";
+    			$resource1[]="profile/changecurricula";
+    			
     			$modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
     			$acls[]= array("controller"=>"admin/receipts","name"=>"Cargar Recibos","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/password/search","name"=>"Cambiar Clave","imgicon"=>"calendar");
@@ -360,7 +366,6 @@ class IndexController extends Zend_Controller_Action {
     		
     		case "AL": {
     			$resource1[]="alumno/index";
-    			$resource1[]="assistence/student";
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"register/listcurrentnotes","name"=>"Asignaturas Actuales","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"horary/consolidated","name"=>"Ver Horario","imgicon"=>"calendar");
@@ -381,6 +386,7 @@ class IndexController extends Zend_Controller_Action {
     		case "DC":{
     			$resource1[]="docente/index";
     			$resource1[]="syllabus/syllabus";
+    			$resource1[]="syllabus/print";
     			$resource1[]="assistance/student";
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
@@ -461,6 +467,8 @@ class IndexController extends Zend_Controller_Action {
     		case "RC":{
     			$resource1[]="rcentral/index";
     			$resource1[]="profile/search";
+    			$resource1[]="profile/changecurricula";
+    			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
     			$acls[]= array("controller"=>"curricula/curricula","name"=>"Adm. Curriculas.","imgicon"=>"list");
