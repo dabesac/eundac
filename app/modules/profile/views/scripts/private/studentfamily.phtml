@@ -1,0 +1,74 @@
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h4>Datos Familiares</h4>
+  </div>
+
+  <div class="panel-body">
+    <?php if($this->famdata){
+    	$c=0;?>
+    	<?php foreach ($this->famdata as $fam) {?>
+    	<div class="panel panel-default">
+    		<div class="panel-heading">
+    			Nombre <h5><b><?php echo $fam[0]['lastname']." ".$fam[0]['firtsname']?></b></h5>
+  			</div>
+    		<div class="panel-body">
+    		<table class="table">
+		    	<tr>
+		    		<td>Parentesco
+		    		<h5><b>
+		    		<?php if($this->famrel[$c]['type']=="P"){
+		    			echo "Padre";
+		    		}elseif($this->famrel[$c]['type']=="M"){
+						echo "Madre";
+		    		}
+		    		$c++;?>
+		    		</b></h5>
+		    		</td>
+		    		<?php if($fam[0]['typedoc']=="D"){?>
+		    			<td>DNI <h5><b><?php echo $fam[0]['numdoc']?></b></h5></td>
+		    		<?php }else{?>
+						<td>Pasaporte <h5><b><?php echo $fam[0]['numdoc']?></b></h5></td>
+		    		<?php }?>
+		    	</tr>
+		    	<tr>
+		    		<td>Ocupacion <h5><b><?php echo $fam[0]['ocupacy']?></b></h5></td>
+		    		<td>Fecha de Nacimiento <h5><b><?php echo $fam[0]['birthday']?></b></h5></td>
+		    	</tr>
+		    	<tr>
+		    		<td>Telefono/Celular <h5><b><?php echo $fam[0]['phone']?></b></h5></td>
+		    		<td>Direccion <h5><b><?php echo $fam[0]['address']?></b></h5></td>
+		    	</tr>
+		    	<tr>
+		    		<td>
+		    			Vive?
+		    			<h5><b>
+		    			<?php if($fam[0]['live']=="S"){
+		    				echo "Si";
+		    			}else{
+							echo "No";
+		    			}?>
+		    			</b></h5>
+		    		</td>
+		    		<td>
+	    				<?php if($fam[0]['live']=="S"){?>
+		    			Sufre de alguna Enfermedad?
+		    			<h5><b>
+							<?php if($fam[0]['health']=="S"){
+		    					echo "Si";
+		    				}else{
+								echo "No";
+		    				}
+		    			}?>	
+		    			</b></h5>	    		
+		    		</td>
+		    	</tr>
+    		</table>
+    		</div>
+		</div>
+		<?php }?>
+    <?php }else{?>
+      <center><h5>No tiene Datos, Sugerir que Actualize su Perfil</h5></center>
+    <?}?>
+  </div>
+
+</div>

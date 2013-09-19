@@ -144,6 +144,16 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
+    public function studenteditfamilyAction(){
+        try{
+            $this->_helper->layout()->disableLayout();
+            $form=new Profile_Form_Family();
+            $this->view->form=$form;
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+
     public function studentacademicAction()
     {
         try{
@@ -157,6 +167,16 @@ class Profile_PublicController extends Zend_Controller_Action {
             //print_r($acadata);
             $this->view->acadata=$acadata;
 
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+
+    public function studenteditacademicAction(){
+        try{
+            $this->_helper->layout()->disableLayout();
+            $form=new Profile_Form_Academic();
+            $this->view->form=$form;
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
