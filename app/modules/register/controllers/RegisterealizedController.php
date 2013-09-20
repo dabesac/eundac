@@ -15,7 +15,7 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 
 	public function indexAction(){
 		try {
-			$this->_helper->layout()->disableLayout();
+			// $this->_helper->layout()->disableLayout();
            	$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
 			$perid=$this->sesion->period->perid;
@@ -54,7 +54,7 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 				$dasd=$dbperiod->_getFilter($whered,$attrib);
 				$newperiod[$f]=$dasd[0];
 			}
-			// print_r($newperiod);s
+			
 			for ($i=0; $i < $len; $i++) {
 				$courseid=$data[$i]['courseid'];
 				$whered=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid);
@@ -62,8 +62,6 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 				$datac=$dbcourse->_getFilter($whered,$attrib);
 				$datacourse[$i]=$datac[0];
 			}
-			// print_r($datacourse);
-			// print_r($data);exit();
 			$this->view->newperiod=$newperiod;
 			$this->view->datacourse=$datacourse;
 			$this->view->data=$data;

@@ -14,6 +14,20 @@
 	    float:left;
 	    margin-right: 12px;
 	}
+	.cajaday{
+		
+		width:12%;
+	    height: 30px;
+	    line-height: 30px;
+	    text-align: center;
+	    border-radius: 5px;
+	    border: 1px solid #000000;  
+	    margin-bottom: 10px;
+	    border: 1px solid rgb(212, 212, 212);
+	    box-shadow: 0px 0px 7px #343434;
+	    opacity: 1.0;
+	    margin-right: 10px;
+	}	
 	.cajadentro{
 	    width:140px;
 	    height: 20px;
@@ -25,6 +39,18 @@
 	    float:left;
 	    margin-right: 12px;
 	}
+	.cajaden{
+		width:12%;
+	    height: 20px;
+	    line-height: 20px;
+	    text-align: center;
+	    border-radius: 5px;
+	    border: 1px solid #000000;  
+	    margin-bottom: 10px;
+	    border: 1px solid rgb(212, 212, 212);
+	    margin-right: 10px;
+	   
+	}	
 	.cajacursos{
 	    height: 20px;
 	    text-align: center;
