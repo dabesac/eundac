@@ -8,14 +8,14 @@ class Profile_Form_Userinfo extends Zend_Form{
         $dni->setAttrib("maxlength", "8")->setAttrib("size", "10");
         $dni->setRequired(true)->addErrorMessage('Este campo es requerido');
         $dni->setAttrib("title","DNI");
-        $dni->setAttrib("class","input-sm");
+        $dni->setAttrib("class","form-control");
 
         $birthday= new Zend_Form_Element_Text("birthday");
         $birthday->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $birthday->setAttrib("maxlength", "10")->setAttrib("size", "10");
         $birthday->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $birthday->setAttrib("title","Birthday");
-        $birthday->setAttrib("class","input-sm");
+        $birthday->setAttrib("class","form-control");
 
         $sex = new Zend_Form_Element_Select('sex');
         $sex->removeDecorator('HtmlTag')->removeDecorator('Label');     
@@ -38,28 +38,28 @@ class Profile_Form_Userinfo extends Zend_Form{
         $mail_person->setAttrib("maxlength", "50")->setAttrib("size", "30");
         $mail_person->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $mail_person->setAttrib("title","Email");
-        $mail_person->setAttrib("class","input-sm");
+        $mail_person->setAttrib("class","form-control");
 
         $mail_work= new Zend_Form_Element_Text("mail_work");
         $mail_work->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $mail_work->setAttrib("maxlength", "50")->setAttrib("size", "30");
         $mail_work->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $mail_work->setAttrib("title","Email Work");
-        $mail_work->setAttrib("class","input-sm");
+        $mail_work->setAttrib("class","form-control");
 
         $phone= new Zend_Form_Element_Text("phone");
         $phone->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $phone->setAttrib("maxlength", "10")->setAttrib("size", "30");
         $phone->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $phone->setAttrib("title","Phone");
-        $phone->setAttrib("class","input-sm");
+        $phone->setAttrib("class","form-control");
 
         $cellular= new Zend_Form_Element_Text("cellular");
         $cellular->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $cellular->setAttrib("maxlength", "9")->setAttrib("size", "30");
         $cellular->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $cellular->setAttrib("title","Cellular");
-        $cellular->setAttrib("class","input-sm");
+        $cellular->setAttrib("class","form-control");
 
         $submit = new Zend_Form_Element_Submit('save');
         $submit->setAttrib('class','btn btn-info pull-right');

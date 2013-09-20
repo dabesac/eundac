@@ -5,6 +5,17 @@ class Api_Model_DbTable_Relationship extends Zend_Db_Table_Abstract
 	protected $_name = 'base_relationship';
 	protected $_primary = array("eid","pid","famid");
 
+	public function _save($data){
+		try{
+			print_r($data);
+			if ($data['eid']=='' || $data['pid']=='') return false;
+			return $this->insert($data);
+			return false;
+		}catch (Exception $e){
+			print "Error al Guardar Familia ".$e->getMessage();
+		}
+	}
+
 	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
 			if($where['eid']=='' || $where['pid']=='' ) return false;

@@ -12,19 +12,19 @@ class Profile_Form_Family extends Zend_Form{
         $type->addMultiOption("B","Hermano/a");
         $type->setAttrib("class","form-control");
         
-        $last_name= new Zend_Form_Element_Text('last_name');
-        $last_name->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $last_name->setAttrib("maxlength", "30")->setAttrib("size", "30");
-        $last_name->setRequired(true)->addErrorMessage('Este campo es requerido');
-        $last_name->setAttrib("title","Apellidos");
-        $last_name->setAttrib("class","input-sm");
+        $lastname= new Zend_Form_Element_Text('lastname');
+        $lastname->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $lastname->setAttrib("maxlength", "30")->setAttrib("size", "30");
+        $lastname->setRequired(true)->addErrorMessage('Este campo es requerido');
+        $lastname->setAttrib("title","Apellidos");
+        $lastname->setAttrib("class","form-control");
 
-        $first_name= new Zend_Form_Element_Text('first_name');
-        $first_name->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $first_name->setAttrib("maxlength", "30")->setAttrib("size", "30");
-        $first_name->setRequired(true)->addErrorMessage('Este campo es requerido');
-        $first_name->setAttrib("title","Nombres");
-        $first_name->setAttrib("class","input-sm");
+        $firtsname= new Zend_Form_Element_Text('firtsname');
+        $firtsname->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $firtsname->setAttrib("maxlength", "30")->setAttrib("size", "30");
+        $firtsname->setRequired(true)->addErrorMessage('Este campo es requerido');
+        $firtsname->setAttrib("title","Nombres");
+        $firtsname->setAttrib("class","form-control");
 
         $sex = new Zend_Form_Element_Select('sex');
         $sex->removeDecorator('HtmlTag')->removeDecorator('Label');     
@@ -54,21 +54,21 @@ class Profile_Form_Family extends Zend_Form{
         $numdoc->setAttrib("maxlength", "8")->setAttrib("size", "10");
         $numdoc->setRequired(true)->addErrorMessage('Este campo es requerido');
         $numdoc->setAttrib("title","numdoc");
-        $numdoc->setAttrib("class","input-sm");
+        $numdoc->setAttrib("class","form-control");
 
         $birthday= new Zend_Form_Element_Text("birthday");
         $birthday->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $birthday->setAttrib("maxlength", "10")->setAttrib("size", "30");
         $birthday->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $birthday->setAttrib("title","Birthday");
-        $birthday->setAttrib("class","input-sm");
+        $birthday->setAttrib("class","form-control");
 
         $ocupacy= new Zend_Form_Element_Text('ocupacy');
         $ocupacy->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $ocupacy->setAttrib("maxlength", "30")->setAttrib("size", "30");
         $ocupacy->setRequired(true)->addErrorMessage('Este campo es requerido');
         $ocupacy->setAttrib("title","Ocupacion");
-        $ocupacy->setAttrib("class","input-sm");
+        $ocupacy->setAttrib("class","form-control");
 
         $health = new Zend_Form_Element_Select('health');
         $health->removeDecorator('HtmlTag')->removeDecorator('Label');     
@@ -82,20 +82,20 @@ class Profile_Form_Family extends Zend_Form{
         $phone->setAttrib("maxlength", "9")->setAttrib("size", "30");
         $phone->setRequired(true)->addErrorMessage('Este campo es requerido');
         $phone->setAttrib("title","phone");
-        $phone->setAttrib("class","input-sm");
+        $phone->setAttrib("class","form-control");
 
         $address= new Zend_Form_Element_Text('address');
         $address->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $address->setAttrib("maxlength", "30")->setAttrib("size", "30");
         $address->setRequired(true)->addErrorMessage('Este campo es requerido');
         $address->setAttrib("title","Direccion");
-        $address->setAttrib("class","input-sm");
+        $address->setAttrib("class","form-control");
 
         $assignee = new Zend_Form_Element_Select('assignee');
         $assignee->removeDecorator('HtmlTag')->removeDecorator('Label');     
         $assignee->setRequired(true)->addErrorMessage('Es necesario que selecciones el estado.');
-        $assignee->addMultiOption("S","Si");
         $assignee->addMultiOption("N","No");
+        $assignee->addMultiOption("S","Si");
         $assignee->setAttrib("class","form-control");
 
         $submit = new Zend_Form_Element_Submit('save');
@@ -103,6 +103,6 @@ class Profile_Form_Family extends Zend_Form{
         $submit->setLabel('Guardar');
         $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
 
-        $this->addElements(array($type, $last_name, $first_name, $sex, $live, $typedoc, $numdoc, $birthday, $ocupacy,$health, $phone, $address, $assignee, $submit));
+        $this->addElements(array($type, $lastname, $firtsname, $sex, $live, $typedoc, $numdoc, $birthday, $ocupacy,$health, $phone, $address, $assignee, $submit));
     }
 }

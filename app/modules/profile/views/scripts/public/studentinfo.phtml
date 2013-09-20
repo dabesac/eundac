@@ -155,8 +155,8 @@
             <td>
                 <ul class="nav nav-pills nav-stacked" id="editpalBtns">
                     <li><a href="#" id="editmaininfo" class="btn btn-block"><h5>Informacion Principal</h5></a></li>
-                    <li><a href="" id="editacadata" class="btn btn-block"><h5>Datos Academicos</h5></a></li>
-                     <li><a href="" id="#" class="btn btn-block"><h5>Datos Laborales</h5></a></li>
+                    <li><a href="" id="editacademic" class="btn btn-block"><h5>Datos Academicos</h5></a></li>
+                     <li><a href="" id="editlaboral" class="btn btn-block"><h5>Datos Laborales</h5></a></li>
                      <li class="hidden"><a></a></li>
                 </ul>
             </td>
@@ -285,11 +285,24 @@
     $("#editform").load("/profile/public/studenteditinfo")
   })
 
-   $("#editfamily").click(function(){
+  $("#editfamily").click(function(){
     $("#editdata").addClass("hidden")
     $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#editform").load("/profile/public/studenteditfamily")
+    $("#editform").load("/profile/public/studentsavefamily")
   })
+
+  $("#editacademic").click(function(){
+    $("#editdata").addClass("hidden")
+    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+    $("#editform").load("/profile/public/studenteditacademic")
+  })
+
+  $("#editlaboral").click(function(){
+    $("#editdata").addClass("hidden")
+    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+    $("#editform").load("/profile/public/studenteditlaboral")
+  })
+
 
 
 </script>
