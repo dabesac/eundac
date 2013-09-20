@@ -5,12 +5,20 @@
 <form name="<?php echo $this->form->getName(); ?>" action="/profile/public/studenteditacademic" method="post" enctype="application/x-www-form-urlencoded">
 
 <div class="col-sm-12">
-	<h4>Informacion Familiar</h4>
+	<h4>Informacion Academica</h4>
 	<table class="table">
 		<tr>
-			<td><label>Parentesco</label><?print $this->form->type?></td>
+			<td><label>Nombre de la Institucion</label><?print $this->form->institution?></td>
+			<td><label>Tipo</label><?print $this->form->type?></td>
 		</tr>
-		
+		<tr>
+			<td><label>Año de Finalización</label><?print $this->form->year_end?></td>
+			<td><label>Titulo</label><?print $this->form->tittle?></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><?print $this->form->save?></td>
+		</tr>
 	</table>
 </div>
 

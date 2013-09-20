@@ -144,11 +144,60 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
-    public function studenteditfamilyAction(){
+    public function studentsavefamilyAction(){
         try{
-            $this->_helper->layout()->disableLayout();
+            //$this->_helper->layout()->disableLayout();
+
+            $eid=$this->sesion->eid;
+            $pid=$this->sesion->pid;
+
             $form=new Profile_Form_Family();
             $this->view->form=$form;
+
+            $dbfamily=new Api_Model_DbTable_Family();
+            $dbrelation=new Api_Model_DbTable_Relationship();
+
+            // $relationdata=array("eid"=>$eid, "pid"=>$pid ,"type"=>trim($formdata["type"]),"assignee"=>trim($formdata["assignee"]));
+            // print_r($firstdata);
+            // $save=$dbrelation->_save($firstdata);
+
+            if ($this->getRequest()->isPost()) {
+                $formdata=$this->getRequest()->getPost();
+                if ($form->isValid($formdata)) {
+
+                    $type=trim($formdata["type"]);
+                    $assignee=trim($formdata["assignee"]);
+                    unset($formdata["save"]);
+                    unset($formdata["type"]);
+                    unset($formdata["assignee"]);
+                    $formdata["eid"]=$eid;
+                    trim($formdata["lastname"]);
+                    trim($formdata["firtsname"]);
+                    trim($formdata["live"]);
+                    trim($formdata["sex"]);
+                    trim($formdata["typedoc"]);
+                    trim($formdata["numdoc"]);
+                    trim($formdata["ocupacy"]);
+                    trim($formdata["birthday"]);
+                    trim($formdata["health"]);
+                    trim($formdata["phone"]);
+                    trim($formdata["address"]);
+
+                    $save=$dbfamily->_save($formdata);
+
+                    $where=array("eid"=>$eid, "numdoc"=>trim($formdata["numdoc"]));
+                    $attrib=array("famid");
+                    $famid=$dbfamily->_getFilter($where, $attrib);
+                    
+                    $relationdata=array("eid"=>$eid, "pid"=>$pid , "famid"=>$famid[0]['famid'],"type"=>$type,"assignee"=>$assignee);
+                    //print_r($relationdata);
+                    $saver=$dbrelation->_save($relationdata);
+
+
+
+                }
+            }
+
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
@@ -209,6 +258,19 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
+    public function studenteditlaboralAction()
+    {
+        try{
+            $this->_helper->layout->disableLayout();
+
+            $form=new Profile_Form_Laboral();
+            $this->view->form=$form;
+
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+
     public function studentinterestAction()
     {
         try{
@@ -225,6 +287,17 @@ class Profile_PublicController extends Zend_Controller_Action {
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
+    }
+
+    public function studentsaveinterestAction()
+    {
+        try{
+           $form=new Profile_Form_Interest();
+           $this->view->form=$form;
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+
     }
 
     public function studentsigncurrentAction()
