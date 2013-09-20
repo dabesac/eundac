@@ -29,7 +29,9 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
             $this->view->subid = $subid;
 
             if(substr($escid,0,3)=='2ES' and ($escid<>'2ESTY')){
-               $this->_redirect("/distribution/printdistribution/printsecundaria/distid/$distid/perid/$perid/subid/$subid/escid/$escid");
+               $this->_redirect("/distribution/printdistribution/printsecond/distid/".base64_encode($distid).
+                                "/perid/".base64_encode($perid)."/subid/".base64_encode($subid).
+                                "/escid/".base64_encode($escid));
             }else{
                 $pk=array('eid' => $eid, 'oid' => $oid, 'escid' => $escid,
                         'subid' => $subid, 'distid' => $distid, 'perid' => $perid);
@@ -90,6 +92,62 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
                     $this->view->datateachers=$datateachers;
                 }
             }
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function printsecondAction(){
+        try {
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $distid = base64_decode($this->_getParam("distid"));
+            $perid = base64_decode($this->_getParam("perid"));
+            $escid = base64_decode($this->_getParam("escid"));
+            $subid = base64_decode($this->_getParam("subid"));
+            $this->view->perid = $perid;
+            $this->view->distid = $distid;
+            $this->view->escid = $escid;
+            $this->view->subid = $subid;
+
+            $whereesp = array('eid' => $eid, 'oid' => $oid,
+                        'escid' => $escid, 'subid' => $subid);
+            $espe = new Api_Model_DbTable_Speciality();
+            $dataespe = $espe->_getOne($whereesp);
+            $this->view->speciality=$dataespe;
+
+            $whereteach=array('eid' => $eid, 'oid' => $oid, 
+                                'escid' => $escid, 'perid' => $perid);
+            $distteacher = new Api_Model_DbTable_Coursexteacher();
+            $dataallteacher = $distteacher->_getAllTeacherXPeriodXEscid($whereteach);
+            $users = new Api_Model_DbTable_Users();
+            $infotea = new Api_Model_DbTable_UserInfoTeacher();
+            if ($dataallteacher) {
+                $tam = count($dataallteacher);
+                $whereuser = array('eid' => $eid, 'oid' => $oid);
+                $whereinfotea = array('eid' => $eid, 'oid' => $oid);
+                for ($i=0; $i < $tam; $i++) { 
+                    $whereuser['uid'] = $dataallteacher[$i]['uid'];
+                    $usu = $users->_getUserXUid($whereuser);
+                    $dataallteacher[$i]['escidorigen'] = $usu[0]['escid'];
+                    $dataallteacher[$i]['subidorigen'] = $usu[0]['subid'];
+                    $dataallteacher[$i]['fullname'] = $usu[0]['last_name0']." ".$usu[0]['last_name1'].", ".$usu[0]['first_name'];
+
+                    $whereinfotea['escid'] = $dataallteacher[$i]['escidorigen'];
+                    $whereinfotea['subid'] = $dataallteacher[$i]['subidorigen'];
+                    $whereinfotea['uid'] = $dataallteacher[$i]['uid'];
+                    $whereinfotea['pid'] = $dataallteacher[$i]['pid'];
+                    $datainfotea = $infotea->_getOne($whereinfotea);
+                    $dataallteacher[$i]['condision'] = $datainfotea['condision'];
+                    $dataallteacher[$i]['dedication'] = $datainfotea['dedication'];
+                    $dataallteacher[$i]['category'] = $datainfotea['category'];
+                }
+            }
+            $this->view->allteachers = $dataallteacher;
+
+            $whereteach['distid']=$distid;
+            $datateachers=$distteacher->_getFilter($whereteach,$attrib=null,$orders=null);                    
+            $this->view->datateachers=$datateachers;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
