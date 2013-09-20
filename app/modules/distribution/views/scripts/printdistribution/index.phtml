@@ -4,434 +4,98 @@ include_once($dir);
 ob_start();
 
 $sesion1  = Zend_Auth::getInstance();
-$sesion = $sesion1->getStorage()->read(); 
+$sesion = $sesion1->getStorage()->read();
 
-    $header='
-
-      <table style="width: 100%;" border="1">
+$header='
+    <table style="width: 100%;" border="1">
         <tr>
-              <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-              <th style="text-align: center; font-size: 12px;">
-                FACULTAD DE  '.strtoupper($sesion->nom_facultad).'<br/>
-                ESCUELA DE  '.strtoupper($sesion->nom_escuela).'
-                   
-              </th>        
-          </tr>
-        <tr>
-          <th style="border: 1px solid #000;font-size: 12px;"> DISTRIBUCIÓN ACADEMICA-ADMINISTRATIVA DE DOCENTES - '.$this->perid.'</th>
+            <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+            <th style="text-align: center; font-size: 12px;">
+                FACULTAD DE  '.strtoupper($sesion->faculty->name).'<br/>
+                ESCUELA DE  '.strtoupper($sesion->speciality->name).'
+            </th>        
         </tr>
-      </table>      
-    '    
+        <tr>
+            <th style="border: 1px solid #000;font-size: 12px;"> DISTRIBUCIÓN ACADÉMICA - ADMINISTRATIVA DE DOCENTES - '.$this->perid.'</th>
+        </tr>
+    </table>'; 
+?>
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
 
+<h5><b>LISTA DE DOCENTES</b></h5>
 
-
-    ?>    
-    <link rel="stylesheet" type="text/css" href="/css/impresion.css">
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap/bootstrap-responsive.min.css">
-
-
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
-
-  
-        <?php
-
-         $distid=$this->distribucion['distid']; 
-         $perid= $this->distribucion['perid'];
-         $sedid = $this->distribucion['sedid'];
-
-
-        ?>
-
-    <table class="table span10 table-condensed">
-    <tr>
-        <th>
-           <h5><b>LISTA DE DOCENTES</b> </h5>
-        </th>
-    </tr>
-    </table>
-
-
-    <?php 
-    $a[0]='PRINCIPAL';
-    $a[1]='ASOCIADO';
-    $a[2]='AUXILIAR';
-
-    for($n=0;$n<=2;$n++)
-    {
-    ?>
+<?php 
+$a[0]='PRINCIPAL';
+$a[1]='ASOCIADO';
+$a[2]='AUXILIAR';
+for($n=0;$n<=2;$n++){ ?>
  
-    <table class="table span10 table-condensed">
-    
-        <tbody>
         <?php
         $g=0;
-        foreach ($this->docentes as $docente)
+        // print_r($this->teachers);
+        foreach ($this->teachers as $teachers)
         {
             $g++;
-            $d = new Admin_Model_DbTable_Persona();
-            $eid = $docente['eid'];
-            $oid = $docente['oid'];
-            $pid = $docente['pid'];
-            $uid = $docente['uid'];
-           
-            $escid = $docente['escid'];
-            $director = $docente['esdirector'];
-            $dl = $d->_getPersona($eid, $oid, $pid);
-            $datos = trim($dl['ape_pat']." ".$dl['ape_mat'].", ".$dl['nombres']);
+            $eid = $teachers['eid'];
+            $oid = $teachers['oid'];
+            $pid = $teachers['pid'];
+            $uid = $teachers['uid'];
+            $escid = $teachers['escid'];            
 
-            $existedoc = new Admin_Model_DbTable_Docentexcursos();
-            $dl = $existedoc->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
-
-            $doccondicion = new Admin_Model_DbTable_Usuario();
-            $condicion = $doccondicion-> _getUsuario($eid,$oid,$uid);
-            $cond=$condicion['condision_doc'];
-            $dedicacion=$condicion['dedicasion_doc'];
-            $cat=$condicion['categoria_doc'];
-            
-            if($dl and $cond<>"CONTRATADO" and $cat==$a[$n])
-            {               
-
-                ?>   
-                <tr colspan="4">
-                    <td >
-                    <table  class="table span10 table-striped table-bordered table-condensed">
-                        <tr>
-                            <th colspan='3'><?php echo $datos?></th>
-                            <th colspan='4' style='font-size:10px'><center><?php echo $cat." - ".$dedicacion?></center></th>
-                        </tr>
+            if($teachers['condision']<>"CONTRATADO" and $teachers['category']==$a[$n]){ ?>   
+                <table style="width: 100%">
+                    <tr>
+                        <th colspan='3' style='font-size:12px'>
+                            <?php echo $teachers['last_name0']." ".$teachers['last_name1'].", ".$teachers['first_name']?>
+                        </th>
+                        <th colspan='4' style='font-size:10px'><center>
+                            <?php echo $teachers['category']." - ".$teachers['dedication']?></center>
+                        </th>
+                    </tr>
                         
-                        <tr>
-                            <th colspan="7">HORAS ACADÉMICAS</th>
-                        </tr>
+                    <tr>
+                        <th colspan="7">HORAS ACADÉMICAS</th>
+                    </tr>
 
-                        <tr>
-                            <th class="span5"><center>Curso</center></th>
-                            <th class="span1"><center>Sem</center></th>
-                            <th class="span1"><center>Turno</center></th>
-                            <th class="span1"><center>Grupo(s)</center></th>
-                            <th class="span1"><center>Horas Teóricas</center></th>
-                            <th class="span1"><center>Horas Prácticas</center></th>
-                            <th class="span1"><center>Total Horas</center></th>
-                        </tr>
-                            <?php 
-                                // Obtengo los cursos ya asiganados
-                                $lc = new Admin_Model_DbTable_Docentexcursos();
-                                $listacursos = $lc->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
-                                $tth=0;
-                                if ($listacursos)
-                                {          
-                                  // echo "si";
-                                    foreach ($listacursos as $curso)
-                                    {
-                                        $nc = new Admin_Model_DbTable_Cursos();
-                                        $cursoid=$curso['cursoid']; 
-                                        $curid=$curso['curid'];
-                                        $semid=$curso['semid'];
-                                        $turno=$curso['turno'];
-                                        $grupos=$curso['grupos'];
-                                        $ht=$curso['horas_teoria'];
-                                        $hp=$curso['horas_practica'];
-                                        $th=$curso['total_horas'];
-                                        $tmp = $nc->_getCurso($eid, $oid, $escid, $sedid, $cursoid,$curid);            
-                                        $tth=$tth+$th;
-                                        if ($tmp)
-                                        {
-                                            $compromiso = ($curso['compromiso']=='S')?" - Compromiso":"";
-                                            $licencia = ($curso['horas_teoria']=='0' and $curso['horas_teoria']=='0' and $curso['horas_practica']=='0' )?" - Licencia":"";
+                    <tr>
+                        <th class="span5"><center>Asignatura</center></th>
+                        <th class="span1"><center>Sem</center></th>
+                        <th class="span1"><center>Turno</center></th>
+                        <th class="span1"><center>Grupo(s)</center></th>
+                        <th class="span1"><center>Horas Teóricas</center></th>
+                        <th class="span1"><center>Horas Prácticas</center></th>
+                        <th class="span1"><center>Total Horas</center></th>
+                    </tr>
+                    <?php 
+                    // Obtengo los cursos ya asiganados
+                    $wherecourteac=array('eid' => $teachers['eid'], 'oid' => $teachers['oid'],
+                                    'uid' => $teachers['uid'], 'pid' => $teachers['pid'],
+                                    'perid' => $this->perid, 'distid' => $this->distid);
+                    $couteach = new Api_Model_DbTable_Coursexteacher();
+                    $listacursos = $couteach->_getFilter($wherecourteac,$attrib=null,$orders=null);
+                    $tth=0;
+                    if ($listacursos){ 
+                        $nc = new Api_Model_DbTable_Course();
+                        foreach ($listacursos as $curso){
+                            $cursoid=$curso['courseid']; 
+                            $curid=$curso['curid'];
+                            $semid=$curso['semid'];
+                            $turno=$curso['turno'];
+                            $grupos=$curso['groups'];
+                            $ht=$curso['hours_t'];
+                            $hp=$curso['hours_p'];
+                            $th=$curso['hours_total'];
+                            $wherecourse = array('eid' => $teachers['eid'], 'oid' => $teachers['oid'], 'curid' => $curso['curid'], 'escid' => $curso['escid'], 'subid' => $curso['subid'], 'courseid' => $curso['courseid']);
+                            $tmp = $nc->_getOne($wherecourse);
+                            $tth=$tth+$th;
+                            if ($tmp){
+                                $compromiso = ($curso['is_com']=='S')?" - Compromiso":"";
+                                $licencia = ($curso['hours_t']=='0' and $curso['hours_t']=='0' and $curso['hours_p']=='0' )?" - Licencia":"";
 
-                                            $curso_nombre = $tmp['nombre_curso']."  ".$compromiso." ".$licencia;
-                                            // " Turno: ".$curso['turno']."
-                                        ?>
-                                        <tr>
-                                            <td><?php echo $curso_nombre;?></th>
-                                            <td><center><?php echo $semid?></center></td>
-                                            <td><center><?php echo $turno?></center></td>
-                                            <td><center><?php echo $grupos?></center></td>
-                                            <td ><center><?php echo $ht?></center></td>
-                                            <td ><center><?php echo $hp?></center></td>
-                                            <td ><center><?php echo $th?></center></td>
-                                        </tr>
-                                        <?php
-                                        }
-                                    }
-
-                                }
-                                
-                                // Obtengo los cursos del docente que tiene apoyando a otros cursos
-                                $lc = new Admin_Model_DbTable_Docentexcursos();
-                                $listacursos = $lc->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
-                                    
-                                $ncu = new Distribucion_Model_DbTable_Docentescursos();
-                                $lcapoyo=$ncu->_getCursosApoyoXDocenteXPeriodo($eid, $oid,$perid,$uid,$pid,$escid);
-                               
-
-                                foreach ($lcapoyo as $rk)
-                                {
-                                    $g++;
-                                    $grupos=$rk['grupos'];
-                                    $ht=$rk['horas_teoria'];
-                                    $hp=$rk['horas_practica'];
-                                    $th=$rk['total_horas'];
-                                    $nc = new Admin_Model_DbTable_Cursos();
-                                    $eid=$rk['eid'];
-                                    $oid=$rk['oid'];
-                                    $escid=$rk['escid'];            
-                                    $semid=$rk['semid'];            
-                                    $sedid=$rk['sedid'];  
-                                    $cursoid=$rk['cursoid'];            
-                                    $curid=$rk['curid'];            
-                                    $tmp = $nc->_getCurso($eid, $oid, $escid, $sedid, $cursoid,$curid);                
-                                    //Leer Escuela
-                                    $e= new Admin_Model_DbTable_Escuela();
-                                    $es = $e->_getEscuela($eid, $oid, $escid);
-                                    $compromiso = ($rk['compromiso']=='S')?" - Compromiso":"";
-
-                                    $curso_nombre = $tmp['nombre_curso'] ." --- Escuela : ".$es['nom_escuela']." ".$compromiso;
-                                    // ." Turno: ".$curso['turno']
-                                    $tht = $tht+$ht;
-                                    $thp = $thp+$hp;
-                                    $tth=$tth+$th;
-                                    ?>
-                                    <tr>
-                                        <td><?php echo $curso_nombre;?></th>
-                                        <td><center><?php echo $semid?></center></td>
-                                        <td><center><?php echo $turno?></center></td>
-                                        <td><center><?php echo $grupos?></center></td>
-                                        <td ><center><?php echo $ht?></center></td>
-                                        <td ><center><?php echo $hp?></center></td>
-                                        <td ><center><?php echo $th?></center></td>
-                                    </tr>
-                                    <?php
-                                }
+                                $curso_nombre = $tmp['name']."  ".$compromiso." ".$licencia;
                                 ?>
                                 <tr>
-                                <th  colspan="6">TOTALES</th>
-                                <th ><center><?php echo $tth?></center></th>
-                                </tr>
-                    </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td>          
-                    <table  class="table span10 table-striped table-bordered table-condensed">
-                            <tr>
-                                <th colspan="2">HORAS ADMINISTRATIVAS</th>
-                            </tr>
-                            <tr >
-                                <th class="span7" >Labor</th>
-                                <th class="span1"><center>Horas</center></th>
-                            </tr>
-                            <?php 
-                            $ll = new Distribucion_Model_DbTable_Distribucionadmin();
-                            $l = $ll->_getDistribuciones($eid, $oid, $distid, $uid, $pid);
-
-                          
-
-                            if($l)
-                            {
-                                $tth=0;
-                                foreach ($l as $adm)
-                                {
-                                    $labor = $adm['labor'];
-                                    $horas = $adm['horas'];
-                                    $tth=$tth+$horas;
-                                    ?>
-                                    <tr>
-                                        <td><?php echo $labor?></td>
-                                        <td><center><?php echo $horas?></center></td>
-                                    </tr> 
-                                    <?php 
-                                }
-                                ?>
-                                <tr>
-                                    <th colspan="1" >TOTALES</th>                
-                                    <th ><center><?php echo $tth?></center></th>    
-
-                                </tr>  
-                                <?php
-                            }
-                            ?>
-                            <?php
-                                $hh = new Distribucion_Model_DbTable_Distribuciondocente();
-                                $h = $hh->_getDistribuciones($eid, $oid, $distid, $uid, $pid);
-                                $hacad=$h['t_h_acad'];
-                                $hadmin=$h['t_h_adm'];
-                                $htotales=$hacad+$hadmin;
-                            ?>
-                            <tr> 
-                                <th colspan="1" >TOTAL DE HORAS </th>                
-                                <th ><center><?php echo $htotales?></center></th> 
-                            </tr> 
-                    </table>
-                   
-                    </td>
-                </tr>           
-                <?php
-            }
-        }
-         ?>
-        </tbody>
-    </table> 
-    <?php
-    }
-    ?>
-  
-
-    <br>
-    <?php  
-    $eid=$this->eid; 
-    $oid=$this->oid; 
-    $escid=$this->escid; 
-    $sedid=$this->sedid; 
-    $estado='A';
-    $condi='CONTRATADO';
-
-    $ll = new Default_Model_DbTable_Usuario();    
-    if($ll->_getUsuarioXContratadosXEscuela($eid,$oid,$escid,$condi,$estado))
-    {
-        ?>
-        <table class="table  span14  table-condensed">
-         <tr>
-            <th>
-               <h5><b>LISTA DE DOCENTES CONTRATADOS</b> </h5>
-            </th>
-        </tr>
-        </table>
-
-        <?php
-    } ?>
-
-    <table class="table span10 table-condensed"><!--table-bordered-->
-        <tbody>
-        <?php
-        $g=0;
-        foreach ($this->docentes as $docente)
-        {
-            $g++;
-            $d = new Admin_Model_DbTable_Persona();
-            $eid = $docente['eid'];
-            $oid = $docente['oid'];
-            $pid = $docente['pid'];
-            $uid = $docente['uid'];
-           
-            $escid = $docente['escid'];
-            $director = $docente['esdirector'];
-            $dl = $d->_getPersona($eid, $oid, $pid);
-            $datos = trim($dl['ape_pat']." ".$dl['ape_mat'].", ".$dl['nombres']);
-
-            $existedoc = new Admin_Model_DbTable_Docentexcursos();
-            $dl = $existedoc->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
-            
-            $doccondicion = new Admin_Model_DbTable_Usuario();
-            $condicion = $doccondicion-> _getUsuario($eid,$oid,$uid);
-            $cond=$condicion['condision_doc']; 
-            $dedicacion=$condicion['dedicasion_doc'];
-            $cat=$condicion['categoria_doc'];          
-
-
-            if($dl and $cond=="CONTRATADO")
-            {             
-                    ?>       
-                    <tr colspan="4">
-                        <td >
-                        <table  class="table span14 table-striped table-bordered table-condensed">
-                       
-                                <tr  >
-                                
-                                <th colspan='3'><?php echo $datos?></th>
-                                <th colspan='4' style='font-size:10px'><center><?php echo $cat." - ".$dedicacion?></center></th>
-                                </tr> 
-
-
-
-                                <tr>
-                                    <th colspan="7">HORAS ACADÉMICAS</th>
-                                </tr>
-                                <tr >
-                                    <th class="span5"><center>Curso</center></th>
-                                    <th class="span1"><center>Sem</center></th>
-                                    <th class="span1"><center>Turno</center></th>
-                                    <th class="span1"><center>Grupo(s)</center></th>
-                                    <th class="span1"><center>Horas Teóricas</center></th>
-                                    <th class="span1"><center>Horas Prácticas</center></th>
-                                    <th class="span1"><center>Total Horas</center></th>
-                                </tr>
-                                <?php 
-                                // Obtengo los cursos ya asiganados
-                                $lc = new Admin_Model_DbTable_Docentexcursos();
-                                $listacursos = $lc->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
-                                $tth=0;
-                                if ($listacursos)
-                                {          
-                                  
-                                    foreach ($listacursos as $curso)
-                                    {
-                                        $nc = new Admin_Model_DbTable_Cursos();
-                                        $cursoid=$curso['cursoid']; 
-                                        $curid=$curso['curid'];
-                                        $grupos=$curso['grupos'];
-                                        $ht=$curso['horas_teoria'];
-                                        $hp=$curso['horas_practica'];
-                                        $th=$curso['total_horas'];
-                                        $semid=$curso['semid'];
-                                        $turno=$curso['turno'];
-                                        $tmp = $nc->_getCurso($eid, $oid, $escid, $sedid, $cursoid,$curid);            
-                                        $tth=$tth+$th;
-                                        if ($tmp)
-                                        {
-                                            $compromiso = ($curso['compromiso']=='S')?" - Compromiso":"";
-                                            $curso_nombre = $tmp['nombre_curso']."    ".$compromiso;
-                                            // ." Turno: ".$curso['turno']
-                                            ?>
-                                            <tr>
-                                                <td><?php echo $curso_nombre;?></th>
-                                                <td><center><?php echo $semid?></center></td>
-                                                <td><center><?php echo $turno?></center></td>
-                                                <td><center><?php echo $grupos?></center></td>
-                                                <td ><center><?php echo $ht?></center></td>
-                                                <td ><center><?php echo $hp?></center></td>
-                                                <td ><center><?php echo $th?></center></td>
-                                            </tr>
-                                            <?php
-                                        }
-                                    }
-
-                                }
-                                
-                                // Obtengo los cursos del docente que tiene apoyando a otros cursos
-                                $lc = new Admin_Model_DbTable_Docentexcursos();
-                                $listacursos = $lc->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
-                                
-                                $ncu = new Distribucion_Model_DbTable_Docentescursos();
-                                $lcapoyo=$ncu->_getCursosApoyoXDocenteXPeriodo($eid, $oid,$perid,$uid,$pid,$escid);
-                               
-
-                                foreach ($lcapoyo as $rk)
-                                {
-                                    $g++;
-                                    $grupos=$rk['grupos'];
-                                    $ht=$rk['horas_teoria'];
-                                    $hp=$rk['horas_practica'];
-                                    $th=$rk['total_horas'];
-                                    $nc = new Admin_Model_DbTable_Cursos();
-                                    $eid=$rk['eid'];
-                                    $oid=$rk['oid'];
-                                    $escid=$rk['escid'];            
-                                    $sedid=$rk['sedid'];
-                                    $semid=$rk['semid'];   
-                                    $cursoid=$rk['cursoid'];            
-                                    $curid=$rk['curid'];            
-                                    $tmp = $nc->_getCurso($eid, $oid, $escid, $sedid, $cursoid,$curid);                
-                                    //Leer Escuela
-                                    $e= new Admin_Model_DbTable_Escuela();
-                                    $es = $e->_getEscuela($eid, $oid, $escid);
-                                    $curso_nombre = $tmp['nombre_curso'] ." --- Escuela(Apoyo) : ".$es['nom_escuela'];
-                                    // ." Turno: ".$curso['turno']
-                                    $tht = $tht+$ht;
-                                    $thp = $thp+$hp;
-                                    $tth=$tth+$th;
-                                     ?>
-                                    <tr>
                                     <td><?php echo $curso_nombre;?></th>
                                     <td><center><?php echo $semid?></center></td>
                                     <td><center><?php echo $turno?></center></td>
@@ -439,150 +103,362 @@ $sesion = $sesion1->getStorage()->read();
                                     <td ><center><?php echo $ht?></center></td>
                                     <td ><center><?php echo $hp?></center></td>
                                     <td ><center><?php echo $th?></center></td>
-                                    </tr>
-                                    <?php
-                                }
-
-                                ?>
-                                <tr>
-                                <th  colspan="6">TOTALES</th>
-                                <th ><center><?php echo $tth?></center></th>
                                 </tr>
-                        </table> 
-                        </td>
+                                <?php
+                            }
+                        }
+                    }
+                    // Obtengo los cursos del docente que tiene apoyando a otros cursos
+                    // $listacursos = $couteach->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
+                                    
+                    // $ncu = new Distribucion_Model_DbTable_Docentescursos();
+                    $wherecoursup=array('eid' => $teachers['eid'], 'oid' => $teachers['oid'],
+                                    'uid' => $teachers['uid'], 'pid' => $teachers['pid'],
+                                    'perid' => $this->perid, 'escid' => $this->escid);
+                    $lcapoyo = $couteach->_getAllCoursesSupportXTeacherXPeriod($wherecoursup);
+
+                    foreach ($lcapoyo as $rk){
+                        $g++;
+                        $grupos=$rk['groups'];
+                        $ht=$rk['hours_t'];
+                        $hp=$rk['hours_p'];
+                        $th=$rk['hours_total'];
+                        $eid=$rk['eid'];
+                        $oid=$rk['oid'];
+                        $escid=$rk['escid'];            
+                        $semid=$rk['semid'];
+                        $sedid=$rk['subid'];  
+                        $cursoid=$rk['courseid'];            
+                        $curid=$rk['curid'];
+                        $wherecourse = array('eid' => $teachers['eid'], 'oid' => $teachers['oid'], 'curid' => $curso['curid'], 'escid' => $curso['escid'], 'subid' => $curso['subid'], 'courseid' => $curso['courseid']);
+                        $tmp = $nc->_getOne($wherecourse);                
+                        
+                        // Leer Escuela
+                        $whereespe=array('eid' => $rk['eid'], 'oid' => $rk['oid'],
+                                'escid' => $rk['escid'], 'subid' => $rk['subid']);
+                        $e= new Api_Model_DbTable_Speciality();
+                        $es = $e->_getOne($whereespe);
+                        
+                        $compromiso = ($rk['is_com']=='S')?" - Compromiso":"";
+
+                        $curso_nombre = $tmp['name'] ." --- Escuela : ".$es['name']." ".$compromiso;
+                        $tht = $tht+$ht;
+                        $thp = $thp+$hp;
+                        $tth=$tth+$th;
+                        ?>
+                        <tr>
+                            <td><?php echo $curso_nombre;?></th>
+                            <td><center><?php echo $semid?></center></td>
+                            <td><center><?php echo $turno?></center></td>
+                            <td><center><?php echo $grupos?></center></td>
+                            <td ><center><?php echo $ht?></center></td>
+                            <td ><center><?php echo $hp?></center></td>
+                            <td ><center><?php echo $th?></center></td>
+                        </tr>
+                        <?php
+                    } ?>
+                    <tr>
+                        <th  colspan="6">TOTALES</th>
+                        <th ><center><?php echo $tth?></center></th>
+                    </tr>
+                </table>
+                <br>         
+                <table style="width: 100%">
+                    <tr>
+                        <th colspan="2">HORAS ADMINISTRATIVAS</th>
                     </tr>
                     <tr>
-                        <th>    
-
-                        <table  class="table span10 table-striped table-bordered table-condensed">
-                    
-                                <tr>
-                                    <th colspan="2">HORAS ADMINISTRATIVAS</th>
-                                </tr>
-                                <tr >
-                                    <th class="span7" >Labor</th>                       
-                                    <th class="span1"><center>Horas</center></th>
-
-                                </tr>
-                                <?php 
-                                $ll = new Distribucion_Model_DbTable_Distribucionadmin();
-                                $l = $ll->_getDistribuciones($eid, $oid, $distid, $uid, $pid);
-                                if ($l)
-                                {
-                                    $tth=0;
-                                    foreach ($l as $adm)
-                                    {
-                                        $labor = $adm['labor'];
-                                        $horas = $adm['horas'];
-                                        $tth=$tth+$horas;
-                                        ?>
-                                        <tr>
-                                            <td><?php echo $labor?></td>                        
-                                            <td><center><?php echo $horas?></center></td>
-                                        </tr> 
-                                        <?php 
-                                    }
-                                     ?>
-                                    <tr>
-                                        <th colspan="1" >TOTALES</th>                
-                                        <th ><center><?php echo $tth?></center></th>
-                                    </tr> 
-                                    <?php
-                                }
-
-                                $hh = new Distribucion_Model_DbTable_Distribuciondocente();
-                                $h = $hh->_getDistribuciones($eid, $oid, $distid, $uid, $pid);
-                                $hacad=$h['t_h_acad'];
-                                $hadmin=$h['t_h_adm'];
-                                $htotales=$hacad+$hadmin;
-                                ?>
-                                <tr> 
-                                    <th colspan="1" >TOTAL DE HORAS </th>                
-                                    <th ><center><?php echo $htotales?></center></th> 
-                                </tr>                             
-
-                        </table>
-                        </th>
-                    </tr>           
+                        <th class="span7" >Labor</th>
+                        <th class="span1"><center>Horas</center></th>
+                    </tr>
                     <?php 
+                    $pkdistadm = array('eid' => $teachers['eid'], 'oid' => $teachers['oid'],
+                                'escid' => $this->escid, 'subid' => $this->subid,
+                                'distid' => $this->distid, 'perid' => $this->perid,
+                                'uid' => $teachers['uid'], 'pid' => $teachers['pid']);
+                    $ll = new Distribution_Model_DbTable_DistributionAdmin();
+                    $l = $ll->_getAll($pkdistadm);
+                    if($l){
+                        $tth=0;
+                        foreach ($l as $adm){
+                            $labor = $adm['work'];
+                            $horas = $adm['hours'];
+                            $tth=$tth+$horas;
+                            ?>
+                            <tr>
+                                <td><?php echo $labor?></td>
+                                <td><center><?php echo $horas?></center></td>
+                            </tr>
+                        <?php 
+                        } ?>
+                        <tr>
+                            <th colspan="1" >TOTALES</th>                
+                            <th><center><?php echo $tth?></center></th>    
+                        </tr>
+                        <?php
+                    } ?>
+                    <?php
+                    $hh = new Distribution_Model_DbTable_DistributionTeacher();
+                    $h = $hh->_getOne($pkdistadm);
+                    $hacad=$h['total_hour_acad'];
+                    $hadmin=$h['total_hour_admin'];
+                    $htotales=$hacad+$hadmin;
+                    ?>
+                    <tr> 
+                        <th colspan="1" >TOTAL DE HORAS </th>                
+                        <th><center><?php echo $htotales?></center></th>
+                    </tr>
+                </table>
+                <br>
+                <br>
+                <br>
+                <?php
+            }
+        }
+    }
+    $eid=$sesion->eid;
+    $oid=$sesion->oid; 
+    $escid=$this->escid; 
+    $sedid=$this->subid; 
+    $estado='A';
+    $condi='CONTRATADO';
+
+    // $ll = new Default_Model_DbTable_Usuario();    
+    // if($ll->_getUsuarioXContratadosXEscuela($eid,$oid,$escid,$condi,$estado)){ ?>
+        <h5><b>LISTA DE DOCENTES CONTRATADOS</b></h5>
+
+        <?php
+    // } ?>
+        <?php
+        $g=0;
+        foreach ($this->teachers as $teachers)
+        {
+            $g++;
+            $eid = $teachers['eid'];
+            $oid = $teachers['oid'];
+            $pid = $teachers['pid'];
+            $uid = $teachers['uid'];
+            $escid = $teachers['escid'];
+            
+            // $existedoc = new Admin_Model_DbTable_Docentexcursos();
+            // $dl = $existedoc->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
+
+            $cond=$teachers['condision']; 
+            $dedicacion=$teachers['dedication'];
+            $cat=$teachers['category'];
+
+            if($cond=="CONTRATADO"){ ?>
+                <table style="width: 100%">
+                    <tr>
+                        <th colspan='3'>
+                            <?php echo $teachers['last_name0']." ".$teachers['last_name1'].", ".$teachers['first_name']?>
+                        </th>
+                        <th colspan='4' style='font-size:10px'><center><?php echo $cat." - ".$dedicacion?></center></th>
+                    </tr>
+                    <tr>
+                        <th colspan="7">HORAS ACADÉMICAS</th>
+                    </tr>
+                    <tr>
+                        <th class="span5"><center>Curso</center></th>
+                        <th class="span1"><center>Sem</center></th>
+                        <th class="span1"><center>Turno</center></th>
+                        <th class="span1"><center>Grupo(s)</center></th>
+                        <th class="span1"><center>Horas Teóricas</center></th>
+                        <th class="span1"><center>Horas Prácticas</center></th>
+                        <th class="span1"><center>Total Horas</center></th>
+                    </tr>
+                    <?php 
+                    // Obtengo los cursos ya asiganados
+                    $wherecourteac=array('eid' => $teachers['eid'], 'oid' => $teachers['oid'],
+                                    'uid' => $teachers['uid'], 'pid' => $teachers['pid'],
+                                    'perid' => $this->perid, 'distid' => $this->distid);
+                    $couteach = new Api_Model_DbTable_Coursexteacher();
+                    $listacursos = $couteach->_getFilter($wherecourteac,$attrib=null,$orders=null);
+                    $tth=0;
+                    if ($listacursos){
+                        $nc = new Api_Model_DbTable_Course();
+                        foreach ($listacursos as $curso){
+                            $cursoid=$curso['courseid']; 
+                            $curid=$curso['curid'];
+                            $semid=$curso['semid'];
+                            $turno=$curso['turno'];
+                            $grupos=$curso['groups'];
+                            $ht=$curso['hours_t'];
+                            $hp=$curso['hours_p'];
+                            $th=$curso['hours_total'];
+                            $wherecourse = array('eid' => $teachers['eid'], 'oid' => $teachers['oid'], 'curid' => $curso['curid'], 'escid' => $curso['escid'], 'subid' => $curso['subid'], 'courseid' => $curso['courseid']);
+                            $tmp = $nc->_getOne($wherecourse);          
+                            $tth=$tth+$th;
+                            if ($tmp){
+                                $compromiso = ($curso['is_com']=='S')?" - Compromiso":"";
+                                $curso_nombre = $tmp['name']."    ".$compromiso;
+                                ?>
+                                <tr>
+                                    <td><?php echo $curso_nombre;?></th>
+                                    <td><center><?php echo $semid?></center></td>
+                                    <td><center><?php echo $turno?></center></td>
+                                    <td><center><?php echo $grupos?></center></td>
+                                    <td><center><?php echo $ht?></center></td>
+                                    <td><center><?php echo $hp?></center></td>
+                                    <td><center><?php echo $th?></center></td>
+                                </tr>
+                            <?php
+                            }
+                        }
+                    }
+                    // Obtengo los cursos del docente que tiene apoyando a otros cursos
+                    // $listacursos = $couteach->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
+                                    
+                    // $ncu = new Distribucion_Model_DbTable_Docentescursos();
+                    $wherecoursup=array('eid' => $teachers['eid'], 'oid' => $teachers['oid'],
+                                    'uid' => $teachers['uid'], 'pid' => $teachers['pid'],
+                                    'perid' => $this->perid, 'escid' => $this->escid);
+                    $lcapoyo = $couteach->_getAllCoursesSupportXTeacherXPeriod($wherecoursup);                       
+
+                    foreach ($lcapoyo as $rk){
+                        $g++;
+                        $grupos=$rk['groups'];
+                        $ht=$rk['hours_t'];
+                        $hp=$rk['hours_p'];
+                        $th=$rk['hours_total'];
+                        $eid=$rk['eid'];
+                        $oid=$rk['oid'];
+                        $escid=$rk['escid'];            
+                        $semid=$rk['semid'];
+                        $sedid=$rk['subid'];  
+                        $cursoid=$rk['courseid'];            
+                        $curid=$rk['curid'];
+                        $wherecourse = array('eid' => $teachers['eid'], 'oid' => $teachers['oid'], 'curid' => $curso['curid'], 'escid' => $curso['escid'], 'subid' => $curso['subid'], 'courseid' => $curso['courseid']);
+                        $tmp = $nc->_getOne($wherecourse);                
+                        
+                        // Leer Escuela
+                        $whereespe=array('eid' => $rk['eid'], 'oid' => $rk['oid'],
+                                'escid' => $rk['escid'], 'subid' => $rk['subid']);
+                        $e= new Api_Model_DbTable_Speciality();
+                        $es = $e->_getOne($whereespe);
+                        
+                        $compromiso = ($rk['is_com']=='S')?" - Compromiso":"";
+
+                        $curso_nombre = $tmp['name'] ." --- Escuela : ".$es['name']." ".$compromiso;
+                        $tht = $tht+$ht;
+                        $thp = $thp+$hp;
+                        $tth=$tth+$th;
+                        ?>
+                        <tr>
+                            <td><?php echo $curso_nombre;?></th>
+                            <td><center><?php echo $semid?></center></td>
+                            <td><center><?php echo $turno?></center></td>
+                            <td><center><?php echo $grupos?></center></td>
+                            <td><center><?php echo $ht?></center></td>
+                            <td><center><?php echo $hp?></center></td>
+                            <td><center><?php echo $th?></center></td>
+                        </tr>
+                        <?php
+                    } ?>
+                    <tr>
+                        <th colspan="6">TOTALES</th>
+                        <th><center><?php echo $tth?></center></th>
+                    </tr>
+                </table> 
+                <br>   
+                <table style="width: 100%">
+                    <tr>
+                        <th colspan="2">HORAS ADMINISTRATIVAS</th>
+                    </tr>
+                    <tr>
+                        <th class="span7" >Labor</th>                       
+                        <th class="span1"><center>Horas</center></th>
+                    </tr>
+                    <?php
+                    $pkdistadm = array('eid' => $teachers['eid'], 'oid' => $teachers['oid'],
+                                'escid' => $this->escid, 'subid' => $this->subid,
+                                'distid' => $this->distid, 'perid' => $this->perid,
+                                'uid' => $teachers['uid'], 'pid' => $teachers['pid']);
+                    $ll = new Distribution_Model_DbTable_DistributionAdmin();
+                    $l = $ll->_getAll($pkdistadm);
+                    if ($l) {
+                        $tth=0;
+                        foreach ($l as $adm){
+                            $labor = $adm['work'];
+                            $horas = $adm['hours'];
+                            $tth=$tth+$horas;
+                            ?>
+                            <tr>
+                                <td><?php echo $labor?></td>                        
+                                <td><center><?php echo $horas?></center></td>
+                            </tr> 
+                            <?php 
+                        } ?>
+                        <tr>
+                            <th colspan="1" >TOTALES</th>                
+                            <th><center><?php echo $tth?></center></th>
+                        </tr> 
+                    <?php
+                    }
+                    $hh = new Distribution_Model_DbTable_DistributionTeacher();
+                    $h = $hh->_getOne($pkdistadm);
+                    $hacad=$h['total_hour_acad'];
+                    $hadmin=$h['total_hour_admin'];
+                    $htotales=$hacad+$hadmin;
+                    ?>
+                    <tr> 
+                        <th colspan="1">TOTAL DE HORAS </th>                
+                        <th><center><?php echo $htotales?></center></th> 
+                    </tr>                             
+                </table>
+                <br>
+                <br>
+                <br>
+                <?php 
             }
         }
         ?>
-        </tbody>
-    </table>
 
-
-    <?php  
-    $eid=$this->eid; 
-    $oid=$this->oid; 
-    $escid=$this->escid; 
-    $sedid=$this->sedid; 
+    <?php
+    $escid=$this->escid;
+    $sedid=$this->subid; 
     $rid='JP';
 
-    $ll = new Admin_Model_DbTable_Usuario();
-    $l = $ll->_getUsuariosXRolXSedeXEscuela($eid,$oid,$escid,$sedid,$rid);
-    //print_r($l);
-    if($l)
-    {
-        ?>
-
-        <table class="table  span10  table-condensed" >
-            <tr>
-                <th>
-                   <h5><b>LISTA DE JEFES DE PRÁCTICA</b></h5>
-                </th>
-            </tr>    
-        </table>
+    // $ll = new Admin_Model_DbTable_Usuario();
+    // $l = $ll->_getUsuariosXRolXSedeXEscuela($eid,$oid,$escid,$sedid,$rid);
+    // if($l){ ?>
+    <h5><b>LISTA DE JEFES DE PRÁCTICA</b></h5>
         <?php
-    }
-
+    // }
     ?>
-    <table class="table span10 table-condensed"> 
-        <tbody>
         <?php
         $g=0;    
-        if($this->listajefepracticas)
+        if($this->practiceteachers)
         {
-            foreach ($this->listajefepracticas as $docentejp)
+            foreach ($this->practiceteachers as $practiceteachers)
             {
                 $g++;
-                $d = new Admin_Model_DbTable_Persona();
-                $eid = $docentejp['eid'];
-                $oid = $docentejp['oid'];
-                $pid = $docentejp['pid'];
-                $uid = $docentejp['uid'];
-                $escid = $docentejp['escid'];
-                $director = $docentejp['esdirector'];
-                $dl = $d->_getPersona($eid, $oid, $pid);
-                $datos = trim($dl['ape_pat']." ".$dl['ape_mat'].", ".$dl['nombres']);
+                $eid = $practiceteachers['eid'];
+                $oid = $practiceteachers['oid'];
+                $pid = $practiceteachers['pid'];
+                $uid = $practiceteachers['uid'];
+                $escid = $practiceteachers['escid'];
 
-                $existedoc = new Admin_Model_DbTable_Docentexcursos();
-                $dl = $existedoc->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
+                // $existedoc = new Admin_Model_DbTable_Docentexcursos();
+                // $dl = $existedoc->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
 
-                $doccondicion = new Admin_Model_DbTable_Usuario();
-                $condicion = $doccondicion-> _getUsuario($eid,$oid,$uid);
-                $cond=$condicion['condision_doc'];
-                $dedicacion=$condicion['dedicasion_doc'];
-                $cat=$condicion['categoria_doc'];
-                    
-                if($dl)
-                {   
+                $cond=$practiceteachers['condision'];
+                $dedicacion=$practiceteachers['dedication'];
+                $cat=$practiceteachers['category'];
+                // if($dl)
+                // {   
                     ?>        
-                    <tr>
-                        <td colspan="4">
-                            
-                            <table  class="table span14 table-striped table-bordered table-condensed" >
-                                
-                                <tr  >                                
-                                <th colspan='3'><?php echo $datos?></th>
+                    <table style="width: 100%">
+                        <tr>                       
+                                <th colspan='3'>
+                                    <?php echo $practiceteachers['last_name0']." ".$practiceteachers['last_name1'].", ".$practiceteachers['first_name']?>
+                                </th>
                                 <th colspan='4' style='font-size:10px'><center><?php echo $cat." - ".$dedicacion?></center></th>
-                                </tr> 
-
-
+                                </tr>
                                 <tr>
                                     <th colspan="7">HORAS ACADÉMICAS</th>
                                 </tr>
-                                <tr >
+                                <tr>
                                     <th class="span5"><center>Curso</center></th>
                                     <th class="span1"><center>Sem</center></th>
                                     <th class="span1"><center>Turno</center></th>
@@ -593,30 +469,33 @@ $sesion = $sesion1->getStorage()->read();
                                 </tr>
                                 <?php 
                                     // Obtengo los cursos ya asiganados
-                                $lc = new Admin_Model_DbTable_Docentexcursos();
-                                $listacursos = $lc->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
+                                $wherecourteac=array('eid' => $practiceteachers['eid'], 'oid' => $practiceteachers['oid'],
+                                    'uid' => $practiceteachers['uid'], 'pid' => $practiceteachers['pid'],
+                                    'perid' => $this->perid, 'distid' => $this->distid);
+                                $couteach = new Api_Model_DbTable_Coursexteacher();
+                                $listacursos = $couteach->_getFilter($wherecourteac,$attrib=null,$orders=null);
                                 $tth=0;
                                 $ht = $hp= $th=0;
                                 if ($listacursos)
                                 {                        
+                                    $nc = new Api_Model_DbTable_Course();
                                     foreach ($listacursos as $curso)
                                     {
-                                        $nc = new Admin_Model_DbTable_Cursos();
-                                        $cursoid=$curso['cursoid']; 
+                                        $cursoid=$curso['courseid']; 
                                         $curid=$curso['curid'];
-                                        $grupos=$curso['grupos'];
-                                        $ht=$curso['horas_teoria'];
-                                        $hp=$curso['horas_practica'];
-                                        $th=$curso['total_horas'];
                                         $semid=$curso['semid'];
                                         $turno=$curso['turno'];
-                                        $tmp = $nc->_getCurso($eid, $oid, $escid, $sedid, $cursoid,$curid);            
+                                        $grupos=$curso['groups'];
+                                        $ht=$curso['hours_t'];
+                                        $hp=$curso['hours_p'];
+                                        $th=$curso['hours_total'];
+                                        $wherecourse = array('eid' => $practiceteachers['eid'], 'oid' => $practiceteachers['oid'], 'curid' => $curso['curid'], 'escid' => $curso['escid'], 'subid' => $curso['subid'], 'courseid' => $curso['courseid']);
+                                        $tmp = $nc->_getOne($wherecourse);            
                                         $tth=$tth+$th;
                                         if ($tmp)
                                         {
-                                            $compromiso = ($curso['compromiso']=='S')?" - Compromiso":"";
-                                            $curso_nombre = $tmp['nombre_curso']."    ".$compromiso;
-                                                // ." Turno: ".$curso['turno']
+                                            $compromiso = ($curso['is_com']=='S')?" - Compromiso":"";
+                                            $curso_nombre = $tmp['name']."    ".$compromiso;
                                             ?>
                                             <tr>
                                                 <td><?php echo $curso_nombre;?></th>
@@ -634,33 +513,40 @@ $sesion = $sesion1->getStorage()->read();
                                 ?>
                                 <?php 
                                     // Obtengo los cursos del docente que tiene apoyando a otros cursos
-                                $lc = new Admin_Model_DbTable_Docentexcursos();
-                                $listacursos = $lc->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
+                                // $lc = new Admin_Model_DbTable_Docentexcursos();
+                                // $listacursos = $lc->_getCursosXDocenteXPeriodoXDistribucion($eid,$oid,$uid,$pid,$perid,$distid);
 
                                     // Listar cursos de otras escuelas
-                                $ncu = new Distribucion_Model_DbTable_Docentescursos();
-                                $lcapoyo=$ncu->_getCursosApoyoXDocenteXPeriodo($eid, $oid,$perid,$uid,$pid,$escid);
-                                foreach ($lcapoyo as $rk)
-                                {
+                                $wherecoursup=array('eid' => $practiceteachers['eid'], 'oid' => $practiceteachers['oid'],
+                                    'uid' => $practiceteachers['uid'], 'pid' => $practiceteachers['pid'],
+                                    'perid' => $this->perid, 'escid' => $this->escid);
+                                $lcapoyo = $couteach->_getAllCoursesSupportXTeacherXPeriod($wherecoursup);                       
+
+                                foreach ($lcapoyo as $rk){
                                         $g++;
-                                        $grupos=$rk['grupos'];
-                                        $ht=$rk['horas_teoria'];
-                                        $hp=$rk['horas_practica'];
-                                        $th=$rk['total_horas'];
-                                        $nc = new Admin_Model_DbTable_Cursos();
+                                        $grupos=$rk['groups'];
+                                        $ht=$rk['hours_t'];
+                                        $hp=$rk['hours_p'];
+                                        $th=$rk['hours_total'];
                                         $eid=$rk['eid'];
                                         $oid=$rk['oid'];
                                         $escid=$rk['escid'];            
-                                        $sedid=$rk['sedid'];
-                                        $semid=$rk['semid'];   
-                                        $cursoid=$rk['cursoid'];            
-                                        $curid=$rk['curid'];            
-                                        $tmp = $nc->_getCurso($eid, $oid, $escid, $sedid, $cursoid,$curid);                
-                                        //Leer Escuela
-                                        $e= new Admin_Model_DbTable_Escuela();
-                                        $es = $e->_getEscuela($eid, $oid, $escid);
-                                        $curso_nombre = $tmp['nombre_curso'] ." --- Escuela / Especialidad : ".$es['nom_escuela'];
-                                        // ." Turno: ".$curso['turno']
+                                        $semid=$rk['semid'];
+                                        $sedid=$rk['subid'];  
+                                        $cursoid=$rk['courseid'];            
+                                        $curid=$rk['curid'];
+                                        $wherecourse = array('eid' => $practiceteachers['eid'], 'oid' => $practiceteachers['oid'], 'curid' => $curso['curid'], 'escid' => $curso['escid'], 'subid' => $curso['subid'], 'courseid' => $curso['courseid']);
+                                        $tmp = $nc->_getOne($wherecourse);                
+                                        
+                                        // Leer Escuela
+                                        $whereespe=array('eid' => $rk['eid'], 'oid' => $rk['oid'],
+                                                'escid' => $rk['escid'], 'subid' => $rk['subid']);
+                                        $e= new Api_Model_DbTable_Speciality();
+                                        $es = $e->_getOne($whereespe);
+                                        
+                                        $compromiso = ($rk['is_com']=='S')?" - Compromiso":"";
+
+                                        $curso_nombre = $tmp['name'] ." --- Escuela : ".$es['name']." ".$compromiso;
                                         $tht = $tht+$ht;
                                         $thp = $thp+$hp;
                                         $tth=$tth+$th;
@@ -682,12 +568,8 @@ $sesion = $sesion1->getStorage()->read();
                                     <th ><center><?php echo $tth?></center></th>
                                 </tr>
                             </table> 
-                           
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colspan="4">
-                            <table  class="table span10 table-striped table-bordered table-condensed"> 
+                            <br>
+                            <table style="width: 100%"> 
                                 <tr>
                                     <th colspan="2">HORAS ADMINISTRATIVAS</th>
                                 </tr>
@@ -697,15 +579,19 @@ $sesion = $sesion1->getStorage()->read();
                                     
                                 </tr>
                                 <?php 
-                                $ll = new Distribucion_Model_DbTable_Distribucionadmin();
-                                $l = $ll->_getDistribuciones($eid, $oid, $distid, $uid, $pid);
+                                $pkdistadm = array('eid' => $practiceteachers['eid'], 'oid' => $practiceteachers['oid'],
+                                'escid' => $this->escid, 'subid' => $this->subid,
+                                'distid' => $this->distid, 'perid' => $this->perid,
+                                'uid' => $practiceteachers['uid'], 'pid' => $practiceteachers['pid']);
+                                $ll = new Distribution_Model_DbTable_DistributionAdmin();
+                                $l = $ll->_getAll($pkdistadm);
                                 if ($l)
                                 {
                                     $tth=0;
                                     foreach ($l as $adm)
                                     {                        
-                                        $labor = $adm['labor'];
-                                        $horas = $adm['horas'];
+                                        $labor = $adm['work'];
+                                        $horas = $adm['hours'];
                                         $tth=$tth+$horas;
                                         ?>
                                         <tr>
@@ -721,177 +607,131 @@ $sesion = $sesion1->getStorage()->read();
                                     </tr>
                                     <?php
                                 }
-                                $hh = new Distribucion_Model_DbTable_Distribuciondocente();
-                                $h = $hh->_getDistribuciones($eid, $oid, $distid, $uid, $pid);
-                                $hacad=$h['t_h_acad'];
-                                $hadmin=$h['t_h_adm'];
+                                $hh = new Distribution_Model_DbTable_DistributionTeacher();
+                                $h = $hh->_getOne($pkdistadm);
+                                $hacad=$h['total_hour_acad'];
+                                $hadmin=$h['total_hour_admin'];
                                 $htotales=$hacad+$hadmin;
                                 ?>
                                 <tr> 
                                     <th colspan="1" >TOTAL DE HORAS</th>                
                                     <th ><center><?php echo $htotales?></center></th> 
                                 </tr>
-                            </table>            
-                        </th>
-                    </tr>
+                            </table>
+                            <br>
+                            <br>
+                            <br>
                     <?php 
                 }
             }
-        }
-        ?>    
-        </tbody>
-    </table>
-   
-    <br>
-    <table class="table span10 table-condensed" >
-     
+        // }
+        ?> 
+        <br>
         <?php
         $g=0;
-        foreach ($this->docentesunicos as $docentea)
+        foreach ($this->allteachers as $allteachers)
         {
             $g++;
-            $d = new Admin_Model_DbTable_Persona();
-            $eid = $docentea['eid'];
-            $oid = $docentea['oid'];
-            $pid = $docentea['pid'];      
+            $eid = $allteachers['eid'];
+            $oid = $allteachers['oid'];
+            $pid = $allteachers['pid'];      
             
-            $uid = $docentea['uid'];
-            $escid = $docentea['escid'];
-            $director = $docentea['esdirector'];
-            $dl = $d->_getPersona($eid, $oid, $pid);
-            $datos = trim($dl['ape_pat']." ".$dl['ape_mat'].", ".$dl['nombres']);
+            $uid = $allteachers['uid'];
+            $escid = $allteachers['escid'];
+            $director = $allteachers['esdirector'];
 
-            $usuario = new Admin_Model_DbTable_Usuario();
-            $estado='A';
-            // $list_p1 = $usuario ->_getUsuarioXEstado($eid,$oid,$uid,$estado);
-            $list_p1 = $usuario ->_getUsuario($eid,$oid,$uid);
+            $whereuser=array('eid' => $allteachers['eid'], 'oid' => $allteachers['oid'],
+                        'uid' => $allteachers['uid']);
+            $usuario = new Api_Model_DbTable_Users();
+            $list_p1 = $usuario ->_getUserXUid($whereuser);
 
-            $info3 = $list_p1['categoria_doc'];
-            $escidorigenusuario=$list_p1['escid'];
+            $info3 = $allteachers['category'];
+            $escidorigenusuario=$list_p1[0]['escid'];
 
-            $cond=$condicion['condision_doc'];
-            $dedicacion=$condicion['dedicasion_doc'];
+            $cond=$allteachers['condision'];
+            $dedicacion=$allteachers['dedication'];
                
 
-            $dbescuela = new Admin_Model_DbTable_Escuela();
-            $escuela = $dbescuela ->_getEscuela($eid,$oid,$escidorigenusuario);
-            $infoescuela = $escuela['nom_escuela'];
+            $whereespe=array('eid' => $allteachers['eid'], 'oid' => $allteachers['oid'],
+                            'escid' => $list_p1[0]['escid'], 'subid' => $list_p1[0]['subid']);
+            $e= new Api_Model_DbTable_Speciality();
+            $es = $e->_getOne($whereespe);
+            $infoescuela = $es['name'];
 
-                if($escidorigenusuario<>$docentea['escid'])
-                {
-                    ?>
-                   
-                    <tr>                    
-                        <th colspan='4' ><h5><?php echo 'Docente de Apoyo :'.$infoescuela?></h5></th>
-                    </tr>
-                    <tr>                    
-                        <th colspan='4' ><?php echo $datos?></th>
-                    </tr>     
-
+            if($escidorigenusuario<>$allteachers['escid']){
+            ?>
+                <h5><?php echo 'Docente de Apoyo :'.$infoescuela?></h5>
+                <h5><?php echo $list_p1[0]['last_name0']." ".$list_p1[0]['last_name1'].", ".$list_p1[0]['first_name']?></h5>
+                <table style="width: 100%">
                     <tr>
-                        <td>  
-                            <table class="table span14  table-bordered ">               
-                                <thead>
-                                <tr>
-                                    <!-- <th ><center>Escuela</center></th> -->
-                                    <th class='span5'><center>Curso</center></th>
-                                    <th class='span1'><center>Sem</center></th>
-                                    <th class='span1'><center>Turno</center></th>
-                                    <th class='span1'><center>(Grupo)s</center></th>
-                                    <th class='span1'><center>Horas Teoricas</center></th>
-                                    <th class='span1'><center>Horas Practicas</center></th>
-                                    <th class='span1'><center>Total Horas</center></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-                                foreach ($this->docentesapoyodetalle as  $detallecursos) {
+                        <th class='span5'><center>Curso</center></th>
+                        <th class='span1'><center>Sem</center></th>
+                        <th class='span1'><center>Turno</center></th>
+                        <th class='span1'><center>(Grupo)s</center></th>
+                        <th class='span1'><center>Horas Teoricas</center></th>
+                        <th class='span1'><center>Horas Practicas</center></th>
+                        <th class='span1'><center>Total Horas</center></th>
+                    </tr>
+                    <?php
+                    foreach ($this->datateachers as  $datateachers) {
+                        $eid=$datateachers['eid'];
+                        $oid=$datateachers['oid'];
+                        $escid=$datateachers['escid'];
+                        $sedid=$datateachers['subid'];
+                        $cursoid=$datateachers['courseid'];
+                        $curid=$datateachers['curid'];
+                        $turno=$datateachers['turno'];
+                        $semid=$datateachers['semid'];                                  
 
-                                    $eid=$detallecursos['eid'];
-                                    $oid=$detallecursos['oid'];
-                                    $escid=$detallecursos['escid'];
-                                    $sedid=$detallecursos['sedid'];
-                                    $cursoid=$detallecursos['cursoid'];
-                                    $curid=$detallecursos['curid'];
-                                    $turno=$detallecursos['turno'];
-                                    $semid=$detallecursos['semid'];                                  
+                        // $es = new Admin_Model_DbTable_Escuela();
+                        // $res = $es->_getEscuela($eid, $oid, $escid);
+                        // $nomescuela = $res['nom_escuela'];
+                        // Leer el nombre del curso
+                        $wherecourse = array('eid' => $datateachers['eid'], 'oid' => $datateachers['oid'], 'curid' => $datateachers['curid'], 'escid' => $datateachers['escid'], 'subid' => $datateachers['subid'], 'courseid' => $datateachers['courseid']);
+                        $tmp = $nc->_getOne($wherecourse); 
+                        $ncurso_ =$tmp['name'];
 
-                                    $es = new Admin_Model_DbTable_Escuela();
-                                    $res = $es->_getEscuela($eid, $oid, $escid);
-                                    $nomescuela = $res['nom_escuela'];
-                                    // Leer el nombre del curso
-                                    $ncur = new Admin_Model_DbTable_Cursos();
-                                    $rncur = $ncur->_getCurso($eid,$oid,$escid,$sedid,$cursoid,$curid);
-                                    $ncurso_ =$rncur['nombre_curso'];
-
-                                    if($detallecursos['uid']==$docentea['uid'])
-                                    {
-                                    ?>
-                                  
-                                    <?php
-                                            
-                                    $cursoid = $docentea['cursoid'];
-                                    $curid = $docentea['curid'];
-
-                                  
-                                    ?>
-                                    <tr>                                                           
-                                         <td><?php echo $ncurso_?></td>                    
-                                         <td><center><?php echo $semid?></center></td>                    
-                                         <td><center><?php echo $turno?></center></td>                    
-                                         <td><center><?php echo $detallecursos['grupos']?></center></td>
-                                         <td><center><?php echo $detallecursos['horas_teoria']?></center></td>
-                                         <td><center><?php echo $detallecursos['horas_practica']?></center></td>
-                                         <td><center><?php echo $detallecursos['total_horas']?></center></td>   
+                        if($datateachers['uid']==$allteachers['uid']){
+                            $cursoid = $allteachers['courseid'];
+                            $curid = $allteachers['curid'];
+                            ?>
+                                    <tr>
+                                        <td><?php echo $ncurso_?></td>                    
+                                        <td><center><?php echo $semid?></center></td>
+                                        <td><center><?php echo $turno?></center></td>
+                                        <td><center><?php echo $datateachers['groups']?></center></td>
+                                        <td><center><?php echo $datateachers['hours_t']?></center></td>
+                                        <td><center><?php echo $datateachers['hours_t']?></center></td>
+                                        <td><center><?php echo $datateachers['hours_total']?></center></td>
                                     </tr>
                                     <?php 
                                         }                                   
                                     }
-                                    ?>                                                                    
-                                </tbody>              
-                            </table>               
-                        </td>
-                    </tr>            
+                                    ?>
+                    </table>
+                    <br>               
+                    <br>               
+                    <br>               
                     <?php  
                 }
         } 
-        ?>   
-    </table>
-    
+        ?>
     <br>
-    <table class="table span10 table-condensed">
-        <tr>
-            <td><?php echo date("d/m/Y");?></td>
-        </tr>
+    <h5><?php echo date("d/m/Y");?></h5>
+    <br>
+    <div style="margin-left: 65%">
+        <h5 style="border-top: solid 1px #000; text-align: center">
+            <?php echo $sesion->infouser['last_name0']." ".$sesion->infouser['last_name1'].", ".$sesion->infouser['first_name']?><br>
+            DIRECTOR
+        </h5>
+    </div>
 
-        <tr>
-            <td></td>
-        </tr>
-
-        <br>      
-        <center>
-            <tr>
-                <?php
-                $eid=$this->eid;
-                $oid=$this->oid;
-                $pid=$this->pid;
-                $persona = new Admin_Model_DbTable_Persona();
-                $list_p = $persona ->_getPersona($eid,$oid,$pid);
-                $info2 = $list_p['ape_pat']." ".$list_p['ape_mat']." ".$list_p['nombres'];
-                ?>
-                <td class='span4'><td>
-                <td style='align:center'><?php echo $info2;?></td>     
-            </tr>
-        </center>
-    </table>
-
-    <?php 
-      $html = ob_get_contents();
-      $mpdf=new mPDF('win-1252','A4','','',15,15,2,12,5,7);
-      $mpdf->SetHTMLHeader($header);
-      $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-      ob_end_clean();
-      $mpdf -> WriteHTML($html);
-      $mpdf->Output('INFORME DISTRIBUCION-'.'.pdf','D');
-    ?>
-    
+<?php 
+    $html = ob_get_contents();
+    $mpdf=new mPDF('win-1252','A4','','',15,15,30,12,5,7);
+    $mpdf->SetHTMLHeader($header);
+    $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('INFORME DISTRIBUCION-'.'.pdf','D');
+?>    

@@ -151,5 +151,20 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 			print "Error: Read All Teacher ".$e->getMessage();
 		}
 	}
+
+	public function _getAllCoursesSupportXTeacherXPeriod($where=array()){
+		try{
+			if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["perid"] =='' || 
+				$where["uid"]=='' || $where["pid"] =='') return false;
+			$wherestr="eid = '".$where['eid']."' and oid='".$where['oid'].
+					"' and not escid='".$where['escid']."' and perid='".$where['perid'].
+					"' and uid='".$where['uid']."' and pid='".$where['pid']."'";
+			$rows = $this->fetchAll($wherestr);
+			if($rows) return $rows->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read All CourseSupport ".$e->getMessage();
+		}
+	}
     
 }
