@@ -328,7 +328,7 @@ for($n=0;$n<=2;$n++){ ?>
                         $sedid=$rk['subid'];  
                         $cursoid=$rk['courseid'];            
                         $curid=$rk['curid'];
-                        $wherecourse = array('eid' => $teachers['eid'], 'oid' => $teachers['oid'], 'curid' => $curso['curid'], 'escid' => $curso['escid'], 'subid' => $curso['subid'], 'courseid' => $curso['courseid']);
+                        $wherecourse = array('eid' => $teachers['eid'], 'oid' => $teachers['oid'], 'curid' => $rk['curid'], 'escid' => $rk['escid'], 'subid' => $rk['subid'], 'courseid' => $rk['courseid']);
                         $tmp = $nc->_getOne($wherecourse);                
                         
                         // Leer Escuela
@@ -535,7 +535,7 @@ for($n=0;$n<=2;$n++){ ?>
                                         $sedid=$rk['subid'];  
                                         $cursoid=$rk['courseid'];            
                                         $curid=$rk['curid'];
-                                        $wherecourse = array('eid' => $practiceteachers['eid'], 'oid' => $practiceteachers['oid'], 'curid' => $curso['curid'], 'escid' => $curso['escid'], 'subid' => $curso['subid'], 'courseid' => $curso['courseid']);
+                                        $wherecourse = array('eid' => $practiceteachers['eid'], 'oid' => $practiceteachers['oid'], 'curid' => $rk['curid'], 'escid' => $rk['escid'], 'subid' => $rk['subid'], 'courseid' => $rk['courseid']);
                                         $tmp = $nc->_getOne($wherecourse);                
                                         
                                         // Leer Escuela
@@ -733,5 +733,5 @@ for($n=0;$n<=2;$n++){ ?>
     $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('INFORME DISTRIBUCION-'.'.pdf','D');
+    $mpdf->Output('INFORME DISTRIBUCION-'.$this->perid.'.pdf','D');
 ?>    
