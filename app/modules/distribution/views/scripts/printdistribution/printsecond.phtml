@@ -28,22 +28,16 @@ $header='
 
 <h5>LISTA DE DOCENTES</h5>
 <?php
-$a[0]='PRINCIPAL';
-$a[1]='ASOCIADO';
-$a[2]='AUXILIAR';
+$a = array('PRINCIPAL', 'ASOCIADO', 'AUXILIAR');
+$b = array('DEDICACIONEXCLUSIVA', 'TIEMPOCOMPLETO', 'TIEMPOPARCIAL');
 
-$b[0]='DEDICACIONEXCLUSIVA';
-$b[1]='TIEMPOCOMPLETO';
-$b[2]='TIEMPOPARCIAL';
-
-for($n=0;$n<=2;$n++){
-    for($p=0;$p<=2;$p++){
-		$k=0;
+for($n=0; $n<=2; $n++){
+    for($p=0 ;$p<=2; $p++){
+		$distri = new Distribution_Model_DbTable_Distribution();
 		foreach ($this->allteachers as $allteachers){
 			$wheredist = array(
 				'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'],
 				'escid' => substr($this->escid,0,3), 'perid' => $this->perid);
-			$distri = new Distribution_Model_DbTable_Distribution();
 	        $tdis = $distri->_getFilter($wheredist,$atrib=array());
 	        $distidsec = $tdis[0]['distid'];
 
@@ -67,9 +61,16 @@ for($n=0;$n<=2;$n++){
 	                    <th class="span1"><center>Horas Prácticas</center></th>
 	                    <th class="span1"><center>Total Horas</center></th>
 	                </tr>
-					<?php	
+					<?php
+					$wherecourteach=array(
+						'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'], 
+						'escid' => $allteachers['escid'], 'perid' => $this->perid, 
+						'distid' => $this->distid, 'uid' => $allteachers['uid'],
+						'pid' => $allteachers['pid']);
+					$courteacher = new Api_Model_DbTable_Coursexteacher();
+					$datateachers=$courteacher->_getFilter($wherecourteach,$attrib=null,$orders=null);
 					$cour = new Api_Model_DbTable_Course();
-					foreach($this->datateachers as $datateachers){
+					foreach($datateachers as $datateachers){
 	                    $wherecour = array(
 	                    	'eid' => $datateachers['eid'], 'oid' => $datateachers['oid'],
 	                    	'curid' => $datateachers['curid'], 'escid' => $datateachers['escid'],
@@ -161,11 +162,9 @@ for($n=0;$n<=2;$n++){
 				<br>
 				<?php
 			}
-			$k++;	
 		}
 	}
 }
-$k=0;
 foreach ($this->allteachers as $allteachers) {
 	$whereespe = array(
 		'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'], 
@@ -190,8 +189,14 @@ foreach ($this->allteachers as $allteachers) {
                 <th class="span1"><center>Total Horas</center></th>
             </tr>
 			<?php	
+			$wherecourteach=array(
+				'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'], 
+				'escid' => $allteachers['escid'], 'perid' => $this->perid, 
+				'distid' => $this->distid, 'uid' => $allteachers['uid'], 
+				'pid' => $allteachers['pid']);
+			$datateachers=$courteacher->_getFilter($wherecourteach,$attrib=null,$orders=null);
 			$cour = new Api_Model_DbTable_Course();
-			foreach($this->datateachers as $datateachers){
+			foreach($datateachers as $datateachers){
                 $wherecour = array(
                 	'eid' => $datateachers['eid'], 'oid' => $datateachers['oid'], 
                 	'curid' => $datateachers['curid'], 'escid' => $datateachers['escid'], 
@@ -222,9 +227,7 @@ foreach ($this->allteachers as $allteachers) {
 		<br>
 		<?php
 	}
-	$k++;	
 }
-$k=0;
 foreach ($this->allteachers as $allteachers){
 	if(substr($allteachers['uid'],8,2)=='JP'){ 
 		$wheredist = array(
@@ -252,8 +255,14 @@ foreach ($this->allteachers as $allteachers){
                     <th class="span1"><center>Total Horas</center></th>
                 </tr>
 				<?php	
+				$wherecourteach=array(
+					'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'], 
+					'escid' => $allteachers['escid'], 'perid' => $this->perid, 
+					'distid' => $this->distid, 'uid' => $allteachers['uid'], 
+					'pid' => $allteachers['pid']);
+				$datateachers=$courteacher->_getFilter($wherecourteach,$attrib=null,$orders=null);
 				$cour = new Api_Model_DbTable_Course();
-				foreach($this->datateachers as $datateachers){
+				foreach($datateachers as $datateachers){
 		            $wherecour = array(
 		               	'eid' => $datateachers['eid'], 'oid' => $datateachers['oid'],
 		               	'curid' => $datateachers['curid'], 'escid' => $datateachers['escid'],
@@ -311,7 +320,6 @@ foreach ($this->allteachers as $allteachers){
 			<?php
 		}
 	}
-	$k++;
 } ?>
 <?php 
     $html = ob_get_contents();

@@ -489,4 +489,62 @@ class Record_DirectedController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
+
+    public function printAction(){
+        try {
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $uid = base64_decode($this->_getParam('uid'));
+            $pid = base64_decode($this->_getParam('pid'));
+            $escid = base64_decode($this->_getParam('escid'));
+            $perid = base64_decode($this->_getParam('perid'));
+            $subid = base64_decode($this->_getParam('subid'));
+            $courseid = base64_decode($this->_getParam('courseid'));
+            $turno = base64_decode($this->_getParam('turno'));
+            $curid = base64_decode($this->_getParam('curid'));
+            $this->view->courseid = $courseid;
+            $this->view->turno = $turno;
+            $this->view->perid = $perid;
+
+            $wheremat = array(
+                'eid' => $eid, 'oid' => $oid, 'perid' => $perid, 'curid' => $curid,
+                'escid' => $escid, 'subid' => $subid, 'courseid' => $courseid, 'turno' => $turno);
+            $matcur = new Api_Model_DbTable_Registrationxcourse();
+            $convalidados = $matcur->_getStudentXcoursesXescidXperiods($wheremat);
+            $this->view->cursosconvalidados = $convalidados;
+
+            $whereesp = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid);
+            $esp = new Api_Model_DbTable_Speciality();
+            $dataesc = $esp->_getOne($whereesp);
+            $this->view->speciality = $dataesc;
+
+            $wherefac = array('eid' => $eid, 'oid' => $oid, 'facid' => substr($escid, 0,1));
+            $fac = new Api_Model_DbTable_Faculty();
+            $datafac = $fac->_getOne($wherefac);
+            $this->view->faculty = $datafac;
+
+            $wherecour = array(
+                'eid' => $eid, 'oid' => $oid, 'curid' => $curid,
+                'escid' => $escid, 'subid' => $subid, 'courseid' => $courseid);
+            $cour = new Api_Model_DbTable_Course();
+            $datacour = $cour->_getOne($wherecour);
+            $this->view->course = $datacour;
+
+            $percour = new Api_Model_DbTable_PeriodsCourses();
+            $periodcourse = $percour->_getOne($wheremat);
+            $this->view->periodcourse = $periodcourse;
+
+            $wherecourtea = array();
+            $courteac = new Api_Model_DbTable_Coursexteacher();
+            $datacourtea = $courteac->_getFilter($wheremat,$attrib=null,$orders=null);
+            if ($datacourtea) {
+                $whereper = array('eid' => $eid, 'pid' => $datacourtea[0]['pid']);
+                $per = new Api_Model_DbTable_Person();
+                $dataper = $per->_getOne($whereper);
+                $this->view->dataper = $dataper;
+            }
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
 }

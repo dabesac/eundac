@@ -32,7 +32,7 @@ if ($this->cursosconvalidados){ ?>
                             <td><center><?php echo $convalidado['notafinal'];?></center></td>
                             <td>
                                 <center>
-                                    <!-- <a target="black" style="float:right" href="/rfacultad/subsanacion/imprimir/perid/<?php echo $this->perid ?>/escid/<?php echo $this->escid ?>/subid/<?php echo $this->subid ?>/uid/<?php echo $this->uid ?>/pid/<?php echo $this->pid ?>/courseid/<?php echo $convalidado['courseid'] ?>/curid/<?php echo $convalidado['curid']?>/turno/<?php echo $convalidado['turno'] ?> "><img src="/img/pdf.png"></a> -->
+                                    <a href="/record/directed/print/perid/<?php echo base64_encode($this->perid) ?>/escid/<?php echo base64_encode($this->escid) ?>/subid/<?php echo base64_encode($this->subid) ?>/uid/<?php echo base64_encode($this->uid) ?>/pid/<?php echo base64_encode($this->pid) ?>/courseid/<?php echo base64_encode($convalidado['courseid']) ?>/curid/<?php echo base64_encode($convalidado['curid']) ?>/turno/<?php echo base64_encode($convalidado['turno']) ?> "><span class="glyphicon glyphicon-print"></span></a>
                                 </center>
                             </td>
                             <?php  
