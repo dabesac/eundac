@@ -303,4 +303,21 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 			print "Error: Read Users ".$e->getMessage();
 		}
 	}
+
+    public function _getUsers($eid="",$oid="",$pid='',$uid='',$nom=''){
+        try{        
+            $sql = $this->_db->query("
+  select last_name0 || ' ' || last_name1 || ', ' || first_name as nombrecompleto
+  ,u.uid,u.rid,u.state,u.subid,u.eid,u.oid,u.escid,p.pid,p.first_name,p.last_name0,p.last_name1,u.escid from base_users as u 
+  right  JOIN base_person as p
+  on u.pid=p.pid and u.eid=p.eid
+  where p.pid ='$pid' and upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nom%'
+  order by nombrecompleto
+                ");
+            if ($sql) return $sql->fetchAll();
+            return false;           
+        }catch (Exception $ex){
+            print "Error: Obteniendo los nombres completos y el codigo de usuario adscrito a una escuela del rol ingresado".$ex->getMessage();
+        }
+    } 
 }

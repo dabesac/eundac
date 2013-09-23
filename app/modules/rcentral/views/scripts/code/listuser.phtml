@@ -1,0 +1,128 @@
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<?php if($this->paginator){
+	//base64_encode($perid)
+	$strn = "pid/".($this->dni);
+	?>
+<div id="datos">
+    <table class="table  table-bordered">
+        <thead>
+        <tr>
+            <th colspan="4"><center><p style="font-size: 16px">Listado de Usuarios de <?php echo $this->nombre;?> con DNI <?php echo $this->dni;?></p>	</center></th> 
+        <td>
+            	<center>           
+<a href='#myModal' class='btn btn-info' id='agregarrol' role='button' role='button'>
+	<i class='icon-book icon-white'></i>Agregar Nuevo Codigo
+</a>
+	 <div class="modal" id="myModal" tabindex="-100" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Agregar un nuevo Usuario</h3>
+		</div>
+		<div class="modal-body">
+			<div id="cargarformrol" class="span6" style="margin: 0px"></div>
+		</div>
+	<div class="modal-footer">
+			<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+			<input type='submit' class="btn btn-primary" id="enviarcod" value="Guardar" ></input>
+		</div>
+	</div> 
+	<script>
+		$(function() {
+			$("#myModal").hide();    
+			$('#myModal').modal('hide');
+			$("#agregarrol").click(function() {
+			var url = "<?php echo $strn?>";
+			$("#cargarformrol").html("<img src='/img/spinner.gif'>Cargando...");
+			$("#cargarformrol").load("/rcentral/persona/generarcodigo/"+url);			
+				$("#myModal").show();
+				$('#myModal').modal('show');
+			});
+		}); 
+	</script>	
+	</center> 	
+        </td>                
+        </tr>
+        <tr>
+                <th class="span1"><center>#</center></th> 
+                <th class="span2" ><center>Codigo de Usuario </center></th>
+                <th class="span2"><center>Rol</center></th>
+                <th class="span2"><center>Escuela</center></th>
+                <th class="span2"><center>Estado</center></th>
+                
+        </tr>
+        </thead>
+
+    <?php
+    if ($this->paginator)
+    {
+        $i=1+($this->pag);
+       foreach ($this->paginator as $registro)    
+        {
+           ?>
+            <tr>
+                <td><center><?php echo $i;?></center></td>
+                <td><center><?php echo $registro['uid'];?></center></td>
+                <td><center><?php 
+                if (utf8_encode($registro['rid'])=='AD'){
+                	echo "Administrativo"; }
+                if (utf8_encode($registro['rid'])=='RF'){
+                	echo "Registro Facultad"; }
+				if (utf8_encode($registro['rid'])=='RC'){
+                	echo "Registro Central"; }
+				if (utf8_encode($registro['rid'])=='BU'){
+                	echo "Bienestar Universitario"; }
+				if (utf8_encode($registro['rid'])=='DC'){
+                	echo "Docente"; }
+				if (utf8_encode($registro['rid'])=='PD'){
+                	echo "Pedagogia"; }
+				if (utf8_encode($registro['rid'])=='AL'){
+                	echo "Alumno"; }
+                if (utf8_encode($registro['rid'])=='VA'){
+                	echo "Vicerector"; }
+                	
+                ?></center></td>
+                <td><center><?php echo $registro['escid'];?></center></td>
+                <td>
+                	<center>
+                	<?php 
+                		if(utf8_encode($registro['estado'])=='A')
+						{
+							echo "Activo";
+						}
+						if(utf8_encode($registro['estado'])=='I')
+						{
+							echo "Inactivo";
+						}
+						if(utf8_encode($registro['estado'])=='B')
+						{
+							echo "Bloqueado";
+						}
+						if(utf8_encode($registro['estado'])=='E')
+						{
+							echo "Eliminado";
+						}	
+                	?>
+                	</center>
+                </td>
+                
+                            </tr>
+           <?php
+             $i++;
+        }
+    }
+    ?>
+    </table>
+        <div style="clear:both"></div>  
+</div>
+
+<?php } 
+else { ?>
+    <div class="alert alert-success">
+        <p> No tiene ningun Usuario con este DNI primero debe crear la Persona dirajase aqui <a  target='_black' class="btn btn-success" href="/rcentral/persona/nuevo/">Nueva Persona</a>  
+
+
+	
+	 </p>
+    </div>
+<?php }?>

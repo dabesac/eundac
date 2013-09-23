@@ -1,0 +1,31 @@
+<div class="alert alert-danger">
+	<B>IMPORTANTE!</b> Las preguntas se podran observar al pasar el mouse sobre las barras.
+</div>
+	<table class="table table-bordered table-condensed span alert-info">
+	    <tr>
+	        <th >
+				<span style="font-size: 15px">REPORTE DETALLADO POR CADA PREGUNTA DE LOS CURSOS ASIGNADOS</span><br/>
+	        </th>
+	    </tr>
+	</table>
+<?php   
+$perid=$this->perid;             
+foreach ($this->cursos as $curso){
+	?>
+    <div width="100%" height="500px">
+    	<iframe name="iFrame1" width="1000px"   		
+    		src="/docente/index/graphicdetail/codigo/<?php echo "curid:".$curso['curid']."-cursoid:".$curso['courseid']."-turno:".$curso['turno']?>/courseid/<?php echo $curso['courseid']?>/curid/<?php echo $curso['curid']?>/turno/<?php echo $curso['turno']?>/perid/<?php echo $perid?>"
+    		frameborder='0'>
+    	</iframe>
+    </div>
+	<?php
+    } ?>
+    
+
+
+
+
+  
+  
+
+

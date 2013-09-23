@@ -39,6 +39,8 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
 		}
 	}
 
+
+
 	public function _getAll($where=null,$order='',$start=0,$limit=0){
 		try{
 			if($where['eid']=='' || $where['oid']=='' || $where['curid']=='' || $where['escid']=='' || $where['subid']=='')
