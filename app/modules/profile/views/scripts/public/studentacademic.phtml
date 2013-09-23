@@ -8,27 +8,44 @@
       <?php foreach ($this->acadata as $academic) {?>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h5><b><?php echo $academic['institution']?></b></h5>
+            <h5>
+              <b><?php echo $academic['institution']?></b>
+              <a class="pull-right" href="/profile/public/studentremoveacademic/eid/<?echo $this->data["eid"]?>/pid/<?echo $this->data["pid"]?>/acid/<?echo $academic['acid']?>"><span class="glyphicon glyphicon-remove"></span></a>
+            </h5>
           </div>
           <div class="panel-body">
             <table class="table">
               <tr>
                 <td>Tipo de Institucion 
                   <h5><b>
-                    <?php if($academic['type']=="ES"){
+                    <?php if($academic['type']=="E"){
                       echo "Estatal";
-                    }elseif($academic['type']=="PA"){
+                    }elseif($academic['type']=="P"){
                       echo "Particular";
-                    }elseif($academic['type']=="PQ"){
+                    }elseif($academic['type']=="PA"){
                       echo "Parroquial";
                     }?>
                   </b></h5>
                 </td>
-                <td>Nivel de Estudio <h5><b><?php echo $academic['title']?></b></h5></td>
+                <td>Nivel de Estudio <h5><b>
+                  <?php if($academic['title']=="SE"){
+                      echo "Secundaria";
+                    }elseif($academic['title']=="SU"){
+                      echo "Superior";
+                    }elseif($academic['title']=="DI"){
+                      echo "Diplomado";
+                    }elseif($academic['title']=="PT"){
+                      echo "Post Grado";
+                    }elseif($academic['title']=="PH"){
+                      echo "PHD";
+                    }elseif($academic['title']=="O"){
+                      echo "Otros";
+                    }?>
+                </b></h5></td>
               </tr>
               <tr>
                 <td>Año de Finalizacion <h5><b><?php echo $academic['year_end']?></b></h5></td>
-                <td>Localizacion <h5><b>Francia</b></h5></td>
+                <td>Localizacion <h5><b><?php echo $academic['location']?></b></h5></td>
               </tr>
             </table>
           </div>        

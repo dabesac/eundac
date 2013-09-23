@@ -83,14 +83,28 @@
     {
         try{
             //$this->_helper->layout()->disableLayout();
-            
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid; 
+
             $uid =$this->_getParam('uid');
             $pid =$this->_getParam('pid');
             $subid =$this->_getParam('subid');
             $escid =$this->_getParam('escid');
+
+            //Datos del Buscado
+            $dbperson=new Api_Model_DbTable_Users();
+            $dbfacesp=new Api_Model_DbTable_Speciality();
+            $where=array("eid"=>$eid, "oid"=>$oid,"uid"=>$uid,"pid"=>$pid,"escid"=>$escid,"subid"=>$subid);
+            $person=$dbperson->_getInfoUser($where);
+            
+            $where=array("eid"=>$eid, "oid"=>$oid,"escid"=>$escid);
+            $person["facesp"]=$dbfacesp->_getFacspeciality($where);
+            print_r($facesp);
+            $this->view->person=$person;
+
+            //---------
          
-            $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;            
+                       
             $perid="13B";
             //print_r($this->sesion);
 

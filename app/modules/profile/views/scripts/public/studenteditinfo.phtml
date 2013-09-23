@@ -1,0 +1,40 @@
+<ul class="nav nav-pills nav-stacked" id="backeditBtn">
+	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
+</ul>
+
+<form name="<?php echo $this->form->getName(); ?>" action="/profile/public/studenteditinfo" method="post" enctype="application/x-www-form-urlencoded">
+<div class="col-sm-12">
+	<h4>Informacion Principal</h4>
+	<table class="table">
+		<tr>
+			<td><label>DNI </label><br><?print $this->form->numdoc?></td>
+			<td><label>Fecha de Nacimiento </label><br><?print $this->form->birthday?></td>
+		</tr>
+		<tr>
+			<td><label>Sexo <?print $this->form->sex;?></label></td>
+			<td><label>Estado Civil <?print $this->form->civil;?></label></td>
+		</tr>
+		<tr>
+			<td><label>E-mail </label><br><?print $this->form->mail_person?></td>
+			<td><label>E-mail de Trabajo </label><br><?print $this->form->mail_work?></td>
+		</tr>
+		<tr>
+			<td><label>Telefono Fijo </label><br><?print $this->form->phone?></td>
+			<td><label>Celular </label><br><?print $this->form->cellular?></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><?print $this->form->save?></td>
+		</tr>
+	</table>
+</div>
+
+<script>
+	$('#backeditBtn a').click(function (e) {
+    	e.preventDefault()
+      	$("#editform").html("")
+      	$("#editdata").removeClass("hidden")
+      	$('#editpalBtns a:last').tab('show')
+  	})
+   
+</script>

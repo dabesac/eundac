@@ -54,6 +54,8 @@ class Record_IndexController extends Zend_Controller_Action {
 			if ($rowperiod ) $this->view->stateperiod=$rowperiod['state'];
 			unset($formData['year']);
 			$this->view->courses = $this->_loadCourses($formData);
+			$this->view->rid =$this->sesion->rid;
+
 		}
 				 
 		

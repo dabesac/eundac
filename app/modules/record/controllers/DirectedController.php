@@ -69,7 +69,11 @@ class Record_DirectedController extends Zend_Controller_Action {
             $cur0=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
             $wherecur['state']="T";
             $cur1=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
-            $cur=array_merge($cur0,$cur1);
+            if ($cur0) {
+                if ($cur1) $cur=array_merge($cur0,$cur1);
+                else $cur=$cur0;
+            }
+            elseif ($cur1) $cur=$cur1;
             $this->view->curriculas=$cur;
 
             $wheresc['eid']=$eid;
@@ -211,154 +215,162 @@ class Record_DirectedController extends Zend_Controller_Action {
             $eid= $this->sesion->eid;
             $oid= $this->sesion->oid;
             $uidreg= $this->sesion->uid;
-            $uid = $this->_getParam("uid");
-            $pid = $this->_getParam("pid");
-            $escid = $this->_getParam("escid");
-            $subid = $this->_getParam("subid");
-            $perid = $this->_getParam("perid");
-            $curid = $this->_getParam("curid");
-            $nota = $this->_getParam("nota");
-            $semid = $this->_getParam("semid");
-            $reso = base64_decode($this->_getParam("reso"));
-            $recibo = $this->_getParam("recibo");
-            $courseid = $this->_getParam("courseid");
-            $turno = $this->_getParam("turno");
-            $credits = $this->_getParam("credits");
-            $uid_doc = $this->_getParam("uid_doc");
-            $pid_doc = $this->_getParam("pid_doc");
+            if ($this->getRequest()->isPost())
+            {
+                $formdata = $this->getRequest()->getPost();
+                $uid = $formdata['uid'];
+                $pid = $formdata['pid'];
+                $escid = $formdata['escid'];
+                $subid = $formdata['subid'];
+                $perid = $formdata['perid'];
+                $turno = $formdata['turno'];
+                $nota = $formdata['nota'];
+                $recibo = $formdata['recibo'];
+                $reso = $formdata['resolucion'];
+
+                $tmpcourseid = split('--', $formdata['courseid']);
+                $courseid = $tmpcourseid[0];
+                $curid = $tmpcourseid[1];
+                $semid = $tmpcourseid[2];
+                $credits = $tmpcourseid[3];
+
+                $tmpdocente_reg = split(';--;', $formdata['docente_reg']);
+                $uid_doc = $tmpdocente_reg[0];
+                $pid_doc = $tmpdocente_reg[1];
          
-            $regid=$uid.$perid;
-            $this->view->uid = $uid;
-            $this->view->pid = $pid;
-            $this->view->perid = $perid;
-            $this->view->escid = $escid;
-            $this->view->subid = $subid;
-            $this->view->eid = $eid;
-            $this->view->oid = $oid;
+                $regid=$uid.$perid;
+                $this->view->uid = $uid;
+                $this->view->pid = $pid;
+                $this->view->perid = $perid;
+                $this->view->escid = $escid;
+                $this->view->subid = $subid;
+                $this->view->eid = $eid;
+                $this->view->oid = $oid;
 
-            // $wherecourse['eid']=$eid;
-            // $wherecourse['oid']=$oid;
-            // $wherecourse['subid']=$subid;
-            // $wherecourse['curid']=$curid;
-            // $wherecourse['escid']=$escid;
-            // $wherecourse['courseid']=$courseid;
-            // $reqcourse = new Api_Model_DbTable_Course();
-            // $req = $reqcourse->_getOne($wherecourse);
-            // $inforequisitos = $req['req_1']." | ".$req['req_2']." | ".$req['req_3'];
-            // print_r($inforequisitos);
-              
-            // $dbveces = new Admin_Model_DbTable_Cursos();       
-            // $vecesllevadas=  $dbveces->_getCursosXAlumnoXVeces($escid,$uid,$curricula,$curso);
-            // print_r($vecesllevadas);
-      
-            // $dbcursopen = new Admin_Model_DbTable_Cursos();     
-            // $cursoapto=  $dbcursopen->_getCursoXllevo($escid,$uid,$curricula,$curso);
-            // print_r($cursoapto);
+                // $wherecourse['eid']=$eid;
+                // $wherecourse['oid']=$oid;
+                // $wherecourse['subid']=$subid;
+                // $wherecourse['curid']=$curid;
+                // $wherecourse['escid']=$escid;
+                // $wherecourse['courseid']=$courseid;
+                // $reqcourse = new Api_Model_DbTable_Course();
+                // $req = $reqcourse->_getOne($wherecourse);
+                // $inforequisitos = $req['req_1']." | ".$req['req_2']." | ".$req['req_3'];
+                // print_r($inforequisitos);
+                  
+                // $dbveces = new Admin_Model_DbTable_Cursos();       
+                // $vecesllevadas=  $dbveces->_getCursosXAlumnoXVeces($escid,$uid,$curricula,$curso);
+                // print_r($vecesllevadas);
+          
+                // $dbcursopen = new Admin_Model_DbTable_Cursos();     
+                // $cursoapto=  $dbcursopen->_getCursoXllevo($escid,$uid,$curricula,$curso);
+                // print_r($cursoapto);
 
 
-            // ------------------------------------------------------------------------------------
-            $wherepercour['eid']=$eid;
-            $wherepercour['oid']=$oid;
-            $wherepercour['courseid']=$courseid;
-            $wherepercour['escid']=$escid;
-            $wherepercour['perid']=$perid;
-            $wherepercour['turno']=$turno;
-            $wherepercour['subid']=$subid;
-            $wherepercour['curid']=$curid;
-            $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
-            $periodcourse=$dbperiodocurso->_getOne($wherepercour);
-            if (!$periodcourse) {
-                $datapercour=$wherepercour;
-                $datapercour['state_record']= 'A';
-                $datapercour['type_rate']= 'O';
-                $datapercour['receipt']= 'N';
-                $datapercour['resolution']= $reso;
-                $datapercour['semid']= $semid;
-                $datapercour['closure_date']= date("Y-m-d");
-                $datapercour['register']=$uidreg;
-                $datapercour['created']= date("Y-m-d");
-                $datapercour['state']= 'A';
-                $dbperiodocurso->_save($datapercour);
-            }
-
-            $wheredoccour=array();
-            $wheredoccour['eid']=$eid;
-            $wheredoccour['oid']=$oid;
-            $wheredoccour['escid']=$escid;
-            $wheredoccour['subid']=$subid;
-            $wheredoccour['courseid']=$courseid;
-            $wheredoccour['curid']=$curid;
-            $wheredoccour['turno']=$turno;
-            $wheredoccour['perid']=$perid;
-            $dbdocentes = new Api_Model_DbTable_Coursexteacher();
-            $infodoccourse=$dbdocentes->_getFilter($wheredoccour,$attrib=null,$orders=null);
-            if ($infodoccourse) {
-                if ($infodoccourse[0]['uid']<>$uid_doc and $infodoccourse[0]['pid']<>$pid_doc) { ?>
-                    <script type="text/javascript">
-                        alert("Esta Asignatura ya se encuentra asignada a Otro Docente en este Turno, verifique los datos del Docente o cambie de Turno.");
-                    </script>
-                    <?php
-                    exit();
+                // ------------------------------------------------------------------------------------
+                $wherepercour['eid']=$eid;
+                $wherepercour['oid']=$oid;
+                $wherepercour['courseid']=$courseid;
+                $wherepercour['escid']=$escid;
+                $wherepercour['perid']=$perid;
+                $wherepercour['turno']=$turno;
+                $wherepercour['subid']=$subid;
+                $wherepercour['curid']=$curid;
+                $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
+                $periodcourse=$dbperiodocurso->_getOne($wherepercour);
+                if (!$periodcourse) {
+                    $datapercour=$wherepercour;
+                    $datapercour['state_record']= 'A';
+                    $datapercour['type_rate']= 'O';
+                    $datapercour['receipt']= 'N';
+                    $datapercour['resolution']= $reso;
+                    $datapercour['semid']= $semid;
+                    $datapercour['closure_date']= date("Y-m-d");
+                    $datapercour['register']=$uidreg;
+                    $datapercour['created']= date("Y-m-d");
+                    $datapercour['state']= 'A';
+                    $dbperiodocurso->_save($datapercour);
                 }
-            }else{
-                $wheredoccour['uid']=$uid_doc;
-                $wheredoccour['pid']=$pid_doc;
-                $datadoccourse=$wheredoccour;
-                $datadoccourse['state']= 'A';
-                $datadoccourse['semid']= $semid;
-                $datadoccourse['is_main']= 'S';
-                $datadoccourse['is_com']= 'N';
-                $dbdocentes->_save($datadoccourse);
-            }
 
-            $wherereg['eid']=$eid;
-            $wherereg['oid']=$oid;
-            $wherereg['escid']=$escid;
-            $wherereg['subid']=$subid;
-            $wherereg['regid']=$regid;
-            $wherereg['pid']=$pid;
-            $wherereg['uid']=$uid;
-            $wherereg['perid']=$perid;
-            $dbreg = new Api_Model_DbTable_Registration();
-            $registration = $dbreg->_getOne($wherereg);
-            if (!$registration) {
-                $datareg=$wherereg;
-                $datareg['semid']='0';
-                $datareg['credits']= $credits;
-                $datareg['date_register']= date("Y-m-d");
-                $datareg['register']= $uidreg;
-                $datareg['modified']= $uidreg;
-                $datareg['created']= date("Y-m-d");
-                $datareg['state']= "M";
-                $datareg['document_auth']= $reso;
-                $datareg['count']= 0;
-                $dbreg->_save($datareg);
-            }
+                $wheredoccour=array();
+                $wheredoccour['eid']=$eid;
+                $wheredoccour['oid']=$oid;
+                $wheredoccour['escid']=$escid;
+                $wheredoccour['subid']=$subid;
+                $wheredoccour['courseid']=$courseid;
+                $wheredoccour['curid']=$curid;
+                $wheredoccour['turno']=$turno;
+                $wheredoccour['perid']=$perid;
+                $dbdocentes = new Api_Model_DbTable_Coursexteacher();
+                $infodoccourse=$dbdocentes->_getFilter($wheredoccour,$attrib=null,$orders=null);
+                if ($infodoccourse) {
+                    if ($infodoccourse[0]['uid']<>$uid_doc and $infodoccourse[0]['pid']<>$pid_doc) { ?>
+                        <script type="text/javascript">
+                            alert("Esta Asignatura ya se encuentra asignada a Otro Docente en este Turno, verifique los datos del Docente o cambie de Turno.");
+                        </script>
+                        <?php
+                        exit();
+                    }
+                }else{
+                    $wheredoccour['uid']=$uid_doc;
+                    $wheredoccour['pid']=$pid_doc;
+                    $datadoccourse=$wheredoccour;
+                    $datadoccourse['state']= 'A';
+                    $datadoccourse['semid']= $semid;
+                    $datadoccourse['is_main']= 'S';
+                    $datadoccourse['is_com']= 'N';
+                    $dbdocentes->_save($datadoccourse);
+                }
 
-            $whereregcour['eid']=$eid;
-            $whereregcour['oid']=$oid;
-            $whereregcour['escid']=$escid;
-            $whereregcour['subid']=$subid;
-            $whereregcour['courseid']=$courseid;
-            $whereregcour['curid']=$curid;
-            $whereregcour['regid']=$regid;
-            $whereregcour['turno']=$turno;
-            $whereregcour['pid']=$pid;
-            $whereregcour['uid']=$uid;
-            $whereregcour['perid']=$perid;
-            $dbregistercourse = new Api_Model_DbTable_Registrationxcourse();
-            $regcourse=$dbregistercourse->_getOne($whereregcour);
-            if (!$regcourse) {
-                $dataregcourse=$whereregcour;
-                $dataregcourse['notafinal']= $nota;
-                $dataregcourse['receipt']= $recibo;
-                $dataregcourse['document_auth']= $reso;
-                $dataregcourse['register']= $uidreg;
-                $dataregcourse['created']= date("Y-m-d");
-                $dataregcourse['state']= 'M';
-                $dataregcourse['approved']= $this->sesion->uid;
-                $dataregcourse['approved_date']= date("Y-m-d h:m:s");
-                $dbregistercourse->_save($dataregcourse);
+                $wherereg['eid']=$eid;
+                $wherereg['oid']=$oid;
+                $wherereg['escid']=$escid;
+                $wherereg['subid']=$subid;
+                $wherereg['regid']=$regid;
+                $wherereg['pid']=$pid;
+                $wherereg['uid']=$uid;
+                $wherereg['perid']=$perid;
+                $dbreg = new Api_Model_DbTable_Registration();
+                $registration = $dbreg->_getOne($wherereg);
+                if (!$registration) {
+                    $datareg=$wherereg;
+                    $datareg['semid']='0';
+                    $datareg['credits']= $credits;
+                    $datareg['date_register']= date("Y-m-d");
+                    $datareg['register']= $uidreg;
+                    $datareg['modified']= $uidreg;
+                    $datareg['created']= date("Y-m-d");
+                    $datareg['state']= "M";
+                    $datareg['document_auth']= $reso;
+                    $datareg['count']= 0;
+                    $dbreg->_save($datareg);
+                }
+
+                $whereregcour['eid']=$eid;
+                $whereregcour['oid']=$oid;
+                $whereregcour['escid']=$escid;
+                $whereregcour['subid']=$subid;
+                $whereregcour['courseid']=$courseid;
+                $whereregcour['curid']=$curid;
+                $whereregcour['regid']=$regid;
+                $whereregcour['turno']=$turno;
+                $whereregcour['pid']=$pid;
+                $whereregcour['uid']=$uid;
+                $whereregcour['perid']=$perid;
+                $dbregistercourse = new Api_Model_DbTable_Registrationxcourse();
+                $regcourse=$dbregistercourse->_getOne($whereregcour);
+                if (!$regcourse) {
+                    $dataregcourse=$whereregcour;
+                    $dataregcourse['notafinal']= $nota;
+                    $dataregcourse['receipt']= $recibo;
+                    $dataregcourse['document_auth']= $reso;
+                    $dataregcourse['register']= $uidreg;
+                    $dataregcourse['created']= date("Y-m-d");
+                    $dataregcourse['state']= 'M';
+                    $dataregcourse['approved']= $this->sesion->uid;
+                    $dataregcourse['approved_date']= date("Y-m-d h:m:s");
+                    $dbregistercourse->_save($dataregcourse);
+                }
             }
 
             $wheresub['eid']=$eid;

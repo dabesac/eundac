@@ -1,0 +1,33 @@
+<ul class="nav nav-pills nav-stacked" id="backeditBtn">
+	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
+</ul>
+
+<form name="<?php echo $this->form->getName(); ?>" action="/profile/public/studentsavelaboral" method="post" enctype="application/x-www-form-urlencoded">
+
+<div class="col-sm-12">
+	<table class="table">
+		<tr>
+			<td><label>Empresa</label><?print $this->form->company?></td>
+			<td><label>Puesto</label><?print $this->form->industry?></td>
+		</tr>
+		<tr>
+			<td><label>Salario Mensual</label><?print $this->form->salary?></td>
+			<td><label>Condición</label><?print $this->form->condition?></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><?print $this->form->save?></td>
+		</tr>
+	</table>
+</div>
+
+
+<script>
+	$('#backeditBtn a').click(function (e) {
+    	e.preventDefault()
+      	$("#editform").html("")
+      	$("#editdata").removeClass("hidden")
+      	$('#editpalBtns a:last').tab('show')
+  	})
+   
+</script>

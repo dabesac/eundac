@@ -19,4 +19,20 @@ class Api_Model_DbTable_Campususer extends Zend_Db_Table_Abstract
 		}
 		return false;
 	}
+
+
+	public function _getOne($where=array()){
+		try{
+			if ($where['username']=='') return false;
+			$wherestr = " username = '".$where['username']."' and status='5' ";
+
+			$row = $this->fetchRow($wherestr);
+			if($row) return $row->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read One Registration".$e->getMessage();
+		}
+	}
+
+
 }

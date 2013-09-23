@@ -1,0 +1,100 @@
+<div class="row">
+<div class="col-sm-9">
+	<div id="mainsign">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h5><b>Matricula Actual | Periodo 13B</b></h5>
+			</div>
+			<div class="panel-body">
+				<?if($this->curact){?>
+				<table class="table">
+					<tr>
+						<th><center>Cursos</center></th>
+						<th><center>Turno</center></th>
+						<?if($this->typerate[0][0]['type_rate']=="O"){?>
+							<th><center>Unidad 1</center></th>
+							<th><center>Unidad 2</center></th>
+						<?}elseif($this->typerate[0][0]['type_rate']=="C"){?>
+							<th><center>Unidad 1</center></th>
+							<th><center>Unidad 2</center></th>
+							<th><center>Unidad 3</center></th>
+							<th><center>Unidad 4</center></th>
+						<?}?>
+							<th><center>Promedio Final</center></th>
+					</tr>
+
+					<? $c=0;
+					foreach ($this->curact as $curact) {
+						if($this->typerate[$c][0]['type_rate']=="O"){?>
+							<tr>
+								<td><h5><?echo $this->name[$c][0]['name']?></h5></td>
+								<td><h5 align="center"><?echo $curact['turno']?></h5></td>
+								<td><h5 align="center"><?echo $curact['promedio1']?></h5></td>
+								<td><h5 align="center"><?echo $curact['promedio2']?></h5></td>
+								<td><h5 align="center"><b><?echo $curact['notafinal']?></b></h5></td>
+							</tr>
+						<?}elseif($this->typerate[$c][0]['type_rate']=="C"){?>
+							<tr>
+								<td><h5><?echo $this->name[$c][0]['name']?></h5></td>
+								<td><h5 align="center"><?echo $curact['turno']?></h5></td>
+								<td><h5 align="center"><?echo $curact['nota4_i']?></h5></td>
+								<td><h5 align="center"><?echo $curact['nota9_i']?></h5></td>
+								<td><h5 align="center"><?echo $curact['nota4_ii']?></h5></td>
+								<td><h5 align="center"><?echo $curact['nota9_ii']?></h5></td>
+								<td><h5 align="center"><b><?echo $curact['notafinal']?></b></h5></td>
+							</tr>
+						<?}
+						$c++;
+					}?>
+				</table>
+				<?}else{?>
+					<h5 align="center">Aun no Valida Matricula en Este Periodo</h5>
+				<?}?>
+			</div>
+		</div>
+	</div>
+
+<div id="datasign"></div>
+</div><!-- div col 9 -->
+
+<div class="col-sm-3">
+<ul class="nav nav-pills nav-stacked" id="backsigninTab">
+  <li><a href="#" id="btncurrentsign" class="btn-xs">Volver a Matricula Actual</a></li>
+</ul>
+<br>
+<ul class="nav nav-pills nav-stacked" id="masinfosignTab">
+  <li><a href="#" id="btncurri" class="btn-xs">Matricula Por Curricula</a></li>
+  <li><a href="#" id="btnrea" class="btn-xs">Matriculas Realizados</a></li>
+  <li class="hidden"><a></a></li>
+</ul>
+</div>
+</div>
+<script>
+   $("#btncurrentsign").addClass("hidden")
+
+  $('#masinfosignTab a').click(function (e) {
+    e.preventDefault()
+    $("#mainsign").addClass("hidden")
+    $("#datasign").removeClass("hidden")
+    $("#btncurrentsign").removeClass("hidden")
+    $(this).tab('show')
+  })
+
+  $('#backsigninTab a').click(function (e) {
+    e.preventDefault()
+    $('#masinfosignTab a:last').tab('show')
+    $("#datasign").addClass("hidden")
+    $("#mainsign").removeClass("hidden")
+    $("#btncurrentsign").addClass("hidden")
+  })
+
+  $("#btncurri").click(function(){
+    $("#datasign").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+    $("#datasign").load("/profile/private/studentsignpercur/eid/<?echo $this->data[eid]?>/pid/<?echo $this->data[pid]?>/uid/<?echo $this->data[uid]?>/escid/<?echo $this->data[escid]?>/subid/<?echo $this->data[subid]?>/oid/<?echo $this->data[oid]?>");
+  })
+
+  $("#btnrea").click(function(){
+    $("#datasign").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+    $("#datasign").load("/profile/private/studentsignrealized");
+  })
+</script>

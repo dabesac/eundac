@@ -1,0 +1,50 @@
+<ul class="nav nav-pills nav-stacked" id="backeditBtn">
+	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
+</ul>
+
+<form name="<?php echo $this->form->getName(); ?>" action="/profile/public/studentsaveacademic" method="post" enctype="application/x-www-form-urlencoded">
+
+<div class="col-sm-12">
+	<h4>Informacion Academica</h4>
+	<table class="table">
+		<tr>
+			<td><label>Nombre de la Institucion</label><?print $this->form->institution?></td>
+			<td><label>Tipo</label><?print $this->form->type?></td>
+		</tr>
+		<tr>
+			<td><label>Localizacion: Pais | Departamento | Provincia | Distrito</label><?print $this->form->location?></td>
+		</tr>
+		<tr>
+			<td><label>Titulo</label><?print $this->form->title?></td>
+			<td><label>Año de Finalización</label><?print $this->form->year_end?></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><?print $this->form->save?></td>
+		</tr>
+	</table>
+</div>
+
+<script>
+	$("#moreinfo").addClass("hidden");
+	$("#live").change(function(){
+		$("#live option:selected").each(function(){
+			var livevar=$(this).val();
+		if (livevar=="S") {
+			$("#moreinfo").removeClass("hidden");
+		};
+		if (livevar=="N") {
+			$("#moreinfo").addClass("hidden");
+		};
+		})
+	})
+	
+	$('#backeditBtn a').click(function (e) {
+    	e.preventDefault()
+      	$("#editform").html("")
+      	$("#editdata").removeClass("hidden")
+      	$('#editpalBtns a:last').tab('show')
+      	$('#editpalBtns2 a:last').tab('show')
+  	})
+   
+</script>
