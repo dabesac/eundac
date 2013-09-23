@@ -5,15 +5,22 @@
 <div>
 	<table class="table table-striped">
 		<?php
-		// print_r($this->newperiod);exit();
+		// print_r($this->rid);exit();
+	if ($this->newperiod) {
 		foreach ($this->newperiod as $period) {
 			$perid=$period['perid'];
 			$pname=$period['name'];
 			?>
 		<thead>
 			<tr style="background: #1e83cb; color: #fff;">
-				<th style='font-size:15px'colspan='7'><span class="glyphicon glyphicon-list"></span><?php echo " ".$perid." - ".$pname?><a href="/register/registerealized/printperiod/perid/<?php echo base64_encode($perid)?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/uid/<?php echo base64_encode($this->uid)?>" class='btn btn-info' style='float:right'><span class="glyphicon glyphicon-download-alt"></span> PDF</a></th>
-				<th><span class='glyphicon glyphicon cloud-download'></span><a href='' class='btn btn-info' style='float:right'>Copia FICHA</a></th>
+				<th style='font-size:15px'colspan='7'><span class="glyphicon glyphicon-list"></span><?php echo " ".$perid." - ".$pname?>
+			<?php
+			if ($this->rid!='AL') { ?>		
+				<a href='' class='btn btn-info' style='float:right; margin-left:10px'><span class='glyphicon glyphicon-file'></span> Copia FICHA</a>
+			<?php
+			}	
+			?>	
+				<a href="/register/registerealized/printperiod/perid/<?php echo base64_encode($perid)?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/uid/<?php echo base64_encode($this->uid)?>" class='btn btn-info' style='float:right'><span class="glyphicon glyphicon-download-alt"></span> PDF</a><span class='glyphicon glyphicon cloud-download'></span></th>
 			</tr>		
 		</thead>
 		<tr>
@@ -68,6 +75,12 @@
 		$c++;	
 		}
 	}
-		?>
+}
+else{    ?>
+	<div class="alert alert-info" style='font-size:15px'><b>No EXISTE DATA en el sistema. </b></div>
+	<?php
+}
+
+	?>
   	</table>
 </div>
