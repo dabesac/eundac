@@ -29,8 +29,9 @@ class IndexController extends Zend_Controller_Action {
     			$rid_ =split(";--;",$this->_getParam('rid'));
     			$rid = base64_decode($rid_[0]);
     			$prefix = trim($rid_[1]);
-    			$cod = ($uid = $form->getValue('usuario').$prefix);    			
-    			$pass = md5($form->getValue('clave'));
+    			$cod = ($uid = $form->getValue('usuario').$prefix);
+    			$clavecampus = $form->getValue('clave');    			
+    			$pass = md5($clavecampus);
     			$dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
     			$authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter,'base_users','uid','password');
     			$authAdapter->getDbSelect()->where("state = 'A' and eid='$eid' and oid='$oid'");
@@ -132,35 +133,6 @@ class IndexController extends Zend_Controller_Action {
     				$data->acls= $tmpacl['module'];
     				$data->resources=$tmpacl['list'];
     				
-    				/*
-    				
-    				$acl = new Api_Model_DbTable_Acl();
-    				$data_ = array("eid"=>$data->eid,"oid"=>$data->oid,"rid"=>$data->rid);
-    				$rowacl = $acl->_getACL($data_);
-    				
-    				if ($rowacl) {
-    					$modules = new Api_Model_DbTable_Module();
-    					$rmodules = $modules->_getAll(array("eid"=>$data->eid,"oid"=>$data->oid));
-    					if ($rmodules){
-    						$f=0;
-    						$dataacl=null;
-    						foreach ($rmodules as $mod){
-    							$mod['acls']=null;
-    							foreach ($rowacl as $mods){
-    								if ($mod['mid']==$mods['mid']){
-    									 $mod['acls'][]=$mods;
-    									 $dataresource[] = $mods['controller'];
-    								}
-    							}
-    							if ($mod['acls']<>null){
-    								$dataacl[]=$mod;    								
-    							} 
-    						}
-    						$data->acls =$dataacl;
-    						$data->resources = $dataresource;
-    					}
-    					
-    				} */
     				// Set Header and Footer Print Org
     				$orgs = new Api_Model_DbTable_Org();
     				$rorg = $orgs->_getOne(array("eid" => $data->eid,"oid"=>$data->oid));
@@ -202,7 +174,7 @@ class IndexController extends Zend_Controller_Action {
     						$this->_redirect("/index/cerrar");
     					}
     					$urlmod = $data->rol['module'];
-    					$passn= base64_encode($pass);
+    					$passn= base64_encode($clavecampus);
     					$urllogin  = "key/$passn/mod/".$data->modulo;
     					$urllogin  = array("key"=>$passn, "mod" => $data->modulo);
     					if (trim($data->rid)=='AL' || $data->rid=='DC')
