@@ -24,17 +24,20 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 			// $rid=$this->sesion->rid;
 			// $subid=$this->sesion->subid;
 			// $uid=$this->sesion->uid;
+			// $pid=$this->sesion->pid;
 
 			$rid=base64_decode($this->_getParam('rid'));
 			$perid=base64_decode($this->_getParam('perid'));
 			$escid=base64_decode($this->_getParam('escid'));
 			$subid=base64_decode($this->_getParam('subid'));
 			$uid=base64_decode($this->_getParam('uid'));
-			
-			$this->view->rid=$rid;
-			$this->view->escid=$escid;
-			$this->view->subid=$subid;
-			$this->view->uid=$uid;
+			$pid=base64_decode($this->_getParam('pid'));
+
+			// $this->view->pid=$pid;
+			// $this->view->rid=$rid;
+			// $this->view->escid=$escid;
+			// $this->view->subid=$subid;
+			// $this->view->uid=$uid;
 
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'uid'=>$uid);
 			$attrib=array('escid','perid','courseid','turno','notafinal','state');

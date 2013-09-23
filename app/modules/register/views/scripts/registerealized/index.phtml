@@ -5,7 +5,7 @@
 <div>
 	<table class="table table-striped">
 		<?php
-		// print_r($this->rid);exit();
+		// print_r($this->data);exit();
 	if ($this->newperiod) {
 		foreach ($this->newperiod as $period) {
 			$perid=$period['perid'];
@@ -16,7 +16,7 @@
 				<th style='font-size:15px'colspan='7'><span class="glyphicon glyphicon-list"></span><?php echo " ".$perid." - ".$pname?>
 			<?php
 			if ($this->rid!='AL') { ?>		
-				<a href='' class='btn btn-info' style='float:right; margin-left:10px'><span class='glyphicon glyphicon-file'></span> Copia FICHA</a>
+				<a href='/register/registerstudent/print/uid/<?php echo base64_encode($this->uid)?>/pid/<?php echo base64_encode($this->pid)?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/perid/<?php echo base64_encode($perid)?>' class='btn btn-info' style='float:right; margin-left:10px'><span class='glyphicon glyphicon-file'></span> Copia FICHA</a>
 			<?php
 			}	
 			?>	
