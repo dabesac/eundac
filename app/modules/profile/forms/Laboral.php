@@ -24,14 +24,14 @@ class Profile_Form_Laboral extends Zend_Form{
 		$salary->setAttrib("tittle","Salario");
 		$salary->setAttrib("class","form-control");
 
-		$condition=new Zend_Form_Element_Text('condition');
+		$condition=new Zend_Form_Element_Select('condition');
 		$condition->removeDecorator('HtmlTag')->removeDecorator('Label');
 		$condition->setRequired(true)->addErrorMessage("Campo Obligatorio");
-		$condition->setAttrib("maxlength","7")->setAttrib("size","30");
-		$condition->setAttrib("tittle","Condición");
+		$condition->addMultiOption("Practicante","Practicante");
+		$condition->addMultiOption("Estable","Estable");
 		$condition->setAttrib("class","form-control");
 
-		$submit=new Zend_Form_Element_Submit('submit');
+		$submit=new Zend_Form_Element_Submit('save');
 		$submit->setAttrib("class","btn btn-info pull-right");
 		$submit->setLabel("Guardar");
 		$submit->removeDecorator('HtmlTag')->removeDecorator('Label');

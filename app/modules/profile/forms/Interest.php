@@ -20,13 +20,20 @@ class Profile_Form_Interest extends Zend_Form{
 		$title->setAttrib("title","Nombre");
 		$title->setAttrib("class","form-control");
 
-		$submit=new Zend_Form_Element_Submit("submit");
+		$club= new Zend_Form_Element_Select("club");
+		$club->removeDecorator("HtmlTag")->removeDecorator("Label");
+		$club->setRequired(true)->addErrorMessage("Este Campo es Obligatorio");
+		$club->setAttrib("class","form-control");
+		$club->addMultiOption("S","Si");
+		$club->addMultiOption("N","No");
+
+		$submit=new Zend_Form_Element_Submit("save");
 		$submit->setAttrib("class","btn btn-info pull-right");
 		$submit->setLabel("Guardar");
 		$submit->removeDecorator("HtmlTag")->removeDecorator("Label");
 
 
-		$this->addElements(array($discipline, $title, $submit));
+		$this->addElements(array($discipline, $title, $club, $submit));
 
 
 	}

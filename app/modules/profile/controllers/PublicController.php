@@ -119,6 +119,7 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
+//DatosFamiliares--------------------------------------------
     public function studentfamilyAction()
     {
         try{
@@ -184,16 +185,12 @@ class Profile_PublicController extends Zend_Controller_Action {
                     trim($formdata["address"]);
 
                     $save=$dbfamily->_save($formdata);
-
-                    $where=array("eid"=>$eid, "numdoc"=>trim($formdata["numdoc"]));
-                    $attrib=array("famid");
-                    $famid=$dbfamily->_getFilter($where, $attrib);
                     
-                    $relationdata=array("eid"=>$eid, "pid"=>$pid , "famid"=>$famid[0]['famid'],"type"=>$type,"assignee"=>$assignee);
+                    //print_r($save);
+
+                    $relationdata=array("eid"=>$eid, "pid"=>$pid , "famid"=>$save,"type"=>$type,"assignee"=>$assignee);
                     //print_r($relationdata);
                     $saver=$dbrelation->_save($relationdata);
-
-
 
                 }
             }
@@ -202,7 +199,13 @@ class Profile_PublicController extends Zend_Controller_Action {
             print "Error : ".$e->getMessage();
         }
     }
+//---------------------------------------------------------------------
 
+
+
+
+
+//Datos Academicos-----------------------------------------------------
     public function studentacademicAction()
     {
         try{
@@ -210,10 +213,14 @@ class Profile_PublicController extends Zend_Controller_Action {
             $eid=$this->sesion->eid;
             $pid=$this->sesion->pid;
 
+            $data=array("eid"=>$eid, "pid"=>$pid);
+
             $dbacadata=new Api_Model_DbTable_Academicrecord();
             $where=array("eid"=>$eid,"pid"=>$pid);
             $acadata=$dbacadata->_getFilter($where);
             //print_r($acadata);
+
+            $this->view->data=$data;
             $this->view->acadata=$acadata;
 
         }catch(exception $e){
@@ -221,15 +228,56 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
-    public function studenteditacademicAction(){
+    public function studentsaveacademicAction(){
         try{
             $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $pid=$this->sesion->pid;
+
+            $dbacademic=new Api_Model_DbTable_Academicrecord();
+
             $form=new Profile_Form_Academic();
             $this->view->form=$form;
+
+            if ($this->getRequest()->isPost()) {
+                $formdata=$this->getRequest()->getPost();
+                if($form->isValid($formdata)){
+                    unset($formdata["save"]);
+                    $formdata["eid"]=$eid;
+                    $formdata["pid"]=$pid;
+                    trim($formdata["location"]);
+                    trim($formdata["type"]);
+                    trim($formdata["institution"]);
+                    trim($formdata["year_end"]);
+                    trim($formdata["title"]);
+                    $academic=$dbacademic->_save($formdata);
+                    $this->_redirect("/profile/public/student");
+                }
+            }
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
     }
+
+    public function studentremoveacademicAction(){
+        try{
+            $eid=$this->_getParam("eid");
+            $pid=$this->_getParam("pid");
+            $acid=$this->_getParam("acid");
+
+            $dbacademic=new Api_Model_DbTable_Academicrecord();
+            $where=array("eid"=>$eid, "pid"=>$pid, "acid"=>$acid);
+
+            if($dbacademic->_delete($where)){
+                $this->_redirect("/profile/public/student");
+            }else{
+                echo "Error al Eliminar";
+            }
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+//-----------------------------------------------------------------
 
     public function studentstatisticAction()
     {
@@ -241,6 +289,9 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
+
+//Datos Laborales-------------------------------------------
+
     public function studentlaboralAction()
     {
         try{
@@ -248,28 +299,78 @@ class Profile_PublicController extends Zend_Controller_Action {
             $eid=$this->sesion->eid;
             $pid=$this->sesion->pid;
 
+            $data=array("eid"=>$eid, "pid"=>$pid);
+
             $dblaboral=new Api_Model_DbTable_Jobs();
             $where=array("eid"=>$eid,"pid"=>$pid);
             $laboral=$dblaboral->_getFilter($where);
-            print_r($laboral);
+            //print_r($laboral);
+
+            $this->view->data=$data;
             $this->view->laboral=$laboral;
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
     }
 
-    public function studenteditlaboralAction()
+    public function studentsavelaboralAction()
     {
         try{
             $this->_helper->layout->disableLayout();
+            $eid=$this->sesion->eid;
+            $pid=$this->sesion->pid;
+
+            $dbjob=new Api_Model_DbTable_Jobs();
 
             $form=new Profile_Form_Laboral();
             $this->view->form=$form;
+
+            if ($this->getRequest()->isPost()) {
+                $formdata=$this->getRequest()->getPost();
+                if($form->isValid($formdata)){
+                    unset($formdata["save"]);
+                    $formdata["eid"]=$eid;
+                    $formdata["pid"]=$pid;
+                    trim($formdata["company"]);
+                    trim($formdata["industry"]);
+                    trim($formdata["salary"]);
+                    trim($formdata["condition"]);
+
+                    $job=$dbjob->_save($formdata);
+
+                    $this->_redirect("/profile/public/student");
+
+                }
+            }
 
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
     }
+
+    public function studentremovelaboralAction(){
+        try{
+            $eid=$this->_getParam("eid");
+            $pid=$this->_getParam("pid");
+            $lid=$this->_getParam("lid");
+
+            $dblaboral=new Api_Model_DbTable_Jobs();
+            $where=array("eid"=>$eid, "pid"=>$pid, "lid"=>$lid);
+
+            if($dblaboral->_delete($where)){
+                $this->_redirect("/profile/public/student");
+            }else{
+                echo "Error al Eliminar";
+            }
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+//------------------------------------------------------------------------
+
+
+
+//Intereses--------------------------------------------------------------
 
     public function studentinterestAction()
     {
@@ -278,11 +379,14 @@ class Profile_PublicController extends Zend_Controller_Action {
             $eid=$this->sesion->eid;
             $pid=$this->sesion->pid;
 
+            $data=array("eid"=>$eid, "pid"=>$pid);
+
             $dbinteres=new Api_Model_DbTable_Interes();
             $where=array("eid"=>$eid,"pid"=>$pid);
             $interes=$dbinteres->_getFilter($where);
             //print_r($interes);
             $this->view->interes=$interes;
+            $this->view->data=$data;
 
         }catch(exception $e){
             print "Error : ".$e->getMessage();
@@ -292,13 +396,53 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studentsaveinterestAction()
     {
         try{
-           $form=new Profile_Form_Interest();
-           $this->view->form=$form;
+            $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $pid=$this->sesion->pid;
+
+            $dbinterest=new Api_Model_DbTable_Interes();
+
+            $form=new Profile_Form_Interest();
+            $this->view->form=$form;
+            if ($this->getRequest()->isPost()) {
+                $formdata=$this->getRequest()->getPost();
+                if($form->isValid($formdata)){
+                    unset($formdata["save"]);
+                    $formdata["eid"]=$eid;
+                    $formdata["pid"]=$pid;
+                    trim($formdata["discipline"]);
+                    trim($formdata["title"]);
+                    trim($formdata["club"]);
+                    $interest=$dbinterest->_save($formdata);
+                    $this->_redirect("/profile/public/student");
+                }
+            }
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
-
     }
+
+    public function studentremoveinterestAction()
+    {
+        try{
+            $eid=$this->_getParam("eid");
+            $pid=$this->_getParam("pid");
+            $iid=$this->_getParam("iid");
+
+            $dbinterest=new Api_Model_DbTable_Interes();
+            $where=array("eid"=>$eid, "pid"=>$pid, "iid"=>$iid);
+
+            if($dbinterest->_delete($where)){
+                $this->_redirect("/profile/public/student");
+            }else{
+                echo "Error al Eliminar";
+            }
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+//-------------------------------------------------------------------
+
 
     public function studentsigncurrentAction()
     {

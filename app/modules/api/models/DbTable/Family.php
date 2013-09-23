@@ -4,12 +4,17 @@ class Api_Model_DbTable_Family extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'base_family';
 	protected $_primary = array("eid","famid");
+	protected $_sequence ="s_family";
 
 	public function _save($data){
 		try{
 			if ($data['eid']=='') return false;
-			return $this->insert($data);
-			return false;
+			$this->insert($data);
+				$rowset= $this->fetchAll()->toArray();
+                $rowCount = count($rowset);
+                $var=$rowCount-1;
+                return ($rowset[$var]['famid']);
+
 		}catch (Exception $e){
 			print "Error al Guardar Familia ".$e->getMessage();
 		}

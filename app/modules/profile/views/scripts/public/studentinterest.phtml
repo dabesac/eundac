@@ -9,13 +9,33 @@
   		foreach ($this->interes as $int) {?>
 		    <div class="panel panel-default">
 		    	<div class="panel-heading">
-		    		<h5><b><?echo $int['discipline']?></b></h5>
+		    		<h5>
+		    			<b><?echo $int['title']?></b>
+	    				<a class="pull-right" title="Eliminar" href="/profile/public/studentremoveinterest/eid/<?echo $this->data['eid']?>/pid/<?echo $this->data['pid']?>/iid/<?echo $int['iid']?>?>"><span class="glyphicon glyphicon-remove"></span></a>
+		    		</h5>
 		    	</div>
 		    	<div class="panel-body">
 		    		<table class="table">
 		    			<tr>
-		    				<th>Club <h5><b><?echo $int['club']?></b></h5></th>
-		    				<th>Dedicacion <h5><b><?echo $int['title']?></b></h5></th>
+		    				<td>Dedicacion <h5><b>
+		    					<?if($int['discipline']=="H"){
+		    						echo "Hobby";
+		    					}elseif($int['discipline']=="D"){
+		    						echo "Deportiva";
+		    					}elseif($int['discipline']=="R"){
+		    						echo "Religiosa";
+		    					}else{
+		    						echo "Otros";
+		    						}?>
+		    				</b></h5></td>
+		    				<td>Club <h5><b>
+		    					<?if($int['club']=="S") {
+		    						echo "Si";
+		    					}else{
+		    						echo "No";
+		    					}
+		    					?>
+		    				</b></h5></td>
 		    			</tr>
 		    		</table>
 		    	</div>

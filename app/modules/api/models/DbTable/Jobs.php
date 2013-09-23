@@ -4,6 +4,7 @@ class Api_Model_DbTable_Jobs extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'base_jobs';
 	protected $_primary = array("lid", "eid","pid");
+	protected $_sequence ="s_jobs";
 
 	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
@@ -26,6 +27,27 @@ class Api_Model_DbTable_Jobs extends Zend_Db_Table_Abstract
 				return false;
 		}catch (Exception $e){
 			print "Error: Read Filter Familiars ".$e->getMessage();
+		}
+	}
+
+	public function _save($data){
+		try{
+			if ($data['eid']=='' || $data['pid']=='') return false;
+			return $this->insert($data);
+			return false;
+		}catch (Exception $e){
+			print "Error al Guardar Jobs ".$e->getMessage();
+		}
+	}
+
+	public function _delete($pk){
+		try{
+			if ($pk['eid']=='' || $pk['pid']==''|| $pk['lid']=='') return false;
+			$where = "eid = '".$pk['eid']."'and pid = '".$pk['pid']."'and lid = '".$pk["lid"]."'";
+			return $this->delete($where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Delete Interes ".$e->getMessage();
 		}
 	}
 }
