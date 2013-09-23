@@ -1,0 +1,29 @@
+<div class="panel panel-info">
+
+  <div class="panel-heading">
+    <h4>Intereses</h4>
+  </div>
+
+  <div class="panel-body">
+    <?php if($this->interes){
+  		foreach ($this->interes as $int) {?>
+		    <div class="panel panel-default">
+		    	<div class="panel-heading">
+		    		<h5><b><?echo $int['discipline']?></b></h5>
+		    	</div>
+		    	<div class="panel-body">
+		    		<table class="table">
+		    			<tr>
+		    				<th>Club <h5><b><?echo $int['club']?></b></h5></th>
+		    				<th>Dedicacion <h5><b><?echo $int['title']?></b></h5></th>
+		    			</tr>
+		    		</table>
+		    	</div>
+		    </div>
+  		<?php }?>
+  	<?php }else{?>
+      <center><h5>No tiene Datos, Sugerir que Actualize su Perfil</h5></center>
+    <?}?>
+  </div>
+
+</div>

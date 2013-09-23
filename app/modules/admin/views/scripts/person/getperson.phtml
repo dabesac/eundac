@@ -8,10 +8,10 @@
         <thead>
         <tr>
                 <th><center>#</center></th>
-                <th class='col-md-2'><center>DNI</center></th>
-                <th>Apellidos y Nombres</th>
+                <th><center>DNI</center></th>
+                <th><center>Apellidos y Nombres</center></th>
                 <th><center>Dirección</center></th>
-                <th colspan='2'><center>Operación</center></th>
+                <th><center>Operación</center></th>
         </tr>
         </thead>
     <?php
@@ -25,8 +25,8 @@
                 <td class='col-md-2'><center><?php echo $info['pid'];?></center></td>
                 <td><?php echo strtoupper($info['last_name0'])." ".strtoupper($info['last_name1']).", ".$info['first_name'];?></td>
                 <td><center><?php echo $info['address']?></center></td>
-                <td><center><a href=""><span class='glyphicon glyphicon-pencil'></span></a></center></td>
-                <td><center><a href=""><span class='glyphicon glyphicon-trash'></span></a></center></td>
+                <td><center><a href="/admin/person/updateperson/pid/<?php echo base64_encode($info['pid'])?>"><span class='glyphicon glyphicon-pencil'></span></a></center></td>
+                <!-- <td><center><a href=""><span class='glyphicon glyphicon-trash'></span></a></center></td> -->
 
             </tr>
           <?php  

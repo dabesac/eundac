@@ -160,6 +160,7 @@ class Register_ValidationController extends Zend_Controller_Action
       $dat['courseid']=$courseid;
       $dat['curid']=$curid;
       $req = $requisitos ->_getOne($dat);
+
       $inforequisitos = $req['req_1']." | ".$req['req_2']." | ".$req['req_3'];
 
       $dbveces = new Api_Model_DbTable_Course();
@@ -168,6 +169,7 @@ class Register_ValidationController extends Zend_Controller_Action
       $where['curid']=$curid;
       $where['courseid']=$courseid;
       $vecesllevadas=  $dbveces->_getCoursesXStudentXV($where);
+      // print_r($vecesllevadas);
       if($temp=='1')
       {
         $cursoapto[0]['apto']==0;
@@ -175,9 +177,11 @@ class Register_ValidationController extends Zend_Controller_Action
       }
       else
       {
+        //print_r($where);
 
-       $dbcursopen = new Api_Model_DbTable_Course();       //admin
+       $dbcursopen = new Api_Model_DbTable_Course();       
        $cursoapto=  $dbcursopen->_getCourseLlevo($where);
+       //print_r($cursoapto);
       }
       if($cursoapto[0]['apto']==1)
         {

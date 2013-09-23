@@ -1,6 +1,5 @@
 <?php
 if ($this->cursosconvalidados){ ?>
-<div id="listam">
     <div><h5><center><b>CURSOS REALIZADOS</b></center></h5></div>
     <div>
         <div style="display: block; height: 150px; overflow: auto;margin: 0px;" >
@@ -72,17 +71,12 @@ if ($this->cursosconvalidados){ ?>
             </table>
         </div>        
     </div> 
-</div>
 <?php
 } ?>
 
 <script type="text/javascript">
 var msg="<?php echo $this->msg?>";
 if (msg=="1") {
- //    $("#lista").hide();
- //    $("#listag").hide();
-	// $("#listam").hide();
- //    $("#header_cursos").hide();
 	$("#modify").modal('hide');
 };
 </script>

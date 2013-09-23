@@ -109,7 +109,7 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
     public function _getCourseLlevo($where=null){
         if ($where['escid']==''|| $where['uid']==''|| $where['curid']=='' || $where['courseid']=='') return false;
             $sql=$this->_db->query("
-                    select state_llevo('".$where['escid']."','".$where['uid']."','".$where['curid']."','".$where['courseid']."') as apto          
+                    select state_llevo1('".$where['escid']."','".$where['uid']."','".$where['curid']."','".$where['courseid']."') as apto          
                ");
         $r = $sql->fetchAll();
         return $r;

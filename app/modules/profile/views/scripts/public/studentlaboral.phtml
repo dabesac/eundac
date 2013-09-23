@@ -9,14 +9,17 @@
   		foreach ($this->laboral as $lab) {?>
 		    <div class="panel panel-default">
 		    	<div class="panel-heading">
-		    		<h5><b><?echo $lab['company']?></b></h5>
+		    		<h5>
+		    			<b>Empresa <?echo $lab['company']?></b>
+		    			<a class="pull-right" href="/profile/public/studentremovelaboral/eid/<?echo $this->data["eid"]?>/pid/<?echo $this->data["pid"]?>/lid/<?echo $lab["lid"]?>"><span class="glyphicon glyphicon-remove"></span></a>
+		    		</h5>
 		    	</div>
 		    	<div class="panel-body">
 		    		<table class="table">
 		    			<tr>
-		    				<th>Area <h5><b><?echo $lab['industry']?></b></h5></th>
-		    				<th>Condicion <h5><b><?echo $lab['condition']?></b></h5></th>
-		    				<th>Salario Mensual <h5><b>S/. <?echo $lab['salary']?></b></h5></th>
+		    				<td>Area <h5><b><?echo $lab['industry']?></b></h5></td>
+		    				<td>Condicion <h5><b><?echo $lab['condition']?></b></h5></td>
+		    				<td>Salario Mensual <h5><b>S/. <?echo $lab['salary']?></b></h5></td>
 		    			</tr>
 		    		</table>
 		    	</div>
