@@ -202,8 +202,13 @@ class IndexController extends Zend_Controller_Action {
     						$this->_redirect("/index/cerrar");
     					}
     					$urlmod = $data->rol['module'];
-    					$this->_redirect($urlmod);
-    					//Falta direccionar
+    					$passn= base64_encode($pass);
+    					$urllogin  = "key/$passn/mod/".$data->modulo;
+    					$urllogin  = array("key"=>$passn, "mod" => $data->modulo);
+    					if (trim($data->rid)=='AL' || $data->rid=='DC')
+    						$this->_forward("ajax", "index", "default", $urllogin );
+    					else
+    						$this->_redirect($urlmod);
     				}
     			}else {
 					switch ($result->getCode()) {
@@ -497,5 +502,23 @@ class IndexController extends Zend_Controller_Action {
     		}
     	}
     	return array("module"=>$modules,"list"=>$resource1);
+    }
+    
+    public function ajaxAction(){
+    	$sesion  = Zend_Auth::getInstance();
+    	if(!$sesion->hasIdentity() ){
+    		$this->_helper->redirector('index',"salir",'default');
+    	}
+    	$this->view->http = "http";
+    	if($_SERVER['SERVER_PORT'] == '443') {
+    		$this->view->http = "https";
+    	}
+    		
+    	$sesion_ = $sesion->getStorage()->read();
+    	$pass= base64_decode($this->_getParam("key"));
+    	$mod= ($this->_getParam("mod"));
+    	$this->view->uid= $sesion_->uid;
+    	$this->view->pass= $pass;
+    	$this->view->mod= $mod;
     }
 }

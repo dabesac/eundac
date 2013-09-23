@@ -95,6 +95,12 @@ $(document).ready(function(){
                 correctamente. Actualiza o descarga un nuevo navegador como este <a href="https://www.google.com/chrome?hl=es">Google Chrome</a>.
     </div>
 <?php //exit();?>
+
+<?php if ($rid=="AL"){
+	$profile = "/profile/public/student";
+}
+?>
+
 <![endif]-->
 <div class="row" style="padding: 0px; margin: 0px" >
 	<div class="col-sm-2 control-top">
@@ -164,21 +170,15 @@ $(document).ready(function(){
 			<ul class="nav navbar-nav pull-right" style="padding-top: 10px">
 			  	<li class='dropdown'>
 					<div class="btn-group">
+						<a href="<?php echo $profile?>" class="btn btn-primary perfil">Mi Perfil</a>
 						<button class="dropdown-toggle btn btn-info" data-toggle="dropdown">
 							<span class="glyphicon glyphicon-cog"></span>
 						</button>
-						<ul class="dropdown-menu" style="margin-left: -130px;" >
+						<ul class="dropdown-menu">
+							<li><a href="<?php echo $profile?>">Mi Perfil</a></li>
 							<li><a href="/default/password/change">Cambiar Contraseña</a></li>
-							<?php if ($rid=="AL"){
-								$profile = "/profile/public/student";
-							}
-							?>
-							<?php php 
-							?>}?>
-							<li><a href="<?php echo $profile?>">Ver mi perfil</a></li>
-							<li><a href="#"></a></li>
 							<li class="divider"></li>
-							 -->
+							<li><a href="/index/salir" >Salir</a></li>
 						</ul>
 					</div>
 				</li>
