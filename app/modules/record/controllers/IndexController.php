@@ -133,7 +133,7 @@ class Record_IndexController extends Zend_Controller_Action {
             	'eid'=>$eid,'oid'=>$oid,
             	'courseid'=>$courseid,'turno'=>$turno,
             	'curid'=>$curid,'escid'=>$escid,
-            	'subid'=>$subid,'perid'=>$perid,);
+            	'subid'=>$subid,'perid'=>$perid,'state'=>'M');
             $base_course_x_teacher =	new Api_Model_DbTable_Coursexteacher();
             $base_register_course = new Api_Model_DbTable_Registrationxcourse();
             $base_speciality = new Api_Model_DbTable_Speciality();
@@ -195,6 +195,9 @@ class Record_IndexController extends Zend_Controller_Action {
 		$this->view->courses = $this->_loadCourses($formData);
 		$this->view->perid = $formData['perid'];
 		$speciality = new Api_Model_DbTable_Speciality();
+
+		
+
 		$rows = $speciality->_getOne($formData);
 		if ($rows){
 			if ($rows->parent){
@@ -313,6 +316,20 @@ class Record_IndexController extends Zend_Controller_Action {
 			$base_course_x_teacher = 	new Api_Model_DbTable_Coursexteacher();
 			$base_register_course = 	new Api_Model_DbTable_Registrationxcourse();
 			$base_person =	new Api_Model_DbTable_Person();
+			$base_impress_course = new Api_Model_DbTable_Impresscourse();
+
+			$data_impress = null;
+
+			$data_impress = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,
+				'register'=>$this->sesion->uid,
+				'code'=>'CONSTANCY'.$perid.$curid.$courseid.$turno,
+				);
+
+			$base_impress_course->_save($data_impress);
 
 			$where = array(
 				'eid' => $eid, 'oid'=>$oid,
@@ -385,6 +402,23 @@ class Record_IndexController extends Zend_Controller_Action {
 			$base_periods = new Api_Model_DbTable_Periods();
 			$base_semester = new Api_Model_DbTable_Semester();
 			$base_base_subsidiary = new Api_Model_DbTable_Subsidiary();
+			$base_impress_course = new Api_Model_DbTable_Impresscourse();
+
+
+			$data_impress = null;
+
+			$data_impress = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,
+				'register'=>$this->sesion->uid,
+				'code'=>'RECORD'.$perid.$curid.$courseid.$turno,
+				);
+
+			$base_impress_course->_save($data_impress);
+
+			
 
 			$where_subid = array(
 				'eid'=>$eid,'oid'=>$oid,
@@ -473,6 +507,22 @@ class Record_IndexController extends Zend_Controller_Action {
 			$base_periods_course = new Api_Model_DbTable_PeriodsCourses();
 			$base_base_subsidiary = new Api_Model_DbTable_Subsidiary();
 
+			$base_impress_course = new Api_Model_DbTable_Impresscourse();
+
+
+			$data_impress = null;
+
+			$data_impress = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,
+				'register'=>$this->sesion->uid,
+				'code'=>'RECORD'.$perid.$curid.$courseid.$turno.'BACK',
+				);
+
+			$base_impress_course->_save($data_impress);
+
 			$where_subid = array(
 				'eid'=>$eid,'oid'=>$oid,
 				'subid'=>$subid,
@@ -550,6 +600,20 @@ class Record_IndexController extends Zend_Controller_Action {
 			$base_person =	new Api_Model_DbTable_Person();
 			$base_CourseCompetency = new Api_Model_DbTable_CourseCompetency();
 			$base_semester = new Api_Model_DbTable_Semester();
+
+			$base_impress_course = new Api_Model_DbTable_Impresscourse();
+
+			$data_impress = null;
+
+			$data_impress = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,
+				'register'=>$this->sesion->uid,
+				'code'=>'REGISTER'.$perid.$curid.$courseid.$turno,
+				);
+			$base_impress_course->_save($data_impress);
 
 			$where = array(
 				'eid' => $eid, 'oid'=>$oid,
@@ -636,6 +700,20 @@ class Record_IndexController extends Zend_Controller_Action {
 			$base_person =	new Api_Model_DbTable_Person();
 			$base_CourseCompetency = new Api_Model_DbTable_CourseCompetency();
 			$base_semester = new Api_Model_DbTable_Semester();
+
+			$base_impress_course = new Api_Model_DbTable_Impresscourse();
+
+			$data_impress = null;
+
+			$data_impress = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,
+				'register'=>$this->sesion->uid,
+				'code'=>'REGISTER'.$perid.$curid.$courseid.$turno.'BACK',
+				);
+			$base_impress_course->_save($data_impress);
 
 			$where = array(
 				'eid' => $eid, 'oid'=>$oid,
@@ -749,6 +827,8 @@ class Record_IndexController extends Zend_Controller_Action {
 			$base_person =	new Api_Model_DbTable_Person();
 			$records = new Api_Model_DbTable_PeriodsCourses();
 
+			
+
 			$attris = array("eid","oid","perid","courseid","escid","subid","curid","turno",
 					"curid","semid","type_rate","closure_date","state_record","state");
 			$orders = array("eid","curid","courseid","turno");
@@ -838,6 +918,20 @@ class Record_IndexController extends Zend_Controller_Action {
 			$base_semester = new Api_Model_DbTable_Semester();
 			$base_base_subsidiary = new Api_Model_DbTable_Subsidiary();
 
+			$base_impress_course = new Api_Model_DbTable_Impresscourse();
+
+			$data_impress = null;
+
+			$data_impress = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,
+				'register'=>$this->sesion->uid,
+				'code'=>'NOTNOTESRECORD'.$perid.$curid.$courseid.$turno,
+				);
+			$base_impress_course->_save($data_impress);
+
 			$where_subid = array(
 				'eid'=>$eid,'oid'=>$oid,
 				'subid'=>$subid,
@@ -926,6 +1020,20 @@ class Record_IndexController extends Zend_Controller_Action {
 			$base_periods_course = new Api_Model_DbTable_PeriodsCourses();
 			$base_base_subsidiary = new Api_Model_DbTable_Subsidiary();
 
+			$base_impress_course = new Api_Model_DbTable_Impresscourse();
+
+			$data_impress = null;
+
+			$data_impress = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,
+				'register'=>$this->sesion->uid,
+				'code'=>'NOTNOTESRECORD'.$perid.$curid.$courseid.$turno.'BACK',
+				);
+			$base_impress_course->_save($data_impress);
+
 			$where_subid = array(
 				'eid'=>$eid,'oid'=>$oid,
 				'subid'=>$subid,
@@ -991,6 +1099,20 @@ class Record_IndexController extends Zend_Controller_Action {
 			$base_person =	new Api_Model_DbTable_Person();
 			$base_CourseCompetency = new Api_Model_DbTable_CourseCompetency();
 			$base_semester = new Api_Model_DbTable_Semester();
+
+			$base_impress_course = new Api_Model_DbTable_Impresscourse();
+
+			$data_impress = null;
+
+			$data_impress = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,
+				'register'=>$this->sesion->uid,
+				'code'=>'NOTNOTESREGISTER'.$perid.$curid.$courseid.$turno,
+				);
+			$base_impress_course->_save($data_impress);
 
 			$where = array(
 				'eid' => $eid, 'oid'=>$oid,
@@ -1077,6 +1199,19 @@ class Record_IndexController extends Zend_Controller_Action {
 			$base_person =	new Api_Model_DbTable_Person();
 			$base_CourseCompetency = new Api_Model_DbTable_CourseCompetency();
 			$base_semester = new Api_Model_DbTable_Semester();
+			$base_impress_course = new Api_Model_DbTable_Impresscourse();
+
+			$data_impress = null;
+
+			$data_impress = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,
+				'register'=>$this->sesion->uid,
+				'code'=>'NOTNOTESREGISTER'.$perid.$curid.$courseid.$turno.'BACK',
+				);
+			$base_impress_course->_save($data_impress);
 
 			$where = array(
 				'eid' => $eid, 'oid'=>$oid,
@@ -1154,4 +1289,112 @@ class Record_IndexController extends Zend_Controller_Action {
 			print "Error: print register not percentage".$e->getMessage();
 		}
 	}
+
+	public function preregisterAction()
+	{
+		try {
+
+			$params = $this->getRequest()->getParams();
+            $paramsdecode = array();
+            foreach ( $params as $key => $value ){
+                if($key!="module" && $key!="controller" && $key!="action"){
+                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+                }
+            }
+
+            $eid =	$this->sesion->eid;
+            $oid =	$this->sesion->oid;
+
+            $params = $paramsdecode;
+            $courseid =	trim($params['courseid']);
+            $turno =	trim($params['turno']);
+            $curid =	trim($params['curid']);
+            $escid =	trim($params['escid']);
+            $subid =	trim($params['subid']);
+            $perid =	trim($params['perid']);
+            $state =	trim($params['state']);
+            $type =	trim($params['type']);
+
+            $this->view->type=$type;
+            $where = null;
+            $students = null;
+            $infouser = null;
+            $info_teacher = null;
+            $info_speciality = null;
+
+            $where = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,);
+
+            $base_faculty 	=	new Api_Model_DbTable_Faculty();
+			$base_speciality = 	new Api_Model_DbTable_Speciality();
+			$base_course = 	new Api_Model_DbTable_Course();
+			$base_course_x_teacher = 	new Api_Model_DbTable_Coursexteacher();
+			$base_register_course = 	new Api_Model_DbTable_Registrationxcourse();
+			$base_person =	new Api_Model_DbTable_Person();
+			$base_CourseCompetency = new Api_Model_DbTable_CourseCompetency();
+			$base_semester = new Api_Model_DbTable_Semester();
+
+			$base_impress_course = new Api_Model_DbTable_Impresscourse();
+
+			$data_impress = null;
+
+			$data_impress = array(
+				'eid' => $eid, 'oid'=>$oid,
+				'escid'=> $escid,'subid' => $subid,
+				'perid' => $perid,'courseid'=>$courseid,
+				'curid' => $curid, 'turno' => $turno,
+				'register'=>$this->sesion->uid,
+				'code'=>'PREREGISTER'.$perid.$curid.$courseid.$turno,
+				);
+			$base_impress_course->_save($data_impress);
+
+            $students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
+
+            $info_couser = $base_course->_getOne($where);
+			$info_couser['turno'] = $turno;
+
+			$dni_teacher = $base_course_x_teacher->_getFilter($where);
+			$info_couser['uid']=$dni_teacher[0]['uid'];
+
+			$where1 = array(
+				'eid'=>$eid,'oid'=>$oid,
+				'pid'=> $dni_teacher[0]['pid']);
+
+			$info_teacher = $base_person->_getOne($where1);
+			$info_couser ['name_teacher'] = $info_teacher['last_name0']." ".
+											$info_teacher['last_name1'].", ".
+											$info_teacher['first_name'];
+			$info_speciality = 	$base_speciality->_getOne($where);
+
+
+			if ($info_speciality['parent'] != "") {
+				$where['escid']=$info_speciality['parent'];
+				$name_speciality = $base_speciality->_getOne($where);
+				$info_speciality['speciality'] = $name_speciality['name'];
+			}
+
+
+			$where ['facid'] = $info_speciality['facid'];
+			$name_faculty = $base_faculty->_getOne($where);
+			$info_speciality['name_faculty'] = $name_faculty['name'];
+
+			
+			$this->view->info_speciality = $info_speciality;
+			$this->view->info_couser = $info_couser;
+			$this->view->students=$students;
+			$this->view->perid=$perid;
+
+			$this->_helper->layout()->disableLayout();	
+
+			
+		} catch (Exception $e) {
+			print "Error: print pre register ".$e->getMessage();
+			
+		}
+	}
+
+	
 }

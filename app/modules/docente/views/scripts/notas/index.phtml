@@ -39,7 +39,6 @@
   foreach ($this->faculty as $number) {
    	$c++;
    	$fname=$number['name'];
-   	
 ?>
 <div class="panel-group" id="accordion">
     <div class="panel panel-info">
@@ -57,7 +56,14 @@
         	       
         	       foreach ($this->data as $courses) {
 
-                    $urlAsist ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($courses['perid'])."/".base64_encode('curid')."/".base64_encode($courses['curid'])."/".base64_encode('state')."/".base64_encode($courses['state_record'])."";
+                    $urlAsist ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($courses['perid'])."/".base64_encode('curid')."/".base64_encode($courses['curid'])."/".base64_encode('state_record')."/".base64_encode($courses['state_record'])."/".base64_encode('state')."/".base64_encode($courses['state']);
+
+                      if ($courses['type_rate']=="O" ) {
+                          $fillnotes ="/docente/fillnotes/target".$urlAsist; 
+                      }
+                      if ($courses['type_rate']=="C" ) {
+                          $fillnotes ="/docente/fillnotes/competition".$urlAsist; 
+                      }
         		      
         		      $where['eid']=$courses['eid'];
         		      $where['oid']=$courses['oid'];
@@ -84,7 +90,7 @@
                                 </div>
                             </div>
                             <div>
-	                            <a class="btn btn-primary disabled" href="#" data-toggle="tooltip" title="Registrar las Notas">
+	                            <a class="btn btn-primary " href="<?php echo $fillnotes?>" data-toggle="tooltip" title="Registrar las Notas">
 	                            Notas
 	                            </a>
 

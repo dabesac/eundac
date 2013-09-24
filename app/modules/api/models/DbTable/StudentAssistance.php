@@ -81,8 +81,10 @@ class Api_Model_DbTable_StudentAssistance extends Zend_Db_Table_Abstract
 
     public function _getAll($where=array()){
         try{
-            if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["subid"] =='' || 
-                $where["coursoid"]=='' || $where["curid"] =='' || $where["turno"] =='' || $where["perid"]=='') return false;
+            if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  
+                $where["subid"] =='' || 
+                $where["coursoid"]=='' || $where["curid"] =='' || $where["turno"] =='' || 
+                $where["perid"]=='') return false;
 
             $wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".
                     $where['escid']."' and subid='".$where['subid']."' and coursoid='".$where['coursoid']."' 
@@ -99,14 +101,16 @@ class Api_Model_DbTable_StudentAssistance extends Zend_Db_Table_Abstract
         try{
             if($where['eid']=='' || $where['oid']=='') return false;
                 $select = $this->_db->select();
-                if ($attrib=='') $select->from("base_course_x_teacher");
-                else $select->from("base_course_x_teacher",$attrib);
+                if ($attrib=='') $select->from("base_student_assistance");
+                else $select->from("base_student_assistance",$attrib);
                 foreach ($where as $atri=>$value){
                     $select->where("$atri = ?", $value);
                 }
                 
-                foreach ($orders as $key => $order) {
+                if($orders){
+                    foreach ($orders as $key => $order) {
                         $select->order($order);
+                    }
                 }
                 $results = $select->query();
                 $rows = $results->fetchAll();
