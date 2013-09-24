@@ -1,0 +1,54 @@
+
+<?php  $oid = $this->oid;
+       $eid = $this->eid;
+       $escid = $this->escid;
+     ?> 
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1.0', {'packages':['corechart']});
+      google.setOnLoadCallback(drawChart);
+     <?php $nombre = $this->nom;
+              $turno = $this->turno;
+              $nom = $nombre."-turno:".$turno;
+          
+          ?>
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+       <?php
+
+       foreach ($this->cantidad as $curso) {
+                        $orden1=$curso['position'];
+                        if($orden1=='1'){
+                          $orden="SIEMPRE";
+                        }
+                         if($orden1=='2'){
+                          $orden="CASI SIEMPRE";
+                        }
+                         if($orden1=='3'){
+                          $orden="AVECES";
+                        }
+                         if($orden1=='4'){
+                          $orden="NUNCA";
+                        }
+                        $cantidad=$curso['cantidad'];                    
+                         ?>
+        ['<?php print $orden?>' ,<?php print $cantidad?>],
+         <?php  }?>
+        ]);
+        var options1 = {'title':'CURSO DE <?php print strtoupper($nom)?>'};
+        var options = {'title':'CURSO DE <?php print strtoupper($nom)?>'};
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options, options1);
+      }
+
+      function selectHandler() {
+        var selectedItem = chart.getSelection()[0];
+        var value = data.getValue(selectedItem.row, 0);
+        alert('The user selected ' + value);
+      }
+     
+    </script>
+    <div id="chart_div" style="width:420px ;height:300px"></div>

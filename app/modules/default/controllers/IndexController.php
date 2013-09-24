@@ -391,7 +391,7 @@ class IndexController extends Zend_Controller_Action {
     				$resource1[]="report/performance";
     				
     			}
-    			$acls[]= array("controller"=>"#","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
+    			$acls[]= array("controller"=>"docente/index/poll","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
     			$resource1[]="report/performance";
     			$modules[1]['acls'] = $acls;
     			$acls = null;
