@@ -1,0 +1,145 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start();
+?>
+<style type="text/css">
+.ind {
+	padding-left: 30px;
+	font-size: 12px;
+	}
+.inden{
+	padding-left: 15px;
+	font-size: 12px;
+}
+</style>
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<table style="font-size: 11px;float: left; width: 100%; border-bottom: 20px">
+   	<tr>    
+       	<td style="text-align: center"><b>UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRION </b></td>
+   	</tr>
+   	<tr>
+       	<td style="text-align: center"><b>FACULTAD DE <?php echo strtoupper($this->faculty)?> </b></td>
+   	</tr>
+   	<tr>
+       	<td style="text-align: center"><b>ESCUELA DE FORMACION PROFESIONAL DE <?php echo strtoupper($this->speciality)?></b></td>
+   	</tr>
+	<tr>        	   
+       	<td style="text-align: center"><b>INFORME N° <?php print $this->informedoc['number'];?> - UNDAC </b></td>
+    </tr>
+</table>
+<table style="font-size: 11px;float: left; width: 100%; border-bottom: 2px">
+    <tr>
+       	<td style="text-align: left;padding-left:10px"> A: DIRECTOR DE LA ESCUELA DE FORMACION PROFESIONAL <?php echo strtoupper($this->speciality)?> </td>
+    </tr>
+    <tr>
+       	<td style="text-align: left; padding-left:10px">DE: <?php echo strtoupper($this->infouser)?></td>
+    </tr>
+    <tr>
+      	<td style="text-align: left; padding-left:10px;">ASUNTO: <b>Informe Académico y Administrativo <?php echo $this->perid?> </b></td>
+    </tr>
+</table>
+<br>
+<br>
+<div colspan="10" style="font-size: 12px"><b>I. INFORME ACADEMICO</b></div><br>
+<div colspan="10" class="inden"><b> 1.1 Desarrollo de las Asignaturas </b></div>
+<div colspan="10" style="padding-left: 40px; font-size: 12px"><b> 1.1.1 Logros </b></div><br>
+<table style="width: 100%; font-size: 10px; border-collapse:collapse; border: 1px solid #555">
+	<tr>
+		<th style="border: 1px solid #555"><center>#</center></th>
+		<th style="border: 1px solid #555"><center>Asignaturas</center></th>
+		<th style="border: 1px solid #555"><center>Turno</center></th>
+		<th style="border: 1px solid #555"><center>Semestre</center></th>
+		<th style="border: 1px solid #555"><center>% Desarrollado</center></th>
+		<th style="border: 1px solid #555"><center>Matriculados   N° -  %</center></th>
+		<th style="border: 1px solid #555"><center>Aprobados  N° -  %</center></th>
+		<th style="border: 1px solid #555"><center>Desaprobados  N° -  %</center></th>
+		<th style="border: 1px solid #555"><center>Retirados  N° -  %</center></th>
+	</tr>
+	<?php
+	$i=1; 
+	foreach ($this->datacourses as $datacourses) { ?>
+	  	<tr>
+	  		<td style="border: 1px solid #555"><?php echo $i ?></td>
+			<td style="border: 1px solid #555"><?php echo $datacourses['name'] ?></td>
+			<td style="border: 1px solid #555"><center><?php echo $datacourses['turno'] ?></center></td>
+			<td style="border: 1px solid #555"><center><?php echo $datacourses['semid'] ?></center></td>
+			<td style="border: 1px solid #555"><center><?php echo $datacourses['percentage']." %" ?></center></td>
+			<td style="border: 1px solid #555">
+				<center>
+					<?php 
+					$wherecant = array(
+                        'eid' => $datacourses['eid'], 'oid' => $datacourses['oid'],
+                        'perid' => $datacourses['perid'], 'curid' => $datacourses['curid'],
+                        'escid' => $datacourses['escid'], 'courseid' => $datacourses['courseid'],
+                        'turno' => $datacourses['turno'], 'subid' => $datacourses['subid']);
+                    $regcour = new Api_Model_DbTable_Registrationxcourse();
+                    echo $cantstu = $regcour->_getCantRegistration($wherecant)." - 100%";
+					?>
+				</center>
+			</td>
+			<td style="border: 1px solid #555">
+				<center>
+					<?php 
+					$aprobados = $regcour->_get_approved($wherecant);
+                    $por = round(($aprobados[0]['count'] / $cantstu) * 100,2);
+                    echo $aprobados[0]['count']." - ".$por."%";
+					?>
+				</center>
+			</td>
+			<td style="border: 1px solid #555">
+				<center>
+					<?php 
+					$desaprobados = $regcour->_get_disapproved_x_course($wherecant);
+                    $por=round(($desaprobados[0]['count'] / $cantstu) * 100,2);
+                    echo $desaprobados[0]['count']." - ".$por."%";
+					?>
+				</center>
+			</td>
+			<td style="border: 1px solid #555">
+				<center>
+					<?php 
+					$retirados = $regcour->_get_retired_x_course($wherecant);
+                    $por=round(($retirados[0]['count'] / $cantstu) * 100,2);
+                    echo $retirados[0]['count']." - ".$por."%";
+					?>
+				</center>
+			</td>
+		</tr>
+		<?php 
+		$i++;
+	}?>
+</table>
+<br>
+<div style="padding-left: 40px; font-size: 12px"><b>1.1.2 Medios y Materiales Educativos Utilizados por Asignatura</b></div><br>
+<div style="padding-left: 50px; font-size: 12px"><?php echo $this->informedoc['acad_medios'];?></div><br>
+<div class="inden"><b>1.2. Tutoria</b></div><br>
+<div class="ind"><?php echo $this->informedoc['acad_tutoria'];?></div><br>
+<br>
+<br>
+
+<div style="font-size: 12px"><b>II. INFORME ADMINISTRATIVO</b></div><br>
+<div class="inden"><b>2.1 Acreditacion</b></div><br>
+<div class="ind"><?php print $this->informedoc['adm_acreditacion'];?></div><br>
+<div class="inden"><b>2.2. Investigacion o Proyeccion Social</b></div><br>
+<div class="ind"><?php print $this->informedoc['adm_investigacion'];?></div><br>
+<div class="inden"><b>2.3. Asesoría de Tesis</b></div><br>
+<div class="ind"><?php print $this->informedoc['adm_asesoria'];?></div><br>
+<div class="inden"><b>2.4. Labor Administrativa (Coordinaciones, comisiones y otras)</b></div><br>
+<div class="ind"><?php print $this->informedoc['adm_labores'];?></div><br>
+
+<div style="margin-top: 50px">
+	<p align="right">----------------------------------</p>
+	<p style="padding-right:50px" align="right">Firma</p>
+</div>
+
+<?php
+  $mpdf=new mPDF('win-1252','A4','','',15,15,10,12,5,7);
+  $html = ob_get_contents();
+  $mpdf->SetHTMLHeader($header);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('INFORME-'.$this->perid.'.pdf','D');
+?>
