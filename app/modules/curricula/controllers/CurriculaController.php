@@ -18,6 +18,16 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 		try {
 			$eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
+            $is_director=$this->sesion->infouser['teacher']['is_director'];
+            if ($is_director=="S") {
+                $facid = $this->sesion->faculty->facid;
+                $escid = $this->sesion->escid;
+                $subid = $this->sesion->subid;
+                $this->view->facid = $facid;
+                $this->view->escid = $escid;
+                $this->view->subid = $subid;
+                $this->view->isdirector=$is_director;
+            }
             $where=array('eid'=>$eid,'oid'=>$oid);
             $fac= new Api_Model_DbTable_Faculty();
             $facultad=$fac->_getAll($where);
@@ -38,6 +48,13 @@ class Curricula_CurriculaController extends Zend_Controller_Action
             $esc= new Api_Model_DbTable_Speciality();
             $escuelas=$esc->_getFilter($where,$attrib);
             $this->view->escuelas=$escuelas;
+            $is_director=$this->sesion->infouser['teacher']['is_director'];
+            if ($is_director=="S") {
+                $escid = $this->sesion->escid;
+                $subid = $this->sesion->subid;
+                $this->view->escid = $escid;
+                $this->view->subid = $subid;
+            }
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}

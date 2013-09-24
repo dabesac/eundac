@@ -53,4 +53,23 @@
 			});
 		})
 	});
+
+	var facid = "<?php echo $this->facid?>";
+	if (facid!="") {
+		$("#facid").val(facid);
+		$("#facid").attr('disabled',true);
+		$.get('/curricula/curricula/schools',{facid:$.base64.encode(facid)},function(data){
+				$("#escid").html(data);
+		});
+	};
+
+	var isdirector = "<?php echo $this->isdirector?>";
+	if (isdirector=="S") {
+		var escid = "<?php echo $this->escid?>";
+		var subid = "<?php echo $this->subid?>";
+		$("#escid").attr('disabled',true);
+		$.get('/curricula/curricula/curriculas',{escid:$.base64.encode(escid+"--"+subid)},function(data){
+				$("#curriculas").html(data);
+		});
+	};
 </script>
