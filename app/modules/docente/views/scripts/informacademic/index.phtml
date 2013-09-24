@@ -1,0 +1,185 @@
+<table class="table table-condensed">
+    <tr>
+        <th style="font-size: 15px;text-align: center">FACULTAD DE <?php echo strtoupper($this->faculty)?></th>
+    </tr>
+    <tr>
+        <th style="font-size: 15px;text-align: center">Escuela de Formación Profesional de <?php echo $this->speciality?></th>
+    </tr>
+    <tr>
+        <th style="font-size: 15px;text-align: center">Informe Académico Administrativo - Periodo <?php echo $this->perid?></th>
+    </tr>
+    <tr>
+      	<th style="font-size: 15px;text-align: center">Docente: <?php echo $this->infouser?></th>
+	</tr>
+</table>
+
+<?php if($this->informedoc['state']<>'C') { ?>
+<div class="alert alert-danger">
+    <B>IMPORTANTE!:</B> Los porcentajes desarrollados se activan siempre y cuando usted haya terminado de registrar todas las notas de las asignaturas que tiene a su cargo.
+</div>
+<p style="font-size: 15px;text-align: center"><b> I.INFORME ACADEMICO</b></p>
+
+<form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="POST" enctype="application/x-www-form-urlencoded">
+    <table class="table table-striped table-bordered table-condensed">
+        <thead>
+            <tr>
+                <th colspan="10"><p style="font-size: 15px;text-align: center"><b> 1.1. Desarrollo de las Asignaturas </b>  </p></th>
+            </tr>
+            <tr>
+                <th><center>#</center></th>
+                <th><center>Asignaturas</center></th>
+                <th><center>Turno</center></th>
+                <th><center>Semestre</center></th>
+                <th><center>% Desarrollado</center></th>
+                <th><center> Matriculados:  N° -  %</center></th>
+                <th><center>Aprobados  N° -  %</center></th>
+                <th><center>Desaprobados  N° -  %</center></th>
+                <th><center>Retirados  N° -  %</center></th>
+            </tr>
+        </thead>
+        <?php
+        $i=1; 
+        foreach ($this->datacourses as $datacourses) { ?>
+            <tr>
+                <td><?php echo $i ?></td>
+                <td><?php echo $datacourses['name'] ?></td>
+                <td><center><?php echo $datacourses['turno'] ?></center></td>
+                <td><center><?php echo $datacourses['semid'] ?></center></td>
+                <td>
+                    <center>
+                    <?php 
+                    if($datacourses['state']=='S'){ ?>
+                        <input class="form-control" maxlenght="3" type="text" value="<?php echo $datacourses['percentage'];?>" name="percentage[<?php echo $i-1 ?>]" style="width: 60px">
+                        <?php   
+                    }else{ ?>
+                        <input class="form-control" maxlenght="3" type="text" value="<?php echo $datacourses['percentage'];?>" name="percentage[<?php echo $i-1 ?>]" style="width: 60px"  title="Cierre el Acta del Curso Primero" rel="tooltip" disabled>
+                        <?php
+                    } ?>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                    <?php 
+                    $wherecant = array(
+                        'eid' => $datacourses['eid'], 'oid' => $datacourses['oid'],
+                        'perid' => $datacourses['perid'], 'curid' => $datacourses['curid'],
+                        'escid' => $datacourses['escid'], 'courseid' => $datacourses['courseid'],
+                        'turno' => $datacourses['turno'], 'subid' => $datacourses['subid']);
+                    $regcour = new Api_Model_DbTable_Registrationxcourse();
+                    echo $cantstu = $regcour->_getCantRegistration($wherecant)." - 100%";
+                    ?>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                    <?php 
+                    $aprobados = $regcour->_get_approved($wherecant);
+                    $por = round(($aprobados[0]['count'] / $cantstu) * 100,2);
+                    echo $aprobados[0]['count']." - ".$por."%";
+                    ?>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                    <?php 
+                    $desaprobados = $regcour->_get_disapproved_x_course($wherecant);
+                    $por=round(($desaprobados[0]['count'] / $cantstu) * 100,2);
+                    echo $desaprobados[0]['count']." - ".$por."%";
+                    ?>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                    <?php 
+                    $retirados = $regcour->_get_retired_x_course($wherecant);
+                    $por=round(($retirados[0]['count'] / $cantstu) * 100,2);
+                    echo $retirados[0]['count']." - ".$por."%";
+                    ?>
+                    </center>
+                </td>
+                <input type="hidden" value="<?php echo $datacourses['courseid'];?>" name="courseid[]">
+                <input type="hidden" value="<?php echo $datacourses['turno'];?>" name="turno[]">
+                <input type="hidden" value="<?php echo $datacourses['escid'];?>" name="escid[]">
+                <input type="hidden" value="<?php echo $datacourses['subid'];?>" name="subid[]">
+                <input type="hidden" value="<?php echo $datacourses['curid'];?>" name="curid[]">
+            </tr>
+            <?php 
+            $i++;
+            } ?>
+        <tr>
+            <td colspan="5"><center><?php echo  $this->form->enviar ?></center></td>
+            <td colspan="4"><center><?php echo  $this->form->cerrar ?></center></td>
+        </tr>
+    </table>
+
+    <div class="alert alert-info" style="margin-top: 10px;margin-bottom: 10px;">
+        <B>INFORMACIÓN:</B> Usted puede registrar el contenido completo de su informe según los cuadros presentados, le recomendamos el uso de viñetas y sangria para poder distingir entre los logros, dificultades y sugerencias.
+    </div>
+    <br>
+    <table class="table table-striped table-bordered table-condensed">
+        <tr>
+            <th><p style="font-size: 14px;text-align: left"><b>1.1 Medios y Materiales Educativos utilizados por asignatura</b> - (Dificultades, Sugerencias)</p></th>
+        </tr>
+        <tr>
+            <td><?php print $this->form->acad_medios;?></td>
+        </tr>
+        <tr>
+            <th><p style="font-size: 14px;text-align: left"><b>1.2. Tutoria</b> - (Logros, Dificultades, Sugerencias)</p></th>
+        </tr>
+        <tr>
+            <td><?php print $this->form->acad_tutoria;?></td>
+        </tr>
+        <tr>
+            <th><p style="font-size: 15px;text-align: left"><b>II. INFORME ADMINISTRATIVO</b></p></th>
+        </tr>
+        <tr>
+            <th><p style="font-size: 14px;text-align: left"><b> 2.1. Acreditacion</b>  - (Logros, Dificultades, Sugerencias) </p></th>
+        </tr>
+        <tr>
+            <td><?php print $this->form->adm_acreditacion;?></td>
+        </tr>
+        <tr>
+            <th><p style="font-size: 14px;text-align: left"><b> 2.2. Investigacion o Proyeccion Social</b>  - (Logros, Dificultades, Sugerencias) </p></th>
+        </tr>
+        <tr>
+            <td><?php print $this->form->adm_investigacion;?></td>
+        </tr>
+        <tr>
+            <th><p style="font-size: 14px;text-align: left"><b> 2.3. Asesoria de Tesis </b> - (Logros, Dificultades, Sugerencias)  </p></th>
+        </tr>
+        <tr>
+            <td>
+                <?php print $this->form->adm_asesoria;?>
+            </td>
+        </tr>
+        <tr>
+            <th ><p style="font-size: 14px;text-align: left"><b> 2.4. Labor Administrativa (Coordinaciones, comisiones y otras) </b> - (Logros, Dificultades, Sugerencias)  </p></th>
+        </tr>
+        <tr>
+            <td><?php print $this->form->adm_labores;?></td>
+        </tr>      
+    </table>
+</form> 
+<?php
+}else{ ?>
+    <div style="margin: 20px">
+        <center>
+        <a href="/docente/informacademic/print/pid/<?php echo base64_encode($this->pid)?>/uid/<?php echo base64_encode($this->uid)?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/perid/<?php echo base64_encode($this->perid)?>" class="btn btn-success"><span class="glyphicon glyphicon-print"> Imprimir</a>
+        <a href="#" class="btn btn-default" style="margin-left: 10%"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>
+        </center>
+    </div>
+<?php
+} ?>
+
+<script type="text/javascript">
+var cierre="<?php echo $this->cierre?>";
+if (cierre=="1") window.location.reload();
+
+(function($) {
+  $(document).ready(function() {
+    $('#acad_medios, #acad_tutoria, #adm_acreditacion, #adm_investigacion, #adm_asesoria, #adm_labores').wysiwyg();
+  });
+})(jQuery);
+
+$('input[rel=tooltip]').tooltip();
+</script>
