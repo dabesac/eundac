@@ -49,7 +49,6 @@ class Admin_PersonController extends Zend_Controller_Action{
  	public function newAction(){
  		try {
  			$eid=$this->sesion->eid;
- 			$oid=$this->sesion->oid;
  			$register=$this->sesion->uid;
  			$fm=new Admin_Form_Personnew();
  			$this->view->fm=$fm;
@@ -83,6 +82,45 @@ class Admin_PersonController extends Zend_Controller_Action{
  		} catch (Exception $e) {
  			print "Error: new Person".$e->getMessage();
  		}
-
  	}
+
+    public function updatepersonAction(){
+        try {
+            $eid=$this->sesion->eid;
+            $modified=$this->sesion->uid;
+            $pid=base64_decode($this->_getParam('pid'));
+            $where=array('eid'=>$eid,'pid'=>$pid);
+            $dper=new Api_Model_DbTable_Person();
+            $data=$dper->_getOne($where);
+            $fm=new Admin_Form_Personnew();
+            $fm->populate($data);
+            $fm->pid->setAttrib('readonly',true);
+            $this->view->fm=$fm;
+            if ($this->getRequest()->isPost()) {
+                $frmdata=$this->getRequest()->getPost();
+                if ($fm->isValid($frmdata)) {
+                    unset($frmdata['Actualizar']);
+                    trim($frmdata['last_name0']);
+                    trim($frmdata['last_name1']);
+                    trim($frmdata['first_name']);
+                    trim($frmdata['address']);
+                    $frmdata['updated']=date('Y-m-d h:m:s'); 
+                    $frmdata['modified']=$modified;
+                    $pk['eid']=$eid;
+                    $pk['pid']=$pid;                   
+                    $reg_= new Api_Model_DbTable_Person();
+                    $reg_->_update($frmdata,$pk);
+                    $this->_redirect("/admin/person/");
+                }
+                else
+                {
+                    echo "Ingrese nuevamente por favor";
+                }
+            }           
+
+        } catch (Exception $e) {
+            print "Error: update Person ".$e->getMessage();
+        }
+    }
+
 }

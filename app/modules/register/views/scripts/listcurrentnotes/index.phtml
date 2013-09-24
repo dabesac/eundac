@@ -7,10 +7,16 @@
 	<?php 
 	$c=0;
 	foreach ($this->courses as $courses) {
+	$course_ = $courses[0];
+	$u_ = $course_['curid'].$course_['courseid'].$this->notes[$c]['turno'];
+	$urlcampus = "http://campus.undac.edu.pe/courses/$u_/index.php";
 	?>
 	<div class="panel panel-primary" style="padding: 0px;">
 		<div class="panel-heading" style="padding-top: 5px;padding-bottom: 0px;">
-			<p style="font-size:14px"><b><?php echo $courses[0]['courseid']?> | <?php echo $courses[0]['name'];?></b></p>
+			<p style="font-size:14px"><b><?php echo $courses[0]['courseid']?> | <?php echo $courses[0]['name'];?></b>
+			| <a href="<?php echo $urlcampus?>" class="btn " style="color: #fff;" target="black">
+			Ir Campus</a></p>
+			
 		</div>
 		<div class="panel-body" style="padding: 0px;">
 			<table class="table table-bordered" style="margin: 0px">

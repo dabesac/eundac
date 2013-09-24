@@ -112,8 +112,13 @@ class Admin_Form_Personnew extends Zend_Form{
         $send->removeDecorator('Label')->removeDecorator('DtDdWrapper');
         $send->removeDecorator('Label')->removeDecorator("HtmlTag");
         $send->setAttrib('class', 'btn btn-success');
+
+        $send1 = new Zend_Form_Element_Submit('Actualizar');
+        $send1->removeDecorator('Label')->removeDecorator('DtDdWrapper');
+        $send1->removeDecorator('Label')->removeDecorator("HtmlTag");
+        $send1->setAttrib('class', 'btn btn-success');
         
-        $this->addElements(array($pid,$first_name,$last_name0,$last_name1,$typedoc,$numdoc,$birthday,$sex,$civil,$mail_person,$mail_work,$phone,$cellular,$address,$send)); 
+        $this->addElements(array($pid,$first_name,$last_name0,$last_name1,$typedoc,$numdoc,$birthday,$sex,$civil,$mail_person,$mail_work,$phone,$cellular,$address,$send,$send1)); 
 
     }
 }

@@ -15,16 +15,29 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 
 	public function indexAction(){
 		try {
-			$this->_helper->layout()->disableLayout();
+			// $this->_helper->layout()->disableLayout();
            	$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
-			$perid=$this->sesion->period->perid;
-			$escid=$this->sesion->escid;
-			$this->view->escid=$escid;
-			$subid=$this->sesion->subid;
-			$this->view->subid=$subid;
-			$uid=$this->sesion->uid;
-			$this->view->uid=$uid;
+
+			// $perid=$this->sesion->period->perid;
+			// $escid=$this->sesion->escid;
+			// $rid=$this->sesion->rid;
+			// $subid=$this->sesion->subid;
+			// $uid=$this->sesion->uid;
+			// $pid=$this->sesion->pid;
+
+			$rid=base64_decode($this->_getParam('rid'));
+			$perid=base64_decode($this->_getParam('perid'));
+			$escid=base64_decode($this->_getParam('escid'));
+			$subid=base64_decode($this->_getParam('subid'));
+			$uid=base64_decode($this->_getParam('uid'));
+			$pid=base64_decode($this->_getParam('pid'));
+
+			// $this->view->pid=$pid;
+			// $this->view->rid=$rid;
+			// $this->view->escid=$escid;
+			// $this->view->subid=$subid;
+			// $this->view->uid=$uid;
 
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'uid'=>$uid);
 			$attrib=array('escid','perid','courseid','turno','notafinal','state');
@@ -54,7 +67,7 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 				$dasd=$dbperiod->_getFilter($whered,$attrib);
 				$newperiod[$f]=$dasd[0];
 			}
-			// print_r($newperiod);s
+			
 			for ($i=0; $i < $len; $i++) {
 				$courseid=$data[$i]['courseid'];
 				$whered=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid);
@@ -62,8 +75,6 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 				$datac=$dbcourse->_getFilter($whered,$attrib);
 				$datacourse[$i]=$datac[0];
 			}
-			// print_r($datacourse);
-			// print_r($data);exit();
 			$this->view->newperiod=$newperiod;
 			$this->view->datacourse=$datacourse;
 			$this->view->data=$data;

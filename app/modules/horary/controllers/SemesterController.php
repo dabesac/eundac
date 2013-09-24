@@ -45,8 +45,8 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			$semid=$this->_getParam('semid');
 			// $semid='8';
 			$subid=$this->sesion->subid;
-			// $perid=$this->sesion->period->perid;
-			$perid='13A';
+			$perid=$this->sesion->period->perid;
+			// $perid='13A';
 			$this->view->semid=$semid;
 
 			$base_url = 'http://localhost:8080/';
@@ -94,8 +94,8 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		// $escid='4SI';
 		$semid=base64_decode($this->_getParam('semid'));
 		$subid=$this->sesion->subid;
-		// $perid=$this->sesion->period->perid;
-		$perid='13A';
+		$perid=$this->sesion->period->perid;
+		// $perid='13A';
 		$this->view->semid=$semid;
 
 		$base_url = 'http://localhost:8080/';
