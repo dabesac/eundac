@@ -454,9 +454,11 @@ class Profile_PublicController extends Zend_Controller_Action {
             $uid=$this->sesion->uid;
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
-            $perid=$this->sesion->next;
+            $perid=$this->sesion->period->perid;
 
-            
+            //print_r($perid);
+
+            $data=array("pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "subid"=>$subid, "perid"=>$perid);
 
             $dbcuract=new Api_Model_DbTable_Registrationxcourse();
             $dbtyperate=new Api_Model_DbTable_PeriodsCourses();
@@ -477,6 +479,7 @@ class Profile_PublicController extends Zend_Controller_Action {
                 $nc++;
             }
             //print_r($name);
+            $this->view->data=$data;
             $this->view->typerate=$typerate;
             $this->view->name=$name;
             $this->view->curact=$curact;
