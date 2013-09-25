@@ -155,16 +155,16 @@
             <td>
                 <ul class="nav nav-pills nav-stacked" id="editpalBtns">
                     <li><a href="#" id="editmaininfo" class="btn btn-block"><h5>Informacion Principal</h5></a></li>
-                    <li><a href="" id="#" class="btn btn-block"><h5>Datos Academicos</h5></a></li>
-                     <li><a href="" id="#" class="btn btn-block"><h5>Datos Laborales</h5></a></li>
+                    <li><a href="" id="editacademic" class="btn btn-block"><h5>Datos Academicos</h5></a></li>
+                     <li><a href="" id="editlaboral" class="btn btn-block"><h5>Datos Laborales</h5></a></li>
                      <li class="hidden"><a></a></li>
                 </ul>
             </td>
             <td>
                 <ul class="nav nav-pills nav-stacked" id="editpalBtns2">
-                    <li><a href="" id="" class="btn btn-block"><h5>Familia</h5></a></li>
+                    <li><a href="" id="editfamily" class="btn btn-block"><h5>Familia</h5></a></li>
                     <li><a href="" id="" class="btn btn-block"><h5>Datos Estadisticos</h5></a></li>
-                    <li><a href="" id="" class="btn btn-block"><h5>Intereses</h5></a></li>
+                    <li><a href="" id="saveinterest" class="btn btn-block"><h5>Intereses</h5></a></li>
                     <li class="hidden"><a></a></li>
                 </ul>
             </td>
@@ -206,6 +206,7 @@
     $("#maininfo").addClass("hidden")
     $('#editprofileTab a:last').tab('show')
     $('#editpalBtns a:last').tab('show')
+    $('#editpalBtns2 a:last').tab('show')
     $("#datastudent").removeClass("hidden")
     $("#editdata").addClass("hidden")
     $("#editform").html("")
@@ -219,6 +220,7 @@
     $("#editform").html("")
     $('#masinfoTab a:last').tab('show')
     $('#editpalBtns a:last').tab('show')
+    $('#editpalBtns2 a:last').tab('show')
     $('#editprofileTab a:last').tab('show')
   })
 
@@ -266,7 +268,11 @@
 
   //Editar Informacion
 
-   $('#editpalBtns a').click(function (e) {
+  $('#editpalBtns a').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+  })
+  $('#editpalBtns2 a').click(function (e) {
     e.preventDefault()
     $(this).tab('show')
   })
@@ -278,6 +284,31 @@
     $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
     $("#editform").load("/profile/public/studenteditinfo")
   })
+
+  $("#editfamily").click(function(){
+    $("#editdata").addClass("hidden")
+    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+    $("#editform").load("/profile/public/studentsavefamily")
+  })
+
+  $("#editacademic").click(function(){
+    $("#editdata").addClass("hidden")
+    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+    $("#editform").load("/profile/public/studentsaveacademic")
+  })
+
+  $("#editlaboral").click(function(){
+    $("#editdata").addClass("hidden")
+    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+    $("#editform").load("/profile/public/studentsavelaboral")
+  })
+
+  $("#saveinterest").click(function(){
+    $("#editdata").addClass("hidden")
+    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+    $("#editform").load("/profile/public/studentsaveinterest")
+  })
+
 
 
 </script>

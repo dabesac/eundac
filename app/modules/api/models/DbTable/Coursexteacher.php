@@ -29,6 +29,17 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _updateXcourse($data,$pk){
+		try{
+			if ($pk["eid"]=='' || $pk["oid"]=='' ||  $pk["escid"]=='' ||  $pk["subid"] =='' || $pk["courseid"]=='' || $pk["curid"] =='' || $pk["turno"] =='' || $pk["perid"]=='') return false;
+			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and courseid='".$pk['courseid']."' and curid='".$pk['curid']."' and turno='".$pk['turno']."' and perid='".$pk['perid']."'";
+			return $this->update($data, $where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Update Organization ".$e->getMessage();
+		}
+	}
+
 	public function _delete($pk){
 		try{
 			if ($pk['oid']=='' || $pk['eid']=='' || $pk['escid']=='' || $pk['subid']=='' || $pk["courseid"]=='' || $pk["curid"] =='' || $pk["turno"] =='' || $pk["perid"]=='' || $pk["uid"]=='' || $pk["pid"]=='') return false;
@@ -94,7 +105,7 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 	public function _getinfoTeacher($where=null,$attrib=null,$order=null){
 		try {
 			if ($where=='' && $attrib=='' ) return false;
-				$base_teacher = new Api_Model_DbTable_User();
+				$base_teacher = new Api_Model_DbTable_Users();
 				$data_teacher = $base_teacher->_getinfoUser($where,$attrib,$order);
 			if($data_teacher) return $data_teacher;
 			return false;
@@ -133,4 +144,38 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 
     }
 
+    public function _getAllTeacherXPeriodXEscid($where=array()){
+		try{
+			if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' || $where["perid"]=='') return false;
+			$select = $this->_db->select()->distinct()
+								->from(array('ct'=>'base_course_x_teacher'),
+										array('ct.eid','ct.oid','ct.uid','ct.pid','ct.escid'))
+								->where('ct.eid = ?', $where['eid'])
+								->where('ct.oid = ?', $where['oid'])
+								->where('ct.perid = ?', $where['perid'])
+								->where('ct.escid = ?', $where['escid']);
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;  
+		}catch (Exception $e){
+			print "Error: Read All Teacher ".$e->getMessage();
+		}
+	}
+
+	public function _getAllCoursesSupportXTeacherXPeriod($where=array()){
+		try{
+			if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["perid"] =='' || 
+				$where["uid"]=='' || $where["pid"] =='') return false;
+			$wherestr="eid = '".$where['eid']."' and oid='".$where['oid'].
+					"' and not escid='".$where['escid']."' and perid='".$where['perid'].
+					"' and uid='".$where['uid']."' and pid='".$where['pid']."'";
+			$rows = $this->fetchAll($wherestr);
+			if($rows) return $rows->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read All CourseSupport ".$e->getMessage();
+		}
+	}
+    
 }

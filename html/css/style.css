@@ -137,10 +137,7 @@ margin: 0px;
 	background: url(../img/left.png) #AEB7DB ;
 	padding: 0px;
 	margin: 0px;	
-	
-    height: auto !important;
-    min-height: 100%;
-	
+    height: 2000px;
 }
 
 
@@ -149,7 +146,7 @@ margin: 0px;
 	/*background: url(../img/left.png) #AEB7DB ;*/
     background: rgb(77,77,77); /* rgb(0,153,153);Old browsers */
     box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.65);
-    height: 100%;
+    
     margin : auto;
     /*position: fixed;*/
    	margin-left: 10px;
@@ -157,6 +154,15 @@ margin: 0px;
     z-index: 100;
 }
 
+.perfil {
+	color: #fff;
+	text-decoration: none;	
+}
+
+.perfil  a{
+	color: #fff;
+	text-decoration: none;	
+}
 #slider a {
 	text-decoration: none;
 	color:#fff;	

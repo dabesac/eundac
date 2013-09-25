@@ -1,0 +1,42 @@
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h4>Datos Academicos</h4>
+  </div>
+
+  <div class="panel-body">
+    <?php if($this->acadata){?>
+      <?php foreach ($this->acadata as $academic) {?>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h5><b><?php echo $academic['institution']?></b></h5>
+          </div>
+          <div class="panel-body">
+            <table class="table">
+              <tr>
+                <td>Tipo de Institucion 
+                  <h5><b>
+                    <?php if($academic['type']=="ES"){
+                      echo "Estatal";
+                    }elseif($academic['type']=="PA"){
+                      echo "Particular";
+                    }elseif($academic['type']=="PQ"){
+                      echo "Parroquial";
+                    }?>
+                  </b></h5>
+                </td>
+                <td>Nivel de Estudio <h5><b><?php echo $academic['title']?></b></h5></td>
+              </tr>
+              <tr>
+                <td>Año de Finalizacion <h5><b><?php echo $academic['year_end']?></b></h5></td>
+                <td>Localizacion <h5><b>Francia</b></h5></td>
+              </tr>
+            </table>
+          </div>        
+        </div>
+      <?php }
+    }else{?>
+      <center><h5>No tiene Datos, Sugerir que Actualize su Perfil</h5></center>
+    <?}?>
+  </div>
+
+</div>

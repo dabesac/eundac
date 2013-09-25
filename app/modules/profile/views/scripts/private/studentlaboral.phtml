@@ -1,0 +1,31 @@
+<div class="panel panel-info">
+
+  <div class="panel-heading">
+    <h4>Datos Laborales</h4>
+  </div>
+
+  <div class="panel-body">
+  	<?php if($this->laboral){
+  		foreach ($this->laboral as $lab) {?>
+		    <div class="panel panel-default">
+		    	<div class="panel-heading">
+		    		<h5><b><?echo $lab['company']?></b></h5>
+		    	</div>
+		    	<div class="panel-body">
+		    		<table class="table">
+		    			<tr>
+		    				<th>Area <h5><b><?echo $lab['industry']?></b></h5></th>
+		    				<th>Condicion <h5><b><?echo $lab['condition']?></b></h5></th>
+		    				<th>Salario Mensual <h5><b>S/. <?echo $lab['salary']?></b></h5></th>
+		    			</tr>
+		    		</table>
+		    	</div>
+		    </div>
+  		<?php }?>
+
+  	<?php }else{?>
+      <center><h5>No tiene Datos, Sugerir que Actualize su Perfil</h5></center>
+    <?}?>
+  </div>
+
+</div>

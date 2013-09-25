@@ -1,0 +1,96 @@
+
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start();
+
+$header='
+    <table style="width: 100%;" border="1">
+        <tr>
+            <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+            <th style="text-align: center; font-size: 12px;">
+                FACULTAD DE  '.strtoupper($this->faculty['name']).'<br/>
+                ESCUELA DE  '.strtoupper($this->speciality['name']).'
+            </th>        
+        </tr>
+        <tr>
+            <th style="border: 1px solid #000;font-size: 12px;"> PRE-REGISTRO DE NOTAS - PERIODO - '.$this->perid.'</th>
+        </tr>
+    </table>'; 
+?> 
+<table style="font-size: 11px;float: left; width: 100%; border-bottom: 2px solid #000;">
+    <tr>
+        <th style="width: 50px;text-align: left;">Asignatura: </th>
+        <td style="text-align: left;"><?php echo $this->courseid." - ".$this->course['name'] ?></td>
+        <th style="width: 40px;text-align: left">Turno:</th>
+        <td style="width: 40px;text-align: center"><?php echo $this->turno?></td>
+    </tr>
+    <tr>
+        <th>Docente:</th>
+        <td><?php echo $this->dataper['last_name0']." ".$this->dataper['last_name1'].", ".$this->dataper['first_name']?></td>
+        <th>Creditos:</th>
+        <td style="width: 40px;text-align: center"><?php echo $this->course['credits']?></td>
+    </tr>    
+</table>
+
+<table style='float: left; font-size: 11px; width: 100%'>
+    <tr style="background: #ccc; color: #ffffff;">
+        <th style="width: 20px;">#</th>
+        <th style="width: 30px;">Codigo</th>
+        <th class="span3">Apellidos y Nombres</th>
+        <th style="width: 30px;text-align: center">N1</th>
+        <th style="width: 30px;text-align: center">N2</th>
+        <th style="width: 30px;text-align: center">N3</th>
+        <th style="width: 30px;text-align: center">N4</th>
+        <th style="width: 30px;text-align: center">N5</th>
+        <th style="width: 30px;text-align: center">N6</th>
+        <th style="width: 30px;text-align: center">N7</th>
+        <th style="width: 30px;text-align: center">N8</th>
+        <th style="width: 30px;text-align: center">N9</th>  
+        <th style="width: 30px">NF</th>
+    </tr>
+    <?php
+    if ($this->cursosconvalidados){
+        $i=1;
+        foreach ($this->cursosconvalidados as $convalidado){ ?>
+            <tr>
+                <td><?php echo $i;?></td>
+                <td><center><?php echo $convalidado['uid'];?></center></td>
+                <td><?php echo $convalidado['last_name0']." ".$convalidado['last_name1'].", ".$convalidado['first_name'];?></td>
+                <td style="text-align: center">____</td>
+                <td style="text-align: center">____</td>
+                <td style="text-align: center">____</td>
+                <td style="text-align: center">____</td>
+                <td style="text-align: center">____</td>
+                <td style="text-align: center">____</td>
+                <td style="text-align: center">____</td>
+                <td style="text-align: center">____</td>
+                <td style="text-align: center">____</td>  
+                <td style="text-align: center">____</td>
+            </tr>
+           <?php
+             $i++;
+        }
+    }
+    ?>
+    </table>
+            
+<hr style="height: 2px; background: #000">
+<p style='font-size: 10px'></p>
+<table>
+    <tr>
+        <th>Fecha del Acta:</th>
+        <td colspan="2">
+        <?php echo $this->periodcourse['closure_date']; ?> 
+        </td>
+    </tr>
+</table>
+<?php
+  $html = ob_get_contents();
+  $mpdf=new mPDF('win-1252','A4','','',15,15,32,12,5,7);
+  $mpdf->SetHTMLHeader($header);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}/|Sistema de Gestión e-UNDAC');
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('constancia-'.$this->courseid.'.pdf','D');
+?>

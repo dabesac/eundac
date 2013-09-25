@@ -1,6 +1,5 @@
 <?php
 if ($this->cursosconvalidados){ ?>
-<div id="listag">
     <div><h5><center><b>CURSOS REALIZADOS</b></center></h5></div>
     <div>
         <div style="display: block; height: 150px; overflow: auto;margin: 0px;" >
@@ -33,11 +32,11 @@ if ($this->cursosconvalidados){ ?>
                             <td><center><?php echo $convalidado['notafinal'];?></center></td>
                             <td>
                                 <center>
-                                    <!-- <a target="black" style="float:right" href="/rfacultad/subsanacion/imprimir/perid/<?php echo $this->perid ?>/escid/<?php echo $this->escid ?>/subid/<?php echo $this->subid ?>/uid/<?php echo $this->uid ?>/pid/<?php echo $this->pid ?>/courseid/<?php echo $convalidado['courseid'] ?>/curid/<?php echo $convalidado['curid']?>/turno/<?php echo $convalidado['turno'] ?> "><img src="/img/pdf.png"></a> -->
+                                    <a href="/record/directed/print/perid/<?php echo base64_encode($this->perid) ?>/escid/<?php echo base64_encode($this->escid) ?>/subid/<?php echo base64_encode($this->subid) ?>/uid/<?php echo base64_encode($this->uid) ?>/pid/<?php echo base64_encode($this->pid) ?>/courseid/<?php echo base64_encode($convalidado['courseid']) ?>/curid/<?php echo base64_encode($convalidado['curid']) ?>/turno/<?php echo base64_encode($convalidado['turno']) ?> "><span class="glyphicon glyphicon-print"></span></a>
                                 </center>
                             </td>
                             <?php  
-                             if ($convalidado['state']<>'C'){ ?>
+                             if ($convalidado['state']<>'C' and $convalidado['state_record']<>'C'){ ?>
                             <td>
                                 <a id="modifyregister_<?php echo $i?>" data-toggle="modal" href="#modify" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
                             </td>
@@ -59,7 +58,12 @@ if ($this->cursosconvalidados){ ?>
                             });
                             </script>
                             <?php 
-                            } ?>
+                            }else{ ?>
+                            <td>
+                                <a href="#" title="No se puede Modificar el Registro."><span class="glyphicon glyphicon-ban-circle"></span></a>
+                            </td>
+                            <?php
+                            }?>
                         </tr>
                         <?php
                         $i++;
@@ -67,6 +71,5 @@ if ($this->cursosconvalidados){ ?>
             </table>
         </div>        
     </div> 
-</div>
 <?php
 } ?>

@@ -12,6 +12,7 @@
                
                 <th >CURRICULA</th>
                 <th >HISTORIAL</th>
+                <th >PERFIL</th>
         </tr>
         </thead>
 
@@ -60,6 +61,10 @@
 
                 <td>
                     <center><a href="/profile/search/studentsignpercur/uid/<?php echo $info['uid']?>/pid/<?php echo $info['pid']?>/escid/<?php echo $info['escid']?>/subid/<?php echo $info['subid']?>"><span class='glyphicon glyphicon-pencil'></span></a></center>                
+                </td>
+
+                <td>
+                    <center><a href="/profile/private/student/uid/<?php echo base64_encode($info['uid'])?>/pid/<?echo base64_encode($info['pid'])?>/escid/<?echo base64_encode($info['escid'])?>/eid/<?echo base64_encode($info['eid'])?>/oid/<?echo base64_encode($info['oid'])?>"><span class="glyphicon glyphicon-user"></span></a></center>
                 </td>
 
 

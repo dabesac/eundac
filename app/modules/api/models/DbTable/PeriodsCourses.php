@@ -306,6 +306,33 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
       }
     } 
 
-
+    public function _getInfoCourseXTeacher($where=null){
+		try {
+			if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where['uid']=='' || $where['pid']=='') return false; 
+				$select = $this->_db->select()
+						->from(array('pc'=>'base_periods_courses'),
+								array('pc.eid','pc.oid','pc.subid','pc.escid','pc.curid','pc.perid',
+									'pc.courseid','pc.turno','pc.semid','pc.state',
+									'pc.state_record'))
+						->join(array('ct'=>'base_course_x_teacher'),
+								'ct.eid=pc.eid and ct.oid=pc.oid and ct.courseid=pc.courseid and 
+								ct.curid=pc.curid and ct.perid=pc.perid and ct.escid=pc.escid and 
+								ct.turno=pc.turno and ct.subid=pc.subid',
+								array('ct.uid','ct.pid','ct.percentage','ct.is_main','ct.is_com','ct.distid'))
+						->where('ct.is_main = ?','S')
+						->where('ct.eid = ?',$where['eid'])
+						->where('ct.oid = ?',$where['oid'])
+						->where('ct.pid = ?',$where['pid'])
+						->where('ct.uid = ?',$where['uid'])
+						->where('ct.perid = ?',$where['perid'])
+						->order('pc.courseid','pc.turno');
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+		} catch (Exception $e) {
+			print "Error: Read Course_Teacher";
+		}
+	}
 }
 

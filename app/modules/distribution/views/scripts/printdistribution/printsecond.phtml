@@ -1,0 +1,332 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start();
+
+$sesion1  = Zend_Auth::getInstance();
+$sesion = $sesion1->getStorage()->read();
+
+$header='
+    <table style="width: 100%;" border="1">
+        <tr>
+            <th rowspan="2" style="width: 50%">
+            	<img src="/img/header_imprimir.jpg"><br><br><br>
+            </th>
+            <th style="text-align: center; font-size: 12px;">
+                FACULTAD DE  '.strtoupper($sesion->faculty->name).'<br>
+                ESCUELA DE  '.strtoupper($sesion->speciality->name).'<br>
+                ESPECIALIDAD DE  '.strtoupper($this->speciality['name']).'<br>
+            </th>
+        </tr>
+        <tr>
+          	<th style="border: 1px solid #000;font-size: 12px;"> DISTRIBUCIÓN ACADEMICA-ADMINISTRATIVA DE DOCENTES - '.$this->perid.'</th>
+        </tr>
+    </table>';
+?>
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+
+<h5>LISTA DE DOCENTES</h5>
+<?php
+$a = array('PRINCIPAL', 'ASOCIADO', 'AUXILIAR');
+$b = array('DEDICACIONEXCLUSIVA', 'TIEMPOCOMPLETO', 'TIEMPOPARCIAL');
+
+for($n=0; $n<=2; $n++){
+    for($p=0 ;$p<=2; $p++){
+		$distri = new Distribution_Model_DbTable_Distribution();
+		foreach ($this->allteachers as $allteachers){
+			$wheredist = array(
+				'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'],
+				'escid' => substr($this->escid,0,3), 'perid' => $this->perid);
+	        $tdis = $distri->_getFilter($wheredist,$atrib=array());
+	        $distidsec = $tdis[0]['distid'];
+
+			if(substr($allteachers['escidorigen'],0,3)=='2ES' and ($allteachers['escidorigen']<>'2ESTY') and $allteachers['category']==$a[$n] and $allteachers['dedication']==$b[$p]){ ?>
+				<table style="width: 100%">	
+					<tr>
+						<th colspan='3'><?php echo $allteachers['fullname'] ?></th>
+		               	<th colspan='4' style='font-size:10px'>
+		               		<center><?php echo $allteachers['category']." - ".$allteachers['dedication']?></center>
+		               	</th>
+					</tr>
+					<tr>
+	                    <th colspan="7">HORAS ACADÉMICAS</th>
+	                </tr>
+	                <tr>
+	                    <th class="span5"><center>Curso</center></th>
+	                    <th class="span1"><center>Sem</center></th>
+	                    <th class="span1"><center>Turno</center></th>
+	                    <th class="span1"><center>Grupo(s)</center></th>
+	                    <th class="span1"><center>Horas Teóricas</center></th>
+	                    <th class="span1"><center>Horas Prácticas</center></th>
+	                    <th class="span1"><center>Total Horas</center></th>
+	                </tr>
+					<?php
+					$wherecourteach=array(
+						'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'], 
+						'escid' => $allteachers['escid'], 'perid' => $this->perid, 
+						'distid' => $this->distid, 'uid' => $allteachers['uid'],
+						'pid' => $allteachers['pid']);
+					$courteacher = new Api_Model_DbTable_Coursexteacher();
+					$datateachers=$courteacher->_getFilter($wherecourteach,$attrib=null,$orders=null);
+					$cour = new Api_Model_DbTable_Course();
+					foreach($datateachers as $datateachers){
+	                    $wherecour = array(
+	                    	'eid' => $datateachers['eid'], 'oid' => $datateachers['oid'],
+	                    	'curid' => $datateachers['curid'], 'escid' => $datateachers['escid'],
+	                    	'subid' => $datateachers['subid'], 'courseid' => $datateachers['courseid']);
+	                    $tmp = $cour->_getOne($wherecour);                    
+	                    if ($tmp){
+		                    $compromiso = ($datateachers['is_com']=='S')? " - Compromiso":"";
+		                    $licencia = ($datateachers['hours_t']=='0' and $datateachers['hours_p']=='0')? " - Licencia":"";
+		                    $curso_nombre = $tmp['name']." ".$compromiso." ".$licencia;
+	                    }
+						if($datateachers['uid']==$allteachers['uid']){
+						?>
+							<tr>							
+								<td><?php echo $curso_nombre?></td>	
+								<td><center><?php echo $datateachers['semid']?></center></td>
+								<td><center><?php echo $datateachers['turno']?></center></td>
+								<td><center><?php echo $datateachers['groups']?></center></td>
+								<td><center><?php echo $datateachers['hours_t']?></center></td>
+								<td><center><?php echo $datateachers['hours_p']?></center></td>
+								<td><center><?php echo $datateachers['hours_total']?></center></td>
+							</tr>
+							<?php
+						}
+					}
+					$courteac = new Api_Model_DbTable_Coursexteacher();
+	           		$wherecoursup=array(
+	           			'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'],
+	                    'uid' => $allteachers['uid'], 'pid' => $allteachers['pid'],
+	                    'perid' => $this->perid, 'escid' => $this->escid);
+	                $lcapoyo = $courteac->_getAllCoursesSupportXTeacherXPeriod($wherecoursup);
+					foreach ($lcapoyo as $support){
+	                    $wherecour = array(
+	                    	'eid' => $support['eid'], 'oid' => $support['oid'], 
+	                    	'curid' => $support['curid'], 'escid' => $support['escid'], 
+	                    	'subid' => $support['subid'], 'courseid' => $support['courseid']);
+	                    $tmp = $cour->_getOne($wherecour);
+
+	                    $whereespe=array(
+	                    	'eid' => $support['eid'], 'oid' => $support['oid'],
+	                        'escid' => $support['escid'], 'subid' => $support['subid']);
+	                    $esp= new Api_Model_DbTable_Speciality();
+	                    $dataesc = $esp->_getOne($whereespe);
+
+	                    $compromiso = ($support['is_com']=='S')?" - Compromiso":"";
+	                    $curso_nombre = $tmp['name'] ." --- Escuela : ".$dataesc['name']." ".$compromiso;
+	                    ?>
+	                    <tr>
+	                        <td><?php echo $curso_nombre;?></th>
+	                        <td><center><?php echo $support['semid']?></center></td>
+	                        <td><center><?php echo $support['turno']?></center></td>
+	                        <td><center><?php echo $support['groups']?></center></td>
+	                        <td><center><?php echo $support['hours_t']?></center></td>
+	                        <td><center><?php echo $support['hours_p']?></center></td>
+	                        <td><center><?php echo $support['hours_total']?></center></td>
+	                    </tr>
+	                    <?php
+	                } ?>
+	            </table>
+				<br>
+	            <table style="width: 100%">
+					<tr>
+			            <th colspan="2">HORAS ADMINISTRATIVAS</th>
+			        </tr>
+					<?php		
+					$wheredistadm = array(
+			        	'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'],
+			        	'distid' => $distidsec, 'uid' => $allteachers['uid'], 
+			        	'pid' => $allteachers['pid']);
+					$distadm = new Distribution_Model_DbTable_DistributionAdmin();
+			        $dataadm = $distadm->_getFilter($wheredistadm,$atrib=array());	
+					foreach($dataadm as $adm){ ?>
+						<tr>
+							<td><?php echo $adm['work']?></td>
+							<td><center><?php echo $adm['hours']?></center></td>
+						</tr>
+						<?php						
+					} 
+	                $distteac = new Distribution_Model_DbTable_DistributionTeacher();
+	                $datadistteac = $distteac->_getFilter($wheredistadm,$atrib=array());
+	                $htotales = $datadistteac[0]['total_hour_acad']+$datadistteac[0]['total_hour_admin'];
+	                ?>
+	                <tr> 
+	                	<th>TOTAL DE HORAS </th>                
+	                    <th><center><?php echo $htotales?></center></th> 
+	                </tr>  					
+				</table>					
+				<br>	
+				<br>	
+				<br>
+				<?php
+			}
+		}
+	}
+}
+foreach ($this->allteachers as $allteachers) {
+	$whereespe = array(
+		'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'], 
+		'escid' => $allteachers['escidorigen'], 'subid' => $allteachers['subidorigen']);
+    $esp = new Api_Model_DbTable_Speciality();
+    $escuela = $esp->_getOne($whereespe);
+
+	if(substr($allteachers['escidorigen'],0,3)<>'2ES' or $allteachers['escidorigen']=='2ESTY'){ ?>
+        <h5><?php echo 'Docente de Apoyo :'.$escuela['name']?></h5>
+		<h5><?php echo $allteachers['fullname'] ?></h5>
+		<table style="width: 100%">
+			<tr>
+            	<th colspan="7">HORAS ACADÉMICAS</th>
+            </tr>
+            <tr>
+                <th class="span5"><center>Curso</center></th>
+                <th class="span1"><center>Sem</center></th>
+                <th class="span1"><center>Turno</center></th>
+                <th class="span1"><center>Grupo(s)</center></th>
+                <th class="span1"><center>Horas Teóricas</center></th>
+                <th class="span1"><center>Horas Prácticas</center></th>
+                <th class="span1"><center>Total Horas</center></th>
+            </tr>
+			<?php	
+			$wherecourteach=array(
+				'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'], 
+				'escid' => $allteachers['escid'], 'perid' => $this->perid, 
+				'distid' => $this->distid, 'uid' => $allteachers['uid'], 
+				'pid' => $allteachers['pid']);
+			$datateachers=$courteacher->_getFilter($wherecourteach,$attrib=null,$orders=null);
+			$cour = new Api_Model_DbTable_Course();
+			foreach($datateachers as $datateachers){
+                $wherecour = array(
+                	'eid' => $datateachers['eid'], 'oid' => $datateachers['oid'], 
+                	'curid' => $datateachers['curid'], 'escid' => $datateachers['escid'], 
+                	'subid' => $datateachers['subid'], 'courseid' => $datateachers['courseid']);
+                $tmp = $cour->_getOne($wherecour);
+
+                if ($tmp){
+	                $compromiso = ($datateachers['is_com']=='S')?" - Compromiso":"";
+	                $curso_nombre = $tmp['name']."    ".$compromiso;
+                }
+				if($datateachers['uid']==$allteachers['uid']){
+				?>
+					<tr>
+						<td><?php echo $curso_nombre?></td>	
+						<td><center><?php echo $datateachers['semid']?></center></td>		
+						<td><center><?php echo $datateachers['turno']?></center></td>		
+						<td><center><?php echo $datateachers['groups']?></center></td>		
+						<td><center><?php echo $datateachers['hours_t']?></center></td>	
+						<td><center><?php echo $datateachers['hours_p']?></center></td>	
+						<td><center><?php echo $datateachers['hours_total']?></center></td>
+					</tr>
+				<?php
+				}
+			} ?>			
+		</table>					
+		<br>
+		<br>
+		<br>
+		<?php
+	}
+}
+foreach ($this->allteachers as $allteachers){
+	if(substr($allteachers['uid'],8,2)=='JP'){ 
+		$wheredist = array(
+			'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'],
+			'escid' => substr($this->escid,0,3), 'perid' => $this->perid);
+		$distri = new Distribution_Model_DbTable_Distribution();
+	    $tdis = $distri->_getFilter($wheredist,$atrib=array());
+	    $distidsec = $tdis[0]['distid'];
+
+		if(substr($allteachers['escidorigen'],0,3)=='2ES'){ ?>
+			<h5>JEFES DE PRÁCTICAS</h5><br>
+			<h5><?php echo $allteachers['fullname'] ?></h5>
+			<table style="width: 100%">
+				<tr>
+                    <th colspan="7" >HORAS ACADÉMICAS</th>
+                </tr>
+                <tr>                       
+                    <th class="span5"><center>Curso</center></th>
+                    <th class="span1"><center>Sem</center></th>
+                    <th class="span1"><center>Turno</center></th>
+                    <th class="span1"><center>Grupo(s)</center></th>
+                    <th class="span1"><center>Horas Teóricas</center></th>
+                    <th class="span1"><center>Horas Prácticas</center></th>
+                    <th class="span1"><center>Total Horas</center></th>
+                    <th class="span1"><center>Total Horas</center></th>
+                </tr>
+				<?php	
+				$wherecourteach=array(
+					'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'], 
+					'escid' => $allteachers['escid'], 'perid' => $this->perid, 
+					'distid' => $this->distid, 'uid' => $allteachers['uid'], 
+					'pid' => $allteachers['pid']);
+				$datateachers=$courteacher->_getFilter($wherecourteach,$attrib=null,$orders=null);
+				$cour = new Api_Model_DbTable_Course();
+				foreach($datateachers as $datateachers){
+		            $wherecour = array(
+		               	'eid' => $datateachers['eid'], 'oid' => $datateachers['oid'],
+		               	'curid' => $datateachers['curid'], 'escid' => $datateachers['escid'],
+		               	'subid' => $datateachers['subid'], 'courseid' => $datateachers['courseid']);
+		            $tmp = $cour->_getOne($wherecour);
+                    if ($tmp){
+	                    $compromiso = ($datateachers['is_com']=='S')?" - Compromiso":"";
+	                    $curso_nombre = $tmp['name']."    ".$compromiso;
+                    }
+					if($datateachers['uid']==$allteachers['uid']){ ?>
+						<tr>
+							<td><?php echo $curso_nombre?></td>	
+							<td><center><?php echo $datateachers['semid']?></center></td>
+							<td><center><?php echo $datateachers['turno']?></center></td>
+							<td><center><?php echo $datateachers['groups']?></center></td>
+							<td><center><?php echo $datateachers['hours_t']?></center></td>
+							<td><center><?php echo $datateachers['hours_p']?></center></td>
+							<td><center><?php echo $datateachers['hours_total']?></center></td>
+						</tr>
+						<?php
+					}
+				} ?>
+			</table>
+			<br>
+			<table>
+				<tr>
+		           	<th colspan="2">HORAS ADMINISTRATIVAS</th>
+		       	</tr>
+				<?php	
+				$wheredistadm = array(
+					'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'],
+					'distid' => $distidsec,	'uid' => $allteachers['uid'], 
+					'pid' => $allteachers['pid']);
+				$distadm = new Distribution_Model_DbTable_DistributionAdmin();
+			    $dataadm = $distadm->_getFilter($wheredistadm,$atrib=array());		
+				foreach($dataadm as $adm){ ?>
+					<tr>							
+						<td><?php echo $adm['work']?></td>			
+						<td><center><?php echo $adm['hours']?></center></td>
+					</tr>
+					<?php						
+				}
+               	$distteac = new Distribution_Model_DbTable_DistributionTeacher();
+		        $datadistteac = $distteac->_getOne($wheredistadm);
+	            $htotales=$datadistteac['total_hour_acad']+$datadistteac['total_hour_admin'];
+                ?>
+                <tr> 
+                   	<th>TOTAL DE HORAS </th>                
+                   	<th><center><?php echo $htotales?></center></th> 
+                </tr>			
+			</table>					
+			<br>
+			<br>
+			<br>
+			<?php
+		}
+	}
+} ?>
+<?php 
+    $html = ob_get_contents();
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,12,5,7);
+    $mpdf->SetHTMLHeader($header);
+    $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('INFORME DISTRIBUCION-'.$this->perid.'.pdf','D');
+?>
