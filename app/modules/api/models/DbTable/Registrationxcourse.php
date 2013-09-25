@@ -474,7 +474,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
          try{
 			 $select = $this->_db->select()
 			 	->from(array('mc' => 'base_registration_course'),array('courseid','turno','perid'))
-                ->where("perid != ?", $where['perid'])->where("uid = ?", $where['uid'])->where("notafinal != ?", '-2')->where("notafinal != ?", '-3'); 
+                ->where("perid != ?", $where['perid'])->where("uid = ?", $where['uid'])->where("notafinal != ?", '-2')->where("notafinal != ?", '-3')->where("state != ?", 'I')->where("state != ?", 'B'); 
 			$results = $select->query();			
 			$rows = $results->fetchAll();
 			if($rows) return $rows;
