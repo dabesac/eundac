@@ -90,6 +90,12 @@ $(document).ready(function(){
     </div>
 <?php //exit();?>
 <![endif]-->
+
+<?php 
+if ($rid=="AL"){
+	$profile = "/profile/public/student";
+}
+?>
 <div class="row" style="padding: 0px; margin: 0px" >
 	<div class="col-sm-2 control-top">
 		<div class="logo">
@@ -158,21 +164,14 @@ $(document).ready(function(){
 			<ul class="nav navbar-nav pull-right" style="padding-top: 10px">
 			  	<li class='dropdown'>
 					<div class="btn-group">
+						<a class="dropdown-toggle btn btn-primary" href="<?php echo $profile?>">Ver mi perfil</a>
 						<button class="dropdown-toggle btn btn-info" data-toggle="dropdown">
 							<span class="glyphicon glyphicon-cog"></span>
 						</button>
-						<ul class="dropdown-menu" style="margin-left: -130px;" >
+						<ul class="dropdown-menu" >
 							<li><a href="/default/password/change">Cambiar Contraseña</a></li>
-							<?php if ($rid=="AL"){
-								$profile = "/profile/public/student";
-							}
-							?>
-							<?php php 
-							?>}?>
-							<li><a href="<?php echo $profile?>">Ver mi perfil</a></li>
-							<li><a href="#"></a></li>
 							<li class="divider"></li>
-							 -->
+							<li><a href="/index/salir">Salir</a></li>
 						</ul>
 					</div>
 				</li>
