@@ -93,6 +93,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             if ($this->getRequest()->isPost())
             {
                 $formdata = $this->getRequest()->getPost();
+                print_r("Se Guardo con Exito");
                 if ($form->isValid($formdata))
                 { 
                     trim($formdata['numdoc']);
@@ -105,7 +106,7 @@ class Profile_PublicController extends Zend_Controller_Action {
                     trim($formdata['cellular']);
                     //print_r($formdata);
                     $upduser=$dbperson->_update($formdata, $where);
-                    $this->_redirect("/profile/public/student");
+                    //$this->_redirect("/profile/public/student");
                 }
                 else
                 {

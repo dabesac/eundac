@@ -34,16 +34,18 @@
 		$("#form").submit()
 	})
 
+
+
 	$("form").submit(function(){
 		$.ajax({
-			type: 'POST',
-			url: $(this).attr('action'),
-			data : $(this).serialize(),
-			success: function(data){
-				$("#editform").html(data);
-			}
-			return false;
-		});
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function(data) { 
+            	$("#editform").html(data);
+       	   }
+           }); 
+            return false;
 	})
 
 	$('#backeditBtn a').click(function (e) {
