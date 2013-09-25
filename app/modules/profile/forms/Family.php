@@ -69,6 +69,7 @@ class Profile_Form_Family extends Zend_Form{
         $ocupacy->setRequired(true)->addErrorMessage('Este campo es requerido');
         $ocupacy->setAttrib("title","Ocupacion");
         $ocupacy->setAttrib("class","form-control");
+        $ocupacy->setAttrib("id","ocupacy");
 
         $health = new Zend_Form_Element_Select('health');
         $health->removeDecorator('HtmlTag')->removeDecorator('Label');     
@@ -76,6 +77,7 @@ class Profile_Form_Family extends Zend_Form{
         $health->addMultiOption("N","No");
         $health->addMultiOption("S","Si");
         $health->setAttrib("class","form-control");
+        $health->setAttrib("id","health");
 
         $phone= new Zend_Form_Element_Text('phone');
         $phone->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
@@ -83,6 +85,7 @@ class Profile_Form_Family extends Zend_Form{
         $phone->setRequired(true)->addErrorMessage('Este campo es requerido');
         $phone->setAttrib("title","phone");
         $phone->setAttrib("class","form-control");
+        $phone->setAttrib("id","phone");
 
         $address= new Zend_Form_Element_Text('address');
         $address->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
@@ -90,6 +93,7 @@ class Profile_Form_Family extends Zend_Form{
         $address->setRequired(true)->addErrorMessage('Este campo es requerido');
         $address->setAttrib("title","Direccion");
         $address->setAttrib("class","form-control");
+        $address->setAttrib("id","address");
 
         $assignee = new Zend_Form_Element_Select('assignee');
         $assignee->removeDecorator('HtmlTag')->removeDecorator('Label');     
@@ -97,12 +101,9 @@ class Profile_Form_Family extends Zend_Form{
         $assignee->addMultiOption("N","No");
         $assignee->addMultiOption("S","Si");
         $assignee->setAttrib("class","form-control");
+        $assignee->setAttrib("id","assignee");
 
-        $submit = new Zend_Form_Element_Submit('save');
-        $submit->setAttrib('class','btn btn-info pull-right');
-        $submit->setLabel('Guardar');
-        $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
 
-        $this->addElements(array($type, $lastname, $firtsname, $sex, $live, $typedoc, $numdoc, $birthday, $ocupacy,$health, $phone, $address, $assignee, $submit));
+        $this->addElements(array($type, $lastname, $firtsname, $sex, $live, $typedoc, $numdoc, $birthday, $ocupacy,$health, $phone, $address, $assignee));
     }
 }

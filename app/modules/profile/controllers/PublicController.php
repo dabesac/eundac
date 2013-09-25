@@ -95,7 +95,6 @@ class Profile_PublicController extends Zend_Controller_Action {
                 $formdata = $this->getRequest()->getPost();
                 if ($form->isValid($formdata))
                 { 
-                    unset($formdata['save']);
                     trim($formdata['numdoc']);
                     trim($formdata['birthday']);
                     trim($formdata['sex']);
@@ -110,7 +109,7 @@ class Profile_PublicController extends Zend_Controller_Action {
                 }
                 else
                 {
-                    echo "Ingrese Nuevamente";
+                     //$this->_redirect("/profile/public/student");
                 }
             }
 

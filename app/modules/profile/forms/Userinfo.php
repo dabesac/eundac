@@ -61,11 +61,7 @@ class Profile_Form_Userinfo extends Zend_Form{
         $cellular->setAttrib("title","Cellular");
         $cellular->setAttrib("class","form-control");
 
-        $submit = new Zend_Form_Element_Submit('save');
-        $submit->setAttrib('class','btn btn-info pull-right');
-        $submit->setLabel('Guardar');
-        $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
         
-        $this->addElements(array($dni, $birthday, $sex, $civil, $mail_person, $mail_work, $phone, $cellular, $submit));
+        $this->addElements(array($dni, $birthday, $sex, $civil, $mail_person, $mail_work, $phone, $cellular));
     }
 }

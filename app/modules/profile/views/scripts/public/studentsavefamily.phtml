@@ -39,23 +39,14 @@
 	</table>
 	<tr>
 		<td></td>
-		<td><?print $this->form->save?></td>
+		<td><a class="btn btn-info pull-right" href="#" id="save">Guardar</a></td>
 	</tr>
 			
 </div>
 
 <script>
-	$("#moreinfo").addClass("hidden");
-	$("#live").change(function(){
-		$("#live option:selected").each(function(){
-			var livevar=$(this).val();
-		if (livevar=="S") {
-			$("#moreinfo").removeClass("hidden");
-		};
-		if (livevar=="N") {
-			$("#moreinfo").addClass("hidden");
-		};
-		})
+	$("#save").click(function(){
+		
 	})
 	
 	$('#backeditBtn a').click(function (e) {
