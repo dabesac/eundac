@@ -82,15 +82,15 @@
                     sedid="<?php echo $register['sedid'];?>" 
                     matid="<?php echo $register['matid'];?>" 
                     uid="<?php echo $register['uid'];?>"
-                    edicion="false"
+                    edition="false"
                     style="color:<?php echo ($register['promedio1'] != -3)?'#000':'#FC4141'; ?>;"
 				>
-				<td>
-                    <span id="edit-note-<?php echo $key?>" class=''></span>
-                    <?php echo $key + 1 ?>
+				<td class='td-edit-note'>
+                    <h6 class='pull-left'><?php echo $key + 1 ?></h6>
+                    <span id="edit-note-<?php echo $key?>" class='pull-left text-primary glyphicon'></span>
                 </td>
-                <td><?php echo $register['uid']?></td>
-				<td><?php echo $register['last_name0']." ".$register['last_name1'].", ".$register['first_name']?></td>
+                <td><h6><?php echo $register['uid']?></h6></td>
+				<td><h6><?php echo $register['last_name0']." ".$register['last_name1'].", ".$register['first_name']?></h6></td>
 				<?php if($this->partial == 2){ ?>
                     <td>
                         <input class='form-control' style="color:<?php echo ($register['promedio1'] != -3)?'#000':'#FC4141'; ?>;" disabled class="uneditable-input"  type="text" name="promedio1"  value="<?php echo ($register['promedio1'] != -3)?$register['promedio1']:'RET'; ?>"/>
@@ -98,31 +98,31 @@
                     <?php } ?>
                  <?php if ($this->partial == 1) { ?>
                  	<td>
-                 		<input  maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true indice="<?php echo $key; ?>"   type="text" name="nota1_i"  value="<?php echo  $register['nota1_i'] ;?>"/>
+                 		<input  maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota1_i"  value="<?php echo  $register['nota1_i'] ;?>"/>
                  	</td>
                  	<td>
-                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true indice="<?php echo $key; ?>"   type="text" name="nota2_i"  value="<?php echo  $register['nota2_i'] ;?>"/>
+                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota2_i"  value="<?php echo  $register['nota2_i'] ;?>"/>
                  	</td>
                  	<td>
-                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true indice="<?php echo $key; ?>"   type="text" name="nota3_i"  value="<?php echo  $register['nota3_i'] ;?>"/>
+                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota3_i"  value="<?php echo  $register['nota3_i'] ;?>"/>
                  	</td>
                  	<td>
-                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true indice="<?php echo $key; ?>"   type="text" name="nota4_i"  value="<?php echo  $register['nota4_i'] ;?>"/>
+                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota4_i"  value="<?php echo  $register['nota4_i'] ;?>"/>
                  	</td>
                  	<td>
-                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true indice="<?php echo $key; ?>"   type="text" name="nota5_i"  value="<?php echo  $register['nota5_i'] ;?>"/>
+                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota5_i"  value="<?php echo  $register['nota5_i'] ;?>"/>
                  	</td>
                  	<td>
-                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true indice="<?php echo $key; ?>"   type="text" name="nota6_i"  value="<?php echo  $register['nota6_i'] ;?>"/>
+                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota6_i"  value="<?php echo  $register['nota6_i'] ;?>"/>
                  	</td>
                  	<td>
-                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true indice="<?php echo $key; ?>"   type="text" name="nota7_i"  value="<?php echo  $register['nota7_i'] ;?>"/>
+                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota7_i"  value="<?php echo  $register['nota7_i'] ;?>"/>
                  	</td>
                  	<td>
-                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true indice="<?php echo $key; ?>"   type="text" name="nota8_i"  value="<?php echo  $register['nota8_i'] ;?>"/>
+                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota8_i"  value="<?php echo  $register['nota8_i'] ;?>"/>
                  	</td>
                  	<td>
-                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true indice="<?php echo $key; ?>"   type="text" name="nota9_i"  value="<?php echo  $register['nota9_i'] ;?>"/>
+                 		<input maxlength="2" class='form-control' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota9_i"  value="<?php echo  $register['nota9_i'] ;?>"/>
                  	</td>
                  	<td class="promedio">
                         <input maxlength="2" class='form-control' style="color:<?php echo ($register['promedio1'] != -3)?'#000':'#FC4141'; ?>;" disabled class="uneditable-input"  type="text" name="promedio1"  value="<?php echo ($register['promedio1'] != -3)?$register['promedio1']:'RET'; ?>"/>

@@ -1,7 +1,15 @@
 $(document).ready(function() {
+    
+    $(window).scroll(function(){
+        var scroll = $(window).scrollTop();
+        
+        
+
+    });
 
 	/**********limit-just-numbers**********/
-	var $strnota = '';
+	var $strnotes = '';
+    var $edition_notes = false;
 	$(".tb-notes input[type='text']").keypress(function(e){
 
 		var charCode = (e.which) ? e.which : event.keyCode
@@ -10,11 +18,11 @@ $(document).ready(function() {
             }else{
                 if(e.which != 8){
                     var chr = String.fromCharCode( e.which );
-                    $strnota = '' + $strnota + chr + '';
-                    if($strnota != ''){$nota = Number($strnota);}
+                    $strnotes = '' + $strnotes + chr + '';
+                    if($strnotes != ''){$nota = Number($strnotes);}
                     else{$nota='';}
                     if(($nota < 0 || $nota >20) && ($nota!=-3) && ($nota!='')){
-                        $strnota = '';
+                        $strnotes = '';
                         $(this).val('');
                         e.preventDefault();
                     }
@@ -23,22 +31,27 @@ $(document).ready(function() {
                 var td = $(this).parent();
                 var tr  = td.parent();
                 $tr = $(tr);
-                $tr.attr("edicion",true); 
+                $tr.attr("edition",true); 
                 
-                $indice = $(this).attr("indice");
-                $("#comprobacion_" + $indice).attr("src","/img/cuaderno.png");
-                $("#btnguardar").attr("disabled",false);
-                
-                if($grillaedicion == false){
+                $index = $(this).attr("index");
+                $("#edit-note-"+ $index).addClass("glyphicon-edit");
+                $("#save_notes").attr("disabled",false);
+                objeto = {
+                    "width":'50px',
+                }
+                $(".td-edit-note").css(objeto);
+                if($edition_notes == false){
                     InitializeTimer();
-                    $grillaedicion = true;
+                    $edition_notes = true;
                 }
                 
             }
 
 	});
+	
+    /****************************--save in notes in 1.5 minutes ********************************/
 
-	/********************************************/
+
 });
 
 

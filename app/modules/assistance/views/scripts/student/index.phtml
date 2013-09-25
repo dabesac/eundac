@@ -3445,6 +3445,13 @@ if ($this->infoassist) { ?>
 	</table>
 	</div>
 </div>
+<?php }else{ ?>
+	<div class='col-md-12 cont-font-not-register'>
+		<h1 class='span-not-register'>
+			<span class='glyphicon glyphicon-exclamation-sign'></span>
+		</h1>
+		<h3 class='text-not-register'>No se encontro ningun Registro</h3>
+	</div>
 <?php }?>
 
 <input type='hidden' id='coursoid' coursoid='<?php echo $infocourse['courseid'] ?>'>
