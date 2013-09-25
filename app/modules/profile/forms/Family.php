@@ -6,11 +6,9 @@ class Profile_Form_Family extends Zend_Form{
     	$type = new Zend_Form_Element_Select('type');
         $type->removeDecorator('HtmlTag')->removeDecorator('Label');     
         $type->setRequired(true)->addErrorMessage('Es necesario que selecciones el estado.');
-        $type->addMultiOption("F","Padre");
-        $type->addMultiOption("M","Madre");
-        $type->addMultiOption("S","Hijo/a");
-        $type->addMultiOption("B","Hermano/a");
+        $type->addMultiOption("","Elija Parentesco");
         $type->setAttrib("class","form-control");
+        $type->setAttrib("id","type");
         
         $lastname= new Zend_Form_Element_Text('lastname');
         $lastname->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
@@ -66,14 +64,12 @@ class Profile_Form_Family extends Zend_Form{
         $ocupacy= new Zend_Form_Element_Text('ocupacy');
         $ocupacy->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $ocupacy->setAttrib("maxlength", "30")->setAttrib("size", "30");
-        $ocupacy->setRequired(true)->addErrorMessage('Este campo es requerido');
         $ocupacy->setAttrib("title","Ocupacion");
         $ocupacy->setAttrib("class","form-control");
         $ocupacy->setAttrib("id","ocupacy");
 
         $health = new Zend_Form_Element_Select('health');
         $health->removeDecorator('HtmlTag')->removeDecorator('Label');     
-        $health->setRequired(true)->addErrorMessage('Es necesario que selecciones el estado.');
         $health->addMultiOption("N","No");
         $health->addMultiOption("S","Si");
         $health->setAttrib("class","form-control");
@@ -82,7 +78,6 @@ class Profile_Form_Family extends Zend_Form{
         $phone= new Zend_Form_Element_Text('phone');
         $phone->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $phone->setAttrib("maxlength", "9")->setAttrib("size", "30");
-        $phone->setRequired(true)->addErrorMessage('Este campo es requerido');
         $phone->setAttrib("title","phone");
         $phone->setAttrib("class","form-control");
         $phone->setAttrib("id","phone");
@@ -90,14 +85,12 @@ class Profile_Form_Family extends Zend_Form{
         $address= new Zend_Form_Element_Text('address');
         $address->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $address->setAttrib("maxlength", "30")->setAttrib("size", "30");
-        $address->setRequired(true)->addErrorMessage('Este campo es requerido');
         $address->setAttrib("title","Direccion");
         $address->setAttrib("class","form-control");
         $address->setAttrib("id","address");
 
         $assignee = new Zend_Form_Element_Select('assignee');
         $assignee->removeDecorator('HtmlTag')->removeDecorator('Label');     
-        $assignee->setRequired(true)->addErrorMessage('Es necesario que selecciones el estado.');
         $assignee->addMultiOption("N","No");
         $assignee->addMultiOption("S","Si");
         $assignee->setAttrib("class","form-control");

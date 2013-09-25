@@ -93,7 +93,6 @@ class Profile_PublicController extends Zend_Controller_Action {
             if ($this->getRequest()->isPost())
             {
                 $formdata = $this->getRequest()->getPost();
-                print_r("Se Guardo con Exito");
                 if ($form->isValid($formdata))
                 { 
                     trim($formdata['numdoc']);
@@ -105,6 +104,7 @@ class Profile_PublicController extends Zend_Controller_Action {
                     trim($formdata['phone']);
                     trim($formdata['cellular']);
                     //print_r($formdata);
+                    print_r("Se Guardo con Exito");
                     $upduser=$dbperson->_update($formdata, $where);
                     //$this->_redirect("/profile/public/student");
                 }
@@ -147,7 +147,7 @@ class Profile_PublicController extends Zend_Controller_Action {
 
     public function studentsavefamilyAction(){
         try{
-            //$this->_helper->layout()->disableLayout();
+            $this->_helper->layout()->disableLayout();
 
             $eid=$this->sesion->eid;
             $pid=$this->sesion->pid;
@@ -157,34 +157,54 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             $dbfamily=new Api_Model_DbTable_Family();
             $dbrelation=new Api_Model_DbTable_Relationship();
+            $where=array("eid"=>$eid, "pid"=>$pid);
+            $attrib=array("type");
+            $relation=$dbrelation->_getFilter($where, $attrib);
+            $pa=0;
+            $ma=0;
+            foreach ($relation as $rel) {
+                if($rel["type"]=="PA"){
+                    $pa=1;
+                }
+                if($rel["type"]=="MA"){
+                    $ma=1;
+                }
+            }
+            if ($pa==0) {
+                $form->type->addMultiOption("PA","Padre");
+            }
+            if ($ma==0) {
+                $form->type->addMultiOption("MA","Madre");
+            }
+            $form->type->addMultiOption("HE","Hermano/a");
+            $form->type->addMultiOption("HI","Hijo/a");
 
-            // $relationdata=array("eid"=>$eid, "pid"=>$pid ,"type"=>trim($formdata["type"]),"assignee"=>trim($formdata["assignee"]));
-            // print_r($firstdata);
-            // $save=$dbrelation->_save($firstdata);
 
             if ($this->getRequest()->isPost()) {
                 $formdata=$this->getRequest()->getPost();
                 if ($form->isValid($formdata)) {
 
-                    $type=trim($formdata["type"]);
-                    $assignee=trim($formdata["assignee"]);
+                    $type=$formdata["type"];
+                    $assignee=$formdata["assignee"];
                     unset($formdata["save"]);
                     unset($formdata["type"]);
                     unset($formdata["assignee"]);
+                    if($formdata["type"]=="PA"){
+                        $formdata["sex"]="M";
+                    }elseif($formdata["type"]=="MA"){
+                        $formdata["sex"]="F";
+                    }
                     $formdata["eid"]=$eid;
-                    trim($formdata["lastname"]);
-                    trim($formdata["firtsname"]);
-                    trim($formdata["live"]);
-                    trim($formdata["sex"]);
-                    trim($formdata["typedoc"]);
                     trim($formdata["numdoc"]);
-                    trim($formdata["ocupacy"]);
-                    trim($formdata["birthday"]);
-                    trim($formdata["health"]);
-                    trim($formdata["phone"]);
-                    trim($formdata["address"]);
+                    if($formdata["live"]=="N")
+                        {
+                            $formdata["ocupacy"]="_";
+                            $formdata["phone"]="_";
+                            $formdata["address"]="_";
+                        }
 
                     $save=$dbfamily->_save($formdata);
+                    print_r("Se Guardo con Exito");
                     
                     //print_r($save);
 
@@ -251,7 +271,7 @@ class Profile_PublicController extends Zend_Controller_Action {
                     trim($formdata["year_end"]);
                     trim($formdata["title"]);
                     $academic=$dbacademic->_save($formdata);
-                    $this->_redirect("/profile/public/student");
+                    print_r("Se Guardo con Exito");
                 }
             }
         }catch(exception $e){
@@ -337,9 +357,7 @@ class Profile_PublicController extends Zend_Controller_Action {
                     trim($formdata["condition"]);
 
                     $job=$dbjob->_save($formdata);
-
-                    $this->_redirect("/profile/public/student");
-
+                    print_r("Se Guardo con Exito");
                 }
             }
 
@@ -414,7 +432,7 @@ class Profile_PublicController extends Zend_Controller_Action {
                     trim($formdata["title"]);
                     trim($formdata["club"]);
                     $interest=$dbinterest->_save($formdata);
-                    $this->_redirect("/profile/public/student");
+                    print_r("Se Guardo con Exito");
                 }
             }
         }catch(exception $e){
@@ -455,10 +473,11 @@ class Profile_PublicController extends Zend_Controller_Action {
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
             $perid=$this->sesion->period->perid;
+            $rid=$this->sesion->rid;
 
-            //print_r($perid);
+            //print_r($rid);
 
-            $data=array("pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "subid"=>$subid, "perid"=>$perid);
+            $data=array("pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "subid"=>$subid, "perid"=>$perid, "rid"=>$rid);
 
             $dbcuract=new Api_Model_DbTable_Registrationxcourse();
             $dbtyperate=new Api_Model_DbTable_PeriodsCourses();

@@ -19,13 +19,6 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
            	$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
 
-			// $perid=$this->sesion->period->perid;
-			// $escid=$this->sesion->escid;
-			// $rid=$this->sesion->rid;
-			// $subid=$this->sesion->subid;
-			// $uid=$this->sesion->uid;
-			// $pid=$this->sesion->pid;
-
 			$rid=$this->_getParam('rid');
 			$perid=$this->_getParam('perid');
 			$escid=$this->_getParam('escid');
@@ -33,11 +26,11 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 			$uid=$this->_getParam('uid');
 			$pid=$this->_getParam('pid');
 
-			// $this->view->pid=$pid;
-			// $this->view->rid=$rid;
-			// $this->view->escid=$escid;
-			// $this->view->subid=$subid;
-			// $this->view->uid=$uid;
+			$this->view->pid=$pid;
+			$this->view->rid=$rid;
+			$this->view->escid=$escid;
+			$this->view->subid=$subid;
+			$this->view->uid=$uid;
 
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'uid'=>$uid);
 			$attrib=array('escid','perid','courseid','turno','notafinal','state');
