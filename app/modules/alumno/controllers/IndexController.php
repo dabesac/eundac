@@ -23,7 +23,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
 
     }
 
-
     public function graphicsperformanceAction()
     {
         try
@@ -59,5 +58,38 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 
     }
 
+        public function graphicsassistanceAction()
+    {
+        try
+        {
+            $this->_helper->layout()->disableLayout();         
+            $where['uid']=$this->sesion->uid;
+            $where['eid']=$this->sesion->eid;
+            $where['oid']=$this->sesion->oid;
+            $where['pid']=$this->sesion->pid;
+            $where['escid']=$this->sesion->escid;
+            $where['subid']=$this->sesion->subid;
+            $this->view->escid = $where['escid'];
 
+            $this->view->uid = $where['uid'];
+            $this->view->oid = $where['oid'];
+            $this->view->eid = $where['eid'];
+            $dbcurricula=new Api_Model_DbTable_Studentxcurricula();
+            $datcur=$dbcurricula->_getOne($where);
+            $where['curid']=$datcur['curid'];
+            $this->view->curid = $where['curid'];
+            $dbcursos=new Api_Model_DbTable_Course();
+            $datcursos=$dbcursos->_getCountCoursesxSemester($where);
+            // print_r($datcursos);
+            $this->view->data=$datcursos;
+            $cur=$dbcursos->_getCountCoursesxApproved($where);
+            // print_r($cur);
+            $this->view->cursos=$cur;
+        }
+        catch(Exception $ex)
+        {
+              print $ex->getMessage();
+        }                  
+                
+    }
 }
