@@ -400,6 +400,8 @@ class IndexController extends Zend_Controller_Action {
     				$modules[2] = array ("name" =>"Periodo Académico", "imgicon"=>"folder");
     				$acls[]= array("controller"=>"distribution/distribution","name"=>"Distribución","imgicon"=>"folder-close");
     				$resource1[]="distribution/distribution";
+                    $acls[]= array("controller"=>"curricula/curricula","name"=>"Currícula","imgicon"=>"book");
+                    $resource1[]="curricula/curricula";
     				$modules[2]['acls'] = $acls;
     				$acls = null;
     			}

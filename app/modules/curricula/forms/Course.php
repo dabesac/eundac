@@ -86,7 +86,6 @@ class Rcentral_Form_Course extends Zend_Form
         $state = new Zend_Form_Element_Select('state');
         $state->removeDecorator('Label')->removeDecorator("HtmlTag");  
         $state->setAttrib("class","input-small");
-        $state->addMultiOption("","- Estado -");
         $state->addMultiOption("A","Activo");
         $state->addMultiOption("I","Inactivo");
         $this->addElement($state);

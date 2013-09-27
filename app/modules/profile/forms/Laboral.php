@@ -31,12 +31,7 @@ class Profile_Form_Laboral extends Zend_Form{
 		$condition->addMultiOption("Estable","Estable");
 		$condition->setAttrib("class","form-control");
 
-		$submit=new Zend_Form_Element_Submit('save');
-		$submit->setAttrib("class","btn btn-info pull-right");
-		$submit->setLabel("Guardar");
-		$submit->removeDecorator('HtmlTag')->removeDecorator('Label');
-
-		$this->addElements(array($company, $industry, $salary, $condition, $submit));
+		$this->addElements(array($company, $industry, $salary, $condition));
 
 	}
 
