@@ -1,0 +1,74 @@
+<table class="table table-striped table-bordered table-condensed">
+   	<tr>
+     	<td colspan="5">
+     		<center><a href="/default/reporteegresados/imprimir/facid/<?php echo $this->facid?>/escid/<?php echo $this->escid?>/especialidad/<?php echo $this->especialidad?>/perid/<?php echo $this->perid?>/anho/<?php echo $this->anho ?>" class="btn btn-info"><span class="glyphicon glyphicon-print"></span> Imprimir Lista</a></center>
+     	</td>  
+    </tr>
+</table> 
+
+<?php
+if ($this->egresados) { ?>
+<table class="table table-striped table-condensed">
+	<tr>
+		<th>#</th>
+		<th class="span2">Cod. Mat.</th>
+		<th class="span1">DNI</th>
+		<th>Apellidos y Nombres</th>
+		<th class="span3">Escuela / Especialidad</th>
+		<th class="span2">Currícula</th>
+		<th class="span1">Nivel</th>
+	</tr>
+	<?php
+		$c=1;
+		$escu= new Api_Model_DbTable_Speciality();
+		foreach ($this->egresados as $egre) { 
+			$whereesc =array(
+				'eid' => $egre['eid'], 'oid' => $egre['oid'],
+				'subid' => $egre['subid'], 'escid' => $egre['escid']);
+			$dat = $escu->_getOne($whereesc); ?>
+			<tr>
+				<td><?php echo $c?></td>
+				<td><?php echo $egre['uid']?></td>
+				<td><?php echo $egre['pid']?></td>
+				<td><?php echo $egre['fullname']?></td>
+				<td><?php echo $dat['name']?></td>
+				<td><?php echo $egre['curid']?></td>
+				<td><a href="#myModal" id='<?php echo $c?>'><span class="glyphicon glyphicon-pencil"></span></a></td>
+				<script>
+					$("#<?php echo $c?>").click(function() {
+						var uid = "<?php echo $egre['uid']?>";
+						var escid = "<?php echo $egre['escid']?>";
+						var pid = "<?php echo $egre['pid']?>";
+						$("#cargarformrol").html("<img src='/img/spinner.gif'>Cargando...");
+						$("#cargarformrol").load("/graduated/reportgraduated/academic/uid/"+uid+"/escid/"+escid+"/pid/"+pid);
+						$('#myModal').modal('show');
+					});
+				</script>	
+				</tr>
+		<?php
+		$c++; ?>
+	<?php	}
+	?>
+</table>
+<?php 
+}else{ ?>
+	<div class="alert alert-info">No hay registro de Egresados.</div>
+<?php 
+} ?>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      	<div class="modal-content">
+        	<div class="modal-header">
+          		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          		<h4 class="modal-title">FICHA ACADEMICA</h4>
+        	</div>
+        	<div class="modal-body">
+        		<div id="cargarformrol"></div>
+        	</div>
+        	<div class="modal-footer">
+          		<a href="#" id="close_new_cur" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+        	</div>
+      	</div>
+    </div>
+</div>
