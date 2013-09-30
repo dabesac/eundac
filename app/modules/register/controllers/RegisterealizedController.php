@@ -15,29 +15,22 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 
 	public function indexAction(){
 		try {
-			// $this->_helper->layout()->disableLayout();
+			$this->_helper->layout()->disableLayout();
            	$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
 
-			// $perid=$this->sesion->period->perid;
-			// $escid=$this->sesion->escid;
-			// $rid=$this->sesion->rid;
-			// $subid=$this->sesion->subid;
-			// $uid=$this->sesion->uid;
-			// $pid=$this->sesion->pid;
+			$rid=$this->_getParam('rid');
+			$perid=$this->_getParam('perid');
+			$escid=$this->_getParam('escid');
+			$subid=$this->_getParam('subid');
+			$uid=$this->_getParam('uid');
+			$pid=$this->_getParam('pid');
 
-			$rid=base64_decode($this->_getParam('rid'));
-			$perid=base64_decode($this->_getParam('perid'));
-			$escid=base64_decode($this->_getParam('escid'));
-			$subid=base64_decode($this->_getParam('subid'));
-			$uid=base64_decode($this->_getParam('uid'));
-			$pid=base64_decode($this->_getParam('pid'));
-
-			// $this->view->pid=$pid;
-			// $this->view->rid=$rid;
-			// $this->view->escid=$escid;
-			// $this->view->subid=$subid;
-			// $this->view->uid=$uid;
+			$this->view->pid=$pid;
+			$this->view->rid=$rid;
+			$this->view->escid=$escid;
+			$this->view->subid=$subid;
+			$this->view->uid=$uid;
 
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'uid'=>$uid);
 			$attrib=array('escid','perid','courseid','turno','notafinal','state');
