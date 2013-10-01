@@ -1,0 +1,35 @@
+<?php
+if ($this->egresados) { ?>
+<table class="table table-striped table-condensed">
+	<tr>
+		<th>#</th>
+		<th>Escuela/Especialidad</th>
+		<th>Total</th>
+	</tr>
+	<?php 
+	$c=1;
+	$escu= new Api_Model_DbTable_Speciality();
+	foreach ($this->egresados as $cantidad) {
+		$whereesc =array(
+				'eid' => $this->eid, 'oid' => $this->oid,
+				'escid' => $cantidad['escid']);
+		$dat = $escu->_getFilter($whereesc,$attrib=null,$orders=null); ?>
+		<tr>
+			<td><?php echo $c?></td>
+			<td><?php echo $dat[0]['name']?></td>
+			<td><?php echo $cantidad['count']?></td>
+		</tr>	
+		<?php
+		$c++;
+		$tot=$tot+$cantidad['count'];
+	} ?>	
+	<tr>
+		<td></td>
+		<th>Total</th>
+		<th><?php echo $tot?></th>
+	</tr>
+</table>
+<?php
+}else{ ?>
+	<div class="alert alert-info">No hay registro de Egresados.</div>
+<?php } ?>

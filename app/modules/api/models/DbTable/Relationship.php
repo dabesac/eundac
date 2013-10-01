@@ -7,7 +7,6 @@ class Api_Model_DbTable_Relationship extends Zend_Db_Table_Abstract
 
 	public function _save($data){
 		try{
-			print_r($data);
 			if ($data['eid']=='' || $data['pid']=='') return false;
 			return $this->insert($data);
 			return false;

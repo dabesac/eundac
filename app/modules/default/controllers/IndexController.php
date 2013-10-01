@@ -29,8 +29,9 @@ class IndexController extends Zend_Controller_Action {
     			$rid_ =split(";--;",$this->_getParam('rid'));
     			$rid = base64_decode($rid_[0]);
     			$prefix = trim($rid_[1]);
-    			$cod = ($uid = $form->getValue('usuario').$prefix);    			
-    			$pass = md5($form->getValue('clave'));
+    			$cod = ($uid = $form->getValue('usuario').$prefix);
+    			$clavecampus = $form->getValue('clave');    			
+    			$pass = md5($clavecampus);
     			$dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
     			$authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter,'base_users','uid','password');
     			$authAdapter->getDbSelect()->where("state = 'A' and eid='$eid' and oid='$oid'");
@@ -132,35 +133,6 @@ class IndexController extends Zend_Controller_Action {
     				$data->acls= $tmpacl['module'];
     				$data->resources=$tmpacl['list'];
     				
-    				/*
-    				
-    				$acl = new Api_Model_DbTable_Acl();
-    				$data_ = array("eid"=>$data->eid,"oid"=>$data->oid,"rid"=>$data->rid);
-    				$rowacl = $acl->_getACL($data_);
-    				
-    				if ($rowacl) {
-    					$modules = new Api_Model_DbTable_Module();
-    					$rmodules = $modules->_getAll(array("eid"=>$data->eid,"oid"=>$data->oid));
-    					if ($rmodules){
-    						$f=0;
-    						$dataacl=null;
-    						foreach ($rmodules as $mod){
-    							$mod['acls']=null;
-    							foreach ($rowacl as $mods){
-    								if ($mod['mid']==$mods['mid']){
-    									 $mod['acls'][]=$mods;
-    									 $dataresource[] = $mods['controller'];
-    								}
-    							}
-    							if ($mod['acls']<>null){
-    								$dataacl[]=$mod;    								
-    							} 
-    						}
-    						$data->acls =$dataacl;
-    						$data->resources = $dataresource;
-    					}
-    					
-    				} */
     				// Set Header and Footer Print Org
     				$orgs = new Api_Model_DbTable_Org();
     				$rorg = $orgs->_getOne(array("eid" => $data->eid,"oid"=>$data->oid));
@@ -202,8 +174,13 @@ class IndexController extends Zend_Controller_Action {
     						$this->_redirect("/index/cerrar");
     					}
     					$urlmod = $data->rol['module'];
-    					$this->_redirect($urlmod);
-    					//Falta direccionar
+    					$passn= base64_encode($clavecampus);
+    					$urllogin  = "key/$passn/mod/".$data->modulo;
+    					$urllogin  = array("key"=>$passn, "mod" => $data->modulo);
+    					if (trim($data->rid)=='AL' || $data->rid=='DC')
+    						$this->_forward("ajax", "index", "default", $urllogin );
+    					else
+    						$this->_redirect($urlmod);
     				}
     			}else {
 					switch ($result->getCode()) {
@@ -412,9 +389,12 @@ class IndexController extends Zend_Controller_Action {
     				$resource1[]="syllabus/director";    				
     				$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     				$resource1[]="report/performance";
-    				
+                    $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Egresados","imgicon"=>"edit");
+                    $resource1[]="graduated/reportgraduated";
+    				$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"edit");
+                    $resource1[]="graduated/graphicgraduated";
     			}
-    			$acls[]= array("controller"=>"#","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
+    			$acls[]= array("controller"=>"docente/index/poll","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
     			$resource1[]="report/performance";
     			$modules[1]['acls'] = $acls;
     			$acls = null;
@@ -423,6 +403,8 @@ class IndexController extends Zend_Controller_Action {
     				$modules[2] = array ("name" =>"Periodo Académico", "imgicon"=>"folder");
     				$acls[]= array("controller"=>"distribution/distribution","name"=>"Distribución","imgicon"=>"folder-close");
     				$resource1[]="distribution/distribution";
+                    $acls[]= array("controller"=>"curricula/curricula","name"=>"Currícula","imgicon"=>"book");
+                    $resource1[]="curricula/curricula";
     				$modules[2]['acls'] = $acls;
     				$acls = null;
     			}
@@ -455,10 +437,14 @@ class IndexController extends Zend_Controller_Action {
     			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
-    			$acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
+    			$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
     			$resource1[]="report/performance";
     			$resource1[]="report/recordnotas";
-    			$resource1[]="report/registration";
+                $resource1[]="report/registration";
+                $resource1[]="graduated/reportgraduated";
+    			$resource1[]="graduated/graphicgraduated";
     			$modules[2]['acls'] = $acls;
     			$acls = null;
     			break;
@@ -487,15 +473,37 @@ class IndexController extends Zend_Controller_Action {
     			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
-    			$acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
+    			$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
     			$resource1[]="report/performance";
     			$resource1[]="report/recordnotas";
-    			$resource1[]="report/registration";
+                $resource1[]="report/registration";
+                $resource1[]="graduated/reportgraduated";
+    			$resource1[]="graduated/graphicgraduated";
     			$modules[2]['acls'] = $acls;
     			$acls = null;
     			break;
     		}
     	}
     	return array("module"=>$modules,"list"=>$resource1);
+    }
+    
+    public function ajaxAction(){
+    	$sesion  = Zend_Auth::getInstance();
+    	if(!$sesion->hasIdentity() ){
+    		$this->_helper->redirector('index',"salir",'default');
+    	}
+    	$this->view->http = "http";
+    	if($_SERVER['SERVER_PORT'] == '443') {
+    		$this->view->http = "https";
+    	}
+    		
+    	$sesion_ = $sesion->getStorage()->read();
+    	$pass= base64_decode($this->_getParam("key"));
+    	$mod= ($this->_getParam("mod"));
+    	$this->view->uid= $sesion_->uid;
+    	$this->view->pass= $pass;
+    	$this->view->mod= $mod;
     }
 }

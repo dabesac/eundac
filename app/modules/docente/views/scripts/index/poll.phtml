@@ -1,0 +1,52 @@
+<table class="table  table-striped  table-condensed">
+  <tr>
+            <td colspan="5" ><br>
+            <div style='height:45px;' class='alert alert-success'><CENTER><h4><b>ENCUESTA RENDIMIENTO</b></h4></CENTER> </div>
+           </td>
+        </tr>    <tr>
+        <td >Año</td>
+        <td >Periodo</td>
+        <td rowspan="2"><br><center><a href="#" class="btn btn-warning">Regresar Rerportes</a></center></td>
+    </tr>
+    <tr>
+        <td>
+            <select id="lanios" name="lanios" class='form-control' style='height:35px;width:150px' >
+             <?php 
+            $anio= date('Y');
+            $i=0;
+            for($i = ($anio+1);$i>=1991;$i--)
+            {
+                if ($anio==$i) $t = "selected";
+                else $t="";?>            
+            <option value="<?php echo $i?>" <?php echo $t?>><?php echo $i?></option>
+                <?php }?>
+            </select>
+        </td>
+        <td>
+            <select id="periodo_c" name="periodo" class='form-control' style='height:35px;width:350px' >
+            <option value="">Primero seleccione un año</option>
+            </select>
+        </td>          
+</table>
+
+<div id="detalle" ></div>
+<script>
+    $("#periodo_c").load("/docente/index/lperiods/anio/"+<?php echo $anio?>);
+    $("#lanios").change(function(){
+	    var anio = $(this).val();
+	    $("#periodo_c").load("/docente/index/lperiods/anio/"+anio);
+    });
+
+    $("#periodo_c").change(function(){
+	    var perid = $(this).val();
+	    $("#detalle").html("<img scr='/img/spinner.gif' />Cargando...");
+	    $("#detalle").load("/docente/index/general/perid/"+perid);    
+    });    
+               
+          
+</script>
+
+
+
+
+

@@ -303,4 +303,142 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 			print "Error: Read Users ".$e->getMessage();
 		}
 	}
+
+    public function _getUsers($eid="",$oid="",$pid='',$uid='',$nom=''){
+        try{        
+            $sql = $this->_db->query("
+  select last_name0 || ' ' || last_name1 || ', ' || first_name as nombrecompleto
+  ,u.uid,u.rid,u.state,u.subid,u.eid,u.oid,u.escid,p.pid,p.first_name,p.last_name0,p.last_name1,u.escid from base_users as u 
+  right  JOIN base_person as p
+  on u.pid=p.pid and u.eid=p.eid
+  where p.pid ='$pid' and upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nom%'
+  order by nombrecompleto
+                ");
+            if ($sql) return $sql->fetchAll();
+            return false;           
+        }catch (Exception $ex){
+            print "Error: Obteniendo los nombres completos y el codigo de usuario adscrito a una escuela del rol ingresado".$ex->getMessage();
+        }
+    }
+
+    public function _getGraduatedXFacultyXSchoolXPeriod($where=array()){
+        try {
+            if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='') return false;
+            $eid = $where['eid'];
+            $oid = $where['oid'];
+            $perid = $where['perid'];
+            $facid = $where['facid'];
+            if ($facid<>"") $facid = " and left(u.escid,1)='$facid'";
+            else $facid = "";
+            if ($where['escid']<>"") {
+            	$escid = $where['escid'];
+	            if ($where['left']<>"") $escid = " and left(u.escid,3)='$escid'";
+	            else $escid = " and u.escid='$escid'";
+            }
+            else $escid = "";
+            $sql = $this->_db->query("
+                select pe.last_name0 || ' ' || pe.last_name1 || ', ' || pe.first_name as fullname,u.pid,u.uid,u.escid,u.eid,u.oid,u.subid,ac.curid 
+                from base_users u inner join  base_person pe on pe.pid=u.pid and pe.eid=u.eid
+                inner join base_student_curricula ac
+                on ac.uid=u.uid and ac.escid=u.escid and ac.subid=u.subid and ac.pid=u.pid
+                where u.eid='$eid' and u.oid='$oid' and u.rid='EG' $facid $escid and (select max(perid) from base_registration_course
+                where uid=u.uid and escid=u.escid and subid=u.subid and curid=ac.curid and (right(perid,1)='A' or right(perid,1)='B'))='$perid'
+                order by pe.last_name0,u.escid");
+            $row=$sql->fetchAll();
+           return $row;
+        } catch (Exception $e) {
+            print "Error: Obteniendo datos ".$ex->getMessage();
+        }
+    }
+
+    public function _getGraduatedXFacultyXSchoolXAnio($where=array()){
+        try {
+            if ($where['eid']=='' || $where['oid']=='' || $where['anio']=='') return false;
+            $eid = $where['eid'];
+            $oid = $where['oid'];
+            $anio = $where['anio'];
+            $facid = $where['facid'];
+            if ($facid<>"") $facid = " and left(u.escid,1)='$facid'";
+            else $facid = "";
+            if ($where['escid']<>"") {
+            	$escid = $where['escid'];
+	            if ($where['left']<>"") $escid = " and left(u.escid,3)='$escid'";
+	            else $escid = " and u.escid='$escid'";
+            }
+            else $escid = "";
+            $sql = $this->_db->query("
+                select pe.last_name0 || ' ' || pe.last_name1 || ', ' || pe.first_name as fullname,u.pid,u.uid,u.escid,u.eid,u.oid,u.subid,ac.curid 
+                from base_users u inner join  base_person pe on pe.pid=u.pid and pe.eid=u.eid
+                inner join base_student_curricula ac
+                on ac.uid=u.uid and ac.escid=u.escid and ac.subid=u.subid and ac.pid=u.pid
+                where u.eid='$eid' and u.oid='$oid' and u.rid='EG' $facid $escid and (select max(left(perid,2)) from base_registration_course
+                where uid=u.uid and escid=u.escid and subid=u.subid and curid=ac.curid and (right(perid,1)='A' or right(perid,1)='B'))='$anio'
+                order by pe.last_name0,u.escid");
+            $row=$sql->fetchAll();
+           return $row;
+        } catch (Exception $e) {
+            print "Error: Obteniendo datos ".$ex->getMessage();
+        }
+    }
+
+    public function _getTotalGraduatedXFacultyXSchoolXPeriod($where=array()){
+        try {
+            if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='') return false;
+            $eid = $where['eid'];
+            $oid = $where['oid'];
+            $perid = $where['perid'];
+            $facid = $where['facid'];
+            if ($facid<>"") $facid = " and left(u.escid,1)='$facid'";
+            else $facid = "";
+            if ($where['escid']<>"") {
+            	$escid = $where['escid'];
+	            if ($where['left']<>"") $escid = " and left(u.escid,3)='$escid'";
+	            else $escid = " and u.escid='$escid'";
+            }
+            else $escid = "";
+            $sql=$this->_db->query("
+                 select u.escid, count(*) from base_users u inner join base_person pe 
+                 on pe.pid=u.pid and pe.eid=u.eid
+                 inner join base_student_curricula ac
+                 on ac.uid=u.uid and ac.escid=u.escid and ac.subid=u.subid and ac.pid=u.pid
+                 where u.eid='$eid' and u.oid='$oid' and rid='EG' $facid $escid and (select  max(perid) from base_registration_course
+                 where uid=u.uid and escid=u.escid and subid=u.subid and curid=ac.curid and (right(perid,1)='A' or right(perid,1)='B'))='$perid'
+                 group by u.escid order by u.escid");
+            $row=$sql->fetchAll();
+           return $row;
+        } catch (Exception $e) {
+            print "Error: Obteniendo datos ".$e->getMessage();
+        }
+    }
+
+    public function _getTotalGraduatedXFacultyXSchoolXAnho($where=array()){
+        try {
+            if ($where['eid']=='' || $where['oid']=='' || $where['anio']=='') return false;
+            $eid = $where['eid'];
+            $oid = $where['oid'];
+            $anho = $where['anio'];
+            $facid = $where['facid'];
+            if ($facid<>"") $facid = " and left(u.escid,1)='$facid'";
+            else $facid = "";
+            if ($where['escid']<>"") {
+            	$escid = $where['escid'];
+	            if ($where['left']<>"") $escid = " and left(u.escid,3)='$escid'";
+	            else $escid = " and u.escid='$escid'";
+            }
+            else $escid = "";
+            $sql=$this->_db->query("
+                select u.escid,count(*) from base_users u inner join base_person pe 
+                on pe.pid=u.pid and pe.eid=u.eid
+                inner join base_student_curricula ac
+                on ac.uid=u.uid and ac.escid=u.escid and ac.subid=u.subid and ac.pid=u.pid
+                where u.eid='$eid' and u.oid='$oid' and rid='EG' $facid $escid and (select max(left(perid,2)) from base_registration_course
+                where uid=u.uid and escid=u.escid and subid=u.subid and curid=ac.curid and (right(perid,1)='A' or right(perid,1)='B'))= '$anho'
+                group by u.escid order by u.escid");
+            $row=$sql->fetchAll();
+           return $row;
+            
+        } catch (Exception $e) {
+            
+        }
+    }
 }

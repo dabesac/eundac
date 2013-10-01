@@ -15,6 +15,7 @@ class Syllabus_PrintController extends Zend_Controller_Action {
 
     public function indexAction(){
         try {
+            $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $courseid = base64_decode($this->_getParam("courseid"));

@@ -2,7 +2,7 @@
 	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
 </ul>
 
-<form name="<?php echo $this->form->getName(); ?>" action="/profile/public/studentsaveinterest" method="post" enctype="application/x-www-form-urlencoded">
+<form id="form" action="/profile/public/studentsaveinterest" method="post">
 <div class="col-sm-12">
 <h4>Intereses</h4>
 	<table class="table">
@@ -15,19 +15,32 @@
 		</tr>
 		<tr>
 			<td></td>
-			<td><?print $this->form->save?></td>
+			<td><a href="#" class="btn btn-info pull-right" id="save">Guardar</a></td>
 		</tr>
 
 	</table>
 </div>
 
 <script>
+	$("#save").click(function(){
+		$("#form").submit()
+	})
+	$("#form").submit(function(){
+		$.ajax({
+			type: 'POST',
+			url: $(this).attr('action'),
+			data: $(this).serialize(),
+			success: function(data){
+				$("#editform").html(data)
+			}
+		})
+		return false;
+	})
+
 	$('#backeditBtn a').click(function (e) {
     	e.preventDefault()
-      	$("#editform").html("")
-      	$("#editdata").removeClass("hidden")
-      	$('#editpalBtns a:last').tab('show')
-      	$('#editpalBtns2 a:last').tab('show')
+    	$("#editform").html("")
+      	$("#datastudent").load("/profile/public/studentinterest");
   	})
    
 </script>

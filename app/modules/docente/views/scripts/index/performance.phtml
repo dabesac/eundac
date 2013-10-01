@@ -1,0 +1,59 @@
+        <script src="/external/jquery/jquery-1.9.1.js"></script>
+        <script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
+        <script src="/external/jquery/external/globalize.js"></script>
+        <script src="/external/jquery/external/jquery.mousewheel.js"></script>
+        <script src="/external/jquery/external/jshint.js"></script>
+        <script src="/external/jquery/external/qunit.js"></script>
+        <script src="/external/jquery/external/base64/jquery.base64.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">      
+        <link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
+        <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
+        <script src="/external/bootstrap/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+        <link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<table class="table table-bordered table-condensed span alert-info" style="margin-left: 0px;margin-right: 15px; font-size: 12px;">
+    <tr>
+        <th rowspan="5">
+            <center>
+                    <p>                
+                    <span style="font-size: 15px">REPORTE RENDIMIENTO</span><br/>
+                    </p>
+                    </center>
+        </th>
+    </tr>
+ 
+</table>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1.0', {'packages':['corechart']});
+      google.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+        ['SIEMPRE' ,<?php print $this->s1?>],
+        ['CASI SIEMPRE' ,<?php print $this->s2?>],
+        ['A VECES' ,<?php print $this->s3?>],
+        ['NUNCA' ,<?php print $this->s4?>],
+        ]);
+   
+        var options = {'title':'RENDIMIENTO GENERAL DE LOS CURSOS ASIGNADOS'};
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+
+      function selectHandler() {
+        var selectedItem = chart.getSelection()[0];
+        var value = data.getValue(selectedItem.row, 0);
+        alert('The user selected ' + value);
+      }
+     
+    </script>
+    <div id="chart_div" style="width:520px ;height:420px"></div>

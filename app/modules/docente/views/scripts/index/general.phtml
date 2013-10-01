@@ -1,0 +1,30 @@
+<?php $perid=$this->perid; ?>
+<table class="table span10 table-striped table-bordered table-condensed flotacarajo">
+    <tr>     
+        <td > 
+             <center>
+               <a href="#" class="btn btn-info" id="llamar" onclick="javascript:window.open('/docente/index/performance/perid/<?php print $perid?>','RENDIMIENTO','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=510,height=460')">
+               	Consolidado de sus cursos
+               	</a>  </center> 
+        </td>
+                 
+    </tr>  
+</table>
+<div class="flotacarajo" style="margin-bottom: 70px;margin-top: 20px;"> 
+  <ul class="nav nav-tabs">
+    <li class="active"> <a href="#tab2" data-toggle="tab">REPORTE ESPECIFICO</a></li>
+      <li><a href="#tab1" data-toggle="tab">REPORTE GENERAL</a></li>
+  </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab2"></div>
+    <div  class="tab-pane" id="tab1"></div>
+    </div>
+</div>
+
+<script>
+  $("#tab1").html("<img src='/img/spinner.gif' />Cargando....");
+  $("#tab1").load("/docente/index/details/perid/<?php print $perid?>");
+  $("#tab2").html("<img src='/img/spinner.gif' />Cargando....");
+  $("#tab2").load("/docente/index/xcourses/perid/<?php print $perid?>");
+  
+</script>

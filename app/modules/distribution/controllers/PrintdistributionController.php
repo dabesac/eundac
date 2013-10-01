@@ -144,10 +144,6 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
                 }
             }
             $this->view->allteachers = $dataallteacher;
-
-            $whereteach['distid']=$distid;
-            $datateachers=$distteacher->_getFilter($whereteach,$attrib=null,$orders=null);                    
-            $this->view->datateachers=$datateachers;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }

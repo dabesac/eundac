@@ -27,13 +27,7 @@ class Profile_Form_Interest extends Zend_Form{
 		$club->addMultiOption("S","Si");
 		$club->addMultiOption("N","No");
 
-		$submit=new Zend_Form_Element_Submit("save");
-		$submit->setAttrib("class","btn btn-info pull-right");
-		$submit->setLabel("Guardar");
-		$submit->removeDecorator("HtmlTag")->removeDecorator("Label");
-
-
-		$this->addElements(array($discipline, $title, $club, $submit));
+		$this->addElements(array($discipline, $title, $club));
 
 
 	}

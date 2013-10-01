@@ -2,7 +2,7 @@
 	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
 </ul>
 
-<form name="<?php echo $this->form->getName(); ?>" action="/profile/public/studenteditinfo" method="post" enctype="application/x-www-form-urlencoded">
+<form action="/profile/public/studenteditinfo" method="post" id="form">
 <div class="col-sm-12">
 	<h4>Informacion Principal</h4>
 	<table class="table">
@@ -24,12 +24,30 @@
 		</tr>
 		<tr>
 			<td></td>
-			<td><?print $this->form->save?></td>
+			<td><a href="#" id="save" class="btn btn-info pull-right">Guardar</a></td>
 		</tr>
 	</table>
 </div>
 
 <script>
+	$("#save").click(function(){
+		$("#form").submit()
+	})
+
+
+
+	$("#form").submit(function(){
+		$.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function(data){ 
+            	$("#editform").html(data);
+       	   	}
+        }); 
+        return false;
+	})
+
 	$('#backeditBtn a').click(function (e) {
     	e.preventDefault()
       	$("#editform").html("")
