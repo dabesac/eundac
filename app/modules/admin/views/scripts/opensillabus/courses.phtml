@@ -5,21 +5,34 @@ if ($this->datacourses) { ?>
         <th><center>#</center></th>
         <th><center>Sem.</center></th>   
         <th><center>Curricula</center></th>        
-        <th><center>Codigo</center></th>
+        <th><center>Código</center></th>
         <th><center>Nombre Curso</center></th>
         <th><center>Turno</center></th>         
         <th><center>Calificación</center></th>
-        <th><center>Fecha de Cierre</center></th>
+        <th><center>DNI Docente</center></th>
+        <th><center>Fecha de Creación</center></th>
         <th><center>Operación</center></th>
     </tr>
 <?php
     $c=0;
+    $S=0;
     foreach ($this->datacourses as $course) {
         $c++;
+        $escid=$course['escid'];
+        $subid=$course['subid'];
         $courseid=$course['courseid'];
         $curid=$course['curid'];
         $perid=$course['perid'];
+        $semid=$course['semid'];
         $turno=$course['turno'];
+        $state=$course['state'];
+        $teach_pid=$course['teach_pid'];
+        $createdate=$course['created'];
+        if ($createdate<>"") {
+            $a= substr($createdate,0, 10);
+            $tmp = split('-', $a);
+            $createdate= $tmp[2]."/".$tmp[1]."/".$tmp[0];
+        }
     ?>
     <tr>
         <td><center><?php echo $c?></center></td>
@@ -29,7 +42,7 @@ if ($this->datacourses) { ?>
         <td><?php echo $this->datacourse[$c-1][0]['name']?> </td>
         <td><center><?php echo $turno?></center></td>
         <?php
-            switch ($tr) {
+            switch ($this->datacour[$c-1][0]['type_rate']) {
                 case 'O':   ?>
                     <td><center><?php echo "Objetivo"?></center></td>
                 <?php    
@@ -40,11 +53,41 @@ if ($this->datacourses) { ?>
                     break;
             }
         ?>
-        <td><center><?php echo $closedate?></center></td>
-        <td></td>
-        <td></td>
+        <td><center><?php echo $teach_pid?></center></td>
+        <td><center><?php echo $createdate?></center></td>
+        <td>
+            <center>
+                <?php 
+                if ($state=='C') {  ?>
+                    <a id='loading<?php echo $s?>' data-toggle="modal" href="#myModal"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
+                    <script type="text/javascript">
+                    $("#loading<?php echo $s?>").click(function(){
+                        
+                        url="/admin/opensillabus/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('B')?>/";
+                        // alert(url);
+                        $("#view").load(url);
+                    });
+                    </script>
+                <?php
+                }
+                else{   ?>
+                    <a id='loads<?php echo $s?>' data-toggle="modal" href="#Modal"><span class="glyphicon glyphicon-lock"></span> Cerrar</a>
+                    <script type="text/javascript">
+                    $("#loads<?php echo $s?>").click(function(){
+                        
+                        url="/admin/opensillabus/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('C')?>/";
+                        // alert(url);
+                        $("#view1").load(url);
+                    });
+                    </script>
+                <?php    
+                }
+                ?>
+            </center>
+        </td>
     </tr>
     <?php    
+    $s++;
     }
 ?>
 </table>
@@ -57,3 +100,48 @@ else{
 }
 
 ?>
+
+
+<!-- Modal 1 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+          <center><h3 class="modal-title" style='color: black' ><img style='width:40px'src="/img/unlock.png" ><b> SE ABRIÓ EL ACTA DE SÍLABO DE ESTE CURSO</b></h3></center>
+          <div id='view'></div>            
+        </div>
+        <div class="modal-footer">
+          <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal 2 -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+            <center><h3 class="modal-title" style='color:black' ><img style='width:40px'src="/img/candado.png" ><b> SE CERRÓ EL ACTA DE SÍLABO DE ESTE CURSO</b></h3></center>
+            <div id='view1'></div>
+            
+        </div>
+        <div class="modal-footer">
+          <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+$ ('#myModal'). on('hidden.bs.modal',function()  { 
+    url="/admin/opensillabus/courses/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    $("#viewcourses").load(url);  
+});
+
+$ ('#Modal'). on('hidden.bs.modal',function()  { 
+    url="/admin/opensillabus/courses/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    $("#viewcourses").load(url);  
+});
+</script>
