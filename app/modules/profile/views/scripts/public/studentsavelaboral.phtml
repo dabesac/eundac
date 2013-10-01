@@ -32,7 +32,7 @@
 			url: $(this).attr("action"),
 			data: $(this).serialize(),
 			success: function(data){
-				$("#editform").html(data)
+				$("#datastudent").html(data)
 			}
 		})
 		return false;
@@ -40,9 +40,8 @@
 
 	$('#backeditBtn a').click(function (e) {
     	e.preventDefault()
-      	$("#editform").html("")
-      	$("#editdata").removeClass("hidden")
-      	$('#editpalBtns a:last').tab('show')
+      	$("#datastudent").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>")
+      	$("#datastudent").load("/profile/public/studentlaboral");
   	})
    
 </script>
