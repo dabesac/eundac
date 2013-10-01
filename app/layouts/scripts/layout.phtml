@@ -28,10 +28,17 @@ $acls = $login->acls;
 $info = $login;
 $resource1 = $login->resources;
 
+$resource1[]="profile/search";
+$resource1[]="profile/changecurricula";
+$resource1[]="default/logaccess";
+$resource1[]="default/rss";
+$resource1[]="distribution/printdistribution";
+$resource1[]="profile/private";
+
+
 //print_r($resource1);
 
 //$resource1[16] = "profile/private";
-
 
 
 $urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/

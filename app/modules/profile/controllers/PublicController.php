@@ -376,7 +376,6 @@ class Profile_PublicController extends Zend_Controller_Action {
             $where=array("eid"=>$eid, "pid"=>$pid, "lid"=>$lid);
 
             if($dblaboral->_delete($where)){
-                $this->_redirect("/profile/public/student");
             }else{
                 echo "Error al Eliminar";
             }
@@ -451,7 +450,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $where=array("eid"=>$eid, "pid"=>$pid, "iid"=>$iid);
 
             if($dbinterest->_delete($where)){
-                $this->_redirect("/profile/public/student");
+
             }else{
                 echo "Error al Eliminar";
             }
@@ -460,6 +459,8 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 //-------------------------------------------------------------------
+
+
 
 
     public function studentsigncurrentAction()
