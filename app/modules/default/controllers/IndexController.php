@@ -389,6 +389,8 @@ class IndexController extends Zend_Controller_Action {
     				$resource1[]="syllabus/director";    				
     				$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     				$resource1[]="report/performance";
+                    $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Egresados","imgicon"=>"edit");
+                    $resource1[]="graduated/reportgraduated";
     				
     			}
     			$acls[]= array("controller"=>"docente/index/poll","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
@@ -434,10 +436,12 @@ class IndexController extends Zend_Controller_Action {
     			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
-    			$acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+    			$acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"signal");
     			$resource1[]="report/performance";
     			$resource1[]="report/recordnotas";
-    			$resource1[]="report/registration";
+                $resource1[]="report/registration";
+    			$resource1[]="graduated/reportgraduated";
     			$modules[2]['acls'] = $acls;
     			$acls = null;
     			break;
@@ -466,10 +470,12 @@ class IndexController extends Zend_Controller_Action {
     			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
-    			$acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+    			$acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"signal");
     			$resource1[]="report/performance";
     			$resource1[]="report/recordnotas";
-    			$resource1[]="report/registration";
+                $resource1[]="report/registration";
+    			$resource1[]="graduated/reportgraduated";
     			$modules[2]['acls'] = $acls;
     			$acls = null;
     			break;
