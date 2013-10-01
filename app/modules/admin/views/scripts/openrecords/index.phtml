@@ -1,0 +1,33 @@
+<h3><center><b><img src="/img/actas_03.png" > ABRIR ACTAS</b></center></h3>
+<table style='margin-top:20px'>
+	<tr>
+		<td><h4><div style='margin-left:5px'>Año:</h4></td>
+		<td><div style='margin-left:10px'><?php echo $this->fm->anio?></td>
+		<td><h4><div style='margin-left:40px'>Periodo:</h4></td>
+		<td><div style='width: 200px; margin-left:10px'><?php echo $this->fm->period?></td>
+		<td><h4><div style='margin-left:40px'>Escuela:</h4></td>
+		<td><div style='width: 250px; margin-left:10px'><?php echo $this->fm->esc?></td>
+		<td><div style='margin-left:40px'><a href="#" id='ver' class='btn btn-info'>Ver</a></td>
+	</tr>
+</table>
+<div id='viewcourses'></div>
+<script>
+    $("#anio").change(function(){
+        var anio = $(this).val();
+        // alert(anio);
+        $("#period").load("/admin/openrecords/lperiod/anio/"+anio);
+    });
+    $("#ver").click(function(){
+    	var escid = $("#esc").val();
+    	var perid = $("#period").val();
+    	if (escid=="") {alert("Seleccione una especialidad");$("#escid").focus();return false;}
+        if (perid=="") {alert("Ingrese un periodo");$("#perid").focus();return false;}
+        var tmp=escid.split(";--;");
+        var escid=tmp[0];
+        var subid=tmp[1];
+
+        var url="/admin/openrecords/courses/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
+        $("#viewcourses").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#viewcourses").load(url);
+    });
+</script>
