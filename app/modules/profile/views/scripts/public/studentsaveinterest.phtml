@@ -39,10 +39,8 @@
 
 	$('#backeditBtn a').click(function (e) {
     	e.preventDefault()
-      	$("#editform").html("")
-      	$("#editdata").removeClass("hidden")
-      	$('#editpalBtns a:last').tab('show')
-      	$('#editpalBtns2 a:last').tab('show')
+    	$("#editform").html("")
+      	$("#datastudent").load("/profile/public/studentinterest");
   	})
    
 </script>
