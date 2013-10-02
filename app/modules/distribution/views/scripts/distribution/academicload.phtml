@@ -16,7 +16,15 @@
 	<div class="tab-content">
         <div id="datcourses" class="tab-pane active"></div>
         <div id="datteachers" class="tab-pane"></div>
-        <div id="datview" class="tab-pane"></div>
+        <div id="datview" class="tab-pane">
+            <div class="panel panel-default" style="margin-top:15px">
+                <div class="panel-body">
+                    <b style="font-size:20px"><span class="glyphicon glyphicon-print"></span> - IMPRESION DISTRIBUCIÓN</b>
+                    <a href="/distribution/printdistribution/index/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/perid/<?php echo base64_encode($this->perid);?>/distid/<?php echo base64_encode($this->distid);?>" class="btn btn-success" style="float:right"><span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Imprimir Distribución"></span> Imprimir</a>
+                </div>
+            </div>
+            
+        </div>
     </div>
 </div>
 

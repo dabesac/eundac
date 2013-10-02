@@ -44,9 +44,12 @@
 
 			</td>
 			<td>
-				<a title='Modificar un registro' href='/admin/speciality/update/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>'><span class="glyphicon glyphicon-pencil"></span></a>
+				<center><a title='Modificar un registro' href='/admin/speciality/update/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>'><span class="glyphicon glyphicon-pencil"></span></a></center>
 			</td>
-	        <td><a title='Eliminar un registro' href='/admin/speciality/delete/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>' onclick="return confirm('Esta Seguro que desea eliminar el registro?');"><span class="glyphicon glyphicon-trash"></span></a></td>
+	        <td>
+	        	<center><a title='Eliminar un registro' href='/admin/speciality/delete/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>' onclick="return confirm('Esta Seguro que desea eliminar el registro?');"><span class="glyphicon glyphicon-trash"></span></a>
+	        	</center>	
+	        </td>
 		</tr>
 	<?php
 	}

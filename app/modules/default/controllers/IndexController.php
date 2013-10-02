@@ -391,10 +391,11 @@ class IndexController extends Zend_Controller_Action {
     				$resource1[]="report/performance";
                     $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Egresados","imgicon"=>"edit");
                     $resource1[]="graduated/reportgraduated";
-    				
+    				$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"edit");
+                    $resource1[]="graduated/graphicgraduated";
     			}
     			$acls[]= array("controller"=>"docente/index/poll","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
-    			$resource1[]="report/performance";
+    			$resource1[]="docente/index";
     			$modules[1]['acls'] = $acls;
     			$acls = null;
     			
@@ -437,11 +438,13 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
-    			$acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
+    			$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
     			$resource1[]="report/performance";
     			$resource1[]="report/recordnotas";
                 $resource1[]="report/registration";
-    			$resource1[]="graduated/reportgraduated";
+                $resource1[]="graduated/reportgraduated";
+    			$resource1[]="graduated/graphicgraduated";
     			$modules[2]['acls'] = $acls;
     			$acls = null;
     			break;
@@ -471,11 +474,13 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
-    			$acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
+    			$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
     			$resource1[]="report/performance";
     			$resource1[]="report/recordnotas";
                 $resource1[]="report/registration";
-    			$resource1[]="graduated/reportgraduated";
+                $resource1[]="graduated/reportgraduated";
+    			$resource1[]="graduated/graphicgraduated";
     			$modules[2]['acls'] = $acls;
     			$acls = null;
     			break;
