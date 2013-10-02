@@ -15,7 +15,6 @@ class Profile_Form_Userinfo extends Zend_Form{
         $year->setAttrib("maxlength", "4")->setAttrib("size", "4");
         $year->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $year->setAttrib("title","Año");
-        $year->setAttrib("placeholder","Año");
         $year->setAttrib("class","form-control");
 
         $month= new Zend_Form_Element_Text("month");

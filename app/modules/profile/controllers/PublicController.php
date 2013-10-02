@@ -318,15 +318,32 @@ class Profile_PublicController extends Zend_Controller_Action {
     }
 //-----------------------------------------------------------------
 
+
+
+//Datos Estadisticos-------------------------------------------------
+
     public function studentstatisticAction()
     {
         try{
-            $this->_helper->layout()->disableLayout();
+            //$this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $uid=$this->sesion->uid;
+            $pid=$this->sesion->pid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
+
+            $dbsta=new Api_Model_DbTable_Statistics();
+            $where=array("eid"=>$eid, "oid"=>$oid, "uid"=>$uid, "pid"=>$pid, "escid"=>$escid, "subid"=>$subid);
+            $sta=$dbsta->_getOne($where);
+            print_r($sta);
 
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
     }
+//------------------------------------------------------------------
+
 
 
 //Datos Laborales-------------------------------------------
@@ -555,7 +572,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $c=0;
             foreach ($courpercur as $cour) {
                 $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);
-                $attrib=array("courseid","notafinal","perid");
+                $attrib=array("courseid","notafinal","perid","turno");
                 //print_r($where);
                 $courlle[$c]=$dbcourlle->_getFilter($where, $attrib);
                 $c++;
@@ -569,6 +586,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $this->view->courpercur=$courpercur;
             $this->view->courlleact=$courlleact;
             $this->view->courlle=$courlle;
+            //print_r($courlle);
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
