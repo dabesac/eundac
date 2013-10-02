@@ -74,8 +74,12 @@ class Docente_FillnotesController extends Zend_Controller_Action {
             }
         }
     }
-    public function competitionAction()
-    {
+
+    public function savetagetnotesAction(){
+
+    }
+
+    public function competitionAction(){
 
     }
 }
