@@ -1,7 +1,6 @@
 <div id="idperson">
     <?php
-    if ($this->datauser || $this->datauser[0]){ 
-            // print_r($this->datauser);exit();
+    if ($this->datauser and $this->datauser[0]){ 
         
     ?>
 
@@ -15,7 +14,7 @@
                 <th><center>Rol</center></th>
                 <th><center>Escuela</center></th>
                 <th><center>Estado</center></th>
-                <th colspan='2'><center>Operación</center></th>
+                <th><center>Operación</center></th>
         </tr>
         </thead>
     <?php
@@ -53,8 +52,14 @@
                         break;                            
                 }
                 ?>
-                <td><center><a href="/admin/user/updateuser/uid/<?php echo base64_encode($info['uid'])?>/pid/<?php echo base64_encode($info['pid'])?>/escid/<?php echo base64_encode($info['escid'])?>/subid/<?php echo base64_encode($info['subid'])?>"><span class='glyphicon glyphicon-pencil'></span></a></center></td>
-                <td><center><a href=""><span class='glyphicon glyphicon-trash'></span></a></center></td>
+                <td><center>
+                <?php
+                if (($this->inforol[$c-1]['rid']!='AL') and ($this->inforol[$c-1]['rid']!='EG') and ($this->inforol[$c-1]['rid']!='')) { ?>
+                    <a href="/admin/user/updateuser/uid/<?php echo base64_encode($info['uid'])?>/pid/<?php echo base64_encode($info['pid'])?>/escid/<?php echo base64_encode($info['escid'])?>/subid/<?php echo base64_encode($info['subid'])?>"><span class='glyphicon glyphicon-pencil'></span></a></center></td>
+                <?php
+                }
+                ?>      
+                <!-- <td><center><a href=""><span class='glyphicon glyphicon-trash'></span></a></center></td> -->
 
             </tr>
           <?php  
