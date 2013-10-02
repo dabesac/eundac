@@ -43,8 +43,7 @@ class Profile_PublicController extends Zend_Controller_Action {
     		print "Error : ".$e->getMessage();
     	}
     }
-
-    public function studentinfoAction()
+    public function studentmaininfoAction()
     {
         try{
             $this->_helper->layout()->disableLayout();
@@ -71,6 +70,16 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             $this->view->datos=$datos;
         }catch(exception $e){
+            print "Error :".$e->getMessage();
+        }
+    }
+
+    public function studentinfoAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
+            
+        }catch(exception $e){
             print "Error: ".$e->getMessage();
         }
     }
@@ -84,6 +93,9 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dbperson=new Api_Model_DbTable_Person();
             $where=array("eid"=>$eid, "pid"=>$pid);
             $person=$dbperson->_getOne($where);
+            $person["year"]=substr($person["birthday"], 0, 4);
+            $person["month"]=substr($person["birthday"], 5, 2);
+            $person["day"]=substr($person["birthday"], 8, 2);
             //print_r($person);
 
             $form= new Profile_Form_Userinfo();
@@ -96,7 +108,10 @@ class Profile_PublicController extends Zend_Controller_Action {
                 if ($form->isValid($formdata))
                 { 
                     trim($formdata['numdoc']);
-                    trim($formdata['birthday']);
+                    $formdata["birthday"]=$formdata["year"]."-".$formdata["month"]."-".$formdata["day"];
+                    unset($formdata['year']);
+                    unset($formdata['month']);
+                    unset($formdata['day']);
                     trim($formdata['sex']);
                     trim($formdata['civil']);
                     trim($formdata['mail_person']);
@@ -189,6 +204,10 @@ class Profile_PublicController extends Zend_Controller_Action {
                     unset($formdata["save"]);
                     unset($formdata["type"]);
                     unset($formdata["assignee"]);
+                    $formdata["birthday"]=$formdata["year"]."-".$formdata["month"]."-".$formdata["day"];
+                    unset($formdata["year"]);
+                    unset($formdata["month"]);
+                    unset($formdata["day"]);
                     if($formdata["type"]=="PA"){
                         $formdata["sex"]="M";
                     }elseif($formdata["type"]=="MA"){
