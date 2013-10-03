@@ -43,8 +43,7 @@ class Profile_PublicController extends Zend_Controller_Action {
     		print "Error : ".$e->getMessage();
     	}
     }
-
-    public function studentinfoAction()
+    public function studentmaininfoAction()
     {
         try{
             $this->_helper->layout()->disableLayout();
@@ -71,6 +70,16 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             $this->view->datos=$datos;
         }catch(exception $e){
+            print "Error :".$e->getMessage();
+        }
+    }
+
+    public function studentinfoAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
+            
+        }catch(exception $e){
             print "Error: ".$e->getMessage();
         }
     }
@@ -84,6 +93,9 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dbperson=new Api_Model_DbTable_Person();
             $where=array("eid"=>$eid, "pid"=>$pid);
             $person=$dbperson->_getOne($where);
+            $person["year"]=substr($person["birthday"], 0, 4);
+            $person["month"]=substr($person["birthday"], 5, 2);
+            $person["day"]=substr($person["birthday"], 8, 2);
             //print_r($person);
 
             $form= new Profile_Form_Userinfo();
@@ -96,7 +108,10 @@ class Profile_PublicController extends Zend_Controller_Action {
                 if ($form->isValid($formdata))
                 { 
                     trim($formdata['numdoc']);
-                    trim($formdata['birthday']);
+                    $formdata["birthday"]=$formdata["year"]."-".$formdata["month"]."-".$formdata["day"];
+                    unset($formdata['year']);
+                    unset($formdata['month']);
+                    unset($formdata['day']);
                     trim($formdata['sex']);
                     trim($formdata['civil']);
                     trim($formdata['mail_person']);
@@ -189,6 +204,10 @@ class Profile_PublicController extends Zend_Controller_Action {
                     unset($formdata["save"]);
                     unset($formdata["type"]);
                     unset($formdata["assignee"]);
+                    $formdata["birthday"]=$formdata["year"]."-".$formdata["month"]."-".$formdata["day"];
+                    unset($formdata["year"]);
+                    unset($formdata["month"]);
+                    unset($formdata["day"]);
                     if($formdata["type"]=="PA"){
                         $formdata["sex"]="M";
                     }elseif($formdata["type"]=="MA"){
@@ -299,15 +318,73 @@ class Profile_PublicController extends Zend_Controller_Action {
     }
 //-----------------------------------------------------------------
 
+
+
+//Datos Estadisticos-------------------------------------------------
+
     public function studentstatisticAction()
     {
         try{
-            $this->_helper->layout()->disableLayout();
+            //$this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $uid=$this->sesion->uid;
+            $pid=$this->sesion->pid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
+
+            $dbsta=new Api_Model_DbTable_Statistics();
+            $where=array("eid"=>$eid, "oid"=>$oid, "uid"=>$uid, "pid"=>$pid, "escid"=>$escid, "subid"=>$subid);
+            $sta=$dbsta->_getOne($where);
+            //print_r($sta);
 
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
     }
+
+    public function studentsavestatisticAction()
+    {
+        try{
+
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $uid=$this->sesion->uid;
+            $pid=$this->sesion->pid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
+
+            $dbsta=new Api_Model_DbTable_Statistics();
+            $where=array("eid"=>$eid, "oid"=>$oid, "uid"=>$uid, "pid"=>$pid, "escid"=>$escid, "subid"=>$subid);
+            $sta=$dbsta->_getOne($where);
+
+            $form=new Profile_Form_Statistic();
+            $this->view->form=$form;
+            //$form->populate($sta);
+            
+            if ($this->getRequest()->isPost()) {
+                $formdata=$this->getRequest()->getPost();
+                if ($form->isValid($formdata)) {
+                    if($formdata["dependen_ud"]=="N"){
+                        $formdata["num_dep_ud"]=0;
+                    }
+                    //$save=$dbstate->_save($formdata);
+                    print_r("Se Guardo con Exito");
+                    
+                    //print_r($save);
+
+                    $relationdata=array("eid"=>$eid, "pid"=>$pid , "famid"=>$save,"type"=>$type,"assignee"=>$assignee);
+                    //print_r($relationdata);
+                    $saver=$dbrelation->_save($relationdata);
+                }
+            }
+        }catch(exception $e){
+            print "Error ! ".$e->getMessage();
+        }
+
+    }
+//------------------------------------------------------------------
+
 
 
 //Datos Laborales-------------------------------------------
@@ -536,7 +613,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $c=0;
             foreach ($courpercur as $cour) {
                 $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);
-                $attrib=array("courseid","notafinal","perid");
+                $attrib=array("courseid","notafinal","perid","turno");
                 //print_r($where);
                 $courlle[$c]=$dbcourlle->_getFilter($where, $attrib);
                 $c++;
@@ -550,6 +627,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $this->view->courpercur=$courpercur;
             $this->view->courlleact=$courlleact;
             $this->view->courlle=$courlle;
+            //print_r($courlle);
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }

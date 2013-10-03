@@ -16,10 +16,14 @@
 		    	<tr>
 		    		<td>Parentesco
 		    		<h5><b>
-		    		<?php if($this->famrel[$c]['type']=="P"){
+		    		<?php if($this->famrel[$c]['type']=="PA"){
 		    			echo "Padre";
-		    		}elseif($this->famrel[$c]['type']=="M"){
+		    		}elseif($this->famrel[$c]['type']=="MA"){
 						echo "Madre";
+		    		}elseif($this->famrel[$c]['type']=="HI"){
+						echo "Hijo/a";
+		    		}elseif($this->famrel[$c]['type']=="HE"){
+						echo "Hermano/a";
 		    		}
 		    		$c++;?>
 		    		</b></h5>
@@ -31,15 +35,8 @@
 		    		<?php }?>
 		    	</tr>
 		    	<tr>
-		    		<td>Ocupacion <h5><b><?php echo $fam[0]['ocupacy']?></b></h5></td>
 		    		<td>Fecha de Nacimiento <h5><b><?php echo $fam[0]['birthday']?></b></h5></td>
-		    	</tr>
-		    	<tr>
-		    		<td>Telefono/Celular <h5><b><?php echo $fam[0]['phone']?></b></h5></td>
-		    		<td>Direccion <h5><b><?php echo $fam[0]['address']?></b></h5></td>
-		    	</tr>
-		    	<tr>
-		    		<td>
+		    		<td id="live">
 		    			Vive?
 		    			<h5><b>
 		    			<?php if($fam[0]['live']=="S"){
@@ -49,22 +46,32 @@
 		    			}?>
 		    			</b></h5>
 		    		</td>
-		    		<td>
-	    				<?php if($fam[0]['live']=="S"){?>
-		    			Sufre de alguna Enfermedad?
-		    			<h5><b>
-							<?php if($fam[0]['health']=="S"){
-		    					echo "Si";
-		    				}else{
-								echo "No";
-		    				}
-		    			}?>	
-		    			</b></h5>	    		
-		    		</td>
+		    	</tr>
+		    	<tr id="moreinfo1">
+		    		<td>Apoderado? <h5><b>
+		    			<?php if($this->famrel[0]['assignee']=="S"){
+		    				echo "Si";
+		    			}else{
+							echo "No";
+		    			}?>
+		    			</b></h5></td>
+		    		<td>Telefono/Celular <h5><b><?php echo $fam[0]['phone']?></b></h5></td>
+		    	</tr>
+		    	<tr id="moreinfo2">
+		    		<td>Direccion <h5><b><?php echo $fam[0]['address']?></b></h5></td>
+		    		<td>Ocupacion <h5><b><?php echo $fam[0]['ocupacy']?></b></h5></td>
 		    	</tr>
     		</table>
+
     		</div>
 		</div>
+		<script>
+			var live="<?echo $fam[0]['live']?>"
+			if(live=="N"){
+				$("#moreinfo1").addClass("hidden")
+				$("#moreinfo2").addClass("hidden")
+			}
+		</script>
 		<?php }?>
     <?php }else{?>
       <center><h5>No tiene Datos Por favor Actualize su Perfil</h5></center>
@@ -72,3 +79,4 @@
   </div>
 
 </div>
+
