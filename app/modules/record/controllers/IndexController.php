@@ -133,7 +133,9 @@ class Record_IndexController extends Zend_Controller_Action {
             	'eid'=>$eid,'oid'=>$oid,
             	'courseid'=>$courseid,'turno'=>$turno,
             	'curid'=>$curid,'escid'=>$escid,
-            	'subid'=>$subid,'perid'=>$perid,'state'=>'M');
+            	'subid'=>$subid,'perid'=>$perid,);
+            
+
             $base_course_x_teacher =	new Api_Model_DbTable_Coursexteacher();
             $base_register_course = new Api_Model_DbTable_Registrationxcourse();
             $base_speciality = new Api_Model_DbTable_Speciality();
@@ -142,18 +144,8 @@ class Record_IndexController extends Zend_Controller_Action {
             $info_couser = $base_course->_getOne($where);
             $info_teacher = $base_course_x_teacher->_getFilter($where);
             $speciality = $base_speciality->_getAll($where);
-            $data_students = $base_register_course->_getFilter($where);
-            foreach ($data_students as $key => $value) {
-            	$where2= array(
-            		'eid' => $value['eid'],
-            		'oid' => $value['oid'],
-            		'pid' => $value['pid']); 
-
-            	$name_student=$base_person->_getOne($where2);
-            	$data_students [$key]['name'] = $name_student['last_name0'].' '.
-            					$name_student['last_name1'].", ".
-            					$name_student['first_name'];
-            }
+            $data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
+           
             foreach ($info_teacher as $key => $value) {
             	$where1= array(
             		'eid' => $value['eid'],
