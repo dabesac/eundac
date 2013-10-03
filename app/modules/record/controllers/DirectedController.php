@@ -492,6 +492,7 @@ class Record_DirectedController extends Zend_Controller_Action {
 
     public function printAction(){
         try {
+            $this->_helper->layout()->disableLayout();
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $uid = base64_decode($this->_getParam('uid'));

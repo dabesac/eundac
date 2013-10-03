@@ -1,0 +1,29 @@
+<div class="panel panel-primary" style="padding: 5px">
+	<div class="panel-heading" style="padding: 5px; font-size: 15px">
+		<center><b>TRASLADO ESTUDIANTIL</b></center>
+	</div>
+</div>
+<table class="table table-condensed">
+	<tr>
+		<th><center>Ingrese Código de Matricula:</center></th>
+		<td>
+			<input id="uid" type="text" maxlength="10" class="form-control" style="width: 200px" placeholder="Ingrese Código">
+		</td>
+		<td>
+			<a id="search" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</a>
+		</td>
+	</tr>
+</table>
+<div id="loaddata"></div>
+
+<script type="text/javascript">
+$("#search").click(function(){
+	var uid = $("#uid").val();
+	if (!uid) {
+		alert("Ingrese el Código de Matricula.");
+		return false;
+	};
+	$("#loaddata").html("<img src='/img/spinner.gif'>Cargando...");
+	$("#loaddata").load("/rcentral/traslatestudent/search/uid/"+uid);
+});
+</script>
