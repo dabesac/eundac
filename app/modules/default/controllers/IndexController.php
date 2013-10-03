@@ -345,9 +345,11 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="alumno/index";
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"register/listcurrentnotes","name"=>"Asignaturas Actuales","imgicon"=>"calendar");
+    			$acls[]= array("controller"=>"alumno/index/assistance","name"=>"Control Asistencia","imgicon"=>"ok");
     			$acls[]= array("controller"=>"horary/consolidated","name"=>"Ver Horario","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"horary/semester","name"=>"Horarios Semes.","imgicon"=>"calendar");
     			$resource1[]="horary/consolidated";
+    			$resource1[]="alumno/index";
     			$resource1[]="register/listcurrentnotes";
     			$resource1[]="horary/semester";
     			$modules[0]['acls'] = $acls;
@@ -467,7 +469,11 @@ class IndexController extends Zend_Controller_Action {
     			 
     			$modules[1] = array ("name" =>"Matricula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"#","name"=>"Matricula Ingresantes","imgicon"=>"saved");
+    			$acls[]= array("controller"=>"rcentral/traslatestudent","name"=>"Traslado Alumnos","imgicon"=>"saved");
+    			$resource1[]="rcentral/traslatestudent";
+    			
     			$modules[1]['acls'] = $acls;
+    			
     			$acls = null;
     			 
     			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
