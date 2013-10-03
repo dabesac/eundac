@@ -467,7 +467,11 @@ class IndexController extends Zend_Controller_Action {
     			 
     			$modules[1] = array ("name" =>"Matricula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"#","name"=>"Matricula Ingresantes","imgicon"=>"saved");
+    			$acls[]= array("controller"=>"rcentral/traslatestudent","name"=>"Traslado Alumnos","imgicon"=>"saved");
+    			$resource1[]="rcentral/traslatestudent";
+    			
     			$modules[1]['acls'] = $acls;
+    			
     			$acls = null;
     			 
     			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
