@@ -121,7 +121,9 @@
 	    		<tr>
 	    			<td><?php echo $key+1?> </td>
 	    			<td><?php echo $student['uid']?></td>
-	    			<td><?php echo $student['name']?></td>
+	    			<td><?php echo $student['last_name0'].
+            								" ".$student['last_name1'].
+            								",".$student['first_name'];?></td>
 	    			<td class='text-center'><?php 
 	    				switch ($student['notafinal']) {
 	    					case '-3':
