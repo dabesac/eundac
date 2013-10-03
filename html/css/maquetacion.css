@@ -87,4 +87,20 @@
 	    transform: scale(1.1);  
 	}
 
-	
+/*****=============%%%%%%%%%%%%%%%%%%%%not-register%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%==============================*/
+.span-not-register{
+		font-size: 120px;
+		color: 	#edecec;
+		padding-left: 40%;
+		padding-top: 8%;
+	}
+	.cont-font-not-register{
+		background-color: #fcfcfc;
+		height: 400px;
+		
+	}
+	.text-not-register{
+		color: #9e9999;
+		margin-left: 32%;
+		font-size: 21px;
+	}

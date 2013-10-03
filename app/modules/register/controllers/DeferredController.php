@@ -17,7 +17,6 @@ class Register_DeferredController extends Zend_Controller_Action {
     }
     public function indexAction()
     {
-        // print_r($this->sesion);
         try {
             
             $eid = $this->sesion->eid;
