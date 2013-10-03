@@ -336,11 +336,52 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dbsta=new Api_Model_DbTable_Statistics();
             $where=array("eid"=>$eid, "oid"=>$oid, "uid"=>$uid, "pid"=>$pid, "escid"=>$escid, "subid"=>$subid);
             $sta=$dbsta->_getOne($where);
-            print_r($sta);
+            //print_r($sta);
 
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
+    }
+
+    public function studentsavestatisticAction()
+    {
+        try{
+
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $uid=$this->sesion->uid;
+            $pid=$this->sesion->pid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
+
+            $dbsta=new Api_Model_DbTable_Statistics();
+            $where=array("eid"=>$eid, "oid"=>$oid, "uid"=>$uid, "pid"=>$pid, "escid"=>$escid, "subid"=>$subid);
+            $sta=$dbsta->_getOne($where);
+
+            $form=new Profile_Form_Statistic();
+            $this->view->form=$form;
+            //$form->populate($sta);
+            
+            if ($this->getRequest()->isPost()) {
+                $formdata=$this->getRequest()->getPost();
+                if ($form->isValid($formdata)) {
+                    if($formdata["dependen_ud"]=="N"){
+                        $formdata["num_dep_ud"]=0;
+                    }
+                    //$save=$dbstate->_save($formdata);
+                    print_r("Se Guardo con Exito");
+                    
+                    //print_r($save);
+
+                    $relationdata=array("eid"=>$eid, "pid"=>$pid , "famid"=>$save,"type"=>$type,"assignee"=>$assignee);
+                    //print_r($relationdata);
+                    $saver=$dbrelation->_save($relationdata);
+                }
+            }
+        }catch(exception $e){
+            print "Error ! ".$e->getMessage();
+        }
+
     }
 //------------------------------------------------------------------
 

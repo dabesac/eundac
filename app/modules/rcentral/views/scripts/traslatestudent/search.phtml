@@ -1,0 +1,36 @@
+<?php 
+if ($this->user) { ?>
+<div style="margin-top: 20px">
+	<table class="table table-hover table-striped">
+		<tr>
+			<th>#</th>
+			<th><center>DNI</center></th>
+			<th><center>Cod. Mat.</center></th>
+			<th>Apellidos y Nombres</th>
+			<th><center>Sede</center></th>
+			<th><center>Escuela</center></th>
+			<th><center>Operaciones</center></th>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td><center><?php echo $this->user['pid'];?></center></td>
+			<td><center><?php echo $this->user['uid'];?></center></td>
+			<td><?php echo $this->user['last_name0']." ".$this->user['last_name1'].", ".$this->user['first_name'];?></td>
+			<td><center><?php echo $this->user['namesubid'];?></center></td>
+			<td><center><?php echo $this->user['nameescid'];?></center></td>
+			<td>
+				<center><a href="#" title="Realizar el Traslado" rel="tooltip"><span class="glyphicon glyphicon-edit"></span></a></td></center>
+		</tr>
+	</table>
+</div>
+<?php
+}else{ ?>
+<div class="alert alert-info" style="margin-top: 20px">
+	<b>INFORMACIÓN:</b> El Alumno no se encuentra registrado en el Sistema; o ud. ha ingresado un Código erróneo, verifique por favor...
+</div>
+<?php
+} ?>
+
+<script type="text/javascript">
+$('a').tooltip()
+</script>
