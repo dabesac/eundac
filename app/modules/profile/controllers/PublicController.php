@@ -553,14 +553,13 @@ class Profile_PublicController extends Zend_Controller_Action {
             $perid=$this->sesion->period->perid;
             $rid=$this->sesion->rid;
 
-            //print_r($rid);
-
             $data=array("pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "subid"=>$subid, "perid"=>$perid, "rid"=>$rid);
 
             $dbcuract=new Api_Model_DbTable_Registrationxcourse();
             $dbtyperate=new Api_Model_DbTable_PeriodsCourses();
 
-            //$where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "perid"=>$perid);
+            $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "perid"=>$perid);
+            $attrib=array("courseid", "turno","curid","promedio1","promedio2","nota4_i","nota9_i","nota4_ii","nota9_ii","notafinal");
             //print_r($this->sesion);
             $curact=$dbcuract->_getFilter($where, $attrib);
             //print_r($curact);
