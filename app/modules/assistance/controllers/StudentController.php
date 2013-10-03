@@ -59,7 +59,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
 
         $where['coursoid']=$courseid;
         
-        $infoassist = $base_assistance ->_getAll($where);
+        $infoassist = $base_assistance ->_getinfoasisstance($where);
         if ($infoassist) {
             foreach ($infoassist as $key => $value) {
                 $where['pid']=$value['pid'];

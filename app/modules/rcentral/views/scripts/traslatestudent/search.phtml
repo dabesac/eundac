@@ -1,0 +1,147 @@
+<?php 
+if ($this->user) { ?>
+<div style="margin-top: 20px">
+	<table class="table table-hover table-striped">
+		<tr>
+			<th>#</th>
+			<th><center>DNI</center></th>
+			<th><center>Cod. Mat.</center></th>
+			<th>Apellidos y Nombres</th>
+			<th><center>Sede</center></th>
+			<th><center>Escuela</center></th>
+			<th><center>Operaciones</center></th>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td><center><?php echo $this->user['pid'];?></center></td>
+			<td><center><?php echo $this->user['uid'];?></center></td>
+			<td><?php echo $this->user['last_name0']." ".$this->user['last_name1'].", ".$this->user['first_name'];?></td>
+			<td><center><?php echo $this->user['namesubid'];?></center></td>
+			<td><center><?php echo $this->user['nameescid'];?></center></td>
+			<td>
+				<center>
+					<?php 
+					if ($this->error) { 
+						if ($this->error==1) { ?>
+							<a href="#detalletraslate" title="El alumno ya realizó un Traslado Estudiantil." rel="tooltip" data-toggle="modal"><span class="glyphicon glyphicon-list"></span></a>
+							<?php
+						}else{ ?>
+							<a href="#" title="El alumno no cumple con los Requisitos: Debe de haberse matriculado en un Semestre, y de haber aprovado un mínimo de 15 créditos." rel="tooltip"><span class="glyphicon glyphicon-remove"></span></a>
+						<?php
+						}
+					}else{?>
+						<a href="#traslate" title="Realizar el Traslado" rel="tooltip" data-toggle="modal"><span class="glyphicon glyphicon-edit"></span></a>
+					<?php
+					}?>
+				</center>
+			</td>
+		</tr>
+	</table>
+</div>
+<?php
+}else{ ?>
+<div class="alert alert-info" style="margin-top: 20px">
+	<b>INFORMACIÓN:</b> El Alumno no se encuentra registrado en el Sistema; o ud. ha ingresado un Código erróneo, verifique por favor...
+</div>
+<?php
+} ?>
+
+<div class="modal fade" id="traslate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="color: blue">REALIZAR TRASLADO</h4>
+            </div>
+            <div class="modal-body">
+            	<div style="margin-bottom: 20px">
+            		<center>
+            			<b style="font-size: 15px"><?php echo $this->user['uid']." - ".$this->user['last_name0']." ".$this->user['last_name1'].", ".$this->user['first_name'];?></b><br>
+            			<b><?php echo $this->user['nameescid'];?></b>
+            		</center>
+            	</div>
+            	<table class="table table-condensed">
+            		<tr>
+            			<th><center>ESCUELA DESTINO</center></th>
+            		</tr>
+            		<tr>
+            			<td>
+            				<select id="esciddes" class="form-control">
+            					<option value="">- Seleccione Escuela -</option>
+            					<?php
+            					if ($this->escuelas) {
+            						foreach ($this->escuelas as $escuelas) { ?>
+            							<option value="<?php echo $escuelas['escid']."--".$escuelas['subid']?>"><?php echo $escuelas['name']?></option>
+            							<?php
+            						}
+            					}
+            					?>
+            				</select>
+            			</td>
+            		</tr>
+            	</table>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+                <a href="#" id="savetraslate" class="btn btn-success">
+                    <span class='glyphicon glyphicon-floppy-disk'></span> Guardar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="loadchange"></div>
+<div class="modal fade" id="detalletraslate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="color: blue">DETALLE DEL TRASLADO</h4>
+            </div>
+            <div class="modal-body">
+            	<div style="margin: 10px">
+            		<center>
+            			<b style="font-size: 15px"><?php echo $this->user['uid']." - ".$this->user['last_name0']." ".$this->user['last_name1'].", ".$this->user['first_name'];?></b><br>
+            			<b><?php echo $this->user['nameescid'];?></b>
+            		</center>
+            	</div>
+            	<div>
+            		<center style="color: red">
+            			<span class='glyphicon glyphicon-arrow-down'></span>
+            			<span class='glyphicon glyphicon-arrow-down'></span>
+            			<span class='glyphicon glyphicon-arrow-down'></span>
+            		</center>
+            	</div>
+            	<div style="margin: 10px">
+            		<center>
+            			<b style="font-size: 15px">ESCUELA DESTINO</b><br>
+            			<b><?php echo $this->traslado['name']?></b>
+            		</center>
+            	</div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success" data-dismiss="modal">Aceptar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+$("#savetraslate").click(function(){
+	var uid = "<?php echo $this->user['uid']?>";
+	var pid = "<?php echo $this->user['pid']?>";
+	var tmpescid = $("#esciddes").val();
+	if (!tmpescid) {
+		alert("Seleccione una Escuela Destino.");
+		return false;
+	};
+	var tmp = tmpescid.split('--');
+	var escid = tmp[0];
+	var subid = tmp[1];
+
+	$("#loadchange").load('/rcentral/traslatestudent/change/uid/'+uid+'/pid/'+pid+'/escid/'+escid+'/subid/'+subid);
+});
+
+$('a').tooltip()
+</script>
