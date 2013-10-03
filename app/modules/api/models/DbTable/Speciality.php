@@ -123,17 +123,31 @@ class Api_Model_DbTable_Speciality extends Zend_Db_Table_Abstract
         }
     }
 
-            //muestra escuela x facultad x sede de la facultad de educacion
-        public  function _getSchoolXSecundaria($data=null){
-            try{
-                if ($data['eid']=='' ||  $data['oid']=='' || $data['facid']=='' || $data['subid']=='' ) return false;
-                $where = "eid = '".$data['eid']."' and oid='".$data['oid']."' and facid='".$data['facid']."' and subid='".$data['subid']."' and (parent='2ES' or parent='')";
-   				$row = $this->fetchAll($where);
-				if($row) return $row->toArray();
-				return false;
-                }catch (Exception $ex){
-                print "Error: Leer todas las escuelas por facultad ".$ex->getMessage();
-            }   
-        }
+    //muestra escuela x facultad x sede de la facultad de educacion
+    public  function _getSchoolXSecundaria($data=null){
+        try{
+            if ($data['eid']=='' ||  $data['oid']=='' || $data['facid']=='' || $data['subid']=='' ) return false;
+            $where = "eid = '".$data['eid']."' and oid='".$data['oid']."' and facid='".$data['facid']."' and subid='".$data['subid']."' and (parent='2ES' or parent='')";
+   			$row = $this->fetchAll($where);
+			if($row) return $row->toArray();
+			return false;
+        }catch (Exception $ex){
+            print "Error: Leer todas las escuelas por facultad ".$ex->getMessage();
+        }   
+    }
 
+	/*Retorna la lista escuelas segun la facultad sin considerar los parent*/
+    public function _getSchoolXFacultyNOTParent($where=array()){
+        try{
+         	if ($where['eid']=='' || $where['oid']=='' || $where['facid']=="") return false;
+         	$eid = $where['eid'];
+         	$oid = $where['oid'];
+         	$facid = $where['facid'];
+         	$sql="facid='$facid' AND eid='$eid' AND oid='$oid' AND state='A' AND (parent is null OR parent = '' OR escid = parent)";
+         	$r=$this->fetchAll($sql);
+         	return ($r)?$r->toArray():false;
+        } catch (Exception $ex){
+         	print "Error: Read ".$ex->getMessage();
+        } 
+    }
 }

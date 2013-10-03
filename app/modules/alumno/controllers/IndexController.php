@@ -23,7 +23,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
 
     }
 
-
     public function graphicsperformanceAction()
     {
         try
@@ -58,6 +57,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
         }                  
                 
     }
+
 
     public function assistanceAction()
     {
@@ -98,4 +98,79 @@ class Alumno_IndexController extends Zend_Controller_Action {
         }
     }
 
+        public function graphicsassistanceAction()
+    {
+        try
+        {
+            $this->_helper->layout()->disableLayout();         
+            $wheres['uid']=$this->sesion->uid;
+            $wheres['eid']=$this->sesion->eid;
+            $wheres['oid']=$this->sesion->oid;
+            $wheres['pid']=$this->sesion->pid;
+            $wheres['escid']=$this->sesion->escid;
+            $wheres['subid']=$this->sesion->subid;
+            $wheres['perid']=$this->sesion->period->perid;
+
+            $this->view->escid = $wheres['escid'];
+            $this->view->uid = $wheres['uid'];
+            $this->view->oid = $wheres['oid'];
+            $this->view->eid = $wheres['eid'];
+                       // //Obtenemos los cursos matriculados
+            $lcursos = new Api_Model_DbTable_StudentAssistance();
+            $listacurso =$lcursos->_assistence($wheres);
+            $j=0;
+            foreach ($listacurso as $cursomas){
+                $where[$j]['eid']=$wheres["eid"];
+                $where[$j]['oid']=$wheres["oid"];
+                $where[$j]['escid']=$wheres["escid"];
+                $where[$j]['subid']=$wheres["subid"];
+                $where[$j]['perid']=$wheres["perid"];
+
+                $where[$j]['courseid']=$cursomas["coursoid"];
+                $where[$j]['name']=$cursomas["name"];
+                $where[$j]['curid']=$cursomas["curid"];
+                $where[$j]['turno']=$cursomas["turno"];
+                $periods = new Api_Model_DbTable_PeriodsCourses();
+                $state =$periods->_getOne($where);
+                $var=$state['state'];
+                if($var=='A'){
+                    $a=1;
+                }
+                if($var=='P'){
+                     $a=18;
+                }      
+                $x=0;
+                $x1=0;
+                for ($i=$a; $i < 35 ; $i++) { 
+                        $assis=$cursomas["a_sesion_".$i];
+                    if ($assis=='A' or $assis=='T') {
+                        $x++;
+                    }
+                     if ($assis=='F') {
+                        $x1++;
+                    }
+                }
+                $where[$j]['asistio']=$x;
+                $where[$j]['falto']=$x1;
+
+                if ($x1>=6) {
+                $where[$j]['coment']='R';
+                    }
+                else{
+                $where[$j]['coment']='N';
+
+                }
+
+
+                   $j++;
+        } 
+        $this->view->assistence=$where; 
+
+        }
+        catch(Exception $ex)
+        {
+              print $ex->getMessage();
+        }                  
+                
+    }
 }

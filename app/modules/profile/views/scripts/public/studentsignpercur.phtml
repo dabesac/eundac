@@ -23,6 +23,7 @@
 								<th><center>Requisito</center></th>
 								<th>Nota</th>
 								<th>Estado</th>
+								<th>Syllabus</th>
 							</tr>
 							
 					<? $semid=$sem['semid'];
@@ -55,9 +56,12 @@
 									<td align='center'><!-- Imprimir mayor nota -->
 										<?if($this->courlle[$c]){
 											$notafinal=$this->courlle[$c]['notafinal'];
+											$turno[$c]=1;
 											foreach ($this->courlle[$c] as $notaf) {
 												if($notaf['notafinal']>=$notafinal){
 													$notafinal=$notaf['notafinal'];
+													$turno[$c]=$notaf["turno"];
+													$perid[$c]=$notaf["perid"];
 												}
 											}
 										echo $notafinal;
@@ -91,15 +95,21 @@
 											<img src="/img/circulo-rojo.png">
 										<?}?>
 									</td>
+									<td align="center">
+										<?if($turno[$c]){?>
+											<a title="Imprimir Syllabu" href="/syllabus/print/index/courseid/<?php echo base64_encode($courses['courseid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/escid/<?php echo base64_encode($courses['escid'])?>/turno/<?php echo base64_encode($turno[$c])?>/perid/<?php echo base64_encode($perid[$c])?>/subid/<?php echo base64_encode($courses['subid'])?>"><span class="glyphicon glyphicon-book"></span></a>
+										<?}?>
+									</td>
 								</tr>
-							<?$c++;
+								<?
+							$c++;
 							}
 						}?>
 						</table>
 					</div>
-				<? 
-				}?>
-			<?}?>
+				<?}?>
+			<?
+			}?>
 		</div><!-- Panel de Semestres -->
 		<?}else{?>
 			<h4 align="center">No Existen Datos</h4>

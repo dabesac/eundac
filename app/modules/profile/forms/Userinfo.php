@@ -10,12 +10,26 @@ class Profile_Form_Userinfo extends Zend_Form{
         $dni->setAttrib("title","DNI");
         $dni->setAttrib("class","form-control");
 
-        $birthday= new Zend_Form_Element_Text("birthday");
-        $birthday->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $birthday->setAttrib("maxlength", "10")->setAttrib("size", "10");
-        $birthday->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
-        $birthday->setAttrib("title","Birthday");
-        $birthday->setAttrib("class","form-control");
+        $year= new Zend_Form_Element_Text("year");
+        $year->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $year->setAttrib("maxlength", "4")->setAttrib("size", "4");
+        $year->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        $year->setAttrib("title","Año");
+        $year->setAttrib("class","form-control");
+
+        $month= new Zend_Form_Element_Text("month");
+        $month->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $month->setAttrib("maxlength", "2")->setAttrib("size", "2");
+        $month->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        $month->setAttrib("title","Mes");
+        $month->setAttrib("class","form-control");
+
+        $day= new Zend_Form_Element_Text("day");
+        $day->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $day->setAttrib("maxlength", "2")->setAttrib("size", "2");
+        $day->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        $day->setAttrib("title","Dia");
+        $day->setAttrib("class","form-control");
 
         $sex = new Zend_Form_Element_Select('sex');
         $sex->removeDecorator('HtmlTag')->removeDecorator('Label');     
@@ -61,11 +75,7 @@ class Profile_Form_Userinfo extends Zend_Form{
         $cellular->setAttrib("title","Cellular");
         $cellular->setAttrib("class","form-control");
 
-        $submit = new Zend_Form_Element_Submit('save');
-        $submit->setAttrib('class','btn btn-info pull-right');
-        $submit->setLabel('Guardar');
-        $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
         
-        $this->addElements(array($dni, $birthday, $sex, $civil, $mail_person, $mail_work, $phone, $cellular, $submit));
+        $this->addElements(array($dni, $year, $month, $day, $sex, $civil, $mail_person, $mail_work, $phone, $cellular));
     }
 }

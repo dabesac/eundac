@@ -43,12 +43,7 @@ class Profile_Form_Academic extends Zend_Form{
         $title->addMultiOption("O","Otros");
         $title->setAttrib("class","form-control"); 
 
-        $submit=new Zend_Form_Element_Submit('save');
-        $submit->setAttrib("class","btn btn-info pull-right");
-        $submit->setLabel("Guardar");
-        $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
-
-        $this->addElements(array($institution, $location, $year_end, $type, $title, $submit));
+        $this->addElements(array($institution, $location, $year_end, $type, $title));
 
    	}
 

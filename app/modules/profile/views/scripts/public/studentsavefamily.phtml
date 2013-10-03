@@ -2,7 +2,7 @@
 	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
 </ul>
 
-<form name="<?php echo $this->form->getName(); ?>" action="/profile/public/studentsavefamily" method="post" enctype="application/x-www-form-urlencoded">
+<form id="form" action="/profile/public/studentsavefamily" method="post">
 
 <div class="col-sm-12">
 	<h4>Agregar Familiar</h4>
@@ -19,8 +19,19 @@
 			<td><label>Num Documento</label><br><?print $this->form->numdoc?></td>
 		</tr>
 		<tr>
-			<td><label>Fecha de Nacimiento</label><br><?print $this->form->birthday?></td>
-			<td><label>Sexo</label><?print $this->form->sex?></td>
+			<td><label>Fecha de Nacimiento</label><br>
+				<div class="row">
+					<div class="col-sm-4">
+						<?print $this->form->year?>
+					</div>
+					<div class="col-sm-4">
+						<?print $this->form->month?>
+					</div>
+					<div class="col-sm-4">
+						<?print $this->form->day?>
+					</div>
+				</div>
+			<td id="sex"><label>Sexo</label><?print $this->form->sex?></td>
 		</tr>
 		<tr>
 			<td><label>Vive?</label><?print $this->form->live?></td>
@@ -39,22 +50,48 @@
 	</table>
 	<tr>
 		<td></td>
-		<td><?print $this->form->save?></td>
+		<td><a class="btn btn-info pull-right" href="#" id="save">Guardar</a></td>
 	</tr>
 			
 </div>
 
 <script>
-	$("#moreinfo").addClass("hidden");
+	$("#save").click(function(){
+		$("#form").submit()
+	})
+	$("#form").submit(function(){
+		$.ajax({
+			type: "POST",
+			url: $(this).attr("action"),
+			data: $(this).serialize(),
+			success: function(data){
+				$("#editform").html(data)
+			}
+		})
+		return false;
+	})
+
+	$("#type").change(function(){
+		$("#type option:selected").each(function(){
+			var vartype=$(this).val()
+			if(vartype=="PA" || vartype=="MA"){
+				$("#sex").addClass("hidden")
+			}else{
+				$("#sex").removeClass("hidden")
+			}
+		})
+	})
+
+
+	$("#moreinfo").addClass("hidden")
 	$("#live").change(function(){
 		$("#live option:selected").each(function(){
-			var livevar=$(this).val();
-		if (livevar=="S") {
-			$("#moreinfo").removeClass("hidden");
-		};
-		if (livevar=="N") {
-			$("#moreinfo").addClass("hidden");
-		};
+			var varlive=$(this).val()
+			if(varlive=="S"){
+				$("#moreinfo").removeClass("hidden")
+			}else{
+				$("#moreinfo").addClass("hidden")
+			}
 		})
 	})
 	
