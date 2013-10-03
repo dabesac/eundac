@@ -76,6 +76,21 @@ class Docente_FillnotesController extends Zend_Controller_Action {
     }
 
     public function savetagetnotesAction(){
+        $params = $this->getRequest()->getParams();
+
+        if(count($params) > 3){
+
+            $paramsdecode = array();
+            
+            foreach ( $params as $key => $value ){
+                if($key!="module" && $key!="controller" && $key!="action"){
+                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+                }
+            }
+            $params = $paramsdecode;
+        }
+
+                
 
     }
 
