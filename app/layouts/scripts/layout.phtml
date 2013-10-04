@@ -46,7 +46,6 @@ $urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
 		pid/".base64_encode($info->pid);
 
 $resource1[]="graduated/filter";
-$resource1[]="rcentral/code";
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
 
@@ -95,7 +94,7 @@ $(document).ready(function(){
 //-->
 </script>
     </head>
- <body>
+ <body >
 <!--[if IE]>
 	<div class="mensaje">
                 Estas utilizando una version obsoleta del navegador Internet Explorer el sitema no se vera
