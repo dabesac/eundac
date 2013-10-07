@@ -20,14 +20,27 @@
     $("#ver").click(function(){
     	var escid = $("#esc").val();
     	var perid = $("#period").val();
+        var anio = $('#anio').val();
     	if (escid=="") {alert("Seleccione una especialidad");$("#escid").focus();return false;}
         if (perid=="") {alert("Ingrese un periodo");$("#perid").focus();return false;}
         var tmp=escid.split(";--;");
         var escid=tmp[0];
         var subid=tmp[1];
+        var tmp1 = anio.substr(2, 4);
+        var vari = tmp1.concat('D');
+        var vari1 = tmp1.concat('E');
+        if (perid==vari || perid==vari1) {
+            // alert('No tiene accesso.');
+            var url="/admin/openrecords/getaplazed/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
+            $("#viewcourses").html("<img src='/img/spinner.gif' />Cargando....");
+            $("#viewcourses").load(url);
+        }
+        else{
+            var url="/admin/openrecords/courses/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
+            $("#viewcourses").html("<img src='/img/spinner.gif' />Cargando....");
+            $("#viewcourses").load(url);
+            
+        };
 
-        var url="/admin/openrecords/courses/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
-        $("#viewcourses").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#viewcourses").load(url);
     });
 </script>
