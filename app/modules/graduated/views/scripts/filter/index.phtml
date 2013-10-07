@@ -1,0 +1,110 @@
+<div class="panel panel-primary" style="padding: 2px">
+	<div class="panel-heading" style="padding: 6px">
+		<center><b style="font-size:15px; color: white">FILTRO DE EGRESADOS</b></center>
+	</div>
+</div>
+<table class="table table-hover table-condensed">
+	<tr>
+		<th>Facultad:</th>
+		<td>
+			<select id="facid" class="form-control">
+				<option>- Seleccione la Facultad -</option>
+				<?php
+				if ($this->facultades) {
+					foreach ($this->facultades as $facultades) { 
+						$str = ($this->facid==$facultades['facid'])?"selected ":""; ?>
+						<option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
+					<?php
+					}
+				} ?>
+			</select>
+		</td>
+		<th>Escuela:</th>
+		<td>
+			<select id="escid" class="form-control" style="width:260px">
+				<option value="">- Seleccione la Escuela -</option>
+			</select>
+		</td>
+		<th>Especialidad:</th>
+		<td>
+			<select id="especialidad" class="form-control" style="width:260px">
+				<option value="">- Seleccione la Especialidad -</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>Año:</th>
+		<td>
+			<select id="anho" class="form-control" style="width:100px">
+            	<option value="">- Año -</option>
+            	<?php
+            	for ($i=$this->anio;$i>=1965;$i--) { ?>
+              		<option value="<?php echo $i;?>"><?php echo $i;?></option>
+            	<?php }
+            	?>
+           	</select>
+		</td>
+		<th>Periodo:</th>
+		<td>
+			<select id="periodo_c" class="form-control">
+				<option value="">- Seleccione -</option>
+			</select>
+		</td>
+		<td colspan="2">
+			<center><a id="generargrafic" href="#" class="btn btn-success"><span class="glyphicon glyphicon-download"></span> Generar Gráfica</a></center>
+		</td>
+	</tr>
+</table>
+<div id="cargagrafico"></div>
+
+<script type="text/javascript">
+var rid="<?php echo $this->rid ?>";
+if (rid=="RF" || rid=="DIREC") {
+	$("#facid").attr("disabled",true);
+	var facid=$("#facid").val();
+	$("#escid").load("/graduated/reportgraduated/schools/facid/"+facid);
+	if (rid=="DIREC") {
+		$("#escid").attr("disabled",true);
+		var escid='<?php echo $this->escid?>';
+		$("#especialidad").load("/graduated/reportgraduated/speciality/escid/"+escid);
+	};
+};
+
+$("#facid").change(function(){
+	var facid=$(this).val();
+	$("#escid").load("/graduated/reportgraduated/schools/facid/"+facid);
+	if (facid=="TODO") {
+		var escid="TODOEC";
+		$("#especialidad").load("/graduated/reportgraduated/speciality/escid/"+escid);
+	};
+});
+
+$("#escid").change(function(){
+	var escid=$(this).val();
+	$("#especialidad").load("/graduated/reportgraduated/speciality/escid/"+escid);
+});
+
+$("#anho").change(function(){
+   	var anio = $(this).val();
+   	var url = "/graduated/reportgraduated/periods/anio/"+anio;
+   	$("#periodo_c").load(url);
+});
+
+$("#generargrafic").click(function(){
+	var facid = $("#facid").val();
+	var escid = $("#escid").val();
+	var espec = $("#especialidad").val();
+	var anho = $("#anho").val();
+	var periodo = $("#periodo_c").val();
+	var xx = periodo.split(";--;");
+    var perid = xx[0];
+    var estado = xx[1];
+	if (facid=='' || escid=='' || perid=='') {
+		alert("Seleccione la Facultad, Escuela y el Periodo Académico.");
+		return false;
+	};
+	var url="/graduated/graphicgraduated/graphics/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
+	$('#cargagrafico').html("<img src='/img/spinner.gif'>Generando Gráfico, espere por favor...");
+	$("#cargagrafico").load(url);
+});
+</script>

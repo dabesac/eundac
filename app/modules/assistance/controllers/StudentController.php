@@ -59,7 +59,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
 
         $where['coursoid']=$courseid;
         
-        $infoassist = $base_assistance ->_getAll($where);
+        $infoassist = $base_assistance ->_getinfoasisstance($where);
         if ($infoassist) {
             foreach ($infoassist as $key => $value) {
                 $where['pid']=$value['pid'];
@@ -341,18 +341,52 @@ class Assistance_StudentController extends Zend_Controller_Action {
             if ($type_course_1) {
                 if ($type_course_1 == 'O') {
                     $data_1 = array(
-                        'promedio1'=>'-3',
-                        'promedio2'=>'-3',
-                        'notafinal'=>'-3',
+                        'nota1_i'       => '',
+                        'nota2_i'       => '',
+                        'nota3_i'       => '',
+                        'nota4_i'       => '',
+                        'nota5_i'       => '',
+                        'nota6_i'       => '',
+                        'nota7_i'       => '',
+                        'nota8_i'       => '',
+                        'nota9_i'       => '',
+                        'promedio1' => '-3',
+                        'nota1_ii'      => '',
+                        'nota2_ii'      => '',
+                        'nota3_ii'      => '',
+                        'nota4_ii'      => '',
+                        'nota5_ii'      => '',
+                        'nota6_ii'      => '',
+                        'nota7_ii'      => '',
+                        'nota8_ii'      => '',
+                        'nota9_ii'      => '',
+                        'promedio2' => '-3',
+                        'notafinal'    => '-3'
                     );
                 }
             if ($type_course_1 == 'C') {
                     $data_1 = array(
-                        'nota4_i'=>'-3',
-                        'nota9_i'=>'-3',
-                        'nota4_ii'=>'-3',
-                        'nota9_ii'=>'-3',
-                        'notafinal'=>'-3',
+                        'nota1_i'       => '',
+                        'nota2_i'       => '',
+                        'nota3_i'       => '',
+                        'nota4_i'       => '-4',
+                        'nota5_i'       => '',
+                        'nota6_i'       => '',
+                        'nota7_i'       => '',
+                        'nota8_i'       => '',
+                        'nota9_i'       => '-3',
+                        'promedio1' => '',
+                        'nota1_ii'      => '',
+                        'nota2_ii'      => '',
+                        'nota3_ii'      => '',
+                        'nota4_ii'      => '-3',
+                        'nota5_ii'      => '',
+                        'nota6_ii'      => '',
+                        'nota7_ii'      => '',
+                        'nota8_ii'      => '',
+                        'nota9_ii'      => '-3',
+                        'promedio2' => '',
+                        'notafinal'    => '-3'
                     );
                 }
             }
@@ -436,15 +470,32 @@ class Assistance_StudentController extends Zend_Controller_Action {
             if ($type_course_1) {
                 if ($type_course_1 == 'O') {
                     $data_1 = array(
-                        'promedio2'=>'-3',
-                        'notafinal'=>'-3',
+                        'nota1_ii'      => '',
+                        'nota2_ii'      => '',
+                        'nota3_ii'      => '',
+                        'nota4_ii'      => '',
+                        'nota5_ii'      => '',
+                        'nota6_ii'      => '',
+                        'nota7_ii'      => '',
+                        'nota8_ii'      => '',
+                        'nota9_ii'      => '',
+                        'promedio2' => '-3',
+                        'notafinal'    => '-3'
                     );
                 }
             if ($type_course_1 == 'C') {
                     $data_1 = array(
-                        'nota4_ii'=>'-3',
-                        'nota9_ii'=>'-3',
-                        'notafinal'=>'-3',
+                        'nota1_ii'      => '',
+                        'nota2_ii'      => '',
+                        'nota3_ii'      => '',
+                        'nota4_ii'      => '-3',
+                        'nota5_ii'      => '',
+                        'nota6_ii'      => '',
+                        'nota7_ii'      => '',
+                        'nota8_ii'      => '',
+                        'nota9_ii'      => '-3',
+                        'promedio2' => '',
+                        'notafinal'    => '-3'
                     );
                 }
             }

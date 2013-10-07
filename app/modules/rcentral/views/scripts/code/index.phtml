@@ -1,10 +1,9 @@
 <script src="/js/bootstrap/bootstrap-modal.js"></script>
     <form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/rcentral/code/listuser/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
-
     <center><p class='alert-success' style="font-size: 16px"><b>Buscar nro DNI para generar Código: </b><?php echo $this->fm->pid?></p></center >
-
   </form>
 <div id="filtrorol"> </div>  
+
 <script>
     $("#pid").keypress(function (e) {     
         if(e == 13 || e.which==13 || e.which==0){           
@@ -12,6 +11,7 @@
             $("#frmFiltroDoc").submit();
         }
     });   
+    
     $("#frmFiltroDoc").submit(function(){
         $.ajax({
         type: 'POST',
@@ -23,16 +23,4 @@
         }); 
         return false;
     });
-
-        $("#pid").keyup(function(){
-        var v = $(this).val();
-        if (isNaN(v))
-        {
-        $(".msg").html("solo escriba numero");
-        $("#pid").val("");
-        }
-        else
-        {
-        $(".msg").html("");}
-        });
  </script>

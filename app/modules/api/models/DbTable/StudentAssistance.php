@@ -81,8 +81,10 @@ class Api_Model_DbTable_StudentAssistance extends Zend_Db_Table_Abstract
 
     public function _getAll($where=array()){
         try{
-            if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["subid"] =='' || 
-                $where["coursoid"]=='' || $where["curid"] =='' || $where["turno"] =='' || $where["perid"]=='') return false;
+            if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  
+                $where["subid"] =='' || 
+                $where["coursoid"]=='' || $where["curid"] =='' || $where["turno"] =='' || 
+                $where["perid"]=='') return false;
 
             $wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".
                     $where['escid']."' and subid='".$where['subid']."' and coursoid='".$where['coursoid']."' 
@@ -99,14 +101,16 @@ class Api_Model_DbTable_StudentAssistance extends Zend_Db_Table_Abstract
         try{
             if($where['eid']=='' || $where['oid']=='') return false;
                 $select = $this->_db->select();
-                if ($attrib=='') $select->from("base_course_x_teacher");
-                else $select->from("base_course_x_teacher",$attrib);
+                if ($attrib=='') $select->from("base_student_assistance");
+                else $select->from("base_student_assistance",$attrib);
                 foreach ($where as $atri=>$value){
                     $select->where("$atri = ?", $value);
                 }
                 
-                foreach ($orders as $key => $order) {
+                if($orders){
+                    foreach ($orders as $key => $order) {
                         $select->order($order);
+                    }
                 }
                 $results = $select->query();
                 $rows = $results->fetchAll();
@@ -132,28 +136,22 @@ class Api_Model_DbTable_StudentAssistance extends Zend_Db_Table_Abstract
     }
 
 
-     /* Retorna los datos del docente asignado a la escuela($escid), curso($cursoid) y turno($turno), */
-    public function _getinfoDoc($where=null){
+    public function _getinfoasisstance($where=null){
         try{
-            if ($where['eid']=='' || $where['oid']=='' || $where['escid']=='' || $where['perid']=='' || $where['courseid']=='' || $where['turno']=='') return false;
-            $eid=$where['eid'];
-            $oid=$where['oid'];
-            $perid=$where['perid'];
-            $escid=$where['escid'];
-            $turno=$where['turno'];
-            $subid=$where['subid'];
-            $courseid=$where['courseid'];
-            $curid=$where['curid'];
-            $str=" select last_name0 || ' ' || last_name1 || ', ' || first_name as nameteacher,            
-            pc.pid from base_course_x_teacher as pc
-            inner join base_person as p on pc.pid=p.pid and pc.eid=p.eid 
-            where p.eid='$eid' and pc.oid ='$oid' and pc.perid = '$perid' and pc.escid='$escid' and pc.turno='$turno'
-            and pc.subid='$subid' and pc.courseid='$courseid' and pc.curid='$curid' 
-            and pc.is_main='S' and  not p.pid='TEMP01' order by pc.is_main desc";
-
-            $sql=$this->_db->query($str);
-                return $sql->fetchAll(); 
-            return false;        
+            if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where['curid']=="" ||
+                 $where['escid']=="" || $where['subid']=="" || $where['coursoid']=='' || $where['turno']=='') return false;
+            $select = $this->_db->select()
+            ->from(array('p' => 'base_person'),array('p.last_name0','p.last_name1','p.first_name'))
+                ->join(array('rc' => 'base_student_assistance'),'rc.pid=p.pid and p.eid=rc.eid', array('rc.*'))
+                ->where('rc.eid = ?', $where['eid'])->where('rc.oid = ?', $where['oid'])
+                ->where('rc.subid = ?', $where['subid'])->where('rc.escid = ?', $where['escid'])
+                ->where('rc.curid = ?', $where['curid'])->where('rc.perid = ?', $where['perid'])
+                ->where('rc.coursoid = ?', $where['courseid'])->where('rc.turno = ?', $where['turno'])
+                ->order('p.last_name0');
+            $results = $select->query();            
+            $rows = $results->fetchAll();
+            if($rows) return $rows;
+            return false; 
         }  catch (Exception $ex){
             print "Error: lista Docentes  ".$ex->getMessage();
         }

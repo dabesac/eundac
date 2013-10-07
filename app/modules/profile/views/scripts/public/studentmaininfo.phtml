@@ -1,0 +1,135 @@
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class="col-sm-12">
+      		<table class="table">
+	        	<tr>
+	          		<td>DNI <h5><b><?php echo $this->datos[3]['numdoc']?></b></h5></td>
+	          	<td>Fecha de Nacimiento <h5><b><?php echo $this->datos[3]['birthday']?></b></h5></td>
+	        	</tr>
+	        	<tr>
+	          		<td>Sexo <h5><b><?php echo $this->datos[3]['sex']?></b></h5></td>
+	          		<td>Estado Civil <h5><b><?php echo $this->datos[3]['civil']?></b></h5></td>
+	        	</tr>
+	        	<tr>
+	          		<td>Mail <h5><b><?php echo $this->datos[3]['mail_person']?></b></h5></td>
+	          		<td>Work Mail <h5><b><?php echo $this->datos[3]['mail_work']?></b></h5></td>
+	        	</tr>
+	        	<tr>
+	          		<td>Telefono <h5><b><?php echo $this->datos[3]['phone']?></b></h5></td>
+	          		<td>Celular <h5><b><?php echo $this->datos[3]['cellular']?></b></h5></td>
+	        	</tr>
+      		</table>
+    	</div>
+    </div>
+</div>
+<div class="panel panel-info">
+
+	<div class="panel-heading"><h5>Datos de Ingreso</h5></div>
+
+	<div class="panel-body">
+
+		<div class="col-sm-4">
+				<table class="table">
+				<tr><td>Año de Ingreso <h5><b><?php echo $this->datos[4]['yearsignin']?></b></h5></td></tr>
+				<tr><td>Proceso
+	  				<h5><b>
+			          <?php if($this->datos[4]['process']=="0"){
+			            echo "Examen Extraordinario";
+			          }elseif($this->datos[4]['process']=="1"){
+			            echo "Centro Pre I";
+			          }elseif($this->datos[4]['process']=="2"){
+			            echo "Examen Ordinario 1er Periodo";
+			          }elseif($this->datos[4]['process']=="3"){
+			            echo "Profesionalizacion Docente";
+			          }elseif($this->datos[4]['process']=="4"){
+			            echo "Examen Ordinario 2do Periodo";
+			          }elseif($this->datos[4]['process']=="5"){
+			            echo "Centro Pre II";
+			          }elseif($this->datos[4]['process']=="6"){
+			            echo "Profesionalizacion Docente Enfermeria";
+			          }elseif($this->datos[4]['process']=="7"){
+			            echo "Complementacion Docente";
+			          }elseif($this->datos[4]['process']=="8"){
+			            echo "Escuela Post-Grado";
+			          }elseif($this->datos[4]['process']=="9"){
+			            echo "Centro Pre III";
+			          }?>
+			          </b></h5>
+			    </td></tr>
+			    <tr><td>Hara Traslado?
+			    	<h5><b>
+			        <?php if($this->datos[4]['traslate']=="S"){
+			              echo "Si";
+			            }else{
+			              echo "No";
+			            }?> 
+			          </b></h5>
+				</td></tr>
+			    <tr><td>La Carrera es de su Agrado?
+			    	<h5><b>
+			    	<?php if($this->datos[4]['eligio_carrera']=="S"){
+			              echo "Si";
+			            }else{
+			              echo "No";
+			            }?> 
+			        </b></h5>
+			    </td></tr>
+			</table>
+		</div>
+		<div class="col-sm-4">
+		    <table class="table">
+		       	<tr><td>Posicion <h5><b><?php echo $this->datos[4]['position']?></b></h5></td></tr>
+		       	<tr><td>Modalidad
+		       		<h5><b>
+		       		<?php if($this->datos[4]['mod_signin']=="1"){
+		           		echo "Exoneracion";
+		       		}elseif($this->datos[4]['mod_signin']=="2"){
+		           		echo "Convenio";
+		       		}elseif($this->datos[4]['mod_signin']=="3"){
+		           		echo "Concurso Admision";
+		       		}elseif($this->datos[4]['mod_signin']=="4"){
+		           		echo "Cobertura";
+		       		}elseif($this->datos[4]['mod_signin']=="5"){
+		           		echo "Segunda Opcion";
+		       		}elseif($this->datos[4]['mod_signin']=="6"){
+		           		echo "Traslado Externo";
+		       		}elseif($this->datos[4]['mod_signin']=="7"){
+		           		echo "Traslado Interno";
+		       		}elseif($this->datos[4]['mod_signin']=="8"){
+		           		echo "Segunda Carrera";
+		       		}elseif($this->datos[4]['mod_signin']=="9"){
+		          		echo "Otros";
+		       		}?>
+		       		</b></h5>
+		       	</td></tr>
+		       	<tr><td>Dedicacion a la Universidad <h5><b><?php echo $this->datos[4]['horas_permanece']." "?>Horas</b></h5></td></tr> 
+		       	<tr><td>
+		       		<?php if($this->datos[4]['eligio_carrera']=="N"){?>
+		           	Carrera de Preferencia
+		           	<h5><b><?php echo $this->datos[4]['carrera_preferencia']?></b></h5>
+		          	<?php }?>
+		       	</td></tr>     
+		    </table>
+		</div>
+		<div class="col-sm-4">
+	  		<table class="table">
+	       		<tr><td>Puntos <h5><b><?php echo $this->datos[4]['point_signin']?></b></h5></td></tr>
+	       		<tr><td>Preparacion
+	       			<h5><b>
+	       			<?php if($this->datos[4]['tipo_prepa_uni']=="A"){
+	           			echo "Autoestudio";
+	       			}elseif($this->datos[4]['tipo_prepa_uni']=="D"){
+	           			echo "Academias";
+	       			}elseif($this->datos[4]['tipo_prepa_uni']=="C"){
+	           			echo "Cepre";
+	       			}elseif($this->datos[4]['tipo_prepa_uni']=="O"){
+	        			echo "Otros";
+	       			}?> 
+	       			</b></h5>
+	       		</td></tr>
+	       		<tr><td>Por que Undac? <h5><b><?php echo $this->datos[4]['xq_undac']?></b></h5></td></tr>
+	  		</table>
+		</div> 
+
+  	</div><!-- panel body -->
+</div>

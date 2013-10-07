@@ -379,9 +379,11 @@
 <div class="row">
   <div class="col-xs-12 col-sm-6 col-md-8"><h4><span class='glyphicon glyphicon-pencil' ></span> Llenado de Aplazados <?php echo $this->infocurso['name']?></h4></div>
   <div class="col-xs-6 col-sm-6 col-md-4">
-  	<button class='btn btn-success' id='save_notas' disabled >Guardar</button>
-  	<button class='btn btn-success' id='closed_record'  <?php echo $disabled?> >Cerrar Acta</button>
-  	<?php if ($this->state=='C') { ?>
+  	<?php if ($this->students_register) { ?>
+  		<button class='btn btn-success' id='save_notas' disabled >Guardar</button>
+	  	<button class='btn btn-success' id='closed_record'  <?php echo $disabled?> >Cerrar Acta</button>
+  	<?php }?>
+  	<?php if ($this->state=='C' ) { ?>
   		<a href="/register/deferred/printdeferred/curid/<?php echo base64_encode($this->infocurso['curid'])?>/escid/<?php echo base64_encode($this->infocurso['escid'])?>/subid/<?php echo base64_encode($this->infocurso['subid'])?>/courseid/<?php echo base64_encode($this->infocurso['courseid'])?>/turno/<?php echo base64_encode($this->students_register[0]['turno'])?>/perid/<?php echo base64_encode($this->students_register[0]['perid'])?>" class='btn btn-primary'><span class="glyphicon glyphicon-print"></span> Imprimir</a>
   	<?php }?>
   </div>
@@ -453,5 +455,13 @@
 <input type='hidden' id='record-escid' name='escid' value='<?php echo $this->students_register[0]['escid']?>'>
 <input type='hidden' id='record-subid' name='subid' value='<?php echo $this->students_register[0]['subid']?>'>
 <input type='hidden' id='record-perid' name='perid' value='<?php echo $this->students_register[0]['perid']?>'>
+<?php }else{ ?>
+	<!-- <img src="/img/009.png" width='90px'> -->
+	<div class='col-md-12 cont-font-not-register'>
+		<h1 class='span-not-register'>
+			<span class='glyphicon glyphicon-exclamation-sign'></span>
+		</h1>
+		<h3 class='text-not-register'>No se encontro ningun Registro  </h3>
+	</div>
 <?php }?>
 

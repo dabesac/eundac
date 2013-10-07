@@ -19,7 +19,18 @@
 			<td><label>Num Documento</label><br><?print $this->form->numdoc?></td>
 		</tr>
 		<tr>
-			<td><label>Fecha de Nacimiento</label><br><?print $this->form->birthday?></td>
+			<td><label>Fecha de Nacimiento</label><br>
+				<div class="row">
+					<div class="col-sm-4">
+						<?print $this->form->year?>
+					</div>
+					<div class="col-sm-4">
+						<?print $this->form->month?>
+					</div>
+					<div class="col-sm-4">
+						<?print $this->form->day?>
+					</div>
+				</div>
 			<td id="sex"><label>Sexo</label><?print $this->form->sex?></td>
 		</tr>
 		<tr>

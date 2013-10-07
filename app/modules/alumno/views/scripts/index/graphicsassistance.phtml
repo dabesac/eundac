@@ -3,7 +3,7 @@
         <link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="/css/style.css">
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<div class="alert alert-success"><center>"SE CONSIDERA EL 30 % DE FALTA COMO RETIRADO A CADA CURSO CORRESPONDIENTE EN EL PRESENTE PERIODO"</center></div> 
+<div class="alert alert-success"><center>"SE CONSIDERA EL 30 % DE INASISTENCIA COMO RETIRADO A CADA CURSO CORRESPONDIENTE EN EL PRESENTE PERIODO"</center></div> 
  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
@@ -14,27 +14,27 @@
     <script type="text/javascript">
       function drawVisualization() {
         var data = google.visualization.arrayToDataTable([
-          ['ASISTENCIA', 'TARDE','ASISTIO', 'FALTAS', 'TOTAL CLASES','RETIRADO','30% INASISTENCIA'],
+          ['ASISTENCIA', 'TARDE','ASISTIO', 'FALTAS', 'TOTAL CLASES','CURSO RETIRADO'],
            <?php  foreach ($this->assistence as $datos) {
            $course=$datos['name'];
            $retirado=$datos['coment'];
            if ($retirado=='R') {
-            $ret=17;
+            $ret1=17;
             $tarde=0;
             $asistio=0;
             $falto=0;
             $total=0;
-            $ret=17;
+            //$ret=0;
            };
            if ($retirado=='N') {
-            $ret=0;
+            $ret1=0;
             $tarde=$datos['tarde'];
             $asistio=$datos['asistio'];
             $falto=$datos['falto'];
             $total=17;
-            $ret=0;
+            //$ret=20;
            };   ?>
-           ['<?php print $course?>' , <?php print $tarde?>,<?php print $asistio?> , <?php print $falto?> , <?php print $total?> ,<?php print $ret?>, <?php print $ret?>],
+           ['<?php print $course?>' , <?php print $tarde?>,<?php print $asistio?> , <?php print $falto?> , <?php print $total?> ,<?php print $ret1?>],
          <?php  }?>
         ]);
           var options = {
