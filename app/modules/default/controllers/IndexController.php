@@ -456,11 +456,14 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="rcentral/index";
     			$resource1[]="profile/search";
     			$resource1[]="profile/changecurricula";
+                $resource1[]="rcentral/code";
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
     			$acls[]= array("controller"=>"curricula/curricula","name"=>"Adm. Curriculas.","imgicon"=>"list");
     			$acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+                $acls[]= array("controller"=>"rcentral/code","name"=>"Generar Codigo.","imgicon"=>"tasks");
+
     			$resource1[]="record/index";
     			$resource1[]="curricula/curricula";
     			$resource1[]="curricula/show";

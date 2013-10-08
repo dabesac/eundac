@@ -1,11 +1,9 @@
-<form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/rcentral/code/listuser/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
-    <table class="table table-striped table-bordered table-condensed ">
-        <tr>
-            <td><p style="font-size: 16px">Buscar nro DNI para crear un Usuario : <?php echo $this->fm->pid?></p></div></td>
-        </tr>
-    </table>
-</form>
-<div id="filtrorol"></div>  
+<script src="/js/bootstrap/bootstrap-modal.js"></script>
+    <form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/rcentral/code/listuser/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+    <center><p class='alert-success' style="font-size: 16px"><b>Buscar nro DNI para generar Código: </b><?php echo $this->fm->pid?></p></center >
+  </form>
+<div id="filtrorol"> </div>  
+
 <script>
     $("#pid").keypress(function (e) {     
         if(e == 13 || e.which==13 || e.which==0){           

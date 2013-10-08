@@ -8,29 +8,30 @@ class Admin_Form_Personnew extends Zend_Form{
         $pid->removeDecorator('Label')->removeDecorator("HtmlTag");
         $pid->setAttrib("maxlength", "8");
         $pid->setAttrib('class','form-control');
+        $pid->setAttrib("style","height:35px;width:500px ");
         $pid->setAttrib("title","Ingrese Dni")->addValidator("digits",true);
-        $pid->setAttrib("onkeypress","return validNumber(event)");
+        // $pid->setAttrib("onkeypress","return validNumber(event)");
     
         $first_name = new Zend_Form_Element_Text('first_name');
         $first_name->setRequired(true)->addErrorMessage('Este campo es requerido');
         $first_name->removeDecorator('Label')->removeDecorator("HtmlTag");
         $first_name->setAttrib('class','form-control');
         $first_name->setAttrib("title","Ingrese Nombre");
-        $first_name->setAttrib("onkeypress","return soloLetras(event)");
+        // $first_name->setAttrib("onkeypress","return soloLetras(event)");
 
         $last_name0 =new Zend_Form_Element_Text('last_name0');
         $last_name0->setRequired(true)->addErrorMessage('Este campo es requerido');
         $last_name0->removeDecorator('Label')->removeDecorator("HtmlTag");
         $last_name0->setAttrib('class','form-control');
         $last_name0->setAttrib("title","Ingrese Apellido Paterno");
-        $last_name0->setAttrib("onkeypress","return soloLetras(event)");
+        // $last_name0->setAttrib("onkeypress","return soloLetras(event)");
 
         $last_name1 =new Zend_Form_Element_Text('last_name1');
         $last_name1->setRequired(true)->addErrorMessage('Este campo es requerido');
         $last_name1->removeDecorator('Label')->removeDecorator("HtmlTag");
         $last_name1->setAttrib('class','form-control');
         $last_name1->setAttrib("title","Ingrese Apellido Materno");
-        $last_name1->setAttrib("onkeypress","return soloLetras(event)");
+        // $last_name1->setAttrib("onkeypress","return soloLetras(event)");
         
         $typedoc = new Zend_Form_Element_Select('typedoc');
         $typedoc->removeDecorator('HtmlTag')->setRequired(true)->addErrorMessage('Es necesario que ingrese el tipo de documento');
@@ -46,7 +47,7 @@ class Admin_Form_Personnew extends Zend_Form{
         $numdoc->setAttrib("maxlength", "15");
         $numdoc->setAttrib('class','form-control');
         $numdoc->setAttrib("title","Ingrese el documento")->addValidator("digits",true);
-        $numdoc->setAttrib("onkeypress","return validNumber(event)");
+        // $numdoc->setAttrib("onkeypress","return validNumber(event)");
 
         $birthday = new Zend_Form_Element_Text('birthday');
         $birthday->removeDecorator('Label')->removeDecorator("HtmlTag");
@@ -87,14 +88,14 @@ class Admin_Form_Personnew extends Zend_Form{
         $phone->setAttrib("title","# de teléfono")->addValidator("digits",true);
         $phone->removeDecorator('Label')->removeDecorator("HtmlTag");
         $phone->setAttrib('class','form-control');
-        $phone->setAttrib("onkeypress","return validNumber(event)");        
+        // $phone->setAttrib("onkeypress","return validNumber(event)");        
 
         $cellular = new Zend_Form_Element_Text('cellular');
         $cellular->setAttrib("maxlength", "15");
         $cellular->setAttrib("title","# de celular")->addValidator("digits",true);
         $cellular->removeDecorator('Label')->removeDecorator("HtmlTag");
         $cellular->setAttrib('class','form-control');
-        $cellular->setAttrib("onkeypress","return validNumber(event)");
+        // $cellular->setAttrib("onkeypress","return validNumber(event)");
 
         $address = new Zend_Form_Element_Text('address');
         $address->removeDecorator('Label')->removeDecorator("HtmlTag");
