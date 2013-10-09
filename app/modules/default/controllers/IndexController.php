@@ -355,11 +355,11 @@ class IndexController extends Zend_Controller_Action {
     			$modules[0]['acls'] = $acls;
     			$acls = null;
     			
-    			$modules[1] = array ("name" =>"Matrícula", "imgicon"=>"ok");
+    			/*$modules[1] = array ("name" =>"Matrícula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"register/student","name"=>"Prematricula","imgicon"=>"edit");
     			$resource1[]="register/student";
     			$modules[1]['acls'] = $acls;
-    			$acls = null;
+    			$acls = null;*/
     			break;
     		}
     		case "DC":{
