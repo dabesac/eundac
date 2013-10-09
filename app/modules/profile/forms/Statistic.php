@@ -89,7 +89,7 @@ class Profile_Form_Statistic extends Zend_Form{
 		$costo_alimento->removeDecorator('HtmlTag')->removeDecorator('Label');
 		$costo_alimento->setRequired(true)->addErrorMessage("Campo Obligatorio");
 		$costo_alimento->setAttrib("maxlength","4")->setAttrib("size","30");
-		$costo_alimento->setAttrib("tittle","Empresa");
+		$costo_alimento->setAttrib("tittle","Costo de Alimento");
 		$costo_alimento->setAttrib("class","form-control");
 		$costo_alimento->setAttrib("placeholder","En soles ¬¬");
 
