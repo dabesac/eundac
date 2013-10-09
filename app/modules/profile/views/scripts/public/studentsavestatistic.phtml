@@ -14,7 +14,7 @@
 	</tr>
 	<tr>
 		<td><label>De quien depende economicamente? </label><?print $this->form->dependencia?></td>
-		<td><label>Dependen de Usted? </label><?print $this->form->dependen_ud?></td>
+		<td><label>Algunas personas o familiares dependen de Usted? </label><?print $this->form->dependen_ud?></td>
 	</tr>
 	<tr>
 		<td id="cuantos"><label>Cuantos? </label><?print $this->form->num_dep_ud?></td>
@@ -64,11 +64,28 @@
 		<td><label>Tiene algun problema con su alimentacion?</label><?print $this->form->prob_alimento?></td>
 	</tr>
 	<tr>
-		
+		<td></td>
+		<td><a id="save" href="#" class="btn btn-info pull-right">Guardar</a></td>
 	</tr>
 </table>
 
 <script>
+	$("#save").click(function(){
+		$("#form").submit()
+	})
+
+	$("#form").submit(function(){
+		$.ajax({
+			type:"POST",
+			url:$(this).attr("action"),
+			data:$(this).serialize(),
+			success: function(data){
+				$("#datastudent").html(data)
+			}
+		})
+		return false;
+	})
+
 	$("#depud").change(function(){
     	$("#depud option:selected").each(function (){
     		var depud=$(this).val(); 

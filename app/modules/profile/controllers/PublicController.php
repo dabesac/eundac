@@ -325,7 +325,7 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studentstatisticAction()
     {
         try{
-            //$this->_helper->layout()->disableLayout();
+            $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $uid=$this->sesion->uid;
@@ -346,7 +346,7 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studentsavestatisticAction()
     {
         try{
-
+            $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $uid=$this->sesion->uid;
