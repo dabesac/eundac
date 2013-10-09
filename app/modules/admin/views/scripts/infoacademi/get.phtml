@@ -1,0 +1,124 @@
+<?php
+if ($this->datacademic) { ?>
+<table class="table table-striped table-bordered" style="margin-top: 15px;">
+    <tr>
+        <th><center>#</center></th>
+        <th><center>DNI</center></th>
+        <th><center>Código</center></th>
+        <th><center>Docente</center></th>
+        <th><center>Fecha de Creación</center></th>
+        <th><center>Operación</center></th>
+    </tr>
+<?php
+    $c=0;
+    $S=0;
+    foreach ($this->datacademic as $data) {
+        $c++;
+        $escid=$data['escid'];
+        $subid=$data['subid'];
+        $perid=$data['perid'];
+        $pid=$data['pid'];
+        $uid=$data['uid'];       
+        $name=$this->dataperson[$c-1][0]['last_name0']." ".$this->dataperson[$c-1][0]['last_name1'].", ".$this->dataperson[$c-1][0]['first_name'];
+        $state=$data['state'];
+        $createdate=$data['created'];
+        if ($createdate<>"") {
+            $a= substr($createdate,0, 10);
+            $tmp = split('-', $a);
+            $createdate= $tmp[2]."/".$tmp[1]."/".$tmp[0];
+        }
+    ?>
+    <tr>
+        <td><center><?php echo $c?></center></td>
+        <td><center><?php echo $pid?></center></td>
+        <td><center><?php echo $uid?></center></td>
+        <td><?php echo $name?></td>
+        <td><center><?php echo $createdate?></center></td>
+        <td>
+            <center>
+                <?php 
+                if ($state=='C') {  ?>
+                    <a id='loading<?php echo $s?>' data-toggle="modal" href="#myModal"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
+                    <script type="text/javascript">
+                    $("#loading<?php echo $s?>").click(function(){
+                        
+                        url="/admin/infoacademi/updatestate/perid/<?php echo base64_encode($perid)?>/pid/<?php echo base64_encode($pid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/uid/<?php echo base64_encode($uid)?>/state/<?php echo base64_encode('B')?>/";
+                        // alert(url);
+                        $("#view").load(url);
+                    });
+                    </script>
+                <?php
+                }
+                else{   ?>
+                    <a id='loads<?php echo $s?>' data-toggle="modal" href="#Modal"><span class="glyphicon glyphicon-lock"></span> Cerrar</a>
+                    <script type="text/javascript">
+                    $("#loads<?php echo $s?>").click(function(){
+                        
+                        url="/admin/infoacademi/updatestate/perid/<?php echo base64_encode($perid)?>/pid/<?php echo base64_encode($pid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/uid/<?php echo base64_encode($uid)?>/state/<?php echo base64_encode('C')?>/";
+                        // alert(url);
+                        $("#view1").load(url);
+                    });
+                    </script>
+                <?php    
+                }
+                ?>
+            </center>
+        </td>
+    </tr>
+    <?php    
+    $s++;
+    }
+?>
+</table>
+<?php    
+}
+else{
+?>
+    <div class="alert alert-info" style='margin-top:20px; font-size:15px'> No existen <b>Registros</b></div>
+<?php
+}
+?>
+
+<!-- Modal 1 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+          <center><h3 class="modal-title" style='color: black' ><img style='width:40px'src="/img/unlock.png" ><b> SE ABRIÓ EL INFORME ACADÉMICO DE ESTE DOCENTE</b></h3></center>
+          <div id='view'></div>           
+        </div>
+        <div class="modal-footer">
+          <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal 2 -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+            <center><h3 class="modal-title" style='color:black' ><img style='width:40px'src="/img/candado.png" ><b> SE CERRÓ EL INFORME ACADEMICO DE ESTE DOCENTE</b></h3></center>
+            <div id='view1'></div>
+            
+        </div>
+        <div class="modal-footer">
+          <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+$ ('#myModal'). on('hidden.bs.modal',function()  { 
+    url="/admin/infoacademi/get/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    $("#viewcourses").load(url);  
+});
+
+$ ('#Modal'). on('hidden.bs.modal',function()  { 
+    url="/admin/infoacademi/get/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    $("#viewcourses").load(url);  
+});
+</script>

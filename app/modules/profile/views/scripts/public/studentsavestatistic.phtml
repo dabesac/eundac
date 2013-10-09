@@ -14,7 +14,7 @@
 	</tr>
 	<tr>
 		<td><label>De quien depende economicamente? </label><?print $this->form->dependencia?></td>
-		<td><label>Algunas personas o familiares dependen de Usted? </label><?print $this->form->dependen_ud?></td>
+		<td><label>Algunas personas dependen de Usted? </label><?print $this->form->dependen_ud?></td>
 	</tr>
 	<tr>
 		<td id="cuantos"><label>Cuantos? </label><?print $this->form->num_dep_ud?></td>
@@ -97,5 +97,29 @@
     		};    		
     	});
     });
+
+    
+
+    $("#backeditBtn a").click(function (e) {
+    	e.preventDefault()
+      	$("#editform").html("")
+      	$("#editdata").removeClass("hidden")
+      	$('#editpalBtns2 a:last').tab('show')
+  	})
+
+    $("#save").click(function(){
+    	$("#form").submit()
+    })
+    $("#form").submit(function(){
+    	$.ajax({
+    		type : "POST",
+    		url : $(this).attr("action"),
+    		data : $(this).serialize(),
+    		success : function(data){
+    			$("#editform").html(data)
+    		}
+    	})
+    	return false;
+    })
 
 </script>

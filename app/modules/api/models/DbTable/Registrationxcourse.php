@@ -486,7 +486,158 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
          }
      }
 
-
+     /*************************************/
+     public function _closuretarget($where=array()){
+     	try {
+     		if ($where['eid']=='' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
+	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
+	    	
+	    	$sql = $this->_db
+                    ->query("
+                         	    select
+		            sum(num_reg) as num_reg, 
+		            sum(nota1_i) as nota1_i, 
+		            sum(nota2_i) as nota2_i, 
+		            sum(nota3_i) as nota3_i, 
+		            sum(nota4_i) as nota4_i, 
+		            sum(nota5_i) as nota5_i, 
+		            sum(nota6_i) as nota6_i, 
+		            sum(nota7_i) as nota7_i, 
+		            sum(nota8_i) as nota8_i, 
+		            sum(nota9_i) as nota9_i,
+		            sum(nota1_ii) as nota1_ii, 
+		            sum(nota2_ii) as nota2_ii, 
+		            sum(nota3_ii) as nota3_ii, 
+		            sum(nota4_ii) as nota4_ii, 
+		            sum(nota5_ii) as nota5_ii, 
+		            sum(nota6_ii) as nota6_ii, 
+		            sum(nota7_ii) as nota7_ii, 
+		            sum(nota8_ii) as nota8_ii, 
+		            sum(nota9_ii) as nota9_ii
+		            from
+		            (
+		            select
+		            (
+		            count(*) -
+		            sum(
+		            CASE 
+		            WHEN promedio1 = '-3' or promedio1 = '-2' or promedio2 = '-3' or promedio2 = '-2'  THEN 1
+		            ELSE 0
+		            END
+		            )
+		            ) as num_reg ,
+		            sum(
+		            CASE 
+		            WHEN length(nota1_i) = 0 or nota1_i is null  THEN 0
+		            ELSE 1
+		            END) as nota1_i, 
+		            sum(
+		            CASE 
+		            WHEN length(nota2_i) = 0 or nota2_i is null  THEN 0
+		            ELSE 1
+		            END) as nota2_i, 
+		            sum(
+		            CASE 
+		            WHEN length(nota3_i) = 0 or nota3_i is null THEN 0
+		            ELSE 1
+		            END) as nota3_i, 
+		            sum(
+		            CASE 
+		            WHEN length(nota4_i) = 0 or nota4_i is null THEN 0
+		            ELSE 1
+		            END) as nota4_i, 
+		            sum(
+		            CASE 
+		            WHEN length(nota5_i) = 0 or nota5_i is null THEN 0
+		            ELSE 1
+		            END) as nota5_i, 
+		            sum(
+		            CASE 
+		            WHEN length(nota6_i) = 0 or nota6_i is null THEN 0
+		            ELSE 1
+		            END) as nota6_i, 
+		            sum(
+		            CASE 
+		            WHEN length(nota7_i) = 0 or nota7_i is null THEN 0
+		            ELSE 1
+		            END) as nota7_i, 
+		            sum(
+		            CASE 
+		            WHEN length(nota8_i) = 0 or nota8_i is null THEN 0
+		            ELSE 1
+		            END) as nota8_i, 
+		            sum(
+		            CASE 
+		            WHEN length(nota9_i) = 0 or nota9_i is null  THEN 0
+		            ELSE 1
+		            END) as nota9_i ,
+		            sum(
+		            CASE 
+		            WHEN length(nota1_ii) = 0 or nota1_ii is null THEN 0
+		            ELSE 1
+		            END) as nota1_ii, 
+		            sum(CASE WHEN length(nota2_ii) = 0 or nota2_ii is null THEN 0
+		            ELSE 1
+		            END) as nota2_ii, 
+		            sum(CASE WHEN length(nota3_ii) = 0 or nota3_ii is null THEN 0
+		            ELSE 1
+		            END) as nota3_ii, 
+		            sum(CASE WHEN length(nota4_ii) = 0 or nota4_ii is null THEN 0
+		            ELSE 1
+		            END) as nota4_ii, 
+		            sum(CASE WHEN length(nota5_ii) = 0 or nota5_ii is null THEN 0
+		            ELSE 1
+		            END) as nota5_ii, 
+		            sum(CASE WHEN length(nota6_ii) = 0 or nota6_ii is null THEN 0
+		            ELSE 1
+		            END) as nota6_ii, 
+		            sum(CASE WHEN length(nota7_ii) = 0 or nota7_ii is null THEN 0
+		            ELSE 1
+		            END) as nota7_ii, 
+		            sum(CASE WHEN length(nota8_ii) = 0 or nota8_ii is null THEN 0
+		            ELSE 1
+		            END) as nota8_ii, 
+		            sum(CASE WHEN length(nota9_ii) = 0 or nota9_ii is null THEN 0
+		            ELSE 1
+		            END) as nota9_ii
+		            from base_registration_course
+		            where
+		            curid = '".$where['curid']."' and 
+		            escid = '".$where['escid']."' and 
+		            courseid ='".$where['courseid']."' and 
+		            perid ='".$where['perid']."' and 
+		            turno ='".$where['turno']."' and 
+		           	eid = '".$where['eid']."' and
+		           	oid = '".$where['oid']."' and
+		            state = 'M' and  
+		            subid = '".$where['subid']."' 
+		            group by 
+		            nota1_i, 
+		            nota2_i, 
+		            nota3_i, 
+		            nota4_i, 
+		            nota5_i, 
+		            nota6_i, 
+		            nota7_i, 
+		            nota8_i, 
+		            nota9_i,
+		            nota1_ii, 
+		            nota2_ii, 
+		            nota3_ii, 
+		            nota4_ii, 
+		            nota5_ii, 
+		            nota6_ii, 
+		            nota7_ii, 
+		            nota8_ii, 
+		            nota9_ii
+		            ) temporal
+                    ");
+                if ($sql) return $sql->fetchAll();
+            return false;
+     	} catch (Exception $e) {
+     		print $e->getMessage();
+     	}
+     }
 
 
 }

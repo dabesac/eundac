@@ -100,11 +100,11 @@ class Rcentral_TraslatestudentController extends Zend_Controller_Action
             $tmp = new Api_Model_DbTable_Tmpgeneratedcode();
             $escidtmp = $tmp->_getOne($where=array('escid' => $escid));
             $codtmp = substr($uid, 0,3);
-            $codtmp2 = substr($uid, 6);
+            $codtmp2 = substr($uid, 7);
             $data = array(
-                'eid' => $eid, 'oid' => $oid, 'uid' => $codtmp.$escidtmp['code'].$codtmp2, 
+                'eid' => $eid, 'oid' => $oid, 'uid' => $codtmp.$escidtmp['code'].'7'.$codtmp2, 
                 'pid' => $pid, 'escid' => $escid, 'subid' => $subid, 'rid' => $datauser[0]['rid'],
-                'password' => $codtmp.$escidtmp['code'].$codtmp2, 'state' => 'A',
+                'password' => md5($codtmp.$escidtmp['code'].'7'.$codtmp2), 'state' => 'A',
                 'register' => $this->sesion->uid, 'created' => date('Y-m-d'));
             $user->_save($data);
             

@@ -355,11 +355,11 @@ class IndexController extends Zend_Controller_Action {
     			$modules[0]['acls'] = $acls;
     			$acls = null;
     			
-    			$modules[1] = array ("name" =>"Matrícula", "imgicon"=>"ok");
+    			/*$modules[1] = array ("name" =>"Matrícula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"register/student","name"=>"Prematricula","imgicon"=>"edit");
     			$resource1[]="register/student";
     			$modules[1]['acls'] = $acls;
-    			$acls = null;
+    			$acls = null;*/
     			break;
     		}
     		case "DC":{
@@ -456,11 +456,14 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="rcentral/index";
     			$resource1[]="profile/search";
     			$resource1[]="profile/changecurricula";
+                $resource1[]="rcentral/code";
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
     			$acls[]= array("controller"=>"curricula/curricula","name"=>"Adm. Curriculas.","imgicon"=>"list");
     			$acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+                $acls[]= array("controller"=>"rcentral/code","name"=>"Generar Codigo.","imgicon"=>"tasks");
+
     			$resource1[]="record/index";
     			$resource1[]="curricula/curricula";
     			$resource1[]="curricula/show";
