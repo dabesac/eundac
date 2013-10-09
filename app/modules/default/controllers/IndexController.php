@@ -345,19 +345,21 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="alumno/index";
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"register/listcurrentnotes","name"=>"Asignaturas Actuales","imgicon"=>"calendar");
+    			$acls[]= array("controller"=>"alumno/index/assistance","name"=>"Control Asistencia","imgicon"=>"ok");
     			$acls[]= array("controller"=>"horary/consolidated","name"=>"Ver Horario","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"horary/semester","name"=>"Horarios Semes.","imgicon"=>"calendar");
     			$resource1[]="horary/consolidated";
+    			$resource1[]="alumno/index";
     			$resource1[]="register/listcurrentnotes";
     			$resource1[]="horary/semester";
     			$modules[0]['acls'] = $acls;
     			$acls = null;
     			
-    			$modules[1] = array ("name" =>"Matrícula", "imgicon"=>"ok");
+    			/*$modules[1] = array ("name" =>"Matrícula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"register/student","name"=>"Prematricula","imgicon"=>"edit");
     			$resource1[]="register/student";
     			$modules[1]['acls'] = $acls;
-    			$acls = null;
+    			$acls = null;*/
     			break;
     		}
     		case "DC":{
@@ -454,11 +456,14 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="rcentral/index";
     			$resource1[]="profile/search";
     			$resource1[]="profile/changecurricula";
+                $resource1[]="rcentral/code";
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
     			$acls[]= array("controller"=>"curricula/curricula","name"=>"Adm. Curriculas.","imgicon"=>"list");
     			$acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+                $acls[]= array("controller"=>"rcentral/code","name"=>"Generar Codigo.","imgicon"=>"tasks");
+
     			$resource1[]="record/index";
     			$resource1[]="curricula/curricula";
     			$resource1[]="curricula/show";
@@ -467,7 +472,11 @@ class IndexController extends Zend_Controller_Action {
     			 
     			$modules[1] = array ("name" =>"Matricula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"#","name"=>"Matricula Ingresantes","imgicon"=>"saved");
+    			$acls[]= array("controller"=>"rcentral/traslatestudent","name"=>"Traslado Alumnos","imgicon"=>"saved");
+    			$resource1[]="rcentral/traslatestudent";
+    			
     			$modules[1]['acls'] = $acls;
+    			
     			$acls = null;
     			 
     			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");

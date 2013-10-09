@@ -7,8 +7,17 @@
 	  	<span class='glyphicon glyphicon-eye-open'></span>
 
 	  	<strong> <?php echo $this->info_couser['name']?> TURNO <?php echo $this->turno?></strong>
+	  	<?php $data_course=$this->info_couser; 
+	  		$url="/".base64_encode('escid')."/".base64_encode($data_course['escid']).
+	  			"/".base64_encode('subid')."/".base64_encode($data_course['subid']).
+	  			"/".base64_encode('curid')."/".base64_encode($data_course['curid']).
+	  			"/".base64_encode('perid')."/".base64_encode($this->perid).
+	  			"/".base64_encode('type')."/".base64_encode($this->type).
+	  			"/".base64_encode('turno')."/".base64_encode($this->turno).
+	  			"/".base64_encode('courseid')."/".base64_encode($data_course['courseid']);
+	  	?>
 	  	<div class='pull-right'>
-	  		<a href="#" class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span> Pre-Registro</a>
+	  		<a href="/record/index/preregister<?php echo $url?>" class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span> Pre-Registro</a>
 	  		<a href="#" class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span> Avance Notas</a>
 
 	  	</div>
@@ -112,11 +121,16 @@
 	    		<tr>
 	    			<td><?php echo $key+1?> </td>
 	    			<td><?php echo $student['uid']?></td>
-	    			<td><?php echo $student['name']?></td>
+	    			<td><?php echo $student['last_name0'].
+            								" ".$student['last_name1'].
+            								",".$student['first_name'];?></td>
 	    			<td class='text-center'><?php 
 	    				switch ($student['notafinal']) {
 	    					case '-3':
 	    						echo "Retirado";
+	    						break;
+	    					case '-2':
+	    						echo "N.S.P";
 	    						break;
 	    					default:
 	    						echo $student['notafinal'];

@@ -58,6 +58,46 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 
     }
 
+
+    public function assistanceAction()
+    {
+        try {
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
+            $perid=$this->sesion->period->perid;
+            $uid=$this->sesion->uid;
+            $pid=$this->sesion->pid;
+            $regid = $uid.$perid;
+
+            $where = null;
+            $where = array(
+                'eid'=>$eid,'oid'=>$oid,
+                'escid'=>$escid,'subid'=>$subid,
+                'perid'=>$perid,'uid'=>$uid,
+                'pid'=>$pid,'regid'=>$regid,
+                );
+            $base_assistance_student = new Api_Model_DbTable_StudentAssistance();
+            $assistance_student = $base_assistance_student->_getFilter($where);
+            
+            if ($assistance_student) {
+                $base_course = new Api_Model_DbTable_Course();
+                foreach ($assistance_student as $key => $value) {
+                    $where['courseid']=$value['coursoid'];
+                    $where['curid']=$value['curid'];
+                    $name = $base_course->_getOne($where);
+                    $assistance_student[$key]['name']=$name['name'];
+                }
+            }
+            
+            $this->view->assitance=$assistance_student;
+
+        } catch (Exception $e) {
+            print "Error Asistencia Alumnno".$e->gegtMessage();
+        }
+    }
+
         public function graphicsassistanceAction()
     {
         try
@@ -75,7 +115,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $this->view->uid = $wheres['uid'];
             $this->view->oid = $wheres['oid'];
             $this->view->eid = $wheres['eid'];
-                       // //Obtenemos los cursos matriculados
             $lcursos = new Api_Model_DbTable_StudentAssistance();
             $listacurso =$lcursos->_assistence($wheres);
             $j=0;
@@ -85,7 +124,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 $where[$j]['escid']=$wheres["escid"];
                 $where[$j]['subid']=$wheres["subid"];
                 $where[$j]['perid']=$wheres["perid"];
-
                 $where[$j]['courseid']=$cursomas["coursoid"];
                 $where[$j]['name']=$cursomas["name"];
                 $where[$j]['curid']=$cursomas["curid"];
@@ -100,17 +138,22 @@ class Alumno_IndexController extends Zend_Controller_Action {
                      $a=18;
                 }      
                 $x=0;
+                $x0=0;
                 $x1=0;
                 for ($i=$a; $i < 35 ; $i++) { 
                         $assis=$cursomas["a_sesion_".$i];
-                    if ($assis=='A' or $assis=='T') {
+                    if ($assis=='A' ) {
                         $x++;
+                    }
+                    if ( $assis=='T') {
+                        $x0++;
                     }
                      if ($assis=='F') {
                         $x1++;
                     }
                 }
                 $where[$j]['asistio']=$x;
+                $where[$j]['tarde']=$x0;
                 $where[$j]['falto']=$x1;
 
                 if ($x1>=6) {
@@ -120,6 +163,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 $where[$j]['coment']='N';
 
                 }
+
 
                    $j++;
         } 

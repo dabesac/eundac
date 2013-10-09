@@ -1,0 +1,21 @@
+<div class="modal fade" id="msgg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+            	<p style="font-size: 15px">Se Realizó el Traslado Correspondiente!!!</p>
+        		<a id="aceptmsg" href="#" class="btn btn-success" data-dismiss="modal" style="float: right">Aceptar</a><br><br>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+var msg = "<?php echo $this->msg?>";
+if (msg==1) {
+	$("#msgg").modal('show');
+	$("#traslate").modal('hide');
+};
+
+$("#aceptmsg").click(function(){
+	window.location.reload();
+});
+</script>

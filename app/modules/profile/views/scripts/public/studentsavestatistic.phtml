@@ -1,0 +1,109 @@
+<ul class="nav nav-pills nav-stacked" id="backeditBtn">
+	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
+</ul>
+
+<form id="form" action="/profile/public/studentsavestatistic" method="post">
+
+<table class="table">
+	<tr>
+		<td><label>Tiene Conocimientos en Computacion? </label><?print $this->form->cono_comp?></td>
+	</tr>
+
+	<tr>
+		<th><h4><b>Datos Economicos</b></h4></th>
+	</tr>
+	<tr>
+		<td><label>De quien depende economicamente? </label><?print $this->form->dependencia?></td>
+		<td><label>Algunas personas dependen de Usted? </label><?print $this->form->dependen_ud?></td>
+	</tr>
+	<tr>
+		<td id="cuantos"><label>Cuantos? </label><?print $this->form->num_dep_ud?></td>
+	</tr>
+
+	<tr></tr>
+	<tr>
+		<th><h4><b>Vivienda</b></h4></th>
+	</tr>
+	<tr>
+		<td><label>Su vivienda es? </label><?print $this->form->vivienda?></td>
+		<td><label>Cuantos Personas Viven con Usted?</label><?print $this->form->num_personas?></td>
+	</tr>
+	<tr>
+		<td><label>Tipo</label><?print $this->form->tipo_vivienda?></td>
+		<td>
+			<label>Material</label><?print $this->form->mat_vivienda?>
+		</td>
+	</tr>
+	<tr>
+		<td><label>Numero de Habitaciones</label><?print $this->form->num_habitacion?></td>
+		<td><label>Con que servicios cuenta?</label><?print $this->form->servicios?></td>
+	</tr>
+	
+
+
+	<tr></tr>
+	<tr>
+		<th><h4><b>Personal</b></h4></th>
+	</tr>
+	<tr>
+		<td><label>Vive con?</label><?print $this->form->vive_con?></td>
+		<td><label>Lugar de Alimentacion</label><?print $this->form->lugar_alimentacion?></td>
+	</tr>
+	<tr>
+		<td><label>Costo</label>
+			<div class="row">
+				
+				<div class="col-sm-1">
+					<h4>S/.</h4>
+				</div>
+				<div class="col-sm-10">
+					<?print $this->form->costo_alimento?>
+				</div>
+			</div>
+		</td>
+		<td><label>Tiene algun problema con su alimentacion?</label><?print $this->form->prob_alimento?></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><a href="#" class="btn btn-info pull-right" id="save">Guardar</a></td>
+	</tr>
+</table>
+
+<script>
+	$("#depud").change(function(){
+    	$("#depud option:selected").each(function (){
+    		var depud=$(this).val(); 
+    		if (depud=="N") {
+				$("#cuantos").addClass("hidden")    			
+    		};
+    		if (depud=="S") {
+				$("#cuantos").removeClass("hidden")    			
+    		};    		
+    	});
+    });
+
+    
+
+    $("#backeditBtn a").click(function (e) {
+    	e.preventDefault()
+      	$("#editform").html("")
+      	$("#editdata").removeClass("hidden")
+      	$('#editpalBtns2 a:last').tab('show')
+  	})
+
+    $("#save").click(function(){
+    	$("#form").submit()
+    })
+    $("#form").submit(function(){
+    	$.ajax({
+    		type : "POST",
+    		url : $(this).attr("action"),
+    		data : $(this).serialize(),
+    		success : function(data){
+    			$("#editform").html(data)
+    		}
+    	})
+    	return false;
+    })
+
+</script>

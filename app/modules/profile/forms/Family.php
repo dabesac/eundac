@@ -54,12 +54,29 @@ class Profile_Form_Family extends Zend_Form{
         $numdoc->setAttrib("title","numdoc");
         $numdoc->setAttrib("class","form-control");
 
-        $birthday= new Zend_Form_Element_Text("birthday");
-        $birthday->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $birthday->setAttrib("maxlength", "10")->setAttrib("size", "30");
-        $birthday->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
-        $birthday->setAttrib("title","Birthday");
-        $birthday->setAttrib("class","form-control");
+        $year= new Zend_Form_Element_Text("year");
+        $year->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $year->setAttrib("maxlength", "4")->setAttrib("size", "4");
+        $year->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        $year->setAttrib("title","Año");
+        $year->setAttrib("placeholder","Año");
+        $year->setAttrib("class","form-control");
+
+        $month= new Zend_Form_Element_Text("month");
+        $month->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $month->setAttrib("maxlength", "2")->setAttrib("size", "2");
+        $month->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        $month->setAttrib("title","Mes");
+        $month->setAttrib("placeholder","Mes");
+        $month->setAttrib("class","form-control");
+
+        $day= new Zend_Form_Element_Text("day");
+        $day->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $day->setAttrib("maxlength", "2")->setAttrib("size", "2");
+        $day->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        $day->setAttrib("title","Dia");
+        $day->setAttrib("placeholder","Día");
+        $day->setAttrib("class","form-control");
 
         $ocupacy= new Zend_Form_Element_Text('ocupacy');
         $ocupacy->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
@@ -97,6 +114,6 @@ class Profile_Form_Family extends Zend_Form{
         $assignee->setAttrib("id","assignee");
 
 
-        $this->addElements(array($type, $lastname, $firtsname, $sex, $live, $typedoc, $numdoc, $birthday, $ocupacy,$health, $phone, $address, $assignee));
+        $this->addElements(array($type, $lastname, $firtsname, $sex, $live, $typedoc, $numdoc, $year, $month, $day, $ocupacy,$health, $phone, $address, $assignee));
     }
 }

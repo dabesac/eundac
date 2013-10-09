@@ -1,0 +1,144 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+$speciality = $this->info_speciality;
+if ($speciality['parent']!= '') {
+	$name_esc = $speciality['speciality'];
+	$name_speciality='ESPECIALIDAD'.$speciality['name'];
+}
+else{
+	$name_esc=$speciality['name'];
+}
+$perid=$this->perid;
+$course = $this->info_couser;
+$students = $this->students;
+$type=$this->type;
+$mpdf->mirrorMargins = 1;
+
+
+$header = '
+<table width="100%" style="border: 1px solid #000;font-family: serif;  color: #000; ">
+	<tr style="text-align:center; padding-left: 100px; ">
+    	<td  rowspan="2" width="340px" style="border: 1px solid #000 "><img src="/img/header_imprimir.jpg">
+    	</td>
+    	<td style="text-align:center; font-size:10px; border: 1px solid #000 ">
+    		FACULTAD '.strtoupper($speciality['name_faculty']).'<br/>
+    		ESCUELA '.strtoupper($name_esc).'<br/>
+    		'.strtoupper($name_speciality).'<br/>
+    		
+    	</td>
+	</tr>
+	<tr>
+		<td style="text-align:center; font-size:10px; border: 1px solid #000 " ><strong>Pre Registro - PERIODO '.$perid.' </strong></td>
+	</tr>
+</table>
+<table width="100%" style="border-bottom: 2px solid #000; font-family: serif;  color: #000; margin-bottom:20px;">
+	<tr >
+		<td  style="font-size:10px; text-align:left;  " >
+		<strong sytle="padding-right:10px">Curso </strong>'.$course['courseid'].' - '.$course['name'].'
+		</td>
+		
+        <td style="text-align: right; font-size:10px;"><strong>Turno </strong> '.$course['turno'].'</td>
+        <td  style="text-align: right; font-size:10px;"><strong>Creditos </strong>'.$course['credits'].' </td>
+	</tr>
+	<tr >
+        <td   style="text-align:left; font-size:10px;"><strong>Docente </strong> '.$course['name_teacher'].'</td>
+        <td  style="text-align: right; font-size:10px;"><strong>Semestre </strong>'.$course['semid'].' </td>
+        <td  style="text-align:right; font-size:10px;"><strong>Alumnos </strong>'.count($students).' </td>
+	</tr>
+</table>
+';
+
+?>
+<style type="text/css">
+.sv
+{
+	right: 
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+<table style='font-size:11px; width:100%; text-align:none; margin-top:100px;'>
+	<tr style='background-color: #cccbcb'>
+		<th >#</th>
+		<th>Cogido</th>
+		<th>Apellidos y Nombres</th>
+		<?php 
+			if (trim($type)=="O"){?>
+				<th style="width: 30px;text-align: center">N1</th>
+				<th style="width: 30px;text-align: center">N2</th>
+				<th style="width: 30px;text-align: center">N3</th>
+				<th style="width: 30px;text-align: center">N4</th>
+				<th style="width: 30px;text-align: center">N5</th>
+				<th style="width: 30px;text-align: center">N6</th>
+				<th style="width: 30px;text-align: center">N7</th>
+				<th style="width: 30px;text-align: center">N8</th>
+				<th style="width: 30px;text-align: center">N9</th>				
+			<?php }
+			if (trim($type)=="C"){?>
+				<th style="width: 30px;text-align: center">____<br>%C</th>
+				<th style="width: 30px;text-align: center">____<br>%P</th>
+				<th style="width: 30px;text-align: center">____<br>%A</th>
+				<th style="width: 30px;text-align: center">P1</th>
+				<th style="width: 30px;text-align: center">____<br>%C</th>
+				<th style="width: 30px;text-align: center">____<br>%P</th>
+				<th style="width: 30px;text-align: center">____<br>%A</th>
+				<th style="width: 30px;text-align: center">P2</th>	
+			<?php }
+			?>
+	</tr>
+
+	<?php if ($students) { 
+		foreach ($students as $key => $student) {
+	?>
+			<tr>
+				<td><?php echo $key+1?></td>
+				<td><?php echo $student['uid']?></td>
+				<td><?php echo $student['last_name0']." ".$student['last_name1'].", ".$student['first_name']?></td>
+				<?php 
+				if (trim($type)=="O"){?>
+					<td style="text-align: center">____</td>
+					<td style="text-align: center">____</td>
+					<td style="text-align: center">____</td>
+					<td style="text-align: center">____</td>
+					<td style="text-align: center">____</td>
+					<td style="text-align: center">____</td>
+					<td style="text-align: center">____</td>
+					<td style="text-align: center">____</td>
+					<td style="text-align: center">____</td>			
+				<?php }
+				if (trim($type)=="C"){?>
+					<td style="text-align: center">____</td>
+					<td style="text-align: center">____</td>
+					<td style="text-align: center">____</td>
+					<td style="background: #ccc">____</td>
+					<td style="text-align: center">____</td>
+					<td style="text-align: center">____</td>
+					<td style="text-align: center">____</td>
+					<td style="background: #ccc">____</td>
+				<?php }?>
+				<td style="font-weight: bold">____</td>
+			</tr>
+	<?php
+	 }}
+	?>
+	
+</table>
+<hr style="height: 2px; background: #000">
+<?php 
+
+$html = ob_get_contents();
+  
+$mpdf=new mPDF('win-1252','A4','','',15,15,43);
+  
+$mpdf->SetHTMLHeader($header);
+
+$mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  
+$mpdf->SetFooter($this->footer);
+ob_end_clean();
+$mpdf -> WriteHTML($html);
+$mpdf->Output('PreRegistro.pdf','D');
+  
+?>

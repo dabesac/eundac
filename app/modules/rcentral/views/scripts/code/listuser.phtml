@@ -1,62 +1,89 @@
-
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <?php if($this->paginator){
-	//base64_encode($perid)
+
 	$strn = "pid/".($this->dni);
 	?>
 <div id="datos">
     <table class="table  table-bordered">
         <thead>
         <tr>
-            <th colspan="4"><center><p style="font-size: 16px">Listado de Usuarios de <?php echo $this->nombre;?> con DNI <?php echo $this->dni;?></p>	</center></th> 
+        <th colspan="4"><center><p style="font-size: 16px">Listado de Usuarios de <?php echo $this->nombre;?> con DNI <?php echo $this->dni;?></p>	</center></th> 
         <td>
             	<center>           
-<a href='#myModal' class='btn btn-info' id='agregarrol' role='button' role='button'>
-	<i class='icon-book icon-white'></i>Agregar Nuevo Codigo
-</a>
-	 <div class="modal" id="myModal" tabindex="-100" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3 id="myModalLabel">Agregar un nuevo Usuario</h3>
-		</div>
-		<div class="modal-body">
-			<div id="cargarformrol" class="span6" style="margin: 0px"></div>
-		</div>
-	<div class="modal-footer">
-			<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-			<input type='submit' class="btn btn-primary" id="enviarcod" value="Guardar" ></input>
-		</div>
-	</div> 
-	<script>
-		$(function() {
-			$("#myModal").hide();    
-			$('#myModal').modal('hide');
-			$("#agregarrol").click(function() {
-			var url = "<?php echo $strn?>";
-			$("#cargarformrol").html("<img src='/img/spinner.gif'>Cargando...");
-			$("#cargarformrol").load("/rcentral/persona/generarcodigo/"+url);			
-				$("#myModal").show();
-				$('#myModal').modal('show');
-			});
-		}); 
-	</script>	
+
+<a href="#myModal" role="button" class="btn btn-primary new_cur" data-toggle="modal"
+    ><span class='glyphicon glyphicon-plus'></span> Agregar Nuevo Codigo</a> 
+
+	 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close " data-dismiss="modal" aria-hidden="true"></button>
+          <h4 class="modal-title"><center><b>AGREGAR NUEVO USUARIO AL SISTEMAS:</b></center></h4>
+        </div>
+        <div class="modal-body cont_new_cur">
+        <form name='<?php echo $this->fm->getName();?>' id='<?php echo $this->fm->getName();?>' action="<?php echo $this->fm->getAction();?>" method="post" >
+            <table class="table table-bordered span6">
+            <tr>
+                <td colspan="2" ><center> Nombre completo: <p style="display:inline"> <b><?php echo $this->name;?></b></p> </center></td>
+            </tr>
+            <tr>
+                <td class="span2">Sede:</td>
+                <td class="span2"><?php print $this->fm->subid?></td>   
+                <input type='hidden' value="<?php echo $this->dni;?>" name="pid">   
+            </tr>
+            <tr>
+                <td class="span2">Escuela:</td>
+                <td class="span2"><?php print $this->fm->escid;?></td>                                 
+            </tr>
+            <tr>
+                <td class="span2">Fecha Ingreso:</td>
+                <td class="span2"><?php print $this->fm->fingreso;?></td>                                 
+            </tr>
+            <tr>
+                <td class="span2">Modalidad:</td>
+                <td class="span2"><?php print $this->fm->idmod;?></td>                                 
+            </tr>
+            <tr>
+                <td class="span2">Proceso:</td>
+                <td class="span2"><?php print $this->fm->idproc;?></td>                                 
+            </tr>
+            <tr>
+                <td class="span2">Orden de Merito:</td>
+                <td class="span2"><?php print $this->fm->orden;?></td>                                 
+            </tr>
+            <tr>
+                <td class="span2">Resolucion:</td>
+                <td class="span2"><?php print $this->fm->resolucion;?></td>                                 
+            </tr>
+        </table>
+</form>
+ 
+        </div>
+        <div style='background: #333; color:#fff;' class="modal-footer">
+            <button type="button" class="btn btn-danger close_new_cur" data-dismiss="modal"><span  class='glyphicon glyphicon-remove'></span></button>
+            <button id="load" type="button" class="btn btn-success save_curri">
+        <span  class='glyphicon glyphicon-floppy-disk'></span>
+       </button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 	</center> 	
         </td>                
         </tr>
-        <tr>
-                <th class="span1"><center>#</center></th> 
-                <th class="span2" ><center>Codigo de Usuario </center></th>
-                <th class="span2"><center>Rol</center></th>
-                <th class="span2"><center>Escuela</center></th>
-                <th class="span2"><center>Estado</center></th>
-                
+        <tr style="background: #333; color: #fff;">
+                <th ><center>#</center></th> 
+                <th ><center>Codigo de Usuario </center></th>
+                <th ><center>Rol</center></th>
+                <th ><center>Escuela</center></th>
+                <th ><center>Estado</center></th>                
         </tr>
         </thead>
-
     <?php
-    if ($this->paginator)
-    {
-        $i=1+($this->pag);
+    if ($this->paginator[0]['uid'])
+    {      
+        $i=1;
        foreach ($this->paginator as $registro)    
         {
            ?>
@@ -80,25 +107,27 @@
                 	echo "Alumno"; }
                 if (utf8_encode($registro['rid'])=='VA'){
                 	echo "Vicerector"; }
+                if (utf8_encode($registro['rid'])=='SP'){
+                    echo "Soporte"; }
                 	
                 ?></center></td>
                 <td><center><?php echo $registro['escid'];?></center></td>
                 <td>
                 	<center>
                 	<?php 
-                		if(utf8_encode($registro['estado'])=='A')
+                		if(utf8_encode($registro['state'])=='A')
 						{
 							echo "Activo";
 						}
-						if(utf8_encode($registro['estado'])=='I')
+						if(utf8_encode($registro['state'])=='I')
 						{
 							echo "Inactivo";
 						}
-						if(utf8_encode($registro['estado'])=='B')
+						if(utf8_encode($registro['state'])=='B')
 						{
 							echo "Bloqueado";
 						}
-						if(utf8_encode($registro['estado'])=='E')
+						if(utf8_encode($registro['state'])=='E')
 						{
 							echo "Eliminado";
 						}	
@@ -106,23 +135,62 @@
                 	</center>
                 </td>
                 
-                            </tr>
+        </tr>
            <?php
              $i++;
         }
     }
     ?>
     </table>
-        <div style="clear:both"></div>  
-</div>
+
 
 <?php } 
 else { ?>
     <div class="alert alert-success">
         <p> No tiene ningun Usuario con este DNI primero debe crear la Persona dirajase aqui <a  target='_black' class="btn btn-success" href="/rcentral/persona/nuevo/">Nueva Persona</a>  
-
-
-	
 	 </p>
     </div>
 <?php }?>
+
+<script>
+    $(function() {
+        $( "#fingreso" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy/mm/dd',
+        });
+    });
+$(function() {
+
+    $("#subid").change(function () {
+            $("#subid option:selected").each(function () {
+                sede = $(this).val();
+                $.post("/rcentral/code/lschool/", { subid: sede }, function(data){
+                    $("#escid").html(data);
+                });
+            });
+    });
+        
+    $("#load").click(function(){
+        $("#frmGcodigo").submit();
+    });
+    
+    $("#frmGcodigo").submit(function(){
+        var sede = $("#subid").val();       
+        var escuela = $("#escid").val();
+        var fingreso = $("#fingreso").val();
+        var idmod = $("#idmod").val();
+        var idproc=$("#idproc").val();
+        var orden=$("#orden").val();
+        if (sede=="") {alert("Debe de seleccionar una sede");return false;}
+        if (escuela=="") {alert("Debe de seleccionar una escuela");return false;}       
+        if (fingreso=="") {alert("Debe de seleccionar la fecha del ingreso del Alumno");return false;}
+        if (idmod=="") {alert("Debe de seleccionar la modalidad de ingreso del Alumno");return false;}
+        if (idproc=="") {alert("Debe de seleccionar el Proceso de ingreso del Alumno");return false;}
+        if (orden=="") {alert("Debe de seleccionar el orden d emerito del Alumno");return false;}
+        
+    });
+}); 
+
+    
+</script>
