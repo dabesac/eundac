@@ -9,9 +9,6 @@ class Bienestar_IndexController extends Zend_Controller_Action {
     		$this->_helper->redirector('index',"index",'default');
     	}
     	$login = $sesion->getStorage()->read();
-    	if (!$login->modulo=="bienestar"){
-    		$this->_helper->redirector('index','index','default');
-    	}
     	$this->sesion = $login;
     }
     public function indexAction()
