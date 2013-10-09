@@ -494,6 +494,35 @@ class IndexController extends Zend_Controller_Action {
     			$acls = null;
     			break;
     		}
+
+                    case "VA":{
+                $resource1[]="vacademico/index";
+                $resource1[]="profile/search";
+                $resource1[]="profile/changecurricula";
+                $resource1[]="rcentral/code";
+                
+                $modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
+                $acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+
+                $resource1[]="curricula/show";
+                $modules[0]['acls'] = $acls;
+                $acls = null;
+                                
+                $modules[1] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
+                $acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
+                $acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
+                $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
+                $acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
+                $resource1[]="report/performance";
+                $resource1[]="report/recordnotas";
+                $resource1[]="report/registration";
+                $resource1[]="graduated/reportgraduated";
+                $resource1[]="graduated/graphicgraduated";
+                $modules[1]['acls'] = $acls;
+                $acls = null;
+                break;
+            }
     	}
     	return array("module"=>$modules,"list"=>$resource1);
     }
