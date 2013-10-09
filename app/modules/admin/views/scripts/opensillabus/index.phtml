@@ -1,5 +1,5 @@
 <h3><center><b><span class="glyphicon glyphicon-file"></span> SÍLABO</b></center></h3>
-<table style='margin-top:20px'>
+<table style='margin-top:20px' class='table table-striped'>
 	<tr>
 		<td><h4><div style='margin-left:5px'>Año:</h4></td>
 		<td><div style='margin-left:10px'><?php echo $this->fm->anio?></td>
@@ -20,14 +20,14 @@
     $("#ver").click(function(){
     	var escid = $("#esc").val();
     	var perid = $("#period").val();
-    	if (escid=="") {alert("Seleccione una especialidad");$("#escid").focus();return false;}
+    	if (escid=="") {alert("Seleccione una escuela");$("#escid").focus();return false;}
         if (perid=="") {alert("Ingrese un periodo");$("#perid").focus();return false;}
         var tmp=escid.split(";--;");
         var escid=tmp[0];
         var subid=tmp[1];
 
         var url="/admin/opensillabus/courses/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
-        $("#viewcourses").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#viewcourses").html("<center><img src='/img/carga.gif' /></center>");
         $("#viewcourses").load(url);
 
 

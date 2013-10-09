@@ -1,5 +1,5 @@
 <h3><center><b><img src="/img/actas_03.png" > ABRIR ACTAS</b></center></h3>
-<table style='margin-top:20px'>
+<table style='margin-top:20px' class='table table-striped'>
 	<tr>
 		<td><h4><div style='margin-left:5px'>Año:</h4></td>
 		<td><div style='margin-left:10px'><?php echo $this->fm->anio?></td>
@@ -21,7 +21,7 @@
     	var escid = $("#esc").val();
     	var perid = $("#period").val();
         var anio = $('#anio').val();
-    	if (escid=="") {alert("Seleccione una especialidad");$("#escid").focus();return false;}
+    	if (escid=="") {alert("Seleccione una escuela");$("#escid").focus();return false;}
         if (perid=="") {alert("Ingrese un periodo");$("#perid").focus();return false;}
         var tmp=escid.split(";--;");
         var escid=tmp[0];
@@ -32,12 +32,12 @@
         if (perid==vari || perid==vari1) {
             // alert('No tiene accesso.');
             var url="/admin/openrecords/getaplazed/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
-            $("#viewcourses").html("<img src='/img/spinner.gif' />Cargando....");
+            $("#viewcourses").html("<center><img src='/img/carga.gif' /></center>");
             $("#viewcourses").load(url);
         }
         else{
             var url="/admin/openrecords/courses/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
-            $("#viewcourses").html("<img src='/img/spinner.gif' />Cargando....");
+            $("#viewcourses").html("<center><img src='/img/carga.gif' /></center>");
             $("#viewcourses").load(url);
             
         };
