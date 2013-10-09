@@ -103,8 +103,7 @@
     $("#backeditBtn a").click(function (e) {
     	e.preventDefault()
       	$("#editform").html("")
-      	$("#editdata").removeClass("hidden")
-      	$('#editpalBtns2 a:last').tab('show')
+      	$("#editform").load("/profile/public/studentstatistic")
   	})
 
 </script>

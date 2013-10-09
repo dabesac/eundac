@@ -64,9 +64,9 @@ class Profile_Form_Userinfo extends Zend_Form{
         $phone= new Zend_Form_Element_Text("phone");
         $phone->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $phone->setAttrib("maxlength", "10")->setAttrib("size", "30");
-        $phone->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $phone->setAttrib("title","Phone");
         $phone->setAttrib("class","form-control");
+        $phone->setAttrib("value","No Tiene");
 
         $cellular= new Zend_Form_Element_Text("cellular");
         $cellular->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
