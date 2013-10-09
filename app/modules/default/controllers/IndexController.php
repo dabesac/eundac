@@ -495,7 +495,7 @@ class IndexController extends Zend_Controller_Action {
     			break;
     		}
 
-                    case "VA":{
+                    case "RE":{
                 $resource1[]="vacademico/index";
                 $resource1[]="profile/search";
                 $resource1[]="profile/changecurricula";
