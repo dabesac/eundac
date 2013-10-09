@@ -7,12 +7,46 @@
 	          	<td>Fecha de Nacimiento <h5><b><?php echo $this->datos[3]['birthday']?></b></h5></td>
 	        	</tr>
 	        	<tr>
-	          		<td>Sexo <h5><b><?php echo $this->datos[3]['sex']?></b></h5></td>
-	          		<td>Estado Civil <h5><b><?php echo $this->datos[3]['civil']?></b></h5></td>
+	          		<td>Sexo <h5><b>
+	          			<?if ($this->datos[3]['sex']=="M") {
+	          				echo "Masculino";
+	          			}else{
+	          				echo "Femenino";
+	          			}?>
+	          		</b></h5></td>
+	          		<td>Estado Civil <h5><b>
+	          			<?if ($this->datos[3]['civil']=="S") {
+	          				if ($this->datos[3]['sex']=="M") {
+	          					echo "Soltero";
+	          				}else{
+	          					echo "Femenino";
+	          				}
+	          			}elseif ($this->datos[3]['civil']=="C"){
+	          				if ($this->datos[3]['sex']=="M") {
+	          					echo "Casado";
+	          				}else{
+	          					echo "Casada";
+	          				}
+	          			}elseif ($this->datos[3]['civil']=="D"){
+	          				if ($this->datos[3]['sex']=="M") {
+	          					echo "Divorciado";
+	          				}else{
+	          					echo "Divorciada";
+	          				}
+	          			}elseif ($this->datos[3]['civil']=="V"){
+	          				if ($this->datos[3]['sex']=="M") {
+	          					echo "Viudo";
+	          				}else{
+	          					echo "Viuda";
+	          				}
+	          			}elseif ($this->datos[3]['civil']=="E"){
+          					echo "Conviviente";
+	          			}?>
+	          		</b></h5></td>
 	        	</tr>
 	        	<tr>
-	          		<td>Mail <h5><b><?php echo $this->datos[3]['mail_person']?></b></h5></td>
-	          		<td>Work Mail <h5><b><?php echo $this->datos[3]['mail_work']?></b></h5></td>
+	          		<td>E-mail <h5><b><?php echo $this->datos[3]['mail_person']?></b></h5></td>
+	          		<td>E-mail de Trabajo <h5><b><?php echo $this->datos[3]['mail_work']?></b></h5></td>
 	        	</tr>
 	        	<tr>
 	          		<td>Telefono <h5><b><?php echo $this->datos[3]['phone']?></b></h5></td>

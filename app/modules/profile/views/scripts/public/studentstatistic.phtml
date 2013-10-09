@@ -1,7 +1,11 @@
 <div class="panel panel-info">
 
   <div class="panel-heading">
-    <h4>Datos Estadisticos</h4>
+    <h4>Datos Estadisticos 
+		<?if($this->statistic){?>
+    		<a id="edit" class="pull-right" title="Editar" href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+    	<?}?>
+    </h4>
   </div>
 
   <div class="panel-body">
@@ -179,3 +183,11 @@
   </div>
 
 </div>
+
+<script>
+	$("#edit").click(function(){
+		$("#datastudent").html("")
+    	$("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>")
+    	$("#editform").load("/profile/public/studenteditstatistic")
+	})
+</script>
