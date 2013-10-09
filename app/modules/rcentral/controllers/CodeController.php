@@ -88,7 +88,7 @@ public function lschoolAction(){
     $where['escid']=$formData['escid'];
     $eid = $this->sesion->eid;        
     $oid = $this->sesion->oid;
-    $codigoescuela = new Api_Model_DbTable_Codespeciality ();
+    $codigoescuela = new Api_Model_DbTable_Tmpgeneratedcode ();
     $codigolo = $codigoescuela->_getOne($where);
     $codigoesc=$codigolo['code'];
     $mod_codigo=$anio.$proceso.$codigoesc.$modalidad.$orde;
