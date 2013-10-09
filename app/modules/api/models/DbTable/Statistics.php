@@ -17,4 +17,14 @@ class Api_Model_DbTable_Statistics extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _save($data){
+		try{
+			if ($data['eid']=='' || $data['oid']=='' || $data['pid']=='' || $data['uid']=='' || $data['escid']=='' || $data['subid']=='') return false;
+			return $this->insert($data);
+			return false;
+		}catch (Exception $e){
+			print "Error al Guardar Estatistics ".$e->getMessage();
+		}
+	}
+
 }

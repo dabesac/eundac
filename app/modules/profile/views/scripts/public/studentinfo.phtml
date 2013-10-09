@@ -27,7 +27,7 @@
             <td>
               <ul class="nav nav-pills nav-stacked" id="editpalBtns2">
                 <li><a href="" id="editfamily" class="btn btn-block"><h5>Familia</h5></a></li>
-                <li><a href="" id="" class="btn btn-block"><h5>Datos Estadisticos</h5></a></li>
+                <li><a href="" id="editstatistics" class="btn btn-block"><h5>Datos Estadisticos</h5></a></li>
                 <li class="hidden"><a></a></li>
               </ul>
             </td>
@@ -146,7 +146,6 @@
     $(this).tab('show')
   })
 
- 
 
   $("#editmaininfo").click(function(){
     $("#editdata").addClass("hidden")
@@ -164,6 +163,12 @@
     $("#editdata").addClass("hidden")
     $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
     $("#editform").load("/profile/public/studentsaveacademic")
+  })
+
+  $("#editstatistics").click(function(){
+    $("#editdata").addClass("hidden")
+    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+    $("#editform").load("/profile/public/studentsavestatistic")
   })
 
 </script>
