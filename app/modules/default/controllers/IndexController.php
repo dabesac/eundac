@@ -491,7 +491,7 @@ class IndexController extends Zend_Controller_Action {
     		}
 
 
-             case "RE":{
+            case "RE":{
                 $resource1[]="vacademico/index";
                 $resource1[]="profile/search";
                 $resource1[]="profile/changecurricula";
@@ -563,7 +563,7 @@ class IndexController extends Zend_Controller_Action {
             }
 
             case "EG":{
-                $resource1[]="rcentral/index";
+                $resource1[]="graduated/index";
                 $resource1[]="profile/search";
                 //$resource1[]="profile/changecurricula";
                 $resource1[]="alumno/index";
