@@ -42,7 +42,9 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                 $data['perid']=$where['perid'];
                 $data['number']=$where['perid'].$where['escid'].$where['courseid'].$where['turno'];
                 $data['units']='4';
-                $data['register']='41951064DC';
+                $data['teach_uid']=$this->sesion->uid;
+                $data['teach_pid']=$this->sesion->pid;
+                $data['register']=$this->sesion->uid;
                 $data['created']=date('Y-m-d');
                 $data['state']='B';
                 $syl->_save($data);
@@ -84,8 +86,8 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $wheredoc['curid']=$where['curid'];
             $wheredoc['perid']=$where['perid'];
             $wheredoc['turno']=$where['turno'];
-            $wheredoc['uid']='41951064DC';
-            $wheredoc['pid']='41951064';
+            $wheredoc['uid'] = $this->sesion->uid;
+            $wheredoc['pid'] = $this->sesion->pid;
             $doc= new Api_Model_DbTable_Coursexteacher();
             $docente=$doc->_getOne($wheredoc);
             $this->view->docente=$docente;

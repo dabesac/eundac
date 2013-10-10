@@ -363,22 +363,25 @@ class IndexController extends Zend_Controller_Action {
     		case "DC":{
     			$resource1[]="docente/index";
     			$resource1[]="syllabus/syllabus";
-    			$resource1[]="syllabus/print";
+    			$resource1[]="syllabus/print";                
     			$resource1[]="assistance/student";
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
-    			
     			$acls[]= array("controller"=>"docente/notas","name"=>"Asignaturas a Cargo","imgicon"=>"list");
-    			$acls[]= array("controller"=>"horary/semester","name"=>"Ver Horarios Sem.","imgicon"=>"calendar");
-    			$resource1[]="docente/notas";
-    			$resource1[]="horary/semester";
-    			
-    			
-    			if (($login->infouser['teacher']['is_director']=="S")){
-    				$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
-    				$resource1[]="record/index";
-    				$acls[]= array("controller"=>"horary/nhorary","name"=>"Crear Horario","imgicon"=>"file");
-    				$resource1[]="horary/nhorary";
+                $resource1[]="docente/notas";
+                $acls[]= array("controller"=>"horary/seehorary","name"=>"Ver Horario","imgicon"=>"calendar");
+                $resource1[]="horary/seehorary";
+                $acls[]= array("controller"=>"docente/informacademic","name"=>"Informe Acad. Adm.","imgicon"=>"file");
+                $resource1[]="docente/informacademic";
+                
+                
+                if (($login->infouser['teacher']['is_director']=="S")){
+                    $acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
+                    $resource1[]="record/index";
+                    $acls[]= array("controller"=>"horary/nhorary","name"=>"Crear Horario","imgicon"=>"file");
+                    $resource1[]="horary/nhorary";
+    			    $acls[]= array("controller"=>"horary/semester","name"=>"Ver Horarios Sem.","imgicon"=>"calendar");
+    			    $resource1[]="horary/semester";
     			}
     			$modules[0]['acls'] = $acls;
     			$acls = null;
@@ -403,8 +406,8 @@ class IndexController extends Zend_Controller_Action {
     				$modules[2] = array ("name" =>"Periodo Académico", "imgicon"=>"folder");
     				$acls[]= array("controller"=>"distribution/distribution","name"=>"Distribución","imgicon"=>"folder-close");
     				$resource1[]="distribution/distribution";
-                    $acls[]= array("controller"=>"curricula/curricula","name"=>"Currícula","imgicon"=>"book");
-                    $resource1[]="curricula/curricula";
+                    $acls[]= array("controller"=>"curricula/show","name"=>"Currícula","imgicon"=>"book");
+                    $resource1[]="curricula/show";
     				$modules[2]['acls'] = $acls;
     				$acls = null;
     			}
@@ -625,6 +628,18 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="graduated/graphicgraduated";
                 $modules[0]['acls'] = $acls;
                 $acls = null;              
+               
+                break;
+            }
+            case "RI":{
+                $resource1[]="rinternational/index";
+                $resource1[]="profile/search";
+
+                $modules[0] = array ("name" =>"Gestión Académica", "imgicon"=>"book");
+                $acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+                $resource1[]="curricula/show";
+                $modules[0]['acls'] = $acls;
+                $acls = null;
                
                 break;
             }
