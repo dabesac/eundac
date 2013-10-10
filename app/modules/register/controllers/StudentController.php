@@ -10,7 +10,9 @@ class Register_StudentController extends Zend_Controller_Action {
         }
          $login = $sesion->getStorage()->read();
         $this->sesion = $login;
-        if ($login->uid<>'9811103229' || $login->uid<>'1324507145'){
+        if ($login->uid=='9811103229' || $login->uid=='1324507145' || $login->uid=='0822277014'){
+
+        }else {
         	$this->_helper->redirector('index',"index",'default');
         }
         
