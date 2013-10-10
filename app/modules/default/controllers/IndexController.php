@@ -609,6 +609,26 @@ class IndexController extends Zend_Controller_Action {
                 break;
             }
 
+            case "ES":{
+                $resource1[]="rcentral/index";
+                $resource1[]="profile/search";
+                //$resource1[]="profile/changecurricula";
+                $resource1[]="alumno/index";
+
+                $modules[0] = array ("name" =>"Perfil", "imgicon"=>"book");            
+                //$acls[]= array("controller"=>"profile/public/student","name"=>"Historial","imgicon"=>"calendar");
+                $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
+                $acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
+             
+                //$resource1[]="profile/public/student";
+                $resource1[]="graduated/reportgraduated";
+                $resource1[]="graduated/graphicgraduated";
+                $modules[0]['acls'] = $acls;
+                $acls = null;              
+               
+                break;
+            }
+
     	}
     	return array("module"=>$modules,"list"=>$resource1);
     }

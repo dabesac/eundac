@@ -104,7 +104,7 @@ $(document).ready(function(){
 <![endif]-->
 
 <?php 
-if ($rid=="AL"){
+if ($rid=="AL" or $rid=='EG'){
 	$profile = "/profile/public/student";
 }
 ?>
@@ -125,7 +125,7 @@ if ($rid=="AL"){
 					<a href="/">INICIO</a>
 				</li>
 				<?php 
-				if ($rid=='AL') {
+				if ($rid=='AL' or $rid=='EG') {
 				?>
 				<li>
 				<a href="<?php echo $urlrecord?>" class="titulo">
