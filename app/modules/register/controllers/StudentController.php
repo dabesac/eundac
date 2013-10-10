@@ -10,7 +10,9 @@ class Register_StudentController extends Zend_Controller_Action {
         }
          $login = $sesion->getStorage()->read();
         $this->sesion = $login;
-        
+        if ($login->uid<>'9811103229'){
+        	$this->_helper->redirector('index',"index",'default');
+        }
         
     }
     public function indexAction()
