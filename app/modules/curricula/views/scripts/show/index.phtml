@@ -48,6 +48,10 @@ $facid=$this->facid;
 <div id="datos" class="flotacarajo span9"></div>
 
 <script type="text/javascript">
+$("#escid").load("/curricula/show/lschools/facid/"+<?php echo $facid?>);
+</script>
+
+<script type="text/javascript">
 var escid="<?php echo $this->escid?>";
 if (escid) {
 	$("#escid").attr('disabled',true);
@@ -55,8 +59,6 @@ if (escid) {
 	$("#datos").html("<img src='/img/spinner.gif'>Cargando...");
 	$("#datos").load(url);
 };
-
-$("#escid").load("/curricula/show/lschools/facid/"+<?php echo $facid?>);
 
 $("#facid").change(function(){
 	var facid=$(this).val();
