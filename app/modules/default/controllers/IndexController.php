@@ -251,54 +251,54 @@ class IndexController extends Zend_Controller_Action {
     		Zend_Auth::getInstance()->clearIdentity();
     		$this->_redirect("/");
     	}
-    	
+        
     } 
     
     private function _aclCreated($rid='',$login=''){
-    	if ($rid=="" || $login=="") return false;    	 
-    	$modules = null; 
-    	$acls = null;
-    	//ACL comunes y que sirven para todos
-    	$resource1[]="index/salir";
-    	$resource1[]="index/cerrar";
-    	$resource1[]="register/deferred";
-    	$resource1[]="profile/public";
-    	$resource1[]="report/recordnotas";
-    	$resource1[]="default/password";
-    	$resource1[]="register/registerealized";
-    	
-    	
-    	switch ($rid){
-    		case "AD":{
-    			$resource1[]="profile/search";
-    			$resource1[]="profile/changecurricula";
-    			
-    			$modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
-    			$acls[]= array("controller"=>"admin/receiptsup","name"=>"Cargar Recibos","imgicon"=>"calendar");
-    			$acls[]= array("controller"=>"admin/password","name"=>"Cambiar Clave","imgicon"=>"calendar");
-    			$acls[]= array("controller"=>"admin/bankpayments","name"=>"Pagos del Banco","imgicon"=>"calendar");
-    			$acls[]= array("controller"=>"admin/person","name"=>"Crear Personas","imgicon"=>"user");
-    			$acls[]= array("controller"=>"admin/user","name"=>"Crear Usuario","imgicon"=>"user");
-    			$resource1[]="admin/receiptsup";
-    			$resource1[]="admin/password";
-    			$resource1[]="admin/bankpayments";
-    			$resource1[]="admin/person";
-    			$resource1[]="admin/user";
-    			$modules[0]['acls'] = $acls;
-    			$acls = null;
-    			
-    			
-    			$modules[1] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
-    			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
-    			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
-    			$acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
-    			$resource1[]="report/performance";
-    			$resource1[]="report/recordnotas";
-    			$resource1[]="report/registration";
-    			$modules[1]['acls'] = $acls;
-    			$acls = null;
-    			break;
-    		}
+        if ($rid=="" || $login=="") return false;        
+        $modules = null; 
+        $acls = null;
+        //ACL comunes y que sirven para todos
+        $resource1[]="index/salir";
+        $resource1[]="index/cerrar";
+        $resource1[]="register/deferred";
+        $resource1[]="profile/public";
+        $resource1[]="report/recordnotas";
+        $resource1[]="default/password";
+        $resource1[]="register/registerealized";
+        
+        
+        switch ($rid){
+            case "AD":{
+                $resource1[]="profile/search";
+                $resource1[]="profile/changecurricula";
+                
+                $modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
+                $acls[]= array("controller"=>"admin/receiptsup","name"=>"Cargar Recibos","imgicon"=>"calendar");
+                $acls[]= array("controller"=>"admin/password","name"=>"Cambiar Clave","imgicon"=>"calendar");
+                $acls[]= array("controller"=>"admin/bankpayments","name"=>"Pagos del Banco","imgicon"=>"calendar");
+                $acls[]= array("controller"=>"admin/person","name"=>"Crear Personas","imgicon"=>"user");
+                $acls[]= array("controller"=>"admin/user","name"=>"Crear Usuario","imgicon"=>"user");
+                $resource1[]="admin/receiptsup";
+                $resource1[]="admin/password";
+                $resource1[]="admin/bankpayments";
+                $resource1[]="admin/person";
+                $resource1[]="admin/user";
+                $modules[0]['acls'] = $acls;
+                $acls = null;
+                
+                
+                $modules[1] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
+                $acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
+                $acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
+                $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $resource1[]="report/performance";
+                $resource1[]="report/recordnotas";
+                $resource1[]="report/registration";
+                $modules[1]['acls'] = $acls;
+                $acls = null;
+                break;
+            }
     		case "SP":{
     			$resource1[]="profile/search";
     			$resource1[]="profile/changecurricula";
@@ -345,42 +345,43 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="alumno/index";
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"register/listcurrentnotes","name"=>"Asignaturas Actuales","imgicon"=>"calendar");
-    			$acls[]= array("controller"=>"alumno/index/assistance","name"=>"Control Asistencia","imgicon"=>"ok");
     			$acls[]= array("controller"=>"horary/consolidated","name"=>"Ver Horario","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"horary/semester","name"=>"Horarios Semes.","imgicon"=>"calendar");
     			$resource1[]="horary/consolidated";
-    			$resource1[]="alumno/index";
     			$resource1[]="register/listcurrentnotes";
     			$resource1[]="horary/semester";
     			$modules[0]['acls'] = $acls;
     			$acls = null;
     			
-    			/*$modules[1] = array ("name" =>"Matrícula", "imgicon"=>"ok");
+    			$modules[1] = array ("name" =>"Matrícula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"register/student","name"=>"Prematricula","imgicon"=>"edit");
     			$resource1[]="register/student";
     			$modules[1]['acls'] = $acls;
-    			$acls = null;*/
+    			$acls = null;
     			break;
     		}
     		case "DC":{
     			$resource1[]="docente/index";
     			$resource1[]="syllabus/syllabus";
-    			$resource1[]="syllabus/print";
+    			$resource1[]="syllabus/print";                
     			$resource1[]="assistance/student";
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
-    			
     			$acls[]= array("controller"=>"docente/notas","name"=>"Asignaturas a Cargo","imgicon"=>"list");
-    			$acls[]= array("controller"=>"horary/semester","name"=>"Ver Horarios Sem.","imgicon"=>"calendar");
-    			$resource1[]="docente/notas";
-    			$resource1[]="horary/semester";
-    			
-    			
-    			if (($login->infouser['teacher']['is_director']=="S")){
-    				$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
-    				$resource1[]="record/index";
-    				$acls[]= array("controller"=>"horary/nhorary","name"=>"Crear Horario","imgicon"=>"file");
-    				$resource1[]="horary/nhorary";
+                $resource1[]="docente/notas";
+                $acls[]= array("controller"=>"horary/seehorary","name"=>"Ver Horario","imgicon"=>"calendar");
+                $resource1[]="horary/seehorary";
+                $acls[]= array("controller"=>"docente/informacademic","name"=>"Informe Acad. Adm.","imgicon"=>"file");
+                $resource1[]="docente/informacademic";
+                
+                
+                if (($login->infouser['teacher']['is_director']=="S")){
+                    $acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
+                    $resource1[]="record/index";
+                    $acls[]= array("controller"=>"horary/nhorary","name"=>"Crear Horario","imgicon"=>"file");
+                    $resource1[]="horary/nhorary";
+    			    $acls[]= array("controller"=>"horary/semester","name"=>"Ver Horarios Sem.","imgicon"=>"calendar");
+    			    $resource1[]="horary/semester";
     			}
     			$modules[0]['acls'] = $acls;
     			$acls = null;
@@ -397,7 +398,7 @@ class IndexController extends Zend_Controller_Action {
                     $resource1[]="graduated/graphicgraduated";
     			}
     			$acls[]= array("controller"=>"docente/index/poll","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
-    			$resource1[]="docente/index";
+    			$resource1[]="report/performance";
     			$modules[1]['acls'] = $acls;
     			$acls = null;
     			
@@ -405,8 +406,8 @@ class IndexController extends Zend_Controller_Action {
     				$modules[2] = array ("name" =>"Periodo Académico", "imgicon"=>"folder");
     				$acls[]= array("controller"=>"distribution/distribution","name"=>"Distribución","imgicon"=>"folder-close");
     				$resource1[]="distribution/distribution";
-                    $acls[]= array("controller"=>"curricula/curricula","name"=>"Currícula","imgicon"=>"book");
-                    $resource1[]="curricula/curricula";
+                    $acls[]= array("controller"=>"curricula/show","name"=>"Currícula","imgicon"=>"book");
+                    $resource1[]="curricula/show";
     				$modules[2]['acls'] = $acls;
     				$acls = null;
     			}
@@ -456,14 +457,11 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="rcentral/index";
     			$resource1[]="profile/search";
     			$resource1[]="profile/changecurricula";
-                $resource1[]="rcentral/code";
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
     			$acls[]= array("controller"=>"curricula/curricula","name"=>"Adm. Curriculas.","imgicon"=>"list");
     			$acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
-                $acls[]= array("controller"=>"rcentral/code","name"=>"Generar Codigo.","imgicon"=>"tasks");
-
     			$resource1[]="record/index";
     			$resource1[]="curricula/curricula";
     			$resource1[]="curricula/show";
@@ -472,11 +470,7 @@ class IndexController extends Zend_Controller_Action {
     			 
     			$modules[1] = array ("name" =>"Matricula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"#","name"=>"Matricula Ingresantes","imgicon"=>"saved");
-    			$acls[]= array("controller"=>"rcentral/traslatestudent","name"=>"Traslado Alumnos","imgicon"=>"saved");
-    			$resource1[]="rcentral/traslatestudent";
-    			
     			$modules[1]['acls'] = $acls;
-    			
     			$acls = null;
     			 
     			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
@@ -493,7 +487,163 @@ class IndexController extends Zend_Controller_Action {
     			$modules[2]['acls'] = $acls;
     			$acls = null;
     			break;
+
     		}
+
+
+            case "RE":{
+                $resource1[]="vacademico/index";
+                $resource1[]="profile/search";
+                $resource1[]="profile/changecurricula";
+                $resource1[]="rcentral/code";
+                
+                $modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
+                $acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+
+                $resource1[]="curricula/show";
+                $modules[0]['acls'] = $acls;
+                $acls = null;
+                break;
+                }   
+
+            case "PD":{
+                 
+                $modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
+            
+                $acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+                $resource1[]="curricula/show";
+                $modules[0]['acls'] = $acls;
+                $acls = null;
+
+                $modules[1] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
+                $acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
+                $acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
+                $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+
+                $resource1[]="report/performance";
+                $resource1[]="report/recordnotas";
+                $resource1[]="report/registration";
+                $modules[1]['acls'] = $acls;
+                $acls = null;
+                break;
+            }
+
+            case "BU":{
+                              
+                $modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
+                $acls[]= array("controller"=>"register/changerates","name"=>"Cambio de Tasas","imgicon"=>"screenshot");
+                $resource1[]="register/changerates";
+                $modules[0]['acls'] = $acls;
+                $acls = null;
+                break;
+            }
+
+            case "DF":{
+                $resource1[]="profile/search";
+
+                $modules[0] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
+                $acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
+                $acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
+                $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+
+                $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
+                $acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
+                $resource1[]="report/performance";
+                $resource1[]="report/recordnotas";
+                $resource1[]="report/registration";
+                $resource1[]="graduated/reportgraduated";
+                $resource1[]="graduated/graphicgraduated";
+
+                $modules[1]['acls'] = $acls;
+                $acls = null;
+
+                $modules[0]['acls'] = $acls;
+                $acls = null;
+                break;
+            }
+
+            case "EG":{
+                $resource1[]="graduated/index";
+                $resource1[]="profile/search";
+                //$resource1[]="profile/changecurricula";
+                $resource1[]="alumno/index";
+
+                $modules[0] = array ("name" =>"Perfil", "imgicon"=>"book");            
+                $acls[]= array("controller"=>"profile/public/student","name"=>"Historial","imgicon"=>"calendar");
+             
+                $resource1[]="profile/public/student";
+                $modules[0]['acls'] = $acls;
+                $acls = null;              
+               
+                break;
+            }
+
+            case "VA":{
+                $resource1[]="rcentral/index";
+                $resource1[]="profile/search";
+                //$resource1[]="profile/changecurricula";
+                
+                $modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
+            
+                $acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+                $resource1[]="curricula/show";
+                $modules[0]['acls'] = $acls;
+                $acls = null;
+                 
+                $modules[1] = array ("name" =>"Matricula", "imgicon"=>"ok");
+                $acls[]= array("controller"=>"#","name"=>"Matricula Ingresantes","imgicon"=>"saved");
+                $modules[1]['acls'] = $acls;
+                $acls = null;
+                 
+                $modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
+                $acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
+                $acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
+                $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
+                $acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
+                $resource1[]="report/performance";
+                $resource1[]="report/recordnotas";
+                $resource1[]="report/registration";
+                $resource1[]="graduated/reportgraduated";
+                $resource1[]="graduated/graphicgraduated";
+                $modules[2]['acls'] = $acls;
+                $acls = null;                           
+               
+                break;
+            }
+
+            case "ES":{
+                $resource1[]="rcentral/index";
+                $resource1[]="profile/search";
+                //$resource1[]="profile/changecurricula";
+                $resource1[]="alumno/index";
+
+                $modules[0] = array ("name" =>"Perfil", "imgicon"=>"book");            
+                //$acls[]= array("controller"=>"profile/public/student","name"=>"Historial","imgicon"=>"calendar");
+                $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
+                $acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
+             
+                //$resource1[]="profile/public/student";
+                $resource1[]="graduated/reportgraduated";
+                $resource1[]="graduated/graphicgraduated";
+                $modules[0]['acls'] = $acls;
+                $acls = null;              
+               
+                break;
+            }
+            case "RI":{
+                $resource1[]="rinternational/index";
+                $resource1[]="profile/search";
+
+                $modules[0] = array ("name" =>"Gestión Académica", "imgicon"=>"book");
+                $acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+                $resource1[]="curricula/show";
+                $modules[0]['acls'] = $acls;
+                $acls = null;
+               
+                break;
+            }
+
     	}
     	return array("module"=>$modules,"list"=>$resource1);
     }

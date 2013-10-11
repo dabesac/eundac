@@ -25,11 +25,12 @@ class Curricula_ShowController extends Zend_Controller_Action
             $where['oid']=$oid;
             $facultad=$facu->_getAll($where);
             $this->view->facultad=$facultad;
-
-            //  if ($rid=="DC" && $esdirector=="S"){
-            //     $escid=$this->sesion->escid;
-            //     $this->view->escid=$escid;
-            // }
+            if ($rid=="DC" && $this->sesion->infouser['teacher']['is_director']=="S"){
+                $escid=$this->sesion->escid;
+                $this->view->escid=$escid;
+                $facid=$this->sesion->faculty->facid;
+                $this->view->facid=$facid;
+            }
 			if ($rid=="RF"){
                 $facid=$this->sesion->faculty->facid;
                 $this->view->facid=$facid;
@@ -44,7 +45,7 @@ class Curricula_ShowController extends Zend_Controller_Action
             $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            //$rid=$this->sesion->rid;
+            $rid=$this->sesion->rid;
             $esdirector=$this->sesion->esdirector;
             $facid=$this->_getParam('facid');
             $esc=new Api_Model_DbTable_Speciality();
@@ -55,10 +56,10 @@ class Curricula_ShowController extends Zend_Controller_Action
             $escuelas=$esc->_getFilter($where);
             $this->view->escuelas=$escuelas;
 
-            // if ($rid=="DC" && $esdirector=="S"){
-            //     $escid=$this->sesion->escid;
-            //     $this->view->escid=$escid;
-            // }
+            if ($rid=="DC" && $this->sesion->infouser['teacher']['is_director']=="S"){
+                $escid=$this->sesion->escid;
+                $this->view->escid=$escid;
+            }
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
