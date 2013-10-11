@@ -3,6 +3,18 @@
 		<h4><b>Matricula Por Curricula</b></h4>
 	</div>
 	<div class="panel-body">
+		<div class="row">
+			<div class="col-sm-4">
+				<center><img src="/img/circulo-verde.png">Aprobado</center>
+			</div>
+			<div class="col-sm-4">
+				<center><img src="/img/circulo-amarillo.png">Llevando</center>
+			</div>
+			<div class="col-sm-4">
+				<center><img src="/img/circulo-rojo.png">Pendiente</center>
+			</div>
+		</div>
+		<br>
 		<?if($this->courpercur){
 			//print_r($this->courpercur);?>
 		<div class="panel panel-primary">
@@ -23,7 +35,7 @@
 								<th><center>Requisito</center></th>
 								<th>Nota</th>
 								<th>Estado</th>
-								<th>Syllabus</th>
+								<th>Sílabo</th>
 							</tr>
 							
 					<? $semid=$sem['semid'];
