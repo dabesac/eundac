@@ -1,0 +1,203 @@
+<?php
+   $rid = $this->rid;
+   $$esdirector = $this->esdirector;
+?>
+
+<table class="table table-striped table-bordered table-condensed flotacarajo">
+    <tr>
+        <td colspan="5"><h4><center>REPORTES</center></h4></td>
+    </tr>
+    <tr>
+        <td >Año</td>
+        <td >Periodo</td>
+        <td >Escuela</td>
+        <td >Tipo de Reporte</td>
+        <td  rowspan="2"><br><center><a href="/reportes/" class="btn btn-warning">Regresar Rerportes</a></center></td> 
+    </tr>
+    <tr>
+        <td>
+            <select id="lanios" name="lanios" style="width: 70px" >
+            <?php 
+            $anio= date('Y');
+            $i=0;
+            for($i = ($anio+1);$i>=1991;$i--){
+                if ($anio==$i) $t = "selected";
+                else $t="";
+                ?>            
+            <option value="<?php echo $i?>" <?php echo $t?>><?php echo $i?></option>
+            <?php }?>
+        </select>
+        </td>
+        <td>
+            <select id="periodo_c" name="periodo" class="input-large">
+                <option value="">Primero seleccione un año</option>
+            </select>
+        </td>
+        <th class="span3"> 
+             <select id="escid" name="escid" class="input-large" rel="tooltip" title="Seleccione una escuela">
+                <?php
+                if ($this->lescuelas){
+                     if ($rid=='RC' || $rid=='RF' || $rid=='VA' || $rid=='PD'){ ?>
+                    <option value="">Seleccione la Escuela</option>  <?php }
+                    foreach ($this->lescuelas as $escuela){
+                        ?>
+                        <option value="<?php echo $escuela['escid'].";--;".$escuela['sedid']?>"><?php echo $escuela['nom_escuela']?></option>
+                        <?php
+                        } 
+
+                              if ($rid=='RC' || $rid=='RF' || $rid=='VA' || $rid=='PD'){ ?>
+                              <option value="todos">Todas</option>  
+
+                            <?php  }
+
+                                }else{
+                    ?>        <option value="">No tienen ninguna escuela</option>
+                    <?php
+                }
+                ?>
+                </select>
+        </th>
+      <td><select id="tipoid" name="tipoid" class="span3">
+         <?php if ($rid=='DC' || $rid=='VA'){?>
+          <option value="">Seleccione tipo de Reporte</option>
+           <?php } ?>
+             <?php if ($rid=='DC' || $rid=='RF' || $rid=='VA' || $rid=='PD'){?>
+            <option value="1">1  | AVANCE DE NOTAS</option>
+             <?php } ?>
+              <?php if ($rid=='DC' || $rid=='RF' || $rid=='RC' || $rid=='VA' || $rid=='PD'){?>
+            <option value="2">2  | MATRICULADOS POR CURSOS</option>
+            <option value="3">3  | MATRICULADOS POR SEMESTRES</option>
+            <option value="4">4  | CANTIDAD DE MATRICULADOS POR CURSOS</option>
+            <?php } ?>
+            <?php if ($rid=='RC' || $rid=='RF' || $rid=='VA' || $rid=='PD'){?>
+            <option value="5">5  | CANTIDAD DE MATRICULADOS POR ESCUELA</option>
+            <?php } ?>
+            <?php if ($rid=='DC' || $rid=='RF' || $rid=='RC' || $rid=='VA' || $rid=='PD'){?>
+            <option value="6">6  | CANTIDAD DE TURNOS POR CURSOS</option>
+            <?php } ?>
+            <?php if ($rid=='RC' || $rid=='RF' || $rid=='VA' || $rid=='PD'){?>
+            <option value="7">7  | MATRICULADOS POR ESCUELA</option>
+            <?php } ?>
+            <?php if ($rid=='RC' || $rid=='RF' || $rid=='VA' || $rid=='DC' || $rid=='PD'){?>
+            <option value="8">8  | CONSOLIDADO POR SEMESTRE</option>
+            <?php } ?>
+        </select></td>
+      
+        
+    </tr>
+   
+</table>
+
+    <div id="formulario"></div>
+      <div id="p"></div>
+
+<script>
+    $("#periodo_c").load("/reportes/reporte/lperiodos/anio/"+<?php echo $anio?>);
+    
+    $("#lanios").change(function(){
+        var anio = $(this).val();
+        $("#periodo_c").load("/reportes/reporte/lperiodos/anio/"+anio);
+    });
+    $("#periodo_c").change(function(){
+        var perid = $(this).val();        
+        $("#escid").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#escid").load("/reportes/reporte/mostrarescuelas/perid/"+perid);
+    });
+
+    
+    $("#escid").change(function(){
+        var tescid = $(this).val();       
+        var perid = $("#periodo_c").val();
+        var tipoid = $("#tipoid").val();
+        var xx=tescid.split(";--;");
+        var escid=xx[0];
+        var sedid=xx[1];
+        // alert(tipoid);
+
+        if (tipoid=="") {alert ("Debe de seleccionar tipo de reporte");return false;}
+        if (perid=="") {alert ("Debe de seleccionar periodo");return false;}
+        if (escid=="") {alert ("Debe de seleccionar escuela");return false;}
+        if (tipoid=="1")  {
+        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}   
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/avancenotas/perid/"+perid+"/escid/"+escid);} 
+        if (tipoid=="2")  {
+        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}   
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/matriculadosxcurso/perid/"+perid+"/escid/"+escid);}  
+        if (tipoid=="3")  {
+        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}   
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/matriculadosxsemestre/perid/"+perid+"/escid/"+escid);} 
+        if (tipoid=="4")  {
+        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}  
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/cargacursos/perid/"+perid+"/escid/"+escid);}
+         if (tipoid=="5")  { 
+         if (escid!="todos") {alert ("Debe de seleccionar todas las escuelas");return false;} 
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/escuela/perid/"+perid+"/escid/"+escid);}
+        if (tipoid=="6")  { 
+         if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;} 
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/cargacursosxturno/perid/"+perid+"/escid/"+escid);} 
+         if (tipoid=="7")  { 
+         if (escid=="todos") {alert ("Debe de seleccionar una escuelas");return false;} 
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/cargaralumnosxescuela/perid/"+perid+"/escid/"+escid);} 
+        if (tipoid=="8")  { 
+         if (escid=="todos") {alert ("Debe de seleccionar una escuelas");return false;} 
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/consolidadoxsemestre/perid/"+perid+"/escid/"+escid);} 
+    
+    });
+
+
+    $("#tipoid").change(function(){
+        var tipoid = $(this).val(); 
+        var perid = $("#periodo_c").val();
+        var tescid = $("#escid").val(); 
+        var xx=tescid.split(";--;");
+        var escid=xx[0];
+        var sedid=xx[1];
+          
+        if (tipoid=="") {alert ("Debe de seleccionar tipo de reporte");return false;}
+        if (perid=="") {alert ("Debe de seleccionar periodo");return false;}
+        if (escid=="") {alert ("Debe de seleccionar escuela");return false;}
+        if (tipoid=="1")  {
+        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}   
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/avancenotas/perid/"+perid+"/escid/"+escid);} 
+        if (tipoid=="2")  {
+        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}   
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/matriculadosxcurso/perid/"+perid+"/escid/"+escid);}  
+        if (tipoid=="3")  {
+        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}   
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/matriculadosxsemestre/perid/"+perid+"/escid/"+escid);} 
+        if (tipoid=="4")  {
+        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}  
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/cargacursos/perid/"+perid+"/escid/"+escid);}
+         if (tipoid=="5")  { 
+         if (escid!="todos") {alert ("Debe de seleccionar todas las escuelas");return false;} 
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/escuelas/perid/"+perid+"/escid/"+escid);}
+        if (tipoid=="6")  { 
+         if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;} 
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/cargacursosxturno/perid/"+perid+"/escid/"+escid);}
+         if (tipoid=="7")  { 
+         if (escid=="todos") {alert ("Debe de seleccionar una escuelas");return false;} 
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/cargaralumnosxescuela/perid/"+perid+"/escid/"+escid);} 
+        if (tipoid=="8")  { 
+         if (escid=="todos") {alert ("Debe de seleccionar una escuelas");return false;} 
+        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#formulario").load("/reportes/reporte/consolidadoxsemestre/perid/"+perid+"/escid/"+escid);}
+
+    });         
+</script>
+
+

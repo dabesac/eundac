@@ -34,7 +34,16 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                $lesc = $escuelas->_getFilter($data); 
             }
             else{
-            $lesc = $escuelas->_getspeciality($where); 
+                if($where['facid']=='5'){
+                $data['eid']=$where['eid'];
+                $data['oid']=$where['oid'];
+                $data['facid']=$where['facid'];
+                $data['state']='A';
+               $lesc = $escuelas->_getFilter($data); 
+                }
+                else{
+                $lesc = $escuelas->_getspeciality($where); 
+                }
             }
             if ($lesc ) $this->view->escuelas=$lesc;
         }catch (Exception $ex){
