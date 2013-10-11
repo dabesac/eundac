@@ -101,7 +101,7 @@ if ($this->horarys) {
             }
         }
         $horaoriginal=$this->horarys;
-        // print_r($horaoriginal);exit();
+        // print_r($this->dcurso);exit();
 ?>
 <div>
     <div class='nomdoc col-md-10' style='font-size:20px; margin-top:20px'>
@@ -111,15 +111,15 @@ if ($this->horarys) {
         <a href="/horary/semester/printhorarysemester/semid/<?php echo base64_encode($this->semid)?>" class='btn btn-success'><i class='glyphicon glyphicon-print'></i>Imprimir</a>
     </div>
 </div>
-<div style='float:left;'>
+<div class='col-md-16' style='float:left;'>
     <div id='encabezado'>
         <div class='cajadia'>Hora:</div>
-        <div class='cajadia' >Lunes</div>
-        <div class='cajadia' >Martes</div>
-        <div class='cajadia' >Miércoles</div>
-        <div class='cajadia' >Jueves</div>
-        <div class='cajadia' >Viernes</div>
-        <div class='cajadia' >Sábado</div>
+        <div class='cajadia' style='margin-left:2px'>Lunes</div>
+        <div class='cajadia' style='margin-left:2px'>Martes</div>
+        <div class='cajadia' style='margin-left:2px'>Miercoles</div>
+        <div class='cajadia' style='margin-left:2px'>Jueves</div>
+        <div class='cajadia' style='margin-left:2px'>Viernes</div>
+        <div class='cajadia' style='margin-left:1px'>Sábado</div>
     </div>
     <div style='float:left; width:144px'>
         <?php
@@ -184,7 +184,7 @@ if ($this->horarys) {
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                     $this->horarys[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                     ?>
-                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['practica'] ?></div>
+                                    <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['practica'] ?></div>
                                     <?php    
                                     $c++;
                                 } else { 
@@ -196,7 +196,7 @@ if ($this->horarys) {
                         }
                     }
                     if($band==1 && $c==0){ ?>
-                        <div class='cajadentro'></div>
+                        <div class='cajadentro' style="margin-left:3px;"></div>
                     <?php    
                     }
             }
@@ -219,7 +219,7 @@ if ($this->horarys) {
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                     $this->horarys[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                     ?>
-                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['practica'] ?></div>
+                                    <div class="cajadentro" style="margin-left:5px; background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['practica'] ?></div>
                                     <?php    
                                     $c++;
                                 } else { 
@@ -231,7 +231,7 @@ if ($this->horarys) {
                         }
                     }
                     if($band==1 && $c==0){ ?>
-                        <div class='cajadentro'></div>
+                        <div class='cajadentro' style="margin-left:5px;"></div>
                     <?php    
                     }
             }
@@ -254,7 +254,7 @@ if ($this->horarys) {
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                     $this->horarys[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                     ?>
-                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['practica'] ?></div>
+                                    <div class="cajadentro" style="margin-left:8px; background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['practica'] ?></div>
                                     <?php    
                                     $c++;
                                 } else { 
@@ -266,7 +266,7 @@ if ($this->horarys) {
                         }
                     }
                     if($band==1 && $c==0){ ?>
-                        <div class='cajadentro'></div>
+                        <div class='cajadentro' style="margin-left:8px;"></div>
                     <?php    
                     }
             }
@@ -289,7 +289,7 @@ if ($this->horarys) {
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                     $this->horarys[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                     ?>
-                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['practica'] ?></div>
+                                    <div class="cajadentro" style="margin-left:12px; background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['practica'] ?></div>
                                     <?php    
                                     $c++;
                                 } else { 
@@ -301,7 +301,7 @@ if ($this->horarys) {
                         }
                     }
                     if($band==1 && $c==0){ ?>
-                        <div class='cajadentro'></div>
+                        <div class='cajadentro' style="margin-left:12px;"></div>
                     <?php    
                     }
             }
@@ -324,7 +324,7 @@ if ($this->horarys) {
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                     $this->horarys[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                     ?>
-                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['practica'] ?></div>
+                                    <div class="cajadentro" style="margin-left:15px; background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['practica'] ?></div>
                                     <?php    
                                     $c++;
                                 } else { 
@@ -336,70 +336,69 @@ if ($this->horarys) {
                         }
                     }
                     if($band==1 && $c==0){ ?>
-                        <div class='cajadentro'></div>
+                        <div class='cajadentro' style="margin-left:15px;"></div>
                     <?php    
                     }
             }
             ?>
 
     </div>
-
-    <div class='col-md-16' style='margin-top:450px'>
+    <div class='col-md-12' style='margin-top:440px'>
         <div class='cajadentro' style='width:30px;box-shadow: 0px 0px 4px #343434'>#</div>
         <div class='cajadentro' style='width:60px;box-shadow: 0px 0px 4px #343434'>Código</div>
         <div class='cajadentro' style='width:320px;box-shadow: 0px 0px 4px #343434'>Nombre Curso</div>
-        <div class='cajadentro' style='width:30px;box-shadow: 0px 0px 4px #343434'>Cred.</div>
-        <div class='cajadentro' style='width:30px;box-shadow: 0px 0px 4px #343434'>Turno</div>
+        <div class='cajadentro' style='width:40px;box-shadow: 0px 0px 4px #343434'>Cred</div>
+        <div class='cajadentro' style='width:40px;box-shadow: 0px 0px 4px #343434'>Turno</div>
         <div class='cajadentro' style='width:320px;box-shadow: 0px 0px 4px #343434'>Docente</div>
-        <div class='cajadentro' style='width:30px;box-shadow: 0px 0px 4px #343434'>HT</div>
-        <div class='cajadentro' style='width:30px;box-shadow: 0px 0px 4px #343434'>HP</div>
-        <div class='cajadentro' style='width:30px;box-shadow: 0px 0px 4px #343434'>TT</div>
+        <div class='cajadentro' style='width:27px;box-shadow: 0px 0px 4px #343434'>HT</div>
+        <div class='cajadentro' style='width:27px;box-shadow: 0px 0px 4px #343434'>HP</div>
+        <div class='cajadentro' style='width:27px;box-shadow: 0px 0px 4px #343434'>TT</div>
+
         <?php
-        $n=0;
+        // print_r($horaoriginal);
+        $n=1;
         $c=0;
         $p=0;
         $temc=$this->dcurso[0]['courseid'];
         $temt=$this->dcurso[0]['turno'];
-        foreach ($this->dcurso as $dcurso)  { 
-            $n++;
-            if($dcurso['courseid']!=""){
-                    if($dcurso['is_main']=='S' && $dcurso['state']=='A') $dcurso['pract']="";
-                    else $dcurso['pract']=" (Practica)";                    
-                    ?>
-                            <div class="cajadentro" style="width:30px"><?php echo $n ?></div>
-                            <?php
-                                if($dcurso['courseid']==$temc && $dcurso['turno']==$temt){ 
-                                    ?>
-                                    <div class="cajadentro" style="width:60px;background-color:
-                                    <?php echo $listacolores[$p];?>"><?php echo $dcurso['courseid'] ?>
-                                    </div>                                    
-                                    <?php
-                                    $temc=$dcurso['courseid'];
-                                    $temt=$dcurso['turno'];
-                                }
-                                else{
-                                    $p++; 
-                                    ?>
-                                    <div class="cajadentro" style="width:60px;background-color:
-                                    <?php echo $listacolores[$p];?>"><?php echo $dcurso['courseid'] ?>
-                                    </div>                                    
-                                    <?php
-                                    $temc=$dcurso['courseid'];
-                                    $temt=$dcurso['turno'];
-                                } ?>
-                            <div class="cajadentro" style="width:320px"><?php echo $dcurso['name'].$dcurso['pract']; ?></div>
-                            <div class="cajadentro" style="width:30px"><?php echo $horaoriginal[$c]['credits'];?></div>
-                            <div class="cajadentro" style="width:30px"><?php echo $dcurso['turno'] ?></div>
-                            <div class="cajadentro" style="width:320px"><?php echo $this->dcurso[$c]['namet']?></div>
-                            <div class="cajadentro" style="width:30px"><?php echo $dcurso['hours_t'] ?></div>
-                            <div class="cajadentro" style="width:30px"><?php echo $dcurso['hours_p'] ?></div>
-                            <div class="cajadentro" style="width:30px"><?php echo $dcurso['hours_total'] ?></div>
-    </div>
-                    <?php  
-                    $c++;
-                    } 
-            }        
+        foreach ($this->dcurso as $dcurso) {
+            if($dcurso['is_main']=='S' && $dcurso['state']=='A') $dcurso['pract']="";
+            else $dcurso['pract']=" (Practica)";                    
             ?>
+            <div>
+                <div class="cajadentro" style="width:30px"><?php echo $n ?></div>
+                <?php
+                    if($dcurso['courseid']==$temc && $dcurso['turno']==$temt){ 
+                    ?>
+                        <div class="cajadentro" style="width:60px;background-color:<?php echo $listacolores[$p];?>"><?php echo $dcurso['courseid'] ?>
+                        </div>                                    
+                    <?php
+                        $temc=$dcurso['courseid'];
+                        $temt=$dcurso['turno'];
+                    }
+                    else{
+                        $p++; 
+                    ?>
+                        <div class="cajadentro" style="width:60px;background-color:<?php echo $listacolores[$p];?>"><?php echo $dcurso['courseid'] ?>
+                        </div>                                    
+                    <?php
+                        $temc=$dcurso['courseid'];
+                        $temt=$dcurso['turno'];
+                    } ?>
+                <div class="cajadentro" style="width:320px"><?php echo $dcurso['name'].$dcurso['pract']; ?></div>
+                <div class="cajadentro" style="width:40px"><?php echo $this->datacourse[$c][0]['credits'];?></div>
+                <div class="cajadentro" style="width:40px"><?php echo $dcurso['turno'] ?></div>
+                <div class="cajacursos" style="width:320px"><?php echo $this->dcurso[$c]['namet']?></div>
+                <div class="cajadentro" style="width:27px; margin-left:6px"><?php echo $dcurso['hours_t'] ?></div>
+                <div class="cajadentro" style="width:27px"><?php echo $dcurso['hours_p'] ?></div>
+                <div class="cajadentro" style="width:27px"><?php echo $dcurso['hours_total'] ?></div>
+            </div>
+        <?php
+        $n++;
+        $c++;
+        }
+        ?>    
+    </div>
 </div>
 <?php
 }else{

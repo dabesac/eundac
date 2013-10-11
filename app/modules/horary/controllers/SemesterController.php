@@ -43,10 +43,8 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			$this->view->oid=$oid;
 			$escid=$this->sesion->escid;
 			$semid=$this->_getParam('semid');
-			// $semid='8';
 			$subid=$this->sesion->subid;
 			$perid=$this->sesion->period->perid;
-			// $perid='13A';
 			$this->view->semid=$semid;
 
 			$base_url = 'http://localhost:8080/';
@@ -64,17 +62,26 @@ class Horary_SemesterController extends Zend_Controller_Action{
         	$where=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
         	$cper= new Api_Model_DbTable_PeriodsCourses();
         	$dcur=$cper->_getCoursesxPeriodxspecialityxsemester($where);
+        	// print_r($dcur);exit();
         	// $this->view->dcurso=$dcur;
 
         	$len=count($dcur);
-        	for ($i=0; $i < $len; $i++) { 
+        	for ($i=0; $i < $len; $i++) {
+        		$escid=$dcur[$i]['escid'];
+        		$curid=$dcur[$i]['curid'];
+        		$semid=$dcur[$i]['semid'];
+        		$courseid=$dcur[$i]['courseid'];
+        		$whe=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid);
+        		$attrib=array('courseid','semid','credits');
+        		$bdcourse = new Api_Model_DbTable_Course();
+        		$datacourse[$i]= $bdcourse->_getFilter($whe,$attrib);
         		$uid=$dcur[$i]['uid'];
         		$where=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid);
         		$user= new Api_Model_DbTable_Users();
         		$duser=$user->_getUserXUid($where);
         		$dcur[$i]['namet']= $duser[0]['last_name0']." ".$duser[0]['last_name1'].", ".$duser[0]['first_name'];
-        		// print_r($dcur);
         	}
+        	$this->view->datacourse=$datacourse;
         	$this->view->dcurso=$dcur;
 
 			
