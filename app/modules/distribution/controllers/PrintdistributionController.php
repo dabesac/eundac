@@ -17,6 +17,7 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
 
     public function indexAction(){
         try {
+            $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $distid = base64_decode($this->_getParam("distid"));
@@ -99,6 +100,7 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
 
     public function printsecondAction(){
         try {
+            $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $distid = base64_decode($this->_getParam("distid"));
