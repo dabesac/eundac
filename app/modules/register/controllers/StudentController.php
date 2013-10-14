@@ -10,7 +10,8 @@ class Register_StudentController extends Zend_Controller_Action {
         }
         $login = $sesion->getStorage()->read();
         $this->sesion = $login;
-        if ($login->uid=='9811103229' || $login->uid=='1324507145' || $login->uid=='0822277014'
+        if (
+        	$login->uid=='9811103229' || $login->uid=='1324507145' || $login->uid=='0822277014'
 			|| $login->uid=='1324507096' || $login->uid=='0591203040' || $login->uid=='0321102065'
 			|| $login->uid=='0641103040' || $login->uid=='0922603051' || $login->uid=='0023203450' 
 			|| $login->uid=='0824203065' || $login->uid=='1022703180' || $login->uid=='1022709020'
@@ -23,7 +24,7 @@ class Register_StudentController extends Zend_Controller_Action {
 			|| $login->uid=='0922383038' || $login->uid=='0922383047' || $login->uid=='1021303399'
 			|| $login->uid=='1022503124' || $login->uid=='0725203209' || $login->uid=='0922293084'
 			|| $login->uid=='1243102098' || $login->uid=='0613403035' || $login->uid=='0853403017' 
-			|| $login->uid=='0823403221'        
+			|| $login->uid=='0823403221' || $login->uid=='0923406010'        
 			){
         }else {
         	$this->_helper->redirector('index',"index",'default');
