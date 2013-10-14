@@ -389,6 +389,8 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="horary/seehorary";
                 $acls[]= array("controller"=>"docente/informacademic","name"=>"Informe Acad. Adm.","imgicon"=>"file");
                 $resource1[]="docente/informacademic";
+                $resource1[]="docente/fillnotes";
+                $resource1[]="docente/register";
                 
                 
                 if (($login->infouser['teacher']['is_director']=="S")){
