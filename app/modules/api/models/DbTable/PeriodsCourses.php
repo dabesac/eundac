@@ -334,5 +334,29 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 			print "Error: Read Course_Teacher";
 		}
 	}
+
+	  /*devuelve CANTIDAD DE ALUMNOS MATRICULADO POR CURSO SEGUN PARAMETROS*/
+public function _getCountStudentxCourse($where=null)
+  {
+    try{
+      if($where['perid']==""||$where['eid']==""||$where['oid']==""||$where['subid']==""||$where['escid']=="") return false;
+     
+      $str = " select  P.semid,C.curid,C.courseid,C.name,MC.turno,count(*) matriculados from base_periods_courses P inner join base_courses C 
+on P.eid=C.eid and P.subid=C.subid and P.escid=C.escid and P.oid=C.oid and P.curid=C.curid and P.courseid=C.courseid INNER JOIN base_registration_course MC
+on MC.courseid=C.courseid AND MC.escid=P.escid AND MC.curid=C.curid AND MC.perid=P.perid AND  MC.turno=P.turno AND MC.oid=P.oid AND MC.eid=P.eid AND MC.subid=C.subid and (MC.state='M' or MC.state='S' or  MC.state='C')
+where   P.eid='".$where['eid']."' and P.oid='".$where['oid']."' and P.escid='".$where['escid']."' and P.subid='".$where['subid']."' and P.perid='".$where['perid']."' 
+group by name, P.semid,C.curid,C.courseid, MC.turno
+order by p.semid
+
+        ";
+
+      
+        $sql = $this->_db->query($str);
+        if ($sql) return $sql->fetchAll();
+        return false;           
+    }catch (Exception $ex){
+        print "Error: Obteniendo datos de Periodo cursos nombre ".$ex->getMessage();
+    }
+  } 
 }
 

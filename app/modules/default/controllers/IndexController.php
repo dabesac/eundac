@@ -404,7 +404,9 @@ class IndexController extends Zend_Controller_Action {
     			$modules[1] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
     			if (($login->infouser['teacher']['is_director']=="S")){    	
     				$acls[]= array("controller"=>"syllabus/director/listsyllabus","name"=>"Llenado Silabus","imgicon"=>"edit");
-    				$resource1[]="syllabus/director";    				
+    				$resource1[]="syllabus/director"; 
+                    $acls[]= array("controller"=>"report/consolidated","name"=>"Reporte General","imgicon"=>"folder-open"); 
+                    $resource1[]="report/consolidated";				
     				$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     				$resource1[]="report/performance";
                     $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Egresados","imgicon"=>"edit");
@@ -500,11 +502,13 @@ class IndexController extends Zend_Controller_Action {
     			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
+                $acls[]= array("controller"=>"report/consolidated","name"=>"Reporte General","imgicon"=>"folder-open");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
                 $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
     			$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
     			$resource1[]="report/performance";
     			$resource1[]="report/recordnotas";
+                $resource1[]="report/consolidated";
                 $resource1[]="report/registration";
                 $resource1[]="graduated/reportgraduated";
     			$resource1[]="graduated/graphicgraduated";

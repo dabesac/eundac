@@ -1,203 +1,126 @@
-<?php
-   $rid = $this->rid;
-   $$esdirector = $this->esdirector;
-?>
-
-<table class="table table-striped table-bordered table-condensed flotacarajo">
-    <tr>
-        <td colspan="5"><h4><center>REPORTES</center></h4></td>
-    </tr>
-    <tr>
-        <td >Año</td>
-        <td >Periodo</td>
-        <td >Escuela</td>
-        <td >Tipo de Reporte</td>
-        <td  rowspan="2"><br><center><a href="/reportes/" class="btn btn-warning">Regresar Rerportes</a></center></td> 
-    </tr>
-    <tr>
+<div class="panel panel-primary" style="padding: 2px">
+    <div class="panel-heading" style="padding: 6px">
+        <center><b style="font-size:15px; color: white">REPORTE GENERAL</b></center>
+    </div>
+</div>
+<table class="table table-hover table-condensed">
+        <tr>
+        <th colspan="2">Año:</th>
         <td>
-            <select id="lanios" name="lanios" style="width: 70px" >
-            <?php 
-            $anio= date('Y');
-            $i=0;
-            for($i = ($anio+1);$i>=1991;$i--){
-                if ($anio==$i) $t = "selected";
-                else $t="";
-                ?>            
-            <option value="<?php echo $i?>" <?php echo $t?>><?php echo $i?></option>
-            <?php }?>
-        </select>
-        </td>
-        <td>
-            <select id="periodo_c" name="periodo" class="input-large">
-                <option value="">Primero seleccione un año</option>
+            <select id="anho" class="form-control" style="width:100px">
+                <option value="">- Año -</option>
+                <?php
+                for ($i=$this->anio;$i>=1965;$i--) { ?>
+                    <option value="<?php echo $i;?>"><?php echo $i;?></option>
+                <?php }
+                ?>
             </select>
         </td>
-        <th class="span3"> 
-             <select id="escid" name="escid" class="input-large" rel="tooltip" title="Seleccione una escuela">
-                <?php
-                if ($this->lescuelas){
-                     if ($rid=='RC' || $rid=='RF' || $rid=='VA' || $rid=='PD'){ ?>
-                    <option value="">Seleccione la Escuela</option>  <?php }
-                    foreach ($this->lescuelas as $escuela){
-                        ?>
-                        <option value="<?php echo $escuela['escid'].";--;".$escuela['sedid']?>"><?php echo $escuela['nom_escuela']?></option>
-                        <?php
-                        } 
+        <th >Periodo:</th>
+        <td >
+            <select id="periodo_c" class="form-control">
+                <option value="">- Seleccione -</option>
+            </select>
+        </td>
+        <td></td>
 
-                              if ($rid=='RC' || $rid=='RF' || $rid=='VA' || $rid=='PD'){ ?>
-                              <option value="todos">Todas</option>  
-
-                            <?php  }
-
-                                }else{
-                    ?>        <option value="">No tienen ninguna escuela</option>
-                    <?php
-                }
-                ?>
-                </select>
-        </th>
-      <td><select id="tipoid" name="tipoid" class="span3">
-         <?php if ($rid=='DC' || $rid=='VA'){?>
-          <option value="">Seleccione tipo de Reporte</option>
-           <?php } ?>
-             <?php if ($rid=='DC' || $rid=='RF' || $rid=='VA' || $rid=='PD'){?>
-            <option value="1">1  | AVANCE DE NOTAS</option>
-             <?php } ?>
-              <?php if ($rid=='DC' || $rid=='RF' || $rid=='RC' || $rid=='VA' || $rid=='PD'){?>
-            <option value="2">2  | MATRICULADOS POR CURSOS</option>
-            <option value="3">3  | MATRICULADOS POR SEMESTRES</option>
-            <option value="4">4  | CANTIDAD DE MATRICULADOS POR CURSOS</option>
-            <?php } ?>
-            <?php if ($rid=='RC' || $rid=='RF' || $rid=='VA' || $rid=='PD'){?>
-            <option value="5">5  | CANTIDAD DE MATRICULADOS POR ESCUELA</option>
-            <?php } ?>
-            <?php if ($rid=='DC' || $rid=='RF' || $rid=='RC' || $rid=='VA' || $rid=='PD'){?>
-            <option value="6">6  | CANTIDAD DE TURNOS POR CURSOS</option>
-            <?php } ?>
-            <?php if ($rid=='RC' || $rid=='RF' || $rid=='VA' || $rid=='PD'){?>
-            <option value="7">7  | MATRICULADOS POR ESCUELA</option>
-            <?php } ?>
-            <?php if ($rid=='RC' || $rid=='RF' || $rid=='VA' || $rid=='DC' || $rid=='PD'){?>
-            <option value="8">8  | CONSOLIDADO POR SEMESTRE</option>
-            <?php } ?>
-        </select></td>
-      
-        
     </tr>
-   
+    <tr>
+        <th>Facultad:</th>
+        <td>
+            <select id="facid" class="form-control">
+                <option>- Seleccione la Facultad -</option>
+                <?php
+                if ($this->facultades) {
+                    foreach ($this->facultades as $facultades) { 
+                        $str = ($this->facid==$facultades['facid'])?"selected ":""; ?>
+                        <option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
+                    <?php
+                    }
+                } ?>
+            </select>
+        </td>
+        <th>Escuela:</th>
+        <td>
+            <select id="escid" class="form-control" style="width:260px">
+                <option value="">- Seleccione la Escuela -</option>
+            </select>
+        </td>
+        <th>Especialidad:</th>
+        <td>
+            <select id="especialidad" class="form-control" style="width:260px">
+                <option value="">- Seleccione la Especialidad -</option>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="6">
+            <center><a id="generar" href="#" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-down"></span></a></center>
+        </td>
+    </tr>
 </table>
+<div id="cargadatos"></div>
 
-    <div id="formulario"></div>
-      <div id="p"></div>
+<script type="text/javascript">
+var rid="<?php echo $this->rid ?>";
+if (rid=="RF" || rid=="DIREC") {
+    $("#facid").attr("disabled",true);
+    var facid=$("#facid").val();
+    $("#escid").load("/report/Consolidated/schools/facid/"+facid);
+    if (rid=="DIREC") {
+        $("#escid").attr("disabled",true);
+        var escid='<?php echo $this->escid?>';
+        $("#especialidad").load("/report/Consolidated/speciality/escid/"+escid);
+    };
+};
 
-<script>
-    $("#periodo_c").load("/reportes/reporte/lperiodos/anio/"+<?php echo $anio?>);
-    
-    $("#lanios").change(function(){
-        var anio = $(this).val();
-        $("#periodo_c").load("/reportes/reporte/lperiodos/anio/"+anio);
-    });
-    $("#periodo_c").change(function(){
-        var perid = $(this).val();        
-        $("#escid").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#escid").load("/reportes/reporte/mostrarescuelas/perid/"+perid);
-    });
+$("#facid").change(function(){
+    var facid=$(this).val();
+    $("#escid").load("/report/Consolidated/schools/facid/"+facid);
+    if (facid=="TODO") {
+        var escid="TODOEC";
+        $("#especialidad").load("/report/Consolidated/speciality/escid/"+escid);
+    };
+});
 
-    
-    $("#escid").change(function(){
-        var tescid = $(this).val();       
-        var perid = $("#periodo_c").val();
-        var tipoid = $("#tipoid").val();
-        var xx=tescid.split(";--;");
-        var escid=xx[0];
-        var sedid=xx[1];
-        // alert(tipoid);
+$("#escid").change(function(){
+    var tescid = $("#escid").val();
+    var xx1 = tescid.split(";--;");
+    var escid = xx1[0];
+    var subid = xx1[1];
+    $("#especialidad").load("/report/Consolidated/speciality/escid/"+escid);
+});
+$("#especialidad").change(function(){
+    var facid=$(this).val();   
+});
 
-        if (tipoid=="") {alert ("Debe de seleccionar tipo de reporte");return false;}
-        if (perid=="") {alert ("Debe de seleccionar periodo");return false;}
-        if (escid=="") {alert ("Debe de seleccionar escuela");return false;}
-        if (tipoid=="1")  {
-        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}   
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/avancenotas/perid/"+perid+"/escid/"+escid);} 
-        if (tipoid=="2")  {
-        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}   
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/matriculadosxcurso/perid/"+perid+"/escid/"+escid);}  
-        if (tipoid=="3")  {
-        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}   
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/matriculadosxsemestre/perid/"+perid+"/escid/"+escid);} 
-        if (tipoid=="4")  {
-        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}  
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/cargacursos/perid/"+perid+"/escid/"+escid);}
-         if (tipoid=="5")  { 
-         if (escid!="todos") {alert ("Debe de seleccionar todas las escuelas");return false;} 
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/escuela/perid/"+perid+"/escid/"+escid);}
-        if (tipoid=="6")  { 
-         if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;} 
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/cargacursosxturno/perid/"+perid+"/escid/"+escid);} 
-         if (tipoid=="7")  { 
-         if (escid=="todos") {alert ("Debe de seleccionar una escuelas");return false;} 
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/cargaralumnosxescuela/perid/"+perid+"/escid/"+escid);} 
-        if (tipoid=="8")  { 
-         if (escid=="todos") {alert ("Debe de seleccionar una escuelas");return false;} 
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/consolidadoxsemestre/perid/"+perid+"/escid/"+escid);} 
-    
-    });
+$("#anho").change(function(){
+    var anio = $(this).val();
+    var url = "/report/Consolidated/periods/anio/"+anio;
+    $("#periodo_c").load(url);
+});
 
 
-    $("#tipoid").change(function(){
-        var tipoid = $(this).val(); 
-        var perid = $("#periodo_c").val();
-        var tescid = $("#escid").val(); 
-        var xx=tescid.split(";--;");
-        var escid=xx[0];
-        var sedid=xx[1];
-          
-        if (tipoid=="") {alert ("Debe de seleccionar tipo de reporte");return false;}
-        if (perid=="") {alert ("Debe de seleccionar periodo");return false;}
-        if (escid=="") {alert ("Debe de seleccionar escuela");return false;}
-        if (tipoid=="1")  {
-        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}   
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/avancenotas/perid/"+perid+"/escid/"+escid);} 
-        if (tipoid=="2")  {
-        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}   
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/matriculadosxcurso/perid/"+perid+"/escid/"+escid);}  
-        if (tipoid=="3")  {
-        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}   
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/matriculadosxsemestre/perid/"+perid+"/escid/"+escid);} 
-        if (tipoid=="4")  {
-        if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;}  
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/cargacursos/perid/"+perid+"/escid/"+escid);}
-         if (tipoid=="5")  { 
-         if (escid!="todos") {alert ("Debe de seleccionar todas las escuelas");return false;} 
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/escuelas/perid/"+perid+"/escid/"+escid);}
-        if (tipoid=="6")  { 
-         if (escid=="todos") {alert ("Debe de seleccionar una escuela");return false;} 
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/cargacursosxturno/perid/"+perid+"/escid/"+escid);}
-         if (tipoid=="7")  { 
-         if (escid=="todos") {alert ("Debe de seleccionar una escuelas");return false;} 
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/cargaralumnosxescuela/perid/"+perid+"/escid/"+escid);} 
-        if (tipoid=="8")  { 
-         if (escid=="todos") {alert ("Debe de seleccionar una escuelas");return false;} 
-        $("#formulario").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#formulario").load("/reportes/reporte/consolidadoxsemestre/perid/"+perid+"/escid/"+escid);}
 
-    });         
+$("#generar").click(function(){
+    var facid = $("#facid").val();
+    var tescid = $("#escid").val();
+    var xx1 = tescid.split(";--;");
+    var escid = xx1[0];
+    var subid = xx1[1];
+    var espec = $("#especialidad").val();
+    var anho = $("#anho").val();
+    var periodo = $("#periodo_c").val();
+    var xx = periodo.split(";--;");
+    var perid = xx[0];
+    var estado = xx[1];
+    if (facid=='' || escid=='' || perid=='') {
+        alert("Seleccione la Facultad, Escuela y el Periodo Académico.");
+        return false;
+    };
+    var url="/report/Consolidated/windows/facid/"+facid+"/escid/"+escid+"/espec/"+espec+"/perid/"+perid+"/subid/"+subid;
+    $('#cargadatos').html("<img src='/img/spinner.gif'>Cargando...");
+    $("#cargadatos").load(url);
+});
 </script>
-
-

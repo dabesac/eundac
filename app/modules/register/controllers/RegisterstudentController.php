@@ -34,7 +34,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                $lesc = $escuelas->_getFilter($data); 
             }
             else{
-                if($where['facid']=='5'){
+                if($where['facid']=='5' || $where['facid']=='2'){
                 $data['eid']=$where['eid'];
                 $data['oid']=$where['oid'];
                 $data['facid']=$where['facid'];

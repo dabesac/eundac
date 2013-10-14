@@ -1,0 +1,82 @@
+<center><h5 >
+  	<strong>FACULTAD DE <?php echo strtoupper($this->facultad)?> - </strong>
+  	<strong>ESCUELA DE  <?php echo strtoupper($this->escuela)?> -</strong>
+  	<?php if ($this->especialidad){ ?>
+  	<strong>ESPECIALIDAD DE  <?php echo strtoupper($this->especialidad)?> -</strong>	
+  	<?php }?>
+  	<strong>PERIODO <?php echo strtoupper($this->perid)?></strong>
+</center></h5>
+<div>
+	<div class="panel panel-primary">
+  	<div class="panel-heading">
+		<h5 class="panel-title">
+	  	<span class='glyphicon glyphicon-list'></span>
+        <?php $tipo=$this->tipo;
+            if ($tipo=='3') { ?> <strong>REPORTES MATRICULADOS POR SEMESTRE</strong> <?php } 
+            else{?> <strong>REPORTE CONSOLIDADO POR SEMESTRE</strong>   <?php } ?>
+	  	
+
+	  	<div class='pull-right'>
+	  		<a href="#" class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span></a>
+
+	  	</div>
+	  </h5>
+  	</div>
+<table class="table table-hover table-condensed">
+        <tr>
+        <th colspan="2">Semestre:</th>
+        <td>
+
+            <select id="semid" name="semid" class="form-control" style="width:100px" >
+                <?php
+                if ($this->semester){
+                    ?>
+                     <option value="">Seleccione...</option>
+                <?php
+                
+                    foreach ($this->semester as $sem){
+                        ?>
+                        <option value="<?php echo $sem['semid']?>"><?php echo $sem['name']?></option>
+                        <?php
+                        }  
+                }else{
+                    ?>        <option value="">No tienen ninguna curricula</option>
+                    <?php
+                }
+                ?>
+                </select>
+        </td>
+        <td></td>
+        <td></td>
+
+    </tr>
+   
+    <tr>
+        <td colspan="6">
+            <center><a id="generar1"  class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-arrow-down"></span></a></center>
+        </td>
+    </tr>
+</table>
+<div id='det'></div>
+	</div>	
+
+</div>
+<script>
+
+
+    $("#generar1").click(function(){
+        //var escid = $("#escid").val();        
+        var perid = "<?php echo $this->perid?>";  
+        var escid = "<?php echo $this->escid?>";
+        var espec = "<?php echo $this->espec?>";
+        var subid = "<?php echo $this->subid?>"; 
+        var tipo = "<?php echo $this->tipo?>";                
+        var semid = $("#semid").val();        
+        if (semid=="") {alert ("Debe de seleccionar un curso");return false;}        
+        var url="/report/consolidated/studentregistrationxsemester/semid/"+semid+"/perid/"+perid+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo;
+        $("#det").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#det").load(url);
+
+    });       
+    
+</script>
