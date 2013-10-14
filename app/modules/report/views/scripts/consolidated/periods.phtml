@@ -1,0 +1,14 @@
+<?php 
+if ($this->lper){ ?>
+	<option value="">Seleccione Periodo</option>
+	<?php
+    foreach ($this->lper as $perio){ ?>
+        <option value="<?php echo $perio['perid']?>"><?php echo $perio['perid']." | ".$perio['name']?></option>
+        <?php
+    } ?>
+    <option value="T">TODOS</option>
+<?php 
+}else{ ?>
+    <option value=""><?php echo $this->anio?>--No tienen ningun periodo</option>
+    <?php
+} ?> 

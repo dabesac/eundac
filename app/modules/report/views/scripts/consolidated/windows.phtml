@@ -1,0 +1,102 @@
+
+<div class="row">
+  <div class="col-lg-6">
+    <div  class="input-group">
+      <span  class="input-group-addon alert-info">
+        <input style='float: left' type="radio" name="group2" value="1"> <font style='float: left'> &nbsp; &nbsp; MATRICULADOS POR CURSOS</font><br>
+      </span>
+    </div>
+  </div>
+    <div class="col-lg-6">
+    <div  class="input-group">
+      <span  class="input-group-addon alert-info">
+        <input style='float: left' type="radio" name="group2" value="2"> <font style='float: left'> &nbsp; &nbsp; AVANCE DE NOTAS</font><br>
+      </span>
+    </div>
+  </div>
+    <div class="col-lg-6">
+    <div  class="input-group">
+      <span  class="input-group-addon alert-info">
+        <input style='float: left' type="radio" name="group2" value="3"> <font style='float: left'> &nbsp; &nbsp;MATRICULADOS POR SEMESTRES </font><br>
+      </span>
+    </div>
+  </div>
+    <div class="col-lg-6">
+    <div  class="input-group">
+      <span  class="input-group-addon alert-info">
+        <input style='float: left' type="radio" name="group2" value="4"> <font style='float: left'> &nbsp; &nbsp; CANTIDAD DE MATRICULADOS POR CURSO</font><br>
+      </span>
+    </div>
+  </div>
+    <div class="col-lg-6">
+    <div  class="input-group">
+      <span  class="input-group-addon alert-info">
+        <input style='float: left' type="radio" name="group2" value="5"> <font style='float: left'> &nbsp; &nbsp; MATRICULADOS POR ESCUELA</font><br>
+      </span>
+    </div>
+  </div>
+    <div class="col-lg-6">
+    <div  class="input-group">
+      <span  class="input-group-addon alert-info">
+        <input style='float: left' type="radio" name="group2" value="6"> <font style='float: left'> &nbsp; &nbsp;  CONSOLIDADO POR SEMESTRE</font><br>
+      </span>
+    </div>
+  </div>
+</div>
+<style type="text/css">
+  .modal-dialog
+  {
+    width: 900px;
+  }
+</style>
+<script type="text/javascript">
+$(document).ready(function()
+{
+        $("input[name=group2]").click(function () {   
+        var tipo=$('input:radio[name=group2]:checked').val(); 
+        var perid = $("#periodo_c").val();
+        var facid = $("#facid").val();
+        var tescid = $("#escid").val(); 
+        var espec = $("#especialidad").val();
+        var xx=tescid.split(";--;");
+        var escid=xx[0];
+        var subid=xx[1];
+        if (tipo=="1" || tipo=="2" )  {  
+        var $url = '/report/consolidated/registerxcourse/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
+        } 
+        if (tipo=="3" || tipo=="6")  {  
+        var $url = '/report/consolidated/registerxsemester/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
+        } 
+        if (tipo=="4")  {  
+        var $url = '/report/consolidated/countregisterxcourse/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
+        }
+        if (tipo=="5")  {  
+        var $url = '/report/consolidated/registerxspeciality/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
+        }
+        // alert($url);
+        $("#modal").modal('show');
+        $(".modal-body").load($url);
+         });
+});
+</script>
+
+
+<div class="modal fade" id='modal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Salir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
