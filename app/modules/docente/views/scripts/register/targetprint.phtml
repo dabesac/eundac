@@ -20,6 +20,8 @@ $mpdf->mirrorMargins = 1;
 $aprobados = 0;
 $jalados = 0;
 $retirados = 0;
+$back = '';
+$back1 = '';
 $header = '
 <table width="100%" style="border: 1px solid #000;font-family: serif;  color: #000; ">
 	<tr style="text-align:center; padding-left: 100px; ">
@@ -122,9 +124,12 @@ address {
                             if ($student['promedio1'] >= 0 && $student['promedio1'] <=10 ) { $jalados++; $back="danger text-danger";} 
                         }?>
 
-                        <?php if ($student['promedio2']== -3 ) { $retirados++;}?>
-                        <?php if ($student['promedio2'] > 10 && $student['promedio2'] <=20 ) { $aprobados++; $back1="active text-primary";}?>
-                        <?php if ($student['promedio2'] >= 0 && $student['promedio2'] <=10 ) { $jalados++; $back1="danger text-danger";}?>
+                        <?php if ($this->partial == 2) {
+                            if ($student['promedio2']== -3 ) { $retirados++;}
+                            if ($student['promedio2'] > 10 && $student['promedio2'] <=20 ) { $aprobados++; $back1="active text-primary";}
+                            if ($student['promedio2'] >= 0 && $student['promedio2'] <=10 ) { $jalados++; $back1="danger text-danger";}
+                        }
+                        ?>
 
                         <td class='text-center'><?php echo $key+1?></td>
                         <td class='text-center'><?php echo $student['uid']?></td>
