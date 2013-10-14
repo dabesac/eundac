@@ -1,0 +1,143 @@
+<?php
+$aprobados = 0;
+$jalados = 0;
+$retirados = 0; 
+?>
+
+<div class='row' id='header-info'>
+    <div class='col-xs-9 header-registration-course'>
+        <h4 class='text-header-registration'> <span class='glyphicon glyphicon-list' style='color:#1abc9c;'></span>
+            REGISTRO DE NOTAS - 
+            <?php echo $this->infocourse['name']?> Turno <?php echo $this->turno?></h4>
+    </div>
+    
+    <div class="col-md-3">
+        <a href="/docente/notas" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
+        <a href="/docente/register/conpetencyprint<?php echo $this->url?>" class='btn btn-info'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
+    </div>
+</div><!-- end header-->
+<div class='row'>
+    <div class='col-md-12 table-responsive'>
+        <table class='table table-bordered'>
+            <thead>
+            <tr>
+                <th  rowspan="2" class='text-center'>N°</th>
+                <th  rowspan="2" class='text-center'>Codigo</th>
+                <th  rowspan="2" class='text-center'>Apellidos y Nombres</th>
+                <th colspan="4" class='text-center'>UNIDAD I</th>
+                <th colspan="4" class='text-center'>UNIDAD II</th>
+                
+                <?php if($this->partial == 2){?>
+                    <th colspan="4" class='text-center' >UNIDAD III</th>
+                    <th rowspan="2" class='text-center'>N.F</th>
+                    <th colspan="4" class='text-center' >UNIDAD III</th>
+                    <th colspan="4" class='text-center' >UNIDAD IV</th>
+                    <th rowspan="2" class='text-center'>N.F</th>
+                <?php }?>
+               
+            </tr>
+            <tr>
+                <?php if($this->partial != 0){ 
+                        if($this->partial == 1){
+                                
+                            $porc["porc1"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc1_u1']:"N1";
+                            $porc["porc2"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc2_u1']:"N2";
+                            $porc["porc3"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc3_u1']:"N3";
+                            $porc["porc4"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc1_u2']:"N1";
+                            $porc["porc5"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc2_u2']:"N2";
+                            $porc["porc6"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc3_u2']:"N3";
+                        }else{
+                            
+                            $porc["porc7"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc1_u3']:"N1";
+                            $porc["porc8"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc2_u3']:"N2";
+                            $porc["porc9"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc3_u3']:"N3";
+                            $porc["porc10"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc1_u4']:"N1";
+                            $porc["porc11"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc2_u4']:"N2";
+                            $porc["porc12"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc3_u4']:"N3";
+
+                        }
+                    }?>
+
+                <th class='text-center' ><?php echo $porc['porc1']; ?>%</th>
+                <th class='text-center' ><?php echo $porc['porc2']; ?>%</th>
+                <th class='text-center' ><?php echo $porc['porc3']; ?>%</th>
+                <th class='text-center success'>Prom 1</th>
+
+                <th class='text-center' ><?php echo $porc['porc4']; ?>%</th>
+                <th class='text-center' ><?php echo $porc['porc5']; ?>%</th>
+                <th class='text-center' ><?php echo $porc['porc6']; ?>%</th>
+                <th class='text-center success'>Prom 2</th>
+
+                <?php if ($this->partial == 2) { ?>
+                <th class='text-center' ><?php echo $porc['porc7']; ?>%</th>
+                <th class='text-center' ><?php echo $porc['porc8']; ?>%</th>
+                <th class='text-center' ><?php echo $porc['porc9']; ?>%</th>
+                <th class='text-center success'>Prom 3</th>
+
+                <th class='text-center' ><?php echo $porc['porc10']; ?>%</th>
+                <th class='text-center' ><?php echo $porc['porc11']; ?>%</th>
+                <th class='text-center' ><?php echo $porc['porc12']; ?>%</th>
+                <th class='text-center success'>Prom 4</th>
+                <?php }?>
+                
+            </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ($this->students){
+                foreach ($this->students as $key => $student) {?>
+                    <tr>
+
+                        <?php if ($this->partial == 1) {
+                            if (intval($student['nota4_i']) > 10 && intval($student['nota4_i']) <=20) {$aprobados ++;}
+                            if (intval($student['nota4_i']) <= 10 && intval($student['nota4_i']) >=0) {$aprobados ++;}
+                            if ( $student['nota4_i'] == -3 ) {$retirados ++;}
+                        }?>
+                        <?php if ($this->partial == 2) {
+                            if (intval($student['notafinal']) > 10 && intval($student['notafinal']) <=20) {$aprobados ++;}
+                            if (intval($student['notafinal']) <= 10 && intval($student['notafinal']) >=0) {$aprobados ++;}
+                            if ( $student['notafinal'] == -3 ) {$retirados ++;}
+                        }?>
+
+                        <td class='text-center' ><?php echo $key+1?></td>
+                        <td class='text-center'><?php echo $student['uid']?></td>
+                        <td ><?php echo $student['last_name0']." ".$student['last_name1'].", ".$student['first_name'] ?></td>
+
+                        <!-- partial 1-->
+                        <td class='text-center'><?php echo ($student['nota4_i']==-3)? 'R': $student['nota1_i'] ?></td>
+                        <td class='text-center'><?php echo ($student['nota4_i']==-3)? 'R': $student['nota2_i'] ?></td>
+                        <td class='text-center'><?php echo ($student['nota4_i']==-3)? 'R': $student['nota3_i'] ?></td>
+                        <td class='success text-center'><?php echo ($student['nota4_i']==-3)? 'R': $student['nota4_i'] ?></td>
+
+                        <td class='text-center' ><?php echo ($student['nota4_i']==-3)? 'R': $student['nota6_i'] ?></td>
+                        <td class='text-center' ><?php echo ($student['nota4_i']==-3)? 'R': $student['nota7_i'] ?></td>
+                        <td class='text-center' ><?php echo ($student['nota4_i']==-3)? 'R': $student['nota8_i'] ?></td>
+                        <td class='text-center success' ><?php echo  ($student['nota4_i']==-3)? 'R': $student['nota9_i'] ?></td>
+                        <!-- partial 2-->
+
+                        <?php if($this->partial == 2){?>
+                        <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota1_ii'] ?></td>
+                        <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota2_ii'] ?></td>
+                        <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota3_ii'] ?></td>
+                        <td class='text-center success' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota4_ii'] ?></td>
+
+                        <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota6_ii'] ?></td>
+                        <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota7_ii'] ?></td>
+                        <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota8_ii'] ?></td>
+                        <td class='text-center success' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota9_ii'] ?></td>
+                        <td class='text-center success' ><?php echo  ($student['notafinal']==-3)? 'R': $student['notafinal'] ?></td>
+                        <?php }?>
+                    </tr>
+
+                <?php }}?>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<address>
+  <strong>Aprobados</strong>  <?php echo $aprobados?><br>
+  <strong>Desaprobados</strong>  <?php echo $jalados?><br>
+  <strong>Retirados</strong>  <?php echo $retirados?><br>
+  <strong>Total</strong>  <?php echo $aprobados+$jalados+$retirados?>
+</address>
