@@ -1,37 +1,180 @@
 <div class="panel panel-info">
 
   <div class="panel-heading">
-    <h4>Datos Estadisticos</h4>
+    <h4>Datos Estadisticos 
+		<?if($this->statistic){?>
+    		<a id="edit" class="pull-right" title="Editar" href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+    	<?}?>
+    </h4>
   </div>
 
   <div class="panel-body">
   	<?if($this->statistic){?>
     <table class="table">
     	<tr>
-			<td>Conocimiento en Computacion</td>
+			<td>Conocimiento en Computacion <h5><b>
+				<?if($this->statistic["cono_comp"]=="S"){
+					echo "Si";
+				}else{
+					echo "No";
+				}?>
+			</b></h5></td>
+		</tr>
+
+		<tr>
+			<th><h4><b>Datos Economicos</b></h4></th>
 		</tr>
     	<tr>
-			<td>Depende Economicamente de</td>
-			<td>Denpenden de Usted</td>
+			<td>Depende Economicamente de <h5><b>
+				<?if($this->statistic["dependencia"]=="P"){
+					echo "Padres";
+				}elseif($this->statistic["dependencia"]=="SP"){
+					echo "Solo Padre";
+				}elseif($this->statistic["dependencia"]=="SM"){
+					echo "Solo Madre";
+				}elseif($this->statistic["dependencia"]=="H"){
+					echo "Hermanos";
+				}elseif($this->statistic["dependencia"]=="T"){
+					echo "Tios";
+				}elseif($this->statistic["dependencia"]=="C"){
+					echo "Conyuge";
+				}elseif($this->statistic["dependencia"]=="O"){
+					echo "Otros";
+				}elseif($this->statistic["dependencia"]=="N"){
+					echo "Ninguno";
+				}?>
+			</b></h5></td>
+			<td>Denpenden de Usted<h5><b>
+				<?if($this->statistic["dependen_ud"]=="S"){
+					echo "Si, ".$this->statistic["num_dep_ud"]." personas";
+				}else{
+					echo "No";
+				}?>
+			</b></h5></td>
+		</tr>
+
+		<tr>
+			<th><h4><b>Vivienda</b></h4></th>
 		</tr>    	
 		<tr>
-			<td>Vivienda</td>
-			<td>Tipo</td>
+			<td>La Vivienda es<h5><b>
+				<?if($this->statistic["vivienda"]=="P"){
+					echo "Propia";
+				}elseif($this->statistic["vivienda"]=="A"){
+					echo "Alquilada";
+				}elseif($this->statistic["vivienda"]=="H"){
+					echo "Hipotecada";
+				}elseif($this->statistic["vivienda"]=="PH"){
+					echo "Prestada";
+				}elseif($this->statistic["vivienda"]=="O"){
+					echo "Otros";
+				}?>
+			</b></h5></td>
+			<td>Numero de Habitantes <h5><b><?echo $this->statistic["num_personas"]?></b></h5></td>
+		</tr>
+		<tr>
+			<td>Tipo de Vivienda<h5><b>
+				<?if($this->statistic["tipo_vivienda"]=="CI"){
+					echo "Casa Independiente";
+				}elseif($this->statistic["tipo_vivienda"]=="CA"){
+					echo "Campamento";
+				}elseif($this->statistic["tipo_vivienda"]=="D"){
+					echo "Departamento";
+				}elseif($this->statistic["tipo_vivienda"]=="C"){
+					echo "Cuarto";
+				}elseif($this->statistic["tipo_vivienda"]=="CC"){
+					echo "Cuarto Compartido";
+				}elseif($this->statistic["tipo_vivienda"]=="O"){
+					echo "Otro";
+				}?>
+			</b></h5></td>
+			<td>Material<h5><b>
+				<?if($this->statistic["mat_vivienda"]=="NA"){
+					echo "Ladrillo o Bloque de Cemento Acabado";
+				}elseif($this->statistic["mat_vivienda"]=="NI"){
+					echo "Ladrillo o Bloque de Cemento Inconcluso";
+				}elseif($this->statistic["mat_vivienda"]=="TA"){
+					echo "Adobe o Tapia Acabado";
+				}elseif($this->statistic["mat_vivienda"]=="TI"){
+					echo "Adobe o Tapia Inconcluso";
+				}elseif($this->statistic["mat_vivienda"]=="PA"){
+					echo "Precario Acabado";
+				}elseif($this->statistic["mat_vivienda"]=="PI"){
+					echo "Precario Inconcluso";
+				}?>
+			</b></h5></td>
 		</tr>    	
 		<tr>
-			<td>Tipo de Material</td>
-			<td>Numero de Habitaciones</td>
+			<td>Numero de Habitaciones<h5><b><?echo $this->statistic["num_habitacion"]?></b></h5></td>
+			<td>Servicios con los que cuenta<h5><b>
+				<?if($this->statistic["servicios"]=="ALD"){
+					echo "Agua, Luz y Desagüe";
+				}elseif($this->statistic["servicios"]=="LD"){
+					echo "Solo Luz y Desagüe";
+				}elseif($this->statistic["servicios"]=="AL"){
+					echo "Solo Agua y Luz";
+				}elseif($this->statistic["servicios"]=="S"){
+					echo "Solo Agua";
+				}elseif($this->statistic["servicios"]=="L"){
+					echo "Solo Luz";
+				}elseif($this->statistic["servicios"]=="N"){
+					echo "Ninguno";
+				}?>
+			</b></h5></td>
+		</tr>
+
+		<tr>
+			<th><h4><b>Personal</b></h4></th>
 		</tr>
 		<tr>
-			<td>Servicios</td>
-			<td>Personas que Habitan en su Hogar</td>
+			<td>Vive con<h5><b>
+				<?if($this->statistic["vive_con"]=="PD"){
+					echo "Padres";
+				}elseif($this->statistic["vive_con"]=="P"){
+					echo "Solo Padre";
+				}elseif($this->statistic["vive_con"]=="M"){
+					echo "Solo Madre";
+				}elseif($this->statistic["vive_con"]=="H"){
+					echo "Hermanos";
+				}elseif($this->statistic["vive_con"]=="C"){
+					echo "Conyugue";
+				}elseif($this->statistic["vive_con"]=="P"){
+					echo "Parientes";
+				}elseif($this->statistic["vive_con"]=="S"){
+					echo "Solo";
+				}?>
+			</b></h5></td>
+			<td>Lugar de Alimentacion<h5><b>
+				<?if($this->statistic["lugar_alimentacion"]=="CU"){
+					echo "Comedor Universitario";
+				}elseif($this->statistic["lugar_alimentacion"]=="P"){
+					echo "Pensión";
+				}elseif($this->statistic["lugar_alimentacion"]=="S"){
+					echo "Hogar";
+				}elseif($this->statistic["lugar_alimentacion"]=="S"){
+					echo "Se Prepara";
+				}elseif($this->statistic["lugar_alimentacion"]=="O"){
+					echo "Otros";
+				}?>
+			</b></h5></td>
 		</tr>
 		<tr>
-			<td>Problemas Con la Necesidad de Alimentos</td>
-			<td>Lugar de Alimentacion</td>
-		</tr>
-		<tr>
-			<td>Costo Diario de Alimentos</td>
+			<td>Costo Diario de Alimentos<h5><b><?echo $this->statistic["costo_alimento"]. " Soles"?></b></h5></td>
+			<td>Tiene Problemas con su Alimentación<h5><b>
+				<?if($this->statistic["prob_alimento"]=="N"){
+					echo "Ninguno";
+				}elseif($this->statistic["prob_alimento"]=="DP"){
+					echo "Sus padres le envian dinero";
+				}elseif($this->statistic["prob_alimento"]=="HG"){
+					echo "Sus padres no cuentan con dinero";
+				}elseif($this->statistic["prob_alimento"]=="AD"){
+					echo "Vive muy lejos de la Universidad";
+				}elseif($this->statistic["prob_alimento"]=="VP"){
+					echo "Sus padres no lo apoyan economicamente";
+				}elseif($this->statistic["prob_alimento"]=="O"){
+					echo "Otros";
+				}?>
+			</b></h5></td>
 		</tr>
     </table>
     <?php }else{?>
@@ -40,3 +183,11 @@
   </div>
 
 </div>
+
+<script>
+	$("#edit").click(function(){
+		$("#datastudent").html("")
+    	$("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>")
+    	$("#editform").load("/profile/public/studenteditstatistic")
+	})
+</script>

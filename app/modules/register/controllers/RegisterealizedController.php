@@ -32,7 +32,7 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 			$this->view->subid=$subid;
 			$this->view->uid=$uid;
 
-			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'uid'=>$uid);
+			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'uid'=>$uid,'state'=>'M');
 			$attrib=array('escid','perid','courseid','turno','notafinal','state');
 			$orders=array('perid','courseid');	
 			$dbgc= new Api_Model_DbTable_Registrationxcourse();

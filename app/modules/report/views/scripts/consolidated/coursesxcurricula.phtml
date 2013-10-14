@@ -1,0 +1,34 @@
+
+<?php 
+if ($this->courses)
+{?>    <option value="">Seleccione curso</option><?php
+
+    foreach ($this->courses  as $curso)
+        {
+    		$where['eid']=$curso['eid'];
+    		$where['oid']=$curso['oid'];
+    		$where['courseid']=$curso['courseid'];
+    		$where['curid']=$curso['curid'];
+    		$where['escid']=$curso['escid'];
+    		$where['subid']=$curso['subid'];
+            $course = new Api_Model_DbTable_Course();
+            $list_curso = $course ->_getOne($where);
+            $info = $list_curso['name'];
+         
+        ?>     
+          <option value="<?php echo $curso['courseid'].";--;".$curso['turno']?>"><?php echo $info." | ".$curso['turno']?> </option>
+        <?php  
+
+        }
+
+}else{
+    ?>
+        <option value="">No tienen ningun CURSO</option>
+    <?php
+}
+?>    
+
+         
+
+
+

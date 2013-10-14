@@ -78,7 +78,21 @@ class Profile_PublicController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $uid=$this->sesion->uid;
+            $pid=$this->sesion->pid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
+
+            $dbsta=new Api_Model_DbTable_Statistics();
+            $where=array("eid"=>$eid, "oid"=>$oid, "uid"=>$uid, "pid"=>$pid, "escid"=>$escid, "subid"=>$subid);
+            $si=0;
+            if($dbsta->_getOne($where)){
+                $si=1;
+            }
+            $this->view->si=$si;
+
         }catch(exception $e){
             print "Error: ".$e->getMessage();
         }
@@ -325,7 +339,7 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studentstatisticAction()
     {
         try{
-            //$this->_helper->layout()->disableLayout();
+            $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $uid=$this->sesion->uid;
@@ -336,6 +350,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dbsta=new Api_Model_DbTable_Statistics();
             $where=array("eid"=>$eid, "oid"=>$oid, "uid"=>$uid, "pid"=>$pid, "escid"=>$escid, "subid"=>$subid);
             $sta=$dbsta->_getOne($where);
+            $this->view->statistic=$sta;
             //print_r($sta);
 
         }catch(exception $e){
@@ -346,7 +361,48 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studentsavestatisticAction()
     {
         try{
+            $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $uid=$this->sesion->uid;
+            $pid=$this->sesion->pid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
 
+            $dbsta=new Api_Model_DbTable_Statistics();
+            //$where=array("eid"=>$eid, "oid"=>$oid, "uid"=>$uid, "pid"=>$pid, "escid"=>$escid, "subid"=>$subid);
+            //$sta=$dbsta->_getOne($where);
+
+            $form=new Profile_Form_Statistic();
+            $this->view->form=$form;
+            //$form->populate($sta);
+            
+            if ($this->getRequest()->isPost()) {
+                $formdata=$this->getRequest()->getPost();
+                if ($form->isValid($formdata)) {
+                    $formdata["eid"]=$eid;
+                    $formdata["oid"]=$oid;
+                    $formdata["uid"]=$uid;
+                    $formdata["pid"]=$pid;
+                    $formdata["escid"]=$escid;
+                    $formdata["subid"]=$subid;
+                    $formdata["state"]="T";
+                    if($formdata["dependen_ud"]=="N"){
+                        $formdata["num_dep_ud"]=0;
+                    }
+                    $save=$dbsta->_save($formdata);
+                    print_r("Se Guardo con Exito");
+                }
+            }
+        }catch(exception $e){
+            print "Error ! ".$e->getMessage();
+        }
+
+    }
+
+    public function studenteditstatisticAction(){
+        try{
+            $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $uid=$this->sesion->uid;
@@ -360,28 +416,28 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             $form=new Profile_Form_Statistic();
             $this->view->form=$form;
-            //$form->populate($sta);
-            
+            $form->populate($sta);
+
             if ($this->getRequest()->isPost()) {
                 $formdata=$this->getRequest()->getPost();
                 if ($form->isValid($formdata)) {
+                    $pk["eid"]=$eid;
+                    $pk["oid"]=$oid;
+                    $pk["uid"]=$uid;
+                    $pk["pid"]=$pid;
+                    $pk["escid"]=$escid;
+                    $pk["subid"]=$subid;
+                    $formdata["state"]="T";
                     if($formdata["dependen_ud"]=="N"){
                         $formdata["num_dep_ud"]=0;
                     }
-                    //$save=$dbstate->_save($formdata);
-                    print_r("Se Guardo con Exito");
-                    
-                    //print_r($save);
-
-                    $relationdata=array("eid"=>$eid, "pid"=>$pid , "famid"=>$save,"type"=>$type,"assignee"=>$assignee);
-                    //print_r($relationdata);
-                    $saver=$dbrelation->_save($relationdata);
+                    $update=$dbsta->_update($formdata, $pk);
+                    print_r("Se Actualizaron los Datos con Exito");
                 }
             }
         }catch(exception $e){
             print "Error ! ".$e->getMessage();
         }
-
     }
 //------------------------------------------------------------------
 

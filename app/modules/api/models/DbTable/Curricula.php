@@ -592,5 +592,58 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                        
         }
 
+        public function _getPromedioPonderadoXUid($where=null)
+        {
+            try{
+                            
+                $perid=$where['perid'];
+                $escid=$where['escid'];
+                $curid=$where['curid'];
+                $semid=$where['semid'];
+                $uid=$where['uid'];
+
+                $sql=$this->_db->query(" 
+               select m.UID,LAST_NAME0 || ' ' || LAST_NAME1 || ', ' || FIRST_NAME AS nom,
+                (
+                    select sum(credits) from base_registration_course  as mc1
+                    inner join base_courses as c1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    where regid=mc.regid and cast(semid as integer)=m.semid and mc1.curid=mc.curid and mc1.perid=mc.perid
+                    and cast(notafinal as integer) > 10
+                ) as cred_apr,
+                ((
+                (
+                    select sum(cast((CASE WHEN notafinal='-3' THEN '0' ELSE NOTAFINAL END) as integer) * credits) from base_registration_course  as mc1
+                    inner join base_courses as c1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    where regid=mc.regid and cast(semid as integer)=m.semid and mc1.curid=mc.curid and mc1.perid=mc.perid
+                ) /
+                (
+                    select sum(credits) from base_registration_course  as mc1
+                    inner join base_courses as c1
+                    ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
+                    where regid=mc.regid and cast(semid as integer)=m.semid and mc1.curid=mc.curid and mc1.perid=mc.perid
+                ) 
+                )) as prom_pon
+                 from base_registration as m inner join base_registration_course as mc
+                on m.regid=mc.regid and m.perid=mc.perid 
+                inner join base_person  p
+                on m.pid = p.pid 
+                INNER JOIN base_courses AS C
+                ON MC.CURID=C.CURID AND MC.COURSEID=C.COURSEID AND MC.ESCID=C.ESCID
+                where mc.curid='$curid' and mc.perid='$perid' and mc.escid='$escid' and m.semid='$semid' and m.state='M' and m.uid='$uid'
+
+                                group by m.uid,nom,m.semid,mc.regid,mc.curid,mc.perid
+                                                
+                    ");
+               return $sql->fetchAll();
+    
+            }  catch (Exception $ex){
+                print "Error:Para mostrar registro Falta ingresar notas de los direrentes cursos";
+           
+            }   
+                       
+        }
+
 
 }

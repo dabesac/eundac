@@ -50,10 +50,19 @@ $facid=$this->facid;
 <script type="text/javascript">
 $("#escid").load("/curricula/show/lschools/facid/"+<?php echo $facid?>);
 </script>
+
 <script type="text/javascript">
+var escid="<?php echo $this->escid?>";
+if (escid) {
+	$("#escid").attr('disabled',true);
+	var url="/curricula/show/curriculas/escid/"+escid;
+	$("#datos").html("<img src='/img/spinner.gif'>Cargando...");
+	$("#datos").load(url);
+};
+
 $("#facid").change(function(){
 	var facid=$(this).val();
-	alert(facid);
+	// alert(facid);
 	var url = "/curricula/show/lschools/facid/"+facid;
 	$("#escid").load("/curricula/show/lschools/facid/"+facid);
 });

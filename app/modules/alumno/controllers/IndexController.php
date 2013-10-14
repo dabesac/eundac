@@ -115,7 +115,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $this->view->uid = $wheres['uid'];
             $this->view->oid = $wheres['oid'];
             $this->view->eid = $wheres['eid'];
-                       // //Obtenemos los cursos matriculados
             $lcursos = new Api_Model_DbTable_StudentAssistance();
             $listacurso =$lcursos->_assistence($wheres);
             $j=0;
@@ -125,7 +124,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 $where[$j]['escid']=$wheres["escid"];
                 $where[$j]['subid']=$wheres["subid"];
                 $where[$j]['perid']=$wheres["perid"];
-
                 $where[$j]['courseid']=$cursomas["coursoid"];
                 $where[$j]['name']=$cursomas["name"];
                 $where[$j]['curid']=$cursomas["curid"];
@@ -140,17 +138,22 @@ class Alumno_IndexController extends Zend_Controller_Action {
                      $a=18;
                 }      
                 $x=0;
+                $x0=0;
                 $x1=0;
                 for ($i=$a; $i < 35 ; $i++) { 
                         $assis=$cursomas["a_sesion_".$i];
-                    if ($assis=='A' or $assis=='T') {
+                    if ($assis=='A' ) {
                         $x++;
+                    }
+                    if ( $assis=='T') {
+                        $x0++;
                     }
                      if ($assis=='F') {
                         $x1++;
                     }
                 }
                 $where[$j]['asistio']=$x;
+                $where[$j]['tarde']=$x0;
                 $where[$j]['falto']=$x1;
 
                 if ($x1>=6) {

@@ -54,18 +54,22 @@ if ($this->datacourses) { ?>
                     <td><center><?php echo "Competencia"?></center></td>
                 <?php    
                     break;
+                default:    ?>
+                    <td><center><?php echo ""?></center></td>
+                <?php    
+                break;    
             }
         ?>
         <td><center><?php echo $closedate?></center></td>
         <td>
             <center>
                 <?php 
-                if ($state=='P' || $state=='S') {  ?>
+                if ($state=='P' || $state=='C') {  ?>
                     <a id='loading<?php echo $s?>' data-toggle="modal" href="#myModal"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
                     <script type="text/javascript">
                     $("#loading<?php echo $s?>").click(function(){
                         
-                        url="/admin/openrecords/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('L')?>/";
+                        url="/admin/openrecords/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('A')?>/state_record/<?php echo base64_encode('A')?>";
                         // alert(url);
                         $("#view").load(url);
                     });
@@ -77,7 +81,7 @@ if ($this->datacourses) { ?>
                     <script type="text/javascript">
                     $("#loads<?php echo $s?>").click(function(){
                         
-                        url="/admin/openrecords/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('P')?>/";
+                        url="/admin/openrecords/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('P')?>/state_record/<?php echo base64_encode('A')?>";
                         // alert(url);
                         $("#view1").load(url);
                     });
@@ -90,12 +94,12 @@ if ($this->datacourses) { ?>
         <td>
             <center>
                 <?php 
-                if ($state=='S') {  ?>
+                if ($state=='C') {  ?>
                     <a id='load<?php echo $s?>' data-toggle="modal" href="#myModal"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
                     <script type="text/javascript">
                     $("#load<?php echo $s?>").click(function(){
                         
-                        url="/admin/openrecords/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('P')?>/";
+                        url="/admin/openrecords/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('P')?>/state_record/<?php echo base64_encode('A')?>";
                         // alert(url);
                         $("#view").load(url);
                     });
@@ -107,7 +111,7 @@ if ($this->datacourses) { ?>
                     <script type="text/javascript">
                     $("#lo<?php echo $s?>").click(function(){
                         
-                        url="/admin/openrecords/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('S')?>/";
+                        url="/admin/openrecords/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('C')?>/state_record/<?php echo base64_encode('C')?>";
                         // alert(url);
                         $("#view1").load(url);
                     });
