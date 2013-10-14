@@ -1,0 +1,117 @@
+<?php
+$aprobados = 0;
+$jalados = 0;
+$retirados = 0;
+$back = "";
+$back1 = "";
+?>
+
+<div class='row' id='header-info'>
+    <div class='col-xs-9 header-registration-course'>
+        <h4 class='text-header-registration'> <span class='glyphicon glyphicon-list' style='color:#1abc9c;'></span>
+            REGISTRO DE NOTAS - 
+            <?php echo $this->infocourse['name']?> Turno <?php echo $this->turno?></h4>
+    </div>
+    <div class="col-md-3">
+        <a href="/docente/notas" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
+        <a href="/docente/register/targetprint<?php echo $this->url?>" class='btn btn-info'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
+    </div>
+</div><!-- end header-->
+<?php if ($this->students) { ?>
+	<div class='row'>
+		<div class='col-md-12 table-responsive'>
+			<table class='table table-bordered'>
+				<thead>
+					<tr>
+						<th class='text-center'>#</th>
+						<th class='text-center'	>Codigo</th>
+						<th >Apellidos y Nombres</th>
+						<th class='text-center'	>N1</th>
+						<th class='text-center'	>N2</th>
+						<th class='text-center'	>N3</th>
+						<th class='text-center'	>N4</th>
+						<th class='text-center'	>N5</th>
+						<th class='text-center'	>N6</th>
+						<th class='text-center'	>N7</th>
+						<th class='text-center'	>N8</th>
+						<th class='text-center'	>N9</th>
+						<th class='text-center success'	>Prom 1</th>
+						<?php if($this->partial == 2){ ?>
+						<th class='text-center'	>N1</th>
+						<th class='text-center'	>N1</th>
+						<th class='text-center'	>N2</th>
+						<th class='text-center'	>N3</th>
+						<th class='text-center'	>N4</th>
+						<th class='text-center'	>N5</th>
+						<th class='text-center'	>N6</th>
+						<th class='text-center'	>N7</th>
+						<th class='text-center'	>N8</th>
+						<th class='text-center'	>N9</th>
+						<th class='text-center success'	>Prom 2</th>
+						<th class='text-center success'	>NF</th>
+						<?php }?>
+					</tr>
+				</thead>
+				<tbody>
+				<?php foreach ($this->students as $key => $student) { ?>
+					<tr>
+
+						<?php if($this->partial == 1 ){
+							if ($student['promedio1']== -3 ) { $retirados++;}
+							if ($student['promedio1'] > 10 && $student['promedio1'] <=20 ) { $aprobados++; $back="active text-primary";}
+							if ($student['promedio1'] >= 0 && $student['promedio1'] <=10 ) { $jalados++; $back="danger text-danger";} 
+						}?>
+
+						<?php if ($student['promedio2']== -3 ) { $retirados++;}?>
+						<?php if ($student['promedio2'] > 10 && $student['promedio2'] <=20 ) { $aprobados++; $back1="active text-primary";}?>
+						<?php if ($student['promedio2'] >= 0 && $student['promedio2'] <=10 ) { $jalados++; $back1="danger text-danger";}?>
+
+						<td class='text-center'><?php echo $key+1?></td>
+						<td class='text-center'><?php echo $student['uid']?></td>
+						<td ><?php echo $student['last_name0']." ".$student['last_name1'].", ".$student['first_name']?></td>
+					<?php if ($student['promedio1'] == -3 ) { ?>
+						<td class='text-center warning' colspan='9'>Retirado</td>
+						<td class='text-center warning' >R</td>
+					<?php }else{?>
+						<td class='text-center <?php echo ($student['nota1_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota1_i']?></td>
+						<td class='text-center <?php echo ($student['nota2_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota2_i']?></td>
+						<td class='text-center <?php echo ($student['nota3_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota3_i']?></td>
+						<td class='text-center <?php echo ($student['nota4_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota4_i']?></td>
+						<td class='text-center <?php echo ($student['nota5_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota5_i']?></td>
+						<td class='text-center <?php echo ($student['nota6_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota6_i']?></td>
+						<td class='text-center <?php echo ($student['nota7_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota7_i']?></td>
+						<td class='text-center <?php echo ($student['nota8_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota8_i']?></td>
+						<td class='text-center <?php echo ($student['nota9_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota9_i']?></td>
+						<td class='text-center <?php echo $back?>'><?php echo $student['promedio1']?></td>
+					<?php }?>
+
+					<?php if ($this->partial == 2) { 
+						if ($student['promedio2'] == -3 ) { ?>
+							<td class='text-center warning' colspan='9'>Retirado</td>
+							<td class='text-center warning' >R</td>
+						<?php }else{ ?>
+						<td class='text-center <?php echo ($student['nota1_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota1_ii']?></td>
+						<td class='text-center <?php echo ($student['nota2_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota2_ii']?></td>
+						<td class='text-center <?php echo ($student['nota3_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota3_ii']?></td>
+						<td class='text-center <?php echo ($student['nota4_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota4_ii']?></td>
+						<td class='text-center <?php echo ($student['nota5_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota5_ii']?></td>
+						<td class='text-center <?php echo ($student['nota6_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota6_ii']?></td>
+						<td class='text-center <?php echo ($student['nota7_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota7_ii']?></td>
+						<td class='text-center <?php echo ($student['nota8_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota8_ii']?></td>
+						<td class='text-center <?php echo ($student['nota9_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota9_ii']?></td>
+						<td class='text-center <?php echo $back1?>'><?php echo $student['promedio2']?></td>
+					<?php }}?>
+
+					</tr>
+				<?php }?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+<?php }?>
+<address>
+  <strong>Aprobados</strong>  <?php echo $aprobados?><br>
+  <strong>Desaprobados</strong>  <?php echo $jalados?><br>
+  <strong>Retirados</strong>  <?php echo $retirados?><br>
+  <strong>Total</strong>  <?php echo $aprobados+$jalados+$retirados?>
+</address>

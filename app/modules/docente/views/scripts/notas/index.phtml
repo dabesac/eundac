@@ -1,3 +1,257 @@
+
+<spam class="alert " style="display: block; font-size: 16px; margin: 3px; padding: 5px; text-align: center">
+<b>ASIGNATURAS A CARGO PERIODO - <?php  echo $this->perid?></b>
+<?php $partial=$this->partial;?>
+</spam>
+<?php 
+  $c=0;
+  foreach ($this->faculty as $number) {
+    $c++;
+    $fname=$number['name'];
+?>
+<div class="panel-group" id="accordion">
+    <div class="panel panel-primary">
+        <div class="panel-heading ">
+            <h4 class="panel-title ">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $c?>"
+                style="font-size: 18px;">
+                    <b>FACULTAD <?php echo strtoupper($fname)?></b>                         
+                </a>
+            </h4>
+        </div>
+        <div id="collapse<?php echo $c?>" class="panel-collapse collapse in">
+            <div class="panel-body" >
+                <div class='row'>
+                    <div class='col-md-11 col-md-offset-1'>
+                        <div class='row'>
+                            <?php foreach ($this->data as $courses) {
+
+                                $u_="";
+                                $urlAsist ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($courses['perid'])."/".base64_encode('curid')."/".base64_encode($courses['curid'])."/".base64_encode('state')."/".base64_encode($courses['state_record'])."/".base64_encode('partial')."/".base64_encode($partial);
+                                $u_ = $courses['curid'].$courses['courseid'].$courses['turno'];
+                                $urlcampus = "http://campus.undac.edu.pe/courses/$u_/index.php";
+                                
+
+                                $where['eid']=$courses['eid'];
+                                $where['oid']=$courses['oid'];
+                                $where['curid']=$courses['curid'];
+                                $where['escid']=$courses['escid'];
+                                $where['subid']=$courses['subid'];
+                                $where['courseid']=$courses['courseid'];
+                                $list= new Api_Model_DbTable_Course();
+                                $course=$list->_getOne($where);                     
+                                if ($number['facid']==$courses['facid']) { ?>
+                                    <div class='col-md-3 cont-coruse' >
+                                        <?php if (
+                                                    (round($courses['persetage_assit']) == 50 || round($courses['persetage_assit']) == 100 ) &&
+                                                    (round($courses['persetage_notes']) == 50 || round($courses['persetage_notes']) == 100 ) &&
+                                                    ($courses['closure_syllabus'] == 'C')&& ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')
+
+                                                ) {?>
+                                                <img src="/img/closure_.png" class='img-closure-course'>
+                                        <?php }else{?>
+                                            <h1 class='span-course'><span class='glyphicon glyphicon-book'></span></h1>
+                                        <?php }?>
+                                        <h4 class='name-course'><?php echo $course['courseid']." - ".$course['name']?></h4>
+                                        <?php switch ($courses['type_rate']) {
+                                            case 'O': ?>
+                                                <a class="btn btn-primary btn-sm btn-group-course" href="/docente/fillnotes/target<?php echo $urlAsist?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
+                                        <?php       break;
+                                            case 'C': ?>
+                                                <a class="btn btn-primary btn-sm btn-group-course " href="/docente/fillnotes/competition<?php echo $urlAsist?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
+                                                <buttom <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?>class="btn btn-primary btn-sm btn-group-course load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist?>" data-toggle="tooltip" title="Asignar Porsentage" >Asignar % </buttom>                               
+                                        <?php        break;
+                                            default: ?>
+                                                <div class="alert alert-danger">Tipo de Curso no Asignado</div>
+                                         <?php       break;
+                                        }?>
+
+                                        <a class="btn btn-primary btn-sm btn-group-course" href="/assistance/student/index<?php echo $urlAsist?>" data-toggle="tooltip" title="Llenado de Asistencia" > Asistencia</a>
+                                        <a class="btn btn-primary btn-sm btn-group-course" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>"data-toggle="tooltip" title="Registro del Sílabo" >Sílabo</a>
+
+                                        <a class="btn btn-primary btn-sm btn-group-course" href="<?php echo $urlcampus?>" target="black" data-toggle="tooltip" title="Ir Campus Virtual eUNDAC">Campus</a>
+
+
+                                        <h5 class='text-persentage-couser'>Llenado de Notas. 
+                                            <?php echo round($courses['persetage_notes'])?>%
+                                            <?php if ($courses['persetage_notes']== 50 || $courses['persetage_notes']== 100) {?>
+                                                <span class='glyphicon glyphicon-ok-sign text-success'></span>
+                                            <?php }else{ ?>
+                                                <span class='glyphicon glyphicon-info-sign text-danger'></span>
+                                            <?php }?>
+                                        </h5>
+                                        <div class="progress-course progress progress-striped active">
+                                          <div class="progress-bar"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courses['persetage_notes']?>%">
+                                          </div>
+                                        </div>
+
+                                        <h5 class='text-persentage-couser'>Llenado de Asistencia. <?php echo round($courses['persetage_assit'])?>%
+                                            <?php if ($courses['persetage_assit']== 50 || $courses['persetage_assit']== 100) {?>
+                                                <span class='glyphicon glyphicon-ok-sign text-success'></span>
+                                            <?php }else{ ?>
+                                                <span class='glyphicon glyphicon-info-sign text-danger'></span>
+                                            <?php }?>
+                                        </h5>
+                                        <div class="progress-course progress progress-striped active">
+                                          <div class="progress-bar progress-bar-danger"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courses['persetage_assit']?>%">
+                                          </div>
+                                        </div>
+                                        <h5 class='text-persentage-couser'>Llenado de Asistencia. 
+                                            <?php if ($courses['closure_syllabus']=='C') {?>
+                                                <span class='glyphicon glyphicon-ok-sign text-success'></span>
+                                            <?php }else{?>
+                                                <span class='glyphicon glyphicon-info-sign text-danger'></span>
+                                            <?php }?></h5>
+
+                                    </div>
+
+                                <?php }
+                            }?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+</div>
+<?php 
+}
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="alert alert-danger" style="margin-top:20px;">
+El Sistema para llenar aplazados estara vigente SOLO el día 02/08/2013 a partir de las 11:00a.m. hasta las 5:00pm.  
+</div>
+
+
+
+<spam class="alert " style="display: block; font-size: 16px; margin: 3px; padding: 5px; text-align: center">
+<b>ASIGNATURAS A CARGO PERIODO - 13A</b>
+</spam>
+<?php 
+  $c=0;
+  foreach ($this->faculty_ as $number_) {
+    $c++;
+    $fname=$number_['name'];
+    
+?>
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $c?>">
+                    <h5><?php
+                    echo $fname?>
+                    </h5>       
+                </a>
+            </h4>
+        </div>
+        <div id="collapse<?php echo $c?>" class="panel-collapse collapse in">
+            <div class="panel-body" >
+                <?php
+                $where=null;
+                   foreach ($this->data_ as $courses_) {
+
+                    $urlAp ="/".base64_encode('escid')."/".base64_encode($courses_['escid'])."/".base64_encode('subid')."/".base64_encode($courses_['subid'])."/".base64_encode('courseid')."/".base64_encode($courses_['courseid'])."/".base64_encode('turno')."/".base64_encode($courses_['turno'])."/".base64_encode('perid')."/".base64_encode($courses_['perid'])."/".base64_encode('curid')."/".base64_encode($courses_['curid'])."/".base64_encode('state')."/".base64_encode($courses_['state_record'])."";
+                      
+                      $where['eid']=$courses_['eid'];
+                      $where['oid']=$courses_['oid'];
+                      $where['curid']=$courses_['curid'];
+                      $where['escid']=$courses_['escid'];
+                      $where['subid']=$courses_['subid'];
+                      $where['courseid']=$courses_['courseid'];
+                      $list= new Api_Model_DbTable_Course();
+                      $course_=$list->_getOne($where);
+                      if ($number_['facid']==$courses_['facid']) { ?>
+                        <div class='curso'>
+                                <div style='height: 40px'>
+                                    <b><?php echo $course_['courseid']." - ".$course_['name'];?></b> 
+                            </div>
+                            <div>
+                                <div style='margin-right:5px;'>
+                                    <b>Curricula:</b>
+                                </div>
+                                    <?php echo $courses_['curid']?>
+                                <div style='float:right;'>
+                                    <b>Turno:</b>
+                                    <?php echo $courses_['turno']?> 
+                                </div>
+                            </div>
+                            
+                                <a class="btn btn-primary disabled" href="#">
+                                Notas
+                                </a>
+                                <a class="btn btn-primary disabled" href="#">
+                                Asistencia
+                                </a>
+                                <a class="btn btn-primary disabled" href="#">
+                                Silabo
+                                </a>
+                                <a class="btn btn-primary " href="/register/deferred/index<?php echo $urlAp ?>">
+                                Aplazados
+                                </a>
+                                <a class="btn btn-primary disabled" href="#">
+                                <img src="/img/icono_imprimir.png">
+                                </a>
+                            
+                        </div>
+            <?php           
+                }
+            }
+        ?>
+            </div>
+        </div>
+  </div>
+</div>
+<?php 
+} 
+
+?>
+
+<div class="modal fade" id="modal-persentage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+</div><!-- /.modal -->
+
+
+
+
+<script>
+
+$(".load-persentage").click(function(){
+    var $url = $(this).attr('href');
+    $("#modal-persentage").modal('show');
+    $.get($url,function($data){
+        $("#modal-persentage").html($data);
+    });
+    
+    return false;
+});
+
+
+
+$(function () {
+    $('[data-toggle=tooltip]').tooltip({ placement: 'bottom' }) ;
+});
+</script>
 <style>
 .curso{
     float: left;
@@ -30,190 +284,3 @@
     width: 360px; 
 }
 </style>
-
-<spam class="alert " style="display: block; font-size: 16px; margin: 3px; padding: 5px; text-align: center">
-<b>ASIGNATURAS A CARGO PERIODO - <?php  echo $this->perid?></b>
-</spam>
-<?php 
-  $c=0;
-  foreach ($this->faculty as $number) {
-   	$c++;
-   	$fname=$number['name'];
-?>
-<div class="panel-group" id="accordion">
-    <div class="panel panel-info">
-        <div class="panel-heading ">
-            <h4 class="panel-title ">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $c?>"
-                style="font-size: 18px;">
-        	        <b>FACULTAD <?php echo strtoupper($fname)?></b>                        	
-                </a>
-            </h4>
-        </div>
-        <div id="collapse<?php echo $c?>" class="panel-collapse collapse in">
-            <div class="panel-body" >
-                <?php
-        	       
-        	       foreach ($this->data as $courses) {
-
-					$u_="";
-                    $urlAsist ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($courses['perid'])."/".base64_encode('curid')."/".base64_encode($courses['curid'])."/".base64_encode('state')."/".base64_encode($courses['state_record'])."";
-                    $u_ = $courses['curid'].$courses['courseid'].$courses['turno'];
-                    $urlcampus = "http://campus.undac.edu.pe/courses/$u_/index.php";
-                    
-                    if ($courses['type_rate']=="O" ) {
-                          $fillnotes ="/docente/fillnotes/target".$urlAsist; 
-                      }
-                    if ($courses['type_rate']=="C" ) {
-                          $fillnotes ="/docente/fillnotes/competition".$urlAsist; 
-                    }
-
-        		      $where['eid']=$courses['eid'];
-        		      $where['oid']=$courses['oid'];
-        		      $where['curid']=$courses['curid'];
-        		      $where['escid']=$courses['escid'];
-        		      $where['subid']=$courses['subid'];
-        		      $where['courseid']=$courses['courseid'];
-        		      $list= new Api_Model_DbTable_Course();
-	        	      $course=$list->_getOne($where);	        	      
-        		      if ($number['facid']==$courses['facid']) { ?>
-        			    <div class='curso'>
-                                <div style='height: 40px'>
-                                    <b><?php echo $course['courseid']." - ".$course['name'];?></b> 
-                            </div>
-                            <div>
-                                <div style='margin-right:5px;'>
-                                    <b>Curricula:</b>
-                                </div>
-                                    <?php echo $courses['curid']?>
-                                <div style='float:right;'>
-                                    <b>Turno:</b>
-                                    <?php echo $courses['turno']?> 
-                                </div>
-                            </div>
-                            <div>
-	                            <a class="btn btn-primary " href="<?php echo $fillnotes?>" data-toggle="tooltip" title="Registrar las Notas">
-	                            Notas
-	                            </a>
-
-	                            <a class="btn btn-primary" href="/assistance/student/index<?php echo $urlAsist?>">
-	                            Asistencia
-	                            </a>
-	                            <a class="btn btn-primary" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>"
-	                            data-toggle="tooltip" title="Registro del Sílabo" >
-	                            Sílabo
-	                            </a>
-	                            <a class="btn btn-primary" href="<?php echo $urlcampus?>" target="black" data-toggle="tooltip" title="Ir Campus Virtual eUNDAC">
-	                            Campus
-	                            </a>
-	                            <a class="btn btn-primary disabled" href="#" data-toggle="tooltip" title="Imprimir Registro de Notas">
-	                            <img src="/img/icono_imprimir.png">
-	                            </a>
-	                      	</div>
-        			    </div>
-            <?php			
-        		}
-        	}
-        ?>
-            </div>
-        </div>
-  </div>
-</div>
-<?php 
-}
-
-?>
-
-<div class="alert alert-danger" style="margin-top:20px;">
-El Sistema para llenar aplazados estara vigente SOLO el día 02/08/2013 a partir de las 11:00a.m. hasta las 5:00pm.  
-</div>
-
-
-
-<spam class="alert " style="display: block; font-size: 16px; margin: 3px; padding: 5px; text-align: center">
-<b>ASIGNATURAS A CARGO PERIODO - 13A</b>
-</spam>
-<?php 
-  $c=0;
-  foreach ($this->faculty_ as $number_) {
-   	$c++;
-   	$fname=$number_['name'];
-   	
-?>
-<div class="panel-group" id="accordion">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $c?>">
-        	        <h5><?php
-                    echo $fname?>
-                    </h5>    	
-                </a>
-            </h4>
-        </div>
-        <div id="collapse<?php echo $c?>" class="panel-collapse collapse in">
-            <div class="panel-body" >
-                <?php
-                $where=null;
-        	       foreach ($this->data_ as $courses_) {
-
-                    $urlAp ="/".base64_encode('escid')."/".base64_encode($courses_['escid'])."/".base64_encode('subid')."/".base64_encode($courses_['subid'])."/".base64_encode('courseid')."/".base64_encode($courses_['courseid'])."/".base64_encode('turno')."/".base64_encode($courses_['turno'])."/".base64_encode('perid')."/".base64_encode($courses_['perid'])."/".base64_encode('curid')."/".base64_encode($courses_['curid'])."/".base64_encode('state')."/".base64_encode($courses_['state_record'])."";
-        		      
-        		      $where['eid']=$courses_['eid'];
-        		      $where['oid']=$courses_['oid'];
-        		      $where['curid']=$courses_['curid'];
-        		      $where['escid']=$courses_['escid'];
-        		      $where['subid']=$courses_['subid'];
-        		      $where['courseid']=$courses_['courseid'];
-        		      $list= new Api_Model_DbTable_Course();
-	        	      $course_=$list->_getOne($where);
-        		      if ($number_['facid']==$courses_['facid']) { ?>
-        			    <div class='curso'>
-                                <div style='height: 40px'>
-                                    <b><?php echo $course_['courseid']." - ".$course_['name'];?></b> 
-                            </div>
-                            <div>
-                                <div style='margin-right:5px;'>
-                                    <b>Curricula:</b>
-                                </div>
-                                    <?php echo $courses_['curid']?>
-                                <div style='float:right;'>
-                                    <b>Turno:</b>
-                                    <?php echo $courses_['turno']?> 
-                                </div>
-                            </div>
-							
-	                            <a class="btn btn-primary disabled" href="#">
-	                            Notas
-	                            </a>
-	                            <a class="btn btn-primary disabled" href="#">
-	                            Asistencia
-	                            </a>
-	                            <a class="btn btn-primary disabled" href="#">
-	                            Silabo
-	                            </a>
-	                            <a class="btn btn-primary " href="/register/deferred/index<?php echo $urlAp ?>">
-	                            Aplazados
-	                            </a>
-	                            <a class="btn btn-primary disabled" href="#">
-	                            <img src="/img/icono_imprimir.png">
-	                            </a>
-                            
-        			    </div>
-            <?php			
-        		}
-        	}
-        ?>
-            </div>
-        </div>
-  </div>
-</div>
-<?php 
-} 
-
-?>
-<script>
-$(function () {
-	$('[data-toggle=tooltip]').tooltip({ placement: 'bottom' }) ;
-});
-</script>
