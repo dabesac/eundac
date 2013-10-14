@@ -34,7 +34,7 @@ $resource1[]="default/logaccess";
 $resource1[]="default/rss";
 $resource1[]="distribution/printdistribution";
 $resource1[]="profile/private";
-
+$resource1[]="profile/public";
 
 //print_r($resource1);
 
@@ -104,7 +104,7 @@ $(document).ready(function(){
 <![endif]-->
 
 <?php 
-if ($rid=="AL"){
+if ($rid=="AL" or $rid=='EG'){
 	$profile = "/profile/public/student";
 }
 ?>
@@ -125,7 +125,7 @@ if ($rid=="AL"){
 					<a href="/">INICIO</a>
 				</li>
 				<?php 
-				if ($rid=='AL') {
+				if ($rid=='AL' or $rid=='EG') {
 				?>
 				<li>
 				<a href="<?php echo $urlrecord?>" class="titulo">

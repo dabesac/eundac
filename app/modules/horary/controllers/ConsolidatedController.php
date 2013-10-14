@@ -3,16 +3,13 @@
 
  	public function init(){
  		$sesion  = Zend_Auth::getInstance();
- 		if(!$sesion->hasIdentity() ){
- 			$this->_helper->redirector('index',"index",'default');
- 		}
- 		
- 		$this->sesion = $login;
+        if(!$sesion->hasIdentity() ){
+            $this->_helper->redirector('index',"index",'default');
+        }
+        $login = $sesion->getStorage()->read();
+        $this->sesion = $login;
  		require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
-        // $this->sesion->escid='2ESCL';
-        // $this->sesion->facid='2';
-        // $this->sesion->uid='0924401019';
  	}
 
  	public function indexAction(){
@@ -33,7 +30,7 @@
 	        $response = $client->restget($endpoint,$data);
 	        $lista=$response->getBody();
 	        $data = Zend_Json::decode($lista);
-        	// print_r($data);exit();
+        	// print_r($data);
         	$this->view->horarys=$data; 
  			
  		} catch (Exception $e) {
@@ -43,6 +40,7 @@
 
  	public function printconsolidatedAction(){
  		try {
+            $this->_helper->layout()->disableLayout();
  			$eid=$this->sesion->eid;
 	        $oid=$this->sesion->oid;
 	        $escid=$this->sesion->escid;
