@@ -223,6 +223,8 @@ class IndexController extends Zend_Controller_Action {
     	$data['eid'] =$sesion_->eid;
     	$data['oid']=$sesion_->oid;
     	$data['tokenid']=$sesion_->tokenid;
+    	$data['uid']=$sesion_->uid;
+    	$data['pid']=$sesion_->pid;
     	$r=$log->_getOne($data);
     	if ($r){
     		$datalog['dateend']= date(DATE_RFC822);
@@ -240,15 +242,18 @@ class IndexController extends Zend_Controller_Action {
     	$sesion_ = $sesion->getStorage()->read();
     	$data['eid'] =$sesion_->eid;
     	$data['oid']=$sesion_->oid;
+    	$data['uid']=$sesion_->uid;
     	$data['state']="A";
     	$log = new Api_Model_DbTable_Logs();
     	$r=$log->_getFilter($data,array("pid","uid"));
     	if ($r){
     		$datalog['dateend']= date(DATE_RFC822);
     		$datalog['state']= 'C';
-    		$sql="eid='".$data['eid']."' and oid='".$data['oid']."'";
+    		echo $sql="eid='".$data['eid']."' and oid='".$data['oid']."' and uid='".$data['uid']."'";
+    		echo "";
+    		
     		$log->update($datalog,$sql);
-    		Zend_Auth::getInstance()->clearIdentity();
+    		//Zend_Auth::getInstance()->clearIdentity();
     		$this->_redirect("/");
     	}
         
