@@ -41,8 +41,18 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                 $data['state']='A';
                $gesp = $esp->_getFilter($data); 
             }
-            else{
-            $gesp = $esp->_getspeciality($where); 
+
+           else{
+                if($where['facid']=='5' || $where['facid']=='2'){
+                $data['eid']=$where['eid'];
+                $data['oid']=$where['oid'];
+                $data['facid']=$where['facid'];
+                $data['state']='A';
+               $gesp = $esp->_getFilter($data); 
+                }
+                else{
+                $gesp = $esp->_getspeciality($where); 
+                }
             }
             if ($gesp ) $this->view->getEsp=$gesp;
             $form=new Rfacultad_Form_Getcond();

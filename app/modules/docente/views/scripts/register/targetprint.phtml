@@ -1,0 +1,195 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+$speciality = $this->info_speciality;
+if ($speciality['parent']!= '') {
+	$name_esc = $speciality['speciality'];
+	$name_speciality='ESPECIALIDAD'.$speciality['name'];
+}
+else{
+	$name_esc=$speciality['name'];
+}
+$perid=$this->perid;
+$course = $this->infocourse;
+$students = $this->students;
+$mpdf->mirrorMargins = 1;
+
+$aprobados = 0;
+$jalados = 0;
+$retirados = 0;
+$back = '';
+$back1 = '';
+$header = '
+<table width="100%" style="border: 1px solid #000;font-family: serif;  color: #000; ">
+	<tr style="text-align:center; padding-left: 100px; ">
+    	<td  rowspan="2" width="340px" style="border: 1px solid #000 "><img src="/img/header_imprimir.jpg">
+    	</td>
+    	<td style="text-align:center; font-size:10px; border: 1px solid #000 ">
+    		FACULTAD '.strtoupper($this->faculty).'<br/>
+    		ESCUELA '.strtoupper($name_esc).'<br/>
+    		'.strtoupper($name_speciality).'<br/>
+    		
+    	</td>
+	</tr>
+	<tr>
+		<td style="text-align:center; font-size:10px; border: 1px solid #000 " >ACTA EVALUACIÓN - PERIODO '.$perid.' </td>
+	</tr>
+</table>
+<table width="100%" style="border-bottom: 2px solid #000; font-family: serif;  color: #000; margin-bottom:20px;">
+	<tr >
+		<td  style="font-size:10px; text-align:left;  " >
+		<strong sytle="padding-right:10px">Curso </strong>'.$course['courseid'].' - '.$course['name'].'
+		</td>
+		
+        <td style="text-align: right; font-size:10px;"><strong>Turno </strong> '.$this->turno.'</td>
+        <td  style="text-align: right; font-size:10px;"><strong>Creditos </strong>'.$course['credits'].' </td>
+	</tr>
+	<tr >
+        <td   style="text-align:left; font-size:10px;"><strong>Docente </strong> '.$this->lasname.'</td>
+        <td  style="text-align: right; font-size:10px;"><strong>Semestre </strong>'.$course['semid'].' </td>
+        <td  style="text-align:right; font-size:10px;"><strong>Alumnos </strong>'.count($students).' </td>
+	</tr>
+</table>
+';
+?>
+<style type="text/css">
+address {
+	margin-top: 10px;
+	font-size: 8px;
+	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+
+}
+.table-bordered {
+	width: 100%;
+	font-size:10px;
+	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+	border: 1px solid #000;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.text-center, .text-name{
+	text-align: center;
+	border: 0.5px solid #2c242c;
+}
+.header{
+	background-color: #ebe9eb;
+}
+</style>
+<?php if ($this->students) { ?>
+    <div class='row'>
+        <div class='col-md-12 table-responsive'>
+            <table class='table table-bordered'>
+                <thead>
+                    <tr>
+                        <th class='text-center'>#</th>
+                        <th class='text-center' >Codigo</th>
+                        <th class='text-name'>Apellidos y Nombres</th>
+                        <th class='text-center' >N1</th>
+                        <th class='text-center' >N2</th>
+                        <th class='text-center' >N3</th>
+                        <th class='text-center' >N4</th>
+                        <th class='text-center' >N5</th>
+                        <th class='text-center' >N6</th>
+                        <th class='text-center' >N7</th>
+                        <th class='text-center' >N8</th>
+                        <th class='text-center' >N9</th>
+                        <th class='text-center success' >Prom 1</th>
+                        <?php if($this->partial == 2){ ?>
+                        <th class='text-center' >N1</th>
+                        <th class='text-center' >N1</th>
+                        <th class='text-center' >N2</th>
+                        <th class='text-center' >N3</th>
+                        <th class='text-center' >N4</th>
+                        <th class='text-center' >N5</th>
+                        <th class='text-center' >N6</th>
+                        <th class='text-center' >N7</th>
+                        <th class='text-center' >N8</th>
+                        <th class='text-center' >N9</th>
+                        <th class='text-center success' >Prom 2</th>
+                        <th class='text-center success' >NF</th>
+                        <?php }?>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($this->students as $key => $student) { ?>
+                    <tr>
+
+                        <?php if($this->partial == 1 ){
+                            if ($student['promedio1']== -3 ) { $retirados++;}
+                            if ($student['promedio1'] > 10 && $student['promedio1'] <=20 ) { $aprobados++; $back="active text-primary";}
+                            if ($student['promedio1'] >= 0 && $student['promedio1'] <=10 ) { $jalados++; $back="danger text-danger";} 
+                        }?>
+
+                        <?php if ($this->partial == 2) {
+                            if ($student['promedio2']== -3 ) { $retirados++;}
+                            if ($student['promedio2'] > 10 && $student['promedio2'] <=20 ) { $aprobados++; $back1="active text-primary";}
+                            if ($student['promedio2'] >= 0 && $student['promedio2'] <=10 ) { $jalados++; $back1="danger text-danger";}
+                        }
+                        ?>
+
+                        <td class='text-center'><?php echo $key+1?></td>
+                        <td class='text-center'><?php echo $student['uid']?></td>
+                        <td class='text-name'><?php echo $student['last_name0']." ".$student['last_name1'].", ".$student['first_name']?></td>
+                    <?php if ($student['promedio1'] == -3 ) { ?>
+                        <td class='text-center warning' colspan='9'>Retirado</td>
+                        <td class='text-center warning' >R</td>
+                    <?php }else{?>
+                        <td class='text-center <?php echo ($student['nota1_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota1_i']?></td>
+                        <td class='text-center <?php echo ($student['nota2_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota2_i']?></td>
+                        <td class='text-center <?php echo ($student['nota3_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota3_i']?></td>
+                        <td class='text-center <?php echo ($student['nota4_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota4_i']?></td>
+                        <td class='text-center <?php echo ($student['nota5_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota5_i']?></td>
+                        <td class='text-center <?php echo ($student['nota6_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota6_i']?></td>
+                        <td class='text-center <?php echo ($student['nota7_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota7_i']?></td>
+                        <td class='text-center <?php echo ($student['nota8_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota8_i']?></td>
+                        <td class='text-center <?php echo ($student['nota9_i'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota9_i']?></td>
+                        <td class='text-center <?php echo $back?>'><?php echo $student['promedio1']?></td>
+                    <?php }?>
+
+                    <?php if ($this->partial == 2) { 
+                        if ($student['promedio2'] == -3 ) { ?>
+                            <td class='text-center warning' colspan='9'>Retirado</td>
+                            <td class='text-center warning' >R</td>
+                        <?php }else{ ?>
+                        <td class='text-center <?php echo ($student['nota1_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota1_ii']?></td>
+                        <td class='text-center <?php echo ($student['nota2_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota2_ii']?></td>
+                        <td class='text-center <?php echo ($student['nota3_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota3_ii']?></td>
+                        <td class='text-center <?php echo ($student['nota4_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota4_ii']?></td>
+                        <td class='text-center <?php echo ($student['nota5_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota5_ii']?></td>
+                        <td class='text-center <?php echo ($student['nota6_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota6_ii']?></td>
+                        <td class='text-center <?php echo ($student['nota7_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota7_ii']?></td>
+                        <td class='text-center <?php echo ($student['nota8_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota8_ii']?></td>
+                        <td class='text-center <?php echo ($student['nota9_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota9_ii']?></td>
+                        <td class='text-center <?php echo $back1?>'><?php echo $student['promedio2']?></td>
+                    <?php }}?>
+
+                    </tr>
+                <?php }?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php }?>
+<address>
+  <strong>Aprobados</strong>  <?php echo $aprobados?><br>
+  <strong>Desaprobados</strong>  <?php echo $jalados?><br>
+  <strong>Retirados</strong>  <?php echo $retirados?><br>
+  <strong>Total</strong>  <?php echo $aprobados+$jalados+$retirados?>
+</address>
+
+
+<?php 
+$html = ob_get_contents();
+$mpdf=new mPDF('win-1252','A4','','',15,15,42);
+$mpdf->SetHTMLHeader($header);
+$mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+$mpdf->SetFooter($this->footer);
+ob_end_clean();
+$mpdf -> WriteHTML($html);
+$mpdf->Output('Registro-'.$course['name'].'-'.$this->turno.'.pdf','D');
+ 
+?>

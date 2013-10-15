@@ -223,6 +223,8 @@ class IndexController extends Zend_Controller_Action {
     	$data['eid'] =$sesion_->eid;
     	$data['oid']=$sesion_->oid;
     	$data['tokenid']=$sesion_->tokenid;
+    	$data['uid']=$sesion_->uid;
+    	$data['pid']=$sesion_->pid;
     	$r=$log->_getOne($data);
     	if ($r){
     		$datalog['dateend']= date(DATE_RFC822);
@@ -240,15 +242,18 @@ class IndexController extends Zend_Controller_Action {
     	$sesion_ = $sesion->getStorage()->read();
     	$data['eid'] =$sesion_->eid;
     	$data['oid']=$sesion_->oid;
+    	$data['uid']=$sesion_->uid;
     	$data['state']="A";
     	$log = new Api_Model_DbTable_Logs();
     	$r=$log->_getFilter($data,array("pid","uid"));
     	if ($r){
     		$datalog['dateend']= date(DATE_RFC822);
     		$datalog['state']= 'C';
-    		$sql="eid='".$data['eid']."' and oid='".$data['oid']."'";
+    		echo $sql="eid='".$data['eid']."' and oid='".$data['oid']."' and uid='".$data['uid']."'";
+    		echo "";
+    		
     		$log->update($datalog,$sql);
-    		Zend_Auth::getInstance()->clearIdentity();
+    		//Zend_Auth::getInstance()->clearIdentity();
     		$this->_redirect("/");
     	}
         
@@ -279,11 +284,27 @@ class IndexController extends Zend_Controller_Action {
                 $acls[]= array("controller"=>"admin/bankpayments","name"=>"Pagos del Banco","imgicon"=>"calendar");
                 $acls[]= array("controller"=>"admin/person","name"=>"Crear Personas","imgicon"=>"user");
                 $acls[]= array("controller"=>"admin/user","name"=>"Crear Usuario","imgicon"=>"user");
+
+                $acls[]= array("controller"=>"admin/rol","name"=>"Crear Rol","imgicon"=>"user");
+                $acls[]= array("controller"=>"admin/faculty","name"=>"Crear Facultad","imgicon"=>"edit");
+                $acls[]= array("controller"=>"admin/org","name"=>"Crear Organización","imgicon"=>"edit");
+                $acls[]= array("controller"=>"admin/opensillabus","name"=>"Abrir Silabus","imgicon"=>"user");
+                $acls[]= array("controller"=>"admin/openrecords","name"=>"Abrir Actas","imgicon"=>"folder-close");
+                $acls[]= array("controller"=>"admin/rateregister","name"=>"Tasas Matricula","imgicon"=>"user");
+
                 $resource1[]="admin/receiptsup";
                 $resource1[]="admin/password";
                 $resource1[]="admin/bankpayments";
                 $resource1[]="admin/person";
                 $resource1[]="admin/user";
+
+                $resource1[]="admin/rol";
+                $resource1[]="admin/faculty";
+                $resource1[]="admin/org";
+                $resource1[]="admin/opensillabus";
+                $resource1[]="admin/openrecords";
+                $resource1[]="admin/rateregister";
+                
                 $modules[0]['acls'] = $acls;
                 $acls = null;
                 
@@ -374,6 +395,8 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="horary/seehorary";
                 $acls[]= array("controller"=>"docente/informacademic","name"=>"Informe Acad. Adm.","imgicon"=>"file");
                 $resource1[]="docente/informacademic";
+                $resource1[]="docente/fillnotes";
+                $resource1[]="docente/register";
                 
                 
                 if (($login->infouser['teacher']['is_director']=="S")){
@@ -390,7 +413,9 @@ class IndexController extends Zend_Controller_Action {
     			$modules[1] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
     			if (($login->infouser['teacher']['is_director']=="S")){    	
     				$acls[]= array("controller"=>"syllabus/director/listsyllabus","name"=>"Llenado Silabus","imgicon"=>"edit");
-    				$resource1[]="syllabus/director";    				
+    				$resource1[]="syllabus/director"; 
+                    $acls[]= array("controller"=>"report/consolidated","name"=>"Reporte General","imgicon"=>"folder-open"); 
+                    $resource1[]="report/consolidated";				
     				$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     				$resource1[]="report/performance";
                     $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Egresados","imgicon"=>"edit");
@@ -442,11 +467,13 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"report/consolidated","name"=>"Reporte General","imgicon"=>"folder-open");
                 $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
     			$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
     			$resource1[]="report/performance";
     			$resource1[]="report/recordnotas";
                 $resource1[]="report/registration";
+                $resource1[]="report/consolidated";
                 $resource1[]="graduated/reportgraduated";
     			$resource1[]="graduated/graphicgraduated";
     			$modules[2]['acls'] = $acls;
@@ -479,11 +506,13 @@ class IndexController extends Zend_Controller_Action {
     			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
+                $acls[]= array("controller"=>"report/consolidated","name"=>"Reporte General","imgicon"=>"folder-open");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
                 $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
     			$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
     			$resource1[]="report/performance";
     			$resource1[]="report/recordnotas";
+                $resource1[]="report/consolidated";
                 $resource1[]="report/registration";
                 $resource1[]="graduated/reportgraduated";
     			$resource1[]="graduated/graphicgraduated";
@@ -585,8 +614,7 @@ class IndexController extends Zend_Controller_Action {
 
             case "VA":{
                 $resource1[]="rcentral/index";
-                $resource1[]="profile/search";
-                //$resource1[]="profile/changecurricula";
+                $resource1[]="profile/search";                
                 
                 $modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
             
@@ -595,17 +623,19 @@ class IndexController extends Zend_Controller_Action {
                 $modules[0]['acls'] = $acls;
                 $acls = null;
                  
-                $modules[1] = array ("name" =>"Matricula", "imgicon"=>"ok");
-                $acls[]= array("controller"=>"#","name"=>"Matricula Ingresantes","imgicon"=>"saved");
-                $modules[1]['acls'] = $acls;
-                $acls = null;
+                // $modules[1] = array ("name" =>"Matricula", "imgicon"=>"ok");
+                // $acls[]= array("controller"=>"#","name"=>"Matricula Ingresantes","imgicon"=>"saved");
+                // $modules[1]['acls'] = $acls;
+                // $acls = null;
                  
                 $modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
+                $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");
                 $acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
                 $acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
                 $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
                 $acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
+                $resource1[]="report/periods";
                 $resource1[]="report/performance";
                 $resource1[]="report/recordnotas";
                 $resource1[]="report/registration";

@@ -8,10 +8,26 @@ class Register_StudentController extends Zend_Controller_Action {
         if(!$sesion->hasIdentity() ){
             $this->_helper->redirector('index',"index",'default');
         }
-         $login = $sesion->getStorage()->read();
+        $login = $sesion->getStorage()->read();
         $this->sesion = $login;
-        if ($login->uid=='9811103229' || $login->uid=='1324507145' || $login->uid=='0822277014'){
-
+        if (
+        	$login->uid=='9811103229' || $login->uid=='1324507145' || $login->uid=='0822277014'
+			|| $login->uid=='1324507096' || $login->uid=='0591203040' || $login->uid=='0321102065'
+			|| $login->uid=='0641103040' || $login->uid=='0922603051' || $login->uid=='0023203450' 
+			|| $login->uid=='0824203065' || $login->uid=='1022703180' || $login->uid=='1022709020'
+			|| $login->uid=='0922703137' || $login->uid=='0622703030' || $login->uid=='0952703020'
+			|| $login->uid=='0942703054' || $login->uid=='1012703023' || $login->uid=='0992703052'
+			|| $login->uid=='1193403130' || $login->uid=='0823403188' || $login->uid=='0894203042'
+			|| $login->uid=='0014503048' || $login->uid=='0824203065' || $login->uid=='0353401340'
+			|| $login->uid=='8021303810' || $login->uid=='1022503204' || $login->uid=='0823403141'
+			|| $login->uid=='0853903017' || $login->uid=='0813403030' || $login->uid=='1340103100'
+			|| $login->uid=='0922383038' || $login->uid=='0922383047' || $login->uid=='1021303399'
+			|| $login->uid=='1022503124' || $login->uid=='0725203209' || $login->uid=='0922293084'
+			|| $login->uid=='1243102098' || $login->uid=='0613403035' || $login->uid=='0853403017' 
+			|| $login->uid=='0823403221' || $login->uid=='0923406010' || $login->uid=='1342283071'
+			|| $login->uid=='1193103152' || $login->uid=='0123507020' || $login->uid=='0823403230'
+			|| $login->uid=='0823402055' || $login->uid=='0953103013'
+			){
         }else {
         	$this->_helper->redirector('index',"index",'default');
         }

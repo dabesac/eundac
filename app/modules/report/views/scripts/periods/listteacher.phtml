@@ -1,0 +1,26 @@
+<?php
+if ($this->data_teacher) { ?>
+	<table class="table table-condensed table-hover">
+		<tr>
+			<th>#</th>
+			<th>Docente</th>
+			<th>Asignaturas</th>
+			<th>Silabo</th>
+			<th>Horario</th>
+			<th>Estado</th>
+		</tr>
+		<?php 
+		$c=1;
+		foreach ($this->data_teacher as $teachers) { ?>
+			<tr>
+				<td><?php echo $c?></td>
+				<td><?php echo $teachers['uid']?></td>
+				<td><?php echo $teachers['courseid'].' - '.$teachers['name'].' - Turno '.$teachers['turno']?></td>
+				<td><?php echo $c?></td>
+				<td><?php echo $c?></td>
+			</tr>
+			<?php
+		}?>
+	</table>
+<?php
+}?>

@@ -1,0 +1,78 @@
+<center><h5 >
+  	<strong>FACULTAD DE <?php echo strtoupper($this->facultad)?> - </strong>
+  	<strong>ESCUELA DE  <?php echo strtoupper($this->escuela)?> -</strong>
+  	<?php if ($this->especialidad){ ?>
+  	<strong>ESPECIALIDAD DE  <?php echo strtoupper($this->especialidad)?> -</strong>	
+  	<?php }?>
+  	<strong>PERIODO <?php echo strtoupper($this->perid)?></strong>
+</center></h5>
+
+	<div class="panel panel-primary">
+  	<div class="panel-heading">
+		<h5 class="panel-title">
+	  	<span class='glyphicon glyphicon-list'></span>
+       
+ <strong>REPORTE CANTIDAD MATRICULADOS POR CURSO</strong> 
+	  	
+
+	  	<div class='pull-right'>
+	  		<a href="#" class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span></a>
+
+	  	</div>
+	  </h5>
+  	</div><br>
+<table class="table  table-condensed table-bordered table-striped" >
+
+        
+    </table>
+
+    <?php 
+foreach ($this->semester as $sem){
+
+            $cont=$sem['semid']?>
+<br>
+<div class="datos-columna" style="font-size: 15px; color: #428bca;"><h4><CENTER><b> SEMESTRE <?php echo $cont;?>   </b></h4><CENTER>  </div>
+
+<table class="table  table-condensed table-bordered table-striped">
+   <thead>
+    <tr style="margin-left: 0px;margin-right: 15px; font-size: 12px; background: #428bca; color: #D2F6F9;">
+        <th class="span1"><center>#</center></th>
+        <th class="span1"><center>Sem.</center></th>
+        <th class="span1"><center>Curricula</center></th>        
+        <th ><center>Curso</center></th>
+        <th class="span1"><center>Turno</center></th>        
+        <th class="span2"><center>Alumnos Matriculados</center></th>
+    </tr>
+    </thead>
+<?php
+$r=0;
+
+if ($this->listacursos){  
+    foreach ($this->listacursos as $curso){
+        $cursoid=$curso['courseid'];
+        $curid=$curso['curid'];
+        $perid=$curso['perid'];
+        $escid=$curso['escid'];
+        $semid=$curso['semid'];       
+        $turno =$curso['turno']; 
+        $cantidad=$curso['matriculados'];   
+          if ($curso['semid']==$cont){  
+            $r++;?>    
+            <tr >
+                <td ><center><?php echo $r?></center></td>                    
+                <td ><?php echo $semid?></td>
+                <td ><?php echo $curid?></td>                
+                <td ><?php echo $curso['name']?></td>
+                <td ><center><?php echo $turno?></center></td>
+                <td ><center><?php echo $cantidad;?></center></td>           
+            </tr>
+            <?php
+            }       
+        }
+        } 
+?>
+</table>
+<?php } ?> 
+</div>
+	
+

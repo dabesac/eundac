@@ -29,7 +29,9 @@ $info = $login;
 $resource1 = $login->resources;
 
 $resource1[]="profile/search";
-//$resource1[]="profile/changecurricula";
+
+$resource1[]="profile/changecurricula";
+
 $resource1[]="default/logaccess";
 $resource1[]="default/rss";
 $resource1[]="distribution/printdistribution";
@@ -49,7 +51,7 @@ $urlrecord ="/report/recordnotas/print/uid/".base64_encode($info->uid)."/
 		oid/".base64_encode($info->oid)."/subid/".base64_encode($info->subid)."/
 		pid/".base64_encode($info->pid);
 
-$resource1[]="graduated/filter";
+$resource1[]="rcentral/traslatestudent";
 if (!in_array($url, $resource1)) header("Location: /error/");
 $info = $login;
 
@@ -108,6 +110,7 @@ $(document).ready(function(){
 <![endif]-->
 
 <?php 
+<<<<<<< HEAD
 if ($rid=="AL" or $rid=='EG' )
 {
  	
@@ -117,6 +120,10 @@ if ($rid=="AL" or $rid=='EG' )
 else
 {
  	$profile = "/profile/privateadm/student";
+=======
+if ($rid=="AL"){
+	$profile = "/profile/public/student";
+>>>>>>> 8fc1ab937347c870f4a5077bd9b9e01f3b8a577e
 }
 
 ?>
@@ -137,7 +144,7 @@ else
 					<a href="/">INICIO</a>
 				</li>
 				<?php 
-				if ($rid=='AL' or $rid=='EG') {
+				if ($rid=='AL') {
 				?>
 				<li>
 				<a href="<?php echo $urlrecord?>" class="titulo">
