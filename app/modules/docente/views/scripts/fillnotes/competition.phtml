@@ -1,0 +1,242 @@
+<style type="text/css">
+	.data-text-note {
+	width: 45px;
+}
+</style>
+<script type="text/javascript" src="/external/notes/values-converter.js"></script>
+<?php $infocourse=$this->infocourse;?>
+<script type="text/javascript">
+	var $partial = <?php echo $this->partial?>;
+	var $units = <?php echo $this->units?>;
+	var $ulr_persentage = '';
+	var $apersentage = {};
+	var persetage_complte = true;
+</script>
+<?php  if ($this->persetage_complte == false) { ?>
+	<script type="text/javascript" >
+		$ulr_persentage = "/docente/fillnotes/persentagecompetition<?php echo $this->urlpersentage?>";
+		persetage_complte = false;
+	</script>	
+<?php }?>
+<?php  if ($this->persetage_complte == true) { ?>
+		<script >
+			$apersentage['porc1_u1'] = intval("<?php echo $this->persetage['porc1_u1']?>");
+			$apersentage['porc2_u1'] = intval("<?php echo $this->persetage['porc2_u1']?>");
+			$apersentage['porc3_u1'] = intval("<?php echo $this->persetage['porc3_u1']?>");
+			$apersentage['porc1_u2'] = intval("<?php echo $this->persetage['porc1_u2']?>");
+			$apersentage['porc2_u2'] = intval("<?php echo $this->persetage['porc2_u2']?>");
+			$apersentage['porc3_u2'] = intval("<?php echo $this->persetage['porc3_u2']?>");
+			$apersentage['porc1_u3'] = intval("<?php echo $this->persetage['porc1_u3']?>");
+			$apersentage['porc2_u3'] = intval("<?php echo $this->persetage['porc2_u3']?>");
+			$apersentage['porc3_u3'] = intval("<?php echo $this->persetage['porc3_u3']?>");
+			$apersentage['porc1_u4'] = intval("<?php echo $this->persetage['porc1_u4']?>");
+			$apersentage['porc2_u4'] = intval("<?php echo $this->persetage['porc2_u4']?>");
+			$apersentage['porc3_u4'] = intval("<?php echo $this->persetage['porc3_u4']?>");
+		</script>
+<?php }?>
+<script type="text/javascript" src="/external/notes/notes-competition.js"></script>
+<script type="text/javascript" src="/external/notes/jquery.jstepper.js"></script>
+
+<!-- /.modal llenado de porsentaje -->
+<div class="modal fade" id="modal-persentage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+</div><!-- /.modal -->
+<!-- /.modal send server -->
+<div class="modal fade" id="data-server" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+</div><!-- /.modal -->
+
+
+
+<!-- /.heade notas -->
+<div class='row' id='header-info'>
+	<div class='col-xs-8 header-registration-course'>
+		<h4 class='text-header-registration'> <span class='glyphicon glyphicon-list' style='color:#1abc9c;'></span> 
+			<?if($this->partial==1){
+				echo "Primer Parcial ";
+			}?>
+			<?if($this->partial==2){
+				echo "Segundo Parcial";
+			}?>
+
+			<?php echo $infocourse['name']?> Turno <?php echo $this->turno?></h4>
+		
+	</div>
+	
+	<div class="col-md-4">
+		<a href="/docente/notas" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
+		<?php if ($this->state_record == 'A' || $this->state_record == 'B' || $this->state_record == 'P') { ?>
+			<buttom  class='btn btn-info' id='save_notes_competition' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
+		<buttom  class='btn btn-danger' id='closure-record-competition' 	><span class='glyphicon  glyphicon-log-out'></span> Cerrar Acta</buttom>
+		<?php }?>
+	</div>
+</div><!-- end header-->
+
+<!-- alerts-->
+<div class='row' id='cont-alerts'>
+
+</div>
+<!-- end alerts-->
+
+<?php if($this->students){
+	if($this->state_syllabus == 'C'){ ?>
+<!-- data students-->
+	<div class='row'>
+		<div class='col-md-12'>
+			<table id='tb-notes' class='table'>
+				<thead>
+				    <tr>
+				        <th rowspan='2' class='text-center'>#</th>
+				        <th rowspan='2' class='text-center'>Código</th>
+				        <th rowspan='2' class='text-center'>Apellidos y Nombres</th>
+				        <th colspan="4" class='text-center'>UNIDAD I</th>
+				        <th colspan="4" class='text-center'>UNIDAD II</th>
+				        
+				        <?php if($this->partial == 2 && intval($this->units) == 3 ){?>
+				            <th colspan="4" class='text-center' >UNIDAD III</th>
+				            <th colspan="4" class='text-center' >UNIDAD IV</th>
+				            <th rowspan="2" class='text-center'>NF</th>
+				        <?php } ?>
+				        <?php if($this->partial == 2 && intval($this->units) != 3 ){?>
+				            <th colspan="4" class='text-center' >UNIDAD III</th>
+				            <th rowspan="2" class='text-center'>NF</th>
+				        <?php } ?>
+				       
+				    </tr>
+				    <tr>
+				        <?php if($this->partial != 0){ 
+				                if($this->partial == 1){
+				                        
+				                    $porc["porc1"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc1_u1']:"N1";
+				                    $porc["porc2"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc2_u1']:"N2";
+				                    $porc["porc3"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc3_u1']:"N3";
+				                    $porc["porc4"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc1_u2']:"N1";
+				                    $porc["porc5"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc2_u2']:"N2";
+				                    $porc["porc6"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc3_u2']:"N3";
+				                }else{
+				                    
+				                    $porc["porc7"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc1_u3']:"N1";
+				                    $porc["porc8"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc2_u3']:"N2";
+				                    $porc["porc9"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc3_u3']:"N3";
+				                    $porc["porc10"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc1_u4']:"N1";
+				                    $porc["porc11"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc2_u4']:"N2";
+				                    $porc["porc12"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc3_u4']:"N3";
+
+				                }
+				            }?>
+
+				        <th class='text-center' >C-<?php echo $porc['porc1']; ?>%</th>
+				        <th class='text-center' >A-<?php echo $porc['porc2']; ?>%</th>
+				        <th class='text-center' >P-<?php echo $porc['porc3']; ?>%</th>
+				        <th class='text-center success'>Prom 1</th>
+
+				        <th class='text-center' >C-<?php echo $porc['porc4']; ?>%</th>
+				        <th class='text-center' >A-<?php echo $porc['porc5']; ?>%</th>
+				        <th class='text-center' >P-<?php echo $porc['porc6']; ?>%</th>
+				        <th class='text-center success'>Prom 2</th>
+
+				        <?php if ($this->partial == 2 && $this->units == 3) { ?>
+				        <th class='text-center' >C-<?php echo $porc['porc7']; ?>%</th>
+				        <th class='text-center' >A-<?php echo $porc['porc8']; ?>%</th>
+				        <th class='text-center' >P-<?php echo $porc['porc9']; ?>%</th>
+				        <th class='text-center success'>Prom 3</th>
+				        <?php }?>
+
+				        <?php if ($this->partial == 2 && $this->units != 3) { ?>
+				        <th class='text-center' >C-<?php echo $porc['porc7']; ?>%</th>
+				        <th class='text-center' >A-<?php echo $porc['porc8']; ?>%</th>
+				        <th class='text-center' >P-<?php echo $porc['porc9']; ?>%</th>
+				        <th class='text-center success'>Prom 3</th>
+
+				        <th class='text-center' >C-<?php echo $porc['porc10']; ?>%</th>
+				        <th class='text-center' >A-<?php echo $porc['porc11']; ?>%</th>
+				        <th class='text-center' >P-<?php echo $porc['porc12']; ?>%</th>
+				        <th class='text-center success'>Prom 4</th>
+				        <?php }?>
+				        
+				    </tr>
+			    </thead>
+				<tbody>
+					<?php foreach ($this->students as $key => $register) { ?>
+						<tr 
+							curid="<?php echo $register['curid'];?>" 
+		                    escid="<?php echo $register['escid'];?>" 
+		                    courseid="<?php echo $register['courseid'];?>" 
+		                    perid="<?php echo $register['perid'];?>" 
+		                    turno="<?php echo $register['turno'];?>" 
+		                    eid="<?php echo $register['eid'];?>"
+		                    oid="<?php echo $register['oid'];?>" 
+		                    subid="<?php echo $register['subid'];?>" 
+		                    regid="<?php echo $register['regid'];?>" 
+		                    uid="<?php echo $register['uid'];?>"
+		                    pid="<?php echo $register['pid'];?>"
+		                    edition="false"
+		                    style="color:<?php echo ($register['nota4_i'] != -3)?'#000':'#FC4141'; ?>;"
+						>
+							<td>
+								<img class='img-notes'src="" id='img-notes-<?php echo $key?>'>
+								<?php echo $key+1?></td>
+							<td><?php echo $register['uid']?></td>
+							<td><?php echo $register['last_name0']." ".$register['last_name1']." ".$register['first_name']?></td>
+							<?php if ($this->partial == 2) { ?>
+								<td><input class='data-text-note-disable form-control' style="color:<?php echo ($register['nota4_i'] != -3)?'#000':'#FC4141'; ?>;" disabled type="text" name="nota4_i"  value="<?php echo ($register['nota4_i'] != -3)?$register['nota4_i']:'RET'; ?>"/></td>
+								<td><input class='data-text-note-disable form-control' style="color:<?php echo ($register['nota4_i'] != -3)?'#000':'#FC4141'; ?>;" disabled type="text" name="nota9_i"  value="<?php echo ($register['nota4_i'] != -3)?$register['nota9_i']:'RET'; ?>"/></td>
+							<?php }?>
+							<?php if ($this->partial == 1) { ?>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_i'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota1_i" value='<?php echo $register['nota1_i']?>' /></td>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_i'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota2_i" value='<?php echo $register['nota2_i']?>' /></td>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_i'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota3_i" value='<?php echo $register['nota3_i']?>' /></td>
+								<td><input class='data-text-note-disable form-control'   maxlength="2" index='<?php echo $key?>' disabled type='text' name="nota4_i" value="<?php echo ($register['nota4_i'] != -3)?$register['nota4_i']:'RET'; ?>" style="color:<?php echo ($register['nota4_i'] != -3)?'#000':'#FC4141'; ?>;"/></td>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_i'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota6_i" value='<?php echo $register['nota6_i']?>' /></td>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_i'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota7_i" value='<?php echo $register['nota7_i']?>' /></td>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_i'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota8_i" value='<?php echo $register['nota8_i']?>' /></td>
+								<td><input class='data-text-note-disable form-control'   maxlength="2" index='<?php echo $key?>' disabled type='text' name="nota9_i" value="<?php echo ($register['nota9_i'] != -3)?$register['nota9_i']:'RET'; ?>" style="color:<?php echo ($register['nota4_i'] != -3)?'#000':'#FC4141'; ?>;" /></td>
+
+							<?php } elseif ($this->partial == 2 && intval($this->units) == 3 ) {?>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota1_ii" value='<?php echo $register['nota1_ii']?>' /></td>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota2_ii" value='<?php echo $register['nota2_ii']?>' /></td>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota3_ii" value='<?php echo $register['nota3_ii']?>' /></td>
+								<td><input class='data-text-note-disable form-control'   maxlength="2" index='<?php echo $key?>' disabled type='text' name="nota4_ii" value="<?php echo ($register['nota4_ii'] != -3)?$register['nota4_ii']:'RET'; ?>" style="color:<?php echo ($register['nota4_ii'] != -3)?'#000':'#FC4141'; ?>;"/></td>
+								<td><input class='data-text-note-disable form-control'   maxlength="2" index='<?php echo $key?>' disabled type='text' name="notafinal" value="<?php echo ($register['nota4_ii'] != -3)?$register['notafinal']:'RET'; ?>" style="color:<?php echo ($register['nota4_ii'] != -3)?'#000':'#FC4141'; ?>;"/></td>
+							<?php }else{ ?>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota1_ii" value='<?php echo $register['nota1_ii']?>' /></td>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota2_ii" value='<?php echo $register['nota2_ii']?>' /></td>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota3_ii" value='<?php echo $register['nota3_ii']?>' /></td>
+								<td><input class='data-text-note-disable form-control'   maxlength="2" index='<?php echo $key?>' disabled type='text' name="nota4_ii" value="<?php echo ($register['nota4_ii'] != -3)?$register['nota4_ii']:'RET'; ?>" style="color:<?php echo ($register['nota4_ii'] != -3)?'#000':'#FC4141'; ?>;"/></td>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota6_ii" value='<?php echo $register['nota6_ii']?>' /></td>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota7_ii" value='<?php echo $register['nota7_ii']?>' /></td>
+								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota8_ii" value='<?php echo $register['nota8_ii']?>' /></td>
+								<td><input class='data-text-note-disable form-control'   maxlength="2" index='<?php echo $key?>' disabled type='text' name="nota9_ii" value="<?php echo ($register['nota9_ii'] != -3)?$register['nota9_ii']:'RET'; ?>" style="color:<?php echo ($register['nota4_ii'] != -3)?'#000':'#FC4141'; ?>;"/></td>
+								<td><input class='data-text-note-disable form-control'   maxlength="2" index='<?php echo $key?>' disabled type='text' name="notafinal" value="<?php echo ($register['nota4_ii'] != -3)?$register['notafinal']:'RET'; ?>" style="color:<?php echo ($register['nota4_ii'] != -3)?'#000':'#FC4141'; ?>;"/></td>
+							<?php }?>
+						</tr>
+					<?php }?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+<!-- error dat students-->
+<?php }else{ ?>
+	<div class='col-md-12 cont-font-not-register'>
+	<h1 class='span-not-register'>
+			<span class='glyphicon glyphicon-exclamation-sign'></span>
+		</h1>
+		<h3 class='text-not-register'>Verifique llenado de Sílabus</h3>
+	</div>
+<?php	}}else{ ?>
+	<div class='col-md-12 cont-font-not-register'>
+	<h1 class='span-not-register'>
+			<span class='glyphicon glyphicon-exclamation-sign'></span>
+		</h1>
+		<h3 class='text-not-register'>No se Encontro ningun Registro</h3>
+	</div>
+<?php }?>
+
+<input type='hidden' id='curid' value='<?php echo $infocourse['curid']?>' >
+<input type='hidden' id='escid' value='<?php echo $infocourse['escid']?>' >
+<input type='hidden' id='courseid' value='<?php echo $infocourse['courseid']?>' >
+<input type='hidden' id='eid' value='<?php echo $infocourse['eid']?>' >
+<input type='hidden' id='oid' value='<?php echo $infocourse['oid']?>' >
+<input type='hidden' id='subid' value='<?php echo $infocourse['subid']?>' >
+<input type='hidden' id='perid' value='<?php echo $this->perid?>' >
+<input type='hidden' id='turno' value='<?php echo $this->turno ?>' >

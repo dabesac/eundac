@@ -1,0 +1,126 @@
+<div class="panel panel-primary" style="padding: 2px">
+    <div class="panel-heading" style="padding: 6px">
+        <center><b style="font-size:15px; color: white">REPORTE GENERAL</b></center>
+    </div>
+</div>
+<table class="table table-hover table-condensed">
+        <tr>
+        <th colspan="2">Año:</th>
+        <td>
+            <select id="anho" class="form-control" style="width:100px">
+                <option value="">- Año -</option>
+                <?php
+                for ($i=$this->anio;$i>=1965;$i--) { ?>
+                    <option value="<?php echo $i;?>"><?php echo $i;?></option>
+                <?php }
+                ?>
+            </select>
+        </td>
+        <th >Periodo:</th>
+        <td >
+            <select id="periodo_c" class="form-control">
+                <option value="">- Seleccione -</option>
+            </select>
+        </td>
+        <td></td>
+
+    </tr>
+    <tr>
+        <th>Facultad:</th>
+        <td>
+            <select id="facid" class="form-control">
+                <option>- Seleccione la Facultad -</option>
+                <?php
+                if ($this->facultades) {
+                    foreach ($this->facultades as $facultades) { 
+                        $str = ($this->facid==$facultades['facid'])?"selected ":""; ?>
+                        <option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
+                    <?php
+                    }
+                } ?>
+            </select>
+        </td>
+        <th>Escuela:</th>
+        <td>
+            <select id="escid" class="form-control" style="width:260px">
+                <option value="">- Seleccione la Escuela -</option>
+            </select>
+        </td>
+        <th>Especialidad:</th>
+        <td>
+            <select id="especialidad" class="form-control" style="width:260px">
+                <option value="">- Seleccione la Especialidad -</option>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="6">
+            <center><a id="generar" href="#" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-down"></span></a></center>
+        </td>
+    </tr>
+</table>
+<div id="cargadatos"></div>
+
+<script type="text/javascript">
+var rid="<?php echo $this->rid ?>";
+if (rid=="RF" || rid=="DIREC") {
+    $("#facid").attr("disabled",true);
+    var facid=$("#facid").val();
+    $("#escid").load("/report/Consolidated/schools/facid/"+facid);
+    if (rid=="DIREC") {
+        $("#escid").attr("disabled",true);
+        var escid='<?php echo $this->escid?>';
+        $("#especialidad").load("/report/Consolidated/speciality/escid/"+escid);
+    };
+};
+
+$("#facid").change(function(){
+    var facid=$(this).val();
+    $("#escid").load("/report/Consolidated/schools/facid/"+facid);
+    if (facid=="TODO") {
+        var escid="TODOEC";
+        $("#especialidad").load("/report/Consolidated/speciality/escid/"+escid);
+    };
+});
+
+$("#escid").change(function(){
+    var tescid = $("#escid").val();
+    var xx1 = tescid.split(";--;");
+    var escid = xx1[0];
+    var subid = xx1[1];
+    $("#especialidad").load("/report/Consolidated/speciality/escid/"+escid);
+});
+$("#especialidad").change(function(){
+    var facid=$(this).val();   
+});
+
+$("#anho").change(function(){
+    var anio = $(this).val();
+    var url = "/report/Consolidated/periods/anio/"+anio;
+    $("#periodo_c").load(url);
+});
+
+
+
+$("#generar").click(function(){
+    var facid = $("#facid").val();
+    var tescid = $("#escid").val();
+    var xx1 = tescid.split(";--;");
+    var escid = xx1[0];
+    var subid = xx1[1];
+    var espec = $("#especialidad").val();
+    var anho = $("#anho").val();
+    var periodo = $("#periodo_c").val();
+    var xx = periodo.split(";--;");
+    var perid = xx[0];
+    var estado = xx[1];
+    if (facid=='' || escid=='' || perid=='') {
+        alert("Seleccione la Facultad, Escuela y el Periodo Académico.");
+        return false;
+    };
+    var url="/report/Consolidated/windows/facid/"+facid+"/escid/"+escid+"/espec/"+espec+"/perid/"+perid+"/subid/"+subid;
+    $('#cargadatos').html("<img src='/img/spinner.gif'>Cargando...");
+    $("#cargadatos").load(url);
+});
+</script>

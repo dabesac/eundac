@@ -94,16 +94,16 @@
 		padding-left: 40%;
 		padding-top: 8%;
 	}
-	.cont-font-not-register{
-		background-color: #fcfcfc;
-		height: 400px;
-		
-	}
-	.text-not-register{
-		color: #9e9999;
-		margin-left: 32%;
-		font-size: 21px;
-	}
+.cont-font-not-register{
+	background-color: #fcfcfc;
+	height: 400px;
+	
+}
+.text-not-register{
+	color: #9e9999;
+	margin-left: 32%;
+	font-size: 21px;
+}
 .data-header-info{
 	position: fixed;
 	z-index: 999;
@@ -113,4 +113,47 @@
 .notes-error-input
 {
 	background-color: #ED3B4B;
+}
+
+.text-header-registration {
+	color: #34495e;
+}
+.img-notes{
+	width: 30px;
+}
+.data-text-note, .data-text-note-disable{
+		width: 45px;
+	}
+/*########list subjet##########*/
+
+.cont-coruse{
+	background-color: #f2f2f2;
+	margin-right: 50px;
+	margin-bottom: 30px;
+	border: 1px solid #d4dde7;
+	border-radius: 4px 4px 4px 4px;
+	padding-bottom: 30px;
+}
+.span-course{
+	font-size: 50px;
+	color: #54769a;
+	margin-left: 35%;
+}
+.name-course{
+	font-size: 15px;
+	color: #1b2531;
+}
+.btn-group-course{
+	margin-bottom: 10px;
+}
+.text-persentage-couser{
+	color: #131b24;
+}
+.progress-course{
+	height: 8px;
+}
+.img-closure-course{
+	width: 100px;
+	margin-top: 10%;
+	margin-left: 27%;
 }

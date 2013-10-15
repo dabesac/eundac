@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<buildpath>
-	<buildpathentry kind="src" path="app"/>
-	<buildpathentry kind="src" path="html"/>
-	<buildpathentry kind="src" path="lib/Zend"/>
-	<buildpathentry kind="src" path="tests"/>
-	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
-</buildpath>

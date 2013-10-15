@@ -1,0 +1,105 @@
+<center><h5 >
+  	<strong>FACULTAD DE <?php echo strtoupper($this->facultad)?> - </strong>
+  	<strong>ESCUELA DE  <?php echo strtoupper($this->escuela)?> -</strong>
+  	<?php if ($this->especialidad){ ?>
+  	<strong>ESPECIALIDAD DE  <?php echo strtoupper($this->especialidad)?> -</strong>	
+  	<?php }?>
+  	<strong>PERIODO <?php echo strtoupper($this->perid)?></strong>
+</center></h5>
+<div>
+	<div class="panel panel-primary">
+  	<div class="panel-heading">
+		<h5 class="panel-title">
+	  	<span class='glyphicon glyphicon-list'></span>
+        <?php $tipo=$this->tipo;
+            if ($tipo=='1') { ?> <strong>REPORTES MATRICULADOS POR CURSO</strong> <?php } 
+            else{?> <strong>REPORTE AVANCE DE NOTAS POR CURSO</strong>   <?php } ?>
+	  	
+
+	  	<div class='pull-right'>
+	  		<a href="#" class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span></a>
+
+	  	</div>
+	  </h5>
+  	</div>
+<table class="table table-hover table-condensed">
+        <tr>
+        <th colspan="2">Curricula:</th>
+        <td>
+
+            <select id="curid" name="curid" class="form-control" style="width:100px" >
+                <?php
+                if ($this->curriculas){
+                    ?>
+                     <option value="">Seleccione...</option>
+                <?php
+                
+                    foreach ($this->curriculas as $curricula){
+                        ?>
+                        <option value="<?php echo $curricula['curid']?>"><?php echo $curricula['curid']?></option>
+                        <?php
+                        }  
+                }else{
+                    ?>        <option value="">No tienen ninguna curricula</option>
+                    <?php
+                }
+                ?>
+                </select>
+        </td>
+        <th >Curso:</th>
+        <td >
+            <select id="courseid" class="form-control">
+                <option value="">- Seleccione -</option>
+            </select>
+        </td>
+        <td></td>
+
+    </tr>
+   
+    <tr>
+        <td colspan="6">
+            <center><a id="generar1"  class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-arrow-down"></span></a></center>
+        </td>
+    </tr>
+</table>
+<div id='det'></div>
+	</div>	
+
+</div>
+<script>
+
+ $("#curid").change(function(){
+        var curid = $(this).val();        
+        var perid = "<?php echo $this->perid?>"; 
+        var escid = "<?php echo $this->escid?>";
+        var espec = "<?php echo $this->espec?>";  
+        $("#courseid").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#courseid").load("/report/consolidated/coursesxcurricula/curid/"+curid+"/perid/"+perid+"/escid/"+escid+"/espec/"+espec);
+    }); 
+
+    $("#courseid").change(function(){
+    var curso = $(this).val();                                
+                         });
+
+
+    $("#generar1").click(function(){
+        //var escid = $("#escid").val();        
+        var perid = "<?php echo $this->perid?>";  
+        var escid = "<?php echo $this->escid?>";
+        var espec = "<?php echo $this->espec?>";
+        var subid = "<?php echo $this->subid?>"; 
+        var tipo = "<?php echo $this->tipo?>";                
+        var curid = $("#curid").val();        
+        var curso = $("#courseid").val(); 
+        var tmp=curso.split(";--;");
+        var courseid=tmp[0];
+        var turno=tmp[1]; 
+        if (curid=="") {alert ("Debe de seleccionar una curricula");return false;}
+        if (courseid=="") {alert ("Debe de seleccionar un curso");return false;}        
+        var url="/report/consolidated/studentregistration/courseid/"+courseid+"/curid/"+curid+"/perid/"+perid+"/turno/"+turno+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo;
+        $("#det").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#det").load(url);
+
+    });       
+    
+</script>
