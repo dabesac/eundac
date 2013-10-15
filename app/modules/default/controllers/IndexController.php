@@ -343,6 +343,7 @@ class IndexController extends Zend_Controller_Action {
     		
     		case "AL": {
     			$resource1[]="alumno/index";
+                
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"register/listcurrentnotes","name"=>"Asignaturas Actuales","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"horary/consolidated","name"=>"Ver Horario","imgicon"=>"calendar");
@@ -456,7 +457,9 @@ class IndexController extends Zend_Controller_Action {
     		case "RC":{
     			$resource1[]="rcentral/index";
     			$resource1[]="profile/search";
-    			$resource1[]="profile/changecurricula";
+                $resource1[]="profile/changecurricula";
+                $resource1[]="profile/privateadm/student";
+    			
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
@@ -567,6 +570,8 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="profile/search";
                 //$resource1[]="profile/changecurricula";
                 $resource1[]="alumno/index";
+
+
 
                 $modules[0] = array ("name" =>"Perfil", "imgicon"=>"book");            
                 $acls[]= array("controller"=>"profile/public/student","name"=>"Historial","imgicon"=>"calendar");

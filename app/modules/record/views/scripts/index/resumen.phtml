@@ -1,0 +1,140 @@
+<?php
+    $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+    include_once($dir);
+    ob_start(); 
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<?php
+$perid=$this->perid;
+
+$escid=$this->listacursos[0]['escid'];
+$eid=$this->listacursos[0]['eid'];
+$oid=$this->listacursos[0]['oid'];
+$perid=$this->listacursos[0]['perid'];
+
+$where_spe=array('eid' => $eid, 'oid'=>$oid,				
+				'escid' => $escid);
+
+$dbescuela = new Api_Model_DbTable_Speciality();
+$escuela = $dbescuela ->_getFacspeciality($where_spe);
+
+$infoescuela = $escuela[0]['nomesc'];
+
+$infofacultad= $escuela[0]['facid'];
+
+$where_fac=array('eid' => $eid, 'oid'=>$oid,                
+                'facid' => $infofacultad);
+
+$dbfacultad = new Api_Model_DbTable_Faculty();
+$facu = $dbfacultad ->_getOne($where_fac);
+
+
+$infonombrefacultad = $facu['name'];
+
+
+echo $header='
+
+<table style="width: 100%;" border="1">
+    <tr>
+        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+        <th style="text-align: center; font-size: 11px;">
+        FACULTAD DE '.strtoupper($infonombrefacultad).'<br/>
+        ESCUELA DE  '.strtoupper($infoescuela).'<br/> 
+        </th>        
+    </tr>
+    <tr>
+        <th style="border: 1px solid #000;"> CONTROL DE DOCUMENTOS OFICIALES PERIODO '.$perid.'</th>
+    </tr>
+</table>'    
+?>
+
+</br>
+<table style=" font-size:11px; width: 1000px;" border="1">
+ <tr>
+        
+        <th style=" float: right;"  height="30px" width="30px" ><center>Nº</center></th>        
+        <th width="50px"><center>Codigo</center></th>
+        <th width="350px"><center>Nombre Curso</center></th>
+        <th width="30px"><center>Turno</center></th>
+        <th width="30px"><center>Sem.</center></th>         
+        <th width="350px"><center>Docente</center></th>
+        <th  width="70px"><center>Actas</center></th>
+        <th width="70px"><center>Registro</center></th>
+        <th  width="50px"><center>R. N.</center></th>
+        <th width="30px"><center># Mat.</center></th>
+    </tr>
+
+<?php
+$r=0;
+foreach ($this->listacursos as $course)
+{
+
+	$eid=$course['eid'];
+	$oid=$course['oid'];
+
+	$escid=$this->escid;
+	$perid=$this->perid;
+	$subid=$this->subid;
+
+	$turno=$course['turno'];
+	$courseid=$course['courseid'];
+	//$perid==$course['perid'];
+	//$subid==$course['subid'];
+	$nummat = $course['num_mat'];
+
+$r++;
+?>
+    <tr >
+    	<td><center><?php echo $r?></center></td>
+    	<td><center><?php echo $course['courseid'];?></center></td>
+    	<td>  <?php echo $course['name'];?></td>
+    	<td><center> <?php echo $course['turno'];?></center></td> 
+        <td><center><?php echo $course['semid']?></center></td> 
+
+        <td>
+        	<?php
+        	$where = array('eid' => $eid, 'oid'=>$oid,'courseid' => $courseid,'perid' => $perid, 'escid'=>$escid, 'subid'=>$subid,'turno'=>$turno);
+            //print_r($where);
+        	$teacher=new Api_Model_DbTable_Coursexteacher();
+            $c_teacher=$teacher->_getFilter($where,$attrib='');
+            //print_r($c_teacher[0]['pid']);
+
+            $pid=$c_teacher[0]['pid'];
+            $where_per= array('eid' => $eid, 'pid'=>$pid);
+
+        	$name_teacher=new Api_Model_DbTable_Person();
+            $nteacher=$name_teacher->_getOne($where_per);
+
+           //print_r($nteacher);
+
+            $strdocente=$nteacher['last_name0']." ".$nteacher['last_name1'].", ".$nteacher['first_name']; 
+
+            echo $strdocente;
+
+        	?>
+        </td>
+        <td ><center></center></td>
+        <td ><center></center></td>
+        <td ><center></center></td>
+        <td><center><?php echo $nummat?></center></td>
+
+
+    </tr >
+<?php
+}
+
+?>
+
+</table>
+
+
+<?php 
+
+  $html = ob_get_contents();
+  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
+  $mpdf->SetHTMLHeader($header);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('Pre-Matricula-'.$this->uid.'.pdf','D');
+?>
