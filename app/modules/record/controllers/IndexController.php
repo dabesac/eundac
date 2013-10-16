@@ -26,11 +26,23 @@ class Record_IndexController extends Zend_Controller_Action {
 			$where['escid']=$this->sesion->escid;
 			$where['subid']=$this->sesion->subid;
 		}
-		if ($this->sesion->rid=="RF"){
+		if ($this->sesion->rid=="RF" and $this->sesion->subid=="1901"){
 			$where['facid']=$this->sesion->faculty->facid;
+		
 		}
+
+		if ($this->sesion->rid=="RF" and $this->sesion->subid<>"1901"){
+			//$where['facid']=$this->sesion->faculty->facid;
+			$where['subid']=$this->sesion->subid;
+
+			
+		}
+		
 		$data= array("escid","subid","name");
-		$rows = $speciality->_getFilter($where,$data);
+		$rows = $speciality->_getFilter($where,$data='');
+
+		
+
 		if ($rows) $this->view->specialitys=$rows;
 		// set speciality for director
 		
