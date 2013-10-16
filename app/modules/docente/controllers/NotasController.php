@@ -19,6 +19,9 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$where['pid']=$this->sesion->pid;
 		$where['perid']=$this->sesion->period->perid;
 		$where['is_main']='S';
+		if ($this->sesion->uid=="21076659DC")
+			$where['perid']="13A";
+		
 		$this->view->perid= $this->sesion->period->perid;
 		$docente = new Api_Model_DbTable_PeriodsCourses();
 		$data = $docente->_getCourseTeacher($where);
@@ -62,10 +65,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 		
 		// Periods Later
 		$where['uid']=$this->sesion->uid;
-		if ($this->sesion->uid=="21076659DC")
-			$where['perid']="13A";
-		else
-			$where['perid']="13D";
+		
 		$where['uid']=$this->sesion->uid;
 		$where['perid']="13D";
 		
