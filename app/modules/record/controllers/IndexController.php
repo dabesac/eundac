@@ -1321,7 +1321,8 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,);
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S');
 
             $base_faculty 	=	new Api_Model_DbTable_Faculty();
 			$base_speciality = 	new Api_Model_DbTable_Speciality();
