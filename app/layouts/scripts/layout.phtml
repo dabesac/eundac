@@ -29,11 +29,17 @@ $info = $login;
 $resource1 = $login->resources;
 
 $resource1[]="profile/search";
+
 $resource1[]="profile/changecurricula";
+
 $resource1[]="default/logaccess";
 $resource1[]="default/rss";
 $resource1[]="distribution/printdistribution";
 $resource1[]="profile/private";
+
+$resource1[]="profile/privateadm";
+
+
 
 
 //print_r($resource1);
@@ -104,9 +110,19 @@ $(document).ready(function(){
 <![endif]-->
 
 <?php 
-if ($rid=="AL"){
-	$profile = "/profile/public/student";
+
+if ($rid=="AL" or $rid=='EG' )
+{
+ 	
+ 	$profile= "/profile/public/student";
+
 }
+else
+{
+ 	$profile = "/profile/privateadm/student";
+
+}
+
 ?>
 <div class="row" style="padding: 0px; margin: 0px" >
 	<div class="col-sm-2 control-top">
