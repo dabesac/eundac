@@ -53,7 +53,8 @@
 										}?>
 									</td>
 									<td align='center'><!-- Imprimir mayor nota -->
-										<?if($this->courlle[$c]){
+										<?php
+										if($this->courlle[$c]){
 											$notafinal=$this->courlle[$c]['notafinal'];
 											foreach ($this->courlle[$c] as $notaf) {
 												if($notaf['notafinal']>=$notafinal){
