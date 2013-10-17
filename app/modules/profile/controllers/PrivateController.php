@@ -249,6 +249,7 @@ class Profile_PrivateController extends Zend_Controller_Action {
             $cur=$dbcur->_getOne($where);
             //print_r($cur);
             $courpercur=$dbcourxcur->_getCoursesXCurriculaXShool($eid,$oid,$cur['curid'],$escid);
+            
             $c=0;
             foreach ($courpercur as $cour) {
                 $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);

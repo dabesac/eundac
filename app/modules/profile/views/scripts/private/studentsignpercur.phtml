@@ -3,15 +3,16 @@
 		<h5><b>Matricula Por Curricula</b></h5>
 	</div>
 	<div class="panel-body">
-		<?if($this->courpercur){
-			//print_r($this->courpercur);?>
+	
+		<?php if($this->courpercur){ ?>
 		<div class="panel panel-primary">
-			<? $semid=0;
+			<?php 
+			$semid=0;
 			$c=0;
 			foreach ($this->courpercur as $sem) {
 				if($sem['semid']<>$semid){?>
 					<div class="panel-heading">
-						<b>SEMESTRE <?echo $sem['semid']?></b>
+						<b>SEMESTRE <?php echo $sem['semid']?></b>
 					</div>
 					<div class="panel-body">
 						<table class="table">
@@ -24,22 +25,22 @@
 								<th>Nota</th>
 								<th>Estado</th>
 							</tr>
-							
-					<? $semid=$sem['semid'];
+					<?php
+					$semid=$sem['semid'];
 						foreach ($this->courpercur as $courses) {
 							if($courses['semid']==$semid) {?>
 								<tr>
-									<td align="center"><?echo $courses['courseid']?></td>
-									<td><?echo $courses['name']?></td>
-									<td align="center"><?echo $courses['credits']?></td>
-									<td align="center"><?if($courses['type']=='O'){
+									<td align="center"><?php echo $courses['courseid']?></td>
+									<td><?php echo $courses['name']?></td>
+									<td align="center"><?php echo $courses['credits']?></td>
+									<td align="center"><?php if($courses['type']=='O'){
 											echo "Obligatorio";
 										}else{
 											echo "Electivo";
 										}?>
 									</td>
 									<td align="center">
-										<?if($sem['semid']<>"1"){
+										<?php if($sem['semid']<>"1"){
 											$exreq=0;
 											for($i=1; $i<=3 ; $i++){
 												if($courses['req_'.$i]){
@@ -67,42 +68,42 @@
 										}?>
 									</td>
 									<td align='center'>
-										<?if($est<>1){
+										<?php if($est<>1){
 											if($notafinal>=11){?>
 												<img src="/img/circulo-verde.png">
-											<?}else{
+											<?php }else{
 												$pinto=0;
 												foreach ($this->courlleact as $cact) {
 													if($this->courlle[$c][0]['courseid']==$cact['courseid']){
 														if($cact['state']=="M"){?>
 															<img src="/img/circulo-amarillo.png">
-														<?$pinto=1;
+														<?php $pinto=1;
 														}else{?>
 															<img src="/img/circulo-rojo.png">
-														<?$pinto=1;
+														<?php $pinto=1;
 														}
 													}
 												}
 												if($pinto==0){?>
 													<img src="/img/circulo-rojo.png">
-												<?}
+												<?php }
 											}
 										}elseif($est==1){
 											$est=0;?>
 											<img src="/img/circulo-rojo.png">
-										<?}?>
+										<?php }?>
 									</td>
 								</tr>
-							<?$c++;
+							<?php $c++;
 							}
 						}?>
 						</table>
 					</div>
 				<? 
 				}?>
-			<?}?>
+			<?php }?>
 		</div><!-- Panel de Semestres -->
-		<?}else{?>
+		<?php }else{?>
 			<h4 align="center">No Existen Datos</h4>
 		<?}?>
 	</div>
