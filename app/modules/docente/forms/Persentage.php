@@ -101,7 +101,7 @@ class Docente_Form_Persentage extends Zend_Form{
         $sp1= new Zend_Form_Element_Text("txtspporcentaje1");
         $sp1->removeDecorator("HtmlTag")->removeDecorator("Label");
         $sp1->setAttrib("maxlength", "2")->setAttrib('size','10');
-        $sp1->setAttrib("placeholder", "Porsentaje 1");
+        $sp1->setAttrib("placeholder", "Conceptual");
         $sp1->setAttrib("class","data-uni-1 form-control");
         $sp1->setRequired(true)->addValidator('NotEmpty',true,array('messages' => '*'));
         $sp1->addValidator('Callback', true, array(
@@ -114,7 +114,7 @@ class Docente_Form_Persentage extends Zend_Form{
         $sp2->removeDecorator("HtmlTag")->removeDecorator("Label");
         $sp2->setAttrib("maxlength", "2")->setAttrib('size','10');
         $sp2->setAttrib("class","data-uni-1 form-control ");
-        $sp2->setAttrib("placeholder", "Porsentaje 2");
+        $sp2->setAttrib("placeholder", "Procedimental");
         $sp2->setRequired(true)->addValidator('NotEmpty',true,array('messages' => '*'));
         $sp2->addValidator('Callback', true, array(
             'callback' => array($this, 'valorIsNumeric'),
@@ -126,7 +126,7 @@ class Docente_Form_Persentage extends Zend_Form{
         $sp3->removeDecorator("HtmlTag")->removeDecorator("Label");
         $sp3->setAttrib("maxlength", "2")->setAttrib('size','10');
         $sp3->setAttrib("class","data-uni-1 form-control");
-        $sp3->setAttrib("placeholder", "Porsentaje 3");
+        $sp3->setAttrib("placeholder", "Actitudinal");
         $sp3->setRequired(true)->addValidator('NotEmpty',true,array('messages' => '*'));
         $sp3->addValidator('Callback', true, array(
             'callback' => array($this, 'valorIsNumeric'),
@@ -147,7 +147,7 @@ class Docente_Form_Persentage extends Zend_Form{
         $p1= new Zend_Form_Element_Text("txtppporcentaje1");
         $p1->removeDecorator("HtmlTag")->removeDecorator("Label");
         $p1->setAttrib("maxlength", "2")->setAttrib('size','10');
-        $p1->setAttrib("placeholder", "Porsentaje 1");
+        $p1->setAttrib("placeholder", "Conceptual");
         $p1->setAttrib("class","data-uni-1 form-control");
         $p1->setRequired(true)->addValidator('NotEmpty',true,array('messages' => '*'));
         $p1->addValidator('Callback', true, array(
@@ -159,7 +159,7 @@ class Docente_Form_Persentage extends Zend_Form{
         $p2= new Zend_Form_Element_Text("txtppporcentaje2");
         $p2->removeDecorator("HtmlTag")->removeDecorator("Label");
         $p2->setAttrib("maxlength", "2")->setAttrib('size','10');
-        $p2->setAttrib("placeholder", "Porsentaje 2");
+        $p2->setAttrib("placeholder", "Procedimental");
 		$p2->setAttrib("class","data-uni-1 form-control");
         $p2->setRequired(true)->addValidator('NotEmpty',true,array('messages' => '*'));
         $p2->addValidator('Callback', true, array(
@@ -171,7 +171,7 @@ class Docente_Form_Persentage extends Zend_Form{
         $p3= new Zend_Form_Element_Text("txtppporcentaje3");
         $p3->removeDecorator("HtmlTag")->removeDecorator("Label");
         $p3->setAttrib("maxlength", "2")->setAttrib('size','10');
-        $p3->setAttrib("placeholder", "Porsentaje 3");
+        $p3->setAttrib("placeholder", "Actitudinal");
         $p3->setAttrib("class","data-uni-1 form-control");
         $p3->setRequired(true)->addValidator('NotEmpty',true,array('messages' => '*'));
         $p3->addValidator('Callback', true, array(
