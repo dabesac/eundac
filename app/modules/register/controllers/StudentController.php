@@ -17,6 +17,8 @@ class Register_StudentController extends Zend_Controller_Action {
                 || $login->uid=='1024403010' || $login->uid=='1124403247' || $login->uid=='1024403164'
                 || $login->uid=='0924403040' || $login->uid=='1024403075' || $login->uid=='0811303036'
                 || $login->uid=='0022303055' || $login->uid=='1023403259'
+               	|| $login->uid=='1195203068' || $login->uid=='0725203183' || $login->uid=='0825403392'
+               	|| $login->uid=='1345407225' || $login->uid=='1124803042'
                ){
         }else {
                 $this->_helper->redirector('index',"index",'default');
