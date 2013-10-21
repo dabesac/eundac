@@ -454,11 +454,11 @@ class IndexController extends Zend_Controller_Action {
     			$modules[1] = array ("name" =>"Matricula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"rfacultad/condition","name"=>"Condición Matricula","imgicon"=>"saved");
     			$acls[]= array("controller"=>"record/directed","name"=>"Subsanación/Dirigido.","imgicon"=>"file");
-    			//$acls[]= array("controller"=>"register/registerstudent","name"=>"Validación Matricula.","imgicon"=>"ok");
+    			$acls[]= array("controller"=>"register/registerstudent","name"=>"Validación Matricula.","imgicon"=>"ok");
     			$acls[]= array("controller"=>"register/validation","name"=>"Convalidación.","imgicon"=>"file");
     			$resource1[]="rfacultad/condition";
     			$resource1[]="record/directed";
-    			//$resource1[]="register/registerstudent";
+    			$resource1[]="register/registerstudent";
     			$resource1[]="register/validation";
     			$modules[1]['acls'] = $acls;
     			$acls = null;
