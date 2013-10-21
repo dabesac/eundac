@@ -19,6 +19,10 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$where['pid']=$this->sesion->pid;
 		$where['perid']=$this->sesion->period->perid;
 		$where['is_main']='S';
+
+		//print_r($this->sesion);
+		$this->view->uid=$where['uid'];
+
 		$this->view->perid= $this->sesion->period->perid;
 		$docente = new Api_Model_DbTable_PeriodsCourses();
 		$data = $docente->_getCourseTeacher($where);
@@ -85,6 +89,49 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$this->view->faculty_=$faculty_;
 		$this->view->data_=$data_;
 	
+	}
+
+
+	public function coursesAction(){
+        $this->_helper->layout()->disablelayout();
+
+        $perid = trim($this->_getParam("perid"));
+
+        $escid = trim($this->_getParam("escid"));
+        $curid = trim($this->_getParam("curid"));
+        $turno = trim($this->_getParam("turno"));
+        $courseid =trim($this->_getParam("courseid"));
+
+        // $escid = $this->_getParam("escid");
+        // $turno = $this->_getParam("turno");
+        
+        $courseidorigen = trim($this->_getParam("courseidorigen"));
+        $turnoorigen = trim($this->_getParam("turnoorigen"));
+        $escidorigen = trim($this->_getParam("escidorigen"));
+      
+
+       	
+        if($courseid==$courseidorigen)
+        {
+
+        $silabo = new Api_Model_DbTable_Syllabus();
+        	if($silabo->_getDuplicasilabo($perid,$escid,$courseid,$curid,$turno,$escidorigen,$turnoorigen))
+        	{
+        	?>
+        	<script>
+        	alert('El silabo ha sido duplicado correctamente')
+        	</script>
+        	<?php
+        	}
+
+        }
+        else
+        {
+        	echo "no son cursos compatibles";
+        }
+
+
+
 	}
 
 	public function persetage_notes($data=array(),$partial){
