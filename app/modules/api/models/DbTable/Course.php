@@ -95,7 +95,7 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
         try
         {
             if ($eid=='' || $oid=='' || $curid=='' || $escid=='') return false;
-            $str="eid='$eid' and oid='$oid' and escid='$escid' and curid='$curid' and state='A'";
+           	$str="eid='$eid' and oid='$oid' and escid='$escid' and curid='$curid' and state='A'";
             $r = $this->fetchAll($str,"cast(semid as integer),courseid");
             if ($r) return $r->toArray ();
             return false;

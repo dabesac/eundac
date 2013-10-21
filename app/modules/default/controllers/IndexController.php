@@ -688,6 +688,7 @@ class IndexController extends Zend_Controller_Action {
     	if(!$sesion->hasIdentity() ){
     		$this->_helper->redirector('index',"salir",'default');
     	}
+    	
     	$this->view->http = "http";
     	if($_SERVER['SERVER_PORT'] == '443') {
     		$this->view->http = "https";
@@ -696,6 +697,8 @@ class IndexController extends Zend_Controller_Action {
     	$sesion_ = $sesion->getStorage()->read();
     	$pass= base64_decode($this->_getParam("key"));
     	$mod= ($this->_getParam("mod"));
+    	
+
     	$this->view->uid= $sesion_->uid;
     	$this->view->pass= $pass;
     	$this->view->mod= $mod;

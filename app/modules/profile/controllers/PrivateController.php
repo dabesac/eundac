@@ -237,7 +237,7 @@ class Profile_PrivateController extends Zend_Controller_Action {
             $eid=$this->getParam("eid");
             $oid=$this->getParam("oid");            
             $perid=$this->sesion->period->perid;
-            print_r($eid);
+            
 
             $dbcur=new Api_Model_DbTable_Studentxcurricula();
             $dbcourxcur=new Api_Model_DbTable_Course();
@@ -249,6 +249,7 @@ class Profile_PrivateController extends Zend_Controller_Action {
             $cur=$dbcur->_getOne($where);
             //print_r($cur);
             $courpercur=$dbcourxcur->_getCoursesXCurriculaXShool($eid,$oid,$cur['curid'],$escid);
+            
             $c=0;
             foreach ($courpercur as $cour) {
                 $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);
@@ -261,7 +262,7 @@ class Profile_PrivateController extends Zend_Controller_Action {
             $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid,"pid"=>$pid,"uid"=>$uid,"perid"=>$perid);
             $attrib=array("courseid","state");
             $courlleact=$dbcourlle->_getFilter($where,$attrib);
-            //print_r($courlleact);
+            //print_r($courlle);
 
             $this->view->courpercur=$courpercur;
             $this->view->courlleact=$courlleact;
