@@ -382,6 +382,7 @@
 
 	</div>
 	<div class="col-md-4">
+		<a href="/docente/notas" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Atras </a>
 		<?php if ($this->state == 'A' || $this->state=='P') { ?>
 			<buttom  class='btn btn-info ' id='save_assistance' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
 		
@@ -394,7 +395,7 @@
 				perid='<?php echo $this->perid?>'
 		><span class='glyphicon  glyphicon-log-out'></span> Cerrar Asistencia</buttom>
 		<?php }?>
-		<a href="/docente/notas" class='btn btn-success'><span class='glyphicon glyphicon-arrow-left'></span> Atras </a>
+		
 	</div>
 </div>
 
@@ -405,89 +406,101 @@ if ($this->infoassist) { ?>
 	<table class='table' id='talassist'>
 		<thead>
 			<tr>
-				<th>#</th>
-				<th>Apellidos y Nombres</th>
-					<th class='success'>1
+				<th rowspan='2'>#</th>
+				<th rowspan='2'>Apellidos y Nombres</th>
+				<th colspan='2' class='text-center success'>Semana 1</th>
+				<th colspan='2'class='text-center warning'>Semana 2</th>
+				<th colspan='2'class='text-center success'>Semana 3</th>
+				<th colspan='2'class='text-center warning'>Semana 4</th>
+				<th colspan='2'class='text-center success'>Semana 5</th>
+				<th colspan='2'class='text-center warning'>Semana 6</th>
+				<th colspan='2'class='text-center success'>Semana 7</th>
+				<th colspan='2'class='text-center warning'>Semana 8</th>
+				
+			</tr>
+			<tr>
+				
+					<th class='text-sesion-assist '>sesión 1
 						<div class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-1' index-all='1'></th>
 						</div>
 					</th>
-					<th class='success'>2
+					<th class='text-sesion-assist '>sesión 2
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-2' index-all='2'></th>
 						</div>
 					</th>
-					<th class='success'>3
+					<th class='text-sesion-assist '> sesión 3
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-3' index-all='3'></th>
 						</div>
 					</th>
-					<th class='success'>4
+					<th class='text-sesion-assist '> sesión 4
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-4' index-all='4'></th>
 						</div>
 					</th>
-					<th class='success'>5
+					<th class='text-sesion-assist '> sesión 5
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-5' index-all='5'></th>
 						</div>
 					</th>
-					<th class='success'>6
+					<th class='text-sesion-assist '>sesión 6
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-6' index-all='6'></th>
 						</div>
 					</th>
-					<th class='success'>7
+					<th class='text-sesion-assist '>sesión 7
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-7' index-all='7'></th>
 						</div >
 					</th>
-					<th class='success'>8
+					<th class='text-sesion-assist '>sesión 8
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-8' index-all='8'></th>
 						</div>
 					</th>
-					<th class='success'>9
+					<th class='text-sesion-assist '>sesión 9
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-9' index-all='9'></th>
 						</div>
 					</th>
-					<th class='success'>10
+					<th class='text-sesion-assist '>sesión 10
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-10' index-all='10'></th>
 						</div>
 					</th>
-					<th class='success'>11
+					<th class='text-sesion-assist '>sesión 11
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-11' index-all='11'></th>
 						</div>
 					</th>
-					<th class='success'>12
+					<th class='text-sesion-assist '>sesión 12
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-12' index-all='12'></th>
 						</div>
 					</th>
-					<th class='success'>13
+					<th class='text-sesion-assist '>sesión 13
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-13' index-all='13'></th>
 						</div>
 					</th>
-					<th class='success'>14
+					<th class='text-sesion-assist '>sesión 14
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-14' index-all='14'></th>
 						</div>
 					</th>
-					<th class='success'>15
+					<th class='text-sesion-assist '> sesión 15
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-15' index-all='15'></th>
 						</div>
 					</th>
-					<th class='success'>16
+					<th class='text-sesion-assist '>sesión 16
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-16' index-all='16'></th>
 						</div>
 					</th>
-					<th class='success'>17
+					<th class='text-sesion-assist active'>Examen
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-17' index-all='17'></th>
 						</div>

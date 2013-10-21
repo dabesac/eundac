@@ -461,11 +461,12 @@ function calculation_of_average($trcell,$partial_temp){
 
             $average = Math.floor(floatval($addition/$num_notes));
             $notes_prom[$.base64.encode('promedio2')]= $average;
+
             $before = intval($.base64.decode($notes_prom[$.base64.encode('promedio1')])) + $average;
 
             $notes_prom[$.base64.encode('notafinal')] = roundNumber($before/2,0);
-            $notes_prom[$.base64.encode('promedio2')] = $.base64.encode($.notes_prom[$.base64.encode('promedio2')]);
-            $notes_prom[$.base64.encode('notafinal')] = $.base64.encode($.notes_prom[$.base64.encode('notafinal')]);
+            $notes_prom[$.base64.encode('promedio2')] = $.base64.encode($notes_prom[$.base64.encode('promedio2')]);
+            $notes_prom[$.base64.encode('notafinal')] = $.base64.encode($notes_prom[$.base64.encode('notafinal')]);
 
         }
     }
@@ -597,8 +598,8 @@ function save_notes(){
             $before = intval($.base64.decode($notes[$.base64.encode('promedio1')])) + $average;
 
             $notes[$.base64.encode('notafinal')] = roundNumber($before/2,0);
-            $notes[$.base64.encode('promedio2')] = $.base64.encode($.notes[$.base64.encode('promedio2')]);
-            $notes[$.base64.encode('notafinal')] = $.base64.encode($.notes[$.base64.encode('notafinal')]);
+            $notes[$.base64.encode('promedio2')] = $.base64.encode($notes[$.base64.encode('promedio2')]);
+            $notes[$.base64.encode('notafinal')] = $.base64.encode($notes[$.base64.encode('notafinal')]);
 
         }
     }

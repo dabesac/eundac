@@ -89,15 +89,19 @@
 				        <th rowspan='2' class='text-center'>#</th>
 				        <th rowspan='2' class='text-center'>Código</th>
 				        <th rowspan='2' class='text-center'>Apellidos y Nombres</th>
-				        <th colspan="4" class='text-center'>UNIDAD I</th>
-				        <th colspan="4" class='text-center'>UNIDAD II</th>
+				        <?php if ($this->partial==1) { ?>
+					        <th colspan="4" class='text-center'>UNIDAD I</th>
+					        <th colspan="4" class='text-center'>UNIDAD II</th>
+				        <?php }?>
 				        
-				        <?php if($this->partial == 2 && intval($this->units) == 3 ){?>
+				        <?php if($this->partial == 2 && intval($this->units) != 3 ){?>
+				            <th colspan="2" class='text-center' ></th>
 				            <th colspan="4" class='text-center' >UNIDAD III</th>
 				            <th colspan="4" class='text-center' >UNIDAD IV</th>
 				            <th rowspan="2" class='text-center'>NF</th>
 				        <?php } ?>
-				        <?php if($this->partial == 2 && intval($this->units) != 3 ){?>
+				        <?php if($this->partial == 2 && intval($this->units) == 3 ){?>
+				            <th colspan="2" class='text-center' ></th>
 				            <th colspan="4" class='text-center' >UNIDAD III</th>
 				            <th rowspan="2" class='text-center'>NF</th>
 				        <?php } ?>
@@ -125,17 +129,21 @@
 				                }
 				            }?>
 
-				        <th class='text-center' >C-<?php echo $porc['porc1']; ?>%</th>
-				        <th class='text-center' >A-<?php echo $porc['porc2']; ?>%</th>
-				        <th class='text-center' >P-<?php echo $porc['porc3']; ?>%</th>
-				        <th class='text-center success'>Prom 1</th>
+				        <?php if ($this->partial==1){?>
+					        <th class='text-center' >C-<?php echo $porc['porc1']; ?>%</th>
+					        <th class='text-center' >A-<?php echo $porc['porc2']; ?>%</th>
+					        <th class='text-center' >P-<?php echo $porc['porc3']; ?>%</th>
+					        <th class='text-center success'>Prom 1</th>
 
-				        <th class='text-center' >C-<?php echo $porc['porc4']; ?>%</th>
-				        <th class='text-center' >A-<?php echo $porc['porc5']; ?>%</th>
-				        <th class='text-center' >P-<?php echo $porc['porc6']; ?>%</th>
-				        <th class='text-center success'>Prom 2</th>
+					        <th class='text-center' >C-<?php echo $porc['porc4']; ?>%</th>
+					        <th class='text-center' >A-<?php echo $porc['porc5']; ?>%</th>
+					        <th class='text-center' >P-<?php echo $porc['porc6']; ?>%</th>
+					        <th class='text-center success'>Prom 2</th>
+				        <?php }?>
 
 				        <?php if ($this->partial == 2 && $this->units == 3) { ?>
+				        <th class='text-center success'>Prom 1</th>
+				        <th class='text-center success'>Prom 2</th>
 				        <th class='text-center' >C-<?php echo $porc['porc7']; ?>%</th>
 				        <th class='text-center' >A-<?php echo $porc['porc8']; ?>%</th>
 				        <th class='text-center' >P-<?php echo $porc['porc9']; ?>%</th>

@@ -563,7 +563,7 @@ function save_notes(){
 		result = result + "/" + $.base64.encode('partial') + "/" + $.base64.encode($partial);
 		var $url = "/docente/fillnotes/savecompettition/" +result;
 		if (result_decode.toLowerCase().indexOf('nota') >= 0) {
-			$index_tmp1 = $index_tmp;
+			$index_tmp1 = $index_tmp-1;
 			$.ajax({
 				url:$url,
 				async:false,
