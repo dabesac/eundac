@@ -110,6 +110,14 @@
 	margin-top: -140px;
 	background-color: #ecf0f1;
 }
+
+.scroll-header-info{
+	position: :fixed;
+	z-index: 999;
+	margin: -140px;
+	background-color: #ecf0f1;
+	
+}
 .notes-error-input
 {
 	background-color: #ED3B4B;

@@ -246,6 +246,19 @@
 
 	$(document).ready(function() {
 
+		$(window).scroll(function(){
+	        var scroll = $(window).scrollTop();
+	        if( scroll >= 146){
+	            $("#header-info").addClass('data-header-info');
+	            $("#header-info").addClass('col-md-10');
+	        }
+	        else{
+	            
+	            $("#header-info").removeClass('data-header-info');
+	            $("#header-info").removeClass('col-md-10');
+	            
+	        }
+    	});
 
 		//*********************seleccionar todo***********************///
 
@@ -366,7 +379,7 @@
 	$infocourse = $this->infocurso;
 ?>
 
-<div class='row'>
+<div class='row' id='header-info'>
 	<div class='col-xs-12 col-sm-6 col-md-8'>
 		<h4> <span class='glyphicon glyphicon-calendar'></span> Asistencia 
 			<?if($this->partial==1){
@@ -418,7 +431,7 @@ if ($this->infoassist) { ?>
 				<th colspan='2'class='text-center warning'>Semana 8</th>
 				
 			</tr>
-			<tr>
+			<tr id='tb-header-info'>
 				
 					<th class='text-sesion-assist '>sesión 1
 						<div class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
