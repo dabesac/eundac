@@ -54,7 +54,6 @@ class Admin_OpenrecordsController extends Zend_Controller_Action{
 				$datacourse[$i]= $dbcourse->_getFilter($where,$attrib);
 				$i++;
 			}
-			// print_r($datacourses);exit();
 			$this->view->datacourses=$datacourses;
 			$this->view->datacourse=$datacourse;
 		} catch (Exception $e) {
@@ -74,9 +73,10 @@ class Admin_OpenrecordsController extends Zend_Controller_Action{
 			$turno = base64_decode($this->_getParam('turno'));
 			$subid = base64_decode($this->_getParam('subid'));
 			$state = base64_decode($this->_getParam('state'));
-			// $closure_date = date('Y m d');
+			$state_record = base64_decode($this->_getParam('state_record'));
+			print_r($state_record);
 			$pk=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno);
-			$data=array('state'=>$state);
+			$data=array('state'=>$state,'state_record'=>$state_record);
 			$bdrecords= new Api_Model_DbTable_PeriodsCourses();
 			$updatedata= $bdrecords->_update($data,$pk);
 		} catch (Exception $e) {

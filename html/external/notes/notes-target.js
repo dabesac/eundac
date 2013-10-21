@@ -1,17 +1,17 @@
 $(document).ready(function() {
 	var $strnotes = '';
     var $edition_notes = false;
-    
+    $(".data-notes-input").jStepper({minValue:0, maxValue:20, minLength:2});
     $(window).scroll(function(){
         var scroll = $(window).scrollTop();
         if( scroll >= 146){
             $("#header-info").addClass('data-header-info');
-            $("#header-info").addClass('col-md-11');
+            $("#header-info").addClass('col-md-10');
         }
         else{
             
             $("#header-info").removeClass('data-header-info');
-            $("#header-info").removeClass('col-md-11');
+            $("#header-info").removeClass('col-md-10');
         }
     });
 
@@ -32,24 +32,13 @@ $(document).ready(function() {
             if (charCode > 31 && (charCode < 48 || charCode > 57)){
                 e.preventDefault();
             }else{
-                // if(e.which != 8){
-                //     var chr = String.fromCharCode( e.which );
-                //     $strnotes = '' + $strnotes + chr + '';
-                //     if($strnotes != ''){$nota = Number($strnotes);}
-                //     else{$nota='';}
-                //     if(($nota < 0 || $nota >20) && ($nota!=-3) && ($nota!='')){
-                //         $strnotes = '';
-                //         $(this).val('');
-                //         e.preventDefault();
-                //     }
-                // }
                 var td = $(this).parent();
                 var tr  = td.parent();
                 $tr = $(tr);
                 $tr.attr("edition",true); 
                 
                 $index = $(this).attr("index");
-                $("#edit-note-"+ $index).addClass("glyphicon-edit");
+                $("#edit-note-"+ $index).attr("src","/img/full_page.png");;
                 $("#save_notes").attr("disabled",false);
                 objeto = {
                     "width":'50px',
@@ -74,8 +63,8 @@ $(document).ready(function() {
         calculation_of_average($tr,$partial);
         $("#save_notes").attr('disabled',false);
         $tr.attr('edition',true);
-        $("#edit-note-"+ $index).addClass("glyphicon-edit");
-
+        $("#edit-note-"+ $index).attr("src","/img/full_page.png");
+        $("#num-edit-note-"+$index).remove();
     });
 
     /***************************** save notes ********************************/
@@ -163,6 +152,10 @@ $(document).ready(function() {
                 if ($data.status == true) {
                     window.location.href = window.location.href; 
                 }else{
+                    if ($data.closure == false) {
+                        var url_assist = '/assistance/student/index/' +result;
+                        $("#cont-alerts").html("<div class='alert alert-danger col-md-12'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><strong>Alerta!</strong> Estimado docente cierre de Asistencia <a href='"+url_assist+"' class='btn btn-warning'><span class='glyphicon glyphicon-calendar'></span> Ir Asistencia</a></div>");
+                    }
 
                     if(
                         ($data.info.nota1_i && parseInt($data.info.num_reg) > parseInt($data.info.nota1_i)) && 
@@ -468,11 +461,12 @@ function calculation_of_average($trcell,$partial_temp){
 
             $average = Math.floor(floatval($addition/$num_notes));
             $notes_prom[$.base64.encode('promedio2')]= $average;
+
             $before = intval($.base64.decode($notes_prom[$.base64.encode('promedio1')])) + $average;
 
             $notes_prom[$.base64.encode('notafinal')] = roundNumber($before/2,0);
-            $notes_prom[$.base64.encode('promedio2')] = $.base64.encode($.notes_prom[$.base64.encode('promedio2')]);
-            $notes_prom[$.base64.encode('notafinal')] = $.base64.encode($.notes_prom[$.base64.encode('notafinal')]);
+            $notes_prom[$.base64.encode('promedio2')] = $.base64.encode($notes_prom[$.base64.encode('promedio2')]);
+            $notes_prom[$.base64.encode('notafinal')] = $.base64.encode($notes_prom[$.base64.encode('notafinal')]);
 
         }
     }
@@ -604,8 +598,8 @@ function save_notes(){
             $before = intval($.base64.decode($notes[$.base64.encode('promedio1')])) + $average;
 
             $notes[$.base64.encode('notafinal')] = roundNumber($before/2,0);
-            $notes[$.base64.encode('promedio2')] = $.base64.encode($.notes[$.base64.encode('promedio2')]);
-            $notes[$.base64.encode('notafinal')] = $.base64.encode($.notes[$.base64.encode('notafinal')]);
+            $notes[$.base64.encode('promedio2')] = $.base64.encode($notes[$.base64.encode('promedio2')]);
+            $notes[$.base64.encode('notafinal')] = $.base64.encode($notes[$.base64.encode('notafinal')]);
 
         }
     }
@@ -646,18 +640,18 @@ function save_notes(){
                 
                 if ($data.status==true) {
                     $("#edit-note-" + $indexTmp).removeClass();
-                    $("#edit-note-" + $indexTmp).addClass('pull-left text-success glyphicon glyphicon-check ');
+                    $("#edit-note-" + $indexTmp).attr('src','/img/accept_page.png');
                     $tr.css('color','none');
                 }else{
                     $("#edit-note-" + $indexTmp).removeClass();
-                    $("#edit-note-" + $indexTmp).addClass('pull-left text-success glyphicon ');
+                    $("#edit-note-" + $indexTmp).attr('src','/img/accept_page.png');
                     $tr.css("color", "#FC4141");
                 }
                 $tr.attr("edition",false); 
             },
             error:function($data){
                 $tr.css("color", "#FC4141");
-                $("#edit-note-" + $indexTmp).addClass('pull-left text-success glyphicon ');
+                $("#edit-note-" + $indexTmp).attr('src','/img/delete_page.png');
                 $tr.attr("edition",false); 
 
             }

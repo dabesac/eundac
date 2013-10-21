@@ -369,7 +369,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                         'nota1_i'       => '',
                         'nota2_i'       => '',
                         'nota3_i'       => '',
-                        'nota4_i'       => '-4',
+                        'nota4_i'       => '-3',
                         'nota5_i'       => '',
                         'nota6_i'       => '',
                         'nota7_i'       => '',
