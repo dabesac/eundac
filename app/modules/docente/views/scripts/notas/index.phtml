@@ -7,6 +7,7 @@
   $c=0;
   foreach ($this->faculty as $number) {
     $c++;
+    $c;
     $fname=$number['name'];
 ?>
 <div class="panel-group" id="accordion">
@@ -24,7 +25,11 @@
                 <div class='row'>
                     <div class='col-md-11 col-md-offset-1'>
                         <div class='row'>
-                            <?php foreach ($this->data as $courses) {
+
+                            <?php 
+                                $f=0;
+                                foreach ($this->data as $courses) {
+                                $f++;
 
                                 $u_="";
                                 $urlAsist ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($courses['perid'])."/".base64_encode('curid')."/".base64_encode($courses['curid'])."/".base64_encode('state')."/".base64_encode($courses['state_record'])."/".base64_encode('partial')."/".base64_encode($partial);
@@ -38,6 +43,7 @@
                                 $where['escid']=$courses['escid'];
                                 $where['subid']=$courses['subid'];
                                 $where['courseid']=$courses['courseid'];
+                              
                                 $list= new Api_Model_DbTable_Course();
                                 $course=$list->_getOne($where);                     
                                 if ($number['facid']==$courses['facid']) { ?>
@@ -52,7 +58,7 @@
                                         <?php }else{?>
                                             <h1 class='span-course'><span class='glyphicon glyphicon-book'></span></h1>
                                         <?php }?>
-                                        <h4 class='name-course'><?php echo $course['courseid']." - ".$course['name']?></h4>
+                                        <h4 class='name-course'><?php echo $course['courseid']." - ".$course['name']." - ".$courses['turno']?></h4>
                                         <?php switch ($courses['type_rate']) {
                                             case 'O': ?>
                                                 <a class="btn btn-primary btn-sm btn-group-course" href="/docente/fillnotes/target<?php echo $urlAsist?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
@@ -103,6 +109,31 @@
                                                 <span class='glyphicon glyphicon-info-sign text-danger'></span>
                                             <?php }?></h5>
 
+                                        <br>
+                                        <h5 class='text-persentage-couser' >Duplicar el silabo desde: 
+                                        </h5>
+                                        <?php
+
+                                        $u=$this->uid;
+
+                                        $where_uid = array('eid'=>$where['eid'],'oid'=>$where['oid'],'perid'=>$this->perid,'uid' => $u,
+                                                'is_main'=>'S', );
+
+                                                //print_r($where_uid);
+
+                                        $cour=new Api_Model_DbTable_Coursexteacher();
+                                        $cc=$cour->_getFilter($where_uid);                                                                           
+                                        //Aqui las escuelas de origen
+                                        $cour=$course['courseid'];
+                                        $esc=$course['escid'];
+                                        $tur=$courses['turno'];
+                                        $cur=$course['curid'];
+
+                                        ?>
+                                        <div>
+                                
+
+
                                     </div>
 
                                 <?php }
@@ -123,7 +154,7 @@
 
 
 
-
+  <div id='sil'>s                                      </div>
 
 
 
