@@ -17,7 +17,7 @@
 	  	
 
 	  	<div class='pull-right'>
-	  		<a href="#" class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span></a>
+	  		<a id="imprimir" class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span></a>
 
 	  	</div>
 	  </h5>
@@ -77,6 +77,19 @@
         $("#det").html("<img src='/img/spinner.gif' />Cargando....");
         $("#det").load(url);
 
-    });       
+    });      
+
+        $("#imprimir").click(function(){
+        //var escid = $("#escid").val();        
+        var perid = "<?php echo $this->perid?>";  
+        var escid = "<?php echo $this->escid?>";
+        var espec = "<?php echo $this->espec?>";
+        var subid = "<?php echo $this->subid?>"; 
+        var tipo = "<?php echo $this->tipo?>";                
+        var semid = $("#semid").val();        
+        if (semid=="") {alert ("Debe de seleccionar un Semestre");return false;}        
+        var url="/report/consolidated/printstudentregistrationxsemester/semid/"+semid+"/perid/"+perid+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo;
+         window.location.href = url;
+    });    
     
 </script>
