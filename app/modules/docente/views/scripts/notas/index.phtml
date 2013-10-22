@@ -52,7 +52,7 @@
                                         <?php }else{?>
                                             <h1 class='span-course'><span class='glyphicon glyphicon-book'></span></h1>
                                         <?php }?>
-                                        <h4 class='name-course'><?php echo $course['courseid']." - ".$course['name']." - Turno ".$courses['turno']?></h4>
+                                        <h4 class='name-course'><?php echo $course['curid']." - ".$course['courseid']." - ".$course['name']." - Turno ".$courses['turno']?></h4>
                                         <?php switch ($courses['type_rate']) {
                                             case 'O': ?>
                                                 <a class="btn btn-primary btn-sm btn-group-course" href="/docente/fillnotes/target<?php echo $urlAsist?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
