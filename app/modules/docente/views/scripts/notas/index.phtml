@@ -158,11 +158,17 @@
                                                 $name= new Api_Model_DbTable_Course();
                                                 $name_co=$name->_getOne($where_course);
                                                 //print_rx($name_co);
-                                                 $nom=$name_co['name'];
+                                                $nom=$name_co['name'];
+
+                                                $where_spe = array('eid'=>$where['eid'],'oid'=>$where['oid'],'escid'=>$escorigen,'subid'=>$suorigen);
+
+                                                $name_spe= new Api_Model_DbTable_Speciality();
+                                                $nspe=$name_spe->_getOne($where_spe);
+                                                $nom_spe=$nspe['name'];
 
 
                                                 ?>                                          
-                                                <option value="<?php echo $crorigen.";--;".$tuorigen.";--;".$escorigen.";--;".$this->perid.";--;".$cur.";--;".$esc.";--;".$cour.";--;".$tur?>"><?php echo $nom."-".$tuorigen;?></option> 
+                                                <option value="<?php echo $crorigen.";--;".$tuorigen.";--;".$escorigen.";--;".$this->perid.";--;".$cur.";--;".$esc.";--;".$cour.";--;".$tur?>"><?php echo $nom."-".$tuorigen."-".$nom_spe;?></option> 
                                                 <?php
                                                 }
                                                 
