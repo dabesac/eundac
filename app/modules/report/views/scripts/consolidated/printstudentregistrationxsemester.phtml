@@ -1,0 +1,137 @@
+ <?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+$tipo=$this->tipo;
+if ($tipo=='6') { $a="REPORTES MATRICULADOS POR SEMESTRE"; } 
+else{ $a="CONSOLIDADO POR SEMESTRE"; }
+$header='
+<table style="width: 100%;" border="1">
+    <tr>
+        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+        <th style="text-align: center; font-size: 11px;">
+        FACULTAD DE '.strtoupper($this->facultad).'<br/>
+        ESCUELA DE  '.strtoupper($this->escuela).'<br/>
+        </th>        
+    </tr>
+    <tr>
+        <th style="border: 1px solid #000;">'.strtoupper($a).' </th>
+    </tr>
+</table>
+<tr>
+        <td style="text-align: left;">Semestre: '.strtoupper($this->semid).' &nbsp;&nbsp;&nbsp;  Periodo: '.strtoupper($this->perid).' </td>
+    </tr></br>
+    <tr>
+        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+'    
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+    <table style="width:100%; font-size: 9px;" border="1"  >
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Codigo</th>
+            <th <?php
+                $tipo=$this->tipo;
+             if ($tipo=='6') { ?>style="width:60px;" <?php }?> >Apellido y Nombre</th>
+            <?php
+                $tipo=$this->tipo;
+             if ($tipo=='6') { ?>
+            <th>Cursos</th>
+            <th>Notas</th>
+            <th style="width:20px;">Promedio</th>
+                      
+           <?php }?>
+           
+        </tr>
+        </thead>
+    <?php
+    if ($this->data)
+    {
+       $i=1;
+       foreach ($this->data as $datos)    
+        {
+          $where['eid']=$datos['eid'];
+          $where['oid']=$datos['oid'];
+          $where['escid']=$datos['escid'];
+          $where['uid']=$datos['uid'];
+          $where['perid']=$datos['perid'];
+          ?>
+        <tr>
+        <td> <?php print $i?> </td>
+        <td> <?php print $datos['uid']?> </td>
+        <td> <?php print strtoupper($datos['nombrecompleto'])?> </td> 
+        <?php if ($tipo=='6') { ?>
+         <td>
+         <?php $alumno= new Api_Model_DbTable_Registrationxcourse();
+               $dataalu= $alumno->_getFilter($where);
+               foreach ($dataalu as $dat) {
+                 $where1['eid'] = $dat['eid'];
+                 $where1['oid'] = $dat['oid'];
+                 $where1['escid'] = $dat['escid'];
+                 $where1['perid'] = $dat['perid'];
+                 $where1['courseid'] = $dat['courseid'];
+                 $where1['curid'] = $dat['curid'];
+                 $where1['subid'] = $dat['subid'];
+                 $cur= new Api_Model_DbTable_Course();
+                 $datcur= $cur->_getOne($where1); ?>
+
+                <li><?php echo $datcur['name']; ?></li>
+
+         <?php      }
+
+                ?>
+        </td> 
+        <td>
+         <?php $alumno= new Api_Model_DbTable_Registrationxcourse();
+               $dataalu= $alumno->_getFilter($where);
+               foreach ($dataalu as $dat) { ?>
+
+                <li><?php echo $dat['notafinal']; ?></li>
+
+         <?php      }
+
+                ?>
+        </td> 
+         <td>
+        <?php 
+            $where2['eid']=$datos['eid'];
+            $where2['oid']=$datos['oid'];
+            $where2['escid']=$datos['escid'];
+            $where2['uid']=$datos['uid'];
+            $where2['perid']=$datos['perid'];
+            $where2['semid']=$this->semid; 
+            $where2['curid'] = $dat['curid'];
+            $alumnos= new Api_Model_DbTable_Curricula();
+            $dataalus= $alumnos->_getPromedioPonderadoXUid($where2);
+               foreach ($dataalus as $dat) {
+                 $ponderado = $dat['prom_pon'];
+                  echo round($ponderado,2); ?></br>
+
+         <?php      } ?>
+      </td>
+
+         <?php }?>
+        </tr><?php
+        $i++;
+        }
+    }
+    ?>           
+    </table>
+
+<?php 
+
+  $html = ob_get_contents();
+  
+  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
+  $mpdf->SetHTMLHeader($header);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  
+  $mpdf->SetFooter($this->footer);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('Semestre-'.$this->semid.'.pdf','D');
+  
+?>

@@ -17,7 +17,7 @@
 	  	
 
 	  	<div class='pull-right'>
-	  		<a href="#" class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span></a>
+	  		<a id='imprimir' class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span></a>
 
 	  	</div>
 	  </h5>
@@ -100,6 +100,26 @@
         $("#det").html("<img src='/img/spinner.gif' />Cargando....");
         $("#det").load(url);
 
-    });       
+    });    
+
+        $("#imprimir").click(function(){
+        //var escid = $("#escid").val();        
+        var perid = "<?php echo $this->perid?>";  
+        var escid = "<?php echo $this->escid?>";
+        var espec = "<?php echo $this->espec?>";
+        var subid = "<?php echo $this->subid?>"; 
+        var tipo = "<?php echo $this->tipo?>";                
+        var curid = $("#curid").val();        
+        var curso = $("#courseid").val(); 
+        var tmp=curso.split(";--;");
+        var courseid=tmp[0];
+        var turno=tmp[1]; 
+        if (curid=="") {alert ("Debe de seleccionar una curricula");return false;}
+        if (courseid=="") {alert ("Debe de seleccionar un curso");return false;}        
+        var url="/report/consolidated/printregisterxcourse/courseid/"+courseid+"/curid/"+curid+"/perid/"+perid+"/turno/"+turno+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo;
+       window.location.href = url;
+       // $("#det").load(url);
+
+    });     
     
 </script>
