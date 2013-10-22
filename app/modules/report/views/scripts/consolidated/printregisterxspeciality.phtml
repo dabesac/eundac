@@ -1,0 +1,72 @@
+ <?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+$tipo=$this->tipo;
+$a="REPORTES MATRICULADOS POR ESCUELA";
+$header='
+<table style="width: 100%;" border="1">
+    <tr>
+        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+        <th style="text-align: center; font-size: 11px;">
+        FACULTAD DE '.strtoupper($this->facultad).'<br/>
+        ESCUELA DE  '.strtoupper($this->escuela).'<br/>
+        </th>        
+    </tr>
+    <tr>
+        <th style="border: 1px solid #000;">'.strtoupper($a).' </th>
+    </tr>
+</table>
+<tr>
+        <td style="text-align: left;">&nbsp;  Periodo: '.strtoupper($this->perid).' </td>
+    </tr></br>
+    <tr>
+        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+'    
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<table style="width:100%; font-size: 9px;" border="1"  >
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Codigo</th>
+            <th>Apellido y Nombre</th>
+           
+        </tr>
+        </thead>
+    <?php
+    if ($this->data)
+    {
+       $i=1;
+       foreach ($this->data as $datos)    
+        {
+          ?>
+        <tr>
+        <td> <?php print $i?> </td>
+        <td> <?php print $datos['uid']?> </td>
+        <td> <?php print strtoupper($datos['last_name0'])." ".strtoupper($datos['last_name1'])." ".$datos['first_name']?> </td>
+        </tr><?php
+        $i++;
+        }
+    }
+    ?>           
+    </table>
+
+<?php 
+
+  $html = ob_get_contents();
+  
+  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
+  $mpdf->SetHTMLHeader($header);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  
+  $mpdf->SetFooter($this->footer);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('Escuela-'.$this->escid.'.pdf','D');
+  
+?>
+
