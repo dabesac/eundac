@@ -42,7 +42,8 @@
                                 $where['curid']=$courses['curid'];
                                 $where['escid']=$courses['escid'];
                                 $where['subid']=$courses['subid'];
-                                $where['courseid']=$courses['courseid'];
+                                $where['courseid']=$courses['courseid'];                             
+
                               
                                 $list= new Api_Model_DbTable_Course();
                                 $course=$list->_getOne($where);                     
@@ -58,7 +59,7 @@
                                         <?php }else{?>
                                             <h1 class='span-course'><span class='glyphicon glyphicon-book'></span></h1>
                                         <?php }?>
-                                        <h4 class='name-course'><?php echo $course['courseid']." - ".$course['name']." - ".$courses['turno']?></h4>
+                                        <h4 class='name-course'><?php echo $course['courseid']." - ".$course['name']?></h4>
                                         <?php switch ($courses['type_rate']) {
                                             case 'O': ?>
                                                 <a class="btn btn-primary btn-sm btn-group-course" href="/docente/fillnotes/target<?php echo $urlAsist?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
@@ -140,7 +141,7 @@
 
                                                 {
 
-                                                if($courses['courseid']==$cour)
+                                                if(($courses['courseid']==$cour and $courses['escid']<>$esc) OR ($courses['courseid']==$cour and $courses['turno']<>$tur))
                                                 {
 
                                                 $crorigen=$courses['courseid']; 
@@ -168,7 +169,7 @@
 
 
                                                 ?>                                          
-                                                <option value="<?php echo $crorigen.";--;".$tuorigen.";--;".$escorigen.";--;".$this->perid.";--;".$cur.";--;".$esc.";--;".$cour.";--;".$tur?>"><?php echo $nom."-".$tuorigen."-".$nom_spe;?></option> 
+                                                <option value="<?php echo $crorigen.";--;".$tuorigen.";--;".$escorigen.";--;".$this->perid.";--;".$cur.";--;".$esc.";--;".$cour.";--;".$tur?>"><?php echo $crorigen."-".$nom."-".$tuorigen."-".$nom_spe;?></option> 
                                                 <?php
                                                 }
                                                 
@@ -231,7 +232,7 @@
 
 
 
-  <div id='sil'>s                                      </div>
+  <div id='sil'></div>
 
 
 
