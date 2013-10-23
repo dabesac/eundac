@@ -4,7 +4,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
 
     public function init()
     {
-    	$sesion  = Zend_Auth::getInstance();
+        $sesion  = Zend_Auth::getInstance();
         if(!$sesion->hasIdentity() ){
             $this->_helper->redirector('index',"index",'default');
         }
@@ -17,10 +17,10 @@ class Assistance_StudentController extends Zend_Controller_Action {
     public function indexAction()
     {
 
-    	$eid = $this->sesion->eid;
-    	$oid = $this->sesion->oid;
-    	
-    	$params = $this->getRequest()->getParams();
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        
+        $params = $this->getRequest()->getParams();
         $paramsdecode = array();
         foreach ( $params as $key => $value ){
             if($key!="module" && $key!="controller" && $key!="action"){
@@ -52,14 +52,50 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 'courseid' => $courseid,'turno' => $turno,
                 'perid' => $perid,'curid'=>$curid,);
 
+        $data_period = $base_period->_getOne($where);
+        if ($data_period) {
+            $time = time();
+            //primer pa
+            if($time >= strtotime($data_period['start_register_note_p'])  && $time <= strtotime($data_period['end_register_note_p'])){
+                   $this->view->partial = 1;
+                   $partial = 1;
+            }else{
+                //segundo parcial
+                if($time >= strtotime($data_period['start_register_note_s'])  && $time <= strtotime($data_period['end_register_note_s'])){
+                    $this->view->partial = 2; 
+                    $partial = 2;
+
+                }
+            }
+        }
+
         if ($base_courses->_getOne($where)) {
             $infocurso = $base_courses->_getOne($where);
             $this->view->infocurso = $infocurso;
         }
 
         $where['coursoid']=$courseid;
-        
+
         $infoassist = $base_assistance ->_getinfoasisstance($where);
+        $state_assistence = $this->verify_closure_assistence($partial,$infoassist);
+
+
+        if ($state_assistence == 'P' || $state_assistence == 'C') {
+            $url_assit ="/".base64_encode('oid')."/".base64_encode($oid)."/".
+                        base64_encode('eid')."/".base64_encode($eid)."/".
+                        base64_encode('escid')."/".base64_encode($escid)."/".
+                        base64_encode('subid')."/".base64_encode($subid)."/".
+                        base64_encode('coursoid')."/".base64_encode($courseid)."/".
+                        base64_encode('curid')."/".base64_encode($curid)."/".
+                        base64_encode('turno')."/".base64_encode($turno)."/".
+                        base64_encode('perid')."/".base64_encode($perid)."/".
+                        base64_encode('state')."/".base64_encode($state_assistence)."/".
+                        base64_encode('partial')."/".base64_encode($partial);
+
+            $this->_redirect('/assistance/student/assistence'.$url_assit);
+
+        }
+
         if ($infoassist) {
             foreach ($infoassist as $key => $value) {
                 $where['pid']=$value['pid'];
@@ -70,20 +106,6 @@ class Assistance_StudentController extends Zend_Controller_Action {
             }
             $this->view->infoassist = $infoassist;
             $this->view->state=$infoassist[0]['state'];
-        }
-
-        $data_period = $base_period->_getOne($where);
-        if ($data_period) {
-            $time = time();
-            //primer pa
-            if($time >= strtotime($data_period['start_register_note_p'])  && $time <= strtotime($data_period['end_register_note_p'])){
-               $this->view->partial = 1;
-            }else{
-                //segundo parcial
-                if($time >= strtotime($data_period['start_register_note_s'])  && $time <= strtotime($data_period['end_register_note_s'])){
-                    $this->view->partial = 2; 
-                }
-            }
         }
         // exit();
         $this->view->turno = $turno;
@@ -779,4 +801,245 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $this->_response->setHeader('Content-Type', 'application/json');                   
         $this->view->data = $json;
     }
+
+
+     public function assistenceAction(){
+        $params = $this->getRequest()->getParams();
+        $paramsdecode = array();
+        foreach ( $params as $key => $value ){
+            if($key!="module" && $key!="controller" && $key!="action"){
+                $paramsdecode[base64_decode($key)] = base64_decode($value);
+            }
+        }
+
+        $params = $paramsdecode;
+        $oid= trim($params['oid']);
+        $eid= trim($params['eid']);
+        $escid= trim($params['escid']);
+        $subid= trim($params['subid']);
+        $coursoid= trim($params['coursoid']);
+        $turno= trim($params['turno']);
+        $perid = trim($params['perid']);
+        $curid = trim($params['curid']);
+        $state = trim($params['state']);
+        $partial = trim($params['partial']);
+        $where = array(
+                'eid' => $eid, 'oid' => $oid,
+                'escid' => $escid,'subid' => $subid,
+                'coursoid' => $coursoid,'turno' => $turno,
+                'perid' => $perid,'curid'=>$curid,);
+        $where['courseid']=$coursoid;
+
+         $url_assit ="/".base64_encode('oid')."/".base64_encode($oid)."/".
+                        base64_encode('eid')."/".base64_encode($eid)."/".
+                        base64_encode('escid')."/".base64_encode($escid)."/".
+                        base64_encode('subid')."/".base64_encode($subid)."/".
+                        base64_encode('coursoid')."/".base64_encode($coursoid)."/".
+                        base64_encode('curid')."/".base64_encode($curid)."/".
+                        base64_encode('turno')."/".base64_encode($turno)."/".
+                        base64_encode('perid')."/".base64_encode($perid)."/".
+                        base64_encode('state')."/".base64_encode($state)."/".
+                        base64_encode('partial')."/".base64_encode($partial);
+
+        $base_assistance = new Api_Model_DbTable_StudentAssistance();
+        $infoassist = $base_assistance ->_getinfoasisstance($where);
+        $this->view->infoassist=$infoassist;
+        $base_courses = new Api_Model_DbTable_Course();
+        $infocurso=$base_courses->_getOne($where);
+        $this->view->turno=$turno;
+        $this->view->infocurso=$infocurso;
+        $this->view->partial=$partial;
+        $this->view->state=$state;
+        $this->view->url=$url_assit;
+        
+
+    }
+
+    public function printAction(){
+                $this->_helper->layout->disableLayout();
+                $params = $this->getRequest()->getParams();
+                $paramsdecode = array();
+                foreach ( $params as $key => $value ){
+                    if($key!="module" && $key!="controller" && $key!="action"){
+                        $paramsdecode[base64_decode($key)] = base64_decode($value);
+                    }
+                }
+
+                $params = $paramsdecode;
+                $oid= trim($params['oid']);
+                $eid= trim($params['eid']);
+                $escid= trim($params['escid']);
+                $subid= trim($params['subid']);
+                $coursoid= trim($params['coursoid']);
+                $turno= trim($params['turno']);
+                $perid = trim($params['perid']);
+                $curid = trim($params['curid']);
+                $state = trim($params['state']);
+                $partial = trim($params['partial']);
+                $where = array(
+                        'eid' => $eid, 'oid' => $oid,
+                        'escid' => $escid,'subid' => $subid,
+                        'coursoid' => $coursoid,'turno' => $turno,
+                        'perid' => $perid,'curid'=>$curid,);
+
+                $where['courseid']=$coursoid;
+
+                $base_faculty   =   new Api_Model_DbTable_Faculty();
+                $base_speciality =  new Api_Model_DbTable_Speciality();
+                $info_speciality =  $base_speciality->_getOne($where);
+
+                if ($info_speciality['parent'] != "") {
+                    $where['escid']=$info_speciality['parent'];
+                    $name_speciality = $base_speciality->_getOne($where);
+                    $info_speciality['speciality'] = $name_speciality['name'];
+                }
+
+                $this->view->info_speciality = $info_speciality;
+                $this->view->name_speciality = $name_speciality;
+                $base_assistance = new Api_Model_DbTable_StudentAssistance();
+                $infoassist = $base_assistance ->_getinfoasisstance($where);
+                $this->view->infoassist=$infoassist;
+                $base_courses = new Api_Model_DbTable_Course();
+                $infocurso=$base_courses->_getOne($where);
+                $this->view->turno=$turno;
+                $this->view->infocourse=$infocurso;
+                $this->view->partial=$partial;
+                $this->view->state=$state;
+                $this->view->perid=$perid;
+                $this->view->lasname= $this->sesion->infouser['fullname'];
+                
+            }
+
+    /*verificar asistencia llenada*/
+    public function verify_closure_assistence($partial,$infoassist_t){
+               $data = null;
+        if ($partial && $infoassist_t) {
+            $count = count($infoassist_t); 
+            $assist_1 = 0; $assist_2 = 0; $assist_3 = 0;$assist_4 = 0;$assist_5 = 0;
+            $assist_6 = 0; $assist_7 = 0; $assist_8 = 0;$assist_9 = 0;$assist_10 = 0;
+            $assist_11 = 0; $assist_12 = 0; $assist_13 = 0;$assist_14 = 0;$assist_15 = 0;
+            $assist_16 = 0; $assist_17 = 0; $assist_18 = 0;$assist_19 = 0;$assist_20 = 0;
+            $assist_21 = 0; $assist_22 = 0; $assist_23 = 0;$assist_24 = 0;$assist_25 = 0;
+            $assist_25 = 0; $assist_27 = 0; $assist_28 = 0;$assist_29 = 0;$assist_30 = 0;
+            $assist_31 = 0; $assist_32 = 0; $assist_33 = 0;$assist_34 = 0;$state=0;
+
+            foreach ($infoassist_t as $key => $infoassist) {
+
+                if ($partial==1) {
+
+                    if ($infoassist['a_sesion_1']=='R' || $infoassist['a_sesion_1']=='A' || $infoassist['a_sesion_1']=='F' || $infoassist['a_sesion_1']=='T') {
+                        $assist_1++;
+                    }
+                    if ($infoassist['a_sesion_2']=='R' || $infoassist['a_sesion_2']=='A' || $infoassist['a_sesion_2']=='F' || $infoassist['a_sesion_2']=='T') {
+                        $assist_2++;
+                    }
+                     if ($infoassist['a_sesion_3']=='R' || $infoassist['a_sesion_3']=='A' || $infoassist['a_sesion_3']=='F' || $infoassist['a_sesion_3']=='T') {
+                        $assist_3++;
+                    }
+                     if ($infoassist['a_sesion_4']=='R' || $infoassist['a_sesion_4']=='A' || $infoassist['a_sesion_4']=='F' || $infoassist['a_sesion_4']=='T') {
+                        $assist_4++;
+                    } if ($infoassist['a_sesion_5']=='R' || $infoassist['a_sesion_5']=='A' || $infoassist['a_sesion_5']=='F' || $infoassist['a_sesion_5']=='T') {
+                        $assist_5++;
+                    } if ($infoassist['a_sesion_6']=='R' || $infoassist['a_sesion_6']=='A' || $infoassist['a_sesion_6']=='F' || $infoassist['a_sesion_6']=='T') {
+                        $assist_6++;
+                    } if ($infoassist['a_sesion_7']=='R' || $infoassist['a_sesion_7']=='A' || $infoassist['a_sesion_7']=='F' || $infoassist['a_sesion_7']=='T') {
+                        $assist_7++;
+                    } if ($infoassist['a_sesion_8']=='R' || $infoassist['a_sesion_8']=='A' || $infoassist['a_sesion_8']=='F' || $infoassist['a_sesion_8']=='T') {
+                        $assist_8++;
+                    } if ($infoassist['a_sesion_9']=='R' || $infoassist['a_sesion_9']=='A' || $infoassist['a_sesion_9']=='F' || $infoassist['a_sesion_9']=='T') {
+                        $assist_9++;
+                    } if ($infoassist['a_sesion_10']=='R' || $infoassist['a_sesion_10']=='A' || $infoassist['a_sesion_10']=='F' || $infoassist['a_sesion_10']=='T') {
+                        $assist_10++;
+                    } if ($infoassist['a_sesion_11']=='R' || $infoassist['a_sesion_11']=='A' || $infoassist['a_sesion_11']=='F' || $infoassist['a_sesion_11']=='T') {
+                        $assist_11++;
+                    } if ($infoassist['a_sesion_12']=='R' || $infoassist['a_sesion_12']=='A' || $infoassist['a_sesion_12']=='F' || $infoassist['a_sesion_12']=='T') {
+                        $assist_12++;
+                    }if ($infoassist['a_sesion_13']=='R' || $infoassist['a_sesion_13']=='A' || $infoassist['a_sesion_13']=='F' || $infoassist['a_sesion_13']=='T') {
+                        $assist_13++;
+                    }if ($infoassist['a_sesion_14']=='R' || $infoassist['a_sesion_14']=='A' || $infoassist['a_sesion_14']=='F' || $infoassist['a_sesion_14']=='T') {
+                        $assist_14++;
+                    }if ($infoassist['a_sesion_15']=='R' || $infoassist['a_sesion_15']=='A' || $infoassist['a_sesion_15']=='F' || $infoassist['a_sesion_15']=='T') {
+                        $assist_15++;
+                    }if ($infoassist['a_sesion_16']=='R' || $infoassist['a_sesion_16']=='A' || $infoassist['a_sesion_16']=='F' || $infoassist['a_sesion_16']=='T') {
+                        $assist_16++;
+                    }if ($infoassist['a_sesion_17']=='R' || $infoassist['a_sesion_17']=='A' || $infoassist['a_sesion_17']=='F' || $infoassist['a_sesion_17']=='T') {
+                        $assist_17++;
+                    }if ($infoassist['state']=='P') {
+                        $state++;
+                    }
+
+                }
+                if ($partial == 2) {
+                    if ($infoassist['a_sesion_18']=='R' || $infoassist['a_sesion_18']=='A' || $infoassist['a_sesion_18']=='F' || $infoassist['a_sesion_18']=='T') {
+                        $assist_18++;
+                    }
+                     if ($infoassist['a_sesion_19']=='R' || $infoassist['a_sesion_19']=='A' || $infoassist['a_sesion_19']=='F' || $infoassist['a_sesion_19']=='T') {
+                        $assist_19++;
+                    }
+                     if ($infoassist['a_sesion_20']=='R' || $infoassist['a_sesion_20']=='A' || $infoassist['a_sesion_20']=='F' || $infoassist['a_sesion_20']=='T') {
+                        $assist_20++;
+                    }
+                     if ($infoassist['a_sesion_21']=='R' || $infoassist['a_sesion_21']=='A' || $infoassist['a_sesion_21']=='F' || $infoassist['a_sesion_21']=='T') {
+                        $assist_21++;
+                    } if ($infoassist['a_sesion_22']=='R' || $infoassist['a_sesion_22']=='A' || $infoassist['a_sesion_22']=='F' || $infoassist['a_sesion_22']=='T') {
+                        $assist_22++;
+                    } if ($infoassist['a_sesion_23']=='R' || $infoassist['a_sesion_23']=='A' || $infoassist['a_sesion_23']=='F' || $infoassist['a_sesion_23']=='T') {
+                        $assist_23++;
+                    } if ($infoassist['a_sesion_24']=='R' || $infoassist['a_sesion_24']=='A' || $infoassist['a_sesion_24']=='F' || $infoassist['a_sesion_24']=='T') {
+                        $assist_24++;
+                    } if ($infoassist['a_sesion_25']=='R' || $infoassist['a_sesion_25']=='A' || $infoassist['a_sesion_25']=='F' || $infoassist['a_sesion_25']=='T') {
+                        $assist_25++;
+                    } if ($infoassist['a_sesion_26']=='R' || $infoassist['a_sesion_26']=='A' || $infoassist['a_sesion_26']=='F' || $infoassist['a_sesion_26']=='T') {
+                        $assist_26++;
+                    } if ($infoassist['a_sesion_27']=='R' || $infoassist['a_sesion_27']=='A' || $infoassist['a_sesion_27']=='F' || $infoassist['a_sesion_27']=='T') {
+                        $assist_27++;
+                    } if ($infoassist['a_sesion_28']=='R' || $infoassist['a_sesion_28']=='A' || $infoassist['a_sesion_28']=='F' || $infoassist['a_sesion_28']=='T') {
+                        $assist_28++;
+                    } if ($infoassist['a_sesion_29']=='R' || $infoassist['a_sesion_29']=='A' || $infoassist['a_sesion_29']=='F' || $infoassist['a_sesion_29']=='T') {
+                        $assist_29++;
+                    }if ($infoassist['a_sesion_30']=='R' || $infoassist['a_sesion_30']=='A' || $infoassist['a_sesion_30']=='F' || $infoassist['a_sesion_30']=='T') {
+                        $assist_30++;
+                    }if ($infoassist['a_sesion_31']=='R' || $infoassist['a_sesion_31']=='A' || $infoassist['a_sesion_31']=='F' || $infoassist['a_sesion_31']=='T') {
+                        $assist_31++;
+                    }if ($infoassist['a_sesion_32']=='R' || $infoassist['a_sesion_32']=='A' || $infoassist['a_sesion_32']=='F' || $infoassist['a_sesion_32']=='T') {
+                        $assist_32++;
+                    }if ($infoassist['a_sesion_33']=='R' || $infoassist['a_sesion_33']=='A' || $infoassist['a_sesion_33']=='F' || $infoassist['a_sesion_33']=='T') {
+                        $assist_33++;
+                    }if ($infoassist['a_sesion_34']=='R' || $infoassist['a_sesion_34']=='A' || $infoassist['a_sesion_34']=='F' || $infoassist['a_sesion_34']=='T') {
+                        $assist_34++;
+                    }if ($infoassist['state']=='C') {
+                        $state++;
+                    }
+                }
+            }
+            
+            if ($partial == 1) {
+                if (
+                    $count == $assist_1 && $count == $assist_2 &&  $count == $assist_3 && $count == $assist_4 && 
+                    $count == $assist_5 && $count == $assist_6  && $count == $assist_7 && $count == $assist_8 &&
+                    $count == $assist_9 && $count == $assist_10 && $count == $assist_11 && $count == $assist_12 &&
+                    $count == $assist_13 && $count == $assist_14 && $count == $assist_15 && $count == $assist_16 &&
+                    $count == $assist_17 && $count == $state
+                    ) {
+                        $data = 'P';
+                    }
+            }
+            if ($partial == 2) {
+                if (
+                    $count == $assist_18 && $count == $assist_19 && $count == $assist_20 && $count == $assist_21 &&
+                    $count == $assist_22 && $count == $assist_23 && $count == $assist_24 && $count == $assist_25 &&
+                    $count == $assist_26 && $count == $assist_27 && $count == $assist_28 && $count == $assist_29 && 
+                    $count == $assist_30 && $count == $assist_31 && $count == $assist_32 && $count == $assist_33 && 
+                    $count == $assist_34 && $count == $state
+                    ) {
+                        $data = 'C';
+                    }
+            }
+
+        }
+
+        return $data;
+
+    }
+
 }
