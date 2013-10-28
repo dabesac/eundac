@@ -71,7 +71,8 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
             $oid = $this->sesion->oid;
             $subid = $this->sesion->subid;
             $escid = $this->_getParam('escid');
-            if ($escid=="TODOEC") $this->view->escid=$escid;
+            if ($escid=="TODOEC") {
+                $this->view->escid=$escid;}
             else{
                 $where = array('eid' => $eid, 'oid' => $oid, 'parent' => $escid);
                 $es = new Api_Model_DbTable_Speciality();
@@ -106,7 +107,16 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
     public function windowsAction(){
       try{
         $this->_helper->layout()->disableLayout();
-
+        $where['perid'] = $this->_getParam('perid');
+        $where['escid'] = $this->_getParam('escid');
+        $where['espec'] = $this->_getParam('espec');
+        $where['facid'] = $this->_getParam('facid');
+        $where['subid'] = $this->_getParam('subid');
+        $this->view->subid=$where['subid'];
+        $this->view->escid=$where['escid'];
+        $this->view->facid=$where['facid'];
+        $this->view->espec=$where['espec'];
+        $this->view->perid=$where['perid'];
       }
       catch (Exception $e){
         print "Error:" .$e->getMessage();
@@ -136,7 +146,9 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $dataescid=$escuela->_getFacspeciality($where);
         // print_r($dataescid);
         if ($dataescid) {
-        $this->view->facultad =$dataescid[0]['nomfac']; 
+                $fac= new Api_Model_DbTable_Faculty();
+                $datafacid=$fac->_getOne($where);
+                $this->view->facultad =$datafacid['name'];               
            }
         //Obteniendo la escuela y especialidad(si lo tuviera)
         if ($dataescid['parent']==""){
@@ -241,7 +253,11 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $dataescid=$escuela->_getFacspeciality($where);
         // print_r($dataescid);
         if ($dataescid) {
-        $this->view->facultad =$dataescid[0]['nomfac']; 
+         if ($dataescid) {
+                $fac= new Api_Model_DbTable_Faculty();
+                $datafacid=$fac->_getOne($where);
+                $this->view->facultad =$datafacid['name'];               
+           }
            }
         $this->view->escuela=strtoupper($esc['name']);
         $dataescid=$escuela->_getOne($where);
@@ -287,7 +303,9 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $dataescid=$escuela->_getFacspeciality($where);
         // print_r($dataescid);
         if ($dataescid) {
-        $this->view->facultad =$dataescid[0]['nomfac']; 
+                $fac= new Api_Model_DbTable_Faculty();
+                $datafacid=$fac->_getOne($where);
+                $this->view->facultad =$datafacid['name'];               
            }
         //Obteniendo la escuela y especialidad(si lo tuviera)
         if ($dataescid['parent']==""){
@@ -304,6 +322,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
             }
 
         if ($where['espec']) {  $where['escid']=$where['espec']; }
+        
         $sem= new Api_Model_DbTable_Semester();
         $lsem=$sem->_getSemesterXPeriodsXEscid($where);
         $this->view->semester=$lsem; 
@@ -366,7 +385,9 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $dataescid=$escuela->_getFacspeciality($where);
         // print_r($dataescid);
         if ($dataescid) {
-        $this->view->facultad =$dataescid[0]['nomfac']; 
+          $fac= new Api_Model_DbTable_Faculty();
+          $datafacid=$fac->_getOne($where);
+          $this->view->facultad =$datafacid['name']; 
            }
          $dataescid=$escuela->_getOne($where);
         $this->view->escuela =$dataescid['name']; 
@@ -407,7 +428,9 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $dataescid=$escuela->_getFacspeciality($where);
         // print_r($dataescid);
         if ($dataescid) {
-        $this->view->facultad =$dataescid[0]['nomfac']; 
+          $fac= new Api_Model_DbTable_Faculty();
+          $datafacid=$fac->_getOne($where);
+          $this->view->facultad =$datafacid['name']; 
            }
         //Obteniendo la escuela y especialidad(si lo tuviera)
         if ($dataescid['parent']==""){
@@ -457,7 +480,9 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $dataescid=$escuela->_getFacspeciality($where);
         // print_r($dataescid);
         if ($dataescid) {
-        $this->view->facultad =$dataescid[0]['nomfac']; 
+          $fac= new Api_Model_DbTable_Faculty();
+          $datafacid=$fac->_getOne($where);
+          $this->view->facultad =$datafacid['name']; 
            }
         //Obteniendo la escuela y especialidad(si lo tuviera)
         if ($dataescid['parent']==""){
@@ -508,7 +533,9 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $dataescid=$escuela->_getFacspeciality($where);
         // print_r($dataescid);
         if ($dataescid) {
-        $this->view->facultad =$dataescid[0]['nomfac']; 
+         $fac= new Api_Model_DbTable_Faculty();
+         $datafacid=$fac->_getOne($where);
+         $this->view->facultad =$datafacid['name']; 
            }
         //Obteniendo la escuela y especialidad(si lo tuviera)
         if ($dataescid['parent']==""){
@@ -571,7 +598,9 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $dataescid=$escuela->_getFacspeciality($where);
         // print_r($dataescid);
         if ($dataescid) {
-        $this->view->facultad =$dataescid[0]['nomfac']; 
+          $fac= new Api_Model_DbTable_Faculty();
+          $datafacid=$fac->_getOne($where);
+          $this->view->facultad =$datafacid['name']; 
            }
         //Obteniendo la escuela y especialidad(si lo tuviera)
         if ($dataescid['parent']==""){
