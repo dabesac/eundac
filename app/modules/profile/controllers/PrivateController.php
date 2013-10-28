@@ -88,15 +88,17 @@ class Profile_PrivateController extends Zend_Controller_Action {
             $pid=$this->getParam("pid");
 
 
-
+            $famdata=$famrel= array();
             $dbfam=new Api_Model_DbTable_Relationship();
             $where=array("eid"=>$eid,"pid"=>$pid);
             $famrel=$dbfam->_getFilter($where);
             $c=0;
-            foreach ($famrel as $f) {
-                $where=array("eid"=>$eid, "famid"=>$f['famid']);
-                $famdata[$c]=$dbfam->_getInfoFamiliars($where);
-                $c++;
+            if ($famrel){
+	            foreach ($famrel as $f) {
+	                $where=array("eid"=>$eid, "famid"=>$f['famid']);
+	                $famdata[$c]=$dbfam->_getInfoFamiliars($where);
+	                $c++;
+	            }
             }
             //print_r($famdata);
             $this->view->famrel=$famrel;
@@ -182,27 +184,28 @@ class Profile_PrivateController extends Zend_Controller_Action {
             $uid=$this->getParam("uid");
             $escid=$this->getParam("escid");
             $subid=$this->getParam("subid");
+            $rid=$this->getParam("rid");
             $perid=$this->sesion->period->perid;
 
-            $data=array("eid"=>$eid,"oid"=>$oid,"pid"=>$pid,"uid"=>$uid,"escid"=>$escid,"subid"=>$subid, "perid"=>$perid);
+            $data=array("eid"=>$eid,"oid"=>$oid,"pid"=>$pid,"uid"=>$uid,"escid"=>$escid,"subid"=>$subid, "perid"=>$perid,"rid"=>$rid);
 
             $dbcuract=new Api_Model_DbTable_Registrationxcourse();
             $dbtyperate=new Api_Model_DbTable_PeriodsCourses();
-
-            //$where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "perid"=>$perid);
-            //print_r($this->sesion);
-            $curact=$dbcuract->_getFilter($where, $attrib);
-            //print_r($curact);
+            $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "perid"=>$perid);
+            $curact=$dbcuract->_getFilter($where);
             $nc=0;
-            foreach ($curact as $cur) {
-                $where=array("eid"=>$eid, "oid"=>$oid, "perid"=>$perid, "courseid"=>$cur['courseid'], "turno"=>$cur['turno'], "curid"=>$cur['curid']);
-                $attrib=array("type_rate");
-                //print_r($where);
-                $typerate[$nc]=$dbtyperate->_getFilter($where,$attrib);
-                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cur['courseid']);
-                $attrib=array("name");
-                $name[$nc]=$dbcuract->_getInfoCourse($where,$attrib);
-                $nc++;
+            $typerate= $name= array();
+            if ($curact){
+	            foreach ($curact as $cur) {
+	                $where=array("eid"=>$eid, "oid"=>$oid, "perid"=>$perid, "courseid"=>$cur['courseid'], "turno"=>$cur['turno'], "curid"=>$cur['curid']);
+	                $attrib=array("type_rate");
+	                //print_r($where);
+	                $typerate[$nc]=$dbtyperate->_getFilter($where,$attrib);
+	                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cur['courseid']);
+	                $attrib=array("name");
+	                $name[$nc]=$dbcuract->_getInfoCourse($where,$attrib);
+	                $nc++;
+	            }
             }
             //print_r($data);
             $this->view->typerate=$typerate;
@@ -249,14 +252,16 @@ class Profile_PrivateController extends Zend_Controller_Action {
             $cur=$dbcur->_getOne($where);
             //print_r($cur);
             $courpercur=$dbcourxcur->_getCoursesXCurriculaXShool($eid,$oid,$cur['curid'],$escid);
-            
+            $courlle=array();
             $c=0;
-            foreach ($courpercur as $cour) {
-                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);
-                $attrib=array("courseid","notafinal","perid");
-                //print_r($where);
-                $courlle[$c]=$dbcourlle->_getFilter($where, $attrib);
-                $c++;
+            if ($courpercur){
+	            foreach ($courpercur as $cour) {
+	                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);
+	                $attrib=array("courseid","notafinal","perid");
+	                //print_r($where);
+	                $courlle[$c]=$dbcourlle->_getFilter($where, $attrib);
+	                $c++;
+	            }
             }
             //print_r($courpercur);
             $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid,"pid"=>$pid,"uid"=>$uid,"perid"=>$perid);
