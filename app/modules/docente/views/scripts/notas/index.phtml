@@ -42,7 +42,8 @@
                                 $where['curid']=$courses['curid'];
                                 $where['escid']=$courses['escid'];
                                 $where['subid']=$courses['subid'];
-                                $where['courseid']=$courses['courseid'];
+                                $where['courseid']=$courses['courseid'];                             
+
                               
                                 $list= new Api_Model_DbTable_Course();
                                 $course=$list->_getOne($where);                     
@@ -59,7 +60,10 @@
                                             <h1 class='span-course'><span class='glyphicon glyphicon-book'></span></h1>
                                         <?php }?>
 
+                                        
+
                                         <h4 class='name-course'><?php echo $course['curid']." - ".$course['courseid']." - ".$course['name']." - Turno ".$courses['turno']?></h4>
+
 
                                         <?php switch ($courses['type_rate']) {
                                             case 'O': ?>
@@ -142,7 +146,7 @@
 
                                                 {
 
-                                                if($courses['courseid']==$cour)
+                                                if(($courses['courseid']==$cour and $courses['escid']<>$esc) OR ($courses['courseid']==$cour and $courses['turno']<>$tur))
                                                 {
 
                                                 $crorigen=$courses['courseid']; 
@@ -170,7 +174,7 @@
 
 
                                                 ?>                                          
-                                                <option value="<?php echo $crorigen.";--;".$tuorigen.";--;".$escorigen.";--;".$this->perid.";--;".$cur.";--;".$esc.";--;".$cour.";--;".$tur?>"><?php echo $nom."-".$tuorigen."-".$nom_spe;?></option> 
+                                                <option value="<?php echo $crorigen.";--;".$tuorigen.";--;".$escorigen.";--;".$this->perid.";--;".$cur.";--;".$esc.";--;".$cour.";--;".$tur?>"><?php echo $crorigen."-".$nom."-".$tuorigen."-".$nom_spe;?></option> 
                                                 <?php
                                                 }
                                                 
@@ -230,6 +234,7 @@
 ?>
 
 
+<div id='sil'></div>
 
 
 
