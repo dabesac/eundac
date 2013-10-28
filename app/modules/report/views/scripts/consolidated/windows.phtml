@@ -1,5 +1,8 @@
 
 <div class="row">
+  <?php
+  $escid = $this->escid;
+   if ($escid!='TODOEC') { ?> 
   <div class="col-lg-6">
     <div  class="input-group">
       <span  class="input-group-addon alert-info">
@@ -7,6 +10,7 @@
       </span>
     </div>
   </div>
+  
     <div class="col-lg-6">
     <div  class="input-group">
       <span  class="input-group-addon alert-info">
@@ -14,6 +18,7 @@
       </span>
     </div>
   </div>
+  <?php }?>
     <div class="col-lg-6">
     <div  class="input-group">
       <span  class="input-group-addon alert-info">
@@ -21,6 +26,7 @@
       </span>
     </div>
   </div>
+   <?php if ($escid!='TODOEC') { ?> 
     <div class="col-lg-6">
     <div  class="input-group">
       <span  class="input-group-addon alert-info">
@@ -28,6 +34,7 @@
       </span>
     </div>
   </div>
+  <?php }?>
     <div class="col-lg-6">
     <div  class="input-group">
       <span  class="input-group-addon alert-info">

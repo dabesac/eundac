@@ -26,11 +26,23 @@ class Record_IndexController extends Zend_Controller_Action {
 			$where['escid']=$this->sesion->escid;
 			$where['subid']=$this->sesion->subid;
 		}
-		if ($this->sesion->rid=="RF"){
+		if ($this->sesion->rid=="RF" and $this->sesion->subid=="1901"){
 			$where['facid']=$this->sesion->faculty->facid;
+		
 		}
+
+		if ($this->sesion->rid=="RF" and $this->sesion->subid<>"1901"){
+			//$where['facid']=$this->sesion->faculty->facid;
+			$where['subid']=$this->sesion->subid;
+
+			
+		}
+		
 		$data= array("escid","subid","name");
-		$rows = $speciality->_getFilter($where,$data);
+		$rows = $speciality->_getFilter($where,$data='');
+
+		
+
 		if ($rows) $this->view->specialitys=$rows;
 		// set speciality for director
 		
@@ -1321,7 +1333,8 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,);
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S');
 
             $base_faculty 	=	new Api_Model_DbTable_Faculty();
 			$base_speciality = 	new Api_Model_DbTable_Speciality();
@@ -1391,5 +1404,85 @@ class Record_IndexController extends Zend_Controller_Action {
 		}
 	}
 
+
+	public function resumenAction()
+	{
+		$eid=$this->sesion->eid;
+        $oid=$this->sesion->oid;
+
+        $perid = base64_decode($this->_getParam("perid"));
+        $sedid = base64_decode($this->_getParam("sedid"));
+        $escid = base64_decode($this->_getParam("escid"));
+
+        $faculty = $this->sesion->faculty->name;
+        $speciality = $this->sesion->speciality->name;
+        $fullname = $this->sesion->infouser['fullname'];
+
+        $perid='13B';
+        $escid='4SI';
+        $subid='1901';
+
+		$this->view->perid=$perid;
+		$this->view->subid=$subid;
+		$this->view->escid=$escid;
+
+
+        if ($perid=="" || $escid=="" || $subid=="") return false;
+        $this->view->escid = $escid;
+		$this->view->subid = $subid;
+
+		$where = array('eid' => $eid, 'oid'=>$oid,				
+				'perid' => $perid);
+
+
+		$base_periods = new Api_Model_DbTable_Periods();
+		$period=$base_periods->_getOnePeriod($where);
+		//print_r($period);break;
+        if ($period) $this->view->infoperiodo= $period;
+
+        $where_periods = array('eid' => $eid, 'oid'=>$oid,'perid' => $perid, 'escid'=>$escid, 'subid'=>$subid);
+        ///print_r($where2);break;
+
+        $base_periods_courses = new Api_Model_DbTable_PeriodsCourses();
+        $bs_courses=$base_periods_courses->_getFilter($where_periods,$data='');
+
+        //print_r($bs_courses);break;
+
+       
+        foreach ($bs_courses as $course)
+        {
+        	//print_r($course['courseid']);//break;
+
+        	$courseid=$course['courseid'];
+        	$curid=$course['curid'];
+        	$turno=$course['turno'];
+
+        	$where_reg = array('eid' => $eid, 'oid'=>$oid,'courseid' => $courseid,'curid' => $curid,'perid' => $perid, 'escid'=>$escid, 'subid'=>$subid,'turno'=>$turno);
+
+        	$mat= new Api_Model_DbTable_Registrationxcourse();
+        	$numatri=$mat->_getCountRegisterCourse($where_reg);
+
+        	//print_r($numatri);
+
+        	$where_course= array('eid' =>$eid,'oid'=>$oid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid);
+
+
+
+        	$ncourse= new Api_Model_DbTable_Course();
+        	$dcourse=$ncourse->_getOne($where_course);
+        	$tmp=$course;
+
+        	if($dcourse) 
+        	$tmp['name']=$dcourse['name'];
+        	$tmp['num_mat']=$numatri;
+			$lcourses[]=$tmp;
+
+        }       
+            $this->view->listacursos = $lcourses;
+
+            //print_r($lcourses);
+
+
+	}
 	
 }

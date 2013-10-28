@@ -10,20 +10,27 @@ class Register_StudentController extends Zend_Controller_Action {
         }
         $login = $sesion->getStorage()->read();
         $this->sesion = $login;
-        if ($login->uid=='9811103229' || $login->uid=='1324507145' || $login->uid=='0822277014'
-			|| $login->uid=='1324507096' || $login->uid=='0591203040' || $login->uid=='0321102065'
-			|| $login->uid=='0641103040' || $login->uid=='0922603051' || $login->uid=='0023203450' 
-			|| $login->uid=='0824203065' || $login->uid=='1022703180' || $login->uid=='1022709020'
-			|| $login->uid=='0922703137' || $login->uid=='0622703030' || $login->uid=='0952703020'
-			|| $login->uid=='0942703054' || $login->uid=='1012703023' || $login->uid=='0992703052'
-			|| $login->uid=='1193403130' || $login->uid=='0823403188' || $login->uid=='0894203042'
-			|| $login->uid=='0014503048' || $login->uid=='0824203065' || $login->uid=='0353401340'
-			|| $login->uid=='8021303810' || $login->uid=='1022503204' || $login->uid=='0823403141'
-			|| $login->uid=='0853903017' 
-			){
+    if (
+                   $login->uid=='1024403235' || $login->uid=='0724403161' || $login->uid=='0724401200'
+                || $login->uid=='1114403056' || $login->uid=='1124403210' || $login->uid=='1020403075'
+                || $login->uid=='1094403070' || $login->uid=='1124403022' || $login->uid=='0824403119' 
+                || $login->uid=='1024403010' || $login->uid=='1124403247' || $login->uid=='1024403164'
+                || $login->uid=='0924403040' || $login->uid=='1024403075' || $login->uid=='0811303036'
+                || $login->uid=='0022303055' || $login->uid=='1023403259'
+               	|| $login->uid=='1195203068' || $login->uid=='0725203183' || $login->uid=='0825403392'
+               	|| $login->uid=='1345407225' || $login->uid=='1124803042'
+               	|| $login->uid=='1123403224' || $login->uid=='1123407018'
+               	|| $login->uid=='1393503070' || $login->uid=='1393503015'
+               	|| $login->uid=='1194403019' || $login->uid=='0994403037'
+               	|| $login->uid=='1024403039' || $login->uid=='1024403128'
+               	|| $login->uid=='1022703180' || $login->uid=='0992703052'
+               	|| $login->uid=='1123403369' || $login->uid=='1123403224'  
+               	|| $login->uid=='1123403331' || $login->uid=='0411203020'|| $login->uid=='1343503026'
+               ){
         }else {
-        	$this->_helper->redirector('index',"index",'default');
+                $this->_helper->redirector('index',"index",'default');
         }
+         
         
     }
     public function indexAction()

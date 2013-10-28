@@ -4,26 +4,16 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
 
     public function init()
     {
-    	// $sesion  = Zend_Auth::getInstance();
-    	// if(!$sesion->hasIdentity() ){
-    	// 	$this->_helper->redirector('index',"index",'default');
-    	// }
-    	// $login = $sesion->getStorage()->read();
-    	// if (!$login->modulo=="bienestar"){
-    	// 	$this->_helper->redirector('index','index','default');
-    	// }
-    	//$this->sesion = $login;
-        $this->eid="20154605046";
-        $this->oid="1";
-        $this->escid="4SI";
-        $this->subid="1901";
+    	$sesion  = Zend_Auth::getInstance();
+    	if(!$sesion->hasIdentity() ){
+    		$this->_helper->redirector('index',"index",'default');
+    	}
+    	$login = $sesion->getStorage()->read();
+    	$this->sesion = $login;
 
     }
     public function indexAction()
     {
-    
-    	
-
     }
 
     public function listsyllabusAction()
@@ -39,8 +29,8 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->eid;
-            $oid=$this->oid;
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
             $year=$this->_getParam("year");
 
             //print_r($where);
@@ -58,9 +48,9 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->eid;
-            $oid=$this->oid;
-            $escid=$this->escid;
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $escid=$this->sesion->escid;
             $perid=$this->_getParam("perid");
 
             $dbsemesters=new Api_Model_DbTable_Semester();
@@ -78,10 +68,10 @@ class Syllabus_DirectorController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->eid;
-            $oid=$this->oid;
-            $escid=$this->escid;
-            $subid=$this->subid;
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
             $year=$this->_getParam("year");
             $perid=$this->_getParam("perid");
             $semid=$this->_getParam("semid");

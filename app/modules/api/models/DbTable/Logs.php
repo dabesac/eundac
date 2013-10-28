@@ -20,7 +20,8 @@ class Api_Model_DbTable_Logs extends Zend_Db_Table_Abstract
 	{
 		try{
 			if ($data['eid']=='' ||  $data['oid']=='' ||  $data['tokenid']=='') return false;
-			$sql="eid='".$data['eid']."' and oid='".$data['oid']."' and tokenid='".$data['tokenid']."'";
+			$sql="eid='".$data['eid']."' and oid='".$data['oid']."' and tokenid='".$data['tokenid']."'
+					and uid='".$data['uid']."' and pid='".$data['pid']."'";
 			return $this->update($where,$sql);
 			return false;
 		}catch (Exception $e){

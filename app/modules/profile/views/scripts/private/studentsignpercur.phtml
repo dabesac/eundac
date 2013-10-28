@@ -3,10 +3,10 @@
 		<h5><b>Matricula Por Curricula</b></h5>
 	</div>
 	<div class="panel-body">
-		<?php if($this->courpercur){
-			//print_r($this->courpercur);?>
+		<?php if($this->courpercur){ ?>
 		<div class="panel panel-primary">
-			<?php  $semid=0;
+			<?php 
+			$semid=0;
 			$c=0;
 			foreach ($this->courpercur as $sem) {
 				if($sem['semid']<>$semid){?>
@@ -24,8 +24,8 @@
 								<th>Nota</th>
 								<th>Estado</th>
 							</tr>
-							
-					<?php  $semid=$sem['semid'];
+					<?php
+					$semid=$sem['semid'];
 						foreach ($this->courpercur as $courses) {
 							if($courses['semid']==$semid) {?>
 								<tr>
@@ -53,7 +53,8 @@
 										}?>
 									</td>
 									<td align='center'><!-- Imprimir mayor nota -->
-										<?php if($this->courlle[$c]){
+										<?php
+										if($this->courlle[$c]){
 											$notafinal=$this->courlle[$c]['notafinal'];
 											foreach ($this->courlle[$c] as $notaf) {
 												if($notaf['notafinal']>=$notafinal){

@@ -1,7 +1,5 @@
 <style type="text/css">
-.text-header-registration{
-	color: #34495e;
-}
+
 .form-control {
 	width: 45px;
 }
@@ -10,16 +8,17 @@
  var $partial = <?php echo $this->partial?>;
 </script>
 <script type="text/javascript" src="/external/notes/notes-target.js"></script>
+<script type="text/javascript" src="/external/notes/jquery.jstepper.js"></script>
 
 <?php $infocourse=$this->infocourse;?>
-
+<!-- header notes-->
 <div class='row' id='header-info'>
 	<div class='col-xs-8 header-registration-course'>
 		<h4 class='text-header-registration'> <span class='glyphicon glyphicon-list' style='color:#1abc9c;'></span> 
-			<?if($this->partial==1){
+			<?php if($this->partial==1){
 				echo "Primer Parcial ";
 			}?>
-			<?if($this->partial==2){
+			<?php if($this->partial==2){
 				echo "Segundo Parcial";
 			}?>
 
@@ -28,6 +27,7 @@
 	</div>
 	
 	<div class="col-md-4">
+        <a href="/docente/notas" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
 		<?php if ($this->state_record == 'A' || $this->state_record == 'B' || $this->state_record == 'P') { ?>
 			<buttom  class='btn btn-info' id='save_notes' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
 		
@@ -35,13 +35,23 @@
 		<?php }?>
 	</div>
 </div>
-<?php if ($this->students) { ?>
+<!-- end header-->
+
+
+<!-- alerts-->
+<div class='row' id='cont-alerts'>
+
+</div>
+<!-- end alerts-->
+
+<?php if ($this->students) { 
+    if ($this->closure_syllabus == 'C') {?>
 <div class='row'>
 	<div class='col-md-12'>
 		<table class='table tb-notes' id='table-notes'>
 			<thead>
 				<tr>
-					<th>#</th>
+					<th>N°</th>
 	                <th>Cod Matricula</th>
 	                <th>Apellidos y Nombres</th>
 	                <?php if($this->partial == 2){?>
@@ -84,8 +94,8 @@
                     style="color:<?php echo ($register['promedio1'] != -3)?'#000':'#FC4141'; ?>;"
 				>
 				<td class='td-edit-note'>
-                    <h6 class='pull-left'><?php echo $key + 1 ?></h6>
-                    <span id="edit-note-<?php echo $key?>" class='pull-left text-primary glyphicon'></span>
+                    <img src="" id="edit-note-<?php echo $key?>">
+                    <h6 class='pull-left ' id='num-edit-note-<?php echo $key?>'><?php echo $key + 1 ?>
                 </td>
                 <td><h6><?php echo $register['uid']?></h6></td>
 				<td><h6><?php echo $register['last_name0']." ".$register['last_name1'].", ".$register['first_name']?></h6></td>
@@ -135,7 +145,8 @@
                  	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota7_ii"  value="<?php echo  $register['nota7_ii'] ;?>"/></td>
                  	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota8_ii"  value="<?php echo  $register['nota8_ii'] ;?>"/></td>
                  	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota9_ii"  value="<?php echo  $register['nota9_ii'] ;?>"/></td>
-                 	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="promedio2"  value="<?php echo ($register['promedio2'] != -3)?$register['promedio2']:'RET'; ?>"/></td><td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="notafinal"  value="<?php echo ($register['promedio2'] != -3)?$register['notafinal']:'RET'; ?>"/></td>
+                 	<td><input maxlength="2" class='form-control data-notes-input' disabled editable=true index="<?php echo $key; ?>"   type="text" name="promedio2"  value="<?php echo ($register['promedio2'] != -3)?$register['promedio2']:'RET'; ?>"/></td>
+                    <td><input maxlength="2" class='form-control data-notes-input' disabled editable=true index="<?php echo $key; ?>"   type="text" name="notafinal"  value="<?php echo ($register['promedio2'] != -3)?$register['notafinal']:'RET'; ?>"/></td>
                  <?php }?>
 				</tr>
 				<?php }?>
@@ -144,11 +155,18 @@
 	</div>
 </div>
 <?php }else{ ?>
+    <div class='col-md-12 cont-font-not-register'>
+        <h1 class='span-not-register'>
+            <span class='glyphicon glyphicon-exclamation-sign'></span>
+        </h1>
+        <h3 class='text-not-register'>Verifique llenado de Sílabus</h3>
+    </div>
+<?php }}else{ ?>
 <div class='col-md-12 cont-font-not-register'>
 	<h1 class='span-not-register'>
 		<span class='glyphicon glyphicon-exclamation-sign'></span>
 	</h1>
-	<h3 class='text-not-register'>No se encontro ningun Registro</h3>
+	<h3 class='text-not-register'>No se Encontro ningun Registro</h3>
 </div>
 	<?php }?>
 <input type='hidden' id='curid' value='<?php echo $infocourse['curid']?>' >

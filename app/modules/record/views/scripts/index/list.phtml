@@ -57,7 +57,7 @@ $strprint = "/record/index/printavence/"
 	<a class="btn btn-primary " href="#">Agregar Asignatura</a>
 <?php } ?>
 	<a class="btn btn-primary " href="#" id="openwindows">Reporte Avance de Notas</a>
-	<?php if ($this->rid == 'RC') { ?>
+	<?php if ($this->rid == 'RC' ||  $this->rid == 'RF' ) { ?>
 		<a class="btn btn-info " href="/record/index/recordcontrol/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid) ?>/perid/<?php echo base64_encode($this->perid)?>" >
 		<span class='glyphicon glyphicon-print'></span> Control de Actas</a>
 	<?php }?>

@@ -639,5 +639,106 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
      	}
      }
 
+     public function _closureconpetency($where=array()){
+     	try {
+     		if ($where['eid']=='' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
+	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
+	    	
+	    	$sql = $this->_db->query("
+                select
+	            sum(num_reg) as num_reg, 
+	            sum(nota1_i) as nota1_i, 
+	            sum(nota2_i) as nota2_i, 
+	            sum(nota3_i) as nota3_i,  
+	            sum(nota6_i) as nota6_i, 
+	            sum(nota7_i) as nota7_i, 
+	            sum(nota8_i) as nota8_i, 
+	            sum(nota1_ii) as nota1_ii, 
+	            sum(nota2_ii) as nota2_ii, 
+	            sum(nota3_ii) as nota3_ii, 
+	            sum(nota6_ii) as nota6_ii, 
+	            sum(nota7_ii) as nota7_ii, 
+	            sum(nota8_ii) as nota8_ii
+	            from
+	            (
+	            select
+	            (
+	            count(*) -
+	            sum(
+	            CASE 
+	            WHEN nota4_i = '-3'  or  nota4_i = '-2'  or  nota4_ii = '-3'  or  nota4_ii = '-2'  THEN 1
+	            ELSE 0
+	            END
+	            )
+	            ) as num_reg ,
+	            sum(CASE WHEN nota1_i  is null or length(trim(nota1_i,'')) = 0 THEN 0
+	             ELSE 1
+	            END) as nota1_i, 
+	            sum(CASE WHEN nota2_i  is null or length(trim(nota2_i,'')) = 0 THEN 0
+	             ELSE 1
+	            END) as nota2_i, 
+	            sum(CASE WHEN nota3_i  is null or length(trim(nota3_i,'')) = 0 THEN 0
+	             ELSE 1
+	            END) as nota3_i, 
+	            sum(CASE WHEN nota6_i  is null or length(trim(nota6_i,'')) = 0 THEN 0
+	             ELSE 1
+	            END) as nota6_i, 
+	            sum(CASE WHEN nota7_i  is null or length(trim(nota7_i,'')) = 0 THEN 0
+	             ELSE 1
+	            END) as nota7_i, 
+	            sum(CASE WHEN nota8_i  is null or length(trim(nota8_i,'')) = 0 THEN 0
+	             ELSE 1
+	            END) as nota8_i, 
+	            sum(CASE WHEN nota1_ii  is null or length(trim(nota1_ii,'')) = 0 THEN 0
+	             ELSE 1
+	            END) as nota1_ii, 
+	            sum(CASE WHEN nota2_ii  is null or length(trim(nota2_ii,'')) = 0 THEN 0
+	             ELSE 1
+	            END) as nota2_ii, 
+	            sum(CASE WHEN nota3_ii  is null or length(trim(nota3_ii,'')) = 0 THEN 0
+	             ELSE 1
+	            END) as nota3_ii,  
+	            sum(CASE WHEN nota6_ii  is null or length(trim(nota6_ii,'')) = 0 THEN 0
+	             ELSE 1
+	            END) as nota6_ii, 
+	            sum(CASE WHEN nota7_ii  is null or length(trim(nota7_ii,'')) = 0 THEN 0
+	             ELSE 1
+	            END) as nota7_ii, 
+	            sum(CASE WHEN nota8_ii  is null or length(trim(nota8_ii,'')) = 0 THEN 0
+	             ELSE 1
+	            END) as nota8_ii
+	            from base_registration_course
+	            where
+	            curid = '".$where['curid']."' and 
+	            escid = '".$where['escid']."' and 
+	            courseid ='".$where['courseid']."' and 
+	            perid ='".$where['perid']."' and 
+	            turno ='".$where['turno']."' and 
+	            eid = '".$where['eid']."' and 
+	            oid= '".$where['oid']."' and
+	            state = 'M' and  
+	            subid = '".$where['subid']."' 
+	            group by 
+	            nota1_i, 
+	            nota2_i, 
+	            nota3_i, 
+	            nota6_i, 
+	            nota7_i, 
+	            nota8_i, 
+	            nota1_ii, 
+	            nota2_ii, 
+	            nota3_ii,  
+	            nota6_ii, 
+	            nota7_ii, 
+	            nota8_ii
+	            ) temporal
+                    ");
+                if ($sql) return $sql->fetchAll();
+            return false;
+     	} catch (Exception $e) {
+     		print $e->getMessage();
+     	}
+     }
+
 
 }

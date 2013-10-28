@@ -223,6 +223,8 @@ class IndexController extends Zend_Controller_Action {
     	$data['eid'] =$sesion_->eid;
     	$data['oid']=$sesion_->oid;
     	$data['tokenid']=$sesion_->tokenid;
+    	$data['uid']=$sesion_->uid;
+    	$data['pid']=$sesion_->pid;
     	$r=$log->_getOne($data);
     	if ($r){
     		$datalog['dateend']= date(DATE_RFC822);
@@ -240,15 +242,18 @@ class IndexController extends Zend_Controller_Action {
     	$sesion_ = $sesion->getStorage()->read();
     	$data['eid'] =$sesion_->eid;
     	$data['oid']=$sesion_->oid;
+    	$data['uid']=$sesion_->uid;
     	$data['state']="A";
     	$log = new Api_Model_DbTable_Logs();
     	$r=$log->_getFilter($data,array("pid","uid"));
     	if ($r){
     		$datalog['dateend']= date(DATE_RFC822);
     		$datalog['state']= 'C';
-    		$sql="eid='".$data['eid']."' and oid='".$data['oid']."'";
+    		echo $sql="eid='".$data['eid']."' and oid='".$data['oid']."' and uid='".$data['uid']."'";
+    		echo "";
+    		
     		$log->update($datalog,$sql);
-    		Zend_Auth::getInstance()->clearIdentity();
+    		//Zend_Auth::getInstance()->clearIdentity();
     		$this->_redirect("/");
     	}
         
@@ -359,6 +364,7 @@ class IndexController extends Zend_Controller_Action {
     		
     		case "AL": {
     			$resource1[]="alumno/index";
+                
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"register/listcurrentnotes","name"=>"Asignaturas Actuales","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"horary/consolidated","name"=>"Ver Horario","imgicon"=>"calendar");
@@ -372,7 +378,7 @@ class IndexController extends Zend_Controller_Action {
     			$modules[1] = array ("name" =>"Matrícula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"register/student","name"=>"Prematricula","imgicon"=>"edit");
     			$resource1[]="register/student";
-    			$modules[1]['acls'] = $acls;
+    			//$modules[1]['acls'] = $acls;
     			$acls = null;
     			break;
     		}
@@ -389,6 +395,8 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="horary/seehorary";
                 $acls[]= array("controller"=>"docente/informacademic","name"=>"Informe Acad. Adm.","imgicon"=>"file");
                 $resource1[]="docente/informacademic";
+                $resource1[]="docente/fillnotes";
+                $resource1[]="docente/register";
                 
                 
                 if (($login->infouser['teacher']['is_director']=="S")){
@@ -476,7 +484,9 @@ class IndexController extends Zend_Controller_Action {
     		case "RC":{
     			$resource1[]="rcentral/index";
     			$resource1[]="profile/search";
-    			$resource1[]="profile/changecurricula";
+                $resource1[]="profile/changecurricula";
+                $resource1[]="profile/privateadm/student";
+    			
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
@@ -590,6 +600,8 @@ class IndexController extends Zend_Controller_Action {
                 //$resource1[]="profile/changecurricula";
                 $resource1[]="alumno/index";
 
+
+
                 $modules[0] = array ("name" =>"Perfil", "imgicon"=>"book");            
                 $acls[]= array("controller"=>"profile/public/student","name"=>"Historial","imgicon"=>"calendar");
              
@@ -602,8 +614,7 @@ class IndexController extends Zend_Controller_Action {
 
             case "VA":{
                 $resource1[]="rcentral/index";
-                $resource1[]="profile/search";
-                //$resource1[]="profile/changecurricula";
+                $resource1[]="profile/search";                
                 
                 $modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
             
@@ -612,17 +623,19 @@ class IndexController extends Zend_Controller_Action {
                 $modules[0]['acls'] = $acls;
                 $acls = null;
                  
-                $modules[1] = array ("name" =>"Matricula", "imgicon"=>"ok");
-                $acls[]= array("controller"=>"#","name"=>"Matricula Ingresantes","imgicon"=>"saved");
-                $modules[1]['acls'] = $acls;
-                $acls = null;
+                // $modules[1] = array ("name" =>"Matricula", "imgicon"=>"ok");
+                // $acls[]= array("controller"=>"#","name"=>"Matricula Ingresantes","imgicon"=>"saved");
+                // $modules[1]['acls'] = $acls;
+                // $acls = null;
                  
                 $modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
+                $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");
                 $acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
                 $acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
                 $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
                 $acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
+                $resource1[]="report/periods";
                 $resource1[]="report/performance";
                 $resource1[]="report/recordnotas";
                 $resource1[]="report/registration";
@@ -675,6 +688,7 @@ class IndexController extends Zend_Controller_Action {
     	if(!$sesion->hasIdentity() ){
     		$this->_helper->redirector('index',"salir",'default');
     	}
+    	
     	$this->view->http = "http";
     	if($_SERVER['SERVER_PORT'] == '443') {
     		$this->view->http = "https";
@@ -683,6 +697,8 @@ class IndexController extends Zend_Controller_Action {
     	$sesion_ = $sesion->getStorage()->read();
     	$pass= base64_decode($this->_getParam("key"));
     	$mod= ($this->_getParam("mod"));
+    	
+
     	$this->view->uid= $sesion_->uid;
     	$this->view->pass= $pass;
     	$this->view->mod= $mod;
