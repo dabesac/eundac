@@ -110,10 +110,19 @@
 	margin-top: -140px;
 	background-color: #ecf0f1;
 }
+.data-header-info-assit{
+	position: fixed;
+	z-index: 999;
+	margin-top: -150px;
+	background-color: #ecf0f1;
+}
 
 .scroll-header-info{
-	
-
+	position: fixed;
+	z-index: 999;
+	margin-top: -141px;
+	background-color: #ecf0f1;
+	width: 53%;
 }
 .notes-error-input
 {

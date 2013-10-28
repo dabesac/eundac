@@ -29,15 +29,7 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $this->view->escid=$escid;
             $this->view->curid=$curid;
             $this->view->courseid=$courseid;
-            $this->view->pid=$this->sesion->pid;
             $this->view->turno=$turno;
-            $this->view->infouser=$this->sesion->infouser;
-            
-            $whereper['eid']=$eid;
-            $whereper['pid']=$this->sesion->pid;
-            $per= new Api_Model_DbTable_Person();
-            $persona=$per->_getOne($whereper);
-            $this->view->persona=$persona;
 
             $wherecur['eid']=$eid;
             $wherecur['oid']=$oid;
@@ -83,6 +75,12 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $dbsilabos = new Api_Model_DbTable_Syllabus();
             $silabo = $dbsilabos->_getOne($wheresyl);
             $this->view->silabo=$silabo;
+
+            $whereper['eid']=$eid;
+            $whereper['pid']=$silabo['teach_pid'];
+            $per= new Api_Model_DbTable_Person();
+            $persona=$per->_getOne($whereper);
+            $this->view->infouser=$persona;
 
             $syluni = new Api_Model_DbTable_Syllabusunits();
             $datsyluni=$syluni->_getAllXSyllabus($wheresyl);

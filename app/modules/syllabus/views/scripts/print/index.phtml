@@ -94,11 +94,11 @@ switch ($mes) {
         </tr>
         <tr>
             <td><b>1.<?php echo $num=$num+1 ?> DOCENTE:</b></td>
-            <td><?php echo $this->infouser['fullname']?></td>
+            <td><?php echo $this->infouser['last_name0']." ".$this->infouser['last_name1'].", ".$this->infouser['first_name']?></td>
         </tr>
         <tr>
             <td></td>
-            <td><strong>e-mail:</strong> <?php echo $this->persona['mail_person']?></td>
+            <td><strong>e-mail:</strong> <?php echo $this->infouser['mail_person']?></td>
         </tr>
     </table>
 </div>
@@ -269,7 +269,7 @@ switch ($mes) {
     <tr>
         <td style='text-align: center'>
             <p style='width: 400px; border-top: solid 1px #000'>
-                <?php echo $this->infouser['fullname']?><br>
+                <?php echo $this->infouser['last_name0']." ".$this->infouser['last_name1'].", ".$this->infouser['first_name']?><br>
                 <span style="border: none; font-weight: bold;">DOCENTE</span>
             </p>
         </td>
