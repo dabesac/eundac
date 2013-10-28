@@ -62,12 +62,14 @@ class Assistance_StudentController extends Zend_Controller_Action {
             }else{
                 //segundo parcial
                 if($time >= strtotime($data_period['start_register_note_s'])  && $time <= strtotime($data_period['end_register_note_s'])){
-                    $this->view->partial = 1; 
-                    $partial = 1;
+                    $this->view->partial = 2; 
+                    $partial = 2;
 
                 }
             }
         }
+        $this->view->partial = 1;
+        $partial = 1;
 
         if ($base_courses->_getOne($where)) {
             $infocurso = $base_courses->_getOne($where);
