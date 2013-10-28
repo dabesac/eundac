@@ -17,30 +17,32 @@
 				<th><center>Condición</center></th>
 				<th><center>Salario Mensual</center></th>
 			</tr>
-  			<?$c=1;
+  			<?php $c=1;
   			foreach ($this->laboral as $lab) {?>
 				<tr>
-					<td align="center"><?echo $c?></td>
-					<td align="center"><?echo $lab['company']?></td>
-					<td align="center"><?echo $lab['industry']?></td>
-					<td align="center"><?echo $lab['condition']?></td>
-					<td align="center">S/. <?echo $lab['salary']?></td>
+					<td align="center"><?php echo $c?></td>
+					<td align="center"><?php echo $lab['company']?></td>
+					<td align="center"><?php echo $lab['industry']?></td>
+					<td align="center"><?php echo $lab['condition']?></td>
+					<td align="center">S/. <?php echo $lab['salary']?></td>
 					<td align="center">
-						<a value="<?echo $lab['lid']?>" id="delete<?echo $lab['lid']?>" onclick="return confirm('Esta Seguro que lo desea eliminar?');" href="#"><span class="glyphicon glyphicon-remove"></span></a>
+						<a value="<?php echo $lab['lid']?>" id="delete<?php echo $lab['lid']?>" onclick="return confirm('Esta Seguro que lo desea eliminar?');" href="#"><span class="glyphicon glyphicon-remove"></span></a>
 						<script>
-							$("#delete<?echo $lab['lid']?>").click(function(){
-						  		$("#datastudent").load("/profile/public/studentremovelaboral/eid/<?echo $this->data['eid']?>/pid/<?echo $this->data['pid']?>/lid/<?echo $lab['lid']?>")
+							$("#delete<?php echo $lab['lid']?>").click(function(){
+						  		$("#datastudent").load("/profile/public/studentremovelaboral/eid/<?php echo $this->data['eid']?>/pid/<?php echo $this->data['pid']?>/lid/<?php echo $lab['lid']?>")
 						  		$("#datastudent").load("/profile/public/studentlaboral")
 						  	})
 						</script>
 					</td>
 				</tr>
-	  		<?$c++;
+	  		<?php $c++;
 	  		}?>
 	  	</table>
   	<?php }else{?>
       <center><h5>No tiene Datos, Por favor Agregue Experiencia Laboral</h5></center>
-    <?}?>
+    <?php
+	}
+	?>
   </div>
 
 </div>

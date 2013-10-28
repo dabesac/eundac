@@ -8,14 +8,14 @@
 	        	</tr>
 	        	<tr>
 	          		<td>Sexo <h5><b>
-	          			<?if ($this->datos[3]['sex']=="M") {
+	          			<?php if ($this->datos[3]['sex']=="M") {
 	          				echo "Masculino";
 	          			}else{
 	          				echo "Femenino";
 	          			}?>
 	          		</b></h5></td>
 	          		<td>Estado Civil <h5><b>
-	          			<?if ($this->datos[3]['civil']=="S") {
+	          			<?php if ($this->datos[3]['civil']=="S") {
 	          				if ($this->datos[3]['sex']=="M") {
 	          					echo "Soltero";
 	          				}else{

@@ -4,13 +4,13 @@
 	</div>
 	<div class="panel-body">
 
-		<?if($this->namper){
+		<?php if($this->namper){
 			//print_r($this->courname);?>
 		<div class="panel panel-default">
-			<?$c=0;
+			<?php $c=0;
 			foreach ($this->namper as $namper) {?>
 			<div class="panel-heading">
-				<b><?echo $namper[0]['name'];?></b>
+				<b><?php echo $namper[0]['name'];?></b>
 			</div>
 				
 			<div class="panel-body">	
@@ -18,18 +18,17 @@
 					<tr>
 						<th>Cursos</th>
 					</tr>
-				<?foreach ($this->courname[$c] as $cour) {?>
+				<?php foreach ($this->courname[$c] as $cour) {?>
 					<tr>
-						<td><?echo $cour[0]['name']?></td>
+						<td><?php echo $cour[0]['name']?></td>
 					</tr>
-				<?}?>
+				<?php }	?>
 				</table>
 			</div>
-			<?$c++;
-			}?>
-
-
+			<?php $c++;
+			}
+			?>
 		</div>
-		<?}?>
-	</div
+		<?php }	?>
+	</div>
 </div>
