@@ -29,7 +29,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 			}
 			return false;
 		}catch (Exception $e){
-			print "Error: Update User".$e->getMessage();
+			// print "Error: Update User".$e->getMessage();
 		}
 	}
 	
