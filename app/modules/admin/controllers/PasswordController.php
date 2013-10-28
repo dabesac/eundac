@@ -155,7 +155,7 @@ class Admin_PasswordController extends Zend_Controller_Action
                 }
                 else
                 {
-                    $this->view->mensaje="Contraseñas no cinciden";
+                    $this->view->mensaje="Contraseñas no coinciden";
                     /*echo "
                     <div class='alert alert-error'>
                             <button type='button' class='close' data-dismiss='alert'>x</button>

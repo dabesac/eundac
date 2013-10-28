@@ -26,7 +26,9 @@
         <tr>
         <th colspan="2">Semestre:</th>
         <td>
-
+            <?php
+            $escid = $this->escid;
+             if ($escid!='TODOEC'){ ?>
             <select id="semid" name="semid" class="form-control" style="width:100px" >
                 <?php
                 if ($this->semester){
@@ -45,6 +47,26 @@
                 }
                 ?>
                 </select>
+                <?php }
+                else{ ?>
+
+                            <select id="semid" name="semid" class="form-control" style="width:100px" >      
+                                <option value="1">1º Semestre</option>
+                                <option value="2">2º Semestre</option>
+                                <option value="3">3º Semestre</option>
+                                <option value="4">4º Semestre</option>
+                                <option value="5">5º Semestre</option>
+                                <option value="6">6º Semestre</option>
+                                <option value="7">7º Semestre</option>
+                                <option value="8">8º Semestre</option>
+                                <option value="9">9º Semestre</option>
+                                <option value="10">10º Semestre</option>
+                                <option value="11">11º Semestre</option>
+                                <option value="12">12º Semestre</option>
+                            </select>   
+
+
+                <?php } ?>
         </td>
         <td></td>
         <td></td>
