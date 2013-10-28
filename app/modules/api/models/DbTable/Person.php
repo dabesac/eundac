@@ -74,11 +74,15 @@ public function _getAll($where,$order='',$start=0,$limit=0){
 				$select = $this->_db->select();
 				if ($attrib=='') $select->from("base_person");
 				else $select->from("base_person",$attrib);
-				foreach ($where as $atri=>$value){
-					$select->where("$atri = ?", $value);
+				if ($where){
+					foreach ($where as $atri=>$value){
+						$select->where("$atri = ?", $value);
+					}
 				}
-				foreach ($orders as $key => $order) {
-						$select->order($order);
+				if ($orders){
+					foreach ($orders as $key => $order) {
+							$select->order($order);
+					}
 				}
 				$results = $select->query();
 				$rows = $results->fetchAll();
