@@ -4,13 +4,17 @@
   </div>
 
   <div class="panel-body">
-    <?php if($this->acadata){?>
-      <?php foreach ($this->acadata as $academic) {?>
+    <?php 
+    if($this->acadata) 
+      { 
+      foreach ($this->acadata as $academic) 
+        { 
+        ?>
         <div class="panel panel-default">
           <div class="panel-heading">
             <h5>
               <b><?php echo $academic['institution']?></b>
-              <a class="pull-right" href="/profile/public/studentremoveacademic/eid/<?echo $this->data["eid"]?>/pid/<?echo $this->data["pid"]?>/acid/<?echo $academic['acid']?>"><span class="glyphicon glyphicon-remove"></span></a>
+              <a class="pull-right" href="/profile/public/studentremoveacademic/eid/<?php echo $this->data["eid"]?>/pid/<?php echo $this->data["pid"]?>/acid/<?php echo $academic['acid']?>"><span class="glyphicon glyphicon-remove"></span></a>
             </h5>
           </div>
           <div class="panel-body">
@@ -40,7 +44,8 @@
                       echo "PHD";
                     }elseif($academic['title']=="O"){
                       echo "Otros";
-                    }?>
+                    }
+                    ?>
                 </b></h5></td>
               </tr>
               <tr>
@@ -51,9 +56,13 @@
           </div>        
         </div>
       <?php }
-    }else{?>
+    }
+    else{
+    ?>
       <center><h5>No tiene Datos Por favor Actualize su Perfil</h5></center>
-    <?}?>
+    <?php  
+    }
+    ?>
   </div>
 
 </div>

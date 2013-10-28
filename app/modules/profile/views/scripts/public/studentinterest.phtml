@@ -15,12 +15,12 @@
 				<th><center>Dedicación</center></th>
 				<th><center>Tiene Club?</center></th>
 			</tr>
-  			<?foreach ($this->interes as $int) {?>
+  			<?php foreach ($this->interes as $int) {?>
 				<tr>
-					<td align="center"><?echo $c?></td>
-					<td align="center"><?echo $int['title']?></td>
+					<td align="center"><?php echo $c?></td>
+					<td align="center"><?php echo $int['title']?></td>
 					<td align="center">
-						<?if($int['discipline']=="H"){
+						<?php if($int['discipline']=="H"){
 							echo "Hobby";
 						}elseif($int['discipline']=="D"){
 							echo "Deportiva";
@@ -31,7 +31,7 @@
 							}?>
 					</td>
 					<td align="center">
-						<?if($int['club']=="S") {
+						<?php if($int['club']=="S") {
 							echo "Si";
 						}else{
 							echo "No";
@@ -39,21 +39,23 @@
 						?>
 					</td>
 					<td>
-						<a value="<?echo $int['iid']?>" id="delete<?echo $int['iid']?>" onclick="return confirm('Esta Seguro que desea eliminar el Interes?');" href="#"><span class="glyphicon glyphicon-remove"></span></a>
+						<a value="<?php echo $int['iid']?>" id="delete<?php echo $int['iid']?>" onclick="return confirm('Esta Seguro que desea eliminar el Interes?');" href="#"><span class="glyphicon glyphicon-remove"></span></a>
 						<script>
-							$("#delete<?echo $int['iid']?>").click(function(){
-						  		$("#datastudent").load("/profile/public/studentremoveinterest/eid/<?echo $this->data['eid']?>/pid/<?echo $this->data['pid']?>/iid/<?echo $int['iid']?>")
+							$("#delete<?php echo $int['iid']?>").click(function(){
+						  		$("#datastudent").load("/profile/public/studentremoveinterest/eid/<?php echo $this->data['eid']?>/pid/<?php echo $this->data['pid']?>/iid/<?php echo $int['iid']?>")
 						  		$("#datastudent").load("/profile/public/studentinterest")
 						  	})
 						</script>
 					</td>
 				</tr>
-  			<? $c++;
+  			<?php  $c++;
   			}?>
 			</table>
   	<?php }else{?>
       <center><h5>No tiene Datos Por favor Agregue un Interes</h5></center>
-    <?}?>
+    <?php
+	}
+	?>
   </div>
 
 </div>

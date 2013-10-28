@@ -2,18 +2,18 @@
 
   <div class="panel-heading">
     <h4>Datos Estadisticos 
-		<?if($this->statistic){?>
+		<?php if($this->statistic){?>
     		<a id="edit" class="pull-right" title="Editar" href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-    	<?}?>
+    	<?php }?>
     </h4>
   </div>
 
   <div class="panel-body">
-  	<?if($this->statistic){?>
+  	<?php if($this->statistic){?>
     <table class="table">
     	<tr>
 			<td>Conocimiento en Computacion <h5><b>
-				<?if($this->statistic["cono_comp"]=="S"){
+				<?php if($this->statistic["cono_comp"]=="S"){
 					echo "Si";
 				}else{
 					echo "No";
@@ -26,7 +26,7 @@
 		</tr>
     	<tr>
 			<td>Depende Economicamente de <h5><b>
-				<?if($this->statistic["dependencia"]=="P"){
+				<?php if($this->statistic["dependencia"]=="P"){
 					echo "Padres";
 				}elseif($this->statistic["dependencia"]=="SP"){
 					echo "Solo Padre";
@@ -45,7 +45,7 @@
 				}?>
 			</b></h5></td>
 			<td>Denpenden de Usted<h5><b>
-				<?if($this->statistic["dependen_ud"]=="S"){
+				<?php if($this->statistic["dependen_ud"]=="S"){
 					echo "Si, ".$this->statistic["num_dep_ud"]." personas";
 				}else{
 					echo "No";
@@ -58,7 +58,8 @@
 		</tr>    	
 		<tr>
 			<td>La Vivienda es<h5><b>
-				<?if($this->statistic["vivienda"]=="P"){
+				<?php 
+				if($this->statistic["vivienda"]=="P"){
 					echo "Propia";
 				}elseif($this->statistic["vivienda"]=="A"){
 					echo "Alquilada";
@@ -68,13 +69,14 @@
 					echo "Prestada";
 				}elseif($this->statistic["vivienda"]=="O"){
 					echo "Otros";
-				}?>
+				}
+				?>
 			</b></h5></td>
-			<td>Numero de Habitantes <h5><b><?echo $this->statistic["num_personas"]?></b></h5></td>
+			<td>Numero de Habitantes <h5><b><?php echo $this->statistic["num_personas"]?></b></h5></td>
 		</tr>
 		<tr>
 			<td>Tipo de Vivienda<h5><b>
-				<?if($this->statistic["tipo_vivienda"]=="CI"){
+				<?php if($this->statistic["tipo_vivienda"]=="CI"){
 					echo "Casa Independiente";
 				}elseif($this->statistic["tipo_vivienda"]=="CA"){
 					echo "Campamento";
@@ -89,7 +91,7 @@
 				}?>
 			</b></h5></td>
 			<td>Material<h5><b>
-				<?if($this->statistic["mat_vivienda"]=="NA"){
+				<?php if($this->statistic["mat_vivienda"]=="NA"){
 					echo "Ladrillo o Bloque de Cemento Acabado";
 				}elseif($this->statistic["mat_vivienda"]=="NI"){
 					echo "Ladrillo o Bloque de Cemento Inconcluso";
@@ -105,9 +107,9 @@
 			</b></h5></td>
 		</tr>    	
 		<tr>
-			<td>Numero de Habitaciones<h5><b><?echo $this->statistic["num_habitacion"]?></b></h5></td>
+			<td>Numero de Habitaciones<h5><b><?php echo $this->statistic["num_habitacion"]?></b></h5></td>
 			<td>Servicios con los que cuenta<h5><b>
-				<?if($this->statistic["servicios"]=="ALD"){
+				<?php if($this->statistic["servicios"]=="ALD"){
 					echo "Agua, Luz y Desagüe";
 				}elseif($this->statistic["servicios"]=="LD"){
 					echo "Solo Luz y Desagüe";
@@ -128,7 +130,7 @@
 		</tr>
 		<tr>
 			<td>Vive con<h5><b>
-				<?if($this->statistic["vive_con"]=="PD"){
+				<?php if($this->statistic["vive_con"]=="PD"){
 					echo "Padres";
 				}elseif($this->statistic["vive_con"]=="P"){
 					echo "Solo Padre";
@@ -145,7 +147,7 @@
 				}?>
 			</b></h5></td>
 			<td>Lugar de Alimentacion<h5><b>
-				<?if($this->statistic["lugar_alimentacion"]=="CU"){
+				<?php if($this->statistic["lugar_alimentacion"]=="CU"){
 					echo "Comedor Universitario";
 				}elseif($this->statistic["lugar_alimentacion"]=="P"){
 					echo "Pensión";
@@ -159,9 +161,9 @@
 			</b></h5></td>
 		</tr>
 		<tr>
-			<td>Costo Diario de Alimentos<h5><b><?echo $this->statistic["costo_alimento"]. " Soles"?></b></h5></td>
+			<td>Costo Diario de Alimentos<h5><b><?php echo $this->statistic["costo_alimento"]. " Soles"?></b></h5></td>
 			<td>Tiene Problemas con su Alimentación<h5><b>
-				<?if($this->statistic["prob_alimento"]=="N"){
+				<?php if($this->statistic["prob_alimento"]=="N"){
 					echo "Ninguno";
 				}elseif($this->statistic["prob_alimento"]=="DP"){
 					echo "Sus padres le envian dinero";
@@ -177,9 +179,11 @@
 			</b></h5></td>
 		</tr>
     </table>
-    <?php }else{?>
+    <?php }
+    else{
+    	?>
       <center><h5>No tiene Datos Por favor Actualize su Perfil</h5></center>
-    <?}?>
+    <?php }?>
   </div>
 
 </div>

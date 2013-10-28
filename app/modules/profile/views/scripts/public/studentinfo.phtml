@@ -27,11 +27,15 @@
             <td>
               <ul class="nav nav-pills nav-stacked" id="editpalBtns2">
                 <li><a href="" id="editfamily" class="btn btn-block"><h5>Familia</h5></a></li>
-                <?if ($this->si==1) {?>
+                <?php if ($this->si==1) { ?>
                   <li><a href="" id="editstatistics" disabled="disabled" class="btn btn-block"><h5>Datos Estadisticos</h5></a></li>
-                <?}else{?>
+                <?php 
+                }
+                else{
+                  ?>
                   <li><a href="" id="editstatistics" class="btn btn-block"><h5>Datos Estadisticos</h5></a></li>
-                <?}?>
+                <?php
+                }?>
                 <li class="hidden"><a></a></li>
               </ul>
             </td>
