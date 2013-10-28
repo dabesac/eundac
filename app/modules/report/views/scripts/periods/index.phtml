@@ -65,6 +65,7 @@
 		var escid = tmpp[0];
 		var subid = tmpp[1];
 		var url = "/report/periods/listteacher/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
+		$("#loaddata").html("<img src='/img/spinner.gif'>Cargando...");
 		$("#loaddata").load(url);
 	});
 </script>
