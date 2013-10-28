@@ -25,7 +25,7 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 			$subid=$this->_getParam('subid');
 			$uid=$this->_getParam('uid');
 			$pid=$this->_getParam('pid');
-
+		
 			$this->view->pid=$pid;
 			$this->view->rid=$rid;
 			$this->view->escid=$escid;

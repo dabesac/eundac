@@ -41,7 +41,6 @@ $resource1[]="profile/privateadm";
 
 
 
-
 //print_r($resource1);
 
 //$resource1[16] = "profile/private";
@@ -153,8 +152,11 @@ else
 				}
 				?>
 			<?php 
+			if ($acls){
 		    foreach ($acls as $acl){
-			$module = $acl['module'];
+
+			//$module = $acl['module'];
+			//print_r($acl);
 		    ?>
 		    	<li>
 		        	<a href="#" class="titulo">
@@ -162,7 +164,10 @@ else
 		        		<?php echo strtoupper($acl['name'])?>
 		        	</a>
 		        	<?php
+		        	if (isset($acl['acls'])){
 					$tacls = $acl['acls'];
+				
+				
 					foreach ($tacls as $tacl){
 						$resource = $tacl['controller'];
 						?>
@@ -175,9 +180,11 @@ else
 					    </ul>
 						<?php 
 					} 
+					}
 					?>	
 				</li>
 			<?php 
+			}
 			}
 		    ?>
 			</ul>

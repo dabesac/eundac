@@ -42,7 +42,8 @@
                                 $where['curid']=$courses['curid'];
                                 $where['escid']=$courses['escid'];
                                 $where['subid']=$courses['subid'];
-                                $where['courseid']=$courses['courseid'];
+                                $where['courseid']=$courses['courseid'];                             
+
                               
                                 $list= new Api_Model_DbTable_Course();
                                 $course=$list->_getOne($where);                     
@@ -58,7 +59,12 @@
                                         <?php }else{?>
                                             <h1 class='span-course'><span class='glyphicon glyphicon-book'></span></h1>
                                         <?php }?>
-                                        <h4 class='name-course'><?php echo $course['courseid']." - ".$course['name']." - ".$courses['turno']?></h4>
+
+                                        
+
+                                        <h4 class='name-course'><?php echo $course['curid']." - ".$course['courseid']." - ".$course['name']." - Turno ".$courses['turno']?></h4>
+
+
                                         <?php switch ($courses['type_rate']) {
                                             case 'O': ?>
                                                 <a class="btn btn-primary btn-sm btn-group-course" href="/docente/fillnotes/target<?php echo $urlAsist?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
@@ -72,7 +78,7 @@
                                          <?php       break;
                                         }?>
 
-                                        <a class="btn btn-primary btn-sm btn-group-course" href="/assistance/student/index<?php echo $urlAsist?>" data-toggle="tooltip" title="Llenado de Asistencia" > Asistencia</a>
+                                        <a class="btn btn-primary btn-sm btn-group-course disabled" href="/assistance/student/index<?php echo $urlAsist?>" data-toggle="tooltip" title="Llenado de Asistencia" > Asistencia</a>
                                         <a class="btn btn-primary btn-sm btn-group-course" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>"data-toggle="tooltip" title="Registro del Sílabo" >Sílabo</a>
 
                                         <a class="btn btn-primary btn-sm btn-group-course" href="<?php echo $urlcampus?>" target="black" data-toggle="tooltip" title="Ir Campus Virtual eUNDAC">Campus</a>
@@ -140,7 +146,7 @@
 
                                                 {
 
-                                                if($courses['courseid']==$cour)
+                                                if(($courses['courseid']==$cour and $courses['escid']<>$esc) OR ($courses['courseid']==$cour and $courses['turno']<>$tur))
                                                 {
 
                                                 $crorigen=$courses['courseid']; 
@@ -158,11 +164,17 @@
                                                 $name= new Api_Model_DbTable_Course();
                                                 $name_co=$name->_getOne($where_course);
                                                 //print_rx($name_co);
-                                                 $nom=$name_co['name'];
+                                                $nom=$name_co['name'];
+
+                                                $where_spe = array('eid'=>$where['eid'],'oid'=>$where['oid'],'escid'=>$escorigen,'subid'=>$suorigen);
+
+                                                $name_spe= new Api_Model_DbTable_Speciality();
+                                                $nspe=$name_spe->_getOne($where_spe);
+                                                $nom_spe=$nspe['name'];
 
 
                                                 ?>                                          
-                                                <option value="<?php echo $crorigen.";--;".$tuorigen.";--;".$escorigen.";--;".$this->perid.";--;".$cur.";--;".$esc.";--;".$cour.";--;".$tur?>"><?php echo $nom."-".$tuorigen;?></option> 
+                                                <option value="<?php echo $crorigen.";--;".$tuorigen.";--;".$escorigen.";--;".$this->perid.";--;".$cur.";--;".$esc.";--;".$cour.";--;".$tur?>"><?php echo $crorigen."-".$nom."-".$tuorigen."-".$nom_spe;?></option> 
                                                 <?php
                                                 }
                                                 
@@ -177,6 +189,8 @@
                                             //$(function() {
                                             //var year_a="<?php echo base64_encode(date('Y'));?>";
                                             $("#courses_<?php echo $f ?>").change(function(){
+
+                                            if(confirm("Esta seguro de duplicar \nel silabo"))
                                             var courses =$("#courses_<?php echo $f ?>").val();
                                             //alert("<?php echo $f ?>")
                                             //alert(courses)
@@ -194,7 +208,7 @@
                                             url="/docente/notas/courses/perid/"+perid+"/courseidorigen/"+courorigen+"/turnoorigen/"+tuorigen+"/escidorigen/"+esorigen+"/curid/"+cur+"/escid/"+escid+"/courseid/"+courseid+"/turno/"+turno;
                                             //alert(courorigen)
                                             //alert(courseid)
-                                            alert(url)
+                                            //alert(url)
                                             $("#sil").html("<option value=''>Cargando...</option>");
                                             $("#sil").load(url);       
                                             });
@@ -220,21 +234,7 @@
 ?>
 
 
-
-
-
-  <div id='sil'>s                                      </div>
-
-
-
-
-
-
-
-
-
-
-
+<div id='sil'></div>
 
 
 

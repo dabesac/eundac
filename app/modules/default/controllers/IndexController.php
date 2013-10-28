@@ -378,7 +378,7 @@ class IndexController extends Zend_Controller_Action {
     			$modules[1] = array ("name" =>"Matrícula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"register/student","name"=>"Prematricula","imgicon"=>"edit");
     			$resource1[]="register/student";
-    			$modules[1]['acls'] = $acls;
+    			//$modules[1]['acls'] = $acls;
     			$acls = null;
     			break;
     		}

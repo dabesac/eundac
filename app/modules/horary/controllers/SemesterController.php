@@ -21,13 +21,10 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
 			$escid=$this->sesion->escid;
-			// $escid='4SI';
-			// $perid='13A';
 			$perid=$this->sesion->period->perid;
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'perid'=>$perid);
 			$sem= new Api_Model_DbTable_Semester();
 			$dsem=$sem->_getSemesterXPeriodsXEscid($where);
-			// print_r($dsem);exit();
 			$this->view->semester=$dsem;
 		} catch (Exception $e) {
 			print "Error: get semester".$e->getMessage();
@@ -97,8 +94,6 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		$oid=$this->sesion->oid;
 		$escid=$this->sesion->escid;
 		$facid=$this->sesion->facid;
-		// $facid='4';
-		// $escid='4SI';
 		$semid=base64_decode($this->_getParam('semid'));
 		$subid=$this->sesion->subid;
 		$perid=$this->sesion->period->perid;

@@ -1,0 +1,92 @@
+ <?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+$tipo=$this->tipo;
+$a="REPORTE CANTIDAD MATRICULADOS POR CURSO";
+$header='
+<table style="width: 100%;" border="1">
+    <tr>
+        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+        <th style="text-align: center; font-size: 11px;">
+        FACULTAD DE '.strtoupper($this->facultad).'<br/>
+        ESCUELA DE  '.strtoupper($this->escuela).'<br/>
+        </th>        
+    </tr>
+    <tr>
+        <th style="border: 1px solid #000;">'.strtoupper($a).' </th>
+    </tr>
+</table>
+<tr>
+        <td style="text-align: left;">Periodo: '.strtoupper($this->perid).' </td>
+    </tr></br>
+    <tr>
+        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+
+'    
+?> 
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+ <?php 
+foreach ($this->semester as $sem){
+
+            $cont=$sem['semid']?>
+<div style="font-size: 15px;"><h4><CENTER><b> SEMESTRE <?php echo $cont;?>   </b></h4><CENTER>  </div>
+
+<table  style="width:100%; font-size: 9px;" border="1" >
+   <thead>
+    <tr >
+        <th style="width:20px;"><center>#</center></th>
+        <th style="width:20px;"><center>Sem.</center></th>
+        <th style="width:20px;"><center>Curricula</center></th>        
+        <th><center>Curso</center></th>
+        <th style="width:20px;"><center>Turno</center></th>        
+        <th style="width:20px;"><center>Alumnos Matriculados</center></th>
+    </tr>
+    </thead>
+<?php
+$r=0;
+
+if ($this->listacursos){  
+    foreach ($this->listacursos as $curso){
+        $cursoid=$curso['courseid'];
+        $curid=$curso['curid'];
+        $perid=$curso['perid'];
+        $escid=$curso['escid'];
+        $semid=$curso['semid'];       
+        $turno =$curso['turno']; 
+        $cantidad=$curso['matriculados'];   
+          if ($curso['semid']==$cont){  
+            $r++;?>    
+            <tr >
+                <td ><center><?php echo $r?></center></td>                    
+                <td ><?php echo $semid?></td>
+                <td ><?php echo $curid?></td>                
+                <td ><?php echo $curso['name']?></td>
+                <td ><center><?php echo $turno?></center></td>
+                <td ><center><?php echo $cantidad;?></center></td>           
+            </tr>
+            <?php
+            }       
+        }
+        } 
+?>
+</table>
+<?php } ?> 
+
+	<?php 
+
+  $html = ob_get_contents();
+  
+  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
+  $mpdf->SetHTMLHeader($header);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  
+  $mpdf->SetFooter($this->footer);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('Escuela-'.$this->escid.'.pdf','D');
+  
+?>
+

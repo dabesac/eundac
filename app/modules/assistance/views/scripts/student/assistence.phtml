@@ -1,0 +1,643 @@
+<div class='row' id='header-info'>
+	<div class='col-xs-12 col-sm-6 col-md-8'>
+		<h4> <span class='glyphicon glyphicon-calendar'></span> Registro Asistencia 
+			<?php echo $this->infocurso['name']?> Turno <?php echo $this->turno?> 
+			<?php if($this->partial==1){
+				echo "Primer Parcial ";
+			}?>
+			<?php if($this->partial==2){
+				echo "Segundo Parcial";
+			}?>
+		</h4>
+	</div>
+	<div class="col-md-4">
+		<a href="/docente/notas" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Atras </a>
+		<a href="/assistance/student/print<?php echo $this->url?>" class='btn btn-default'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
+	</div>
+</div>
+
+<table class='table' id='talassist'>
+		<thead>
+			<tr>
+				<th rowspan='2'>#</th>
+				<th rowspan='2'>Apellidos y Nombres</th>
+				<th colspan='2' class='text-center success'>Semana 1</th>
+				<th colspan='2'class='text-center warning'>Semana 2</th>
+				<th colspan='2'class='text-center success'>Semana 3</th>
+				<th colspan='2'class='text-center warning'>Semana 4</th>
+				<th colspan='2'class='text-center success'>Semana 5</th>
+				<th colspan='2'class='text-center warning'>Semana 6</th>
+				<th colspan='2'class='text-center success'>Semana 7</th>
+				<th colspan='2'class='text-center warning'>Semana 8</th>
+				<th colspan='1'class='text-center success'></th>
+				<?php if ($this->partial == 2) {?>
+					<th colspan='2'class='text-center warning'>Semana 9</th>
+					<th colspan='2'class='text-center success'>Semana 10</th>
+					<th colspan='2'class='text-center warning'>Semana 11</th>
+					<th colspan='2'class='text-center success'>Semana 12</th>
+					<th colspan='2'class='text-center warning'>Semana 13</th>
+					<th colspan='2'class='text-center success'>Semana 14</th>
+					<th colspan='2'class='text-center warning'>Semana 16</th>
+					<th colspan='2'class='text-center success'>Semana 17</th>
+					<th colspan='2'class='text-center warning'></th>
+				<?php }?>
+			</tr>
+			<tr id='tb-header-info'>
+				<th class='text-sesion-assist '>sesión 1</th>
+				<th class='text-sesion-assist '>sesión 2</th>
+				<th class='text-sesion-assist '>sesión 3</th>
+				<th class='text-sesion-assist '>sesión 4</th>
+				<th class='text-sesion-assist '>sesión 5</th>
+				<th class='text-sesion-assist '>sesión 6</th>
+				<th class='text-sesion-assist '>sesión 7</th>
+				<th class='text-sesion-assist '>sesión 8</th>
+				<th class='text-sesion-assist '>sesión 9</th>
+				<th class='text-sesion-assist '>sesión 10</th>
+				<th class='text-sesion-assist '>sesión 11</th>
+				<th class='text-sesion-assist '>sesión 12</th>
+				<th class='text-sesion-assist '>sesión 13</th>
+				<th class='text-sesion-assist '>sesión 14</th>
+				<th class='text-sesion-assist '> sesión 15</th>
+				<th class='text-sesion-assist '>sesión 16</th>
+				<th class='text-sesion-assist active'>Ex Parcial 1</th>
+				<?php if ($this->partial==2) { ?>
+					<th class='text-sesion-assist '>sesión 18</th>
+					<th class='text-sesion-assist '>sesión 19</th>
+					<th class='text-sesion-assist '> sesión 20</th>
+					<th class='text-sesion-assist '> sesión 21</th>
+					<th class='text-sesion-assist '> sesión 22</th>
+					<th class='text-sesion-assist '>sesión 29</th>
+					<th class='text-sesion-assist '>sesión 24</th>
+					<th class='text-sesion-assist '>sesión 25</th>
+					<th class='text-sesion-assist '>sesión 26</th>
+					<th class='text-sesion-assist '>sesión 27</th>
+					<th class='text-sesion-assist '>sesión 28</th>
+					<th class='text-sesion-assist '>sesión 29</th>
+					<th class='text-sesion-assist '>sesión 30</th>
+					<th class='text-sesion-assist '>sesión 31</th>
+					<th class='text-sesion-assist '> sesión 32</th>
+					<th class='text-sesion-assist '>sesión 33</th>
+					<th class='text-sesion-assist active'>Ex Parcial 1</th>
+				<?php } ?>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($this->infoassist as $key => $register) {?>
+				<tr>
+					<td><?php echo $key+1?> <span  class='text-success glyphicon'></span></td>
+					<td><?php echo $register['last_name0']." ".$register['last_name1']." ,".$register['first_name']?></td>
+					<td>
+						<?php switch ($register['a_sesion_1']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_2']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_3'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_4']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_5']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_6']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_7'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_8'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_9'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_10'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_11'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_12'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_13']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_14'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_15'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_16']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_17'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+
+					<?php if ($this->state == 'C' && $this->partial==2) { ?>
+					
+					<td>
+						<?php switch ($register['a_sesion_18']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_19'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_20']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_21']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_22']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_23'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_24'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_25'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_26'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_27'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_28'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_29']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_30'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_31'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_32']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_33'] ) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+					<td>
+						<?php switch ($register['a_sesion_34']) {
+							case 'T':
+								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
+								break;
+							case 'R':
+								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
+								break;
+							case 'A':
+								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
+								break;
+							case 'F':
+								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
+								break;
+						}?>
+					</td>
+
+
+			<?php	
+			}?>
+				</tr>
+			<?php }?>
+		</tbody>
+</table>

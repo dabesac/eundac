@@ -161,6 +161,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 				$num_temp = 0;
 				$persetage=0;
 				$num =0;
+				$data[$key]['persetage_notes'] = 0;
 				if ($course['type_rate']=="C") {
 					$base_registration_course = new Api_Model_DbTable_Registrationxcourse();
         			$result_conpetency = $base_registration_course->_closureconpetency($where);
@@ -177,13 +178,13 @@ class Docente_NotasController extends Zend_Controller_Action{
 			        			}
 
 			        			$num_temp = 
-			        							intval($notes_conpetency['nota1_i'])+
-			        							intval($notes_conpetency['nota2_i'])+
-			        							intval($notes_conpetency['nota3_i'])+
-			        							intval($notes_conpetency['nota6_i'])+
-			        							intval($notes_conpetency['nota7_i'])+
-			        							intval($notes_conpetency['nota8_i']);
-			        			$persetage = ((0.5*$num_temp)/$num)*100;
+		        							intval($notes_conpetency['nota1_i'])+
+		        							intval($notes_conpetency['nota2_i'])+
+		        							intval($notes_conpetency['nota3_i'])+
+		        							intval($notes_conpetency['nota6_i'])+
+		        							intval($notes_conpetency['nota7_i'])+
+		        							intval($notes_conpetency['nota8_i']);
+			        			$persetage = ($num_temp != 0)? (((0.5*$num_temp)/$num)*100) : 0;
 			        		}
 
 			        	}
@@ -204,11 +205,12 @@ class Docente_NotasController extends Zend_Controller_Action{
 		        							intval($notes_conpetency['nota6_i'])+
 		        							intval($notes_conpetency['nota7_i'])+
 		        							intval($notes_conpetency['nota8_i']);
-			        			$persetage = ((0.5*$num_temp)/$num)*100;
+			        			$persetage = ($num_temp != 0)? (((100 *$num_temp)/$num)) : 0;
 			        		}
 
 			        	}
     			}
+
     			if ($course['type_rate']=="O") {
 					$base_registration_course = new Api_Model_DbTable_Registrationxcourse();
 			        $result_target = $base_registration_course->_closuretarget($where);
@@ -227,7 +229,8 @@ class Docente_NotasController extends Zend_Controller_Action{
 			        				$num_temp =  $num_temp + intval($result_target['nota'.$i.'_i']);
 			        			}
 
-			        			$persetage = ((0.5*$num_temp)/$num)*100;
+			        			$persetage = ($num_temp != 0)? (((0.5 *$num_temp)/$num)*100) : 0;
+
 			        		}
 
 			        	}
@@ -246,7 +249,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 			        										intval($result_target['nota'.$i.'_ii']);
 			        			}
 
-			        			$persetage = (100*$num_temp)/$num;
+			        			$persetage = ($num_temp != 0)? (((100 *$num_temp)/$num)) : 0;
 			        		}
 
 			        	}
@@ -255,6 +258,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 
         		$data[$key]['persetage_notes']=$persetage;
 			}
+
 
 			$num_temp = array();
 			foreach ($data as $key => $course_1) {
@@ -272,10 +276,10 @@ class Docente_NotasController extends Zend_Controller_Action{
 				
 				$persetage_assit=0;
 				$sum = 0;
-				$num_reg = o;
+				$num_reg = 0;
         		$base_assistance = new Api_Model_DbTable_StudentAssistance();
 		        $assistence = $base_assistance ->_getAll($where);
-
+		        $data[$key]['persetage_assit'] = 0;
 		        $count = count($assistence);
 
 		        $assist_1 = 0; $assist_2 = 0; $assist_3 = 0;$assist_4 = 0;$assist_5 = 0;

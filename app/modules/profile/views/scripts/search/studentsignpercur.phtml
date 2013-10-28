@@ -1,25 +1,25 @@
 <div class="panel panel-default">
 	<table class="table">
 		<tr>
-			<td><h5>Codigo <b><br><?echo $this->person[0]["uid"]?></b></h5></td>
-			<td><h5>Nombre <b><br><?echo $this->person[0]["last_name0"]." ".$this->person[0]["last_name1"]." ".$this->person[0]["first_name"]?></b></h5></td>
-			<td><h5>Factultad de <b><?echo $this->person["facesp"][0]["nomfac"]?></b></h5>
-				<h5>Escuela de <b><?echo $this->person["facesp"][0]["nomesc"]?></b></h5></td>
+			<td><h5>Codigo <b><br><?php echo $this->person[0]["uid"]?></b></h5></td>
+			<td><h5>Nombre <b><br><?php echo $this->person[0]["last_name0"]." ".$this->person[0]["last_name1"]." ".$this->person[0]["first_name"]?></b></h5></td>
+			<td><h5>Factultad de <b><?php echo $this->person["facesp"][0]["nomfac"]?></b></h5>
+				<h5>Escuela de <b><?php echo $this->person["facesp"][0]["nomesc"]?></b></h5></td>
 		</tr>
 	</table>
 	<div class="panel-heading">
 		<h4><b>Matricula Por Curricula</b></h4>
 	</div>
 	<div class="panel-body">
-		<?if($this->courpercur){
+		<?php if($this->courpercur){
 			//print_r($this->courlleact);?>
 		<div class="panel panel-default">
-			<? $semid=0;
+			<?php  $semid=0;
 			$c=0;
 			foreach ($this->courpercur as $sem) {
 				if($sem['semid']<>$semid){?>
 					<div class="panel-heading">
-						<b>SEMESTRE <?echo $sem['semid']?></b>
+						<b>SEMESTRE <?php echo $sem['semid']?></b>
 					</div>
 					<div class="panel-body">
 						<table class="table">
@@ -27,31 +27,31 @@
 								<th><center>Codigo</center></th>
 								<th>Cursos</th>
 								<th><center>Tipo</center></th>
-								<?if($sem['semid']<>"1"){?>
+								<?php if($sem['semid']<>"1"){?>
 									<th><center>Requisito</center></th>
-								<?}else{?>
+								<?php }else{?>
 									<th></th>
-								<?}?>
+								<?php }?>
 								<th><center>Creditos</center></th>
 								<th>Nota</th>
 								<th>Estado</th>
 							</tr>
 							
-					<? $semid=$sem['semid'];
+					<?php $semid=$sem['semid'];
 						foreach ($this->courpercur as $courses) {
 							if($courses['semid']==$semid) {?>
 								<tr>
-									<td align="center"><?echo $courses['courseid']?></td>
-									<td><?echo $courses['name']?></td>
+									<td align="center"><?php echo $courses['courseid']?></td>
+									<td><?php echo $courses['name']?></td>
 									<td align="center">
-										<?if($courses['type']=="E"){?>
+										<?php if($courses['type']=="E"){?>
 											<h6><b>E</b></h6>			
-										<?}elseif($courses['type']=="O"){?>
+										<?php }elseif($courses['type']=="O"){?>
 											<h6><b>O</b></h6>
-										<?}?>
+										<?php }?>
 									</td>
 									<td align="center">
-										<?if($sem['semid']<>"1"){
+										<?php if($sem['semid']<>"1"){
 											$exreq=0;
 											for($i=1; $i<=3 ; $i++){
 												if($courses['req_'.$i]){
@@ -64,9 +64,9 @@
 											}
 										}?>
 									</td>
-									<td align="center"><?echo $courses['credits']?></td>
+									<td align="center"><?php echo $courses['credits']?></td>
 									<td><!-- Imprimir mayor nota -->
-										<?if($this->courlle[$c]){
+										<?php if($this->courlle[$c]){
 											$notafinal=$this->courlle[$c]['notafinal'];
 											foreach ($this->courlle[$c] as $notaf) {
 												if($notaf['notafinal']>=$notafinal){
@@ -79,43 +79,43 @@
 										}?>
 									</td>
 									<td>
-										<?if($est<>1){
+										<?php if($est<>1){
 											if($notafinal>=11){?>
 												<img src="/img/circulo-verde.png">
-											<?}else{
+											<?php }else{
 												$pinto=0;
 												foreach ($this->courlleact as $cact) {
 													if($this->courlle[$c][0]['courseid']==$cact['courseid']){
 														if($cact['state']=="M"){?>
 															<img src="/img/circulo-amarillo.png">
-														<?$pinto=1;
+														<?php $pinto=1;
 														}else{?>
 															<img src="/img/circulo-rojo.png">
-														<?$pinto=1;
+														<?php $pinto=1;
 														}
 													}
 												}
 												if($pinto==0){?>
 													<img src="/img/circulo-rojo.png">
-												<?}
+												<?php }
 											}
 										}elseif($est==1){
 											$est=0;?>
 											<img src="/img/circulo-rojo.png">
-										<?}?>
+										<?php }?>
 									</td>
 								</tr>
-							<?$c++;
+							<?php $c++;
 							}
 						}?>
 						</table>
 					</div>
-				<? 
+				<?php  
 				}?>
-			<?}?>
+			<?php }?>
 		</div><!-- Panel de Semestres -->
-		<?}else{?>
+		<?php }else{?>
 			<h4 align="center">No Existen Datos</h4>
-		<?}?>
+		<?php }?>
 	</div>
 </div>
