@@ -118,7 +118,10 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $lcursos = new Api_Model_DbTable_StudentAssistance();
             $listacurso =$lcursos->_assistence($wheres);
             $j=0;
+            $a=1;
+            
             foreach ($listacurso as $cursomas){
+            	
                 $where[$j]['eid']=$wheres["eid"];
                 $where[$j]['oid']=$wheres["oid"];
                 $where[$j]['escid']=$wheres["escid"];
@@ -129,7 +132,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 $where[$j]['curid']=$cursomas["curid"];
                 $where[$j]['turno']=$cursomas["turno"];
                 $periods = new Api_Model_DbTable_PeriodsCourses();
-                $state =$periods->_getOne($where);
+                $state =$periods->_getOne($where[$j]);
                 $var=$state['state'];
                 if($var=='A'){
                     $a=1;
