@@ -226,7 +226,6 @@ class Docente_NotasController extends Zend_Controller_Action{
 			        				}
 			        				$num_temp =  $num_temp + intval($result_target['nota'.$i.'_i']);
 			        			}
-
 			        			$persetage = ((0.5*$num_temp)/$num)*100;
 			        		}
 
@@ -272,7 +271,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 				
 				$persetage_assit=0;
 				$sum = 0;
-				$num_reg = o;
+				$num_reg = 0;
         		$base_assistance = new Api_Model_DbTable_StudentAssistance();
 		        $assistence = $base_assistance ->_getAll($where);
 

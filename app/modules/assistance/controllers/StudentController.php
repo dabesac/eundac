@@ -68,6 +68,8 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 }
             }
         }
+        $this->view->partial = 1;
+        $partial = 1;
 
         if ($base_courses->_getOne($where)) {
             $infocurso = $base_courses->_getOne($where);
