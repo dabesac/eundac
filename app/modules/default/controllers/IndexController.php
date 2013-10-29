@@ -332,11 +332,16 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"register/changerates","name"=>"Cambio de Tasas","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/person","name"=>"Crear Personas","imgicon"=>"user");
     			$acls[]= array("controller"=>"admin/user","name"=>"Crear Usuario","imgicon"=>"user");
+    			$acls[]= array("controller"=>"admin/opensillabus","name"=>"Abrir Silabus","imgicon"=>"user");
+    			$acls[]= array("controller"=>"admin/openrecords","name"=>"Abrir Actas","imgicon"=>"folder-close");
+    			
     			$resource1[]="admin/receipts";
     			$resource1[]="admin/password";
     			$resource1[]="admin/bankpayments";
     			$resource1[]="admin/rateregister";
     			$resource1[]="register/changerates";
+    			$resource1[]="admin/opensillabus";
+    			$resource1[]="admin/openrecords";
     			$resource1[]="admin/person";
     			$resource1[]="admin/user";
     			$modules[0]['acls'] = $acls;
