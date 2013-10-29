@@ -14,11 +14,25 @@
  		try {
  			$eid = $this->sesion->eid;
  			$oid = $this->sesion->oid;
+ 			$rid = $this->sesion->rid;
+ 			$is_director = $this->sesion->infouser['teacher']['is_director'];
 
- 			$where = array('eid' => $eid, 'oid' => $oid, 'state' => 'A');
- 			$esc = new Api_Model_DbTable_Speciality();
- 			$dataesc = $esc->_getFilter($where,$attrib=null,$orders=array('facid','escid'));
- 			$this->view->speciality = $dataesc;
+	 		$esc = new Api_Model_DbTable_Speciality();
+ 			if ($rid == 'RF' || $rid == 'DF') {
+ 				$facid = $this->sesion->faculty->facid;
+ 				$where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid,'state' => 'A');
+ 			}else{
+ 				if ($rid == 'DC' && $is_director=='S') {
+ 					$this->view->director = $is_director;
+ 					$this->view->escid = $this->sesion->escid;
+ 					$where = array('eid' => $eid, 'oid' => $oid, 'escid' => $this->sesion->escid,'state' => 'A');
+ 				}else{
+		 			$where = array('eid' => $eid, 'oid' => $oid, 'state' => 'A');
+ 				}
+ 			}
+		 	$dataesc = $esc->_getFilter($where,$attrib=null,$orders=array('facid','escid'));
+	 		$this->view->speciality = $dataesc;
+
 
  			$this->view->perid = $this->sesion->period->perid;
  			$where = array('eid' => $eid, 'oid' => $oid);
