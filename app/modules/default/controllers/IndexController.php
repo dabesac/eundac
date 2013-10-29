@@ -175,8 +175,8 @@ class IndexController extends Zend_Controller_Action {
     					}
     					$urlmod = $data->rol['module'];
     					$passn= base64_encode($clavecampus);
-    					$urllogin  = "key/$passn/mod/".$data->modulo;
-    					$urllogin  = array("key"=>$passn, "mod" => $data->modulo);
+    					$urllogin  = "key/$passn/mod/".$data->rol['module'];
+    					$urllogin  = array("key"=>$passn, "mod" => $data->rol['module']);
     					if (trim($data->rid)=='AL' || $data->rid=='DC')
     						$this->_forward("ajax", "index", "default", $urllogin );
     					else
@@ -332,11 +332,16 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"register/changerates","name"=>"Cambio de Tasas","imgicon"=>"calendar");
     			$acls[]= array("controller"=>"admin/person","name"=>"Crear Personas","imgicon"=>"user");
     			$acls[]= array("controller"=>"admin/user","name"=>"Crear Usuario","imgicon"=>"user");
+    			$acls[]= array("controller"=>"admin/opensillabus","name"=>"Abrir Silabus","imgicon"=>"user");
+    			$acls[]= array("controller"=>"admin/openrecords","name"=>"Abrir Actas","imgicon"=>"folder-close");
+    			
     			$resource1[]="admin/receipts";
     			$resource1[]="admin/password";
     			$resource1[]="admin/bankpayments";
     			$resource1[]="admin/rateregister";
     			$resource1[]="register/changerates";
+    			$resource1[]="admin/opensillabus";
+    			$resource1[]="admin/openrecords";
     			$resource1[]="admin/person";
     			$resource1[]="admin/user";
     			$modules[0]['acls'] = $acls;
@@ -411,7 +416,9 @@ class IndexController extends Zend_Controller_Action {
     			$acls = null;
     			    			
     			$modules[1] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
-    			if (($login->infouser['teacher']['is_director']=="S")){    	
+    			if (($login->infouser['teacher']['is_director']=="S")){  
+                    $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");  
+                    $resource1[]="report/periods";	
     				$acls[]= array("controller"=>"syllabus/director/listsyllabus","name"=>"Llenado Silabus","imgicon"=>"edit");
     				$resource1[]="syllabus/director"; 
                     $acls[]= array("controller"=>"report/consolidated","name"=>"Reporte General","imgicon"=>"folder-open"); 
@@ -464,13 +471,15 @@ class IndexController extends Zend_Controller_Action {
     			$acls = null;
     			
     			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
+                $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
                 $acls[]= array("controller"=>"report/consolidated","name"=>"Reporte General","imgicon"=>"folder-open");
                 $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
     			$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
-    			$resource1[]="report/performance";
+    			$resource1[]="report/periods";
+                $resource1[]="report/performance";
     			$resource1[]="report/recordnotas";
                 $resource1[]="report/registration";
                 $resource1[]="report/consolidated";
@@ -504,13 +513,15 @@ class IndexController extends Zend_Controller_Action {
     			$acls = null;
     			 
     			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
+                $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"report/consolidated","name"=>"Reporte General","imgicon"=>"folder-open");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
                 $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
     			$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
-    			$resource1[]="report/performance";
+            	$resource1[]="report/periods";
+                $resource1[]="report/performance";
     			$resource1[]="report/recordnotas";
                 $resource1[]="report/consolidated";
                 $resource1[]="report/registration";
@@ -574,12 +585,13 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="profile/search";
 
                 $modules[0] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
+                $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");
                 $acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
                 $acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
-
                 $acls[]= array("controller"=>"graduated/reportgraduated","name"=>"Reporte Egresados","imgicon"=>"list");
                 $acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"signal");
+                $resource1[]="report/periods";
                 $resource1[]="report/performance";
                 $resource1[]="report/recordnotas";
                 $resource1[]="report/registration";
