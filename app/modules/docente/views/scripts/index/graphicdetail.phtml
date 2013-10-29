@@ -14,14 +14,14 @@
         var data = google.visualization.arrayToDataTable([
           ['ENCUESTA', 'SIEMPRE', 'CASI SIEMPRE', 'AVECES', 'NUNCA'],
            <?php  foreach ($this->cantidad as $datos) {
-           $nombre=$datos['pregunta'];
-           $siempre=$datos['siempre'];
-           $casi_siempre=$datos['casi_siempre'];
-           $aveces=$datos['aveces'];
-           $nunca=$datos['nunca'];
+           $nombr = $datos['question1'];
+           $siempre = $datos['siempre'];
+           $casi_siempre = $datos['casi_siempre'];
+           $aveces = $datos['aveces'];
+           $nunca = $datos['nunca'];
           
           ?>
-           ['<?php print $nombre?>' , <?php print $siempre?> ,<?php print $casi_siempre?> ,<?php print $aveces?> ,<?php print $nunca?>],
+           ['<?php print $nombr;?>' , <?php print $siempre?> ,<?php print $casi_siempre?> ,<?php print $aveces?> ,<?php print $nunca?>],
          <?php  }?>
  
         ]);
@@ -34,14 +34,14 @@
           series: {5: {type: "line"}}
         };
 
-        var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+        var chart = new google.visualization.ComboChart(document.getElementById('chart_div1'));
         chart.draw(data, options);
       }
       google.setOnLoadCallback(drawVisualization);
     </script>
   </head>
   <body>
-    <div id="chart_div" style="width: 95%; height: 100%;"></div>
+    <div id="chart_div1" style="width: 95%; height: 100%;"></div>
   </body>
 
  
