@@ -889,6 +889,9 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 $base_speciality =  new Api_Model_DbTable_Speciality();
                 $info_speciality =  $base_speciality->_getOne($where);
 
+                $info_speciality['speciality'] = null;
+                $name_speciality = null;
+                
                 if ($info_speciality['parent'] != "") {
                     $where['escid']=$info_speciality['parent'];
                     $name_speciality = $base_speciality->_getOne($where);

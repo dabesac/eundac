@@ -92,11 +92,15 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
 				$select = $this->_db->select();
 				if ($attrib=='') $select->from("base_curricula");
 				else $select->from("base_curricula",$attrib);
-				foreach ($where as $atri=>$value){
-					$select->where("$atri = ?", $value);
+				if ($where ){
+					foreach ($where as $atri=>$value){
+						$select->where("$atri = ?", $value);
+					}
 				}
-				foreach ($orders as $key => $order) {
-						$select->order($order);
+				if ($orders){
+					foreach ($orders as $key => $order) {
+							$select->order($order);
+					}
 				}
 				$results = $select->query();
 				$rows = $results->fetchAll();
