@@ -11,10 +11,11 @@ class Register_StudentController extends Zend_Controller_Action {
         $login = $sesion->getStorage()->read();
         $this->sesion = $login;
     if (
-                   $login->uid=='1291203394' || $login->uid=='0993503056'
-                   || $login->uid=='1321103144'    || $login->uid=='1342293096'
-                   || $login->uid=='1342907348'   || $login->uid=='1121203476'
-                   || $login->uid=='1091202014'
+    $login->uid=='1291203394' || $login->uid=='0993503056'
+    		|| $login->uid=='1321103144'    || $login->uid=='1342293096'
+    				|| $login->uid=='1342907348'   || $login->uid=='1121203476'
+    						|| $login->uid=='1091202014' || $login->uid=='1252703032'
+    								|| $login->uid=='1053103039' || $login->uid=='1123403224'
                ){
         }else {
                 $this->_helper->redirector('index',"index",'default');
