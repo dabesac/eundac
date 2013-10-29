@@ -228,16 +228,19 @@ function retired_assist (obj) {
 		$(window).scroll(function(){
 	        var scroll = $(window).scrollTop();
 	        if( scroll >= 146){
-	            $("#header-info").addClass('data-header-info');
+	            $("#header-info").addClass('data-header-info-assit');
 	            $("#header-info").addClass('col-md-10');
+	            $("#tb-header-info").addClass('scroll-header-info');
 	        }
 	        else{
 	            
-	            $("#header-info").removeClass('data-header-info');
+	            $("#header-info").removeClass('data-header-info-assit');
 	            $("#header-info").removeClass('col-md-10');
+	            $("#tb-header-info").removeClass('scroll-header-info');
 	            
 	        }
     	});
+
 
 		//*********************seleccionar todo***********************///
 
