@@ -1,15 +1,27 @@
-<table class="table table-bordered table-condensed ">
-  <tr>
-    <th>Fecha Inicio:</th>
-    <th><input type="text" id="f_inicio" class="form-control"></th>
-    <th>Fecha Fin:</th>
-    <th><input type="text" id="f_fin" class="form-control"></th>
-    <th>Usuario:</th>
-    <th><input type="text" id="usuario" class="form-control"></th>
-    <th><a id="buscar" class="btn btn-success" href="#"></i>Buscar</a></th>
-  </tr>
+<div class="panel panel-primary" style="padding: 2px">
+    <div class="panel-heading" style="padding: 6px">
+        <center><b style="font-size:15px; color: white">RECIBOS DEL BANCO</b></center>
+    </div>
+</div>
+<table class="table table-condensed table-hover">
+    <tr>
+        <th>Fecha Inicio:</th>
+        <th><input type="text" id="f_inicio" class="form-control"></th>
+        <th>Fecha Fin:</th>
+        <th><input type="text" id="f_fin" class="form-control"></th>
+        <th>Usuario:</th>
+        <th><input type="text" id="usuario" class="form-control"></th>
+        <th><a id="buscar" class="btn btn-success" href="#"><span class="glyphicon glyphicon-search"></span> Buscar</a></th>
+    </tr>
+    <tr>
+        <td colspan="7">
+            <center>
+                <a href="/admin/bankpayments/loadreceipt/" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Nuevo Recibo</a>
+            </center>
+        </td>
+    </tr>
 </table>
-<div id="listadatos"></div>
+<div id="listadatos" style="margin-top: 10px"></div>
 
 <script type="text/javascript">
 $(function() {
@@ -33,43 +45,43 @@ $("#buscar").click(function(){
     alert("Debe seleccionar las fechas para realizar la consulta");
     return false;
   }else{
-      var xDia=fini.substring(0, 2);
-    var xMes=fini.substring(3, 5);
-      var xAnio=fini.substring(6,10);
-      var yDia=ffin.substring(0, 2);
-      var yMes=ffin.substring(3, 5);
-      var yAnio=ffin.substring(6,10);
-      if (yAnio > xAnio){
-      validaFecha="1";
-      }else{
-       if (yAnio == xAnio){
-        if (yMes > xMes){
-          validaFecha="1";
+        var xDia=fini.substring(0, 2);
+        var xMes=fini.substring(3, 5);
+        var xAnio=fini.substring(6,10);
+        var yDia=ffin.substring(0, 2);
+        var yMes=ffin.substring(3, 5);
+        var yAnio=ffin.substring(6,10);
+        if (yAnio > xAnio){
+            validaFecha="1";
         }else{
-          if (yMes == xMes){
-            if (yDia >= xDia){
-              validaFecha="1";
+            if (yAnio == xAnio){
+                if (yMes > xMes){
+                    validaFecha="1";
+                }else{
+                    if (yMes == xMes){
+                        if (yDia >= xDia){
+                            validaFecha="1";
+                        }else{
+                            validaFecha="0";
+                        }
+                    }else{
+                        validaFecha="0";
+                    }
+                }
             }else{
-              validaFecha="0";
+                validaFecha="0";
             }
-          }else{
-            validaFecha="0";
-          }
-        }
-      }else{
-        validaFecha="0";
-      }
-      }         
+        }         
       
-     if (validaFecha=="1"){
-      var url="/admin/bankpayments/list/fini/"+fini+"/ffin/"+ffin+"/usuario/"+cod;
-      // alert(url);
-      $("#listadatos").html("<img src='/img/spinner.gif'> Cargando....");
-      $("#listadatos").load(url);
-     }else{
-      alert("La Fecha Final tiene que ser posterior que la Fecha Inicial");
-     };
-  };
+        if (validaFecha=="1"){
+            var url="/admin/bankpayments/list/fini/"+fini+"/ffin/"+ffin+"/usuario/"+cod;
+            // alert(url);
+            $("#listadatos").html("<img src='/img/spinner.gif'> Cargando....");
+            $("#listadatos").load(url);
+        }else{
+            alert("La Fecha Final tiene que ser posterior que la Fecha Inicial");
+        };
+    };
 });
 
 $('#usuario').attr("maxlength", 10);
