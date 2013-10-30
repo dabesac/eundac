@@ -193,6 +193,27 @@ class Admin_BankpaymentsController extends Zend_Controller_Action {
         }
     }
 
-   
+    public function loadreceiptAction(){
+        try {
+            $form = new Admin_Form_Receipt();
+            if ($this->getRequest()->isPost())
+            {
+                $formdata = $this->getRequest()->getPost();
+                if ($form->isValid($formdata)){
+                    unset($formdata['save']);
+                    $formdata['processed'] = 'N';
+                    $bank = new Api_Model_DbTable_Bankreceipts();
+                    $bank->_save($formdata);
+                    $this->_helper->redirector('index');
+                }
+                else{
+                    $form->populate($formdata);
+                }
+            }
+            $this->view->form = $form;
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
 
 }

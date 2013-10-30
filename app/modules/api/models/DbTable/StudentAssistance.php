@@ -173,7 +173,29 @@ where uid='".$where['uid']."' and  a.escid='".$where['escid']."' and pid='".$whe
         }  catch (Exception $ex){
                         print "Error: Obteniendo datos de tabla 'Matricula Curso'".$ex->getMessage();
         }
+    }
+    // Funcion para sacar un solo estado de asistencia de todos los alumno de un determinado curso.
+    public function _getState($where=array()){
+        try{
+            if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' || $where["perid"]=='' || $where["turno"]=='' || $where["coursoid"]=='' || $where["subid"]=='' || $where["curid"]=='') return false;
+            $select = $this->_db->select()->distinct()
+                                ->from(array('sa'=>'base_student_assistance'),
+                                        array('sa.coursoid','sa.state'))
+                                ->where('sa.eid = ?', $where['eid'])
+                                ->where('sa.oid = ?', $where['oid'])
+                                ->where('sa.perid = ?', $where['perid'])
+                                ->where('sa.escid = ?', $where['escid'])
+                                ->where('sa.coursoid = ?', $where['coursoid'])
+                                ->where('sa.subid = ?', $where['subid'])
+                                ->where('sa.curid = ?', $where['curid'])
+                                ->where('sa.turno = ?', $where['turno']);
+                $results = $select->query();
+                $rows = $results->fetchAll();
+                if ($rows) return $rows;
+                return false;  
+        }catch (Exception $e){
+            print "Error: Read get State ".$e->getMessage();
         }
-
+    }
 
 }

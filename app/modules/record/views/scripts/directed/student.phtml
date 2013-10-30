@@ -11,7 +11,7 @@ if ($this->user) {
 	$wheresub['subid']=$this->user['subid'];
 	$sub= new Api_Model_DbTable_Subsidiary();
 	$datsub=$sub->_getOne($wheresub)?>
-<table class="table">
+<table class="table table-striped">
 	<tr>
 		<th>Cod. Mat.</th>
 		<th>DNI</th>

@@ -13,8 +13,10 @@
 					if ($this->speciality) { ?>
 						<option value="">- Seleccione Escuela-</option>
 						<?php 
-						foreach ($this->speciality as $speciality) { ?>
-							<option value="<?php echo $speciality['escid'].'--'.$speciality['subid']?>"><?php echo $speciality['name']?></option>
+						foreach ($this->speciality as $speciality) { 
+							if ($this->director) $selected = ($this->escid == $speciality['escid'])? "selected": "";
+							?>
+							<option value="<?php echo $speciality['escid'].'--'.$speciality['subid']?>" <?php echo $selected?>><?php echo $speciality['name']?></option>
 							<?php
 						}
 					}else{ ?>

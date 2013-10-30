@@ -55,6 +55,8 @@ class Record_DirectedController extends Zend_Controller_Action {
             $subid=$this->_getParam('subid');
             $escid=$this->_getParam('escid');
             $perid=$this->_getParam('perid');
+            $this->view->eid = $eid;
+            $this->view->oid = $oid;
             $this->view->uid = $uid;
             $this->view->pid = $pid;
             $this->view->perid = $perid;
@@ -422,6 +424,11 @@ class Record_DirectedController extends Zend_Controller_Action {
             $resolution=$this->_getParam("resolution");
             $option=$this->_getParam("option");
             $f_acta=$this->_getParam("f_acta");
+            $this->view->uid = $uid;
+            $this->view->pid = $pid;
+            $this->view->perid = $perid;
+            $this->view->escid = $escid;
+            $this->view->subid = $subid;
 
             $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
             $bdmatricurso=new Api_Model_DbTable_Registrationxcourse();

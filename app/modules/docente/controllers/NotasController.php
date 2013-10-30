@@ -392,7 +392,8 @@ class Docente_NotasController extends Zend_Controller_Action{
 	                    	$sum = $assist_1 + $assist_2 + $assist_3 + $assist_4 +$assist_5+$assist_6 +$assist_7+
 	                    	   $assist_8 +$assist_9 + $assist_10 + $assist_11 + $assist_12 +$assist_13 + $assist_14+
 	                    	   $assist_15 +$assist_16 +$assist_17;
-	                   		$persetage_assit = ((0.5*$sum)/$num_reg)*100;
+
+	                   		$persetage_assit = ($num_reg > 0)? ((0.5*$sum)/$num_reg)*100:0;
 	                    }
 	                    if ($partial == 2) {
 	                    	$sum = $assist_1 + $assist_2 + $assist_3 + $assist_4 +$assist_5+$assist_6 +$assist_7+
@@ -400,7 +401,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 	                    	   $assist_15 +$assist_16 +$assist_17+$assist_18+$assist_19+$assist_20+$assist_21+$assist_22+
 	                    	   $assist_23+$assist_24+$assist_25+$assist_26+$assist_27+$assist_28+$assist_29+$assist_30+
 	                    	   $assist_31+$assist_32+$assist_33+$assist_34;
-	                   		$persetage_assit = (100*$sum)/$num_reg;
+	                   		$persetage_assit = ($num_reg > 0)? (100*$sum)/$num_reg:0;
 	                    }
                   	
         		}
