@@ -85,6 +85,7 @@
             //$this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid; 
+            $perid=$this->sesion->period->perid; 
 
             $uid =$this->_getParam('uid');
             $pid =$this->_getParam('pid');
@@ -99,15 +100,10 @@
             
             $where=array("eid"=>$eid, "oid"=>$oid,"escid"=>$escid);
             $person["facesp"]=$dbfacesp->_getFacspeciality($where);
-            print_r($facesp);
+            //print_r($facesp);
             $this->view->person=$person;
-
-            //---------
+  
          
-                       
-            $perid="13B";
-            //print_r($this->sesion);
-
             $dbcur=new Api_Model_DbTable_Studentxcurricula();
             $dbcourxcur=new Api_Model_DbTable_Course();
             $dbcourlle=new Api_Model_DbTable_Registrationxcourse();
