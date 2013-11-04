@@ -638,4 +638,39 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
       }
 
     }
+
+     public function totalturnosxspecialityAction(){
+        try{
+              $this->_helper->layout()->disableLayout();
+              $perid= ($this->_getParam("perid"));            
+              $curid = ($this->_getParam("curid"));
+              $semid = ($this->_getParam("semid"));
+              $escid = ($this->_getParam("escid"));
+              $sedid = ($this->_getParam("sedid"));
+              $sede = $this->sesion->sedid;
+              $this->view->perid=$perid; 
+              $this->view->curid=$curid;
+              $this->view->semid=$semid; 
+              $this->view->escid=$escid; 
+              $this->view->sedid=$sedid;      
+              $eid= $this->sesion->eid;
+              $oid= $this->sesion->oid;
+              $rid= $this->sesion->rid;
+              $facid= $this->sesion->facid;
+            if ($escid=="" || $perid=="") return false;
+             $pc = new Admin_Model_DbTable_Periodoscursos();
+              if ($rid=='RF' || $rid=='RC' || $rid=='VA' || $rid=='PD')
+             {                   
+             $this->view->listacursos = $pc->_getCantidaddeturnos($eid, $oid, $sedid, $escid,$perid);
+            }
+            if ($rid=='DC')
+             {
+          $this->view->listacursos = $pc->_getCantidaddeturnos($eid, $oid, $sede, $escid,$perid);
+            }
+             $sem = new Admin_Model_DbTable_Semestre();
+            $this->view->semestres = $sem->_getSemestreXPer($eid,$oid,$perid,$escid);
+        }  catch (Exception $ex){
+            print "Error: Cargar Cursos del Periodo Seleccionado";//.$ex->getMessage()
+        }
+    }
 }
