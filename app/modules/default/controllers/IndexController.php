@@ -290,6 +290,7 @@ class IndexController extends Zend_Controller_Action {
                 $acls[]= array("controller"=>"admin/org","name"=>"Crear Organización","imgicon"=>"edit");
                 $acls[]= array("controller"=>"admin/opensillabus","name"=>"Abrir Silabus","imgicon"=>"user");
                 $acls[]= array("controller"=>"admin/openrecords","name"=>"Abrir Actas","imgicon"=>"folder-close");
+                $acls[]= array("controller"=>"admin/openassistance","name"=>"Abrir Asistencia","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"admin/rateregister","name"=>"Tasas Matricula","imgicon"=>"user");
                 $acls[]= array("controller"=>"admin/generatedeferred","name"=>"Generar Aplazados","imgicon"=>"list");
                 $acls[]= array("controller"=>"admin/generategraduated","name"=>"Generar Egresados","imgicon"=>"list-alt");
@@ -305,6 +306,7 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="admin/org";
                 $resource1[]="admin/opensillabus";
                 $resource1[]="admin/openrecords";
+                $resource1[]="admin/openassistance";
                 $resource1[]="admin/rateregister";
                 $resource1[]="admin/generatedeferred";
                 $resource1[]="admin/generategraduated";
@@ -338,6 +340,7 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"admin/user","name"=>"Crear Usuario","imgicon"=>"user");
     			$acls[]= array("controller"=>"admin/opensillabus","name"=>"Abrir Silabus","imgicon"=>"user");
     			$acls[]= array("controller"=>"admin/openrecords","name"=>"Abrir Actas","imgicon"=>"folder-close");
+                $acls[]= array("controller"=>"admin/openassistance","name"=>"Abrir Asistencia","imgicon"=>"folder-close");
     			
     			$resource1[]="admin/receipts";
     			$resource1[]="admin/password";
@@ -346,6 +349,7 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="register/changerates";
     			$resource1[]="admin/opensillabus";
     			$resource1[]="admin/openrecords";
+                $resource1[]="admin/openassistance";
     			$resource1[]="admin/person";
     			$resource1[]="admin/user";
     			$modules[0]['acls'] = $acls;

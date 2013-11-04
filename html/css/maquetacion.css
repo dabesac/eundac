@@ -139,7 +139,26 @@
 		width: 45px;
 	}
 /*########list subjet##########*/
-
+.list-option-notes{
+	display: block;
+	font-size: 16px;
+	color: #737980;
+	margin-left: 17%;
+}
+.list-option-notes1{
+	display: block;
+	font-size: 16px;
+	color: #1b1f2c;
+	margin-left: 17%;
+}
+.notes-option{
+	width: 30px;
+	position: absolute;
+	margin-left: 94%;
+	margin-top: 5%;
+	background-color: #e4e7eb;
+	border-radius: 0px 4px 4px 0px;
+}
 .cont-coruse{
 	background-color: #f2f2f2;
 	margin-right: 50px;
@@ -174,5 +193,6 @@
 /***********assistence ***/
 .text-sesion-assist{
 	font-size: 10px;
+
 }
 
