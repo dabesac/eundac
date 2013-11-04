@@ -291,6 +291,8 @@ class IndexController extends Zend_Controller_Action {
                 $acls[]= array("controller"=>"admin/opensillabus","name"=>"Abrir Silabus","imgicon"=>"user");
                 $acls[]= array("controller"=>"admin/openrecords","name"=>"Abrir Actas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"admin/rateregister","name"=>"Tasas Matricula","imgicon"=>"user");
+                $acls[]= array("controller"=>"admin/generatedeferred","name"=>"Generar Aplazados","imgicon"=>"list");
+                $acls[]= array("controller"=>"admin/generategraduated","name"=>"Generar Egresados","imgicon"=>"list-alt");
 
                 $resource1[]="admin/receiptsup";
                 $resource1[]="admin/password";
@@ -304,6 +306,8 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="admin/opensillabus";
                 $resource1[]="admin/openrecords";
                 $resource1[]="admin/rateregister";
+                $resource1[]="admin/generatedeferred";
+                $resource1[]="admin/generategraduated";
                 
                 $modules[0]['acls'] = $acls;
                 $acls = null;

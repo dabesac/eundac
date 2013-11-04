@@ -1,0 +1,12 @@
+<?php
+if ($this->school) { ?>
+	<option value="">- Seleccione Escuela -</option>
+	<?php
+	foreach ($this->school as $school) { ?>
+		<option value="<?php echo $school['escid']."--".$school['subid']?>"><?php echo $school['name']?></option>
+		<?php
+	}
+}else{ ?>
+	<option value="">- Ninguna Escuela -</option>
+<?php
+}?>
