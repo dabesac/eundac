@@ -9,8 +9,7 @@
       function drawVisualization() {
        <?php $nombre = $this->nom;
               $turno = $this->turno;
-              $nom=$nombre."-turno:".$turno;
-          ?>
+              $nom=$nombre."-turno:".$turno; ?>
         var data = google.visualization.arrayToDataTable([
           ['ENCUESTA', 'SIEMPRE', 'CASI SIEMPRE', 'AVECES', 'NUNCA'],
            <?php  foreach ($this->cantidad as $datos) {
@@ -18,14 +17,10 @@
            $siempre = $datos['siempre'];
            $casi_siempre = $datos['casi_siempre'];
            $aveces = $datos['aveces'];
-           $nunca = $datos['nunca'];
-          
-          ?>
+           $nunca = $datos['nunca']; ?>
            ['<?php print $nombr;?>' , <?php print $siempre?> ,<?php print $casi_siempre?> ,<?php print $aveces?> ,<?php print $nunca?>],
          <?php  }?>
- 
         ]);
-
         var options = {
           title : 'CURSO: <?php print strtoupper($nom)?>',
           vAxis: {title: "CANTIDAD"},
@@ -33,7 +28,6 @@
           seriesType: "bars",
           series: {5: {type: "line"}}
         };
-
         var chart = new google.visualization.ComboChart(document.getElementById('chart_div1'));
         chart.draw(data, options);
       }

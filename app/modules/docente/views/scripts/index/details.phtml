@@ -6,17 +6,14 @@
    	    <td><img src="/img/circulo-verde.png" />4:NUNCA</td>
 	</tr>
 </table>
-<?php                
-foreach ($this->cursos as $curso){
-    ?>
-    <div style='float:left; margin-left:20px'>
+<?php   foreach ($this->cursos as $curso){ ?>
+ <div style='float:left; margin-left:20px'>
    	 	<iframe name="iFrame1" width="430px" height="320px" 
    	 		src="/docente/index/graphicttotal/codigo/<?php echo "curid:".$curso['curid']."-cursoid:".$curso['courseid']."-turno:".$curso['turno']?>/courseid/<?php echo $curso['courseid']?>/curid/<?php echo $curso['curid']?>/turno/<?php echo $curso['turno']?>/perid/<?php echo $this->perid ?>" 
    	 		frameborder='0'> 	
     </iframe>
-   	</div>
-    <?php
-   } ?>
+</div>
+<?php } ?>
     
 
 

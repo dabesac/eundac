@@ -658,17 +658,17 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
               $rid= $this->sesion->rid;
               $facid= $this->sesion->facid;
             if ($escid=="" || $perid=="") return false;
-             $pc = new Admin_Model_DbTable_Periodoscursos();
-              if ($rid=='RF' || $rid=='RC' || $rid=='VA' || $rid=='PD')
-             {                   
-             $this->view->listacursos = $pc->_getCantidaddeturnos($eid, $oid, $sedid, $escid,$perid);
-            }
-            if ($rid=='DC')
-             {
-          $this->view->listacursos = $pc->_getCantidaddeturnos($eid, $oid, $sede, $escid,$perid);
-            }
-             $sem = new Admin_Model_DbTable_Semestre();
-            $this->view->semestres = $sem->_getSemestreXPer($eid,$oid,$perid,$escid);
+          //    $pc = new Admin_Model_DbTable_Periodoscursos();
+          //     if ($rid=='RF' || $rid=='RC' || $rid=='VA' || $rid=='PD')
+          //    {                   
+          //    $this->view->listacursos = $pc->_getCantidaddeturnos($eid, $oid, $sedid, $escid,$perid);
+          //   }
+          //   if ($rid=='DC')
+          //    {
+          // $this->view->listacursos = $pc->_getCantidaddeturnos($eid, $oid, $sede, $escid,$perid);
+          //   }
+          //    $sem = new Admin_Model_DbTable_Semestre();
+          //   $this->view->semestres = $sem->_getSemestreXPer($eid,$oid,$perid,$escid);
         }  catch (Exception $ex){
             print "Error: Cargar Cursos del Periodo Seleccionado";//.$ex->getMessage()
         }
