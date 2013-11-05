@@ -74,7 +74,6 @@ class Admin_OpenrecordsController extends Zend_Controller_Action{
 			$subid = base64_decode($this->_getParam('subid'));
 			$state = base64_decode($this->_getParam('state'));
 			$state_record = base64_decode($this->_getParam('state_record'));
-			print_r($state_record);
 			$pk=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno);
 			$data=array('state'=>$state,'state_record'=>$state_record);
 			$bdrecords= new Api_Model_DbTable_PeriodsCourses();

@@ -1,0 +1,33 @@
+<?php
+if ($this->data_school) { ?>
+	<table class="table table-hover">
+		<tr>
+			<th>#</th>
+			<th>Código</th>
+			<th>Escuela</th>
+			<th>Generar</th>
+		</tr>
+		<?php 
+		$c = 1;
+		foreach ($this->data_school as $data_school) { ?>
+			<tr>
+				<td><?php echo $c?></td>
+				<td><?php echo $data_school['escid']?></td>
+				<td><?php echo $data_school['name']?></td>
+				<td><a id="generate_<?php echo $c?>" href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
+			</tr>
+			<script type="text/javascript">
+				$("#generate_<?php echo $c?>").click(function(){
+					var escid = "<?php echo $data_school['escid'] ?>";
+					var perid = "<?php echo $this->perid ?>";
+					$("#loaddeferred").html("<div><center><img src='/img/carga.gif'></center></div>");
+					$("#loaddeferred").load("/admin/generatedeferred/generate/escid/"+escid+"/perid/"+perid);
+				});
+			</script>
+			<?php
+			$c++;
+		}?>
+	</table>
+	<?php
+}?>
+<div id="loaddeferred"></div>

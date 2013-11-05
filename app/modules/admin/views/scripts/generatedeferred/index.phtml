@@ -1,0 +1,61 @@
+<div class="panel panel-primary" style="padding: 2px">
+    <div class="panel-heading" style="padding: 6px">
+        <center><b style="font-size:15px; color: white">GENERAR APLAZADOS</b></center>
+    </div>
+</div>
+<table class="table">
+	<tr>
+		<th>Año:</th>
+		<td>
+			<select id="anio" class="form-control" style="width: 100px">
+				<?php
+				$anio = date('Y');
+				for ($i=$anio; 1960 < $i; $i--) { ?>
+					<option value="<?php echo substr($i,2,3)?>"><?php echo $i?></option>	
+					<?php
+				} ?>
+			</select>
+		</td>
+		<th>Periodo:</th>
+		<td>
+			<select id="perid" class="form-control">
+				<option value="">- Seleccione Periodo -</option>
+			</select>
+		</td>
+		<th>Facultad:</th>
+		<td>
+			<select id="facid" class="form-control">
+				<?php 
+				if ($this->faculty) { ?>
+					<option value="">- Seleccione Facultad -</option>
+					<?php 
+					foreach ($this->faculty as $faculty) { ?>
+						<option value="<?php echo $faculty['facid']?>"><?php echo $faculty['name']?></option>
+					<?php	
+					}
+				}?>
+			</select>
+		</td>
+	</tr>
+</table>
+<div id="dataschool" style="margin-top: 20px"></div>
+
+<script type="text/javascript">
+$("#perid").load("/admin/generatedeferred/periods/anio/<?php echo substr($anio,2,3)?>");
+
+$("#anio").change(function(){
+	var anio = $(this).val();
+	$("#perid").load("/admin/generatedeferred/periods/anio/"+anio);
+});
+
+$("#facid, #perid").change(function(){
+	var facid = $("#facid").val();
+	var perid = $("#perid").val();
+	if (!facid || !perid) {
+		alert("Seleccione una Facultad ó el Periodo.");
+		return false;
+	};
+	$("#dataschool").html("<img src='/img/spinner.gif'>Cargando...");
+	$("#dataschool").load("/admin/generatedeferred/schools/perid/"+perid+"/facid/"+facid);
+});
+</script>

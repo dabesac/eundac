@@ -54,6 +54,16 @@ class Api_Model_DbTable_Bankreceipts extends Zend_Db_Table_Abstract
 		}
 	}
 
+    public function _save($data){
+        try {
+                if ($data['operation']=='' || $data['code_student']=='' || $data['info_person']=='' || $data['payment_date']=='' || $data['amount']=='' || $data['concept']=='' || $data['perid']=='' || $data['processed']=='') return false;
+                return $this->insert($data);
+                return false;           
+        } catch (Exception $e) {
+            print "Error: Save bankreceipts".$e->getMessage();
+        }
+    }
+
 	public function _update($data,$pk){
 		try{
 			if ($pk['operation']=='' || $pk['code_student']=='') return false;
