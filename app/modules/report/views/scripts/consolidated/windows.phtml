@@ -1,4 +1,3 @@
-
 <div class="row">
   <?php
   $escid = $this->escid;
@@ -10,8 +9,7 @@
       </span>
     </div>
   </div>
-  
-    <div class="col-lg-6">
+<div class="col-lg-6">
     <div  class="input-group">
       <span  class="input-group-addon alert-info">
         <input style='float: left' type="radio" name="group2" value="2"> <font style='float: left'> &nbsp; &nbsp; AVANCE DE NOTAS</font><br>
@@ -49,13 +47,13 @@
       </span>
     </div>
   </div>
-<!--   <div class="col-lg-6">
+  <div class="col-lg-6">
     <div  class="input-group">
       <span  class="input-group-addon alert-info">
         <input style='float: left' type="radio" name="group2" value="7"> <font style='float: left'> &nbsp; &nbsp;  CANTIDAD DE TURNOS POR ESCUELA</font><br>
       </span>
     </div>
-  </div> -->
+  </div> 
 </div>
 <style type="text/css">
   .modal-dialog
@@ -88,7 +86,7 @@ $(document).ready(function()
         var $url = '/report/consolidated/registerxspeciality/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
         }
          if (tipo=="7")  {  
-        var $url = '/report/consolidated/totalturnosxspeciality/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
+        // var $url = '/report/consolidated/totalturnosxspeciality/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
         }
         // alert($url);
         $("#modal").modal('show');
