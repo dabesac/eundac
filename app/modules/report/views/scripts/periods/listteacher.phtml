@@ -1,10 +1,16 @@
 <?php
 if ($this->data_teacher) { ?>
+	<div style="margin-bottom: 10px">
+		<center>
+			<a href="/report/periods/print/perid/<?php echo base64_encode($this->perid)?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>" class="btn btn-primary"><span class="glyphicon glyphicon-print"></span> Imprimir</a>
+		</center>
+	</div>
 	<table class="table table-condensed table-hover">
 		<tr>
 			<th>#</th>
 			<th>Docente</th>
 			<th>Asignaturas</th>
+			<th>Turno</th>
 			<th>Silabo</th>
 			<th>1° Parcial</th>
 			<th>2° Parcial</th>
@@ -18,7 +24,7 @@ if ($this->data_teacher) { ?>
 				<td rowspan="<?php echo $teachers['cantidad_courses']+2?>">
 					<?php echo $teachers['uid']." - ".$teachers['full_name']?>
 				</td>
-				<td colspan="4"></td>
+				<td colspan="5"></td>
 				<td rowspan="<?php echo $teachers['cantidad_courses']+2?>">
 					<center>
 						<a href="#" rel="tooltip" title="Ver Horario del Docente."><span class="glyphicon glyphicon-calendar"></span></a>
@@ -30,7 +36,10 @@ if ($this->data_teacher) { ?>
 					?>
 					<tr>
 						<td>
-							<?php echo $courses['courseid']." - ".$courses['name']." - Turno: ".$courses['turno']?>
+							<?php echo $courses['courseid']." - ".$courses['name']?>
+						</td>
+						<td>
+							<center><?php echo $courses['turno']?></center>
 						</td>
 						<td>
 							<center>
@@ -64,6 +73,7 @@ if ($this->data_teacher) { ?>
 					<?php
 				}?>
 				<tr>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>
