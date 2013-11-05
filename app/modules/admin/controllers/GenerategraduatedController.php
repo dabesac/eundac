@@ -1,5 +1,4 @@
 <?php
-
 class Admin_GenerategraduatedController extends Zend_Controller_Action {
 
     public function init()
@@ -13,7 +12,6 @@ class Admin_GenerategraduatedController extends Zend_Controller_Action {
     		$this->_helper->redirector('index','index','admin');
     	}
     	$this->sesion = $login;
-       
     }
     
     public function indexAction()
