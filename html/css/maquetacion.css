@@ -139,18 +139,14 @@
 		width: 45px;
 	}
 /*########list subjet##########*/
+
 .list-option-notes{
 	display: block;
 	font-size: 16px;
 	color: #737980;
 	margin-left: 17%;
 }
-.list-option-notes1{
-	display: block;
-	font-size: 16px;
-	color: #1b1f2c;
-	margin-left: 17%;
-}
+
 .notes-option{
 	width: 30px;
 	position: absolute;
@@ -174,7 +170,7 @@
 }
 .name-course{
 	font-size: 15px;
-	color: #1b2531;
+	color: #54769a;
 }
 .btn-group-course{
 	margin-bottom: 10px;
@@ -195,4 +191,10 @@
 	font-size: 10px;
 
 }
+.margin-top-btn{
+	margin-top: 10px;
+}
 
+.alert-title-course{
+	text-align: justify;
+}
