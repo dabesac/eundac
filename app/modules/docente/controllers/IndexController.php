@@ -206,8 +206,7 @@ class Docente_IndexController extends Zend_Controller_Action {
 
      public function graphicttotalAction()
     {
-        try
-        {
+        
            $this->_helper->layout()->disableLayout();
            $where['eid'] = $this->sesion->eid;         
            $where['oid'] = $this->sesion->oid; 
@@ -233,16 +232,12 @@ class Docente_IndexController extends Zend_Controller_Action {
            $lpolltot= $db_polltot->_getPollTotal($where);  
             // print_r($lpolltot);
             $this->view->cantidad=$lpolltot; 
-        }
-        catch(Exception $ex)
-        {
-              print $ex->getMessage();
-        }                  
+                 
                 
     }
 
         public function performanceAction(){
-          try{
+         
            $this->_helper->layout()->disableLayout();
            $where['eid'] = $this->sesion->eid;         
            $where['oid'] = $this->sesion->oid; 
@@ -289,10 +284,7 @@ class Docente_IndexController extends Zend_Controller_Action {
            $this->view->s3=$s3;
            $this->view->s4=$s4;       
     }
-    }
-    catch (Exception $e) {
-            print "Error: ".$e->getMessage();
-        }
+    
 
 
 }
