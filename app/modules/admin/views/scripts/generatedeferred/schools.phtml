@@ -1,0 +1,61 @@
+<?php
+if ($this->data_school) { ?>
+	<table class="table table-hover">
+		<tr>
+			<th>#</th>
+			<th>Código</th>
+			<th>Escuela</th>
+			<th><center>Estado</center></th>
+			<th><center>Generar</center></th>
+		</tr>
+		<?php 
+		$perid = $this->perid;
+		if (substr($perid,2,3) == "A") $perid_apla = substr($perid, 0,2)."D";
+		else $perid_apla = substr($perid, 0,2)."E";
+		$c = 1;
+		foreach ($this->data_school as $data_school) { 
+			$data = null;
+			$wherereg = array(
+				'eid' => $this->eid, 'oid' => $this->oid, 'escid' => $data_school['escid'], 'perid' => $perid_apla);
+			$reg_cur = new Api_Model_DbTable_Registrationxcourse();
+			$data = $reg_cur->_getFilter($wherereg,$attrib=null,$orders=null);
+			if ($data) $img = "circulo-verde.png";
+			else $img = "circulo-rojo.png";
+			?>
+			<tr>
+				<td><?php echo $c?></td>
+				<td><?php echo $data_school['escid']?></td>
+				<td><?php echo $data_school['name']?></td>
+				<td><center><img src="/img/<?php echo $img?>"></center></td>
+				<td>
+					<center>
+					<?php
+					if ($data) { ?>
+						<a href="#" title="Los Aplazados ya se encuentran Generados." rel="tooltip"><span class="glyphicon glyphicon-list-alt"></span></a>
+						<?php
+					}else{ ?>
+						<a id="generate_<?php echo $c?>" href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+					<?php
+					}?>
+					</center>
+				</td>
+			</tr>
+			<script type="text/javascript">
+				$("#generate_<?php echo $c?>").click(function(){
+					var escid = "<?php echo $data_school['escid'] ?>";
+					var perid = "<?php echo $this->perid ?>";
+					$("#loaddeferred").html("<div><center><img src='/img/carga.gif'></center></div>");
+					$("#loaddeferred").load("/admin/generatedeferred/generate/escid/"+escid+"/perid/"+perid);
+				});
+			</script>
+			<?php
+			$c++;
+		}?>
+	</table>
+	<?php
+}?>
+<div id="loaddeferred"></div>
+
+<script type="text/javascript">
+$("a").tooltip();
+</script>

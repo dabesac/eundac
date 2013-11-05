@@ -35,13 +35,13 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $turno= trim($params['turno']);
         $perid = trim($params['perid']);
         $curid = trim($params['curid']);
+        $partial = trim($params['partial']);
 
         $this->view->turno = $turno;
         $this->view->perid = $perid;
         $base_courses = new Api_Model_DbTable_Course();
         $base_person = new Api_Model_DbTable_Person();
         $base_assistance = new Api_Model_DbTable_StudentAssistance();
-        $base_period = new Api_Model_DbTable_Periods();
         $where = null;
         $infocurso = null;
         $infoassist = null;
@@ -52,22 +52,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 'courseid' => $courseid,'turno' => $turno,
                 'perid' => $perid,'curid'=>$curid,);
 
-        $data_period = $base_period->_getOne($where);
-        if ($data_period) {
-            $time = time();
-            //primer pa
-            if($time >= strtotime($data_period['start_register_note_p'])  && $time <= strtotime($data_period['end_register_note_p'])){
-                   $this->view->partial = 1;
-                   $partial = 1;
-            }else{
-                //segundo parcial
-                if($time >= strtotime($data_period['start_register_note_s'])  && $time <= strtotime($data_period['end_register_note_s'])){
-                    $this->view->partial = 2; 
-                    $partial = 2;
-
-                }
-            }
-        }
+        
 
 
         if ($base_courses->_getOne($where)) {
@@ -110,6 +95,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
         }
         // exit();
         $this->view->turno = $turno;
+        $this->view->partial=$partial;
     }
 
     public function savefileAction()

@@ -9,8 +9,7 @@
       google.setOnLoadCallback(drawChart);
      <?php $nombre = $this->nom;
               $turno = $this->turno;
-              $nom = $nombre."-turno:".$turno;
-          
+              $nom = $nombre."-turno:".$turno;         
           ?>
       function drawChart() {
         var data = new google.visualization.DataTable();
@@ -43,12 +42,10 @@
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options, options1);
       }
-
       function selectHandler() {
         var selectedItem = chart.getSelection()[0];
         var value = data.getValue(selectedItem.row, 0);
         alert('The user selected ' + value);
-      }
-     
+      }     
     </script>
     <div id="chart_div" style="width:420px ;height:300px"></div>

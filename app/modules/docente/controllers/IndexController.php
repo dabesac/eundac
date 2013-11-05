@@ -4,22 +4,25 @@ class Docente_IndexController extends Zend_Controller_Action {
 
     public function init()
     {
-    	$sesion  = Zend_Auth::getInstance();
-    	if(!$sesion->hasIdentity() ){
-    		$this->_helper->redirector('index',"index",'default');
-    	}
-    	$login = $sesion->getStorage()->read();
-    	if (!$login->rol['module']=="docente"){
-    		$this->_helper->redirector('index','index','default');
-    	}
-    	$this->sesion = $login;
-    
+      $sesion  = Zend_Auth::getInstance();
+      if(!$sesion->hasIdentity() ){
+        $this->_helper->redirector('index',"index",'default');
+      }
+      $login = $sesion->getStorage()->read();
+      if (!$login->rol['module']=="docente"){
+        $this->_helper->redirector('index','index','default');
+      }
+      $this->sesion = $login;   
     }
     
     public function indexAction()
     {
-   	    $pid=$this->sesion->pid;
+      try{
+        $pid=$this->sesion->pid;
         $this->view->pid=$pid;
+        }
+        catch (Exception $e) {           
+        }
     }
     public function subjectsAction()
     {
@@ -32,8 +35,7 @@ class Docente_IndexController extends Zend_Controller_Action {
             $perid = $this->sesion->period->perid;
             $perid_netx = $this->sesion->period->next;
             $uid = $this->sesion->uid;
-            $pid = $this->sesion->infouser['pid'];
-            
+            $pid = $this->sesion->infouser['pid'];           
             $this->view->perid_netx = $perid_netx;
             $where = array(
                 'eid'=>$eid,'oid'=>$oid,
@@ -44,10 +46,7 @@ class Docente_IndexController extends Zend_Controller_Action {
             $base_curses = new Api_Model_DbTable_Course();
             $base_especiality = new Api_Model_DbTable_Speciality();
             $base_faculty = new Api_Model_DbTable_Faculty();
-
-
-            $subjects = $base_course_x_teacher ->_getFilter($where);
-            
+            $subjects = $base_course_x_teacher ->_getFilter($where);           
             foreach ($subjects as $key => $subject) {
                 $where = array(
                     'eid' => $eid,'oid' => $oid,
@@ -80,10 +79,19 @@ class Docente_IndexController extends Zend_Controller_Action {
 
    public function pollAction()
       {
+        try{
+
+         }
+        catch(Exception $ex)
+         {
+          print $ex->getMessage();
+         }  
+
      
       }
 
     public function lperiodsAction(){
+      try{
          $this->_helper->layout()->disableLayout();
           $where['eid']= $this->sesion->eid;
           $where['oid']= $this->sesion->oid;
@@ -94,19 +102,30 @@ class Docente_IndexController extends Zend_Controller_Action {
              $where['p2']=$p."B";
              $periodos = new Api_Model_DbTable_Periods();
              $lper = $periodos->_getPeriodsXAyB($where);
-             $this->view->lper=$lper;
-        
+             $this->view->lper=$lper;  
+        }
+      catch(Exception $ex)
+        {
+          print $ex->getMessage();
+        }  
+
     }
     public function generalAction(){
-      $this->_helper->layout()->disableLayout();
-      $perid = $this->_getParam("perid");
-      $this->view->perid=$perid;
+      try{
+        $this->_helper->layout()->disableLayout();
+        $perid = $this->_getParam("perid");
+        $this->view->perid=$perid;
+      }
+      catch(Exception $ex)
+        {
+          print $ex->getMessage();
+        }  
          
     }
 
     public function detailsAction(){
-          $this->_helper->layout()->disableLayout();
-           
+      try{
+          $this->_helper->layout()->disableLayout();        
            $where['eid'] = $this->sesion->eid;         
            $where['oid'] = $this->sesion->oid; 
            $where['escid'] = $this->sesion->escid;
@@ -115,15 +134,21 @@ class Docente_IndexController extends Zend_Controller_Action {
            $where['subid'] = $this->sesion->subid;
            $where['uid'] = $this->sesion->uid;
            $where['pid'] = $this->sesion->pid;
-
            $dbcursos = new Api_Model_DbTable_Coursexteacher();
            $lcursos = $dbcursos->_getFilter($where);
            $this->view->cursos=$lcursos;     
+          }
+
+          catch(Exception $ex)
+        {
+              print $ex->getMessage();
+        }  
+
       }
 
       public function xcoursesAction(){
-          $this->_helper->layout()->disableLayout();
-           
+        try{
+          $this->_helper->layout()->disableLayout();          
            $where['eid'] = $this->sesion->eid;         
            $where['oid'] = $this->sesion->oid; 
            $where['escid'] = $this->sesion->escid;
@@ -132,17 +157,22 @@ class Docente_IndexController extends Zend_Controller_Action {
            $where['subid'] = $this->sesion->subid;
            $where['uid'] = $this->sesion->uid;
            $where['pid'] = $this->sesion->pid;
-
            $dbcursos = new Api_Model_DbTable_Coursexteacher();
            $lcursos = $dbcursos->_getFilter($where);
            $this->view->cursos=$lcursos;      
+           }
+            catch(Exception $ex)
+        {
+              print $ex->getMessage();
+        }  
+
     }
 
        public function graphicdetailAction()
       {
         try
         {
-            $this->_helper->layout()->disableLayout();
+           $this->_helper->layout()->disableLayout();
            $where['eid'] = $this->sesion->eid;         
            $where['oid'] = $this->sesion->oid; 
            $where['escid'] = $this->sesion->escid;
@@ -176,8 +206,7 @@ class Docente_IndexController extends Zend_Controller_Action {
 
      public function graphicttotalAction()
     {
-        try
-        {
+        
            $this->_helper->layout()->disableLayout();
            $where['eid'] = $this->sesion->eid;         
            $where['oid'] = $this->sesion->oid; 
@@ -199,19 +228,16 @@ class Docente_IndexController extends Zend_Controller_Action {
            $this->view->uid=$uid;
            $this->view->oid=$where['eid'];
            $this->view->eid=$where['oid'];
-            $db_polltot = new Api_Model_DbTable_Poll();
-            $lpolltot= $db_polltot->_getPollTotal($where);  
+           $db_polltot = new Api_Model_DbTable_Poll();
+           $lpolltot= $db_polltot->_getPollTotal($where);  
             // print_r($lpolltot);
             $this->view->cantidad=$lpolltot; 
-        }
-        catch(Exception $ex)
-        {
-              print $ex->getMessage();
-        }                  
+                 
                 
     }
 
         public function performanceAction(){
+         
            $this->_helper->layout()->disableLayout();
            $where['eid'] = $this->sesion->eid;         
            $where['oid'] = $this->sesion->oid; 
@@ -258,6 +284,7 @@ class Docente_IndexController extends Zend_Controller_Action {
            $this->view->s3=$s3;
            $this->view->s4=$s4;       
     }
+    
 
 
 }

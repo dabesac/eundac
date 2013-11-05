@@ -1,0 +1,57 @@
+<div class="panel panel-primary" style="padding: 2px">
+    <div class="panel-heading" style="padding: 6px">
+        <center><b style="font-size:15px; color: white">GENERAR EGRESADOS</b></center>
+    </div>
+</div>
+<table class="table">
+	<tr>
+		<th>Facultad:</th>
+		<td>
+			<select id="facid" class="form-control">
+				<?php 
+				if ($this->faculty) { ?>
+					<option value="">- Seleccione Facultad -</option>
+					<?php 
+					foreach ($this->faculty as $faculty) { ?>
+						<option value="<?php echo $faculty['facid']?>"><?php echo $faculty['name']?></option>
+					<?php	
+					}
+				}?>
+			</select>
+		</td>
+		<th>Escuela:</th>
+		<td>
+			<select id="escid" class="form-control">
+				<option>- Seleccione Escuela -</option>
+			</select>
+		</td>
+		<td>
+			<a id="generargraduated" href="#" class="btn btn-success"><span class="glyphicon glyphicon-download-alt"></span> Generar</a>
+		</td>
+	</tr>
+</table>
+<div id="loadgraduated"></div>
+
+<script type="text/javascript">
+$("#facid").change(function(){
+	var facid = $(this).val();
+	if (!facid) {
+		alert("Seleccione una Facultad.");
+		return false;
+	};
+	$("#escid").load("/admin/generategraduated/school/facid/"+facid);
+});
+
+$("#generargraduated").click(function(){
+	var tmp = $("#escid").val();
+	if (!tmp) {
+		alert("Seleccione una Escuela.");
+		return false;
+	};
+	var tmpp = tmp.split('--');
+	var escid = tmpp[0];
+	var subid = tmpp[1];
+	$("#loadgraduated").html("<div><center><img src='/img/carga.gif'></center></div>");
+	$("#loadgraduated").load("/admin/generategraduated/generated/escid/"+escid+"/subid/"+subid);
+});
+</script>
