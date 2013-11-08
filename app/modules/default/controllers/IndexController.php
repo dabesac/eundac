@@ -570,10 +570,15 @@ class IndexController extends Zend_Controller_Action {
                 $acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
                 $acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"pedagogia/distribution/view","name"=>"Ver distribucion","imgicon"=>"signal");
+                $acls[]= array("controller"=>"pedagogia/distribution/view","name"=>"Ver distribucion","imgicon"=>"signal");
+                $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");
 
                 $resource1[]="report/performance";
                 $resource1[]="report/recordnotas";
                 $resource1[]="report/registration";
+                $resource1[]="pedagogia/distribution/view";
+                $resource1[]="report/periods";
                 $modules[1]['acls'] = $acls;
                 $acls = null;
                 break;
