@@ -1,0 +1,13 @@
+<?php
+if ($this->period) { ?>
+	<option>- Seleccione Periodo -</option>
+	<?php
+	foreach ($this->period as $period) { 
+		if ($this->perid) $selected = ($this->perid == $period['perid'])? "selected": "";?>
+		<option value="<?php echo $period['perid']?>" <?php echo $selected?>><?php echo $period['perid']." - ".$period['name']?></option>
+	<?php
+	}
+}else{ ?>
+	<option value="">- Ningun Periodo -</option>
+<?php
+}?>

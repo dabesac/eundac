@@ -140,6 +140,21 @@
 	}
 /*########list subjet##########*/
 
+.list-option-notes{
+	display: block;
+	font-size: 16px;
+	color: #737980;
+	margin-left: 17%;
+}
+
+.notes-option{
+	width: 30px;
+	position: absolute;
+	margin-left: 94%;
+	margin-top: 5%;
+	background-color: #e4e7eb;
+	border-radius: 0px 4px 4px 0px;
+}
 .cont-coruse{
 	background-color: #f2f2f2;
 	margin-right: 50px;
@@ -155,7 +170,7 @@
 }
 .name-course{
 	font-size: 15px;
-	color: #1b2531;
+	color: #54769a;
 }
 .btn-group-course{
 	margin-bottom: 10px;
@@ -174,5 +189,12 @@
 /***********assistence ***/
 .text-sesion-assist{
 	font-size: 10px;
+
+}
+.margin-top-btn{
+	margin-top: 10px;
 }
 
+.alert-title-course{
+	text-align: justify;
+}

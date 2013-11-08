@@ -1,3 +1,11 @@
+<?php
+ $rid=$this->rid;
+
+// $xrid=$rid[0]['rid'];
+// echo $xrid;
+
+?>
+
 <div id="data">
 
     <table class="table span9 table-bordered">
@@ -8,10 +16,16 @@
                 <th >USUARIO</th>
                 <th >NOMBRE</th>
                 <th >ESCUELA</th>
-                <th >RECORD</th>
-               
+                <?php
+                 if ($rid=='AL')
+                 {
+                ?>
+                <th >RECORD</th>               
                 <th >CURRICULA</th>
                 <th >HISTORIAL</th>
+                <?php
+                 }
+                ?>
                 <th >PERFIL</th>
         </tr>
         </thead>
@@ -19,10 +33,14 @@
     <?php
     if ($this->data)
     {
+        // $rid=$this->data;
+        // $xrid=$rid[0]['rid'];
+
+        // print_r($this->data);
        foreach ($this->data as $info)    
         {
-            
-            $data=null;
+            //print_r($this->data);
+            //$data=null;
             $facid=$this->facid;
             $facaulm = new Api_Model_DbTable_Speciality();
             $data['eid'] = $info['eid'];
@@ -31,16 +49,19 @@
             $data['subid'] = $info['subid'];
 
             $rfacaulm = $facaulm->_getOne($data);
-            if ($rfacaulm) $vfacalum= $rfacaulm['facid'];
-
-          
+            if ($rfacaulm) $vfacalum= $rfacaulm['facid'];          
   
     ?>
             <tr>
                 <td><?php echo $info['pid'];?></td>
-                <td><?php echo $info['uid'];?></td>    
+                <td><?php echo $info['uid'];?></td>  
                 <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
-                <td><?php echo $info['escid']?></td> 
+                <td><?php echo $info['escid']?></td>
+
+                <?php
+                if($rid=='AL')
+                {
+                ?>
                 <td>
                     <?php 
                     if ($facid==$vfacalum || $facid=="TODO"){
@@ -54,7 +75,8 @@
                     }
                     ?>
                 </td>
-             
+                
+              
                 <td>
                     <center><a href="/profile/changecurricula/change/uid/<?php echo base64_encode($info['uid'])?>/pid/<?php echo base64_encode($info['pid'])?>"><span class='glyphicon glyphicon-pencil'></span></a></center>                
                 </td>
@@ -65,8 +87,21 @@
 
                 <td>
                     <center><a href="/profile/private/student/uid/<?php echo base64_encode($info['uid'])?>/pid/<?php echo base64_encode($info['pid'])?>/escid/<?php echo base64_encode($info['escid'])?>/eid/<?php echo base64_encode($info['eid'])?>/oid/<?php echo base64_encode($info['oid'])?>"><span class="glyphicon glyphicon-user"></span></a></center>
-                </td>
+                </td>            
+                <?php
+                }
+                ?>
 
+                <?php
+                if($rid=='DC')
+                {
+                ?>                
+                <td>
+                    <center><a href="/profile/private/student/uid/<?php echo base64_encode($info['uid'])?>/pid/<?php echo base64_encode($info['pid'])?>/escid/<?php echo base64_encode($info['escid'])?>/eid/<?php echo base64_encode($info['eid'])?>/oid/<?php echo base64_encode($info['oid'])?>"><span class="glyphicon glyphicon-user"></span></a></center>
+                </td>
+                <?php
+                }
+                ?>
 
             </tr>
           <?php 

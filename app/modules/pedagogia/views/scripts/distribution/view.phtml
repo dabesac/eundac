@@ -1,0 +1,99 @@
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+	<table class="table table-hover" style="font-size:14px">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Nombre de la Escuela</th>
+			<th>Fecha de Registro</th>
+			<th>Ver</th>
+			<th>Observacion</th>
+			<th>Impresion</th>
+		</tr>
+
+	</thead>
+
+	<tbody>
+		<?php
+		$i=0;
+		foreach ($this->dis as $distrib) {
+			$i++;
+			$eid=$distrib['eid'];
+			$oid=$distrib['oid'];
+			$escid=$distrib['escid'];
+
+			$dbescuela= new Api_Model_DbTable_Speciality();
+    		$where=array("eid"=>$eid, "oid"=>$oid,"escid"=>$escid);	
+			$ldepa=$dbescuela->_getFilter($where);
+			
+			//print_r($ldepa);
+			$info=$ldepa[0]['name'];
+			
+			?>
+			<tr>
+				<td><?php echo $i?></td>
+				<td><?php echo $info?></td>
+				<td ><?php echo $distrib['number']?></td>
+				<td>
+				<a class="btn btn-success" id=''  onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Eliminar Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')" class=''>
+                <i class=" icon-pencil icon-white"></i>ver</a>				
+				</td>
+				<td><span title="eescriba" rel="tooltip" placeholder="escribaa" id="<?php echo $i?>"  value='editar'>
+				<?php if($distrib['observation']=='')
+				{
+				  echo "Haga doble clic para editar su observacion";
+				}
+				else
+				{
+				  echo trim($distrib['observation']);	
+				}
+
+				?></span></td>				
+
+
+				<td><a href='/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>' data-dismiss="modal" aria-hidden="true" style="float:center"><span class="glyphicon glyphicon-print"></span></a></td>
+				<!--  Nombre: <span class="editText">Fulanito de tal</span> -->
+			</tr>
+
+			
+			<script> 
+            // $(function(){
+                $('#<?php echo $i?>').dblclick( function(){
+                    var text = $(this).text();
+
+					text=text.trim();
+                    //alert(text);
+
+                    $(this).empty().html('<input type="text" class="form-control" value="'+text+'">').find('input').focus();
+                	}).keypress( function(e){
+                    if(e.keyCode == 13){
+                        var text = $('input', this).val();
+                        $(this).html( text );
+
+                    //alert("Campo actualizado");
+
+                    //e.preventDefault();                 
+                    //alert(url);
+                    $("#destino").load("/pedagogia/distribution/distribution/", {escid: "<?php echo $distrib['escid']?>", distid: "<?php echo $distrib['distid']?>",perid: "<?php echo $distrib['perid']?>",subid: "<?php echo $distrib['subid']?>",observation: text}, function(){
+                	});
+
+                    }
+                });
+            // });
+        	</script>
+
+			<?php
+
+
+
+		}
+		?>
+	</tbody>
+	</table>
+
+<script>
+$(".span").tooltip();
+</script>
+
+ <div id="destino"></div> 

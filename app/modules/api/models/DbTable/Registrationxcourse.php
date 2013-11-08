@@ -742,5 +742,17 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
      	}
      }
 
-
+     public function _generateDeferred($where=null){
+     	try {
+     		$perid = $where['perid'];
+     		$escid = $where['escid'];
+     		$perid_apla = $where['perid_apla'];
+     		$sql = $this->_db->query("
+            	select * from aplazados2('$perid','$escid','$perid_apla');");
+            if ($sql) return $sql->fetchAll();
+            return false;
+     	} catch (Exception $e) {
+     		print "Error: ".$e->getMessage();
+     	}
+     }
 }

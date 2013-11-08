@@ -292,6 +292,8 @@ class IndexController extends Zend_Controller_Action {
                 $acls[]= array("controller"=>"admin/openrecords","name"=>"Abrir Actas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"admin/openassistance","name"=>"Abrir Asistencia","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"admin/rateregister","name"=>"Tasas Matricula","imgicon"=>"user");
+                $acls[]= array("controller"=>"admin/generatedeferred","name"=>"Generar Aplazados","imgicon"=>"list");
+                $acls[]= array("controller"=>"admin/generategraduated","name"=>"Generar Egresados","imgicon"=>"list-alt");
 
                 $resource1[]="admin/receiptsup";
                 $resource1[]="admin/password";
@@ -306,6 +308,8 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="admin/openrecords";
                 $resource1[]="admin/openassistance";
                 $resource1[]="admin/rateregister";
+                $resource1[]="admin/generatedeferred";
+                $resource1[]="admin/generategraduated";
                 
                 $modules[0]['acls'] = $acls;
                 $acls = null;
@@ -566,10 +570,15 @@ class IndexController extends Zend_Controller_Action {
                 $acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
                 $acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"pedagogia/distribution/view","name"=>"Ver distribucion","imgicon"=>"signal");
+                $acls[]= array("controller"=>"pedagogia/distribution/view","name"=>"Ver distribucion","imgicon"=>"signal");
+                $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");
 
                 $resource1[]="report/performance";
                 $resource1[]="report/recordnotas";
                 $resource1[]="report/registration";
+                $resource1[]="pedagogia/distribution/view";
+                $resource1[]="report/periods";
                 $modules[1]['acls'] = $acls;
                 $acls = null;
                 break;

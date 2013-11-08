@@ -27,6 +27,8 @@
 
             $rid = $this->_getParam("rid");
             $nombre=$this->_getParam("nombre");
+
+            $this->view->rid=$rid;
 			
             $p1 = substr($nombre, 0, 8);
 
@@ -84,7 +86,7 @@
         try{
             //$this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid; 
+            $oid=$this->sesion->oid;      
 
             $uid =$this->_getParam('uid');
             $pid =$this->_getParam('pid');
@@ -99,7 +101,9 @@
             
             $where=array("eid"=>$eid, "oid"=>$oid,"escid"=>$escid);
             $person["facesp"]=$dbfacesp->_getFacspeciality($where);
-            $this->view->person=$person;
+
+            //print_r($facesp);
+            $this->view->person=$person;   
             
             $perid=$this->sesion->period->perid;
 
