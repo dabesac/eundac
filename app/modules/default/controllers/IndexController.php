@@ -607,7 +607,10 @@ class IndexController extends Zend_Controller_Action {
                               
                 $modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
                 $acls[]= array("controller"=>"register/changerates","name"=>"Cambio de Tasas","imgicon"=>"screenshot");
+                $acls[]= array("controller"=>"bienestar/lockandunlock","name"=>"Bloqueo de Usuarios","imgicon"=>"lock");
+
                 $resource1[]="register/changerates";
+                $resource1[]="bienestar/lockandunlock";
                 $modules[0]['acls'] = $acls;
                 $acls = null;
                 break;
