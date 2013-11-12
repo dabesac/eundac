@@ -1,0 +1,32 @@
+<?php
+if ($this->datauser) {
+  ?>
+  <table class="table table-condensed table-striped table-hover">
+    <tr>
+      <th><center>#</center></th>
+      <th><center>D.N.I</center></th>
+      <th><center>Código</center></th>
+      <th>Nombres y Apellidos</th>
+      <th><center>Bloquear</center></th>
+    </tr>
+    <?php 
+    $c=0;
+    foreach ($this->datauser as $data) {
+      $c++;
+      $pid=$data['pid'];
+      $uid=$data['uid'];
+    ?>
+    <tr>
+      <td><center><?php echo $c?></center></td>
+      <td><center><?php echo $pid?></center></td>
+      <td><center><?php echo $uid?></center></td>
+      <td></td>  
+      <td></td>
+    </tr>
+    <?php
+    }
+    ?>
+  </table>
+<?php    
+}
+?>

@@ -1,20 +1,20 @@
 <form name="<?php echo $this->fm->getName(); ?>" id ="frmLock" action="/bienestar/lockandunlock/created"  method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
   <table class="table table-condensed table-striped">
     <tr>
-      <th><p style='float:right; font-size:13px'>Oficina </p></th>
+      <th><p style='float:right; font-size:12px'>Oficina </p></th>
       <td><div style='width: 200px'><?php echo $this->fm->office_lock ?></td>
-      <th><p style='float:right; font-size:13px'>Razón </p></th>
+      <th><p style='float:right; font-size:12px'>Razón </p></th>
       <td><div style='width: 200px'><?php echo $this->fm->reason_lock ?></td>
     </tr>
     <tr>
-      <th><p style='float:right; font-size:13px'>Número Doc</p></th>
+      <th><p style='float:right; font-size:12px'>Número de Documento</p></th>
       <td><div style='width: 200px'><?php echo $this->fm->type_doc_lock ?></td>
-      <th><p style='float:right; font-size:13px'>Fecha </p></th>
+      <th><p style='float:right; font-size:12px'>Fecha </p></th>
       <td><div style='width: 200px'><?php echo $this->fm->date_lock ?></td>
     </tr>
     <tr>
-      <th><p style='float:right; font-size:13px'>Detalles</p></th>
-      <td colspan='4'><div style='width: 400px'><?php echo $this->fm->detail_lock ?></td>
+      <th><p style='float:right; font-size:12px'>Detalles</p></th>
+      <td colspan='4'><div style='width: 430px'><?php echo $this->fm->detail_lock ?></td>
     </tr>
     <input type="hidden" name='state' value='<?php echo 'C'?>'>
     <input type="hidden" name='uid' value='<?php echo $this->uid?>'>

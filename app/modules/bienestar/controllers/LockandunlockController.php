@@ -188,8 +188,6 @@ class Bienestar_LockandunlockController extends Zend_Controller_Action {
 	                $frmdata['perid']=$perid;
 	                $frmdata['date_reg']=date('Y-m-d');
 	                $frmdata['uid_lock']=$uid_reg;
-	                // print_r($frmdata);
-	                // print_r($pk);
 	                $reg_= new Api_Model_DbTable_Lockandunlock();
 	                $reg_->_update($frmdata,$pk);
 	                ?>
