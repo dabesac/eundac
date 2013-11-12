@@ -584,6 +584,25 @@ class IndexController extends Zend_Controller_Action {
                 break;
             }
 
+            case "CU":{
+                
+                $resource1[]="rcentral/index";
+                $resource1[]="profile/search";
+                $resource1[]="profile/changecurricula";
+                $resource1[]="profile/privateadm/student";
+
+                $modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
+                $acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+                $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");
+                $resource1[]="curricula/show";
+                $resource1[]="report/periods";
+                 
+                $modules[0]['acls'] = $acls;
+                $acls = null;
+                break;
+
+            }
+
             case "BU":{
                               
                 $modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
