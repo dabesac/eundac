@@ -347,7 +347,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
                          MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."' and 
                          MC.escid='".$where['escid']."' and MC.courseid='".$where['courseid']."' and 
                          MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' 
-                        AND M.state='M' 
+                        AND MC.state='M' 
                     ");
 
             if ($sql) return $sql->fetchAll();
@@ -375,7 +375,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 							  where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and 
 							  MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."' and MC.escid='".$where['escid']."' and 
 							  MC.courseid='".$where['courseid']."' and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' 
-							 AND M.state='M' 
+							 AND MC.state='M' 
 							and (cast((case when notafinal='' or notafinal is null then '0' else 
 							notafinal end) as integer)>10)        
                     ");
@@ -403,7 +403,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 							 mc.oid=m.oid and mc.subid=m.subid
 							where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and MC.perid='".$where['perid']."' and 
 							MC.curid='".$where['curid']."' and MC.escid='".$where['escid']."' and MC.courseid='".$where['courseid']."'
-							and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."'  AND M.state='M' and 
+							and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."'  AND MC.state='M' and 
 							(cast((case when notafinal='' or notafinal is null then '0'
 							 else notafinal end) as integer)<=10) and not (cast((case when 
 							 notafinal='' or notafinal is null then '0' else notafinal end) 
@@ -434,7 +434,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 						where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and 
 						MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."'
 					    and MC.escid='".$where['escid']."' and MC.courseid='".$where['courseid']."'
-					    and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' AND M.state='M' 
+					    and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' AND MC.state='M' 
 						and (cast((case when notafinal='' or notafinal is null then '0' else notafinal end) as integer)=-3)  
                     ");
                 if ($sql) return $sql->fetchAll();
@@ -462,7 +462,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 						where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and 
 						MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."'
 					    and MC.escid='".$where['escid']."' and MC.courseid='".$where['courseid']."'
-					    and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' AND M.state='M' 
+					    and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' AND MC.state='M' 
 						and (cast((case when notafinal='' or notafinal is null then '0' else notafinal end) as integer)=-2)
                     ");
                 if ($sql) return $sql->fetchAll();
