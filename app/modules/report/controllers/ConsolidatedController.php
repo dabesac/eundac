@@ -46,13 +46,25 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
             $oid = $this->sesion->oid;
             $rid = $this->sesion->rid;
             $escid = $this->sesion->escid;
+            $subid = $this->sesion->subid;
             $is_director = $this->sesion->infouser['teacher']['is_director'];
             $facid = $this->_getParam('facid');
             if ($rid=="DC" && $is_director=="S"){
                 if ($facid=="2") $escid=substr($escid,0,3);
                 $this->view->escid=$escid;
             }
-            if ($facid=="TODO") $this->view->facid=$facid;
+            if ($facid=="TODO") 
+                {
+                    if($rid=='RF'){
+                        $esp = new Api_Model_DbTable_Speciality();
+                        $wheres = array('eid' => $eid, 'oid' => $oid, 'subid' => $subid);                      
+                        $escu = $esp->_getFilter($wheres);
+                        $this->view->escuelas=$escu;
+                     }
+                     else{
+                         $this->view->facid=$facid;
+                        }                
+                }
             else{
                 $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid);
                 $es = new Api_Model_DbTable_Speciality();
@@ -177,8 +189,6 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
 
     }
     
-
-
     public function coursesxcurriculaAction(){
       try{
         $this->_helper->layout()->disableLayout();
@@ -218,8 +228,12 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $espec = $this->_getParam('espec');
         if ($espec) {  $where['escid']=$espec;  }
         else{ $where['escid']=$escid; }
+        $tcur= new Api_Model_DbTable_PeriodsCourses();
+        $tipo=$tcur->_getOne($where);
+        $this->view->tcur =$tipo['type_rate']; 
         $cur= new Api_Model_DbTable_Registrationxcourse();
         $lcur=$cur->_getStudentXcoursesXescidXperiods($where);
+        // print_r($lcur);
         $this->view->data=$lcur;
 
       }
@@ -228,8 +242,6 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
       }
 
     }
-    
-
     public function printregisterxcourseAction(){
       try{
         $this->_helper->layout()->disableLayout();
@@ -266,13 +278,10 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $cur= new Api_Model_DbTable_Registrationxcourse();
         $lcur=$cur->_getStudentXcoursesXescidXperiods($where);
         $this->view->data=$lcur;
-
         $course= new Api_Model_DbTable_Course();
         $lcourse=$course->_getOne($where);
         $this->view->courseid =$lcourse['name']; 
         $this->view->perid = $where['perid']; 
-
-
       }
       catch (Exception $e){
         print "Error:" .$e->getMessage();

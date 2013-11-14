@@ -6,12 +6,22 @@
             <th>Codigo</th>
             <th>Apellido y Nombre</th>
             <?php
-                $tipo=$this->tipo;
-             if ($tipo=='2') { ?>
-            <th>1º Parcial</th>
-            <th>2º Parcial</th>
-            
-           <?php }?>
+                $tipo = $this->tipo;
+                $tcur = $this->tcur;
+             if ($tipo=='2') { 
+                if($tcur == 'O')  { ?>
+                  <th>1º Parcial</th>
+                  <th>2º Parcial</th>           
+                  <?php }
+             if($tcur == 'C')  { ?>
+                 <th>1º Unidad</th>
+                 <th>2º Unidad</th>
+                 <th>3º Unidad</th>
+                 <th>4º Unidad</th>            
+           <?php }
+
+
+         }?>
            
         </tr>
         </thead>
@@ -25,10 +35,19 @@
         <td> <?php print $i?> </td>
         <td> <?php print $datos['uid']?> </td>
         <td> <?php print strtoupper($datos['last_name0'])." ".strtoupper($datos['last_name1'])." ".$datos['first_name']?> </td> 
-        <?php if ($tipo=='2') { ?>
-        <td> <?php print $datos['promedio1']?> </td>
-        <td> <?php print $datos['promedio2']?> </td>
-         <?php }?>
+        <?php if ($tipo=='2') {
+            if($tcur == 'O')  { ?>
+                <td> <?php print $datos['promedio1']?> </td>
+                <td> <?php print $datos['promedio2']?> </td>
+               <?php }
+            if($tcur == 'C')  { ?>
+               <td> <?php print $datos['nota4_i']?> </td>
+               <td> <?php print $datos['nota9_i']?> </td>
+               <td> <?php print $datos['nota4_ii']?> </td>
+               <td> <?php print $datos['nota9_ii']?> </td>
+                <?php }
+
+       }?>
         </tr><?php
         $i++;
         }

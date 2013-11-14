@@ -6,7 +6,7 @@
 <table class="table table-hover table-condensed">
         <tr>
         <th colspan="2">Año:</th>
-        <td>ndependientes
+        <td>
             <select id="anho" class="form-control" style="width:100px">
                 <option value="">- Año -</option>
                 <?php
@@ -67,6 +67,7 @@ var rid="<?php echo $this->rid ?>";
 if (rid=="RF" || rid=="DIREC") {
     $("#facid").attr("disabled",true);
     var facid=$("#facid").val();
+    // alert("/report/Consolidated/schools/facid/"+facid);
     $("#escid").load("/report/Consolidated/schools/facid/"+facid);
     if (rid=="DIREC") {
         $("#escid").attr("disabled",true);

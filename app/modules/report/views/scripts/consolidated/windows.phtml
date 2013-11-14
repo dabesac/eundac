@@ -47,13 +47,13 @@
       </span>
     </div>
   </div>
-  <div class="col-lg-6">
+<!--   <div class="col-lg-6">
     <div  class="input-group">
       <span  class="input-group-addon alert-info">
         <input style='float: left' type="radio" name="group2" value="7"> <font style='float: left'> &nbsp; &nbsp;  CANTIDAD DE TURNOS POR ESCUELA</font><br>
       </span>
     </div>
-  </div> 
+  </div>  -->
 </div>
 <style type="text/css">
   .modal-dialog
@@ -75,6 +75,7 @@ $(document).ready(function()
         var subid=xx[1];
         if (tipo=="1" || tipo=="2" )  {  
         var $url = '/report/consolidated/registerxcourse/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
+
         } 
         if (tipo=="3" || tipo=="6")  {  
         var $url = '/report/consolidated/registerxsemester/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
