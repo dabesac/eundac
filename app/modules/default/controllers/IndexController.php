@@ -570,20 +570,47 @@ class IndexController extends Zend_Controller_Action {
                 $acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
                 $acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"report/registration","name"=>"Reporte Matriculados","imgicon"=>"signal");
+                $acls[]= array("controller"=>"pedagogia/distribution/view","name"=>"Ver distribucion","imgicon"=>"signal");
+                $acls[]= array("controller"=>"pedagogia/distribution/view","name"=>"Ver distribucion","imgicon"=>"signal");
+                $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");
 
                 $resource1[]="report/performance";
                 $resource1[]="report/recordnotas";
                 $resource1[]="report/registration";
+                $resource1[]="pedagogia/distribution/view";
+                $resource1[]="report/periods";
                 $modules[1]['acls'] = $acls;
                 $acls = null;
                 break;
+            }
+
+            case "CU":{
+                
+                $resource1[]="rcentral/index";
+                $resource1[]="profile/search";
+                $resource1[]="profile/changecurricula";
+                $resource1[]="profile/privateadm/student";
+
+                $modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
+                $acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+                $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");
+                $resource1[]="curricula/show";
+                $resource1[]="report/periods";
+                 
+                $modules[0]['acls'] = $acls;
+                $acls = null;
+                break;
+
             }
 
             case "BU":{
                               
                 $modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
                 $acls[]= array("controller"=>"register/changerates","name"=>"Cambio de Tasas","imgicon"=>"screenshot");
+                $acls[]= array("controller"=>"bienestar/lockandunlock","name"=>"Bloqueo de Usuarios","imgicon"=>"lock");
+
                 $resource1[]="register/changerates";
+                $resource1[]="bienestar/lockandunlock";
                 $modules[0]['acls'] = $acls;
                 $acls = null;
                 break;
