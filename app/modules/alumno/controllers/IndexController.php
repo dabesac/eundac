@@ -179,4 +179,20 @@ class Alumno_IndexController extends Zend_Controller_Action {
         }                  
                 
     }
+
+
+    public function encuestaAction()
+    {
+        //$this->_helper->layout()->disableLayout();        
+        echo $eid = $this->sesion->eid;  
+        echo $oid = $this->sesion->oid;      
+        echo $escid = $this->sesion->escid;       
+        echo $uid = $this->sesion->uid;      
+        echo $pid=$this->sesion->pid;
+        echo $perid= $this->sesion->period->perid;
+
+        //print_r($this->sesion);
+    }
+
+
 }

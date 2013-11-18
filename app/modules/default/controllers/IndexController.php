@@ -376,7 +376,8 @@ class IndexController extends Zend_Controller_Action {
     		}
     		
     		case "AL": {
-    			$resource1[]="alumno/index";
+                $resource1[]="alumno/index";
+    			$resource1[]="alumno/index/encuesta";
                 
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"register/listcurrentnotes","name"=>"Asignaturas Actuales","imgicon"=>"calendar");
