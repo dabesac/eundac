@@ -1,0 +1,36 @@
+<div class="panel panel-primary" style="padding: 2px">
+	<div class="panel-heading" style="padding: 6px">
+		<center><b style="font-size:15px; color: white">GESTIÓN ENCUESTAS</b></center>
+	</div>
+</div>
+
+<?php
+if ($this->poll) { ?>
+	<table class="table">
+		<tr>
+			<th>#</th>
+			<th>Título Encuesta</th>
+			<th>Publicación</th>
+			<th>Cierre</th>
+			<th>Estado</th>
+			<th>Operación</th>
+		</tr>
+		<?php
+		$c = 1;
+		foreach ($this->poll as $data_poll) { 
+			if ($data_poll['state']=="A") $img = "/img/circulo-verde.png";
+			else $img = "/img/circulo-rojo.png";
+			?>
+			<tr>
+				<td><?php echo $c?></td>
+				<td><?php echo $data_poll['title']?></td>
+				<td><?php echo $data_poll['published']?></td>
+				<td><?php echo $data_poll['closed']?></td>
+				<td><img src="<?php echo $img?>"></td>
+			</tr>
+			<?php
+			$c++;
+		}?>
+	</table>
+<?php	
+}?>
