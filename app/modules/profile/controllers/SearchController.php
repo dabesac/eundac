@@ -27,6 +27,8 @@
 
             $rid = $this->_getParam("rid");
             $nombre=$this->_getParam("nombre");
+
+            $this->view->rid=$rid;
 			
             $p1 = substr($nombre, 0, 8);
 

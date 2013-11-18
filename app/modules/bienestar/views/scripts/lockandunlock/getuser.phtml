@@ -1,0 +1,91 @@
+<?php
+if ($this->data) {	?>
+<table class="table table-condensed table-striped">
+	<tr>
+		<th><center>#</center></th>
+        <th><center>Código</center></th>
+        <th><center>Apellidos y Nombres</center></th>
+        <th><center>Escuela</center></th>
+        <th><center>Sede</center></th>
+        <th><center>Operación</center></th>
+	</tr>
+<?php
+	$c=0;
+	foreach ($this->data as $user) {
+		$c++;
+    $pid=$user['pid'];
+		$uid=$user['uid'];
+		$name=$user['last_name0']." ".$user['last_name1'].", ".$user['first_name'];
+		$escid=$this->esc[$c-1]['name'];
+		$subid=$this->sub[$c-1]['name'];
+	?>
+	<tr>
+		<td><center><?php echo $c?></center></td>
+		<td><center><?php echo $uid?></center></td>
+		<td><?php echo $name?></td>
+		<td><center><?php echo $escid?></center></td>
+		<td><center><?php echo $subid?></center></td>
+		<td style='font-size:15px'>
+    <?php
+    if ($this->band!='1') {   ?>
+      <center><a id='loading' data-toggle="modal" data-target="#myModal" href="#Modal"><span class="glyphicon glyphicon-lock"><b> Bloquear</b></span></a></center>
+    <?php  
+    }
+    else{
+    ?>
+    <center><img src="/img/check.gif"></center>
+    <?php  } ?>
+    </td>
+	</tr>
+</table>  
+<?php
+  }
+}
+?>
+<table> 
+<tr>
+    <center><a id='history' href='#' style='font-size:20px; color:black'><b><img src="/img/f-abajo.png"> HISTORIAL</b></a></center>
+</tr>  
+</table>
+<div id='change'></div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <center><h3 class="modal-title" style='color:blue' ><b>BLOQUEO</b></h3></center>
+        <center style='font-size:15px'><b><?php echo $uid."<b style='color:white'>.....</b> ".$name?></b></center>
+        <center style='font-size:15px'><?php echo $subid." - ".$escid?></center>
+      </div>
+      <div class="modal-body">
+        <div id='changed'></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" href='/bienestar/lockandunlock/getuser'>Cerrar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">  
+  $("#loading").click(function(){
+    
+    url="/bienestar/lockandunlock/created/pid/<?php echo $pid?>/uid/<?php echo $uid?>/escid/<?php echo $this->esc[0]['escid']?>/subid/<?php echo $this->esc[0]['subid']?>";
+    $("#changed").load(url);    
+    });
+
+  $("#history").click(function(){
+        var uid = $("#uid").val();          
+        var url="/bienestar/lockandunlock/historyuser/uid/"+uid;
+        $("#change").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#change").load(url);
+    });
+
+  $ ('#myModal'). on('hidden.bs.modal',function()  { 
+    url="/bienestar/lockandunlock/getuser/uid/<?php echo $uid?>";
+    $("#cargadata").load(url);
+  });
+
+</script>
