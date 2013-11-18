@@ -341,6 +341,7 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"admin/opensillabus","name"=>"Abrir Silabus","imgicon"=>"user");
     			$acls[]= array("controller"=>"admin/openrecords","name"=>"Abrir Actas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"admin/openassistance","name"=>"Abrir Asistencia","imgicon"=>"folder-close");
+                $acls[]= array("controller"=>"poll/index","name"=>"Gestion Encuesta","imgicon"=>"folder-close");
     			
     			$resource1[]="admin/receipts";
     			$resource1[]="admin/password";
@@ -351,7 +352,8 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="admin/openrecords";
                 $resource1[]="admin/openassistance";
     			$resource1[]="admin/person";
-    			$resource1[]="admin/user";
+                $resource1[]="admin/user";
+    			$resource1[]="poll/index";
     			$modules[0]['acls'] = $acls;
     			$acls = null;
     			
