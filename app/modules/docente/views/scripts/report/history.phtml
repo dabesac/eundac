@@ -1,0 +1,136 @@
+<?php
+if ($this->periods) { 
+	foreach ($this->periods as $periods) { 
+		if ($periods['data'] == 1) { ?>
+		<div class="panel panel-primary">
+			<div class="panel-heading"><b><?php echo $periods['name']?></b></div>
+			<div class="panel-body">
+				<ul class="nav nav-pills nav-justified" id="history">
+			  		<li class="active">
+						<a href="#datcourses_<?php echo $periods['perid']?>"><b>Académico</b></a>
+				  	</li>
+				  	<li>
+				  		<a href="#datadmin_<?php echo $periods['perid']?>"><b>Administrativo</b></a>
+			  		</li>
+			  		<li>
+						<a href="#datpoll_<?php echo $periods['perid']?>"><b>Estadística</b></a>
+				  	</li>
+				  	<li>
+			  			<a href="#datview_<?php echo $periods['perid']?>"><b>Rendimiento</b></a>
+			  		</li>
+				</ul>
+				<div class="tab-content">
+			        <div id="datcourses_<?php echo $periods['perid']?>" class="tab-pane active">
+			        	<?php if($periods['courses']){ ?>
+			        		<table class="table" style="margin-top: 10px">
+			        			<tr>
+			        				<th>#</th>
+			        				<th>Codigo</th>
+			        				<th>Nombre</th>
+			        				<th><center>Turno</center></th>
+			        				<th><center>Semestre</center></th>
+			        				<th><center>Silabo</center></th>
+			        				<th><center>Registro</center></th>
+			        			</tr>
+				        		<?php
+				        		$c=1;
+				        		foreach ($periods['courses'] as $courses) { 
+					        		if (substr($courses['perid'], 2, 3) == 'D') {
+					        			$pperid = substr($courses['perid'], 0,2).'A';
+					        		}else{ 
+					       				if (substr($courses['perid'], 2, 3) == 'E') {
+					        				$pperid = substr($courses['perid'], 0,2).'B';
+					       				}else{
+				        					$pperid = $courses['perid'];
+				        				}
+					        		}
+				        			$where = array(
+				        				'eid' => $courses['eid'], 'oid' => $courses['oid'], 
+				        				'courseid' => $courses['courseid'], 'curid' => $courses['curid'], 
+				        				'subid' => $courses['subid'], 'escid' => $courses['escid']);
+				        			$cour = new Api_Model_DbTable_Course();
+				        			$data_cour = $cour->_getOne($where);
+				        			?>
+				        			<tr>
+				        				<td><?php echo $c?></td>
+				        				<td><?php echo $courses['courseid']?></td>
+				        				<td><?php echo $data_cour['name']?></td>
+				        				<td><center><?php echo $courses['turno']?></center></td>
+				        				<td><center><?php echo $courses['semid']?></center></td>
+				        				<td>
+				        					<center><a href="/syllabus/print/index/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/curid/<?php echo base64_encode($courses['curid'])?>/escid/<?php echo base64_encode($courses['escid'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($pperid)?>"><span class="glyphicon glyphicon-print"></span></a></center>
+				        				</td>
+				        				<td>
+				        					<center>
+				        						<a href="/record/index/printconstancy/perid/<?php echo  base64_encode($periods['perid'])?>/escid/<?php echo base64_encode($courses['escid'])?>/subid/<?php echo base64_encode($courses['subid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/turno/<?php echo base64_encode($courses['turno'])?>"><span class="glyphicon glyphicon-list-alt"></span></a>
+				        					</center>
+				        				</td>
+				        			</tr>
+				        			<?php
+				        			$c++;
+				        		} ?>
+			        		</table>
+			        		<?php
+			        	}else{ ?>
+			        		<div class="alert alert-info" style="margin-top: 10px">
+			        			<b>INFORMACIÓN: </b>No hay registro de los Cursos asignados en este Periodo.
+			        		</div>
+			        	<?php
+			        	}?>
+			        </div>
+			        <div id="datadmin_<?php echo $periods['perid']?>" class="tab-pane">
+			        	<?php
+			        	if ($periods['admin']) { ?>
+			        		<table class="table" style="margin-top: 10px">
+			        			<tr>
+			        				<th>#</th>
+			        				<th>Labor Administrativa</th>
+			        				<th>Horas</th>
+			        			</tr>
+			        			<?php
+			        			$c=1;
+			        			foreach ($periods['admin'] as $admin) { ?>
+			        				<tr>
+			        					<td><?php echo $c?></td>
+			        					<td><?php echo $admin['work']?></td>
+			        					<td><?php echo $admin['hours']?></td>
+			        				</tr>
+			        				<?php
+			        				$c++;
+			        			}?>
+			        		</table>
+			        		<?php
+			        	}else{ ?>
+							<div class="alert alert-info" style="margin-top: 10px">
+			        			<b>INFORMACIÓN: </b>No hay registro de las Labores Administrativas asignadas en este Periodo.
+			        		</div>
+			        	<?php
+			        	}?>
+			        </div>
+			        <div id="datpoll_<?php echo $periods['perid']?>" class="tab-pane">
+			        	<div id="graphics_<?php echo $periods['perid']?>" style="margin-top: 10px"></div>
+			        	<script type="text/javascript">
+			        		$("#graphics_<?php echo $periods['perid']?>").load("/docente/index/xcourses/perid/<?php echo $periods['perid']?>");
+			        	</script>
+			        </div>
+				    <div id="datview_<?php echo $periods['perid']?>" class="tab-pane"></div>
+				</div>
+
+			</div>
+		</div>
+		<?php
+		}
+	}
+}else{ ?>
+	<div class="alert alert-info">
+		<b>INFORMACIÓN: </b>No se encontro registro de Periodos para el Año seleccionado.
+	</div>
+<?php
+}?>
+
+<script type="text/javascript">
+	$('#history a').click(function (e) {
+        e.preventDefault()
+		$(this).tab('show')
+	})
+</script>

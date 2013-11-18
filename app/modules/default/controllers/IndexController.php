@@ -438,8 +438,10 @@ class IndexController extends Zend_Controller_Action {
     				$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"edit");
                     $resource1[]="graduated/graphicgraduated";
     			}
-    			$acls[]= array("controller"=>"docente/index/poll","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
-    			$resource1[]="report/performance";
+                $acls[]= array("controller"=>"docente/report","name"=>"Historial Academico","imgicon"=>"list");
+    			$resource1[]="docente/report";
+                $acls[]= array("controller"=>"docente/index/poll","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
+                $resource1[]="report/performance";
     			$modules[1]['acls'] = $acls;
     			$acls = null;
     			
