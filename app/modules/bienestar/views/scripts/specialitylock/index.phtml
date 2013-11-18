@@ -1,15 +1,14 @@
-<form name="<?php echo $this->fm->getName(); ?>" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
-	<table class="table table-condensed table-striped table-hover">
-	    
-	    <div style="font-size:25px; color:#1E83CB " colspan='4'><center><span class="glyphicon glyphicon-lock"></span><b>BLOQUEO Y DESBLOQUEO DE CÓDIGOS POR ESCUELAS</b></center></div></br>
-	    
-	    <tr>
-	        <th><p style='float:right; font-size:13px'>Facultad </p></th>
-	        <td><div style='width: 250px'><?php echo $this->frm->facid?></td>	
-	        <th><p style='float:right; font-size:13px'>Escuela </p></th>
-	        <td><div style='width: 250px'><?php echo $this->frm->escid?></td>
-	    </tr>
-	    <tr>
+<div class="panel panel-primary">
+  <div class="panel-heading" style="font-size:15px"><b><center>BLOQUEO Y DESBLOQUEO DE CÓDIGOS POR ESCUELAS</center></b></div>		
+  <div class="panel-body">
+	<table class="table table-condensed table-striped table-hover">	    
+	  <tr>
+	    <th><p style='float:right; font-size:13px'>Facultad </p></th>
+	    <td><div style='width: 250px'><?php echo $this->frm->facid?></td>	
+	    <th><p style='float:right; font-size:13px'>Escuela </p></th>
+	    <td><div style='width: 250px'><?php echo $this->frm->escid?></td>
+	  </tr>
+	  <tr>
 			<td><p style='float:right; font-size:13px'>Oficina </p></td>
 			<td><div style='width: 200px'><?php echo $this->fm->office_lock ?></td>
 			<td><p style='float:right; font-size:13px'>Razón </p></td>
@@ -25,18 +24,19 @@
 		    <td><p style='float:right; font-size:13px'>Detalles</p></td>
 		    <td colspan='3'><div style='width: 400px'><?php echo $this->fm->detail_lock ?></td>
 		</tr>
-			    <input type="hidden" name='state' value='<?php echo 'C'?>'>
 			    <input type="hidden" name='uid' value='<?php echo $this->uid?>'>
 			    <input type="hidden" name='pid' value='<?php echo $this->pid?>'>
 			    <input type="hidden" name='subid' value='<?php echo $this->subid?>'>
 			    <input type="hidden" name='escid' value='<?php echo $this->escid?>'>
 		<tr>
-	   	<td colspan='2'><center><a id='lock' href="#" class='btn btn-success'>BLOQUEO</a></center></td>
-	   	<td colspan='2'><center><a id='unlock' href="" class='btn btn-danger' >DESBLOQUEO</a></center></td>
+	   	<td colspan='2'><center><a id='lock' href="#" class='btn btn-danger'>BLOQUEO</a></center></td>
+	   	<td colspan='2'><center><a id='unlock' class='btn btn-success' >DESBLOQUEO</a></center></td>
 	   	</tr>	
 	</table>
-</form>
-<div id='list'></div>
+  </div>
+  <div id='list'>
+  </div>
+</div>
 
 <script type="text/javascript">
     
@@ -57,9 +57,32 @@
     	var tmp = escid.split("-");
     	subid = tmp[0];
     	esc = tmp[1];
-   		url="/bienestar/specialitylock/listlock/escid/"+esc+"/subid/"+subid+"/office/"+office+"/reason/"+reason+"/type_doc/"+type_doc+"/date/"+date+"/detail/"+detail;
+   		url="/bienestar/specialitylock/listlock/escid/"+esc+"/subid/"+subid+"/office/"+office+"/reason/"+reason+"/type_doc/"+type_doc+"/date/"+date+"/detail/"+detail+"/state/A";
+   		$("#list").html("<center><img src='/img/carga.gif'></center>");
     	$("#list").load(url);    	
 	});    
+
+	$("#unlock").click(function(){
+    	var escid=	$("#escid").val();
+    	var office= $("#office_lock").val();
+    	var reason= $("#reason_lock").val();
+    	var type_doc= $("#type_doc_lock").val();
+    	var date= $("#date_lock").val();
+    	var detail= $("#detail_lock").val();
+
+    	if (escid=="") {alert("Seleccione una Escuela");$("#escid").focus();return false;}
+    	if (office=="") {alert("Ingrese una Oficina");$("#escid").focus();return false;}
+    	if (reason=="") {alert("Ingrese una Razón");$("#escid").focus();return false;}
+    	if (type_doc=="") {alert("Ingrese un Número de Documento");$("#escid").focus();return false;}
+    	if (date=="") {alert("Ingrese Seleccione una Fecha");$("#escid").focus();return false;}
+
+    	var tmp = escid.split("-");
+    	subid = tmp[0];
+    	esc = tmp[1];
+   		url="/bienestar/specialitylock/listunlock/escid/"+esc+"/subid/"+subid+"/office/"+office+"/reason/"+reason+"/type_doc/"+type_doc+"/date/"+date+"/detail/"+detail+"/state/B";
+   		$("#list").html("<center><img src='/img/carga.gif'></center>");
+    	$("#list").load(url);    	
+	}); 
 
     $("#facid").change(function(){
     var facid=$(this).val();
