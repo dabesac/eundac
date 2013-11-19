@@ -185,7 +185,6 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
       catch (Exception $e){
         print "Error:" .$e->getMessage();
       }
-
     }
     
     public function coursesxcurriculaAction(){

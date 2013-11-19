@@ -16,7 +16,7 @@ class Rcentral_PeriodsController extends Zend_Controller_Action {
 
 
     public function indexAction() {
-     //   $this->_helper->redirector("Listar");
+       // $this->_helper->redirector("Listar");
     }
 
 
@@ -44,38 +44,6 @@ class Rcentral_PeriodsController extends Zend_Controller_Action {
         $estado=$peri[0]['state'];
         $this->view->estado = $estado; 
         
-        // $f_ini_clases=$peri[0]['class_start_date'];
-        // $tfiniclases =split("-",$f_ini_clases);
-        // $f_ini_clases = $tfiniclases[2]."/".$tfiniclases[1]."/".$tfiniclases[0];
-        // $peri['f_ini_clases']=$f_ini_clases;
-        // $f_fin_clases=$peri['f_fin_clases'];
-        // $tffinclases =split("-",$f_fin_clases);
-        // $f_fin_clases = $tffinclases[2]."/".$tffinclases[1]."/".$tffinclases[0];
-        // $peri['f_fin_clases']=$f_fin_clases;
-        // $f_ini_mat=$peri['f_ini_mat'];
-        // $tfinimat =split("-",$f_ini_mat);
-        // $f_ini_mat = $tfinimat[2]."/".$tfinimat[1]."/".$tfinimat[0];
-        // $peri['f_ini_mat']=$f_ini_mat;
-        // $f_fin_mat=$peri['f_fin_mat'];
-        // $tffinmat =split("-",$f_fin_mat);
-        // $f_fin_mat =$tffinmat[2]."/".$tffinmat[1]."/".$tffinmat[0];
-        // $peri['f_fin_mat']=$f_fin_mat;
-        // $f_ipp_not=$peri['f_ipp_not'];
-        // $tfippnot =split("-",$f_ipp_not);
-        // $f_ipp_not =$tfippnot[2]."/".$tfippnot[1]."/".$tfippnot[0];
-        // $peri['f_ipp_not']=$f_ipp_not;
-        // $f_fpp_not=$peri['f_fpp_not'];
-        // $tffppnot =split("-",$f_fpp_not);
-        // $f_fpp_not =$tffppnot[2]."/".$tffppnot[1]."/".$tffppnot[0];
-        // $peri['f_fpp_not']=$f_fpp_not;
-        // $f_isp_not=$peri['f_isp_not'];
-        // $tfispnot =split("-",$f_isp_not);
-        // $f_isp_not =$tfispnot[2]."/".$tfispnot[1]."/".$tfispnot[0];
-        // $peri['f_isp_not']=$f_isp_not;
-        // $f_fsp_not=$peri['f_fsp_not'];
-        // $tffspnot =split("-",$f_fsp_not);
-        // $f_fsp_not =$tffspnot[2]."/".$tffspnot[1]."/".$tffspnot[0];
-        // $peri['f_fsp_not']=$f_fsp_not;
         $form=new Rcentral_Form_Periods();
         $form->populate($peri[0]);
         $this->view->form=$form;
@@ -151,29 +119,21 @@ public function eliminarAction()
       $usuario = new Api_Model_DbTable_Periods();
      
       if($usuario->_delete($where))
-         { ?>
-                    <script>
-                    alert('se elimino el periodo');
-                    </script>
-            <?php $this->_helper->redirector('index',"periods",'rcentral');
-                
-
-              } 
-              else
-            {
-              ?>
-               <script>
-                    alert('No se puede eliminar este periodo por que tiene ');
+         { ?> <script>
+               alert('se elimino el periodo');
                 </script>
-            <?php 
-                 
-            }
+            <?php $this->_helper->redirector('index',"periods",'rcentral');
+         } 
+      else
+        { ?> <script>
+                alert('No se puede eliminar este periodo por que tiene ');
+             </script>
+      <?php }
   }
   catch (Exception $ex)
   {
 
   }
 }
-
 
 }
