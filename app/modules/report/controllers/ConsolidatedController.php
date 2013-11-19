@@ -1,5 +1,4 @@
 <?php
-
 class Report_ConsolidatedController extends Zend_Controller_Action {
 
     public function init()
@@ -203,7 +202,6 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $cur= new Api_Model_DbTable_PeriodsCourses();
         $lcur=$cur->_getFilter($where);
         $this->view->courses =$lcur; 
-
       }
       catch (Exception $e){
         print "Error:" .$e->getMessage();
@@ -222,8 +220,6 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $where['subid'] = $this->_getParam('subid');
         $where['tipo'] = $this->_getParam('tipo');
         $this->view->tipo =$where['tipo']; 
-
-
         $escid = $this->_getParam('escid');
         $espec = $this->_getParam('espec');
         if ($espec) {  $where['escid']=$espec;  }
@@ -254,8 +250,6 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $where['subid'] = $this->_getParam('subid');
         $where['tipo'] = $this->_getParam('tipo');
         $this->view->tipo =$where['tipo']; 
-
-
         $escid = $this->_getParam('escid');
         $espec = $this->_getParam('espec');
         if ($espec) {  $where['escid']=$espec;  }
@@ -274,7 +268,6 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $this->view->escuela=strtoupper($esc['name']);
         $dataescid=$escuela->_getOne($where);
         $this->view->escuela =$dataescid['name']; 
-
         $cur= new Api_Model_DbTable_Registrationxcourse();
         $lcur=$cur->_getStudentXcoursesXescidXperiods($where);
         $this->view->data=$lcur;
