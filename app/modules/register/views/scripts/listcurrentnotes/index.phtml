@@ -78,7 +78,13 @@
 								<?php }?>
 							</tr>
 							<tr class="success ">
-								<?php for($rcr = 1;$rcr<=$numcol+1;$rcr++){
+								<?php if ($tipo_ == 'O') {
+									$tamanio = $numcol;
+								}elseif ($tipo_ == 'C'){
+									$tamanio = $numcol+1;
+								}?>
+
+								<?php for($rcr = 1;$rcr<=$tamanio;$rcr++){
 									$index="nota".$rcr."_i";
 									$nota_ = $this->notes[$c][$index];
 								
@@ -86,13 +92,16 @@
 										<th class="center <?php echo ($nota_<11 && $nota_<>"")?"danger":"";?>">
 											<?php echo $this->notes[$c][$index];?>
 										</th>
-									<?php }?>
-
-								
+									<?php }elseif($tipo_ == 'O'){?>
+										<th></th>
+									<?php }elseif($tipo_ == 'C'){
+										if ($rcr <> 5) {?>
+											<th></th>
+										<?php }
+									}?>
 								<?php } ?>
 								
-								<?php 
-								if ($tipo_=="O"){ 
+								<?php if ($tipo_=="O"){ 
 								$prom_ = trim($this->notes[$c]['promedio1']);
 								?>
 								<th class="center <?php echo ($prom_<11)?"danger":""?>">
@@ -134,15 +143,27 @@
 								<?php }?>
 							</tr>
 							<tr class="success center">
-								<?php for($rcr = 1;$rcr<=$numcol;$rcr++){
+								<?php if ($tipo_ == 'O') {
+									$tamanio = $numcol;
+								}elseif ($tipo_ == 'C'){
+									$tamanio = $numcol+1;
+								}?>
+
+								<?php for($rcr = 1;$rcr<=$tamanio;$rcr++){
 									$index="nota".$rcr."_ii";
 									$nota_ = $this->notes[$c][$index];
 								
-								if ($this->notes[$c][$index]) {?>
-										<th class="center <?php echo ($nota_<11 && $nota_<>"")?"danger":"";?>">
-											<?php echo $this->notes[$c][$index];?>
-										</th>
-									<?php }?>
+									if ($this->notes[$c][$index]) {?>
+											<th class="center <?php echo ($nota_<11 && $nota_<>"")?"danger":"";?>">
+												<?php echo $this->notes[$c][$index];?>
+											</th>
+										<?php }elseif($tipo_ == 'O'){?>
+											<th></th>
+										<?php }elseif($tipo_ == 'C'){
+											if ($rcr <> 5) {?>
+												<th></th>
+											<?php }
+										}?>
 								<?php } ?>
 								<?php if ($tipo_=="O"){ 
 								$prom = $this->notes[$c]['promedio2'];
