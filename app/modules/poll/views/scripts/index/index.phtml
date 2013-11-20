@@ -4,6 +4,10 @@
 	</div>
 </div>
 
+<div style="margin-bottom: 20px">
+	<center><a id="new_poll" href="#poll_new" class="btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> Nueva Encuesta</a></center>
+</div>
+
 <?php
 if ($this->poll) { ?>
 	<table class="table">
@@ -26,7 +30,16 @@ if ($this->poll) { ?>
 				<td><?php echo $data_poll['title']?></td>
 				<td><?php echo $data_poll['published']?></td>
 				<td><?php echo $data_poll['closed']?></td>
-				<td><img src="<?php echo $img?>"></td>
+				<td>
+					<center>
+						<img src="<?php echo $img?>" title="<?php echo ($data_poll['state']=="A")? "Activa": "Cerrada"?>" rel="tooltip">
+					</center>
+				</td>
+				<td>
+					<center>
+						<a href="#" title="Editar Encuesta" rel="tooltip"><span class="glyphicon glyphicon-edit"></span></a>
+					</center>
+				</td>
 			</tr>
 			<?php
 			$c++;
@@ -34,3 +47,30 @@ if ($this->poll) { ?>
 	</table>
 <?php	
 }?>
+
+<div class="modal fade" id="poll_new" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      	<div class="modal-content">
+        	<div class="modal-header">
+          		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          		<h4 class="modal-title"><span class="glyphicon glyphicon-list"></span> - NUEVA ENCUESTA</h4>
+        	</div>
+        	<div id="load_poll_new" class="modal-body"></div>
+        	<div class="modal-footer">
+          		<a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+          		<a href="#" id="save_poll" class="btn btn-success">
+					<span class='glyphicon glyphicon-floppy-disk'></span> Guardar
+				</a>
+        	</div>
+      	</div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$("#new_poll").click(function(){
+	$("#load_poll_new").html("<img src='/img/carga.gif'>");
+	$("#load_poll_new").load("/poll/index/new/");
+});
+
+$("a, img").tooltip();
+</script>
