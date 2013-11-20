@@ -182,14 +182,68 @@ class Alumno_IndexController extends Zend_Controller_Action {
     public function encuestaAction()
     {
         //$this->_helper->layout()->disableLayout();        
-        echo $eid = $this->sesion->eid;  
-        echo $oid = $this->sesion->oid;      
-        echo $escid = $this->sesion->escid;       
-        echo $uid = $this->sesion->uid;      
-        echo $pid=$this->sesion->pid;
-        echo $perid= $this->sesion->period->perid;
+        $eid = $this->sesion->eid;  
+        $oid = $this->sesion->oid;      
+        $escid = $this->sesion->escid;       
+        $uid = $this->sesion->uid;      
+        $pid=$this->sesion->pid;
+        $perid= $this->sesion->period->perid;
 
-        //print_r($this->sesion);
+
+        $data['eid']=$eid;
+        $data['oid']=$oid;
+        $where = array('eid'=>$eid,'oid'=>$oid,);
+        $encuestas = new  Api_Model_DbTable_Polll();
+        $encuesta=$encuestas->_getEncuestaActiva($where);
+        //print_r($encuesta);
+        if($encuesta)
+        {
+            $this->view->encuesta=$encuesta;
+            $pollid=$encuesta['pollid'];
+            $where1 = array('eid'=>$eid,'oid'=>$oid,'pollid'=>$pollid);
+            //print_r($where1);
+            $dbpreguntas = new Api_Model_DbTable_PollQuestion();
+            $preguntas=$dbpreguntas->_getPreguntasXencuesta($where1);
+            //print_r($preguntas);
+            $this->view->preguntas=$preguntas;
+
+            $cursos = new Api_Model_DbTable_Registrationxcourse();
+            $where2=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'uid'=>$uid,'pid'=>$pid,'perid'=>$perid);
+            //print_r($where2);
+            $curs=$cursos->_getFilter($where2);
+            //print_r($curs);
+
+            $c= new Api_Model_DbTable_Course();
+            $cur=array();
+            if($curs)
+            {
+
+                foreach ($curs as $curso) 
+                {
+                    $data['eid']=$eid;
+                    $data['oid']=$oid;
+                    $data['escid']=$escid;
+                    $data['subid']=$curso['subid'];
+                    $data['courseid']=$curso['courseid'];
+                    $data['curid']=$curso['curid'];
+                    
+                    //print_r($data);
+
+                    $c_=$c->_getOne($data);
+                    //print_r($c_);
+                    $c_['turno']=$curso['turno'];
+                    $cur[]=$c_;
+                    //print_r($cur);
+                }
+            }
+            //print_r($curso);
+            if(!$cur)
+            {
+                $this->_redirect('/alumno');
+            }
+            $this->view->cursos=$cur;
+        }       
+     
     }
 
 

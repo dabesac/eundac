@@ -32,9 +32,9 @@ class Api_Model_DbTable_Polll extends Zend_Db_Table_Abstract
     }
 
 
-       public function _getOne($data=null){
+    public function _getOne($data=null){
             try{               
-                if ($data['eid']==''|| $data['oid']==''||$data['pollid']=='') return false;
+                if ($data['eid']=='' || $data['oid']=='' || $data['pollid']=='') return false;
                 $str ="eid='".$data['eid']."' and oid='".$data['oid']."' and pollid='".$data['pollid']."'";
                 $row = $this->fetchRow($str);
             if($row) return $row->toArray();
@@ -42,6 +42,19 @@ class Api_Model_DbTable_Polll extends Zend_Db_Table_Abstract
                 print "Error Leer Encuestas".$ex->getMessage();
             }
         }
+
+
+    public function _getEncuestaActiva($data=null){
+        try{
+            if ($data['eid']=="" || $data['oid'] =="") return false;
+            $str="eid='".$data['eid']."' and  oid='".$data['oid']."' and state='A'";
+            $row=$this->fetchRow($str);
+            if($row) return $row->toArray();            
+
+        }  catch (Exception $ex){
+            print "Error: Leer encuesta activa. ".$ex->getMessage();
+        }
+    }
 
     public function _getAll($where=null, $order='', $start=0, $limit=0)
     {
