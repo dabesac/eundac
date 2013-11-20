@@ -287,6 +287,7 @@ class IndexController extends Zend_Controller_Action {
 
                 $acls[]= array("controller"=>"admin/rol","name"=>"Crear Rol","imgicon"=>"user");
                 $acls[]= array("controller"=>"admin/faculty","name"=>"Crear Facultad","imgicon"=>"edit");
+                $acls[]= array("controller"=>"admin/speciality","name"=>"Crear Escuela","imgicon"=>"edit");
                 $acls[]= array("controller"=>"admin/org","name"=>"Crear Organización","imgicon"=>"edit");
                 $acls[]= array("controller"=>"admin/opensillabus","name"=>"Abrir Silabus","imgicon"=>"user");
                 $acls[]= array("controller"=>"admin/openrecords","name"=>"Abrir Actas","imgicon"=>"folder-close");
@@ -303,6 +304,7 @@ class IndexController extends Zend_Controller_Action {
 
                 $resource1[]="admin/rol";
                 $resource1[]="admin/faculty";
+                $resource1[]="admin/speciality";
                 $resource1[]="admin/org";
                 $resource1[]="admin/opensillabus";
                 $resource1[]="admin/openrecords";
