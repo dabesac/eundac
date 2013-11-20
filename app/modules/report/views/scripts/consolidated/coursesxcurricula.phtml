@@ -13,14 +13,10 @@ if ($this->courses)
     		$where['subid']=$curso['subid'];
             $course = new Api_Model_DbTable_Course();
             $list_curso = $course ->_getOne($where);
-            $info = $list_curso['name'];
-         
+            $info = $list_curso['name']; 
         ?>     
           <option value="<?php echo $curso['courseid'].";--;".$curso['turno']?>"><?php echo $info." | ".$curso['turno']?> </option>
-        <?php  
-
-        }
-
+        <?php    }
 }else{
     ?>
         <option value="">No tienen ningun CURSO</option>

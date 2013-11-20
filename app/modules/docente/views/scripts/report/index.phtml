@@ -1,0 +1,32 @@
+<div class="panel panel-default" style="padding: 5px">
+	<h4><center>HISTORIAL ACADEMICO</center></h4>
+</div>
+<div>
+	<center>
+		<div style="float: left"><b>Selecione Año: </b></div>
+		<div  style="width: 200px">
+			<select id="anio" class="form-control" style="width: 120px">
+				<option value="">- Año -</option>
+				<?php
+				$anio = date('Y');
+				for ($i=$anio; $i > 1960; $i--) { ?>
+					<option value="<?php echo $i?>"><?php echo $i?></option>
+				<?php
+				} ?>
+			</select>
+		</div>
+	</center>
+</div>
+<div id="loaddata" style="margin-top: 20px"></div>
+
+<script type="text/javascript">
+$("#anio").change(function(){
+	var anio = $(this).val();
+	if (!anio) {
+		alert("Seleccione un Año.");
+		return false;
+	};
+	$("#loaddata").html("<img src='/img/spinner.gif'>Cargando...");
+	$("#loaddata").load("/docente/report/history/anio/"+anio);
+});
+</script>
