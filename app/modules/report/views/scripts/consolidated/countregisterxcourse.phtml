@@ -6,29 +6,20 @@
   	<?php }?>
   	<strong>PERIODO <?php echo strtoupper($this->perid)?></strong>
 </center></h5>
-
 	<div class="panel panel-primary">
   	<div class="panel-heading">
 		<h5 class="panel-title">
-	  	<span class='glyphicon glyphicon-list'></span>
-       
+	  	<span class='glyphicon glyphicon-list'></span>      
  <strong>REPORTE CANTIDAD MATRICULADOS POR CURSO</strong> 
-	  	
-
 	  	<div class='pull-right'>
 	  		<a id="imprimir" class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span></a>
-
 	  	</div>
 	  </h5>
   	</div><br>
-<table class="table  table-condensed table-bordered table-striped" >
-
-        
+<table class="table  table-condensed table-bordered table-striped" >    
     </table>
-
     <?php 
 foreach ($this->semester as $sem){
-
             $cont=$sem['semid']?>
 <br>
 <div class="datos-columna" style="font-size: 15px; color: #428bca;"><h4><CENTER><b> SEMESTRE <?php echo $cont;?>   </b></h4><CENTER>  </div>
@@ -46,7 +37,6 @@ foreach ($this->semester as $sem){
     </thead>
 <?php
 $r=0;
-
 if ($this->listacursos){  
     foreach ($this->listacursos as $curso){
         $cursoid=$curso['courseid'];

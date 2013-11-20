@@ -61,12 +61,12 @@
     </tr>
 </table>
 <div id="cargadatos"></div>
-
 <script type="text/javascript">
 var rid="<?php echo $this->rid ?>";
 if (rid=="RF" || rid=="DIREC") {
     $("#facid").attr("disabled",true);
     var facid=$("#facid").val();
+    // alert("/report/Consolidated/schools/facid/"+facid);
     $("#escid").load("/report/Consolidated/schools/facid/"+facid);
     if (rid=="DIREC") {
         $("#escid").attr("disabled",true);
@@ -74,7 +74,6 @@ if (rid=="RF" || rid=="DIREC") {
         $("#especialidad").load("/report/Consolidated/speciality/escid/"+escid);
     };
 };
-
 $("#facid").change(function(){
     var facid=$(this).val();
     $("#escid").load("/report/Consolidated/schools/facid/"+facid);
@@ -100,8 +99,6 @@ $("#anho").change(function(){
     var url = "/report/Consolidated/periods/anio/"+anio;
     $("#periodo_c").load(url);
 });
-
-
 
 $("#generar").click(function(){
     var facid = $("#facid").val();
