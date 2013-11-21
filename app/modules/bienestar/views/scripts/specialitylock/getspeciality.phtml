@@ -3,16 +3,15 @@ if ($this->data){
 ?>
   <option value="">- Seleccione Escuelas -</option>
   <?php
+  print_r($this->data);
     foreach ($this->data  as $speciality){
-    	if ($speciality['state']=='A' or $speciality['state']=='B') {
         ?>
-        <option value="<?php echo $speciality['escid']?>"><?php echo $speciality['escid']." | ".$speciality['name']?></option>
+        <option value="<?php echo $speciality['subid']."-".$speciality['escid']?>"><?php echo $speciality['escid']." | ".$speciality['name']?></option>
         <?php
-    	}
     }
 }else{
     ?>
         <option value="">No tienen ninguna escuela</option>
     <?php
 }
-?> 
+?>  

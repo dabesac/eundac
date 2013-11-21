@@ -342,6 +342,8 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                 if ($where['perid']=="" || $where['escid']==""|| $where['eid']==""|| $where['oid']=="") return false;
                 else
                 {
+                    $perid=$where['perid'];
+                    $escid=$where['escid'];
                     $sql=$this->_db->query(" 
                    SELECT REGID,M.UID,LAST_NAME0,LAST_NAME1,FIRST_NAME,SEMID,
                     ROUND(
@@ -368,7 +370,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     INNER JOIN BASE_PERSON AS P
                     ON M.PID=P.PID AND M.STATE='M' INNER JOIN BASE_STUDENT_CURRICULA AS AC
                     ON M.UID=AC.UID AND M.ESCID=AC.ESCID
-                    WHERE PERID='".$where['PERID']."' AND M.ESCID='".$where['ESCID']."' AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    WHERE PERID='$perid' AND M.ESCID='$escid' AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
                     INNER JOIN BASE_COURSES AS C1
                     ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
                     WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND 
@@ -391,7 +393,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     INNER JOIN BASE_PERSON AS P
                     ON M.PID=P.PID AND M.STATE='M' INNER JOIN BASE_STUDENT_CURRICULA AS AC
                     ON M.UID=AC.UID AND M.ESCID=AC.ESCID
-                    WHERE PERID='".$where['PERID']."' AND M.ESCID='".$where['ESCID']."'  
+                    WHERE PERID='$perid' AND M.ESCID='$escid'  
                     AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
                     INNER JOIN BASE_COURSES AS C1
                     ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
@@ -412,10 +414,9 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     )
                     ) > 12)
                     OFFSET 0            
-           
-
                     ");
-               return $sql->fetchAll(); 
+                 
+                 return $sql->fetchAll(); 
                 }
             }  catch (Exception $ex){
                 ///print "Error: Lecturando semestre de curricula ".$ex->getMessage();
@@ -436,6 +437,8 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                 if ($where['perid']=="" || $where['escid']==""|| $where['eid']==""|| $where['oid']=="") return false;
                 else
                 {
+                    $perid=$where['perid'];
+                    $escid=$where['escid'];
                     $sql=$this->_db->query(" 
                    SELECT REGID,M.UID,LAST_NAME0,LAST_NAME1,FIRST_NAME,SEMID,
                     ROUND(
@@ -462,7 +465,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     INNER JOIN BASE_PERSON AS P
                     ON M.PID=P.PID AND M.STATE='M' INNER JOIN BASE_STUDENT_CURRICULA AS AC
                     ON M.UID=AC.UID AND M.ESCID=AC.ESCID
-                    WHERE PERID='".$where['PERID']."' AND M.ESCID='".$where['ESCID']."' AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
+                    WHERE PERID='$perid' AND M.ESCID='$escid' AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
                     INNER JOIN BASE_COURSES AS C1
                     ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
                     WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND 
@@ -485,7 +488,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     INNER JOIN BASE_PERSON AS P
                     ON M.PID=P.PID AND M.STATE='M' INNER JOIN BASE_STUDENT_CURRICULA AS AC
                     ON M.UID=AC.UID AND M.ESCID=AC.ESCID
-                    WHERE PERID='".$where['PERID']."' AND M.ESCID='".$where['ESCID']."'  
+                    WHERE PERID='$perid' AND M.ESCID='$escid'  
                     AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
                     INNER JOIN BASE_COURSES AS C1
                     ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')

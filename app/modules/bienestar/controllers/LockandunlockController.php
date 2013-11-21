@@ -47,7 +47,7 @@ class Bienestar_LockandunlockController extends Zend_Controller_Action {
 			$l=count($datauser);
 			for ($i=0; $i <= $l ; $i++) { 
 				$state=$datauser[$i]['state'];
-				if ($state=='C') {
+				if ($state=='B') {
 					$band=1;
 					$i=$l+1;
 				}				
@@ -130,7 +130,13 @@ class Bienestar_LockandunlockController extends Zend_Controller_Action {
 	                $frmdata['date_reg']=date('Y-m-d');
 	                $frmdata['uid_lock']=$uid_reg;
 	                $reg_= new Api_Model_DbTable_Lockandunlock();
-	                $reg_->_save($frmdata);
+	              
+	                if ($reg_->_save($frmdata)) {
+	                	$pk = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'pid'=>$pid,'uid'=>$uid);
+	                	$data = array('state'=>'B','comments'=>$frmdata['reason_lock']);
+	                	$user_= new Api_Model_DbTable_Users();
+	                	$user_->_update($data,$pk);
+	                }
 	                ?>
 	                <script type="text/javascript">
 	                	alert("El usuario ha sido bloqueado");
@@ -155,7 +161,6 @@ class Bienestar_LockandunlockController extends Zend_Controller_Action {
 			$this->view->fm=$fm;
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
-			$perid=$this->sesion->period->perid;
 			$uid_reg=$this->sesion->uid;
 			$dbuid=$this->_getParam('dbuid');
 			$this->view->dbuid=$dbuid;
@@ -185,13 +190,15 @@ class Bienestar_LockandunlockController extends Zend_Controller_Action {
 	                $pk['pid']=$frmdata['pid'];
 	                $pk['uid']=$frmdata['uid'];
 	                $pk['escid']=$frmdata['escid'];
-	                $frmdata['perid']=$perid;
 	                $frmdata['date_reg']=date('Y-m-d');
 	                $frmdata['uid_lock']=$uid_reg;
-	                // print_r($frmdata);
-	                // print_r($pk);
 	                $reg_= new Api_Model_DbTable_Lockandunlock();
-	                $reg_->_update($frmdata,$pk);
+	                if ($reg_->_update($frmdata,$pk)) {
+	                	$pk = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'pid'=>$pid,'uid'=>$uid);
+	                	$data = array('state'=>'A','comments'=>$frmdata['reason_unlock']);
+	                	$user_= new Api_Model_DbTable_Users();
+	                	$user_->_update($data,$pk);
+	                }
 	                ?>
 	                <script type="text/javascript">
 	                	alert("El usuario ha sido Desbloqueado");
