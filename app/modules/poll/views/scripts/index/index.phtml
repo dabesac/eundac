@@ -5,7 +5,7 @@
 </div>
 
 <div style="margin-bottom: 20px">
-	<center><a id="new_poll" href="#poll_new" class="btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> Nueva Encuesta</a></center>
+	<center><a id="create_poll" href="#poll_create" class="btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> Nueva Encuesta</a></center>
 </div>
 
 <?php
@@ -14,10 +14,11 @@ if ($this->poll) { ?>
 		<tr>
 			<th>#</th>
 			<th>Título Encuesta</th>
+			<th>Periodo</th>
 			<th>Publicación</th>
 			<th>Cierre</th>
 			<th>Estado</th>
-			<th>Operación</th>
+			<th colspan="2">Operación</th>
 		</tr>
 		<?php
 		$c = 1;
@@ -28,6 +29,7 @@ if ($this->poll) { ?>
 			<tr>
 				<td><?php echo $c?></td>
 				<td><?php echo $data_poll['title']?></td>
+				<td><?php echo $data_poll['perid']?></td>
 				<td><?php echo $data_poll['published']?></td>
 				<td><?php echo $data_poll['closed']?></td>
 				<td>
@@ -37,9 +39,21 @@ if ($this->poll) { ?>
 				</td>
 				<td>
 					<center>
-						<a href="#" title="Editar Encuesta" rel="tooltip"><span class="glyphicon glyphicon-edit"></span></a>
+						<a href="#poll_update" id="update_poll_<?php echo $data_poll['pollid']?>" title="Editar Encuesta" rel="tooltip" data-toggle="modal"><span class="glyphicon glyphicon-edit"></span></a>
 					</center>
 				</td>
+				<td>
+					<center>
+						<a href="/poll/index/questions/pollid/<?php echo base64_encode($data_poll['pollid'])?>" title="Agregar Preguntas" rel="tooltip"><span class="glyphicon glyphicon-list"></span></a>
+					</center>
+				</td>
+				<script type="text/javascript">
+					$("#update_poll_<?php echo $data_poll['pollid']?>").click(function(){
+						var pollid = "<?php echo $data_poll['pollid']?>";
+						$("#load_poll_update").html("<img src='/img/carga.gif'>");
+						$("#load_poll_update").load("/poll/index/update/pollid/"+pollid);
+					});
+				</script>
 			</tr>
 			<?php
 			$c++;
@@ -48,17 +62,35 @@ if ($this->poll) { ?>
 <?php	
 }?>
 
-<div class="modal fade" id="poll_new" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="poll_create" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       	<div class="modal-content">
         	<div class="modal-header">
           		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           		<h4 class="modal-title"><span class="glyphicon glyphicon-list"></span> - NUEVA ENCUESTA</h4>
         	</div>
-        	<div id="load_poll_new" class="modal-body"></div>
+        	<div id="load_poll_create" class="modal-body"></div>
         	<div class="modal-footer">
           		<a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
-          		<a href="#" id="save_poll" class="btn btn-success">
+          		<a href="#" id="creating_poll" class="btn btn-success">
+					<span class='glyphicon glyphicon-floppy-disk'></span> Guardar
+				</a>
+        	</div>
+      	</div>
+    </div>
+</div>
+
+<div class="modal fade" id="poll_update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      	<div class="modal-content">
+        	<div class="modal-header">
+          		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          		<h4 class="modal-title"><span class="glyphicon glyphicon-list"></span> - MODIFICAR ENCUESTA</h4>
+        	</div>
+        	<div id="load_poll_update" class="modal-body"></div>
+        	<div class="modal-footer">
+          		<a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+          		<a href="#" id="update_new_poll" class="btn btn-success">
 					<span class='glyphicon glyphicon-floppy-disk'></span> Guardar
 				</a>
         	</div>
@@ -67,9 +99,17 @@ if ($this->poll) { ?>
 </div>
 
 <script type="text/javascript">
-$("#new_poll").click(function(){
-	$("#load_poll_new").html("<img src='/img/carga.gif'>");
-	$("#load_poll_new").load("/poll/index/new/");
+$("#create_poll").click(function(){
+	$("#load_poll_create").html("<img src='/img/carga.gif'>");
+	$("#load_poll_create").load("/poll/index/new/");
+});
+
+$("#creating_poll").click(function(){
+    $("#formPollcreate").submit();
+});
+
+$("#update_new_poll").click(function(){
+    $("#formPoll").submit();
 });
 
 $("a, img").tooltip();

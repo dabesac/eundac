@@ -1,4 +1,6 @@
-<form id="formPollcreate" name="<?php echo $this->form->getName(); ?>" action="/poll/index/new/" method="post" enctype="application/x-www-form-urlencoded">
+<?php
+if ($this->form) { ?>
+	<form id="formPoll" name="<?php echo $this->form->getName(); ?>" action="/poll/index/update" method="post" enctype="application/x-www-form-urlencoded">
 		<table class="table table-hover">
 			<tr>
 				<th>Título: </th>
@@ -23,11 +25,16 @@
 				<td colspan="3"><?php echo $this->form->perid?></td>
 			</tr>
 			<tr>
-				<th colspan="2">Aplicar Encuesta a Todos: </th>
-				<td colspan="2"><?php echo $this->form->is_all?></td>
+				<th>Aplicar Encuesta a Todos: </th>
+				<td><?php echo $this->form->is_all?></td>
+				<th>Estado: </th>
+				<td><?php echo $this->form->state?></td>
 			</tr>
 		</table>
-</form>	
+		<input type="hidden" name='pollid' value="<?php echo $this->pollid?>">
+	</form>	
+	<?php
+}?>
 
 <script type="text/javascript">
 	var success = "<?php echo $this->success?>";
@@ -35,13 +42,13 @@
 		window.location.reload();
 	};
 
-    $("#formPollcreate").submit(function(){
+    $("#formPoll").submit(function(){
             $.ajax({
                 type: 'POST',
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
                 success: function(data) { 
-                    $("#load_poll_create").html(data);
+                    $("#load_poll_update").html(data);
                 }
             }); 
             return false;

@@ -9,23 +9,19 @@ class Api_Model_DbTable_Polll extends Zend_Db_Table_Abstract
     public function _save($data)
     {
         try{
-            if ($data['eid']=='' || $data['oid']=='' || $data['pollid']=='' || $data['title']=='' ||
-                $data['published']=='' || $data['closed']=='' || $data['is_all']=='') return false;
-            
+            if ($data['eid']=='' || $data['oid']=='' ||  $data['title']=='' || $data['published']=='' || $data['closed']=='' || $data['is_all']=='') return false;
             return $this->insert($data);
-            return false;
         }catch (Exception $e){
-                print "Error: save Poll ".$e->getMessage();
+            print "Error: save Poll ".$e->getMessage();
         }
     }
 
     public function _update($data,$pk)
     {
         try{
-            if ($pk['eid']=='' ||   $pk['oid']=='' ||  $pk['pollid']=='') return false;
-            $where = "eid = '".$pk['eid']."' and pid='".$pk['pid']."' and oid = '".$pk['oid']."' and pollid = '".$pk['pollid']."'";
+            if ($pk['eid']=='' || $pk['oid']=='' || $pk['pollid']=='') return false;
+            $where = "eid = '".$pk['eid']."' and oid = '".$pk['oid']."' and pollid = '".$pk['pollid']."'";
             return $this->update($data, $where);
-            return false;
         }catch (Exception $e){
             print "Error: Update Poll ".$e->getMessage();
         }
