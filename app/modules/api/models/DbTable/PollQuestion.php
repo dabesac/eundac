@@ -39,12 +39,12 @@ class Api_Model_DbTable_PollQuestion extends Zend_Db_Table_Abstract
     }
 
 
-    public function _getPreguntasXencuesta($data=null){
+    public function _getPreguntasXencuesta($data=null,$order='', $start=0, $limit=0){
         try{
            // if ($data['eid'] == "" || $data['oid'] =="" || $data['pollid'] == "") return false;
             $str="eid='".$data['eid']."' and oid='".$data['oid']."' and pollid='".$data['pollid']."'";
-            //,"orden asc"
-            $row = $this->fetchAll($str);
+            
+            $row = $this->fetchAll($str,$order,$start,$limit);
 
             if ($row ) return $row->toArray();
            
