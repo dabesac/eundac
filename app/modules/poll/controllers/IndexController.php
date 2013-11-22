@@ -127,9 +127,9 @@ class Poll_IndexController extends Zend_Controller_Action {
                         unset($formData['alternative'.$i]);
                     }
                     $ques->_save($formData);
-                    $whereques = array('eid' => $eid, 'oid' => $oid, 'position' => $formData['position']);
+                    $whereques = array('eid' => $eid, 'oid' => $oid, 'pollid' => $formData['pollid'], 'position' => $formData['position']);
                     $question = $ques->_getFilter($whereques,$attrib=null,$orders=null);
-
+                    
                     if ($question) {
                         $alt = new Api_Model_DbTable_PollAlternatives();
                         $wherealt = array('eid' => $eid, 'oid' => $oid, 'qid' => $question[0]['qid']);
