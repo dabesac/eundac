@@ -313,8 +313,6 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
             print "Error: Obteniendo Curricula anterior".$ex->getMessage();
         }
     }
-
-
     //Lista las curriculas usadas por escuela de un determinado periodo
     public function _getCurriculasXSchool($where=null)
     {
@@ -333,8 +331,6 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
             print $ex->getMessage();
         }
     }
-
-
             public function _get3superiorXcurricula($where=null)
         {
             //print(utf8_encode($perid).utf8_decode($escid).utf8_decode($curid).$eid.$oid);
@@ -414,8 +410,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     )
                     ) > 12)
                     OFFSET 0            
-                    ");
-                 
+                    ");                
                  return $sql->fetchAll(); 
                 }
             }  catch (Exception $ex){
