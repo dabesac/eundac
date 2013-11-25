@@ -1,0 +1,59 @@
+<?php
+if ($this->form) { ?>
+	<form id="formPoll" name="<?php echo $this->form->getName(); ?>" action="/poll/index/update" method="post" enctype="application/x-www-form-urlencoded">
+		<table class="table table-hover">
+			<tr>
+				<th>Título: </th>
+				<td colspan="3"><?php echo $this->form->title?></td>
+			</tr>
+			<tr>
+				<th>Objetivos: </th>
+				<td colspan="3"><?php echo $this->form->objective?></td>
+			</tr>
+			<tr>
+				<th>Comentarios: </th>
+				<td colspan="3"><?php echo $this->form->comments?></td>
+			</tr>
+			<tr>
+				<th>Publicación:</th>
+				<td><?php echo $this->form->published?></td>
+				<th>Finalización:</th>
+				<td><?php echo $this->form->closed?></td>
+			</tr>
+			<tr>
+				<th>Periodo: </th>
+				<td colspan="3"><?php echo $this->form->perid?></td>
+			</tr>
+			<tr>
+				<th>Aplicar Encuesta a Todos: </th>
+				<td><?php echo $this->form->is_all?></td>
+				<th>Estado: </th>
+				<td><?php echo $this->form->state?></td>
+			</tr>
+		</table>
+		<input type="hidden" name='pollid' value="<?php echo $this->pollid?>">
+	</form>	
+	<?php
+}?>
+
+<script type="text/javascript">
+	var success = "<?php echo $this->success?>";
+	if (success == 1) {
+		window.location.reload();
+	};
+
+    $("#formPoll").submit(function(){
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function(data) { 
+                    $("#load_poll_update").html(data);
+                }
+            }); 
+            return false;
+    });
+
+	$("#published").datepicker();
+	$("#closed").datepicker();
+</script>

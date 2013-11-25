@@ -159,7 +159,6 @@ if ($this->option=="V") { ?>
 		</tr>
 	</table>
 </form>
-<div id="loaddatamod"></div>
 <?php 
 	} 
 }?>
@@ -182,7 +181,7 @@ if ($this->option=="V") { ?>
 	        url: $(this).attr('action'),
 	        data: $(this).serialize(),
            	success: function(data) { 
-        		$("#loaddatamod").html(data);
+        		$("#cont_mod_cur").html(data);
        			// $('#modifyc_curricula').modal('hide');
             }
         }); 

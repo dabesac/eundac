@@ -14,10 +14,58 @@ class Alumno_IndexController extends Zend_Controller_Action {
     public function indexAction()
     {
         try {
+
+        if ($this->_validaren()=="false")
+        {
+            $this->_redirect('/alumno/index/encuesta');
+        }
+
+
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
 
+    }
+
+    public function _validaren()
+    {
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $escid = $this->sesion->escid;
+        $uid = $this->sesion->uid;
+        $pid=$this->sesion->pid;
+        $perid=$this->sesion->period->perid;
+
+        $where = array('eid'=>$eid,'oid'=>$oid,);
+        $encuestas = new  Api_Model_DbTable_Polll();
+        $encuesta=$encuestas->_getEncuestaActiva($where);
+
+        if ($encuesta) 
+        {
+               $pollid=$encuesta['pollid'];  
+               $where1 = array('eid'=>$eid,'oid'=>$oid,'pollid'=>$pollid);
+               $dbpreguntas = new Api_Model_DbTable_PollQuestion();
+               $lista=$dbpreguntas->_getPreguntasXencuesta($where1);
+
+                if ($lista)
+                {
+                   $resp = new Api_Model_DbTable_Results();
+                   foreach ($lista as $lista_)
+                   {
+                      $qid=$lista_['qid'];
+                                     
+                      $where2 = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'qid'=>$qid);
+                      $paso=$resp->_getAlumnoPasoEncuestaT($where2);
+                      if($paso)
+                      {
+                        return "true";
+                      }
+
+                   }
+   
+               }
+        }
+        return "false";
     }
 
     public function graphicsperformanceAction()
@@ -179,7 +227,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
 
     public function encuestaAction()
     {
-        //$this->_helper->layout()->disableLayout();        
+        $this->_helper->layout()->disableLayout();        
         $eid = $this->sesion->eid;  
         $oid = $this->sesion->oid;      
         $escid = $this->sesion->escid;       
@@ -199,9 +247,11 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $this->view->encuesta=$encuesta;
             $pollid=$encuesta['pollid'];
             $where1 = array('eid'=>$eid,'oid'=>$oid,'pollid'=>$pollid);
+            $order = array('position  ASC');
+
             //print_r($where1);
             $dbpreguntas = new Api_Model_DbTable_PollQuestion();
-            $preguntas=$dbpreguntas->_getPreguntasXencuesta($where1);
+            $preguntas=$dbpreguntas->_getPreguntasXencuesta($where1,$order);
             //print_r($preguntas);
             $this->view->preguntas=$preguntas;
 
@@ -244,5 +294,49 @@ class Alumno_IndexController extends Zend_Controller_Action {
      
     }
 
+
+    public function guardarAction()
+    {
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $escid = $this->sesion->escid;
+        $uid = $this->sesion->uid;
+        $pid=$this->sesion->pid;
+        $perid= $this->sesion->period->perid;        
+        $subid= $this->sesion->subid;
+        $respuestas = $_POST;
+
+        //print_r($respuestas);
+        foreach ($respuestas as $respuesta)
+        {
+            $respuesta_ = new Api_Model_DbTable_Results();
+            $tmp1 = split(";--;",$respuesta);
+            $tmp = split("-",$tmp1[0]);
+
+            $qid = $tmp[0];
+            $altid = $tmp[1];
+
+            $data['oid']="$oid" ;
+            $data['eid']=$eid ;
+            $data['qid']="$qid";
+            $data['altid']="$altid" ;
+            $data['subid']="$subid" ;
+            $data['pid']="$pid" ;           
+            $data['escid']="$escid" ;
+            $data['uid']="$uid" ;
+            $data['created']=date('Y-m-d') ;
+            $data['code']=  $tmp1[1];
+
+            //print_r($data);
+            if($respuesta_->_save($data))
+            {
+                
+            }
+
+        }
+        
+        $this->_redirect("/");
+
+    }
 
 }

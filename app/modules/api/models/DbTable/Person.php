@@ -68,31 +68,27 @@ public function _getAll($where,$order='',$start=0,$limit=0){
 		}
 	}
 	
-	 public function _getFilter($where=null,$attrib=null,$orders=null){
+	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
 			if($where['eid']=='' || $where['pid']=='') return false;
 				$select = $this->_db->select();
 				if ($attrib=='') $select->from("base_person");
 				else $select->from("base_person",$attrib);
-				if ($where){
-					foreach ($where as $atri=>$value){
-						$select->where("$atri = ?", $value);
-					}
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
 				}
-				if ($orders){
-					foreach ($orders as $key => $order) {
-							$select->order($order);
-					}
-				}
+				if ($orders<>null || $orders<>"") {
+					if (is_array($orders))
+						$select->order($orders);
+				}	
 				$results = $select->query();
 				$rows = $results->fetchAll();
 				if ($rows) return $rows;
 				return false;
 		}catch (Exception $e){
-			print "Error: Read Filter Person ".$e->getMessage();
+			print "Error: Read Filter Person".$e->getMessage();
 		}
 	}
-
 	/*------------------PENDIENTE--------------------------*/
 	public function _getPersonxname($nom='',$eid=''){
         try{

@@ -4,6 +4,8 @@
 // $xrid=$rid[0]['rid'];
 // echo $xrid;
 
+ echo $rid;
+
 ?>
 
 <div id="data">
@@ -17,7 +19,7 @@
                 <th >NOMBRE</th>
                 <th >ESCUELA</th>
                 <?php
-                 if ($rid=='AL')
+                 if ($rid=='AL' or $rid=='EG')
                  {
                 ?>
                 <th >RECORD</th>               
@@ -59,7 +61,7 @@
                 <td><?php echo $info['escid']?></td>
 
                 <?php
-                if($rid=='AL')
+                if($rid=='AL' or $rid=='EG')
                 {
                 ?>
                 <td>
