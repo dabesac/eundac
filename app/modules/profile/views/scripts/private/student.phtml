@@ -11,7 +11,12 @@
       <a href="/report/recordnotas/print/uid/<?php echo base64_encode($this->person['uid'])?>/escid/<?php echo base64_encode($this->facesp[0]['escid'])?>/eid/<?php echo base64_encode($this->person['eid'])?>/oid/<?php echo base64_encode($this->person['oid'])?>/subid/<?php echo base64_encode($this->facesp[0]['subid'])?>/pid/<?php echo base64_encode($this->person[0]['pid'])?>" class="btn btn-success">
       Record Notas
       </a>
-    </div>
+    </div><br><br><br>
+<!--   <div class="pull-right">
+      <a id='click'  class="btn btn-primary"><span class="glyphicon glyphicon-earphone"></span>
+      Contactar
+      </a>
+  </div> -->
 </div>
 
 <div style="display: block; width: 100%; ">
@@ -48,3 +53,36 @@
     });
   });
 </script>
+
+
+<style type="text/css">
+  .modal-dialog
+  {
+    width: 700px;
+  }
+</style>
+<script type="text/javascript">
+    $("#click").click(function(){  
+      var $url ="/default/correo/index/uid/<?php echo base64_encode($this->person['uid'])?>/escid/<?php echo base64_encode($this->facesp[0]['escid'])?>/eid/<?php echo base64_encode($this->person['eid'])?>/oid/<?php echo base64_encode($this->person['oid'])?>/subid/<?php echo base64_encode($this->facesp[0]['subid'])?>/pid/<?php echo base64_encode($this->person[0]['pid'])?>";  
+        $("#modal").modal('show');
+        $(".modal-body").load($url);
+    });
+</script>
+
+<div class="modal fade" id='modal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style='background: #404040; color:white; font-size: 14px;'> Mensaje Nuevo 
+        <button style='color:white;' type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer" style='background: #333; color:#fff;'>
+         <a href="/admin/comunicados/nuevo" class="btn btn-primary" style="float:left;margin-left"><i class="icon-pencil icon-white"></i>Enviar</a> 
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Salir</button>
+
+      </div>
+    </div>
+  </div>
+</div>
