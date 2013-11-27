@@ -117,7 +117,7 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $perid = $this->_getParam('perid');
             $anho = $this->_getParam('anho');
             $this->view->facid=$facid;
-            $this->view->especialidad=$especialidad;
+            $this->view->especialidad=$espec;
             $this->view->escid=$escid;
             $this->view->perid=$perid;
             $this->view->anho=$anho;
@@ -244,6 +244,70 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                 $egre=$user->_getTotalGraduatedXFacultyXSchoolXAnho($where);
             }
             $this->view->egresados=$egre;
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function printAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $facid = base64_decode($this->_getParam('facid'));
+            $escid = base64_decode($this->_getParam('escid'));
+            $espec = base64_decode($this->_getParam('especialidad'));
+            $perid = base64_decode($this->_getParam('perid'));
+            $anho = base64_decode($this->_getParam('anho'));
+
+            $where = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid);
+            $esc = new Api_Model_DbTable_Speciality();
+            $data_esc = $esc->_getFilter($where, $attrib=null, $orders=null);
+            $this->view->school = $data_esc[0];
+
+            $fac = new Api_Model_DbTable_Faculty();
+            $data_fac = $fac->_getOne($where=array('eid' => $eid, 'oid' => $oid, 'facid' => $facid));
+            $this->view->faculty = $data_fac;
+            
+            $user= new Api_Model_DbTable_Users();
+            if($perid!='T'){
+                if ($facid!="TODO") {
+                    if ($escid=="TODOEC") {
+                        $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid, 'perid' => $perid);
+                    }else{
+                        if ($espec<>"") {
+                            if ($espec=="TODOEP") $left='S';
+                            else $escid = $espec;
+                        }
+                        $where = array(
+                            'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 
+                            'perid' => $perid, 'left' => $left);
+                    }
+                }else $where = array('eid' => $eid, 'oid' => $oid, 'perid' => $perid);
+                $egre = $user->_getGraduatedXFacultyXSchoolXPeriod($where);
+            }else{
+                $ano=substr($anho,2,4);
+                if ($facid!="TODO") {
+                    if ($escid=="TODOEC") {  
+                        $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid, 'anio' => $ano);
+                    }else{
+                        if ($espec<>"") {
+                            if ($espec=="TODOEP") $left='S';
+                            else $escid = $espec;
+                        }
+                        $where = array(
+                            'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 
+                            'anio' => $ano, 'left' => $left);
+                    }
+                }else $where = array('eid' => $eid, 'oid' => $oid, 'anio' => $ano);
+                $egre = $user->_getGraduatedXFacultyXSchoolXAnio($where);
+            }
+            $this->view->egresados=$egre;
+            $this->view->facid=$facid;
+            $this->view->especialidad=$espec;
+            $this->view->escid=$escid;
+            $this->view->perid=$perid;
+            $this->view->anho=$anho;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
