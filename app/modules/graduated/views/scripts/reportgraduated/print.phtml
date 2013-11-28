@@ -1,0 +1,69 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start();
+$header='
+    <table style="width: 100%;" border="1">
+        <tr>
+            <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+            <th style="text-align: center; font-size: 11px;">
+                FACULTAD DE  '.strtoupper($this->faculty['name']).'<br/>
+                ESCUELA DE  '.strtoupper($this->school['name']).'
+            </th>
+        </tr>
+        <tr>
+            <th style="border: 1px solid #000;"> REPORTE - EGRESADOS </th>
+        </tr>
+    </table>
+
+    <div><b>Periodo: </b>'.strtoupper($this->perid).'</div>'
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<table style="width: 100%">
+    <tr>
+        <th>#</th>
+        <th>Cod. Mat.</th>
+        <th>DNI</th>
+        <th>Apellidos y Nombres</th>
+        <?php 
+        if ($this->especialidad) { ?>
+            <th>Escuela/Especialidad</th>
+        <?php 
+        } ?>
+        <th>Currícula</th>
+    </tr>
+    <?php
+    $c=1;
+    $escu= new Api_Model_DbTable_Speciality();
+    foreach ($this->egresados as $egre) { 
+        $whereesc =array(
+                'eid' => $egre['eid'], 'oid' => $egre['oid'],
+                'subid' => $egre['subid'], 'escid' => $egre['escid']);
+        $dat = $escu->_getOne($whereesc);?>
+        <tr>
+            <td><center><?php echo $c?></center></td>
+            <td><center><?php echo $egre['uid']?></center></td>
+            <td><center><?php echo $egre['pid']?></center></td>
+            <td><?php echo $egre['fullname']?></td>
+            <?php 
+            if ($this->especialidad) { ?>
+                <td><?php echo $dat['name']?></td>
+            <?php 
+            } ?>
+            <td><center><?php echo $egre['curid']?></center></td>
+        </tr>
+    <?php
+    $c++;
+    } ?>
+</table>
+
+<?php
+  $html = ob_get_contents();
+  $mpdf=new mPDF('win-1252','A4','','',15,15,35,12,5,7);
+  $mpdf->SetHTMLHeader($header);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('Reporte -'.$this->escid.'.pdf','D');
+?>
