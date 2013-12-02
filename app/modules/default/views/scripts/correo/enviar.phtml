@@ -1,0 +1,22 @@
+
+<script>
+   $("#mail").hide();
+</script>
+<?php ob_start();
+$mail=$this->para;
+$nombres='adas';
+?>     
+   <b><center> Se ha enviado un correo electronico a la siguiente direccion: <?php echo $mail ?></b></center>
+   <div id="mail" style="border:1px solid black;font-family:helvetica,sans-serif;font-size:14px;  padding:20px 5px;">
+      <div style="margin-bottom:20px;">
+            <p><center>Bienvenido a la comunidad Universitaria “Universidad Nacional Daniel Alcides Carrion - UNDAC”</center></p>
+      </div>
+          
+  </div>    
+<?php
+$html = ob_get_contents();
+$dir = APPLICATION_LIBRARY . "/mail/Enviarmail.php";
+include ($dir);
+$r[] = array('correo'=>$mail,'apenom'=>$nombres,'escuela'=>"Bienvenido a la recuperacion del password");
+$f = new Enviarmail();
+$f->scorreo($r,$html,"Bienvenido");
