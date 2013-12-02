@@ -64,26 +64,79 @@ class Api_Model_DbTable_Jobs extends Zend_Db_Table_Abstract
     }
 
 
-    public function _getBuscarxSeleccion($nom,$salary,$salary2,$salary3)
+    public function _getBuscarxSeleccion($nom,$f1,$f2)
 	    {
 	    try
 	        {
-	        if ($salary=="" and  $salary2=="" and $salary3=="" ) 
+	        if ($f1=="" and $f2=="") 
 		        {	
-		        $sql=$this->_db->query(
-		        "
-		        select * from base_jobs
-		        where  company like '%$nom%' order by company
-		        ");
+			        $sql=$this->_db->query
+			        (
+			        "
+			        select * from base_jobs
+			        where  company like '%$nom%' order by company
+			        ");
 		    	}
 		    else 		    	
 		    	{	
-			    	$sql=$this->_db->query
-			    	(
-			        "select * from base_jobs
-			         where  company like '%$nom%' and (salary in ('$salary','$salary2','$salary3')) order by company
-			        ");	
+			    	
+		    		if($f1<>"") //and $f2<>"") 
+		    		{
+
+		    			if($f1==1000)
+		    			{
+			    			$sql=$this->_db->query
+					    	(
+					        "select * from base_jobs
+					         where  company like '%$nom%' and (CAST(salary as decimal) <=$f1)  order by company
+					        ");
+				    	}
+
+				    	if($f1==1001)
+		    			{
+			    			$sql=$this->_db->query
+					    	(
+					        "select * from base_jobs
+					         where  company like '%$nom%' and (CAST(salary as decimal) >=$f1 and CAST(salary as decimal) <=$f2) order by company
+					        ");
+				    	}
+
+				    	if($f1==3000)
+		    			{
+			    			$sql=$this->_db->query
+					    	(
+					        "select * from base_jobs
+					         where  company like '%$nom%' and (CAST(salary as decimal) >=$f1) order by company
+					        ");
+				    	}
+
+		    		}
+
+		    		// if($salary=="" and $f1<>"" and $f2<>"" and $salary3=="") 
+		    		// {
+		    		// 	$sql=$this->_db->query
+				    // 	(
+				    //     "select * from base_jobs
+				    //      where  company like '%$nom%' and (CAST(salary as decimal)>$f1 )  order by company
+				    //     "
+				    //     );				       
+
+		    		// }
+
+		    		// if($salary=="" and $salary2=="" and $salary3<>"") 
+		    		// {
+		    		// 	$sql=$this->_db->query
+				    // 	(
+				    //     "select * from base_jobs
+				    //      where  company like '%$nom%' and (CAST(salary as decimal) >$salary3)  order by company
+				    //     ");
+
+		    		// }
+   				    	
+
 		    	}
+
+
 	  
 
 	        return $sql->fetchAll();            
