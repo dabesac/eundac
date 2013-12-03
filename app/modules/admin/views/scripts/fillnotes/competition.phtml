@@ -14,7 +14,7 @@
 </script>
 <?php  if ($this->persetage_complte == false) { ?>
 	<script type="text/javascript" >
-		$ulr_persentage = "/docente/fillnotes/persentagecompetition<?php echo $this->urlpersentage?>";
+		$ulr_persentage = "/admin/fillnotes/persentagecompetition<?php echo $this->urlpersentage?>";
 		persetage_complte = false;
 	</script>	
 <?php }?>
@@ -34,7 +34,7 @@
 			$apersentage['porc3_u4'] = intval("<?php echo $this->persetage['porc3_u4']?>");
 		</script>
 <?php }?>
-<script type="text/javascript" src="/external/notes/notes-competition.js"></script>
+<script type="text/javascript" src="/external/notes-admin/notes-competition.js"></script>
 <script type="text/javascript" src="/external/notes/jquery.jstepper.js"></script>
 
 <!-- /.modal llenado de porsentaje -->
@@ -46,6 +46,10 @@
 
 </div><!-- /.modal -->
 
+<ul class="nav nav-tabs nav-justified">
+  <li class="active"><a href="/admin/fillnotes/competition<?php echo $this->url."/".base64_encode('partial')."/".base64_encode('1')?>"><h5>Primer Parcial</h5></a></li>
+  <li ><a href="/admin/fillnotes/competition<?php echo $this->url."/".base64_encode('partial')."/".base64_encode('2')?>"><h5>Segundo Parcial</h5></a></li>
+</ul>
 
 
 <!-- /.heade notas -->
@@ -64,11 +68,9 @@
 	</div>
 	
 	<div class="col-md-4">
-		<a href="/docente/notas" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
-		<?php if ($this->state_record == 'A' || $this->state_record == 'B' || $this->state_record == 'P') { ?>
+		<a href="/admin/correctnotes" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
 			<buttom  class='btn btn-info' id='save_notes_competition' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
 		<buttom  class='btn btn-danger' id='closure-record-competition' 	><span class='glyphicon  glyphicon-log-out'></span> Cerrar Acta</buttom>
-		<?php }?>
 	</div>
 </div><!-- end header-->
 

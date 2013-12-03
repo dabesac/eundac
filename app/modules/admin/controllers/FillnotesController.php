@@ -1,20 +1,17 @@
 <?php
 
-class Docente_FillnotesController extends Zend_Controller_Action {
+class Admin_FillnotesController extends Zend_Controller_Action {
 
-    public function init()
-    {
-        $sesion  = Zend_Auth::getInstance();
+    public function init(){
+       	$sesion  = Zend_Auth::getInstance();
         if(!$sesion->hasIdentity() ){
             $this->_helper->redirector('index',"index",'default');
         }
         $login = $sesion->getStorage()->read();
-        if (!$login->rol['module']=="docente"){
-            $this->_helper->redirector('index','index','default');
-        }
         $this->sesion = $login;
-    
-    }
+		$this->eid=$login->eid;
+		$this->oid=$login->oid;
+	}
     
     public function targetAction()
     {
@@ -25,6 +22,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                 $paramsdecode[base64_decode($key)] = base64_decode($value);
             }
         }
+
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
 
@@ -37,10 +35,8 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         $subid = trim($params['subid']);
         $partial = trim($params['partial']);
         $state_record = trim($params['state']);
-
         $this->view->partial=$partial;
         $this->view->turno=$turno;
-        $this->view->state_record = $state_record;
         $this->view->perid=$perid;
 
         $where = array(
@@ -49,32 +45,20 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                 'courseid' => $courseid,'turno' => $turno,
                 'perid' => $perid,'curid'=>$curid,
             );
-
         $base_period_course = new Api_Model_DbTable_PeriodsCourses();
         $state_record_c = $base_period_course ->_getOne($where);
+        $this->view->state_record = $state_record_c['state_record'];
 
-        $urlpersentage ="/".base64_encode('oid')."/".base64_encode($oid)."/".
+        $url ="/".base64_encode('oid')."/".base64_encode($oid)."/".
                         base64_encode('eid')."/".base64_encode($eid)."/".
                         base64_encode('escid')."/".base64_encode($escid)."/".
                         base64_encode('subid')."/".base64_encode($subid)."/".
                         base64_encode('courseid')."/".base64_encode($courseid)."/".
                         base64_encode('curid')."/".base64_encode($curid)."/".
                         base64_encode('turno')."/".base64_encode($turno)."/".
-                        base64_encode('perid')."/".base64_encode($perid)."/".
-                        base64_encode('partial')."/".base64_encode($partial);
+                        base64_encode('perid')."/".base64_encode($perid);
 
-        if ($state_record_c) {
-            if ($partial==1 && $state_record_c['state_record'] == 'A' && $state_record_c['state'] == 'P') {
-                $this->_redirect('/docente/register/registertarget'.$urlpersentage."/".base64_encode('action')."/".base64_encode('N'));
-            }
-            if ($partial == 2 && $state_record_c['state_record'] == 'C' && $state_record_c['state'] == 'C') {
-                $this->_redirect('/docente/register/registertarget'.$urlpersentage."/".base64_encode('action')."/".base64_encode('N'));
-            }
-        }
-
-        $base_syllabus = new Api_Model_DbTable_Syllabus();
-        $units = $base_syllabus->_getOne($where);
-        $this->view->closure_syllabus = $units['state'];
+        $this->view->url=$url;
 
         $base_courses = new Api_Model_DbTable_Course();
         $infocourse = $base_courses->_getOne($where);
@@ -730,24 +714,17 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         $base_period_course = new Api_Model_DbTable_PeriodsCourses();
         $state_record_c = $base_period_course ->_getOne($where);
 
-        $urlpersentage ="/".base64_encode('oid')."/".base64_encode($oid)."/".
+        $url ="/".base64_encode('oid')."/".base64_encode($oid)."/".
                         base64_encode('eid')."/".base64_encode($eid)."/".
                         base64_encode('escid')."/".base64_encode($escid)."/".
                         base64_encode('subid')."/".base64_encode($subid)."/".
                         base64_encode('courseid')."/".base64_encode($courseid)."/".
                         base64_encode('curid')."/".base64_encode($curid)."/".
                         base64_encode('turno')."/".base64_encode($turno)."/".
-                        base64_encode('perid')."/".base64_encode($perid)."/".
-                        base64_encode('partial')."/".base64_encode($partial);
+                        base64_encode('perid')."/".base64_encode($perid);
 
-        if ($state_record_c) {
-            if ($partial == 1 && $state_record_c['state_record'] == 'A' && $state_record_c['state'] == 'P') {
-                $this->_redirect('/docente/register/registerconpetency'.$urlpersentage."/".base64_encode('action')."/".base64_encode('N'));
-            }
-            if ($partial == 2 && $state_record_c['state_record'] == 'C' && $state_record_c['state'] == 'C') {
-                $this->_redirect('/docente/register/registerconpetency'.$urlpersentage."/".base64_encode('action')."/".base64_encode('N'));
-            }
-        }
+        $urlpersentage = $url."/".base64_encode('partial')."/".base64_encode($partial);
+        
 
         $base_syllabus = new Api_Model_DbTable_Syllabus();
         $units = $base_syllabus->_getOne($where);
@@ -815,6 +792,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         $this->view->persetage_complte = $persetage_complte;
         $this->view->persetage = $persetage;
         $this->view->urlpersentage = $urlpersentage;
+        $this->view->url=$url;
     }
 
     public function savecompettitionAction(){

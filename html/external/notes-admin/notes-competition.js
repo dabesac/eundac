@@ -150,7 +150,7 @@ $(document).ready(function() {
         for(var prop in $record){
             result += ''+ prop + '/' + $record[prop] + '/';
         }
-        var $url = '/docente/fillnotes/closurerecordcompetition/' + result;
+        var $url = '/admin/fillnotes/closurerecordcompetition/' + result;
 
         $.ajax({
         	url:$url,
@@ -426,7 +426,8 @@ function save_notes(){
 			$notes[$.base64.encode('nota4_i')] = $.base64.encode($notes[$.base64.encode('nota4_i')]);
 			$notes[$.base64.encode('nota9_i')] = $.base64.encode($notes[$.base64.encode('nota9_i')]);
 		}else{
-            if ($partial==2) {
+			
+				if ($partial==2) {
                     
                     if (
                         $notes[$.base64.encode('nota1_ii')] && 
@@ -501,6 +502,7 @@ function save_notes(){
 
                 }
 
+
 		}
 
 		$($tr[0].children).each(function(){
@@ -545,7 +547,7 @@ function save_notes(){
 
 		result = result.substring(0,result.length-1);
 		result = result + "/" + $.base64.encode('partial') + "/" + $.base64.encode($partial);
-		var $url = "/docente/fillnotes/savecompettition/" +result;
+		var $url = "/admin/fillnotes/savecompettition/" +result;
 		if (result_decode.toLowerCase().indexOf('nota') >= 0) {
 			$index_tmp1 = $index_tmp-1;
 			$.ajax({
@@ -637,45 +639,45 @@ function calculation_of_average($tr_tmp,$partial_t,$units_t){
 		}else{
 			
 				if ($partial_t==2) {
-					
-					if (
-						$notes_prom[$.base64.encode('nota1_ii')] && 
-						$notes_prom[$.base64.encode('nota2_ii')] && 
-						$notes_prom[$.base64.encode('nota3_ii')]
-					) {
-						$notes_prom[$.base64.encode('nota4_ii')] = 
-						Math.floor(
+                    
+                    if (
+                        $notes_prom[$.base64.encode('nota1_ii')] && 
+                        $notes_prom[$.base64.encode('nota2_ii')] && 
+                        $notes_prom[$.base64.encode('nota3_ii')]
+                    ) {
+                        $notes_prom[$.base64.encode('nota4_ii')] = 
+                        Math.floor(
                             ( intval($.base64.decode($notes_prom[$.base64.encode('nota1_ii')]))*intval($apersentage['porc1_u3'])/100 ) + 
                             ( intval($.base64.decode($notes_prom[$.base64.encode('nota2_ii')]))*intval($apersentage['porc2_u3'])/100 ) +
                             ( intval($.base64.decode($notes_prom[$.base64.encode('nota3_ii')]))*intval($apersentage['porc3_u3'])/100 )
                         );
-					}
-					else
-					{
-						$notes_prom[$.base64.encode('nota4_ii')] = '';
-					}
+                    }
+                    else
+                    {
+                        $notes_prom[$.base64.encode('nota4_ii')] = '';
+                    }
 
-					if (
-						$notes_prom[$.base64.encode('nota6_ii')] && 
-						$notes_prom[$.base64.encode('nota7_ii')] && 
-						$notes_prom[$.base64.encode('nota8_ii')]
-					) {
-						$notes_prom[$.base64.encode('nota9_ii')] = 
-						Math.floor(
+                    if (
+                        $notes_prom[$.base64.encode('nota6_ii')] && 
+                        $notes_prom[$.base64.encode('nota7_ii')] && 
+                        $notes_prom[$.base64.encode('nota8_ii')]
+                    ) {
+                        $notes_prom[$.base64.encode('nota9_ii')] = 
+                        Math.floor(
                             ( intval($.base64.decode($notes_prom[$.base64.encode('nota6_ii')]))*intval($apersentage['porc1_u4'])/100 ) + 
                             ( intval($.base64.decode($notes_prom[$.base64.encode('nota7_ii')]))*intval($apersentage['porc2_u4'])/100 ) +
                             ( intval($.base64.decode($notes_prom[$.base64.encode('nota8_ii')]))*intval($apersentage['porc3_u4'])/100 )
                         );
-					}
-					else
-					{
-						$notes_prom[$.base64.encode('nota9_ii')] = '';
-					}
+                    }
+                    else
+                    {
+                        $notes_prom[$.base64.encode('nota9_ii')] = '';
+                    }
 
-					$notes_prom[$.base64.encode('nota4_ii')] = $.base64.encode($notes_prom[$.base64.encode('nota4_ii')]);
-					$notes_prom[$.base64.encode('nota9_ii')] = $.base64.encode($notes_prom[$.base64.encode('nota9_ii')]);
+                    $notes_prom[$.base64.encode('nota4_ii')] = $.base64.encode($notes_prom[$.base64.encode('nota4_ii')]);
+                    $notes_prom[$.base64.encode('nota9_ii')] = $.base64.encode($notes_prom[$.base64.encode('nota9_ii')]);
 
-					if (
+                    if (
                         $units_t == 3
                     ) {
                         if(
@@ -709,7 +711,8 @@ function calculation_of_average($tr_tmp,$partial_t,$units_t){
                     }
                     }
 
-				}
+                }
+
 
 		}
 

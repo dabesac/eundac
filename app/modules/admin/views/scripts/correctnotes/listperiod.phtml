@@ -1,0 +1,6 @@
+<?php if ($this->periods){
+	foreach ($this->periods as $key => $period) { ?>
+	<option value="<?php echo $period['perid']?>"><?php echo $period['perid']." | ".$period['name']?></option>
+<?php }}else{?>
+	<option>Sin Registro</option>
+<?php 	}?>
