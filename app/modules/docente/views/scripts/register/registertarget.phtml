@@ -38,7 +38,6 @@ $back1 = "";
 						<th class='text-center success'	>Prom 1</th>
 						<?php if($this->partial == 2){ ?>
 						<th class='text-center'	>N1</th>
-						<th class='text-center'	>N1</th>
 						<th class='text-center'	>N2</th>
 						<th class='text-center'	>N3</th>
 						<th class='text-center'	>N4</th>
@@ -104,6 +103,7 @@ $back1 = "";
 						<td class='text-center <?php echo ($student['nota8_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota8_ii']?></td>
 						<td class='text-center <?php echo ($student['nota9_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota9_ii']?></td>
 						<td class='text-center <?php echo $back1?>'><?php echo $student['promedio2']?></td>
+						<td class='text-center <?php echo $back1?>'><?php echo $student['notafinal']?></td>
 					<?php }}?>
 
 					</tr>
