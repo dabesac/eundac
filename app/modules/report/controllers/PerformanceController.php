@@ -365,16 +365,15 @@ public function listcurriculaAction()
       
          $db_35superior = new Api_Model_DbTable_Curricula();
        
-          if ($superior=='3')
+          if ($where['superior']=='3')
           {
             $rep_superior= $db_35superior->_get3superiorXcurricula($where);
           }
          
-          if ($superior=='5')
+          if ($where['superior']=='5')
           {
             $rep_superior= $db_35superior->_get5superiorXcurricula($where);
           }
-         
          $this->view->rep_superior=$rep_superior;
     
       }

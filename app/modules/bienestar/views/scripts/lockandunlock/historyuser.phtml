@@ -1,0 +1,127 @@
+<?php
+if ($this->datauser) { 	?>
+	<br>
+<table class="table table-condensed table-striped table-bordered">
+	<tr>
+
+		<th><center>#</center></th>
+		<th colspan='3' style='font-size:15px'><center>BLOQUEO</center></th>
+		<th colspan='3' style='font-size:15px'><center>DESBLOQUEO</center></th>
+		<th><center>Estado</center></th>
+        <th><center>Operación</center></th>
+	</tr>	
+	<tr>
+		<th></th>
+        <th><center>Razón de Bloqueo</center></th>
+        <th><center># Doc.</center></th>
+        <th><center>Fecha</center></th>
+        <th><center>Razón de Desbloqueo</center></th>
+        <th><center># Doc.</center></th>
+        <th><center>Fecha</center></th>
+        <th></th>   
+        <th></th>
+	</tr>
+<?php
+	$c=0;
+		$pid=$this->data[$c]['pid'];
+		$uid=$this->data[$c]['uid'];
+		$name=$this->data[$c]['last_name0']." ".$this->data[$c]['last_name1'].", ".$this->data[$c]['first_name'];
+		$escid=$this->esc[$c]['name'];
+		$subid=$this->sub[$c]['name'];
+	foreach ($this->datauser as $listuser) {
+		$c++;
+		$dbuid=$listuser['dbuid'];
+		$razonlock=$listuser['reason_lock'];
+		$doclock=$listuser['type_doc_lock'];
+		$datelock=$listuser['date_lock'];
+		$razonunlock=$listuser['reason_unlock'];
+		$docunlock=$listuser['type_doc_unlock'];
+		$dateunlock=$listuser['date_unlock'];
+		$state=$listuser['state'];
+	?>
+	<tr>
+		<td><center><?php echo $c?></center></td>
+		<td><center><?php echo $razonlock?></center></td>
+		<td><?php echo $doclock?></td>
+		<td><center><?php echo $datelock?></center></td>
+		<td><center><?php echo $razonunlock?></center></td>
+		<td><?php echo $docunlock?></td>
+		<td><center><?php echo $dateunlock?></center></td>
+		<td><?php 
+		switch ($state) {
+			case 'A':
+				?>
+				<center><img src="/img/circulo-verde.png"></center>
+				<?php
+				break;
+			case 'B':
+				?>
+				<center><img src="/img/circulo-rojo.png"></center>
+				<?php
+				break;	
+			
+			default:
+				?>
+				<center><img src="/img/circulo-amarillo.png"></center>
+				<?php
+				break;
+		}
+		?>
+		</td>
+		<td>
+		<?php
+		if ($state=='B') {	?>
+			<center><a id='loading1' data-toggle="modal" href="#Modal" ><span class="glyphicon glyphicon-share-alt"><b style='font-size:15px'> Desbloquear</b></span></a></center>
+			<script type="text/javascript">  
+			  	$("#loading1").click(function(){
+			    
+			    url="/bienestar/lockandunlock/updated/dbuid/<?php echo $dbuid?>/pid/<?php echo $pid?>/uid/<?php echo $uid?>/escid/<?php echo $this->esc[0]['escid']?>/subid/<?php echo $this->esc[0]['subid']?>";    
+			    // alert(url);
+			    $("#list").load(url);    
+			    });
+			</script>
+		<?php	
+		}
+		?>	
+	</tr>
+<?php
+	}
+?>	
+</table>  
+<?php
+}
+else{
+?>	
+<h3><center><b> No tiene Historial </b></center></h3>
+<?php
+}
+?>
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <center><h3 class="modal-title" style='color:blue' ><b>DESBLOQUEO</b></h3></center>
+        <center style='font-size:15px'><b><?php echo $uid."<b style='color:white'>.....</b> ".$name?></b></center>
+        <center style='font-size:15px'><?php echo $subid." - ".$escid?></center>
+      </div>
+      <div class="modal-body">
+        <div id='list'></div>
+            
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" href='/bienestar/getuser'>Cerrar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">  
+
+  $ ('#Modal'). on('hidden.bs.modal',function()  { 
+    url="/bienestar/lockandunlock/getuser/uid/<?php echo $uid?>";
+    $("#cargadata").load(url);
+  });
+
+</script>

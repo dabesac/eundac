@@ -4,7 +4,7 @@ if ($this->data){
   <option value="">- Seleccione Escuelas -</option>
   <?php
     foreach ($this->data  as $speciality){
-    	if ($speciality['state']=='A') {
+    	if ($speciality['state']=='A' or $speciality['state']=='B') {
         ?>
         <option value="<?php echo $speciality['escid']?>"><?php echo $speciality['escid']." | ".$speciality['name']?></option>
         <?php

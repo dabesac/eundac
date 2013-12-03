@@ -1,10 +1,14 @@
 <?php
+if($this->t<>'U')
+{
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start();
 
 $sesion1  = Zend_Auth::getInstance();
 $sesion = $sesion1->getStorage()->read();
+
+}
 
 $header='
     <table style="width: 100%;" border="1">

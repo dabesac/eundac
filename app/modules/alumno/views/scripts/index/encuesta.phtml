@@ -1,0 +1,122 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="/css/bootstrap/bootstrap-responsive.min.css"> -->
+    <link href="/css/style.css" type="text/css" rel="stylesheet" />        
+    <script type="text/javascript" src="/external/jquery/jquery-1.9.1.js"></script>
+
+    <script src="/external/js/bootstrap.min.js"></script>      
+
+</head>
+<?php //print_r($this->cursos);
+$numcurso=count($this->cursos);
+
+?>
+
+<body>
+<div class="container" >
+<div id="contenedor-encuesta"  >
+    <div class="alert alert-info">
+        <center><p style="font-size: 18px;font-weight: bold"><?php echo $this->encuesta['title']?></p></center>
+        <center><p style="font-size: 13px"><?php echo "Objetivo: ".$this->encuesta['objective']?><b style="color: red">
+        LA ENCUESTA ES PERSONAL Y ANONIMA</b></p></center>
+        <div style="clear:both"></div>
+    </div>
+    
+        <form class="form-vertical" name="formEncuesta" action="/alumno/index/guardar/" method="post">
+            <table class="table table-hover table-bordered table-condensed span10" class="table table-striped">            
+                <thead>
+                    <tr>
+                        <th colspan="2" style="font-size:14px"><center>PREGUNTAS</center></th>
+                        <?php
+                        foreach ($this->cursos as $curso){
+                            print("<th style='font-size:14px'>".$curso['name']."</th>");
+                        }                        
+                        ?>
+                 
+            		</tr>
+                </thead>
+                <tbody>
+                <?php 
+                //print_r($this->preguntas);
+                $ff_=0;
+                foreach ($this->preguntas as $pregunta){
+                    $ff_++;
+                    ?>
+                    <tr>
+                        <td ><?php echo $ff_?></td>
+                        <td style="width:50%"><?php echo $pregunta['question'];?></td>               
+                        <?php                         
+                        $eid = $pregunta['eid'];
+                        $oid = $pregunta['oid'];
+                        $qid = $pregunta['qid'];
+
+                        $alternativas = new Api_Model_DbTable_PollAlternatives();
+                        
+                        foreach ($this->cursos as $curso){                        
+                       
+            			$where=array('eid'=>$eid,'oid'=>$oid,'qid'=>$qid);
+                        $regalternativas = $alternativas->_getAll($where);
+                        $f++;
+                        ?>
+            	
+                        <td style="width:40%">
+                            <div class="control-group">             
+                                <div class="controls" >
+                                    <?php 
+                                    $g=0;
+                                    foreach ($regalternativas as $alternativa){
+                                        $ff = ($g=='0')?"":"";
+                                    ?>
+                                        <label style="font-size:13px" class="radio"> <input <?php echo $ff; ?> type="radio" name="registro_<?php echo $f?>" value="<?php echo $pregunta['qid']."-".$alternativa['atlid'].";--;curid:".$curso['curid']."-courseid:".$curso['courseid']."-turno:".$curso['turno'];?>" ><?php echo $alternativa['alternative']?></label>
+                                    <?php 
+                                    $g++;
+                                    } 
+                                    ?>
+                                </div>
+                            </div>
+                        </td>
+                        <?php
+                        }
+                        ?>
+                    </tr>  
+                    <?php 
+                }
+                ?>
+                </tbody>    
+            </table>
+          	<div class="enviarencuesta span9">
+                <input type="submit" value="REGISTRAR ENCUESTA" class="btn btn-primary" id="enviarencuesta">
+                <a href="/index/salir" class="btn btn-danger">SALIR SISTEMA</a>
+            </div>
+
+        </form>
+    <div style="clear:both"></div>
+    
+</div>
+</div>
+</body>
+
+<script>
+        $("#enviarencuesta").click(function(e){
+      
+        var x=0;
+        var y=0;
+        //alert("<?php echo $f?>");
+
+        for(x=1;x<=<?php echo $f;?>;x++){
+            var $elegido =$("input[name=registro_"+x+"]:checked");
+            if (! $elegido.val())
+                 y=1;       
+        }
+        if (y==1){
+            alert("Debe de responder todas las respuestas.");
+            e.preventDefault();
+           
+        }
+        });
+    
+</script>
+</html>

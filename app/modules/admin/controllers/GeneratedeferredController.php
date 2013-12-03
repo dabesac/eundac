@@ -52,6 +52,8 @@ class Admin_GeneratedeferredController extends Zend_Controller_Action {
             $oid = $this->sesion->oid;
             $facid = $this->_getParam('facid');
             $perid = $this->_getParam('perid');
+            $this->view->eid = $eid;
+            $this->view->oid = $oid;
             $this->view->perid = $perid;
             $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid, 'state' => 'A');
             $esc = new Api_Model_DbTable_Speciality();

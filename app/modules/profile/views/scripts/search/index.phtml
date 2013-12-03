@@ -1,6 +1,10 @@
 <?php
-$rid=$this->data;
-$xrid=$rid[0]['rid'];
+ $rid=$this->rid;
+
+// $xrid=$rid[0]['rid'];
+// echo $xrid;
+
+ echo $rid;
 
 ?>
 
@@ -15,14 +19,14 @@ $xrid=$rid[0]['rid'];
                 <th >NOMBRE</th>
                 <th >ESCUELA</th>
                 <?php
-                if ($xrid=='AL')
-                {
+                 if ($rid=='AL' or $rid=='EG')
+                 {
                 ?>
                 <th >RECORD</th>               
                 <th >CURRICULA</th>
                 <th >HISTORIAL</th>
                 <?php
-                }
+                 }
                 ?>
                 <th >PERFIL</th>
         </tr>
@@ -31,12 +35,14 @@ $xrid=$rid[0]['rid'];
     <?php
     if ($this->data)
     {
+        // $rid=$this->data;
+        // $xrid=$rid[0]['rid'];
 
         // print_r($this->data);
        foreach ($this->data as $info)    
         {
-            
-            $data=null;
+            //print_r($this->data);
+            //$data=null;
             $facid=$this->facid;
             $facaulm = new Api_Model_DbTable_Speciality();
             $data['eid'] = $info['eid'];
@@ -50,12 +56,12 @@ $xrid=$rid[0]['rid'];
     ?>
             <tr>
                 <td><?php echo $info['pid'];?></td>
-                <td><?php echo $info['uid'];?></td>    
+                <td><?php echo $info['uid'];?></td>  
                 <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
                 <td><?php echo $info['escid']?></td>
 
                 <?php
-                if($info['rid']=='AL')
+                if($rid=='AL' or $rid=='EG')
                 {
                 ?>
                 <td>
@@ -89,7 +95,7 @@ $xrid=$rid[0]['rid'];
                 ?>
 
                 <?php
-                if($info['rid']=='DC')
+                if($rid=='DC')
                 {
                 ?>                
                 <td>

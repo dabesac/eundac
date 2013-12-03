@@ -163,7 +163,7 @@ class Api_Model_DbTable_StudentAssistance extends Zend_Db_Table_Abstract
         try{
             $sql = $this->_db->query("
 select perid, a.curid,a.coursoid,c.name,turno,a_sesion_1,a_sesion_2,a_sesion_3,a_sesion_4,a_sesion_5,a_sesion_6,a_sesion_7,a_sesion_8,a_sesion_9,a_sesion_10,a_sesion_11,a_sesion_12,a_sesion_13,a_sesion_14,a_sesion_15,a_sesion_16,a_sesion_17,
-a_sesion_18,a_sesion_19,a_sesion_20,a_sesion_21,a_sesion_22,a_sesion_23,a_sesion_24,a_sesion_25,a_sesion_26,a_sesion_27,a_sesion_28,a_sesion_29,a_sesion_30,a_sesion_31,a_sesion_32,a_sesion_33,a_sesion_34 from base_student_assistance  a 
+a_sesion_18,a_sesion_19,a_sesion_20,a_sesion_21,a_sesion_22,a_sesion_23,a_sesion_24,a_sesion_25,a_sesion_26,a_sesion_27,a_sesion_28,a_sesion_29,a_sesion_30,a_sesion_31,a_sesion_32,a_sesion_33,a_sesion_34,a.state from base_student_assistance  a 
 inner join base_courses c
 on a.eid=c.eid and  a.oid=c.oid  and a.escid=c.escid  and  a.curid=c.curid and  a.coursoid=c.courseid 
 where uid='".$where['uid']."' and  a.escid='".$where['escid']."' and pid='".$where['pid']."' and a.perid='".$where['perid']."'

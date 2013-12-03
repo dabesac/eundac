@@ -1,0 +1,157 @@
+<style rel="stylesheet" type="text/css">
+
+.control-topo {
+background: #e0e0e0;
+padding: 0px;
+margin: 0px;
+height:1000px;
+}
+
+
+#slider1 {
+background: #e0e0e0;
+background: rgb(77,77,77);
+box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.65);
+margin: auto;
+/*position: fixed;*/
+margin-left: 10px;
+width: 200px;
+z-index: 100;
+}
+
+
+#slider1 .titulo1 {
+display: block;
+color: #fff;
+background: #303238;
+height: 30px;
+padding: 5px;
+padding-left: 5px;
+text-transform: uppercase;
+border-bottom: 1px solid #BEC4D8;
+font-weight: bold;
+}
+
+#slider1 ul, #slider1 li {
+margin: 0px;
+padding: 0px;
+list-style: none outside none;
+}
+</style> 
+<?php $com=$this->companias;
+	//print_r($com);
+?>
+
+ 
+<div class="row" style="padding: 0px; margin: 0px" >
+	<div class="col-sm-2 control-topo" background="#FFFFFF">		
+	
+	    <hr>
+
+		<div id="slider1" class='control-topo'>
+			<ul>
+
+
+				<!--<li class="titulo1" class='control-topo'>
+					<span class="glyphicon glyphicon-home"></span>
+					<p class='ocultar'>ocultar Empresa/Compañia</p>			
+					<p class='mostrar'>mostrar Empresa/Compañia</p>			
+				
+				</li>
+ 				-->
+
+ 				<li >
+           			<center><a href="#" id="generarbusqueda" style="float:center" class="btn btn-primary">Buscar</a><center>            
+				</li>
+
+ 				<li>
+ 					<p class='ocultar'>Empresa/Compañia</p>	
+ 					<p class='mostrar'>Empresa/Compañia</p>	
+ 				</li>
+
+				<li class="titulo1" class='control-topo'>
+				 <form  id ="frmFiltroRep" action="/default/searchgraduated/listreport/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal"> 
+				 	<br>
+				 	<input type="checkbox" value="1000" name="mil" id="mil" />  Menor a 1000
+				 	<br>
+					<input type="checkbox" value="2000" name="mil2" id="mil2" />  2000
+				 	<br>					
+					<input type="checkbox" value="3000" name="mil3" id="mil3" />  3000
+				 	<br>
+
+				<?php 
+					$i=0;
+					foreach ($com as $company)
+					{
+					$i++;
+					?>
+					</br>
+
+			
+					<input type="checkbox" value="<?php echo $company['company']?>" name="compania[<?php echo $company['company']?>]" id="company" />  
+					<?php echo $company['company'];}
+
+
+					?>	
+			
+
+				</li>
+				</form>
+		</div>
+	   
+	</div>
+	<div class="col-sm-10" style="margin:0px; padding: 0px">
+		<div class="col-sm-12 header-top" > 
+			<h3 class="nav pull-left" >BUSQUEDA DE EGRESADOS</h3>
+				
+		</div>
+
+		
+		<div class="col-sm-12 header-center"> 
+			<div class="panel panel-default">		    	
+		    	<div  id="cargadatos_"></div> 
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col-sm-12 footer"> 
+
+<script>
+$("#generarbusqueda").click(function(){
+        $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
+        $("#frmFiltroRep").submit();
+        return false;
+});
+
+$("#frmFiltroRep").submit(function(){
+        $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(data) 
+            {                        
+            $('#cargadatos_').html(data);
+            }
+        }); 
+        return false;
+});
+
+$(".mostrar").hide();
+$(".ocultar").click(function (){
+$(".titulo1").hide();
+$(".mostrar").show();
+$(".ocultar").hide();
+
+});
+
+
+//$(".mostrar").hide();
+$(".mostrar").click(function (){
+$(".titulo1").show();
+$(".ocultar").show();
+$(".mostrar").hide();
+});
+
+
+
+</script>

@@ -1,0 +1,108 @@
+ <?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+$header='
+<table style="width: 100%;" border="1">
+    <tr>
+        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+        <th style="text-align: center; font-size: 11px;">
+        FACULTAD DE '.strtoupper($this->faculty['name']).'<br/>
+        ESCUELA DE  '.strtoupper($this->speciality['name']).'<br/>
+        </th>        
+    </tr>
+    <tr>
+        <th style="border: 1px solid #000;">REPORTE AVANCE ACADEMICO</th>
+    </tr>
+</table>
+<tr>
+        <td style="text-align: left">&nbsp;  <b>Periodo: </b>'.strtoupper($this->perid).' </td>
+    </tr></br>
+    <tr>
+        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+'    
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<?php
+if ($this->data_teacher) { ?>
+	<table style="width:100%; font-size: 9px;" border="1">
+		<tr>
+			<th>#</th>
+			<th>Docente</th>
+			<th>Asignaturas</th>
+			<th>Turno</th>
+			<th>Silabo</th>
+			<th>1° Parcial</th>
+			<th>2° Parcial</th>
+		</tr>
+		<?php 
+		$c=1;
+		foreach ($this->data_teacher as $teachers) { ?>
+			<tr>
+				<td rowspan="<?php echo $teachers['cantidad_courses']+2?>"><?php echo $c?></td>
+				<td rowspan="<?php echo $teachers['cantidad_courses']+2?>">
+					<?php echo $teachers['uid']." - ".$teachers['full_name']?>
+				</td>
+				<td colspan="5"></td>
+			</tr>
+			<?php
+				foreach ($teachers['courses'] as $courses) { 
+					?>
+					<tr>
+						<td>
+							<?php echo $courses['courseid']." - ".$courses['name']?>
+						</td>
+						<td>
+							<center><?php echo $courses['turno']?></center>
+						</td>
+						<td>
+							<center>
+								<?php
+								if ($courses['state_syllabus'] == 'C') echo "SI";
+								else echo "NO"; ?>
+							</center>
+						</td>
+						<td>
+							<center>
+								<?php 
+								if ($courses['state_course'] == "P" || $courses['state_course'] == "C" || $courses['state_course'] == "S") echo "SI";
+								else echo "NO"; ?>
+							</center>
+						</td>
+						<td>
+							<center>
+								<?php 
+								if ($courses['state_course']=="C" || $courses['state_course'] == "S") echo "SI";
+								else echo "NO"; ?>
+							</center>
+						</td>
+					</tr>
+
+					<?php
+				}?>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			<?php
+			$c++;
+		}?>
+	</table>
+<?php
+} ?>
+
+<?php
+  $html = ob_get_contents();
+  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
+  $mpdf->SetHTMLHeader($header);
+  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  $mpdf->SetFooter($this->footer);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('Escuela-'.$this->escid.'.pdf','D');
+?>

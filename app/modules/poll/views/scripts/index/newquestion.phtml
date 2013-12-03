@@ -1,0 +1,57 @@
+<form id="formQuestion" name="<?php echo $this->form->getName(); ?>" action="/poll/index/newquestion/" method="post" enctype="application/x-www-form-urlencoded">
+		<table class="table table-hover">
+			<tr>
+				<th>Pregunta: </th>
+				<td><?php echo $this->form->question?></td>
+			</tr>
+			<tr>
+				<th>Tipo: </th>
+				<td><?php echo $this->form->type?></td>
+			</tr>
+		</table>
+		<table class="table table-hover">
+			<tr>
+				<th colspan="2" style="font-size: 14px"><center>Registro de Alternativas </center></th>
+			</tr>
+			<tr>
+				<th>1:</th>
+				<td><?php echo $this->form->alternative1?></td>
+			</tr>
+			<tr>
+				<th>2:</th>
+				<td><?php echo $this->form->alternative2?></td>
+			</tr>
+			<tr>
+				<th>3:</th>
+				<td><?php echo $this->form->alternative3?></td>
+			</tr>
+			<tr>
+				<th>4: </th>
+				<td><?php echo $this->form->alternative4?></td>
+			</tr>
+			<tr>
+				<th>5: </th>
+				<td><?php echo $this->form->alternative5?></td>
+			</tr>
+		</table>
+		<input type="hidden" name="pollid" value="<?php echo $this->pollid?>">
+</form>	
+
+<script type="text/javascript">
+	var success = "<?php echo $this->success?>";
+	if (success == 1) {
+		window.location.reload();
+	};
+
+    $("#formQuestion").submit(function(){
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function(data) { 
+                    $("#load_question_create").html(data);
+                }
+            }); 
+            return false;
+    });
+</script>

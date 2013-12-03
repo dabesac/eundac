@@ -25,8 +25,24 @@
 		<div class="tab-pane" id="signin"></div>
 	</div>
 </div>
+
+<div class="modal fade" id="update_profile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top: 15%">
+      	<div class="modal-content">
+        	<div class="modal-body">
+          		<h5 class="modal-title"><b>MENSAJE:</b></h5><br>
+        		Ayudanos a mejorar nuestro Sistema, ingresa y/o actualiza tus datos personales para mantener una mejor comunicación y brindarles el mejor servicio. Gracias.<br>
+          		<a href="#" class="btn btn-success" data-dismiss="modal" style="float: right">
+          			<span class='glyphicon glyphicon-ok'></span> Aceptar
+          		</a><br><br>
+        	</div>
+      	</div>
+    </div>
+</div>
+
 <script>
 $(function () {
+	$("#update_profile").modal('show');
 	$("#info").load("/profile/public/studentinfo");
 	$("#signin").load("/profile/public/studentsigncurrent");
 	$('#profileTab a').click(function (e) {

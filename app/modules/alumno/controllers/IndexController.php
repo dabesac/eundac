@@ -10,17 +10,104 @@ class Alumno_IndexController extends Zend_Controller_Action {
     	}
     	$login = $sesion->getStorage()->read();
     	$this->sesion = $login;
+
     }
+    
     public function indexAction()
     {
+        try {
 
-    	try {
-            $pid=$this->sesion->pid;
-            $this->view->pid=$pid;
+            // if ($this->_validaren()=="false"){
+            //     $this->_redirect('/alumno/index/encuesta');
+            // }
+
+            // if ($this->_verifyprofile() == "1"){
+            //     $this->_redirect('/profile/public/student');
+            // }
+
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
 
+
+    }
+
+    public function _verifyprofile(){
+        try {
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $pid = $this->sesion->pid;
+            $uid = $this->sesion->uid;
+            $escid = $this->sesion->escid;
+            $subid = $this->sesion->subid;
+
+            $where_stadis = array(
+                'eid' => $eid, 'oid' => $oid, 'pid' => $pid, 'uid' => $uid, 'escid' => $escid, 'subid' => $subid);
+            $stadis= new Api_Model_DbTable_Statistics();
+            $data_stadis = $stadis->_getOne($where_stadis);
+
+            $where_rel = array('eid' => $eid, 'pid' => $pid);
+            $rel = new Api_Model_DbTable_Relationship();
+            $data_rel = $rel->_getFilter($where_rel, $attrib=null, $orders=null);
+
+            $acad = new Api_Model_DbTable_Academicrecord();
+            $data_acad = $acad->_getFilter($where_rel, $attrib=null, $orders=null);
+
+            $jobs = new Api_Model_DbTable_Jobs();
+            $data_jobs = $jobs->_getFilter($where_rel, $attrib=null, $orders=null);
+
+            $inter = new Api_Model_DbTable_Interes();
+            $data_inter = $inter->_getFilter($where_rel, $attrib=null, $orders=null);
+
+            if (!$data_acad || !$data_stadis || !$data_rel || !$data_inter || !$data_jobs) {
+                return "1";
+            }else{
+                return "0";
+            }
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function _validaren()
+    {
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $escid = $this->sesion->escid;
+        $uid = $this->sesion->uid;
+        $pid=$this->sesion->pid;
+        $perid=$this->sesion->period->perid;
+
+        $where = array('eid'=>$eid,'oid'=>$oid,);
+        $encuestas = new  Api_Model_DbTable_Polll();
+        $encuesta=$encuestas->_getEncuestaActiva($where);
+
+        if ($encuesta) 
+        {
+               $pollid=$encuesta['pollid'];  
+               $where1 = array('eid'=>$eid,'oid'=>$oid,'pollid'=>$pollid);
+               $dbpreguntas = new Api_Model_DbTable_PollQuestion();
+               $lista=$dbpreguntas->_getPreguntasXencuesta($where1);
+
+                if ($lista)
+                {
+                   $resp = new Api_Model_DbTable_Results();
+                   foreach ($lista as $lista_)
+                   {
+                      $qid=$lista_['qid'];
+                                     
+                      $where2 = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'qid'=>$qid);
+                      $paso=$resp->_getAlumnoPasoEncuestaT($where2);
+                      if($paso)
+                      {
+                        return "true";
+                      }
+
+                   }
+   
+               }
+        }
+        return "false";
     }
 
     public function graphicsperformanceAction()
@@ -35,7 +122,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $where['escid']=$this->sesion->escid;
             $where['subid']=$this->sesion->subid;
             $this->view->escid = $where['escid'];
-
             $this->view->uid = $where['uid'];
             $this->view->oid = $where['oid'];
             $this->view->eid = $where['eid'];
@@ -110,13 +196,13 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $wheres['escid']=$this->sesion->escid;
             $wheres['subid']=$this->sesion->subid;
             $wheres['perid']=$this->sesion->period->perid;
-
             $this->view->escid = $wheres['escid'];
             $this->view->uid = $wheres['uid'];
             $this->view->oid = $wheres['oid'];
             $this->view->eid = $wheres['eid'];
             $lcursos = new Api_Model_DbTable_StudentAssistance();
             $listacurso =$lcursos->_assistence($wheres);
+            // print_r($listacurso);
             $j=0;
             $a=1;
             
@@ -133,17 +219,13 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 $where[$j]['turno']=$cursomas["turno"];
                 $periods = new Api_Model_DbTable_PeriodsCourses();
                 $state =$periods->_getOne($where[$j]);
-                $var=$state['state'];
-                if($var=='A'){
-                    $a=1;
-                }
-                if($var=='P'){
-                     $a=18;
-                }      
+                // print_r($state);
+                $var=$cursomas['state'];
+                $this->view->var=$var;       
                 $x=0;
                 $x0=0;
                 $x1=0;
-                for ($i=$a; $i < 35 ; $i++) { 
+                for ($i=1; $i < 35 ; $i++) { 
                         $assis=$cursomas["a_sesion_".$i];
                     if ($assis=='A' ) {
                         $x++;
@@ -159,15 +241,19 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 $where[$j]['tarde']=$x0;
                 $where[$j]['falto']=$x1;
 
+                // if ($var=='A'){
+                //     $ret=6;
+                // }
+                //  if ($var=='P'){
+                //     $ret=12;
+                // }
+
                 if ($x1>=6) {
                 $where[$j]['coment']='R';
                     }
                 else{
                 $where[$j]['coment']='N';
-
                 }
-
-
                    $j++;
         } 
         $this->view->assistence=$where; 
@@ -179,4 +265,120 @@ class Alumno_IndexController extends Zend_Controller_Action {
         }                  
                 
     }
+
+
+    public function encuestaAction()
+    {
+        $this->_helper->layout()->disableLayout();        
+        $eid = $this->sesion->eid;  
+        $oid = $this->sesion->oid;      
+        $escid = $this->sesion->escid;       
+        $uid = $this->sesion->uid;      
+        $pid=$this->sesion->pid;
+        $perid= $this->sesion->period->perid;
+
+
+        $data['eid']=$eid;
+        $data['oid']=$oid;
+        $where = array('eid'=>$eid,'oid'=>$oid,);
+        $encuestas = new  Api_Model_DbTable_Polll();
+        $encuesta=$encuestas->_getEncuestaActiva($where);
+        //print_r($encuesta);
+        if($encuesta)
+        {
+            $this->view->encuesta=$encuesta;
+            $pollid=$encuesta['pollid'];
+            $where1 = array('eid'=>$eid,'oid'=>$oid,'pollid'=>$pollid);
+            $order = array('position  ASC');
+
+            //print_r($where1);
+            $dbpreguntas = new Api_Model_DbTable_PollQuestion();
+            $preguntas=$dbpreguntas->_getPreguntasXencuesta($where1,$order);
+            //print_r($preguntas);
+            $this->view->preguntas=$preguntas;
+
+            $cursos = new Api_Model_DbTable_Registrationxcourse();
+            $where2=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'uid'=>$uid,'pid'=>$pid,'perid'=>$perid);
+            //print_r($where2);
+            $curs=$cursos->_getFilter($where2);
+            //print_r($curs);
+
+            $c= new Api_Model_DbTable_Course();
+            $cur=array();
+            if($curs)
+            {
+
+                foreach ($curs as $curso) 
+                {
+                    $data['eid']=$eid;
+                    $data['oid']=$oid;
+                    $data['escid']=$escid;
+                    $data['subid']=$curso['subid'];
+                    $data['courseid']=$curso['courseid'];
+                    $data['curid']=$curso['curid'];
+                    
+                    //print_r($data);
+
+                    $c_=$c->_getOne($data);
+                    //print_r($c_);
+                    $c_['turno']=$curso['turno'];
+                    $cur[]=$c_;
+                    //print_r($cur);
+                }
+            }
+            //print_r($curso);
+            if(!$cur)
+            {
+                $this->_redirect('/alumno');
+            }
+            $this->view->cursos=$cur;
+        }       
+     
+    }
+
+
+    public function guardarAction()
+    {
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $escid = $this->sesion->escid;
+        $uid = $this->sesion->uid;
+        $pid=$this->sesion->pid;
+        $perid= $this->sesion->period->perid;        
+        $subid= $this->sesion->subid;
+        $respuestas = $_POST;
+
+        //print_r($respuestas);
+        foreach ($respuestas as $respuesta)
+        {
+            $respuesta_ = new Api_Model_DbTable_Results();
+            $tmp1 = split(";--;",$respuesta);
+            $tmp = split("-",$tmp1[0]);
+
+            $qid = $tmp[0];
+            $altid = $tmp[1];
+
+            $data['oid']="$oid" ;
+            $data['eid']=$eid ;
+            $data['qid']="$qid";
+            $data['altid']="$altid" ;
+            $data['subid']="$subid" ;
+            $data['pid']="$pid" ;           
+            $data['escid']="$escid" ;
+            $data['uid']="$uid" ;
+            $data['created']=date('Y-m-d') ;
+            $data['code']=  $tmp1[1];
+
+            //print_r($data);
+            if($respuesta_->_save($data))
+            {
+                
+            }
+
+        }
+        
+        $this->_redirect("/");
+
+    }
+
 }

@@ -1,0 +1,49 @@
+<form name="<?php echo $this->fm->getName(); ?>" id ="frmUnlock" action="/bienestar/lockandunlock/updated" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+    <table class="table table-condensed table-striped">
+	    <tr>
+	        <th><p style='float:right; font-size:12px'>Oficina </p></th>
+	        <td><div style='width: 200px'><?php echo $this->fm->office_unlock ?></td>
+	        <th><p style='float:right; font-size:12px'>Razón </p></th>
+	        <td><div style='width: 200px'><?php echo $this->fm->reason_unlock ?></td>
+	    </tr>
+	        <tr>
+	        <th><p style='float:right; font-size:12px'>Número de Documento</p></th>
+	        <td><div style='width: 200px'><?php echo $this->fm->type_doc_unlock ?></td>
+	        <th><p style='float:right; font-size:12px'>Fecha </p></th>
+	        <td><div style='width: 200px'><?php echo $this->fm->date_unlock ?></td>
+	    </tr>
+	    <tr>
+	        <th><p style='float:right; font-size:12px'>Detalles</p></th>
+	        <td colspan='4'><div style='width: 430px'><?php echo $this->fm->detail_unlock ?></td>
+	    </tr>          
+    </table>
+    	<input type="hidden" name='state' value='<?php echo 'A'?>'>
+    	<input type="hidden" name='dbuid' value='<?php echo $this->dbuid?>'>
+    	<input type="hidden" name='uid' value='<?php echo $this->uid?>'>
+    	<input type="hidden" name='pid' value='<?php echo $this->pid?>'>
+    	<input type="hidden" name='escid' value='<?php echo $this->escid?>'>
+    	<input type="hidden" name='subid' value='<?php echo $this->subid?>'>
+		<div><center><?php echo $this->fm->Guardar?></center></div>
+</form>
+
+<script type="text/javascript">  
+  $(function() {
+    $( "#date_unlock" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      dateFormat: 'yy-mm-dd'  
+      });
+    });
+
+  $("#frmUnlock").submit(function(){
+      $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(data) {                        
+            $('#list').html(data);                                 
+            }
+        }); 
+        return false;
+    });
+</script>
