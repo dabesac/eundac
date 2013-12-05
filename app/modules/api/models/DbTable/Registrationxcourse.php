@@ -338,16 +338,12 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	    	if ($where['eid']== '' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
 	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
 	    	$sql = $this->_db->query("
-                        select count(*) from base_registration_course AS MC
-                        inner join base_registration as m
-                        on mc.regid=m.regid and mc.pid =m.pid and mc.escid=m.escid and
-                        mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and
-                         mc.oid=m.oid and mc.subid=m.subid
-                        where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and
-                         MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."' and 
-                         MC.escid='".$where['escid']."' and MC.courseid='".$where['courseid']."' and 
-                         MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' 
-                        AND MC.state='M' 
+						select count(*) from base_registration_course 
+                        where eid='".$where['eid']."' and oid='".$where['oid']."' and
+                         perid='".$where['perid']."' and curid='".$where['curid']."' and 
+                         escid='".$where['escid']."' and courseid='".$where['courseid']."' and 
+                         turno='".$where['turno']."' and subid='".$where['subid']."' 
+                        AND state='M'
                     ");
 
             if ($sql) return $sql->fetchAll();

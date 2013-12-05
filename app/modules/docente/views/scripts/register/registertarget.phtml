@@ -62,9 +62,9 @@ $back1 = "";
 						}?>
 
 						<?php if ($this->partial == 2) {
-							if ($student['promedio2']== -3 ) { $retirados++;}
-							if ($student['promedio2'] > 10 && $student['promedio2'] <=20 ) { $aprobados++; $back1="active text-primary";}
-							if ($student['promedio2'] >= 0 && $student['promedio2'] <=10 ) { $jalados++; $back1="danger text-danger";}
+							if ($student['notafinal']== -3 ) { $retirados++;}
+							if ($student['notafinal'] > 10 && $student['notafinal'] <=20 ) { $aprobados++; $back1="active text-primary";}
+							if ($student['notafinal'] >= 0 && $student['notafinal'] <=10 ) { $jalados++; $back1="danger text-danger";}
 							}
 
 						?>
