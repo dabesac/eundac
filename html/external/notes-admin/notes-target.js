@@ -38,16 +38,24 @@ $(document).ready(function() {
                 $tr.attr("edition",true); 
                 
                 $index = $(this).attr("index");
-                $("#edit-note-"+ $index).attr("src","/img/full_page.png");;
-                $("#save_notes").attr("disabled",false);
-                objeto = {
-                    "width":'50px',
+                $("#edit-note-"+ $index).attr("src","/img/full_page.png");
+                if ($("#resolution-notes").val() !='') {
+                    $("#cont-resolution").removeClass('has-error');
+                    $("#save_notes").attr("disabled",false);
+                        objeto = {
+                        "width":'50px',
+                    }
+                    $(".td-edit-note").css(objeto);
+                    if($edition_notes == false){
+                        InitializeTimer();
+                        $edition_notes = true;
+                    }
                 }
-                $(".td-edit-note").css(objeto);
-                if($edition_notes == false){
-                    InitializeTimer();
-                    $edition_notes = true;
+                else
+                {
+                    $("#cont-resolution").addClass('has-error');
                 }
+                
                 
             }
 
@@ -61,7 +69,9 @@ $(document).ready(function() {
 
         $tr = $(tr);
         calculation_of_average($tr,$partial);
-        $("#save_notes").attr('disabled',false);
+        if ($("#resolution-notes").val() != '') {
+            $("#save_notes").attr('disabled',false);
+        }
         $tr.attr('edition',true);
         $("#edit-note-"+ $index).attr("src","/img/full_page.png");
         $("#num-edit-note-"+$index).remove();
@@ -627,8 +637,9 @@ function save_notes(){
     for (var prop in $notes){
         result += '' + prop + '/' + $notes[prop] + '/';
     }
+
     result = result.substring(0,result.length-1);
-    result = result + '/' + $.base64.encode('partial') + '/' + $.base64.encode($partial);
+    result = result + '/' + $.base64.encode('partial') + '/' + $.base64.encode($partial)+ '/' + $.base64.encode('document_auth') + '/' + $.base64.encode($("#resolution-notes").val());
     var $url = '/admin/fillnotes/savetargetnotes/' + result;
     /**************************************************************/
     if(result_decode.toLowerCase().indexOf("nota") >= 0){
@@ -637,14 +648,13 @@ function save_notes(){
             url:$url,
             async:false,
             success:function($data){
-                
                 if ($data.status==true) {
                     $("#edit-note-" + $indexTmp).removeClass();
                     $("#edit-note-" + $indexTmp).attr('src','/img/accept_page.png');
                     $tr.css('color','none');
                 }else{
                     $("#edit-note-" + $indexTmp).removeClass();
-                    $("#edit-note-" + $indexTmp).attr('src','/img/accept_page.png');
+                    $("#edit-note-" + $indexTmp).attr('src','/img/delete_page.png');
                     $tr.css("color", "#FC4141");
                 }
                 $tr.attr("edition",false); 

@@ -45,11 +45,11 @@
 <div class="modal fade" id="data-server" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
 </div><!-- /.modal -->
-
 <ul class="nav nav-tabs nav-justified">
   <li class="active"><a href="/admin/fillnotes/competition<?php echo $this->url."/".base64_encode('partial')."/".base64_encode('1')?>"><h5>Primer Parcial</h5></a></li>
   <li ><a href="/admin/fillnotes/competition<?php echo $this->url."/".base64_encode('partial')."/".base64_encode('2')?>"><h5>Segundo Parcial</h5></a></li>
 </ul>
+
 
 
 <!-- /.heade notas -->
@@ -70,10 +70,12 @@
 	<div class="col-md-4">
 		<a href="/admin/correctnotes" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
 			<buttom  class='btn btn-info' id='save_notes_competition' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
-		<buttom  class='btn btn-danger' id='closure-record-competition' 	><span class='glyphicon  glyphicon-log-out'></span> Cerrar Acta</buttom>
+		<!--<buttom  class='btn btn-danger' id='closure-record-competition' 	><span class='glyphicon  glyphicon-log-out'></span> Cerrar Acta</buttom>-->
 	</div>
 </div><!-- end header-->
-
+<div id='cont-resolution' class="col-lg-2">
+       <input id='resolution-notes' class="form-control input-lg " type="text" placeholder="Resolucion">
+</div>
 <!-- alerts-->
 <div class='row' id='cont-alerts'>
 
@@ -83,6 +85,7 @@
 <?php if($this->students){
 	if($this->state_syllabus == 'C'){ ?>
 <!-- data students-->
+	
 	<div class='row'>
 		<div class='col-md-12'>
 			<table id='tb-notes' class='table'>

@@ -104,6 +104,7 @@ class Admin_FillnotesController extends Zend_Controller_Action {
         $partial      = trim($params['partial']);
 
         /***********notes by partial*********/
+        $document_auth      = ((isset($params['document_auth']) == true && ( !empty($params['document_auth']) || (intval($params['document_auth'])== 0) ) )?trim($params['document_auth']):'');
         $nota1_i            = ((isset($params['nota1_i']) == true && ( !empty($params['nota1_i']) || (intval($params['nota1_i'])== 0) ) )?trim($params['nota1_i']):'');
         $nota2_i            = ((isset($params['nota2_i']) == true && ( !empty($params['nota2_i']) || (intval($params['nota2_i'])== 0) ) )?trim($params['nota2_i']):'');
         $nota3_i            = ((isset($params['nota3_i']) == true && ( !empty($params['nota3_i']) || (intval($params['nota3_i'])== 0) ) )?trim($params['nota3_i']):'');
@@ -153,7 +154,8 @@ class Admin_FillnotesController extends Zend_Controller_Action {
                 'nota8_ii'      => $nota8_ii,
                 'nota9_ii'      => $nota9_ii,
                 'promedio2' => $promedio2,
-                'notafinal'    => $notafinal
+                'notafinal'    => $notafinal,
+                'document_auth' =>$document_auth
             );
         }else{
             if ($partial == 2) {
@@ -171,11 +173,11 @@ class Admin_FillnotesController extends Zend_Controller_Action {
                     'nota8_ii'      => $nota8_ii,
                     'nota9_ii'      => $nota9_ii,
                     'promedio2' => $promedio2,
-                    'notafinal'    => $notafinal
+                    'notafinal'    => $notafinal,
+                    'document_auth' =>$document_auth
                     );
             }
         }
-
         $pk = array(
                 'eid' => $eid,
                 'oid' => $oid,
@@ -825,6 +827,7 @@ class Admin_FillnotesController extends Zend_Controller_Action {
 
 
         /***********************notes first and  second partial***********************/
+        $document_auth      = ((isset($params['document_auth']) == true && ( !empty($params['document_auth']) || (intval($params['document_auth'])== 0) ) )?trim($params['document_auth']):'');
         $nota1_i            = ((isset($params['nota1_i']) == true && (!empty($params['nota1_i']) || (intval($params['nota1_i'])== 0) ) )?trim($params['nota1_i']):'');
         $nota2_i            = ((isset($params['nota2_i']) == true && (!empty($params['nota2_i']) || (intval($params['nota2_i'])== 0) ) )?trim($params['nota2_i']):'');
         $nota3_i            = ((isset($params['nota3_i']) == true && (!empty($params['nota3_i']) || (intval($params['nota3_i'])== 0) ) )?trim($params['nota3_i']):'');
@@ -867,7 +870,8 @@ class Admin_FillnotesController extends Zend_Controller_Action {
                     'nota7_ii' => $nota7_ii,
                     'nota8_ii' => $nota8_ii,
                     'nota9_ii' => $nota9_ii,
-                    'notafinal' => $notafinal
+                    'notafinal' => $notafinal,
+                    'document_auth' =>$document_auth
                 );
         }
         if ($partial == 2) {
@@ -882,7 +886,8 @@ class Admin_FillnotesController extends Zend_Controller_Action {
                     'nota7_ii' => $nota7_ii,
                     'nota8_ii' => $nota8_ii,
                     'nota9_ii' => $nota9_ii,
-                    'notafinal' => $notafinal
+                    'notafinal' => $notafinal,
+                    'document_auth' =>$document_auth
             );
         }
 

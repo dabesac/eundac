@@ -69,7 +69,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->infocourse = $infocourse;
 
         $base_students = new Api_Model_DbTable_Registrationxcourse();
-        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods($where);
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
 
         $this->view->turno = $turno;
         $this->view->partial = $partial;
@@ -120,7 +120,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->infocourse = $infocourse;
 
         $base_students = new Api_Model_DbTable_Registrationxcourse();
-        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods($where);
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
 
         $base_faculty   =   new Api_Model_DbTable_Faculty();
         $base_speciality =  new Api_Model_DbTable_Speciality();
@@ -213,7 +213,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->infocourse = $infocourse;
 
         $base_students = new Api_Model_DbTable_Registrationxcourse();
-        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods($where);
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
 
 
         $this->view->turno = $turno;
@@ -284,7 +284,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->infocourse = $infocourse;
 
         $base_students = new Api_Model_DbTable_Registrationxcourse();
-        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods($where);
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
 
         $base_faculty   =   new Api_Model_DbTable_Faculty();
         $base_speciality =  new Api_Model_DbTable_Speciality();

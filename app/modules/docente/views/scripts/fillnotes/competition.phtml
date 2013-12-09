@@ -187,7 +187,7 @@
 								<img class='img-notes'src="" id='img-notes-<?php echo $key?>'>
 								<?php echo $key+1?></td>
 							<td><?php echo $register['uid']?></td>
-							<td><?php echo $register['last_name0']." ".$register['last_name1']." ".$register['first_name']?></td>
+							<td><?php echo $register['name_complet']?></td>
 							<?php if ($this->partial == 2) { ?>
 								<td><input class='data-text-note-disable form-control' style="color:<?php echo ($register['nota4_i'] != -3)?'#000':'#FC4141'; ?>;" disabled type="text" name="nota4_i"  value="<?php echo ($register['nota4_i'] != -3)?$register['nota4_i']:'RET'; ?>"/></td>
 								<td><input class='data-text-note-disable form-control' style="color:<?php echo ($register['nota4_i'] != -3)?'#000':'#FC4141'; ?>;" disabled type="text" name="nota9_i"  value="<?php echo ($register['nota4_i'] != -3)?$register['nota9_i']:'RET'; ?>"/></td>

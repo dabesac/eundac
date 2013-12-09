@@ -83,7 +83,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         }
 
         $base_students = new Api_Model_DbTable_Registrationxcourse();
-        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods($where);
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
         if ($data_notes_students) {
             $this->view->students = $data_notes_students;
         }
@@ -809,7 +809,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
      
 
         $base_students = new Api_Model_DbTable_Registrationxcourse();
-        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods($where);
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
         $this->view->students = $data_notes_students;
 
         $this->view->persetage_complte = $persetage_complte;

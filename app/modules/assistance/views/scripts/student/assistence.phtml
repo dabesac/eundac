@@ -15,21 +15,23 @@
 		<a href="/assistance/student/print<?php echo $this->url?>" class='btn btn-default'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
 	</div>
 </div>
-
+<div class="table-responsive">
 <table class='table' id='talassist'>
 		<thead>
 			<tr>
 				<th rowspan='2'>#</th>
 				<th rowspan='2'>Apellidos y Nombres</th>
-				<th colspan='2' class='text-center success'>Semana 1</th>
-				<th colspan='2'class='text-center warning'>Semana 2</th>
-				<th colspan='2'class='text-center success'>Semana 3</th>
-				<th colspan='2'class='text-center warning'>Semana 4</th>
-				<th colspan='2'class='text-center success'>Semana 5</th>
-				<th colspan='2'class='text-center warning'>Semana 6</th>
-				<th colspan='2'class='text-center success'>Semana 7</th>
-				<th colspan='2'class='text-center warning'>Semana 8</th>
-				<th colspan='1'class='text-center success'></th>
+				<?php if ($this->partial == 1) { ?>
+					<th colspan='2' class='text-center success'>Semana 1</th>
+					<th colspan='2'class='text-center warning'>Semana 2</th>
+					<th colspan='2'class='text-center success'>Semana 3</th>
+					<th colspan='2'class='text-center warning'>Semana 4</th>
+					<th colspan='2'class='text-center success'>Semana 5</th>
+					<th colspan='2'class='text-center warning'>Semana 6</th>
+					<th colspan='2'class='text-center success'>Semana 7</th>
+					<th colspan='2'class='text-center warning'>Semana 8</th>
+					<th colspan='1'class='text-center success'></th>
+				<?php }?>
 				<?php if ($this->partial == 2) {?>
 					<th colspan='2'class='text-center warning'>Semana 9</th>
 					<th colspan='2'class='text-center success'>Semana 10</th>
@@ -43,23 +45,25 @@
 				<?php }?>
 			</tr>
 			<tr id='tb-header-info'>
-				<th class='text-sesion-assist '>sesión 1</th>
-				<th class='text-sesion-assist '>sesión 2</th>
-				<th class='text-sesion-assist '>sesión 3</th>
-				<th class='text-sesion-assist '>sesión 4</th>
-				<th class='text-sesion-assist '>sesión 5</th>
-				<th class='text-sesion-assist '>sesión 6</th>
-				<th class='text-sesion-assist '>sesión 7</th>
-				<th class='text-sesion-assist '>sesión 8</th>
-				<th class='text-sesion-assist '>sesión 9</th>
-				<th class='text-sesion-assist '>sesión 10</th>
-				<th class='text-sesion-assist '>sesión 11</th>
-				<th class='text-sesion-assist '>sesión 12</th>
-				<th class='text-sesion-assist '>sesión 13</th>
-				<th class='text-sesion-assist '>sesión 14</th>
-				<th class='text-sesion-assist '> sesión 15</th>
-				<th class='text-sesion-assist '>sesión 16</th>
-				<th class='text-sesion-assist active'>Ex Parcial 1</th>
+				<?php if ($this->partial == 1) { ?>
+					<th class='text-sesion-assist '>sesión 1</th>
+					<th class='text-sesion-assist '>sesión 2</th>
+					<th class='text-sesion-assist '>sesión 3</th>
+					<th class='text-sesion-assist '>sesión 4</th>
+					<th class='text-sesion-assist '>sesión 5</th>
+					<th class='text-sesion-assist '>sesión 6</th>
+					<th class='text-sesion-assist '>sesión 7</th>
+					<th class='text-sesion-assist '>sesión 8</th>
+					<th class='text-sesion-assist '>sesión 9</th>
+					<th class='text-sesion-assist '>sesión 10</th>
+					<th class='text-sesion-assist '>sesión 11</th>
+					<th class='text-sesion-assist '>sesión 12</th>
+					<th class='text-sesion-assist '>sesión 13</th>
+					<th class='text-sesion-assist '>sesión 14</th>
+					<th class='text-sesion-assist '> sesión 15</th>
+					<th class='text-sesion-assist '>sesión 16</th>
+					<th class='text-sesion-assist active'>Ex Parcial 1</th>
+				<?php }?>
 				<?php if ($this->partial==2) { ?>
 					<th class='text-sesion-assist '>sesión 18</th>
 					<th class='text-sesion-assist '>sesión 19</th>
@@ -86,7 +90,8 @@
 				<tr>
 					<td><?php echo $key+1?> <span  class='text-success glyphicon'></span></td>
 					<td><?php echo $register['last_name0']." ".$register['last_name1']." ,".$register['first_name']?></td>
-					<td>
+					<?php if ($this->partial == 1) { ?>
+						<td>
 						<?php switch ($register['a_sesion_1']) {
 							case 'T':
 								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
@@ -358,6 +363,7 @@
 								break;
 						}?>
 					</td>
+					<?php }?>
 
 					<?php if ($this->state == 'C' && $this->partial==2) { ?>
 					
@@ -641,3 +647,4 @@
 			<?php }?>
 		</tbody>
 </table>
+</div>

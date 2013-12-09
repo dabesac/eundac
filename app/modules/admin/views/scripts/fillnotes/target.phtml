@@ -9,7 +9,7 @@
 </script>
 
 <script type="text/javascript" src="/external/notes/jquery.jstepper.js"></script>
-<script type="text/javascript" src="/external/notes/notes-target.js"></script>
+<script type="text/javascript" src="/external/notes-admin/notes-target.js"></script>
 
 <ul class="nav nav-tabs nav-justified">
   <li class="active"><a href="/admin/fillnotes/target<?php echo $this->url."/".base64_encode('partial')."/".base64_encode('1')?>"><h5>Primer Parcial</h5></a></li>
@@ -35,11 +35,12 @@
 	
 	<div class="col-md-4">
         <a href="/admin/correctnotes" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
-		<?php if ($this->state_record == 'A' || $this->state_record == 'B' || $this->state_record == 'P') { ?>
-			<buttom  class='btn btn-info' id='save_notes' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
+		<buttom  class='btn btn-info' id='save_notes' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
+        <?php if ($this->state_record == 'A' || $this->state_record == 'B' || $this->state_record == 'P') { ?>
 		
-		<buttom  class='btn btn-danger' id='closure-record' 	><span class='glyphicon  glyphicon-log-out'></span> Cerrar Acta</buttom>
-		<?php }?>
+        <?php }?>
+
+		<!--<buttom  class='btn btn-danger' id='closure-record' 	><span class='glyphicon  glyphicon-log-out'></span> Cerrar Acta</buttom>-->
 	</div>
 </div>
 <!-- end header-->
@@ -52,8 +53,13 @@
 <!-- end alerts-->
 
 <?php if ($this->students) { ?>
+<div class="row">
+    <div id='cont-resolution' class="col-lg-2">
+       <input id='resolution-notes' class="form-control input-lg " type="text" placeholder="Resolucion">
+    </div>
+</div>
 <div class='row'>
-	<div class='col-md-12'>
+    <div class='col-md-12'>
 		<table class='table tb-notes' id='table-notes'>
 			<thead>
 				<tr>

@@ -204,7 +204,13 @@ class Docente_NotasController extends Zend_Controller_Action{
 		        							intval($notes_conpetency['nota3_i'])+
 		        							intval($notes_conpetency['nota6_i'])+
 		        							intval($notes_conpetency['nota7_i'])+
-		        							intval($notes_conpetency['nota8_i']);
+		        							intval($notes_conpetency['nota8_i'])+
+		        							intval($notes_conpetency['nota1_ii'])+
+		        							intval($notes_conpetency['nota2_ii'])+
+		        							intval($notes_conpetency['nota3_ii'])+
+		        							intval($notes_conpetency['nota6_ii'])+
+		        							intval($notes_conpetency['nota7_ii'])+
+		        							intval($notes_conpetency['nota8_ii']);
 			        			$persetage = ($num_temp != 0)? (((100 *$num_temp)/$num)) : 0;
 			        		}
 
@@ -223,7 +229,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 			        			) {
 			        			$num_reg = $result_target['num_reg'];
 			        			for ($i=1; $i <= 9 ; $i++) { 
-			        				if ($result_target['nota'.$i.'_i']>0) {
+			        				if ($result_target['nota'.$i.'_i'] > 0) {
 			        					$num = $num +$num_reg;
 			        				}
 			        				$num_temp =  $num_temp + intval($result_target['nota'.$i.'_i']);
@@ -241,9 +247,14 @@ class Docente_NotasController extends Zend_Controller_Action{
 
 			        			) {
 			        			$num_reg = $result_target['num_reg'];
+
 			        			for ($i=1; $i <= 9 ; $i++) { 
-			        				if ($result_target['nota'.$i.'_i']>0 || $result_target['nota'.$i.'_ii']) {
+			        				if ($result_target['nota'.$i.'_i']>0 ) {
 			        					$num = $num +$num_reg;
+			        					if ($result_target['nota'.$i.'_ii'] > 0) {
+			        						
+				        					$num = $num +$num_reg;
+			        					}
 			        				}
 			        				$num_temp =  $num_temp + intval($result_target['nota'.$i.'_i'])+
 			        										intval($result_target['nota'.$i.'_ii']);
@@ -251,7 +262,6 @@ class Docente_NotasController extends Zend_Controller_Action{
 
 			        			$persetage = ($num_temp != 0)? (((100 *$num_temp)/$num)) : 0;
 			        		}
-
 			        	}
     			}
 

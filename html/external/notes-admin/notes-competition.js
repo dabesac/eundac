@@ -50,10 +50,15 @@ $(document).ready(function() {
                 
                 $index = $(this).attr("index");
                 $("#img-notes-"+ $index).attr("src","/img/full_page.png");
-                $("#save_notes_competition").attr("disabled",false);
-                if($edition_notes == false){
-                    InitializeTimer();
-                    $edition_notes = true;
+
+                if ($("#resolution-notes").val() != '') {
+                    $("#save_notes_competition").attr("disabled",false);
+                    if($edition_notes == false){
+                        InitializeTimer();
+                        $edition_notes = true;
+                    }
+                }else{
+                    $("#cont-resolution").addClass('has-error');
                 }
                 
             }
@@ -68,7 +73,10 @@ $(document).ready(function() {
         $index = $(this).attr("index");
         $tr = $(tr);
         calculation_of_average($tr,$partial,$units);
-        $("#save_notes_competition").attr('disabled',false);
+        if ($("#resolution-notes").val() != '') {
+            $("#save_notes_competition").attr('disabled',false);
+        };
+
         $tr.attr('edition',true);
         $("#img-notes-"+ $index).attr("src","/img/full_page.png");
 	});
@@ -546,7 +554,7 @@ function save_notes(){
 		}
 
 		result = result.substring(0,result.length-1);
-		result = result + "/" + $.base64.encode('partial') + "/" + $.base64.encode($partial);
+        result = result + '/' + $.base64.encode('partial') + '/' + $.base64.encode($partial)+ '/' + $.base64.encode('document_auth') + '/' + $.base64.encode($("#resolution-notes").val());
 		var $url = "/admin/fillnotes/savecompettition/" +result;
 		if (result_decode.toLowerCase().indexOf('nota') >= 0) {
 			$index_tmp1 = $index_tmp-1;

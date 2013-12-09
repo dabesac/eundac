@@ -213,6 +213,30 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 			print "Error: Read UserInfo ".$e->getMessage();
 		}
 	}
+	public function _getStudentXcoursesXescidXperiods_sql($where=null)
+	{
+		try{
+			if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where['curid']=="" ||
+				 $where['escid']=="" || $where['subid']=="" || $where['courseid']=='' || $where['turno']=='') return false;
+			$results = $this->_db->query("
+				select p.last_name0 || ' ' || p.last_name1 || ', '|| p.first_name as name_complet, rc.*from base_person p
+				inner join base_registration_course rc
+				on rc.pid=p.pid and p.eid=rc.eid
+				where 
+				rc.eid='".$where['eid']."' and rc.oid='".$where['oid']."' and
+				rc.subid='".$where['subid']."' and rc.escid='".$where['escid']."' and
+				rc.curid ='".$where['curid']."' and rc.perid='".$where['perid']."' and
+				rc.courseid='".$where['courseid']."' and rc.turno='".$where['turno']."' and
+				rc.state='M'
+				order by name_complet
+			");			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;
+		}catch (Exception $e){
+			print "Error: Read UserInfo ".$e->getMessage();
+		}
+	}
 
 	   /*Devuelve el record segun la funcion Record de Notas */
     public function _getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid){
