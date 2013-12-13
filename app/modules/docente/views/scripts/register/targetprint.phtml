@@ -187,7 +187,7 @@ address {
 
 <?php 
 $html = ob_get_contents();
-$mpdf=new mPDF('win-1252','A4','','',15,15,42);
+$mpdf=new mPDF('win-1252','A4','','',10,10,42);
 $mpdf->SetHTMLHeader($header);
 $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
 $mpdf->SetFooter($this->footer);

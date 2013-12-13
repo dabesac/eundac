@@ -166,7 +166,9 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $perid        = trim($params['perid']);
         $partial      = trim($params['partial']); 
         $action      = trim($params['action']);
+        $units      = trim($params['units']);
 
+        $this->view->units=$units;
         $where = null;
         $url = null;
         $where = array(
@@ -205,6 +207,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
                         base64_encode('curid')."/".base64_encode($curid)."/".
                         base64_encode('turno')."/".base64_encode($turno)."/".
                         base64_encode('perid')."/".base64_encode($perid)."/".
+                        base64_encode('units')."/".base64_encode($units)."/".
                         base64_encode('action')."/".base64_encode('I')."/".
                         base64_encode('partial')."/".base64_encode($partial);
 
@@ -248,7 +251,8 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $perid        = trim($params['perid']);
         $partial      = trim($params['partial']); 
         $action      = trim($params['action']);
-
+        $units      = trim($params['units']);
+        $this->view->units=$units;
         $where = null;
         $url = null;
         $where = array(

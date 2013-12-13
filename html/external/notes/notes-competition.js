@@ -43,6 +43,7 @@ $(document).ready(function() {
                 e.preventDefault();
             }else{
                
+                $(this).removeClass('notes-error-input');
                 var td = $(this).parent();
                 var tr  = td.parent();
                 $tr = $(tr);
@@ -146,6 +147,7 @@ $(document).ready(function() {
         $record[$.base64.encode('oid')] = $.base64.encode($.trim($("#oid").val()));         
         $record[$.base64.encode('subid')] = $.base64.encode($.trim($("#subid").val()));         
         $record[$.base64.encode('partial')] = $.base64.encode($.trim($partial));         
+        $record[$.base64.encode('units')] = $.base64.encode($.trim($units));         
 
         for(var prop in $record){
             result += ''+ prop + '/' + $record[prop] + '/';
@@ -155,7 +157,6 @@ $(document).ready(function() {
         $.ajax({
         	url:$url,
         	success:function($data){
-
         		if ($data.status == true) {
                     window.location.href = window.location.href; 
         		}else{

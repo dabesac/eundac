@@ -730,6 +730,13 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         $base_period_course = new Api_Model_DbTable_PeriodsCourses();
         $state_record_c = $base_period_course ->_getOne($where);
 
+
+
+        $base_syllabus = new Api_Model_DbTable_Syllabus();
+        $units = $base_syllabus->_getOne($where);
+        $this->view->units=$units['units'];
+        $this->view->state_syllabus = $units['state'];
+
         $urlpersentage ="/".base64_encode('oid')."/".base64_encode($oid)."/".
                         base64_encode('eid')."/".base64_encode($eid)."/".
                         base64_encode('escid')."/".base64_encode($escid)."/".
@@ -738,6 +745,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                         base64_encode('curid')."/".base64_encode($curid)."/".
                         base64_encode('turno')."/".base64_encode($turno)."/".
                         base64_encode('perid')."/".base64_encode($perid)."/".
+                        base64_encode('units')."/".base64_encode($units['units'])."/".
                         base64_encode('partial')."/".base64_encode($partial);
 
         if ($state_record_c) {
@@ -748,11 +756,6 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                 $this->_redirect('/docente/register/registerconpetency'.$urlpersentage."/".base64_encode('action')."/".base64_encode('N'));
             }
         }
-
-        $base_syllabus = new Api_Model_DbTable_Syllabus();
-        $units = $base_syllabus->_getOne($where);
-        $this->view->units=$units['units'];
-        $this->view->state_syllabus = $units['state'];
 
         $base_persentage = new Api_Model_DbTable_CourseCompetency();
         $result1 = $base_persentage->_getFilter($where,$attrib);
@@ -992,6 +995,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         $oid            = trim($params['oid']);
         $subid        = trim($params['subid']);                    
         $partial      = trim($params['partial']);
+        $units      = trim($params['units']);
 
         $where = null;
         $result_conpetency = null;
@@ -1055,9 +1059,9 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                     $validate = true;
                     
                 }
-        }elseif ($partial==2) {
+        }elseif ($partial==2 && intval($units) != 3 ) {
             if(
-                    (empty($notes_target['num_reg']))
+                    (empty($notes_conpetency['num_reg'])) 
                 ){
                     $validate = false;
                 }elseif(
@@ -1073,12 +1077,12 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                 }else{
                     
                     $data2 = array(
-                           'state' => 'C','state_record'=>'C',
+                            'state' => 'C','state_record'=>'C',
                             'closure_date' => date('Y-m-d'),
                             'updated' => date('Y-m-d H:m:s'),
                             'modified' => $this->sesion->uid
-                            );
-
+                    ) ;
+                    
                     $pk = array(
                         'curid' => $curid,
                         'escid' => $escid,
@@ -1089,12 +1093,48 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                         'oid' => $oid,
                         'subid' => $subid,
                         );
+
+                    
+                    $validate = true;
+                    
+                }
+        }elseif ($partial==2 && intval($units) == 3) {
+            if(
+                    (empty($notes_conpetency['num_reg'])) 
+                ){
+                    $validate = false;
+                }elseif(
+                    ( $notes_conpetency['num_reg'] > $notes_conpetency['nota1_ii'] ) ||  
+                    ( $notes_conpetency['num_reg'] > $notes_conpetency['nota2_ii'] ) || 
+                    ( $notes_conpetency['num_reg'] > $notes_conpetency['nota3_ii'] ) ||
+                    (count($notes_conpetency) == 0)
+                ){
+                    $validate = false;
+                }else{
+                    
+                    $data2 = array(
+                            'state' => 'C','state_record'=>'C',
+                            'closure_date' => date('Y-m-d'),
+                            'updated' => date('Y-m-d H:m:s'),
+                            'modified' => $this->sesion->uid
+                    ) ;
+                    
+                    $pk = array(
+                        'curid' => $curid,
+                        'escid' => $escid,
+                        'courseid' => $courseid,
+                        'perid' => $perid,
+                        'turno' => $turno,
+                        'eid' => $eid,
+                        'oid' => $oid,
+                        'subid' => $subid,
+                        );
+
                     
                     $validate = true;
                     
                 }
         }
-
 
         if ($validate == true && $validate_assit == true) {
              $base_period_course = new Api_Model_DbTable_PeriodsCourses();
@@ -1118,7 +1158,6 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                 'closure' =>$validate_assit
             );
         }
-
         $this->_helper->layout->disableLayout();
         $this->_response->setHeader('Content-Type', 'application/json');
         $this->view->data = $json; 
