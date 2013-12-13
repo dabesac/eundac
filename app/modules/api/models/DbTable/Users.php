@@ -343,7 +343,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
                 on ac.uid=u.uid and ac.escid=u.escid and ac.subid=u.subid and ac.pid=u.pid
                 where u.eid='$eid' and u.oid='$oid' and u.rid='EG' $facid $escid and (select max(perid) from base_registration_course
                 where uid=u.uid and escid=u.escid and subid=u.subid and curid=ac.curid and (right(perid,1)='A' or right(perid,1)='B'))='$perid'
-                order by pe.last_name0,u.escid");
+                order by u.escid,pe.last_name0");
             $row=$sql->fetchAll();
            return $row;
         } catch (Exception $e) {
@@ -373,7 +373,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
                 on ac.uid=u.uid and ac.escid=u.escid and ac.subid=u.subid and ac.pid=u.pid
                 where u.eid='$eid' and u.oid='$oid' and u.rid='EG' $facid $escid and (select max(left(perid,2)) from base_registration_course
                 where uid=u.uid and escid=u.escid and subid=u.subid and curid=ac.curid and (right(perid,1)='A' or right(perid,1)='B'))='$anio'
-                order by pe.last_name0,u.escid");
+                order by u.escid,pe.last_name0");
             $row=$sql->fetchAll();
            return $row;
         } catch (Exception $e) {

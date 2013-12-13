@@ -50,4 +50,46 @@ class Api_Model_DbTable_Jobs extends Zend_Db_Table_Abstract
 			print "Error: Delete Interes ".$e->getMessage();
 		}
 	}
+
+	public function _getCompanyXDistinct($eid="",$oid=""){
+        
+           try{
+            if ($eid=="" || $oid=="" ) return false;
+            $sql = $this->_db->query("select distinct company from base_jobs");
+            if ($sql) return $sql->fetchAll();
+            return false;           
+        }catch (Exception $ex){
+            print "Error: Leer información de docentes segun dni activos".$ex->getMessage();
+        }                              
+    }
+
+
+    public function _getBuscarxSeleccion($nom,$salary,$salary2,$salary3)
+	    {
+	    try
+	        {
+	        if ($salary=="" and  $salary2=="" and $salary3=="" ) 
+		        {	
+		        $sql=$this->_db->query(
+		        "
+		        select * from base_jobs
+		        where  company like '%$nom%' order by company
+		        ");
+		    	}
+		    else 		    	
+		    	{	
+			    	$sql=$this->_db->query
+			    	(
+			        "select * from base_jobs
+			         where  company like '%$nom%' and (salary in ('$salary','$salary2','$salary3')) order by company
+			        ");	
+		    	}
+	  
+
+	        return $sql->fetchAll();            
+	        }
+	    catch (Exception $ex){
+	            print "Error: Guardar entidad".$ex->getMessage();
+	        }
+    }
 }

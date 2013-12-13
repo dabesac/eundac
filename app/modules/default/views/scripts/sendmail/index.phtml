@@ -36,7 +36,7 @@
 
 			 <div class="col-lg-6">
 			      <span  class="input-group-addon">
-			        <input style='float: left' type="radio" name="group2" value="1"> <font style='float: left'>  &nbsp; &nbsp;Alumno</font><br>
+			        <input style='float: left' type="radio" name="group2" value="2"> <font style='float: left'>  &nbsp; &nbsp;Alumno</font><br>
 			      </span>
 			 </div>
 		</td>
@@ -56,63 +56,44 @@ $("#facid").change(function(){
 	$("#escid").load("/default/sendmail/schools/facid/"+facid);
 });
 
-<script type="text/javascript">
-$(document).ready(function()
-{
-        $("input[name=group2]").click(function () {   
-        var tipo=$('input:radio[name=group2]:checked').val(); 
-        var perid = $("#periodo_c").val();
+// $(document).ready(function()
+// {
+//         $("input[name=group2]").click(function () {   
+//         var tipo=$('input:radio[name=group2]:checked').val(); 
+//         alert(tipo);
+//         var perid = $("#periodo_c").val();
+//         var facid = $("#facid").val();
+//         var tescid = $("#escid").val(); 
+//         var espec = $("#especialidad").val();
+//         var xx=tescid.split(";--;");
+//         var escid=xx[0];
+//         var subid=xx[1];
+
+//         if (tipo=="3" || tipo=="6")  {  
+//         var $url = '/report/consolidated/registerxsemester/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
+//         } 
+   
+//          });
+// });
+			
+
+
+
+$("#generar").click(function(){
+
         var facid = $("#facid").val();
+        alert(facid);
         var tescid = $("#escid").val(); 
         var espec = $("#especialidad").val();
         var xx=tescid.split(";--;");
         var escid=xx[0];
         var subid=xx[1];
-        if (tipo=="1" || tipo=="2" )  {  
-        var $url = '/report/consolidated/registerxcourse/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
 
-        } 
-        if (tipo=="3" || tipo=="6")  {  
-        var $url = '/report/consolidated/registerxsemester/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
-        } 
-        if (tipo=="4")  {  
-        var $url = '/report/consolidated/countregisterxcourse/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
-        }
-        if (tipo=="5")  {  
-        var $url = '/report/consolidated/registerxspeciality/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
-        }
-         if (tipo=="7")  {  
-        // var $url = '/report/consolidated/totalturnosxspeciality/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
-        }
-        // alert($url);
-        $("#modal").modal('show');
-        $(".modal-body").load($url);
-         });
+        
+
+
+   
 });
-</script>
-
-
-
-$("#generar").click(function(){
-	var facid = $("#facid").val();
-	var escid = $("#escid").val();
-	var espec = $("#especialidad").val();
-	var anho = $("#anho").val();
-	var periodo = $("#periodo_c").val();
-	var xx = periodo.split(";--;");
-    var perid = xx[0];
-    var estado = xx[1];
-	if (facid=='' || escid=='' || perid=='') {
-		alert("Seleccione la Facultad, Escuela y el Periodo Académico.");
-		return false;
-	};
-	var totales = $("#totales").val();
-	if (totales=="N") {
-		var url="/graduated/reportgraduated/listgraduateds/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
-	}else{
-		var url="/graduated/reportgraduated/totalgraduateds/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
-	}
-	$('#cargadatos').html("<img src='/img/spinner.gif'>Cargando...");
-	$("#cargadatos").load(url);
-});
+	// $('#cargadatos').html("<img src='/img/spinner.gif'>Cargando...");
+	// $("#cargadatos").load(url);
 </script>
