@@ -1,0 +1,193 @@
+<style type="text/css">
+
+.form-control {
+	width: 45px;
+}
+</style>
+<script >
+ var $partial = <?php echo $this->partial?>;
+</script>
+
+<script type="text/javascript" src="/external/notes/jquery.jstepper.js"></script>
+<script type="text/javascript" src="/external/notes-admin/notes-target.js"></script>
+
+<ul class="nav nav-tabs nav-justified">
+  <li class="active"><a href="/admin/fillnotes/target<?php echo $this->url."/".base64_encode('partial')."/".base64_encode('1')?>"><h5>Primer Parcial</h5></a></li>
+  <li ><a href="/admin/fillnotes/target<?php echo $this->url."/".base64_encode('partial')."/".base64_encode('2')?>"><h5>Segundo Parcial</h5></a></li>
+</ul>
+
+
+<?php $infocourse=$this->infocourse;?>
+<!-- header notes-->
+<div class='row' id='header-info'>
+	<div class='col-xs-8 header-registration-course'>
+		<h4 class='text-header-registration'> <span class='glyphicon glyphicon-list' style='color:#1abc9c;'></span> 
+			<?php if($this->partial==1){
+				echo "Primer Parcial ";
+			}?>
+			<?php if($this->partial==2){
+				echo "Segundo Parcial";
+			}?>
+
+			<?php echo $infocourse['name']?> Turno <?php echo $this->turno?></h4>
+		
+	</div>
+	
+	<div class="col-md-4">
+        <a href="/admin/correctnotes" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
+		<buttom  class='btn btn-info' id='save_notes' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
+        <?php if ($this->state_record == 'A' || $this->state_record == 'B' || $this->state_record == 'P') { ?>
+		
+        <?php }?>
+
+		<!--<buttom  class='btn btn-danger' id='closure-record' 	><span class='glyphicon  glyphicon-log-out'></span> Cerrar Acta</buttom>-->
+	</div>
+</div>
+<!-- end header-->
+
+
+<!-- alerts-->
+<div class='row' id='cont-alerts'>
+
+</div>
+<!-- end alerts-->
+
+<?php if ($this->students) { ?>
+<div class="row">
+    <div id='cont-resolution' class="col-lg-2">
+       <input id='resolution-notes' class="form-control input-lg " type="text" placeholder="Resolucion">
+    </div>
+</div>
+<div class='row'>
+    <div class='col-md-12'>
+		<table class='table tb-notes' id='table-notes'>
+			<thead>
+				<tr>
+					<th>N°</th>
+	                <th>Cod Matricula</th>
+	                <th>Apellidos y Nombres</th>
+	                <?php if($this->partial == 2){?>
+	                <th>Promedio 1</th>
+	                <?php } ?>
+	                <?php if($this->partial != 0){ ?>
+	                <th>Nota 1</th>
+	                <th>Nota 2</th>
+	                <th>Nota 3</th>
+	                <th>Nota 4</th>
+	                <th>Nota 5</th>
+	                <th>Nota 6</th>
+	                <th>Nota 7</th>
+	                <th>Nota 8</th>
+	                <th>Nota 9</th>
+	                <?php if($this->partial == 1){?>
+	                <th class="promedio">Promedio 1</th>
+	                <?php }else{ ?>
+	                <th class="promedio">Promedio 2</th>
+	                <th class="promedio">Nota Final</th>
+	                <?php } ?>
+	                <?php } ?>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($this->students as $key => $register) { ?>
+				<tr
+					curid="<?php echo $register['curid'];?>" 
+                    escid="<?php echo $register['escid'];?>" 
+                    courseid="<?php echo $register['courseid'];?>" 
+                    perid="<?php echo $register['perid'];?>" 
+                    turno="<?php echo $register['turno'];?>" 
+                    eid="<?php echo $register['eid'];?>"
+                    oid="<?php echo $register['oid'];?>" 
+                    subid="<?php echo $register['subid'];?>" 
+                    regid="<?php echo $register['regid'];?>" 
+                    uid="<?php echo $register['uid'];?>"
+                    pid="<?php echo $register['pid'];?>"
+                    edition="false"
+                    style="color:<?php echo ($register['promedio1'] != -3)?'#000':'#FC4141'; ?>;"
+				>
+				<td class='td-edit-note'>
+                    <img src="" id="edit-note-<?php echo $key?>">
+                    <h6 class='pull-left ' id='num-edit-note-<?php echo $key?>'><?php echo $key + 1 ?>
+                </td>
+                <td><h6><?php echo $register['uid']?></h6></td>
+				<td><h6><?php echo $register['last_name0']." ".$register['last_name1'].", ".$register['first_name']?></h6></td>
+				<?php if($this->partial == 2){ ?>
+                    <td>
+                        <input class='form-control data-notes-input uneditable-input' style="color:<?php echo ($register['promedio1'] != -3)?'#000':'#FC4141'; ?>;" disabled type="text" name="promedio1"  value="<?php echo ($register['promedio1'] != -3)?$register['promedio1']:'RET'; ?>"/>
+                    </td>
+                    <?php } ?>
+                 <?php if ($this->partial == 1) { ?>
+                 	<td>
+                 		<input  maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota1_i"  value="<?php echo  $register['nota1_i'] ;?>"/>
+                 	</td>
+                 	<td>
+                 		<input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota2_i"  value="<?php echo  $register['nota2_i'] ;?>"/>
+                 	</td>
+                 	<td>
+                 		<input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota3_i"  value="<?php echo  $register['nota3_i'] ;?>"/>
+                 	</td>
+                 	<td>
+                 		<input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota4_i"  value="<?php echo  $register['nota4_i'] ;?>"/>
+                 	</td>
+                 	<td>
+                 		<input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota5_i"  value="<?php echo  $register['nota5_i'] ;?>"/>
+                 	</td>
+                 	<td>
+                 		<input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota6_i"  value="<?php echo  $register['nota6_i'] ;?>"/>
+                 	</td>
+                 	<td>
+                 		<input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota7_i"  value="<?php echo  $register['nota7_i'] ;?>"/>
+                 	</td>
+                 	<td>
+                 		<input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota8_i"  value="<?php echo  $register['nota8_i'] ;?>"/>
+                 	</td>
+                 	<td>
+                 		<input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota9_i"  value="<?php echo  $register['nota9_i'] ;?>"/>
+                 	</td>
+                 	<td class="promedio">
+                        <input maxlength="2" class='form-control data-notes-input' style="color:<?php echo ($register['promedio1'] != -3)?'#000':'#FC4141'; ?>;" disabled class="uneditable-input"  type="text" name="promedio1"  value="<?php echo ($register['promedio1'] != -3)?$register['promedio1']:'RET'; ?>"/>
+                    </td>
+                 <?php } if ($this->partial == 2) { ?>
+                 	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota1_ii"  value="<?php echo  $register['nota1_ii'] ;?>"/></td>
+                 	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota2_ii"  value="<?php echo  $register['nota2_ii'] ;?>"/></td>
+                 	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota3_ii"  value="<?php echo  $register['nota3_ii'] ;?>"/></td>
+                 	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota4_ii"  value="<?php echo  $register['nota4_ii'] ;?>"/></td>
+                 	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota5_ii"  value="<?php echo  $register['nota5_ii'] ;?>"/></td>
+                 	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota6_ii"  value="<?php echo  $register['nota6_ii'] ;?>"/></td>
+                 	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota7_ii"  value="<?php echo  $register['nota7_ii'] ;?>"/></td>
+                 	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota8_ii"  value="<?php echo  $register['nota8_ii'] ;?>"/></td>
+                 	<td><input maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio2'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota9_ii"  value="<?php echo  $register['nota9_ii'] ;?>"/></td>
+                 	<td><input maxlength="2" class='form-control data-notes-input' disabled editable=true index="<?php echo $key; ?>"   type="text" name="promedio2"  value="<?php echo ($register['promedio2'] != -3)?$register['promedio2']:'RET'; ?>"/></td>
+                    <td><input maxlength="2" class='form-control data-notes-input' disabled editable=true index="<?php echo $key; ?>"   type="text" name="notafinal"  value="<?php echo ($register['promedio2'] != -3)?$register['notafinal']:'RET'; ?>"/></td>
+                 <?php }?>
+				</tr>
+				<?php }?>
+			</tbody>
+		</table>
+	</div>
+</div>
+<?php }else{ ?>
+<div class='col-md-12 cont-font-not-register'>
+	<h1 class='span-not-register'>
+		<span class='glyphicon glyphicon-exclamation-sign'></span>
+	</h1>
+	<h3 class='text-not-register'>No se Encontro ningun Registro</h3>
+</div>
+	<?php }?>
+<input type='hidden' id='curid' value='<?php echo $infocourse['curid']?>' >
+<input type='hidden' id='escid' value='<?php echo $infocourse['escid']?>' >
+<input type='hidden' id='courseid' value='<?php echo $infocourse['courseid']?>' >
+<input type='hidden' id='eid' value='<?php echo $infocourse['eid']?>' >
+<input type='hidden' id='oid' value='<?php echo $infocourse['oid']?>' >
+<input type='hidden' id='subid' value='<?php echo $infocourse['subid']?>' >
+<input type='hidden' id='perid' value='<?php echo $this->perid?>' >
+<input type='hidden' id='turno' value='<?php echo $this->turno ?>' >
+<div class="modal fade" id="data-server" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Enviando al Servidor</h4>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

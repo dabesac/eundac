@@ -98,7 +98,7 @@
                     <h6 class='pull-left ' id='num-edit-note-<?php echo $key?>'><?php echo $key + 1 ?>
                 </td>
                 <td><h6><?php echo $register['uid']?></h6></td>
-				<td><h6><?php echo $register['last_name0']." ".$register['last_name1'].", ".$register['first_name']?></h6></td>
+				<td><h6><?php echo $register['name_complet']?></h6></td>
 				<?php if($this->partial == 2){ ?>
                     <td>
                         <input class='form-control data-notes-input uneditable-input' style="color:<?php echo ($register['promedio1'] != -3)?'#000':'#FC4141'; ?>;" disabled type="text" name="promedio1"  value="<?php echo ($register['promedio1'] != -3)?$register['promedio1']:'RET'; ?>"/>

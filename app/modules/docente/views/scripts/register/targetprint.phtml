@@ -103,7 +103,6 @@ address {
                         <th class='text-center success' >Prom 1</th>
                         <?php if($this->partial == 2){ ?>
                         <th class='text-center' >N1</th>
-                        <th class='text-center' >N1</th>
                         <th class='text-center' >N2</th>
                         <th class='text-center' >N3</th>
                         <th class='text-center' >N4</th>
@@ -128,15 +127,15 @@ address {
                         }?>
 
                         <?php if ($this->partial == 2) {
-                            if ($student['promedio2']== -3 ) { $retirados++;}
-                            if ($student['promedio2'] > 10 && $student['promedio2'] <=20 ) { $aprobados++; $back1="active text-primary";}
-                            if ($student['promedio2'] >= 0 && $student['promedio2'] <=10 ) { $jalados++; $back1="danger text-danger";}
+                            if ($student['notafinal']== -3 ) { $retirados++;}
+                            if ($student['notafinal'] > 10 && $student['notafinal'] <=20 ) { $aprobados++; $back1="active text-primary";}
+                            if ($student['notafinal'] >= 0 && $student['notafinal'] <=10 ) { $jalados++; $back1="danger text-danger";}
                         }
                         ?>
 
                         <td class='text-center'><?php echo $key+1?></td>
                         <td class='text-center'><?php echo $student['uid']?></td>
-                        <td class='text-name'><?php echo $student['last_name0']." ".$student['last_name1'].", ".$student['first_name']?></td>
+                        <td class='text-name'><?php echo $student['name_complet']?></td>
                     <?php if ($student['promedio1'] == -3 ) { ?>
                         <td class='text-center warning' colspan='9'>Retirado</td>
                         <td class='text-center warning' >R</td>
@@ -168,6 +167,7 @@ address {
                         <td class='text-center <?php echo ($student['nota8_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota8_ii']?></td>
                         <td class='text-center <?php echo ($student['nota9_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota9_ii']?></td>
                         <td class='text-center <?php echo $back1?>'><?php echo $student['promedio2']?></td>
+                        <td class='text-center <?php echo $back1?>'><?php echo $student['notafinal']?></td>
                     <?php }}?>
 
                     </tr>
@@ -187,7 +187,7 @@ address {
 
 <?php 
 $html = ob_get_contents();
-$mpdf=new mPDF('win-1252','A4','','',15,15,42);
+$mpdf=new mPDF('win-1252','A4','','',10,10,42);
 $mpdf->SetHTMLHeader($header);
 $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
 $mpdf->SetFooter($this->footer);

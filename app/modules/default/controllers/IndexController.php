@@ -318,8 +318,11 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="admin/rateregister";
                 $resource1[]="admin/generatedeferred";
                 $resource1[]="admin/generategraduated";
-                $resource1[]="default/sendmail";
                 
+                $resource1[]="default/sendmail";
+
+                $resource1[]="admin/correctnotes";
+                $resource1[]="admin/fillnotes";
                 
                 $modules[0]['acls'] = $acls;
                 $acls = null;
