@@ -64,7 +64,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                         base64_encode('partial')."/".base64_encode($partial);
 
         if ($state_record_c) {
-            if ($partial==1 && $state_record_c['state_record'] == 'A' && $state_record_c['state'] == 'P') {
+            if ($partial==1 && $state_record_c['state_record'] == 'A' && $state_record_c['state'] == 'P' || $state_record_c['state'] == 'C' ) {
                 $this->_redirect('/docente/register/registertarget'.$urlpersentage."/".base64_encode('action')."/".base64_encode('N'));
             }
             if ($partial == 2 && $state_record_c['state_record'] == 'C' && $state_record_c['state'] == 'C') {
@@ -749,7 +749,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                         base64_encode('partial')."/".base64_encode($partial);
 
         if ($state_record_c) {
-            if ($partial == 1 && $state_record_c['state_record'] == 'A' && $state_record_c['state'] == 'P') {
+            if ($partial == 1 && $state_record_c['state_record'] == 'A' && $state_record_c['state'] == 'P' || $state_record_c['state'] == 'C') {
                 $this->_redirect('/docente/register/registerconpetency'.$urlpersentage."/".base64_encode('action')."/".base64_encode('N'));
             }
             if ($partial == 2 && $state_record_c['state_record'] == 'C' && $state_record_c['state'] == 'C') {
