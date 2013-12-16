@@ -17,9 +17,9 @@ class Alumno_IndexController extends Zend_Controller_Action {
     {
         try {
 
-            // if ($this->_validaren()=="false"){
-            //     $this->_redirect('/alumno/index/encuesta');
-            // }
+             if ($this->_validaren()=="false"){
+                 $this->_redirect('/alumno/index/encuesta');
+             }
 
             // if ($this->_verifyprofile() == "1"){
             //     $this->_redirect('/profile/public/student');
