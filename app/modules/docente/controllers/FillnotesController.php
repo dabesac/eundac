@@ -40,7 +40,6 @@ class Docente_FillnotesController extends Zend_Controller_Action {
 
         $this->view->partial=$partial;
         $this->view->turno=$turno;
-        $this->view->state_record = $state_record;
         $this->view->perid=$perid;
 
         $where = array(
@@ -52,6 +51,8 @@ class Docente_FillnotesController extends Zend_Controller_Action {
 
         $base_period_course = new Api_Model_DbTable_PeriodsCourses();
         $state_record_c = $base_period_course ->_getOne($where);
+        $this->view->state_record = $state_record_c['state_record'];
+        $this->view->state_course = $state_record_c['state'];
 
         $urlpersentage ="/".base64_encode('oid')."/".base64_encode($oid)."/".
                         base64_encode('eid')."/".base64_encode($eid)."/".
@@ -757,6 +758,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
             }
         }
 
+        $this->view->state_course = $state_record_c['state'];
         $base_persentage = new Api_Model_DbTable_CourseCompetency();
         $result1 = $base_persentage->_getFilter($where,$attrib);
         

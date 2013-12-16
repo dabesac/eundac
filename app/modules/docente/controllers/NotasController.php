@@ -291,6 +291,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 		        $assistence = $base_assistance ->_getAll($where);
 		        $data[$key]['persetage_assit'] = 0;
 		        $count = count($assistence);
+				
 
 		        $assist_1 = 0; $assist_2 = 0; $assist_3 = 0;$assist_4 = 0;$assist_5 = 0;
 	            $assist_6 = 0; $assist_7 = 0; $assist_8 = 0;$assist_9 = 0;$assist_10 = 0;
@@ -311,6 +312,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 	    				$num_reg = $num_reg + $count;
 	    			}
 	           	}
+
 
     			foreach ($assistence as $key1 => $infoassist) {
 

@@ -28,7 +28,7 @@
 	
 	<div class="col-md-4">
         <a href="/docente/notas" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
-		<?php if ($this->state_record == 'A' || $this->state_record == 'B' || $this->state_record == 'P') { ?>
+		<?php if ($this->state_record == 'A' || $this->state_record == 'B') { ?>
 			<buttom  class='btn btn-info' id='save_notes' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
 		
 		<buttom  class='btn btn-danger' id='closure-record' 	><span class='glyphicon  glyphicon-log-out'></span> Cerrar Acta</buttom>
@@ -104,7 +104,7 @@
                         <input class='form-control data-notes-input uneditable-input' style="color:<?php echo ($register['promedio1'] != -3)?'#000':'#FC4141'; ?>;" disabled type="text" name="promedio1"  value="<?php echo ($register['promedio1'] != -3)?$register['promedio1']:'RET'; ?>"/>
                     </td>
                     <?php } ?>
-                 <?php if ($this->partial == 1) { ?>
+                 <?php if ($this->partial == 1 && $this->state_course !='P' ) { ?>
                  	<td>
                  		<input  maxlength="2" class='form-control data-notes-input' <?php echo ($register['promedio1'] != -3)?'':'disabled'; ?> editable=true index="<?php echo $key; ?>"   type="text" name="nota1_i"  value="<?php echo  $register['nota1_i'] ;?>"/>
                  	</td>
