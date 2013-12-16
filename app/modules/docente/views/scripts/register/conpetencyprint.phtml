@@ -89,14 +89,16 @@ address {
         
         <?php if($this->partial == 2 && intval($this->units) == 3 ){?>
             <th colspan="4" class='text-center' >UNIDAD III</th>
+            <th rowspan="3" class='text-center'>NF</th>
+        <?php }if($this->partial == 2 && intval($this->units) != 3 ){?>
+            <th colspan="4" class='text-center' >UNIDAD III</th>
             <th colspan="4" class='text-center' >UNIDAD IV</th>
             <th rowspan="3" class='text-center'>NF</th>
-        <?php } ?>
+        <?php }?>
        
     </tr>
     <tr>
         <?php if($this->partial != 0){ 
-                if($this->partial == 1){
                         
                     $porc["porc1"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc1_u1']:"N1";
                     $porc["porc2"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc2_u1']:"N2";
@@ -104,8 +106,8 @@ address {
                     $porc["porc4"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc1_u2']:"N1";
                     $porc["porc5"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc2_u2']:"N2";
                     $porc["porc6"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc3_u2']:"N3";
-                }else{
                     
+                if($this->partial == 2){
                     $porc["porc7"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc1_u3']:"N1";
                     $porc["porc8"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc2_u3']:"N2";
                     $porc["porc9"] = (isset($this->persetage) && count($this->persetage) > 0)?(string)$this->persetage['porc3_u3']:"N3";
@@ -126,7 +128,13 @@ address {
         <th class='text-center' ><?php echo $porc['porc6']; ?>%</th>
         <th class='text-center success'>Prom 2</th>
 
-        <?php if ($this->partial == 2) { ?>
+        <?php if ($this->partial == 2 && intval($this->units) == 3  ) { ?>
+        <th class='text-center' ><?php echo $porc['porc7']; ?>%</th>
+        <th class='text-center' ><?php echo $porc['porc8']; ?>%</th>
+        <th class='text-center' ><?php echo $porc['porc9']; ?>%</th>
+        <th class='text-center success'>Prom 3</th>
+
+        <?php }if ($this->partial == 2 && intval($this->units) != 3) { ?>
         <th class='text-center' ><?php echo $porc['porc7']; ?>%</th>
         <th class='text-center' ><?php echo $porc['porc8']; ?>%</th>
         <th class='text-center' ><?php echo $porc['porc9']; ?>%</th>
@@ -151,16 +159,20 @@ address {
         <th class='text-center'>P</th>
         <th class='text-center'>A</th>
         <th class='text-center'>U2</th>
-        <?php if ($this->partial == 2) { ?>
-    	<th class='text-center'>C</th>
-        <th class='text-center'>P</th>
-        <th class='text-center'>A</th>
-        <th class='text-center'>U3</th>
-        <th class='text-center'>C</th>
-        <th class='text-center'>P</th>
-        <th class='text-center'>A</th>
-        <th class='text-center'>U4</th>
-        <th class='text-center'>NF</th>
+        <?php if ($this->partial == 2 && intval($this->units) != 3 ) { ?>
+            <th class='text-center'>C</th>
+            <th class='text-center'>P</th>
+            <th class='text-center'>A</th>
+            <th class='text-center'>U3</th>
+            <th class='text-center'>C</th>
+            <th class='text-center'>P</th>
+            <th class='text-center'>A</th>
+            <th class='text-center'>U4</th>
+        <?php }if ($this->partial == 2 && intval($this->units) == 3) { ?>
+        	<th class='text-center'>C</th>
+            <th class='text-center'>P</th>
+            <th class='text-center'>A</th>
+            <th class='text-center'>U3</th>
         <?php }?>
    	</tr>
 
@@ -176,13 +188,13 @@ address {
                 }?>
                 <?php if ($this->partial == 2) {
                     if (intval($student['notafinal']) > 10 && intval($student['notafinal']) <=20) {$aprobados ++;}
-                    if (intval($student['notafinal']) <= 10 && intval($student['notafinal']) >=0) {$aprobados ++;}
+                    if (intval($student['notafinal']) <= 10 && intval($student['notafinal']) >=0) {$jalados ++;}
                     if ( $student['notafinal'] == -3 ) {$retirados ++;}
                 }?>
 
                 <td class='text-center' ><?php echo $key+1?></td>
                 <td class='text-center'><?php echo $student['uid']?></td>
-                <td class='text-name'><?php echo $student['last_name0']." ".$student['last_name1'].", ".$student['first_name'] ?></td>
+                <td class='text-name'><?php echo $student['name_complet'] ?></td>
 
                 <!-- partial 1-->
                 <td class='text-center'><?php echo ($student['nota4_i']==-3)? 'R': $student['nota1_i'] ?></td>
@@ -196,7 +208,7 @@ address {
                 <td class='text-center success' ><?php echo  ($student['nota4_i']==-3)? 'R': $student['nota9_i'] ?></td>
                 <!-- partial 2-->
 
-                <?php if($this->partial == 2){?>
+                <?php if($this->partial == 2 && intval($this->units) != 3  ){?>
                 <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota1_ii'] ?></td>
                 <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota2_ii'] ?></td>
                 <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota3_ii'] ?></td>
@@ -206,6 +218,14 @@ address {
                 <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota7_ii'] ?></td>
                 <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota8_ii'] ?></td>
                 <td class='text-center success' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota9_ii'] ?></td>
+                <td class='text-center success' ><?php echo  ($student['notafinal']==-3)? 'R': $student['notafinal'] ?></td>
+
+                <?php }if($this->partial == 2 && intval($this->units) == 3 ){?>
+                <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota1_ii'] ?></td>
+                <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota2_ii'] ?></td>
+                <td class='text-center ' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota3_ii'] ?></td>
+                <td class='text-center success' ><?php echo  ($student['nota4_ii']==-3)? 'R': $student['nota4_ii'] ?></td>
+
                 <td class='text-center success' ><?php echo  ($student['notafinal']==-3)? 'R': $student['notafinal'] ?></td>
                 <?php }?>
             </tr>
@@ -223,7 +243,7 @@ address {
 
 <?php 
 $html = ob_get_contents();
-$mpdf=new mPDF('win-1252','A4','','',15,15,42);
+$mpdf=new mPDF('win-1252','A4','','',10,10,42);
 $mpdf->SetHTMLHeader($header);
 $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
 $mpdf->SetFooter($this->footer);

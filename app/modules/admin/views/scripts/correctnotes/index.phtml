@@ -1,0 +1,44 @@
+<?php 
+	$year = date("Y");
+?>
+<script type="text/javascript" src="/external/notes/fillter-notes.js"></script>
+
+<!-- header listado-->
+<div class='row' id='header-info'>
+	<div class='col-xs-8 header-registration-course'>
+		<h4 class='text-header-registration'> <span class='glyphicon glyphicon-list' style='color:#1abc9c;'></span> Listado de Cursos</h4>
+	</div>
+</div>
+<!-- end header-->
+<div class="row">
+	<div class="col-md-9 " >
+		<div class="col-md-2">
+			<select id="anho" name="anho" class="form-control">
+	        <?php for ($i=$year;$i>=1990;$i--) {?>
+	              <option value="<?php echo base64_encode($i);?>"><?php echo $i;?></option>
+	        <?php }?>
+	    	</select>
+		</div>
+
+		<div class="col-md-4" id='search-period'>
+			<select id="perid" name="perid" class="form-control" rel="tooltip" title="Periodo">
+	    	   <option value="">Seleccione Periodo</option>
+			</select>
+		</div>
+		<div class="col-md-4">
+			<select id='escid' name="escid" class="form-control" >
+				<?php if($this->speciality){ 
+					foreach( $this->speciality as $key=>$data){ ?>
+						<option value="<?php echo $data['escid']."-".$data['subid']?>"><?php echo $data['name']?></option>
+				<?php }}?>
+			</select>
+		</div>
+		<button href="/admin/correctnotes/listcourses" class="btn btn-success" id='search-courses' ><span class='glyphicon glyphicon-search'></span> Buscar</button>
+	</div>
+	
+</div>
+<div class="row">
+	<div class="col-md-12" id='result-search'>
+		
+	</div>
+</div>

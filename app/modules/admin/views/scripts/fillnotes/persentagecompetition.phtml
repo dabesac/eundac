@@ -1,0 +1,190 @@
+<?php 
+	$hdpartial = $this->form->getElement('hdpartial');
+	$unidad1 = '';
+	$unidad2 = '';
+	if($hdpartial->getValue() != 0){
+	    if($hdpartial->getValue() == 1){
+	        $unidad1 = 1;
+	        $unidad2 = 2;
+	    }else{
+	        $unidad1 = 3;
+	        $unidad2 = 4;
+	    }
+	}
+?>
+<form 
+id="<?php echo $this->form->getId(); ?>"
+enctype="<?php echo $this->form->getEnctype(); ?>" 
+method="<?php echo $this->form->getMethod(); ?>" 
+action="/admin/fillnotes/persentagecompetition" 
+class='form-inline'	
+> 
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id='close-modal-persentage'>&times;</button>
+      <h4 class="modal-title text-primary">Asignacion de Porcentaje</h4>
+    </div>
+    <div class="modal-body">
+    	<?php if ($this->form->getMessages() && $this->errorglobal == true) { ?>  
+		    <div class="alert alert-danger">
+			  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			  <strong>Error!</strong> Porcentaje no aceptado en Unidad <?=implode('<br />', $this->form->getMessages())?> 
+			</div>
+		<?php } ?>
+    	<?php if ($this->units && $this->state_syllabus == 'C' ) { ?>
+    	<h4>Porcentajes Unidad <?php echo $unidad1?></h4>
+			<div class='row' >
+				<div class='col-md-offset-1' id='unid-1' index='1'>
+					<div class="form-group">
+						<?php echo $this->form->txtppporcentaje1?>
+				  	</div>
+				  	<div class="form-group">
+						<?php echo $this->form->txtppporcentaje2?>
+				  	</div>
+				  	<div class="form-group">
+						<?php echo $this->form->txtppporcentaje3?>
+				  	</div>
+				  	<div class="form-group">
+				  		<h6 class='text-addition'><span class='glyphicon' id='addition-1'></span></h6>
+				  	</div>
+				</div>
+			</div>
+	    	<?php if ($this->partial == 1  || $this->partial == 2 && $this->units != 3) { ?>
+	    		<h4>Porcentajes Unidad <?php echo $unidad2?></h4>
+				<div class='row' >
+					<div class='col-md-offset-1' id='unid-2' index='2'>
+						<div class="form-group">
+						    <?php echo $this->form->txtspporcentaje1?>
+					  	</div>
+					  	<div class="form-group">
+						    <?php echo $this->form->txtspporcentaje2?>
+							
+					  	</div>
+					  	<div class="form-group">
+						    <?php echo $this->form->txtspporcentaje3?>
+					  	</div>
+					  	<div class="form-group">
+					  		<h6 class='text-addition'><span class='glyphicon' id='addition-2'></span></h6>
+						</div>
+					</div>
+				</div>
+	    	<?php }?>
+    	<?php }else { ?>
+    		<div class="alert alert-danger">
+			  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			  <h5><span class='glyphicon glyphicon-question-sign'></span><strong> Llenar sílabus !</strong> Para asignar las unidades</h5> 
+
+			</div>
+    		<div class='col-md-12 cont-font-not-register'>
+				<h1 class='span-not-register'>
+					<span class='glyphicon glyphicon-exclamation-sign'></span>
+				</h1>
+				<h3 class='text-not-register'>Error al generar Unidades</h3>
+			</div>
+    	<?php }?>
+	    <?php echo $this->form->getElement("hdcurid"); ?>
+		<?php echo $this->form->getElement("hdescid"); ?>
+		<?php echo $this->form->getElement("hdcourseid"); ?>
+		<?php echo $this->form->getElement("hdperid"); ?>
+		<?php echo $this->form->getElement("hdturno"); ?>
+		<?php echo $this->form->getElement("hdeid"); ?>
+		<?php echo $this->form->getElement("hdoid"); ?>
+		<?php echo $this->form->getElement("hdsubid"); ?>
+		<?php echo $this->form->getElement("hdpartial"); ?>
+		<?php echo $this->form->getElement("hdunits"); ?>
+		<?php echo $this->form->getElement("hdsilstate"); ?>
+    </div>
+    <div class="modal-footer">
+    	<a href="/admin/correctnotes" class='btn btn-info'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
+       	<button type="button" class="btn btn-primary" id='save-persentage' disabled ><span class='glyphicon glyphicon-floppy-disk' ></span> Guardar</button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</form>
+<?php if ($this->ejcutarcerrar == true) { ?>
+	<script >
+		$("#close-modal-persentage").click();
+		window.location.href = window.location.href;  
+	</script>
+<?php }?>
+<script >
+	$(".data-uni-1").keyup(function(){
+		var $persentaje = $(this).val();
+		var div = $(this).parent();
+		var div1 = $(div).parent();
+		addition($(div1));
+	});
+
+	$("#save-persentage").click(function(){
+	    var $values = $("#frmCompetition").serialize();
+	    $.post('/docente/fillnotes/persentagecompetition',$values,function($data){
+	    	$("#modal-persentage").html($data);
+	    });
+	});
+
+	function addition($obj){
+		var $addition =0;
+		var $index = $obj.attr('index');
+		$persenage = {};
+		$data = false;
+		$($obj[0].children).each(function () {
+        	if(this.firstElementChild != null){
+        		if (this.firstElementChild.nodeName == 'INPUT') {
+        			$text_input = $(this.firstElementChild);
+        			$value =  $text_input.val();
+        			$name = $text_input.attr('name');
+        			if ($value != "") {
+        				$data = true;
+        				$persenage[$name] = $.trim($value);
+        			}
+        		}
+        	}
+		});
+
+		if ($persenage['txtppporcentaje1']) { $addition += intval($persenage['txtppporcentaje1'])};
+		if ($persenage['txtppporcentaje2']) { $addition += intval($persenage['txtppporcentaje2'])};
+		if ($persenage['txtppporcentaje3']) { $addition += intval($persenage['txtppporcentaje3'])};
+		if ($persenage['txtspporcentaje1']) { $addition += intval($persenage['txtspporcentaje1'])};
+		if ($persenage['txtspporcentaje2']) { $addition += intval($persenage['txtspporcentaje2'])};
+		if ($persenage['txtspporcentaje3']) { $addition += intval($persenage['txtspporcentaje3'])};
+
+		if ($addition == 100) {
+			$("#addition-"+$index).addClass('glyphicon-ok-circle text-success');
+			$("#save-persentage").attr('disabled',false);
+		}
+		else{
+			$("#save-persentage").attr('disabled',true);
+			$("#addition-"+$index).removeClass('glyphicon-ok-circle text-success');
+			$("#addition-"+$index).addClass('glyphicon-remove-circle text-danger');
+		}
+
+	}
+
+	function intval (mixed_var, base) {
+	    var tmp;
+	    var type = typeof(mixed_var);
+	     if (type === 'boolean') {
+	        return +mixed_var;
+	    } else if (type === 'string') {
+	        tmp = parseInt(mixed_var, base || 10);
+	        return (isNaN(tmp) || !isFinite(tmp)) ? 0 : tmp;    } else if (type === 'number' && isFinite(mixed_var)) {
+	        return mixed_var | 0;
+	    } else {
+	        return 0;
+	    }
+	}
+
+</script>
+<style type="text/css">
+	.text-addition{
+		font-size: 20px;
+	}
+	.errors {
+		list-style: none;
+		color: red;
+	}
+	.form-group{
+		margin-right: 20px;
+	}
+</style>

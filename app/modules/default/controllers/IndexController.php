@@ -295,7 +295,11 @@ class IndexController extends Zend_Controller_Action {
                 $acls[]= array("controller"=>"admin/rateregister","name"=>"Tasas Matricula","imgicon"=>"user");
                 $acls[]= array("controller"=>"admin/generatedeferred","name"=>"Generar Aplazados","imgicon"=>"list");
                 $acls[]= array("controller"=>"admin/generategraduated","name"=>"Generar Egresados","imgicon"=>"list-alt");
+
+                $acls[]= array("controller"=>"default/sendmail","name"=>"Enviar Correo","imgicon"=>"envelope");
+
                 $acls[]= array("controller"=>"poll/index","name"=>"Gestion Encuesta","imgicon"=>"folder-close");
+
 
                 $resource1[]="admin/receiptsup";
                 $resource1[]="admin/password";
@@ -314,6 +318,11 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="admin/rateregister";
                 $resource1[]="admin/generatedeferred";
                 $resource1[]="admin/generategraduated";
+                
+                $resource1[]="default/sendmail";
+
+                $resource1[]="admin/correctnotes";
+                $resource1[]="admin/fillnotes";
                 
                 $modules[0]['acls'] = $acls;
                 $acls = null;

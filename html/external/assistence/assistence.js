@@ -231,6 +231,7 @@ function retired_assist (obj) {
 	            $("#header-info").addClass('data-header-info-assit');
 	            $("#header-info").addClass('col-md-10');
 	            $("#tb-header-info").addClass('scroll-header-info');
+	            $(".text-sesion-assist").css({'padding-right':'22px'});
 	        }
 	        else{
 	            

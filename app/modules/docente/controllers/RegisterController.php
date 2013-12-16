@@ -69,7 +69,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->infocourse = $infocourse;
 
         $base_students = new Api_Model_DbTable_Registrationxcourse();
-        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods($where);
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
 
         $this->view->turno = $turno;
         $this->view->partial = $partial;
@@ -120,7 +120,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->infocourse = $infocourse;
 
         $base_students = new Api_Model_DbTable_Registrationxcourse();
-        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods($where);
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
 
         $base_faculty   =   new Api_Model_DbTable_Faculty();
         $base_speciality =  new Api_Model_DbTable_Speciality();
@@ -166,7 +166,9 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $perid        = trim($params['perid']);
         $partial      = trim($params['partial']); 
         $action      = trim($params['action']);
+        $units      = trim($params['units']);
 
+        $this->view->units=$units;
         $where = null;
         $url = null;
         $where = array(
@@ -205,6 +207,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
                         base64_encode('curid')."/".base64_encode($curid)."/".
                         base64_encode('turno')."/".base64_encode($turno)."/".
                         base64_encode('perid')."/".base64_encode($perid)."/".
+                        base64_encode('units')."/".base64_encode($units)."/".
                         base64_encode('action')."/".base64_encode('I')."/".
                         base64_encode('partial')."/".base64_encode($partial);
 
@@ -213,7 +216,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->infocourse = $infocourse;
 
         $base_students = new Api_Model_DbTable_Registrationxcourse();
-        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods($where);
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
 
 
         $this->view->turno = $turno;
@@ -248,7 +251,8 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $perid        = trim($params['perid']);
         $partial      = trim($params['partial']); 
         $action      = trim($params['action']);
-
+        $units      = trim($params['units']);
+        $this->view->units=$units;
         $where = null;
         $url = null;
         $where = array(
@@ -284,7 +288,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->infocourse = $infocourse;
 
         $base_students = new Api_Model_DbTable_Registrationxcourse();
-        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods($where);
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
 
         $base_faculty   =   new Api_Model_DbTable_Faculty();
         $base_speciality =  new Api_Model_DbTable_Speciality();
