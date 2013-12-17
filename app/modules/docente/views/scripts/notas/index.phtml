@@ -55,9 +55,7 @@
                                           <h4 class='name-course'><?php echo $course['name']." - Turno ".$courses['turno']?></h4>
                                         </div>
                                         <?php if (
-                                                    (round($courses['persetage_assit']) == 50 || round($courses['persetage_assit']) == 100 ) &&
-                                                    (round($courses['persetage_notes']) == 50 || round($courses['persetage_notes']) == 100 ) &&
-                                                    ($courses['closure_syllabus'] == 'C')&& ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')
+                                                    $courses['closure_syllabus'] == 'C' && ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')
 
                                                 ) {?>
                                                 <img src="/img/closure_.png" class='img-closure-course'>
