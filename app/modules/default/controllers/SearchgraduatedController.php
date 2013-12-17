@@ -35,24 +35,32 @@ class SearchgraduatedController extends Zend_Controller_Action
 
 	  $cursoid=$this->_getParam('compania');
 	  $mil=$this->_getParam('mil');
-	  $mil2=$this->_getParam('mil2');
-	  $mil3=$this->_getParam('mil3');
+	  //$mil2=$this->_getParam('mil2');
+	  //$mil3=$this->_getParam('mil3');
 	  
 	  // echo $mil;
-	  // echo $mil2;
+	  $tno =split("--",$mil);
+      $f1=$tno[0];
+      $f2=$tno[1];
+
+	  $f1=(int)$f1;
+	  $f2=(int)$f2;
+
+	  // echo $f1;
+	  // echo $f2;	
 	  // echo $mil3;
 	  //print_r($cursoid);break;
 
 	  foreach ($cursoid as $cur) 
 	  {
 	  	$comp = new Api_Model_DbTable_Jobs();
-		$c=$comp->_getBuscarxSeleccion($cur,$mil,$mil2,$mil3);
+		$c=$comp->_getBuscarxSeleccion($cur,$f1,$f2);
 
 		$co[]=$c;
 	  }
 
 	  	$this->view->companias=$co;
-	 	//print_r($co);
+	 	
 	}
 
 }
