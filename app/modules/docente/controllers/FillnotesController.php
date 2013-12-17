@@ -40,7 +40,6 @@ class Docente_FillnotesController extends Zend_Controller_Action {
 
         $this->view->partial=$partial;
         $this->view->turno=$turno;
-        $this->view->state_record = $state_record;
         $this->view->perid=$perid;
 
         $where = array(
@@ -52,6 +51,8 @@ class Docente_FillnotesController extends Zend_Controller_Action {
 
         $base_period_course = new Api_Model_DbTable_PeriodsCourses();
         $state_record_c = $base_period_course ->_getOne($where);
+        $this->view->state_record = $state_record_c['state_record'];
+        $this->view->state_course = $state_record_c['state'];
 
         $urlpersentage ="/".base64_encode('oid')."/".base64_encode($oid)."/".
                         base64_encode('eid')."/".base64_encode($eid)."/".
@@ -159,17 +160,6 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                 'nota8_i'       => $nota8_i,
                 'nota9_i'       => $nota9_i,
                 'promedio1' => $promedio1,
-                'nota1_ii'      => $nota1_ii,
-                'nota2_ii'      => $nota2_ii,
-                'nota3_ii'      => $nota3_ii,
-                'nota4_ii'      => $nota4_ii,
-                'nota5_ii'      => $nota5_ii,
-                'nota6_ii'      => $nota6_ii,
-                'nota7_ii'      => $nota7_ii,
-                'nota8_ii'      => $nota8_ii,
-                'nota9_ii'      => $nota9_ii,
-                'promedio2' => $promedio2,
-                'notafinal'    => $notafinal
             );
         }else{
             if ($partial == 2) {
@@ -757,6 +747,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
             }
         }
 
+        $this->view->state_course = $state_record_c['state'];
         $base_persentage = new Api_Model_DbTable_CourseCompetency();
         $result1 = $base_persentage->_getFilter($where,$attrib);
         
@@ -884,15 +875,6 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                     'nota7_i' => $nota7_i,
                     'nota8_i' => $nota8_i,
                     'nota9_i' => $nota9_i,
-                    'nota1_ii' => $nota1_ii,
-                    'nota2_ii' => $nota2_ii,
-                    'nota3_ii' => $nota3_ii,
-                    'nota4_ii' => $nota4_ii,
-                    'nota6_ii' => $nota6_ii,
-                    'nota7_ii' => $nota7_ii,
-                    'nota8_ii' => $nota8_ii,
-                    'nota9_ii' => $nota9_ii,
-                    'notafinal' => $notafinal
                 );
         }
         if ($partial == 2) {

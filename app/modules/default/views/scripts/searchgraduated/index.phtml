@@ -4,7 +4,7 @@
 background: #e0e0e0;
 padding: 0px;
 margin: 0px;
-height:1000px;
+height:3600px;
 }
 
 
@@ -23,7 +23,7 @@ z-index: 100;
 #slider1 .titulo1 {
 display: block;
 color: #fff;
-background: #303238;
+background: #303235;
 height: 30px;
 padding: 5px;
 padding-left: 5px;
@@ -51,33 +51,30 @@ list-style: none outside none;
 		<div id="slider1" class='control-topo'>
 			<ul>
 
-
-				<!--<li class="titulo1" class='control-topo'>
-					<span class="glyphicon glyphicon-home"></span>
-					<p class='ocultar'>ocultar Empresa/Compañia</p>			
-					<p class='mostrar'>mostrar Empresa/Compañia</p>			
-				
+				<li>
+ 				<center><FONT COLOR=#2a6496><p  style="font-size:16px" class='ocultar'><b>Empresa/Compañia</b><FONT COLOR=#2a6496></p></center>
+ 				<center><FONT COLOR=#2a6496><p  style="font-size:16px" class='mostrar'><b>Empresa/Compañia</b><FONT COLOR=#2a6496></p></center>
 				</li>
- 				-->
 
  				<li >
            			<center><a href="#" id="generarbusqueda" style="float:center" class="btn btn-primary">Buscar</a><center>            
 				</li>
-
- 				<li>
- 					<p class='ocultar'>Empresa/Compañia</p>	
- 					<p class='mostrar'>Empresa/Compañia</p>	
- 				</li>
-
 				<li class="titulo1" class='control-topo'>
-				 <form  id ="frmFiltroRep" action="/default/searchgraduated/listreport/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal"> 
+				 <form  name="f1" id ="frmFiltroRep" action="/default/searchgraduated/listreport/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal"> 
 				 	<br>
-				 	<input type="checkbox" value="1000" name="mil" id="mil" />  Menor a 1000
 				 	<br>
-					<input type="checkbox" value="2000" name="mil2" id="mil2" />  2000
+				 	<input type="radio" value="1000" name="mil" id="mil" />  Menor a 1000
+				 	<br>
+					<input type="radio" value="1001--3000" name="mil" id="mil2" />  Entre 1000 a 3000
 				 	<br>					
-					<input type="checkbox" value="3000" name="mil3" id="mil3" />  3000
-				 	<br>
+					<input type="radio" value="3000" name="mil" id="mil3" /> Mayor a 3000
+				 	<br>			
+				 	<br>			
+
+					<a href="javascript:seleccionar_todo()">Todos</a> | 
+					<a href="javascript:deseleccionar_todo()">Ninguno</a> 
+					<br>
+								 					
 
 				<?php 
 					$i=0;
@@ -86,12 +83,9 @@ list-style: none outside none;
 					$i++;
 					?>
 					</br>
-
-			
+		
 					<input type="checkbox" value="<?php echo $company['company']?>" name="compania[<?php echo $company['company']?>]" id="company" />  
 					<?php echo $company['company'];}
-
-
 					?>	
 			
 
@@ -102,7 +96,7 @@ list-style: none outside none;
 	</div>
 	<div class="col-sm-10" style="margin:0px; padding: 0px">
 		<div class="col-sm-12 header-top" > 
-			<h3 class="nav pull-left" >BUSQUEDA DE EGRESADOS</h3>
+			<h4 class="nav pull-left" >BUSQUEDA LABORAL</h4>
 				
 		</div>
 
@@ -117,6 +111,20 @@ list-style: none outside none;
 <div class="col-sm-12 footer"> 
 
 <script>
+$(".mostrar").hide();
+$(".ocultar").click(function (){
+$(".titulo1").hide();
+$(".mostrar").show();
+$(".ocultar").hide();
+
+});
+
+$(".mostrar").click(function (){
+$(".titulo1").show();
+$(".ocultar").show();
+$(".mostrar").hide();
+});
+
 $("#generarbusqueda").click(function(){
         $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
         $("#frmFiltroRep").submit();
@@ -136,22 +144,21 @@ $("#frmFiltroRep").submit(function(){
         return false;
 });
 
-$(".mostrar").hide();
-$(".ocultar").click(function (){
-$(".titulo1").hide();
-$(".mostrar").show();
-$(".ocultar").hide();
-
-});
 
 
-//$(".mostrar").hide();
-$(".mostrar").click(function (){
-$(".titulo1").show();
-$(".ocultar").show();
-$(".mostrar").hide();
-});
+</script>
 
+<script>
 
+function seleccionar_todo(){ 
+   for (i=0;i<document.f1.elements.length;i++) 
+      if(document.f1.elements[i].type == "checkbox")	
+         document.f1.elements[i].checked=1 
+} 
 
+function deseleccionar_todo(){ 
+   for (i=0;i<document.f1.elements.length;i++) 
+      if(document.f1.elements[i].type == "checkbox")	
+         document.f1.elements[i].checked=0 
+}
 </script>

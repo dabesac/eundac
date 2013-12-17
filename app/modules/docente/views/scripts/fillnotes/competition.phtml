@@ -65,7 +65,7 @@
 	
 	<div class="col-md-4">
 		<a href="/docente/notas" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
-		<?php if ($this->state_record == 'A' || $this->state_record == 'B' || $this->state_record == 'P') { ?>
+		<?php if ($this->state_record == 'A' || $this->state_record == 'B') { ?>
 			<buttom  class='btn btn-info' id='save_notes_competition' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
 		<buttom  class='btn btn-danger' id='closure-record-competition' 	><span class='glyphicon  glyphicon-log-out'></span> Cerrar Acta</buttom>
 		<?php }?>
@@ -192,7 +192,7 @@
 								<td><input class='data-text-note-disable form-control' style="color:<?php echo ($register['nota4_i'] != -3)?'#000':'#FC4141'; ?>;" disabled type="text" name="nota4_i"  value="<?php echo ($register['nota4_i'] != -3)?$register['nota4_i']:'RET'; ?>"/></td>
 								<td><input class='data-text-note-disable form-control' style="color:<?php echo ($register['nota4_i'] != -3)?'#000':'#FC4141'; ?>;" disabled type="text" name="nota9_i"  value="<?php echo ($register['nota4_i'] != -3)?$register['nota9_i']:'RET'; ?>"/></td>
 							<?php }?>
-							<?php if ($this->partial == 1) { ?>
+							<?php if ($this->partial == 1 && $this->state_course !='P') { ?>
 								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_i'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota1_i" value='<?php echo $register['nota1_i']?>' /></td>
 								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_i'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota2_i" value='<?php echo $register['nota2_i']?>' /></td>
 								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_i'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota3_i" value='<?php echo $register['nota3_i']?>' /></td>
@@ -208,7 +208,7 @@
 								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota3_ii" value='<?php echo $register['nota3_ii']?>' /></td>
 								<td><input class='data-text-note-disable form-control'   maxlength="2" index='<?php echo $key?>' disabled type='text' name="nota4_ii" value="<?php echo ($register['nota4_ii'] != -3)?$register['nota4_ii']:'RET'; ?>" style="color:<?php echo ($register['nota4_ii'] != -3)?'#000':'#FC4141'; ?>;"/></td>
 								<td><input class='data-text-note-disable form-control'   maxlength="2" index='<?php echo $key?>' disabled type='text' name="notafinal" value="<?php echo ($register['nota4_ii'] != -3)?$register['notafinal']:'RET'; ?>" style="color:<?php echo ($register['nota4_ii'] != -3)?'#000':'#FC4141'; ?>;"/></td>
-							<?php }else{ ?>
+							<?php }elseif($this->partial == 2 && intval($this->units) != 3){ ?>
 								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota1_ii" value='<?php echo $register['nota1_ii']?>' /></td>
 								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota2_ii" value='<?php echo $register['nota2_ii']?>' /></td>
 								<td><input class='data-text-note form-control'  <?php echo ($register['nota4_ii'] != -3)?'':'disabled'; ?> maxlength="2" index='<?php echo $key?>' type='text' name="nota3_ii" value='<?php echo $register['nota3_ii']?>' /></td>

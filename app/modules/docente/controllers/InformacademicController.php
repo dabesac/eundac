@@ -121,6 +121,8 @@ class Docente_InformacademicController extends Zend_Controller_Action {
 
     public function printAction(){
         try {
+            
+            $this->_helper->layout()->disableLayout();
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $pid = base64_decode($this->_getParam('pid'));
