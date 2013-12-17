@@ -292,7 +292,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 		        $data[$key]['persetage_assit'] = 0;
 		        $count = count($assistence);
 				
-
+		        
 		        $assist_1 = 0; $assist_2 = 0; $assist_3 = 0;$assist_4 = 0;$assist_5 = 0;
 	            $assist_6 = 0; $assist_7 = 0; $assist_8 = 0;$assist_9 = 0;$assist_10 = 0;
 	            $assist_11 = 0; $assist_12 = 0; $assist_13 = 0;$assist_14 = 0;$assist_15 = 0;
