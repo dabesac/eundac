@@ -12,11 +12,10 @@ if ($this->data_teacher) { ?>
 			<th>Asignaturas</th>
 			<th>Turno</th>
 			<th>Silabo</th>
-			<th>F.C. Silabus</th>
+			<th>F.Cierre Silabus</th>
 			<th>1° Parcial</th>
 			<th>2° Parcial</th>
-			<th>F.C. Acta</th>
-
+			<th >F.Cierre Acta</th>
 			<th>Horario</th>
 		</tr>
 		<?php 
@@ -58,7 +57,9 @@ if ($this->data_teacher) { ?>
 						</td>
 							<td>
 								<?php 
-								echo $courses['create_syllabus'];
+								        $f_=$courses['create_syllabus'];
+       									$tf =split(" ",$f_);
+        								echo $tf[0];
 								?>
 						</td>
 						<td>

@@ -158,10 +158,13 @@
 								'escid' => $escid, 'curid' => $course_tea[$j]['curid'], 
 								'courseid' => $course_tea[$j]['courseid'], 'turno' => $course_tea[$j]['turno']);
 							$data_syll = $syl->_getOne($where_syl);
+
+							$course_tea[$j]['create_syllabus'] = $data_syll['created'];
 		 					$course_tea[$j]['state_syllabus'] = $data_syll['state'];
 
 		 					$data_percour = $per_cour->_getOne($where_syl);
 		 					$course_tea[$j]['state_course'] = $data_percour['state'];
+		 					$course_tea[$j]['closure_date_course'] = $data_percour['closure_date'];
 		 					// $course_tea[$j]['state_record'] = $data_percour['state_record'];
 
  							$wherecour = array(
