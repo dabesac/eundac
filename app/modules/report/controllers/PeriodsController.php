@@ -104,7 +104,7 @@
  					$allteacher[$i]['full_name'] = $data_person['last_name0']." ".$data_person['last_name1'].", ".$data_person['first_name'];
  				}
  			}
- 			print_r($allteacher);
+ 			// print_r($allteacher);
 
  			$this->view->data_teacher = $allteacher;
  		} catch (Exception $e) {
