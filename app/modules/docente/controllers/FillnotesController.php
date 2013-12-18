@@ -859,7 +859,8 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         $nota7_ii            = ((isset($params['nota7_ii']) == true && (!empty($params['nota7_ii']) || (intval($params['nota7_ii'])== 0) ) )?trim($params['nota7_ii']):'');
         $nota8_ii            = ((isset($params['nota8_ii']) == true && (!empty($params['nota8_ii']) || (intval($params['nota8_ii'])== 0) ) )?trim($params['nota8_ii']):'');
         $nota9_ii            = ((isset($params['nota9_ii']) == true && (!empty($params['nota9_ii']) || (intval($params['nota9_ii'])== 0) ) )?trim($params['nota9_ii']):'');
-        $notafinal          = ((isset($params['notafinal']) == true && !empty($params['notafinal']))?trim($params['notafinal']):'');
+        $notafinal            = ((isset($params['notafinal']) == true && (!empty($params['notafinal']) || (intval($params['notafinal'])== 0) ) )?trim($params['notafinal']):'');
+        //$notafinal          = ((isset($params['notafinal']) == true && !empty($params['notafinal']))?trim($params['notafinal']):'');
 
         $data = null;
 
