@@ -12,8 +12,11 @@ if ($this->data_teacher) { ?>
 			<th>Asignaturas</th>
 			<th>Turno</th>
 			<th>Silabo</th>
+			<th>F.C. Silabus</th>
 			<th>1° Parcial</th>
 			<th>2° Parcial</th>
+			<th>F.C. Acta</th>
+
 			<th>Horario</th>
 		</tr>
 		<?php 
@@ -24,7 +27,7 @@ if ($this->data_teacher) { ?>
 				<td rowspan="<?php echo $teachers['cantidad_courses']+2?>">
 					<?php echo $teachers['uid']." - ".$teachers['full_name']?>
 				</td>
-				<td colspan="5"></td>
+				<td colspan="7"></td>
 				<td rowspan="<?php echo $teachers['cantidad_courses']+2?>">
 					<center>
 						<a href="#" rel="tooltip" title="Ver Horario del Docente."><span class="glyphicon glyphicon-calendar"></span></a>
@@ -53,6 +56,11 @@ if ($this->data_teacher) { ?>
 								}?>
 							</center>
 						</td>
+							<td>
+								<?php 
+								echo $courses['create_syllabus'];
+								?>
+						</td>
 						<td>
 							<center>
 								<?php 
@@ -67,6 +75,14 @@ if ($this->data_teacher) { ?>
 								if ($courses['state_course']=="C" || $courses['state_course'] == "S") $icon="ok";
 								else $icon = "remove"; ?>
 									<span class="glyphicon glyphicon-<?php echo $icon?>"></span>
+							</center>
+						</td>
+						<td>
+							<center>
+								<?php 
+								echo $courses['closure_date_course'];
+								?>
+									
 							</center>
 						</td>
 					</tr>
