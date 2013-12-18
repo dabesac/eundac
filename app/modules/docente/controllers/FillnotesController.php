@@ -160,17 +160,6 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                 'nota8_i'       => $nota8_i,
                 'nota9_i'       => $nota9_i,
                 'promedio1' => $promedio1,
-                'nota1_ii'      => $nota1_ii,
-                'nota2_ii'      => $nota2_ii,
-                'nota3_ii'      => $nota3_ii,
-                'nota4_ii'      => $nota4_ii,
-                'nota5_ii'      => $nota5_ii,
-                'nota6_ii'      => $nota6_ii,
-                'nota7_ii'      => $nota7_ii,
-                'nota8_ii'      => $nota8_ii,
-                'nota9_ii'      => $nota9_ii,
-                'promedio2' => $promedio2,
-                'notafinal'    => $notafinal
             );
         }else{
             if ($partial == 2) {
@@ -886,15 +875,6 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                     'nota7_i' => $nota7_i,
                     'nota8_i' => $nota8_i,
                     'nota9_i' => $nota9_i,
-                    'nota1_ii' => $nota1_ii,
-                    'nota2_ii' => $nota2_ii,
-                    'nota3_ii' => $nota3_ii,
-                    'nota4_ii' => $nota4_ii,
-                    'nota6_ii' => $nota6_ii,
-                    'nota7_ii' => $nota7_ii,
-                    'nota8_ii' => $nota8_ii,
-                    'nota9_ii' => $nota9_ii,
-                    'notafinal' => $notafinal
                 );
         }
         if ($partial == 2) {
