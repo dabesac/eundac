@@ -545,8 +545,14 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"#","name"=>"Matricula Ingresantes","imgicon"=>"saved");
     			$modules[1]['acls'] = $acls;
     			$acls = null;
+
+                $modules[2] = array ("name" =>"Codigo", "imgicon"=>"ok");
+                $acls[]= array("controller"=>"rcentral/code","name"=>"Generar Código","imgicon"=>"saved");
+                $resource1[]="rcentral/code";
+                $modules[2]['acls'] = $acls;
+                $acls = null;
     			 
-    			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
+    			$modules[3] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
                 $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
@@ -561,7 +567,7 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="report/registration";
                 $resource1[]="graduated/reportgraduated";
     			$resource1[]="graduated/graphicgraduated";
-    			$modules[2]['acls'] = $acls;
+    			$modules[3]['acls'] = $acls;
     			$acls = null;
     			break;
 

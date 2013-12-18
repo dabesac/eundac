@@ -68,7 +68,9 @@ if ($this->data_teacher) { ?>
 						</td>
 						<td>
 								<?php 
-								echo $courses['create_syllabus'];
+								$f_=$courses['create_syllabus'];
+       									$tf =split(" ",$f_);
+        								echo $tf[0];
 								?>
 						</td>
 						<td>
