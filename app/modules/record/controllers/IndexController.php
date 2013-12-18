@@ -342,7 +342,8 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 
 
@@ -445,7 +446,8 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 
 
@@ -626,7 +628,8 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 
 			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 			if ($type=="C") {
@@ -858,6 +861,7 @@ class Record_IndexController extends Zend_Controller_Action {
 					$where['subid']=$row['subid'];
 					$where['perid']=$row['perid'];
 					$where['turno']=$row['turno'];
+					$where['is_main']='S';
 					$register = new Api_Model_DbTable_Registrationxcourse();
 					$countregister = $register->_getCountRegisterCourse($where);
 					$rows[$key]['numregister'] = ($countregister)?$countregister:0;
@@ -956,7 +960,8 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 
 
@@ -1124,7 +1129,8 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 
 			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 
