@@ -11,7 +11,7 @@ class Register_StudentController extends Zend_Controller_Action {
         $login = $sesion->getStorage()->read();
         $this->sesion = $login;
     if (
-            $login->uid=='0518103020' 
+            $login->uid=='1243103148' 
     		
                ){
         }else {
