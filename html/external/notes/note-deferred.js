@@ -150,9 +150,9 @@ $(document).ready(function() {
 
 	                if($data.status == true){
 	                    //Pintar el exito
+	                    window.location.href = window.location.href;	
 	                    $("#edit_nota_" + $temporaindex).addClass('glyphicon-ok-circle');
 	                    $subject.css("color", "none");
-	                    
 	                }else{
 	                    
                 			$("#tbnotas tr").each(function(){
