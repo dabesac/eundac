@@ -32,6 +32,9 @@
 
                                 $u_="";
                                 $urlAsist ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($courses['perid'])."/".base64_encode('curid')."/".base64_encode($courses['curid'])."/".base64_encode('state')."/".base64_encode($courses['state_record']);
+
+                                $url_aplazado ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode('13E')."/".base64_encode('curid')."/".base64_encode($courses['curid']);
+
                                 $u_ = $courses['curid'].$courses['courseid'].$courses['turno'];
                                 $urlcampus = "http://campus.undac.edu.pe/courses/$u_/index.php";
                                 
@@ -52,7 +55,7 @@
                                         
 
                                         <div class="alert alert-title-course">
-                                          <h4 class='name-course'><?php echo $course['name']." - Turno ".$courses['turno']?></h4>
+                                          <h4 class='name-course'><?php echo $courses['courseid']." - ".$course['name']." - Turno ".$courses['turno']?></h4>
                                         </div>
                                         <?php if (
                                                     $courses['closure_syllabus'] == 'C' && ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')
@@ -141,6 +144,11 @@
 
                                         <?php }?>
 
+
+
+                                        <?php if ($courses['closure_record_n']=='C') {?>
+                                            <a class="btn btn-primary btn-sm btn-group-course btn-fill-deferred" href="/register/deferred/index<?php echo $url_aplazado?>" data-toggle="tooltip" title="Llenado de Asistencia" > Aplazados</a>
+                                        <?php }?>
                                         
 
 
