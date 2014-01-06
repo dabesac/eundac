@@ -425,9 +425,7 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="horary/seehorary";
                 $acls[]= array("controller"=>"docente/informacademic","name"=>"Informe Acad. Adm.","imgicon"=>"file");
 
-                $resource1[]="docente/listacademicreport";
-                $acls[]= array("controller"=>"docente/listacademicreport","name"=>"Reporte de Informes Academicos","imgicon"=>"calendar");
-
+       
                 $resource1[]="docente/informacademic";
                 $resource1[]="docente/fillnotes";
                 $resource1[]="docente/register";
@@ -440,6 +438,10 @@ class IndexController extends Zend_Controller_Action {
                     $resource1[]="horary/nhorary";
     			    $acls[]= array("controller"=>"horary/semester","name"=>"Ver Horarios Sem.","imgicon"=>"calendar");
     			    $resource1[]="horary/semester";
+
+                    $acls[]= array("controller"=>"docente/listacademicreport","name"=>"Reporte de Informes Academicos","imgicon"=>"calendar");
+                    $resource1[]="docente/listacademicreport";
+
     			}
     			$modules[0]['acls'] = $acls;
     			$acls = null;
