@@ -1,22 +1,33 @@
 <div>
 	<h4><center><b>DISTRIBUCIÓN ACADÉMICA PERIODO - <?php echo $this->perid?></b></center></h4>
 </div>
+<div>
+    <center>
+        <a href="/distribution/distribution" class="btn btn-warning"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>
+    </center>
+</div>
 <div style="margin-top:20px">
-	<ul class="nav nav-pills nav-justified" id="distribution">
-  		<li class="active">
-  			<a id="courses" href="#datcourses"><b>Paso &nbsp &nbsp</b><span class="badge">1</span></a>
-  		</li>
-  		<li>
-  			<a id="teachers" href="#datteachers"><b>Paso &nbsp &nbsp</b><span class="badge">2</span></a>
-  		</li>
-  		<li>
-  			<a id="view" href="#datview"><b>Paso &nbsp &nbsp</b><span class="badge">3</span></a>
-  		</li>
-	</ul>
+    <ul class="nav nav-pills nav-justified" id="distribution">
+        <li class="active">
+            <a id="courses" href="#datcourses"><b>Paso &nbsp &nbsp</b><span class="badge">1</span></a>
+        </li>
+        <li>
+            <a id="teachers" href="#datteachers"><b>Paso &nbsp &nbsp</b><span class="badge">2</span></a>
+        </li>
+        <li>
+            <a id="view" href="#datview"><b>Paso &nbsp &nbsp</b><span class="badge">3</span></a>
+        </li>
+    </ul>
 	<div class="tab-content">
         <div id="datcourses" class="tab-pane active"></div>
         <div id="datteachers" class="tab-pane"></div>
         <div id="datview" class="tab-pane">
+            <div class="panel panel-default" style="margin-top:15px">
+                <div class="panel-body">
+                    <b style="font-size:20px"><span class="glyphicon glyphicon-print"></span> - VISTA PRELIMINAR GENERAL</b>
+                    <a onclick="javascript: window.open('/distribution/distribution/generalpreview/escid/<?php echo base64_encode($this->escid)?>/distid/<?php echo base64_encode($this->distid)?>/perid/<?php echo base64_encode($this->perid)?>/subid/<?php echo base64_encode($this->subid)?>','Vista Preliminar General','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=900,height=720')" class="btn btn-success" style="float:right"><span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Vista Preliminar General Docente-Curso"></span> Imprimir</a>
+                </div>
+            </div>
             <div class="panel panel-default" style="margin-top:15px">
                 <div class="panel-body">
                     <b style="font-size:20px"><span class="glyphicon glyphicon-print"></span> - IMPRESION DISTRIBUCIÓN</b>
@@ -44,4 +55,5 @@ $('#distribution a').click(function (e) {
   e.preventDefault()
   $(this).tab('show')
 })
+$('a[rel=tooltip]').tooltip();
 </script>
