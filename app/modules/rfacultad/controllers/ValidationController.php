@@ -16,6 +16,9 @@ class Rfacultad_ValidationController extends Zend_Controller_Action
 
     public function indexAction() 
     {
+
+      print_r($this->sesion);break;
+
       $this->_helper->redirector("addcourse");
     }
 
