@@ -57,12 +57,7 @@ class Syllabus_Form_Syllabusunitcontent extends Zend_Form{
         $com_instruments->setAttrib("maxlength", "500");
         $com_instruments->setAttrib("placeholder","Ingrese texto");
         $com_instruments->removeDecorator("HtmlTag")->removeDecorator("Label");
-        
-        $submit = new Zend_Form_Element_Submit('guardar');
-        $submit->setAttrib('class','btn btn-info');
-        $submit->setLabel('Agregar');
-        $submit->removeDecorator("HtmlTag")->removeDecorator("Label")->removeDecorator('DtDdWrapper');
 
-        $this-> addElements(array($week,$session,$obj_content,$obj_strategy,$com_conceptual,$com_procedimental,$com_actitudinal,$com_indicators,$com_instruments,$submit));
+        $this-> addElements(array($week,$session,$obj_content,$obj_strategy,$com_conceptual,$com_procedimental,$com_actitudinal,$com_indicators,$com_instruments));
     }
 }

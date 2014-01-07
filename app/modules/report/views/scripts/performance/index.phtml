@@ -33,7 +33,7 @@
         <tr>
             <td colspan="2"><b>SELECCIONE ESCUELA:</b></td>
             <td colspan="2"><?php 
-            if ( $this->rid=='DC' && $this->esdirector=='S' && $this->escid!='2ESTY')
+            if ( $this->rid=='DC' && $this->esdirector=='S')
             {?>
                 <select style='height:35px;width:350px' class='form-control' id="escu" name="escu"><option value="<?php echo $this->escid?>"><?php echo $this->nom_escuela?></option>
                 </select>
@@ -44,11 +44,13 @@
             }
             else{
 
-                 if ( $this->rid=='DC' && $this->esdirector=='S' &&  $this->escid=='2ESTY')
-                     {    print $this->fm->escid; }
+                 // if ( $this->rid=='DC' && $this->esdirector=='S' &&  $this->escid=='2ESTY')
+                 //     {    print $this->fm->escid; }
 
-                else
-                    { print $this->fm->escid; }
+               // else
+                 //   { 
+                        print $this->fm->escid; 
+                   // }
             }
             ?></td>
 

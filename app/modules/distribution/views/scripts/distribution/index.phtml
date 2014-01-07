@@ -1,16 +1,23 @@
 <?php
 $ldistri =$this->ldistribution;
 ?>
-<div class="menu-botones">
+<div class="panel panel-primary">
 	<div class="pull-left"><h4>Lista Distribuciones</h4></div>
 	<div class="pull-right"><a href="/distribution/distribution/new" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span> NUEVO</a></div>
+	<br><br>
+</div>
+<div class="row" style="margin-bottom: 10px">
+  <div class="col-md-3"><center><img src="/img/circulo-verde.png"> Activo</center></div>
+  <div class="col-md-3"><center><img src="/img/circulo-rojo.png"> Cerrado</center></div>
+  <div class="col-md-3"><center><img src="/img/circulo-amarillo.png"> Borrador</center></div>
+  <div class="col-md-3"><center><img src="/img/circulo-azul.png"> Observado</center></div>
 </div>
 <div class="table-responsive">
 <table class="table table-striped table-hover table-condensed"> 
 	<tr>
 		<th class="col-md-1">#</th>
 		<th class="col-md-1">Periodo</th>
-		<th >Numero</th>
+		<th >Número</th>
 		<th class="col-md-2">Fecha Aprobación</th>
 		<th class="col-md-1">Estado</th>
 		<th class="col-md-3" colspan="4"><center>Operaciones</center></th>
@@ -27,15 +34,23 @@ $ldistri =$this->ldistribution;
 		$distid = base64_encode($distri['distid']);
 		$perid = base64_encode($distri['perid']);
 		$state="";
+		$image="";
 		$state = ($distri['state']=='A')?"class='success'":"";
 		$i++; 
+		switch ($distri['state']) {
+			case 'A': $image = "/img/circulo-verde.png"; break;
+			case 'I': $image = "/img/circulo-rojo.png"; break;
+			case 'C': $image = "/img/circulo-rojo.png"; break;
+			case 'B': $image = "/img/circulo-amarillo.png"; break;
+			case 'O': $image = "/img/circulo-azul.png"; break;
+		}
 	?>
 	<tr <?php echo $state;?>>
 		<td><?php echo $i;?></td>	
 		<td><?php echo $periodo ;?></td>
 		<td><?php echo $num;?></td>
 		<td><?php echo $approv;?></td>
-		<td><?php echo $distri['state'];?></td>
+		<td><img src='<?php echo $image;?>'></td>
 		<td>
 			<center>
 				<a href="/distribution/printdistribution/index/escid/<?php echo base64_encode($distri['escid'])?>/subid/<?php echo base64_encode($distri['subid'])?>/perid/<?php echo $perid;?>/distid/<?php echo $distid;?>"><span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Imprimir Distribución"></span></a>

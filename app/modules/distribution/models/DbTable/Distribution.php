@@ -73,7 +73,7 @@ class Distribution_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	public function _getFilter($where=null,$atrib=array()){
+	public function _getFilter($where=null,$atrib=array(),$orders=array()){
 		try{
 			if($where['eid']=='' || $where['oid']=='') return false;
 				$select = $this->_db->select();
