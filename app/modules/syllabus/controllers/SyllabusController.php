@@ -10,7 +10,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
         // if (!$login->modulo=="syllabus"){
         //  $this->_helper->redirector('index','index','default');
         // }
-        $this->sesion = $login;
+        $this->sesion = $login; 
     }
 
     public function indexAction(){
@@ -31,6 +31,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $this->view->perid=$where['perid'];
             $syl= new Api_Model_DbTable_Syllabus();
             $datsyl=$syl->_getOne($where);
+            $this->view->num=$datsyl['number'];
             if (!$datsyl) {
                 $data['eid']=$where['eid'];
                 $data['oid']=$where['oid'];
@@ -122,6 +123,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
 
             if ($this->getRequest()->isPost())
             {
+                echo "akiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
                 $formData = $this->getRequest()->getPost();
                 $pk['perid']=$where['perid'];
                 $pk['curid']=$where['curid'];
@@ -144,8 +146,8 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                         $data['state']='C';
                         if ($syll->_update($data,$pk)){ ?>
                             <script type="text/javascript">
-                                alert("Se cerró el Silabo");
-                                window.location.reload();
+                                //alert("Se cerró el Silabo");
+                                //window.location.reload();
                             </script>
                         <?php
                         }
