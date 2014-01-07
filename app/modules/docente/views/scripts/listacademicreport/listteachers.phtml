@@ -11,9 +11,12 @@
 		foreach ($this->packdatat as $pdt) {?>
 			<tr>
 				<td><center><?php echo $c+1 ?></center></td>
-				<td><center><?php echo $this->packdatat[$c][0]['uid']?></center></td>
-				<td><?php echo $this->packdatat[$c][0]['last_name0']." ".$this->packdatat[$c][0]['last_name1']." ".$this->packdatat[$c][0]['first_name'];?></td>
-				<td><center><a href="informacademic/print/pid/<?php echo base64_encode($this->packdatat[$c][0]['pid'])?>/uid/<?php echo base64_encode($this->packdatat[$c][0]['uid'])?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/perid/<?php echo base64_encode($this->perid)?>"><span class="glyphicon glyphicon-print"></span></a></center></td>
+				<td><center><?php echo $pdt['uid'] ?></center></td>
+				<td><center><?php echo $pdt['pid'] ?></center></td>
+				<td><center><?php echo $pdt['escid'] ?></center></td>
+				<td><?php echo $pdt['nombrecompleto'] ?></td>
+	
+				<td><center><a href="listacademicreport/print/pid/<?php echo base64_encode($pdt['pid'])?>/uid/<?php echo base64_encode($pdt['uid'])?>/escid/<?php echo base64_encode($pdt['escid'])?>/subid/<?php echo base64_encode($pdt['subid'])?>/perid/<?php echo base64_encode($this->perid)?>/nombre/<?php echo base64_encode($pdt['nombrecompleto'])?>"><span class="glyphicon glyphicon-print"></span></a></center></td>
 			</tr>
 		<?php $c++;
 		}
