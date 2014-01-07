@@ -176,5 +176,25 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 			print "Error: Read All CourseSupport ".$e->getMessage();
 		}
 	}
+
+	public function _getTeachersXPeridXEscid($eid,$oid,$escid,$perid){
+        try{
+            $sql=$this->_db->query("
+       
+
+            select distinct p.last_name0 || ' ' || p.last_name1 || ', ' || p.first_name as nombrecompleto,u.subid,u.escid,u.uid,u.pid from base_course_x_teacher AS d
+			inner join base_users as u
+			on u.uid=d.uid and u.escid=d.escid
+			inner join base_person as p
+			on p.pid=u.pid
+			where d.escid='$escid' and d.perid='$perid' and d.oid='$oid' and d.eid='$eid'
+             ");          
+            return $sql->fetchAll(); 
+            }  catch (Exception $ex){
+                print $ex->getMessage();
+            }            
+        }
+
+	
     
 }
