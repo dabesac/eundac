@@ -1,9 +1,10 @@
 <table class="table span10">
+	
 	<?php if ($this->packdatat){?>
 	    <tr>
 	        <th><center>Num</center></th>
 	        <th><center>Codigo</center></th>
-	        <th ><center>Docente</center></th>
+	        <th >Docente</th>
 	        <th ><center>Imprimir</center></th>	        
 	    </tr>
 	<?php $c=0; 
@@ -11,8 +12,8 @@
 			<tr>
 				<td><center><?php echo $c+1 ?></center></td>
 				<td><center><?php echo $this->packdatat[$c][0]['uid']?></center></td>
-				<td><center><?php echo $this->packdatat[$c][0]['last_name0']." ".$this->packdatat[$c][0]['last_name1']." ".$this->packdatat[$c][0]['first_name'];?></center></td>
-				<td><center><a href=""><span class="glyphicon glyphicon-print"></span></a></center></td>
+				<td><?php echo $this->packdatat[$c][0]['last_name0']." ".$this->packdatat[$c][0]['last_name1']." ".$this->packdatat[$c][0]['first_name'];?></td>
+				<td><center><a href="informacademic/print/pid/<?php echo base64_encode($this->packdatat[$c][0]['pid'])?>/uid/<?php echo base64_encode($this->packdatat[$c][0]['uid'])?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/perid/<?php echo base64_encode($this->perid)?>"><span class="glyphicon glyphicon-print"></span></a></center></td>
 			</tr>
 		<?php $c++;
 		}

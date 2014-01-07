@@ -18,7 +18,8 @@ class Docente_ListacademicreportController extends Zend_Controller_Action {
     
     public function indexAction()
     {
-   	    //print_r($this->sesion);
+   	
+
     }
 
      public function listperiodsAction()
@@ -48,10 +49,16 @@ class Docente_ListacademicreportController extends Zend_Controller_Action {
     		$this->_helper->layout()->disableLayout();
     		$eid=$this->sesion->eid;
     		$oid=$this->sesion->oid;
-    		$where['eid']=$eid;
-    		$where['oid']=$oid;
-    		$perid=$this->_getParam("perid");
-    		$where['perid']=$perid;
+            $subid=$this->sesion->subid;
+            $escid=$this->sesion->escid;
+
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $perid=$this->_getParam("perid");
+            $where['perid']=$perid;
+            $this->view->perid=$perid;
+            $this->view->subid=$subid;
+            $this->view->escid=$escid;
 
     		$dbteachers= new Api_Model_DbTable_Coursexteacher();
     		$where=array("eid"=>$eid,"oid"=>$oid,"perid"=>$perid,"is_main"=>"S");
