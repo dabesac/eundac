@@ -56,8 +56,6 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             }else{
                 $form->populate($formData);
     		}
-    	}else{
-    		$form->number->setValue($this->sesion->period->perid."-".time());
     	}
     	$this->view->form = $form;
     }

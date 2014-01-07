@@ -1,3 +1,4 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <script src="/external/jquery/jquery-1.9.1.js"></script>
 <script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
 <script src="/external/jquery/external/globalize.js"></script>
@@ -7,8 +8,22 @@
 <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
 <script src="/external/bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+<link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/css/style.css">
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<style type="text/css">
+.cuadro{    
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid silver;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 96%;
+    margin-left: 2%;
+}
+th, td{
+    font-size:12px;
+}
+</style>
 
 <?php 
 $turno=$this->turno;
@@ -35,14 +50,26 @@ switch ($numunidad) {
 }
 $nunidad=$numunidad-1;
 ?>
-<div class="alert alert-info" style="font-size: 14px"><b>Información: </b>Primero debe ingresar y guardar los datos de la Unidad, luego agregar los contenidos.</div>
-<div style="width:100%; text-align:center;font-size:22px; margin-bottom:20px">
-	<b>PROGRAMACIÓN DE UNIDADES</b>
-	<a id="cerrar" class="btn btn-danger" style="margin-left:100px"><span class="glyphicon glyphicon-eject"></span>Cerrar</a>
-</div>
+
+<body class="found">
+<table class="table" style="background: #428bca; color: white">
+    <tr>
+        <td>
+        	<h4><b><center>PROGRAMACIÓN DE UNIDADES</center></b></h4>
+        </td>
+        <td rowspan="2">
+        	<br><a style="float:right" class='btn btn-danger' onclick="javascript: window.close();"><span class="glyphicon glyphicon-eject"></span> Cerrar</a>
+        </td>
+    </tr>
+    <tr>
+    	<td style="font-size: 13px"><b>INFORMACIÓN: </b>Primero debe ingresar y guardar los datos de la Unidad, luego agregar los contenidos.</td>
+    </tr>
+</table>
+
+<div class="cuadro">
 <form name="<?php echo $this->form->getName(); ?>" id='<?php echo $this->form->getName(); ?>' action="<?php echo $this->form->getAction(); ?>" method="post" enctype="multipart/form-data">
 
-	<table class="table table-bordered table-striped" style="width:95%; margin-left:20px">
+	<table class="table table-hover" style="width:95%; margin-left:20px">
 	    <tr>
 	        <th style="font-size:20px; width:150px">UNIDAD <?php echo $numroma ?>:</th>
 	        <td><?php echo $this->form->name?></td>
@@ -53,8 +80,12 @@ $nunidad=$numunidad-1;
 	    </tr>
 		<tr>
 			<td colspan="2">
-				<center><a href="/syllabus/syllabus/content/perid/<?php echo base64_encode($perid)?>/subid/<?php echo base64_encode($subid)?>/escid/<?php echo base64_encode($escid)?>/curid/<?php echo base64_encode($curid)?>/courseid/<?php echo base64_encode($courseid)?>/turno/<?php echo base64_encode($turno)?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $numunidad?>" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span>Agregar Contenidos</a></center>
+				<!-- <center><a href="/syllabus/syllabus/content/perid/<?php echo base64_encode($perid)?>/subid/<?php echo base64_encode($subid)?>/escid/<?php echo base64_encode($escid)?>/curid/<?php echo base64_encode($curid)?>/courseid/<?php echo base64_encode($courseid)?>/turno/<?php echo base64_encode($turno)?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $numunidad?>" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span>Agregar Contenidos</a></center> -->
+				<center><a id="btn_addcontent" href="#" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span>Agregar Contenidos</a></center>
 			</td>
+		</tr>
+		<tr id="tr_content" style="display: none">
+			<td colspan="2"><div id="addcontents"></div></td>
 		</tr>
 		<tr style="height:150px; background-color:#FAF6CC">
 			<td colspan="2">
@@ -77,12 +108,20 @@ $nunidad=$numunidad-1;
 							<td><?php echo $conte['obj_content']?></td>
 							<td><?php echo $conte['obj_strategy']?></td>
 							<td style="width:20px">
-								<a href="/syllabus/syllabus/modifycontent/perid/<?php echo base64_encode($conte['perid'])?>/subid/<?php echo base64_encode($conte['subid'])?>/escid/<?php echo base64_encode($conte['escid'])?>/curid/<?php echo base64_encode($conte['curid'])?>/courseid/<?php echo base64_encode($conte['courseid'])?>/turno/<?php echo base64_encode($conte['turno'])?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $conte['unit']?>/session/<?php echo $conte['session']?>" title="Modificar"><span class="glyphicon glyphicon-pencil"></span></a>
+								<a id="update_content_<?php echo $conte['session']?>" href="#" title="Modificar"><span class="glyphicon glyphicon-pencil"></span></a>
 							</td>
 							<td style="width:20px">
 								<a href="/syllabus/syllabus/deletecontent/perid/<?php echo base64_encode($conte['perid']) ?>/subid/<?php echo base64_encode($conte['subid'])?>/escid/<?php echo base64_encode($conte['escid'])?>/curid/<?php echo base64_encode($conte['curid'])?>/courseid/<?php echo base64_encode($conte['courseid'])?>/turno/<?php echo base64_encode($conte['turno'])?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $conte['unit']?>/session/<?php echo $conte['session']?>" onclick="return confirm('Esta seguro de Eliminar el registro.')" title="Eliminar"><span class="glyphicon glyphicon-trash"></span></a>
 							</td>
 						</tr>
+						<script type="text/javascript">
+						$("#update_content_<?php echo $conte['session']?>").click(function(){
+							$("#addcontents").html("<center><img src='/img/spinner.gif'></center>");
+							var url = "/syllabus/syllabus/modifycontent/perid/<?php echo base64_encode($conte['perid'])?>/subid/<?php echo base64_encode($conte['subid'])?>/escid/<?php echo base64_encode($conte['escid'])?>/curid/<?php echo base64_encode($conte['curid'])?>/courseid/<?php echo base64_encode($conte['courseid'])?>/turno/<?php echo base64_encode($conte['turno'])?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/numunidad/<?php echo $conte['unit']?>/session/<?php echo $conte['session']?>";
+							$("#addcontents").load(url);
+							$("#tr_content").show();
+						});
+						</script>
 					<?php	
 					}
 				}
@@ -115,12 +154,20 @@ $nunidad=$numunidad-1;
 							<td><?php echo $conte['com_indicators']?></td>
 							<td><?php echo $conte['com_instruments']?></td>
 							<td style="width:20px">
-								<a href="/syllabus/syllabus/modifycontent/perid/<?php echo base64_encode($conte['perid'])?>/subid/<?php echo base64_encode($conte['subid'])?>/escid/<?php echo base64_encode($conte['escid'])?>/curid/<?php echo base64_encode($conte['curid'])?>/courseid/<?php echo base64_encode($conte['courseid'])?>/turno/<?php echo base64_encode($conte['turno'])?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $conte['unit']?>/session/<?php echo $conte['session']?>" title="Modificar"><span class="glyphicon glyphicon-pencil"></span></a>
+								<a id="update_content_<?php echo $conte['session']?>" href="#" title="Modificar"><span class="glyphicon glyphicon-pencil"></span></a>
 							</td>
 							<td style="width:20px">
 								<a href="/syllabus/syllabus/deletecontent/perid/<?php echo base64_encode($conte['perid']) ?>/subid/<?php echo base64_encode($conte['subid'])?>/escid/<?php echo base64_encode($conte['escid'])?>/curid/<?php echo base64_encode($conte['curid'])?>/courseid/<?php echo base64_encode($conte['courseid'])?>/turno/<?php echo base64_encode($conte['turno'])?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $conte['unit']?>/session/<?php echo $conte['session']?>" onclick="return confirm('Esta seguro de Eliminar el registro.')" title="Eliminar"><span class="glyphicon glyphicon-trash"></span></a>
 							</td>
 						</tr>
+						<script type="text/javascript">
+						$("#update_content_<?php echo $conte['session']?>").click(function(){
+							$("#addcontents").html("<center><img src='/img/spinner.gif'></center>");
+							var url = "/syllabus/syllabus/modifycontent/perid/<?php echo base64_encode($conte['perid'])?>/subid/<?php echo base64_encode($conte['subid'])?>/escid/<?php echo base64_encode($conte['escid'])?>/curid/<?php echo base64_encode($conte['curid'])?>/courseid/<?php echo base64_encode($conte['courseid'])?>/turno/<?php echo base64_encode($conte['turno'])?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/numunidad/<?php echo $conte['unit']?>/session/<?php echo $conte['session']?>";
+							$("#addcontents").load(url);
+							$("#tr_content").show();
+						});
+						</script>
 					<?php	
 					}
 				}
@@ -142,10 +189,12 @@ $nunidad=$numunidad-1;
 		</tr>
 	</table>
 	<div style="width:100%; text-align:center; margin-top:20px">
-		<a id="atras" href="/syllabus/syllabus/units/perid/<?php echo base64_encode($perid)?>/subid/<?php echo base64_encode($subid)?>/escid/<?php echo base64_encode($escid)?>/curid/<?php echo base64_encode($curid)?>/courseid/<?php echo base64_encode($courseid)?>/turno/<?php echo base64_encode($turno)?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $nunidad?>" class="btn btn-info"><span class="glyphicon glyphicon-arrow-left"></span> Atras</a>
+		<a id="atras" href="/syllabus/syllabus/units/perid/<?php echo base64_encode($perid)?>/subid/<?php echo base64_encode($subid)?>/escid/<?php echo base64_encode($escid)?>/curid/<?php echo base64_encode($curid)?>/courseid/<?php echo base64_encode($courseid)?>/turno/<?php echo base64_encode($turno)?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $nunidad?>" class="btn btn-success"><span class="glyphicon glyphicon-arrow-left"></span> Atras</a>
 		<?php echo $this->form->guardar ?>
 	</div><br><br>
 </form>
+</div>
+</body>
 
 <script type="text/javascript">
 	var numunidad="<?php echo $this->numunidad?>";
@@ -156,7 +205,11 @@ $nunidad=$numunidad-1;
 		});
 	};
 
-	$("#cerrar").click(function(){
-			window.close();
+
+	$("#btn_addcontent").click(function(){
+		$("#addcontents").html("<center><img src='/img/spinner.gif'></center>");
+		var url = "/syllabus/syllabus/content/perid/<?php echo base64_encode($perid)?>/subid/<?php echo base64_encode($subid)?>/escid/<?php echo base64_encode($escid)?>/curid/<?php echo base64_encode($curid)?>/courseid/<?php echo base64_encode($courseid)?>/turno/<?php echo base64_encode($turno)?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $numunidad?>";
+		$("#addcontents").load(url);
+		$("#tr_content").show();
 	});
 </script>

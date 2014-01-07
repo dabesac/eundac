@@ -241,7 +241,7 @@ $("#crearunidad").click(function(){
     };
     url='/syllabus/syllabus/units/perid/'+perid+'/subid/'+subid+'/escid/'+escid+'/curid/'+curid+'/courseid/'+courseid+'/turno/'+turno+'/tipo_cali/'+tipo_cali+'/units/'+uni+'/numunidad/'+1;
 	// alert(url);
-    window.open(url,'Programación de Unidades','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=no,dependent=no,width=850,height=650');
+    window.open(url,'Programación de Unidades','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=no,dependent=no,width=850,height=700');
 });
 
 $(".height").click(function(e){
@@ -276,7 +276,7 @@ $("#modal").modal('show');
 setTimeout('closeWin(text)', 4000);	// tiempo 5 segundos antes de cerrar
 }
 function closeWin(text) {
-
+	$("#save").click();
 	$("#modal").modal('hide');
 	popupWin();
 }
@@ -290,7 +290,7 @@ function closeWin(text) {
 <div  style="margin-left: 0px;margin-right: 5px; font-size: 12px; top:  550px;  left: 200px;"class="modal fade" id='modal'>
   <div class="modal-dialog">
     	<div class="alert alert-danger">
-        <center><b>GUARDE SUS AVANCES AL SISTEMA PARA CONTINUAR</b>
+        <center><b>Los datos se enviaron al Servidor.</b>
         </center>
       </div>  
   </div>

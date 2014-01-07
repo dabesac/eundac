@@ -50,6 +50,12 @@
 		if (exis == 1) {
 			$("#existe").show();
 		};
+
+		$("#perid").change(function(){
+			var perid = $.base64.decode($(this).val());
+			var time = "<?php echo time()?>";
+			$("#number").val(perid+" - "+time);
+		});
 		
 	});
 	
