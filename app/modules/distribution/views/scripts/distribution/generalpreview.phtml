@@ -39,6 +39,49 @@ th, td{
         </td>
     </tr>
 </table>
+
+<?php 
+if ($this->coursenotassign) { ?>
+    <div id="academica" class="cuadro">
+        <div>
+            <h5 style="color: red"><center><b>ASIGNATURAS SIN DOCENTE</b></center></h5>
+        </div>
+        <center>
+        <table class="table table-condensed table-hover" style="margin-top:10px; width:96%">
+        <tr>
+            <th><center>#</center></th>
+            <th><center>Currícula</center></th>
+            <th>Asignaturas</th>
+            <th><center>Turno</center></th>
+            <th><center>Sem</center></th>
+        </tr>
+        <?php
+        $i = 1;
+        foreach ($this->coursenotassign as $coursenotassign) {
+                $where = array(
+                    'eid' => $coursenotassign['eid'], 'oid' => $coursenotassign['oid'], 
+                    'curid' => $coursenotassign['curid'], 'escid' => $coursenotassign['escid'], 
+                    'subid' => $coursenotassign['subid'], 'courseid' => $coursenotassign['courseid']);
+                $cour = new Api_Model_DbTable_Course();
+                $data_cour = $cour->_getOne($where);
+                ?>
+                <tr>
+                    <td><center><?php echo $i ?></center></td>
+                    <td><center><?php echo $coursenotassign['curid'] ?></center></td>
+                    <td><?php echo $coursenotassign['courseid']." - ".$data_cour['name'] ?></td>
+                    <td><center><?php echo $coursenotassign['turno']?></center></td>
+                    <td><center><?php echo $coursenotassign['semid'] ?></center></td>
+                </tr>
+                <?php
+                $i++;
+        }
+        ?>
+    </table>
+    </center>
+    </div>
+    <?php
+}?>
+
 <?php 
 if ($this->courses) { 
     foreach ($this->teachers as $teachers) { 

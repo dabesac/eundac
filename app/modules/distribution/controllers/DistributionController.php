@@ -1125,6 +1125,10 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $data_courses = $cour_tea->_getFilter($where,$attrib=null,$orders=array('uid','curid','courseid','turno'));
             $this->view->courses = $data_courses;
 
+            $per_cour = new Api_Model_DbTable_PeriodsCourses();
+            $data_percour = $per_cour->_getCoursesIsNotTeacher($where);
+            if ($data_percour) $this->view->coursenotassign = $data_percour;
+
             $doc = array();
             $tmp_doc = '';
             $c=1;
@@ -1158,6 +1162,10 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $cour_tea = new Api_Model_DbTable_Coursexteacher();
             $data_courses = $cour_tea->_getFilter($where,$attrib=null,$orders=array('uid','curid','courseid','turno'));
             $this->view->courses = $data_courses;
+
+            $per_cour = new Api_Model_DbTable_PeriodsCourses();
+            $data_percour = $per_cour->_getCoursesIsNotTeacher($where);
+            if ($data_percour) $this->view->coursenotassign = $data_percour;
 
             $doc = array();
             $tmp_doc = '';
