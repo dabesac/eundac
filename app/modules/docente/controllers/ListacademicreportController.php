@@ -59,10 +59,7 @@ class Docente_ListacademicreportController extends Zend_Controller_Action {
             $this->view->perid=$perid;
             $this->view->subid=$subid;
             $this->view->escid=$escid;     
-            $dbteachers= new Api_Model_DbTable_Coursexteacher();
-            //"is_main"=>"S"
-            //$wheresc=array("eid"=>$eid,"oid"=>$oid,"perid"=>$perid,"escid"=>$escid);
-            //print_r($wheresc);
+            $dbteachers= new Api_Model_DbTable_Coursexteacher();        
 
             $teachers=$dbteachers->_getTeachersXPeridXEscid($eid,$oid,$escid,$perid);
             //print_r($teachers);

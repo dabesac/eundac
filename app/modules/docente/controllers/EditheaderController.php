@@ -34,6 +34,28 @@ class Docente_EditheaderController extends Zend_Controller_Action {
             $form->populate($datescid);
             $this->view->form=$form;
 
+             if ($this->getRequest()->isPost())
+            {
+                $frmdata=$this->getRequest()->getPost();
+                if ($form->isValid($frmdata))
+                { 
+                    unset($frmdata['save']);
+                    $pk=array();
+                    $pk['eid']=$eid;
+                    $pk['oid']=$oid;                           
+                    $pk['escid']=$escid;                     
+                    $pk['subid']=$subid;
+                    
+                    $esc->_update($frmdata,$pk);
+                    //print_r($frmdata);
+
+
+                }
+
+            }
+
+
+
             } catch (Exception $e) {
             print "Error: ".$e->getMessage();
              }
