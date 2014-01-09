@@ -1,37 +1,19 @@
-<script src="/external/jquery/jquery-1.9.1.js"></script>
-<script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
-<script src="/external/jquery/external/globalize.js"></script>
-<script src="/external/jquery/external/jquery.mousewheel.js"></script>
-<script src="/external/jquery/external/jshint.js"></script>
-<script src="/external/jquery/external/qunit.js"></script>
-<link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
-<script src="/external/bootstrap/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="/css/style.css">
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-
-<?php
-$turno=$this->turno;
-$perid=$this->perid;
-$courseid=$this->courseid;
-$curid=$this->curid;
-$escid=$this->escid;
-$subid=$this->subid;
-$tipo_cali=$this->tipo_cali;
-$units=$this->units;
-$numunidad=$this->numunidad;
-?>
-<div style="width:100%; font-size:20px"><br><center><b>NUEVO REGISTRO DE CONTENIDO</b></center></div>
-<form name="<?php echo $this->form->getName(); ?>" id='<?php echo $this->form->getName(); ?>' action="<?php echo $this->form->getAction(); ?>" method="post" enctype="multipart/form-data">
+<div class="panel panel-primary">
+<div style="width:100%; font-size:15px">
+	<b>MODIFICAR REGISTRO DE CONTENIDO</b>
+	<a id="close_drag" href="#" class="btn btn-default" style="margin-left:10px; float: right" rel="tooltip" title="Cerrar Contenido"><span class="glyphicon glyphicon-eject"></span></a>
+	<a id="modify_content" href="#" class="btn btn-default" style="float: right" rel="tooltip" title="Actualizar Contenido"><span class="glyphicon glyphicon-edit"></span></a>
+</div>
+<form name="<?php echo $this->form->getName(); ?>" id='frmupdatecontent' action="/syllabus/syllabus/modifycontent/perid/<?php echo base64_encode($this->perid)?>/subid/<?php echo base64_encode($this->subid)?>/escid/<?php echo base64_encode($this->escid)?>/curid/<?php echo base64_encode($this->curid)?>/courseid/<?php echo base64_encode($this->courseid)?>/turno/<?php echo base64_encode($this->turno)?>/tipo_cali/<?php echo base64_encode($this->tipo_cali)?>/numunidad/<?php echo $this->numunidad?>/session/<?php echo $this->session?>" method="post" enctype="multipart/form-data">
 	<br>
-	<table class="table table-striped table-bordered" style="font-size:13px; width:95%; margin-left:20px">
+	<table class="table table-striped table-bordered" style="font-size:12px; width:96%; margin-left:20px">
 			<tr>
-	   			<th style="font-size:16px">Semana:</th>
+	   			<th style="font-size:15px">Semana:</th>
 	   			<td><div style="width:80px"><?php echo $this->form->week ?></div></td>
-	   			<th style="font-size:16px">Sesión:</th>
+	   			<th style="font-size:15px">Sesión:</th>
 	   			<td><div style="width:80px"><?php echo $this->form->session ?></div></td>
 	   		</tr>
-			<?php if ($tipo_cali=="O") { ?>   
+			<?php if ($this->tipo_cali=="O") { ?>   
 		    <tr>
 		       	<th>Contenidos:</th>
 		      	<td colspan="3">
@@ -44,7 +26,7 @@ $numunidad=$this->numunidad;
 		       		<?php echo $this->form->obj_strategy ?>
 		       	</td>
 		    </tr>
-			<?php }elseif ($tipo_cali=="C") { ?>
+			<?php }elseif ($this->tipo_cali=="C") { ?>
 		    <tr>
 		       	<th>Conceptual:</th>
 		      	<td colspan="3">
@@ -77,8 +59,42 @@ $numunidad=$this->numunidad;
 		    </tr>
 		<?php }?>
 	</table>
-	<div style="width:100%; text-align:center">
-	    <?php echo $this->form->guardar?>
-	    <a href="/syllabus/syllabus/units/perid/<?php echo base64_encode($perid)?>/subid/<?php echo base64_encode($subid)?>/escid/<?php echo base64_encode($escid)?>/curid/<?php echo base64_encode($curid)?>/courseid/<?php echo base64_encode($courseid)?>/turno/<?php echo base64_encode($turno)?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $numunidad?>" class="btn btn-danger" style="margin-left:30px"><i class="icon-remove icon-white"></i>Cancelar</a>
-	</div>
+	<input type="hidden" name="turno" value="<?php echo $this->turno?>">
+	<input type="hidden" name="perid" value="<?php echo $this->perid?>">
+	<input type="hidden" name="courseid" value="<?php echo $this->courseid?>">
+	<input type="hidden" name="curid" value="<?php echo $this->curid?>">
+	<input type="hidden" name="escid" value="<?php echo $this->escid?>">
+	<input type="hidden" name="subid" value="<?php echo $this->subid?>">
+	<input type="hidden" name="unit" value="<?php echo $this->numunidad?>">
 </form>
+</div>
+
+<script type="text/javascript">
+$("#close_drag").click(function(){
+	$("#tr_content").hide();
+});
+
+$("#modify_content").click(function(){
+	$("#frmupdatecontent").submit();
+});
+
+$("#frmupdatecontent").submit(function(){
+		$("#tr_content").hide();
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function(data) { 
+                $('#addcontents').html(data);                                 
+            }
+        }); 
+        return false;
+});
+
+var success = "<?php echo $this->success?>";
+if (success == 1) {
+	window.location.reload();
+};
+
+$('a[rel=tooltip]').tooltip();
+</script>

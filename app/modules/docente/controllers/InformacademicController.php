@@ -164,4 +164,40 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
+
+
+    // public function printpruebaAction(){
+    //     try {
+            
+    //         $this->_helper->layout()->disableLayout();
+    //         $eid = $this->sesion->eid;
+    //         $oid = $this->sesion->oid;
+    //         $pid = base64_decode($this->_getParam('pid'));
+    //         $uid = base64_decode($this->_getParam('uid'));
+    //         echo $escid = base64_decode($this->_getParam('escid'));
+    //         echo $subid = base64_decode($this->_getParam('subid'));
+    //         $escid='4ME';
+    //         $subid='1901';
+
+    //         $perid = base64_decode($this->_getParam('perid'));
+    //         $this->view->speciality = $this->sesion->speciality->name;
+    //         $this->view->faculty = $this->sesion->faculty->name;
+    //         $this->view->infouser = $this->sesion->infouser['fullname'];
+    //         $this->view->perid = $perid;
+
+    //         $wherescid= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+    //         //print_r($wherescid);
+    //         $esc= new Api_Model_DbTable_Speciality();
+    //         $datescid=$esc->_getOne($wherescid);      
+
+    //         echo $date=$datescid['header'];
+    //         $this->view->header=$date;
+
+            
+
+            
+    //     } catch (Exception $e) {
+    //         print "Error: ".$e->getMessage();
+    //     }
+    // }
 }

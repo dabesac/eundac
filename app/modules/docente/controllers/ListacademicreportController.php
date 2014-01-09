@@ -51,49 +51,75 @@ class Docente_ListacademicreportController extends Zend_Controller_Action {
     		$oid=$this->sesion->oid;
             $subid=$this->sesion->subid;
             $escid=$this->sesion->escid;
-
+            //print_r($this->sesion);
             $where['eid']=$eid;
             $where['oid']=$oid;
             $perid=$this->_getParam("perid");
             $where['perid']=$perid;
             $this->view->perid=$perid;
             $this->view->subid=$subid;
-            $this->view->escid=$escid;
+            $this->view->escid=$escid;     
+            $dbteachers= new Api_Model_DbTable_Coursexteacher();
+            //"is_main"=>"S"
+            //$wheresc=array("eid"=>$eid,"oid"=>$oid,"perid"=>$perid,"escid"=>$escid);
+            //print_r($wheresc);
 
-    		$dbteachers= new Api_Model_DbTable_Coursexteacher();
-    		$where=array("eid"=>$eid,"oid"=>$oid,"perid"=>$perid,"is_main"=>"S");
-    		$attrib=array('pid','uid','escid','subid');
-    		$order=array('uid');
-    		$teachers=$dbteachers->_getFilter($where,$attrib,$order);
-    		//print_r($teachers);
-    	    $escid=$teachers[0]['escid'];
-    	    $pid=$teachers[0]['pid'];
-    	    $subid=$teachers[0]['subid'];
-    	    
-
-    		$uidtchr[0]=$teachers[0]['uid'];
-    		$c=0;
-    		$c2=0;
-    		foreach ($teachers as $tec) {
-    			if($uidtchr[$c]<>$teachers[$c2]['uid']){
-    				$uidtchr[$c+1]=$teachers[$c2]['uid'];
-    				$pidtchr[$c+1]=$teachers[$c2]['pid'];
-    				$where = array("eid"=>$eid,"oid"=>$oid,"escid"=>$escid,"subid"=>$subid,"pid"=>$pidtchr[$c+1],"uid"=>$uidtchr[$c+1]);
- 					$pack[$c]=$dbteachers->_getinfoTeacher($where,$attrib);
-                    if($pack[$c][0]['pid']<>""){
-                        //print_r($pack[$c][0]['first_name']);
-                        //print_r("  ");        
-                        $packdatat[$c]=$dbteachers->_getinfoTeacher($where,$attrib);
-                        $c++;
-                    }
-                }
-             $c2++;
-            }  
-            //print_r($packdatat);  
-    		$this->view->packdatat=$packdatat;		
+            $teachers=$dbteachers->_getTeachersXPeridXEscid($eid,$oid,$escid,$perid);
+            //print_r($teachers);
+    		$this->view->packdatat=$teachers;		
     		
     	}catch(exception $ex){
     		print "Error en listar Cursos";		
     	}
     }
+
+
+    public function printAction(){
+        try {
+            
+            $this->_helper->layout()->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $pid = base64_decode($this->_getParam('pid'));
+            $uid = base64_decode($this->_getParam('uid'));
+            $escid = base64_decode($this->_getParam('escid'));
+            $subid = base64_decode($this->_getParam('subid'));
+            $perid = base64_decode($this->_getParam('perid'));
+            $nombre = base64_decode($this->_getParam('nombre'));
+            $this->view->speciality = $this->sesion->speciality->name;
+            $this->view->faculty = $this->sesion->faculty->name;
+            //$this->view->infouser = $this->sesion->infouser['fullname'];
+            $this->view->infouser = $nombre;
+            $this->view->perid = $perid;
+
+            $wherecour = array('eid' => $eid, 'oid' => $oid, 
+                'perid' => $perid, 'uid' => $uid, 'pid' => $pid);
+            $percour= new Api_Model_DbTable_PeriodsCourses();
+            $coursesdoc=$percour->_getInfoCourseXTeacher($wherecour);
+            if ($coursesdoc) {
+                $tam = count($coursesdoc);
+                $wherecours = array('eid' => $eid, 'oid' => $oid);
+                $cour = new Api_Model_DbTable_Course();
+                for ($i=0; $i < $tam; $i++) { 
+                    $wherecours['curid'] = $coursesdoc[$i]['curid'];
+                    $wherecours['escid'] = $coursesdoc[$i]['escid'];
+                    $wherecours['subid'] = $coursesdoc[$i]['subid'];
+                    $wherecours['courseid'] = $coursesdoc[$i]['courseid'];
+                    $datacourse = $cour->_getOne($wherecours);
+                    $coursesdoc[$i]['name'] = $datacourse['name'];
+                }
+            }
+            $this->view->datacourses=$coursesdoc;
+
+            $whereinf = array(
+                    'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid,
+                    'perid' => $perid, 'pid' => $pid, 'uid' => $uid);
+            $inform = new Api_Model_DbTable_Addreportacadadm();
+            $informedoc = $inform->_getOne($whereinf);
+            $this->view->informedoc = $informedoc;
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
 }
