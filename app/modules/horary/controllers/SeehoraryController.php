@@ -26,7 +26,18 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             $subid=$this->sesion->subid;
             $pid=$this->sesion->pid;
             $uid=$this->sesion->uid;
+
+            $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+            $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
+            $datahours=$bd_hours->_getFilter($wheres);   
+            $valhoras[0]=$datahours[0]['hours_begin'];
             $hora=new Api_Model_DbTable_Horary();
+            for ($k=0; $k < 20; $k++) { 
+                $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                $valhoras[$k+1]=$dho[0]['hora'];
+            }
+            $this->view->valhoras=$valhoras;
+
             $where['eid']=$eid;
             $where['oid']=$oid;
             $where['perid']=$perid;
