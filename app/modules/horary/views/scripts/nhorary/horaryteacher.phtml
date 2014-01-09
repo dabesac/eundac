@@ -96,7 +96,6 @@
 
    ?>
 <div class="row" style="margin: 0px">
-
         <div id="encabezado">
             <div class="cajadia">Hora:</div>
             <div class="cajadia">Lunes</div>
@@ -107,7 +106,7 @@
             <div class="cajadia">Sábado</div>
         </div>
 
-        <div style="float: left; width:144px">
+        <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { ?>
                 <div class="cajadentro"><?php echo $hora[$i]['hora'] ?></div>
@@ -119,7 +118,7 @@
                $dat=$this->horarios;
                 // print_r($dat)
         ?>
-        <div style="float: left; width:144px">
+        <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
                 $band=0;
@@ -180,7 +179,7 @@
             }
             ?>
         </div>
-        <div style="float: left; width:144px">
+        <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
                 $band=0;
@@ -239,7 +238,7 @@
             }
             ?>
         </div>
-        <div style="float: left; width:144px">
+        <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
                 $band=0;
@@ -299,7 +298,7 @@
             }
             ?>
         </div>
-         <div style="float: left; width:144px">
+         <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
                 $band=0;
