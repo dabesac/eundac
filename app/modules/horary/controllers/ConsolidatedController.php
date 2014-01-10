@@ -21,6 +21,18 @@
  			$pid=$this->sesion->pid;
  			$subid=$this->sesion->subid;
  			$perid=$this->sesion->period->perid;
+
+            $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+            $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
+            $datahours=$bd_hours->_getFilter($wheres);   
+            $valhoras[0]=$datahours[0]['hours_begin'];
+            $hora=new Api_Model_DbTable_Horary();
+            for ($k=0; $k < 20; $k++) { 
+                $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                $valhoras[$k+1]=$dho[0]['hora'];
+            }
+            $this->view->valhoras=$valhoras;
+
 			$base_url = 'http://localhost:8080/';
 	        $endpoint = '/s1st3m4s/und4c/horary_student';
 	        $data = array('escid' => $escid,'eid' =>$eid,'oid' =>$oid,'perid'=>$perid,'subid'=>$subid,'uid'=>$uid);
@@ -50,6 +62,17 @@
 	        $subid=$this->sesion->subid;
 	        $perid=$this->sesion->period->perid;
 	        $this->view->uid=$uid;
+            
+            $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+            $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
+            $datahours=$bd_hours->_getFilter($wheres);   
+            $valhoras[0]=$datahours[0]['hours_begin'];
+            $hora=new Api_Model_DbTable_Horary();
+            for ($k=0; $k < 20; $k++) { 
+                $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                $valhoras[$k+1]=$dho[0]['hora'];
+            }
+            $this->view->valhoras=$valhoras;
 			
 			$base_url = 'http://localhost:8080/';
 	        $endpoint = '/s1st3m4s/und4c/horary_student';

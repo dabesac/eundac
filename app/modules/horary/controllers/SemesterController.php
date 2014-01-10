@@ -7,9 +7,6 @@ class Horary_SemesterController extends Zend_Controller_Action{
  			$this->_helper->redirector('index',"index",'default');
  		}
  		$login = $sesion->getStorage()->read();
- 		if (!$login->rol['module']=="alumno"){
- 			$this->_helper->redirector('index','index','default');
- 		}
  		$this->sesion = $login;
  		require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
@@ -43,6 +40,17 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			$subid=$this->sesion->subid;
 			$perid=$this->sesion->period->perid;
 			$this->view->semid=$semid;
+
+			$wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+        	$bd_hours= new Api_Model_DbTable_HoursBeginClasses();
+        	$datahours=$bd_hours->_getFilter($wheres);   
+        	$valhoras[0]=$datahours[0]['hours_begin'];
+	        $hora=new Api_Model_DbTable_Horary();
+	        for ($k=0; $k < 20; $k++) { 
+	            $dho=$hora->_getsumminutes($valhoras[$k],'50');
+	            $valhoras[$k+1]=$dho[0]['hora'];
+	        }
+	        $this->view->valhoras=$valhoras;
 
 			$base_url = 'http://localhost:8080/';
 	        $endpoint = '/s1st3m4s/und4c/horary_course';
@@ -97,8 +105,18 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		$semid=base64_decode($this->_getParam('semid'));
 		$subid=$this->sesion->subid;
 		$perid=$this->sesion->period->perid;
-		// $perid='13A';
 		$this->view->semid=$semid;
+
+		$wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+        $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
+        $datahours=$bd_hours->_getFilter($wheres);   
+        $valhoras[0]=$datahours[0]['hours_begin'];
+	    $hora=new Api_Model_DbTable_Horary();
+	    for ($k=0; $k < 20; $k++) { 
+	        $dho=$hora->_getsumminutes($valhoras[$k],'50');
+	        $valhoras[$k+1]=$dho[0]['hora'];
+	    }
+	    $this->view->valhoras=$valhoras;
 
 		$base_url = 'http://localhost:8080/';
 	    $endpoint = '/s1st3m4s/und4c/horary_course';

@@ -1,45 +1,31 @@
 <?php
     $hora=array();
-    $hora[0]['hora']="6:20 am - 7:10 am";
-    $hora[0]['h_ini']="06";  $hora[0]['h_fin']="07";  $hora[0]['m_ini']="20";  $hora[0]['m_fin']="10";
-    $hora[1]['hora']="7:10 am - 8:00 am";
-    $hora[1]['h_ini']="07";  $hora[1]['h_fin']="08";  $hora[1]['m_ini']="10";  $hora[1]['m_fin']="00";
-    $hora[2]['hora']="8:00 am - 8:50 am";
-    $hora[2]['h_ini']="08";  $hora[2]['h_fin']="08";  $hora[2]['m_ini']="00";  $hora[2]['m_fin']="50";
-    $hora[3]['hora']="8:50 am - 9:40 am";
-    $hora[3]['h_ini']="08";  $hora[3]['h_fin']="09";  $hora[3]['m_ini']="50";  $hora[3]['m_fin']="40";
-    $hora[4]['hora']="9:40 am - 10:30 am";
-    $hora[4]['h_ini']="09";  $hora[4]['h_fin']="10";  $hora[4]['m_ini']="40";  $hora[4]['m_fin']="30";
-    $hora[5]['hora']="10:30 am - 11:20 am";
-    $hora[5]['h_ini']="10";  $hora[5]['h_fin']="11";  $hora[5]['m_ini']="30";  $hora[5]['m_fin']="20";
-    $hora[6]['hora']="11:20 am - 12:10 pm";
-    $hora[6]['h_ini']="11";  $hora[6]['h_fin']="12";  $hora[6]['m_ini']="20";  $hora[6]['m_fin']="10";
-    $hora[7]['hora']="12:10 pm - 13:00 pm";
-    $hora[7]['h_ini']="12";  $hora[7]['h_fin']="13";  $hora[7]['m_ini']="10";  $hora[7]['m_fin']="00";
-    $hora[8]['hora']="13:00 pm - 13:50 pm";
-    $hora[8]['h_ini']="13";  $hora[8]['h_fin']="13";  $hora[8]['m_ini']="00";  $hora[8]['m_fin']="50";
-    $hora[9]['hora']="13:50 pm - 14:40 pm";
-    $hora[9]['h_ini']="13";  $hora[9]['h_fin']="14";  $hora[9]['m_ini']="50";  $hora[9]['m_fin']="40";
-    $hora[10]['hora']="14:40 pm - 15:30 pm";
-    $hora[10]['h_ini']="14";  $hora[10]['h_fin']="15";  $hora[10]['m_ini']="40";  $hora[10]['m_fin']="30";
-    $hora[11]['hora']="15:30 pm - 16:20 pm";
-    $hora[11]['h_ini']="15";  $hora[11]['h_fin']="16";  $hora[11]['m_ini']="30";  $hora[11]['m_fin']="20";
-    $hora[12]['hora']="16:20 pm - 17:10 pm";
-    $hora[12]['h_ini']="16";  $hora[12]['h_fin']="17";  $hora[12]['m_ini']="20";  $hora[12]['m_fin']="10";
-    $hora[13]['hora']="17:10 pm - 18:00 pm";
-    $hora[13]['h_ini']="17";  $hora[13]['h_fin']="18";  $hora[13]['m_ini']="10";  $hora[13]['m_fin']="00";
-    $hora[14]['hora']="18:00 pm - 18:50 pm";
-    $hora[14]['h_ini']="18";  $hora[14]['h_fin']="18";  $hora[14]['m_ini']="00";  $hora[14]['m_fin']="50";
-    $hora[15]['hora']="18:50 pm - 19:40 pm";
-    $hora[15]['h_ini']="18";  $hora[15]['h_fin']="19";  $hora[15]['m_ini']="50";  $hora[15]['m_fin']="40";
-    $hora[16]['hora']="19:40 pm - 20:30 pm";
-    $hora[16]['h_ini']="19";  $hora[16]['h_fin']="20";  $hora[16]['m_ini']="40";  $hora[16]['m_fin']="30";
-    $hora[17]['hora']="20:30 pm - 21:20 pm";
-    $hora[17]['h_ini']="20";  $hora[17]['h_fin']="21";  $hora[17]['m_ini']="30";  $hora[17]['m_fin']="20";
-    $hora[18]['hora']="21:20 pm - 22:10 pm";
-    $hora[18]['h_ini']="21";  $hora[18]['h_fin']="22";  $hora[18]['m_ini']="20";  $hora[18]['m_fin']="10";
-    $hora[19]['hora']="22:10 pm - 23:00 pm";
-    $hora[19]['h_ini']="22";  $hora[19]['h_fin']="23";  $hora[19]['m_ini']="10";  $hora[19]['m_fin']="00";
+    $j=1;
+    $hour_begin=array();
+    $hour_begin=$this->valhoras;
+    for ($i=0; $i <= 20; $i++) { 
+        $hour[$i]=substr($hour_begin[$i],0,2);
+        $minute[$i]=substr($hour_begin[$i],3,2);
+    }
+    for ($i=0; $i <= 20; $i++) {
+        if ($hour[$i]<12) {
+            if ($hour[$j]<12) {
+                $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." am";
+            }
+            else{
+                $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." pm";
+            }
+        } 
+        else{
+            $hora[$i]['hora']=$hour[$i].":".$minute[$i]." pm - ".$hour[$j].":".$minute[$j]." pm";
+        }
+        $hora[$i]['h_ini']=$hour[$i];
+        $hora[$i]['h_fin']=$hour[$j];
+        $hora[$i]['m_ini']=$minute[$i];
+        $hora[$i]['m_fin']=$minute[$j];
+        $j++;
+    }
+    
     $listacolores = array();
     $listacolores[0] = "#FA8D74";
     $listacolores[1] = "#A3CFE0";
@@ -57,7 +43,7 @@
     $listacolores[13] = "#C4E6CE";
     $listacolores[14] = "#B4DAA1";
 
-    if ($this->horarios) {
+if ($this->horarios) {
       //print_r($this->horarios);
     $len=count($this->horarios);
     $cco=0;
@@ -96,8 +82,7 @@
         if ($hi<=$hmen) $hmen=$hi;
         if ($hf>=$hmay) $hmay=$hf;
     }
-     //print_r($this->horarios);
-     $k=0;
+    $k=0;
     for ($z=0; $z < 20; $z++) { 
         if ($hmen==$hora[$z]['h_ini'] && $k==0) {
             $inih=$z;
@@ -106,77 +91,69 @@
         if ($hmay==$hora[$z]['h_fin']) $finh=$z;
     }
       // echo $inih;
-    $horaoriginal=$this->horarios;
-    
+    $horaoriginal=$this->horarios;  
 ?>
-<div class="col-md-11 flotacarajo">
-    <div class="nomdoc col-md-10" style="font-size:20px;">
-        <b>HORARIO DOCENTE</b>
+    <div class="row col-md-12" style="margin:0px">
+        <div class="nomdoc col-md-10" style="font-size:20px; margin-top:20px">
+            <b>HORARIO DOCENTE</b>
+        </div>
+        <div class="col-md-2 pull-rigth" style="margin-top:20px">
+            <center><a href="/docente/seehorary/imprimirhora/" class="btn btn-success" ><i class="glyphicon glyphicon-print"></i> Imprimir</a></center>
+        </div>
     </div>
-    <div class="col-md-2" style="float:left">
-        <a href="/docente/seehorary/imprimirhora/" class="btn btn-primary" ><i class="icon icon-print icon-white"></i>Imprimir</a>
-    </div>
-</div>
-<div >
-
+    <div class='col-md-16 pull-left'>
         <div id="encabezado" >
             <div class="cajadia">Hora:</div>
-            <div class="cajadia">Lunes</div>
-            <div class="cajadia">Martes</div>
-            <div class="cajadia">Miercoles</div>
-            <div class="cajadia">Jueves</div>
-            <div class="cajadia">Viernes</div>
-            <div class="cajadia">Sabado</div>
+            <div class="cajadia" style='margin-left:2px'>Lunes</div>
+            <div class="cajadia" style='margin-left:2px'>Martes</div>
+            <div class="cajadia" style='margin-left:2px'>Miercoles</div>
+            <div class="cajadia" style='margin-left:2px'>Jueves</div>
+            <div class="cajadia" style='margin-left:2px'>Viernes</div>
+            <div class="cajadia" style='margin-left:1px'>Sabado</div>
         </div>
 
-        <div style="float: left; width:144px">
+        <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { ?>
                 <div class="cajadentro"><?php echo $hora[$i]['hora'] ?></div>
-                <?php
+            <?php
             }
             ?>
         </div>
 
-        <div style="float: left; width:144px">
+        <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
-                    $band=0;
-                    $c=0;
-                    $dat=$this->horarios;
-                    
-                    // print_r($dat);
-                    for ($s=0; $s < $len; $s++) { 
-                        $hsplit=split(":", $dat[$s]['hora_ini']);
-                        $h=$hsplit[0];
-                        $m=$hsplit[1];
-                        $d=$dat[$s]['day'];
-                        if($d==1){
-                            $dia="Monday";
-                        }
-                        if($d==2){
-                            $dia="Tuesday";
-                        }
-                        if($d==3){
-                            $dia="Wednesday";
-                        }
-                        if($d==4){
-                            $dia="Thursday";
-                        }
-                        if($d==5){
-                            $dia="Friday";
-                        }
-                        if($d==6){
-                            $dia="Saturday";
-                        }
-                       //echo  $time = strtotime($dat[$s]['fecha']); 
-
-                        //$dia= strftime("%A", $time);
+                $band=0;
+                $c=0;
+                $dat=$this->horarios;
+                for ($s=0; $s < $len; $s++) { 
+                    $hsplit=split(":", $dat[$s]['hora_ini']);
+                    $h=$hsplit[0];
+                    $m=$hsplit[1];
+                    $d=$dat[$s]['day'];
+                    if($d==1){
+                        $dia="Monday";
+                    }
+                    if($d==2){
+                        $dia="Tuesday";
+                    }
+                    if($d==3){
+                        $dia="Wednesday";
+                    }
+                    if($d==4){
+                        $dia="Thursday";
+                    }
+                    if($d==5){
+                        $dia="Friday";
+                    }
+                    if($d==6){
+                        $dia="Saturday";
+                    }
+                
                         if ($dia=="Monday") {
                             if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
-                                    
                                 if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
-                                    //echo $dia;
                                     $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                     ?>
                                     <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
@@ -189,28 +166,26 @@
                         } else { 
                             $band=1;
                         }
-                    }
+                }
                     if ($band==1 && $c==0) { ?>
                         <div class="cajadentro"></div>
                     <?php
-                    }
+                   }
             }
             ?>
-        </div>
+            </div>
 
-        <div style="float: left; width:144px">
+        <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) {
-                    $band=0;
-                    $c=0;
-                    $dat=$this->horarios;
-                    for ($s=0; $s < $len; $s++) { 
-                        $hsplit=split(":", $dat[$s]['hora_ini']);
-                        $h=$hsplit[0];
-                        $m=$hsplit[1];
-                        // $time = strtotime($dat[$s]['fecha']); 
-                        // $dia= strftime("%A", $time);
-                        $d=$dat[$s]['day'];
+                $band=0;
+                $c=0;
+                $dat=$this->horarios;
+                for ($s=0; $s < $len; $s++) { 
+                    $hsplit=split(":", $dat[$s]['hora_ini']);
+                    $h=$hsplit[0];
+                    $m=$hsplit[1];
+                    $d=$dat[$s]['day'];
                         if($d==1){
                             $dia="Monday";
                         }
@@ -229,299 +204,299 @@
                         if($d==6){
                             $dia="Saturday";
                         }
-                         
-                        if ($dia=="Tuesday") {
-                            if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
-                                if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
-                                    $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
-                                    ?>
-                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
-                                    <?php    
-                                    $c++;
-                                } else { 
-                                    $band=1;
+                            
+                           if ($dia=="Tuesday") {
+                                if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
+                                    if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
+                                        $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
+                                        ?>
+                                        <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
+                                        <?php    
+                                        $c++;
+                                    } else { 
+                                        $band=1;
+                                    }
                                 }
+                            } else { 
+                                $band=1;
                             }
-                        } else { 
-                            $band=1;
-                        }
-                    }
+                }
                     if ($band==1 && $c==0) { ?>
-                        <div class="cajadentro"></div>
+                        <div class="cajadentro" style="margin-left:3px;"></div>
                     <?php
                     }
             }
-            ?>
-        </div>
+                ?>
+            </div>
 
-        <div style="float: left; width:144px">
-            <?php
-            for ($i=$inih; $i <= $finh; $i++) { 
-                    $band=0;
-                    $c=0;
-                    $dat=$this->horarios;
-                    for ($s=0; $s < $len; $s++) { 
-                        $hsplit=split(":", $dat[$s]['hora_ini']);
-                        $h=$hsplit[0];
-                        $m=$hsplit[1];
-                        // $time = strtotime($dat[$s]['fecha']); 
-                        // $dia= strftime("%A", $time);
-                        $d=$dat[$s]['day'];
-                        if($d==1){
-                            $dia="Monday";
-                        }
-                        if($d==2){
-                            $dia="Tuesday";
-                        }
-                        if($d==3){
-                            $dia="Wednesday";
-                        }
-                        if($d==4){
-                            $dia="Thursday";
-                        }
-                        if($d==5){
-                            $dia="Friday";
-                        }
-                        if($d==6){
-                            $dia="Saturday";
-                        }
-                         
-                        if ($dia=="Wednesday") {
-                            if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
-                               // echo $hora[$i]['m_ini'];
-                                if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
-                                    $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
-                                    ?>
-                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
-                                    <?php    
-                                    $c++;
-                                } else { 
-                                    $band=1;
-                                }
+            <div class='pull-left' style='width:144px'>
+                <?php
+                for ($i=$inih; $i <= $finh; $i++) { 
+                        $band=0;
+                        $c=0;
+                        $dat=$this->horarios;
+                        for ($s=0; $s < $len; $s++) { 
+                            $hsplit=split(":", $dat[$s]['hora_ini']);
+                            $h=$hsplit[0];
+                            $m=$hsplit[1];
+                            // $time = strtotime($dat[$s]['fecha']); 
+                            // $dia= strftime("%A", $time);
+                            $d=$dat[$s]['day'];
+                            if($d==1){
+                                $dia="Monday";
                             }
-                        } else { 
-                            $band=1;
+                            if($d==2){
+                                $dia="Tuesday";
+                            }
+                            if($d==3){
+                                $dia="Wednesday";
+                            }
+                            if($d==4){
+                                $dia="Thursday";
+                            }
+                            if($d==5){
+                                $dia="Friday";
+                            }
+                            if($d==6){
+                                $dia="Saturday";
+                            }
+                             
+                            if ($dia=="Wednesday") {
+                                if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
+                                   // echo $hora[$i]['m_ini'];
+                                    if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
+                                        $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
+                                        ?>
+                                        <div class="cajadentro" style="margin-left:5px; background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
+                                        <?php    
+                                        $c++;
+                                    } else { 
+                                        $band=1;
+                                    }
+                                }
+                            } else { 
+                                $band=1;
+                            }
                         }
-                    }
-                    if ($band==1 && $c==0) { ?>
-                        <div class="cajadentro"></div>
-                    <?php
-                    }
-            }
-            ?>
-        </div>
+                        if ($band==1 && $c==0) { ?>
+                            <div class="cajadentro"  style="margin-left:5px;"></div>
+                        <?php
+                        }
+                }
+                ?>
+            </div>
 
-        <div style="float: left; width:144px">
-            <?php
-            for ($i=$inih; $i <= $finh; $i++) {
-                    $band=0;
-                    $c=0;
-                    $dat=$this->horarios;
-                    for ($s=0; $s < $len; $s++) { 
-                        $hsplit=split(":", $dat[$s]['hora_ini']);
-                        $h=$hsplit[0];
-                        $m=$hsplit[1];
-                        // $time = strtotime($dat[$s]['fecha']); 
-                        // $dia= strftime("%A", $time);
-                        $d=$dat[$s]['day'];
-                        if($d==1){
-                            $dia="Monday";
-                        }
-                        if($d==2){
-                            $dia="Tuesday";
-                        }
-                        if($d==3){
-                            $dia="Wednesday";
-                        }
-                        if($d==4){
-                            $dia="Thursday";
-                        }
-                        if($d==5){
-                            $dia="Friday";
-                        }
-                        if($d==6){
-                            $dia="Saturday";
-                        }
-                         
-                        if ($dia=="Thursday") {
-                            if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
-                                if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
-                                    $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
-                                    ?>
-                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
-                                    <?php    
-                                    $c++;
-                                } else { 
-                                    $band=1;
-                                }
+            <div class='pull-left' style='width:144px'>
+                <?php
+                for ($i=$inih; $i <= $finh; $i++) {
+                        $band=0;
+                        $c=0;
+                        $dat=$this->horarios;
+                        for ($s=0; $s < $len; $s++) { 
+                            $hsplit=split(":", $dat[$s]['hora_ini']);
+                            $h=$hsplit[0];
+                            $m=$hsplit[1];
+                            // $time = strtotime($dat[$s]['fecha']); 
+                            // $dia= strftime("%A", $time);
+                            $d=$dat[$s]['day'];
+                            if($d==1){
+                                $dia="Monday";
                             }
-                        } else { 
-                            $band=1;
+                            if($d==2){
+                                $dia="Tuesday";
+                            }
+                            if($d==3){
+                                $dia="Wednesday";
+                            }
+                            if($d==4){
+                                $dia="Thursday";
+                            }
+                            if($d==5){
+                                $dia="Friday";
+                            }
+                            if($d==6){
+                                $dia="Saturday";
+                            }
+                             
+                            if ($dia=="Thursday") {
+                                if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
+                                    if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
+                                        $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
+                                        ?>
+                                        <div class="cajadentro" style="margin-left:8px; background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
+                                        <?php    
+                                        $c++;
+                                    } else { 
+                                        $band=1;
+                                    }
+                                }
+                            } else { 
+                                $band=1;
+                            }
                         }
-                    }
-                    if ($band==1 && $c==0) { ?>
-                        <div class="cajadentro"></div>
-                    <?php
-                    }
-            }
-            ?>
-        </div>
+                        if ($band==1 && $c==0) { ?>
+                            <div class="cajadentro" style="margin-left:8px;"></div>
+                        <?php
+                        }
+                }
+                ?>
+            </div>
 
-        <div style="float: left; width:144px">
-            <?php
-            for ($i=$inih; $i <= $finh; $i++) { 
-                    $band=0;
-                    $c=0;
-                    $dat=$this->horarios;
-                    for ($s=0; $s < $len; $s++) { 
-                        $hsplit=split(":", $dat[$s]['hora_ini']);
-                        $h=$hsplit[0];
-                        $m=$hsplit[1];
-                        // $time = strtotime($dat[$s]['fecha']); 
-                        // $dia= strftime("%A", $time);
-                        $d=$dat[$s]['day'];
-                        if($d==1){
-                            $dia="Monday";
-                        }
-                        if($d==2){
-                            $dia="Tuesday";
-                        }
-                        if($d==3){
-                            $dia="Wednesday";
-                        }
-                        if($d==4){
-                            $dia="Thursday";
-                        }
-                        if($d==5){
-                            $dia="Friday";
-                        }
-                        if($d==6){
-                            $dia="Saturday";
-                        }
-                         
-                        if ($dia=="Friday") {
-                            if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
-                                if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
-                                    $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
-                                    ?>
-                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
-                                    <?php    
-                                    $c++;
-                                } else { 
-                                    $band=1;
-                                }
+            <div class='pull-left' style='width:144px'>
+                <?php
+                for ($i=$inih; $i <= $finh; $i++) { 
+                        $band=0;
+                        $c=0;
+                        $dat=$this->horarios;
+                        for ($s=0; $s < $len; $s++) { 
+                            $hsplit=split(":", $dat[$s]['hora_ini']);
+                            $h=$hsplit[0];
+                            $m=$hsplit[1];
+                            // $time = strtotime($dat[$s]['fecha']); 
+                            // $dia= strftime("%A", $time);
+                            $d=$dat[$s]['day'];
+                            if($d==1){
+                                $dia="Monday";
                             }
-                        } else { 
-                            $band=1;
+                            if($d==2){
+                                $dia="Tuesday";
+                            }
+                            if($d==3){
+                                $dia="Wednesday";
+                            }
+                            if($d==4){
+                                $dia="Thursday";
+                            }
+                            if($d==5){
+                                $dia="Friday";
+                            }
+                            if($d==6){
+                                $dia="Saturday";
+                            }
+                             
+                            if ($dia=="Friday") {
+                                if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
+                                    if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
+                                        $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
+                                        ?>
+                                        <div class="cajadentro" style="margin-left:12px; background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
+                                        <?php    
+                                        $c++;
+                                    } else { 
+                                        $band=1;
+                                    }
+                                }
+                            } else { 
+                                $band=1;
+                            }
                         }
-                    }
-                    if ($band==1 && $c==0) { ?>
-                        <div class="cajadentro"></div>
-                    <?php
-                    }
-            }
-            ?>
-        </div>
+                        if ($band==1 && $c==0) { ?>
+                            <div class="cajadentro"  style="margin-left:12px;"></div>
+                        <?php
+                        }
+                }
+                ?>
+            </div>
 
-        <div style="float: left; width:144px">
-            <?php
-            for ($i=$inih; $i <= $finh; $i++) {
-                    $band=0;
-                    $c=0;
-                    $dat=$this->horarios;
-                    for ($s=0; $s < $len; $s++) { 
-                        $hsplit=split(":", $dat[$s]['hora_ini']);
-                        $h=$hsplit[0];
-                        $m=$hsplit[1];
-                        // $time = strtotime($dat[$s]['fecha']); 
-                        // $dia= strftime("%A", $time);
-                        $d=$dat[$s]['day'];
-                        if($d==1){
-                            $dia="Monday";
-                        }
-                        if($d==2){
-                            $dia="Tuesday";
-                        }
-                        if($d==3){
-                            $dia="Wednesday";
-                        }
-                        if($d==4){
-                            $dia="Thursday";
-                        }
-                        if($d==5){
-                            $dia="Friday";
-                        }
-                        if($d==6){
-                            $dia="Saturday";
-                        }
-                         
-                        if ($dia=="Saturday") {
-                            if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
-                                if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
-                                    $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
-                                    ?>
-                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
-                                    <?php    
-                                    $c++;
-                                } else { 
-                                    $band=1;
-                                }
+            <div class='pull-left' style='width:144px'>
+                <?php
+                for ($i=$inih; $i <= $finh; $i++) {
+                        $band=0;
+                        $c=0;
+                        $dat=$this->horarios;
+                        for ($s=0; $s < $len; $s++) { 
+                            $hsplit=split(":", $dat[$s]['hora_ini']);
+                            $h=$hsplit[0];
+                            $m=$hsplit[1];
+                            // $time = strtotime($dat[$s]['fecha']); 
+                            // $dia= strftime("%A", $time);
+                            $d=$dat[$s]['day'];
+                            if($d==1){
+                                $dia="Monday";
                             }
-                        } else { 
-                            $band=1;
+                            if($d==2){
+                                $dia="Tuesday";
+                            }
+                            if($d==3){
+                                $dia="Wednesday";
+                            }
+                            if($d==4){
+                                $dia="Thursday";
+                            }
+                            if($d==5){
+                                $dia="Friday";
+                            }
+                            if($d==6){
+                                $dia="Saturday";
+                            }
+                             
+                            if ($dia=="Saturday") {
+                                if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
+                                    if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
+                                        $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
+                                        ?>
+                                        <div class="cajadentro" style="margin-left:15px; background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
+                                        <?php    
+                                        $c++;
+                                    } else { 
+                                        $band=1;
+                                    }
+                                }
+                            } else { 
+                                $band=1;
+                            }
                         }
-                    }
-                    if ($band==1 && $c==0) { ?>
-                        <div class="cajadentro"></div>
-                    <?php
-                    }
-            }
-            ?>
-        </div>
-</div>
-<div class="col-md-9 flotacarajo" style="margin-left:135px;margin-top:30px">
-    <div class="cajadentro" style="width:25px;box-shadow: 0px 0px 4px #343434">#</div>
-    <div class="cajadentro" style="width:80px;box-shadow: 0px 0px 4px #343434">Cod. Curso</div>
-    <div class="cajadentro" style="width:350px;box-shadow: 0px 0px 4px #343434">Nombre Curso</div>
-    <div class="cajadentro" style="width:70px;box-shadow: 0px 0px 4px #343434">Creditos</div>
-    <div class="cajadentro" style="width:60px;box-shadow: 0px 0px 4px #343434">Turno</div>
-    <div class="cajadentro" style="width:70px;box-shadow: 0px 0px 4px #343434">Semestre</div>
-    <?php
-    $n=1;
-    // print_r($this->cursos);
-    for ($d=0; $d < count($this->cursos); $d++) { 
-        
-        for ($f=0; $f < count($horaoriginal); $f++) { 
-                        
-            if ($this->cursos[$d]['courseid']==$horaoriginal[$f]['courseid'] && $this->cursos[$d]['turno']==$horaoriginal[$f]['turno']) {
+                        if ($band==1 && $c==0) { ?>
+                            <div class="cajadentro" style="margin-left:15px;"></div>
+                        <?php
+                        }
+                }
+                ?>
+            </div>
+    <div>
+        <div class='col-md-10 pull-left' style='margin-top:40px; margin-left:50px'>
+            <div class="cajadentro" style="width:40px;box-shadow: 0px 0px 4px #343434">#</div>
+            <div class="cajadentro" style="width:80px;box-shadow: 0px 0px 4px #343434">Cod. Curso</div>
+            <div class="cajadentro" style="width:400px;box-shadow: 0px 0px 4px #343434">Nombre Curso</div>
+            <div class="cajadentro" style="width:80px;box-shadow: 0px 0px 4px #343434">Creditos</div>
+            <div class="cajadentro" style="width:70px;box-shadow: 0px 0px 4px #343434">Turno</div>
+            <div class="cajadentro" style="width:80px;box-shadow: 0px 0px 4px #343434">Semestre</div>
+            <?php
+            $n=1;
+            // print_r($this->cursos);
+            for ($d=0; $d < count($this->cursos); $d++) { 
                 
-            ?>
-                <div>
-                    <div class="cajadentro" style="width:25px"><?php echo $n ?></div>
-                    <div class="cajadentro" style="width:80px;background-color:<?php echo $horaoriginal[$f]["color"] ?>"><?php echo $horaoriginal[$f]['courseid'] ?></div>
-                    <div class="cajadentro" style="width:350px"><?php echo $horaoriginal[$f]['name'] ?></div>
-                    <div class="cajadentro" style="width:70px"><?php echo $horaoriginal[$f]['credits'] ?></div>
-                    <div class="cajadentro" style="width:60px"><?php echo $horaoriginal[$f]['turno'] ?></div>
-                    <div class="cajadentro" style="width:70px"><?php echo $horaoriginal[$f]['semid'] ?></div>
-                </div>
-            <?php
-            $n++;
-            $f = count($horaoriginal);
+                for ($f=0; $f < count($horaoriginal); $f++) { 
+                                
+                    if ($this->cursos[$d]['courseid']==$horaoriginal[$f]['courseid'] && $this->cursos[$d]['turno']==$horaoriginal[$f]['turno']) {
+                        
+                    ?>
+                        <div>
+                            <div class="cajadentro" style="width:40px"><?php echo $n ?></div>
+                            <div class="cajadentro" style="width:80px;background-color:<?php echo $horaoriginal[$f]["color"] ?>"><?php echo $horaoriginal[$f]['courseid'] ?></div>
+                            <div class="cajadentro" style="width:400px; font-size:16px"><?php echo $horaoriginal[$f]['name'] ?></div>
+                            <div class="cajadentro" style="width:80px"><?php echo $horaoriginal[$f]['credits'] ?></div>
+                            <div class="cajadentro" style="width:70px"><?php echo $horaoriginal[$f]['turno'] ?></div>
+                            <div class="cajadentro" style="width:80px"><?php echo $horaoriginal[$f]['semid'] ?></div>
+                        </div>
+                    <?php
+                    $n++;
+                    $f = count($horaoriginal);
+                    }
+                }
             }
-        }
-    }
+            ?>
+            </div>
+        </div>    
+    </div>        
+<?php
+} 
+else {
     ?>
-</div>
-<?php
- // print_r($this->horarios);
-} else {
-?>
-<div class="alert alert-success col-md-9">
-    <button type="button" class="close" data-dismiss="alert">x</button>
-    <b>No hay registro de horario.</b>
-</div>
-
-
-<?php
-}
-?>
+    <div class="alert alert-success col-md-9">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <b>No hay registro de horario.</b>
+    </div>
+    <?php
+    }   
+    ?>
