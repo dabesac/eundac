@@ -96,16 +96,16 @@
 
    ?>
 <div class="row" style="margin: 0px">
-        <div id="encabezado">
-            <div class="cajadia">Hora:</div>
-            <div class="cajadia">Lunes</div>
-            <div class="cajadia">Martes</div>
-            <div class="cajadia">Miércoles</div>
-            <div class="cajadia">Jueves</div>
-            <div class="cajadia">Viernes</div>
-            <div class="cajadia">Sábado</div>
-        </div>
-
+    <div class='col-md-12' id='encabezado'>
+        <div class="cajadia">Hora:</div>
+        <div class="cajadia" style='margin-left:3px'>Lunes</div>
+        <div class="cajadia" style='margin-left:3px'>Martes</div>
+        <div class="cajadia" style='margin-left:2px'>Miércoles</div>
+        <div class="cajadia" style='margin-left:2px'>Jueves</div>
+        <div class="cajadia" style='margin-left:2px'>Viernes</div>
+        <div class="cajadia" style='margin-left:2px'>Sábado</div>
+    </div>
+    <div class='col-md-12 pull-left' style='margin-bottom:40px'>    
         <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { ?>
@@ -156,7 +156,7 @@
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                 ?>
-                                <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>">
+                                <div class="cajadentro" style="margin-left:2px; background-color:<?php echo $dat[$s]["color"] ?>">
                                     <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>"
 
                                      type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
@@ -173,7 +173,7 @@
                     }
                 }
                 if ($band==1 && $c==0){ ?>
-                    <div class="cajadentro"></div>
+                    <div class="cajadentro" style='margin-left:2px'></div>
                 <?php
                 }
             }
@@ -217,7 +217,7 @@
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                 ?>
-                                <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>">
+                                <div class="cajadentro" style="margin-left:2px; background-color:<?php echo $dat[$s]["color"] ?>">
                                     <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
@@ -232,7 +232,7 @@
                     }
                 }
                 if ($band==1 && $c==0){ ?>
-                    <div class="cajadentro"></div>
+                    <div class="cajadentro" style="margin-left:2px" ></div>
                 <?php
                 }
             }
@@ -277,7 +277,7 @@
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
 
                                 ?>
-                                <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>">
+                                <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>">
                                     <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
@@ -292,7 +292,7 @@
                     }
                 }
                 if ($band==1 && $c==0){ ?>
-                    <div class="cajadentro"></div>
+                    <div class="cajadentro" style="margin-left:3px" ></div>
                 <?php
                 }
             }
@@ -336,7 +336,7 @@
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                 ?>
-                                <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>">
+                                <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>">
                                     <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
@@ -351,7 +351,7 @@
                     }
                 }
                 if ($band==1 && $c==0){ ?>
-                    <div class="cajadentro"></div>
+                    <div class="cajadentro" style="margin-left:3px"></div>
                 <?php
                 }
             }
@@ -395,7 +395,7 @@
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                 ?>
-                                <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>">
+                                <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>">
                                     <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
@@ -410,7 +410,7 @@
                     }
                 }
                 if ($band==1 && $c==0){ ?>
-                    <div class="cajadentro"></div>
+                    <div class="cajadentro" style="margin-left:3px"></div>
                 <?php
                 }
             }
@@ -456,7 +456,7 @@
 
                                 ?>
 
-                                <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>">
+                                <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>">
                                     <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
@@ -471,12 +471,13 @@
                     }
                 }
                 if ($band==1 && $c==0){ ?>
-                    <div class="cajadentro"></div>
+                    <div class="cajadentro" style="margin-left:3px"></div>
                 <?php
                 }
             }
             ?>
         </div>
+    </div>    
 </div>
 <?php
 }
