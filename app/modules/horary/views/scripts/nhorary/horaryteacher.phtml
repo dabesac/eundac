@@ -66,7 +66,6 @@
         $ncursos=$this->ncursos;
         for ($j=0; $j < $ncursos; $j++) { 
         	if ($this->horarios[$i]['courseid']==$this->datcursos[$j]['courseid'] && $this->horarios[$i]['turno']==$this->datcursos[$j]['turno']) {
-
                 $this->horarios[$i]['color']=$listacolores[$this->datcursos[$j]['num']];
             }
         }
@@ -90,8 +89,7 @@
             $finh=$z;
         }
     }
-    // echo $inih;
-    // echo $finh;
+    // print_r($this->horarios);
     $horaoriginal=$this->horarios;
 
    ?>
@@ -116,7 +114,6 @@
         </div>
         <?php
                $dat=$this->horarios;
-                // print_r($dat)
         ?>
         <div class='pull-left' style='width:144px'>
             <?php
@@ -129,29 +126,9 @@
                     $hsplit=split(":", $dat[$s]['hora_ini']);
                     $h=$hsplit[0];
                     $m=$hsplit[1];
-                    $d=$dat[$s]['day'];
-                       if($d==1){
-                            $dia="Monday";
-                        }
-                        if($d==2){
-                            $dia="Tuesday";
-                        }
-                        if($d==3){
-                            $dia="Wednesday";
-                        }
-                        if($d==4){
-                            $dia="Thursday";
-                        }
-                        if($d==5){
-                            $dia="Friday";
-                        }
-                        if($d==6){
-                            $dia="Saturday";
-                        }
-
-                         
-
-                    if ($dia=="Monday") {
+                    $dia=$dat[$s]['day'];
+                       
+                    if ($dia==1) {
                         if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
@@ -179,6 +156,7 @@
             }
             ?>
         </div>
+
         <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
@@ -190,29 +168,9 @@
                     $hsplit=split(":", $dat[$s]['hora_ini']);
                     $h=$hsplit[0];
                     $m=$hsplit[1];
-                    $d=$dat[$s]['day'];
-                       if($d==1){
-                            $dia="Monday";
-                        }
-                        if($d==2){
-                            $dia="Tuesday";
-                        }
-                        if($d==3){
-                            $dia="Wednesday";
-                        }
-                        if($d==4){
-                            $dia="Thursday";
-                        }
-                        if($d==5){
-                            $dia="Friday";
-                        }
-                        if($d==6){
-                            $dia="Saturday";
-                        }
-
-                         
-
-                    if ($dia=="Tuesday") {
+                    $dia=$dat[$s]['day'];
+                    
+                    if ($dia==2) {
                         if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
@@ -249,29 +207,9 @@
                     $hsplit=split(":", $dat[$s]['hora_ini']);
                     $h=$hsplit[0];
                     $m=$hsplit[1];
-                    $d=$dat[$s]['day'];
-                       if($d==1){
-                            $dia="Monday";
-                        }
-                        if($d==2){
-                            $dia="Tuesday";
-                        }
-                        if($d==3){
-                            $dia="Wednesday";
-                        }
-                        if($d==4){
-                            $dia="Thursday";
-                        }
-                        if($d==5){
-                            $dia="Friday";
-                        }
-                        if($d==6){
-                            $dia="Saturday";
-                        }
-
-                         
-
-                    if ($dia=="Wednesday") {
+                    $dia=$dat[$s]['day'];
+                    
+                    if ($dia==3) {
                         if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
@@ -298,6 +236,7 @@
             }
             ?>
         </div>
+
          <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
@@ -309,29 +248,9 @@
                     $hsplit=split(":", $dat[$s]['hora_ini']);
                     $h=$hsplit[0];
                     $m=$hsplit[1];
-                    $d=$dat[$s]['day'];
-                       if($d==1){
-                            $dia="Monday";
-                        }
-                        if($d==2){
-                            $dia="Tuesday";
-                        }
-                        if($d==3){
-                            $dia="Wednesday";
-                        }
-                        if($d==4){
-                            $dia="Thursday";
-                        }
-                        if($d==5){
-                            $dia="Friday";
-                        }
-                        if($d==6){
-                            $dia="Saturday";
-                        }
-
-                         
-
-                    if ($dia=="Thursday") {
+                    $dia=$dat[$s]['day'];
+    
+                    if ($dia==4) {
                         if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
@@ -357,40 +276,20 @@
             }
             ?>
         </div>
-        <div style="float: left; width:144px">
+
+        <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
                 $band=0;
                 $c=0;
                 $dat=$this->horarios;
-                //print_r($dat);
                 for ($s=0; $s < $len; $s++) { 
                     $hsplit=split(":", $dat[$s]['hora_ini']);
                     $h=$hsplit[0];
                     $m=$hsplit[1];
-                    $d=$dat[$s]['day'];
-                       if($d==1){
-                            $dia="Monday";
-                        }
-                        if($d==2){
-                            $dia="Tuesday";
-                        }
-                        if($d==3){
-                            $dia="Wednesday";
-                        }
-                        if($d==4){
-                            $dia="Thursday";
-                        }
-                        if($d==5){
-                            $dia="Friday";
-                        }
-                        if($d==6){
-                            $dia="Saturday";
-                        }
+                    $dia=$dat[$s]['day'];
 
-                         
-
-                    if ($dia=="Friday") {
+                    if ($dia==5) {
                         if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
@@ -416,7 +315,7 @@
             }
             ?>
         </div>
-        <div style="float: left; width:144px">
+        <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
                 $band=0;
@@ -427,29 +326,9 @@
                     $hsplit=split(":", $dat[$s]['hora_ini']);
                     $h=$hsplit[0];
                     $m=$hsplit[1];
-                    $d=$dat[$s]['day'];
-                       if($d==1){
-                            $dia="Monday";
-                        }
-                        if($d==2){
-                            $dia="Tuesday";
-                        }
-                        if($d==3){
-                            $dia="Wednesday";
-                        }
-                        if($d==4){
-                            $dia="Thursday";
-                        }
-                        if($d==5){
-                            $dia="Friday";
-                        }
-                        if($d==6){
-                            $dia="Saturday";
-                        }
-
-                         
-
-                    if ($dia=="Saturday") {
+                    $dia=$dat[$s]['day'];
+ 
+                    if ($dia==6) {
                         if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";

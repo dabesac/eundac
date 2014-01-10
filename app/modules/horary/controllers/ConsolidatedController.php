@@ -42,7 +42,6 @@
 	        $response = $client->restget($endpoint,$data);
 	        $lista=$response->getBody();
 	        $data = Zend_Json::decode($lista);
-        	// print_r($data);
         	$this->view->horarys=$data; 
  			
  		} catch (Exception $e) {
