@@ -1,15 +1,11 @@
 <?php
-if($this->t<>'U')
-{
-$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
-include_once($dir);
-ob_start();
-
-$sesion1  = Zend_Auth::getInstance();
-$sesion = $sesion1->getStorage()->read();
-
+if($this->t<>'U'){
+	$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+	include_once($dir);
+	ob_start();
+	$sesion1  = Zend_Auth::getInstance();
+	$sesion = $sesion1->getStorage()->read();
 }
-
 $header='
     <table style="width: 100%;" border="1">
         <tr>
@@ -35,8 +31,8 @@ $header='
 $a = array('PRINCIPAL', 'ASOCIADO', 'AUXILIAR');
 $b = array('DEDICACIONEXCLUSIVA', 'TIEMPOCOMPLETO', 'TIEMPOPARCIAL');
 
-for($n=0; $n<=2; $n++){
-    for($p=0 ;$p<=2; $p++){
+for($n = 0; $n <= 2; $n++){
+    for($p = 0 ;$p <= 2; $p++){
 		$distri = new Distribution_Model_DbTable_Distribution();
 		foreach ($this->allteachers as $allteachers){
 			$wheredist = array(
@@ -57,13 +53,13 @@ for($n=0; $n<=2; $n++){
 	                    <th colspan="7">HORAS ACADÉMICAS</th>
 	                </tr>
 	                <tr>
-	                    <th class="span5"><center>Curso</center></th>
-	                    <th class="span1"><center>Sem</center></th>
-	                    <th class="span1"><center>Turno</center></th>
-	                    <th class="span1"><center>Grupo(s)</center></th>
-	                    <th class="span1"><center>Horas Teóricas</center></th>
-	                    <th class="span1"><center>Horas Prácticas</center></th>
-	                    <th class="span1"><center>Total Horas</center></th>
+	                    <th>Curso</th>
+	                    <th><center>Sem</center></th>
+	                    <th><center>Turno</center></th>
+	                    <th><center>Grupo(s)</center></th>
+	                    <th><center>Horas Teóricas</center></th>
+	                    <th><center>Horas Prácticas</center></th>
+	                    <th><center>Total Horas</center></th>
 	                </tr>
 					<?php
 					$wherecourteach=array(
@@ -161,9 +157,7 @@ for($n=0; $n<=2; $n++){
 	                    <th><center><?php echo $htotales?></center></th> 
 	                </tr>  					
 				</table>					
-				<br>	
-				<br>	
-				<br>
+				<br><br><br>
 				<?php
 			}
 		}
@@ -184,13 +178,13 @@ foreach ($this->allteachers as $allteachers) {
             	<th colspan="7">HORAS ACADÉMICAS</th>
             </tr>
             <tr>
-                <th class="span5"><center>Curso</center></th>
-                <th class="span1"><center>Sem</center></th>
-                <th class="span1"><center>Turno</center></th>
-                <th class="span1"><center>Grupo(s)</center></th>
-                <th class="span1"><center>Horas Teóricas</center></th>
-                <th class="span1"><center>Horas Prácticas</center></th>
-                <th class="span1"><center>Total Horas</center></th>
+                <th>Curso</th>
+                <th><center>Sem</center></th>
+                <th><center>Turno</center></th>
+                <th><center>Grupo(s)</center></th>
+                <th><center>Horas Teóricas</center></th>
+                <th><center>Horas Prácticas</center></th>
+                <th><center>Total Horas</center></th>
             </tr>
 			<?php	
 			$wherecourteach=array(
@@ -226,9 +220,7 @@ foreach ($this->allteachers as $allteachers) {
 				}
 			} ?>			
 		</table>					
-		<br>
-		<br>
-		<br>
+		<br><br><br>
 		<?php
 	}
 }
@@ -318,9 +310,7 @@ foreach ($this->allteachers as $allteachers){
                    	<th><center><?php echo $htotales?></center></th> 
                 </tr>			
 			</table>					
-			<br>
-			<br>
-			<br>
+			<br><br><br>
 			<?php
 		}
 	}
