@@ -1,9 +1,14 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<style>
+#logo{
+    max-width: 40px;
+}
+</style>
 
 <?php
-// $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
-// include_once($dir);
-// ob_start(); 
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
 $speciality = $this->info_speciality;
 if ($speciality['parent']!= '') {
 	$name_esc = $speciality['speciality'];
@@ -21,7 +26,9 @@ $jalados = 0;
 $retirados = 0;
 $back = '';
 $back1 = '';
-echo $header = '
+
+$header = '
+
 <table width="100%" style="border: 1px solid #000;font-family: serif;  color: #000; ">
 	<tr style="text-align:center; padding-left: 100px; ">
     	<td  rowspan="2" width="340px" style="border: 1px solid #000 "><img src="/img/header_imprimir.jpg">
@@ -29,15 +36,24 @@ echo $header = '
     	<td style="text-align:center; font-size:10px; border: 1px solid #000 ">
     		FACULTAD '.strtoupper($this->faculty).'<br/>
     		ESCUELA '.strtoupper($name_esc).'<br/>
-            '.strtoupper($name_speciality).'<br/>
-    		'.$this->header.'<br/>
+            '.strtoupper($name_speciality).'<br/>   		
     		
     	</td>
+        <td  rowspan="2" width="40px" style="text-align:center; font-size:10px; border: 1px solid #000 "><center>
+             <div id="logo" style="width:100px">          
+             <img style="width:110px,height:90px" src="../html/header/'.$this->header.'">
+
+              
+             </div> 
+            <br/>
+            </center>
+        </td>
 	</tr>
 	<tr>
 		<td style="text-align:center; font-size:10px; border: 1px solid #000 " >Assistencia - PERIODO '.$perid.' </td>
 	</tr>
 </table>
+
 <table width="100%" style="border-bottom: 2px solid #000; font-family: serif;  color: #000; margin-bottom:20px;">
 	<tr >
 		<td  style="font-size:10px; text-align:left;  " >
@@ -58,44 +74,7 @@ echo $header = '
 
 <table class='table-print' id='talassist'>
         <thead>
-            <tr>
-                <th rowspan='2'>#</th>
-                <th rowspan='2'>Apellidos y Nombres</th>
-                <th colspan='2' class='text-center success'>Semana 1</th>
-                <th colspan='2' class='text-center warning'>Semana 2</th>
-                <th colspan='2' class='text-center success'>Semana 3</th>
-                <th colspan='2' class='text-center warning'>Semana 4</th>
-                <th colspan='2' class='text-center success'>Semana 5</th>
-                <th colspan='2' class='text-center warning'>Semana 6</th>
-                <th colspan='2' class='text-center success'>Semana 7</th>
-                <th colspan='2' class='text-center warning'>Semana 8</th>
-                <?php if ($this->partial == 1) {?>
-                <th colspan='1' rowspan='2' class='text-center primary'>Ex.1er Parcial</th>
-                <?php }?>
-                <?php if ($this->partial == 2) {?>
-                <th colspan='1' rowspan='2' class='text-center primary'>Ex.2do Parcial</th>
-                <?php }?>
-
-            </tr>
-            <tr id='tb-header-info'>
-                <th class='text-sesion-assist '>sesión 1</th>
-                <th class='text-sesion-assist '>sesión 2</th>
-                <th class='text-sesion-assist '>sesión 3</th>
-                <th class='text-sesion-assist '>sesión 4</th>
-                <th class='text-sesion-assist '>sesión 5</th>
-                <th class='text-sesion-assist '>sesión 6</th>
-                <th class='text-sesion-assist '>sesión 7</th>
-                <th class='text-sesion-assist '>sesión 8</th>
-                <th class='text-sesion-assist '>sesión 9</th>
-                <th class='text-sesion-assist '>sesión 10</th>
-                <th class='text-sesion-assist '>sesión 11</th>
-                <th class='text-sesion-assist '>sesión 12</th>
-                <th class='text-sesion-assist '>sesión 13</th>
-                <th class='text-sesion-assist '>sesión 14</th>
-                <th class='text-sesion-assist '>sesión 15</th>
-                <th class='text-sesion-assist '>sesión 16</th>
-                <th class='text-sesion-assist active'></th>
-            </tr>
+          
         </thead>
         <tbody>
                 <?php echo "hola" ?>
@@ -103,13 +82,13 @@ echo $header = '
 </table>
 
 <?php 
-// $html = ob_get_contents();
-// $mpdf=new mPDF('win-1252','A4-L','','',10,10,44);
-// $mpdf->SetHTMLHeader($header);
-// $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-// $mpdf->SetFooter($this->footer);
-// ob_end_clean();
-// $mpdf -> WriteHTML($html);
-// $mpdf->Output('Assistencia-'.$course['name'].'-'.$this->turno.'.pdf','D');
+$html = ob_get_contents();
+$mpdf=new mPDF('win-1252','A4-L','','',10,10,44);
+$mpdf->SetHTMLHeader($header);
+$mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+$mpdf->SetFooter($this->footer);
+ob_end_clean();
+$mpdf -> WriteHTML($html);
+$mpdf->Output('Assistencia-'.$course['name'].'-'.$this->turno.'.pdf','D');
  
 ?>

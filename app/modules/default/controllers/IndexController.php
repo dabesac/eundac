@@ -442,8 +442,7 @@ class IndexController extends Zend_Controller_Action {
                     $acls[]= array("controller"=>"docente/listacademicreport","name"=>"Reporte de Informes Academicos","imgicon"=>"calendar");
                     $resource1[]="docente/listacademicreport";
 
-
-                    $acls[]= array("controller"=>"docente/editheader","name"=>"Editar cabecera","imgicon"=>"calendar");
+                    $acls[]= array("controller"=>"docente/editheader","name"=>"Insertar logo","imgicon"=>"calendar");
                     $resource1[]="docente/editheader";
 
     			}
