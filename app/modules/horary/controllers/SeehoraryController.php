@@ -30,38 +30,40 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
             $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
             $datahours=$bd_hours->_getFilter($wheres);   
-            $valhoras[0]=$datahours[0]['hours_begin'];
-            $hora=new Api_Model_DbTable_Horary();
-            for ($k=0; $k < 20; $k++) { 
-                $dho=$hora->_getsumminutes($valhoras[$k],'50');
-                $valhoras[$k+1]=$dho[0]['hora'];
+            
+            if ($datahours) {
+                $hora=new Api_Model_DbTable_Horary();
+                $valhoras[0]=$datahours[0]['hours_begin'];
+                for ($k=0; $k < 20; $k++) { 
+                    $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                    $valhoras[$k+1]=$dho[0]['hora'];
+                }
+                $this->view->valhoras=$valhoras;
+
+                $where['eid']=$eid;
+                $where['oid']=$oid;
+                $where['perid']=$perid;
+                $where['subid']=$subid;
+                $where['teach_uid']=$uid;
+                $where['teach_pid']=$pid;
+                $order=array('courseid');
+                // print_r($where);
+                $dathora=$hora->_getFilter($where,'',$order);
+                // print_r($dathora);
+                $this->view->horarios=$dathora;
+                $curso=new Api_Model_DbTable_Coursexteacher();
+                $where1['eid']=$eid;
+                $where1['oid']=$oid;
+                $where1['escid']=$escid;
+                $where1['perid']=$perid;
+                $where1['subid']=$subid;
+                $where1['pid']=$pid;
+                $datcur=$curso->_getFilter($where1);
+                $this->view->cursos=$datcur;
             }
-            $this->view->valhoras=$valhoras;
 
-            $where['eid']=$eid;
-            $where['oid']=$oid;
-            $where['perid']=$perid;
-            $where['subid']=$subid;
-            $where['teach_uid']=$uid;
-            $where['teach_pid']=$pid;
-            $order=array('courseid');
-            // print_r($where);
-            $dathora=$hora->_getFilter($where,'',$order);
-            // print_r($dathora);
-            $this->view->horarios=$dathora;
-            $curso=new Api_Model_DbTable_Coursexteacher();
-            $where1['eid']=$eid;
-            $where1['oid']=$oid;
-            $where1['escid']=$escid;
-            $where1['perid']=$perid;
-            $where1['subid']=$subid;
-            $where1['pid']=$pid;
-            $datcur=$curso->_getFilter($where1);
-            // print_r($datcur);
-
-            $this->view->cursos=$datcur;
         } catch (Exception $ex) {
-            print $ex->getMessage();
+            print "Error: See Horary".$ex->getMessage();
         }
     }
 

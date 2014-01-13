@@ -124,16 +124,17 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
         $bd_hours = new Api_Model_DbTable_HoursBeginClasses();
         $datahours=$bd_hours->_getFilter($wheres);
-        $valhoras[0]=$datahours[0]['hours_begin'];
-        $hora=new Api_Model_DbTable_Horary();
-        for ($k=0; $k < 20; $k++) { 
-            $dho=$hora->_getsumminutes($valhoras[$k],'50');
-            $valhoras[$k+1]=$dho[0]['hora'];
-        }
 
+        if ($datahours) {
+            $valhoras[0]=$datahours[0]['hours_begin'];
+            $hora=new Api_Model_DbTable_Horary();
+            for ($k=0; $k < 20; $k++) { 
+                $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                $valhoras[$k+1]=$dho[0]['hora'];
+            }
+        }    
         // valida que la hora de inicio sea multiplo de 50 min.
         for ($zz=0; $zz < 20; $zz++) { 
-            print_r($hora_ini);
             if ($hora_ini==$valhoras[$zz]) {
                 $valini=1;
             }
@@ -234,39 +235,42 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
         $bd_hours = new Api_Model_DbTable_HoursBeginClasses();
         $datahours=$bd_hours->_getFilter($wheres);
-        $valhoras[0]=$datahours[0]['hours_begin'];
-        $hora=new Api_Model_DbTable_Horary();
-        for ($k=0; $k < 20; $k++) { 
-            $dho=$hora->_getsumminutes($valhoras[$k],'50');
-            $valhoras[$k+1]=$dho[0]['hora'];
-        }
-        $this->view->valhoras=$valhoras;
-        $where['eid']=$eid;
-        $where['oid']=$oid;
-        $where['perid']=$perid;
-        $where['subid']=$subid;
-        $where['teach_uid']=$uid;
-        $where['teach_pid']=$pid;
-           //print_r($where);
-        $dathora=$hora->_getFilter($where);
-            // print_r($dathora);
-        $this->view->horarios=$dathora;
-        $curso=new Api_Model_DbTable_Coursexteacher();
-        $where1['eid']=$eid;
-        $where1['oid']=$oid;
-        $where1['escid']=$escid;
-        $where1['perid']=$perid;
-        $where1['subid']=$subid;
-        $where1['pid']=$pid;
-        $datcur=$curso->_getFilter($where1);
-            // print_r($datcur);
+        
+        if ($datahours) {
+            $valhoras[0]=$datahours[0]['hours_begin'];
+            $hora=new Api_Model_DbTable_Horary();
+            for ($k=0; $k < 20; $k++) { 
+                $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                $valhoras[$k+1]=$dho[0]['hora'];
+            }
+            $this->view->valhoras=$valhoras;
+            
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['perid']=$perid;
+            $where['subid']=$subid;
+            $where['teach_uid']=$uid;
+            $where['teach_pid']=$pid;
+               //print_r($where);
+            $dathora=$hora->_getFilter($where);
+                // print_r($dathora);
+            $this->view->horarios=$dathora;
+            $curso=new Api_Model_DbTable_Coursexteacher();
+            $where1['eid']=$eid;
+            $where1['oid']=$oid;
+            $where1['escid']=$escid;
+            $where1['perid']=$perid;
+            $where1['subid']=$subid;
+            $where1['pid']=$pid;
+            $datcur=$curso->_getFilter($where1);
 
-        $ncursos=count($datcur);
-        for ($cont=0; $cont < $ncursos; $cont++) { 
-            $datcur[$cont]['num']=$cont;
+            $ncursos=count($datcur);
+            for ($cont=0; $cont < $ncursos; $cont++) { 
+                $datcur[$cont]['num']=$cont;
+            }
+            $this->view->datcursos=$datcur;
+            $this->view->ncursos=$ncursos;
         }
-        $this->view->datcursos=$datcur;
-        $this->view->ncursos=$ncursos;
     }
 
     public function deletehoraryAction()
