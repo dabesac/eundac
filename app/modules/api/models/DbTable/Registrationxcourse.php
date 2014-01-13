@@ -427,7 +427,9 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 							(cast((case when notafinal='' or notafinal is null then '0'
 							 else notafinal end) as integer)<=10) and not (cast((case when 
 							 notafinal='' or notafinal is null then '0' else notafinal end) 
-							 as integer)=-3)              
+							 as integer)=-3) and not (cast((case when 
+							 notafinal='' or notafinal is null then '0' else notafinal end) 
+							 as integer)=-2)              
                     ");
                 if ($sql) return $sql->fetchAll();
             return false;

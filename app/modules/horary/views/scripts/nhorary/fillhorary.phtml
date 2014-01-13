@@ -2,8 +2,8 @@
 $usuario=$this->usuario;
 $nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usuario[0]['first_name']; 
 ?>
-<div class="row">
-<div class="col-md-11 nomdoc" style="font-size:20px;color:#0404B4; margin-left:4%"><b>
+<div class="row col-md-12 nomdoc" style="font-size:20px; color:#0404B4; margin-left:0px">
+    <b>
 	<?php
 	if ($this->usuario) {
 		echo $this->usuario[0]['uid']." - ".$nombredocente;
@@ -11,81 +11,78 @@ $nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usua
 	?>
 	</b>
 </div>
+<div class="row">
+    <div class="col-md-12">
+        <?php
+        if ($this->cursos) {
+        	$listacolores = array();
+            $listacolores[0] = "#FA8D74";
+            $listacolores[1] = "#A3CFE0";
+            $listacolores[2] = "#CBE487";
+            $listacolores[3] = "#FAF48D";
+            $listacolores[4] = "#FCB16B";
+            $listacolores[5] = "#CCF0EE";
+            $listacolores[6] = "#DFDFDF";
+            $listacolores[7] = "#81FF86";
+            $listacolores[8] = "#CD88FD";
+            $listacolores[9] = "#F59FFC";
+            $listacolores[10] = "#A58CFF";
+            $listacolores[11] = "#F2BBBB";
+            $listacolores[12] = "#D8BADA";
+            $listacolores[13] = "#C4E6CE";
+            $listacolores[14] = "#B4DAA1"; 	
+
+        	$len=count($this->cursos);
+        	$cco=0;
+        	for ($i=0; $i < $len; $i++) { 
+                $codcurso=$this->cursos[$i]['courseid'];
+        	    $turno=$this->cursos[$i]['turno'];
+                $codcursodes=$this->cursos[$i+1]['courseid'];
+        	    $turnodes=$this->cursos[$i+1]['turno'];
+        	   if ($codcurso==$codcursodes && $turno==$turnodes) {
+        	        $this->cursos[$i]['color']=$listacolores[$cco];
+        	    } else {
+        	        $this->cursos[$i]['color']=$listacolores[$cco];
+        	        $cco++;
+        	    }
+            }
+
+        	foreach ($this->cursos as $curso) { 
+        		$n=new Api_Model_DbTable_Course();
+                $where['eid']=$curso['eid'];
+                $where['oid']=$curso['oid'];
+                $where['escid']=$curso['escid'];
+                $where['subid']=$curso['subid'];
+                $where['courseid']=$curso['courseid'];
+                $where['curid']=$curso['curid'];
+        		$ncur=$n->_getOne($where);
+        		?>
+        		<buttom id="codcursos" onclick="cargarPopup(this);" courseid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
+
+        			<div class="nomdoc cajacurso" style="background-color:<?php echo $curso["color"] ?>">
+                        <?php echo $ncur['name'];?> - <?php echo $curso['turno'];?>
+                    </div>
+        		</buttom>
+
+        	<?php	
+        	}
+        }
+        ?>
+    </div>
 </div>
 <div class="row">
-<div class="col-md-12">
-<?php
-if ($this->cursos) {
-	$listacolores = array();
-    $listacolores[0] = "#FA8D74";
-    $listacolores[1] = "#A3CFE0";
-    $listacolores[2] = "#CBE487";
-    $listacolores[3] = "#FAF48D";
-    $listacolores[4] = "#FCB16B";
-    $listacolores[5] = "#CCF0EE";
-    $listacolores[6] = "#DFDFDF";
-    $listacolores[7] = "#81FF86";
-    $listacolores[8] = "#CD88FD";
-    $listacolores[9] = "#F59FFC";
-    $listacolores[10] = "#A58CFF";
-    $listacolores[11] = "#F2BBBB";
-    $listacolores[12] = "#D8BADA";
-    $listacolores[13] = "#C4E6CE";
-    $listacolores[14] = "#B4DAA1"; 	
-
-	$len=count($this->cursos);
-	$cco=0;
-	for ($i=0; $i < $len; $i++) { 
-        $codcurso=$this->cursos[$i]['courseid'];
-	    $turno=$this->cursos[$i]['turno'];
-        $codcursodes=$this->cursos[$i+1]['courseid'];
-	    $turnodes=$this->cursos[$i+1]['turno'];
-	   if ($codcurso==$codcursodes && $turno==$turnodes) {
-	        $this->cursos[$i]['color']=$listacolores[$cco];
-	    } else {
-	        $this->cursos[$i]['color']=$listacolores[$cco];
-	        $cco++;
-	    }
-    }
-
-	foreach ($this->cursos as $curso) { 
-		$n=new Api_Model_DbTable_Course();
-        $where['eid']=$curso['eid'];
-        $where['oid']=$curso['oid'];
-        $where['escid']=$curso['escid'];
-        $where['subid']=$curso['subid'];
-        $where['courseid']=$curso['courseid'];
-        $where['curid']=$curso['curid'];
-		$ncur=$n->_getOne($where);
-		?>
-		<buttom id="codcursos" onclick="cargarPopup(this);" courseid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
-
-			<div class="nomdoc cajacurso" style="background-color:<?php echo $curso["color"] ?>">
-                <?php echo $ncur['name'];?> - <?php echo $curso['turno'];?>
-            </div>
-		</buttom>
-
-	<?php	
-	}
-}
-?>
-</div>
+    <div class="alert alert-info col-md-10" style="font-size:15px; margin-left:23px">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <b style="font-size:18px">Información:</b> Click en el curso para agregar el horario, para eliminar el horario dar click en cualquiera de las (x).
+    </div>
 </div>
 <div class="row">
-
-<div class="alert alert-info col-md-11 flotacarajo" style="margin-left:2%">
-    <button type="button" class="close" data-dismiss="alert">x</button>
-    <b style="font-size:15px">Información:</b> Click en el curso para agregar el horario, para eliminar el horario dar click en cualquiera de las (x).
-</div>
-</div>
-<div class="row">
-
-<div class="col-md-11">
-    <center><a href="/horary/nhorary/listteacher" class="btn btn-warning"><i class="icon icon-arrow-left icon-white"></i>Regresar</a></center><br>
-</div>
+    <div class="col-md-12">
+        <center><a href="/horary/nhorary/listteacher" class="btn btn-warning"><i class="icon icon-arrow-left icon-white"></i>Regresar</a></center><br>
+    </div>
 </div>
 
- <div class="modal fade" id="mymodalhorasclase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="mymodalhorasclase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
        <div class="modal-header">
@@ -232,8 +229,9 @@ if ($this->cursos) {
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div>
+
 <div id="cargaaqui"></div>
-<div id="horariocurso" class="flotacarajo"></div>
+<div id="horariocurso"></div>
 
 
 <script type="text/javascript">
