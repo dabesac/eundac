@@ -87,10 +87,13 @@
 								<?php for($rcr = 1;$rcr<=$tamanio;$rcr++){
 									$index="nota".$rcr."_i";
 									$nota_ = $this->notes[$c][$index];
-								
 									if ($this->notes[$c][$index]) {?>
 										<th class="center <?php echo ($nota_<11 && $nota_<>"")?"danger":"";?>">
-											<?php echo $this->notes[$c][$index];?>
+											<?php if ($this->notes[$c][$index] == '0') {
+												echo 'imprime';
+											}else{
+												echo $this->notes[$c][$index];
+											}?>
 										</th>
 									<?php }elseif($tipo_ == 'O'){?>
 										<th></th>
