@@ -192,7 +192,7 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $esc= new Api_Model_DbTable_Speciality();
             $datescid=$esc->_getOne($wherescid);      
 
-            echo $date=$datescid['header'];
+            $date=$datescid['header'];
             $this->view->header=$date;
 
             

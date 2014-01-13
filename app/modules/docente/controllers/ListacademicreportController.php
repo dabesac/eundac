@@ -59,6 +59,8 @@ class Docente_ListacademicreportController extends Zend_Controller_Action {
             $this->view->perid=$perid;
             $this->view->subid=$subid;
             $this->view->escid=$escid;     
+            $this->view->eid=$eid;     
+            $this->view->oid=$oid;     
             $dbteachers= new Api_Model_DbTable_Coursexteacher();        
 
             $teachers=$dbteachers->_getTeachersXPeridXEscid($eid,$oid,$escid,$perid);
@@ -115,6 +117,42 @@ class Docente_ListacademicreportController extends Zend_Controller_Action {
             $informedoc = $inform->_getOne($whereinf);
             $this->view->informedoc = $informedoc;
         } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function printreportAction(){
+        try 
+        {
+            //$this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $subid=$this->sesion->subid;
+            $escid=$this->sesion->escid;
+            //print_r($this->sesion);
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $perid=$this->_getParam("perid");
+            
+            $where['perid']=$perid;
+            $this->view->perid=$perid;
+            $this->view->subid=$subid;
+            $this->view->escid=$escid;     
+            $this->view->eid=$eid;     
+            $this->view->oid=$oid;     
+
+            $this->view->speciality = $this->sesion->speciality->name;
+            $this->view->faculty = $this->sesion->faculty->name;
+            $this->view->infouser = $this->sesion->infouser['fullname'];
+
+            $dbteachers= new Api_Model_DbTable_Coursexteacher();        
+
+            $teachers=$dbteachers->_getTeachersXPeridXEscid($eid,$oid,$escid,$perid);
+            //print_r($teachers);
+            $this->view->packdatat=$teachers;   
+
+        }
+        catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
     }

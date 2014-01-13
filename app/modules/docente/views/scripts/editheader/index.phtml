@@ -1,5 +1,5 @@
 
-	<form name="<?php echo $this->form->getName(); ?>" id='frmCabecera' action="<?php echo $this->form->getAction(); ?>" method="post" enctype="multipart/form-data">
+ 	<form name="<?php echo $this->form->getName(); ?>" id='frmCabecera' action="<?php echo $this->form->getAction(); ?>" method="post" enctype="multipart/form-data">
  	<div class="accordion" id="accordion2" style="margin: 0px 80px 0px 80px">
 	 	<div class="panel panel-default">
 		        	<div class="panel-heading">
@@ -13,9 +13,12 @@
 		        	<div id="collapse5" class="panel-collapse collapse">
 		              	<div class="panel-body">
 				        	<?php echo $this->form->header?>
+				    					  
 				        	<?php echo $this->form->save?>
 		              	</div>
 		         	</div>
+				   
+
 		</div>
 	</div>
 		<script>
@@ -25,5 +28,10 @@
 		  });
 		})(jQuery);
 		</script>
-	</form>
+	</form> 
+
+	
+
+
+
 

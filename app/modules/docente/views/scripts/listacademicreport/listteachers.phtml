@@ -1,10 +1,11 @@
 <table class="table span10">
-	
+	<a href="listacademicreport/printreport/perid/<?php echo $this->perid?>" class="btn btn-success">Imprimir</a>
 	<?php if ($this->packdatat){?>
 	    <tr>
 	        <th><center>Num</center></th>
 	        <th><center>Codigo</center></th>
 	        <th >Docente</th>
+	        <th >Estado</th>
 	        <th ><center>Imprimir</center></th>	        
 	    </tr>
 	<?php $c=0; 
@@ -12,9 +13,32 @@
 			<tr>
 				<td><center><?php echo $c+1 ?></center></td>
 				<td><center><?php echo $pdt['uid'] ?></center></td>
-				<td><center><?php echo $pdt['pid'] ?></center></td>
-				<td><center><?php echo $pdt['escid'] ?></center></td>
+
+				<?php 
+				$pk=array('uid'=>$pdt['uid'],'pid'=>$pdt['pid'],'escid'=>$pdt['escid'],'subid'=>$pdt['subid'],'eid'=>$this->eid,'oid'=>$this->oid,'perid'=>$this->perid);
+		      	$dbteachers= new Api_Model_DbTable_Addreportacadadm();        
+				$teacher=$dbteachers->_getOne($pk);
+				//print_r($teacher);
+				$stinfo=$teacher['state'];
+
+				?>
 				<td><?php echo $pdt['nombrecompleto'] ?></td>
+				<td><?php 
+					if($stinfo=='C')
+					{
+						?>
+						<span class="glyphicon glyphicon-ok"></span>				
+						<?php 
+					}
+					else
+					{
+						?>
+						<span class="glyphicon glyphicon-remove"></span>
+						<?php	
+					}
+				 ?></td>
+
+			
 	
 				<td><center><a href="listacademicreport/print/pid/<?php echo base64_encode($pdt['pid'])?>/uid/<?php echo base64_encode($pdt['uid'])?>/escid/<?php echo base64_encode($pdt['escid'])?>/subid/<?php echo base64_encode($pdt['subid'])?>/perid/<?php echo base64_encode($this->perid)?>/nombre/<?php echo base64_encode($pdt['nombrecompleto'])?>"><span class="glyphicon glyphicon-print"></span></a></center></td>
 			</tr>
