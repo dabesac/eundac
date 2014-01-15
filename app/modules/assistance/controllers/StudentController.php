@@ -334,6 +334,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 'a_sesion_19' => "R",
                 'a_sesion_20' => "R",
                 'a_sesion_21' => "R",
+                'a_sesion_22' => "R",
                 'a_sesion_23' => "R",
                 'a_sesion_24' => "R",
                 'a_sesion_25' => "R",

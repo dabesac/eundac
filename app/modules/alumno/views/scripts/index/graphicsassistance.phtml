@@ -1,7 +1,7 @@
-        <script src="/external/bootstrap/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
-        <link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="/css/style.css">
+<script src="/external/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+<link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <div class="alert alert-success"><center>"SE CONSIDERA EL 30 % DE INASISTENCIA COMO RETIRADO A CADA CURSO CORRESPONDIENTE EN EL PRESENTE PERIODO"</center></div> 
  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -24,15 +24,26 @@
             $asistio=0;
             $falto=0;
             $total=0;
-            //$ret=0;
+            $var=$this->var;
+            if($var=='A'){
+              $ret1=17;
+                }
+            if($var=='P'){
+              $ret1=34;
+            }
            };
            if ($retirado=='N') {
             $ret1=0;
             $tarde=$datos['tarde'];
             $asistio=$datos['asistio'];
-            $falto=$datos['falto'];
-            $total=17;
-            //$ret=20;
+            $falto=$datos['falto'];            
+            $var=$this->var;
+            if($var=='A'){
+              $total=17;
+                }
+            if($var=='P'){
+              $total=34;
+            }
            };   ?>
            ['<?php print $course?>' , <?php print $tarde?>,<?php print $asistio?> , <?php print $falto?> , <?php print $total?> ,<?php print $ret1?>],
          <?php  }?>
@@ -40,7 +51,7 @@
           var options = {
           title: 'ASISTENCIA',
           titleTextStyle: {color: '#0567B1'},
-          hAxis: {title: ' CURSOS',  titleTextStyle: {color: '#FA1707'}},
+          hAxis: {title: 'CURSOS',  titleTextStyle: {color: '#FA1707'}},
           vAxis: {title: "CLASES",  titleTextStyle: {color: '#FA1707'}},
           seriesType: "bars",
           series: {5: {type: "line"}}

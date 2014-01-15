@@ -287,6 +287,7 @@ class IndexController extends Zend_Controller_Action {
 
                 $acls[]= array("controller"=>"admin/rol","name"=>"Crear Rol","imgicon"=>"user");
                 $acls[]= array("controller"=>"admin/faculty","name"=>"Crear Facultad","imgicon"=>"edit");
+                $acls[]= array("controller"=>"admin/speciality","name"=>"Crear Escuela","imgicon"=>"edit");
                 $acls[]= array("controller"=>"admin/org","name"=>"Crear Organización","imgicon"=>"edit");
                 $acls[]= array("controller"=>"admin/opensillabus","name"=>"Abrir Silabus","imgicon"=>"user");
                 $acls[]= array("controller"=>"admin/openrecords","name"=>"Abrir Actas","imgicon"=>"folder-close");
@@ -295,14 +296,21 @@ class IndexController extends Zend_Controller_Action {
                 $acls[]= array("controller"=>"admin/generatedeferred","name"=>"Generar Aplazados","imgicon"=>"list");
                 $acls[]= array("controller"=>"admin/generategraduated","name"=>"Generar Egresados","imgicon"=>"list-alt");
 
+                $acls[]= array("controller"=>"default/sendmail","name"=>"Enviar Correo","imgicon"=>"envelope");
+
+                $acls[]= array("controller"=>"poll/index","name"=>"Gestion Encuesta","imgicon"=>"folder-close");
+
+
                 $resource1[]="admin/receiptsup";
                 $resource1[]="admin/password";
                 $resource1[]="admin/bankpayments";
                 $resource1[]="admin/person";
                 $resource1[]="admin/user";
+                $resource1[]="poll/index";
 
                 $resource1[]="admin/rol";
                 $resource1[]="admin/faculty";
+                $resource1[]="admin/speciality";
                 $resource1[]="admin/org";
                 $resource1[]="admin/opensillabus";
                 $resource1[]="admin/openrecords";
@@ -310,6 +318,11 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="admin/rateregister";
                 $resource1[]="admin/generatedeferred";
                 $resource1[]="admin/generategraduated";
+                
+                $resource1[]="default/sendmail";
+
+                $resource1[]="admin/correctnotes";
+                $resource1[]="admin/fillnotes";
                 
                 $modules[0]['acls'] = $acls;
                 $acls = null;
@@ -341,6 +354,7 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"admin/opensillabus","name"=>"Abrir Silabus","imgicon"=>"user");
     			$acls[]= array("controller"=>"admin/openrecords","name"=>"Abrir Actas","imgicon"=>"folder-close");
                 $acls[]= array("controller"=>"admin/openassistance","name"=>"Abrir Asistencia","imgicon"=>"folder-close");
+                $acls[]= array("controller"=>"poll/index","name"=>"Gestion Encuesta","imgicon"=>"folder-close");
     			
     			$resource1[]="admin/receipts";
     			$resource1[]="admin/password";
@@ -351,7 +365,8 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="admin/openrecords";
                 $resource1[]="admin/openassistance";
     			$resource1[]="admin/person";
-    			$resource1[]="admin/user";
+                $resource1[]="admin/user";
+    			$resource1[]="poll/index";
     			$modules[0]['acls'] = $acls;
     			$acls = null;
     			
@@ -376,7 +391,8 @@ class IndexController extends Zend_Controller_Action {
     		}
     		
     		case "AL": {
-    			$resource1[]="alumno/index";
+                $resource1[]="alumno/index";
+    			$resource1[]="alumno/index/encuesta";
                 
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"register/listcurrentnotes","name"=>"Asignaturas Actuales","imgicon"=>"calendar");
@@ -399,7 +415,8 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="docente/index";
     			$resource1[]="syllabus/syllabus";
     			$resource1[]="syllabus/print";                
-    			$resource1[]="assistance/student";
+                $resource1[]="assistance/student";
+
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"docente/notas","name"=>"Asignaturas a Cargo","imgicon"=>"list");
@@ -407,6 +424,8 @@ class IndexController extends Zend_Controller_Action {
                 $acls[]= array("controller"=>"horary/seehorary","name"=>"Ver Horario","imgicon"=>"calendar");
                 $resource1[]="horary/seehorary";
                 $acls[]= array("controller"=>"docente/informacademic","name"=>"Informe Acad. Adm.","imgicon"=>"file");
+
+       
                 $resource1[]="docente/informacademic";
                 $resource1[]="docente/fillnotes";
                 $resource1[]="docente/register";
@@ -419,6 +438,13 @@ class IndexController extends Zend_Controller_Action {
                     $resource1[]="horary/nhorary";
     			    $acls[]= array("controller"=>"horary/semester","name"=>"Ver Horarios Sem.","imgicon"=>"calendar");
     			    $resource1[]="horary/semester";
+
+                    $acls[]= array("controller"=>"docente/listacademicreport","name"=>"Reporte de Informes Academicos","imgicon"=>"calendar");
+                    $resource1[]="docente/listacademicreport";
+
+                    $acls[]= array("controller"=>"docente/editheader","name"=>"Insertar logo","imgicon"=>"calendar");
+                    $resource1[]="docente/editheader";
+
     			}
     			$modules[0]['acls'] = $acls;
     			$acls = null;
@@ -462,9 +488,13 @@ class IndexController extends Zend_Controller_Action {
     			$resource1[]="profile/changecurricula";
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
     			$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
-    			$acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+                $acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+                $acls[]= array("controller"=>"rfacultad/registeractas","name"=>"Registro de Actas.","imgicon"=>"tasks");
+    			$acls[]= array("controller"=>"default/registernotesactas","name"=>"Notas de Actas.","imgicon"=>"tasks");
     			$resource1[]="record/index";
-    			$resource1[]="curricula/show";
+                $resource1[]="curricula/show";
+                $resource1[]="rfacultad/registeractas";
+    			$resource1[]="default/registernotesactas";
     			$modules[0]['acls'] = $acls;
     			$acls = null;
     			
@@ -511,9 +541,13 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"record/index","name"=>"ASIGNATURAS(ACTAS)","imgicon"=>"folder-close");
     			$acls[]= array("controller"=>"curricula/curricula","name"=>"Adm. Curriculas.","imgicon"=>"list");
     			$acls[]= array("controller"=>"curricula/show","name"=>"Curriculas.","imgicon"=>"tasks");
+                $acls[]= array("controller"=>"rcentral/periods","name"=>"Periodos.","imgicon"=>"tasks");
+
     			$resource1[]="record/index";
     			$resource1[]="curricula/curricula";
     			$resource1[]="curricula/show";
+                $resource1[]="rcentral/periods";
+
     			$modules[0]['acls'] = $acls;
     			$acls = null;
     			 
@@ -521,8 +555,14 @@ class IndexController extends Zend_Controller_Action {
     			$acls[]= array("controller"=>"#","name"=>"Matricula Ingresantes","imgicon"=>"saved");
     			$modules[1]['acls'] = $acls;
     			$acls = null;
+
+                $modules[2] = array ("name" =>"Codigo", "imgicon"=>"ok");
+                $acls[]= array("controller"=>"rcentral/code","name"=>"Generar Código","imgicon"=>"saved");
+                $resource1[]="rcentral/code";
+                $modules[2]['acls'] = $acls;
+                $acls = null;
     			 
-    			$modules[2] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
+    			$modules[3] = array ("name" =>"Reportes", "imgicon"=>"list-alt");
                 $acls[]= array("controller"=>"report/periods","name"=>"Avance Academico","imgicon"=>"list-alt");
     			$acls[]= array("controller"=>"report/performance","name"=>"Rendimiento","imgicon"=>"edit");
     			$acls[]= array("controller"=>"report/recordnotas","name"=>"Record Notas","imgicon"=>"folder-close");
@@ -537,7 +577,7 @@ class IndexController extends Zend_Controller_Action {
                 $resource1[]="report/registration";
                 $resource1[]="graduated/reportgraduated";
     			$resource1[]="graduated/graphicgraduated";
-    			$modules[2]['acls'] = $acls;
+    			$modules[3]['acls'] = $acls;
     			$acls = null;
     			break;
 
@@ -610,9 +650,12 @@ class IndexController extends Zend_Controller_Action {
                 $modules[0] = array ("name" =>"Plataforma", "imgicon"=>"book");
                 $acls[]= array("controller"=>"register/changerates","name"=>"Cambio de Tasas","imgicon"=>"screenshot");
                 $acls[]= array("controller"=>"bienestar/lockandunlock","name"=>"Bloqueo de Usuarios","imgicon"=>"lock");
+                $acls[]= array("controller"=>"bienestar/specialitylock","name"=>"Bloqueo por escuelas","imgicon"=>"link");
 
                 $resource1[]="register/changerates";
                 $resource1[]="bienestar/lockandunlock";
+                $resource1[]="bienestar/specialitylock";
+
                 $modules[0]['acls'] = $acls;
                 $acls = null;
                 break;

@@ -1,0 +1,30 @@
+<form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded">
+<table class="table  table-striped">
+	<tr style="font-size: 16px">
+		<td colspan="6"><b><font style="font-size: 16px">De:</font></b><font style="font-size: 13px"><?php echo " ".strtoupper($this->person['last_name0'])." ".strtoupper($this->person['last_name1'])." ".$this->person['first_name']." | "?></font><font style="color: #BBB9B9; font-size: 13px"><?php echo " ".$this->person['mail_person']." "?></font>  </td>
+	</tr>
+	<tr >
+		<td colspan="6"><b><font style="font-size: 16px">Para:</font></b><font style="font-size: 13px"><?php echo " ".strtoupper($this->dataperson['last_name0'])." ".strtoupper($this->dataperson['last_name1'])." ".$this->dataperson['first_name']." | "?></font><font style="color: #BBB9B9; font-size: 13px"><?php echo " ".$this->dataperson['mail_person']." "?></font></td>
+	</tr>
+
+	<tr style="font-size: 16px">
+		<td colspan="6"><b>Asunto:</b> <?php print $this->form->title;?></td>
+	</tr>
+	<tr style="font-size: 16px">
+		<td colspan="6"><?php print $this->form->Asunto;?></td>
+		
+	</tr>
+</table>
+<div id='carga'></div>
+</form>
+
+<script type="text/javascript">
+    $("#enviar").click(function(){  
+    	var asunto = $("#title").val();
+    	var contenido = $("#Asunto").val();
+     	var $url ="/default/correo/enviar/de/<?php echo $this->person['mail_person']?>/para/<?php echo $this->dataperson['mail_person']?>/asunto/"+asunto + "/contenido/" + contenido;
+
+      $('#carga').html("<img src='/img/spinner.gif'>Enviando, espere por favor..."); 
+      $("#carga").load($url);
+    });
+</script>

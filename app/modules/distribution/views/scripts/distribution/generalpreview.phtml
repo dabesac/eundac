@@ -1,0 +1,138 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<script src="/external/jquery/jquery-1.9.1.js"></script>
+<script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
+<script src="/external/jquery/external/globalize.js"></script>
+<script src="/external/jquery/external/jquery.mousewheel.js"></script>
+<script src="/external/jquery/external/jshint.js"></script>
+<script src="/external/jquery/external/qunit.js"></script>
+<link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
+<script src="/external/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
+<link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<style type="text/css">
+.cuadro{    
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid silver;
+    padding-top: 10px;
+    padding-bottom: 15px;
+    width: 96%;
+    margin-left: 2%;
+    margin-bottom: 5px;
+}
+th, td{
+    font-size:12px;
+}
+</style>
+<body class="found">
+<table class="table" style="background: #428bca; color: white">
+    <tr>
+        <td>
+            <a href="/distribution/distribution/printgeneralpreview/perid/<?php echo base64_encode($this->perid)?>/distid/<?php echo base64_encode($this->distid)?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>" class='btn btn-info'><span class="glyphicon glyphicon-print"></span> Imprimir</a>
+        </td>
+        <td>
+        	<h4><b><center>VISTA PRELIMINAR GENERAL (Docente - Asignatura)</center></b></h4>
+        </td>
+        <td>
+            <a style="float:right" class='btn btn-danger' onclick="javascript: window.close();"><span class="glyphicon glyphicon-eject"></span> Cerrar</a>
+        </td>
+    </tr>
+</table>
+
+<?php 
+if ($this->coursenotassign) { ?>
+    <div id="academica" class="cuadro">
+        <div>
+            <h5 style="color: red"><center><b>ASIGNATURAS SIN DOCENTE</b></center></h5>
+        </div>
+        <center>
+        <table class="table table-condensed table-hover" style="margin-top:10px; width:96%">
+        <tr>
+            <th><center>#</center></th>
+            <th><center>Currícula</center></th>
+            <th>Asignaturas</th>
+            <th><center>Turno</center></th>
+            <th><center>Sem</center></th>
+        </tr>
+        <?php
+        $i = 1;
+        foreach ($this->coursenotassign as $coursenotassign) {
+                $where = array(
+                    'eid' => $coursenotassign['eid'], 'oid' => $coursenotassign['oid'], 
+                    'curid' => $coursenotassign['curid'], 'escid' => $coursenotassign['escid'], 
+                    'subid' => $coursenotassign['subid'], 'courseid' => $coursenotassign['courseid']);
+                $cour = new Api_Model_DbTable_Course();
+                $data_cour = $cour->_getOne($where);
+                ?>
+                <tr>
+                    <td><center><?php echo $i ?></center></td>
+                    <td><center><?php echo $coursenotassign['curid'] ?></center></td>
+                    <td><?php echo $coursenotassign['courseid']." - ".$data_cour['name'] ?></td>
+                    <td><center><?php echo $coursenotassign['turno']?></center></td>
+                    <td><center><?php echo $coursenotassign['semid'] ?></center></td>
+                </tr>
+                <?php
+                $i++;
+        }
+        ?>
+    </table>
+    </center>
+    </div>
+    <?php
+}?>
+
+<?php 
+if ($this->courses) { 
+    foreach ($this->teachers as $teachers) { 
+    $user = new Api_Model_DbTable_Users();
+    $data_user = $user->_getUserXUid($where=array('eid' => $this->eid, 'oid' => $this->oid, 'uid' => $teachers)); ?>
+    <div id="academica" class="cuadro">
+        <div>
+            <h5 style="color: silver"><center><b><?php echo $teachers." - ".$data_user[0]['last_name0']." ".$data_user[0]['last_name1'].", ".$data_user[0]['first_name']?></b></center></h5>
+        </div>
+        <center>
+        <table class="table table-condensed table-hover" style="margin-top:10px; width:96%">
+        <tr>
+            <th><center>#</center></th>
+            <th><center>Currícula</center></th>
+            <th>Asignaturas</th>
+            <th><center>Turno</center></th>
+            <th><center>Sem</center></th>
+            <th><center>Grupos</center></th>
+            <th><center>#H.T.</center></th>
+            <th><center>#H.P.</center></th>
+            <th><center>#T.T.</center></th>
+        </tr>
+        <?php
+        $i = 1;
+        foreach ($this->courses as $courses) {
+            if ($courses['uid'] == $teachers) {
+                $where = array(
+                    'eid' => $courses['eid'], 'oid' => $courses['oid'], 'curid' => $courses['curid'], 
+                    'escid' => $courses['escid'], 'subid' => $courses['subid'], 'courseid' => $courses['courseid']);
+                $cour = new Api_Model_DbTable_Course();
+                $data_cour = $cour->_getOne($where);
+                ?>
+                <tr>
+                    <td><center><?php echo $i ?></center></td>
+                    <td><center><?php echo $courses['curid'] ?></center></td>
+                    <td><?php echo $courses['courseid']." - ".$data_cour['name'] ?></td>
+                    <td><center><?php echo $courses['turno']?></center></td>
+                    <td><center><?php echo $courses['semid'] ?></center></td>
+                    <td><center><?php echo $courses['groups'] ?></center></td>
+                    <td><center><?php echo $courses['hours_t'] ?></center></td>
+                    <td><center><?php echo $courses['hours_p'] ?></center></td>
+                    <td><center><?php echo $courses['hours_total'] ?></center></td>
+                </tr>
+                <?php
+                $i++;
+            }
+        }
+        ?>
+    </table>
+    </center>
+    </div>
+    <?php
+    }
+}?>

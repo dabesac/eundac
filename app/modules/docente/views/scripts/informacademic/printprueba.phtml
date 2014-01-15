@@ -1,0 +1,94 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<style>
+#logo{
+    max-width: 40px;
+}
+</style>
+
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+$speciality = $this->info_speciality;
+if ($speciality['parent']!= '') {
+	$name_esc = $speciality['speciality'];
+	$name_speciality='ESPECIALIDAD'.$speciality['name'];
+}
+else{
+	$name_esc=$speciality['name'];
+}
+$perid=$this->perid;
+$course = $this->infocourse;
+$students = $this->students;
+
+$aprobados = 0;
+$jalados = 0;
+$retirados = 0;
+$back = '';
+$back1 = '';
+
+$header = '
+
+<table width="100%" style="border: 1px solid #000;font-family: serif;  color: #000; ">
+	<tr style="text-align:center; padding-left: 100px; ">
+    	<td  rowspan="2" width="340px" style="border: 1px solid #000 "><img src="/img/header_imprimir.jpg">
+    	</td>
+    	<td style="text-align:center; font-size:10px; border: 1px solid #000 ">
+    		FACULTAD '.strtoupper($this->faculty).'<br/>
+    		ESCUELA '.strtoupper($name_esc).'<br/>
+            '.strtoupper($name_speciality).'<br/>   		
+    		
+    	</td>
+        <td  rowspan="2" width="40px" style="text-align:center; font-size:10px; border: 1px solid #000 "><center>
+             <div id="logo" style="width:100px">          
+             <img style="width:110px,height:90px" src="../html/header/'.$this->header.'">
+
+              
+             </div> 
+            <br/>
+            </center>
+        </td>
+	</tr>
+	<tr>
+		<td style="text-align:center; font-size:10px; border: 1px solid #000 " >Assistencia - PERIODO '.$perid.' </td>
+	</tr>
+</table>
+
+<table width="100%" style="border-bottom: 2px solid #000; font-family: serif;  color: #000; margin-bottom:20px;">
+	<tr >
+		<td  style="font-size:10px; text-align:left;  " >
+		<strong sytle="padding-right:10px">Curso </strong>'.$course['courseid'].' - '.$course['name'].'
+		</td>
+		<td>fffffffffffffff</td>
+        <td style="text-align: right; font-size:10px;"><strong>Turno </strong> '.$this->turno.'</td>
+        <td  style="text-align: right; font-size:10px;"><strong>Creditos </strong>'.$course['credits'].' </td>
+	</tr>
+	<tr >
+        <td   style="text-align:left; font-size:10px;"><strong>Docente </strong> '.$this->lasname.'</td>
+        <td  style="text-align: right; font-size:10px;"><strong>Semestre </strong>'.$course['semid'].' </td>
+        <td  style="text-align:right; font-size:10px;"><strong>Alumnos </strong>'.count($this->infoassist).' </td>
+	</tr>
+</table>
+';
+?>
+
+<table class='table-print' id='talassist'>
+        <thead>
+          
+        </thead>
+        <tbody>
+                <?php echo "hola" ?>
+        </tbody>
+</table>
+
+<?php 
+$html = ob_get_contents();
+$mpdf=new mPDF('win-1252','A4-L','','',10,10,44);
+$mpdf->SetHTMLHeader($header);
+$mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+$mpdf->SetFooter($this->footer);
+ob_end_clean();
+$mpdf -> WriteHTML($html);
+$mpdf->Output('Assistencia-'.$course['name'].'-'.$this->turno.'.pdf','D');
+ 
+?>

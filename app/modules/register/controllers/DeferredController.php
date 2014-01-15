@@ -30,6 +30,7 @@ class Register_DeferredController extends Zend_Controller_Action {
                 }
             }
 
+
             $params = $paramsdecode;
             $escid= trim($params['escid']);
             $subid= trim($params['subid']);
@@ -40,11 +41,32 @@ class Register_DeferredController extends Zend_Controller_Action {
             $state = trim($params['state']);
 
             $this->view->state=$state;
+
+            $urlpersentage ="/".base64_encode('oid')."/".base64_encode($oid)."/".
+                base64_encode('eid')."/".base64_encode($eid)."/".
+                base64_encode('escid')."/".base64_encode($escid)."/".
+                base64_encode('subid')."/".base64_encode($subid)."/".
+                base64_encode('courseid')."/".base64_encode($courseid)."/".
+                base64_encode('curid')."/".base64_encode($curid)."/".
+                base64_encode('turno')."/".base64_encode($turno)."/".
+                base64_encode('perid')."/".base64_encode($perid);
+
             $where = array(
                 'eid' => $eid, 'oid' => $oid,
                 'escid' => $escid,'subid' => $subid,
                 'courseid' => $courseid,'turno' => $turno,
                 'perid' => $perid,'curid'=>$curid,);
+
+            $base_period_course = new Api_Model_DbTable_PeriodsCourses();
+            $state_record_c = $base_period_course ->_getOne($where);
+            $this->view->state_record = $state_record_c['state_record'];
+            $this->view->state_course = $state_record_c['state'];
+
+            if ($state_record_c) {
+                if ($state_record_c['state_record'] == 'C' && $state_record_c['state'] == 'C') {
+                    $this->_redirect('/register/deferred/registerdeferred'.$urlpersentage);
+                }
+            }
 
             $base_courses = new Api_Model_DbTable_Course();
             $base_courses_registration = new Api_Model_DbTable_Registrationxcourse();
@@ -239,7 +261,7 @@ class Register_DeferredController extends Zend_Controller_Action {
                 $base_bankreceipts = new Api_Model_DbTable_Bankreceipts();
 
                 $data1 = array(
-                    'state'=>'S',
+                    'state'=>'C',
                     'state_record'=>'C',
                     'closure_date'=>date('Y-m-d'),
                     'updated'=>date('Y-m-d H:m:s'),
@@ -296,84 +318,150 @@ class Register_DeferredController extends Zend_Controller_Action {
     }
 
     public function printdeferredAction(){
+        
+           $params = $this->getRequest()->getParams();
+        if(count($params) > 3){
+
+            $paramsdecode = array();
+            
+            foreach ( $params as $key => $value ){
+                if($key!="module" && $key!="controller" && $key!="action"){
+                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+                }
+            }
+            $params = $paramsdecode;
+        }
+        /***********paramets***********/
+        $oid        = trim($params['oid']);
+        $eid        = trim($params['eid']);
+        $escid        = trim($params['escid']);
+        $subid        = trim($params['subid']);                    
+        $courseid    = trim($params['courseid']);
+        $curid        = trim($params['curid']);
+        $turno        = trim($params['turno']);
+        $perid        = trim($params['perid']);
+        $partial      = trim($params['partial']); 
+        $action      = trim($params['action']);
+
+        $where = null;
+        $url = null;
+        $where = array(
+            'oid'=>$oid, 
+            'eid'=>$eid,
+            'escid'=>$escid,
+            'subid'=>$subid,
+            'courseid'=>$courseid,
+            'curid'=>$curid,
+            'turno'=>$turno,
+            'perid'=>$perid,
+            );
+        $base_courses = new Api_Model_DbTable_Course();
+        $infocourse = $base_courses->_getOne($where);
+        $this->view->infocourse = $infocourse;
+
+        $base_students = new Api_Model_DbTable_Registrationxcourse();
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
+
+        $base_faculty   =   new Api_Model_DbTable_Faculty();
+        $base_speciality =  new Api_Model_DbTable_Speciality();
+        $info_speciality =  $base_speciality->_getOne($where);
+
+        if ($info_speciality['parent'] != "") {
+            $where['escid']=$info_speciality['parent'];
+            $name_speciality = $base_speciality->_getOne($where);
+            $info_speciality['speciality'] = $name_speciality['name'];
+        }
+
+        $this->view->info_speciality = $info_speciality;
+        $this->view->name_speciality = $name_speciality;
+        $this->view->turno = $turno;
+        $this->view->perid = $perid;
+        $this->view->partial = $partial;
+        $this->view->students = $data_notes_students;
+        $this->view->faculty = $this->sesion->faculty->name;
+        $this->view->lasname= $this->sesion->infouser['fullname'];
+        $this->_helper->layout->disableLayout();
+    }
+    public function registerdeferredAction(){
         try {
-            $this->_helper->layout->disableLayout();
+            
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
-            $uid = $this->sesion->uid;
-            $perid = base64_decode($this->_getParam('perid'));
-            $curid = base64_decode($this->_getParam('curid'));
-            $escid = base64_decode($this->_getParam('escid'));
-            $subid = base64_decode($this->_getParam('subid'));
-            $courseid = base64_decode($this->_getParam('courseid'));
-            $turno = base64_decode($this->_getParam('turno'));
-            $this->view->turno=$turno;
-            $this->view->perid=$perid;
-            $this->view->uid=$uid;
+
+            $params = $this->getRequest()->getParams();
+            $paramsdecode = array();
+            foreach ( $params as $key => $value ){
+                if($key!="module" && $key!="controller" && $key!="action"){
+                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+                }
+            }
+
+
+            $params = $paramsdecode;
+            $escid= trim($params['escid']);
+            $subid= trim($params['subid']);
+            $courseid= trim($params['courseid']);
+            $turno= trim($params['turno']);
+            $perid = trim($params['perid']);
+            $curid = trim($params['curid']);
+            $state = trim($params['state']);
+
+            $this->view->state=$state;
+
+            $urlpersentage ="/".base64_encode('oid')."/".base64_encode($oid)."/".
+                base64_encode('eid')."/".base64_encode($eid)."/".
+                base64_encode('escid')."/".base64_encode($escid)."/".
+                base64_encode('subid')."/".base64_encode($subid)."/".
+                base64_encode('courseid')."/".base64_encode($courseid)."/".
+                base64_encode('curid')."/".base64_encode($curid)."/".
+                base64_encode('turno')."/".base64_encode($turno)."/".
+                base64_encode('perid')."/".base64_encode($perid);
 
             $where = array(
                 'eid' => $eid, 'oid' => $oid,
                 'escid' => $escid,'subid' => $subid,
                 'courseid' => $courseid,'turno' => $turno,
-                'perid' => $perid,'curid'=>$curid);
+                'perid' => $perid,'curid'=>$curid,);
 
-            $wherefac['eid'] = $whereesc['eid'] = $eid;
-            $wherefac['oid'] = $whereesc['oid'] = $oid;
-            $whereesc['escid'] = $escid;
-            $whereesc['subid'] = $subid;
-            $esc = new Api_Model_DbTable_Speciality();
-            $dataesc = $esc->_getOne($whereesc);
-            $this->view->speciality = $dataesc;
+            $base_period_course = new Api_Model_DbTable_PeriodsCourses();
+            $state_record_c = $base_period_course ->_getOne($where);
+            $this->view->state_record = $state_record_c['state_record'];
+            $this->view->state_course = $state_record_c['state'];
 
-            $wherefac['facid'] = substr($escid, 0, 1);
-            $fac = new Api_Model_DbTable_Faculty();
-            $datafac = $fac->_getOne($wherefac);
-            $this->view->faculty = $datafac;
+            
+            $base_courses = new Api_Model_DbTable_Course();
+            $base_courses_registration = new Api_Model_DbTable_Registrationxcourse();
+            $base_person = new Api_Model_DbTable_Person();
+            $base_bankreceipts = new Api_Model_DbTable_Bankreceipts();
+            $students_register = $base_courses_registration->_getFilter($where);
 
-            $whereuser['eid'] = $eid;
-            $whereuser['oid'] = $oid;
-            $whereuser['uid'] = $uid;
-            $user = new Api_Model_DbTable_Users();
-            $datauser = $user->_getUserXUid($whereuser);
-            $this->view->person = $datauser;
+            if ($students_register) {
 
-            $wherecour['eid']=$eid;
-            $wherecour['oid']=$oid;
-            $wherecour['curid']=$curid;
-            $wherecour['escid']=$escid;
-            $wherecour['subid']=$subid;
-            $wherecour['courseid']=$courseid;
-            $cour = new Api_Model_DbTable_Course();
-            $datacour = $cour->_getOne($wherecour);
-            $this->view->course = $datacour;
-
-            $wherepercour['eid']=$eid;
-            $wherepercour['oid']=$oid;
-            $wherepercour['courseid']=$courseid;
-            $wherepercour['escid']=$escid;
-            $wherepercour['perid']=$perid;
-            $wherepercour['turno']=$turno;
-            $wherepercour['subid']=$subid;
-            $wherepercour['curid']=$curid;
-            $percour = new Api_Model_DbTable_PeriodsCourses();
-            $datapercour = $percour->_getOne($wherepercour);
-            $this->view->periodcourse = $datapercour;
-
-            $bdregcourse = new Api_Model_DbTable_Registrationxcourse();
-            $dataregcour = $bdregcourse->_getFilter($where);
-            if ($dataregcour) {
-                $tam=count($dataregcour);
-                $wherestu['eid']=$eid;
-                $wherestu['oid']=$oid;
-                for ($i=0; $i < $tam; $i++) { 
-                    $wherestu['uid']=$dataregcour[$i]['uid'];
-                    $datstudent = $user->_getUserXUid($wherestu);
-                    $dataregcour[$i]['fullname'] = $datstudent[0]['last_name0']." ".$datstudent[0]['last_name1'].", ".$datstudent[0]['first_name'];
-                }
+                foreach ($students_register as $key => $student) {
+                $where['pid']=$student['pid'];
+                $infostudent = $base_person->_getOne($where);
+                $students_register[$key]['name'] = $infostudent['last_name0']." ".
+                                            $infostudent['last_name1'].", ".
+                                        $infostudent['first_name'];
+                $where1 = array(
+                    'code_student'=>$student['uid'],
+                    'perid'=>$perid,'processed'=>'N');
+                $receipts = $base_bankreceipts->_getFilter($where1);
+                $students_register[$key]['receipts']= $receipts; 
+                } 
             }
-            $this->view->datastudent=$dataregcour;
+            else
+            {
+                $this->view->erro_data = "No tiene Registros";
+            }
+
+            $infocurso = $base_courses->_getOne($where);
+            $this->view->students_register=$students_register;
+            $this->view->infocurso = $infocurso;
+            $this->view->perid = $perid;
+            $this->view->urlpersentage=$urlpersentage;
         } catch (Exception $e) {
-            print "Error: ".$e->getMessage();
+            print "Error index Registration ".$e->$getMessage();
         }
     }
 }

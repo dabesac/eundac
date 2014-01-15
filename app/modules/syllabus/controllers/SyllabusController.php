@@ -10,7 +10,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
         // if (!$login->modulo=="syllabus"){
         //  $this->_helper->redirector('index','index','default');
         // }
-        $this->sesion = $login;
+        $this->sesion = $login; 
     }
 
     public function indexAction(){
@@ -31,6 +31,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $this->view->perid=$where['perid'];
             $syl= new Api_Model_DbTable_Syllabus();
             $datsyl=$syl->_getOne($where);
+            $this->view->num=$datsyl['number'];
             if (!$datsyl) {
                 $data['eid']=$where['eid'];
                 $data['oid']=$where['oid'];
@@ -320,7 +321,6 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $this->view->tipo_cali=$tipo_cali;
             $this->view->units=$units;
             $this->view->numunidad=$numunidad;
-            $mod=0;
 
             $form= new Syllabus_Form_Syllabusunitcontent();
             $this->view->form=$form;
@@ -330,7 +330,6 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                 $frmdata=$this->getRequest()->getPost();
                 if ($form->isValid($frmdata))
                 { 
-                    unset($frmdata['guardar']);
                     trim($frmdata['week']);
                     trim($frmdata['session']);
                     trim($frmdata['obj_content']);
@@ -340,24 +339,23 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                     trim($frmdata['com_actitudinal']);
                     trim($frmdata['com_indicators']);
                     trim($frmdata['com_instruments']);
-                    $frmdata['eid']=$pk['eid'];
-                    $frmdata['oid']=$pk['oid'];
-                    $frmdata['perid']=$pk['perid'];
-                    $frmdata['curid']=$pk['curid'];
-                    $frmdata['escid']=$pk['escid'];
-                    $frmdata['courseid']=$pk['courseid'];
-                    $frmdata['subid']=$pk['subid'];
-                    $frmdata['turno']=$pk['turno'];
-                    $frmdata['unit']=$numunidad;
-                    $sylconte = new Api_Model_DbTable_Syllabusunitcontent();
+                    $frmdata['eid']=$this->sesion->eid;
+                    $frmdata['oid']=$this->sesion->oid;
                     // print_r($frmdata);
-                    $sylconte->_save($frmdata);
-                    if ($sylconte) $mod=1;
+
+                    $where = array(
+                        'eid' => $frmdata['eid'], 'oid' => $frmdata['oid'], 'subid' => $frmdata['subid'],
+                        'perid' => $frmdata['perid'], 'escid' => $frmdata['escid'], 'curid' => $frmdata['curid'],
+                        'courseid' => $frmdata['courseid'], 'turno' => $frmdata['turno'], 'session' => $frmdata['session']);
+                    $sylconte = new Api_Model_DbTable_Syllabusunitcontent();
+                    $data_exis = $sylconte->_getFilter($where,$attrib=null,$orders=null);
+                    if ($data_exis) {
+                        $this->view->exis = 1;
+                    }else{
+                        $sylconte->_save($frmdata);
+                        $this->view->save_success = 1;
+                    }
                 }
-            }
-            if ($mod==1) {
-                $url="perid/".base64_encode($pk['perid'])."/subid/".base64_encode($pk['subid'])."/escid/".base64_encode($pk['escid'])."/curid/".base64_encode($pk['curid'])."/courseid/".base64_encode($pk['courseid'])."/turno/".base64_encode($pk['turno'])."/tipo_cali/".base64_encode($tipo_cali)."/units/".$units."/numunidad/".$numunidad;
-                $this->_redirect("/syllabus/syllabus/units/".$url);                
             }
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
@@ -378,7 +376,6 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $where['unit'] = $this->_getParam("numunidad");
             $where['session'] = $this->_getParam("session");
             $tipo_cali = base64_decode($this->_getParam("tipo_cali"));
-            $units = $this->_getParam("units");
             $this->view->turno=$where['turno'];
             $this->view->perid=$where['perid'];
             $this->view->courseid=$where['courseid'];
@@ -386,22 +383,19 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $this->view->escid=$where['escid'];
             $this->view->subid=$where['subid'];
             $this->view->tipo_cali=$tipo_cali;
-            $this->view->units=$units;
             $this->view->numunidad=$where['unit'];
+            $this->view->session=$where['session'];
 
             $conten= new Api_Model_DbTable_Syllabusunitcontent();
             $datacont=$conten->_getOne($where);
 
             $form= new Syllabus_Form_Syllabusunitcontent();
-            $form->populate($datacont);
-            $this->view->form=$form;
 
             if ($this->getRequest()->isPost())
             {
                 $frmdata=$this->getRequest()->getPost();
                 if ($form->isValid($frmdata))
                 { 
-                    unset($frmdata['guardar']);
                     trim($frmdata['week']);
                     trim($frmdata['session']);
                     trim($frmdata['obj_content']);
@@ -411,24 +405,25 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                     trim($frmdata['com_actitudinal']);
                     trim($frmdata['com_indicators']);
                     trim($frmdata['com_instruments']);
-                    $pk['eid']=$where['eid'];
-                    $pk['oid']=$where['oid'];
-                    $pk['perid']=$where['perid'];
-                    $pk['curid']=$where['curid'];
-                    $pk['escid']=$where['escid'];
-                    $pk['courseid']=$where['courseid'];
-                    $pk['subid']=$where['subid'];
-                    $pk['turno']=$where['turno'];
-                    $pk['unit']=$where['unit'];
-                    $pk['session']=$where['session'];
+                    $pk['eid'] = $this->sesion->eid;
+                    $pk['oid'] = $this->sesion->oid;
+                    $pk['perid']=$frmdata['perid'];
+                    $pk['curid']=$frmdata['curid'];
+                    $pk['escid']=$frmdata['escid'];
+                    $pk['courseid']=$frmdata['courseid'];
+                    $pk['subid']=$frmdata['subid'];
+                    $pk['turno']=$frmdata['turno'];
+                    $pk['unit']=$frmdata['unit'];
+                    $pk['session']=$frmdata['session'];
                     $sylconte = new Api_Model_DbTable_Syllabusunitcontent();
                     // print_r($frmdata);
                     if ($sylconte->_update($frmdata,$pk)) {
-                        $url="perid/".base64_encode($where['perid'])."/subid/".base64_encode($where['subid'])."/escid/".base64_encode($where['escid'])."/curid/".base64_encode($where['curid'])."/courseid/".base64_encode($where['courseid'])."/turno/".base64_encode($where['turno'])."/tipo_cali/".base64_encode($tipo_cali)."/units/".$units."/numunidad/".$where['unit'];
-                        $this->_redirect("/syllabus/syllabus/units/".$url);                
+                        $this->view->success = 1;
                     }
                 }
             }
+            $form->populate($datacont);
+            $this->view->form=$form;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }

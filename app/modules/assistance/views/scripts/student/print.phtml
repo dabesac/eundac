@@ -71,7 +71,7 @@ table{
 	border-spacing: 0;
 }
 .img-icon{
-    width: 1.5%;
+    width: 10px;
 }
 .header{
 	background-color: #ebe9eb;
@@ -142,41 +142,41 @@ table{
         <tbody>
             <?php foreach ($this->infoassist as $key => $register) {?>
             <tr >
-                <?php if ($this->partial==1) { ?>
-                    <td class='text-name'><?php echo $key+1?></td>
+                <td class='text-name'><?php echo $key+1?></td>
                 <td class='text-name'><?php echo $register['last_name0']." ".$register['last_name1']." ,".$register['first_name']?></td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_1']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_2']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
+                <?php if ($this->partial==1) { ?>
+                    <td class='text-center'>
+                        <?php switch ($register['a_sesion_1']) {
+                            case 'A':
+                                echo "<img class='img-icon' src='/img/check-icon.png'>";
+                                break;
+                            case 'R':
+                                echo "<img class='img-icon' src='/img/R-icon.png'>";
+                                break;
+                            case 'T':
+                                echo "<img class='img-icon' src='/img/T-icon.png'>";
+                                break;
+                            case 'F':
+                                echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                                break;
+                        }?>
+                    </td>
+                    <td class='text-center'>
+                        <?php switch ($register['a_sesion_2']) {
+                            case 'A':
+                                echo "<img class='img-icon' src='/img/check-icon.png'>";
+                                break;
+                            case 'R':
+                                echo "<img class='img-icon' src='/img/R-icon.png'>";
+                                break;
+                            case 'T':
+                                echo "<img class='img-icon' src='/img/T-icon.png'>";
+                                break;
+                            case 'F':
+                                echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                                break;
+                        }?>
+                    </td>
                 <td class='text-center'>
                     <?php switch ($register['a_sesion_3']) {
                         case 'A':
@@ -699,7 +699,7 @@ table{
 
 <?php 
 $html = ob_get_contents();
-$mpdf=new mPDF('win-1252','A4-L','','',15,15,42);
+$mpdf=new mPDF('win-1252','A4-L','','',10,10,44);
 $mpdf->SetHTMLHeader($header);
 $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
 $mpdf->SetFooter($this->footer);

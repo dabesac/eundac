@@ -335,6 +335,24 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 		}
 	}
 
+	  /*Devuelve los Cursos que no tienen docentes Distribución*/
+	public function _getCoursesIsNotTeacher($where=null){
+	    try{
+	      	if($where['eid']=="" || $where['oid']=="" || $where['subid']=="" || $where['escid']=="" || $where['perid']=="") return false;
+	      	$str = "select pc.* from base_periods_courses pc left join base_course_x_teacher dc 
+					on pc.eid=dc.eid and pc.oid=dc.oid and pc.subid=dc.subid and pc.courseid=dc.courseid and pc.turno=dc.turno 
+					and pc.escid=dc.escid and pc.curid=dc.curid and pc.perid=dc.perid
+					where pc.eid='".$where['eid']."' and pc.oid='".$where['oid']."' and pc.subid='".$where['subid']."' 
+					and pc.escid='".$where['escid']."' and pc.perid='".$where['perid']."' and dc.eid is null and dc.oid is null";
+
+	        $sql = $this->_db->query($str);
+	        if ($sql) return $sql->fetchAll();
+	        return false;           
+	    }catch (Exception $ex){
+	        print "Error: Obteniendo datos ".$ex->getMessage();
+	    }
+	}
+
 	  /*devuelve CANTIDAD DE ALUMNOS MATRICULADO POR CURSO SEGUN PARAMETROS*/
 public function _getCountStudentxCourse($where=null)
   {

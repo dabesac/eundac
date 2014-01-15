@@ -159,7 +159,7 @@ class Record_IndexController extends Zend_Controller_Action {
             $info_couser = $base_course->_getOne($where);
             $info_teacher = $base_course_x_teacher->_getFilter($where);
             $speciality = $base_speciality->_getAll($where);
-            $data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
+            $data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
            
             foreach ($info_teacher as $key => $value) {
             	$where1= array(
@@ -342,8 +342,9 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
-			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
+			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 
 
 			$info_couser = $base_course->_getOne($where);
@@ -445,8 +446,9 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
-			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
+			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 
 
 			$info_couser = $base_course->_getOne($where);
@@ -626,10 +628,10 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 
-			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
-
+			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 			if ($type=="C") {
 				$data_Competecy = $base_CourseCompetency->_getOne($where);
 				$this->view->data_Competecy = $data_Competecy;
@@ -726,7 +728,8 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 
 			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
 
@@ -859,6 +862,7 @@ class Record_IndexController extends Zend_Controller_Action {
 					$where['subid']=$row['subid'];
 					$where['perid']=$row['perid'];
 					$where['turno']=$row['turno'];
+					$where['is_main']='S';
 					$register = new Api_Model_DbTable_Registrationxcourse();
 					$countregister = $register->_getCountRegisterCourse($where);
 					$rows[$key]['numregister'] = ($countregister)?$countregister:0;
@@ -957,8 +961,9 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
-			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
+			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 
 
 			$info_couser = $base_course->_getOne($where);
@@ -1052,7 +1057,8 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 
 			$data_period_course = $base_periods_course->_getOne($where);
 
@@ -1125,9 +1131,10 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 
-			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
+			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 
 			if ($type=="C") {
 				$data_Competecy = $base_CourseCompetency->_getOne($where);
@@ -1224,9 +1231,10 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 
-			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
+			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 
 			$tota_students = $base_register_course->_get_total_students_x_course($where);
 			$total_approved = $base_register_course->_get_approved($where);
@@ -1359,7 +1367,7 @@ class Record_IndexController extends Zend_Controller_Action {
 				);
 			$base_impress_course->_save($data_impress);
 
-            $students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
+            $students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 
             $info_couser = $base_course->_getOne($where);
 			$info_couser['turno'] = $turno;

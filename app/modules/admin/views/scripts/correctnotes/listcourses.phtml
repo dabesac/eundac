@@ -1,0 +1,71 @@
+<?php if ($this->registers) { ?>
+	<table class="table table-bordered">
+  		<thead>
+  			<tr>
+				<th >#</th>
+				<th >Sem.</th>
+				<th >Curricula </th> 
+				<th >Código Asig.</th>
+				<th >Nombre Asignatura </th>
+				<th >Turno</th>
+				<th >Calificación</th>
+				<th >Primer Parcial</th>
+				<th >Segundo Parcial</th>
+				<th >Fecha Cierre Acta</th>
+				<th >Estado</th>
+				<th>Cambiar</th>
+  			</tr>
+  		</thead>
+  		<tbody>
+  				<?php foreach ($this->registers as $key => $course) { 
+  					$url = "/".base64_encode('courseid')."/".base64_encode($course['courseid']).
+  							"/".base64_encode('turno')."/".base64_encode($course['turno']).
+  							"/".base64_encode('perid')."/".base64_encode($this->perid).
+  							"/".base64_encode('curid')."/".base64_encode($course['curid']).
+  							"/".base64_encode('escid')."/".base64_encode($this->escid).
+  							"/".base64_encode('subid')."/".base64_encode($course['subid']).
+  							"/".base64_encode('partial')."/".base64_encode('1');
+  				?>
+	  			<tr>
+  					<td><?php echo $key+1?></td>
+  					<td><?php echo $course['semid'] ?></td>
+  					<td><?php echo $course['curid'] ?></td>
+  					<td><?php echo $course['courseid'] ?></td>
+  					<td><?php echo $course['name'] ?></td>
+  					<td><?php echo $course['turno'] ?></td>
+  					<td><?php switch ($course['type_rate']) {
+  						case 'O':
+  							echo 'Objetivo';
+  							break;
+  						case 'C':
+  							echo 'Competencia';
+  							break;
+  						default:
+  							echo "Sin Asignar";
+  							break;
+  					}?></td>
+  					<td></td>
+  					<td><?php echo $course['closure_date']?></td>
+  					<td></td>
+  					<td></td>
+  					<td><?php switch ($course['type_rate']) {
+  						case 'O':
+
+  							echo '<a href="/admin/fillnotes/target'.$url.'"><img src="/img/actas_03.png"></a>';
+  							break;
+  						case 'C':
+  							echo '<a href="/admin/fillnotes/competition'.$url.'"><img src="/img/actas_03.png"></a>';
+  							
+  							break;
+  						default:
+  							echo "Sin Asignar";
+  							break;
+  					}?></td>
+  					
+	  			</tr>
+  				<?php }?>
+  		</tbody>
+	</table>
+<?php }else{?>
+
+<?php }?>

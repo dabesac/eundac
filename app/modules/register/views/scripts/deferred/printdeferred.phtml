@@ -1,105 +1,140 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
 <?php
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
-ob_start();
-$header='<table style="width: 100%;" border="1">
-    <tr>
-        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-        <th style="text-align: center; font-size: 11px;">
-            FACULTAD DE  '.strtoupper($this->faculty['name']).'<br/>
-            ESCUELA DE  '.strtoupper($this->especiality['name']).'    
-        </th>        
-    </tr>
-    <tr>
-      <th style="border: 1px solid #000;"> REGISTRO DE NOTAS - PERIODO '.strtoupper($this->perid).'</th>
-    </tr>
+ob_start(); 
+$speciality = $this->info_speciality;
+if ($speciality['parent']!= '') {
+  $name_esc = $speciality['speciality'];
+  $name_speciality='ESPECIALIDAD'.$speciality['name'];
+}
+else{
+  $name_esc=$speciality['name'];
+}
+$perid=$this->perid;
+$course = $this->infocourse;
+$students = $this->students;
+$mpdf->mirrorMargins = 1;
+
+$aprobados = 0;
+$jalados = 0;
+$retirados = 0;
+$back = '';
+$back1 = '';
+$header = '
+<table width="100%" style="border: 1px solid #000;font-family: serif;  color: #000; ">
+  <tr style="text-align:center; padding-left: 100px; ">
+      <td  rowspan="2" width="340px" style="border: 1px solid #000 "><img src="/img/header_imprimir.jpg">
+      </td>
+      <td style="text-align:center; font-size:10px; border: 1px solid #000 ">
+        FACULTAD '.strtoupper($this->faculty).'<br/>
+        ESCUELA '.strtoupper($name_esc).'<br/>
+        '.strtoupper($name_speciality).'<br/>
+        
+      </td>
+  </tr>
+  <tr>
+    <td style="text-align:center; font-size:10px; border: 1px solid #000 " >ACTA EVALUACIÓN - PERIODO '.$perid.' </td>
+  </tr>
 </table>
-'
+<table width="100%" style="border-bottom: 2px solid #000; font-family: serif;  color: #000; margin-bottom:20px;">
+  <tr >
+    <td  style="font-size:10px; text-align:left;  " >
+    <strong sytle="padding-right:10px">Curso </strong>'.$course['courseid'].' - '.$course['name'].'
+    </td>
+    
+        <td style="text-align: right; font-size:10px;"><strong>Turno </strong> '.$this->turno.'</td>
+        <td  style="text-align: right; font-size:10px;"><strong>Creditos </strong>'.$course['credits'].' </td>
+  </tr>
+  <tr >
+        <td   style="text-align:left; font-size:10px;"><strong>Docente </strong> '.$this->lasname.'</td>
+        <td  style="text-align: right; font-size:10px;"><strong>Semestre </strong>'.$course['semid'].' </td>
+        <td  style="text-align:right; font-size:10px;"><strong>Alumnos </strong>'.count($students).' </td>
+  </tr>
+</table>
+';
 ?>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" /> 
+<style type="text/css">
+address {
+  margin-top: 10px;
+  font-size: 8px;
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+
+}
+.table-bordered {
+  width: 100%;
+  font-size:10px;
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  border: 1px solid #000;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.text-name{
+    text-align: left;
+    border: 0.5px solid #2c242c;
+}
+.text-center, {
+  text-align: center;
+  border: 0.5px solid #2c242c;
+}
+.header{
+  background-color: #ebe9eb;
+}
+</style>
+<?php if ($this->students) { ?>
+    <div class='row'>
+        <div class='col-md-12 table-responsive'>
+            <table class='table table-bordered'>
+                <thead>
+                    <tr>
+                        <th class='text-center'>#</th>
+                        <th class='text-center' >Codigo</th>
+                        <th class='text-name'>Apellidos y Nombres</th>
+                        <th class='text-center' >Recibo</th>
+                        <th class='text-center' >Nota</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($this->students as $key => $student) { ?>
+                    <tr>
+
+                        <?php 
+                            if ($student['notafinal']== -2 ) { $retirados++;}
+                            if ($student['notafinal'] > 10 && $student['notafinal'] <=20 ) { $aprobados++; $back="active text-primary";}
+                            if ($student['notafinal'] >= 0 && $student['notafinal'] <=10 ) { $jalados++; $back="danger text-danger";} 
+                       ?>
+
+                        <td class='text-center'><?php echo $key+1?></td>
+                        <td class='text-center'><?php echo $student['uid']?></td>
+                        <td class='text-name'><?php echo $student['name_complet']?></td>
+                        <td class='text-name'><?php echo $student['receipt']?></td>
+                        <td class='text-name'><?php echo ($student['notafinal']==-2)?'N.S.P':$student['notafinal']?></td>
+
+                    </tr>
+                <?php }?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php }?>
+<address>
+  <strong>Aprobados</strong>  <?php echo $aprobados?><br>
+  <strong>Desaprobados</strong>  <?php echo $jalados?><br>
+  <strong>No se Presentaron</strong>  <?php echo $retirados?><br>
+  <strong>Total</strong>  <?php echo $aprobados+$jalados+$retirados?>
+</address>
+
 
 <?php 
-	$fecha=$this->periodcourse['closure_date'];
-	$nfe=split("-", $fecha);
-	$fecha=$nfe[2]."/".$nfe[1]."/".$nfe[0];
-?>      
-<table style="font-size: 11px;float: left; width: 100%; border-bottom: 2px solid #000;" >   
-      <tr>                
-          	<th style="width: 50px;text-align: left;">Curso:</th>
-          	<td style="text-align: left;">
-                <?php echo $this->course['courseid']." - ".$this->course['name'] ?>
-            </td>
-          	<th>Semestre:</th>
-        	<td><?php echo $this->course['semid']?></td>
-          	<th style="width: 40px;text-align: left">Turno:</th>
-          	<td style="width: 40px;text-align: center"><?php echo $this->turno?></td>
-      </tr>
-      <tr>
-        	<th>Docente:</th>
-        	<td>
-                <?php echo $this->person[0]['last_name0']." ".$this->person[0]['last_name1'].", ".$this->person[0]['first_name']?>
-            </td>
-        	<th>Creditos:</th>
-          	<td><?php echo $this->course['credits']?></td>
-          	<th>Fecha:</th>
-          	<td><?php echo $fecha ?></td>
-      </tr>    
-</table>
-<table style="font-size:11px; width: 100%;float: left;border-bottom: 2px solid #000; margin-bottom: 10px">
-		<tr>
-			<th>#</th>
-			<th>Cod. Mat.</th>
-			<th>Apellidos y Nombres</th>
-			<th>Recibo</th>
-			<th>Nota Final</th>
-		</tr>
-		<?php
-        $ca=0;
-        $cd=0;
-        $cn=0;
-		if ($this->datastudent) {
-			$c=1;
-			foreach ($this->datastudent as $datos) {
-				if ($datos['notafinal']=="-2") {
-					$notafinal="N.S.P.";
-                    $cn++;
-				}else{
-					$notafinal=$datos['notafinal'];
-                    if ($notafinal>10) $ca++;
-                    else $cd++;
-				}?>
-				<tr>
-					<td style="text-align: center"><?php echo $c?></td>
-					<td style="text-align: center"><?php echo $datos['uid']?></td>
-					<td ><?php echo $datos['fullname']?></td>
-					<td style="text-align: center"><?php echo $datos['receipt']?></td>
-					<td style="text-align: center"><?php echo $notafinal ?></td>
-				</tr>
-			<?php
-			$c++;
-            }
-		} ?>
-</table>
-<table>
-    <tr>
-        <td># Aprobados: <?php echo $ca?></td>
-    </tr>
-    <tr>
-        <td># Desaprobados: <?php echo $cd?></td>
-    </tr>
-    <tr>
-        <td># No se Presentaron: <?php echo $cn?></td>
-    </tr>
-    <tr>
-        <td># Total: <?php echo $c-1 ?></td>
-    </tr>
-</table>
-<?php
-    $html = ob_get_contents();
-    $mpdf = new mPDF('win-1252','A4','','',15,15,30);
-    $mpdf->SetHTMLHeader($header);
-    $mpdf->SetFooter('{DATE j/m/Y}|Página {PAGENO}|'.$this->uid.' - Sistema de Gestión e-UNDAC');
-    ob_end_clean();
-    $mpdf->WriteHTML($html);
-    $mpdf->Output('Registro'.$this->course['courseid'].'.pdf','D');
+$html = ob_get_contents();
+$mpdf=new mPDF('win-1252','A4','','',10,10,42);
+$mpdf->SetHTMLHeader($header);
+$mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+$mpdf->SetFooter($this->footer);
+ob_end_clean();
+$mpdf -> WriteHTML($html);
+$mpdf->Output('Registro-'.$course['name'].'-'.$this->turno.'.pdf','D');
+ 
 ?>

@@ -33,6 +33,11 @@
 		</tr>
 	</table>
 </form>
+
+<div id="existe" class="alert alert-info" style="display: none; font-size: 15px">
+	<b>INFORMACIÓN: </b>Ya existe una Distribución creada para este periodo.
+</div>
+
 <script>
 	$(function() {
 		$("#datepress").datepicker();
@@ -41,6 +46,16 @@
 			$("#frmDistribution").submit();
 		});
 		
+		var exis = "<?php echo $this->exis?>";
+		if (exis == 1) {
+			$("#existe").show();
+		};
+
+		$("#perid").change(function(){
+			var perid = $.base64.decode($(this).val());
+			var time = "<?php echo time()?>";
+			$("#number").val(perid+" - "+time);
+		});
 		
 	});
 	

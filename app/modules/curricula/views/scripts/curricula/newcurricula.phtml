@@ -78,7 +78,6 @@
 	</form>
 <?php }
 ?>
-<div id="loadnewcurr"></div>
 
 <script>
 	var act="<?php echo $this->act?>";
@@ -122,7 +121,7 @@
 	            data: $(this).serialize(),
             	success: function(data) { 
 					// $('#curr_new').modal('hide');
-        			$("#loadnewcurr").html(data);
+        			$("#cont_new_cur").html(data);
                 }
 	        }); 
 	        return false;

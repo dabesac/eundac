@@ -45,9 +45,11 @@ class Distribution_Form_Distribution extends Zend_Form{
         $rows_lperiod=$lperid->_getPeriodsxYears(array("eid"=> $login->eid,"oid"=> $login->oid,"year"=>date('y')));
         $perid->addMultiOption(base64_encode(""),"Seleccione");
         if ($rows_lperiod){
-        	foreach ($rows_lperiod as $_perid ){
-        		$perid->addMultiOption(base64_encode($_perid['perid']),$_perid['perid']."-".$_perid['name']);
-        	}
+            $niv = $lperid->_getOne($where=array("eid"=> $login->eid,"oid"=> $login->oid,'perid'=>'13N'));
+        	if ($niv) $perid->addMultiOption(base64_encode($niv['perid']),$niv['perid']."-".$niv['name']);
+            foreach ($rows_lperiod as $_perid ){
+                $perid->addMultiOption(base64_encode($_perid['perid']),$_perid['perid']."-".$_perid['name']);
+            }
         }
         
         $number= new Zend_Form_Element_Text("number");

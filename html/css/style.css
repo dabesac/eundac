@@ -208,3 +208,11 @@ margin: 0px;
 .menu-botones{
 	display: block;
 }
+#resolution-notes
+{
+	width: 700px !important;
+	margin-left: 110px;
+}
+.btn-fill-deferred{
+	margin-top: 10px;
+}

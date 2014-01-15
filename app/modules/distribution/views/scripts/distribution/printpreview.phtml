@@ -1,0 +1,82 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start();
+$sesion1  = Zend_Auth::getInstance();
+$sesion = $sesion1->getStorage()->read();
+
+$header='
+    <table style="width: 100%;" border="1">
+        <tr>
+            <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+            <th style="text-align: center; font-size: 12px;">
+                FACULTAD DE  '.strtoupper($sesion->faculty->name).'<br/>
+                ESCUELA DE  '.strtoupper($sesion->speciality->name).'
+            </th>        
+        </tr>
+        <tr>
+            <th style="border: 1px solid #000;font-size: 12px;"> LISTA DE ASIGNATURAS - '.$this->perid.'</th>
+        </tr>
+    </table>'; 
+?>
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+<div>
+    <b>DOCENTE: </b> <?php echo $this->person['last_name0']." ".$this->person['last_name1'].", ".$this->person['first_name']?>
+</div>
+ <?php
+    if ($this->courses) { ?>
+    <table style="margin-top:10px; width:100%">
+        <tr>
+            <th><center>#</center></th>
+            <th><center>Currícula</center></th>
+            <th>Asignaturas</th>
+            <th><center>Escuela</center></th>
+            <th><center>Turno</center></th>
+            <th><center>Sem</center></th>
+            <th><center>Grupos</center></th>
+            <th><center>#H.T.</center></th>
+            <th><center>#H.P.</center></th>
+            <th><center>#T.T.</center></th>
+        </tr>
+        <?php
+        $i = 1;
+        foreach ($this->courses as $courses) {
+            $where = array(
+                'eid' => $courses['eid'], 'oid' => $courses['oid'], 'curid' => $courses['curid'], 
+                'escid' => $courses['escid'], 'subid' => $courses['subid'], 'courseid' => $courses['courseid']);
+            $cour = new Api_Model_DbTable_Course();
+            $data_cour = $cour->_getOne($where);
+
+            $where = array('eid' => $courses['eid'], 'oid' => $courses['oid'], 'escid' => $courses['escid']);
+            $esc = new Api_Model_DbTable_Speciality();
+            $data_school = $esc->_getFilter($where,$attrib=null,$orders=null);
+            ?>
+            <tr>
+                <td><center><?php echo $i ?></center></td>
+                <td><center><?php echo $courses['curid'] ?></center></td>
+                <td><?php echo $courses['courseid']." - ".$data_cour['name'] ?></td>
+                <td><center><?php echo $data_school[0]['name']?></center></td>
+                <td><center><?php echo $courses['turno']?></center></td>
+                <td><center><?php echo $courses['semid'] ?></center></td>
+                <td><center><?php echo $courses['groups'] ?></center></td>
+                <td><center><?php echo $courses['hours_t'] ?></center></td>
+                <td><center><?php echo $courses['hours_p'] ?></center></td>
+                <td><center><?php echo $courses['hours_total'] ?></center></td>
+            </tr>
+            <?php
+            $i++;
+        }?>
+    </table>
+    <?php
+    } ?>
+
+<?php 
+    $html = ob_get_contents();
+    $mpdf=new mPDF('win-1252','A4','','',15,15,30,12,5,7);
+    $mpdf->SetHTMLHeader($header);
+    $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('ASIGNATURAS -'.$this->perid.'.pdf','D');
+?>    

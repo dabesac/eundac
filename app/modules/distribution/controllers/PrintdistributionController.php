@@ -111,18 +111,13 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
             $perid = base64_decode($this->_getParam("perid"));
             $escid = base64_decode($this->_getParam("escid"));
             $subid = base64_decode($this->_getParam("subid"));
-             
             $t = $this->_getParam("t");
-
-           
 
             $this->view->perid = $perid;
             $this->view->distid = $distid;
             $this->view->escid = $escid;
             $this->view->subid = $subid;
-            $this->view->t = $t;            
-                     
-            
+            $this->view->t = $t;
 
             $whereesp = array('eid' => $eid, 'oid' => $oid,
                         'escid' => $escid, 'subid' => $subid);

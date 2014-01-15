@@ -50,4 +50,99 @@ class Api_Model_DbTable_Jobs extends Zend_Db_Table_Abstract
 			print "Error: Delete Interes ".$e->getMessage();
 		}
 	}
+
+	public function _getCompanyXDistinct($eid="",$oid=""){
+        
+           try{
+            if ($eid=="" || $oid=="" ) return false;
+            $sql = $this->_db->query("select distinct company from base_jobs");
+            if ($sql) return $sql->fetchAll();
+            return false;           
+        }catch (Exception $ex){
+            print "Error: Leer información de docentes segun dni activos".$ex->getMessage();
+        }                              
+    }
+
+
+    public function _getBuscarxSeleccion($nom,$f1,$f2)
+	    {
+	    try
+	        {
+	        if ($f1=="" and $f2=="") 
+		        {	
+			        $sql=$this->_db->query
+			        (
+			        "
+			        select * from base_jobs
+			        where  company like '%$nom%' order by company
+			        ");
+		    	}
+		    else 		    	
+		    	{	
+			    	
+		    		if($f1<>"") //and $f2<>"") 
+		    		{
+
+		    			if($f1==1000)
+		    			{
+			    			$sql=$this->_db->query
+					    	(
+					        "select * from base_jobs
+					         where  company like '%$nom%' and (CAST(salary as decimal) <=$f1)  order by company
+					        ");
+				    	}
+
+				    	if($f1==1001)
+		    			{
+			    			$sql=$this->_db->query
+					    	(
+					        "select * from base_jobs
+					         where  company like '%$nom%' and (CAST(salary as decimal) >=$f1 and CAST(salary as decimal) <=$f2) order by company
+					        ");
+				    	}
+
+				    	if($f1==3000)
+		    			{
+			    			$sql=$this->_db->query
+					    	(
+					        "select * from base_jobs
+					         where  company like '%$nom%' and (CAST(salary as decimal) >=$f1) order by company
+					        ");
+				    	}
+
+		    		}
+
+		    		// if($salary=="" and $f1<>"" and $f2<>"" and $salary3=="") 
+		    		// {
+		    		// 	$sql=$this->_db->query
+				    // 	(
+				    //     "select * from base_jobs
+				    //      where  company like '%$nom%' and (CAST(salary as decimal)>$f1 )  order by company
+				    //     "
+				    //     );				       
+
+		    		// }
+
+		    		// if($salary=="" and $salary2=="" and $salary3<>"") 
+		    		// {
+		    		// 	$sql=$this->_db->query
+				    // 	(
+				    //     "select * from base_jobs
+				    //      where  company like '%$nom%' and (CAST(salary as decimal) >$salary3)  order by company
+				    //     ");
+
+		    		// }
+   				    	
+
+		    	}
+
+
+	  
+
+	        return $sql->fetchAll();            
+	        }
+	    catch (Exception $ex){
+	            print "Error: Guardar entidad".$ex->getMessage();
+	        }
+    }
 }

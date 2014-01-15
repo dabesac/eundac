@@ -34,8 +34,10 @@ if ($this->data_teacher) { ?>
 			<th>Asignaturas</th>
 			<th>Turno</th>
 			<th>Silabo</th>
+			<th>F.C. Silabus</th>
 			<th>1° Parcial</th>
 			<th>2° Parcial</th>
+			<th>F.C. Acta</th>
 		</tr>
 		<?php 
 		$c=1;
@@ -45,7 +47,7 @@ if ($this->data_teacher) { ?>
 				<td rowspan="<?php echo $teachers['cantidad_courses']+2?>">
 					<?php echo $teachers['uid']." - ".$teachers['full_name']?>
 				</td>
-				<td colspan="5"></td>
+				<td colspan="7"></td>
 			</tr>
 			<?php
 				foreach ($teachers['courses'] as $courses) { 
@@ -65,6 +67,13 @@ if ($this->data_teacher) { ?>
 							</center>
 						</td>
 						<td>
+								<?php 
+								$f_=$courses['create_syllabus'];
+       									$tf =split(" ",$f_);
+        								echo $tf[0];
+								?>
+						</td>
+						<td>
 							<center>
 								<?php 
 								if ($courses['state_course'] == "P" || $courses['state_course'] == "C" || $courses['state_course'] == "S") echo "SI";
@@ -76,6 +85,14 @@ if ($this->data_teacher) { ?>
 								<?php 
 								if ($courses['state_course']=="C" || $courses['state_course'] == "S") echo "SI";
 								else echo "NO"; ?>
+							</center>
+						</td>
+						<td>
+							<center>
+								<?php 
+								echo $courses['closure_date_course'];
+								?>
+									
 							</center>
 						</td>
 					</tr>

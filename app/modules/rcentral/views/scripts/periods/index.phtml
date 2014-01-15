@@ -1,0 +1,30 @@
+        <div class="panel panel-primary" style="padding: 2px">
+            <div class="panel-heading" style="padding: 6px">
+            <center><b style="font-size:15px; color: white">GESTIONAR PERIODO</b></center>
+            </div>
+        </div>
+        <center><select class="form-control" id="lanios" name="lanios" style = 'height:35px;width:400px'>
+            <option  value="">Seleccione..</option>
+            <?php 
+            $anio= date('Y');
+            $i=0;
+            for($i = ($anio+1);$i>=1991;$i--){
+                if ($anio==$i) $t = " selected ";
+                else $t="";
+                ?>
+            
+            <option value="<?php echo $i?>" <?php echo $t?>><?php echo $i?></option>
+            <?php }?>
+        </select></center><br>
+ 
+<div id="peri"></div>
+
+<script>
+    $("#lanios").change(function(){
+        var anio = $(this).val();
+        alert("/rcentral/periods/listar/anio/"+anio);
+       $("#peri").load("/rcentral/periods/listar/anio/"+anio);
+    });
+    var anio_ = "<?php echo $anio?>";
+    $("#peri").load("/rcentral/periods/listar/anio/"+anio_);   
+</script>

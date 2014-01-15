@@ -33,7 +33,7 @@ public function loadreceiptsAction()
 		$this->_helper->layout()->disableLayout();
 		$fecha = $this->_getParam("fecha");
 		$turno = $this->_getParam("turno");
-		$perid='13B';
+		$perid='13E';
 		require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
         $base_url = 'http://localhost:8080/';

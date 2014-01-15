@@ -43,6 +43,7 @@ $(document).ready(function() {
                 e.preventDefault();
             }else{
                
+                $(this).removeClass('notes-error-input');
                 var td = $(this).parent();
                 var tr  = td.parent();
                 $tr = $(tr);
@@ -146,6 +147,7 @@ $(document).ready(function() {
         $record[$.base64.encode('oid')] = $.base64.encode($.trim($("#oid").val()));         
         $record[$.base64.encode('subid')] = $.base64.encode($.trim($("#subid").val()));         
         $record[$.base64.encode('partial')] = $.base64.encode($.trim($partial));         
+        $record[$.base64.encode('units')] = $.base64.encode($.trim($units));         
 
         for(var prop in $record){
             result += ''+ prop + '/' + $record[prop] + '/';
@@ -155,7 +157,6 @@ $(document).ready(function() {
         $.ajax({
         	url:$url,
         	success:function($data){
-
         		if ($data.status == true) {
                     window.location.href = window.location.href; 
         		}else{
@@ -426,96 +427,80 @@ function save_notes(){
 			$notes[$.base64.encode('nota4_i')] = $.base64.encode($notes[$.base64.encode('nota4_i')]);
 			$notes[$.base64.encode('nota9_i')] = $.base64.encode($notes[$.base64.encode('nota9_i')]);
 		}else{
-			
-				if ($partial==2 && $units_t == 3) {
-					if (
-						$notes[$.base64.encode('nota1_ii')] && 
-						$notes[$.base64.encode('nota2_ii')] && 
-						$notes[$.base64.encode('nota3_ii')]
-					) {
-						$notes[$.base64.encode('nota4_ii')] = 
-						Math.floor(
-							(intval($.base64.encode($notes[$.base64.encode('nota1_ii')]))*intval($apersentage('porc1_u3'))/100 ) +
-							(intval($.base64.encode($notes[$.base64.encode('nota2_ii')]))*intval($apersentage('porc2_u3'))/100 ) +
-							(intval($.base64.encode($notes[$.base64.encode('nota3_ii')]))*intval($apersentage('porc3_u3'))/100 ) 
-						);
-					}
-					else
-					{
-						$notes[$.base64.encode('nota4_ii')] = '';
-					}
+            if ($partial==2) {
+                    
+                    if (
+                        $notes[$.base64.encode('nota1_ii')] && 
+                        $notes[$.base64.encode('nota2_ii')] && 
+                        $notes[$.base64.encode('nota3_ii')]
+                    ) {
+                        $notes[$.base64.encode('nota4_ii')] = 
+                        Math.floor(
+                            ( intval($.base64.decode($notes[$.base64.encode('nota1_ii')]))*intval($apersentage['porc1_u3'])/100 ) + 
+                            ( intval($.base64.decode($notes[$.base64.encode('nota2_ii')]))*intval($apersentage['porc2_u3'])/100 ) +
+                            ( intval($.base64.decode($notes[$.base64.encode('nota3_ii')]))*intval($apersentage['porc3_u3'])/100 )
+                        );
+                    }
+                    else
+                    {
+                        $notes[$.base64.encode('nota4_ii')] = '';
+                    }
 
+                    if (
+                        $notes[$.base64.encode('nota6_ii')] && 
+                        $notes[$.base64.encode('nota7_ii')] && 
+                        $notes[$.base64.encode('nota8_ii')]
+                    ) {
+                        $notes[$.base64.encode('nota9_ii')] = 
+                        Math.floor(
+                            ( intval($.base64.decode($notes[$.base64.encode('nota6_ii')]))*intval($apersentage['porc1_u4'])/100 ) + 
+                            ( intval($.base64.decode($notes[$.base64.encode('nota7_ii')]))*intval($apersentage['porc2_u4'])/100 ) +
+                            ( intval($.base64.decode($notes[$.base64.encode('nota8_ii')]))*intval($apersentage['porc3_u4'])/100 )
+                        );
+                    }
+                    else
+                    {
+                        $notes[$.base64.encode('nota9_ii')] = '';
+                    }
 
-					if(
-						$notes[$.base64.encode('nota4_i')] &&
-						$notes[$.base64.encode('nota9_i')] &&
-						$notes[$.base64.encode('nota4_ii')]
-						){
+                    $notes[$.base64.encode('nota4_ii')] = $.base64.encode($notes[$.base64.encode('nota4_ii')]);
+                    $notes[$.base64.encode('nota9_ii')] = $.base64.encode($notes[$.base64.encode('nota9_ii')]);
 
-						$sum = floatval($.base64.encode($notes[$.base64.encode('nota4_i')])) +
-								floatval($.base64.encode($notes[$.base64.encode('nota9_i')])) +
-								floatval($.base64.encode($notes[$.base64.encode('nota4_ii')])) ;
+                    if (
+                        $units == 3
+                    ) {
+                        if(
+                        $notes[$.base64.encode('nota4_i')] &&
+                        $notes[$.base64.encode('nota9_i')] &&
+                        $notes[$.base64.encode('nota4_ii')]
+                        ){
 
-						$notes[$.base64.encode('notafinal')] = roundNumber($sum/4,0);
-						$notes[$.base64.encode('notafinal')] = $.base64.encode[$.base64.encode($notes[$.base64.encode('notafinal')])];
-					}
+                            $sum = floatval($.base64.decode($notes[$.base64.encode('nota4_i')])) +
+                                    floatval($.base64.decode($notes[$.base64.encode('nota9_i')])) +
+                                    floatval($.base64.decode($notes[$.base64.encode('nota4_ii')]));
 
-				}
-				else {
-					if (
-						$notes[$.base64.encode('nota1_ii')] && 
-						$notes[$.base64.encode('nota2_ii')] && 
-						$notes[$.base64.encode('nota3_ii')]
-					) {
-						$notes[$.base64.encode('nota4_ii')] = 
-						Math.floor(
-							(intval($.base64.encode($notes[$.base64.encode('nota1_ii')]))*intval($apersentage('porc1_u3'))/100 ) +
-							(intval($.base64.encode($notes[$.base64.encode('nota2_ii')]))*intval($apersentage('porc2_u3'))/100 ) +
-							(intval($.base64.encode($notes[$.base64.encode('nota3_ii')]))*intval($apersentage('porc3_u3'))/100 ) 
-						);
-					}
-					else
-					{
-						$notes[$.base64.encode('nota4_ii')] = '';
-					}
+                            $notes[$.base64.encode('notafinal')] = roundNumber($sum/3,0);
+                            $notes[$.base64.encode('notafinal')] = $.base64.encode($notes[$.base64.encode('notafinal')]);
+                        }
+                    }else{
+                        if(
+                        $notes[$.base64.encode('nota4_i')] &&
+                        $notes[$.base64.encode('nota9_i')] &&
+                        $notes[$.base64.encode('nota4_ii')] &&
+                        $notes[$.base64.encode('nota9_ii')] 
+                        ){
 
-					if (
-						$notes[$.base64.encode('nota6_ii')] && 
-						$notes[$.base64.encode('nota7_ii')] && 
-						$notes[$.base64.encode('nota8_ii')]
-					) {
-						$notes[$.base64.encode('nota9_ii')] = 
-						Math.floor(
-							(intval($.base64.encode($notes[$.base64.encode('nota6_ii')]))*intval($apersentage('porc1_u4'))/100 ) +
-							(intval($.base64.encode($notes[$.base64.encode('nota7_ii')]))*intval($apersentage('porc2_u4'))/100 ) +
-							(intval($.base64.encode($notes[$.base64.encode('nota8_ii')]))*intval($apersentage('porc3_u4'))/100 ) 
-						);
-					}
-					else
-					{
-						$notes[$.base64.encode('nota9_ii')] = '';
-					}
+                        $sum = floatval($.base64.decode($notes[$.base64.encode('nota4_i')])) +
+                                floatval($.base64.decode($notes[$.base64.encode('nota9_i')])) +
+                                floatval($.base64.decode($notes[$.base64.encode('nota4_ii')])) +
+                                floatval($.base64.decode($notes[$.base64.encode('nota9_ii')])) ;
 
-					$notes[$.base64.encode('nota4_ii')] = $.base64.encode($notes[$.base64.encode('nota4_ii')]);
-					$notes[$.base64.encode('nota9_ii')] = $.base64.encode($notes[$.base64.encode('nota9_ii')]);
+                        $notes[$.base64.encode('notafinal')] = roundNumber($sum/4,0);
+                        $notes[$.base64.encode('notafinal')] = $.base64.encode($notes[$.base64.encode('notafinal')]);
+                    }
+                    }
 
-					if(
-						$notes[$.base64.encode('nota4_i')] &&
-						$notes[$.base64.encode('nota9_i')] &&
-						$notes[$.base64.encode('nota4_ii')] &&
-						$notes[$.base64.encode('nota9_ii')] 
-						){
-
-						$sum = floatval($.base64.encode($notes[$.base64.encode('nota4_i')])) +
-								floatval($.base64.encode($notes[$.base64.encode('nota9_i')])) +
-								floatval($.base64.encode($notes[$.base64.encode('nota4_ii')])) +
-								floatval($.base64.encode($notes[$.base64.encode('nota9_ii')])) ;
-
-						$notes[$.base64.encode('notafinal')] = roundNumber($sum/4,0);
-						$notes[$.base64.encode('notafinal')] = $.base64.encode[$.base64.encode($notes[$.base64.encode('notafinal')])];
-					}
-
-				}
+                }
 
 		}
 
@@ -652,7 +637,8 @@ function calculation_of_average($tr_tmp,$partial_t,$units_t){
 			$notes_prom[$.base64.encode('nota9_i')] = $.base64.encode($notes_prom[$.base64.encode('nota9_i')]);
 		}else{
 			
-				if ($partial_t==2 && $units_t == 3) {
+				if ($partial_t==2) {
+					
 					if (
 						$notes_prom[$.base64.encode('nota1_ii')] && 
 						$notes_prom[$.base64.encode('nota2_ii')] && 
@@ -660,44 +646,10 @@ function calculation_of_average($tr_tmp,$partial_t,$units_t){
 					) {
 						$notes_prom[$.base64.encode('nota4_ii')] = 
 						Math.floor(
-							(intval($.base64.encode($notes_prom[$.base64.encode('nota1_ii')]))*intval($apersentage('porc1_u3'))/100 ) +
-							(intval($.base64.encode($notes_prom[$.base64.encode('nota2_ii')]))*intval($apersentage('porc2_u3'))/100 ) +
-							(intval($.base64.encode($notes_prom[$.base64.encode('nota3_ii')]))*intval($apersentage('porc3_u3'))/100 ) 
-						);
-					}
-					else
-					{
-						$notes_prom[$.base64.encode('nota4_ii')] = '';
-					}
-
-
-					if(
-						$notes_prom[$.base64.encode('nota4_i')] &&
-						$notes_prom[$.base64.encode('nota9_i')] &&
-						$notes_prom[$.base64.encode('nota4_ii')]
-						){
-
-						$sum = floatval($.base64.encode($notes_prom[$.base64.encode('nota4_i')])) +
-								floatval($.base64.encode($notes_prom[$.base64.encode('nota9_i')])) +
-								floatval($.base64.encode($notes_prom[$.base64.encode('nota4_ii')])) ;
-
-						$notes_prom[$.base64.encode('notafinal')] = roundNumber($sum/4,0);
-						$notes_prom[$.base64.encode('notafinal')] = $.base64.encode[$.base64.encode($notes_prom[$.base64.encode('notafinal')])];
-					}
-
-				}
-				else {
-					if (
-						$notes_prom[$.base64.encode('nota1_ii')] && 
-						$notes_prom[$.base64.encode('nota2_ii')] && 
-						$notes_prom[$.base64.encode('nota3_ii')]
-					) {
-						$notes_prom[$.base64.encode('nota4_ii')] = 
-						Math.floor(
-							(intval($.base64.encode($notes_prom[$.base64.encode('nota1_ii')]))*intval($apersentage('porc1_u3'))/100 ) +
-							(intval($.base64.encode($notes_prom[$.base64.encode('nota2_ii')]))*intval($apersentage('porc2_u3'))/100 ) +
-							(intval($.base64.encode($notes_prom[$.base64.encode('nota3_ii')]))*intval($apersentage('porc3_u3'))/100 ) 
-						);
+                            ( intval($.base64.decode($notes_prom[$.base64.encode('nota1_ii')]))*intval($apersentage['porc1_u3'])/100 ) + 
+                            ( intval($.base64.decode($notes_prom[$.base64.encode('nota2_ii')]))*intval($apersentage['porc2_u3'])/100 ) +
+                            ( intval($.base64.decode($notes_prom[$.base64.encode('nota3_ii')]))*intval($apersentage['porc3_u3'])/100 )
+                        );
 					}
 					else
 					{
@@ -711,10 +663,10 @@ function calculation_of_average($tr_tmp,$partial_t,$units_t){
 					) {
 						$notes_prom[$.base64.encode('nota9_ii')] = 
 						Math.floor(
-							(intval($.base64.encode($notes_prom[$.base64.encode('nota6_ii')]))*intval($apersentage('porc1_u4'))/100 ) +
-							(intval($.base64.encode($notes_prom[$.base64.encode('nota7_ii')]))*intval($apersentage('porc2_u4'))/100 ) +
-							(intval($.base64.encode($notes_prom[$.base64.encode('nota8_ii')]))*intval($apersentage('porc3_u4'))/100 ) 
-						);
+                            ( intval($.base64.decode($notes_prom[$.base64.encode('nota6_ii')]))*intval($apersentage['porc1_u4'])/100 ) + 
+                            ( intval($.base64.decode($notes_prom[$.base64.encode('nota7_ii')]))*intval($apersentage['porc2_u4'])/100 ) +
+                            ( intval($.base64.decode($notes_prom[$.base64.encode('nota8_ii')]))*intval($apersentage['porc3_u4'])/100 )
+                        );
 					}
 					else
 					{
@@ -724,21 +676,39 @@ function calculation_of_average($tr_tmp,$partial_t,$units_t){
 					$notes_prom[$.base64.encode('nota4_ii')] = $.base64.encode($notes_prom[$.base64.encode('nota4_ii')]);
 					$notes_prom[$.base64.encode('nota9_ii')] = $.base64.encode($notes_prom[$.base64.encode('nota9_ii')]);
 
-					if(
-						$notes_prom[$.base64.encode('nota4_i')] &&
-						$notes_prom[$.base64.encode('nota9_i')] &&
-						$notes_prom[$.base64.encode('nota4_ii')] &&
-						$notes_prom[$.base64.encode('nota9_ii')] 
-						){
+					if (
+                        $units_t == 3
+                    ) {
+                        if(
+                        $notes_prom[$.base64.encode('nota4_i')] &&
+                        $notes_prom[$.base64.encode('nota9_i')] &&
+                        $notes_prom[$.base64.encode('nota4_ii')]
+                        ){
 
-						$sum = floatval($.base64.encode($notes_prom[$.base64.encode('nota4_i')])) +
-								floatval($.base64.encode($notes_prom[$.base64.encode('nota9_i')])) +
-								floatval($.base64.encode($notes_prom[$.base64.encode('nota4_ii')])) +
-								floatval($.base64.encode($notes_prom[$.base64.encode('nota9_ii')])) ;
+                            $sum = floatval($.base64.decode($notes_prom[$.base64.encode('nota4_i')])) +
+                                    floatval($.base64.decode($notes_prom[$.base64.encode('nota9_i')])) +
+                                    floatval($.base64.decode($notes_prom[$.base64.encode('nota4_ii')]));
 
-						$notes_prom[$.base64.encode('notafinal')] = roundNumber($sum/4,0);
-						$notes_prom[$.base64.encode('notafinal')] = $.base64.encode[$.base64.encode($notes_prom[$.base64.encode('notafinal')])];
-					}
+                            $notes_prom[$.base64.encode('notafinal')] = roundNumber($sum/3,0);
+                            $notes_prom[$.base64.encode('notafinal')] = $.base64.encode($notes_prom[$.base64.encode('notafinal')]);
+                        }
+                    }else{
+                        if(
+                        $notes_prom[$.base64.encode('nota4_i')] &&
+                        $notes_prom[$.base64.encode('nota9_i')] &&
+                        $notes_prom[$.base64.encode('nota4_ii')] &&
+                        $notes_prom[$.base64.encode('nota9_ii')] 
+                        ){
+
+                        $sum = floatval($.base64.decode($notes_prom[$.base64.encode('nota4_i')])) +
+                                floatval($.base64.decode($notes_prom[$.base64.encode('nota9_i')])) +
+                                floatval($.base64.decode($notes_prom[$.base64.encode('nota4_ii')])) +
+                                floatval($.base64.decode($notes_prom[$.base64.encode('nota9_ii')])) ;
+
+                        $notes_prom[$.base64.encode('notafinal')] = roundNumber($sum/4,0);
+                        $notes_prom[$.base64.encode('notafinal')] = $.base64.encode($notes_prom[$.base64.encode('notafinal')]);
+                    }
+                    }
 
 				}
 
