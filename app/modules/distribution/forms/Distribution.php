@@ -41,8 +41,9 @@ class Distribution_Form_Distribution extends Zend_Form{
         $perid->removeDecorator('Label');
         $perid->removeDecorator('HtmlTag');
         $perid->setAttrib("class","form-control");
-        $lperid = new Api_Model_DbTable_Periods();        
-        $rows_lperiod=$lperid->_getPeriodsxYears(array("eid"=> $login->eid,"oid"=> $login->oid,"year"=>date('y')));
+        $lperid = new Api_Model_DbTable_Periods();      
+        $rows_lperiod=$lperid->_getPeriodsxYears(array("eid"=> $login->eid,"oid"=> $login->oid,"year"=>"13"));
+
         $perid->addMultiOption(base64_encode(""),"Seleccione");
         if ($rows_lperiod){
             $niv = $lperid->_getOne($where=array("eid"=> $login->eid,"oid"=> $login->oid,'perid'=>'13N'));
