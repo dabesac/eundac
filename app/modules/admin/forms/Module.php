@@ -2,52 +2,48 @@
 class Admin_Form_Module extends Zend_Form
 {
 	public function init()
-	{
-		$this->setName("frmDistribution");
-		$this->setAction("/admin/module/new");
-					
-        $mid= new Zend_Form_Element_Hidden('mid');
-        $mid->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $mid->addErrorMessage('Este campo es Obligatorio');
-        $mid->setAttrib("class","form-control input-sm");
-        $mid->setAttrib("readonly","true");
-		
-		$name= new Zend_Form_Element_Text('name');
-        $name->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $name->setAttrib("maxlength", "50")->setAttrib("size", "10");
-        $name->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
-        $name->setAttrib("title","Nombre");
-        $name->setAttrib("class","form-control");      
+        {
+                $sesion  = Zend_Auth::getInstance();
+                $this->setName("frmAcl");
+                $this->setAction("/admin/acl/ne");
 
-        $module= new Zend_Form_Element_Text('module');
-        $module->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $module->setAttrib("maxlength", "50");
-        $module->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
-        $module->setAttrib("title","Nombre Modulo");
-        $module->setAttrib("class","form-control input-sm");
+        if(!$sesion->hasIdentity() ){
+                $this->_helper->redirector('index',"index",'default');
+        }
+        $login = $sesion->getStorage()->read();
+        $eid=$login->eid;
+        $oid=$login->oid;
+
         
-        $state = new Zend_Form_Element_Select("state");
-        $state->setRequired(true);
-        $state->removeDecorator('Label');
-        $state->removeDecorator('HtmlTag');
-        $state->setAttrib("class","form-control ");
-        $state->addMultiOption("A","Activo");
-        $state->addMultiOption("I","Inactivo");
+        $name = new Zend_Form_Element_Text('name');
+        $name->setAttrib("class","form-control");
+        $name->setAttrib("required","true");
+        $name->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $name->setRequired(true)->addErrorMessage('Campo Obligatorio');
+        $this->addElement($name);
         
-        
-        $icon = new Zend_Form_Element_Text("imgicon");
-        $icon->removeDecorator('Label');
-        $icon->removeDecorator('HtmlTag');
-        $icon->setAttrib("class","form-control input-small");
-       
-        
+
+        $imgicon = new Zend_Form_Element_Text('imgicon');
+        $imgicon->setAttrib("class","form-control");
+        $imgicon->setAttrib("required","true");
+        $imgicon->setRequired(true)->addErrorMessage('Campo Obligatorio');
+        $imgicon->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $this->addElement($imgicon);
+
+
+
+        $module = new Zend_Form_Element_Text('module');
+        $module->setAttrib("class","form-control");
+        $module->setAttrib("required","true");
+        $module->setRequired(true)->addErrorMessage('Campo Obligatorio');
+        $module->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $this->addElement($module);
+                
 
         $submit = new Zend_Form_Element_Submit('save');
-        $submit->removeDecorator("DtDdWrapper");
         $submit->setAttrib('class', 'btn btn-success pull-right');
-        $submit->setLabel('GUARDAR');
-        $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
-
-        $this->addElements(array($mid, $name,$module,$icon,$state, $submit));
-	}
+        $submit->setLabel('Guardar');
+        $submit->removeDecorator("DtDdWrapper");
+        $this->addElement($submit);
+        }
 }

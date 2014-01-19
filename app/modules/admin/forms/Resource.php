@@ -3,58 +3,54 @@ class Admin_Form_Resource extends Zend_Form
 {
 	public function init()
 	{
-		$sesion  = Zend_Auth::getInstance();
-		if(!$sesion->hasIdentity() ){
-			$this->_helper->redirector('index',"index",'default');
-		}
-		$login = $sesion->getStorage()->read();
+
+	$sesion  = Zend_Auth::getInstance();
+	if(!$sesion->hasIdentity() ){
+		$this->_helper->redirector('index',"index",'default');
+	}
+	$login = $sesion->getStorage()->read();
 		
-        $reid= new Zend_Form_Element_Hidden('reid');
-        $reid->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $reid->setAttrib("maxlength", "3")->setAttrib("size", "10");
-       
-        $reid->setAttrib("readonlu","true");
-		
-		$name= new Zend_Form_Element_Text('name');
+        $mid = new Zend_Form_Element_Hidden('mid');
+        $this->addElement($mid);
+        
+        $name= new Zend_Form_Element_Text('name');
         $name->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $name->setAttrib("maxlength", "50")->setAttrib("size", "10");
         $name->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $name->setAttrib("title","Nombre");
         $name->setAttrib("class","form-control");        
         
+        $module= new Zend_Form_Element_Text('module');
+        $module->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $module->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        $module->setAttrib("title","Ingreso nombre controlador");
+        $module->setAttrib("class","form-control");
+        
         $controller= new Zend_Form_Element_Text('controller');
         $controller->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $controller->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $controller->setAttrib("title","Ingreso nombre controlador");
         $controller->setAttrib("class","form-control");
+
+        $action= new Zend_Form_Element_Text('action');
+        $action->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $action->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        $action->setAttrib("title","Ingreso nombre controlador");
+        $action->setAttrib("class","form-control");
         
         $icon = new Zend_Form_Element_Text("imgicon");
         $icon->removeDecorator('Label');
         $icon->removeDecorator('HtmlTag');
         $icon->setAttrib("class","form-control input-small");
          
-        $state = new Zend_Form_Element_Select("state");
-        $state->setRequired(true);
-        $state->removeDecorator('Label');
-        $state->removeDecorator('HtmlTag');
-        $state->setAttrib("class","form-control ");
-        $state->addMultiOption("A","Activo");
-        $state->addMultiOption("I","Inactivo");
-        
-        $mid = new Zend_Form_Element_Select("mid");
-        $mid->setRequired(true);
-        $mid->removeDecorator('Label');
-        $mid->removeDecorator('HtmlTag');
-        $mid->setAttrib("class","form-control ");
-        $modules = new Api_Model_DbTable_Module();
-        $data['eid']= $login->eid;
-        $data['oid']= $login->oid;
-        $rows = $modules->_getAll($data);
-        if ($rows){
-        	foreach ($rows as $row){
-        		$mid->addMultiOption(base64_encode($row['mid']),$row['name']);
-        	}
-        }
+
+        $is_menu = new Zend_Form_Element_Select("is_menu");
+        $is_menu->setRequired(true);
+        $is_menu->removeDecorator('Label');
+        $is_menu->removeDecorator('HtmlTag');
+        $is_menu->setAttrib("class","form-control ");
+        $is_menu->addMultiOption("S","Si");
+        $is_menu->addMultiOption("N","No");
         
         
         $submit = new Zend_Form_Element_Submit('save');
@@ -63,7 +59,10 @@ class Admin_Form_Resource extends Zend_Form
         $submit->setLabel('GUARDAR');
         $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
         
+        $this->setDefaults(array(
+                'is_menu' => 'N',
+                ));
 
-        $this->addElements(array($reid, $name,$mid,$controller,$icon, $submit,$state));
+        $this->addElements(array($name,$mid,$controller,$module,$action,$icon,$is_menu,$submit,$state));
 	}
 }

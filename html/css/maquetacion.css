@@ -198,3 +198,11 @@
 .alert-title-course{
 	text-align: justify;
 }
+.style-icon-all{
+	font-size: 17px;
+	cursor: pointer;
+}
+.access-warming{
+	font-size: 100px;
+	color: #f0dfac;
+}

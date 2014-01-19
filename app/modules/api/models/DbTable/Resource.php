@@ -4,6 +4,7 @@ class Api_Model_DbTable_Resource extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'base_resource';
 	protected $_primary = array("eid","oid","reid","mid");
+	protected $_sequence ="s_resource";
 
 	public function _getAll($where=null,$order='',$start=0,$limit=0){
 
@@ -51,7 +52,7 @@ class Api_Model_DbTable_Resource extends Zend_Db_Table_Abstract
 
 	public function _save($data){
 		try{
-			if ($data['eid']=='' || $data['oid']=='' || $data['reid']=='') return false;
+			if ($data['eid']=='' || $data['oid']=='') return false;
 			return $this->insert($data);
 			return false;
 		}catch (Exception $e){

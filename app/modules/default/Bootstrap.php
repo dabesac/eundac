@@ -19,7 +19,17 @@ class Default_Bootstrap extends Zend_Application_Module_Bootstrap
                 ),
             )
         ));
+
+        $front = Zend_Controller_Front::getInstance();
+        $front->registerPlugin(new Default_Plugin_SecurityCheck()); 
+        
         return $autoloader;
     }
+
+    public function _initACL()
+    {           
+        
     }
+    
+}
 

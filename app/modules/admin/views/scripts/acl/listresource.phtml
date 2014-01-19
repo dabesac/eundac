@@ -1,0 +1,101 @@
+
+<div class='row' id='header-info'>
+	<div class='col-xs-7  col-md-offset-1 	header-registration-course'>
+		<h4 class='text-header-registration'> <span class='glyphicon glyphicon-list' style='color:#1abc9c;'></span> 
+		Lista de Recursos
+		</h4>
+	</div>
+	<div class="col-md-4">
+        <a href="/admin/acl/index" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
+		<button mid='<?php echo base64_encode($this->mid)?>' id="btn-new-resouce" href="/admin/acl/newresource" class='btn btn-info' ><span class='glyphicon glyphicon-plus-sign'></span> Nuevo</button>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+		
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th class="text-center">#</th>
+					<th class="text-center">Nombre</th>
+					<th class="text-center">Module</th>
+					<th class="text-center">Controller</th>
+					<th class="text-center">Action</th>
+					<th class="text-center">Icon</th>
+					<th class="text-center">Menu</th>
+					<th class="text-center">Permisos</th>
+					<th class="text-center">Editar</th>
+					<th class="text-center">Estado</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($this->resources as $key => $resource) { ?>
+					<tr>
+						<td class="text-center"><?php echo $key+1?></td>
+						<td class="text-center"><?php echo $resource['name']?></td>
+						<td class="text-center"><?php echo $resource['module']?></td>
+						<td class="text-center"><?php echo $resource['controller']?></td>
+						<td class="text-center"><?php echo $resource['action']?></td>
+						<td class="text-center"><span class='text-muted glyphicon glyphicon-<?php echo $resource['imgicon']?> style-icon-all'></span></td>
+						<td class="text-center" ><?php echo ($resource['is_menu']=='S')? "<a href='' class='style-icon-all'><span class='glyphicon glyphicon-list-alt'></span></a>":""?></td>
+
+						<td class="text-center"><span mid='<?php echo base64_encode($this->mid)?>' reid='<?php echo base64_encode($resource['reid'])?>' class='edit-premissio text-warning style-icon-all glyphicon glyphicon-lock'></span></td>
+
+						<td class="text-center" ><span mid='<?php echo base64_encode($this->mid)?>' reid='<?php echo base64_encode($resource['reid'])?>' class='edit-resource-list text-primary style-icon-all glyphicon glyphicon-edit'></span></td>
+						<td class="text-center"><?php echo ($resource['state']=='A')? "<span class='glyphicon glyphicon-ok-circle style-icon-all text-primary '></span>":"<span class='glyphicon glyphicon-remove-circle style-icon-all text-danger'></span>" ?></td>
+					</tr>
+				<?php }?>
+			</tbody>
+		</table>		
+	</div>
+</div>
+<div class="modal fade" id="modalNewResource" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    
+</div><!-- /.modal -->
+<div class="modal fade" id="modalEditResource" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    
+</div><!-- /.modal -->
+<div class="modal fade" id="cont-modalEditPremission" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    
+</div><!-- /.modal -->
+
+
+<script>
+$("#btn-new-resouce").click(function(){
+	$.ajax({
+		url:$(this).attr('href'),
+		data:{mid:$(this).attr('mid')},
+		success: function($data){
+			$("#modalNewResource").modal('show');
+			$("#modalNewResource").html($data);
+		},
+	});
+	return false;
+});
+
+$(".edit-resource-list").click(function(){
+	$.ajax({
+		url:'/admin/acl/editresource',
+		data:{mid:$(this).attr('mid'),reid:$(this).attr('reid')},
+		success: function($data){
+			$("#modalEditResource").modal('show');
+			$("#modalEditResource").html($data);
+		},
+	});
+	return false;
+});
+
+$(".edit-premissio").click(function(){
+	$.ajax({
+		url:'/admin/acl/editpremissios',
+		data:{mid:$(this).attr('mid'),reid:$(this).attr('reid')},
+		success: function($data){
+			$("#cont-modalEditPremission").modal('show');
+			$("#cont-modalEditPremission").html($data);
+		},
+	});
+	return false;
+});
+
+
+</script>

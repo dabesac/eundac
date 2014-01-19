@@ -1,0 +1,53 @@
+<?php if ($this->form) { ?>
+	<form action="/admin/acl/newresource" method="POST" id='form-new-resource'>
+	<div class="modal-dialog">
+	  	<div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	          <h4 class="modal-title">Nuevo Recurso</h4>
+	        </div>
+	        <div class="modal-body">
+	          	<?php echo $this->form->mid?>
+	          	<label>Nombre</label>
+				<?php echo $this->form->name?>
+				<label>Modulo</label>
+				<?php echo $this->form->module?>
+				<label>Controller</label>
+				<?php echo $this->form->controller?>
+				<label>Action</label>
+				<?php echo $this->form->action?>
+				<label>Icono</label>
+				<?php echo $this->form->imgicon?>
+				<label>Menu</label>
+				<?php echo $this->form->is_menu?>
+
+	        </div>
+	        <div class="modal-footer">
+	        <button id='btn-new-resource'class="btn bnt-success">Nuevo</button>
+	        </div>
+	  	</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</form>
+<script>
+$("#btn-new-resource").click(function(){
+	$.ajax({
+		url:$("#form-new-resource").attr('action'),
+		type:'POST',
+		data:$("#form-new-resource").serialize(),
+		success: function ($data){
+			if ($data.status == true) {
+				window.location.href = window.location.href;
+			}else{
+				$("#modalNewResource").html($data);
+			}
+		},
+		error : function ($error){
+			alert("error");
+		}
+	});
+	return false;
+})
+</script>
+<?php }else{
+	echo json_encode($this->json);
+}?>

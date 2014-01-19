@@ -50,6 +50,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('Adaptador3',$Adapter3);
 	}
 
+    public function _initLoader()
+   {
+     
+   }
+    
 	
             
 }

@@ -114,7 +114,7 @@ class IndexController extends Zend_Controller_Action {
     				if ($rol_)
     					$data->rol = $rol_;
     				else{ 
-    					$msg = "Error nose especifico un rol para el usuario";
+    					$msg = "Error no se encontro un rol epecifico el usuario";
     					$this->_redirect("/error/msg/msg/'$msg'");
     				}
     				// Select infoteacher
@@ -128,10 +128,11 @@ class IndexController extends Zend_Controller_Action {
     				$rowteacher = $teacher->_getOne($datate);
     				
     				$data->infouser['teacher']=$rowteacher;
+                    
 					// Set ACL
-    				$tmpacl = $this->_aclCreated($data->rid,$data);
-    				$data->acls= $tmpacl['module'];
-    				$data->resources=$tmpacl['list'];
+    				//$tmpacl = $this->_aclCreated($data->rid,$data);
+    				//$data->acls= $tmpacl['module'];
+    				//$data->resources=$tmpacl['list'];
     				
     				// Set Header and Footer Print Org
     				$orgs = new Api_Model_DbTable_Org();
@@ -171,7 +172,7 @@ class IndexController extends Zend_Controller_Action {
     					$rlogs = $logs->_getConnect($logdata);
     					if (count($rlogs)>2){
     						//echo "Existe otra sesion abierta en algun otro lugar";exit();
-    						$this->_redirect("/index/cerrar");
+    						//$this->_redirect("/default/index/salir");
     					}
     					$urlmod = $data->rol['module'];
     					$passn= base64_encode($clavecampus);

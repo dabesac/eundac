@@ -1,0 +1,52 @@
+<?php if($this->form){?>
+	<form id='form-model-edit' action="/admin/acl/edit" method="POST">
+	<div class="modal-dialog">
+	  	<div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	          <h4 class="modal-title">Editar Modulo</h4>
+	        </div>
+	        <div class="modal-body">
+				<?php echo $this->form->mid?>
+	          	<label>Nombre</label>
+				<?php echo $this->form->name?>
+				<label>Icono</label>
+				<?php echo $this->form->imgicon?>
+				<label>Modulo</label>
+				<?php echo $this->form->module?>
+				<div class="radio">
+					<label>
+						<?php echo $this->form->state?>
+					</label>
+				</div>
+	        </div>
+	        <div class="modal-footer">
+	          <?php echo $this->form->save ?>
+	        </div>
+	  	</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</form>
+<script>
+	
+	$("#save").click(function(){
+		$.ajax({
+			url:"/admin/acl/edit",
+			type:'POST',
+			data:$('#form-model-edit').serialize(),
+			success:function($data){
+				if ($data.status == true) {
+					window.location.href = window.location.href;
+				}else{
+					$('#myModal').html($data);
+				};
+			},
+			error:function ($error) {
+				alert('Disculpe, existió un problema');
+			}
+		});
+		return false;
+	});
+</script>
+<?php }else{
+	echo json_encode($this->json);
+ }?>

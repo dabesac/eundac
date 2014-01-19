@@ -18,13 +18,11 @@ class Admin_AclController extends Zend_Controller_Action{
         {
             $eid=$this->eid;
             $oid=$this->oid;
-            $dbrol=new Api_Model_DbTable_Rol();
+            $dbrol=new Api_Model_DbTable_Module();
             $where=array("eid"=>$eid,"oid"=>$oid);
             $order=array("name");
-            $rols=$dbrol->_getAll($where,$order);
-            $this->view->rols=$rols;
-            $form= new Admin_Form_Acl();
-            $this->view->form=$form;
+            $modules=$dbrol->_getAll($where,$order);
+            $this->view->modules=$modules;
         } 
         catch (Exception $ex) 
         {
@@ -33,51 +31,304 @@ class Admin_AclController extends Zend_Controller_Action{
 
     }
     
-    public  function listrAction()
-    {
-    	$this->_helper->layout()->disableLayout();
-    	$data['eid']=$this->eid;
-    	$data['oid']=$this->oid;
-        $mid=trim($this->_getParam("mid"));
-        if (!$mid) return false;
-        $data['mid']=$mid;
-        $data['state']="A";   
-        $resources = new Api_Model_DbTable_Resource();
-        $attr = array("eid","oid","mid","reid","state","name");
-        $rows = $resources->_getFilter($data,$attr);
-        if($rows) $this->view->data = $rows;
-    }
-
-
-    public function listaclAction()
+    public function newAction()
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->eid;
-            $oid=$this->oid;
-            $rid=$this->_getParam("rid");
-            $dbacl=new Api_Model_DbTable_Acl();
-            $where=array("eid"=>$eid,"oid"=>$oid,"rid"=>$rid);
-            $acl=$dbacl->_getFilter($where);
-            $c=0;
-            $attrib=array("name","reid","mid");
-            foreach ($acl as $a) {
-                $where=array("eid"=>$eid,"oid"=>$oid,"reid"=>$a['reid']);
-                $recxacl[$c]=$dbacl->_getinfoResource($where,$attrib);
-                $c++;
+            $form= new Admin_Form_Module();
+            if ($this->getRequest()->isPost()) {
+                $data = $this->getRequest()->getPost();
+                if ($form->isValid($data)) {
+                    $data['eid']=$this->sesion->eid;
+                    $data['oid']=$this->sesion->oid;
+                    $data['mid']= strtotime(date('Y-m-d h:m:s'));
+                    $data['state']='A';
+                    unset($data['save']);
+                    $tb_module = new Api_Model_DbTable_Module(); 
+                    if ($tb_module->_save($data)) {
+                         $this->_helper->_redirector('index');
+                    }
+                }
             }
-            $this->view->rid=$rid;
-            $this->view->aclname=$recxacl;
+            $this->view->form=$form;
+        }catch(exception $e){
+            print ("Error : ").$e->getMessage();
+        }
+    }
 
+    public function editAction()
+    {
+        try{
+            $this->_helper->layout()->disableLayout();
+            
+            $form= new Admin_Form_Module();
+            $state = new Zend_Form_Element_Select('state');
+            $state->setAttrib("class","form-control");
+            $state->setAttrib("required","true");
+            $state->setRequired(true)->addErrorMessage('Campo Obligatorio');
+            $state->removeDecorator("HtmlTag")->removeDecorator("Label");
+            $state->addMultiOption('A','Activo');
+            $state->addMultiOption('B','Desactivo');
+            $form->addElement($state);
+            $t_mid = new Zend_Form_Element_Hidden('mid');
+            $form->addElement($t_mid);
+            if ($this->getRequest()->isPost()) {
+                $data = $this->getRequest()->getPost();
+                if ($form->isValid($data)) {
+                    $p_key = array(
+                                    'eid'=>$this->sesion->eid,
+                                    'oid'=>$this->sesion->oid,
+                                    'mid'=>$data['mid'],
+                                    );
+                    unset($data['save']);
+                    unset($data['mid']);
+                    $tb_module = new Api_Model_DbTable_Module(); 
+                    if ($tb_module->_update($data,$p_key)) {
+                        $this->_response->setHeader('Content-Type', 'application/json');
+                        $json = array('status'=> true);                   
+                        $this->view->json = $json;
+                    }
+
+                }else{
+                    
+                    $this->view->form=$form;
+                    $form->populate($data);
+                }
+            }
+            else{
+                $params = base64_decode($this->_getParam('mid'));
+                $where =    array(
+                                'eid' => $this->sesion->eid,
+                                'oid' => $this->sesion->oid,
+                                'mid' => trim($params),
+                                );
+                $tb_module = new Api_Model_DbTable_Module();
+                $module = $tb_module->_getOne($where);
+                $form->mid->setValue($params);
+                $form->populate($module);
+                $this->view->form=$form;
+
+            }
         } 
         catch (Exception $ex) 
         {
             print "Error listando al Crear Roles: ".$ex->getMessage();
         }
+
     }
 
+    public function listresourceAction(){
+        $params = $this->getRequest()->getParams();
+        if(count($params) > 3){
 
-     public function deleteAction()
+            $paramsdecode = array();
+            
+            foreach ( $params as $key => $value ){
+                if($key!="module" && $key!="controller" && $key!="action"){
+                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+                }
+            }
+            $params = $paramsdecode;
+        }
+        $where =    array(
+                        'eid'   =>   $this->sesion->eid,
+                       'oid'   =>   $this->sesion->oid,
+                        'mid'   =>   trim($params['mid']),
+                        );
+        $tb_resourse =  new Api_Model_DbTable_Resource();
+        $resources = $tb_resourse->_getFilter($where);
+        $this->view->resources = $resources;
+        $this->view->mid = trim($params['mid']);
+    }
+    public function newresourceAction()
+    {
+        $this->_helper->layout()->disableLayout();
+
+        $form = new Admin_Form_Resource();
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            if ($form->isValid($data)) {
+                $data['eid']=$this->sesion->eid;
+                $data['oid']=$this->sesion->oid;
+                $data['state']= 'A';
+                $data['created']=date('Y-m-d h:m:s');
+
+                $tb_resourse =  new Api_Model_DbTable_Resource();
+                if ($tb_resourse->_save($data)) {
+                        $this->_response->setHeader('Content-Type', 'application/json');
+                        $json = array('status'=> true);                   
+                        $this->view->json = $json;
+                    }
+            }
+            else{
+                $form->populate($data);
+                $this->view->form=$form;
+            }
+        }else{
+            $mid = base64_decode($this->_getParam('mid'));
+            $form->mid->setValue($mid);
+            $this->view->form=$form;
+        }
+    }
+    public  function editresourceAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $tb_resourse =  new Api_Model_DbTable_Resource();
+        $form = new Admin_Form_Resource();
+        $elemen_reid = new Zend_Form_Element_Hidden('reid');
+        $form->addElement($elemen_reid);
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            if ($form->isValid($data)) {
+                $p_key['eid']=$this->sesion->eid;
+                $p_key['oid']=$this->sesion->oid;
+                $p_key['mid']=$data['mid'];
+                $p_key['reid']=$data['reid'];
+                unset($data['mid']);
+                unset($data['reid']);
+                if ($tb_resourse->_update($data,$p_key)) {
+                        $this->_response->setHeader('Content-Type', 'application/json');
+                        $json = array('status'=> true);                   
+                        $this->view->json = $json;
+                    }
+            }
+            else{
+                $form->populate($data);
+                $this->view->form=$form;
+            }
+        }else{
+            $mid = base64_decode($this->_getParam('mid'));
+            $reid = base64_decode($this->_getParam('reid'));
+            $where =    array(
+                            'eid'=>$this->sesion->eid,
+                            'oid'   =>$this->sesion->oid,
+                            'reid'  =>$reid );
+            $resource = $tb_resourse->_getOne($where);
+            $form->mid->setValue($mid);
+            $form->reid->setValue($reid);
+            $form->populate($resource);
+            $this->view->form=$form;
+        }
+
+    }
+
+    public function editpremissiosAction(){
+        try {
+
+            $this->_helper->layout()->disableLayout();
+
+
+            $mid = trim(base64_decode($this->_getParam('mid')));
+            $reid = trim(base64_decode($this->_getParam('reid')));
+            $where  =   array(
+                                'eid'=>$this->sesion->eid,
+                                'oid'=>$this->sesion->oid,
+                                'mid'=>$mid,
+                                'reid'=>$reid,
+                            );
+            $where1 = array(
+                            'eid'=>$this->sesion->eid,
+                            'oid'=>$this->sesion->oid,
+                            );
+            $tb_rol = new Api_Model_DbTable_Rol();
+            $tb_acl = new Api_Model_DbTable_Acl();
+
+            $roles = $tb_rol->_getFilter($where1);
+            $permissios = $tb_acl->_getFilter($where); 
+            $count = count($roles);
+            foreach ($roles as $key => $role) {
+                foreach ($permissios as $per) {
+                    if ($role['rid'] == $per['rid']) {
+                        $roles[$key]['permission']=$per['permission'];
+                    }
+                    else{
+                        if ($key+1 < $count)  {
+                            $roles[$key+1]['permission']='not';
+                        }
+                    }
+                }
+            }
+            $this->view->roles =$roles;
+            $this->view->mid = $mid;
+            $this->view->reid = $reid;
+
+
+            
+        } catch (Exception $e) {
+            
+        }
+    }
+    
+    public function allowresourceAction(){
+        $this->_helper->layout()->disableLayout();
+        $params = $this->getRequest()->getParams();
+        if(count($params) > 3){
+
+            $paramsdecode = array();
+            
+            foreach ( $params as $key => $value ){
+                if($key!="module" && $key!="controller" && $key!="action"){
+                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+                }
+            }
+            $params = $paramsdecode;
+        }
+
+        $rid    =   trim($params['rid']);
+        $mid    =   trim($params['mid']);
+        $reid    =   trim($params['reid']);
+        $action    =   trim($params['action']);
+        $permission    =   trim($params['permission']);
+
+        try {
+            $tb_acl =   new Api_Model_DbTable_Acl();
+            if ((integer)$action == 1) {
+            $data = array(
+                        'eid'=>$this->sesion->eid,
+                        'oid'=>$this->sesion->oid,
+                        'mid'=>$mid,
+                        'reid'=>$reid,
+                        'rid'=>$rid,
+                        'permission'=>$permission,
+                    );
+                if ($tb_acl->_save($data)) {
+                    $json = array(
+                            'status' =>true,
+                        );
+                }
+            }
+            if ((integer)$action == 0) {
+               $data = array(
+                        'permission'=>$permission,
+                );
+                $p_key = array(
+                        'eid'=>$this->sesion->eid,
+                        'oid'=>$this->sesion->oid,
+                        'mid'=>$mid,
+                        'reid'=>$reid,
+                        'rid'=>$rid,
+                    );
+                if ($tb_acl->_update($data,$p_key)) {
+                    $json = array(
+                            'status' =>true,
+                        );
+                }
+            }
+        } catch (Exception $e) {
+            $json = array(
+                            'status' =>true,
+                            'error' =>$e->getMessage(),
+                        );
+        }
+
+        $this->view->json =$json;
+        $this->_response->setHeader('Content-Type', 'application/json');
+
+    }
+    
+
+    public function deleteAction()
+    
     {
         try{
             $eid=$this->eid;
@@ -101,31 +352,7 @@ class Admin_AclController extends Zend_Controller_Action{
         }
     }
 
-    public function saveAction()
-    {
-        try{
-            $eid=$this->eid;
-            $oid=$this->oid;
-            $form= new Admin_Form_Acl();
-            if ($this->getRequest()->isPost())
-            {
-                $formdata = $this->getRequest()->getPost();
-                $rid=$this->_getParam("rolid");
-                unset($formdata['save']);
-                $formdata['eid']=$eid;
-                $formdata['oid']=$oid;
-                trim($formdata['mid']);
-                trim($formdata['reid']);
-                trim($formdata['state']);
-                $dbacl=new Api_Model_DbTable_Acl();
-                $newacl=$dbacl->_save($formdata);
-                $this->_redirect("/admin/acl");
-             
-            }  
-        }catch(exception $e){
-            print ("Error : ").$e->getMessage();
-        }
-    }
+    
 
 	
 }

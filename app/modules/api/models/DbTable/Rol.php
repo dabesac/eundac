@@ -83,4 +83,28 @@ class Api_Model_DbTable_Rol extends Zend_Db_Table_Abstract
 			print "Error: Read All Rol ".$e->getMessage();
 		}
 	}
+
+	public function _getFilter($where=null,$attrib=null,$orders=null){
+		try{
+			if($where['eid']=='' || $where['oid']=='' ) return false;
+				$select = $this->_db->select();
+				if ($attrib=='') $select->from("base_rol");
+				else $select->from("base_rol",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				if($orders){
+					foreach ($orders as $key => $order) {
+						$select->order($order);
+					}	
+				}
+				
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+		}catch (Exception $e){
+			print "Error: Read Filter Acl's ".$e->getMessage();
+		}
+	}
 }

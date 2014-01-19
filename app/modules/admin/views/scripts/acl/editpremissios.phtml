@@ -1,0 +1,53 @@
+
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Modal title</h4>
+        </div>
+        <div class="modal-body">
+          	<table class="table" id='table-permission'>
+				<thead>
+					<th>#</th>
+					<th>Rol</th>
+					<th class="text-center">Permiso <input type="checkbox" id="check-permission-all"> </th>
+				</thead>
+				<tbody>
+					<?php foreach ($this->roles as $key => $role) {?>
+						<tr
+							index=<?php echo $key?> 
+							edit='false'
+							mid=<?php echo $this->mid?>
+							reid=<?php echo $this->reid?>
+							rid=<?php echo $role['rid']?>
+						>
+							<td><?php echo $key+1?></td>
+							<td><?php echo $role['name']?></td>
+							<td class="text-center">
+								<?php 
+								switch ($role['permission']) {
+									case 'allow':
+										echo "<span onclick='f_edit_permission_one(this);' permission='allow' class='text-info style-icon-all glyphicon glyphicon-ok-circle'></span>";
+										break;
+									case 'deny':
+										echo "<span onclick='f_edit_permission_one(this);' permission='deny' class='text-danger style-icon-all glyphicon glyphicon-remove-circle'></span>";
+										break;
+									default:
+										echo "<span onclick='f_edit_permission_one(this);' permission='not' class='text-success style-icon-all glyphicon glyphicon-minus-sign'></span>";
+										break;
+								}?>
+							</td>
+
+						</tr>
+					<?php }?>
+				</tbody>
+			</table>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+<script type="text/javascript" src="/external/notes-admin/permission.js"></script>

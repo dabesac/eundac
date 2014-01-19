@@ -1,92 +1,74 @@
-<div><h2>ACL</h2></div>
+
+
+
+<div class='row' id='header-info'>
+	<div class='col-xs-6  col-md-offset-1 	header-registration-course'>
+		<h4 class='text-header-registration'> <span class='glyphicon glyphicon-list' style='color:#1abc9c;'></span> 
+		Lista de Modulos
+		</h4>
+		
+	</div>
+	<div class="col-md-4">
+        <a href="/admin/correctnotes" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
+		<a data-toggle="modal" data-target="#modalNewModel" href="/admin/acl/new" class='btn btn-info' ><span class='glyphicon glyphicon-plus-sign'></span> Nuevo</a>
+	</div>
+</div>
+<!-- end header-->
 <div class="row">
-	<div class="col-md-11 pull-right"><h4>Rol</h4>
-	<select name="rol" id="rol" class="input-sm">
-			<option value="">Selecione..</option>
-			<?php if($this->rols){
-				$c=0;
-				foreach ($this->rols as $rls) {?>
-					<option value="<?php echo $rls['rid']?>"><?php echo $rls['name']?></option>		
-				<?php $c++;
-				}
-			}?>
-		</select>
-	<div class="col-md-7 pull-right"><a class="btn btn-info" id="new">Nuevo</a></div>
+	<div class="col-md-9 col-md-offset-1">
+		<table class="table table-bordered">
+		  <thead>
+		  	<tr>
+		        <th class='text-center'>#</th>
+		        <th class='text-center'>Nombre</th>
+		        <th class='text-center'>Icono</th>
+			    <th class='text-center'>Recursos</th>
+		        <th class='text-center'>Editar</th>
+		        <th class='text-center'>Estado</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+				<?php foreach ($this->modules as $key => $module) {?>
+					<tr>
+						<td><?php echo $key+1?></td>
+						<td><?php echo $module['name']?></td>
+						<td class="text-center text-muted"><span class='glyphicon glyphicon-<?php echo $module['imgicon']?>'></span></td>
+						<td class='text-center'>
+							<a href="/admin/acl/listresource/<?php echo base64_encode('mid')?>/<?php echo base64_encode($module['mid'])?>"><span  class='glyphicon glyphicon-plus-sign style-icon-all text-warning'></span></a>
+						</td>
+						<td class='text-center'>
+							<span mid="<?php echo base64_encode($module['mid'])?>" class='glyphicon glyphicon-edit model-edit style-icon-all text-primary' ></span>
+						</td>
+						<td class="text-center"><?php echo ($module['state']=='A')? "<span class='text-success glyphicon glyphicon-ok-circle style-icon-all'></span>":"<span class='text-danger glyphicon glyphicon-remove-circle style-icon-all'></span>"?></td>
+					</tr>
+				<?php }?>		  		
+		   </tbody>
+		</table>
 	</div>
 </div>
 
-<div id="list_acl" name="list_acl"></div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    
+</div><!-- /.modal -->
+<div class="modal fade" id="modalNewModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    
+</div><!-- /.modal -->
 
-<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" 
-	method="post" enctype="application/x-www-form-urlencoded">
-<div class="modal fade" id="enternewdata">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        		<h3 class="modal-title">Nuevo ACL</h3>
-      		</div>
-      		<div class="modal-body">
-	      		<table class="table">
-	        		<tr>
-	        			<input type="hidden" name="rid" id="rid">
-	        			<td>Modulo</td>
-	        			<td><?php print $this->form->mid?></td>
-	        		</tr>
-	        		<tr>
-	        			<td>Nombre</td>
-	        			<td><?php print $this->form->reid?></td>
-	        		</tr>
-	        		<tr>
-	        			<td>Estado</td>
-	        			<td><?php print $this->form->state?></td>
-	        		</tr>
-	        	</table>
-      		</div>
-      		<div class="modal-footer">
-      			<button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cerrar</button>
-        		<?php print $this->form->save?>
-      		</div>
-		</div>
-  	</div>
-</div>
-</form>
 <script>
-	$("#rol").change(function(){
-		var rid = $("#rol").val();
-		var url = "/admin/acl/listacl/rid/"+rid;
-		$("#list_acl").html("<img src='/img/spinner.gif'>Cargando...");
-		$("#list_acl").load(url);
-	});
-	
-	$("#new").click(function(){
-		var rid=($("#rol").val());
-		$("#rid").val(rid);
-		if(rid){
-			$("#enternewdata").modal("show")
-		}else{
-			alert("Elija un Rol!")
-		}
-	});
-
-	$("#mid").change(function(){
-	var mid = ""+$("#mid").val();
-	var url = "/admin/acl/listr/mid/"+mid;
-	$("#reid").load(url);
-
-	$("#new").click(function(){
-		alert("work");
-		e.preventDefault();
-		$("#list_acl").html("<img src='/img/spinner.gif'>Cargando....");
+	$(".model-edit").click(function(){
 		$.ajax({
-	        type: "POST",
-	        url: $("#frmAcl").attr("action"),
-	        data: $("#frmAcl").serialize(),
-	        success: function(data){
-	       		$("#list_acl").html(data);
-	      	}		
+			url:"/admin/acl/edit",
+			data:{mid:$(this).attr('mid')},
+			success:function($data){
+				$('#myModal').modal('show');
+				$('#myModal').html($data);
+			},
+			error:function ($error) {
+				alert('Disculpe, existió un problema');
+			}
 		});
 		return false;
 	});
-});
+
+
 </script>
