@@ -16,6 +16,9 @@ class Rfacultad_ValidationController extends Zend_Controller_Action
 
     public function indexAction() 
     {
+
+      print_r($this->sesion);break;
+
       $this->_helper->redirector("addcourse");
     }
 
@@ -29,7 +32,7 @@ class Rfacultad_ValidationController extends Zend_Controller_Action
         $form=new Rfacultad_Form_Search;
         $form->buscar->setLabel("Buscar");
         $this->view->form=$form;  
-        $perid='13C';
+        $perid='14C';
         $this->view->perid = $perid;
         $this->view->temp = $temp;
         $rid='AL';

@@ -60,4 +60,27 @@ class Api_Model_DbTable_Syllabusunitcontent extends Zend_Db_Table_Abstract
 			print "Error: Read One SyllabusUnitsContent ".$e->getMessage();
 		}
 	}
+
+	public function _getFilter($where=null,$attrib=null,$orders=null){
+		try{
+			if($where['eid']=='' || $where['oid']=='') return false;
+				$select = $this->_db->select();
+				if ($attrib=='') $select->from("base_syllabus_units_content");
+				else $select->from("base_syllabus_units_content",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				if ($orders<>null || $orders<>"") {
+					if (is_array($orders))
+						$select->order($orders);
+				}
+				
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+		}catch (Exception $e){
+			print "Error: Read Filter SyllabusUnitsContent ".$e->getMessage();
+		}
+	}
 }

@@ -96,7 +96,7 @@ class Bienestar_SpecialitylockController extends Zend_Controller_Action {
 				$datauser[$i] = $dbuser->_getFilter($whe,$attri,$order);
 				$i++;
 			}
-			// print_r($unlockuser);
+			print_r($unlockuser);
 			$this->view->datauser=$datauser;
 			$this->view->unlockuser=$unlockuser;
 		} catch (Exception $e) {

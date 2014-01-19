@@ -2,8 +2,8 @@
 $usuario=$this->usuario;
 $nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usuario[0]['first_name']; 
 ?>
-<div class="row">
-<div class="col-md-11 nomdoc" style="font-size:20px;color:#0404B4; margin-left:4%"><b>
+<div class="row col-md-12 nomdoc" style="font-size:20px; color:#0404B4; margin-left:0px">
+    <b>
 	<?php
 	if ($this->usuario) {
 		echo $this->usuario[0]['uid']." - ".$nombredocente;
@@ -11,102 +11,101 @@ $nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usua
 	?>
 	</b>
 </div>
+<div class="row">
+    <div class="col-md-12">
+        <?php
+        if ($this->cursos) {
+        	$listacolores = array();
+            $listacolores[0] = "#FA8D74";
+            $listacolores[1] = "#A3CFE0";
+            $listacolores[2] = "#CBE487";
+            $listacolores[3] = "#FAF48D";
+            $listacolores[4] = "#FCB16B";
+            $listacolores[5] = "#CCF0EE";
+            $listacolores[6] = "#DFDFDF";
+            $listacolores[7] = "#81FF86";
+            $listacolores[8] = "#CD88FD";
+            $listacolores[9] = "#F59FFC";
+            $listacolores[10] = "#A58CFF";
+            $listacolores[11] = "#F2BBBB";
+            $listacolores[12] = "#D8BADA";
+            $listacolores[13] = "#C4E6CE";
+            $listacolores[14] = "#B4DAA1"; 	
+
+        	$len=count($this->cursos);
+        	$cco=0;
+        	for ($i=0; $i < $len; $i++) { 
+                $codcurso=$this->cursos[$i]['courseid'];
+        	    $turno=$this->cursos[$i]['turno'];
+                $codcursodes=$this->cursos[$i+1]['courseid'];
+        	    $turnodes=$this->cursos[$i+1]['turno'];
+        	   if ($codcurso==$codcursodes && $turno==$turnodes) {
+        	        $this->cursos[$i]['color']=$listacolores[$cco];
+        	    } else {
+        	        $this->cursos[$i]['color']=$listacolores[$cco];
+        	        $cco++;
+        	    }
+            }
+
+        	foreach ($this->cursos as $curso) { 
+        		$n=new Api_Model_DbTable_Course();
+                $where['eid']=$curso['eid'];
+                $where['oid']=$curso['oid'];
+                $where['escid']=$curso['escid'];
+                $where['subid']=$curso['subid'];
+                $where['courseid']=$curso['courseid'];
+                $where['curid']=$curso['curid'];
+        		$ncur=$n->_getOne($where);
+        		?>
+        		<buttom id="codcursos" onclick="cargarPopup(this);" courseid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
+
+        			<div class="nomdoc cajacurso" style="background-color:<?php echo $curso["color"] ?>">
+                        <?php echo $ncur['name'];?> - <?php echo $curso['turno'];?>
+                    </div>
+        		</buttom>
+
+        	<?php	
+        	}
+        }
+        ?>
+    </div>
 </div>
 <div class="row">
-<div class="col-md-12">
-<?php
-if ($this->cursos) {
-	$listacolores = array();
-    $listacolores[0] = "#FA8D74";
-    $listacolores[1] = "#A3CFE0";
-    $listacolores[2] = "#CBE487";
-    $listacolores[3] = "#FAF48D";
-    $listacolores[4] = "#FCB16B";
-    $listacolores[5] = "#CCF0EE";
-    $listacolores[6] = "#DFDFDF";
-    $listacolores[7] = "#81FF86";
-    $listacolores[8] = "#CD88FD";
-    $listacolores[9] = "#F59FFC";
-    $listacolores[10] = "#A58CFF";
-    $listacolores[11] = "#F2BBBB";
-    $listacolores[12] = "#D8BADA";
-    $listacolores[13] = "#C4E6CE";
-    $listacolores[14] = "#B4DAA1"; 	
-
-	$len=count($this->cursos);
-	$cco=0;
-	for ($i=0; $i < $len; $i++) { 
-        $codcurso=$this->cursos[$i]['courseid'];
-	    $turno=$this->cursos[$i]['turno'];
-        $codcursodes=$this->cursos[$i+1]['courseid'];
-	    $turnodes=$this->cursos[$i+1]['turno'];
-	   if ($codcurso==$codcursodes && $turno==$turnodes) {
-	        $this->cursos[$i]['color']=$listacolores[$cco];
-	    } else {
-	        $this->cursos[$i]['color']=$listacolores[$cco];
-	        $cco++;
-	    }
-    }
-
-	foreach ($this->cursos as $curso) { 
-		$n=new Api_Model_DbTable_Course();
-        $where['eid']=$curso['eid'];
-        $where['oid']=$curso['oid'];
-        $where['escid']=$curso['escid'];
-        $where['subid']=$curso['subid'];
-        $where['courseid']=$curso['courseid'];
-        $where['curid']=$curso['curid'];
-		$ncur=$n->_getOne($where);
-		?>
-		<buttom id="codcursos" onclick="cargarPopup(this);" courseid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
-
-			<div class="nomdoc cajacurso" style="background-color:<?php echo $curso["color"] ?>">
-                <?php echo $ncur['name'];?> - <?php echo $curso['turno'];?>
-            </div>
-		</buttom>
-
-	<?php	
-	}
-}
-?>
-</div>
+    <div class="alert alert-info col-md-10" style="font-size:15px; margin-left:23px">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <b style="font-size:18px">Información:</b> Click en el curso para agregar el horario, para eliminar el horario dar click en cualquiera de las (x).
+    </div>
 </div>
 <div class="row">
-
-<div class="alert alert-info col-md-11 flotacarajo" style="margin-left:2%">
-    <button type="button" class="close" data-dismiss="alert">x</button>
-    <b style="font-size:15px">Información:</b> Click en el curso para agregar el horario, para eliminar el horario dar click en cualquiera de las (x).
-</div>
-</div>
-<div class="row">
-
-<div class="col-md-11">
-    <center><a href="/horary/nhorary/listteacher" class="btn btn-warning"><i class="icon icon-arrow-left icon-white"></i>Regresar</a></center><br>
-</div>
+    <div class="col-md-12">
+        <center><a href="/horary/nhorary/listteacher" class="btn btn-warning"><i class="icon icon-arrow-left icon-white"></i>Regresar</a></center><br>
+    </div>
 </div>
 
- <div class="modal fade" id="mymodalhorasclase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="mymodalhorasclase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
        <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3>Ingresar Horario:</h3>
+            <h3><b style='color:#0404B4;'><center>Ingresar Horario</center></b></h3>
     </div>
     <div class="modal-body">
         <div class="alert alert-success">
-            <b style="font-size:15px">Nota:</b> Las horas académicas son de 50 minutos a partir de las 6:20 am.
+            <b style="font-size:15px">Nota:</b> Las horas académicas son de 50 minutos a partir de la HORA DE INICIO.
         </div>
             <table class="table table-striped">
                 <tr>
-                    <th>Tipo de clase:
-                        <select id="tipoclase" class="input-medium">
-                            <option value="">-- Seleccione --</option>
-                            <option value="T">Teoria</option>
-                            <option value="P">Práctica</option>
-                        </select>
+                    <th><h5><b>Tipo de clase:</b></h5>
+                        <div style='width: 200px'>
+                            <select id="tipoclase" class="input-medium; form-control">
+                                <option value="">-- Seleccione --</option>
+                                <option value="T">Teoria</option>
+                                <option value="P">Práctica</option>
+                            </select>
+                        </div>    
                     </th>
-                    <th>Día:
-                        <select id="dia" class="input-medium">
+                    <th><h5><b>Día:</b></h5>
+                        <select id="dia" class="input-medium; form-control">
                             <option value="">-- Seleccione --</option>
                             <option value="0">Lunes</option>
                             <option value="1">Martes</option>
@@ -119,46 +118,89 @@ if ($this->cursos) {
                 </tr>
 
                 <tr>
-                    <th colspan="2">Hora de Inicio:</th>
+                    <th colspan="2"><h5><b>Hora de Inicio:</b></h5></th>
                 </tr>
+                <?php
+                    $hours=$this->datahours[0]['hours_begin'];
+                    $hour=substr($hours,0,2);
+                    $minute=substr($hours,3,2);
+                    $hour=intval($hour);
+                ?>
                 <tr>
-                    <td>Hora: 
-                        <select id="hora_ini" class="input-mini">
-                            <option value="06">06</option>
-                            <option value="07">07</option>
-                            <option value="08">08</option>
-                            <option value="09">09</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="13">13</option>
-                            <option value="14">14</option>
-                            <option value="15">15</option>
-                            <option value="16">16</option>
-                            <option value="17">17</option>
-                            <option value="18">18</option>
-                            <option value="19">19</option>
-                            <option value="20">20</option>
-                            <option value="21">21</option>
-                            <option value="22">22</option>
-                        </select>
+                    <td><h5>Hora:</h5>
+                        <div style='width: 150px'> 
+                            <select id="hora_ini" class="input-mini; form-control">
+                            <?php    
+                            for ($i=$hour; $i <= 22 ; $i++) { ?>
+                                <option value="<?php
+                                                if ($i<=9) echo "0".$i;
+                                                else echo $i;
+                                                ?>">
+                                                <?php
+                                                if ($i<=9) echo "0".$i;
+                                                else echo $i;
+                                                ?>
+                                </option>
+                            <?php
+                            }
+                            ?>
+                            </select>
+                        </div>    
                     </td>
-                    <td>Minuto:
-                        <select id="min_ini" class="input-mini">
-                            <option value="00">00</option>
-                            <option value="10">10</option>
-                            <option value="20" selected>20</option>
-                            <option value="30">30</option>
-                            <option value="40">40</option>
-                            <option value="50">50</option>
-                        </select>
+                    <td><h5>Minuto:</h5>
+                        <div style='width: 150px'>
+                            <select id="min_ini" class="input-mini; form-control">
+                                <option value="00" <?php 
+                                                    if ($minute=="00"){ ?> 
+                                                        selected
+                                                    <?php    
+                                                    }
+                                                    ?>
+                                >00</option>
+                                <option value="10" <?php 
+                                                    if ($minute=="10"){ ?> 
+                                                        selected
+                                                    <?php    
+                                                    }
+                                                    ?>
+                                >10</option>
+                                <option value="20" <?php 
+                                                    if ($minute=="20"){ ?> 
+                                                        selected
+                                                    <?php    
+                                                    }
+                                                    ?>
+                                >20</option>
+                                <option value="30"  <?php 
+                                                    if ($minute=="30"){ ?> 
+                                                        selected
+                                                    <?php    
+                                                    }
+                                                    ?>
+                                >30</option>
+                                <option value="40"  <?php 
+                                                    if ($minute=="40"){ ?> 
+                                                        selected
+                                                    <?php    
+                                                    }
+                                                    ?>
+                                >40</option>
+                                <option value="50"  <?php 
+                                                    if ($minute=="50"){ ?> 
+                                                        selected
+                                                    <?php    
+                                                    }
+                                                    ?>
+                                >50</option>
+                            </select>
+                        </div>    
                     </td>
                 </tr>
 
                 <tr colspan="2">
-                    <th>Cantidad de Horas Académicas:</th>
+                    <th><h5><b>Cantidad de Horas Académicas:</h5></b></th>
                     <td>
-                        <select id="horasacademicas" class="input-mini">
+                        <select id="horasacademicas" class="input-mini; form-control">
                             <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -187,8 +229,9 @@ if ($this->cursos) {
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div>
+
 <div id="cargaaqui"></div>
-<div id="horariocurso" class="flotacarajo"></div>
+<div id="horariocurso"></div>
 
 
 <script type="text/javascript">
@@ -220,7 +263,7 @@ $("#guardarhora").click(function(){
 	var uid="<?php echo $this->usuario[0]['uid'] ?>";
 	var pid="<?php echo $this->usuario[0]['pid'] ?>";
 	var hora_ini=h_ini+":"+m_ini+":00";
-    //alert(pid);
+    // alert(hora_ini);
     
     if (tipo_clase=="") {
         alert("Debe seleccionar el tipo de clase.");

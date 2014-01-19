@@ -14,15 +14,19 @@ if ($this->periodocurso['type_rate']!="O" && $this->periodocurso['type_rate']!="
 <form name="<?php echo $this->form->getName(); ?>" id='frmSyllabus' action="<?php echo $this->form->getAction(); ?>" method="post" enctype="multipart/form-data">
 <div>
 	<center>
-		<h4>UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRIÓN</h4>
-		<h5>Facultad de <?php echo $this->facultad['name']?></h5>
-		<h5>Escuela de Formación Profesional de <?php echo $this->escuelas['name']?></h5>
-		<h5><div style="width:120px"><?php echo $this->form->number?></div></h5>
-		<h5><?php echo $this->curso['name']?></h5>
+		
+		<h4><b>FACULTAD DE <?php echo strtoupper($this->facultad['name']);?></b></h4>
+		<h5><b>ESCUELA DE FORMACIÓN PROFESIONAL DE<?php echo strtoupper($this->escuelas['name']);?></b></h5>
+		<h5><div class="panel panel-primary" style="padding: 2px; width:350px;">
+    	<div class="panel-heading" style="padding: 6px">
+        <center><b style="font-size:16px; color: white; "><?php echo $this->num ?> <br>CURSO: <?php echo $this->curso['name']?></b>
+        </center>
+   		</div>
+		</div></h5>
 	</center>
 </div>
 <div>
-	<h5>I. DATOS GENERALES:</h5>
+	<h5 style="margin: 0px 80px 0px 80px"><b>I. DATOS GENERALES:</b></h5> <br>
 	<div class="panel panel-default" style="margin: 0px 80px 0px 80px">
 		<div class="panel-heading">
 		  	<table style="width: 100%">
@@ -237,7 +241,7 @@ $("#crearunidad").click(function(){
     };
     url='/syllabus/syllabus/units/perid/'+perid+'/subid/'+subid+'/escid/'+escid+'/curid/'+curid+'/courseid/'+courseid+'/turno/'+turno+'/tipo_cali/'+tipo_cali+'/units/'+uni+'/numunidad/'+1;
 	// alert(url);
-    window.open(url,'Programación de Unidades','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=no,dependent=no,width=850,height=650');
+    window.open(url,'Programación de Unidades','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=no,dependent=no,width=850,height=700');
 });
 
 $(".height").click(function(e){
@@ -255,3 +259,39 @@ $(".height").click(function(e){
   });
 })(jQuery);
 </script>
+</head>
+
+<SCRIPT LANGUAGE="JavaScript">
+function popupWin() {
+text = "<html> <head> <title>Universidad Nacional Daniel Alcides Carrión</title> <body> ";
+text += "<center> <br>";
+text += "<a target='_blank'><h2>GUARDE SUS AVANCES AL SISTEMA PARA CONTINUAR</h2></a>";
+text += "</center> </body> </html> ";
+
+setTimeout('windowProp(text)', 200000); // El tiempo antes de abrir 3 segundos
+}
+function windowProp(text) {
+$("#modal").modal('show');
+
+setTimeout('closeWin(text)', 4000);	// tiempo 5 segundos antes de cerrar
+}
+function closeWin(text) {
+	$("#save").click();
+	$("#modal").modal('hide');
+	popupWin();
+}
+
+</script>
+</head>
+<body>
+<BODY onLoad="popupWin()">
+</body>
+
+<div  style="margin-left: 0px;margin-right: 5px; font-size: 12px; top:  550px;  left: 200px;"class="modal fade" id='modal'>
+  <div class="modal-dialog">
+    	<div class="alert alert-danger">
+        <center><b>Los datos se enviaron al Servidor.</b>
+        </center>
+      </div>  
+  </div>
+</div>

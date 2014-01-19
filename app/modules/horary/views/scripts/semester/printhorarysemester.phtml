@@ -10,7 +10,7 @@ $header='
     <tr>
         <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
         <th style="text-align: center; font-size: 15px;">
-        FACULTAD DE '.strtoupper($this->dfac['name']).'<br/>
+        FACULTAD DE '.strtoupper($this->faculty).'<br/>
         ESCUELA DE  '.strtoupper($this->desc['name']).'<br/>
         '.strtoupper($this->spe['parent']).' 
         </th>        
@@ -25,46 +25,31 @@ $header='
 <link rel="stylesheet" type="text/css" href="/css/print.css">
 <?php
     $hora=array();
-    $hora[0]['hora']="6:20 am - 7:10 am";
-    $hora[0]['h_ini']="06";  $hora[0]['h_fin']="07";  $hora[0]['m_ini']="20";  $hora[0]['m_fin']="10";
-    $hora[1]['hora']="7:10 am - 8:00 am";
-    $hora[1]['h_ini']="07";  $hora[1]['h_fin']="08";  $hora[1]['m_ini']="10";  $hora[1]['m_fin']="00";
-    $hora[2]['hora']="8:00 am - 8:50 am";
-    $hora[2]['h_ini']="08";  $hora[2]['h_fin']="08";  $hora[2]['m_ini']="00";  $hora[2]['m_fin']="50";
-    $hora[3]['hora']="8:50 am - 9:40 am";
-    $hora[3]['h_ini']="08";  $hora[3]['h_fin']="09";  $hora[3]['m_ini']="50";  $hora[3]['m_fin']="40";
-    $hora[4]['hora']="9:40 am - 10:30 am";
-    $hora[4]['h_ini']="09";  $hora[4]['h_fin']="10";  $hora[4]['m_ini']="40";  $hora[4]['m_fin']="30";
-    $hora[5]['hora']="10:30 am - 11:20 am";
-    $hora[5]['h_ini']="10";  $hora[5]['h_fin']="11";  $hora[5]['m_ini']="30";  $hora[5]['m_fin']="20";
-    $hora[6]['hora']="11:20 am - 12:10 pm";
-    $hora[6]['h_ini']="11";  $hora[6]['h_fin']="12";  $hora[6]['m_ini']="20";  $hora[6]['m_fin']="10";
-    $hora[7]['hora']="12:10 pm - 13:00 pm";
-    $hora[7]['h_ini']="12";  $hora[7]['h_fin']="13";  $hora[7]['m_ini']="10";  $hora[7]['m_fin']="00";
-    $hora[8]['hora']="13:00 pm - 13:50 pm";
-    $hora[8]['h_ini']="13";  $hora[8]['h_fin']="13";  $hora[8]['m_ini']="00";  $hora[8]['m_fin']="50";
-    $hora[9]['hora']="13:50 pm - 14:40 pm";
-    $hora[9]['h_ini']="13";  $hora[9]['h_fin']="14";  $hora[9]['m_ini']="50";  $hora[9]['m_fin']="40";
-    $hora[10]['hora']="14:40 pm - 15:30 pm";
-    $hora[10]['h_ini']="14";  $hora[10]['h_fin']="15";  $hora[10]['m_ini']="40";  $hora[10]['m_fin']="30";
-    $hora[11]['hora']="15:30 pm - 16:20 pm";
-    $hora[11]['h_ini']="15";  $hora[11]['h_fin']="16";  $hora[11]['m_ini']="30";  $hora[11]['m_fin']="20";
-    $hora[12]['hora']="16:20 pm - 17:10 pm";
-    $hora[12]['h_ini']="16";  $hora[12]['h_fin']="17";  $hora[12]['m_ini']="20";  $hora[12]['m_fin']="10";
-    $hora[13]['hora']="17:10 pm - 18:00 pm";
-    $hora[13]['h_ini']="17";  $hora[13]['h_fin']="18";  $hora[13]['m_ini']="10";  $hora[13]['m_fin']="00";
-    $hora[14]['hora']="18:00 pm - 18:50 pm";
-    $hora[14]['h_ini']="18";  $hora[14]['h_fin']="18";  $hora[14]['m_ini']="00";  $hora[14]['m_fin']="50";
-    $hora[15]['hora']="18:50 pm - 19:40 pm";
-    $hora[15]['h_ini']="18";  $hora[15]['h_fin']="19";  $hora[15]['m_ini']="50";  $hora[15]['m_fin']="40";
-    $hora[16]['hora']="19:40 pm - 20:30 pm";
-    $hora[16]['h_ini']="19";  $hora[16]['h_fin']="20";  $hora[16]['m_ini']="40";  $hora[16]['m_fin']="30";
-    $hora[17]['hora']="20:30 pm - 21:20 pm";
-    $hora[17]['h_ini']="20";  $hora[17]['h_fin']="21";  $hora[17]['m_ini']="30";  $hora[17]['m_fin']="20";
-    $hora[18]['hora']="21:20 pm - 22:10 pm";
-    $hora[18]['h_ini']="21";  $hora[18]['h_fin']="22";  $hora[18]['m_ini']="20";  $hora[18]['m_fin']="10";
-    $hora[19]['hora']="22:10 pm - 23:00 pm";
-    $hora[19]['h_ini']="22";  $hora[19]['h_fin']="23";  $hora[19]['m_ini']="10";  $hora[19]['m_fin']="00";
+    $j=1;
+    $hour_begin=array();
+    $hour_begin=$this->valhoras;
+    for ($i=0; $i <= 20; $i++) { 
+        $hour[$i]=substr($hour_begin[$i],0,2);
+        $minute[$i]=substr($hour_begin[$i],3,2);
+    }
+    for ($i=0; $i <= 20; $i++) {
+        if ($hour[$i]<12) {
+            if ($hour[$j]<12) {
+                $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." am";
+            }
+            else{
+                $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." pm";
+            }
+        } 
+        else{
+            $hora[$i]['hora']=$hour[$i].":".$minute[$i]." pm - ".$hour[$j].":".$minute[$j]." pm";
+        }
+        $hora[$i]['h_ini']=$hour[$i];
+        $hora[$i]['h_fin']=$hour[$j];
+        $hora[$i]['m_ini']=$minute[$i];
+        $hora[$i]['m_fin']=$minute[$j];
+        $j++;
+    }
     
     //Colores aleatorios 
     $listacolores = array();
@@ -178,13 +163,13 @@ if ($this->horarys) {
 ?>
 <div style="width:1000px">
     <div id='encabezado'>
-        <div class='cajatitulo'>Hora:</div>
-        <div class='cajatitulo'>Lunes</div>
-        <div class='cajatitulo'>Martes</div>
-        <div class='cajatitulo'>Miercoles</div>
-        <div class='cajatitulo'>Jueves</div>
-        <div class='cajatitulo'>Viernes</div>
-        <div class='cajatitulo'>Sábado</div>
+        <div class='cajatitulo'><b>Hora:</b></div>
+        <div class='cajatitulo'><b>Lunes</b></div>
+        <div class='cajatitulo'><b>Martes</b></div>
+        <div class='cajatitulo'><b>Miercoles</b></div>
+        <div class='cajatitulo'><b>Jueves</b></div>
+        <div class='cajatitulo'><b>Viernes</b></div>
+        <div class='cajatitulo'><b>Sábado</b></div>
     </div>
     <div style="float: left; width:134px; margin-left:7px">
         <?php
@@ -409,15 +394,15 @@ if ($this->horarys) {
 
     </div>
     <div style="width:980px;margin-top:30px;margin-left:0px">
-        <div class='cajacursos' style='width:25px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'>#</div>
-        <div class='cajacursos' style='width:50px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'>Código</div>
-        <div class='cajacursos' style='width:320px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'>Nombre Curso</div>
-        <div class='cajacursos' style='width:40px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'>Cred.</div>
-        <div class='cajacursos' style='width:40px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'>Turno</div>
-        <div class='cajacursos' style='width:320px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'>Docente</div>
-        <div class='cajacursos' style='width:25px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'>HT</div>
-        <div class='cajacursos' style='width:25px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'>HP</div>
-        <div class='cajacursos' style='width:25px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'>TT</div>
+        <div class='cajacursos' style='width:25px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'><b>#</b></div>
+        <div class='cajacursos' style='width:50px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'><b>Código</b></div>
+        <div class='cajacursos' style='width:320px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'><b>Nombre Curso</b></div>
+        <div class='cajacursos' style='width:40px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'><b>Cred.</b></div>
+        <div class='cajacursos' style='width:40px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'><b>Turno</b></div>
+        <div class='cajacursos' style='width:320px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'><b>Docente</b></div>
+        <div class='cajacursos' style='width:25px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'><b>HT</b></div>
+        <div class='cajacursos' style='width:25px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'><b>HP</b></div>
+        <div class='cajacursos' style='width:25px;box-shadow: 0px 0px 4px #343434; margin-left: 8px;'><b>TT</b></div>
 
         <?php
         $n=0;
@@ -485,5 +470,4 @@ else{
   ob_end_clean();
   $mpdf -> WriteHTML($html);
   $mpdf->Output('Horario -'.$this->semid.'.pdf','D');
-  
 ?>

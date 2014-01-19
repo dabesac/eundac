@@ -61,8 +61,9 @@
  	public function printAction(){
  		try {
  			    $this->_helper->layout()->disableLayout();
-      		$footer=$this->sesion->org['footer_print'];
-      		$this->view->footer=$footer;
+
+      		// $footer=$this->sesion->org['footer_print'];
+      		// $this->view->footer=$footer;
  			    $uid=base64_decode($this->_getParam('uid'));
       		$this->view->uid=$uid;	
       		$escid=base64_decode($this->_getParam('escid'));
@@ -71,17 +72,18 @@
       		$subid=base64_decode($this->_getParam('subid'));
       		$pid=base64_decode($this->_getParam('pid'));
       		$record = new Api_Model_DbTable_Registrationxcourse();
- 			//$data = $record->_getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid);
- 			$data = $record->_getRecordNotasAlumno_H($escid,$uid,$eid,$oid,$subid,$pid);
- 			//print_r($data);
- 			//exit();
- 			$this->view->data=$data;
-      		$where['eid']=$eid;
-      		$where['oid']=$oid;
-      		$where['escid']=$escid;
-      		$where['subid']=$subid;
+     			// $data = $record->_getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid);
+     			$data = $record->_getRecordNotasAlumno_H($escid,$uid,$eid,$oid,$subid,$pid);
+          // $len=count($data);
+          // print ($len);
+          // exit();
+          $this->view->data=$data;
+          $where['eid']=$eid;
+          $where['oid']=$oid;
+          $where['escid']=$escid;
+          $where['subid']=$subid;
 		      
-			$spe=array();
+			  $spe=array();
 		    $dbspeciality = new Api_Model_DbTable_Speciality();
 		    $speciality = $dbspeciality ->_getOne($where);
 		    $parent=$speciality['parent'];
@@ -110,7 +112,7 @@
       		$person= $dbperson ->_getOne($wheres);
       		$this->view->person=$person;
  		} catch (Exception $e) {
- 			print ("Error: Print Notas: ".$e->getMessage());
+ 			print "Error: Print Notas: ".$e->getMessage();
  		}
 
  	}

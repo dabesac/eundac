@@ -32,6 +32,7 @@ class Record_DirectedController extends Zend_Controller_Action {
             
             $year=date('Y');
             $anio=substr($year,2,3);
+            $anio=13;
             $whereper1['eid']=$eid;
             $whereper1['oid']=$oid;
             $whereper1['perid']=$anio.'J';

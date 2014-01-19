@@ -3,7 +3,7 @@ $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start(); 
 $header='
-<table style="width: 100%;" border="1">
+<table style="width: 100%; margin-bottom:10px;" border="1">
     <tr>
         <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
         <th style="text-align: center; font-size: 11px;">
@@ -21,7 +21,7 @@ $header='
         <td style="text-align: left;">Codigo: '.strtoupper($this->uid).'</td>
     </tr>
     <tr>
-        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
+        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;</td>
     </tr>
     <tr>   
         <td style="text-align: left;">Alumno: '.strtoupper($this->person['last_name0']." ".$this->person['last_name1'].", ".$this->person['first_name']).'</td>
@@ -32,57 +32,93 @@ $header='
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
 
-<table style="width:100%;" border="1">
-        <tr>
-            <th class='small'>Sem.</th>
-            <th class='small-50'>Per.</th>
-            <th class='small-50'>Curso</th>
-            <th >Nombre Curso</th>
-            <th class='small'>Turno</th>
-            <th class='small'>Creditos</th>
-            <th class='small-50'>Prom. Final</th>
-        </tr>
-    <?php
-    foreach ($this->data as $nota){
-    ?>
-        <tr>
-            <td class="center"><?php print $nota['semid'] ?></td>
-            <td class="center"><?php print $nota['perid'] ?></td>
-            <td class="center"><?php print $nota['courseid']?></td>
-            <td><?php print $nota['name']?></td>
-            <td class="center"> <?php print $nota['turno']?></td>
-            <td class="center"><?php print $nota['creditos']?></td>
-            <td class="center"><?php           
-            if ($nota['nota']=='' )
-            {
-              print "-";
+<?php 
+    $d=1;
+    $c=1;
+    $j=0;
+    if ($this->data) {
+        $len=count($this->data);
+        $semes[$j]=$this->data[$j]['semid'];
+        $se[$j]=$semes[$j];
+        for ($i=0; $i < $len; $i++) { 
+            $semid=$this->data[$i]['semid'];
+            if ($semid==$c) {
+                $d++;
             }
-            else
-            {
-              if ($nota['nota']=='-3' )
-                    {
-                     print "R";
-                    }
-                        else
-                        {       
+            else{
+                $c++;
+                $j++;
+                $semes[$d]=$semid;
+                $se[$j]=$semes[$d];
+            }
+        }
+        $len1=count($se);
+        for ($f=0; $f < $len1; $f++) { 
+            ?>
+                <table style="width:100%; margin-bottom:20px" border=" 1px">
+                    <tr style='background:#E5E5E5'>
+                        <th colspan='6' style='font-size:12px; '><?php print $se[$f]."º SEMESTRE"?></th>
+                    </tr>
+                    <tr style='background:'>
+                        <th class='small-50'>Periodo</th>
+                        <th class='small-50'>Curso</th>
+                        <th >Nombre Curso</th>
+                        <th class='small'>Turno</th>
+                        <th class='small'>Créditos</th>
+                        <th class='small-70'>Prom. Final</th>
+                    </tr>
+                    <?php
+                    foreach ($this->data as $nota) {
+                        if ($nota['semid']==$se[$f]) {
+                    ?>
+                        <tr>
+                            <td class="center"><?php print $nota['perid'] ?></td>
+                            <td class="center"><?php print $nota['courseid']?></td>
+                            <td><?php print $nota['name']?></td>
+                            <td class="center"> <?php print $nota['turno']?></td>
+                            <td class="center"><?php print $nota['creditos']?></td>
+                            <?php           
+                            if ($nota['nota']=='' ){
+                                ?> <td class="center"><?php print "-"?></td> <?php
+                            }
+                            else{
 
-                            if ($nota['nota']=='-2' )
-                                {
-                                    print "N. P.";
+                                if ($nota['nota']=='-3' ){
+                                    ?> <td class="center" style='color:red'><?php print "R"?></td> <?php   
                                 }
-                                else
-                                    {
-                
-                                        print $nota['nota'];
+                                else{       
+
+                                    if ($nota['nota']=='-2' ){
+                                        ?> <td class="center" style='color:red'><?php print "N. P."?></td> <?php
                                     }
+                                    else{
+
+                                        if ($nota['nota']>10) {
+                                            ?> <td class="center" border-style:'solid'; style='color:blue'><?php print $nota['nota']?></td> <?php
+                                        }
+                                        else{
+
+                                            if ($nota['nota']!=10) {
+                                                ?> <td class="center" style='color:red;'><?php print '0'.$nota['nota']?></td> <?php
+                                            }
+                                            else{
+                                                ?> <td class="center" style='color:red;'><?php print $nota['nota']?></td> <?php
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            ?>
+                        </tr>        
+                    <?php
                         }
-            }
-            ?></td>
-        </tr>        
-    <?php
+                    }
+                    ?>
+                </table>    
+                <?php
+        }
     }
-    ?>       
-    </table>
+?>
 <?php 
 
   $html = ob_get_contents();
@@ -90,10 +126,14 @@ $header='
   $mpdf=new mPDF('win-1252','A4','','',15,15,40);
   $mpdf->SetHTMLHeader($header);
   $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-  
-  $mpdf->SetFooter($this->footer);
+
+  $mpdf->SetWatermarkImage('/img/UNDAC.png', 0.1, 'F');
+  $mpdf->showWatermarkImage = true;
+
+  // $mpdf->SetFooter($this->footer);
   ob_end_clean();
   $mpdf -> WriteHTML($html);
   $mpdf->Output('RecordNotas-'.$this->person['pid'].'.pdf','D');
+  // $mpdf -> Output();
   
 ?>

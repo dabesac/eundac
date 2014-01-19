@@ -728,7 +728,8 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 
 			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
 
@@ -1056,7 +1057,8 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 
 			$data_period_course = $base_periods_course->_getOne($where);
 
@@ -1229,7 +1231,8 @@ class Record_IndexController extends Zend_Controller_Action {
 				'eid' => $eid, 'oid'=>$oid,
 				'escid'=> $escid,'subid' => $subid,
 				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,); 
+				'curid' => $curid, 'turno' => $turno,
+				'is_main'=>'S'); 
 
 			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 
