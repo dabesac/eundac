@@ -35,7 +35,10 @@
 			url: $(this).attr("action"),
 			data: $(this).serialize(),
 			success: function(data){
-				$("#editform").html(data)
+				$("#editform").html(data);
+				$("#editform").html("");
+				$("#datastudent").removeClass("hidden");
+				$("#datastudent").load("/profile/public/studentacademic");
 			}
 		})
 		return false;
@@ -44,7 +47,7 @@
 	$('#backeditBtn a').click(function (e) {
     	e.preventDefault()
       	$("#editform").html("")
-      	$("#editdata").removeClass("hidden")
+      	$("#datastudent").removeClass("hidden")
       	$('#editpalBtns a:last').tab('show')
       	$('#editpalBtns2 a:last').tab('show')
   	})

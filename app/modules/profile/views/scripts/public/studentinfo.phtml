@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-sm-9">
+  <div class="col-md-10">
 
     <div id="maininfo"></div>
 
@@ -7,64 +7,19 @@
 
     <div id="editform"></div>
 
-    <div class="col-sm-9" align="center" id="editdata">
-
-      <div class="row">
-
-        <div class="col-sm-3"></div>
-        <div class="col-sm-6">
-          <table class="table">
-            <tr>
-              <th>Editar</th>
-            </tr>
-            <td>
-              <ul class="nav nav-pills nav-stacked" id="editpalBtns">
-                <li><a href="#" id="editmaininfo" class="btn btn-block"><h5>Informacion Principal</h5></a></li>
-                <li><a href="" id="editacademic" class="btn btn-block"><h5>Datos Academicos</h5></a></li>
-                <li class="hidden"><a></a></li>
-              </ul>
-            </td>
-            <td>
-              <ul class="nav nav-pills nav-stacked" id="editpalBtns2">
-                <li><a href="" id="editfamily" class="btn btn-block"><h5>Familia</h5></a></li>
-                <?php if ($this->si==1) { ?>
-                  <li><a href="" id="editstatistics" disabled="disabled" class="btn btn-block"><h5>Datos Estadisticos</h5></a></li>
-                <?php 
-                }
-                else{
-                  ?>
-                  <li><a href="" id="editstatistics" class="btn btn-block"><h5>Datos Estadisticos</h5></a></li>
-                <?php
-                }?>
-                <li class="hidden"><a></a></li>
-              </ul>
-            </td>
-          </table>
-        </div>
-        <div class="col-sm-3"></div>
-
-      </div>
-      
-    </div><!-- Edit Data -->
-
   </div>
-  <div class="col-sm-3">
+  <div class="col-md-2">
     <br>
     <ul class="nav nav-pills nav-stacked" id="backprofileTab">
       <li><a href="#" id="btnprofile">Volver al Perfil</a></li>
     </ul>
     <br>
     <ul class="nav nav-pills nav-stacked" id="masinfoTab">
-      <li><a href="#" id="btnfamily" class="btn-xs">Familia</a></li>
+      <li><a href="#" id="btnfamily" class="btn-xs">Datos Familiares</a></li>
       <li><a href="#" id="btnacademic" class="btn-xs">Datos Academico</a></li>
-      <li><a href="#" id="btnstadistic" class="btn-xs">Datos Estadistico</a></li>
       <li><a href="#" id="btnlaboral" class="btn-xs">Datos Laborales</a></li>
+      <li><a href="#" id="btnstadistic" class="btn-xs">Datos Estadistico</a></li>
       <li><a href="#" id="btninters" class="btn-xs">Intereses</a></li>
-      <li class="hidden"><a></a></li>
-    </ul>
-    <br>
-    <ul class="nav nav-pills nav-stacked" id="editprofileTab">
-      <li><a href="#" id="btneditdata">Actualizar Perfil</a></li>
       <li class="hidden"><a></a></li>
     </ul>
   </div>
@@ -81,9 +36,6 @@
   $('#masinfoTab a').click(function (e) {
     e.preventDefault()
     $("#maininfo").html("")
-    $('#editprofileTab a:last').tab('show')
-    $('#editpalBtns a:last').tab('show')
-    $('#editpalBtns2 a:last').tab('show')
     $("#datastudent").removeClass("hidden")
     $("#editdata").addClass("hidden")
     $("#editform").html("")
@@ -96,19 +48,6 @@
     $("#editdata").addClass("hidden")
     $("#editform").html("")
     $('#masinfoTab a:last').tab('show')
-    $('#editpalBtns a:last').tab('show')
-    $('#editpalBtns2 a:last').tab('show')
-    $('#editprofileTab a:last').tab('show')
-  })
-
-  $('#editprofileTab a').click(function (e) {
-    e.preventDefault()
-    $("#btnprofile").removeClass("hidden")
-    $('#masinfoTab a:last').tab('show')
-    $("#maininfo").html("")
-    $("#datastudent").html("")
-    $("#editdata").removeClass("hidden")
-    $(this).tab('show')
   })
 
 
@@ -141,42 +80,6 @@
     $("#datastudent").addClass("hidden")
     $("#maininfo").load("/profile/public/studentmaininfo")
     $("#btnprofile").addClass("hidden")
-  })
-
-  //Editar Informacion
-
-  $('#editpalBtns a').click(function (e) {
-    e.preventDefault()
-    $(this).tab('show')
-  })
-  $('#editpalBtns2 a').click(function (e) {
-    e.preventDefault()
-    $(this).tab('show')
-  })
-
-
-  $("#editmaininfo").click(function(){
-    $("#editdata").addClass("hidden")
-    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#editform").load("/profile/public/studenteditinfo")
-  })
-
-  $("#editfamily").click(function(){
-    $("#editdata").addClass("hidden")
-    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#editform").load("/profile/public/studentsavefamily")
-  })
-
-  $("#editacademic").click(function(){
-    $("#editdata").addClass("hidden")
-    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#editform").load("/profile/public/studentsaveacademic")
-  })
-
-  $("#editstatistics").click(function(){
-    $("#editdata").addClass("hidden")
-    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#editform").load("/profile/public/studentsavestatistic")
   })
 
 </script>

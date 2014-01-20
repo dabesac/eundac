@@ -5,7 +5,7 @@ class Profile_Form_Academic extends Zend_Form{
 
     	$institution= new Zend_Form_Element_Text('institution');
         $institution->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $institution->setAttrib("maxlength", "30")->setAttrib("size", "30");
+        $institution->setAttrib("maxlength", "50");
         $institution->setRequired(true)->addErrorMessage('Este campo es requerido');
         $institution->setAttrib("title","Institucion");
         $institution->setAttrib("class","form-control");

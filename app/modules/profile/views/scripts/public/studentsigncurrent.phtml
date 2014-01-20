@@ -1,100 +1,96 @@
 <div class="row">
-<div class="col-sm-9">
-	<div id="mainsign">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h5><b>Matricula Actual | Periodo 13B</b></h5>
-			</div>
-			<div class="panel-body">
-				<?php if($this->curact){?>
-				<table class="table">
-					<tr>
-						<th><center>Cursos</center></th>
-						<th><center>Turno</center></th>
-						<?php if($this->typerate[0][0]['type_rate']=="O"){?>
-							<th><center>Unidad 1</center></th>
-							<th><center>Unidad 2</center></th>
-						<?php }elseif($this->typerate[0][0]['type_rate']=="C"){?>
-							<th><center>Unidad 1</center></th>
-							<th><center>Unidad 2</center></th>
-							<th><center>Unidad 3</center></th>
-							<th><center>Unidad 4</center></th>
-						<?php }?>
-							<th><center>Promedio Final</center></th>
-					</tr>
+	<div class="col-md-1 col-md-offset-1">
+		<h2 class="text-right"><span class="glyphicon glyphicon-stats text-muted"></span></h2> 
+	</div>
+	<div class="col-md-6">
+		<h3><blockquote>Matricula Actual <strong class="text-muted"><?php echo $this->data['perid']?></strong></blockquote></h3>
+	</div>
+	<div class="col-md-1">
+		<h1><a id="comprimir" class="text-warning" href="#" title="Comprimir"><span class="glyphicon glyphicon-th-large"></span></a></h1>
+	</div>
+	<div class="col-md-1">
+		<h1><a id="extender" class="text-warning" href="#" title="Extender"><span class="glyphicon glyphicon-th"></span></a></h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4 col-md-offset-1">
+		<p class="lead"><span class="text-muted">Cantidad de Cursos </span><?php echo $this->data['nc']?></p>
+	</div>
+</div>
 
-					<?php  $c=0;
-					foreach ($this->curact as $curact) {
-						if($this->typerate[$c][0]['type_rate']=="O"){?>
-							<tr>
-								<td><h5><?php echo $this->name[$c][0]['name']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['turno']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['promedio1']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['promedio2']?></h5></td>
-								<td><h5 align="center"><b><?php echo $curact['notafinal']?></b></h5></td>
-							</tr>
-						<?php }elseif($this->typerate[$c][0]['type_rate']=="C"){?>
-							<tr>
-								<td><h5><?php echo $this->name[$c][0]['name']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['turno']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['nota4_i']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['nota9_i']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['nota4_ii']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['nota9_ii']?></h5></td>
-								<td><h5 align="center"><b><?php echo $curact['notafinal']?></b></h5></td>
-							</tr>
-						<?php }
-						$c++;
-					}?>
-				</table>
-				<?php }else{?>
-					<h5 align="center">No Tiene Matricula Actual | Validelo en Registro de Facultad</h5>
-				<?php }?>
-			</div>
+<div class="row">
+<div class="col-md-12">
+	<div id="notasComprimidas" class="panel panel-warning">
+		<div class="panel-body">
+			<?php if($this->curact){?>
+			<table class="table table-hover">
+				<tr>
+					<th><center>Cursos</center></th>
+					<th><center>Turno</center></th>
+					<?php if($this->typerate[0][0]['type_rate']=="O"){?>
+						<th><center>Unidad 1</center></th>
+						<th><center>Unidad 2</center></th>
+					<?php }elseif($this->typerate[0][0]['type_rate']=="C"){?>
+						<th><center>Unidad 1</center></th>
+						<th><center>Unidad 2</center></th>
+						<th><center>Unidad 3</center></th>
+						<th><center>Unidad 4</center></th>
+					<?php }?>
+						<th><center>Promedio Final</center></th>
+				</tr>
+
+				<?php  $c=0;
+				foreach ($this->curact as $curact) {
+					if($this->typerate[$c][0]['type_rate']=="O"){?>
+						<tr>
+							<td><h5><?php echo $this->name[$c][0]['name']?></h5></td>
+							<td><h5 align="center"><?php echo $curact['turno']?></h5></td>
+							<td><h5 align="center"><?php echo $curact['promedio1']?></h5></td>
+							<td><h5 align="center"><?php echo $curact['promedio2']?></h5></td>
+							<td><h5 align="center"><b><?php echo $curact['notafinal']?></b></h5></td>
+						</tr>
+					<?php }elseif($this->typerate[$c][0]['type_rate']=="C"){?>
+						<tr>
+							<td><h5><?php echo $this->name[$c][0]['name']?></h5></td>
+							<td><h5 align="center"><?php echo $curact['turno']?></h5></td>
+							<td><h5 align="center"><?php echo $curact['nota4_i']?></h5></td>
+							<td><h5 align="center"><?php echo $curact['nota9_i']?></h5></td>
+							<td><h5 align="center"><?php echo $curact['nota4_ii']?></h5></td>
+							<td><h5 align="center"><?php echo $curact['nota9_ii']?></h5></td>
+							<td><h5 align="center"><b><?php echo $curact['notafinal']?></b></h5></td>
+						</tr>
+					<?php }
+					$c++;
+				}?>
+			</table>
+			<?php }else{?>
+				<h5 align="center">No Tiene Matricula Actual | Validelo en Registro de Facultad</h5>
+			<?php }?>
 		</div>
 	</div>
 
-<div id="datasign"></div>
-</div><!-- div col 9 -->
+	<div id="notasExtendidas" class="panel panel-warning">
+		<div class="panel-body">
+			Soy las Notas Extendidas :D
+		</div>
+	</div>
+</div>
+</div>
 
-<div class="col-sm-3">
-<ul class="nav nav-pills nav-stacked" id="backsigninTab">
-  <li><a href="#" id="btncurrentsign" class="btn-xs">Volver a Matricula Actual</a></li>
-</ul>
-<br>
-<ul class="nav nav-pills nav-stacked" id="masinfosignTab">
-  <li><a href="#" id="btncurri" class="btn-xs">Matricula Por Curricula</a></li>
-  <li><a href="#" id="btnrea" class="btn-xs">Matriculas Realizados</a></li>
-  <li class="hidden"><a></a></li>
-</ul>
-</div>
-</div>
 <script>
-   $("#btncurrentsign").addClass("hidden")
+	$('#notasExtendidas').addClass('hidden');
+	$('#notasExtendidas').load('/register/listcurrentnotes');
+	$('#notasExtendidas').fadeOut('slow');
 
-  $('#masinfosignTab a').click(function (e) {
-    e.preventDefault()
-    $("#mainsign").addClass("hidden")
-    $("#datasign").removeClass("hidden")
-    $("#btncurrentsign").removeClass("hidden")
-    $(this).tab('show')
-  })
+	$('#extender').click(function(){
+		$('#notasComprimidas').fadeOut('slow');
+		$('#notasExtendidas').removeClass('hidden');
+		$('#notasExtendidas').fadeIn('slow');
+	});
 
-  $('#backsigninTab a').click(function (e) {
-    e.preventDefault()
-    $('#masinfosignTab a:last').tab('show')
-    $("#datasign").addClass("hidden")
-    $("#mainsign").removeClass("hidden")
-    $("#btncurrentsign").addClass("hidden")
-  })
-
-  $("#btncurri").click(function(){
-    $("#datasign").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datasign").load("/profile/public/studentsignpercur");
-  })
-
-  $("#btnrea").click(function(){
-    $("#datasign").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datasign").load("/register/registerealized/index/pid/<?php echo $this->data[pid]?>/uid/<?php echo $this->data[uid]?>/escid/<?php echo $this->data[escid]?>/subid/<?php echo $this->data[subid]?>/perid/<?php echo $this->data[perid]?>/rid/<?php echo $this->data[rid]?>");
-  })
+	$('#comprimir').click(function(){
+		$('#notasExtendidas').fadeOut('slow');
+		$('#notasComprimidas').fadeIn('slow');
+	});
 </script>
+

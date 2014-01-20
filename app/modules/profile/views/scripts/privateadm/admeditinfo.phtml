@@ -45,7 +45,6 @@
 	$("#save").click(function(){
 		$("#form").submit()
 	})
-
 	$("#form").submit(function(){
 		$.ajax({
             type: 'POST',
@@ -53,24 +52,19 @@
             data: $(this).serialize(),
             success: function(data){ 
             	$("#editform").html(data);
+            	$('#editform').html('');
+            	$('#datastudent').fadeIn('slow');
+            	$('#datastudent').load("/profile/privateadm/adminfo");
        	   	}
         }); 
         return false;
 	})
+	
 
 	$('#backeditBtn a').click(function (e) {
     	e.preventDefault()
-      	$("#editform").html("")
-      	$("#editdata").removeClass("hidden")
-      	$('#editpalBtns a:last').tab('show')
+      	$("#editform").html("");
+      	$("#datastudent").fadeIn('slow');
   	})
-
-  	$('#backprofileTab a').click(function (e) {
-    e.preventDefault()
-    $('#masinfoTab a:last').tab('show')
-    $('#editpalBtns a:last').tab('show')
-    $('#editpalBtns2 a:last').tab('show')
-  })
-
    
 </script>

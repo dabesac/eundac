@@ -7,6 +7,10 @@ class Profile_Form_Family extends Zend_Form{
         $type->removeDecorator('HtmlTag')->removeDecorator('Label');     
         $type->setRequired(true)->addErrorMessage('Es necesario que selecciones el estado.');
         $type->addMultiOption("","Elija Parentesco");
+        /*$type->addMultiOption("PA","Padre");
+        $type->addMultiOption("MA","Madre");
+        $type->addMultiOption("HE","Hermano/a");
+        $type->addMultiOption("HI","Hijo/a");*/
         $type->setAttrib("class","form-control");
         $type->setAttrib("id","type");
         

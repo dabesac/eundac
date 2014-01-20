@@ -5,7 +5,7 @@ class Profile_Form_Userinfo extends Zend_Form{
         
         $dni= new Zend_Form_Element_Text('numdoc');
         $dni->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $dni->setAttrib("maxlength", "8")->setAttrib("size", "10");
+        $dni->setAttrib("maxlength", "8");
         $dni->setRequired(true)->addErrorMessage('Este campo es requerido');
         $dni->setAttrib("title","DNI");
         $dni->setAttrib("class","form-control");

@@ -26,10 +26,13 @@ class Profile_PublicController extends Zend_Controller_Action {
             $oid=$this->sesion->oid;
             $pid=$this->sesion->pid;
             $uid=$this->sesion->uid;
+            $rid = $this->sesion->rid;
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
             $fullname=$this->sesion->infouser['fullname'];
             $dateborn=$this->sesion->infouser['birthday'];
+
+            $data=array("eid"=>$eid,"oid"=>$oid,"pid"=>$pid,"uid"=>$uid,"escid"=>$escid,"subid"=>$subid, "perid"=>$perid,"rid"=>$rid);
 
             $datos[0]=array("eid"=>$eid,"oid"=>$oid,"fullname"=>$fullname, "uid"=>$uid, "pid"=>$pid, "birthday"=>$dateborn, "escid"=>$escid, "subid"=>$subid);
 
@@ -38,6 +41,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dbfacesp=new Api_Model_DbTable_Speciality();
             $datos[1]=$dbfacesp->_getFacspeciality($where);
             $this->view->datos=$datos;
+            $this->view->data = $data;
 
     	}catch(exception $e){
     		print "Error : ".$e->getMessage();
@@ -237,7 +241,6 @@ class Profile_PublicController extends Zend_Controller_Action {
                         }
 
                     $save=$dbfamily->_save($formdata);
-                    print_r("Se Guardo con Exito");
                     
                     //print_r($save);
 
@@ -250,6 +253,136 @@ class Profile_PublicController extends Zend_Controller_Action {
 
         }catch(exception $e){
             print "Error : ".$e->getMessage();
+        }
+    }
+
+    public function studenteditfamilyAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+
+            $famid = $this->getParam('famid');
+            $this->view->famid = $famid;
+
+            $eid = $this->sesion->eid;
+            $pid = $this->sesion->pid;
+
+            $familyDb = new Api_Model_DbTable_Family();
+            $relationDb = new Api_Model_DbTable_Relationship();
+            $form=new Profile_Form_Family();
+
+            $where=array("eid"=>$eid, "pid"=>$pid, "famid"=>$famid);
+            $relationtype=$relationDb->_getOne($where);
+            
+            $interruptor = 0;
+            $typeRel = $relationtype['type'];
+            if($typeRel=="PA"){
+                $form->type->addMultiOption("PA","Padre");
+            }
+            if($typeRel=="MA"){
+                $form->type->addMultiOption("MA","Madre");
+            }
+
+            $pa=0;
+            $ma=0;
+            $where=array("eid"=>$eid, "pid"=>$pid);
+            $attrib=array("type");
+            $relation=$relationDb->_getFilter($where, $attrib);
+            foreach ($relation as $rel) {
+                if($rel["type"]=="PA"){
+                    $pa=1;
+                }
+                if($rel["type"]=="MA"){
+                    $ma=1;
+                }
+            }
+            if ($pa==0) {
+                $form->type->addMultiOption("PA","Padre");
+            }
+            if ($ma==0) {
+                $form->type->addMultiOption("MA","Madre");
+            }
+            $form->type->addMultiOption("HE","Hermano/a");
+            $form->type->addMultiOption("HI","Hijo/a");
+
+            $where = array('eid'=>$eid, 'famid'=>$famid);
+            $family = $familyDb->_getOne($where);
+            $this->view->nameFamily = $family['firtsname'];
+
+
+            $family['type'] = $relationtype['type'];
+            $family['assignee'] = $relationtype['assignee'];
+
+            $birthdayDivide = explode("-", $family['birthday']);
+            $family['year'] = $birthdayDivide[0];
+            $family['month'] = $birthdayDivide[1];
+            $family['day'] = $birthdayDivide[2];
+
+            
+            //$form->type->setAttrib('disabled', 'disabled');
+            $this->view->form=$form;
+            $form->populate($family);
+
+            if ($this->getRequest()->isPost()) {
+                $formdata=$this->getRequest()->getPost();
+                if ($form->isValid($formdata)) {
+                    $type=$formdata["type"];
+                    $assignee=$formdata["assignee"];
+                    unset($formdata["type"]);
+                    unset($formdata["assignee"]);
+                    $formdata["birthday"]=$formdata["year"]."-".$formdata["month"]."-".$formdata["day"];
+                    unset($formdata["year"]);
+                    unset($formdata["month"]);
+                    unset($formdata["day"]);
+                    if($formdata["type"]=="PA"){
+                        $formdata["sex"]="M";
+                    }elseif($formdata["type"]=="MA"){
+                        $formdata["sex"]="F";
+                    }
+                    $where = array('eid'=>$eid, 'famid'=>$famid);
+
+                    if($formdata["live"]=="N")
+                        {
+                            $formdata["ocupacy"]="_";
+                            $formdata["phone"]="_";
+                            $formdata["address"]="_";
+                        }
+
+                    $relationdata=array("type"=>$type,"assignee"=>$assignee);
+                    print_r($formdata);
+                    print_r($relationdata);
+                    
+                    $saver=$relationDb->_update($relationdata, $where);
+                    
+                    $save=$familyDb->_update($formdata, $where);
+                    //print_r($relationdata);
+
+                    //print_r("Se Guardo con Exito");
+                }
+            }
+
+
+        } catch (Exception $e) {
+            print 'Error '.$e->getMessage();
+        }
+    }
+
+    public function studentremovefamilyAction(){
+        try {
+            $eid = $this->sesion->eid;
+            $pid = $this->sesion->pid;
+            $famid = $this->getParam('famid');
+
+            $familyDb = new Api_Model_DbTable_Family();
+            $relationDb = new Api_Model_DbTable_Relationship();
+
+            $where = array('eid'=>$eid, 'pid'=>$pid, 'famid'=>$famid);
+            if ($relationDb->_delete($where)) {
+                $where = array('eid'=>$eid, 'famid'=>$famid);
+                $removeFam = $familyDb->_delete($where);
+            }
+
+        } catch (Exception $e) {
+            print 'Error'.$e->getMessage();
         }
     }
 //---------------------------------------------------------------------
@@ -312,8 +445,42 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
+    public function studenteditacademicAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+
+            $eid = $this->sesion->eid;
+            $pid = $this->sesion->pid;
+            $acid = $this->getParam('acid');
+
+            $this->view->acid = $acid;
+
+            $academicDb = new Api_Model_DbTable_Academicrecord();
+            $form=new Profile_Form_Academic();
+
+            $where = array('acid'=>$acid, 'eid'=>$eid, 'pid'=>$pid);
+            $academic = $academicDb->_getOne($where);
+
+            //print_r($where);
+            
+            $this->view->form=$form;
+            $form->populate($academic);
+            if ($this->getRequest()->isPost())
+            {
+                $formdata = $this->getRequest()->getPost();
+                if ($form->isValid($formdata))
+                { 
+                    $update = $academicDb->_update($formdata, $where);
+                }
+            }
+        } catch (Exception $e) {
+            print 'Error'.$e->getMessage();
+        }
+    }
+
     public function studentremoveacademicAction(){
         try{
+            $this->_helper->layout()->disableLayout();
             $eid=$this->_getParam("eid");
             $pid=$this->_getParam("pid");
             $acid=$this->_getParam("acid");
@@ -321,11 +488,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dbacademic=new Api_Model_DbTable_Academicrecord();
             $where=array("eid"=>$eid, "pid"=>$pid, "acid"=>$acid);
 
-            if($dbacademic->_delete($where)){
-                $this->_redirect("/profile/public/student");
-            }else{
-                echo "Error al Eliminar";
-            }
+            $remove = $dbacademic->_delete($where);
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
@@ -358,7 +521,7 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
-    public function studentsavestatisticAction()
+    public function studentnewstatisticAction()
     {
         try{
             $this->_helper->layout()->disableLayout();
@@ -466,7 +629,7 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
-    public function studentsavelaboralAction()
+    public function studentnewlaboralAction()
     {
         try{
             $this->_helper->layout->disableLayout();
@@ -481,7 +644,6 @@ class Profile_PublicController extends Zend_Controller_Action {
             if ($this->getRequest()->isPost()) {
                 $formdata=$this->getRequest()->getPost();
                 if($form->isValid($formdata)){
-                    unset($formdata["save"]);
                     $formdata["eid"]=$eid;
                     $formdata["pid"]=$pid;
                     trim($formdata["company"]);
@@ -496,6 +658,36 @@ class Profile_PublicController extends Zend_Controller_Action {
 
         }catch(exception $e){
             print "Error : ".$e->getMessage();
+        }
+    }
+
+    public function studenteditlaboralAction(){
+        try {
+            $this->_helper->layout->disableLayout();
+            $eid=$this->sesion->eid;
+            $pid=$this->sesion->pid;
+            $lid = $this->getParam('lid');
+
+            $this->view->lid = $lid;
+
+            $jobDb=new Api_Model_DbTable_Jobs();
+            $form=new Profile_Form_Laboral();
+
+            $where = array('eid'=>$eid, 'pid'=>$pid, 'lid'=>$lid);
+            $job = $jobDb->_getOne($where);
+
+            $this->view->form = $form;
+            $form->populate($job);
+
+            if ($this->getRequest()->isPost()) {
+                $formdata=$this->getRequest()->getPost();
+                print_r($formdata);
+                if($form->isValid($formdata)){
+                    $jobupdate = $jobDb->_update($formdata, $where);
+                }
+            }
+        } catch (Exception $e) {
+            print 'Error '.$e->getMessage();
         }
     }
 
@@ -543,7 +735,7 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
-    public function studentsaveinterestAction()
+    public function studentnewinterestAction()
     {
         try{
             $this->_helper->layout()->disableLayout();
@@ -569,6 +761,36 @@ class Profile_PublicController extends Zend_Controller_Action {
             }
         }catch(exception $e){
             print "Error : ".$e->getMessage();
+        }
+    }
+
+    public function studenteditinterestAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $pid=$this->sesion->pid;
+            $iid = $this->getParam('iid');
+
+            $this->view->iid = $iid;
+
+            $interestDb=new Api_Model_DbTable_Interes();
+            $form=new Profile_Form_Interest();
+
+            $where = array('eid'=>$eid, 'pid'=>$pid, 'iid'=>$iid);
+            $interes = $interestDb->_getOne($where);
+
+            $this->view->form = $form;
+            $form->populate($interes);
+
+            if ($this->getRequest()->isPost()) {
+                $formdata=$this->getRequest()->getPost();
+                if($form->isValid($formdata)){
+                    $interest=$interestDb->_update($formdata, $where);
+                }
+            }
+
+        } catch (Exception $e) {
+            print 'Error '.$e->getMessage();
         }
     }
 
@@ -609,7 +831,6 @@ class Profile_PublicController extends Zend_Controller_Action {
             $perid=$this->sesion->period->perid;
             $rid=$this->sesion->rid;
 
-            $data=array("pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "subid"=>$subid, "perid"=>$perid, "rid"=>$rid);
 
             $dbcuract=new Api_Model_DbTable_Registrationxcourse();
             $dbtyperate=new Api_Model_DbTable_PeriodsCourses();
@@ -630,7 +851,9 @@ class Profile_PublicController extends Zend_Controller_Action {
                 $name[$nc]=$dbcuract->_getInfoCourse($where,$attrib);
                 $nc++;
             }
-            //print_r($name);
+
+            $data=array("pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "subid"=>$subid, "perid"=>$perid, "rid"=>$rid, 'nc'=>$nc);
+            
             $this->view->data=$data;
             $this->view->typerate=$typerate;
             $this->view->name=$name;
@@ -652,7 +875,7 @@ class Profile_PublicController extends Zend_Controller_Action {
          
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;            
-            $perid="13B";
+            $perid=$this->sesion->perid;
             //print_r($this->sesion);
 
             $dbcur=new Api_Model_DbTable_Studentxcurricula();
@@ -688,6 +911,7 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
+    //Matriculas realizadas por JK, pero hay otra en Register hecha por Sandro, esa se esta usando ¬¬
     public function studentsignrealizedAction()
     {
         try{
@@ -703,17 +927,16 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dbnamper=new Api_Model_DbTable_Periods();
 
             $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid);
-            $attrib=array("perid","courseid");
-            $order=array("perid");
+            $attrib=array('perid', 'courseid', 'notafinal');
+            $order=array("perid", "courseid");
             $signr=$dbsignr->_getFilter($where, $attrib, $order);
             //print_r($signr);
             $per="0";
             $c=0;
-
-            $attrib=array("name");
-            $attribcour=array("courseid");
+            $attribcour=array('courseid');
             foreach ($signr as $sperid) {
                 if($sperid['perid']<>$per){
+                    $attrib=array('name');
                     $where=array("eid"=>$eid, "oid"=>$oid, "perid"=>$sperid['perid']);
                     $namper[$c]=$dbnamper->_getFilter($where,$attrib);
 
@@ -722,6 +945,7 @@ class Profile_PublicController extends Zend_Controller_Action {
                     //print_r($where);
                     $courxper=$dbsignr->_getFilter($where,$attribcour);
                     $x=0;
+                    $attrib = array('name', 'credits');
                     foreach ($courxper as $cour) {
                         $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid']);
                         //print_r($where);
@@ -735,6 +959,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             }
             //print_r($courname);
 
+            $this->view->coursesperPeriod = $signr;
             $this->view->courname=$courname;
             $this->view->namper=$namper;
 

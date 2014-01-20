@@ -1,26 +1,37 @@
-<ul class="nav nav-pills nav-stacked" id="backeditBtn">
+<ul class="nav nav-pills nav-stacked" id="backFamilyBtn">
 	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
 </ul>
 
-<form name="<?php echo $this->form->getName(); ?>" action="/profile/public/studenteditfamily" method="post" enctype="application/x-www-form-urlencoded">
+<form id="form" action="/profile/public/studenteditfamily/famid/<?php echo$this->famid?>" method="post">
 
 <div class="col-sm-12">
-	<h4>Informacion Familiar</h4>
+	<h4>Editar a <?php echo $this->nameFamily?></h4>
 	<table class="table">
 		<tr>
 			<td><label>Parentesco</label><?php print $this->form->type?></td>
 		</tr>
 		<tr>
-			<td><label>Apellidos </label><br><?php print $this->form->last_name?></td>_
-			<td><label>Nombres </label><br><?php print $this->form->first_name?></td>
+			<td><label>Apellidos </label><br><?php print $this->form->lastname?></td>_
+			<td><label>Nombres </label><br><?php print $this->form->firtsname?></td>
 		</tr>
 		<tr>
 			<td><label>Tipo de Documento</label><?php print $this->form->typedoc?></td>
 			<td><label>Num Documento</label><br><?php print $this->form->numdoc?></td>
 		</tr>
 		<tr>
-			<td><label>Fecha de Nacimiento</label><br><?php print $this->form->birthday?></td>
-			<td><label>Sexo</label><?php print $this->form->sex?></td>
+			<td><label>Fecha de Nacimiento</label><br>
+				<div class="row">
+					<div class="col-sm-4">
+						<?php print $this->form->year?>
+					</div>
+					<div class="col-sm-4">
+						<?php print $this->form->month?>
+					</div>
+					<div class="col-sm-4">
+						<?php print $this->form->day?>
+					</div>
+				</div></td>
+			<td id="sex"><label>Sexo</label><?php print $this->form->sex?></td>
 		</tr>
 		<tr>
 			<td><label>Vive?</label><?php print $this->form->live?></td>
@@ -39,31 +50,75 @@
 	</table>
 	<tr>
 		<td></td>
-		<td><?php print $this->form->save?></td>
+		<td><a class="btn btn-info pull-right" href="#" id="save">Guardar</a></td>
 	</tr>
 			
 </div>
 
+
 <script>
-	$("#moreinfo").addClass("hidden");
+	$("#save").click(function(){
+		$("#form").submit()
+	})
+	$("#form").submit(function(){
+		$.ajax({
+			type: "POST",
+			url: $(this).attr("action"),
+			data: $(this).serialize(),
+			success: function(data){
+				$("#editform").html(data);
+				$('#editform').html("");
+				$("#datastudent").load("/profile/public/studentfamily");
+				$('#datastudent').removeClass('hidden');
+			}
+		})
+		return false;
+	})
+	
+
+	var livevar=$('#live').val();
+	if (livevar=="S") {
+		$("#moreinfo").removeClass("hidden");
+	}else{
+		$("#moreinfo").addClass("hidden");
+	};
+
 	$("#live").change(function(){
 		$("#live option:selected").each(function(){
 			var livevar=$(this).val();
-		if (livevar=="S") {
-			$("#moreinfo").removeClass("hidden");
-		};
-		if (livevar=="N") {
-			$("#moreinfo").addClass("hidden");
-		};
+			if (livevar=="S") {
+				$("#moreinfo").removeClass("hidden");
+			}else{
+				$("#moreinfo").addClass("hidden");
+			};
+		})
+	})
+
+	
+
+
+	var vartype=$("#type").val()
+	if(vartype=="PA" || vartype=="MA"){
+		$("#sex").addClass("hidden")
+	}else{
+		$("#sex").removeClass("hidden")
+	}
+
+	$("#type").change(function(){
+		$("#type option:selected").each(function(){
+			var vartype=$(this).val()
+			if(vartype=="PA" || vartype=="MA"){
+				$("#sex").addClass("hidden")
+			}else{
+				$("#sex").removeClass("hidden")
+			}
 		})
 	})
 	
-	$('#backeditBtn a').click(function (e) {
+	$('#backFamilyBtn a').click(function (e) {
     	e.preventDefault()
       	$("#editform").html("")
-      	$("#editdata").removeClass("hidden")
-      	$('#editpalBtns a:last').tab('show')
-      	$('#editpalBtns2 a:last').tab('show')
+      	$("#datastudent").removeClass("hidden")
   	})
    
 </script>

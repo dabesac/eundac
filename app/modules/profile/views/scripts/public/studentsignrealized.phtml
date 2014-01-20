@@ -1,6 +1,6 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h4><b>Matriculas Realizadas</b></h4>
+		<h4><b>Matriculas Realizadas Soy yo :D</b></h4>
 	</div>
 	<div class="panel-body">
 
@@ -8,6 +8,7 @@
 			//print_r($this->courname);?>
 		<div class="panel panel-default">
 			<?php $c=0;
+			$courses = 0;
 			foreach ($this->namper as $namper) {?>
 			<div class="panel-heading">
 				<b><?php echo $namper[0]['name'];?></b>
@@ -16,13 +17,20 @@
 			<div class="panel-body">	
 				<table class="table">
 					<tr>
+						<th>Codigo</th>
 						<th>Cursos</th>
+						<th><center>Creditos</center></th>
+						<th><center>Nota</center></th>
 					</tr>
 				<?php foreach ($this->courname[$c] as $cour) {?>
 					<tr>
+						<td><?php echo $this->coursesperPeriod[$courses]['courseid']?></td>
 						<td><?php echo $cour[0]['name']?></td>
+						<td align="center"><?php echo $cour[0]['credits']?></td>
+						<td align="center"><?php echo $this->coursesperPeriod[$courses]['notafinal']?></td>
 					</tr>
-				<?php }	?>
+				<?php $courses++;
+				}	?>
 				</table>
 			</div>
 			<?php $c++;

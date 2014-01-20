@@ -30,6 +30,18 @@ class Api_Model_DbTable_Academicrecord extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getOne($where=array()){
+		try{
+			if ($where['acid']==""|| $where['eid']=='' || $where['pid']=='') return false;
+			$wherestr="acid = '".$where['acid']."' and eid='".$where['eid']."' and pid='".$where['pid']."'";
+			$row = $this->fetchRow($wherestr);
+			if($row) return $row->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read One Academic Data ".$e->getMessage();
+		}
+	}
+
 	public function _save($data){
 		try{
 			if ($data['eid']=='' || $data['pid']=='') return false;
@@ -39,6 +51,17 @@ class Api_Model_DbTable_Academicrecord extends Zend_Db_Table_Abstract
 			print "Error al Guardar Datos Academicos ".$e->getMessage();
 		}
 	}
+
+	public function _update($data,$pk){
+		try{
+			if ($pk['acid']=='' || $pk['eid']=='' || $pk['pid']=='') return false;
+			$where = "acid = '".$pk['acid']."'and eid = '".$pk['eid']."' and pid = '".$pk['pid']."'";
+			return $this->update($data, $where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Update Academic".$e->getMessage();
+		}
+	}	
 
 	public function _delete($pk){
 		try{

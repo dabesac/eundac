@@ -2,7 +2,7 @@
 	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
 </ul>
 
-<form id="form" action="/profile/public/studentsaveinterest" method="post">
+<form id="form" action="/profile/public/studentnewinterest" method="post">
 <div class="col-sm-12">
 <h4>Intereses</h4>
 	<table class="table">
@@ -32,6 +32,9 @@
 			data: $(this).serialize(),
 			success: function(data){
 				$("#editform").html(data)
+				$('#editform').html('');
+				$('#datastudent').removeClass('hidden');
+				$('#datastudent').load('/profile/public/studentinterest');
 			}
 		})
 		return false;
@@ -39,8 +42,8 @@
 
 	$('#backeditBtn a').click(function (e) {
     	e.preventDefault()
-    	$("#editform").html("")
-      	$("#datastudent").load("/profile/public/studentinterest");
+    	$("#editform").html("");
+      	$("#datastudent").removeClass('hidden');;
   	})
    
 </script>

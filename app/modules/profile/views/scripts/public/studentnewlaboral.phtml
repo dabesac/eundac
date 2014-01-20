@@ -2,13 +2,13 @@
 	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
 </ul>
 
-<form id="form" action="/profile/public/studentsavelaboral" method="post">
+<form id="form" action="/profile/public/studentnewlaboral" method="post">
 
 <div class="col-sm-12">
 	<table class="table">
 		<tr>
 			<td><label>Empresa</label><?php print $this->form->company?></td>
-			<td><label>Puesto</label><?php print $this->form->industry?></td>
+			<td><label>Area</label><?php print $this->form->industry?></td>
 		</tr>
 		<tr>
 			<td><label>Salario Mensual</label><?php print $this->form->salary?></td>
@@ -32,7 +32,10 @@
 			url: $(this).attr("action"),
 			data: $(this).serialize(),
 			success: function(data){
-				$("#datastudent").html(data)
+				$("#editform").html(data);
+				$("#editform").html('');
+				$("#datastudent").removeClass("hidden");
+				$('#datastudent').load("/profile/public/studentlaboral");
 			}
 		})
 		return false;
@@ -40,8 +43,8 @@
 
 	$('#backeditBtn a').click(function (e) {
     	e.preventDefault()
-      	$("#datastudent").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>")
-      	$("#datastudent").load("/profile/public/studentlaboral");
+      	$("#datastudent").removeClass('hidden');
+      	$("#editform").html('');
   	})
    
 </script>
