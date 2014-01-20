@@ -11,17 +11,36 @@
 </div>
 
 <div class="panel-body">
-  	<?php if($this->laboral){
-    	$c=1;?>
-		<?php $c=1;
+  	<?php if($this->laboral){?>
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+		<div class="panel panel-warning">
+			<div class="panel-body">
+				<table class="table">
+					<tr>
+						<th><h5><strong>#</strong></h5></th>
+						<th><h5><strong>Empresa</strong></h5></th>
+						<th class="text-center"><h5><strong>Area</strong></h5></th>
+						<th class="text-center"><h5><strong>Condicion</strong></h5></th>
+						<th class="text-center"><h5><strong>Salario</strong></h5></th>
+					</tr>
+		<?php $c=0;
 		foreach ($this->laboral as $lab) {?>
-
-			<div class="panel panel-warning">
-				<div class="panel-body">
-
-					<div class="row">
-						<div class="col-md-6">
-							<a class="text-muted" id="remove<?php echo $lab['lid']?>" href="#" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
+					<tr>
+						<td><h5><?php echo $c + 1?></h5></td>
+						<td><h5><?php echo $lab['company']?></h5></td>
+						<td align="center"><h5><?php echo $lab['industry']?></h5></td>
+						<td align="center"><h5><?php echo $lab['condition']?></h5></td>
+						<td align="center"><h5>S/. <?php echo $lab['salary']?></h5></td>
+						<td align="center"><h5><a class="text-warning" id="edit<?php echo $lab['lid']?>" href="#" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+		                	<script>
+							  $("#edit<?php echo $lab['lid']?>").click(function(){
+							    $("#datastudent").addClass('hidden');
+						    	$("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+						    	$("#editform").load("/profile/public/studenteditlaboral/lid/<?php echo $lab['lid']?>");
+							  });
+							</script></h5></td>
+							<td align="center"><h5><a class="text-warning" id="remove<?php echo $lab['lid']?>" href="#" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
 							<script>
 							  $("#remove<?php echo $lab['lid']?>").click(function(){
 							    bootbox.confirm("Seguro que desea eliminar <?php echo $lab['company']?>", function(result) {
@@ -31,41 +50,16 @@
 							          $("#datastudent").load("/profile/public/studentlaboral");
 							      });
 							  });
-							</script>
-						</div>
-						<div class="col-md-1 pull-right">
-		                	<a class="text-muted" id="edit<?php echo $lab['lid']?>" href="#" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
-		                	<script>
-							  $("#edit<?php echo $lab['lid']?>").click(function(){
-							    $("#datastudent").addClass('hidden');
-						    	$("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-						    	$("#editform").load("/profile/public/studenteditlaboral/lid/<?php echo $lab['lid']?>");
-							  });
-							</script>
-		              	</div>
-		            </div>
-
-		            <br>
-		            <blockquote>
-		              	<h4>Empresa <span class="text-muted"><?php echo $lab['company']?></span> </h4>
-		            </blockquote>
-		            <hr class="featurette-divider">
-					
-					<div class="row">
-		              	<div class="col-md-4 col-md-offset-3">
-		                	<h4><span class="text-muted">Area </span><?php echo $lab['industry']?></h4>
-		                	<h4><span class="text-muted">Condición </span><?php echo $lab['condition']?></h4>
-		              	</div>
-		              	<div class="col-md-4">
-		                	<h4><span class="text-muted">Salario </span>S/. <?php echo $lab['salary']?></h4>
-		              	</div>
-		            </div>
-
-				</div>
-			</div>
-
+							</script></h5></td>
+					</tr>
 	  	<?php $c++;
 	  	}?>
+	  			</table>
+	  		</div>
+	  		</div>
+		</div>
+	</div>
+	  	
 <?php }else{?>
       <center><h5>No tiene Datos, Por favor Agregue Experiencia Laboral</h5></center>
     <?php

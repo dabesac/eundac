@@ -37,20 +37,21 @@
 						<th><center>Unidad 4</center></th>
 					<?php }?>
 						<th><center>Promedio Final</center></th>
+					<?php if ($this->notasAplazados[0]): ?>
+						<th class="text-center">Aplazados</th>
+					<?php endif ?>
 				</tr>
 
 				<?php  $c=0;
-				foreach ($this->curact as $curact) {
-					if($this->typerate[$c][0]['type_rate']=="O"){?>
+				foreach ($this->curact as $curact) {?>
 						<tr>
+					<?php if($this->typerate[$c][0]['type_rate']=="O"){?>
 							<td><h5><?php echo $this->name[$c][0]['name']?></h5></td>
 							<td><h5 align="center"><?php echo $curact['turno']?></h5></td>
 							<td><h5 align="center"><?php echo $curact['promedio1']?></h5></td>
 							<td><h5 align="center"><?php echo $curact['promedio2']?></h5></td>
 							<td><h5 align="center"><b><?php echo $curact['notafinal']?></b></h5></td>
-						</tr>
 					<?php }elseif($this->typerate[$c][0]['type_rate']=="C"){?>
-						<tr>
 							<td><h5><?php echo $this->name[$c][0]['name']?></h5></td>
 							<td><h5 align="center"><?php echo $curact['turno']?></h5></td>
 							<td><h5 align="center"><?php echo $curact['nota4_i']?></h5></td>
@@ -58,9 +59,14 @@
 							<td><h5 align="center"><?php echo $curact['nota4_ii']?></h5></td>
 							<td><h5 align="center"><?php echo $curact['nota9_ii']?></h5></td>
 							<td><h5 align="center"><b><?php echo $curact['notafinal']?></b></h5></td>
+					<?php }?>
+						<?php foreach ($this->notasAplazados as $notaAplazados): ?>
+							<?php if ($curact['courseid'] == $notaAplazados[0]['courseid']): ?>
+								<td><h5 align="center"><b><?php echo $notaAplazados[0]['notafinal']?></b></h5></td>
+							<?php endif ?>
+						<?php endforeach ?>
 						</tr>
-					<?php }
-					$c++;
+					<?php $c++;
 				}?>
 			</table>
 			<?php }else{?>

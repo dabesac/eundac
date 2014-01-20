@@ -831,6 +831,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $perid=$this->sesion->period->perid;
             $rid=$this->sesion->rid;
 
+            $data=array("pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "subid"=>$subid, "perid"=>$perid, "rid"=>$rid, 'nc'=>$nc);
 
             $dbcuract=new Api_Model_DbTable_Registrationxcourse();
             $dbtyperate=new Api_Model_DbTable_PeriodsCourses();
@@ -841,6 +842,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $curact=$dbcuract->_getFilter($where, $attrib);
             //print_r($curact);
             $nc=0;
+            $coursesD = 0;
             foreach ($curact as $cur) {
                 $where=array("eid"=>$eid, "oid"=>$oid, "perid"=>$perid, "courseid"=>$cur['courseid'], "turno"=>$cur['turno'], "curid"=>$cur['curid']);
                 $attrib=array("type_rate");
@@ -850,14 +852,44 @@ class Profile_PublicController extends Zend_Controller_Action {
                 $attrib=array("name");
                 $name[$nc]=$dbcuract->_getInfoCourse($where,$attrib);
                 $nc++;
+
+                if ($cur['notafinal']<11) {
+                    $coursesDis[$coursesD]['courseid'] = $cur['courseid'];
+                    $coursesDis[$coursesD]['curid'] =$cur['curid'];
+                    $coursesD++;
+                }
             }
 
-            $data=array("pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "subid"=>$subid, "perid"=>$perid, "rid"=>$rid, 'nc'=>$nc);
-            
+            if ($coursesD < 3) {
+                $number = $rest = substr($perid, 0, 2);
+                $letter = substr($perid, -1);
+                if ($letter == 'A') {
+                    $letter = 'D';
+                    $perid = $number.$letter;
+                }else{
+                    $letter = 'E';
+                    $perid = $number.$letter;
+                }
+                $c = 0;
+                $attrib = array('notafinal', 'courseid');
+                foreach ($coursesDis as $courseDis) {
+                   $where = array('eid'=>$eid,
+                                'oid'=>$oid,
+                                'escid'=>$escid,
+                                'subid'=>$subid,
+                                'courseid'=>$courseDis['courseid'],
+                                'curid'=>$courseDis['curid'],
+                                'perid'=>$perid);
+                   $notasAplazados[$c]=$dbcuract->_getFilter($where, $attrib);
+                   $c++;
+                }
+            }
+
             $this->view->data=$data;
             $this->view->typerate=$typerate;
             $this->view->name=$name;
             $this->view->curact=$curact;
+            $this->view->notasAplazados = $notasAplazados;
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
