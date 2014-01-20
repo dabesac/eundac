@@ -69,6 +69,27 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
 		}
 		
 	}
+	public function _getUserXRidXPid($where=null){
+        try{
+            if ($where['pid']=="" || $where['rid']=="" || $where['eid']=="" || $where['oid']=="" ) return false;
+			
+			$select = $this->_db->select()
+			->from(array('p' => 'base_person'),array('p.pid','p.typedoc','numdoc','p.last_name0','p.last_name1','p.first_name','p.birthday','p.photografy'))
+				->join(array('u' => 'base_users'),'u.eid= p.eid and u.pid=p.pid', 
+						array('u.uid','u.uid','u.escid','u.eid','u.oid','u.subid'))
+				->where('u.eid = ?', $where['eid'])
+				->where('u.oid = ?', $where['oid'])
+				->where('u.pid = ?', $where['pid'])
+				->where('u.rid = ?', $where['rid'])
+				->order('last_name0');
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;         
+        }  catch (Exception $ex){
+            print "Error: Obteniendo datos de un usuario deacuerdo a su codigo y a su rol".$ex->getMessage();
+        }
+    }
 
 	public function _getUserXRidXUid($where=null){
         try{

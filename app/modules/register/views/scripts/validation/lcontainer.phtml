@@ -58,7 +58,6 @@ $subid=$this->subid;
     </tr>
     
 </table>
-
     <div id="header_alumnos"></div>
 </div>
 </center>
@@ -182,7 +181,7 @@ $subid=$this->subid;
          {
             $("#lista").hide();
             var url = "/register/validation/save/subid/<?php echo $curricula['subid'] ?>/escid/<?php echo $curricula['escid']?>/perid/<?php echo $this->perid ?>/uid/<?php echo $this->uid ?>/pid/<?php echo $this->pid ?>/temp/<?php echo $this->temp ?>"+"/curid/"+curricula+"/courseid/"+courseid+"/semid/"+semid+"/credi/"+creditos+"/nota/"+nota+"/reso/"+reso+"/uidreg/"+uidreg;
-            //alert(url);
+            // alert(url);
             $("#header_alumnos").load(url);
             $("#header_alumnos").html("Cargando..."); 
         }

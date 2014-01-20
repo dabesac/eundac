@@ -688,6 +688,60 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
+    public function printpercurAction(){
+        try{
+            $this->_helper->layout()->disableLayout();
+            
+            $pid=$this->sesion->pid;
+            $uid=$this->sesion->uid;
+            $this->view->uid=$uid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
+         
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;            
+            $perid=$this->sesion->period->perid; 
+            
+            $faculty=$this->sesion->faculty->name;
+            $this->view->faculty=$faculty;
+
+            $speciality=$this->sesion->speciality->name;
+            $this->view->speciality=$speciality;
+
+            $dbcur=new Api_Model_DbTable_Studentxcurricula();
+            $dbcourxcur=new Api_Model_DbTable_Course();
+            $dbcourlle=new Api_Model_DbTable_Registrationxcourse();
+
+
+            $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "uid"=>$uid, "pid"=>$pid);
+            $cur=$dbcur->_getOne($where);
+            $courpercur=$dbcourxcur->_getCoursesXCurriculaXShool($eid,$oid,$cur['curid'],$escid);
+            $c=0;
+            foreach ($courpercur as $cour) {
+                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);
+                $attrib=array("courseid","notafinal","perid","turno");
+                $courlle[$c]=$dbcourlle->_getFilter($where, $attrib);
+                // print_r($courlle);
+                $c++;
+            }
+            $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid,"pid"=>$pid,"uid"=>$uid,"perid"=>$perid);
+            $attrib=array("courseid","state");
+            $courlleact=$dbcourlle->_getFilter($where,$attrib);
+            
+            $wheres=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid);
+            $dbperson = new Api_Model_DbTable_Users();
+            $person= $dbperson -> _getUserXUid($wheres);
+
+            $this->view->person=$person;
+            $this->view->courpercur=$courpercur;
+            $this->view->courlleact=$courlleact;
+            $this->view->courlle=$courlle;
+            
+        }catch(exception $e){
+            print "Error : ".$e->getMessage();
+        }
+    }
+
     public function studentsignrealizedAction()
     {
         try{
