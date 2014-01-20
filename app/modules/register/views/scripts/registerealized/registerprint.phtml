@@ -3,7 +3,7 @@ $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start(); 
 $header='
-<table style="width: 100%;" border="1">
+<table style="width: 100%; margin-bottom:15px" border="1">
     <tr>
         <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
         <th style="text-align: center; font-size: 11px;">
@@ -15,6 +15,7 @@ $header='
     <tr>
         <th style="border: 1px solid #000;"> MATRICULAS REALIZADAS </th>
     </tr>
+    <br>
 </table>
 
     <tr>
@@ -110,6 +111,6 @@ $header='
   $mpdf->SetFooter($this->footer);
   ob_end_clean();
   $mpdf -> WriteHTML($html);
-  $mpdf->Output('Matriculas Realizadas-'.$this->person['pid'].'.pdf','D');
+  $mpdf->Output('Matriculas Realizadas-'.$this->person[0]['pid'].'.pdf','D');
   
 ?>

@@ -40,6 +40,8 @@ class Record_DirectedController extends Zend_Controller_Action {
             $periods[0]=$peri->_getOnePeriod($whereper1);
             $whereper1['perid']=$anio.'S';
             $periods[1]=$peri->_getOnePeriod($whereper1);
+            $whereper1['perid']=$anio.'C';
+            $periods[2]=$peri->_getOnePeriod($whereper1);
             $this->view->periods=$periods;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();

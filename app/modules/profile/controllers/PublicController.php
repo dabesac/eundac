@@ -911,61 +911,114 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
-    //Matriculas realizadas por JK, pero hay otra en Register hecha por Sandro, esa se esta usando ¬¬
-    public function studentsignrealizedAction()
-    {
+    public function printpercurAction(){
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;
+            
             $pid=$this->sesion->pid;
             $uid=$this->sesion->uid;
+            $this->view->uid=$uid;
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
+         
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;            
+            $perid=$this->sesion->period->perid; 
+            
+            $faculty=$this->sesion->faculty->name;
+            $this->view->faculty=$faculty;
 
-            $dbsignr=new Api_Model_DbTable_Registrationxcourse();
-            $dbnamper=new Api_Model_DbTable_Periods();
+            $speciality=$this->sesion->speciality->name;
+            $this->view->speciality=$speciality;
 
-            $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid);
-            $attrib=array('perid', 'courseid', 'notafinal');
-            $order=array("perid", "courseid");
-            $signr=$dbsignr->_getFilter($where, $attrib, $order);
-            //print_r($signr);
-            $per="0";
+            $dbcur=new Api_Model_DbTable_Studentxcurricula();
+            $dbcourxcur=new Api_Model_DbTable_Course();
+            $dbcourlle=new Api_Model_DbTable_Registrationxcourse();
+
+
+            $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "uid"=>$uid, "pid"=>$pid);
+            $cur=$dbcur->_getOne($where);
+            $courpercur=$dbcourxcur->_getCoursesXCurriculaXShool($eid,$oid,$cur['curid'],$escid);
             $c=0;
-            $attribcour=array('courseid');
-            foreach ($signr as $sperid) {
-                if($sperid['perid']<>$per){
-                    $attrib=array('name');
-                    $where=array("eid"=>$eid, "oid"=>$oid, "perid"=>$sperid['perid']);
-                    $namper[$c]=$dbnamper->_getFilter($where,$attrib);
-
-
-                    $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "perid"=>$sperid['perid']);
-                    //print_r($where);
-                    $courxper=$dbsignr->_getFilter($where,$attribcour);
-                    $x=0;
-                    $attrib = array('name', 'credits');
-                    foreach ($courxper as $cour) {
-                        $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid']);
-                        //print_r($where);
-                        $courname[$c][$x]=$dbsignr->_getInfoCourse($where, $attrib);
-                        $x++;
-                    }
-
-                    $per=$sperid['perid'];
-                    $c++;
-                }
+            foreach ($courpercur as $cour) {
+                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);
+                $attrib=array("courseid","notafinal","perid","turno");
+                $courlle[$c]=$dbcourlle->_getFilter($where, $attrib);
+                // print_r($courlle);
+                $c++;
             }
-            //print_r($courname);
+            $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid,"pid"=>$pid,"uid"=>$uid,"perid"=>$perid);
+            $attrib=array("courseid","state");
+            $courlleact=$dbcourlle->_getFilter($where,$attrib);
+            
+            $wheres=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid);
+            $dbperson = new Api_Model_DbTable_Users();
+            $person= $dbperson -> _getUserXUid($wheres);
 
-            $this->view->coursesperPeriod = $signr;
-            $this->view->courname=$courname;
-            $this->view->namper=$namper;
-
+            $this->view->person=$person;
+            $this->view->courpercur=$courpercur;
+            $this->view->courlleact=$courlleact;
+            $this->view->courlle=$courlle;
+            
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
     }
+
+    // public function studentsignrealizedAction()
+    // {
+    //     try{
+    //         $this->_helper->layout()->disableLayout();
+    //         $eid=$this->sesion->eid;
+    //         $oid=$this->sesion->oid;
+    //         $pid=$this->sesion->pid;
+    //         $uid=$this->sesion->uid;
+    //         $escid=$this->sesion->escid;
+    //         $subid=$this->sesion->subid;
+
+    //         $dbsignr=new Api_Model_DbTable_Registrationxcourse();
+    //         $dbnamper=new Api_Model_DbTable_Periods();
+
+    //         $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid);
+    //         $attrib=array('perid', 'courseid', 'notafinal');
+    //         $order=array("perid", "courseid");
+    //         $signr=$dbsignr->_getFilter($where, $attrib, $order);
+    //         //print_r($signr);
+    //         $per="0";
+    //         $c=0;
+    //         $attribcour=array('courseid');
+    //         foreach ($signr as $sperid) {
+    //             if($sperid['perid']<>$per){
+    //                 $attrib=array('name');
+    //                 $where=array("eid"=>$eid, "oid"=>$oid, "perid"=>$sperid['perid']);
+    //                 $namper[$c]=$dbnamper->_getFilter($where,$attrib);
+
+
+    //                 $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "perid"=>$sperid['perid']);
+    //                 //print_r($where);
+    //                 $courxper=$dbsignr->_getFilter($where,$attribcour);
+    //                 $x=0;
+    //                 $attrib = array('name', 'credits');
+    //                 foreach ($courxper as $cour) {
+    //                     $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid']);
+    //                     //print_r($where);
+    //                     $courname[$c][$x]=$dbsignr->_getInfoCourse($where, $attrib);
+    //                     $x++;
+    //                 }
+
+    //                 $per=$sperid['perid'];
+    //                 $c++;
+    //             }
+    //         }
+    //         //print_r($courname);
+
+    //         $this->view->coursesperPeriod = $signr;
+    //         $this->view->courname=$courname;
+    //         $this->view->namper=$namper;
+
+    //     }catch(exception $e){
+    //         print "Error : ".$e->getMessage();
+    //     }
+    // }
 
 }

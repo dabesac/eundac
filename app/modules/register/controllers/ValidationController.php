@@ -65,8 +65,8 @@ class Register_ValidationController extends Zend_Controller_Action
             $oid= $this->sesion->oid;
             $userregistra= $this->sesion->uid;
             $temp = ($this->_getParam("temp"));
-           // echo $perid;
-           // $perid='12C';
+            // echo $perid;
+            // $perid='12C';
             $this->view->nota = $nota;
             $this->view->uid = $uid;
             $this->view->perid = $perid;
@@ -666,7 +666,7 @@ class Register_ValidationController extends Zend_Controller_Action
                 
                 if(confirm("Esta seguro de continuar \nAgregando el Curso a pesar de no haber aprobado el prerequisito"))
 
-                document.location.href="/register/validation/save/temp/1/uid/<?php echo $uid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/perid/<?php echo $perid?>/curid/<?php echo $curid?>/nota/<?php echo $nota?>/semid/<?php echo $semid?>/pid/<?php echo $pid ?>/reso/<?php echo $reso?>/courseid/<?php echo $courseid?>/credi/<?php echo $credi?>/uidreg/<?php echo $uidreg?>";
+                document.location.href="/register/directd/student/temp/1/uid/<?php echo $uid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/perid/<?php echo $perid?>/curid/<?php echo $curid?>/nota/<?php echo $nota?>/semid/<?php echo $semid?>/pid/<?php echo $pid ?>/reso/<?php echo $reso?>/courseid/<?php echo $courseid?>/credi/<?php echo $credi?>/uidreg/<?php echo $uidreg?>";
                 // var url="/rfacultad/convalidacion/ahoraguardar/temp/1/uid/<?php echo $uid?>/escid/<?php echo $escid?>/sedid/<?php echo $sedid?>/perid/<?php echo $perid?>/curricula/<?php echo $curricula?>/nota/<?php echo $nota?>/semid/<?php echo $semid?>/pid/<?php echo $pid ?>/reso/<?php echo $reso?>/curso/<?php echo $curso?>/credi/<?php echo $credi?>/uidreg/<?php echo $uidreg?>";
                 // $("#agregar").load(url);
                 else

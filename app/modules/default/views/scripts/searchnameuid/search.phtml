@@ -1,0 +1,90 @@
+<?php
+	if ($this->datauid) { ?>
+		<table class='table table-hover'>
+			<tr>
+				<th>#</th>
+				<th>DNI</th>
+				<th>Código</th>
+				<th>Apellidos y Nombres</th>
+			</tr>	
+		<?php
+		$c=0;
+		foreach ($this->datauid as $user) {
+			$c++;
+			$pid=$user['pid'];
+			$uid=$user['uid'];	
+			$name=$user['last_name0']." ".$user['last_name1'].", ".$user['first_name'];
+		?>
+			<tr>
+				<td><?php echo $c?></td>	
+				<td><?php echo $pid?></td>
+				<td><?php echo $uid?></td>
+				<td><?php echo $name?></td>
+			</tr>
+		<?php	
+		}	
+		?>
+		</table>
+	<?php	
+	}
+?>
+<?php
+	if ($this->datapid) { ?>
+		<table class='table table-hover'>
+			<tr>
+				<th>#</th>
+				<th>DNI</th>
+				<th>Código</th>
+				<th>Apellidos y Nombres</th>
+			</tr>	
+		<?php
+		$c=0;
+		foreach ($this->datapid as $user) {
+			$c++;
+			$pid=$user['pid'];
+			$uid=$user['uid'];	
+			$name=$user['last_name0']." ".$user['last_name1'].", ".$user['first_name'];
+		?>
+			<tr>
+				<td><?php echo $c?></td>	
+				<td><?php echo $pid?></td>
+				<td><?php echo $uid?></td>
+				<td><?php echo $name?></td>
+			</tr>
+		<?php	
+		}	
+		?>
+		</table>
+	<?php	
+	}
+?>
+<?php
+	if ($this->dataname) { ?>
+		<table class='table table-hover'>
+			<tr>
+				<th>#</th>
+				<th>DNI</th>
+				<th>Código</th>
+				<th>Apellidos y Nombres</th>
+			</tr>	
+		<?php
+		$c=0;
+		foreach ($this->dataname as $user) {
+			$c++;
+			$pid=$user['pid'];
+			$uid=$user['uid'];	
+			$name=$user['last_name0']." ".$user['last_name1'].", ".$user['first_name'];
+		?>
+			<tr>
+				<td><?php echo $c?></td>	
+				<td><?php echo $pid?></td>
+				<td><?php echo $uid?></td>
+				<td><?php echo $name?></td>
+			</tr>
+		<?php	
+		}	
+		?>
+		</table>
+	<?php	
+	}
+?>
