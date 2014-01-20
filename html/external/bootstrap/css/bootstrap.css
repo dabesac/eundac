@@ -6057,7 +6057,7 @@ body.modal-open,
 
 .carousel-control {
   position: absolute;
-  top: 0;
+  top: 40%;
   bottom: 0;
   left: 0;
   width: 15%;

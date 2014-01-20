@@ -93,7 +93,7 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
 		// $sql=$this->_db->query("select * from periodos where eid='$eid' and oid ='$oid' and left(perid,2)='$anio' order by perid");
 		try {
 			if ($data['eid']=='' || $data['oid']=='') return false;
-			$wherestr="eid='".$data['eid']."' and oid='".$data['oid']."' and left(perid,2)='".$data['year']."'";
+			echo $wherestr="eid='".$data['eid']."' and oid='".$data['oid']."' and left(perid,2)='".$data['year']."'";
 			$order="perid asc";
 			$rows= $this->fetchAll($wherestr,$order);
 			if ($rows) return $rows->toArray();
@@ -103,6 +103,18 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getPeriodsxYears1($data=null){
+		try {
+			if ($data['eid']=='' || $data['oid']=='') return false;
+			$wherestr="eid='".$data['eid']."' and oid='".$data['oid']."' and perid in('13N','14A')";
+			$order="perid asc";
+			$rows= $this->fetchAll($wherestr,$order);
+			if ($rows) return $rows->toArray();
+			return false;
+		} catch (Exception $e) {
+			print "Error: Read All Periods x Years" .$e->getMessage();
+		}
+	}
   //Retorna dos periodos respectivos
      public function _getPeriodsXAyB($where){
             try{
