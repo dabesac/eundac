@@ -138,7 +138,7 @@ class Profile_Form_Statistic extends Zend_Form{
 		$num_personas=new Zend_Form_Element_Select('num_personas');
 		$num_personas->removeDecorator('HtmlTag')->removeDecorator('Label');
 		$num_personas->setRequired(true)->addErrorMessage("Campo Obligatorio");
-		for ($i=1; $i<=20 ; $i++) { 
+		for ($i=0; $i<=20 ; $i++) { 
 			$num_personas->addMultiOption($i,$i);
 		};
 		$num_personas->setAttrib("class","form-control");

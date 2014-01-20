@@ -1,71 +1,103 @@
 <div class="panel panel-info">
-  <div class="panel-heading">
-  	<h4>Intereses 
-		<a id="saveinterest" title="Nuevo" class="pull-right" href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-  	</h4>
-  </div>
+  <div class="row">
+	<div class="col-md-9 col-md-offset-1">
+	  	<h3 class="text-muted"><span class="glyphicon glyphicon-credit-card"></span> Intereses</h3>
+	</div>
+	<div class="col-md-2 ">
+  		<br>
+  		<a href="#" id="newInterest" class="btn btn-default" title="Nuevo"><span class="text-muted">Nuevo</span></a>
+	</div>
+</div>
+<hr class="featurette-divider">
 
   <div class="panel-body">
     <?php if($this->interes){
-    	$c=1;?>
-		<table class="table">
-			<tr>
-				<th><center>Num</center></th>
-				<th><center>Interes</center></th>
-				<th><center>Dedicación</center></th>
-				<th><center>Tiene Club?</center></th>
-			</tr>
+    	$c=1;
+    	$interruptor = 0;?>
+    		<div class="row">
   			<?php foreach ($this->interes as $int) {?>
-				<tr>
-					<td align="center"><?php echo $c?></td>
-					<td align="center"><?php echo $int['title']?></td>
-					<td align="center">
-						<?php if($int['discipline']=="H"){
-							echo "Hobby";
-						}elseif($int['discipline']=="D"){
-							echo "Deportiva";
-						}elseif($int['discipline']=="R"){
-							echo "Religiosa";
-						}else{
-							echo "Otros";
-							}?>
-					</td>
-					<td align="center">
-						<?php if($int['club']=="S") {
-							echo "Si";
-						}else{
-							echo "No";
-						}
-						?>
-					</td>
-					<td>
-						<a value="<?php echo $int['iid']?>" id="delete<?php echo $int['iid']?>" onclick="return confirm('Esta Seguro que desea eliminar el Interes?');" href="#"><span class="glyphicon glyphicon-remove"></span></a>
-						<script>
-							$("#delete<?php echo $int['iid']?>").click(function(){
-						  		$("#datastudent").load("/profile/public/studentremoveinterest/eid/<?php echo $this->data['eid']?>/pid/<?php echo $this->data['pid']?>/iid/<?php echo $int['iid']?>")
-						  		$("#datastudent").load("/profile/public/studentinterest")
-						  	})
-						</script>
-					</td>
-				</tr>
+					<div class="col-md-6">
+						<div class="panel panel-warning">
+							<div class="row">
+								<div class="col-md-6">
+									<a class="text-muted" id="remove<?php echo $int['iid']?>" href="#" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
+									<script>
+									  $("#remove<?php echo $int['iid']?>").click(function(){
+									    bootbox.confirm("Seguro que desea eliminar <?php echo $int['title']?>", function(result) {
+									        if (result)
+									          $("#editform").load("/profile/public/studentremoveinterest/eid/<?php echo $this->data['eid']?>/pid/<?php echo $this->data['pid']?>/iid/<?php echo $int['iid']?>");
+									          $('#editform').html("");
+									          $("#datastudent").load("/profile/public/studentinterest");
+									      });
+									  });
+									</script>
+								</div>
+								<div class="col-md-1 pull-right">
+				                	<a class="text-muted" id="edit<?php echo $int['iid']?>" href="#" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+				                	<script>
+									  $("#edit<?php echo $int['iid']?>").click(function(){
+									    $("#datastudent").addClass('hidden');
+								    	$("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+								    	$("#editform").load("/profile/public/studenteditinterest/iid/<?php echo $int['iid']?>");
+									  });
+									</script>
+				              	</div>
+				            </div>
+				            <hr class="featurette-divider">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-md-5">
+										<br>
+										<h5 class="text-right"><span class="text-muted"><strong><?php echo $int['title']?></strong></span></h5>
+									</div>
+									<div class="col-md-7">
+									<blockquote>
+										<h5><span class="text-muted">Dedicación </span>
+										<?php if($int['discipline']=="H"){
+											echo "Como Hobby";
+										}elseif($int['discipline']=="D"){
+											echo "Deportiva";
+										}elseif($int['discipline']=="R"){
+											echo "Religiosa";
+										}else{
+											echo "Otros";
+											}?></h5>
+										<h5><span class="text-muted">Tiene Club? </span>
+										<?php if($int['club']=="S") {
+											echo "Si";
+										}else{
+											echo "No";
+										}
+										?></h5>
+									</blockquote>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
   			<?php  $c++;
   			}?>
-			</table>
+			</div>
+	</div>
   	<?php }else{?>
       <center><h5>No tiene Datos Por favor Agregue un Interes</h5></center>
     <?php
 	}
 	?>
-  </div>
-
 </div>
+
 
 <script>
 
-	$("#saveinterest").click(function(){
-    	$("#datastudent").html("")
+	$("#newInterest").click(function(){
+    	$("#datastudent").addClass('hidden');
     	$("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>")
-    	$("#editform").load("/profile/public/studentsaveinterest")
+    	$("#editform").load("/profile/public/studentnewinterest")
   	})
 
 </script>
+
+<!--<div class="panel panel-warning">
+							
+						-->

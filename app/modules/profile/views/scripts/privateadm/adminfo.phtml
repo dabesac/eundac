@@ -1,151 +1,92 @@
 <div class="row">
-<div class="col-sm-9">
-<div id="maininfo">
-<div class="panel panel-default">
-  <div class="panel-body">
-    <div class="row">
-      <div class="col-sm-1"><br></div>
-      <div class="col-sm-10">
-      <table class="table">
-        <tr>
-          <td>DNI <h5><b><?php echo $this->datos[3]['numdoc']?></b></h5></td>
-          <td>Fecha de Nacimiento <h5><b><?php echo $this->datos[3]['birthday']?></b></h5></td>
-        </tr>
-        <tr>
-          <td>Sexo <h5><b><?php echo $this->datos[3]['sex']?></b></h5></td>
-          <td>Estado Civil <h5><b><?php echo $this->datos[3]['civil']?></b></h5></td>
-        </tr>
-        <tr>
-          <td>Mail <h5><b><?php echo $this->datos[3]['mail_person']?></b></h5></td>
-          <td>Work Mail <h5><b><?php echo $this->datos[3]['mail_work']?></b></h5></td>
-        </tr>
-        <tr>
-          <td>Telefono <h5><b><?php echo $this->datos[3]['phone']?></b></h5></td>
-          <td>Celular <h5><b><?php echo $this->datos[3]['cellular']?></b></h5></td>
-        </tr>
-      </table>
-      </div>
-      <div class="col-sm-1"><br></div>
-    </div><!-- Row de Informacion Principal -->
-  </div>
-</div>
+<div class="col-sm-12">
 
-<div id="datastudent"></div>
-</div><!-- div col 9 -->
+  <div id="datastudent">
 
-<div id="editform"></div>
-
-    <div class="col-sm-9" align="center" id="editdata">
-
-      <div class="row">
-
-        <div class="col-sm-3"></div>
-        <div class="col-sm-6">
-          <table class="table">
-            <tr>
-              <th>Editar</th>
-            </tr>
-            <td>
-              <ul class="nav nav-pills nav-stacked" id="editpalBtns">
-                <li><a href="#" id="editmaininfo" class="btn btn-block"><h5>Informacion Principal</h5></a></li>
-                <!-- <li><a href="" id="editacademic" class="btn btn-block"><h5>Datos Academicos</h5></a></li> -->
-                <li class="hidden"><a></a></li>
-              </ul>
-            </td>
-          
-          </table>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="jumbotron">
+        <div class="row">
+          <div class="col-md-1 pull-right">
+            <a id="editInfo" href="#" class="text-muted" title="Editar Información"><span class="glyphicon glyphicon-pencil"></span></a>
+          </div>
         </div>
-        <div class="col-sm-3"></div>
 
+        <div class="row">
+          <div class="col-md-2">
+            <br>
+            <center><h1><span class="glyphicon glyphicon-user text-muted"></span></h1></center>
+          </div>
+          <div class="col-md-4">
+            <small class="text-muted">DNI </small><b class="text-info"><?php echo $this->datos[3]['numdoc']?></b>
+            <br>
+            <small class="text-muted">Fecha de Nacimiento </small><b class="text-info"><?php echo $this->datos[3]['birthday']?></b><br>
+            <small class="text-muted">Sexo </small> <b class="text-info">
+                      <?php if ($this->datos[3]['sex']=="M") {
+                        echo "Masculino";
+                      }else{
+                        echo "Femenino";
+                      }?>
+                    </b><br>
+                  <small class="text-muted">Estado Civil </small> <b class="text-info">
+                      <?php if ($this->datos[3]['civil']=="S") {
+                        if ($this->datos[3]['sex']=="M") {
+                          echo "Soltero";
+                        }else{
+                          echo "Femenino";
+                        }
+                      }elseif ($this->datos[3]['civil']=="C"){
+                        if ($this->datos[3]['sex']=="M") {
+                          echo "Casado";
+                        }else{
+                          echo "Casada";
+                        }
+                      }elseif ($this->datos[3]['civil']=="D"){
+                        if ($this->datos[3]['sex']=="M") {
+                          echo "Divorciado";
+                        }else{
+                          echo "Divorciada";
+                        }
+                      }elseif ($this->datos[3]['civil']=="V"){
+                        if ($this->datos[3]['sex']=="M") {
+                          echo "Viudo";
+                        }else{
+                          echo "Viuda";
+                        }
+                      }elseif ($this->datos[3]['civil']=="E"){
+                        echo "Conviviente";
+                      }?>
+                    </b>
+          </div>
+          <div class="col-md-1">
+            <center><h2><span class="glyphicon glyphicon-earphone text-muted"></span></h2></center>
+          </div>
+          <div- class="col-md-5">
+            <small class="text-muted">Telefono </small> <b class="text-info"><?php echo $this->datos[3]['phone']?></b><br>
+                  <small class="text-muted">Celular </small> <b class="text-info"><?php echo $this->datos[3]['cellular']?></b>
+          </div->
+          <div class="col-md-1">
+            <center><h2><span class="glyphicon text-muted">@</span></h2></center>
+          </div>
+          <div- class="col-md-5">
+            <small class="text-muted">E-mail </small> <b class="text-info"><?php echo $this->datos[3]['mail_person']?></b><br>
+            <small class="text-muted">Work E-mail </small> <b class="text-info"><?php echo $this->datos[3]['mail_work']?></b>
+          </div->
+        </div>
+      </div>
     </div>
-      
-</div><!-- Edit Data -->
+  </div>
 
-<div class="panel panel-info">
-  <div class="panel-heading"><h5></h5></div>
-  <div class="panel-body">  
-    
-  </div><!-- panel body -->
-  </div><!--panel danger -->
-</div><!-- main info -->
+  </div>
 
+  <div id="editform"></div>
 
-
-<div class="col-sm-3">
-    <br>
-    <ul class="nav nav-pills nav-stacked" id="backprofileTab">
-      <li><a href="#" id="btnprofile">Volver al Perfil</a></li>
-    </ul>
-    <br>   
-    <br>
-    <ul class="nav nav-pills nav-stacked" id="editprofileTab">
-      <li><a href="#" id="btneditdata">Actualizar Perfil</a></li>
-      <li class="hidden"><a></a></li>
-    </ul>
+</div><!-- div col 12 -->
 </div>
-</div><!-- div row -->
 
 <script>
-  $("#maininfo").load("/profile/privateadm/admmaininfo")
-  $("#btnprofile").addClass("hidden")
-  $("#editdata").addClass("hidden")
-
-  // $('#masinfoTab a').click(function (e) {
-  //   e.preventDefault()
-  //   $("#maininfo").html("")
-  //   $('#editprofileTab a:last').tab('show')
-  //   $('#editpalBtns a:last').tab('show')
-  //   $('#editpalBtns2 a:last').tab('show')
-  //   $("#datastudent").removeClass("hidden")
-  //   $("#editdata").addClass("hidden")
-  //   $("#editform").html("")
-  //   $("#btnprofile").removeClass("hidden")
-  //   $(this).tab('show')
-  // })
-
-  $('#backprofileTab a').click(function (e) {
-    e.preventDefault()
-    $("#editdata").addClass("hidden")
-    $("#editform").html("")
-    $('#masinfoTab a:last').tab('show')
-    $('#editpalBtns a:last').tab('show')
-    $('#editpalBtns2 a:last').tab('show')
-    $('#editprofileTab a:last').tab('show')
-  })
-
-  $('#editprofileTab a').click(function (e) {
-    e.preventDefault()
-    $("#btnprofile").removeClass("hidden")
-    $('#masinfoTab a:last').tab('show')
-    $("#maininfo").html("")
-    $("#datastudent").html("")
-    $("#editdata").removeClass("hidden")
-    $(this).tab('show')
-  })
-
-  $("#btnprofile").click(function(){
-    $("#datastudent").addClass("hidden")
-    $("#maininfo").load("/profile/privateadm/admmaininfo")
-    $("#btnprofile").addClass("hidden")
-  })
-
-  //Editar Informacion
-
-  $('#editpalBtns a').click(function (e) {
-    e.preventDefault()
-    $(this).tab('show')
-  })
-  $('#editpalBtns2 a').click(function (e) {
-    e.preventDefault()
-    $(this).tab('show')
-  })
-
-
-  $("#editmaininfo").click(function(){
-    $("#editdata").addClass("hidden")
-    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#editform").load("/profile/privateadm/admeditinfo")
-  })
-
- 
+  $('#editInfo').click(function(){
+    $('#datastudent').fadeOut('slow');
+    $('#editform').load('/profile/privateadm/admeditinfo');
+  });
 </script>

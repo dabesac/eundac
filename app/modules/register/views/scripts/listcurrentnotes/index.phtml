@@ -1,7 +1,4 @@
 <div class="col-md-12">
-<center>
-<h3><span class="glyphicon glyphicon-stats"></span> | Notas Periodo <?php echo $this->perid?></h3>
-</center></div>
 <?php if($this->courses){ ?>
 <div class="col-sm-12">
 	<?php 
@@ -87,10 +84,13 @@
 								<?php for($rcr = 1;$rcr<=$tamanio;$rcr++){
 									$index="nota".$rcr."_i";
 									$nota_ = $this->notes[$c][$index];
-								
 									if ($this->notes[$c][$index]) {?>
 										<th class="center <?php echo ($nota_<11 && $nota_<>"")?"danger":"";?>">
-											<?php echo $this->notes[$c][$index];?>
+											<?php if ($this->notes[$c][$index] == '0') {
+												echo 'imprime';
+											}else{
+												echo $this->notes[$c][$index];
+											}?>
 										</th>
 									<?php }elseif($tipo_ == 'O'){?>
 										<th></th>

@@ -1,20 +1,28 @@
 <div class="panel panel-default">
 	<div class="panel-body">
-		<div class="col-sm-12">
-      		<table class="table">
-	        	<tr>
-	          		<td>DNI <h5><b><?php echo $this->datos[3]['numdoc']?></b></h5></td>
-	          	<td>Fecha de Nacimiento <h5><b><?php echo $this->datos[3]['birthday']?></b></h5></td>
-	        	</tr>
-	        	<tr>
-	          		<td>Sexo <h5><b>
+	<div class="jumbotron">
+		<div class="row">
+			<div class="col-md-1 pull-right">
+				<a id="editInfo" href="#" class="text-muted" title="Editar Información"><span class="glyphicon glyphicon-pencil"></span></a>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-2">
+				<br>
+				<center><h1><span class="glyphicon glyphicon-user text-muted"></span></h1></center>
+			</div>
+			<div class="col-md-4">
+				<small class="text-muted">DNI </small><b class="text-info"><?php echo $this->datos[3]['numdoc']?></b><br>
+				<small class="text-muted">Fecha de Nacimiento </small><b class="text-info"><?php echo $this->datos[3]['birthday']?></b><br>
+				<small class="text-muted">Sexo </small> <b class="text-info">
 	          			<?php if ($this->datos[3]['sex']=="M") {
 	          				echo "Masculino";
 	          			}else{
 	          				echo "Femenino";
 	          			}?>
-	          		</b></h5></td>
-	          		<td>Estado Civil <h5><b>
+	          		</b><br>
+	          	<small class="text-muted">Estado Civil </small> <b class="text-info">
 	          			<?php if ($this->datos[3]['civil']=="S") {
 	          				if ($this->datos[3]['sex']=="M") {
 	          					echo "Soltero";
@@ -42,128 +50,147 @@
 	          			}elseif ($this->datos[3]['civil']=="E"){
           					echo "Conviviente";
 	          			}?>
-	          		</b></h5></td>
-	        	</tr>
-	        	<tr>
-	          		<td>E-mail <h5><b><?php echo $this->datos[3]['mail_person']?></b></h5></td>
-	          		<td>E-mail de Trabajo <h5><b><?php echo $this->datos[3]['mail_work']?></b></h5></td>
-	        	</tr>
-	        	<tr>
-	          		<td>Telefono <h5><b><?php echo $this->datos[3]['phone']?></b></h5></td>
-	          		<td>Celular <h5><b><?php echo $this->datos[3]['cellular']?></b></h5></td>
-	        	</tr>
-      		</table>
-    	</div>
+	          		</b>
+			</div>
+			<div class="col-md-1">
+				<center><h2><span class="glyphicon glyphicon-earphone text-muted"></span></h2></center>
+			</div>
+			<div- class="col-md-5">
+				<small class="text-muted">Telefono </small> <b class="text-info"><?php echo $this->datos[3]['phone']?></b><br>
+          		<small class="text-muted">Celular </small> <b class="text-info"><?php echo $this->datos[3]['cellular']?></b>
+			</div->
+			<div class="col-md-1">
+				<center><h2><span class="glyphicon text-muted">@</span></h2></center>
+			</div>
+			<div- class="col-md-5">
+				<small class="text-muted">E-mail </small> <b class="text-info"><?php echo $this->datos[3]['mail_person']?></b><br>
+				<small class="text-muted">Work E-mail </small> <b class="text-info"><?php echo $this->datos[3]['mail_work']?></b>
+			</div->
+		</div>
+	</div>
     </div>
 </div>
 <div class="panel panel-info">
-
-	<div class="panel-heading"><h5>Datos de Ingreso</h5></div>
-
 	<div class="panel-body">
+		<h3 class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Información Adicional</h3>
+		<br><br>
+		<div class="row">
+			<div class="col-md-2">
+				<br><br><br><br>
+				<span class="text-muted text-right"><h4><strong>Datos de Ingreso</strong></h4></span>
+			</div>
+			<div class="col-md-4">
+				<blockquote>
 
-		<div class="col-sm-4">
-				<table class="table">
-				<tr><td>Año de Ingreso <h5><b><?php echo $this->datos[4]['yearsignin']?></b></h5></td></tr>
-				<tr><td>Proceso
-	  				<h5><b>
-			          <?php if($this->datos[4]['process']=="0"){
-			            echo "Examen Extraordinario";
-			          }elseif($this->datos[4]['process']=="1"){
-			            echo "Centro Pre I";
-			          }elseif($this->datos[4]['process']=="2"){
-			            echo "Examen Ordinario 1er Periodo";
-			          }elseif($this->datos[4]['process']=="3"){
-			            echo "Profesionalizacion Docente";
-			          }elseif($this->datos[4]['process']=="4"){
-			            echo "Examen Ordinario 2do Periodo";
-			          }elseif($this->datos[4]['process']=="5"){
-			            echo "Centro Pre II";
-			          }elseif($this->datos[4]['process']=="6"){
-			            echo "Profesionalizacion Docente Enfermeria";
-			          }elseif($this->datos[4]['process']=="7"){
-			            echo "Complementacion Docente";
-			          }elseif($this->datos[4]['process']=="8"){
-			            echo "Escuela Post-Grado";
-			          }elseif($this->datos[4]['process']=="9"){
-			            echo "Centro Pre III";
-			          }?>
-			          </b></h5>
-			    </td></tr>
-			    <tr><td>Hara Traslado?
-			    	<h5><b>
-			        <?php if($this->datos[4]['traslate']=="S"){
-			              echo "Si";
-			            }else{
-			              echo "No";
-			            }?> 
-			          </b></h5>
-				</td></tr>
-			    <tr><td>La Carrera es de su Agrado?
-			    	<h5><b>
-			    	<?php if($this->datos[4]['eligio_carrera']=="S"){
-			              echo "Si";
-			            }else{
-			              echo "No";
-			            }?> 
-			        </b></h5>
-			    </td></tr>
-			</table>
-		</div>
-		<div class="col-sm-4">
-		    <table class="table">
-		       	<tr><td>Posicion <h5><b><?php echo $this->datos[4]['position']?></b></h5></td></tr>
-		       	<tr><td>Modalidad
-		       		<h5><b>
-		       		<?php if($this->datos[4]['mod_signin']=="1"){
-		           		echo "Exoneracion";
-		       		}elseif($this->datos[4]['mod_signin']=="2"){
-		           		echo "Convenio";
-		       		}elseif($this->datos[4]['mod_signin']=="3"){
-		           		echo "Concurso Admision";
-		       		}elseif($this->datos[4]['mod_signin']=="4"){
-		           		echo "Cobertura";
-		       		}elseif($this->datos[4]['mod_signin']=="5"){
-		           		echo "Segunda Opcion";
-		       		}elseif($this->datos[4]['mod_signin']=="6"){
-		           		echo "Traslado Externo";
-		       		}elseif($this->datos[4]['mod_signin']=="7"){
-		           		echo "Traslado Interno";
-		       		}elseif($this->datos[4]['mod_signin']=="8"){
-		           		echo "Segunda Carrera";
-		       		}elseif($this->datos[4]['mod_signin']=="9"){
-		          		echo "Otros";
-		       		}?>
-		       		</b></h5>
-		       	</td></tr>
-		       	<tr><td>Dedicacion a la Universidad <h5><b><?php echo $this->datos[4]['horas_permanece']." "?>Horas</b></h5></td></tr> 
-		       	<tr><td>
-		       		<?php if($this->datos[4]['eligio_carrera']=="N"){?>
-		           	Carrera de Preferencia
-		           	<h5><b><?php echo $this->datos[4]['carrera_preferencia']?></b></h5>
+					<h5><span class="text-muted">Año </span><?php echo $this->datos[4]['yearsignin']?></h5>
+
+					<h5><span class="text-muted">Proceso </span> 
+				          <?php if($this->datos[4]['process']=="0"){
+				            echo "Examen Extraordinario";
+				          }elseif($this->datos[4]['process']=="1"){
+				            echo "Centro Pre I";
+				          }elseif($this->datos[4]['process']=="2"){
+				            echo "Examen Ordinario 1er Periodo";
+				          }elseif($this->datos[4]['process']=="3"){
+				            echo "Profesionalizacion Docente";
+				          }elseif($this->datos[4]['process']=="4"){
+				            echo "Examen Ordinario 2do Periodo";
+				          }elseif($this->datos[4]['process']=="5"){
+				            echo "Centro Pre II";
+				          }elseif($this->datos[4]['process']=="6"){
+				            echo "Profesionalizacion Docente Enfermeria";
+				          }elseif($this->datos[4]['process']=="7"){
+				            echo "Complementacion Docente";
+				          }elseif($this->datos[4]['process']=="8"){
+				            echo "Escuela Post-Grado";
+				          }elseif($this->datos[4]['process']=="9"){
+				            echo "Centro Pre III";
+				          }?>
+				          </h5>
+
+				    <h5><span class="text-muted">Modalidad </span>
+				    	<?php if($this->datos[4]['mod_signin']=="1"){
+			           		echo "Exoneracion";
+			       		}elseif($this->datos[4]['mod_signin']=="2"){
+			           		echo "Convenio";
+			       		}elseif($this->datos[4]['mod_signin']=="3"){
+			           		echo "Concurso Admision";
+			       		}elseif($this->datos[4]['mod_signin']=="4"){
+			           		echo "Cobertura";
+			       		}elseif($this->datos[4]['mod_signin']=="5"){
+			           		echo "Segunda Opcion";
+			       		}elseif($this->datos[4]['mod_signin']=="6"){
+			           		echo "Traslado Externo";
+			       		}elseif($this->datos[4]['mod_signin']=="7"){
+			           		echo "Traslado Interno";
+			       		}elseif($this->datos[4]['mod_signin']=="8"){
+			           		echo "Segunda Carrera";
+			       		}elseif($this->datos[4]['mod_signin']=="9"){
+			          		echo "Otros";
+			       		}?></h5>
+
+					<h5><span class="text-muted">Puntaje </span><?php echo $this->datos[4]['point_signin']?></h5>
+
+					<h5><span class="text-muted">Posición </span><?php echo $this->datos[4]['position']?></h5>
+
+					<h5><span class="text-muted">Tipo de Preparación </span>
+						<?php if($this->datos[4]['tipo_prepa_uni']=="A"){
+		           			echo "Autoestudio";
+		       			}elseif($this->datos[4]['tipo_prepa_uni']=="D"){
+		           			echo "Academias";
+		       			}elseif($this->datos[4]['tipo_prepa_uni']=="C"){
+		           			echo "Cepre";
+		       			}elseif($this->datos[4]['tipo_prepa_uni']=="O"){
+		        			echo "Otros";
+		       			}?></h5>
+
+				</blockquote>
+			</div>
+
+			<div class="col-md-2">
+				<br><br><br><br>
+				<span class="text-muted text-right"><h4><strong>Sobre la Carrera</strong></h4></span>
+			</div>
+			<div class="col-md-4">
+				<br><br>		
+				<blockquote>
+
+					<h5><span class="text-muted">La Carrera es de su Agrado? </span>
+					<?php if($this->datos[4]['eligio_carrera']=="S"){
+		              	echo "Si";
+	            	}else{
+	              		echo "No";
+		            }?></h5>
+		
+					<h5><span class="text-muted">Se Trasladara Luego? </span>
+					<?php if($this->datos[4]['traslate']=="S"){
+		              	echo "Si";
+		            }else{
+		              	echo "No";
+		            }?></h5>
+
+		            <?php if($this->datos[4]['eligio_carrera']=="N"){?>
+			           	<h5><span class="text-muted">Carrera de Preferencia </span>
+			           	<?php echo $this->datos[4]['carrera_preferencia']?></h5>
 		          	<?php }?>
-		       	</td></tr>     
-		    </table>
-		</div>
-		<div class="col-sm-4">
-	  		<table class="table">
-	       		<tr><td>Puntos <h5><b><?php echo $this->datos[4]['point_signin']?></b></h5></td></tr>
-	       		<tr><td>Preparacion
-	       			<h5><b>
-	       			<?php if($this->datos[4]['tipo_prepa_uni']=="A"){
-	           			echo "Autoestudio";
-	       			}elseif($this->datos[4]['tipo_prepa_uni']=="D"){
-	           			echo "Academias";
-	       			}elseif($this->datos[4]['tipo_prepa_uni']=="C"){
-	           			echo "Cepre";
-	       			}elseif($this->datos[4]['tipo_prepa_uni']=="O"){
-	        			echo "Otros";
-	       			}?> 
-	       			</b></h5>
-	       		</td></tr>
-	       		<tr><td>Por que Undac? <h5><b><?php echo $this->datos[4]['xq_undac']?></b></h5></td></tr>
-	  		</table>
-		</div> 
 
+		          	<h5><span class="text-muted">Dedicación a la Universidad </span> <?php echo $this->datos[4]['horas_permanece']." "?>H</h5>
+
+				</blockquote>
+			</div>
+		</div>
+		<div class="row">
+			<br><br>
+			<div class="col-md-5 pull-right">
+				<h3><span class="text-muted">Por que eligio UNDAC? </span><?php echo $this->datos[4]['xq_undac']?></h3>
+			</div>
+		</div>
   	</div><!-- panel body -->
 </div>
+
+<script>
+	$('#editInfo').click(function(){
+		$('#maininfo').fadeOut('slow');
+		$('#editform').load('/profile/public/studenteditinfo');
+	});
+</script>

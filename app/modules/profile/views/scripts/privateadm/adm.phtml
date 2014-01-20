@@ -1,54 +1,56 @@
-
-
-<div style="display: block; height: 120px; width: 100%; ">
-  <div class="img-thumbnail pull-left">
-    <img src="/fotos/<?php echo $this->person['uid']?>.jpg" title="">
+<div class="row">
+  <br>
+  <div class="col-md-1">
+    <img alt="Foto de Perfil" align="center">
+    <!--<img src="/fotos/<?php echo $this->person['uid']?>.jpg" title="">-->
   </div>
-  <div class="pull-left" style="padding: 8px;">
-    <p style="font-size: 18px"><b><?php echo $this->person[0]['last_name0']." ".$this->person[0]['last_name1']." ".$this->person[0]['first_name'];?></b><br>
-    Código <b><?php echo $this->person['uid']?></b><br>
-    Facultad de <?php echo $this->facesp[0]['nomfac']." Escuela de ".$this->facesp[0]['nomesc']?></p>
-   </div>
-
+  <div class="col-md-5">
+    <h3 class="text-right"><b><?php echo $this->person[0]['last_name0']." ".$this->person[0]['last_name1']?><span class="text-muted"> <?php echo $this->person[0]['first_name']?></span></b></h3>
+    <br>
+    <h5 class="text-right">Código <b><?php echo $this->person['uid']?></b></h5>
+  </div>
+  <div class="col-md-6">
+    <blockquote>
+      <h3>Facultad de <?php echo $this->facesp[0]['nomfac']?></h3>
+      <h3>Escuela de <?php echo $this->facesp[0]['nomesc']?></h3>
+    </blockquote>
+  </div>
 </div>
 
 <div style="display: block; width: 100%; ">
 	<ul class="nav nav-tabs" id="profileTab">
-		<li class="active"><a href="#info" id="btnmaininfo"><h5>Datos Personales</h5></a></li>
-		<li><a href="#tab" id="btnmainsignin"><h5>Accesos</h5></a></li>
+		<li class="active"><a href="#courses"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Cursos a Cargo</h5></a></li>
+    <li><a href="#academicRecord"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Historial Academico</h5></a></li>
+    <li><a href="#info"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Datos Personales</h5></a></li>
 		<li><a class="hidden"></a></li>
 	</ul>
-	<div class="tab-content" style="margin: 0px; padding: 0px; min-height: 500px;" >
-		<div class="tab-pane active" id="info" ></div>
-		<div class="tab-pane" id="tab">hhhhh	</div>
-		</div>
+	<div class="tab-content">
+    <div class="tab-pane active in fade" id="courses"></div>
+    <div class="tab-pane fade" id="academicRecord"></div>
+    <div class="tab-pane fade" id="info"></div>
 	</div>
 </div>
 
 
 <script>
-  $(function () {
-    $("#info").load("/profile/privateadm/adminfo/eid/<?php echo $this->person['eid']?>/oid/<?php echo $this->person['oid']?>/pid/<?php echo $this->person[0]['pid']?>/uid/<?php echo $this->person['uid']?>/escid/<?php echo $this->facesp[0]['escid']?>/subid/<?php echo $this->facesp[0]['subid']?>");
+  $('#courses').load("/docente/notas/index");
+  $("#academicRecord").load("/docente/report/index");
+  $("#info").load("/profile/privateadm/adminfo");
 
-    //$("#signin").load("/profile/privateadm/admlog/");
-    $("#tab").load("/profile/privateadm/access/");
 
-    $('#profileTab a').click(function (e) {
-      e.preventDefault()
-        $(this).tab('show')
-    });
+  //$("#signin").load("/profile/privateadm/admlog/");
 
-      
-    $("#btnmainsignin").click(function(){
-      $("#info").load("/profile/privateadm/adnminfo/eid/<?php echo $this->person['eid']?>/oid/<?php echo $this->person['oid']?>/pid/<?php echo $this->person[0]['pid']?>/uid/<?php echo $this->person['uid']?>/escid/<?php echo $this->facesp[0]['escid']?>/subid/<?php echo $this->facesp[0]['subid']?>");
-      $("#masinfoTab a:last").tab('show')
-    });
-
-    $("#btnmaininfo").click(function(){
-    $("#tab").load("/profile/privateadm/access/");
-    //$("#signin").html("<h1>dddd</h1>")
-       //$("#masinfosignTab a:last").tab('show')
-    });
-
+  $('#profileTab a').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
   });
+
+    
+  /*$("#btnmainsignin").click(function(){
+    $("#info").load("/profile/privateadm/adnminfo/eid/<?php echo $this->person['eid']?>/oid/<?php echo $this->person['oid']?>/pid/<?php echo $this->person[0]['pid']?>/uid/<?php echo $this->person['uid']?>/escid/<?php echo $this->facesp[0]['escid']?>/subid/<?php echo $this->facesp[0]['subid']?>");
+    $("#masinfoTab a:last").tab('show')
+  });*/
+
+  //$("#signin").html("<h1>dddd</h1>")
+     //$("#masinfosignTab a:last").tab('show')
 </script>

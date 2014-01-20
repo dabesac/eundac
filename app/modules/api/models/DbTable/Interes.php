@@ -1,4 +1,4 @@
-<?php
+		<?php
 
 class Api_Model_DbTable_Interes extends Zend_Db_Table_Abstract
 {
@@ -54,6 +54,16 @@ class Api_Model_DbTable_Interes extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _update($data,$pk){
+		try{
+			if ($pk['iid']=='' || $pk['eid']=='' || $pk['pid']=='') return false;
+			$where = "iid = '".$pk['iid']."'and eid = '".$pk['eid']."' and pid = '".$pk['pid']."'";
+			return $this->update($data, $where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Update Job".$e->getMessage();
+		}
+	}	
 
 	public function _delete($pk){
 		try{
