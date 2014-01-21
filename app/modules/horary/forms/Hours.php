@@ -10,7 +10,7 @@ class Horary_Form_Hours extends Zend_Form{
         $hour->setRequired(true)->addErrorMessage('Este campo es requerido');
         $hour->setAttrib('class','form-control');
         $hour->addMultiOption("","- Selecione -");
-        for ($i=6; $i <=12 ; $i++) {
+        for ($i=6; $i <=13 ; $i++) {
             if ($i<=9) {
          	  $hour->addMultiOption($i,"0".$i);
             }

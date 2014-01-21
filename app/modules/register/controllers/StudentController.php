@@ -56,7 +56,7 @@ class Register_StudentController extends Zend_Controller_Action {
             }
             else{
                 
-                $where['ratid']=20;
+                $where['ratid']=39;
                 $where['amount']=0;
                 $where['register']=$uid;
                 $where['created']=date("Y-m-d");
