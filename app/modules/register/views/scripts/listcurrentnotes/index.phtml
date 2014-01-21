@@ -187,6 +187,19 @@
 					</span>
 					</P>
 					</th>
+					<?php foreach ($this->notasAplazados as $notaAplazado):
+						if ($notaAplazado[0]['courseid'] == $courses[0]['courseid']): ?>
+							<th class="col-sm-1 center <?php echo ($notaAplazado[0]['notafinal']<11)?"danger":"success"?>" style="margin: 0px; padding: 0px" >
+								<br>
+								<P>APLAZADOS <br><br>
+								<span class="label label-<?php echo ($notaAplazado[0]['notafinal']<11)?"danger":"success"?>" 
+									style="font-size: 22px">
+									<?php echo $notaAplazado[0]['notafinal']?>
+								</span>
+								</P>
+							</th>
+						<?php endif ?>
+					<?php endforeach ?>
 				</tr>
 			</table>
 		</div>

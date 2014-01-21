@@ -1,6 +1,6 @@
 <div class="panel panel-info">
 	<div class="row">
-		<div class="col-md-10">
+		<div class="col-md-9 col-md-offset-1">
     		<h3 class="text-muted"><span class="glyphicon glyphicon-tree-deciduous"> </span> Datos Familiares</h3>
 		</div>
 		<div class="col-md-2 ">
@@ -9,117 +9,96 @@
 		</div>
 	</div>
 	
-  <div class="panel-body">
+<div class="panel-body">
     <?php if($this->famdata){
     	$c=0;?>
-    	<?php foreach ($this->famdata as $fam) {?>
-    	<div class="panel panel-warning">
-    		<div class="panel-body">
-    			<div class="row">
-					<div class="col-md-1 pull-right">
-						<a href="#" id="edit<?php echo $fam[0]['famid']?>" class="text-muted" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
-						<script>
-							$("#edit<?php echo $fam[0]['famid']?>").click(function(){
-								$('#datastudent').addClass('hidden');
-							    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-							    $("#editform").load("/profile/public/studenteditfamily/famid/<?php echo $fam[0]['famid']?>");
-							})
-						</script>
+	<div class="row">
+    	<?php $c = 0;
+    	foreach ($this->famdata as $fam) {?>
+		<div class="col-md-6">
+			<div class="panel panel-warning">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-1">
+							<a href="#" id="remove<?php echo $fam[0]['famid']?>" class="pull-right text-warning" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
+							<script>
+							  	$("#remove<?php echo $fam[0]['famid']?>").click(function(){
+							    	bootbox.confirm("Seguro que desea eliminar <?php echo $fam[0]['firtsname']?>", function(result) {
+							        	if (result)
+							        	{
+							          		$("#editform").load("/profile/public/studentremovefamily/famid/<?php echo $fam[0]['famid']?>");
+							          		$('#editform').html("");
+							          		$("#datastudent").load("/profile/public/studentfamily");
+							        	}
+							      	});
+							  	});
+							</script>
+						</div>
+						<div class="col-md-1 col-md-offset-10">
+							<a href="#" id="edit<?php echo $fam[0]['famid']?>" class="text-warning" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+							<script>
+								$("#edit<?php echo $fam[0]['famid']?>").click(function(){
+									$('#datastudent').addClass('hidden');
+								    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+								    $("#editform").load("/profile/public/studenteditfamily/famid/<?php echo $fam[0]['famid']?>");
+								})
+							</script>
+						</div>
 					</div>
-					<div class="col-md-1">
-						<a href="#" id="remove<?php echo $fam[0]['famid']?>" class="text-muted" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
-						<script>
-						  	$("#remove<?php echo $fam[0]['famid']?>").click(function(){
-						    	bootbox.confirm("Seguro que desea eliminar <?php echo $fam[0]['firtsname']?>", function(result) {
-						        	if (result)
-						        	{
-						          		$("#editform").load("/profile/public/studentremovefamily/famid/<?php echo $fam[0]['famid']?>");
-						          		$('#editform').html("");
-						          		$("#datastudent").load("/profile/public/studentfamily");
-						        	}
-						      	});
-						  	});
-						</script>
-					</div>
-    			</div>
-				<br>
-	    		<div class="row">
-					<div class="col-md-10">
-	    				<h4><span class="glyphicon glyphicon-user text-muted"></span> <?php echo $fam[0]['lastname']?> <b class="text-muted"><?php echo $fam[0]['firtsname']?></b></h4>
-					</div>
-					<div class="col-md-2">
+					<br>
+					<div class="row">
+						<div class="col-md-9">
 						<blockquote>
-							<h4 class="text-muted"><strong><?php if($this->famrel[$c]['type']=="PA"){
-					    			echo "Padre";
-					    		}elseif($this->famrel[$c]['type']=="MA"){
-									echo "Madre";
-					    		}elseif($this->famrel[$c]['type']=="HI"){
-									echo "Hijo/a";
-					    		}elseif($this->famrel[$c]['type']=="HE"){
-									echo "Hermano/a";
-					    		}
-					    		?>
-				    		</strong></h4>
-			    		</blockquote>
+							<h5><span class="glyphicon glyphicon-user text-muted"></span> <?php echo $fam[0]['lastname']?> <b class="text-muted"><?php echo $fam[0]['firtsname']?></b></h5>
+						</blockquote>
+						</div>
+						<div class="col-md-3">
+						<blockquote>
+							<h5 class="text-left">
+							<?php if($this->famrel[$c]['type']=="PA"){
+				    			echo "Padre";
+				    		}elseif($this->famrel[$c]['type']=="MA"){
+								echo "Madre";
+				    		}elseif($this->famrel[$c]['type']=="HI"){
+								echo "Hijo/a";
+				    		}elseif($this->famrel[$c]['type']=="HE"){
+								echo "Hermano/a";
+				    		}
+				    		$c++; ?></h5>
+				    	</blockquote>
+						</div>
 					</div>
-	    		</div>
+					<hr class="featurette-divider">
+					<div class="row">
+						<div class="col-md-7 col-md-offset-1">
+							<?php if($fam[0]['typedoc']=="D"){?>
+				    			<h5><strong class="text-muted">DNI </strong><?php echo $fam[0]['numdoc']?></h5>
+				    		<?php }else{?>
+								<h5><strong class="text-muted">Pasaporte </strong><?php echo $fam[0]['numdoc']?></h5>
+				    		<?php }?>
+  							<h5><strong class="text-muted">Fecha de Nacimiento </strong><?php echo $fam[0]['birthday']?></h5>
+							<?php if ($fam[0]['live']=="S"): ?>
+		    				<h5><strong class="text-muted">Dirección </strong><?php echo $fam[0]['address']?></h5>
+		    				<h5><strong class="text-muted">Telefono|Celular </strong><?php echo $fam[0]['phone']?></h5>
+		    				<h5><strong class="text-muted">Ocupación </strong><?php echo $fam[0]['ocupacy']?></h5>
+							<?php endif ?>
 
-				<hr class="featurette-divider">
-					
-				<div class="row">
-					<div class="col-md-4 col-md-offset-3">
-
-						<?php if($fam[0]['typedoc']=="D"){?>
-			    			<h4><span class="text-muted">DNI </span><?php echo $fam[0]['numdoc']?></h4>
-			    		<?php }else{?>
-							<h4><span class="text-muted">Pasaporte </span><?php echo $fam[0]['numdoc']?></h4>
-			    		<?php }?>
-
-			    		<h4><span class="text-muted">Fecha de Nacimiento </span><?php echo $fam[0]['birthday']?></h4>
-
-			    		<?php if ($fam[0]['live']=="S"): ?>
-
-			    		<h4><span class="text-muted">Dirección </span><?php echo $fam[0]['address']?></h4>
-
-			    		<h4><span class="text-muted">Teléfono|Celular </span><?php echo $fam[0]['phone']?></h4>
-			    			
-			    		<?php endif ?>
-
-					</div>
-
-					<div class="col-md-5">
-						
-						<?php if ($fam[0]['live']=="S"): ?>
-						<h4><span class="text-muted">Apoderado? </span>
-						<?php if($this->famrel[$c]['assignee']=="S"){
-			    				echo "Si";
-			    			}else{
-								echo "No";
-			    			}?></h4>
-						<?php $c++;
-						endif ?>
-
-			    		<h4><span class="text-muted">Vive? </span>
-			    			<?php if($fam[0]['live']=="S"){
-			    				echo "Si";
-			    			}else{
-								echo "No";
-			    			}?></h4>
-
-			    		<?php if ($fam[0]['live']=="S"): ?>
-
-			    		<h4><span class="text-muted">Ocupación </span><?php echo $fam[0]['ocupacy']?></h4>
-			    			
-			    		<?php endif ?>
-
+						</div>
+						<div class="col-md-3">
+	      					<h5><strong class="text-muted">Vive? </strong>
+	          					<?php if($fam[0]['live']=="S"){
+				    				echo "Si";
+				    			}else{
+									echo "No";
+				    			}?></h5>
+						</div>
 					</div>
 				</div>
-    		</div><!--Panel Body-->
-		</div>
-
+			</div>
+		</div><!--Panel Body-->
 		<?php 
-		}	
-		?>
+		}?>
+	</div>
     <?php }else{?>
       <center><h5>No tiene Datos Por favor Actualize su Perfil</h5></center>
     <?php

@@ -4,23 +4,21 @@
 		<img alt="Foto de Perfil" align="center">
 		<!--<img src="/fotos/<?php echo $this->datos[0]['uid']?>.jpg" title="">-->
 	</div>
-		<div class="col-md-5">
+	<div class="col-md-5">
 		<h3 class="text-right"><b><?php echo $this->datos[0]['fullname']?></b></h3>
 		<br>
 		<h5 class="text-right">Código <b><?php echo $this->datos[0]['uid']?></b></h5>
-		</div>
-	<div class="col-md-6">
+	</div>
+	<div class="col-md-5">
 		<blockquote>
 			<h3>Facultad de <?php echo $this->datos[1][0]['nomfac']?></h3>
 			<h3>Escuela de <?php echo $this->datos[1][0]['nomesc']?></p></h3>
 		</blockquote>
 	</div>
-	<!--<div class="col-md-1">
-	  <<a href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>" class="btn btn-success btn-xs">
-	  Record Notas
-	  </a>
-	</div>-->
-	<br><br>
+	<div class="col-md-1">
+		<br>
+	  	<h3><a href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>" class="text-warning" title="Imprimir Record de Notas"><span class="glyphicon glyphicon-print"></span></a></h3>
+	</div>
 </div>
 
 
