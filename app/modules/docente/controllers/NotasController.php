@@ -9,6 +9,8 @@ class Docente_NotasController extends Zend_Controller_Action{
  		$login = $sesion->getStorage()->read();
  		
  		$this->sesion = $login;
+ 		$this->sesion->period->perid="13B";
+
 	}
 
 	public function indexAction(){
