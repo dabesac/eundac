@@ -25,11 +25,10 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
         $this->_controller = $this->getRequest()->getControllerName();
         $this->_action= $this->getRequest()->getActionName();
 
-
         $resource_tmp = "{$this->_module}/{$this->_controller}/{$this->_action}";
         
         $auth= Zend_Auth::getInstance();
-
+        
         if ($auth->hasIdentity()) {
            if(!$this->_acl->isAllowed($this->_role, $resource_tmp)){  
                 $request->setModuleName('default')
@@ -75,7 +74,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
                         if ($premission['permission'] == 'allow') {
                            $this->_acl->allow($this->_role, $resourceToken);
                         }
-                        else{
+                        if ($premission['permission'] == 'deny') {
                            $this->_acl->deny($this->_role, $resourceToken);
                         }
                     }

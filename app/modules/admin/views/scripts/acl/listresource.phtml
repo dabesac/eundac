@@ -29,7 +29,9 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ($this->resources as $key => $resource) { ?>
+				<?php
+				if ($this->resources) {
+				foreach ($this->resources as $key => $resource) { ?>
 					<tr>
 						<td class="text-center"><?php echo $key+1?></td>
 						<td class="text-center"><?php echo $resource['name']?></td>
@@ -44,7 +46,7 @@
 						<td class="text-center" ><span mid='<?php echo base64_encode($this->mid)?>' reid='<?php echo base64_encode($resource['reid'])?>' class='edit-resource-list text-primary style-icon-all glyphicon glyphicon-edit'></span></td>
 						<td class="text-center"><?php echo ($resource['state']=='A')? "<span class='glyphicon glyphicon-ok-circle style-icon-all text-primary '></span>":"<span class='glyphicon glyphicon-remove-circle style-icon-all text-danger'></span>" ?></td>
 					</tr>
-				<?php }?>
+				<?php }}?>
 			</tbody>
 		</table>		
 	</div>

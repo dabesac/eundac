@@ -179,6 +179,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 }
             }
             $this->view->courses=$courses;
+
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }

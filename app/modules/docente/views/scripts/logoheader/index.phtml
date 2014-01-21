@@ -1,0 +1,50 @@
+<form action="/docente/logoheader/index" method="post" enctype="multipart/form-data"> 
+	     <br> 
+	     <?php echo $this->form->photo?>
+	     <?php echo $this->form->save?>
+</form>
+</br>
+<div>
+<img width="120px" height="120px" src="/header/<?php echo $this->header ?>"> 
+</div>
+
+<div class="header-content">
+	<img src="/img/UNDAC.png" class="img-header-left">
+	<div class="block-contet-header">
+		<h2 class="text-header-university">UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRION</h2>
+		<h6 class="text-faculty">Facultad de <?php echo $this->facultad?></h6>
+		<h6 class="text-speciality">Escuela de Formacion Profecional de <?php echo $this->speciality?> Especialidad de jbniasbfuiasui iubasdiu wbwoeiugbwe </h6>
+	</div>
+	<img src="/header/<?php echo $this->header ?>" class="img-header-right">
+</div>
+
+<style>
+	.text-speciality{
+		text-align: center;
+		font-size: 111%;
+	}
+	.text-faculty{
+		text-align: center;
+		font-size: 20px;
+		text-transform : uppercase;
+	}
+	.block-contet-header{
+		float: left;
+		border-bottom: 1px; 
+	}
+	.header-content
+	{
+		width: 100%;
+	}
+	.img-header-left{
+		float: left;
+		width: 100px;
+		margin-right:5px; 
+	}
+	.img-header-right{
+		width: 100px;
+		margin-left: 10px;
+	}
+	.text-header-university{
+	}
+</style>

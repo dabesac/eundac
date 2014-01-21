@@ -174,13 +174,13 @@ class IndexController extends Zend_Controller_Action {
     						//echo "Existe otra sesion abierta en algun otro lugar";exit();
     						//$this->_redirect("/default/index/salir");
     					}
-    					$urlmod = $data->rol['module'];
-    					$passn= base64_encode($clavecampus);
-    					$urllogin  = "key/$passn/mod/".$data->rol['module'];
-    					$urllogin  = array("key"=>$passn, "mod" => $data->rol['module']);
-    					if (trim($data->rid)=='AL' || $data->rid=='DC')
-    						$this->_forward("ajax", "index", "default", $urllogin );
-    					else
+    					//$urlmod = $data->rol['module'];
+    					//$passn= base64_encode($clavecampus);
+    					//$urllogin  = "key/$passn/mod/".$data->rol['module'];
+    					//$urllogin  = array("key"=>$passn, "mod" => $data->rol['module']);
+    					//if (trim($data->rid)=='AL' || $data->rid=='DC')
+    					//	$this->_forward("ajax", "index", "default", $urllogin );
+    					//else
     						$this->_redirect($urlmod);
     				}
     			}else {

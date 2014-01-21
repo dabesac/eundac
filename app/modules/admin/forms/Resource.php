@@ -63,6 +63,6 @@ class Admin_Form_Resource extends Zend_Form
                 'is_menu' => 'N',
                 ));
 
-        $this->addElements(array($name,$mid,$controller,$module,$action,$icon,$is_menu,$submit,$state));
+        $this->addElements(array($name,$mid,$controller,$module,$action,$icon,$is_menu,$submit));
 	}
 }

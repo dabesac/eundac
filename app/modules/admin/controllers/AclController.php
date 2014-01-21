@@ -23,6 +23,8 @@ class Admin_AclController extends Zend_Controller_Action{
             $order=array("name");
             $modules=$dbrol->_getAll($where,$order);
             $this->view->modules=$modules;
+
+            //echo md5('1234');
         } 
         catch (Exception $ex) 
         {
@@ -140,6 +142,7 @@ class Admin_AclController extends Zend_Controller_Action{
         $this->view->resources = $resources;
         $this->view->mid = trim($params['mid']);
     }
+
     public function newresourceAction()
     {
         $this->_helper->layout()->disableLayout();
@@ -237,17 +240,22 @@ class Admin_AclController extends Zend_Controller_Action{
             $permissios = $tb_acl->_getFilter($where); 
             $count = count($roles);
             foreach ($roles as $key => $role) {
-                foreach ($permissios as $per) {
-                    if ($role['rid'] == $per['rid']) {
-                        $roles[$key]['permission']=$per['permission'];
-                    }
-                    else{
-                        if ($key+1 < $count)  {
-                            $roles[$key+1]['permission']='not';
+                if ($permissios) {
+                        foreach ($permissios as $per) {
+                        if ($role['rid'] == $per['rid']) {
+                            $roles[$key]['permission']=$per['permission'];
+                        }
+                        else{
+                            if ($count > $key+1) {
+                                $roles[$key+1]['permission']='not';
+                            }
                         }
                     }
+                }else{
+                    $roles[$key]['permission']='not';
                 }
             }
+
             $this->view->roles =$roles;
             $this->view->mid = $mid;
             $this->view->reid = $reid;
@@ -290,6 +298,7 @@ class Admin_AclController extends Zend_Controller_Action{
                         'reid'=>$reid,
                         'rid'=>$rid,
                         'permission'=>$permission,
+                        'state'=>'A'
                     );
                 if ($tb_acl->_save($data)) {
                     $json = array(

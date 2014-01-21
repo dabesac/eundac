@@ -10,13 +10,7 @@ class Register_StudentController extends Zend_Controller_Action {
         }
         $login = $sesion->getStorage()->read();
         $this->sesion = $login;
-    if (
-            $login->uid=='1243103148' 
-    		
-               ){
-        }else {
-                $this->_helper->redirector('index',"index",'default');
-        }
+    
          
         
     }
@@ -64,7 +58,7 @@ class Register_StudentController extends Zend_Controller_Action {
             }
             else{
                 
-                $where['ratid']=20;
+                $where['ratid']=39;
                 $where['amount']=0;
                 $where['register']=$uid;
                 $where['created']=date("Y-m-d");
@@ -74,7 +68,7 @@ class Register_StudentController extends Zend_Controller_Action {
             
             $regid=base64_encode($uid.$perid);
 
-            $this->_redirect("/register/Student/start/regid/".$regid);
+            $this->_redirect("/register/student/start/regid/".$regid);
             
         } catch (Exception $e) {
             print "Error index Registration ".$e->$getMessage();

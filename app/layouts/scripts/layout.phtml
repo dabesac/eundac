@@ -51,11 +51,6 @@ $(document).ready(function(){
 
 <?php 
 $sesion  = Zend_Auth::getInstance();
-if(!$sesion->hasIdentity() ){
-	echo "ingreso no permitido";
-	Header ("Location: /");
-	exit();
-}
 $login = $sesion->getStorage()->read();
 $fullname= $login->infouser['fullname'];
 $numberdoc= $login->infouser['numdoc'];
