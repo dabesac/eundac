@@ -244,25 +244,34 @@ class Register_StudentController extends Zend_Controller_Action {
                     }
 
 
-                    if($veces < 2 ){
-                        if ($data_register['semid']==0) {
-                           $this->view->assign_semester=0;
-                           $this->view->assign_credist=0;
-                           $this->view->total_credits=0;
+                    if ($perid != '13N' ) {
+                            if($veces < 2 ){
+                            
+                            if ($data_register['semid']==0) {
+                               $this->view->assign_semester=0;
+                               $this->view->assign_credist=0;
+                               $this->view->total_credits=0;
+                            }
+                            else{
+                                    $assign_credist =   $base_registration->_get_Credits_Asignated($escid,$curid,$perid,$data_register['semid']);
+                                    $this->view->assign_semester=$data_register['semid'];
+                                    $this->view->total_credits=$data_register['credits'];
+                                    $this->view->assign_credist=intval($assign_credist[0]['semester_creditsz'])+$condition_credits+$created_resolu;
+                            }
                         }
                         else{
-                                $assign_credist =   $base_registration->_get_Credits_Asignated($escid,$curid,$perid,$data_register['semid']);
-                                $this->view->assign_semester=$data_register['semid'];
-                                $this->view->total_credits=$data_register['credits'];
-                                $this->view->assign_credist=intval($assign_credist[0]['semester_creditsz'])+$condition_credits+$created_resolu;
+
+                            $this->view->assign_semester=$data_register['semid'];
+                            $this->view->total_credits=$data_register['credits'];
+                            $this->view->assign_credist=11+$condition_credits;
+                            
                         }
                     }
-                    else{
-
+                    else
+                    {
                         $this->view->assign_semester=$data_register['semid'];
                         $this->view->total_credits=$data_register['credits'];
-                        $this->view->assign_credist=11+$condition_credits;
-                        
+                        $this->view->assign_credist=9+$condition_credits;
                     }
 
                     $this->view->subjects = $subject;
@@ -637,6 +646,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
                     $credits_register = $base_registration -> _getOne($where);
 
+                    
                     if($veces >= 2 ){
 
                         $credits_assing[0]['semester_creditsz']=11+$condition_credits;
@@ -685,28 +695,34 @@ class Register_StudentController extends Zend_Controller_Action {
 
                             $credits_register = $base_registration -> _getOne($where);
 
-                           if($veces >= 2 ){
+                            if ($perid != '13N') {
+                                 if($veces >= 2 ){
 
-                                $credits_assing[0]['semester_creditsz']=11+$condition_credits;
+                                    $credits_assing[0]['semester_creditsz']=11+$condition_credits;
+                                    }
+                                    else{
+                                        if($credits_register['semid'] != 0 && $veces < 2){
+                                            $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
+                                            $credits_assing[0]['semester_creditsz']=intVal($credits_assing[0]['semester_creditsz'])+$condition_credits+$created_resolu;
+                                        }
+                                        if( $credits_register['semid'] == 0 )
+                                        {
+                                            if ($this->sesion->escid=='3OB' || $this->sesion->escid=='3OT')
+                                                $credits_assing[0]['semester_creditsz']=26;
+                                            else
+                                                $credits_assing[0]['semester_creditsz']=22;
+                                        }
+                                        if( $credits_register['semid'] == 10 )
+                                        {
+                                            if($this->sesion->escid=='2EP' )
+                                                $credits_assing[0]['semester_creditsz']=22;
+                                        }
+                                }
+                            }else{
+                                $credits_assing[0]['semester_creditsz']=9+$condition_credits;
                             }
-                            else{
-                                if($credits_register['semid'] != 0 && $veces < 2){
-                                    $credits_assing =   $base_registration -> _get_Credits_Asignated($escid,$curid,$perid,$credits_register['semid']);
-                                    $credits_assing[0]['semester_creditsz']=intVal($credits_assing[0]['semester_creditsz'])+$condition_credits+$created_resolu;
-                                }
-                                if( $credits_register['semid'] == 0 )
-                                {
-                                    if ($this->sesion->escid=='3OB' || $this->sesion->escid=='3OT')
-                                		$credits_assing[0]['semester_creditsz']=26;
-                                    else
-                                    	$credits_assing[0]['semester_creditsz']=22;
-                                }
-                                if( $credits_register['semid'] == 10 )
-                                {
-                                	if($this->sesion->escid=='2EP' )
-                                		$credits_assing[0]['semester_creditsz']=22;
-                                }
-                            }
+
+
                                 $json   =   array(  
                                     'status'=>true,
                                     'total_credits'=>$credits_register['credits'],
