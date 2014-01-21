@@ -73,7 +73,7 @@ $ldistri =$this->ldistribution;
 				<?php
 			}elseif ($distri['state']=="A" || $distri['state']=="B" || $distri['state']=='O') {?>
 				
-			<!-- 	<a id='horary' data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-arrow-right" data-toggle="tooltip" title="Carga Académica Distribución"></span></a> -->
+				<!-- <a id='horary' data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-arrow-right" data-toggle="tooltip" title="Carga Académica Distribución"></span></a> -->
 				<a href="/distribution/distribution/academicload/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>/escid/<?php echo base64_encode($distri['escid'])?>/subid/<?php echo base64_encode($distri['subid'])?>"><span class="glyphicon glyphicon-arrow-right" data-toggle="tooltip" title="Carga Académica Distribución"></span></a>
 				<?php
 			}?>

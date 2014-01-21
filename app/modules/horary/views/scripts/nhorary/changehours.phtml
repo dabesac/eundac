@@ -8,8 +8,8 @@
 		<form name="<?php echo $this->fm->getName(); ?>" id ="frmhours" action="/horary/Nhorary/changehours"  method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
 			<table class='table'>
 				<tr>
-					<th colspan='2'><div class='text-center'><h4>MAÑANA</h4></div></th>
-					<th colspan='2'><div class='text-center'><h4>TARDE</h4></div></th>
+					<th colspan='2'><div class='text-center'><h3>MAÑANA</h3></div></th>
+					<th colspan='2'><div class='text-center'><h3>TARDE</h3></div></th>
 				</tr>
 				<tr>
 					<th><h5>Hora:</h5></th>
@@ -23,9 +23,7 @@
 					<th><h5>Minutos:</h5></th>
 					<td><div style='width: 120px'><?php echo $this->fm->minute_t?></td>
 				</tr>
-				<tr>
 					<th><?php echo $this->fm->save?></th>
-				</tr>
 			</table>
 		</form>	
 	</div>

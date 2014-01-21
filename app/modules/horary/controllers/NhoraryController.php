@@ -363,9 +363,9 @@ class Horary_NhoraryController extends Zend_Controller_Action {
                     $frmdata['escid']=$escid;
                     $frmdata['subid']=$subid;
                     $reg_= new Api_Model_DbTable_HoursBeginClasses();
-                    // print_r($frmdata);
-                    $reg_->_save($frmdata); 
-                    $this->_redirect("/horary/nhorary/listteacher"); 
+                    print_r($frmdata);
+                    // $reg_->_save($frmdata); 
+                    // $this->_redirect("/horary/nhorary/listteacher"); 
                 }   
             }            
         } catch (Exception $e) {
