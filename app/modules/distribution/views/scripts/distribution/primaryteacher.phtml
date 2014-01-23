@@ -4,11 +4,12 @@
             <th><center>#</center></th>       
             <th><center>Código</center></th>
             <th>Apellidos y Nombres</th>
-            <th><center>Estado</center></th>
+            <th class="col-xs-1" ><center>Estado</center></th>
             <th><center>Categoria</center></th>       
             <th><center>Condición</center></th>       
             <th><center>Dedicación</center></th>       
             <th><center>Asignar Curso</center></th>
+            <th><center>Asignar Horario</center></th>
         </tr>
         <?php
         $i=1;
@@ -156,6 +157,7 @@
                     <td>
                         <center><a href="#" onclick="javascript: window.open('/distribution/distribution/assigncourses/uid/<?php print base64_encode($teacher['uid'])?>/pid/<?php print base64_encode($teacher['pid'])?>/escid/<?php print base64_encode($teacher['escid'])?>/distid/<?php echo base64_encode($this->distid)?>/perid/<?php echo base64_encode($this->perid)?>/subid/<?php echo base64_encode($teacher['subid'])?>','Asignación Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=900,height=720')" rel="tooltip" title="Asignar Asignaturas"><span class="glyphicon glyphicon-edit"></span></a></center>
                     </td>
+                    <td><center><a><span class="glyphicon glyphicon-calendar"></span></a></center></td>
                 </tr>
                 <?php
             $i++;   

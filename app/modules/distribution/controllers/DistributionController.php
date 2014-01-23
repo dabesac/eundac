@@ -16,7 +16,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
     }
     
     public function indexAction()
-    {
+    {   
    		$distribution = new Distribution_Model_DbTable_Distribution();
    		$data['eid']=$this->sesion->eid;
    		$data['oid']=$this->sesion->oid;
@@ -24,6 +24,18 @@ class Distribution_DistributionController extends Zend_Controller_Action {
    		$data['subid']=$this->sesion->subid;
    		$campos = array("eid","oid","escid","subid","perid","dateaccept","number","state","distid");
    		$rows_distribution =$distribution->_getFilter($data,$campos,$orders=array('perid'));
+        $bdhorary = new Api_Model_DbTable_HoursBeginClasses();
+        $i=0;
+        foreach ($rows_distribution as $periodos) {
+            $perid=$periodos['perid'];
+            $escid=$periodos['escid'];
+            $subid=$periodos['subid'];
+            $wheres=array('eid'=>$data['eid'],'oid'=>$data['oid'],'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+
+            $datahours=$bdhorary->_getFilter($wheres);
+            $rows_distribution[$i]['hours']=$datahours; 
+            $i++;        
+        }
    		if ($rows_distribution) $this->view->ldistribution=$rows_distribution ;
     }
     

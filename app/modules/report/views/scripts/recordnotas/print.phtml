@@ -99,7 +99,7 @@ $header='
                                         else{
 
                                             if ($nota['nota']!=10) {
-                                                ?> <td class="center" style='color:red;'><?php print '0'.$nota['nota']?></td> <?php
+                                                ?> <td class="center" style='color:red;'><?php print $nota['nota']?></td> <?php
                                             }
                                             else{
                                                 ?> <td class="center" style='color:red;'><?php print $nota['nota']?></td> <?php
@@ -127,7 +127,7 @@ $header='
   $mpdf->SetHTMLHeader($header);
   $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
 
-  $mpdf->SetWatermarkImage('/img/UNDAC.png', 0.1, 'F');
+  $mpdf->SetWatermarkImage('/img/UNDAC.png', 0.07, 'F');
   $mpdf->showWatermarkImage = true;
 
   // $mpdf->SetFooter($this->footer);

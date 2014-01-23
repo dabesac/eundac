@@ -1,4 +1,3 @@
-<div class="alert alert-success">Es <b>IMPORTANTE</b> seleccionar por lo menos la hora de inicio de clases del <b>TURNO MAÑANA</b></div>
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<div style='font-size:14px'>
@@ -6,7 +5,7 @@
 		</div>
 	</div>
 	<div class="panel-body">
-		<form name="<?php echo $this->fm->getName(); ?>" id ="frmhours" action="/horary/Nhorary/changehours"  method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+		<form name="<?php echo $this->fm->getName(); ?>" id ="frmhours" action="/horary/Nhorary/updatehours"  method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
 			<table class='table table-hover'>
 				<tr>
 					<th colspan='4'><div class='text-center'><h4><b>TURNO</b></h4></div></th>
@@ -28,19 +27,17 @@
 					<td><div style='width: 120px'><?php echo $this->fm->minute_t?></td>
 				</tr>
 				<tr>
-					<th colspan='4' class='text-center'><?php echo $this->fm->save?></th>
+					<th colspan='4' class='text-center'><?php echo $this->fm->update?></th>
 				</tr>
 			</table>
-    		<input type="hidden" name='escid' value='<?php echo $this->escid?>'>
-    		<input type="hidden" name='subid' value='<?php echo $this->subid?>'>
-    		<input type="hidden" name='perid' value='<?php echo $this->perid?>'>
+    		<input type="hidden" name='pk' value='<?php echo $this->pk['hoursid']?>'>
 		</form>	
 	</div>
 </div>
 <script type="text/javascript">
-	var redirect=<?php echo $this->redirect?>;
-	if (redirect==1) {
-
+	var redirec=<?php echo $this->redirec?>;
+	
+	if (redirec==1) {
 		window.location.href = window.location.href
 	};
 	
@@ -50,12 +47,10 @@
         url: $(this).attr('action'),
         data: $(this).serialize(),
         success: function(data) {                        
-            $('#hourbegin').html(data);                                 
+            $('#updatehour').html(data);                                 
             }
         }); 
         return false;
       });
 	
 </script>
-
-

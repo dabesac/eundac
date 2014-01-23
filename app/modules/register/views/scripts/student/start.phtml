@@ -92,8 +92,8 @@
 					<tr>
 						<th>Usted pagó el monto de</th>
 						<td>S/. <?php echo $this->amount_payment?></td>
-						<th>Usted debe de pagar el monto de</th>
-						<td>S/. <?php echo $this->amount_assing?></td>
+						<th>Usted debe de pagar el monto de </th>
+						<td>S/. <?php echo $this->amount_assing?> <b> por crédito </b></td>
 					</tr>
 				</table>
 			</div>
@@ -328,6 +328,7 @@ if($this->error_cur){ ?>
 	        $.ajax({
 	            url:$url,
 	            success:function($data){
+	            
 	            		var courseid=$($this).attr('courseid');
 	            		var turno=$($this).attr('turno');
 	                    if($data.status == true){
@@ -357,6 +358,7 @@ if($this->error_cur){ ?>
 	            },
 	            error:function($data){
 	                    //Pintar el error
+	                    alert($data.error);
                     $("#modal").modal('show');
                 	$("#error_").html("Error en el Servidor");
 	                    

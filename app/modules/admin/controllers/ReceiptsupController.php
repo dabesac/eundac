@@ -16,7 +16,7 @@ $this->_helper->redirector("recordreceipts");
 public function recordreceiptsAction()
 {
 	try{
-		$anio='2013';
+		$anio='2014';
 		$recibo = new Api_Model_DbTable_Bankreceipts();
 		$listar = $recibo->_getbankreceiptsXAnio($anio);
 		$this->view->listarrecibos=$listar;

@@ -10,7 +10,7 @@ class Horary_Form_Hours extends Zend_Form{
         $hour->setRequired(true)->addErrorMessage('Este campo es requerido');
         $hour->setAttrib('class','form-control');
         $hour->addMultiOption("","- Selecione -");
-        for ($i=6; $i <=12 ; $i++) {
+        for ($i=6; $i <=13 ; $i++) {
             if ($i<=9) {
          	  $hour->addMultiOption($i,"0".$i);
             }
@@ -41,7 +41,7 @@ class Horary_Form_Hours extends Zend_Form{
         $hour_t->removeDecorator('HtmlTag');
         $hour_t->setAttrib('class','form-control');
         $hour_t->addMultiOption("","- Selecione -");
-        for ($i=14; $i <=22 ; $i++) {
+        for ($i=13; $i <=22 ; $i++) {
             if ($i<=9) {
               $hour_t->addMultiOption($i,"0".$i);
             }
@@ -69,8 +69,13 @@ class Horary_Form_Hours extends Zend_Form{
         $submit = new Zend_Form_Element_Submit('save');
         $submit->setAttrib('class','btn btn-success');
         $submit->setLabel('Guardar');
-        $submit->removeDecorator("HtmlTag")->removeDecorator("Label");    
+        $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
 
-        $this->addElements(array($hour,$minute,$hour_t,$minute_t,$submit));
+        $submit1 = new Zend_Form_Element_Submit('update');
+        $submit1->setAttrib('class','btn btn-success');
+        $submit1->setLabel('Actualizar');
+        $submit1->removeDecorator("HtmlTag")->removeDecorator("Label");    
+
+        $this->addElements(array($hour,$minute,$hour_t,$minute_t,$submit,$submit1));
 	}
 }
