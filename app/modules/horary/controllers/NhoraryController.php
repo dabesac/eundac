@@ -29,7 +29,7 @@ class Horary_NhoraryController extends Zend_Controller_Action {
             $this->_helper->redirector("listteacher");   
         }
         else{
-            $this->_helper->redirector("changehours");            
+            $this->_helper->redirector('index','distribution','distribution');         
         }
 
 
