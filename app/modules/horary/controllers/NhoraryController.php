@@ -315,14 +315,12 @@ class Horary_NhoraryController extends Zend_Controller_Action {
     
     public function changehoursAction(){
         try {
-            // $this->_helper->layout()->disableLayout();
+            $this->_helper->layout()->disableLayout();
             $fm = new Horary_Form_Hours();
-            $this->view->fm=$fm;
             $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;
-            $perid=$this->sesion->period->perid;
-            $escid=$this->sesion->escid;
-            $subid=$this->sesion->subid;
+            $oid=$this->sesion->oid;       
+    
+            $redirect=0;
 
             if ($this->getRequest()->isPost())
             {
@@ -345,11 +343,11 @@ class Horary_NhoraryController extends Zend_Controller_Action {
                             if ($hour_t<=9) {
                                 $frmdata['hour_t']="0".$hour_t;
                             }
-                        $minute=$frmdata['minute_t'];
-                            if ($minute==0) {
-                              $frmdata['minute_t']="0".$minute;
+                        $minute_t=$frmdata['minute_t'];
+                            if ($minute_t==0) {
+                              $frmdata['minute_t']="0".$minute_t;
                             }
-                        $frmdata['hours_begin_t']=$frmdata['hour_t'].":".$frmdata['minute_t'].":00";
+                        $frmdata['hours_begin_afternoon']=$frmdata['hour_t'].":".$frmdata['minute_t'].":00";
 
                     }
                     unset($frmdata['save']);
@@ -359,17 +357,118 @@ class Horary_NhoraryController extends Zend_Controller_Action {
                     unset($frmdata['minute_t']);
                     $frmdata['eid']=$eid;
                     $frmdata['oid']=$oid;
-                    $frmdata['perid']=$perid;
-                    $frmdata['escid']=$escid;
-                    $frmdata['subid']=$subid;
                     $reg_= new Api_Model_DbTable_HoursBeginClasses();
-                    print_r($frmdata);
-                    // $reg_->_save($frmdata); 
-                    // $this->_redirect("/horary/nhorary/listteacher"); 
+                    if ($reg_->_save($frmdata)) {
+                        $redirect=1;
+                    }
+                }
+                else{
+                    $this->view->escid=$frmdata['escid'];
+                    $this->view->perid=$frmdata['perid'];
+                    $this->view->subid=$frmdata['subid'];
+                    $this->view->distid=$frmdata['distid'];
                 }   
-            }            
+            }
+            else{
+                $escid=base64_decode($this->_getParam('escid'));
+                $subid=base64_decode($this->_getParam('subid'));
+                $perid=base64_decode($this->_getParam('perid'));
+                $distid=base64_decode($this->_getParam('distid'));
+                $this->view->escid=$escid;        
+                $this->view->subid=$subid;        
+                $this->view->perid=$perid;        
+                $this->view->distid=$distid; 
+            }
+            $this->view->redirect=$redirect;
+            $this->view->fm=$fm;
+
         } catch (Exception $e) {
             print "Error: Change Hours".$e->getMessage(); 
         }
-    }  
+    }
+
+    public function updatehoursAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+
+            $redirec=0;
+
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $escid=base64_decode($this->_getParam('escid'));
+            $subid=base64_decode($this->_getParam('subid'));
+            $perid=base64_decode($this->_getParam('perid'));
+
+            $param=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+            $attrib=array('hoursid','hours_begin','hours_begin_afternoon');
+            $bdbegin= new Api_Model_DbTable_HoursBeginClasses();
+            $datah=$bdbegin->_getFilter($param,$attrib);
+
+            $datahm=$datah[0]['hours_begin'];
+            $dataht=$datah[0]['hours_begin_afternoon'];
+            $datahm=split(":",$datahm);
+            $hour=$datahm[0];
+            $minute=$datahm[1];
+            $dataht=split(":",$dataht);
+            $hour_t=$dataht[0];
+            $minute_t=$dataht[1];
+            $arrays=array('hour'=>$hour,'minute'=>$minute,'hour_t'=>$hour_t,'minute_t'=>$minute_t);
+            $fm = new Horary_Form_Hours();
+            $fm->populate($arrays);
+
+            $this->view->fm=$fm;
+            $pk['hoursid']=$datah[0]['hoursid'];
+        
+            if ($this->getRequest()->isPost())
+            {
+                $frmdata=$this->getRequest()->getPost();
+
+                if ($fm->isValid($frmdata)){
+
+                    $hour=$frmdata['hour'];
+                        if ($hour<=9) {
+                            $frmdata['hour']="0".$hour;
+                        }
+                    $minute=$frmdata['minute'];
+                        if ($minute==0) {
+                          $frmdata['minute']="0".$minute;
+                        }
+                    $frmdata['hours_update']=$frmdata['hour'].":".$frmdata['minute'].":00";    
+
+                    if ($frmdata['hour_t']) {
+                        $hour_t=$frmdata['hour_t'];
+                            if ($hour_t<=9) {
+                                $frmdata['hour_t']="0".$hour_t;
+                            }
+                        $minute_t=$frmdata['minute_t'];
+                            if ($minute_t==0) {
+                              $frmdata['minute_t']="0".$minute_t;
+                            }
+                        $frmdata['hours_update_afternoon']=$frmdata['hour_t'].":".$frmdata['minute_t'].":00";
+
+                    }
+                    $pk['hoursid']=$frmdata['pk'];
+                    unset($frmdata['update']);
+                    unset($frmdata['hour']);
+                    unset($frmdata['minute']);
+                    unset($frmdata['hour_t']);
+                    unset($frmdata['minute_t']);
+                    unset($frmdata['pk']);
+                
+                    $reg_= new Api_Model_DbTable_HoursBeginClasses();
+                    if ($reg_->_update($frmdata,$pk)) {
+                        $redirec=1;
+                    }
+                }  
+            }
+            else{
+                $this->view->pk=$pk;   
+            }
+            $this->view->redirec=$redirec;
+
+        } catch (Exception $e) {
+            print "Error: Update Hours".$e->getMessage();
+        }
+
+    } 
 }

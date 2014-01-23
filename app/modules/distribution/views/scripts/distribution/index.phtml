@@ -20,6 +20,7 @@ $ldistri =$this->ldistribution;
 		<th >Número</th>
 		<th class="col-md-2">Fecha Aprobación</th>
 		<th class="col-md-1">Estado</th>
+		<th class="col-md-1"><center>Modificar Horario</center></th>
 		<th class="col-md-3" colspan="4"><center>Operaciones</center></th>
 	</tr>
 	<?php 
@@ -28,6 +29,7 @@ $ldistri =$this->ldistribution;
 		$i=0;
 		foreach ($ldistri as $distri)
 		{
+		$hours = $distri['hours'];	
 		$periodo = $distri['perid'];
 		$num = $distri['number'];
 		$approv = $distri['dateaccept'];
@@ -51,6 +53,26 @@ $ldistri =$this->ldistribution;
 		<td><?php echo $num;?></td>
 		<td><?php echo $approv;?></td>
 		<td><img src='<?php echo $image;?>'></td>
+		<td><center>
+			<?php
+			if ($distri['state']=='C' || $distri['state']=='I') { ?>
+				<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Modificación Inactiva"></span></a>
+				<?php
+			}elseif ($distri['state']=="A" || $distri['state']=="B" || $distri['state']=='O') {
+				if ($hours) {
+				?>
+					<a class='updatehour' data-toggle="modal" data-target="#myModal" perid='<?php echo $perid;?>' escid='<?php echo base64_encode($distri['escid']);?>' subid='<?php echo base64_encode($distri['subid'])?>'><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" title="Modifique Horario"></span></a>
+
+				<?php
+				}
+				else{
+				?>	
+					<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Modificación Inactiva"></span></a>
+				<?php						
+				}
+			}?>
+			</center>
+		</td>
 		<td>
 			<center>
 				<a href="/distribution/printdistribution/index/escid/<?php echo base64_encode($distri['escid'])?>/subid/<?php echo base64_encode($distri['subid'])?>/perid/<?php echo $perid;?>/distid/<?php echo $distid;?>"><span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Imprimir Distribución"></span></a>
@@ -71,11 +93,17 @@ $ldistri =$this->ldistribution;
 			if ($distri['state']=='C' || $distri['state']=='I') { ?>
 				<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Distribución Cerrado"></span></a>
 				<?php
-			}elseif ($distri['state']=="A" || $distri['state']=="B" || $distri['state']=='O') {?>
-				
-				<!-- <a id='horary' data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-arrow-right" data-toggle="tooltip" title="Carga Académica Distribución"></span></a> -->
-				<a href="/distribution/distribution/academicload/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>/escid/<?php echo base64_encode($distri['escid'])?>/subid/<?php echo base64_encode($distri['subid'])?>"><span class="glyphicon glyphicon-arrow-right" data-toggle="tooltip" title="Carga Académica Distribución"></span></a>
+			}elseif ($distri['state']=="A" || $distri['state']=="B" || $distri['state']=='O') {
+				if ($hours) {
+				?>
+					<a href="/distribution/distribution/academicload/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>/escid/<?php echo base64_encode($distri['escid'])?>/subid/<?php echo base64_encode($distri['subid'])?>"><span class="glyphicon glyphicon-arrow-right" data-toggle="tooltip" title="Carga Académica Distribución"></span></a>
 				<?php
+				}
+				else{
+				?>	
+					<a class='horary' data-toggle="modal" data-target="#myModal1" distid='<?php echo $distid;?>' perid='<?php echo $perid;?>' escid='<?php echo base64_encode($distri['escid']);?>' subid='<?php echo base64_encode($distri['subid'])?>'><span class="glyphicon glyphicon-calendar" data-toggle="tooltip" title="Ingrese Horario de Clases"></span></a>
+				<?php						
+				}
 			}?>
 			</center>
 		</td>
@@ -86,8 +114,8 @@ $ldistri =$this->ldistribution;
 </table>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- Modal Nuevo-->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -103,11 +131,52 @@ $ldistri =$this->ldistribution;
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+
+<!-- Modal Modificar-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id='updatehour'></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script>
 $('.glyphicon').tooltip();
 
-$("#horary").click(function(){
-    url="/horary/nhorary/changehours/";
-    $("#hourbegin").load(url);    
-    });
+$(".horary").click(function(){
+	var params = {
+		escid:$(this).attr('escid'),
+		subid:$(this).attr('subid'),
+		distid:$(this).attr('distid'),
+		perid:$(this).attr('perid')
+	};
+	$.get("/horary/nhorary/changehours/",
+		params,
+		function  ($data) {
+			$("#hourbegin").html($data);
+	});
+
+});
+
+$(".updatehour").click(function(){
+	var para = {
+		escid:$(this).attr('escid'),
+		subid:$(this).attr('subid'),
+		perid:$(this).attr('perid')
+	};
+	$.get("/horary/nhorary/updatehours/",
+		para,
+		function  ($data) {
+			$("#updatehour").html($data);
+	});
+});
 </script>

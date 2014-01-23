@@ -36,4 +36,17 @@ class Api_Model_DbTable_HoursBeginClasses extends Zend_Db_Table_Abstract
             print "Error: Save data. ".$ex->getMessage();
         }
     }
+
+    public function _update($data,$pk)
+	{
+		try{
+			if ($pk['hoursid']=='') return false;
+			$where = "hoursid = '".$pk['hoursid']."'";
+			return $this->update($data, $where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Update data".$e->getMessage();
+		}
+	}
+	
 }    
