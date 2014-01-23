@@ -1,12 +1,21 @@
-<div class="panel panel-primary" style="padding: 2px">
-	<div class="panel-heading" style="padding: 6px">
-		<center><b style="font-size:15px; color: white">REPORTE DE EGRESADOS</b></center>
+<div class="row">
+	<br>
+	<div class="col-md-5 col-md-offset-1">
+		<blockquote>
+			<h2>Egresados <span class="text-warning"><?php echo $this->school ?></span></h2>
+		</blockquote>
+	</div>
+	<div class="col-md-1 col-md-offset-4">
+		<blockquote>
+			<h2><span class="glyphicon glyphicon-user text-warning"></span></h2>
+		</blockquote>
 	</div>
 </div>
-<table class="table table-hover table-condensed">
-	<tr>
-		<th>Facultad:</th>
-		<td>
+<hr class="featurette-divider">
+
+<div id="Admin" class="row">
+	<div class="col-md-4 col-md-offset-1">
+		<h5 class="text-muted">Facultad</h5>
 			<select id="facid" class="form-control">
 				<option>- Seleccione la Facultad -</option>
 				<?php
@@ -18,110 +27,135 @@
 					}
 				} ?>
 			</select>
-		</td>
-		<th>Escuela:</th>
-		<td>
+	</div>
+	<div class="col-md-3">
+		<h5 class="text-muted">Escuela</h5>
 			<select id="escid" class="form-control" style="width:260px">
-				<option value="">- Seleccione la Escuela -</option>
+				<option value="">Seleccione la Escuela</option>
 			</select>
-		</td>
-		<th>Especialidad:</th>
-		<td>
+	</div>
+	<div class="col-md-3">
+		<h5 class="text-muted">Especialidad</h5>
 			<select id="especialidad" class="form-control" style="width:260px">
-				<option value="">- Seleccione la Especialidad -</option>
+				<option value="">Seleccione la Especialidad</option>
 			</select>
-		</td>
-	</tr>
-	<tr>
-		<th>Año:</th>
-		<td>
+	</div>
+	<hr class="featurette-divider">
+</div>
+<div class="row">
+	<br>
+	<div class="col-md-2 col-md-offset-1">
+		<h5 class="text-muted">Año</h5>
 			<select id="anho" class="form-control" style="width:100px">
-            	<option value="">- Año -</option>
-            	<?php
-            	for ($i=$this->anio;$i>=1965;$i--) { ?>
+            	<option value="">Año</option>
+            	<?php for ($i=$this->anio;$i>=1965;$i--) { ?>
               		<option value="<?php echo $i;?>"><?php echo $i;?></option>
             	<?php }
             	?>
            	</select>
-		</td>
-		<th>Periodo:</th>
-		<td>
+	</div>
+	<div class="col-md-5">
+		<h5 class="text-muted">Periodo </h5> 
 			<select id="periodo_c" class="form-control">
-				<option value="">- Seleccione -</option>
+				<option value="">Seleccione Periodo</option>
 			</select>
-		</td>
-		<th>Totales:</th>
-		<td>
-			<input type="checkbox" id="totales" value="N">
-		</td>
-	</tr>
-	<tr>
-		<td colspan="6">
-			<center><a id="generar" href="#" class="btn btn-success"><span class="glyphicon glyphicon-download"></span> Generar</a></center>
-		</td>
-	</tr>
-</table>
+		<br>
+	</div>
+	<div class="col-md-2">
+		<br><br>
+		<div class="checkbox">
+		  	<h5 class="text-muted"><label>
+		    	<input id="totales" type="checkbox" value="N">
+		    	Totales
+		  	</label></h5>
+		</div>
+	</div>
+	<div class="col-md-1">
+		<br>
+		<h3><a class="text-success" title="Generar" href="#" id="generar"><span class="glyphicon glyphicon-send"></span></a></h3>
+	</div>
+</div>
+
+<hr class="featurette-divider">
+<div id="buttons">
+
+</div>
+
 <div id="cargadatos"></div>
+<div id="graphic"></div>
 
 <script type="text/javascript">
-var rid="<?php echo $this->rid ?>";
-if (rid=="RF" || rid=="DIREC") {
-	$("#facid").attr("disabled",true);
-	var facid=$("#facid").val();
-	$("#escid").load("/graduated/reportgraduated/schools/facid/"+facid);
-	if (rid=="DIREC") {
-		$("#escid").attr("disabled",true);
-		var escid='<?php echo $this->escid?>';
+	
+
+	var rid="<?php echo $this->rid ?>";
+	if (rid=="RF" || rid=="DIREC") {
+		$("#Admin").addClass('hidden');
+		var facid=$("#facid").val();
+		$("#escid").load("/graduated/reportgraduated/schools/facid/"+facid);
+		if (rid=="DIREC") {
+			$("#escid").attr("disabled",true);
+			var escid='<?php echo $this->escid?>';
+			$.get("/graduated/reportgraduated/speciality/escid/"+escid, function(data){
+				$('#especialidad').html(data);
+			});
+		};
+	};
+			
+
+	$("#facid").change(function(){
+		var facid=$(this).val();
+		$("#escid").load("/graduated/reportgraduated/schools/facid/"+facid);
+		if (facid=="TODO") {
+			var escid="TODOEC";
+			$("#especialidad").load("/graduated/reportgraduated/speciality/escid/"+escid);
+		};
+	});
+
+	$("#escid").change(function(){
+		var escid=$(this).val();
 		$("#especialidad").load("/graduated/reportgraduated/speciality/escid/"+escid);
-	};
-};
+	});
 
-$("#facid").change(function(){
-	var facid=$(this).val();
-	$("#escid").load("/graduated/reportgraduated/schools/facid/"+facid);
-	if (facid=="TODO") {
-		var escid="TODOEC";
-		$("#especialidad").load("/graduated/reportgraduated/speciality/escid/"+escid);
-	};
-});
+	$("#anho").change(function(){
+	   	var anio = $(this).val();
+	   	var url = "/graduated/reportgraduated/periods/anio/"+anio;
+	   	$("#periodo_c").load(url);
+	});
 
-$("#escid").change(function(){
-	var escid=$(this).val();
-	$("#especialidad").load("/graduated/reportgraduated/speciality/escid/"+escid);
-});
+	$("#totales").click(function(){
+	   	var vall = $(this).val();
+	   	if (vall=="S") $(this).val('N');
+	   	else $(this).val('S');
+	});
 
-$("#anho").change(function(){
-   	var anio = $(this).val();
-   	var url = "/graduated/reportgraduated/periods/anio/"+anio;
-   	$("#periodo_c").load(url);
-});
+	$("#generar").click(function(){
+		var facid = $("#facid").val();
+		var escid = $("#escid").val();
+		var espec = $("#especialidad").val();
+		var anho = $("#anho").val();
+		var periodo = $("#periodo_c").val();
+		var xx = periodo.split(";--;");
+	    var perid = xx[0];
+	    var estado = xx[1];
+		if (facid=='' || escid=='' || perid=='') {
+			alert("Seleccione la Facultad, Escuela y el Periodo Académico.");
+			return false;
+		};
+		var totales = $("#totales").val();
+		if (totales=="N") {
+			var url="/graduated/reportgraduated/listgraduateds/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
+			$('#cargadatos').html("<img src='/img/spinner.gif'>Cargando...");
+			$("#cargadatos").load(url);
 
-$("#totales").click(function(){
-   	var vall = $(this).val();
-   	if (vall=="S") $(this).val('N');
-   	else $(this).val('S');
-});
+			var urlg="/graduated/graphicgraduated/graphics/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
+			$("#graphic").load(urlg);
+			$('#graphic').fadeOut('slow');
+		}else{
+			var url="/graduated/reportgraduated/totalgraduateds/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
+			$('#cargadatos').html("<img src='/img/spinner.gif'>Cargando...");
+			$("#cargadatos").load(url);
+		}
+		
+	});
 
-$("#generar").click(function(){
-	var facid = $("#facid").val();
-	var escid = $("#escid").val();
-	var espec = $("#especialidad").val();
-	var anho = $("#anho").val();
-	var periodo = $("#periodo_c").val();
-	var xx = periodo.split(";--;");
-    var perid = xx[0];
-    var estado = xx[1];
-	if (facid=='' || escid=='' || perid=='') {
-		alert("Seleccione la Facultad, Escuela y el Periodo Académico.");
-		return false;
-	};
-	var totales = $("#totales").val();
-	if (totales=="N") {
-		var url="/graduated/reportgraduated/listgraduateds/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
-	}else{
-		var url="/graduated/reportgraduated/totalgraduateds/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
-	}
-	$('#cargadatos').html("<img src='/img/spinner.gif'>Cargando...");
-	$("#cargadatos").load(url);
-});
 </script>

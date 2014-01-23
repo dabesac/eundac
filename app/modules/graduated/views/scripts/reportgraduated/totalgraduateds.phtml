@@ -1,34 +1,46 @@
 <?php
 if ($this->egresados) { ?>
-<table class="table table-striped table-condensed">
-	<tr>
-		<th>#</th>
-		<th>Escuela/Especialidad</th>
-		<th>Total</th>
-	</tr>
-	<?php 
-	$c=1;
-	$escu= new Api_Model_DbTable_Speciality();
-	foreach ($this->egresados as $cantidad) {
-		$whereesc =array(
-				'eid' => $this->eid, 'oid' => $this->oid,
-				'escid' => $cantidad['escid']);
-		$dat = $escu->_getFilter($whereesc,$attrib=null,$orders=null); ?>
-		<tr>
-			<td><?php echo $c?></td>
-			<td><?php echo $dat[0]['name']?></td>
-			<td><?php echo $cantidad['count']?></td>
-		</tr>	
-		<?php
-		$c++;
-		$tot=$tot+$cantidad['count'];
-	} ?>	
-	<tr>
-		<td></td>
-		<th>Total</th>
-		<th><?php echo $tot?></th>
-	</tr>
-</table>
+<div class="row">
+	<br>
+	<div class="col-md-5 col-md-offset-1">
+		<blockquote>
+			<h4>Total <span class="text-warning">Egresados</span></h4>
+		</blockquote>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+		<table class="table table-hover">
+			<tr>
+				<th><h5><strong>#</strong></h5></th>
+				<th><h5><strong>Escuela/Especialidad</strong></h5></th>
+				<th class="text-center"><h5><strong>Total</strong></h5></th>
+			</tr>
+			<?php 
+			$c=1;
+			$escu= new Api_Model_DbTable_Speciality();
+			foreach ($this->egresados as $cantidad) {
+				$whereesc =array(
+						'eid' => $this->eid, 'oid' => $this->oid,
+						'escid' => $cantidad['escid']);
+				$dat = $escu->_getFilter($whereesc,$attrib=null,$orders=null); ?>
+				<tr>
+					<td><h5><strong><?php echo $c?></strong></h5></td>
+					<td><h5><?php echo $dat[0]['name']?></h5></td>
+					<td class="text-center"><h5><?php echo $cantidad['count']?></h5></td>
+				</tr>	
+				<?php
+				$c++;
+				$tot=$tot+$cantidad['count'];
+			} ?>	
+			<tr>
+				<td></td>
+				<th><h5><strong>Total</strong></h5></th>
+				<th class="text-center"><h5><strong><?php echo $tot?></strong></h5></th>
+			</tr>
+		</table>
+	</div>
+</div>
 <?php
 }else{ ?>
 	<div class="alert alert-info">No hay registro de Egresados.</div>

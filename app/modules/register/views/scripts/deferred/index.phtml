@@ -18,7 +18,7 @@
 <div class="row">
   <div class="col-xs-12 col-sm-6 col-md-8"><h4><span class='glyphicon glyphicon-pencil' ></span> Llenado de Aplazados <?php echo $this->infocurso['name']?></h4></div>
   <div class="col-xs-6 col-sm-6 col-md-4">
-  	<a href="/docente/notas" class="btn btn-default"><span class='glyphicon glyphicon-arrow-left'></span> Regresar</a>
+  	<a href="/profile/privateadm/adm" class="btn btn-default"><span class='glyphicon glyphicon-arrow-left'></span> Regresar</a>
   	<?php if ($this->students_register && $this->state !='C') { ?>
   		<button class='btn btn-info' id='save_notas' disabled > <span class='glyphicon glyphicon-save'></span> Guardar</button>
 	  	<button class='btn btn-danger' id='closed_record'  <?php echo $disabled?> > <span class='glyphicon glyphicon-log-out'></span> Cerrar Acta</button>

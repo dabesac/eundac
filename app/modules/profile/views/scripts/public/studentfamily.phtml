@@ -5,7 +5,7 @@
 		</div>
 		<div class="col-md-2 ">
 			<br>
-			<a href="#" id="newFamily" class="btn btn-default" title="Nuevo"><span class="text-muted">Nuevo</span></a>
+			<a href="##" id="newFamily" class="btn btn-default" title="Nuevo"><span class="text-muted">Nuevo</span></a>
 		</div>
 	</div>
 	
@@ -20,7 +20,7 @@
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-1">
-							<a href="#" id="remove<?php echo $fam[0]['famid']?>" class="pull-right text-warning" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
+							<a href="##" id="remove<?php echo $fam[0]['famid']?>" class="pull-right text-warning" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
 							<script>
 							  	$("#remove<?php echo $fam[0]['famid']?>").click(function(){
 							    	bootbox.confirm("Seguro que desea eliminar <?php echo $fam[0]['firtsname']?>", function(result) {
@@ -35,7 +35,7 @@
 							</script>
 						</div>
 						<div class="col-md-1 col-md-offset-10">
-							<a href="#" id="edit<?php echo $fam[0]['famid']?>" class="text-warning" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+							<a href="##" id="edit<?php echo $fam[0]['famid']?>" class="text-warning" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
 							<script>
 								$("#edit<?php echo $fam[0]['famid']?>").click(function(){
 									$('#datastudent').addClass('hidden');
@@ -63,8 +63,7 @@
 								echo "Hijo/a";
 				    		}elseif($this->famrel[$c]['type']=="HE"){
 								echo "Hermano/a";
-				    		}
-				    		$c++; ?></h5>
+				    		}?></h5>
 				    	</blockquote>
 						</div>
 					</div>
@@ -91,12 +90,20 @@
 				    			}else{
 									echo "No";
 				    			}?></h5>
+				    		<?php if ($fam[0]['live']=="S"): ?>
+				    		<h5><strong class="text-muted">Apoderado </strong>
+	          					<?php if($this->famrel[$c]['assignee']=="S"){
+				    				echo "Si";
+				    			}else{
+									echo "No";
+				    			}?></h5>
+				    		<?php endif ?>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div><!--Panel Body-->
-		<?php 
+		<?php $c++; 
 		}?>
 	</div>
     <?php }else{?>

@@ -190,7 +190,18 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             $dbfamily=new Api_Model_DbTable_Family();
             $dbrelation=new Api_Model_DbTable_Relationship();
+
             $where=array("eid"=>$eid, "pid"=>$pid);
+            $attrib = array('assignee');
+            $familiars = $dbrelation->_getFilter($where, $attrib);
+            $assigneeYes = 0;
+            foreach ($familiars as $assignee) {
+                if ($assignee['assignee'] == 'S') {
+                    $assigneeYes = 1;
+                }
+            }
+            $this->view->assignee = $assigneeYes;
+
             $attrib=array("type");
             $relation=$dbrelation->_getFilter($where, $attrib);
             $pa=0;
@@ -311,6 +322,20 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             $family['type'] = $relationtype['type'];
             $family['assignee'] = $relationtype['assignee'];
+
+            $assigneeYes = 0;
+            if($family['assignee'] == 'N'){
+                $attrib = array('assignee');
+                $familiars = $dbrelation->_getFilter($where, $attrib);
+                foreach ($familiars as $assignee) {
+                    if ($assignee['assignee'] == 'S') {
+                        $assigneeYes = 1;
+                    }
+                }
+            }
+            $this->view->assignee = $assigneeYes;
+
+            
 
             $birthdayDivide = explode("-", $family['birthday']);
             $family['year'] = $birthdayDivide[0];
@@ -832,6 +857,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $rid=$this->sesion->rid;
 
             $data=array("pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "subid"=>$subid, "perid"=>$perid, "rid"=>$rid, 'nc'=>$nc);
+            $this->view->data=$data;
 
             $dbcuract=new Api_Model_DbTable_Registrationxcourse();
             $dbtyperate=new Api_Model_DbTable_PeriodsCourses();
@@ -885,7 +911,9 @@ class Profile_PublicController extends Zend_Controller_Action {
                 }
             }
 
-            $this->view->data=$data;
+            $nc;
+            
+            $this->view->nc = $nc;
             $this->view->typerate=$typerate;
             $this->view->name=$name;
             $this->view->curact=$curact;

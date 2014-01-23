@@ -38,7 +38,9 @@
 		</tr>
 	</table>
 	<table class="table" id="moreinfo">
+	<?php if ($this->assignee == 0): ?>
 		<td><label>Esta persona es su Apoderado/a? </label><?php print $this->form->assignee?></td>
+	<?php endif ?>
 		<tr>
 			<td><label>Dirección</label><?php print $this->form->address?></td>
 			<td><label>Telefono/Celular</label><br><?php print $this->form->phone?></td>

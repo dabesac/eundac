@@ -27,6 +27,9 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             if ($rid=="DC" && $is_director=="S"){
                 $rid="DIREC";
                 if ($facid=="2") $escid=substr($escid,0,3);
+                $school = $this->sesion->speciality->name;
+
+                $this->view->school = $school;
                 $this->view->escid=$escid;        
             }
             if ($rid=="RF" || $rid=="DIREC") $this->view->facid=$facid;
@@ -128,7 +131,7 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                     if ($escid=="TODOEC") {
                         $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid, 'perid' => $perid);
                     }else{
-                        if ($espec<>"") {
+                        if ($espec <> "") {
                             if ($espec=="TODOEP") $left='S';
                             else $escid = $espec;
                         }

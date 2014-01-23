@@ -5,7 +5,7 @@
 	</div>
 	<div class="col-md-2 ">
   		<br>
-  		<a href="#" id="newInterest" class="btn btn-default" title="Nuevo"><span class="text-muted">Nuevo</span></a>
+  		<a href="##" id="newInterest" class="btn btn-default" title="Nuevo"><span class="text-muted">Nuevo</span></a>
 	</div>
 </div>
 <hr class="featurette-divider">
@@ -45,7 +45,7 @@
 										echo "No";
 									}
 								?></h5></td>
-							<td align="center"><h5><a class="text-warning" id="edit<?php echo $int['iid']?>" href="#" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+							<td align="center"><h5><a class="text-warning" id="edit<?php echo $int['iid']?>" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
 			                	<script>
 								  $("#edit<?php echo $int['iid']?>").click(function(){
 								    $("#datastudent").addClass('hidden');
@@ -53,7 +53,7 @@
 							    	$("#editform").load("/profile/public/studenteditinterest/iid/<?php echo $int['iid']?>");
 								  });
 								</script></h5></td>
-							<td align="center"><h5><a class="text-warning" id="remove<?php echo $int['iid']?>" href="#" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
+							<td align="center"><h5><a class="text-warning" id="remove<?php echo $int['iid']?>" href="##" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
 								<script>
 								  $("#remove<?php echo $int['iid']?>").click(function(){
 								    bootbox.confirm("Seguro que desea eliminar <?php echo $int['title']?>", function(result) {

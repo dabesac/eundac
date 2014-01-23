@@ -15,6 +15,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
 
     public function indexAction(){
         try {
+
             $where['eid']=$this->sesion->eid;
             $where['oid']=$this->sesion->oid;
             $where['escid']=base64_decode($this->_getParam('escid'));

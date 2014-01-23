@@ -6,7 +6,7 @@
 	</div>
 	<div class="col-md-2 ">
 	  	<br>
-	  	<a href="#" id="newLaboral" class="btn btn-default" title="Editar"><span class="text-muted">Nuevo</span></a>
+	  	<a href="##" id="newLaboral" class="btn btn-default" title="Editar"><span class="text-muted">Nuevo</span></a>
 	</div>
 </div>
 
@@ -32,7 +32,7 @@
 						<td align="center"><h5><?php echo $lab['industry']?></h5></td>
 						<td align="center"><h5><?php echo $lab['condition']?></h5></td>
 						<td align="center"><h5>S/. <?php echo $lab['salary']?></h5></td>
-						<td align="center"><h5><a class="text-warning" id="edit<?php echo $lab['lid']?>" href="#" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+						<td align="center"><h5><a class="text-warning" id="edit<?php echo $lab['lid']?>" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
 		                	<script>
 							  $("#edit<?php echo $lab['lid']?>").click(function(){
 							    $("#datastudent").addClass('hidden');
@@ -40,7 +40,7 @@
 						    	$("#editform").load("/profile/public/studenteditlaboral/lid/<?php echo $lab['lid']?>");
 							  });
 							</script></h5></td>
-							<td align="center"><h5><a class="text-warning" id="remove<?php echo $lab['lid']?>" href="#" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
+							<td align="center"><h5><a class="text-warning" id="remove<?php echo $lab['lid']?>" href="##" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
 							<script>
 							  $("#remove<?php echo $lab['lid']?>").click(function(){
 							    bootbox.confirm("Seguro que desea eliminar <?php echo $lab['company']?>", function(result) {

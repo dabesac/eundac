@@ -6,85 +6,91 @@
 		<h3><blockquote>Matricula Actual <strong class="text-muted"><?php echo $this->data['perid']?></strong></blockquote></h3>
 	</div>
 	<div class="col-md-1">
-		<h1><a id="comprimir" class="text-warning" href="#" title="Comprimir"><span class="glyphicon glyphicon-th-large"></span></a></h1>
+		<h1><a id="comprimir" class="text-warning" href="##" title="Comprimir"><span class="glyphicon glyphicon-th-large"></span></a></h1>
 	</div>
 	<div class="col-md-1">
-		<h1><a id="extender" class="text-warning" href="#" title="Extender"><span class="glyphicon glyphicon-th"></span></a></h1>
+		<h1><a id="extender" class="text-warning" href="##" title="Extender"><span class="glyphicon glyphicon-th"></span></a></h1>
 	</div>
 </div>
 <div class="row">
 	<div class="col-md-4 col-md-offset-1">
-		<p class="lead"><span class="text-muted">Cantidad de Cursos </span><?php echo $this->data['nc']?></p>
+		<p class="lead"><span class="text-muted">Cantidad de Cursos </span><?php echo $this->nc ?></p>
 	</div>
 </div>
 
-<div class="row">
-<div class="col-md-12">
-	<div id="notasComprimidas" class="panel panel-warning">
-		<div class="panel-body">
-			<?php if($this->curact){?>
-			<table class="table table-hover">
-				<tr>
-					<th><center>Cursos</center></th>
-					<th><center>Turno</center></th>
-					<?php if($this->typerate[0][0]['type_rate']=="O"){?>
-						<th><center>Unidad 1</center></th>
-						<th><center>Unidad 2</center></th>
-					<?php }elseif($this->typerate[0][0]['type_rate']=="C"){?>
-						<th><center>Unidad 1</center></th>
-						<th><center>Unidad 2</center></th>
-						<th><center>Unidad 3</center></th>
-						<th><center>Unidad 4</center></th>
-					<?php }?>
-						<th><center>Promedio Final</center></th>
-					<?php if ($this->notasAplazados[0]): ?>
-						<th class="text-center">Aplazados</th>
-					<?php endif ?>
-				</tr>
+<div id="notasComprimidas" class="row">
+	<div id="horary_notas" class="col-md-10 col-md-offset-1">
+		<div class="panel panel-warning">
+			<div class="panel-body">
+				<?php if($this->curact){?>
+				<table class="table table-hover">
+					<tr>
+						<th><center>Cursos</center></th>
+						<th><center>Turno</center></th>
+						<?php if($this->typerate[0][0]['type_rate']=="O"){?>
+							<th><center>Unidad 1</center></th>
+							<th><center>Unidad 2</center></th>
+						<?php }elseif($this->typerate[0][0]['type_rate']=="C"){?>
+							<th><center>Unidad 1</center></th>
+							<th><center>Unidad 2</center></th>
+							<th><center>Unidad 3</center></th>
+							<th><center>Unidad 4</center></th>
+						<?php }?>
+							<th><center>Promedio Final</center></th>
+						<?php if ($this->notasAplazados[0]): ?>
+							<th class="text-center">Aplazados</th>
+						<?php endif ?>
+					</tr>
 
-				<?php  $c=0;
-				foreach ($this->curact as $curact) {?>
-						<tr>
-					<?php if($this->typerate[$c][0]['type_rate']=="O"){?>
-							<td><h5><?php echo $this->name[$c][0]['name']?></h5></td>
-							<td><h5 align="center"><?php echo $curact['turno']?></h5></td>
-							<td><h5 align="center"><?php echo $curact['promedio1']?></h5></td>
-							<td><h5 align="center"><?php echo $curact['promedio2']?></h5></td>
-							<td><h5 align="center"><b><?php echo $curact['notafinal']?></b></h5></td>
-					<?php }elseif($this->typerate[$c][0]['type_rate']=="C"){?>
-							<td><h5><?php echo $this->name[$c][0]['name']?></h5></td>
-							<td><h5 align="center"><?php echo $curact['turno']?></h5></td>
-							<td><h5 align="center"><?php echo $curact['nota4_i']?></h5></td>
-							<td><h5 align="center"><?php echo $curact['nota9_i']?></h5></td>
-							<td><h5 align="center"><?php echo $curact['nota4_ii']?></h5></td>
-							<td><h5 align="center"><?php echo $curact['nota9_ii']?></h5></td>
-							<td><h5 align="center"><b><?php echo $curact['notafinal']?></b></h5></td>
-					<?php }?>
-						<?php foreach ($this->notasAplazados as $notaAplazados): ?>
-							<?php if ($curact['courseid'] == $notaAplazados[0]['courseid']): ?>
-								<td><h5 align="center"><b><?php echo $notaAplazados[0]['notafinal']?></b></h5></td>
-							<?php endif ?>
-						<?php endforeach ?>
-						</tr>
-					<?php $c++;
-				}?>
-			</table>
-			<?php }else{?>
-				<h5 align="center">No Tiene Matricula Actual | Validelo en Registro de Facultad</h5>
-			<?php }?>
+					<?php  $c=0;
+					foreach ($this->curact as $curact) {?>
+							<tr>
+						<?php if($this->typerate[$c][0]['type_rate']=="O"){?>
+								<td><h5><?php echo $this->name[$c][0]['name']?></h5></td>
+								<td><h5 align="center"><?php echo $curact['turno']?></h5></td>
+								<td><h5 align="center"><?php echo $curact['promedio1']?></h5></td>
+								<td><h5 align="center"><?php echo $curact['promedio2']?></h5></td>
+								<td><h5 align="center"><b><?php echo $curact['notafinal']?></b></h5></td>
+						<?php }elseif($this->typerate[$c][0]['type_rate']=="C"){?>
+								<td><h5><?php echo $this->name[$c][0]['name']?></h5></td>
+								<td><h5 align="center"><?php echo $curact['turno']?></h5></td>
+								<td><h5 align="center"><?php echo $curact['nota4_i']?></h5></td>
+								<td><h5 align="center"><?php echo $curact['nota9_i']?></h5></td>
+								<td><h5 align="center"><?php echo $curact['nota4_ii']?></h5></td>
+								<td><h5 align="center"><?php echo $curact['nota9_ii']?></h5></td>
+								<td><h5 align="center"><b><?php echo $curact['notafinal']?></b></h5></td>
+						<?php }?>
+							<?php foreach ($this->notasAplazados as $notaAplazados): ?>
+								<?php if ($curact['courseid'] == $notaAplazados[0]['courseid']): ?>
+									<td><h5 align="center"><b><?php echo $notaAplazados[0]['notafinal']?></b></h5></td>
+								<?php endif ?>
+							<?php endforeach ?>
+							</tr>
+						<?php $c++;
+					}?>
+				</table>
+				<?php }else{?>
+					<h5 align="center">No Tiene Matricula Actual | Validelo en Registro de Facultad</h5>
+				<?php }?>
+			</div>
 		</div>
 	</div>
-
-	<div id="notasExtendidas" class="panel panel-warning">
-		<div class="panel-body">
-			Soy las Notas Extendidas :D
-		</div>
+	<div id="horary" class="col-md-10 col-md-offset-1"></div>
+	<div class="col-md-1">
+		<br><br><br><br><br><br><br>
+		<blockquote>
+			<h3><a id="btnHorary" href="##" title="Ver Horario" class="text-warning"><span class="glyphicon glyphicon-calendar"></span></a></h3>
+		</blockquote>
 	</div>
 </div>
+<div id="notasExtendidas" class="panel panel-warning">
+	<div class="panel-body">
+	</div>
 </div>
 
 <script>
 	$('#notasExtendidas').addClass('hidden');
+	$('#horary').slideUp();
 	$('#notasExtendidas').load('/register/listcurrentnotes');
 	$('#notasExtendidas').fadeOut('slow');
 
@@ -97,6 +103,12 @@
 	$('#comprimir').click(function(){
 		$('#notasExtendidas').fadeOut('slow');
 		$('#notasComprimidas').fadeIn('slow');
+	});
+	$('#btnHorary').click(function(){
+		$('#horary_notas').slideToggle();
+		$('#horary').load('/horary/consolidated/index')
+		$('#horary').removeClass('hidden');
+		$('#horary').slideToggle();
 	});
 </script>
 

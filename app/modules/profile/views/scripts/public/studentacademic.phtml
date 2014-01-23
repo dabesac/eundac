@@ -5,7 +5,7 @@
     </div>
     <div class="col-md-2 ">
       <br>
-      <a href="#" id="newAcademic" class="btn btn-default" title="Nuevo"><span class="text-muted">Nuevo</span></a>
+      <a href="##" id="newAcademic" class="btn btn-default" title="Nuevo"><span class="text-muted">Nuevo</span></a>
     </div>
   </div>
 
@@ -54,7 +54,7 @@
                 }
                 ?></h5></td>
               <td align="center"><h5><?php echo $academic['year_end']?></h5></td>
-              <td><h5><a id="delete<?php echo $academic['acid']?>" class="text-warning" href="#" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+              <td><h5><a id="delete<?php echo $academic['acid']?>" class="text-warning" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
                 <script>
                   $("#delete<?php echo $academic['acid']?>").click(function(){
                     $("#datastudent").addClass("hidden")
@@ -62,7 +62,7 @@
                     $("#editform").load("/profile/public/studenteditacademic/acid/<?php echo $academic['acid']?>")
                   })
                 </script></h5></td>
-                <td><h5><a class="text-warning" id="remove<?php echo $academic['acid']?>" href="#" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
+                <td><h5><a class="text-warning" id="remove<?php echo $academic['acid']?>" href="##" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
                 <script>
                   $("#remove<?php echo $academic['acid']?>").click(function(){
                     bootbox.confirm("Seguro que desea eliminar <?php echo $academic['institution']?>", function(result) {
