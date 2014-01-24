@@ -450,6 +450,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $where['subid']=$subid;
             $where['rid']='DC';
             $where['state']='A';  
+
             $doc = new Api_Model_DbTable_Users();
             $teacher = $doc->_getUserXRidXEscidAll($where);
             $where['state']='I';
@@ -461,7 +462,10 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $whereinfo['oid']=$oid;
             $whereinfo['escid']=$escid;
             $whereinfo['subid']=$subid;
+
             $info= new Api_Model_DbTable_UserInfoTeacher();
+            $bdcourseteach=new Api_Model_DbTable_Coursexteacher();
+            $whe = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
             for ($i=0; $i < $tam; $i++) {
                 $whereinfo['pid']=$datateacher[$i]['pid'];
                 $whereinfo['uid']=$datateacher[$i]['uid'];
@@ -471,7 +475,11 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $datateacher[$i]['dedication']=$datainfo['dedication'];
                 $datateacher[$i]['charge']=$datainfo['charge'];
                 $datateacher[$i]['contract']=$datainfo['contract'];
+                $whe['pid']=$datateacher[$i]['pid'];
+                $datacourseteacher=$bdcourseteach->_getFilter($whe);
+                $datateacher[$i]['courseasig']=$datacourseteacher[0]['courseid'];
             }
+            // print_r($datateacher);
             $this->view->teacher=$datateacher;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();

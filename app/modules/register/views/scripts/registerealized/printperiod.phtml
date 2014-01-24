@@ -105,5 +105,6 @@ $header='
   ob_end_clean();
   $mpdf -> WriteHTML($html);
   $mpdf->Output('Matricula-'.$this->dataperiod[0]['name'].'.pdf','D');
+  // $mpdf -> Output();
   
 ?>

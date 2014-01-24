@@ -456,6 +456,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $where['escid'] = base64_decode($this->_getParam('escid'));
             $where['subid'] = base64_decode($this->_getParam('subid'));
             $where['perid'] = $this->sesion->period->perid;
+            // $where['perid'] = base64_decode($this->_getParam('perid'));
             $where['eid'] = $this->sesion->eid;        
             $where['oid'] = $this->sesion->oid;        
 

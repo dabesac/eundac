@@ -25,8 +25,8 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
         $datahours=$bd_hours->_getFilter($wheres);
 
-        if ($datahours) {
-            $this->_helper->redirector("listteacher");   
+        if ( $datahours) {
+            $this->_helper->redirector('listteacher');   
         }
         else{
             $this->_helper->redirector('index','distribution','distribution');         
@@ -37,16 +37,15 @@ class Horary_NhoraryController extends Zend_Controller_Action {
     public function listteacherAction()
     {
         try {
-            
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $perid=$this->sesion->period->perid;
             $escid=$this->sesion->escid;
-             $d=new Api_Model_DbTable_PeriodsCourses();
-             $where['eid']=$eid;
-             $where['oid']=$oid;
-             $where['perid']=$perid;
-             $where['escid']=$escid;
+            $d=new Api_Model_DbTable_PeriodsCourses();
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['perid']=$perid;
+            $where['escid']=$escid;
 
             $cur=$d->_getTeacherXPeridXEscid($eid,$oid,$escid,$perid);
             //$cur=$d->_getTeacherXPeridXEscid1($where);
@@ -62,6 +61,7 @@ class Horary_NhoraryController extends Zend_Controller_Action {
 
     public function fillhoraryAction()
     {
+        $this->_helper->layout()->disablelayout();
         $eid=$this->sesion->eid;
         $oid=$this->sesion->oid;
         $perid=$this->sesion->period->perid;
