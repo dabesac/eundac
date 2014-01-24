@@ -26,7 +26,8 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $datahours=$bd_hours->_getFilter($wheres);
 
         if ( $datahours) {
-            $this->_helper->redirector('listteacher');   
+            // $this->_helper->redirector('listteacher');   
+            $this->_helper->redirector('index','distribution','distribution');
         }
         else{
             $this->_helper->redirector('index','distribution','distribution');         
@@ -60,21 +61,21 @@ class Horary_NhoraryController extends Zend_Controller_Action {
     }
 
     public function fillhoraryAction()
-    {
-        $this->_helper->layout()->disablelayout();
+    {  
         $eid=$this->sesion->eid;
         $oid=$this->sesion->oid;
-        $perid=$this->sesion->period->perid;
-        $escid=$this->sesion->escid;
-        $subid=$this->sesion->subid;
         $pid=base64_decode($this->_getParam('pid'));
         $uid=base64_decode($this->_getParam('uid'));
+        $escid=base64_decode($this->_getParam('escid'));
+        $subid=base64_decode($this->_getParam('subid'));
+        $perid=base64_decode($this->_getParam('perid'));
         $where['eid']=$eid;
         $where['oid']=$oid;
         $where['perid']=$perid;
         $where['escid']=$escid;
         $where['subid']=$subid;
         $where['pid']=$pid;
+        // print_r($where);
         $curso=new Api_Model_DbTable_Coursexteacher();
         $datcur=$curso->_getFilter($where);
         $this->view->cursos=$datcur;
@@ -106,9 +107,9 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $this->_helper->layout()->disableLayout();
         $eid=$this->sesion->eid;
         $oid=$this->sesion->oid;
-        $perid=$this->sesion->period->perid;
-        $escid=$this->sesion->escid;
-        $subid=$this->sesion->subid;
+        $escid=$this->_getParam('escid');
+        $subid=$this->_getParam('subid');
+        $perid=$this->_getParam('perid');
         $courseid=$this->_getParam('courseid');
         $curid=$this->_getParam('curid');
         $turno=$this->_getParam('turno');
@@ -195,10 +196,10 @@ class Horary_NhoraryController extends Zend_Controller_Action {
             $data['teach_uid']=$uid;
             $data['type_class']=$tipo_clase;
             $data['day']=$dia+1;
-            // print_r($data);
             $horaexis=$hora->_getHorary($eid,$oid,$perid,$escid,$curid,$courseid,$turno,$subid,$uid,$fecha[0]['dia'],$data['hora_ini'],$data['hora_fin']);
-            $horasem=$hora->_getHoraryXsemXturno($eid,$oid,$perid,$escid,$sedid,$semid,$turno,$hora_ini,$hora_fin,$data['day']);
-            if ($horaexis || $horasem) { ?>
+            $horasem=$hora->_getHoraryXsemXturno($eid,$oid,$perid,$escid,$subid,$semid,$turno,$hora_ini,$hora_fin,$data['day']);
+            // exit();
+            if ($horaexis or $horasem){ ?>
                 <script type="text/javascript">
                 alert("Ya existe un horario en el mismo semestre ó del mismo curso, no debe duplicar el horario.");
                 </script>
@@ -227,9 +228,12 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $this->_helper->layout()->disableLayout();
         $eid=$this->sesion->eid;
         $oid=$this->sesion->oid;
-        $perid=$this->sesion->period->perid;
-        $escid=$this->sesion->escid;
-        $subid=$this->sesion->subid;
+        // $perid=$this->sesion->period->perid;
+        // $escid=$this->sesion->escid;
+        // $subid=$this->sesion->subid;
+        $escid=$this->_getParam('escid');
+        $subid=$this->_getParam('subid');
+        $perid=$this->_getParam('perid');
         $pid=$this->_getParam('pid');
         $uid=$this->_getParam('uid');
         $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
@@ -251,9 +255,8 @@ class Horary_NhoraryController extends Zend_Controller_Action {
             $where['subid']=$subid;
             $where['teach_uid']=$uid;
             $where['teach_pid']=$pid;
-               //print_r($where);
             $dathora=$hora->_getFilter($where);
-                // print_r($dathora);
+
             $this->view->horarios=$dathora;
             $curso=new Api_Model_DbTable_Coursexteacher();
             $where1['eid']=$eid;
@@ -278,8 +281,8 @@ class Horary_NhoraryController extends Zend_Controller_Action {
      //$this->_helper->layout()->disableLayout();
         $eid=$this->sesion->eid;
         $oid=$this->sesion->oid;
-        $perid=$this->sesion->period->perid;
-        $subid=$this->sesion->subid;
+        $subid=$this->_getParam('subid');
+        $perid=$this->_getParam('perid');
         $courseid=$this->_getParam('courseid');
         $escid=$this->_getParam('escid');
         $teach_uid=$this->_getParam('uid');
@@ -309,7 +312,10 @@ class Horary_NhoraryController extends Zend_Controller_Action {
             
             $teach_uid=base64_encode($teach_uid);
             $teach_pid=base64_encode($teach_pid);
-            $this->_redirect("/horary/nhorary/fillhorary/uid/$teach_uid/pid/$teach_pid");        
+            $escid=base64_encode($escid);
+            $subid=base64_encode($subid);
+            $perid=base64_encode($perid);
+            $this->_redirect("/horary/nhorary/fillhorary/uid/$teach_uid/pid/$teach_pid/escid/$escid/subid/$subid/perid/$perid");        
 
     }
     

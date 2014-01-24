@@ -47,8 +47,8 @@ $nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usua
         	    }
             }
 
-        	foreach ($this->cursos as $curso) { 
-        		$n=new Api_Model_DbTable_Course();
+            foreach ($this->cursos as $curso) { 
+                $n=new Api_Model_DbTable_Course();
                 $where['eid']=$curso['eid'];
                 $where['oid']=$curso['oid'];
                 $where['escid']=$curso['escid'];
@@ -57,12 +57,12 @@ $nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usua
                 $where['curid']=$curso['curid'];
         		$ncur=$n->_getOne($where);
         		?>
-        		<buttom id="codcursos" onclick="cargarPopup(this);" courseid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
+        		<a class='courseasig' href='#' data-toggle="modal" data-target="#mymodalhorasclase" escid="<?php echo $curso['escid']; ?>" subid="<?php echo $curso['subid']; ?>" perid="<?php echo $curso['perid']; ?>" courseid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
 
         			<div class="nomdoc cajacurso" style="background-color:<?php echo $curso["color"] ?>">
                         <?php echo $ncur['name'];?> - <?php echo $curso['turno'];?>
                     </div>
-        		</buttom>
+        		</a>
 
         	<?php	
         	}
@@ -76,20 +76,20 @@ $nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usua
         <b style="font-size:18px">Información:</b> Click en el curso para agregar el horario, para eliminar el horario dar click en cualquiera de las (x).
     </div>
 </div>
-<div class="row">
+<!-- <div class="row">
     <div class="col-md-12">
         <center><a href="/distribution/distribution/primaryteacher" class="btn btn-warning"><i class="icon icon-arrow-left icon-white"></i>Regresar</a></center><br>
     </div>
-</div>
-
+</div> -->
+<!-- Modal Nuevo-->
 <div class="modal fade" id="mymodalhorasclase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-       <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3><b style='color:#0404B4;'><center>Ingresar Horario</center></b></h3>
-    </div>
-    <div class="modal-body">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3><b style='color:#0404B4;'><center>Ingresar Horario</center></b></h3>
+      </div>
+      <div class="modal-body">
         <div class="alert alert-success">
             <b style="font-size:15px">Nota:</b> Las horas académicas son de 50 minutos a partir de la HORA DE INICIO.
         </div>
@@ -218,42 +218,49 @@ $nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usua
 
                 <tr colspan="2"><td></td><td></td></tr>
             </table>
-    </div>
-    <div class="modal-footer">
-            <a id="guardarhora" href="#" class="btn btn-primary">Guardar</a>
-
-            <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-    </div>  
-     
-
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div>
+      </div>
+      <div class="modal-footer">
+        <a id="guardarhora" href="#" class="btn btn-primary">Guardar</a>
+        <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div id="cargaaqui"></div>
 <div id="horariocurso"></div>
 
 
 <script type="text/javascript">
+
+$(".courseasig").click(function(){
+    escid=$(this).attr('escid');
+    subid=$(this).attr('subid');
+    perid=$(this).attr('perid');
+    courseid=$(this).attr('courseid');
+    turno=$(this).attr('turno');
+    curid=$(this).attr('curid');
+    semid=$(this).attr('semid');
+});
+
 var dathora="<?php echo $this->dathora; ?>";
 var d_uid="<?php echo $this->usuario[0]['uid'] ?>";
 var d_pid="<?php echo $this->usuario[0]['pid'] ?>";
+var escid="<?php echo $this->cursos[0]['escid']?>";
+var subid="<?php echo $this->cursos[0]['subid']?>";
+var perid="<?php echo $this->cursos[0]['perid']?>";
 // alert(dathora);
 if (dathora=="1") {
-    url="/horary/nhorary/horaryteacher/uid/"+d_uid+"/pid/"+d_pid;
+    url="/horary/nhorary/horaryteacher/uid/"+d_uid+"/pid/"+d_pid+"/escid/"+escid+"/subid/"+subid+"/perid/"+perid;
     $("#horariocurso").html("<img src='/img/spinner.gif'> Cargando....");
     $("#horariocurso").load(url);
 };
 // var curso;
-function cargarPopup($curso){
-    $("#mymodalhorasclase").show();
-    $('#mymodalhorasclase').modal('show');
-    $this=$($curso);
-    courseid=$this.attr('courseid');
-    turno=$this.attr('turno');
-    curid=$this.attr('curid');
-    semid=$this.attr('semid');
-}
+// $("#mymodalhorasclase").click(function(){
+// //     // $("#mymodalhorasclase").show();
+// //     // $('#mymodalhorasclase').modal('show');
+// });
+
 $("#guardarhora").click(function(){
 	var dia=$("#dia").val();
 	var h_ini=$("#hora_ini").val();
@@ -263,8 +270,7 @@ $("#guardarhora").click(function(){
 	var uid="<?php echo $this->usuario[0]['uid'] ?>";
 	var pid="<?php echo $this->usuario[0]['pid'] ?>";
 	var hora_ini=h_ini+":"+m_ini+":00";
-    // alert(hora_ini);
-    
+
     if (tipo_clase=="") {
         alert("Debe seleccionar el tipo de clase.");
         return false;
@@ -278,7 +284,7 @@ $("#guardarhora").click(function(){
         return false;
     }
     else{
-		var url="/horary/nhorary/validatetime/uid/"+uid+"/pid/"+pid+"/dia/"+dia+"/hora_ini/"+hora_ini+"/hora_acad/"+hacad+"/courseid/"+courseid+"/turno/"+turno+"/curid/"+curid+"/semid/"+semid+"/tipoclase/"+tipo_clase;
+		var url="/horary/nhorary/validatetime/uid/"+uid+"/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/pid/"+pid+"/dia/"+dia+"/hora_ini/"+hora_ini+"/hora_acad/"+hacad+"/courseid/"+courseid+"/turno/"+turno+"/curid/"+curid+"/semid/"+semid+"/tipoclase/"+tipo_clase;
 		 $("#cargaaqui").load(url);
 	}
 });
