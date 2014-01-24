@@ -406,23 +406,38 @@ class Horary_NhoraryController extends Zend_Controller_Action {
             $perid=base64_decode($this->_getParam('perid'));
 
             $param=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
-            $attrib=array('hoursid','hours_begin','hours_begin_afternoon');
+            $attrib=array('hoursid','hours_begin','hours_update','hours_begin_afternoon','hours_update_afternoon');
             $bdbegin= new Api_Model_DbTable_HoursBeginClasses();
             $datah=$bdbegin->_getFilter($param,$attrib);
 
-            $datahm=$datah[0]['hours_begin'];
-            $dataht=$datah[0]['hours_begin_afternoon'];
-            $datahm=split(":",$datahm);
-            $hour=$datahm[0];
-            $minute=$datahm[1];
-            $dataht=split(":",$dataht);
-            $hour_t=$dataht[0];
-            $minute_t=$dataht[1];
-            $arrays=array('hour'=>$hour,'minute'=>$minute,'hour_t'=>$hour_t,'minute_t'=>$minute_t);
-            $fm = new Horary_Form_Hours();
-            $fm->populate($arrays);
-
+            if ($datah[0]['hours_update'] or $datah[0]['hours_update_afternoon']) {
+                $datahm=$datah[0]['hours_update'];
+                $dataht=$datah[0]['hours_update_afternoon'];
+                $datahm=split(":",$datahm);
+                $hour=$datahm[0];
+                $minute=$datahm[1];
+                $dataht=split(":",$dataht);
+                $hour_t=$dataht[0];
+                $minute_t=$dataht[1];
+                $arrays=array('hour'=>$hour,'minute'=>$minute,'hour_t'=>$hour_t,'minute_t'=>$minute_t);
+                $fm = new Horary_Form_Hours();
+                $fm->populate($arrays);
+            }
+            else{
+                $datahm=$datah[0]['hours_begin'];
+                $dataht=$datah[0]['hours_begin_afternoon'];
+                $datahm=split(":",$datahm);
+                $hour=$datahm[0];
+                $minute=$datahm[1];
+                $dataht=split(":",$dataht);
+                $hour_t=$dataht[0];
+                $minute_t=$dataht[1];
+                $arrays=array('hour'=>$hour,'minute'=>$minute,'hour_t'=>$hour_t,'minute_t'=>$minute_t);
+                $fm = new Horary_Form_Hours();
+                $fm->populate($arrays);
+            }
             $this->view->fm=$fm;
+
             $pk['hoursid']=$datah[0]['hoursid'];
         
             if ($this->getRequest()->isPost())
@@ -460,7 +475,6 @@ class Horary_NhoraryController extends Zend_Controller_Action {
                     unset($frmdata['hour_t']);
                     unset($frmdata['minute_t']);
                     unset($frmdata['pk']);
-                
                     $reg_= new Api_Model_DbTable_HoursBeginClasses();
                     if ($reg_->_update($frmdata,$pk)) {
                         $redirec=1;
