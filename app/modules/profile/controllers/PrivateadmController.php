@@ -179,6 +179,60 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
         }
     }
 
+    public function coursescurrentAction(){
+        try {
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $pid = $this->sesion->pid;
+            $uid = $this->sesion->uid;
+            $perid = $this->sesion->period->perid;
+
+            $where = array('eid'=>$eid, 'oid'=>$oid, 'pid'=>$pid, 'uid'=>$uid, 'perid'=>$perid);
+
+            $coursesxTeacherDb = new Api_Model_DbTable_Coursexteacher();
+            $coursesDb = new Api_Model_DbTable_Course();
+            $schoolDb = new Api_Model_DbTable_Speciality();
+
+            $courses = $coursesxTeacherDb->_getFilter($where);
+
+            $c = 0;
+            $esc = 0;
+            $esp = 0;
+            $escid = '_';
+            foreach ($courses as $course) {
+                $attrib = array('name');
+                $where = array('eid'=>$eid, 'oid'=>$oid, 'curid'=>$course['curid'], 'courseid'=>$course['courseid']);
+                $courseName[$c] = $coursesDb->_getFilter($where, $attrib);
+                $c++;
+                if ($escid <> $course['escid']) {
+                    $attrib = array('name', 'parent');
+                    $escid = $course['escid'];
+                    $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid);
+                    $schoolName[$esc] = $schoolDb->_getFilter($where, $attrib);
+                    $facultyName[$esc] = $schoolDb->_getFacspeciality($where);
+                    if ($schoolName[$esc][0]['parent']) {
+                        $specialityName[$esp] = $schoolName[$esc][0]['name'];
+                        $esp++;
+                        $attrib = array('name');
+                        $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$schoolName[$esc][0]['parent']);
+                        $schoolName[$esc] = $schoolDb->_getFilter($where, $attrib);
+                    }else{
+                        $schoolName[$esc] = $schoolName[$esc][0]['name'];
+                    }
+                    $esc++;
+                }
+            }
+
+            $this->view->courses = $courses;
+            $this->view->facultyName = $facultyName;
+            $this->view->schoolName = $schoolName;
+            $this->view->specialityName = $specialityName;
+
+        } catch (Exception $e) {
+            print 'Error'.$e->getMessage();
+        }
+    }
+
 
 
 }

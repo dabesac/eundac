@@ -1,0 +1,49 @@
+<div class="row">
+	<br>
+	<div class="col-md-5 col-md-offset-1">
+		<blockquote>
+			<h2>Cursos a <span class="text-warning">Cargo</span></h2>
+		</blockquote>
+	</div>
+	<div class="col-md-1 col-md-offset-4">
+		<blockquote>
+			<h2><span class="glyphicon glyphicon-book text-warning"></span></h2>
+		</blockquote>
+	</div>
+</div>
+<hr>
+
+<?php 
+$escid = "_";
+$esc = 0;
+$interruptor = 0;
+$change = 0;
+foreach ($this->courses as $course): ?>
+	<?php if ($course['escid'] <> $escid): 
+		$escid = $course['escid'] ?>
+		<div class="row">
+			<div class="col-md-5 col-md-offset-1">
+				<h4>Facultad de <span class="text-muted"><?php echo $this->facultyName[$esc][0]['nomfac'] ?></span></h4>
+			</div>
+			<div class="col-md-5">
+				<h4 class="text-right"><span class="text-muted"><?php echo $this->schoolName[$esc][0]['name'] ?></span></h4>
+				<?php if ($this->specialityName): ?>
+					<h4 class="text-right"><?php echo $this->specialityName[$esc] ?></h4>
+				<?php endif ?>
+			</div>
+		</div>
+			<hr>
+	<div class="row">
+	<?php $esc++;?>
+	<?php $interruptor = 1;
+	endif ?>
+		<div class="col-md-4">
+			<div class="jumbotron">
+	
+			</div>
+		</div>
+	<?php if ($interruptor == 1): ?>
+	</div>
+	<?php $interruptor = 0;
+	endif ?>
+<?php endforeach ?>
