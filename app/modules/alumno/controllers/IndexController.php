@@ -285,7 +285,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
                         'uid'=>$uid, 
                         'escid'=>$escid, 
                         'subid'=>$subid, 
-                        'perid'=>$perid);
+                        'perid'=>'13B');
         $attrib = array('state');
         $register = $registerDb->_getFilter($where, $attrib);
 
