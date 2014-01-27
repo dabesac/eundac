@@ -277,6 +277,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
         $pid=$this->sesion->pid;
         $perid= $this->sesion->period->perid;
         $subid = $this->sesion->subid;
+        $rid = $this->sesion->rid;
 
         $registerDb = new Api_Model_DbTable_Registration();
         $where = array('eid'=>$eid, 
@@ -289,7 +290,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
         $attrib = array('state');
         $register = $registerDb->_getFilter($where, $attrib);
 
-        if ($register[0]['state'] == 'M') {
+        if ($register[0]['state'] == 'M' && $rid == 'AL') {
             $data['eid']=$eid;
             $data['oid']=$oid;
             $where = array('eid'=>$eid,'oid'=>$oid,);
