@@ -19,6 +19,8 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
     public function indexAction()
     {
         try {
+            $this->_helper->layout()->disableLayout();
+
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $perid=$this->sesion->period->perid;
