@@ -94,9 +94,11 @@ ob_start();
 
 $mpdf=new mPDF(); 
 $mpdf=new mPDF('win-1252','A4','','','','',22);
+$mpdf->SetWatermarkImage('/img/UNDAC.png', 0.07, 'F');
+$mpdf->showWatermarkImage = true;
 $mpdf->WriteHTML($html);
-// $mpdf->Output('Copia Ficha-'.$this->perid.'.pdf','D');
-$mpdf->Output();
+$mpdf->Output('Copia Ficha-'.$this->perid.'.pdf','D');
+// $mpdf->Output();
 exit;
 
 //==============================================================
