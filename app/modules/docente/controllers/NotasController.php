@@ -15,7 +15,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 
 	public function indexAction(){
 		// Periods Now
-		$this->_helper->layout()->disablelayout();
+		//$this->_helper->layout()->disablelayout();
 
 		$where['eid']=$this->sesion->eid;
 		$where['oid']=$this->sesion->oid;

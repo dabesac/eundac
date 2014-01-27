@@ -181,6 +181,8 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
 
     public function coursescurrentAction(){
         try {
+            $this->_helper->layout()->disableLayout();
+
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $pid = $this->sesion->pid;
@@ -202,7 +204,7 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
             foreach ($courses as $course) {
                 $attrib = array('name');
                 $where = array('eid'=>$eid, 'oid'=>$oid, 'curid'=>$course['curid'], 'courseid'=>$course['courseid']);
-                $courseName[$c] = $coursesDb->_getFilter($where, $attrib);
+                $coursesName[$c] = $coursesDb->_getFilter($where, $attrib);
                 $c++;
                 if ($escid <> $course['escid']) {
                     $attrib = array('name', 'parent');
@@ -227,6 +229,7 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
             $this->view->facultyName = $facultyName;
             $this->view->schoolName = $schoolName;
             $this->view->specialityName = $specialityName;
+            $this->view->coursesName = $coursesName;
 
         } catch (Exception $e) {
             print 'Error'.$e->getMessage();
