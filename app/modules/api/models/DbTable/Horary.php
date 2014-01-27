@@ -43,11 +43,11 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
     public function _getHorary($eid='',$oid='',$perid='',$escid='',$curid='',$cursoid='',$turno='',$subid='',$teach_uid='',$fecha='', $hora_ini='', $hora_fin=''){
         try
         {
-            if ($eid==""|| $oid==""||$perid==""||$escid==""||$curid==""||$cursoid==""||$turno==""||$subid==""||$d_uid=="") return false;
+            if ($eid==""|| $oid==""||$perid==""||$escid==""||$curid==""||$cursoid==""||$turno==""||$subid==""||$teach_uid=="") return false;
             if ($fecha=="") $fechas="";
             else $fechas=" and fecha='$fecha'"; 
             $f = $this->fetchAll("eid='$eid' and oid='$oid' and subid='$subid' and perid='$perid' and escid='$escid' and curid='$curid' 
-                    and cursoid='$cursoid' and turno='$turno' and teach_uid='$teach_uid' $fechas and (hora_ini='$hora_ini' or hora_fin='$hora_fin')");
+                    and courseid='$cursoid' and turno='$turno' and teach_uid='$teach_uid' and (hora_ini='$hora_ini' or hora_fin='$hora_fin')");
             if($f) return $f->toArray();
             return false;
         } 
@@ -61,7 +61,8 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
     public function _getHoraryXsemXturno($eid='',$oid='',$perid='',$escid='',$subid='',$semid='',$turno='',$hora_ini='',$hora_fin='',$day=''){
         try
         {
-            if ($eid==""|| $oid==""||$perid==""||$escid==""||$subid==""||$semid==""||$turno==""||$hora_ini==''||$hora_fin==''||$day=='') return false; 
+
+            if ($eid=="" || $oid=="" || $perid=="" || $escid=="" || $subid=="" || $semid=="" || $turno=="" || $hora_ini=='' || $hora_fin=='' || $day=='') return false; 
             $f = $this->fetchAll("eid='$eid' and oid='$oid' and subid='$subid' and perid='$perid' and escid='$escid' 
                     and semid='$semid' and turno='$turno' and day='$day' and (hora_ini='$hora_ini' or hora_fin='$hora_fin')");
             if($f) return $f->toArray();

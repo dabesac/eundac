@@ -93,6 +93,7 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 				}
 				$results = $select->query();
 				$rows = $results->fetchAll();
+				// print_r($rows); 
 				if ($rows) return $rows;
 				return false;
 		}catch (Exception $e){

@@ -227,7 +227,7 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 	public function _getTeacherXPeridXEscid($eid,$oid,$escid,$perid){
         try{
             $sql=$this->_db->query("
-             select distinct on(DC.uid)DC.uid,DC.pid,PC.courseid,PC.perid,PC.curid,PC.escid,PC.turno,DC.is_main,DC.is_com,P.last_name0, P.last_name1, P.first_name from base_periods_courses PC inner join base_course_x_teacher DC 
+             select distinct on(DC.uid)DC.uid,DC.pid,PC.courseid,PC.perid,PC.curid,PC.escid,PC.subid,PC.turno,DC.is_main,DC.is_com,P.last_name0, P.last_name1, P.first_name from base_periods_courses PC inner join base_course_x_teacher DC 
             on PC.perid=DC.perid and PC.escid=DC.escid and PC.eid=DC.eid  and PC.oid=DC.oid and PC.curid=DC.curid and PC.courseid=DC.courseid inner join base_person P
             on DC.pid=P.pid and P.eid=DC.eid where PC.eid='$eid' and PC.oid='$oid' and PC.perid='$perid' and PC.escid='$escid'order by DC.uid ASC
              ");          
