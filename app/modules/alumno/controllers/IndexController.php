@@ -18,7 +18,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
         try {
 
              if ($this->_validaren()=="false"){
-                 $this->_redirect('/alumno/index/encuesta');
+                $this->_redirect('/alumno/index/encuesta');
              }
 
             // if ($this->_verifyprofile() == "1"){
@@ -342,11 +342,11 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 //print_r($curso);
                 if(!$cur)
                 {
-                    $this->_redirect('/alumno');
+                    $this->_redirect('/profile/public/student');
                 }
             }       
         }else{
-            $this->_redirect('/alumno/index');
+            $this->_redirect('/profile/public/student');
         }
         $this->view->cursos=$cur;
      
