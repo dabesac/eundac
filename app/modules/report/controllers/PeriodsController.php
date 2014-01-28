@@ -58,7 +58,7 @@
  	public function listperiodsAction(){
  		try {
  			$this->_helper->layout()->disableLayout();
-
+ 			
  			$eid = $this->sesion->eid;
  			$oid = $this->sesion->oid;
 
