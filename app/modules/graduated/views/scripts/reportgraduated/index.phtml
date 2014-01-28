@@ -1,11 +1,14 @@
 <div class="row">
 	<br>
-	<div class="col-md-5 col-md-offset-1">
+	<div class="col-md-9 col-md-offset-1">
 		<blockquote>
-			<h2>Egresados <span class="text-warning"><?php echo $this->school ?></span></h2>
+			<h2>Egresados <span class="text-warning"><?php echo $this->schoolName ?></span></h2>
+			<?php if ($this->specialityName): ?>
+				<h4 class="text-muted"><?php echo $this->specialityName ?></h4>
+			<?php endif ?>
 		</blockquote>
 	</div>
-	<div class="col-md-1 col-md-offset-4">
+	<div class="col-md-1">
 		<blockquote>
 			<h2><span class="glyphicon glyphicon-user text-warning"></span></h2>
 		</blockquote>
@@ -13,38 +16,46 @@
 </div>
 <hr class="featurette-divider">
 
-<div id="Admin" class="row">
-	<div class="col-md-4 col-md-offset-1">
-		<h5 class="text-muted">Facultad</h5>
-			<select id="facid" class="form-control">
-				<option>- Seleccione la Facultad -</option>
-				<?php
-				if ($this->facultades) {
-					foreach ($this->facultades as $facultades) { 
-						$str = ($this->facid==$facultades['facid'])?"selected ":""; ?>
-						<option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
+	
+
+<div class="row">
+	<div id="Admin">
+		<div class="col-md-3 col-md-offset-2">
+			<h5 class="text-muted">Facultad</h5>
+				<select id="facid" class="form-control">
+					<option>Seleccione la Facultad</option>
 					<?php
-					}
-				} ?>
-			</select>
+					if ($this->facultades) {
+						foreach ($this->facultades as $facultades) { 
+							$str = ($this->facid==$facultades['facid'])?"selected ":""; ?>
+							<option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
+						<?php
+						}
+					} ?>
+				</select>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Escuela</h5>
+				<select id="escid" class="form-control" style="width:260px">
+					<option value="">Seleccione la Escuela</option>
+				</select>
+		</div>
 	</div>
-	<div class="col-md-3">
-		<h5 class="text-muted">Escuela</h5>
-			<select id="escid" class="form-control" style="width:260px">
-				<option value="">Seleccione la Escuela</option>
-			</select>
+	<div id="divSpecilaity" class="col-md-3">
+		<?php if ($this->specialityName == ''): ?>
+			<h5 class="text-muted">Especialidad</h5>
+				<select id="especialidad" class="form-control" style="width:260px">
+					<option value="">Seleccione la Especialidad</option>
+				</select>
+		<?php else: ?>
+			<input id="especialidad" type="hidden" value="<?php echo $this->escid ?>">
+		<?php endif ?>
 	</div>
-	<div class="col-md-3">
-		<h5 class="text-muted">Especialidad</h5>
-			<select id="especialidad" class="form-control" style="width:260px">
-				<option value="">Seleccione la Especialidad</option>
-			</select>
-	</div>
-	<hr class="featurette-divider">
 </div>
+
 <div class="row">
 	<br>
-	<div class="col-md-2 col-md-offset-1">
+	<div class="col-md-1 col-md-offset-2">
 		<h5 class="text-muted">Año</h5>
 			<select id="anho" class="form-control" style="width:100px">
             	<option value="">Año</option>
@@ -61,7 +72,7 @@
 			</select>
 		<br>
 	</div>
-	<div class="col-md-2">
+	<div class="col-md-1">
 		<br><br>
 		<div class="checkbox">
 		  	<h5 class="text-muted"><label>
@@ -72,7 +83,7 @@
 	</div>
 	<div class="col-md-1">
 		<br>
-		<h3><a class="text-success" title="Generar" href="#" id="generar"><span class="glyphicon glyphicon-send"></span></a></h3>
+		<h3><a class="btn btn-success" title="Generar" href="#" id="generar"><span class="glyphicon glyphicon-send"></span> Generar</a></h3>
 	</div>
 </div>
 
@@ -90,13 +101,17 @@
 	var rid="<?php echo $this->rid ?>";
 	if (rid=="RF" || rid=="DIREC") {
 		$("#Admin").addClass('hidden');
+		$('#divSpecilaity').addClass('col-md-offset-2');
 		var facid=$("#facid").val();
 		$("#escid").load("/graduated/reportgraduated/schools/facid/"+facid);
 		if (rid=="DIREC") {
 			$("#escid").attr("disabled",true);
 			var escid='<?php echo $this->escid?>';
 			$.get("/graduated/reportgraduated/speciality/escid/"+escid, function(data){
-				$('#especialidad').html(data);
+				if (data == '<option value="">No Se Encontraron Registros</option>')
+					$('#divSpecilaity').addClass('hidden');
+				else
+					$('#especialidad').html(data);
 			});
 		};
 	};

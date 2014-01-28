@@ -326,7 +326,8 @@ class Profile_PublicController extends Zend_Controller_Action {
             $assigneeYes = 0;
             if($family['assignee'] == 'N'){
                 $attrib = array('assignee');
-                $familiars = $dbrelation->_getFilter($where, $attrib);
+                $where = array('eid'=>$eid, 'pid'=>$pid);
+                $familiars = $relationDb->_getFilter($where, $attrib);
                 foreach ($familiars as $assignee) {
                     if ($assignee['assignee'] == 'S') {
                         $assigneeYes = 1;
@@ -363,7 +364,6 @@ class Profile_PublicController extends Zend_Controller_Action {
                     }elseif($formdata["type"]=="MA"){
                         $formdata["sex"]="F";
                     }
-                    $where = array('eid'=>$eid, 'famid'=>$famid);
 
                     if($formdata["live"]=="N")
                         {
@@ -372,12 +372,12 @@ class Profile_PublicController extends Zend_Controller_Action {
                             $formdata["address"]="_";
                         }
 
+                    $where = array('eid'=>$eid, 'pid'=>$pid, 'famid'=>$famid);
                     $relationdata=array("type"=>$type,"assignee"=>$assignee);
-                    print_r($formdata);
-                    print_r($relationdata);
                     
                     $saver=$relationDb->_update($relationdata, $where);
                     
+                    $where = array('eid'=>$eid, 'famid'=>$famid);
                     $save=$familyDb->_update($formdata, $where);
                     //print_r($relationdata);
 

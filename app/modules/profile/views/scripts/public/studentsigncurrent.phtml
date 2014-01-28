@@ -5,11 +5,13 @@
 	<div class="col-md-6">
 		<h3><blockquote>Matricula Actual <strong class="text-muted"><?php echo $this->data['perid']?></strong></blockquote></h3>
 	</div>
-	<div class="col-md-1">
-		<h1><a id="comprimir" class="text-warning" href="##" title="Comprimir"><span class="glyphicon glyphicon-th-large"></span></a></h1>
+	<div class="col-md-2 col-md-offset-1">
+		<br>
+		<h2 class="text-right"><a id="comprimir" data-toggle="popover" data-placement="left" data-container="body" data-content="Vista comprimida de tus cursos" class="text-warning" href="##" title="Comprimir"><span class="glyphicon glyphicon-th-large"></span></a>
+		<a id="extender" data-toggle="popover" data-placement="bottom" data-container="body" data-content="Vista extendida de tus cursos" class="text-warning" href="##" title="Extender"><span class="glyphicon glyphicon-th"></span></a></h2>
 	</div>
 	<div class="col-md-1">
-		<h1><a id="extender" class="text-warning" href="##" title="Extender"><span class="glyphicon glyphicon-th"></span></a></h1>
+		<h2></h2>
 	</div>
 </div>
 <div class="row">
@@ -75,38 +77,71 @@
 			</div>
 		</div>
 	</div>
-	<div id="horary" class="col-md-10 col-md-offset-1"></div>
 	<div class="col-md-1">
 		<br><br><br><br><br><br><br>
 		<blockquote>
-			<h3><a id="btnHorary" href="##" title="Ver Horario" class="text-warning"><span class="glyphicon glyphicon-calendar"></span></a></h3>
+			<h3><a id="btnHorary" data-toggle="popover" data-placement="left" data-container="body" data-content="Mira aqui tu horario" href="##" title="Ver Horario" class="text-warning"><span class="glyphicon glyphicon-calendar"></span></a></h3>
 		</blockquote>
 	</div>
 </div>
+<div id="horary" class="row">
+	<div id="horaryData" class="col-md-10 col-md-offset-1"></div>
+	<div class="col-md-1">
+		<br><br><br><br><br><br><br>
+		<blockquote>
+			<h3><a id="btnCourses" data-toggle="popover" data-placement="left" data-container="body" data-content="Volver a tus cursos" href="##" title="Volver" class="text-warning"><span class="glyphicon glyphicon-book"></span></a></h3>
+		</blockquote>
+	</div>
+</div>
+
 <div id="notasExtendidas" class="panel panel-warning">
 	<div class="panel-body">
 	</div>
 </div>
 
 <script>
+	$('#extender').popover('show');
+	setTimeout(function(){
+		$('#extender').popover('hide');
+	}, 2000);
+	$('#extender').hover(function(){
+		$('#extender').popover('toggle');
+	});
+	
+	$('#comprimir').popover('show');
+	setTimeout(function(){
+		$('#comprimir').popover('hide');
+	}, 2000);
+	$('#comprimir').hover(function(){
+		$('#comprimir').popover('toggle');
+	});
+
+	$('#btnHorary').hover(function(){
+		$('#btnHorary').popover('toggle');
+	});
+
 	$('#notasExtendidas').addClass('hidden');
 	$('#horary').slideUp();
+	$('#horaryData').load('/horary/consolidated/index')
 	$('#notasExtendidas').load('/register/listcurrentnotes');
 	$('#notasExtendidas').fadeOut('slow');
 
 	$('#extender').click(function(){
+		$('#extender').popover('show');
 		$('#notasComprimidas').fadeOut('slow');
+		$('#horary').fadeOut('slow');
 		$('#notasExtendidas').removeClass('hidden');
 		$('#notasExtendidas').fadeIn('slow');
 	});
 
 	$('#comprimir').click(function(){
+		$('#comprimir').popover('show');
 		$('#notasExtendidas').fadeOut('slow');
 		$('#notasComprimidas').fadeIn('slow');
 	});
-	$('#btnHorary').click(function(){
-		$('#horary_notas').slideToggle();
-		$('#horary').load('/horary/consolidated/index')
+	$('#btnHorary, #btnCourses').click(function(){
+		$('#btnHorary').popover('destroy');
+		$('#notasComprimidas').slideToggle();
 		$('#horary').removeClass('hidden');
 		$('#horary').slideToggle();
 	});
