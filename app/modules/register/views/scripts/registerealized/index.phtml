@@ -12,7 +12,7 @@
 			<div class="panel-heading">
 					<p style='font-size:15px'><span class="glyphicon glyphicon-list"></span><?php echo " ".$perid." - ".$pname; 
 						if ($this->rid!='AL') { ?>		
-							<a href='/register/registerstudent/print/uid/<?php echo base64_encode($this->uid)?>/pid/<?php echo base64_encode($this->pid)?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/perid/<?php echo base64_encode($perid)?>' class='btn btn-info' style='float:right; margin-left:10px; padding: 3px 12px'><span class='glyphicon glyphicon-file'></span> Copia FICHA</a>
+							<a href='/register/registerstudent/printcopiaficha/uid/<?php echo base64_encode($this->uid)?>/pid/<?php echo base64_encode($this->pid)?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/perid/<?php echo base64_encode($perid)?>' class='btn btn-info' style='float:right; margin-left:10px; padding: 3px 12px'><span class='glyphicon glyphicon-file'></span> Copia FICHA</a>
 						<?php
 						}	
 						?>	
