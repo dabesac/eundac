@@ -66,17 +66,9 @@ $(function () {
 
 	$('#profileTab a').click(function (e) {
 		e.preventDefault()
-	    $(this).tab('show')
+	    $(this).tab('show');
 	});
 	  
-	$("#btnmaininfo").click(function(){
-		$("#signin").load("/profile/public/studentsigncurrent");
-		$("#masinfosignTab a:last").tab('show')
-	});
-	$("#btnmainsignin").click(function(){
-		$("#info").load("/profile/public/studentinfo");
-		$("#masinfoTab a:last").tab('show')
-	});
 });
 </script>
 

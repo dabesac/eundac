@@ -80,10 +80,13 @@
 			url:$(this).attr("action"),
 			data:$(this).serialize(),
 			success: function(data){
-				$("#editform").html(data)
-				$('#editform').html('');
-				$('#datastudent').removeClass('hidden');
-				$('#datastudent').load('/profile/public/studentstatistic');
+				$("#datastudent").html(data);
+            	$("#datastudent").html('<br><br><center><img src="/img/spinner.gif" alt="" /></center>');
+            	$("#datastudent").fadeOut('fast', function(){
+            		$("#datastudent").load('/profile/public/studentstatistic', function(){
+            			$("#datastudent").fadeIn('fast');
+            		});
+            	});
 			}
 		})
 		return false;
@@ -105,8 +108,11 @@
 
     $("#backeditBtn a").click(function (e) {
     	e.preventDefault()
-      	$("#editform").html("");
-      	$("#datastudent").removeClass('hidden');
+      	$("#datastudent").fadeOut('fast', function(){
+      		$('#datastudent').load('/profile/public/studentstatistic', function(){
+				$('#datastudent').fadeIn('fast');
+			});
+      	});
   	})
 
 </script>

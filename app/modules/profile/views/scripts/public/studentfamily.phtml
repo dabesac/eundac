@@ -38,9 +38,11 @@
 							<a href="##" id="edit<?php echo $fam[0]['famid']?>" class="text-warning" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
 							<script>
 								$("#edit<?php echo $fam[0]['famid']?>").click(function(){
-									$('#datastudent').addClass('hidden');
-								    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-								    $("#editform").load("/profile/public/studenteditfamily/famid/<?php echo $fam[0]['famid']?>");
+									$('#datastudent').fadeOut('fast', function(){
+										$('#datastudent').load("/profile/public/studenteditfamily/famid/<?php echo $fam[0]['famid']?>", function(){
+											$('#datastudent').fadeIn('fast');
+										});
+									});
 								})
 							</script>
 						</div>
@@ -115,7 +117,7 @@
 
 				</div>
 			</div>
-		</div><!--Panel Body-->
+		</div>
 		<?php $c++; 
 		}?>
 	</div>
@@ -130,8 +132,10 @@
 
 <script>
 	$("#newFamily").click(function(){
-		$('#datastudent').addClass('hidden');
-	    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-	    $("#editform").load("/profile/public/studentsavefamily");
+		$('#datastudent').fadeOut('fast', function(){
+			$('#datastudent').load('/profile/public/studentsavefamily', function(){
+				$('#datastudent').fadeIn('fast');
+			});
+		});
 	})
 </script>

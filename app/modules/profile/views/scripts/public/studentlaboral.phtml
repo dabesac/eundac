@@ -35,9 +35,11 @@
 						<td align="center"><h5><a class="text-warning" id="edit<?php echo $lab['lid']?>" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
 		                	<script>
 							  $("#edit<?php echo $lab['lid']?>").click(function(){
-							    $("#datastudent").addClass('hidden');
-						    	$("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-						    	$("#editform").load("/profile/public/studenteditlaboral/lid/<?php echo $lab['lid']?>");
+							    $('#datastudent').fadeOut('fast', function(){
+									$('#datastudent').load("/profile/public/studenteditlaboral/lid/<?php echo $lab['lid']?>", function(){
+										$('#datastudent').fadeIn('fast');
+									});
+								});
 							  });
 							</script></h5></td>
 							<td align="center"><h5><a class="text-warning" id="remove<?php echo $lab['lid']?>" href="##" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
@@ -71,9 +73,11 @@
 
 <script>
 	$("#newLaboral").click(function(){
-    	$("#datastudent").addClass('hidden');
-    	$("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    	$("#editform").load("/profile/public/studentnewlaboral");
+    	$('#datastudent').fadeOut('fast', function(){
+			$('#datastudent').load('/profile/public/studentnewlaboral', function(){
+				$('#datastudent').fadeIn('fast');
+			});
+		});
   	})
 
 </script>

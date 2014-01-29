@@ -200,7 +200,9 @@ class Profile_PublicController extends Zend_Controller_Action {
                     $assigneeYes = 1;
                 }
             }
-            $this->view->assignee = $assigneeYes;
+            if ($assigneeYes == 0) {
+                $form->assignee->addMultiOption('S', 'Si');
+            }
 
             $attrib=array("type");
             $relation=$dbrelation->_getFilter($where, $attrib);
@@ -226,6 +228,7 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             if ($this->getRequest()->isPost()) {
                 $formdata=$this->getRequest()->getPost();
+                print_r($formdata);
                 if ($form->isValid($formdata)) {
 
                     $type=$formdata["type"];
@@ -334,7 +337,9 @@ class Profile_PublicController extends Zend_Controller_Action {
                     }
                 }
             }
-            $this->view->assignee = $assigneeYes;
+            if ($assigneeYes == 0) {
+                $form->assignee->addMultiOption('S', 'Si');
+            }
 
             
 
@@ -856,14 +861,14 @@ class Profile_PublicController extends Zend_Controller_Action {
             $perid=$this->sesion->period->perid;
             $rid=$this->sesion->rid;
 
-            $data=array("pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "subid"=>$subid, "perid"=>$perid, "rid"=>$rid, 'nc'=>$nc);
+            $data=array("pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "subid"=>$subid, "perid"=>$perid, "rid"=>$rid);
             $this->view->data=$data;
 
             $dbcuract=new Api_Model_DbTable_Registrationxcourse();
             $dbtyperate=new Api_Model_DbTable_PeriodsCourses();
 
-            $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "perid"=>$perid);
-            $attrib=array("courseid", "turno","curid","promedio1","promedio2","nota4_i","nota9_i","nota4_ii","nota9_ii","notafinal");
+            $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "perid"=>$perid, 'state'=>'M');
+            $attrib=array("courseid", "turno","curid","promedio1","promedio2","nota4_i","nota9_i","nota4_ii","nota9_ii","notafinal", 'state');
             //print_r($this->sesion);
             $curact=$dbcuract->_getFilter($where, $attrib);
             //print_r($curact);
@@ -911,8 +916,6 @@ class Profile_PublicController extends Zend_Controller_Action {
                 }
             }
 
-            $nc;
-            
             $this->view->nc = $nc;
             $this->view->typerate=$typerate;
             $this->view->name=$name;

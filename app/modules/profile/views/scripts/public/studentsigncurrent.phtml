@@ -7,8 +7,8 @@
 	</div>
 	<div class="col-md-2 col-md-offset-1">
 		<br>
-		<h2 class="text-right"><a id="comprimir" data-toggle="popover" data-placement="left" data-container="body" data-content="Vista comprimida de tus cursos" class="text-warning" href="##" title="Comprimir"><span class="glyphicon glyphicon-th-large"></span></a>
-		<a id="extender" data-toggle="popover" data-placement="bottom" data-container="body" data-content="Vista extendida de tus cursos" class="text-warning" href="##" title="Extender"><span class="glyphicon glyphicon-th"></span></a></h2>
+		<h2 class="text-right"><a id="comprimir" class="text-warning" href="##" title="Comprimir"><span class="glyphicon glyphicon-th-large"></span></a>
+		<a id="extender" class="text-warning" href="##" title="Extender"><span class="glyphicon glyphicon-th"></span></a></h2>
 	</div>
 	<div class="col-md-1">
 		<h2></h2>
@@ -89,7 +89,7 @@
 	<div class="col-md-1">
 		<br><br><br><br><br><br><br>
 		<blockquote>
-			<h3><a id="btnCourses" data-toggle="popover" data-placement="left" data-container="body" data-content="Volver a tus cursos" href="##" title="Volver" class="text-warning"><span class="glyphicon glyphicon-book"></span></a></h3>
+			<h3><a id="btnCourses" href="##" title="Volver" class="text-warning"><span class="glyphicon glyphicon-book"></span></a></h3>
 		</blockquote>
 	</div>
 </div>
@@ -100,47 +100,43 @@
 </div>
 
 <script>
-	$('#extender').popover('show');
-	setTimeout(function(){
-		$('#extender').popover('hide');
-	}, 2000);
 	$('#extender').hover(function(){
-		$('#extender').popover('toggle');
+		$('#extender').tooltip('toggle');
 	});
 	
-	$('#comprimir').popover('show');
-	setTimeout(function(){
-		$('#comprimir').popover('hide');
-	}, 2000);
 	$('#comprimir').hover(function(){
-		$('#comprimir').popover('toggle');
+		$('#comprimir').tooltip('toggle');
 	});
 
 	$('#btnHorary').hover(function(){
-		$('#btnHorary').popover('toggle');
+		$('#btnHorary').tooltip('toggle');
 	});
 
-	$('#notasExtendidas').addClass('hidden');
+	$('#btnCourses').hover(function(){
+		$('#btnCourses').tooltip('toggle');
+	});
+
+	$('#notasExtendidas').fadeOut('fast');
 	$('#horary').slideUp();
 	$('#horaryData').load('/horary/consolidated/index')
 	$('#notasExtendidas').load('/register/listcurrentnotes');
 	$('#notasExtendidas').fadeOut('slow');
 
 	$('#extender').click(function(){
-		$('#extender').popover('show');
-		$('#notasComprimidas').fadeOut('slow');
-		$('#horary').fadeOut('slow');
-		$('#notasExtendidas').removeClass('hidden');
-		$('#notasExtendidas').fadeIn('slow');
+		$('#notasComprimidas').fadeOut('fast', function(){
+			$('#horary').fadeOut('fast', function(){
+				$('#notasExtendidas').fadeIn('fast');
+			});
+		});
 	});
 
 	$('#comprimir').click(function(){
-		$('#comprimir').popover('show');
-		$('#notasExtendidas').fadeOut('slow');
-		$('#notasComprimidas').fadeIn('slow');
+		$('#notasExtendidas').fadeOut('fast', function(){
+			$('#notasComprimidas').fadeIn('slow');
+		});
 	});
+
 	$('#btnHorary, #btnCourses').click(function(){
-		$('#btnHorary').popover('destroy');
 		$('#notasComprimidas').slideToggle();
 		$('#horary').removeClass('hidden');
 		$('#horary').slideToggle();

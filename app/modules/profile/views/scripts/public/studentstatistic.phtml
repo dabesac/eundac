@@ -204,14 +204,18 @@
 
 <script>
 	$("#newStatistic").click(function(){
-		$("#datastudent").addClass('hidden');
-    	$("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    	$("#editform").load("/profile/public/studentnewstatistic")
+		$('#datastudent').fadeOut('fast', function(){
+			$('#datastudent').load('/profile/public/studentnewstatistic', function(){
+				$('#datastudent').fadeIn('fast');
+			});
+		});
 	})
 
 	$("#editStatistic").click(function(){
-		$("#datastudent").addClass('hidden');
-    	$("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    	$("#editform").load("/profile/public/studenteditstatistic");
+		$('#datastudent').fadeOut('fast', function(){
+			$('#datastudent').load('/profile/public/studenteditstatistic', function(){
+				$('#datastudent').fadeIn('fast');
+			});
+		});
 	})
 </script>

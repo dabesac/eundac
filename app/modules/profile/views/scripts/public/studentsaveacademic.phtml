@@ -35,10 +35,13 @@
 			url: $(this).attr("action"),
 			data: $(this).serialize(),
 			success: function(data){
-				$("#editform").html(data);
-				$("#editform").html("");
-				$("#datastudent").removeClass("hidden");
-				$("#datastudent").load("/profile/public/studentacademic");
+				$("#datastudent").html(data);
+            	$("#datastudent").html('<br><br><center><img src="/img/spinner.gif" alt="" /></center>');
+            	$("#datastudent").fadeOut('fast', function(){
+            		$("#datastudent").load('/profile/public/studentacademic', function(){
+            			$("#datastudent").fadeIn('fast');
+            		});
+            	});
 			}
 		})
 		return false;
@@ -46,10 +49,11 @@
 	
 	$('#backeditBtn a').click(function (e) {
     	e.preventDefault()
-      	$("#editform").html("")
-      	$("#datastudent").removeClass("hidden")
-      	$('#editpalBtns a:last').tab('show')
-      	$('#editpalBtns2 a:last').tab('show')
+      	$("#datastudent").fadeOut('fast', function(){
+      		$('#datastudent').load('/profile/public/studentacademic', function(){
+				$('#datastudent').fadeIn('fast');
+			});
+      	});
   	})
    
 </script>

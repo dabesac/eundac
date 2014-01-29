@@ -7,7 +7,7 @@
 	</div>
 	<div class="col-md-1">
 		<blockquote>
-			<h2><a id="managementCourses" data-placement="left" data-toggle="popover" data-container="body" data-content="Administra aqui todos tus cursos a cargo :D" class="text-warning" href="/docente/notas" title="Administrar Cursos"><span class="glyphicon glyphicon-book"></a></span></h2>
+			<h2><a id="managementCourses" data-placement="left" data-toggle="popover" data-container="body" data-content="Click aqui para administrar todos tus cursos" class="text-warning" href="/docente/notas" title="Administrar Cursos"><span class="glyphicon glyphicon-book"></a></span></h2>
 		</blockquote>
 	</div>
 </div>
@@ -116,13 +116,15 @@ endforeach ?>
 	});
 
 	$('#horaryBtn').click(function(){
-		$('#coursesData').fadeOut('slow');
-		$('#horary').fadeIn('slow');
+		$('#coursesData').fadeOut('fast', function(){
+			$('#horary').fadeIn('slow');
+		});
 	});
 
 	$('#coursesBtn').click(function(){
-		$('#horary').fadeOut('slow');
-		$('#coursesData').fadeIn('slow');
+		$('#horary').fadeOut('fast', function(){
+			$('#coursesData').fadeIn('fast');
+		});
 	});
 
 	$('#coursesBtn').hover(function (){

@@ -190,7 +190,10 @@
 
 <script>
 	$('#editInfo').click(function(){
-		$('#maininfo').fadeOut('slow');
-		$('#editform').load('/profile/public/studenteditinfo');
+		$('#datastudent').fadeOut('fast', function(){
+			$('#datastudent').load('/profile/public/studenteditinfo', function(){
+				$('#datastudent').fadeIn('fast');
+			});
+		});
 	});
 </script>

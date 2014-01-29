@@ -57,9 +57,11 @@
               <td><h5><a id="delete<?php echo $academic['acid']?>" class="text-warning" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
                 <script>
                   $("#delete<?php echo $academic['acid']?>").click(function(){
-                    $("#datastudent").addClass("hidden")
-                    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-                    $("#editform").load("/profile/public/studenteditacademic/acid/<?php echo $academic['acid']?>")
+                    $('#datastudent').fadeOut('fast', function(){
+                      $('#datastudent').load('/profile/public/studenteditacademic/acid/<?php echo $academic['acid']?>', function(){
+                        $('#datastudent').fadeIn('fast');
+                      });
+                    });
                   })
                 </script></h5></td>
                 <td><h5><a class="text-warning" id="remove<?php echo $academic['acid']?>" href="##" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
@@ -116,8 +118,10 @@
 
 <script>
   $("#newAcademic").click(function(){
-    $("#datastudent").addClass("hidden")
-    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#editform").load("/profile/public/studentsaveacademic")
+    $('#datastudent').fadeOut('fast', function(){
+      $('#datastudent').load('/profile/public/studentsaveacademic', function(){
+        $('#datastudent').fadeIn('fast');
+      });
+    });
   })
 </script>
