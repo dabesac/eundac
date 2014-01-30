@@ -18,7 +18,10 @@
 		<select id="school" class="form-control">
 			<?php
 			if ($this->speciality) { ?>
-				<option value="">- Seleccione Escuela-</option>
+				<option value="">Seleccione Escuela</option>
+				<?php if (condition): ?>
+					<option value="<?php echo $this->allSchool?>">Todas las Especialidades</option>
+				<?php endif ?>
 				<?php 
 				foreach ($this->speciality as $speciality) { 
 					if ($this->director) $selected = ($this->escid == $speciality['escid'])? "selected": "";

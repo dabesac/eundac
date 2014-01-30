@@ -1,92 +1,90 @@
 <div class="row">
-<div class="col-sm-12">
+  <div  id="datastudent" class="col-md-12">
 
-  <div id="datastudent">
-
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <div class="jumbotron">
-        <div class="row">
-          <div class="col-md-1 pull-right">
-            <a id="editInfo" href="##" class="text-muted" title="Editar Información"><span class="glyphicon glyphicon-pencil"></span></a>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="jumbotron">
+          <div class="row">
+            <div class="col-md-1 pull-right">
+              <a id="editInfo" href="##" class="text-muted" title="Editar Información"><span class="glyphicon glyphicon-pencil"></span></a>
+            </div>
           </div>
-        </div>
 
-        <div class="row">
-          <div class="col-md-2">
-            <br>
-            <center><h1><span class="glyphicon glyphicon-user text-muted"></span></h1></center>
-          </div>
-          <div class="col-md-4">
-            <small class="text-muted">DNI </small><b class="text-info"><?php echo $this->datos[3]['numdoc']?></b>
-            <br>
-            <small class="text-muted">Fecha de Nacimiento </small><b class="text-info"><?php echo $this->datos[3]['birthday']?></b><br>
-            <small class="text-muted">Sexo </small> <b class="text-info">
-                      <?php if ($this->datos[3]['sex']=="M") {
-                        echo "Masculino";
-                      }else{
-                        echo "Femenino";
-                      }?>
-                    </b><br>
-                  <small class="text-muted">Estado Civil </small> <b class="text-info">
-                      <?php if ($this->datos[3]['civil']=="S") {
-                        if ($this->datos[3]['sex']=="M") {
-                          echo "Soltero";
+          <div class="row">
+            <div class="col-md-2">
+              <br>
+              <center><h1><span class="glyphicon glyphicon-user text-muted"></span></h1></center>
+            </div>
+            <div class="col-md-4">
+              <small class="text-muted">DNI </small><b class="text-info"><?php echo $this->datos[3]['numdoc']?></b>
+              <br>
+              <small class="text-muted">Fecha de Nacimiento </small><b class="text-info"><?php echo $this->datos[3]['birthday']?></b><br>
+              <small class="text-muted">Sexo </small> <b class="text-info">
+                        <?php if ($this->datos[3]['sex']=="M") {
+                          echo "Masculino";
                         }else{
                           echo "Femenino";
-                        }
-                      }elseif ($this->datos[3]['civil']=="C"){
-                        if ($this->datos[3]['sex']=="M") {
-                          echo "Casado";
-                        }else{
-                          echo "Casada";
-                        }
-                      }elseif ($this->datos[3]['civil']=="D"){
-                        if ($this->datos[3]['sex']=="M") {
-                          echo "Divorciado";
-                        }else{
-                          echo "Divorciada";
-                        }
-                      }elseif ($this->datos[3]['civil']=="V"){
-                        if ($this->datos[3]['sex']=="M") {
-                          echo "Viudo";
-                        }else{
-                          echo "Viuda";
-                        }
-                      }elseif ($this->datos[3]['civil']=="E"){
-                        echo "Conviviente";
-                      }?>
-                    </b>
+                        }?>
+                      </b><br>
+                    <small class="text-muted">Estado Civil </small> <b class="text-info">
+                        <?php if ($this->datos[3]['civil']=="S") {
+                          if ($this->datos[3]['sex']=="M") {
+                            echo "Soltero";
+                          }else{
+                            echo "Femenino";
+                          }
+                        }elseif ($this->datos[3]['civil']=="C"){
+                          if ($this->datos[3]['sex']=="M") {
+                            echo "Casado";
+                          }else{
+                            echo "Casada";
+                          }
+                        }elseif ($this->datos[3]['civil']=="D"){
+                          if ($this->datos[3]['sex']=="M") {
+                            echo "Divorciado";
+                          }else{
+                            echo "Divorciada";
+                          }
+                        }elseif ($this->datos[3]['civil']=="V"){
+                          if ($this->datos[3]['sex']=="M") {
+                            echo "Viudo";
+                          }else{
+                            echo "Viuda";
+                          }
+                        }elseif ($this->datos[3]['civil']=="E"){
+                          echo "Conviviente";
+                        }?>
+                      </b>
+            </div>
+            <div class="col-md-1">
+              <center><h2><span class="glyphicon glyphicon-earphone text-muted"></span></h2></center>
+            </div>
+            <div- class="col-md-5">
+              <small class="text-muted">Telefono </small> <b class="text-info"><?php echo $this->datos[3]['phone']?></b><br>
+                    <small class="text-muted">Celular </small> <b class="text-info"><?php echo $this->datos[3]['cellular']?></b>
+            </div->
+            <div class="col-md-1">
+              <center><h2><span class="glyphicon text-muted">@</span></h2></center>
+            </div>
+            <div- class="col-md-5">
+              <small class="text-muted">E-mail </small> <b class="text-info"><?php echo $this->datos[3]['mail_person']?></b><br>
+              <small class="text-muted">Work E-mail </small> <b class="text-info"><?php echo $this->datos[3]['mail_work']?></b>
+            </div->
           </div>
-          <div class="col-md-1">
-            <center><h2><span class="glyphicon glyphicon-earphone text-muted"></span></h2></center>
-          </div>
-          <div- class="col-md-5">
-            <small class="text-muted">Telefono </small> <b class="text-info"><?php echo $this->datos[3]['phone']?></b><br>
-                  <small class="text-muted">Celular </small> <b class="text-info"><?php echo $this->datos[3]['cellular']?></b>
-          </div->
-          <div class="col-md-1">
-            <center><h2><span class="glyphicon text-muted">@</span></h2></center>
-          </div>
-          <div- class="col-md-5">
-            <small class="text-muted">E-mail </small> <b class="text-info"><?php echo $this->datos[3]['mail_person']?></b><br>
-            <small class="text-muted">Work E-mail </small> <b class="text-info"><?php echo $this->datos[3]['mail_work']?></b>
-          </div->
         </div>
       </div>
     </div>
-  </div>
 
-  </div>
 
-  <div id="editform"></div>
-
-</div><!-- div col 12 -->
+  </div><!-- div col 12 -->
 </div>
+
 
 <script>
   $('#editInfo').click(function(){
-    $('#datastudent').fadeOut('slow');
-    $('#editform').load('/profile/privateadm/admeditinfo');
+    $('#admData').fadeOut('fast', function(){
+      $('#editData').load('/profile/privateadm/admeditinfo');
+      $('#editData').fadeIn('slow');
+    });
   });
 </script>

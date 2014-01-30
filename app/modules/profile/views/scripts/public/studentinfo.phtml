@@ -29,57 +29,71 @@
 
 
 <script>
-  $("#maininfo").load("/profile/public/studentmaininfo")
-  $("#btnprofile").addClass("hidden")
-  $("#editdata").addClass("hidden")
+  $("#datastudent").load("/profile/public/studentmaininfo");
+  $("#btnprofile").fadeOut("fast");
+  $('#editform').fadeOut('fast');
+
 
   $('#masinfoTab a').click(function (e) {
     e.preventDefault()
-    $("#maininfo").html("")
-    $("#datastudent").removeClass("hidden")
-    $("#editdata").addClass("hidden")
-    $("#editform").html("")
-    $("#btnprofile").removeClass("hidden")
+    
+    $("#btnprofile").fadeIn("fast");
+    /*$("#datastudent").removeClass("hidden")
+    $("#editform").html("")*/
     $(this).tab('show')
   })
 
   $('#backprofileTab a').click(function (e) {
     e.preventDefault()
-    $("#editdata").addClass("hidden")
-    $("#editform").html("")
-    $('#masinfoTab a:last').tab('show')
+    $('#datastudent').fadeOut('fast', function(){
+      $("#datastudent").load("/profile/public/studentmaininfo", function(){
+        $('#datastudent').fadeIn('fast');
+      });
+    });
+    $('#masinfoTab a:last').tab('show');
+    $("#btnprofile").fadeOut("slow");
+    /*$("#editform").html("")*/
   })
 
 
   $("#btnfamily").click(function(){
-    $("#datastudent").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datastudent").load("/profile/public/studentfamily");
+    $('#datastudent').fadeOut('fast', function(){
+      $("#datastudent").load("/profile/public/studentfamily", function(){
+        $('#datastudent').fadeIn('fast');
+      });
+    });
   })
 
   $("#btnacademic").click(function(){
-    $("#datastudent").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datastudent").load("/profile/public/studentacademic");
+    $('#datastudent').fadeOut('fast', function(){
+      $("#datastudent").load("/profile/public/studentacademic", function(){
+        $('#datastudent').fadeIn('fast');
+      });
+    });
   })
 
   $("#btnstadistic").click(function(){
-    $("#datastudent").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datastudent").load("/profile/public/studentstatistic");
+    $('#datastudent').fadeOut('fast', function(){
+      $("#datastudent").load("/profile/public/studentstatistic", function(){
+        $('#datastudent').fadeIn('fast');
+      });
+    });
   })
 
   $("#btnlaboral").click(function(){
-    $("#datastudent").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datastudent").load("/profile/public/studentlaboral");
+    $('#datastudent').fadeOut('fast', function(){
+      $("#datastudent").load("/profile/public/studentlaboral", function(){
+        $('#datastudent').fadeIn('fast');
+      });
+    });
   })
 
   $("#btninters").click(function(){
-    $("#datastudent").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datastudent").load("/profile/public/studentinterest");
-  })
-
-  $("#btnprofile").click(function(){
-    $("#datastudent").addClass("hidden")
-    $("#maininfo").load("/profile/public/studentmaininfo")
-    $("#btnprofile").addClass("hidden")
+    $('#datastudent').fadeOut('fast', function(){
+      $("#datastudent").load("/profile/public/studentinterest", function(){
+        $('#datastudent').fadeIn('fast');
+      });
+    });
   })
 
 </script>

@@ -48,9 +48,11 @@
 							<td align="center"><h5><a class="text-warning" id="edit<?php echo $int['iid']?>" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
 			                	<script>
 								  $("#edit<?php echo $int['iid']?>").click(function(){
-								    $("#datastudent").addClass('hidden');
-							    	$("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-							    	$("#editform").load("/profile/public/studenteditinterest/iid/<?php echo $int['iid']?>");
+								    $('#datastudent').fadeOut('fast', function(){
+										$('#datastudent').load("/profile/public/studenteditinterest/iid/<?php echo $int['iid']?>", function(){
+											$('#datastudent').fadeIn('fast');
+										});
+									});
 								  });
 								</script></h5></td>
 							<td align="center"><h5><a class="text-warning" id="remove<?php echo $int['iid']?>" href="##" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
@@ -83,9 +85,11 @@
 <script>
 
 	$("#newInterest").click(function(){
-    	$("#datastudent").addClass('hidden');
-    	$("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>")
-    	$("#editform").load("/profile/public/studentnewinterest")
+    	$('#datastudent').fadeOut('fast', function(){
+			$('#datastudent').load('/profile/public/studentnewinterest', function(){
+				$('#datastudent').fadeIn('fast');
+			});
+		});
   	})
 
 </script>

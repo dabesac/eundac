@@ -112,9 +112,8 @@ class Profile_Form_Family extends Zend_Form{
 
         $assignee = new Zend_Form_Element_Select('assignee');
         $assignee->removeDecorator('HtmlTag')->removeDecorator('Label');     
-        $assignee->addMultiOption("N","No");
-        $assignee->addMultiOption("S","Si");
         $assignee->setAttrib("class","form-control");
+        $assignee->addMultiOption("N","No");
         $assignee->setAttrib("id","assignee");
 
 

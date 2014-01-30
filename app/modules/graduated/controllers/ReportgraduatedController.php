@@ -23,13 +23,23 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $rid = $this->sesion->rid;
             $facid = $this->sesion->faculty->facid;
             $escid = $this->sesion->escid;
+            $schoolDb = new Api_Model_DbTable_Speciality();
             $is_director = $this->sesion->infouser['teacher']['is_director'];
             if ($rid=="DC" && $is_director=="S"){
-                $rid="DIREC";
-                if ($facid=="2") $escid=substr($escid,0,3);
-                $school = $this->sesion->speciality->name;
+                $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid);
+                $attrib = array('parent', 'name');
+                $school = $schoolDb->_getFilter($where, $attrib);
+                if ($school[0]['parent']) {
+                    $specialityName = $school[0]['name'];
+                }else{
+                    $specialityName = '';
+                }
 
-                $this->view->school = $school;
+                $schoolName = $this->sesion->speciality->name;
+                $this->view->schoolName = $schoolName;
+                $this->view->specialityName = $specialityName;
+                
+                $rid="DIREC";
                 $this->view->escid=$escid;        
             }
             if ($rid=="RF" || $rid=="DIREC") $this->view->facid=$facid;

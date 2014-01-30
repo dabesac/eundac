@@ -38,9 +38,7 @@
 		</tr>
 	</table>
 	<table class="table" id="moreinfo">
-	<?php if ($this->assignee == 0): ?>
 		<td><label>Esta persona es su Apoderado/a? </label><?php print $this->form->assignee?></td>
-	<?php endif ?>
 		<tr>
 			<td><label>Dirección</label><?php print $this->form->address?></td>
 			<td><label>Telefono/Celular</label><br><?php print $this->form->phone?></td>
@@ -52,7 +50,7 @@
 	</table>
 	<tr>
 		<td></td>
-		<td><a class="btn btn-info pull-right" href="#" id="save">Guardar</a></td>
+		<td><a class="btn btn-info pull-right" href="##" id="save">Guardar</a></td>
 	</tr>
 			
 </div>
@@ -68,10 +66,13 @@
 			url: $(this).attr("action"),
 			data: $(this).serialize(),
 			success: function(data){
-				$("#editform").html(data);
-				$('#editform').html("");
-				$("#datastudent").load("/profile/public/studentfamily");
-				$('#datastudent').removeClass('hidden');
+				$("#datastudent").html(data);
+            	$("#datastudent").html('<br><br><center><img src="/img/spinner.gif" alt="" /></center>');
+            	$("#datastudent").fadeOut('fast', function(){
+            		$("#datastudent").load('/profile/public/studentfamily', function(){
+            			$("#datastudent").fadeIn('fast');
+            		});
+            	});
 			}
 		})
 		return false;
@@ -119,8 +120,11 @@
 	
 	$('#backFamilyBtn a').click(function (e) {
     	e.preventDefault()
-      	$("#editform").html("")
-      	$("#datastudent").removeClass("hidden")
+      	$("#datastudent").fadeOut('fast', function(){
+      		$('#datastudent').load('/profile/public/studentfamily', function(){
+				$('#datastudent').fadeIn('fast');
+			});
+      	});
   	})
    
 </script>

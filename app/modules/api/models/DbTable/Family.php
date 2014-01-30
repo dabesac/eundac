@@ -24,7 +24,7 @@ class Api_Model_DbTable_Family extends Zend_Db_Table_Abstract
 	public function _update($data,$pk){
 		try{
 			if ($pk['eid']=='' || $pk['famid']=='') return false;
-			$where = "eid = '".$pk['eid']."'and famid = '".$pk['famid']."'";
+			$where = "eid = '".$pk['eid']."' and famid = '".$pk['famid']."'";
 			return $this->update($data, $where);
 			return false;
 		}catch (Exception $e){

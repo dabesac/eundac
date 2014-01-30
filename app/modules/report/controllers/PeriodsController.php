@@ -15,6 +15,7 @@
  			$eid = $this->sesion->eid;
  			$oid = $this->sesion->oid;
  			$rid = $this->sesion->rid;
+ 			$escid = $this->sesion->escid;
  			$is_director = $this->sesion->infouser['teacher']['is_director'];
 
 	 		$esc = new Api_Model_DbTable_Speciality();
@@ -25,12 +26,22 @@
  				if ($rid == 'DC' && $is_director=='S') {
  					$this->view->director = $is_director;
  					$this->view->escid = $this->sesion->escid;
- 					$where = array('eid' => $eid, 'oid' => $oid, 'escid' => $this->sesion->escid,'state' => 'A');
+ 					$where = array('eid' => $eid, 'oid' => $oid, 'parent' => $this->sesion->escid,'state' => 'A');
+ 					$specialities = $esc->_getFilter($where);
+ 					if ($specialities) {
+		 				$allSchool = $escid;
+		 			}else{
+		 				$where = array('eid' => $eid, 'oid' => $oid, 'escid' => $this->sesion->escid,'state' => 'A');
+		 				$allSchool = '';
+		 			}
  				}else{
 		 			$where = array('eid' => $eid, 'oid' => $oid, 'state' => 'A');
  				}
  			}
 		 	$dataesc = $esc->_getFilter($where,$attrib=null,$orders=array('facid','escid'));
+ 			$this->view->allSchool = $allSchool;
+
+
 	 		$this->view->speciality = $dataesc;
 
 
@@ -47,7 +58,7 @@
  	public function listperiodsAction(){
  		try {
  			$this->_helper->layout()->disableLayout();
-
+ 			
  			$eid = $this->sesion->eid;
  			$oid = $this->sesion->oid;
 
