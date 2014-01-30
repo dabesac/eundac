@@ -35,6 +35,7 @@ $ldistri =$this->ldistribution;
 		$approv = $distri['dateaccept'];
 		$distid = base64_encode($distri['distid']);
 		$perid = base64_encode($distri['perid']);
+		$per = $distri['perid'];
 		$state="";
 		$image="";
 		$state = ($distri['state']=='A')?"class='success'":"";
@@ -61,7 +62,7 @@ $ldistri =$this->ldistribution;
 			}elseif ($distri['state']=="A" || $distri['state']=="B" || $distri['state']=='O') {
 				if ($hours) {
 				?>
-					<a class='updatehour' data-toggle="modal" data-target="#myModal" perid='<?php echo $perid;?>' escid='<?php echo base64_encode($distri['escid']);?>' subid='<?php echo base64_encode($distri['subid'])?>'><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" title="Modifique Horario"></span></a>
+					<a href='#'class='updatehour' data-toggle="modal" data-target="#myModal" perid='<?php echo $per;?>' escid='<?php echo $distri['escid'];?>' subid='<?php echo $distri['subid']?>'><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" title="Modifique Horario"></span></a>
 
 				<?php
 				}
@@ -101,7 +102,7 @@ $ldistri =$this->ldistribution;
 				}
 				else{
 				?>	
-					<a class='horary' data-toggle="modal" data-target="#myModal1" distid='<?php echo $distid;?>' perid='<?php echo $perid;?>' escid='<?php echo base64_encode($distri['escid']);?>' subid='<?php echo base64_encode($distri['subid'])?>'><span class="glyphicon glyphicon-calendar" data-toggle="tooltip" title="Ingrese Horario de Clases"></span></a>
+					<a href='#' class='horary' data-toggle="modal" data-target="#myModal1" distid='<?php echo $distid;?>' perid='<?php echo $perid;?>' escid='<?php echo base64_encode($distri['escid']);?>' subid='<?php echo base64_encode($distri['subid'])?>'><span class="glyphicon glyphicon-calendar" data-toggle="tooltip" title="Ingrese Horario de Clases"></span></a>
 				<?php						
 				}
 			}?>

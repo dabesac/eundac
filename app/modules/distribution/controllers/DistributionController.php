@@ -556,16 +556,25 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $whereinfo['escid']=$escid;
             $whereinfo['subid']=$subid;
             $info= new Api_Model_DbTable_UserInfoTeacher();
-            for ($i=0; $i < $tam; $i++) {
-                $whereinfo['pid']=$datateacher[$i]['pid'];
-                $whereinfo['uid']=$datateacher[$i]['uid'];
-                $datainfo=$info->_getOne($whereinfo);
-                $datateacher[$i]['category']=$datainfo['category'];
-                $datateacher[$i]['condision']=$datainfo['condision'];
-                $datateacher[$i]['dedication']=$datainfo['dedication'];
-                $datateacher[$i]['charge']=$datainfo['charge'];
-                $datateacher[$i]['contract']=$datainfo['contract'];
+            $bdcourseteach=new Api_Model_DbTable_Coursexteacher();
+            $whe = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+            $attrib=array('courseid');
+            if ($datateacher) {
+                for ($i=0; $i < $tam; $i++) {
+                    $whereinfo['pid']=$datateacher[$i]['pid'];
+                    $whereinfo['uid']=$datateacher[$i]['uid'];
+                    $datainfo=$info->_getOne($whereinfo);
+                    $datateacher[$i]['category']=$datainfo['category'];
+                    $datateacher[$i]['condision']=$datainfo['condision'];
+                    $datateacher[$i]['dedication']=$datainfo['dedication'];
+                    $datateacher[$i]['charge']=$datainfo['charge'];
+                    $datateacher[$i]['contract']=$datainfo['contract'];
+                    $whe['pid']=$datateacher[$i]['pid'];             
+                    $datacourseteacher=$bdcourseteach->_getFilter($whe,$attrib);
+                    $datateacher[$i]['courseasig']=$datacourseteacher[0]['courseid'];
+                }
             }
+
             $this->view->teachers=$datateacher;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
@@ -601,7 +610,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $name=$this->_getParam("name");
             $pid =$this->_getParam("pid");
             $distid =$this->_getParam("distid"); 
-            $perid =$this->_getParam("perid"); 
+            $perid =$this->_getParam("perid");
             $this->view->distid=$distid;
             $this->view->perid=$perid;
             $this->view->escid=$escid;
@@ -617,6 +626,16 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $where['rid']='DC';
                 $where['nom']=strtoupper($name);
                 $datauser = $user->_getUsuarioXNombre($where);
+            }
+            $bdcourseteach=new Api_Model_DbTable_Coursexteacher();
+            $whe = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+            $attrib=array('courseid');
+            $len=count($datauser);
+            for ($i=0; $i < $len; $i++) {            
+                $whe['pid']=$datauser[$i]['pid'];             
+                $datacourseteacher=$bdcourseteach->_getFilter($whe,$attrib);
+                $datauser[$i]['courseasig']=$datacourseteacher[0]['courseid'];
+                
             }
             $this->view->usuarios=$datauser;
         } catch (Exception $e) {

@@ -127,9 +127,6 @@ $header='
   $mpdf->SetHTMLHeader($header);
   $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
 
-  $mpdf->SetWatermarkImage('/img/UNDAC.png', 0.07, 'F');
-  $mpdf->showWatermarkImage = true;
-
   // $mpdf->SetFooter($this->footer);
   ob_end_clean();
   $mpdf -> WriteHTML($html);
