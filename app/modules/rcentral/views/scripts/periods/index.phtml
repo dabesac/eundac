@@ -22,7 +22,6 @@
 <script>
     $("#lanios").change(function(){
         var anio = $(this).val();
-        alert("/rcentral/periods/listar/anio/"+anio);
        $("#peri").load("/rcentral/periods/listar/anio/"+anio);
     });
     var anio_ = "<?php echo $anio?>";
