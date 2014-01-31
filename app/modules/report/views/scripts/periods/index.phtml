@@ -1,29 +1,114 @@
-<div class="panel panel-primary" style="padding: 2px">
-	<div class="panel-heading" style="padding: 6px">
-		<center><b style="font-size:15px; color: white">REPORTE AVANCE ACADEMICO</b></center>
+<div class="row">
+	<br>
+	<div class="col-md-6 col-md-offset-1">
+		<blockquote>	
+			<h2>Avance <span class="text-warning">Academico</span></h2>
+		</blockquote>
+	</div>
+	<div class="col-md-1 col-md-offset-3">
+		<blockquote>
+			<h2><span class="glyphicon glyphicon-tasks text-warning"></span></h2>
+		</blockquote>
 	</div>
 </div>
-<div>
+<hr class="featurette-divider">
+<div class="row">
+	<div class="col-md-3 col-md-offset-2	">
+		<h5 class="text-muted">Escuela </h5>
+		<select id="school" class="form-control">
+			<?php
+			if ($this->speciality) { ?>
+				<option value="">Seleccione Escuela</option>
+				<?php if (condition): ?>
+					<option value="<?php echo $this->allSchool?>">Todas las Especialidades</option>
+				<?php endif ?>
+				<?php 
+				foreach ($this->speciality as $speciality) { 
+					if ($this->director) $selected = ($this->escid == $speciality['escid'])? "selected": "";
+					?>
+					<option value="<?php echo $speciality['escid'].'--'.$speciality['subid']?>" <?php echo $selected?>><?php echo $speciality['name']?></option>
+					<?php
+				}
+			}else{ ?>
+				<option value="">- No hay Escuelas Disponibles -</option>
+			<?php
+			}?>
+		</select>
+	</div>
+	<div class="col-md-1">
+		<h5 class="text-muted">Año</h5>
+		<select class="form-control" name="Anio" id="anio">
+			<?php $anio = date(Y);
+	 		for ($i=$anio; $i >=1993 ; $i--) :?> 
+	 			<option value="<?php echo $i?>"><?php echo $i ?></option>
+	 		<?php endfor?>
+	 	</select>
+	</div>
+	<div class="col-md-3">
+		<h5 class="text-muted">Periodo</h5>
+		<select class="form-control" name="Periodo" id="period"></select>
+	</div>
+	<div class="col-md-3">
+		<br><br>
+		<a id="showData" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></a>
+	</div>
+
+</div>
+<br>
+<hr class="featurette-diveder">
+<br>
+<div id="data"></div>
+
+<script>
+	$('#data').fadeOut('fast');
+	var vardiv = $('#school').val().split('--');
+	var escid = vardiv[0];
+	var subid = vardiv[1];
+
+	$('#school').change(function(){
+		$('#school option:selected').each(function(){
+			vardiv = $(this).val().split('--');
+			escid = vardiv[0];
+			subid = vardiv[1];
+		});
+	});
+
+
+	//Filtras  Periodos por años -------------------
+	var anio = $('#anio').val();
+	$.get('/report/periods/listperiods/anio/'+anio, function(data){
+	$('#period').html(data);
+	});
+	$('#anio').change(function(){
+		$('#anio option:selected').each(function(){
+			anio = $(this).val();
+			$.get('/report/periods/listperiods/anio/'+anio, function(data){
+				$('#period').html(data);
+			});
+		});
+	});
+	//------------------------------------------------
+
+
+	var perid = $('#period').val();
+	$('#period').change(function(){
+		$('#period option:selected').each(function(){
+			perid = $(this).val();
+		});
+	});
+
+	$('#showData').click(function(){
+		$('#data').load("/report/periods/listteacher/perid/" + perid + "/escid/" + escid + "/subid/" + subid);
+		$('#data').fadeIn('slow');
+	});
+</script>
+
+<!--<div>
 	<table class="table table-condensed">
 		<tr>
 			<th>Escuela: </th>
 			<td>
-				<select id="escid" class="form-control">
-					<?php
-					if ($this->speciality) { ?>
-						<option value="">- Seleccione Escuela-</option>
-						<?php 
-						foreach ($this->speciality as $speciality) { 
-							if ($this->director) $selected = ($this->escid == $speciality['escid'])? "selected": "";
-							?>
-							<option value="<?php echo $speciality['escid'].'--'.$speciality['subid']?>" <?php echo $selected?>><?php echo $speciality['name']?></option>
-							<?php
-						}
-					}else{ ?>
-						<option value="">- No hay Escuelas Disponibles -</option>
-					<?php
-					}?>
-				</select>
+				
 			</td>
 			<th>Periodo: </th>
 			<td>
@@ -70,4 +155,4 @@
 		$("#loaddata").html("<img src='/img/spinner.gif'>Cargando...");
 		$("#loaddata").load(url);
 	});
-</script>
+</script>-->

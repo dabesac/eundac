@@ -1,6 +1,7 @@
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>-->
 
+<?php if ($this->dis): ?>
 	<table class="table table-hover" style="font-size:14px">
 	<thead>
 		<tr>
@@ -9,7 +10,7 @@
 			<th>Fecha de Registro</th>
 			<th>Ver</th>
 			<th>Observacion</th>
-			<th>Impresion</th>
+			<th class="text-center">Impresion</th>
 		</tr>
 
 	</thead>
@@ -36,8 +37,8 @@
 				<td><?php echo $info?></td>
 				<td ><?php echo $distrib['number']?></td>
 				<td>
-				<a class="btn btn-success" id=''  onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Eliminar Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')" class=''>
-                <i class=" icon-pencil icon-white"></i>ver</a>				
+				<h4><a id="seeDistribution<?php echo $distrib['number']?>" href="##" title="Ver" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Eliminar Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')">
+                <span class="glyphicon glyphicon-eye-open"></span></a></h4>				
 				</td>
 				<td><span title="eescriba" rel="tooltip" placeholder="escribaa" id="<?php echo $i?>"  value='editar'>
 				<?php if($distrib['observation']=='')
@@ -52,13 +53,17 @@
 				?></span></td>				
 
 
-				<td><a href='/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>' data-dismiss="modal" aria-hidden="true" style="float:center"><span class="glyphicon glyphicon-print"></span></a></td>
+				<td class="text-center"><h4><a href='/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>' data-dismiss="modal" aria-hidden="true" style="float:center"><span class="glyphicon glyphicon-print"></span></a></h4></td>
 				<!--  Nombre: <span class="editText">Fulanito de tal</span> -->
 			</tr>
 
 			
 			<script> 
             // $(function(){
+            	$('#seeDistribution<?php echo $distrib['number']?>').hover(function(){
+					$('#seeDistribution<?php echo $distrib['number']?>').tooltip('toggle');
+				});
+
                 $('#<?php echo $i?>').dblclick( function(){
                     var text = $(this).text();
 
@@ -91,9 +96,13 @@
 		?>
 	</tbody>
 	</table>
+<?php else: ?>
+	<h2 class="text-muted text-center">No <strong>existen</strong> datos en este periodo...</h2>
+<?php endif ?>
 
 <script>
-$(".span").tooltip();
+
+	$(".span").tooltip();
 </script>
 
  <div id="destino"></div> 

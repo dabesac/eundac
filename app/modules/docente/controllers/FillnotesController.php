@@ -18,6 +18,8 @@ class Docente_FillnotesController extends Zend_Controller_Action {
     
     public function targetAction()
     {
+        $this->_helper->layout()->disableLayout();
+
         $params = $this->getRequest()->getParams();
         $paramsdecode = array();
         foreach ( $params as $key => $value ){

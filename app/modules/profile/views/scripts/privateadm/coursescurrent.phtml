@@ -1,0 +1,137 @@
+<div class="row">
+	<br>
+	<div class="col-md-9 col-md-offset-1">
+		<blockquote>
+			<h2>Cursos a <span class="text-warning">Cargo</span></h2>
+		</blockquote>
+	</div>
+	<div class="col-md-1">
+		<blockquote>
+			<h2><a id="managementCourses" data-placement="left" data-toggle="popover" data-container="body" data-content="Click aqui para administrar todos tus cursos" class="text-warning" href="/docente/notas" title="Administrar Cursos"><span class="glyphicon glyphicon-book"></a></span></h2>
+		</blockquote>
+	</div>
+</div>
+<div class="container">
+<div class="row" style="background-color : #FAFAFA">
+	<div class="col-md-1 col-md-offset-9">
+		<h3><a id="coursesBtn" data-toggle="tooltip" title="Ver Cursos" href="##" class="text-warning"><span class="glyphicon glyphicon-list"></span></a></h3>
+	</div>
+	<div class="col-md-1">
+		<h3><a id="horaryBtn" href="##" class="text-warning" title="Ver Horario"><span class="glyphicon glyphicon-calendar"></span></a></h3>
+	</div>
+</div>
+</div>
+
+<div id="coursesData">
+
+<?php 
+$escid = "_";
+$esc = 0;
+$row = 2;
+$interruptor = 0;
+$c = 0;
+foreach ($this->courses as $course): ?>
+	<?php if ($course['escid'] <> $escid): 
+		$escid = $course['escid'] ?>
+
+		<?php if ($row == 1): ?>
+			</div>
+		<?php endif ?>
+		
+		<hr>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-1">
+				<h4>Facultad de <span class="text-muted"><?php echo $this->facultyName[$esc][0]['nomfac'] ?></span></h4>
+			</div>
+			<div class="col-md-4">
+				<?php if ($this->specialityName): ?>
+				<h5 class="text-right"><span class="text-muted"><?php echo $this->schoolName[$esc][0]['name'] ?></span></h5>
+					<h5 class="text-right"><?php echo $this->specialityName[$esc] ?></h5>
+				<?php else: ?>
+					<h4 class="text-right"><span class="text-muted"><?php echo $this->schoolName[$esc] ?></span></h4>
+				<?php endif ?>
+			</div>
+		</div>
+		<hr>
+	<?php echo $change;
+	$esc++;
+	$row = 2; ?>
+	<?php endif ?>
+	<?php if ($row == 2) : ?>
+		<div class="row">
+			<div class="col-md-5 col-md-offset-1">
+				<div class="jumbotron">
+					<div class="row">
+						<div class="col-md-11">
+							<h5><?php echo $this->coursesName[$c][0]['name'] ?></h5>
+							<h5><span class="text-muted">Código </span><?php echo $course['courseid'] ?></h5>
+							<h5><span class="text-muted">Turno </span><?php echo $course['turno'] ?></h5>
+						</div>
+						<div class="col-md-1">
+							<span class="glyphicon glyphicon-bookmark text-muted"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+	<?php $row = 0;
+	endif ?>
+	<?php if ($row == 1): ?>
+			<div class="col-md-5">
+				<div class="jumbotron">
+					<div class="row">
+						<div class="col-md-11">
+							<h5><?php echo $this->coursesName[$c][0]['name'] ?></h5>
+							<h5><span class="text-muted">Código </span><?php echo $course['courseid'] ?></h5>
+							<h5><span class="text-muted">Turno </span><?php echo $course['turno'] ?></h5>
+						</div>
+						<div class="col-md-1">
+							<span class="glyphicon glyphicon-bookmark text-muted"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php endif ?>
+	<?php $row++;
+	$c++;
+endforeach ?>
+
+</div>
+</div>
+
+
+<div id="horary"></div>
+
+<script>
+	$('#horary').load('/horary/seehorary/index');
+	$('#horary').fadeOut('slow');
+
+	$('#managementCourses').popover('show');	
+	setTimeout(function(){
+		$('#managementCourses').popover('hide')
+	}, 4000);
+
+	$('#managementCourses').hover(function (){
+		$('#managementCourses').popover('toggle');
+	});
+
+	$('#horaryBtn').click(function(){
+		$('#coursesData').fadeOut('fast', function(){
+			$('#horary').fadeIn('slow');
+		});
+	});
+
+	$('#coursesBtn').click(function(){
+		$('#horary').fadeOut('fast', function(){
+			$('#coursesData').fadeIn('fast');
+		});
+	});
+
+	$('#coursesBtn').hover(function (){
+		$('#coursesBtn').tooltip('toggle');
+	});
+	$('#horaryBtn').hover(function (){
+		$('#horaryBtn').tooltip('toggle');
+	});
+</script>
+

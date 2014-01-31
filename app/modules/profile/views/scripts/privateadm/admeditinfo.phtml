@@ -36,7 +36,7 @@
 		</tr>
 		<tr>
 			<td></td>
-			<td><a href="#" id="save" class="btn btn-info pull-right">Guardar</a></td>
+			<td><a href="##" id="save" class="btn btn-info pull-right">Guardar</a></td>
 		</tr>
 	</table>
 </div>
@@ -51,10 +51,13 @@
             url: $(this).attr('action'),
             data: $(this).serialize(),
             success: function(data){ 
-            	$("#editform").html(data);
-            	$('#editform').html('');
-            	$('#datastudent').fadeIn('slow');
-            	$('#datastudent').load("/profile/privateadm/adminfo");
+            	$("#editData").html(data);
+            	$('#editData').html('<br><center><img src="/img/spinner.gif"/></center>')
+            	$('#admData').load('/profile/privateadm/adminfo', function(){
+            		$('#editData').fadeOut('fast', function(){
+            			$('#admData').fadeIn('fast');
+            		});
+            	});
        	   	}
         }); 
         return false;
@@ -63,8 +66,9 @@
 
 	$('#backeditBtn a').click(function (e) {
     	e.preventDefault()
-      	$("#editform").html("");
-      	$("#datastudent").fadeIn('slow');
+    	$('#editData').fadeOut('fast', function(){
+      		$('#admData').fadeIn('fast');
+    	});
   	})
    
 </script>

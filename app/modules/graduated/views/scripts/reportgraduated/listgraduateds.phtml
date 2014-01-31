@@ -1,22 +1,38 @@
 <?php
 if ($this->egresados) { ?>
-<table class="table table-striped table-bordered table-condensed">
-   	<tr>
-     	<td colspan="5">
-     		<center><a href="/graduated/reportgraduated/print/facid/<?php echo base64_encode($this->facid)?>/escid/<?php echo base64_encode($this->escid)?>/especialidad/<?php echo base64_encode($this->especialidad)?>/perid/<?php echo base64_encode($this->perid)?>/anho/<?php echo base64_encode($this->anho)?>" class="btn btn-info"><span class="glyphicon glyphicon-print"></span> Imprimir Lista</a></center>
-     	</td>  
-    </tr>
-</table> 
-<table class="table table-striped table-condensed">
-	<tr>
-		<th>#</th>
-		<th class="span2">Cod. Mat.</th>
-		<th class="span1">DNI</th>
-		<th>Apellidos y Nombres</th>
-		<th class="span3">Escuela / Especialidad</th>
-		<th class="span2">Currícula</th>
-		<th class="span1">Nivel</th>
-	</tr>
+<div class="row">
+	<div class="col-md-4 col-md-offset-1">
+		<div id="showList">
+			<blockquote>
+				<h4>Imprimir <span class="text-muted">Lista </span><a href="/graduated/reportgraduated/print/facid/<?php echo base64_encode($this->facid)?>/escid/<?php echo base64_encode($this->escid)?>/especialidad/<?php echo base64_encode($this->especialidad)?>/perid/<?php echo base64_encode($this->perid)?>/anho/<?php echo base64_encode($this->anho)?>" class="text-warning"><span class="glyphicon glyphicon-print"></span></a></h4>
+			</blockquote>
+		</div>
+		<div id="showGraphic">
+			<blockquote>
+				<h4>Vista <span class="text-warning">Gráfica</span></h4>
+			</blockquote>
+		</div>
+	</div>
+	<div class="col-md-1 col-md-offset-4">
+		<h3><a title="Vista en Tabla" id="btnTable" href="##" class="text-warning"><span class="glyphicon glyphicon-list-alt"></span></a></h3>
+	</div>
+	<div class="col-md-1">
+		<h3><a title="Vista en Gráfico" id="btnGraphic" href="##" class="text-warning"><span class="glyphicon glyphicon-picture"></span></a></h3>
+	</div>
+</div>
+
+<div id="data">
+
+	<table class="table table-hover">
+		<tr>
+			<th><h5><strong>#</strong></h5></th>
+			<th class="text-center"><h5><strong>Cod. Matricula</strong></h5></th>
+			<th class="text-center"><h5><strong>DNI</strong></h5></th>
+			<th><h5><strong>Apellidos y Nombres</strong></h5></th>
+			<th class="text-center"><h5><strong>Escuela | Especialidad</strong></h5></th>
+			<th class="text-center"><h5><strong>Currícula</strong></h5></th>
+			<th class="text-center"><h5><strong>Nivel</strong></h5></th>
+		</tr>
 	<?php
 		$c=1;
 		$escu= new Api_Model_DbTable_Speciality();
@@ -26,13 +42,13 @@ if ($this->egresados) { ?>
 				'subid' => $egre['subid'], 'escid' => $egre['escid']);
 			$dat = $escu->_getOne($whereesc); ?>
 			<tr>
-				<td><?php echo $c?></td>
-				<td><?php echo $egre['uid']?></td>
-				<td><?php echo $egre['pid']?></td>
-				<td><?php echo $egre['fullname']?></td>
-				<td><?php echo $dat['name']?></td>
-				<td><?php echo $egre['curid']?></td>
-				<td><a href="#myModal" id='<?php echo $c?>'><span class="glyphicon glyphicon-pencil"></span></a></td>
+				<td><h5><?php echo $c?></h5></td>
+				<td class="text-center"><h5><?php echo $egre['uid']?></h5></td>
+				<td class="text-center"><h5><?php echo $egre['pid']?></h5></td>
+				<td><h5><?php echo $egre['fullname']?></h5></td>
+				<td class="text-center"><h5><?php echo $dat['name']?></h5></td>
+				<td class="text-center"><h5><?php echo $egre['curid']?></h5></td>
+				<td class="text-center"><h5><a href="#myModal" id='<?php echo $c?>'><span class="glyphicon glyphicon-pencil"></span></a></h5></td>
 				<script>
 					$("#<?php echo $c?>").click(function() {
 						var uid = "<?php echo $egre['uid']?>";
@@ -47,13 +63,15 @@ if ($this->egresados) { ?>
 		<?php
 		$c++; ?>
 	<?php	}
-	?>
-</table>
-<?php 
-}else{ ?>
-	<div class="alert alert-info">No hay registro de Egresados.</div>
-<?php 
-} ?>
+		?>
+	</table>
+	<?php 
+	}else{ ?>
+		<div class="alert alert-info">No hay registro de Egresados.</div>
+	<?php 
+	} ?>
+
+</div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -71,3 +89,20 @@ if ($this->egresados) { ?>
       	</div>
     </div>
 </div>
+
+<script>
+	$('#showGraphic').fadeOut('fast');
+	$('#btnTable').click(function(){
+		$('#showGraphic').fadeOut('slow');
+		$('#showList').fadeIn('slow');
+		$('#graphic').fadeOut('slow');
+		$('#data').fadeIn('slow');
+	});
+
+	$('#btnGraphic').click(function(){
+		$('#showList').fadeOut('slow');
+		$('#showGraphic').fadeIn('slow');
+		$('#data').fadeOut('slow');
+		$('#graphic').fadeIn('slow');
+	});
+</script>

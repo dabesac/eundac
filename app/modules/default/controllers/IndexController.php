@@ -407,7 +407,7 @@ class IndexController extends Zend_Controller_Action {
     			$modules[1] = array ("name" =>"Matrícula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"register/student","name"=>"Prematricula","imgicon"=>"edit");
     			$resource1[]="register/student";
-    			//$modules[1]['acls'] = $acls;
+    			$modules[1]['acls'] = $acls;
     			$acls = null;
     			break;
     		}
@@ -419,7 +419,7 @@ class IndexController extends Zend_Controller_Action {
 
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
-    			$acls[]= array("controller"=>"docente/notas","name"=>"Asignaturas a Cargo","imgicon"=>"list");
+    			$acls[]= array("controller"=>"profile/privateadm/adm","name"=>"Asignaturas a Cargo","imgicon"=>"list");
                 $resource1[]="docente/notas";
                 $acls[]= array("controller"=>"horary/seehorary","name"=>"Ver Horario","imgicon"=>"calendar");
                 $resource1[]="horary/seehorary";
@@ -464,7 +464,7 @@ class IndexController extends Zend_Controller_Action {
     				$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"edit");
                     $resource1[]="graduated/graphicgraduated";
     			}
-                $acls[]= array("controller"=>"docente/report","name"=>"Historial Academico","imgicon"=>"list");
+                $acls[]= array("controller"=>"profile/privateadm/adm","name"=>"Historial Academico","imgicon"=>"list");
     			$resource1[]="docente/report";
                 $acls[]= array("controller"=>"docente/index/poll","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
                 $resource1[]="report/performance";

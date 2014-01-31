@@ -15,6 +15,7 @@
  			$eid = $this->sesion->eid;
  			$oid = $this->sesion->oid;
  			$rid = $this->sesion->rid;
+ 			$escid = $this->sesion->escid;
  			$is_director = $this->sesion->infouser['teacher']['is_director'];
 
 	 		$esc = new Api_Model_DbTable_Speciality();
@@ -25,22 +26,54 @@
  				if ($rid == 'DC' && $is_director=='S') {
  					$this->view->director = $is_director;
  					$this->view->escid = $this->sesion->escid;
- 					$where = array('eid' => $eid, 'oid' => $oid, 'escid' => $this->sesion->escid,'state' => 'A');
+ 					$where = array('eid' => $eid, 'oid' => $oid, 'parent' => $this->sesion->escid,'state' => 'A');
+ 					$specialities = $esc->_getFilter($where);
+ 					if ($specialities) {
+		 				$allSchool = $escid;
+		 			}else{
+		 				$where = array('eid' => $eid, 'oid' => $oid, 'escid' => $this->sesion->escid,'state' => 'A');
+		 				$allSchool = '';
+		 			}
  				}else{
 		 			$where = array('eid' => $eid, 'oid' => $oid, 'state' => 'A');
  				}
  			}
 		 	$dataesc = $esc->_getFilter($where,$attrib=null,$orders=array('facid','escid'));
+ 			$this->view->allSchool = $allSchool;
+
+
 	 		$this->view->speciality = $dataesc;
 
 
- 			$this->view->perid = $this->sesion->period->perid;
+ 			/*$this->view->perid = $this->sesion->period->perid;
  			$where = array('eid' => $eid, 'oid' => $oid);
  			$per = new Api_Model_DbTable_Periods();
  			$dataper = $per->_getFilter($where,$attrib=null,$orders=array('perid'));
- 			$this->view->periods = $dataper;
+ 			$this->view->periods = $dataper;*/
  		} catch (Exception $e) {
  			print "Error: ".$e->getMessage();
+ 		}
+ 	}
+
+ 	public function listperiodsAction(){
+ 		try {
+ 			$this->_helper->layout()->disableLayout();
+ 			
+ 			$eid = $this->sesion->eid;
+ 			$oid = $this->sesion->oid;
+
+ 			$anio = $this->getParam('anio');
+ 			$anio = substr($anio, -2);
+
+ 			$periodsDb = new Api_Model_DbTable_Periods();
+ 			$where = array('eid'=>$eid, 'oid'=>$oid, 'year'=>$anio);
+ 			//print_r($where);
+ 			$periods = $periodsDb->_getPeriodsxYears($where);
+ 			
+ 			$this->view->periods = $periods;
+
+ 		} catch (Exception $e) {
+ 			print 'Error '.$e->getMessage();
  		}
  	}
 
@@ -55,6 +88,9 @@
  			$this->view->perid = $perid;
  			$this->view->escid = $escid;
  			$this->view->subid = $subid;
+
+ 			$data = array('subid'=>$subid, 'perid'=>$perid);
+ 			$this->view->data = $data;
 
  			$where = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid, 'perid' => $perid);
  			$user = new Api_Model_DbTable_Coursexteacher();
@@ -111,6 +147,8 @@
  			print "Error: ".$e->getMessage();
  		}
  	}
+
+
 
  	public function printAction(){
  		try {

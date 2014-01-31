@@ -256,7 +256,7 @@ class Docente_IndexController extends Zend_Controller_Action {
                  $courseid=$curso['courseid'];
                  $curid=$curso['curid'];
                  $turno=$curso['turno'];
-                 $where['codigo']="curid:".$curso['curid']."-cursoid:".$curso['courseid']."-turno:".$curso['turno'];
+                 $where['codigo']="curid:".$curso['curid']."-courseid:".$curso['courseid']."-turno:".$curso['turno'];
                  $db_polltot = new Api_Model_DbTable_Poll();
                  $lpolltot= $db_polltot->_getPollTotal($where);   
                 foreach ($lpolltot   as $cantidad) {
