@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 class Horary_NhoraryController extends Zend_Controller_Action {
 
