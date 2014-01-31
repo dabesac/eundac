@@ -2,11 +2,15 @@
 <?php
     $hora=array();  
     $hour_begin=array();
+    // print_r($this->valhorasm);
+    // print_r($this->valhorast);
+    // print_r($this->valhoras);
     if ($this->valhorasm or $this->valhorast) {
         $j=1;
         $hour_begin=$this->valhorasm;
         $hour_begin_afternoon=$this->valhorast;
         $len1= count($hour_begin);
+        // print($len1);
         $len2= count($hour_begin_afternoon);
         $lentotal = $len1+$len2;
         for ($i=0; $i < $len1; $i++) { 
@@ -39,7 +43,6 @@
             }
 
         }
-
         $q=1;
         for ($p=0; $p < $len2; $p++) {
             if ($hourt[$p]) {
@@ -62,12 +65,12 @@
                 $i++;            
             }
         }
-        
     }
     else{
         $j=1;
         $hour_begin=$this->valhoras;
         $len= count($hour_begin);
+        // print_r($len);
         $lentotal = $len;
         for ($i=0; $i < $len; $i++) { 
             $hour[$i]=substr($hour_begin[$i],0,2);
@@ -95,8 +98,6 @@
         }
     }
 
-if ($this->horarios) {
-
     $listacolores = array();
     $listacolores[0] = "#FA8D74";
     $listacolores[1] = "#A3CFE0";
@@ -113,54 +114,56 @@ if ($this->horarios) {
     $listacolores[12] = "#D8BADA";
     $listacolores[13] = "#C4E6CE";
     $listacolores[14] = "#B4DAA1";
+// print_r($hora);
+if ($this->horarios) {
 
-            $len=count($this->horarios);
-            $hmen=13;
-            $hmay=13;
-            for ($i=0; $i < $len; $i++) {
-                $n=new Api_Model_DbTable_Course();
-                $where['eid']=$this->horarios[$i]['eid'];
-                $where['oid']=$this->horarios[$i]['oid'];
-                $where['escid']=$this->horarios[$i]['escid'];
-                $where['curid']=$this->horarios[$i]['curid'];
-                $where['subid']=$this->horarios[$i]['subid'];
-                $where['courseid']=$this->horarios[$i]['courseid'];
-                $ncur=$n->_getOne($where);
-                
-                $this->horarios[$i]['name']=$ncur['name'];
-                $this->horarios[$i]['abbreviation']=$ncur['abbreviation'];
-                if ($this->horarios[$i]['type_class']=="P") $this->horarios[$i]['type_class']="(P)";
-                else $this->horarios[$i]['type_class']="";
-                $ncursos=$this->ncursos;
-                for ($j=0; $j < $ncursos; $j++) { 
-                    if ($this->horarios[$i]['courseid']==$this->datcursos[$j]['courseid'] && $this->horarios[$i]['turno']==$this->datcursos[$j]['turno']) {
-                        $this->horarios[$i]['color']=$listacolores[$this->datcursos[$j]['num']];
-                    }
-                }
-
-                $hsplit=split(":", $this->horarios[$i]['hora_ini']);
-                $hi=$hsplit[0];
-                $hsplit=split(":", $this->horarios[$i]['hora_fin']);
-                $hf=$hsplit[0];
-
-                if ($hi<=$hmen) $hmen=$hi;
-                if ($hf>=$hmay) $hmay=$hf;
-            }
-            // print_r($hi);
-            $k=0;
-            if ($hour_begin) {
-                for ($z=0; $z < $lentotal; $z++) { 
-                    if ($hmen==$hora[$z]['h_ini'] && $k==0) {
-                        $inih=$z;
-                        $k=1;
-                    }
-                    if ($hmay==$hora[$z]['h_fin']) {
-                        $finh=$z;
-                    }
+        $len=count($this->horarios);
+        $hmen=13;
+        $hmay=13;
+        for ($i=0; $i < $len; $i++) {
+            $n=new Api_Model_DbTable_Course();
+            $where['eid']=$this->horarios[$i]['eid'];
+            $where['oid']=$this->horarios[$i]['oid'];
+            $where['escid']=$this->horarios[$i]['escid'];
+            $where['curid']=$this->horarios[$i]['curid'];
+            $where['subid']=$this->horarios[$i]['subid'];
+            $where['courseid']=$this->horarios[$i]['courseid'];
+            $ncur=$n->_getOne($where);
+            
+            $this->horarios[$i]['name']=$ncur['name'];
+            $this->horarios[$i]['abbreviation']=$ncur['abbreviation'];
+            if ($this->horarios[$i]['type_class']=="P") $this->horarios[$i]['type_class']="(P)";
+            else $this->horarios[$i]['type_class']="";
+            $ncursos=$this->ncursos;
+            for ($j=0; $j < $ncursos; $j++) { 
+                if ($this->horarios[$i]['courseid']==$this->datcursos[$j]['courseid'] && $this->horarios[$i]['turno']==$this->datcursos[$j]['turno']) {
+                    $this->horarios[$i]['color']=$listacolores[$this->datcursos[$j]['num']];
                 }
             }
-    
-    $horaoriginal=$this->horarios; 
+
+            $hsplit=split(":", $this->horarios[$i]['hora_ini']);
+            $hi=$hsplit[0];
+            $hsplit=split(":", $this->horarios[$i]['hora_fin']);
+            $hf=$hsplit[0];
+
+            if ($hi<=$hmen) $hmen=$hi;
+            if ($hf>=$hmay) $hmay=$hf;
+        }
+        // print_r($hi);
+        $k=0;
+        if ($hour_begin) {
+            for ($z=0; $z < $lentotal; $z++) { 
+                if ($hmen==$hora[$z]['h_ini'] && $k==0) {
+                    $inih=$z;
+                    $k=1;
+                }
+                if ($hmay==$hora[$z]['h_fin']) {
+                    $finh=$z;
+                }
+            }
+        }
+
+$horaoriginal=$this->horarios; 
 
    ?>
 <div class="row" style="margin: 0px">

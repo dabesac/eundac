@@ -75,10 +75,22 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $where['escid']=$escid;
         $where['subid']=$subid;
         $where['pid']=$pid;
+        
         // print_r($where);
         $curso=new Api_Model_DbTable_Coursexteacher();
         $datcur=$curso->_getFilter($where);
         $this->view->cursos=$datcur;
+        unset($where['escid']);
+        $datacur=$curso->_getFilter($where);   
+        // print_r($datcur);
+        // print_r($datacur);
+        $len = count($datacur);
+        for ($i=0; $i < $len; $i++) { 
+            // if ($datcur[$i][]==) {
+            //     # code...
+            // }
+        }
+        // exit();
         $usu=new Api_Model_DbTable_Users();
         $data['eid']=$eid;
         $data['oid']=$oid;
@@ -280,10 +292,10 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
         $bd_hours = new Api_Model_DbTable_HoursBeginClasses();
         $datahours=$bd_hours->_getFilter($wheres);
+        // exit();
         
         if ($datahours) {
             $hora=new Api_Model_DbTable_Horary();
-
             if ($datahours[0]['hours_begin_afternoon']) {
                 $valhorasm[0]=$datahours[0]['hours_begin'];
                 $valhorast[0]=$datahours[0]['hours_begin_afternoon'];
@@ -299,6 +311,7 @@ class Horary_NhoraryController extends Zend_Controller_Action {
                         
                 for ($g=0; $g < $len + 1 ; $g++) { 
                     if ($valhorasm[$g]==$valhorast[0] && $w==0) {
+
                         $valhoras[0]=$datahours[0]['hours_begin'];
                         for ($k=0; $k < 20; $k++) { 
                             $dho=$hora->_getsumminutes($valhoras[$k],'50');
@@ -337,7 +350,7 @@ class Horary_NhoraryController extends Zend_Controller_Action {
             $where['teach_uid']=$uid;
             $where['teach_pid']=$pid;
             $dathora=$hora->_getFilter($where);
-
+            // print_r($dathora);
             $this->view->horarios=$dathora;
             
             $curso=new Api_Model_DbTable_Coursexteacher();
@@ -348,7 +361,6 @@ class Horary_NhoraryController extends Zend_Controller_Action {
             $where1['subid']=$subid;
             $where1['pid']=$pid;
             $datcur=$curso->_getFilter($where1);
-
             $ncursos=count($datcur);
             for ($cont=0; $cont < $ncursos; $cont++) { 
                 $datcur[$cont]['num']=$cont;
