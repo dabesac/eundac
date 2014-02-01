@@ -143,6 +143,7 @@ class Register_DeferredController extends Zend_Controller_Action {
             $data = array(
                 'receipt' =>$receipt,
                 'notafinal' => $notafinal,
+                'modified' =>$this->sesion->uid,
                 );
             $where =  
                 " eid='$eid' and oid= '$oid' and 

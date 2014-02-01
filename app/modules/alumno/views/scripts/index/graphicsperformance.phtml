@@ -1,121 +1,69 @@
-        <script src="/external/jquery/jquery-1.9.1.js"></script>
-        <script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
-        <script src="/external/jquery/external/globalize.js"></script>
-        <script src="/external/jquery/external/jquery.mousewheel.js"></script>
-        <script src="/external/jquery/external/jshint.js"></script>
-        <script src="/external/jquery/external/qunit.js"></script>
-        <script src="/external/jquery/external/base64/jquery.base64.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">      
-        <link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
-        <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
-        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
-        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
-        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
-        <script src="/external/bootstrap/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
-        <link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="/css/style.css">
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<div class="alert alert-success"><center>"PARA LOGRAR UN RENDIMIENTO AL 100% DEBEN COINCIDIR LA CANTIDAD DE CURSOS POR SEMESTRE Y LA CANTIDAD DE CURSOS APROBADOS"</center></div> 
-   <table class="table  table-bordered table-striped table-condensed" style="float:left; margin-left:150px;font-size:11px; width:600px">
-      <tr>
-         <th style='color:#222863;width:200px'>Semestres</th>
-            <?php $cont=1;  
-            while ( $cont<= 12) {
-            foreach ($this->data as $datos) {           
-             $nombre=$datos['semid']; 
-              if ($nombre==$cont){
-             $total=$datos['cantidad_cursos']; 
-                          $a=0;                     
-                          foreach ($this->cursos as $datos1) {                         
-                              if($datos1['semid']==$cont){
-                              $cant=$datos1['cantidad_cursos'];
-                              $a = $a+1;  
-                              }                            
-                          }
-                           if($a==0)
-                          {
-                            $cant=0;
-                          }                    
-                    ?>  
-             <td><center><span class="label label-info" id="mostrartexto" rel="popover" data-placement="bottom" style="float:left;font-size:11px;">
-        <?php print $nombre?> </span></td>        
-           <?php  }}
-           $cont=$cont +1; }?>
-           </tr>
-           <tr>
-         <th style='color:#F0184E'>Cant.Cursos Pendientes</th>
-         <?php $cont=1;  
-            while ( $cont<= 12) {
-            foreach ($this->data as $datos) {           
-             $nombre=$datos['semid']; 
-              if ($nombre==$cont){
-             $total=$datos['cantidad_cursos']; 
-                          $a=0;                     
-                          foreach ($this->cursos as $datos1) {                         
-                              if($datos1['semid']==$cont){
-                              $cant=$datos1['cantidad_cursos'];
-                              $a = $a+1;  
-                              }                            
-                          }
-                           if($a==0)
-                          {
-                            $cant=0;
-                          }                    
-                    ?>
-         <td><font color="red"><b><?php print ($total-$cant)?></b></font></td>
-         <?php  }}
-           $cont=$cont +1; }?>
-        </tr> 
-      </table></center>
-      <br>
-      <br>
-      <br>
-      <br>
-  <html>
-  <head>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['SEMESTRE', 'CANTIDAD DE CURSOS POR SEMESTRE', 'CANTIDAD CURSOS APROBADOS'],
-         <?php $cont=1;  
-          while ( $cont<= 12) {
-          foreach ($this->data as $datos) {           
-           $nombre=$datos['semid'];
-            if ($nombre==$cont){
-           $total=$datos['cantidad_cursos']; 
-                        $a=0;                     
-                        foreach ($this->cursos as $datos1) {                         
-                            if($datos1['semid']==$cont){
-                            $cant=$datos1['cantidad_cursos'];
-                            $a = $a+1;  
-                            }                            
-                        }
-                         if($a==0)
-                        {
-                          $cant=0;
-                        }                    
-                  ?>
-           ['<?php print $nombre."º"?>' ,<?php print $total?> ,<?php print $cant?>],
-         <?php  }}
-         $cont=$cont +1; }?>
-        ]);
-        var options = {
-          title: 'RENDIMIENTO ACADEMICO HASTA LA ACTUALIDAD',
-          titleTextStyle: {color: '#0567B1'},
-          hAxis: {title: 'SEMESTRES',  titleTextStyle: {color: '#019B20'}},
-          vAxis: {title: "TOTAL CURSOS",  titleTextStyle: {color: '#019B20'}}
-        };
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
-    </script>   
-  </head>
-  <body>
-    <div id="chart_div" style="width: 100%; height: 90%;"></div>
-  </body>
-</html>
+<script type="text/javascript">
+$(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'area',
+                spacingBottom: 30
+            },
+            title: {
+                text: 'Fruit consumption *'
+            },
+            subtitle: {
+                text: '* Jane\'s banana consumption is unknown',
+                floating: true,
+                align: 'right',
+                verticalAlign: 'bottom',
+                y: 15
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top',
+                x: 150,
+                y: 100,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: '#FFFFFF'
+            },
+            xAxis: {
+                categories: ['Apples', 'Pears', 'Oranges', 'Bananas', 'Grapes', 'Plums', 'Strawberries', 'Raspberries']
+            },
+            yAxis: {
+                title: {
+                    text: 'Y-Axis'
+                },
+                labels: {
+                    formatter: function() {
+                        return this.value;
+                    }
+                }
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    this.x +': '+ this.y;
+                }
+            },
+            plotOptions: {
+                area: {
+                    fillOpacity: 0.5
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'John',
+                data: [0, 1, 4, 4, 5, 2, 3, 7]
+            }, {
+                name: 'Jane',
+                data: [1, 0, 3, 8, 3, 1, 2, 1]
+            }]
+        });
+    });
+    
 
+    </script>
+<script src="/external/highcharts/js/highcharts.js"></script>
+<script src="/externa/highcharts/modules/exporting.js"></script>
+<div id="container_performance" style="min-width: 310px; height: 400px; margin: 0 auto"></div>

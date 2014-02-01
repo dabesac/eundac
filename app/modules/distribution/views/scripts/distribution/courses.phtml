@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/external/distribution/distribution.js"></script>
 <div class="panel panel-default" style="margin-top:15px">
   	<div class="panel-body">
     	<b style="font-size:20px"><span class="glyphicon glyphicon-tasks"></span> - LISTA DE ASIGNATURAS</b>
@@ -6,7 +7,7 @@
 </div>
 <?php if ($this->courses) { ?>
 	<div id="coursesss">
-		<table class="table table-hover table-condensed table-striped">
+		<table id='courses_distribution_list' class="table table-hover table-condensed table-striped">
 			<tr class="active">
 				<th>#</th>
 				<th><center>Currícula</center></th>
@@ -15,11 +16,13 @@
 				<th><center>Turno</center></th>
 				<th><center>Tipo Asignatura</center></th>
 				<th><center>Semestre</center></th>
-				<th><center>Tipo Calificación <select name="type_rate" class="form-control input-sm">
-							<option>Seleccione</option>
-							<option value="O">Objetivo</option>
-							<option value="C">Competencia</option>
-						</select></center></th>
+				<th><center>
+				<select name="type_rate" id='edit-type-rate-all' class=" form-control input-sm">
+						<option value="">Seleccione</option>
+						<option value="O" <?php echo ($courses['type_rate'] == 'O')?'selected': '' ?> >Objetivo</option>
+						<option value="C" <?php echo ($courses['type_rate'] == 'C')?'selected': '' ?>>Competencia</option>
+				</select>
+					</center></th>
 				<th><center>Eliminar</center></th>
 			</tr>
 			<?php 
@@ -44,10 +47,12 @@
 					<td><center><?php echo $type?></center></td>
 					<td><center><?php echo $courses['semid']?></center></td>
 					<td>
-						<select name="type_rate" class="form-control input-sm">
-							<option>Seleccione</option>
-							<option value="O">Objetivo</option>
-							<option value="C">Competencia</option>
+						<select name="type_rate" class="edit-type-rate form-control input-sm" 
+
+						>
+							<option value="">Seleccione</option>
+							<option value="O" <?php echo ($courses['type_rate'] == 'O')?'selected': '' ?> >Objetivo</option>
+							<option value="C" <?php echo ($courses['type_rate'] == 'C')?'selected': '' ?>>Competencia</option>
 						</select>
 					</td>
 					<td>

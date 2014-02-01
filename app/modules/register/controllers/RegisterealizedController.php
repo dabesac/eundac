@@ -45,8 +45,9 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 			$c=0;
 			$aux=$data[0]['perid'];
 			$newperiod[0]=$aux;
+			
 			foreach ($data as $periods) {
-				$perid=$periods['perid'];				 
+				$perid=$periods['perid'];
 				if ($perid!=$aux) {
 					$c++;	
 					$newperiod[$c]=$perid;

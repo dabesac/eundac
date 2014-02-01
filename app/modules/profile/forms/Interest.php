@@ -8,9 +8,9 @@ class Profile_Form_Interest extends Zend_Form{
 		$discipline->removeDecorator("HtmlTag")->removeDecorator("Label");
 		$discipline->setRequired(true)->addErrorMessage("Este Campo es Obligatorio");
 		$discipline->setAttrib("class","form-control");
-		$discipline->addMultiOption("H","Hobby");
-		$discipline->addMultiOption("D","Deporte");
-		$discipline->addMultiOption("R","Religion");
+		$discipline->addMultiOption("H","Como Hobby");
+		$discipline->addMultiOption("D","Deportiva");
+		$discipline->addMultiOption("R","Religiosa");
 		$discipline->addMultiOption("O","Otros");
 
 		$title=new Zend_Form_Element_Text("title");

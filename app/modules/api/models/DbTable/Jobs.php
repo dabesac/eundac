@@ -30,6 +30,18 @@ class Api_Model_DbTable_Jobs extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getOne($where=array()){
+		try{
+			if ($where['lid']==""|| $where['eid']=='' || $where['pid']=='') return false;
+			$wherestr="lid = '".$where['lid']."' and eid='".$where['eid']."' and pid='".$where['pid']."'";
+			$row = $this->fetchRow($wherestr);
+			if($row) return $row->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read One Academic Data ".$e->getMessage();
+		}
+	}
+
 	public function _save($data){
 		try{
 			if ($data['eid']=='' || $data['pid']=='') return false;
@@ -39,6 +51,17 @@ class Api_Model_DbTable_Jobs extends Zend_Db_Table_Abstract
 			print "Error al Guardar Jobs ".$e->getMessage();
 		}
 	}
+
+	public function _update($data,$pk){
+		try{
+			if ($pk['lid']=='' || $pk['eid']=='' || $pk['pid']=='') return false;
+			$where = "lid = '".$pk['lid']."'and eid = '".$pk['eid']."' and pid = '".$pk['pid']."'";
+			return $this->update($data, $where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Update Job".$e->getMessage();
+		}
+	}	
 
 	public function _delete($pk){
 		try{

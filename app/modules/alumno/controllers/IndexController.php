@@ -17,13 +17,123 @@ class Alumno_IndexController extends Zend_Controller_Action {
     {
         try {
 
-             if ($this->_validaren()=="false"){
-                 $this->_redirect('/alumno/index/encuesta');
-             }
+            $where['uid']=$this->sesion->uid;
+            $where['eid']=$this->sesion->eid;
+            $where['oid']=$this->sesion->oid;
+            $where['pid']=$this->sesion->pid;
+            $where['escid']=$this->sesion->escid;
+            $where['subid']=$this->sesion->subid;
+            $this->view->escid = $where['escid'];
+            $this->view->uid = $where['uid'];
+            $this->view->oid = $where['oid'];
+            $this->view->eid = $where['eid'];
+            $dbcurricula=new Api_Model_DbTable_Studentxcurricula();
+            $datcur=$dbcurricula->_getOne($where);
+            $where['curid']=$datcur['curid'];
+            $this->view->curid = $where['curid'];
+            $dbcursos=new Api_Model_DbTable_Course();
+            $datcursos=$dbcursos->_getCountCoursesxSemester($where);
+            $cur=$dbcursos->_getCountCoursesxApproved($where);
 
-            // if ($this->_verifyprofile() == "1"){
-            //     $this->_redirect('/profile/public/student');
-            // }
+            $data_all = array();
+            $data_rel = array();
+            if ($cur) {
+                foreach ($datcursos as $key => $courses) {
+                        $data_course[$key] = $courses['cantidad_cursos'];
+                        $data_all[0][$courses['semid']-1]=$courses['cantidad_cursos'];
+                        $semestre[$key]=$courses['semid'];
+
+                }
+                foreach ($cur as $key => $value) {
+                        $data_all[1][$value['semid']-1]= $value['cantidad_cursos'];
+                        $semestre_t[$key] = $value['semid'];
+                }
+
+                foreach ($data_all[0] as $key => $value) {
+                    if (!array_key_exists($key,$data_all[1])) {
+                        $data_all[1][$key]=0;
+                    }
+                }
+                for ($i=0; $i  < count($data_all[0]); $i++) { 
+                    $data_rel[$i]=$data_all[1][$i];
+                }
+            }
+           
+            $courses_x_sem = array(
+                    '0'=>array(
+                            'name'=>'Cursos por Semestre',
+                            'data'=>$data_all[0]
+                            ),
+                    '1'=>array(
+                            'name'=>'Cantidad de Cursos Llevados',
+                            'data'=>$data_rel
+                            ),
+            );
+            $data = json_encode($courses_x_sem);
+            $this->view->datos = $data;
+
+            $where['perid'] = '13B';//$this->sesion->period->perid;
+            $tb_assistence = new Api_Model_DbTable_StudentAssistance();
+            $dat_assist =$tb_assistence->_assistence($where);
+
+
+            $dat_assist_all = array();
+            $data_courses = array();
+            $data_assistences = array();
+            
+            foreach ($dat_assist as $key => $assistence) {
+                $data_courses[$key]= $assistence['name'];
+                $assist = 0;
+                $late = 0;
+                $short = 0;
+                $retired =0;
+                for ($i=1; $i < 35 ; $i++) { 
+                    if ($assistence['a_sesion_'.$i] == 'A') {
+                        $assist ++;
+                    }
+                    if ($assistence['a_sesion_'.$i] == 'T') {
+                        $late ++;
+                    }
+                    
+                    if ($assistence['a_sesion_'.$i] == 'F') {
+                        $short ++;
+                    }
+                    if($assistence['a_sesion_'.$i] == 'R'){
+                        $retired ++;
+                    }
+
+                }
+                    $data_assistences['asistio'][$key] = $assist ;
+                    $data_assistences['late'][$key] = $late;
+                    $data_assistences['short'][$key] = $short;
+                    $data_assistences['retired'][$key] =  $retired;
+            }
+
+            $result  = array(
+                            '0' =>  array(
+                                        'name' => 'Asistio',
+                                        'data'  =>$data_assistences['asistio']
+                                    ),
+                            '1' =>  array(
+                                        'name'  =>  'Tarde',
+                                        'data'  =>$data_assistences['late']
+                                ),
+                            '2' =>  array(
+                                        'name'  =>'Falto',
+                                        'data'  => $data_assistences['short']
+                                ),
+                            '3' =>  array(
+                                        'name'  =>'Retirado',
+                                        'data'  => $data_assistences['retired']
+                                ),
+                         );
+
+            $result = json_encode($result);
+            $data_courses = json_encode($data_courses);
+            
+            $this->view->courses = $data_courses;
+            $this->view->dat_assist = $result;
+            //print_r($data_courses);exit();
 
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
@@ -241,13 +351,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 $where[$j]['tarde']=$x0;
                 $where[$j]['falto']=$x1;
 
-                // if ($var=='A'){
-                //     $ret=6;
-                // }
-                //  if ($var=='P'){
-                //     $ret=12;
-                // }
-
                 if ($x1>=6) {
                 $where[$j]['coment']='R';
                     }
@@ -255,7 +358,9 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 $where[$j]['coment']='N';
                 }
                    $j++;
-        } 
+        }
+
+
         $this->view->assistence=$where; 
 
         }

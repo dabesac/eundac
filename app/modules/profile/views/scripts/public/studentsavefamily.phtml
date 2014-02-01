@@ -1,4 +1,4 @@
-<ul class="nav nav-pills nav-stacked" id="backeditBtn">
+<ul class="nav nav-pills nav-stacked" id="backFamilyBtn">
 	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
 </ul>
 
@@ -30,7 +30,7 @@
 					<div class="col-sm-4">
 						<?php print $this->form->day?>
 					</div>
-				</div>
+				</div></td>
 			<td id="sex"><label>Sexo</label><?php print $this->form->sex?></td>
 		</tr>
 		<tr>
@@ -65,7 +65,10 @@
 			url: $(this).attr("action"),
 			data: $(this).serialize(),
 			success: function(data){
-				$("#editform").html(data)
+				$("#editform").html(data);
+				$('#editform').html("");
+				$("#datastudent").load("/profile/public/studentfamily");
+				$('#datastudent').removeClass('hidden');
 			}
 		})
 		return false;
@@ -95,12 +98,10 @@
 		})
 	})
 	
-	$('#backeditBtn a').click(function (e) {
+	$('#backFamilyBtn a').click(function (e) {
     	e.preventDefault()
       	$("#editform").html("")
-      	$("#editdata").removeClass("hidden")
-      	$('#editpalBtns a:last').tab('show')
-      	$('#editpalBtns2 a:last').tab('show')
+      	$("#datastudent").removeClass("hidden")
   	})
    
 </script>

@@ -5,21 +5,49 @@ class Default_Model_DbTable_Premission extends Zend_Db_Table_Abstract
 	protected $_name = 'base_acl';
 	protected $_primary = array('eid', 'oid', 'reid', 'rid', 'mid');
 
-
+	public function _getResources($where = array()){
+	
+		if($where['eid']=='' || $where['oid']=='' || $where['rid']=='' || $where['mid']=='') return false;
+		//print_r($where);
+		$select = $this->_db->select()
+			->from(array('a' => 'base_acl'),array('*'))
+				->join(array('r' => 'base_resource'),'a.eid=r.eid and a.oid=r.oid and 
+						a.reid=r.reid and a.mid=r.mid')
+				->where('a.eid = ?', $where['eid'])
+				->where('a.oid = ?', $where['oid'])
+				->where('r.is_menu = ?', 'S')
+				->where('a.permission= ?','allow')
+				->where('a.mid = ?', $where['mid'])
+				->where('a.rid = ?', $where['rid']);
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;
+	}
+	
 	public function _getResource_Role($eid=null,$oid=nul,$rid=null)
 	{
 		try {
 			
 			if ($eid=='' || $oid==''|| $rid=='')return false;
-			$where="eid = '".$eid."' and oid = '".$oid."' and rid = '".$rid."'";
-			$rows=$this->fetchAll($where);
-			if($rows) return $rows->toArray();
+			
+			$select = $this->_db->select()
+			->from(array('a' => 'base_acl'))
+				->join(array('r' => 'base_resource'),'a.eid=r.eid and a.oid=r.oid and 
+						a.reid=r.reid and a.mid=r.mid', array('r.*'))
+				->where('a.eid = ?', $eid)
+				->where('a.oid = ?', $oid)
+				->where('a.rid = ?', $rid);
+			$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
 			return false;
 
 		} catch (Exception $e) {
 			print "Error: Read Filter Acl's ".$e->getMessage();
 		}
 	}
+
 
 	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
@@ -52,19 +80,23 @@ class Default_Model_DbTable_Premission extends Zend_Db_Table_Abstract
 		try {
 
 			if ($where['eid']=='' || $where['oid'] =='' || $where['rid'] == '') return false;
-
-			$select = $this->_db->select()
-				->from(array('a'=>'base_acl'))
-				->join(array('r'=>'base_resource'),
-					'a.eid = r.eid and a.oid=r.oid and a.reid=r.reid and a.mid=r.mid',array('r.module','r.controller','r.action','name_r'=>'r.name','icon_r'=>'r.imgicon'))
-				->join(array('m'=>'base_module'),'r.eid=m.eid and r.oid=m.oid and r.mid=m.mid',array('m.mid','name_m'=>'m.name',  'icon_m' =>'m.imgicon'))
-				->where('a.rid = ?', $where['rid'])
-				->where('r.is_menu = ?', 'S')
-				->where('a.permission = ?', 'allow');
-
-			$results = $select->query();			
-			$rows = $results->fetchAll();
-			
+			$sql = $this->_db->query("
+				select 
+				m.mid, m.name
+				from base_acl a 
+				inner join base_resource r 
+				on a.eid = r.eid and a.oid	= r.oid and 
+				a.mid = r.mid and a.reid = r.reid 
+				inner join base_module m
+				on r.eid = m.eid and r.oid	= m.oid and 
+				r.mid = m.mid 
+				where 
+				a.eid = '".$where['eid']."' and
+				a.oid = '".$where['oid']."' and
+				a.rid='".$where['rid']."' and is_menu='S' and a.permission='allow'
+				group by m.mid,m.name 
+               ");
+            $rows=$sql->fetchAll();
 			if($rows) return $rows;
 			return false;
 			

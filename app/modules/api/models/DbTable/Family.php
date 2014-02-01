@@ -20,6 +20,45 @@ class Api_Model_DbTable_Family extends Zend_Db_Table_Abstract
 		}
 	}
 
+
+	public function _update($data,$pk){
+		try{
+			if ($pk['eid']=='' || $pk['famid']=='') return false;
+			$where = "eid = '".$pk['eid']."'and famid = '".$pk['famid']."'";
+			return $this->update($data, $where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Update Family ".$e->getMessage();
+		}
+	}
+
+	public function _delete($pk){
+		try{
+			if ($pk['eid']=='' || $pk['famid']=='') return false;
+			$where = "eid = '".$pk['eid']."'and famid = '".$pk["famid"]."'";
+			return $this->delete($where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Delete Interes ".$e->getMessage();
+		}
+	}
+
+
+	public function _getOne($where=null){
+		try{
+			
+			if ($where['eid']=="" || $where['famid']=="") return false;
+			
+			$wherestr="eid = '".$where['eid']."' and famid = '".$where['famid']."'";
+			$row = $this->fetchRow($wherestr);
+			if($row) return $row->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read One Interes ".$e->getMessage();
+		}
+	}
+
+
 	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
 			if($where['eid']=='') return false;

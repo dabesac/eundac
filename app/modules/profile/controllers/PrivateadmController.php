@@ -57,12 +57,13 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->getParam("eid");
-            $oid=$this->getParam("oid");
-            $pid=$this->getParam("pid");
-            $uid=$this->getParam("uid");
-            $escid=$this->getParam("escid");
-            $subid=$this->getParam("subid");
+
+            $uid=$this->sesion->uid;
+            $pid=$this->sesion->pid;
+            $escid=$this->sesion->escid;
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $subid = $this->sesion->subid;
 
             $data=array("eid"=>$eid,"pid"=>$pid);
 

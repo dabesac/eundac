@@ -72,6 +72,8 @@ $ldistri =$this->ldistribution;
 				<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Distribución Cerrado"></span></a>
 				<?php
 			}elseif ($distri['state']=="A" || $distri['state']=="B" || $distri['state']=='O') {?>
+				
+			<!-- 	<a id='horary' data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-arrow-right" data-toggle="tooltip" title="Carga Académica Distribución"></span></a> -->
 				<a href="/distribution/distribution/academicload/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>/escid/<?php echo base64_encode($distri['escid'])?>/subid/<?php echo base64_encode($distri['subid'])?>"><span class="glyphicon glyphicon-arrow-right" data-toggle="tooltip" title="Carga Académica Distribución"></span></a>
 				<?php
 			}?>
@@ -83,6 +85,29 @@ $ldistri =$this->ldistribution;
 	?>
 </table>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id='hourbegin'></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script>
 $('.glyphicon').tooltip();
+
+$("#horary").click(function(){
+    url="/horary/nhorary/changehours/";
+    $("#hourbegin").load(url);    
+    });
 </script>

@@ -155,7 +155,6 @@ class Admin_AclController extends Zend_Controller_Action{
                 $data['oid']=$this->sesion->oid;
                 $data['state']= 'A';
                 $data['created']=date('Y-m-d h:m:s');
-
                 $tb_resourse =  new Api_Model_DbTable_Resource();
                 if ($tb_resourse->_save($data)) {
                         $this->_response->setHeader('Content-Type', 'application/json');
@@ -212,7 +211,6 @@ class Admin_AclController extends Zend_Controller_Action{
             $form->populate($resource);
             $this->view->form=$form;
         }
-
     }
 
     public function editpremissiosAction(){

@@ -186,31 +186,52 @@ class Distribution_DistributionController extends Zend_Controller_Action {
     }
 
     public function modifytypecourseAction(){
+            $param  =   $this->getRequest()->getParams();
+            if (count($param)>3) {
+                foreach ($param as $key => $value) {
+                    if($key!="module" && $key!="controller" && $key!="action"){
+                        $params_decode[base64_decode($key)] = base64_decode($value);
+                    }
+                }
+                $param = $params_decode;
+            }
+            $curid =    trim($param['curid']);
+            $courseid =    trim($param['courseid']);
+            $turno =    trim($param['turno']);
+            $escid =    trim($param['escid']);
+            $subid =    trim($param['subid']);
+            $distid =    trim($param['distid']);
+            $perid =    trim($param['perid']);
+            $type_rate  = trim($param['type_rate']);
+            $pk  =   array(
+                            'eid'   =>$this->sesion->eid,
+                            'oid'   =>$this->sesion->oid,
+                            'curid'   =>$curid,
+                            'courseid'   =>$courseid,
+                            'turno'   =>$turno,
+                            'escid'   =>$escid,
+                            'subid'   =>$subid,
+                            'distid'   =>$distid,
+                            'perid'   =>$perid,
+                        );
+            $data = array(
+                            'type_rate' =>  $type_rate
+                        );
         try {
-            $this->_helper->layout()->disablelayout();
-            $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;
-            $subid = $this->_getParam("subid"); 
-            $escid = $this->_getParam("escid");
-            $courseid = $this->_getParam("courseid");
-            $curid = $this->_getParam("curid");
-            $turno = $this->_getParam("turno");
-            $perid = $this->_getParam("perid");
-            $type = $this->_getParam("type");
-            $pk["eid"]=$eid;
-            $pk["oid"]=$oid;
-            $pk["perid"]=$perid;
-            $pk["courseid"]=$courseid;
-            $pk["escid"]=$escid;
-            $pk["subid"]=$subid;
-            $pk["curid"]=$curid;
-            $pk["turno"]=$turno;
-            $data['type_rate']=$type;
             $percourses = new Api_Model_DbTable_PeriodsCourses();
-            $percourses->_update($data,$pk);
+            if ($percourses->_update($data,$pk)) {
+                $json   =   array(
+                                'status'    =>   true
+                            );
+            }
         } catch (Exception $e) {
-            print "Error: ".$e->getMessage();
+            $json   =   array(
+                            'status'    => false
+                        );
         }
+        $this->_helper->layout()->disablelayout();
+        $this->_response->setHeader('Content-Type', 'application/json');                   
+        $this->view->data = $json; 
     }
 
     public function addcoursesAction(){

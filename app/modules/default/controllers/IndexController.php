@@ -174,14 +174,14 @@ class IndexController extends Zend_Controller_Action {
     						//echo "Existe otra sesion abierta en algun otro lugar";exit();
     						//$this->_redirect("/default/index/salir");
     					}
-    					//$urlmod = $data->rol['module'];
+    					$urlmod = $data->rol['module'];
     					//$passn= base64_encode($clavecampus);
     					//$urllogin  = "key/$passn/mod/".$data->rol['module'];
     					//$urllogin  = array("key"=>$passn, "mod" => $data->rol['module']);
     					//if (trim($data->rid)=='AL' || $data->rid=='DC')
     					//	$this->_forward("ajax", "index", "default", $urllogin );
     					//else
-    						$this->_redirect($urlmod);
+    					$this->_redirect($urlmod);
     				}
     			}else {
 					switch ($result->getCode()) {
@@ -391,6 +391,7 @@ class IndexController extends Zend_Controller_Action {
     			break;
     		}
     		
+            
     		case "AL": {
                 $resource1[]="alumno/index";
     			$resource1[]="alumno/index/encuesta";
@@ -408,7 +409,7 @@ class IndexController extends Zend_Controller_Action {
     			$modules[1] = array ("name" =>"Matrícula", "imgicon"=>"ok");
     			$acls[]= array("controller"=>"register/student","name"=>"Prematricula","imgicon"=>"edit");
     			$resource1[]="register/student";
-    			//$modules[1]['acls'] = $acls;
+    			$modules[1]['acls'] = $acls;
     			$acls = null;
     			break;
     		}
@@ -420,7 +421,7 @@ class IndexController extends Zend_Controller_Action {
 
     			
     			$modules[0] = array ("name" =>"Gestión Asignaturas", "imgicon"=>"book");
-    			$acls[]= array("controller"=>"docente/notas","name"=>"Asignaturas a Cargo","imgicon"=>"list");
+    			$acls[]= array("controller"=>"profile/privateadm/adm","name"=>"Asignaturas a Cargo","imgicon"=>"list");
                 $resource1[]="docente/notas";
                 $acls[]= array("controller"=>"horary/seehorary","name"=>"Ver Horario","imgicon"=>"calendar");
                 $resource1[]="horary/seehorary";
@@ -465,7 +466,7 @@ class IndexController extends Zend_Controller_Action {
     				$acls[]= array("controller"=>"graduated/graphicgraduated","name"=>"Grafica Egresados","imgicon"=>"edit");
                     $resource1[]="graduated/graphicgraduated";
     			}
-                $acls[]= array("controller"=>"docente/report","name"=>"Historial Academico","imgicon"=>"list");
+                $acls[]= array("controller"=>"profile/privateadm/adm","name"=>"Historial Academico","imgicon"=>"list");
     			$resource1[]="docente/report";
                 $acls[]= array("controller"=>"docente/index/poll","name"=>"Evaluación Rendimiento","imgicon"=>"edit");
                 $resource1[]="report/performance";

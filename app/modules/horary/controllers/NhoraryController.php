@@ -315,6 +315,7 @@ class Horary_NhoraryController extends Zend_Controller_Action {
     
     public function changehoursAction(){
         try {
+            // $this->_helper->layout()->disableLayout();
             $fm = new Horary_Form_Hours();
             $this->view->fm=$fm;
             $eid=$this->sesion->eid;
@@ -329,7 +330,7 @@ class Horary_NhoraryController extends Zend_Controller_Action {
 
                 if ($fm->isValid($frmdata)){
 
-                     $hour=$frmdata['hour'];
+                    $hour=$frmdata['hour'];
                         if ($hour<=9) {
                             $frmdata['hour']="0".$hour;
                         }
@@ -338,20 +339,33 @@ class Horary_NhoraryController extends Zend_Controller_Action {
                           $frmdata['minute']="0".$minute;
                         }
                     $frmdata['hours_begin']=$frmdata['hour'].":".$frmdata['minute'].":00";    
+
+                    if ($frmdata['hour_t']) {
+                        $hour_t=$frmdata['hour_t'];
+                            if ($hour_t<=9) {
+                                $frmdata['hour_t']="0".$hour_t;
+                            }
+                        $minute=$frmdata['minute_t'];
+                            if ($minute==0) {
+                              $frmdata['minute_t']="0".$minute;
+                            }
+                        $frmdata['hours_begin_t']=$frmdata['hour_t'].":".$frmdata['minute_t'].":00";
+
+                    }
                     unset($frmdata['save']);
                     unset($frmdata['hour']);
                     unset($frmdata['minute']);
+                    unset($frmdata['hour_t']);
+                    unset($frmdata['minute_t']);
                     $frmdata['eid']=$eid;
                     $frmdata['oid']=$oid;
                     $frmdata['perid']=$perid;
                     $frmdata['escid']=$escid;
                     $frmdata['subid']=$subid;
                     $reg_= new Api_Model_DbTable_HoursBeginClasses();
+                    // print_r($frmdata);
                     $reg_->_save($frmdata); 
                     $this->_redirect("/horary/nhorary/listteacher"); 
-                }
-                else{
-                    echo "Ingrese nuevamente por favor";
                 }   
             }            
         } catch (Exception $e) {

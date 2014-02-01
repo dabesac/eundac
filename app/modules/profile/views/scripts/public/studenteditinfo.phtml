@@ -45,9 +45,6 @@
 	$("#save").click(function(){
 		$("#form").submit()
 	})
-
-
-
 	$("#form").submit(function(){
 		$.ajax({
             type: 'POST',
@@ -55,16 +52,19 @@
             data: $(this).serialize(),
             success: function(data){ 
             	$("#editform").html(data);
+            	$("#editform").html("");
+            	$("#maininfo").load('/profile/public/studentinfo');
+            	$("#maininfo").fadeIn('slow');
        	   	}
         }); 
         return false;
 	})
 
+
 	$('#backeditBtn a').click(function (e) {
     	e.preventDefault()
-      	$("#editform").html("")
-      	$("#editdata").removeClass("hidden")
-      	$('#editpalBtns a:last').tab('show')
+      	$("#editform").html("");
+      	$("#maininfo").fadeIn('slow');
   	})
    
 </script>

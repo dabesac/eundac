@@ -18,7 +18,7 @@ class Docente_ReportController extends Zend_Controller_Action {
 
     public function indexAction(){
         try {
-            
+            $this->_helper->layout()->disableLayout();
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }

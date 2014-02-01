@@ -10,19 +10,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $view->doctype('XHTML1_STRICT');
             $view->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
             
-            $view->headLink()->prependStylesheet('/external/bootstrap/css/bootstrap.min.css')
-            ->headLink()->appendStylesheet('/external/bootstrap/css/bootstrap-theme.min.css')
-            ->headLink()->appendStylesheet('/external/jquery/themes/redmond/jquery-ui.css');
-            //->headLink()->appendStylesheet('/css/style.css');
-            
-            $view->headScript()->prependFile('/external/jquery/jquery-1.9.1.js')
-            ->headScript()->appendFile('/external/jquery/additional-methods.min.js')
-            ->headScript()->appendFile('/external/jquery/jquery.validate.min.js')
-            ->headScript()->appendFile('/external/jquery/messages_es.js')
-            ->headScript()->appendFile('/external/jquery/ui/minified/i18n/jquery.ui.datepicker-es.min.js')
-            ->headScript()->appendFile('/external/jquery/ui/minified/jquery-ui.custom.min.js')
-            ->headScript()->appendFile('/external/bootstrap/js/bootstrap.min.js')
-            ->headScript()->appendFile('/external/jquery/external/base64/jquery.base64.min.js');
+            $view->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.css')
+            ->headLink()->appendStylesheet('/external_library/bootstrap/css/layout.css');
+
+            $view->headScript()->prependFile('/external_library/bootstrap/js/bootstrap.js')
+            ->headScript()->prependFile('/external_library/bootstrap/js/jquery.functions.js')
+            ->headScript()->prependFile('/external_library/base64/jquery.base64.min.js')
+            ->headScript()->prependFile('/js/jquery-1.11.0.js');
             
             
             $view->headTitle()->setSeparator(' - ');
@@ -50,12 +44,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('Adaptador3',$Adapter3);
 	}
 
-    public function _initLoader()
-   {
-     
-   }
-    
-	
+    protected function _initPlaceholders(){
+        $this->bootstrap('layout');
+        $layout = $this->getResource('layout');
+        $view = $view = $layout->getView();
+        $view->placeholder('Textnav')
+                ->setPrefix("<div class=\"col-md-6\">\n    
+                        <h4 class=\"text-nav\">\n")
+                ->setSeparator("</h4>\n</div>");
+        $view->placeholder('Btnnav')
+                ->setPrefix("<div class=\"pull-left\">\n")
+                ->setSeparator("</div>");
+    }
             
 }
 

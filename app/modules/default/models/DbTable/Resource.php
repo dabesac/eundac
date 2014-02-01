@@ -5,6 +5,7 @@ class Default_Model_DbTable_Resource extends Zend_Db_Table_Abstract
 	protected $_name = 'base_resource';
 	protected $_primary = array('eid', 'oid', 'reid', 'mid');
 
+
 	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
 			if($where['eid']=='' || $where['oid']=='' ) return false;

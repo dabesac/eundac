@@ -1,50 +1,56 @@
-<div style="display: block; height: 120px; width: 100%; ">
-  <div class="img-thumbnail pull-left">
-    <img src="/fotos/<?php echo $this->datos[0]['uid']?>.jpg" title="">
-  </div>
-  <div class="pull-left" style="padding: 8px;">
-    <p style="font-size: 18px"><b><?php echo $this->datos[0]['fullname']?></b><br>
-    Código <b><?php echo $this->datos[0]['uid']?></b><br>
-    Facultad de <?php echo $this->datos[1][0]['nomfac']." Escuela de ".$this->datos[1][0]['nomesc']?></p>
-   </div>
-   <div class="pull-right">
-      <a href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>" class="btn btn-success">
-      Record Notas
-      </a>
-    </div>
+<div class="row">
+	<br>
+	<div class="col-md-1">
+		<img alt="Foto de Perfil" align="center">
+		<!--<img src="/fotos/<?php echo $this->datos[0]['uid']?>.jpg" title="">-->
+	</div>
+	<div class="col-md-5">
+		<h3 class="text-right"><b><?php echo $this->datos[0]['fullname']?></b></h3>
+		<br>
+		<h5 class="text-right">Código <b><?php echo $this->datos[0]['uid']?></b></h5>
+	</div>
+	<div class="col-md-5">
+		<blockquote>
+			<h3>Facultad de <?php echo $this->datos[1][0]['nomfac']?></h3>
+			<h3>Escuela de <?php echo $this->datos[1][0]['nomesc']?></p></h3>
+		</blockquote>
+	</div>
+	<div class="col-md-1">
+		<br>
+	  	<h3><a href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>" class="text-warning" title="Imprimir Record de Notas"><span class="glyphicon glyphicon-print"></span></a></h3>
+	</div>
+</div>
+
+
 </div>
 
 <div style="display: block; width: 100%; ">
 	<ul class="nav nav-tabs" id="profileTab">
-		<li class="active"><a href="#info" id="btnmaininfo"><h5>Informacion</h5></a></li>
-		<li><a href="#signin" id="btnmainsignin"><h5>Matricula</h5></a></li>
+		<li class="active"><a href="#signinCurrent" id="btnmainsignin"><h5 class="text-info"><span class="glyphicon glyphicon-th text-muted"></span> Matricula Actual</h5></a></li>
+		<li><a href="#signinCurriculum"><h5 class="text-info"><span class="glyphicon glyphicon-th text-muted"></span> Matriculas por Currícula</h5></a></li>
+		<li><a href="#signinRealized"><h5 class="text-info"><span class="glyphicon glyphicon-th text-muted"></span> Matriculas Realizadas</h5></a></li>
+		<li><a href="#info" id="btnmaininfo"><h5 class="text-info"><span class="glyphicon glyphicon-th text-muted"></span> Informacion</h5></a></li>
 		<li><a class="hidden"></a></li>
 	</ul>
 	<div class="tab-content" style="margin: 0px; padding: 0px; min-height: 500px;" >
-		<div class="tab-pane active" id="info" ></div>
-		<div class="tab-pane" id="signin"></div>
+		<div class="tab-pane  active in fade" id="signinCurrent"></div>
+		<div class="tab-pane fade" id="signinCurriculum"></div>
+		<div class="tab-pane fade" id="signinRealized"></div>
+		<div class="tab-pane fade" id="info" ></div>
 	</div>
 </div>
 
-<div class="modal fade" id="update_profile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="margin-top: 15%">
-      	<div class="modal-content">
-        	<div class="modal-body">
-          		<h5 class="modal-title"><b>MENSAJE:</b></h5><br>
-        		Ayudanos a mejorar nuestro Sistema, ingresa y/o actualiza tus datos personales para mantener una mejor comunicación y brindarles el mejor servicio. Gracias.<br>
-          		<a href="#" class="btn btn-success" data-dismiss="modal" style="float: right">
-          			<span class='glyphicon glyphicon-ok'></span> Aceptar
-          		</a><br><br>
-        	</div>
-      	</div>
-    </div>
-</div>
 
 <script>
 $(function () {
-	$("#update_profile").modal('show');
+	$("#signinCurrent").load("/profile/public/studentsigncurrent");
+
+	$('#signinCurriculum').load('/profile/public/studentsignpercur');
+
+    $("#signinRealized").load("/register/registerealized/index/pid/<?php echo $this->data['pid']?>/uid/<?php echo $this->data['uid']?>/escid/<?php echo $this->data['escid']?>/subid/<?php echo $this->data['subid']?>/perid/<?php echo $this->data['perid']?>/rid/<?php echo $this->data['rid']?>");
+
 	$("#info").load("/profile/public/studentinfo");
-	$("#signin").load("/profile/public/studentsigncurrent");
+
 	$('#profileTab a').click(function (e) {
 		e.preventDefault()
 	    $(this).tab('show')

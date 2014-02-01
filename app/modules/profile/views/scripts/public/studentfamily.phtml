@@ -1,80 +1,104 @@
 <div class="panel panel-info">
-  <div class="panel-heading">
-    <h4>Datos Familiares</h4>
-  </div>
-
-  <div class="panel-body">
+	<div class="row">
+		<div class="col-md-9 col-md-offset-1">
+    		<h3 class="text-muted"><span class="glyphicon glyphicon-tree-deciduous"> </span> Datos Familiares</h3>
+		</div>
+		<div class="col-md-2 ">
+			<br>
+			<a href="#" id="newFamily" class="btn btn-default" title="Nuevo"><span class="text-muted">Nuevo</span></a>
+		</div>
+	</div>
+	
+<div class="panel-body">
     <?php if($this->famdata){
     	$c=0;?>
-    	<?php foreach ($this->famdata as $fam) {?>
-    	<div class="panel panel-default">
-    		<div class="panel-heading">
-    			Nombre <h5><b><?php echo $fam[0]['lastname']." ".$fam[0]['firtsname']?></b></h5>
-  			</div>
-    		<div class="panel-body">
-    		<table class="table">
-		    	<tr>
-		    		<td>Parentesco
-		    		<h5><b>
-		    		<?php if($this->famrel[$c]['type']=="PA"){
-		    			echo "Padre";
-		    		}elseif($this->famrel[$c]['type']=="MA"){
-						echo "Madre";
-		    		}elseif($this->famrel[$c]['type']=="HI"){
-						echo "Hijo/a";
-		    		}elseif($this->famrel[$c]['type']=="HE"){
-						echo "Hermano/a";
-		    		}
-		    		$c++;?>
-		    		</b></h5>
-		    		</td>
-		    		<?php if($fam[0]['typedoc']=="D"){?>
-		    			<td>DNI <h5><b><?php echo $fam[0]['numdoc']?></b></h5></td>
-		    		<?php }else{?>
-						<td>Pasaporte <h5><b><?php echo $fam[0]['numdoc']?></b></h5></td>
-		    		<?php }?>
-		    	</tr>
-		    	<tr>
-		    		<td>Fecha de Nacimiento <h5><b><?php echo $fam[0]['birthday']?></b></h5></td>
-		    		<td id="live">
-		    			Vive?
-		    			<h5><b>
-		    			<?php if($fam[0]['live']=="S"){
-		    				echo "Si";
-		    			}else{
-							echo "No";
-		    			}?>
-		    			</b></h5>
-		    		</td>
-		    	</tr>
-		    	<tr id="moreinfo1">
-		    		<td>Apoderado? <h5><b>
-		    			<?php if($this->famrel[0]['assignee']=="S"){
-		    				echo "Si";
-		    			}else{
-							echo "No";
-		    			}?>
-		    			</b></h5></td>
-		    		<td>Telefono/Celular <h5><b><?php echo $fam[0]['phone']?></b></h5></td>
-		    	</tr>
-		    	<tr id="moreinfo2">
-		    		<td>Direccion <h5><b><?php echo $fam[0]['address']?></b></h5></td>
-		    		<td>Ocupacion <h5><b><?php echo $fam[0]['ocupacy']?></b></h5></td>
-		    	</tr>
-    		</table>
+	<div class="row">
+    	<?php $c = 0;
+    	foreach ($this->famdata as $fam) {?>
+		<div class="col-md-6">
+			<div class="panel panel-warning">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-1">
+							<a href="#" id="remove<?php echo $fam[0]['famid']?>" class="pull-right text-warning" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
+							<script>
+							  	$("#remove<?php echo $fam[0]['famid']?>").click(function(){
+							    	bootbox.confirm("Seguro que desea eliminar <?php echo $fam[0]['firtsname']?>", function(result) {
+							        	if (result)
+							        	{
+							          		$("#editform").load("/profile/public/studentremovefamily/famid/<?php echo $fam[0]['famid']?>");
+							          		$('#editform').html("");
+							          		$("#datastudent").load("/profile/public/studentfamily");
+							        	}
+							      	});
+							  	});
+							</script>
+						</div>
+						<div class="col-md-1 col-md-offset-10">
+							<a href="#" id="edit<?php echo $fam[0]['famid']?>" class="text-warning" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+							<script>
+								$("#edit<?php echo $fam[0]['famid']?>").click(function(){
+									$('#datastudent').addClass('hidden');
+								    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+								    $("#editform").load("/profile/public/studenteditfamily/famid/<?php echo $fam[0]['famid']?>");
+								})
+							</script>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-9">
+						<blockquote>
+							<h5><span class="glyphicon glyphicon-user text-muted"></span> <?php echo $fam[0]['lastname']?> <b class="text-muted"><?php echo $fam[0]['firtsname']?></b></h5>
+						</blockquote>
+						</div>
+						<div class="col-md-3">
+						<blockquote>
+							<h5 class="text-left">
+							<?php if($this->famrel[$c]['type']=="PA"){
+				    			echo "Padre";
+				    		}elseif($this->famrel[$c]['type']=="MA"){
+								echo "Madre";
+				    		}elseif($this->famrel[$c]['type']=="HI"){
+								echo "Hijo/a";
+				    		}elseif($this->famrel[$c]['type']=="HE"){
+								echo "Hermano/a";
+				    		}
+				    		$c++; ?></h5>
+				    	</blockquote>
+						</div>
+					</div>
+					<hr class="featurette-divider">
+					<div class="row">
+						<div class="col-md-7 col-md-offset-1">
+							<?php if($fam[0]['typedoc']=="D"){?>
+				    			<h5><strong class="text-muted">DNI </strong><?php echo $fam[0]['numdoc']?></h5>
+				    		<?php }else{?>
+								<h5><strong class="text-muted">Pasaporte </strong><?php echo $fam[0]['numdoc']?></h5>
+				    		<?php }?>
+  							<h5><strong class="text-muted">Fecha de Nacimiento </strong><?php echo $fam[0]['birthday']?></h5>
+							<?php if ($fam[0]['live']=="S"): ?>
+		    				<h5><strong class="text-muted">Dirección </strong><?php echo $fam[0]['address']?></h5>
+		    				<h5><strong class="text-muted">Telefono|Celular </strong><?php echo $fam[0]['phone']?></h5>
+		    				<h5><strong class="text-muted">Ocupación </strong><?php echo $fam[0]['ocupacy']?></h5>
+							<?php endif ?>
 
-    		</div>
-		</div>
-		<script>
-			var live="<?echo $fam[0]['live']?>"
-			if(live=="N"){
-				$("#moreinfo1").addClass("hidden")
-				$("#moreinfo2").addClass("hidden")
-			}
-		</script>
+						</div>
+						<div class="col-md-3">
+	      					<h5><strong class="text-muted">Vive? </strong>
+	          					<?php if($fam[0]['live']=="S"){
+				    				echo "Si";
+				    			}else{
+									echo "No";
+				    			}?></h5>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--Panel Body-->
 		<?php 
-		}	
-		?>
+		}?>
+	</div>
     <?php }else{?>
       <center><h5>No tiene Datos Por favor Actualize su Perfil</h5></center>
     <?php
@@ -84,3 +108,10 @@
 
 </div>
 
+<script>
+	$("#newFamily").click(function(){
+		$('#datastudent').addClass('hidden');
+	    $("#editform").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
+	    $("#editform").load("/profile/public/studentsavefamily");
+	})
+</script>

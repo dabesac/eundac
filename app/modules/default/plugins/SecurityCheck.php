@@ -7,8 +7,6 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
      *
      */
     private $_acl = null;
-
-
     const MODULE_NO_AUTH='default';
     private $_controller;
     private $_module;
@@ -30,18 +28,16 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
         $auth= Zend_Auth::getInstance();
         
         if ($auth->hasIdentity()) {
-           if(!$this->_acl->isAllowed($this->_role, $resource_tmp)){  
+            if (!$this->_acl->isAllowed($this->_role,$resource_tmp)) {
                 $request->setModuleName('default')
                         ->setControllerName('error') 
                         ->setActionName('error');
             }
-        }
-        else{
+        }else{
              $request->setModuleName('default')
                         ->setControllerName('index') 
                         ->setActionName('index');
         }
-        
     }
 
     /**
@@ -57,29 +53,22 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
             $eid= $auth->getStorage()->read()->eid;
             $oid= $auth->getStorage()->read()->oid;
             $this->_acl->addRole(new Zend_Acl_Role($this->_role));
-
-            $params = array('eid'=>$eid,'oid'=>$oid);
-            $resourceTable = new Default_Model_DbTable_Resource();
-            $resources = $resourceTable->_getFilter($params);
-            
-            $premissionsTable = new Default_Model_DbTable_Premission();
-            $premissions = $premissionsTable->_getResource_Role($eid,$oid,$this->_role);
-            
-            if ($resources) {
-                    foreach ($resources as $key => $resource) {
-                    $resourceToken = "{$resource['module']}/{$resource['controller']}/{$resource['action']}";
+            $permissionTable = new Default_Model_DbTable_Premission();
+            $permission = $permissionTable->_getResource_Role($eid,$oid,$this->_role);
+            if ($permission) {
+                foreach ($permission as $key => $access ) {
+                    $resourceToken = "{$access['module']}/{$access['controller']}/{$access['action']}";
                     $this->_acl->add(new Zend_Acl_Resource($resourceToken));
-                    foreach ($premissions as $key => $premission) {
-
-                        if ($premission['permission'] == 'allow') {
-                           $this->_acl->allow($this->_role, $resourceToken);
-                        }
-                        if ($premission['permission'] == 'deny') {
-                           $this->_acl->deny($this->_role, $resourceToken);
-                        }
+                    if ($access['permission'] == 'allow') {
+                       $this->_acl->allow($this->_role, $resourceToken);
                     }
+                    if ($access['permission'] == 'deny') {
+                        # code...
+                       $this->_acl->deny($this->_role, $resourceToken);
+                    }
+                    
                 }
-            }
+            } 
         }
     }
 }
