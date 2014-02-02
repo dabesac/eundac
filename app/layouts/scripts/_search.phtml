@@ -1,0 +1,27 @@
+<?php $auth = Zend_Auth::getInstance();
+    if (!$auth->hasIdentity()) {
+        exit();
+    }
+    $sesion = $auth->getStorage()->read();
+    $rol = $sesion->rol['rid']; ?>
+ <?php if ($rol != 'AL' ){ ?>
+ <div class="col-lg-6 pull-right">
+    <div class="input-group">
+    	<div class="input-group-btn">
+	        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Usuario <span class="caret"></span></button>
+	        <ul class="dropdown-menu">
+	          <li><a href="#">Action</a></li>
+	          <li><a href="#">Another action</a></li>
+	          <li><a href="#">Something else here</a></li>
+	          <li class="divider"></li>
+	          <li><a href="#">Separated link</a></li>
+	        </ul>
+	      </div><!-- /btn-group -->
+      	<input type="text" class="form-control">
+      	<span class="input-group-btn">
+        	<button class="btn btn-warning" type="button"><span class='glyphicon glyphicon-search'></span></button>
+      	</span>
+    </div><!-- /input-group -->
+</div><!-- /.col-lg-6 -->
+<?php }?>
+

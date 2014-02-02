@@ -1,0 +1,59 @@
+  <?php $auth = Zend_Auth::getInstance();
+
+    if (!$auth->hasIdentity()) {
+        exit();
+    }
+    $sesion = $auth->getStorage()->read();
+    $last_name = $sesion->infouser['fullname'];
+    $speciality = $sesion->speciality->name;
+    $module = $sesion->rol['module'];
+  ?>
+  <nav id="undac-menu" class="navbar navbar-default" role="navigation">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#"><img src="/img/logou2.0.png" alt=""></a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li>
+            <p>Bienvenido a UNDAC 2.0, <?php echo $last_name?></p>
+            <p>Adscrito Escuela <?php echo $speciality?></p>
+          </li>
+        </ul>
+        
+        <ul class="nav navbar-nav navbar-right">
+		  <li class="ver"><a href="/<?php echo $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
+          <li class="ver"><a href="#"><span class="glyphicon glyphicon-user"></span> Ver perfil</a></li>
+          <li class="ver dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cambiar clave <b class="caret"></b></a>
+            <ul id="form-change" class="dropdown-menu">
+              <li>
+                <form role="form">
+                  <div class="form-group">
+                    <input type="password" class="form-control" id="exampleInputEmail1" placeholder="Contraseña Actual">
+                  </div>
+                  <div class="form-group">
+                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Nueva Contraseña">
+                  </div>
+                  <div class="form-group">
+                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Repetir Nueva Contraseña">
+                  </div>
+                  <button type="submit" class="btn btn-taipa btn-block">Cambiar</button>
+                </form>
+              </li>
+            </ul>
+          </li>
+          <li><a href="/index/salir"><span class="glyphicon glyphicon-off "></span> <b>Salir</b></a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div>
+  </nav>

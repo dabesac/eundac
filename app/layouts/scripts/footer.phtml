@@ -1,0 +1,45 @@
+<?php $auth = Zend_Auth::getInstance();
+    if (!$auth->hasIdentity()) {
+        exit();
+    }
+    $sesion = $auth->getStorage()->read();
+    $home = $sesion->rol['module'];
+    $permission_recource = new Default_Model_DbTable_Premission();
+    $tb_module = new Api_Model_DbTable_Module();
+    $where =    array(
+                    'eid'   =>  $sesion->eid,
+                    'oid'   =>  $sesion->oid,
+                    'rid'   =>  $sesion->rol['rid']
+                   );
+    $menu = $permission_recource->_getAllMenu($where);
+    foreach ($menu as $key => $value) {
+        $where['mid']=$value['mid'];
+        $dat_module = $tb_module->_getOne($where);
+        $menu[$key]['icon']=$dat_module['imgicon'];
+        $linnk = $permission_recource->_getResources($where);
+        $menu[$key]['link']=$linnk;
+    }
+?>
+<div id="footer_fondo">
+  <div id="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2 text-center">
+          <ul class="nav nav-pills nav-justified">
+          <li class="active"><a href="/<?php echo $home?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
+            <?php foreach ($menu as $key => $value) { ?>
+                <li class="dropdown dropup">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-<?php echo $value['icon']?>"></span> <?php echo $value['name']?></a>
+                        <ul class="dropdown-menu">
+                            <?php foreach ($value['link'] as $key => $value_1) {?>
+                                <li><a href="/<?php echo $value_1['module']?>/<?php echo $value_1['controller']?>/<?php echo $value_1['action']?>" title=""><?php echo strtoupper($value_1['name'])?></a></li>
+                            <?php }?>
+                        </ul>
+                </li>
+            <?php } ?>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  

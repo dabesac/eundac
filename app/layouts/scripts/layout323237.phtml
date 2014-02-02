@@ -1,0 +1,243 @@
+<?php echo $this->doctype(); ?>
+<<<<<<< HEAD
+<html lang="es">
+	<head>
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		 <![endif]-->
+		<!-- Mobile Specific Metas -->
+		<?php echo $this->headTitle()?>
+		<?php echo $this->headMeta()?>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+		<link href="//fonts.googleapis.com/css?family=Cuprum:400italic,400,700italic,700" rel="stylesheet" type="text/css">
+		<?php echo $this->headLink()?>
+		<?php echo $this->headScript()?>
+	</head>
+	<body>
+		<?php echo $this->render('header.phtml')?>
+	  	<nav  class="navbar navbar-default" role="navigation">
+			<div class="row" id="nav-secundary">
+				<div ><?php echo $this->placeholder('Textnav') ?></div>
+ 					<div class="col-md-5 pull-right">
+						<?php echo $this->placeholder('Btnnav') ?>
+		 				<?php echo $this->render('_search.phtml') ?>
+ 					</div>
+			</div>	
+		</nav>
+	    <div class="container">
+				<?php echo $this->layout()->content ?>
+	    </div>
+		<?php echo $this->render('footer.phtml') ?>
+	</body>
+</html>
+=======
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+
+    <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name= "viewport" content= "width=device-width, initial-scale=1" >
+        <?php echo $this->headMeta(); ?>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headScript(); ?> 
+        <?php echo $this->headLink(); ?>
+        
+   		<link rel="stylesheet" type="text/css" href="/css/maquetacion.css">
+   		<link rel="stylesheet" type="text/css" href="/css/style.css">
+   		<link rel="stylesheet" type="text/css" href="/css/dashboard.css">
+   		<link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
+
+        <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
+        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script> 
+
+		<script src="/js/bootbox.min.js"></script>
+		<script type="text/javascript" src="/js/jquery.transit.js"></script>
+		
+
+
+    <script type="text/javascript">
+<!--
+/*jQuery time*/
+$(document).ready(function(){
+	$("#accordian h3").click(function(){
+		//slide up all the link lists
+		$("#accordian ul ul").slideUp();
+		//slide down the link list below the h3 clicked - only if its closed
+		if(!$(this).next().is(":visible"))
+		{
+			$(this).next().slideDown();
+		}
+	})
+})
+//-->
+</script>
+    </head>
+ <body >
+<!--[if IE]>
+	<div class="mensaje">
+                Estas utilizando una version obsoleta del navegador Internet Explorer el sitema no se vera
+                correctamente. Actualiza o descarga un nuevo navegador como este <a href="https://www.google.com/chrome?hl=es">Google Chrome</a>.
+    </div>
+<?php //exit();?>
+<![endif]-->
+
+<?php 
+
+if ($rid=="AL" or $rid=='EG' )
+{
+ 	
+ 	$profile= "/profile/public/student";
+
+}
+else
+{
+ 	$profile = "/profile/privateadm/adm";
+
+}
+
+?>
+<div class="row" style="padding: 0px; margin: 0px" >
+	<div class="col-sm-2 control-top">
+		<div class="logo">
+			<a href="/"><img src="/img/logo_03.png" ></a>
+		</div>
+			
+		<?php 
+	    if ($acls){
+	    ?>
+	    <hr>
+	    
+		<div id="slider">
+			<ul>
+				<li class="titulo">
+					<span class="glyphicon glyphicon-home"></span>
+					<a href="/">INICIO</a>
+				</li>
+				<?php 
+				if ($rid=='AL') {
+				?>
+				<li>
+				<a href="<?php echo $urlrecord?>" class="titulo">
+				<span class="glyphicon glyphicon-file"></span>
+				Record Notas
+				</a>
+				</li>
+				<?php 
+				}
+				?>
+			<?php 
+			if ($acls){
+		    foreach ($acls as $acl){
+
+			//$module = $acl['module'];
+			//print_r($acl);
+		    ?>
+		    	<li>
+		        	<a href="#" class="titulo">
+		        		<span class="glyphicon glyphicon-<?php echo ($acl['imgicon'])?>"></span>
+		        		<?php echo strtoupper($acl['name'])?>
+		        	</a>
+		        	<?php
+		        	if (isset($acl['acls'])){
+					$tacls = $acl['acls'];
+				
+				
+					foreach ($tacls as $tacl){
+						$resource = $tacl['controller'];
+						?>
+						<ul class="cuerpo">
+							<li>
+							<a href="<?php echo "/$resource"?>">
+							<span class="glyphicon glyphicon-<?php echo ($tacl['imgicon'])?>"></span>
+					    	<?php echo strtoupper($tacl['name'])?></a>
+					    	</li>
+					    </ul>
+						<?php 
+					} 
+					}
+					?>	
+				</li>
+			<?php 
+			}
+			}
+		    ?>
+			</ul>
+		</div>
+	    <?php 
+		} 
+		?>
+	</div>
+	<div class="col-sm-10" style="margin:0px; padding: 0px">
+		<div class="col-sm-12 header-top" > 
+			<h3 class="nav pull-left" >Universidad Nacional Daniel Alcides Carrión</h3>
+			<ul class="nav navbar-nav pull-right" style="padding-top: 10px">
+			  	<li class='dropdown'>
+					<div class="btn-group">
+						<a class="dropdown-toggle btn btn-primary" href="<?php echo $profile?>">Ver mi perfil</a>
+						<button class="dropdown-toggle btn btn-info" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-cog"></span>
+						</button>
+						<ul class="dropdown-menu" >
+							<li><a href="/default/password/change">Cambiar Contraseña</a></li>
+							<li class="divider"></li>
+							<li><a href="/index/salir">Salir</a></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<div class="btn-group">
+						<a class="btn btn-danger" href="/index/salir">Salir <span class="glyphicon glyphicon-log-out"></span></a>
+					</div>
+				</li>
+			</ul>	
+		</div>
+		<div class="col-sm-12 header-middle" > 
+			<div class='col-sm-6 pull-left'>
+				<p> 
+					<img src="/img/<?php echo $sex?>.jpg" class="img-rounded photoprofile"
+					align="left">					
+					<strong style="color: #24348D; font-size: 17px;"><?php echo mb_strtoupper($fullname, 'UTF-8')?> </strong><br>
+					<strong style="color: #000; font-size: 16px;"> ADSCRITO ESCUELA 
+					<?php echo mb_strtoupper($speciality, 'UTF-8');?> </strong>
+				</p>
+			</div>
+	    	
+	    	<?php 
+			if ($rid<>"AL" && $rid<>"DC" && $rid<>"EG"){?>
+			<div class='pull-right' style="margin-top: 8px">
+				<form name="buscausuario" class="form-inline" role="form" action="/profile/search">
+					<div class="col-lg-6" style="margin:0px;padding: 0px;"> 
+				        <input type="text" name="nombre" class="form-control input-medium search-query" 
+				        	placeholder="Codigo / Apellidos" title="Codigo / Apellidos" required>
+				    </div>
+				    <div class="col-lg-3" style="margin: 0px; padding: 0px">
+				        <select name="rid" class="form-control " >
+				        	<option value="AL">Alumno</option>
+				        	<option value="DC">Docente</option>
+				        	<option value="EG">Egresado</option>
+				      	</select>
+				  	</div>
+				  	<div class="col-lg-2" style="margin: 2px; padding: 0px">
+				    <input type="submit"  class="btn btn-success" value="Buscar">
+				    </div>
+				</form>			
+			</div>	
+			<?php } ?>
+	    	
+		</div>
+		<div class="col-sm-12 header-center"> 
+			<div class="panel panel-default">
+		    	<?php print $this->layout()->content; ?>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col-sm-12 footer">
+Universidad Nacional Daniel Alcides Carrión - Cerro de Pasco - Perú | 
+Oficina de Informáctica y Estadística - <a href="mail: informatica@undac.edu.pe">informatica@undac.edu.pe</a>
+</div>
+
+</body>
+</html>
+>>>>>>> 4c63b703b232c14eac756e2f34b1f2d693439e0b

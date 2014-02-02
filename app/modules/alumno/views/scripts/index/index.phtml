@@ -1,25 +1,277 @@
+
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Listado de distribuciones');?>
 <?php $this->placeholder('Btnnav')->append('<a href="" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
                             <a href="" class="btn btn-success"><span class="glyphicon glyphicon-plus "></span> Nuevo</a>
                             <a href="" class="btn btn-info"><span class="glyphicon glyphicon-edit"></span> Editar</a>');?>
 
-<script type="text/javascript">
-    var $data_courses = <?php echo $this->datos?>;
-    var $courses = <?php echo $this->courses?>;
-    var $dat_assist = <?php echo $this->dat_assist?>;
-</script>
-<script type="text/javascript" src="/js/graphic/student.js"></script>
-<script src="/external_library/highcharts/js/highcharts.js"></script>
-<script src="/external_library/highcharts/modules/exporting.js"></script>
-<div class="row">
-    <div class="col-md-13">
-        <div class="row">
-            <div class="col-md-6 content-graphic">
-                <div id="container_performance" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
-            </div>
-            <div class="col-md-6 content-graphic">
-                <div id="container_assistence" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
-            </div>
-        </div>
-    </div>
+
+
+<div class="container-fluid showFirst">
+	<div class="row">
+		<br><br><br>
+		<div class="col-md-8 col-md-offset-1">
+			<div id="mainSlider" class="slider">
+
+				<div id="slide_1" class="slide slide_active">
+					<div class="transparent">
+						<div class="row text">
+							<div class="col-md-6 col-md-offset-1">
+								<h2>Pagos - Matricula 14A</h2>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed, ducimus, animi, cupiditate sit quaerat explicabo accusamus vel eligendi quae labore reiciendis delectus quisquam sapiente maxime velit esse porro perspiciatis dolore.....</p>
+							</div>
+							<div class="col-md-2 col-md-offset-2">
+								<br><br><br><br><br><br>
+								<a href="#infoContainer" class="btn btn-info"><span class="glyphicon glyphicon-info-sign"></span> Mas Información</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="slide_2" class="slide">
+					<div class="transparent">
+						<div class="row text">
+							<div class="col-md-6 col-md-offset-1">
+								<h2>Congreso Regional - Brasil</h2>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, asperiores, minus quae laudantium eos cumque obcaecati dolorem vel culpa accusantium distinctio natus et omnis enim reiciendis maxime magni dignissimos ipsum.....</p>
+							</div>
+							<div class="col-md-2 col-md-offset-2">
+								<br><br><br><br><br><br>
+								<a href="#infoContainer" class="btn btn-info"><span class="glyphicon glyphicon-info-sign"></span> Mas Información</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="slide_3" class="slide">
+					<div class="transparent">
+						<div class="row text">
+							<div class="col-md-6 col-md-offset-1">
+								<h2>Por Fin Tenemos Biblioteca...</h2>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, molestiae, vero nisi repellat quos libero sed natus corrupti veniam ad maxime minus ipsa commodi eveniet molestias iusto laboriosam expedita id....</p>
+							</div>
+							<div class="col-md-2 col-md-offset-2">
+								<br><br><br><br><br><br>
+								<a href="#infoContainer" class="btn btn-info"><span class="glyphicon glyphicon-info-sign"></span> Mas Información</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="row">
+				<div class="col-md-1">
+					<a id="leftBtn" class="text-warning" href="##"><span class="glyphicon glyphicon-chevron-left"></span></a>
+				</div>
+				<div class="col-md-10"><hr></div>
+				<div class="col-md-1">
+					<a id="rightBtn" class="text-warning pull-right" href="##"><span class="glyphicon glyphicon-chevron-right"></span></a>
+				</div>
+			</div>
+		</div>
+
+		<div id="allLeft_1" class="col-md-2">
+			<a id="btnProfile" href="/profile/public/student" class="btn form-control">
+				<div class="panel panel-info">
+					<h2 class="text-center"><span class="glyphicon glyphicon-user text-primary"></span></h2>
+					<h4 class="text-center text-muted">Mi Perfil</h4>
+				</div>
+			</a>
+			<br><br><br><br><br><br><br>
+			<a id="btnJobs" href="#jobs" class="btn form-control">
+				<div class="panel panel-info">
+					<h2 class="text-center"><span class="glyphicon glyphicon-briefcase text-primary"></span></h2>
+					<h4 class="text-center text-muted">Ofertas Laborales</h4>
+				</div>
+			</a>
+			<br><br><br><br><br><br><br>
+			<a id="btnGrafics" href="#grafics" class="btn form-control">
+				<div class="panel panel-info">
+					<h2 class="text-center"><span class="glyphicon glyphicon-stats text-primary"></span></h2>
+					<h4 class="text-center text-muted">Rendimiento</h4>
+				</div>
+			</a>
+		</div>
+	</div>
 </div>
+<br><br><br>
+<div class="container-fluid">
+	<div class="row">
+		<div id="infoContainer" class="col-md-10 col-md-offset-1">
+			<div id="moreInfo">
+				<div class="panel panel-warning">
+				<blockquote>
+					<div class="row">
+						<div class="col-md-1 col-md-offset-11"><a id="hidemoreInfo" href="#mainSlider" class="text-warning"><span class="glyphicon glyphicon-remove"></span></a></div>
+					</div>
+					<h3><span class="glyphicon glyphicon-info-sign text-muted"></span> Pagos del Periodo 2014 A</h3>
+					<p>bla bla bla Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem, a, ipsum, reprehenderit officia ex alias nostrum explicabo quia ab amet natus cumque consectetur fuga optio mollitia architecto autem iusto fugit?</p>
+				</blockquote>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="jobs" class="container-fluid" style="height: 600px;">
+	<div class="row">
+		<div class="col-md-9 col-md-offset-1">
+			<blockquote>
+				<h2 class="text-info">Ofertas <span class="text-muted">Laborales</span></h2>
+			</blockquote>
+		</div>
+		<div class="col-md-1">
+			<blockquote>
+				<h2><span class="glyphicon glyphicon-briefcase text-info"></span></h2>
+			</blockquote>
+		</div>
+	</div>
+</div>
+
+<div id="grafics" class="container-fluid" style="height: 600px;">
+	<div class="row">
+		<div class="col-md-9 col-md-offset-1">
+			<blockquote>
+				<h2 class="text-info">Rendimiento <span class="text-muted">Academico</span></h2>
+			</blockquote>
+		</div>
+		<div class="col-md-1">
+			<blockquote>
+				<h2><span class="glyphicon glyphicon-signal text-info"></span></h2>
+			</blockquote>
+		</div>
+		<script type="text/javascript">
+	    var $data_courses = <?php echo $this->datos?>;
+	    var $courses = <?php echo $this->courses?>;
+	    var $dat_assist = <?php echo $this->dat_assist?>;
+	</script>
+	<script type="text/javascript" src="/js/graphic/student.js"></script>
+	<script src="/external_library/highcharts/js/highcharts.js"></script>
+	<script src="/external_library/highcharts/modules/exporting.js"></script>
+	<div class="row">
+	    <div class="col-md-13">
+	        <div class="row">
+	            <div class="col-md-6 content-graphic">
+	                <div id="container_performance" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
+	            </div>
+	            <div class="col-md-6 content-graphic">
+	                <div id="container_assistence" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	</div>
+
+</div>
+
+<script>
+	setInterval(function(){sliderForward();}, 5000);
+	$('#moreInfo').addClass('hidden');
+	$('#moreInfo').transition({ scale: 0 });
+
+	$('#rightBtn').click(function(){
+		sliderForward();
+	});
+
+	$('#leftBtn').click(function(){
+		sliderBackward();
+	});
+
+	function sliderForward(){
+		var size = $('.slider').find('.slide').size();
+		$('.slider').find('.slide').each(function(index, value){
+			if ($(value).hasClass('slide_active')) {
+				$($('.slider').find('.slide').get(index)).slideUp(function(){
+					$(value).removeClass('slide_active');
+				});
+
+				if (index+1 < size) {
+					$($('.slider').find('.slide').get(index+1)).slideDown('slow');
+					$($('.slider').find('.slide').get(index+1)).addClass('slide_active');
+					return false;
+				}else{
+					$($('.slider').find('.slide').get(0)).slideDown('slow');
+					$($('.slider').find('.slide').get(0)).addClass('slide_active');
+					return false;
+				};
+			};
+		});
+	}
+
+	function sliderBackward(){
+		var size = $('.slider').find('.slide').size();
+		$('.slider').find('.slide').each(function(index, value){
+			if ($(value).hasClass('slide_active')) {
+				$(value).slideUp();
+				$($('.slider').find('.slide').get(index)).slideUp(function(){
+					$(value).removeClass('slide_active');
+				});
+
+				if (index == 0) {
+					$($('.slider').find('.slide').get(size-1)).slideDown();
+					$($('.slider').find('.slide').get(size-1)).addClass('slide_active');
+					return false;
+				}else{
+					$($('.slider').find('.slide').get(index-1)).slideDown();
+					$($('.slider').find('.slide').get(index-1)).addClass('slide_active');
+					return false;
+				};
+			};
+		});
+	}
+
+	$('.slider').mouseenter(function(){
+		$('.slider').transition({scale: 1.02});
+	});
+	$('.slider').mouseleave(function(){
+		$('.slider').transition({scale: 1});
+	});
+
+	//mas Informacion
+	$('.btn-info').click(function(){
+		$('#moreInfo').removeClass('hidden', function(){
+			$('#moreInfo').transition({ scale: 1 });
+		});
+	});
+
+	$('#hidemoreInfo').click(function(){
+		$('#moreInfo').transition({ scale: 0 }, function(){
+			$('#moreInfo').addClass('hidden');
+		});
+	});
+
+	//Boton Perfil
+	$('#btnProfile').mouseenter(function(){
+		$('#btnProfile').transition({ scale: 1.05 });
+	});
+	$('#btnProfile').mouseleave(function(){
+		$('#btnProfile').transition({ scale: 1 });
+	});
+
+	//Boton Trabajos
+	$('#btnJobs').mouseenter(function(){
+		$('#btnJobs').transition({ scale: 1.05 });
+	});
+	$('#btnJobs').mouseleave(function(){
+		$('#btnJobs').transition({ scale: 1 });
+	});
+	$("#btnJobs").click(function () {
+	    $('html,body').animate({
+	        scrollTop: $("#jobs").offset().top
+	    }, 500);
+	});
+
+	//Boton Grafics
+	$('#btnGrafics').mouseenter(function(){
+		$('#btnGrafics').transition({ scale: 1.05 });
+	});
+	$('#btnGrafics').mouseleave(function(){
+		$('#btnGrafics').transition({ scale: 1 });
+	});
+	$("#btnGrafics").click(function () {
+	    $('html,body').animate({
+	        scrollTop: $("#grafics").offset().top
+	    }, 500);
+	});
+	
+</script>
+

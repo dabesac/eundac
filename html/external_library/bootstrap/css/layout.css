@@ -1,0 +1,88 @@
+@font-face{
+	src:url(../fonts/Cuprum-Regular.ttf);
+	font-family: Cuprum;
+}
+body{
+	font-family: "Cuprum";
+}
+#undac-menu{
+	background: #015292;
+	border:0;
+	border-radius: 0;
+	margin: 0;
+}
+.navbar-nav li p{
+	color: #fff;
+	margin-top: 12px;
+}
+
+.ver{background: url(../img/bgm.png) no-repeat right center;}
+#form-change{width: 245px}
+
+.container{
+	width: 100%;
+	
+}
+#wrapper{
+maring-left: 100px;
+}
+#wrapper .container .row > .col-md-11{
+	padding: 20px 29px;
+	border-left: 2px solid #363c46;
+	padding-bottom: 100px;
+	
+}
+#accordion .panel > .panel-heading:after{
+	content: " ";
+	background: url(../img/bg.png)no-repeat;
+	display: block;
+	width: 40px;
+	height: 21px;
+	position: absolute;
+	left: -10px;
+	margin-top: -20px;
+}
+
+#footer_fondo{
+	background: #363c46 !important;
+	height: 35px;
+	position:fixed;
+	width: 100%;
+	border-top: 2px solid #555;	
+	text-align: center;
+	
+   	bottom:0;
+}
+
+#footer{	
+	position:fixed;
+	text-align: center;
+	position:fixed;
+   	bottom:0;
+}
+
+#footer a {
+	height: 35px;
+	padding-top: 10px;
+	margin: 0px;
+}
+
+
+.nav-pills li a{color: #fff;}
+.nav-pills li a:hover{border-bottom: 4px solid #0065B4;}
+
+#footer .dropdown-menu{
+	background: #363C46;
+	
+}
+#footer .dropdown-menu li a:hover{
+	border:0;
+	
+}
+#nav-secundary{
+	padding-top: 10px;
+}
+.text-nav{
+	color: #2d4857;
+	margin-left: 10%;
+}
