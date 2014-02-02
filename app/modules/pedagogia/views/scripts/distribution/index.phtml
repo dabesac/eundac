@@ -1,0 +1,66 @@
+<div class="row">
+	<br><br>
+	<div class="col-md-9 col-md-offset-1">
+		<blockquote>
+			<h2>Distribución</h2>
+		</blockquote>
+	</div>
+	<div class="col-md-1">
+		<blockquote>
+			<h2><span class="glyphicon glyphicon-bookmark text-warning"></span></h2>
+		</blockquote>
+	</div>
+</div>
+<hr>
+<div class="row">
+	<div class="col-md-2 col-md-offset-2">
+		<h5 class="text-muted">Año</h5>
+		<select class="form-control" name="Anio" id="anio">
+			<option value="">Seleccione Año</option>
+			<?php $anio = date(Y);
+			for ($i=$anio; $i >= 1993 ; $i--) { ?>
+ 				<option value="<?php echo $i?>"><?php echo $i?></option>
+ 			<?php } ?>
+		</select>
+	</div>
+	<div class="col-md-4">
+		<h5 class="text-muted">Periodo</h5>
+		<select name="Periods" id="periods" class="form-control">
+			<option value="">Primero Seleccione un Año</option>
+		</select>
+	</div>
+	<div class="col-md-1 col-md-offset-1">
+		<br><br>
+		<a id="show" href="##" class="btn btn-success">Mostrar</a>
+	</div>
+</div>
+<hr>
+<br>
+<div id="data"></div>
+
+<div id="alert" class="alert alert-warning">
+	<strong>Error!</strong> Seleccione un periodo ¬¬
+</div>
+
+<script>
+	$('#alert').fadeOut('fast');
+	$('#anio').change(function(){
+		$('#anio option:selected').each(function(){
+			var anio = $(this).val();
+			$.get('/report/periods/listperiods/anio/'+anio, function(data){
+				$('#periods').html(data);
+			});
+		});
+	});
+	$('#show').click(function(){
+		var perid = $('#periods').val();
+		if (perid){
+			$('#data').html('<center><img class="text-center" src="/img/spinner.gif"></center>');
+			$('#data').load('/pedagogia/distribution/view/perid/'+perid);
+			$('#alert').fadeOut('fast');
+		}else{
+			$('#alert').fadeIn('slow');
+		}
+	});
+
+</script>

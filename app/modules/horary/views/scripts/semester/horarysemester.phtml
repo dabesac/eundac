@@ -1,29 +1,96 @@
 <?php 
-    $hora = array();
-    $j=1;
+    $hora=array();  
     $hour_begin=array();
-    $hour_begin=$this->valhoras;
-    for ($i=0; $i <= 20; $i++) { 
-        $hour[$i]=substr($hour_begin[$i],0,2);
-        $minute[$i]=substr($hour_begin[$i],3,2);
-    }
-    for ($i=0; $i <= 20; $i++) {
-        if ($hour[$i]<12) {
-            if ($hour[$j]<12) {
-                $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." am";
-            }
-            else{
-                $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." pm";
-            }
-        } 
-        else{
-            $hora[$i]['hora']=$hour[$i].":".$minute[$i]." pm - ".$hour[$j].":".$minute[$j]." pm";
+    if ($this->valhorasm or $this->valhorast) {
+        $j=1;
+        $hour_begin=$this->valhorasm;
+        $hour_begin_afternoon=$this->valhorast;
+        $len1= count($hour_begin);
+        $len2= count($hour_begin_afternoon);
+        $lentotal = $len1+$len2;
+    
+        for ($i=0; $i < $len1; $i++) { 
+            $hourm[$i]=substr($hour_begin[$i],0,2);
+            $minutem[$i]=substr($hour_begin[$i],3,2);
         }
-        $hora[$i]['h_ini']=$hour[$i];
-        $hora[$i]['h_fin']=$hour[$j];
-        $hora[$i]['m_ini']=$minute[$i];
-        $hora[$i]['m_fin']=$minute[$j];
-        $j++;
+        for ($i=0; $i < $len2; $i++) { 
+            $hourt[$i]=substr($hour_begin_afternoon[$i],0,2);
+            $minutet[$i]=substr($hour_begin_afternoon[$i],3,2);
+        }
+        for ($i=0; $i < $len1-1; $i++) {
+            if ($hourm[$i]) {
+                if ($hourm[$i]<12) {
+                    if ($hourm[$j]<12) {
+                        $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." am - ".$hourm[$j].":".$minutem[$j]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." am - ".$hourm[$j].":".$minutem[$j]." pm";
+                    }
+                } 
+                else{
+                    $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." pm - ".$hourm[$j].":".$minutem[$j]." pm";
+                }
+                $hora[$i]['h_ini']=$hourm[$i];
+                $hora[$i]['h_fin']=$hourm[$j];
+                $hora[$i]['m_ini']=$minutem[$i];
+                $hora[$i]['m_fin']=$minutem[$j];
+                $j++;            
+            }
+
+        }
+
+        $q=1;
+        for ($p=0; $p < $len2; $p++) {
+            if ($hourt[$p]) {
+                if ($hourt[$p]<12) {
+                    if ($hourt[$q]<12) {
+                        $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." am - ".$hourt[$q].":".$minutet[$q]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." am - ".$hourt[$q].":".$minutet[$q]." pm";
+                    }
+                } 
+                else{
+                    $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." pm - ".$hourt[$q].":".$minutet[$q]." pm";
+                }
+                $hora[$i]['h_ini']=$hourt[$p];
+                $hora[$i]['h_fin']=$hourt[$q];
+                $hora[$i]['m_ini']=$minutet[$p];
+                $hora[$i]['m_fin']=$minutet[$q];
+                $q++;
+                $i++;            
+            }
+        }
+    }
+    else{
+        $j=1;
+        $hour_begin=$this->valhoras;
+        $len= count($hour_begin);
+        $lentotal=$len;
+        for ($i=0; $i < $len; $i++) { 
+            $hour[$i]=substr($hour_begin[$i],0,2);
+            $minute[$i]=substr($hour_begin[$i],3,2);
+        }
+        for ($i=0; $i < $len; $i++) {
+            if ($hour[$i]) {
+                if ($hour[$i]<12) {
+                    if ($hour[$j]<12) {
+                        $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." pm";
+                    }
+                } 
+                else{
+                    $hora[$i]['hora']=$hour[$i].":".$minute[$i]." pm - ".$hour[$j].":".$minute[$j]." pm";
+                }
+                $hora[$i]['h_ini']=$hour[$i];
+                $hora[$i]['h_fin']=$hour[$j];
+                $hora[$i]['m_ini']=$minute[$i];
+                $hora[$i]['m_fin']=$minute[$j];
+                $j++;            
+            }
+        }
     }
 
     $listacolores = array();
@@ -43,6 +110,7 @@
     $listacolores[13] = "#C4E6CE";
     $listacolores[14] = "#B4DAA1";
 
+// print_r($this->horary);
 if ($this->horarys) {
         $len=count($this->horarys);
         $cco=0;
@@ -75,14 +143,15 @@ if ($this->horarys) {
             
         }
         $k=0;
-        for ($z=0;$z < 20; $z++){
-                // print_r($hmen);exit();
-            if ($hmen==$hora[$z]['h_ini'] && $k==0) {
-                $inih=$z;
-                $k=1;
-            }
-            if($hmay==$hora[$z]['h_fin']){
-                $finh=$z;
+        if ($hour_begin) {
+            for ($z=0; $z < $lentotal; $z++) { 
+                if ($hmen==$hora[$z]['h_ini'] && $k==0) {
+                    $inih=$z;
+                    $k=1;
+                }
+                if ($hmay==$hora[$z]['h_fin']) {
+                    $finh=$z;
+                }
             }
         }
         $horaoriginal=$this->horarys;

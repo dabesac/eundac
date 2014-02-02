@@ -27,22 +27,26 @@
 	<div class="tab-content">
     <div class="tab-pane active in fade" id="courses"></div>
     <div class="tab-pane fade" id="academicRecord"></div>
-    <div class="tab-pane fade" id="info"></div>
+    <div class="tab-pane fade" id="info">
+      <div id="admData"></div>
+      <div id="editData"></div>
+    </div>
 	</div>
 </div>
 
 
 <script>
-  $('#courses').load("/docente/notas/index");
+  $('#courses').load("/profile/privateadm/coursescurrent");
   $("#academicRecord").load("/docente/report/index");
-  $("#info").load("/profile/privateadm/adminfo");
-
+  $("#admData").load("/profile/privateadm/adminfo");
+  $('#editData').fadeOut('fast');
 
   //$("#signin").load("/profile/privateadm/admlog/");
 
   $('#profileTab a').click(function (e) {
     e.preventDefault()
-    $(this).tab('show')
+    $(this).tab('show');
+    $('#managementCourses').popover('destroy');
   });
 
     

@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 class Horary_NhoraryController extends Zend_Controller_Action {
 
@@ -25,11 +25,12 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
         $datahours=$bd_hours->_getFilter($wheres);
 
-        if ($datahours) {
-            $this->_helper->redirector("listteacher");   
+        if ( $datahours) {
+            // $this->_helper->redirector('listteacher');   
+            $this->_helper->redirector('index','distribution','distribution');
         }
         else{
-            $this->_helper->redirector("changehours");            
+            $this->_helper->redirector('index','distribution','distribution');         
         }
 
 
@@ -37,16 +38,15 @@ class Horary_NhoraryController extends Zend_Controller_Action {
     public function listteacherAction()
     {
         try {
-            
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $perid=$this->sesion->period->perid;
             $escid=$this->sesion->escid;
-             $d=new Api_Model_DbTable_PeriodsCourses();
-             $where['eid']=$eid;
-             $where['oid']=$oid;
-             $where['perid']=$perid;
-             $where['escid']=$escid;
+            $d=new Api_Model_DbTable_PeriodsCourses();
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['perid']=$perid;
+            $where['escid']=$escid;
 
             $cur=$d->_getTeacherXPeridXEscid($eid,$oid,$escid,$perid);
             //$cur=$d->_getTeacherXPeridXEscid1($where);
@@ -61,23 +61,36 @@ class Horary_NhoraryController extends Zend_Controller_Action {
     }
 
     public function fillhoraryAction()
-    {
+    {  
         $eid=$this->sesion->eid;
         $oid=$this->sesion->oid;
-        $perid=$this->sesion->period->perid;
-        $escid=$this->sesion->escid;
-        $subid=$this->sesion->subid;
         $pid=base64_decode($this->_getParam('pid'));
         $uid=base64_decode($this->_getParam('uid'));
+        $escid=base64_decode($this->_getParam('escid'));
+        $subid=base64_decode($this->_getParam('subid'));
+        $perid=base64_decode($this->_getParam('perid'));
         $where['eid']=$eid;
         $where['oid']=$oid;
         $where['perid']=$perid;
         $where['escid']=$escid;
         $where['subid']=$subid;
         $where['pid']=$pid;
+        
+        // print_r($where);
         $curso=new Api_Model_DbTable_Coursexteacher();
         $datcur=$curso->_getFilter($where);
         $this->view->cursos=$datcur;
+        unset($where['escid']);
+        $datacur=$curso->_getFilter($where);   
+        // print_r($datcur);
+        // print_r($datacur);
+        $len = count($datacur);
+        for ($i=0; $i < $len; $i++) { 
+            // if ($datcur[$i][]==) {
+            //     # code...
+            // }
+        }
+        // exit();
         $usu=new Api_Model_DbTable_Users();
         $data['eid']=$eid;
         $data['oid']=$oid;
@@ -106,9 +119,9 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $this->_helper->layout()->disableLayout();
         $eid=$this->sesion->eid;
         $oid=$this->sesion->oid;
-        $perid=$this->sesion->period->perid;
-        $escid=$this->sesion->escid;
-        $subid=$this->sesion->subid;
+        $escid=$this->_getParam('escid');
+        $subid=$this->_getParam('subid');
+        $perid=$this->_getParam('perid');
         $courseid=$this->_getParam('courseid');
         $curid=$this->_getParam('curid');
         $turno=$this->_getParam('turno');
@@ -120,68 +133,96 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $dia=$this->_getParam('dia');
         $tipo_clase=$this->_getParam('tipoclase');
 
-        //Obtenemos un array con todas las horas academicas establecidas.
+        //Obtenemos un array con todas las horas academicas, desde la hora de inicio.
         $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
         $bd_hours = new Api_Model_DbTable_HoursBeginClasses();
         $datahours=$bd_hours->_getFilter($wheres);
 
         if ($datahours) {
-            $valhoras[0]=$datahours[0]['hours_begin'];
             $hora=new Api_Model_DbTable_Horary();
-            for ($k=0; $k < 20; $k++) { 
-                $dho=$hora->_getsumminutes($valhoras[$k],'50');
-                $valhoras[$k+1]=$dho[0]['hora'];
+
+            if ($datahours[0]['hours_begin_afternoon']) {
+                $valhorasm[0]=$datahours[0]['hours_begin'];
+                $valhorast[0]=$datahours[0]['hours_begin_afternoon'];
+                $k=0;
+                while ($valhorasm[$k] < $datahours[0]['hours_begin_afternoon']) {
+                    $dho=$hora->_getsumminutes($valhorasm[$k],'50');
+                    $valhorasm[$k+1]=$dho[0]['hora'];
+                    $k++;
+                }
+
+                $len=count($valhorasm);
+                $w=0;
+                        
+                for ($g=0; $g < $len; $g++) { 
+                    if ($valhorasm[$g]==$valhorast[0] && $w==0) {
+                        $valhoras[0]=$datahours[0]['hours_begin'];
+                        for ($k=0; $k < 20; $k++) { 
+                            $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                            $valhoras[$k+1]=$dho[0]['hora'];
+                        }
+                        $w=1;
+                    }
+                }
+                if ($w==0) {
+                    $j=0;
+                    while ( $j < 12) {
+                        $dho=$hora->_getsumminutes($valhorast[$j],'50');
+                        $valhorast[$j+1]=$dho[0]['hora'];
+                        $j++;
+                    }
+                    $endtarde=$valhorast[$j-1];
+                }
+            }
+            else{
+                $valhoras[0]=$datahours[0]['hours_begin'];
+                for ($k=0; $k < 20; $k++) { 
+                    $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                    $valhoras[$k+1]=$dho[0]['hora'];
+                }
             }
         }    
-        // valida que la hora de inicio sea multiplo de 50 min.
-        for ($zz=0; $zz < 20; $zz++) { 
-            if ($hora_ini==$valhoras[$zz]) {
-                $valini=1;
+
+        if ($valhorasm) {
+            // valida que la hora de inicio sea multiplo de 50 min.(MAÑANA)
+            $lenm=count($valhorasm);
+            for ($zm=0; $zm < $lenm-2; $zm++) {
+                if ($hora_ini==$valhorasm[$zm]) {
+                    $valinim=1;
+                }
+            }   
+        }
+        if ($valhorast) {
+            // valida que la hora de inicio sea multiplo de 50 min.(TARDE)
+            $lentar=count($valhorast);
+            for ($zt=0; $zt < $lentar; $zt++) {
+                if ($hora_ini==$valhorast[$zt]) {
+                    $valinit=1;
+                }
+            }
+            
+        }    
+
+        if($valhoras){
+            // valida que la hora de inicio sea multiplo de 50 min.(TODO)
+            for ($zz=0; $zz < 20; $zz++) {
+                if ($hora_ini==$valhoras[$zz]) {
+                    $valini=1;
+                }
             }
         }
 
-        if ($valini=="1") {
+        if ($valinim=="1" or $valinit=="1" or $valini=="1") {
             //Sacamos de hora de finalizacion deacuerdo a la cantidad de horas academicas.
             $hora_fin[0]['hora']=$hora_ini;
             for ($x=0; $x < $hora_acad; $x++) { 
                 $hora_fin=$hora->_getsumminutes($hora_fin[0]['hora'],'50');
             }
             $hora_fin=$hora_fin[0]['hora'];
-            //Recupera el nombre del día del inicio de clases del periodo.
-            $per=new Api_Model_DbTable_Periods();
-            $wp['eid']=$eid;
-            $wp['oid']=$oid;
-            $wp['perid']=$perid;
-            $dper=$per->_getOnePeriod($wp);
-            $time = strtotime($dper['class_start_date']);
-            $day= strftime("%A", $time);
-            $week[0]="Monday";
-            $week[1]="Tuesday";
-            $week[2]="Wednesday";
-            $week[3]="Thursday";
-            $week[4]="Friday";
-            $week[5]="Saturday";
-            $week[6]="Sunday";
-
-            //Verificamos numero de dias que debe empezar el horario segun el dia de inicio de clases del periodo.
-            for ($i=0; $i < 7; $i++) { 
-                if ($week[$i]==$day) $sum=7-$i;
-            }
-            
-            $diaempezar=$sum+$dia;
-
-            if ($diaempezar>6) {
-                if ($diaempezar==7) $diaempezar=0;
-                else $diaempezar=$diaempezar-7;
-            }
-
-            //Retorna la fecha de inicio de la primera semana de clases deacuerdo al dia del horario.
-             $fecha=$hora->_getsumdate($dper['class_start_date'], $diaempezar);
 
             $data=array();
             $data['eid']=$eid;
             $data['oid']=$oid;
-            // $data['hid']=time().rand(0,9);
             $data['perid']=$perid;
             $data['escid']=$escid;
             $data['subid']=$subid;
@@ -195,23 +236,39 @@ class Horary_NhoraryController extends Zend_Controller_Action {
             $data['teach_uid']=$uid;
             $data['type_class']=$tipo_clase;
             $data['day']=$dia+1;
-            // print_r($data);
-            $horaexis=$hora->_getHorary($eid,$oid,$perid,$escid,$curid,$courseid,$turno,$subid,$uid,$fecha[0]['dia'],$data['hora_ini'],$data['hora_fin']);
-            $horasem=$hora->_getHoraryXsemXturno($eid,$oid,$perid,$escid,$sedid,$semid,$turno,$hora_ini,$hora_fin,$data['day']);
-            if ($horaexis || $horasem) { ?>
+            
+            $horaexis=$hora->_getHorary($eid,$oid,$perid,$escid,$curid,$courseid,$turno,$subid,$uid,$hora_ini,$hora_fin,$data['day']);
+            $horasem=$hora->_getHoraryXsemXturno($eid,$oid,$perid,$escid,$subid,$semid,$turno,$hora_ini,$hora_fin,$data['day']);
+            $horateach=$hora->_getHoraryXteacherXday($eid,$oid,$perid,$escid,$subid,$uid,$hora_ini,$hora_fin,$data['day']);
+            if ($horateach or $horaexis or $horasem){ ?>
                 <script type="text/javascript">
                 alert("Ya existe un horario en el mismo semestre ó del mismo curso, no debe duplicar el horario.");
                 </script>
             <?php       
             }else {
-                
+                if ($data['hora_ini'] <= $valhorasm[$k-1]) {                     
+                    if ($data['hora_fin'] <= $valhorasm[$k-1]) {                    
+                        $hora->_save($data);
+                       ?>
+                        <script type="text/javascript">
+                        window.location.reload();
+                        </script>
+                    <?php
+                    }else{ ?>
+                        <script type="text/javascript">
+                            alert("La Hora de Inicio no coincide con las horas académicas establecidas. Por favor ingrese nuevamente.");
+                        </script>
+                    <?php
+                    }
+                }
+                else{
                     $hora->_save($data);
-                   ?>
-                    <script type="text/javascript">
-                    window.location.reload();
-                    </script>
-                
-                <?php
+                    ?>
+                        <script type="text/javascript">
+                        window.location.reload();
+                        </script>
+                    <?php
+                } 
             }
 
         }else{ ?>
@@ -227,34 +284,75 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $this->_helper->layout()->disableLayout();
         $eid=$this->sesion->eid;
         $oid=$this->sesion->oid;
-        $perid=$this->sesion->period->perid;
-        $escid=$this->sesion->escid;
-        $subid=$this->sesion->subid;
+        $escid=$this->_getParam('escid');
+        $subid=$this->_getParam('subid');
+        $perid=$this->_getParam('perid');
         $pid=$this->_getParam('pid');
         $uid=$this->_getParam('uid');
         $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
         $bd_hours = new Api_Model_DbTable_HoursBeginClasses();
         $datahours=$bd_hours->_getFilter($wheres);
+        // exit();
         
         if ($datahours) {
-            $valhoras[0]=$datahours[0]['hours_begin'];
             $hora=new Api_Model_DbTable_Horary();
-            for ($k=0; $k < 20; $k++) { 
-                $dho=$hora->_getsumminutes($valhoras[$k],'50');
-                $valhoras[$k+1]=$dho[0]['hora'];
+            if ($datahours[0]['hours_begin_afternoon']) {
+                $valhorasm[0]=$datahours[0]['hours_begin'];
+                $valhorast[0]=$datahours[0]['hours_begin_afternoon'];
+                $k=0;
+                while ($valhorasm[$k] < $datahours[0]['hours_begin_afternoon']) {
+                    $dho=$hora->_getsumminutes($valhorasm[$k],'50');
+                    $valhorasm[$k+1]=$dho[0]['hora'];
+                    $k++;
+                }
+                
+                $len=count($valhorasm);
+                $w=0;
+                        
+                for ($g=0; $g < $len + 1 ; $g++) { 
+                    if ($valhorasm[$g]==$valhorast[0] && $w==0) {
+
+                        $valhoras[0]=$datahours[0]['hours_begin'];
+                        for ($k=0; $k < 20; $k++) { 
+                            $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                            $valhoras[$k+1]=$dho[0]['hora'];
+                        }
+                        $this->view->valhoras=$valhoras;
+                        $w=1;
+                    }
+                }
+                if ($w==0) {
+                    unset($valhorasm[$k]);
+                    $this->view->valhorasm=$valhorasm;
+                    $j=0;
+                    while ( $j < 12) {
+                        $dho=$hora->_getsumminutes($valhorast[$j],'50');
+                        $valhorast[$j+1]=$dho[0]['hora'];
+                        $j++;
+                    }
+                    $endtarde=$valhorast[$j-1];
+                    $this->view->valhorast=$valhorast; 
+                }    
             }
-            $this->view->valhoras=$valhoras;
-            
+            else{
+                $valhoras[0]=$datahours[0]['hours_begin'];
+                for ($k=0; $k < 20; $k++) { 
+                    $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                    $valhoras[$k+1]=$dho[0]['hora'];
+                }
+                $this->view->valhoras=$valhoras;
+            }
+
             $where['eid']=$eid;
             $where['oid']=$oid;
             $where['perid']=$perid;
             $where['subid']=$subid;
             $where['teach_uid']=$uid;
             $where['teach_pid']=$pid;
-               //print_r($where);
             $dathora=$hora->_getFilter($where);
-                // print_r($dathora);
+            // print_r($dathora);
             $this->view->horarios=$dathora;
+            
             $curso=new Api_Model_DbTable_Coursexteacher();
             $where1['eid']=$eid;
             $where1['oid']=$oid;
@@ -263,7 +361,6 @@ class Horary_NhoraryController extends Zend_Controller_Action {
             $where1['subid']=$subid;
             $where1['pid']=$pid;
             $datcur=$curso->_getFilter($where1);
-
             $ncursos=count($datcur);
             for ($cont=0; $cont < $ncursos; $cont++) { 
                 $datcur[$cont]['num']=$cont;
@@ -278,8 +375,8 @@ class Horary_NhoraryController extends Zend_Controller_Action {
      //$this->_helper->layout()->disableLayout();
         $eid=$this->sesion->eid;
         $oid=$this->sesion->oid;
-        $perid=$this->sesion->period->perid;
-        $subid=$this->sesion->subid;
+        $subid=$this->_getParam('subid');
+        $perid=$this->_getParam('perid');
         $courseid=$this->_getParam('courseid');
         $escid=$this->_getParam('escid');
         $teach_uid=$this->_getParam('uid');
@@ -309,20 +406,21 @@ class Horary_NhoraryController extends Zend_Controller_Action {
             
             $teach_uid=base64_encode($teach_uid);
             $teach_pid=base64_encode($teach_pid);
-            $this->_redirect("/horary/nhorary/fillhorary/uid/$teach_uid/pid/$teach_pid");        
+            $escid=base64_encode($escid);
+            $subid=base64_encode($subid);
+            $perid=base64_encode($perid);
+            $this->_redirect("/horary/nhorary/fillhorary/uid/$teach_uid/pid/$teach_pid/escid/$escid/subid/$subid/perid/$perid");        
 
     }
     
     public function changehoursAction(){
         try {
-            // $this->_helper->layout()->disableLayout();
+            $this->_helper->layout()->disableLayout();
             $fm = new Horary_Form_Hours();
-            $this->view->fm=$fm;
             $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;
-            $perid=$this->sesion->period->perid;
-            $escid=$this->sesion->escid;
-            $subid=$this->sesion->subid;
+            $oid=$this->sesion->oid;       
+    
+            $redirect=0;
 
             if ($this->getRequest()->isPost())
             {
@@ -345,11 +443,11 @@ class Horary_NhoraryController extends Zend_Controller_Action {
                             if ($hour_t<=9) {
                                 $frmdata['hour_t']="0".$hour_t;
                             }
-                        $minute=$frmdata['minute_t'];
-                            if ($minute==0) {
-                              $frmdata['minute_t']="0".$minute;
+                        $minute_t=$frmdata['minute_t'];
+                            if ($minute_t==0) {
+                              $frmdata['minute_t']="0".$minute_t;
                             }
-                        $frmdata['hours_begin_t']=$frmdata['hour_t'].":".$frmdata['minute_t'].":00";
+                        $frmdata['hours_begin_afternoon']=$frmdata['hour_t'].":".$frmdata['minute_t'].":00";
 
                     }
                     unset($frmdata['save']);
@@ -359,17 +457,130 @@ class Horary_NhoraryController extends Zend_Controller_Action {
                     unset($frmdata['minute_t']);
                     $frmdata['eid']=$eid;
                     $frmdata['oid']=$oid;
-                    $frmdata['perid']=$perid;
-                    $frmdata['escid']=$escid;
-                    $frmdata['subid']=$subid;
                     $reg_= new Api_Model_DbTable_HoursBeginClasses();
-                    // print_r($frmdata);
-                    $reg_->_save($frmdata); 
-                    $this->_redirect("/horary/nhorary/listteacher"); 
+                    if ($reg_->_save($frmdata)) {
+                        $redirect=1;
+                    }
+                }
+                else{
+                    $this->view->escid=$frmdata['escid'];
+                    $this->view->perid=$frmdata['perid'];
+                    $this->view->subid=$frmdata['subid'];
+                    $this->view->distid=$frmdata['distid'];
                 }   
-            }            
+            }
+            else{
+                $escid=base64_decode($this->_getParam('escid'));
+                $subid=base64_decode($this->_getParam('subid'));
+                $perid=base64_decode($this->_getParam('perid'));
+                $distid=base64_decode($this->_getParam('distid'));
+                $this->view->escid=$escid;        
+                $this->view->subid=$subid;        
+                $this->view->perid=$perid;        
+                $this->view->distid=$distid; 
+            }
+            $this->view->redirect=$redirect;
+            $this->view->fm=$fm;
+
         } catch (Exception $e) {
             print "Error: Change Hours".$e->getMessage(); 
         }
-    }  
+    }
+
+    public function updatehoursAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+
+            $redirec=0;
+
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $escid=$this->_getParam('escid');
+            $subid=$this->_getParam('subid');
+            $perid=$this->_getParam('perid');
+            
+            $this->view->escid=$escid;
+            $this->view->perid=$perid;
+            $this->view->subid=$subid;   
+
+            $param=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+            $attrib=array('hoursid','hours_begin','hours_update','hours_begin_afternoon','hours_update_afternoon');
+            $bdbegin= new Api_Model_DbTable_HoursBeginClasses();
+            $datah=$bdbegin->_getFilter($param,$attrib);
+
+            $datahm=$datah[0]['hours_begin'];
+            $dataht=$datah[0]['hours_begin_afternoon'];
+            $datahm=split(":",$datahm);
+            $hour=$datahm[0];
+            $minute=$datahm[1];
+            $dataht=split(":",$dataht);
+            $hour_t=$dataht[0];
+            $minute_t=$dataht[1];
+            $arrays=array('hour'=>$hour,'minute'=>$minute,'hour_t'=>$hour_t,'minute_t'=>$minute_t);
+            $fm = new Horary_Form_Hours();
+            $fm->populate($arrays);
+            $this->view->fm=$fm;
+
+            $pk['hoursid']=$datah[0]['hoursid'];
+        
+             
+            if ($this->getRequest()->isPost())
+            {
+                $frmdata=$this->getRequest()->getPost();
+
+                if ($fm->isValid($frmdata)){
+
+                    $hour=$frmdata['hour'];
+                        if ($hour<=9) {
+                            $frmdata['hour']="0".$hour;
+                        }
+                    $minute=$frmdata['minute'];
+                        if ($minute==0) {
+                          $frmdata['minute']="0".$minute;
+                        }
+                    $frmdata['hours_update']=$frmdata['hour'].":".$frmdata['minute'].":00";    
+
+                    if ($frmdata['hour_t']) {
+                        $hour_t=$frmdata['hour_t'];
+                            if ($hour_t<=9) {
+                                $frmdata['hour_t']="0".$hour_t;
+                            }
+                        $minute_t=$frmdata['minute_t'];
+                            if ($minute_t==0) {
+                              $frmdata['minute_t']="0".$minute_t;
+                            }
+
+                        $frmdata['hours_update_afternoon']=$frmdata['hour_t'].":".$frmdata['minute_t'].":00";
+
+                    }
+                    $pk['hoursid']=$frmdata['pk'];
+                    $uhorary= new Api_Model_DbTable_Horary();
+                    $data=array('esc'=>$frmdata['escid'],'per'=>$frmdata['perid'],'sub'=>$frmdata['subid']);
+                    unset($frmdata['escid']);
+                    unset($frmdata['perid']);
+                    unset($frmdata['subid']);
+                    unset($frmdata['update']);
+                    unset($frmdata['hour']);
+                    unset($frmdata['minute']);
+                    unset($frmdata['hour_t']);
+                    unset($frmdata['minute_t']);
+                    unset($frmdata['pk']);
+        
+                    $reg_= new Api_Model_DbTable_HoursBeginClasses();
+                    if ($reg_->_update($frmdata,$pk)) {
+                        $datah=$uhorary->_updateHoraryAll($data);
+                        $redirec=1;
+                    }
+                }  
+            }
+            else{
+                $this->view->pk=$pk;
+            }
+            $this->view->redirec=$redirec;
+
+        } catch (Exception $e) {
+            print "Error: Update Hours".$e->getMessage();
+        }
+
+    } 
 }

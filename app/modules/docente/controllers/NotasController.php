@@ -15,14 +15,14 @@ class Docente_NotasController extends Zend_Controller_Action{
 
 	public function indexAction(){
 		// Periods Now
-		$this->_helper->layout()->disableLayout();
+		//$this->_helper->layout()->disablelayout();
+
 		$where['eid']=$this->sesion->eid;
 		$where['oid']=$this->sesion->oid;
 		$where['uid']=$this->sesion->uid;
 		$where['pid']=$this->sesion->pid;
 		$where['perid']=$this->sesion->period->perid;
 		$where['is_main']='S';
-
 		//print_r($this->sesion);
 		$this->view->uid=$where['uid'];
 
@@ -91,7 +91,8 @@ class Docente_NotasController extends Zend_Controller_Action{
 		}
 		$this->view->faculty_=$faculty_;
 		$this->view->data_=$data_;
-	
+
+
 	}
 
 

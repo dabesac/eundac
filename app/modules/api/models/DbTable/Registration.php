@@ -60,8 +60,29 @@ class Api_Model_DbTable_Registration extends Zend_Db_Table_Abstract
 		}
 	}
 
+    public function _getFilter($where=null,$attrib=null,$orders=null){
+        try{
+            if($where['eid']=='' || $where['oid']=='') return false;
+                $select = $this->_db->select();
+                if ($attrib=='') $select->from("base_registration");
+                else $select->from("base_registration",$attrib);
+                foreach ($where as $atri=>$value){
+                    $select->where("$atri = ?", $value);
+                }
+                if ($orders<>null || $orders<>"") {
+                    if (is_array($orders))
+                        $select->order($orders);
+                }
+                $results = $select->query();
+                $rows = $results->fetchAll();
+                if ($rows) return $rows;
+                return false;
+        }catch (Exception $e){
+            print "Error: Read Filter Register ".$e->getMessage();
+        }
+    }
 	
- public function _getFilter($where=array()){
+ /*public function _getFilter($where=array()){
 		try{
 			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."' and subid='".$where['subid']."'";
 			$row = $this->fetchAll($wherestr);
@@ -70,7 +91,7 @@ class Api_Model_DbTable_Registration extends Zend_Db_Table_Abstract
 		}catch (Exception $e){
 			print "Error: Read Filter Registration".$e->getMessage();
 		}
-	}
+	}*/
 
 public function _getPaymentsStudent($where=null,$attrib=null,$order=null){
 	try {

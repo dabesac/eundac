@@ -5,7 +5,7 @@
 		</div>
 	</div>
 	<div class="panel-body">
-		<form class="form-inline" role="form" name="<?php echo $this->fm->getName(); ?>" id ="frmhours" action="/horary/Nhorary/changehours"  method="POST" enctype="application/x-www-form-urlencoded">
+		<form class="form-inline" role="form" name="<?php echo $this->fm->getName(); ?>" id ="frmhours" action="/horary/Nhorary/updatehours"  method="POST" enctype="application/x-www-form-urlencoded">
 			
 				<div class='col-sm-12 form-group'>
 					
@@ -34,18 +34,19 @@
 			  	</div></br>
 
 				<div class='col-sm-12 form-group'>
-					<div class="col-sm-12 text-center"><?php echo $this->fm->save?></div>		
-				</div>
-			<input type="hidden" name='escid' value='<?php echo $this->escid?>'>
+					<div class="col-sm-12 text-center"><?php echo $this->fm->update?></div>		
+				</div>	
+    		<input type="hidden" name='pk' value='<?php echo $this->pk['hoursid']?>'>
+    		<input type="hidden" name='escid' value='<?php echo $this->escid?>'>
     		<input type="hidden" name='perid' value='<?php echo $this->perid?>'>
-    		<input type="hidden" name='subid' value='<?php echo $this->subid?>'>	
+    		<input type="hidden" name='subid' value='<?php echo $this->subid?>'>
 		</form>	
 	</div>
 </div>
 <script type="text/javascript">
-	var redirect=<?php echo $this->redirect?>;
-	if (redirect==1) {
-
+	var redirec=<?php echo $this->redirec?>;
+	
+	if (redirec==1) {
 		window.location.href = window.location.href
 	};
 	
@@ -55,12 +56,10 @@
         url: $(this).attr('action'),
         data: $(this).serialize(),
         success: function(data) {                        
-            $('#hourbegin').html(data);                                 
+            $('#updatehour').html(data);                                 
             }
         }); 
         return false;
       });
 	
 </script>
-
-

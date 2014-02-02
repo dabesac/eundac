@@ -17,6 +17,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
     {
         try {
 
+<<<<<<< HEAD
             $where['uid']=$this->sesion->uid;
             $where['eid']=$this->sesion->eid;
             $where['oid']=$this->sesion->oid;
@@ -34,6 +35,11 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $dbcursos=new Api_Model_DbTable_Course();
             $datcursos=$dbcursos->_getCountCoursesxSemester($where);
             $cur=$dbcursos->_getCountCoursesxApproved($where);
+=======
+             if ($this->_validaren()=="false"){
+                $this->_redirect('/alumno/index/encuesta');
+             }
+>>>>>>> aeb38666851bf65fbadf348bd0ec3b2db99b9a36
 
             $data_all = array();
             $data_rel = array();
@@ -381,63 +387,79 @@ class Alumno_IndexController extends Zend_Controller_Action {
         $uid = $this->sesion->uid;      
         $pid=$this->sesion->pid;
         $perid= $this->sesion->period->perid;
+        $subid = $this->sesion->subid;
+        $rid = $this->sesion->rid;
 
+        $registerDb = new Api_Model_DbTable_Registration();
+        $where = array('eid'=>$eid, 
+                        'oid'=>$oid, 
+                        'pid'=>$pid, 
+                        'uid'=>$uid, 
+                        'escid'=>$escid, 
+                        'subid'=>$subid, 
+                        'perid'=>'13B');
+        $attrib = array('state');
+        $register = $registerDb->_getFilter($where, $attrib);
 
-        $data['eid']=$eid;
-        $data['oid']=$oid;
-        $where = array('eid'=>$eid,'oid'=>$oid,);
-        $encuestas = new  Api_Model_DbTable_Polll();
-        $encuesta=$encuestas->_getEncuestaActiva($where);
-        //print_r($encuesta);
-        if($encuesta)
-        {
-            $this->view->encuesta=$encuesta;
-            $pollid=$encuesta['pollid'];
-            $where1 = array('eid'=>$eid,'oid'=>$oid,'pollid'=>$pollid);
-            $order = array('position  ASC');
-
-            //print_r($where1);
-            $dbpreguntas = new Api_Model_DbTable_PollQuestion();
-            $preguntas=$dbpreguntas->_getPreguntasXencuesta($where1,$order);
-            //print_r($preguntas);
-            $this->view->preguntas=$preguntas;
-
-            $cursos = new Api_Model_DbTable_Registrationxcourse();
-            $where2=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'uid'=>$uid,'pid'=>$pid,'perid'=>$perid);
-            //print_r($where2);
-            $curs=$cursos->_getFilter($where2);
-            //print_r($curs);
-
-            $c= new Api_Model_DbTable_Course();
-            $cur=array();
-            if($curs)
+        if ($register[0]['state'] == 'M' && $rid == 'AL') {
+            $data['eid']=$eid;
+            $data['oid']=$oid;
+            $where = array('eid'=>$eid,'oid'=>$oid,);
+            $encuestas = new  Api_Model_DbTable_Polll();
+            $encuesta=$encuestas->_getEncuestaActiva($where);
+            //print_r($encuesta);
+            if($encuesta)
             {
+                $this->view->encuesta=$encuesta;
+                $pollid=$encuesta['pollid'];
+                $where1 = array('eid'=>$eid,'oid'=>$oid,'pollid'=>$pollid);
+                $order = array('position  ASC');
 
-                foreach ($curs as $curso) 
+                //print_r($where1);
+                $dbpreguntas = new Api_Model_DbTable_PollQuestion();
+                $preguntas=$dbpreguntas->_getPreguntasXencuesta($where1,$order);
+                //print_r($preguntas);
+                $this->view->preguntas=$preguntas;
+
+                $cursos = new Api_Model_DbTable_Registrationxcourse();
+                $where2=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'uid'=>$uid,'pid'=>$pid,'perid'=>$perid);
+                //print_r($where2);
+                $curs=$cursos->_getFilter($where2);
+                //print_r($curs);
+
+                $c= new Api_Model_DbTable_Course();
+                $cur=array();
+                if($curs)
                 {
-                    $data['eid']=$eid;
-                    $data['oid']=$oid;
-                    $data['escid']=$escid;
-                    $data['subid']=$curso['subid'];
-                    $data['courseid']=$curso['courseid'];
-                    $data['curid']=$curso['curid'];
-                    
-                    //print_r($data);
 
-                    $c_=$c->_getOne($data);
-                    //print_r($c_);
-                    $c_['turno']=$curso['turno'];
-                    $cur[]=$c_;
-                    //print_r($cur);
+                    foreach ($curs as $curso) 
+                    {
+                        $data['eid']=$eid;
+                        $data['oid']=$oid;
+                        $data['escid']=$escid;
+                        $data['subid']=$curso['subid'];
+                        $data['courseid']=$curso['courseid'];
+                        $data['curid']=$curso['curid'];
+                        
+                        //print_r($data);
+
+                        $c_=$c->_getOne($data);
+                        //print_r($c_);
+                        $c_['turno']=$curso['turno'];
+                        $cur[]=$c_;
+                        //print_r($cur);
+                    }
                 }
-            }
-            //print_r($curso);
-            if(!$cur)
-            {
-                $this->_redirect('/alumno');
-            }
-            $this->view->cursos=$cur;
-        }       
+                //print_r($curso);
+                if(!$cur)
+                {
+                    $this->_redirect('/profile/public/student');
+                }
+            }       
+        }else{
+            $this->_redirect('/profile/public/student');
+        }
+        $this->view->cursos=$cur;
      
     }
 

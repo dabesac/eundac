@@ -17,10 +17,11 @@
 	</div>
 	<div class="col-md-1">
 		<br>
-	  	<h3><a href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>" class="text-warning" title="Imprimir Record de Notas"><span class="glyphicon glyphicon-print"></span></a></h3>
+	  	<h2> 
+	  	<a id="printRecord" class="text-warning" data-placement="left" data-toggle="popover" title="Record de Notas" data-container="body" data-content="Imprime aqui tu record de notas :D"
+	  		href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>"><span class="glyphicon glyphicon-print"></span></a></h2>
 	</div>
 </div>
-
 
 </div>
 
@@ -40,9 +41,21 @@
 	</div>
 </div>
 
-
 <script>
 $(function () {
+	$('#printRecord').popover('show');
+	setTimeout(function() {
+	  $('#printRecord').popover('hide');
+	}, 4000);
+
+	$('#printRecord').click(function(){
+		$('#printRecord').popover('destroy');
+	});
+
+	$('#printRecord').hover(function(){
+		$('#printRecord').popover('toggle');
+	});
+
 	$("#signinCurrent").load("/profile/public/studentsigncurrent");
 
 	$('#signinCurriculum').load('/profile/public/studentsignpercur');
@@ -53,17 +66,9 @@ $(function () {
 
 	$('#profileTab a').click(function (e) {
 		e.preventDefault()
-	    $(this).tab('show')
+	    $(this).tab('show');
 	});
 	  
-	$("#btnmaininfo").click(function(){
-		$("#signin").load("/profile/public/studentsigncurrent");
-		$("#masinfosignTab a:last").tab('show')
-	});
-	$("#btnmainsignin").click(function(){
-		$("#info").load("/profile/public/studentinfo");
-		$("#masinfoTab a:last").tab('show')
-	});
 });
 </script>
 

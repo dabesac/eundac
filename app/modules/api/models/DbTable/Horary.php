@@ -40,16 +40,16 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
         return $row;
     }
 
-    public function _getHorary($eid='',$oid='',$perid='',$escid='',$curid='',$cursoid='',$turno='',$subid='',$teach_uid='',$fecha='', $hora_ini='', $hora_fin=''){
+     /*Devuelve el registro del horario de un curso.De acuerdo a parametros enviados*/
+    public function _getHorary($eid='',$oid='',$perid='',$escid='',$curid='',$courseid='',$turno='',$subid='',$teach_uid='', $hora_ini='', $hora_fin='',$day=''){
         try
         {
-            if ($eid==""|| $oid==""||$perid==""||$escid==""||$curid==""||$cursoid==""||$turno==""||$subid==""||$d_uid=="") return false;
-            if ($fecha=="") $fechas="";
-            else $fechas=" and fecha='$fecha'"; 
-            $f = $this->fetchAll("eid='$eid' and oid='$oid' and subid='$subid' and perid='$perid' and escid='$escid' and curid='$curid' 
-                    and cursoid='$cursoid' and turno='$turno' and teach_uid='$teach_uid' $fechas and (hora_ini='$hora_ini' or hora_fin='$hora_fin')");
+            if ($eid==""|| $oid==""||$perid==""||$escid==""||$curid==""||$courseid==""||$turno==""||$subid==""||$teach_uid==""||$hora_ini==""||$hora_fin==""||$day=="") return false;
+            $where=array("eid='$eid' and oid='$oid' and subid='$subid' and perid='$perid' and escid='$escid' and curid='$curid' and courseid='$courseid' and turno='$turno' and teach_uid='$teach_uid' 
+                          and (hora_ini='$hora_ini' or hora_fin='$hora_fin') and day='$day'");            
+            $f = $this->fetchAll($where);
             if($f) return $f->toArray();
-            return false;
+            return false;        
         } 
         catch (Exception $ex)
         {
@@ -61,9 +61,27 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
     public function _getHoraryXsemXturno($eid='',$oid='',$perid='',$escid='',$subid='',$semid='',$turno='',$hora_ini='',$hora_fin='',$day=''){
         try
         {
-            if ($eid==""|| $oid==""||$perid==""||$escid==""||$subid==""||$semid==""||$turno==""||$hora_ini==''||$hora_fin==''||$day=='') return false; 
-            $f = $this->fetchAll("eid='$eid' and oid='$oid' and subid='$subid' and perid='$perid' and escid='$escid' 
+            if ($eid=="" || $oid=="" || $perid=="" || $escid=="" || $subid=="" || $semid=="" || $turno=="" || $hora_ini=='' || $hora_fin=='' || $day=='') return false; 
+            $where=array("eid='$eid' and oid='$oid' and subid='$subid' and perid='$perid' and escid='$escid' 
                     and semid='$semid' and turno='$turno' and day='$day' and (hora_ini='$hora_ini' or hora_fin='$hora_fin')");
+            $f = $this->fetchAll($where);
+            if($f) return $f->toArray();
+            return false;
+        } 
+        catch (Exception $ex)
+        {
+            print $ex->getMessage();
+        }            
+    }
+
+    /*Devuelve el horario de un docente.De acuerdo a parametros enviados*/
+    public function _getHoraryXteacherXday($eid='',$oid='',$perid='',$escid='',$subid='',$teach_uid='',$hora_ini='',$hora_fin='',$day=''){
+        try
+        {
+            if ($eid=="" || $oid=="" || $perid=="" || $escid=="" || $subid=="" || $teach_uid=="" || $hora_ini=='' || $hora_fin=='' || $day=='') return false; 
+            $where=array("eid='$eid' and oid='$oid' and subid='$subid' and perid='$perid' and escid='$escid' and teach_uid='$teach_uid'
+                        and day='$day' and (hora_ini='$hora_ini' or hora_fin='$hora_fin')");
+            $f = $this->fetchAll($where);
             if($f) return $f->toArray();
             return false;
         } 
@@ -95,4 +113,24 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
         }
     }
 
+    public function _updateHoraryAll($data){
+        try {
+            if($data['esc']=='' || $data['per']=='' || $data['sub']=='') return false;
+            
+            $esc=$data['esc'];
+            $per=$data['per'];
+            $sub=$data['sub'];
+
+            $sql=$this->_db->query("                
+                select * from update_horary_periods('$esc','$per','$sub')  AS (
+                    ".'ho_fin'." interval
+                    ); 
+            ");
+
+            if ($sql) return $sql->fetchAll();
+            return false; 
+        } catch (Exception $e) {
+            print "Error: Update Horary All".$e->getMessage();
+        }
+    }
  }

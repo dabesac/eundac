@@ -16,7 +16,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
     }
     
     public function indexAction()
-    {
+    {   
    		$distribution = new Distribution_Model_DbTable_Distribution();
    		$data['eid']=$this->sesion->eid;
    		$data['oid']=$this->sesion->oid;
@@ -24,6 +24,18 @@ class Distribution_DistributionController extends Zend_Controller_Action {
    		$data['subid']=$this->sesion->subid;
    		$campos = array("eid","oid","escid","subid","perid","dateaccept","number","state","distid");
    		$rows_distribution =$distribution->_getFilter($data,$campos,$orders=array('perid'));
+        $bdhorary = new Api_Model_DbTable_HoursBeginClasses();
+        $i=0;
+        foreach ($rows_distribution as $periodos) {
+            $perid=$periodos['perid'];
+            $escid=$periodos['escid'];
+            $subid=$periodos['subid'];
+            $wheres=array('eid'=>$data['eid'],'oid'=>$data['oid'],'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+
+            $datahours=$bdhorary->_getFilter($wheres);
+            $rows_distribution[$i]['hours']=$datahours; 
+            $i++;        
+        }
    		if ($rows_distribution) $this->view->ldistribution=$rows_distribution ;
     }
     
@@ -460,6 +472,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $where['subid']=$subid;
             $where['rid']='DC';
             $where['state']='A';  
+
             $doc = new Api_Model_DbTable_Users();
             $teacher = $doc->_getUserXRidXEscidAll($where);
             $where['state']='I';
@@ -471,7 +484,10 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $whereinfo['oid']=$oid;
             $whereinfo['escid']=$escid;
             $whereinfo['subid']=$subid;
+
             $info= new Api_Model_DbTable_UserInfoTeacher();
+            $bdcourseteach=new Api_Model_DbTable_Coursexteacher();
+            $whe = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
             for ($i=0; $i < $tam; $i++) {
                 $whereinfo['pid']=$datateacher[$i]['pid'];
                 $whereinfo['uid']=$datateacher[$i]['uid'];
@@ -481,7 +497,11 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $datateacher[$i]['dedication']=$datainfo['dedication'];
                 $datateacher[$i]['charge']=$datainfo['charge'];
                 $datateacher[$i]['contract']=$datainfo['contract'];
+                $whe['pid']=$datateacher[$i]['pid'];
+                $datacourseteacher=$bdcourseteach->_getFilter($whe);
+                $datateacher[$i]['courseasig']=$datacourseteacher[0]['courseid'];
             }
+            // print_r($datateacher);
             $this->view->teacher=$datateacher;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
@@ -558,16 +578,25 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $whereinfo['escid']=$escid;
             $whereinfo['subid']=$subid;
             $info= new Api_Model_DbTable_UserInfoTeacher();
-            for ($i=0; $i < $tam; $i++) {
-                $whereinfo['pid']=$datateacher[$i]['pid'];
-                $whereinfo['uid']=$datateacher[$i]['uid'];
-                $datainfo=$info->_getOne($whereinfo);
-                $datateacher[$i]['category']=$datainfo['category'];
-                $datateacher[$i]['condision']=$datainfo['condision'];
-                $datateacher[$i]['dedication']=$datainfo['dedication'];
-                $datateacher[$i]['charge']=$datainfo['charge'];
-                $datateacher[$i]['contract']=$datainfo['contract'];
+            $bdcourseteach=new Api_Model_DbTable_Coursexteacher();
+            $whe = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+            $attrib=array('courseid');
+            if ($datateacher) {
+                for ($i=0; $i < $tam; $i++) {
+                    $whereinfo['pid']=$datateacher[$i]['pid'];
+                    $whereinfo['uid']=$datateacher[$i]['uid'];
+                    $datainfo=$info->_getOne($whereinfo);
+                    $datateacher[$i]['category']=$datainfo['category'];
+                    $datateacher[$i]['condision']=$datainfo['condision'];
+                    $datateacher[$i]['dedication']=$datainfo['dedication'];
+                    $datateacher[$i]['charge']=$datainfo['charge'];
+                    $datateacher[$i]['contract']=$datainfo['contract'];
+                    $whe['pid']=$datateacher[$i]['pid'];             
+                    $datacourseteacher=$bdcourseteach->_getFilter($whe,$attrib);
+                    $datateacher[$i]['courseasig']=$datacourseteacher[0]['courseid'];
+                }
             }
+
             $this->view->teachers=$datateacher;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
@@ -603,7 +632,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $name=$this->_getParam("name");
             $pid =$this->_getParam("pid");
             $distid =$this->_getParam("distid"); 
-            $perid =$this->_getParam("perid"); 
+            $perid =$this->_getParam("perid");
             $this->view->distid=$distid;
             $this->view->perid=$perid;
             $this->view->escid=$escid;
@@ -619,6 +648,16 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $where['rid']='DC';
                 $where['nom']=strtoupper($name);
                 $datauser = $user->_getUsuarioXNombre($where);
+            }
+            $bdcourseteach=new Api_Model_DbTable_Coursexteacher();
+            $whe = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+            $attrib=array('courseid');
+            $len=count($datauser);
+            for ($i=0; $i < $len; $i++) {            
+                $whe['pid']=$datauser[$i]['pid'];             
+                $datacourseteacher=$bdcourseteach->_getFilter($whe,$attrib);
+                $datauser[$i]['courseasig']=$datacourseteacher[0]['courseid'];
+                
             }
             $this->view->usuarios=$datauser;
         } catch (Exception $e) {

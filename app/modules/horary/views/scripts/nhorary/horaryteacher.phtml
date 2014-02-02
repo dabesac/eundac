@@ -1,30 +1,101 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <?php
     $hora=array();  
-    $j=1;
     $hour_begin=array();
-    $hour_begin=$this->valhoras;
-    for ($i=0; $i <= 20; $i++) { 
-        $hour[$i]=substr($hour_begin[$i],0,2);
-        $minute[$i]=substr($hour_begin[$i],3,2);
-    }
-    for ($i=0; $i <= 20; $i++) {
-        if ($hour[$i]<12) {
-            if ($hour[$j]<12) {
-                $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." am";
-            }
-            else{
-                $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." pm";
-            }
-        } 
-        else{
-            $hora[$i]['hora']=$hour[$i].":".$minute[$i]." pm - ".$hour[$j].":".$minute[$j]." pm";
+    // print_r($this->valhorasm);
+    // print_r($this->valhorast);
+    // print_r($this->valhoras);
+    if ($this->valhorasm or $this->valhorast) {
+        $j=1;
+        $hour_begin=$this->valhorasm;
+        $hour_begin_afternoon=$this->valhorast;
+        $len1= count($hour_begin);
+        // print($len1);
+        $len2= count($hour_begin_afternoon);
+        $lentotal = $len1+$len2;
+        for ($i=0; $i < $len1; $i++) { 
+            $hourm[$i]=substr($hour_begin[$i],0,2);
+            $minutem[$i]=substr($hour_begin[$i],3,2);
         }
-        $hora[$i]['h_ini']=$hour[$i];
-        $hora[$i]['h_fin']=$hour[$j];
-        $hora[$i]['m_ini']=$minute[$i];
-        $hora[$i]['m_fin']=$minute[$j];
-        $j++;
+        
+        for ($i=0; $i < $len2; $i++) { 
+            $hourt[$i]=substr($hour_begin_afternoon[$i],0,2);
+            $minutet[$i]=substr($hour_begin_afternoon[$i],3,2);
+        }
+        for ($i=0; $i < $len1-1; $i++) {
+            if ($hourm[$i]) {
+                if ($hourm[$i]<12) {
+                    if ($hourm[$j]<12) {
+                        $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." am - ".$hourm[$j].":".$minutem[$j]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." am - ".$hourm[$j].":".$minutem[$j]." pm";
+                    }
+                } 
+                else{
+                    $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." pm - ".$hourm[$j].":".$minutem[$j]." pm";
+                }
+                $hora[$i]['h_ini']=$hourm[$i];
+                $hora[$i]['h_fin']=$hourm[$j];
+                $hora[$i]['m_ini']=$minutem[$i];
+                $hora[$i]['m_fin']=$minutem[$j];
+                $j++;            
+            }
+
+        }
+        $q=1;
+        for ($p=0; $p < $len2; $p++) {
+            if ($hourt[$p]) {
+                if ($hourt[$p]<12) {
+                    if ($hourt[$q]<12) {
+                        $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." am - ".$hourt[$q].":".$minutet[$q]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." am - ".$hourt[$q].":".$minutet[$q]." pm";
+                    }
+                } 
+                else{
+                    $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." pm - ".$hourt[$q].":".$minutet[$q]." pm";
+                }
+                $hora[$i]['h_ini']=$hourt[$p];
+                $hora[$i]['h_fin']=$hourt[$q];
+                $hora[$i]['m_ini']=$minutet[$p];
+                $hora[$i]['m_fin']=$minutet[$q];
+                $q++;
+                $i++;            
+            }
+        }
+    }
+    else{
+        $j=1;
+        $hour_begin=$this->valhoras;
+        $len= count($hour_begin);
+        // print_r($len);
+        $lentotal = $len;
+        for ($i=0; $i < $len; $i++) { 
+            $hour[$i]=substr($hour_begin[$i],0,2);
+            $minute[$i]=substr($hour_begin[$i],3,2);
+        }
+        for ($i=0; $i < $len; $i++) {
+            if ($hour[$i]) {
+                if ($hour[$i]<12) {
+                    if ($hour[$j]<12) {
+                        $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." pm";
+                    }
+                } 
+                else{
+                    $hora[$i]['hora']=$hour[$i].":".$minute[$i]." pm - ".$hour[$j].":".$minute[$j]." pm";
+                }
+                $hora[$i]['h_ini']=$hour[$i];
+                $hora[$i]['h_fin']=$hour[$j];
+                $hora[$i]['m_ini']=$minute[$i];
+                $hora[$i]['m_fin']=$minute[$j];
+                $j++;            
+            }
+        }
     }
 
     $listacolores = array();
@@ -43,54 +114,56 @@
     $listacolores[12] = "#D8BADA";
     $listacolores[13] = "#C4E6CE";
     $listacolores[14] = "#B4DAA1";
+// print_r($hora);
+if ($this->horarios) {
 
-    if ($this->horarios) {
-    // print_r($this->horarios);
-    $len=count($this->horarios);
-    $hmen=13;
-    $hmay=13;
-    for ($i=0; $i < $len; $i++) {
-        $n=new Api_Model_DbTable_Course();
-        $where['eid']=$this->horarios[$i]['eid'];
-        $where['oid']=$this->horarios[$i]['oid'];
-        $where['escid']=$this->horarios[$i]['escid'];
-        $where['curid']=$this->horarios[$i]['curid'];
-        $where['subid']=$this->horarios[$i]['subid'];
-        $where['courseid']=$this->horarios[$i]['courseid'];
-        $ncur=$n->_getOne($where);
-        
-        $this->horarios[$i]['name']=$ncur['name'];
-        $this->horarios[$i]['abbreviation']=$ncur['abbreviation'];
-        if ($this->horarios[$i]['type_class']=="P") $this->horarios[$i]['type_class']="(P)";
-        else $this->horarios[$i]['type_class']="";
-        $ncursos=$this->ncursos;
-        for ($j=0; $j < $ncursos; $j++) { 
-        	if ($this->horarios[$i]['courseid']==$this->datcursos[$j]['courseid'] && $this->horarios[$i]['turno']==$this->datcursos[$j]['turno']) {
-                $this->horarios[$i]['color']=$listacolores[$this->datcursos[$j]['num']];
+        $len=count($this->horarios);
+        $hmen=13;
+        $hmay=13;
+        for ($i=0; $i < $len; $i++) {
+            $n=new Api_Model_DbTable_Course();
+            $where['eid']=$this->horarios[$i]['eid'];
+            $where['oid']=$this->horarios[$i]['oid'];
+            $where['escid']=$this->horarios[$i]['escid'];
+            $where['curid']=$this->horarios[$i]['curid'];
+            $where['subid']=$this->horarios[$i]['subid'];
+            $where['courseid']=$this->horarios[$i]['courseid'];
+            $ncur=$n->_getOne($where);
+            
+            $this->horarios[$i]['name']=$ncur['name'];
+            $this->horarios[$i]['abbreviation']=$ncur['abbreviation'];
+            if ($this->horarios[$i]['type_class']=="P") $this->horarios[$i]['type_class']="(P)";
+            else $this->horarios[$i]['type_class']="";
+            $ncursos=$this->ncursos;
+            for ($j=0; $j < $ncursos; $j++) { 
+                if ($this->horarios[$i]['courseid']==$this->datcursos[$j]['courseid'] && $this->horarios[$i]['turno']==$this->datcursos[$j]['turno']) {
+                    $this->horarios[$i]['color']=$listacolores[$this->datcursos[$j]['num']];
+                }
+            }
+
+            $hsplit=split(":", $this->horarios[$i]['hora_ini']);
+            $hi=$hsplit[0];
+            $hsplit=split(":", $this->horarios[$i]['hora_fin']);
+            $hf=$hsplit[0];
+
+            if ($hi<=$hmen) $hmen=$hi;
+            if ($hf>=$hmay) $hmay=$hf;
+        }
+        // print_r($hi);
+        $k=0;
+        if ($hour_begin) {
+            for ($z=0; $z < $lentotal; $z++) { 
+                if ($hmen==$hora[$z]['h_ini'] && $k==0) {
+                    $inih=$z;
+                    $k=1;
+                }
+                if ($hmay==$hora[$z]['h_fin']) {
+                    $finh=$z;
+                }
             }
         }
 
-        $hsplit=split(":", $this->horarios[$i]['hora_ini']);
-        $hi=$hsplit[0];
-        $hsplit=split(":", $this->horarios[$i]['hora_fin']);
-        $hf=$hsplit[0];
-
-        if ($hi<=$hmen) $hmen=$hi;
-        if ($hf>=$hmay) $hmay=$hf;
-    }
-    // print_r($this->horarios);
-    $k=0;
-    for ($z=0; $z < 20; $z++) { 
-        if ($hmen==$hora[$z]['h_ini'] && $k==0) {
-            $inih=$z;
-            $k=1;
-        }
-        if ($hmay==$hora[$z]['h_fin']) {
-            $finh=$z;
-        }
-    }
-    // print_r($this->horarios);
-    $horaoriginal=$this->horarios;
+$horaoriginal=$this->horarios; 
 
    ?>
 <div class="row" style="margin: 0px">
@@ -134,7 +207,7 @@
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                 ?>
                                 <div class="cajadentro" style="margin-left:2px; background-color:<?php echo $dat[$s]["color"] ?>">
-                                    <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>"
+                                    <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/subid/<?php echo $dat[$s]['subid'] ?>/perid/<?php echo $dat[$s]['perid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>"
 
                                      type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
@@ -156,7 +229,6 @@
             }
             ?>
         </div>
-
         <div class='pull-left' style='width:144px'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
@@ -176,7 +248,7 @@
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                 ?>
                                 <div class="cajadentro" style="margin-left:2px; background-color:<?php echo $dat[$s]["color"] ?>">
-                                    <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
+                                    <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/subid/<?php echo $dat[$s]['subid'] ?>/perid/<?php echo $dat[$s]['perid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
                                 <?php    
@@ -216,7 +288,7 @@
 
                                 ?>
                                 <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>">
-                                    <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
+                                    <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/subid/<?php echo $dat[$s]['subid'] ?>/perid/<?php echo $dat[$s]['perid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
                                 <?php    
@@ -256,7 +328,7 @@
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                 ?>
                                 <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>">
-                                    <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
+                                    <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/subid/<?php echo $dat[$s]['subid'] ?>/perid/<?php echo $dat[$s]['perid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
                                 <?php    
@@ -295,7 +367,7 @@
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                 ?>
                                 <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>">
-                                    <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
+                                    <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/subid/<?php echo $dat[$s]['subid'] ?>/perid/<?php echo $dat[$s]['perid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
                                 <?php    
@@ -336,7 +408,7 @@
                                 ?>
 
                                 <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>">
-                                    <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
+                                    <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/subid/<?php echo $dat[$s]['subid'] ?>/perid/<?php echo $dat[$s]['perid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
                                 <?php    
@@ -357,6 +429,7 @@
             ?>
         </div>
     </div>    
+</div> 
 </div>
 <?php
 }
@@ -367,9 +440,5 @@ else {
     <b>No hay registro de horario.</b>
 </div>
 <?php
-}	
+}   
 ?>
-
-
-
-

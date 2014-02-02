@@ -94,9 +94,13 @@ ob_start();
 
 $mpdf=new mPDF(); 
 $mpdf=new mPDF('win-1252','A4','','','','',22);
+
+$mpdf->SetWatermarkText('COPIA',0.05);
+$mpdf->watermark_font = 'DejaVuSansCondensed';
+$mpdf->showWatermarkText = true;
 $mpdf->WriteHTML($html);
-// $mpdf->Output('Copia Ficha-'.$this->perid.'.pdf','D');
-$mpdf->Output();
+$mpdf->Output('Copia Ficha-'.$this->perid.'.pdf','D');
+// $mpdf->Output();
 exit;
 
 //==============================================================
