@@ -17,7 +17,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
     {
         try {
 
-<<<<<<< HEAD
+
             $where['uid']=$this->sesion->uid;
             $where['eid']=$this->sesion->eid;
             $where['oid']=$this->sesion->oid;
@@ -35,11 +35,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $dbcursos=new Api_Model_DbTable_Course();
             $datcursos=$dbcursos->_getCountCoursesxSemester($where);
             $cur=$dbcursos->_getCountCoursesxApproved($where);
-=======
-             if ($this->_validaren()=="false"){
-                $this->_redirect('/alumno/index/encuesta');
-             }
->>>>>>> aeb38666851bf65fbadf348bd0ec3b2db99b9a36
+
 
             $data_all = array();
             $data_rel = array();
