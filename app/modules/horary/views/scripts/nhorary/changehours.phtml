@@ -1,4 +1,3 @@
-<div class="alert alert-success">Es <b>IMPORTANTE</b> seleccionar por lo menos la hora de inicio de clases del <b>TURNO MAÑANA</b></div>
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<div style='font-size:14px'>
@@ -6,34 +5,40 @@
 		</div>
 	</div>
 	<div class="panel-body">
-		<form name="<?php echo $this->fm->getName(); ?>" id ="frmhours" action="/horary/Nhorary/changehours"  method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
-			<table class='table table-hover'>
-				<tr>
-					<th colspan='4'><div class='text-center'><h4><b>TURNO</b></h4></div></th>
-				</tr>
-				<tr>
-					<th colspan='2'><div class='text-center'><h5><b>MAÑANA</b></h5></div></th>
-					<th colspan='2'><div class='text-center'><h5><b>TARDE</b></h5></div></th>
-				</tr>
-				<tr>
-					<th><h6>Hora:</h6></th>
-					<td><div style='width: 120px;'><?php echo $this->fm->hour?></td>
-					<th><h6>Hora:</h6></th>
-					<td><div style='width: 120px;'><?php echo $this->fm->hour_t?></td>
-				</tr>
-				<tr>
-					<th><h6>Minutos:</h6></th>
-					<td><div style='width: 120px'><?php echo $this->fm->minute?></td>
-					<th><h6>Minutos:</h6></th>
-					<td><div style='width: 120px'><?php echo $this->fm->minute_t?></td>
-				</tr>
-				<tr>
-					<th colspan='4' class='text-center'><?php echo $this->fm->save?></th>
-				</tr>
-			</table>
-    		<input type="hidden" name='escid' value='<?php echo $this->escid?>'>
-    		<input type="hidden" name='subid' value='<?php echo $this->subid?>'>
+		<form class="form-inline" role="form" name="<?php echo $this->fm->getName(); ?>" id ="frmhours" action="/horary/Nhorary/changehours"  method="POST" enctype="application/x-www-form-urlencoded">
+			
+				<div class='col-sm-12 form-group'>
+					
+					<label class='col-sm-12 control-label text-center'><h4><b>MAÑANA</b></h4></label>
+	
+					<div class='col-sm-1'><span class='glyphicon glyphicon-time' style='font-size:15px'></span></div>
+					<label class="col-sm-2 control-label">Hora</label>
+			    		<div class="col-sm-3"><?php echo $this->fm->hour?></div>
+			    	<div class='col-sm-1'><h4><b>:</b></h4></div>
+			  		<label class="col-sm-2 control-label">Minutos</label>
+			    		<div class="col-sm-3"><?php echo $this->fm->minute?></div>
+
+			  	</div></br></br>
+
+			  	<div class='col-sm-12 form-group'>
+					
+					<label class='col-sm-12 control-label text-center'><h4><b>TARDE</b></h4></label>
+	
+					<div class='col-sm-1'><span class='glyphicon glyphicon-time' style='font-size:15px'></span></div>
+					<label class="col-sm-2 control-label">Hora</label>
+			    		<div class="col-sm-3"><?php echo $this->fm->hour_t?></div>
+			    	<div class='col-sm-1'><h4><b>:</b></h4></div>
+			  		<label class="col-sm-2 control-label">Minutos</label>
+			    		<div class="col-sm-3"><?php echo $this->fm->minute_t?></div>
+
+			  	</div></br>
+
+				<div class='col-sm-12 form-group'>
+					<div class="col-sm-12 text-center"><?php echo $this->fm->save?></div>		
+				</div>
+			<input type="hidden" name='escid' value='<?php echo $this->escid?>'>
     		<input type="hidden" name='perid' value='<?php echo $this->perid?>'>
+    		<input type="hidden" name='subid' value='<?php echo $this->subid?>'>	
 		</form>	
 	</div>
 </div>

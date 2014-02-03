@@ -39,6 +39,7 @@ class Horary_Form_Hours extends Zend_Form{
         $hour_t= new Zend_Form_Element_Select('hour_t');
         $hour_t->removeDecorator('Label');
         $hour_t->removeDecorator('HtmlTag');
+        $hour_t->setRequired(true)->addErrorMessage('Este campo es requerido');
         $hour_t->setAttrib('class','form-control');
         $hour_t->addMultiOption("","- Selecione -");
         for ($i=13; $i <=22 ; $i++) {
@@ -54,6 +55,7 @@ class Horary_Form_Hours extends Zend_Form{
         $minute_t= new Zend_Form_Element_Select('minute_t');
         $minute_t->removeDecorator('Label');
         $minute_t->removeDecorator('HtmlTag');
+        $minute_t->setRequired(true)->addErrorMessage('Este campo es requerido');
         $minute_t->setAttrib('class','form-control');
         $minute_t->addMultiOption("","- Selecione -");
         for ($j=0; $j <= 50 ; $j=$j+10) { 
