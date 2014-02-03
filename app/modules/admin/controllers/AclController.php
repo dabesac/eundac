@@ -159,7 +159,7 @@ class Admin_AclController extends Zend_Controller_Action{
                 if ($tb_resourse->_save($data)) {
                         $this->_response->setHeader('Content-Type', 'application/json');
                         $json = array('status'=> true);                   
-                        $this->view->json = $json;
+                        $this->view->json = zend_json::encode($json);
                     }
             }
             else{
