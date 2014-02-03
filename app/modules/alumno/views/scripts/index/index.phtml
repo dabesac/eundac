@@ -112,6 +112,41 @@
 	</div>
 </div>
 
+<div id="grafics" class="container-fluid" style="height: 600px;">
+	<div class="row">
+		<div class="col-md-9 col-md-offset-1">
+			<blockquote>
+				<h2 class="text-info">Graficas <span class="text-muted">Estadisticas</span></h2>
+			</blockquote>
+		</div>
+		<div class="col-md-1">
+			<blockquote>
+				<h2><span class="glyphicon glyphicon-briefcase text-info"></span></h2>
+			</blockquote>
+		</div>
+		<script type="text/javascript">
+	    var $data_courses = <?php echo $this->datos?>;
+	    var $courses = <?php echo $this->courses?>;
+	    var $dat_assist = <?php echo $this->dat_assist?>;
+		</script>
+		<script type="text/javascript" src="/js/graphic/student.js"></script>
+		<script src="/external_library/highcharts/js/highcharts.js"></script>
+		<script src="/external_library/highcharts/modules/exporting.js"></script>
+		<div class="row">
+		    <div class="col-md-13">
+		        <div class="row">
+		            <div class="col-md-6 content-graphic">
+		                <div id="container_performance" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
+		            </div>
+		            <div class="col-md-6 content-graphic">
+		                <div id="container_assistence" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+</div>
+
 <div id="jobs" class="container-fluid" style="height: 600px;">
 	<div class="row">
 		<div class="col-md-9 col-md-offset-1">
@@ -121,44 +156,9 @@
 		</div>
 		<div class="col-md-1">
 			<blockquote>
-				<h2><span class="glyphicon glyphicon-briefcase text-info"></span></h2>
-			</blockquote>
-		</div>
-	</div>
-</div>
-
-<div id="grafics" class="container-fluid" style="height: 600px;">
-	<div class="row">
-		<div class="col-md-9 col-md-offset-1">
-			<blockquote>
-				<h2 class="text-info">Rendimiento <span class="text-muted">Academico</span></h2>
-			</blockquote>
-		</div>
-		<div class="col-md-1">
-			<blockquote>
 				<h2><span class="glyphicon glyphicon-signal text-info"></span></h2>
 			</blockquote>
 		</div>
-		<script type="text/javascript">
-	    var $data_courses = <?php echo $this->datos?>;
-	    var $courses = <?php echo $this->courses?>;
-	    var $dat_assist = <?php echo $this->dat_assist?>;
-	</script>
-	<script type="text/javascript" src="/js/graphic/student.js"></script>
-	<script src="/external_library/highcharts/js/highcharts.js"></script>
-	<script src="/external_library/highcharts/modules/exporting.js"></script>
-	<div class="row">
-	    <div class="col-md-13">
-	        <div class="row">
-	            <div class="col-md-6 content-graphic">
-	                <div id="container_performance" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
-	            </div>
-	            <div class="col-md-6 content-graphic">
-	                <div id="container_assistence" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
-	            </div>
-	        </div>
-	    </div>
-	</div>
 	</div>
 
 </div>
