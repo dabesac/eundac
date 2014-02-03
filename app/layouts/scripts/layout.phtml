@@ -69,6 +69,7 @@ $info = $login;
 
     <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name= "viewport" content= "width=device-width, initial-scale=1" >
         <?php echo $this->headMeta(); ?>
         <?php echo $this->headTitle(); ?>
         <?php echo $this->headScript(); ?> 
@@ -76,17 +77,18 @@ $info = $login;
         
    		<link rel="stylesheet" type="text/css" href="/css/maquetacion.css">
    		<link rel="stylesheet" type="text/css" href="/css/style.css">
-   		<!-- Texto Enriquecido-->
+   		<link rel="stylesheet" type="text/css" href="/css/dashboard.css">
    		<link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
+
         <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
         <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
         <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
         <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script> 
 
-        <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
-		<script type="text/javascript" src="/ckeditor/adapters/jquery.js"></script>
 		<script src="/js/bootbox.min.js"></script>
-		<script src="/js/jqFancyTransitions.1.8.min.js"></script>
+		<script type="text/javascript" src="/js/jquery.transit.js"></script>
+		
+
 
     <script type="text/javascript">
 <!--
@@ -130,7 +132,7 @@ else
 
 ?>
 <div class="row" style="padding: 0px; margin: 0px" >
-	<div class="col-sm-2 control-top">
+	<!--<div class="col-sm-2 control-top">
 		<div class="logo">
 			<a href="/"><img src="/img/logo_03.png" ></a>
 		</div>
@@ -199,8 +201,8 @@ else
 	    <?php 
 		} 
 		?>
-	</div>
-	<div class="col-sm-10" style="margin:0px; padding: 0px">
+	</div>-->
+	<div class="col-sm-12" style="margin:0px; padding: 0px">
 		<div class="col-sm-12 header-top" > 
 			<h3 class="nav pull-left" >Universidad Nacional Daniel Alcides Carrión</h3>
 			<ul class="nav navbar-nav pull-right" style="padding-top: 10px">
