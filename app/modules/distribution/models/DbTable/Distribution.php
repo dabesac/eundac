@@ -11,7 +11,6 @@ class Distribution_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']==''
 				|| $data['distid']=='' || $data['perid']=='' ) return false;
 			return $this->insert($data);
-			return false;
 		}catch (Exception $e){
 				print "Error: Save Distribution ".$e->getMessage();
 		}
@@ -73,7 +72,7 @@ class Distribution_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	public function _getFilter($where=null,$atrib=array(),$orders=array()){
+	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
 			if($where['eid']=='' || $where['oid']=='') return false;
 				$select = $this->_db->select();
@@ -86,14 +85,14 @@ class Distribution_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 					if (is_array($orders))
 						$select->order($orders);
 				}
-				
 				$results = $select->query();
 				$rows = $results->fetchAll();
 				if ($rows) return $rows;
 				return false;
 		}catch (Exception $e){
-			print "Error: Read Filter Distribution ".$e->getMessage();
+			print "Error: Read Filter Course ".$e->getMessage();
 		}
 	}
+
 
 }
