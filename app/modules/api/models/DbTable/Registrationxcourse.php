@@ -281,7 +281,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 					and rc.eid='$eid' and rc.oid='$oid' and (rc.state='M' or rc.state='C')
 					order by c.semid, c.courseid, c.name
     				");
-    				print_r($sql);
+    				// print_r($sql);
             if ($sql) return $sql->fetchAll();
             return false;
         }  catch (Exception $ex){

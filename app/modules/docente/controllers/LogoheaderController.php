@@ -45,7 +45,7 @@ class Docente_LogoheaderController extends Zend_Controller_Action {
                 unset($formData['MAX_FILE_SIZE']);
                 unset($formData['save']);
                 $upload = new Zend_File_Transfer_Adapter_Http();
-                $filterRename = new Zend_Filter_File_Rename(array('target' => '/srv/www/app-academico/eundac/html/header/' .$eid."_".$oid."_".$escid."_".$subid, 'overwrite' => false));
+                $filterRename = new Zend_Filter_File_Rename(array('target' => '/srv/www/eundac/html/logo/' .$eid."_".$oid."_".$escid."_".$subid, 'overwrite' => false));
                 $upload->addFilter($filterRename);
                 if (!$upload->receive()) {
                     $this->view->message = 'Error receiving the file';
