@@ -41,85 +41,88 @@ class Distribution_DistributionController extends Zend_Controller_Action {
     
     public function newAction()
     {    	
-    	$form = new Distribution_Form_Distribution();
-    	if ($this->getRequest()->isPost()) {
-    		$formData = $this->getRequest()->getPost();
-    		if ($form->isValid($formData)) {
-    			unset($formData['save']);
-    			$formData['eid'] = base64_decode($formData['eid']);
-    			$formData['oid'] = base64_decode($formData['oid']);
-    			$formData['escid'] = base64_decode($formData['escid']);
-    			$formData['subid'] = base64_decode($formData['subid']);
-    			$formData['perid'] = base64_decode($formData['perid']);
-    			$formData['register'] = $this->sesion->uid;
-    			$distr = new Distribution_Model_DbTable_Distribution();
-                $where = array(
-                    'eid' => $formData['eid'], 'oid' => $formData['oid'], 'escid' => $formData['escid'], 
-                    'subid' => $formData['subid'], 'perid' => $formData['perid']);
-                $exis = $distr->_getFilter($where, $atrib=array(), $orders=array());
-                if ($exis) {
-    			    $form->populate($formData);
-                    $this->view->exis = 1;
+        $form = new Distribution_Form_Distribution();
+        $this->view->form = $form;
+
+        if ($this->getRequest()->isPost()) {
+            $formData = $this->getRequest()->getPost();
+            if ($form->isValid($formData)) {
+                $formData['eid'] = base64_decode($formData['eid']);
+                $formData['oid'] = base64_decode($formData['oid']);
+                $formData['escid'] = base64_decode($formData['escid']);
+                $formData['subid'] = base64_decode($formData['subid']);
+                $formData['perid'] = base64_decode($formData['perid']);
+                $formData['register'] = $this->sesion->uid;
+                $formData['distid'] = time();
+
+                $distributionDb = new Distribution_Model_DbTable_Distribution();
+                $where = array('eid'=>$formData['eid'], 'oid'=>$formData['oid'], 'perid'=>$formData['perid'], 'escid'=> $formData['escid']);
+                $exist = $distributionDb->_getFilter($where);
+                $interruptor = 0;
+                if ($exist) {
+                    $interruptor = 1;
                 }else{
-                    $formData['distid'] = time();
-                    $distr->_save($formData);
-                    $this->_helper->redirector('index','distribution','distribution');
+                    $distributionDb->_save($formData);
                 }
+                $this->_helper->redirector('index','distribution','distribution');
+                /*if ($distributionDb->_save($formData)) {
+                    $this->_helper->redirector('index','distribution','distribution');
+                }else{
+                }*/
             }else{
                 $form->populate($formData);
-    		}
-    	}
-    	$this->view->form = $form;
+            }
+        }
     }
     
     public function editAction()
     {
-    	$distid = base64_decode($this->_getParam("distid"));
-    	$perid = base64_decode($this->_getParam("perid"));
-    	$form = new Distribution_Form_Distribution();
-    	$form->setAction("/distribution/distribution/edit/");
-    	if ($this->getRequest()->isPost()) {
-    		$formData = $this->getRequest()->getPost();
-    		if ($form->isValid($formData)) {
-    			unset($formData['save']);
-    			$formData['eid'] = base64_decode($formData['eid']);
-    			$formData['oid'] = base64_decode($formData['oid']);
-    			$formData['escid'] = base64_decode($formData['escid']);
-    			$formData['subid'] = base64_decode($formData['subid']);
-    			$formData['perid'] = base64_decode($formData['perid']);
-    			$formData['distid'] = trim($formData['distid']);
-    			$pk =$formData;
-    			$formData['modified'] = $this->sesion->uid;
-    			$formData['updated'] = date('Y-m-d H:i:s');
-    			$distr = new Distribution_Model_DbTable_Distribution();
-    			$distr->_update($formData,$pk);
-    			$this->_helper->redirector('index','distribution','distribution');
-    		}else{
-    			$form->populate($formData);
-    		}
-    	}else{
-	    	 
-	    	$data['eid']=$this->sesion->eid;
-	    	$data['oid']=$this->sesion->oid;
-	    	$data['escid']=$this->sesion->escid;
-	    	$data['subid']=$this->sesion->subid;
-	    	$data['distid']=$distid;
-	    	$data['perid']=$perid;
-	    	$distr_ = new Distribution_Model_DbTable_Distribution();
-	    	$r = $distr_->_getOne($data);
-	    	if ($r) {
-	    		$r['perid'] = base64_encode($r['perid']);
-	    		$r['eid'] = base64_encode($r['eid']);
-	    		$r['oid'] = base64_encode($r['oid']);
-	    		$r['escid'] = base64_encode($r['escid']);
-	    		$r['subid'] = base64_encode($r['subid']);
-	    		$form->populate($r);
-	    	}else{
-	    		$this->_helper->redirector('index','distribution','distribution');	
-	    	}
-    	}
-    	$form->perid->setAttrib("readonly", "");
-    	$this->view->form = $form;    	
+        $distid = base64_decode($this->_getParam("distid"));
+        $perid = base64_decode($this->_getParam("perid"));
+        $this->view->dataget = $dataget = array('distid'=>base64_encode($distid), 'perid'=>base64_encode($perid));
+
+
+        $distr_ = new Distribution_Model_DbTable_Distribution();
+        $form = new Distribution_Form_Distribution();
+
+        $form->perid->setAttrib("disabled", "");
+        $data['eid']=$this->sesion->eid;
+        $data['oid']=$this->sesion->oid;
+        $data['escid']=$this->sesion->escid;
+        $data['subid']=$this->sesion->subid;
+        $data['distid']=$distid;
+        $data['perid']=$perid;
+
+        $r = $distr_->_getOne($data);
+        $r['perid'] = base64_encode($r['perid']);
+        
+        $this->view->form = $form;      
+        $form->populate($r);
+
+       //$form->setAction("/distribution/distribution/edit/");
+        if ($this->getRequest()->isPost()) {
+            $formData = $this->getRequest()->getPost();
+            $formData['perid'] = $r['perid'];
+            if ($form->isValid($formData)) {
+                $pk = array('eid'=>$data['eid'], 
+                        'oid'=>$data['oid'], 
+                        'distid'=>$data['distid'], 
+                        'escid'=>$data['escid'], 
+                        'subid'=>$data['subid'], 
+                        'perid'=>$data['perid']);
+                print_r($pk);
+                $formData['perid'] = base64_decode($formData['perid']);
+                $formData['modified'] = $this->sesion->uid;
+                $formData['updated'] = date('Y-m-d H:i:s');
+                print_r($formData);
+
+                $distr = new Distribution_Model_DbTable_Distribution();
+                $distr->_update($formData,$pk);
+                $this->_helper->redirector('index','distribution','distribution');
+            }else{
+                $form->populate($formData);
+            }
+        }
     }
 
     public function deleteAction()
@@ -1190,17 +1193,52 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $data_percour = $per_cour->_getCoursesIsNotTeacher($where);
             if ($data_percour) $this->view->coursenotassign = $data_percour;
 
+
             $doc = array();
             $tmp_doc = '';
             $c=1;
-            foreach ($data_courses as $data_courses) {
-                if ($tmp_doc <> $data_courses['uid']) {
-                    $doc[$c] = $data_courses['uid'];
-                    $tmp_doc = $data_courses['uid'];
+            foreach ($data_courses as $course) {
+                //print_r($data_courses['uid'].'--');
+                if ($tmp_doc <> $course['uid']) {
+                    $doc[$c] = $course['uid'];
+                    $tmp_doc = $course['uid'];
                     $c++;
                 }
             }
             $this->view->teachers = $doc;
+
+            //Docentes de la Escuela
+            
+            $teachersDb = new Api_Model_DbTable_Users();
+            $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid, 'subid'=>$subid, 'rid'=>'DC', 'state'=>'A');
+            $attrib = array('uid', 'pid');
+            $teachers = $teachersDb->_getFilter($where, $attrib);
+
+            $c = 0;
+            $interruptor = 0;
+            foreach ($teachers as $teacher) {
+                foreach ($data_courses as $course) {
+                    if ($teacher['uid'] == $course['uid']) {
+                        $interruptor = 1;
+                    }
+                }
+                if ($interruptor == 0) {
+                    $teachersWcourses[$c]['uid'] = $teacher['uid'];
+                    $teachersWcourses[$c]['pid'] = $teacher['pid'];
+                    $c++;
+                }
+                $interruptor = 0;
+            }
+
+            $c = 0;
+            foreach ($teachersWcourses as $teacher) {
+                $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid, 'subid'=>$subid, 'uid'=>$teacher['uid'], 'pid'=>$teacher['pid']);
+                $teacherInfo[$c] = $teachersDb->_getInfoUser($where);
+                $c++;
+            }
+            $this->view->teacherUid = $teachersWcourses;
+            $this->view->teacherwcInfo = $teacherInfo;
+
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -1239,6 +1277,8 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 }
             }
             $this->view->teachers = $doc;
+
+
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }

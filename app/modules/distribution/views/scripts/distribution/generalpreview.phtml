@@ -1,8 +1,5 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <script src="/external/jquery/jquery-1.9.1.js"></script>
-<script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
-<script src="/external/jquery/external/globalize.js"></script>
-<script src="/external/jquery/external/jquery.mousewheel.js"></script>
 <script src="/external/jquery/external/jshint.js"></script>
 <script src="/external/jquery/external/qunit.js"></script>
 <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
@@ -25,6 +22,7 @@ th, td{
     font-size:12px;
 }
 </style>
+
 <body class="found">
 <table class="table" style="background: #428bca; color: white">
     <tr>
@@ -41,46 +39,29 @@ th, td{
 </table>
 
 <?php 
-if ($this->coursenotassign) { ?>
-    <div id="academica" class="cuadro">
-        <div>
-            <h5 style="color: red"><center><b>ASIGNATURAS SIN DOCENTE</b></center></h5>
-        </div>
-        <center>
-        <table class="table table-condensed table-hover" style="margin-top:10px; width:96%">
-        <tr>
-            <th><center>#</center></th>
-            <th><center>Currícula</center></th>
-            <th>Asignaturas</th>
-            <th><center>Turno</center></th>
-            <th><center>Sem</center></th>
-        </tr>
-        <?php
-        $i = 1;
-        foreach ($this->coursenotassign as $coursenotassign) {
-                $where = array(
-                    'eid' => $coursenotassign['eid'], 'oid' => $coursenotassign['oid'], 
-                    'curid' => $coursenotassign['curid'], 'escid' => $coursenotassign['escid'], 
-                    'subid' => $coursenotassign['subid'], 'courseid' => $coursenotassign['courseid']);
-                $cour = new Api_Model_DbTable_Course();
-                $data_cour = $cour->_getOne($where);
-                ?>
+if ($this->teacherwcInfo) { ?>
+    <div class="row">
+        <h5 class="text-danger text-center">Docentes sin Cursos</h5>
+        <div class="col-md-10 col-md-offset-1">
+            <table class="table">
                 <tr>
-                    <td><center><?php echo $i ?></center></td>
-                    <td><center><?php echo $coursenotassign['curid'] ?></center></td>
-                    <td><?php echo $coursenotassign['courseid']." - ".$data_cour['name'] ?></td>
-                    <td><center><?php echo $coursenotassign['turno']?></center></td>
-                    <td><center><?php echo $coursenotassign['semid'] ?></center></td>
+                    <th>#</th>
+                    <th>Código</th>
+                    <th>Nombre</th>
                 </tr>
-                <?php
-                $i++;
-        }
-        ?>
-    </table>
-    </center>
+        <?php $c = 0;
+        foreach ($this->teacherwcInfo as $teacher): ?>
+                <tr>
+                    <td><?php echo $c+1 ?></td>
+                    <td><?php echo $this->teacherUid[$c]['uid'] ?></td>
+                    <td><?php echo $teacher[0]['last_name0'].' '.$teacher[0]['last_name1'].', '.$teacher[0]['first_name'] ?></td>
+                </tr>
+        <?php $c++;
+        endforeach ?>
+            </table>
+        </div>
     </div>
-    <?php
-}?>
+<?php }?>
 
 <?php 
 if ($this->courses) { 
