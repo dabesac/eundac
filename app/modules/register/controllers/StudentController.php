@@ -871,13 +871,26 @@ class Register_StudentController extends Zend_Controller_Action {
                 $this->view->faculty   = $faculty;
                 $this->view->speciality   = $speciality;
                 $this->view->uid = $uid;
-                
+
                 $escid = base64_decode($this->_getParam('escid'));
                 $subid = base64_decode($this->_getParam('subid'));
                 $regid = base64_decode($this->_getParam('regid'));
                 $perid = base64_decode($this->_getParam('perid'));
                 $curid = base64_decode($this->_getParam('curid'));
                 $this->view->perid = $perid;
+
+                $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+                $dbspeciality = new Api_Model_DbTable_Speciality();
+                $speciality = $dbspeciality ->_getOne($wheres); 
+
+                if ($speciality['header']) {
+                    $namelogo = $speciality['header'];
+                }
+                else{
+                    $namelogo = 'blanco';
+                }
+                $this->view->namelogo=$namelogo;
+                
                 $where = array(
                     'eid'=>$eid,'oid'=>$oid,
                     'escid'=>$escid,'subid'=>$subid,
@@ -926,13 +939,33 @@ class Register_StudentController extends Zend_Controller_Action {
                    $data_subjects [$key]['name_t']  = $data_pid_teacher[0]['nameteacher'];
 
                 } 
-
-
-
                 $this->view->data_subjects  =   $data_subjects;
-                $this->_helper->layout->disableLayout();
+                $dbimpression = new Api_Model_DbTable_Countimpressionall();
+                $data = array(
+                    'eid'=>$eid,
+                    'oid'=>$oid,
+                    'uid'=>$uid,
+                    'escid'=>$escid,
+                    'subid'=>$subid,
+                    'pid'=>$pid,
+                    'type_impression'=>'prematricula',
+                    'date_impression'=>date('Y-m-d h:m:s')
+                    );
+                $dbimpression->_save($data);
 
-                
+                $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'prematricula');
+                $dataim = $dbimpression->_getFilter($wheri);
+                $co=0;
+                $len=count($dataim);
+                for ($i=0; $i < $len ; $i++) { 
+                    if($dataim[$i]['type_impression']=='prematricula'){
+                        $co=$co+1;
+                    }
+                }
+                $uidim=$this->sesion->pid;
+                $codigo=$co.$uidim;
+                $this->view->codigo=$codigo;
+                $this->_helper->layout->disableLayout();
 
         } catch (Exception $e) {
             print "Error: print register".$e->getMessage();

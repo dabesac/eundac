@@ -258,7 +258,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
                     ".'requisito'." character varying
                     )               
                 ");
-            print_r($sql);
+            // print_r($sql);
             if ($sql) return $sql->fetchAll();
             return false;           
         }  catch (Exception $ex){

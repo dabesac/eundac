@@ -2,6 +2,27 @@
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start();
+
+$namef=strtoupper($this->facu['name']);
+$names=strtoupper($this->escuela['name']);
+$logo = $this->namelogo;
+$codigo=$this->codigo;
+$header='
+<table style="width:100%;margin-bottom:5px; border:2px solid #FFFFFFF;" >
+    <tr>
+        <th  style="width: 100px; "><img style="width:10%" src="/img/UNDAC.png"></img></th>
+        <th style="text-align: center;">
+            <h4 style="color:#24348D;">UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRIÓN</h4>
+            <h5 style="color:#2D6CA2">FACULTAD DE '.$namef.'</h5>
+            <h6 style="color:#333333">ESCUELA DE FORMACIÓN PROFESIONAL DE '.$names.'</h6>
+        </th>
+        <th  style="width: 100px; "><img style="width:10%" src="/logo/'.$logo.'"></img></th>
+    </tr>
+</table>
+    <div style="text-align:right; font-size:12px;">
+        <b>Nº </b>'.$codigo.'
+    </div>
+' 
 ?>
 <style type="text/css">
 div{
@@ -41,10 +62,6 @@ switch ($mes) {
     case 12: $strm = "Diciembre";break;
 } 
 ?>
-<div style="width:100%;text-align: center;">
-    <b>FACULTAD DE <?php echo strtoupper($this->facu['name'])?><br>
-    ESCUELA DE FORMACIÓN PROFESIONAL DE <?php echo strtoupper($this->escuela['name'])?></b>
-</div>
 <div>
     <h4 style="text-align: center; font-size: 15px;">SILABO</h4>
     <h4 style="text-align: center; font-size: 14px;"><?php echo $curso['name']?></h4>
@@ -285,12 +302,27 @@ switch ($mes) {
     <p style='width:200px ;border-top: solid 1px #000; font-weight: bold'>V° B° Comisión de Sílabo</p>
 </div>
 <?php 
-  $html = ob_get_contents();
-  $mpdf=new mPDF('win-1252','A4','','',15,15,12,12,5,7);
-  $mpdf->SetFooter(' Impresion {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-  $mpdf->SetFooter($this->footer);
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('SILABO -'.$curso['courseid'].'.pdf','D');
+    $fooder='
+    <table style="width:100%;margin-bottom:10px; border:2px solid #FFFFFFF;" >
+        <tr>
+            <th style="width:25%; text-align:left;"><h6>Impresión {DATE d M Y}</h6></th>
+            <th style="width:50%; text-align:center;"><h5>Sistema de Gestión e-UNDAC</h5></th>
+            <th style="width:25%; text-align:right;"><h6>{PAGENO}</h6></th>
+        </tr>
+    </table>
+    '
+    ?>
+    <?php
+    $html = ob_get_contents();
+    $mpdf=new mPDF('win-1252','A4','','',15,15,36,18,8,8);
+
+    $mpdf->SetHTMLHeader($header);
+    // $mpdf->SetFooter(' Impresion {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+    $mpdf->SetHTMLFooter($fooder);
+    ob_end_clean();
+
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('SILABO -'.$curso['courseid'].'.pdf','D');
+    // $mpdf->Output(); 
   
 ?>

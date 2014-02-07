@@ -59,10 +59,10 @@
 
  	public function printAction(){
  		try {
- 			    $this->_helper->layout()->disableLayout();
-          // $footer=$this->sesion->org['footer_print'];
+ 			$this->_helper->layout()->disableLayout();
+        //     $footer=$this->sesion->org['footer_print'];
       		// $this->view->footer=$footer;
- 			    $uid=base64_decode($this->_getParam('uid'));
+ 			$uid=base64_decode($this->_getParam('uid'));
       		$this->view->uid=$uid;	
       		$escid=base64_decode($this->_getParam('escid'));
       		$eid=base64_decode($this->_getParam('eid'));
@@ -70,59 +70,85 @@
       		$subid=base64_decode($this->_getParam('subid'));
       		$pid=base64_decode($this->_getParam('pid'));
       		$record = new Api_Model_DbTable_Registrationxcourse();
-     			// $data = $record->_getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid);
-     			$data = $record->_getRecordNotasAlumno_H($escid,$uid,$eid,$oid,$subid,$pid);
-          // $len=count($data);
-          // print ($len);
-          // exit();
-          $this->view->data=$data;
-          $where['eid']=$eid;
-          $where['oid']=$oid;
-          $where['escid']=$escid;
-          $where['subid']=$subid;
+     		// $data = $record->_getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid);
+     		$data = $record->_getRecordNotasAlumno_H($escid,$uid,$eid,$oid,$subid,$pid);
+            // $len=count($data);
+            // print ($len);
+            // exit();
+            $this->view->data=$data;
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['escid']=$escid;
+            $where['subid']=$subid;
 		      
-  			  $spe=array();
+  			$spe=array();
   		    $dbspeciality = new Api_Model_DbTable_Speciality();
   		    $speciality = $dbspeciality ->_getOne($where);
 
-          if ($speciality['header']) {
-            $namelogo = $speciality['header'];
-          }
-          else{
-            $namelogo = 'blanco';
-          }
-          $this->view->namelogo=$namelogo;
+            if ($speciality['header']) {
+                $namelogo = $speciality['header'];
+            }
+            else{
+                $namelogo = 'blanco';
+            }
+            $this->view->namelogo=$namelogo;
       
   		    $parent=$speciality['parent'];
   		    $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
   		    $parentesc= $dbspeciality->_getOne($wher);
           	if ($parentesc) {
-  	          $pala='ESPECIALIDAD DE ';
-  	          $spe['esc']=$parentesc['name'];
-  	          $spe['parent']=$pala.$speciality['name'];
-  	          $this->view->spe=$spe;
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+                $this->view->spe=$spe;
   	        }
           	else{
-  	          $spe['esc']=$speciality['name'];
-  	          $spe['parent']='';  
-  	          $this->view->spe=$spe;
+  	            $spe['esc']=$speciality['name'];
+  	            $spe['parent']='';  
+  	            $this->view->spe=$spe;
           	}
             // print_r($spe);
             // exit();
-        		$whered['eid']=$eid;
-        		$whered['oid']=$oid;
-        		$whered['facid']= $speciality['facid'];
-        		$dbfaculty = new Api_Model_DbTable_Faculty();
-        		$faculty = $dbfaculty ->_getOne($whered);
-        		$this->view->faculty=$faculty;      
-        		$wheres['eid']=$eid;
-        		$wheres['pid']=$pid;
-        		$dbperson = new Api_Model_DbTable_Person();
-        		$person= $dbperson ->_getOne($wheres);
-        		$this->view->person=$person;
+        	$whered['eid']=$eid;
+        	$whered['oid']=$oid;
+        	$whered['facid']= $speciality['facid'];
+        	$dbfaculty = new Api_Model_DbTable_Faculty();
+        	$faculty = $dbfaculty ->_getOne($whered);
+        	$this->view->faculty=$faculty;      
+        	$wheres['eid']=$eid;
+        	$wheres['pid']=$pid;
+        	$dbperson = new Api_Model_DbTable_Person();
+        	$person= $dbperson ->_getOne($wheres);
+        	$this->view->person=$person;
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'recordnotas',
+                'date_impression'=>date('Y-m-d h:m:s')
+                );
+            $dbimpression->_save($data);
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'recordnotas');
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=0;
+            $len=count($dataim);
+            for ($i=0; $i < $len ; $i++) { 
+                if($dataim[$i]['type_impression']=='recordnotas'){
+                    $co=$co+1;
+                }
+            }
+            $uidim=$this->sesion->pid;
+            $codigo=$co.$uidim;
+            $this->view->codigo=$codigo;
  		} catch (Exception $e) {
  			print "Error: Print Notas: ".$e->getMessage();
  		}
 
  	}
- }
+}
