@@ -149,7 +149,6 @@
             $header = str_replace("?logo", $namelogo, $header);
             $header = str_replace("?codigo", $codigo, $header);
             
-            $this->view->spe=$spe;
             $this->view->uid=$uid;  
             $this->view->person=$person;
             $this->view->header=$header;
