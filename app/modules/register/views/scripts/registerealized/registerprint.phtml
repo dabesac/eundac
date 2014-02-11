@@ -2,46 +2,22 @@
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start(); 
-$header='
-<table style="width: 100%; margin-bottom:15px" border="1">
-    <tr>
-        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-        <th style="text-align: center; font-size: 11px;">
-        FACULTAD DE '.strtoupper($this->faculty['name']).'<br/>
-        ESCUELA DE  '.strtoupper($this->spe['esc']).'<br/>
-        '.strtoupper($this->spe['parent']).' 
-        </th>        
-    </tr>
-    <tr>
-        <th style="border: 1px solid #000;"> MATRICULAS REALIZADAS </th>
-    </tr>
-    <br>
-</table>
-
-    <tr>
-        <td style="text-align: left;">Codigo: '.strtoupper($this->uid).'</td>
-    </tr>
-    <tr>
-        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
-    </tr>
-    <tr>   
-        <td style="text-align: left;">Alumno: '.strtoupper($this->person[0]['last_name0']." ".$this->person[0]['last_name1'].", ".$this->person[0]['first_name']).'</td>
-    <tr>   
-
-'    
 ?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
-
 <div>
+    <div style="text-align:left; font-size:12px;"><b>Codigo: </b><?php echo strtoupper($this->uid)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Alumno: </b><?php echo strtoupper($this->person[0]['last_name0']." ".$this->person[0]['last_name1'].", ".$this->person[0]['first_name'])?>
+    </div>
+</div>
+    <div style="text-align: center; font-size:16px;margin-top:10px"><b> MATRÍCULAS REALIZADAS </b></div> <br/>
+    <div>
         <?php
-        // print_r($this->newperiod);exit();
         foreach ($this->newperiod as $period) {
             $perid=$period['perid'];
             $pname=$period['name'];
             ?>
-        <table style="width:100%; margin-top:15px" border="1">
-            <tr>
+        <table style="width:100%; margin-bottom:15px" border="1">
+            <tr  style='background:#E5E5E5'>
                 <th colspan='7'><?php echo " ".$perid." - ".$pname?></th>
             </tr>       
         <tr>
@@ -101,16 +77,18 @@ $header='
         ?>
 </div>
 <?php 
+    date_default_timezone_set("America/Lima");
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,36,18,8,5);
+    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
 
-  $html = ob_get_contents();
-  
-  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
-  $mpdf->SetHTMLHeader($header);
-  // $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-  
-  $mpdf->SetFooter($this->footer);
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('Matriculas Realizadas-'.$this->person[0]['pid'].'.pdf','D');
-  
+    $mpdf->SetHTMLHeader($this->header);  
+    $mpdf->SetHTMLFooter($this->footer,'O');
+
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('Matriculas Realizadas-'.$this->person[0]['pid'].'.pdf','D');
+    // $mpdf->Output();  
 ?>

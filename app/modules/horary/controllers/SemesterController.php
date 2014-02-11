@@ -143,7 +143,6 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		$oid=$this->sesion->oid;
 		$escid=$this->sesion->escid;
 		$faculty=$this->sesion->faculty->name;
-		$this->view->faculty=$faculty;
 		$semid=base64_decode($this->_getParam('semid'));
 		$subid=$this->sesion->subid;
 		$perid=$this->sesion->period->perid;
@@ -180,19 +179,23 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	        $desc = $esc->_getOne($where);
 	        $this->view->desc=$desc;
 	        $parent=$desc['parent'];
-	        	$wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
-	        	$parentesc= $esc->_getOne($wher);
-	        	if ($parentesc) {
-	        		$pala='ESPECIALIDAD DE ';
-	      			$spe['esc']=$parentesc['name'];
-	      			$spe['parent']=$pala.$desc['name'];
-	        		$this->view->spe=$spe;
-	        	}
-	        	else{
-	        		$spe['esc']=$desc['name'];
-	        		$spe['parent']=''; 	
-	        		$this->view->spe=$spe;
-	        	}
+        	$wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+        	$parentesc= $esc->_getOne($wher);
+        	if ($parentesc) {
+        		$pala='ESPECIALIDAD DE ';
+      			$spe['esc']=$parentesc['name'];
+      			$spe['parent']=$pala.$desc['name'];
+        		$this->view->spe=$spe;
+        	}
+        	else{
+        		$spe['esc']=$desc['name'];
+        		$spe['parent']=''; 	
+        		$this->view->spe=$spe;
+        	}
+	        $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names." <br> ".$namep;
+            $namef = strtoupper($faculty);	
 
 	        $where=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
 	        $cper= new Api_Model_DbTable_PeriodsCourses();
@@ -205,9 +208,62 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	        		$user= new Api_Model_DbTable_Users();
 	        		$duser=$user->_getUserXUid($where);
 	        		$dcur[$i]['namet']= $duser[0]['last_name0']." ".$duser[0]['last_name1'].", ".$duser[0]['first_name'];
-	        		// print_r($dcur);
 	        	}
 	        $this->view->dcurso=$dcur;
+
+        	if ($desc['header']) {
+                $namelogo = $desc['header'];
+            }
+            else{
+                $namelogo = 'blanco';
+            }
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            date_default_timezone_set("America/Lima");
+            $uidim=$this->sesion->pid;
+            $pid=$uidim;
+            $uid=$this->sesion->uid;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$this->sesion->pid,
+                'type_impression'=>'horarysemester',
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+            $dbimpression->_save($data);
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'horarysemester');
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=0;
+            $len=count($dataim);
+            for ($i=0; $i < $len ; $i++) { 
+                if($dataim[$i]['type_impression']=='horarysemester'){
+                    $co=$co+1;
+                }
+            }
+            $codigo=$co." - ".$uidim;
+            $h1="h1";
+            $h2="h2";
+            $h3="h3";
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+            $header = str_replace("h2", $h1, $header);
+            $header = str_replace("h3", $h1, $header);
+            $header = str_replace("h4", $h2, $header);
+
+            $this->view->header=$header;
+            $this->view->footer=$footer;
 		}
 
 	}

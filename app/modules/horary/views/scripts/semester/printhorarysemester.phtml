@@ -1,28 +1,11 @@
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
-
-<link rel="stylesheet" type="text/css" href="/css/impresion.css">
 <?php
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start();
-$header='
-<table style="width: 100%;" border="1">
-    <tr>
-        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-        <th style="text-align: center; font-size: 15px;">
-        FACULTAD DE '.strtoupper($this->faculty).'<br/>
-        ESCUELA DE  '.strtoupper($this->desc['name']).'<br/>
-        '.strtoupper($this->spe['parent']).' 
-        </th>        
-    </tr>
-    <tr>
-        <th style="border: 1px solid #000;font-size: 15px;"> HORARIO - '.strtoupper($this->semid).' SEMESTRE v2.0 
-        </th>
-    </tr>
-</table>
-'?>
+?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
+<div style="text-align: center; font-size:16px;margin-top:10px"><b> HORARIO - <?php echo strtoupper($this->semid) ?> SEMESTRE </b></div> <br/>
 <?php
     $hora=array();
     $j=1;
@@ -460,14 +443,14 @@ else{
 }
 ?>
 <?php 
-  $html = ob_get_contents();
-  // $mpdf = new mPDF('utf-8',array(280,370),'','',10,10,35,10,5,5);
-  $mpdf=new mPDF('win-1252','A4-L','','',15,15,37,5);
-  //$mpdf=new mPDF('win-1252','A4', 0,'', 15, 15,35,'','','', 'P');
-  $mpdf->SetHTMLHeader($header);
-  // $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-   $mpdf->SetFooter($this->footer);
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('Horario -'.$this->semid.'.pdf','D');
+    date_default_timezone_set("America/Lima");
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4-L','','',15,15,40,18,5,5);
+    $mpdf->SetHTMLHeader($this->header);  
+    $mpdf->SetHTMLFooter($this->footer);
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('Horario -'.$this->semid.'.pdf','D');
+    // $mpdf->Output();  
 ?>

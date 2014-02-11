@@ -32,7 +32,12 @@ $header='
 ?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
-    <div style='margin-bottom:20px; margin-top:25px'>
+<div>
+    <div style="text-align:left; font-size:12px;"><b>Codigo: </b><?php echo strtoupper($this->uid)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Alumno: </b><?php echo strtoupper($this->person[0]['last_name0']." ".$this->person[0]['last_name1'].", ".$this->person[0]['first_name'])?>
+    </div>
+</div>
+    <div style="text-align: center; font-size:16px;margin-top:10px"><b> CURRÍCULA </b></div>
+    <div style='margin-bottom:20px; margin-top:5px'>
         <img src="/img/circulo-verde.png"><b> Aprobado</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <img src="/img/circulo-amarillo.png"><b> Llevando</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <img src="/img/circulo-rojo.png"><b> Pendiente</b>
@@ -145,18 +150,18 @@ $header='
         <?php 
         }
 
-  $html = ob_get_contents();
+    date_default_timezone_set("America/Lima");
+    $html = ob_get_contents();
   
-  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
-  $mpdf->SetHTMLHeader($header);
-  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-  $mpdf->SetWatermarkImage('/img/UNDAC.png', 0.1, 'F');
-  $mpdf->showWatermarkImage = true;
+    $mpdf=new mPDF('win-1252','A4','','',15,15,36,18,8,5);
+    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
   
-  // $mpdf->SetFooter($this->footer);
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('Matriculas Por Curricula-'.$this->person[0]['pid'].'.pdf','D');
-  // $mpdf->Output();
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');  
   
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('Matriculas Por Curricula-'.$this->person[0]['pid'].'.pdf','D');
+    // $mpdf->Output();  
 ?>

@@ -31,6 +31,18 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $this->view->courseid=$courseid;
             $this->view->turno=$turno;
 
+            $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $dbspeciality = new Api_Model_DbTable_Speciality();
+            $speciality = $dbspeciality ->_getOne($wheres); 
+
+            if ($speciality['header']) {
+                $namelogo = $speciality['header'];
+            }
+            else{
+                $namelogo = 'blanco';
+            }
+            $this->view->namelogo=$namelogo;    
+
             $wherecur['eid']=$eid;
             $wherecur['oid']=$oid;
             $wherecur['escid']=$escid;
@@ -92,6 +104,34 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $whereper['pid']=$direc[0]['pid'];
             $director = $per->_getOne($whereper);
             $this->view->director = $director;
+
+            $uid=$direc[0]['uid'];
+            $pid=$direc[0]['pid'];
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'silabo',
+                'date_impression'=>date('Y-m-d h:m:s')
+                );
+            $dbimpression->_save($data);
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'silabo');
+            $dataim = $dbimpression->_getFilter($wheri);
+            $co=0;
+            $len=count($dataim);
+            for ($i=0; $i < $len ; $i++) { 
+                if($dataim[$i]['type_impression']=='silabo'){
+                    $co=$co+1;
+                }
+            }
+            $uidim=$this->sesion->pid;
+            $codigo=$co.$uidim;
+            $this->view->codigo=$codigo;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
