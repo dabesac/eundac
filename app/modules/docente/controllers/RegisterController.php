@@ -126,12 +126,20 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $base_speciality =  new Api_Model_DbTable_Speciality();
         $info_speciality =  $base_speciality->_getOne($where);
 
+            if ($info_speciality['header']) {
+                $namelogo = $speciality['header'];
+            }
+            else{
+                $namelogo = 'blanco';
+            }
+
         if ($info_speciality['parent'] != "") {
             $where['escid']=$info_speciality['parent'];
             $name_speciality = $base_speciality->_getOne($where);
             $info_speciality['speciality'] = $name_speciality['name'];
         }
 
+        $this->view->namelogo=$namelogo;
         $this->view->info_speciality = $info_speciality;
         $this->view->name_speciality = $name_speciality;
         $this->view->turno = $turno;

@@ -2,37 +2,14 @@
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start(); 
-$namef=strtoupper($this->faculty['name']);
-$names=strtoupper($this->spe['esc']);
-$namee=strtoupper($this->spe['parent']);
-$nameto = $names."<br/>".$namee;
-$logo = $this->namelogo;
-$codigo=$this->codigo;
-// print_r($a);
-$header='
-<table style="width:100%;margin-bottom:10px; border:2px solid #FFFFFFF;" >
-    <tr>
-        <th  style="width: 100px; "><img style="width:10%" src="/img/UNDAC.png"></img></th>
-        <th style="text-align: center;">
-            <h2 style="color:#24348D;">UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRION</h2>
-            <h3 style="color:#2D6CA2">FACULTAD DE '.$namef.'</h3>
-            <h4 style="color:#333333">ESCUELA DE FORMACIÓN PROFESIONAL DE '.$nameto.'</h4>
-        </th>
-        <th  style="width: 100px; "><img style="width:10%" src="/logo/'.$logo.'"></img></th>
-    </tr>
-</table>
-    <div>
-        <div style="text-align:left; font-size:12px;"><b>Codigo: </b>'.strtoupper($this->uid).'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Alumno:</b> '.strtoupper($this->person['last_name0']." ".$this->person['last_name1'].", ".$this->person['first_name']).'
-        </div>
-        <div style="text-align:right; font-size:12px;">
-            <b>Nº </b>'.$codigo.'
-        </div>
-    </div>
-'
 ?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
-<div style="text-align: center; font-size:16px;"><b> RECORD DE NOTAS </b></div> <br/>
+<div>
+    <div style="text-align:left; font-size:12px;"><b>Codigo: </b><?php echo strtoupper($this->uid)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Alumno: </b><?php echo strtoupper($this->person['last_name0']." ".$this->person['last_name1'].", ".$this->person['first_name'])?>
+    </div>
+</div>
+<div style="text-align: center; font-size:16px;margin-top:10px"><b> RECORD DE NOTAS </b></div> <br/>
 <?php 
     $d=1;
     $c=1;
@@ -56,11 +33,11 @@ $header='
         $len1=count($se);
         for ($f=0; $f < $len1; $f++) { 
             ?>
-                <table style="width:100%; margin-bottom:18px" border=" 1px">
+                <table style="width:100%; margin-bottom:15px" border=" 1px">
                     <tr style='background:#E5E5E5'>
                         <th colspan='6' style='font-size:12px; '><?php print $se[$f]."º SEMESTRE"?></th>
                     </tr>
-                    <tr style='background:'>
+                    <tr>
                         <th class='small-50'>Periodo</th>
                         <th class='small-50'>Curso</th>
                         <th >Nombre Curso</th>
@@ -120,31 +97,19 @@ $header='
         }
     }
 ?>
-<?php 
-
-    $fooder='
-    <table style="width:100%;margin-bottom:10px; border:2px solid #FFFFFFF;" >
-        <tr>
-            <th style="width:20%; text-align:left;"><h5>{DATE d M Y}</h5></th>
-            <th style="width:60%; text-align:center;"><h4>Sistema de Gestión e-UNDAC</h4></th>
-            <th style="width:20%; text-align:right;"><h5>{PAGENO}</h5></th>
-        </tr>
-    </table>
-    '
-?>
 <?php
+    date_default_timezone_set("America/Lima");
     $html = ob_get_contents();
   
-    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,8,8);
+    $mpdf=new mPDF('win-1252','A4','','',15,15,36,18,8,5);
     $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
     $mpdf->showWatermarkImage = true;
 
-    $mpdf->SetHTMLHeader($header);
-    // $mpdf->SetHTMLHeader();
-    // $mpdf->SetFooter(' {DATE d M Y } | Sistema de Gestión e-UNDAC | {PAGENO} ');
-    $mpdf->SetHTMLFooter($fooder,'O');
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    // $mpdf->Output('RecordNotas-'.$this->person['pid'].'.pdf','D');
-    $mpdf -> Output();  
+    $mpdf->Output('RecordNotas-'.$this->person['pid'].'.pdf','D');
+    // $mpdf -> Output();  
 ?>

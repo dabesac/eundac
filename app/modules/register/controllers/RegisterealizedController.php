@@ -81,6 +81,10 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 
 	public function registerprintAction(){
 		try {
+			$this->_helper->layout()->disableLayout();
+			$header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
 			$escid=base64_decode($this->_getParam('escid'));
@@ -140,23 +144,72 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 		        $pala='ESPECIALIDAD DE ';
 		        $spe['esc']=$parentesc['name'];
 		        $spe['parent']=$pala.$speciality['name'];
-		        $this->view->spe=$spe;
 		    }
 		    else{
 		        $spe['esc']=$speciality['name'];
 		        $spe['parent']='';  
-		        $this->view->spe=$spe;
 		    }
+
+		    if ($speciality['header']) {
+                $namelogo = $speciality['header'];
+            }
+            else{
+                $namelogo = 'blanco';
+            }
+
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names."<br>".$namep;
 		    $whered['eid']=$eid;
 		    $whered['oid']=$oid;
 		    $whered['facid']= $speciality['facid'];
 		    $dbfaculty = new Api_Model_DbTable_Faculty();
 		    $faculty = $dbfaculty ->_getOne($whered);
-		    $this->view->faculty=$faculty;      
+		    $namef = strtoupper($faculty['name']);
+
 		    $wheres=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid);
 		    $dbperson = new Api_Model_DbTable_Users();
 		    $person= $dbperson -> _getUserXUid($wheres);
 		   	$this->view->person=$person;
+		   	$pid=$person[0]['pid'];
+
+		   	$dbimpression = new Api_Model_DbTable_Countimpressionall();
+            date_default_timezone_set("America/Lima");
+            $uidim=$this->sesion->pid;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'matriculasrealizadas',
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+            $dbimpression->_save($data);            
+            
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'matriculasrealizadas');
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=0;
+            $len=count($dataim);
+            for ($i=0; $i < $len ; $i++) { 
+                if($dataim[$i]['type_impression']=='matriculasrealizadas'){
+                    $co=$co+1;
+                }
+            }
+            $codigo=$co." - ".$uidim;
+
+		   	$header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+
+            $this->view->header=$header;
+            $this->view->footer=$footer;
+
 					
 		} catch (Exception $e) {
 			print "Error: Print".$e->getMessage();
@@ -166,6 +219,9 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 
 	public function printperiodAction(){
 		try {
+			$this->_helper->layout()->disableLayout();
+			$header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
 			$escid=base64_decode($this->_getParam('escid'));
@@ -186,7 +242,6 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 			$attrib=array('perid','name');
 			$dbperiod=new Api_Model_DbTable_Periods();
 			$dataperiod=$dbperiod->_getFilter($wher,$attrib);
-			// print_r($dataperiod);exit();
 			$dbcourse=new Api_Model_DbTable_Course();
 			
 			for ($i=0; $i < $len; $i++) {
@@ -196,8 +251,7 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 				$datac=$dbcourse->_getFilter($whered,$attrib);
 				$datacourse[$i]=$datac[0];
 			}
-			// print_r($datacourse);
-			// print_r($data);exit();
+			
 			$this->view->dataperiod=$dataperiod;
 			$this->view->datap=$datap;
 			$this->view->datacourse=$datacourse;
@@ -210,6 +264,7 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 		    $parent=$speciality['parent'];
 		    $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
 		    $parentesc= $dbspeciality->_getOne($wher);
+		    
 		    if ($parentesc) {
 		        $pala='ESPECIALIDAD DE ';
 		        $spe['esc']=$parentesc['name'];
@@ -221,17 +276,67 @@ class Register_RegisterealizedController extends Zend_Controller_Action {
 		        $spe['parent']='';  
 		        $this->view->spe=$spe;
 		    }
+
+		    if ($speciality['header']) {
+                $namelogo = $speciality['header'];
+            }
+            else{
+                $namelogo = 'blanco';
+            }
+
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names."<br>".$namep;
 		    $whered['eid']=$eid;
 		    $whered['oid']=$oid;
 		    $whered['facid']= $speciality['facid'];
 		    $dbfaculty = new Api_Model_DbTable_Faculty();
 		    $faculty = $dbfaculty ->_getOne($whered);
-		    $this->view->faculty=$faculty;      
+		    $namef = strtoupper($faculty['name']);
+		  
 		    $wheres=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid);
 		    $dbperson = new Api_Model_DbTable_Users();
 		    $person= $dbperson -> _getUserXUid($wheres);
 		   	$this->view->person=$person;
+		   	$pid=$person[0]['pid'];
 
+		   	$dbimpression = new Api_Model_DbTable_Countimpressionall();
+            date_default_timezone_set("America/Lima");
+            $uidim=$this->sesion->pid;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'matriculasrealizadasxperiodo',
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+         
+            $dbimpression->_save($data);            
+            
+			$wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'matriculasrealizadasxperiodo');
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=0;
+            $len=count($dataim);
+            for ($i=0; $i < $len ; $i++) { 
+                if($dataim[$i]['type_impression']=='matriculasrealizadasxperiodo'){
+                    $co=$co+1;
+                }
+            }
+            $codigo=$co." - ".$uidim;
+
+		   	$header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+
+            $this->view->header=$header;
+            $this->view->footer=$footer;
 
 		} catch (Exception $e) {
 			print "Error: Print".$e->getMessage();
