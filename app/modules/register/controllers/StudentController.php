@@ -9,14 +9,9 @@ class Register_StudentController extends Zend_Controller_Action {
             $this->_helper->redirector('index',"index",'default');
         }
         $login = $sesion->getStorage()->read();
-<<<<<<< HEAD
         $this->sesion = $login;
-    
-         
-        
-=======
-        $this->sesion = $login;         
->>>>>>> a18b9fbc850ca948fa27e03634da0207009424b8
+        $this->sesion->period->perid='13N';
+
     }
     
     public function indexAction()

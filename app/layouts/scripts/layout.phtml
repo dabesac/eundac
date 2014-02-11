@@ -8,24 +8,44 @@
 		<?php echo $this->headTitle()?>
 		<?php echo $this->headMeta()?>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-		<link href="//fonts.googleapis.com/css?family=Cuprum:400italic,400,700italic,700" rel="stylesheet" type="text/css">
+		<link href="http://fonts.googleapis.com/css?family=Cuprum:400italic,400,700italic,700" rel="stylesheet" type="text/css">
 		<?php echo $this->headLink()?>
 		<?php echo $this->headScript()?>
 	</head>
 	<body>
+		<div id="loading_overlay">
+			<div class="loading_message round_bottom">Cargando....</div>
+		</div>
 		<?php echo $this->render('header.phtml')?>
 	  	<nav  class="navbar navbar-default" role="navigation">
-			<div class="row" id="nav-secundary">
+			<div class='container'>
+				<div class="row" id="nav-secundary">
 				<div ><?php echo $this->placeholder('Textnav') ?></div>
  					<div class="col-md-5 pull-right">
 						<?php echo $this->placeholder('Btnnav') ?>
 		 				<?php echo $this->render('_search.phtml') ?>
  					</div>
+				</div>
 			</div>	
 		</nav>
-	    <div class="container">
-				<?php echo $this->layout()->content ?>
-	    </div>
+		<div id="wrapper">
+		    <div class="container" id='container_layout'>
+					<?php echo $this->layout()->content ?>
+		    </div>
+		</div>
 		<?php echo $this->render('footer.phtml') ?>
 	</body>
 </html>
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		function loadingOverlay(){
+			$("#loading_overlay .loading_message").delay(1000).fadeOut(function(){}); 
+			$("#loading_overlay").delay(500).fadeOut();  
+		}
+		
+		window.onload = function () {
+			loadingOverlay();   
+		};
+	});
+</script>

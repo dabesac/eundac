@@ -1,7 +1,19 @@
-<spam class="alert " style="display: block; font-size: 16px; margin: 3px; padding: 5px; text-align: center">
-<b>ASIGNATURAS A CARGO PERIODO - <?php  echo $this->perid?></b>
-<?php $partial=$this->partial;?>
-</spam>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> ASIGNATURAS A CARGO PERIODO - '.$this->perid.'');?>
+<?php $this->placeholder('Btnnav')->append('
+    <div class="btn-group">
+        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+            Periodo <span class="caret"></span>
+        </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+    </div>');?>
+
+
 <?php 
   $c=0;
   foreach ($this->faculty as $number) {
@@ -73,7 +85,7 @@
 
                                         <!--option cursos-->
                                         
-                                        <a id="silabo<?php echo $courses['courseid'] ?>" class="btn btn-primary btn-sm btn-group-course <?php echo ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')? 'margin-top-btn':''?>" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>"data-toggle="tooltip" title="Registro del Sílabo" >Sílabo</a>
+                                        <a id="silabo<?php echo $courses['courseid'] ?>" class="btn btn-primary btn-sm btn-group-course btn-couses-sil <?php echo ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')? 'margin-top-btn':''?>" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>"data-toggle="tooltip" title="Registro del Sílabo" >Sílabo</a>
                                         
                                        <?php if($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C'){?>
                                             <?php switch ($courses['type_rate']) {

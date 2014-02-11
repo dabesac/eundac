@@ -27,10 +27,9 @@
 	</div><!-- /.modal-dialog -->
 </form>
 <script>
-	
 	$("#save").click(function(){
 		$.ajax({
-			url:"/admin/acl/edit",
+			url:"edit-module",
 			type:'POST',
 			data:$('#form-model-edit').serialize(),
 			success:function($data){
