@@ -1,0 +1,99 @@
+<div class="row">
+	<div class="col-md-9 col-md-offset-1">
+		<blockquote>
+			<h2>Control de <span class="text-info">Actividad</span></h2>
+		</blockquote>
+	</div>
+	<div class="col-md-1">
+		<blockquote>
+			<h2><span class="glyphicon glyphicon-list text-info"></span></h2>
+		</blockquote>
+	</div>
+</div>
+<hr>
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+
+<?php if ($this->contentsyllabus): 
+	$c = 0; ?>
+
+	<?php if ($this->firstTime == 'No'): ?>
+		
+		<h4 class="text-muted" style="opacity : 0.3">Clase Pasada</h4>
+		<div id="pastSession" class="panel panel-warning" style="opacity : 0.3">
+			<table class="table table-striped table-hover">
+				<tr>
+					<th class="text-center">Semana</th>
+					<th class="text-center">Unidad</th>
+					<th class="text-center">Sesión</th>
+					<th>Clase</th>
+				</tr>
+				<tr>
+					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['week'] ?></h5></td>
+					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['unit'] ?></h5></td>
+					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['session'] ?></h5></td>
+					<td class="col-md-5"><h5><?php echo $this->contentsyllabus[$c][0]['obj_content'] ?></h5></td>
+				</tr>
+			</table>
+		</div>
+
+	<?php $c++;
+	endif ?>
+		
+		<h4 class="text-muted">Clase en Curso</h4>
+
+		<div id="presentSession" class="panel panel-warning">
+			<table class="table table-striped table-hover">
+				<tr>
+					<th class="text-center">Semana</th>
+					<th class="text-center">Unidad</th>
+					<th class="text-center">Sesión</th>
+					<th>Clase</th>
+				</tr>
+				<tr>
+					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['week'] ?></h5></td>
+					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['unit'] ?></h5></td>
+					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['session'] ?></h5></td>
+					<td class="col-md-5"><h5><?php echo $this->contentsyllabus[$c][0]['obj_content'] ?></h5></td>
+					<?php $url = '/courseid/'.base64_encode($this->contentsyllabus[$c][0]['courseid']).
+									'/curid/'.base64_encode($this->contentsyllabus[$c][0]['curid']).
+									'/turno/'.base64_encode($this->contentsyllabus[$c][0]['turno']).
+									'/subid/'.base64_encode($this->contentsyllabus[$c][0]['subid']).
+									'/unit/'.base64_encode($this->contentsyllabus[$c][0]['unit']).
+									'/session/'.base64_encode($this->contentsyllabus[$c][0]['session']).
+									'/week/'.base64_encode($this->contentsyllabus[$c][0]['week']).
+									'/perid/'.base64_encode($this->contentsyllabus[$c][0]['perid']); ?>
+					<td class="text-center"><h4><a class="text-success" href="/controlactivity/index/save<?php echo $url ?>"><span class="glyphicon glyphicon-check"></span></a></h4></td>
+				</tr>
+			</table>
+		</div>
+
+		<?php $c++; ?>
+
+		<h4 class="text-muted" style="opacity : 0.3">Futura Clase</h4>
+		<div id="futureSession" style="opacity : 0.3" class="panel panel-warning">
+			<table class="table table-striped table-hover">
+				<tr>
+					<th class="text-center">Semana</th>
+					<th class="text-center">Unidad</th>
+					<th class="text-center">Sesión</th>
+					<th>Clase</th>
+				</tr>
+				<tr>
+					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['week'] ?></h5></td>
+					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['unit'] ?></h5></td>
+					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['session'] ?></h5></td>
+					<td class="col-md-5"><h5><?php echo $this->contentsyllabus[$c][0]['obj_content'] ?></h5></td>
+				</tr>
+			</table>
+		</div>
+
+
+<?php else: ?>
+	
+	<h4>No existen registros, tal vez no relleno su silabo aun....</h4>
+
+<?php endif ?>
+
+	</div>
+</div>
