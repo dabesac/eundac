@@ -1,37 +1,15 @@
 <?php
-    $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
-    include_once($dir);
-    ob_start(); 
-$perid=$this->perid;
-$header='
-<table style="width: 100%;" border="1">
-    <tr>
-        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-        <th style="text-align: center; font-size: 11px;">
-        FACULTAD DE '.strtoupper($this->faculty).'<br/>
-        ESCUELA DE  '.strtoupper($this->speciality).'<br/> 
-        </th>        
-    </tr>
-    <tr>
-        <th style="border: 1px solid #000;"> PRE-MATRICULA '.$perid.'</th>
-    </tr>
-</table>
-<table style="width: 100%;margin-top:10px;" border="0">
-    <tr>
-        <th style="text-align: left;">Código:</th>
-        <th style="text-align: left;">'.strtoupper($this->uid).'</th>
-        <th style="text-align: left;">Alumno:</th>
-        <th style="text-align: left;">'.strtoupper($this->fullname).'</th>
-        <th style="text-align: left;">Semestre :</th>
-        <th style="text-align: left;">'.strtoupper($this->regmatr['semid']).'</th>
-    </tr>   
-</table>
-';    
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
 ?>
-
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<div>
+    <div style="text-align:left; font-size:12px;"><b>Codigo: </b><?php echo strtoupper($this->uid)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Alumno: </b> <?php echo strtoupper($this->fullname)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Semestre: </b><?php echo strtoupper($this->regmatr['semid'])?>
+    </div>
+</div>
 <link rel="stylesheet" type="text/css" href="/css/print.css">
-
+<div style="text-align: center; font-size:16px;margin-top:15px"><b> PRE - MATRÍCULA <?php echo $this->perid?></b></div> <br/>
 <table style="width:100%; text-align:center; margin-top: 10px;">
         <tr>
             <th class='small'>Código Curso</th>
@@ -63,12 +41,17 @@ $header='
 </table>
 
 <?php 
+    date_default_timezone_set("America/Lima");
     $html = ob_get_contents();
-    $mpdf=new mPDF('win-1252','A4','','',15,15,40);
-    $mpdf->SetHTMLHeader($header);
-    $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+
+    $mpdf=new mPDF('win-1252','A4','','',15,15,36,18,8,5);    
+    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
     ob_end_clean();
     $mpdf -> WriteHTML($html);
     $mpdf->Output('Pre-Matricula-'.$this->uid.'.pdf','D');
+    // $mpdf -> Output();  
    
 ?>

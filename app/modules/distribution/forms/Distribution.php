@@ -70,7 +70,6 @@ class Distribution_Form_Distribution extends Zend_Form{
         $dateaccept= new Zend_Form_Element_Text("dateaccept");
         $dateaccept->setAttrib("class","form-control");
         $dateaccept->setAttrib("required","");
-        $dateaccept->setRequired(true);
         $dateaccept->removeDecorator("HtmlTag")->removeDecorator("Label");
         
         $state = new Zend_Form_Element_Select("state");
@@ -87,7 +86,7 @@ class Distribution_Form_Distribution extends Zend_Form{
         $save->setAttrib("class","btn btn-success");  
         $save->setAttrib("data-loading-text","Guardando...");
         
-        $save->setLabel("GUARDAR");
+        $save->setLabel("Guardar");
 
         $this-> addElements(array($eid,$oid,$distid,$escid,$subid,$perid,
                             $number,$datepress,$dateaccept,$state,$save));

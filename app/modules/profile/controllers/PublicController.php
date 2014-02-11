@@ -976,6 +976,8 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function printpercurAction(){
         try{
             $this->_helper->layout()->disableLayout();
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
             
             $pid=$this->sesion->pid;
             $uid=$this->sesion->uid;
@@ -1012,11 +1014,81 @@ class Profile_PublicController extends Zend_Controller_Action {
             $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid,"pid"=>$pid,"uid"=>$uid,"perid"=>$perid);
             $attrib=array("courseid","state");
             $courlleact=$dbcourlle->_getFilter($where,$attrib);
+
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $spe=array();
+            $dbspeciality = new Api_Model_DbTable_Speciality();
+            $speciality = $dbspeciality ->_getOne($where);
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $dbspeciality->_getOne($wher);
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+
+            if ($speciality['header']) {
+                $namelogo = $speciality['header'];
+            }
+            else{
+                $namelogo = 'blanco';
+            }
             
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names."<br>".$namep;
+            $whered['eid']=$eid;
+            $whered['oid']=$oid;
+            $whered['facid']= $speciality['facid'];
+            $dbfaculty = new Api_Model_DbTable_Faculty();
+            $faculty = $dbfaculty ->_getOne($whered);
+            $namef = strtoupper($faculty['name']);
+
             $wheres=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid);
             $dbperson = new Api_Model_DbTable_Users();
             $person= $dbperson -> _getUserXUid($wheres);
 
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            date_default_timezone_set("America/Lima");
+            $uidim=$this->sesion->pid;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'matriculasxcurricula',
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+            $dbimpression->_save($data);            
+            
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'matriculasxcurricula');
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=0;
+            $len=count($dataim);
+            for ($i=0; $i < $len ; $i++) { 
+                if($dataim[$i]['type_impression']=='matriculasxcurricula'){
+                    $co=$co+1;
+                }
+            }
+            $codigo=$co." - ".$uidim;
+
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+
+            $this->view->header=$header;
+            $this->view->footer=$footer;
             $this->view->person=$person;
             $this->view->courpercur=$courpercur;
             $this->view->courlleact=$courlleact;

@@ -60,9 +60,7 @@
  			$eid=$this->sesion->eid;
 	        $oid=$this->sesion->oid;
 	        $escid=$this->sesion->escid;
-
 	        $faculty=$this->sesion->faculty->name;
-            $this->view->faculty=$faculty;
 
 	        $uid=$this->sesion->uid;
 	        $pid=$this->sesion->pid;
@@ -104,18 +102,72 @@
                     $pala='ESPECIALIDAD DE ';
                     $spe['esc']=$parentesc['name'];
                     $spe['parent']=$pala.$desc['name'];
-                    $this->view->spe=$spe;
                 }
                 else{
                     $spe['esc']=$desc['name'];
                     $spe['parent']='';  
-                    $this->view->spe=$spe;
                 }
+                $names=strtoupper($spe['esc']);
+                $namep=strtoupper($spe['parent']);
+                $namefinal=$names." <br> ".$namep;
+                $namef = strtoupper($faculty);
 
                 $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'uid'=>$uid,'subid'=>$subid,'pid'=>$pid); 
                 $user = new Api_Model_DbTable_Users();
                 $duser = $user->_getInfoUser($wheres);
                 $this->view->duser=$duser;
+
+                if ($desc['header']) {
+                    $namelogo = $desc['header'];
+                }
+                else{
+                    $namelogo = 'blanco';
+                }
+
+                $dbimpression = new Api_Model_DbTable_Countimpressionall();
+                date_default_timezone_set("America/Lima");
+                $uidim=$this->sesion->pid;
+
+                $data = array(
+                    'eid'=>$eid,
+                    'oid'=>$oid,
+                    'uid'=>$uid,
+                    'escid'=>$escid,
+                    'subid'=>$subid,
+                    'pid'=>$pid,
+                    'type_impression'=>'consolidadohorary',
+                    'date_impression'=>date('Y-m-d H:i:s'),
+                    'pid_print'=>$uidim
+                    );
+                $dbimpression->_save($data);            
+
+                $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'consolidadohorary');
+                $dataim = $dbimpression->_getFilter($wheri);
+                
+                $co=0;
+                $len=count($dataim);
+                for ($i=0; $i < $len ; $i++) { 
+                    if($dataim[$i]['type_impression']=='consolidadohorary'){
+                        $co=$co+1;
+                    }
+                }
+                $codigo=$co." - ".$uidim;
+                $h1="h1";
+                $h2="h2";
+                $h3="h3";
+
+                $header=$this->sesion->org['header_print'];
+                $footer=$this->sesion->org['footer_print'];
+                $header = str_replace("?facultad",$namef,$header);
+                $header = str_replace("?escuela",$namefinal,$header);
+                $header = str_replace("?logo", $namelogo, $header);
+                $header = str_replace("?codigo", $codigo, $header);
+                $header = str_replace("h2", $h1, $header);
+                $header = str_replace("h3", $h1, $header);
+                $header = str_replace("h4", $h2, $header);
+
+                $this->view->header=$header;
+                $this->view->footer=$footer;
 			}
         } catch (Exception $e) {
             print "Error: print Horary".$e->getMessage();

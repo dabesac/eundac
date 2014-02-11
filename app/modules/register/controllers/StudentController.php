@@ -10,8 +10,6 @@ class Register_StudentController extends Zend_Controller_Action {
         }
         $login = $sesion->getStorage()->read();
         $this->sesion = $login;
-        $this->sesion->period->perid='13N';
-
     }
     
     public function indexAction()
@@ -864,21 +862,46 @@ class Register_StudentController extends Zend_Controller_Action {
                 $pid = $this->sesion->infouser['pid'];
                 $uid = $this->sesion->uid;
                 
-                $faculty = $this->sesion->faculty->name;
-                $speciality = $this->sesion->speciality->name;
+                $namef = strtoupper($this->sesion->faculty->name);
                 $fullname = $this->sesion->infouser['fullname'];
 
                 $this->view->fullname   = $fullname;
-                $this->view->faculty   = $faculty;
-                $this->view->speciality   = $speciality;
                 $this->view->uid = $uid;
-                
+
                 $escid = base64_decode($this->_getParam('escid'));
                 $subid = base64_decode($this->_getParam('subid'));
                 $regid = base64_decode($this->_getParam('regid'));
                 $perid = base64_decode($this->_getParam('perid'));
                 $curid = base64_decode($this->_getParam('curid'));
                 $this->view->perid = $perid;
+
+                $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+                $dbspeciality = new Api_Model_DbTable_Speciality();
+                $speciality = $dbspeciality ->_getOne($wheres);
+                $parent=$speciality['parent'];
+                $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+                $parentesc= $dbspeciality->_getOne($wher);
+                if ($parentesc) {
+                    $pala='ESPECIALIDAD DE ';
+                    $spe['esc']=$parentesc['name'];
+                    $spe['parent']=$pala.$speciality['name'];
+                }
+                else{
+                    $spe['esc']=$speciality['name'];
+                    $spe['parent']='';  
+                }
+                $names=strtoupper($spe['esc']);
+                $namep=strtoupper($spe['parent']);
+                $namefinal=$names." <br> ".$namep;
+
+                if ($speciality['header']) {
+                    $namelogo = $speciality['header'];
+                }
+                else{
+                    $namelogo = 'blanco';
+                }
+                $this->view->namelogo=$namelogo;
+                
                 $where = array(
                     'eid'=>$eid,'oid'=>$oid,
                     'escid'=>$escid,'subid'=>$subid,
@@ -927,13 +950,46 @@ class Register_StudentController extends Zend_Controller_Action {
                    $data_subjects [$key]['name_t']  = $data_pid_teacher[0]['nameteacher'];
 
                 } 
-
-
-
                 $this->view->data_subjects  =   $data_subjects;
-                $this->_helper->layout->disableLayout();
 
-                
+                $dbimpression = new Api_Model_DbTable_Countimpressionall();
+                date_default_timezone_set("America/Lima");
+                $uidim=$this->sesion->pid;
+
+                $data = array(
+                    'eid'=>$eid,
+                    'oid'=>$oid,
+                    'uid'=>$uid,
+                    'escid'=>$escid,
+                    'subid'=>$subid,
+                    'pid'=>$pid,
+                    'type_impression'=>'prematricula',
+                    'date_impression'=>date('Y-m-d h:m:s'),
+                    'pid_print'=>$uidim
+                    );
+                $dbimpression->_save($data);
+
+                $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'prematricula');
+                $dataim = $dbimpression->_getFilter($wheri);
+                $co=0;
+                $len=count($dataim);
+                for ($i=0; $i < $len ; $i++) { 
+                    if($dataim[$i]['type_impression']=='prematricula'){
+                        $co=$co+1;
+                    }
+                }
+                $codigo=$co." - ".$uidim;
+                $header=$this->sesion->org['header_print'];
+                $footer=$this->sesion->org['footer_print'];
+                $header = str_replace("?facultad",$namef,$header);
+                $header = str_replace("?escuela",$namefinal,$header);
+                $header = str_replace("?logo", $namelogo, $header);
+                $header = str_replace("?codigo", $codigo, $header);
+
+                $this->view->codigo=$codigo;
+                $this->view->header=$header;
+                $this->view->footer=$footer;
+                $this->_helper->layout->disableLayout();
 
         } catch (Exception $e) {
             print "Error: print register".$e->getMessage();
