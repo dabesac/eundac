@@ -80,7 +80,7 @@ class Api_Model_DbTable_Syllabusunitcontent extends Zend_Db_Table_Abstract
 				if ($rows) return $rows;
 				return false;
 		}catch (Exception $e){
-			print "Error: Read Filter SyllabusUnitsContent ".$e->getMessage();
+		
 		}
 	}
 }
