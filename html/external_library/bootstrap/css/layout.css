@@ -211,3 +211,20 @@ body{
 	margin-top: 10px;
 	margin-right: 5px;
 }
+/*==================%%%%%%%%%%%%%not register%%%%%%%%%%%%=========================00*/
+.span-not-register{
+		font-size: 120px;
+		color: 	#edecec;
+		padding-left: 45%;
+		padding-top: 8%;
+	}
+.cont-font-not-register{
+	background-color: #fcfcfc;
+	height: 400px;
+	
+}
+.text-not-register{
+	color: #9e9999;
+	font-size: 21px;
+	text-align: center;
+}

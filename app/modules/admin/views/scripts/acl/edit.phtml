@@ -29,7 +29,7 @@
 <script>
 	$("#save").click(function(){
 		$.ajax({
-			url:"edit-module",
+			url:"/admin/acl/edit",
 			type:'POST',
 			data:$('#form-model-edit').serialize(),
 			success:function($data){
@@ -47,5 +47,5 @@
 	});
 </script>
 <?php }else{
-	echo json_encode($this->json);
+	echo $this->json;
  }?>
