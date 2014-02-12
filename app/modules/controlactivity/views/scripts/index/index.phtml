@@ -1,93 +1,138 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Control de Actividad');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+
 <div class="row">
 	<div class="col-md-9 col-md-offset-1">
 		<blockquote>
-			<h2>Control de <span class="text-info">Actividad</span></h2>
+			<h4 class="text-muted">Curso <span class="text-info"><?php echo $this->coursename[0]['name'] ?></span></h4>
 		</blockquote>
 	</div>
 	<div class="col-md-1">
 		<blockquote>
-			<h2><span class="glyphicon glyphicon-list text-info"></span></h2>
+			<h4 class="text-info"><span class="glyphicon glyphicon-book"></span></h4>
 		</blockquote>
 	</div>
 </div>
-<hr>
+
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">
 
-<?php if ($this->contentsyllabus): 
-	$c = 0; ?>
+<?php if ($this->completeSyllabus == 'Si'): ?>
+	<div class="alert alert-success fade in">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      	<h4>Completo con exito su silabo :D</h4>
+      	<p>Ya finalizo con todas las clases de su silabo.......</p>
+    </div>
+<?php endif ?>
 
-	<?php if ($this->firstTime == 'No'): ?>
-		
-		<h4 class="text-muted" style="opacity : 0.3">Clase Pasada</h4>
-		<div id="pastSession" class="panel panel-warning" style="opacity : 0.3">
-			<table class="table table-striped table-hover">
+<?php if ($this->contentsyllabus): ?>
+
+	<?php $c = 0;
+	if ($this->firstTime == 'No'): ?>
+		<h4 class="text-muted" style="opacity : 0.8">Clases <span class="text-info">Pasadas</span></h4>
+		<div id="pastSession" class="panel panel-warning" style="opacity : 0.8">
+			<table class="table table-bordered table-hover">
 				<tr>
 					<th class="text-center">Semana</th>
 					<th class="text-center">Unidad</th>
 					<th class="text-center">Sesión</th>
-					<th>Clase</th>
+					<th class="col-md-5">Clase</th>
+					<th class="text-center col-md-2">Fecha de Finalización</th>
 				</tr>
+		<?php foreach ($this->contentsyllabus as $content): ?>
 				<tr>
-					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['week'] ?></h5></td>
-					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['unit'] ?></h5></td>
-					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['session'] ?></h5></td>
-					<td class="col-md-5"><h5><?php echo $this->contentsyllabus[$c][0]['obj_content'] ?></h5></td>
+					<td class="text-center"><h5><?php echo $content[0]['week'] ?></h5></td>
+					<td class="text-center"><h5><?php echo $content[0]['unit'] ?></h5></td>
+					<td class="text-center"><h5><?php echo $content[0]['session'] ?></h5></td>
+					<td><h5><?php echo $content[0]['obj_content'] ?></h5></td>
+					<td class="text-center"><h5><?php echo $this->controlsyllabus[$c][0]['datecheck'] ?></h5></td>
 				</tr>
+				<?php $c++;
+				if ($c == $this->realizedSession): 
+					break;
+				endif ?>
+		<?php endforeach ?>
 			</table>
 		</div>
 
-	<?php $c++;
-	endif ?>
-		
-		<h4 class="text-muted">Clase en Curso</h4>
+	<?php endif ?>
+
+
+<?php if ($this->completeSyllabus == 'No'): ?>
+		<div id="alertCourse" class="alert alert-danger fade in">
+	      	<h4>Seguro que deseas marca la clase como realizada</h4>
+	      	<p>Una vez que la cambies no habra marcha atras</p>
+	      	<p>
+	      		<?php $url = '/courseid/'.base64_encode($this->contentsyllabus[$c][0]['courseid']).
+							'/curid/'.base64_encode($this->contentsyllabus[$c][0]['curid']).
+							'/turno/'.base64_encode($this->contentsyllabus[$c][0]['turno']).
+							'/subid/'.base64_encode($this->contentsyllabus[$c][0]['subid']).
+							'/unit/'.base64_encode($this->contentsyllabus[$c][0]['unit']).
+							'/session/'.base64_encode($this->contentsyllabus[$c][0]['session']).
+							'/week/'.base64_encode($this->contentsyllabus[$c][0]['week']).
+							'/perid/'.base64_encode($this->contentsyllabus[$c][0]['perid']); ?>
+	        	<a href="/controlactivity/index/save<?php echo $url ?>" class="btn btn-danger">Marcar Clase</a>
+	        	<a id="closeAlert" class="btn btn-default">Cancelar</a>
+	      	</p>
+	    </div>
+	
+			
+	
+	<?php if ($this->finalSession == 1): ?>
+		<h4 class="text-muted">Clase en <span class="text-info">Curso</span></h4>
+	<?php else: ?>
+		<h4 class="text-muted">Clase <span class="text-info">Final</span></h4>
+	<?php endif ?>
 
 		<div id="presentSession" class="panel panel-warning">
-			<table class="table table-striped table-hover">
+			<table class="table table-bordered table-hover">
 				<tr>
 					<th class="text-center">Semana</th>
 					<th class="text-center">Unidad</th>
 					<th class="text-center">Sesión</th>
 					<th>Clase</th>
+					<th></th>
 				</tr>
 				<tr>
 					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['week'] ?></h5></td>
 					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['unit'] ?></h5></td>
 					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['session'] ?></h5></td>
 					<td class="col-md-5"><h5><?php echo $this->contentsyllabus[$c][0]['obj_content'] ?></h5></td>
-					<?php $url = '/courseid/'.base64_encode($this->contentsyllabus[$c][0]['courseid']).
-									'/curid/'.base64_encode($this->contentsyllabus[$c][0]['curid']).
-									'/turno/'.base64_encode($this->contentsyllabus[$c][0]['turno']).
-									'/subid/'.base64_encode($this->contentsyllabus[$c][0]['subid']).
-									'/unit/'.base64_encode($this->contentsyllabus[$c][0]['unit']).
-									'/session/'.base64_encode($this->contentsyllabus[$c][0]['session']).
-									'/week/'.base64_encode($this->contentsyllabus[$c][0]['week']).
-									'/perid/'.base64_encode($this->contentsyllabus[$c][0]['perid']); ?>
-					<td class="text-center"><h4><a class="text-success" href="/controlactivity/index/save<?php echo $url ?>"><span class="glyphicon glyphicon-check"></span></a></h4></td>
+					
+					<td class="text-center col-md-2"><h4><a id="openAlert" class="text-success" href="##"><span class="glyphicon glyphicon-check"></span></a></h4></td>
 				</tr>
 			</table>
 		</div>
 
+		<?php if ($this->finalSession == 1): ?>
+			
+		<h4 class="text-muted" style="opacity : 0.8">Futuras <span class="text-info">Clases</span></h4>
 		<?php $c++; ?>
-
-		<h4 class="text-muted" style="opacity : 0.3">Futura Clase</h4>
-		<div id="futureSession" style="opacity : 0.3" class="panel panel-warning">
-			<table class="table table-striped table-hover">
+			
+		<div id="futureSession" style="opacity : 0.8" class="panel panel-warning">
+			<table class="table table-bordered table-hover">
 				<tr>
 					<th class="text-center">Semana</th>
 					<th class="text-center">Unidad</th>
 					<th class="text-center">Sesión</th>
-					<th>Clase</th>
+					<th class="col-md-5">Clase</th>
 				</tr>
+		<?php for ($i = $c; $i <= $this->restSession ; $i++): ?>
 				<tr>
 					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['week'] ?></h5></td>
 					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['unit'] ?></h5></td>
 					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['session'] ?></h5></td>
-					<td class="col-md-5"><h5><?php echo $this->contentsyllabus[$c][0]['obj_content'] ?></h5></td>
+					<td><h5><?php echo $this->contentsyllabus[$c][0]['obj_content'] ?></h5></td>
+					<td class="col-md-2"></td>
 				</tr>
+		<?php $c++;
+		endfor ?>
 			</table>
 		</div>
 
+		<?php endif ?>
+		
+<?php endif ?>	
 
 <?php else: ?>
 	
@@ -97,3 +142,14 @@
 
 	</div>
 </div>
+
+<script>
+	$("#alertCourse").fadeOut('fast');
+	//$('#alertCourse').fadeOut('fast');
+	$('#openAlert').click(function(){
+		$('#alertCourse').fadeIn('slow');
+	});
+	$('#closeAlert').click(function(){
+		$('#alertCourse').fadeOut('slow');
+	});
+</script>

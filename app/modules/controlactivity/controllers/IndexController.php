@@ -20,6 +20,7 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
         try{
             $controlsyllabusDb = new Api_Model_DbTable_ControlActivity();
             $contentsyllabusDb = new Api_Model_DbTable_Syllabusunitcontent();
+            $coursesDb = new Api_Model_DbTable_Course();
 
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
@@ -28,6 +29,11 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
             $courseid = base64_decode($this->getParam('courseid'));
             $turno = base64_decode($this->getParam('turno'));
             $perid = base64_decode($this->getParam('perid'));
+
+            $where = array('eid'=>$eid, 'oid'=>$oid, 'courseid'=>$courseid, 'curid'=>$curid);
+            $attrib = array('name');
+            $coursename = $coursesDb->_getFilter($where, $attrib);
+            $this->view->coursename = $coursename;
 
             $attrib = array('session');
             $where = array('eid' => $eid, 
@@ -39,15 +45,18 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
                             'turno'=>$turno);
               
             $controlsyllabus = $controlsyllabusDb->_getFilter($where, $attrib);
+            $contentsyllabus = $contentsyllabusDb->_getFilter($where, $attrib);
 
+            $c = 0;    
+            $index = 0;
+            $firstTime = "Si";
             if ($controlsyllabus) {
-                $c = 0;    
                 foreach ($controlsyllabus as $session) {
                     $c++;
                 }
-                print_r($c);
-                $index = 0;
-                for ($i = $c; $i < $c + 3; $i++) { 
+                $this->view->realizedSession = $c;
+
+                for ($i = 0; $i < $c; $i++) { 
                     $attrib = array('perid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
                     $where = array('eid' => $eid, 
                                 'oid'=>$oid, 
@@ -56,31 +65,75 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
                                 'courseid'=>$courseid, 
                                 'curid'=>$curid,
                                 'turno'=>$turno,
-                                'session'=>$i);
+                                'session'=>$controlsyllabus[$i]['session']);
                     $contentsyllabus[$index] = $contentsyllabusDb->_getFilter($where, $attrib);
+
+                    $attrib = array('datecheck');
+                    $where = array('eid' => $eid, 
+                                'oid'=>$oid, 
+                                'perid'=>$perid, 
+                                'subid'=>$subid, 
+                                'courseid'=>$courseid, 
+                                'curid'=>$curid,
+                                'turno'=>$turno,
+                                'session'=>$controlsyllabus[$i]['session']);
+                    $controlsyllabus[$index] = $controlsyllabusDb->_getFilter($where, $attrib);
+
                     $index++;
                 }
-                $this->view->firstTime = "No";
-            }else{
-                $session = 1;
-                $c = 0;
-                for ($i=0; $i <= 1 ; $i++) { 
-                    $attrib = array('perid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
-                    $where = array('eid' => $eid, 
-                                'oid'=>$oid, 
-                                'perid'=>$perid, 
-                                'subid'=>$subid, 
-                                'courseid'=>$courseid, 
-                                'curid'=>$curid,
-                                'turno'=>$turno,
-                                'session'=>$i + 1);
-                    $contentsyllabus[$i] = $contentsyllabusDb->_getFilter($where, $attrib);
-                    
-                }
-
-                $this->view->firstTime = "Si";
+                $firstTime = "No";
             }
+
+            $attrib = array('perid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
+            $where = array('eid' => $eid, 
+                        'oid'=>$oid, 
+                        'perid'=>$perid, 
+                        'subid'=>$subid, 
+                        'courseid'=>$courseid, 
+                        'curid'=>$curid,
+                        'turno'=>$turno,
+                        'session'=>$contentsyllabus[$index]['session']);
+            $contentsyllabus[$index] = $contentsyllabusDb->_getFilter($where, $attrib);
+
+
+            if ($contentsyllabus[$index] == null) {
+                $completeSyllabus = 'Si';
+            }else{
+                $completeSyllabus = 'No';
+            }
+            $index++;
+
+            $c = 0;    
+            foreach ($contentsyllabus as $session) {
+                $c++;
+            }
+            $this->view->restSession = $c;
+
+            $finalSession = 0;
+            for ($i = $index; $i < $c ; $i++) { 
+                //echo $i.' ';
+                $attrib = array('perid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
+                $where = array('eid' => $eid, 
+                            'oid'=>$oid, 
+                            'perid'=>$perid, 
+                            'subid'=>$subid, 
+                            'courseid'=>$courseid, 
+                            'curid'=>$curid,
+                            'turno'=>$turno,
+                            'session'=>$contentsyllabus[$i]['session']);
+                $contentsyllabus[$index] = $contentsyllabusDb->_getFilter($where, $attrib);
+                $index++;
+                $finalSession = 1;
+            }
+
+            $this->view->finalSession = $finalSession;
+
+            $this->view->firstTime = $firstTime;
+            print_r($completeSyllabus);
+            $this->view->completeSyllabus = $completeSyllabus;
+         
             $this->view->contentsyllabus = $contentsyllabus;
+            $this->view->controlsyllabus = $controlsyllabus;
         }
             catch (Exception $e) {           
         }
