@@ -1,16 +1,25 @@
-<spam class="alert " style="display: block; font-size: 16px; margin: 3px; padding: 5px; text-align: center">
-<b>ASIGNATURAS A CARGO PERIODO - <?php  echo $this->perid?></b>
-<?php $partial=$this->partial;?>
-</spam>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> ASIGNATURAS A CARGO PERIODO - '.$this->perid.'');?>
 <?php 
+    
+    $this->placeholder('Btnnav')->append('
+    <div class="btn-group">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+            Periodo <span class="caret"></span>
+        </button>
+          <ul class="dropdown-menu" role="menu"> '
+            .$this->periods.
+          '</ul>
+    </div>');
+
+    
   $c=0;
+  if ($this->faculty){
   foreach ($this->faculty as $number) {
     $c++;
     $c;
     $fname=$number['name'];
 ?>
 
-<div id="otherPicture"></div>
 <div id="coursesPrincipal">
 <div class="panel-group" id="accordion">
     <div class="panel panel-primary">
@@ -42,23 +51,12 @@
                                 $urlcampus = "http://campus.undac.edu.pe/courses/$u_/index.php";
                                 
 
-                                $where['eid']=$courses['eid'];
-                                $where['oid']=$courses['oid'];
-                                $where['curid']=$courses['curid'];
-                                $where['escid']=$courses['escid'];
-                                $where['subid']=$courses['subid'];
-                                $where['courseid']=$courses['courseid'];                             
-
-                              
-                                $list= new Api_Model_DbTable_Course();
-                                $course=$list->_getOne($where);                     
+                                                     
                                 if ($number['facid']==$courses['facid']) { ?>
                                     <div class='col-md-3 cont-coruse' >
 
-                                        
-
                                         <div class="alert alert-title-course">
-                                          <h4 class='name-course'><?php echo $courses['courseid']." - ".$course['name']." - Turno ".$courses['turno']?></h4>
+                                          <h4 class='name-course'><?php echo $courses['courseid']." - ".$courses['name_course']." - Turno ".$courses['turno']?></h4>
                                         </div>
                                         <?php if (
                                                     $courses['closure_syllabus'] == 'C' && ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')
@@ -69,11 +67,13 @@
                                             <h1 class='span-course'><span class='glyphicon glyphicon-book'></span></h1>
                                         <?php }?>
 
-                                        <h6 >Curricula - <?php echo $course['curid']?></h6>
+                                        <h6 >Curricula - <?php echo $courses['curid']?></h6>
 
                                         <!--option cursos-->
+
+                                        <a id="silabo<?php echo $courses['courseid'] ?>" class="btn btn-primary btn-sm btn-group-course btn-couses-sil <?php echo ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')? 'margin-top-btn':''?>" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>"data-toggle="tooltip" title="Registro del Sílabo" >Sílabo</a>
                                         
-                                        <a id="silabo<?php echo $courses['courseid'] ?>" class="btn btn-primary btn-sm btn-group-course <?php echo ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')? 'margin-top-btn':''?>" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>"data-toggle="tooltip" title="Registro del Sílabo" >Sílabo</a>
+                                        <a href="/controlactivity/index/index/courseid/<?php echo base64_encode($courses['courseid']) ?>/curid/<?php echo base64_encode($courses['curid']) ?>/turno/<?php echo base64_encode($courses['turno']) ?>/perid/<?php echo base64_encode($courses['perid']) ?>/subid/<?php echo base64_encode($courses['subid']) ?>" class="btn btn-primary btn-sm">Control de Actividad</a>
                                         
                                        <?php if($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C'){?>
                                             <?php switch ($courses['type_rate']) {
@@ -187,110 +187,7 @@
                                             <?php }else{?>
                                                 <span class='glyphicon glyphicon-info-sign text-danger'></span>
                                             <?php }?></h5>
-
-
-                                        <br>
-                                        <h5 class='text-persentage-couser' >Duplicar el silabo desde: 
-                                        </h5>
-                                        <?php
-
-                                        $u=$this->uid;
-
-                                        $where_uid = array('eid'=>$where['eid'],'oid'=>$where['oid'],'perid'=>$this->perid,'uid' => $u,
-                                                'is_main'=>'S', );
-
-                                                //print_r($where_uid);
-
-                                        $cour=new Api_Model_DbTable_Coursexteacher();
-                                        $cc=$cour->_getFilter($where_uid);                                                                           
-                                        //Aqui las escuelas de origen
-                                        $cour=$course['courseid'];
-                                        $esc=$course['escid'];
-                                        $tur=$courses['turno'];
-                                        $cur=$course['curid'];
-
-                                        ?>
-                                        <div>
-                                
-                                        <select id="courses_<?php echo $f?>" name="courses_<?php echo $f?>" class="form-control"> 
-                                                <option value="">Seleccione el curso </option>
-                                        <?php
-                                                
-                                                foreach ($cc as $courses)
-
-                                                {
-
-                                                if(($courses['courseid']==$cour and $courses['escid']<>$esc) OR ($courses['courseid']==$cour and $courses['turno']<>$tur))
-                                                {
-
-                                                $crorigen=$courses['courseid']; 
-                                                $escorigen=$courses['escid']; 
-                                                $cuorigen=$courses['curid']; 
-                                                $suorigen=$courses['subid']; 
-                                                $tuorigen=$courses['turno']; 
-                                                //$crname=$courses['name'];                                
-                                                //print_r($courses);  
-                                                                                
-                                                $where_course = array('eid'=>$where['eid'],'oid'=>$where['oid'],'courseid'=>$crorigen,'escid'=>$escorigen,'curid'=>$cuorigen,'subid'=>$suorigen);
-
-                                                //print_r($where_course);                                            
-
-                                                $name= new Api_Model_DbTable_Course();
-                                                $name_co=$name->_getOne($where_course);
-                                                //print_rx($name_co);
-                                                $nom=$name_co['name'];
-
-                                                $where_spe = array('eid'=>$where['eid'],'oid'=>$where['oid'],'escid'=>$escorigen,'subid'=>$suorigen);
-
-                                                $name_spe= new Api_Model_DbTable_Speciality();
-                                                $nspe=$name_spe->_getOne($where_spe);
-                                                $nom_spe=$nspe['name'];
-
-
-                                                ?>                                          
-                                                <option value="<?php echo $crorigen.";--;".$tuorigen.";--;".$escorigen.";--;".$this->perid.";--;".$cur.";--;".$esc.";--;".$cour.";--;".$tur?>"><?php echo $crorigen."-".$nom."-".$tuorigen."-".$nom_spe;?></option> 
-                                                <?php
-                                                }
-                                                
-                                                }
-
-                                                ?>
-                                        </select>
-                                        </div>
-                                      
-
-                                        <script>
-                                            //$(function() {
-                                            //var year_a="<?php echo base64_encode(date('Y'));?>";
-                                            $("#courses_<?php echo $f ?>").change(function(){
-
-                                            if(confirm("Esta seguro de duplicar \nel silabo"))
-                                            var courses =$("#courses_<?php echo $f ?>").val();
-                                            //alert("<?php echo $f ?>")
-                                            //alert(courses)
-
-                                            tmp=courses.split(";--;");
-                                            courorigen=tmp[0];
-                                            tuorigen=tmp[1];
-                                            esorigen=tmp[2];
-                                            perid=tmp[3];
-                                            cur=tmp[4];
-                                            escid=tmp[5];
-                                            courseid=tmp[6];
-                                            turno=tmp[7];
-                                                                       
-                                            url="/docente/notas/courses/perid/"+perid+"/courseidorigen/"+courorigen+"/turnoorigen/"+tuorigen+"/escidorigen/"+esorigen+"/curid/"+cur+"/escid/"+escid+"/courseid/"+courseid+"/turno/"+turno;
-                                            //alert(courorigen)
-                                            //alert(courseid)
-                                            //alert(url)
-                                            $("#sil").html("<option value=''>Cargando...</option>");
-                                            $("#sil").load(url);       
-                                            });
-                                            //$("#perid").load("/record/index/periods/year/"+year_a);    
-                                            //});
-                                        </script>
-
-
+                                        
                                     </div>
 
                                 <?php }
@@ -302,11 +199,17 @@
         </div>
   </div>
 </div>
+</div>
 <?php 
 }
-
-?>
-</div>
+}else{ ?>
+    <div class='col-md-12 cont-font-not-register'>
+        <h1 class='span-not-register'>
+            <span class='glyphicon glyphicon-exclamation-sign'></span>
+        </h1>
+        <h3 class='text-not-register'>Ningún Curso Asignados</h3>
+    </div>
+<?php } ?>
 
 <div id='sil'></div>
 
@@ -316,61 +219,22 @@
 
 </div><!-- /.modal -->
 
-
-
-
 <script>
+    $('#otherPicture').fadeOut('slow');
 
-$('#otherPicture').fadeOut('slow');
-
-$(".load-persentage").click(function(){
-    var $url = $(this).attr('href');
-    $("#modal-persentage").modal('show');
-    $.get($url,function($data){
-        $("#modal-persentage").html($data);
+    $(".load-persentage").click(function(){
+        var $url = $(this).attr('href');
+        $("#modal-persentage").modal('show');
+        $.get($url,function($data){
+            $("#modal-persentage").html($data);
+        });
+        
+        return false;
     });
-    
-    return false;
-});
 
 
 
-$(function () {
-    $('[data-toggle=tooltip]').tooltip({ placement: 'bottom' }) ;
-});
-
-    
-
+    $(function () {
+        $('[data-toggle=tooltip]').tooltip({ placement: 'bottom' }) ;
+    });
 </script>
-<style>
-.curso{
-    float: left;
-    width: 380px;
-    margin-right: 20px;
-    padding: 5px;
-    
-    border-radius: 5px;
-    border: 1px solid #000000;  
-    margin-bottom: 20px;
-    border: 1px solid rgb(212, 212, 212);
-    box-shadow: 0px 0px 7px #343434;
-  opacity: 0.6;
-  
-}
-
-.curso:hover{
-  opacity: 1.0;
-    z-index:999;
-      -webkit-transform: scale(1);  
-      -moz-transform: scale(1);  
-      -ms-transform: scale(1);   
-      -o-transform: scale(1);   
-    transform: scale(1);  
-}
-.curso div {
-    float: left;
-}
-.curso > div {
-    width: 360px; 
-}
-</style>

@@ -137,6 +137,7 @@ class IndexController extends Zend_Controller_Action {
     				// Set Header and Footer Print Org
     				$orgs = new Api_Model_DbTable_Org();
     				$rorg = $orgs->_getOne(array("eid" => $data->eid,"oid"=>$data->oid));
+                    
     				if ($rorg) $data->org = $rorg;
     				// Register access
     				$clientIp = $this->getRequest()->getClientIp();

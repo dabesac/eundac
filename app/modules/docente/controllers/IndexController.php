@@ -18,8 +18,31 @@ class Docente_IndexController extends Zend_Controller_Action {
     public function indexAction()
     {
       try{
-        $pid=$this->sesion->pid;
-        $this->view->pid=$pid;
+            $tb_periods = new Api_Model_DbTable_Periods();
+            $where_1 = array(
+                    'eid'=>$this->sesion->eid,
+                    'oid'=>$this->sesion->oid,
+                    'perid'=>$this->sesion->period->perid
+                );
+            $dat_period = $tb_periods->_getOne($where_1);
+            $date_1 = new Zend_Date($dat_period['start_register_note_p']);
+            $day_1 = $date_1->get(Zend_Date::DAY); 
+            $day_last = $date_1->get(Zend_Date::WEEKDAY);
+            $mounth = $date_1->get(Zend_Date::MONTH_NAME);
+            $this->view->day_1=$day_1;
+            $this->view->day_last=$day_last;
+            $this->view->mounth=$mounth;
+
+            $date_2 = new Zend_Date($dat_period['start_register_note_s']);
+            $day_2 = $date_2->get(Zend_Date::DAY); 
+            $day_last_2 = $date_2->get(Zend_Date::WEEKDAY);
+            $mounth_2 = $date_2->get(Zend_Date::MONTH_NAME);
+            $this->view->day_2=$day_2;
+            $this->view->day_last2=$day_last2;
+            $this->view->mounth_2=$mounth_2;
+
+            
+            //print_r($courses);
         }
         catch (Exception $e) {           
         }
@@ -92,17 +115,18 @@ class Docente_IndexController extends Zend_Controller_Action {
 
     public function lperiodsAction(){
       try{
-         $this->_helper->layout()->disableLayout();
-          $where['eid']= $this->sesion->eid;
-          $where['oid']= $this->sesion->oid;
-          $anio = $this->_getParam("anio");
-             if ($where['eid']=="" || $where['oid']==""||$anio=="") return false;
-             $p = substr($anio, 2, 3);
-             $where['p1']=$p."A";
-             $where['p2']=$p."B";
-             $periodos = new Api_Model_DbTable_Periods();
-             $lper = $periodos->_getPeriodsXAyB($where);
-             $this->view->lper=$lper;  
+            $this->_helper->layout()->disableLayout();
+            $where['eid']= $this->sesion->eid;
+            $where['oid']= $this->sesion->oid;
+            $anio = $this->_getParam("anio");
+            if ($where['eid']=="" || $where['oid']==""||$anio=="") return false;
+                $p = substr($anio, 2, 3);
+                $where['p1']=$p."A";
+                $where['p2']=$p."B";
+                $periodos = new Api_Model_DbTable_Periods();
+                $lper = $periodos->_getPeriodsXAyB($where);
+                $this->view->lper=$lper; 
+
         }
       catch(Exception $ex)
         {
@@ -148,18 +172,34 @@ class Docente_IndexController extends Zend_Controller_Action {
 
       public function xcoursesAction(){
         try{
-          $this->_helper->layout()->disableLayout();          
-           $where['eid'] = $this->sesion->eid;         
-           $where['oid'] = $this->sesion->oid; 
-           $where['escid'] = $this->sesion->escid;
-           $where['perid'] = $this->_getParam("perid");
-           $this->view->perid=$where['perid'];
-           $where['subid'] = $this->sesion->subid;
-           $where['uid'] = $this->sesion->uid;
-           $where['pid'] = $this->sesion->pid;
-           $dbcursos = new Api_Model_DbTable_Coursexteacher();
-           $lcursos = $dbcursos->_getFilter($where);
-           $this->view->cursos=$lcursos;      
+            $this->_helper->layout()->disableLayout(); 
+                   
+            $perid = $this->_getParam('perid','13A');
+            $where = array(
+                        'eid' => $this->sesion->eid,
+                        'oid'   =>$this->sesion->oid,
+                        'perid' =>$perid,
+                        'escid' =>$this->sesion->escid,
+                        'subid' =>$this->sesion->subid,
+                        'pid'   =>$this->sesion->pid
+                    );
+            $tb_course_teacher = new Api_Model_DbTable_Coursexteacher();
+            $tb_course= new Api_Model_DbTable_Course();
+            $dat_courses = $tb_course_teacher->_getFilter($where);
+            foreach ($dat_courses as $key => $course) {
+                $where1 = array(
+                        'eid' =>    $this->sesion->eid,
+                        'oid' =>    $this->sesion->oid,
+                        'courseid' => $course['courseid'],
+                        'subid'=>$this->sesion->subid,
+                        'curid' =>$course['curid'],
+                        'escid' =>$course['escid'],
+                    );
+                $name_course = $tb_course->_getOne($where1);
+                $courses[$key] = $name_course['name'];  
+            }
+            $this->view->courses= Zend_Json::encode($courses);
+
            }
             catch(Exception $ex)
         {
@@ -197,6 +237,9 @@ class Docente_IndexController extends Zend_Controller_Action {
            $lpolldetails= $db_poll->_getPollDetail($where);  
             // print_r($lpolldetails);
             $this->view->cantidad=$lpolldetails; 
+
+
+            
         }
         catch(Exception $ex)
         {

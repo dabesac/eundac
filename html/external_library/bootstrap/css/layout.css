@@ -1,9 +1,10 @@
-@font-face{
+/*@font-face{
 	src:url(../fonts/Cuprum-Regular.ttf);
 	font-family: Cuprum;
-}
+}*/
 body{
-	font-family: "Cuprum";
+	font-family: "Cuprum", sans-serif;
+	/*overflow: hidden;*/
 }
 #undac-menu{
 	background: #015292;
@@ -21,28 +22,10 @@ body{
 
 .container{
 	width: 100%;
-	
 }
 #wrapper{
-maring-left: 100px;
+	maring-left: 100px;
 }
-#wrapper .container .row > .col-md-11{
-	padding: 20px 29px;
-	border-left: 2px solid #363c46;
-	padding-bottom: 100px;
-	
-}
-#accordion .panel > .panel-heading:after{
-	content: " ";
-	background: url(../img/bg.png)no-repeat;
-	display: block;
-	width: 40px;
-	height: 21px;
-	position: absolute;
-	left: -10px;
-	margin-top: -20px;
-}
-
 #footer_fondo{
 	background: #363c46 !important;
 	height: 35px;
@@ -85,4 +68,163 @@ maring-left: 100px;
 .text-nav{
 	color: #2d4857;
 	margin-left: 10%;
+}
+
+#container_layout{
+	margin-bottom: 20px;
+	overflow: hidden;
+}
+/* .................... ...##loading_overlay##......................../*/
+#loading_overlay{
+	position: fixed;
+	top:0;
+	left: 0;
+	width:100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 9999;
+}
+#loading_overlay .loading_message{
+	background: #fff;
+	padding:0;
+	line-height: 25px;
+	height: 30px;
+	border: 1px solid #fff;
+	position: absolute;
+	top:0px;
+	left: 50%;
+	width: 100px;
+	margin-left: -37px;
+	text-align: center;
+	color: #333;
+	font-weight: bold;
+	-webkit-border-radius: 0px;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+}
+
+/*contect calendar*/
+.content-calendar{
+	margin-left: 10px;
+	margin-bottom: 20px;
+	height: auto;
+	border: 2px solid #bfbfbf;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+.content-day{
+	border-left:  5px solid #3cacfa;
+	height: 70px;
+	margin-bottom: 30px;
+}
+.text-calendar{
+	color: #2d2e32;
+	margin: 0px !important;
+}
+.content-event{
+	background-color: #2d2e32;
+	color: #fff;
+	height: auto;
+	padding: 10px;
+}
+.content-date{
+	margin-left: 10px;
+}
+.contet-add-cal{
+	background-color: #bfbfbf;
+	color: #fff;
+	font-size: 20px;
+	padding: 10px;
+	cursor: pointer;
+	margin-right: -1px;
+}
+.contet-add-cal:hover{
+	background-color: #3cacfa;
+}
+.text-event-title{
+	color: #fff;
+	font-weight: bold;
+}
+.icon-event{
+	font-size: 20px;
+	margin-right: 3px;
+}
+.calendar-text-day{
+	font-weight: bold;
+}
+.text-detail-event{
+	color: #b9b9b9;
+	font-size: 10px;
+}
+/*########list courses notes ##########*/
+.list-option-notes{
+	display: block;
+	font-size: 16px;
+	color: #737980;
+	margin-left: 17%;
+}
+
+.notes-option{
+	width: 30px;
+	position: absolute;
+	margin-left: 94%;
+	margin-top: 5%;
+	background-color: #e4e7eb;
+	border-radius: 0px 4px 4px 0px;
+}
+.cont-coruse{
+	background-color: #f2f2f2;
+	margin-right: 50px;
+	margin-bottom: 30px;
+	border: 1px solid #d4dde7;
+	border-radius: 4px 4px 4px 4px;
+	padding-bottom: 30px;
+}
+.span-course{
+	font-size: 50px;
+	color: #54769a;
+	margin-left: 35%;
+}
+.name-course{
+	font-size: 15px;
+	color: #54769a;
+}
+.btn-group-course{
+	margin-bottom: 10px;
+}
+.text-persentage-couser{
+	color: #131b24;
+}
+.progress-course{
+	height: 8px;
+}
+.img-closure-course{
+	width: 100px;
+	margin-top: 10%;
+	margin-left: 27%;
+}
+.btn-couses-sil{
+	margin-top: 10px;
+	margin-right: 5px;
+}
+/*==================%%%%%%%%%%%%%not register%%%%%%%%%%%%=========================00*/
+.span-not-register{
+		font-size: 120px;
+		color: 	#edecec;
+		padding-left: 45%;
+		padding-top: 8%;
+	}
+.cont-font-not-register{
+	background-color: #fcfcfc;
+	height: 400px;
+	
+}
+.text-not-register{
+	color: #9e9999;
+	font-size: 21px;
+	text-align: center;
 }

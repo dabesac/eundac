@@ -10,7 +10,6 @@ class Register_StudentController extends Zend_Controller_Action {
         }
         $login = $sesion->getStorage()->read();
         $this->sesion = $login;
-    
     }
     
     public function indexAction()

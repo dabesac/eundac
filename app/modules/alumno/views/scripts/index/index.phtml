@@ -1,8 +1,8 @@
 
-<!--<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Listado de distribuciones');?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Listado de distribuciones');?>
 <?php $this->placeholder('Btnnav')->append('<a href="" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
                             <a href="" class="btn btn-success"><span class="glyphicon glyphicon-plus "></span> Nuevo</a>
-                            <a href="" class="btn btn-info"><span class="glyphicon glyphicon-edit"></span> Editar</a>');?>-->
+                            <a href="" class="btn btn-info"><span class="glyphicon glyphicon-edit"></span> Editar</a>');?>
 
 <link rel="stylesheet" type="text/css" href="/css/dashboard.css">
 
@@ -159,6 +159,27 @@
 				<h2><span class="glyphicon glyphicon-signal text-info"></span></h2>
 			</blockquote>
 		</div>
+	<script type="text/javascript">
+	    var $data_courses = <?php echo $this->datos?>;
+	    var $courses = <?php echo $this->courses?>;
+	    var $dat_assist = <?php echo $this->dat_assist?>;
+	</script>
+	<script type="text/javascript" src="/js/graphic/student.js"></script>
+	<script src="/external_library/highcharts/js/highcharts.js"></script>
+	<script src="/external_library/highcharts/modules/exporting.js"></script>
+	<div class="row">
+	    <div class="col-md-13">
+	        <div class="row">
+	            <div class="col-md-6 content-graphic">
+	                <div id="container_performance" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
+	            </div>
+	            <div class="col-md-6 content-graphic">
+	                <div id="container_assistence" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
 	</div>
 
 </div>

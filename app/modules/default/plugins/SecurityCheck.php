@@ -53,6 +53,12 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
             $eid= $auth->getStorage()->read()->eid;
             $oid= $auth->getStorage()->read()->oid;
             $this->_acl->addRole(new Zend_Acl_Role($this->_role));
+            $logout = "default/index/salir";
+            $error = "default/error/error";
+            $this->_acl->add(new Zend_Acl_Resource($logout));
+            $this->_acl->add(new Zend_Acl_Resource($error));
+            $this->_acl->allow($this->_role, $logout);
+            $this->_acl->allow($this->_role, $error);
             $permissionTable = new Default_Model_DbTable_Premission();
             $permission = $permissionTable->_getResource_Role($eid,$oid,$this->_role);
             if ($permission) {
@@ -66,9 +72,9 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
                         # code...
                        $this->_acl->deny($this->_role, $resourceToken);
                     }
-                    
                 }
             } 
         }
+
     }
 }
