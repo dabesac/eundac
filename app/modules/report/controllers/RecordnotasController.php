@@ -25,10 +25,10 @@
  	public function getstudentuidAction(){
  		try{
        		$this->_helper->layout()->disableLayout();
-          $facid=$this->sesion->faculty->facid;
-          $this->view->facid=$facid;
-          // print ($facid);
-          $uid= $this->_getParam('uid');
+            $facid=$this->sesion->faculty->facid;
+            $this->view->facid=$facid;
+            $uid= $this->_getParam('uid');
+            
        		if($uid){
        			$where['uid'] = $uid;
         		$where['eid'] = $this->sesion->eid;

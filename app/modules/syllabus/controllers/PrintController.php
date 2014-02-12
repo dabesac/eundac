@@ -33,7 +33,23 @@ class Syllabus_PrintController extends Zend_Controller_Action {
 
             $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
             $dbspeciality = new Api_Model_DbTable_Speciality();
-            $speciality = $dbspeciality ->_getOne($wheres); 
+            $speciality = $dbspeciality ->_getOne($wheres);
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $dbspeciality->_getOne($wher);
+
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names." <br> ".$namep;
 
             if ($speciality['header']) {
                 $namelogo = $speciality['header'];
@@ -41,7 +57,6 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             else{
                 $namelogo = 'blanco';
             }
-            $this->view->namelogo=$namelogo;    
 
             $wherecur['eid']=$eid;
             $wherecur['oid']=$oid;
@@ -53,21 +68,13 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $percurso = new Api_Model_DbTable_PeriodsCourses();
             $datcurso = $percurso->_getInfocourseXescidXperidXcourseXturno($wherecur);
             $this->view->curso = $datcurso;
-            
-            $wheresc['eid']=$eid;
-            $wheresc['oid']=$oid;
-            $wheresc['escid']=$escid;
-            $wheresc['subid']=$subid;
-            $esc = new Api_Model_DbTable_Speciality();
-            $escuela = $esc ->_getOne($wheresc);
-            $this->view->escuela=$escuela;
 
             $wherefac['eid']=$eid;
             $wherefac['oid']=$oid;
-            $wherefac['facid']=$escuela['facid'];
+            $wherefac['facid']=$speciality['facid'];
             $fac = new Api_Model_DbTable_Faculty();
             $facu = $fac ->_getOne($wherefac);
-            $this->view->facu=$facu;
+            $namef=strtoupper($facu['name']);
             
             $whereperi['eid']=$eid;
             $whereperi['oid']=$oid;
@@ -105,9 +112,16 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $director = $per->_getOne($whereper);
             $this->view->director = $director;
 
+            $escid=$this->sesion->escid;
+            $where['escid']=$escid;
+
             $uid=$direc[0]['uid'];
             $pid=$direc[0]['pid'];
+
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            date_default_timezone_set("America/Lima");
+            $uidim=$this->sesion->pid;
+
             $data = array(
                 'eid'=>$eid,
                 'oid'=>$oid,
@@ -116,9 +130,11 @@ class Syllabus_PrintController extends Zend_Controller_Action {
                 'subid'=>$subid,
                 'pid'=>$pid,
                 'type_impression'=>'silabo',
-                'date_impression'=>date('Y-m-d h:m:s')
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
                 );
-            $dbimpression->_save($data);
+
+            $dbimpression->_save($data);            
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'silabo');
             $dataim = $dbimpression->_getFilter($wheri);
@@ -129,9 +145,25 @@ class Syllabus_PrintController extends Zend_Controller_Action {
                     $co=$co+1;
                 }
             }
-            $uidim=$this->sesion->pid;
-            $codigo=$co.$uidim;
+            $codigo=$co." - ".$uidim;
             $this->view->codigo=$codigo;
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+            $header = str_replace("h2", "h3", $header);
+            $header = str_replace("h3", "h5", $header);
+            $header = str_replace("h4", "h6", $header);
+            $header = str_replace("10%", "8%", $header);
+
+            $footer = str_replace("h4", "h5", $footer);
+            $footer = str_replace("h5", "h6", $footer);
+            
+            $this->view->header=$header;
+            $this->view->footer=$footer;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
