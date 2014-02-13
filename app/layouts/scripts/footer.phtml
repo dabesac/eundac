@@ -3,6 +3,7 @@
         exit();
     }
     $sesion = $auth->getStorage()->read();
+    $parent = $sesion->rol['parent'];
     $home = $sesion->rol['module'];
     $permission_recource = new Default_Model_DbTable_Premission();
     $tb_module = new Api_Model_DbTable_Module();
@@ -11,14 +12,27 @@
                     'oid'   =>  $sesion->oid,
                     'rid'   =>  $sesion->rol['rid']
                    );
-    $menu = $permission_recource->_getAllMenu($where);
-    foreach ($menu as $key => $value) {
+    if (!isset($parent)) {
+        $menu = $permission_recource->_getAllMenu($where);
+        foreach ($menu as $key => $value) {
         $where['mid']=$value['mid'];
         $dat_module = $tb_module->_getOne($where);
         $menu[$key]['icon']=$dat_module['imgicon'];
         $linnk = $permission_recource->_getResources($where);
         $menu[$key]['link']=$linnk;
     }
+    }else{
+        $where['parent'] = $parent;
+        $menu = $permission_recource->_getAllMenu_parent($where);
+        foreach ($menu as $key => $value) {
+        $where['mid']=$value['mid'];
+        $dat_module = $tb_module->_getOne($where);
+        $menu[$key]['icon']=$dat_module['imgicon'];
+        $linnk = $permission_recource->_getResources_parent($where);
+        $menu[$key]['link']=$linnk;
+    }
+    }
+    
 ?>
 <div id="footer_fondo">
   <div id="footer">
