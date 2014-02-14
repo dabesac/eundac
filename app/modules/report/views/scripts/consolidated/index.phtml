@@ -67,19 +67,19 @@ if (rid=="RF" || rid=="DIREC") {
     $("#facid").attr("disabled",true);
     var facid=$("#facid").val();
     // alert("/report/Consolidated/schools/facid/"+facid);
-    $("#escid").load("/report/Consolidated/schools/facid/"+facid);
+    $("#escid").load("/report/consolidated/schools/facid/"+facid);
     if (rid=="DIREC") {
         $("#escid").attr("disabled",true);
         var escid='<?php echo $this->escid?>';
-        $("#especialidad").load("/report/Consolidated/speciality/escid/"+escid);
+        $("#especialidad").load("/report/consolidated/speciality/escid/"+escid);
     };
 };
 $("#facid").change(function(){
     var facid=$(this).val();
-    $("#escid").load("/report/Consolidated/schools/facid/"+facid);
+    $("#escid").load("/report/consolidated/schools/facid/"+facid);
     if (facid=="TODO") {
         var escid="TODOEC";
-        $("#especialidad").load("/report/Consolidated/speciality/escid/"+escid);
+        $("#especialidad").load("/report/consolidated/speciality/escid/"+escid);
     };
 });
 
@@ -88,7 +88,7 @@ $("#escid").change(function(){
     var xx1 = tescid.split(";--;");
     var escid = xx1[0];
     var subid = xx1[1];
-    $("#especialidad").load("/report/Consolidated/speciality/escid/"+escid);
+    $("#especialidad").load("/report/consolidated/speciality/escid/"+escid);
 });
 $("#especialidad").change(function(){
     var facid=$(this).val();   
@@ -96,7 +96,7 @@ $("#especialidad").change(function(){
 
 $("#anho").change(function(){
     var anio = $(this).val();
-    var url = "/report/Consolidated/periods/anio/"+anio;
+    var url = "/report/consolidated/periods/anio/"+anio;
     $("#periodo_c").load(url);
 });
 
@@ -117,7 +117,7 @@ $("#generar").click(function(){
         alert("Seleccione la Facultad, Escuela y el Periodo Académico.");
         return false;
     };
-    var url="/report/Consolidated/windows/facid/"+facid+"/escid/"+escid+"/espec/"+espec+"/perid/"+perid+"/subid/"+subid;
+    var url="/report/consolidated/windows/facid/"+facid+"/escid/"+escid+"/espec/"+espec+"/perid/"+perid+"/subid/"+subid;
     $('#cargadatos').html("<img src='/img/spinner.gif'>Cargando...");
     $("#cargadatos").load(url);
 });
