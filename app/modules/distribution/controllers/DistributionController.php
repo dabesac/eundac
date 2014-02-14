@@ -17,6 +17,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
     
     public function indexAction()
     {   
+   
    		$distribution = new Distribution_Model_DbTable_Distribution();
    		$data['eid']=$this->sesion->eid;
    		$data['oid']=$this->sesion->oid;

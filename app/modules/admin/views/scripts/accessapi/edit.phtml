@@ -1,0 +1,29 @@
+<form id="<?php echo $this->form->getAction() ?>"  name="<?php echo $this->form->getAction() ?>"  action="<?php echo $this->form->getAction() ?>" method="POST">
+
+	<div class="row">
+  		<div class="col-sm-8"><h2 style="margin-top:-60px;">Editar Registro Acceso Api</h2></div>
+  		<div class="col-sm-2 "><center><?php print $this->form->guardar;?></center></div>
+  		<div class="col-sm-1"><br><a href="/admin/accessapi"  class="btn btn-danger  ">Cancelar</a></br></div>
+	</div>
+	<table class="table span6 table-striped table-bordered">
+		<tr>
+			<th>Empresa</th>
+			<td required><?php echo $this->form->emp;?></td>
+		</tr>
+		
+		<tr>
+			<th>Responsable</th>
+			<td><?php echo $this->form->resp;?></td>
+		</tr>
+		<tr>
+			<th>Correo Electronico</th>
+			<td><?php echo $this->form->mail;?></td>
+		</tr>
+		<tr>
+			<th>Register</th>
+			<td><?php echo $this->form->register;?></td>
+		</tr>
+	</table>
+
+		
+</form>

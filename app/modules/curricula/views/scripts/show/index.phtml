@@ -48,7 +48,8 @@ $facid=$this->facid;
 <div id="datos" class="flotacarajo span9"></div>
 
 <script type="text/javascript">
-$("#escid").load("/curricula/show/lschools/facid/"+<?php echo $facid?>);
+	var $facid_temp = "<?php echo $facid?>";
+	$("#escid").load("/curricula/show/lschools/facid/" + $facid_temp);
 </script>
 
 <script type="text/javascript">
