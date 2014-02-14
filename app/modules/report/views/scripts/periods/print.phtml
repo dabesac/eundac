@@ -1,30 +1,11 @@
  <?php
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
-ob_start(); 
-$header='
-<table style="width: 100%;" border="1">
-    <tr>
-        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-        <th style="text-align: center; font-size: 11px;">
-        FACULTAD DE '.strtoupper($this->faculty['name']).'<br/>
-        ESCUELA DE  '.strtoupper($this->speciality['name']).'<br/>
-        </th>        
-    </tr>
-    <tr>
-        <th style="border: 1px solid #000;">REPORTE AVANCE ACADEMICO</th>
-    </tr>
-</table>
-<tr>
-        <td style="text-align: left">&nbsp;  <b>Periodo: </b>'.strtoupper($this->perid).' </td>
-    </tr></br>
-    <tr>
-        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
-    </tr>
-'    
+ob_start();    
 ?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
+<div style="text-align: center; margin-bottom:3%"><b>REPORTE AVANCE ACADÉMICO - PERIODO <?php echo strtoupper($this->perid)?></b></div>    
 <?php
 if ($this->data_teacher) { ?>
 	<table style="width:100%; font-size: 9px;" border="1">
@@ -111,15 +92,20 @@ if ($this->data_teacher) { ?>
 		}?>
 	</table>
 <?php
-} ?>
+} 
+    date_default_timezone_set("America/Lima");
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,33,18,10,5);
+    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.05,'F');
+    $mpdf->showWatermarkImage = true;
 
-<?php
-  $html = ob_get_contents();
-  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
-  $mpdf->SetHTMLHeader($header);
-  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-  $mpdf->SetFooter($this->footer);
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('Escuela-'.$this->escid.'.pdf','D');
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    ob_end_clean();
+
+    $mpdf -> WriteHTML($html);
+  	$mpdf->Output('Escuela-'.$this->escid.'.pdf','D');
+    // $mpdf->Output(); 
+  
 ?>
