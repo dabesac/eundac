@@ -15,8 +15,9 @@ class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract{
 						$select->where("$atri = ?", $value);
 					}
 
-					foreach ($orders as $key => $order) {
-							$select->order($order);
+					if ($orders<>null || $orders<>"") {
+						if (is_array($orders))
+							$select->order($orders);
 					}
 					
 					$results = $select->query();
