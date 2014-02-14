@@ -162,14 +162,36 @@
  			$this->view->escid = $escid;
  			$this->view->subid = $subid;
 
- 			$whereesc = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid);
- 			$esc = new Api_Model_DbTable_Speciality();
- 			$data_esc = $esc->_getOne($whereesc);
- 			$this->view->speciality = $data_esc;
+ 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $base_speciality =  new Api_Model_DbTable_Speciality();        
+            $speciality = $base_speciality ->_getOne($where);
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $base_speciality->_getOne($wher);
+
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names." <br> ".$namep;
+
+            if ($speciality['header']) {
+                $namelogo = $speciality['header'];
+            }
+            else{
+                $namelogo = 'blanco';
+            }
 
  			$fac = new Api_Model_DbTable_Faculty();
  			$data_fac = $fac->_getOne($where = array('eid' => $eid, 'oid' => $oid, 'facid' => $data_esc['facid']));
- 			$this->view->faculty = $data_fac;
+ 			$namef=strtoupper($data_fac['name']);
 
  			$where = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid, 'perid' => $perid);
  			$user = new Api_Model_DbTable_Coursexteacher();
@@ -221,6 +243,46 @@
  				}
  			}
  			$this->view->data_teacher = $allteacher;
+
+ 			$escid=$this->sesion->escid;
+            $where['escid']=$escid;
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            date_default_timezone_set("America/Lima");
+            $uid=$this->sesion->uid;
+            $uidim=$this->sesion->pid;
+            $pid=$uidim;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'informe_academico',
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+            $dbimpression->_save($data);            
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'informe_academico');
+            $dataim = $dbimpression->_getFilter($wheri);
+            $co=count($dataim);
+            
+            $codigo=$co." - ".$uidim;
+            $this->view->codigo=$codigo;
+
+ 			$header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+            $header = str_replace("10%", "8%", $header);
+            
+            $this->view->header=$header;
+            $this->view->footer=$footer;
  		} catch (Exception $e) {
  			print "Error: ".$e->getMessage();
  		}

@@ -193,36 +193,93 @@ class Record_IndexController extends Zend_Controller_Action {
 	public function printavenceAction()
 	{
 		$this->_helper->layout()->disableLayout();		
-		$formData['eid'] = $this->sesion->eid;
-		$formData['oid'] = $this->sesion->oid;
+		$eid = $this->sesion->eid;
+		$oid = $this->sesion->oid;
 		$tmpescid = split(";--;",$this->getParam('escid'));
-		$formData['escid'] = base64_decode($tmpescid[0]);
-		$formData['subid'] = base64_decode($tmpescid[1]);
-		$formData['perid'] = base64_decode($this->getParam('perid'));
+		$escid = base64_decode($tmpescid[0]);
+		$subid = base64_decode($tmpescid[1]);
+		$perid = base64_decode($this->getParam('perid'));
+		$formData= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
 		$this->view->courses = $this->_loadCourses($formData);
-		$this->view->perid = $formData['perid'];
-		$speciality = new Api_Model_DbTable_Speciality();
+		$this->view->perid = $perid;
 
-		
-
-		$rows = $speciality->_getOne($formData);
-		if ($rows){
-			if ($rows->parent){
-				$rows->escid=$rows->parent;
-				$erows = $speciality->_getOne($rows);
-				$this->view->speciality = $erows;
-				$this->view->speciality1 = $rows;
-			}				
-			else
-				$this->view->speciality = $rows;
-		}
-		
+		$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+        $base_speciality =  new Api_Model_DbTable_Speciality();        
+        $speciality = $base_speciality ->_getOne($where);
+     
+        $facid = $speciality['facid'];
+		$whe=array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid);
 		$faculty = new Api_Model_DbTable_Faculty();
-		$frows = $faculty->_getOne($rows);
-		if ($frows) $this->view->faculty = $frows;
+		$datafa=$faculty->_getOne($whe);
+		$namef=strtoupper($datafa['name']);
+     
+        $parent=$speciality['parent'];
+        $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+        $parentesc= $base_speciality->_getOne($wher);
+
+        if ($parentesc) {
+            $pala='ESPECIALIDAD DE ';
+            $spe['esc']=$parentesc['name'];
+            $spe['parent']=$pala.$speciality['name'];
+        }
+        else{
+            $spe['esc']=$speciality['name'];
+            $spe['parent']='';  
+        }
+        $names=strtoupper($spe['esc']);
+        $namep=strtoupper($spe['parent']);
+        $namefinal=$names." <br> ".$namep;
+
+        if ($speciality['header']) {
+            $namelogo = $speciality['header'];
+        }
+        else{
+            $namelogo = 'blanco';
+        }
+        
+        $escid=$this->sesion->escid;
+        $where['escid']=$escid;
+
+        $dbimpression = new Api_Model_DbTable_Countimpressionall();
+        date_default_timezone_set("America/Lima");
+        $uid=$this->sesion->uid;
+        $uidim=$this->sesion->pid;
+        $pid=$uidim;
+
+        $data = array(
+            'eid'=>$eid,
+            'oid'=>$oid,
+            'uid'=>$uid,
+            'escid'=>$escid,
+            'subid'=>$subid,
+            'pid'=>$pid,
+            'type_impression'=>'avance_de_notas',
+            'date_impression'=>date('Y-m-d H:i:s'),
+            'pid_print'=>$uidim
+            );
+        $dbimpression->_save($data);            
+
+        $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'avance_de_notas');
+        $dataim = $dbimpression->_getFilter($wheri);
+        $co=0;
+        $len=count($dataim);
+        for ($i=0; $i < $len ; $i++) { 
+            if($dataim[$i]['type_impression']=='avance_de_notas'){
+                $co=$co+1;
+            }
+        }
+        $codigo=$co." - ".$uidim;
+        $this->view->codigo=$codigo;
 		
-		$this->view->printheader = $this->sesion->org['header_print'];
-		$this->view->printfooter = $this->sesion->org['footer_print'];
+		$header=$this->sesion->org['header_print'];
+        $footer=$this->sesion->org['footer_print'];
+        $header = str_replace("?facultad",$namef,$header);
+        $header = str_replace("?escuela",$namefinal,$header);
+        $header = str_replace("?logo", $namelogo, $header);
+        $header = str_replace("?codigo", $codigo, $header);
+        
+        $this->view->header=$header;
+        $this->view->footer=$footer;
 	}
 	
 	public function periodsAction()
@@ -361,27 +418,84 @@ class Record_IndexController extends Zend_Controller_Action {
 			$info_couser ['name_teacher'] = $info_teacher['last_name0']." ".
 											$info_teacher['last_name1'].", ".
 											$info_teacher['first_name'];
-			$info_speciality = 	$base_speciality->_getOne($where);
 
-
-			if ($info_speciality['parent'] != "") {
-				$where['escid']=$info_speciality['parent'];
-				$name_speciality = $base_speciality->_getOne($where);
-				$info_speciality['speciality'] = $name_speciality['name'];
-			}
-
-
-			$where ['facid'] = $info_speciality['facid'];
+	        $speciality = $base_speciality ->_getOne($where);
+	          
+			$where ['facid'] = $speciality['facid'];
 			$name_faculty = $base_faculty->_getOne($where);
-			$info_speciality['name_faculty'] = $name_faculty['name'];
+			$namef = strtoupper($name_faculty['name']);
 
-			
-			$this->view->info_speciality = $info_speciality;
+	        $parent=$speciality['parent'];
+	        $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+	        $parentesc= $base_speciality->_getOne($wher);
+
+	        if ($parentesc) {
+	            $pala='ESPECIALIDAD DE ';
+	            $spe['esc']=$parentesc['name'];
+	            $spe['parent']=$pala.$speciality['name'];
+	        }
+	        else{
+	            $spe['esc']=$speciality['name'];
+	            $spe['parent']='';  
+	        }
+	        $names=strtoupper($spe['esc']);
+	        $namep=strtoupper($spe['parent']);
+	        $namefinal=$names." <br> ".$namep;
+
+	        if ($speciality['header']) {
+	            $namelogo = $speciality['header'];
+	        }
+	        else{
+	            $namelogo = 'blanco';
+	        }
+	        
+	        $escid=$this->sesion->escid;
+	        $where['escid']=$escid;
+
+	        $dbimpression = new Api_Model_DbTable_Countimpressionall();
+	        date_default_timezone_set("America/Lima");
+	        $uid=$this->sesion->uid;
+	        $uidim=$this->sesion->pid;
+	        $pid=$uidim;
+
+	        $data = array(
+	            'eid'=>$eid,
+	            'oid'=>$oid,
+	            'uid'=>$uid,
+	            'escid'=>$escid,
+	            'subid'=>$subid,
+	            'pid'=>$pid,
+	            'type_impression'=>'constancia',
+	            'date_impression'=>date('Y-m-d H:i:s'),
+	            'pid_print'=>$uidim
+	            );
+	        $dbimpression->_save($data);            
+
+	        $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'constancia');
+	        $dataim = $dbimpression->_getFilter($wheri);
+	        $co=0;
+	        $len=count($dataim);
+	        for ($i=0; $i < $len ; $i++) { 
+	            if($dataim[$i]['type_impression']=='constancia'){
+	                $co=$co+1;
+	            }
+	        }
+	        $codigo=$co." - ".$uidim;
+	        $this->view->codigo=$codigo;
+
 			$this->view->info_couser = $info_couser;
 			$this->view->students=$data_students;
 			$this->view->perid=$perid;
 
-
+			$header=$this->sesion->org['header_print'];
+		    $footer=$this->sesion->org['footer_print'];
+		    $header = str_replace("?facultad",$namef,$header);
+		    $header = str_replace("?escuela",$namefinal,$header);
+		    $header = str_replace("?logo", $namelogo, $header);
+		    $header = str_replace("?codigo", $codigo, $header);
+		    
+		    $this->view->header=$header;
+		    $this->view->footer=$footer;
 			$this->_helper->layout()->disableLayout();	
 
 		} catch (Exception $e) {
@@ -1345,7 +1459,6 @@ class Record_IndexController extends Zend_Controller_Action {
 				'is_main'=>'S');
 
             $base_faculty 	=	new Api_Model_DbTable_Faculty();
-			$base_speciality = 	new Api_Model_DbTable_Speciality();
 			$base_course = 	new Api_Model_DbTable_Course();
 			$base_course_x_teacher = 	new Api_Model_DbTable_Coursexteacher();
 			$base_register_course = 	new Api_Model_DbTable_Registrationxcourse();
@@ -1353,19 +1466,6 @@ class Record_IndexController extends Zend_Controller_Action {
 			$base_CourseCompetency = new Api_Model_DbTable_CourseCompetency();
 			$base_semester = new Api_Model_DbTable_Semester();
 
-			$base_impress_course = new Api_Model_DbTable_Impresscourse();
-
-			$data_impress = null;
-
-			$data_impress = array(
-				'eid' => $eid, 'oid'=>$oid,
-				'escid'=> $escid,'subid' => $subid,
-				'perid' => $perid,'courseid'=>$courseid,
-				'curid' => $curid, 'turno' => $turno,
-				'register'=>$this->sesion->uid,
-				'code'=>'PREREGISTER'.$perid.$curid.$courseid.$turno,
-				);
-			$base_impress_course->_save($data_impress);
 
             $students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
 
@@ -1383,25 +1483,85 @@ class Record_IndexController extends Zend_Controller_Action {
 			$info_couser ['name_teacher'] = $info_teacher['last_name0']." ".
 											$info_teacher['last_name1'].", ".
 											$info_teacher['first_name'];
-			$info_speciality = 	$base_speciality->_getOne($where);
-
-
-			if ($info_speciality['parent'] != "") {
-				$where['escid']=$info_speciality['parent'];
-				$name_speciality = $base_speciality->_getOne($where);
-				$info_speciality['speciality'] = $name_speciality['name'];
-			}
-
-
-			$where ['facid'] = $info_speciality['facid'];
-			$name_faculty = $base_faculty->_getOne($where);
-			$info_speciality['name_faculty'] = $name_faculty['name'];
-
 			
-			$this->view->info_speciality = $info_speciality;
+			$wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $dbspeciality = new Api_Model_DbTable_Speciality();
+            $speciality = $dbspeciality ->_getOne($wheres);
+            $facid=$speciality['facid'];
+            $whe=array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid);
+            $dataf=$base_faculty->_getOne($whe);
+            $namef=strtoupper($dataf['name']);
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $dbspeciality->_getOne($wher);
+
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names." <br> ".$namep;
+
+            if ($speciality['header']) {
+                $namelogo = $speciality['header'];
+            }
+            else{
+                $namelogo = 'blanco';
+            }
+
+            $dbimpression = new Api_Model_DbTable_Impresscourse();
+            date_default_timezone_set("America/Lima");
+            $uidim=$this->sesion->pid;
+            $code='PREREGISTER'.$perid.$curid.$courseid.$turno;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'perid'=>$perid,
+                'courseid'=>$courseid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'curid'=>$curid,
+                'turno'=>$turno,
+                'register'=>$uidim,
+                'created'=>date('Y-m-d H:i:s'),
+				'code'=>$code
+                );
+
+            $dbimpression->_save($data);            
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>$code);
+            $dataim = $dbimpression->_getFilter($wheri);
+            $co=count($dataim);
+            $codigo=$co." - ".$uidim;
+            $this->view->codigo=$codigo;
+
 			$this->view->info_couser = $info_couser;
 			$this->view->students=$students;
 			$this->view->perid=$perid;
+
+			$header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+            $header = str_replace("h2", "h3", $header);
+            $header = str_replace("h3", "h5", $header);
+            $header = str_replace("h4", "h6", $header);
+            $header = str_replace("10%", "8%", $header);
+
+            $footer = str_replace("h4", "h5", $footer);
+            $footer = str_replace("h5", "h6", $footer);
+            
+            $this->view->header=$header;
+            $this->view->footer=$footer;
 
 			$this->_helper->layout()->disableLayout();	
 

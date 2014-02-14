@@ -5,16 +5,7 @@ ob_start();
 ?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
-<div class="center">
-FACULTAD DE <?php echo strtoupper($this->faculty['name'])?><br> 
-ESCUELA DE <?php echo strtoupper($this->speciality['name'])?><br>
-<?php if($this->speciality1){
-	echo "ESPECIALIDAD DE ".strtoupper($this->speciality1['name'])."<br>";
-}
-?>
-INFORME DE AVANCE DE NOTAS <?php echo $this->perid?>
-</div>
-<br/>
+<div class="center" style="font-size:15px"><strong>INFORME DE AVANCE DE NOTAS <?php echo $this->perid?></strong></div><br/>
 	<table>
 		<tr >
 			<th class="small">#</th>
@@ -60,11 +51,11 @@ INFORME DE AVANCE DE NOTAS <?php echo $this->perid?>
 		<tr >
 			<td class="center"><?php echo $i;?></td>
 			<td class="center"><?php echo $semid?></td>
-			<td><?php echo $curid?></td>
-			<td><?php echo $courseid?></td>
+			<td class="center"><?php echo $curid?></td>
+			<td class="center"><?php echo $courseid?></td>
 			<td><?php echo $name?></td>
 			<td class="center"><?php echo $turno?></td>
-			<td><?php echo $type;?></td>
+			<td class="center"><?php echo $type;?></td>
 			<td class="center"><?php echo $counregister;?></td>
 			<td class="center"><?php echo $pp?></td>
 			<td class="center"><?php echo $sp?> </td>
@@ -78,20 +69,21 @@ INFORME DE AVANCE DE NOTAS <?php echo $this->perid?>
 	</table>
 <?php 
 
-  $html = ob_get_contents();
-  //$mpdf=new mPDF('win-1252','A4','','',15,15,2,12,5,7);
-	$mpdf=new mPDF('win-1252','A4','','');
-  $mpdf->SetHTMLHeader($this->printheader);
-  //$mpdf->SetFooter(' ');
+    date_default_timezone_set("America/Lima");
+    $html = ob_get_contents();
   
-  $mpdf->SetFooter($this->printfooter);
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('avence-'.$this->perid.'.pdf','D');
-  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,33,18,5,5);
+    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.05,'F');
+    $mpdf->showWatermarkImage = true;
+
+    $mpdf->SetHTMLHeader($this->header);  
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+  	$mpdf->Output('AVANCE DE NOTAS-'.$this->perid.'.pdf','D');
+    // $mpdf->Output();
+ 
 ?>
-
-
 
 
 

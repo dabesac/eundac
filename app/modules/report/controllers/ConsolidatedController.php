@@ -240,33 +240,61 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
     public function printregisterxcourseAction(){
       try{
         $this->_helper->layout()->disableLayout();
-        $where['eid'] = $this->sesion->eid;
-        $where['oid'] = $this->sesion->oid;
-        $where['perid'] = $this->_getParam('perid');
-        $where['curid'] = $this->_getParam('curid');
-        $where['turno'] = $this->_getParam('turno');
-        $where['courseid'] = $this->_getParam('courseid');
-        $where['subid'] = $this->_getParam('subid');
-        $where['tipo'] = $this->_getParam('tipo');
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $perid = $this->_getParam('perid');
+        $curid = $this->_getParam('curid');
+        $subid = $this->_getParam('subid');
+        $turno = $this->_getParam('turno');
+        $courseid = $this->_getParam('courseid');
+        $tipo = $this->_getParam('tipo');
+        
+        $where = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'curid'=>$curid,'subid'=>$subid,'turno'=>$turno,'courseid'=>$courseid,'tipo'=>$tipo);
         $this->view->tipo =$where['tipo']; 
         $escid = $this->_getParam('escid');
         $espec = $this->_getParam('espec');
-        if ($espec) {  $where['escid']=$espec;  }
-        else{ $where['escid']=$escid; }
-         // Obteniendo la facultad
-        $escuela= new Api_Model_DbTable_Speciality();
-        $dataescid=$escuela->_getFacspeciality($where);
-        // print_r($dataescid);
-        if ($dataescid) {
-         if ($dataescid) {
-                $fac= new Api_Model_DbTable_Faculty();
-                $datafacid=$fac->_getOne($where);
-                $this->view->facultad =$datafacid['name'];               
-           }
-           }
-        $this->view->escuela=strtoupper($esc['name']);
-        $dataescid=$escuela->_getOne($where);
-        $this->view->escuela =$dataescid['name']; 
+
+        $base_speciality =  new Api_Model_DbTable_Speciality();        
+        $base_faculty =  new Api_Model_DbTable_Faculty();
+        if ($espec){
+            $where['escid']=$espec;
+            $speciality = $base_speciality ->_getOne($where);
+            $whe=array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']); 
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $base_speciality->_getOne($wher);
+        }
+        else{
+            $where['escid']=$escid;
+            $speciality = $base_speciality ->_getOne($where);
+            $whe=array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']); 
+        }
+        $dataf = $base_faculty->_getOne($whe);
+        $namef = strtoupper($dataf['name']);
+
+        if ($parentesc) {
+            $pala='ESPECIALIDAD DE ';
+            $spe['esc']=$parentesc['name'];
+            $spe['parent']=$pala.$speciality['name'];
+            $escid = $espec;
+        }
+        else{
+            $spe['esc']=$speciality['name'];
+            $spe['parent']='';
+            $escid = $escid;
+        }
+        $names=strtoupper($spe['esc']);
+        $namep=strtoupper($spe['parent']);
+        $namefinal=$names." <br> ".$namep;
+
+        if ($speciality['header']) {
+            $namelogo = $speciality['header'];
+        }
+        else{
+            $namelogo = 'blanco';
+        }
+        
+         
         $cur= new Api_Model_DbTable_Registrationxcourse();
         $lcur=$cur->_getStudentXcoursesXescidXperiods($where);
         $this->view->data=$lcur;
@@ -274,6 +302,51 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $lcourse=$course->_getOne($where);
         $this->view->courseid =$lcourse['name']; 
         $this->view->perid = $where['perid']; 
+
+        // $escid=$this->sesion->escid;
+        // $where['escid']=$escid;
+
+        $dbimpression = new Api_Model_DbTable_Impresscourse();
+        date_default_timezone_set("America/Lima");
+        $uidim=$this->sesion->pid;
+        if ($tipo=="1") {
+            $code="matriculados_curso";
+        }
+        if ($tipo=="2") {
+            $code="avance_de_notas";
+        }
+
+        $data = array(
+            'eid'=>$eid,
+            'oid'=>$oid,
+            'perid'=>$perid,
+            'courseid'=>$courseid,
+            'escid'=>$escid,
+            'subid'=>$subid,
+            'curid'=>$curid,
+            'turno'=>$turno,
+            'register'=>$uidim,
+            'created'=>date('Y-m-d H:i:s'),
+            'code'=>$code
+            );
+        
+        $dbimpression->_save($data);            
+
+        $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>$code);
+        $dataim = $dbimpression->_getFilter($wheri);
+        $co=count($dataim);
+        $codigo=$co." - ".$uidim;
+        $this->view->codigo=$codigo;
+
+        $header=$this->sesion->org['header_print'];
+        $footer=$this->sesion->org['footer_print'];
+        $header = str_replace("?facultad",$namef,$header);
+        $header = str_replace("?escuela",$namefinal,$header);
+        $header = str_replace("?logo", $namelogo, $header);
+        $header = str_replace("?codigo", $codigo, $header);
+        
+        $this->view->header=$header;
+        $this->view->footer=$footer;
       }
       catch (Exception $e){
         print "Error:" .$e->getMessage();
