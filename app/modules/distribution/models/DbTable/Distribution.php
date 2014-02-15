@@ -94,5 +94,19 @@ class Distribution_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getDistributionsxYear($data=null){
+		// $sql=$this->_db->query("select * from periodos where eid='$eid' and oid ='$oid' and left(perid,2)='$anio' order by perid");
+		try {
+			if ($data['eid']=='' || $data['oid']==''|| $data['escid']=='' || $data['subid']=='') return false;
+			$wherestr="eid='".$data['eid']."' and oid='".$data['oid']."' and escid='".$data['escid']."' and subid='".$data['subid']."' and left(perid,2)='".$data['year']."'";
+			//$order="perid asc";
+			$rows= $this->fetchAll($wherestr,$order);
+			if ($rows) return $rows->toArray();
+			return false;
+		} catch (Exception $e) {
+			print "Error: Read All Periods x Years" .$e->getMessage();
+		}
+	}
+
 
 }
