@@ -27,7 +27,6 @@
 	</div><!-- /.modal-dialog -->
 </form>
 <script>
-	
 	$("#save").click(function(){
 		$.ajax({
 			url:"/admin/acl/edit",
@@ -48,5 +47,5 @@
 	});
 </script>
 <?php }else{
-	echo json_encode($this->json);
+	echo $this->json;
  }?>

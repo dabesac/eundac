@@ -1,42 +1,38 @@
-<form id="<?php  print $this->form->getname()?>"  name="<?php print $this->form->getname()?>" action="<?php print $this->form->getaction()?>" method="POST" enctype="application/x-www-form-urlencoded">
-<div class="menu-botones">
-	<div class="pull-left"><h4>Lista Distribuciones</h4></div>
-	<div class="pull-right">
-	<?php print $this->form->save?>
-	
-</button>
-	<a href="/distribution/distribution/" class="btn btn-danger" >CANCELAR</a>
-	</a>
-	
-	</div>
-</div>
 
-	<div class="table-responsive">					
-		<?php print $this->form->eid ?>
-		<?php print $this->form->oid ?>
-		<?php print $this->form->escid ?>
-		<?php print $this->form->subid ?>
-		<?php print $this->form->distid ?>
-	</div>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Editar Distribución');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a></a>
+	<a href="##" id="save" class="btn btn-success">Guardar</a>');?>
+
+<form action="/distribution/distribution/edit/distid/<?php echo $this->dataget['distid']?>/perid/<?php echo $this->dataget['perid']?>" method="post" id="form">
+
 	<table class="table"> 
 		<tr>
 			<th class="col-md-2">Periodo</th>
 			<th class="col-md-2" >Numero</th>
 			<th class="col-md-2">Fecha Presentación</th>
-			<th class="col-md-2">Fecha Aprobación</th>
-			<th class="col-md-2">Fecha Aprobación</th>
+			<th class="col-md-2">Estado</th>
 		</tr>
 		<tr>
 			<td ><?php print $this->form->perid?></td>
 			<td ><?php print $this->form->number?></td>
 			<td ><?php print $this->form->datepress?></td>
-			<td ><?php print $this->form->dateaccept?></td>
 			<td ><?php print $this->form->state?></td>
 		</tr>
 	</table>
 </form>
 <script>
-	$(function() {
+	$('#save').click(function(){
+		$('#form').submit();
+	});
+
+	$('#form').submit(function(){
+		$.ajax({
+			type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+		});
+	});
+	/*$(function() {
 		
 		$("#datepress").datepicker();
 		$("#dateaccept").datepicker();
@@ -45,6 +41,6 @@
 		});
 		
 		
-	});
+	});*/
 	
 </script>

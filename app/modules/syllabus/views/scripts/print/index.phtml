@@ -41,10 +41,6 @@ switch ($mes) {
     case 12: $strm = "Diciembre";break;
 } 
 ?>
-<div style="width:100%;text-align: center;">
-    <b>FACULTAD DE <?php echo strtoupper($this->facu['name'])?><br>
-    ESCUELA DE FORMACIÓN PROFESIONAL DE <?php echo strtoupper($this->escuela['name'])?></b>
-</div>
 <div>
     <h4 style="text-align: center; font-size: 15px;">SILABO</h4>
     <h4 style="text-align: center; font-size: 14px;"><?php echo $curso['name']?></h4>
@@ -285,12 +281,17 @@ switch ($mes) {
     <p style='width:200px ;border-top: solid 1px #000; font-weight: bold'>V° B° Comisión de Sílabo</p>
 </div>
 <?php 
-  $html = ob_get_contents();
-  $mpdf=new mPDF('win-1252','A4','','',15,15,12,12,5,7);
-  $mpdf->SetFooter(' Impresion {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-  $mpdf->SetFooter($this->footer);
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('SILABO -'.$curso['courseid'].'.pdf','D');
+    date_default_timezone_set("America/Lima");
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,36,18,8,5);
+
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    ob_end_clean();
+
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('SILABO -'.$curso['courseid'].'.pdf','D');
+    // $mpdf->Output(); 
   
 ?>

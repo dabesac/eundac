@@ -9,88 +9,91 @@ class Docente_NotasController extends Zend_Controller_Action{
  		$login = $sesion->getStorage()->read();
  		
  		$this->sesion = $login;
- 		$this->sesion->period->perid="13B";
 
 	}
 
 	public function indexAction(){
-		// Periods Now
-		//$this->_helper->layout()->disablelayout();
+
+		$perid = $this->_getParam('perid',$this->sesion->period->perid);
 
 		$where['eid']=$this->sesion->eid;
 		$where['oid']=$this->sesion->oid;
 		$where['uid']=$this->sesion->uid;
 		$where['pid']=$this->sesion->pid;
-		$where['perid']=$this->sesion->period->perid;
+		$where['perid']=$perid;
 		$where['is_main']='S';
-		//print_r($this->sesion);
 		$this->view->uid=$where['uid'];
 
-		$this->view->perid= $this->sesion->period->perid;
-		$docente = new Api_Model_DbTable_PeriodsCourses();
-		$data = $docente->_getCourseTeacher($where);
+		$this->view->perid= $perid;
+		$tb_periods_course = new Api_Model_DbTable_PeriodsCourses();
+		$data_courses = $tb_periods_course->_getCourseTeacher($where);
 		
-		$l=count($data);
+        $tb_course= new Api_Model_DbTable_Course();
+
+
 		$faculty=array();
 
-		$a=0;
-		$faculty[$a]['facid']=$data[0]['facid'];
-		$faculty[$a]['name']=$data[0]['name'];
-		for ($i=0; $i < $l ; $i++) { 
-			if (($faculty[$a]['facid'])!= $data[$i]['facid']) {
-				$a++;
-				$faculty[$a]['facid']=$data[$i]['facid']; 
-				$faculty[$a]['name']=$data[$i]['name']; 
+		if ($data_courses) {
+			foreach ($data_courses as $key => $tmp_course) {
+				$where_1['eid']=$tmp_course['eid'];
+		        $where_1['oid']=$tmp_course['oid'];
+		        $where_1['curid']=$tmp_course['curid'];
+		        $where_1['escid']=$tmp_course['escid'];
+		        $where_1['subid']=$tmp_course['subid'];
+		        $where_1['courseid']=$tmp_course['courseid']; 
+	            $course_name=$tb_course->_getOne($where_1);
+				$data_courses[$key]['name_course']	=	$course_name['name'];
+			}
+			$l=count($data_courses);
+			$a=0;
+			$faculty[$a]['facid']=$data_courses[0]['facid'];
+			$faculty[$a]['name']=$data_courses[0]['name'];
+			for ($i=0; $i < $l ; $i++) { 
+				if (($faculty[$a]['facid'])!= $data_courses[$i]['facid']) {
+					$a++;
+					$faculty[$a]['facid']=$data_courses[$i]['facid']; 
+					$faculty[$a]['name']=$data_courses[$i]['name']; 
+				}
 			}
 		}
 		$this->view->faculty=$faculty;
 
 		$base_period = new Api_Model_DbTable_Periods();
 	    $data_period = $base_period->_getOne($where);
+	    $period_tm_act_ini = $base_period->_get_periods_ini_temp_activo($where);
 	    
+	    $li = '';
+		 if ($period_tm_act_ini) {
+		 	foreach ($period_tm_act_ini as $key => $value) {
+                $li = "<li><a href=/docente/notas/index/perid/".$value['perid'].">".$value['name']." | ".$value['perid']."</a></li> \n" . $li;
+			}
+		}
+	    $this->view->periods = $li;
+
+        $partial = 0;
 	    if ($data_period) {
 	        $time = time();
 	        //primer partial
 	        if($time >= strtotime($data_period['start_register_note_p'])  && $time <= strtotime($data_period['end_register_note_p'])){
                 $this->view->partial = 1; 
                 $partial = 1;
-	        }else{
-	            //segundo partial
-	            if($time >= strtotime($data_period['start_register_note_s'])  && $time <= strtotime($data_period['end_register_note_s'])){
-	                $this->view->partial = 2; 
-	                $partial = 2;
-	            }
 	        }
+	            //segundo partial
+            if($time >= strtotime($data_period['start_register_note_s'])  && $time <= strtotime($data_period['end_register_note_s'])){
+                $this->view->partial = 2; 
+                $partial = 2;
+            }else{
+                $this->view->partial = 0; 
+            }
+
+	        
 	    }
 
-	    $persetage = $this->persetage_notes($data,$partial);
+	    $persetage = $this->persetage_notes($data_courses,$partial);
 
 		$this->view->data=$persetage;
 		
-		// Periods Later
-		$where['uid']=$this->sesion->uid;
 		
-		$where['uid']=$this->sesion->uid;
-		$where['perid']="13D";
-		
-		$where['is_main']='S';
-		$docente_ = new Api_Model_DbTable_PeriodsCourses();
-		$data_ = $docente_->_getCourseTeacher($where);
-		 $l_=count($data_);
-		$faculty_=array();
-		
-		$a_=0;
-		$faculty_[$a_]['facid']=$data_[0]['facid'];
-		$faculty_[$a_]['name']=$data_[0]['name'];
-		for ($i_=0; $i_ < $l_ ; $i_++) {
-			if (($faculty_[$a_]['facid'])!= $data_[$i_]['facid']) {
-				$a_++;
-				$faculty_[$a_]['facid']=$data_[$i_]['facid'];
-				$faculty_[$a_]['name']=$data_[$i_]['name'];
-			}
-		}
-		$this->view->faculty_=$faculty_;
-		$this->view->data_=$data_;
 
 
 	}
@@ -117,24 +120,16 @@ class Docente_NotasController extends Zend_Controller_Action{
        	
         if($courseid==$courseidorigen)
         {
-
-        $silabo = new Api_Model_DbTable_Syllabus();
+        	$silabo = new Api_Model_DbTable_Syllabus();
         	if($silabo->_getDuplicasilabo($perid,$escid,$courseid,$curid,$turno,$escidorigen,$turnoorigen))
         	{
-        	?>
-        	<script>
-        	alert('El silabo ha sido duplicado correctamente')
-        	</script>
-        	<?php
+        		
         	}
-
         }
         else
         {
         	echo "no son cursos compatibles";
         }
-
-
 
 	}
 
@@ -204,7 +199,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 	            $assist_11 = 0; $assist_12 = 0; $assist_13 = 0;$assist_14 = 0;$assist_15 = 0;
 	            $assist_16 = 0; $assist_17 = 0; $assist_18 = 0;$assist_19 = 0;$assist_20 = 0;
 	            $assist_21 = 0; $assist_22 = 0; $assist_23 = 0;$assist_24 = 0;$assist_25 = 0;
-	            $assist_25 = 0; $assist_27 = 0; $assist_28 = 0;$assist_29 = 0;$assist_30 = 0;
+	            $assist_26 = 0; $assist_27 = 0; $assist_28 = 0;$assist_29 = 0;$assist_30 = 0;
 	            $assist_31 = 0; $assist_32 = 0; $assist_33 = 0;$assist_34 = 0;
 	           	
 	           	

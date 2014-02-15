@@ -4,7 +4,7 @@
                             <a href="" class="btn btn-success"><span class="glyphicon glyphicon-plus "></span> Nuevo</a>
                             <a href="" class="btn btn-info"><span class="glyphicon glyphicon-edit"></span> Editar</a>');?>
 
-
+<link rel="stylesheet" type="text/css" href="/css/dashboard.css">
 
 <div class="container-fluid showFirst">
 	<div class="row">
@@ -87,7 +87,7 @@
 			<a id="btnGrafics" href="#grafics" class="btn form-control">
 				<div class="panel panel-info">
 					<h2 class="text-center"><span class="glyphicon glyphicon-stats text-primary"></span></h2>
-					<h4 class="text-center text-muted">Rendimiento</h4>
+					<h4 class="text-center text-muted">Graficas</h4>
 				</div>
 			</a>
 		</div>
@@ -112,6 +112,41 @@
 	</div>
 </div>
 
+<div id="grafics" class="container-fluid" style="height: 600px;">
+	<div class="row">
+		<div class="col-md-9 col-md-offset-1">
+			<blockquote>
+				<h2 class="text-info">Graficas <span class="text-muted">Estadisticas</span></h2>
+			</blockquote>
+		</div>
+		<div class="col-md-1">
+			<blockquote>
+				<h2><span class="glyphicon glyphicon-briefcase text-info"></span></h2>
+			</blockquote>
+		</div>
+		<script type="text/javascript">
+	    var $data_courses = <?php echo $this->datos?>;
+	    var $courses = <?php echo $this->courses?>;
+	    var $dat_assist = <?php echo $this->dat_assist?>;
+		</script>
+		<script type="text/javascript" src="/js/graphic/student.js"></script>
+		<script src="/external_library/highcharts/js/highcharts.js"></script>
+		<script src="/external_library/highcharts/modules/exporting.js"></script>
+		<div class="row">
+		    <div class="col-md-13">
+		        <div class="row">
+		            <div class="col-md-6 content-graphic">
+		                <div id="container_performance" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
+		            </div>
+		            <div class="col-md-6 content-graphic">
+		                <div id="container_assistence" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+</div>
+
 <div id="jobs" class="container-fluid" style="height: 600px;">
 	<div class="row">
 		<div class="col-md-9 col-md-offset-1">
@@ -121,25 +156,10 @@
 		</div>
 		<div class="col-md-1">
 			<blockquote>
-				<h2><span class="glyphicon glyphicon-briefcase text-info"></span></h2>
-			</blockquote>
-		</div>
-	</div>
-</div>
-
-<div id="grafics" class="container-fluid" style="height: 600px;">
-	<div class="row">
-		<div class="col-md-9 col-md-offset-1">
-			<blockquote>
-				<h2 class="text-info">Rendimiento <span class="text-muted">Academico</span></h2>
-			</blockquote>
-		</div>
-		<div class="col-md-1">
-			<blockquote>
 				<h2><span class="glyphicon glyphicon-signal text-info"></span></h2>
 			</blockquote>
 		</div>
-		<script type="text/javascript">
+	<script type="text/javascript">
 	    var $data_courses = <?php echo $this->datos?>;
 	    var $courses = <?php echo $this->courses?>;
 	    var $dat_assist = <?php echo $this->dat_assist?>;
@@ -159,6 +179,7 @@
 	        </div>
 	    </div>
 	</div>
+
 	</div>
 
 </div>

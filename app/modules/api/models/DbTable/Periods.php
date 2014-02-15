@@ -150,7 +150,7 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
 	}
 
 
-	  public function _getAniosPerids($where=null)
+	public function _getAniosPerids($where=null)
     {
        try
        {
@@ -168,7 +168,27 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
         }
     }
 
+    public function _get_periods_ini_temp_activo($where = array() )
+    {
+       try
+       {
+       		if ($where['eid'] == "" || $where['oid']=='') return false;
 
+            $sql=$this->_db->query("
+            	select *from 
+            	base_periods where 
+            	eid='".$where['eid']."' and
+            	oid ='".$where['oid']."' and
+            	state in('A','T','I')
+            ");  
+           $row=$sql->fetchAll();
+           return $row;  
+        } 
+        catch (Exception $ex)
+        {
+            print "read periods temporal activo and start".$ex->getMessage();
+        }
+    }
 
 	public function _delete($data)
 	{

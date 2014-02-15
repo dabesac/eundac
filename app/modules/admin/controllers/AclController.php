@@ -88,11 +88,10 @@ class Admin_AclController extends Zend_Controller_Action{
                     if ($tb_module->_update($data,$p_key)) {
                         $this->_response->setHeader('Content-Type', 'application/json');
                         $json = array('status'=> true);                   
-                        $this->view->json = $json;
+                        $this->view->json = Zend_Json::encode($json);
                     }
 
                 }else{
-                    
                     $this->view->form=$form;
                     $form->populate($data);
                 }
@@ -116,6 +115,7 @@ class Admin_AclController extends Zend_Controller_Action{
         {
             print "Error listando al Crear Roles: ".$ex->getMessage();
         }
+
 
     }
 
@@ -159,7 +159,7 @@ class Admin_AclController extends Zend_Controller_Action{
                 if ($tb_resourse->_save($data)) {
                         $this->_response->setHeader('Content-Type', 'application/json');
                         $json = array('status'=> true);                   
-                        $this->view->json = $json;
+                        $this->view->json = Zend_Json::encode($json);
                     }
             }
             else{
@@ -191,7 +191,7 @@ class Admin_AclController extends Zend_Controller_Action{
                 if ($tb_resourse->_update($data,$p_key)) {
                         $this->_response->setHeader('Content-Type', 'application/json');
                         $json = array('status'=> true);                   
-                        $this->view->json = $json;
+                        $this->view->json = Zend_Json::encode($json);
                     }
             }
             else{

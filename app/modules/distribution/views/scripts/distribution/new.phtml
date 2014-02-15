@@ -1,13 +1,9 @@
-<form id="<?php  print $this->form->getname()?>"  name="<?php print $this->form->getname()?>" action="<?php print $this->form->getaction()?>" method="POST" enctype="application/x-www-form-urlencoded">
-<div class="menu-botones">
-	<div class="pull-left"><h4>Crear Distribución</h4></div>
-	<div class="pull-right">
-	<?php print $this->form->save?>
-	<a href="/distribution/distribution/" class="btn btn-danger" >CANCELAR</a>
-	</a>
-	
-	</div>
-</div>
+
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-plus"></span> Nueva Distribución');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+	<a href="##" id="save" class="btn btn-success">Guardar</a>');?>
+
+<form action="/distribution/distribution/new" method="post" id="form">
 
 	<div class="table-responsive">					
 		<?php print $this->form->eid ?>
@@ -21,14 +17,12 @@
 			<th class="col-md-2">Periodo</th>
 			<th class="col-md-2" >Numero</th>
 			<th class="col-md-2">Fecha Presentación</th>
-			<th class="col-md-2">Fecha Aprobación</th>
-			<th class="col-md-2">Fecha Aprobación</th>
+			<th class="col-md-2">Estado</th>
 		</tr>
 		<tr>
 			<td ><?php print $this->form->perid?></td>
 			<td ><?php print $this->form->number?></td>
 			<td ><?php print $this->form->datepress?></td>
-			<td ><?php print $this->form->dateaccept?></td>
 			<td ><?php print $this->form->state?></td>
 		</tr>
 	</table>
@@ -39,24 +33,38 @@
 </div>
 
 <script>
+	$("#perid").change(function(){
+		var perid = $.base64.decode($(this).val());
+		var time = "<?php echo time()?>";
+		$("#number").val(perid+" - "+time);
+	});
+
+	$('#save').click(function(){
+		$('#form').submit();
+	});
+
+	$('#form').submit(function(){
+		$.ajax({
+			type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+		});
+	});
+
+	var exist = 1;
+	if ('<?php $this->exist?>') {
+		var exist = '<?php echo $this->exist?>';
+	};
+	if (exist == 0) {
+		$("#existe").show();
+	}
+	
 	$(function() {
 		$("#datepress").datepicker();
 		$("#dateaccept").datepicker();
 		$("#sendform").click(function(){
 			$("#frmDistribution").submit();
 		});
-		
-		var exis = "<?php echo $this->exis?>";
-		if (exis == 1) {
-			$("#existe").show();
-		};
-
-		$("#perid").change(function(){
-			var perid = $.base64.decode($(this).val());
-			var time = "<?php echo time()?>";
-			$("#number").val(perid+" - "+time);
-		});
-		
 	});
 	
 </script>

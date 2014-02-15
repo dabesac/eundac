@@ -11,11 +11,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $view->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
             
             $view->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.css')
-            ->headLink()->appendStylesheet('/external_library/bootstrap/css/layout.css');
+            ->headLink()->appendStylesheet('/external_library/bootstrap/css/layout.css')
+            ->headLink()->appendStylesheet('/external_library/jquery-ui/jquery.ui.datepicker.css');
 
-            $view->headScript()->prependFile('/external_library/bootstrap/js/bootstrap.js')
+            $view->headScript()->prependFile('/external_library/jquery-transit/jquery.transit.min.js')
+            ->headScript()->prependFile('/external_library/bootstrap/js/bootstrap.js')
             ->headScript()->prependFile('/external_library/bootstrap/js/jquery.functions.js')
             ->headScript()->prependFile('/external_library/base64/jquery.base64.min.js')
+            ->headScript()->prependFile('/external_library/jquery-ui/jquery.ui.datepicker.js')
+            ->headScript()->prependFile('/external_library/jquery-ui/jquery.ui.core.js')
             ->headScript()->prependFile('/js/jquery-1.11.0.js');
             
             

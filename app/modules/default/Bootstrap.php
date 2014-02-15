@@ -26,9 +26,27 @@ class Default_Bootstrap extends Zend_Application_Module_Bootstrap
         return $autoloader;
     }
 
-    public function _initACL()
-    {           
+    public function _initRouter(){
         
+        $router = Zend_Controller_Front::getInstance()->getRouter();
+        $router->addRoute('login',
+                    new Zend_Controller_Router_Route('login',
+                            array(
+                                'module'     => 'default',
+                                'controller' => 'index',
+                                'action'     => 'index'
+                                )
+                            )
+            );
+        $router->addRoute('logout',
+                    new Zend_Controller_Router_Route('logout',
+                            array(
+                                'module'     => 'default',
+                                'controller' => 'index',
+                                'action'     => 'salir'
+                                )
+                            )
+            );
     }
     
 }
