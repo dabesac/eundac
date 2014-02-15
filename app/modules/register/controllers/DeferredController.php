@@ -448,8 +448,10 @@ class Register_DeferredController extends Zend_Controller_Action {
                     'code_student'=>$student['uid'],
                     'perid'=>$perid,'processed'=>'N');
                 $receipts = $base_bankreceipts->_getFilter($where1);
-                $students_register[$key]['receipts']= $receipts; 
+                $students_register[$key]['receipts']= $receipts;
+
                 } 
+
             }
             else
             {
@@ -458,6 +460,7 @@ class Register_DeferredController extends Zend_Controller_Action {
 
             $infocurso = $base_courses->_getOne($where);
             $this->view->students_register=$students_register;
+
             $this->view->infocurso = $infocurso;
             $this->view->perid = $perid;
             $this->view->urlpersentage=$urlpersentage;

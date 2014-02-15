@@ -1,0 +1,33 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-road"></span> Acceso al Api');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+                            <a href="/admin/accessapi/new" class="btn btn-success"><span class="glyphicon glyphicon-plus "></span> Nuevo</a>
+                            ');?>
+<?php if($this->allquery) { ?>
+<table style="margin-top:20px ;"class="table span9 table-striped table-bordered table-condensed">
+	<tr>
+		<th><center>#</center></th>
+		<th><center>Address IP</center></th>
+		<th><center>Empresa</center></th>
+		<th><center>Responsable</center></th>
+		<th><center>Mail</center></th>
+		<th colspan="2"><center>Operacion</center></th>
+	</tr>
+	<?php $c=1 ; foreach($this->allquery as $allquery){?>
+		<tr>
+			<td><center><?php echo $c ?></center></td>
+			<td><center><?php echo $allquery['ip']?></center></td>
+			<td><center><?php echo $allquery['emp']?></center></td>
+			<td><center><?php echo $allquery['resp']?></center></td>
+			<td><center><?php echo $allquery['mail']?></center></td>
+			<td><center /><a href="/admin/accessapi/edit/ip/<?php echo $allquery['ip'];?>/key/<?php echo base64_encode($allquery['key']);?>" class="glyphicon glyphicon-pencil"></a></td>
+			<td><center /><a href="/admin/accessapi/delete/ip/<?php echo $allquery['ip']?>/key/<?php echo base64_encode($allquery['key']);?>" class="glyphicon glyphicon-remove"></a></td>
+		</tr>
+	<?php $c++;} ?>
+</table>
+
+<?php } else { ?>
+<script >
+	alert("No se encontraron registros");
+</script>
+
+<?php } ?>
