@@ -551,10 +551,10 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $pid=$uidim;
 
         if ($tipo=="3") {
-            $code="matriculados_por_semestre";
+            $code="matriculados_por_semestre ".$semid." ".$perid;
         }
         if ($tipo=="6") {
-            $code="consolidado_de_semestre";
+            $code="consolidado_de_semestre ".$semid." ".$perid;
         }
 
         $data = array(
