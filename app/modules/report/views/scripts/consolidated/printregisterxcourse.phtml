@@ -51,7 +51,7 @@ else{ $a="REPORTE AVANCE DE NOTAS POR CURSO"; }
 
 <?php 
 
-    date_default_timezone_set("America/Lima");
+    
     $html = ob_get_contents();
   
     $mpdf=new mPDF('win-1252','A4','','',15,15,33,18,5,5);
@@ -62,7 +62,7 @@ else{ $a="REPORTE AVANCE DE NOTAS POR CURSO"; }
     $mpdf->SetHTMLFooter($this->footer,'O');
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('Curso-'.$this->courseid.'.pdf','D');
-    // $mpdf->Output();
+    // $mpdf->Output('Curso-'.$this->courseid.'.pdf','D');
+    $mpdf->Output();
  
 ?>

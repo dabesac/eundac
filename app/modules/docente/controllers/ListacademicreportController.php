@@ -18,7 +18,7 @@ class Docente_ListacademicreportController extends Zend_Controller_Action {
     
     public function indexAction()
     {
-   	    // date_default_timezone_set("America/Lima");
+   	    // 
         // $date =new  Zend_Date();
         // $valor=$date->toString('Y');
         // $this->view->anio=$valor;

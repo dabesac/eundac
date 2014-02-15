@@ -1054,7 +1054,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $person= $dbperson -> _getUserXUid($wheres);
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            date_default_timezone_set("America/Lima");
+            
             $uidim=$this->sesion->pid;
 
             $data = array(

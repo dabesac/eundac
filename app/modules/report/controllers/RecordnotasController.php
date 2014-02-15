@@ -114,7 +114,7 @@
             }
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            date_default_timezone_set("America/Lima");
+            
             $uidim=$this->sesion->pid;
 
             $data = array(

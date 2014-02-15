@@ -118,7 +118,7 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $pid=$direc[0]['pid'];
 
             $dbimpression = new Api_Model_DbTable_Impresscourse();
-            date_default_timezone_set("America/Lima");
+            
             $uidim=$this->sesion->pid;
 
             $data = array(

@@ -241,7 +241,7 @@ class Record_IndexController extends Zend_Controller_Action {
         $where['escid']=$escid;
 
         $dbimpression = new Api_Model_DbTable_Countimpressionall();
-        date_default_timezone_set("America/Lima");
+        
         $uid=$this->sesion->uid;
         $uidim=$this->sesion->pid;
         $pid=$uidim;
@@ -453,7 +453,7 @@ class Record_IndexController extends Zend_Controller_Action {
 	        $where['escid']=$escid;
 
 	        $dbimpression = new Api_Model_DbTable_Countimpressionall();
-	        date_default_timezone_set("America/Lima");
+	        
 	        $uid=$this->sesion->uid;
 	        $uidim=$this->sesion->pid;
 	        $pid=$uidim;
@@ -1516,7 +1516,7 @@ class Record_IndexController extends Zend_Controller_Action {
             }
 
             $dbimpression = new Api_Model_DbTable_Impresscourse();
-            date_default_timezone_set("America/Lima");
+            
             $uidim=$this->sesion->pid;
             $code='PREREGISTER'.$perid.$curid.$courseid.$turno;
 

@@ -194,7 +194,7 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $where['escid']=$escid;
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            date_default_timezone_set("America/Lima");
+            
             $uid=$this->sesion->uid;
             $uidim=$this->sesion->pid;
             $pid=$uidim;
