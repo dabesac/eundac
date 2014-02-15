@@ -913,39 +913,34 @@ class Assistance_StudentController extends Zend_Controller_Action {
                     $namelogo = 'blanco';
                 }
 
-                $escid=$this->sesion->escid;
-                $where['escid']=$escid;
+                // $escid=$this->sesion->escid;
+                // $where['escid']=$escid;
 
-                $dbimpression = new Api_Model_DbTable_Countimpressionall();
+                $dbimpression = new Api_Model_DbTable_Impresscourse();
                 date_default_timezone_set("America/Lima");
-                $uid=$this->sesion->uid;
                 $uidim=$this->sesion->pid;
-                $pid=$uidim;
-
+                $code="asistencia - ".$partial;
                 $data = array(
                     'eid'=>$eid,
                     'oid'=>$oid,
-                    'uid'=>$uid,
+                    'perid'=>$perid,
+                    'courseid'=>$coursoid,
                     'escid'=>$escid,
                     'subid'=>$subid,
-                    'pid'=>$pid,
-                    'type_impression'=>'asistencia',
-                    'date_impression'=>date('Y-m-d H:i:s'),
-                    'pid_print'=>$uidim
+                    'curid'=>$curid,
+                    'turno'=>$turno,
+                    'register'=>$uidim,
+                    'created'=>date('Y-m-d H:i:s'),
+                    'code'=>$code
                     );
                 $dbimpression->_save($data);            
 
-                $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'asistencia');
+                $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$coursoid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>$code);
                 $dataim = $dbimpression->_getFilter($wheri);
-                $co=0;
-                $len=count($dataim);
-                for ($i=0; $i < $len ; $i++) { 
-                    if($dataim[$i]['type_impression']=='asistencia'){
-                        $co=$co+1;
-                    }
-                }
+                $co=count($dataim);
                 $codigo=$co." - ".$uidim;
                 $this->view->codigo=$codigo;
+                
 
                 $header=$this->sesion->org['header_print'];
                 $footer=$this->sesion->org['footer_print'];

@@ -38,7 +38,7 @@ class Docente_IndexController extends Zend_Controller_Action {
             $day_last_2 = $date_2->get(Zend_Date::WEEKDAY);
             $mounth_2 = $date_2->get(Zend_Date::MONTH_NAME);
             $this->view->day_2=$day_2;
-            $this->view->day_last2=$day_last2;
+            $this->view->day_last2=$day_last_2;
             $this->view->mounth_2=$mounth_2;
 
             

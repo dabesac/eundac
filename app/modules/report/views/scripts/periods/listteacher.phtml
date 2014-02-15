@@ -1,23 +1,46 @@
+
 <?php
 if ($this->data_teacher) { ?>
+	<div class="row">
+		<div class="col-md-1 col-md-offset-1">
+			<h5 class="text-muted">Leyenda</h5>
+		</div>
+		<div class="col-md-2">
+			<h5 class="text-danger"><span class="glyphicon glyphicon-ban-circle"></span> No existe</h5>
+		</div>
+		<div class="col-md-2">
+			<h5 class="text-info"><span class="glyphicon glyphicon-print"></span> Impresiones</h5>
+		</div>
+		<div class="col-md-2">
+			<h5 class="text-info"><span class="glyphicon glyphicon-calendar"></span> Horario</h5>
+		</div>
+		<div class="col-md-2">
+			<h5 class="text-success"><span class="glyphicon glyphicon-ok"></span> Completo</h5>
+		</div>
+		<div class="col-md-2">
+			<h5 class="text-danger"><span class="glyphicon glyphicon-remove"></span> Imcompleto</h5>
+		</div>
+	</div>
+<hr>
+
 	<div class="row">
 		<div class="col-md-4 col-md-offset-1">
 		<br>
 			 <div class="input-group">
                 <input id="searchData" type="text" onkeyup="javascript:this.value=this.value.toUpperCase();" class="form-control" placeholder="Filtrar por Docente | Apellido o Codigo	">
                 <span class="input-group-btn">
-                <a class="btn btn-success" id="searchButton" title="Filtrar :D" href="#"><span class="glyphicon glyphicon-filter"></span></a>
+                <a class="btn btn-success" id="searchButton" title="Filtrar :D" href="##"><span class="glyphicon glyphicon-filter"></span></a>
                 </span>
             </div>
 		</div>
 		<div class="col-md-1 col-md-offset-5">
-			<h2><a title="Imprimir Reporte" href="/report/periods/print/perid/<?php echo base64_encode($this->perid)?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>" class="text-warning"><span class="glyphicon glyphicon-print"></span></a></h2>
+			<h2><a title="Imprimir Reporte" href="/report/periods/print/perid/<?php echo base64_encode($this->perid)?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>" class="text-info"><span class="glyphicon glyphicon-print"></span></a></h2>
 		</div>
 	</div>
 
 	<br>
 	<ul id="teachers">
-	<?php $c=1;
+	<?php $c = 0;
 	foreach ($this->data_teacher as $teachers) { ?>
 		<li style="list-style : none;"><span class="hidden"><?php echo $teachers['uid']." - ".$teachers['full_name'] ?></span>
 			<div class="row">
@@ -29,7 +52,7 @@ if ($this->data_teacher) { ?>
 					for ($i=0; $i < $br; $i++) {?> 
 					 	<br>
 					 <?php }?>
-					<h3 class="text-muted text-right"><strong><?php echo $c ?> </strong></h3>
+					<h3 class="text-muted text-right"><strong><?php echo $c + 1 ?> </strong></h3>
 				</div>
 				<div class="col-md-3">
 					
@@ -44,15 +67,19 @@ if ($this->data_teacher) { ?>
 					<h5 class="text-right"><?php echo $teachers['full_name'] ?></h5>
 					<h5 class="text-right"><span class="text-muted">Codigo </span><?php echo $teachers['uid'] ?></h5>
 					<h3 class="text-right">
-						<a class="text-warning" title="Horario de Docente" href="#"><span class="glyphicon glyphicon-calendar"></span></a>
-						<a href="/docente/listacademicreport/print/pid/<?php echo base64_encode($teachers['pid'])?>/uid/<?php echo base64_encode($teachers['uid'])?>/escid/<?php echo base64_encode($teachers['escid'])?>/subid/<?php echo base64_encode($this->data['subid'])?>/perid/<?php echo base64_encode($this->data['perid'])?>/nombre/<?php echo base64_encode($teachers['full_name'])?>" title="Imprimir Informe Academico" class="glyphicon glyphicon-print text-warning"></a>
+						<a class="text-info" title="Horario de Docente" href="##"><span class="glyphicon glyphicon-calendar"></span></a>
+						<?php if ($this->reportAcademic[$c][0]['state'] == 'C'): ?>
+							<a href="/docente/listacademicreport/print/pid/<?php echo base64_encode($teachers['pid'])?>/uid/<?php echo base64_encode($teachers['uid'])?>/escid/<?php echo base64_encode($teachers['escid'])?>/subid/<?php echo base64_encode($this->data['subid'])?>/perid/<?php echo base64_encode($this->data['perid'])?>/nombre/<?php echo base64_encode($teachers['full_name'])?>" title="Imprimir Informe Academico" class="glyphicon glyphicon-print text-info"></a>
+						<?php else: ?>
+							<span title="No tiene Informe" class="glyphicon glyphicon-ban-circle text-danger"></span>
+						<?php endif ?>
 					</h3>
 					</blockquote>
 				</div>
 				<div class="col-md-8">
 					<blockquote>
 					<table class="table table-hover">
-						<tr>
+						<tr class="active">
 							<th class="col-md-5">Asignaturas</th>
 							<th class="text-center">Turno</th>
 							<th class="text-center">Silabo</th>
@@ -88,21 +115,19 @@ if ($this->data_teacher) { ?>
     								echo $tf[0];
 								?>
 							</td>
-							<td>
-								<center>
-									<?php 
-									if ($courses['state_course'] == "P" || $courses['state_course'] == "C" || $courses['state_course'] == "S") $icon="ok";
-									else $icon = "remove"; ?>
-										<span title="Completo el Parcial" class="glyphicon glyphicon-<?php echo $icon?> text-success"></span>
-								</center>
+							<td class="text-center">
+								<?php if ($courses['state_course'] == "P" || $courses['state_course'] == "C" || $courses['state_course'] == "S") {?>
+									<span title="Completo el Parcial" class="glyphicon glyphicon-ok text-success"></span>
+								<?php }else {?>
+									<span title="No Completa el Parcial" class="glyphicon glyphicon-remove text-danger"></span>
+								<?php } ?>
 							</td>
-							<td>
-								<center>
-									<?php 
-									if ($courses['state_course']=="C" || $courses['state_course'] == "S") $icon="ok";
-									else $icon = "remove"; ?>
-										<span title="Completo el Parcial" class="glyphicon glyphicon-<?php echo $icon?> text-success"></span>
-								</center>
+							<td class="text-center">
+								<?php if ($courses['state_course'] == "P" || $courses['state_course'] == "C" || $courses['state_course'] == "S") {?>
+									<span title="Completo el Parcial" class="glyphicon glyphicon-ok text-success"></span>
+								<?php }else {?>
+									<span title="No Completa el Parcial" class="glyphicon glyphicon-remove text-danger"></span>
+								<?php } ?>
 							</td>
 							<td>
 								<center>
@@ -126,9 +151,12 @@ if ($this->data_teacher) { ?>
 	<!--</table>-->
 <?php
 }else{ ?>
-	<div class="alert alert-info">
-		<b>INFORMACIÓN: </b>No se registraron datos de esta Escuela.
-	</div>
+	<div class='col-md-12 cont-font-not-register'>
+        <h1 class='span-not-register'>
+            <span class='glyphicon glyphicon-exclamation-sign'></span>
+        </h1>
+        <h3 class='text-not-register'>No existen <span class="text-danger">registros</h3>
+    </div>
 <?php
 }?>
 

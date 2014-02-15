@@ -2,19 +2,10 @@
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start(); 
-$speciality = $this->info_speciality;
-if ($speciality['parent']!= '') {
-	$name_esc = $speciality['speciality'];
-	$name_speciality='ESPECIALIDAD'.$speciality['name'];
-}
-else{
-	$name_esc=$speciality['name'];
-}
 $perid=$this->perid;
 $course = $this->info_couser;
 $students = $this->students;
 $mpdf->mirrorMargins = 1;
-
 $mpdf->mirrorMargins = 1;	// Use different Odd/Even headers and footers and mirror margins
 
 $header = '
@@ -30,7 +21,7 @@ $header = '
     	</td>
 	</tr>
 	<tr>
-		<td style="text-align:center; font-size:10px; border: 1px solid #000 " >ACTA EVALUACIÓN - PERIODO '.$perid.' </td>
+		
 	</tr>
 </table>
 <table width="100%" style="border-bottom: 2px solid #000; font-family: serif;  color: #000; margin-bottom:20px;">
@@ -58,21 +49,37 @@ $header = '
 }
 </style>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-
-<table style='font-size:11px; width:100%; text-align:none; margin-top:100px;'>
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<table width="100%">
+    <tr >
+        <td  style="font-size:10px; text-align:left;  " >
+        <strong sytle="padding-right:5px">Curso: </strong><?php echo $course['courseid']." - ".$course['name']?>
+        </td>
+        
+        <td style="text-align: right; font-size:10px;"><strong>Turno: </strong> <?php echo $course['turno']?></td>
+        <td  style="text-align: right; font-size:10px;"><strong>Créditos: </strong><?php echo $course['credits'] ?></td>
+    </tr>
+    <tr >
+        <td   style="text-align:left; font-size:10px;"><strong>Docente: </strong> <?php echo $course['name_teacher']?></td>
+        <td  style="text-align: right; font-size:10px;"><strong>Semestre: </strong><?php echo $course['semid'] ?></td>
+        <td  style="text-align:right; font-size:10px;"><strong>Alumnos: </strong><?php echo count($students)?></td>
+    </tr>
+</table>
+<div style="text-align:center; font-size:12px; width:100%; margin-top:2%;" ><strong>ACTA EVALUACIÓN - PERIODO <?php echo $perid?></strong></div>
+<table style='font-size:11px; width:100%; margin-top:2%;'>
 	<tr style='background-color: #cccbcb'>
-		<th >#</th>
-		<th>Cogido</th>
-		<th>Apellidos y Nombres</th>
-		<th>Nota</th>
+		<th class="center">#</th>
+		<th class="center">Código</th>
+		<th class="center">Apellidos y Nombres</th>
+		<th class="center">Nota</th>
 	</tr>
 	<?php $R=0;	$apro=0; $j=0;
 		foreach ($students as $key => $student) {?>
 		<tr>
-			<td style='text-aling:center;'><?php echo $key+1?></td>
-			<td><?php echo $student['uid']?></td>
+			<td class="center"><?php echo $key+1?></td>
+			<td class="center"><?php echo $student['uid']?></td>
 			<td><?php echo $student['name_complet']?></td>
-			<td><?php
+			<td class="center"><?php
 				
 				$notafinal = intval(trim($student['notafinal']));
 				switch ($notafinal) {
@@ -98,26 +105,28 @@ $header = '
 		</tr>	
 	<?php }?>
 </table>
-<hr style="height: 2px; background: #000">
+<hr style="height: 1px; color: #000">
 <p style='font-size: 10px'>
 	Aprobados: <?php echo $apro?><br/>
 	Desaprobados: <?php echo $j?><br/>
 	Retirados: <?php echo $R?><br/>
 	Total Matriculados: <?php echo count($students);?>
 </p>
+
 <?php 
 
-$html = ob_get_contents();
+    date_default_timezone_set("America/Lima");
+    $html = ob_get_contents();
   
-$mpdf=new mPDF('win-1252','A4','','',15,15,40);
-  
-$mpdf->SetHTMLHeader($header);
+    $mpdf=new mPDF('win-1252','A4','','',15,15,33,18,5,5);
+    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
 
-$mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-  
-$mpdf->SetFooter($this->footer);
-ob_end_clean();
-$mpdf -> WriteHTML($html);
-$mpdf->Output('Constacia-'.$this->person['pid'].'.pdf','D');
-  
+    $mpdf->SetHTMLHeader($this->header);  
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+	$mpdf->Output('Constancia-'.$this->person['pid'].'.pdf','D');
+    // $mpdf->Output();
+ 
 ?>

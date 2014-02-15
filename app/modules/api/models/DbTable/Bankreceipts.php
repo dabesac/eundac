@@ -42,9 +42,10 @@ class Api_Model_DbTable_Bankreceipts extends Zend_Db_Table_Abstract
 				foreach ($where as $atri=>$value){
 					$select->where("$atri = ?", $value);
 				}
-				foreach ($orders as $key => $order) {
-						$select->order($order);
-				}
+				if ($orders<>null || $orders<>"") {
+                    if (is_array($orders))
+                        $select->order($orders);
+                }
 				$results = $select->query();
 				$rows = $results->fetchAll();
 				if ($rows) return $rows;

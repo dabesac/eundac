@@ -112,39 +112,34 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $director = $per->_getOne($whereper);
             $this->view->director = $director;
 
-            $escid=$this->sesion->escid;
-            $where['escid']=$escid;
-
-            $uid=$direc[0]['uid'];
+            // $escid=$this->sesion->escid;
+            // $where['escid']=$escid;
+            
             $pid=$direc[0]['pid'];
 
-            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            $dbimpression = new Api_Model_DbTable_Impresscourse();
             date_default_timezone_set("America/Lima");
             $uidim=$this->sesion->pid;
 
             $data = array(
                 'eid'=>$eid,
                 'oid'=>$oid,
-                'uid'=>$uid,
+                'perid'=>$perid,
+                'courseid'=>$courseid,
                 'escid'=>$escid,
                 'subid'=>$subid,
-                'pid'=>$pid,
-                'type_impression'=>'silabo',
-                'date_impression'=>date('Y-m-d H:i:s'),
-                'pid_print'=>$uidim
+                'curid'=>$curid,
+                'turno'=>$turno,
+                'register'=>$uidim,
+                'created'=>date('Y-m-d H:i:s'),
+                'code'=>'silabo'
                 );
 
             $dbimpression->_save($data);            
 
-            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'silabo');
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>'silabo');
             $dataim = $dbimpression->_getFilter($wheri);
-            $co=0;
-            $len=count($dataim);
-            for ($i=0; $i < $len ; $i++) { 
-                if($dataim[$i]['type_impression']=='silabo'){
-                    $co=$co+1;
-                }
-            }
+            $co=count($dataim);
             $codigo=$co." - ".$uidim;
             $this->view->codigo=$codigo;
 

@@ -19,6 +19,14 @@
     </tr>
   </thead>
   <tbody>
+
+    <?php 
+      foreach ($this->students_register as $key => $register){
+        $aux[$key]=$register['name'];
+      }
+      array_multisort($aux,SORT_ASC,$this->students_register);
+    ?>
+
     <?php foreach ($this->students_register as $key => $register) { ?>
       <tr>
         <td><?php echo $key+1?></td>

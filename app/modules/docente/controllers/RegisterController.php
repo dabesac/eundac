@@ -149,8 +149,8 @@ class Docente_RegisterController extends Zend_Controller_Action {
             $namelogo = 'blanco';
         }
         
-        $escid=$this->sesion->escid;
-        $where['escid']=$escid;
+        // $escid=$this->sesion->escid;
+        // $where['escid']=$escid;
         $this->view->turno = $turno;
         $this->view->perid = $perid;
         $this->view->partial = $partial;
@@ -158,34 +158,28 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->lasname= $this->sesion->infouser['fullname'];
         $namef = strtoupper($this->sesion->faculty->name);
 
-        $dbimpression = new Api_Model_DbTable_Countimpressionall();
+        $dbimpression = new Api_Model_DbTable_Impresscourse();
         date_default_timezone_set("America/Lima");
-        $uid=$this->sesion->uid;
         $uidim=$this->sesion->pid;
-        $pid=$uidim;
-
+        $code="notas_objetivo - ".$partial;
         $data = array(
             'eid'=>$eid,
             'oid'=>$oid,
-            'uid'=>$uid,
+            'perid'=>$perid,
+            'courseid'=>$courseid,
             'escid'=>$escid,
             'subid'=>$subid,
-            'pid'=>$pid,
-            'type_impression'=>'notas_objetivo',
-            'date_impression'=>date('Y-m-d H:i:s'),
-            'pid_print'=>$uidim
+            'curid'=>$curid,
+            'turno'=>$turno,
+            'register'=>$uidim,
+            'created'=>date('Y-m-d H:i:s'),
+            'code'=>$code
             );
         $dbimpression->_save($data);            
 
-        $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'notas_objetivo');
+        $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>$code);
         $dataim = $dbimpression->_getFilter($wheri);
-        $co=0;
-        $len=count($dataim);
-        for ($i=0; $i < $len ; $i++) { 
-            if($dataim[$i]['type_impression']=='notas_objetivo'){
-                $co=$co+1;
-            }
-        }
+        $co=count($dataim);
         $codigo=$co." - ".$uidim;
         $this->view->codigo=$codigo;
 
@@ -383,8 +377,8 @@ class Docente_RegisterController extends Zend_Controller_Action {
             $namelogo = 'blanco';
         }
 
-        $escid=$this->sesion->escid;
-        $where['escid']=$escid;
+        // $escid=$this->sesion->escid;
+        // $where['escid']=$escid;
         $this->view->turno = $turno;
         $this->view->perid = $perid;
         $this->view->partial = $partial;
@@ -392,34 +386,28 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->students = $data_notes_students;
         $this->view->lasname= $this->sesion->infouser['fullname'];
 
-        $dbimpression = new Api_Model_DbTable_Countimpressionall();
+        $dbimpression = new Api_Model_DbTable_Impresscourse();
         date_default_timezone_set("America/Lima");
-        $uid=$this->sesion->uid;
         $uidim=$this->sesion->pid;
-        $pid=$uidim;
-
+        $code="notas_competencia - ".$partial;
         $data = array(
             'eid'=>$eid,
             'oid'=>$oid,
-            'uid'=>$uid,
+            'perid'=>$perid,
+            'courseid'=>$courseid,
             'escid'=>$escid,
             'subid'=>$subid,
-            'pid'=>$pid,
-            'type_impression'=>'notas_competencias',
-            'date_impression'=>date('Y-m-d H:i:s'),
-            'pid_print'=>$uidim
+            'curid'=>$curid,
+            'turno'=>$turno,
+            'register'=>$uidim,
+            'created'=>date('Y-m-d H:i:s'),
+            'code'=>$code
             );
-        $dbimpression->_save($data);            
+        $dbimpression->_save($data); 
 
-        $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'notas_competencias');
+        $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>$code);
         $dataim = $dbimpression->_getFilter($wheri);
-        $co=0;
-        $len=count($dataim);
-        for ($i=0; $i < $len ; $i++) { 
-            if($dataim[$i]['type_impression']=='notas_competencias'){
-                $co=$co+1;
-            }
-        }
+        $co=count($dataim);
         $codigo=$co." - ".$uidim;
         $this->view->codigo=$codigo;
 
