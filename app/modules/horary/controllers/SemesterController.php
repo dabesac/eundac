@@ -231,22 +231,16 @@ class Horary_SemesterController extends Zend_Controller_Action{
                 'escid'=>$escid,
                 'subid'=>$subid,
                 'pid'=>$this->sesion->pid,
-                'type_impression'=>'horarysemester',
+                'type_impression'=>'horarysemester'.$semid,
                 'date_impression'=>date('Y-m-d H:i:s'),
                 'pid_print'=>$uidim
                 );
             $dbimpression->_save($data);
 
-            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'horarysemester');
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'horarysemester'.$semid);
             $dataim = $dbimpression->_getFilter($wheri);
             
-            $co=0;
-            $len=count($dataim);
-            for ($i=0; $i < $len ; $i++) { 
-                if($dataim[$i]['type_impression']=='horarysemester'){
-                    $co=$co+1;
-                }
-            }
+            $co=count($dataim);
             $codigo=$co." - ".$uidim;
             $h1="h1";
             $h2="h2";

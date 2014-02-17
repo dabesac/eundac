@@ -3,45 +3,49 @@ $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start(); 
 $tipo=$this->tipo;
-if ($tipo=='1') { $a="REPORTES MATRICULADOS POR CURSO"; } 
-else{ $a="REPORTE AVANCE DE NOTAS POR CURSO"; }
-$header='
-<table style="width: 100%;" border="1">
-    <tr>
-        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-        <th style="text-align: center; font-size: 11px;">
-        FACULTAD DE '.strtoupper($this->facultad).'<br/>
-        ESCUELA DE  '.strtoupper($this->escuela).'<br/>
-        </th>        
-    </tr>
-    <tr>
-        <th style="border: 1px solid #000;">'.strtoupper($a).' </th>
-    </tr>
-</table>
-<tr>
-        <td style="text-align: left;">Curso: '.strtoupper($this->courseid).' &nbsp;&nbsp;&nbsp;  Periodo: '.strtoupper($this->perid).' </td>
-    </tr></br>
-    <tr>
-        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
-    </tr>
-'    
+if ($tipo=='5') { $a="REPORTES MATRICULADOS POR ESCUELA"; } 
+// else{ $a="REPORTE AVANCE DE NOTAS POR CURSO"; }
+// $header='
+// <table style="width: 100%;" border="1">
+//     <tr>
+//         <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+//         <th style="text-align: center; font-size: 11px;">
+//         FACULTAD DE '.strtoupper($this->facultad).'<br/>
+//         ESCUELA DE  '.strtoupper($this->escuela).'<br/>
+//         </th>        
+//     </tr>
+//     <tr>
+//         <th style="border: 1px solid #000;">'.strtoupper($a).' </th>
+//     </tr>
+// </table>
+// <tr>
+//         <td style="text-align: left;">Curso: '.strtoupper($this->courseid).' &nbsp;&nbsp;&nbsp;  Periodo: '.strtoupper($this->perid).' </td>
+//     </tr></br>
+//     <tr>
+//         <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
+//     </tr>
+// '    
 ?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
-  <table style="width:100%;" border="1" >
+    <div style="margin-bottom:1%; text-align:center;">
+        <p><b><?php echo strtoupper($a)?></b></p>
+        <h4><b><?php echo strtoupper("periodo - ".$this->perid)?></b></h4>
+    </div>
+    <table style="width:100%;" border="1" >
 
         <thead>
           <tr>
             <th>#</th>
-            <th>Codigo</th>
+            <th>Código</th>
             <th>Apellido y Nombre</th>
-            <?php
+ <!--            <?php
                 $tipo=$this->tipo;
              if ($tipo=='2') { ?>
             <th>1º Parcial</th>
             <th>2º Parcial</th>
             
-           <?php }?>
+           <?php }?> -->
            
         </tr>
         </thead>
@@ -52,8 +56,8 @@ $header='
        foreach ($this->data as $datos)    
         {?>
         <tr>
-        <td> <?php print $i?> </td>
-        <td> <?php print $datos['uid']?> </td>
+        <td style='text-align:center'> <?php print $i?> </td>
+        <td style='text-align:center'> <?php print $datos['uid']?> </td>
         <td> <?php print strtoupper($datos['last_name0'])." ".strtoupper($datos['last_name1'])." ".$datos['first_name']?> </td> 
         <?php if ($tipo=='2') { ?>
         <td> <?php print $datos['promedio1']?> </td>
@@ -67,15 +71,17 @@ $header='
     </table>
 <?php 
 
-  $html = ob_get_contents();
+    $html = ob_get_contents();
   
-  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
-  $mpdf->SetHTMLHeader($header);
-  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-  
-  $mpdf->SetFooter($this->footer);
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('Curso-'.$this->courseid.'.pdf','D');
-  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,33,18,5,5);
+    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+
+    $mpdf->SetHTMLHeader($this->header);  
+    $mpdf->SetHTMLFooter($this->footer);
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    // $mpdf->Output('Escuela - '.$this->namesc.'.pdf','D');
+    $mpdf->Output();
+
 ?>
