@@ -23,8 +23,7 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $uid = $this->sesion->uid;
             $escid = $this->sesion->escid;
             $subid = $this->sesion->subid;
-            $perid='13B';
-            // $perid = $this->sesion->period->perid;
+            $perid = $this->sesion->period->perid;
             $this->view->speciality = $this->sesion->speciality->name;
             $this->view->faculty = $this->sesion->faculty->name;
             $this->view->infouser = $this->sesion->infouser['fullname'];
@@ -190,14 +189,14 @@ class Docente_InformacademicController extends Zend_Controller_Action {
                 $namelogo = 'blanco';
             }
             
-            $escid=$this->sesion->escid;
-            $where['escid']=$escid;
+            // $escid=$this->sesion->escid;
+            // $where['escid']=$escid;
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
             
-            $uid=$this->sesion->uid;
+            // $uid=$this->sesion->uid;
             $uidim=$this->sesion->pid;
-            $pid=$uidim;
+            // $pid=$uidim;
 
             $data = array(
                 'eid'=>$eid,
@@ -210,14 +209,14 @@ class Docente_InformacademicController extends Zend_Controller_Action {
                 'date_impression'=>date('Y-m-d H:i:s'),
                 'pid_print'=>$uidim
                 );
+
             $dbimpression->_save($data);            
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'informe_academico');
             $dataim = $dbimpression->_getFilter($wheri);
-            $co=count($dataim);
             
+            $co=count($dataim);            
             $codigo=$co." - ".$uidim;
-            $this->view->codigo=$codigo;
 
             $header=$this->sesion->org['header_print'];
             $footer=$this->sesion->org['footer_print'];

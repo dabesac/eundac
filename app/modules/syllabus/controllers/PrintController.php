@@ -141,7 +141,6 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $dataim = $dbimpression->_getFilter($wheri);
             $co=count($dataim);
             $codigo=$co." - ".$uidim;
-            $this->view->codigo=$codigo;
 
             $header=$this->sesion->org['header_print'];
             $footer=$this->sesion->org['footer_print'];
