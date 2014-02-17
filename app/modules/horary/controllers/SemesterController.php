@@ -92,9 +92,17 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	                $this->view->valhoras=$valhoras;
             	}
 		        
-				$base_url = 'http://localhost:8080/';
-		        $endpoint = '/s1st3m4s/und4c/horary_course';
-		        $data = array('escid' => $escid,'eid' =>$eid,'oid' =>$oid,'perid'=>$perid,'subid'=>$subid,'semid'=>$semid);
+				$base_url = 'http://172.16.0.210:8080/';
+		        $endpoint = '/'.base64_encode('s1t3m4s').'/'.base64_encode('und4c').'/horary_course';
+		        $data = array(
+		        				'escid' => base64_encode($escid),
+		        				'eid' => base64_encode($eid),
+		        				'oid' =>base64_encode($oid),
+		        				'perid'=>base64_encode($perid),
+		        				'subid'=>base64_encode($subid),
+		        				'semid'=>base64_encode($semid)
+		        				);
+
 		        $client = new Zend_Rest_Client($base_url);
 		        $httpClient = $client->getHttpClient();
 		        $httpClient->setConfig(array("timeout" => 1800));
@@ -161,9 +169,16 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		    }
 		    $this->view->valhoras=$valhoras;
 		    
-			$base_url = 'http://localhost:8080/';
-		    $endpoint = '/s1st3m4s/und4c/horary_course';
-		    $data = array('escid' => $escid,'eid' =>$eid,'oid' =>$oid,'perid'=>$perid,'subid'=>$subid,'semid'=>$semid);
+			$base_url = 'http://172.16.0.210:8080/';
+	        $endpoint = '/'.base64_encode('s1t3m4s').'/'.base64_encode('und4c').'/horary_course';
+		    $data = array(
+		        				'escid' => base64_encode($escid),
+		        				'eid' => base64_encode($eid),
+		        				'oid' =>base64_encode($oid),
+		        				'perid'=>base64_encode($perid),
+		        				'subid'=>base64_encode($subid),
+		        				'semid'=>base64_encode($semid)
+		        				);
 		    // print_r($data);
 		    $client = new Zend_Rest_Client($base_url);
 		    $httpClient = $client->getHttpClient();
