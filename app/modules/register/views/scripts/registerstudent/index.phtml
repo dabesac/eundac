@@ -1,9 +1,74 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-ok"></span> Validación de Matricula - '. 'Periodo '. $this->perid);?>
+<?php $this->placeholder('Btnnav')->append('<a href="/rfacultad" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
-<form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/register/registerstudent/liststudent/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+<div class="row">
+    <div class="col-md-5 col-md-offset-1">
+        <span class="text-muted"><span class="glyphicon glyphicon-filter"></span> Filtre por :</span>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-3 col-md-offset-1">
+        <select class='form-control' id='escuela' name='escid'>
+            <option value="">Escuela</option>
+            <?php foreach ($this->escuelas as $escuela){   
+                echo "<option value=".$escuela['escid'].">".$escuela['name']."</option>";
+            }?>
+        </select>
+    </div>
+    <div class="col-md-5">
+        <input id="searchData" type="text" class="form-control" title="Código" placeholder="Código o Apellidos">
+    </div>
+    <div class="col-md-2">
+        <select  class='form-control' id="estado" name="estadom">
+            <option value="">Estado</option>
+            <option value="<?php echo 'I'; ?>"><?php echo "Iniciado"; ?></option>
+            <option value="<?php echo 'M'; ?>"><?php echo "Matriculado"; ?></option>
+            <option value="<?php echo 'O'; ?>"><?php echo "Observado"; ?></option>
+            <option value="<?php echo 'R'; ?>"><?php echo "Reservado"; ?></option>
+        </select>
+    </div>
+</div>
+<hr>
+<div id="data"></div>
+
+<script>
+    var state = $('#estado').val();
+    $('#data').html("<br><center><img src='/img/spinner.gif'> Cargando.... </center>");
+    $("#data").load("/register/registerstudent/liststudent/state/"+state);
+
+    $('#estado').change(function(){
+        var state = $(this).val();
+        $('#data').html("<br><center><img src='/img/spinner.gif'> Cargando.... </center>");
+        $('#data').load('/register/registerstudent/liststudent/state/' + state);
+    });
+
+    $('#escuela').change(function(){
+        var escid = $(this).val();
+        $('#students > li').each(function(){
+            var currentLiText = $(this).text(),
+            showCurrentLi = currentLiText.indexOf(escid) !== -1;
+
+            $(this).toggle(showCurrentLi);
+        });
+    });
+
+    $('#searchData').keyup(function(){
+        var data = $(this).val();
+
+        $('#students > li').each(function(){
+            var currentLiText = $(this).text(),
+            showCurrentLi = currentLiText.indexOf(data) !== -1;
+
+            $(this).toggle(showCurrentLi);
+        });
+    })
+
+</script>
+
+
+<!--<form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/register/registerstudent/liststudent/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
     <table class="table table-striped">
-        <tr>
-               <td colspan="3"><b><center>VALIDACIÓN DE MATRÍCULA  - Periodo <b><?php echo $this->perid?></center></b></td>
-        </tr>
         <tr>
             <td >Escuela:</td>
             <td >
@@ -83,4 +148,4 @@
     });
 
 
-</script>
+</script>-->

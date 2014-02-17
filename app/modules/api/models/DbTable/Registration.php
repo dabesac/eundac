@@ -356,12 +356,12 @@ public function _getPaymentsStudent($where=null,$attrib=null,$order=null){
         try{            
             $sql = $this->_db->query("
                         select 
-           (p.last_name0 || ' ' || p.last_name1 || ', '|| p.first_name) as NombreCompleto, m.regid,m.semid,m.credits,m.date_register, m.state as estmat,m.perid,
+           (p.last_name0 || ' ' || p.last_name1 || ', '|| p.first_name) as nombreCompleto, m.regid,m.semid,m.credits,m.date_register, m.state as estmat,m.perid,
             m.subid,m.uid,m.eid,m.oid,m.escid,m.pid from base_registration as m
             inner join base_person as p
             on m.pid=p.pid and m.eid=p.eid
             where m.eid='".$where['eid']."' and m.oid ='".$where['oid']."'   and m.perid = '".$where['perid']."' and m.escid='".$where['escid']."' and m.state = 'M' and m.semid = '".$where['semid']."'
-            order by Nombrecompleto");
+            order by nombrecompleto");
                          if ($sql) return $sql->fetchAll();
             return false;           
             }  catch (Exception $ex){

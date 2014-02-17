@@ -17,29 +17,53 @@ class Distribution_DistributionController extends Zend_Controller_Action {
     
     public function indexAction()
     {   
-   
-   		$distribution = new Distribution_Model_DbTable_Distribution();
-   		$data['eid']=$this->sesion->eid;
-   		$data['oid']=$this->sesion->oid;
-   		$data['escid']=$this->sesion->escid;
-   		$data['subid']=$this->sesion->subid;
-   		$campos = array("eid","oid","escid","subid","perid","dateaccept","number","state","distid");
-   		$rows_distribution =$distribution->_getFilter($data,$campos,$orders=array('perid'));
-        $bdhorary = new Api_Model_DbTable_HoursBeginClasses();
-        $i=0;
-        foreach ($rows_distribution as $periodos) {
-            $perid=$periodos['perid'];
-            $escid=$periodos['escid'];
-            $subid=$periodos['subid'];
-            $wheres=array('eid'=>$data['eid'],'oid'=>$data['oid'],'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
-
-            $datahours=$bdhorary->_getFilter($wheres);
-            $rows_distribution[$i]['hours']=$datahours; 
-            $i++;        
+        try {
+            $periodActive = '14B';
+            $yearActive = substr($periodActive, 0, 2);
+            $yearActive = '20'.$yearActive;
+            $this->view->yearActive = $yearActive;
+        } catch (Exception $e) {
+            print 'Error Controlador Index'.$e->getMessage();
         }
-   		if ($rows_distribution) $this->view->ldistribution=$rows_distribution ;
     }
     
+    public function showdistributionAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+
+       		$distribution = new Distribution_Model_DbTable_Distribution();
+       		$data['eid']=$this->sesion->eid;
+       		$data['oid']=$this->sesion->oid;
+       		$data['escid']=$this->sesion->escid;
+       		$data['subid']=$this->sesion->subid;
+
+            $anio = $this->getParam('anio');
+            $anio = substr($anio, 2, 2);
+            $data['year'] = $anio;
+       		//$campos = array("eid","oid","escid","subid","perid","dateaccept","number","state","distid");
+
+            $c = 0;
+
+       		$rows_distribution =$distribution->_getDistributionsxYear($data);
+    
+            $bdhorary = new Api_Model_DbTable_HoursBeginClasses();
+            $i=0;
+            foreach ($rows_distribution as $periodos) {
+                $perid=$periodos['perid'];
+                $escid=$periodos['escid'];
+                $subid=$periodos['subid'];
+                $wheres=array('eid'=>$data['eid'],'oid'=>$data['oid'],'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+
+                $datahours=$bdhorary->_getFilter($wheres);
+                $rows_distribution[$i]['hours']=$datahours; 
+                $i++;        
+            }
+       		if ($rows_distribution) $this->view->ldistribution=$rows_distribution ;
+        } catch (Exception $e) {
+            print 'Error'.$e->getMessage();
+        }
+    }
+
     public function newAction()
     {    	
         $form = new Distribution_Form_Distribution();

@@ -125,7 +125,7 @@
                 }
 
                 $dbimpression = new Api_Model_DbTable_Countimpressionall();
-                date_default_timezone_set("America/Lima");
+                
                 $uidim=$this->sesion->pid;
 
                 $data = array(
@@ -144,14 +144,9 @@
                 $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'consolidadohorary');
                 $dataim = $dbimpression->_getFilter($wheri);
                 
-                $co=0;
-                $len=count($dataim);
-                for ($i=0; $i < $len ; $i++) { 
-                    if($dataim[$i]['type_impression']=='consolidadohorary'){
-                        $co=$co+1;
-                    }
-                }
+                $co=count($dataim);
                 $codigo=$co." - ".$uidim;
+                
                 $h1="h1";
                 $h2="h2";
                 $h3="h3";

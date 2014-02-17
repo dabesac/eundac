@@ -1,4 +1,142 @@
-<?php
+<div class="row">
+    <div class="col-md-5 col-md-offset-1">
+        <h3 class="text-muted">Facultad de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomfac'] ?></span></h3>
+    </div>
+    <div class="col-md-5">
+        <h3 class="text-muted">Escuela de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomesc'] ?></span></h3>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-7 div col-md-offset-1">
+        <blockquote class="danger">
+            <h4><span class="glyphicon glyphicon-user text-info"></span> <?php echo $this->person[0]['last_name0'].' '.$this->person[0]['last_name1'] ?> <span class="text-info"><?php echo $this->person[0]['first_name'] ?></span></h4>
+            <h6>Codigo <span class="text-info"><?php echo $this->person[0]['uid'] ?></span></h6>
+        </blockquote>
+    </div>
+    <div class="col-md-1">
+        <br>
+        <a href="##" class="btn btn-success form-control">Validar</a>
+    </div>
+    <div class="col-md-1">
+        <br>
+        <a href="##" class="btn btn-info form-control">Reservar</a>
+    </div>
+    <div class="col-md-1">
+        <br>
+        <a href="##" class="btn btn-warning form-control">Observar</a>
+    </div>
+</div>
+<?php if ($this->courses): ?>
+
+
+    
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <table class="table table-hover">
+            <tr class="active">
+                <th class="text-center">#</th>
+                <th class="text-center">Codigo</th>
+                <th>Curso</th>
+                <th class="text-center">Turno</th>
+                <th>Profesor</th>
+                <th>Numero de Veces</th>
+            </tr>
+        <?php $c = 0;
+        foreach ($this->courses as $course): ?>
+            <tr id="fila<?php echo $course['courseid'] ?>">
+                <td class="text-center"><?php echo $c + 1 ?></td>
+                <td class="text-center"><?php echo $course['courseid'] ?></td>
+                <td><?php echo $this->coursesName[$c][0]['name'] ?></td>
+                <td class="text-center"><?php echo $course['turno'] ?></td>
+                <td><?php echo $this->teachers[$c][0]['last_name0'].' '.$this->teachers[$c][0]['last_name1'].' '.$this->teachers[$c][0]['first_name']  ?> </td>
+                <td></td>
+                <td class="text-center"><a href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td class="text-center"><a id="showAlert<?php echo $course['courseid'] ?>" href="#alert<?php echo $course['courseid'] ?>" title="Eliminar Curso" class="text-danger"><span class="glyphicon glyphicon-remove"></span></a></td>
+            </tr>
+            <tr>
+                <td id="alert<?php echo $course['courseid'] ?>" class="hidden" colspan="8">
+                    <div class="alert alert-danger">
+                        <h5>Seguro que desea eliminar <?php echo $this->coursesName[$c][0]['name'] ?></h5>
+                        <p>Una vez que lo haga no habra marcha atras...</p><br>
+                        <a id="delete<?php echo $course['courseid'] ?>" href="##" class="btn btn-danger">Eliminar</a>
+                        <a id="hideAlert<?php echo $course['courseid'] ?>" href="##" class="btn btn-default">Cancelar</a>
+                    </div>
+                </td>
+            </tr>
+            <script>
+                $("#showAlert<?php echo $course['courseid'] ?>").click(function(){
+                    $("#alert<?php echo $course['courseid'] ?>").removeClass('hidden');
+                });
+                $("#hideAlert<?php echo $course['courseid'] ?>").click(function(){
+                    $("#alert<?php echo $course['courseid'] ?>").addClass('hidden');
+                });
+                $("#delete<?php echo $course['courseid'] ?>").click(function(){
+                    $.get("/register/registerstudent/deletecourse/uid/<?php echo base64_encode($course['uid']) ?>/pid/<?php echo base64_encode($course['pid']) ?>/escid/<?php echo base64_encode($course['escid']) ?>/subid/<?php echo base64_encode($course['subid']) ?>/courseid/<?php echo base64_encode($course['courseid']) ?>/curid/<?php echo base64_encode($course['curid']) ?>/turno/<?php echo base64_encode($course['turno']) ?>", function(){
+                            $("#fila<?php echo $course['courseid'] ?>").addClass('hidden');
+                            $("#alert<?php echo $course['courseid'] ?>").addClass('hidden');
+                    });
+                });
+            </script>
+        <?php $c++;
+        endforeach ?>
+        </table>
+    </div>
+</div>
+
+<?php else: ?>
+    <h4 class="text-center text-muted">Aun no hizo la <span class="text-danger">prematricula</span></h4>
+<?php endif ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<?php
 $eid=$this->eid;
 $oid=$this->oid;
 $escid= $this->escid;
@@ -20,21 +158,15 @@ $urlmatri="uid/".base64_encode($matricula['uid'])."/pid/".base64_encode($matricu
         <script src="/external/jquery/external/qunit.js"></script>
         <script src="/external/jquery/external/base64/jquery.base64.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">      
-        <!-- Texto Enriquecido-->
         <link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
         <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
         <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
         <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
         <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
         
-        <!-- Bootstrap -->
         <script src="/external/bootstrap/js/bootstrap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
         <link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
-        
-        <!-- JS  -->    
-        
-        <!-- CSS  Generic-->
         
         <link rel="stylesheet" type="text/css" href="/css/style.css">
 
@@ -397,7 +529,7 @@ $("#pendientes").load("/register/registerstudent/listcoursependient/<?php echo $
 <br><br><br><br><br>
 
 
-        </div>        
+        </div>-->
 
  
 
