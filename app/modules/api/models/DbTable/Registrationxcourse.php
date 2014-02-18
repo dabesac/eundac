@@ -16,7 +16,18 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		}
 	}
 	
-	public function _update($data,$pk)
+	public function _update($data,$pk){
+		try {
+				if ($pk['eid']=='' || $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' || $pk['courseid']=='' || $pk['curid']=='' || $pk['perid']=='' || $pk['regid']=='' || $pk['pid']=='' || $pk['uid']=='') return false;
+				$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and courseid='".$pk['courseid']."' and curid='".$pk['curid']."' and perid='".$pk['perid']."' and regid='".$pk['regid']."' and pid='".$pk['pid']."' and uid='".$pk['uid']."'";
+				return $this->update($data, $where);
+				return false;
+		} catch (Exception $e) {
+			print "Error: Update Register x Course".$e->getMessage();
+		}
+	}
+
+	/*public function _update($data,$pk)
 	{
 		try{
 
@@ -32,7 +43,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		}catch (Exception $e){
 			print "Error: Update Registration".$e->getMessage();
 		}
-	}
+	}*/
 
 	public function _updatenoteregister($data,$pk)
 	{
@@ -181,12 +192,12 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	}
 			
 
-	     public function _updatestr($data,$str)
+	     public function _updatestr($data, $str)
 	    {
-	    try
-	        {  if ($data=="") return false;
-	            return $this->update($data,$str); }
-	    catch (Exception $ex){
+		    try{  
+	        	if ($data=="") return false;
+	            return $this->update($data, $str); }
+		    catch (Exception $ex){
 	            print "Error: Actualizar RegisterCourse".$ex->getMessage();
 	        }
 	    }

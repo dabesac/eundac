@@ -48,10 +48,10 @@
                 <td class="text-center"><?php echo $c + 1 ?></td>
                 <td class="text-center"><?php echo $course['courseid'] ?></td>
                 <td><?php echo $this->coursesName[$c][0]['name'] ?></td>
-                <td class="text-center"><?php echo $course['turno'] ?></td>
+                <td id="courseTurno<?php echo $course['courseid'] ?>" class="text-center"><?php echo $course['turno'] ?></td>
                 <td><?php echo $this->teachers[$c][0]['last_name0'].' '.$this->teachers[$c][0]['last_name1'].' '.$this->teachers[$c][0]['first_name']  ?> </td>
                 <td></td>
-                <td class="text-center"><a href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td class="text-center"><a id="showEditAlert<?php echo $course['courseid'] ?>" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 <td class="text-center"><a id="showAlert<?php echo $course['courseid'] ?>" href="#alert<?php echo $course['courseid'] ?>" title="Eliminar Curso" class="text-danger"><span class="glyphicon glyphicon-remove"></span></a></td>
             </tr>
             <tr>
@@ -60,15 +60,29 @@
                         <h5>Seguro que desea eliminar <?php echo $this->coursesName[$c][0]['name'] ?></h5>
                         <p>Una vez que lo haga no habra marcha atras...</p><br>
                         <a id="delete<?php echo $course['courseid'] ?>" href="##" class="btn btn-danger">Eliminar</a>
-                        <a id="hideAlert<?php echo $course['courseid'] ?>" href="##" class="btn btn-default">Cancelar</a>
+                        <a href="##" class="btn btn-default cancel">Cancelar</a>
                     </div>
                 </td>
             </tr>
+            <tr>
+                <td id="editAlert<?php echo $course['courseid'] ?>" class="hidden alert" colspan="8">
+                   
+                </td>
+            </tr>
             <script>
+                $("#showEditAlert<?php echo $course['courseid'] ?>").click(function(){
+                    $('.alert').addClass('hidjden');
+                    $("#editAlert<?php echo $course['courseid'] ?>").load("/register/registerstudent/editturno/uid/<?php echo base64_encode($course['uid']) ?>/pid/<?php echo base64_encode($course['pid']) ?>/escid/<?php echo base64_encode($course['escid']) ?>/subid/<?php echo base64_encode($course['subid']) ?>/courseid/<?php echo base64_encode($course['courseid']) ?>/curid/<?php echo base64_encode($course['curid']) ?>/turno/<?php echo base64_encode($course['turno']) ?>", function(){
+                        $("#editAlert<?php echo $course['courseid'] ?>").removeClass('hidden');
+                    });
+                });
+
                 $("#showAlert<?php echo $course['courseid'] ?>").click(function(){
                     $("#alert<?php echo $course['courseid'] ?>").removeClass('hidden');
                 });
-                $("#hideAlert<?php echo $course['courseid'] ?>").click(function(){
+
+
+                $(".cancel").click(function(){
                     $("#alert<?php echo $course['courseid'] ?>").addClass('hidden');
                 });
                 $("#delete<?php echo $course['courseid'] ?>").click(function(){
@@ -77,12 +91,18 @@
                             $("#alert<?php echo $course['courseid'] ?>").addClass('hidden');
                     });
                 });
+
             </script>
         <?php $c++;
         endforeach ?>
         </table>
     </div>
 </div>
+<script>
+    $('a').hover(function(){
+        $(this).tooltip('toggle');
+    });
+</script>
 
 <?php else: ?>
     <h4 class="text-center text-muted">Aun no hizo la <span class="text-danger">prematricula</span></h4>

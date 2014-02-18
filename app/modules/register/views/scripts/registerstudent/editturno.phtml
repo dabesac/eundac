@@ -1,0 +1,63 @@
+<div class="alert alert-warning">
+	<?php if ($this->courses): ?>
+		<div class="row">
+			<div class="col-md-6">
+				<h5>Editar <?php echo $this->coursesName[$c][0]['name'] ?></h5>
+	    		<p>Edite el turno de este curso, si cambia de turno puede cambiar el profesor a cargo.....</p>
+	    	</div>
+			<div class="col-md-1">
+				Turno
+				<select class="form-control" name="Turno" id="turno<?php echo $this->data['courseid'] ?>">
+					<?php $c = 0;
+					foreach ($this->courses as $course): ?>
+						<option value="<?php echo $c.'-'.$course['turno'] ?>"><?php echo $course['turno'] ?></option>
+					<?php $c++;
+					endforeach ?>
+				</select>
+			</div>
+			<div class="col-md-5">
+				Docente a Cargo
+				<?php $c = 0;
+				foreach ($this->teachersInfo as $teacher): ?>
+					<h5 id="docente<?php echo $this->data['courseid'].$c ?>" class="hidden"><?php echo $teacher[$c]['last_name0'].' '.$teacher[$c]['last_name1'].' '.$teacher[$c]['first_name'] ?></h5>
+				<?php $c++;
+				endforeach ?>
+			</div>
+		</div><br>
+	    <a id="editCourse<?php echo $this->data['courseid'] ?>" href="##" class="btn btn-warning">Guardar</a>
+	    <a href="##" class="btn btn-default cancel">Cancelar</a>
+		<script>
+			var turno = $('#turno<?php echo $this->data['courseid'] ?>').val();
+			var indice = turno.split('-');
+
+			$("#docente<?php echo $this->data['courseid'] ?>"+indice[0]).removeClass('hidden');
+
+			$('#turno<?php echo $this->data['courseid'] ?>').change(function(){
+				$("#docente<?php echo $this->data['courseid'] ?>"+indice[0]).addClass('hidden');
+				turno = $(this).val();
+				indice = turno.split('-');
+				$("#docente<?php echo $this->data['courseid'] ?>"+indice[0]).removeClass('hidden');
+			});
+
+			$("#editCourse<?php echo $this->data['courseid'] ?>").click(function(){
+				$.get("/register/registerstudent/updatecourseperturno/uid/<?php echo $this->data['uid'] ?>/pid/<?php echo $this->data['pid'] ?>/escid/<?php echo $this->data['escid'] ?>/subid/<?php echo $this->data['subid'] ?>/courseid/<?php echo $this->data['courseid'] ?>/curid/<?php echo $this->data['curid'] ?>/turno/"+indice[1],function(){
+						$("#courseTurno<?php echo $this->data['courseid'] ?>").html(indice[1]);
+						$("#editAlert<?php echo $this->data['courseid'] ?>").addClass('hidden');
+				});
+			});
+
+		 	$(".cancel").click(function(){
+		        $("#editAlert<?php echo $this->data['courseid'] ?>").addClass('hidden');
+		    });
+
+		</script>
+	<?php else: ?>
+		<h5>No existe otros turnos para este curso....</h5><br>
+		<a href="##" class="btn btn-default cancel">Cancelar</a>
+		<script>
+			$(".cancel").click(function(){
+		        $("#editAlert<?php echo $this->data['courseid'] ?>").addClass('hidden');
+		    });
+		</script>
+	<?php endif ?>
+</div>
