@@ -24,6 +24,7 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
 
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
+            $escid = base64_decode($this->getParam('escid'));
             $subid = base64_decode($this->getParam('subid'));
             $curid = base64_decode($this->getParam('curid'));
             $courseid = base64_decode($this->getParam('courseid'));
@@ -38,7 +39,8 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
             $attrib = array('session');
             $where = array('eid' => $eid, 
                             'oid'=>$oid, 
-                            'perid'=>$perid, 
+                            'perid'=>$perid,
+                            'escid'=>$escid, 
                             'subid'=>$subid, 
                             'courseid'=>$courseid, 
                             'curid'=>$curid,
@@ -50,13 +52,70 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
             $c = 0;    
             $index = 0;
             $firstTime = "Si";
-            if ($controlsyllabus) {
-                foreach ($controlsyllabus as $session) {
+            if ($contentsyllabus) {
+                if ($controlsyllabus) {
+                    foreach ($controlsyllabus as $session) {
+                        $c++;
+                    }
+                    $this->view->realizedSession = $c;
+
+                    for ($i = 0; $i < $c; $i++) { 
+                        $attrib = array('perid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
+                        $where = array('eid' => $eid, 
+                                    'oid'=>$oid, 
+                                    'perid'=>$perid, 
+                                    'subid'=>$subid, 
+                                    'courseid'=>$courseid, 
+                                    'curid'=>$curid,
+                                    'turno'=>$turno,
+                                    'session'=>$controlsyllabus[$i]['session']);
+                        $contentsyllabus[$index] = $contentsyllabusDb->_getFilter($where, $attrib);
+
+                        $attrib = array('datecheck');
+                        $where = array('eid' => $eid, 
+                                    'oid'=>$oid, 
+                                    'perid'=>$perid, 
+                                    'subid'=>$subid, 
+                                    'courseid'=>$courseid, 
+                                    'curid'=>$curid,
+                                    'turno'=>$turno,
+                                    'session'=>$controlsyllabus[$i]['session']);
+                        $controlsyllabus[$index] = $controlsyllabusDb->_getFilter($where, $attrib);
+
+                        $index++;
+                    }
+                    $firstTime = "No";
+                }
+
+                $attrib = array('perid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
+                $where = array('eid' => $eid, 
+                            'oid'=>$oid, 
+                            'perid'=>$perid,
+                            'escid'=>$escid, 
+                            'subid'=>$subid, 
+                            'courseid'=>$courseid, 
+                            'curid'=>$curid,
+                            'turno'=>$turno,
+                            'session'=>$contentsyllabus[$index]['session']);
+                $contentsyllabus[$index] = $contentsyllabusDb->_getFilter($where, $attrib);
+
+
+                if ($contentsyllabus[$index] == null) {
+                    $completeSyllabus = 'Si';
+                }else{
+                    $completeSyllabus = 'No';
+                }
+                $index++;
+
+                $c = 0;    
+                foreach ($contentsyllabus as $session) {
                     $c++;
                 }
-                $this->view->realizedSession = $c;
+                $this->view->restSession = $c;
 
-                for ($i = 0; $i < $c; $i++) { 
+                $finalSession = 0;
+                for ($i = $index; $i < $c ; $i++) { 
+                    //echo $i.' ';
                     $attrib = array('perid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
                     $where = array('eid' => $eid, 
                                 'oid'=>$oid, 
@@ -65,75 +124,20 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
                                 'courseid'=>$courseid, 
                                 'curid'=>$curid,
                                 'turno'=>$turno,
-                                'session'=>$controlsyllabus[$i]['session']);
+                                'session'=>$contentsyllabus[$i]['session']);
                     $contentsyllabus[$index] = $contentsyllabusDb->_getFilter($where, $attrib);
-
-                    $attrib = array('datecheck');
-                    $where = array('eid' => $eid, 
-                                'oid'=>$oid, 
-                                'perid'=>$perid, 
-                                'subid'=>$subid, 
-                                'courseid'=>$courseid, 
-                                'curid'=>$curid,
-                                'turno'=>$turno,
-                                'session'=>$controlsyllabus[$i]['session']);
-                    $controlsyllabus[$index] = $controlsyllabusDb->_getFilter($where, $attrib);
-
                     $index++;
+                    $finalSession = 1;
                 }
-                $firstTime = "No";
+
+                $this->view->finalSession = $finalSession;
+
+                $this->view->firstTime = $firstTime;
+                $this->view->completeSyllabus = $completeSyllabus;
+             
+                $this->view->contentsyllabus = $contentsyllabus;
+                $this->view->controlsyllabus = $controlsyllabus;
             }
-
-            $attrib = array('perid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
-            $where = array('eid' => $eid, 
-                        'oid'=>$oid, 
-                        'perid'=>$perid, 
-                        'subid'=>$subid, 
-                        'courseid'=>$courseid, 
-                        'curid'=>$curid,
-                        'turno'=>$turno,
-                        'session'=>$contentsyllabus[$index]['session']);
-            $contentsyllabus[$index] = $contentsyllabusDb->_getFilter($where, $attrib);
-
-
-            if ($contentsyllabus[$index] == null) {
-                $completeSyllabus = 'Si';
-            }else{
-                $completeSyllabus = 'No';
-            }
-            $index++;
-
-            $c = 0;    
-            foreach ($contentsyllabus as $session) {
-                $c++;
-            }
-            $this->view->restSession = $c;
-
-            $finalSession = 0;
-            for ($i = $index; $i < $c ; $i++) { 
-                //echo $i.' ';
-                $attrib = array('perid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
-                $where = array('eid' => $eid, 
-                            'oid'=>$oid, 
-                            'perid'=>$perid, 
-                            'subid'=>$subid, 
-                            'courseid'=>$courseid, 
-                            'curid'=>$curid,
-                            'turno'=>$turno,
-                            'session'=>$contentsyllabus[$i]['session']);
-                $contentsyllabus[$index] = $contentsyllabusDb->_getFilter($where, $attrib);
-                $index++;
-                $finalSession = 1;
-            }
-
-            $this->view->finalSession = $finalSession;
-
-            $this->view->firstTime = $firstTime;
-            print_r($completeSyllabus);
-            $this->view->completeSyllabus = $completeSyllabus;
-         
-            $this->view->contentsyllabus = $contentsyllabus;
-            $this->view->controlsyllabus = $controlsyllabus;
         }
             catch (Exception $e) {           
         }

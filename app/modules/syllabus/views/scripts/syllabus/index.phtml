@@ -73,6 +73,17 @@ if ($this->periodocurso['type_rate']!="O" && $this->periodocurso['type_rate']!="
 		</div>
 	</div>
 </div>
+
+<div>
+	<h5 style="margin: 0px 80px 0px 80px"><b>II. SUMILLA GENERAL:</b></h5> <br>
+	<div class="panel panel-default" style="margin: 0px 80px 0px 80px">
+		<div class="panel-heading">
+		  	<table style="width: 100%"><?php echo $this->sumgral['course_sumilla'] ?><br /></table>
+		</div>	
+	</div>
+</div>
+
+
 <?php
 $rom="";
 if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="C") {
@@ -90,7 +101,7 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 	        	<div class="panel-heading">
 	        		<h6 class="panel-title" style="font-size:14px">
 		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapseO">
-		                	II. SUMILLA
+		                	III. SUMILLA ESPECIFICA
 		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
 		              	</a>
 	        		</h6>
@@ -106,8 +117,8 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 	        		<h6 class="panel-title" style="font-size:14px">
 		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse1">
 		             		<?php 
-		             		if ($this->periodocurso['type_rate']=='C') echo "III. COMPETENCIA Y CAPACIDADES";
-		             		if ($this->periodocurso['type_rate']=='O') echo "III. OBJETIVOS";
+		             		if ($this->periodocurso['type_rate']=='C') echo "IV. COMPETENCIA Y CAPACIDADES";
+		             		if ($this->periodocurso['type_rate']=='O') echo "IV. OBJETIVOS";
 		             		?>
 		             		<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
 		              	</a>
@@ -117,9 +128,9 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 	              	<div class="panel-body">
 					    <?php 
 					    if ($this->periodocurso['type_rate']=='C') {?>
-			                    <div><h5>3.1 COMPETENCIA</h5></div>
+			                    <div><h5>4.1 COMPETENCIA</h5></div>
 			                    <?php echo $this->form->competency?>
-			                    <div><h5>3.2 CAPACIDADES</h5></div>
+			                    <div><h5>4.2 CAPACIDADES</h5></div>
 			                    <?php echo $this->form->capacity?>
 			            <?php }
 			            if ($this->periodocurso['type_rate']=='O') {?>
@@ -136,8 +147,8 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 	        		<h6 class="panel-title" style="font-size:14px">
 		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse2">
 		                	<?php 
-		             		if ($this->periodocurso['type_rate']=='C') echo "IV. PROGRAMACIÓN DE UNIDADES";
-		             		if ($this->periodocurso['type_rate']=='O') echo "IV. PROGRAMACIÓN DE CONTENIDOS";
+		             		if ($this->periodocurso['type_rate']=='C') echo "V. PROGRAMACIÓN DE UNIDADES";
+		             		if ($this->periodocurso['type_rate']=='O') echo "V. PROGRAMACIÓN DE CONTENIDOS";
 		             		?>
 		             		<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
 		              	</a>
@@ -157,7 +168,7 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 	        	<div class="panel-heading">
 	        		<h6 class="panel-title" style="font-size:14px">
 		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse3">
-		                	V. ESTRATEGIAS METÓDOLOGICAS
+		                	VI. ESTRATEGIAS METÓDOLOGICAS
 		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
 		              	</a>
 	        		</h6>
@@ -173,7 +184,7 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 	        	<div class="panel-heading">
 	        		<h6 class="panel-title" style="font-size:14px">
 		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse4">
-		                	V<?php echo $rom?>. MEDIOS Y MATERIALES
+		                	VI<?php echo $rom?>. MEDIOS Y MATERIALES
 		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
 		              	</a>
 	        		</h6>
@@ -188,7 +199,7 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 	        	<div class="panel-heading">
 	        		<h6 class="panel-title" style="font-size:14px">
 		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse5">
-		                	VI<?php echo $rom?>. SISTEMA DE EVALUCIÓN
+		                	VII<?php echo $rom?>. SISTEMA DE EVALUCIÓN
 		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
 		              	</a>
 	        		</h6>
@@ -203,7 +214,7 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 	        	<div class="panel-heading">
 	        		<h6 class="panel-title" style="font-size:14px">
 		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse6">
-		                	VII<?php echo $rom?>. FUENTES DE INFORMACIÓN
+		                	VIII<?php echo $rom?>. FUENTES DE INFORMACIÓN
 		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
 		              	</a>
 	        		</h6>

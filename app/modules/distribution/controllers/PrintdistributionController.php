@@ -4,15 +4,15 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
 
     public function init()
     {
-    	$sesion  = Zend_Auth::getInstance();
-    	if(!$sesion->hasIdentity() ){
-    		$this->_helper->redirector('index',"index",'default');
-    	}
-    	$login = $sesion->getStorage()->read();
-    	// if (($login->infouser['teacher']['is_director']<>"S")){
-    	// 	$this->_helper->redirector('index','error','default');
-    	// }
-    	$this->sesion = $login;
+        $sesion  = Zend_Auth::getInstance();
+        if(!$sesion->hasIdentity() ){
+            $this->_helper->redirector('index',"index",'default');
+        }
+        $login = $sesion->getStorage()->read();
+        // if (($login->infouser['teacher']['is_director']<>"S")){
+        //  $this->_helper->redirector('index','error','default');
+        // }
+        $this->sesion = $login;
     }
 
     public function indexAction(){
@@ -95,6 +95,77 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
                     $whereteach['distid']=$distid;
                     $datateachers=$distteacher->_getFilter($whereteach,$attrib=null,$orders=null);                    
                     $this->view->datateachers=$datateachers;
+
+                    $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+                    $base_speciality =  new Api_Model_DbTable_Speciality();        
+                    $speciality = $base_speciality ->_getOne($where);
+                    $parent=$speciality['parent'];
+                    $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+                    $parentesc= $base_speciality->_getOne($wher);
+
+                    if ($parentesc) {
+                        $pala='ESPECIALIDAD DE ';
+                        $spe['esc']=$parentesc['name'];
+                        $spe['parent']=$pala.$speciality['name'];
+                    }
+                    else{
+                        $spe['esc']=$speciality['name'];
+                        $spe['parent']='';  
+                    }
+                    $names=strtoupper($spe['esc']);
+                    $namep=strtoupper($spe['parent']);
+                    $namev=$names." ".$namep;
+                    $this->view->namev=$namev;
+                    $namefinal=$names." <br> ".$namep;
+
+                    if ($speciality['header']) {
+                        $namelogo = $speciality['header'];
+                    }
+                    else{
+                        $namelogo = 'blanco';
+                    }
+                    
+                    $fac = array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']);
+                    $base_fac =  new Api_Model_DbTable_Faculty();        
+                    $datafa= $base_fac->_getOne($fac);
+                    $namef = strtoupper($datafa['name']);
+
+                    $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            
+                    $uid=$this->sesion->uid;
+                    $uidim=$this->sesion->pid;
+                    $pid=$uidim;
+
+                    $data = array(
+                        'eid'=>$eid,
+                        'oid'=>$oid,
+                        'uid'=>$uid,
+                        'escid'=>$escid,
+                        'subid'=>$subid,
+                        'pid'=>$pid,
+                        'type_impression'=>'informe_distribucion_'.$perid,
+                        'date_impression'=>date('Y-m-d H:i:s'),
+                        'pid_print'=>$uidim
+                        );
+                    // print_r($data);exit();
+                    $dbimpression->_save($data);            
+
+                    $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,
+                        'subid'=>$subid,'type_impression'=>'informe_distribucion_'.$perid);
+                    $dataim = $dbimpression->_getFilter($wheri);
+                                
+                    $co=count($dataim);            
+                    $codigo=$co." - ".$uidim;
+
+                    $header=$this->sesion->org['header_print'];
+                    $footer=$this->sesion->org['footer_print'];
+                    $header = str_replace("?facultad",$namef,$header);
+                    $header = str_replace("?escuela",$namefinal,$header);
+                    $header = str_replace("?logo", $namelogo, $header);
+                    $header = str_replace("?codigo", $codigo, $header);
+                  
+                    $this->view->header=$header;
+                    $this->view->footer=$footer;
                 }
             }
         } catch (Exception $e) {
@@ -153,6 +224,78 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
                 }
             }
             $this->view->allteachers = $dataallteacher;
+
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $base_speciality =  new Api_Model_DbTable_Speciality();        
+            $speciality = $base_speciality ->_getOne($where);
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $base_speciality->_getOne($wher);
+
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namev=$names." ".$namep;
+            $this->view->namev=$namev;
+            $namefinal=$names." <br> ".$namep;
+
+            if ($speciality['header']) {
+                $namelogo = $speciality['header'];
+            }
+            else{
+                $namelogo = 'blanco';
+            }
+            
+            $fac = array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']);
+            $base_fac =  new Api_Model_DbTable_Faculty();        
+            $datafa= $base_fac->_getOne($fac);
+            $namef = strtoupper($datafa['name']);
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+    
+            $uid=$this->sesion->uid;
+            $uidim=$this->sesion->pid;
+            $pid=$uidim;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'informe_distribucion_'.$perid,
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+            // print_r($data);exit();
+            $dbimpression->_save($data);            
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,
+                'subid'=>$subid,'type_impression'=>'informe_distribucion_'.$perid);
+            $dataim = $dbimpression->_getFilter($wheri);
+                        
+            $co=count($dataim);            
+            $codigo=$co." - ".$uidim;
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+          
+            $this->view->header=$header;
+            $this->view->footer=$footer;
+            
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }

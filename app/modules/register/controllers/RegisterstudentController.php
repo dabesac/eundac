@@ -381,6 +381,115 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
 
     }
 
+    public function editturnoAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+
+            $coursesPeriodsDb = new Api_Model_DbTable_PeriodsCourses();
+            $coursesTeachersDb = new Api_Model_DbTable_Coursexteacher();
+
+
+            $perid = $this->sesion->period->perid;
+            $uid = base64_decode($this->_getParam('uid'));
+            $pid = base64_decode($this->_getParam('pid'));
+            $escid = base64_decode($this->_getParam('escid'));
+            $subid = base64_decode($this->_getParam('subid'));
+            $courseid = base64_decode($this->_getParam('courseid'));
+            $curid = base64_decode($this->_getParam('curid'));
+            $turno = base64_decode($this->_getParam('turno'));
+            $eid = $this->sesion->eid;        
+            $oid = $this->sesion->oid;
+
+            $data = array(  'uid'=>$uid,
+                            'pid'=>$pid,
+                            'escid'=>$escid,
+                            'subid'=>$subid,
+                            'courseid'=>$courseid,
+                            'curid'=>$curid );
+            $this->view->data = $data;
+            //$regid=$where['uid'].$where['perid'];
+
+            $where = array( 'eid'=>$eid,
+                            'oid'=>$oid,
+                            'perid'=>$perid,
+                            'courseid'=>$courseid,
+                            'curid'=>$curid,
+                            'escid'=>$escid,
+                            'subid'=>$subid );
+            $attrib = array('courseid', 'turno');
+            $courses = $coursesPeriodsDb->_getFilter($where, $attrib);
+            $turnos = count($courses);
+            if ($turnos >= 2) {
+                $c = 0;
+                foreach ($courses as $course) {
+                    $attrib = array('courseid', 'pid', 'uid');
+                    $where = array( 'eid'=>$eid,
+                                    'oid'=>$oid,
+                                    'perid'=>$perid,
+                                    'courseid'=>$course['courseid'],
+                                    'curid'=>$curid,
+                                    'escid'=>$escid,
+                                    'subid'=>$subid,
+                                    'turno'=>$course['turno'] );
+                    $teacher = $coursesTeachersDb->_getFilter($where, $attrib);
+
+                    $attrib = array('name');
+                    $where = array( 'eid'=>$eid,
+                                    'oid'=>$oid,
+                                    'escid'=>$escid,
+                                    'subid'=>$subid,
+                                    'pid'=>$teacher[0]['pid'],
+                                    'uid'=>$teacher[0]['uid'] );
+                    $teachersInfo[$c] = $coursesTeachersDb->_getinfoTeacher($where, $attrib);
+                    $c++;
+                }
+                $this->view->courses = $courses;
+                $this->view->teachersInfo = $teachersInfo;
+            }
+
+        } catch (Exception $e) {
+            print 'Error : '.$e->getMessage();            
+        }
+    }
+
+
+
+    public function updatecourseperturnoAction(){
+        try {
+            $perid = $this->sesion->period->perid;
+            $eid = $this->sesion->eid;        
+            $oid = $this->sesion->oid;
+            $uid = $this->_getParam('uid');
+            $pid = $this->_getParam('pid');
+            $escid = $this->_getParam('escid');
+            $subid = $this->_getParam('subid');
+            $courseid = $this->_getParam('courseid');
+            $curid = $this->_getParam('curid');
+            $turno = $this->_getParam('turno');
+            $regid=$uid.$perid;
+
+            $where = array( 'eid'=>$eid,
+                            'oid'=>$oid, 
+                            'uid'=>$uid,
+                            'pid'=>$pid,
+                            'escid'=>$escid,
+                            'subid'=>$subid,
+                            'courseid'=>$courseid,
+                            'curid'=>$curid,
+                            'regid'=>$regid,
+                            'perid'=>$perid );
+
+            $data = array(  'turno'=>$turno,
+                            'updated'=>date('Y-m-d h:m:s') );
+
+            $registercourseDb = new Api_Model_DbTable_Registrationxcourse();  
+            $updateCourse = $registercourseDb->_update($data, $where);
+            //$bdmatricula_curso ->_update($data, $where);        
+        } catch (Exception $e) {
+            print 'Error : '.$e->getMessage();
+        }
+    }
+
         public function turnoAction()
     {
         try{

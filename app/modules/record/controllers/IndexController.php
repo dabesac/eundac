@@ -447,30 +447,31 @@ class Record_IndexController extends Zend_Controller_Action {
 	        $escid=$this->sesion->escid;
 	        $where['escid']=$escid;
 
-	        $dbimpression = new Api_Model_DbTable_Countimpressionall();
+	        $dbimpression = new Api_Model_DbTable_Impresscourse();
 	        
-	        $uid=$this->sesion->uid;
 	        $uidim=$this->sesion->pid;
-	        $pid=$uidim;
 
-	        $data = array(
-	            'eid'=>$eid,
-	            'oid'=>$oid,
-	            'uid'=>$uid,
-	            'escid'=>$escid,
-	            'subid'=>$subid,
-	            'pid'=>$pid,
-	            'type_impression'=>'constancia',
-	            'date_impression'=>date('Y-m-d H:i:s'),
-	            'pid_print'=>$uidim
-	            );
-	        $dbimpression->_save($data);            
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'perid'=>$perid,
+                'courseid'=>$courseid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'curid'=>$curid,
+                'turno'=>$turno,
+                'register'=>$uidim,
+                'created'=>date('Y-m-d H:i:s'),
+                'code'=>'constancia'
+                );
 
-	        $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'constancia');
-	        $dataim = $dbimpression->_getFilter($wheri);
-	        
-	        $co=count($dataim);
-	        $codigo=$co." - ".$uidim;
+            // print_r($data);exit();
+            $dbimpression->_save($data);            
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>'constancia');
+            $dataim = $dbimpression->_getFilter($wheri);
+            $co=count($dataim);
+            $codigo=$co." - ".$uidim;
 
 			$this->view->info_couser = $info_couser;
 			$this->view->students=$data_students;

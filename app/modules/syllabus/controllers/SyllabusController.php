@@ -33,6 +33,13 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $syl= new Api_Model_DbTable_Syllabus();
             $datsyl=$syl->_getOne($where);
             $this->view->num=$datsyl['number'];
+
+            $datasum=array('eid'=>$where['eid'],'oid'=>$where['oid'],'curid'=>$where['curid'],
+                'escid'=>$where['escid'],'subid'=>$where['subid'],'courseid'=>$where['courseid']);
+            $querysum=new Api_Model_DbTable_Course();
+            $this->view->sumgral=$querysum->_getOne($datasum);
+
+
             if (!$datsyl) {
                 $data['eid']=$where['eid'];
                 $data['oid']=$where['oid'];
@@ -537,6 +544,11 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $syluni = new Api_Model_DbTable_Syllabusunits();
             $datsyluni=$syluni->_getAllXSyllabus($wheresyl);
             $this->view->datunidades=$datsyluni;
+
+            $buscar=array('eid'=>$wheresyl['eid'],'oid'=>$wheresyl['oid'],'curid'=>$wheresyl['curid'],
+                'escid'=>$wheresyl['escid'],'subid'=>$wheresyl['subid'],'courseid'=>$wheresyl['courseid']);
+            $syl_sumg=new Api_Model_DbTable_Course();
+            $this->view->sumgral=$syl_sumg->_getOne($buscar);
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
