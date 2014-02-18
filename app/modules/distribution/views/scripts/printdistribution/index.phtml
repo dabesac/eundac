@@ -6,22 +6,11 @@ if($this->t<>'U'){
     $sesion1  = Zend_Auth::getInstance();
     $sesion = $sesion1->getStorage()->read();
 }
-$header='
-    <table style="width: 100%;" border="1">
-        <tr>
-            <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-            <th style="text-align: center; font-size: 12px;">
-                FACULTAD DE  '.strtoupper($sesion->faculty->name).'<br/>
-                ESCUELA DE  '.strtoupper($sesion->speciality->name).'
-            </th>        
-        </tr>
-        <tr>
-            <th style="border: 1px solid #000;font-size: 12px;"> DISTRIBUCIÓN ACADÉMICA - ADMINISTRATIVA DE DOCENTES - '.$this->perid.'</th>
-        </tr>
-    </table>'; 
 ?>
 <link rel="stylesheet" type="text/css" href="/css/print.css">
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+
+<div style="text-align:center"><b><h3>DISTRIBUCIÓN ACADÉMICA - ADMINISTRATIVA DE DOCENTES - <?php echo strtoupper($this->perid)?></h3></b></div>
 
 <h5><b>LISTA DE DOCENTES</b></h5>
 
@@ -611,10 +600,12 @@ foreach ($this->allteachers as $allteachers){
 
 <?php 
     $html = ob_get_contents();
-    $mpdf=new mPDF('win-1252','A4','','',15,15,30,12,5,7);
-    $mpdf->SetHTMLHeader($header);
-    $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+    $mpdf=new mPDF('win-1252','A4','','',15,15,33,18,5,5);
+    // $mpdf=new mPDF('win-1252','A4','','',15,15,30,12,5,7);
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer);
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('INFORME DISTRIBUCION-'.$this->perid.'.pdf','D');
+    $mpdf->Output('INFORME DISTRIBUCION - '.$this->perid.'.pdf','D');
+    // $mpdf->Output();
 ?>    

@@ -1,164 +1,129 @@
 <?php 
-$facid=trim(mb_substr($this->escid,0,1));
-$escid=$this->escid; 
-$subid=$this->subid;
-$curid=$this->curid;
-$state=$this->state;
-$eid=$this->eid;
-$oid=$this->oid;
+// $facid=trim(mb_substr($this->escid,0,1));
+// $escid=$this->escid; 
+// $subid=$this->subid;
+// $curid=$this->curid;
+// $state=$this->state;
+// $eid=$this->eid;
+// $oid=$this->oid;
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start(); 
-
 ?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
-<table class="table table-striped table-bordered table-condensed">
-        <tr>
-            <th ><img src="/img/header_imprimir.jpg"></th>
-            <th>    
-                <center>
-                <p>                
-                <span style="font-size: 16px"> <?php print(strtoupper($this->nombre_curricula)); ?></span><br/>
-                <span style="font-size: 15px"> FACULTAD DE <?php                    
-                    $facultad= new Api_Model_DbTable_Faculty();
-                    $where['eid']=$eid;
-                    $where['oid']=$oid;
-                    $where['facid']=$facid;
-                    $datafacid=$facultad->_getOne($where);
-                    print_r(strtoupper($datafacid['name']));
-                ?></span><br/>                 
-                <?php 
-                    $escuela= new Api_Model_DbTable_Speciality();
-                    $data['eid']=$eid;
-                    $data['oid']=$oid;
-                    $data['escid']=$escid;
-                    $data['subid']=$subid;
-
-                    $dataescid=$escuela->_getOne($data);
-                    if ($dataescid['parent']=="")
-                    {
-                ?>
-                    <span style="font-size: 14px">ESCUELA DE 
-                        <?php 
-                            // $escuela= new Admin_Model_DbTable_Escuela();
-                            // $dataescid=$escuela->_getEscuela($eid,$oid,$escid);
-                            print_r(strtoupper($dataescid['name']));
-                        ?> 
-                    </span><br/>
-
-                    <?php 
-                    }
-                    else
-                   {
-                    ?>
-                    <span style="font-size: 14px">ESCUELA DE 
-                        <?php 
-                         
-                            // $escuela= new Admin_Model_DbTable_Escuela();
-                            // // $dataescid=$escuela->_getEscuela($eid,$oid,$escid);
-                            // $dataesciduno=$escuela->_getMostrardatosXEscuela($eid,$oid,$dataescid['parent_escuela']);
-
-                            // print_r(strtoupper($dataesciduno['nom_escuela']));
-                        ?> 
-                    </span><br/>
-
-
-                    <span style="font-size: 14px">ESPECIALIDAD DE 
-                        <?php 
-                   
-                            // $escuela= new Admin_Model_DbTable_Escuela();
-                            // $dataescid=$escuela->_getEscuela($eid,$oid,$escid);
-                            print_r(strtoupper($dataescid['name']));
-
-                        ?>
-                    </span><br/>
-                <?php 
-            }
-                
-                ?>
-
-                </p>
-                </center>
-                
-            </th>
-        </tr>
-    </table>
-        <?php
-        foreach($this->semestre as $lsem)
-        {?>
-
-<div>
-
-     <table class="table table-striped table-bordered table-condensed" style="font-size: 11px">
-            <tr>
-                <th colspan="10"><?php echo strtoupper($lsem['name']) ?></th>
+<div style="margin-bottom:2%; text-align:center"><h3><b><?php echo strtoupper($this->nombre_curricula)?></b></h3></div>
+<?php 
+    // print_r($this->datasemestre);exit();
+    $len=count($this->datasemestre);
+    foreach ($this->datasemestre as $semestre) {   ?>
+        <table style="margin-bottom:3%; width:100%">
+            <tr style="background:#E5E5E5">
+                <th colspan="10"><?php echo $semestre['name']?></th>
             </tr>
-
             <tr>
-                <th>Codigo</th>
-                <th >Curso</th>
-                <th>Tipo</th>
-                <th>Creditos</th>
-                <th>Horas Teoricas.</th>
-                <th>Horas Practicas.</th>
-                <th>Req 1</th>
-                <th>Req 2</th>
-                <th>Req 3</th>
-                <th>Equivalencia</th>
+                <th class="small">Código</th>
+                <th>Curso</th>
+                <th class="small">Tipo</th>
+                <th class="small">Créd</th>
+                <th class="small">Horas Teóricas</th>
+                <th class="small">Horas Prácticas</th>
+                <th class="small">Req 1</th>
+                <th class="small">Req 2</th>
+                <th class="small">Req 3</th>
+                <th class="small">Equivalencia</th>
             </tr>
-
-
-             <?php
-                $bdcursos = new Api_Model_DbTable_Course();
-                $dat['eid']=$eid;
-                $dat['oid']=$oid;
-                $dat['escid']=$escid;
-                $dat['subid']=$subid;
-                $dat['curid']=$curid;
-                $dat['semid']=$lsem["semid"];
-                
-                $cursos=$bdcursos->_getFilter($dat);
-                foreach ($cursos as $lcursos){ 
-                    
-                ?>
-                <tr>
-                    <td><?php echo $lcursos['courseid'] ?></td>
-                    <td><?php echo $lcursos['name'] ?></td>
-                    <td><?php 
-                        if ($lcursos['type']=='O') echo "Obligatorio";
-
-                        if ($lcursos['type']=='E') echo "Electivo";
-                    ?>
-                    </td>
-                    <td><?php echo $lcursos['credits']?></td>
-                    <td><?php echo $lcursos['hours_theoretical']?></td>
-                    <td><?php echo $lcursos['hours_practical']?></td>
-                    <td><?php echo $lcursos['req_1']?></td>
-                    <td><?php echo $lcursos['req_2']?></td>
-                    <td><?php echo $lcursos['req_3']?></td>
-                    <td><?php echo $lcursos['course_equivalence']?></td>
-                </tr>
             <?php
-                
+            $i=0;
+            while ($semestre['semid'] == $semestre['cursos'][$i]['semid']) {    ?>
+                <tr>
+                    <td style="text-align:center"><?php echo $semestre['cursos'][$i]['courseid']?></td>
+                    <td><?php echo $semestre['cursos'][$i]['name']?></td>
+                        <?php 
+                        switch ($semestre['cursos'][$i]['type']) {
+                            case 'O':
+                                ?>
+                                <td style="text-align:center">OBLIGATORIO</td>
+                                <?php
+                                break;
+                            case 'E':
+                                ?>
+                                <td style="text-align:center">ELECTIVO</td>
+                                <?php
+                                break;    
+                            default:
+                                ?>
+                                <td style="text-align:center"></td>
+                                <?php
+                                break;                                
+                        }
+                        ?>
+                    <td style="text-align:center"><?php echo $semestre['cursos'][$i]['credits']?></td>
+                    <td style="text-align:center"><?php echo $semestre['cursos'][$i]['hours_theoretical']?></td>
+                    <td style="text-align:center"><?php echo $semestre['cursos'][$i]['hours_practical']?></td>
+                        <?php
+                            $req_1 =$semestre['cursos'][$i]['req_1'];
+                            if (is_null($req_1) || $req_1==' ') {    ?>
+                                <td style="text-align:center">-</td>        
+                            <?php    
+                            }
+                            else{
+                            ?>
+                                <td style="text-align:center"><?php echo $semestre['cursos'][$i]['req_1']?></td>
+                            <?php            
+                            }
+                            $req_2 =$semestre['cursos'][$i]['req_2'];
+                            if (is_null($req_2) || $req_2==' ') {    ?>
+                            <td style="text-align:center">-</td>        
+                            <?php    
+                            }
+                            else{
+                            ?>
+                            <td style="text-align:center"><?php echo $semestre['cursos'][$i]['req_2']?></td>
+                        <?php            
+                        }
+                            if (is_null($semestre['cursos'][$i]['req_3'])) {    ?>
+                            <td style="text-align:center">-</td>        
+                            <?php    
+                            }
+                            else{
+                            ?>
+                            <td style="text-align:center"><?php echo $semestre['cursos'][$i]['req_3']?></td>
+                        <?php
+                        }    
+                            if (is_null($semestre['cursos'][$i]['course_equivalence'])) {    ?>
+                            <td style="text-align:center">-</td>        
+                            <?php    
+                            }
+                            else{
+                            ?>
+                            <td style="text-align:center"><?php echo $semestre['cursos'][$i]['course_equivalence']?></td>
+                        <?php
+                        }    
+                        ?>
+                        ?>
+
+                </tr>  
+            <?php
+            $i++;   
             }
+            
             ?>
         </table>
-</div>
-        <div style="clear:both" ></div>
-        <?php }
-        ?>
-<?php 
+    <?php     
+    }
 
-  $html = ob_get_contents();
-  
-  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
-  $mpdf->SetHTMLHeader($header);
-  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-  
-  $mpdf->SetFooter($this->footer);
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('Curricula-'.$curid.'.pdf','D');
-  
+?>
+<?php 
+    $html = ob_get_contents(); 
+    $mpdf=new mPDF('win-1252','A4','','',15,15,33,18,5,5);
+    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer);
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('Curricula - '.$this->curid.'.pdf','D');
+    // $mpdf->Output();
+
 ?>
