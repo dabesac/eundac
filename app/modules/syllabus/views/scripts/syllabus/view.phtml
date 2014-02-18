@@ -85,12 +85,16 @@ $total=$curso['hours_theoretical']+$curso['hours_practical']; ?>
 <?php if($this->silabo) { 
     $silabo=$this->silabo;?>
         <div style="margin-left:30px">
-            <h5>II. SUMILLA</h5>
+            <h5>II. SUMILLA GENERAL</h5>
+            <div class='detalle'><?php echo $sumgral['course_sumilla']?></div>
+        </div>
+        <div style="margin-left:30px">
+            <h5>III. SUMILLA ESPECIFICA</h5>
             <div class='detalle'><?php echo $silabo['sumilla']?></div>
         </div>
         <?php if ($curso["type_rate"]=="C") {?>
         <div style="margin-left:30px">
-            <h5>III. COMPETENCIAS Y CAPACIDADES</h5>
+            <h5>IV. COMPETENCIAS Y CAPACIDADES</h5>
             <h5 class='indent'>3.1 COMPETENCIAS</h5>
             <div class='detalle'><?php echo $silabo['competency']?></div>
             <h5 class='indent'>3.2 CAPACIDADES</h5>
@@ -98,18 +102,18 @@ $total=$curso['hours_theoretical']+$curso['hours_practical']; ?>
         </div>
         <?php } elseif ($curso["type_rate"]=="O") { ?>
         <div style="margin-left:30px">
-            <h5>III. OBJETIVOS</h5>
-            <h5 class='indent'>3.1 OBJETIVO GENERAL</h5>
+            <h5>IV. OBJETIVOS</h5>
+            <h5 class='indent'>4.1 OBJETIVO GENERAL</h5>
             <div class='detalle'><?php echo $silabo['competency']?></div>
-            <h5 class='indent'>3.2 OBJETIVOS ESPECÍFICOS</h5>
+            <h5 class='indent'>4.2 OBJETIVOS ESPECÍFICOS</h5>
             <div class='detalle'><?php echo $silabo['capacity']?></div>
         </div>
         <div>
         <?php }
         if ($curso["type_rate"]=="C") { ?>
-            <h5 style="margin-left:30px">IV. PROGRAMACIÓN DE UNIDADES</h5>
+            <h5 style="margin-left:30px">V. PROGRAMACIÓN DE UNIDADES</h5>
         <?php } elseif ($curso["type_rate"]=="O") { ?>
-            <h5 style="margin-left:30px">IV. PROGRAMACIÓN DE CONTENIDOS</h5>
+            <h5 style="margin-left:30px">V. PROGRAMACIÓN DE CONTENIDOS</h5>
         <?php } ?>
         </div>
         <?php
@@ -226,18 +230,18 @@ $total=$curso['hours_theoretical']+$curso['hours_practical']; ?>
       <?php if ($curso['type_rate']=='C') {
         $rom="I"; ?>
         <div style="margin-left:30px; float:left">
-            <h5>V. ESTRATEGIAS METODÓLOGICAS</h5>
+            <h5>VI. ESTRATEGIAS METODÓLOGICAS</h5>
             <div class="detalle"><?php echo $silabo['methodology']?></div>
         </div> 
       <?php }?>
         <div style="margin-left:30px; float:left">
-            <h5>V<?php echo $rom?>. MEDIOS Y MATERIALES</h5>
+            <h5>VI<?php echo $rom?>. MEDIOS Y MATERIALES</h5>
             <div class="detalle"><?php echo $silabo['media']?></div>
 
-            <h5>VI<?php echo $rom?>. SISTEMA DE EVALUACIÓN</h5>
+            <h5>VII<?php echo $rom?>. SISTEMA DE EVALUACIÓN</h5>
             <div class="detalle"><?php echo $silabo['evaluation']?></div>
 
-            <h5>VII<?php echo $rom?>. FUENTES DE INFORMACIÓN</h5>
+            <h5>VIII<?php echo $rom?>. FUENTES DE INFORMACIÓN</h5>
             <div class="detalle"><?php echo $silabo['sources']?></div>
         </div>
 <?php }?>

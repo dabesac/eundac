@@ -123,7 +123,25 @@ class Profile_PublicController extends Zend_Controller_Action {
             if ($this->getRequest()->isPost())
             {
                 $formdata = $this->getRequest()->getPost();
-                if ($form->isValid($formdata))
+                $s=1;
+                if($formdata['typedoc']=='D'){
+                        $patron='/^\d{8}$/';
+                        $val=preg_match($patron, $formdata['numdoc']);
+                        if(!$val){
+                            echo "Numero de DNI Invalido";
+                            $s=0;
+                        }
+                }
+                if($formdata['typedoc']=='P'){
+                        $patron='/^\d{8}[A-Z]$/';
+                        $val=preg_match($patron, $formdata['numdoc']);
+                        $s=1;
+                        if(!$val){
+                            echo "Numero de Pasaporte Invalido";
+                            $s=0;
+                        }
+                }   
+                if ($form->isValid($formdata) and $s==1)
                 { 
                     trim($formdata['numdoc']);
                     $formdata["birthday"]=$formdata["year"]."-".$formdata["month"]."-".$formdata["day"];

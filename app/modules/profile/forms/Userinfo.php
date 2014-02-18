@@ -7,8 +7,17 @@ class Profile_Form_Userinfo extends Zend_Form{
         $dni->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $dni->setAttrib("maxlength", "8");
         $dni->setRequired(true)->addErrorMessage('Este campo es requerido');
-        $dni->setAttrib("title","DNI");
+        // $dni->setAttrib("title","DNI");
         $dni->setAttrib("class","form-control");
+
+        $doctype=new Zend_Form_Element_Select('typedoc');
+        $doctype->removeDecorator('Label')->removeDecorator('HtmlTag')->removeDecorator('Label');
+        $doctype->setRequired(true)->addErrorMessage('Es nesesario que selecciones el estado');
+        $doctype->addMultiOption("D","DNI");
+        $doctype->addMultiOption("P","Pasaporte");
+        $doctype->addMultiOption("C","Carnet Extranjeria");
+        $doctype->setAttrib("class","form-control");
+
 
         $year= new Zend_Form_Element_Text("year");
         $year->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
@@ -78,6 +87,6 @@ class Profile_Form_Userinfo extends Zend_Form{
         $cellular->setAttrib("class","form-control");
 
         
-        $this->addElements(array($dni, $year, $month, $day, $sex, $civil, $mail_person, $mail_work, $phone, $cellular));
+        $this->addElements(array($dni,$doctype, $year, $month, $day, $sex, $civil, $mail_person, $mail_work, $phone, $cellular));
     }
 }
