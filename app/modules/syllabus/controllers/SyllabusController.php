@@ -547,6 +547,11 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $syluni = new Api_Model_DbTable_Syllabusunits();
             $datsyluni=$syluni->_getAllXSyllabus($wheresyl);
             $this->view->datunidades=$datsyluni;
+
+            $buscar=array('eid'=>$wheresyl['eid'],'oid'=>$wheresyl['oid'],'curid'=>$wheresyl['curid'],
+                'escid'=>$wheresyl['escid'],'subid'=>$wheresyl['subid'],'courseid'=>$wheresyl['courseid']);
+            $syl_sumg=new Api_Model_DbTable_Course();
+            $this->view->sumgral=$syl_sumg->_getOne($buscar);
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
