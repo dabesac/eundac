@@ -53,6 +53,7 @@ class Profile_Form_Userinfo extends Zend_Form{
         $mail_person->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $mail_person->setAttrib("title","Email");
         $mail_person->setAttrib("class","form-control");
+        $email_person->addValidator('EmailAddress',true)->addErroMessage('Direccion electronica no valida');
 
         $mail_work= new Zend_Form_Element_Text("mail_work");
         $mail_work->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
@@ -60,6 +61,7 @@ class Profile_Form_Userinfo extends Zend_Form{
         $mail_work->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $mail_work->setAttrib("title","Email Work");
         $mail_work->setAttrib("class","form-control");
+        $email_person->addValidator('EmailAddress',true)->addErrorMessage('Direccion electronica no valida');
 
         $phone= new Zend_Form_Element_Text("phone");
         $phone->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
