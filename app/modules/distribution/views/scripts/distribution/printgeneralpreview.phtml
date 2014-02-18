@@ -4,23 +4,10 @@ include_once($dir);
 ob_start();
 $sesion1  = Zend_Auth::getInstance();
 $sesion = $sesion1->getStorage()->read();
-
-$header='
-    <table style="width: 100%;" border="1">
-        <tr>
-            <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-            <th style="text-align: center; font-size: 12px;">
-                FACULTAD DE  '.strtoupper($sesion->faculty->name).'<br/>
-                ESCUELA DE  '.strtoupper($sesion->speciality->name).'
-            </th>        
-        </tr>
-        <tr>
-            <th style="border: 1px solid #000;font-size: 12px;"> LISTA DE DOCENTES - ASIGNATURAS - '.$this->perid.'</th>
-        </tr>
-    </table>'; 
 ?>
 <link rel="stylesheet" type="text/css" href="/css/print.css">
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+<div style="text-align:center; margin-top:2%"><b><h3> LISTA DE DOCENTES - ASIGNATURAS - <?php echo $this->perid?></h3></b></div>
 
 <?php 
 if ($this->coursenotassign) { ?>
@@ -121,9 +108,10 @@ if ($this->courses) {
 <?php 
     $html = ob_get_contents();
     $mpdf=new mPDF('win-1252','A4','','',15,15,30,12,5,7);
-    $mpdf->SetHTMLHeader($header);
-    $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer);
     ob_end_clean();
     $mpdf -> WriteHTML($html);
     $mpdf->Output('DOCENTES - ASIGNATURAS -'.$this->perid.'.pdf','D');
+    // $mpdf->Output();
 ?>    

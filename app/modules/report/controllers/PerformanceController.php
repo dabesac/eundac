@@ -1,18 +1,18 @@
 <?php
  class Report_PerformanceController extends Zend_Controller_Action{
 
- 	public function init(){
- 		$sesion  = Zend_Auth::getInstance();
- 		if(!$sesion->hasIdentity() ){
- 			$this->_helper->redirector('index',"index",'default');
- 		}
- 		$login = $sesion->getStorage()->read();
- 		
-    	$this->sesion = $login;
- 	}
+    public function init(){
+        $sesion  = Zend_Auth::getInstance();
+        if(!$sesion->hasIdentity() ){
+            $this->_helper->redirector('index',"index",'default');
+        }
+        $login = $sesion->getStorage()->read();
+        
+        $this->sesion = $login;
+    }
 
- 	public function indexAction(){
- 		try {
+    public function indexAction(){
+        try {
          $where['subid'] = $this->sesion->subid;        
          $where['facid'] =$this->sesion->faculty->facid;
          $nomfac = $this->sesion->faculty->name;
@@ -43,13 +43,13 @@
           else
           { $fm->facid->setAttrib("disabled", true); }
         }
-        $this->view->fm=$fm;	
- 		} catch (Exception $e) {
- 			print ('Error: get datos'. $e->getMessage());
- 			
- 		}
+        $this->view->fm=$fm;    
+        } catch (Exception $e) {
+            print ('Error: get datos'. $e->getMessage());
+            
+        }
 
- 	}
+    }
 
   public function lperiodsAction()
     {
@@ -359,28 +359,103 @@ public function listcurriculaAction()
     }
 
     public function printprimerospuestosAction(){
-      try{
-         $this->_helper->layout()->disableLayout();
-          $where['escid'] = base64_decode($this->_getParam("escid"));
-          $where['curid'] = base64_decode($this->_getParam("curid"));
-          $where['perid'] = base64_decode($this->_getParam("perid"));
-          $where['eid'] = $this->sesion->eid;
-          $where['oid'] = $this->sesion->oid;
+        try{
+            $this->_helper->layout()->disableLayout();
+            $escid = base64_decode($this->_getParam("escid"));
+            $curid = base64_decode($this->_getParam("curid"));
+            $perid = base64_decode($this->_getParam("perid"));
+            $semid = ($this->_getParam("semid"));
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $this->view->perid=$perid;
+            $this->view->curid=$curid;
   
-          $where['semid'] = ($this->_getParam("semid"));
-          $db_sem = new Api_Model_DbTable_Semester();
-          $lissem = $db_sem->_getOne($where);
-          $this->view->semestre=strtoupper($lissem['name']); 
-          $bdcurri = new Api_Model_DbTable_Curricula();
-          $rep_alumnos= $bdcurri->_getPrimerospuestos($where);
-          $this->view->rep_alumnos=$rep_alumnos;
-          $this->view->data=$where;
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'curid'=>$curid,'perid'=>$perid,'semid'=>$semid);
+            $db_sem = new Api_Model_DbTable_Semester();
+            $lissem = $db_sem->_getOne($where);
+            $this->view->semestre=strtoupper($lissem['name']); 
+            $bdcurri = new Api_Model_DbTable_Curricula();
+            $rep_alumnos= $bdcurri->_getPrimerospuestos($where);
+            $this->view->rep_alumnos=$rep_alumnos;
 
-      }
-      catch (Exception $ex) 
-      {
-          print "Error rendimiento: ".$ex->getMessage();
-      }
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid);
+            $base_speciality =  new Api_Model_DbTable_Speciality();        
+            $speciality = $base_speciality ->_getFilter($where);
+            $parent=$speciality[0]['parent'];
+            $subid=$speciality[0]['subid'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $base_speciality->_getOne($wher);
+
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality[0]['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namev=$names." ".$namep;
+            $this->view->namev=$namev;
+            $namefinal=$names." <br> ".$namep;
+
+            if ($speciality[0]['header']) {
+                $namelogo = $speciality[0]['header'];
+            }
+            else{
+                $namelogo = 'blanco';
+            }
+            
+            $fac = array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality[0]['facid']);
+            $base_fac =  new Api_Model_DbTable_Faculty();        
+            $datafa= $base_fac->_getOne($fac);
+            $namef = strtoupper($datafa['name']);
+            // $escid=$this->sesion->escid;
+            // $where['escid']=$escid;
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            
+            $uid=$this->sesion->uid;
+            $uidim=$this->sesion->pid;
+            $pid=$uidim;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'reporte_primeros_puestos_'.$semid,
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+            // print_r($data);exit();
+            $dbimpression->_save($data);            
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,
+                'subid'=>$subid,'type_impression'=>'reporte_primeros_puestos_'.$semid);
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=count($dataim);            
+            $codigo=$co." - ".$uidim;
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+          
+            $this->view->header=$header;
+            $this->view->footer=$footer;
+        }
+        catch (Exception $ex) 
+        {
+            print "Error rendimiento: ".$ex->getMessage();
+        }
     }
 
     public function superiorAction(){
@@ -430,36 +505,107 @@ public function listcurriculaAction()
     }
 
 
-        public function printsuperiorAction(){
-      try{
-          $this->_helper->layout()->disableLayout();
-          $where['escid'] = base64_decode($this->_getParam("escid"));
-          $where['perid'] = base64_decode($this->_getParam("perid"));
-          $where['superior'] = $this->_getParam("superior");
-          $where['oid'] = $this->sesion->oid;
-          $where['eid'] = $this->sesion->eid;
-          $this->view->data=$where;
+    public function printsuperiorAction(){
+        try{
+            $this->_helper->layout()->disableLayout();
+            $escid = base64_decode($this->_getParam("escid"));
+            $perid = base64_decode($this->_getParam("perid"));
+            $superior = $this->_getParam("superior");
+            $oid = $this->sesion->oid;
+            $eid = $this->sesion->eid;
+
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'perid'=>$perid,'superior'=>$superior);
+            $this->view->superior=$superior;
+            $this->view->perid=$perid;
       
-         $db_35superior = new Api_Model_DbTable_Curricula();
+            $db_35superior = new Api_Model_DbTable_Curricula();
        
-          if ($where['superior']=='3')
-          {
-            $rep_superior= $db_35superior->_get3superiorXcurricula($where);
-          }
+            if ($where['superior']=='3'){
+                $rep_superior= $db_35superior->_get3superiorXcurricula($where);
+            }
          
-          if ($where['superior']=='5')
-          {
-            $rep_superior= $db_35superior->_get5superiorXcurricula($where);
-          }
-         $this->view->rep_superior=$rep_superior;
+            if ($where['superior']=='5'){
+                $rep_superior= $db_35superior->_get5superiorXcurricula($where);
+            }
+            $this->view->rep_superior=$rep_superior;
+
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid);
+            $base_speciality =  new Api_Model_DbTable_Speciality();        
+            $speciality = $base_speciality ->_getFilter($where);
+            $parent=$speciality[0]['parent'];
+            $subid=$speciality[0]['subid'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $base_speciality->_getOne($wher);
+
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality[0]['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namev=$names." ".$namep;
+            $this->view->namev=$namev;
+            $namefinal=$names." <br> ".$namep;
+
+            if ($speciality[0]['header']) {
+                $namelogo = $speciality[0]['header'];
+            }
+            else{
+                $namelogo = 'blanco';
+            }
+            
+            $fac = array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality[0]['facid']);
+            $base_fac =  new Api_Model_DbTable_Faculty();        
+            $datafa= $base_fac->_getOne($fac);
+            $namef = strtoupper($datafa['name']);
+            // $escid=$this->sesion->escid;
+            // $where['escid']=$escid;
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            
+            $uid=$this->sesion->uid;
+            $uidim=$this->sesion->pid;
+            $pid=$uidim;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'reporte_'.$superior.'_superior',
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+            // print_r($data);exit();
+            $dbimpression->_save($data);            
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,
+                'subid'=>$subid,'type_impression'=>'reporte_'.$superior.'_superior');
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=count($dataim);            
+            $codigo=$co." - ".$uidim;
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+          
+            $this->view->header=$header;
+            $this->view->footer=$footer;
     
-      }
-      catch (Exception $ex) {
-          print "Error rendimiento: ".$ex->getMessage();
+        }
+        catch (Exception $ex) {
+            print "Error rendimiento: ".$ex->getMessage();
         }
     }
-
-
-
-
  }
