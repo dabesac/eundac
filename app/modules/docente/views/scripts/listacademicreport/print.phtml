@@ -15,20 +15,8 @@ ob_start();
 </style>
 
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<table style="font-size: 11px;float: left; width: 100%; border-bottom: 20px">
-   	<tr>    
-       	<td style="text-align: center"><b>UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRION </b></td>
-   	</tr>
-   	<tr>
-       	<td style="text-align: center"><b>FACULTAD DE <?php echo strtoupper($this->faculty)?> </b></td>
-   	</tr>
-   	<tr>
-       	<td style="text-align: center"><b>ESCUELA DE FORMACION PROFESIONAL DE <?php echo strtoupper($this->speciality)?></b></td>
-   	</tr>
-	<tr>        	   
-       	<td style="text-align: center"><b>INFORME N° <?php print $this->informedoc['number'];?> - UNDAC </b></td>
-    </tr>
-</table>
+
+<div style="text-align:center;margin-bottom:2%"><b>INFORME N° <?php print $this->informedoc['number'];?> - UNDAC </b></div>
 <table style="font-size: 11px;float: left; width: 100%; border-bottom: 2px">
     <tr>
        	<td style="text-align: left;padding-left:10px"> A: DIRECTOR DE LA ESCUELA DE FORMACION PROFESIONAL <?php echo strtoupper($this->speciality)?> </td>
@@ -135,11 +123,16 @@ ob_start();
 </div>
 
 <?php
-  $mpdf=new mPDF('win-1252','A4','','',15,15,10,12,5,7);
-  $html = ob_get_contents();
-  $mpdf->SetHTMLHeader($header);
-  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('INFORME-'.$this->perid.'.pdf','D');
+
+	$html = ob_get_contents();
+  	$mpdf=new mPDF('win-1252','A4','','',15,15,33,18,5,5);
+
+    $mpdf->SetHTMLHeader($this->header);  
+    $mpdf->SetHTMLFooter($this->footer,'O');
+
+  	ob_end_clean();
+  	$mpdf -> WriteHTML($html);
+  	$mpdf->Output('INFORME-'.$this->perid.'.pdf','D');
+  	// $mpdf->Output();
+
 ?>

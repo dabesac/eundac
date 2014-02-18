@@ -1054,7 +1054,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $person= $dbperson -> _getUserXUid($wheres);
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            date_default_timezone_set("America/Lima");
+            
             $uidim=$this->sesion->pid;
 
             $data = array(
@@ -1073,13 +1073,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'matriculasxcurricula');
             $dataim = $dbimpression->_getFilter($wheri);
             
-            $co=0;
-            $len=count($dataim);
-            for ($i=0; $i < $len ; $i++) { 
-                if($dataim[$i]['type_impression']=='matriculasxcurricula'){
-                    $co=$co+1;
-                }
-            }
+            $co=count($dataim);
             $codigo=$co." - ".$uidim;
 
             $header = str_replace("?facultad",$namef,$header);

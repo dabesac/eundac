@@ -1,19 +1,9 @@
-<div class="row">
-	<br>
-	<div class="col-md-6 col-md-offset-1">
-		<blockquote>	
-			<h2>Avance <span class="text-warning">Academico</span></h2>
-		</blockquote>
-	</div>
-	<div class="col-md-1 col-md-offset-3">
-		<blockquote>
-			<h2><span class="glyphicon glyphicon-tasks text-warning"></span></h2>
-		</blockquote>
-	</div>
-</div>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tasks"></span> Avance Academico');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+
 <hr class="featurette-divider">
 <div class="row">
-	<div class="col-md-3 col-md-offset-2	">
+	<div class="col-md-3 col-md-offset-2">
 		<h5 class="text-muted">Escuela </h5>
 		<select id="school" class="form-control">
 			<?php
@@ -49,8 +39,8 @@
 		<select class="form-control" name="Periodo" id="period"></select>
 	</div>
 	<div class="col-md-3">
-		<br><br>
-		<a id="showData" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></a>
+		<h5><br></h5>
+		<a id="showData" href="#data" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></a>
 	</div>
 
 </div>
@@ -60,7 +50,6 @@
 <div id="data"></div>
 
 <script>
-	$('#data').fadeOut('fast');
 	var vardiv = $('#school').val().split('--');
 	var escid = vardiv[0];
 	var subid = vardiv[1];
@@ -98,8 +87,8 @@
 	});
 
 	$('#showData').click(function(){
+		$('#data').html("<br><center><img src='/img/spinner.gif' alt='Cargando...' /></center>");
 		$('#data').load("/report/periods/listteacher/perid/" + perid + "/escid/" + escid + "/subid/" + subid);
-		$('#data').fadeIn('slow');
 	});
 </script>
 

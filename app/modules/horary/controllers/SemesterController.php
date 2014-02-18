@@ -92,9 +92,17 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	                $this->view->valhoras=$valhoras;
             	}
 		        
-				$base_url = 'http://localhost:8080/';
-		        $endpoint = '/s1st3m4s/und4c/horary_course';
-		        $data = array('escid' => $escid,'eid' =>$eid,'oid' =>$oid,'perid'=>$perid,'subid'=>$subid,'semid'=>$semid);
+				$base_url = 'http://172.16.0.210:8080/';
+		        $endpoint = '/'.base64_encode('s1t3m4s').'/'.base64_encode('und4c').'/horary_course';
+		        $data = array(
+		        				'escid' => base64_encode($escid),
+		        				'eid' => base64_encode($eid),
+		        				'oid' =>base64_encode($oid),
+		        				'perid'=>base64_encode($perid),
+		        				'subid'=>base64_encode($subid),
+		        				'semid'=>base64_encode($semid)
+		        				);
+
 		        $client = new Zend_Rest_Client($base_url);
 		        $httpClient = $client->getHttpClient();
 		        $httpClient->setConfig(array("timeout" => 1800));
@@ -161,9 +169,16 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		    }
 		    $this->view->valhoras=$valhoras;
 		    
-			$base_url = 'http://localhost:8080/';
-		    $endpoint = '/s1st3m4s/und4c/horary_course';
-		    $data = array('escid' => $escid,'eid' =>$eid,'oid' =>$oid,'perid'=>$perid,'subid'=>$subid,'semid'=>$semid);
+			$base_url = 'http://172.16.0.210:8080/';
+	        $endpoint = '/'.base64_encode('s1t3m4s').'/'.base64_encode('und4c').'/horary_course';
+		    $data = array(
+		        				'escid' => base64_encode($escid),
+		        				'eid' => base64_encode($eid),
+		        				'oid' =>base64_encode($oid),
+		        				'perid'=>base64_encode($perid),
+		        				'subid'=>base64_encode($subid),
+		        				'semid'=>base64_encode($semid)
+		        				);
 		    // print_r($data);
 		    $client = new Zend_Rest_Client($base_url);
 		    $httpClient = $client->getHttpClient();
@@ -219,7 +234,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
             }
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            date_default_timezone_set("America/Lima");
+            
             $uidim=$this->sesion->pid;
             $pid=$uidim;
             $uid=$this->sesion->uid;
@@ -231,22 +246,16 @@ class Horary_SemesterController extends Zend_Controller_Action{
                 'escid'=>$escid,
                 'subid'=>$subid,
                 'pid'=>$this->sesion->pid,
-                'type_impression'=>'horarysemester',
+                'type_impression'=>'horarysemester'.$semid,
                 'date_impression'=>date('Y-m-d H:i:s'),
                 'pid_print'=>$uidim
                 );
             $dbimpression->_save($data);
 
-            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'horarysemester');
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'horarysemester'.$semid);
             $dataim = $dbimpression->_getFilter($wheri);
             
-            $co=0;
-            $len=count($dataim);
-            for ($i=0; $i < $len ; $i++) { 
-                if($dataim[$i]['type_impression']=='horarysemester'){
-                    $co=$co+1;
-                }
-            }
+            $co=count($dataim);
             $codigo=$co." - ".$uidim;
             $h1="h1";
             $h2="h2";

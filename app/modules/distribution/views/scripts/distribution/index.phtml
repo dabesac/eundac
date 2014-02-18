@@ -4,218 +4,29 @@
 <?php
 $ldistri =$this->ldistribution;
 ?>
-
 <div class="row">
 	<div class="col-md-2 col-md-offset-1">
-		<h5 class="text-muted">
-			<strong>Leyenda</strong>
-		</h5>
+		<h6 class="text-muted pull-right"><span class="glyphicon glyphicon-filter"></span> Filtre por Año</h6>
 	</div>
 	<div class="col-md-2">
-		<h5 class="text-muted">
-			<span class="glyphicon glyphicon-record text-success"></span> <span class="text-success">Activo</span>
-		</h5>
-	</div>
-	<div class="col-md-2">
-		<h5 class="text-muted">
-			<span class="glyphicon glyphicon-record text-danger"></span> <span class="text-danger">Inactivo</span>
-		</h5>
-	</div>
-	<div class="col-md-2">
-		<h5 class="text-muted">
-			<span class="glyphicon glyphicon-record text-warning"></span> <span class="text-warning">Observado</span>
-		</h5>
-	</div>
-	<div class="col-md-2">
-		<h5 class="text-muted">
-			<span class="glyphicon glyphicon-record text-info"></span> <span class="text-info">Borrador</span>
-		</h5>
+		<select class="form-control" name="Año" id="anio">
+			<?php for ($i=$this->yearActive; $i >= 1993 ; $i--) : ?>
+				<option value="<?php echo $i ?>"><?php echo $i ?></option>
+			<?php endfor ?>
+		</select>
 	</div>
 </div>
+<hr>
 
-<!--<div class="row" style="margin-bottom: 10px">
-  <div class="col-md-3"><center><img src="/img/circulo-verde.png"> Activo</center></div>
-  <div class="col-md-3"><center><img src="/img/circulo-rojo.png"> Cerrado</center></div>
-  <div class="col-md-3"><center><img src="/img/circulo-amarillo.png"> Borrador</center></div>
-  <div class="col-md-3"><center><img src="/img/circulo-azul.png"> Observado</center></div>
-</div>-->
-<br>
-<div class="table-responsive">
-<table class="table table-hover table-condensed"> 
-	<tr>
-		<th class="col-md-1 text-center">#</th>
-		<th class="col-md-1 text-center">Periodo</th>
-		<th >Número</th>
-		<th class="col-md-2 text-center">Fecha Aprobación</th>
-		<th class="col-md-1 text-center">Estado</th>
-		<th class="col-md-2"><center>Modificar Horario</center></th>
-		<th class="col-md-3" colspan="4"><center>Operaciones</center></th>
-	</tr>
-	<?php 
-	if ($ldistri)
-	{		
-		$i=0;
-		foreach ($ldistri as $distri)
-		{
-		$hours = $distri['hours'];	
-		$periodo = $distri['perid'];
-		$num = $distri['number'];
-		$approv = $distri['dateaccept'];
-		$distid = base64_encode($distri['distid']);
-		$perid = base64_encode($distri['perid']);
-		$per = $distri['perid'];
-		$state="";
-		$image="";
-		$state = ($distri['state']=='A')?"class='success'":"";
-		$i++; 
-		switch ($distri['state']) {
-			case 'A': $state = "success"; 
-						$namestate = "Activo";
-						break;
-			case 'I': $state = "danger"; 
-						$namestate = "Inactivo";
-						break;
-			case 'C': $state = "danger"; 
-						$namestate = "Cerrado";
-						break;
-			case 'B': $state = "warning"; 
-						$namestate = "Borrador";
-						break;
-			case 'O': $state = "info"; 
-						$namestate = "Observado";
-						break;
-		}
-	?>
-	<tr <?php echo $state;?>>
-		<td class="text-center"><?php echo $i;?></td>	
-		<td class="text-center"><?php echo $periodo ;?></td>
-		<td><?php echo $num;?></td>
-		<td class="text-center"><?php echo $approv;?></td>
-		<td class="text-center"><span title="<?php echo $namestate?>" class="glyphicon glyphicon-record text-<?php echo $state?>"></span></td>
-		<td><center>
-			<?php
-			if ($distri['state']=='C' || $distri['state']=='I') { ?>
-				<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Modificación Inactiva"></span></a>
-				<?php
-			}elseif ($distri['state']=="A" || $distri['state']=="B" || $distri['state']=='O') {
-				if ($hours) {
-				?>
-					<a href='#'class='updatehour' data-toggle="modal" data-target="#myModal" perid='<?php echo $per;?>' escid='<?php echo $distri['escid'];?>' subid='<?php echo $distri['subid']?>'><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" title="Modifique Horario"></span></a>
-
-				<?php
-				}
-				else{
-				?>	
-					<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Modificación Inactiva"></span></a>
-				<?php						
-				}
-			}?>
-			</center>
-		</td>
-		<td>
-			<center>
-				<a href="/distribution/printdistribution/index/escid/<?php echo base64_encode($distri['escid'])?>/subid/<?php echo base64_encode($distri['subid'])?>/perid/<?php echo $perid;?>/distid/<?php echo $distid;?>"><span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Imprimir Distribución"></span></a>
-			</center>
-		</td>
-		<td>
-			<center>
-				<a href="/distribution/distribution/edit/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Modificar Distribución"></span></a>
-			</center>
-		</td>
-		<td>
-			<center>
-				<a href="/distribution/distribution/delete/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" title="Eliminar Distribución"></span></a>
-			</center>
-		</td>
-		<td><center>
-			<?php
-			if ($distri['state']=='C' || $distri['state']=='I') { ?>
-				<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Distribución Cerrado"></span></a>
-				<?php
-			}elseif ($distri['state']=="A" || $distri['state']=="B" || $distri['state']=='O') {
-				if ($hours) {
-				?>
-					<a href="/distribution/distribution/academicload/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>/escid/<?php echo base64_encode($distri['escid'])?>/subid/<?php echo base64_encode($distri['subid'])?>"><span class="glyphicon glyphicon-arrow-right" data-toggle="tooltip" title="Carga Académica Distribución"></span></a>
-				<?php
-				}
-				else{
-				?>	
-					<a href='#' class='horary' data-toggle="modal" data-target="#myModal1" distid='<?php echo $distid;?>' perid='<?php echo $perid;?>' escid='<?php echo base64_encode($distri['escid']);?>' subid='<?php echo base64_encode($distri['subid'])?>'><span class="glyphicon glyphicon-calendar" data-toggle="tooltip" title="Ingrese Horario de Clases"></span></a>
-				<?php						
-				}
-			}?>
-			</center>
-		</td>
-	</tr>		
-	<?php }
-	}
-	?>
-</table>
-</div>
-
-<!-- Modal Nuevo-->
-<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div id='hourbegin'></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-
-<!-- Modal Modificar-->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div id='updatehour'></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+<div id="dataDistribution"></div>
 
 <script>
-$('.glyphicon').tooltip();
-
-$(".horary").click(function(){
-	var params = {
-		escid:$(this).attr('escid'),
-		subid:$(this).attr('subid'),
-		distid:$(this).attr('distid'),
-		perid:$(this).attr('perid')
-	};
-	$.get("/horary/nhorary/changehours/",
-		params,
-		function  ($data) {
-			$("#hourbegin").html($data);
+	var anio = $('#anio').val();
+	$('#dataDistribution').html('<center><img src="/img/spinner.gif" alt="" /></center>');
+	$('#dataDistribution').load('/distribution/distribution/showdistribution/anio/' + anio);
+	$('#anio').change(function(){
+		$('#dataDistribution').html('<center><img src="/img/spinner.gif" alt="" /></center>');
+		var anio = $(this).val();
+		$('#dataDistribution').load('/distribution/distribution/showdistribution/anio/' + anio);
 	});
-
-});
-
-$(".updatehour").click(function(){
-	var para = {
-		escid:$(this).attr('escid'),
-		subid:$(this).attr('subid'),
-		perid:$(this).attr('perid')
-	};
-	$.get("/horary/nhorary/updatehours/",
-		para,
-		function  ($data) {
-			$("#updatehour").html($data);
-	});
-});
 </script>

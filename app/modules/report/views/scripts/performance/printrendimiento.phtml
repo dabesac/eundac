@@ -1,96 +1,77 @@
 <?php
-$dat = $this->data;
-$where['oid']=$dat['oid'];
-$where['eid']=$dat['eid'];
-$where['escid']=$dat['escid'];
+// $dat = $this->data;
+// $where['oid']=$dat['oid'];
+// $where['eid']=$dat['eid'];
+// $where['escid']=$dat['escid'];
 
-$dbescuela = new Api_Model_DbTable_Speciality();
-$escuela = $dbescuela ->_getFilter($where);
-$infoescuela = $escuela[0]['name'];
-$dat['facid']= $escuela[0]['facid'];
-$dbfacultad = new Api_Model_DbTable_Faculty();
-$facu = $dbfacultad ->_getOne($dat);
-$infonombrefacultad = $facu['name'];
+// $dbescuela = new Api_Model_DbTable_Speciality();
+// $escuela = $dbescuela ->_getFilter($where);
+// $infoescuela = $escuela[0]['name'];
+// $dat['facid']= $escuela[0]['facid'];
+// $dbfacultad = new Api_Model_DbTable_Faculty();
+// $facu = $dbfacultad ->_getOne($dat);
+// $infonombrefacultad = $facu['name'];
 
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
-ob_start(); 
-$header='
-<table style="width: 100%;" border="1">
-    <tr>
-        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-        <th style="text-align: center; font-size: 11px;">
-        FACULTAD DE '.strtoupper($infonombrefacultad).'<br/>
-        ESCUELA DE  '.strtoupper($infoescuela).' 
-        </th>        
-    </tr>
-    <tr>
-        <th style="border: 1px solid #000;"> REPORTE RENDIMIENTO </th>
-    </tr>
-</table>
-
-    <tr>
-        <td style="text-align: left;">Periodo: '.strtoupper($dat['perid']).'</td>
-    </tr>
-    <tr>
-        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
-    </tr>
-   
-
-'    
+ob_start();   
 ?>
 
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
+<div style="margin-bottom:2%; text-align:center"><h3><b>REPORTE RENDIMIENTO PERIODO - <?php echo strtoupper($this->perid)?></b></h3></div>
+        <td style="text-align: left;"></td>
+    </tr>
         <table style="width:100%;" border="1">
-                          <tr ></tr>
-             <tr>
-              <td ><center><b>SEM</b></center></td>
-              <td ><center><b>ASIGNATURAS</b></center></td>
-              <td colspan="2"><center><b>APROBADOS</b></center></td>
-              <td colspan="2"><center><b>DESAPROBADOS</b></center></td>
-              <td colspan="2"><center><b>RETIRADOS</b></center></td>
-              <td colspan="2"><center><b>TOTALES</b></center></td>
+        
+            <tr>
+                <th rowspan="2">SEM</th>
+                <th rowspan="2">ASIGNATURAS</th>
+                <th colspan="2">APROBADOS</th>
+                <th colspan="2">DESAPROBADOS</th>
+                <th colspan="2">RETIRADOS</th>
+                <th colspan="2">TOTALES</th>
             </tr>
-             <tr>
-              <td ></td>
-              <td ></td>
-              <td><font color="blue">N°</font></td>
-              <td><font color="blue">%</font></td>
-              <td><font color="red">N°</font></td>
-              <td><font color="red">%</font></td>
-              <td><font color="green">N°</font></td>
-              <td><font color="green">%</font></td>
-              <td>N°</td>
-              <td>%</td>
-              
+            <tr>
+                <th><font color="blue">N°</font></th>
+                <th><font color="blue">%</font></th>
+                <th><font color="red">N°</font></th>
+                <th><font color="red">%</font></th>
+                <th><font color="green">N°</font></th>
+                <th><font color="green">%</font></th>
+                <th>N°</th>
+                <th>%</th>              
             </tr>
 
             <?php foreach ($this->rep_rendimiento as $dr) {?>
         <tr>  
-            <td><b><?php echo $dr['semid']?></b></td>
-            <td><b><?php echo $dr['name']?></b></td>
-           
-              <td><font color="blue"><?php echo $dr['aprobados']?></font></td>
-              <td><font color="blue"><?php echo $dr['porc_ap']?></font></td>
-              <td><font color="red"><?php echo $dr['desaprobados']?></font></td>              
-              <td><font color="red"><?php echo $dr['porc_desap']?></font></td>
-              <td><font color="green"><?php echo $dr['retirados']?></font></td>
-              <td><font color="green"><?php echo $dr['porc_ret']?></font></td>
-              <td><?php echo $dr['totales']?></td>
-              <td><?php echo '100'?></td>
+            <td><center><?php echo $dr['semid']?></center></td>
+            <td><font color="#000"><?php echo $dr['name']?></font></td>            
+            <td><font color="blue"><center><?php echo $dr['aprobados']?></center></font></td>
+            <td><font color="blue"><center><?php echo $dr['porc_ap']?></center></font></td>
+            <td><font color="red"><center><?php echo $dr['desaprobados']?></center></font></td>         
+            <td><font color="red"><center><?php echo $dr['porc_desap']?></center></font></td>
+            <td><font color="green"><center><?php echo $dr['retirados']?></center></font></td>
+            <td><font color="green"><center><?php echo $dr['porc_ret']?></center></font></td>
+            <td><center><?php echo $dr['totales']?></center></td>
+            <td><center><?php echo '100'?></center></td>
                          
         </tr>
       <?php }?>
-        </table>
+    </table>
 <?php 
-  $html = ob_get_contents(); 
-  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
-  $mpdf->SetHTMLHeader($header);
-  $mpdf->SetFooter($this->footer);
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('Rendimiento-'.$infoescuela.$dat['perid'].'.pdf','D');
+    $html = ob_get_contents(); 
+    $mpdf=new mPDF('win-1252','A4','','',15,15,33,18,5,5);
+    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+    
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer);
+    
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('Rendimiento_'.$this->namev.'_'.$this->perid.'.pdf','D');
+    // $mpdf->Output();
 ?>
         
 

@@ -1,19 +1,23 @@
-<table class="table table-condensed ">
-    <thead>
-    <tr>    
-            <th style="width: 25px" >Nro</th>               
-            <th class="span1">Codigo</th>
-            <th >Apellidos y Nombres</th>
-            <th class="span1">Escuela</th>
-            <th class="span1">Semestre</th>
-            <th class="span1">T.Cred.</th>
-            <th class="span1">Condicion</th>
-            <th class="span1">Matricular</th>
-    </tr>
-    </thead>
-<?php
-$i=1;
-if ($this->datos){
+<?php if ($this->datos){ ?>
+    <ul>
+        <li style="list-style : none;">
+            <table class="table table-condensed ">
+                <tr class="active">    
+                    <th class="col-md-1">#</th>               
+                    <th class="col-md-1 text-center">Codigo</th>
+                    <th class="col-md-4 text-center">Apellidos y Nombres</th>
+                    <th class="col-md-1 text-center">Escuela</th>
+                    <th class="col-md-1 text-center">Semestre</th>
+                    <th class="col-md-1 text-center">T.Cred.</th>
+                    <th class="col-md-1 text-center">Condicion</th>
+                    <th class="col-md-1 text-center">Matricular</th>
+                </tr>
+            </table>
+        </li>
+    </ul>
+
+    <ul id="students">
+    <?php $i=1;
     foreach ($this->datos as $datos){
         switch (trim($datos['estmat'])){
             case 'M': $estadomat_="Matriculado"; break;
@@ -24,25 +28,32 @@ if ($this->datos){
             case 'O': $estadomat_="Observado"; break;
         }
         ?>
-        <tr>
-            <td><?php echo $i;?></td>
-            <td><?php echo $datos['uid'];?></td>                
-            <td><?php echo $datos['last_name0']." ".$datos['last_name1'].", ".$datos['first_name'];?></td>
-            <td><?php echo $datos['escid']?></td>
-            <td><?php echo $datos['semid']?></td>
-            <td><?php echo $datos['credits']?></td>
-            <td><?php echo $estadomat_;?></td>
-            <td>                    
-            <?php
-                $url= "uid/".base64_encode($datos['uid'])."/pid/".base64_encode($datos['pid'])."/escid/".base64_encode($datos['escid'])."/subid/".base64_encode($datos['subid']);
-            ?>  
-                <a href="#"  onclick="javascript: window.open('/register/registerstudent/detail/<?php echo $url?>','Matricula Alumno','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=830,height=600')">
-                <img src="/img/ir.png" title="Realizar / Ver Matricula "></i>
-                </a>
-            </td>
-        </tr>
+    <li style="list-style : none;">
+        <table class="table">
+            <tr>
+                <td class="col-md-1"><?php echo $i;?></td>
+                <td class="col-md-1 text-center"><?php echo $datos['uid'];?></td>
+                <td class="col-md-4"><?php echo $datos['last_name0']." ".$datos['last_name1'].", ".$datos['first_name'];?></td>
+                <td class="col-md-1 text-center"><?php echo $datos['escid']?></td>
+                <td class="col-md-1 text-center"><?php echo $datos['semid']?></td>
+                <td class="col-md-1 text-center"><?php echo $datos['credits']?></td>
+                <td class="col-md-1 text-center"><?php echo $estadomat_;?></td>
+                <td class="col-md-1 text-center">                    
+                    <?php
+                        $url= "/register/registerstudent/detail/uid/".base64_encode($datos['uid'])."/pid/".base64_encode($datos['pid'])."/escid/".base64_encode($datos['escid'])."/subid/".base64_encode($datos['subid']);
+                    ?>  
+                    <a class="text-success" href="<?php echo $url ?>">
+                    <span class="glyphicon glyphicon-send"></span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </li>
         <?php
-        $i++;
-        }
-    }?>
-</table>
+            $i++;
+        }?>
+    </ul>
+    <?php }else{?>
+        <br>
+        <h4 class="text-muted text-center">No existen <span class="text-danger">Registros</span></h4>
+    <?php }?>

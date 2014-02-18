@@ -917,7 +917,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 // $where['escid']=$escid;
 
                 $dbimpression = new Api_Model_DbTable_Impresscourse();
-                date_default_timezone_set("America/Lima");
+                
                 $uidim=$this->sesion->pid;
                 $code="asistencia - ".$partial;
                 $data = array(
