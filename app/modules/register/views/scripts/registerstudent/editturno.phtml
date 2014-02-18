@@ -19,7 +19,8 @@
 				Docente a Cargo
 				<?php $c = 0;
 				foreach ($this->teachersInfo as $teacher): ?>
-					<h5 id="docente<?php echo $this->data['courseid'].$c ?>" class="hidden"><?php echo $teacher[$c]['last_name0'].' '.$teacher[$c]['last_name1'].' '.$teacher[$c]['first_name'] ?></h5>
+					<h5 id="docente<?php echo $this->data['courseid'].$c ?>" class="hidden">
+						<?php echo $teacher[0]['last_name0'].' '.$teacher[0]['last_name1'].' '.$teacher[0]['first_name'] ?></h5>
 				<?php $c++;
 				endforeach ?>
 			</div>
@@ -29,6 +30,7 @@
 		<script>
 			var turno = $('#turno<?php echo $this->data['courseid'] ?>').val();
 			var indice = turno.split('-');
+			var name = $("#docente<?php echo $this->data['courseid'] ?>"+indice[0]).html();
 
 			$("#docente<?php echo $this->data['courseid'] ?>"+indice[0]).removeClass('hidden');
 
@@ -36,18 +38,22 @@
 				$("#docente<?php echo $this->data['courseid'] ?>"+indice[0]).addClass('hidden');
 				turno = $(this).val();
 				indice = turno.split('-');
+				name = $("#docente<?php echo $this->data['courseid'] ?>"+indice[0]).html();
 				$("#docente<?php echo $this->data['courseid'] ?>"+indice[0]).removeClass('hidden');
 			});
 
 			$("#editCourse<?php echo $this->data['courseid'] ?>").click(function(){
-				$.get("/register/registerstudent/updatecourseperturno/uid/<?php echo $this->data['uid'] ?>/pid/<?php echo $this->data['pid'] ?>/escid/<?php echo $this->data['escid'] ?>/subid/<?php echo $this->data['subid'] ?>/courseid/<?php echo $this->data['courseid'] ?>/curid/<?php echo $this->data['curid'] ?>/turno/"+indice[1],function(){
+				$.get("/register/registerstudent/updatecourseperturno/uid/<?php echo $this->data['uid'] ?>/pid/<?php echo $this->data['pid'] ?>/escid/<?php echo $this->data['escid'] ?>/subid/<?php echo $this->data['subid'] ?>/courseid/<?php echo $this->data['courseid'] ?>/curid/<?php echo $this->data['curid'] ?>/turno/"+indice[1], function(){
+						$(".iluminate").removeClass('danger warning');
 						$("#courseTurno<?php echo $this->data['courseid'] ?>").html(indice[1]);
+						$("#teacherTurno<?php echo $this->data['courseid'] ?>").html(name);
 						$("#editAlert<?php echo $this->data['courseid'] ?>").addClass('hidden');
 				});
 			});
 
 		 	$(".cancel").click(function(){
 		        $("#editAlert<?php echo $this->data['courseid'] ?>").addClass('hidden');
+		        $(".iluminate").removeClass('danger warning');
 		    });
 
 		</script>
@@ -57,6 +63,7 @@
 		<script>
 			$(".cancel").click(function(){
 		        $("#editAlert<?php echo $this->data['courseid'] ?>").addClass('hidden');
+		        $(".iluminate").removeClass('danger warning');
 		    });
 		</script>
 	<?php endif ?>

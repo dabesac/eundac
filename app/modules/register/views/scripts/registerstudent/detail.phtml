@@ -44,18 +44,18 @@
             </tr>
         <?php $c = 0;
         foreach ($this->courses as $course): ?>
-            <tr id="fila<?php echo $course['courseid'] ?>">
+            <tr id="fila<?php echo $course['courseid'] ?>" class="iluminate">
                 <td class="text-center"><?php echo $c + 1 ?></td>
                 <td class="text-center"><?php echo $course['courseid'] ?></td>
                 <td><?php echo $this->coursesName[$c][0]['name'] ?></td>
                 <td id="courseTurno<?php echo $course['courseid'] ?>" class="text-center"><?php echo $course['turno'] ?></td>
-                <td><?php echo $this->teachers[$c][0]['last_name0'].' '.$this->teachers[$c][0]['last_name1'].' '.$this->teachers[$c][0]['first_name']  ?> </td>
+                <td id="teacherTurno<?php echo $course['courseid'] ?>"><?php echo $this->teachers[$c][0]['last_name0'].' '.$this->teachers[$c][0]['last_name1'].' '.$this->teachers[$c][0]['first_name']  ?> </td>
                 <td></td>
-                <td class="text-center"><a id="showEditAlert<?php echo $course['courseid'] ?>" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td class="text-center"><a id="showEditAlert<?php echo $course['courseid'] ?>" href="#editAlert<?php echo $course['courseid'] ?>" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 <td class="text-center"><a id="showAlert<?php echo $course['courseid'] ?>" href="#alert<?php echo $course['courseid'] ?>" title="Eliminar Curso" class="text-danger"><span class="glyphicon glyphicon-remove"></span></a></td>
             </tr>
             <tr>
-                <td id="alert<?php echo $course['courseid'] ?>" class="hidden" colspan="8">
+                <td id="alert<?php echo $course['courseid'] ?>" class="hidden alertSpace" colspan="8">
                     <div class="alert alert-danger">
                         <h5>Seguro que desea eliminar <?php echo $this->coursesName[$c][0]['name'] ?></h5>
                         <p>Una vez que lo haga no habra marcha atras...</p><br>
@@ -65,24 +65,30 @@
                 </td>
             </tr>
             <tr>
-                <td id="editAlert<?php echo $course['courseid'] ?>" class="hidden alert" colspan="8">
+                <td id="editAlert<?php echo $course['courseid'] ?>" class="hidden alertSpace" colspan="8">
                    
                 </td>
             </tr>
             <script>
                 $("#showEditAlert<?php echo $course['courseid'] ?>").click(function(){
-                    $('.alert').addClass('hidjden');
+                    $('.alertSpace').addClass('hidden');
+                    $(".iluminate").removeClass('warning danger');
                     $("#editAlert<?php echo $course['courseid'] ?>").load("/register/registerstudent/editturno/uid/<?php echo base64_encode($course['uid']) ?>/pid/<?php echo base64_encode($course['pid']) ?>/escid/<?php echo base64_encode($course['escid']) ?>/subid/<?php echo base64_encode($course['subid']) ?>/courseid/<?php echo base64_encode($course['courseid']) ?>/curid/<?php echo base64_encode($course['curid']) ?>/turno/<?php echo base64_encode($course['turno']) ?>", function(){
                         $("#editAlert<?php echo $course['courseid'] ?>").removeClass('hidden');
                     });
+                    $("#fila<?php echo $course['courseid'] ?>").addClass('warning');
                 });
 
                 $("#showAlert<?php echo $course['courseid'] ?>").click(function(){
+                    $('.alertSpace').addClass('hidden');
+                    $(".iluminate").removeClass('danger warning');
                     $("#alert<?php echo $course['courseid'] ?>").removeClass('hidden');
+                    $("#fila<?php echo $course['courseid'] ?>").addClass('danger');
                 });
 
 
                 $(".cancel").click(function(){
+                    $(".iluminate").removeClass('danger warning');
                     $("#alert<?php echo $course['courseid'] ?>").addClass('hidden');
                 });
                 $("#delete<?php echo $course['courseid'] ?>").click(function(){
