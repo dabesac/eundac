@@ -5,22 +5,11 @@ ob_start();
 if ($this->busqx == 'xfac') $a= "POR FACULTADES";  
 if ($this->busqx == 'xesc') $a= "POR ESCUELAS";
 if ($this->busqx == 'xsed') $a="POR SEDES";
-$header='
-<table style="width: 100%;" border="1">
-    <tr>
-        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-        <th style="text-align: center; font-size: 11px;">
-        NRO DE ALUMNOS MATRICULADOS PERIODO '.strtoupper($this->perid).'
-        </th>        
-    </tr>
-    <tr>
-        <th style="border: 1px solid #000;"> REPORTE GENERADO '.strtoupper($a).'</th>
-    </tr>
-</table>
- 
-'    
 ?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+<link rel="stylesheet" type="text/css" href="/css/print.css">
 
+<div style='text-align:center'><b><h3>NÚMERO DE ALUMNOS MATRICULADOS PERIODO <?php echo strtoupper($this->perid)?></h3></b></div>
 <div id="datos">
 	<?php
 		$eid=$this->eid;
@@ -29,9 +18,10 @@ $header='
 		$total=0;
 	?>
 	<br></br>
+	<div style='text-align:center; margin-bottom:3%'><b> REPORTE GENERADO <?php echo strtoupper($a)?></b></div>
 	<table style='float:left; font-size: 11px; width:100%'>
 		<thead>
-			<tr style="background: #ccc; color; #ffffff;">
+			<tr style="background: #E5E5E5;">
 				<th>
 					<center>
 						<?php
@@ -333,15 +323,18 @@ $header='
 </div>
 <?php 
 
-  $html = ob_get_contents();
+  	$html = ob_get_contents();
   
-  $mpdf=new mPDF('win-1252','A4','','',15,15,40);
-  $mpdf->SetHTMLHeader($header);
-  $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+  	$mpdf=new mPDF('win-1252','A4','','',15,15,36,18,8,5);
+    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+
+  	$mpdf->SetHTMLHeader($this->header);
+  	$mpdf->SetHTMLFooter($this->footer);
   
-  $mpdf->SetFooter($this->footer);
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('ReporteMatriculados-'.$perid.'.pdf','D');
+  	ob_end_clean();
+  	$mpdf -> WriteHTML($html);
+  	$mpdf->Output('ReporteMatriculados-'.$perid.'.pdf','D');
+  	// $mpdf->Output();
   
 ?>
