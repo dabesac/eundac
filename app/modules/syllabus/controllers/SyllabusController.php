@@ -151,12 +151,9 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                     if ($form->isValid($formData)) 
                     {
                         $data['state']='C';
-                        if ($syll->_update($data,$pk)){ ?>
-                            <script type="text/javascript">
-                                alert("Se cerró el Silabo");
-                                window.location.reload();
-                            </script>
-                        <?php
+                        if ($syll->_update($data,$pk)){ 
+                           
+                       
                         }
                     }
                     else $this->view->msgclose=1;

@@ -27,14 +27,9 @@
 	</div>
 	
 	<div class="col-md-4">
-        <a id="backMainfromNotes" href="#" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
+        <a id="backMainfromNotes" href="/docente/notas/index" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
 		<?php if ($this->state_record == 'A' || $this->state_record == 'B') { ?>
 			<buttom  class='btn btn-info' id='save_notes' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
-        <script>
-            $('#backMainfromNotes').click(function(){
-                alert("Hola");
-            });
-        </script>
 		
 		<buttom  class='btn btn-danger' id='closure-record'><span class='glyphicon  glyphicon-log-out'></span> Cerrar Acta</buttom>
 		<?php }?>

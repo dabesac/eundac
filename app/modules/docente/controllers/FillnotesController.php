@@ -18,7 +18,6 @@ class Docente_FillnotesController extends Zend_Controller_Action {
     
     public function targetAction()
     {
-        $this->_helper->layout()->disableLayout();
 
         $params = $this->getRequest()->getParams();
         $paramsdecode = array();
@@ -132,7 +131,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         $nota7_i            = ((isset($params['nota7_i']) == true && ( !empty($params['nota7_i']) || (intval($params['nota7_i'])== 0) ) )?trim($params['nota7_i']):'');
         $nota8_i            = ((isset($params['nota8_i']) == true && ( !empty($params['nota8_i']) || (intval($params['nota8_i'])== 0) ) )?trim($params['nota8_i']):'');
         $nota9_i            = ((isset($params['nota9_i']) == true && ( !empty($params['nota9_i']) || (intval($params['nota9_i'])== 0) ) )?trim($params['nota9_i']):'');
-        $promedio1       = ((isset($params['promedio1']) == true && (!empty($params['promedio1']) || (intval($params['promedio1'])== 0)) )?trim($params['promedio1']):'');
+        $promedio1          = ((isset($params['promedio1']) == true && (!empty($params['promedio1']) || (intval($params['promedio1'])== 0)) )?trim($params['promedio1']):'');
         
         $nota1_ii            = ((isset($params['nota1_ii']) == true && ( !empty($params['nota1_ii']) || (intval($params['nota1_ii'])== 0) ) )?trim($params['nota1_ii']):'');
         $nota2_ii            = ((isset($params['nota2_ii']) == true && ( !empty($params['nota2_ii']) || (intval($params['nota2_ii'])== 0) ) )?trim($params['nota2_ii']):'');
@@ -143,7 +142,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         $nota7_ii            = ((isset($params['nota7_ii']) == true && ( !empty($params['nota7_ii']) || (intval($params['nota7_ii'])== 0) ) )?trim($params['nota7_ii']):'');
         $nota8_ii            = ((isset($params['nota8_ii']) == true && ( !empty($params['nota8_ii']) || (intval($params['nota8_ii'])== 0) ) )?trim($params['nota8_ii']):'');
         $nota9_ii            = ((isset($params['nota9_ii']) == true && ( !empty($params['nota9_ii']) || (intval($params['nota9_ii'])== 0) ) )?trim($params['nota9_ii']):'');
-        $promedio2       = ((isset($params['promedio2']) == true && (!empty($params['promedio2']) || (intval($params['promedio2'])== 0)))?trim($params['promedio2']):'');
+        $promedio2           = ((isset($params['promedio2']) == true && (!empty($params['promedio2']) || (intval($params['promedio2'])== 0)))?trim($params['promedio2']):'');
         $notafinal           = ((isset($params['notafinal']) == true && (!empty($params['notafinal']) || (intval($params['notafinal'])== 0)) )?trim($params['notafinal']):'');
 
         $data = null;
