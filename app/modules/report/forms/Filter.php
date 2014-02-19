@@ -21,7 +21,7 @@ class Report_Form_Filter extends Zend_Form{
 
         $anio->addMultiOption("","- Selecione el Año -");
         foreach ($a as $anios){
-                        $anio->addMultiOption($anios['anioid'],$anios['anio']);
+            $anio->addMultiOption($anios['anioid'],$anios['anio']);
         }
 
         $perid= new Zend_Form_Element_Select('perid');

@@ -263,8 +263,8 @@
  			}
  			$this->view->data_teacher = $allteacher;
 
- 			$escid=$this->sesion->escid;
-            $where['escid']=$escid;
+ 			// $escid=$this->sesion->escid;
+    //         $where['escid']=$escid;
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
             
@@ -279,13 +279,13 @@
                 'escid'=>$escid,
                 'subid'=>$subid,
                 'pid'=>$pid,
-                'type_impression'=>'informe_academico',
+                'type_impression'=>'informe_academico_'.$perid,
                 'date_impression'=>date('Y-m-d H:i:s'),
                 'pid_print'=>$uidim
                 );
             $dbimpression->_save($data);            
 
-            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'informe_academico');
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'informe_academico_'.$perid);
             $dataim = $dbimpression->_getFilter($wheri);
             $co=count($dataim);
             
