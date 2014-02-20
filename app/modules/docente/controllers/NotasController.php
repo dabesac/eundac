@@ -82,10 +82,7 @@ class Docente_NotasController extends Zend_Controller_Action{
             if($time >= strtotime($data_period['start_register_note_s'])  && $time <= strtotime($data_period['end_register_note_s'])){
                 $this->view->partial = 2; 
                 $partial = 2;
-            }else{
-                $this->view->partial = 0; 
             }
-
 	        
 	    }
 
