@@ -140,10 +140,10 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $a_sesion_13     = ((isset($params['a_sesion_13']) == true && (!empty($params['a_sesion_13']) ) )?trim($params['a_sesion_13']):'');
         $a_sesion_14     = ((isset($params['a_sesion_14']) == true && (!empty($params['a_sesion_14']) ) )?trim($params['a_sesion_14']):'');
         $a_sesion_15     = ((isset($params['a_sesion_15']) == true && (!empty($params['a_sesion_15']) ) )?trim($params['a_sesion_15']):'');
-        $a_sesion_16     = ((isset($params['a_sesion_16']) == true && (!empty($params['a_sesion_16']) ) )?trim($params['a_sesion_16']):'');
-        $a_sesion_17     = ((isset($params['a_sesion_17']) == true && (!empty($params['a_sesion_17']) ) )?trim($params['a_sesion_17']):'');
 
         /***********sesion partial 2*******************/
+        $a_sesion_16     = ((isset($params['a_sesion_16']) == true && (!empty($params['a_sesion_16']) ) )?trim($params['a_sesion_16']):'');
+        $a_sesion_17     = ((isset($params['a_sesion_17']) == true && (!empty($params['a_sesion_17']) ) )?trim($params['a_sesion_17']):'');
         $a_sesion_18     = ((isset($params['a_sesion_18']) == true && (!empty($params['a_sesion_18']) ) )?trim($params['a_sesion_18']):'');
         $a_sesion_19     = ((isset($params['a_sesion_19']) == true && (!empty($params['a_sesion_19']) ) )?trim($params['a_sesion_19']):'');
         $a_sesion_20     = ((isset($params['a_sesion_20']) == true && (!empty($params['a_sesion_20']) ) )?trim($params['a_sesion_20']):'');
@@ -204,6 +204,8 @@ class Assistance_StudentController extends Zend_Controller_Action {
         }
         if ($partial == 2) {
             $data = array(
+                'a_sesion_16' => $a_sesion_16,
+                'a_sesion_17' => $a_sesion_17,
                 'a_sesion_18' => $a_sesion_18,
                 'a_sesion_19' => $a_sesion_19,
                 'a_sesion_20' => $a_sesion_20,
@@ -459,6 +461,8 @@ class Assistance_StudentController extends Zend_Controller_Action {
         }
         if ($partial == 2 && $action == 0) {
             $data = array(
+                'a_sesion_16' => "R",
+                'a_sesion_17' => "R",
                 'a_sesion_18' => "R",
                 'a_sesion_19' => "R",
                 'a_sesion_20' => "R",
@@ -512,6 +516,8 @@ class Assistance_StudentController extends Zend_Controller_Action {
         }
         if ($partial == 2 && $action == 1) {
             $data = array(
+                'a_sesion_16' => "",
+                'a_sesion_17' => "",
                 'a_sesion_18' => "",
                 'a_sesion_19' => "",
                 'a_sesion_20' => "",
@@ -679,13 +685,14 @@ class Assistance_StudentController extends Zend_Controller_Action {
                         $assist_14++;
                     }if ($infoassist['a_sesion_15']=='R' || $infoassist['a_sesion_15']=='A' || $infoassist['a_sesion_15']=='F' || $infoassist['a_sesion_15']=='T') {
                         $assist_15++;
-                    }if ($infoassist['a_sesion_16']=='R' || $infoassist['a_sesion_16']=='A' || $infoassist['a_sesion_16']=='F' || $infoassist['a_sesion_16']=='T') {
+                    }
+                }
+                if ($partial == 2) {
+                    if ($infoassist['a_sesion_16']=='R' || $infoassist['a_sesion_16']=='A' || $infoassist['a_sesion_16']=='F' || $infoassist['a_sesion_16']=='T') {
                         $assist_16++;
                     }if ($infoassist['a_sesion_17']=='R' || $infoassist['a_sesion_17']=='A' || $infoassist['a_sesion_17']=='F' || $infoassist['a_sesion_17']=='T') {
                         $assist_17++;
                     }
-                }
-                if ($partial == 2) {
                     if ($infoassist['a_sesion_18']=='R' || $infoassist['a_sesion_18']=='A' || $infoassist['a_sesion_18']=='F' || $infoassist['a_sesion_18']=='T') {
                         $assist_18++;
                     }
@@ -732,8 +739,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                     $count == $assist_1 && $count == $assist_2 &&  $count == $assist_3 && $count == $assist_4 && 
                     $count == $assist_5 && $count == $assist_6  && $count == $assist_7 && $count == $assist_8 &&
                     $count == $assist_9 && $count == $assist_10 && $count == $assist_11 && $count == $assist_12 &&
-                    $count == $assist_13 && $count == $assist_14 && $count == $assist_15 && $count == $assist_16 &&
-                    $count == $assist_17
+                    $count == $assist_13 && $count == $assist_14 && $count == $assist_15 
                     ) {
                         $data = array(
                             'state' => 'P',
@@ -742,7 +748,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
             }
             if ($partial == 2) {
                 if (
-                    $count == $assist_18 && $count == $assist_19 && $count == $assist_20 && $count == $assist_21 &&
+                    $count == $assist_16 &&  $count == $assist_17 && $count == $assist_18 && $count == $assist_19 && $count == $assist_20 && $count == $assist_21 &&
                     $count == $assist_22 && $count == $assist_23 && $count == $assist_24 && $count == $assist_25 &&
                     $count == $assist_26 && $count == $assist_27 && $count == $assist_28 && $count == $assist_29 && 
                     $count == $assist_30 && $count == $assist_31 && $count == $assist_32 && $count == $assist_33 && 

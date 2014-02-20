@@ -28,7 +28,6 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         }
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
-
         $params = $paramsdecode;
         $courseid = trim($params['courseid']);
         $turno = trim($params['turno']);
@@ -1202,17 +1201,17 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                         $assist_14++;
                     }if ($infoassist['a_sesion_15']=='R' || $infoassist['a_sesion_15']=='A' || $infoassist['a_sesion_15']=='F' || $infoassist['a_sesion_15']=='T') {
                         $assist_15++;
-                    }if ($infoassist['a_sesion_16']=='R' || $infoassist['a_sesion_16']=='A' || $infoassist['a_sesion_16']=='F' || $infoassist['a_sesion_16']=='T') {
-                        $assist_16++;
-                    }if ($infoassist['a_sesion_17']=='R' || $infoassist['a_sesion_17']=='A' || $infoassist['a_sesion_17']=='F' || $infoassist['a_sesion_17']=='T') {
-                        $assist_17++;
                     }
                     if ($infoassist['state']=='P') {
                         $state++;
                     }
                 }
                 if ($partial == 2) {
-
+                    if ($infoassist['a_sesion_16']=='R' || $infoassist['a_sesion_16']=='A' || $infoassist['a_sesion_16']=='F' || $infoassist['a_sesion_16']=='T') {
+                        $assist_16++;
+                    }if ($infoassist['a_sesion_17']=='R' || $infoassist['a_sesion_17']=='A' || $infoassist['a_sesion_17']=='F' || $infoassist['a_sesion_17']=='T') {
+                        $assist_17++;
+                    }
                     if ($infoassist['a_sesion_18']=='R' || $infoassist['a_sesion_18']=='A' || $infoassist['a_sesion_18']=='F' || $infoassist['a_sesion_18']=='T') {
                         $assist_18++;
                     }
@@ -1266,15 +1265,15 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                     $count == $assist_1 && $count == $assist_2 &&  $count == $assist_3 && $count == $assist_4 && 
                     $count == $assist_5 && $count == $assist_6  && $count == $assist_7 && $count == $assist_8 &&
                     $count == $assist_9 && $count == $assist_10 && $count == $assist_11 && $count == $assist_12 &&
-                    $count == $assist_13 && $count == $assist_14 && $count == $assist_15 && $count == $assist_16 &&
-                    $count == $assist_17 && $count == $state
+                    $count == $assist_13 && $count == $assist_14 && $count == $assist_15 &&  $count == $state
                     ) {
                         $data = true;
                     }
             }
             if ($partial == 2) {
                 if (
-                    $count == $assist_18 && $count == $assist_19 && $count == $assist_20 && $count == $assist_21 &&
+                    $count == $assist_16 && $count == $assist_17 && $count == $assist_18 && $count == $assist_19 && 
+                    $count == $assist_20 && $count == $assist_21 &&
                     $count == $assist_22 && $count == $assist_23 && $count == $assist_24 && $count == $assist_25 &&
                     $count == $assist_26 && $count == $assist_27 && $count == $assist_28 && $count == $assist_29 && 
                     $count == $assist_30 && $count == $assist_31 && $count == $assist_32 && $count == $assist_33 && 

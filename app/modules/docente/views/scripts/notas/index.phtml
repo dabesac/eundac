@@ -10,7 +10,6 @@
             .$this->periods.
           '</ul>
     </div>');
-
     
   $c=0;
   if ($this->faculty){
@@ -49,7 +48,7 @@
 
                                 $u_ = $courses['curid'].$courses['courseid'].$courses['turno'];
                                 $urlcampus = "http://campus.undac.edu.pe/courses/$u_/index.php";
-                                
+                                $partial = $this->partial;
 
                                                      
                                 if ($number['facid']==$courses['facid']) { ?>
