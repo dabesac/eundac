@@ -1,0 +1,38 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-ok-sign"></span> Informe Académico');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/index/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button type="button" id="imprimir" class="btn btn-success"><span class="glyphicon glyphicon-print"></span> Imprimir</button>');?>
+<div class='row'>
+    <div class ='col-xs-12 text-center' style='font-size:18px'><b>FACULTAD DE <?php echo strtoupper($this->faculty)?></b></div>
+    <div class ='col-xs-12 text-center' style='font-size:15px'><b>ESCUELA DE FORMACIÓN PROFESIONAL DE <?php echo strtoupper($this->speciality)?></b></div>
+    <div class ='col-xs-12 text-center' style='font-size:18px'><b>Informe Académico Administrativo - Periodo <?php echo strtoupper($this->perid)?></b></div>
+</div></br>
+<div class='row'>
+    <div class="col-md-9 col-md-offset-1">
+        <blockquote>
+            <p class='text center' ><b>Docente: </b><?php echo $this->infouser?></p>
+        </blockquote>
+    </div>
+</div>
+<!-- <div class='text-center' style='margin-top:5%'><img src="/img/check-icon.png" width="80" height="80"></div> -->
+<div class='col-md-12 cont-font-not-register'>
+    <h1 class='span-not-register'>
+        <span class='glyphicon glyphicon-exclamation-sign' ></span>
+    </h1>
+    <h3 class='text-not-register'><b>INFORME ACADÉMICO LISTO</b></h3>
+    <h2 class='text-not-register'>¡¡ YA PUEDE IMPRIMIRLO !!</h2>
+</div>
+<div id='fs'></div>
+<script type="text/javascript">
+$("#imprimir").click(function(){
+	var datos= "<?php echo $this->pid?>"; 
+	// alert(datos);
+	var url= "/docente/informacademic/print";    
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {dat:datos},
+        success: function (data){
+            $("#fs").html(data);
+        }
+    });
+});
+</script>
