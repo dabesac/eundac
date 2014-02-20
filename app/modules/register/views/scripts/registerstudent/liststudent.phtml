@@ -53,7 +53,25 @@
             $i++;
         }?>
     </ul>
+
     <?php }else{?>
         <br>
         <h4 class="text-muted text-center">No existen <span class="text-danger">Registros</span></h4>
     <?php }?>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal">
+
+    <div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myLargeModalLabel">Large modal</h4>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
