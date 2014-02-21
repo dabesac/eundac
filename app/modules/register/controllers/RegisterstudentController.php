@@ -57,21 +57,22 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $perid = $this->sesion->period->perid;  
         $eid = $this->sesion->eid;        
         $oid = $this->sesion->oid;
+        $subid = $this->sesion->subid;
         $escid = $this->sesion->escid;
-
+        
         if ($state == null) {
             $pfac='T'.$escid['1'];
             $estados='I';
             $bdu = new Api_Model_DbTable_Registration();        
             $str = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
-            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados);  
+            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados, $subid);  
             $this->view->datos=$datos;
         }elseif ($state) {
             $pfac='T'.$escid['1'];
             $estados = $state;
             $bdu = new Api_Model_DbTable_Registration();        
             $str = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
-            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados);  
+            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados, $subid);  
             $this->view->datos=$datos;
         }
     }
@@ -79,10 +80,13 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
     public function detailAction()
     {
         try{
+            $this->_helper->layout()->disableLayout();
+
             //Databases
             $specialityDb = new Api_Model_DbTable_Speciality();
             $personDb = new Api_Model_DbTable_Users();
             $coursesRegisterDb = new Api_Model_DbTable_Registrationxcourse();
+            $registerDb = new Api_Model_DbTable_Registration();
             $coursesDb = new Api_Model_DbTable_Course();
             $teachersDb = new Api_Model_DbTable_Coursexteacher();
             $paymentDb = new Api_Model_DbTable_Payments();
@@ -107,9 +111,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                                     'oid'=>$oid );
             $this->view->dataStudent = $dataStudent;
             
-            $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid);
-
             //Información de Facultad
+            $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid);
             $faculty = $specialityDb->_getFacspeciality($where);
             $this->view->infoSpeciality = $faculty;
 
@@ -135,7 +138,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
             $this->view->paymentData = $paymentData;
 
-            //Cursos Prematriculados
+            //Estado de la Matricula
             $where = array( 'eid'=>$eid, 
                             'oid'=>$oid, 
                             'uid'=>$uid, 
@@ -143,21 +146,36 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                             'escid'=>$escid, 
                             'subid'=>$subid,
                             'perid'=>$perid );
-            $attrib = array('courseid', 'turno', 'curid', 'uid', 'pid', 'escid', 'subid', 'state');
+            $attrib = array('state');
+            $stateRegister = $registerDb->_getFilter($where, $attrib);
+            if ($stateRegister[0]['state'] == 'I') {
+                $stateRegister = 'I';
+            }elseif ($stateRegister[0]['state'] == 'M') {
+                $stateRegister = 'M';
+            }elseif ($stateRegister[0]['state'] == 'O') {
+                $stateRegister = 'O';
+            }elseif ($stateRegister[0]['state'] == 'R') {
+                $stateRegister = 'R';
+            }elseif ($stateRegister[0]['state'] == 'B') {
+                $stateRegister = 'B';
+            }
+            $this->view->stateRegister = $stateRegister;
+
+            //Cursos Prematriculados
+            $where = array( 'eid'=>$eid, 
+                            'oid'=>$oid, 
+                            'uid'=>$uid, 
+                            'pid'=>$pid,
+                            'escid'=>$escid, 
+                            'subid'=>$subid,
+                            'perid'=>$perid,
+                            'state'=>$stateRegister);
+            $attrib = array('courseid', 'turno', 'curid', 'uid', 'pid', 'escid', 'subid');
             $courses = $coursesRegisterDb->_getFilter($where, $attrib);
 
             $c = 0;
             foreach ($courses as $course) {
-                //Estado de la Matricula
-                if ($course['state'] == 'I') {
-                    $stateRegister = 'I';
-                }elseif ($course['state'] == 'M') {
-                    $stateRegister = 'M';
-                }elseif ($course['state'] == 'O') {
-                    $stateRegister = 'O';
-                }elseif ($course['state'] == 'R') {
-                    $stateRegister = 'R';
-                }
+                
 
                 //Obteniendo Cursos
                 $attrib = array('courseid', 'curid', 'name', 'credits');
@@ -212,189 +230,11 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $this->view->courses = $courses;
             $this->view->coursesName = $coursesName;
             $this->view->teachers = $teachers;
-            $this->view->stateRegister = $stateRegister;
-
-            /*$this->_helper->layout()->disableLayout();
-            $where['uid'] = base64_decode($this->_getParam('uid'));
-            $where['pid'] = base64_decode($this->_getParam('pid'));
-            $where['escid'] = base64_decode($this->_getParam('escid'));
-            $where['subid'] = base64_decode($this->_getParam('subid'));
-            $where['perid'] = $this->sesion->period->perid;
-            $where['eid'] = $this->sesion->eid;    
-            $where['oid'] = $this->sesion->oid;      
-            $this->view->perid=$where['perid'];        
-            // Obtener fecha periodo
-            $infoper = new Api_Model_DbTable_Periods();
-            $infoperiodo = $infoper->_getOne($where);
-            // print_r($infoperiodo);
-            if ($infoperiodo) {
-                $this->view->finimat = $infoperiodo['start_registration'];
-                $this->view->ffinmat = $infoperiodo['end_registration'];
-            }
-            
-            // Obteniendo la facultad
-            $escuela= new Api_Model_DbTable_Speciality();
-            $dataescid=$escuela->_getFacspeciality($where);
-            // print_r($dataescid);
-            if ($dataescid) {
-              $this->view->facultad =$dataescid[0]['nomfac']; 
-            }
-            //Obteniendo la escuela y especialidad(si lo tuviera)
-            if ($dataescid['parent']==""){
-               $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
-            }else{
-                $dato['eid'] = $this->sesion->eid;    
-                $dato['oid'] = $this->sesion->oid;
-                $dato['escid'] = $dataescid['parent']; 
-                $dato['subid'] = $dataescid['sub']; 
-                $esc = $escuela->_getOne($dato);
-                $this->view->escuela=strtoupper($esc['name']);
-                $dataescid=$escuela->_getOne($where);
-                $this->view->especialidad= strtoupper($dataescid['name']);
-            }
-            // //Obtenemos el valor de la matricula
-            $matri = new Api_Model_DbTable_Registration();
-            $rmatri = $matri->_getRegister($where);
-            // print_r($rmatri);
-            if(!$rmatri) return false;
-            $where['regid']=$rmatri['regid'];
-            $this->view->matricula_ = $rmatri;
-            
-            //Obteniendo los datos del alumno
-            $alum = new Api_Model_DbTable_Person();
-            $ralum= $alum->_getOne($where);
-            if ($ralum) $this->view->alumno = $ralum['last_name0']." ".$ralum['last_name1'].", ".$ralum['first_name'];
-            
-            // //Obtenemos los cursos matriculados
-            $lcursos = new Api_Model_DbTable_Registrationxcourse();
-            $listacurso =$lcursos->_getFilter($where);
-            // print_r($listacurso);
-
-            foreach ($listacurso as $cursomas){
-                //Agregar valores al registro de matricula curso para mandar a la vista
-                $where['courseid']=$cursomas['courseid'];
-                $where['curid']=$cursomas['curid'];
-                $where['turno']=$cursomas['turno'];
-
-                $nuevoreg = new Api_Model_DbTable_Course();
-                $rcus = $nuevoreg->_getOne($where);
-                // print_r($rcus);
-                $cursomas['semid'] = $rcus['semid'];
-                $cursomas['credits'] = $rcus['credits'];
-                $cursomas['namecourse'] = $rcus['name'];
-
-                //Obteniendo numero de veces matrocula a un curso
-                // $veces = new Api_Model_DbTable_Course();
-                // $listusuario = $veces ->_getCoursesXStudentXV($cursomas); 
-                // $cursomas['veces'] = intval($listusuario[0]['veces']);
-
-                // $db = Zend_Registry::get('Adaptador1');
-                // $sql2="select courseid,turno,perid from base_registration_course where uid='".$where['uid']."' and perid!='".$where['perid']."' and notafinal!='-3' and notafinal!='-2'";
-                // $curmat = $db->fetchAll($sql2);   
-
-                $curmat =$lcursos->_register($where);
-                $i=0;
-                foreach ($curmat as $row2) {
-                    if($where['courseid']==$row2['courseid']){
-                        $periodo=$row2['perid'];
-                        $p=substr($periodo,2,3);
-                        if($p=='A' or $p=='B' or $p=='N' or $p=='V'){
-                         $i=$i+1;  
-                         }               
-                     }
-                 }
-                $cursomas['veces'] = intval($i);
-                //Sacamos los docentes por curso
-                $bdprofesores = new Api_Model_DbTable_Coursexteacher();        
-                $datosss= $bdprofesores->_getinfoDoc($where);
-                $ndoc=$datosss[0]['nameteacher'];
-                $cursomas['teacherp'] = $ndoc;
-                // print_r($cursomas);      
-                $cantmatr = new Api_Model_DbTable_Registrationxcourse();
-                $numat = $cantmatr->_getCantRegistration($where);
-
-                if ($numat)
-                  $cursomas['nunmatriculados'] = $numat;    
-                
-                $nupremat = $cantmatr->_getCantiPreResgistration($where);
-
-                if ($nupremat)
-                    $cursomas['nunmapretriculados'] = $nupremat;
-                
-                $listacurso1[]= $cursomas;
-            }      
-            // print_r($listacurso1);      
-             $this->view->listacurso = $listacurso1;
-
-            //obtenemos los pagos realizados
-            $pagos = new Api_Model_DbTable_Payments();
-            $rpagos = $pagos->_getOne($where);
-            if ($rpagos){
-                //verificamos fechas de pago y tiempo de pago
-                $this->view->fechapago = $rpagos['date_payment'];
-                $fpago = $this->view->fechapago;
-                $this->view->montopagado = (float)$rpagos['amount'];
-                $where['ratid'] = $rpagos['ratid'];
-                $montoapagar="";
-                $tasa = new Api_Model_DbTable_Rates();
-                $rtm = $tasa->_getOne($where);
-                if ($rtm){
-                    // Verificando el monto a pagar y la fecha de pago
-                    $fechaactual =strtotime($fpago);
-                    $ffn= strtotime($rtm['f_fin_tn']." 11:59:00");
-                    $fi1= strtotime($rtm['f_fin_ti1']." 11:59:00");
-                    $fi2= strtotime($rtm['f_fin_ti2']." 11:59:00");
-                    switch ($fechaactual){                        
-                        case ($fechaactual < $ffn):{
-                            // Esta dentro de la fecha normal                            
-                            $montoapagar = $rtm['t_normal'];                            
-                            break;
-                        }
-                        case ($ffn < $fechaactual && $fechaactual < $fi1):{
-                            // Esta dentro de la fecha normal
-                            $montoapagar = $rtm['t_incremento1'];
-                            break;
-                        }
-                        case ($fi1 < $fechaactual && $fechaactual < $fi2 ):{
-                            // Esta con el primer incremento ( normalmente +50%)
-                            $montoapagar = $rtm['t_incremento2'];
-                            break;
-                            }
-                        default:{
-                            $montoapagar = "Monto no aceptado";
-                            break;
-                            }                        
-                    }
-                    $this->view->montoapagar=(float)$montoapagar ;
-                }                
-            }
-
-            //obtenemos las condiciones de la matricula registradas
-            $condi = new Api_Model_DbTable_Condition();
-            $date['eid']=$where['eid'];
-            $date['oid']=$where['oid'];
-            $date['pid']=$where['pid'];
-            $date['uid']=$where['uid'];
-            $date['escid']=$where['escid'];
-            $date['perid']=$where['perid'];
-            $date['subid']=$where['subid'];
-            $rcondision=$condi->_getFilter($date);
-            // print_r($rcondision);
-            if ($rcondision) $this->view->condision = $rcondision;
-            
-            //Sacamos la lista de pagos del alumno
-            $listapagos = new Api_Model_DbTable_PaymentsDetail();
-            $reg = $listapagos->_getAll($where);
-
-            if ($reg) $this->view->pagosrealizados = $reg;*/
-
-
-
-
         }catch(Exception $ex ){
             print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
         } 
-    }
+    }       
+
 
     public function deleteregisterAction(){
         $this->_helper->layout()->disableLayout();
@@ -410,6 +250,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $subid = base64_decode($this->_getParam('subid'));
         $pid = base64_decode($this->_getParam('pid'));
         $uid = base64_decode($this->_getParam('uid'));
+        $state = base64_decode($this->_getParam('state'));
         $regid = $uid.$perid;
 
         $where = array( 'eid' => $eid, 
@@ -419,8 +260,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'escid' => $escid, 
                         'subid' => $subid,
                         'perid' => $perid,
-                        'regid' => $regid );
-
+                        'regid' => $regid,
+                        'state' => $state );
         $data = array(  'modified' => $this->sesion->uid,
                         'updated' => date('Y-m-d h:m:s') );
 
@@ -654,10 +495,11 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
         $perid = $this->sesion->period->perid;
-        $escid = base64_decode($this->getParam('escid'));
-        $subid = base64_decode($this->getParam('subid'));
-        $pid = base64_decode($this->getParam('pid'));
-        $uid = base64_decode($this->getParam('uid'));
+        $escid = base64_decode($this->_getParam('escid'));
+        $subid = base64_decode($this->_getParam('subid'));
+        $pid = base64_decode($this->_getParam('pid'));
+        $uid = base64_decode($this->_getParam('uid'));
+        $state = base64_decode($this->_getParam('state'));
         $regid = $uid.$perid;
 
         $where = array( 'eid'=>$eid,
@@ -667,7 +509,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'perid'=>$perid, 
                         'regid'=>$regid,
                         'pid'=>$pid,
-                        'uid'=>$uid );
+                        'uid'=>$uid,
+                        'state'=>$state );
 
         $data = array(  'modified'=>$this->sesion->uid,
                         'updated'=>date('Y-m-d h:m:s'),
@@ -705,6 +548,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $subid = base64_decode($this->getParam('subid'));
         $pid = base64_decode($this->getParam('pid'));
         $uid = base64_decode($this->getParam('uid'));
+        $state = base64_decode($this->_getParam('state'));
         $regid = $uid.$perid;
 
         $where = array( 'eid'=>$eid,
@@ -714,7 +558,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'perid'=>$perid, 
                         'regid'=>$regid,
                         'pid'=>$pid,
-                        'uid'=>$uid );
+                        'uid'=>$uid,
+                        'state'=>$state );
 
         $data = array(  'modified'=>$this->sesion->uid,
                         'updated'=>date('Y-m-d h:m:s'),
@@ -747,6 +592,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $subid = base64_decode($this->getParam('subid'));
         $pid = base64_decode($this->getParam('pid'));
         $uid = base64_decode($this->getParam('uid'));
+        $state = base64_decode($this->_getParam('state'));
         $regid = $uid.$perid;
 
         $where = array( 'eid'=>$eid,
@@ -756,7 +602,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'perid'=>$perid, 
                         'regid'=>$regid,
                         'pid'=>$pid,
-                        'uid'=>$uid );
+                        'uid'=>$uid,
+                        'state'=>$state );
 
         $data = array(  'modified'=>$this->sesion->uid,
                         'updated'=>date('Y-m-d h:m:s'),

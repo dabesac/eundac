@@ -1,61 +1,77 @@
+<button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true">&times;</button>
+<br><br>
 <div class="row">
     <div class="col-md-5 col-md-offset-1">
         <blockquote>
-            <h3 class="text-center">Proceso de Matricula <span class="text-danger"><?php echo $this->dataStudent['perid'] ?></span></h3>
+            <br>
+            <h4 class="text-center">Proceso de Matricula <span class="text-danger"><?php echo $this->dataStudent['perid'] ?></span></h4>
         </blockquote>
-    </div>
-    <div class="col-md-5">
         <blockquote>
-            <h4 class="text-center text-muted">Facultad de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomfac'] ?></span></h4>
-            <h4 class="text-center text-muted">Escuela de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomesc'] ?></span></h4>
-        </blockquote>
-    </div>
-</div>
-<hr>
-<div class="row">
-    <div class="col-md-5 div col-md-offset-1">
-        <blockquote class="danger">
             <h4><span class="glyphicon glyphicon-user text-info"></span> <?php echo $this->person[0]['last_name0'].' '.$this->person[0]['last_name1'] ?> <span class="text-info"><?php echo $this->person[0]['first_name'] ?></span></h4>
             <h6>Codigo <span class="text-info"><?php echo $this->person[0]['uid'] ?></span></h6>
             <h6>Semestre <span class="text-info">Unknow</span></h6>
         </blockquote>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-5">
         <blockquote>
-            <h6>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h6>
-            <h6>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h6>
-            <h6>Condiciones</h6>
+            <h5 class="text-center text-muted">Facultad de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomfac'] ?></span></h5>
+            <h5 class="text-center text-muted">Escuela de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomesc'] ?></span></h5>
         </blockquote>
-    </div>
-    <div class="col-md-1">
-        <br><br>
-        <?php $urlRecord =  '/report/recordnotas/print'.'/uid/'.    base64_encode($this->dataStudent['uid']) .
-                                                        '/pid/'.    base64_encode($this->dataStudent['pid']) .
-                                                        '/escid/'.  base64_encode($this->dataStudent['escid']) .
-                                                        '/subid/'.  base64_encode($this->dataStudent['subid']) .
-                                                        '/eid/'.    base64_encode($this->dataStudent['eid']) .
-                                                        '/oid/'.    base64_encode($this->dataStudent['oid']) ?>
-        <a class="btn btn-default form-control" href="<?php echo $urlRecord ?>"><span class="glyphicon glyphicon-print"></span> Record</a>
-    </div>
-<?php if ($this->stateRegister == 'I' or $this->stateRegister == null): 
-    $classPrint = 'hidden';
-else:
-    $classPrint = '';
-endif ?>
-    <div class="col-md-1">
-        <br><br>
-        <?php $urlPrintRegister =  '/register/registerstudent/print'. 
-                                    '/uid/'.    base64_encode($this->dataStudent['uid']) .
-                                    '/pid/'.    base64_encode($this->dataStudent['pid']) .
-                                    '/escid/'.  base64_encode($this->dataStudent['escid']) .
-                                    '/subid/'.  base64_encode($this->dataStudent['subid']) ?>
-        <a id="printRegister" class="btn btn-default <?php echo $classPrint ?>" target="_blank" href="<?php echo $urlPrintRegister ?>"><span class="glyphicon glyphicon-print"></span> Matricula</a>
+        <div class="row">
+            <div class="col-md-6">
+                <blockquote>
+                    <h6>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h6>
+                    <h6>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h6>
+                    <h6>Condiciones</h6>
+                </blockquote>
+            </div>
+            <div class="col-md-3">
+                <br><br>
+                <?php $urlRecord =  '/report/recordnotas/print'.'/uid/'.    base64_encode($this->dataStudent['uid']) .
+                                                                '/pid/'.    base64_encode($this->dataStudent['pid']) .
+                                                                '/escid/'.  base64_encode($this->dataStudent['escid']) .
+                                                                '/subid/'.  base64_encode($this->dataStudent['subid']) .
+                                                                '/eid/'.    base64_encode($this->dataStudent['eid']) .
+                                                                '/oid/'.    base64_encode($this->dataStudent['oid']) ?>
+                <a class="btn btn-default form-control" href="<?php echo $urlRecord ?>"><span class="glyphicon glyphicon-print"></span> Record</a>
+            </div>
+            <div class="col-md-3">
+                <?php if ($this->stateRegister == 'I' or $this->stateRegister == null or $this->stateRegister == 'O' or $this->stateRegister == 'R' or $this->stateRegister == 'B' ): 
+                    $classPrint = 'hidden';
+                else:
+                    $classPrint = '';
+                endif ?>
+                <br><br>
+                <?php $urlPrintRegister =  '/register/registerstudent/print'. 
+                                            '/uid/'.    base64_encode($this->dataStudent['uid']) .
+                                            '/pid/'.    base64_encode($this->dataStudent['pid']) .
+                                            '/escid/'.  base64_encode($this->dataStudent['escid']) .
+                                            '/subid/'.  base64_encode($this->dataStudent['subid']) ?>
+                <a id="printRegister" class="btn btn-default <?php echo $classPrint ?>" target="_blank" href="<?php echo $urlPrintRegister ?>"><span class="glyphicon glyphicon-print"></span> Matricula</a>
+            </div>
+        </div>
     </div>
 </div>
-
 <hr>
 
 <?php if ($this->courses): ?>
+<!--Mensajes y todas esas cosas-->
+<div class="row">
+    <div id="waitingSpinner" class="col-md-11 col-md-offset-1">
+        
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <!--Confirmación para Eliminar-->
+        <div id="confirmDelete" class="alert alert-danger fade in hidden">
+            <h4>Seguro que desea Eliminar la Matricula</h4>
+            <p>Una vez que lo haga no habra marcha atras....</p><br>
+            <a id="deleteRegister" href="##" class="btn btn-danger">Eliminar</a>
+            <a href="##" class="btn btn-default closeConfirmAlert">Cancelar</a>
+        </div>
+    </div>
+</div>
     
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
@@ -63,7 +79,7 @@ endif ?>
         <div id="successValidate" class="alert alert-success fade in">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h4>Validación Realizada con Exito</h4>
-            <p>Puede pasar a imprimir la matricula</p>
+            <p>Ahora puede imprimir la matricula</p>
         </div>
         <div id="failValidate" class="alert alert-danger fade in">
             <button class="close">&times;</button>
@@ -94,11 +110,11 @@ endif ?>
             <h4>Error al Observar</h4>
             <p>Hubo un error al momento de observar la matricula....</p>
         </div>
-        <!--Avisos para la Observación-->
+        <!--Avisos para la Reservación-->
         <div id="reservedSuccessRegister" class="alert alert-info fade in hidden">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <h4>Matricula Reservada con Exito</h4>
-            <p>Se observo la matricula con exito....</p>
+            <p>Se reservo la matricula con exito....</p>
         </div>
         <div id="reservedFailRegister" class="alert alert-danger fade in hidden">
             <button class="close">&times;</button>
@@ -152,7 +168,7 @@ endif ?>
                 <th class="text-center">Turno</th>
                 <th>Profesor</th>
                 <th class="text-center">Numero de Veces</th>
-            </tr>
+            </tr> 
         <?php $c = 0;
         foreach ($this->courses as $course): ?>
             <tr id="fila<?php echo $course['courseid'] ?>" class="iluminate <?php echo $claseFilas ?>">
@@ -229,6 +245,7 @@ endif ?>
         endforeach ?>
         </table>
     </div>
+    <!--Botones de interacción-->
     <div class="col-md-1">
         <?php if ($state == 'O' or $state == 'R'): 
             $classInteractions = 'hidden';
@@ -255,11 +272,12 @@ endif ?>
             <a id="observedRegister" href="##" class="btn btn-warning form-control">Observar</a>
             <br><br>
         </div>
-        <a id="deleteRegister" href="##" class="btn btn-danger form-control">Eliminar</a>
+        <a id="openConfirmAlert" href="##" class="btn btn-danger form-control">Eliminar</a>
     </div>
 </div>
 
 <script>
+    var stateReg = "<?php echo $this->stateRegister ?>";
 
     $('#failValidate').addClass('hidden');
     $('#successValidate').addClass('hidden');
@@ -271,14 +289,24 @@ endif ?>
         $('#failValidate, #deleteFailRegister, #observedFailRegister, #reservedFailRegister').addClass('hidden');
     });
 
+    $('.closeConfirmAlert').click(function(){
+        $('#confirmDelete').addClass('hidden');
+    });
+
     //Validar Matricula
     $('#validateRegister').click(function(){
-        $.get("/register/registerstudent/validate/escid/<?php echo base64_encode($this->dataStudent['escid']) ?>/subid/<?php echo base64_encode($this->dataStudent['subid']) ?>/uid/<?php echo base64_encode($this->dataStudent['uid']) ?>/pid/<?php echo base64_encode($this->dataStudent['pid']) ?>", function(status){
+        $('#waitingSpinner').html('<br><center><img src="/img/spinner.gif" alt="Cargando....." /></center><br>');
+        $.get("/register/registerstudent/validate/escid/<?php echo base64_encode($this->dataStudent['escid']) ?>/subid/<?php echo base64_encode($this->dataStudent['subid']) ?>/uid/<?php echo base64_encode($this->dataStudent['uid']) ?>/pid/<?php echo base64_encode($this->dataStudent['pid']) ?>/state/<?php echo base64_encode($this->stateRegister) ?>", function(status){
             if (status.status == true) {
-                $('.iluminate').addClass('success');
-                $('td a, #stateRegister').addClass('hidden');
-                $('.tdValidate').removeClass('hidden');
-                $('#successValidate').removeClass('hidden');
+                $('.iluminate').removeClass('warning info');
+                $('.iluminate, #studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('success');
+                $('.butonsCourses, #stateRegister').addClass('hidden');
+                $('#validateRegister').addClass('disabled');
+                $('.tdValidate, #successValidate, #printRegister').removeClass('hidden');
+                $('#waitingSpinner').html('');
+                $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').html('Matriculado');
+                $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').addClass('text-success');
+                stateReg = 'M';
             }else{
                 $('#failValidate').removeClass('hidden');
             };
@@ -286,19 +314,29 @@ endif ?>
     });
 
     //Eliminar Matricula
+    $('#openConfirmAlert').on('click', function(){
+        $('#confirmDelete').removeClass('hidden');
+    }); 
+
     $('#deleteRegister').click(function(){
+        $('#waitingSpinner').html('<br><center><img src="/img/spinner.gif" alt="Cargando....." /></center><br>');
         $.ajax({
             url : '/register/registerstudent/deleteregister',
             data : {pid : $.base64.encode("<?php echo $this->dataStudent['pid'] ?>"),
                     uid : $.base64.encode("<?php echo $this->dataStudent['uid'] ?>"),
                     escid : $.base64.encode("<?php echo $this->dataStudent['escid'] ?>"),
-                    subid : $.base64.encode("<?php echo $this->dataStudent['subid'] ?>") },
+                    subid : $.base64.encode("<?php echo $this->dataStudent['subid'] ?>"),
+                    state : $.base64.encode(stateReg) },
             success: function(data){
                 if (data == 'true') {
                     $('#allDataCourses').html('<h3 class="text-center">No existen <span class="text-danger">datos...</span></h3>');
+                    $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('danger');
                     $('#deleteSuccessRegister').removeClass('hidden');
-                    $('#deleteRegister, #reservedRegister, #validateRegister, #printRegister, #observedRegister, #activeRegister').addClass('disabled');
-                    $('#stateRegister').addClass('hidden');
+                    $('#openConfirmAlert, #reservedRegister, #validateRegister, #printRegister, #observedRegister, #activeRegister').addClass('disabled');
+                    $('#stateRegister, #confirmDelete').addClass('hidden');
+                    $('#waitingSpinner').html('');
+                    $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').html('Eliminado');
+                    $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').addClass('text-danger');
                 }else{
                     $('#deleteFailRegister').removeClass('hidden');
                 };
@@ -308,17 +346,23 @@ endif ?>
 
     //Observar Matricula
     $('#observedRegister').click(function(){
+        $('#waitingSpinner').html('<br><center><img src="/img/spinner.gif" alt="Cargando....." /></center><br>')
         $.ajax({
             url : '/register/registerstudent/observedregister',
             data : {pid : $.base64.encode("<?php echo $this->dataStudent['pid'] ?>"),
                     uid : $.base64.encode("<?php echo $this->dataStudent['uid'] ?>"),
                     escid : $.base64.encode("<?php echo $this->dataStudent['escid'] ?>"),
-                    subid : $.base64.encode("<?php echo $this->dataStudent['subid'] ?>") },
+                    subid : $.base64.encode("<?php echo $this->dataStudent['subid'] ?>"),
+                    state : $.base64.encode("<?php echo $this->stateRegister ?>") },
             success: function(data){
                 if (data == 'true') {
-                    $('#observedSuccessRegister').removeClass('hidden');
-                    $('#stateRegister').addClass('hidden');
-                    $('.iluminate').addClass('warning');
+                    $('#stateRegister, .butonsCourses, td strong').addClass('hidden');
+                    $('#reservedRegister, #validateRegister, #printRegister, #observedRegister, #activeRegister').addClass('disabled');
+                    $('#observedSuccessRegister, .tdObserved').removeClass('hidden');
+                    $('.iluminate, #studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('warning');
+                    $('#waitingSpinner').html('');
+                    $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').html('Observado');
+                    $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').addClass('text-warning');
                 }else{
                     $('#observedFailRegister').removeClass('hidden');
                 };
@@ -328,19 +372,23 @@ endif ?>
 
     //Reservar Matricula
     $('#reservedRegister').click(function(){
+        $('#waitingSpinner').html('<br><center><img src="/img/spinner.gif" alt="Cargando....." /></center><br>');
         $.ajax({
             url : '/register/registerstudent/reservedregister',
             data : {pid : $.base64.encode("<?php echo $this->dataStudent['pid'] ?>"),
                     uid : $.base64.encode("<?php echo $this->dataStudent['uid'] ?>"),
                     escid : $.base64.encode("<?php echo $this->dataStudent['escid'] ?>"),
-                    subid : $.base64.encode("<?php echo $this->dataStudent['subid'] ?>") },
+                    subid : $.base64.encode("<?php echo $this->dataStudent['subid'] ?>"),
+                    state : $.base64.encode("<?php echo $this->stateRegister ?>") },
             success: function(data){
                 if (data == 'true') {
-                    $('#stateRegister, td a, #reservedRegister, td strong').addClass('hidden');
-                    $('#reservedRegister, #validateRegister, #printRegister, #observedRegister, #activeRegister').addClass('disabled');
+                    $('#stateRegister, .butonsCourses, td strong').addClass('hidden');
+                    $('#reservedRegister, #validateRegister, #printRegister, #observedRegister, #activeRegister, #reservedRegister').addClass('disabled');
                     $('#reservedSuccessRegister, .tdReserved').removeClass('hidden');
-                    $('.iluminate').addClass('info');
-
+                    $('.iluminate, #studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('info');
+                    $('#waitingSpinner').html('');
+                    $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').html('Reservado');
+                    $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').addClass('text-info');
                 }else{
                     $('#observedFailRegister').removeClass('hidden');
                 };
@@ -360,6 +408,7 @@ endif ?>
     <h4 class="text-center text-muted">Aun no hizo la <span class="text-danger">prematricula</span></h4>
 <?php endif ?>
 
+<br><br>
 
 
 
