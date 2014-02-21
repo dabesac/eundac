@@ -17,11 +17,10 @@
         </select>
     </div>
     <div class="col-md-5">
-        <input id="searchData" type="text" class="form-control" title="Código" placeholder="Código o Apellidos">
+        <input id="searchData" type="text" class="form-control" title="Código" onkeyup="javascript:this.value=this.value.toUpperCase();" placeholder="Código o Apellidos">
     </div>
     <div class="col-md-2">
         <select  class='form-control' id="estado" name="estadom">
-            <option value="">Estado</option>
             <option value="<?php echo 'I'; ?>"><?php echo "Iniciado"; ?></option>
             <option value="<?php echo 'M'; ?>"><?php echo "Matriculado"; ?></option>
             <option value="<?php echo 'O'; ?>"><?php echo "Observado"; ?></option>
@@ -40,7 +39,15 @@
     $('#estado').change(function(){
         var state = $(this).val();
         $('#data').html("<br><center><img src='/img/spinner.gif'> Cargando.... </center>");
-        $('#data').load('/register/registerstudent/liststudent/state/' + state);
+        $('#data').load('/register/registerstudent/liststudent/state/' + state ,function(){
+            var escid = $('#escuela').val();
+            $('#students > li').each(function(){
+                var currentLiText = $(this).text(),
+                showCurrentLi = currentLiText.indexOf(escid) !== -1;
+
+                $(this).toggle(showCurrentLi);
+            });
+        });
     });
 
     $('#escuela').change(function(){

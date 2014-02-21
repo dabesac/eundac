@@ -95,7 +95,7 @@ ob_start();
 $mpdf=new mPDF(); 
 $mpdf=new mPDF('win-1252','A4','','','','',22);
 $mpdf->WriteHTML($html);
-// $mpdf->Output('Copia Ficha-'.$this->perid.'.pdf','D');
+//$mpdf->Output('Ficha-'.$this->perid.'.pdf','D');
 $mpdf->Output();
 exit;
 
