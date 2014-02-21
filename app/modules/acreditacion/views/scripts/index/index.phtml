@@ -1,0 +1,24 @@
+<script type="text/javascript">
+    // var $cources = <?php echo $this->courses?>;
+</script>
+<script src="/external_library/highcharts/js/highcharts.js"></script>
+<script src="/external_library/highcharts/modules/exporting.js"></script>
+<script type="text/javascript" src="/js/graphic/accreditation.js"></script>
+<div id="container_standards"></div>
+
+<?php if ($this->data) {?>
+    <div class="panel panel-default">
+        <div class="panel-heading">Panel heading</div>
+        <table class="table table-bordered">
+             <thead>
+                <tr class='active'>
+                    <th>#</th>
+                    <th>Estandar</th>
+                    <th>Fuente de Verificacion</th>
+                    <th>Estamacion</th>
+                    <th>Validacion</th>
+                </tr>
+              </thead>
+        </table>
+    </div>
+<?php }?>
