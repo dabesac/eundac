@@ -1,0 +1,97 @@
+<?php if($this->row) { ?>
+<table style="margin-top:20px ;"class="table span9 table-striped table-bordered table-condensed">
+	<tr>
+		<th><center>#</center></th>
+		<th><center>DNI</center></th>
+		<th><center>Docente</center></th>
+		<th colspan="2"><center>Operacion</center></th>
+	</tr>
+	<?php $c=1;$s=0 ; foreach($this->row as $row){?>
+		<tr>
+			<td><center><?php echo $c ?></center></td>
+			<td><center><?php echo $row['pid'];?>
+			<td><center><?php echo $row['last_name0']." ".$row['last_name1']." ".$row['first_name']?>
+			<td>
+            <center>
+                <?php 
+                if ($row['state']=='C') {  ?>
+                    <a id='loading<?php echo $s?>' data-toggle="modal" href="#myModal"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
+                    <script type="text/javascript">
+                    $("#loading<?php echo $s?>").click(function(){
+                        
+                        url="/admin/openinfoacademic/updatestate/perid/<?php echo base64_encode($this->perid) ?>/escid/<?php echo base64_encode($this->escid)?>/pid/<?php echo base64_encode($row['pid'])?>/state/<?php echo base64_encode('B')?>/";
+                        // alert(url);
+                        $("#view").load(url);
+                    });
+                    </script>
+                <?php
+                }
+                else{   ?>
+                    <a id='loads<?php echo $s?>' data-toggle="modal" href="#Modal"><span class="glyphicon glyphicon-lock"></span> Cerrar</a>
+                    <script type="text/javascript">
+                    $("#loads<?php echo $s?>").click(function(){
+                        
+                        url="/admin/openinfoacademic/updatestate/perid/<?php echo base64_encode($this->perid)?>/escid/<?php echo base64_encode($this->escid)?>/pid/<?php echo base64_encode($row['pid'])?>/state/<?php echo base64_encode('C')?>/";
+                        // alert(url);
+                        $("#view1").load(url);
+                    });
+                    </script>
+                <?php    
+                }
+                ?>
+            </center>
+        	</td>
+		</tr>
+	<?php $c++;$s++;} ?>
+</table>
+
+<?php } else { ?>
+<script >
+	alert("No se encontraron registros");
+</script>
+
+<?php } ?>
+
+<!-- Modal 1 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+          <center><h3 class="modal-title" style='color: black' ><img style='width:40px'src="/img/unlock.png" ><b> SE ABRIÓ EL INFORME ACADEMICO</b></h3></center>
+          <div id='view'></div>            
+        </div>
+        <div class="modal-footer">
+          <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal 2 -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+            <center><h3 class="modal-title" style='color:black' ><img style='width:40px'src="/img/candado.png" ><b> SE CERRÓ EL INFORME ACADEMICO</b></h3></center>
+            
+        </div>
+        <div class="modal-footer">
+          <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id='view1'></div>
+<script type="text/javascript">
+
+$ ('#myModal'). on('hidden.bs.modal',function()  {
+    url="/admin/openinfoacademic/listteacher/perid/<?php echo $this->perid ?>/escid/<?php echo $this->escid;?>/"
+    $("#view").load(url);  
+});
+
+$ ('#Modal'). on('hidden.bs.modal',function()  { 
+    url="/admin/openinfoacademic/listteacher/perid/<?php echo $this->perid ?>/escid/<?php echo $this->escid;?>/";
+    $("#view1").load(url);  
+});
+</script>

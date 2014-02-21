@@ -62,7 +62,7 @@ if ($this->datacourses) { ?>
         <td>
             <center>
                 <?php 
-                if ($state=='C') {  ?>
+                if ($row['state']=='C') {  ?>
                     <a id='loading<?php echo $s?>' data-toggle="modal" href="#myModal"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
                     <script type="text/javascript">
                     $("#loading<?php echo $s?>").click(function(){
