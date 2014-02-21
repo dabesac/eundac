@@ -64,16 +64,16 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             if ($this->getRequest()->isPost()){
                 $formData = $this->getRequest()->getPost();
                 if ($formData) {                    
-                    // $cont=count($formData['courseid']);
-                    // $courtea = new Api_Model_DbTable_Coursexteacher();
-                    // for ($i=0; $i < $cont ; $i++){ 
-                    //     $pk = array(
-                    //         'eid' => $eid, 'oid' => $oid, 'perid' => $perid,
-                    //         'escid' => $formData['escid'][$i], 'subid' => $formData['subid'][$i], 
-                    //         'courseid' => $formData['courseid'][$i], 'curid' => $formData['curid'][$i], 'turno' => $formData['turno'][$i]);
-                    //     $datacourtea = array('percentage' => $formData['percentage'][$i]);
-                    //     $courtea ->_updateXcourse($datacourtea,$pk);
-                    // }
+                    $cont=count($formData['courseid']);
+                    $courtea = new Api_Model_DbTable_Coursexteacher();
+                    for ($i=0; $i < $cont ; $i++){ 
+                        $pk = array(
+                            'eid' => $eid, 'oid' => $oid, 'perid' => $perid,
+                            'escid' => $formData['escid'][$i], 'subid' => $formData['subid'][$i], 
+                            'courseid' => $formData['courseid'][$i], 'curid' => $formData['curid'][$i], 'turno' => $formData['turno'][$i]);
+                        $datacourtea = array('percentage' => $formData['percentage'][$i]);
+                        $courtea ->_updateXcourse($datacourtea,$pk);
+                    }
                 
                     $data = array(
                     'acad_tutoria' => $formData['acad_tutoria'], 'acad_medios' => $formData['acad_medios'],
@@ -218,6 +218,8 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $escid = $this->sesion->escid;
             $subid = $this->sesion->subid;
             $perid = $this->sesion->period->perid;
+
+            $this->view->datacourses=$coursesdoc;
             $this->view->speciality = $this->sesion->speciality->name;
             $this->view->faculty = $this->sesion->faculty->name;
             $this->view->infouser = $this->sesion->infouser['fullname'];
@@ -226,6 +228,25 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $this->view->subid = $subid;
             $this->view->pid = $pid;
             $this->view->uid = $uid;
+
+            $wherecour = array('eid' => $eid, 'oid' => $oid,'perid' => $perid, 'uid' => $uid, 'pid' => $pid);
+            $percour= new Api_Model_DbTable_PeriodsCourses();
+            $coursesdoc=$percour->_getInfoCourseXTeacher($wherecour);
+            if ($coursesdoc) {
+                $tam = count($coursesdoc);
+                $wherecours = array('eid' => $eid, 'oid' => $oid);
+                $cour = new Api_Model_DbTable_Course();
+                for ($i=0; $i < $tam; $i++) { 
+                    $wherecours['curid'] = $coursesdoc[$i]['curid'];
+                    $wherecours['escid'] = $coursesdoc[$i]['escid'];
+                    $wherecours['subid'] = $coursesdoc[$i]['subid'];
+                    $wherecours['courseid'] = $coursesdoc[$i]['courseid'];
+                    $datacourse = $cour->_getOne($wherecours);
+                    $coursesdoc[$i]['name'] = $datacourse['name'];
+                }
+            }
+            $this->view->datacourses=$coursesdoc;
+            // print_r($coursesdoc);exit();    
 
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
@@ -238,13 +259,14 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $this->_helper->layout()->disableLayout();
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
-            $formData = $this->getRequest()->getPost();
-            print_r($formData);exit();
-            $pid = base64_decode($this->_getParam('pid'));
-            $uid = base64_decode($this->_getParam('uid'));
-            $escid = base64_decode($this->_getParam('escid'));
-            $subid = base64_decode($this->_getParam('subid'));
-            $perid = base64_decode($this->_getParam('perid'));
+            // $formData = $this->getRequest()->getPost();
+    
+            $pid = base64_decode($this->_getParam("pid"));
+            $uid = base64_decode($this->_getParam("uid"));
+            $escid = base64_decode($this->_getParam("escid"));
+            $subid = base64_decode($this->_getParam("subid"));
+            // $perid = "13B";
+            $perid = base64_decode($this->_getParam("perid"));
             $this->view->speciality = $this->sesion->speciality->name;
             $namef = strtoupper($this->sesion->faculty->name);
             $this->view->infouser = $this->sesion->infouser['fullname'];
@@ -252,6 +274,7 @@ class Docente_InformacademicController extends Zend_Controller_Action {
 
             $wherecour = array('eid' => $eid, 'oid' => $oid, 
                 'perid' => $perid, 'uid' => $uid, 'pid' => $pid);
+            // print_r($wherecour);exit();
             $percour= new Api_Model_DbTable_PeriodsCourses();
             $coursesdoc=$percour->_getInfoCourseXTeacher($wherecour);
             if ($coursesdoc) {

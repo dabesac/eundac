@@ -240,9 +240,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
             
             $co=count($dataim);
             $codigo=$co." - ".$uidim;
-            $h1="h1";
-            $h2="h2";
-            $h3="h3";
+            
 
             $header=$this->sesion->org['header_print'];
             $footer=$this->sesion->org['footer_print'];
@@ -250,9 +248,9 @@ class Horary_SemesterController extends Zend_Controller_Action{
             $header = str_replace("?escuela",$namefinal,$header);
             $header = str_replace("?logo", $namelogo, $header);
             $header = str_replace("?codigo", $codigo, $header);
-            $header = str_replace("h2", $h1, $header);
-            $header = str_replace("h3", $h1, $header);
-            $header = str_replace("h4", $h2, $header);
+            $header = str_replace("h2", "h1", $header);
+            $header = str_replace("h3", "h2", $header);
+            $header = str_replace("h4", "h3", $header);
 
             $this->view->header=$header;
             $this->view->footer=$footer;
