@@ -36,6 +36,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
 
             $datasum=array('eid'=>$where['eid'],'oid'=>$where['oid'],'curid'=>$where['curid'],
                 'escid'=>$where['escid'],'subid'=>$where['subid'],'courseid'=>$where['courseid']);
+            
             $querysum=new Api_Model_DbTable_Course();
             $this->view->sumgral=$querysum->_getOne($datasum);
 

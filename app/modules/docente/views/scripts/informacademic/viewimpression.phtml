@@ -1,0 +1,121 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-ok-sign"></span> Informe Académico');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/index/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><a href="#" type="button" id="imprimir" class="btn btn-success"><span class="glyphicon glyphicon-print"></span> Imprimir</a>');?>
+<div class='row'>
+    <div class ='col-xs-12 text-center' style='font-size:18px'><b>FACULTAD DE <?php echo strtoupper($this->faculty)?></b></div>
+    <div class ='col-xs-12 text-center' style='font-size:18px'><b>ESCUELA DE FORMACIÓN PROFESIONAL DE <?php echo strtoupper($this->speciality)?></b></div>
+    <div class ='col-xs-12 text-center' style='font-size:18px'><b>Informe Académico Administrativo - Periodo <?php echo strtoupper($this->perid)?></b></div>
+</div></br>
+<div class='row'>
+    <div class="col-md-9 col-md-offset-1">
+        <blockquote>
+            <p class='text center' ><b>Docente: </b><?php echo $this->infouser?></p>
+        </blockquote>
+    </div>
+</div>    
+<table class="table table-hover table-bordered table-condensed">
+        <thead>
+            <tr>
+                <th colspan="10"><p style="font-size: 15px;text-align: center"><b> 1.1. Desarrollo de las Asignaturas </b>  </p></th>
+            </tr>
+            <tr>
+                <th><center>#</center></th>
+                <th><center>Asignaturas</center></th>
+                <th><center>Turno</center></th>
+                <th><center>Semestre</center></th>
+                <th><center>% Desarrollado</center></th>
+                <th><center> Matriculados:  N° -  %</center></th>
+                <th><center>Aprobados  N° -  %</center></th>
+                <th><center>Desaprobados  N° -  %</center></th>
+                <th><center>Retirados  N° -  %</center></th>
+            </tr>
+        </thead>
+        <?php
+        $i=1; 
+        foreach ($this->datacourses as $datacourses) { ?>
+            <tr>
+                <td><?php echo $i ?></td>
+                <td><?php echo $datacourses['name'] ?></td>
+                <td><center><?php echo $datacourses['turno'] ?></center></td>
+                <td><center><?php echo $datacourses['semid'] ?></center></td>
+                <td>
+                    <center>
+                    <?php 
+                    if($datacourses['state']=='C'){ ?>
+                        <input class="form-control" maxlength="3" type="text" value="<?php echo $datacourses['percentage'];?>" name="percentage[<?php echo $i-1 ?>]" style="width: 60px" onkeypress="return validNumber(event)"required>
+                        <?php   
+                    }else{ ?>
+                        <input class="form-control" maxlenght="3" type="text" value="<?php echo $datacourses['percentage'];?>" name="percentage[<?php echo $i-1 ?>]" style="width: 60px"  title="Cierre el Acta del Curso Primero" rel="tooltip" disabled required>
+                        <?php
+                    } ?>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                    <?php 
+                    $wherecant = array(
+                        'eid' => $datacourses['eid'], 'oid' => $datacourses['oid'],
+                        'perid' => $datacourses['perid'], 'curid' => $datacourses['curid'],
+                        'escid' => $datacourses['escid'], 'courseid' => $datacourses['courseid'],
+                        'turno' => $datacourses['turno'], 'subid' => $datacourses['subid']);
+                    $regcour = new Api_Model_DbTable_Registrationxcourse();
+                    echo $cantstu = $regcour->_getCantRegistration($wherecant)." - 100%";
+                    ?>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                    <?php 
+                    $aprobados = $regcour->_get_approved($wherecant);
+                    $por = round(($aprobados[0]['count'] / $cantstu) * 100,2);
+                    echo $aprobados[0]['count']." - ".$por."%";
+                    ?>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                    <?php 
+                    $desaprobados = $regcour->_get_disapproved_x_course($wherecant);
+                    $por=round(($desaprobados[0]['count'] / $cantstu) * 100,2);
+                    echo $desaprobados[0]['count']." - ".$por."%";
+                    ?>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                    <?php 
+                    $retirados = $regcour->_get_retired_x_course($wherecant);
+                    $por=round(($retirados[0]['count'] / $cantstu) * 100,2);
+                    echo $retirados[0]['count']." - ".$por."%";
+                    ?>
+                    </center>
+                </td>
+                <input type="hidden" value="<?php echo $datacourses['courseid'];?>" name="courseid[]">
+                <input type="hidden" value="<?php echo $datacourses['turno'];?>" name="turno[]">
+                <input type="hidden" value="<?php echo $datacourses['escid'];?>" name="escid[]">
+                <input type="hidden" value="<?php echo $datacourses['subid'];?>" name="subid[]">
+                <input type="hidden" value="<?php echo $datacourses['curid'];?>" name="curid[]">
+            </tr>
+            <?php 
+            $i++;
+            } ?>
+        <tr>
+            <!-- <td colspan="5"><center><?php echo  $this->form->enviar ?></center></td>
+            <td colspan="4"><center><?php echo  $this->form->cerrar ?></center></td> -->
+        </tr>
+    </table>
+<div class='col-md-12 cont-font-not-register'>
+    <h3 class='text-not-register'><b>INFORME ACADÉMICO LISTO</b></h3>
+    <h2 class='text-not-register'><i>¡¡ YA PUEDE IMPRIMIRLO !!</i></h2>
+    <h1 class='span-not-register'>
+        <span class='glyphicon glyphicon-exclamation-sign' ></span>
+    </h1>
+</div>
+<div id='fs'></div>
+<script type="text/javascript">
+$("#imprimir").click(function(){
+
+    var url="/docente/informacademic/print/pid/<?php echo base64_encode($this->pid)?>/uid/<?php echo base64_encode($this->uid)?>/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/perid/<?php echo base64_encode($this->perid)?>";
+
+    $(location).attr('href',url);
+});
+</script>
