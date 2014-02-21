@@ -130,8 +130,8 @@ class Alumno_IndexController extends Zend_Controller_Action {
                                 ),
                          );
 
-            $result = json_encode($result);
-            $data_courses = json_encode($data_courses);
+            $result = Zend_Json::encode($result);
+            $data_courses = Zend_Json::encode($data_courses);
             
             $this->view->courses = $data_courses;
             $this->view->dat_assist = $result;
