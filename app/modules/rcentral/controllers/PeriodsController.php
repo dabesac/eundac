@@ -21,16 +21,16 @@ class Rcentral_PeriodsController extends Zend_Controller_Action {
 
 
     public function listarAction() {
-      $this->_helper->layout()->disableLayout();
-      $where['eid']= $this->sesion->eid;
-      $where['oid']= $this->sesion->oid;
-      $anio=$this->_getParam('anio');            
-      $where['year'] = substr($anio, 2, 3);
-      $periodos = new Api_Model_DbTable_Periods();
-      $lper=$periodos->_getPeriodsxYears($where);
-      //print_r($lper); 
-      $this->view->lper = $lper; 
-      }
+        $this->_helper->layout()->disableLayout();
+        $where['eid']= $this->sesion->eid;
+        $where['oid']= $this->sesion->oid;
+        $anio=$this->_getParam('anio');            
+        $where['year'] = substr($anio, 2, 3);
+        $periodos = new Api_Model_DbTable_Periods();
+        $lper=$periodos->_getPeriodsxYears($where);
+        //print_r($lper); 
+        $this->view->lper = $lper; 
+    }
 
     public function modificarAction() {
         // $this->_helper->layout()->disableLayout();

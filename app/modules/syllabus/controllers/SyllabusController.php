@@ -128,42 +128,52 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
 
             $form= new Syllabus_Form_Syllabus();
             if ($periodocurso["type_rate"]=="C") $form->methodology->setRequired(true)->addErrorMessage('Rellene Metodologia');
-
-            if ($this->getRequest()->isPost())
-            {
-                $formData = $this->getRequest()->getPost();
-                $pk['perid']=$where['perid'];
-                $pk['curid']=$where['curid'];
-                $pk['escid']=$where['escid'];
-                $pk['courseid']=$where['courseid'];                   
-                $pk['eid']=$where['eid'];
-                $pk['oid']=$where['oid'];
-                $pk['turno']=$where['turno'];
-                $pk['subid']=$where['subid'];
-                $syll= new Api_Model_DbTable_Syllabus();
-                if ($formData['save']!="") {
-                    unset($formData['save']);
-                    if ($syll->_update($formData,$pk)){
-                        $datsyl=$syl->_getOne($where);
-                    }
-                }elseif ($formData['close']!="") {
-                    $formData['save']='Guardar Avance';
-                    if ($form->isValid($formData)) 
-                    {
-                        $data['state']='C';
-                        if ($syll->_update($data,$pk)){ 
-                           
-                       
-                        }
-                    }
-                    else $this->view->msgclose=1;
-                }
-            }
             $form->populate($datsyl);
             $this->view->form=$form;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
+    }
+
+    public function savemodifiedAction(){
+        try {
+            if ($this->getRequest()->isPost())
+            {
+                $formData = $this->getRequest()->getPost();
+                $pk = array(
+                        'eid'=>$this->sesion->eid,
+                        'oid'=>$this->sesion->oid,
+                        'escid'=>base64_decode($formData['escid']),
+                        'subid'=>base64_decode($formData['subid']),
+                        'curid'=>base64_decode($formData['curid']),
+                        'courseid'=>base64_decode($formData['courseid']),
+                        'turno'=>base64_decode($formData['turno']),
+                        'perid'=>base64_decode($formData['perid']),
+                    );
+                $data=array(
+                    'sumilla'=>$formData['sumilla'],
+                    'competency'=>$formData['competency'],
+                    'capacity'=>$formData['capacity'],
+                    'units'=>$formData['units'],
+                    'media'=>$formData['media'],
+                    'sources'=>$formData['sources'],
+                    'evaluation'=>$formData['evaluation'],
+                    );
+                $syll= new Api_Model_DbTable_Syllabus();
+                if ($syll->_update($data,$pk)){
+                    $json = array('status' => true);
+                }else{
+                    $json = array('status' => false);
+                }
+                
+            }
+        } catch (Exception $e) {
+            $json  = array('status' => false
+                        );
+        }
+        $this->_helper->layout->disableLayout();
+        $this->_response->setHeader('Content-Type', 'application/json');                   
+        $this->view->data = Zend_Json::encode($json); 
     }
 
     public function unitsAction(){
