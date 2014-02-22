@@ -1,30 +1,11 @@
-<link rel="stylesheet" type="text/css" href="/external_library/jwysiwyg/jquery.wysiwyg.css">
-<script type="text/javascript" src="/external_library/jwysiwyg/jquery.wysiwyg.js"></script>
-<script type="text/javascript" src="/external_library/jwysiwyg/wysiwyg.image.js"></script>
-<script type="text/javascript" src="/external_library/jwysiwyg/wysiwyg.link.js"></script>
-<script type="text/javascript" src="/external_library/jwysiwyg/wysiwyg.table.js"></script>
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Llenado de Silabo');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button type="button" id="save_sylabus" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button><button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cerrar</button>');?>
-<?php
-$tipo=($this->periodocurso['type_rate']=="O")? "OBJETIVOS": "COMPETENCIAS"; ?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Llenado de Sílabo');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button type="button" id="save_sylabus" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button><button id="close_sylabus" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cerrar</button>');?>
 
-<?php if ($this->msgclose=="1") { ?>
-	<div class="alert alert-danger">
-		<b>Aviso: </b>Rellene los campos obligatorios para Cerrar el Silabo.
-	</div>
-<?php }
-if ($this->periodocurso['type_rate']!="O" && $this->periodocurso['type_rate']!="C") { ?>
-	<div class="alert alert-info">
-  		<b>Información: </b>El director no ingreso todos los datos de la asignatura, comunique a su director de Escuela que actualize su Distribución Académica.
-  	</div>
-<?php }?>
-
-<form name="<?php echo $this->form->getName(); ?>" id='frmSyllabus' action="/syllabus/syllabus/savemodified" method="post" enctype="multipart/form-data">
 <div>
 	<center>
 		
 		<h4><b>FACULTAD DE <?php echo strtoupper($this->facultad['name']);?></b></h4>
-		<h5><b>ESCUELA DE FORMACIÓN PROFESIONAL DE<?php echo strtoupper($this->escuelas['name']);?></b></h5>
+		<h5><b>ESCUELA DE FORMACIÓN PROFESIONAL DE <?php echo strtoupper($this->escuelas['name']);?></b></h5>
 		<h5><div class="panel panel-primary" style="padding: 2px; width:350px;">
     	<div class="panel-heading" style="padding: 6px">
         <center><b style="font-size:16px; color: white; "><?php echo $this->num ?> <br>CURSO: <?php echo $this->curso['name']?></b>
@@ -33,7 +14,9 @@ if ($this->periodocurso['type_rate']!="O" && $this->periodocurso['type_rate']!="
 		</div></h5>
 	</center>
 </div>
+
 <div>
+            
 	<h5 style="margin: 0px 80px 0px 80px"><b>I. DATOS GENERALES:</b></h5> <br>
 	<div class="panel panel-default" style="margin: 0px 80px 0px 80px">
 		<div class="panel-heading">
@@ -52,7 +35,7 @@ if ($this->periodocurso['type_rate']!="O" && $this->periodocurso['type_rate']!="
 		  			<th>PRE-REQUISITO:</th>
 		  			<td><?php echo $this->curso['req_1']?> <?php echo $this->curso['req_2']?> <?php echo $this->curso['req_3']?></td>
 		  			<th>SECCIÓN:</th>
-		  			<td><?php echo $this->turno?></td>
+		  			<td><?php echo $this->where['turno']?></td>
 		  		</tr>
 		  		<tr>
 		  			<th>CREDITOS:</th>
@@ -76,221 +59,15 @@ if ($this->periodocurso['type_rate']!="O" && $this->periodocurso['type_rate']!="
 		</div>
 	</div>
 </div>
-
-<div>
-	<h5 style="margin: 0px 80px 0px 80px"><b>II. SUMILLA GENERAL:</b></h5> <br>
-	<div class="panel panel-default" style="margin: 0px 80px 0px 80px">
-		<div class="panel-heading">
-		  	<table style="width: 100%"><?php echo $this->sumgral['course_sumilla'] ?><br /></table>
-		</div>	
-	</div>
-</div>
-
-
-<?php
-$rom="";
-if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="C") {
-	if ($this->syllabus['state']=="B") { ?>
-			<div>
-		<div class="panel-group" id="accordion2" style="margin: 0px 80px 0px 80px">
-	      	<div class="panel panel-default">
-	        	<div class="panel-heading">
-	        		<h6 class="panel-title" style="font-size:14px">
-		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapseO">
-		                	III. SUMILLA ESPECIFICA
-		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
-		              	</a>
-	        		</h6>
-	        	</div>
-	        	<div id="collapseO" class="panel-collapse collapse">
-	              	<div class="panel-body">
-			        	<?php echo $this->form->sumilla?>
-	              	</div>
-	         	</div>
-	      	</div>
-	      	<div class="panel panel-default">
-	        	<div class="panel-heading">
-	        		<h6 class="panel-title" style="font-size:14px">
-		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse1">
-		             		<?php 
-		             		if ($this->periodocurso['type_rate']=='C') echo "IV. COMPETENCIA Y CAPACIDADES";
-		             		if ($this->periodocurso['type_rate']=='O') echo "IV. OBJETIVOS";
-		             		?>
-		             		<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
-		              	</a>
-	        		</h6>
-	        	</div>
-	        	<div id="collapse1" class="panel-collapse collapse">
-	              	<div class="panel-body">
-					    <?php 
-					    if ($this->periodocurso['type_rate']=='C') {?>
-			                    <div><h5>4.1 COMPETENCIA</h5></div>
-			                    <?php echo $this->form->competency?>
-			                    <div><h5>4.2 CAPACIDADES</h5></div>
-			                    <?php echo $this->form->capacity?>
-			            <?php }
-			            if ($this->periodocurso['type_rate']=='O') {?>
-			                    <div><h5>3.1 Objetivo General</h5></div>
-			                    <?php echo $this->form->competency?>
-			                    <div><h5>3.2 Objetivos Específicos</h5></div>
-			                    <?php echo $this->form->capacity?>
-			            <?php }?>
-	              	</div>
-	         	</div>
-	      	</div>
-	      	<div class="panel panel-default">
-	        	<div class="panel-heading">
-	        		<h6 class="panel-title" style="font-size:14px">
-		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse2">
-		                	<?php 
-		             		if ($this->periodocurso['type_rate']=='C') echo "V. PROGRAMACIÓN DE UNIDADES";
-		             		if ($this->periodocurso['type_rate']=='O') echo "V. PROGRAMACIÓN DE CONTENIDOS";
-		             		?>
-		             		<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
-		              	</a>
-	        		</h6>
-	        	</div>
-	        	<div id="collapse2" class="panel-collapse collapse">
-	              	<div class="panel-body">
-	                	<h5 style="float:left">Ingrese Cantidad de Unidades: </h5>
-	                	<div style="width:60px; float:left; margin-left:30px"><?php echo $this->form->units?></div>
-	                	<a href="#" id="crearunidad" class="btn btn-info" style="margin-left:30px"><span class="glyphicon glyphicon-pencil"></span>Crear Unidades</a>
-	              	</div>
-	         	</div>
-	      	</div>
-	      	<?php if ($this->periodocurso['type_rate']=='C') {
-	        $rom="I"; ?>
-	      	<div class="panel panel-default">
-	        	<div class="panel-heading">
-	        		<h6 class="panel-title" style="font-size:14px">
-		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse3">
-		                	VI. ESTRATEGIAS METÓDOLOGICAS
-		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
-		              	</a>
-	        		</h6>
-	        	</div>
-	        	<div id="collapse3" class="panel-collapse collapse">
-	              	<div class="panel-body">
-	                	<?php echo $this->form->methodology?>
-	              	</div>
-	         	</div>
-	      	</div>
-	      <?php }?>
-	      	<div class="panel panel-default">
-	        	<div class="panel-heading">
-	        		<h6 class="panel-title" style="font-size:14px">
-		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse4">
-		                	VI<?php echo $rom?>. MEDIOS Y MATERIALES
-		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
-		              	</a>
-	        		</h6>
-	        	</div>
-	        	<div id="collapse4" class="panel-collapse collapse">
-	              	<div class="panel-body">
-			        	<?php echo $this->form->media?>
-	              	</div>
-	         	</div>
-	      	</div>
-	      	<div class="panel panel-default">
-	        	<div class="panel-heading">
-	        		<h6 class="panel-title" style="font-size:14px">
-		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse5">
-		                	VII<?php echo $rom?>. SISTEMA DE EVALUCIÓN
-		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
-		              	</a>
-	        		</h6>
-	        	</div>
-	        	<div id="collapse5" class="panel-collapse collapse">
-	              	<div class="panel-body">
-			        	<?php echo $this->form->evaluation?>
-	              	</div>
-	         	</div>
-	      	</div>
-	      	<div class="panel panel-default">
-	        	<div class="panel-heading">
-	        		<h6 class="panel-title" style="font-size:14px">
-		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse6">
-		                	VIII<?php echo $rom?>. FUENTES DE INFORMACIÓN
-		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
-		              	</a>
-	        		</h6>
-	        	</div>
-	        	<div id="collapse6" class="panel-collapse collapse">
-	              	<div class="panel-body">
-			        	<?php echo $this->form->sources?>
-	              	</div>
-	         	</div>
-	      	</div>
-	    </div>
-	    </div>
-	<?php
-	}elseif($this->syllabus['state']=="C"){ ?>
-		<div style="margin:20px">
-			<center>
-				<a href="/syllabus/print/index/courseid/<?php echo base64_encode($this->courseid)?>/curid/<?php echo base64_encode($this->curid)?>/escid/<?php echo base64_encode($this->escid)?>/turno/<?php echo base64_encode($this->turno)?>/perid/<?php echo base64_encode($this->perid)?>/subid/<?php echo base64_encode($this->subid)?>" class="btn btn-primary" style="margin-left:150px"><span class="glyphicon glyphicon-print"></span> Imprimir</a>
-			</center>
-		</div>
-		<?php
-	}
-}?>
-	<input type="hidden" name ="subid" value="<?php echo base64_encode($this->periodocurso['subid'])?>">
-	<input type="hidden" name ="perid" value="<?php echo base64_encode($this->periodocurso['perid'])?>">
-	<input type="hidden" name ="escid" value="<?php echo base64_encode($this->periodocurso['escid'])?>">
-	<input type="hidden" name ="curid" value="<?php echo base64_encode($this->periodocurso['curid'])?>">
-	<input type="hidden" name ="courseid" value="<?php echo base64_encode($this->periodocurso['courseid'])?>">
-	<input type="hidden" name ="turno" value="<?php echo base64_encode($this->periodocurso['turno'])?>">
-</form>
-<div id="loading"></div>
+<div id="campo"></div>
 
 <script type="text/javascript">
-$("#save_sylabus").click(function(){
-	/*$("#loading_overlay").css({diplay:black});*/
-	$.ajax({
-		url: $("#frmSyllabus").attr('action'),
-		type: 'POST',
-		data:$("#frmSyllabus").serialize(),
-		success: function ($data){
-				
-		},
-		error : function($error){
-				alert("error al Guardar");
-		}
-	});
-});
+	var perid="<?php echo base64_encode($this->where['perid'])?>";
+	var subid="<?php echo base64_encode($this->where['subid'])?>";
+	var turno="<?php echo base64_encode($this->where['turno'])?>";
+	var courseid="<?php echo base64_encode($this->where['courseid'])?>";
+	var curid="<?php echo base64_encode($this->where['curid'])?>";
+	var escid="<?php echo base64_encode($this->where['escid'])?>";
 
-$("#crearunidad").click(function(){
-    var uni=$("#units").val();
-    var subid="<?php echo base64_encode($this->periodocurso['subid'])?>";
-    var perid="<?php echo base64_encode($this->periodocurso['perid'])?>";
-    var escid="<?php echo base64_encode($this->periodocurso['escid'])?>";
-    var curid="<?php echo base64_encode($this->periodocurso['curid'])?>";
-    var courseid="<?php echo base64_encode($this->periodocurso['courseid'])?>";
-    var turno="<?php echo base64_encode($this->periodocurso['turno'])?>";
-    var tipo_cali="<?php echo base64_encode($this->periodocurso['type_rate'])?>";
-    if (uni==0 || uni=="") {
-      alert("La cantidad de Unidades debe de ser mayor de 0, por favor ingrese nuevamente.");
-      return false;
-    };
-    url='/syllabus/syllabus/units/perid/'+perid+'/subid/'+subid+'/escid/'+escid+'/curid/'+curid+'/courseid/'+courseid+'/turno/'+turno+'/tipo_cali/'+tipo_cali+'/units/'+uni+'/numunidad/'+1;
-	// alert(url);
-    window.open(url,'Programación de Unidades','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=no,dependent=no,width=850,height=700');
-});
-
-$(".height").click(function(e){
-    var  $this= $(this).find('span');
-    if ($this.attr('class').match('glyphicon glyphicon-chevron-down')) {
-            $this.attr('class','glyphicon glyphicon-chevron-up');
-            e.preventDefault();
-        }
-    else $this.attr('class','glyphicon glyphicon-chevron-down');
-});
-
-(function($) {
-  // $(document).ready(function() {
-    $('#sumilla, #competency, #capacity, #methodology,#media,#evaluation,#sources').wysiwyg();
-  // });
-})(jQuery);
-
+	$("#campo").load("/syllabus/syllabus/viewfrm/perid/"+perid+"/subid/"+subid+"/turno/"+turno+"/courseid/"+courseid+"/curid/"+curid+"/escid/"+escid);
 </script>
-
-
