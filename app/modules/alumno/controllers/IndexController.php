@@ -71,7 +71,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
                             'data'=>$data_rel
                             ),
             );
-            $data = json_encode($courses_x_sem);
+            $data = Zend_Json::encode($courses_x_sem);
             $this->view->datos = $data;
 
             $where['perid'] = '13B';//$this->sesion->period->perid;
@@ -130,8 +130,8 @@ class Alumno_IndexController extends Zend_Controller_Action {
                                 ),
                          );
 
-            $result = json_encode($result);
-            $data_courses = json_encode($data_courses);
+            $result = Zend_Json::encode($result);
+            $data_courses = Zend_Json::encode($data_courses);
             
             $this->view->courses = $data_courses;
             $this->view->dat_assist = $result;
