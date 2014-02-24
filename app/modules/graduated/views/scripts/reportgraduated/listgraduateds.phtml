@@ -4,7 +4,7 @@ if ($this->egresados) { ?>
 	<div class="col-md-4 col-md-offset-1">
 		<div id="showList">
 			<blockquote>
-				<h4>Imprimir <span class="text-muted">Lista </span><a href="/graduated/reportgraduated/print/facid/<?php echo base64_encode($this->facid)?>/escid/<?php echo base64_encode($this->escid)?>/especialidad/<?php echo base64_encode($this->especialidad)?>/perid/<?php echo base64_encode($this->perid)?>/anho/<?php echo base64_encode($this->anho)?>" class="text-warning"><span class="glyphicon glyphicon-print"></span></a></h4>
+				<h4>Imprimir <span class="text-muted">Lista </span><a href="/graduated/reportgraduated/print/facid/<?php echo base64_encode($this->facid)?>/escid/<?php echo base64_encode($this->escid)?>/especialidad/<?php echo base64_encode($this->especialidad)?>/perid/<?php echo base64_encode($this->perid)?>/anho/<?php echo base64_encode($this->anho)?>" class="text-warning" title="Imprimir Lista"><span class="glyphicon glyphicon-print"></span></a></h4>
 			</blockquote>
 		</div>
 		<div id="showGraphic">
@@ -21,17 +21,17 @@ if ($this->egresados) { ?>
 	</div>
 </div>
 
-<div id="data">
+<div id="data" class="col-md-10 col-md-offset-1">
 
 	<table class="table table-hover">
-		<tr>
-			<th><h5><strong>#</strong></h5></th>
-			<th class="text-center"><h5><strong>Cod. Matricula</strong></h5></th>
-			<th class="text-center"><h5><strong>DNI</strong></h5></th>
-			<th><h5><strong>Apellidos y Nombres</strong></h5></th>
-			<th class="text-center"><h5><strong>Escuela | Especialidad</strong></h5></th>
-			<th class="text-center"><h5><strong>Currícula</strong></h5></th>
-			<th class="text-center"><h5><strong>Nivel</strong></h5></th>
+		<tr class="active">
+			<th>#</th>
+			<th class="text-center">Cod. Matricula</th>
+			<th class="text-center">DNI</th>
+			<th>Apellidos y Nombres</th>
+			<th class="text-center">Escuela | Especialidad</th>
+			<th class="text-center">Currícula</th>
+			<th class="text-center">Nivel</th>
 		</tr>
 	<?php
 		$c=1;
@@ -42,13 +42,13 @@ if ($this->egresados) { ?>
 				'subid' => $egre['subid'], 'escid' => $egre['escid']);
 			$dat = $escu->_getOne($whereesc); ?>
 			<tr>
-				<td><h5><?php echo $c?></h5></td>
-				<td class="text-center"><h5><?php echo $egre['uid']?></h5></td>
-				<td class="text-center"><h5><?php echo $egre['pid']?></h5></td>
-				<td><h5><?php echo $egre['fullname']?></h5></td>
-				<td class="text-center"><h5><?php echo $dat['name']?></h5></td>
-				<td class="text-center"><h5><?php echo $egre['curid']?></h5></td>
-				<td class="text-center"><h5><a href="#myModal" id='<?php echo $c?>'><span class="glyphicon glyphicon-pencil"></span></a></h5></td>
+				<td><?php echo $c?></td>
+				<td class="text-center"><?php echo $egre['uid']?></td>
+				<td class="text-center"><?php echo $egre['pid']?></td>
+				<td><?php echo $egre['fullname']?></td>
+				<td class="text-center"><?php echo $dat['name']?></td>
+				<td class="text-center"><?php echo $egre['curid']?></td>
+				<td class="text-center"><a href="#myModal" id='<?php echo $c?>'><span class="glyphicon glyphicon-pencil"></span></a></td>
 				<script>
 					$("#<?php echo $c?>").click(function() {
 						var uid = "<?php echo $egre['uid']?>";
@@ -91,18 +91,26 @@ if ($this->egresados) { ?>
 </div>
 
 <script>
+	$('a').hover(function(){
+		$(this).tooltip('toggle');
+	});
+
 	$('#showGraphic').fadeOut('fast');
 	$('#btnTable').click(function(){
-		$('#showGraphic').fadeOut('slow');
-		$('#showList').fadeIn('slow');
-		$('#graphic').fadeOut('slow');
-		$('#data').fadeIn('slow');
+		$('#showGraphic').fadeOut('slow', function(){
+			$('#showList').fadeIn('slow');
+		});
+		$('#graphic').fadeOut('slow', function(){
+			$('#data').fadeIn('slow');
+		});
 	});
 
 	$('#btnGraphic').click(function(){
-		$('#showList').fadeOut('slow');
-		$('#showGraphic').fadeIn('slow');
-		$('#data').fadeOut('slow');
-		$('#graphic').fadeIn('slow');
+		$('#showList').fadeOut('slow', function(){
+			$('#showGraphic').fadeIn('slow');
+		});
+		$('#data').fadeOut('slow', function(){
+			$('#graphic').fadeIn('slow');
+		});
 	});
 </script>

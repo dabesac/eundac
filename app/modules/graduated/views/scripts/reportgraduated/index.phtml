@@ -1,23 +1,24 @@
-<div class="row">
-	<br>
+<div class="row"> <br>
 	<div class="col-md-9 col-md-offset-1">
 		<blockquote>
-			<h2>Egresados <span class="text-warning"><?php echo $this->schoolName ?></span></h2>
-			<?php if ($this->specialityName): ?>
-				<h4 class="text-muted"><?php echo $this->specialityName ?></h4>
-			<?php endif ?>
+			<h2 class="text-muted">Reporte <span class="text-info">Egresados
+				<?php if ($this->schoolName): ?>
+					<?php echo $this->schoolName ?>
+				<?php elseif ($this->specialityName): ?>
+					<?php echo $this->specialityName ?>
+				<?php elseif ($this->facultyName): ?>
+					<?php echo $this->facultyName[0]['name'] ?>
+				<?php endif ?>
+			</span></h2>
 		</blockquote>
 	</div>
 	<div class="col-md-1">
 		<blockquote>
-			<h2><span class="glyphicon glyphicon-user text-warning"></span></h2>
+			<h2><span class="glyphicon glyphicon-user text-info"></span></h2>
 		</blockquote>
 	</div>
 </div>
 <hr class="featurette-divider">
-
-	
-
 <div class="row">
 	<div id="Admin">
 		<div class="col-md-3 col-md-offset-2">
@@ -36,20 +37,21 @@
 		</div>
 		<div class="col-md-3">
 			<h5 class="text-muted">Escuela</h5>
-				<select id="escid" class="form-control" style="width:260px">
-					<option value="">Seleccione la Escuela</option>
+				<select id="escid" class="form-control">
+					<option value="<?php echo $this->escid ?>">Seleccione la Escuela</option>
 				</select>
 		</div>
 	</div>
-	<div id="divSpecilaity" class="col-md-3">
-		<?php if ($this->specialityName == ''): ?>
-			<h5 class="text-muted">Especialidad</h5>
-				<select id="especialidad" class="form-control" style="width:260px">
-					<option value="">Seleccione la Especialidad</option>
-				</select>
-		<?php else: ?>
-			<input id="especialidad" type="hidden" value="<?php echo $this->escid ?>">
-		<?php endif ?>
+	<?php if ($this->haveSpeciality == 'No'):
+		$classSpeciality = 'hidden';
+	else:	
+		$classSpeciality = '';
+	endif ?>
+	<div id="divSpecilaity" class="col-md-3 <?php echo $classSpeciality ?>">
+		<h5 class="text-muted">Especialidad</h5>
+			<select id="especialidad" class="form-control">
+				<option value="">Seleccione la Especialidad</option>
+			</select>
 	</div>
 </div>
 
@@ -81,9 +83,9 @@
 		  	</label></h5>
 		</div>
 	</div>
-	<div class="col-md-1">
+	<div class="col-md-2">
 		<br>
-		<h3><a class="btn btn-success" title="Generar" href="#" id="generar"><span class="glyphicon glyphicon-send"></span> Generar</a></h3>
+		<h3 class="text-center"><a class="btn btn-success" href="#" id="generar"><span class="glyphicon glyphicon-send"></span> Generar</a></h3>
 	</div>
 </div>
 
@@ -99,7 +101,7 @@
 	
 
 	var rid="<?php echo $this->rid ?>";
-	if (rid=="RF" || rid=="DIREC") {
+	if (rid=="DIREC") {
 		$("#Admin").addClass('hidden');
 		$('#divSpecilaity').addClass('col-md-offset-2');
 		var facid=$("#facid").val();
@@ -108,12 +110,18 @@
 			$("#escid").attr("disabled",true);
 			var escid='<?php echo $this->escid?>';
 			$.get("/graduated/reportgraduated/speciality/escid/"+escid, function(data){
-				if (data == '<option value="">No Se Encontraron Registros</option>')
+				if (data == '<option value="">No tiene Especialidades</option>')
 					$('#divSpecilaity').addClass('hidden');
 				else
 					$('#especialidad').html(data);
 			});
 		};
+	}else if(rid == 'RF' || rid == 'RC'){
+		if (rid == 'RF') {
+			$("#facid").attr("disabled",true);
+		};
+		var facid  = $("#facid").val();
+		$("#escid").load("/graduated/reportgraduated/schools/facid/"+facid);
 	};
 			
 
@@ -159,7 +167,7 @@
 		var totales = $("#totales").val();
 		if (totales=="N") {
 			var url="/graduated/reportgraduated/listgraduateds/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
-			$('#cargadatos').html("<img src='/img/spinner.gif'>Cargando...");
+			$('#cargadatos').html("<br><center><img src='/img/spinner.gif'>Cargando...</center>");
 			$("#cargadatos").load(url);
 
 			var urlg="/graduated/graphicgraduated/graphics/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
@@ -167,7 +175,7 @@
 			$('#graphic').fadeOut('slow');
 		}else{
 			var url="/graduated/reportgraduated/totalgraduateds/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
-			$('#cargadatos').html("<img src='/img/spinner.gif'>Cargando...");
+			$('#cargadatos').html("<br><center><img src='/img/spinner.gif'>Cargando...</center>");
 			$("#cargadatos").load(url);
 		}
 		
