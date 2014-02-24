@@ -3,10 +3,12 @@
     if (!$auth->hasIdentity()) {
         exit();
     }
+
     $sesion = $auth->getStorage()->read();
     $last_name = $sesion->infouser['fullname'];
     $speciality = $sesion->speciality->name;
     $module = $sesion->rol['module'];
+    $rol = $sesion->rid;
   ?>
   <nav id="undac-menu" class="navbar navbar-default" role="navigation">
     <div class="container">
@@ -32,7 +34,7 @@
         
         <ul class="nav navbar-nav navbar-right">
 		  <li class="ver"><a href="/<?php echo $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
-          <li class="ver"><a href="#"><span class="glyphicon glyphicon-user"></span> Ver perfil</a></li>
+          <li class="ver"><a href="/profile/<?php echo ($rol=='AL')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Ver perfil </a></li>
           <li class="ver dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cambiar clave <b class="caret"></b></a>
             <ul id="form-change" class="dropdown-menu">

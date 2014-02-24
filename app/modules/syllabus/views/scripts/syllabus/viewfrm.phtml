@@ -1,0 +1,261 @@
+<link rel="stylesheet" type="text/css" href="/external_library/jwysiwyg/jquery.wysiwyg.css">
+<script type="text/javascript" src="/external_library/jwysiwyg/jquery.wysiwyg.js"></script>
+<script type="text/javascript" src="/external_library/jwysiwyg/wysiwyg.image.js"></script>
+<script type="text/javascript" src="/external_library/jwysiwyg/wysiwyg.link.js"></script>
+<script type="text/javascript" src="/external_library/jwysiwyg/wysiwyg.table.js"></script>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Llenado de Sílabo');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button type="button" id="save_sylabus" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button><button id="close_sylabus" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cerrar</button>');?>
+<?php
+$tipo=($this->periodocurso['type_rate']=="O")? "OBJETIVOS": "COMPETENCIAS"; ?>
+
+<?php if ($this->msgclose=="1") { ?>
+	<div class="panel panel-default" style="margin: 0px 80px 0px 80px">
+		<div class="panel-body">
+			<div class="alert alert-danger" style="font-size:18px">
+				<b>Aviso: </b>Rellene los campos obligatorios para Cerrar el Silabo.
+			</div>
+		</div>
+	</div>
+
+<?php }
+if ($this->periodocurso['type_rate']!="O" && $this->periodocurso['type_rate']!="C") { ?>
+	<div class="alert alert-info">
+  		<b>Información: </b>El director no ingreso todos los datos de la asignatura, comunique a su director de Escuela que actualize su Distribución Académica.
+  	</div>
+<?php }?>
+<div class="panel panel-default" style="margin: 0px 80px 0px 80px">
+	<div class="panel-heading">
+		<h6 class="panel-title" style="font-size:14px">II. SUMILLA GENERAL</h6>	
+	</div>
+	<div class="panel-body">
+	  	<table><?php echo $this->sumgral['course_sumilla'] ?></table>
+	</div>
+</div>
+<form name="<?php echo $this->form->getName(); ?>" id='frmSyllabus' action="/syllabus/syllabus/viewfrm" method="post" enctype="multipart/form-data">
+<?php
+$rom="";
+if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="C") {
+	if ($this->syllabus['state']=="B") { ?>
+			<div>
+		<div class="panel-group" id="accordion2" style="margin: 0px 80px 0px 80px">
+	      	<div class="panel panel-default">
+	        	<div class="panel-heading">
+	        		<h6 class="panel-title" style="font-size:14px">
+		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapseO">
+		                	III. SUMILLA ESPECIFICA
+		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
+		              	</a>
+	        		</h6>
+	        	</div>
+	        	<div id="collapseO" class="panel-collapse collapse">
+	              	<div class="panel-body">
+			        	<?php echo $this->form->sumilla?>
+	              	</div>
+	         	</div>
+	      	</div>
+	      	<div class="panel panel-default">
+	        	<div class="panel-heading">
+	        		<h6 class="panel-title" style="font-size:14px">
+		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse1">
+		             		<?php 
+		             		if ($this->periodocurso['type_rate']=='C') echo "IV. COMPETENCIA Y CAPACIDADES";
+		             		if ($this->periodocurso['type_rate']=='O') echo "IV. OBJETIVOS";
+		             		?>
+		             		<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
+		              	</a>
+	        		</h6>
+	        	</div>
+	        	<div id="collapse1" class="panel-collapse collapse">
+	              	<div class="panel-body">
+					    <?php 
+					    if ($this->periodocurso['type_rate']=='C') {?>
+			                    <div><h5>4.1 COMPETENCIA</h5></div>
+			                    <?php echo $this->form->competency?>
+			                    <div><h5>4.2 CAPACIDADES</h5></div>
+			                    <?php echo $this->form->capacity?>
+			            <?php }
+			            if ($this->periodocurso['type_rate']=='O') {?>
+			                    <div><h5>3.1 Objetivo General</h5></div>
+			                    <?php echo $this->form->competency?>
+			                    <div><h5>3.2 Objetivos Específicos</h5></div>
+			                    <?php echo $this->form->capacity?>
+			            <?php }?>
+	              	</div>
+	         	</div>
+	      	</div>
+	      	<div class="panel panel-default">
+	        	<div class="panel-heading">
+	        		<h6 class="panel-title" style="font-size:14px">
+		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse2">
+		                	<?php 
+		             		if ($this->periodocurso['type_rate']=='C') echo "V. PROGRAMACIÓN DE UNIDADES";
+		             		if ($this->periodocurso['type_rate']=='O') echo "V. PROGRAMACIÓN DE CONTENIDOS";
+		             		?>
+		             		<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
+		              	</a>
+	        		</h6>
+	        	</div>
+	        	<div id="collapse2" class="panel-collapse collapse">
+	              	<div class="panel-body">
+	                	<h5 style="float:left">Ingrese Cantidad de Unidades: </h5>
+	                	<div style="width:60px; float:left; margin-left:30px"><?php echo $this->form->units?></div>
+	                	<a data-toggle="modal" data-target="#myModal" id="crearunidad" class="btn btn-info" style="margin-left:30px"><span class="glyphicon glyphicon-pencil"></span>Crear Unidades</a>
+	              	</div>
+	         	</div>
+	      	</div>
+	      	<?php if ($this->periodocurso['type_rate']=='C') {
+	        $rom="I"; ?>
+	      	<div class="panel panel-default">
+	        	<div class="panel-heading">
+	        		<h6 class="panel-title" style="font-size:14px">
+		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse3">
+		                	VI. ESTRATEGIAS METÓDOLOGICAS
+		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
+		              	</a>
+	        		</h6>
+	        	</div>
+	        	<div id="collapse3" class="panel-collapse collapse">
+	              	<div class="panel-body">
+	                	<?php echo $this->form->methodology?>
+	              	</div>
+	         	</div>
+	      	</div>
+	      <?php }?>
+	      	<div class="panel panel-default">
+	        	<div class="panel-heading">
+	        		<h6 class="panel-title" style="font-size:14px">
+		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse4">
+		                	VI<?php echo $rom?>. MEDIOS Y MATERIALES
+		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
+		              	</a>
+	        		</h6>
+	        	</div>
+	        	<div id="collapse4" class="panel-collapse collapse">
+	              	<div class="panel-body">
+			        	<?php echo $this->form->media?>
+	              	</div>
+	         	</div>
+	      	</div>
+	      	<div class="panel panel-default">
+	        	<div class="panel-heading">
+	        		<h6 class="panel-title" style="font-size:14px">
+		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse5">
+		                	VII<?php echo $rom?>. SISTEMA DE EVALUCIÓN
+		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
+		              	</a>
+	        		</h6>
+	        	</div>
+	        	<div id="collapse5" class="panel-collapse collapse">
+	              	<div class="panel-body">
+			        	<?php echo $this->form->evaluation?>
+	              	</div>
+	         	</div>
+	      	</div>
+	      	<div class="panel panel-default">
+	        	<div class="panel-heading">
+	        		<h6 class="panel-title" style="font-size:14px">
+		             	<a class="accordion-toggle height" data-toggle="collapse" data-parent="#accordion2" href="#collapse6">
+		                	VIII<?php echo $rom?>. FUENTES DE INFORMACIÓN
+		                	<span class="glyphicon glyphicon-chevron-down" style="float: right"></span>
+		              	</a>
+	        		</h6>
+	        	</div>
+	        	<div id="collapse6" class="panel-collapse collapse">
+	              	<div class="panel-body">
+			        	<?php echo $this->form->sources?>
+	              	</div>
+	         	</div>
+	      	</div>
+	    </div>
+	    </div>
+	<?php
+	}elseif($this->syllabus['state']=="C"){ ?>
+		<div style="margin:20px">
+			<center>
+				<a href="/syllabus/print/index/courseid/<?php echo base64_encode($this->courseid)?>/curid/<?php echo base64_encode($this->curid)?>/escid/<?php echo base64_encode($this->escid)?>/turno/<?php echo base64_encode($this->turno)?>/perid/<?php echo base64_encode($this->perid)?>/subid/<?php echo base64_encode($this->subid)?>" class="btn btn-primary" style="margin-left:150px"><span class="glyphicon glyphicon-print"></span> Imprimir</a>
+			</center>
+		</div>
+		<?php
+	}
+}?>
+	<input type="hidden" name ="subid" value="<?php echo base64_encode($this->periodocurso['subid'])?>">
+	<input type="hidden" name ="perid" value="<?php echo base64_encode($this->periodocurso['perid'])?>">
+	<input type="hidden" name ="escid" value="<?php echo base64_encode($this->periodocurso['escid'])?>">
+	<input type="hidden" name ="curid" value="<?php echo base64_encode($this->periodocurso['curid'])?>">
+	<input type="hidden" name ="courseid" value="<?php echo base64_encode($this->periodocurso['courseid'])?>">
+	<input type="hidden" name ="turno" value="<?php echo base64_encode($this->periodocurso['turno'])?>">
+</form>
+<script type="text/javascript">
+$("#save_sylabus").click(function(){
+	/*$("#loading_overlay").css({diplay:black});*/
+	var url="/syllabus/syllabus/savemodified";
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data:$("#frmSyllabus").serialize(),
+		success: function ($data){
+				
+		},
+		error : function($error){
+				alert("error al Guardar");
+		}
+	});
+});
+
+$("#close_sylabus").click(function(){
+	$.ajax({
+		url: $("#frmSyllabus").attr('action'),
+		type: 'POST',
+		data:$("#frmSyllabus").serialize(),
+		success: function ($data){
+			$("#campo").html($data);
+		}
+	});
+});
+
+$("#crearunidad").click(function(){
+    var uni=$("#units").val();
+    var subid="<?php echo base64_encode($this->periodocurso['subid'])?>";
+    var perid="<?php echo base64_encode($this->periodocurso['perid'])?>";
+    var escid="<?php echo base64_encode($this->periodocurso['escid'])?>";
+    var curid="<?php echo base64_encode($this->periodocurso['curid'])?>";
+    var courseid="<?php echo base64_encode($this->periodocurso['courseid'])?>";
+    var turno="<?php echo base64_encode($this->periodocurso['turno'])?>";
+    var tipo_cali="<?php echo base64_encode($this->periodocurso['type_rate'])?>";
+    if (uni==0 || uni=="") {
+      alert("La cantidad de Unidades debe de ser mayor de 0, por favor ingrese nuevamente.");
+      return false;
+    };
+    url='/syllabus/syllabus/units/perid/'+perid+'/subid/'+subid+'/escid/'+escid+'/curid/'+curid+'/courseid/'+courseid+'/turno/'+turno+'/tipo_cali/'+tipo_cali+'/units/'+uni+'/numunidad/'+1;
+    
+    window.open(url,'Programación de Unidades','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=no,dependent=no,width=850,height=700');
+});
+
+$(".height").click(function(e){
+    var  $this= $(this).find('span');
+    if ($this.attr('class').match('glyphicon glyphicon-chevron-down')) {
+            $this.attr('class','glyphicon glyphicon-chevron-up');
+            e.preventDefault();
+        }
+    else $this.attr('class','glyphicon glyphicon-chevron-down');
+});
+
+(function($) {
+  // $(document).ready(function() {
+    $('#sumilla, #competency, #capacity, #methodology,#media,#evaluation,#sources').wysiwyg();
+  // });
+})(jQuery);
+
+var cierre="<?php echo $this->ban?>";
+if (cierre=="1") {
+	var perid="<?php echo base64_encode($this->where['perid'])?>";
+	var subid="<?php echo base64_encode($this->where['subid'])?>";
+	var turno="<?php echo base64_encode($this->where['turno'])?>";
+	var courseid="<?php echo base64_encode($this->where['courseid'])?>";
+	var curid="<?php echo base64_encode($this->where['curid'])?>";
+	var escid="<?php echo base64_encode($this->where['escid'])?>";
+
+    $(location).attr("href", "/syllabus/syllabus/viewimpress/perid/"+perid+"/subid/"+subid+"/turno/"+turno+"/courseid/"+courseid+"/curid/"+curid+"/escid/"+escid)
+}
+
+</script>

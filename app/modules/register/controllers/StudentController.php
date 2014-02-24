@@ -572,24 +572,19 @@ class Register_StudentController extends Zend_Controller_Action {
             $backendOptions);
 
             $where = array(
-                        'uid' => $uid, 'pid' => $pid,
-                        'escid' => $escid,'subid' =>$subid,
-                        'eid' =>$eid,'oid' =>$oid,
-                        'perid'=>$perid,'curid'=>$curid,
-                        'semestre'=>$semester);
-        
+                        'uid' => base64_encode($uid), 
+                        'pid' => base64_encode($pid),
+                        'escid' => base64_encode($escid),
+                        'subid' =>base64_encode($subid),
+                        'eid' =>base64_encode($eid),
+                        'oid' =>base64_encode($oid),
+                        'perid'=>base64_encode($perid),
+                        'curid'=>base64_encode($curid),
+                        'semestre'=>base64_encode($semester));
             if(!$subject = $cache->load("$name_cache")) {
 
-                require_once 'Zend/Loader.php';
-                Zend_Loader::loadClass('Zend_Rest_Client');
-                $base_url = 'http://localhost:8080/';
-                $route = '/s1st3m4s/und4c/pendig_absolute';
-                $client = new Zend_Rest_Client($base_url);
-                $httpClient = $client->getHttpClient();
-                $httpClient->setConfig(array("timeout" => 680));
-                $response = $client->restget($route,$where);
-                $lista=$response->getBody();
-                $subject = Zend_Json::decode($lista);
+                $server = new Eundac_Connect_Api('pendig_absolute',$where);
+                $subject = $server->connectAuth();
                 $cache->save($subject,$name_cache);
 
             }

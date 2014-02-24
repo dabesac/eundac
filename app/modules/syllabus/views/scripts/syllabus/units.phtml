@@ -1,15 +1,16 @@
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<script src="/external/jquery/jquery-1.9.1.js"></script>
-<script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
-<script src="/external/jquery/external/globalize.js"></script>
+<!-- <script src="/external/jquery/external/globalize.js"></script>
 <script src="/external/jquery/external/jquery.mousewheel.js"></script>
 <script src="/external/jquery/external/jshint.js"></script>
 <script src="/external/jquery/external/qunit.js"></script>
 <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
-<script src="/external/bootstrap/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
-<link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+<link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"> -->
+
+<script src="/js/jquery-1.11.0.js"></script>
+<script src="/external_library/bootstrap/js/bootstrap.js"></script>
+<script src="/external_library/bootstrap/js/jquery.functions.js"></script>
+<link rel="stylesheet" type="text/css" href="/external_library/bootstrap/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="/css/style.css">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <style type="text/css">
 .cuadro{    
     background-color: #fff;
@@ -64,11 +65,8 @@ $nunidad=$numunidad-1;
     <tr>
     	<td style="font-size: 13px"><b>INFORMACIÓN: </b>Primero debe ingresar y guardar los datos de la Unidad, luego agregar los contenidos.</td>
     </tr>
-</table>
-
-<div class="cuadro">
+</table> 
 <form name="<?php echo $this->form->getName(); ?>" id='<?php echo $this->form->getName(); ?>' action="<?php echo $this->form->getAction(); ?>" method="post" enctype="multipart/form-data">
-
 	<table class="table table-hover" style="width:95%; margin-left:20px">
 	    <tr>
 	        <th style="font-size:20px; width:150px">UNIDAD <?php echo $numroma ?>:</th>
@@ -90,7 +88,7 @@ $nunidad=$numunidad-1;
 		<tr style="height:150px; background-color:#FAF6CC">
 			<td colspan="2">
 		<?php if ($tipo_cali=="O") { ?>
-		<div id="contobjetivos">
+		<div>
 			<table class="table table-striped table-condensed table-bordered" style="width:95%; margin-left:20px;font-size:12px">
 				<tr>
 					<th style="width:40px">Semana</th>
@@ -129,7 +127,7 @@ $nunidad=$numunidad-1;
 			</table>
 		</div>
 		<?php }elseif($tipo_cali=="C"){ ?>
-		<div id="contobjetivos">
+		<div>
 			<table class="table table-striped table-condensed table-bordered" style="width:95%; margin-left:20px;font-size:12px">
 				<tr><th colspan="9"><center>CONTENIDOS DE APRENDIZAJE</center></th></tr>
 				<tr>
@@ -209,6 +207,7 @@ $nunidad=$numunidad-1;
 	$("#btn_addcontent").click(function(){
 		$("#addcontents").html("<center><img src='/img/spinner.gif'></center>");
 		var url = "/syllabus/syllabus/content/perid/<?php echo base64_encode($perid)?>/subid/<?php echo base64_encode($subid)?>/escid/<?php echo base64_encode($escid)?>/curid/<?php echo base64_encode($curid)?>/courseid/<?php echo base64_encode($courseid)?>/turno/<?php echo base64_encode($turno)?>/tipo_cali/<?php echo base64_encode($tipo_cali)?>/units/<?php echo $units?>/numunidad/<?php echo $numunidad?>";
+		alert(url);
 		$("#addcontents").load(url);
 		$("#tr_content").show();
 	});
