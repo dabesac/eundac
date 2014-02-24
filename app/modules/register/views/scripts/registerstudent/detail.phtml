@@ -1,28 +1,44 @@
-<button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true">&times;</button>
+<div class="modal-header" style="background-color: #d9edf7">
+    <div class="row">
+        <div class="col-md-5 col-md-offset-1">
+            <h5 class="text-center"><br>Proceso de Matricula <span class="text-danger"><?php echo $this->dataStudent['perid'] ?></span></h5>
+        </div>
+        <div class="col-md-5">
+            <p class="text-center">Facultad de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomfac'] ?></span></p>
+            <p class="text-center">Escuela de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomesc'] ?></span></p>
+        </div>
+        <div class="col-md-1">
+            <br>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+    </div>
+</div>
+
 <br><br>
 <div class="row">
     <div class="col-md-5 col-md-offset-1">
         <blockquote>
-            <br>
-            <h4 class="text-center">Proceso de Matricula <span class="text-danger"><?php echo $this->dataStudent['perid'] ?></span></h4>
-        </blockquote>
-        <blockquote>
-            <h4><span class="glyphicon glyphicon-user text-info"></span> <?php echo $this->person[0]['last_name0'].' '.$this->person[0]['last_name1'] ?> <span class="text-info"><?php echo $this->person[0]['first_name'] ?></span></h4>
+            <p><span class="glyphicon glyphicon-user text-info"></span> <?php echo $this->person[0]['last_name0'].' '.$this->person[0]['last_name1'] ?> <span class="text-info"><?php echo $this->person[0]['first_name'] ?></span></p>
             <h6>Codigo <span class="text-info"><?php echo $this->person[0]['uid'] ?></span></h6>
-            <h6>Semestre <span class="text-info">Unknow</span></h6>
+            <h6>Semestre <span class="text-info"><?php echo $this->dataStudent['semid'] ?></span></h6>
         </blockquote>
     </div>
     <div class="col-md-5">
-        <blockquote>
-            <h5 class="text-center text-muted">Facultad de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomfac'] ?></span></h5>
-            <h5 class="text-center text-muted">Escuela de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomesc'] ?></span></h5>
-        </blockquote>
         <div class="row">
             <div class="col-md-6">
                 <blockquote>
-                    <h6>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h6>
-                    <h6>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h6>
-                    <h6>Condiciones</h6>
+                    <br>
+                    <h5>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h5>
+                    <h5>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
+                    <?php if (!$this->condition and $this->matriculaCondicional == 'No'): 
+                        $classCondition = 'hidden';
+                    elseif ($this->condition and $this->matriculaCondicional == 'Si'):
+                        $classCondition = 'text-success';
+                    elseif (!$this->condition and $this->matriculaCondicional == 'Si'):
+                        $classCondition = 'text-danger';
+                        $classButtonValidate = 'disabled';
+                    endif ?>
+                    <h5><a href="##" class="<?php echo $classCondition ?>">Condiciones <span class="glyphicon glyphicon-flag"></span></a></h5>
                 </blockquote>
             </div>
             <div class="col-md-3">
@@ -65,7 +81,7 @@
     <div class="col-md-10 col-md-offset-1">
         <!--Confirmación para Eliminar-->
         <div id="confirmDelete" class="alert alert-danger fade in hidden">
-            <h4>Seguro que desea Eliminar la Matricula</h4>
+            <h4>Seguro que desea Eliminar la Matricula?</h4>
             <p>Una vez que lo haga no habra marcha atras....</p><br>
             <a id="deleteRegister" href="##" class="btn btn-danger">Eliminar</a>
             <a href="##" class="btn btn-default closeConfirmAlert">Cancelar</a>
@@ -137,6 +153,7 @@
         $state = 'M';
         $claseFilas = 'success';
         $nameState = 'Matriculado';
+        $classButtons = 'hidden';
         elseif ($this->stateRegister == 'O'): ?>
             <div class="alert alert-warning">
                 <h5 class="text-center">Matricula Observada</h5>
@@ -145,6 +162,7 @@
         $state = 'O';
         $claseFilas = 'warning';
         $nameState = 'Observado';
+        $classButtons = 'hidden';
         elseif ($this->stateRegister == 'R'): ?>
             <div class="alert alert-info">
                 <h5 class="text-center">Matricula Reservada</h5>
@@ -153,10 +171,12 @@
         $state = 'R';
         $claseFilas = 'info';
         $nameState = 'Reservado';
+        $classButtons = 'hidden';
         endif ?>
     </div>
 </div>
 
+<!--Imprimir Cursos................. raetod oreiuq odasnac yotse  -->
 <div class="row">
     <div id="allDataCourses" class="col-md-9 col-md-offset-1">
         <table class="table table-hover">
@@ -167,30 +187,29 @@
                 <th class="text-center">Creditos</th>
                 <th class="text-center">Turno</th>
                 <th>Profesor</th>
-                <th class="text-center">Numero de Veces</th>
-            </tr> 
+                <th class="text-center">Llevando por</th>
         <?php $c = 0;
         foreach ($this->courses as $course): ?>
-            <tr id="fila<?php echo $course['courseid'] ?>" class="iluminate <?php echo $claseFilas ?>">
+            <?php if ($this->coursesName[$c]['veces'] >= 2):
+                $styleCondition = 'background-color: #f2dede';
+                $classtdVeces = 'text-danger';
+            else:
+                $styleCondition = '';
+                $classtdVeces = 'text-success';
+            endif ?>
+            <tr id="fila<?php echo $course['courseid'] ?>" class="iluminate <?php echo $claseFilas ?>" style="<?php echo $styleCondition ?>">
                 <td class="text-center"><?php echo $c + 1 ?></td>
                 <td class="text-center"><?php echo $course['courseid'] ?></td>
                 <td><?php echo $this->coursesName[$c][0]['name'] ?></td>
                 <td class="text-center"><?php echo $this->coursesName[$c][0]['credits'] ?></td>
                 <td id="courseTurno<?php echo $course['courseid'] ?>" class="text-center"><?php echo $course['turno'] ?></td>
                 <td id="teacherTurno<?php echo $course['courseid'] ?>"><?php echo $this->teachers[$c][0]['last_name0'].' '.$this->teachers[$c][0]['last_name1'].' '.$this->teachers[$c][0]['first_name']  ?> </td>
-                <td class="text-center"><?php echo $this->coursesName[0]['veces'] ?></td>
-            <?php if ($state == 'I'): 
-                $classButtons = '';
-                $classState = 'hidden';
-            else: 
-                $classButtons = 'hidden';
-                $classState = '';
-            endif ?>
+                <td class="text-center <?php echo $classtdVeces ?>"><strong><?php echo $this->coursesName[$c]['veces'] + 1 ?> Vez</strong></td>
                 <td class="text-center <?php echo $classButtons ?> butonsCourses">
-                    <a id="showEditAlert<?php echo $course['courseid'] ?>" href="#editAlert<?php echo $course['courseid'] ?>" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a id="showEditAlert<?php echo $course['courseid'] ?>" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
                 </td>
                 <td class="text-center <?php echo $classButtons ?> butonsCourses">
-                    <a id="showAlert<?php echo $course['courseid'] ?>" href="#alert<?php echo $course['courseid'] ?>" title="Eliminar Curso" class="text-danger"><span class="glyphicon glyphicon-remove"></span></a>
+                    <a id="showAlert<?php echo $course['courseid'] ?>" href="##" title="Eliminar Curso" class="text-danger"><span class="glyphicon glyphicon-remove"></span></a>
                 </td>
                 <td class="text-center text-success tdValidate hidden">Matriculado</td>
                 <td class="text-center text-warning tdObserved hidden">Observado</td>
@@ -199,9 +218,9 @@
             </tr>
 
             <tr>
-                <td id="alert<?php echo $course['courseid'] ?>" class="hidden alertSpace" colspan="9">
+                <td id="alertDeleteCourse<?php echo $course['courseid'] ?>" class="hidden alertSpace" colspan="10">
                     <div class="alert alert-danger">
-                        <h5>Seguro que desea eliminar <?php echo $this->coursesName[$c][0]['name'] ?></h5>
+                        <h5>Seguro que desea eliminar <?php echo $this->coursesName[$c][0]['name'] ?> ?</h5>
                         <p>Una vez que lo haga no habra marcha atras...</p><br>
                         <a id="delete<?php echo $course['courseid'] ?>" href="##" class="btn btn-danger">Eliminar</a>
                         <a href="##" class="btn btn-default cancel">Cancelar</a>
@@ -209,7 +228,7 @@
                 </td>
             </tr>
             <tr>
-                <td id="editAlert<?php echo $course['courseid'] ?>" class="hidden alertSpace" colspan="9"></td>
+                <td id="editAlert<?php echo $course['courseid'] ?>" class="hidden alertSpace" colspan="10"></td>
             </tr>
             <script>
                 $("#showEditAlert<?php echo $course['courseid'] ?>").click(function(){
@@ -224,19 +243,19 @@
                 $("#showAlert<?php echo $course['courseid'] ?>").click(function(){
                     $('.alertSpace').addClass('hidden');
                     $(".iluminate").removeClass('danger warning');
-                    $("#alert<?php echo $course['courseid'] ?>").removeClass('hidden');
+                    $("#alertDeleteCourse<?php echo $course['courseid'] ?>").removeClass('hidden');
                     $("#fila<?php echo $course['courseid'] ?>").addClass('danger');
                 });
 
 
                 $(".cancel").click(function(){
                     $(".iluminate").removeClass('danger warning');
-                    $("#alert<?php echo $course['courseid'] ?>").addClass('hidden');
+                    $("#alertDeleteCourse<?php echo $course['courseid'] ?>").addClass('hidden');
                 });
                 $("#delete<?php echo $course['courseid'] ?>").click(function(){
                     $.get("/register/registerstudent/deletecourse/uid/<?php echo base64_encode($course['uid']) ?>/pid/<?php echo base64_encode($course['pid']) ?>/escid/<?php echo base64_encode($course['escid']) ?>/subid/<?php echo base64_encode($course['subid']) ?>/courseid/<?php echo base64_encode($course['courseid']) ?>/curid/<?php echo base64_encode($course['curid']) ?>/turno/<?php echo base64_encode($course['turno']) ?>", function(){
                             $("#fila<?php echo $course['courseid'] ?>").addClass('hidden');
-                            $("#alert<?php echo $course['courseid'] ?>").addClass('hidden');
+                            $("#alertDeleteCourse<?php echo $course['courseid'] ?>").addClass('hidden');
                     });
                 });
 
@@ -261,7 +280,7 @@
         <a id="activeRegister" href="##" class="btn btn-success form-control <?php echo $classActive ?>">Activar</a>
         <br><br>
         <div class="validateRegister <?php echo $classValidate ?>">
-            <a id="validateRegister" href="##" class="btn btn-success form-control">Validar</a>
+            <a id="validateRegister" href="##" class="btn btn-success form-control <?php echo $classButtonValidate ?>">Validar</a>
             <br><br>
         </div>
         <div class="reservedRegister <?php echo $classInteractions ?>">
@@ -277,6 +296,10 @@
 </div>
 
 <script>
+    $('#condition').hover(function(){
+        $('#condition').popover('toggle');
+    });
+
     var stateReg = "<?php echo $this->stateRegister ?>";
 
     $('#failValidate').addClass('hidden');

@@ -90,20 +90,22 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $coursesDb = new Api_Model_DbTable_Course();
             $teachersDb = new Api_Model_DbTable_Coursexteacher();
             $paymentDb = new Api_Model_DbTable_Payments();
+            $conditionDb = new Api_Model_DbTable_Condition();
             //--------------
 
             $uid = base64_decode($this->_getParam('uid'));
             $pid = base64_decode($this->_getParam('pid'));
             $escid = base64_decode($this->_getParam('escid'));
             $subid = base64_decode($this->_getParam('subid'));
+            $semid = base64_decode($this->_getParam('semid'));
 
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $perid = $this->sesion->period->perid;
-
             //Data del Estudiante
             $dataStudent = array(   'uid'=>$uid,
                                     'pid'=>$pid,
+                                    'semid'=>$semid,
                                     'escid'=>$escid,
                                     'subid'=>$subid,
                                     'perid'=>$perid,
@@ -125,7 +127,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $person = $personDb->_getInfoUser($where);
             $this->view->person = $person;
             
-            //Informacion de Pago
+            //Información de Pago
             $where = array( 'eid'=>$eid, 
                             'oid'=>$oid, 
                             'uid'=>$uid, 
@@ -137,6 +139,12 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $paymentData = $paymentDb->_getFilter($where, $attrib);
             $paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
             $this->view->paymentData = $paymentData;
+
+            //Información de Condición
+            $attrib = array('doc_authorize', 'comments');
+            $condition = $conditionDb->_getFilter($where, $attrib);
+            $this->view->condition = $condition;
+
 
             //Estado de la Matricula
             $where = array( 'eid'=>$eid, 
@@ -172,11 +180,10 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                             'state'=>$stateRegister);
             $attrib = array('courseid', 'turno', 'curid', 'uid', 'pid', 'escid', 'subid');
             $courses = $coursesRegisterDb->_getFilter($where, $attrib);
+            $matriculaCondicional = 'No';
 
             $c = 0;
             foreach ($courses as $course) {
-                
-
                 //Obteniendo Cursos
                 $attrib = array('courseid', 'curid', 'name', 'credits');
                 $where = array( 'eid'=>$eid, 
@@ -188,7 +195,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $coursesName[$c] = $coursesRegisterDb->_getInfoCourse($where, $attrib);
 
                 //Numero de Veces que llevo un curso
-                $attrib = array('state');
+                $attrib = array('perid');
                 $where = array( 'eid'=>$eid, 
                                 'oid'=>$oid, 
                                 'uid'=>$uid, 
@@ -199,7 +206,16 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                                 'curid'=>$course['curid'],
                                 'state'=>'M' );
                 $veces = $coursesRegisterDb->_getFilter($where, $attrib);
-                $coursesName[$c]['veces'] = count($veces);
+                $j = 0;
+                foreach ($veces as $vez) {
+                    if ($vez['perid']['2'] != 'D' and $vez['perid']['2'] != 'E') {
+                        $j++;
+                    }
+                }
+                if ($j >= 2) {
+                    $matriculaCondicional = 'Si';
+                }
+                $coursesName[$c]['veces'] = $j;
 
                 //Codigo de Profesores
                 $attrib = array('uid', 'pid');
@@ -230,6 +246,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $this->view->courses = $courses;
             $this->view->coursesName = $coursesName;
             $this->view->teachers = $teachers;
+            $this->view->matriculaCondicional = $matriculaCondicional;
         }catch(Exception $ex ){
             print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
         } 
