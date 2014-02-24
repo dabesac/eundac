@@ -1,6 +1,5 @@
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Llenado de Sílabo');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button type="button" id="save_sylabus" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button><button id="close_sylabus" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cerrar</button>');?>
-
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-ok-sign"></span> Sílabo');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><a href="#" type="button" id="imprimir" class="btn btn-success"><span class="glyphicon glyphicon-print"></span> Imprimir</a>');?>
 <div>
 	<center>
 		
@@ -15,8 +14,7 @@
 	</center>
 </div>
 
-<div>
-            
+<div>            
 	<h5 style="margin: 0px 80px 0px 80px"><b>I. DATOS GENERALES:</b></h5> <br>
 	<div class="panel panel-default" style="margin: 0px 80px 0px 80px">
 		<div class="panel-heading">
@@ -59,15 +57,19 @@
 		</div>
 	</div>
 </div>
-<div id="campo"></div>
+<div class='col-md-12 cont-font-not-register'>
+    <h3 class='text-not-register'><b>SÍLABO LISTO</b></h3>
+    <h2 class='text-not-register'><i>¡¡ YA PUEDE IMPRIMIRLO !!</i></h2>
+    <h1 class='span-not-register'>
+        <span class='glyphicon glyphicon-exclamation-sign' ></span>
+    </h1>
+</div>
 
 <script type="text/javascript">
-	var perid="<?php echo base64_encode($this->where['perid'])?>";
-	var subid="<?php echo base64_encode($this->where['subid'])?>";
-	var turno="<?php echo base64_encode($this->where['turno'])?>";
-	var courseid="<?php echo base64_encode($this->where['courseid'])?>";
-	var curid="<?php echo base64_encode($this->where['curid'])?>";
-	var escid="<?php echo base64_encode($this->where['escid'])?>";
+$("#imprimir").click(function(){
 
-	$("#campo").load("/syllabus/syllabus/viewfrm/perid/"+perid+"/subid/"+subid+"/turno/"+turno+"/courseid/"+courseid+"/curid/"+curid+"/escid/"+escid);
+    var url="/syllabus/print/index/courseid/<?php echo base64_encode($this->curso['courseid'])?>/curid/<?php echo base64_encode($this->where['curid'])?>/escid/<?php echo base64_encode($this->where['escid'])?>/turno/<?php echo base64_encode($this->where['turno'])?>/subid/<?php echo base64_encode($this->where['subid'])?>/perid/<?php echo base64_encode($this->where['perid'])?>";
+    // alert(url);
+    $(location).attr('href',url);
+});
 </script>
