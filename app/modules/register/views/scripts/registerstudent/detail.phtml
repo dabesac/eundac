@@ -30,6 +30,7 @@
             <h5>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
             <?php if (!$this->condition and $this->matriculaCondicional == 'No'): 
                 $classCondition = 'hidden';
+                echo "<br>";
             elseif ($this->condition and $this->matriculaCondicional == 'Si'):
                 $classCondition = 'text-success';
                 $conditions     = 'Si';
@@ -46,8 +47,8 @@
             </div>
         </blockquote>
     </div>
-    <div class="col-md-1">
-        <br><br>
+    <div class="col-md-2">
+        <br>
         <?php $urlRecord =  '/report/recordnotas/print'.'/uid/'.    base64_encode($this->dataStudent['uid']) .
                                                         '/pid/'.    base64_encode($this->dataStudent['pid']) .
                                                         '/escid/'.  base64_encode($this->dataStudent['escid']) .
@@ -55,20 +56,18 @@
                                                         '/eid/'.    base64_encode($this->dataStudent['eid']) .
                                                         '/oid/'.    base64_encode($this->dataStudent['oid']) ?>
         <a class="btn btn-default form-control" href="<?php echo $urlRecord ?>"><span class="glyphicon glyphicon-print"></span> Record</a>
-    </div>
-    <div class="col-md-1">
+        <br><br>
         <?php if ($this->stateRegister == 'I' or $this->stateRegister == null or $this->stateRegister == 'O' or $this->stateRegister == 'R' or $this->stateRegister == 'B' ): 
             $classPrint = 'hidden';
         else:
             $classPrint = '';
         endif ?>
-        <br><br>
         <?php $urlPrintRegister =  '/register/registerstudent/print'. 
                                     '/uid/'.    base64_encode($this->dataStudent['uid']) .
                                     '/pid/'.    base64_encode($this->dataStudent['pid']) .
                                     '/escid/'.  base64_encode($this->dataStudent['escid']) .
                                     '/subid/'.  base64_encode($this->dataStudent['subid']) ?>
-        <a id="printRegister" class="btn btn-default <?php echo $classPrint ?>" target="_blank" href="<?php echo $urlPrintRegister ?>"><span class="glyphicon glyphicon-print"></span> Matricula</a>
+        <a id="printRegister" class="btn btn-default <?php echo $classPrint ?> form-control" target="_blank" href="<?php echo $urlPrintRegister ?>"><span class="glyphicon glyphicon-print"></span> Imprimir Matricula</a>
     </div>
 </div>
 <hr>
