@@ -37,15 +37,19 @@
                 }
                 $this->view->valhoras=$valhoras;
 
-                $base_url = 'http://localhost:8080/';
-                $endpoint = '/s1st3m4s/und4c/horary_student';
-                $data = array('escid' => $escid,'eid' =>$eid,'oid' =>$oid,'perid'=>$perid,'subid'=>$subid,'uid'=>$uid);
-                $client = new Zend_Rest_Client($base_url);
-                $httpClient = $client->getHttpClient();
-                $httpClient->setConfig(array("timeout" => 1800));
-                $response = $client->restget($endpoint,$data);
-                $lista=$response->getBody();
-                $data = Zend_Json::decode($lista);
+                $module = "horary_student";
+
+                $data = array(  
+                        'escid' => base64_encode($escid),
+                        'eid' =>base64_encode($eid),
+                        'oid' =>base64_encode($oid),
+                        'perid'=>base64_encode($perid),
+                        'subid'=>base64_encode($subid),
+                        'uid'=>base64_encode($uid)
+                    );
+
+                $server = new Eundac_Connect_Api($module,$data);
+                $data = $server->connectAuth();
                 $this->view->horarys=$data; 
             }   
  			
@@ -80,15 +84,20 @@
                 }
                 $this->view->valhoras=$valhoras;
 
-                $base_url = 'http://localhost:8080/';
-                $endpoint = '/s1st3m4s/und4c/horary_student';
-                $data = array('escid' => $escid,'eid' =>$eid,'oid' =>$oid,'perid'=>$perid,'subid'=>$subid,'uid'=>$uid);
-                $client = new Zend_Rest_Client($base_url);
-                $httpClient = $client->getHttpClient();
-                $httpClient->setConfig(array("timeout" => 1800));
-                $response = $client->restget($endpoint,$data);
-                $lista=$response->getBody();
-                $data = Zend_Json::decode($lista);
+                $module = "horary_student";
+
+                $data = array(  
+                        'escid' => base64_encode($escid),
+                        'eid' =>base64_encode($eid),
+                        'oid' =>base64_encode($oid),
+                        'perid'=>base64_encode($perid),
+                        'subid'=>base64_encode($subid),
+                        'uid'=>base64_encode($uid)
+                    );
+
+                $server = new Eundac_Connect_Api($module,$data);
+                $data = $server->connectAuth();
+               
                 $this->view->horarys=$data;
                 // print_r($data);
                 $spe=array();

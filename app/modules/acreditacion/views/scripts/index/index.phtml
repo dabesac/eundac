@@ -6,19 +6,47 @@
 <script type="text/javascript" src="/js/graphic/accreditation.js"></script>
 <div id="container_standards"></div>
 
-<?php if ($this->data) {?>
+<?php if ($this->dimensions) {
+    foreach ($this->dimensions as $key => $standards) {?>
     <div class="panel panel-default">
-        <div class="panel-heading">Panel heading</div>
-        <table class="table table-bordered">
+        <div class="panel-heading"><?php echo $standards['description']?></div>
+            <table class="table table-bordered">
              <thead>
                 <tr class='active'>
-                    <th>#</th>
-                    <th>Estandar</th>
+                    <th>Factores</th>
+                    <th>Criterios</th>
+                    <th>Estandares</th>
                     <th>Fuente de Verificacion</th>
-                    <th>Estamacion</th>
+                    <th>Estimacion</th>
                     <th>Validacion</th>
                 </tr>
               </thead>
+              <tbody>
+              <?php foreach ($standards['factores_id'] as $key => $factores){?>
+                    <tr>
+                        <td rowspan='<?php echo count($factores['criterid'])+1?>'><?php echo $factores['description']?></td>
+                        <?php if(!empty($factores['criterid'])){echo "<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>";} ?>
+                    </tr>
+                    <?php if (!empty($factores['criterid'])){?>
+                        <tr>
+                            <td rowspan='2'>rrrrrrr</td>
+                            <td rowspan='2'>sss</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td >rrrrrrr</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                     <?php   ?>
+                    <?php }
+                } ?>
+
+              </tbody>
         </table>
     </div>
-<?php }?>
+<?php }}?>
+
