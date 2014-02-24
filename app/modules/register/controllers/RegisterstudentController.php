@@ -80,24 +80,25 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
     public function detailAction()
     {
         try{
+            
             $this->_helper->layout()->disableLayout();
 
             //Databases
-            $specialityDb = new Api_Model_DbTable_Speciality();
-            $personDb = new Api_Model_DbTable_Users();
-            $coursesRegisterDb = new Api_Model_DbTable_Registrationxcourse();
-            $registerDb = new Api_Model_DbTable_Registration();
-            $coursesDb = new Api_Model_DbTable_Course();
-            $teachersDb = new Api_Model_DbTable_Coursexteacher();
-            $paymentDb = new Api_Model_DbTable_Payments();
-            $conditionDb = new Api_Model_DbTable_Condition();
+            $specialityDb     = new Api_Model_DbTable_Speciality();
+            $personDb         = new Api_Model_DbTable_Users();
+            $coursesRegisterDb= new Api_Model_DbTable_Registrationxcourse();
+            $registerDb       = new Api_Model_DbTable_Registration();
+            $coursesDb        = new Api_Model_DbTable_Course();
+            $teachersDb       = new Api_Model_DbTable_Coursexteacher();
+            $paymentDb        = new Api_Model_DbTable_Payments();
+            $conditionDb      = new Api_Model_DbTable_Condition();
             //--------------
 
-            $uid = base64_decode($this->_getParam('uid'));
-            $pid = base64_decode($this->_getParam('pid'));
-            $escid = base64_decode($this->_getParam('escid'));
-            $subid = base64_decode($this->_getParam('subid'));
-            $semid = base64_decode($this->_getParam('semid'));
+            $uid  = base64_decode($this->_getParam('uid'));
+            $pid  = base64_decode($this->_getParam('pid'));
+            $escid= base64_decode($this->_getParam('escid'));
+            $subid= base64_decode($this->_getParam('subid'));
+            $semid= base64_decode($this->_getParam('semid'));
 
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
@@ -109,8 +110,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                                     'escid'=>$escid,
                                     'subid'=>$subid,
                                     'perid'=>$perid,
-                                    'eid'=>$eid,
-                                    'oid'=>$oid );
+                                    'eid'  =>$eid,
+                                    'oid'  =>$oid );
             $this->view->dataStudent = $dataStudent;
             
             //Información de Facultad
@@ -118,23 +119,25 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $faculty = $specialityDb->_getFacspeciality($where);
             $this->view->infoSpeciality = $faculty;
 
-            $where = array( 'eid'=>$eid, 
-                            'oid'=>$oid, 
-                            'uid'=>$uid, 
-                            'pid'=>$pid ,
-                            'escid'=>$escid, 
-                            'subid'=>$subid);
+            $where = array( 
+                            'eid'   =>$eid, 
+                            'oid'   =>$oid, 
+                            'uid'   =>$uid, 
+                            'pid'   =>$pid ,
+                            'escid' =>$escid, 
+                            'subid' =>$subid);
             $person = $personDb->_getInfoUser($where);
             $this->view->person = $person;
             
             //Información de Pago
-            $where = array( 'eid'=>$eid, 
-                            'oid'=>$oid, 
-                            'uid'=>$uid, 
-                            'pid'=>$pid,
-                            'escid'=>$escid, 
-                            'subid'=>$subid,
-                            'perid'=>$perid );
+            $where = array( 
+                            'eid'   =>$eid, 
+                            'oid'   =>$oid, 
+                            'uid'   =>$uid, 
+                            'pid'   =>$pid,
+                            'escid' =>$escid, 
+                            'subid' =>$subid,
+                            'perid' =>$perid );
             $attrib = array('date_payment', 'amount');
             $paymentData = $paymentDb->_getFilter($where, $attrib);
             $paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
@@ -147,13 +150,14 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
 
 
             //Estado de la Matricula
-            $where = array( 'eid'=>$eid, 
-                            'oid'=>$oid, 
-                            'uid'=>$uid, 
-                            'pid'=>$pid,
-                            'escid'=>$escid, 
-                            'subid'=>$subid,
-                            'perid'=>$perid );
+            $where = array( 
+                            'eid'   =>$eid, 
+                            'oid'   =>$oid, 
+                            'uid'   =>$uid, 
+                            'pid'   =>$pid,
+                            'escid' =>$escid, 
+                            'subid' =>$subid,
+                            'perid' =>$perid );
             $attrib = array('state');
             $stateRegister = $registerDb->_getFilter($where, $attrib);
             if ($stateRegister[0]['state'] == 'I') {
@@ -170,10 +174,11 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $this->view->stateRegister = $stateRegister;
 
             //Cursos Prematriculados
-            $where = array( 'eid'=>$eid, 
-                            'oid'=>$oid, 
-                            'uid'=>$uid, 
-                            'pid'=>$pid,
+            $where = array(
+                            'eid'  =>$eid, 
+                            'oid'  =>$oid, 
+                            'uid'  =>$uid, 
+                            'pid'  =>$pid,
                             'escid'=>$escid, 
                             'subid'=>$subid,
                             'perid'=>$perid,
@@ -186,25 +191,27 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             foreach ($courses as $course) {
                 //Obteniendo Cursos
                 $attrib = array('courseid', 'curid', 'name', 'credits');
-                $where = array( 'eid'=>$eid, 
-                                'oid'=>$oid, 
-                                'escid'=>$escid, 
-                                'subid'=>$subid,
+                $where = array( 
+                                'eid'     =>$eid, 
+                                'oid'     =>$oid, 
+                                'escid'   =>$escid, 
+                                'subid'   =>$subid,
                                 'courseid'=>$course['courseid'],
-                                'curid'=>$course['curid'] );
+                                'curid'   =>$course['curid'] );
                 $coursesName[$c] = $coursesRegisterDb->_getInfoCourse($where, $attrib);
 
                 //Numero de Veces que llevo un curso
                 $attrib = array('perid');
-                $where = array( 'eid'=>$eid, 
-                                'oid'=>$oid, 
-                                'uid'=>$uid, 
-                                'pid'=>$pid,
-                                'escid'=>$escid, 
-                                'subid'=>$subid,
+                $where = array( 
+                                'eid'     =>$eid, 
+                                'oid'     =>$oid, 
+                                'uid'     =>$uid, 
+                                'pid'     =>$pid,
+                                'escid'   =>$escid, 
+                                'subid'   =>$subid,
                                 'courseid'=>$course['courseid'],
-                                'curid'=>$course['curid'],
-                                'state'=>'M' );
+                                'curid'   =>$course['curid'],
+                                'state'   =>'M' );
                 $veces = $coursesRegisterDb->_getFilter($where, $attrib);
                 $j = 0;
                 foreach ($veces as $vez) {
@@ -219,16 +226,17 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
 
                 //Codigo de Profesores
                 $attrib = array('uid', 'pid');
-                $where = array( 'eid'=>$eid, 
-                                'oid'=>$oid, 
-                                'escid'=>$escid, 
-                                'subid'=>$subid,
+                $where = array( 
+                                'eid'     =>$eid, 
+                                'oid'     =>$oid, 
+                                'escid'   =>$escid, 
+                                'subid'   =>$subid,
                                 'courseid'=>$course['courseid'],
-                                'curid'=>$course['curid'],
-                                'turno'=>$course['turno'],
-                                'perid'=>$perid,
-                                'state'=>'A',
-                                'is_main'=>'S' );
+                                'curid'   =>$course['curid'],
+                                'turno'   =>$course['turno'],
+                                'perid'   =>$perid,
+                                'state'   =>'A',
+                                'is_main' =>'S' );
                 $teacher = $teachersDb->_getFilter($where, $attrib);
 
                 $where = array( 'eid'=>$eid, 
@@ -270,17 +278,20 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $state = base64_decode($this->_getParam('state'));
         $regid = $uid.$perid;
 
-        $where = array( 'eid' => $eid, 
-                        'oid' => $oid, 
-                        'pid' => $pid, 
-                        'uid' => $uid, 
+        $where = array( 
+                        'eid'   => $eid, 
+                        'oid'   => $oid, 
+                        'pid'   => $pid, 
+                        'uid'   => $uid, 
                         'escid' => $escid, 
                         'subid' => $subid,
                         'perid' => $perid,
                         'regid' => $regid,
                         'state' => $state );
-        $data = array(  'modified' => $this->sesion->uid,
-                        'updated' => date('Y-m-d h:m:s') );
+
+        $data = array(  
+                        'modified' => $this->sesion->uid,
+                        'updated'  => date('Y-m-d h:m:s') );
 
         if ($registerxcourseDb->_updatestateregister($data, $where)) {
             if ($registerDb->_update($data, $where)){

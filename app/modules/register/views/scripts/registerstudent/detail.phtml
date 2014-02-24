@@ -13,59 +13,64 @@
         </div>
     </div>
 </div>
-
-<br><br>
+<br>
 <div class="row">
     <div class="col-md-5 col-md-offset-1">
         <blockquote>
+            <br>
             <p><span class="glyphicon glyphicon-user text-info"></span> <?php echo $this->person[0]['last_name0'].' '.$this->person[0]['last_name1'] ?> <span class="text-info"><?php echo $this->person[0]['first_name'] ?></span></p>
             <h6>Codigo <span class="text-info"><?php echo $this->person[0]['uid'] ?></span></h6>
             <h6>Semestre <span class="text-info"><?php echo $this->dataStudent['semid'] ?></span></h6>
         </blockquote>
     </div>
-    <div class="col-md-5">
-        <div class="row">
-            <div class="col-md-6">
-                <blockquote>
-                    <br>
-                    <h5>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h5>
-                    <h5>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
-                    <?php if (!$this->condition and $this->matriculaCondicional == 'No'): 
-                        $classCondition = 'hidden';
-                    elseif ($this->condition and $this->matriculaCondicional == 'Si'):
-                        $classCondition = 'text-success';
-                    elseif (!$this->condition and $this->matriculaCondicional == 'Si'):
-                        $classCondition = 'text-danger';
-                        $classButtonValidate = 'disabled';
-                    endif ?>
-                    <h5><a href="##" class="<?php echo $classCondition ?>">Condiciones <span class="glyphicon glyphicon-flag"></span></a></h5>
-                </blockquote>
+    <div class="col-md-3">
+        <blockquote>
+            <br>
+            <h5>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h5>
+            <h5>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
+            <?php if (!$this->condition and $this->matriculaCondicional == 'No'): 
+                $classCondition = 'hidden';
+            elseif ($this->condition and $this->matriculaCondicional == 'Si'):
+                $classCondition = 'text-success';
+                $conditions     = 'Si';
+            elseif (!$this->condition and $this->matriculaCondicional == 'Si'):
+                $classCondition      = 'text-danger';
+                $classButtonValidate = 'disabled';
+            endif ?>
+            <h5 id="condition" class="<?php echo $classCondition ?>">Condiciones <span class="glyphicon glyphicon-flag"></span></h5>
+            <div class="col-md-6" id='conditionInfo' style="position: absolute; z-index: 2; background: white;">
+                <?php foreach ($this->condition as $condition): ?>
+                    <strong class="text-success"><?php echo $condition['doc_authorize'] ?></strong>
+                    <p class="small"><?php echo $condition['comments'] ?></p>
+                <?php endforeach ?>
+                 <strong class="text-success">Solicitud</strong>
+                <p class="small">Cuarta vez</p>
             </div>
-            <div class="col-md-3">
-                <br><br>
-                <?php $urlRecord =  '/report/recordnotas/print'.'/uid/'.    base64_encode($this->dataStudent['uid']) .
-                                                                '/pid/'.    base64_encode($this->dataStudent['pid']) .
-                                                                '/escid/'.  base64_encode($this->dataStudent['escid']) .
-                                                                '/subid/'.  base64_encode($this->dataStudent['subid']) .
-                                                                '/eid/'.    base64_encode($this->dataStudent['eid']) .
-                                                                '/oid/'.    base64_encode($this->dataStudent['oid']) ?>
-                <a class="btn btn-default form-control" href="<?php echo $urlRecord ?>"><span class="glyphicon glyphicon-print"></span> Record</a>
-            </div>
-            <div class="col-md-3">
-                <?php if ($this->stateRegister == 'I' or $this->stateRegister == null or $this->stateRegister == 'O' or $this->stateRegister == 'R' or $this->stateRegister == 'B' ): 
-                    $classPrint = 'hidden';
-                else:
-                    $classPrint = '';
-                endif ?>
-                <br><br>
-                <?php $urlPrintRegister =  '/register/registerstudent/print'. 
-                                            '/uid/'.    base64_encode($this->dataStudent['uid']) .
-                                            '/pid/'.    base64_encode($this->dataStudent['pid']) .
-                                            '/escid/'.  base64_encode($this->dataStudent['escid']) .
-                                            '/subid/'.  base64_encode($this->dataStudent['subid']) ?>
-                <a id="printRegister" class="btn btn-default <?php echo $classPrint ?>" target="_blank" href="<?php echo $urlPrintRegister ?>"><span class="glyphicon glyphicon-print"></span> Matricula</a>
-            </div>
-        </div>
+        </blockquote>
+    </div>
+    <div class="col-md-1">
+        <br><br>
+        <?php $urlRecord =  '/report/recordnotas/print'.'/uid/'.    base64_encode($this->dataStudent['uid']) .
+                                                        '/pid/'.    base64_encode($this->dataStudent['pid']) .
+                                                        '/escid/'.  base64_encode($this->dataStudent['escid']) .
+                                                        '/subid/'.  base64_encode($this->dataStudent['subid']) .
+                                                        '/eid/'.    base64_encode($this->dataStudent['eid']) .
+                                                        '/oid/'.    base64_encode($this->dataStudent['oid']) ?>
+        <a class="btn btn-default form-control" href="<?php echo $urlRecord ?>"><span class="glyphicon glyphicon-print"></span> Record</a>
+    </div>
+    <div class="col-md-1">
+        <?php if ($this->stateRegister == 'I' or $this->stateRegister == null or $this->stateRegister == 'O' or $this->stateRegister == 'R' or $this->stateRegister == 'B' ): 
+            $classPrint = 'hidden';
+        else:
+            $classPrint = '';
+        endif ?>
+        <br><br>
+        <?php $urlPrintRegister =  '/register/registerstudent/print'. 
+                                    '/uid/'.    base64_encode($this->dataStudent['uid']) .
+                                    '/pid/'.    base64_encode($this->dataStudent['pid']) .
+                                    '/escid/'.  base64_encode($this->dataStudent['escid']) .
+                                    '/subid/'.  base64_encode($this->dataStudent['subid']) ?>
+        <a id="printRegister" class="btn btn-default <?php echo $classPrint ?>" target="_blank" href="<?php echo $urlPrintRegister ?>"><span class="glyphicon glyphicon-print"></span> Matricula</a>
     </div>
 </div>
 <hr>
@@ -296,8 +301,10 @@
 </div>
 
 <script>
+    //Navegación
+    $('#conditionInfo').slideUp();
     $('#condition').hover(function(){
-        $('#condition').popover('toggle');
+        $('#conditionInfo').slideToggle();
     });
 
     var stateReg = "<?php echo $this->stateRegister ?>";
