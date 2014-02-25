@@ -1,22 +1,24 @@
-<div class="panel panel-default">
-	<!-- <div class="panel-heading"> -->
-		<!-- <h4><b>Matricula Por Curricula</b></h4> -->
-		<div align="right">
-			<br>
-			<a href="/profile/public/printpercur/" class='btn btn-success btn-lg'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
-		</div>
-	</br>
-	<!-- </div> -->
-	<div class="panel-body">
+<br>
+<div class="row">
+	<div class="col-md-1 col-md-offset-10">
+		<a href="/profile/public/printpercur/" class='btn btn-success'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-md-12">
 		<div class="row">
-			<div class="col-sm-4">
-				<center><img src="/img/circulo-verde.png">Aprobado</center>
+			<div class="col-md-3">
+				<h5 class="text-center text-muted">Leyenda</h5>
 			</div>
-			<div class="col-sm-4">
-				<center><img src="/img/circulo-amarillo.png">Llevando</center>
+			<div class="col-md-3">
+				<h5 class="text-center text-success"><span class="glyphicon glyphicon-record"></span> Aprobado</h5>
 			</div>
-			<div class="col-sm-4">
-				<center><img src="/img/circulo-rojo.png">Pendiente</center>
+			<div class="col-md-3">
+				<h5 class="text-center text-danger"><span class="glyphicon glyphicon-record"></span> Falta/Desaprobado</h5>
+			</div>
+			<div class="col-md-3">
+				<h5 class="text-center text-warning"><span class="glyphicon glyphicon-record"></span> Llevando</h5>
 			</div>
 		</div>
 		<br>
@@ -31,16 +33,16 @@
 						<b>SEMESTRE <?php echo $sem['semid']?></b>
 					</div>
 					<div class="panel-body">
-						<table class="table">
-							<tr>
-								<th><center>Codigo</center></th>
-								<th>Cursos</th>
-								<th><center>Creditos</center></th>
-								<th><center>Tipo</center></th>
-								<th><center>Requisito</center></th>
-								<th class="text-center">Nota</th>
-								<th class="text-center">Estado</th>
-								<th class="text-center">Sílabo</th>
+						<table class="table table-hover/fotos/<?php echo $this->datos[0]['uid']?>.jpg">
+							<tr class="active">
+								<th class="text-center col-md-1">Codigo</th>
+								<th class="col-md-4">Cursos</th>
+								<th class="text-center col-md-1">Creditos</th>
+								<th class="text-center col-md-2">Tipo</th>
+								<th class="text-center col-md-1">Requisito</th>
+								<th class="text-center col-md-1">Nota</th>
+								<th class="text-center col-md-1">Estado</th>
+								<th class="text-center col-md-1">Sílabo</th>
 							</tr>
 							
 					<?php  $semid=$sem['semid'];
@@ -87,30 +89,37 @@
 										}?>
 									</td>
 									<td class="text-center">
-										<?php if($est<>1){
-											if($notafinal>=11){?>
-												<img src="/img/circulo-verde.png">
-											<?php }else{
+										<?php 
+										if($est<>1){
+											if($notafinal>=11){
+												$color = 'success';
+												$stateCourse = 'Aprobado';
+											}else{
 												$pinto=0;
 												foreach ($this->courlleact as $cact) {
 													if($this->courlle[$c][0]['courseid']==$cact['courseid']){
-														if($cact['state']=="M"){?>
-															<img src="/img/circulo-amarillo.png">
-														<?php $pinto=1;
-														}else{?>
-															<img src="/img/circulo-rojo.png">
-														<?php $pinto=1;
+														if($cact['state']=="M"){
+															$color = 'warning';
+															$stateCourse = 'Llevando';
+															$pinto=1;
+														}else{
+															$color = 'danger';
+															$stateCourse = 'Te Jalaste :(';
+															$pinto=1;
 														}
 													}
 												}
-												if($pinto==0){?>
-													<img src="/img/circulo-rojo.png">
-												<?php }
+												if($pinto==0){
+													$color = 'danger';
+													$stateCourse = 'Te Jalaste :(';
+												}
 											}
 										}elseif($est==1){
-											$est=0;?>
-											<img src="/img/circulo-rojo.png">
-										<?php }?>
+											$est=0;
+											$color = 'danger';
+											$stateCourse = 'Aun No Llevas';
+										} ?>
+										<span title="<?php echo $stateCourse ?>" class="glyphicon glyphicon-record text-<?php echo $color ?>"></span>
 									</td>
 									<td class="text-center">
 										<?php if($turno[$c]){?>
@@ -128,6 +137,11 @@
 			<?php 
 			}	?>
 		</div><!-- Panel de Semestres -->
+		<script>
+			$('span, a').hover(function(){
+				$(this).tooltip('toggle');
+			});
+		</script>
 		<?php 
 		}
 		else{

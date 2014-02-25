@@ -23,6 +23,9 @@
             <h6>Semestre <span class="text-info"><?php echo $this->dataStudent['semid'] ?></span></h6>
         </blockquote>
     </div>
+
+<?php if ($this->courses): ?>
+        
     <div class="col-md-3">
         <blockquote>
             <br>
@@ -40,10 +43,14 @@
             endif ?>
             <h5 id="condition" class="<?php echo $classCondition ?>">Condiciones <span class="glyphicon glyphicon-flag"></span></h5>
             <div class="col-md-6" id='conditionInfo' style="position: absolute; z-index: 2; background: white;">
-                <?php foreach ($this->condition as $condition): ?>
-                    <strong class="text-success"><?php echo $condition['doc_authorize'] ?></strong>
-                    <p class="small"><?php echo $condition['comments'] ?></p>
-                <?php endforeach ?>
+                <?php if ($this->condition): ?>
+                    <?php foreach ($this->condition as $condition): ?>
+                        <strong class="text-success"><?php echo $condition['doc_authorize'] ?></strong>
+                        <p class="small"><?php echo $condition['comments'] ?></p>
+                    <?php endforeach ?>
+                <?php else: ?>
+                    <strong class="text-danger">No Existe Condiciones</strong>
+                <?php endif ?>
             </div>
         </blockquote>
     </div>
@@ -72,7 +79,6 @@
 </div>
 <hr>
 
-<?php if ($this->courses): ?>
 <!--Mensajes y todas esas cosas-->
 <div class="row">
     <div id="waitingSpinner" class="col-md-11 col-md-offset-1">
@@ -432,6 +438,7 @@
 </script>
 
 <?php else: ?>
+    <br><br>
     <h4 class="text-center text-muted">Aun no hizo la <span class="text-danger">prematricula</span></h4>
 <?php endif ?>
 
