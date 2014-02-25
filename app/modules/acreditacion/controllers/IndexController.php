@@ -1,3 +1,4 @@
+
 <?php
 
 class Acreditacion_IndexController extends Zend_Controller_Action {
@@ -14,6 +15,8 @@ class Acreditacion_IndexController extends Zend_Controller_Action {
 
     public function indexAction()
     {	
+      
+
 	   	$model = "standares_acredit";
     	$params = array(
 			'eid' => base64_encode($this->sesion->eid),
@@ -22,7 +25,7 @@ class Acreditacion_IndexController extends Zend_Controller_Action {
     		);
     	$prueba = new Eundac_Connect_Api($model,$params);
     	$data= $prueba->connectAuth();
-    	$this->view->data = $data;
+    	$this->view->dimensions = $data;
     	print_r($data);
     }
 

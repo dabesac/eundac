@@ -479,14 +479,12 @@ class Register_StudentController extends Zend_Controller_Action {
             $perid  =   trim($params['perid']);
             $regid  =   trim($params['regid']);
             $total = intVal(trim($params['total']));
-
             $pk= array(
                 'eid'=>$eid,'oid'=>$oid,
                 'pid'=>$pid,'uid'=>$uid,
                 'escid'=>$escid,'subid'=>$subid,
                 'perid'=>$perid,'regid'=>$regid,
-                'uid'=>$uid,'pid'=>$pid);
-
+                    'uid'=>$uid,'pid'=>$pid);
             $data=array('state'=>"I",'approved'=>$uid,);
             
 
@@ -494,12 +492,10 @@ class Register_StudentController extends Zend_Controller_Action {
 
                 $base_registration =  new Api_Model_DbTable_Registration();
                 $base_registration_subjet =new Api_Model_DbTable_Registrationxcourse();
-
-
                 
                 if ($total > 0) {
 
-                    if($base_registration_subjet->_update($data,$pk)){
+                    if($base_registration_subjet->_update_pre_registration($data,$pk)){
 
                         $data1 = array('state'=>'I');
                         if ($base_registration->_update($data1,$pk)) {
@@ -508,12 +504,18 @@ class Register_StudentController extends Zend_Controller_Action {
                                     'status'=> true,
                                     'total'=>$total);
 
+                        }else{
+                            $json = array(
+                                    'status'=> false,
+                                    'total'=>$total);
                         }
+                    }else{
+                        $json = array(
+                                    'status'=> false,
+                                    'error'=>"matri curso");
                     }
 
                 }
-
-
                 else{
 
                     $json = array(
@@ -531,7 +533,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
             $this->_helper->layout->disableLayout();
             $this->_response->setHeader('Content-Type', 'application/json');   
-            $this->view->data = $json;
+            $this->view->data = Zend_Json::encode($json);
 
 
     }

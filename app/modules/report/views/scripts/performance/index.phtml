@@ -18,7 +18,7 @@
                             {
                             print $this->fm->facid->setvalue($this->facid);
                              }
-                        if ( $this->rid=='DC' && $this->esdirector=='S')
+                        if ( $this->rid=='DR' && $this->esdirector=='S')
                         {?>
                             <select class='form-control' style='height:35px;width:350px' id="facu"><option><?php echo $this->nom_fac?></option></select>
                             <script type="text/javascript">
@@ -33,7 +33,7 @@
         <tr>
             <td colspan="2"><b>SELECCIONE ESCUELA:</b></td>
             <td colspan="2"><?php 
-            if ( $this->rid=='DC' && $this->esdirector=='S')
+            if ( $this->rid=='DR' && $this->esdirector=='S')
             {?>
                 <select style='height:35px;width:350px' class='form-control' id="escu" name="escu"><option value="<?php echo $this->escid?>"><?php echo $this->nom_escuela?></option>
                 </select>
@@ -102,15 +102,14 @@
         return false;
     });
     
-     $("#facid").change(function () {
-         $("#facid option:selected").each(function () {
-             facultad = $(this).val();
-
-             $('#escuela').html('<div class="controls"> <img src="/img/spinner.gif" /> Procesando...</div>');
-             $.post("/report/performance/listshool/", { facid: facultad }, function(data){
-                 $('#escuela').html("<select id='escid' name='escid'><option value=''>- Seleccione la Escuela -</option></select>");
-                 $("#escid").html(data);
-             });
+    $("#facid").change(function () {
+        $("#facid option:selected").each(function () {
+            facultad = $(this).val();
+            $('#escuela').html('<div class="controls"> <img src="/img/spinner.gif" /> Procesando...</div>');
+            $.post("/report/performance/listshool/", { facid: facultad }, function(data){
+            $('#escuela').html("<select id='escid' name='escid'><option value=''>- Seleccione la Escuela -</option></select>");
+            $("#escid").html(data);
+            });
              //$('#especialidad').hide();
         });
     });

@@ -125,7 +125,7 @@ ob_start();
 <?php
 
 	$html = ob_get_contents();
-  	$mpdf=new mPDF('win-1252','A4','','',15,15,33,18,5,5);
+  	$mpdf=new mPDF('win-1252','A4','','',15,15,40,18,5,5);
 
     $mpdf->SetHTMLHeader($this->header);  
     $mpdf->SetHTMLFooter($this->footer,'O');

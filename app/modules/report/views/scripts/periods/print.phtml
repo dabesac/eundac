@@ -96,8 +96,8 @@ if ($this->data_teacher) { ?>
     
     $html = ob_get_contents();
   
-    $mpdf=new mPDF('win-1252','A4','','',15,15,33,18,10,5);
-    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.05,'F');
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,10,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.05,'F');
     $mpdf->showWatermarkImage = true;
 
     $mpdf->SetHTMLHeader($this->header);

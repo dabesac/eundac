@@ -83,15 +83,15 @@ else{ $a="REPORTES MATRICULADOS POR SEMESTRE"; }
 
     $html = ob_get_contents();
   
-    $mpdf=new mPDF('win-1252','A4','','',15,15,33,18,5,5);
-    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,5,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
     $mpdf->showWatermarkImage = true;
 
     $mpdf->SetHTMLHeader($this->header);  
     $mpdf->SetHTMLFooter($this->footer,'O');
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    // $mpdf->Output('Semestre-'.$this->semid.'.pdf','D');
-    $mpdf->Output();
+    $mpdf->Output('Semestre-'.$this->semid.'.pdf','D');
+    // $mpdf->Output();
  
 ?>

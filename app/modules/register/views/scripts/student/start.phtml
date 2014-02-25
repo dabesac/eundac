@@ -145,16 +145,19 @@
 						 $addClass='';	
 					}
 
-					if($subject['veces_cur']==1 ){
+					if (isset($subject['veces_cur'])) {
+						if($subject['veces_cur']==1 ){
 
 						$veces_cur='veces_cur';
 						$content_veces=$subject['veces']+1;
 						$content="Requisito: Debe presentar una solicitud a Decanura de su Facultar  y Compromiso";
-					}
-					else {$veces_cur='';}
+						}
+						
+					}else {$veces_cur='';}
 
 				?>
-				<?php if($subject['register'] == 1  ){
+				<?php if (isset($subject['register'])) {
+					if($subject['register'] == 1  ){
 
 							$display_reg="display:none";
 							$btnsuccess='btn-success';
@@ -170,13 +173,15 @@
 						// $style_reg="display:none";
 					 }
 
-					 if($subject['register'] == 1  && $this->state != "B" ){
+					if(isset($subject['register'] ) && $subject['register'] == 1  && $this->state != "B" ){
 							$style_reg="";
 						}
 					 elseif ($this->state !="B") {
 							$style_reg="display:none";
 					 }
-					 
+				}else{
+					$display_reg="";
+					$display_mod="display:none";}
 				?>
 
 				<tr class='<?php echo $class?> tr-<?php echo $subject['courseid']?> tr-<?php echo $subject['courseid'].$subject['turno']?>' id='<?php echo $veces_cur?>' 
@@ -282,14 +287,14 @@ if($this->error_cur){ ?>
 							<?php echo $this->cont_conmment['num_registration']?>
 						</p>
 					</div>
-				<?php } if($this->cont_conmment['credits'] != ""){ ?>
+				<?php } if(isset($this->cont_conmment['credits'])){ ?>
 					<h5 class='text-danger '><strong>CREDITOS</strong></h5>
 					<div class='alert alert-info'>
 						<p class='text-primary'>
 							<?php echo $this->cont_conmment['credits']?>
 						</p>
 					</div>
-				<?php }  if($this->cont_conmment['semester'] != ""){ ?>
+				<?php }  if(isset($this->cont_conmment['semester'])){ ?>
 					<h5 class='text-danger '><strong>Semestres</strong></h5>
 					<div class='alert alert-info'>
 						<p class='text-primary'>
@@ -455,7 +460,7 @@ if($this->error_cur){ ?>
 	            },
 	            error:function($data){
 	                    //Pintar el error
-	                alert("Error");
+	                //alert("Error");
                     $("#modal").modal('show');
                 	$("#error_").html("Error en el Servidor");
 	            }

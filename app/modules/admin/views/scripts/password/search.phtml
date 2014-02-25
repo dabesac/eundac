@@ -1,30 +1,33 @@
-<form id="cambiaclave" name="<?php echo $this->fm->getName(); ?>" action="<?php echo $this->fm->getAction(); ?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
-        
- 
-<center>
-<table class="table span9 ">
-<tr >
-    <th >Codigo</th>
-     <td ><div colspan='2' ><?php echo $this->fm->uid; ?></div></td>
-</tr>
-<tr >
-    <th >Apellidos y Nombres</th>
-    <td ><?php echo $this->fm->nom; ?></td>
-    <!-- <td><input |type="text" name="nom" id="nom" ></td> -->
-</tr>
-<tr >
-    <th >Rol</th>
-     <td > <?php echo $this->fm->chrol; ?></td>
-</tr>
-<tr >
-    <td colspan='2'> <?php echo $this->fm->buscar; ?></td>
-</tr>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-qrcode"></span> Cambiar Clave');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/admin" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button id="buscar"type="button" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Buscar</button>');?>
 
-</table>
-</center>
-
-<div id="datos"></div>
+<form id="cambiaclave" name="<?php echo $this->fm->getName(); ?>" action="<?php echo $this->fm->getAction(); ?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >        
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <center>
+            <table class='table table-hover'>
+                <tr >
+                    <th class='text-right' style='font-size:15px'>Código : </th>
+                    <td><div class='col-xs-4 col-xs-offset-1'><?php echo $this->fm->uid;?></div></td>
+                </tr>
+                <tr >
+                    <th class='text-right' style='font-size:15px'>Apellidos y Nombres : </th>
+                    <td><div class='col-md-9 col-xs-offset-1'><?php echo $this->fm->nom; ?></div></td>
+                    <!-- <td><input |type="text" name="nom" id="nom" ></td> -->
+                </tr>
+                <tr >
+                    <th class='text-right' style='font-size:15px'>Rol : </th>
+                    <td><div class='col-md-12 col-xs-offset-1'><?php echo $this->fm->chrol; ?></div></td>
+                </tr>
+                <tr >
+                    <!-- <td colspan='2'> <?php echo $this->fm->buscar; ?></td> -->
+                </tr>
+            </table>
+        </center>
+    </div>    
+</div> 
 </form>
+<div id="datos"></div>
 <!-- <div class="datos" id="datos-tabla"></div> -->
 <!-- <input type='text' id='rol'  readonly='readonly' style='border:none;display:none'  /> -->
 
@@ -34,14 +37,13 @@ $("#buscar").click(function(){
     if ($("#uid").val() || $("#nom").val()) {
         vuid = $("#uid").val();
         vnom = $("#nom").val();
-
         
         url="/admin/password/list/uid/" + vuid +"/nom/" + vnom + "/rol/" + rol;
-        
+        $('#datos').html("<center><img src='/img/spinner.gif'> Cargando....</center>");
         $("#datos").load(url);
         return false;
     }else{
-        //alert ("Escriba el Codigo o Apellidos y Nombres");
+        alert ("Escriba un Código ó Apellidos y Nombres");
     };
 });
 rol='';
