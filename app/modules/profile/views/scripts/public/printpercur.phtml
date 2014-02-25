@@ -1,34 +1,7 @@
 <?php
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
-ob_start(); 
-$header='
-<table style="width: 100%; margin-bottom:15px" border="1" >
-    <tr>
-        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-        <th style="text-align: center; font-size: 11px;">
-        FACULTAD DE '.strtoupper($this->faculty).'<br/>
-        ESCUELA DE  '.strtoupper($this->speciality).'<br/>
-        '.strtoupper($this->spe['parent']).' 
-        </th>        
-    </tr>
-    <tr>
-        <th style="border: 1px solid #000;"> MATRICULAS POR CURRICULA</th>
-    </tr>
-    <br>
-</table>
-
-    <tr>
-        <td style="text-align: left;">Codigo: '.strtoupper($this->uid).'</td>
-    </tr>
-    <tr>
-        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
-    </tr>
-    <tr>   
-        <td style="text-align: left;">Alumno: '.strtoupper($this->person[0]['last_name0']." ".$this->person[0]['last_name1'].", ".$this->person[0]['first_name']).'</td>
-    <tr></br>   
-
-'    
+ob_start();   
 ?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
@@ -153,8 +126,8 @@ $header='
     
     $html = ob_get_contents();
   
-    $mpdf=new mPDF('win-1252','A4','','',15,15,36,18,8,5);
-    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,8,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
     $mpdf->showWatermarkImage = true;
   
     $mpdf->SetHTMLHeader($this->header);

@@ -25,7 +25,7 @@ class Curricula_ShowController extends Zend_Controller_Action
             $where['oid']=$oid;
             $facultad=$facu->_getAll($where);
             $this->view->facultad=$facultad;
-            if ($rid=="DC" && $this->sesion->infouser['teacher']['is_director']=="S"){
+            if ($rid=="DR" && $this->sesion->infouser['teacher']['is_director']=="S"){
                 $escid=$this->sesion->escid;
                 $this->view->escid=$escid;
                 $facid=$this->sesion->faculty->facid;
@@ -56,7 +56,7 @@ class Curricula_ShowController extends Zend_Controller_Action
             $escuelas=$esc->_getFilter($where);
             $this->view->escuelas=$escuelas;
 
-            if ($rid=="DC" && $this->sesion->infouser['teacher']['is_director']=="S"){
+            if ($rid=="DR" && $this->sesion->infouser['teacher']['is_director']=="S"){
                 $escid=$this->sesion->escid;
                 $this->view->escid=$escid;
             }

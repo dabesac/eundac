@@ -27,8 +27,8 @@ ob_start();
 </table>
 <?php 
     $html = ob_get_contents(); 
-    $mpdf=new mPDF('win-1252','A4','','',15,15,33,18,5,5);
-    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,5,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
     $mpdf->showWatermarkImage = true;
     $mpdf->SetHTMLHeader($this->header);
     $mpdf->SetHTMLFooter($this->footer);

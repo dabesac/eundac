@@ -23,7 +23,7 @@
  				$facid = $this->sesion->faculty->facid;
  				$where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid,'state' => 'A');
  			}else{
- 				if ($rid == 'DC' && $is_director=='S') {
+ 				if ($rid == 'DR' && $is_director=='S') {
  					$this->view->director = $is_director;
  					$this->view->escid = $this->sesion->escid;
  					$where = array('eid' => $eid, 'oid' => $oid, 'parent' => $this->sesion->escid,'state' => 'A');
