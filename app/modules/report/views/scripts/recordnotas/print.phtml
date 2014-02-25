@@ -110,6 +110,6 @@ ob_start();
     
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('RecordNotas-'.$this->person['pid'].'.pdf','D');
+    $mpdf->Output('RecordNotas -'.$this->person['pid'].'.pdf','D');
     // $mpdf -> Output();  
 ?>
