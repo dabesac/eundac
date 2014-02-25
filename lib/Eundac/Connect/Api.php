@@ -15,7 +15,7 @@ class Eundac_Connect_Api extends Zend_Rest_Client{
 	**@param sever Zend_Rest_Client ***
 	** user password
 	**/
-	const API_HOST_SERVER ="http://172.16.0.210:8080/";
+	const API_HOST_SERVER ="http://api.undac.edu.pe:8080/";
 	protected $_params = array(); 
 	protected $_model = null;
 	protected $_url= null;
@@ -52,14 +52,14 @@ class Eundac_Connect_Api extends Zend_Rest_Client{
 		    $data = Zend_Json::decode($lista);
 		    print_r($data);/*
 
-    	/*$server = new Zend_XmlRpc_Client('http://172.16.0.211:8069/xmlrpc/common');
+    	/*$server = new Zend_XmlRpc_Client('http://erp.undac.edu.pe:8069/xmlrpc/common');
 		$client = $server->getProxy();
 		try {
 			$database = 'acreditacion';
 			$user = 'admin';
 			$password = 'sistemas';
 			$auth = $client->login($database,$user,$password);
-	    	$object = new Zend_XmlRpc_Client('http://172.16.0.211:8069/xmlrpc/');
+	    	$object = new Zend_XmlRpc_Client('http://erp.undac.edu.pe:8069/xmlrpc/');
 	    	$estandar = $object->getProxy();
 	    	//$data = $estandar->execute($database,$user,$password,'search','ac.estandar.school',array('escid'=>'4SI'));
 
