@@ -26,12 +26,14 @@ class Admin_Form_Keychange extends Zend_Form{
         $ncla->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $ncla->setAttrib("maxlength", "30")->setAttrib("size", "30");
         $ncla->setAttrib('class', 'form-control');
+        $ncla->setAttrib("placeholder","Nueva Contraseña");
         $ncla->setRequired(true)->addErrorMessage('Este campo es requerido');
 
         $rcla= new Zend_Form_Element_Password("rcla");
         $rcla->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $rcla->setAttrib("maxlength", "30")->setAttrib("size", "30");
         $rcla->setAttrib('class', 'form-control');
+        $rcla->setAttrib("placeholder","Repita Contraseña");
         $rcla->setRequired(true)->addErrorMessage('Este campo es requerido');
 
         // $rol= new Zend_Form_Element_Select('rid');

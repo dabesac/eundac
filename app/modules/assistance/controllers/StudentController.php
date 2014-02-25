@@ -912,6 +912,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 $namep=strtoupper($spe['parent']);
                 $namefinal=$names." <br> ".$namep;
 
+                $speciality['header']="";
                 if ($speciality['header']) {
                     $namelogo = $speciality['header'];
                 }
