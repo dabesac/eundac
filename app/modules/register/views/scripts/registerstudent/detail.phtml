@@ -41,7 +41,7 @@
                 $classCondition      = 'text-danger';
                 $classButtonValidate = 'disabled';
             endif ?>
-            <h5 id="condition" class="<?php echo $classCondition ?>">Condiciones <span class="glyphicon glyphicon-flag"></span></h5>
+            <h5 class="<?php echo $classCondition ?>"><span id="condition">Condiciones <span class="glyphicon glyphicon-flag"></span></span></h5>
             <div class="col-md-6" id='conditionInfo' style="position: absolute; z-index: 2; background: white;">
                 <?php if ($this->condition): ?>
                     <?php foreach ($this->condition as $condition): ?>
