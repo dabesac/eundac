@@ -1,37 +1,32 @@
 <form name="<?php echo $this->fm->getName(); ?>" action="<?php echo $this->fm->getAction(); ?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
-
-  <div class="form-group">
-    <label for="inputEmail1" class="col-lg-2 control-label">Nueva Clave</label>
-    <div class="col-lg-10">
-      <?php echo $this->fm->ncla; ?>
+    <div class="form-group">
+        <label for="inputEmail1" class="col-md-3 control-label">Nueva Clave</label>
+        <div class="col-md-8">
+            <?php echo $this->fm->ncla; ?>
+        </div>
     </div>
-  </div>
-
-  <div class="form-group">
-    <label for="inputEmail1" class="col-lg-2 control-label">Repita Clave</label>
-    <div class="col-lg-10">
-      <?php echo $this->fm->rcla; ?>
-    </div>
-  </div>
-                   
 
     <div class="form-group">
-    <div class="col-lg-10">
-      <h5><p class="text-danger text-center"><?php echo $this->mensaje; ?></p></h5>
-    </div>
-  <div>        
-             
-       
+        <label for="inputEmail1" class="col-md-3 control-label">Repita Clave</label>
+        <div class="col-md-8">
+            <?php echo $this->fm->rcla; ?>
+        </div>
+    </div>                   
+
     <div class="form-group">
-    <div class="col-lg-offset-2 col-lg-10">
-      <?php echo $this->fm->guardar; ?>
-    </div>
-  </div>
-
-
-    
+        <div class="col-md-10">
+            <h5><p class="text-danger text-center"><?php echo $this->mensaje; ?></p></h5>
+        </div>
+    <div>            
+    <!-- <div class="form-group"> -->
+        <div class='text-center'><?php echo $this->fm->guardar; ?>
+            <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> -->
+            <!-- <div class="col-lg-offset-2 col-lg-10"> -->         
+        </div>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+    <!-- </div> -->
+</form>
+<!--    
     <div style="clear:both" ></div>
 
-</div>
-
-    </form>
+</div> -->

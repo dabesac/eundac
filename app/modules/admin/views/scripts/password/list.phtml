@@ -27,9 +27,9 @@ if ($this->datos)
             <td><?php echo $datos['last_name0']." ".$datos['last_name1'].", ".$datos['first_name'];?></td>
             <td class='text-center'><?php echo $datos['escid']?></td>
             <td class='text-center'>
-                <!-- <a href='#' data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-pencil"></span></a> -->
+                <a href='#' id='keychange' data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-pencil"></span></a>
 
-                <a href="/admin/password/keychange/uid/<?php echo base64_encode($datos['uid']);?>/eid/<?php echo base64_encode($datos['eid']);?>/oid/<?php echo base64_encode($datos['oid']);?>/pid/<?php echo base64_encode($datos['pid']);?>/escid/<?php echo base64_encode($datos['escid']);?>/subid/<?php echo base64_encode($datos['subid']);?>"><span class="glyphicon glyphicon-pencil"></span>
+                <!-- <a href="/admin/password/keychange/uid/<?php echo base64_encode($datos['uid']);?>/eid/<?php echo base64_encode($datos['eid']);?>/oid/<?php echo base64_encode($datos['oid']);?>/pid/<?php echo base64_encode($datos['pid']);?>/escid/<?php echo base64_encode($datos['escid']);?>/subid/<?php echo base64_encode($datos['subid']);?>"><span class="glyphicon glyphicon-pencil"></span> -->
                 </a>
             </td>
         </tr>
@@ -56,15 +56,18 @@ else{   ?>
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                <center><h3 class="modal-title" id="myModalLabel"><b class='text-primary'>Nueva Contraseña</b></h3></center>
             </div>
             <div class="modal-body">
-            
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <div id='change'></div>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $("#keychange").click( function(){
+        url="/admin/password/keychange/uid/<?php echo base64_encode($datos['uid']);?>/eid/<?php echo base64_encode($datos['eid']);?>/oid/<?php echo base64_encode($datos['oid']);?>/pid/<?php echo base64_encode($datos['pid']);?>/escid/<?php echo base64_encode($datos['escid']);?>/subid/<?php echo base64_encode($datos['subid'])?>";
+        $('#change').html("<center><img src='/img/spinner.gif'> Cargando....</center>");
+        $("#change").load(url);
+    });
+</script>
