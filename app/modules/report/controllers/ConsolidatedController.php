@@ -20,7 +20,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
             $facid = $this->sesion->faculty->facid;
             $escid = $this->sesion->escid;
             $is_director = $this->sesion->infouser['teacher']['is_director'];
-            if ($rid=="DC" && $is_director=="S"){
+            if ($rid=="DR" && $is_director=="S"){
                 $rid="DIREC";
                 if ($facid=="2") $escid=substr($escid,0,3);
                 $this->view->escid=$escid;        
@@ -48,7 +48,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
             $subid = $this->sesion->subid;
             $is_director = $this->sesion->infouser['teacher']['is_director'];
             $facid = $this->_getParam('facid');
-            if ($rid=="DC" && $is_director=="S"){
+            if ($rid=="DR" && $is_director=="S"){
                 if ($facid=="2") $escid=substr($escid,0,3);
                 $this->view->escid=$escid;
             }
@@ -820,7 +820,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
              $listacursos = $pc->_getCountStudentxCourse($where);
              $this->view->listacursos=$listacursos;
             }
-            if ($rid=='DC')
+            if ($rid=='DR')
              {
             $where['subid'] = $this->sesion->subid;
             $this->view->listacursos = $pc->_getCountStudentxCourse($where);
@@ -910,7 +910,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
              $listacursos = $pc->_getCountStudentxCourse($where);
              $this->view->listacursos=$listacursos;
             }
-            if ($rid=='DC')
+            if ($rid=='DR')
             {
             $where['subid'] = $this->sesion->subid;
             $this->view->listacursos = $pc->_getCountStudentxCourse($where);
