@@ -7,7 +7,7 @@ class Eundac_Connect_Api extends Zend_Rest_Client{
 	**@param auth ***
 	** user password
 	**/
-	protected $_user = 's1t3m4s';
+	protected $_user = 's1st3m4s';
 	protected $_password = 'und4c';
 	protected $_auth = false;
 	/**
@@ -15,7 +15,10 @@ class Eundac_Connect_Api extends Zend_Rest_Client{
 	**@param sever Zend_Rest_Client ***
 	** user password
 	**/
+
+
 	const API_HOST_SERVER ="http://api.undac.edu.pe:8080/";
+
 	protected $_params = array(); 
 	protected $_model = null;
 	protected $_url= null;

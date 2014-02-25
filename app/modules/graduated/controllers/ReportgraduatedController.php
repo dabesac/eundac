@@ -44,8 +44,7 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                 $attrib = array('parent', 'name');
                 $parents = $schoolDb->_getFilter($where, $attrib);
                 foreach ($parents as $parent) {
-                    if ($parent['parent']['0'] == $escid['0']) {
-                        $haveSpeciality = 'Si';
+                    if ($parent['parent']['0'] == $escid['0']) {$haveSpeciality = 'Si';
                         break;
                     }
                 }

@@ -29,18 +29,16 @@
 					<th colspan='2'class='text-center success'>Semana 5</th>
 					<th colspan='2'class='text-center warning'>Semana 6</th>
 					<th colspan='2'class='text-center success'>Semana 7</th>
-					<th colspan='2'class='text-center warning'>Semana 8</th>
 					<th colspan='1'class='text-center success'></th>
 				<?php }?>
 				<?php if ($this->partial == 2) {?>
-					<th colspan='2'class='text-center warning'>Semana 9</th>
-					<th colspan='2'class='text-center success'>Semana 10</th>
-					<th colspan='2'class='text-center warning'>Semana 11</th>
-					<th colspan='2'class='text-center success'>Semana 12</th>
-					<th colspan='2'class='text-center warning'>Semana 13</th>
-					<th colspan='2'class='text-center success'>Semana 14</th>
-					<th colspan='2'class='text-center warning'>Semana 16</th>
-					<th colspan='2'class='text-center success'>Semana 17</th>
+					<th colspan='2'class='text-center warning'>Semana 8</th>
+					<th colspan='2'class='text-center success'>Semana 9</th>
+					<th colspan='2'class='text-center warning'>Semana 10</th>
+					<th colspan='2'class='text-center success'>Semana 11</th>
+					<th colspan='2'class='text-center warning'>Semana 12</th>
+					<th colspan='2'class='text-center success'>Semana 13</th>
+					<th colspan='2'class='text-center warning'>Semana 14</th>
 					<th colspan='2'class='text-center warning'></th>
 				<?php }?>
 			</tr>
@@ -60,8 +58,6 @@
 					<th class='text-sesion-assist '>sesión 12</th>
 					<th class='text-sesion-assist '>sesión 13</th>
 					<th class='text-sesion-assist '>sesión 14</th>
-					<th class='text-sesion-assist '> sesión 15</th>
-					<th class='text-sesion-assist '>sesión 16</th>
 					<th class='text-sesion-assist active'>Ex Parcial 1</th>
 				<?php }?>
 				<?php if ($this->partial==2) { ?>
@@ -79,8 +75,6 @@
 					<th class='text-sesion-assist '>sesión 29</th>
 					<th class='text-sesion-assist '>sesión 30</th>
 					<th class='text-sesion-assist '>sesión 31</th>
-					<th class='text-sesion-assist '> sesión 32</th>
-					<th class='text-sesion-assist '>sesión 33</th>
 					<th class='text-sesion-assist active'>Ex Parcial 2</th>
 				<?php } ?>
 			</tr>
@@ -331,6 +325,10 @@
 								break;
 						}?>
 					</td>
+					
+					<?php }?>
+
+					<?php if ($this->state == 'C' && $this->partial==2) { ?>
 					<td>
 						<?php switch ($register['a_sesion_16']) {
 							case 'T':
@@ -363,10 +361,6 @@
 								break;
 						}?>
 					</td>
-					<?php }?>
-
-					<?php if ($this->state == 'C' && $this->partial==2) { ?>
-					
 					<td>
 						<?php switch ($register['a_sesion_18']) {
 							case 'T':
@@ -607,39 +601,6 @@
 								break;
 						}?>
 					</td>
-					<td>
-						<?php switch ($register['a_sesion_33'] ) {
-							case 'T':
-								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
-								break;
-							case 'R':
-								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
-								break;
-							case 'A':
-								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
-								break;
-							case 'F':
-								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
-								break;
-						}?>
-					</td>
-					<td>
-						<?php switch ($register['a_sesion_34']) {
-							case 'T':
-								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
-								break;
-							case 'R':
-								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
-								break;
-							case 'A':
-								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
-								break;
-							case 'F':
-								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
-								break;
-						}?>
-					</td>
-
 
 			<?php	
 			}?>
