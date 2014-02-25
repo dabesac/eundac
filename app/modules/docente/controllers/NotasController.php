@@ -14,7 +14,8 @@ class Docente_NotasController extends Zend_Controller_Action{
 
 	public function indexAction(){
 
-		$perid = $this->_getParam('perid',$this->sesion->period->perid);
+		$perid_encode = base64_encode($this->sesion->period->perid);
+		$perid = base64_decode($this->_getParam('perid',$perid_encode));
 
 		$where['eid']=$this->sesion->eid;
 		$where['oid']=$this->sesion->oid;
@@ -65,7 +66,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 	    $li = '';
 		 if ($period_tm_act_ini) {
 		 	foreach ($period_tm_act_ini as $key => $value) {
-                $li = "<li><a href=/docente/notas/index/perid/".$value['perid'].">".$value['name']." | ".$value['perid']."</a></li> \n" . $li;
+                $li = "<li><a href=/docente/notas/index/perid/".base64_encode($value['perid']).">".$value['name']." | ".$value['perid']."</a></li> \n" . $li;
 			}
 		}
 	    $this->view->periods = $li;
@@ -158,6 +159,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 				$persetage=0;
 				$num =0;
 				$data[$key]['persetage_notes'] = 0;
+
 				if ($data[$key]['closure_syllabus']=='C' && $data[$key]['closure_record_n']=='P') {
 						$data[$key]['persetage_notes'] = 50;
 				}elseif ($data[$key]['closure_syllabus']=='C' && $data[$key]['closure_record_n']=='C') {
@@ -168,7 +170,6 @@ class Docente_NotasController extends Zend_Controller_Action{
 			}
 
 
-			$num_temp = array();
 			foreach ($data as $key => $course_1) {
 				$where = array(
                 'eid' => $course_1['eid'],
@@ -189,7 +190,6 @@ class Docente_NotasController extends Zend_Controller_Action{
 		        $assistence = $base_assistance ->_getAll($where);
 		        $data[$key]['persetage_assit'] = 0;
 		        $count = count($assistence);
-				
 		        
 		        $assist_1 = 0; $assist_2 = 0; $assist_3 = 0;$assist_4 = 0;$assist_5 = 0;
 	            $assist_6 = 0; $assist_7 = 0; $assist_8 = 0;$assist_9 = 0;$assist_10 = 0;
@@ -197,17 +197,15 @@ class Docente_NotasController extends Zend_Controller_Action{
 	            $assist_16 = 0; $assist_17 = 0; $assist_18 = 0;$assist_19 = 0;$assist_20 = 0;
 	            $assist_21 = 0; $assist_22 = 0; $assist_23 = 0;$assist_24 = 0;$assist_25 = 0;
 	            $assist_26 = 0; $assist_27 = 0; $assist_28 = 0;$assist_29 = 0;$assist_30 = 0;
-	            $assist_31 = 0; $assist_32 = 0; $assist_33 = 0;$assist_34 = 0;
+	            $assist_31 = 0; $assist_32 = 0; ;
 	           	
 	           	
-	           		for ($i=1; $i <=34 ; $i++) { 
-	    				$num_reg = $num_reg + $count;
-	    			}
+           		for ($i=1; $i <= 32 ; $i++) { 
+    				$num_reg = $num_reg + $count;
+    			}
 
 
     			foreach ($assistence as $key1 => $infoassist) {
-
-	        		
 
 	        			if ($infoassist['a_sesion_1']=='R' || $infoassist['a_sesion_1']=='A' || $infoassist['a_sesion_1']=='F' || $infoassist['a_sesion_1']=='T') {
                         $assist_1++;
@@ -248,8 +246,6 @@ class Docente_NotasController extends Zend_Controller_Action{
 	                        $assist_17++;
 	                    }
 
-	                   
-
 	                    if ($infoassist['a_sesion_18']=='R' || $infoassist['a_sesion_18']=='A' || $infoassist['a_sesion_18']=='F' || $infoassist['a_sesion_18']=='T') {
 	                        $assist_18++;
 	                    }
@@ -283,23 +279,19 @@ class Docente_NotasController extends Zend_Controller_Action{
 	                        $assist_31++;
 	                    }if ($infoassist['a_sesion_32']=='R' || $infoassist['a_sesion_32']=='A' || $infoassist['a_sesion_32']=='F' || $infoassist['a_sesion_32']=='T') {
 	                        $assist_32++;
-	                    }if ($infoassist['a_sesion_33']=='R' || $infoassist['a_sesion_33']=='A' || $infoassist['a_sesion_33']=='F' || $infoassist['a_sesion_33']=='T') {
-	                        $assist_33++;
-	                    }if ($infoassist['a_sesion_34']=='R' || $infoassist['a_sesion_34']=='A' || $infoassist['a_sesion_34']=='F' || $infoassist['a_sesion_34']=='T') {
-	                        $assist_34++;
 	                    }
-		                    
-		             
 
 	            
                     	$sum = $assist_1 + $assist_2 + $assist_3 + $assist_4 +$assist_5+$assist_6 +$assist_7+
                     	   $assist_8 +$assist_9 + $assist_10 + $assist_11 + $assist_12 +$assist_13 + $assist_14+
                     	   $assist_15 +$assist_16 +$assist_17+$assist_18+$assist_19+$assist_20+$assist_21+$assist_22+
                     	   $assist_23+$assist_24+$assist_25+$assist_26+$assist_27+$assist_28+$assist_29+$assist_30+
-                    	   $assist_31+$assist_32+$assist_33+$assist_34;
+                    	   $assist_31+$assist_32;
+                    	
                    		$persetage_assit = ($num_reg > 0)? ((100*$sum)/$num_reg):0;
                   	
         		}
+                    	//echo $sum; exit();
 
 	    		$data[$key]['persetage_assit']=$persetage_assit;
 			}

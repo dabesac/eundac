@@ -154,12 +154,19 @@ if ($this->infoassist) { ?>
 								<input class='selectedall' type='checkbox' name='select-all-14' index-all='16'></th>
 							</div>
 						</th>
+						<th class='text-sesion-assist '>Examen
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-15' index-all='17'></th>
+							</div>
+						</th>
+					<?php }elseif ($this->partial == 1) { ?>
+						<th class='text-sesion-assist '>Examen
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-15' index-all='15'></th>
+							</div>
+						</th>
 					<?php }?>
-					<th class='text-sesion-assist '>Examen
-						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
-							<input class='selectedall' type='checkbox' name='select-all-15' index-all='17'></th>
-						</div>
-					</th>
+					
 					<th class='text-sesion-assist '>Retirar</th>
 			</tr>
 		</thead>
@@ -2912,39 +2919,6 @@ if ($this->infoassist) { ?>
 								break;
 						}?>
 					</td>
-					<td>
-						<?php switch ($register['a_sesion_33'] ) {
-							case 'T':
-								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
-								break;
-							case 'R':
-								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
-								break;
-							case 'A':
-								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
-								break;
-							case 'F':
-								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
-								break;
-						}?>
-					</td>
-					<td>
-						<?php switch ($register['a_sesion_34']) {
-							case 'T':
-								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
-								break;
-							case 'R':
-								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
-								break;
-							case 'A':
-								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
-								break;
-							case 'F':
-								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
-								break;
-						}?>
-					</td>
-
 
 			<?php	
 			}?>
