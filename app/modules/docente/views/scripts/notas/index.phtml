@@ -12,13 +12,17 @@
     </div>');
     
   $c=0;
-    // $perid_tmp = null;
-    // if (substr('A', $this->perid)) {
-    //     $perid_tmp = '';
-    // }elseif (substr('B', $this->perid)) {
-    //     # code...
-    // }
 
+    $perid_tmp = null;
+    $btn_alp = false;
+    if (substr($this->perid,2) == 'A') {
+        $perid_tmp = str_replace('A', 'D', $this->perid);
+        $btn_alp = true;
+    }elseif (substr($this->perid,2)=='B') {
+        $perid_tmp = str_replace('B', 'E', $this->perid);
+        $btn_alp = true;
+
+    }
 
 
   if ($this->faculty){
@@ -54,7 +58,7 @@
                                 $u_="";
                                 $urlAsist ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($courses['perid'])."/".base64_encode('curid')."/".base64_encode($courses['curid'])."/".base64_encode('state')."/".base64_encode($courses['state_record']);
 
-                                $url_aplazado ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode('13E')."/".base64_encode('curid')."/".base64_encode($courses['curid']);
+                                $url_aplazado ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($perid_tmp)."/".base64_encode('curid')."/".base64_encode($courses['curid']);
 
                                 $u_ = $courses['curid'].$courses['courseid'].$courses['turno'];
                                 $urlcampus = "http://campus.undac.edu.pe/courses/$u_/index.php";
@@ -158,7 +162,7 @@
 
 
 
-                                        <?php if ($courses['closure_record_n']=='C') {?>
+                                        <?php if ($courses['closure_record_n']=='C' && $btn_alp) {?>
                                             <a class="btn btn-primary btn-sm btn-group-course btn-fill-deferred" href="/register/deferred/index<?php echo $url_aplazado?>" data-toggle="tooltip" title="Llenado de Asistencia" > Aplazados</a>
                                         <?php }?>
                                         
