@@ -8,7 +8,7 @@ class Api_Model_DbTable_CourseCompetency extends Zend_Db_Table_Abstract
     public function _getOne($where=array()){
         try {
             if ($where['eid']=="" || $where['oid']=="" || $where['escid']=="" || $where['subid']==""  ||
-                $where['courseid '] || $where['curid']=="" || $where['perid']=="" || $where['turno']==""  
+                $where['courseid'] || $where['curid']=="" || $where['perid']=="" || $where['turno']==""  
                ) return false;
             $wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and curid='".$where['curid']."' and escid='".$where['escid']."' and subid='".$where['subid']."' and courseid='".$where['courseid']."' and turno='".$where['turno']."' and perid='".$where['perid']."'";
                 $row = $this->fetchRow($wherestr);
