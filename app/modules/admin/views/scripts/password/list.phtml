@@ -27,10 +27,7 @@ if ($this->datos)
             <td><?php echo $datos['last_name0']." ".$datos['last_name1'].", ".$datos['first_name'];?></td>
             <td class='text-center'><?php echo $datos['escid']?></td>
             <td class='text-center'>
-                <a href='#' id='keychange' data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-pencil"></span></a>
-
-                <!-- <a href="/admin/password/keychange/uid/<?php echo base64_encode($datos['uid']);?>/eid/<?php echo base64_encode($datos['eid']);?>/oid/<?php echo base64_encode($datos['oid']);?>/pid/<?php echo base64_encode($datos['pid']);?>/escid/<?php echo base64_encode($datos['escid']);?>/subid/<?php echo base64_encode($datos['subid']);?>"><span class="glyphicon glyphicon-pencil"></span> -->
-                </a>
+                <a href='#' class='keychange' data-toggle="modal" data-target="#myModal" eid="<?php echo base64_encode($datos['eid'])?>" oid="<?php echo base64_encode($datos['oid'])?>" rid="<?php echo base64_encode($datos['rid'])?>" uid="<?php echo base64_encode($datos['uid'])?>" pid="<?php echo base64_encode($datos['pid'])?>" escid="<?php echo base64_encode($datos['escid'])?>" subid="<?php echo base64_encode($datos['subid'])?>"><span class="glyphicon glyphicon-pencil"></span></a>
             </td>
         </tr>
        <?php
@@ -64,10 +61,23 @@ else{   ?>
         </div>
     </div>
 </div>
+
 <script type="text/javascript">
-    $("#keychange").click( function(){
-        url="/admin/password/keychange/uid/<?php echo base64_encode($datos['uid']);?>/eid/<?php echo base64_encode($datos['eid']);?>/oid/<?php echo base64_encode($datos['oid']);?>/pid/<?php echo base64_encode($datos['pid']);?>/escid/<?php echo base64_encode($datos['escid']);?>/subid/<?php echo base64_encode($datos['subid'])?>";
-        $('#change').html("<center><img src='/img/spinner.gif'> Cargando....</center>");
-        $("#change").load(url);
+    $(".keychange").click( function(){
+        var params = {
+        eid:$(this).attr('eid'),
+        oid:$(this).attr('oid'),
+        rid:$(this).attr('rid'),
+        uid:$(this).attr('uid'),
+        pid:$(this).attr('pid'),
+        escid:$(this).attr('escid'),
+        subid:$(this).attr('subid')
+        };
+        $.get("/admin/password/keychange/",
+            params,
+            function  (data) {
+                $('#change').html("<center><img src='/img/spinner.gif'> Cargando...</center>");
+                $("#change").html(data);
+        });
     });
 </script>
