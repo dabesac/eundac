@@ -17,7 +17,7 @@ $ldistri =$this->ldistribution;
 	</div>
 	<div class="col-md-2">
 		<h5 class="text-muted">
-			<span class="glyphicon glyphicon-record text-danger"></span> <span class="text-danger">Inactivo</span>
+			<span class="glyphicon glyphicon-record text-danger"></span> <span class="text-danger">Cerrado/Inactivo</span>
 		</h5>
 	</div>
 	<div class="col-md-2">
@@ -62,19 +62,19 @@ $ldistri =$this->ldistribution;
 		$state = ($distri['state']=='A')?"class='success'":"";
 		$i++; 
 		switch ($distri['state']) {
-			case 'A': $state = "success"; 
+			case 'A': 	$state = "success"; 
 						$namestate = "Activo";
 						break;
-			case 'I': $state = "danger"; 
+			case 'I': 	$state = "danger"; 
 						$namestate = "Inactivo";
 						break;
-			case 'C': $state = "danger"; 
+			case 'C': 	$state = "danger"; 
 						$namestate = "Cerrado";
 						break;
-			case 'B': $state = "warning"; 
+			case 'B': 	$state = "info"; 
 						$namestate = "Borrador";
 						break;
-			case 'O': $state = "info"; 
+			case 'O': 	$state = "info"; 
 						$namestate = "Observado";
 						break;
 		}

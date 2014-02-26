@@ -212,7 +212,11 @@
                 <td class="text-center"><?php echo $this->coursesName[$c][0]['credits'] ?></td>
                 <td id="courseTurno<?php echo $course['courseid'] ?>" class="text-center"><?php echo $course['turno'] ?></td>
                 <td id="teacherTurno<?php echo $course['courseid'] ?>"><?php echo $this->teachers[$c][0]['last_name0'].' '.$this->teachers[$c][0]['last_name1'].' '.$this->teachers[$c][0]['first_name']  ?> </td>
+                <?php if ($state == 'M'): ?>
+                <td class="text-center <?php echo $classtdVeces ?>"><strong><?php echo $this->coursesName[$c]['veces'] ?> Vez</strong></td>
+                <?php else: ?>
                 <td class="text-center <?php echo $classtdVeces ?>"><strong><?php echo $this->coursesName[$c]['veces'] + 1 ?> Vez</strong></td>
+                <?php endif ?>
                 <td class="text-center <?php echo $classButtons ?> butonsCourses">
                     <a id="showEditAlert<?php echo $course['courseid'] ?>" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
                 </td>

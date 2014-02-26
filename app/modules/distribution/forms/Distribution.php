@@ -3,18 +3,30 @@
 class Distribution_Form_Distribution extends Zend_Form{    
     public function init(){
     	
-        $distid= new Zend_Form_Element_Hidden("distid");
-        $distid->setAttrib("class","form-control");
-        $distid->setAttrib('readonly',true);
-        $distid->removeDecorator("HtmlTag")->removeDecorator("Label");
-        
+        $sesion  = Zend_Auth::getInstance();
+        $sesion = $sesion->getStorage()->read();
+        $eid = $sesion->eid;
+        $oid = $sesion->oid;
+
         $perid = new Zend_Form_Element_Select("perid");
         $perid->setRequired(true);
         $perid->removeDecorator('Label');
         $perid->removeDecorator('HtmlTag');
         $perid->setAttrib("class","form-control");
         $perid->addMultiOption("","Selecione Periodo");
-        //$perid->addMultiOption("12B","12B Periodo");
+        $periodsDb = new Api_Model_DbTable_Periods();
+        $where = array(
+                        'eid'  => $eid,
+                        'oid'  => $oid,
+                        'year' => 14 );
+
+        $periods = $periodsDb->_getPeriodsxYears($where);
+        foreach ($periods as $period) {
+            if ($period['perid']['2'] == 'A' or $period['perid']['2'] == 'B'or $period['perid']['2'] == 'N') {
+                $perid->addMultiOption($period['perid'],$period['perid'].' | '.$period['name']);
+            }
+        }
+        $this->view->periodsDistribution = $periodsDistribution;
 
         
         $number= new Zend_Form_Element_Text("number");
@@ -29,11 +41,9 @@ class Distribution_Form_Distribution extends Zend_Form{
         $datepress->setAttrib("required","");
         $datepress->setRequired(true);
         $datepress->removeDecorator("HtmlTag")->removeDecorator("Label");
-        
 
         $dateaccept= new Zend_Form_Element_Text("dateaccept");
         $dateaccept->setAttrib("class","form-control");
-        $dateaccept->setAttrib("required","");
         $dateaccept->removeDecorator("HtmlTag")->removeDecorator("Label");
         
         $state = new Zend_Form_Element_Select("state");

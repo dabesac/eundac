@@ -1,50 +1,70 @@
 
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Editar Distribución');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution/index/anio/'.$this->anio.'" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a></a>
+<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution/index/anio/'.$this->dataforUpdate['anio'].'" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a></a>
 	<a href="##" id="save" class="btn btn-success">Guardar</a>');?>
 
-<form action="/distribution/distribution/edit/distid/<?php echo $this->dataget['distid']?>/perid/<?php echo $this->dataget['perid']?>" method="post" id="form">
+<!--Mensajes-->
+<div class="row-fluid">
+	<div class="col-md-8 col-md-offset-2">
+		<div id="missing" class="alert alert-warning hidden">
+			<button type="button" class="close">&times;</button>
+			<strong>Falta Datos!</strong> Le falta rellenar algunos datos....
+		</div>
+	</div>
+</div>
 
-	<table class="table"> 
-		<tr>
-			<th class="col-md-2">Periodo</th>
-			<th class="col-md-2" >Numero</th>
-			<th class="col-md-2">Fecha Presentación</th>
-			<th class="col-md-2">Estado</th>
-		</tr>
-		<tr>
-			<td ><input id="year" class="form-control" type="text" value="<?php echo $this->period[0]['perid'].' | '.$this->period[0]['name'] ?>" disabled></td>
-			<td ><?php print $this->form->number?></td>
-			<td ><?php print $this->form->datepress?></td>
-			<td ><?php print $this->form->state?></td>
-		</tr>
-	</table>
+<form action="" id="form">
+
+<input type="hidden" name="distid" value="<?php echo $this->dataforUpdate['distid'] ?>">
+<input type="hidden" name="perid" value="<?php echo $this->dataforUpdate['perid'] ?>">
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-2 panel panel-default">
+		<div class="col-md-5">
+			<h4><br></h4>
+			<h5 class="text-muted">Codigo</h5>
+			<?php echo $this->form->number ?>
+		</div>
+		<div class="col-md-7">
+			<h5 class="text-muted">Periodo</h5>
+			<?php echo $this->form->perid ?>
+			<div class="row">
+				<div class="col-md-6">
+					<h5 class="text-muted">Fecha de Presentación</h5>
+					<?php echo $this->form->datepress ?>
+				</div>
+				<div class="col-md-6">
+					<h5 class="text-muted">Estado</h5>
+					<?php echo $this->form->state ?>
+				</div>
+			</div><br>
+		</div>
+	</div>
+</div>	
+<input type="hidden" name="whySubmit" value="update">
 </form>
 <script>
+	$("#datepress").datepicker();
 
 	$('#save').click(function(){
-		$('#form').submit();
+		$.ajax({
+			type   : 'post',
+			url    : '/distribution/distribution/savedistribution',
+			data   : $('#form').serialize(),
+			success: function(data){
+				$('.alert').addClass('hidden');
+				if (data == 'exito') {
+					$(location).attr('href', "/distribution/distribution/index/anio/<?php echo $this->dataforUpdate['anio'] ?>")
+				}else if (data == 'falta-datos'){
+					$('#missing').removeClass('hidden');
+				}
+			}
+		});
 	});
 
-	$('#form').submit(function(){
-		$.ajax({
-			type: 'POST',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            success: function(data){
-            	alert(data);
-            }
-		});
+	//Close Alerts
+	$('.close').click(function(){
+		$('.alert').addClass('hidden');
 	});
-	/*$(function() {
-		
-		$("#datepress").datepicker();
-		$("#dateaccept").datepicker();
-		$("#sendform").click(function(){
-			$("#frmDistribution").submit();
-		});
-		
-		
-	});*/
-	
+
 </script>
