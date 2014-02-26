@@ -1,6 +1,6 @@
 
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Editar Distribución');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a></a>
+<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution/index/anio/'.$this->anio.'" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a></a>
 	<a href="##" id="save" class="btn btn-success">Guardar</a>');?>
 
 <form action="/distribution/distribution/edit/distid/<?php echo $this->dataget['distid']?>/perid/<?php echo $this->dataget['perid']?>" method="post" id="form">
@@ -13,7 +13,7 @@
 			<th class="col-md-2">Estado</th>
 		</tr>
 		<tr>
-			<td ><?php print $this->form->perid?></td>
+			<td ><input id="year" class="form-control" type="text" value="<?php echo $this->period[0]['perid'].' | '.$this->period[0]['name'] ?>" disabled></td>
 			<td ><?php print $this->form->number?></td>
 			<td ><?php print $this->form->datepress?></td>
 			<td ><?php print $this->form->state?></td>
@@ -21,6 +21,7 @@
 	</table>
 </form>
 <script>
+
 	$('#save').click(function(){
 		$('#form').submit();
 	});
@@ -30,6 +31,9 @@
 			type: 'POST',
             url: $(this).attr('action'),
             data: $(this).serialize(),
+            success: function(data){
+            	alert(data);
+            }
 		});
 	});
 	/*$(function() {

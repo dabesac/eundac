@@ -1,5 +1,4 @@
 <?php
-
 class Distribution_DistributionController extends Zend_Controller_Action {
 
     public function init()
@@ -22,6 +21,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $yearActive = substr($periodActive, 0, 2);
             $yearActive = '20'.$yearActive;
             $this->view->yearActive = $yearActive;
+
+            $anio = base64_decode($this->_getParam('anio'));
+            $this->view->anio = $anio;
         } catch (Exception $e) {
             print 'Error Controlador Index'.$e->getMessage();
         }
@@ -38,6 +40,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
        		$data['subid']=$this->sesion->subid;
 
             $anio = $this->getParam('anio');
+            $this->view->anio = $anio;
             $anio = substr($anio, 2, 2);
             $data['year'] = $anio;
        		//$campos = array("eid","oid","escid","subid","perid","dateaccept","number","state","distid");
@@ -64,8 +67,39 @@ class Distribution_DistributionController extends Zend_Controller_Action {
         }
     }
 
+    public function listperiodsAction(){
+        $this->_helper->layout()->disablelayout();
+
+        $periodsDb = new Api_Model_DbTable_Periods();
+
+        $perid = $this->sesion->period->perid;
+        $anio = $perid['0'].$perid['1'];
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        $where = array(
+                        'eid'  => $eid,
+                        'oid'  => $oid,
+                        'year' => $anio );
+
+        $periods = $periodsDb->_getPeriodsxYears($where);
+        $c = 0;
+        foreach ($periods as $period) {
+            if ($period['perid']['2'] == 'A' or $period['perid']['2'] == 'B'or $period['perid']['2'] == 'N') {
+                $periodsDistribution[$c]['perid'] = $period['perid'];
+                $periodsDistribution[$c]['name'] = $period['name'];
+                $c++;
+            }
+        }
+        $this->view->periodsDistribution = $periodsDistribution;
+
+    }
+
     public function newAction()
-    {    	
+    {    
+        $anio = $this->_getParam('anio');
+        $this->view->anio = $anio;
         $form = new Distribution_Form_Distribution();
         $this->view->form = $form;
 
@@ -104,13 +138,15 @@ class Distribution_DistributionController extends Zend_Controller_Action {
     {
         $distid = base64_decode($this->_getParam("distid"));
         $perid = base64_decode($this->_getParam("perid"));
+        $anio = $this->_getParam("anio");
+        $this->view->anio = $anio;
         $this->view->dataget = $dataget = array('distid'=>base64_encode($distid), 'perid'=>base64_encode($perid));
 
-
+        $periodsDb = new Api_Model_DbTable_Periods();
         $distr_ = new Distribution_Model_DbTable_Distribution();
         $form = new Distribution_Form_Distribution();
 
-        $form->perid->setAttrib("disabled", "");
+        //$form->perid->setAttrib("disabled", "");
         $data['eid']=$this->sesion->eid;
         $data['oid']=$this->sesion->oid;
         $data['escid']=$this->sesion->escid;
@@ -118,9 +154,12 @@ class Distribution_DistributionController extends Zend_Controller_Action {
         $data['distid']=$distid;
         $data['perid']=$perid;
 
+        $where = array('eid'=>$data['eid'], 'oid'=>$data['oid'], 'perid'=>$perid);
+        $attrib = array('name', 'perid');
+        $period = $periodsDb->_getFilter($where, $attrib);
+        $this->view->period = $period;
+
         $r = $distr_->_getOne($data);
-        $r['perid'] = base64_encode($r['perid']);
-        
         $this->view->form = $form;      
         $form->populate($r);
 
@@ -135,17 +174,16 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                         'escid'=>$data['escid'], 
                         'subid'=>$data['subid'], 
                         'perid'=>$data['perid']);
-                print_r($pk);
                 $formData['perid'] = base64_decode($formData['perid']);
                 $formData['modified'] = $this->sesion->uid;
                 $formData['updated'] = date('Y-m-d H:i:s');
-                print_r($formData);
 
                 $distr = new Distribution_Model_DbTable_Distribution();
                 $distr->_update($formData,$pk);
-                $this->_helper->redirector('index','distribution','distribution');
+                $this->_redirect('/distribution/distribution/index/anio/'.$anio);
             }else{
                 $form->populate($formData);
+                print_r($formData);
             }
         }
     }

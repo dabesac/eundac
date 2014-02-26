@@ -1,6 +1,6 @@
 
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-plus"></span> Nueva Distribución');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution/index/anio/'.base64_encode($this->anio).'" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
 	<a href="##" id="save" class="btn btn-success">Guardar</a>');?>
 
 <form action="/distribution/distribution/new" method="post" id="form">
@@ -33,6 +33,8 @@
 </div>
 
 <script>
+	$('#perid').load('/distribution/distribution/listperiods');
+
 	$("#perid").change(function(){
 		var perid = $.base64.decode($(this).val());
 		var time = "<?php echo time()?>";
