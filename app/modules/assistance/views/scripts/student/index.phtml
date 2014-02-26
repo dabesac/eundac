@@ -40,6 +40,9 @@ $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-calendar
 				perid='.$this->perid.'
 		><span class="glyphicon  glyphicon-log-out"></span> Cerrar Asistencia</buttom>
                             ');
+}else{
+	$this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');
+
 }?>
 
 <?php $partial = $this->partial;
@@ -58,7 +61,9 @@ if ($this->infoassist) { ?>
 				<th colspan='2'class='text-center success'>Semana 5</th>
 				<th colspan='2'class='text-center warning'>Semana 6</th>
 				<th colspan='2'class='text-center success'>Semana 7</th>
+				<?php if ($this ->partial == 2) { ?>
 				<th colspan='2'class='text-center success'>Semana 8</th>
+				<?php }?>
 			</tr>
 			<tr>
 				<th colspan='2'>sesion</th>
@@ -2640,10 +2645,6 @@ if ($this->infoassist) { ?>
 								break;
 						}?>
 					</td>
-					
-					
-
-
 			<?php	
 			}?>
 			<?php if ($this->state == 'C' && $partial==2) { ?>

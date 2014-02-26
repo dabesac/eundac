@@ -66,7 +66,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $state_assistence = $this->verify_closure_assistence($partial,$infoassist);
 
 
-        if ($state_assistence == 'P' || $state_assistence == 'C') {
+        if ($state_assistence) {
             $url_assit ="/".base64_encode('oid')."/".base64_encode($oid)."/".
                         base64_encode('eid')."/".base64_encode($eid)."/".
                         base64_encode('escid')."/".base64_encode($escid)."/".
@@ -646,7 +646,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
             $assist_11 = 0; $assist_12 = 0; $assist_13 = 0;$assist_14 = 0;$assist_15 = 0;
             $assist_16 = 0; $assist_17 = 0; $assist_18 = 0;$assist_19 = 0;$assist_20 = 0;
             $assist_21 = 0; $assist_22 = 0; $assist_23 = 0;$assist_24 = 0;$assist_25 = 0;
-            $assist_25 = 0; $assist_27 = 0; $assist_28 = 0;$assist_29 = 0;$assist_30 = 0;
+            $assist_26 = 0; $assist_27 = 0; $assist_28 = 0;$assist_29 = 0;$assist_30 = 0;
             $assist_31 = 0; $assist_32 = 0; $assist_33 = 0;$assist_34 = 0;
 
             foreach ($infoassist_t as $key => $infoassist) {
@@ -964,12 +964,13 @@ class Assistance_StudentController extends Zend_Controller_Action {
         if ($partial && $infoassist_t) {
 
             $count = count($infoassist_t); 
+
             $assist_1 = 0; $assist_2 = 0; $assist_3 = 0;$assist_4 = 0;$assist_5 = 0;
             $assist_6 = 0; $assist_7 = 0; $assist_8 = 0;$assist_9 = 0;$assist_10 = 0;
             $assist_11 = 0; $assist_12 = 0; $assist_13 = 0;$assist_14 = 0;$assist_15 = 0;
             $assist_16 = 0; $assist_17 = 0; $assist_18 = 0;$assist_19 = 0;$assist_20 = 0;
             $assist_21 = 0; $assist_22 = 0; $assist_23 = 0;$assist_24 = 0;$assist_25 = 0;
-            $assist_25 = 0; $assist_27 = 0; $assist_28 = 0;$assist_29 = 0;$assist_30 = 0;
+            $assist_26 = 0; $assist_27 = 0; $assist_28 = 0;$assist_29 = 0;$assist_30 = 0;
             $assist_31 = 0; $assist_32 = 0; $assist_33 = 0;$assist_34 = 0;$state=0;
 
             foreach ($infoassist_t as $key => $infoassist) {
@@ -1009,7 +1010,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                         $assist_14++;
                     }if ($infoassist['a_sesion_15']=='R' || $infoassist['a_sesion_15']=='A' || $infoassist['a_sesion_15']=='F' || $infoassist['a_sesion_15']=='T') {
                         $assist_15++;
-                    }if ($infoassist['state']=='P') {
+                    }if ($infoassist['state']=='P' || $infoassist['state']=='C') {
                         $state++;
                     }
 
@@ -1058,6 +1059,8 @@ class Assistance_StudentController extends Zend_Controller_Action {
                     }
                 }
             }
+
+
             
             if ($partial == 1) {
                 if (
@@ -1066,7 +1069,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                     $count == $assist_9 && $count == $assist_10 && $count == $assist_11 && $count == $assist_12 &&
                     $count == $assist_13 && $count == $assist_14 && $count == $assist_15  && $count == $state
                     ) {
-                        $data = 'P';
+                        $data = true;
                     }
             }
             if ($partial == 2) {
@@ -1077,12 +1080,11 @@ class Assistance_StudentController extends Zend_Controller_Action {
                     $count == $assist_26 && $count == $assist_27 && $count == $assist_28 && $count == $assist_29 && 
                     $count == $assist_30 && $count == $assist_31 && $count == $assist_32  && $count == $state
                     ) {
-                        $data = 'C';
+                        $data = true;
                     }
             }
 
         }
-
         return $data;
 
     }
