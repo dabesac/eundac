@@ -179,7 +179,8 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
             	base_periods where 
             	eid='".$where['eid']."' and
             	oid ='".$where['oid']."' and
-            	state in('A','T','I')
+            	state in('A','T','I') and  
+            	right(perid,1) in ('A','B','D','N')
             ");  
            $row=$sql->fetchAll();
            return $row;  

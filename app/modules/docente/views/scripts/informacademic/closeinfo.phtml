@@ -3,6 +3,7 @@
 <script type="text/javascript" src="/external_library/jwysiwyg/wysiwyg.image.js"></script>
 <script type="text/javascript" src="/external_library/jwysiwyg/wysiwyg.link.js"></script>
 <script type="text/javascript" src="/external_library/jwysiwyg/wysiwyg.table.js"></script>
+
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Llenado Informe Académico');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button type="button" id="enviar" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar Avance</button><button type="button" id ="cerrar" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cerrar Informe</button>');?>
 <?php if($this->informedoc['state']<>'C') { ?>

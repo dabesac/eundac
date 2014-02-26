@@ -1,20 +1,17 @@
-<div class='row' id='header-info'>
-	<div class='col-xs-12 col-sm-6 col-md-8'>
-		<h4> <span class='glyphicon glyphicon-calendar'></span> Registro Asistencia 
-			<?php echo $this->infocurso['name']?> Turno <?php echo $this->turno?> 
-			<?php if($this->partial==1){
-				echo "Primer Parcial ";
-			}?>
-			<?php if($this->partial==2){
-				echo "Segundo Parcial";
-			}?>
-		</h4>
-	</div>
-	<div class="col-md-4">
-		<a href="/docente/notas" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Atras </a>
-		<a href="/assistance/student/print<?php echo $this->url?>" class='btn btn-default'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
-	</div>
-</div>
+<?php $infocourse=$this->infocurso;
+if($this->partial==1) {
+    $partial_text ="Registro Asistencia Primer Parcial";
+}
+if($this->partial==2) {
+    $partial_text ="Registro Asistencia Segundo Parcial";
+}
+
+$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> '. $partial_text.' ' .$infocourse['name'].' Turno '.$this->turno.'');
+
+$this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+			<a href="/assistance/student/print'.$this->url.''.'" class="btn btn-info"><span class="glyphicon glyphicon-print"></span> Imprimir</a>
+                            ');
+?>
 <div class="table-responsive">
 <table class='table' id='talassist'>
 		<thead>
@@ -39,6 +36,7 @@
 					<th colspan='2'class='text-center warning'>Semana 12</th>
 					<th colspan='2'class='text-center success'>Semana 13</th>
 					<th colspan='2'class='text-center warning'>Semana 14</th>
+					<th colspan='2'class='text-center success'>Semana 15</th>
 					<th colspan='2'class='text-center warning'></th>
 				<?php }?>
 			</tr>
@@ -61,12 +59,15 @@
 					<th class='text-sesion-assist active'>Ex Parcial 1</th>
 				<?php }?>
 				<?php if ($this->partial==2) { ?>
-					<th class='text-sesion-assist '>sesión 18</th>
-					<th class='text-sesion-assist '>sesión 19</th>
-					<th class='text-sesion-assist '> sesión 20</th>
-					<th class='text-sesion-assist '> sesión 21</th>
-					<th class='text-sesion-assist '> sesión 22</th>
-					<th class='text-sesion-assist '>sesión 29</th>
+					<th class='text-sesion-assist '>sesión 15</th>
+					<th class='text-sesion-assist '>sesión 16</th>
+					<th class='text-sesion-assist '> sesión 17</th>
+					<th class='text-sesion-assist '> sesión 18</th>
+					<th class='text-sesion-assist '> sesión 19</th>
+					<th class='text-sesion-assist '>sesión 20</th>
+					<th class='text-sesion-assist '>sesión 21</th>
+					<th class='text-sesion-assist '>sesión 22</th>
+					<th class='text-sesion-assist '>sesión 23</th>
 					<th class='text-sesion-assist '>sesión 24</th>
 					<th class='text-sesion-assist '>sesión 25</th>
 					<th class='text-sesion-assist '>sesión 26</th>
@@ -74,7 +75,6 @@
 					<th class='text-sesion-assist '>sesión 28</th>
 					<th class='text-sesion-assist '>sesión 29</th>
 					<th class='text-sesion-assist '>sesión 30</th>
-					<th class='text-sesion-assist '>sesión 31</th>
 					<th class='text-sesion-assist active'>Ex Parcial 2</th>
 				<?php } ?>
 			</tr>
@@ -328,7 +328,7 @@
 					
 					<?php }?>
 
-					<?php if ($this->state == 'C' && $this->partial==2) { ?>
+					<?php if ( $this->partial==2) { ?>
 					<td>
 						<?php switch ($register['a_sesion_16']) {
 							case 'T':

@@ -38,7 +38,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $curid        = trim($params['curid']);
         $turno        = trim($params['turno']);
         $perid        = trim($params['perid']);
-        $partial      = trim($params['partial']); 
+        $partial      = trim($params['partial']);
         $action      = trim($params['action']);
 
         $where = null;
