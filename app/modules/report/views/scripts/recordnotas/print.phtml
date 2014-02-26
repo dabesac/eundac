@@ -102,7 +102,7 @@ ob_start();
     $html = ob_get_contents();
   
     $mpdf=new mPDF('win-1252','A4','','',15,15,36,18,8,5);
-    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
+    $mpdf->SetWatermarkImage('/img/undac.jpg',0.07,'F');
     $mpdf->showWatermarkImage = true;
 
     $mpdf->SetHTMLHeader($this->header);
@@ -112,4 +112,5 @@ ob_start();
     $mpdf -> WriteHTML($html);
     $mpdf->Output('RecordNotas -'.$this->person['pid'].'.pdf','D');
     // $mpdf -> Output();  
+
 ?>

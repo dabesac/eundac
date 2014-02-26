@@ -78,7 +78,7 @@
               
             $spe=array();
             $dbspeciality = new Api_Model_DbTable_Speciality();
-            $speciality = $dbspeciality ->_getOne($where);      
+            $speciality = $dbspeciality ->_getOne($where);                  
             $parent=$speciality['parent'];
             $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
             $parentesc= $dbspeciality->_getOne($wher);
@@ -105,13 +105,8 @@
             $wheres=array('eid'=>$eid,'pid'=>$pid);
             $dbperson = new Api_Model_DbTable_Person();
             $person= $dbperson ->_getOne($wheres);
-
-            if ($speciality['header']) {
-                $namelogo = $speciality['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+                
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
             
