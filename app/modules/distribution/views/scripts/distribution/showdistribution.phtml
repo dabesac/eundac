@@ -17,7 +17,7 @@ $ldistri =$this->ldistribution;
 	</div>
 	<div class="col-md-2">
 		<h5 class="text-muted">
-			<span class="glyphicon glyphicon-record text-danger"></span> <span class="text-danger">Inactivo</span>
+			<span class="glyphicon glyphicon-record text-danger"></span> <span class="text-danger">Cerrado/Inactivo</span>
 		</h5>
 	</div>
 	<div class="col-md-2">
@@ -62,19 +62,19 @@ $ldistri =$this->ldistribution;
 		$state = ($distri['state']=='A')?"class='success'":"";
 		$i++; 
 		switch ($distri['state']) {
-			case 'A': $state = "success"; 
+			case 'A': 	$state = "success"; 
 						$namestate = "Activo";
 						break;
-			case 'I': $state = "danger"; 
+			case 'I': 	$state = "danger"; 
 						$namestate = "Inactivo";
 						break;
-			case 'C': $state = "danger"; 
+			case 'C': 	$state = "danger"; 
 						$namestate = "Cerrado";
 						break;
-			case 'B': $state = "warning"; 
+			case 'B': 	$state = "info"; 
 						$namestate = "Borrador";
 						break;
-			case 'O': $state = "info"; 
+			case 'O': 	$state = "info"; 
 						$namestate = "Observado";
 						break;
 		}
@@ -112,7 +112,7 @@ $ldistri =$this->ldistribution;
 		</td>
 		<td>
 			<center>
-				<a href="/distribution/distribution/edit/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Modificar Distribución"></span></a>
+				<a href="/distribution/distribution/edit/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>/anio/<?php echo base64_encode($this->anio) ?>"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Modificar Distribución"></span></a>
 			</center>
 		</td>
 		<td>
@@ -156,7 +156,7 @@ $ldistri =$this->ldistribution;
         <div id='hourbegin'></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -174,7 +174,7 @@ $ldistri =$this->ldistribution;
         <div id='updatehour'></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -193,6 +193,7 @@ $(".horary").click(function(){
 	$.get("/horary/nhorary/changehours/",
 		params,
 		function  ($data) {
+			$("#hourbegin").html('<br><center>Cargando <img src="/img/spinner.gif" alt="Cargando ..." /></center>');
 			$("#hourbegin").html($data);
 	});
 
@@ -207,6 +208,7 @@ $(".updatehour").click(function(){
 	$.get("/horary/nhorary/updatehours/",
 		para,
 		function  ($data) {
+			$("#updatehour").html('<br><center>Cargando <img src="/img/spinner.gif" alt="Cargando ..." /></center>');
 			$("#updatehour").html($data);
 	});
 });

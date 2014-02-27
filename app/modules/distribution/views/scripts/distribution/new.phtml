@@ -1,70 +1,80 @@
 
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-plus"></span> Nueva Distribución');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution/index/anio/'.base64_encode($this->anio).'" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
 	<a href="##" id="save" class="btn btn-success">Guardar</a>');?>
 
-<form action="/distribution/distribution/new" method="post" id="form">
-
-	<div class="table-responsive">					
-		<?php print $this->form->eid ?>
-		<?php print $this->form->oid ?>
-		<?php print $this->form->escid ?>
-		<?php print $this->form->subid ?>
-		<?php print $this->form->distid ?>
+<!--Mensajes -->
+<div class="row-fluid">
+	<div class="col-md-8 col-md-offset-2">
+		<div id="exist" class="alert alert-danger hidden">
+			<button type="button" class="close">&times;</button>
+			<strong>Error!</strong> Ya existe una Distribucion para este Periodo....
+		</div>
+		<div id="missing" class="alert alert-warning hidden">
+			<button type="button" class="close">&times;</button>
+			<strong>Falta Datos!</strong> Le falta rellenar algunos datos....
+		</div>
 	</div>
-	<table class="table"> 
-		<tr>
-			<th class="col-md-2">Periodo</th>
-			<th class="col-md-2" >Numero</th>
-			<th class="col-md-2">Fecha Presentación</th>
-			<th class="col-md-2">Estado</th>
-		</tr>
-		<tr>
-			<td ><?php print $this->form->perid?></td>
-			<td ><?php print $this->form->number?></td>
-			<td ><?php print $this->form->datepress?></td>
-			<td ><?php print $this->form->state?></td>
-		</tr>
-	</table>
-</form>
-
-<div id="existe" class="alert alert-info" style="display: none; font-size: 15px">
-	<b>INFORMACIÓN: </b>Ya existe una Distribución creada para este periodo.
 </div>
 
+<form action="" id="form">
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-2 panel panel-default">
+		<div class="col-md-5">
+			<h4><br></h4>
+			<h5 class="text-muted">Codigo</h5>
+			<?php echo $this->form->number ?>
+		</div>
+		<div class="col-md-7">
+			<h5 class="text-muted">Periodo</h5>
+			<?php echo $this->form->perid ?>
+			<div class="row">
+				<div class="col-md-6">
+					<h5 class="text-muted">Fecha de Presentación</h5>
+					<?php echo $this->form->datepress ?>
+				</div>
+				<div class="col-md-6">
+					<h5 class="text-muted">Estado</h5>
+					<?php echo $this->form->state ?>
+				</div>
+			</div><br>
+		</div>
+	</div>
+</div>	
+<input type="hidden" name="whySubmit" value="save">
+	
+</form>
+<input id="time" type="hidden" value="<?php echo time() ?>">
 <script>
-	$("#perid").change(function(){
-		var perid = $.base64.decode($(this).val());
-		var time = "<?php echo time()?>";
-		$("#number").val(perid+" - "+time);
+	$("#datepress").datepicker();
+	$('#perid').change(function(){
+		var time  = $('#time').val();
+		var perid = $(this).val();
+		$('#number').val(perid+' - '+time);
 	});
 
 	$('#save').click(function(){
-		$('#form').submit();
-	});
-
-	$('#form').submit(function(){
 		$.ajax({
-			type: 'POST',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-		});
+			type   :'post',
+			url    : "/distribution/distribution/savedistribution",
+			data   : $('#form').serialize(),
+			success: function(data){
+				$('.alert').addClass('hidden');
+				if (data == 'exito') {
+					$(location).attr("href", "/distribution/distribution/index");
+				}else if (data == 'existe'){
+					$('#exist').removeClass('hidden');
+				}else if (data == 'falta-datos'){
+					$('#missing').removeClass('hidden');
+				}
+			}
+		})
 	});
 
-	var exist = 1;
-	if ('<?php $this->exist?>') {
-		var exist = '<?php echo $this->exist?>';
-	};
-	if (exist == 0) {
-		$("#existe").show();
-	}
-	
-	$(function() {
-		$("#datepress").datepicker();
-		$("#dateaccept").datepicker();
-		$("#sendform").click(function(){
-			$("#frmDistribution").submit();
-		});
+	//Close Alerts
+	$('.close').click(function(){
+		$('.alert').addClass('hidden');
 	});
-	
+
 </script>

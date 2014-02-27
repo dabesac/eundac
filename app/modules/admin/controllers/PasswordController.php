@@ -67,8 +67,8 @@ class Admin_PasswordController extends Zend_Controller_Action
             }
 
 
-             $nom=mb_strtoupper($nom, 'UTF-8');
-             $bdu = new Api_Model_DbTable_Users ();
+            $nom=mb_strtoupper($nom, 'UTF-8');
+            $bdu = new Api_Model_DbTable_Users ();
             if ($rid<>'') {
                 if ($uid=='' && $nom<>'')
                 {
@@ -102,7 +102,6 @@ class Admin_PasswordController extends Zend_Controller_Action
                 $this->view->datos=$datos;                
 
             }
-
         }
         catch (Exception $ex) 
         {
@@ -113,55 +112,53 @@ class Admin_PasswordController extends Zend_Controller_Action
     public function keychangeAction() 
     {
         try 
-        {
+        {   
             $this->_helper->layout()->disableLayout();
             $eid = base64_decode($this->_getParam("eid"));
             $oid = base64_decode($this->_getParam("oid"));
+            $rid = base64_decode($this->_getParam("rid"));
             $uid = base64_decode($this->_getParam("uid"));
             $escid = base64_decode($this->_getParam("escid"));
             $pid = base64_decode($this->_getParam("pid"));
             $subid = base64_decode($this->_getParam("subid"));
+            $where = array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid,'uid'=>$uid,'escid'=>$escid,'pid'=>$pid,'subid'=>$subid);
+            $this->view->where=$where;
             $fm=new Admin_Form_Keychange();
             $fm->guardar->setLabel("Guardar");
             $this->view->fm=$fm;
 
-             if ($this->getRequest()->isPost())
-             {
+            if ($this->getRequest()->isPost()){
                 $formData = $this->getRequest()->getPost();
-                //print_r($formData);break;
-                 unset($formData["enviar"]);
-                if (($formData["ncla"]==($formData["rcla"])) && ($formData["ncla"]<>"" || $formData["rcla"]<>""))
-                {
-                    $data['password']=md5($formData["ncla"]);
-                    $pk['uid']=$uid;
-                    $pk['eid']=$eid;
-                    $pk['oid']=$oid;
-                    $pk['pid']=$pid;
-                    $pk['escid']=$escid;
-                    $pk['subid']=$subid;
-                    $bdu = new Api_Model_DbTable_Users();
-                    //print($uid.$pid.$eid.$oid.$escid.$pass);
-                    $datos = $bdu->_update($data,$pk);           
-                    if ($datos)
-                    {
-                        $this->view->mensaje="Guardo";
-                        echo "
-                        <div class='alert alert-error' style='display:block'>
-                        <button type='button' class='close' data-dismiss='alert'>x</button>
-                        <strong>Contraseña Guardada Correctamente</strong>
-                        .</spam>";
-                           
-                        $this->_helper->redirector("search");
+                unset($formData["enviar"]);
+                if (($formData["ncla"]<>"" && $formData["rcla"]<>"")) {
+
+                    if (($formData["ncla"]==$formData["rcla"])) {
+                        $password=md5($formData["ncla"]);
+
+                        $data['password']=$password;
+                        $pk['eid']=$eid;
+                        $pk['oid']=$oid;
+                        $pk['uid']=$uid;
+                        $pk['pid']=$pid;
+                        $pk['escid']=$escid;
+                        $pk['subid']=$subid;
+                        
+                        $bdu = new Api_Model_DbTable_Users();
+                        $bdu->_update($data,$pk);
+                            // $where_=array();
+                            // $where_ = array("username"=>$uid);
+                            // $datac = array("password"=> $password);
+                            // $campus = new Api_Model_DbTable_Campususer();
+                            // $campus->_update($where_,$datac);
+            
+                        $this->view->mensaje=3;
+                    }
+                    else{
+                        $this->view->mensaje=2;
                     }
                 }
-                else
-                {
-                    $this->view->mensaje="Contraseñas no coinciden";
-                    /*echo "
-                    <div class='alert alert-error'>
-                            <button type='button' class='close' data-dismiss='alert'>x</button>
-                            <strong>Contraseñas no Coinciden</strong>
-                            </div>";*/
+                else{
+                    $this->view->mensaje=1;
                 }
             }
         }

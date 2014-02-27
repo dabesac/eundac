@@ -1,6 +1,6 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Listado de Distribuciones');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
-    <a href="/distribution/distribution/new" class="btn btn-success"><span class="glyphicon glyphicon-plus "></span> Nuevo</a>');?>
+    <a id="newDistribution" href="/distribution/distribution/new" class="btn btn-success"><span class="glyphicon glyphicon-plus "></span> Nuevo</a>');?>
 <?php
 $ldistri =$this->ldistribution;
 ?>
@@ -17,10 +17,17 @@ $ldistri =$this->ldistribution;
 	</div>
 </div>
 <hr>
+<input id="yearComing" type="hidden" value="<?php echo $this->anio ?>">
 
 <div id="dataDistribution"></div>
 
 <script>
+
+	var year = $('#yearComing').attr('value');
+	if (year) {
+		$('#anio').val(year);
+	}
+
 	var anio = $('#anio').val();
 	$('#dataDistribution').html('<center><img src="/img/spinner.gif" alt="" /></center>');
 	$('#dataDistribution').load('/distribution/distribution/showdistribution/anio/' + anio);
@@ -28,5 +35,7 @@ $ldistri =$this->ldistribution;
 		$('#dataDistribution').html('<center><img src="/img/spinner.gif" alt="" /></center>');
 		var anio = $(this).val();
 		$('#dataDistribution').load('/distribution/distribution/showdistribution/anio/' + anio);
+		$('#newDistribution').attr('href', '/distribution/distribution/new/anio/'+anio);
+
 	});
 </script>
