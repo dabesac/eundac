@@ -385,12 +385,7 @@ class Register_DeferredController extends Zend_Controller_Action {
         $namep=strtoupper($spe['parent']);
         $namefinal=$names." <br> ".$namep;
 
-        if ($speciality['header']) {
-            $namelogo = $speciality['header'];
-        }
-        else{
-            $namelogo = 'blanco';
-        }
+        $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
         $escid=$this->sesion->escid;
         $where['escid']=$escid;
@@ -435,7 +430,7 @@ class Register_DeferredController extends Zend_Controller_Action {
         $header = str_replace("h2", "h3", $header);
         $header = str_replace("h3", "h5", $header);
         $header = str_replace("h4", "h6", $header);
-        $header = str_replace("10%", "8%", $header);
+        $header = str_replace("11%", "9%", $header);
 
         $footer = str_replace("h4", "h5", $footer);
         $footer = str_replace("h5", "h6", $footer);

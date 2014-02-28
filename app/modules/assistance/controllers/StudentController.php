@@ -908,14 +908,8 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 $namep=strtoupper($spe['parent']);
                 $namefinal=$names." <br> ".$namep;
 
-                $speciality['header']="";
-                if ($speciality['header']) {
-                    $namelogo = $speciality['header'];
-                }
-                else{
-                    $namelogo = 'blanco';
-                }
-
+                $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+    
                 // $escid=$this->sesion->escid;
                 // $where['escid']=$escid;
 
@@ -952,7 +946,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 $header = str_replace("?escuela",$namefinal,$header);
                 $header = str_replace("?logo", $namelogo, $header);
                 $header = str_replace("?codigo", $codigo, $header);
-                $header = str_replace("10%", "8%", $header);
+                $header = str_replace("11%", "9%", $header);
                 
                 $this->view->header=$header;
                 $this->view->footer=$footer;

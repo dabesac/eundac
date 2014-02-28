@@ -258,12 +258,7 @@ public function listcurriculaAction()
             $this->view->namev=$namev;
             $namefinal=$names." <br> ".$namep;
 
-            if ($speciality[0]['header']) {
-                $namelogo = $speciality[0]['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+            $namelogo = (!empty($speciality[0]['header']))?$speciality[0]['header']:"blanco";
             
             $fac = array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality[0]['facid']);
             $base_fac =  new Api_Model_DbTable_Faculty();        
@@ -401,12 +396,7 @@ public function listcurriculaAction()
             $this->view->namev=$namev;
             $namefinal=$names." <br> ".$namep;
 
-            if ($speciality[0]['header']) {
-                $namelogo = $speciality[0]['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+            $namelogo = (!empty($speciality[0]['header']))?$speciality[0]['header']:"blanco";
             
             $fac = array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality[0]['facid']);
             $base_fac =  new Api_Model_DbTable_Faculty();        
@@ -552,12 +542,7 @@ public function listcurriculaAction()
             $this->view->namev=$namev;
             $namefinal=$names." <br> ".$namep;
 
-            if ($speciality[0]['header']) {
-                $namelogo = $speciality[0]['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+            $namelogo = (!empty($speciality[0]['header']))?$speciality[0]['header']:"blanco";
             
             $fac = array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality[0]['facid']);
             $base_fac =  new Api_Model_DbTable_Faculty();        

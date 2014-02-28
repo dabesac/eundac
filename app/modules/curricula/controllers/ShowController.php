@@ -200,12 +200,7 @@ class Curricula_ShowController extends Zend_Controller_Action
             $this->view->namev=$namev;
             $namefinal=$names." <br> ".$namep;
 
-            if ($speciality['header']) {
-                $namelogo = $speciality['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
             
             $fac = array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']);
             $base_fac =  new Api_Model_DbTable_Faculty();        

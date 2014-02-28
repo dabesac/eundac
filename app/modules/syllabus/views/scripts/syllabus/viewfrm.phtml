@@ -223,12 +223,18 @@ $("#crearunidad").click(function(){
     var turno="<?php echo base64_encode($this->periodocurso['turno'])?>";
     var tipo_cali="<?php echo base64_encode($this->periodocurso['type_rate'])?>";
     if (uni==0 || uni=="") {
-      alert("La cantidad de Unidades debe de ser mayor de 0, por favor ingrese nuevamente.");
-      return false;
+      	alert("La cantidad de Unidades debe de ser mayor de 0, por favor ingrese nuevamente.");
+      	return false;
     };
     url='/syllabus/syllabus/units/perid/'+perid+'/subid/'+subid+'/escid/'+escid+'/curid/'+curid+'/courseid/'+courseid+'/turno/'+turno+'/tipo_cali/'+tipo_cali+'/units/'+uni+'/numunidad/'+1;
+
+    url1 = "/syllabus/syllabus/savedefault/subid/"+subid+"/perid/"+perid+"/curid/"+curid+"/escid/"+escid+"/courseid/"+courseid+"/turno/"+turno+"/tipo_cali/"+tipo_cali;
     
+	$("#savedefault").load(url1);
+
     window.open(url,'Programación de Unidades','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=no,dependent=no,width=850,height=700');
+
+	
 });
 
 $(".height").click(function(e){
