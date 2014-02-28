@@ -182,29 +182,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 'a_sesion_13' => $a_sesion_13,
                 'a_sesion_14' => $a_sesion_14,
                 'a_sesion_15' => $a_sesion_15,
-                'a_sesion_16' => $a_sesion_16,
-                'a_sesion_17' => $a_sesion_17,
-                'a_sesion_18' => $a_sesion_18,
-                'a_sesion_19' => $a_sesion_19,
-                'a_sesion_20' => $a_sesion_20,
-                'a_sesion_21' => $a_sesion_21,
-                'a_sesion_23' => $a_sesion_23,
-                'a_sesion_24' => $a_sesion_24,
-                'a_sesion_25' => $a_sesion_25,
-                'a_sesion_26' => $a_sesion_26,
-                'a_sesion_27' => $a_sesion_27,
-                'a_sesion_28' => $a_sesion_28,
-                'a_sesion_29' => $a_sesion_29,
-                'a_sesion_30' => $a_sesion_30,
-                'a_sesion_31' => $a_sesion_31,
-                'a_sesion_32' => $a_sesion_32,
-                'a_sesion_33' => $a_sesion_33,
-                'a_sesion_34' => $a_sesion_34,
-                );
-        }
-        if ($partial == 2) {
-            $data = array(
-                'a_sesion_16' => $a_sesion_16,
+                'a_sesion_16' => $a_sesion_15,
                 'a_sesion_17' => $a_sesion_17,
                 'a_sesion_18' => $a_sesion_18,
                 'a_sesion_19' => $a_sesion_19,
@@ -222,7 +200,29 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 'a_sesion_31' => $a_sesion_31,
                 'a_sesion_32' => $a_sesion_32,
                 'a_sesion_33' => $a_sesion_33,
-                'a_sesion_34' => $a_sesion_34,
+                'a_sesion_34' => $a_sesion_33,
+                );
+        }
+        if ($partial == 2) {
+            $data = array(
+                'a_sesion_17' => $a_sesion_17,
+                'a_sesion_18' => $a_sesion_18,
+                'a_sesion_19' => $a_sesion_19,
+                'a_sesion_20' => $a_sesion_20,
+                'a_sesion_21' => $a_sesion_21,
+                'a_sesion_22' => $a_sesion_22,
+                'a_sesion_23' => $a_sesion_23,
+                'a_sesion_24' => $a_sesion_24,
+                'a_sesion_25' => $a_sesion_25,
+                'a_sesion_26' => $a_sesion_26,
+                'a_sesion_27' => $a_sesion_27,
+                'a_sesion_28' => $a_sesion_28,
+                'a_sesion_29' => $a_sesion_29,
+                'a_sesion_30' => $a_sesion_30,
+                'a_sesion_31' => $a_sesion_31,
+                'a_sesion_32' => $a_sesion_32,
+                'a_sesion_33' => $a_sesion_33,
+                'a_sesion_34' => $a_sesion_33,
                 );
             
         }

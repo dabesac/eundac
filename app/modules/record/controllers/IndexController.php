@@ -810,6 +810,7 @@ class Record_IndexController extends Zend_Controller_Action {
 			$base_course = 	new Api_Model_DbTable_Course();
 			$base_course_x_teacher = 	new Api_Model_DbTable_Coursexteacher();
 			$base_register_course = 	new Api_Model_DbTable_Registrationxcourse();
+			$t_base_assitence_student = new Api_Model_DbTable_StudentAssistance();
 			$base_person =	new Api_Model_DbTable_Person();
 			$base_CourseCompetency = new Api_Model_DbTable_CourseCompetency();
 			$base_semester = new Api_Model_DbTable_Semester();
@@ -835,7 +836,9 @@ class Record_IndexController extends Zend_Controller_Action {
 				'curid' => $curid, 'turno' => $turno,
 				'is_main'=>'S'); 
 
-			$data_students = $base_register_course->_getStudentXcoursesXescidXperiods($where);
+
+			$data_students = $t_base_assitence_student->_get_asisstance_backregister($where);
+
 
 			$tota_students = $base_register_course->_get_total_students_x_course($where);
 			$total_approved = $base_register_course->_get_approved($where);

@@ -74,7 +74,7 @@ body{
 
 #container_layout{
 	margin-bottom: 70px;
-	overflow: hidden;
+	/*overflow: hidden;*/
 }
 /* .................... ...##loading_overlay##......................../*/
 #loading_overlay{

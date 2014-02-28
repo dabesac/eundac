@@ -1,0 +1,8 @@
+<?php if ($this->periodsDistribution): ?>
+	<option value="">Seleccione Periodo</option>
+	<?php foreach ($this->periodsDistribution as $period): ?>
+		<option value="<?php echo $period['perid'] ?>"><?php echo $period['perid'].' | '.$period['name'] ?></option>
+	<?php endforeach ?>
+<?php else: ?>
+	<option value="">No Existen Periodos</option>
+<?php endif ?>
