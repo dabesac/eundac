@@ -173,6 +173,28 @@ class Api_Model_DbTable_StudentAssistance extends Zend_Db_Table_Abstract
                         print "Error: Obteniendo datos de tabla 'Matricula Curso'".$ex->getMessage();
         }
     }
+
+    public function _get_asisstance_backregister ($where=null){
+        try{
+            $sql = $this->_db->query("
+                select p.last_name0 || ' ' || p.last_name1 || ', '|| p.first_name as name_complet, rc.*from base_person p
+                inner join base_student_assistance rc
+                on rc.pid=p.pid and p.eid=rc.eid
+                where 
+                rc.eid='".$where['eid']."' and rc.oid='".$where['oid']."' and
+                rc.subid='".$where['subid']."' and rc.escid='".$where['escid']."' and
+                rc.curid ='".$where['curid']."' and rc.perid='".$where['perid']."' and
+                rc.coursoid='".$where['courseid']."' and rc.turno='".$where['turno']."' and
+                rc.state='C'
+                order by name_complet
+                    "); 
+            if ($sql) return $sql->fetchAll();
+            return false;
+        }  catch (Exception $ex){
+                        print "Error: Obteniendo datos de tabla 'Matricula Curso'".$ex->getMessage();
+        }
+    }
+
     // Funcion para sacar un solo estado de asistencia de todos los alumno de un determinado curso.
     public function _getState($where=array()){
         try{
