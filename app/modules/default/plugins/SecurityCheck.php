@@ -48,6 +48,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
     public function _iniAcl(){
         $this->_acl = new Zend_Acl();
         $auth= Zend_Auth::getInstance();
+        
         if ($auth->hasIdentity()) {
             $this->_role= $auth->getStorage()->read()->rid;
             $this->_parent = $auth->getStorage()->read()->rol['parent'];

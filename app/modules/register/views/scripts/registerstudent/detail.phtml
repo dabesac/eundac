@@ -2,6 +2,7 @@
     <div class="row">
         <div class="col-md-5 col-md-offset-1">
             <h5 class="text-center"><br>Proceso de Matricula <span class="text-danger"><?php echo $this->dataStudent['perid'] ?></span></h5>
+            
         </div>
         <div class="col-md-5">
             <p class="text-center">Facultad de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomfac'] ?></span></p>
@@ -306,8 +307,53 @@
         <a id="openConfirmAlert" href="##" class="btn btn-danger form-control">Eliminar</a>
     </div>
 </div>
+<br><br>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3"><a href="##" class="btn btn-info form-control" id="despliega">Cursos Pendientes</a></div>
+</div>
 
 <script>
+    //Barra Lateral
+    $('#despliega').click(function(){
+        $(this).attr('disabled', 'true');
+        $("#coursesperCurriculum").addClass('abierto');
+        var sameStudent = $("#coursesperCurriculum").attr("student");
+        if (sameStudent != <?php echo $this->dataStudent['pid'] ?>) {
+            $("#barraLateral").animate({ "left": "-=40%" }, "slow" );
+            $("#coursesperCurriculum").attr("student", "<?php echo $this->dataStudent['pid'] ?>");
+            $('#mensajeTryAgain').addClass('hidden');
+            sendDataBarra();
+        }else{
+            $("#barraLateral").animate({ "left": "-=40%" }, "slow" );
+        }
+    });
+    $('#tryAgainCurriculum').click(function(){
+        sendDataBarra();
+        $('#mensajeTryAgain').addClass('hidden');
+    });
+    
+
+    function sendDataBarra(){
+        $("#coursesperCurriculum").html('<br><center>Cargando <img src="/img/spinner.gif" alt="Wait" /></center>');
+        $.ajax({
+            url    : '/register/registerstudent/coursespercurriculum',
+            data   : {  pid  : $.base64.encode("<?php echo $this->dataStudent['pid'] ?>"),
+                        uid  : $.base64.encode("<?php echo $this->dataStudent['uid'] ?>"),
+                        escid: $.base64.encode("<?php echo $this->dataStudent['escid'] ?>"),
+                        subid: $.base64.encode("<?php echo $this->dataStudent['subid'] ?>"),
+                        curid: $.base64.encode("<?php echo $this->dataStudent['curid'] ?>") },
+            timeout: 15000,
+            success: function(data){
+                $("#coursesperCurriculum").html(data);
+            },
+            error: function(){
+                $("#coursesperCurriculum").html('');
+                $('#mensajeTryAgain').removeClass('hidden');
+            }
+        })
+    }
+
+
     //Navegación
     $('#conditionInfo').slideUp();
     $('#condition').hover(function(){
@@ -336,14 +382,23 @@
         $.get("/register/registerstudent/validate/escid/<?php echo base64_encode($this->dataStudent['escid']) ?>/subid/<?php echo base64_encode($this->dataStudent['subid']) ?>/uid/<?php echo base64_encode($this->dataStudent['uid']) ?>/pid/<?php echo base64_encode($this->dataStudent['pid']) ?>/state/<?php echo base64_encode($this->stateRegister) ?>", function(status){
             if (status.status == true) {
                 $('.iluminate').removeClass('warning info');
-                $('.iluminate, #studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('success');
+                $('.iluminate').addClass('success');
                 $('.butonsCourses, #stateRegister').addClass('hidden');
                 $('#validateRegister').addClass('disabled');
                 $('.tdValidate, #successValidate, #printRegister').removeClass('hidden');
                 $('#waitingSpinner').html('');
-                $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').html('Matriculado');
-                $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').addClass('text-success');
+                $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
                 stateReg = 'M';
+                var num = 1;
+                var i   = 1;
+                $("#students li").each(function(){
+                    var classli = $(this).attr('class');
+                    if (classli != 'hidden') {
+                        $('#studentNum'+[i]).html(num);
+                        num++;
+                    };
+                    i++;
+                })
             }else{
                 $('#failValidate').removeClass('hidden');
             };
@@ -372,8 +427,18 @@
                     $('#openConfirmAlert, #reservedRegister, #validateRegister, #printRegister, #observedRegister, #activeRegister').addClass('disabled');
                     $('#stateRegister, #confirmDelete').addClass('hidden');
                     $('#waitingSpinner').html('');
-                    $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').html('Eliminado');
-                    $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').addClass('text-danger');
+                    $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
+                    stateReg = 'M';
+                    var num = 1;
+                    var i   = 1;
+                    $("#students li").each(function(){
+                        var classli = $(this).attr('class');
+                        if (classli != 'hidden') {
+                            $('#studentNum'+[i]).html(num);
+                            num++;
+                        };
+                        i++;
+                    })
                 }else{
                     $('#deleteFailRegister').removeClass('hidden');
                 };
@@ -398,8 +463,18 @@
                     $('#observedSuccessRegister, .tdObserved').removeClass('hidden');
                     $('.iluminate, #studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('warning');
                     $('#waitingSpinner').html('');
-                    $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').html('Observado');
-                    $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').addClass('text-warning');
+                    $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
+                    stateReg = 'M';
+                    var num = 1;
+                    var i   = 1;
+                    $("#students li").each(function(){
+                        var classli = $(this).attr('class');
+                        if (classli != 'hidden') {
+                            $('#studentNum'+[i]).html(num);
+                            num++;
+                        };
+                        i++;
+                    })
                 }else{
                     $('#observedFailRegister').removeClass('hidden');
                 };
@@ -424,8 +499,18 @@
                     $('#reservedSuccessRegister, .tdReserved').removeClass('hidden');
                     $('.iluminate, #studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('info');
                     $('#waitingSpinner').html('');
-                    $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').html('Reservado');
-                    $('#tdStudentValidate<?php echo $this->dataStudent['uid'] ?>').addClass('text-info');
+                    $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
+                    stateReg = 'M';
+                    var num = 1;
+                    var i   = 1;
+                    $("#students li").each(function(){
+                        var classli = $(this).attr('class');
+                        if (classli != 'hidden') {
+                            $('#studentNum'+[i]).html(num);
+                            num++;
+                        };
+                        i++;
+                    })
                 }else{
                     $('#observedFailRegister').removeClass('hidden');
                 };

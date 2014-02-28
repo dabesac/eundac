@@ -1,3 +1,4 @@
+
 <?php if ($this->datos){ ?>
     <ul>
         <li style="list-style : none;">
@@ -28,10 +29,10 @@
             case 'O': $estadomat_="Observado"; break;
         }
         ?>
-    <li style="list-style : none;">
+    <li style="list-style : none;" id="studentRow<?php echo $datos['uid'] ?>">
         <table class="table">
-            <tr id="studentRow<?php echo $datos['uid'] ?>">
-                <td class="col-md-1"><?php echo $i;?></td>
+            <tr>
+                <td id="studentNum<?php echo $i ?>" class="col-md-1"></td>
                 <td class="col-md-1 text-center"><?php echo $datos['uid'];?></td>
                 <td class="col-md-4"><?php echo $datos['last_name0']." ".$datos['last_name1'].", ".$datos['first_name'];?></td>
                 <td class="col-md-1 text-center"><?php echo $datos['escid']?></td>
@@ -47,8 +48,14 @@
                     </a>
                     <script>
                         $("#detailRegisterButton<?php echo $datos['uid'].$datos['pid'] ?>").click(function(){
+                            $("td .col-md-1").attr('chosse', '');
                             $('#detailModal').html('<br><center><img src="/img/spinner.gif" alt="Cargando..." /></center>');
                             $('#detailModal').load('<?php echo $url ?>');
+                            $("#studentNum<?php echo $i ?>").attr('chosse', 'true');
+                            var abierto = $('#coursesperCurriculum').hasClass('abierto');
+                            if (abierto) {
+                                $("#barraLateral").animate({ "left": "+=40%" }, "slow" );
+                            }
                         });
                     </script>
                 </td>
@@ -60,17 +67,71 @@
         }?>
     </ul>
     
+    <style>
+        #barraLateral{
+            width     : 40%;
+            height: 100%;
+            z-index   : 5;
+            background: white;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position  : fixed;
+            left      : 60%;
+            top       : 0%;
+        }
+
+        .modal-dialog{
+            width : 1200px;
+            z-index   : 2;
+        }
+
+        #barraNav{
+            position: fixed;
+            z-index   : 1;
+            height: 55px;
+            width: 39%;
+            background-color : #d9534f;
+        }
+    </style>
     <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width : 1200px;">
-                <div id="detailModal" class="modal-content">
-                    
+        <div class="modal-dialog">
+            <div id="detailModal" class="modal-content">
+                
+            </div>
+        </div>
+        <div id="barraLateral">
+            <div id="barraNav">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5 class="text-center"><a href="##" id="closeLateral" class="btn btn-default"><span class="text-danger">Cerrar</span></a></h5>
+                    </div>
                 </div>
+            </div>
+            <br><br><br>
+            <div id="coursesperCurriculum">
+            </div>
+
+            <br>
+            <h4 id="mensajeTryAgain" class="text-muted text-center hidden">:( Hubo un <span class="text-danger">problema</span> en nuestro servidor pero puede <a id="tryAgainCurriculum" href="##" class="btn btn-link text-success">Intentar Nuevamente</a></h4>
         </div>
     </div>
+    <script>
+        $("#barraLateral").animate({ "left": "+=40%" }, "slow" );
+        $("#closeLateral").click(function(){
+            $("#barraLateral").animate({ "left": "+=40%" }, "slow" );
+            $('#despliega').removeAttr('disabled');
+            $('#coursesperCurriculum').removeClass('abierto');
+        });
 
+        var num = 1;
+        $("#students li").each(function(){
+            $('#studentNum'+[num]).html(num);
+            num++;
+        })
+       
+    </script>
     <?php }else{?>
         <br>
         <h4 class="text-muted text-center">No existen <span class="text-danger">Registros</span></h4>
     <?php }?>
 
-   <!-- Large modal -->

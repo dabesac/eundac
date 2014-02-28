@@ -103,24 +103,14 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $perid = $this->sesion->period->perid;
-            //Data del Estudiante
-            $dataStudent = array(   'uid'=>$uid,
-                                    'pid'=>$pid,
-                                    'semid'=>$semid,
-                                    'escid'=>$escid,
-                                    'subid'=>$subid,
-                                    'perid'=>$perid,
-                                    'eid'  =>$eid,
-                                    'oid'  =>$oid );
-            $this->view->dataStudent = $dataStudent;
-            
+
+           
             //Información de Facultad
             $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid);
             $faculty = $specialityDb->_getFacspeciality($where);
             $this->view->infoSpeciality = $faculty;
 
-            $where = array( 
-                            'eid'   =>$eid, 
+            $where = array( 'eid'   =>$eid, 
                             'oid'   =>$oid, 
                             'uid'   =>$uid, 
                             'pid'   =>$pid ,
@@ -174,8 +164,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $this->view->stateRegister = $stateRegister;
 
             //Cursos Prematriculados
-            $where = array(
-                            'eid'  =>$eid, 
+            $where = array( 'eid'  =>$eid, 
                             'oid'  =>$oid, 
                             'uid'  =>$uid, 
                             'pid'  =>$pid,
@@ -183,8 +172,9 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                             'subid'=>$subid,
                             'perid'=>$perid,
                             'state'=>$stateRegister);
-            $attrib = array('courseid', 'turno', 'curid', 'uid', 'pid', 'escid', 'subid');
+            $attrib = array('courseid', 'turno', 'curid', 'uid', 'pid', 'escid', 'subid', 'curid');
             $courses = $coursesRegisterDb->_getFilter($where, $attrib);
+            $curid = $courses[0]['curid'];
             $matriculaCondicional = 'No';
 
             $c = 0;
@@ -249,7 +239,18 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 
                 $c++;
             }
-            //Numero de Veces que llevo un curso
+            //Data del Estudiante
+            $dataStudent = array(   'uid'   => $uid,
+                                    'pid'   => $pid,
+                                    'semid' => $semid,
+                                    'escid' => $escid,
+                                    'subid' => $subid,
+                                    'perid' => $perid,
+                                    'eid'   => $eid,
+                                    'oid'   => $oid,
+                                    'curid' => $curid );
+            $this->view->dataStudent = $dataStudent;
+            
 
             $this->view->courses = $courses;
             $this->view->coursesName = $coursesName;
@@ -621,6 +622,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $pid = base64_decode($this->getParam('pid'));
         $uid = base64_decode($this->getParam('uid'));
         $state = base64_decode($this->_getParam('state'));
+
         $regid = $uid.$perid;
 
         $where = array( 'eid'=>$eid,
@@ -649,6 +651,45 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         }
     }
 
+    public function coursespercurriculumAction(){
+        $this->_helper->layout()->disableLayout();
+        $coursesDb = new Api_Model_DbTable_Registrationxcourse();
+        
+        $pid   = $this->_getParam('pid');
+        $uid   = $this->_getParam('uid');
+        $escid = $this->_getParam('escid');
+        $subid = $this->_getParam('subid');
+        $curid = $this->_getParam('curid');
+
+        $eid   = $this->sesion->eid;    
+        $oid   = $this->sesion->oid;
+        $perid = $this->sesion->period->perid;
+
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'perid' => $perid,
+                        'escid' => base64_decode($escid),
+                        'subid' => base64_decode($subid),
+                        'pid'   => base64_decode($pid),
+                        'uid'   => base64_decode($uid) );
+        $attrib = array('courseid');
+        $courses = $coursesDb->_getFilter($where, $attrib);
+        $this->view->courses = $courses;
+
+        $data = array(  'eid' => base64_encode($eid),
+                        'oid' => base64_encode($oid),
+                        'perid' => base64_encode($perid),
+                        'pid' => $pid,
+                        'uid' => $uid,
+                        'escid' => $escid,
+                        'subid' => $subid,
+                        'curid' => $curid );
+
+        $server = new Eundac_Connect_Api('validate', $data);
+        $data = $server->connectAuth();
+        $this->view->data = $data;
+                
+    }
 
         public function printAction(){
         try{

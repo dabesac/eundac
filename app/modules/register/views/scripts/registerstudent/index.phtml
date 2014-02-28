@@ -32,6 +32,7 @@
 <div id="data"></div>
 
 <script>
+
     var state = $('#estado').val();
     $('#data').html("<br><center><img src='/img/spinner.gif'> Cargando.... </center>");
     $("#data").load("/register/registerstudent/liststudent/state/"+state);
@@ -72,87 +73,3 @@
     })
 
 </script>
-
-
-<!--<form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/register/registerstudent/liststudent/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
-    <table class="table table-striped">
-        <tr>
-            <td >Escuela:</td>
-            <td >
-                <select class='form-control' id='escid' name='escid' style='height:35px;width:300px'>
-                            <option value="">-Seleccione-</option>
-                            <?php foreach ($this->escuelas as $escuela){   
-                            echo "<option value=".$escuela['escid'].">".$escuela['name']."</option>";
-                    }?>
-                </select>
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td class="span4">Codigo</td>
-            <td>Apellidos y Nombres</td>
-            <td>Estado Matricula</td>
-        </tr>
-        <tr>
-            <td><?php echo $this->fm->uid; ?></td>            
-            <td><?php echo $this->fm->nombre; ?></td>
-            <td>
-            <select  class='form-control' id="estado" name="estadom" style='height:35px;width:150px'>
-                    <option value="<?php echo "I"; ?>"><?php echo "Iniciado"; ?></option>
-                    <option value="<?php echo "M"; ?>"><?php echo "Matriculado"; ?></option>
-                    <option value="<?php echo "O"; ?>"><?php echo "Observado"; ?></option>
-                    <option value="<?php echo "R"; ?>"><?php echo "Reservado"; ?></option>
-            </select>
-            </td>
-        </tr>
-    </table>
-</form>
-<div style="width: 100%" class="flotacarajo"></div>    
-<div style="width: 98%" id="cargadatos_" class="flotacarajo"></div>
-<script>
-    var t = "<?php echo base64_encode("vertodo");?>";
-    $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-    $("#cargadatos_").load("/register/registerstudent/liststudent/ver/"+t);
-    $("#nombre, #uid").keypress(function (e) {        
-        if(e == 13 || e.which==13 || e.which==0){
-            $(".datos2").hide();
-            $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-            $("#frmFiltroDoc").submit();
-        }
-    });
-    
-    $("#frmFiltroDoc").submit(function(){
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            success: function(data) {  
-                $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-                $('#cargadatos_').html(data);    
-                }
-        }); 
-        return false;
-    });
-    
-
-    $("#escid").change(function () {
-        $("#escid option:selected").each(function () {
-            escuela = $(this).val();
-            $(".datos2").hide();
-            $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-            $("#frmFiltroDoc").submit();
-        });
-    });
-
-
-    $("#estado").change(function () {
-        $("#estado option:selected").each(function () {
-            estado = $(this).val();
-            $(".datos2").hide();
-            $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-            $("#frmFiltroDoc").submit();
-        });
-    });
-
-
-</script>-->
