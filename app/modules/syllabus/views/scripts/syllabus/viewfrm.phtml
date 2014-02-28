@@ -19,9 +19,13 @@ $tipo=($this->periodocurso['type_rate']=="O")? "OBJETIVOS": "COMPETENCIAS"; ?>
 
 <?php }
 if ($this->periodocurso['type_rate']!="O" && $this->periodocurso['type_rate']!="C") { ?>
-	<div class="alert alert-info">
-  		<b>Información: </b>El director no ingreso todos los datos de la asignatura, comunique a su director de Escuela que actualize su Distribución Académica.
-  	</div>
+	<div class="panel panel-default" style="margin: 0px 80px 0px 80px">
+		<div class="panel-body">
+			<div class="alert alert-info">
+		  		<b>Información: </b>El director no ingreso todos los datos de la asignatura, comunique a su director de Escuela que actualize su Distribución Académica.
+		  	</div>
+		</div>
+	</div>
 <?php }?>
 <div class="panel panel-default" style="margin: 0px 80px 0px 80px">
 	<div class="panel-heading">

@@ -737,6 +737,13 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $unit = base64_decode($this->_getParam("unit"));
 
             $bdconsult = new Api_Model_DbTable_Syllabusunitcontent();
+            $where1=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'subid'=>$subid,'curid'=>$curid,'escid'=>$escid,
+                          'courseid'=>$courseid,'turno'=>$turno);
+            $where2=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'subid'=>$subid,'curid'=>$curid,'escid'=>$escid,
+                          'courseid'=>$courseid,'turno'=>$turno);
+
+            if ($tipo_cali=="O") {
+
             $unit2=2;
             $unit4=4;
             $name1 = "EXAMEN PRIMER PARCIAL";
@@ -746,12 +753,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $week1 = 8;
             $week2 = 16;
             $week3 = 17;
-            $where1=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'subid'=>$subid,'curid'=>$curid,'escid'=>$escid,
-                          'courseid'=>$courseid,'turno'=>$turno);
-            $where2=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'subid'=>$subid,'curid'=>$curid,'escid'=>$escid,
-                          'courseid'=>$courseid,'turno'=>$turno);
 
-            if ($tipo_cali=="O") {
                 $where1['unit']=$unit2;
                 $where2['unit']=$unit2;
                 $where1['session']=15;
@@ -802,10 +804,28 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                     }             
             }
             if ($tipo_cali=="C") {
-                $where1['unit']=$unit2;
+                $unit1=1;
+                $unit2=2;
+                $unit3=3;
+                $unit4=4;
+
+                $name1 = "I EVALUACIÓN";
+                $name2 = "II EVALUACIÓN";
+                $name3 = "III EVALUACIÓN";
+                $name4 = "IV EVALUACIÓN";
+                $name5 = "EXAMEN DE APLAZADOS";
+
+                $week1 = 4;
+                $week2 = 8;
+                $week3 = 12;
+                $week4 = 16;
+                $week5 = 17;
+
+
+                $where1['unit']=$unit1;
                 $where2['unit']=$unit2;
-                $where1['session']=15;
-                $where2['session']=16;
+                $where1['session']=4;
+                $where2['session']=8;
                 $data1=$bdconsult->_getOne($where1);
                 $data2=$bdconsult->_getOne($where2);
                     if($data1=="") {
@@ -814,42 +834,42 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                         $bdconsult->_save($where1);
                     }
                     if($data2=="") {
-                        $where2['week']=$week1;
-                        $where2['com_conceptual']=$name1;
-                        $bdconsult->_save($where2);
-                    }
-                $where1['unit']=$unit4;
-                $where2['unit']=$unit4;
-                $where1['session']=31;
-                $where2['session']=32;
-                $data3=$bdconsult->_getOne($where1);
-                $data4=$bdconsult->_getOne($where2);
-                    if($data3=="") {
-                        $where1['week']=$week2;
-                        $where1['com_conceptual']=$name2;
-                        $bdconsult->_save($where1);
-                    }
-                    if($data4=="") {
                         $where2['week']=$week2;
                         $where2['com_conceptual']=$name2;
                         $bdconsult->_save($where2);
                     }
-                $where1['unit']=$unit4;
+                $where1['unit']=$unit3;
                 $where2['unit']=$unit4;
-                $where1['session']=33;
-                $where2['session']=34;
-                $data5=$bdconsult->_getOne($where1);
-                $data6=$bdconsult->_getOne($where2);
-                    if($data5=="") {
+                $where1['session']=12;
+                $where2['session']=16;
+                $data3=$bdconsult->_getOne($where1);
+                $data4=$bdconsult->_getOne($where2);
+                    if($data3=="") {
                         $where1['week']=$week3;
                         $where1['com_conceptual']=$name3;
                         $bdconsult->_save($where1);
                     }
-                    if($data6=="") {
-                        $where2['week']=$week3;
-                        $where2['com_conceptual']=$name3;
+                    if($data4=="") {
+                        $where2['week']=$week4;
+                        $where2['com_conceptual']=$name4;
                         $bdconsult->_save($where2);
-                    }     
+                    }
+                $where1['unit']=$unit4;
+                // $where2['unit']=$unit4;
+                $where1['session']=17;
+                // $where2['session']=34;
+                $data5=$bdconsult->_getOne($where1);
+                // $data6=$bdconsult->_getOne($where2);
+                    if($data5=="") {
+                        $where1['week']=$week5;
+                        $where1['com_conceptual']=$name5;
+                        $bdconsult->_save($where1);
+                    }
+                    // if($data6=="") {
+                    //     $where2['week']=$week3;
+                    //     $where2['com_conceptual']=$name3;
+                    //     $bdconsult->_save($where2);
+                    // }     
             }  
             
         } catch (Exception $e) {
