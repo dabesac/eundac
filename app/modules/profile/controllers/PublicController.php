@@ -1030,12 +1030,7 @@ class Profile_PublicController extends Zend_Controller_Action {
                 $spe['parent']='';  
             }
 
-            if ($speciality['header']) {
-                $namelogo = $speciality['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
             
             $names=strtoupper($spe['esc']);
             $namep=strtoupper($spe['parent']);

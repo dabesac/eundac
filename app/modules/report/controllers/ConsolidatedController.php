@@ -296,12 +296,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $namep=strtoupper($spe['parent']);
         $namefinal=$names." <br> ".$namep;
 
-        if ($speciality['header']) {
-            $namelogo = $speciality['header'];
-        }
-        else{
-            $namelogo = 'blanco';
-        }
+        $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
         // $escid=$this->sesion->escid;
         // $where['escid']=$escid;
@@ -488,12 +483,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $namep=strtoupper($spe['parent']);
         $namefinal=$names." <br> ".$namep;
 
-        if ($speciality['header']<>null || $speciality['header']<>"") {
-            $namelogo = $speciality['header'];
-        }
-        else{
-            $namelogo = 'blanco';
-        }
+        $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
         $sem= new Api_Model_DbTable_Registration();
         $alumno= new Api_Model_DbTable_Registrationxcourse();
@@ -706,12 +696,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $namefinal1=$names." ".$namep;
         $this->view->namesc=$namefinal1;
 
-        if ($speciality['header']<>null || $speciality['header']<>"") {
-            $namelogo = $speciality['header'];
-        }
-        else{
-            $namelogo = 'blanco';
-        }
+        $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
         
         if ($where['espec']) {  $where['escid']=$where['espec']; }
         $student= new Api_Model_DbTable_Registration();
@@ -891,12 +876,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $namep=strtoupper($spe['parent']);
         $namefinal=$names." <br> ".$namep;
 
-        if ($speciality['header']<>null || $speciality['header']<>"") {
-            $namelogo = $speciality['header'];
-        }
-        else{
-            $namelogo = 'blanco';
-        }
+        $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
         if ($espec) {  $where['escid']=$espec; }
         $sem= new Api_Model_DbTable_Semester();

@@ -722,4 +722,158 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
+    public function savedefaultAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $subid = base64_decode($this->_getParam("subid"));
+            $perid = base64_decode($this->_getParam("perid"));
+            $curid = base64_decode($this->_getParam("curid"));
+            $escid = base64_decode($this->_getParam("escid"));
+            $courseid = base64_decode($this->_getParam("courseid"));
+            $turno = base64_decode($this->_getParam("turno"));
+            $tipo_cali = base64_decode($this->_getParam("tipo_cali"));
+            $unit = base64_decode($this->_getParam("unit"));
+
+            $bdconsult = new Api_Model_DbTable_Syllabusunitcontent();
+            $where1=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'subid'=>$subid,'curid'=>$curid,'escid'=>$escid,
+                          'courseid'=>$courseid,'turno'=>$turno);
+            $where2=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'subid'=>$subid,'curid'=>$curid,'escid'=>$escid,
+                          'courseid'=>$courseid,'turno'=>$turno);
+
+            if ($tipo_cali=="O") {
+
+            $unit2=2;
+            $unit4=4;
+            $name1 = "EXAMEN PRIMER PARCIAL";
+            $name2 = "EXAMEN SEGUNDO PARCIAL";
+            $name3 = "EXAMEN DE APLAZADOS";
+
+            $week1 = 8;
+            $week2 = 16;
+            $week3 = 17;
+
+                $where1['unit']=$unit2;
+                $where2['unit']=$unit2;
+                $where1['session']=15;
+                $where2['session']=16;
+                $data1=$bdconsult->_getOne($where1);
+                $data2=$bdconsult->_getOne($where2);
+                    if($data1=="") {
+                        $where1['week']=$week1;
+                        $where1['obj_content']=$name1;
+                        $bdconsult->_save($where1);
+                    }
+                    if($data2=="") {
+                        $where2['week']=$week1;
+                        $where2['obj_content']=$name1;
+                        $bdconsult->_save($where2);
+                    }
+                $where1['unit']=$unit4;
+                $where2['unit']=$unit4;
+                $where1['session']=31;
+                $where2['session']=32;
+                $data3=$bdconsult->_getOne($where1);
+                $data4=$bdconsult->_getOne($where2);
+                    if($data3=="") {
+                        $where1['week']=$week2;
+                        $where1['obj_content']=$name2;
+                        $bdconsult->_save($where1);
+                    }
+                    if($data4=="") {
+                        $where2['week']=$week2;
+                        $where2['obj_content']=$name2;
+                        $bdconsult->_save($where2);
+                    }
+                $where1['unit']=$unit4;
+                $where2['unit']=$unit4;
+                $where1['session']=33;
+                $where2['session']=34;
+                $data5=$bdconsult->_getOne($where1);
+                $data6=$bdconsult->_getOne($where2);
+                    if($data5=="") {
+                        $where1['week']=$week3;
+                        $where1['obj_content']=$name3;
+                        $bdconsult->_save($where1);
+                    }
+                    if($data6=="") {
+                        $where2['week']=$week3;
+                        $where2['obj_content']=$name3;
+                        $bdconsult->_save($where2);
+                    }             
+            }
+            if ($tipo_cali=="C") {
+                $unit1=1;
+                $unit2=2;
+                $unit3=3;
+                $unit4=4;
+
+                $name1 = "I EVALUACIÓN";
+                $name2 = "II EVALUACIÓN";
+                $name3 = "III EVALUACIÓN";
+                $name4 = "IV EVALUACIÓN";
+                $name5 = "EXAMEN DE APLAZADOS";
+
+                $week1 = 4;
+                $week2 = 8;
+                $week3 = 12;
+                $week4 = 16;
+                $week5 = 17;
+
+
+                $where1['unit']=$unit1;
+                $where2['unit']=$unit2;
+                $where1['session']=4;
+                $where2['session']=8;
+                $data1=$bdconsult->_getOne($where1);
+                $data2=$bdconsult->_getOne($where2);
+                    if($data1=="") {
+                        $where1['week']=$week1;
+                        $where1['com_conceptual']=$name1;
+                        $bdconsult->_save($where1);
+                    }
+                    if($data2=="") {
+                        $where2['week']=$week2;
+                        $where2['com_conceptual']=$name2;
+                        $bdconsult->_save($where2);
+                    }
+                $where1['unit']=$unit3;
+                $where2['unit']=$unit4;
+                $where1['session']=12;
+                $where2['session']=16;
+                $data3=$bdconsult->_getOne($where1);
+                $data4=$bdconsult->_getOne($where2);
+                    if($data3=="") {
+                        $where1['week']=$week3;
+                        $where1['com_conceptual']=$name3;
+                        $bdconsult->_save($where1);
+                    }
+                    if($data4=="") {
+                        $where2['week']=$week4;
+                        $where2['com_conceptual']=$name4;
+                        $bdconsult->_save($where2);
+                    }
+                $where1['unit']=$unit4;
+                // $where2['unit']=$unit4;
+                $where1['session']=17;
+                // $where2['session']=34;
+                $data5=$bdconsult->_getOne($where1);
+                // $data6=$bdconsult->_getOne($where2);
+                    if($data5=="") {
+                        $where1['week']=$week5;
+                        $where1['com_conceptual']=$name5;
+                        $bdconsult->_save($where1);
+                    }
+                    // if($data6=="") {
+                    //     $where2['week']=$week3;
+                    //     $where2['com_conceptual']=$name3;
+                    //     $bdconsult->_save($where2);
+                    // }     
+            }  
+            
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
 }

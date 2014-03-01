@@ -60,6 +60,7 @@
 	</div>
 </div>
 <div id="campo"></div>
+<div id="savedefault"></div>
 
 <script type="text/javascript">
 	var perid="<?php echo base64_encode($this->where['perid'])?>";
@@ -69,5 +70,6 @@
 	var curid="<?php echo base64_encode($this->where['curid'])?>";
 	var escid="<?php echo base64_encode($this->where['escid'])?>";
 
+	$('#campo').html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
 	$("#campo").load("/syllabus/syllabus/viewfrm/perid/"+perid+"/subid/"+subid+"/turno/"+turno+"/courseid/"+courseid+"/curid/"+curid+"/escid/"+escid);
 </script>

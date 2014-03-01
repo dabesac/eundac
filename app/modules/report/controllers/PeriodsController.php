@@ -200,12 +200,7 @@
             $namep=strtoupper($spe['parent']);
             $namefinal=$names." <br> ".$namep;
 
-            if ($speciality['header']) {
-                $namelogo = $speciality['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
  			$fac = new Api_Model_DbTable_Faculty();
  			$data_fac = $fac->_getOne($where = array('eid' => $eid, 'oid' => $oid, 'facid' => $data_esc['facid']));
