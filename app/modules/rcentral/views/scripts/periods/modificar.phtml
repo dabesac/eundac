@@ -1,15 +1,21 @@
-        <script src="/external/jquery/jquery-1.9.1.js"></script>
+          <!-- <script src="/external/jquery/jquery-1.9.1.js"></script>
         <script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
         <script src="/external/jquery/external/globalize.js"></script>
-        <script src="/external/jquery/external/jquery.mousewheel.js"></script>
-        <script src="/external/jquery/external/jshint.js"></script>
-        <script src="/external/jquery/external/qunit.js"></script>
-        <script src="/external/login/js/bjqs-1.3.min.js"></script>
-        <script src="/external/login/js/scripts.js"></script>
-        <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">    
-        <script src="/external/bootstrap/js/bootstrap.min.js"></script>
+         <script src="/external/jquery/external/jquery.mousewheel.js"></script>
+         <script src="/external/jquery/external/jshint.js"></script>
+         <script src="/external/jquery/external/qunit.js"></script>
+         <script src="/external/login/js/bjqs-1.3.min.js"></script>
+         <script src="/external/login/js/scripts.js"></script>
+         <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">    
+         <script src="/external/bootstrap/js/bootstrap.min.js"></script> >
         <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
-         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" /-->  
+         <script src="/external/js/jquery-1.11.0.js"></script>
+        <script src="/external_library/bootstrap/js/bootstrap.js"></script>
+        <script src="/external_library/bootstrap/js/jquery.functions.js"></script>
+        <link rel="stylesheet" type="text/css" href="/external_library/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 
         
 <form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded">
@@ -39,33 +45,30 @@
       	</tr>
         <tr>
 		<?php
-        $estado=$this->estado;
-		if($estado=='B')
-        { ?>
-			<th><center><?php print $this->form->state;?></center></th>
-        <?php
-        } else { ?>
-			<td>
-				<center>
-                <select  id="state" name="state" class="form-control">
-                	<option value="<?php echo $estado?>">
-                    <?php
-                    if($estado=='A')
-                    { echo "Activo";    
-                    }
+        $estado=$this->estado;?>
+        <td>
+            <center>
+            <select  id="state" name="state" class="form-control">
+            <?php if($estado=='A'){?>
+            <option value="T">Temporal</option>  
+            <option value="C">Cerrado</option> 
+            <?php }?>
+            <?php if($estado=='I'){//I=iniciado?>
+            <option value="A">Activo</option>  
+            <option value="T">Temporal</option>
+            <option value="C">Cerrado</option> 
+            <?php }?>
+            <?php if($estado=='T'){?>
+            <option value="A">Activo</option>  
+            <option value="C">Cerrado</option> 
+            <?php }?>
+            <?php if($estado=='C'){?>  
+            <option value="T">Temporal</option> 
+            <?php }?>                            
+            </select>
+            </center>
+        </td>
 
-                    if($estado=='T')
-                    { echo "Temporal";
-                    ?>
-					<option value="A">Activo</option>  
-                    <?php } ?>
-                    <option value="C">Cerrado</option>            
-                    <option value="I">Inactivo</option>     
-
-              	</select>
-                </center>
-         	</td>
-            <?php  } ?>
            	<th colspan="3"><center><?php print $this->form->document_auth;?></center></th>
      	</tr>
 		<tr>

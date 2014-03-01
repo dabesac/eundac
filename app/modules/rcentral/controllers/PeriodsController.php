@@ -33,7 +33,7 @@ class Rcentral_PeriodsController extends Zend_Controller_Action {
     }
 
     public function modificarAction() {
-        // $this->_helper->layout()->disableLayout();
+        $this->_helper->layout()->disableLayout();
         $where['eid']= $this->sesion->eid;
         $where['oid']= $this->sesion->oid;
         $uid= $this->sesion->uid;
