@@ -5,13 +5,15 @@
 <div class="row">
 	<div class="col-md-3 col-md-offset-2">
 		<h5 class="text-muted">Escuela </h5>
-		<select id="school" class="form-control">
+		<?php if (!$this->allSchool): 
+			$disabled = 'disabled';
+		endif ?>
+		<select id="school" class="form-control" <?php echo $disabled ?>>
 			<?php
 			if ($this->speciality) { ?>
+
 				<option value="">Seleccione Escuela</option>
-				<?php if (condition): ?>
-					<option value="<?php echo $this->allSchool?>">Todas las Especialidades</option>
-				<?php endif ?>
+				<option value="<?php echo $this->allSchool?>">Todas las Especialidades</option>
 				<?php 
 				foreach ($this->speciality as $speciality) { 
 					if ($this->director) $selected = ($this->escid == $speciality['escid'])? "selected": "";
@@ -71,6 +73,7 @@
 	$('#anio').change(function(){
 		$('#anio option:selected').each(function(){
 			anio = $(this).val();
+			$('#period').html("Cargando <img src='/img/spinner.gif' alt='Cargando...' /></center>");
 			$.get('/report/periods/listperiods/anio/'+anio, function(data){
 				$('#period').html(data);
 			});
@@ -87,7 +90,7 @@
 	});
 
 	$('#showData').click(function(){
-		$('#data').html("<br><center><img src='/img/spinner.gif' alt='Cargando...' /></center>");
+		$('#data').html("<br><center>Cargando... <img src='/img/spinner.gif' alt='Cargando...' /></center>");
 		$('#data').load("/report/periods/listteacher/perid/" + perid + "/escid/" + escid + "/subid/" + subid);
 	});
 </script>

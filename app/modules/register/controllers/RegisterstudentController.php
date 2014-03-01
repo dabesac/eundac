@@ -59,16 +59,20 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $oid = $this->sesion->oid;
         $subid = $this->sesion->subid;
         $escid = $this->sesion->escid;
-        
-        if ($state == null) {
+
+        /*if ($state == null) {
             $pfac='T'.$escid['1'];
             $estados='I';
             $bdu = new Api_Model_DbTable_Registration();        
             $str = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
             $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados, $subid);  
             $this->view->datos=$datos;
-        }elseif ($state) {
-            $pfac='T'.$escid['1'];
+        }else*/
+        if ($state) {
+            if ($subid != '1901') {
+                $escid = '';
+            }
+
             $estados = $state;
             $bdu = new Api_Model_DbTable_Registration();        
             $str = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
@@ -255,7 +259,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $this->view->courses = $courses;
             $this->view->coursesName = $coursesName;
             $this->view->teachers = $teachers;
-            $this->view->matriculaCondicional = $matriculaCondicional;
+            $this->view->matriculaCondicional = $matriculaCondicional;    
         }catch(Exception $ex ){
             print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
         } 
