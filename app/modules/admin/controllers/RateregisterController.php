@@ -46,55 +46,59 @@ class Admin_RateregisterController extends Zend_Controller_Action {
         }
     public function listAction()
         {
-          $this->_helper->layout()->disableLayout();                     
-          $eid= $this->sesion->eid;                    
-          $oid= $this->sesion->oid;  
-          $perid = $this->_getParam("perid");
-          $state = $this->_getParam("state");
+            $this->_helper->layout()->disableLayout();                 
+            $eid= $this->sesion->eid;                    
+            $oid= $this->sesion->oid;  
+            $perid = $this->_getParam("perid");
+            $state = $this->_getParam("state");
                             
-           $this->view->state=$state;
-           $dbtasas=new Api_Model_DbTable_Rates();
-           $data['eid']=$eid;
-           $data['oid']=$oid;
-           $data['perid']=$perid;
-           $datatasas=$dbtasas->_getFilter($data);
-           $this->view->tasas=$datatasas;
+            $this->view->state=$state;
+            $this->view->perid=$perid;
+            $dbtasas=new Api_Model_DbTable_Rates();
+            $data['eid']=$eid;
+            $data['oid']=$oid;
+            $data['perid']=$perid;
+            $datatasas=$dbtasas->_getFilter($data);
+            $this->view->tasas=$datatasas;
         }
-    public function newAction()
-        {
-          try
-        {
-                $eid= $this->sesion->eid;
-                $oid= $this->sesion->oid;   
-                $perid= $this->_getParam("perid"); 
-                $this->view->perid=$perid;
-                $fm=new Admin_Form_Ratesnew ();
-                $fm->guardar->setLabel("Guardar");
-                if ($this->getRequest()->isPost())
-                 {
-                   $formData = $this->getRequest()->getPost();
-                       if ($fm->isValid($formData))
-                          {     
-                                 unset($formData["guardar"]);
-                                 $formData['eid']=$eid;
-                                 $formData['oid']=$oid;
-                                 $nf=new Api_Model_DbTable_Rates();
-                                 $nf->_save($formData); 
-                                 $this->_helper->redirector("index");
-                          }
-                       else
-                          {
-                                 $fm->populate($formData);
-                           }
-                 }
-                         $this->view->fm=$fm;
+    public function newAction(){
+        try{
+            $this->_helper->layout()->disableLayout();
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;   
+            $perid= $this->_getParam("perid"); 
+            $this->view->perid=$perid;
+            $state= $this->_getParam("state"); 
+            $this->view->state=$state;
+            $fm=new Admin_Form_Ratesnew ();
+            $fm->guardar->setLabel("Guardar");
+
+            if ($this->getRequest()->isPost())
+             {
+                $formData = $this->getRequest()->getPost();
+                if ($fm->isValid($formData))
+                    {     
+                    unset($formData["guardar"]);
+                    $formData['eid']=$eid;
+                    $formData['oid']=$oid;
+                    $nf=new Api_Model_DbTable_Rates();
+                    
+                    if ($nf->_save($formData)) {
+                        $this->view->valor=1;                        
+                    }
+                    // $this->_helper->redirector("index");
+                }
+                else{
+                    $fm->populate($formData);
+               }
+            }
+            $this->view->fm=$fm;
         }
-         catch (Exception $ex) 
-        {
-          print "Error listar TasasController: ".$ex->getMessage();
-          
+        catch (Exception $ex){
+          print "Error listar Tasas Controller: ".$ex->getMessage();          
         }
-        }
+    }
+
     public function deleteAction()
         {
            try 

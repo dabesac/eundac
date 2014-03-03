@@ -9,7 +9,6 @@ class Admin_Form_Ratesnew extends Zend_Form{
 
         // $periodo=new Zend_Form_Element_Hidden('perid');
 
-
         $periodo = new Zend_Form_Element_Text('perid');
         $periodo->setRequired(true)->addErrorMessage('Este campo es requerido');
         $periodo->removeDecorator('Label')->removeDecorator("HtmlTag");
