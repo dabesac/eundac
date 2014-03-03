@@ -18,31 +18,31 @@
  			$escid = $this->sesion->escid;
  			$is_director = $this->sesion->infouser['teacher']['is_director'];
 
-	 		$esc = new Api_Model_DbTable_Speciality();
- 			if ($rid == 'RF' || $rid == 'DF') {
- 				$facid = $this->sesion->faculty->facid;
- 				$where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid,'state' => 'A');
- 			}else{
- 				if ($rid == 'DR' && $is_director=='S') {
- 					$this->view->director = $is_director;
- 					$this->view->escid = $this->sesion->escid;
- 					$where = array('eid' => $eid, 'oid' => $oid, 'parent' => $this->sesion->escid,'state' => 'A');
- 					$specialities = $esc->_getFilter($where);
- 					if ($specialities) {
-		 				$allSchool = $escid;
-		 			}else{
-		 				$where = array('eid' => $eid, 'oid' => $oid, 'escid' => $this->sesion->escid,'state' => 'A');
-		 				$allSchool = '';
-		 			}
- 				}else{
-		 			$where = array('eid' => $eid, 'oid' => $oid, 'state' => 'A');
- 				}
- 			}
-		 	$dataesc = $esc->_getFilter($where,$attrib=null,$orders=array('facid','escid'));
- 			$this->view->allSchool = $allSchool;
-
+            $esc = new Api_Model_DbTable_Speciality();
+            if ($rid == 'RF' || $rid == 'DF') {
+                $facid = $this->sesion->faculty->facid;
+                $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid,'state' => 'A');
+            }else{
+                if ($rid == 'DC' && $is_director=='S') {
+                    $this->view->director = $is_director;
+                    $this->view->escid = $this->sesion->escid;
+                    $where = array('eid' => $eid, 'oid' => $oid, 'parent' => $this->sesion->escid,'state' => 'A');
+                    $specialities = $esc->_getFilter($where);
+                    if ($specialities) {
+                        $allSchool = $escid.'--'.$specialities[0]['subid'];
+                    }else{
+                        $where = array('eid' => $eid, 'oid' => $oid, 'escid' => $this->sesion->escid,'state' => 'A');
+                        $allSchool = '';
+                    }
+                }else{
+                    $where = array('eid' => $eid, 'oid' => $oid, 'state' => 'A');
+                }
+            }
+            $dataesc = $esc->_getFilter($where,$attrib=null,$orders=array('facid','escid'));
+            $this->view->allSchool = $allSchool;
 
 	 		$this->view->speciality = $dataesc;
+            //print_r($dataesc);
 
 
  			/*$this->view->perid = $this->sesion->period->perid;
@@ -88,14 +88,13 @@
  			$this->view->perid = $perid;
  			$this->view->escid = $escid;
  			$this->view->subid = $subid;
-
- 			$data = array('subid'=>$subid, 'perid'=>$perid);
+            $data = array('subid'=>$subid, 'perid'=>$perid);
             $this->view->data = $data;
 
             $where = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid, 'perid' => $perid);
             $user = new Api_Model_DbTable_Coursexteacher();
 
-            $wheretea = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'perid' => $perid);
+            $wheretea = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'perid' => $perid , 'subid' => $subid);
             $allteacher = $user->_getAllTeacherXPeriodXEscid($wheretea);
 
             //Verificando Informe Academico

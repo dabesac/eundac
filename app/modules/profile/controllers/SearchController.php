@@ -26,7 +26,7 @@
 
 
             $rid = $this->_getParam("rid");
-            $nombre=$this->_getParam("nombre");
+            $nombre=$this->_getParam("uid");
 
             $this->view->rid=$rid;
 			
@@ -40,6 +40,9 @@
 
                    if ($uid<>'')
                    {
+                    if(strlen($uid)==8){
+                        $uid=$uid.'DC';
+                    }
                     $where['uid'] = $uid;
                     $where['rid'] = $rid;
                     $where['eid'] = $this->sesion->eid;

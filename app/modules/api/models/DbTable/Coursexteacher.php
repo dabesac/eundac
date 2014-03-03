@@ -1,4 +1,4 @@
-<?php
+	<?php
 
 class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 {
@@ -146,13 +146,14 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 
     public function _getAllTeacherXPeriodXEscid($where=array()){
 		try{
-			if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' || $where["perid"]=='') return false;
+			if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' || $where["perid"]=='' || $where["subid"]=='') return false;
 			$select = $this->_db->select()->distinct()
 								->from(array('ct'=>'base_course_x_teacher'),
-										array('ct.eid','ct.oid','ct.uid','ct.pid','ct.escid'))
+										array('ct.eid','ct.oid','ct.uid','ct.pid','ct.subid','ct.escid'))
 								->where('ct.eid = ?', $where['eid'])
 								->where('ct.oid = ?', $where['oid'])
 								->where('ct.perid = ?', $where['perid'])
+								->where('ct.subid = ?', $where['subid'])
 								->where('ct.escid = ?', $where['escid']);
 
 				$results = $select->query();

@@ -4,13 +4,13 @@
        		<img src="/img/circulo-verde.png"><b>ACTIVO</b>
        	</td>
       	<td class="span3">
-      		    <img src="/img/unlock.png" width='30' height='30'><b>INACTIVO/CERRADO</b>
+      		    <img src="/img/circulo-rojo.png" width='30' height='30'><b>CERRADO</b>
       	</td>
   	    <td class="span2">
   		    <img src="/img/circulo-amarillo.png"><b>TEMPORAL</b>
   	    </td>
   	    <td class="span2">
-  		    <img src="/img/circulo-rojo.png"><b>BORRADOR</b>
+  		    <img src="/img/circulo-azul.png"><b>INICIADO</b>
    	    </td>
    	    <td style="text-align: right">
 			<a id="#"  class="btn btn-info" onclick="javascript: window.open('/rcentral/periods/nuevo/','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=0,fullscreen=yes,dependent=no,width=600,height=600')"> 
@@ -43,69 +43,32 @@
                 <td><?php echo $periodo['name'];?></td>
                 <td><?php echo $periodo['class_start_date'];?></td>
                 <td><?php echo $periodo['class_end_date'];?></td>
-                <td><?php echo $periodo['document_auth'];?></td>
+                <td><?php echo $periodo['document_auth'];?></td> 
                 <td>
-                <?php
-                if($estado=='A')
-                {
-                   ?> <img src="/img/circulo-verde.png" id="editar_<?php echo $escid.$r; ?>" rel="tooltip" title="<?php echo $titulo?>"  />
+                <?php if($estado=='I'){?>
+                    <img src="/img/circulo-azul.png" id="editar_<?php echo $escid.$r; ?>" rel="tooltip" title="<?php echo $titulo?>"  />
                        <td>
                        <a href="#"  onclick="javascript: window.open('/rcentral/periods/modificar/perid/<?php echo $periodo['perid'];?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=600,height=550')">
                                  <i class="glyphicon glyphicon-pencil"></i></a>
-                       </td>
-                   <?php }
-                else {
-                    if($estado=='C')
-                    { ?>                     
-                      <img src="/img/unlock.png" width="30" height="30"  rel="tooltip" title="<?php echo $titulo?>"  />
-                      <?php
-                    }
-                    else
-                        if($estado=='I')
-                        { ?>                         
-                        <img src="/img/unlock.png" width="30" height="30"   rel="tooltip" title="<?php echo $titulo?>"  />
-                          <td>
-                                 <a href="#"  onclick="javascript: window.open('/rcentral/periods/modificar/perid/<?php echo $periodo['perid'];?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=600,height=500')"> 
+                <?php } ?>
+                <?php if($estado=='A'){?>
+                    <img src="/img/circulo-verde.png" id="editar_<?php echo $escid.$r; ?>" rel="tooltip" title="<?php echo $titulo?>"  />
+                       <td>
+                       <a href="#"  onclick="javascript: window.open('/rcentral/periods/modificar/perid/<?php echo $periodo['perid'];?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=600,height=550')">
                                  <i class="glyphicon glyphicon-pencil"></i></a>
-                          </td>
-                        <?php   
-                        }
-                        else
-                        {
-                             if($estado=='T')
-                             {
-                              ?>
-                                 <img src="/img/circulo-amarillo.png"  rel="tooltip" title="<?php echo $titulo?>"  />
-                                 <td>
-                                 <a href="#"  onclick="javascript: window.open('/rcentral/periods/modificar/perid/<?php echo $periodo['perid'];?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=600,height=500')"> 
+                <?php } ?>
+                <?php if($estado=='T'){?>
+                    <img src="/img/circulo-amarillo.png" id="editar_<?php echo $escid.$r; ?>" rel="tooltip" title="<?php echo $titulo?>"  />
+                       <td>
+                       <a href="#"  onclick="javascript: window.open('/rcentral/periods/modificar/perid/<?php echo $periodo['perid'];?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=600,height=550')">
                                  <i class="glyphicon glyphicon-pencil"></i></a>
-                                 </td>
-
-                             <?php  
-                             }   
-                             else
-                             {
-                                 if($estado=='B')
-                                 {
-                                  ?>
-                                     <img src="/img/circulo-rojo.png"  rel="tooltip" title="<?php echo $titulo?>"/>
-                                     <td>
-                                     <a href="#"  onclick="javascript: window.open('/rcentral/periods/modificar/perid/<?php echo $periodo['perid'];?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=600,height=500')"> 
-                                     <i class="glyphicon glyphicon-pencil"></i></a>
-                                     </td>
-                                     <td>
-                                     <a href="/rcentral/periods/eliminar/perid/<?php echo $periodo['perid'];?>" onclick="return confirm('Esta Seguro que desea eliminar el periodo?');"> 
-                                    <img src="/img/cancel_30x30.png"  rel="tooltip" title="<?php echo $titulo?>"  />
-                                     </a>
-                                     </td>
-
-                                 <?php  
-                                 }   
-                            }
-                        }
-                }
-
-                ?>
+                <?php } ?>
+                <?php if($estado=='C'){?>
+                    <img src="/img/circulo-rojo.png" id="editar_<?php echo $escid.$r; ?>" rel="tooltip" title="<?php echo $titulo?>"  />
+                       <td>
+                       <a href="#"  onclick="javascript: window.open('/rcentral/periods/modificar/perid/<?php echo $periodo['perid'];?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=600,height=550')">
+                                 <i class="glyphicon glyphicon-pencil"></i></a>
+                <?php } ?>
                </td>
             </tr>
            <?php
@@ -114,7 +77,7 @@
     }
     ?>
     </table>
-</div>
+
 
 
 
