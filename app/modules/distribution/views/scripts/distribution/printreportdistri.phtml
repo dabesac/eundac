@@ -1,0 +1,123 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start();
+$name1=$this->dataper;
+$name=$this->dataper1;
+$nameall=strtoupper($name['last_name0'])." ".strtoupper($name['last_name1']).", ".$name['first_name'];
+$nameall1=strtoupper($name1['last_name0'])." ".strtoupper($name1['last_name1']).", ".$name1['first_name'];
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<div>
+    <div style="text-align:left; font-size:12px;"><b>Docente: </b><?php echo $nameall1?></div>
+</div>
+<div style="margin-top:15px">
+    <h2 style="text-align:center">MEMORÁNDUM PERIODO <?php echo $this->perid?></h2>
+    Estimado docente este periodo tiene asignado horas académicas y labores administrativas esperamos que lo desarrolle con total normalidad. Para el Beneficio de la escuela.
+    <h3 style="text-align:center; margin-top:6%"> CARGA ACADÉMICA Y ADMINISTRATIVA</h3>
+</div> 
+</br>
+<?php 
+    $i=1;
+    $sumha=0;
+    if ($this->cursosasignados) {
+        ?>
+        <table style="width:100%; margin-bottom:3%">
+            <tr>
+                <th colspan="9"><center><h3>HORAS ACADÉMICAS<h3></center></th>
+            </tr>
+            <tr>
+                <th class='small'>#</th>
+                <th class='small'>Código</th>
+                <th >Nombre Asignatura</th>
+                <th class='small'>Turno</th>
+                <th class='small'>Sem.</th>
+                <th class='small'>Grupos</th>
+                <th class='small'>#H.T</th>
+                <th class='small'>#H.P</th>
+                <th class='small-50'>#T.H</th>
+            </tr>
+            <?php    
+            foreach ($this->cursosasignados as $academico) {
+                ?>
+            <tr>
+                <td class="center"><?php echo $i?></td>
+                <td class="center"><?php echo $academico['courseid']?></td>
+                <td><?php echo $academico['name']?></td>
+                <td class="center"> <?php echo $academico['turno']?></td>
+                <td class="center"><?php echo $academico['semid']?></td>
+                <td class="center"><?php echo $academico['groups']?></td>
+                <td class="center"><?php echo $academico['hours_t']?></td>
+                <td class="center"><?php echo $academico['hours_p']?></td>
+                <td class="center"><?php echo $academico['hours_total']?></td>
+            </tr>        
+            <?php
+            $sumha=$sumha+$academico['hours_total'];
+            $i++;
+            }
+            ?>
+            <tr>
+                <td colspan='8' style='text-align:right'><b>TOTAL DE HORAS ACADÉMICAS <b></td>
+                <th><?php echo $sumha?></th>
+            </tr>
+        </table>
+    <?php
+    }
+    $j=1;
+    $sumhad=0;
+    if ($this->administrativas) {
+        ?>
+        <table style="width:100%; margin-bottom:20px" border=" 1px">
+            <tr>
+                <th colspan="3"><center><h3>HORAS ADMINISTRATIVAS<h3></center></th>
+            </tr>
+            <tr>
+                <th class='small-50'>#</th>
+                <th >Labor Administrativa</th>
+                <th class='small-100'>#Horas</th>
+            </tr>
+            <?php    
+            foreach ($this->administrativas as $administrativas) {
+                ?>
+            <tr>
+                <td class="center"><?php echo $j?></td>
+                <td><?php echo $administrativas['work']?></td>
+                <td class="center"><?php echo $administrativas['hours']?></td>
+            </tr>        
+            <?php
+            $j++;
+            $sumhad=$sumhad+$administrativas['hours'];
+            }
+            ?>
+            <tr>
+                <td colspan='2' style='text-align:right'><b>TOTAL DE HORAS ADMINISTRATIVAS <b></td>
+                <th><?php echo $sumhad?></th>
+            </tr>
+        </table>
+        <table style='margin-top:5%; width:100%;'>
+            <tr>
+                <th style='text-align:right'><h2>TOTAL DE HORAS</h2></th>
+                <th><h2><?php echo $sumha+$sumhad?></h2></th>
+            </tr>
+        </table>
+
+        <p style='text-align:center; margin-top:20%; margin-left:35%; width:200px ; border-top: solid 1px #000'><?php echo $nameall?><br><span style="border: none; font-weight: bold;">DIRECTOR</span></p>
+    <?php
+    }
+    
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,8,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.05,'F');
+    $mpdf->showWatermarkImage = true;
+
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    // $mpdf->Output('RecordNotas -'.$this->person['pid'].'.pdf','D');
+    $mpdf -> Output();  
+
+?>

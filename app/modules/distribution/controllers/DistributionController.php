@@ -862,7 +862,68 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
+    public function printreportdistriAction(){
+        try {
+            $this->_helper->layout()->disablelayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $uid=base64_decode($this->_getParam('uid'));
+            $pid=base64_decode($this->_getParam('pid'));
+            $perid=base64_decode($this->_getParam('perid'));
+            $escid=base64_decode($this->_getParam('escid'));
+            $distid=base64_decode($this->_getParam('distid'));
+            $where=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'perid'=>$perid,'distid'=>$distid);
+            $orders=array('curid','courseid','turno');
+            $courdoc = new Api_Model_DbTable_Coursexteacher();
+            $courasig = $courdoc->_getFilter($where,$attrib=null,$orders);
+            if ($courasig) {
+                $len=count($courasig);
+                $wherecourse['eid']=$eid;
+                $wherecourse['oid']=$oid;
+                $cours= new Api_Model_DbTable_Course();
+                for ($i=0; $i < $len; $i++) { 
+                    $wherecourse['subid']=$courasig[$i]['subid'];
+                    $wherecourse['escid']=$courasig[$i]['escid'];
+                    $wherecourse['curid']=$courasig[$i]['curid'];
+                    $wherecourse['courseid']=$courasig[$i]['courseid'];
+                    $dbcourse=$cours->_getOne($wherecourse);
+                    $courasig[$i]['name']=$dbcourse['name'];
+                    $courasig[$i]['credits']=$dbcourse['credits'];
+                }
+            }
+            // print_r($courasig);exit();
+            $this->view->cursosasignados=$courasig;
 
+            $where1['eid']=$eid;
+            $where1['oid']=$oid;
+            $where1['escid']=$escid;
+            $where1['perid']=$perid;
+            $where1['uid']=$uid;
+            $where1['pid']=$pid;
+            $distadm = new Distribution_Model_DbTable_DistributionAdmin();
+            $labor=$distadm->_getFilter($where1);
+            // print_r($labor);exit();
+            $bdperson = new Api_Model_DbTable_Person();
+            $this->view->administrativas=$labor;
+            $where2=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid);
+            $dataperson = $bdperson->_getOne($where2);
+            $this->view->dataper=$dataperson;
+
+            $pid1=$this->sesion->pid;
+            $where3=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid1);
+            $dataperson1 = $bdperson->_getOne($where3);
+            $this->view->dataper1=$dataperson1;
+
+            // print_r($dataperson);exit();
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $this->view->header=$header;
+            $this->view->footer=$footer;
+            $this->view->perid=$perid;
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
     public function coursesxcurriculaAction(){
         try {
             $this->_helper->layout()->disableLayout();

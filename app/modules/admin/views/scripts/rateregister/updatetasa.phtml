@@ -1,0 +1,232 @@
+<form id="formtasas" name="formtasas" action="/admin/rateregister/updatetasa/" method="POST" enctype="application/x-www-form-urlencoded">
+    <table class="table table-striped table-bordered table-condensed">
+        <tbody>
+            <tr>
+                <div class="control-group">
+                <td>
+                    <div class="control-group">
+                        <label class="control-label">Codigo:</label>
+                        <div class="controls"><?php print $this->form->ratid;?></div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Tasa Normal:</label>
+                        <div class="controls"><?php print $this->form->t_normal;?></div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Incremento 1: (%)</label>
+                        <div class="controls"><?php print $this->form->v_t_incremento1;?></div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Incremento 2: (%)</label>
+                        <div class="controls"><?php print $this->form->v_t_incremento2;?></div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Incremento 3: (%)</label>
+                        <div class="controls"><?php print $this->form->v_t_incremento3;?></div>
+                    </div>                                
+                </td> 
+                <td>
+                    <div class="control-group">
+                        <label class="control-label">Nombre Tasa::</label>
+                        <div class="controls"><?php print $this->form->name;?></div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Fecha Inicio:</label>
+                        <div class="controls"><?php print  $this->form->f_ini_tn;?></div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Monto a Pagar 1:</label>
+                        <div class="controls"><?php print $this->form->t_incremento1?></div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Monto a Pagar 2:</label>
+                        <div class="controls"><?php print $this->form->t_incremento2;?></div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Monto a Pagar 3:</label>
+                        <div class="controls"><?php print $this->form->t_incremento3;?></div>
+                    </div>                                 
+                </td>
+                <td>
+                    <div class="control-group">
+                        <label class="control-label">Nombre Resolucion:</label>
+                        <div class="controls"><?php print $this->form->resolucion;?></div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Fecha Final:</label>
+                        <div class="controls"><?php print $this->form->f_fin_tnd;?></div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Fecha Final 1:</label>
+                        <div class="controls"><?php print $this->form->f_fin_ti1;?></div>
+                    </div>                   
+                   
+                    <div class="control-group">
+                        <label class="control-label">Fecha Final 2:</label>
+                        <div class="controls"><?php print $this->form->f_fin_ti2;?></div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Fecha Final 3:</label>
+                        <div class="controls"><?php print $this->form->f_fin_ti3;?></div>
+                    </div> 
+                </td>
+            </tr>                            
+        </tbody>
+    </table>
+    <input type="hidden" name ="perid" value="<?php echo $this->perid?>">
+    <input type="hidden" name ="state" value="<?php echo $this->state?>">
+</form>
+
+<div class="modal-footer">
+    <button class="btn btn-success" id="modificartasa"><span class="glyphicon glyphicon-save"></span> Actualizar</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>    
+</div>
+
+<script type="text/javascript">
+    
+    $(function() {
+        $( "#f_ini_tn" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy/mm/dd',
+        });
+    });
+
+    $(function() {
+        $( "#f_fin_tnd" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy/mm/dd',
+        });
+    });
+
+    $(function() {
+        $( "#f_fin_ti1" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy/mm/dd',
+        });
+    });
+
+    $(function() {
+        $( "#f_fin_ti2" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy/mm/dd',
+        });
+    });
+
+    $(function() {
+        $( "#f_fin_ti3" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy/mm/dd',
+        });
+    });
+
+    $("#t_normal").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v)){
+            $(".msg").html("solo escriba numero");
+            $("#t_normal").val("");
+        }
+        else{
+            $(".msg").html("");}
+    });
+
+    $("#v_t_incremento1").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v)){
+            $(".msg").html("solo escriba numero");
+            $("#v_t_incremento1").val("");
+        }
+        else{
+            $(".msg").html("");}
+    });
+
+    $("#v_t_incremento2").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v)){
+            $(".msg").html("solo escriba numero");
+            $("#v_t_incremento2").val("");
+        }
+        else{
+            $(".msg").html("");}
+    });
+
+    $("#v_t_incremento3").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v)){
+            $(".msg").html("solo escriba numero");
+            $("#v_t_incremento3").val("");
+        }
+        else{
+            $(".msg").html("");}
+    });
+
+    $("#t_incremento1").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v)){
+            $(".msg").html("solo escriba numero");
+            $("#t_incremento1").val("");
+        }
+        else{
+            $(".msg").html("");}
+    });
+
+    $("#t_incremento2").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v)){
+            $(".msg").html("solo escriba numero");
+            $("#t_incremento2").val("");
+        }
+        else{
+            $(".msg").html("");}
+    });
+
+    $("#t_incremento3").keyup(function(){
+        var v = $(this).val();
+        if (isNaN(v)){
+            $(".msg").html("solo escriba numero");
+            $("#t_incremento3").val("");
+        }
+        else{
+            $(".msg").html("");}
+    });
+
+    $("#modificartasa").click(function(){
+    
+        var url="/admin/rateregister/updatetasa/";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data:$("#formtasas").serialize(),
+            success: function (data){
+                $("#modi_tasa").html(data); 
+            }
+        });
+    });
+
+    var valor="<?php echo $this->valor?>";
+    if (valor==1) {
+        $('#myModal1').modal('hide');
+        $('#myModal1').on('hidden.bs.modal', function (e) {
+            var perid="<?php echo $this->perid ?>";
+            var state="<?php echo $this->state?>";
+            var url="/admin/rateregister/list/perid/"+perid+"/state/"+state;
+            $("#detalle").html("<img src='/img/spinner.gif' />Cargando....");
+            $("#detalle").load(url);
+        });
+    };
+ </script>

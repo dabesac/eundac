@@ -1,7 +1,6 @@
 <?php 
 $perid=$this->perid;
 $state=$this->state;
-
 ?>
  <form id="frmtasas" name="frmtasas" action="/admin/rateregister/new/" method="POST" enctype="application/x-www-form-urlencoded">
 
@@ -61,6 +60,8 @@ $state=$this->state;
             </td> 
         </tr>       
     </table>
+    <input type="hidden" name ="perid" value="<?php echo $this->perid?>">
+    <input type="hidden" name ="state" value="<?php echo $this->state?>">
 </form>
 
 <div class="modal-footer">
@@ -205,8 +206,8 @@ $state=$this->state;
     if (valor==1) {
         $('#myModal').modal('hide');
         $('#myModal').on('hidden.bs.modal', function (e) {
-            var perid="<?php echo $perid ?>";
-            var state="<?php echo $state ?>";
+            var perid="<?php echo $this->perid ?>";
+            var state="<?php echo $this->state?>";
             var url="/admin/rateregister/list/perid/"+perid+"/state/"+state;
             $("#detalle").html("<img src='/img/spinner.gif' />Cargando....");
             $("#detalle").load(url);
