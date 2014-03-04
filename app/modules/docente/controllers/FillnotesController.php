@@ -28,7 +28,6 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         }
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
-
         $params = $paramsdecode;
         $courseid = trim($params['courseid']);
         $turno = trim($params['turno']);
@@ -66,7 +65,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                         base64_encode('partial')."/".base64_encode($partial);
 
         if ($state_record_c) {
-            if ($partial==1 && $state_record_c['state_record'] == 'A' && $state_record_c['state'] == 'P' || $state_record_c['state'] == 'C' ) {
+            if ($partial==1 && $state_record_c['state'] == 'P' || $state_record_c['state'] == 'C' ) {
                 $this->_redirect('/docente/register/registertarget'.$urlpersentage."/".base64_encode('action')."/".base64_encode('N'));
             }
             if ($partial == 2 && $state_record_c['state_record'] == 'C' && $state_record_c['state'] == 'C') {
@@ -740,7 +739,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                         base64_encode('partial')."/".base64_encode($partial);
 
         if ($state_record_c) {
-            if ($partial == 1 && $state_record_c['state_record'] == 'A' && $state_record_c['state'] == 'P' || $state_record_c['state'] == 'C') {
+            if ($partial == 1 && $state_record_c['state'] == 'P' || $state_record_c['state'] == 'C') {
                 $this->_redirect('/docente/register/registerconpetency'.$urlpersentage."/".base64_encode('action')."/".base64_encode('N'));
             }
             if ($partial == 2 && $state_record_c['state_record'] == 'C' && $state_record_c['state'] == 'C') {
@@ -1163,7 +1162,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
             $assist_11 = 0; $assist_12 = 0; $assist_13 = 0;$assist_14 = 0;$assist_15 = 0;
             $assist_16 = 0; $assist_17 = 0; $assist_18 = 0;$assist_19 = 0;$assist_20 = 0;
             $assist_21 = 0; $assist_22 = 0; $assist_23 = 0;$assist_24 = 0;$assist_25 = 0;
-            $assist_25 = 0; $assist_27 = 0; $assist_28 = 0;$assist_29 = 0;$assist_30 = 0;
+            $assist_26 = 0; $assist_27 = 0; $assist_28 = 0;$assist_29 = 0;$assist_30 = 0;
             $assist_31 = 0; $assist_32 = 0; $assist_33 = 0;$assist_34 = 0;$state = 0;
 
             foreach ($assistence as $key => $infoassist) {
@@ -1202,17 +1201,17 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                         $assist_14++;
                     }if ($infoassist['a_sesion_15']=='R' || $infoassist['a_sesion_15']=='A' || $infoassist['a_sesion_15']=='F' || $infoassist['a_sesion_15']=='T') {
                         $assist_15++;
-                    }if ($infoassist['a_sesion_16']=='R' || $infoassist['a_sesion_16']=='A' || $infoassist['a_sesion_16']=='F' || $infoassist['a_sesion_16']=='T') {
-                        $assist_16++;
-                    }if ($infoassist['a_sesion_17']=='R' || $infoassist['a_sesion_17']=='A' || $infoassist['a_sesion_17']=='F' || $infoassist['a_sesion_17']=='T') {
-                        $assist_17++;
                     }
-                    if ($infoassist['state']=='P') {
+                    if ($infoassist['state']=='P' || $infoassist['state']=='C' ) {
                         $state++;
                     }
                 }
                 if ($partial == 2) {
-
+                    if ($infoassist['a_sesion_16']=='R' || $infoassist['a_sesion_16']=='A' || $infoassist['a_sesion_16']=='F' || $infoassist['a_sesion_16']=='T') {
+                        $assist_16++;
+                    }if ($infoassist['a_sesion_17']=='R' || $infoassist['a_sesion_17']=='A' || $infoassist['a_sesion_17']=='F' || $infoassist['a_sesion_17']=='T') {
+                        $assist_17++;
+                    }
                     if ($infoassist['a_sesion_18']=='R' || $infoassist['a_sesion_18']=='A' || $infoassist['a_sesion_18']=='F' || $infoassist['a_sesion_18']=='T') {
                         $assist_18++;
                     }
@@ -1246,10 +1245,6 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                         $assist_31++;
                     }if ($infoassist['a_sesion_32']=='R' || $infoassist['a_sesion_32']=='A' || $infoassist['a_sesion_32']=='F' || $infoassist['a_sesion_32']=='T') {
                         $assist_32++;
-                    }if ($infoassist['a_sesion_33']=='R' || $infoassist['a_sesion_33']=='A' || $infoassist['a_sesion_33']=='F' || $infoassist['a_sesion_33']=='T') {
-                        $assist_33++;
-                    }if ($infoassist['a_sesion_34']=='R' || $infoassist['a_sesion_34']=='A' || $infoassist['a_sesion_34']=='F' || $infoassist['a_sesion_34']=='T') {
-                        $assist_34++;
                     }
                     if ($infoassist['state']=='C') {
                         $state++;
@@ -1266,19 +1261,18 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                     $count == $assist_1 && $count == $assist_2 &&  $count == $assist_3 && $count == $assist_4 && 
                     $count == $assist_5 && $count == $assist_6  && $count == $assist_7 && $count == $assist_8 &&
                     $count == $assist_9 && $count == $assist_10 && $count == $assist_11 && $count == $assist_12 &&
-                    $count == $assist_13 && $count == $assist_14 && $count == $assist_15 && $count == $assist_16 &&
-                    $count == $assist_17 && $count == $state
+                    $count == $assist_13 && $count == $assist_14 && $count == $assist_15 &&  $count == $state
                     ) {
                         $data = true;
                     }
             }
             if ($partial == 2) {
                 if (
-                    $count == $assist_18 && $count == $assist_19 && $count == $assist_20 && $count == $assist_21 &&
+                    $count == $assist_16 && $count == $assist_17 && $count == $assist_18 && $count == $assist_19 && 
+                    $count == $assist_20 && $count == $assist_21 &&
                     $count == $assist_22 && $count == $assist_23 && $count == $assist_24 && $count == $assist_25 &&
                     $count == $assist_26 && $count == $assist_27 && $count == $assist_28 && $count == $assist_29 && 
-                    $count == $assist_30 && $count == $assist_31 && $count == $assist_32 && $count == $assist_33 && 
-                    $count == $assist_34 && $count == $state
+                    $count == $assist_30 && $count == $assist_31 && $count == $assist_32 && $count == $state
                     ) {
                         $data = true; 
                     }

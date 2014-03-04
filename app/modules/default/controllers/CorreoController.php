@@ -35,7 +35,7 @@ class CorreoController extends Zend_Controller_Action{
 		}
 	}
 
-            public function enviarAction(){
+      public function enviarAction(){
             try {
                   $this->_helper->layout()->disableLayout();
                   $de = $this->_getParam('de');

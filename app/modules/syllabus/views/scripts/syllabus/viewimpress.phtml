@@ -1,0 +1,75 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-ok-sign"></span> Sílabo');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><a href="#" type="button" id="imprimir" class="btn btn-success"><span class="glyphicon glyphicon-print"></span> Imprimir</a>');?>
+<div>
+	<center>
+		
+		<h4><b>FACULTAD DE <?php echo strtoupper($this->facultad['name']);?></b></h4>
+		<h5><b>ESCUELA DE FORMACIÓN PROFESIONAL DE <?php echo strtoupper($this->escuelas['name']);?></b></h5>
+		<h5><div class="panel panel-primary" style="padding: 2px; width:350px;">
+    	<div class="panel-heading" style="padding: 6px">
+        <center><b style="font-size:16px; color: white; "><?php echo $this->num ?> <br>CURSO: <?php echo $this->curso['name']?></b>
+        </center>
+   		</div>
+		</div></h5>
+	</center>
+</div>
+
+<div>            
+	<h5 style="margin: 0px 80px 0px 80px"><b>I. DATOS GENERALES:</b></h5> <br>
+	<div class="panel panel-default" style="margin: 0px 80px 0px 80px">
+		<div class="panel-heading">
+		  	<table style="width: 100%">
+		  		<tr>
+		  			<?php 
+		  			if ($this->periodocurso['type_rate']=="C") { ?>
+			  			<th>ÁREA:</th>
+			  			<td><?php echo $tipo ?></td>
+		  			<?php
+		  			}?>
+		  			<th>CÓDIGO:</th>
+		  			<td><?php echo $this->curso['courseid']?></td>
+		  		</tr>
+		  		<tr>
+		  			<th>PRE-REQUISITO:</th>
+		  			<td><?php echo $this->curso['req_1']?> <?php echo $this->curso['req_2']?> <?php echo $this->curso['req_3']?></td>
+		  			<th>SECCIÓN:</th>
+		  			<td><?php echo $this->where['turno']?></td>
+		  		</tr>
+		  		<tr>
+		  			<th>CREDITOS:</th>
+		  			<td><?php echo $this->curso['credits']?></td>
+		  			<th>EXTENSIÓN HORARIA:</th>
+		  			<td>HT: <?php echo $this->docente['hours_t']?>	HP: <?php echo $this->docente['hours_p']?> TH: <?php echo $this->docente['hours_total']?></td>
+		  		</tr>
+		  		<tr>
+		  			<th>SEMESTRE:</th>
+		  			<td><?php echo $this->curso['semid']?></td>
+		  			<th>DURACIÓN:</th>
+		  			<td>Desde: <?php echo $this->periodo['class_start_date']?>	Hasta: <?php echo $this->periodo['class_end_date']?></td>
+		  		</tr>
+		  		<tr>
+		  			<th>DOCENTE:</th>
+		  			<td><?php echo $this->persona['last_name0']." ".$this->persona['last_name1'].", ".$this->persona['first_name']?></td>
+		  			<th>E-MAIL:</th>
+		  			<td><?php echo $this->persona['mail_person']?></td>
+		  		</tr>
+		  	</table>
+		</div>
+	</div>
+</div></br>
+<div class='col-md-10 col-md-offset-1 cont-font-not-register alert alert-success'>
+    <h3 class='text-not-register'><b>SÍLABO LISTO</b></h3>
+    <h2 class='text-not-register'><i>¡¡ YA PUEDE IMPRIMIRLO !!</i></h2>
+    <h1 class='span-not-register'>
+        <span class='glyphicon glyphicon-exclamation-sign' ></span>
+    </h1>
+</div>
+
+<script type="text/javascript">
+$("#imprimir").click(function(){
+
+    var url="/syllabus/print/index/courseid/<?php echo base64_encode($this->curso['courseid'])?>/curid/<?php echo base64_encode($this->where['curid'])?>/escid/<?php echo base64_encode($this->where['escid'])?>/turno/<?php echo base64_encode($this->where['turno'])?>/subid/<?php echo base64_encode($this->where['subid'])?>/perid/<?php echo base64_encode($this->where['perid'])?>";
+    // alert(url);
+    $(location).attr('href',url);
+});
+</script>

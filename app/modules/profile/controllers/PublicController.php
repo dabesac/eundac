@@ -116,57 +116,37 @@ class Profile_PublicController extends Zend_Controller_Action {
             $person["day"]=substr($person["birthday"], 8, 2);
             //print_r($person);
 
-            $form= new Profile_Form_Userinfo();
+            $form = new Profile_Form_Userinfo();
             $this->view->form=$form;
             $form->populate($person);
 
-            if ($this->getRequest()->isPost())
-            {
-                $formdata = $this->getRequest()->getPost();
-                $s=1;
-                if($formdata['typedoc']=='D'){
-                        $patron='/^\d{8}$/';
-                        $val=preg_match($patron, $formdata['numdoc']);
-                        if(!$val){
-                            echo "Numero de DNI Invalido";
-                            $s=0;
-                        }
-                }
-                if($formdata['typedoc']=='P'){
-                        $patron='/^\d{8}[A-Z]$/';
-                        $val=preg_match($patron, $formdata['numdoc']);
-                        $s=1;
-                        if(!$val){
-                            echo "Numero de Pasaporte Invalido";
-                            $s=0;
-                        }
-                }   
-                if ($form->isValid($formdata) and $s==1)
-                { 
-                    trim($formdata['numdoc']);
-                    $formdata["birthday"]=$formdata["year"]."-".$formdata["month"]."-".$formdata["day"];
-                    unset($formdata['year']);
-                    unset($formdata['month']);
-                    unset($formdata['day']);
-                    trim($formdata['sex']);
-                    trim($formdata['civil']);
-                    trim($formdata['mail_person']);
-                    trim($formdata['mail_work']);
-                    trim($formdata['phone']);
-                    trim($formdata['cellular']);
-                    //print_r($formdata);
-                    print_r("Se Guardo con Exito");
-                    $upduser=$dbperson->_update($formdata, $where);
-                    //$this->_redirect("/profile/public/student");
-                }
-                else
-                {
-                     //$this->_redirect("/profile/public/student");
-                }
-            }
+            
 
         }catch(exception $e){
             print "Error ".$e->getMessage();
+        }
+    }
+
+    public function studentupdateAction(){
+        $this->_helper->layout()->disableLayout();
+
+        $dbperson=new Api_Model_DbTable_Person();
+
+        $eid=$this->sesion->eid;
+        $pid=$this->sesion->pid;
+        $where=array("eid"=>$eid, "pid"=>$pid);
+
+        if ($this->getRequest()->isPost()){
+            $formdata = $this->getRequest()->getPost();
+            $formdata["birthday"]=$formdata["year"]."-".$formdata["month"]."-".$formdata["day"];
+            unset($formdata['year']);
+            unset($formdata['month']);
+            unset($formdata['day']);
+            if ($dbperson->_update($formdata, $where)) {
+                echo '1';
+            }else{
+                echo '0';
+            }
         }
     }
 
@@ -1050,12 +1030,7 @@ class Profile_PublicController extends Zend_Controller_Action {
                 $spe['parent']='';  
             }
 
-            if ($speciality['header']) {
-                $namelogo = $speciality['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
             
             $names=strtoupper($spe['esc']);
             $namep=strtoupper($spe['parent']);

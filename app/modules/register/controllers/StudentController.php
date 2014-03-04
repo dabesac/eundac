@@ -479,14 +479,12 @@ class Register_StudentController extends Zend_Controller_Action {
             $perid  =   trim($params['perid']);
             $regid  =   trim($params['regid']);
             $total = intVal(trim($params['total']));
-
             $pk= array(
                 'eid'=>$eid,'oid'=>$oid,
                 'pid'=>$pid,'uid'=>$uid,
                 'escid'=>$escid,'subid'=>$subid,
                 'perid'=>$perid,'regid'=>$regid,
-                'uid'=>$uid,'pid'=>$pid);
-
+                    'uid'=>$uid,'pid'=>$pid);
             $data=array('state'=>"I",'approved'=>$uid,);
             
 
@@ -494,12 +492,10 @@ class Register_StudentController extends Zend_Controller_Action {
 
                 $base_registration =  new Api_Model_DbTable_Registration();
                 $base_registration_subjet =new Api_Model_DbTable_Registrationxcourse();
-
-
                 
                 if ($total > 0) {
 
-                    if($base_registration_subjet->_update($data,$pk)){
+                    if($base_registration_subjet->_update_pre_registration($data,$pk)){
 
                         $data1 = array('state'=>'I');
                         if ($base_registration->_update($data1,$pk)) {
@@ -508,12 +504,18 @@ class Register_StudentController extends Zend_Controller_Action {
                                     'status'=> true,
                                     'total'=>$total);
 
+                        }else{
+                            $json = array(
+                                    'status'=> false,
+                                    'total'=>$total);
                         }
+                    }else{
+                        $json = array(
+                                    'status'=> false,
+                                    'error'=>"matri curso");
                     }
 
                 }
-
-
                 else{
 
                     $json = array(
@@ -531,7 +533,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
             $this->_helper->layout->disableLayout();
             $this->_response->setHeader('Content-Type', 'application/json');   
-            $this->view->data = $json;
+            $this->view->data = Zend_Json::encode($json);
 
 
     }
@@ -572,24 +574,19 @@ class Register_StudentController extends Zend_Controller_Action {
             $backendOptions);
 
             $where = array(
-                        'uid' => $uid, 'pid' => $pid,
-                        'escid' => $escid,'subid' =>$subid,
-                        'eid' =>$eid,'oid' =>$oid,
-                        'perid'=>$perid,'curid'=>$curid,
-                        'semestre'=>$semester);
-        
+                        'uid' => base64_encode($uid), 
+                        'pid' => base64_encode($pid),
+                        'escid' => base64_encode($escid),
+                        'subid' =>base64_encode($subid),
+                        'eid' =>base64_encode($eid),
+                        'oid' =>base64_encode($oid),
+                        'perid'=>base64_encode($perid),
+                        'curid'=>base64_encode($curid),
+                        'semestre'=>base64_encode($semester));
             if(!$subject = $cache->load("$name_cache")) {
 
-                require_once 'Zend/Loader.php';
-                Zend_Loader::loadClass('Zend_Rest_Client');
-                $base_url = 'http://localhost:8080/';
-                $route = '/s1st3m4s/und4c/pendig_absolute';
-                $client = new Zend_Rest_Client($base_url);
-                $httpClient = $client->getHttpClient();
-                $httpClient->setConfig(array("timeout" => 680));
-                $response = $client->restget($route,$where);
-                $lista=$response->getBody();
-                $subject = Zend_Json::decode($lista);
+                $server = new Eundac_Connect_Api('pendig_absolute',$where);
+                $subject = $server->connectAuth();
                 $cache->save($subject,$name_cache);
 
             }
@@ -894,13 +891,7 @@ class Register_StudentController extends Zend_Controller_Action {
                 $namep=strtoupper($spe['parent']);
                 $namefinal=$names." <br> ".$namep;
 
-                if ($speciality['header']) {
-                    $namelogo = $speciality['header'];
-                }
-                else{
-                    $namelogo = 'blanco';
-                }
-                $this->view->namelogo=$namelogo;
+                $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
                 
                 $where = array(
                     'eid'=>$eid,'oid'=>$oid,

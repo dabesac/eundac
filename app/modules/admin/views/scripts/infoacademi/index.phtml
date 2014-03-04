@@ -25,9 +25,8 @@
         var tmp=escid.split(";--;");
         var escid=tmp[0];
         var subid=tmp[1];
-
+        $('#view').html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
         var url="/admin/infoacademi/get/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
-        $("#view").html("<center><img src='/img/carga.gif' /></center>");
         $("#view").load(url);
     });
 </script>

@@ -23,7 +23,7 @@
  				$facid = $this->sesion->faculty->facid;
  				$where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid,'state' => 'A');
  			}else{
- 				if ($rid == 'DC' && $is_director=='S') {
+ 				if ($rid == 'DR' && $is_director=='S') {
  					$this->view->director = $is_director;
  					$this->view->escid = $this->sesion->escid;
  					$where = array('eid' => $eid, 'oid' => $oid, 'parent' => $this->sesion->escid,'state' => 'A');
@@ -201,12 +201,7 @@
             $namep=strtoupper($spe['parent']);
             $namefinal=$names." <br> ".$namep;
 
-            if ($speciality['header']) {
-                $namelogo = $speciality['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
  			$fac = new Api_Model_DbTable_Faculty();
  			$data_fac = $fac->_getOne($where = array('eid' => $eid, 'oid' => $oid, 'facid' => $data_esc['facid']));

@@ -35,7 +35,7 @@ $header='
 				<center>UNIVERSIDAD NACIONAL</center>
 				<center>DANIEL ALCIDES CARRION</center>
 				<p style="font-size:9px; font-weight: none;" >"LA MÁS ALTA DEL MUNDO, CON EXCELENCIA ACADÉMICA Y RESPONSABILIDAD SOCIAL"</p>
-				<center><img src="/img/UNDAC.png"></center>
+				<center><img src="/img/undac_acta.png"></center>
 			</h4>
 		</div>
 	
@@ -179,22 +179,31 @@ $header='
 		width: 6px;
 		height: 30px;
 		border: 0.50px solid #000;
-		font-size: 10px;
+		font-size: 5px;
 	}
 	.normal-td-1{
 		width: 6px;
 		height: 18px;
 		border: 0.50px solid #000;
-		font-size: 10px;
+		font-size: 5px;
 	}
 	.normal-td-R{
 		width: 240px;
 		height: 18px;
 		border: 0.50px solid #000;
-		font-size: 10px;
+		font-size: 8px;
+	}
+	.color-asistio{
+		color: blue;
+	}
+	.color-tarde{
+		color: red;
+	}
+	#controlasistence{
+		font-size: 5px;
 	}
 </style>
- <table width="380px" style="float:left;" >
+ <table id='controlasistence' width="380px" style="float:left;" >
        	<tr>
 			 <td style="border: 0.20px solid #000;font-size: 18px; margin-bottom:20px;" colspan="35"><center>CONTROL DE ASISTENCIA </center></td>
 		</tr>
@@ -241,44 +250,25 @@ $header='
 		<?php foreach ($students as $key => $student) {?>
 			<tr>
 				<td class='normal-td-1' ><center><?php echo $key+1?></center></td>
-	          	<?php if($student['notafinal']=='-3'){ ?>
-          		<td class='normal-td-R'  colspan="34"><center>RETIRADO</center></td>
-	          	<?php }else{ ?>
-          		<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-		      	<td class='normal-td-1' ><center></center></td>
-	         <?php }?>
+	          	<?php if($student['a_sesion_1']=='R' && $student['a_sesion_34']=='R'){ ?>
+          			<td class='normal-td-R'  colspan="34"><center>RETIRADO</center></td>
+	          	<?php }elseif ($student['a_sesion_17']=='R' && $student['a_sesion_34']=='R') { ?>
+          			<td class='normal-td-R'  colspan="17"><center>RETIRADO</center></td>
+	          	<?php }else{ 
+	          		for ($i=1; $i <= 34 ; $i++) { 
+	          			switch ($student['a_sesion_'.$i]) {
+	          				case 'A':
+	          					echo "<td class='normal-td-1 color-asistio' ><center> . </center></td>";
+	          					break;
+	          				case 'F':
+	          					echo "<td class='normal-td-1' ><center> F </center></td>";
+	          					break;
+	          				case 'T':
+	          					echo "<td class='normal-td-1' ><center> T </center></td>";
+	          					break;
+	          			}
+	          		}
+	          	 }?>
 			</tr>
 		<?php if ($key+1 == 50 || $key+1 == 100 || $key+1 == 150) { ?>
 			<tr>

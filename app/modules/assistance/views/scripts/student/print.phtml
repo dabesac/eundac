@@ -678,7 +678,7 @@ table{
     $html = ob_get_contents();
   
     $mpdf=new mPDF('win-1252','A4-L','','',10,10,40,18,5,5);
-    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
     $mpdf->showWatermarkImage = true;
 
     $mpdf->SetHTMLHeader($this->header);  
@@ -686,7 +686,7 @@ table{
 
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('Assistencia-'.$course['name'].'-'.$this->turno.'.pdf','D');
+    $mpdf->Output('Asistencia-'.$course['name'].'-'.$this->turno.'.pdf','D');
     // $mpdf->Output();
  
 ?>

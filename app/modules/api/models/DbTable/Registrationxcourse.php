@@ -19,6 +19,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	public function _update($data,$pk){
 		try {
 				if ($pk['eid']=='' || $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' || $pk['courseid']=='' || $pk['curid']=='' || $pk['perid']=='' || $pk['regid']=='' || $pk['pid']=='' || $pk['uid']=='') return false;
+				print_r($pk); exit();
 				$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and courseid='".$pk['courseid']."' and curid='".$pk['curid']."' and perid='".$pk['perid']."' and regid='".$pk['regid']."' and pid='".$pk['pid']."' and uid='".$pk['uid']."'";
 				return $this->update($data, $where);
 				return false;
@@ -27,7 +28,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		}
 	}
 
-	/*public function _update($data,$pk)
+	public function _update_pre_registration($data,$pk)
 	{
 		try{
 
@@ -43,7 +44,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		}catch (Exception $e){
 			print "Error: Update Registration".$e->getMessage();
 		}
-	}*/
+	}
 
 	public function _updatenoteregister($data,$pk)
 	{
@@ -61,8 +62,8 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		public function _updatestateregister($data,$pk)
 	{
 		try{
-			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']==''   || $pk['regid']==''  || $pk['pid']=='' || $pk['uid']=='' || $pk['perid']=='') return false;
-			$where = "eid = '".$pk['eid']."' and oid = '".$pk['oid']."' and pid='".$pk['pid']."'  and escid = '".$pk['escid']."' and subid = '".$pk['subid']."' and regid = '".$pk['regid']."' and uid = '".$pk['uid']."'  and perid = '".$pk['perid']."'";
+			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']==''   || $pk['regid']==''  || $pk['pid']=='' || $pk['uid']=='' || $pk['perid']=='' || $pk['state']=='' ) return false;
+			$where = "eid = '".$pk['eid']."' and oid = '".$pk['oid']."' and pid='".$pk['pid']."'  and escid = '".$pk['escid']."' and subid = '".$pk['subid']."' and regid = '".$pk['regid']."' and uid = '".$pk['uid']."'  and perid = '".$pk['perid']."'  and state = '".$pk['state']."'";
 			return $this->update($data, $where);
 			return false;
 		}catch (Exception $e){

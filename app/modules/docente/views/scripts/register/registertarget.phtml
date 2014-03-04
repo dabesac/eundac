@@ -4,19 +4,14 @@ $jalados = 0;
 $retirados = 0;
 $back = "";
 $back1 = "";
+$text_partial = ($this->partial==1)? 'Primer Partial':'Segundo Partial';
 ?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> REGISTRO DE NOTAS - '. $text_partial.' ' .$this->infocourse['name'].' Turno '.$this->turno.'');
 
-<div class='row' id='header-info'>
-    <div class='col-xs-9 header-registration-course'>
-        <h4 class='text-header-registration'> <span class='glyphicon glyphicon-list' style='color:#1abc9c;'></span>
-            REGISTRO DE NOTAS - 
-            <?php echo $this->infocourse['name']?> Turno <?php echo $this->turno?></h4>
-    </div>
-    <div class="col-md-3">
-        <a href="/docente/notas" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
-        <a href="/docente/register/targetprint<?php echo $this->url?>" class='btn btn-info'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
-    </div>
-</div><!-- end header-->
+        $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+        	<a href="/docente/register/targetprint'.$this->url.'" class="btn btn-info"><span class="glyphicon glyphicon-print"></span> Imprimir</a>
+                            ');
+?>
 <?php if ($this->students) { ?>
 	<div class='row'>
 		<div class='col-md-12 table-responsive'>

@@ -17,45 +17,33 @@
 	var $indicefa = -1;
 	var $tr = null;
 </script>	
-<script type="text/javascript" src='/external/assistence/assistence.js'></script>
-<?php 
-	$infocourse = $this->infocurso;
-?>
+<script type="text/javascript" src='/js/assistence/assistence.js'></script>
+<?php $infocourse=$this->infocurso;
+if($this->partial==1) {
+    $partial_text ="Asistencia Primer Parcial";
+}
+if($this->partial==2) {
+    $partial_text ="Asistencia Segundo Parcial";
+}
 
-<div class='row' id='header-info'>
-	<div class='col-xs-12 col-sm-6 col-md-8'>
-		<h4> <span class='glyphicon glyphicon-calendar'></span> Asistencia 
+$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-calendar"></span> '. $partial_text.' ' .$infocourse['name'].' Turno '.$this->turno.'');
 
-			<?php if($this->partial==1){
+ if ($this->state == 'A' || $this->state == 'P') { 
+        $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+        	<buttom  class="btn btn-info" id="save_assistance" disabled ><span class="glyphicon glyphicon-save"></span> Guardar</buttom>
+            <buttom  class="btn btn-danger" id="closure-assistance" onclick="closureassistance(this);"
+				coursoid='.$infocourse['courseid'].'
+				escid='.$infocourse['escid'].'
+				curid='.$infocourse['curid'].'
+				subid='.$infocourse['subid'].'
+				turno='.$this->turno.'
+				perid='.$this->perid.'
+		><span class="glyphicon  glyphicon-log-out"></span> Cerrar Asistencia</buttom>
+                            ');
+}else{
+	$this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');
 
-				echo "Primer Parcial ";
-			}?>
-			<?php if($this->partial==2){
-				echo "Segundo Parcial";
-			}?>
-
-			<?php echo $infocourse['name']?> Turno <?php echo $this->turno?> 
-			
-		</h4>
-
-	</div>
-	<div class="col-md-4">
-		<a href="/docente/notas" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Atras </a>
-		<?php if ($this->state == 'A' || $this->state=='P') { ?>
-			<buttom  class='btn btn-info ' id='save_assistance' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
-		
-		<buttom  class='btn btn-danger' id='closure-assistance' onclick='closureassistance(this);'
-				coursoid='<?php echo $infocourse['courseid']?>'
-				escid='<?php echo $infocourse['escid']?>'
-				curid='<?php echo $infocourse['curid']?>'
-				subid='<?php echo $infocourse['subid']?>'
-				turno='<?php echo $this->turno?>'
-				perid='<?php echo $this->perid?>'
-		><span class='glyphicon  glyphicon-log-out'></span> Cerrar Asistencia</buttom>
-		<?php }?>
-		
-	</div>
-</div>
+}?>
 
 <?php $partial = $this->partial;
 if ($this->infoassist) { ?>
@@ -66,116 +54,224 @@ if ($this->infoassist) { ?>
 			<tr>
 				<th rowspan='4'>#</th>
 				<th rowspan='4'>Apellidos y Nombres</th>
-				<th colspan='2' class='text-center success'>Semana 1</th>
-				<th colspan='2'class='text-center warning'>Semana 2</th>
-				<th colspan='2'class='text-center success'>Semana 3</th>
-				<th colspan='2'class='text-center warning'>Semana 4</th>
-				<th colspan='2'class='text-center success'>Semana 5</th>
-				<th colspan='2'class='text-center warning'>Semana 6</th>
-				<th colspan='2'class='text-center success'>Semana 7</th>
-				<th colspan='2'class='text-center warning'>Semana 8</th>
+
+				<?php if ($this->partial == 1) {?>
+					<th colspan='2' class='text-center success'>Semana 1</th>
+					<th colspan='2'class='text-center warning'>Semana 2</th>
+					<th colspan='2'class='text-center success'>Semana 3</th>
+					<th colspan='2'class='text-center warning'>Semana 4</th>
+					<th colspan='2'class='text-center success'>Semana 5</th>
+					<th colspan='2'class='text-center warning'>Semana 6</th>
+					<th colspan='2'class='text-center success'>Semana 7</th>
+					<th class='text-center warning'>Semana 8</th>
+				<?php }?>
+
+				<?php if ($this ->partial == 2) { ?>
+					<th colspan='2' class='text-center success'>Semana 9</th>
+					<th colspan='2'class='text-center warning'>Semana 10</th>
+					<th colspan='2'class='text-center success'>Semana 11</th>
+					<th colspan='2'class='text-center warning'>Semana 12</th>
+					<th colspan='2'class='text-center success'>Semana 13</th>
+					<th colspan='2'class='text-center warning'>Semana 14</th>
+					<th colspan='2'class='text-center success'>Semana 15</th>
+					<th colspan='2' class='text-center warning'>Semana 16</th>
+				<?php }?>
 			</tr>
 			<tr>
-				<th colspan='2'>sesion</th>
-				<th colspan='2'>sesion</th>
-				<th colspan='2'>sesion</th>
-				<th colspan='2'>sesion</th>
-				<th colspan='2'>sesion</th>
-				<th colspan='2'>sesion</th>
-				<th colspan='2'>sesion</th>
-				<th colspan='2'>sesion</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<th class='text-center' >sesión</th>
+				<?php if ($this ->partial == 2) { ?>
+					<th class='text-center' >sesión</th>
+					<th class='text-center' >sesión</th>
+				<?php }?>
+
 			</tr>
 			<tr id='tb-header-info'>
-					<th class='text-sesion-assist '>1
+					<?php if ($this->partial==1) { ?>
+						<th class='text-center text-center text-sesion-assist '>1
 						<div class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-1' index-all='1'></th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>2
+					<th class='text-center text-sesion-assist '>2
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-2' index-all='2'>
 					</th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>3
+					<th class='text-center text-sesion-assist '>3
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-3' index-all='3'>
 					</th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>4
+					<th class='text-center text-sesion-assist '>4
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-4' index-all='4'></th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>5
+					<th class='text-center text-sesion-assist '>5
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-5' index-all='5'></th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>6
+					<th class='text-center text-sesion-assist '>6
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-6' index-all='6'></th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>7
+					<th class='text-center text-sesion-assist '>7
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-7' index-all='7'></th>
 						</div >
 					</th>
-					<th class='text-sesion-assist '>8
+					<th class='text-center text-sesion-assist '>8
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-8' index-all='8'></th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>9
+					<th class='text-center text-sesion-assist '>9
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-9' index-all='9'></th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>10
+					<th class='text-center text-sesion-assist '>10
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-10' index-all='10'></th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>11
+					<th class='text-center text-sesion-assist '>11
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-11' index-all='11'></th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>12
+					<th class='text-center text-sesion-assist '>12
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-12' index-all='12'></th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>13
+					<th class='text-center text-sesion-assist '>13
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-13' index-all='13'></th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>14
+					<th class='text-center text-sesion-assist '>14
 						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
 							<input class='selectedall' type='checkbox' name='select-all-14' index-all='14'></th>
 						</div>
 					</th>
-					<th class='text-sesion-assist '>15
-						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
-							<input class='selectedall' type='checkbox' name='select-all-15' index-all='15'></th>
-						</div>
+					<th class='text-center text-sesion-assist active'>Examen
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-15' index-all='15'></th>
+							</div>
 					</th>
-					<th class='text-sesion-assist'>16
-						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
-							<input class='selectedall' type='checkbox' name='select-all-16' index-all='16'></th>
+					<?php }?>
+					<?php if ($this->partial == 2) { ?>
+						<th class='text-center text-center text-sesion-assist '>17
+						<div class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+							<input class='selectedall' type='checkbox' name='select-all-1' index-all='1'></th>
 						</div>
-					</th>
-					<th class='text-sesion-assist active'>Examen
-						<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
-							<input class='selectedall' type='checkbox' name='select-all-17' index-all='17'></th>
-						</div>
-					</th>
+						</th>
+						<th class='text-center text-sesion-assist '>18
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-2' index-all='2'>
+						</th>
+							</div>
+						</th>
+						<th class='text-center text-sesion-assist '>19
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-3' index-all='3'>
+						</th>
+							</div>
+						</th>
+						<th class='text-center text-sesion-assist '>20
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-4' index-all='4'></th>
+							</div>
+						</th>
+						<th class='text-center text-sesion-assist '>21
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-5' index-all='5'></th>
+							</div>
+						</th>
+						<th class='text-center text-sesion-assist '>22
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-6' index-all='6'></th>
+							</div>
+						</th>
+						<th class='text-center text-sesion-assist '>23
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-7' index-all='7'></th>
+							</div >
+						</th>
+						<th class='text-center text-sesion-assist '>24
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-8' index-all='8'></th>
+							</div>
+						</th>
+						<th class='text-center text-sesion-assist '>25
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-9' index-all='9'></th>
+							</div>
+						</th>
+						<th class='text-center text-sesion-assist '>26
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-10' index-all='10'></th>
+							</div>
+						</th>
+						<th class='text-center text-sesion-assist '>27
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-11' index-all='11'></th>
+							</div>
+						</th>
+						<th class='text-center text-sesion-assist '>28
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-12' index-all='12'></th>
+							</div>
+						</th>
+						<th class='text-center text-sesion-assist '>29
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-13' index-all='13'></th>
+							</div>
+						</th>
+						<th class='text-center text-sesion-assist '>30
+							<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+								<input class='selectedall' type='checkbox' name='select-all-14' index-all='14'></th>
+							</div>
+						</th>
+							<th class='text-center text-sesion-assist '>31
+								<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+									<input class='selectedall' type='checkbox' name='select-all-14' index-all='15'></th>
+								</div>
+							</th>
+							<th class='text-center text-sesion-assist '>32
+								<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+									<input class='selectedall' type='checkbox' name='select-all-14' index-all='16'></th>
+								</div>
+							</th>
+							<th class='text-center text-sesion-assist active'>Examen
+								<div  class ='div-tooltip' data-toggle="tooltip" title="Asignar Asistio a Todo">
+									<input class='selectedall' type='checkbox' name='select-all-15' index-all='17'></th>
+								</div>
+							</th>
+					<?php }?>
+					
+					<th class='text-sesion-assist '>Retirar</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody class='text-center'>
 			<?php foreach ($this->infoassist as $key => $register) { ?>
 			<tr id='index-tr-<?php echo $key+1?>'
 				courseid='<?php echo $register['coursoid']?>'
@@ -191,7 +287,7 @@ if ($this->infoassist) { ?>
                 style="color:<?php echo ($register['a_sesion_17'] == 'R' || $register['a_sesion_34'] == 'R' )?'#FC4141':'#000'; ?>;"
 				>
 			<td><?php echo $key+1?> <span  class='text-success glyphicon'></span></td>
-			<td><?php echo $register['name']?></td>
+			<td class='text-left'><?php echo $register['name']?></td>
 
 			<?php if ($partial==1 && $this->state=='A') { ?>
 				<td>
@@ -1161,6 +1257,7 @@ if ($this->infoassist) { ?>
 				</td>
 				<!-- *******************sesion-15************* -->
 
+
 				<td>
 					<?php switch ($register['a_sesion_15']) {
 						case 'R': ?>
@@ -1228,160 +1325,25 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- *******************sesion-16************* -->
+				
+			<?php } if ($partial == 2 && $this->state =='P') { ?>
 
-				<td>
-					<?php switch ($register['a_sesion_16']) {
-						case 'R': ?>
-						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-16-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_16'] != 'R')?$register['a_sesion_16']:''; ?>"
-							action='checkbox' name='a_sesion_16' index='<?php echo $key+1?>' indexall='16'>
-						</span>
-					<?php	break; 
-						case 'A': ?>
-							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_16'] != 'R')?$register['a_sesion_16']:''; ?>"
-							   	id='index-16-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_16' index='<?php echo $key+1?>' indexall='16' 
-								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
-								data-original-title="Asignar Asistencia" 
-								data-content='
-								<h5><span class="assignet-assist glyphicon glyphicon-remove-circle text-danger" value="F" index="<?php echo $key+1?>" indexall="16"  onclick="assignet_assistance(this);"> Falto</span></h5>
-								<h5><span class="assignet-assist glyphicon glyphicon-copyright-mark text-success" value="T" index="<?php echo $key+1?>" indexall="16" onclick="assignet_assistance(this);"> Tarde</span></h5>'
-								data-trigger='click'
-							></span>
-					<?php break; 
-					case 'F': ?>
-							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-16-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_16'] != 'R')?$register['a_sesion_16']:''; ?>"
-							action='checkbox' name='a_sesion_16' index='<?php echo $key+1?>' indexall='16'
-							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
-							data-original-title="Asignar Asistencia" 
-							data-content='
-							<h5><span class="assignet-assist glyphicon glyphicon-ok-circle text-primary" value="A" index="<?php echo $key+1?>" indexall="16" onclick="assignet_assistance(this);"> Asistio</span></h5>
-							<h5><span class="assignet-assist glyphicon glyphicon-copyright-mark text-success" value="T" index="<?php echo $key+1?>" indexall="16" onclick="assignet_assistance(this);"> Tarde</span></h5>'
-							data-trigger='click'
-							></span>
-					<?php break; 
-					case 'T': ?>
-							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-16-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_16'] != 'R')?$register['a_sesion_16']:''; ?>"
-							action='checkbox' name='a_sesion_16' index='<?php echo $key+1?>' indexall='16'
-							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
-							data-original-title="Asignar Asistencia" 
-							data-content='
-							<h5><span class="assignet-assist glyphicon glyphicon-ok-circle text-primary" value="A" index="<?php echo $key+1?>" indexall="16"  onclick="assignet_assistance(this);"> Asistio</span></h5>
-
-							<h5><span class="assignet-assist glyphicon glyphicon-remove-circle text-danger" value="F" index="<?php echo $key+1?>" indexall="16" onclick="assignet_assistance(this);"> Falto</span></h5>
-							'
-							data-trigger='click'
-							></span>
-					<?php break;
-						default: ?>
-							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-16-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_16'] != 'R')?$register['a_sesion_16']:''; ?>"
-							action='checkbox' name='a_sesion_16' index='<?php echo $key+1?>' indexall='16'
-							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
-							data-original-title="Asignar Asistencia" 
-							data-content='
-							<h5><span class="assignet-assist glyphicon glyphicon-ok-circle text-primary" value="A" index="<?php echo $key+1?>" indexall="16" onclick="assignet_assistance(this);"> Asistio</span></h5>
-
-							<h5><span class="assignet-assist glyphicon glyphicon-copyright-mark text-success" value="T"  index="<?php echo $key+1?>" indexall="16" onclick="assignet_assistance(this);"> Tarde</span></h5>
-
-							<h5><span class="assignet-assist glyphicon glyphicon-remove-circle text-danger" value="F" index="<?php echo $key+1?>" indexall="16" onclick="assignet_assistance(this);"> Falto</span></h5>'
-							data-trigger='click'
-							></span>
-					<?php break; }?>
-				</td>
 				<!-- *******************sesion-17************* -->
 
 				<td>
 					<?php switch ($register['a_sesion_17']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-17-<?php echo $key+1?>'
+						   disabled id='index-1-<?php echo $key+1?>'
 						   assistance="<?php echo ($register['a_sesion_17'] != 'R')?$register['a_sesion_17']:''; ?>"
-							action='checkbox' name='a_sesion_17' index='<?php echo $key+1?>' indexall='17'>
+							action='checkbox' name='a_sesion_17' index='<?php echo $key+1?>' indexall='1'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
 							   assistance="<?php echo ($register['a_sesion_17'] != 'R')?$register['a_sesion_17']:''; ?>"
-							   	id='index-17-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_17' index='<?php echo $key+1?>' indexall='17' 
-								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
-								data-original-title="Asignar Asistencia" 
-								data-content='
-								<h5><span class="assignet-assist glyphicon glyphicon-remove-circle text-danger" value="F" index="<?php echo $key+1?>" indexall="17"  onclick="assignet_assistance(this);"> Falto</span></h5>
-								<h5><span class="assignet-assist glyphicon glyphicon-copyright-mark text-success" value="T" index="<?php echo $key+1?>" indexall="17" onclick="assignet_assistance(this);"> Tarde</span></h5>'
-								data-trigger='click'
-							></span>
-					<?php break; 
-					case 'F': ?>
-							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-17-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_17'] != 'R')?$register['a_sesion_17']:''; ?>"
-							action='checkbox' name='a_sesion_17' index='<?php echo $key+1?>' indexall='17'
-							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
-							data-original-title="Asignar Asistencia" 
-							data-content='
-							<h5><span class="assignet-assist glyphicon glyphicon-ok-circle text-primary" value="A" index="<?php echo $key+1?>" indexall="17" onclick="assignet_assistance(this);"> Asistio</span></h5>
-							<h5><span class="assignet-assist glyphicon glyphicon-copyright-mark text-success" value="T" index="<?php echo $key+1?>" indexall="17" onclick="assignet_assistance(this);"> Tarde</span></h5>'
-							data-trigger='click'
-							></span>
-					<?php break; 
-					case 'T': ?>
-							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-17-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_17'] != 'R')?$register['a_sesion_17']:''; ?>"
-							action='checkbox' name='a_sesion_17' index='<?php echo $key+1?>' indexall='17'
-							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
-							data-original-title="Asignar Asistencia" 
-							data-content='
-							<h5><span class="assignet-assist glyphicon glyphicon-ok-circle text-primary" value="A" index="<?php echo $key+1?>" indexall="17"  onclick="assignet_assistance(this);"> Asistio</span></h5>
-
-							<h5><span class="assignet-assist glyphicon glyphicon-remove-circle text-danger" value="F" index="<?php echo $key+1?>" indexall="17" onclick="assignet_assistance(this);"> Falto</span></h5>
-							'
-							data-trigger='click'
-							></span>
-					<?php break;
-						default: ?>
-							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-17-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_17'] != 'R')?$register['a_sesion_17']:''; ?>"
-							action='checkbox' name='a_sesion_17' index='<?php echo $key+1?>' indexall='17'
-							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
-							data-original-title="Asignar Asistencia" 
-							data-content='
-							<h5><span class="assignet-assist glyphicon glyphicon-ok-circle text-primary" value="A" index="<?php echo $key+1?>" indexall="17" onclick="assignet_assistance(this);"> Asistio</span></h5>
-
-							<h5><span class="assignet-assist glyphicon glyphicon-copyright-mark text-success" value="T"  index="<?php echo $key+1?>" indexall="17" onclick="assignet_assistance(this);"> Tarde</span></h5>
-
-							<h5><span class="assignet-assist glyphicon glyphicon-remove-circle text-danger" value="F" index="<?php echo $key+1?>" indexall="17" onclick="assignet_assistance(this);"> Falto</span></h5>'
-							data-trigger='click'
-							></span>
-					<?php break; }?>
-				</td>
-			<?php } if ($partial == 2 && $this->state =='P') { ?>
-					<!-- *******************sesion-18************* -->
-				<td>
-					<?php switch ($register['a_sesion_18']) {
-						case 'R': ?>
-						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-1-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_18'] != 'R')?$register['a_sesion_18']:''; ?>"
-							action='checkbox' name='a_sesion_18' index='<?php echo $key+1?>' indexall='1'>
-						</span>
-					<?php	break; 
-						case 'A': ?>
-							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_18'] != 'R')?$register['a_sesion_18']:''; ?>"
 							   	id='index-1-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_18' index='<?php echo $key+1?>' indexall='1' 
+								action='checkbox' name='a_sesion_17' index='<?php echo $key+1?>' indexall='1' 
 								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -1393,8 +1355,8 @@ if ($this->infoassist) { ?>
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
 								id='index-1-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_18'] != 'R')?$register['a_sesion_18']:''; ?>"
-							action='checkbox' name='a_sesion_18' index='<?php echo $key+1?>' indexall='1'
+						   assistance="<?php echo ($register['a_sesion_17'] != 'R')?$register['a_sesion_17']:''; ?>"
+							action='checkbox' name='a_sesion_17' index='<?php echo $key+1?>' indexall='1'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1406,8 +1368,8 @@ if ($this->infoassist) { ?>
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
 							id='index-1-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_18'] != 'R')?$register['a_sesion_18']:''; ?>"
-							action='checkbox' name='a_sesion_18' index='<?php echo $key+1?>' indexall='1'
+						   assistance="<?php echo ($register['a_sesion_17'] != 'R')?$register['a_sesion_17']:''; ?>"
+							action='checkbox' name='a_sesion_17' index='<?php echo $key+1?>' indexall='1'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1421,8 +1383,8 @@ if ($this->infoassist) { ?>
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
 							id='index-1-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_18'] != 'R')?$register['a_sesion_18']:''; ?>"
-							action='checkbox' name='a_sesion_18' index='<?php echo $key+1?>' indexall='1'
+						   assistance="<?php echo ($register['a_sesion_17'] != 'R')?$register['a_sesion_17']:''; ?>"
+							action='checkbox' name='a_sesion_17' index='<?php echo $key+1?>' indexall='1'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1435,22 +1397,22 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- ******************sesion 19************** -->
+					<!-- *******************sesion-18************* -->
 				<td>
-					<?php switch ($register['a_sesion_19']) {
+					<?php switch ($register['a_sesion_18']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
 						   disabled id='index-2-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_19'] != 'R')?$register['a_sesion_19']:''; ?>"
-							action='checkbox' name='a_sesion_19' index='<?php echo $key+1?>' indexall='2'>
+						   assistance="<?php echo ($register['a_sesion_18'] != 'R')?$register['a_sesion_18']:''; ?>"
+							action='checkbox' name='a_sesion_18' index='<?php echo $key+1?>' indexall='2'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_19'] != 'R')?$register['a_sesion_19']:''; ?>"
+							   assistance="<?php echo ($register['a_sesion_18'] != 'R')?$register['a_sesion_18']:''; ?>"
 							   	id='index-2-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_19' index='<?php echo $key+1?>' indexall='2' 
-								rel="popover" data-placement='right' data-html='true'
+								action='checkbox' name='a_sesion_18' index='<?php echo $key+1?>' indexall='2' 
+								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
 								<h5><span class="assignet-assist glyphicon glyphicon-remove-circle text-danger" value="F" index="<?php echo $key+1?>" indexall="2"  onclick="assignet_assistance(this);"> Falto</span></h5>
@@ -1461,9 +1423,9 @@ if ($this->infoassist) { ?>
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
 								id='index-2-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_19'] != 'R')?$register['a_sesion_19']:''; ?>"
-							action='checkbox' name='a_sesion_19' index='<?php echo $key+1?>' indexall='2'
-							rel="popover" data-placement='right' data-html='true'
+						   assistance="<?php echo ($register['a_sesion_18'] != 'R')?$register['a_sesion_18']:''; ?>"
+							action='checkbox' name='a_sesion_18' index='<?php echo $key+1?>' indexall='2'
+							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
 							<h5><span class="assignet-assist glyphicon glyphicon-ok-circle text-primary" value="A" index="<?php echo $key+1?>" indexall="2" onclick="assignet_assistance(this);"> Asistio</span></h5>
@@ -1474,9 +1436,9 @@ if ($this->infoassist) { ?>
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
 							id='index-2-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_19'] != 'R')?$register['a_sesion_19']:''; ?>"
-							action='checkbox' name='a_sesion_19' index='<?php echo $key+1?>' indexall='2'
-							rel="popover" data-placement='right' data-html='true'
+						   assistance="<?php echo ($register['a_sesion_18'] != 'R')?$register['a_sesion_18']:''; ?>"
+							action='checkbox' name='a_sesion_18' index='<?php echo $key+1?>' indexall='2'
+							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
 							<h5><span class="assignet-assist glyphicon glyphicon-ok-circle text-primary" value="A" index="<?php echo $key+1?>" indexall="2"  onclick="assignet_assistance(this);"> Asistio</span></h5>
@@ -1489,9 +1451,9 @@ if ($this->infoassist) { ?>
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
 							id='index-2-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_19'] != 'R')?$register['a_sesion_19']:''; ?>"
-							action='checkbox' name='a_sesion_19' index='<?php echo $key+1?>' indexall='2'
-							rel="popover" data-placement='right' data-html='true'
+						   assistance="<?php echo ($register['a_sesion_18'] != 'R')?$register['a_sesion_18']:''; ?>"
+							action='checkbox' name='a_sesion_18' index='<?php echo $key+1?>' indexall='2'
+							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
 							<h5><span class="assignet-assist glyphicon glyphicon-ok-circle text-primary" value="A" index="<?php echo $key+1?>" indexall="2" onclick="assignet_assistance(this);"> Asistio</span></h5>
@@ -1503,21 +1465,21 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- *********************sesion 20*************** -->
+				<!-- ******************sesion 19************** -->
 				<td>
-					<?php switch ($register['a_sesion_20']) {
+					<?php switch ($register['a_sesion_19']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
 						   disabled id='index-3-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_20'] != 'R')?$register['a_sesion_20']:''; ?>"
-							action='checkbox' name='a_sesion_20' index='<?php echo $key+1?>' indexall='3'>
+						   assistance="<?php echo ($register['a_sesion_19'] != 'R')?$register['a_sesion_19']:''; ?>"
+							action='checkbox' name='a_sesion_19' index='<?php echo $key+1?>' indexall='3'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_20'] != 'R')?$register['a_sesion_20']:''; ?>"
+							   assistance="<?php echo ($register['a_sesion_19'] != 'R')?$register['a_sesion_19']:''; ?>"
 							   	id='index-3-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_20' index='<?php echo $key+1?>' indexall='3' 
+								action='checkbox' name='a_sesion_19' index='<?php echo $key+1?>' indexall='3' 
 								rel="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -1529,8 +1491,8 @@ if ($this->infoassist) { ?>
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
 								id='index-3-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_20'] != 'R')?$register['a_sesion_20']:''; ?>"
-							action='checkbox' name='a_sesion_20' index='<?php echo $key+1?>' indexall='3'
+						   assistance="<?php echo ($register['a_sesion_19'] != 'R')?$register['a_sesion_19']:''; ?>"
+							action='checkbox' name='a_sesion_19' index='<?php echo $key+1?>' indexall='3'
 							rel="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1542,8 +1504,8 @@ if ($this->infoassist) { ?>
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
 							id='index-3-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_20'] != 'R')?$register['a_sesion_20']:''; ?>"
-							action='checkbox' name='a_sesion_20' index='<?php echo $key+1?>' indexall='3'
+						   assistance="<?php echo ($register['a_sesion_19'] != 'R')?$register['a_sesion_19']:''; ?>"
+							action='checkbox' name='a_sesion_19' index='<?php echo $key+1?>' indexall='3'
 							rel="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1557,8 +1519,8 @@ if ($this->infoassist) { ?>
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
 							id='index-3-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_20'] != 'R')?$register['a_sesion_20']:''; ?>"
-							action='checkbox' name='a_sesion_20' index='<?php echo $key+1?>' indexall='3'
+						   assistance="<?php echo ($register['a_sesion_19'] != 'R')?$register['a_sesion_19']:''; ?>"
+							action='checkbox' name='a_sesion_19' index='<?php echo $key+1?>' indexall='3'
 							rel="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1571,22 +1533,21 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				
-				<!-- *******************sesion-21************* -->
+				<!-- *********************sesion 20*************** -->
 				<td>
-					<?php switch ($register['a_sesion_21']) {
+					<?php switch ($register['a_sesion_20']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
 						   disabled id='index-4-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_21'] != 'R')?$register['a_sesion_21']:''; ?>"
-							action='checkbox' name='a_sesion_21' index='<?php echo $key+1?>' indexall='4'>
+						   assistance="<?php echo ($register['a_sesion_20'] != 'R')?$register['a_sesion_20']:''; ?>"
+							action='checkbox' name='a_sesion_20' index='<?php echo $key+1?>' indexall='4'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_21'] != 'R')?$register['a_sesion_21']:''; ?>"
+							   assistance="<?php echo ($register['a_sesion_20'] != 'R')?$register['a_sesion_20']:''; ?>"
 							   	id='index-4-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_21' index='<?php echo $key+1?>' indexall='4' 
+								action='checkbox' name='a_sesion_20' index='<?php echo $key+1?>' indexall='4' 
 								rel="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -1598,8 +1559,8 @@ if ($this->infoassist) { ?>
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
 								id='index-4-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_21'] != 'R')?$register['a_sesion_21']:''; ?>"
-							action='checkbox' name='a_sesion_21' index='<?php echo $key+1?>' indexall='4'
+						   assistance="<?php echo ($register['a_sesion_20'] != 'R')?$register['a_sesion_20']:''; ?>"
+							action='checkbox' name='a_sesion_20' index='<?php echo $key+1?>' indexall='4'
 							rel="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1611,8 +1572,8 @@ if ($this->infoassist) { ?>
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
 							id='index-4-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_21'] != 'R')?$register['a_sesion_21']:''; ?>"
-							action='checkbox' name='a_sesion_21' index='<?php echo $key+1?>' indexall='4'
+						   assistance="<?php echo ($register['a_sesion_20'] != 'R')?$register['a_sesion_20']:''; ?>"
+							action='checkbox' name='a_sesion_20' index='<?php echo $key+1?>' indexall='4'
 							rel="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1626,8 +1587,8 @@ if ($this->infoassist) { ?>
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
 							id='index-4-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_21'] != 'R')?$register['a_sesion_21']:''; ?>"
-							action='checkbox' name='a_sesion_21' index='<?php echo $key+1?>' indexall='4'
+						   assistance="<?php echo ($register['a_sesion_20'] != 'R')?$register['a_sesion_20']:''; ?>"
+							action='checkbox' name='a_sesion_20' index='<?php echo $key+1?>' indexall='4'
 							rel="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1636,26 +1597,26 @@ if ($this->infoassist) { ?>
 							<h5><span class="assignet-assist glyphicon glyphicon-copyright-mark text-success" value="T"  index="<?php echo $key+1?>" indexall="4" onclick="assignet_assistance(this);"> Tarde</span></h5>
 
 							<h5><span class="assignet-assist glyphicon glyphicon-remove-circle text-danger" value="F" index="<?php echo $key+1?>" indexall="4" onclick="assignet_assistance(this);"> Falto</span></h5>'
-							
 							data-trigger='click'
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- *******************sesion-22************* -->
+				
+				<!-- *******************sesion-21************* -->
 				<td>
-					<?php switch ($register['a_sesion_22']) {
+					<?php switch ($register['a_sesion_21']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-5-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_22'] != 'R')?$register['a_sesion_22']:''; ?>"
-							action='checkbox' name='a_sesion_22' index='<?php echo $key+1?>' indexall='5'>
+						   disabled id='index-6-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_21'] != 'R')?$register['a_sesion_21']:''; ?>"
+							action='checkbox' name='a_sesion_21' index='<?php echo $key+1?>' indexall='5'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_22'] != 'R')?$register['a_sesion_22']:''; ?>"
-							   	id='index-5-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_22' index='<?php echo $key+1?>' indexall='5' 
+							   assistance="<?php echo ($register['a_sesion_21'] != 'R')?$register['a_sesion_21']:''; ?>"
+							   	id='index-6-<?php echo $key+1?>'
+								action='checkbox' name='a_sesion_21' index='<?php echo $key+1?>' indexall='5' 
 								rel="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -1666,9 +1627,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-5-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_22'] != 'R')?$register['a_sesion_22']:''; ?>"
-							action='checkbox' name='a_sesion_22' index='<?php echo $key+1?>' indexall='5'
+								id='index-6-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_21'] != 'R')?$register['a_sesion_21']:''; ?>"
+							action='checkbox' name='a_sesion_21' index='<?php echo $key+1?>' indexall='5'
 							rel="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1679,9 +1640,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-5-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_22'] != 'R')?$register['a_sesion_22']:''; ?>"
-							action='checkbox' name='a_sesion_22' index='<?php echo $key+1?>' indexall='5'
+							id='index-6-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_21'] != 'R')?$register['a_sesion_21']:''; ?>"
+							action='checkbox' name='a_sesion_21' index='<?php echo $key+1?>' indexall='5'
 							rel="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1694,9 +1655,9 @@ if ($this->infoassist) { ?>
 					<?php break;
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-5-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_22'] != 'R')?$register['a_sesion_22']:''; ?>"
-							action='checkbox' name='a_sesion_22' index='<?php echo $key+1?>' indexall='5'
+							id='index-6-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_21'] != 'R')?$register['a_sesion_21']:''; ?>"
+							action='checkbox' name='a_sesion_21' index='<?php echo $key+1?>' indexall='5'
 							rel="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1705,28 +1666,27 @@ if ($this->infoassist) { ?>
 							<h5><span class="assignet-assist glyphicon glyphicon-copyright-mark text-success" value="T"  index="<?php echo $key+1?>" indexall="5" onclick="assignet_assistance(this);"> Tarde</span></h5>
 
 							<h5><span class="assignet-assist glyphicon glyphicon-remove-circle text-danger" value="F" index="<?php echo $key+1?>" indexall="5" onclick="assignet_assistance(this);"> Falto</span></h5>'
+							
 							data-trigger='click'
 							></span>
 					<?php break; }?>
 				</td>
-				
-				<!-- *******************sesion-23************* -->
-
+				<!-- *******************sesion-22************* -->
 				<td>
-					<?php switch ($register['a_sesion_23']) {
+					<?php switch ($register['a_sesion_22']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
 						   disabled id='index-6-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_23'] != 'R')?$register['a_sesion_23']:''; ?>"
-							action='checkbox' name='a_sesion_23' index='<?php echo $key+1?>' indexall='6'>
+						   assistance="<?php echo ($register['a_sesion_22'] != 'R')?$register['a_sesion_22']:''; ?>"
+							action='checkbox' name='a_sesion_22' index='<?php echo $key+1?>' indexall='6'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_23'] != 'R')?$register['a_sesion_23']:''; ?>"
+							   assistance="<?php echo ($register['a_sesion_22'] != 'R')?$register['a_sesion_22']:''; ?>"
 							   	id='index-6-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_23' index='<?php echo $key+1?>' indexall='6' 
-								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
+								action='checkbox' name='a_sesion_22' index='<?php echo $key+1?>' indexall='6' 
+								rel="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
 								<h5><span class="assignet-assist glyphicon glyphicon-remove-circle text-danger" value="F" index="<?php echo $key+1?>" indexall="6"  onclick="assignet_assistance(this);"> Falto</span></h5>
@@ -1737,9 +1697,9 @@ if ($this->infoassist) { ?>
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
 								id='index-6-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_23'] != 'R')?$register['a_sesion_23']:''; ?>"
-							action='checkbox' name='a_sesion_23' index='<?php echo $key+1?>' indexall='6'
-							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
+						   assistance="<?php echo ($register['a_sesion_22'] != 'R')?$register['a_sesion_22']:''; ?>"
+							action='checkbox' name='a_sesion_22' index='<?php echo $key+1?>' indexall='6'
+							rel="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
 							<h5><span class="assignet-assist glyphicon glyphicon-ok-circle text-primary" value="A" index="<?php echo $key+1?>" indexall="6" onclick="assignet_assistance(this);"> Asistio</span></h5>
@@ -1750,9 +1710,9 @@ if ($this->infoassist) { ?>
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
 							id='index-6-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_23'] != 'R')?$register['a_sesion_23']:''; ?>"
-							action='checkbox' name='a_sesion_23' index='<?php echo $key+1?>' indexall='6'
-							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
+						   assistance="<?php echo ($register['a_sesion_22'] != 'R')?$register['a_sesion_22']:''; ?>"
+							action='checkbox' name='a_sesion_22' index='<?php echo $key+1?>' indexall='6'
+							rel="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
 							<h5><span class="assignet-assist glyphicon glyphicon-ok-circle text-primary" value="A" index="<?php echo $key+1?>" indexall="6"  onclick="assignet_assistance(this);"> Asistio</span></h5>
@@ -1765,9 +1725,9 @@ if ($this->infoassist) { ?>
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
 							id='index-6-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_23'] != 'R')?$register['a_sesion_23']:''; ?>"
-							action='checkbox' name='a_sesion_23' index='<?php echo $key+1?>' indexall='6'
-							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
+						   assistance="<?php echo ($register['a_sesion_22'] != 'R')?$register['a_sesion_22']:''; ?>"
+							action='checkbox' name='a_sesion_22' index='<?php echo $key+1?>' indexall='6'
+							rel="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
 							<h5><span class="assignet-assist glyphicon glyphicon-ok-circle text-primary" value="A" index="<?php echo $key+1?>" indexall="6" onclick="assignet_assistance(this);"> Asistio</span></h5>
@@ -1779,23 +1739,23 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-
-				<!-- *******************sesion-24************* -->
+				
+				<!-- *******************sesion-23************* -->
 
 				<td>
-					<?php switch ($register['a_sesion_24']) {
+					<?php switch ($register['a_sesion_23']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-7-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_24'] != 'R')?$register['a_sesion_24']:''; ?>"
-							action='checkbox' name='a_sesion_24' index='<?php echo $key+1?>' indexall='7'>
+						   disabled id='index-8-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_23'] != 'R')?$register['a_sesion_23']:''; ?>"
+							action='checkbox' name='a_sesion_23' index='<?php echo $key+1?>' indexall='7'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_24'] != 'R')?$register['a_sesion_24']:''; ?>"
-							   	id='index-7-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_24' index='<?php echo $key+1?>' indexall='7' 
+							   assistance="<?php echo ($register['a_sesion_23'] != 'R')?$register['a_sesion_23']:''; ?>"
+							   	id='index-8-<?php echo $key+1?>'
+								action='checkbox' name='a_sesion_23' index='<?php echo $key+1?>' indexall='7' 
 								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -1806,9 +1766,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-7-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_24'] != 'R')?$register['a_sesion_24']:''; ?>"
-							action='checkbox' name='a_sesion_24' index='<?php echo $key+1?>' indexall='7'
+								id='index-8-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_23'] != 'R')?$register['a_sesion_23']:''; ?>"
+							action='checkbox' name='a_sesion_23' index='<?php echo $key+1?>' indexall='7'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1819,9 +1779,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-7-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_24'] != 'R')?$register['a_sesion_24']:''; ?>"
-							action='checkbox' name='a_sesion_24' index='<?php echo $key+1?>' indexall='7'
+							id='index-8-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_23'] != 'R')?$register['a_sesion_23']:''; ?>"
+							action='checkbox' name='a_sesion_23' index='<?php echo $key+1?>' indexall='7'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1834,9 +1794,9 @@ if ($this->infoassist) { ?>
 					<?php break;
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-7-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_24'] != 'R')?$register['a_sesion_24']:''; ?>"
-							action='checkbox' name='a_sesion_24' index='<?php echo $key+1?>' indexall='7'
+							id='index-8-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_23'] != 'R')?$register['a_sesion_23']:''; ?>"
+							action='checkbox' name='a_sesion_23' index='<?php echo $key+1?>' indexall='7'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1849,22 +1809,23 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- *******************sesion-25************* -->
+
+				<!-- *******************sesion-24************* -->
 
 				<td>
-					<?php switch ($register['a_sesion_25']) {
+					<?php switch ($register['a_sesion_24']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-8-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_25'] != 'R')?$register['a_sesion_25']:''; ?>"
-							action='checkbox' name='a_sesion_25' index='<?php echo $key+1?>' indexall='8'>
+						   disabled id='index-9-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_24'] != 'R')?$register['a_sesion_24']:''; ?>"
+							action='checkbox' name='a_sesion_24' index='<?php echo $key+1?>' indexall='8'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_25'] != 'R')?$register['a_sesion_25']:''; ?>"
-							   	id='index-8-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_25' index='<?php echo $key+1?>' indexall='8' 
+							   assistance="<?php echo ($register['a_sesion_24'] != 'R')?$register['a_sesion_24']:''; ?>"
+							   	id='index-9-<?php echo $key+1?>'
+								action='checkbox' name='a_sesion_24' index='<?php echo $key+1?>' indexall='8' 
 								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -1875,9 +1836,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-8-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_25'] != 'R')?$register['a_sesion_25']:''; ?>"
-							action='checkbox' name='a_sesion_25' index='<?php echo $key+1?>' indexall='8'
+								id='index-9-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_24'] != 'R')?$register['a_sesion_24']:''; ?>"
+							action='checkbox' name='a_sesion_24' index='<?php echo $key+1?>' indexall='8'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1888,9 +1849,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-8-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_25'] != 'R')?$register['a_sesion_25']:''; ?>"
-							action='checkbox' name='a_sesion_25' index='<?php echo $key+1?>' indexall='8'
+							id='index-9-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_24'] != 'R')?$register['a_sesion_24']:''; ?>"
+							action='checkbox' name='a_sesion_24' index='<?php echo $key+1?>' indexall='8'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1903,9 +1864,9 @@ if ($this->infoassist) { ?>
 					<?php break;
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-8-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_25'] != 'R')?$register['a_sesion_25']:''; ?>"
-							action='checkbox' name='a_sesion_25' index='<?php echo $key+1?>' indexall='8'
+							id='index-9-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_24'] != 'R')?$register['a_sesion_24']:''; ?>"
+							action='checkbox' name='a_sesion_24' index='<?php echo $key+1?>' indexall='8'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1918,22 +1879,22 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- *******************sesion-26************* -->
+				<!-- *******************sesion-25************* -->
 
 				<td>
-					<?php switch ($register['a_sesion_26']) {
+					<?php switch ($register['a_sesion_25']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-9-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_26'] != 'R')?$register['a_sesion_26']:''; ?>"
-							action='checkbox' name='a_sesion_26' index='<?php echo $key+1?>' indexall='9'>
+						   disabled id='index-10-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_25'] != 'R')?$register['a_sesion_25']:''; ?>"
+							action='checkbox' name='a_sesion_25' index='<?php echo $key+1?>' indexall='9'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_26'] != 'R')?$register['a_sesion_26']:''; ?>"
-							   	id='index-9-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_26' index='<?php echo $key+1?>' indexall='9' 
+							   assistance="<?php echo ($register['a_sesion_25'] != 'R')?$register['a_sesion_25']:''; ?>"
+							   	id='index-10-<?php echo $key+1?>'
+								action='checkbox' name='a_sesion_25' index='<?php echo $key+1?>' indexall='9' 
 								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -1944,9 +1905,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-9-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_26'] != 'R')?$register['a_sesion_26']:''; ?>"
-							action='checkbox' name='a_sesion_26' index='<?php echo $key+1?>' indexall='9'
+								id='index-10-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_25'] != 'R')?$register['a_sesion_25']:''; ?>"
+							action='checkbox' name='a_sesion_25' index='<?php echo $key+1?>' indexall='9'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1957,9 +1918,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-9-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_26'] != 'R')?$register['a_sesion_26']:''; ?>"
-							action='checkbox' name='a_sesion_26' index='<?php echo $key+1?>' indexall='9'
+							id='index-10-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_25'] != 'R')?$register['a_sesion_25']:''; ?>"
+							action='checkbox' name='a_sesion_25' index='<?php echo $key+1?>' indexall='9'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1972,9 +1933,9 @@ if ($this->infoassist) { ?>
 					<?php break;
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-9-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_26'] != 'R')?$register['a_sesion_26']:''; ?>"
-							action='checkbox' name='a_sesion_26' index='<?php echo $key+1?>' indexall='9'
+							id='index-10-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_25'] != 'R')?$register['a_sesion_25']:''; ?>"
+							action='checkbox' name='a_sesion_25' index='<?php echo $key+1?>' indexall='9'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -1987,22 +1948,22 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- *******************sesion-27************* -->
+				<!-- *******************sesion-26************* -->
 
 				<td>
-					<?php switch ($register['a_sesion_27']) {
+					<?php switch ($register['a_sesion_26']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-10-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_27'] != 'R')?$register['a_sesion_27']:''; ?>"
-							action='checkbox' name='a_sesion_27' index='<?php echo $key+1?>' indexall='10'>
+						   disabled id='index-11-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_26'] != 'R')?$register['a_sesion_26']:''; ?>"
+							action='checkbox' name='a_sesion_26' index='<?php echo $key+1?>' indexall='10'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_27'] != 'R')?$register['a_sesion_27']:''; ?>"
-							   	id='index-10-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_27' index='<?php echo $key+1?>' indexall='10' 
+							   assistance="<?php echo ($register['a_sesion_26'] != 'R')?$register['a_sesion_26']:''; ?>"
+							   	id='index-11-<?php echo $key+1?>'
+								action='checkbox' name='a_sesion_26' index='<?php echo $key+1?>' indexall='10' 
 								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -2013,9 +1974,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-10-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_27'] != 'R')?$register['a_sesion_27']:''; ?>"
-							action='checkbox' name='a_sesion_27' index='<?php echo $key+1?>' indexall='10'
+								id='index-11-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_26'] != 'R')?$register['a_sesion_26']:''; ?>"
+							action='checkbox' name='a_sesion_26' index='<?php echo $key+1?>' indexall='10'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2026,9 +1987,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-10-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_27'] != 'R')?$register['a_sesion_27']:''; ?>"
-							action='checkbox' name='a_sesion_27' index='<?php echo $key+1?>' indexall='10'
+							id='index-11-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_26'] != 'R')?$register['a_sesion_26']:''; ?>"
+							action='checkbox' name='a_sesion_26' index='<?php echo $key+1?>' indexall='10'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2041,9 +2002,9 @@ if ($this->infoassist) { ?>
 					<?php break;
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-10-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_27'] != 'R')?$register['a_sesion_27']:''; ?>"
-							action='checkbox' name='a_sesion_27' index='<?php echo $key+1?>' indexall='10'
+							id='index-11-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_26'] != 'R')?$register['a_sesion_26']:''; ?>"
+							action='checkbox' name='a_sesion_26' index='<?php echo $key+1?>' indexall='10'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2056,22 +2017,22 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- *******************sesion-28************* -->
+				<!-- *******************sesion-27************* -->
 
 				<td>
-					<?php switch ($register['a_sesion_28']) {
+					<?php switch ($register['a_sesion_27']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-11-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_28'] != 'R')?$register['a_sesion_28']:''; ?>"
-							action='checkbox' name='a_sesion_28' index='<?php echo $key+1?>' indexall='11'>
+						   disabled id='index-12-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_27'] != 'R')?$register['a_sesion_27']:''; ?>"
+							action='checkbox' name='a_sesion_27' index='<?php echo $key+1?>' indexall='11'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_28'] != 'R')?$register['a_sesion_28']:''; ?>"
-							   	id='index-11-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_28' index='<?php echo $key+1?>' indexall='11' 
+							   assistance="<?php echo ($register['a_sesion_27'] != 'R')?$register['a_sesion_27']:''; ?>"
+							   	id='index-12-<?php echo $key+1?>'
+								action='checkbox' name='a_sesion_27' index='<?php echo $key+1?>' indexall='11' 
 								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -2082,9 +2043,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-11-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_28'] != 'R')?$register['a_sesion_28']:''; ?>"
-							action='checkbox' name='a_sesion_28' index='<?php echo $key+1?>' indexall='11'
+								id='index-12-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_27'] != 'R')?$register['a_sesion_27']:''; ?>"
+							action='checkbox' name='a_sesion_27' index='<?php echo $key+1?>' indexall='11'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2095,9 +2056,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-11-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_28'] != 'R')?$register['a_sesion_28']:''; ?>"
-							action='checkbox' name='a_sesion_28' index='<?php echo $key+1?>' indexall='11'
+							id='index-12-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_27'] != 'R')?$register['a_sesion_27']:''; ?>"
+							action='checkbox' name='a_sesion_27' index='<?php echo $key+1?>' indexall='11'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2110,9 +2071,9 @@ if ($this->infoassist) { ?>
 					<?php break;
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-11-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_28'] != 'R')?$register['a_sesion_28']:''; ?>"
-							action='checkbox' name='a_sesion_28' index='<?php echo $key+1?>' indexall='11'
+							id='index-12-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_27'] != 'R')?$register['a_sesion_27']:''; ?>"
+							action='checkbox' name='a_sesion_27' index='<?php echo $key+1?>' indexall='11'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2125,23 +2086,22 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-
-				<!-- *******************sesion-29************* -->
+				<!-- *******************sesion-28************* -->
 
 				<td>
-					<?php switch ($register['a_sesion_29']) {
+					<?php switch ($register['a_sesion_28']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-12-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_29'] != 'R')?$register['a_sesion_29']:''; ?>"
-							action='checkbox' name='a_sesion_29' index='<?php echo $key+1?>' indexall='12'>
+						   disabled id='index-13-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_28'] != 'R')?$register['a_sesion_28']:''; ?>"
+							action='checkbox' name='a_sesion_28' index='<?php echo $key+1?>' indexall='12'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_29'] != 'R')?$register['a_sesion_29']:''; ?>"
-							   	id='index-12-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_29' index='<?php echo $key+1?>' indexall='12' 
+							   assistance="<?php echo ($register['a_sesion_28'] != 'R')?$register['a_sesion_28']:''; ?>"
+							   	id='index-13-<?php echo $key+1?>'
+								action='checkbox' name='a_sesion_28' index='<?php echo $key+1?>' indexall='12' 
 								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -2152,9 +2112,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-12-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_29'] != 'R')?$register['a_sesion_29']:''; ?>"
-							action='checkbox' name='a_sesion_29' index='<?php echo $key+1?>' indexall='12'
+								id='index-13-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_28'] != 'R')?$register['a_sesion_28']:''; ?>"
+							action='checkbox' name='a_sesion_28' index='<?php echo $key+1?>' indexall='12'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2165,9 +2125,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-12-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_29'] != 'R')?$register['a_sesion_29']:''; ?>"
-							action='checkbox' name='a_sesion_29' index='<?php echo $key+1?>' indexall='12'
+							id='index-13-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_28'] != 'R')?$register['a_sesion_28']:''; ?>"
+							action='checkbox' name='a_sesion_28' index='<?php echo $key+1?>' indexall='12'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2180,9 +2140,9 @@ if ($this->infoassist) { ?>
 					<?php break;
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-12-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_29'] != 'R')?$register['a_sesion_29']:''; ?>"
-							action='checkbox' name='a_sesion_29' index='<?php echo $key+1?>' indexall='12'
+							id='index-13-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_28'] != 'R')?$register['a_sesion_28']:''; ?>"
+							action='checkbox' name='a_sesion_28' index='<?php echo $key+1?>' indexall='12'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2195,22 +2155,23 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- *******************sesion-30************* -->
+
+				<!-- *******************sesion-29************* -->
 
 				<td>
-					<?php switch ($register['a_sesion_30']) {
+					<?php switch ($register['a_sesion_29']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-13-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_30'] != 'R')?$register['a_sesion_30']:''; ?>"
-							action='checkbox' name='a_sesion_30' index='<?php echo $key+1?>' indexall='13'>
+						   disabled id='index-14-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_29'] != 'R')?$register['a_sesion_29']:''; ?>"
+							action='checkbox' name='a_sesion_29' index='<?php echo $key+1?>' indexall='13'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_30'] != 'R')?$register['a_sesion_30']:''; ?>"
-							   	id='index-13-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_30' index='<?php echo $key+1?>' indexall='13' 
+							   assistance="<?php echo ($register['a_sesion_29'] != 'R')?$register['a_sesion_29']:''; ?>"
+							   	id='index-14-<?php echo $key+1?>'
+								action='checkbox' name='a_sesion_29' index='<?php echo $key+1?>' indexall='13' 
 								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -2221,9 +2182,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-13-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_30'] != 'R')?$register['a_sesion_30']:''; ?>"
-							action='checkbox' name='a_sesion_30' index='<?php echo $key+1?>' indexall='13'
+								id='index-14-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_29'] != 'R')?$register['a_sesion_29']:''; ?>"
+							action='checkbox' name='a_sesion_29' index='<?php echo $key+1?>' indexall='13'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2234,9 +2195,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-13-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_30'] != 'R')?$register['a_sesion_30']:''; ?>"
-							action='checkbox' name='a_sesion_30' index='<?php echo $key+1?>' indexall='13'
+							id='index-14-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_29'] != 'R')?$register['a_sesion_29']:''; ?>"
+							action='checkbox' name='a_sesion_29' index='<?php echo $key+1?>' indexall='13'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2249,9 +2210,9 @@ if ($this->infoassist) { ?>
 					<?php break;
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-13-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_30'] != 'R')?$register['a_sesion_30']:''; ?>"
-							action='checkbox' name='a_sesion_30' index='<?php echo $key+1?>' indexall='13'
+							id='index-14-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_29'] != 'R')?$register['a_sesion_29']:''; ?>"
+							action='checkbox' name='a_sesion_29' index='<?php echo $key+1?>' indexall='13'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2264,22 +2225,22 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- *******************sesion-31************* -->
+				<!-- *******************sesion-30************* -->
 
 				<td>
-					<?php switch ($register['a_sesion_31']) {
+					<?php switch ($register['a_sesion_30']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-14-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_31'] != 'R')?$register['a_sesion_31']:''; ?>"
-							action='checkbox' name='a_sesion_31' index='<?php echo $key+1?>' indexall='14'>
+						   disabled id='index-15-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_30'] != 'R')?$register['a_sesion_30']:''; ?>"
+							action='checkbox' name='a_sesion_30' index='<?php echo $key+1?>' indexall='14'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_31'] != 'R')?$register['a_sesion_31']:''; ?>"
-							   	id='index-14-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_31' index='<?php echo $key+1?>' indexall='14' 
+							   assistance="<?php echo ($register['a_sesion_30'] != 'R')?$register['a_sesion_30']:''; ?>"
+							   	id='index-15-<?php echo $key+1?>'
+								action='checkbox' name='a_sesion_30' index='<?php echo $key+1?>' indexall='14' 
 								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -2290,9 +2251,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-14-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_31'] != 'R')?$register['a_sesion_31']:''; ?>"
-							action='checkbox' name='a_sesion_31' index='<?php echo $key+1?>' indexall='14'
+								id='index-15-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_30'] != 'R')?$register['a_sesion_30']:''; ?>"
+							action='checkbox' name='a_sesion_30' index='<?php echo $key+1?>' indexall='14'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2303,9 +2264,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-14-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_31'] != 'R')?$register['a_sesion_31']:''; ?>"
-							action='checkbox' name='a_sesion_31' index='<?php echo $key+1?>' indexall='14'
+							id='index-15-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_30'] != 'R')?$register['a_sesion_30']:''; ?>"
+							action='checkbox' name='a_sesion_30' index='<?php echo $key+1?>' indexall='14'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2318,9 +2279,9 @@ if ($this->infoassist) { ?>
 					<?php break;
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-14-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_31'] != 'R')?$register['a_sesion_31']:''; ?>"
-							action='checkbox' name='a_sesion_31' index='<?php echo $key+1?>' indexall='14'
+							id='index-15-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_30'] != 'R')?$register['a_sesion_30']:''; ?>"
+							action='checkbox' name='a_sesion_30' index='<?php echo $key+1?>' indexall='14'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2333,22 +2294,22 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- *******************sesion-32************* -->
+				<!-- *******************sesion-31************* -->
 
 				<td>
-					<?php switch ($register['a_sesion_32']) {
+					<?php switch ($register['a_sesion_31']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-15-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_32'] != 'R')?$register['a_sesion_32']:''; ?>"
-							action='checkbox' name='a_sesion_32' index='<?php echo $key+1?>' indexall='15'>
+						   disabled id='index-16-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_31'] != 'R')?$register['a_sesion_31']:''; ?>"
+							action='checkbox' name='a_sesion_31' index='<?php echo $key+1?>' indexall='15'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_32'] != 'R')?$register['a_sesion_32']:''; ?>"
-							   	id='index-15-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_32' index='<?php echo $key+1?>' indexall='15' 
+							   assistance="<?php echo ($register['a_sesion_31'] != 'R')?$register['a_sesion_31']:''; ?>"
+							   	id='index-16-<?php echo $key+1?>'
+								action='checkbox' name='a_sesion_31' index='<?php echo $key+1?>' indexall='15' 
 								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -2359,9 +2320,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-15-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_32'] != 'R')?$register['a_sesion_32']:''; ?>"
-							action='checkbox' name='a_sesion_32' index='<?php echo $key+1?>' indexall='15'
+								id='index-16-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_31'] != 'R')?$register['a_sesion_31']:''; ?>"
+							action='checkbox' name='a_sesion_31' index='<?php echo $key+1?>' indexall='15'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2372,9 +2333,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-15-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_32'] != 'R')?$register['a_sesion_32']:''; ?>"
-							action='checkbox' name='a_sesion_32' index='<?php echo $key+1?>' indexall='15'
+							id='index-16-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_31'] != 'R')?$register['a_sesion_31']:''; ?>"
+							action='checkbox' name='a_sesion_31' index='<?php echo $key+1?>' indexall='15'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2387,9 +2348,9 @@ if ($this->infoassist) { ?>
 					<?php break;
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-15-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_32'] != 'R')?$register['a_sesion_32']:''; ?>"
-							action='checkbox' name='a_sesion_32' index='<?php echo $key+1?>' indexall='15'
+							id='index-16-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_31'] != 'R')?$register['a_sesion_31']:''; ?>"
+							action='checkbox' name='a_sesion_31' index='<?php echo $key+1?>' indexall='15'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2402,22 +2363,22 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- *******************sesion-33************* -->
+				<!-- *******************sesion-32************* -->
 
 				<td>
-					<?php switch ($register['a_sesion_33']) {
+					<?php switch ($register['a_sesion_32']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
-						   disabled id='index-16-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_33'] != 'R')?$register['a_sesion_33']:''; ?>"
-							action='checkbox' name='a_sesion_33' index='<?php echo $key+1?>' indexall='16'>
+						   disabled id='index-17-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_32'] != 'R')?$register['a_sesion_32']:''; ?>"
+							action='checkbox' name='a_sesion_32' index='<?php echo $key+1?>' indexall='16'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_33'] != 'R')?$register['a_sesion_33']:''; ?>"
-							   	id='index-16-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_33' index='<?php echo $key+1?>' indexall='16' 
+							   assistance="<?php echo ($register['a_sesion_32'] != 'R')?$register['a_sesion_32']:''; ?>"
+							   	id='index-17-<?php echo $key+1?>'
+								action='checkbox' name='a_sesion_32' index='<?php echo $key+1?>' indexall='16' 
 								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -2428,9 +2389,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
-								id='index-16-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_33'] != 'R')?$register['a_sesion_33']:''; ?>"
-							action='checkbox' name='a_sesion_33' index='<?php echo $key+1?>' indexall='16'
+								id='index-17-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_32'] != 'R')?$register['a_sesion_32']:''; ?>"
+							action='checkbox' name='a_sesion_32' index='<?php echo $key+1?>' indexall='16'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2441,9 +2402,9 @@ if ($this->infoassist) { ?>
 					<?php break; 
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
-							id='index-16-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_33'] != 'R')?$register['a_sesion_33']:''; ?>"
-							action='checkbox' name='a_sesion_33' index='<?php echo $key+1?>' indexall='16'
+							id='index-17-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_32'] != 'R')?$register['a_sesion_32']:''; ?>"
+							action='checkbox' name='a_sesion_32' index='<?php echo $key+1?>' indexall='16'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2456,9 +2417,9 @@ if ($this->infoassist) { ?>
 					<?php break;
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
-							id='index-16-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_33'] != 'R')?$register['a_sesion_33']:''; ?>"
-							action='checkbox' name='a_sesion_33' index='<?php echo $key+1?>' indexall='16'
+							id='index-17-<?php echo $key+1?>'
+						   assistance="<?php echo ($register['a_sesion_32'] != 'R')?$register['a_sesion_32']:''; ?>"
+							action='checkbox' name='a_sesion_32' index='<?php echo $key+1?>' indexall='16'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2471,22 +2432,22 @@ if ($this->infoassist) { ?>
 							></span>
 					<?php break; }?>
 				</td>
-				<!-- *******************sesion-34************* -->
+				<!-- *******************sesion-33************* -->
 
 				<td>
-					<?php switch ($register['a_sesion_34']) {
+					<?php switch ($register['a_sesion_33']) {
 						case 'R': ?>
 						<span class='inputassist  glyphicon glyphicon-registration-mark' 
 						   disabled id='index-17-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_34'] != 'R')?$register['a_sesion_34']:''; ?>"
-							action='checkbox' name='a_sesion_34' index='<?php echo $key+1?>' indexall='17'>
+						   assistance="<?php echo ($register['a_sesion_33'] != 'R')?$register['a_sesion_33']:''; ?>"
+							action='checkbox' name='a_sesion_33' index='<?php echo $key+1?>' indexall='17'>
 						</span>
 					<?php	break; 
 						case 'A': ?>
 							<span class='inputassist glyphicon glyphicon-ok-circle text-primary' 
-							   assistance="<?php echo ($register['a_sesion_34'] != 'R')?$register['a_sesion_34']:''; ?>"
+							   assistance="<?php echo ($register['a_sesion_33'] != 'R')?$register['a_sesion_33']:''; ?>"
 							   	id='index-17-<?php echo $key+1?>'
-								action='checkbox' name='a_sesion_34' index='<?php echo $key+1?>' indexall='17' 
+								action='checkbox' name='a_sesion_33' index='<?php echo $key+1?>' indexall='17' 
 								data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 								data-original-title="Asignar Asistencia" 
 								data-content='
@@ -2498,8 +2459,8 @@ if ($this->infoassist) { ?>
 					case 'F': ?>
 							<span class='inputassist glyphicon glyphicon-remove-circle text-danger'
 								id='index-17-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_34'] != 'R')?$register['a_sesion_34']:''; ?>"
-							action='checkbox' name='a_sesion_34' index='<?php echo $key+1?>' indexall='17'
+						   assistance="<?php echo ($register['a_sesion_33'] != 'R')?$register['a_sesion_33']:''; ?>"
+							action='checkbox' name='a_sesion_33' index='<?php echo $key+1?>' indexall='17'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2511,8 +2472,8 @@ if ($this->infoassist) { ?>
 					case 'T': ?>
 							<span class='inputassist glyphicon glyphicon-copyright-mark text-success'
 							id='index-17-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_34'] != 'R')?$register['a_sesion_34']:''; ?>"
-							action='checkbox' name='a_sesion_34' index='<?php echo $key+1?>' indexall='17'
+						   assistance="<?php echo ($register['a_sesion_33'] != 'R')?$register['a_sesion_33']:''; ?>"
+							action='checkbox' name='a_sesion_33' index='<?php echo $key+1?>' indexall='17'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2526,8 +2487,8 @@ if ($this->infoassist) { ?>
 						default: ?>
 							<span class='inputassist glyphicon glyphicon-unchecked'
 							id='index-17-<?php echo $key+1?>'
-						   assistance="<?php echo ($register['a_sesion_34'] != 'R')?$register['a_sesion_34']:''; ?>"
-							action='checkbox' name='a_sesion_34' index='<?php echo $key+1?>' indexall='17'
+						   assistance="<?php echo ($register['a_sesion_33'] != 'R')?$register['a_sesion_33']:''; ?>"
+							action='checkbox' name='a_sesion_33' index='<?php echo $key+1?>' indexall='17'
 							data-container='body' data-toggle="popover" data-placement='right' data-html='true'
 							data-original-title="Asignar Asistencia" 
 							data-content='
@@ -2541,6 +2502,7 @@ if ($this->infoassist) { ?>
 					<?php break; }?>
 				</td>
 			<?php }?>
+
 			<?php if ($this->state == 'P' && $partial==1) { ?>
 					<td>
 						<?php switch ($register['a_sesion_1']) {
@@ -2782,6 +2744,9 @@ if ($this->infoassist) { ?>
 								break;
 						}?>
 					</td>
+			<?php	
+			}?>
+			<?php if ($this->state == 'C' && $partial==2) { ?>
 					<td>
 						<?php switch ($register['a_sesion_16']) {
 							case 'T':
@@ -2814,13 +2779,6 @@ if ($this->infoassist) { ?>
 								break;
 						}?>
 					</td>
-					
-
-
-			<?php	
-			}?>
-			<?php if ($this->state == 'C' && $partial==2) { ?>
-					
 					<td>
 						<?php switch ($register['a_sesion_18']) {
 							case 'T':
@@ -3061,39 +3019,6 @@ if ($this->infoassist) { ?>
 								break;
 						}?>
 					</td>
-					<td>
-						<?php switch ($register['a_sesion_33'] ) {
-							case 'T':
-								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
-								break;
-							case 'R':
-								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
-								break;
-							case 'A':
-								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
-								break;
-							case 'F':
-								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
-								break;
-						}?>
-					</td>
-					<td>
-						<?php switch ($register['a_sesion_34']) {
-							case 'T':
-								echo "<span class='glyphicon glyphicon-copyright-mark text-success'></span>";
-								break;
-							case 'R':
-								echo "<span class='glyphicon glyphicon-registration-mark'></span>";
-								break;
-							case 'A':
-								echo "<span class='glyphicon glyphicon-ok-circle text-primary'></span>";
-								break;
-							case 'F':
-								echo "<span class='glyphicon glyphicon-remove-circle text-danger'></span>";
-								break;
-						}?>
-					</td>
-
 
 			<?php	
 			}?>

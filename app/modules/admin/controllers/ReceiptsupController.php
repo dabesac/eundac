@@ -7,7 +7,7 @@ public function init() {
         }  
         $this->sesion=$sesion;
 	require_once 'Zend/Loader.php';
-  Zend_Loader::loadClass('Zend_Rest_Client');
+  	Zend_Loader::loadClass('Zend_Rest_Client');
 }
 
 public function indexAction() {
@@ -16,6 +16,8 @@ $this->_helper->redirector("recordreceipts");
 public function recordreceiptsAction()
 {
 	try{
+		$module=$this->sesion->rol['module'];
+		$this->view->module->$module;
 		$anio='2014';
 		$recibo = new Api_Model_DbTable_Bankreceipts();
 		$listar = $recibo->_getbankreceiptsXAnio($anio);

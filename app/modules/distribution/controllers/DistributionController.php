@@ -1,5 +1,4 @@
 <?php
-
 class Distribution_DistributionController extends Zend_Controller_Action {
 
     public function init()
@@ -22,6 +21,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $yearActive = substr($periodActive, 0, 2);
             $yearActive = '20'.$yearActive;
             $this->view->yearActive = $yearActive;
+
+            $anio = base64_decode($this->_getParam('anio'));
+            $this->view->anio = $anio;
         } catch (Exception $e) {
             print 'Error Controlador Index'.$e->getMessage();
         }
@@ -38,6 +40,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
        		$data['subid']=$this->sesion->subid;
 
             $anio = $this->getParam('anio');
+            $this->view->anio = $anio;
             $anio = substr($anio, 2, 2);
             $data['year'] = $anio;
        		//$campos = array("eid","oid","escid","subid","perid","dateaccept","number","state","distid");
@@ -64,68 +67,56 @@ class Distribution_DistributionController extends Zend_Controller_Action {
         }
     }
 
-    public function newAction()
-    {    	
+
+    public function newAction(){    
+        $anio = $this->_getParam('anio');
+        $this->view->anio = $anio;
+        
         $form = new Distribution_Form_Distribution();
         $this->view->form = $form;
 
-        if ($this->getRequest()->isPost()) {
-            $formData = $this->getRequest()->getPost();
-            if ($form->isValid($formData)) {
-                $formData['eid'] = base64_decode($formData['eid']);
-                $formData['oid'] = base64_decode($formData['oid']);
-                $formData['escid'] = base64_decode($formData['escid']);
-                $formData['subid'] = base64_decode($formData['subid']);
-                $formData['perid'] = base64_decode($formData['perid']);
-                $formData['register'] = $this->sesion->uid;
-                $formData['distid'] = time();
-
-                $distributionDb = new Distribution_Model_DbTable_Distribution();
-                $where = array('eid'=>$formData['eid'], 'oid'=>$formData['oid'], 'perid'=>$formData['perid'], 'escid'=> $formData['escid']);
-                $exist = $distributionDb->_getFilter($where);
-                $interruptor = 0;
-                if ($exist) {
-                    $interruptor = 1;
-                }else{
-                    $distributionDb->_save($formData);
-                }
-                $this->_helper->redirector('index','distribution','distribution');
-                /*if ($distributionDb->_save($formData)) {
-                    $this->_helper->redirector('index','distribution','distribution');
-                }else{
-                }*/
-            }else{
-                $form->populate($formData);
-            }
-        }
     }
-    
+
     public function editAction()
     {
         $distid = base64_decode($this->_getParam("distid"));
         $perid = base64_decode($this->_getParam("perid"));
-        $this->view->dataget = $dataget = array('distid'=>base64_encode($distid), 'perid'=>base64_encode($perid));
+        $anio = $this->_getParam("anio");
 
-
-        $distr_ = new Distribution_Model_DbTable_Distribution();
+        $dataforUpdate = array( 'distid' => $distid,
+                                'perid'  => $perid,
+                                'anio'   => $anio );
+        $this->view->dataforUpdate = $dataforUpdate;
+        
+        $periodsDb = new Api_Model_DbTable_Periods();
+        $distributionDb = new Distribution_Model_DbTable_Distribution();
         $form = new Distribution_Form_Distribution();
 
-        $form->perid->setAttrib("disabled", "");
-        $data['eid']=$this->sesion->eid;
-        $data['oid']=$this->sesion->oid;
-        $data['escid']=$this->sesion->escid;
-        $data['subid']=$this->sesion->subid;
-        $data['distid']=$distid;
-        $data['perid']=$perid;
+        //$form->perid->setAttrib("disabled", "");
+        $eid   = $this->sesion->eid;
+        $oid   = $this->sesion->oid;
+        $escid = $this->sesion->escid;
+        $subid = $this->sesion->subid;
 
-        $r = $distr_->_getOne($data);
-        $r['perid'] = base64_encode($r['perid']);
-        
+        $where = array('eid'=>$eid, 'oid'=>$oid, 'perid'=>$perid);
+        $attrib = array('name', 'perid');
+        $period = $periodsDb->_getFilter($where, $attrib);
+        $form->perid->addMultioption($period[0]['perid'], $period[0]['perid'].' | '.$period[0]['name']);
+        $form->perid->setAttrib("disabled", "");
+
+        $where = array( 
+                        'eid'    => $eid,
+                        'oid'    => $oid,
+                        'escid'  => $escid,
+                        'subid'  => $subid,
+                        'distid' => $distid,
+                        'perid'  => $perid );
+        $distribution = $distributionDb->_getOne($where);
         $this->view->form = $form;      
-        $form->populate($r);
+        $form->populate($distribution);
 
        //$form->setAction("/distribution/distribution/edit/");
-        if ($this->getRequest()->isPost()) {
+        /*if ($this->getRequest()->isPost()) {
             $formData = $this->getRequest()->getPost();
             $formData['perid'] = $r['perid'];
             if ($form->isValid($formData)) {
@@ -135,20 +126,92 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                         'escid'=>$data['escid'], 
                         'subid'=>$data['subid'], 
                         'perid'=>$data['perid']);
-                print_r($pk);
                 $formData['perid'] = base64_decode($formData['perid']);
                 $formData['modified'] = $this->sesion->uid;
-                $formData['updated'] = date('Y-m-d H:i:s');
-                print_r($formData);
+                $formData['updated'] = date('Y-m-d H:m:s');
 
                 $distr = new Distribution_Model_DbTable_Distribution();
                 $distr->_update($formData,$pk);
-                $this->_helper->redirector('index','distribution','distribution');
+                $this->_redirect('/distribution/distribution/index/anio/'.$anio);
             }else{
                 $form->populate($formData);
+                print_r($formData);
+            }
+        }*/
+    }
+
+    public function savedistributionAction(){
+        $this->_helper->layout()->disablelayout();
+        $distributionDb = new Distribution_Model_DbTable_Distribution();
+        $form           = new Distribution_Form_Distribution();
+
+        $eid   = $this->sesion->eid;
+        $oid   = $this->sesion->oid;
+        $escid = $this->sesion->escid;
+        $subid = $this->sesion->subid;
+        $uid   = $this->sesion->uid;
+
+        if ($this->getRequest()->isPost()) {
+            $formdata = $this->getRequest()->getPost();
+            if ($formdata['whySubmit'] == 'save') {
+                if ($form->isValid($formdata)) {
+                    unset($formdata['whySubmit']);
+                    $where = array( 'eid'   => $eid,
+                                    'oid'   => $oid,
+                                    'escid' => $escid,
+                                    'subid' => $subid,
+                                    'perid' => $formdata['perid'] );
+
+                    $attrib = array('perid');
+
+                    $exist = $distributionDb->_getFilter($where, $attrib);
+
+                    if (!$exist) {
+                        $formdata['eid']       = $eid;
+                        $formdata['oid']       = $oid;
+                        $formdata['escid']     = $escid;
+                        $formdata['subid']     = $subid;
+                        $formdata['register']  = $uid;
+                        $formdata['distid']    = time();
+                        $formdata['datepress'] = date("Y-m-d", strtotime($formdata['datepress']));
+
+                        if ($distributionDb->_save($formdata)) {
+                            echo 'exito';
+                        }else{
+                            echo 'fallo-guardar';
+                        }
+                    }else{
+                        echo 'existe';
+                    }
+                }else{
+                    echo 'falta-datos';
+                }
+            }elseif($formdata['whySubmit'] == 'update'){
+                unset($formdata['whySubmit']);
+                if($formdata['datepress']){
+                    $pk = array(    'eid'    => $eid, 
+                                    'oid'    => $oid, 
+                                    'escid'  => $escid, 
+                                    'subid'  => $subid, 
+                                    'distid' => $formdata['distid'], 
+                                    'perid'  => $formdata['perid'] );
+                    unset($formdata['distid']);
+                    unset($formdata['perid']);
+                    $formdata['datepress'] = date("Y-m-d", strtotime($formdata['datepress']));
+                    $formdata['modified']  = $this->sesion->uid;
+                    $formdata['updated']   = date('Y-m-d H:m:s');
+                    if ($distributionDb->_update($formdata,$pk)) {
+                        echo 'exito';
+                    }else{
+                        echo 'fail-update';
+                    }
+                }else{
+                    echo 'falta-datos';
+                }
             }
         }
     }
+    
 
     public function deleteAction()
     {

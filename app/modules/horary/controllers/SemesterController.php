@@ -8,8 +8,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
  		}
  		$login = $sesion->getStorage()->read();
  		$this->sesion = $login;
- 		require_once 'Zend/Loader.php';
-        Zend_Loader::loadClass('Zend_Rest_Client');
+ 		
 	}
 
 	public function indexAction(){
@@ -92,32 +91,21 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	                $this->view->valhoras=$valhoras;
             	}
 		        
-				$base_url = 'http://172.16.0.210:8080/';
-		        $endpoint = '/'.base64_encode('s1t3m4s').'/'.base64_encode('und4c').'/horary_course';
-		        $data = array(
-		        				'escid' => base64_encode($escid),
-		        				'eid' => base64_encode($eid),
-		        				'oid' =>base64_encode($oid),
-		        				'perid'=>base64_encode($perid),
-		        				'subid'=>base64_encode($subid),
-		        				'semid'=>base64_encode($semid)
-		        				);
-
-		        $client = new Zend_Rest_Client($base_url);
-		        $httpClient = $client->getHttpClient();
-		        $httpClient->setConfig(array("timeout" => 1800));
-		        $response = $client->restget($endpoint,$data);
-		        $lista=$response->getBody();
-		        $data = Zend_Json::decode($lista);
-		        // print_r($data);exit();
+		        $module = 'horary_course';
+			    $parmas = array(
+			        				'escid' => base64_encode($escid),
+			        				'eid' => base64_encode($eid),
+			        				'oid' =>base64_encode($oid),
+			        				'perid'=>base64_encode($perid),
+			        				'subid'=>base64_encode($subid),
+			        				'semid'=>base64_encode($semid)
+			        				);
+			    $server = new Eundac_Connect_Api($module,$parmas);
+			    $data = $server->connectAuth();
 	        	$this->view->horarys=$data; 
-
 	        	$where=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
 	        	$cper= new Api_Model_DbTable_PeriodsCourses();
 	        	$dcur=$cper->_getCoursesxPeriodxspecialityxsemester($where);
-	        	// print_r($dcur);exit();
-	        	// $this->view->dcurso=$dcur;
-
 	        	$len=count($dcur);
 	        	for ($i=0; $i < $len; $i++) {
 	        		$escid=$dcur[$i]['escid'];
@@ -168,10 +156,9 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		        $valhoras[$k+1]=$dho[0]['hora'];
 		    }
 		    $this->view->valhoras=$valhoras;
-		    
-			$base_url = 'http://172.16.0.210:8080/';
-	        $endpoint = '/'.base64_encode('s1t3m4s').'/'.base64_encode('und4c').'/horary_course';
-		    $data = array(
+		    	
+	        $module = 'horary_course';
+		    $parmas = array(
 		        				'escid' => base64_encode($escid),
 		        				'eid' => base64_encode($eid),
 		        				'oid' =>base64_encode($oid),
@@ -179,13 +166,9 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		        				'subid'=>base64_encode($subid),
 		        				'semid'=>base64_encode($semid)
 		        				);
+		    $server = new Eundac_Connect_Api($module,$parmas);
+		    $data = $server->connectAuth();
 		    // print_r($data);
-		    $client = new Zend_Rest_Client($base_url);
-		    $httpClient = $client->getHttpClient();
-		    $httpClient->setConfig(array("timeout" => 1800));
-		    $response = $client->restget($endpoint,$data);
-		    $lista=$response->getBody();
-		    $data = Zend_Json::decode($lista);
 	     
 	        $this->view->horarys=$data;
 	        $spe=array();
@@ -226,12 +209,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	        	}
 	        $this->view->dcurso=$dcur;
 
-        	if ($desc['header']) {
-                $namelogo = $desc['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+        	$namelogo = (!empty($desc['header']))?$desc['header']:"blanco";
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
             
@@ -257,9 +235,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
             
             $co=count($dataim);
             $codigo=$co." - ".$uidim;
-            $h1="h1";
-            $h2="h2";
-            $h3="h3";
+            
 
             $header=$this->sesion->org['header_print'];
             $footer=$this->sesion->org['footer_print'];
@@ -267,9 +243,10 @@ class Horary_SemesterController extends Zend_Controller_Action{
             $header = str_replace("?escuela",$namefinal,$header);
             $header = str_replace("?logo", $namelogo, $header);
             $header = str_replace("?codigo", $codigo, $header);
-            $header = str_replace("h2", $h1, $header);
-            $header = str_replace("h3", $h1, $header);
-            $header = str_replace("h4", $h2, $header);
+            $header = str_replace("h2", "h1", $header);
+            $header = str_replace("h3", "h2", $header);
+            $header = str_replace("h4", "h3", $header);
+            $header = str_replace("11%", "9%", $header);
 
             $this->view->header=$header;
             $this->view->footer=$footer;

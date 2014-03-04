@@ -1,37 +1,66 @@
-<form name="<?php echo $this->fm->getName(); ?>" action="<?php echo $this->fm->getAction(); ?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
-
-  <div class="form-group">
-    <label for="inputEmail1" class="col-lg-2 control-label">Nueva Clave</label>
-    <div class="col-lg-10">
-      <?php echo $this->fm->ncla; ?>
+<form id="frmclave" name="frmclave" action="/admin/password/keychange/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+    <div class="form-group">
+        <label for="inputEmail1" class="col-md-3 control-label">Nueva Clave</label>
+        <div class="col-md-8">
+            <?php echo $this->fm->ncla; ?>
+        </div>
     </div>
-  </div>
-
-  <div class="form-group">
-    <label for="inputEmail1" class="col-lg-2 control-label">Repita Clave</label>
-    <div class="col-lg-10">
-      <?php echo $this->fm->rcla; ?>
-    </div>
-  </div>
-                   
 
     <div class="form-group">
-    <div class="col-lg-10">
-      <h5><p class="text-danger text-center"><?php echo $this->mensaje; ?></p></h5>
+        <label for="inputEmail1" class="col-md-3 control-label">Repita Clave</label>
+        <div class="col-md-8">
+            <?php echo $this->fm->rcla; ?>
+        </div>
+    </div>                   
+    <div id='sms'></div>
+    <input type="hidden" value="<?php echo base64_encode($this->where['eid'])?>" name="eid">
+    <input type="hidden" value="<?php echo base64_encode($this->where['oid'])?>" name="oid">
+    <input type="hidden" value="<?php echo base64_encode($this->where['rid'])?>" name="rid">
+    <input type="hidden" value="<?php echo base64_encode($this->where['uid'])?>" name="uid">
+    <input type="hidden" value="<?php echo base64_encode($this->where['pid'])?>" name="pid">
+    <input type="hidden" value="<?php echo base64_encode($this->where['escid'])?>" name="escid">
+    <input type="hidden" value="<?php echo base64_encode($this->where['subid'])?>" name="subid">
+
+    <div id="sms2"></div>
+    <div class="modal-footer">
+        <button id='guardar' type="button" class="btn btn-success">Guardar</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
     </div>
-  <div>        
-             
-       
-    <div class="form-group">
-    <div class="col-lg-offset-2 col-lg-10">
-      <?php echo $this->fm->guardar; ?>
-    </div>
-  </div>
+</form>
+<script type="text/javascript">
+var mensaje="<?php echo $this->mensaje?>";
 
+$("#guardar").click(function(){ 
+    var url= "/admin/password/keychange/";  
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data:$("#frmclave").serialize(),
+        success: function (data){
+            $("#change").html(data); 
+        }
+    });
+});
 
-    
-    <div style="clear:both" ></div>
-
-</div>
-
-    </form>
+if (mensaje=="1") {
+    $("#sms").html("<center><h4><p class='text-danger'>Rellene los campos...</p></h4></center>");
+};
+if (mensaje=="2"){
+    $("#sms").html("<center><h4><p class='text-danger'>Las contraseñas no coinciden</p></h4></center>");
+};
+if (mensaje=="3"){
+    $('#sms2').html("<center><img src='/img/spinner.gif'> Cargando....</center>");
+    $('#myModal').modal('hide');
+    $('#myModal').on('hidden.bs.modal', function (e) {
+        $("#datos").html("<center><h3><p class='text-success'><span class='glyphicon glyphicon-thumbs-up'></span><b> Contraseña cambiada</b></p></h3></center>");      
+    });
+};
+// var men="<?php echo $this->men?>";
+// if (men=="4") {
+//     $("#datos").html("<center><h4><p class='text-success'>Contraseña cambiada</p></h4></center>");
+//     $('#myModal').modal('hide');
+//     $('#myModal').on('hidden.bs.modal', function (e) {
+//         $("#datos").html("<center><h3><p class='text-success'><span class='glyphicon glyphicon-thumbs-up'></span><b> Contraseña cambiada</b></p></h3></center>");      
+//     });
+// };
+</script>

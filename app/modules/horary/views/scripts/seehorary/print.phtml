@@ -1,38 +1,15 @@
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
 <?php
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start();
-$header='
-<table style="width: 100%;" border="1">
-    <tr>
-        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
-        <th style="text-align: center; font-size: 15px;">
-        FACULTAD DE '.strtoupper($this->faculty).'<br/>
-        ESCUELA DE '.strtoupper($this->spe['esc']).'<br/>
-        '.strtoupper($this->spe['parent']).'
-        </th>        
-    </tr>
-    <tr>
-        <th style="border: 1px solid #000;font-size: 15px;"> HORARIO DOCENTE </th>
-    </tr>
-</table>
-
-    <tr>
-        <td style="text-align: left;font-size: 13px;"><b>Codigo: </b>'.strtoupper($this->uid).'</td>
-    </tr>
-    <tr>
-        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;</td>
-    </tr>
-    <tr>   
-        <td style="text-align: left;font-size: 13px;"><b>Docente: </b>'.strtoupper($this->duser[0]['last_name0']." ".$this->duser[0]['last_name1'].", ".$this->duser[0]['first_name']).'</td>
-    </tr>   
-
-'
 ?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
 
+<div style="font-size: 13px; margin-top:2%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Codigo: </b><?php echo strtoupper($this->uid)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Docente: </b><?php echo strtoupper($this->duser[0]['last_name0']." ".$this->duser[0]['last_name1'].", ".$this->duser[0]['first_name'])?>
+</div>
+
+<div style="text-align: center; font-size:16px; margin-top:2%"><b> HORARIO DOCENTE </b></div> <br/>
 <?php
     $hora=array();
     $j=1;
@@ -444,21 +421,14 @@ else{
 <div class="alert alert-info">No hay registro.</div>    
 <?php
 }
-?>    
-
-<?php 
-
-  $html = ob_get_contents();
+    
+    $html = ob_get_contents();
   
-  // $mpdf = new mPDF('utf-8',array(280,370),'','',10,10,35,10,5,5);
-  $mpdf=new mPDF('win-1252','A4-L','','',15,15,37,5);
-  //$mpdf=new mPDF('win-1252','A4', 0,'', 15, 15,35,'','','', 'P');
-  $mpdf->SetHTMLHeader($header);
-  // $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
-  
-  $mpdf->SetFooter($this->footer);
-  ob_end_clean();
-  $mpdf -> WriteHTML($html);
-  $mpdf->Output('Horario-'.$this->duser[0]['pid'].'.pdf','D');
-  
+    $mpdf=new mPDF('win-1252','A4-L','','',15,15,40,18,5,5);
+    $mpdf->SetHTMLHeader($this->header);  
+    $mpdf->SetHTMLFooter($this->footer);
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('Horario - '.$this->pid.'.pdf','D');
+    // $mpdf->Output();  
 ?>

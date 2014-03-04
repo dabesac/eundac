@@ -25,7 +25,7 @@ class Curricula_ShowController extends Zend_Controller_Action
             $where['oid']=$oid;
             $facultad=$facu->_getAll($where);
             $this->view->facultad=$facultad;
-            if ($rid=="DC" && $this->sesion->infouser['teacher']['is_director']=="S"){
+            if ($rid=="DR" && $this->sesion->infouser['teacher']['is_director']=="S"){
                 $escid=$this->sesion->escid;
                 $this->view->escid=$escid;
                 $facid=$this->sesion->faculty->facid;
@@ -56,7 +56,7 @@ class Curricula_ShowController extends Zend_Controller_Action
             $escuelas=$esc->_getFilter($where);
             $this->view->escuelas=$escuelas;
 
-            if ($rid=="DC" && $this->sesion->infouser['teacher']['is_director']=="S"){
+            if ($rid=="DR" && $this->sesion->infouser['teacher']['is_director']=="S"){
                 $escid=$this->sesion->escid;
                 $this->view->escid=$escid;
             }
@@ -200,12 +200,7 @@ class Curricula_ShowController extends Zend_Controller_Action
             $this->view->namev=$namev;
             $namefinal=$names." <br> ".$namep;
 
-            if ($speciality['header']) {
-                $namelogo = $speciality['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
             
             $fac = array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']);
             $base_fac =  new Api_Model_DbTable_Faculty();        

@@ -11,6 +11,7 @@ body{
 	border:0;
 	border-radius: 0;
 	margin: 0;
+	padding-top: 10px;
 }
 .navbar-nav li p{
 	color: #fff;
@@ -21,10 +22,11 @@ body{
 #form-change{width: 245px}
 
 .container{
-	width: 100%;s
+	width: 100%;
 }
 #wrapper{
 	maring-left: 100px;
+	padding: 30px;
 }
 #footer_fondo{
 	background: #363c46 !important;
@@ -72,7 +74,7 @@ body{
 
 #container_layout{
 	margin-bottom: 70px;
-	overflow: hidden;
+	/*overflow: hidden;*/
 }
 /* .................... ...##loading_overlay##......................../*/
 #loading_overlay{

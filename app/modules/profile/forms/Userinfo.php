@@ -3,39 +3,37 @@ class Profile_Form_Userinfo extends Zend_Form{
 
     public function init(){
         
-        $dni= new Zend_Form_Element_Text('numdoc');
-        $dni->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $dni->setAttrib("maxlength", "8");
-        $dni->setRequired(true)->addErrorMessage('Este campo es requerido');
-        // $dni->setAttrib("title","DNI");
-        $dni->setAttrib("class","form-control");
+        $numdoc = new Zend_Form_Element_Text('numdoc');
+        $numdoc->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $numdoc->setAttrib("class","form-control");
+        $numdoc->setAttrib("title","Numero de Documento");
+        $numdoc->setAttrib("maxlength", "8")->setAttrib("pattern","[0-9]{8}");
 
-        $doctype=new Zend_Form_Element_Select('typedoc');
-        $doctype->removeDecorator('Label')->removeDecorator('HtmlTag')->removeDecorator('Label');
-        $doctype->setRequired(true)->addErrorMessage('Es nesesario que selecciones el estado');
-        $doctype->addMultiOption("D","DNI");
-        $doctype->addMultiOption("P","Pasaporte");
-        $doctype->addMultiOption("C","Carnet Extranjeria");
-        $doctype->setAttrib("class","form-control");
+        $typedoc =new Zend_Form_Element_Select('typedoc');
+        $typedoc->removeDecorator('Label')->removeDecorator('HtmlTag')->removeDecorator('Label');
+        $typedoc->addMultiOption("D","DNI");
+        $typedoc->addMultiOption("P","Pasaporte");
+        $typedoc->addMultiOption("C","Carnet Extranjeria");
+        $typedoc->setAttrib("class","form-control");
 
 
-        $year= new Zend_Form_Element_Text("year");
+        $year = new Zend_Form_Element_Text("year");
         $year->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $year->setAttrib("maxlength", "4")->setAttrib("size", "4");
+        $year->setAttrib("maxlength", "4")->setAttrib("pattern","[0-9]{4}");
         $year->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $year->setAttrib("title","Año");
         $year->setAttrib("class","form-control");
 
         $month= new Zend_Form_Element_Text("month");
         $month->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $month->setAttrib("maxlength", "2")->setAttrib("size", "2");
+        $month->setAttrib("maxlength", "2")->setAttrib("pattern","[0-9]{2}");
         $month->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $month->setAttrib("title","Mes");
         $month->setAttrib("class","form-control");
 
         $day= new Zend_Form_Element_Text("day");
         $day->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $day->setAttrib("maxlength", "2")->setAttrib("size", "2");
+        $day->setAttrib("maxlength", "2")->setAttrib("pattern","[0-9]{2}");
         $day->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $day->setAttrib("title","Dia");
         $day->setAttrib("class","form-control");
@@ -58,11 +56,13 @@ class Profile_Form_Userinfo extends Zend_Form{
 
         $mail_person= new Zend_Form_Element_Text("mail_person");
         $mail_person->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $mail_person->setAttrib("maxlength", "50")->setAttrib("size", "30");
-        $mail_person->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        $mail_person->setAttrib("maxlength", "50");
         $mail_person->setAttrib("title","Email");
         $mail_person->setAttrib("class","form-control");
+<<<<<<< HEAD
         $mail_person->addValidator('EmailAddress',true)->addErroMessage('Direccion electronica no valida');
+=======
+>>>>>>> 1ec601f23f4850111e1fcb7a90b0e1c785f9ee43
 
         $mail_work= new Zend_Form_Element_Text("mail_work");
         $mail_work->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
@@ -70,23 +70,25 @@ class Profile_Form_Userinfo extends Zend_Form{
         $mail_work->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $mail_work->setAttrib("title","Email Work");
         $mail_work->setAttrib("class","form-control");
+<<<<<<< HEAD
         $mail_work->addValidator('EmailAddress',true)->addErrorMessage('Direccion electronica no valida');
+=======
+>>>>>>> 1ec601f23f4850111e1fcb7a90b0e1c785f9ee43
 
         $phone= new Zend_Form_Element_Text("phone");
         $phone->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $phone->setAttrib("maxlength", "10")->setAttrib("size", "30");
+        $phone->setAttrib("maxlength", "6")->setAttrib("pattern","[0-9]{6}");
         $phone->setAttrib("title","Phone");
         $phone->setAttrib("class","form-control");
         $phone->setAttrib("value","No Tiene");
 
         $cellular= new Zend_Form_Element_Text("cellular");
         $cellular->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $cellular->setAttrib("maxlength", "9")->setAttrib("size", "30");
-        $cellular->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
-        $cellular->setAttrib("title","Cellular");
+        $cellular->setAttrib("maxlength", "9")->setAttrib("pattern","[0-9]{9}");
+        $cellular->setAttrib("title","Celular");
         $cellular->setAttrib("class","form-control");
 
         
-        $this->addElements(array($dni,$doctype, $year, $month, $day, $sex, $civil, $mail_person, $mail_work, $phone, $cellular));
+        $this->addElements(array($numdoc, $typedoc, $year, $month, $day, $sex, $civil, $mail_person, $mail_work, $phone, $cellular));
     }
 }

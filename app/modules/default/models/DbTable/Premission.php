@@ -168,6 +168,7 @@ class Default_Model_DbTable_Premission extends Zend_Db_Table_Abstract
 				a.eid = r.eid and a.oid=r.oid and
 				a.mid = r.mid and a.reid = r.reid
 				where
+				a.permission = 'allow' and
 				a.eid = '".$eid."' and
 				a.oid = '".$oid."' and 
 				a.rid in ('".$rid."','".$parent."') 

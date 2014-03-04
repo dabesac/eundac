@@ -57,95 +57,178 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $perid = $this->sesion->period->perid;  
         $eid = $this->sesion->eid;        
         $oid = $this->sesion->oid;
+        $subid = $this->sesion->subid;
         $escid = $this->sesion->escid;
-
+        
         if ($state == null) {
             $pfac='T'.$escid['1'];
             $estados='I';
             $bdu = new Api_Model_DbTable_Registration();        
             $str = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
-            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados);  
+            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados, $subid);  
             $this->view->datos=$datos;
         }elseif ($state) {
             $pfac='T'.$escid['1'];
             $estados = $state;
             $bdu = new Api_Model_DbTable_Registration();        
             $str = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
-            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados);  
+            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados, $subid);  
             $this->view->datos=$datos;
         }
     }
 
-        public function detailAction()
+    public function detailAction()
     {
         try{
+            
+            $this->_helper->layout()->disableLayout();
+
             //Databases
-            $specialityDb = new Api_Model_DbTable_Speciality();
-            $personDb = new Api_Model_DbTable_Users();
-            $coursesRegisterDb = new Api_Model_DbTable_Registrationxcourse();
-            $coursesDb = new Api_Model_DbTable_Course();
-            $teachersDb = new Api_Model_DbTable_Coursexteacher();
+            $specialityDb     = new Api_Model_DbTable_Speciality();
+            $personDb         = new Api_Model_DbTable_Users();
+            $coursesRegisterDb= new Api_Model_DbTable_Registrationxcourse();
+            $registerDb       = new Api_Model_DbTable_Registration();
+            $coursesDb        = new Api_Model_DbTable_Course();
+            $teachersDb       = new Api_Model_DbTable_Coursexteacher();
+            $paymentDb        = new Api_Model_DbTable_Payments();
+            $conditionDb      = new Api_Model_DbTable_Condition();
             //--------------
 
-            $uid = base64_decode($this->getParam('uid'));
-            $pid = base64_decode($this->getParam('pid'));
-            $escid = base64_decode($this->getParam('escid'));
-            $subid = base64_decode($this->getParam('subid'));
+            $uid  = base64_decode($this->_getParam('uid'));
+            $pid  = base64_decode($this->_getParam('pid'));
+            $escid= base64_decode($this->_getParam('escid'));
+            $subid= base64_decode($this->_getParam('subid'));
+            $semid= base64_decode($this->_getParam('semid'));
 
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $perid = $this->sesion->period->perid;
-            
-            $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid);
 
+           
+            //Información de Facultad
+            $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid);
             $faculty = $specialityDb->_getFacspeciality($where);
             $this->view->infoSpeciality = $faculty;
 
-            $where = array( 'eid'=>$eid, 
-                            'oid'=>$oid, 
-                            'uid'=>$uid, 
-                            'pid'=>$pid ,
-                            'escid'=>$escid, 
-                            'subid'=>$subid);
+            $where = array( 'eid'   =>$eid, 
+                            'oid'   =>$oid, 
+                            'uid'   =>$uid, 
+                            'pid'   =>$pid ,
+                            'escid' =>$escid, 
+                            'subid' =>$subid);
             $person = $personDb->_getInfoUser($where);
             $this->view->person = $person;
             
+            //Información de Pago
+            $where = array( 
+                            'eid'   =>$eid, 
+                            'oid'   =>$oid, 
+                            'uid'   =>$uid, 
+                            'pid'   =>$pid,
+                            'escid' =>$escid, 
+                            'subid' =>$subid,
+                            'perid' =>$perid );
+            $attrib = array('date_payment', 'amount');
+            $paymentData = $paymentDb->_getFilter($where, $attrib);
+            $paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
+            $this->view->paymentData = $paymentData;
+
+            //Información de Condición
+            $attrib = array('doc_authorize', 'comments');
+            $condition = $conditionDb->_getFilter($where, $attrib);
+            $this->view->condition = $condition;
+
+
+            //Estado de la Matricula
+            $where = array( 
+                            'eid'   =>$eid, 
+                            'oid'   =>$oid, 
+                            'uid'   =>$uid, 
+                            'pid'   =>$pid,
+                            'escid' =>$escid, 
+                            'subid' =>$subid,
+                            'perid' =>$perid );
+            $attrib = array('state');
+            $stateRegister = $registerDb->_getFilter($where, $attrib);
+            if ($stateRegister[0]['state'] == 'I') {
+                $stateRegister = 'I';
+            }elseif ($stateRegister[0]['state'] == 'M') {
+                $stateRegister = 'M';
+            }elseif ($stateRegister[0]['state'] == 'O') {
+                $stateRegister = 'O';
+            }elseif ($stateRegister[0]['state'] == 'R') {
+                $stateRegister = 'R';
+            }elseif ($stateRegister[0]['state'] == 'B') {
+                $stateRegister = 'B';
+            }
+            $this->view->stateRegister = $stateRegister;
+
             //Cursos Prematriculados
-            $where = array( 'eid'=>$eid, 
-                            'oid'=>$oid, 
-                            'uid'=>$uid, 
-                            'pid'=>$pid,
+            $where = array( 'eid'  =>$eid, 
+                            'oid'  =>$oid, 
+                            'uid'  =>$uid, 
+                            'pid'  =>$pid,
                             'escid'=>$escid, 
                             'subid'=>$subid,
                             'perid'=>$perid,
-                            'state'=>'I' );
-            $attrib = array('courseid', 'turno', 'curid', 'uid', 'pid', 'escid', 'subid');
+                            'state'=>$stateRegister);
+            $attrib = array('courseid', 'turno', 'curid', 'uid', 'pid', 'escid', 'subid', 'curid');
             $courses = $coursesRegisterDb->_getFilter($where, $attrib);
+            $curid = $courses[0]['curid'];
+            $matriculaCondicional = 'No';
 
             $c = 0;
             foreach ($courses as $course) {
-                $attrib = array('name');
-                $where = array( 'eid'=>$eid, 
-                                'oid'=>$oid, 
-                                'escid'=>$escid, 
-                                'subid'=>$subid,
+                //Obteniendo Cursos
+                $attrib = array('courseid', 'curid', 'name', 'credits');
+                $where = array( 
+                                'eid'     =>$eid, 
+                                'oid'     =>$oid, 
+                                'escid'   =>$escid, 
+                                'subid'   =>$subid,
                                 'courseid'=>$course['courseid'],
-                                'curid'=>$course['curid'] );
+                                'curid'   =>$course['curid'] );
                 $coursesName[$c] = $coursesRegisterDb->_getInfoCourse($where, $attrib);
+
+                //Numero de Veces que llevo un curso
+                $attrib = array('perid');
+                $where = array( 
+                                'eid'     =>$eid, 
+                                'oid'     =>$oid, 
+                                'uid'     =>$uid, 
+                                'pid'     =>$pid,
+                                'escid'   =>$escid, 
+                                'subid'   =>$subid,
+                                'courseid'=>$course['courseid'],
+                                'curid'   =>$course['curid'],
+                                'state'   =>'M' );
+                $veces = $coursesRegisterDb->_getFilter($where, $attrib);
+                $j = 0;
+                foreach ($veces as $vez) {
+                    if ($vez['perid']['2'] != 'D' and $vez['perid']['2'] != 'E') {
+                        $j++;
+                    }
+                }
+                if ($j >= 2) {
+                    $matriculaCondicional = 'Si';
+                }
+                $coursesName[$c]['veces'] = $j;
 
                 //Codigo de Profesores
                 $attrib = array('uid', 'pid');
-                $where = array( 'eid'=>$eid, 
-                                'oid'=>$oid, 
-                                'escid'=>$escid, 
-                                'subid'=>$subid,
+                $where = array( 
+                                'eid'     =>$eid, 
+                                'oid'     =>$oid, 
+                                'escid'   =>$escid, 
+                                'subid'   =>$subid,
                                 'courseid'=>$course['courseid'],
-                                'curid'=>$course['curid'],
-                                'turno'=>$course['turno'],
-                                'perid'=>$perid,
-                                'state'=>'A',
-                                'is_main'=>'S' );
+                                'curid'   =>$course['curid'],
+                                'turno'   =>$course['turno'],
+                                'perid'   =>$perid,
+                                'state'   =>'A',
+                                'is_main' =>'S' );
                 $teacher = $teachersDb->_getFilter($where, $attrib);
+
                 $where = array( 'eid'=>$eid, 
                                 'oid'=>$oid, 
                                 'uid'=>$teacher[0]['uid'], 
@@ -154,216 +237,90 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                                 'subid'=>$subid);
                 $teachers[$c] = $teachersDb->_getinfoTeacher($where);
                 
-                /*$where = array( 'escid'=>$escid, 
-                                'uid'=>$uid,
-                                'curid'=>$course['curid'],
-                                'courseid'=>$course['courseid'] );
-                print_r($where);
-                $coursesTimes[$c] = $coursesDb->_getCoursesXStudentXV($where);*/
                 $c++;
             }
+            //Data del Estudiante
+            $dataStudent = array(   'uid'   => $uid,
+                                    'pid'   => $pid,
+                                    'semid' => $semid,
+                                    'escid' => $escid,
+                                    'subid' => $subid,
+                                    'perid' => $perid,
+                                    'eid'   => $eid,
+                                    'oid'   => $oid,
+                                    'curid' => $curid );
+            $this->view->dataStudent = $dataStudent;
+            
+
             $this->view->courses = $courses;
             $this->view->coursesName = $coursesName;
             $this->view->teachers = $teachers;
-
-
-            /*$this->_helper->layout()->disableLayout();
-            $where['uid'] = base64_decode($this->_getParam('uid'));
-            $where['pid'] = base64_decode($this->_getParam('pid'));
-            $where['escid'] = base64_decode($this->_getParam('escid'));
-            $where['subid'] = base64_decode($this->_getParam('subid'));
-            $where['perid'] = $this->sesion->period->perid;
-            $where['eid'] = $this->sesion->eid;    
-            $where['oid'] = $this->sesion->oid;      
-            $this->view->perid=$where['perid'];        
-            // Obtener fecha periodo
-            $infoper = new Api_Model_DbTable_Periods();
-            $infoperiodo = $infoper->_getOne($where);
-            // print_r($infoperiodo);
-            if ($infoperiodo) {
-                $this->view->finimat = $infoperiodo['start_registration'];
-                $this->view->ffinmat = $infoperiodo['end_registration'];
-            }
-            
-            // Obteniendo la facultad
-            $escuela= new Api_Model_DbTable_Speciality();
-            $dataescid=$escuela->_getFacspeciality($where);
-            // print_r($dataescid);
-            if ($dataescid) {
-              $this->view->facultad =$dataescid[0]['nomfac']; 
-            }
-            //Obteniendo la escuela y especialidad(si lo tuviera)
-            if ($dataescid['parent']==""){
-               $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
-            }else{
-                $dato['eid'] = $this->sesion->eid;    
-                $dato['oid'] = $this->sesion->oid;
-                $dato['escid'] = $dataescid['parent']; 
-                $dato['subid'] = $dataescid['sub']; 
-                $esc = $escuela->_getOne($dato);
-                $this->view->escuela=strtoupper($esc['name']);
-                $dataescid=$escuela->_getOne($where);
-                $this->view->especialidad= strtoupper($dataescid['name']);
-            }
-            // //Obtenemos el valor de la matricula
-            $matri = new Api_Model_DbTable_Registration();
-            $rmatri = $matri->_getRegister($where);
-            // print_r($rmatri);
-            if(!$rmatri) return false;
-            $where['regid']=$rmatri['regid'];
-            $this->view->matricula_ = $rmatri;
-            
-            //Obteniendo los datos del alumno
-            $alum = new Api_Model_DbTable_Person();
-            $ralum= $alum->_getOne($where);
-            if ($ralum) $this->view->alumno = $ralum['last_name0']." ".$ralum['last_name1'].", ".$ralum['first_name'];
-            
-            // //Obtenemos los cursos matriculados
-            $lcursos = new Api_Model_DbTable_Registrationxcourse();
-            $listacurso =$lcursos->_getFilter($where);
-            // print_r($listacurso);
-
-            foreach ($listacurso as $cursomas){
-                //Agregar valores al registro de matricula curso para mandar a la vista
-                $where['courseid']=$cursomas['courseid'];
-                $where['curid']=$cursomas['curid'];
-                $where['turno']=$cursomas['turno'];
-
-                $nuevoreg = new Api_Model_DbTable_Course();
-                $rcus = $nuevoreg->_getOne($where);
-                // print_r($rcus);
-                $cursomas['semid'] = $rcus['semid'];
-                $cursomas['credits'] = $rcus['credits'];
-                $cursomas['namecourse'] = $rcus['name'];
-
-                //Obteniendo numero de veces matrocula a un curso
-                // $veces = new Api_Model_DbTable_Course();
-                // $listusuario = $veces ->_getCoursesXStudentXV($cursomas); 
-                // $cursomas['veces'] = intval($listusuario[0]['veces']);
-
-                // $db = Zend_Registry::get('Adaptador1');
-                // $sql2="select courseid,turno,perid from base_registration_course where uid='".$where['uid']."' and perid!='".$where['perid']."' and notafinal!='-3' and notafinal!='-2'";
-                // $curmat = $db->fetchAll($sql2);   
-
-                $curmat =$lcursos->_register($where);
-                $i=0;
-                foreach ($curmat as $row2) {
-                    if($where['courseid']==$row2['courseid']){
-                        $periodo=$row2['perid'];
-                        $p=substr($periodo,2,3);
-                        if($p=='A' or $p=='B' or $p=='N' or $p=='V'){
-                         $i=$i+1;  
-                         }               
-                     }
-                 }
-                $cursomas['veces'] = intval($i);
-                //Sacamos los docentes por curso
-                $bdprofesores = new Api_Model_DbTable_Coursexteacher();        
-                $datosss= $bdprofesores->_getinfoDoc($where);
-                $ndoc=$datosss[0]['nameteacher'];
-                $cursomas['teacherp'] = $ndoc;
-                // print_r($cursomas);      
-                $cantmatr = new Api_Model_DbTable_Registrationxcourse();
-                $numat = $cantmatr->_getCantRegistration($where);
-
-                if ($numat)
-                  $cursomas['nunmatriculados'] = $numat;    
-                
-                $nupremat = $cantmatr->_getCantiPreResgistration($where);
-
-                if ($nupremat)
-                    $cursomas['nunmapretriculados'] = $nupremat;
-                
-                $listacurso1[]= $cursomas;
-            }      
-            // print_r($listacurso1);      
-             $this->view->listacurso = $listacurso1;
-
-            //obtenemos los pagos realizados
-            $pagos = new Api_Model_DbTable_Payments();
-            $rpagos = $pagos->_getOne($where);
-            if ($rpagos){
-                //verificamos fechas de pago y tiempo de pago
-                $this->view->fechapago = $rpagos['date_payment'];
-                $fpago = $this->view->fechapago;
-                $this->view->montopagado = (float)$rpagos['amount'];
-                $where['ratid'] = $rpagos['ratid'];
-                $montoapagar="";
-                $tasa = new Api_Model_DbTable_Rates();
-                $rtm = $tasa->_getOne($where);
-                if ($rtm){
-                    // Verificando el monto a pagar y la fecha de pago
-                    $fechaactual =strtotime($fpago);
-                    $ffn= strtotime($rtm['f_fin_tn']." 11:59:00");
-                    $fi1= strtotime($rtm['f_fin_ti1']." 11:59:00");
-                    $fi2= strtotime($rtm['f_fin_ti2']." 11:59:00");
-                    switch ($fechaactual){                        
-                        case ($fechaactual < $ffn):{
-                            // Esta dentro de la fecha normal                            
-                            $montoapagar = $rtm['t_normal'];                            
-                            break;
-                        }
-                        case ($ffn < $fechaactual && $fechaactual < $fi1):{
-                            // Esta dentro de la fecha normal
-                            $montoapagar = $rtm['t_incremento1'];
-                            break;
-                        }
-                        case ($fi1 < $fechaactual && $fechaactual < $fi2 ):{
-                            // Esta con el primer incremento ( normalmente +50%)
-                            $montoapagar = $rtm['t_incremento2'];
-                            break;
-                            }
-                        default:{
-                            $montoapagar = "Monto no aceptado";
-                            break;
-                            }                        
-                    }
-                    $this->view->montoapagar=(float)$montoapagar ;
-                }                
-            }
-
-            //obtenemos las condiciones de la matricula registradas
-            $condi = new Api_Model_DbTable_Condition();
-            $date['eid']=$where['eid'];
-            $date['oid']=$where['oid'];
-            $date['pid']=$where['pid'];
-            $date['uid']=$where['uid'];
-            $date['escid']=$where['escid'];
-            $date['perid']=$where['perid'];
-            $date['subid']=$where['subid'];
-            $rcondision=$condi->_getFilter($date);
-            // print_r($rcondision);
-            if ($rcondision) $this->view->condision = $rcondision;
-            
-            //Sacamos la lista de pagos del alumno
-            $listapagos = new Api_Model_DbTable_PaymentsDetail();
-            $reg = $listapagos->_getAll($where);
-
-            if ($reg) $this->view->pagosrealizados = $reg;*/
-
-
-
-
+            $this->view->matriculaCondicional = $matriculaCondicional;
         }catch(Exception $ex ){
             print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
         } 
+    }       
+
+
+    public function deleteregisterAction(){
+        $this->_helper->layout()->disableLayout();
+        //Databases
+        $registerDb = new Api_Model_DbTable_Registration();
+        $registerxcourseDb = new Api_Model_DbTable_Registrationxcourse();
+        //________________________
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $perid = $this->sesion->period->perid;
+        $escid = base64_decode($this->_getParam('escid'));
+        $subid = base64_decode($this->_getParam('subid'));
+        $pid = base64_decode($this->_getParam('pid'));
+        $uid = base64_decode($this->_getParam('uid'));
+        $state = base64_decode($this->_getParam('state'));
+        $regid = $uid.$perid;
+
+        $where = array( 
+                        'eid'   => $eid, 
+                        'oid'   => $oid, 
+                        'pid'   => $pid, 
+                        'uid'   => $uid, 
+                        'escid' => $escid, 
+                        'subid' => $subid,
+                        'perid' => $perid,
+                        'regid' => $regid,
+                        'state' => $state );
+
+        $data = array(  
+                        'modified' => $this->sesion->uid,
+                        'updated'  => date('Y-m-d h:m:s') );
+
+        if ($registerxcourseDb->_updatestateregister($data, $where)) {
+            if ($registerDb->_update($data, $where)){
+                $registerDb->_delete($where);
+                echo 'true';
+            }else{
+                echo 'false';
+            }
+        }else{
+            echo 'false';
+        }
     }
 
 
-        public function listcoursependientAction()
-    {
-            $this->_helper->getHelper('layout')->disableLayout();
-           
-            $subid = base64_decode($this->_getParam('subid'));
-            $pid = base64_decode($this->_getParam('pid'));
-            $uid = base64_decode($this->_getParam('uid'));
-            $escid = base64_decode($this->_getParam('escid'));
-            $curid = ($this->_getParam('curid'));
+    public function listcoursependientAction()
+        {
+        $this->_helper->getHelper('layout')->disableLayout();
+       
+        $subid = base64_decode($this->_getParam('subid'));
+        $pid = base64_decode($this->_getParam('pid'));
+        $uid = base64_decode($this->_getParam('uid'));
+        $escid = base64_decode($this->_getParam('escid'));
+        $curid = ($this->_getParam('curid'));
 
-            $eid = $this->sesion->eid;    
-            $oid = $this->sesion->oid;
-            $perid= $this->sesion->period->perid;
-    
+        $eid = $this->sesion->eid;    
+        $oid = $this->sesion->oid;
+        $perid= $this->sesion->period->perid;
+
         require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
         $base_url = 'http://localhost:8080/';
@@ -479,7 +436,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                             'regid'=>$regid,
                             'perid'=>$perid );
 
-            $data = array(  'turno'=>$turno,
+            $data = array(  'modified'=>$this->sesion->uid,
+                            'turno'=>$turno,
                             'updated'=>date('Y-m-d h:m:s') );
 
             $registercourseDb = new Api_Model_DbTable_Registrationxcourse();  
@@ -542,9 +500,11 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $where['oid'] = $this->sesion->oid;
             $where['regid']=$where['uid'].$where['perid'];
 
-
+            $data = array(  'modified'=>$this->sesion->uid,
+                            'updated'=>date('Y-m-d h:m:s'),
+                            'state'=>'B' );
             $bdmatricula_curso = new Api_Model_DbTable_Registrationxcourse();  
-            $bdmatricula_curso ->_delete($where);        
+            $bdmatricula_curso ->_update($data, $where);        
 
             //$this->_helper->_redirector("detail","registerstudent","register",array('uid' => base64_encode($where['uid']) ,'pid' => base64_encode($where['pid']),'escid' => base64_encode($where['escid']),'subid' => base64_encode($where['subid'])));
 
@@ -553,83 +513,183 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         } 
     }
 
-        public function validateAction()
-    {
-        try{
-            $this->_helper->layout()->disableLayout();
-            $where['uid'] = base64_decode($this->_getParam('uid'));
-            $where['pid'] = base64_decode($this->_getParam('pid'));
-            $where['escid'] = base64_decode($this->_getParam('escid'));
-            $where['subid'] = base64_decode($this->_getParam('subid'));
-            $where['perid'] = $this->sesion->period->perid;
-            $flag = base64_decode($this->_getParam('flag'));
-            $where['regid']=$where['uid'].$where['perid'];
-            $where['eid'] = $this->sesion->eid;        
-            $where['oid'] = $this->sesion->oid;        
+    public function validateAction(){
 
-            $bdmatricula_curso = new Api_Model_DbTable_Registrationxcourse();        
-            $bdmatricula = new Api_Model_DbTable_Registration(); 
-            $data= $bdmatricula->_getOne($where);
-            //Verifico que la matricula exista
-            if ($data){
-                // Creo el STR que ira despues del WHERE
-                $str=" eid='".$where['eid']."' and oid=''".$where['oid']."' and subid='".$where['subid']."' and escid='".$where['escid']."' and uid='".$where['uid']."' and pid='".$where['pid']."' and perid='".$where['perid']."' and regid= '".$where['regid']."' ";
-                //Si el Valor es E se eliminar
-                    if (trim($flag)=="E"){
+        $this->_helper->layout()->disableLayout();
+        //Databases
+        $registerDb = new Api_Model_DbTable_Registration();
+        $registerxcourseDb = new Api_Model_DbTable_Registrationxcourse();
+        //________________________
 
-                            $DataUsuario['state']="B";
-                            $DataUsuario['updated']=date("Y-m-d h:m:s");
-                            $DataUsuario['modified']=$this->sesion->uid; 
-                            if ($bdmatricula->_update($DataUsuario,$where)){
-                            $bdmatricula->_delete($where);
-                            $this->view->msgeliminar="La matricula fue eliminada correctamente";}             
-                    }
-                    else{
-                        //Asigno los valores al array para la modiciacion
-                        $DataUsuario['state']=trim($flag);
-                        $DataUsuario['updated']=date("Y-m-d h:m:s");
-                        $DataUsuario['modified']=$this->sesion->uid; 
-                        if ($bdmatricula->_update($DataUsuario,$where)){
-                            //si actualizo correctamente la matricula, ahora actualizo los cursos de la matricula  
-                                $DataUsuario1['state']=trim($flag);
-                                $DataUsuario1['updated']=date("Y-m-d h:m:s");
-                                $DataUsuario1['modified']=$this->sesion->uid;
-                                $DataUsuario1['approved']=$this->sesion->uid; 
-                                $DataUsuario1['approved_date']=date("Y-m-d h:m:s");                                  
-                            if ($bdmatricula_curso->_updatestateregister($DataUsuario1,$where)){
-                                $this->_helper->_redirector("detail","registerstudent","register",array('uid' => base64_encode($where['uid']) ,'pid' => base64_encode($where['pid']),'escid' => base64_encode($where['escid']),'subid' => base64_encode($where['subid'])));
-                                }else{
-                                    print "No se pudo actualizar los cursos de la matricula";
-                                }
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $perid = $this->sesion->period->perid;
+        $escid = base64_decode($this->_getParam('escid'));
+        $subid = base64_decode($this->_getParam('subid'));
+        $pid = base64_decode($this->_getParam('pid'));
+        $uid = base64_decode($this->_getParam('uid'));
+        $state = base64_decode($this->_getParam('state'));
+        $regid = $uid.$perid;
 
-                        $usercampus = new Api_Model_DbTable_Campususer();
-                        $usercursoscampus = new Api_Model_DbTable_Campususerxcourse();
-                        $wheres['username']= $where['uid'];
-                        $data = $usercampus->_getOne($wheres);
-                        $datx['user_id'] = $data['user_id'];
-                        $datx['status'] = '5';
-                        
+        $where = array( 'eid'=>$eid,
+                        'oid'=>$oid,
+                        'escid'=>$escid, 
+                        'subid'=>$subid, 
+                        'perid'=>$perid, 
+                        'regid'=>$regid,
+                        'pid'=>$pid,
+                        'uid'=>$uid,
+                        'state'=>$state );
 
-                        $datos= $bdmatricula_curso->_getFilter($where);
-                        foreach ($datos as $cursos) {
-                                 $courseid=$cursos['courseid'];
-                                 $curid=$cursos['curid'];
-                                 $turno=$cursos['turno'];
-                                 $datx['course_code']=$curid.$courseid.$turno;
-                                 $save = $usercursoscampus->_save($datx);
-                                 // print_r($save);
-                        }
-                    
-                        }else{
-                            print "No se pudo actualizar la matricula";
-                        }
-                    }
+        $data = array(  'modified'=>$this->sesion->uid,
+                        'updated'=>date('Y-m-d h:m:s'),
+                        'state'=>'M' );
+        if ($registerxcourseDb->_updatestateregister($data, $where)) {
+            if ($registerDb->_update($data, $where)){
+                $json = array('status' => true );
+            }else{
+                $json = array('status' => false );
+                $data = array(  'modified'=>'',
+                                'updated'=>'',
+                                'state'=>'I' );
+                $registerxcourseDb->_updatestateregister($data, $where);
             }
-        }catch(Exception $ex ){
-            print ("Error Controlador Mostrar Datos: ".$ex->getMessage());
-        } 
+        }else{
+            $json = array('status' => false );
+        }
+        
+        $json= Zend_Json::encode($json);
+        $this->view->json=$json;
     }
 
+    public function observedregisterAction(){
+
+        $this->_helper->layout()->disableLayout();
+        //Databases
+        $registerDb = new Api_Model_DbTable_Registration();
+        $registerxcourseDb = new Api_Model_DbTable_Registrationxcourse();
+        //________________________
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $perid = $this->sesion->period->perid;
+        $escid = base64_decode($this->getParam('escid'));
+        $subid = base64_decode($this->getParam('subid'));
+        $pid = base64_decode($this->getParam('pid'));
+        $uid = base64_decode($this->getParam('uid'));
+        $state = base64_decode($this->_getParam('state'));
+        $regid = $uid.$perid;
+
+        $where = array( 'eid'=>$eid,
+                        'oid'=>$oid,
+                        'escid'=>$escid, 
+                        'subid'=>$subid, 
+                        'perid'=>$perid, 
+                        'regid'=>$regid,
+                        'pid'=>$pid,
+                        'uid'=>$uid,
+                        'state'=>$state );
+
+        $data = array(  'modified'=>$this->sesion->uid,
+                        'updated'=>date('Y-m-d h:m:s'),
+                        'state'=>'O' );
+
+
+        if ($registerxcourseDb->_updatestateregister($data, $where)) {
+            if ($registerDb->_update($data, $where)){
+                echo 'true';
+            }else{
+               echo 'falso';
+            }
+        }else{
+            echo 'falso';
+        }
+    }
+
+    public function reservedregisterAction(){
+
+        $this->_helper->layout()->disableLayout();
+        //Databases
+        $registerDb = new Api_Model_DbTable_Registration();
+        $registerxcourseDb = new Api_Model_DbTable_Registrationxcourse();
+        //________________________
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $perid = $this->sesion->period->perid;
+        $escid = base64_decode($this->getParam('escid'));
+        $subid = base64_decode($this->getParam('subid'));
+        $pid = base64_decode($this->getParam('pid'));
+        $uid = base64_decode($this->getParam('uid'));
+        $state = base64_decode($this->_getParam('state'));
+
+        $regid = $uid.$perid;
+
+        $where = array( 'eid'=>$eid,
+                        'oid'=>$oid,
+                        'escid'=>$escid, 
+                        'subid'=>$subid, 
+                        'perid'=>$perid, 
+                        'regid'=>$regid,
+                        'pid'=>$pid,
+                        'uid'=>$uid,
+                        'state'=>$state );
+
+        $data = array(  'modified'=>$this->sesion->uid,
+                        'updated'=>date('Y-m-d h:m:s'),
+                        'state'=>'R' );
+
+
+        if ($registerxcourseDb->_updatestateregister($data, $where)) {
+            if ($registerDb->_update($data, $where)){
+                echo 'true';
+            }else{
+               echo 'falso';
+            }
+        }else{
+            echo 'falso';
+        }
+    }
+
+    public function coursespercurriculumAction(){
+        $this->_helper->layout()->disableLayout();
+        $coursesDb = new Api_Model_DbTable_Registrationxcourse();
+        
+        $pid   = $this->_getParam('pid');
+        $uid   = $this->_getParam('uid');
+        $escid = $this->_getParam('escid');
+        $subid = $this->_getParam('subid');
+        $curid = $this->_getParam('curid');
+
+        $eid   = $this->sesion->eid;    
+        $oid   = $this->sesion->oid;
+        $perid = $this->sesion->period->perid;
+
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'perid' => $perid,
+                        'escid' => base64_decode($escid),
+                        'subid' => base64_decode($subid),
+                        'pid'   => base64_decode($pid),
+                        'uid'   => base64_decode($uid) );
+        $attrib = array('courseid');
+        $courses = $coursesDb->_getFilter($where, $attrib);
+        $this->view->courses = $courses;
+
+        $data = array(  'eid' => base64_encode($eid),
+                        'oid' => base64_encode($oid),
+                        'perid' => base64_encode($perid),
+                        'pid' => $pid,
+                        'uid' => $uid,
+                        'escid' => $escid,
+                        'subid' => $subid,
+                        'curid' => $curid );
+
+        $server = new Eundac_Connect_Api('validate', $data);
+        $data = $server->connectAuth();
+        $this->view->data = $data;
+                
+    }
 
         public function printAction(){
         try{

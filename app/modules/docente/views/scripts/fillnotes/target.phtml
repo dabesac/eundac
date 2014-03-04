@@ -10,31 +10,22 @@
 <script type="text/javascript" src="/js/notes/notes-target.js"></script>
 <script type="text/javascript" src="/js/notes/jquery.jstepper.js"></script>
 
-<?php $infocourse=$this->infocourse;?>
-<!-- header notes-->
-<div class='row' id='header-info'>
-	<div class='col-xs-8 header-registration-course'>
-		<h4 class='text-header-registration'> <span class='glyphicon glyphicon-list' style='color:#1abc9c;'></span> 
-			<?php if($this->partial==1){
-				echo "Primer Parcial ";
-			}?>
-			<?php if($this->partial==2){
-				echo "Segundo Parcial";
-			}?>
+<?php $infocourse=$this->infocourse;
+if($this->partial==1) {
+    $partial_text ="Llenado Primer Parcial";
+}
+if($this->partial==2) {
+    $partial_text ="Llenado Segundo Parcial";
+}
 
-			<?php echo $infocourse['name']?> Turno <?php echo $this->turno?></h4>
-		
-	</div>
-	
-	<div class="col-md-4">
-        <a id="backMainfromNotes" href="/docente/notas/index" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
-		<?php if ($this->state_record == 'A' || $this->state_record == 'B') { ?>
-			<buttom  class='btn btn-info' id='save_notes' disabled ><span class='glyphicon glyphicon-save'></span> Guardar</buttom>
-		
-		<buttom  class='btn btn-danger' id='closure-record'><span class='glyphicon  glyphicon-log-out'></span> Cerrar Acta</buttom>
-		<?php }?>
-	</div>
-</div>
+$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> '. $partial_text.' ' .$infocourse['name'].' Turno '.$this->turno.'');
+
+ if ($this->state_record == 'A' || $this->state_record == 'B') { 
+        $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+                            <buttom  class="btn btn-info" id="save_notes" disabled ><span class="glyphicon glyphicon-save"></span> Guardar</buttom><buttom  class="btn btn-danger" id="closure-record"><span class="glyphicon  glyphicon-log-out"></span> Cerrar Acta</buttom>
+                            ');
+}?>
+
 <!-- end header-->
 
 

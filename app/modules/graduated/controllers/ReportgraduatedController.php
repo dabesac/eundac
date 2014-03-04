@@ -18,12 +18,16 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
     public function indexAction()
     {
         try {
+            //DataBases
+            $schoolDb = new Api_Model_DbTable_Speciality();
+            $facultyDb = new Api_Model_DbTable_Faculty();
+            //_____________________
+            $haveSpeciality = 'No';
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $rid = $this->sesion->rid;
             $facid = $this->sesion->faculty->facid;
             $escid = $this->sesion->escid;
-            $schoolDb = new Api_Model_DbTable_Speciality();
             $is_director = $this->sesion->infouser['teacher']['is_director'];
             if ($rid=="DC" && $is_director=="S"){
                 $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid);
@@ -35,6 +39,17 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                     $specialityName = '';
                 }
 
+               
+                $where = array('eid'=>$eid, 'oid'=>$oid, 'state'=>'A');
+                $attrib = array('parent', 'name');
+                $parents = $schoolDb->_getFilter($where, $attrib);
+                foreach ($parents as $parent) {
+                    if ($parent['parent']['0'] == $escid['0']) {$haveSpeciality = 'Si';
+                        break;
+                    }
+                }
+                $this->view->haveSpeciality = $haveSpeciality;
+
                 $schoolName = $this->sesion->speciality->name;
                 $this->view->schoolName = $schoolName;
                 $this->view->specialityName = $specialityName;
@@ -42,7 +57,25 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                 $rid="DIREC";
                 $this->view->escid=$escid;        
             }
-            if ($rid=="RF" || $rid=="DIREC") $this->view->facid=$facid;
+            if ($rid=="RF" || $rid=="DIREC") {
+                $this->view->facid=$facid;
+                $where = array('eid'=>$eid, 'oid'=>$oid, 'facid'=>$facid);
+                $attrib = array('name');
+                $facultyName = $facultyDb->_getFilter($where, $attrib);
+                $this->view->facultyName = $facultyName;
+
+                $where = array('eid'=>$eid, 'oid'=>$oid, 'state'=>'A');
+                $attrib = array('parent', 'name');
+                $parents = $schoolDb->_getFilter($where, $attrib);
+                foreach ($parents as $parent) {
+                    if ($parent['parent']['0'] == $escid['1']) {
+                        $haveSpeciality = 'Si';
+                        break;
+                    }
+                }
+                $this->view->haveSpeciality = $haveSpeciality;
+            }
+
             $where = array('eid' => $eid, 'oid' => $oid, 'state' => 'A');
             $fac= new Api_Model_DbTable_Faculty();
             $facultad=$fac->_getFilter($where,$attrib=null,$orders=null);
