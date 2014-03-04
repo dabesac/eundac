@@ -355,6 +355,10 @@
 
 
     //Navegación
+    $('#printRegister').click(function(){
+        $('.modalRegister').modal('hide');
+    });
+
     $('#conditionInfo').slideUp();
     $('#condition').hover(function(){
         $('#conditionInfo').slideToggle();
@@ -393,7 +397,9 @@
                 var i   = 1;
                 $("#students li").each(function(){
                     var classli = $(this).attr('class');
-                    if (classli != 'hidden') {
+                    var cssli = $(this).css('display');
+                    var filtradoli = $(this).attr('filtrado');
+                    if (classli != 'hidden' && cssli != 'none' && !filtradoli) {
                         $('#studentNum'+[i]).html(num);
                         num++;
                     };
@@ -428,12 +434,13 @@
                     $('#stateRegister, #confirmDelete').addClass('hidden');
                     $('#waitingSpinner').html('');
                     $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
-                    stateReg = 'M';
                     var num = 1;
                     var i   = 1;
                     $("#students li").each(function(){
                         var classli = $(this).attr('class');
-                        if (classli != 'hidden') {
+                        var cssli = $(this).css('display');
+                        var filtradoli = $(this).attr('filtrado');
+                        if (classli != 'hidden' && cssli != 'none' && !filtradoli) {
                             $('#studentNum'+[i]).html(num);
                             num++;
                         };
@@ -464,12 +471,13 @@
                     $('.iluminate, #studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('warning');
                     $('#waitingSpinner').html('');
                     $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
-                    stateReg = 'M';
                     var num = 1;
                     var i   = 1;
                     $("#students li").each(function(){
                         var classli = $(this).attr('class');
-                        if (classli != 'hidden') {
+                        var cssli = $(this).css('display');
+                        var filtradoli = $(this).attr('filtrado');
+                        if (classli != 'hidden' && cssli != 'none' && !filtradoli) {
                             $('#studentNum'+[i]).html(num);
                             num++;
                         };
@@ -500,12 +508,13 @@
                     $('.iluminate, #studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('info');
                     $('#waitingSpinner').html('');
                     $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
-                    stateReg = 'M';
                     var num = 1;
                     var i   = 1;
                     $("#students li").each(function(){
                         var classli = $(this).attr('class');
-                        if (classli != 'hidden') {
+                        var cssli = $(this).css('display');
+                        var filtradoli = $(this).attr('filtrado');
+                        if (classli != 'hidden' && cssli != 'none' && !filtradoli) {
                             $('#studentNum'+[i]).html(num);
                             num++;
                         };

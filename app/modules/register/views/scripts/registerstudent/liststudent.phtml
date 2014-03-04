@@ -43,7 +43,7 @@
                     <?php
                         $url= "/register/registerstudent/detail/uid/".base64_encode($datos['uid'])."/pid/".base64_encode($datos['pid'])."/escid/".base64_encode($datos['escid'])."/subid/".base64_encode($datos['subid'])."/semid/".base64_encode($datos['semid']);
                     ?>  
-                    <a id="detailRegisterButton<?php echo $datos['uid'].$datos['pid'] ?>" data-toggle="modal" data-target=".bs-example-modal-lg" class="text-success" href="##">
+                    <a id="detailRegisterButton<?php echo $datos['uid'].$datos['pid'] ?>" data-toggle="modal" data-target=".modalRegister" class="text-success" href="##">
                         <span class="glyphicon glyphicon-send"></span>
                     </a>
                     <script>
@@ -93,7 +93,7 @@
             background-color : #d9534f;
         }
     </style>
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal fade modalRegister" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div id="detailModal" class="modal-content">
                 
@@ -122,13 +122,6 @@
             $('#despliega').removeAttr('disabled');
             $('#coursesperCurriculum').removeClass('abierto');
         });
-
-        var num = 1;
-        $("#students li").each(function(){
-            $('#studentNum'+[num]).html(num);
-            num++;
-        })
-       
     </script>
     <?php }else{?>
         <br>
