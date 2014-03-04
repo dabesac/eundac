@@ -102,7 +102,7 @@ $nameall1=strtoupper($name1['last_name0'])." ".strtoupper($name1['last_name1']).
             </tr>
         </table>
 
-        <p style='text-align:center; margin-top:20%; margin-left:35%; width:200px ; border-top: solid 1px #000'><?php echo $nameall?><br><span style="border: none; font-weight: bold;">DIRECTOR</span></p>
+        <p style='text-align:center; margin-top:20%; margin-left:35%; width:200px ; border-top: solid 1px #000'><?php echo $nameall?><br><span style="border: none; font-weight: bold;">DIRECTOR(A)</span></p>
     <?php
     }
     
@@ -117,7 +117,7 @@ $nameall1=strtoupper($name1['last_name0'])." ".strtoupper($name1['last_name1']).
     
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    // $mpdf->Output('RecordNotas -'.$this->person['pid'].'.pdf','D');
-    $mpdf -> Output();  
+    $mpdf->Output('CARGA ASIGNADA -'.$name1['pid'].'.pdf','D');
+    // $mpdf -> Output();  
 
 ?>

@@ -176,7 +176,7 @@
                         <center>
                             <?php
                             if ($teacher['courseasig']) {   ?>
-                                <a href="/distribution/distribution/printreportdistri/escid/<?php print base64_encode($teacher['escid'])?>/uid/<?php print base64_encode($teacher['uid'])?>/pid/<?php print base64_encode($teacher['pid'])?>/distid/<?php echo base64_encode($this->distid)?>/perid/<?php echo base64_encode($this->perid)?>" target="_blank" rel="tooltip" title="Asignar Horarios"><span class="glyphicon glyphicon-print"></span></a>
+                                <a href="/distribution/distribution/printreportdistri/subid/<?php echo base64_encode($teacher['subid'])?>/escid/<?php print base64_encode($teacher['escid'])?>/uid/<?php print base64_encode($teacher['uid'])?>/pid/<?php print base64_encode($teacher['pid'])?>/distid/<?php echo base64_encode($this->distid)?>/perid/<?php echo base64_encode($this->perid)?>" target="_blank" rel="tooltip" title="Imprimir carga"><span class="glyphicon glyphicon-print"></span></a>
                             <?php
                             }
                             else{ ?>
