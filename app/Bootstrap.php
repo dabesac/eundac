@@ -60,6 +60,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 ->setPrefix("<div class=\"pull-left\">\n")
                 ->setSeparator("</div>");
     }
+    
+    
+   
             
-}
+}       
 

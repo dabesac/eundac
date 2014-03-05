@@ -18,6 +18,7 @@ class Docente_IndexController extends Zend_Controller_Action {
     public function indexAction()
     {
       try{
+        echo base64_encode('14A');
             $tb_periods = new Api_Model_DbTable_Periods();
             $where_1 = array(
                     'eid'=>$this->sesion->eid,
@@ -174,7 +175,7 @@ class Docente_IndexController extends Zend_Controller_Action {
         try{
             $this->_helper->layout()->disableLayout(); 
                    
-            $perid = $this->_getParam('perid','13A');
+            $perid = $this->_getParam('perid','13B');
             $where = array(
                         'eid' => $this->sesion->eid,
                         'oid'   =>$this->sesion->oid,
