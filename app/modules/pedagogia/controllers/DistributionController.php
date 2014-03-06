@@ -16,27 +16,31 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
     	//echo "hfh";
     }
 
-    public function viewAction()
-    {	
-    	try
-    	{
+    public function viewAction(){	
+    	try{
+            
             $this->_helper->layout()->disablelayout();
-
     		$eid=$this->sesion->eid;
     		$oid=$this->sesion->oid;
     		$perid=$this->_getParam('perid');
 
-    		$distri= new Distribution_Model_DbTable_Distribution();
-    		$where=array("eid"=>$eid, "oid"=>$oid,"perid"=>$perid);
-    		$order=array('escid');
-    		$dis=$distri->_getFilter($where,$order);
+            $distri= new Distribution_Model_DbTable_Distribution();
+            $where=array("eid"=>$eid, "oid"=>$oid,"perid"=>$perid);
+            $order=array('escid');
+            $dis=$distri->_getFilter($where,$attrib=null,$order);
+            $len=count($dis);
 
-    		$this->view->dis=$dis;
+            $dbescuela= new Api_Model_DbTable_Speciality();
+            $where1=array('eid'=>$eid,'oid'=>$oid);
 
-    		//print_r($dis);
+            for ($i=0; $i < $len; $i++) { 
+                $where1['escid']=$dis[$i]['escid'];
+                $where1['subid']=$dis[$i]['subid'];
+                $datae=$dbescuela->_getOne($where1);
+                $dis[$i]['name']=$datae['name'];
+            }
+            $this->view->dis=$dis;
 
-    		//echo $eid;
-    		//echo $perid;    	
     	}catch(Exception $ex){
             print "Error: Cargar ".$ex->getMessage();
 

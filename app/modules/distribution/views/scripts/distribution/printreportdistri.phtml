@@ -2,6 +2,7 @@
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start();
+$date=$this->dateact;
 $name1=$this->dataper;
 $name=$this->dataper1;
 $nameall=strtoupper($name['last_name0'])." ".strtoupper($name['last_name1']).", ".$name['first_name'];
@@ -10,11 +11,13 @@ $nameall1=strtoupper($name1['last_name0'])." ".strtoupper($name1['last_name1']).
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
 <div>
-    <div style="text-align:left; font-size:12px;"><b>Docente: </b><?php echo $nameall1?></div>
 </div>
 <div style="margin-top:15px">
-    <h2 style="text-align:center">MEMORÁNDUM PERIODO <?php echo $this->perid?></h2>
-    Estimado docente este periodo tiene asignado horas académicas y labores administrativas esperamos que lo desarrolle con total normalidad. Para el Beneficio de la escuela.
+    <h2 style="text-align:center"><u>MEMORÁNDUM Nº <?php echo $this->conte."-".$this->anio?></u></h2>
+    <div style="text-align:left; font-size:12px;"><b>A  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;</b><?php echo $nameall1?></div>
+    <div style="text-align:left; font-size:12px;"><b>ASUNTO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;</b>POSESIÓN DE CARGO - <?php echo $this->perid?></div>
+    <div style="text-align:left; font-size:12px;"><b>FECHA &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;</b><?php echo $date?></div>
+    <p style='border-top: solid 1px #000'><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A través del presente remito posición de CARGO, asignado para el presente periodo academico <?php echo $this->perid?>, de acuerdo a la distribución académica:</p>
     <h3 style="text-align:center; margin-top:6%"> CARGA ACADÉMICA Y ADMINISTRATIVA</h3>
 </div> 
 </br>
@@ -34,9 +37,9 @@ $nameall1=strtoupper($name1['last_name0'])." ".strtoupper($name1['last_name1']).
                 <th class='small'>Turno</th>
                 <th class='small'>Sem.</th>
                 <th class='small'>Grupos</th>
-                <th class='small'>#H.T</th>
-                <th class='small'>#H.P</th>
-                <th class='small-50'>#T.H</th>
+                <th class='small'>H.T</th>
+                <th class='small'>H.P</th>
+                <th class='small-50'>T.H</th>
             </tr>
             <?php    
             foreach ($this->cursosasignados as $academico) {
@@ -75,7 +78,7 @@ $nameall1=strtoupper($name1['last_name0'])." ".strtoupper($name1['last_name1']).
             <tr>
                 <th class='small-50'>#</th>
                 <th >Labor Administrativa</th>
-                <th class='small-100'>#Horas</th>
+                <th class='small-100'>Horas</th>
             </tr>
             <?php    
             foreach ($this->administrativas as $administrativas) {
@@ -101,8 +104,10 @@ $nameall1=strtoupper($name1['last_name0'])." ".strtoupper($name1['last_name1']).
                 <th><h2><?php echo $sumha+$sumhad?></h2></th>
             </tr>
         </table>
+        <p style="margin-top:2%">Seguro de su gentil atención y cumplimiento me suscribo de usted.</p>
+        <p><i><b>Atentamente,</b></i></p>
 
-        <p style='text-align:center; margin-top:20%; margin-left:35%; width:200px ; border-top: solid 1px #000'><?php echo $nameall?><br><span style="border: none; font-weight: bold;">DIRECTOR(A)</span></p>
+        <p style='text-align:center; margin-top:10%; margin-left:35%; width:200px ; border-top: solid 1px #000'><?php echo $nameall?><br><span style="border: none; font-weight: bold;">DIRECTOR(A)</span></p>
     <?php
     }
     
