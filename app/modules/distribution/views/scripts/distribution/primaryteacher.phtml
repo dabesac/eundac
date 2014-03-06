@@ -10,6 +10,7 @@
             <th><center>Dedicación</center></th>       
             <th><center>Asignar Curso</center></th>
             <th><center>Asignar Horario</center></th>
+            <th><center>Carga Académica</center></th>
         </tr>
         <?php
         $i=1;
@@ -166,6 +167,20 @@
                             }
                             else{ ?>
                                 <a><span rel="tooltip" title="Deshabilitado" class="glyphicon glyphicon-ban-circle"></span></a>
+                            <?php    
+                            }
+                            ?>
+                        </center>
+                    </td>
+                    <td>
+                        <center>
+                            <?php
+                            if ($teacher['courseasig']) {   ?>
+                                <a href="/distribution/distribution/printreportdistri/subid/<?php echo base64_encode($teacher['subid'])?>/escid/<?php print base64_encode($teacher['escid'])?>/uid/<?php print base64_encode($teacher['uid'])?>/pid/<?php print base64_encode($teacher['pid'])?>/distid/<?php echo base64_encode($this->distid)?>/perid/<?php echo base64_encode($this->perid)?>" target="_blank" rel="tooltip" title="Imprimir carga"><span class="glyphicon glyphicon-print"></span></a>
+                            <?php
+                            }
+                            else{ ?>
+                                <a href="#"><span rel="tooltip" title="Deshabilitado" class="glyphicon glyphicon-ban-circle"></span></a>
                             <?php    
                             }
                             ?>

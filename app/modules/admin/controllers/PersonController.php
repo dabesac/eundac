@@ -48,6 +48,7 @@ class Admin_PersonController extends Zend_Controller_Action{
 
  	public function newAction(){
  		try {
+            $this->_helper->layout()->disableLayout();
  			$eid=$this->sesion->eid;
  			$register=$this->sesion->uid;
  			$fm=new Admin_Form_Personnew();
@@ -58,6 +59,7 @@ class Admin_PersonController extends Zend_Controller_Action{
                 
                 if ($fm->isValid($frmdata))
                 {                    
+                    $this->view->pid=$frmdata['pid'];
                     unset($frmdata['Guardar']);
                     trim($frmdata['last_name0']);
                     trim($frmdata['last_name1']);
@@ -68,14 +70,10 @@ class Admin_PersonController extends Zend_Controller_Action{
                     $frmdata['location']='-';
                     $frmdata['created']=date('Y-m-d h:m:s');
                     $frmdata['register']=$register;                  
-                    $reg_= new Api_Model_DbTable_Person();
-                    // print_r($frmdata);exit();
-                    $reg_->_save($frmdata);
-                    $this->_redirect("/admin/person/");                           
-                }
-                else
-                {
-                    echo "Ingrese nuevamente por favor";
+                    $reg_= new Api_Model_DbTable_Person();                          
+                    if ($reg_->_save($frmdata)) {
+                        $this->view->valor=1;
+                    }
                 }
             }
  			
@@ -86,6 +84,7 @@ class Admin_PersonController extends Zend_Controller_Action{
 
     public function updatepersonAction(){
         try {
+            $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $modified=$this->sesion->uid;
             $pid=base64_decode($this->_getParam('pid'));
@@ -95,10 +94,11 @@ class Admin_PersonController extends Zend_Controller_Action{
             $fm=new Admin_Form_Personnew();
             $fm->populate($data);
             $fm->pid->setAttrib('readonly',true);
-            $this->view->fm=$fm;
             if ($this->getRequest()->isPost()) {
                 $frmdata=$this->getRequest()->getPost();
+                $frmdata['pid']=base64_decode($frmdata['pid']);
                 if ($fm->isValid($frmdata)) {
+                    $this->view->pid=$frmdata['pid'];
                     unset($frmdata['Actualizar']);
                     trim($frmdata['last_name0']);
                     trim($frmdata['last_name1']);
@@ -109,14 +109,20 @@ class Admin_PersonController extends Zend_Controller_Action{
                     $pk['eid']=$eid;
                     $pk['pid']=$pid;                   
                     $reg_= new Api_Model_DbTable_Person();
-                    $reg_->_update($frmdata,$pk);
-                    $this->_redirect("/admin/person/");
+                    if ($reg_->_update($frmdata,$pk)) {
+                        $this->view->clave=3;
+                    }
+                    // $this->_redirect("/admin/person/");
                 }
                 else
                 {
                     echo "Ingrese nuevamente por favor";
                 }
-            }           
+            }
+            else{
+                $this->view->pid=$pid;
+            }         
+            $this->view->fm=$fm;
 
         } catch (Exception $e) {
             print "Error: update Person ".$e->getMessage();

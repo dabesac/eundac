@@ -2,44 +2,96 @@
  $state = $this->state;
  $perid = $this->perid;
 ?>
-<div class="datos">
-</div>
-    <table class="table table-bordered">
-        <thead>
-       <tr>
-        <th>#</th>
-        <th>Nombre de la Tasa:</th>
-        <th>Codigo de Tasa:</th>
-        <th>Tasa Normal</th>
-        <th>Tasa Incremento N°1  |%|</th>
-        <th>Tasa Incremento N°2  |%|</th>
-        <?php if ($state=='A' || $state=='I'){?>
-        <th>Modificar</th>
-        <th>Eliminar</th>
-         <?php } ?>
-    </tr>
-        </thead>
-    <?php
-    if ($this->tasas)
-    {$i=1;
-       foreach ($this->tasas as $tasa)    
-        { ?>
-         <tr>
-        <td> <?php print $i?> </td>
-        <td> <?php print $tasa['name']?> </td>
-        <td> <?php print $tasa['ratid']?> </td>
-        <td> <?php print $tasa['t_normal']?> </td>
-        <td> <?php print $tasa['t_incremento1']?> </td>
-        <td> <?php print $tasa['t_incremento2']?> </td>
-        <?php if ($state=='A' || $state=='I'){?>
-        <td> <a href="/admin/rateregister/update/ratid/<?php print $tasa['ratid']?>/perid/<?php print $tasa['perid']?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
-        <td> <a href="/admin/rateregister/delete/ratid/<?php print $tasa['ratid']?>/perid/<?php print $tasa['perid']?>"onclick="return confirm('Esta Seguro que desea eliminar el registro?');"><span class="glyphicon glyphicon-trash"></span></a></td>
-        <?php } ?>
+<?php
+if ($this->tasas)
+{
+?>
+<div class='col-md-10 col-md-offset-1'>
+    <h3 class='text-primary'><b><center>TASAS - <?php echo $perid?></center></b></h3>
+</div></br>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th class='text-center'>#</th>
+            <th class='text-center'>Nombre de la Tasa</th>
+            <th class='text-center'>Código de Tasa</th>
+            <th class='text-center'>Tasa Normal</th>
+            <th class='text-center'>Tasa Incremento N°1 (%)</th>
+            <th class='text-center'>Tasa Incremento N°2 (%)</th>
+            <th class='text-center'>Tasa Incremento N°3 (%)</th>
+            <?php if ($state=='A' || $state=='I'){?>
+            <th class='text-center'>Modificar</th>
+            <th class='text-center'>Eliminar</th>
+             <?php } ?>
         </tr>
-          
-           <?php
-            $i++;
-        }
+    </thead>
+<?php
+    // print_r($this->tasas);
+    $i=1;
+    foreach ($this->tasas as $tasa)    
+    { ?>
+    <body>
+        <tr>
+            <td class='text-center'> <?php print $i?> </td>
+            <td> <?php print $tasa['name']?> </td>
+            <td class='text-center'> <?php print $tasa['ratid']?> </td>
+            <td class='text-center'> <?php print $tasa['t_normal']?> </td>
+            <td class='text-center'> <?php print $tasa['t_incremento1']?> </td>
+            <td class='text-center'> <?php print $tasa['t_incremento2']?> </td>
+            <td class='text-center'> <?php print $tasa['t_incremento3']?> </td>
+            <?php if ($state=='A' || $state=='I'){?>
+            <td class='text-center'> 
+                <a class='update_tasa' ratid='<?php echo $tasa['ratid']?>' perid="<?php echo $tasa['perid']?>"
+                state="<?php echo $tasa['state']?>" href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+            </td>
+            <td class='text-center'>
+                <a href="/admin/rateregister/delete/ratid/<?php print $tasa['ratid']?>/perid/<?php print $tasa['perid']?>/state/<?php print $state?>"onclick="return confirm('Esta Seguro que desea eliminar el registro?');"><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+            <?php } ?>
+        </tr>
+    </body>  
+       <?php
+        $i++;
     }
     ?>
-    </table>
+</table>
+<?php    
+}
+else{
+    ?>
+    <div class='col-md-8 col-md-offset-2 alert alert-info'>
+        <h4><b><center> ¡ NO EXISTE DATOS !</center></b></h4>
+        <h5><center>Crea nuevas tasas para este periodo</center></h5>
+    </div></br>
+<?php   
+}
+?>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style='width:1000px;'>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title"><b class='text-info'> <center> MODIFICAR TASA MATRICULA </center></b></h3>
+            </div>
+            <div class="modal-body">
+                <div id="modi_tasa"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(".update_tasa").click(function(){
+        var params = {
+                ratid:$(this).attr('ratid'),
+                perid:$(this).attr('perid'),
+                state:$(this).attr('state')
+            };
+        $('#myModal1').modal('show');            
+        var url1="/admin/rateregister/updatetasa/ratid/"+params['ratid']+"/perid/"+params['perid']+"/state/<?php echo $state?>";
+        $("#modi_tasa").load(url1);
+    });
+</script>
+
