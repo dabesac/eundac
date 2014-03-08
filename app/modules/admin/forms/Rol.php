@@ -1,6 +1,7 @@
 <?php
 class Admin_Form_Rol extends Zend_Form{    
     public function init(){
+        $this->setName("frmrol");
 
         $rid= new Zend_Form_Element_Text('rid');
         $rid->removeDecorator('Label')->removeDecorator("HtmlTag");

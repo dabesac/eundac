@@ -1,5 +1,4 @@
-
-<form class="form-inline" id="frmperson" name="frmperson" action="/admin/person/new" method="POST" enctype="application/x-www-fm-urlencode">  
+ <form class="form-inline" id="frmperson" name="frmperson" action="/admin/person/newperson"method="POST" enctype="application/x-www-fm-urlencode">  
     <div class="row">
         <div class='col-md-1'>DNI:</div>
         <div class='col-md-2'><?php echo $this->fm->pid?></div>
@@ -40,49 +39,25 @@
         <div class='col-md-3'><?php echo $this->fm->mail_work?></div>
     </div></br></br>
 </form>
-<div class="modal-footer">
-    <button id="saveperson" type="button" class="btn btn-success"><span class='glyphicon glyphicon-save'></span> Guardar</button>
-    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-</div>
 <script>
     $(function() {
         $("#birthday").datepicker();
+        $("#dateaccept").datepicker();
+        $("#sendform").click(function(){
+        $("#frmDistribution").submit();
     });
-    
-    $("#saveperson").click(function(){   
-        var url="/admin/person/new/";
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data:$("#frmperson").serialize(),
-            success: function (data){
-                $("#nueva_persona").html(data)
-            }
-        });
-    });
-
-    var valor="<?php echo $this->valor?>";
-    if (valor==1) {
-        var pid="<?php echo $this->pid?>";
-        $('#myModal').modal('hide');
-        $('#myModal').on('hidden.bs.modal', function (e) {
-            var url="/admin/person/getperson/pid/"+pid;
-            $("#cargadatos_").html("<img src='/img/spinner.gif' />Cargando....");
-            $("#cargadatos_").load(url);
-        });
-    };
-    function validNumber(e) {
-        var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
-        return ((tecla > 47 && tecla < 58) || tecla == 8);
+  function validNumber(e) {
+    var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
+    return ((tecla > 47 && tecla < 58) || tecla == 8);
     } 
-    function soloLetras(e){
-        key = e.keyCode || e.which;
-        tecla = String.fromCharCode(key).toLowerCase();
-        letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
-        especiales = [8,37,39,46];
+  function soloLetras(e){
+       key = e.keyCode || e.which;
+       tecla = String.fromCharCode(key).toLowerCase();
+       letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+       especiales = [8,37,39,46];
 
-        tecla_especial = false
-        for(var i in especiales){
+       tecla_especial = false
+       for(var i in especiales){
             if(key == especiales[i]){
                 tecla_especial = true;
                 break;

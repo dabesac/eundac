@@ -8,7 +8,7 @@ class Admin_Form_Personnew extends Zend_Form{
         $pid->removeDecorator('Label')->removeDecorator("HtmlTag");
         $pid->setAttrib("maxlength", "8");
         $pid->setAttrib('class','form-control');
-        $pid->setAttrib("style","height:35px;width:500px ");
+        // $pid->setAttrib("style","height:35px;width:500px ");
         $pid->setAttrib("title","Ingrese Dni")->addValidator("digits",true);
         // $pid->setAttrib("onkeypress","return validNumber(event)");
     

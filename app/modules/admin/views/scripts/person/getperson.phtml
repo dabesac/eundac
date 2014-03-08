@@ -1,44 +1,77 @@
-<div id="idperson">
-    <?php
-    if ($this->dataperson and $this->dataperson[0]){ 
-        
-    ?>
+<?php
+if ($this->dataperson and $this->dataperson[0]){ 
+    
+?>
 
-    <table class="table span9 table-bordered">
-        <thead>
+<table class="table table-hover table-bordered table-striped">
+    <thead>
         <tr>
-                <th><center>#</center></th>
-                <th><center>DNI</center></th>
-                <th><center>Apellidos y Nombres</center></th>
-                <th><center>Dirección</center></th>
-                <th><center>Operación</center></th>
+            <th><center>#</center></th>
+            <th><center>DNI</center></th>
+            <th><center>Apellidos y Nombres</center></th>
+            <th><center>Dirección</center></th>
+            <th><center>Operación</center></th>
         </tr>
-        </thead>
-    <?php
-        $c=0;
-        foreach ($this->dataperson as $info) {
-            // print_r($info);exit();
-            $c++;
-          ?>
-            <tr>
-                <td><center><?php echo $c?></center></td>
-                <td class='col-md-2'><center><?php echo $info['pid'];?></center></td>
-                <td><?php echo strtoupper($info['last_name0'])." ".strtoupper($info['last_name1']).", ".$info['first_name'];?></td>
-                <td><center><?php echo $info['address']?></center></td>
-                <td><center><a href="/admin/person/updateperson/pid/<?php echo base64_encode($info['pid'])?>"><span class='glyphicon glyphicon-pencil'></span></a></center></td>
-                <!-- <td><center><a href=""><span class='glyphicon glyphicon-trash'></span></a></center></td> -->
+    </thead>
+<?php
+    $c=0;
+    foreach ($this->dataperson as $info) {
+        $c++;
+      ?>
+        <tr>
+            <td><center><?php echo $c?></center></td>
+            <td class='col-md-2'><center><?php echo $info['pid'];?></center></td>
+            <td><?php echo strtoupper($info['last_name0'])." ".strtoupper($info['last_name1']).", ".$info['first_name'];?></td>
+            <td><center><?php echo $info['address']?></center></td>
+            <td>
+                <center>
+                    <a href="#" class='modifper' pid="<?php echo base64_encode($info['pid'])?>"><span class='glyphicon glyphicon-pencil'></span></a>
+                    <!-- <a href="/admin/person/updateperson/pid/<?php echo base64_encode($info['pid'])?>"><span class='glyphicon glyphicon-pencil'></span> -->
+                    </a>
+                </center>
+            </td>
+            <!-- <td><center><a href=""><span class='glyphicon glyphicon-trash'></span></a></center></td> -->
 
-            </tr>
-          <?php  
-        }  
+        </tr>
+      <?php  
     }
-    else{
-    ?>
-    <div class="alert alert-info" style='font-size:15px'><b>La persona no se ENCUENTRA registrado en el SISTEMA....</b></div>
-    <?php
-    exit();
-    }
-    ?>
-    </table>
-          
+    ?>  
+</table>
+<?php
+}
+else{
+?>
+<div class='col-md-12 cont-font-not-register alert alert-info' >
+    <h3 class='text-not-register'><b>La persona no se ENCUENTRA registrado en el SISTEMA....</b></h3>
+    <h1 class='span-not-register'>
+        <span class='glyphicon glyphicon-exclamation-sign' ></span>
+    </h1>
 </div>
+<?php
+exit();
+}
+?>
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style='width:1000px;'>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title"><b class='text-info'> <center> MODIFICAR PERSONA </center></b></h2>
+            </div>
+            <div class="modal-body">
+                <div id='mo_persona'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(".modifper").click(function(){ 
+        var pid=$(this).attr('pid');
+        $('#myModal1').modal('show');            
+        var url="/admin/person/updateperson/pid/"+pid;
+        $("#mo_persona").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
+        $("#mo_persona").load(url);
+    });
+</script>

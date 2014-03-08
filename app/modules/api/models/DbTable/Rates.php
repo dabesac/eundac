@@ -75,18 +75,30 @@ class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract{
 	}
       
 
-	public function _update($data,$str='')
-    {
-        try
-        {
-            if ($str=="") return false;
-            return $this->update($data,$str);
-        }
-        catch (Exception $ex)
-        {
-            print "Error: Guardar rates".$ex->getMessage();
-        }
-    }
+	// public function _update($data,$str='')
+ //    {
+ //        try
+ //        {
+ //            if ($str=="") return false;
+ //            return $this->update($data,$str);
+ //        }
+ //        catch (Exception $ex)
+ //        {
+ //            print "Error: Guardar rates".$ex->getMessage();
+ //        }
+ //    }
+
+    public function _update($data,$pk)
+	{
+		try{
+			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['ratid']=='' || $pk['perid']=='' ) return false;
+			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and ratid = '".$pk['ratid']."' and perid='".$pk['perid']."'";
+			return $this->update($data, $where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Update User".$e->getMessage();
+		}
+	}
 
     public function _delete($data)
 	{

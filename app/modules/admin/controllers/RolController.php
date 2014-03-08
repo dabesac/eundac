@@ -3,18 +3,23 @@
 class Admin_RolController extends Zend_Controller_Action{
 
 	public function init(){
-		$this->eid='20154605046';
-		$this->oid='1';
-	}
+ 		$sesion  = Zend_Auth::getInstance();
+ 		if(!$sesion->hasIdentity() ){
+ 			$this->_helper->redirector('index',"index",'default');
+ 		}
+ 		$login = $sesion->getStorage()->read();
+ 		$this->sesion = $login;
+ 	}
 
 	public function indexAction(){
 		try {
-			$eid=$this->eid;
-			$oid=$this->oid;
+			$eid=$this->sesion->eid;
+			$oid=$this->sesion->oid;
 			$rol=new Api_Model_DbTable_Rol();
 			$where['eid']=$eid;
 			$where['oid']=$oid;
-			$data=$rol->_getAll($where);
+			$orders=array('rid');
+			$data=$rol->_getFilter($where,$attrib=null,$orders);
 			//print_r($data);
 			$this->view->data=$data;
 		} catch (Exception $e) {
@@ -25,8 +30,9 @@ class Admin_RolController extends Zend_Controller_Action{
 
 	public function newAction(){
 		try {
-			$eid=$this->eid;
-			$oid=$this->oid;
+			$this->_helper->layout()->disableLayout();
+			$eid=$this->sesion->eid;
+			$oid=$this->sesion->oid;
 			$form= new Admin_Form_Rol();
 			$this->view->form=$form;
             if ($this->getRequest()->isPost())
@@ -43,8 +49,11 @@ class Admin_RolController extends Zend_Controller_Action{
                     $frmdata['oid']=$oid;                   
                     $reg_= new Api_Model_DbTable_Rol;
                     //print_r($frmdata);
-                    $reg_->_save($frmdata);
-                    $this->_redirect("/Admin/rol/");                           
+                  
+                    if ($reg_->_save($frmdata)) {
+                  		$this->view->clave=1;      
+                    }
+                    // $this->_redirect("/admin/rol/");   
                 }
                 else
                 {
@@ -60,8 +69,9 @@ class Admin_RolController extends Zend_Controller_Action{
 
 	public function updateAction(){
 		try {
-			$eid=$this->eid;
-			$oid=$this->oid;
+			$this->_helper->layout()->disableLayout();
+			$eid=$this->sesion->eid;
+			$oid=$this->sesion->oid;
 			$rid=base64_decode($this->_getParam('rid'));
 			$rol=new Api_Model_DbTable_Rol();
 			$where['eid']=$eid;
@@ -74,6 +84,7 @@ class Admin_RolController extends Zend_Controller_Action{
 			$this->view->form=$form;
 			if ($this->getRequest()->isPost()) {
 				$frmdata=$this->getRequest()->getPost();
+				$frmdata['rid']=base64_decode($frmdata['rid']);
 				if ($form->isValid($frmdata)) {
 					unset($frmdata['send']);
 					trim($frmdata['name']);
@@ -84,15 +95,21 @@ class Admin_RolController extends Zend_Controller_Action{
                     $pk['oid']=$oid; 
                     $pk['rid']=$rid;                  
                     $reg_= new Api_Model_DbTable_Rol();
-                    // print_r($frmdata);
-                    $reg_->_update($frmdata,$pk);
-                    $this->_redirect("/Admin/rol/");
+                    // $reg_->_update($frmdata,$pk);
+                    if ($reg_->_update($frmdata,$pk)) {
+                  		$this->view->valor=2;      
+                    }
+
+                    // $this->_redirect("/admin/rol/");
 				}
 				else
                 {
                     echo "Ingrese nuevamente por favor";
                 }
-			}			
+			}
+			else{
+				$this->view->rid=$rid;
+			}		
 		} catch (Exception $e) {
 			print "Error: Update Rol".$e->getMessage();
 		}
@@ -100,14 +117,14 @@ class Admin_RolController extends Zend_Controller_Action{
 	}
 
 	public function deleteAction(){
-		$eid=$this->eid;
-		$oid=$this->oid;
+		$eid=$this->sesion->eid;
+		$oid=$this->sesion->oid;
 		$rid=base64_decode($this->_getParam('rid'));
 		$data['eid']=$eid;
 		$data['oid']=$oid;
 		$data['rid']=$rid;
 		$reg_= new Api_Model_DbTable_Rol();
 		$reg_->_delete($data);
-		$this->_redirect("/Admin/rol/");
+		$this->_redirect("/admin/rol/");
 	}
 }
