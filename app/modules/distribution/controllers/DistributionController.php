@@ -59,7 +59,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
 
                 $datahours=$bdhorary->_getFilter($wheres);
                 $rows_distribution[$i]['hours']=$datahours; 
-                $i++;        
+                $i++;
             }
        		if ($rows_distribution) $this->view->ldistribution=$rows_distribution ;
         } catch (Exception $e) {

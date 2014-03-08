@@ -46,7 +46,7 @@ $ldistri =$this->ldistribution;
 	</tr>
 	<?php 
 	if ($ldistri)
-	{		
+	{			
 		$i=0;
 		foreach ($ldistri as $distri)
 		{
@@ -74,17 +74,30 @@ $ldistri =$this->ldistribution;
 			case 'B': 	$state = "info"; 
 						$namestate = "Borrador";
 						break;
-			case 'O': 	$state = "info"; 
+			case 'O': 	$state = "warning"; 
 						$namestate = "Observado";
 						break;
 		}
 	?>
-	<tr <?php echo $state;?>>
+	<tr class="<?php echo $state?>">
 		<td class="text-center"><?php echo $i;?></td>	
 		<td class="text-center"><?php echo $periodo ;?></td>
 		<td><?php echo $num;?></td>
 		<td class="text-center"><?php echo $approv;?></td>
-		<td class="text-center"><span title="<?php echo $namestate?>" class="glyphicon glyphicon-record text-<?php echo $state?>"></span></td>
+		<td class="text-center <?php echo $state?>">
+			<?php
+			if ($distri['observation']!='' && $distri['observation']!="''" && $distri['state']=='O') {	?>
+				<span class='obser glyphicon glyphicon-record text-<?php echo $state?>' title="Observado" data-container="body" data-toggle="popover" data-content="<?php echo $distri['observation']?>">
+				</span>
+			<?php	
+			}
+			else{
+			?>
+				<span title="<?php echo $namestate?>" data-toggle="popover" class="glyphicon glyphicon-record text-<?php echo $state?>"></span>
+			<?php	
+			}
+			?>
+		</td>
 		<td><center>
 			<?php
 			if ($distri['state']=='C' || $distri['state']=='I') { ?>
@@ -180,8 +193,39 @@ $ldistri =$this->ldistribution;
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!-- Corregir distribución-->
+<div class="modal fade" id="myModals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="modal-title text-info" id="myModalLabel">Revise su distribución</h3>
+      </div>
+      <div class="modal-body">
+        <!-- <div id='updatehour'></div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script>
 $('.glyphicon').tooltip();
+
+$(function () {
+	$('.obser').popover('show');
+});	
+
+$('#anio').hover(function(){   
+	$('.obser').popover('hide');	
+});
+
+$('.obser').hover(function(){   
+	$('#myModals').modal('show');	
+});
+
 
 $(".horary").click(function(){
 	var params = {

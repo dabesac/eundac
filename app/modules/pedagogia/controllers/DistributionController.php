@@ -64,15 +64,28 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
     	$dist=$distribution->_getOne($where);
 
     	//print_r($dist);
+        $state=$dist['state'];
+        $formData['eid']=$eid;
+        $formData['oid']=$oid;
+        $formData['escid']=$escid;
+        $formData['perid']=$perid;
+        $formData['distid']=$distid;
+        $formData['subid']=$subid;
+        $pk =$formData;
 
-    	$formData['eid']=$eid;
-    	$formData['oid']=$oid;
-    	$formData['escid']=$escid;
-    	$formData['perid']=$perid;
-    	$formData['distid']=$distid;
-    	$formData['subid']=$subid;
-    	$pk =$formData;
-    	$formData['observation']=$obs;
+        if ($dist['comments']=='' && $state<>"O") {
+            $formData['comments']=$state;
+        }
+
+        if ($obs!="''" && $obs!="") {
+            $formData['state']='O';
+            $formData['observation']=$obs;
+        }
+        else{
+            $formData['state']=$dist['comments'];
+            $formData['comments']=null;
+            $formData['observation']=null;
+        }
 
     	//print_r($formData);
     	$distr = new Distribution_Model_DbTable_Distribution();

@@ -25,7 +25,6 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
             $escid = base64_decode($this->_getParam("escid"));
             $subid = base64_decode($this->_getParam("subid"));
             $t = $this->_getParam("t");
-
             $this->view->perid = $perid;
             $this->view->distid = $distid;
             $this->view->escid = $escid;
@@ -44,7 +43,7 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
             $this->view->datadir=$datadir;
 
             if(substr($escid,0,3)=='2ES' and ($escid<>'2ESTY')){
-               $this->_redirect("/distribution/printdistribution/printsecond/t/$t/distid/".base64_encode($distid).
+                $this->_redirect("/distribution/printdistribution/printsecond/t/$t/distid/".base64_encode($distid).
                                 "/perid/".base64_encode($perid)."/subid/".base64_encode($subid).
                                 "/escid/".base64_encode($escid));
             }else{
