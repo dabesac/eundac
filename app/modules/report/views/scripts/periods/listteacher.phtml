@@ -78,7 +78,17 @@ if ($this->data_teacher) { ?>
 				</div>
 				<div class="col-md-8">
 					<blockquote>
+					<?php $escuela = ''; ?>
 					<table class="table table-hover">
+					<?php foreach ($teachers['courses'] as $courses): ?>
+						<?php if ($courses['escid'] != $escuela): ?>
+							<?php 
+							$escuela = $courses['escid']; 
+						if ($this->TE == 'Si') {?>
+						<tr>
+							<th class="success" colspan="7"><span class="text-muted">Escuela </span><?php echo $courses['name_school'] ?></th>
+						</tr>
+						<?php }?>
 						<tr class="active">
 							<th class="col-md-5">Asignaturas</th>
 							<th class="text-center">Turno</th>
@@ -88,7 +98,7 @@ if ($this->data_teacher) { ?>
 							<th class="text-center">2° Parcial</th>
 							<th class="text-center">Cierre Acta</th>
 						</tr>
-					<?php foreach ($teachers['courses'] as $courses): ?>
+						<?php endif ?>
 						<tr>
 							<td>
 								<?php echo $courses['courseid']." - ".$courses['name']?>

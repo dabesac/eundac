@@ -1,0 +1,353 @@
+<div class="row">
+	<div class="col-md-12">
+		<!--Cargando-->
+		<div id="loadingMessage"></div>
+
+		<!--Mensajes para la Validacion-->
+		<div id="alertSuccessValidate" class="alert alert-success hidden alertMessages">
+			<a type="button" class="close closeAlerts" data-dismiss="alert" aria-hidden="true">&times;</a>
+			<h4>Exito!</h4>
+			<p>La matricula se <strong>Valido</strong> con exito, ahora puede imprimir la matricula......</p>
+		</div>
+
+		<!--Mensajes para la Reservación-->
+		<div id="alertSuccessReserved" class="alert alert-info hidden alertMessages">
+			<a type="button" class="close closeAlerts" data-dismiss="alert" aria-hidden="true">&times;</a>
+			<h4>Exito!</h4>
+			<p>La matricula se <strong>Reservo</strong> con exito......</p>
+		</div>
+
+		<!--Mensajes para la Observacion-->
+		<div id="alertSuccessObserved" class="alert alert-warning hidden alertMessages">
+			<a type="button" class="close closeAlerts" data-dismiss="alert" aria-hidden="true">&times;</a>
+			<h4>Exito!</h4>
+			<p>La matricula se <strong>Observo</strong> con exito......</p>
+		</div>
+
+		<!--Error al procesar-->
+		<div id="alertFailProcess" class="alert alert-danger hidden alertMessages">
+			<a type="button" class="close" aria-hidden="true">&times;</a>
+			<h4>Error!</h4>
+			<p>Hubo un error durante el proceso......</p>
+		</div>
+
+		<!--Datos Eliminados-->
+		<div id="deleteAllMessage" class="hidden">
+			<br><br>
+			<h4 class="text-muted text-center">No Existen <span class="text-danger">Registros</span></h4>
+			<br>
+		</div>
+	</div>
+</div>
+
+<?php if ($this->data): ?>
+	<?php if ($this->stateStudent == 'I'): ?>
+		<div id="allTurnosDiv" class="row">
+			<div class="col-md-6">
+				<h5 class="text-muted pull-right"><span class="glyphicon glyphicon-info-sign"></span> Puede seleccionar todos los turnos de una sola vez</h5>
+			</div>
+			<div class="col-md-1">
+				<select name="allTurno" id="allTurno" class="form-control input-sm">
+				<?php 
+				$coursePilot = $this->data[0]['courseid'];
+				$c = 0;
+				foreach ($this->data as $course): ?>
+					<?php if ($course['courseid'] == $coursePilot): ?>
+						<option value="<?php echo $c ?>"><?php echo $course['turno'] ?></option>
+					<?php else: 
+						break;
+					endif ?>
+				<?php 
+				$c++;
+				endforeach ?>
+				</select>
+			</div>
+		</div>
+	<?php endif ?>
+	<br>
+	<div class="row" id="allData">
+		<div class="col-md-10">
+			<table class="table table-hover">
+				<tr class="active">
+					<th class="text-center col-md-1">#</th>
+					<th class="text-center col-md-1">Codigo</th>
+					<th class="col-md-4">Curso</th>
+					<th class="text-center col-md-1 tdIniciado">#Mat</th>
+					<th class="text-center col-md-1">Turno</th>
+					<th class="col-md-3">Docente</th>
+					<th class="messageTh"></th>
+				</tr>
+			<form id="formPreRegister">
+				<input name="stateStudent" id="stateStudent" type="hidden" value="<?php echo $this->stateStudent ?>">
+				<input type="hidden" name="pid" value="<?php echo $this->dataStudent['pid'] ?>">
+				<input id="uid" type="hidden" name="uid" value="<?php echo $this->dataStudent['uid'] ?>">
+				<input type="hidden" name="subid" value="<?php echo $this->dataStudent['subid'] ?>">
+				<input type="hidden" name="escid" value="<?php echo $this->dataStudent['escid'] ?>">
+				<input type="hidden" name="perid" value="<?php echo $this->dataStudent['perid'] ?>">
+				<input type="hidden" name="curid" value="<?php echo $this->dataStudent['curid'] ?>">
+				<input type="hidden" name="exist" value="<?php echo $this->exist ?>">
+				<input id="whySend" type="hidden" name="whySend" value="">
+
+				<?php if ($this->stateStudent == 'M'): 
+					$classRowCourses = 'success';
+				elseif ($this->stateStudent == 'O'): 
+					$classRowCourses = 'warning';
+				elseif ($this->stateStudent == 'R'): 
+					$classRowCourses = 'info';
+				endif ?>
+				<?php $c = 0;
+				$courses = 0;
+				foreach ($this->data as $course): ?>
+					<?php if ($course['courseid'] != $courses): ?>
+						<tr class="listStudent <?php echo $classRowCourses ?>">
+							<td class="text-center"><?php echo $c +1 ?></td>
+							<td class="text-center"><?php echo $course['courseid'] ?></td>
+
+						<!--tdIniciado-->
+							<td class="tdIniciado"><?php echo $course['name'] ?></td>
+							<td class="tdIniciado text-center text-success">
+								<?php 
+								$interruptor = 0;
+								foreach ($this->cantStudents as $cantidad): ?>
+									<?php if ($course['courseid'] == $cantidad['courseid']): 
+										if ($interruptor == 0): ?>
+											<span id="cantidad<?php echo $cantidad['turno'].$cantidad['courseid'] ?>"><?php echo $cantidad['cantidad'] ?> </span>
+										<?php $interruptor = 1;
+										else : ?>
+											<span id="cantidad<?php echo $cantidad['turno'].$cantidad['courseid'] ?>" class="hidden"><?php echo $cantidad['cantidad'] ?></span>
+										<?php endif ?>
+									<?php endif ?>
+								<?php endforeach ?>
+							</td>
+
+							<!--Turnos-->
+							<td class="text-center turnoBlock tdIniciado">
+								<select id="select<?php echo $c + 1 ?>" name="Course<?php echo $c + 1 ?>" id="turno" class="form-control input-sm selectTurnos">
+									<?php foreach ($this->data as $turno): ?>
+										<?php if ($course['courseid'] == $turno['courseid']): ?>
+											<option value="<?php echo $turno['turno'].'--'.$turno['courseid'] ?> "><?php echo $turno['turno'] ?></option>
+										<?php endif ?>
+									<?php endforeach ?>
+								</select>
+							</td>
+
+							<!--Docentes-->
+							<td class="tdIniciado" id="docentesTurno<?php echo $course['courseid'] ?>">
+							<?php 
+							$interruptor = 0;
+							foreach ($this->data as $docente): ?>
+								<?php if ($course['courseid'] == $docente['courseid']): 
+									if ($interruptor == 0): ?>
+										<span id="docente<?php echo $docente['turno'].$docente['courseid'] ?>"><?php echo $docente['docente'] ?> </span>
+									<?php $interruptor = 1;
+									else : ?>
+										<span id="docente<?php echo $docente['turno'].$docente['courseid'] ?>" class="hidden"><?php echo $docente['docente'] ?></span>
+									<?php endif ?>
+								<?php endif ?>
+							<?php endforeach ?>
+							</td>
+						<!--______________________________________________________________-->
+
+						<!--tdOtherState-->
+							<td class="tdOtherState"><?php echo $this->coursesName[$c][0]['name'] ?></td>
+							<td class="text-center tdOtherState"><?php echo $course['turno'] ?></td>
+							<td class="tdOtherState"><?php echo $this->coursesTeachers[$c][0]['last_name0'].' '.$this->coursesTeachers[$c][0]['last_name1'].' '.$this->coursesTeachers[$c][0]['first_name'] ?></td>
+							<td class="text-center stateRegister"></td>
+						<!--______________________________________________________________-->
+
+							<td class="hidden validateMessage text-center"></td>							
+						</tr>
+						<?php $courses = $course['courseid'];
+						$c++;
+					endif ?>
+				<?php endforeach ?>
+				<input type="hidden" name="CantidadCursos" value="<?php echo $c ?>">
+			</form>
+			</table>
+		</div>
+
+		<!--Botones de Validación-->
+		<div class="col-md-2">
+			<br>
+			<a id="validateBtn" href="##" class="btn btn-success form-control btnProcessRegister">Validar</a>
+			<br><br>
+			<a id="observedBtn" href="##" class="btn btn-warning form-control btnProcessRegister">Observar</a>
+			<br><br>
+			<a id="reservedBtn" href="##" class="btn btn-info form-control btnProcessRegister">Reservar</a>
+			<br><br>
+			<a id="deleteBtn" href="##" class="btn btn-danger form-control btnProcessRegister">Eliminar</a>
+		</div>
+	</div>
+	<script>
+		//Alertas y esas cosas
+
+		//Bloquear Botones y otras Cosas de acuerdo al estado
+		var stateStudent = $('#stateStudent').val();
+		if (stateStudent == 'M') {
+			$('.tdIniciado').addClass('hidden');
+			$('#validateBtn').attr('disabled', 'true');
+			$('#printRegister').removeAttr('disabled');
+			$('.messageTh').removeClass('hidden');
+			$('.stateRegister').addClass('text-success');
+			$('.stateRegister').html('<strong>Matriculado</strong>');
+		}else if (stateStudent == 'O'){
+			$('.tdIniciado').addClass('hidden');
+			$('#observedBtn').attr('disabled', 'true');
+			$('.messageTh').removeClass('hidden');
+			$('.stateRegister').addClass('text-warning');
+			$('.stateRegister').html('<strong>Observado</strong>');
+		}else if (stateStudent == 'R'){
+			$('.tdIniciado').addClass('hidden');
+			$('#reservedBtn').attr('disabled', 'true');
+			$('.messageTh').removeClass('hidden');
+			$('.stateRegister').addClass('text-info');
+			$('.stateRegister').html('<strong>Reservado</strong>');
+		}else if (stateStudent == 'I'){
+			$('.tdOtherState').addClass('hidden');
+			$('#deleteBtn').addClass('hidden');
+			//Variables y esas cosas
+			var uid = $('#uid').val();
+
+			//Seleccionar Turno y Cambiar de Docente
+			$(".selectTurnos").change(function(){
+				var valor = $(this).val();
+				var valorSplit = valor.split('--');
+				var turno = valorSplit[0];
+				var course = valorSplit[1];
+				$('#docentesTurno' + course + 'span').each(function(){
+					$(this).addClass('hidden');
+				});
+				$('#docente' + turno + course).removeClass('hidden');
+			});
+
+			//Seleccionar Todos los Turnos
+			$('#allTurno').change(function(){
+				var valorAllTurno = $(this).val();
+
+				var index = 1;
+				$('.listStudent').each(function(){
+					$('#select' + index + ' option:eq(' + valorAllTurno + ')').prop('selected', true);
+					index++;
+				});
+
+				$(".selectTurnos option:selected").each(function(){
+					valor = $(this).val();
+					valorSplit = valor.split('--');
+					turno = valorSplit[0];
+					course = valorSplit[1];
+					$('#docentesTurno' + course + 'span').each(function(){
+						$(this).addClass('hidden');
+					});
+					$('#docente' + turno + course).removeClass('hidden');
+				});
+			});
+
+		};
+
+		//Boton para Validar Matricula
+		$('#validateBtn').click(function(){
+			$('#whySend').val('M');
+			validateRegister();
+		});
+
+		//Boton para Observar Matricula
+		$('#observedBtn').click(function(){
+			$('#whySend').val('O');
+			validateRegister();
+		});
+		
+		//Boton para Reservar Matricula
+		$('#reservedBtn').click(function(){
+			$('#whySend').val('R');
+			validateRegister();
+		});
+
+		//Boton para Eliminar Matricula
+		$('#deleteBtn').click(function(){
+			$('#whySend').val('E');
+			validateRegister();
+		});
+
+		function validateRegister(){
+			$('.alertMessages').addClass('hidden');
+			$('#loadingMessage').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+			var whySendRegister = $('#whySend').val();
+			$.ajax({
+				type   : 'post',
+				url    : "/rcentral/entrant/validateregister/",
+				data   : $('#formPreRegister').serialize(),
+				success: function(data){
+					$('#loadingMessage').html('');
+					$('.stateRegister').addClass('hidden');
+					$('.btnProcessRegister').removeAttr('disabled');
+					$('.listStudent').removeClass('info success warning');
+					if (data == 'true') {
+						if (whySendRegister == 'M') {
+							//Acciones para Validar
+							$('.listStudent').addClass('success');
+							$('.validateMessage').addClass('text-success');
+							$('.validateMessage').html('<strong>Matriculado</strong>');
+							$('#validateBtn').attr('disabled', 'true');
+							$('#printRegister').removeAttr('disabled');
+							$('#studentRow' + uid).attr('state', 'Matriculados');
+							$('#state' + uid).html('Matriculados');
+							$('#alertSuccessValidate').removeClass('hidden');
+						}else if (whySendRegister == 'R'){
+							//Acciones para Reservar
+							$('.listStudent').addClass('info');
+							$('.validateMessage').addClass('text-info');
+							$('.validateMessage').html('<strong>Reservado</strong>');
+							$('#reservedBtn').attr('disabled', 'true');
+							$('#studentRow' + uid).attr('state', 'Reservados');
+							$('#state' + uid).html('Reservados');
+							$('#alertSuccessReserved').removeClass('hidden');
+						}else if (whySendRegister == 'O'){
+							//Acciones para Observar
+							$('.listStudent').addClass('warning');
+							$('.validateMessage').addClass('text-warning');
+							$('.validateMessage').html('<strong>Observado</strong>');
+							$('#observedBtn').attr('disabled', 'true');
+							$('#studentRow' + uid).attr('state', 'Observados');
+							$('#state' + uid).html('Observados');
+							$('#alertSuccessObserved').removeClass('hidden');
+						}else if (whySendRegister == 'E'){
+							//Acciones para Observar
+							$('#deleteAllMessage').removeClass('hidden');
+							$('#allData').addClass('hidden');
+							$('#studentRow' + uid).attr('state', 'Delete');
+							$('#state' + uid).html('Eliminados');
+						};
+						
+						//Acciones Globales
+						$('#allTurnosDiv').addClass('hidden');
+						$('.validateMessage, .messageTh').removeClass('hidden');
+
+						$(".selectTurnos option:selected").each(function(){
+							valor = $(this).val();
+							turno = valor.split('--');
+							$('.turnoBlock').html(turno[0]);
+						});
+
+						//Eliminar de la Tabla
+						$('#studentRow' + uid).css('display', 'none');
+
+						//Enumerar Again
+					 	var num = 1;
+				        var i   = 0;
+				        $("#students li").each(function(){
+				            var cssli = $(this).css('display');
+				            if (cssli != 'none') {
+				                $('#numeracion'+i).html(num);
+				                num++;
+				            };
+				            i++;
+				        });
+					};
+				}
+			});
+		}
+
+	</script>
+<?php else: ?>
+	<h4 class="text-muted text-center">No Existen <span class="text-danger">Registros</span></h4>
+<?php endif ?>

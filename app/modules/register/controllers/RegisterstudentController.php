@@ -195,7 +195,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $coursesName[$c] = $coursesRegisterDb->_getInfoCourse($where, $attrib);
 
                 //Numero de Veces que llevo un curso
-                $attrib = array('perid');
+                $attrib = array('perid', 'notafinal');
                 $where = array( 
                                 'eid'     =>$eid, 
                                 'oid'     =>$oid, 
@@ -209,7 +209,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $veces = $coursesRegisterDb->_getFilter($where, $attrib);
                 $j = 0;
                 foreach ($veces as $vez) {
-                    if ($vez['perid']['2'] != 'D' and $vez['perid']['2'] != 'E') {
+                    if ($vez['perid']['2'] != 'D' and $vez['perid']['2'] != 'E' and $vez['notafinal'] != '-3') {
                         $j++;
                     }
                 }
@@ -669,7 +669,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $oid   = $this->sesion->oid;
         $perid = $this->sesion->period->perid;
 
-        $where = array( 'eid'   => $eid,
+        /*$where = array( 'eid'   => $eid,
                         'oid'   => $oid,
                         'perid' => $perid,
                         'escid' => base64_decode($escid),
@@ -678,18 +678,18 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'uid'   => base64_decode($uid) );
         $attrib = array('courseid');
         $courses = $coursesDb->_getFilter($where, $attrib);
-        $this->view->courses = $courses;
+        $this->view->courses = $courses;*/
 
-        $data = array(  'eid' => base64_encode($eid),
-                        'oid' => base64_encode($oid),
-                        'perid' => base64_encode($perid),
-                        'pid' => $pid,
-                        'uid' => $uid,
-                        'escid' => $escid,
-                        'subid' => $subid,
-                        'curid' => $curid );
+        $request = array(   'eid' => base64_encode($eid),
+                            'oid' => base64_encode($oid),
+                            'perid' => base64_encode($perid),
+                            'pid' => $pid,
+                            'uid' => $uid,
+                            'escid' => $escid,
+                            'subid' => $subid,
+                            'curid' => $curid );
 
-        $server = new Eundac_Connect_Api('validate', $data);
+        $server = new Eundac_Connect_Api('validate', $request);
         $data = $server->connectAuth();
         $this->view->data = $data;
                 

@@ -11,15 +11,15 @@
 			<th class="text-center col-md-1">Creditos</th>
 		</tr>
 	<?php foreach ($this->data as $course): ?>
-		<?php foreach ($this->courses as $courseTake) : 
+		<?php /*foreach ($this->courses as $courseTake) : 
 			if ($course['courseid'] == $courseTake[0]['courseid']):
 				$classFila = 'text-success';
 			else :
 				$classFila = '';
 			endif 
-		endforeach ?>
+		endforeach */?>
 		<?php if ($course['llevo'] == 0): ?>
-			<tr class="success <?php echo $classFila ?>">
+			<tr class="success">
 				<td class="text-center"><?php echo $course['semid'] ?></td>
 				<td class="text-center"><?php echo $course['courseid'] ?></td>
 				<td><?php echo $course['name'] ?></td>

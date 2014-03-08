@@ -29,7 +29,7 @@
                     $where = array('eid' => $eid, 'oid' => $oid, 'parent' => $this->sesion->escid,'state' => 'A');
                     $specialities = $esc->_getFilter($where);
                     if ($specialities) {
-                        $allSchool = $escid.'--'.$specialities[0]['subid'];
+                        $allSchool = $escid.'TE--'.$specialities[0]['subid'];
                     }else{
                         $where = array('eid' => $eid, 'oid' => $oid, 'escid' => $this->sesion->escid,'state' => 'A');
                         $allSchool = '';
@@ -79,23 +79,37 @@
 
  	public function listteacherAction(){
  		try {
+            $user = new Api_Model_DbTable_Coursexteacher();
+            $person = new Api_Model_DbTable_Person();
+            $specialityDb = new Api_Model_DbTable_Speciality();
+
             $this->_helper->layout()->disableLayout();
- 			$eid = $this->sesion->eid;
- 			$oid = $this->sesion->oid;
- 			$perid = $this->_getParam('perid');
- 			$escid = $this->_getParam('escid');
- 			$subid = $this->_getParam('subid');
+            $eid   = $this->sesion->eid;
+            $oid   = $this->sesion->oid;
+            $perid = $this->_getParam('perid');
+            $escid = $this->_getParam('escid');
+            $subid = $this->_getParam('subid');
  			$this->view->perid = $perid;
  			$this->view->escid = $escid;
  			$this->view->subid = $subid;
             $data = array('subid'=>$subid, 'perid'=>$perid);
             $this->view->data = $data;
 
-            $where = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid, 'perid' => $perid);
-            $user = new Api_Model_DbTable_Coursexteacher();
+            $TE    = $escid['3'].$escid['4'];
 
-            $wheretea = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'perid' => $perid , 'subid' => $subid);
-            $allteacher = $user->_getAllTeacherXPeriodXEscid($wheretea);
+            if ($TE == 'TE') {
+                $escid = $escid['0'].$escid['1'].$escid['2'];
+                $wheretea = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'perid' => $perid , 'subid' => $subid);
+                $allteacher = $user->_getAllTeacherXPeriodXTodasEsc($wheretea);
+                $escuela = 'left(escid, 3)';
+                $this->view->TE = 'Si';
+            }else{
+                $escid = $escid;
+                $wheretea = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'perid' => $perid , 'subid' => $subid);
+                $allteacher = $user->_getAllTeacherXPeriodXEscid($wheretea);
+                $escuela = 'escid';
+            }
+            //$where  = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid, 'perid' => $perid);
 
             //Verificando Informe Academico
             $reportAcademicDb = new Api_Model_DbTable_Addreportacadadm();
@@ -118,13 +132,27 @@
 
             if ($allteacher) {
                 $t = count($allteacher);
+
+                $teachersAlready = '';
                 for ($i=0; $i < $t; $i++) {
-                    $course_tea = array(); 
+                    $course_tea = array();
                     $wherecour = array(
-                        'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid, 'perid' => $perid,
+                        'eid' => $eid, 'oid' => $oid, $escuela => $escid, 'subid' => $subid, 'perid' => $perid,
                         'uid' => $allteacher[$i]['uid'], 'pid' => $allteacher[$i]['pid']);
                     $course_tea = $user->_getFilter($wherecour,$attrib=null,$orders=array('courseid','turno'));
-                    if ($course_tea) {
+
+                    $interruptor = 0;
+                    foreach ($teachersAlready as $teacher) {
+                        if ($allteacher[$i]['uid'] == $teacher) {
+                            $interruptor = 1;
+                        }
+                    }
+                    if ($interruptor == 0) {
+                        $teachersAlready[$i] = $allteacher[$i]['uid'];
+                    }
+
+
+                    if ($course_tea and $interruptor == 0) {
                         $cour = new Api_Model_DbTable_Course();
                         $syl = new Api_Model_DbTable_Syllabus();
                         $per_cour = new Api_Model_DbTable_PeriodsCourses();
@@ -133,7 +161,7 @@
                         for ($j=0; $j < $cc; $j++) { 
                             $where_syl = array(
                                 'eid' => $eid, 'oid' => $oid, 'subid' => $subid, 'perid' => $perid, 
-                                'escid' => $escid, 'curid' => $course_tea[$j]['curid'], 
+                                'escid' => $course_tea[$j]['escid'], 'curid' => $course_tea[$j]['curid'], 
                                 'courseid' => $course_tea[$j]['courseid'], 'turno' => $course_tea[$j]['turno']);
                             $data_syll = $syl->_getOne($where_syl);
 
@@ -145,22 +173,31 @@
                             // $course_tea[$j]['state_record'] = $data_percour['state_record'];
 
                             $wherecour = array(
-                                'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid,
+                                'eid' => $eid, 'oid' => $oid, 'escid' => $course_tea[$j]['escid'], 'subid' => $subid,
                                 'curid' => $course_tea[$j]['curid'], 'courseid' => $course_tea[$j]['courseid']);
                             $datacour = $cour->_getOne($wherecour);
                             $course_tea[$j]['name'] = $datacour['name'];
+
+                            //Nombre Especialidad
+                            $where = array( 'eid'   => $eid,
+                                            'oid'   => $oid,
+                                            'escid' => $course_tea[$j]['escid']);
+                            $attrib = array('name');
+                            $nameSpec = $specialityDb->_getFilter($where, $attrib);
+                            $course_tea[$j]['name_school'] = $nameSpec[0]['name'];
                         }
-                        $allteacher[$i]['courses'] = $course_tea;
-                        $allteacher[$i]['cantidad_courses'] = $cc;
+                        $allteacherEnabled[$i]['courses'] = $course_tea;
+                        $allteacherEnabled[$i]['cantidad_courses'] = $cc;
                     }
 
-                    $person = new Api_Model_DbTable_Person();
-                    $data_person = $person->_getOne($where=array('eid' => $eid, 'pid' => $allteacher[$i]['pid']));
-                    $allteacher[$i]['full_name'] = $data_person['last_name0']." ".$data_person['last_name1'].", ".$data_person['first_name'];
+                    if ($interruptor == 0) {
+                        $data_person = $person->_getOne($where=array('eid' => $eid, 'pid' => $allteacher[$i]['pid']));
+                        $allteacherEnabled[$i]['full_name'] = $data_person['last_name0']." ".$data_person['last_name1'].", ".$data_person['first_name'];
+                    }
                 }
             }
-
- 			$this->view->data_teacher = $allteacher;
+            
+ 			$this->view->data_teacher = $allteacherEnabled;
  		} catch (Exception $e) {
  			print "Error: ".$e->getMessage();
  		}

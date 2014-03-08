@@ -1,0 +1,8 @@
+<?php if ($this->specialities): ?>
+	<option value="">Todas las Especialidades</option>
+	<?php foreach ($this->specialities as $speciality): ?>
+		<option value="<?php echo $speciality['escid'] ?>"><?php echo $speciality['name'] ?></option>
+	<?php endforeach ?>
+<?php else: ?>
+	<option value="">No Tiene Especialides</option>
+<?php endif ?>

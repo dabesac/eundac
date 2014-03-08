@@ -1,0 +1,51 @@
+<div class="modal-header" style="background-color: #d9edf7">
+    <div class="row">
+        <div class="col-md-5 col-md-offset-1">
+            <h5 class="text-center"><br>Proceso de Matricula Ingresantes <span class="text-danger"><?php echo $this->perid ?></span></h5>
+            
+        </div>
+        <div class="col-md-5">
+            <p class="text-center">Facultad de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomfac'] ?></span></p>
+            <p class="text-center">Escuela de <span class="text-info"><?php echo $this->infoSpeciality[0]['nomesc'] ?></span></p>
+        </div>
+        <div class="col-md-1">
+            <br>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+    </div>
+</div>
+<br>
+
+<div class="row">
+    <div class="col-md-5 col-md-offset-1">
+        <blockquote>
+            <br>
+            <p><span class="glyphicon glyphicon-user text-info"></span> <?php echo $this->student[0]['last_name0'].' '.$this->student[0]['last_name1'] ?> <span class="text-info"><?php echo $this->student[0]['first_name'] ?></span></p>
+            <h6>Codigo <span class="text-info"><?php echo $this->student[0]['uid'] ?></span></h6>
+            <h6>Semestre <span class="text-info">Ingresante</span></h6>
+        </blockquote>
+    </div>
+
+    <div class="col-md-3">
+        <blockquote>
+            <br>
+            <h5>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h5>
+            <h5>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
+        </blockquote>
+    </div>
+    <div class="col-md-2">
+        <br><br>
+        <?php $urlPrintRegister =  '/register/registerstudent/print'. 
+                                    '/uid/'.    base64_encode($this->dataStudent['uid']) .
+                                    '/pid/'.    base64_encode($this->dataStudent['pid']) .
+                                    '/escid/'.  base64_encode($this->dataStudent['escid']) .
+                                    '/subid/'.  base64_encode($this->dataStudent['subid']) ?>
+        <a id="printRegister" class="btn btn-default <?php echo $classPrint ?> form-control" target="_blank" href="<?php echo $urlPrintRegister ?>" disabled><span class="glyphicon glyphicon-print"></span> Imprimir Matricula</a>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div id="coursesPending" class="col-md-10 col-md-offset-1">
+
+    </div>
+</div>
