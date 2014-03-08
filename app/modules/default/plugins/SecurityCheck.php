@@ -82,6 +82,6 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
                     }
                 }
             } 
-        }   
+        }  
     }
 }
