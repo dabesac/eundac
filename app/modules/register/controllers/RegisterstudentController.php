@@ -690,9 +690,10 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                             'curid' => $curid );
 
         $server = new Eundac_Connect_Api('validate', $request);
-        $data = $server->connectAuth();
-        $this->view->data = $data;
-                
+        //$data = $server->connectAuth();
+        //$this->view->data = $data;
+        
+        print_r($request);
     }
 
         public function printAction(){

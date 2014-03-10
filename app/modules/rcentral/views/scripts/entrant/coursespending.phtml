@@ -32,8 +32,13 @@
 		</div>
 
 		<!--Datos Eliminados-->
+		<div id="alertSuccessDelete" class="alert alert-danger hidden alertMessages">
+			<a type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</a>
+			<h4>Eliminado!</h4>
+			<p>La Matricula se <strong>Elimino</strong> correctamente......</p>
+		</div>
 		<div id="deleteAllMessage" class="hidden">
-			<br><br>
+			<br>
 			<h4 class="text-muted text-center">No Existen <span class="text-danger">Registros</span></h4>
 			<br>
 		</div>
@@ -65,6 +70,9 @@
 		</div>
 	<?php endif ?>
 	<br>
+	<div class="row">
+		
+	</div>
 	<div class="row" id="allData">
 		<div class="col-md-10">
 			<table class="table table-hover">
@@ -72,7 +80,7 @@
 					<th class="text-center col-md-1">#</th>
 					<th class="text-center col-md-1">Codigo</th>
 					<th class="col-md-4">Curso</th>
-					<th class="text-center col-md-1 tdIniciado">#Mat</th>
+					<th class="text-center col-md-1 cantSignStudents">#Mat</th>
 					<th class="text-center col-md-1">Turno</th>
 					<th class="col-md-3">Docente</th>
 					<th class="messageTh"></th>
@@ -85,7 +93,7 @@
 				<input type="hidden" name="escid" value="<?php echo $this->dataStudent['escid'] ?>">
 				<input type="hidden" name="perid" value="<?php echo $this->dataStudent['perid'] ?>">
 				<input type="hidden" name="curid" value="<?php echo $this->dataStudent['curid'] ?>">
-				<input type="hidden" name="exist" value="<?php echo $this->exist ?>">
+				<input id="existRegister" type="hidden" name="exist" value="<?php echo $this->exist ?>">
 				<input id="whySend" type="hidden" name="whySend" value="">
 
 				<?php if ($this->stateStudent == 'M'): 
@@ -105,7 +113,8 @@
 
 						<!--tdIniciado-->
 							<td class="tdIniciado"><?php echo $course['name'] ?></td>
-							<td class="tdIniciado text-center text-success">
+							<td class="tdOtherState"><?php echo $this->coursesName[$c][0]['name'] ?></td>
+							<td class="cantSignStudents text-center text-success" id="howManySign<?php echo $course['courseid'] ?>">
 								<?php 
 								$interruptor = 0;
 								foreach ($this->cantStudents as $cantidad): ?>
@@ -149,7 +158,6 @@
 						<!--______________________________________________________________-->
 
 						<!--tdOtherState-->
-							<td class="tdOtherState"><?php echo $this->coursesName[$c][0]['name'] ?></td>
 							<td class="text-center tdOtherState"><?php echo $course['turno'] ?></td>
 							<td class="tdOtherState"><?php echo $this->coursesTeachers[$c][0]['last_name0'].' '.$this->coursesTeachers[$c][0]['last_name1'].' '.$this->coursesTeachers[$c][0]['first_name'] ?></td>
 							<td class="text-center stateRegister"></td>
@@ -168,23 +176,31 @@
 
 		<!--Botones de Validación-->
 		<div class="col-md-2">
-			<br>
-			<a id="validateBtn" href="##" class="btn btn-success form-control btnProcessRegister">Validar</a>
-			<br><br>
-			<a id="observedBtn" href="##" class="btn btn-warning form-control btnProcessRegister">Observar</a>
-			<br><br>
-			<a id="reservedBtn" href="##" class="btn btn-info form-control btnProcessRegister">Reservar</a>
-			<br><br>
-			<a id="deleteBtn" href="##" class="btn btn-danger form-control btnProcessRegister">Eliminar</a>
+			<div class="panel panel-default">
+				<div class="container">
+					<br>
+					<a id="validateBtn" href="##" class="btn btn-success form-control btnProcessRegister">Validar</a>
+					<br><br>
+					<a id="observedBtn" href="##" class="btn btn-warning form-control btnProcessRegister">Observar</a>
+					<br><br>
+					<a id="reservedBtn" href="##" class="btn btn-info form-control btnProcessRegister">Reservar</a>
+					<br><br>
+					<div class="deleteBtnGroup">
+						<a id="deleteBtn" href="##" class="btn btn-danger form-control btnProcessRegister">Eliminar</a>
+						<br><br>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<script>
-		//Alertas y esas cosas
+		//Variables y esas cosas
+		var uid = $('#uid').val();
 
 		//Bloquear Botones y otras Cosas de acuerdo al estado
 		var stateStudent = $('#stateStudent').val();
 		if (stateStudent == 'M') {
-			$('.tdIniciado').addClass('hidden');
+			$('.tdIniciado, .cantSignStudents').addClass('hidden');
 			$('#validateBtn').attr('disabled', 'true');
 			$('#printRegister').removeAttr('disabled');
 			$('.messageTh').removeClass('hidden');
@@ -204,9 +220,7 @@
 			$('.stateRegister').html('<strong>Reservado</strong>');
 		}else if (stateStudent == 'I'){
 			$('.tdOtherState').addClass('hidden');
-			$('#deleteBtn').addClass('hidden');
-			//Variables y esas cosas
-			var uid = $('#uid').val();
+			$('.deleteBtnGroup').addClass('hidden');
 
 			//Seleccionar Turno y Cambiar de Docente
 			$(".selectTurnos").change(function(){
@@ -217,7 +231,10 @@
 				$('#docentesTurno' + course + 'span').each(function(){
 					$(this).addClass('hidden');
 				});
-				$('#docente' + turno + course).removeClass('hidden');
+				$('#howManySign' + course + 'span').each(function(){
+					$(this).addClass('hidden');
+				});
+				$('#docente' + turno + course + ', #cantidad' + turno + course).removeClass('hidden');
 			});
 
 			//Seleccionar Todos los Turnos
@@ -235,10 +252,13 @@
 					valorSplit = valor.split('--');
 					turno = valorSplit[0];
 					course = valorSplit[1];
+					$('#howManySign' + course + 'span').each(function(){
+						$(this).addClass('hidden');
+					});
 					$('#docentesTurno' + course + 'span').each(function(){
 						$(this).addClass('hidden');
 					});
-					$('#docente' + turno + course).removeClass('hidden');
+					$('#docente' + turno + course + ', #cantidad' + turno + course).removeClass('hidden');
 				});
 			});
 
@@ -281,9 +301,11 @@
 					$('.stateRegister').addClass('hidden');
 					$('.btnProcessRegister').removeAttr('disabled');
 					$('.listStudent').removeClass('info success warning');
+					$('.validateMessage').removeClass('text-info text-success text-warning');
 					if (data == 'true') {
 						if (whySendRegister == 'M') {
 							//Acciones para Validar
+							$('#stateStudent').val('M');
 							$('.listStudent').addClass('success');
 							$('.validateMessage').addClass('text-success');
 							$('.validateMessage').html('<strong>Matriculado</strong>');
@@ -292,8 +314,23 @@
 							$('#studentRow' + uid).attr('state', 'Matriculados');
 							$('#state' + uid).html('Matriculados');
 							$('#alertSuccessValidate').removeClass('hidden');
+							$(".selectTurnos option:selected").each(function(){
+								valor = $(this).val();
+								valorSplit = valor.split('--');
+								turno = valorSplit[0];
+								course = valorSplit[1];
+								$('#howManySign' + course + 'span').each(function(){
+									var plusSign = $(this).hasClass('hidden');
+									if (!plusSign) {
+										valorSign = $(this).text();
+										valorSign++;
+										$('#cantidad' + turno + course).text(valorSign);
+									};
+								});
+							});
 						}else if (whySendRegister == 'R'){
 							//Acciones para Reservar
+							$('#stateStudent').val('R');
 							$('.listStudent').addClass('info');
 							$('.validateMessage').addClass('text-info');
 							$('.validateMessage').html('<strong>Reservado</strong>');
@@ -303,6 +340,7 @@
 							$('#alertSuccessReserved').removeClass('hidden');
 						}else if (whySendRegister == 'O'){
 							//Acciones para Observar
+							$('#stateStudent').val('O');
 							$('.listStudent').addClass('warning');
 							$('.validateMessage').addClass('text-warning');
 							$('.validateMessage').html('<strong>Observado</strong>');
@@ -312,13 +350,14 @@
 							$('#alertSuccessObserved').removeClass('hidden');
 						}else if (whySendRegister == 'E'){
 							//Acciones para Observar
-							$('#deleteAllMessage').removeClass('hidden');
+							$('#deleteAllMessage, #alertSuccessDelete').removeClass('hidden');
 							$('#allData').addClass('hidden');
 							$('#studentRow' + uid).attr('state', 'Delete');
 							$('#state' + uid).html('Eliminados');
 						};
 						
 						//Acciones Globales
+						$('#existRegister').val('Yes');
 						$('#allTurnosDiv').addClass('hidden');
 						$('.validateMessage, .messageTh').removeClass('hidden');
 

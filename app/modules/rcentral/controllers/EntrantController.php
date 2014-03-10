@@ -274,12 +274,12 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 						'uid' 	=> $uid,
 						'perid' => $perid );
 
-        $courses = $registerxCourseDb->_getFilter($where, $attrib);
-        if ($courses[0]['state'] and $courses[0]['state'] <> 'I') {
-        	$this->view->stateStudent = $courses[0]['state'];
+        $data = $registerxCourseDb->_getFilter($where, $attrib);
+        if ($data[0]['state'] and $data[0]['state'] <> 'I') {
+        	$this->view->stateStudent = $data[0]['state'];
         	$this->view->exist = 'Yes';
         	$c = 0;
-        	foreach ($courses as $course) {
+        	foreach ($data as $course) {
         		//Nombre Cursos
         		$attrib = array('name');
         		$where = array(	'eid'      => $eid, 
@@ -317,7 +317,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
         		$c++;
         	}
-        	$this->view->data = $courses;
+        	$this->view->data = $data;
         	$this->view->coursesName = $coursesName;
         	$this->view->coursesTeachers = $coursesTeachers;
         }elseif ($courses[0]['state'] == 'I' or !$courses[0]['state']){
@@ -335,25 +335,30 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 	        $server = new Eundac_Connect_Api('pendig_cachimbos', $request);
 	        $data = $server->connectAuth();
 	        $this->view->data = $data;
-	        $c = 0;
-	        foreach ($data as $course) {
-	        	$attrib = array('state', 'courseid', 'turno');
-	        	$where = array(	'eid'      => $eid,
-								'oid'      => $oid,
-								'escid'    => $escid,
-								'subid'    => $subid,
-								'perid'    => $perid,
-								'courseid' => $course['courseid'],
-								'curid'    => $course['curid'],
-								'turno'    => $course['turno'],
-								'state'    => 'M' );
-	        	$students = $registerxCourseDb->_getFilter($where, $attrib);
-	        	$cantStudents[$c]['cantidad'] = count($students);
-	        	$cantStudents[$c]['courseid'] = $students[0]['courseid'];
-	        	$c++;
-	        }
-	        $this->view->cantStudents = $cantStudents;
         }
+        $c = 0;
+        foreach ($data as $course) {
+        	$attrib = array('state', 'courseid', 'turno');
+        	$where = array(	'eid'      => $eid,
+							'oid'      => $oid,
+							'escid'    => $escid,
+							'subid'    => $subid,
+							'perid'    => $perid,
+							'courseid' => $course['courseid'],
+							'curid'    => $course['curid'],
+							'turno'    => $course['turno'],
+							'state'    => 'M' );
+        	$students = $registerxCourseDb->_getFilter($where, $attrib);
+        	if ($students) {
+        		$cantStudents[$c]['cantidad'] = count($students);
+        	}else {
+        		$cantStudents[$c]['cantidad'] = '0';
+        	}
+        	$cantStudents[$c]['courseid'] = $course['courseid'];
+        	$cantStudents[$c]['turno'] = $course['turno'];
+        	$c++;
+        }
+        $this->view->cantStudents = $cantStudents;
 
 	}
 
