@@ -1,0 +1,16 @@
+<?php
+if ($this->datad) {	?>
+	
+	<option value=" ">- Seleccione un Distrito -</option>
+
+	<?php
+	foreach ($this->datad as $datad) {	?>	
+	<option value="<?php echo $datad['disid']?>"><?php echo $datad['name_d']?></option>
+	<?php
+	}
+}
+else{	?>
+	<option value=" ">- No existen Distritos -</option>
+<?php
+}
+?>

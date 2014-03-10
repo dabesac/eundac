@@ -59,7 +59,7 @@
 		</div>
 	</div>
 </form>
-<div class='col-md-4 col-md-offset-2'><button id ='enviar' class='btn btn-success'>Actualizar</button></div>
+<div class='col-md-2 col-md-offset-10'><button id ='enviar' class='btn btn-success'>Actualizar</button></div>
 
 <script>
 	// $('#mail_person, #mail_work').attr('type', 'email');
@@ -69,6 +69,10 @@
 	// $("#save").click(function(){
 	// 	$('#form').submit();
 	// })
+	var valor='PE';
+	$("#country option[value="+valor+"]").attr("selected",true);
+	var url="/profile/public/countrystate/coid/"+valor;
+    $("#country_s").load(url);
 
 	$("#enviar").click(function(){   
         var url="/profile/public/studenteditinfo/";
@@ -90,6 +94,28 @@
 			});
 		});    	
     };
+
+    var country="<?php echo $this->country?>";
+    if (country==1) {
+    	var datacountry="<?php echo $this->data['country']?>";
+    	var url="/profile/public/countrystate/coid/"+datacountry;
+    	$("#country_s").load(url);
+    };
+
+    var country_s="<?php echo $this->country_s?>";
+    if (country_s==1) {
+    	var datacountry_s="<?php echo $this->data['country_s']?>";
+    	var url="/profile/public/countryprovince/cosid/"+datacountry_s;
+    	$("#country_p").load(url);
+    };
+
+    var country_p="<?php echo $this->country_p?>";
+    if (country_p==1) {
+    	var datacountry_p="<?php echo $this->data['country_p']?>";
+    	var url="/profile/public/countrydistrict/proid/"+datacountry_p;
+    	$("#country_d").load(url);
+    };
+    
 	// $("#form").submit(function(){
 	// 	$.ajax({
 	//         type: 'POST',

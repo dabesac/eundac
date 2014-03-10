@@ -67,9 +67,31 @@
 				<small class="text-muted">Work E-mail </small> <b class="text-info"><?php echo $this->datos[3]['mail_work']?></b>
 			</div->
 		</div>
+		<?php
+		if ($this->datos[2]) {	
+			$dataubigeo=$this->datos[2][0];
+		?>	
+		<br>
+		<div class="row">
+			<div class="col-md-2">
+				<center><h2><span class="glyphicon glyphicon-globe text-muted"></span></h2></center>
+			</div>
+			<div class="col-md-4">
+				<small class="text-muted">País </small><b class="text-info"><?php echo $dataubigeo['name_c']?></b><br>
+				<small class="text-muted">Departamento </small><b class="text-info"><?php echo $dataubigeo['name_s']?></b><br>
+			</div>
+			<div class='col-md-6'>
+				<small class="text-muted">Provincia </small><b class="text-info"><?php echo $dataubigeo['name_p']?></b><br>
+				<small class="text-muted">Distrito </small><b class="text-info"><?php echo $dataubigeo['name_d']?></b><br>
+			</div>
+		</div>
+		<?php
+		}	
+		?>
 	</div>
     </div>
 </div>
+
 <div class="panel panel-info">
 	<div class="panel-body">
 		<h3 class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Información Adicional</h3>

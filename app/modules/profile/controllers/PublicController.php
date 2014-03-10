@@ -111,11 +111,14 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dbperson=new Api_Model_DbTable_Person();
             $where=array("eid"=>$eid, "pid"=>$pid);
             $datos[3]=$dbperson->_getOne($where);
-           
+
+            $wheres=array('disid'=>$datos[3]['location']);
+            $bdubigeo=new Api_Model_DbTable_CountryDistrict();
+            $datos[2]=$bdubigeo->_infoUbigeo($wheres);
+
             $dbdetingreso=new Api_Model_DbTable_Studentsignin();
             $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "pid"=>$pid, "uid"=>$uid);
             $datos[4]=$dbdetingreso->_getOne($where);
-            //print_r($datos);
 
             $this->view->datos=$datos;
         }catch(exception $e){
@@ -181,7 +184,17 @@ class Profile_PublicController extends Zend_Controller_Action {
                     
                 }
                 else{
-                    $form->populate($formdata);                
+                    $form->populate($formdata);
+                    $this->view->data=$formdata;                    
+                    if ($formdata['country']) {
+                        $this->view->country=1;
+                    }
+                    if ($formdata['country_s']) {
+                        $this->view->country_s=1;
+                    }
+                    if ($formdata['country_p']) {
+                        $this->view->country_p=1;
+                    }
                 }
             }
             else{

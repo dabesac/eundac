@@ -1,0 +1,16 @@
+<?php
+if ($this->datas) {	?>
+	
+	<option value=" ">- Seleccione un Departamento -</option>
+
+	<?php
+	foreach ($this->datas as $datas) {	?>	
+	<option value="<?php echo $datas['cosid']?>"><?php echo $datas['name_s']?></option>
+	<?php
+	}
+}
+else{	?>
+	<option value=" ">- No existe Departamentos -</option>
+<?php
+}
+?>
