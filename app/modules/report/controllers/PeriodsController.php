@@ -32,12 +32,14 @@
                         $allSchool = $escid.'TE--'.$specialities[0]['subid'];
                     }else{
                         $where = array('eid' => $eid, 'oid' => $oid, 'escid' => $this->sesion->escid,'state' => 'A');
-                        $allSchool = '';
+                        $allSchool ='';
                     }
                 }else{
                     $where = array('eid' => $eid, 'oid' => $oid, 'state' => 'A');
+                    $allSchool =' ';
                 }
             }
+            
             $dataesc = $esc->_getFilter($where,$attrib=null,$orders=array('facid','escid'));
             $this->view->allSchool = $allSchool;
 

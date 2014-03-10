@@ -669,7 +669,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $oid   = $this->sesion->oid;
         $perid = $this->sesion->period->perid;
 
-        /*$where = array( 'eid'   => $eid,
+        $where = array( 'eid'   => $eid,
                         'oid'   => $oid,
                         'perid' => $perid,
                         'escid' => base64_decode($escid),
@@ -678,7 +678,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'uid'   => base64_decode($uid) );
         $attrib = array('courseid');
         $courses = $coursesDb->_getFilter($where, $attrib);
-        $this->view->courses = $courses;*/
+        $this->view->courses = $courses;
 
         $request = array(   'eid' => base64_encode($eid),
                             'oid' => base64_encode($oid),
@@ -692,7 +692,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $server = new Eundac_Connect_Api('validate', $request);
         $data = $server->connectAuth();
         $this->view->data = $data;
-                
+        
     }
 
         public function printAction(){
