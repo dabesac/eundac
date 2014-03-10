@@ -7,23 +7,28 @@
 		<tr class="active">
 			<th class="text-center col-md-1">Semestre</th>
 			<th class="text-center col-md-1">Codigo</th>
-			<th class="col-md-9">Curso</th>
+			<th class="col-md-8">Curso</th>
 			<th class="text-center col-md-1">Creditos</th>
+			<th class="text-center col-md-1">Veces</th>
 		</tr>
-	<?php foreach ($this->data as $course): ?>
-		<?php /*foreach ($this->courses as $courseTake) : 
-			if ($course['courseid'] == $courseTake[0]['courseid']):
-				$classFila = 'text-success';
-			else :
-				$classFila = '';
-			endif 
-		endforeach */?>
-		<?php if ($course['llevo'] == 0): ?>
-			<tr class="success">
+	<?php foreach ($this->data as $course):
+		$llevando = 0;
+		$classTextLlevo = '';
+		foreach ($this->courses as $courseTake) : 
+			if ($course['courseid'] == $courseTake['courseid']) {
+				$llevando = 1;
+			}
+		endforeach ?>
+		<?php if ($llevando == 1){
+			$classTextLlevo = 'text-success';
+		} 
+		if ($course['llevo'] == 0): ?>
+			<tr class="success <?php echo $classTextLlevo ?>">
 				<td class="text-center"><?php echo $course['semid'] ?></td>
 				<td class="text-center"><?php echo $course['courseid'] ?></td>
 				<td><?php echo $course['name'] ?></td>
 				<td class="text-center"><?php echo $course['credits'] ?></td>
+				<td class="text-center"><?php echo $course['veces'] ?></td>
 			</tr>
 		<?php endif ?>
 	<?php endforeach ?>
@@ -38,6 +43,7 @@
 			<th class="text-center col-md-1">Codigo</th>
 			<th class="col-md-9">Curso</th>
 			<th class="text-center col-md-1">Creditos</th>
+			<th class="text-center col-md-1">Veces</th>
 		</tr>
 	<?php foreach ($this->data as $course): ?>
 		<?php if ($course['llevo'] == 2): ?>
@@ -46,6 +52,7 @@
 				<td class="text-center"><?php echo $course['courseid'] ?></td>
 				<td><?php echo $course['name'] ?></td>
 				<td class="text-center"><?php echo $course['credits'] ?></td>
+				<td class="text-center"><?php echo $course['veces'] ?></td>
 			</tr>
 		<?php endif ?>
 	<?php endforeach ?>
