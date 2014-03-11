@@ -67,6 +67,9 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studentAction()
     {
         try{
+            $success = $this->_getParam('success');
+            $this->view->success = $success;
+
         	$eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $pid=$this->sesion->pid;

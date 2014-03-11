@@ -67,6 +67,22 @@
 				endforeach ?>
 				</select>
 			</div>
+			<div class="col-md-3 col-md-offset-2">
+				<?php if ($this->dataProfile['registerValidate'] == 'yes'): ?>
+					<h5 id="dataProfile" value="yes" class="pull-right text-success"><span class="glyphicon glyphicon-record"> Apto para Validar</span></h5>
+				<?php else: ?>
+					<?php if ($this->dataProfile['family'] == 'no'){
+						$emptyProfileF = 'Falta Datos Familiares';
+					} 
+					if ($this->dataProfile['academic'] == 'no'){
+						$emptyProfileA = ' | Falta Datos Academicos';
+					}
+					if ($this->dataProfile['statistic'] == 'no'){
+						$emptyProfileS = ' | Falta Datos Estadisticos';
+					} ?>
+					<h5 id="dataProfile" value="no" class="pull-right text-danger" title="<?php echo $emptyProfileF.$emptyProfileA.$emptyProfileS ?>"><span class="glyphicon glyphicon-record"></span> No Apto Para Validar</h5>
+				<?php endif ?>
+			</div>
 		</div>
 	<?php endif ?>
 	<br>
@@ -194,6 +210,15 @@
 		</div>
 	</div>
 	<script>
+		//Tooltips
+		$('#dataProfile').tooltip();
+
+		//DataProfile
+		var dataProfile = $('#dataProfile').attr('value');
+		if (dataProfile == 'no') {
+			$('#validateBtn, #observedBtn, #reservedBtn').attr('disabled', 'true');
+		};
+
 		//Variables y esas cosas
 		var uid = $('#uid').val();
 
@@ -234,7 +259,7 @@
 				$('#howManySign' + course + 'span').each(function(){
 					$(this).addClass('hidden');
 				});
-				$('#docente' + turno + course + ', #cantidad' + turno + course).removeClass('hidden');
+				//$('#docente' + turno + course + ', #cantidad' + turno + course).removeClass('hidden');
 			});
 
 			//Seleccionar Todos los Turnos
@@ -258,7 +283,7 @@
 					$('#docentesTurno' + course + 'span').each(function(){
 						$(this).addClass('hidden');
 					});
-					$('#docente' + turno + course + ', #cantidad' + turno + course).removeClass('hidden');
+					$('#docente' + turno + course).removeClass('hidden');
 				});
 			});
 

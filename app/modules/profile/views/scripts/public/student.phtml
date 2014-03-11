@@ -1,3 +1,30 @@
+<input type="hidden" id="successProfile" value="<?php echo $this->success ?>">
+<div id="alertCompleteProfile" class="alert alert-danger hidden">
+	<h4><span class="glyphicon glyphicon-exclamation-sign"></span> COMPLETA TU PERFIL : Información Estadistica y Socio-Economica</h4>
+	<p>Es muy importante que usted registre esta informacion para que colabore con el proceso de <strong>Acreditación Universitaria</strong> que su escuela viene trabajando.</p>
+	<p>Por favor lee las siguientes instrucciones :</p>
+	<ol>
+		<li>Para empezar tiene los siguientes datos para rellenar :</li>
+		<ul>
+			<li><strong>Informacion Principal</strong> (obligatorio)</li>
+			<li><strong>Datos Familiares</strong> (obligatorio)</li>
+			<li><strong>Datos Academicos</strong> (obligatorio)</li>
+			<li><strong>Datos Estadisticos</strong> (obligatorio)</li>
+			<li><strong>Datos Laborales</strong> (opcional, si es que ya trabajaste o hiciste practicas en algun lugar)</li>
+			<li><strong>Intereses</strong> (Obligatorio, todo tenemos hobbies)</li>
+		</ul>
+		<li>En la parte izquierda existe todo un <strong>Menu de Navegacion</strong> dale click a cualquiera.</li>
+		<li>Ahora, una vez entendido todo lo anterior; existen <strong>3 botones escenciales </strong> en todo el Perfil que le ayudaran a interactuar con este:</li>
+			<ul>
+				<li>El boton "Nuevo" <a href="##" class="btn btn-default btn-sm">Nuevo</a>, sirve para <strong>ingresar</strong> nuevos datos.</li>
+				<li>El boton "Editar" <span class="glyphicon glyphicon-pencil"></span> que esta representado por un lapiz, sirve para <strong>editar</strong> datos ya existentes.</li>
+				<li>Por ultimo el boton "Elimnar" <span class="glyphicon glyphicon-remove"></span>, que obviamente <strong>elimina</strong> datos que considera usted no deberian estar en su perfil.</li>
+			</ul>
+	</ol>
+	<br>
+	<p class="pull-right"><strong>Ahora que todo quedo claro pasemos a completar tu perfil </strong><a id="btnCompleteProfile" href="##" class="btn btn-default"><span class="text-success">Completar Perfil</span></a></p>
+	<br><br>
+</div>
 <div class="container">
 	<div class="panel panel-default">
 	<div class="row">
@@ -46,6 +73,18 @@
 
 <script>
 $(function () {
+	//Actualizar perfil
+	var successProfile = $('#successProfile').val();
+	if (successProfile == 'no') {
+		$('#alertCompleteProfile').removeClass('hidden');
+    	$('#profileTab li:eq(3) a').tab('show');
+	};
+	$('#btnCompleteProfile').click(function(){
+		$('html,body').animate({
+	        scrollTop: $("#profileTab").offset().top
+	    }, 500);
+	});
+
 	$('#printRecord').popover('show');
 	setTimeout(function() {
 	  $('#printRecord').popover('hide');

@@ -217,7 +217,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 						'pid'   => $pid,
 						'escid' => $escid, 
 						'subid' => $subid,
-						'perid' => '13A' );
+						'perid' => $perid );
 
         $attrib = array('date_payment', 'amount');
 
@@ -235,6 +235,9 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$registerDb 	   = new Api_Model_DbTable_Registration();
 		$courseDb          = new Api_Model_DbTable_Course();
 		$coursexTeacherDb  = new Api_Model_DbTable_Coursexteacher();
+		$realtionshipDb	   = new Api_Model_DbTable_Relationship();
+		$academicDb		   = new Api_Model_DbTable_Academicrecord();
+		$statisticDb	   = new Api_Model_DbTable_Statistics();
         //________________________________________________________
         $pid   = base64_decode($this->_getParam('pid'));
         $uid   = base64_decode($this->_getParam('uid'));
@@ -244,6 +247,46 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
         $eid   = $this->sesion->eid;    
         $oid   = $this->sesion->oid;
         $perid = $this->sesion->period->perid;
+
+        //Relleno Datos del Perfil
+        	$dataProfile['registerValidate'] = 'yes	';
+        	//Family
+	        $where = array(	'eid'   => $eid,
+							'pid'   => $pid );
+	        $relationship = $realtionshipDb->_getFilter($where);
+	        if ($relationship) {
+	        	$dataProfile['family'] = 'yes';
+	        }else {
+	        	$dataProfile['family'] = 'no';
+	        	$dataProfile['registerValidate'] = 'no';
+	        }
+
+	        //Datos Academicos
+	        $academic = $academicDb->_getFilter($where);
+         	if ($academic) {
+	        	$dataProfile['academic'] = 'yes';
+	        }else {
+	        	$dataProfile['academic'] = 'no';
+	        	$dataProfile['registerValidate'] = 'no';
+	        }
+
+	        //Datos Estadisticos
+	        $where = array(	'eid'   => $eid,
+							'oid'   => $oid,
+							'escid' => $escid,
+							'subid' => $subid,
+							'pid'   => $pid,
+							'uid'   => $uid );
+	        $statistic = $statisticDb->_getFilter($where);
+         	if ($statistic) {
+	        	$dataProfile['statistic'] = 'yes';
+	        }else {
+	        	$dataProfile['statistic'] = 'no';
+	        	$dataProfile['registerValidate'] = 'no';
+	        }
+
+
+	    $this->view->dataProfile = $dataProfile;
 
      	//Curricula
         $where = array(	'eid'   => $eid,

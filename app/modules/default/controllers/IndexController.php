@@ -14,11 +14,10 @@ class IndexController extends Zend_Controller_Action {
     {
     	try{
     	$sesion1  = Zend_Auth::getInstance();
-    	if($sesion1->hasIdentity()){
+    	/*if($sesion1->hasIdentity()){
     		$sesion = $sesion1->getStorage()->read();
     		$this->_helper->redirector('index','index',($sesion->rol['module']));
-    	}
-    	
+    	}*/
     	$form = new Default_Form_Login();
     	$this->view->form = $form; 
     	if ($this->getRequest()->isPost()) {
@@ -99,7 +98,57 @@ class IndexController extends Zend_Controller_Action {
     						$data->speciality->name=$esc['name'];
     					}
     				}
-    				
+                    //Verificar Si Lleno su perfil
+                    $realtionshipDb = new Api_Model_DbTable_Relationship();
+                    $academicDb     = new Api_Model_DbTable_Academicrecord();
+                    $statisticDb    = new Api_Model_DbTable_Statistics();
+                    $interestDb     = new Api_Model_DbTable_Interes();
+
+                    $data->fullProfile->success = 'yes';
+                    //Family
+                    $where = array( 'eid'   => $eid,
+                                    'pid'   => $data->pid );
+                    $relationship = $realtionshipDb->_getFilter($where);
+                    if ($relationship) {
+                        $data->fullProfile->family = 'yes';
+                    }else {
+                        $data->fullProfile->family = 'no';
+                        $data->fullProfile->success = 'no';
+                    }
+
+                    //Datos Academicos
+                    $academic = $academicDb->_getFilter($where);
+                    if ($academic) {
+                        $data->fullProfile->academic = 'yes';
+                    }else {
+                        $data->fullProfile->academic = 'no';
+                        $data->fullProfile->success = 'no';
+                    }
+
+                    //Datos de interes
+                    $interest = $interestDb->_getFilter($where);
+                    if ($interest) {
+                        $data->fullProfile->interes = 'yes';
+                    }else {
+                        $data->fullProfile->interes = 'no';
+                        $data->fullProfile->success = 'no';
+                    }
+
+                    //Datos Estadisticos
+                    $where = array( 'eid'   => $eid,
+                                    'oid'   => $oid,
+                                    'escid' => $data->escid,
+                                    'subid' => $data->subid,
+                                    'pid'   => $data->pid,
+                                    'uid'   => $uid );
+                    $statistic = $statisticDb->_getFilter($where);
+                    if ($statistic) {
+                        $data->fullProfile->statistic = 'yes';
+                    }else {
+                        $data->fullProfile->statistic = 'no';
+                        $data->fullProfile->success = 'no';
+                    }
+
     				// Set info User
     				$user = new Api_Model_DbTable_Users();
     				$row = $user->_getInfoUser(array("eid"=>$eid,"oid"=>$oid,"uid"=>$data->uid,
@@ -128,6 +177,8 @@ class IndexController extends Zend_Controller_Action {
     				$rowteacher = $teacher->_getOne($datate);
     				
     				$data->infouser['teacher']=$rowteacher;
+
+                    print_r($data);
                     
 					// Set ACL
     				//$tmpacl = $this->_aclCreated($data->rid,$data);
