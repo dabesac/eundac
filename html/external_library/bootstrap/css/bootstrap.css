@@ -4107,7 +4107,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .nav > li > a:hover,
 .nav > li > a:focus {
   text-decoration: none;
-  color: #fff;
+  /*color: #fff;*/
   border-radius: 0;
 }
 
@@ -4238,9 +4238,9 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
+  border-bottom: 2px solid #0065B4;
+  border-radius: 2px;
   color: #ffffff;
-  border-bottom: 4px solid #0065B4;
-  border-radius: 0;
 }
 
 .nav-stacked > li {
@@ -5221,7 +5221,7 @@ a.badge:focus {
 a.list-group-item.active > .badge,
 .nav-pills > .active > a > .badge {
   color: #428bca;
-  background-color: #ffffff;
+  background-color: #123452;
 }
 
 .nav-pills > li > a > .badge {

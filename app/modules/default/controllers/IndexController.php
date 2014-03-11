@@ -157,7 +157,22 @@ class IndexController extends Zend_Controller_Action {
     				$row[0]['fullname']=$full;
     				$data->sex=$row[0]['sex'];
     				$data->infouser=$row[0];
-    				
+
+                    $datate['eid']= $data->eid;
+                    $datate['oid']= $data->oid;
+                    $datate['uid']= $data->uid;
+                    $datate['pid']= $data->pid;
+                    $datate['escid']= $data->escid;
+                    $datate['subid']= $data->subid;
+                    $teacher = new Api_Model_DbTable_Infoteacher();
+                    $rowteacher = $teacher->_getOne($datate);
+                    
+                    $data->infouser['teacher']=$rowteacher;
+
+                    if ($data->infouser['teacher']['is_director']=='S') {
+                        $data->rid='DR';
+                    }
+
     				$rols_ = new Api_Model_DbTable_Rol();
     				$rol_ = $rols_->_getOne(array("eid"=>$data->eid,"oid"=>$data->oid,"rid"=>$data->rid));
     				if ($rol_)
@@ -167,18 +182,9 @@ class IndexController extends Zend_Controller_Action {
     					$this->_redirect("/error/msg/msg/'$msg'");
     				}
     				// Select infoteacher
-    				$datate['eid']= $data->eid;
-    				$datate['oid']= $data->oid;
-    				$datate['uid']= $data->uid;
-    				$datate['pid']= $data->pid;
-    				$datate['escid']= $data->escid;
-    				$datate['subid']= $data->subid;
-    				$teacher = new Api_Model_DbTable_Infoteacher();
-    				$rowteacher = $teacher->_getOne($datate);
     				
-    				$data->infouser['teacher']=$rowteacher;
 
-                    print_r($data);
+    				$data->infouser['teacher']=$rowteacher;
                     
 					// Set ACL
     				//$tmpacl = $this->_aclCreated($data->rid,$data);

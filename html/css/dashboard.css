@@ -4,10 +4,10 @@
 	}
 
 	.slide{
+		display: none;
+		height: 100%;
 		position: relative;
 		width:100%;
-		height: 100%;
-		display: none;
 	}
 
 	.slide_active{
@@ -30,10 +30,10 @@
 	}
 
 	.left_cont{
+		background-size: 100%;
+		height: 100%;
 		position: absolute;
 		width: 100%;
-		height: 100%;
-		background-size: 100%;
 	}
 
 	#left_img_1{
@@ -57,10 +57,10 @@
 	}
 
 	.transparent{
+		background-color: rgba(0, 0, 0, 0.6);
 		height: 200px;
 		position: relative;
 		top: 50%;
-		background-color: rgba(0, 0, 0, 0.6);
 	}
 	.text{
 		color: white;

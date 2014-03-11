@@ -92,14 +92,7 @@ class Profile_Form_Userinfo extends Zend_Form{
         $country->removeDecorator('HtmlTag')->removeDecorator('Label');
         $country->setRequired(true)->addErrorMessage("Campo Obligatorio");
         $country->setAttrib("class","form-control");
-        $country->addMultiOption("","- Seleccione -");
-        $len=count($data);
-        for ($i=0; $i < $len; $i++) { 
-            if ($data[$i]['coid']=='PE') {
-                $country->addMultiOption($data[$i]['coid'],$data[$i]['name_c']);
-            }           
-        }
-        
+        $country->addMultiOption("","- Seleccione -");        
         foreach ($data as $data) {
             $country->addMultiOption($data['coid'],$data['name_c']);            
         }   
