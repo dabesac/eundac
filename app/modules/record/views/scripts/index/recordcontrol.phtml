@@ -105,11 +105,14 @@ $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start(); 
 
-$mpdf=new mPDF(); 
-$mpdf=new mPDF('utf-8','A4',0,0,0,0,21,'',''); 
-$mpdf->SetHTMLHeader($header);
+$mpdf=new mPDF();
+$mpdf=new mPDF('win-1252','A4',0,0,0,0,32,10,0,0); 
+// $mpdf=new mPDF('utf-8','A4',0,0,0,0,40,'',''); 
+$mpdf->SetHTMLHeader($this->header);
+$mpdf->SetHTMLFooter($this->footer);
 $mpdf->WriteHTML($html);
-$mpdf->Output('Control'.'.pdf','D');
+// $mpdf->Output('Control'.'.pdf','D');
+$mpdf->Output();
 
 exit();
 //==============================================================

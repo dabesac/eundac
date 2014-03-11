@@ -12,7 +12,7 @@ class Api_Model_DbTable_CountryState extends Zend_Db_Table_Abstract{
 			if($row) return $row->toArray();
 			return false;
 		}catch (Exception $e){
-			print "Error: Read One Country ".$e->getMessage();
+			print "Error: Read One Country State ".$e->getMessage();
 		}
 	}
 
@@ -22,7 +22,7 @@ class Api_Model_DbTable_CountryState extends Zend_Db_Table_Abstract{
 			if($row) return $row->toArray();
 			return false;
 		}catch (Exception $e){
-			print "Error: Read All Country ".$e->getMessage();
+			print "Error: Read All Country State ".$e->getMessage();
 		}
 	}
 
