@@ -5,7 +5,7 @@
     $sesion = $auth->getStorage()->read();
     $rol = $sesion->rol['rid']; ?>
  <?php if ($rol != 'AL' && $rol !='DC'){ ?>
- <div class="col-lg-6 pull-right">
+ <div class="col-lg-7 pull-right">
     <form action="/profile/search" method='post'>
       <table >
         <th>
@@ -15,7 +15,7 @@
               <option value='EG'>Egresados</option>
          </select>
         </th>
-        <th><input type="text" class="form-control" name='uid'></th>
+        <th><input type="text" class="form-control" name='uid'style="width : 150px;"></th>
         <th><button class="btn btn-warning" type="submit" name='enviar'><span class='glyphicon glyphicon-search'></span></button></th>
       
       </table>

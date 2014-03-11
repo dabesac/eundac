@@ -93,6 +93,7 @@ class RegisternotesactasController extends Zend_Controller_Action{
             $where['escid']=$escid;
             $where['semid']=$semid;
             $where['perid']=$perid;
+   
 			$cur= new Api_Model_DbTable_PeriodsCourses();
 			$curso=$cur->_getAllcoursesXescidXsemester($where);
 			$this->view->cursos=$curso;
