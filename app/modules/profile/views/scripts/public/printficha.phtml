@@ -1,0 +1,12 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<div>
+    <div style="text-align:left; font-size:12px;"><b>Codigo: </b><?php echo strtoupper($this->uid)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Alumno: </b><?php echo strtoupper($this->person['last_name0']." ".$this->person['last_name1'].", ".$this->person['first_name'])?>
+    </div>
+</div>
+<div style="text-align: center; font-size:16px;margin-top:10px"><b> RECORD DE NOTAS </b></div> <br/>

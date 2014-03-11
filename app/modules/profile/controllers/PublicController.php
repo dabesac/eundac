@@ -19,6 +19,10 @@ class Profile_PublicController extends Zend_Controller_Action {
         
     }
 
+    public function validatefullprofileAction(){
+
+    }
+
     public function countrystateAction(){
         try {
             $this->_helper->layout()->disableLayout();
@@ -139,6 +143,15 @@ class Profile_PublicController extends Zend_Controller_Action {
             $pid=$this->sesion->pid;
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
+
+            $dataStudent = array(   'eid'   => base64_encode($eid),
+                                    'oid'   => base64_encode($oid),
+                                    'pid'   => base64_encode($pid),
+                                    'uid'   => base64_encode($uid),
+                                    'escid' => base64_encode($escid),
+                                    'subid' => base64_encode($subid) );
+
+            $this->view->dataStudent = $dataStudent;
 
             $dbsta=new Api_Model_DbTable_Statistics();
             $where=array("eid"=>$eid, "oid"=>$oid, "uid"=>$uid, "pid"=>$pid, "escid"=>$escid, "subid"=>$subid);
@@ -1166,6 +1179,10 @@ class Profile_PublicController extends Zend_Controller_Action {
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
+    }
+
+    public function printfichaAction(){
+        $this->_helper->layout()->disableLayout();
     }
 
     // public function studentsignrealizedAction()

@@ -117,6 +117,12 @@
 </div>
 
 <script>
+  
+
+  $('a').hover(function(){
+    $(this).tooltip('toggle');
+  });
+
   $("#newAcademic").click(function(){
     $('#datastudent').fadeOut('fast', function(){
       $('#datastudent').load('/profile/public/studentsaveacademic', function(){

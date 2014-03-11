@@ -203,6 +203,10 @@
 </div>
 
 <script>
+	$('a').hover(function(){
+    	$(this).tooltip('toggle');
+  	});
+  	
 	$("#newStatistic").click(function(){
 		$('#datastudent').fadeOut('fast', function(){
 			$('#datastudent').load('/profile/public/studentnewstatistic', function(){

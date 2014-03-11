@@ -211,6 +211,10 @@
 </div>
 
 <script>
+ 	$('a').hover(function(){
+    	$(this).tooltip('toggle');
+  	});
+  	
 	$('#editInfo').click(function(){
 		$('#datastudent').fadeOut('fast', function(){
 			$('#datastudent').load('/profile/public/studenteditinfo', function(){

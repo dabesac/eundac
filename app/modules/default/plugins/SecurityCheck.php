@@ -19,7 +19,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
 
     public function preDispatch (Zend_Controller_Request_Abstract $request){
 
-        $this->_module= $this->getRequest()->getModuleName();
+        /*$this->_module= $this->getRequest()->getModuleName();
         $this->_controller = $this->getRequest()->getControllerName();
         $this->_action= $this->getRequest()->getActionName();
 
@@ -37,7 +37,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
              $request->setModuleName('default')
                         ->setControllerName('index') 
                         ->setActionName('index');
-        }
+        }*/
     }
 
     /**

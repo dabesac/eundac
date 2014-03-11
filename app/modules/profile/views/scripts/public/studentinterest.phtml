@@ -83,7 +83,10 @@
 
 
 <script>
-
+	$('a').hover(function(){
+    	$(this).tooltip('toggle');
+  	});
+  	
 	$("#newInterest").click(function(){
     	$('#datastudent').fadeOut('fast', function(){
 			$('#datastudent').load('/profile/public/studentnewinterest', function(){
