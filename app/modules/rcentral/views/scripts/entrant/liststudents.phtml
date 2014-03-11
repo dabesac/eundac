@@ -1,0 +1,68 @@
+<br><br>
+<?php if ($this->studentEntrant): ?>
+	<ul>
+		<li style="list-style : none; height : 27px;">
+			<table class="table table hover">
+				<tr class="active">
+					<th class="col-md-1 text-center">#</th>
+					<th class="col-md-1 text-center">Codigo</th>
+					<th class="col-md-3">Estudiante</th>
+					<th class="col-md-2 text-center">Escuela</th>
+					<th class="col-md-1 text-center">Matricula</th>
+				</tr>
+			</table>
+		</li>
+	</ul>
+	<ul id="students">
+		<?php $c = 0;
+		foreach ($this->studentEntrant as $student): ?>
+			<li id="studentRow<?php echo $student[0]['uid'] ?>" style="list-style : none; height : 37px;" state="<?php echo $this->studentState[$c]['state'] ?>"><span id="state<?php echo $student[0]['uid'] ?>" class="hidden"><?php echo $this->studentState[$c]['state'] ?></span>
+				<table class="table table-hover">
+					<tr>
+						<td id="numeracion<?php echo $c ?>" class="col-md-1 text-center"></td>
+						<td class="col-md-1 text-center"><?php echo $student[0]['uid'] ?></td>
+						<td class="col-md-3"><?php echo $student[0]['last_name0'].' '.$student[0]['last_name1'].' '.$student[0]['first_name'] ?></td>
+						<td class="col-md-2 text-center"><span class="hidden"><?php echo $this->studentSpeciality[$c][0]['escid'] ?></span><?php echo $this->studentSpeciality[$c][0]['name'] ?></td>
+						<td class="col-md-1 text-center"><a id="detailBtn<?php echo $student[0]['uid'] ?>" data-toggle="modal" data-target=".modalRegister" class="text-success" href="##"><span class="glyphicon glyphicon-send"></span></a></td>
+						<script>
+							$("#detailBtn<?php echo $student[0]['uid'] ?>").click(function(){
+								$.ajax({
+									url    : "/rcentral/entrant/detailregister/",
+									data   : {	pid  : $.base64.encode("<?php echo $student[0]['pid'] ?>"), 
+												uid  : $.base64.encode("<?php echo $student[0]['uid'] ?>"),
+												escid: $.base64.encode("<?php echo $this->studentSpeciality[$c][0]['escid'] ?>") },
+									success: function(data){
+										$('#detailModal').html(data);
+										$('#coursesPending').html("<br><center>Cargando... <img src='/img/spinner.gif' alt='Loading' /></center><br>")										
+										$.ajax({
+											url    : "/rcentral/entrant/coursespending/",
+											data   : {	pid  : $.base64.encode("<?php echo $student[0]['pid'] ?>"), 
+														uid  : $.base64.encode("<?php echo $student[0]['uid'] ?>"),
+														escid: $.base64.encode("<?php echo $this->studentSpeciality[$c][0]['escid'] ?>"),
+														subid: $.base64.encode("<?php echo $this->studentSpeciality[$c][0]['subid'] ?>") },
+											success: function(data){
+												$('#coursesPending').html(data);
+											}
+										});
+									}
+								});
+							});
+						</script>
+					</tr>
+				</table>
+			</li>
+		<?php $c++;
+		endforeach ?>
+	</ul>
+	
+	<div class="modal fade modalRegister" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width : 1200px;">
+            <div id="detailModal" class="modal-content">
+
+            </div>
+        </div>
+    </div>
+
+<?php else: ?>
+	<h4 class="text-muted text-center">No Existen <span class="text-danger">Registros</span></h4>
+<?php endif ?>

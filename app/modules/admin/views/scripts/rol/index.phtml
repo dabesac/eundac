@@ -28,7 +28,7 @@
                     <td>
                         <center>
                         <!-- <a title='Modificar un registro' href='/admin/rol/update/rid/<?php echo base64_encode($rid)?>'><span class="glyphicon glyphicon-pencil"></span></a> -->
-                        <a id='updaterol' href="#" rid='<?php echo base64_encode($rid)?>'><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a class='updaterol' href="#" rid='<?php echo base64_encode($rid)?>'><span class="glyphicon glyphicon-pencil"></span></a>
                         </center>
                     </td>
                     <td><center><a title='Eliminar un registro' href='/admin/rol/delete/rid/<?php echo base64_encode($rid)?>' onclick="return confirm('Esta Seguro que desea eliminar el registro?');"><span class="glyphicon glyphicon-trash"></span></a></center></td> 
@@ -74,9 +74,10 @@
         $("#nuevo_rol").load(url);
     });
 
-    $("#updaterol").click(function(){   
-        $('#myModal1').modal('show');            
-        var url1="/admin/rol/update/";
+    $(".updaterol").click(function(){   
+        $('#myModal1').modal('show');
+        var rid=$(this).attr('rid');          
+        var url1="/admin/rol/update/rid/"+rid;
         $("#mo_rol").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
         $("#mo_rol").load(url1);
     });

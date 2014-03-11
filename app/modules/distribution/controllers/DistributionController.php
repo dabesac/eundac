@@ -59,7 +59,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
 
                 $datahours=$bdhorary->_getFilter($wheres);
                 $rows_distribution[$i]['hours']=$datahours; 
-                $i++;        
+                $i++;
             }
        		if ($rows_distribution) $this->view->ldistribution=$rows_distribution ;
         } catch (Exception $e) {
@@ -775,6 +775,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->view->uid=$uid;
             $this->view->pid=$pid;
             $this->view->escid=$escid;
+            $this->view->subid=$subid;
             $this->view->subiddoc=$subiddoc;
             $this->view->esciddoc=$esciddoc;
             $this->view->perid=$perid;
@@ -862,9 +863,56 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
+
+    public function hourstheoreticalAction(){
+        try {
+            $this->_helper->layout()->disablelayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $course=$this->_getParam('courseid');
+            $escid=$this->_getParam('escid');
+            $subid=$this->_getParam('subid');
+            $curid=$this->_getParam('curid');
+            $coursep=split(";--;",$course);
+            $courseid=$coursep[0];
+            $dbcourse= new Api_Model_DbTable_Course();
+            $where=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid);
+            $datacour=$dbcourse->_getOne($where);
+            $this->view->hteo=$datacour['hours_theoretical'];
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function hourspracticalAction(){
+        try {
+            $this->_helper->layout()->disablelayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $course=$this->_getParam('courseid');
+            $escid=$this->_getParam('escid');
+            $subid=$this->_getParam('subid');
+            $curid=$this->_getParam('curid');
+            $coursep=split(";--;",$course);
+            $courseid=$coursep[0];
+            $dbcourse= new Api_Model_DbTable_Course();
+            $where=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid);
+            $datacour=$dbcourse->_getOne($where);
+            $this->view->hpra=$datacour['hours_practical'];
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
     public function printreportdistriAction(){
         try {
             $this->_helper->layout()->disablelayout();
+            $fecha= new Zend_Date();
+            $dia=$fecha->get(Zend_Date::DAY);
+            $mes=$fecha->get(Zend_Date::MONTH_NAME);
+            $anio=$fecha->get(Zend_Date::YEAR);
+            $dateact=$dia." de ".$mes." del ".$anio;
+            $this->view->anio=$anio;
+            $this->view->dateact=$dateact;
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $uid=base64_decode($this->_getParam('uid'));
@@ -956,16 +1004,21 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 'escid'=>$escid,
                 'subid'=>$subid,
                 'pid'=>$pid,
-                'type_impression'=>'impresion_carga_acacemica',
+                'type_impression'=>'impresion_memorandum_carga_acacemica',
                 'date_impression'=>date('Y-m-d H:i:s'),
                 'pid_print'=>$uidim
                 );
             $dbimpression->_save($data);            
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,
-                'subid'=>$subid,'type_impression'=>'impresion_carga_acacemica');
+                'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica');
             $dataim = $dbimpression->_getFilter($wheri);
-                        
+
+            $wheri1 = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica');
+            $dataim1 = $dbimpression->_getFilter($wheri1);
+            
+            $conte = count($dataim1);
+            $this->view->conte=$conte;
             $co=count($dataim);            
             $codigo=$co." - ".$uidim;
             $header=$this->sesion->org['header_print'];

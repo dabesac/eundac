@@ -25,16 +25,25 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
             $escid = base64_decode($this->_getParam("escid"));
             $subid = base64_decode($this->_getParam("subid"));
             $t = $this->_getParam("t");
-
             $this->view->perid = $perid;
             $this->view->distid = $distid;
             $this->view->escid = $escid;
             $this->view->subid = $subid;
             $this->view->t = $t;            
 
+            $wheres=array("eid"=>$eid,"oid"=>$oid,"escid"=>$escid,"subid"=>$subid,"is_director"=>"S");
+            $dbinfo= new Api_Model_DbTable_UserInfoTeacher();
+            $datad=$dbinfo->_getFilter($wheres);
+            $uidd=$datad[0]['uid'];
+            $pidd=$datad[0]['pid'];
+
+            $wheress=array("eid"=>$eid,"oid"=>$oid,"escid"=>$escid,"subid"=>$subid,"uid"=>$uidd,"pid"=>$pidd);
+            $dbdir= new Api_Model_DbTable_Users();
+            $datadir= $dbdir->_getInfoUser($wheress);
+            $this->view->datadir=$datadir;
 
             if(substr($escid,0,3)=='2ES' and ($escid<>'2ESTY')){
-               $this->_redirect("/distribution/printdistribution/printsecond/t/$t/distid/".base64_encode($distid).
+                $this->_redirect("/distribution/printdistribution/printsecond/t/$t/distid/".base64_encode($distid).
                                 "/perid/".base64_encode($perid)."/subid/".base64_encode($subid).
                                 "/escid/".base64_encode($escid));
             }else{

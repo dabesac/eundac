@@ -18,7 +18,8 @@ class Admin_RolController extends Zend_Controller_Action{
 			$rol=new Api_Model_DbTable_Rol();
 			$where['eid']=$eid;
 			$where['oid']=$oid;
-			$data=$rol->_getAll($where);
+			$orders=array('rid');
+			$data=$rol->_getFilter($where,$attrib=null,$orders);
 			//print_r($data);
 			$this->view->data=$data;
 		} catch (Exception $e) {
@@ -83,6 +84,7 @@ class Admin_RolController extends Zend_Controller_Action{
 			$this->view->form=$form;
 			if ($this->getRequest()->isPost()) {
 				$frmdata=$this->getRequest()->getPost();
+				$frmdata['rid']=base64_decode($frmdata['rid']);
 				if ($form->isValid($frmdata)) {
 					unset($frmdata['send']);
 					trim($frmdata['name']);
@@ -93,15 +95,21 @@ class Admin_RolController extends Zend_Controller_Action{
                     $pk['oid']=$oid; 
                     $pk['rid']=$rid;                  
                     $reg_= new Api_Model_DbTable_Rol();
-                    // print_r($frmdata);
-                    $reg_->_update($frmdata,$pk);
-                    $this->_redirect("/admin/rol/");
+                    // $reg_->_update($frmdata,$pk);
+                    if ($reg_->_update($frmdata,$pk)) {
+                  		$this->view->valor=2;      
+                    }
+
+                    // $this->_redirect("/admin/rol/");
 				}
 				else
                 {
                     echo "Ingrese nuevamente por favor";
                 }
-			}			
+			}
+			else{
+				$this->view->rid=$rid;
+			}		
 		} catch (Exception $e) {
 			print "Error: Update Rol".$e->getMessage();
 		}

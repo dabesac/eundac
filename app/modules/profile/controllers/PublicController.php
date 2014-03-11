@@ -16,7 +16,52 @@ class Profile_PublicController extends Zend_Controller_Action {
 
     public function indexAction()
     {
+        
+    }
 
+    public function countrystateAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $coid=$this->_getParam('coid');
+            $where=array('coid'=>$coid);
+
+            $dbcountry_s=new Api_Model_DbTable_CountryState();
+            $datas=$dbcountry_s->_getAllxCountry($where);
+            $this->view->datas=$datas;
+
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function countryprovinceAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $cosid=$this->_getParam('cosid');
+            $where=array('cosid'=>$cosid);
+
+            $dbcountry_p=new Api_Model_DbTable_CountryProvince();
+            $datap=$dbcountry_p->_getAllxState($where);
+            $this->view->datap=$datap;
+
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function countrydistrictAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $proid=$this->_getParam('proid');
+            $where=array('proid'=>$proid);
+
+            $dbcountry_d=new Api_Model_DbTable_CountryDistrict();
+            $datad=$dbcountry_d->_getAllxProvince($where);
+            $this->view->datad=$datad;
+
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
     }
 
     public function studentAction()
@@ -114,14 +159,35 @@ class Profile_PublicController extends Zend_Controller_Action {
             $person["year"]=substr($person["birthday"], 0, 4);
             $person["month"]=substr($person["birthday"], 5, 2);
             $person["day"]=substr($person["birthday"], 8, 2);
-            //print_r($person);
-
             $form = new Profile_Form_Userinfo();
+
+            if ($this->getRequest()->isPost()){
+                $formdata=$this->getRequest()->getPost();
+                
+                if ($form->isValid($formdata)){
+                    $formdata['location']=$formdata['country_d'];
+                    $formdata['birthday']=$formdata['year']."-".$formdata['month']."-".$formdata['day'];
+                    unset($formdata['country']);
+                    unset($formdata['country_s']);
+                    unset($formdata['country_p']);
+                    unset($formdata['country_d']);
+                    unset($formdata['year']);
+                    unset($formdata['month']);
+                    unset($formdata['day']);
+                    $pk=array('eid'=>$eid,'pid'=>$pid);
+                    if($dbperson->_update($formdata,$pk)){
+                        $this->view->clave=1;
+                    }
+                    
+                }
+                else{
+                    $form->populate($formdata);                
+                }
+            }
+            else{
+                $form->populate($person);
+            }
             $this->view->form=$form;
-            $form->populate($person);
-
-            
-
         }catch(exception $e){
             print "Error ".$e->getMessage();
         }

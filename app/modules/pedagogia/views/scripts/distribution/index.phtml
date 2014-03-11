@@ -1,4 +1,7 @@
-<div class="row">
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Distribución');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/pedagogia/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+
+<!-- <div class="row">
 	<br><br>
 	<div class="col-md-9 col-md-offset-1">
 		<blockquote>
@@ -11,10 +14,10 @@
 		</blockquote>
 	</div>
 </div>
-<hr>
+<hr> -->
 <div class="row">
 	<div class="col-md-2 col-md-offset-2">
-		<h5 class="text-muted">Año</h5>
+		<h5 class="text-info">Año</h5>
 		<select class="form-control" name="Anio" id="anio">
 			<option value="">Seleccione Año</option>
 			<?php $anio = date(Y);
@@ -24,22 +27,22 @@
 		</select>
 	</div>
 	<div class="col-md-4">
-		<h5 class="text-muted">Periodo</h5>
+		<h5 class="text-info">Periodo</h5>
 		<select name="Periods" id="periods" class="form-control">
 			<option value="">Primero Seleccione un Año</option>
 		</select>
 	</div>
 	<div class="col-md-1 col-md-offset-1">
 		<br><br>
-		<a id="show" href="##" class="btn btn-success">Mostrar</a>
+		<a id="show" href="#" class="btn btn-success">Mostrar</a>
 	</div>
 </div>
 <hr>
 <br>
 <div id="data"></div>
 
-<div id="alert" class="alert alert-warning">
-	<strong>Error!</strong> Seleccione un periodo ¬¬
+<div id="alert" class="alert alert-warning text-center">
+	<h4><strong>Error!</strong> Seleccione un periodo</h4>
 </div>
 
 <script>
@@ -52,6 +55,7 @@
 			});
 		});
 	});
+
 	$('#show').click(function(){
 		var perid = $('#periods').val();
 		if (perid){
@@ -62,5 +66,4 @@
 			$('#alert').fadeIn('slow');
 		}
 	});
-
 </script>

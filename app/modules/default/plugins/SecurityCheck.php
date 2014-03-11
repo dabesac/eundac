@@ -77,12 +77,10 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
                        $this->_acl->allow($this->_role, $resourceToken);
                     }
                     if ($access['permission'] == 'deny') {
-                        # code...
                        $this->_acl->deny($this->_role, $resourceToken);
                     }
                 }
             } 
         }
-        
     }
 }

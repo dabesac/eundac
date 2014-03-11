@@ -134,6 +134,15 @@ for($n = 0; $n <= 2; $n++){
                     </tr>
                 </table>
                 <br>         
+                <?php 
+                $pkdistadm = array(
+                    'eid' => $teachers['eid'], 'oid' => $teachers['oid'], 'escid' => $this->escid, 
+                    'subid' => $this->subid, 'distid' => $this->distid, 'perid' => $this->perid,
+                    'uid' => $teachers['uid'], 'pid' => $teachers['pid']);
+                $ll = new Distribution_Model_DbTable_DistributionAdmin();
+                $l = $ll->_getAll($pkdistadm);  
+                if($l){
+                ?>
                 <table style="width: 100%">
                     <tr>
                         <th colspan="2">HORAS ADMINISTRATIVAS</th>
@@ -142,14 +151,7 @@ for($n = 0; $n <= 2; $n++){
                         <th class="span7" >Labor</th>
                         <th class="span1"><center>Horas</center></th>
                     </tr>
-                    <?php 
-                    $pkdistadm = array(
-                        'eid' => $teachers['eid'], 'oid' => $teachers['oid'], 'escid' => $this->escid, 
-                        'subid' => $this->subid, 'distid' => $this->distid, 'perid' => $this->perid,
-                        'uid' => $teachers['uid'], 'pid' => $teachers['pid']);
-                    $ll = new Distribution_Model_DbTable_DistributionAdmin();
-                    $l = $ll->_getAll($pkdistadm);
-                    if($l){
+                        <?php    
                         $tth = 0;
                         foreach ($l as $adm){
                             $labor = $adm['work'];
@@ -167,8 +169,6 @@ for($n = 0; $n <= 2; $n++){
                             <th><center><?php echo $tth?></center></th>    
                         </tr>
                         <?php
-                    } ?>
-                    <?php
                     $hh = new Distribution_Model_DbTable_DistributionTeacher();
                     $h = $hh->_getOne($pkdistadm);
                     $hacad = $h['total_hour_acad'];
@@ -180,6 +180,8 @@ for($n = 0; $n <= 2; $n++){
                         <th><center><?php echo $htotales?></center></th>
                     </tr>
                 </table>
+                    <?php
+                    } ?>
                 <br><br><br>
                 <?php
             }
@@ -304,6 +306,15 @@ foreach ($this->teachers as $teachers){
                 </tr>
             </table> 
             <br>   
+            <?php
+            $pkdistadm = array(
+                'eid' => $teachers['eid'], 'oid' => $teachers['oid'], 'escid' => $this->escid, 
+                'subid' => $this->subid, 'distid' => $this->distid, 'perid' => $this->perid,
+                'uid' => $teachers['uid'], 'pid' => $teachers['pid']);
+            $ll = new Distribution_Model_DbTable_DistributionAdmin();
+            $l = $ll->_getAll($pkdistadm);
+            if ($l) {
+                ?>
             <table style="width: 100%">
                 <tr>
                     <th colspan="2">HORAS ADMINISTRATIVAS</th>
@@ -312,14 +323,7 @@ foreach ($this->teachers as $teachers){
                     <th class="span7" >Labor</th>
                     <th class="span1"><center>Horas</center></th>
                 </tr>
-                <?php
-                $pkdistadm = array(
-                    'eid' => $teachers['eid'], 'oid' => $teachers['oid'], 'escid' => $this->escid, 
-                    'subid' => $this->subid, 'distid' => $this->distid, 'perid' => $this->perid,
-                    'uid' => $teachers['uid'], 'pid' => $teachers['pid']);
-                $ll = new Distribution_Model_DbTable_DistributionAdmin();
-                $l = $ll->_getAll($pkdistadm);
-                if ($l) {
+                    <?php
                     $tth = 0;
                     foreach ($l as $adm){
                         $labor = $adm['work'];
@@ -337,7 +341,6 @@ foreach ($this->teachers as $teachers){
                         <th><center><?php echo $tth?></center></th>
                     </tr> 
                     <?php
-                }
                 $hh = new Distribution_Model_DbTable_DistributionTeacher();
                 $h = $hh->_getOne($pkdistadm);
                 $hacad = $h['total_hour_acad'];
@@ -349,6 +352,9 @@ foreach ($this->teachers as $teachers){
                     <th><center><?php echo $htotales?></center></th> 
                 </tr>                             
             </table>
+            <?php
+                }
+            ?>    
             <br><br><br>
             <?php 
         }
@@ -476,6 +482,15 @@ if($this->practiceteachers){ ?>
             </tr>
         </table> 
         <br>
+        <?php 
+        $pkdistadm = array(
+            'eid' => $practiceteachers['eid'], 'oid' => $practiceteachers['oid'], 'escid' => $this->escid, 
+            'subid' => $this->subid, 'distid' => $this->distid, 'perid' => $this->perid,
+            'uid' => $practiceteachers['uid'], 'pid' => $practiceteachers['pid']);
+        $ll = new Distribution_Model_DbTable_DistributionAdmin();
+        $l = $ll->_getAll($pkdistadm);
+        if ($l){
+            ?>
         <table style="width: 100%"> 
             <tr>
                 <th colspan="2">HORAS ADMINISTRATIVAS</th>
@@ -484,14 +499,7 @@ if($this->practiceteachers){ ?>
                 <th class="span7" >Labor</th>
                 <th class="span1"><center>Horas</center></th>
             </tr>
-            <?php 
-            $pkdistadm = array(
-                'eid' => $practiceteachers['eid'], 'oid' => $practiceteachers['oid'], 'escid' => $this->escid, 
-                'subid' => $this->subid, 'distid' => $this->distid, 'perid' => $this->perid,
-                'uid' => $practiceteachers['uid'], 'pid' => $practiceteachers['pid']);
-            $ll = new Distribution_Model_DbTable_DistributionAdmin();
-            $l = $ll->_getAll($pkdistadm);
-            if ($l){
+                <?php
                 $tth = 0;
                 foreach ($l as $adm){                        
                     $labor = $adm['work'];
@@ -509,7 +517,6 @@ if($this->practiceteachers){ ?>
                     <th><center><?php echo $tth?></center></th>
                 </tr>
                 <?php
-            }
             $hh = new Distribution_Model_DbTable_DistributionTeacher();
             $h = $hh->_getOne($pkdistadm);
             $hacad = $h['total_hour_acad'];
@@ -521,6 +528,9 @@ if($this->practiceteachers){ ?>
                 <th><center><?php echo $htotales?></center></th> 
             </tr>
         </table>
+        <?php
+            }
+        ?>    
         <br><br><br>
         <?php 
     }
@@ -588,12 +598,11 @@ foreach ($this->allteachers as $allteachers){
         <?php  
     }
 } ?>
-<br>
-<h5><?php echo date("d/m/Y");?></h5>
+<!--   -->
 <br><br>
 <div style="margin-left: 65%">
     <h5 style="border-top: solid 1px #000; text-align: center">
-        <?php echo $sesion->infouser['last_name0']." ".$sesion->infouser['last_name1'].", ".$sesion->infouser['first_name']?><br>
+        <?php echo $this->datadir[0]['last_name0']." ".$this->datadir[0]['last_name1'].", ".$this->datadir[0]['first_name']?><br>
             DIRECTOR
     </h5>
 </div>
