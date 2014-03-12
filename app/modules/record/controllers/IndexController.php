@@ -1007,6 +1007,19 @@ class Record_IndexController extends Zend_Controller_Action {
 			$this->view->info_couser=$rows;
 			$this->view->perid=$perid;
 
+			$header=$this->sesion->org['header_print'];
+			$footer=$this->sesion->org['footer_print'];
+
+			$header=str_replace("h2", "h3", $header);
+			$header=str_replace("h3", "h4", $header);
+			$header=str_replace("h4", "h5", $header);
+			$footer=str_replace("h4", "h5", $footer);
+			$footer=str_replace("h5", "h6", $footer);
+			$header=str_replace("100px", "70px", $header);
+
+			$this->view->header=$header;
+			$this->view->footer=$footer;
+
 		} catch (Exception $e) {
 			print "Error: print record control ".$e->getMessage();
 		}

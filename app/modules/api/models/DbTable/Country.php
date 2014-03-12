@@ -23,7 +23,7 @@ class Api_Model_DbTable_Country extends Zend_Db_Table_Abstract{
 			if($rows) return $rows->toArray();
 			return false;
 		}catch (Exception $e){
-			print "Error: Read All Course ".$e->getMessage();
+			print "Error: Read All Country ".$e->getMessage();
 		}
 	}
 }
