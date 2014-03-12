@@ -113,8 +113,7 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studentAction()
     {
         try{
-            $success = $this->_getParam('success');
-            $this->view->success = $success;
+            $this->view->success = $this->sesion->fullProfile->success;
 
         	$eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
@@ -284,6 +283,87 @@ class Profile_PublicController extends Zend_Controller_Action {
             }else{
                 echo '0';
             }
+        }
+    }
+//Editar datos de Carrera
+    public function studentformsignAction(){
+        $this->_helper->layout()->disableLayout();
+        $studentSigninDb = new Api_Model_DbTable_Studentsignin();
+        $formCareer = new Profile_Form_Career();
+        $this->view->formCareer = $formCareer;
+
+        $eid   = $this->sesion->eid;
+        $oid   = $this->sesion->oid;
+        $escid = $this->sesion->escid;
+        $subid = $this->sesion->subid;
+        $pid   = $this->sesion->pid;
+        $uid   = $this->sesion->uid;
+
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'subid' => $subid,
+                        'escid' => $escid,
+                        'pid'   => $pid,
+                        'uid'   => $uid );
+        $whySend = 'save';
+        $studentSignin = $studentSigninDb->_getOne($where);
+        if ($studentSignin) {
+            $formCareer->populate($studentSignin);
+            $whySend = 'update';
+        }
+        $this->view->whySend = $whySend;
+    }
+
+    public function studentsavesignAction(){
+        $this->_helper->layout()->disableLayout();
+        $formCareer = new Profile_Form_Career();
+        $studentSigninDb = new Api_Model_DbTable_Studentsignin();
+
+        $eid   = $this->sesion->eid;
+        $oid   = $this->sesion->oid;
+        $escid = $this->sesion->escid;
+        $subid = $this->sesion->subid;
+        $pid   = $this->sesion->pid;
+        $uid   = $this->sesion->uid;
+
+        $data = $this->getRequest()->getPost();
+
+        if ($formCareer->isValid($data)) {
+            if ($data['eligio_carrera'] == 'N' and $data['carrera_preferencia'] == '') {
+                echo 'falta';
+            }else{
+                if ($data['whySend'] == 'save') {
+                    unset($data['whySend']);
+                    $data['eid']   = $eid;
+                    $data['oid']   = $oid;
+                    $data['escid'] = $escid;
+                    $data['subid'] = $subid;
+                    $data['pid']   = $pid;
+                    $data['uid']   = $uid;
+
+                    if ($studentSigninDb->_save($data)) {
+                        echo 'true';
+                    }else{
+                        echo 'false';
+                    }
+                }else if ($data['whySend'] == 'update'){
+                    unset($data['whySend']);
+                    $pk = array('eid' => $eid,
+                                'oid' => $oid,
+                                'escid' => $escid,
+                                'subid' => $subid,
+                                'pid' => $pid,
+                                'uid' => $uid );
+                    //print_r($data);
+                    if ($studentSigninDb->_update($data, $pk)) {
+                        echo 'true';
+                    }else{
+                        echo 'false';
+                    }
+                }
+            }
+        }else{
+            echo 'falta';
         }
     }
 
