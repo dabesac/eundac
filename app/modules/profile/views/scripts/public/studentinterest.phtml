@@ -10,6 +10,9 @@
 </div>
 <hr class="featurette-divider">
 
+<input type="hidden" id="eid" value="<?php echo $this->data['eid'] ?>">
+<input type="hidden" id="oid" value="<?php echo $this->data['oid'] ?>">
+<input type="hidden" id="pid" value="<?php echo $this->data['pid'] ?>">
   <div class="panel-body">
     <?php if($this->interes){
     	$c=1;
@@ -83,6 +86,7 @@
 
 
 <script>
+
 	$('a').hover(function(){
     	$(this).tooltip('toggle');
   	});
@@ -95,8 +99,18 @@
 		});
   	})
 
+	var eid = $('#eid').val();
+	var oid = $('#oid').val();
+  	var pid = $('#pid').val();
+
+	$.ajax({
+		url : '/profile/public/validatefullprofile',
+		data : { 	eid : eid,
+					oid : oid,
+					pid : pid },
+		success: function(data){
+			$('#alertCompleteProfile').addClass('hidden');
+		},
+	});
 </script>
 
-<!--<div class="panel panel-warning">
-							
-						-->

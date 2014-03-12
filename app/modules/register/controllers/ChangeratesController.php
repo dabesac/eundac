@@ -140,7 +140,7 @@ class Register_ChangeratesController extends Zend_Controller_Action{
                     // print_r($frmdata);
                     // print_r($pks); exit();
                     $reg_->_update($frmdata,$pks);
-                    //$this->_redirect("/register/changerates/");
+                    $this->_redirect("/register/changerates/");
                 }
                 else
                 {

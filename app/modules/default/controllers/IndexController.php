@@ -164,17 +164,17 @@ class IndexController extends Zend_Controller_Action {
                     $payment = $paymentDb->_getFilter($where);
 
                     if(!$payment){
-                        $data = array(  'eid'      => $eid,
-                                        'oid'      => $oid,
-                                        'escid'    => $data->escid,
-                                        'subid'    => $data->subid,
-                                        'pid'      => $data->pid,
-                                        'uid'      => $data->uid,
-                                        'perid'    => '13A',
-                                        'ratid'    => '10',
-                                        'amount'   => '0',
-                                        'register' => $data->uid );
-                        $paymentDb->_save($data);
+                        $dataPayment = array(   'eid'      => $eid,
+                                                'oid'      => $oid,
+                                                'escid'    => $data->escid,
+                                                'subid'    => $data->subid,
+                                                'pid'      => $data->pid,
+                                                'uid'      => $data->uid,
+                                                'perid'    => '13A',
+                                                'ratid'    => '10',
+                                                'amount'   => '0',
+                                                'register' => $data->uid );
+                        $paymentDb->_save($dataPayment);
                     }
                     
 

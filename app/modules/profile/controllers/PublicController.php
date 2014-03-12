@@ -20,7 +20,49 @@ class Profile_PublicController extends Zend_Controller_Action {
     }
 
     public function validatefullprofileAction(){
+        $this->_helper->layout()->disableLayout();
+        //DataBases 
+        $interestDb     = new Api_Model_DbTable_Interes();
+        $relationshipDb = new Api_Model_DbTable_Relationship();
+        $academicDb     = new Api_Model_DbTable_Academicrecord();
+        $statisticDb    = new Api_Model_DbTable_Statistics();
 
+        $eid = $this->_getParam('eid');
+        $oid = $this->_getParam('oid');
+        $pid = $this->_getParam('pid');
+
+        $fullProfile = 'yes';
+
+        $where = array( 'eid' => $eid,
+                        'pid' => $pid);
+        $interest = $interestDb->_getFilter($where);
+        if (!$interest) {
+            $fullProfile = 'no';
+        }
+
+        $family = $relationshipDb->_getFilter($where);
+        if (!$family) {
+            $fullProfile = 'no';
+        }
+
+        $academic = $academicDb->_getFilter($where);
+        if (!$academic) {
+            $fullProfile = 'no';
+        }
+
+        $where = array( 'eid' => $eid,
+                        'oid' => $oid,
+                        'pid' => $pid);
+        $statistic = $statisticDb->_getFilter($where);
+        if (!$statistic) {
+            $fullProfile = 'no';
+        }
+
+        if ($fullProfile == 'yes') {
+            $this->sesion->fullProfile->success = 'yes';
+        }else{
+            $this->sesion->fullProfile->success = 'no';
+        }
     }
 
     public function countrystateAction(){
@@ -251,7 +293,13 @@ class Profile_PublicController extends Zend_Controller_Action {
         try{
             $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
             $pid=$this->sesion->pid;
+
+            $dataStudent = array(   'eid' => $eid,
+                                    'oid' => $oid,
+                                    'pid' => $pid );
+            $this->view->dataStudent = $dataStudent;
 
             $dbfam=new Api_Model_DbTable_Relationship();
             $where=array("eid"=>$eid,"pid"=>$pid);
@@ -520,9 +568,10 @@ class Profile_PublicController extends Zend_Controller_Action {
         try{
             $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
             $pid=$this->sesion->pid;
 
-            $data=array("eid"=>$eid, "pid"=>$pid);
+            $data=array("eid"=>$eid, 'oid' => $oid, "pid"=>$pid);
 
             $dbacadata=new Api_Model_DbTable_Academicrecord();
             $where=array("eid"=>$eid,"pid"=>$pid);
@@ -632,6 +681,12 @@ class Profile_PublicController extends Zend_Controller_Action {
             $pid=$this->sesion->pid;
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
+
+            $dataStudent = array(   'eid' => $eid,
+                                    'oid' => $oid,
+                                    'pid' => $pid );
+
+            $this->view->dataStudent = $dataStudent;
 
             $dbsta=new Api_Model_DbTable_Statistics();
             $where=array("eid"=>$eid, "oid"=>$oid, "uid"=>$uid, "pid"=>$pid, "escid"=>$escid, "subid"=>$subid);
@@ -842,9 +897,10 @@ class Profile_PublicController extends Zend_Controller_Action {
         try{
             $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
             $pid=$this->sesion->pid;
 
-            $data=array("eid"=>$eid, "pid"=>$pid);
+            $data=array("eid"=>$eid, 'oid' => $oid, "pid"=>$pid);
 
             $dbinteres=new Api_Model_DbTable_Interes();
             $where=array("eid"=>$eid,"pid"=>$pid);
