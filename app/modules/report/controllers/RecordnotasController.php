@@ -105,8 +105,8 @@
             $wheres=array('eid'=>$eid,'pid'=>$pid);
             $dbperson = new Api_Model_DbTable_Person();
             $person= $dbperson ->_getOne($wheres);
-            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
                 
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
             
