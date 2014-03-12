@@ -19,7 +19,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
 
-    	$perid = $this->sesion->period->perid;
+    	$perid = '13A';
     	$this->view->perid = $perid;
 
     	$where = array(	'eid'   => $eid,
@@ -103,7 +103,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
-		$perid = $this->sesion->period->perid;
+		$perid = '13A';
 		
 		$where = array(	'eid'            => $eid,
 						'oid'            => $oid,
@@ -171,6 +171,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$specialityDb = new Api_Model_DbTable_Speciality();
 		$userDb       = new Api_Model_DbTable_Users();
 		$paymentDb    = new Api_Model_DbTable_Payments();
+		$academicDb   = new Api_Model_DbTable_Academicrecord();
 		//________________________________________________
 
 		$escid = base64_decode($this->_getParam('escid'));
@@ -180,8 +181,8 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
-		$perid = $this->sesion->period->perid;
-
+		$perid = '13A';
+		print_r($pid);
 		$dataStudent = array(	'uid'   => $uid,
 								'pid'   => $pid,
 								'subid' => $subid,
@@ -201,6 +202,14 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
 		$student = $userDb->_getInfoUser($where);
 		$this->view->student = $student;
+
+		//Datos de Colegio
+		$where = array(	'eid'   => $eid,
+						'pid'   => $pid );
+		$academic = $academicDb->_getFilter($where);
+		$this->view->academic = $academic;
+
+		//Tipo de Pago
 
 		//Datos de la Facultad y Escuela
 		$where = array(	'eid'   => $eid,
@@ -246,7 +255,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
         $eid   = $this->sesion->eid;    
         $oid   = $this->sesion->oid;
-        $perid = $this->sesion->period->perid;
+        $perid = '13A';
 
         //Relleno Datos del Perfil
         	$dataProfile['registerValidate'] = 'yes	';

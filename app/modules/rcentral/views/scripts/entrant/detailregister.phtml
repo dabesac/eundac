@@ -22,7 +22,13 @@
             <br>
             <p><span class="glyphicon glyphicon-user text-info"></span> <?php echo $this->student[0]['last_name0'].' '.$this->student[0]['last_name1'] ?> <span class="text-info"><?php echo $this->student[0]['first_name'] ?></span></p>
             <h6>Codigo <span class="text-info"><?php echo $this->student[0]['uid'] ?></span></h6>
-            <h6>Semestre <span class="text-info">Ingresante</span></h6>
+            <h6>Colegio <span class="text-info"><?php echo $this->academic[0]['institution'] ?>
+                    <?php if ($this->academic[0]['type_school'] == 'E'): 
+                        echo "(Estatal)";
+                    elseif ($this->academic[0]['type_school'] == 'P') :
+                        echo "(Particular)";
+                    endif ?>
+               </span></h6>
         </blockquote>
     </div>
 
