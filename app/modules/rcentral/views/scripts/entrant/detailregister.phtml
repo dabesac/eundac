@@ -22,15 +22,22 @@
             <br>
             <p><span class="glyphicon glyphicon-user text-info"></span> <?php echo $this->student[0]['last_name0'].' '.$this->student[0]['last_name1'] ?> <span class="text-info"><?php echo $this->student[0]['first_name'] ?></span></p>
             <h6>Codigo <span class="text-info"><?php echo $this->student[0]['uid'] ?></span></h6>
-            <h6>Semestre <span class="text-info">Ingresante</span></h6>
+            <h6>Colegio <span class="text-info"><?php echo $this->academic[0]['institution'] ?>
+                    <?php if ($this->academic[0]['type'] == 'E'): 
+                        echo "(Estatal)";
+                    elseif ($this->academic[0]['type'] == 'P') :
+                        echo "(Particular)";
+                    endif ?>
+               </span></h6>
         </blockquote>
     </div>
 
     <div class="col-md-3">
         <blockquote>
-            <br>
             <h5>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h5>
             <h5>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
+            <h5>Tipo de Pago <br><span class="text-info"><?php echo $this->rate[0]['name'] ?></span></h5>
+            <h5><span class="text-success glyphicon glyphicon-record"></span></h5>
         </blockquote>
     </div>
     <div class="col-md-2">

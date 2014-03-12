@@ -19,7 +19,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
 
-    	$perid = $this->sesion->period->perid;
+    	$perid = '13A';
     	$this->view->perid = $perid;
 
     	$where = array(	'eid'   => $eid,
@@ -103,7 +103,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
-		$perid = $this->sesion->period->perid;
+		$perid = '13A';
 		
 		$where = array(	'eid'            => $eid,
 						'oid'            => $oid,
@@ -171,17 +171,19 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$specialityDb = new Api_Model_DbTable_Speciality();
 		$userDb       = new Api_Model_DbTable_Users();
 		$paymentDb    = new Api_Model_DbTable_Payments();
+		$academicDb   = new Api_Model_DbTable_Academicrecord();
+		$rateDb       = new Api_Model_DbTable_Rates();
 		//________________________________________________
 
 		$escid = base64_decode($this->_getParam('escid'));
 		$uid   = base64_decode($this->_getParam('uid'));
 		$pid   = base64_decode($this->_getParam('pid'));
 
+		print_r($pid);
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
-		$perid = $this->sesion->period->perid;
-
+		$perid = '13A';
 		$dataStudent = array(	'uid'   => $uid,
 								'pid'   => $pid,
 								'subid' => $subid,
@@ -202,6 +204,12 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$student = $userDb->_getInfoUser($where);
 		$this->view->student = $student;
 
+		//Datos de Colegio
+		$where = array(	'eid'   => $eid,
+						'pid'   => $pid );
+		$academic = $academicDb->_getFilter($where);
+		$this->view->academic = $academic;
+
 		//Datos de la Facultad y Escuela
 		$where = array(	'eid'   => $eid,
 						'oid'   => $oid,
@@ -219,11 +227,21 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 						'subid' => $subid,
 						'perid' => $perid );
 
-        $attrib = array('date_payment', 'amount');
-
+        $attrib = array('date_payment', 'amount', 'ratid');
         $paymentData = $paymentDb->_getFilter($where, $attrib);
         $paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
+       	$paymentData[0]['date_payment'] = date("d-m-Y", strtotime($paymentData[0]['date_payment']));
         $this->view->paymentData = $paymentData;
+		
+		//Tipo de Pago
+		$where = array(	'eid'   => $eid,
+						'oid'   => $oid,
+						'ratid' => $paymentData[0]['ratid'], 
+						'perid' => $perid );
+		$rate = $rateDb->_getFilter($where);
+		$this->view->rate = $rate;
+
+		//$rate[0]['']
 
 	}
 
@@ -246,7 +264,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
         $eid   = $this->sesion->eid;    
         $oid   = $this->sesion->oid;
-        $perid = $this->sesion->period->perid;
+        $perid = '13A';
 
         //Relleno Datos del Perfil
         	$dataProfile['registerValidate'] = 'yes	';

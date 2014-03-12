@@ -2,7 +2,7 @@
   <div class="col-md-10">
 
     <div id="maininfo"></div>
-
+    
     <div id="datastudent"></div>
 
     <div id="editform"></div>
@@ -10,18 +10,36 @@
   </div>
   <div class="col-md-2">
     <br>
-    <ul class="nav nav-pills nav-stacked" id="backprofileTab">
-      <li><a href="##" id="btnprofile">Volver al Perfil</a></li>
-    </ul>
+    <div id="divBtnProfile" class="panel panel-default">
+      <ul class="nav nav-pills nav-stacked" id="backprofileTab">
+        <li><a href="##" id="btnProfile">Volver al Perfil</a></li>
+      </ul>
+    </div>
     <br>
-    <ul class="nav nav-pills nav-stacked" id="masinfoTab">
-      <li><a href="##" id="btnfamily" class="btn-xs">Datos Familiares</a></li>
-      <li><a href="##" id="btnacademic" class="btn-xs">Datos Academico</a></li>
-      <li><a href="##" id="btnlaboral" class="btn-xs">Datos Laborales</a></li>
-      <li><a href="##" id="btnstadistic" class="btn-xs">Datos Estadistico</a></li>
-      <li><a href="##" id="btninters" class="btn-xs">Intereses</a></li>
-      <li class="hidden"><a></a></li>
-    </ul>
+    <div class="panel panel-default">
+      <ul class="nav nav-pills nav-stacked" id="masinfoTab">
+        <li><a href="##" id="btnfamily" class="">1. Datos Familiares</a></li>
+        <li><a href="##" id="btnacademic" class="">2. Datos Academico</a></li>
+        <li><a href="##" id="btnlaboral" class="">3. Datos Laborales</a></li>
+        <li><a href="##" id="btnstadistic" class="">4. Datos Estadistico</a></li>
+        <li><a href="##" id="btninters" class="">5. Intereses</li>
+        <li class="hidden"><a></a></li>
+      </ul>
+    </div>
+    <br><br>
+    <!--<div class="panel panel-default">
+      <ul class="nav nav-pills nav-stacked">
+        <?php 
+        $urlPrintFicha = '/profile/public/printficha'.  '/eid/'.$this->dataStudent['eid'].
+                                                        '/oid/'.$this->dataStudent['oid'].
+                                                        '/pid/'.$this->dataStudent['pid'].
+                                                        '/uid/'.$this->dataStudent['uid'].
+                                                        '/escid/'.$this->dataStudent['escid'].
+                                                        '/subid/'.$this->dataStudent['subid'];
+        ?>
+        <li><a href="<?php echo $urlPrintFicha ?>" id="prinfFicha" class="form-class text-center"><span class="glyphicon glyphicon-print"></span> Imprimir Ficha</a></li>
+      </ul>
+    </div>-->
   </div>
 </div><!-- div row -->
 
@@ -29,15 +47,17 @@
 
 
 <script>
+
+
   $("#datastudent").load("/profile/public/studentmaininfo");
-  $("#btnprofile").fadeOut("fast");
+  $("#divBtnProfile").fadeOut("fast");
   $('#editform').fadeOut('fast');
 
 
   $('#masinfoTab a').click(function (e) {
     e.preventDefault()
     
-    $("#btnprofile").fadeIn("fast");
+    $("#divBtnProfile").fadeIn("fast");
     /*$("#datastudent").removeClass("hidden")
     $("#editform").html("")*/
     $(this).tab('show')
@@ -51,7 +71,7 @@
       });
     });
     $('#masinfoTab a:last').tab('show');
-    $("#btnprofile").fadeOut("slow");
+    $("#divBtnProfile").fadeOut("fast");
     /*$("#editform").html("")*/
   })
 

@@ -10,7 +10,8 @@ class Register_Form_Changerate extends Zend_Form{
     
         $eid = $login->eid;
         $oid = $login->oid;
-        $peri = $login->period->perid;
+        $peri = '13A';
+        //$peri = $login->period->perid;
 
         $perid=new Zend_Form_Element_Text('perid');
         $perid->setAttrib("readonly","true");
@@ -32,7 +33,7 @@ class Register_Form_Changerate extends Zend_Form{
         $ratid->setAttrib('class','form-control');
         $where['eid']=$eid;
         $where['oid']=$oid;
-        $where['perid']=$peri;
+        $where['perid']='13A';
         $ratid->addMultiOption("",'- Seleccione -');
         $bdrate = new Api_Model_DbTable_Rates();
         $lrate= $bdrate->_getFilter($where);

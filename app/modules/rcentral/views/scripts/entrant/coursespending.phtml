@@ -68,7 +68,7 @@
 				</select>
 			</div>
 			<div class="col-md-3 col-md-offset-2">
-				<?php if ($this->dataProfile['registerValidate'] == 'yes'): ?>
+				<?php if ($this->dataProfile['registerValidate'] != 'no'): ?>
 					<h5 id="dataProfile" value="yes" class="pull-right text-success"><span class="glyphicon glyphicon-record"> Apto para Validar</span></h5>
 				<?php else: ?>
 					<?php if ($this->dataProfile['family'] == 'no'){
@@ -96,9 +96,10 @@
 					<th class="text-center col-md-1">#</th>
 					<th class="text-center col-md-1">Codigo</th>
 					<th class="col-md-4">Curso</th>
-					<th class="text-center col-md-1 cantSignStudents">#Mat</th>
+					<th class?="text-center">Creditos</th>
 					<th class="text-center col-md-1">Turno</th>
 					<th class="col-md-3">Docente</th>
+					<th class="text-center col-md-1 cantSignStudents">#Mat</th>
 					<th class="messageTh"></th>
 				</tr>
 			<form id="formPreRegister">
@@ -130,22 +131,9 @@
 						<!--tdIniciado-->
 							<td class="tdIniciado"><?php echo $course['name'] ?></td>
 							<td class="tdOtherState"><?php echo $this->coursesName[$c][0]['name'] ?></td>
-							<td class="cantSignStudents text-center text-success" id="howManySign<?php echo $course['courseid'] ?>">
-								<?php 
-								$interruptor = 0;
-								foreach ($this->cantStudents as $cantidad): ?>
-									<?php if ($course['courseid'] == $cantidad['courseid']): 
-										if ($interruptor == 0): ?>
-											<span id="cantidad<?php echo $cantidad['turno'].$cantidad['courseid'] ?>"><?php echo $cantidad['cantidad'] ?> </span>
-										<?php $interruptor = 1;
-										else : ?>
-											<span id="cantidad<?php echo $cantidad['turno'].$cantidad['courseid'] ?>" class="hidden"><?php echo $cantidad['cantidad'] ?></span>
-										<?php endif ?>
-									<?php endif ?>
-								<?php endforeach ?>
-							</td>
+							<td class="text-center"><?php echo $course['credits'] ?></td>
 
-							<!--Turnos-->
+						<!--Turnos-->
 							<td class="text-center turnoBlock tdIniciado">
 								<select id="select<?php echo $c + 1 ?>" name="Course<?php echo $c + 1 ?>" id="turno" class="form-control input-sm selectTurnos">
 									<?php foreach ($this->data as $turno): ?>
@@ -176,6 +164,20 @@
 						<!--tdOtherState-->
 							<td class="text-center tdOtherState"><?php echo $course['turno'] ?></td>
 							<td class="tdOtherState"><?php echo $this->coursesTeachers[$c][0]['last_name0'].' '.$this->coursesTeachers[$c][0]['last_name1'].' '.$this->coursesTeachers[$c][0]['first_name'] ?></td>
+							<td class="cantSignStudents text-center text-success" id="howManySign<?php echo $course['courseid'] ?>"><strong>
+								<?php 
+								$interruptor = 0;
+								foreach ($this->cantStudents as $cantidad): ?>
+									<?php if ($course['courseid'] == $cantidad['courseid']): 
+										if ($interruptor == 0): ?>
+											<span id="cantidad<?php echo $cantidad['turno'].$cantidad['courseid'] ?>"><?php echo $cantidad['cantidad'] ?> </span>
+										<?php $interruptor = 1;
+										else : ?>
+											<span id="cantidad<?php echo $cantidad['turno'].$cantidad['courseid'] ?>" class="hidden"><?php echo $cantidad['cantidad'] ?></span>
+										<?php endif ?>
+									<?php endif ?>
+								<?php endforeach ?>
+							</strong></td>
 							<td class="text-center stateRegister"></td>
 						<!--______________________________________________________________-->
 
@@ -259,7 +261,7 @@
 				$('#howManySign' + course + 'span').each(function(){
 					$(this).addClass('hidden');
 				});
-				//$('#docente' + turno + course + ', #cantidad' + turno + course).removeClass('hidden');
+				$('#docente' + turno + course + ', #cantidad' + turno + course).removeClass('hidden');
 			});
 
 			//Seleccionar Todos los Turnos
@@ -283,7 +285,7 @@
 					$('#docentesTurno' + course + 'span').each(function(){
 						$(this).addClass('hidden');
 					});
-					$('#docente' + turno + course).removeClass('hidden');
+					$('#docente' + turno + course + ', #cantidad' + turno + course).removeClass('hidden');
 				});
 			});
 
