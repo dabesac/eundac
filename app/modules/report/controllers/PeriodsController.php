@@ -17,13 +17,13 @@
  			$rid = $this->sesion->rid;
  			$escid = $this->sesion->escid;
  			$is_director = $this->sesion->infouser['teacher']['is_director'];
-
             $esc = new Api_Model_DbTable_Speciality();
             if ($rid == 'RF' || $rid == 'DF') {
                 $facid = $this->sesion->faculty->facid;
                 $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid,'state' => 'A');
+                $allSchool =' ';
             }else{
-                if ($rid == 'DC' && $is_director=='S') {
+                if ($rid == 'DR' && $is_director=='S') {
                     $this->view->director = $is_director;
                     $this->view->escid = $this->sesion->escid;
                     $where = array('eid' => $eid, 'oid' => $oid, 'parent' => $this->sesion->escid,'state' => 'A');
@@ -42,7 +42,6 @@
             
             $dataesc = $esc->_getFilter($where,$attrib=null,$orders=array('facid','escid'));
             $this->view->allSchool = $allSchool;
-
 	 		$this->view->speciality = $dataesc;
             //print_r($dataesc);
 
@@ -215,11 +214,11 @@
  			$perid = base64_decode($this->_getParam('perid'));
  			$escid = base64_decode($this->_getParam('escid'));
  			$subid = base64_decode($this->_getParam('subid'));
- 			$this->view->perid = $perid;
- 			$this->view->escid = $escid;
- 			$this->view->subid = $subid;
+            $this->view->perid = $perid;
+            $this->view->escid = $escid;
+            $this->view->subid = $subid;
 
- 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
             $base_speciality =  new Api_Model_DbTable_Speciality();        
             $speciality = $base_speciality ->_getOne($where);
             $parent=$speciality['parent'];
@@ -241,62 +240,61 @@
 
             $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
- 			$fac = new Api_Model_DbTable_Faculty();
- 			$data_fac = $fac->_getOne($where = array('eid' => $eid, 'oid' => $oid, 'facid' => $data_esc['facid']));
- 			$namef=strtoupper($data_fac['name']);
+            $fac = new Api_Model_DbTable_Faculty();
+            $data_fac = $fac->_getOne($where = array('eid' => $eid, 'oid' => $oid, 'facid' => $speciality['facid']));
+            $namef=strtoupper($data_fac['name']);
 
- 			$where = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid, 'perid' => $perid);
- 			$user = new Api_Model_DbTable_Coursexteacher();
+            // $where = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid, 'perid' => $perid);
+            $user = new Api_Model_DbTable_Coursexteacher();
 
- 			$wheretea = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'perid' => $perid);
-			$allteacher = $user->_getAllTeacherXPeriodXEscid($wheretea);
- 			if ($allteacher) {
- 				$t = count($allteacher);
- 				for ($i=0; $i < $t; $i++) {
- 					$course_tea = array(); 
- 					$wherecour = array(
-	 					'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid, 'perid' => $perid,
-	 					'uid' => $allteacher[$i]['uid'], 'pid' => $allteacher[$i]['pid']);
- 					$course_tea = $user->_getFilter($wherecour,$attrib=null,$orders=array('courseid','turno'));
- 					if ($course_tea) {
- 						$cour = new Api_Model_DbTable_Course();
-						$syl = new Api_Model_DbTable_Syllabus();
-						$per_cour = new Api_Model_DbTable_PeriodsCourses();
+            $wheretea = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid,'subid'=>$subid ,'perid' => $perid);
+            $allteacher = $user->_getAllTeacherXPeriodXEscid($wheretea);
+            if ($allteacher) {
+                $t = count($allteacher);
+                for ($i=0; $i < $t; $i++) {
+                    $course_tea = array(); 
+                    $wherecour = array(
+                        'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid, 'perid' => $perid,
+                        'uid' => $allteacher[$i]['uid'], 'pid' => $allteacher[$i]['pid']);
+                    $course_tea = $user->_getFilter($wherecour,$attrib=null,$orders=array('courseid','turno'));
+                    if ($course_tea) {
+                        $cour = new Api_Model_DbTable_Course();
+                        $syl = new Api_Model_DbTable_Syllabus();
+                        $per_cour = new Api_Model_DbTable_PeriodsCourses();
 
- 						$cc = count($course_tea);
- 						for ($j=0; $j < $cc; $j++) { 
- 							$where_syl = array(
-								'eid' => $eid, 'oid' => $oid, 'subid' => $subid, 'perid' => $perid, 
-								'escid' => $escid, 'curid' => $course_tea[$j]['curid'], 
-								'courseid' => $course_tea[$j]['courseid'], 'turno' => $course_tea[$j]['turno']);
-							$data_syll = $syl->_getOne($where_syl);
+                        $cc = count($course_tea);
+                        for ($j=0; $j < $cc; $j++) { 
+                            $where_syl = array(
+                                'eid' => $eid, 'oid' => $oid, 'subid' => $subid, 'perid' => $perid, 
+                                'escid' => $escid, 'curid' => $course_tea[$j]['curid'], 
+                                'courseid' => $course_tea[$j]['courseid'], 'turno' => $course_tea[$j]['turno']);
+                            $data_syll = $syl->_getOne($where_syl);
 
-							$course_tea[$j]['create_syllabus'] = $data_syll['created'];
-		 					$course_tea[$j]['state_syllabus'] = $data_syll['state'];
+                            $course_tea[$j]['create_syllabus'] = $data_syll['created'];
+                            $course_tea[$j]['state_syllabus'] = $data_syll['state'];
 
-		 					$data_percour = $per_cour->_getOne($where_syl);
-		 					$course_tea[$j]['state_course'] = $data_percour['state'];
-		 					$course_tea[$j]['closure_date_course'] = $data_percour['closure_date'];
-		 					// $course_tea[$j]['state_record'] = $data_percour['state_record'];
+                            $data_percour = $per_cour->_getOne($where_syl);
+                            $course_tea[$j]['state_course'] = $data_percour['state'];
+                            $course_tea[$j]['closure_date_course'] = $data_percour['closure_date'];
+                            // $course_tea[$j]['state_record'] = $data_percour['state_record'];
 
- 							$wherecour = array(
-		 						'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid,
-		 						'curid' => $course_tea[$j]['curid'], 'courseid' => $course_tea[$j]['courseid']);
-		 					$datacour = $cour->_getOne($wherecour);
-		 					$course_tea[$j]['name'] = $datacour['name'];
- 						}
- 						$allteacher[$i]['courses'] = $course_tea;
- 						$allteacher[$i]['cantidad_courses'] = $cc;
- 					}
+                            $wherecour = array(
+                                'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid,
+                                'curid' => $course_tea[$j]['curid'], 'courseid' => $course_tea[$j]['courseid']);
+                            $datacour = $cour->_getOne($wherecour);
+                            $course_tea[$j]['name'] = $datacour['name'];
+                        }
+                        $allteacher[$i]['courses'] = $course_tea;
+                        $allteacher[$i]['cantidad_courses'] = $cc;
+                    }
 
- 					$person = new Api_Model_DbTable_Person();
- 					$data_person = $person->_getOne($where=array('eid' => $eid, 'pid' => $allteacher[$i]['pid']));
- 					$allteacher[$i]['full_name'] = $data_person['last_name0']." ".$data_person['last_name1'].", ".$data_person['first_name'];
- 				}
- 			}
- 			$this->view->data_teacher = $allteacher;
-
- 			// $escid=$this->sesion->escid;
+                    $person = new Api_Model_DbTable_Person();
+                    $data_person = $person->_getOne($where=array('eid' => $eid, 'pid' => $allteacher[$i]['pid']));
+                    $allteacher[$i]['full_name'] = $data_person['last_name0']." ".$data_person['last_name1'].", ".$data_person['first_name'];
+                }
+            }
+            $this->view->data_teacher = $allteacher;
+            // $escid=$this->sesion->escid;
     //         $where['escid']=$escid;
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();

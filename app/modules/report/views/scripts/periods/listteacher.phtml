@@ -62,14 +62,16 @@ if ($this->data_teacher) { ?>
 					}
 					for ($i=0; $i < $br-1; $i++) {?> 
 					 	<br>
-					 <?php }?>
+					 <?php }
+					 ?>
 					<blockquote>
 					<h5 class="text-right"><?php echo $teachers['full_name'] ?></h5>
-					<h5 class="text-right"><span class="text-muted">Codigo </span><?php echo $teachers['uid'] ?></h5>
+					<h5 class="text-right"><span class="text-muted">Codigo </span><?php echo $teachers['courses'][0]['uid'] ?></h5>
 					<h3 class="text-right">
 						<a class="text-info" title="Horario de Docente" href="##"><span class="glyphicon glyphicon-calendar"></span></a>
-						<?php if ($this->reportAcademic[$c][0]['state'] == 'C'): ?>
-							<a href="/docente/listacademicreport/print/pid/<?php echo base64_encode($teachers['pid'])?>/uid/<?php echo base64_encode($teachers['uid'])?>/escid/<?php echo base64_encode($teachers['escid'])?>/subid/<?php echo base64_encode($this->data['subid'])?>/perid/<?php echo base64_encode($this->data['perid'])?>/nombre/<?php echo base64_encode($teachers['full_name'])?>" title="Imprimir Informe Academico" class="glyphicon glyphicon-print text-info"></a>
+						<?php if ($this->reportAcademic[$c][0]['state'] == 'C'): 
+						?>
+							<a href="/docente/listacademicreport/print/pid/<?php echo base64_encode($teachers['courses'][0]['pid'])?>/uid/<?php echo base64_encode($teachers['courses'][0]['uid'])?>/escid/<?php echo base64_encode($teachers['courses'][0]['escid'])?>/subid/<?php echo base64_encode($this->data['subid'])?>/perid/<?php echo base64_encode($this->data['perid'])?>/nombre/<?php echo base64_encode($teachers['full_name'])?>" title="Imprimir Informe Academico" class="glyphicon glyphicon-print text-info"></a>
 						<?php else: ?>
 							<span title="No tiene Informe" class="glyphicon glyphicon-ban-circle text-danger"></span>
 						<?php endif ?>
