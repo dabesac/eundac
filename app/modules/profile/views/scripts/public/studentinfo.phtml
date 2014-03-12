@@ -87,9 +87,11 @@
   $("#btnacademic").click(function(){
     $('#datastudent').fadeOut('fast', function(){
       $("#datastudent").load("/profile/public/studentacademic", function(){
-        $('#datastudent').fadeIn('fast');
+        $("#datastudent").fadeIn('fast');
       });
     });
+    /*$("#datastudent").load("/profile/public/studentacademic");
+    $('#datastudent').fadeIn('fast');*/
   })
 
   $("#btnstadistic").click(function(){
