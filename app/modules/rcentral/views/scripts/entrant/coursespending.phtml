@@ -68,7 +68,7 @@
 				</select>
 			</div>
 			<div class="col-md-3 col-md-offset-2">
-				<?php if ($this->dataProfile['registerValidate'] == 'yes'): ?>
+				<?php if ($this->dataProfile['registerValidate'] != 'no'): ?>
 					<h5 id="dataProfile" value="yes" class="pull-right text-success"><span class="glyphicon glyphicon-record"> Apto para Validar</span></h5>
 				<?php else: ?>
 					<?php if ($this->dataProfile['family'] == 'no'){
