@@ -248,39 +248,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
-
-    public function viewprintfichaAction(){
-        try {
-            $this->_helper->layout()->disableLayout();
-            // $eid=$this->sesion->eid;
-            // $oid=$this->sesion->oid;
-            // $uid=$this->sesion->uid;
-            // $pid=$this->sesion->pid;
-            // $escid=$this->sesion->escid;
-            // $subid=$this->sesion->subid;
-
-            // $whered=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid,'uid'=>$uid,'escid'=>$escid,'subid'=>$subid);
-            // $dbdetingreso=new Api_Model_DbTable_Studentsignin();
-            // $dataingre=$dbdetingreso->_getOne($whered);
-
-            // $dbstatistics=new Api_Model_DbTable_Statistics();
-            // $dataest=$dbstatistics->_getOne($whered);
-
-            // $wherea=array('eid'=>$eid,'pid'=>$pid);
-            // $dbacademic=new Api_Model_DbTable_Academicrecord();
-            // $datacade=$dbacademic->_getFilter($wherea);
-
-            // $wherei=array('eid'=>$eid,'pid'=>$pid);
-            // $dbinterest=new Api_Model_DbTable_Interes();
-            // $datainte=$dbinterest->_getFilter($wherei);
-
-            // if ($dataingre && $dataest && $datacade && $datainte) {
-            //     $this->view->clave=1;
-            // }
-        } catch (Exception $e) {
-            print "Error: ".$e->getMessage();
-        }
-    }
+    
     public function studenteditinfoAction(){
         try{
             $this->_helper->layout()->disableLayout();
