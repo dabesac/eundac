@@ -214,7 +214,7 @@ class Profile_PublicController extends Zend_Controller_Action {
                 }
             }
             else{
-                if ($datafami && $dataingre && $dataest && $datacade && $datainte) {
+                if ($datafami && $dataest && $datacade && $datainte) {
                     $this->view->clave=1;
                 }   
             }
@@ -248,7 +248,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
-    
+
     public function studenteditinfoAction(){
         try{
             $this->_helper->layout()->disableLayout();
