@@ -157,6 +157,38 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $this->view->rate = $rate;
 
             //Verificar Fecha de Pago
+            $datePago       = date('Y-m-d', strtotime($paymentData[0]['date_payment']));
+            $dateNormal     = date('Y-m-d', strtotime($rate[0]['f_ini_tn']));
+            $dateIncrement1 = date('Y-m-d', strtotime($rate[0]['f_fin_ti1']));
+            $dateIncrement2 = date('Y-m-d', strtotime($rate[0]['f_fin_ti2']));
+            $dateIncrement3 = date('Y-m-d', strtotime($rate[0]['f_fin_ti3']));
+
+
+            $pagoAtiempo = 'yes';
+            /*if ($datePago <= $dateNormal) {
+                $tipePayment['tipoPago'] = 'AT';
+            }elseif ($datePago <= $dateIncrement1){
+                $tipePayment['tipoPago']   = 'I1';
+                $tipePayment['incremento'] = $rate[0]['t_incremento1'];
+                $tipePayment['porcentaje'] = $rate[0]['v_t_incremento1'];
+                $pagoAtiempo = 'no';
+            }elseif ($datePago <= $dateIncrement2){
+                $tipePayment['tipoPago']    = 'I2';
+                $tipePayment['incremento'] = $rate[0]['t_incremento2'];
+                $tipePayment['porcentaje'] = $rate[0]['v_t_incremento2'];
+                $pagoAtiempo = 'no';
+            }elseif ($datePago <= $dateIncrement2){
+                $tipePayment['tipoPago']    = 'I3';
+                $tipePayment['incremento'] = $rate[0]['t_incremento3'];
+                $tipePayment['porcentaje'] = $rate[0]['v_t_incremento2'];
+                $pagoAtiempo = 'no';
+            }else {
+                $tipePayment['tipoPago']    = 'FT';
+                $pagoAtiempo = 'no';
+            }*/
+            $this->view->tipePayment = $tipePayment;
+            $this->view->pagoAtiempo  = $pagoAtiempo;
+
 
             //Estado de la Matricula
             $where = array( 'eid'   =>$eid, 
