@@ -789,7 +789,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $pkdist['escid'] = $esciddoc;
                 $pkdist['perid'] = $perid;
                 $dist = new Distribution_Model_DbTable_Distribution();
-                $datadist = $dist->_getFilter($pkdist,$atrib=array(),$orders=array());
+                $datadist = $dist->_getFilter($pkdist);
                 if(!$datadist){ ?>
                     <script>  
                         alert("No se encuentra disponible los docentes de apoyo de esa Escuela\nIntentelo mas tarde.");
@@ -856,7 +856,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $pk['uid']=$uid;
             $pk['pid']=$pid;
             $distadm = new Distribution_Model_DbTable_DistributionAdmin();
-            $labor=$distadm->_getFilter($pk,$atrib=array());
+            $labor=$distadm->_getFilter($pk);
             $this->view->administrativas=$labor;
 
         } catch (Exception $e) {
@@ -1172,7 +1172,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                         $wheredis['escid']=$esciddoc;
                         $wheredis['perid']=$perid;
                         $dist = new Distribution_Model_DbTable_Distribution();
-                        $distiddoc=$dist->_getFilter($wheredis,$atrib=array(),$orders=array());
+                        $distiddoc=$dist->_getFilter($wheredis);
                         
                         $pkdistdoc['distid'] = $datadistdoc['distid'] = $distiddoc[0]['distid'];
                         $pkdistdoc['subid'] = $datadistdoc['subid'] = $subiddoc;
