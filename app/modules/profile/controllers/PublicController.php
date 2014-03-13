@@ -186,6 +186,25 @@ class Profile_PublicController extends Zend_Controller_Action {
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
 
+            // $whered=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid,'uid'=>$uid,'escid'=>$escid,'subid'=>$subid);
+            // $dbdetingreso=new Api_Model_DbTable_Studentsignin();
+            // $dataingre=$dbdetingreso->_getOne($whered);
+
+            // $dbstatistics=new Api_Model_DbTable_Statistics();
+            // $dataest=$dbstatistics->_getOne($whered);
+
+            // $wherea=array('eid'=>$eid,'pid'=>$pid);
+            // $dbacademic=new Api_Model_DbTable_Academicrecord();
+            // $datacade=$dbacademic->_getFilter($wherea);
+
+            // $wherei=array('eid'=>$eid,'pid'=>$pid);
+            // $dbinterest=new Api_Model_DbTable_Interes();
+            // $datainte=$dbinterest->_getFilter($wherei);
+
+            if ($dataingre && $dataest && $datacade && $datainte) {
+                $this->view->clave=1;
+            }
+
             $dataStudent = array(   'eid'   => base64_encode($eid),
                                     'oid'   => base64_encode($oid),
                                     'pid'   => base64_encode($pid),
@@ -208,6 +227,38 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
+    public function viewprintfichaAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $uid=$this->sesion->uid;
+            $pid=$this->sesion->pid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
+
+            $whered=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid,'uid'=>$uid,'escid'=>$escid,'subid'=>$subid);
+            $dbdetingreso=new Api_Model_DbTable_Studentsignin();
+            $dataingre=$dbdetingreso->_getOne($whered);
+
+            $dbstatistics=new Api_Model_DbTable_Statistics();
+            $dataest=$dbstatistics->_getOne($whered);
+
+            $wherea=array('eid'=>$eid,'pid'=>$pid);
+            $dbacademic=new Api_Model_DbTable_Academicrecord();
+            $datacade=$dbacademic->_getFilter($wherea);
+
+            $wherei=array('eid'=>$eid,'pid'=>$pid);
+            $dbinterest=new Api_Model_DbTable_Interes();
+            $datainte=$dbinterest->_getFilter($wherei);
+
+            if ($dataingre && $dataest && $datacade && $datainte) {
+                $this->view->clave=1;
+            }            
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
     public function studenteditinfoAction(){
         try{
             $this->_helper->layout()->disableLayout();
@@ -299,6 +350,8 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dataStudent = array(   'eid' => $eid,
                                     'oid' => $oid,
                                     'pid' => $pid );
+            $valor=$this->sesion->fullProfile->success = 'yes';
+            $this->view->valor=$valor;
             $this->view->dataStudent = $dataStudent;
 
             $dbfam=new Api_Model_DbTable_Relationship();
@@ -906,6 +959,9 @@ class Profile_PublicController extends Zend_Controller_Action {
             $where=array("eid"=>$eid,"pid"=>$pid);
             $interes=$dbinteres->_getFilter($where);
             //print_r($interes);
+            $valor=$this->sesion->fullProfile->success;
+            print_r($valor);
+            $this->view->valor=$valor;
             $this->view->interes=$interes;
             $this->view->data=$data;
 
@@ -1238,7 +1294,120 @@ class Profile_PublicController extends Zend_Controller_Action {
     }
 
     public function printfichaAction(){
-        $this->_helper->layout()->disableLayout();
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid=base64_decode($this->_getParam('eid'));
+            $oid=base64_decode($this->_getParam('oid'));
+            $pid=base64_decode($this->_getParam('pid'));
+            $uid=base64_decode($this->_getParam('uid'));
+            $escid=base64_decode($this->_getParam('escid'));
+            $subid=base64_decode($this->_getParam('subid'));
+            $this->view->pid=$pid;
+            $wherep=array('eid'=>$eid,'pid'=>$pid);
+
+            $dbrelation=new Api_Model_DbTable_Relationship();
+            $datafami=$dbrelation->_getFilter($wherep);
+            $len=count($datafami);
+
+            $dbfamily=new Api_Model_DbTable_Family();
+            $wherefa['eid']=$eid;
+            for ($i=0; $i < $len; $i++) { 
+                $wherefa['famid']=$datafami[$i]['famid'];
+                $data=$dbfamily->_getOne($wherefa);
+                $pidfa=$data['numdoc'];
+                $namefa=$data['lastname'].", ".$data['firtsname'];
+                $datafami[$i]['name']=$namefa;
+                $datafami[$i]['numdoc']=$pidfa;
+            }
+            $this->view->datafami=$datafami;
+
+            $whered=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid,'uid'=>$uid,'escid'=>$escid,'subid'=>$subid);
+            $dbdetingreso=new Api_Model_DbTable_Studentsignin();
+            $dataingre=$dbdetingreso->_getOne($whered);
+            $this->view->dataingre=$dataingre;
+
+            $dbstatistics=new Api_Model_DbTable_Statistics();
+            $dataest=$dbstatistics->_getOne($whered);
+            $this->view->dataest=$dataest;
+
+            $wherea=array('eid'=>$eid,'pid'=>$pid);
+            $dbacademic=new Api_Model_DbTable_Academicrecord();
+            $datacade=$dbacademic->_getFilter($wherea);
+            $datacade=$datacade[0];
+            $this->view->datacade=$datacade;
+
+            $wherei=array('eid'=>$eid,'pid'=>$pid);
+            $dbinterest=new Api_Model_DbTable_Interes();
+            $datainte=$dbinterest->_getFilter($wherei);
+            $this->view->datainte=$datainte;
+
+            $dbperson=new Api_Model_DbTable_Person();
+            $datapers=$dbperson->_getOne($wherep);
+            $this->view->datapers=$datapers;
+
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $spe=array();
+            $dbspeciality = new Api_Model_DbTable_Speciality();
+            $speciality = $dbspeciality ->_getOne($where);
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $dbspeciality->_getOne($wher);
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+            
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names."<br>".$namep;
+
+            $whered=array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']);
+            $dbfaculty = new Api_Model_DbTable_Faculty();
+            $faculty = $dbfaculty ->_getOne($whered);
+            $namef = strtoupper($faculty['name']);
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();    
+            $uidim=$this->sesion->pid;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'impresion_ficha_estadistica',
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+            // print_r($data);exit();
+            $dbimpression->_save($data);            
+            
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_ficha_estadistica');
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=count($dataim);
+            $codigo=$co." - ".$uidim;
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+
+            $this->view->header=$header;
+            $this->view->footer=$footer;
+        } catch (Exception $e) {
+            print "Error".$e -> getMessage();    
+        }
     }
 
     // public function studentsignrealizedAction()

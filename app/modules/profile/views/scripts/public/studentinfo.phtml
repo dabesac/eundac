@@ -25,10 +25,7 @@
         <li><a href="##" id="btninters" class="">5. Intereses</li>
         <li class="hidden"><a></a></li>
       </ul>
-    </div>
-    <br><br>
-    <!--<div class="panel panel-default">
-      <ul class="nav nav-pills nav-stacked">
+      <ul  id='printficha' class="nav nav-pills nav-stacked">
         <?php 
         $urlPrintFicha = '/profile/public/printficha'.  '/eid/'.$this->dataStudent['eid'].
                                                         '/oid/'.$this->dataStudent['oid'].
@@ -37,9 +34,10 @@
                                                         '/escid/'.$this->dataStudent['escid'].
                                                         '/subid/'.$this->dataStudent['subid'];
         ?>
-        <li><a href="<?php echo $urlPrintFicha ?>" id="prinfFicha" class="form-class text-center"><span class="glyphicon glyphicon-print"></span> Imprimir Ficha</a></li>
+        <li><a href="<?php echo $urlPrintFicha ?>" class="form-class text-center"><span class="glyphicon glyphicon-print"></span> Imprimir Ficha</a></li>
       </ul>
-    </div>-->
+      <!-- <a href="#" class='btn btn-success btn-lg'><span class="glyphicon glyphicon-print"></span> Imprimir Ficha</a> -->
+    </div>
   </div>
 </div><!-- div row -->
 
@@ -47,11 +45,15 @@
 
 
 <script>
-
-
-  $("#datastudent").load("/profile/public/studentmaininfo");
-  $("#divBtnProfile").fadeOut("fast");
-  $('#editform').fadeOut('fast');
+    $("#printficha").hide();
+    
+    var clave="<?php echo $this->clave?>";
+    if (clave==1) {
+      $("#printficha").show();
+    };
+    $("#datastudent").load("/profile/public/studentmaininfo");
+    $("#divBtnProfile").fadeOut("fast");
+    $('#editform').fadeOut('fast');
 
 
   $('#masinfoTab a').click(function (e) {
