@@ -22,6 +22,7 @@
             <p><span class="glyphicon glyphicon-user text-info"></span> <?php echo $this->person[0]['last_name0'].' '.$this->person[0]['last_name1'] ?> <span class="text-info"><?php echo $this->person[0]['first_name'] ?></span></p>
             <h6>Codigo <span class="text-info"><?php echo $this->person[0]['uid'] ?></span></h6>
             <h6>Semestre <span class="text-info"><?php echo $this->dataStudent['semid'] ?></span></h6>
+            <h6>Cantidad de Creditos <span class="text-info"><?php echo $this->fullCredits ?></span></h6>
         </blockquote>
     </div>
 
@@ -31,7 +32,87 @@
         <blockquote>
             <br>
             <h5>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h5>
-            <h5>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
+            <h5>Monto <span class="text-info" id="hoverDetailPayment">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
+            <div class="col-md-12" id='detailPayment' style="position: absolute; z-index: 2; background: white;">
+                <h6 class="text-info">Pagos Normales</h6>
+                <table class="table">
+                    <tr>
+                        <th class="text-center">Pago</th>
+                        <th class="text-center">Operación</th>
+                        <th class="text-center">Fecha</th>
+                    </tr>
+                <?php foreach ($this->paymentsDetail as $payment): ?>
+                    <tr>
+                        <td class="text-center text-info">S/. <?php echo $payment['amount'] ?></td>
+                        <td class="text-center text-danger"><?php echo $payment['operation'] ?></td>
+                        <td class="text-center text-muted"><?php echo substr($payment['date_payment'], 0, 10) ?></td>
+                    </tr>
+                <?php endforeach ?>
+                </table>
+                <hr>
+            <?php if ($this->matriculaCondicional == 'Si'): ?>
+                <h6 class="text-danger">Pagos Condicionales</h6>
+                <?php if ($this->paymentsConditional): ?>
+                    <table class="table">
+                        <tr>
+                            <th class="text-center">Curso</th>
+                            <th class="text-center ">Llevando por</th>
+                            <th class="text-center">Pago</th>
+                            <th class="text-center">Operación</th>
+                        </tr>
+                    <?php foreach ($this->coursesCondition as $course): 
+                        $montoPaga = $course['credits'] * $course['montoxCredito'];
+                    ?>
+                        <?php foreach ($this->paymentsConditional as $payment): ?>
+                            <?php if ($payment['amount'] <= $montoPaga): ?>
+                                <tr>
+                                    <td class="text-center text-muted"><?php echo $course['courseid'] ?></td>
+                                    <td class="text-center text-danger"><?php echo $course['veces'] + 1 ?> vez</td>
+                                    <td class="text-center text-info">S/. <?php echo $payment['amount']?></td>
+                                    <td class="text-center text-danger"><?php echo $payment['operation']?></td>
+                                </tr>
+                                <?php if ($payment['amount'] < $montoPaga): ?>
+                                    <tr>
+                                        <td class="text-center text-danger" colspan="4">Falta un reintegro de S/. <?php echo $montoPaga - $payment['amount'] ?></td>
+                                    </tr>
+
+                                <?php 
+                                    $faltaReintegro = 'si';
+                                    $classButtonValidate = 'disabled';
+                                endif ?>
+                            <?php endif ?>
+                        <?php endforeach ?>
+                    <?php endforeach ?>
+                    </table>
+                <?php else: ?>
+                    <h5 class="text-muted text-center">Falta <span class="text-danger">Pagos</span></h5>
+                    <table class="table">
+                        <tr>
+                            <th class="text-center">Curso</th>
+                            <th class="text-center">Llevando por</th>
+                            <th class="text-center">Monto</th>
+                        </tr>
+                    <?php foreach ($this->coursesCondition as $course): ?>
+                        <tr>
+                            <td class="text-center text-muted"><?php echo $course['courseid'] ?></td>
+                            <td class="text-center text-danger"><strong><?php echo $course['veces'] + 1 ?> vez</strong></td>
+                            <td class="text-center text-danger"><strong>S/. <?php echo $course['montoxCredito'] * $course['credits'] ?>.00</strong></td>
+                        </tr>
+                    <?php endforeach ?>
+                    </table>
+                <?php 
+                $classButtonValidate = 'disabled';
+                endif ?>
+            <?php endif ?>
+            </div>
+        <?php if ($this->matriculaCondicional == 'Si' and !$this->paymentsConditional): ?>
+            <h5 class="text-danger">Pagos Condicionales <strong>No Tiene</strong></h5>
+        <?php elseif ($this->matriculaCondicional == 'Si' and $faltaReintegro == 'si'): ?>
+            <h5 class="text-danger">Pagos Condicionales <strong>Falta Reintegro</strong></h5>
+         <?php elseif ($this->matriculaCondicional == 'Si'): ?>
+            <h5 class="text-danger">Pagos Condicionales <strong>Todo en Orden</strong></h5>
+        <?php endif ?>
+
             <?php if (!$this->condition and $this->matriculaCondicional == 'No'): 
                 $classCondition = 'hidden';
                 echo "<br>";
@@ -313,6 +394,7 @@
 </div>
 
 <script>
+
     //Barra Lateral
     $('#despliega').click(function(){
         $(this).attr('disabled', 'true');
@@ -355,6 +437,12 @@
 
 
     //Navegación
+    //Detalle de Pago
+    $('#detailPayment').slideUp();
+    $('#hoverDetailPayment').hover(function(){
+        $('#detailPayment').slideToggle();
+    });
+
     $('#printRegister').click(function(){
         $('.modalRegister').modal('hide');
     });
