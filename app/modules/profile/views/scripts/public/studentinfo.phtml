@@ -55,9 +55,9 @@
     var clave="<?php echo $this->clave?>";
     if (clave==1) {
         var state="<?php echo $this->state?>";
-        if (state!="C") {
-            $('#profileTab li:eq(3) a').tab('show');            
-        };
+            if (state!="C") {
+                $('#profileTab li:eq(3) a').tab('show');            
+            };
         $("#printficha").show();
         $("#veri").hide();
         $("#printficha").append('<li><a href="<?php echo $urlPrintFicha ?>" class="form-class text-center"><span class="glyphicon glyphicon-print"></span> Imprimir Ficha</a></li>');
