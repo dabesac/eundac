@@ -1,21 +1,25 @@
 <div class="row">
+  <br>
   <div class="col-md-10">
 
     <div id="maininfo"></div>
-    
-    <div id="datastudent"></div>
 
-    <div id="editform"></div>
+    <div id="loadingDiv"></div>
+    
+      <div id="datastudent"></div>
+    
+    <div class="panel panel-default">
+      <div id="editform"></div>
+    </div>
+    
 
   </div>
   <div class="col-md-2">
-    <br>
     <div id="divBtnProfile" class="panel panel-default">
       <ul class="nav nav-pills nav-stacked" id="backprofileTab">
         <li><a href="##" id="btnProfile">Volver al Perfil</a></li>
       </ul>
     </div>
-    <br>
     <div class="panel panel-default">
       <ul class="nav nav-pills nav-stacked" id="masinfoTab">
         <li><a href="##" id="btnfamily" class="">1. Datos Familiares</a></li>
@@ -51,17 +55,18 @@
     if (clave==1) {
       $("#printficha").show();
     };
-    $("#datastudent").load("/profile/public/studentmaininfo");
-    $("#divBtnProfile").fadeOut("fast");
-    $('#editform').fadeOut('fast');
+
+  $("#datastudent").load("/profile/public/studentmaininfo");
+  $("#divBtnProfile").fadeOut("fast");
 
 
   $('#masinfoTab a').click(function (e) {
     e.preventDefault()
-    
+    $('#datastudent').html('');
+    $('#datastudent').removeClass('hidden');
     $("#divBtnProfile").fadeIn("fast");
-    /*$("#datastudent").removeClass("hidden")
-    $("#editform").html("")*/
+    $("#editform").html("");
+    /*$("#datastudent").removeClass("hidden")*/
     $(this).tab('show')
   })
 
@@ -89,9 +94,11 @@
   $("#btnacademic").click(function(){
     $('#datastudent').fadeOut('fast', function(){
       $("#datastudent").load("/profile/public/studentacademic", function(){
-        $('#datastudent').fadeIn('fast');
+        $("#datastudent").fadeIn('fast');
       });
     });
+    /*$("#datastudent").load("/profile/public/studentacademic");
+    $('#datastudent').fadeIn('fast');*/
   })
 
   $("#btnstadistic").click(function(){

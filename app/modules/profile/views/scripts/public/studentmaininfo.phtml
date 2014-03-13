@@ -94,8 +94,15 @@
 
 <div class="panel panel-info">
 	<div class="panel-body">
-		<h3 class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Información Adicional</h3>
-		<br><br>
+		<div class="row container">
+			<div class="col-md-11">
+				<h3 class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Información Adicional</h3>
+			</div>
+			<div class="col-md-1">
+				<h3><a id="editInfoCareer" href="##" class="text-muted" title="Editar Información Sobre Carrera"><span class="glyphicon glyphicon-pencil"></span></a></h3>
+			</div>
+		</div>
+		<br>
 		<div class="row">
 			<div class="col-md-2">
 				<br><br><br><br>
@@ -198,6 +205,20 @@
 
 		          	<h5><span class="text-muted">Dedicación a la Universidad </span> <?php echo $this->datos[4]['horas_permanece']." "?>H</h5>
 
+		          	<h5><span class="text-muted">Por </span> 
+						<?php if ($this->datos[4]['debido_a'] == 'HC'): 
+							echo "Horario de Clases";
+						elseif ($this->datos[4]['debido_a'] == 'EG'):
+							echo "Estudios en Grupo";
+						elseif ($this->datos[4]['debido_a'] == 'CB'):
+							echo "Consulta en la Biblioteca";
+						elseif ($this->datos[4]['debido_a'] == 'IU'):
+							echo "Internet en la Universidad";
+						elseif ($this->datos[4]['debido_a'] == 'O'):
+							echo "Otros";
+						endif ?>
+	          		</h5>
+
 				</blockquote>
 			</div>
 		</div>
@@ -220,6 +241,14 @@
 			$('#datastudent').load('/profile/public/studenteditinfo', function(){
 				$('#datastudent').fadeIn('fast');
 			});
+		});
+	});
+
+	$('#editInfoCareer').click(function(){
+		$('#datastudent').addClass('hidden');
+		$('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+		$('#editform').load('/profile/public/studentformsign/', function(){
+			$('#loadingDiv').html('');
 		});
 	});
 </script>
