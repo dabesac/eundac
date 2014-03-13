@@ -1,3 +1,4 @@
+<input type="hidden" id="successProfile" value="<?php echo $this->success ?>">
 <div class="row">
   <br>
   <div class="col-md-10">
@@ -29,7 +30,6 @@
         <li><a href="##" id="btninters" class="">5. Intereses</li>
         <li class="hidden"><a></a></li>
       </ul>
-      <ul  id='printficha' class="nav nav-pills nav-stacked">
         <?php 
         $urlPrintFicha = '/profile/public/printficha'.  '/eid/'.$this->dataStudent['eid'].
                                                         '/oid/'.$this->dataStudent['oid'].
@@ -38,10 +38,11 @@
                                                         '/escid/'.$this->dataStudent['escid'].
                                                         '/subid/'.$this->dataStudent['subid'];
         ?>
-        <li><a href="<?php echo $urlPrintFicha ?>" class="form-class text-center"><span class="glyphicon glyphicon-print"></span> Imprimir Ficha</a></li>
-      </ul>
+      <ul id='printficha' class="nav nav-pills nav-stacked"></ul>
+
       <!-- <a href="#" class='btn btn-success btn-lg'><span class="glyphicon glyphicon-print"></span> Imprimir Ficha</a> -->
     </div>
+        <button id='veri' class="form-class text-center btn btn-success btn-sm" style="width:170px"><span class="glyphicon glyphicon-log-out"></span> Si lleno todo pulse aquí</button>
   </div>
 </div><!-- div row -->
 
@@ -50,11 +51,24 @@
 
 <script>
     $("#printficha").hide();
-    
+    var $url ="<?php echo $urlPrintFicha?>";
     var clave="<?php echo $this->clave?>";
     if (clave==1) {
-      $("#printficha").show();
+        var state="<?php echo $this->state?>";
+        if (state!="C") {
+            $('#profileTab li:eq(3) a').tab('show');            
+        };
+        $("#printficha").show();
+        $("#veri").hide();
+        $("#printficha").append('<li><a href="<?php echo $urlPrintFicha ?>" class="form-class text-center"><span class="glyphicon glyphicon-print"></span> Imprimir Ficha</a></li>');
     };
+
+    $("#veri").click(function(){
+        window.location.reload();
+        // var successProfile = $('#successProfile').val();
+        // if (successProfile == 'no') {
+        
+    });
 
   $("#datastudent").load("/profile/public/studentmaininfo");
   $("#divBtnProfile").fadeOut("fast");

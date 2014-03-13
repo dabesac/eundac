@@ -185,6 +185,15 @@ class Profile_PublicController extends Zend_Controller_Action {
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
 
+            $uidveri=substr($uid,0,2);
+            $anio=date(Y);
+            $anioveri=substr($anio,2,2);
+
+
+            $wherep=array('eid'=>$eid,'pid'=>$pid);
+            $dbrelation=new Api_Model_DbTable_Relationship();
+            $datafami=$dbrelation->_getFilter($wherep);
+
             $whered=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid,'uid'=>$uid,'escid'=>$escid,'subid'=>$subid);
             $dbdetingreso=new Api_Model_DbTable_Studentsignin();
             $dataingre=$dbdetingreso->_getOne($whered);
@@ -199,9 +208,23 @@ class Profile_PublicController extends Zend_Controller_Action {
             $wherei=array('eid'=>$eid,'pid'=>$pid);
             $dbinterest=new Api_Model_DbTable_Interes();
             $datainte=$dbinterest->_getFilter($wherei);
+            if ($uidveri==$anioveri) {
+                if ($datafami && $dataingre && $dataest && $datacade && $datainte) {
+                    $this->view->clave=1;
+                }
+            }
+            else{
+                if ($datafami && $dataingre && $dataest && $datacade && $datainte) {
+                    $this->view->clave=1;
+                }   
+            }
 
-            if ($dataingre && $dataest && $datacade && $datainte) {
-                $this->view->clave=1;
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_ficha_estadistica');
+            $dataim = $dbimpression->_getFilter($wheri);
+            $co=count($dataim);
+            if ($co>0) {
+                $this->view->state=C;
             }
 
             $dataStudent = array(   'eid'   => base64_encode($eid),
@@ -229,31 +252,31 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function viewprintfichaAction(){
         try {
             $this->_helper->layout()->disableLayout();
-            $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;
-            $uid=$this->sesion->uid;
-            $pid=$this->sesion->pid;
-            $escid=$this->sesion->escid;
-            $subid=$this->sesion->subid;
+            // $eid=$this->sesion->eid;
+            // $oid=$this->sesion->oid;
+            // $uid=$this->sesion->uid;
+            // $pid=$this->sesion->pid;
+            // $escid=$this->sesion->escid;
+            // $subid=$this->sesion->subid;
 
-            $whered=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid,'uid'=>$uid,'escid'=>$escid,'subid'=>$subid);
-            $dbdetingreso=new Api_Model_DbTable_Studentsignin();
-            $dataingre=$dbdetingreso->_getOne($whered);
+            // $whered=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid,'uid'=>$uid,'escid'=>$escid,'subid'=>$subid);
+            // $dbdetingreso=new Api_Model_DbTable_Studentsignin();
+            // $dataingre=$dbdetingreso->_getOne($whered);
 
-            $dbstatistics=new Api_Model_DbTable_Statistics();
-            $dataest=$dbstatistics->_getOne($whered);
+            // $dbstatistics=new Api_Model_DbTable_Statistics();
+            // $dataest=$dbstatistics->_getOne($whered);
 
-            $wherea=array('eid'=>$eid,'pid'=>$pid);
-            $dbacademic=new Api_Model_DbTable_Academicrecord();
-            $datacade=$dbacademic->_getFilter($wherea);
+            // $wherea=array('eid'=>$eid,'pid'=>$pid);
+            // $dbacademic=new Api_Model_DbTable_Academicrecord();
+            // $datacade=$dbacademic->_getFilter($wherea);
 
-            $wherei=array('eid'=>$eid,'pid'=>$pid);
-            $dbinterest=new Api_Model_DbTable_Interes();
-            $datainte=$dbinterest->_getFilter($wherei);
+            // $wherei=array('eid'=>$eid,'pid'=>$pid);
+            // $dbinterest=new Api_Model_DbTable_Interes();
+            // $datainte=$dbinterest->_getFilter($wherei);
 
-            if ($dataingre && $dataest && $datacade && $datainte) {
-                $this->view->clave=1;
-            }            
+            // if ($dataingre && $dataest && $datacade && $datainte) {
+            //     $this->view->clave=1;
+            // }
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
