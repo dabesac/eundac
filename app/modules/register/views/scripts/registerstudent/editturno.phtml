@@ -1,6 +1,15 @@
-<input type="hidden" id="turnoActivo" value="<?php echo $this->turno ?>">
+
+
 
 <div class="alert alert-warning">
+	<form id="formEditTurno">
+	<input type="hidden" name="turnoActual" id="turnoActual" value="<?php echo $this->turno ?>">
+	<input type="hidden" name="uid" value="<?php echo $this->data['uid'] ?>">
+	<input type="hidden" name="pid" value="<?php echo $this->data['pid'] ?>">
+	<input type="hidden" name="escid" value="<?php echo $this->data['escid'] ?>">
+	<input type="hidden" name="subid" value="<?php echo $this->data['subid'] ?>">
+	<input type="hidden" name="courseid" id="courseid" value="<?php echo $this->data['courseid'] ?>">
+	<input type="hidden" name="curid" value="<?php echo $this->data['curid'] ?>">
 	<?php if ($this->courses): ?>
 		<div class="row">
 			<div class="col-md-5">
@@ -9,7 +18,7 @@
 	    	</div>
 			<div class="col-md-2">
 				Turno
-				<select class="form-control turnoCourses" name="Turno" id="turno<?php echo $this->data['courseid'] ?>">
+				<select class="form-control turnoCourses" name="turno">
 					<?php $c = 0;
 					foreach ($this->courses as $course): ?>
 						<option value="<?php echo $course['turno'] ?>"><?php echo $course['turno'] ?></option>
@@ -21,34 +30,44 @@
 				Docente a Cargo
 				<?php $c = 0;
 				foreach ($this->teachersInfo as $teacher): ?>
-					<h5 id="docente<?php echo $teacher[0]['turno'] ?>" class="hidden">
+					<h5 id="docente<?php echo $teacher['turno'] ?>" class="hidden docentes">
 						<?php echo $teacher[0]['last_name0'].' '.$teacher[0]['last_name1'].' '.$teacher[0]['first_name'] ?></h5>
 				<?php $c++;
 				endforeach ?>
 			</div>
 		</div><br>
-	    <a id="editCourse<?php echo $this->data['courseid'] ?>" href="##" class="btn btn-warning">Guardar</a>
+	    <a id="editCourse" href="##" class="btn btn-warning">Guardar</a>
 	    <a href="##" class="btn btn-default cancel">Cancelar</a>
+	</form>
 		<script>
-			var turnoActivo = $('#turnoActivo').val();
-			//alert(turnoActivo);
-			$('.turnoCourses').val('C');
+			var courseid = $('#courseid').val();
+
+			var turnoActual = $('#turnoActual').val();
+			var name = $('#docente' + turnoActual).text();
+			$('.turnoCourses').val(turnoActual);
+			$('#docente' + turnoActual).removeClass('hidden');
 
 			$('.turnoCourses').change(function(){
-				var turnoActivo	= $(this).val();
-				/*$("#docente<?php echo $this->data['courseid'] ?>"+indice[0]).addClass('hidden');
-				turno = $(this).val();
-				indice = turno.split('-');
-				name = $("#docente<?php echo $this->data['courseid'] ?>"+indice[0]).html();
-				$("#docente<?php echo $this->data['courseid'] ?>"+indice[0]).removeClass('hidden');*/
+				turnoActual	= $(this).val();
+				var name = $('#docente' + turnoActual).text();
+				$('.docentes').addClass('hidden');
+				$('#docente' + turnoActual).removeClass('hidden');
 			});
 
-			$("#editCourse<?php echo $this->data['courseid'] ?>").click(function(){
-				$.get("/register/registerstudent/updatecourseperturno/uid/<?php echo $this->data['uid'] ?>/pid/<?php echo $this->data['pid'] ?>/escid/<?php echo $this->data['escid'] ?>/subid/<?php echo $this->data['subid'] ?>/courseid/<?php echo $this->data['courseid'] ?>/curid/<?php echo $this->data['curid'] ?>/turno/"+indice[1], function(){
-						$(".iluminate").removeClass('danger warning');
-						$("#courseTurno<?php echo $this->data['courseid'] ?>").html(indice[1]);
-						$("#teacherTurno<?php echo $this->data['courseid'] ?>").html(name);
-						$("#editAlert<?php echo $this->data['courseid'] ?>").addClass('hidden');
+			$("#editCourse").click(function(){
+				$.ajax({
+					type   : 'post',
+					url    : '/register/registerstudent/updatecourseperturno',
+					data   : $('#formEditTurno').serialize(),
+					success: function(data){
+						if (data == 'true') {
+							$(".iluminate").removeClass('danger warning');
+							$("#courseTurno" + courseid).html(turnoActual);
+							$("#courseTurno" + courseid).attr('turno', turnoActual);
+							$("#teacherTurno" + courseid).html(name);
+							$("#editAlert" + courseid).addClass('hidden');
+						};
+					}
 				});
 			});
 

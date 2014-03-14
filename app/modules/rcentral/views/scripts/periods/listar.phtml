@@ -13,8 +13,9 @@
   		    <img src="/img/circulo-azul.png"><b>INICIADO</b>
    	    </td>
    	    <td style="text-align: right">
-			<a id="#"  class="btn btn-info" onclick="javascript: window.open('/rcentral/periods/nuevo/','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=0,fullscreen=yes,dependent=no,width=600,height=600')"> 
-   			<i class="glyphicon glyphicon-pencil"></i>Nuevo</a>
+            <button id="newper" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Nuevo</button>
+<!-- 			<a id="#"  class="btn btn-info" onclick="javascript: window.open('/rcentral/periods/nuevo/','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=0,fullscreen=yes,dependent=no,width=600,height=600')"> 
+   			<i class="glyphicon glyphicon-pencil"></i>Nuevo</a> -->
    	    </td>   				
 	</tr>
 </table>
@@ -77,8 +78,28 @@
     }
     ?>
     </table>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                
+            </div>
+            <div class="modal-body">
+                <div id='nuevo_periodo'></div>
+            </div>
+        </div>
+    </div>
+</div>
 
-
+<script type="text/javascript">
+    $("#newper").click(function(){   
+        $('#myModal').modal('show');            
+        var url="/rcentral/periods/nuevo/";
+        $("#nuevo_periodo").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
+        $("#nuevo_periodo").load(url);
+    });
+</script>
 
 
 
