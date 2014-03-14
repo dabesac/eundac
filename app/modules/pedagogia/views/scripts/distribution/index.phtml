@@ -16,7 +16,7 @@
 </div>
 <hr> -->
 <div class="row">
-	<div class="col-md-2 col-md-offset-2">
+	<div class="col-md-2 col-md-offset-1">
 		<h5 class="text-info">Año</h5>
 		<select class="form-control" name="Anio" id="anio">
 			<option value="">Seleccione Año</option>
@@ -32,7 +32,17 @@
 			<option value="">Primero Seleccione un Año</option>
 		</select>
 	</div>
-	<div class="col-md-1 col-md-offset-1">
+	<div class="col-md-4">
+		<h5 class="text-info">Facultad</h5>
+		<select name="faculty" id="faculty" class="form-control">
+			<option value="">Seleccione Facultad</option>
+			<?php
+			foreach ($this->dataf as $dataf) {	?>
+ 				<option value="<?php echo $dataf['facid']?>"><?php echo $dataf['name']?></option>
+ 			<?php } ?>
+		</select>
+	</div>
+	<div class="col-md-1 col-md-offset-5">
 		<br><br>
 		<a id="show" href="#" class="btn btn-success">Mostrar</a>
 	</div>
@@ -58,9 +68,10 @@
 
 	$('#show').click(function(){
 		var perid = $('#periods').val();
-		if (perid){
+		var facid = $('#faculty').val();
+		if (perid && facid){
 			$('#data').html('<center><img class="text-center" src="/img/spinner.gif"></center>');
-			$('#data').load('/pedagogia/distribution/view/perid/'+perid);
+			$('#data').load('/pedagogia/distribution/view/perid/'+perid+'/facid/'+facid);
 			$('#alert').fadeOut('fast');
 		}else{
 			$('#alert').fadeIn('slow');
