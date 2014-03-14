@@ -610,11 +610,15 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'uid'=>$uid,
                         'state'=>$state );
 
-        $data = array(  'modified'=>$this->sesion->uid,
-                        'updated'=>date('Y-m-d h:m:s'),
-                        'state'=>'M' );
-        if ($registerxcourseDb->_updatestateregister($data, $where)) {
-            if ($registerDb->_update($data, $where)){
+        $dataRegisterxCourse = array(   'modified' => $this->sesion->uid,
+                                        'approved' => $this->sesion->uid,
+                                        'updated'  => date('Y-m-d h:m:s'),
+                                        'state'    => 'M' );
+        if ($registerxcourseDb->_updatestateregister($dataRegisterxCourse, $where)) {
+            $dataRegister = array(  'modified' => $this->sesion->uid,
+                                    'updated'  => date('Y-m-d h:m:s'),
+                                    'state'    => 'M' );
+            if ($registerDb->_update($dataRegister, $where)){
                 $json = array('status' => true );
             }else{
                 $json = array('status' => false );
