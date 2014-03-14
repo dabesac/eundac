@@ -200,10 +200,11 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
             $dataespe = $espe->_getOne($whereesp);
             $this->view->speciality=$dataespe;
 
-            $whereteach=array('eid' => $eid, 'oid' => $oid, 
-                                'escid' => $escid, 'perid' => $perid);
+            $whereteach=array('eid' => $eid, 'oid' => $oid,'escid' => $escid, 
+                'subid'=>$subid,'perid' => $perid);
             $distteacher = new Api_Model_DbTable_Coursexteacher();
             $dataallteacher = $distteacher->_getAllTeacherXPeriodXEscid($whereteach);
+            
             $users = new Api_Model_DbTable_Users();
             $infotea = new Api_Model_DbTable_UserInfoTeacher();
             if ($dataallteacher) {

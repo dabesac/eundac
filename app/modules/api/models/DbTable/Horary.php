@@ -2,33 +2,32 @@
 
 class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
 {
-	protected $_name = 'horary_periods';
-	protected $_primary = array("eid","oid","hid","escid","subid","perid","courseid","curso","turno");
+    protected $_name = 'horary_periods';
+    protected $_primary = array("eid","oid","hid","escid","subid","perid","courseid","curso","turno");
     protected $_sequence ="s_horaryperiods";
 
-	public function _getFilter($where=null,$attrib=null,$orders=null){
-		try{
-			if($where['eid']=='' || $where['oid']=='') return false;
-				$select = $this->_db->select();
-				if ($attrib=='') $select->from("horary_periods");
-				else $select->from("horary_periods",$attrib);
-				foreach ($where as $atri=>$value){
-					$select->where("$atri = ?", $value);
-				}
-				if ($orders<>null || $orders<>"") {
-                    if (is_array($orders))
-                        $select->order($orders);
+    public function _getFilter($where=null,$attrib=null,$orders=null){
+        try{
+            if($where['eid']=='' || $where['oid']=='') return false;
+                $select = $this->_db->select();
+                if ($attrib=='') $select->from("horary_periods");
+                else $select->from("horary_periods",$attrib);
+                foreach ($where as $atri=>$value){
+                    $select->where("$atri = ?", $value);
                 }
-				$results = $select->query();
-				$rows = $results->fetchAll();
-				if ($rows) return $rows;
-				return false;
-		}catch (Exception $e){
-			print "Error: Read Filter Horary".$e->getMessage();
-		}
-	}
+                foreach ($orders as $key => $order) {
+                        $select->order($order);
+                }
+                $results = $select->query();
+                $rows = $results->fetchAll();
+                if ($rows) return $rows;
+                return false;
+        }catch (Exception $e){
+            print "Error: Read Filter Horary".$e->getMessage();
+        }
+    }
 
-	/*La función suma los minutos de una hora indicada*/
+    /*La función suma los minutos de una hora indicada*/
     public function _getsumminutes($hora,$nummin){
         $sql=$this->_db->query("select time '$hora' + interval '$nummin minutes' as hora");
         $row=$sql->fetchAll();
@@ -92,6 +91,23 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
         }            
     }
 
+     /*Devuelve el horario de un docente.De acuerdo a parametros enviados*/
+    public function _getHoraryXteacher($eid='',$oid='',$perid='',$teach_uid='',$day=''){
+        try
+        {
+            // if ($eid=="" || $oid=="" || $perid=="" || $escid=="" || $subid=="" || $teach_uid=="" || $hora_ini=='' || $hora_fin=='' || $day=='') return false; 
+            $where=array("eid='$eid' and oid='$oid' and perid='$perid' and teach_uid='$teach_uid'
+                        and day='$day' ");
+            $f = $this->fetchAll($where);
+            if($f) return $f->toArray();
+            return false;
+        } 
+        catch (Exception $ex)
+        {
+            print $ex->getMessage();
+        }            
+    }
+
     public function _save($data){
         try{
             if ($data['eid']==""||$data['oid']==""||$data['perid']==""||$data['curid']==""||$data['escid']==""||$data['courseid']==""||$data['turno']==""||$data['subid']==""||$data['teach_uid']==""||$data['teach_pid']=="") return false;
@@ -132,6 +148,45 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
             return false; 
         } catch (Exception $e) {
             print "Error: Update Horary All".$e->getMessage();
+        }
+    }
+
+    public function _intervalHoraryi($eid='',$oid='',$perid='',$uid='',$day='',$hora){
+        try {
+            if($eid=='' || $oid=='' || $perid=='' || $uid=='' || $day=='' || $hora=='') return false;
+            $tiempo=split(":", $hora);
+            $hora=$tiempo[0];
+            $min=$tiempo[1];
+            $hora=$hora.":".$min.":01";
+
+            $sql=$this->_db->query("select * from horary_periods where eid='$eid' and oid='$oid' 
+                                    and perid='$perid' and teach_uid='$uid' and day='$day' 
+                                    and '$hora' between hora_ini and hora_fin ");
+
+            if ($sql) return $sql->fetchAll();
+            return false; 
+        } catch (Exception $e) {
+            print "Error: Interval Horary".$e->getMessage();
+        }
+    }
+
+    public function _intervalHoraryf($eid='',$oid='',$perid='',$uid='',$day='',$hora){
+        try {
+            if($eid=='' || $oid=='' || $perid=='' || $uid=='' || $day=='' || $hora=='') return false;
+            $tiempo=split(":", $hora);
+            $hora=$tiempo[0];
+            $min=$tiempo[1];
+            $min=intval($min-1);
+            $hora=$hora.":".$min.":00";
+            
+            $sql=$this->_db->query("select * from horary_periods where eid='$eid' and oid='$oid' 
+                                    and perid='$perid' and teach_uid='$uid' and day='$day' 
+                                    and '$hora' between hora_ini and hora_fin ");
+
+            if ($sql) return $sql->fetchAll();
+            return false; 
+        } catch (Exception $e) {
+            print "Error: Interval Horary".$e->getMessage();
         }
     }
  }

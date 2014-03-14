@@ -6,7 +6,16 @@ class Admin_Form_Receipt extends Zend_Form{
         $eid = $sesion1->eid;
         $oid = $sesion1->oid;
         $anio = date('Y');
-        $anio = substr($anio, 2,3);
+
+        $anios=new Zend_Form_Element_Select('anios');
+        $anios->removeDecorator('HtmlTag')->removeDecorator('Label');     
+        $anios->setRequired(true)->addErrorMessage('Este campo es requerido.');
+        $anios->setAttrib("class","form-control");
+        $anios->addMultiOption("","- Seleccione Año -");
+        for ($i=$anio; $i > 2000; $i--) { 
+            $a = substr($i, 2,3);
+            $anios->addMultiOption($a,$i);
+        }
         
         $operation= new Zend_Form_Element_Text('operation');
         $operation->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
@@ -57,20 +66,13 @@ class Admin_Form_Receipt extends Zend_Form{
         $perid->removeDecorator('HtmlTag')->removeDecorator('Label');     
         $perid->setRequired(true)->addErrorMessage('Este campo es requerido.');
         $perid->setAttrib("class","form-control");
-        $perid->addMultiOption("","- Seleccione Periodo -");
-        $data = array('eid' => $eid, 'oid' => $oid, 'year' => $anio);
-        $per = new Api_Model_DbTable_Periods();
-        $data_per = $per->_getPeriodsxYears($data);
-        foreach ($data_per as $periodos) {
-            $perid->addMultiOption($periodos['perid'],$periodos['perid']." - ".$periodos['name']);
-        }
-
+        $perid->addMultiOption("","- Seleccione un Año -");
 
         $save = new Zend_Form_Element_Submit('save');
         $save->setAttrib('class', 'btn btn-success');
         $save->removeDecorator("HtmlTag")->removeDecorator("Label");
         $save->setLabel('Guardar');
 
-        $this->addElements(array($operation,$code_student,$info_person,$payment_date,$amount,$perid,$concept,$save));        
+        $this->addElements(array($anios,$operation,$code_student,$info_person,$payment_date,$amount,$perid,$concept,$save));        
     }
 }

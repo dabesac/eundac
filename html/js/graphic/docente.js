@@ -4,7 +4,7 @@ $(function () {
                 type: 'bar'
             },
             title: {
-                text: 'Gráfica de Encuesta'
+                text: 'Gráfica de Encuesta Periodo'
             },
             xAxis: {
                 categories: $cources
@@ -25,14 +25,19 @@ $(function () {
                 }
             },
             series: [{
-                name: 'John',
-                data: [5, 3, 4, 7, 2]
+                name: 'Siempre',
+                data: $cant
+
             }, {
-                name: 'Jane',
-                data: [2, 2, 3, 2, 1]
+                name: 'Casi Siempre',
+                data: $cant
             }, {
-                name: 'Joe',
-                data: [3, 4, 4, 2, 5]
+                name: 'A veces',
+                data: $cant
+
+            },{
+                name:'Nunca',
+                data: $cant
             }]
     });
 });
