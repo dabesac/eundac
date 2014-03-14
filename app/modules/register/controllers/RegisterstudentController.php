@@ -767,7 +767,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         
     }
 
-        public function printAction(){
+    public function printAction(){
         try{
             $this->_helper->layout()->disableLayout();
             $where['uid'] = base64_decode($this->_getParam('uid'));
@@ -821,7 +821,6 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             if(!$curicula_alumno) return false;
             $curricula_alu = $curicula_alumno['curid'];
             $this->view->curricula = $curricula_alu;
-            
 
             //Obteniendo los datos del alumno
             $alum = new Api_Model_DbTable_Person();

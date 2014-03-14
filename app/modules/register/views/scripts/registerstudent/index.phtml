@@ -3,14 +3,14 @@
 
 <div class="row">
     <div class="col-md-5 col-md-offset-1">
-        <span class="text-muted"><span class="glyphicon glyphicon-filter"></span> Filtre por :</span>
+        <span class="text-muted"><span class="glyphicon glyphicon-filter"></span> Filtrar por :</span>
     </div>
 </div>
 <br>
 <div class="row">
     <div class="col-md-3 col-md-offset-1">
         <select class='form-control' id='escuela' name='escid'>
-            <option value="">Escuela</option>
+            <option value="">Todas las Escuelas</option>
             <?php foreach ($this->escuelas as $escuela){   
                 echo "<option value=".$escuela['escid'].">".$escuela['name']."</option>";
             }?>
@@ -44,6 +44,7 @@
         var i   = 1;
         $("#students li").each(function(){
             var cssli = $(this).css('display');
+            $(this).attr('escid', '');
             if (cssli != 'none') {
                 $('#studentNum'+[i]).html(num);
                 num++;
@@ -54,38 +55,30 @@
 
     $('#estado').change(function(){
         $('#searchData').val('');
+        var escid = $('#escuela').val();
         var state = $(this).val();
+
         $('#data').html("<br><center><img src='/img/spinner.gif'> Cargando.... </center>");
         $('#data').load('/register/registerstudent/liststudent/state/' + state ,function(){
-            var escid = $('#escuela').val();
+            var num = 1;
+            var i   = 1;
+
             $('#students > li').each(function(){
                 var currentLiText = $(this).text(),
                 showCurrentLi = currentLiText.indexOf(escid) !== -1;
 
                 $(this).toggle(showCurrentLi);
             });
-            var num   = 1;
-            var i     = 1;
-            var vacio = 0;
-            $("#students li").each(function(){
-                var cssLiOrder = $(this).css('display');
-                if (cssLiOrder != 'none') {
+
+            $("#students > li").each(function(){
+                var cssli = $(this).css('display');
+                if (cssli != 'none') {
+                    $(this).attr('escid', escid);
                     $('#studentNum'+[i]).html(num);
                     num++;
-                }else{
-                    vacio++;
-                }
+                };
                 i++;
-            })
-            $('#data').removeClass('hidden');
-            $('#emptyData').addClass('hidden');
-            var tam = $('#students li').size();
-            if (tam == 0) {
-                //$('#emptyData').removeClass('hidden');
-            }else if (tam == vacio){
-                $('#emptyData').removeClass('hidden');
-                $('#data').addClass('hidden');
-            }
+            });
         });
     });
 
@@ -95,97 +88,48 @@
             var currentLiText = $(this).text(),
             showCurrentLi = currentLiText.indexOf(escid) !== -1;
             $(this).toggle(showCurrentLi);
-
         });
+
         var num   = 1;
         var i     = 1;
-        var vacio = 0;
-        $("#students li").each(function(){
-            cssLiOrder = $(this).css('display');
-            if (cssLiOrder != 'none') {
+        $("#students > li").each(function(){
+            var cssli = $(this).css('display');
+            if (cssli != 'none') {
+                $(this).attr('escid', escid);
                 $('#studentNum'+[i]).html(num);
                 num++;
-            }else {
-                vacio++;
             }
             i++;
-        });
-        $('#data').removeClass('hidden');
-        $('#emptyData').addClass('hidden');
-        var tam = $('#students li').size();
-        if (tam == 0) {
-            //$('#emptyData').removeClass('hidden');
-        }else if (tam == vacio){
-            $('#emptyData').removeClass('hidden');
-            $('#data').addClass('hidden');
-        }
-
-        $('#searchData').val('');
-
-        $('#students > li').each(function(){
-            $(this).removeAttr('filtrado escid');
         });
     });
 
     $('#searchData').keyup(function(){
-        var data = $(this).val();
-        var reordenar = 'No';
-        $('#students li').each(function(){
-            $(this).attr('filtrado', 'Si');
-            var escid = $('#escuela').val();
-            var cssli = $(this).css('display');
-            var currentLiText = $(this).text();
-            if (escid && !data) {
-                showCurrentLi = currentLiText.indexOf(escid) !== -1;
-                $(this).toggle(showCurrentLi);
-                $(this).removeAttr('filtrado');
-                reordenar = 'Si';
-            }else if (escid && data) {
-                if (cssli != 'none') {
-                    $(this).attr('escid', escid);
-                    showCurrentLi = currentLiText.indexOf(data) !== -1;
-                    $(this).toggle(showCurrentLi);
-                }
-                var claseLi = $(this).attr('escid');
-                if (cssli == 'none' && claseLi == escid) {
-                    showCurrentLi = currentLiText.indexOf(data) !== -1;
-                    $(this).toggle(showCurrentLi);
-                }
-            }else if (!escid && data){
+        var escid        = $('#escuela').val();
+        var data         = $(this).val();
+        $('#students > li').each(function(){
+            $(this).attr('filtrado', 'yes');
+            var attrEscid = $(this).attr('escid');
+            if (attrEscid == escid) {
+                var currentLiText = $(this).text(),
                 showCurrentLi = currentLiText.indexOf(data) !== -1;
                 $(this).toggle(showCurrentLi);
-            }else if (!escid && !data){
-                showCurrentLi = currentLiText.indexOf(data) !== -1;
-                $(this).toggle(showCurrentLi);
-                $(this).removeAttr('filtrado');
-                reordenar = 'Si';
-            }
+            };
         });
-        if (reordenar == 'Si') {
+        if (!data) {
+            $('#students > li').each(function(){
+                $(this).removeAttr('filtrado');
+            });
             var num   = 1;
             var i     = 1;
-            var vacio = 0;
-            $("#students li").each(function(){
+            $("#students > li").each(function(){
                 var cssli = $(this).css('display');
                 if (cssli != 'none') {
                     $('#studentNum'+[i]).html(num);
                     num++;
-                }else {
-                    vacio++;
                 }
-            })
-            $('#data').removeClass('hidden');
-            $('#emptyData').addClass('hidden');
-            var tam = $('#students li').size();
-            if (tam == 0) {
-                //$('#emptyData').removeClass('hidden');
-            }else if (tam == vacio){
-                $('#emptyData').removeClass('hidden');
-                $('#data').addClass('hidden');
-            }
-            
-            reordenar == 'No';
-        }
+                i++;
+            });
+        };
     })
 
 </script>
