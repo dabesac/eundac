@@ -19,7 +19,6 @@ class Api_Model_DbTable_StudentAssistance extends Zend_Db_Table_Abstract
     }
     public function _update($data,$pk){
         try{
-
             if ($pk["eid"]=='' || $pk["oid"]=='' ||  $pk["escid"]=='' ||  $pk["subid"] =='' || 
                 $pk["coursoid"]=='' || $pk["curid"] =='' || $pk["turno"] =='' || $pk["perid"]=='' || 
                 $pk["uid"]=='' || $pk["pid"]=='' || $pk['regid']=='') return false;

@@ -478,40 +478,43 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         }
     }
 
-
-
     public function updatecourseperturnoAction(){
         try {
+            $this->_helper->layout()->disableLayout();
+            //DataBase
+            $registercourseDb    = new Api_Model_DbTable_Registrationxcourse();
+            $studentAssistanceDb = new Api_Model_DbTable_StudentAssistance();
+            //_________________________________________________________
+
             $perid = $this->sesion->period->perid;
+            $dataForm = $this->getRequest()->getPost();
+
             $eid = $this->sesion->eid;        
             $oid = $this->sesion->oid;
-            $uid = $this->_getParam('uid');
-            $pid = $this->_getParam('pid');
-            $escid = $this->_getParam('escid');
-            $subid = $this->_getParam('subid');
-            $courseid = $this->_getParam('courseid');
-            $curid = $this->_getParam('curid');
-            $turno = $this->_getParam('turno');
-            $regid=$uid.$perid;
 
-            $where = array( 'eid'=>$eid,
-                            'oid'=>$oid, 
-                            'uid'=>$uid,
-                            'pid'=>$pid,
-                            'escid'=>$escid,
-                            'subid'=>$subid,
-                            'courseid'=>$courseid,
-                            'curid'=>$curid,
-                            'regid'=>$regid,
-                            'perid'=>$perid );
 
-            $data = array(  'modified'=>$this->sesion->uid,
-                            'turno'=>$turno,
-                            'updated'=>date('Y-m-d h:m:s') );
+            $where = array( 'eid'      => $eid,
+                            'oid'      => $oid, 
+                            'uid'      => $dataForm['uid'],
+                            'pid'      => $dataForm['pid'],
+                            'escid'    => $dataForm['escid'],
+                            'subid'    => $dataForm['subid'],
+                            'courseid' => $dataForm['courseid'],
+                            'curid'    => $dataForm['curid'],
+                            'perid'    => $perid,
+                            'regid'    => $dataForm['uid'].$perid );
 
-            $registercourseDb = new Api_Model_DbTable_Registrationxcourse();  
-            $updateCourse = $registercourseDb->_update($data, $where);
-            //$bdmatricula_curso ->_update($data, $where);        
+            $data = array(  'modified' => $this->sesion->uid,
+                            'turno'    => $dataForm['turno'],
+                            'updated'  => date('Y-m-d h:m:s') );
+
+
+            if ($registercourseDb->_update($data, $where)) {
+                echo "true";
+            }else {
+                echo "false";
+            }
+
         } catch (Exception $e) {
             print 'Error : '.$e->getMessage();
         }
