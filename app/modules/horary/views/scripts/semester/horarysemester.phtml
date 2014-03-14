@@ -110,7 +110,6 @@
     $listacolores[13] = "#C4E6CE";
     $listacolores[14] = "#B4DAA1";
 
-// print_r($this->horary);
 if ($this->horarys) {
         $len=count($this->horarys);
         $cco=0;
@@ -120,7 +119,13 @@ if ($this->horarys) {
         
             $rid=substr($this->horarys[$i]['teach_uid'],8,2);
             if ($rid=='JP') $this->horarys[$i]['practica']='(P)';
-            else $this->horarys[$i]['practica']="";
+            else{
+                $this->horarys[$i]['practica']="";
+                if ($this->horarys[$i]['type_class']=='P') {
+                    $this->horarys[$i]['abbreviation']=$this->horarys[$i]['abbreviation']." (P)";
+                }                
+            } 
+
             $codcurso=$this->horarys[$i]['courseid'];
             $tturno=$this->horarys[$i]['turno'];
             $codcursodes=$this->horarys[$i+1]['courseid'];
@@ -190,7 +195,6 @@ if ($this->horarys) {
                 $band=0;
                 $c=0;
                 $dat=$this->horarys;
-                // print_r($dat); exit();
                 for ($s=0; $s < $len ; $s++) { 
                     $hsplit=split(":",$dat[$s]['hora_ini']);
                     $h=$hsplit[0];

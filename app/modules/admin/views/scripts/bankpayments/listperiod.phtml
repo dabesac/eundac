@@ -1,0 +1,13 @@
+<option value=" ">Seleccione un Periodo</option>
+<?php
+if ($this->data_per) {
+    foreach ($this->data_per as $periodos) {	?>
+    	<option value="<?php echo $periodos['perid']?>"><?php echo $periodos['perid']." | ".$periodos['name']?></option>
+    <?php	
+    }
+}
+else{	?>
+	<option value="">No existen periodos</option>
+<?php	
+}    
+?>
