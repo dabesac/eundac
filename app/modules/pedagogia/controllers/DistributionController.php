@@ -36,7 +36,7 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
             print_r($datae);exit();
 
             for ($i=0; $i < $len; $i++) { 
-                $where=array("eid"=>$eid, "oid"=>$oid,"perid"=>$perid);
+                $where=array("eid"=>$eid, "oid"=>$oid,"","perid"=>$perid);
                 $datae=$dbescuela->_getOne($where1);
                 $dis[$i]['name']=$datae['name'];
             }

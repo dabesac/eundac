@@ -65,6 +65,7 @@ class Admin_Form_Receipt extends Zend_Form{
         $perid = new Zend_Form_Element_Select('perid');
         $perid->removeDecorator('HtmlTag')->removeDecorator('Label');     
         $perid->setRequired(true)->addErrorMessage('Este campo es requerido.');
+        $perid->setRegisterInArrayValidator(false);
         $perid->setAttrib("class","form-control");
         $perid->addMultiOption("","- Seleccione un Año -");
 
