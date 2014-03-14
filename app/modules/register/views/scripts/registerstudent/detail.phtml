@@ -516,11 +516,10 @@
                 stateReg = 'M';
                 var num = 1;
                 var i   = 1;
-                $("#students li").each(function(){
-                    var classli = $(this).attr('class');
+                $("#students > li").each(function(){
                     var cssli = $(this).css('display');
                     var filtradoli = $(this).attr('filtrado');
-                    if (classli != 'hidden' && cssli != 'none' && !filtradoli) {
+                    if (cssli != 'none' && !filtradoli) {
                         $('#studentNum'+[i]).html(num);
                         num++;
                     };
@@ -557,11 +556,10 @@
                     $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
                     var num = 1;
                     var i   = 1;
-                    $("#students li").each(function(){
-                        var classli = $(this).attr('class');
+                    $("#students > li").each(function(){
                         var cssli = $(this).css('display');
                         var filtradoli = $(this).attr('filtrado');
-                        if (classli != 'hidden' && cssli != 'none' && !filtradoli) {
+                        if (cssli != 'none' && !filtradoli) {
                             $('#studentNum'+[i]).html(num);
                             num++;
                         };
@@ -594,11 +592,10 @@
                     $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
                     var num = 1;
                     var i   = 1;
-                    $("#students li").each(function(){
-                        var classli = $(this).attr('class');
+                    $("#students > li").each(function(){
                         var cssli = $(this).css('display');
                         var filtradoli = $(this).attr('filtrado');
-                        if (classli != 'hidden' && cssli != 'none' && !filtradoli) {
+                        if (cssli != 'none' && !filtradoli) {
                             $('#studentNum'+[i]).html(num);
                             num++;
                         };
@@ -631,11 +628,10 @@
                     $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
                     var num = 1;
                     var i   = 1;
-                    $("#students li").each(function(){
-                        var classli = $(this).attr('class');
+                    $("#students > li").each(function(){
                         var cssli = $(this).css('display');
                         var filtradoli = $(this).attr('filtrado');
-                        if (classli != 'hidden' && cssli != 'none' && !filtradoli) {
+                        if (cssli != 'none' && !filtradoli) {
                             $('#studentNum'+[i]).html(num);
                             num++;
                         };
