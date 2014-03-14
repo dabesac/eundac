@@ -99,7 +99,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $conditionDb      = new Api_Model_DbTable_Condition();
             $bankReceiptsDb   = new Api_Model_DbTable_Bankreceipts();
             $rateDb           = new Api_Model_DbTable_Rates();
-            //--------------
+            //________________________________________________________________
 
             $uid  = base64_decode($this->_getParam('uid'));
             $pid  = base64_decode($this->_getParam('pid'));
@@ -257,7 +257,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $veces = $coursesRegisterDb->_getFilter($where, $attrib);
                 $j = 0;
                 foreach ($veces as $vez) {
-                    if ($vez['perid']['2'] != 'D' and $vez['perid']['2'] != 'E' and $vez['notafinal'] != '-3') {
+                    if ($vez['perid']['2'] != 'D' and $vez['perid']['2'] != 'E' and $vez['notafinal'] != '-3' and $vez['perid'] != $perid) {
                         $j++;
                     }
                 }
@@ -346,8 +346,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $state = base64_decode($this->_getParam('state'));
         $regid = $uid.$perid;
 
-        $where = array( 
-                        'eid'   => $eid, 
+        $where = array( 'eid'   => $eid, 
                         'oid'   => $oid, 
                         'pid'   => $pid, 
                         'uid'   => $uid, 
@@ -357,8 +356,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'regid' => $regid,
                         'state' => $state );
 
-        $data = array(  
-                        'modified' => $this->sesion->uid,
+        $data = array(  'modified' => $this->sesion->uid,
                         'updated'  => date('Y-m-d h:m:s') );
 
         if ($registerxcourseDb->_updatestateregister($data, $where)) {
@@ -424,24 +422,27 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $eid = $this->sesion->eid;        
             $oid = $this->sesion->oid;
 
-            $data = array(  'uid'=>$uid,
-                            'pid'=>$pid,
-                            'escid'=>$escid,
-                            'subid'=>$subid,
-                            'courseid'=>$courseid,
-                            'curid'=>$curid );
+            $this->view->turno = $turno;
+
+            $data = array(  'uid'      => $uid,
+                            'pid'      => $pid,
+                            'escid'    => $escid,
+                            'subid'    => $subid,
+                            'courseid' => $courseid,
+                            'curid'    => $curid );
             $this->view->data = $data;
             //$regid=$where['uid'].$where['perid'];
 
-            $where = array( 'eid'=>$eid,
-                            'oid'=>$oid,
-                            'perid'=>$perid,
-                            'courseid'=>$courseid,
-                            'curid'=>$curid,
-                            'escid'=>$escid,
-                            'subid'=>$subid );
+            $where = array( 'eid'      => $eid,
+                            'oid'      => $oid,
+                            'perid'    => $perid,
+                            'courseid' => $courseid,
+                            'curid'    => $curid,
+                            'escid'    => $escid,
+                            'subid'    => $subid );
             $attrib = array('courseid', 'turno');
             $courses = $coursesPeriodsDb->_getFilter($where, $attrib);
+
             $turnos = count($courses);
             if ($turnos >= 2) {
                 $c = 0;
@@ -465,12 +466,13 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                                     'pid'=>$teacher[0]['pid'],
                                     'uid'=>$teacher[0]['uid'] );
                     $teachersInfo[$c] = $coursesTeachersDb->_getinfoTeacher($where, $attrib);
+                    $teachersInfo[$c]['turno'] = $course['turno'];
+
                     $c++;
                 }
                 $this->view->courses = $courses;
                 $this->view->teachersInfo = $teachersInfo;
             }
-
         } catch (Exception $e) {
             print 'Error : '.$e->getMessage();            
         }

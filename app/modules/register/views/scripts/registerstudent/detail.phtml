@@ -1,3 +1,7 @@
+<input type="hidden" id="conditionRegister" value ="<?php echo $this->matriculaCondicional ?>">
+<input type="hidden" id="stateRegister" value ="<?php echo $this->matriculaCondicional ?>">
+<input type="hidden" id="stateReg" value="<?php echo $this->stateRegister ?>">
+
 <div class="modal-header" style="background-color: #d9edf7">
     <div class="row">
         <div class="col-md-5 col-md-offset-1">
@@ -174,6 +178,14 @@
 </div>
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
+        <!--Confirmación para Validar por Tercera Vez-->
+        <div id="confirmValidation" class="alert alert-danger hidden">
+            <h4>Seguro que desea Validar la Matricula?</h4>
+            <p>Este alumno tiene uno o mas cursos por tercera vez, asegurese que todo este en orden para poder validarlo....</p><br>
+            <a id="confirmBtnValidation" href="##" class="btn btn-success">Validar</a>
+            <a href="##" class="btn btn-default closeConfirmAlert">Cancelar</a>
+        </div>
+
         <!--Confirmación para Eliminar-->
         <div id="confirmDelete" class="alert alert-danger fade in hidden">
             <h4>Seguro que desea Eliminar la Matricula?</h4>
@@ -304,11 +316,7 @@
                 <td class="text-center"><?php echo $this->coursesName[$c][0]['credits'] ?></td>
                 <td id="courseTurno<?php echo $course['courseid'] ?>" class="text-center"><?php echo $course['turno'] ?></td>
                 <td id="teacherTurno<?php echo $course['courseid'] ?>"><?php echo $this->teachers[$c][0]['last_name0'].' '.$this->teachers[$c][0]['last_name1'].' '.$this->teachers[$c][0]['first_name']  ?> </td>
-                <?php if ($state == 'M'): ?>
-                <td class="text-center <?php echo $classtdVeces ?>"><strong><?php echo $this->coursesName[$c]['veces'] ?> Vez</strong></td>
-                <?php else: ?>
                 <td class="text-center <?php echo $classtdVeces ?>"><strong><?php echo $this->coursesName[$c]['veces'] + 1 ?> Vez</strong></td>
-                <?php endif ?>
                 <td class="text-center <?php echo $classButtons ?> butonsCourses">
                     <a id="showEditAlert<?php echo $course['courseid'] ?>" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
                 </td>
@@ -318,7 +326,7 @@
                 <td class="text-center text-success tdValidate hidden">Matriculado</td>
                 <td class="text-center text-warning tdObserved hidden">Observado</td>
                 <td class="text-center text-info tdReserved hidden">Reservado</td>
-                <td><strong class="text-<?php echo $claseFilas.' '.$classState ?>"><?php echo $nameState ?></strong></td>
+                <td><strong class="text-<?php echo $claseFilas.' '.$classState ?> nameState"><?php echo $nameState ?></strong></td>
             </tr>
 
             <tr>
@@ -404,7 +412,6 @@
 </div>
 
 <script>
-
     //Barra Lateral
     $('#despliega').click(function(){
         $(this).attr('disabled', 'true');
@@ -462,7 +469,7 @@
         $('#conditionInfo').slideToggle();
     });
 
-    var stateReg = "<?php echo $this->stateRegister ?>";
+    var stateReg = $('#stateReg').val();
 
     $('#failValidate').addClass('hidden');
     $('#successValidate').addClass('hidden');
@@ -475,11 +482,25 @@
     });
 
     $('.closeConfirmAlert').click(function(){
-        $('#confirmDelete').addClass('hidden');
+        $('#confirmDelete, #confirmValidation').addClass('hidden');
     });
 
-    //Validar Matricula
+    //Btn Validar Matricula
+    var conditionRegister = $('#conditionRegister').val();
     $('#validateRegister').click(function(){
+        if (conditionRegister != 'Si') {
+            validateRegister();
+        }else {
+            $('#confirmValidation').removeClass('hidden');
+        };
+    });
+    $('#confirmBtnValidation').click(function(){
+        $('#confirmValidation').addClass('hidden');
+        validateRegister();
+    });
+
+    //Funcion Validar
+    function validateRegister(){
         $('#waitingSpinner').html('<br><center><img src="/img/spinner.gif" alt="Cargando....." /></center><br>');
         $.get("/register/registerstudent/validate/escid/<?php echo base64_encode($this->dataStudent['escid']) ?>/subid/<?php echo base64_encode($this->dataStudent['subid']) ?>/uid/<?php echo base64_encode($this->dataStudent['uid']) ?>/pid/<?php echo base64_encode($this->dataStudent['pid']) ?>/state/<?php echo base64_encode($this->stateRegister) ?>", function(status){
             if (status.status == true) {
@@ -507,7 +528,7 @@
                 $('#failValidate').removeClass('hidden');
             };
         }, "json");
-    });
+    }
 
     //Eliminar Matricula
     $('#openConfirmAlert').on('click', function(){
@@ -563,7 +584,7 @@
                     state : $.base64.encode("<?php echo $this->stateRegister ?>") },
             success: function(data){
                 if (data == 'true') {
-                    $('#stateRegister, .butonsCourses, td strong').addClass('hidden');
+                    $('#stateRegister, .butonsCourses').addClass('hidden');
                     $('#reservedRegister, #validateRegister, #printRegister, #observedRegister, #activeRegister').addClass('disabled');
                     $('#observedSuccessRegister, .tdObserved').removeClass('hidden');
                     $('.iluminate, #studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('warning');
@@ -627,7 +648,7 @@
 
     //Activar Interacciones
     $('#activeRegister').click(function(){
-        $('#activeRegister, td strong').addClass('hidden');
+        $('#activeRegister, .nameState').addClass('hidden');
         $('.validateRegister, .butonsCourses').removeClass('hidden');
     });
     
