@@ -174,7 +174,7 @@ class Docente_IndexController extends Zend_Controller_Action {
         try{
             $this->_helper->layout()->disableLayout(); 
                    
-            $perid = $this->_getParam('perid','13A');
+            $perid = $this->_getParam('perid','13B');
             $where = array(
                         'eid' => $this->sesion->eid,
                         'oid'   =>$this->sesion->oid,
@@ -186,6 +186,8 @@ class Docente_IndexController extends Zend_Controller_Action {
             $tb_course_teacher = new Api_Model_DbTable_Coursexteacher();
             $tb_course= new Api_Model_DbTable_Course();
             $dat_courses = $tb_course_teacher->_getFilter($where);
+            // print_r($dat_courses);
+
             foreach ($dat_courses as $key => $course) {
                 $where1 = array(
                         'eid' =>    $this->sesion->eid,
@@ -198,7 +200,11 @@ class Docente_IndexController extends Zend_Controller_Action {
                 $name_course = $tb_course->_getOne($where1);
                 $courses[$key] = $name_course['name'];  
             }
+            // $cant_elementos=count($courses);//Cantidad de elementos del array
+            $cant_elementos=array(1,2,3,4);
+            print_r($cant_elementos);
             $this->view->courses= Zend_Json::encode($courses);
+            $this->view->cant_elementos=Zend_Json::encode($cant_elementos);
 
            }
             catch(Exception $ex)
