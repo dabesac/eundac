@@ -200,11 +200,9 @@ class Docente_IndexController extends Zend_Controller_Action {
                 $name_course = $tb_course->_getOne($where1);
                 $courses[$key] = $name_course['name'];  
             }
-            // $cant_elementos=count($courses);//Cantidad de elementos del array
-            $cant_elementos=array(1,2,3,4);
-            print_r($cant_elementos);
+            
             $this->view->courses= Zend_Json::encode($courses);
-            $this->view->cant_elementos=Zend_Json::encode($cant_elementos);
+           
 
            }
             catch(Exception $ex)
