@@ -1,17 +1,18 @@
 <div class="panel panel-info">
 
   <div class="panel-heading">
-    <h4>Datos Estadisticos</h4>
+    <h4>Datos Estadísticos</h4>
   </div>
 
   <div class="panel-body">
-  	<?if($this->statistic){?>
+  	<?php 
+  	if($this->statistic){?>
     <table class="table">
     	<tr>
-			<td>Conocimiento en Computacion</td>
+			<td>Conocimiento en Computación</td>
 		</tr>
     	<tr>
-			<td>Depende Economicamente de</td>
+			<td>Depende Económicamente de</td>
 			<td>Denpenden de Usted</td>
 		</tr>    	
 		<tr>
@@ -20,7 +21,7 @@
 		</tr>    	
 		<tr>
 			<td>Tipo de Material</td>
-			<td>Numero de Habitaciones</td>
+			<td>Número de Habitaciones</td>
 		</tr>
 		<tr>
 			<td>Servicios</td>
@@ -28,13 +29,15 @@
 		</tr>
 		<tr>
 			<td>Problemas Con la Necesidad de Alimentos</td>
-			<td>Lugar de Alimentacion</td>
+			<td>Lugar de Alimentación</td>
 		</tr>
 		<tr>
 			<td>Costo Diario de Alimentos</td>
 		</tr>
     </table>
-    <?php }else{?>
+    <?php }
+    else{
+    	?>
       <center><h5>No tiene Datos, Sugerir que Actualize su Perfil</h5></center>
     <?php }?>
   </div>

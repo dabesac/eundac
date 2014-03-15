@@ -37,9 +37,12 @@
 		<select name="faculty" id="faculty" class="form-control">
 			<option value="">Seleccione Facultad</option>
 			<?php
-			foreach ($this->dataf as $dataf) {	?>
- 				<option value="<?php echo $dataf['facid']?>"><?php echo $dataf['name']?></option>
- 			<?php } ?>
+			foreach ($this->dataf as $dataf) {	
+				if ($dataf['facid']<>"NINGUN") { ?>
+ 					<option value="<?php echo $dataf['facid']?>"><?php echo strtoupper($dataf['name'])?></option>
+				<?php		
+				}
+ 			} ?>
 		</select>
 	</div>
 	<div class="col-md-1 col-md-offset-5">
@@ -52,11 +55,15 @@
 <div id="data"></div>
 
 <div id="alert" class="alert alert-warning text-center">
-	<h4><strong>Error!</strong> Seleccione un periodo</h4>
+	<h4><strong>Error!</strong> Seleccione un Periodo</h4>
+</div>
+<div id="alert1" class="alert alert-warning text-center">
+	<h4><strong>Error!</strong> Seleccione una Facultad</h4>
 </div>
 
 <script>
 	$('#alert').fadeOut('fast');
+	$('#alert1').fadeOut('fast');
 	$('#anio').change(function(){
 		$('#anio option:selected').each(function(){
 			var anio = $(this).val();
@@ -69,11 +76,21 @@
 	$('#show').click(function(){
 		var perid = $('#periods').val();
 		var facid = $('#faculty').val();
-		if (perid && facid){
-			$('#data').html('<center><img class="text-center" src="/img/spinner.gif"></center>');
-			$('#data').load('/pedagogia/distribution/view/perid/'+perid+'/facid/'+facid);
-			$('#alert').fadeOut('fast');
+		if (perid){
+			if (facid) {
+				$("#data").show();
+				$('#data').html('<center><img class="text-center" src="/img/spinner.gif"></center>');
+				$('#data').load('/pedagogia/distribution/view/perid/'+perid+'/facid/'+facid);
+				$('#alert1').hide();
+				$('#alert').hide();
+			}
+			else{
+				$("#data").hide();
+				$('#alert').fadeOut('fast');
+				$('#alert1').fadeIn('slow');
+			}
 		}else{
+			$("#data").hide();
 			$('#alert').fadeIn('slow');
 		}
 	});

@@ -59,12 +59,12 @@
 
 <div class="col-sm-3">
 <ul class="nav nav-pills nav-stacked" id="backsigninTab">
-  <li><a href="#" id="btncurrentsign" class="btn-xs">Volver a Matricula Actual</a></li>
+  <li><a href="#" id="btncurrentsign" class="btn-xs">Volver a Matrícula Actual</a></li>
 </ul>
 <br>
 <ul class="nav nav-pills nav-stacked" id="masinfosignTab">
-  <li><a href="#" id="btncurri" class="btn-xs">Matricula Por Curricula</a></li>
-  <li><a href="#" id="btnrea" class="btn-xs">Matriculas Realizados</a></li>
+  <li><a href="#" id="btncurri" class="btn-xs">Matrícula Por Curricula</a></li>
+  <li><a href="#" id="btnrea" class="btn-xs">Matrículas Realizadas</a></li>
   <li class="hidden"><a></a></li>
 </ul>
 </div>
@@ -95,6 +95,7 @@
 
   $("#btnrea").click(function(){
     $("#datasign").html("<center><br><br><br><br><img src='/img/spinner.gif'></center>");
-    $("#datasign").load("/register/registerealized/index/pid/<?php echo $this->data['pid']?>/uid/<?php echo $this->data['uid']?>/escid/<?php echo $this->data['escid']?>/subid/<?php echo $this->data['subid']?>/perid/<?php echo $this->data['perid']?>/rid/<?php echo $this->data['rid']?>");
+    var url=("/register/registerealized/index/pid/<?php echo $this->data['pid']?>/uid/<?php echo $this->data['uid']?>/escid/<?php echo $this->data['escid']?>/subid/<?php echo $this->data['subid']?>/perid/<?php echo $this->data['perid']?>/rid/<?php echo $this->data['rid']?>");
+    $("#datasign").load(url);
   })
 </script>

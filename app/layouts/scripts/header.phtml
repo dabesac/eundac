@@ -1,4 +1,4 @@
-  <?php $auth = Zend_Auth::getInstance();
+<?php $auth = Zend_Auth::getInstance();
 
     if (!$auth->hasIdentity()) {
         exit();
@@ -9,63 +9,89 @@
     $speciality = $sesion->speciality->name;
     $module = $sesion->rol['module'];
     $rol = $sesion->rid;
-  ?>
-  <input type="hidden" id="rol" value="<?php echo $rol ?>">
-  <input type="hidden" id="fullProfile" value="<?php echo $sesion->fullProfile->success ?>">
-  <nav id="undac-menu" class="navbar navbar-default" role="navigation">
+?>
+<input type="hidden" id="rol" value="<?php echo $rol ?>">
+<input type="hidden" id="fullProfile" value="<?php echo $sesion->fullProfile->success ?>">
+<nav id="undac-menu" class="navbar navbar-default" role="navigation">
     <div class="container">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#"><img src="/img/logo_03.png" alt=""></a>
-      </div>
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/<?php echo $module ?>"><img src="/img/logo_03.png" alt=""></a>
+        </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li>
-            <p>Bienvenido a UNDAC 2.0, <?php echo $last_name?></p>
-            <p>Adscrito Escuela <?php echo $speciality?></p>
-          </li>
-        </ul>
-        
-        <ul class="nav navbar-nav navbar-right">
-		  <li class="ver"><a href="/<?php echo $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
-          <li class="ver"><a href="/profile/<?php echo ($rol=='AL')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Ver perfil </a></li>
-
-          <li class="ver dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cambiar clave <b class="caret"></b></a>
-            <ul id="form-change" class="dropdown-menu">
-              <li>
-                <form role="form">
-                  <div class="form-group">
-                    <input type="password" class="form-control" id="exampleInputEmail1" placeholder="Contraseña Actual">
-                  </div>
-                  <div class="form-group">
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Nueva Contraseña">
-                  </div>
-                  <div class="form-group">
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Repetir Nueva Contraseña">
-                  </div>
-                  <button type="submit" class="btn btn-taipa btn-block">Cambiar</button>
-                </form>
-              </li>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <p>Bienvenido a UNDAC 2.0, <?php echo $last_name?></p>
+                    <p>Adscrito Escuela <?php echo $speciality?></p>
+                </li>
             </ul>
-          </li>
-          
+        
+            <ul class="nav navbar-nav navbar-right">
+		        <li class="ver"><a href="/<?php echo $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
+                <li class="ver"><a href="/profile/<?php echo ($rol=='AL')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Ver perfil </a></li>
 
-          <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> <b>Cerrar Sessión</b></a></li>
-        </ul>
-      </div><!-- /.navbar-collapse -->
+
+                <li class="ver dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cambiar clave <b class="caret"></b></a>
+                    <ul id="form-change" class="dropdown-menu">
+                        <li>
+                        <form id="frmclave" name="frmclave" action="/admin/password/keychange/" method="POST" enctype="application/x-www-form-urlencoded">
+                            <div class="form-group" style="margin-left:2%; width:233px">
+                                <input type="password" class="form-control" id="acla" name="acla" placeholder="Contraseña Actual" title="Contraseña Actual" required>
+                            </div>
+                            <div class="form-group" style="margin-left:2%; width:233px">
+                                <input type="password" class="form-control" id="ncla" name="ncla" placeholder="Nueva Contraseña" title="Nueva Contraseña" required>
+                            </div>
+                            <div class="form-group" style="margin-left:2%; width:233px">
+                                <input type="password" class="form-control" id="rcla" name="rcla" placeholder="Repetir Nueva Contraseña" title="Repetir Nueva Contraseña" required>
+                            </div>                   
+                            <div id='sms'></div>
+                            <input type="hidden" value="<?php echo $sesion->eid?>" name="eid">
+                            <input type="hidden" value="<?php echo $sesion->oid?>" name="oid">
+                            <input type="hidden" value="<?php echo $sesion->rid?>" name="rid">
+                            <input type="hidden" value="<?php echo $sesion->uid?>" name="uid">
+                            <input type="hidden" value="<?php echo $sesion->pid?>" name="pid">
+                            <input type="hidden" value="<?php echo $sesion->escid?>" name="escid">
+                            <input type="hidden" value="<?php echo $sesion->subid?>" name="subid">
+
+                            <div id="sms2"></div>
+                            <div class="modal-footer">
+                                <button id='guardar' type="submit" class="btn btn-taipa btn-block">Cambiar</button>
+                            </div>
+                        </form>
+                       <!--  <form role="form">
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="exampleInputEmail1" placeholder="Contraseña Actual">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Nueva Contraseña">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Repetir Nueva Contraseña">
+                            </div>
+                            <button type="submit" class="btn btn-taipa btn-block">Cambiar</button>
+                        </form> -->
+                        </li>
+                    </ul>
+                </li>          
+
+                <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> <b>Cerrar Sessión</b></a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
     </div>
-  </nav>
+</nav>
 
-  <script>
+<script>
+    // var url=("/admin/password/keychange/");
+    // $("#form-change").load(url);
     var rol = $('#rol').val();
     if (rol == 'AL' || rol == 'EG') {
       var fullProfile = $('#fullProfile').val();
@@ -75,4 +101,4 @@
         $(location).attr('href', '/profile/public/student');
       };
     };
-  </script>
+ </script>

@@ -21,32 +21,49 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
     }
 
     public function viewAction(){	
-    	try{
-            
+    	try{            
             $this->_helper->layout()->disablelayout();
     		$eid=$this->sesion->eid;
     		$oid=$this->sesion->oid;
     		$perid=$this->_getParam('perid');
             $facid=$this->_getParam('facid');
-
             $distri= new Distribution_Model_DbTable_Distribution();
             $dbescuela= new Api_Model_DbTable_Speciality();
-            $where1=array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid);
-            $datae=$dbescuela->_getFilter($where1);
-            print_r($datae);exit();
-
-            for ($i=0; $i < $len; $i++) { 
-                $where=array("eid"=>$eid, "oid"=>$oid,"","perid"=>$perid);
-                $datae=$dbescuela->_getOne($where1);
-                $dis[$i]['name']=$datae['name'];
+            if ($facid=="TODO") {
+                $where=array("eid"=>$eid, "oid"=>$oid,"perid"=>$perid);
+                $order=array('escid');
+                $datadis=$distri->_getFilter($where,$attrib=null,$order);
+                $dis=$datadis;
+                unset($where['perid']);
+                $i=0;
+                foreach ($datadis as $datadis) {
+                    $where['escid']=$datadis['escid'];
+                    $where['subid']=$datadis['subid'];
+                    $dataes=$dbescuela->_getOne($where);
+                    $dis[$i]['name']=$dataes['name'];
+                    $i++;
+                }
             }
-            // $order=array('escid');
-            // $dis=$distri->_getFilter($where,$attrib=null,$order);
-            // $len=count($dis);
-
-
-            // $this->view->dis=$dis;
-
+            else{
+                $where1=array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid);
+                $order=array('name');
+                $datae=$dbescuela->_getFilter($where1,$attrib=null,$order);
+                $len=count($datae);
+                $dis=array();
+                $i=0;
+                foreach ($datae as $datae) {
+                    $escid=$datae['escid'];
+                    $where=array("eid"=>$eid, "oid"=>$oid,"escid"=>$escid,"perid"=>$perid);
+                    $datadis=$distri->_getFilter($where);
+                    if ($datadis[0]) {
+                        $dis[$i]=$datadis[0];
+                        $dis[$i]['name']=$datae['name'];
+                        $i++;                   
+                    }
+                }
+            }
+            // print_r($dis);exit();
+            $this->view->dis=$dis;
     	}catch(Exception $ex){
             print "Error: Cargar ".$ex->getMessage();
 
