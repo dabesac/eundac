@@ -246,7 +246,7 @@ public function listcurriculaAction()
             if ($parentesc) {
                 $pala='ESPECIALIDAD DE ';
                 $spe['esc']=$parentesc['name'];
-                $spe['parent']=$pala.$speciality['name'];
+                $spe['parent']=$pala.$speciality[0]['name'];
             }
             else{
                 $spe['esc']=$speciality[0]['name'];
@@ -384,7 +384,7 @@ public function listcurriculaAction()
             if ($parentesc) {
                 $pala='ESPECIALIDAD DE ';
                 $spe['esc']=$parentesc['name'];
-                $spe['parent']=$pala.$speciality['name'];
+                $spe['parent']=$pala.$speciality[0]['name'];
             }
             else{
                 $spe['esc']=$speciality[0]['name'];
@@ -530,7 +530,7 @@ public function listcurriculaAction()
             if ($parentesc) {
                 $pala='ESPECIALIDAD DE ';
                 $spe['esc']=$parentesc['name'];
-                $spe['parent']=$pala.$speciality['name'];
+                $spe['parent']=$pala.$speciality[0]['name'];
             }
             else{
                 $spe['esc']=$speciality[0]['name'];

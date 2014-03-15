@@ -47,6 +47,20 @@ class Admin_BankpaymentsController extends Zend_Controller_Action {
         }
 
     }
+    public function listperiodAction(){
+        try {
+            $this->_helper->layout->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $anio=$this->_getParam('anio');
+            $data = array('eid' => $eid, 'oid' => $oid, 'year' => $anio);
+            $per = new Api_Model_DbTable_Periods();
+            $data_per = $per->_getPeriodsxYears($data);
+            $this->view->data_per=$data_per;
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
 
     public function assignAction()
     {

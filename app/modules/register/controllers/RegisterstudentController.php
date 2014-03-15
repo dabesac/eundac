@@ -39,7 +39,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $data['oid']=$where['oid'];
                 $data['facid']=$where['facid'];
                 $data['state']='A';
-               $lesc = $escuelas->_getFilter($data); 
+                $lesc = $escuelas->_getFilter($data); 
                 }
                 else{
                 $lesc = $escuelas->_getspeciality($where); 
@@ -95,8 +95,11 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $coursesDb        = new Api_Model_DbTable_Course();
             $teachersDb       = new Api_Model_DbTable_Coursexteacher();
             $paymentDb        = new Api_Model_DbTable_Payments();
+            $paymentsDetailDb = new Api_Model_DbTable_PaymentsDetail();
             $conditionDb      = new Api_Model_DbTable_Condition();
-            //--------------
+            $bankReceiptsDb   = new Api_Model_DbTable_Bankreceipts();
+            $rateDb           = new Api_Model_DbTable_Rates();
+            //________________________________________________________________
 
             $uid  = base64_decode($this->_getParam('uid'));
             $pid  = base64_decode($this->_getParam('pid'));
@@ -124,36 +127,81 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $this->view->person = $person;
             
             //Información de Pago
-            $where = array( 
-                            'eid'   =>$eid, 
-                            'oid'   =>$oid, 
-                            'uid'   =>$uid, 
-                            'pid'   =>$pid,
-                            'escid' =>$escid, 
-                            'subid' =>$subid,
-                            'perid' =>$perid );
-            $attrib = array('date_payment', 'amount');
+            $where = array( 'eid'   => $eid, 
+                            'oid'   => $oid, 
+                            'uid'   => $uid, 
+                            'pid'   => $pid,
+                            'escid' => $escid, 
+                            'subid' => $subid,
+                            'perid' => $perid );
+            $attrib = array('date_payment', 'amount', 'ratid');
             $paymentData = $paymentDb->_getFilter($where, $attrib);
             $paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
             $this->view->paymentData = $paymentData;
+
+            //Detalle de Pago
+            $paymentsDetail = $paymentsDetailDb->_getFilter($where);
+            $this->view->paymentsDetail = $paymentsDetail;
 
             //Información de Condición
             $attrib = array('doc_authorize', 'comments');
             $condition = $conditionDb->_getFilter($where, $attrib);
             $this->view->condition = $condition;
 
+            //Información de Taza
+            $where = array( 'eid'   => $eid, 
+                            'oid'   => $oid, 
+                            'ratid' => $paymentData[0]['ratid'], 
+                            'perid' => $perid );
+            $rate = $rateDb->_getFilter($where);
+            $this->view->rate = $rate;
+
+            //Verificar Fecha de Pago
+            $datePago       = date('Y-m-d', strtotime($paymentData[0]['date_payment']));
+            $dateNormal     = date('Y-m-d', strtotime($rate[0]['f_ini_tn']));
+            $dateIncrement1 = date('Y-m-d', strtotime($rate[0]['f_fin_ti1']));
+            $dateIncrement2 = date('Y-m-d', strtotime($rate[0]['f_fin_ti2']));
+            $dateIncrement3 = date('Y-m-d', strtotime($rate[0]['f_fin_ti3']));
+
+
+            $pagoAtiempo = 'yes';
+            /*if ($datePago <= $dateNormal) {
+                $tipePayment['tipoPago'] = 'AT';
+            }elseif ($datePago <= $dateIncrement1){
+                $tipePayment['tipoPago']   = 'I1';
+                $tipePayment['incremento'] = $rate[0]['t_incremento1'];
+                $tipePayment['porcentaje'] = $rate[0]['v_t_incremento1'];
+                $pagoAtiempo = 'no';
+            }elseif ($datePago <= $dateIncrement2){
+                $tipePayment['tipoPago']    = 'I2';
+                $tipePayment['incremento'] = $rate[0]['t_incremento2'];
+                $tipePayment['porcentaje'] = $rate[0]['v_t_incremento2'];
+                $pagoAtiempo = 'no';
+            }elseif ($datePago <= $dateIncrement2){
+                $tipePayment['tipoPago']    = 'I3';
+                $tipePayment['incremento'] = $rate[0]['t_incremento3'];
+                $tipePayment['porcentaje'] = $rate[0]['v_t_incremento2'];
+                $pagoAtiempo = 'no';
+            }else {
+                $tipePayment['tipoPago']    = 'FT';
+                $pagoAtiempo = 'no';
+            }*/
+            $this->view->tipePayment = $tipePayment;
+            $this->view->pagoAtiempo  = $pagoAtiempo;
+
 
             //Estado de la Matricula
-            $where = array( 
-                            'eid'   =>$eid, 
+            $where = array( 'eid'   =>$eid, 
                             'oid'   =>$oid, 
                             'uid'   =>$uid, 
                             'pid'   =>$pid,
                             'escid' =>$escid, 
                             'subid' =>$subid,
                             'perid' =>$perid );
-            $attrib = array('state');
+            $attrib = array('state', 'credits');
             $stateRegister = $registerDb->_getFilter($where, $attrib);
+            $this->view->fullCredits   = $stateRegister[0]['credits'];
+            
             if ($stateRegister[0]['state'] == 'I') {
                 $stateRegister = 'I';
             }elseif ($stateRegister[0]['state'] == 'M') {
@@ -209,11 +257,15 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $veces = $coursesRegisterDb->_getFilter($where, $attrib);
                 $j = 0;
                 foreach ($veces as $vez) {
-                    if ($vez['perid']['2'] != 'D' and $vez['perid']['2'] != 'E' and $vez['notafinal'] != '-3') {
+                    if ($vez['perid']['2'] != 'D' and $vez['perid']['2'] != 'E' and $vez['notafinal'] != '-3' and $vez['perid'] != $perid) {
                         $j++;
                     }
                 }
                 if ($j >= 2) {
+                    $coursesCondition[$c]['courseid'] = $course['courseid'];
+                    $coursesCondition[$c]['veces']    = $j;
+                    $coursesCondition[$c]['credits']  = $coursesName[$c][0]['credits'];
+                    $coursesCondition[$c]['montoxCredito'] = 11 * ($j-1);
                     $matriculaCondicional = 'Si';
                 }
                 $coursesName[$c]['veces'] = $j;
@@ -243,6 +295,17 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 
                 $c++;
             }
+            //Pago por Tercera vez
+            if ($matriculaCondicional == 'Si') {
+                $where = array( 'code_student' => $uid,
+                                'perid'        => $perid,
+                                'concept'      => '00000045' );
+
+                $paymentsConditional = $bankReceiptsDb->_getFilter($where);
+                $this->view->paymentsConditional = $paymentsConditional;
+                $this->view->coursesCondition = $coursesCondition;
+            }
+
             //Data del Estudiante
             $dataStudent = array(   'uid'   => $uid,
                                     'pid'   => $pid,
@@ -283,8 +346,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $state = base64_decode($this->_getParam('state'));
         $regid = $uid.$perid;
 
-        $where = array( 
-                        'eid'   => $eid, 
+        $where = array( 'eid'   => $eid, 
                         'oid'   => $oid, 
                         'pid'   => $pid, 
                         'uid'   => $uid, 
@@ -294,8 +356,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'regid' => $regid,
                         'state' => $state );
 
-        $data = array(  
-                        'modified' => $this->sesion->uid,
+        $data = array(  'modified' => $this->sesion->uid,
                         'updated'  => date('Y-m-d h:m:s') );
 
         if ($registerxcourseDb->_updatestateregister($data, $where)) {
@@ -361,24 +422,27 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $eid = $this->sesion->eid;        
             $oid = $this->sesion->oid;
 
-            $data = array(  'uid'=>$uid,
-                            'pid'=>$pid,
-                            'escid'=>$escid,
-                            'subid'=>$subid,
-                            'courseid'=>$courseid,
-                            'curid'=>$curid );
+            $this->view->turno = $turno;
+
+            $data = array(  'uid'      => $uid,
+                            'pid'      => $pid,
+                            'escid'    => $escid,
+                            'subid'    => $subid,
+                            'courseid' => $courseid,
+                            'curid'    => $curid );
             $this->view->data = $data;
             //$regid=$where['uid'].$where['perid'];
 
-            $where = array( 'eid'=>$eid,
-                            'oid'=>$oid,
-                            'perid'=>$perid,
-                            'courseid'=>$courseid,
-                            'curid'=>$curid,
-                            'escid'=>$escid,
-                            'subid'=>$subid );
+            $where = array( 'eid'      => $eid,
+                            'oid'      => $oid,
+                            'perid'    => $perid,
+                            'courseid' => $courseid,
+                            'curid'    => $curid,
+                            'escid'    => $escid,
+                            'subid'    => $subid );
             $attrib = array('courseid', 'turno');
             $courses = $coursesPeriodsDb->_getFilter($where, $attrib);
+
             $turnos = count($courses);
             if ($turnos >= 2) {
                 $c = 0;
@@ -402,12 +466,13 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                                     'pid'=>$teacher[0]['pid'],
                                     'uid'=>$teacher[0]['uid'] );
                     $teachersInfo[$c] = $coursesTeachersDb->_getinfoTeacher($where, $attrib);
+                    $teachersInfo[$c]['turno'] = $course['turno'];
+
                     $c++;
                 }
                 $this->view->courses = $courses;
                 $this->view->teachersInfo = $teachersInfo;
             }
-
         } catch (Exception $e) {
             print 'Error : '.$e->getMessage();            
         }
@@ -545,11 +610,15 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'uid'=>$uid,
                         'state'=>$state );
 
-        $data = array(  'modified'=>$this->sesion->uid,
-                        'updated'=>date('Y-m-d h:m:s'),
-                        'state'=>'M' );
-        if ($registerxcourseDb->_updatestateregister($data, $where)) {
-            if ($registerDb->_update($data, $where)){
+        $dataRegisterxCourse = array(   'modified' => $this->sesion->uid,
+                                        'approved' => $this->sesion->uid,
+                                        'updated'  => date('Y-m-d h:m:s'),
+                                        'state'    => 'M' );
+        if ($registerxcourseDb->_updatestateregister($dataRegisterxCourse, $where)) {
+            $dataRegister = array(  'modified' => $this->sesion->uid,
+                                    'updated'  => date('Y-m-d h:m:s'),
+                                    'state'    => 'M' );
+            if ($registerDb->_update($dataRegister, $where)){
                 $json = array('status' => true );
             }else{
                 $json = array('status' => false );
@@ -669,7 +738,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $oid   = $this->sesion->oid;
         $perid = $this->sesion->period->perid;
 
-        /*$where = array( 'eid'   => $eid,
+        $where = array( 'eid'   => $eid,
                         'oid'   => $oid,
                         'perid' => $perid,
                         'escid' => base64_decode($escid),
@@ -678,7 +747,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'uid'   => base64_decode($uid) );
         $attrib = array('courseid');
         $courses = $coursesDb->_getFilter($where, $attrib);
-        $this->view->courses = $courses;*/
+        $this->view->courses = $courses;
 
         $request = array(   'eid' => base64_encode($eid),
                             'oid' => base64_encode($oid),
@@ -690,10 +759,9 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                             'curid' => $curid );
 
         $server = new Eundac_Connect_Api('validate', $request);
-        //$data = $server->connectAuth();
-        //$this->view->data = $data;
+        $data = $server->connectAuth();
+        $this->view->data = $data;
         
-        print_r($request);
     }
 
         public function printAction(){

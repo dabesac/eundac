@@ -22,7 +22,7 @@ class Docente_Form_Logo extends Zend_Form{
 		$save= new Zend_Form_Element_Submit('save');
         $save->removeDecorator("HtmlTag")->removeDecorator("Label");
         $save->setAttrib("class","btn btn-success");
-        $save->setLabel("Guardar Avance");
+        $save->setLabel("Guardar Archivo");
         $this->addElement($save);
 
 	}

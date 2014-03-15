@@ -1,0 +1,16 @@
+<?php
+if ($this->datap) {	?>
+	
+	<option value=" ">- Seleccione una Provincia -</option>
+
+	<?php
+	foreach ($this->datap as $datap) {	?>	
+	<option value="<?php echo $datap['proid']?>"><?php echo $datap['name_p']?></option>
+	<?php
+	}
+}
+else{	?>
+	<option value=" ">- No existe Provincias -</option>
+<?php
+}
+?>

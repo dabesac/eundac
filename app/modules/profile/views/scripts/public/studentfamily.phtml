@@ -8,7 +8,9 @@
 			<a href="##" id="newFamily" class="btn btn-default" title="Nuevo"><span class="text-muted">Nuevo</span></a>
 		</div>
 	</div>
-	
+<input type="hidden" id="eid" value="<?php echo $this->dataStudent['eid'] ?>">
+<input type="hidden" id="oid" value="<?php echo $this->dataStudent['oid'] ?>">
+<input type="hidden" id="pid" value="<?php echo $this->dataStudent['pid'] ?>">
 <div class="panel-body">
     <?php if($this->famdata){
     	$c=0;?>
@@ -131,11 +133,29 @@
 </div>
 
 <script>
+
+	$('a').hover(function(){
+    	$(this).tooltip('toggle');
+  	});
+  	
 	$("#newFamily").click(function(){
 		$('#datastudent').fadeOut('fast', function(){
 			$('#datastudent').load('/profile/public/studentsavefamily', function(){
 				$('#datastudent').fadeIn('fast');
 			});
 		});
-	})
+	});
+
+	var eid = $('#eid').val();
+	var oid = $('#oid').val();
+  	var pid = $('#pid').val();
+	$.ajax({
+		url : '/profile/public/validatefullprofile',
+		data : { 	eid : eid,
+					oid : oid,
+					pid : pid },
+		success: function(data){
+			$('#alertCompleteProfile').addClass('hidden');
+		},
+	});
 </script>

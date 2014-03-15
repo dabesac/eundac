@@ -10,6 +10,8 @@
     $module = $sesion->rol['module'];
     $rol = $sesion->rid;
   ?>
+  <input type="hidden" id="rol" value="<?php echo $rol ?>">
+  <input type="hidden" id="fullProfile" value="<?php echo $sesion->fullProfile->success ?>">
   <nav id="undac-menu" class="navbar navbar-default" role="navigation">
     <div class="container">
       <!-- Brand and toggle get grouped for better mobile display -->
@@ -62,3 +64,15 @@
       </div><!-- /.navbar-collapse -->
     </div>
   </nav>
+
+  <script>
+    var rol = $('#rol').val();
+    if (rol == 'AL' || rol == 'EG') {
+      var fullProfile = $('#fullProfile').val();
+      var allCurrentUrl = window.location.pathname;
+      var currentUrl = allCurrentUrl.substr(0, 23);
+      if (fullProfile == 'no' && currentUrl != '/profile/public/student') {
+        $(location).attr('href', '/profile/public/student');
+      };
+    };
+  </script>

@@ -145,17 +145,55 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		$this->view->semid=$semid;
 
 		$wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
-        $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
-        $datahours=$bd_hours->_getFilter($wheres);   
-        
-        if ($datahours) {
-	        $valhoras[0]=$datahours[0]['hours_begin'];
-		    $hora=new Api_Model_DbTable_Horary();
-		    for ($k=0; $k < 20; $k++) { 
-		        $dho=$hora->_getsumminutes($valhoras[$k],'50');
-		        $valhoras[$k+1]=$dho[0]['hora'];
-		    }
-		    $this->view->valhoras=$valhoras;
+        	$bd_hours= new Api_Model_DbTable_HoursBeginClasses();
+        	$datahours=$bd_hours->_getFilter($wheres);
+
+        	if ($datahours) {   
+        		$hora=new Api_Model_DbTable_Horary();
+	        	if ($datahours[0]['hours_begin_afternoon']) {
+	                $valhorasm[0]=$datahours[0]['hours_begin'];
+	                $valhorast[0]=$datahours[0]['hours_begin_afternoon'];
+	                $k=0;
+	                while ($valhorasm[$k] < $datahours[0]['hours_begin_afternoon']) {
+	                    $dho=$hora->_getsumminutes($valhorasm[$k],'50');
+	                    $valhorasm[$k+1]=$dho[0]['hora'];
+	                    $k++;
+	                }
+	                $len=count($valhorasm);
+	                $w=0;
+	                        
+	                for ($g=0; $g < $len + 1 ; $g++) { 
+	                    if ($valhorasm[$g]==$valhorast[0] && $w==0) {
+	                        $valhoras[0]=$datahours[0]['hours_begin'];
+	                        for ($k=0; $k < 20; $k++) { 
+	                            $dho=$hora->_getsumminutes($valhoras[$k],'50');
+	                            $valhoras[$k+1]=$dho[0]['hora'];
+	                        }
+	                        $this->view->valhoras=$valhoras;
+	                        $w=1;
+	                    }
+	                }
+	                if ($w==0) {
+	                	unset($valhorasm[$k]);
+	                    $this->view->valhorasm=$valhorasm;
+	                    $j=0;
+	                    while ( $j < 12) {
+	                        $dho=$hora->_getsumminutes($valhorast[$j],'50');
+	                        $valhorast[$j+1]=$dho[0]['hora'];
+	                        $j++;
+	                    }
+	                    $endtarde=$valhorast[$j-1];
+	                    $this->view->valhorast=$valhorast; 
+	                }    
+            	}
+            	else{
+	                $valhoras[0]=$datahours[0]['hours_begin'];
+	                for ($k=0; $k < 20; $k++) { 
+	                    $dho=$hora->_getsumminutes($valhoras[$k],'50');
+	                    $valhoras[$k+1]=$dho[0]['hora'];
+	                }
+	                $this->view->valhoras=$valhoras;
+            	}
 		    	
 	        $module = 'horary_course';
 		    $parmas = array(

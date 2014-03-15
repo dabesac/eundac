@@ -19,7 +19,7 @@ class Register_ChangeratesController extends Zend_Controller_Action{
  			$this->sesion->eid;
  			$this->sesion->oid;
  			$this->sesion->rid;
- 			$perid=$this->sesion->period->perid;
+ 			$perid='13A';
  			$this->view->perid=$perid;
  			$fm=new Register_Form_Buscar();
 			$this->view->fm=$fm;
@@ -34,7 +34,7 @@ class Register_ChangeratesController extends Zend_Controller_Action{
 	public function getuserAction(){
 		try {
 			$this->_helper->layout()->disableLayout();
-			$perid=$this->sesion->period->perid;
+			$perid='13A';
  			$this->view->perid=$perid;
           	$uid= $this->_getParam('uid');
           	$where['uid'] = $uid;
@@ -134,6 +134,9 @@ class Register_ChangeratesController extends Zend_Controller_Action{
                     $frmdata['modified']=$this->sesion->uid;
                     $frmdata['updated']=date('Y-m-d h:m:s');
                     $reg_= new Api_Model_DbTable_Payments();
+                    if (!$frmdata['date_payment']) {
+                        $frmdata['date_payment'] = null;
+                    }
                     // print_r($frmdata);
                     // print_r($pks); exit();
                     $reg_->_update($frmdata,$pks);

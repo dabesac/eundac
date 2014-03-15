@@ -53,8 +53,12 @@ body{
 }
 
 
-.nav-pills li a{color: #fff;}
-.nav-pills li a:hover{border-bottom: 4px solid #0065B4;}
+.footerText li a{
+	color: #fff;
+}
+.footerBtnHover li a:hover{
+	border-bottom: 4px solid #0065B4;
+}
 
 #footer .dropdown-menu{
 	background: #363C46;

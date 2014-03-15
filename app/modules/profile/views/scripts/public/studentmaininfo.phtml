@@ -67,13 +67,42 @@
 				<small class="text-muted">Work E-mail </small> <b class="text-info"><?php echo $this->datos[3]['mail_work']?></b>
 			</div->
 		</div>
+		<?php
+		if ($this->datos[2]) {	
+			$dataubigeo=$this->datos[2][0];
+		?>	
+		<br>
+		<div class="row">
+			<div class="col-md-2">
+				<center><h2><span class="glyphicon glyphicon-globe text-muted"></span></h2></center>
+			</div>
+			<div class="col-md-4">
+				<small class="text-muted">País </small><b class="text-info"><?php echo $dataubigeo['name_c']?></b><br>
+				<small class="text-muted">Departamento </small><b class="text-info"><?php echo $dataubigeo['name_s']?></b><br>
+			</div>
+			<div class='col-md-6'>
+				<small class="text-muted">Provincia </small><b class="text-info"><?php echo $dataubigeo['name_p']?></b><br>
+				<small class="text-muted">Distrito </small><b class="text-info"><?php echo $dataubigeo['name_d']?></b><br>
+			</div>
+		</div>
+		<?php
+		}	
+		?>
 	</div>
     </div>
 </div>
+
 <div class="panel panel-info">
 	<div class="panel-body">
-		<h3 class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Información Adicional</h3>
-		<br><br>
+		<div class="row container">
+			<div class="col-md-11">
+				<h3 class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Información Adicional</h3>
+			</div>
+			<div class="col-md-1">
+				<h3><a id="editInfoCareer" href="##" class="text-muted" title="Editar Información Sobre Carrera"><span class="glyphicon glyphicon-pencil"></span></a></h3>
+			</div>
+		</div>
+		<br>
 		<div class="row">
 			<div class="col-md-2">
 				<br><br><br><br>
@@ -176,6 +205,20 @@
 
 		          	<h5><span class="text-muted">Dedicación a la Universidad </span> <?php echo $this->datos[4]['horas_permanece']." "?>H</h5>
 
+		          	<h5><span class="text-muted">Por </span> 
+						<?php if ($this->datos[4]['debido_a'] == 'HC'): 
+							echo "Horario de Clases";
+						elseif ($this->datos[4]['debido_a'] == 'EG'):
+							echo "Estudios en Grupo";
+						elseif ($this->datos[4]['debido_a'] == 'CB'):
+							echo "Consulta en la Biblioteca";
+						elseif ($this->datos[4]['debido_a'] == 'IU'):
+							echo "Internet en la Universidad";
+						elseif ($this->datos[4]['debido_a'] == 'O'):
+							echo "Otros";
+						endif ?>
+	          		</h5>
+
 				</blockquote>
 			</div>
 		</div>
@@ -189,11 +232,23 @@
 </div>
 
 <script>
+ 	$('a').hover(function(){
+    	$(this).tooltip('toggle');
+  	});
+  	
 	$('#editInfo').click(function(){
 		$('#datastudent').fadeOut('fast', function(){
 			$('#datastudent').load('/profile/public/studenteditinfo', function(){
 				$('#datastudent').fadeIn('fast');
 			});
+		});
+	});
+
+	$('#editInfoCareer').click(function(){
+		$('#datastudent').addClass('hidden');
+		$('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+		$('#editform').load('/profile/public/studentformsign/', function(){
+			$('#loadingDiv').html('');
 		});
 	});
 </script>

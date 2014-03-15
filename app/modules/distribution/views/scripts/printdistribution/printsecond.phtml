@@ -23,7 +23,7 @@ for($n = 0; $n <= 2; $n++){
 			$wheredist = array(
 				'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'],
 				'escid' => substr($this->escid,0,3), 'perid' => $this->perid);
-	        $tdis = $distri->_getFilter($wheredist,$atrib=array());
+	        $tdis = $distri->_getFilter($wheredist);
 	        $distidsec = $tdis[0]['distid'];
 
 			if(substr($allteachers['escidorigen'],0,3)=='2ES' and ($allteachers['escidorigen']<>'2ESTY') and $allteachers['category']==$a[$n] and $allteachers['dedication']==$b[$p]){ ?>
@@ -125,7 +125,7 @@ for($n = 0; $n <= 2; $n++){
 			        	'distid' => $distidsec, 'uid' => $allteachers['uid'], 
 			        	'pid' => $allteachers['pid']);
 					$distadm = new Distribution_Model_DbTable_DistributionAdmin();
-			        $dataadm = $distadm->_getFilter($wheredistadm,$atrib=array());	
+			        $dataadm = $distadm->_getFilter($wheredistadm);	
 					foreach($dataadm as $adm){ ?>
 						<tr>
 							<td><?php echo $adm['work']?></td>
@@ -134,7 +134,7 @@ for($n = 0; $n <= 2; $n++){
 						<?php						
 					} 
 	                $distteac = new Distribution_Model_DbTable_DistributionTeacher();
-	                $datadistteac = $distteac->_getFilter($wheredistadm,$atrib=array());
+	                $datadistteac = $distteac->_getFilter($wheredistadm);
 	                $htotales = $datadistteac[0]['total_hour_acad']+$datadistteac[0]['total_hour_admin'];
 	                ?>
 	                <tr> 
@@ -215,7 +215,7 @@ foreach ($this->allteachers as $allteachers){
 			'eid' => $allteachers['eid'], 'oid' => $allteachers['oid'],
 			'escid' => substr($this->escid,0,3), 'perid' => $this->perid);
 		$distri = new Distribution_Model_DbTable_Distribution();
-	    $tdis = $distri->_getFilter($wheredist,$atrib=array());
+	    $tdis = $distri->_getFilter($wheredist);
 	    $distidsec = $tdis[0]['distid'];
 
 		if(substr($allteachers['escidorigen'],0,3)=='2ES'){ ?>
@@ -278,7 +278,7 @@ foreach ($this->allteachers as $allteachers){
 					'distid' => $distidsec,	'uid' => $allteachers['uid'], 
 					'pid' => $allteachers['pid']);
 				$distadm = new Distribution_Model_DbTable_DistributionAdmin();
-			    $dataadm = $distadm->_getFilter($wheredistadm,$atrib=array());		
+			    $dataadm = $distadm->_getFilter($wheredistadm);		
 				foreach($dataadm as $adm){ ?>
 					<tr>							
 						<td><?php echo $adm['work']?></td>			

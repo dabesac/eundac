@@ -1,7 +1,7 @@
 
 <?php if ($this->datos){ ?>
     <ul>
-        <li style="list-style : none;">
+        <li style="list-style : none; height: 20px;">
             <table class="table table-condensed ">
                 <tr class="active">    
                     <th class="col-md-1">#</th>               
@@ -29,7 +29,7 @@
             case 'O': $estadomat_="Observado"; break;
         }
         ?>
-    <li style="list-style : none;" id="studentRow<?php echo $datos['uid'] ?>">
+    <li style="list-style : none; height: 35px;" id="studentRow<?php echo $datos['uid'] ?>">
         <table class="table">
             <tr>
                 <td id="studentNum<?php echo $i ?>" class="col-md-1"></td>
@@ -112,7 +112,7 @@
             </div>
 
             <br>
-            <h4 id="mensajeTryAgain" class="text-muted text-center hidden">:( Hubo un <span class="text-danger">problema</span> en nuestro servidor pero puede <a id="tryAgainCurriculum" href="##" class="btn btn-link text-success">Intentar Nuevamente</a></h4>
+            <h4 id="mensajeTryAgain" class="text-muted text-center hidden">:( Hubo un <span class="text-danger">problema</span> en nuestros servidores pero puede <a id="tryAgainCurriculum" href="##" class="btn btn-link text-success">Intentar Nuevamente</a></h4>
         </div>
     </div>
     <script>
