@@ -26,18 +26,18 @@ $(function () {
             },
             series: [{
                 name: 'Siempre',
-                data: [1,4,2,3]
+                data: $cant
 
             }, {
                 name: 'Casi Siempre',
-                data: [7,4,2,3]
+                data: $cant
             }, {
                 name: 'A veces',
-                data: [1,6,2,3]
+                data: $cant
 
             },{
                 name:'Nunca',
-                data: [12,4,2,3]
+                data: $cant
             }]
     });
 });
