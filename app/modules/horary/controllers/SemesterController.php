@@ -92,7 +92,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
             	}
 		        
 		        $module = 'horary_course';
-			    $parmas = array(
+			    $params = array(
 			        				'escid' => base64_encode($escid),
 			        				'eid' => base64_encode($eid),
 			        				'oid' =>base64_encode($oid),
@@ -100,12 +100,17 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			        				'subid'=>base64_encode($subid),
 			        				'semid'=>base64_encode($semid)
 			        				);
-			    $server = new Eundac_Connect_Api($module,$parmas);
-			    $data = $server->connectAuth();
+			    
+    			$prueba = new Eundac_Connect_Api($module,$params);
+    			$data= $prueba->connectAuth();
 	        	$this->view->horarys=$data; 
+
+
+
 	        	$where=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
 	        	$cper= new Api_Model_DbTable_PeriodsCourses();
 	        	$dcur=$cper->_getCoursesxPeriodxspecialityxsemester($where);
+
 	        	$len=count($dcur);
 	        	for ($i=0; $i < $len; $i++) {
 	        		$escid=$dcur[$i]['escid'];
@@ -204,8 +209,9 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		        				'subid'=>base64_encode($subid),
 		        				'semid'=>base64_encode($semid)
 		        				);
-		    $server = new Eundac_Connect_Api($module,$parmas);
-		    $data = $server->connectAuth();
+
+		    $server = new Eundac_Application_Resource_Connectapi();
+		    //$data = $server->connectAuth();
 		    // print_r($data);
 	     
 	        $this->view->horarys=$data;

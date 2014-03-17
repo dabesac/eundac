@@ -1,8 +1,5 @@
-<link rel="stylesheet" type="text/css" href="/external_library/jwysiwyg/jquery.wysiwyg.css">
-<script type="text/javascript" src="/external_library/jwysiwyg/jquery.wysiwyg.js"></script>
-<script type="text/javascript" src="/external_library/jwysiwyg/wysiwyg.image.js"></script>
-<script type="text/javascript" src="/external_library/jwysiwyg/wysiwyg.link.js"></script>
-<script type="text/javascript" src="/external_library/jwysiwyg/wysiwyg.table.js"></script>
+<script type="text/javascript" src="/external_library/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="/external_library/ckeditor/adapters/jquery.js"></script>
 
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Llenado Informe Académico');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button type="button" id="enviar" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar Avance</button><button type="button" id ="cerrar" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cerrar Informe</button>');?>
@@ -200,7 +197,7 @@ if (cierre=="1") {
 
 (function($) {
   // $(document).ready(function() {
-    $('#acad_medios, #acad_tutoria, #adm_acreditacion, #adm_investigacion, #adm_asesoria, #adm_labores').wysiwyg();
+    $('textarea#acad_medios, textarea#acad_tutoria, textarea#adm_acreditacion, textarea#adm_investigacion, textarea#adm_asesoria, textarea#adm_labores').ckeditor();
   // });
 })(jQuery);
 

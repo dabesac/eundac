@@ -32,7 +32,7 @@
 	<div class="row">
 		<br>
 		<div class="col-md-1">
-			<center><img src="/fotos/<?php echo $this->datos[0]['uid']?>.jpg" alt="Foto de Perfil" align="center"></center>
+			<img class='img-avatar' src="/fotos/<?php echo $this->datos[0]['uid']?>.jpg" onerror="imgError(this);" alt="Foto de Perfil" align="center" >
 		</div>
 		<div class="col-md-5">
 			<h3 class="text-right"><b><?php echo $this->datos[0]['fullname']?></b></h3>
@@ -74,6 +74,13 @@
 </div>
 
 <script>
+function imgError(image) {
+	var avatar = '<?php echo $this->avatar_default?>'; 
+    image.onerror = "";
+    image.src = "/img/default_avatar_"+avatar+".jpg";
+    return true;
+}
+
 $(function () {
 	//Actualizar perfil
 	var successProfile = $('#successProfile').val();

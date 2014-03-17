@@ -50,10 +50,10 @@
                 if ($menu) {
                 foreach ($menu as $key => $value) { ?>
                 <li class="dropdown dropup">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-<?php echo $value['icon']?>"></span> <?php echo $value['name']?></a>
-                        <ul class="dropdown-menu">
+                    <a href="#" class="dropdown-toggle menu-main" data-toggle="dropdown"><span class="glyphicon glyphicon-<?php echo $value['icon']?>"></span> <?php echo $value['name']?></a>
+                        <ul class="dropdown-menu menu-eundac-fooder">
                             <?php foreach ($value['link'] as $key => $value_1) {?>
-                                <li><a href="/<?php echo $value_1['module']?>/<?php echo $value_1['controller']?>/<?php echo $value_1['action']?>" title=""><?php echo strtoupper($value_1['name'])?></a></li>
+                                <li><a class='sub-menu' href="/<?php echo $value_1['module']?>/<?php echo $value_1['controller']?>/<?php echo $value_1['action']?>" title=""><?php echo strtoupper($value_1['name'])?></a></li>
                             <?php }?>
                         </ul>
                 </li>

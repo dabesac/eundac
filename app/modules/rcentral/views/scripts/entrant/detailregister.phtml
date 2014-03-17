@@ -19,7 +19,7 @@
 <div class="row">
     <div class="col-md-5 col-md-offset-1">
         <blockquote>
-            <br>
+            <br><br>
             <p><span class="glyphicon glyphicon-user text-info"></span> <?php echo $this->student[0]['last_name0'].' '.$this->student[0]['last_name1'] ?> <span class="text-info"><?php echo $this->student[0]['first_name'] ?></span></p>
             <h6>Codigo <span class="text-info"><?php echo $this->student[0]['uid'] ?></span></h6>
             <h6>Colegio <span class="text-info"><?php echo $this->academic[0]['institution'] ?>
@@ -37,17 +37,54 @@
             <h5>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h5>
             <h5>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
             <h5>Tipo de Pago <br><span class="text-info"><?php echo $this->rate[0]['name'] ?></span></h5>
-            <h5><span class="text-success glyphicon glyphicon-record"></span></h5>
+            <?php if ($this->paymentDateData['tiempo'] == 'yes' and $this->paymentDateData['pago'] == 'yes'): ?>
+                <h6 class="text-success"><span class="glyphicon glyphicon-record"></span> Todo en Orden con el Págo</h6>
+            <?php else: ?>
+                <h6 class="text-danger"><span class="glyphicon glyphicon-record"></span> Pago a Destiempo</h6>
+                <h6 class="text-muted">Debe un <span class="text-danger">reintegro de un <?php echo $this->paymentDateData['porcentaje'] ?> %</span>,<br> osea <span class="text-danger">S/. <?php echo $this->paymentDateData['cantidad'] ?></span></h6>
+            <?php endif ?>
         </blockquote>
     </div>
     <div class="col-md-2">
-        <br><br>
+        <br>
         <?php $urlPrintRegister =  '/register/registerstudent/print'. 
                                     '/uid/'.    base64_encode($this->dataStudent['uid']) .
                                     '/pid/'.    base64_encode($this->dataStudent['pid']) .
                                     '/escid/'.  base64_encode($this->dataStudent['escid']) .
                                     '/subid/'.  base64_encode($this->dataStudent['subid']) ?>
         <a id="printRegister" class="btn btn-default <?php echo $classPrint ?> form-control" target="_blank" href="<?php echo $urlPrintRegister ?>" disabled><span class="glyphicon glyphicon-print"></span> Imprimir Matricula</a>
+        <br><br>
+        <?php if ($this->dataProfile['registerValidate'] != 'no'): ?>
+            <h5 id="dataProfile" value="yes" class="text-success text-center" title="Todo en Orden"><span class="glyphicon glyphicon-record"></span> Todo en Orden</h5>
+        <?php else: ?>
+            <h5 id="dataProfile" value="no" class="text-danger text-center" title="Falta Rellenar Ficha Estadística"><span class="glyphicon glyphicon-record"></span> Falta Ficha Estadística</h5>
+        <?php endif ?>
+        <div class="row">
+            <div class="col-md-6">
+                <?php if ($this->dataProfile['family'] == 'no'): ?>
+                    <p class="small text-danger" title="Falta Datos Familiares">Familiares <span class="glyphicon glyphicon-remove"></span></p>
+                <?php else: ?>
+                    <p class="small text-success">Familiares <span class="glyphicon glyphicon-ok"></span></p>
+                <?php endif ?>
+                <?php if ($this->dataProfile['academic'] == 'no'): ?>
+                    <p class="small text-danger" title="Falta Datos Acádemicos">Académicos <span class="glyphicon glyphicon-remove"></span></p>
+                <?php else: ?>
+                    <p class="small text-success">Académicos <span class="glyphicon glyphicon-ok"></span></p>
+                <?php endif ?>
+            </div>
+            <div class="col-md-6">
+                <?php if ($this->dataProfile['statistic'] == 'no'): ?>
+                    <p class="small text-danger" title="Falta Datos Estadísticos">Estadísticos <span class="glyphicon glyphicon-remove"></span></p>
+                <?php else: ?>
+                    <p class="small text-success">Estadísticos <span class="glyphicon glyphicon-ok"></span></p>
+                <?php endif ?>
+                <?php if ($this->dataProfile['interest'] == 'no'): ?>
+                    <p class="small text-danger" title="Falta Datos de Interes">Interes <span class="glyphicon glyphicon-remove"></span></p>
+                <?php else: ?>
+                    <p class="small text-success">Interes <span class="glyphicon glyphicon-ok"></span></p>
+                <?php endif ?>
+            </div>
+        </div>
     </div>
 </div>
 <hr>
@@ -56,3 +93,9 @@
 
     </div>
 </div>
+
+<script>
+    $('p').hover(function(){
+        $(this).tooltip('toggle');
+    });
+</script>

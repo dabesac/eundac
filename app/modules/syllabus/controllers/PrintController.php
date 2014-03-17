@@ -74,8 +74,22 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $whereperi['eid']=$eid;
             $whereperi['oid']=$oid;
             $whereperi['perid']=$perid;
+
             $bdperiodo = new Api_Model_DbTable_Periods();
             $periods = $bdperiodo->_getOne($whereperi);
+            
+            $date_stard = $periods['class_start_date'];
+            $date_end = $periods['class_end_date'];
+
+            $data_stard = new Zend_Date($date_stard);
+            $date_stard =$data_stard->get(Zend_Date::DATE_LONG);
+            // echo $data_stard->get('dd/mm/yyyy');
+            $data_end = new Zend_Date($date_end);
+            $date_end = $data_end->toString(Zend_Date::DATE_LONG);
+
+            $this->view->date_stard = $date_stard;
+            $this->view->date_end = $date_end;
+
             $this->view->periods=$periods; 
             
             $wheresyl['eid']=$eid;

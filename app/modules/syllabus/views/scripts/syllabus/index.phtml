@@ -32,7 +32,8 @@
 		  			<td><?php echo $this->curso['courseid']?></td>
 		  		</tr>
 		  		<tr>
-		  			<th>PRE-REQUISITO:</th>
+		  			<?php echo ($this->periodocurso['type_rate']=='O')?'<th>PREREQUISITO:</th>':''?>
+		  			<?php echo ($this->periodocurso['type_rate']=='C')?'<th>REQUISITO:</th>':''?>
 		  			<td><?php echo $this->curso['req_1']?> <?php echo $this->curso['req_2']?> <?php echo $this->curso['req_3']?></td>
 		  			<th>SECCIÓN:</th>
 		  			<td><?php echo $this->where['turno']?></td>
@@ -47,7 +48,7 @@
 		  			<th>SEMESTRE:</th>
 		  			<td><?php echo $this->curso['semid']?></td>
 		  			<th>DURACIÓN:</th>
-		  			<td>Desde: <?php echo $this->periodo['class_start_date']?>	Hasta: <?php echo $this->periodo['class_end_date']?></td>
+		  			<td>Desde: <?php echo $this->date_stard ?>	Hasta: <?php echo $this->date_end ?></td>
 		  		</tr>
 		  		<tr>
 		  			<th>DOCENTE:</th>
