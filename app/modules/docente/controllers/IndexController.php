@@ -187,6 +187,8 @@ class Docente_IndexController extends Zend_Controller_Action {
             $tb_course_teacher = new Api_Model_DbTable_Coursexteacher();
             $tb_course= new Api_Model_DbTable_Course();
             $dat_courses = $tb_course_teacher->_getFilter($where);
+            // print_r($dat_courses);
+
             foreach ($dat_courses as $key => $course) {
                 $where1 = array(
                         'eid' =>    $this->sesion->eid,
@@ -199,7 +201,9 @@ class Docente_IndexController extends Zend_Controller_Action {
                 $name_course = $tb_course->_getOne($where1);
                 $courses[$key] = $name_course['name'];  
             }
+            
             $this->view->courses= Zend_Json::encode($courses);
+           
 
            }
             catch(Exception $ex)

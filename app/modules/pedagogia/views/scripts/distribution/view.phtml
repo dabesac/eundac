@@ -19,25 +19,14 @@
 		<?php
 		$i=0;
 		foreach ($this->dis as $distrib) {
-			$i++;
-			$eid=$distrib['eid'];
-			$oid=$distrib['oid'];
-			$escid=$distrib['escid'];
-
-			$dbescuela= new Api_Model_DbTable_Speciality();
-    		$where=array("eid"=>$eid, "oid"=>$oid,"escid"=>$escid);	
-			$ldepa=$dbescuela->_getFilter($where);
-			
-			//print_r($ldepa);
-			$info=$ldepa[0]['name'];
-			
+			$i++;			
 			?>
 			<tr>
 				<td><?php echo $i?></td>
-				<td><?php echo $info?></td>
+				<td><?php echo $distrib['name']?></td>
 				<td ><?php echo $distrib['number']?></td>
 				<td>
-				<h4><a id="seeDistribution<?php echo $distrib['number']?>" href="##" title="Ver" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Eliminar Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')">
+				<h4><a id="seeDistribution<?php echo $distrib['number']?>" href="#" title="Ver" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Eliminar Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')">
                 <span class="glyphicon glyphicon-eye-open"></span></a></h4>				
 				</td>
 				<td><span title="eescriba" rel="tooltip" placeholder="escribaa" id="<?php echo $i?>"  value='editar'>

@@ -1,40 +1,123 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+
+<link rel="stylesheet" type="text/css" href="/css/impresion.css">
 <?php
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start();
-?>
+$header='
+<table style="width: 100%;" border="1">
+    <tr>
+        <th rowspan="2" style="width: 340px; "><img src="/img/header_imprimir.jpg"></th>
+        <th style="text-align: center; font-size: 15px;">
+        FACULTAD DE '.strtoupper($this->faculty).'<br/>
+        ESCUELA DE  '.strtoupper($this->desc['name']).'<br/>
+        '.strtoupper($this->spe['parent']).' 
+        </th>        
+    </tr>
+    <tr>
+        <th style="border: 1px solid #000;font-size: 15px;"> HORARIO - '.strtoupper($this->semid).' SEMESTRE v2.0 
+        </th>
+    </tr>
+</table>
+'?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
-<div style="text-align: center; font-size:16px;margin-top:10px"><b> HORARIO - <?php echo strtoupper($this->semid) ?> SEMESTRE </b></div> <br/>
-<?php
-    $hora=array();
-    $j=1;
+<?php 
+    $hora=array();  
     $hour_begin=array();
-    $hour_begin=$this->valhoras;
-    for ($i=0; $i <= 20; $i++) { 
-        $hour[$i]=substr($hour_begin[$i],0,2);
-        $minute[$i]=substr($hour_begin[$i],3,2);
-    }
-    for ($i=0; $i <= 20; $i++) {
-        if ($hour[$i]<12) {
-            if ($hour[$j]<12) {
-                $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." am";
-            }
-            else{
-                $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." pm";
-            }
-        } 
-        else{
-            $hora[$i]['hora']=$hour[$i].":".$minute[$i]." pm - ".$hour[$j].":".$minute[$j]." pm";
-        }
-        $hora[$i]['h_ini']=$hour[$i];
-        $hora[$i]['h_fin']=$hour[$j];
-        $hora[$i]['m_ini']=$minute[$i];
-        $hora[$i]['m_fin']=$minute[$j];
-        $j++;
-    }
+    if ($this->valhorasm or $this->valhorast) {
+        $j=1;
+        $hour_begin=$this->valhorasm;
+        $hour_begin_afternoon=$this->valhorast;
+        $len1= count($hour_begin);
+        $len2= count($hour_begin_afternoon);
+        $lentotal = $len1+$len2;
     
-    //Colores aleatorios 
+        for ($i=0; $i < $len1; $i++) { 
+            $hourm[$i]=substr($hour_begin[$i],0,2);
+            $minutem[$i]=substr($hour_begin[$i],3,2);
+        }
+        for ($i=0; $i < $len2; $i++) { 
+            $hourt[$i]=substr($hour_begin_afternoon[$i],0,2);
+            $minutet[$i]=substr($hour_begin_afternoon[$i],3,2);
+        }
+        for ($i=0; $i < $len1-1; $i++) {
+            if ($hourm[$i]) {
+                if ($hourm[$i]<12) {
+                    if ($hourm[$j]<12) {
+                        $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." am - ".$hourm[$j].":".$minutem[$j]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." am - ".$hourm[$j].":".$minutem[$j]." pm";
+                    }
+                } 
+                else{
+                    $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." pm - ".$hourm[$j].":".$minutem[$j]." pm";
+                }
+                $hora[$i]['h_ini']=$hourm[$i];
+                $hora[$i]['h_fin']=$hourm[$j];
+                $hora[$i]['m_ini']=$minutem[$i];
+                $hora[$i]['m_fin']=$minutem[$j];
+                $j++;            
+            }
+
+        }
+
+        $q=1;
+        for ($p=0; $p < $len2; $p++) {
+            if ($hourt[$p]) {
+                if ($hourt[$p]<12) {
+                    if ($hourt[$q]<12) {
+                        $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." am - ".$hourt[$q].":".$minutet[$q]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." am - ".$hourt[$q].":".$minutet[$q]." pm";
+                    }
+                } 
+                else{
+                    $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." pm - ".$hourt[$q].":".$minutet[$q]." pm";
+                }
+                $hora[$i]['h_ini']=$hourt[$p];
+                $hora[$i]['h_fin']=$hourt[$q];
+                $hora[$i]['m_ini']=$minutet[$p];
+                $hora[$i]['m_fin']=$minutet[$q];
+                $q++;
+                $i++;            
+            }
+        }
+    }
+    else{
+        $j=1;
+        $hour_begin=$this->valhoras;
+        $len= count($hour_begin);
+        $lentotal=$len;
+        for ($i=0; $i < $len; $i++) { 
+            $hour[$i]=substr($hour_begin[$i],0,2);
+            $minute[$i]=substr($hour_begin[$i],3,2);
+        }
+        for ($i=0; $i < $len; $i++) {
+            if ($hour[$i]) {
+                if ($hour[$i]<12) {
+                    if ($hour[$j]<12) {
+                        $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." pm";
+                    }
+                } 
+                else{
+                    $hora[$i]['hora']=$hour[$i].":".$minute[$i]." pm - ".$hour[$j].":".$minute[$j]." pm";
+                }
+                $hora[$i]['h_ini']=$hour[$i];
+                $hora[$i]['h_fin']=$hour[$j];
+                $hora[$i]['m_ini']=$minute[$i];
+                $hora[$i]['m_fin']=$minute[$j];
+                $j++;            
+            }
+        }
+    }
+
     $listacolores = array();
     $listacolores[0] = "#FA8D74";
     $listacolores[1] = "#A3CFE0";
@@ -50,7 +133,7 @@ ob_start();
     $listacolores[11] = "#F2BBBB";
     $listacolores[12] = "#D8BADA";
     $listacolores[13] = "#C4E6CE";
-    $listacolores[14] = "#B4DAA1"; 
+    $listacolores[14] = "#B4DAA1";
 ?>
 <link rel="stylesheet" type="text/css" href="/css/print.css">
 <style type="text/css">
@@ -100,6 +183,7 @@ ob_start();
         float:left;
     }
 </style>
+    
 <?php
 if ($this->horarys) {
         $len=count($this->horarys);
@@ -107,19 +191,27 @@ if ($this->horarys) {
         $hmen=13;
         $hmay=13;
         for ($i=0; $i < $len;$i++){
+        
             $rid=substr($this->horarys[$i]['teach_uid'],8,2);
             if ($rid=='JP') $this->horarys[$i]['practica']='(P)';
-            else $this->horarys[$i]['practica']="";
-            $codcurso=$this->horarys[$i]['courseid'];
-            $codcursodes=$this->horarys[$i+1]['courseid'];
-            $turno=$this->horarys[$i]['turno'];
-            $curid=$this->horarys[$i]['curid'];
+            else{
+                $this->horarys[$i]['practica']="";
+                if ($this->horarys[$i]['type_class']=='P') {
+                    $this->horarys[$i]['abbreviation']=$this->horarys[$i]['abbreviation']." (P)";
+                }                
+            } 
 
-            if($codcurso==$codcursodes){
+            $codcurso=$this->horarys[$i]['courseid'];
+            $tturno=$this->horarys[$i]['turno'];
+            $codcursodes=$this->horarys[$i+1]['courseid'];
+            $tturnodes=$this->horarys[$i+1]['turno'];
+
+            if($codcurso==$codcursodes && $tturno==$tturnodes){
                 $this->horarys[$i]['color']=$listacolores[$cco];
             }
             else{
                 $this->horarys[$i]['color']=$listacolores[$cco];
+                // $this->dcurso[$cc]['color']=$listacolores[$cco];
                 $cco++;
             }
             $hsplit=split(":",$this->horarys[$i]['hora_ini']);
@@ -131,18 +223,19 @@ if ($this->horarys) {
             
         }
         $k=0;
-        for ($z=0;$z < 20; $z++){
-                // print_r($hmen);exit();
-            if ($hmen==$hora[$z]['h_ini'] && $k==0) {
-                $inih=$z;
-                $k=1;
-            }
-            if($hmay==$hora[$z]['h_fin']){
-                $finh=$z;
+        if ($hour_begin) {
+            for ($z=0; $z < $lentotal; $z++) { 
+                if ($hmen==$hora[$z]['h_ini'] && $k==0) {
+                    $inih=$z;
+                    $k=1;
+                }
+                if ($hmay==$hora[$z]['h_fin']) {
+                    $finh=$z;
+                }
             }
         }
         $horaoriginal=$this->horarys;
-        // print_r($horaoriginal);exit();
+        // print_r($this->dcurso);exit();
 ?>
 <div style="width:1000px">
     <div id='encabezado'>
@@ -443,14 +536,14 @@ else{
 }
 ?>
 <?php 
-    
-    $html = ob_get_contents();
-  
-    $mpdf=new mPDF('win-1252','A4-L','','',15,15,40,18,5,5);
-    $mpdf->SetHTMLHeader($this->header);  
-    $mpdf->SetHTMLFooter($this->footer);
-    ob_end_clean();
-    $mpdf -> WriteHTML($html);
-    $mpdf->Output('Horario -'.$this->semid.'.pdf','D');
-    // $mpdf->Output();  
+  $html = ob_get_contents();
+  // $mpdf = new mPDF('utf-8',array(280,370),'','',10,10,35,10,5,5);
+  $mpdf=new mPDF('win-1252','A4-L','','',15,15,37,5);
+  //$mpdf=new mPDF('win-1252','A4', 0,'', 15, 15,35,'','','', 'P');
+  $mpdf->SetHTMLHeader($header);
+  // $mpdf->SetFooter(' {DATE j/m/Y}|Página {PAGENO}|Sistema de Gestión e-UNDAC');
+   $mpdf->SetFooter($this->footer);
+  ob_end_clean();
+  $mpdf -> WriteHTML($html);
+  $mpdf->Output('Horario -'.$this->semid.'.pdf','D');
 ?>

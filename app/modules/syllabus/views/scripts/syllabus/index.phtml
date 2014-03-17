@@ -32,7 +32,8 @@
 		  			<td><?php echo $this->curso['courseid']?></td>
 		  		</tr>
 		  		<tr>
-		  			<th>PRE-REQUISITO:</th>
+		  			<?php echo ($this->periodocurso['type_rate']=='O')?'<th>PREREQUISITO:</th>':''?>
+		  			<?php echo ($this->periodocurso['type_rate']=='C')?'<th>REQUISITO:</th>':''?>
 		  			<td><?php echo $this->curso['req_1']?> <?php echo $this->curso['req_2']?> <?php echo $this->curso['req_3']?></td>
 		  			<th>SECCIÓN:</th>
 		  			<td><?php echo $this->where['turno']?></td>
@@ -47,7 +48,7 @@
 		  			<th>SEMESTRE:</th>
 		  			<td><?php echo $this->curso['semid']?></td>
 		  			<th>DURACIÓN:</th>
-		  			<td>Desde: <?php echo $this->periodo['class_start_date']?>	Hasta: <?php echo $this->periodo['class_end_date']?></td>
+		  			<td>Desde: <?php echo $this->date_stard ?>	Hasta: <?php echo $this->date_end ?></td>
 		  		</tr>
 		  		<tr>
 		  			<th>DOCENTE:</th>
@@ -60,6 +61,7 @@
 	</div>
 </div>
 <div id="campo"></div>
+<div id="savedefault"></div>
 
 <script type="text/javascript">
 	var perid="<?php echo base64_encode($this->where['perid'])?>";
@@ -69,5 +71,6 @@
 	var curid="<?php echo base64_encode($this->where['curid'])?>";
 	var escid="<?php echo base64_encode($this->where['escid'])?>";
 
+	$('#campo').html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
 	$("#campo").load("/syllabus/syllabus/viewfrm/perid/"+perid+"/subid/"+subid+"/turno/"+turno+"/courseid/"+courseid+"/curid/"+curid+"/escid/"+escid);
 </script>

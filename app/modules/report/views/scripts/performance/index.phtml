@@ -141,4 +141,12 @@
                  $("#escid").html(data);
             });
  }
+ var rid="<?php echo $this->rid?>";
+ if (rid == "RF") {
+    var facultad="<?php echo $this->facid?>";
+    $.post("/report/performance/listshool/", { facid: facultad }, function(data){
+        $('#escuela').html("<select id='escid' name='escid'><option value=''>- Seleccione la Escuela -</option></select>");
+        $("#escid").html(data);
+    });     
+ };
 </script>

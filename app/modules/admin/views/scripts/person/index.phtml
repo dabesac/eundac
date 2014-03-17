@@ -1,13 +1,8 @@
-<form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/admin/person/getperson" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
-    <table class="table span9 table-striped table-bordered table-condensed">
-        <tr >
-            <td colspan="2" style='font-size:25px; background: #1e83cb; color: #fff;'><center>GESTIÓN PERSONA</center></td>
-        </tr>
-    </table>
-    <table class="table span9 table-striped table-bordered table-condensed">
-        <tr>
-            <td colspan='2'><a href="/admin/person/new" style='float:right' class='btn btn-info'><span class='glyphicon glyphicon-pencil'></span> Nueva Persona</a></td>
-        </tr>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> Gestión Persona');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/admin" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button id="newper" type="button" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Nueva Persona</button>');?>
+
+<form name="frmFiltroDoc" id ="frmFiltroDoc" action="/admin/person/getperson" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+    <table class="table table-hover table-bordered">
         <tr>
             <td><center>DNI</center></td>
             <td><center>Nombres y Apellidos</center></td>
@@ -18,7 +13,23 @@
         </tr>
     </table>
 </form>
+</br>
 <div  id="cargadatos_"></div> 
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style='width:1000px;'>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title"><b class='text-info'> <center> NUEVA PERSONA </center></b></h2>
+            </div>
+            <div class="modal-body">
+                <div id='nueva_persona'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $("#name, #pid").keypress(function (e) {
         if(e == 13 || e.which==13 || e.which==0){
@@ -40,28 +51,35 @@
     
     $("#frmFiltroDoc").submit(function(){
         $.ajax({
-        type: 'POST',
-        url: $(this).attr('action'),
-        data: $(this).serialize(),
-        success: function(data) {                        
-            $('#cargadatos_').html(data);                                 
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(data) {                        
+                $('#cargadatos_').html(data);                                 
             }
         }); 
         return false;
     });
 
-function validNumber(e) {
-    var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
-    return ((tecla > 47 && tecla < 58) || tecla == 8);
-    } 
-function soloLetras(e){
-       key = e.keyCode || e.which;
-       tecla = String.fromCharCode(key).toLowerCase();
-       letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
-       especiales = [8,37,39,46];
+    $("#newper").click(function(){   
+        $('#myModal').modal('show');            
+        var url="/admin/person/new/";
+        $("#nueva_persona").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
+        $("#nueva_persona").load(url);
+    });
 
-       tecla_especial = false
-       for(var i in especiales){
+    function validNumber(e) {
+        var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
+        return ((tecla > 47 && tecla < 58) || tecla == 8);
+    } 
+    function soloLetras(e){
+        key = e.keyCode || e.which;
+        tecla = String.fromCharCode(key).toLowerCase();
+        letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+        especiales = [8,37,39,46];
+
+        tecla_especial = false
+        for(var i in especiales){
             if(key == especiales[i]){
                 tecla_especial = true;
                 break;

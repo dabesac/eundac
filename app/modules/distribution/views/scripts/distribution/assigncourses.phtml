@@ -1,15 +1,9 @@
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<script src="/external/jquery/jquery-1.9.1.js"></script>
-<script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
-<script src="/external/jquery/external/globalize.js"></script>
-<script src="/external/jquery/external/jquery.mousewheel.js"></script>
-<script src="/external/jquery/external/jshint.js"></script>
-<script src="/external/jquery/external/qunit.js"></script>
-<link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">
-<script src="/external/bootstrap/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
-<link href="/external/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+<script src="/js/jquery-1.11.0.js"></script>
+<script src="/external_library/bootstrap/js/bootstrap.js"></script>
+<script src="/external_library/bootstrap/js/jquery.functions.js"></script>
+<link rel="stylesheet" type="text/css" href="/external_library/bootstrap/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="/css/style.css">
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <style type="text/css">
 .cuadro{    
     background-color: #fff;
@@ -105,33 +99,18 @@ th, td{
             </td>
             <td>
                 <center>
+                    <!-- <input type="text" class="form-control" style="width:80px"> -->
+                    <!-- <div type="text" id="hteoria" class="form-control" style="width:60px"></div> -->
                     <select id="hteoria" class="form-control" style="width:80px">
-                        <option value="">Teoría</option>
-                        <?php    
-                        $uid=$this->uid;
-                        $riddoc=substr($uid,8,2); 
-                        if($riddoc=='DC'){
-                            for($i=0;$i<=20;$i++){ ?>
-                                <option value="<?php echo $i?>"><?php echo $i?></option>
-                            <?php 
-                            }
-                        }else{
-                            $i=0; ?>
-                            <option value="<?php echo $i?>" selected><?php echo $i?></option>
-                            <?php
-                        }?>
+                        <option value="">Teória</option>                        
                     </select>
                 </center>
             </td>
             <td>
                 <center>
+                    <!-- <div type="text" id="hpractica" class="form-control" style="width:60px"></div> -->
                     <select id="hpractica" class="form-control" style="width:80px">
                         <option value="">Práctica</option>
-                        <?php           
-                        $i=0;
-                        for($i=0; $i<=20; $i++){ ?>            
-                            <option value="<?php echo $i?>"><?php echo $i?></option>
-                        <?php }?>
                     </select>
                 </center>
             </td>
@@ -263,6 +242,7 @@ th, td{
     </center>     
 </div>
 <br>
+<div id='sandro'></div>
 <center style="padding-left:70%" class="col-lg-4">
     <div class="cuadro col-lg-4">
         <table class="table table-hover table-bordered table-condensed" style="margin:0px">
@@ -323,13 +303,30 @@ th, td{
         var url = "/distribution/distribution/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/perid/"+perid;
         // alert(url);
         $("#courseid").load(url);
-    }); 
+    });
+
+    $("#courseid").change(function(){
+        var courseid = $(this).val();
+        var curid = $("#curid").val();
+        var escid = "<?php echo $this->escid?>";   
+        var perid = "<?php echo $this->perid?>";   
+        var subid = "<?php echo $this->subid?>";   
+        var url1 = "/distribution/distribution/hourstheoretical/courseid/"+courseid+"/escid/"+escid+"/perid/"+perid+"/subid/"+subid+"/curid/"+curid;
+        $("#hteoria").load(url1);
+
+        var url2 = "/distribution/distribution/hourspractical/courseid/"+courseid+"/escid/"+escid+"/perid/"+perid+"/subid/"+subid+"/curid/"+curid;
+        $("#hpractica").load(url2);
+
+
+    });
 
     $("#grupos, #hpractica, #hteoria").change(function(){
         var grupos= eval($("#grupos").val());
         var ht= eval($("#hteoria").val());
         var hp= eval($("#hpractica").val());
-        var tt=grupos*hp+ht;
+        // var ht =  $("#hteoria").attr('value');
+        // var hp =  $("#hpractica").attr('value');
+        var tt=(grupos*hp)+ht;
         $("#totalhoras").attr("value",tt);
     });
 
@@ -345,7 +342,23 @@ th, td{
         else $("#compromiso").attr("value","N");
     }); 
 
+    $("#agregarcurso").hover(function(){
+        var grupos= eval($("#grupos").val());
+        var ht= eval($("#hteoria").val());
+        var hp= eval($("#hpractica").val());
+
+        if (ht!='' || hp!='') {
+            var tt=(grupos*hp)+ht;
+            $("#totalhoras").attr("value",tt);   
+        }
+        else{
+            var tt="-";
+            $("#totalhoras").attr("value",tt);      
+        }
+    });
+
     $("#agregarcurso").click(function(){
+
         $("#vercursosasig").hide();
         var uid="<?php echo $this->uid?>";
         var pid="<?php echo $this->pid?>";

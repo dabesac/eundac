@@ -1,27 +1,48 @@
+<input type="hidden" id="successProfile" value="<?php echo $this->success ?>">
 <div class="row">
+  <br>
   <div class="col-md-10">
 
     <div id="maininfo"></div>
 
-    <div id="datastudent"></div>
-
-    <div id="editform"></div>
+    <div id="loadingDiv"></div>
+    
+      <div id="datastudent"></div>
+    
+    <div class="panel panel-default">
+      <div id="editform"></div>
+    </div>
+    
 
   </div>
   <div class="col-md-2">
-    <br>
-    <ul class="nav nav-pills nav-stacked" id="backprofileTab">
-      <li><a href="##" id="btnprofile">Volver al Perfil</a></li>
-    </ul>
-    <br>
-    <ul class="nav nav-pills nav-stacked" id="masinfoTab">
-      <li><a href="##" id="btnfamily" class="btn-xs">Datos Familiares</a></li>
-      <li><a href="##" id="btnacademic" class="btn-xs">Datos Academico</a></li>
-      <li><a href="##" id="btnlaboral" class="btn-xs">Datos Laborales</a></li>
-      <li><a href="##" id="btnstadistic" class="btn-xs">Datos Estadistico</a></li>
-      <li><a href="##" id="btninters" class="btn-xs">Intereses</a></li>
-      <li class="hidden"><a></a></li>
-    </ul>
+    <div id="divBtnProfile" class="panel panel-default">
+      <ul class="nav nav-pills nav-stacked" id="backprofileTab">
+        <li><a href="##" id="btnProfile">Volver al Perfil</a></li>
+      </ul>
+    </div>
+    <div class="panel panel-default">
+      <ul class="nav nav-pills nav-stacked" id="masinfoTab">
+        <li><a href="##" id="btnfamily" class="">1. Datos Familiares</a></li>
+        <li><a href="##" id="btnacademic" class="">2. Datos Academico</a></li>
+        <li><a href="##" id="btnlaboral" class="">3. Datos Laborales</a></li>
+        <li><a href="##" id="btnstadistic" class="">4. Datos Estadistico</a></li>
+        <li><a href="##" id="btninters" class="">5. Intereses</li>
+        <li class="hidden"><a></a></li>
+      </ul>
+        <?php 
+        $urlPrintFicha = '/profile/public/printficha'.  '/eid/'.$this->dataStudent['eid'].
+                                                        '/oid/'.$this->dataStudent['oid'].
+                                                        '/pid/'.$this->dataStudent['pid'].
+                                                        '/uid/'.$this->dataStudent['uid'].
+                                                        '/escid/'.$this->dataStudent['escid'].
+                                                        '/subid/'.$this->dataStudent['subid'];
+        ?>
+      <ul id='printficha' class="nav nav-pills nav-stacked"></ul>
+
+      <!-- <a href="#" class='btn btn-success btn-lg'><span class="glyphicon glyphicon-print"></span> Imprimir Ficha</a> -->
+    </div>
+        <button id='veri' class="form-class text-center btn btn-success btn-sm" style="width:170px"><span class="glyphicon glyphicon-log-out"></span> Si llenó todo pulse aquí</button>
   </div>
 </div><!-- div row -->
 
@@ -29,17 +50,37 @@
 
 
 <script>
+    $("#printficha").hide();
+    var $url ="<?php echo $urlPrintFicha?>";
+    var clave="<?php echo $this->clave?>";
+    if (clave==1) {
+        var state="<?php echo $this->state?>";
+            if (state!="C") {
+                $('#profileTab li:eq(3) a').tab('show');            
+            };
+        $("#printficha").show();
+        $("#veri").hide();
+        $("#printficha").append('<li><a href="<?php echo $urlPrintFicha ?>" class="form-class text-center"><span class="glyphicon glyphicon-print"></span> Imprimir Ficha</a></li>');
+    };
+
+    $("#veri").click(function(){
+        window.location.reload();
+        // var successProfile = $('#successProfile').val();
+        // if (successProfile == 'no') {
+        
+    });
+
   $("#datastudent").load("/profile/public/studentmaininfo");
-  $("#btnprofile").fadeOut("fast");
-  $('#editform').fadeOut('fast');
+  $("#divBtnProfile").fadeOut("fast");
 
 
   $('#masinfoTab a').click(function (e) {
     e.preventDefault()
-    
-    $("#btnprofile").fadeIn("fast");
-    /*$("#datastudent").removeClass("hidden")
-    $("#editform").html("")*/
+    $('#datastudent').html('');
+    $('#datastudent').removeClass('hidden');
+    $("#divBtnProfile").fadeIn("fast");
+    $("#editform").html("");
+    /*$("#datastudent").removeClass("hidden")*/
     $(this).tab('show')
   })
 
@@ -51,7 +92,7 @@
       });
     });
     $('#masinfoTab a:last').tab('show');
-    $("#btnprofile").fadeOut("slow");
+    $("#divBtnProfile").fadeOut("fast");
     /*$("#editform").html("")*/
   })
 
@@ -67,9 +108,11 @@
   $("#btnacademic").click(function(){
     $('#datastudent').fadeOut('fast', function(){
       $("#datastudent").load("/profile/public/studentacademic", function(){
-        $('#datastudent').fadeIn('fast');
+        $("#datastudent").fadeIn('fast');
       });
     });
+    /*$("#datastudent").load("/profile/public/studentacademic");
+    $('#datastudent').fadeIn('fast');*/
   })
 
   $("#btnstadistic").click(function(){

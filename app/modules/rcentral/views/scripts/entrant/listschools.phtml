@@ -1,0 +1,8 @@
+<?php if ($this->schools): ?>
+	<option value="">Todas las Escuelas</option>
+	<?php foreach ($this->schools as $school): ?>
+		<option value="<?php echo $school['escid'] ?>"><?php echo $school['name'] ?></option>
+	<?php endforeach ?>
+<?php else: ?>
+	<option value="">No Existen Datos</option>
+<?php endif ?>

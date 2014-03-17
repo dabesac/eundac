@@ -1,0 +1,271 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-ok"></span> Validación de Matricula Para Ingresantes - '. 'Periodo '. $this->perid);?>
+<?php $this->placeholder('Btnnav')->append('<a href="/rcentral" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+
+<div class="row">
+    <div class="col-md-5 col-md-offset-1">
+        <h5 class="text-muted"> <span class="glyphicon glyphicon-info-sign"></span> Seleccione una <span class="text-success">Facultad </span>para <span class="text-success">Empezar</span></h5>
+    </div>
+</div>
+<br>
+<div class="row" id="topNavigateButton">
+    <div class="col-md-3 col-md-offset-1">
+        <h5 class="text-muted">Facultad</h5>
+        <select class='form-control' id='faculty' name='Facultad'>
+            <option value="">Selecione una Facultad</option>
+        <?php foreach ($this->faculties as $faculty): ?>
+            <option value="<?php echo $faculty['facid'] ?>"><?php echo $faculty['name'] ?></option>
+        <?php endforeach ?>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <h5 class="text-muted">Escuela</h5>
+        <select class='form-control' id='school' name='Escuela'>
+            <option value="">Primero Selecione una Facultad</option>
+            
+        </select>
+    </div>
+    <div class="col-md-4">
+        <h5 class="text-muted">Especialidad</h5>
+        <select class='form-control' id='speciality' name='Especialidad'>
+            <option value="">Primero Seleccione una Escuela</option>
+            
+        </select>
+    </div>
+</div>
+<hr>
+
+<div id="studentsList" style="height : 500px;" class="hidden">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-1">
+            <h5 class="text-muted">Filtrar</h5>
+            <div class="input-group">
+                <input id="searchData" type="text" class="form-control" title="Código" onkeyup="javascript:this.value=this.value.toUpperCase();" placeholder="Código o Apellidos" disabled>
+                <span class="input-group-btn">
+                <a class="btn btn-success" id="searchButton" title="Filtrar :D" href="##"><span class="glyphicon glyphicon-filter"></span></a>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h5 class="text-muted">Estado</h5>
+             <select class='form-control' id='state' name='Estado' disabled>
+                <option value="Ingresantes">Ingresantes</option>
+                <option value="Matriculados">Matriculados</option>
+                <option value="Observados">Observados</option>
+                <option value="Reservados">Reservados</option>
+            </select>
+        </div>
+    </div>
+    <div id="data"></div>
+    <br><br>
+</div>
+
+<script>
+    //Cargar Primeros Datos
+    $('#faculty').change(function(){
+        var facid = $(this).val();
+        if (facid) {
+            $('#studentsList').removeClass('hidden');
+
+            $('html,body').animate({
+                scrollTop: $("#topNavigateButton").offset().top
+            }, 500);
+
+            $('#searchData, #state').attr('disabled', 'true');
+            $('#searchData').val('');
+            $('#school').html("<option value=''>Cargando...</option>");
+            $('#speciality').html("<option value=''>Cargando...</option>");
+            $('#data').html("<br><center>Cargando... <img src='/img/spinner.gif' alt='Loading' /></center>");
+            $('#data').load('/rcentral/entrant/liststudents/facid/' + facid, function(){
+                $('#school').load('/rcentral/entrant/listschools/facid/' + facid);
+                $('#speciality').html("<option value=''>Seleccione una Escuela</option>");
+                $('#searchData, #state').removeAttr('disabled');
+
+                var state = $('#state').val();
+                $('#students > li').each(function(){
+                    var currentLiText = $(this).text(),
+                    showCurrentLi = currentLiText.indexOf(state) !== -1;
+
+                    $(this).toggle(showCurrentLi);
+                });
+
+                var num = 1;
+                var i   = 0;
+                $("#students li").each(function(){
+                    var cssli = $(this).css('display');
+                    if (cssli != 'none') {
+                        $('#numeracion'+i).html(num);
+                        num++;
+                    };
+                    i++;
+                });
+            });
+        }else {
+            $('html,body').animate({
+                scrollTop: $("#loading_overlay").offset().top
+            }, 500);
+            $('#studentsList').addClass('hidden');
+            $('#searchData').attr('disabled', 'true');
+            $('#school').html("<option value=''>Seleccione una Escuela</option>");
+            $('#speciality').html("<option value=''>Seleccione una Especialidad</option>");
+        };
+    });
+
+    //Filtrar Por Escuela
+    $('#school').change(function(){
+        if (!escid) {
+            $('#speciality').html("<option value=''>Seleccione una Especialidad</option>");
+        };
+        
+        $('html,body').animate({
+            scrollTop: $("#topNavigateButton").offset().top
+        }, 500);
+        $('#searchData').val('');
+
+        var escid = $(this).val();
+        $('#speciality').html("<option value=''>Cargando...</option>");
+        $('#speciality').load('/rcentral/entrant/listspecialities/escid/' + escid);
+
+
+        $('#students > li').each(function(){
+            var currentLiText = $(this).text(),
+            showCurrentLi = currentLiText.indexOf(escid) !== -1;
+            $(this).toggle(showCurrentLi);
+        });
+        $("#students li").each(function(){
+            var cssli = $(this).css('display');
+            if (cssli != 'none') {
+                $(this).attr('escid', escid);
+            }
+        });
+
+        var state = $('#state').val();
+        $('#students > li').each(function(){
+            var attrEscid = $(this).attr('escid');
+            if (escid == attrEscid) {
+                var currentLiText = $(this).text(),
+                showCurrentLi = currentLiText.indexOf(state) !== -1;
+                $(this).toggle(showCurrentLi);
+            };
+        });
+
+        var num = 1;
+        var i   = 0;
+        $("#students li").each(function(){
+            var cssli = $(this).css('display');
+            if (cssli != 'none') {
+                $('#numeracion'+i).html(num);
+                num++;
+            }
+            i++;
+        });
+    });
+
+    //Filtrar Por Especialidad
+    $('#speciality').change(function(){
+        $('html,body').animate({
+            scrollTop: $("#topNavigateButton").offset().top
+        }, 500);
+        $('#searchData').val('');
+
+        var escid = $(this).val();
+        if (!escid) {
+            escid = $('#school').val();
+        }
+
+        $('#students > li').each(function(){
+            var currentLiText = $(this).text(),
+            showCurrentLi = currentLiText.indexOf(escid) !== -1;
+            $(this).toggle(showCurrentLi);
+        });
+        $("#students li").each(function(){
+            var cssli = $(this).css('display');
+            if (cssli != 'none') {
+                $(this).attr('escid', escid);
+            }
+        });
+
+        var state = $('#state').val();
+        $('#students > li').each(function(){
+            var attrEscid = $(this).attr('escid');
+            if (escid == attrEscid) {
+                var currentLiText = $(this).text(),
+                showCurrentLi = currentLiText.indexOf(state) !== -1;
+                $(this).toggle(showCurrentLi);
+            };
+        });
+
+        var num = 1;
+        var i   = 0;
+        $("#students li").each(function(){
+            var cssli = $(this).css('display');
+            if (cssli != 'none') {
+                $('#numeracion'+i).html(num);
+                num++;
+            }
+            i++;
+        });
+
+    });
+
+    //Filtrar por Estado
+    $('#state').change(function(){
+        $('#searchData').val('');
+        
+        var state = $(this).val();
+        var escid = $('#speciality').val();
+        if (!escid) {
+            escid = $('#school').val();
+        };
+        $('#students > li').each(function(){
+            var attrEscid = $(this).attr('escid');
+            var attrSpec  = $(this).attr('spec');
+            if (!escid) {
+                var currentLiText = $(this).text(),
+                showCurrentLi = currentLiText.indexOf(state) !== -1;
+                $(this).toggle(showCurrentLi);
+            }else if (escid == attrEscid){
+                var currentLiText = $(this).text(),
+                showCurrentLi = currentLiText.indexOf(state) !== -1;
+                $(this).toggle(showCurrentLi);
+            };
+        });
+        var num = 1;
+        var i   = 0;
+        $("#students li").each(function(){
+            var cssli = $(this).css('display');
+            if (cssli != 'none') {
+                $('#numeracion'+i).html(num);
+                num++;
+            };
+            i++;
+        });
+    });
+
+    //Filtrar Por Codigo o Apellidos
+    $('#searchData').keyup(function(){
+        var data  = $(this).val();
+        var state = $('#state').val();
+        var escid = $('#speciality').val();
+        if (!escid) {
+            escid = $('#school').val();
+        };
+        $('#students > li').each(function(){
+            var attrEscid = $(this).attr('escid');
+            var attrState = $(this).attr('state');
+
+            if (!escid && attrState == state) {
+                var currentLiText = $(this).text(),
+                showCurrentLi = currentLiText.indexOf(data) !== -1;
+                $(this).toggle(showCurrentLi);
+            }else if (escid == attrEscid && attrState == state) {
+                var currentLiText = $(this).text(),
+                showCurrentLi = currentLiText.indexOf(data) !== -1;
+                $(this).toggle(showCurrentLi);
+            };
+        });
+    })
+
+    //Mostrar Aviso cuando No hay Datos
+
+
+</script>

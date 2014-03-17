@@ -1,0 +1,63 @@
+<br>
+<?php if ($this->data): ?>
+<div class="container">
+	<h4 class="text muted">Cursos <span class="text-success">Permitidos</span></h4>
+	<br>
+	<table class="table table-hover table-bordered">
+		<tr class="active">
+			<th class="text-center col-md-1">Semestre</th>
+			<th class="text-center col-md-1">Codigo</th>
+			<th class="col-md-8">Curso</th>
+			<th class="text-center col-md-1">Creditos</th>
+			<th class="text-center col-md-1">Veces</th>
+		</tr>
+	<?php foreach ($this->data as $course):
+		$llevando = 0;
+		$classTextLlevo = '';
+		foreach ($this->courses as $courseTake) : 
+			if ($course['courseid'] == $courseTake['courseid']) {
+				$llevando = 1;
+			}
+		endforeach ?>
+		<?php if ($llevando == 1){
+			$classTextLlevo = 'text-success';
+		} 
+		if ($course['llevo'] == 0): ?>
+			<tr class="success <?php echo $classTextLlevo ?>">
+				<td class="text-center"><?php echo $course['semid'] ?></td>
+				<td class="text-center"><?php echo $course['courseid'] ?></td>
+				<td><?php echo $course['name'] ?></td>
+				<td class="text-center"><?php echo $course['credits'] ?></td>
+				<td class="text-center"><?php echo $course['veces'] ?></td>
+			</tr>
+		<?php endif ?>
+	<?php endforeach ?>
+	</table>
+</div>
+<div class="container">
+	<h4 class="text muted">Cursos <span class="text-danger">Restantes</span></h4>
+	<br>
+	<table class="table table-hover table-bordered">
+		<tr class="active">
+			<th class="text-center col-md-1">Semestre</th>
+			<th class="text-center col-md-1">Codigo</th>
+			<th class="col-md-9">Curso</th>
+			<th class="text-center col-md-1">Creditos</th>
+			<th class="text-center col-md-1">Veces</th>
+		</tr>
+	<?php foreach ($this->data as $course): ?>
+		<?php if ($course['llevo'] == 2): ?>
+			<tr class="danger">
+				<td class="text-center"><?php echo $course['semid'] ?></td>
+				<td class="text-center"><?php echo $course['courseid'] ?></td>
+				<td><?php echo $course['name'] ?></td>
+				<td class="text-center"><?php echo $course['credits'] ?></td>
+				<td class="text-center"><?php echo $course['veces'] ?></td>
+			</tr>
+		<?php endif ?>
+	<?php endforeach ?>
+	</table>
+</div>
+<?php else: ?>
+	<h4 class="text-center">No existe <span class="text-danger">Datos</span></h4>
+<?php endif ?>

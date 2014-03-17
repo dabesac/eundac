@@ -1,0 +1,389 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<br><br><br>
+<div>
+    <div style="text-align: center; font-size:25px;"><b> CONSTANCIA ESTADÍSTICA E INFORMÁTICA </b></div> <br/>
+    <div style="text-align:left; font-size:15px;">
+        <b>DNI: </b><?php echo strtoupper($this->datapers['pid'])?><br>
+        <b>Alumno: </b><?php echo strtoupper($this->datapers['last_name0']." ".$this->datapers['last_name1'].", ".$this->datapers['first_name'])?>
+    </div>
+</div><br><br>
+<div>
+    <div style="float:left; width:49%; height: 22%; border:1px solid; border-radius:5px;">
+        <h4 style="text-align:center">DATOS DE INGRESO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/img/check-icon.png" style="width:20px"></h4>  
+        <div style="margin-left:3%">
+            <div><b>Año de Ingreso: </b> <?php echo $this->dataingre['yearsignin']?></div>
+            <div><b>Proceso: </b> 
+                <?php 
+                switch ($this->dataingre['process']) {
+                    case '0':
+                        echo "EXAMEN EXTRAORDINARIO";
+                        break;
+                    case '1':
+                        echo "CEPRE - I";
+                        break;    
+                    case '2':
+                        echo "EXAMEN ORDINARIO - I";
+                        break;
+                    case '3':
+                        echo "EDP";
+                        break;
+                    case '4':
+                        echo "EXAMEN ORDINARIO - II";
+                        break;
+                    case '5':
+                        echo "CEPRE - II";
+                        break;    
+                    case '6':
+                        echo "E.P.D ENFERMERÍA";
+                        break;
+                    case '7':
+                        echo "COMPLEMENTACION ACADÉMICA";
+                        break;
+                    case '8':
+                        echo "POST GRADO";
+                        break;
+                    case '9':
+                        echo "CEPRE - III";
+                        break;    
+                }
+                ?>
+            </div>
+            <div><b>Modalidad: </b> 
+                <?php 
+                switch ($this->dataingre['mod_signin']) {
+                    case '1':
+                        echo "EXONERADOS";
+                        break;    
+                    case '2':
+                        echo "CONVENIOS";
+                        break;
+                    case '3':
+                        echo "CONCURSO ADMISIÓN";
+                        break;
+                    case '4':
+                        echo "COBERTURAS";
+                        break;
+                    case '5':
+                        echo "SEGUNDA OPCIÓN";
+                        break;    
+                    case '6':
+                        echo "TRASLADO EXTERNO";
+                        break;
+                    case '7':
+                        echo "TRASLADO INTERNO";
+                        break;
+                    case '8':
+                        echo "SEGUNDA CARRERA";
+                        break;
+                    case '9':
+                        echo "OTROS";
+                        break;    
+                }
+                ?>
+            </div>
+            <div><b>Posición:</b> <?php echo $this->dataingre['position']?>º</div>
+            <div><b>Puntaje:</b> <?php echo $this->dataingre['point_signin']?> pts</div>
+        </div>
+    </div>
+    <div style="float:right; width:49%; height:22%; border:1px solid; border-radius:5px;">
+        <h4  style="text-align:center">DATOS ESTADÍSTICOS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/img/check-icon.png" style="width:20px"></h4>
+        <div style="margin-left:3%">
+            <div><b>Algunas personas dependen de Usted?</b>
+                <?php 
+                switch ($this->dataest['dependen_ud']) {
+                    case 'N':
+                        echo "NO";
+                        break;
+                    case 'S':
+                        echo "SI";
+                        break;
+                }
+                ?>
+            </div>
+            <div><b>Depende Economicamente de</b>
+                <?php 
+                switch ($this->dataest['dependencia']) {
+                    case 'P':
+                        echo "PADRES";
+                        break;
+                    case 'SP':
+                        echo "SOLO PAPÁ";
+                        break;
+                    case 'SM':
+                        echo "SOLO MAMÁ";
+                        break;
+                    case 'H':
+                        echo "HERMANO";
+                        break;
+                    case 'T':
+                        echo "TIOS";
+                        break;
+                    case 'C':
+                        echo "CONYUGUE";
+                        break;
+                    case 'O':
+                        echo "OTROS";
+                        break;
+                    case 'N':
+                        echo "NINGUNO";
+                        break;                        
+                }
+                ?>
+            </div>
+            <div>
+            <div><b>La vivienda es </b>
+                <?php
+                switch ($this->dataest['vivienda']) {
+                    case 'P':
+                        echo "PROPIA";
+                        break;
+                    case 'A':
+                        echo "ALQUILADA";
+                        break;
+                    case 'H':
+                        echo "HIPOTECADA";
+                        break;
+                    case 'PH':
+                        echo "PRESTADA";
+                        break;
+                    case 'O':
+                        echo "OTROS";
+                        break;        
+                }
+                ?>
+            </div>
+                <b>El tipo de vivienda</b>
+                <?php 
+                switch ($this->dataest['tipo_vivienda']) {
+                    case 'CI':
+                        echo "CASA INDEPENDIENTE";
+                        break;
+                    case 'CA':
+                        echo "CAMPAMENTO";
+                        break;
+                    case 'D':
+                        echo "DEPARTAMENTO";
+                        break;
+                    case 'C':
+                        echo "CUARTO";
+                        break;
+                    case 'CC':
+                        echo "CUARTO COMPARTIDO";
+                        break;
+                    case 'O':
+                        echo "OTROS";
+                        break;
+                }
+                ?>
+            </div>
+            <div>
+                <b>Material </b>
+                <?php 
+                switch ($this->dataest['mat_vivienda']) {
+                    case 'NA':
+                        echo "LADRILLO O BLOQUE DE CEMENTO ACABADO";
+                        break;
+                    case 'NI':
+                        echo "LADRILLO O BLOQUE DE CEMENTO INCONCLUSO";
+                        break;
+                    case 'TA':
+                        echo "ADOBE O TAPIA ACABADO";
+                        break;
+                    case 'TI':
+                        echo "ADOBE O TAPIA INCONCLUSO";
+                        break;    
+                    case 'PA':
+                        echo "PRECARIO ACABADO";
+                        break;
+                    case 'PI':
+                        echo "PRECARIO INCONCLUSO";
+                        break;    
+                }
+                ?>
+            </div>
+            <div>
+                <b>Servicios con los que cuenta </b>
+                <?php 
+                    switch ($this->dataest['servicios']) {
+                        case 'ALD':
+                            echo "AGUA-LUZ-DESAGÜE";
+                            break;
+                        case 'LD':
+                            echo "SOLO LUZ Y DESAGÜE";
+                            break; 
+                        case 'AL':
+                            echo "SOLO AGUA Y LUZ";
+                            break;
+                        case 'S':
+                            echo "SOLO AGUA";
+                            break;
+                        case 'L':
+                            echo "SOLO LUZ";
+                            break;
+                        case 'N':
+                            echo "NINGUNO";
+                            break;
+                    }
+                ?>
+            </div>
+            <div><b>Número de Habitaciones </b><?php echo $this->dataest['num_habitacion']?></div>
+            <div><b>Número de Habitantes </b><?php echo $this->dataest['num_personas']?></div>
+        </div>    
+    </div>
+</div><br>
+<div>
+    <div style="float:left; width:32%; height:18%; border:1px solid; border-radius:5px;">
+        <h4 style="text-align:center">DATOS ACADÉMICOS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/img/check-icon.png" style="width:20px"></h4>
+        <div style="margin-left:3%">
+            <div><b>Institución </b><?php echo $this->datacade['institution']?></div>
+            <div><b>Tipo</b>
+                <?php 
+                switch ($this->datacade['type']) {
+                    case 'E':
+                        echo "ESTATAL";
+                        break;
+                    case 'P':
+                        echo "PARTICULAR";
+                        break;
+                    case 'PA':
+                        echo "PARROQUIAL";
+                        break;
+                }
+                ?>
+            </div>
+            <div><b>Nivel de estudios</b>
+                <?php 
+                switch ($this->datacade['title']) {
+                    case 'SE':
+                        echo "SECUNDARIO";
+                        break;
+                    case 'SU':
+                        echo "SUPERIOR";
+                        break;    
+                    case 'DI':
+                        echo "DIPLOMADO";
+                        break;
+                    case 'PT':
+                        echo "POST GRADO";
+                        break;
+                    case 'PH':
+                        echo "PHD";
+                        break;
+                    case 'O':
+                        echo "OTROS";
+                        break;        
+                }
+                ?>
+            </div>
+            <div><b>Año de finalización </b><?php echo $this->datacade['year_end']?></div>
+        </div>
+    </div>
+    <div style="margin-left:10px; float:left; width:32%; height:18%; border:1px solid; border-radius:5px;">
+        <h4  style="text-align:center">DATOS FAMILIARES &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/img/check-icon.png" style="width:20px"></h4>
+        <div style="margin-left:3%">
+            <?php
+            $i=1;
+            foreach ($this->datafami as $fami) {
+                ?>
+                <ul>
+                    <li><b>DNI </b><?php echo $fami['numdoc']?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php
+                        switch ($fami['type']) {
+                            case 'PA':
+                                echo "PAPÁ";
+                                break;
+                            case 'MA':
+                                echo "MAMÁ";
+                                break;
+                            case 'HE':
+                                echo "HERMANO(A)";
+                                break;
+                            case 'HI':
+                                echo "HIJO(A)";
+                                break;        
+                        }
+                        ?></b>
+                    </li><br>
+                    <div><?php echo $fami['name']?></div>
+                </ul>    
+            <?php    
+            $i++;    
+            }
+            ?>
+        </div>    
+    </div>    
+    <div style="margin-left:10px; float:left; width:32%; height:18%; border:1px solid; border-radius:5px;">
+        <h4 style="text-align:center">INTERESES &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/img/check-icon.png" style="width:20px"></h4>  
+        <div style="margin-left:3%">
+            <?php 
+            $datai=$this->datainte;
+            for ($i=0; $i < 1; $i++) {
+                ?>
+                <ul>
+                    <li><b>Interés </b><?php echo $datai[$i]['title']?></li><br>
+                    <div><b>Dedicación</b>
+                        <?php 
+                        switch ($datai[$i]['discipline']) {
+                            case 'H':
+                                echo "COMO HOBBY";
+                                break;
+                            case 'D':
+                                echo "DEPORTIVA";
+                                break;
+                            case 'R':
+                                echo "RELIGIOSA";
+                                break;
+                            case 'O':
+                                echo "OTROS";
+                                break;    
+                        }
+                    ?></div><br>
+                    <div><b>Tiene club?</b>
+                        <?php 
+                        switch ($datai[$i]['club']) {
+                            case 'S':
+                                echo "SI";
+                                break;
+                            case 'N':
+                                echo "NO";
+                                break;
+                        }    
+                        ?>
+                    </div>
+                </ul>    
+            <?php    
+            }
+            ?>
+        </div>
+    </div>
+</5v>
+<div style="text-align:center; margin-top:5%">
+    <img src="/img/firma.jpg">
+</div>
+<div style="margin-left:32%; border-top:1px solid; width:33%; text-align:center">
+    <span>Ing. Percy Ramirez Medrano</span><br>
+    <span><b>DIRECTOR</b></span>
+</div>
+
+<?php
+    
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,8,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('Ficha_Estadística -'.$this->pid.'.pdf','D');
+    // $mpdf -> Output();  
+
+?>

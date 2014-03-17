@@ -18,7 +18,6 @@ class IndexController extends Zend_Controller_Action {
     		$sesion = $sesion1->getStorage()->read();
     		$this->_helper->redirector('index','index',($sesion->rol['module']));
     	}
-    	
     	$form = new Default_Form_Login();
     	$this->view->form = $form; 
     	if ($this->getRequest()->isPost()) {
@@ -57,145 +56,233 @@ class IndexController extends Zend_Controller_Action {
     					$msg = "Error en la seccion del periodo siguiente para la plataforma";
     					$this->_redirect("/error/msg/msg/'$msg'");
     				}
-    				
-    				// set value Period System
-    				$data  = $authAdapter->getResultRowObject(array('eid','oid','uid','escid','pid','rid','subid'));
-    				$userinfo  = $authAdapter->getResultRowObject(array('eid','oid','uid','escid','pid','rid','subid'));
-    				// Begin Var
-    				$data->period = new stdClass();
-    				$data->faculty = new stdClass();
-    				$data->speciality = new stdClass();
-    				$data->infouser = new stdClass();
-    				$data->rol = new stdClass();
-    				$data->org = new stdClass();
-    				
-    				$data->period->perid = $period;
-    				$data->period->name = $name_period;
-    				$data->period->next= $periodnext ;
-    				$data->period->name_next = $name_periodnext;
-    				
-    				// set Speciality
-    				$esc = new Api_Model_DbTable_Speciality();
-    				$esc = $esc->_getOne(array("eid" => $eid, "oid" => $oid,"escid" => $data->escid,"subid" => $data->subid));
-    				
-    				if ($esc){
-    					$facu  = new Api_Model_DbTable_Faculty();
-    					$nf = $facu->_getOne(array("eid" => $eid, "oid" => $oid,"facid" => $esc['facid']));
-    					if ($nf){
-    						$data->faculty->name=$nf['name'];
-    						$data->faculty->facid=$nf['facid'];
-    					}
-    					if ($esc['parent']) {
-    						$data->speciality->name=  ($esc['name']);
-    						$data->speciality->escid=  ($esc['escid']);
-    						$escuela = new Api_Model_DbTable_Speciality();
-    						$tmpo = array("eid"=>$eid,"oid"=>$oid,"escid"=>$esc['parent'],"subid"=>$esc['subid']);
-    						$te = $escuela->_getOne($tmpo);
-    						if ($te){
-    							$data->speciality->name=$te['name'];
-    							$data->speciality->escid=  ($esc['escid']);
-    						}
-    					}else{
-    						$data->speciality->name=$esc['name'];
-    					}
-    				}
-    				
-    				// Set info User
-    				$user = new Api_Model_DbTable_Users();
-    				$row = $user->_getInfoUser(array("eid"=>$eid,"oid"=>$oid,"uid"=>$data->uid,
-    								"pid"=>$data->pid,"escid"=>$data->escid,"subid"=>$data->subid));
-    				$full = $row[0]['last_name0']." ".$row[0]['last_name1'].", ".$row[0]['first_name'];
-    				$row[0]['fullname']=$full;
-    				$data->sex=$row[0]['sex'];
-    				$data->infouser=$row[0];
-    				
-    				$rols_ = new Api_Model_DbTable_Rol();
-    				$rol_ = $rols_->_getOne(array("eid"=>$data->eid,"oid"=>$data->oid,"rid"=>$data->rid));
-    				if ($rol_)
-    					$data->rol = $rol_;
-    				else{ 
-    					$msg = "Error no se encontro un rol epecifico el usuario";
-    					$this->_redirect("/error/msg/msg/'$msg'");
-    				}
-    				// Select infoteacher
-    				$datate['eid']= $data->eid;
-    				$datate['oid']= $data->oid;
-    				$datate['uid']= $data->uid;
-    				$datate['pid']= $data->pid;
-    				$datate['escid']= $data->escid;
-    				$datate['subid']= $data->subid;
-    				$teacher = new Api_Model_DbTable_Infoteacher();
-    				$rowteacher = $teacher->_getOne($datate);
-    				
-    				$data->infouser['teacher']=$rowteacher;
+
                     
-					// Set ACL
-    				//$tmpacl = $this->_aclCreated($data->rid,$data);
-    				//$data->acls= $tmpacl['module'];
-    				//$data->resources=$tmpacl['list'];
-    				
-    				// Set Header and Footer Print Org
-    				$orgs = new Api_Model_DbTable_Org();
-    				$rorg = $orgs->_getOne(array("eid" => $data->eid,"oid"=>$data->oid));
+                    // set value Period System
+                    $data  = $authAdapter->getResultRowObject(array('eid','oid','uid','escid','pid','rid','subid'));
+                    $userinfo  = $authAdapter->getResultRowObject(array('eid','oid','uid','escid','pid','rid','subid'));
+                    // Begin Var
+                    $data->period = new stdClass();
+                    $data->faculty = new stdClass();
+                    $data->speciality = new stdClass();
+                    $data->infouser = new stdClass();
+                    $data->rol = new stdClass();
+                    $data->org = new stdClass();
                     
-    				if ($rorg) $data->org = $rorg;
-    				// Register access
-    				$clientIp = $this->getRequest()->getClientIp();
-    				$log = new Api_Model_DbTable_Logs();
-    				$aleatorio = rand(10,100);
-    				$datalog['tokenid']= time()+$aleatorio;
-    				$data->tokenid=$datalog['tokenid'];
-    				$datalog['year']= date('Y');
-    				$datalog['ip']= $clientIp;
-    				$datalog['eid']= $data->eid;
-    				$datalog['oid']= $data->oid;
-    				$datalog['uid']= $data->uid;
-    				$datalog['pid']= $data->pid;
-    				$datalog['rid']= $data->rid;
-    				$datalog['datestart']= date(DATE_RFC822);
-    				$datalog['dateend']= date(DATE_RFC822);
-    				$datalog['state']= 'A';
-    				$datalog['keysession']= $datalog['tokenid'];
-    				
-    				$userAgent = new Zend_Http_UserAgent();
-    				$device = $userAgent->getDevice();
-    				$datalog['browse'] = $device->getBrowser();
-    				$datalog['vbrowser'] = $device->getBrowserVersion();
-    				$datalog['browserinfo'] = $device->getUserAgent();
-    				if ($log->_save($datalog)){
-    					$auth->getStorage()->write($data);
-    					//Verify unique user connect
-    					$logdata=null;
-    					$logs = new Api_Model_DbTable_Logs();
-    					$logdata['eid']=$eid;
-    					$logdata['oid']=$oid;
-    					$logdata['uid']=$cod;
-    					$rlogs = $logs->_getConnect($logdata);
-    					if (count($rlogs)>2){
-    						//echo "Existe otra sesion abierta en algun otro lugar";exit();
-    						//$this->_redirect("/default/index/salir");
-    					}
-    					$urlmod = $data->rol['module'];
-    					//$passn= base64_encode($clavecampus);
-    					//$urllogin  = "key/$passn/mod/".$data->rol['module'];
-    					//$urllogin  = array("key"=>$passn, "mod" => $data->rol['module']);
-    					//if (trim($data->rid)=='AL' || $data->rid=='DC')
-    					//	$this->_forward("ajax", "index", "default", $urllogin );
-    					//else
-    					$this->_redirect($urlmod);
-    				}
-    			}else {
-					switch ($result->getCode()) {
-						case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
-							$this->view->msgerror="El código que ingreso no existe";
-							break;
-						case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
-							$this->view->msgerror="Su contraseña es incorrecta";
-							break; 
-						default:
-							$this->view->msgerror="Se produjo un error al ingreso, intentelo nuevamente";
-							break;
-					}
+                    $data->period->perid = $period;
+                    $data->period->name = $name_period;
+                    $data->period->next= $periodnext ;
+                    $data->period->name_next = $name_periodnext;
+                    
+                    // set Speciality
+                    $esc = new Api_Model_DbTable_Speciality();
+                    $esc = $esc->_getOne(array("eid" => $eid, "oid" => $oid,"escid" => $data->escid,"subid" => $data->subid));
+                    
+                    if ($esc){
+                        $facu  = new Api_Model_DbTable_Faculty();
+                        $nf = $facu->_getOne(array("eid" => $eid, "oid" => $oid,"facid" => $esc['facid']));
+                        if ($nf){
+                            $data->faculty->name=$nf['name'];
+                            $data->faculty->facid=$nf['facid'];
+                        }
+                        if ($esc['parent']) {
+                            $data->speciality->name=  ($esc['name']);
+                            $data->speciality->escid=  ($esc['escid']);
+                            $escuela = new Api_Model_DbTable_Speciality();
+                            $tmpo = array("eid"=>$eid,"oid"=>$oid,"escid"=>$esc['parent'],"subid"=>$esc['subid']);
+                            $te = $escuela->_getOne($tmpo);
+                            if ($te){
+                                $data->speciality->name=$te['name'];
+                                $data->speciality->escid=  ($esc['escid']);
+                            }
+                        }else{
+                            $data->speciality->name=$esc['name'];
+                        }
+                    }
+                    //Verificar Si Lleno su perfil
+                    $realtionshipDb = new Api_Model_DbTable_Relationship();
+                    $academicDb     = new Api_Model_DbTable_Academicrecord();
+                    $statisticDb    = new Api_Model_DbTable_Statistics();
+                    $interestDb     = new Api_Model_DbTable_Interes();
+
+                    $data->fullProfile->success = 'yes';
+                    //Family
+                    $where = array( 'eid'   => $eid,
+                                    'pid'   => $data->pid );
+                    $relationship = $realtionshipDb->_getFilter($where);
+                    if ($relationship) {
+                        $data->fullProfile->family = 'yes';
+                    }else {
+                        $data->fullProfile->family = 'no';
+                        $data->fullProfile->success = 'no';
+                    }
+
+                    //Datos Academicos
+                    $academic = $academicDb->_getFilter($where);
+                    if ($academic) {
+                        $data->fullProfile->academic = 'yes';
+                    }else {
+                        $data->fullProfile->academic = 'no';
+                        $data->fullProfile->success = 'no';
+                    }
+
+                    //Datos de interes
+                    $interest = $interestDb->_getFilter($where);
+                    if ($interest) {
+                        $data->fullProfile->interes = 'yes';
+                    }else {
+                        $data->fullProfile->interes = 'no';
+                        $data->fullProfile->success = 'no';
+                    }
+
+                    //Datos Estadisticos
+                    $where = array( 'eid'   => $eid,
+                                    'oid'   => $oid,
+                                    'escid' => $data->escid,
+                                    'subid' => $data->subid,
+                                    'pid'   => $data->pid,
+                                    'uid'   => $uid );
+                    $statistic = $statisticDb->_getFilter($where);
+                    if ($statistic) {
+                        $data->fullProfile->statistic = 'yes';
+                    }else {
+                        $data->fullProfile->statistic = 'no';
+                        $data->fullProfile->success = 'no';
+                    }
+
+                    //Insertar pago y Matricula Para Cachimbos
+                    $paymentDb     = new Api_Model_DbTable_Payments();
+
+                    $where = array( 'eid'   => $eid,
+                                    'oid'   => $oid,
+                                    'escid' => $data->escid,
+                                    'subid' => $data->subid,
+                                    'pid'   => $data->pid,
+                                    'uid'   => $uid,
+                                    'perid' => '13A' );
+
+                    $payment = $paymentDb->_getFilter($where);
+
+                    if(!$payment){
+                        $dataPayment = array(   'eid'      => $eid,
+                                                'oid'      => $oid,
+                                                'escid'    => $data->escid,
+                                                'subid'    => $data->subid,
+                                                'pid'      => $data->pid,
+                                                'uid'      => $data->uid,
+                                                'perid'    => '13A',
+                                                'ratid'    => '10',
+                                                'amount'   => '0',
+                                                'register' => $data->uid );
+                        $paymentDb->_save($dataPayment);
+                    }
+                    
+
+                    // Set info User
+                    $user = new Api_Model_DbTable_Users();
+                    $row = $user->_getInfoUser(array("eid"=>$eid,"oid"=>$oid,"uid"=>$data->uid,
+                                    "pid"=>$data->pid,"escid"=>$data->escid,"subid"=>$data->subid));
+                    $full = $row[0]['last_name0']." ".$row[0]['last_name1'].", ".$row[0]['first_name'];
+                    $row[0]['fullname']=$full;
+                    $data->sex=$row[0]['sex'];
+                    $data->infouser=$row[0];
+
+                    $datate['eid']= $data->eid;
+                    $datate['oid']= $data->oid;
+                    $datate['uid']= $data->uid;
+                    $datate['pid']= $data->pid;
+                    $datate['escid']= $data->escid;
+                    $datate['subid']= $data->subid;
+                    $teacher = new Api_Model_DbTable_Infoteacher();
+                    $rowteacher = $teacher->_getOne($datate);
+                    
+                    $data->infouser['teacher']=$rowteacher;
+
+                    if ($data->infouser['teacher']['is_director']=='S') {
+                        $data->rid='DR';
+                    }
+
+                    $rols_ = new Api_Model_DbTable_Rol();
+                    $rol_ = $rols_->_getOne(array("eid"=>$data->eid,"oid"=>$data->oid,"rid"=>$data->rid));
+                    if ($rol_)
+                        $data->rol = $rol_;
+                    else{ 
+                        $msg = "Error no se encontro un rol epecifico el usuario";
+                        $this->_redirect("/error/msg/msg/'$msg'");
+                    }
+                    // Select infoteacher
+                    
+
+                    $data->infouser['teacher']=$rowteacher;
+                    
+                    // Set ACL
+                    //$tmpacl = $this->_aclCreated($data->rid,$data);
+                    //$data->acls= $tmpacl['module'];
+                    //$data->resources=$tmpacl['list'];
+                    
+                    // Set Header and Footer Print Org
+                    $orgs = new Api_Model_DbTable_Org();
+                    $rorg = $orgs->_getOne(array("eid" => $data->eid,"oid"=>$data->oid));
+                    
+                    if ($rorg) $data->org = $rorg;
+                    // Register access
+                    $clientIp = $this->getRequest()->getClientIp();
+                    $log = new Api_Model_DbTable_Logs();
+                    $aleatorio = rand(10,100);
+                    $datalog['tokenid']= time()+$aleatorio;
+                    $data->tokenid=$datalog['tokenid'];
+                    $datalog['year']= date('Y');
+                    $datalog['ip']= $clientIp;
+                    $datalog['eid']= $data->eid;
+                    $datalog['oid']= $data->oid;
+                    $datalog['uid']= $data->uid;
+                    $datalog['pid']= $data->pid;
+                    $datalog['rid']= $data->rid;
+                    $datalog['datestart']= date(DATE_RFC822);
+                    $datalog['dateend']= date(DATE_RFC822);
+                    $datalog['state']= 'A';
+                    $datalog['keysession']= $datalog['tokenid'];
+                    
+                    $userAgent = new Zend_Http_UserAgent();
+                    $device = $userAgent->getDevice();
+                    $datalog['browse'] = $device->getBrowser();
+                    $datalog['vbrowser'] = $device->getBrowserVersion();
+                    $datalog['browserinfo'] = $device->getUserAgent();
+                    if ($log->_save($datalog)){
+                        $auth->getStorage()->write($data);
+                        //Verify unique user connect
+                        $logdata=null;
+                        $logs = new Api_Model_DbTable_Logs();
+                        $logdata['eid']=$eid;
+                        $logdata['oid']=$oid;
+                        $logdata['uid']=$cod;
+                        $rlogs = $logs->_getConnect($logdata);
+                        if (count($rlogs)>2){
+                            //echo "Existe otra sesion abierta en algun otro lugar";exit();
+                            //$this->_redirect("/default/index/salir");
+                        }
+                        $urlmod = $data->rol['module'];
+                        //$passn= base64_encode($clavecampus);
+                        //$urllogin  = "key/$passn/mod/".$data->rol['module'];
+                        //$urllogin  = array("key"=>$passn, "mod" => $data->rol['module']);
+                        //if (trim($data->rid)=='AL' || $data->rid=='DC')
+                        //  $this->_forward("ajax", "index", "default", $urllogin );
+                        //else
+                        $this->_redirect($urlmod);
+                    }
+                    print_r($data);
+                }else {
+                    switch ($result->getCode()) {
+                        case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
+                            $this->view->msgerror="El código que ingreso no existe";
+                            break;
+                        case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
+                            $this->view->msgerror="Su contraseña es incorrecta";
+                            break; 
+                        default:
+                            $this->view->msgerror="Se produjo un error al ingreso, intentelo nuevamente";
+                            break;
+                    }
     			}
     		}else{
     			$form->populate($formData);

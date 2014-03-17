@@ -38,4 +38,28 @@ class Api_Model_DbTable_Statistics extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getFilter($where=null,$attrib=null,$orders=null){
+		try{
+			if($where['eid']=='' || $where['oid']=='' ) return false;
+				$select = $this->_db->select();
+				if ($attrib=='') $select->from("addons_student_statistics");
+				else $select->from("addons_student_statistics",$attrib);
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
+				}
+				if($orders){
+					foreach ($orders as $key => $order) {
+						$select->order($order);
+					}	
+				}
+				
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+		}catch (Exception $e){
+			print "Error: Read Filter Familiars ".$e->getMessage();
+		}
+	}
+
 }

@@ -1,0 +1,99 @@
+<br>
+<div class="container">
+	<div class="row">
+		<div class="col-md-8">
+			<h3 class="text-muted">Informacion <span class="text-info">Adicional</span></h3>
+		</div>
+		<div class="col-md-2">
+			<h3></h3>
+			<a id="saveData" href="##" class="btn btn-info form-control">Guardar</a>
+		</div>
+		<div class="col-md-2">
+			<h3></h3>
+			<a id="backeditBtn" href="##" class="btn btn-default form-control">Volver</a>
+		</div>
+	</div>
+	<hr>
+	<form id="formDataSign">
+		<input type="hidden" name="whySend" value="<?php echo $this->whySend ?>">
+		<div class="row">
+			<div class="col-md-7">
+				<span class="text-muted">Por que elegiste la UNDAC?
+				<?php echo $this->formCareer->xq_undac ?></span><br><br>
+				
+				<div class="row">
+					<div class="col-md-7">
+						<span class="text-muted">Cuantas horas le dedicas/dedicarias a la Universidad?
+						<?php echo $this->formCareer->horas_permanece ?></span>
+					</div>
+					<div class="col-md-5">
+						<span class="text-muted">Por que?
+						<?php echo $this->formCareer->debido_a ?></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-5">
+				<div class="row">
+					<div class="col-md-4">
+						<span class="text-muted">Te gusta tu carrera?</span>
+						<?php echo $this->formCareer->eligio_carrera ?>
+					</div>
+					<div class="col-md-8">
+						<span id="label_eligio_carrera" class="text-muted">Cual te gusta entonces?</span>
+						<?php echo $this->formCareer->carrera_preferencia ?>
+					</div>
+				</div><br><br>
+
+				<span class="text-muted">Haras un traslado de Universidad o Carrera?</span>
+				<?php echo $this->formCareer->traslate ?>
+			</div>
+		</div>
+	</form>
+</div>
+<br>
+<script>
+	$('#carrera_preferencia').attr('disabled', 'true');
+	$('#carrera_preferencia').attr('placeholder', 'Que bueno que te guste tu carrera...');
+
+	$('#label_eligio_carrera').html('...');
+
+	$('#eligio_carrera').change(function(){
+		var eligio = $(this).val();
+		if (eligio == 'N') {
+			$('#label_eligio_carrera').html('Cual te gusta entonces?');
+			$('#carrera_preferencia').removeAttr('disabled');
+			$('#carrera_preferencia').attr('placeholder', 'Cual Carrera');
+		}else{
+			$('#carrera_preferencia').attr('disabled', 'true');
+			$('#carrera_preferencia').attr('placeholder', 'Que bueno que te guste tu carrera...');
+			$('#label_eligio_carrera').html('...');
+		}
+	});
+
+	$('#backeditBtn').click(function(){
+    	$('#editform').html('');
+    	$('#datastudent').removeClass('hidden');
+  	});
+
+  	$('#saveData').click(function(){
+  		saveCareerData();
+  	});
+
+  	function saveCareerData(){
+  		$.ajax({
+  			type 	: 'post',
+  			url 	: '/profile/public/studentsavesign',
+  			data 	: $('#formDataSign').serialize(),
+  			success : function(data){
+  				if(data == 'true'){
+  					$('#editform').html('');
+  					$('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+  					$("#datastudent").load("/profile/public/studentmaininfo", function(){
+  						$('#datastudent').removeClass('hidden');
+						$('#loadingDiv').html('');
+  					});
+  				}
+  			},
+  		});
+  	}
+</script>

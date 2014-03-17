@@ -1,23 +1,49 @@
-<form action="/docente/logoheader/index" method="post" enctype="multipart/form-data"> 
-	     <br> 
-	     <?php echo $this->form->photo?>
-	     <?php echo $this->form->save?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-picture"></span> Logo de la Escuela');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+
+<form action="/docente/logoheader/index" method="post" enctype="multipart/form-data">
+	<div class='row text-center col-md-4 col-md-offset-4 panel panel-primary'>
+		<br>
+		<?php
+		if ($this->header) {	?>
+			<img width="120px" src="/logo/<?php echo $this->header ?>"> 
+		<?php
+		}
+		else{	?>
+			<div class='col-md-12'>
+				<h1 class='glyphicon glyphicon-picture'></h1>
+			</div>
+		<?php	
+		}
+		?>
+		<?php echo $this->form->photo?>
+		<?php echo $this->form->save?>
+		<br>
+	</div>
 </form>
 </br>
-<div>
-<img width="120px" height="120px" src="/header/<?php echo $this->header ?>"> 
-</div>
-
-<div class="header-content">
-	<img src="/img/UNDAC.png" class="img-header-left">
-	<div class="block-contet-header">
-		<h2 class="text-header-university">UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRION</h2>
-		<h6 class="text-faculty">Facultad de <?php echo $this->facultad?></h6>
-		<h6 class="text-speciality">Escuela de Formacion Profecional de <?php echo $this->speciality?> Especialidad de jbniasbfuiasui iubasdiu wbwoeiugbwe </h6>
+<div id='view' class='col-md-12 text-center panel panel-primary'>
+	<br>
+	<div class="text-center">
+		<div class='col-md-2'><img src="/img/undac.png" style="width:100px"></div>
+			<div class="col-md-8">
+				<h3 class="text-header-university"><b>UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRION</b></h3>
+				<h6 class="text-faculty">Facultad de <?php echo $this->facultad?></h6>
+				<h6 class="text-speciality">Escuela de Formación Profesional de <?php echo $this->speciality?></h6>
+			</div>
+		<div class='col-md-2'><img src="/logo/<?php echo $this->header ?>" style="width:100px"></div>
 	</div>
-	<img src="/logo/<?php echo $this->header ?>" class="img-header-right">
+	<br>
 </div>
 
+<script type="text/javascript">
+	$("#view").hide();
+
+	var clave="<?php echo $this->header?>";
+	if (clave!="") {
+		$("#view").show();
+	};
+</script>
 <style>
 	.text-speciality{
 		text-align: center;
@@ -29,7 +55,7 @@
 		text-transform : uppercase;
 	}
 	.block-contet-header{
-		float: left;
+		/*float: left;*/
 		border-bottom: 1px; 
 	}
 	.header-content
@@ -39,7 +65,7 @@
 	.img-header-left{
 		float: left;
 		width: 100px;
-		margin-right:5px; 
+		margin-right:4%; 
 	}
 	.img-header-right{
 		width: 100px;

@@ -12,7 +12,7 @@ class Api_Model_DbTable_Person extends Zend_Db_Table_Abstract
 			return $this->insert($data);
 			return false;
 		}catch (Exception $e){
-				print "Error: Save User ".$e->getMessage();
+				print "Error: Save Person ".$e->getMessage();
 		}
 	}
 	
@@ -24,7 +24,7 @@ class Api_Model_DbTable_Person extends Zend_Db_Table_Abstract
 			return $this->update($data, $where);
 			return false;
 		}catch (Exception $e){
-			print "Error: Update User".$e->getMessage();
+			print "Error: Update Person".$e->getMessage();
 		}
 	}
 	
@@ -36,7 +36,7 @@ class Api_Model_DbTable_Person extends Zend_Db_Table_Abstract
 			return $this->delete($where);
 			return false;
 		}catch (Exception $e){
-			print "Error: Delete User".$e->getMessage();
+			print "Error: Delete Person".$e->getMessage();
 		}
 	}
 
@@ -49,7 +49,7 @@ class Api_Model_DbTable_Person extends Zend_Db_Table_Abstract
 			if($row) return $row->toArray();
 			return false;
 		}catch (Exception $e){
-			print "Error: Read One Entity ".$e->getMessage();
+			print "Error: Read One Person ".$e->getMessage();
 		}
 	}
 
@@ -64,7 +64,7 @@ public function _getAll($where,$order='',$start=0,$limit=0){
 			if($rows) return $rows->toArray();
 			return false;
 		}catch (Exception $e){
-			print "Error: Read All Persom ".$e->getMessage();
+			print "Error: Read All Person ".$e->getMessage();
 		}
 	}
 	

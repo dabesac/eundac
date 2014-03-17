@@ -46,72 +46,79 @@ class Admin_RateregisterController extends Zend_Controller_Action {
         }
     public function listAction()
         {
-          $this->_helper->layout()->disableLayout();                     
-          $eid= $this->sesion->eid;                    
-          $oid= $this->sesion->oid;  
-          $perid = $this->_getParam("perid");
-          $state = $this->_getParam("state");
+            $this->_helper->layout()->disableLayout();                 
+            $eid= $this->sesion->eid;                    
+            $oid= $this->sesion->oid;  
+            $perid = $this->_getParam("perid");
+            $state = $this->_getParam("state");
                             
-           $this->view->state=$state;
-           $dbtasas=new Api_Model_DbTable_Rates();
-           $data['eid']=$eid;
-           $data['oid']=$oid;
-           $data['perid']=$perid;
-           $datatasas=$dbtasas->_getFilter($data);
-           $this->view->tasas=$datatasas;
+            $this->view->state=$state;
+            $this->view->perid=$perid;
+            $dbtasas=new Api_Model_DbTable_Rates();
+            $data['eid']=$eid;
+            $data['oid']=$oid;
+            $data['perid']=$perid;
+            $datatasas=$dbtasas->_getFilter($data);
+            $this->view->tasas=$datatasas;
         }
-    public function newAction()
-        {
-          try
-        {
-                $eid= $this->sesion->eid;
-                $oid= $this->sesion->oid;   
-                $perid= $this->_getParam("perid"); 
-                $this->view->perid=$perid;
-                $fm=new Admin_Form_Ratesnew ();
-                $fm->guardar->setLabel("Guardar");
-                if ($this->getRequest()->isPost())
-                 {
-                   $formData = $this->getRequest()->getPost();
-                       if ($fm->isValid($formData))
-                          {     
-                                 unset($formData["guardar"]);
-                                 $formData['eid']=$eid;
-                                 $formData['oid']=$oid;
-                                 $nf=new Api_Model_DbTable_Rates();
-                                 $nf->_save($formData); 
-                                 $this->_helper->redirector("index");
-                          }
-                       else
-                          {
-                                 $fm->populate($formData);
-                           }
-                 }
-                         $this->view->fm=$fm;
+    public function newAction(){
+        try{
+            $this->_helper->layout()->disableLayout();
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;   
+            $perid= $this->_getParam("perid"); 
+            $state= $this->_getParam("state"); 
+            $this->view->perid=$perid;
+            $this->view->state=$state;
+            $fm=new Admin_Form_Ratesnew ();
+            $fm->guardar->setLabel("Guardar");
+
+            if ($this->getRequest()->isPost())
+             {
+                $formData = $this->getRequest()->getPost();
+                if ($fm->isValid($formData))
+                    {     
+                    unset($formData["guardar"]);
+                    unset($formData['state']);
+                    $formData['eid']=$eid;
+                    $formData['oid']=$oid;
+                    $nf=new Api_Model_DbTable_Rates();
+                    
+                    if ($nf->_save($formData)) {
+                        $this->view->valor=1;                        
+                    }
+                    // $this->_helper->redirector("index");
+                }
+                else{
+                    $fm->populate($formData);
+               }
+            }
+            $this->view->fm=$fm;
         }
-         catch (Exception $ex) 
-        {
-          print "Error listar TasasController: ".$ex->getMessage();
-          
+        catch (Exception $ex){
+          print "Error listar Tasas Controller: ".$ex->getMessage();          
         }
-        }
-    public function deleteAction()
-        {
-           try 
-        {            
+    }
+
+    public function deleteAction(){
+        try{            
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $ratid=($this->_getParam("ratid"));
             $perid=($this->_getParam("perid"));
+            $state=($this->_getParam("state"));
+            
             $del=new Api_Model_DbTable_Rates();
-                $where['eid']=$eid;
-                $where['oid']=$oid;
-                $where['ratid']=$ratid;
-                $where['perid']=$perid;
-
-            if ($del->_delete($where))
-            {
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['ratid']=$ratid;
+            $where['perid']=$perid;
+            $where['state']=$state;
+        
+            if ($del->_delete($where)){
                 $this->_helper->_redirector("index");
+                // $params = array('perid'=>$perid,'state'=>$state);
+                // $this->_helper->redirector('list','rateregister','admin', $params);
             }
             else
             {
@@ -124,57 +131,70 @@ class Admin_RateregisterController extends Zend_Controller_Action {
         }
     
         }
-    public function updateAction()
-    {
-      try
-      { 
-              //  $this->_helper->layout()->disableLayout();                     
-                $eid=$this->sesion->eid;
-                $oid=$this->sesion->oid;
-                $ratid=($this->_getParam("ratid"));
-                $perid=($this->_getParam("perid"));
-                $dbtasas=new Api_Model_DbTable_Rates();
-                $where['eid']=$eid;
-                $where['oid']=$oid;
-                $where['ratid']=$ratid;
-                $where['perid']=$perid;
-                $tasas=$dbtasas ->_getOne($where);
-                //print_r($tasas);
-                $form=new Admin_Form_Rates();
-                  if ($this->getRequest()->isPost())
-                   {
-                        $frmdata=$this->getRequest()->getPost();
-                        unset($frmdata['guardar']);
-                        trim($frmdata['resolucion']);
-                        trim($frmdata['name']);
-                        trim($frmdata['t_normal']);
-                        $frmdata['f_ini_tn'];
-                        $frmdata['f_fin_tnd'];
-                        trim($frmdata['t_incremento1']);
-                        trim($frmdata['v_t_incremento1']);
-                        $frmdata['f_fin_ti1'];
-                        trim($frmdata['t_incremento2']);
-                        trim($frmdata['v_t_incremento2']);
-                        $frmdata['f_fin_ti2'];
-                        trim($frmdata['t_incremento3']);
-                        trim($frmdata['v_t_incremento3']);
-                        $frmdata['f_fin_ti3'];
-                        $frmdata['eid']=$eid;
-                        $frmdata['oid']=$oid;
-                        $frmdata['ratid']=$ratid;
-                        $str=array();
-                        $str="eid='$eid' and oid='$oid' and ratid='$ratid'";
-                        $dbper=new Api_Model_DbTable_Rates();
-                        $per=$dbper->_update($frmdata,$str);
-                        $this->_helper->redirector("index");
-                    }
-               $form->populate($tasas);
-               $this->view->form = $form;
-      }
-       catch (Exception $ex)
-       {
-        print "Error listar TasasController: ".$ex->getMessage();
-       }
-     }
 
+    public function updatetasaAction(){
+
+    try{ 
+            $this->_helper->layout()->disableLayout();                     
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $ratid=($this->_getParam("ratid"));
+            $perid=($this->_getParam("perid"));
+            $state=($this->_getParam("state"));
+
+            $this->view->ratid=$ratid;
+            $this->view->perid=$perid;
+            $this->view->state=$state;
+            
+            $dbtasas=new Api_Model_DbTable_Rates();
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['ratid']=$ratid;
+            $where['perid']=$perid;
+            $tasas=$dbtasas ->_getOne($where);
+            $form=new Admin_Form_Rates();
+            $form->populate($tasas);                
+        
+            if ($this->getRequest()->isPost()){
+                
+                $formData = $this->getRequest()->getPost();
+                if ($form->isValid($formData)){                            
+                    unset($formData['guardar']);
+                    unset($formData['state']);
+                    trim($formData['resolucion']);
+                    trim($formData['name']);
+                    trim($formData['t_normal']);
+                    $formData['f_ini_tn'];
+                    $formData['f_fin_tnd'];
+                    trim($formData['t_incremento1']);
+                    trim($formData['v_t_incremento1']);
+                    $formData['f_fin_ti1'];
+                    trim($formData['t_incremento2']);
+                    trim($formData['v_t_incremento2']);
+                    $formData['f_fin_ti2'];
+                    trim($formData['t_incremento3']);
+                    trim($formData['v_t_incremento3']);
+                    $formData['f_fin_ti3'];
+                    $formData['eid']=$eid;
+                    $formData['oid']=$oid;
+                    $formData['ratid']=$ratid;
+                    // $str=array();
+                    // $str="eid='$eid' and oid='$oid' and ratid='$ratid'";
+                    $pk=array('eid'=>$eid,'oid'=>$oid,'ratid'=>$ratid,'perid'=>$perid);                    
+                    $dbper=new Api_Model_DbTable_Rates();
+                    
+                    if ($dbper->_update($formData,$pk)) {
+                        $this->view->valor=1;
+                    }
+                }
+                else{
+                    $form->populate($formData);
+                }    
+            }
+            $this->view->form = $form;        
+    }
+    catch (Exception $ex){
+        print "Error listar TasasController: ".$ex->getMessage();
+    }
+}
 }

@@ -31,12 +31,29 @@
 <hr>
 <div id="data"></div>
 
+<div id="emptyData" class="hidden">
+    <br>
+    <h4 class="text-muted text-center">No existen <span class="text-danger">Registros</span></h4>
+</div>
+
 <script>
     var state = $('#estado').val();
     $('#data').html("<br><center><img src='/img/spinner.gif'> Cargando.... </center>");
-    $("#data").load("/register/registerstudent/liststudent/state/"+state);
+    $("#data").load("/register/registerstudent/liststudent/state/"+state, function(){
+        var num = 1;
+        var i   = 1;
+        $("#students li").each(function(){
+            var cssli = $(this).css('display');
+            if (cssli != 'none') {
+                $('#studentNum'+[i]).html(num);
+                num++;
+            };
+            i++;
+        })
+    });
 
     $('#estado').change(function(){
+        $('#searchData').val('');
         var state = $(this).val();
         $('#data').html("<br><center><img src='/img/spinner.gif'> Cargando.... </center>");
         $('#data').load('/register/registerstudent/liststudent/state/' + state ,function(){
@@ -47,6 +64,28 @@
 
                 $(this).toggle(showCurrentLi);
             });
+            var num   = 1;
+            var i     = 1;
+            var vacio = 0;
+            $("#students li").each(function(){
+                var cssLiOrder = $(this).css('display');
+                if (cssLiOrder != 'none') {
+                    $('#studentNum'+[i]).html(num);
+                    num++;
+                }else{
+                    vacio++;
+                }
+                i++;
+            })
+            $('#data').removeClass('hidden');
+            $('#emptyData').addClass('hidden');
+            var tam = $('#students li').size();
+            if (tam == 0) {
+                //$('#emptyData').removeClass('hidden');
+            }else if (tam == vacio){
+                $('#emptyData').removeClass('hidden');
+                $('#data').addClass('hidden');
+            }
         });
     });
 
@@ -55,104 +94,98 @@
         $('#students > li').each(function(){
             var currentLiText = $(this).text(),
             showCurrentLi = currentLiText.indexOf(escid) !== -1;
-
             $(this).toggle(showCurrentLi);
+
+        });
+        var num   = 1;
+        var i     = 1;
+        var vacio = 0;
+        $("#students li").each(function(){
+            cssLiOrder = $(this).css('display');
+            if (cssLiOrder != 'none') {
+                $('#studentNum'+[i]).html(num);
+                num++;
+            }else {
+                vacio++;
+            }
+            i++;
+        });
+        $('#data').removeClass('hidden');
+        $('#emptyData').addClass('hidden');
+        var tam = $('#students li').size();
+        if (tam == 0) {
+            //$('#emptyData').removeClass('hidden');
+        }else if (tam == vacio){
+            $('#emptyData').removeClass('hidden');
+            $('#data').addClass('hidden');
+        }
+
+        $('#searchData').val('');
+
+        $('#students > li').each(function(){
+            $(this).removeAttr('filtrado escid');
         });
     });
 
     $('#searchData').keyup(function(){
         var data = $(this).val();
-
-        $('#students > li').each(function(){
-            var currentLiText = $(this).text(),
-            showCurrentLi = currentLiText.indexOf(data) !== -1;
-
-            $(this).toggle(showCurrentLi);
+        var reordenar = 'No';
+        $('#students li').each(function(){
+            $(this).attr('filtrado', 'Si');
+            var escid = $('#escuela').val();
+            var cssli = $(this).css('display');
+            var currentLiText = $(this).text();
+            if (escid && !data) {
+                showCurrentLi = currentLiText.indexOf(escid) !== -1;
+                $(this).toggle(showCurrentLi);
+                $(this).removeAttr('filtrado');
+                reordenar = 'Si';
+            }else if (escid && data) {
+                if (cssli != 'none') {
+                    $(this).attr('escid', escid);
+                    showCurrentLi = currentLiText.indexOf(data) !== -1;
+                    $(this).toggle(showCurrentLi);
+                }
+                var claseLi = $(this).attr('escid');
+                if (cssli == 'none' && claseLi == escid) {
+                    showCurrentLi = currentLiText.indexOf(data) !== -1;
+                    $(this).toggle(showCurrentLi);
+                }
+            }else if (!escid && data){
+                showCurrentLi = currentLiText.indexOf(data) !== -1;
+                $(this).toggle(showCurrentLi);
+            }else if (!escid && !data){
+                showCurrentLi = currentLiText.indexOf(data) !== -1;
+                $(this).toggle(showCurrentLi);
+                $(this).removeAttr('filtrado');
+                reordenar = 'Si';
+            }
         });
+        if (reordenar == 'Si') {
+            var num   = 1;
+            var i     = 1;
+            var vacio = 0;
+            $("#students li").each(function(){
+                var cssli = $(this).css('display');
+                if (cssli != 'none') {
+                    $('#studentNum'+[i]).html(num);
+                    num++;
+                }else {
+                    vacio++;
+                }
+            })
+            $('#data').removeClass('hidden');
+            $('#emptyData').addClass('hidden');
+            var tam = $('#students li').size();
+            if (tam == 0) {
+                //$('#emptyData').removeClass('hidden');
+            }else if (tam == vacio){
+                $('#emptyData').removeClass('hidden');
+                $('#data').addClass('hidden');
+            }
+            
+            reordenar == 'No';
+        }
     })
 
 </script>
-
-
-<!--<form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/register/registerstudent/liststudent/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
-    <table class="table table-striped">
-        <tr>
-            <td >Escuela:</td>
-            <td >
-                <select class='form-control' id='escid' name='escid' style='height:35px;width:300px'>
-                            <option value="">-Seleccione-</option>
-                            <?php foreach ($this->escuelas as $escuela){   
-                            echo "<option value=".$escuela['escid'].">".$escuela['name']."</option>";
-                    }?>
-                </select>
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td class="span4">Codigo</td>
-            <td>Apellidos y Nombres</td>
-            <td>Estado Matricula</td>
-        </tr>
-        <tr>
-            <td><?php echo $this->fm->uid; ?></td>            
-            <td><?php echo $this->fm->nombre; ?></td>
-            <td>
-            <select  class='form-control' id="estado" name="estadom" style='height:35px;width:150px'>
-                    <option value="<?php echo "I"; ?>"><?php echo "Iniciado"; ?></option>
-                    <option value="<?php echo "M"; ?>"><?php echo "Matriculado"; ?></option>
-                    <option value="<?php echo "O"; ?>"><?php echo "Observado"; ?></option>
-                    <option value="<?php echo "R"; ?>"><?php echo "Reservado"; ?></option>
-            </select>
-            </td>
-        </tr>
-    </table>
-</form>
-<div style="width: 100%" class="flotacarajo"></div>    
-<div style="width: 98%" id="cargadatos_" class="flotacarajo"></div>
-<script>
-    var t = "<?php echo base64_encode("vertodo");?>";
-    $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-    $("#cargadatos_").load("/register/registerstudent/liststudent/ver/"+t);
-    $("#nombre, #uid").keypress(function (e) {        
-        if(e == 13 || e.which==13 || e.which==0){
-            $(".datos2").hide();
-            $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-            $("#frmFiltroDoc").submit();
-        }
-    });
-    
-    $("#frmFiltroDoc").submit(function(){
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            success: function(data) {  
-                $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-                $('#cargadatos_').html(data);    
-                }
-        }); 
-        return false;
-    });
-    
-
-    $("#escid").change(function () {
-        $("#escid option:selected").each(function () {
-            escuela = $(this).val();
-            $(".datos2").hide();
-            $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-            $("#frmFiltroDoc").submit();
-        });
-    });
-
-
-    $("#estado").change(function () {
-        $("#estado option:selected").each(function () {
-            estado = $(this).val();
-            $(".datos2").hide();
-            $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-            $("#frmFiltroDoc").submit();
-        });
-    });
-
-
-</script>-->

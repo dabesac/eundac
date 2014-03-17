@@ -1,37 +1,6 @@
 <?php
-
-$speciality = $this->info_speciality;
-$name_esc = null;
-$name_speciality = null;
-if ($speciality['parent']!= '') {
-	$name_esc = $speciality['speciality'];
-	$name_speciality='ESPECIALIDAD'.$speciality['name'];
-}
-else{
-	$name_esc=$speciality['name'];
-}
-
 $perid=$this->perid;
 $courses = $this->info_couser;
-
-$header = '
-	<table width="100%" style="border: 1px solid #000; font-family: serif;">
-	<tr style="text-align:center; padding-left: 100px; ">
-    	<td  rowspan="2" width="340px" style="border: 1px solid #000 "><img src="/img/header_imprimir.jpg">
-    	</td>
-    	<td style="text-align:center; font-size:10px; border: 1px solid #000 ">
-    		FACULTAD '.strtoupper($speciality['name_faculty']).'<br/>
-    		ESCUELA '.strtoupper($name_esc).'<br/>
-    		'.strtoupper($name_speciality).'<br/>
-    		
-    	</td>
-	</tr>
-	<tr>
-		<td style="text-align:center; font-size:10px; border: 1px solid #000 " > CONTROL DE DOCUMENTOS OFICIALES '.$perid.' </td>
-	</tr>
-</table>
-';
-
 $conntent = '';
 if ($courses) {
 	$i=0;
@@ -60,6 +29,7 @@ if ($courses) {
 }
 
 $html = '
+	<div style="text-align: center; font-size:14px;margin-top:10px"><b> CONTROL DE DOCUMENTOS OFICIALES '.$perid.'</b></div><br/>
 	<table style="font-size:14px; font-family: Courier , monospace; width:100%;" border="1">
 	<tr height="30px">
         <th width="30px" ><center>Nº</center></th>
@@ -101,17 +71,21 @@ $html = '
 //==============================================================
 //==============================================================
 
-$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
-include_once($dir);
-ob_start(); 
+	$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+	include_once($dir);
+	ob_start(); 
 
-$mpdf=new mPDF(); 
-$mpdf=new mPDF('utf-8','A4',0,0,0,0,21,'',''); 
-$mpdf->SetHTMLHeader($header);
-$mpdf->WriteHTML($html);
-$mpdf->Output('Control'.'.pdf','D');
-
-exit();
+	$mpdf=new mPDF();
+	$mpdf=new mPDF('win-1252','A4',0,0,0,0,34,10,0,0); 
+	// $mpdf=new mPDF('utf-8','A4',0,0,0,0,40,'',''); 
+	$mpdf->SetWatermarkImage('/img/undac.png',0.02,'F');
+    $mpdf->showWatermarkImage = true;
+	$mpdf->SetHTMLHeader($this->header);
+	$mpdf->SetHTMLFooter($this->footer);
+	$mpdf->WriteHTML($html);
+	$mpdf->Output('Control de Actas'.'pdf','D');
+	// $mpdf->Output();
+	exit();
 //==============================================================
 //==============================================================
 //==============================================================

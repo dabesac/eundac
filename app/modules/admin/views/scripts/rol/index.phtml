@@ -1,41 +1,84 @@
-<div class="span10 flotacarajo">
-    <table class="table table-hover span9">
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list-alt"></span> Roles');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/admin" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button id="newrol" type="button" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Nuevo Rol</button>');?>
+<div id='carga'>
+    <table class="table table-bordered table-striped table-hover ">
         <tr>
-            <th style="font-size:20px;"><br>
-                ROLES
-                <a style="float:right" rel="tooltip" title='Agregue Nuevo registro' href="/admin/rol/new"  class="btn btn-info"><i class="icon-pencil"></i>Nuevo</a>
-            </th>
+            <th class="span1"><center>#</center></th>
+            <th class="span1"><center>Cod.</center></th>   
+            <th class="span1"><center>Nombre</center></th>        
+            <th class="span1"><center>Estado</center></th>
+            <th class="span1"><center>Modulo</center></th>
+            <th class="span1" colspan="2"><center>Operaciones</center></th>         
         </tr>
+    <?php
+        $r=0;
+        foreach ($this->data as $rol){
+            $r++;
+            $rid=$rol['rid'];
+            $name=$rol['name'];
+            $estado=$rol['state'];
+            $module=$rol['module'];
+            ?>       
+                <tr id="tr_<?php echo $rid.$r?>">
+                    <td ><center><?php echo $r?></center></td>                    
+                    <td ><center><?php echo $rid?></center></td>
+                    <td ><?php echo $name?></td>                
+                    <td ><center><?php echo $estado?></center></td>
+                    <td><?php echo $module?></td>
+                    <td>
+                        <center>
+                        <!-- <a title='Modificar un registro' href='/admin/rol/update/rid/<?php echo base64_encode($rid)?>'><span class="glyphicon glyphicon-pencil"></span></a> -->
+                        <a class='updaterol' href="#" rid='<?php echo base64_encode($rid)?>'><span class="glyphicon glyphicon-pencil"></span></a>
+                        </center>
+                    </td>
+                    <td><center><a title='Eliminar un registro' href='/admin/rol/delete/rid/<?php echo base64_encode($rid)?>' onclick="return confirm('Esta Seguro que desea eliminar el registro?');"><span class="glyphicon glyphicon-trash"></span></a></center></td> 
+                </tr>
+              <?php 
+            }
+    ?>
     </table>
 </div>
-<table class="table table-bordered table-striped table-condensed span10">
-    <tr>
-        <th class="span1"><center>#</center></th>
-        <th class="span1"><center>Cod.</center></th>   
-        <th class="span1"><center>Nombre</center></th>        
-        <th class="span1"><center>Estado</center></th>
-        <th class="span1"><center>Modulo</center></th>
-        <th class="span1" colspan="2"><center>Operaciones</center></th>         
-    </tr>
-<?php
-    $r=0;
-    foreach ($this->data as $rol){
-        $r++;
-        $rid=$rol['rid'];
-        $name=$rol['name'];
-        $estado=$rol['state'];
-        $module=$rol['module'];
-        ?>       
-            <tr id="tr_<?php echo $rid.$r?>">
-                <td ><center><?php echo $r?></center></td>                    
-                <td ><center><?php echo $rid?></center></td>
-                <td ><?php echo $name?></td>                
-                <td ><center><?php echo $estado?></center></td>
-                <td><?php echo base64_decode($module)?></td>
-                <td><a title='Modificar un registro' href='/admin/rol/update/rid/<?php echo base64_encode($rid)?>'><i class="icon-pencil"></i>modificar</a></td>
-                <td><a title='Eliminar un registro' href='/admin/rol/delete/rid/<?php echo base64_encode($rid)?>' onclick="return confirm('Esta Seguro que desea eliminar el registro?');">eliminar</a></td> 
-            </tr>
-          <?php 
-        }
-?>
-</table>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title"><b class='text-info'> <center> NUEVO ROL </center></b></h2>
+            </div>
+            <div class="modal-body">
+                <div id='nuevo_rol'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title"><b class='text-info'> <center> MODIFICAR ROL</center></b></h2>
+            </div>
+            <div class="modal-body">
+                <div id='mo_rol'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#newrol").click(function(){   
+        $('#myModal').modal('show');            
+        var url="/admin/rol/new/";
+        $("#nuevo_rol").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
+        $("#nuevo_rol").load(url);
+    });
+
+    $(".updaterol").click(function(){   
+        $('#myModal1').modal('show');
+        var rid=$(this).attr('rid');          
+        var url1="/admin/rol/update/rid/"+rid;
+        $("#mo_rol").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
+        $("#mo_rol").load(url1);
+    });
+</script>

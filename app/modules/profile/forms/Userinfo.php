@@ -5,6 +5,7 @@ class Profile_Form_Userinfo extends Zend_Form{
         
         $numdoc = new Zend_Form_Element_Text('numdoc');
         $numdoc->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $numdoc->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $numdoc->setAttrib("class","form-control");
         $numdoc->setAttrib("title","Numero de Documento");
         $numdoc->setAttrib("maxlength", "8")->setAttrib("pattern","[0-9]{8}");
@@ -56,16 +57,19 @@ class Profile_Form_Userinfo extends Zend_Form{
 
         $mail_person= new Zend_Form_Element_Text("mail_person");
         $mail_person->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $mail_person->setRequired(true)->addErrorMessage('Ingrese un e-mail correcto');
         $mail_person->setAttrib("maxlength", "50");
         $mail_person->setAttrib("title","Email");
         $mail_person->setAttrib("class","form-control");
+        $mail_person->addValidator('EmailAddress',true);
 
         $mail_work= new Zend_Form_Element_Text("mail_work");
         $mail_work->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
         $mail_work->setAttrib("maxlength", "50")->setAttrib("size", "30");
-        $mail_work->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        // $mail_work->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $mail_work->setAttrib("title","Email Work");
         $mail_work->setAttrib("class","form-control");
+        $mail_work->addValidator('EmailAddress',true);
 
         $phone= new Zend_Form_Element_Text("phone");
         $phone->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
@@ -76,11 +80,45 @@ class Profile_Form_Userinfo extends Zend_Form{
 
         $cellular= new Zend_Form_Element_Text("cellular");
         $cellular->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $cellular->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $cellular->setAttrib("maxlength", "9")->setAttrib("pattern","[0-9]{9}");
         $cellular->setAttrib("title","Celular");
         $cellular->setAttrib("class","form-control");
 
+        $dbcountry=new Api_Model_DbTable_Country();
+        $data=$dbcountry->_getAll();
+
+        $country=new Zend_Form_Element_Select('country');
+        $country->removeDecorator('HtmlTag')->removeDecorator('Label');
+        $country->setRequired(true)->addErrorMessage("Campo Obligatorio");
+        $country->setAttrib("class","form-control");
+        $country->addMultiOption("","- Seleccione -");        
+        foreach ($data as $data) {
+            $country->addMultiOption($data['coid'],$data['name_c']);            
+        }   
+
+        $country_s=new Zend_Form_Element_Select('country_s');
+        $country_s->removeDecorator('HtmlTag')->removeDecorator('Label');
+        $country_s->setRequired(true)->addErrorMessage("Campo Obligatorio");
+        $country_s->setRegisterInArrayValidator(false); 
+        $country_s->setAttrib("class","form-control");
+        $country_s->addMultiOption("","- Seleccione un Pais -");
+
+        $country_p=new Zend_Form_Element_Select('country_p');
+        $country_p->removeDecorator('HtmlTag')->removeDecorator('Label');
+        $country_p->setRequired(true)->addErrorMessage("Campo Obligatorio");
+        $country_p->setRegisterInArrayValidator(false); 
+        $country_p->setAttrib("class","form-control");
+        $country_p->addMultiOption("","- Seleccione un Departamento -");
+
+        $country_d=new Zend_Form_Element_Select('country_d');
+        $country_d->removeDecorator('HtmlTag')->removeDecorator('Label');
+        $country_d->setRequired(true)->addErrorMessage("Campo Obligatorio");
+        $country_d->setRegisterInArrayValidator(false); 
+        $country_d->setAttrib("class","form-control");
+        $country_d->addMultiOption("","- Seleccione una Provincia -");
         
-        $this->addElements(array($numdoc, $typedoc, $year, $month, $day, $sex, $civil, $mail_person, $mail_work, $phone, $cellular));
+        $this->addElements(array($numdoc, $typedoc, $year, $month, $day, $sex, $civil, 
+            $mail_person, $mail_work, $phone, $cellular,$country,$country_s,$country_p,$country_d));
     }
 }

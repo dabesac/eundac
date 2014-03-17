@@ -201,6 +201,7 @@ class Report_RegistrationController extends Zend_Controller_Action
             $header = str_replace("?logo", "blanco", $header);
             $header = str_replace("?codigo", $codigo, $header);
             $header = str_replace("h3", "h2", $header);
+            $header = str_replace("11%", "9%", $header);
             $header = str_replace("ESCUELA DE FORMACIÓN PROFESIONAL DE"," ", $header);
             
             $this->view->header=$header;

@@ -72,6 +72,10 @@
 </div>
 
 <script>
+	$('a').hover(function(){
+    	$(this).tooltip('toggle');
+  	});
+  	
 	$("#newLaboral").click(function(){
     	$('#datastudent').fadeOut('fast', function(){
 			$('#datastudent').load('/profile/public/studentnewlaboral', function(){

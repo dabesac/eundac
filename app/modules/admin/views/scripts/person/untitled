@@ -1,0 +1,71 @@
+ <form class="form-inline" id="frmperson" name="frmperson" action="/admin/person/newperson"method="POST" enctype="application/x-www-fm-urlencode">  
+    <div class="row">
+        <div class='col-md-1'>DNI:</div>
+        <div class='col-md-2'><?php echo $this->fm->pid?></div>
+        <div class='col-md-1'></div>
+        <div class='col-md-1'>Tipo Doc :</div>
+        <div class='col-md-3'><?php echo $this->fm->typedoc?></div>   
+        <div class='col-md-1'>Número de Doc :</div>
+        <div class='col-md-3'><?php echo $this->fm->numdoc?></div> 
+    </div></br></br>  
+    <div class="row">
+        <div class='col-md-1'>Apellido Paterno:</div>
+        <div class='col-md-3'><?php echo $this->fm->last_name0?></div>
+        <div class='col-md-1'>Apellido Materno:</div>
+        <div class='col-md-3'><?php echo $this->fm->last_name1?></div>
+        <div class='col-md-1'>Nombres:</div>
+        <div class='col-md-3'><?php echo $this->fm->first_name?></div>
+    </div></br></br>
+    <div class="row">
+        <div class='col-md-1'>Dirección:</div>
+        <div class='col-md-3'><?php echo $this->fm->address?></div>
+        <div class='col-md-1'>Teléfono:</div>
+        <div class='col-md-3'><?php echo $this->fm->phone?></div>
+        <div class='col-md-1'>Celular:</div>
+        <div class='col-md-3'><?php echo $this->fm->cellular?></div>
+    </div></br></br>
+    <div class="row">
+        <div class='col-md-1'>Fecha de Nacimiento:</div>
+        <div class='col-md-3'><?php echo $this->fm->birthday?></div>
+        <div class='col-md-1'>Estado Civil:</div>
+        <div class='col-md-3'><?php echo $this->fm->civil?></div>
+        <div class='col-md-1'>Sexo:</div>
+        <div class='col-md-3'><?php echo $this->fm->sex?></div>
+    </div></br></br>
+    <div class="row">
+        <div class='col-md-1'>E-mail Personal</div>
+        <div class='col-md-3'><?php echo $this->fm->mail_person?></div>
+        <div class='col-md-1'>E-mail de Trabajo</div>
+        <div class='col-md-3'><?php echo $this->fm->mail_work?></div>
+    </div></br></br>
+</form>
+<script>
+    $(function() {
+        $("#birthday").datepicker();
+        $("#dateaccept").datepicker();
+        $("#sendform").click(function(){
+        $("#frmDistribution").submit();
+    });
+  function validNumber(e) {
+    var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
+    return ((tecla > 47 && tecla < 58) || tecla == 8);
+    } 
+  function soloLetras(e){
+       key = e.keyCode || e.which;
+       tecla = String.fromCharCode(key).toLowerCase();
+       letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+       especiales = [8,37,39,46];
+
+       tecla_especial = false
+       for(var i in especiales){
+            if(key == especiales[i]){
+                tecla_especial = true;
+                break;
+            }
+        }
+
+        if(letras.indexOf(tecla)==-1 && !tecla_especial){
+            return false;
+        }
+    }
+</script>

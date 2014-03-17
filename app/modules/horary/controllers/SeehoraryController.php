@@ -186,12 +186,7 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             $duser = $user->_getInfoUser($wheres);
             $this->view->duser=$duser;
 
-            if ($desc['header']) {
-                $namelogo = $desc['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+            $namelogo = (!empty($desc['header']))?$desc['header']:"blanco";
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
             
@@ -227,6 +222,7 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             $header = str_replace("h2", "h1", $header);
             $header = str_replace("h3", "h2", $header);
             $header = str_replace("h4", "h3", $header);
+            $header = str_replace("11%", "9%", $header);
 
             $this->view->header=$header;
             $this->view->footer=$footer;

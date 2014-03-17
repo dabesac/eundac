@@ -86,7 +86,7 @@ switch ($mes) {
         </tr>
         <tr>
             <td><b>1.<?php echo $num=$num+1 ?> DURACIÓN:</b></td>
-            <td><?php echo "Desde: ".$this->periods['class_start_date']."  "."Hasta: ".$this->periods['class_end_date']?></td>
+            <td><?php echo "Desde: ".$this->date_stard."  "."Hasta: ".$this->date_stard?></td>
         </tr>
         <tr>
             <td><b>1.<?php echo $num=$num+1 ?> DOCENTE:</b></td>
@@ -147,10 +147,10 @@ switch ($mes) {
                     <div>
                         <table style="margin-left:60px; margin-bottom:20px; font-size:12px; width:100%; border: solid 0.50px #000;border-collapse:collapse;">
                             <tr>
-                                <td colspan='4' style="border: solid 0.50px #000; border-collapse: collapse"><b>UNIDAD <?php echo $unidades['unit']?>:</b> <?php echo $unidades['name']?></td>
+                                <td colspan='6' style="border: solid 0.50px #000; border-collapse: collapse"><b>UNIDAD <?php echo $unidades['unit']?>:</b> <?php echo $unidades['name']?></td>
                             </tr>
                             <tr>
-                                <td colspan='4' style="border: solid 0.50px #000; border-collapse: collapse"><b>Objetivo Específico:</b> <?php echo $unidades['objetive']?></td>
+                                <td colspan='6' style="border: solid 0.50px #000; border-collapse: collapse"><b>Objetivo Específico:</b> <?php echo $unidades['objetive']?></td>
                             </tr>
                             <?php if ($contenidos) { ?>
                             <tr>
@@ -158,6 +158,8 @@ switch ($mes) {
                                 <th style="width:30px;text-align: center; border: solid 0.50px #000; border-collapse: collapse">Sesión</th>
                                 <th style="border: solid 0.50px #000; border-collapse: collapse">Contenidos</th>
                                 <th style="border: solid 0.50px #000; border-collapse: collapse">Estrategias</th>
+                                <th style="border: solid 0.50px #000; border-collapse: collapse">Indicadores de Logro</th>
+                                <th style="border: solid 0.50px #000; border-collapse: collapse">Instrumentos</th>
                             </tr>
                             <?php
                             foreach ($contenidos as $uniconte) { ?>
@@ -166,15 +168,17 @@ switch ($mes) {
                                 <td style="text-align: center; border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['session']?></td>
                                 <td style="border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['obj_content']?></td>
                                 <td style="border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['obj_strategy']?></td>
+                                <td style="border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['com_indicators']?></td>
+                                <td style="border: solid 0.50px #000; border-collapse: collapse"><?php echo $uniconte['com_instruments']?></td>
                             </tr>
                             <?php }
                             }?>
                             <tr>
-                                <td colspan='4' style="border: solid 0.50px #000; border-collapse: collapse"><b>Lectura:</b> <?php echo $unidades['reading']?></td>
+                                <td colspan='6' style="border: solid 0.50px #000; border-collapse: collapse"><b>Lectura:</b> <?php echo $unidades['reading']?></td>
                             </tr>
                             <?php if ($unidades['activity']<>"") { ?>
                             <tr>
-                                <td colspan="4" style="border: solid 0.50px #000; border-collapse: collapse"><b>Actividad:</b> <?php echo $unidades['activity']?></td>
+                                <td colspan="6" style="border: solid 0.50px #000; border-collapse: collapse"><b>Actividad:</b> <?php echo $unidades['activity']?></td>
                             </tr> 
                             <?php
                         }?>
@@ -211,7 +215,7 @@ switch ($mes) {
                                 <th style="border: solid 0.50px #000; border-collapse: collapse">Conceptual</th>
                                 <th style="border: solid 0.50px #000; border-collapse: collapse">Procedimental</th>
                                 <th style="border: solid 0.50px #000; border-collapse: collapse">Actitudinal</th>
-                                <th style="border: solid 0.50px #000; border-collapse: collapse">Indicadores de Desempeño</th>
+                                <th style="border: solid 0.50px #000; border-collapse: collapse">Indicadores de Logro</th>
                                 <th style="border: solid 0.50px #000; border-collapse: collapse">Instrumentos de Evaluación</th>
                             </tr>
                             <?php
@@ -284,7 +288,7 @@ switch ($mes) {
     
     $html = ob_get_contents();
   
-    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,8,5);
+    $mpdf=new mPDF('win-1252','A4','','',13,15,40,18,8,5);
 
     $mpdf->SetHTMLHeader($this->header);
     $mpdf->SetHTMLFooter($this->footer,'O');

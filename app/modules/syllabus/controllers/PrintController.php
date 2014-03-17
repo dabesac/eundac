@@ -51,12 +51,7 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $namep=strtoupper($spe['parent']);
             $namefinal=$names." <br> ".$namep;
 
-            if ($speciality['header']) {
-                $namelogo = $speciality['header'];
-            }
-            else{
-                $namelogo = 'blanco';
-            }
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
             $wherecur['eid']=$eid;
             $wherecur['oid']=$oid;
@@ -79,8 +74,22 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $whereperi['eid']=$eid;
             $whereperi['oid']=$oid;
             $whereperi['perid']=$perid;
+
             $bdperiodo = new Api_Model_DbTable_Periods();
             $periods = $bdperiodo->_getOne($whereperi);
+            
+            $date_stard = $periods['class_start_date'];
+            $date_end = $periods['class_end_date'];
+
+            $data_stard = new Zend_Date($date_stard);
+            $date_stard =$data_stard->get(Zend_Date::DATE_LONG);
+            // echo $data_stard->get('dd/mm/yyyy');
+            $data_end = new Zend_Date($date_end);
+            $date_end = $data_end->toString(Zend_Date::DATE_LONG);
+
+            $this->view->date_stard = $date_stard;
+            $this->view->date_end = $date_end;
+
             $this->view->periods=$periods; 
             
             $wheresyl['eid']=$eid;
@@ -151,7 +160,7 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $header = str_replace("h2", "h3", $header);
             $header = str_replace("h3", "h5", $header);
             $header = str_replace("h4", "h6", $header);
-            $header = str_replace("10%", "8%", $header);
+            $header = str_replace("11%", "12%", $header);
 
             $footer = str_replace("h4", "h5", $footer);
             $footer = str_replace("h5", "h6", $footer);

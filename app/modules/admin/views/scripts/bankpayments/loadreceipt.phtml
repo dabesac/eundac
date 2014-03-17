@@ -1,57 +1,52 @@
-<div class="panel panel-primary" style="padding: 2px">
-    <div class="panel-heading" style="padding: 6px">
-        <center><b style="font-size:15px; color: white">NUEVO RECIBO</b></center>
-    </div>
-</div>
 <form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded">
-	<table class="table">
-		<tr>
-			<th class="col-md-2">Número de Operación:</th>
-			<td>
-				<div class="col-md-5"><?php echo $this->form->operation?></div>
-			</td>
-			<th class="col-md-2">Fecha de Pago:</th>
-			<td class="col-md-2"><?php echo $this->form->payment_date?></td>
-		</tr>
-		<tr>
-			<th>Código de Matricula:</th>
-			<td>
+<div class="col-md-10 col-md-offset-1">	
+	<div class="panel panel-primary">
+	    <div class="panel-heading">
+	        <center><b>NUEVO RECIBO</b></center>
+	    </div>
+	    <div class="panel-body">
+			<div class="col-md-10">
+				<div class="col-md-3 text-right"><b>Número de Operación :</b></div>
+				<div class="col-md-3"><?php echo $this->form->operation?></div>
+				<div class="col-md-3 text-right"><b>Fecha Pago:</b></div>
+				<div class="col-md-3"><?php echo $this->form->payment_date?></div>
+			</div><br><br><br>
+			<div class="col-md-10">
+				<div class="col-md-3 text-right"><b>Código de Matricula :</b></div>
+				<div class="col-md-3"><?php echo $this->form->code_student?></div>
+				<div class="col-md-3 text-right"><b>Monto:</b></div>
+				<div class="col-md-3"><?php echo $this->form->amount?></div>
+			</div><br><br><br>
+			<div class="col-md-10">
+				<div class="col-md-3 text-right"><b>Apellidos y Nombres :</b></div>
 				<div class="col-md-5"><?php echo $this->form->code_student?></div>
-			</td>
-			<th>Monto:</th>
-			<td><?php echo $this->form->amount?></td>
-		</tr>
-		<tr>
-			<th>Apellidos y Nombres:</th>
-			<td>
-				<div class="col-md-10"><?php echo $this->form->info_person?></div>
-			</td>
-			<th>Concepto:</th>
-			<td><?php echo $this->form->concept?></td>
-		</tr>
-		<tr>
-			<th>Periodo:</th>
-			<td colspan="3">
-				<div class="col-md-6"><?php echo $this->form->perid?></div>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<center>
-					<?php echo $this->form->save?>
-				</center>
-			</td>
-			<td colspan="2">
-				<center>
-					<br><a href="/admin/bankpayments/" class="btn btn-danger">Cancelar</a>
-				</center>
-			</td>
-		</tr>
-	</table>
+				<div class="col-md-2"><b>Concepto:</b></div>
+				<div class="col-md-2"><?php echo $this->form->amount?></div>
+			</div><br><br><br>
+			<div class="col-md-10">
+				<div class="col-md-3 text-right"><b>Año:</b></div>
+				<div class="col-md-3"><?php echo $this->form->anios?></div>
+				<div class="col-md-3 text-right"><b>Periodo:</b></div>
+				<div class="col-md-3"><?php echo $this->form->perid?></div>
+			</div><br><br><br>
+			<div class="col-md-10">
+				<div class="col-md-8"><center><?php echo $this->form->save?></center></div>
+				<div><center><br><a href="/admin/bankpayments/" class="btn btn-danger">Cancelar</a></center></div>
+			</div><br><br><br>
+		</div>	
+	</div>
+</div>	
 </form>
 
 <script type="text/javascript">
 $("#payment_date").datepicker();
+
+$("#anios").change(function(){
+	var anio=$(this).val();
+	var url=("/admin/bankpayments/listperiod/anio/"+anio);
+	$("#perid").load(url);
+
+});
 
 function soloNumero(e){
     key = e.keyCode || e.which;

@@ -891,13 +891,7 @@ class Register_StudentController extends Zend_Controller_Action {
                 $namep=strtoupper($spe['parent']);
                 $namefinal=$names." <br> ".$namep;
 
-                if ($speciality['header']) {
-                    $namelogo = $speciality['header'];
-                }
-                else{
-                    $namelogo = 'blanco';
-                }
-                $this->view->namelogo=$namelogo;
+                $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
                 
                 $where = array(
                     'eid'=>$eid,'oid'=>$oid,

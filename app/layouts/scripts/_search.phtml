@@ -5,23 +5,38 @@
     $sesion = $auth->getStorage()->read();
     $rol = $sesion->rol['rid']; ?>
  <?php if ($rol != 'AL' && $rol !='DC'){ ?>
- <div class="col-lg-6 pull-right">
-    <div class="input-group">
-    	<div class="input-group-btn">
-	        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Usuario <span class="caret"></span></button>
-	        <ul class="dropdown-menu">
-	          <li><a href="#">Action</a></li>
-	          <li><a href="#">Another action</a></li>
-	          <li><a href="#">Something else here</a></li>
-	          <li class="divider"></li>
-	          <li><a href="#">Separated link</a></li>
-	        </ul>
-	      </div><!-- /btn-group -->
-      	<input type="text" class="form-control">
-      	<span class="input-group-btn">
-        	<button class="btn btn-warning" type="button"><span class='glyphicon glyphicon-search'></span></button>
-      	</span>
-    </div><!-- /input-group -->
+ <div class="col-lg-7 pull-right">
+    <form action="/profile/search" method='post'>
+      <table >
+        <th>
+         <select name='rid' class="btn btn-default dropdown-toggle">
+              <option value='AL'>Alumno</option>
+              <option value='DC'>Docente</option>
+              <option value='EG'>Egresados</option>
+         </select>
+        </th>
+        <th><input type="text" class="form-control" name='uid'style="width : 150px;"></th>
+        <th><button class="btn btn-warning" type="submit" name='enviar'><span class='glyphicon glyphicon-search'></span></button></th>
+      
+      </table>
+
+
+      <!--<div class="input-group-btn">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Usuario <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="#">Alumno</a></li>
+            <li><a href="#">Docente</a></li>
+            <li><a href="#">Egresado</a></li>
+          </ul>
+        </div>
+        <input type="text" class="form-control">
+        <span class="input-group-btn">
+          <button class="btn btn-warning" type="button"><span class='glyphicon glyphicon-search'></span></button>
+        </span> -->
+
+
+      </div><!-- /input-group -->
+    </form>
 </div><!-- /.col-lg-6 -->
 <?php }?>
 

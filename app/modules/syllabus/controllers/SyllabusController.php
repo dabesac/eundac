@@ -24,6 +24,23 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $where['turno']=base64_decode($this->_getParam('turno'));
             $where['subid']=base64_decode($this->_getParam('subid'));
             $where['perid']=base64_decode($this->_getParam('perid'));
+
+            $tb_period = new Api_Model_DbTable_Periods();
+            $data_period =$tb_period->_getOne($where);
+
+            $date_stard = $data_period['class_start_date'];
+            $date_end = $data_period['class_end_date'];
+
+            $data_stard = new Zend_Date($date_stard);
+            $date_stard =$data_stard->get(Zend_Date::DATE_LONG);
+            // echo $data_stard->get('dd/mm/yyyy');
+            $data_end = new Zend_Date($date_end);
+            $date_end = $data_end->toString(Zend_Date::DATE_LONG);
+
+            $this->view->date_stard = $date_stard;
+            $this->view->date_end = $date_end;
+
+
             $this->view->where=$where;
             $syl= new Api_Model_DbTable_Syllabus();
             $datsyl=$syl->_getOne($where);
@@ -114,6 +131,13 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $persona=$per->_getOne($whereper);
             $this->view->persona=$persona;
 
+            $percur= new Api_Model_DbTable_PeriodsCourses();
+            $periodocurso= $percur->_getOne($wheredoc);
+            $this->view->periodocurso=$periodocurso;
+
+
+
+
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -180,6 +204,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $wherepercur['subid']=$where['subid'];
             $wherepercur['curid']=$where['curid'];
             $wherepercur['turno']=$where['turno'];
+
             $percur= new Api_Model_DbTable_PeriodsCourses();
             $periodocurso= $percur->_getOne($wherepercur);
             $this->view->periodocurso=$periodocurso;
@@ -337,307 +362,283 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
         }
     }
     public function unitsAction(){
-        try {
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
             $this->_helper->layout()->disableLayout();
-            $pk['eid'] = $this->sesion->eid;
-            $pk['oid'] = $this->sesion->oid;
-            $pk['subid'] = base64_decode($this->_getParam("subid"));
-            $pk['perid'] = base64_decode($this->_getParam("perid"));
-            $pk['curid'] = base64_decode($this->_getParam("curid"));
-            $pk['escid'] = base64_decode($this->_getParam("escid"));
-            $pk['courseid'] = base64_decode($this->_getParam("courseid"));
-            $pk['turno'] = base64_decode($this->_getParam("turno"));
-            $tipo_cali = base64_decode($this->_getParam("tipo_cali"));
-            $formData['units'] = $this->_getParam("units");
-    
-            $numunidad = $this->_getParam("numunidad");
-            $this->view->turno=$pk['turno'];
-            $this->view->perid=$pk['perid'];
-            $this->view->courseid=$pk['courseid'];
-            $this->view->curid=$pk['curid'];
-            $this->view->escid=$pk['escid'];
-            $this->view->subid=$pk['subid'];
-            $this->view->tipo_cali=$tipo_cali;
-            $this->view->units=$formData['units'];
-            $this->view->numunidad=$numunidad;
-
-            $syllabus= new Api_Model_DbTable_Syllabus();
-            $syllabus->_update($formData,$pk);
-
-            $whereunit['eid']=$pk['eid'];
-            $whereunit['oid']=$pk['oid'];
-            $whereunit['perid']=$pk['perid'];
-            $whereunit['escid']=$pk['escid'];
-            $whereunit['subid']=$pk['subid'];
-            $whereunit['courseid']=$pk['courseid'];
-            $whereunit['curid']=$pk['curid'];
-            $whereunit['turno']=$pk['turno'];
-            $whereunit['unit']=$numunidad;
-            $syllunits= new Api_Model_DbTable_Syllabusunits();
-            $datuni=$syllunits->_getOne($whereunit);
-
-            $whereunitcont['eid']=$pk['eid'];
-            $whereunitcont['oid']=$pk['oid'];
-            $whereunitcont['perid']=$pk['perid'];
-            $whereunitcont['escid']=$pk['escid'];
-            $whereunitcont['subid']=$pk['subid'];
-            $whereunitcont['courseid']=$pk['courseid'];
-            $whereunitcont['curid']=$pk['curid'];
-            $whereunitcont['turno']=$pk['turno'];
-            $whereunitcont['unit']=$numunidad;
-            $syllunitscont= new Api_Model_DbTable_Syllabusunitcontent();
-            $cont=$syllunitscont->_getAllXUnit($whereunitcont);
-            $this->view->conte=$cont;
-
             $form= new Syllabus_Form_Syllabusunits();
-            if ($tipo_cali=="O") $form->reading->setRequired(true)->addErrorMessage('Rellene lectura.');
-            elseif ($tipo_cali=="C") $form->activity->setRequired(true)->addErrorMessage('Rellene actividad.');
-            $band=0;
-            $act=0;
+            $tb_units = new Api_Model_DbTable_Syllabusunits();
+            $tb_syllabus = new Api_Model_DbTable_Syllabus();
 
-            if ($this->getRequest()->isPost())
-            {
-                $frmdata=$this->getRequest()->getPost();
-                if ($form->isValid($frmdata))
-                { 
-                    if ($datuni) {
-                        unset($frmdata['guardar']);
-                        trim($frmdata['name']);
-                        trim($frmdata['objetive']);
-                        trim($frmdata['reading']);
-                        trim($frmdata['activity']);
-                        // Creamos nuevo array para comparar con el original.
-                        $data=array();
-                        $data=$frmdata;
-                        $data['eid']=$pk['eid'];
-                        $data['oid']=$pk['oid'];
-                        $data['perid']=$pk['perid'];
-                        $data['curid']=$pk['curid'];
-                        $data['escid']=$pk['escid'];
-                        $data['courseid']=$pk['courseid'];
-                        $data['subid']=$pk['subid'];
-                        $data['turno']=$pk['turno'];
-                        $data['unit']=$numunidad;
-                        $result = array_diff($data,$datuni);
-                        if ($result) {
-                            $pkunit=array();
-                            $pkunit['eid']=$pk['eid'];
-                            $pkunit['oid']=$pk['oid'];
-                            $pkunit['perid']=$pk['perid'];
-                            $pkunit['curid']=$pk['curid'];
-                            $pkunit['escid']=$pk['escid'];
-                            $pkunit['courseid']=$pk['courseid'];
-                            $pkunit['subid']=$pk['subid'];
-                            $pkunit['turno']=$pk['turno'];
-                            $pkunit['unit']=$numunidad;
-                            if ($syllunits->_update($frmdata,$pkunit)) $act=1;
+            if ($this->getRequest()->isPost()) {
+                    $data_form = $this->getRequest()->getPost();
+                    $subid=base64_decode($data_form['subid']);
+                    $escid=base64_decode($data_form['escid']);
+                    $curid=base64_decode($data_form['curid']);
+                    $courseid=base64_decode($data_form['courseid']);
+                    $turno=base64_decode($data_form['turno']);
+                    $perid=base64_decode($data_form['perid']);
+                    $unit=base64_decode($data_form['unit']);
+                    $type_rate=base64_decode($data_form['type_rate']);
+                    $params= array(
+                            'eid'=>$eid,
+                            'oid'=>$oid,
+                            'subid'=>$subid,
+                            'escid'=>$escid,
+                            'curid'=>$curid,
+                            'courseid'=>$courseid,
+                            'turno'=>$turno,
+                            'perid'=>$perid,
+                            'unit'=>$unit,
+                            );
+                    if ($form->isValid($data_form)) {
+                        
+                        $data_unit = $tb_units->_getOne($params);
+                        if (!$data_unit) {
+                            $params['name']=$data_form['name'];
+                            $params['objetive']=$data_form['objetive'];
+                            $params['activity']=$data_form['activity'];
+                            $params['reading']=$data_form['reading'];
+                            if ($tb_units->_save($params)) {
+                                $json = array(
+                                    'status'=>true
+                                );
+                            }
+                        }else{
+                            $data['name']=$data_form['name'];
+                            $data['objetive']=$data_form['objetive'];
+                            $data['activity']=$data_form['activity'];
+                            $data['reading']=$data_form['reading'];
+                            try {
+                                if ($tb_units->_update($data,$params)) {
+                                    $json = array(
+                                        'status'=>true
+                                    );
+                                }
+                            } catch (Exception $e) {
+                                $json = array('status'=>false);
+                            }
                         }
-                        else $band=1;
+                        $this->_response->setHeader('Content-Type', 'application/json');
+                        $this->view->json= Zend_Json::encode($json);                
                     }else{
-                        unset($frmdata['guardar']);
-                        trim($frmdata['name']);
-                        trim($frmdata['objetive']);
-                        trim($frmdata['reading']);
-                        trim($frmdata['activity']);
-                        $frmdata['eid']=$pk['eid'];
-                        $frmdata['oid']=$pk['oid'];
-                        $frmdata['perid']=$pk['perid'];
-                        $frmdata['curid']=$pk['curid'];
-                        $frmdata['escid']=$pk['escid'];
-                        $frmdata['courseid']=$pk['courseid'];
-                        $frmdata['subid']=$pk['subid'];
-                        $frmdata['turno']=$pk['turno'];
-                        $frmdata['unit']=$numunidad;
-                        $syllunits->_save($frmdata);
-                        if ($syllunits) $band=1;
+                        $params['type_rate']=$type_rate;
+                        $form->populate($data_form);
+                        $data_syllabus = $tb_syllabus->_getOne($params);
+                        $this->view->data_syllabus=$data_syllabus;
+                        $this->view->params = $params;
+                        $this->view->form=$form;
                     }
+            }else{
+                $params = $this->getRequest()->getParams();
+                $paramsdecode = array();
+                foreach ( $params as $key => $value ){
+                    if($key!="module" && $key!="controller" && $key!="action"){
+                        $paramsdecode[base64_decode($key)] = base64_decode($value);
+                    }
+                }
 
+                $params = $paramsdecode;
+                $subid= trim($params['subid']);
+                $escid= trim($params['escid']);
+                $curid = trim($params['curid']);
+                $courseid= trim($params['courseid']);
+                $turno= trim($params['turno']);
+                $perid = trim($params['perid']);
+                $unit= trim($params['unit']);
+                $type_rate = trim($params['type_rate']);
+                $data = array(
+                        'eid'=>$eid,
+                        'oid'=>$oid,
+                        'subid'=>$subid,
+                        'escid'=>$escid,
+                        'curid'=>$curid,
+                        'courseid'=>$courseid,
+                        'turno'=>$turno,
+                        'perid'=>$perid,
+                        'unit'=>$unit,
+                    );
+                $data_syllabus = $tb_syllabus->_getOne($data);
+                $data_unit = $tb_units->_getOne($data);
+                $status = false;
+                if ($data_unit) {
+                    $form->populate($data_unit);
+                    $status = true;
                 }
-                else echo "Ingrese nuevamente por favor";
+                $this->view->status=$status;
+                $this->view->data_syllabus=$data_syllabus;
+                $this->view->params = $params;
+                $this->view->form=$form;
             }
-            if ($datuni || $act==1) {
-                $datuni=$syllunits->_getOne($whereunit);
-                $form->populate($datuni);
-            }
-            if ($band==1) {
-                if ($numunidad<$formData['units']) {
-                    $numunidad=$numunidad+1;
-                    $url= "perid/".base64_encode($pk['perid'])."/subid/".base64_encode($pk['subid'])."/escid/".base64_encode($pk['escid'])."/curid/".base64_encode($pk['curid'])."/courseid/".base64_encode($pk['courseid'])."/turno/".base64_encode($pk['turno'])."/tipo_cali/".base64_encode($tipo_cali)."/units/".$formData['units']."/numunidad/".$numunidad;
-                    $this->_redirect("/syllabus/syllabus/units/".$url);
-                }
-            }
-            $this->view->form=$form;
-        } catch (Exception $e) {
-            print "Error: ".$e->getMessage();
-        }
+
     }
     public function contentAction(){
-            $this->_helper->layout()->disableLayout();
-            $pk['eid'] = $this->sesion->eid;
-            $pk['oid'] = $this->sesion->oid;
-            $pk['subid'] = base64_decode($this->_getParam("subid"));
-            $pk['perid'] = base64_decode($this->_getParam("perid"));
-            $pk['curid'] = base64_decode($this->_getParam("curid"));
-            $pk['escid'] = base64_decode($this->_getParam("escid"));
-            $pk['courseid'] = base64_decode($this->_getParam("courseid"));
-            $pk['turno'] = base64_decode($this->_getParam("turno"));
-            $tipo_cali = base64_decode($this->_getParam("tipo_cali"));
-            $units = $this->_getParam("units");
-            $numunidad = $this->_getParam("numunidad");
-            $this->view->turno=$pk['turno'];
-            $this->view->perid=$pk['perid'];
-            $this->view->courseid=$pk['courseid'];
-            $this->view->curid=$pk['curid'];
-            $this->view->escid=$pk['escid'];
-            $this->view->subid=$pk['subid'];
-            $this->view->tipo_cali=$tipo_cali;
-            $this->view->units=$units;
-            $this->view->numunidad=$numunidad;
-
-            $form= new Syllabus_Form_Syllabusunitcontent();
-            $this->view->form=$form;
-
-            if ($this->getRequest()->isPost())
-            {
-                $frmdata=$this->getRequest()->getPost();
-                if ($form->isValid($frmdata))
-                { 
-                    trim($frmdata['week']);
-                    trim($frmdata['session']);
-                    trim($frmdata['obj_content']);
-                    trim($frmdata['obj_strategy']);
-                    trim($frmdata['com_conceptual']);
-                    trim($frmdata['com_procedimental']);
-                    trim($frmdata['com_actitudinal']);
-                    trim($frmdata['com_indicators']);
-                    trim($frmdata['com_instruments']);
-                    $frmdata['eid']=$this->sesion->eid;
-                    $frmdata['oid']=$this->sesion->oid;
-                    // print_r($frmdata);
-
-                    $where = array(
-                        'eid' => $frmdata['eid'], 'oid' => $frmdata['oid'], 'subid' => $frmdata['subid'],
-                        'perid' => $frmdata['perid'], 'escid' => $frmdata['escid'], 'curid' => $frmdata['curid'],
-                        'courseid' => $frmdata['courseid'], 'turno' => $frmdata['turno'], 'session' => $frmdata['session']);
-                    $sylconte = new Api_Model_DbTable_Syllabusunitcontent();
-                    $data_exis = $sylconte->_getFilter($where,$attrib=null,$orders=null);
-                    if ($data_exis) {
-                        $this->view->exis = 1;
-                    }else{
-                        $sylconte->_save($frmdata);
-                        $this->view->save_success = 1;
-                    }
-                }
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $form= new Syllabus_Form_Syllabusunitcontent();
+        $this->view->form=$form;
+        $params = $this->getRequest()->getParams();
+        $paramsdecode = array();
+        foreach ( $params as $key => $value ){
+            if($key!="module" && $key!="controller" && $key!="action"){
+                $paramsdecode[base64_decode($key)] = base64_decode($value);
             }
-        try {
-            $this->_helper->layout()->disableLayout();
-        } catch (Exception $e) {
-            print "Error: ".$e->getMessage();
         }
+
+        $params = $paramsdecode;
+        $subid= trim($params['subid']);
+        $escid= trim($params['escid']);
+        $curid = trim($params['curid']);
+        $courseid= trim($params['courseid']);
+        $turno= trim($params['turno']);
+        $perid = trim($params['perid']);
+        $unit= trim($params['unit']);
+        $type_rate = trim($params['type_rate']);
+        $data = array(
+                        'eid'=>$eid,
+                        'oid'=>$oid,
+                        'subid'=>$subid,
+                        'escid'=>$escid,
+                        'curid'=>$curid,
+                        'courseid'=>$courseid,
+                        'turno'=>$turno,
+                        'perid'=>$perid,
+                        'unit'=>$unit,
+                    );
+        $this->view->params=$params;
+        $tb_units_content = new Api_Model_DbTable_Syllabusunitcontent();
+        $data_content = $tb_units_content->_getAllXUnit($data);
+        $this->view->data_content=$data_content;
+        $this->_helper->layout()->disableLayout();
+        
     }
+    public function addcontentAction(){
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $this->_helper->layout()->disableLayout();
+        if ($this->getRequest()->isPost()) {
+            $data= $this->getRequest()->getPost();
+            $subid=base64_decode($data['subid']);
+            $escid=base64_decode($data['escid']);
+            $curid=base64_decode($data['curid']);
+            $courseid=base64_decode($data['courseid']);
+            $turno=base64_decode($data['turno']);
+            $perid=base64_decode($data['perid']);
+            $unit=base64_decode($data['unit']);
+            $type_rate=base64_decode($data['type_rate']);
 
-    public function modifycontentAction(){
-        try {
-            $this->_helper->layout()->disableLayout();
-            $where['eid'] = $this->sesion->eid;
-            $where['oid'] = $this->sesion->oid;
-            $where['subid'] = base64_decode($this->_getParam("subid"));
-            $where['perid'] = base64_decode($this->_getParam("perid"));
-            $where['curid'] = base64_decode($this->_getParam("curid"));
-            $where['escid'] = base64_decode($this->_getParam("escid"));
-            $where['courseid'] = base64_decode($this->_getParam("courseid"));
-            $where['turno'] = base64_decode($this->_getParam("turno"));
-            $where['unit'] = $this->_getParam("numunidad");
-            $where['session'] = $this->_getParam("session");
-            $tipo_cali = base64_decode($this->_getParam("tipo_cali"));
-            $this->view->turno=$where['turno'];
-            $this->view->perid=$where['perid'];
-            $this->view->courseid=$where['courseid'];
-            $this->view->curid=$where['curid'];
-            $this->view->escid=$where['escid'];
-            $this->view->subid=$where['subid'];
-            $this->view->tipo_cali=$tipo_cali;
-            $this->view->numunidad=$where['unit'];
-            $this->view->session=$where['session'];
+            $params= array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'subid'=>$subid,
+                'escid'=>$escid,
+                'curid'=>$curid,
+                'courseid'=>$courseid,
+                'turno'=>$turno,
+                'perid'=>$perid,
+                'unit'=>$unit,
+                'week'=>$data['week'],
+                'session'=>$data['session']
+                );
 
-            $conten= new Api_Model_DbTable_Syllabusunitcontent();
-            $datacont=$conten->_getOne($where);
-
-            $form= new Syllabus_Form_Syllabusunitcontent();
-
-            if ($this->getRequest()->isPost())
-            {
-                $frmdata=$this->getRequest()->getPost();
-                if ($form->isValid($frmdata))
-                { 
-                    trim($frmdata['week']);
-                    trim($frmdata['session']);
-                    trim($frmdata['obj_content']);
-                    trim($frmdata['obj_strategy']);
-                    trim($frmdata['com_conceptual']);
-                    trim($frmdata['com_procedimental']);
-                    trim($frmdata['com_actitudinal']);
-                    trim($frmdata['com_indicators']);
-                    trim($frmdata['com_instruments']);
-                    $pk['eid'] = $this->sesion->eid;
-                    $pk['oid'] = $this->sesion->oid;
-                    $pk['perid']=$frmdata['perid'];
-                    $pk['curid']=$frmdata['curid'];
-                    $pk['escid']=$frmdata['escid'];
-                    $pk['courseid']=$frmdata['courseid'];
-                    $pk['subid']=$frmdata['subid'];
-                    $pk['turno']=$frmdata['turno'];
-                    $pk['unit']=$frmdata['unit'];
-                    $pk['session']=$frmdata['session'];
-                    $sylconte = new Api_Model_DbTable_Syllabusunitcontent();
-                    // print_r($frmdata);
-                    if ($sylconte->_update($frmdata,$pk)) {
-                        $this->view->success = 1;
-                    }
-                }
+            if ($type_rate == 'O') {
+                $params['obj_content'] = $data['obj_content'];
+                $params['obj_strategy'] = $data['obj_strategy'];
+                $params['com_indicators'] = $data['com_indicators'];
+                $params['com_instruments'] = $data['com_instruments'];
+            }elseif ($type_rate == 'C') {
+                $params['com_conceptual'] = $data['com_conceptual'];
+                $params['com_procedimental'] = $data['com_procedimental'];
+                $params['com_actitudinal'] = $data['com_actitudinal'];
+                $params['com_indicators'] = $data['com_indicators'];
+                $params['com_instruments'] = $data['com_instruments'];
             }
-            $form->populate($datacont);
-            $this->view->form=$form;
-        } catch (Exception $e) {
-            print "Error: ".$e->getMessage();
+            try {
+                $tb_units_content = new Api_Model_DbTable_Syllabusunitcontent();
+                if ($tb_units_content->_save($params)) {
+                        $json = array('status' => true, );
+                    }
+            } catch (Exception $e) {
+                $json = array('status' => false, );
+            }
         }
+
+        $this->_response->setHeader('Content-Type', 'application/json');
+        $this->view->json = Zend_Json::encode($json);
+    }
+    public function modifycontentAction(){
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $this->_helper->layout()->disableLayout();
+        if ($this->getRequest()->isPost()) {
+                $data_form = $this->getRequest()->getPost();
+                $type_rate = trim($data_form['type_rate']);
+                $pk = array(
+                        'eid'=>$eid,
+                        'oid'=>$oid,
+                        'subid'=>trim($data_form ['subid']),
+                        'escid'=>trim($data_form ['escid']),
+                        'curid'=>trim($data_form ['curid']),
+                        'courseid'=>trim($data_form ['courseid']),
+                        'turno'=>trim($data_form ['turno']),
+                        'perid'=>trim($data_form ['perid']),
+                        'unit'=>trim($data_form ['unit']),
+                        'week'=>$data_form['week'],
+                        'session'=>$data_form['session']
+                    );
+
+                 if ($type_rate == 'O') {
+                    $data['obj_content'] = $data_form['obj_content'];
+                    $data['obj_strategy'] = $data_form['obj_strategy'];
+                    $data['com_indicators'] = $data_form['com_indicators'];
+                    $data['com_instruments'] = $data_form['com_instruments'];
+                }elseif ($type_rate == 'C') {
+                    $data['com_conceptual'] = $data_form['com_conceptual'];
+                    $data['com_procedimental'] = $data_form['com_procedimental'];
+                    $data['com_actitudinal'] = $data_form['com_actitudinal'];
+                    $data['com_indicators'] = $data_form['com_indicators'];
+                    $data['com_instruments'] = $data_form['com_instruments'];
+                }
+                
+                try {
+                    $tb_units_content = new Api_Model_DbTable_Syllabusunitcontent();
+                    if ($tb_units_content->_update($data,$pk)) {
+                        $json = array('status'=>true);
+                    }
+                } catch (Exception $e) {
+                    $json = array('status'=>false,);
+                }
+            } 
+         $this->_response->setHeader('Content-Type', 'application/json');
+        $this->view->json = Zend_Json::encode($json);
     }
 
     public function deletecontentAction(){
-        try {
+       
             $this->_helper->layout()->disableLayout();
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
-            $subid = base64_decode($this->_getParam("subid"));
-            $perid = base64_decode($this->_getParam("perid"));
-            $curid = base64_decode($this->_getParam("curid"));
-            $escid = base64_decode($this->_getParam("escid"));
-            $courseid = base64_decode($this->_getParam("courseid"));
-            $turno = base64_decode($this->_getParam("turno"));
-            $tipo_cali = base64_decode($this->_getParam("tipo_cali"));
-            $units = $this->_getParam("units");
-            $numunidad = $this->_getParam("numunidad");
-            $session = $this->_getParam("session");
-            $data=array();
-            $data['eid']=$eid;
-            $data['oid']=$oid;
-            $data['subid']=$subid;
-            $data['perid']=$perid;
-            $data['escid']=$escid;
-            $data['curid']=$curid;
-            $data['courseid']=$courseid;
-            $data['turno']=$turno;
-            $data['unit']=$numunidad;
-            $data['session']=$session;
-            $elim = new Api_Model_DbTable_Syllabusunitcontent();
-            $elim->_delete($data);
-            if ($elim) { 
-                $url="perid/".base64_encode($perid)."/subid/".base64_encode($subid)."/escid/".base64_encode($escid)."/curid/".base64_encode($curid)."/courseid/".base64_encode($courseid)."/turno/".base64_encode($turno)."/tipo_cali/".base64_encode($tipo_cali)."/units/".$units."/numunidad/".$numunidad;
-                $this->_redirect("/syllabus/syllabus/units/".$url);
+            $params = $this->getRequest()->getParams();
+            $paramsdecode = array();
+            foreach ( $params as $key => $value ){
+                if($key!="module" && $key!="controller" && $key!="action"){
+                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+                }
             }
-        } catch (Exception $e) {
-            print "Error: ".$e->getMessage();
-        }
+            $params = $paramsdecode;
+            $params['eid']=$eid;
+            $params['oid']=$oid;
+            try {
+                $tb_units_content = new Api_Model_DbTable_Syllabusunitcontent();
+                if ($tb_units_content->_delete($params)) {
+                    $json = array('status'=>true);
+                }
+            } catch (Exception $e) {
+                    $json = array('status'=>false);
+                
+            }
+            $this->_response->setHeader('Content-Type','application/json');
+            $this->view->json = Zend_Json::encode($json);
+
     }
 
     public function viewAction(){
@@ -718,6 +719,160 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                 'escid'=>$wheresyl['escid'],'subid'=>$wheresyl['subid'],'courseid'=>$wheresyl['courseid']);
             $syl_sumg=new Api_Model_DbTable_Course();
             $this->view->sumgral=$syl_sumg->_getOne($buscar);
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+    public function savedefaultAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $subid = base64_decode($this->_getParam("subid"));
+            $perid = base64_decode($this->_getParam("perid"));
+            $curid = base64_decode($this->_getParam("curid"));
+            $escid = base64_decode($this->_getParam("escid"));
+            $courseid = base64_decode($this->_getParam("courseid"));
+            $turno = base64_decode($this->_getParam("turno"));
+            $tipo_cali = base64_decode($this->_getParam("tipo_cali"));
+            $unit = base64_decode($this->_getParam("unit"));
+
+            $bdconsult = new Api_Model_DbTable_Syllabusunitcontent();
+            $where1=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'subid'=>$subid,'curid'=>$curid,'escid'=>$escid,
+                          'courseid'=>$courseid,'turno'=>$turno);
+            $where2=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'subid'=>$subid,'curid'=>$curid,'escid'=>$escid,
+                          'courseid'=>$courseid,'turno'=>$turno);
+
+            if ($tipo_cali=="O") {
+
+            $unit2=2;
+            $unit4=4;
+            $name1 = "EXAMEN PRIMER PARCIAL";
+            $name2 = "EXAMEN SEGUNDO PARCIAL";
+            $name3 = "EXAMEN DE APLAZADOS";
+
+            $week1 = 8;
+            $week2 = 16;
+            $week3 = 17;
+
+                $where1['unit']=$unit2;
+                $where2['unit']=$unit2;
+                $where1['session']=15;
+                $where2['session']=16;
+                $data1=$bdconsult->_getOne($where1);
+                $data2=$bdconsult->_getOne($where2);
+                    if($data1=="") {
+                        $where1['week']=$week1;
+                        $where1['obj_content']=$name1;
+                        $bdconsult->_save($where1);
+                    }
+                    if($data2=="") {
+                        $where2['week']=$week1;
+                        $where2['obj_content']=$name1;
+                        $bdconsult->_save($where2);
+                    }
+                $where1['unit']=$unit4;
+                $where2['unit']=$unit4;
+                $where1['session']=31;
+                $where2['session']=32;
+                $data3=$bdconsult->_getOne($where1);
+                $data4=$bdconsult->_getOne($where2);
+                    if($data3=="") {
+                        $where1['week']=$week2;
+                        $where1['obj_content']=$name2;
+                        $bdconsult->_save($where1);
+                    }
+                    if($data4=="") {
+                        $where2['week']=$week2;
+                        $where2['obj_content']=$name2;
+                        $bdconsult->_save($where2);
+                    }
+                $where1['unit']=$unit4;
+                $where2['unit']=$unit4;
+                $where1['session']=33;
+                $where2['session']=34;
+                $data5=$bdconsult->_getOne($where1);
+                $data6=$bdconsult->_getOne($where2);
+                    if($data5=="") {
+                        $where1['week']=$week3;
+                        $where1['obj_content']=$name3;
+                        $bdconsult->_save($where1);
+                    }
+                    if($data6=="") {
+                        $where2['week']=$week3;
+                        $where2['obj_content']=$name3;
+                        $bdconsult->_save($where2);
+                    }             
+            }
+            if ($tipo_cali=="C") {
+                $unit1=1;
+                $unit2=2;
+                $unit3=3;
+                $unit4=4;
+
+                $name1 = "I EVALUACIÓN";
+                $name2 = "II EVALUACIÓN";
+                $name3 = "III EVALUACIÓN";
+                $name4 = "IV EVALUACIÓN";
+                $name5 = "EXAMEN DE APLAZADOS";
+
+                $week1 = 4;
+                $week2 = 8;
+                $week3 = 12;
+                $week4 = 16;
+                $week5 = 17;
+
+
+                $where1['unit']=$unit1;
+                $where2['unit']=$unit2;
+                $where1['session']=4;
+                $where2['session']=8;
+                $data1=$bdconsult->_getOne($where1);
+                $data2=$bdconsult->_getOne($where2);
+                    if($data1=="") {
+                        $where1['week']=$week1;
+                        $where1['com_conceptual']=$name1;
+                        $bdconsult->_save($where1);
+                    }
+                    if($data2=="") {
+                        $where2['week']=$week2;
+                        $where2['com_conceptual']=$name2;
+                        $bdconsult->_save($where2);
+                    }
+                $where1['unit']=$unit3;
+                $where2['unit']=$unit4;
+                $where1['session']=12;
+                $where2['session']=16;
+                $data3=$bdconsult->_getOne($where1);
+                $data4=$bdconsult->_getOne($where2);
+                    if($data3=="") {
+                        $where1['week']=$week3;
+                        $where1['com_conceptual']=$name3;
+                        $bdconsult->_save($where1);
+                    }
+                    if($data4=="") {
+                        $where2['week']=$week4;
+                        $where2['com_conceptual']=$name4;
+                        $bdconsult->_save($where2);
+                    }
+                $where1['unit']=$unit4;
+                // $where2['unit']=$unit4;
+                $where1['session']=17;
+                // $where2['session']=34;
+                $data5=$bdconsult->_getOne($where1);
+                // $data6=$bdconsult->_getOne($where2);
+                    if($data5=="") {
+                        $where1['week']=$week5;
+                        $where1['com_conceptual']=$name5;
+                        $bdconsult->_save($where1);
+                    }
+                    // if($data6=="") {
+                    //     $where2['week']=$week3;
+                    //     $where2['com_conceptual']=$name3;
+                    //     $bdconsult->_save($where2);
+                    // }     
+            }  
+            
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }

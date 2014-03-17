@@ -20,7 +20,13 @@
 			<?php echo $this->form->mail_person ?><br>
 
 			<h5 class="text-muted">Celular</h5>
-			<?php echo $this->form->cellular ?>	
+			<?php echo $this->form->cellular ?><br>	
+
+			<h5 class="text-muted">País</h5>
+			<?php echo $this->form->country ?><br>
+
+			<h5 class="text-muted">Provincia</h5>
+			<?php echo $this->form->country_p ?><br>	
 		</div>
 		<div class="col-md-6">
 			<h5 class="text-muted">Numero de Documento</h5>
@@ -43,38 +49,93 @@
 			<h5 class="text-muted">Telefono Fijo</h5>
 			<?php echo $this->form->phone ?><br>
 
-			<input type="submit" value="Guardar" class="btn btn-info pull-right"></td>
+			<h5 class="text-muted">Departamento</h5>
+			<?php echo $this->form->country_s?><br>
+
+			<h5 class="text-muted">Distrito</h5>
+			<?php echo $this->form->country_d?><br>
+
+			<!-- <input type="submit" value="Guardar" class="btn btn-info pull-right"></td> -->
 		</div>
 	</div>
 </form>
+<div class='col-md-2 col-md-offset-10'><button id ='enviar' class='btn btn-success'>Actualizar</button></div>
 
 <script>
-	$('#mail_person, #mail_work').attr('type', 'email');
-	$('input').attr('required', 'true');
+	// $('#mail_person, #mail_work').attr('type', 'email');
+	// $('input').attr('required', 'true');
+	// $('#country_d').attr('required', 'true');
 
-	$("#save").click(function(){
-		$('#form').submit();
-	})
-	$("#form").submit(function(){
-		$.ajax({
-	        type: 'POST',
-	        url: "/profile/public/studentupdate",
-	        data: $(this).serialize(),
-	        success: function(data){ 
-	        	if (data == 1) {
-	        		$("#datastudent").html('<br><br><center><img src="/img/spinner.gif" alt="" /></center>');
-	        		$("#datastudent").fadeOut('fast', function(){
-	        			$("#datastudent").load('/profile/public/studentinfo', function(){
-	        				$("#datastudent").fadeIn('fast');
-	        			});
-	    			});
-	        	}else{
-	        		alert("Error!");
-	        	}
-   	   		}
-    	});
-        return false;
-	})
+	// $("#save").click(function(){
+	// 	$('#form').submit();
+	// })
+	var valor='PE';
+	$("#country option[value="+valor+"]").attr("selected",true);
+	var url="/profile/public/countrystate/coid/"+valor;
+    $("#country_s").load(url);
+
+	$("#enviar").click(function(){   
+        var url="/profile/public/studenteditinfo/";
+     
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data:$("#form").serialize(),
+            success: function (data){
+                $("#datastudent").html(data);
+            }
+        });
+    });
+    var clave="<?php echo $this->clave?>";
+    if (clave==1) {
+    	$("#datastudent").fadeOut('fast', function(){
+			$("#datastudent").load('/profile/public/studentinfo', function(){
+				$("#datastudent").fadeIn('fast');
+			});
+		});    	
+    };
+
+    var country="<?php echo $this->country?>";
+    if (country==1) {
+    	var datacountry="<?php echo $this->data['country']?>";
+    	var url="/profile/public/countrystate/coid/"+datacountry;
+    	$("#country_s").load(url);
+    };
+
+    var country_s="<?php echo $this->country_s?>";
+    if (country_s==1) {
+    	var datacountry_s="<?php echo $this->data['country_s']?>";
+    	var url="/profile/public/countryprovince/cosid/"+datacountry_s;
+    	$("#country_p").load(url);
+    };
+
+    var country_p="<?php echo $this->country_p?>";
+    if (country_p==1) {
+    	var datacountry_p="<?php echo $this->data['country_p']?>";
+    	var url="/profile/public/countrydistrict/proid/"+datacountry_p;
+    	$("#country_d").load(url);
+    };
+    
+	// $("#form").submit(function(){
+	// 	$.ajax({
+	//         type: 'POST',
+	//         url: "/profile/public/studentupdate",
+	//         data: $(this).serialize(),
+	//         success: function(data){ 
+	//         	if (data == 1) {
+	//         		$("#datastudent").html('<br><br><center><img src="/img/spinner.gif" alt="" /></center>');
+	//         		$("#datastudent").fadeOut('fast', function(){
+	//         			$("#datastudent").load('/profile/public/studentinfo', function(){
+	//         				$("#datastudent").fadeIn('fast');
+	//         			});
+	//     			});
+	//         	}else{
+	//         		alert("Error!");
+	//         	}
+ //   	   		}
+ //    	});
+ //        return false;
+	// })
 
 
 	$('#backeditBtn a').click(function (e) {
@@ -84,6 +145,27 @@
 				$('#datastudent').fadeIn('fast');
 			});
       	});
-  	})
+  	});
+
+  	$("#country").change(function(){
+	    var coid=$(this).val();
+    	// var coid=$("#country").val();
+    	var url="/profile/public/countrystate/coid/"+coid;
+    	$("#country_s").load(url);
+    });
+
+    $("#country_s").change(function(){
+	    var cosid=$(this).val();
+    	// var coid=$("#country").val();
+    	var url="/profile/public/countryprovince/cosid/"+cosid;
+    	$("#country_p").load(url);
+    });
+
+    $("#country_p").change(function(){
+	    var proid=$(this).val();
+    	// var coid=$("#country").val();
+    	var url="/profile/public/countrydistrict/proid/"+proid;
+    	$("#country_d").load(url);
+    });
    
 </script>

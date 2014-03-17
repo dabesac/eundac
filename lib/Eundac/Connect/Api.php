@@ -17,7 +17,13 @@ class Eundac_Connect_Api extends Zend_Rest_Client{
   **/
 
 
+<<<<<<< HEAD
   const API_HOST_SERVER ="http://undac.edu.pe:8080/";
+=======
+	// const API_HOST_SERVER ="http://api.undac.edu.pe:8080/";
+	//const API_HOST_SERVER ="http://172.16.0.210:8080/";
+	const API_HOST_SERVER ="http://localhost:8080/";
+>>>>>>> 793d2202a10c63dec08718d96ea58dde3b372bad
 
   protected $_params = array(); 
   protected $_model = null;

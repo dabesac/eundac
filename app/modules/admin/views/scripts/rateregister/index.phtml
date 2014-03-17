@@ -1,15 +1,11 @@
-<table class="table table-striped table-bordered table-condensed">
-    <tr>
-        <td colspan="5"><h4><center>TASAS MATRICULA</center></h4></td>
-    </tr>
-    <tr>
-        <td>Año</td>
-        <td>Periodo</td>
-        <td>Operaciones</td>   
-    </tr>
-    <tr>
-        <td>
-            <select id="lanios" name="lanios" class="input-small">
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-usd"></span> TASAS MATRICULA');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/admin" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button id="nuevo" type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Nueva Tasa</button>');?>
+</br>
+<div class='text-center bordered'>
+    <form class='form-inline' role="form" >
+        <div class="form-group" style='width:25%'> 
+            <label>Año</label></br>
+            <select id="lanios" name="lanios" class="form-control">
              <?php 
             $anio= date('Y');
             $i=0;
@@ -20,22 +16,40 @@
             <option value="<?php echo $i?>" <?php echo $t?>><?php echo $i?></option>
                 <?php }?>
             </select>
-        </td>
-
-        <td>
-            <select id="periodo_c" name="periodo" class="input-large">
+        </div>
+        <div class="form-group" style='width:25%'>
+            <label>Periodo</label></br>
+            <select id="periodo_c" name="periodo" class="form-control">
             <option value="">Primero seleccione un año</option>
             </select>
-        </td>  
+        </div>
+    </form>
+</div></br></br>
 
-        <td ><center>
-        <a href="#" class="btn btn-primary " id="nuevo">Nueva Tasa</a>
-        <a href="#" class="btn btn-info " id="llamar">Ver Detalle</a>
-       </center></td>
-       </tr>
-    
-</table>
-    <div id="detalle"></div>
+<div id="detalle">
+    <div class='col-md-10 col-md-offset-1 cont-font-not-register alert alert-info'>
+        <h3 class='text-not-register'><b>ELIJA UN PERIODO</b></h3>
+        <h1 class='span-not-register'>
+            <span class='glyphicon glyphicon-exclamation-sign' ></span>
+        </h1>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style='width:1000px;'>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title"><b class='text-info'> <center> NUEVO REGISTRO TASA DE MATRICULA </center></b></h3>
+            </div>
+            <div class="modal-body">
+                <div id='nueva_tasa'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $("#periodo_c").load("/admin/rateregister/lperiods/anio/"+<?php echo $anio?>);
     $("#lanios").change(function(){
@@ -49,9 +63,8 @@
     	var xx=periodo.split(";--;");
     	var perid=xx[0];
     	var estado=xx[1];    
-    });    
-    
-    $("#llamar").click(function(){      
+
+        // muestra las tasas de un periodo
     	var periodo = $("#periodo_c").val(); 
     	var xx=periodo.split(";--;");
     	var perid=xx[0];
@@ -63,21 +76,27 @@
    		var url="/admin/rateregister/list/perid/"+perid+"/state/"+state;
     	$("#detalle").html("<img src='/img/spinner.gif' />Cargando....");
     	$("#detalle").load(url);
-    });            
+    });
+    
+    // $("#llamar").click(function(){      
+    // });            
           
-    $("#nuevo").click(function(){    
-    	var periodo = $("#periodo_c").val(); 
-    	var xx=periodo.split(";--;");
-    	var perid=xx[0];
-    	var state=xx[1];
-    	if (perid=="")
-    	{
-    		alert ("Debe de seleccionar un periodo");return false;
-    	}
-    	if (state=="C")
-    	{
-    	alert ("Usted no puede crear una tasa nueva escoja periodo Activo");return false;}
-    	location.href="/admin/rateregister/new/perid/"+perid+"/state/"+state;                
+    $("#nuevo").click(function(){
+        var periodo = $("#periodo_c").val(); 
+        var xx=periodo.split(";--;");
+        var perid=xx[0];
+        var state=xx[1];
+        if (perid==""){
+            alert ("Debe de seleccionar un periodo");return false;
+        }
+        else if (state=="C"){
+        alert ("Usted no puede crear una tasa nueva escoja periodo Activo");return false;}
+        else{
+            $('#myModal').modal('show');            
+            var url1="/admin/rateregister/new/perid/"+perid+"/state/"+state;
+            $("#nueva_tasa").load(url1);
+        }
+        // location.href="/admin/rateregister/new/perid/"+perid+"/state/"+state;
     });
 </script>
 

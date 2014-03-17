@@ -54,7 +54,16 @@ body{
 
 .sub-menu, .menu-main {color: #fff !important;}
 
+<<<<<<< HEAD
 .nav-pills li a:hover{border-bottom: 4px solid #0065B4;}
+=======
+.footerText li a{
+	color: #fff;
+}
+.footerBtnHover li a:hover{
+	border-bottom: 4px solid #0065B4;
+}
+>>>>>>> 793d2202a10c63dec08718d96ea58dde3b372bad
 
 #footer .dropdown-menu{
 	background: #363C46;
@@ -321,4 +330,8 @@ body{
 	.img-avatar{
 		width: 100px;
 		margin-left: 15px;
+	}
+
+	#content_syllabus_unit{
+		width: 87.999999999999999%;
 	}
