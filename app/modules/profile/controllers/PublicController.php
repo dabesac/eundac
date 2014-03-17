@@ -637,6 +637,8 @@ class Profile_PublicController extends Zend_Controller_Action {
 
     public function studentremovefamilyAction(){
         try {
+            $this->_helper->layout()->disableLayout();
+
             $eid = $this->sesion->eid;
             $pid = $this->sesion->pid;
             $famid = $this->getParam('famid');
@@ -644,10 +646,19 @@ class Profile_PublicController extends Zend_Controller_Action {
             $familyDb = new Api_Model_DbTable_Family();
             $relationDb = new Api_Model_DbTable_Relationship();
 
-            $where = array('eid'=>$eid, 'pid'=>$pid, 'famid'=>$famid);
+            $where = array( 'eid' => $eid, 
+                            'pid' => $pid, 
+                            'famid' => $famid );
             if ($relationDb->_delete($where)) {
-                $where = array('eid'=>$eid, 'famid'=>$famid);
-                $removeFam = $familyDb->_delete($where);
+                $where = array( 'eid' => $eid, 
+                                'famid' => $famid);
+                if ($familyDb->_delete($where)) {
+                    echo 'true';
+                }else{
+                    echo 'false';
+                }
+            }else{
+                echo 'false';
             }
 
         } catch (Exception $e) {
@@ -669,10 +680,13 @@ class Profile_PublicController extends Zend_Controller_Action {
             $oid=$this->sesion->oid;
             $pid=$this->sesion->pid;
 
-            $data=array("eid"=>$eid, 'oid' => $oid, "pid"=>$pid);
+            $data=array('eid' => $eid, 
+                        'oid' => $oid, 
+                        'pid' => $pid );
 
             $dbacadata=new Api_Model_DbTable_Academicrecord();
-            $where=array("eid"=>$eid,"pid"=>$pid);
+            $where=array(   "eid" => $eid,
+                            "pid" => $pid);
             $acadata=$dbacadata->_getFilter($where);
             //print_r($acadata);
 
@@ -751,14 +765,20 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studentremoveacademicAction(){
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->_getParam("eid");
-            $pid=$this->_getParam("pid");
+            $eid = $this->sesion->eid;
+            $pid = $this->sesion->pid;
             $acid=$this->_getParam("acid");
 
-            $dbacademic=new Api_Model_DbTable_Academicrecord();
-            $where=array("eid"=>$eid, "pid"=>$pid, "acid"=>$acid);
+            $academicDb=new Api_Model_DbTable_Academicrecord();
+            $where=array(   "eid"  => $eid, 
+                            "pid"  => $pid, 
+                            "acid" => $acid);
 
-            $remove = $dbacademic->_delete($where);
+            if ($academicDb->_delete($where)) {
+                echo 'true';
+            }else{
+                echo 'false';
+            }
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
@@ -1074,17 +1094,21 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studentremoveinterestAction()
     {
         try{
-            $eid=$this->_getParam("eid");
-            $pid=$this->_getParam("pid");
+            $this->_helper->layout()->disableLayout();
+
+            $eid = $this->sesion->eid;
+            $pid = $this->sesion->pid;
             $iid=$this->_getParam("iid");
 
             $dbinterest=new Api_Model_DbTable_Interes();
-            $where=array("eid"=>$eid, "pid"=>$pid, "iid"=>$iid);
+            $where=array(   "eid" => $eid,
+                            "pid" => $pid, 
+                            "iid" => $iid );
 
             if($dbinterest->_delete($where)){
-
+                echo 1;
             }else{
-                echo "Error al Eliminar";
+                echo 0;
             }
         }catch(exception $e){
             print "Error : ".$e->getMessage();
