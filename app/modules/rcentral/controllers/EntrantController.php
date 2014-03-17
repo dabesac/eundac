@@ -168,18 +168,22 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$this->_helper->layout()->disableLayout();
 
 		//DataBases
-		$specialityDb = new Api_Model_DbTable_Speciality();
-		$userDb       = new Api_Model_DbTable_Users();
-		$paymentDb    = new Api_Model_DbTable_Payments();
-		$academicDb   = new Api_Model_DbTable_Academicrecord();
-		$rateDb       = new Api_Model_DbTable_Rates();
+		$specialityDb   = new Api_Model_DbTable_Speciality();
+		$userDb         = new Api_Model_DbTable_Users();
+		$paymentDb      = new Api_Model_DbTable_Payments();
+		$academicDb     = new Api_Model_DbTable_Academicrecord();
+		$rateDb         = new Api_Model_DbTable_Rates();
+		$realtionshipDb = new Api_Model_DbTable_Relationship();
+		$academicDb     = new Api_Model_DbTable_Academicrecord();
+		$statisticDb    = new Api_Model_DbTable_Statistics();
+		$interestDb     = new Api_Model_DbTable_Interes();
 		//________________________________________________
 
 		$escid = base64_decode($this->_getParam('escid'));
 		$uid   = base64_decode($this->_getParam('uid'));
 		$pid   = base64_decode($this->_getParam('pid'));
 
-		print_r($pid);
+		//print_r($pid);
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
@@ -232,7 +236,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
         $paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
        	$paymentData[0]['date_payment'] = date("d-m-Y", strtotime($paymentData[0]['date_payment']));
         $this->view->paymentData = $paymentData;
-		
+
 		//Tipo de Pago
 		$where = array(	'eid'   => $eid,
 						'oid'   => $oid,
@@ -241,32 +245,37 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$rate = $rateDb->_getFilter($where);
 		$this->view->rate = $rate;
 
-		//$rate[0]['']
-
-	}
-
-	public function coursespendingAction(){
-		$this->_helper->layout()->disableLayout();
-		//DataBases
-		$curriculaDb       = new Api_Model_DbTable_Studentxcurricula();
-		$registerxCourseDb = new Api_Model_DbTable_Registrationxcourse();
-		$registerDb 	   = new Api_Model_DbTable_Registration();
-		$courseDb          = new Api_Model_DbTable_Course();
-		$coursexTeacherDb  = new Api_Model_DbTable_Coursexteacher();
-		$realtionshipDb	   = new Api_Model_DbTable_Relationship();
-		$academicDb		   = new Api_Model_DbTable_Academicrecord();
-		$statisticDb	   = new Api_Model_DbTable_Statistics();
-        //________________________________________________________
-        $pid   = base64_decode($this->_getParam('pid'));
-        $uid   = base64_decode($this->_getParam('uid'));
-        $escid = base64_decode($this->_getParam('escid'));
-        $subid = base64_decode($this->_getParam('subid'));
-
-        $eid   = $this->sesion->eid;    
-        $oid   = $this->sesion->oid;
-        $perid = $this->sesion->period->perid;
-
-        //Relleno Datos del Perfil
+		//$Comparar fechas y pagos
+		$paymentDate = $paymentData[0]['date_payment'];
+		$paymentAmount = $paymentData[0]['amount'];
+		$paymentNormal = date('d-m-Y', strtotime($rate[0]['f_ini_tn']));
+		$paymentIncrement1 = date('d-m-Y', strtotime($rate[0]['f_fin_ti1']));
+		$paymentIncrement2 = date('d-m-Y', strtotime($rate[0]['f_fin_ti2']));
+		$paymentIncrement3 = date('d-m-Y', strtotime($rate[0]['f_fin_ti3']));
+		if ($paymentDate <= $paymentNormal) {
+			$paymentDateData['tiempo'] = 'yes';
+			$paymentDateData['cantidad'] = $rate[0]['t_normal'];
+		}else if($paymentDate <= $paymentIncrement1){
+			$paymentDateData['tiempo'] = 'no';
+			$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento1'];
+			$paymentDateData['cantidad'] = $rate[0]['t_incremento1'];
+		}else if($paymentDate <= $paymentIncrement2){
+			$paymentDateData['tiempo'] = 'no';
+			$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento2'];
+			$paymentDateData['cantidad'] = $rate[0]['t_incremento2'];
+		}else if($paymentDate <= $paymentIncrement3){
+			$paymentDateData['tiempo'] = 'no';
+			$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento3'];
+			$paymentDateData['cantidad'] = $rate[0]['t_incremento3'];
+		}
+		if ($paymentAmount = $paymentData[0]['amount'] >= $paymentDateData['cantidad']) {
+			$paymentDateData['pago'] = 'yes';
+		}else {
+			$paymentDateData['pago'] = 'no';
+		}
+		$this->view->paymentDateData = $paymentDateData;
+		
+		//Relleno Datos del Perfil
         	$dataProfile['registerValidate'] = 'yes	';
         	//Family
 	        $where = array(	'eid'   => $eid,
@@ -288,6 +297,15 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 	        	$dataProfile['registerValidate'] = 'no';
 	        }
 
+         	//Datos de Interes
+	        $interest = $interestDb->_getFilter($where);
+         	if ($interest) {
+	        	$dataProfile['interest'] = 'yes';
+	        }else {
+	        	$dataProfile['interest'] = 'no';
+	        	$dataProfile['registerValidate'] = 'no';
+	        }
+
 	        //Datos Estadisticos
 	        $where = array(	'eid'   => $eid,
 							'oid'   => $oid,
@@ -305,6 +323,28 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
 
 	    $this->view->dataProfile = $dataProfile;
+
+	}
+
+	public function coursespendingAction(){
+		$this->_helper->layout()->disableLayout();
+		//DataBases
+		$curriculaDb       = new Api_Model_DbTable_Studentxcurricula();
+		$registerxCourseDb = new Api_Model_DbTable_Registrationxcourse();
+		$registerDb 	   = new Api_Model_DbTable_Registration();
+		$courseDb          = new Api_Model_DbTable_Course();
+		$coursexTeacherDb  = new Api_Model_DbTable_Coursexteacher();
+        //________________________________________________________
+        $pid   = base64_decode($this->_getParam('pid'));
+        $uid   = base64_decode($this->_getParam('uid'));
+        $escid = base64_decode($this->_getParam('escid'));
+        $subid = base64_decode($this->_getParam('subid'));
+
+        $eid   = $this->sesion->eid;    
+        $oid   = $this->sesion->oid;
+        $perid = $this->sesion->period->perid;
+
+        
 
      	//Curricula
         $where = array(	'eid'   => $eid,

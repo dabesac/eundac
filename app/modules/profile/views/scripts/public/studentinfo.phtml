@@ -9,9 +9,7 @@
     
       <div id="datastudent"></div>
     
-    <div class="panel panel-default">
-      <div id="editform"></div>
-    </div>
+    <div id="editform" class="panel panel-default"></div>
     
 
   </div>
@@ -98,44 +96,42 @@
 
 
   $("#btnfamily").click(function(){
-    $('#datastudent').fadeOut('fast', function(){
-      $("#datastudent").load("/profile/public/studentfamily", function(){
-        $('#datastudent').fadeIn('fast');
-      });
+    $('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+    $('#datastudent').html('');
+    $("#datastudent").load("/profile/public/studentfamily", function(){
+      $('#loadingDiv').html('');
     });
   })
 
   $("#btnacademic").click(function(){
-    $('#datastudent').fadeOut('fast', function(){
-      $("#datastudent").load("/profile/public/studentacademic", function(){
-        $("#datastudent").fadeIn('fast');
-      });
+    $('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+    $('#datastudent').html('');
+    $("#datastudent").load("/profile/public/studentacademic", function(){
+      $('#loadingDiv').html('');
     });
-    /*$("#datastudent").load("/profile/public/studentacademic");
-    $('#datastudent').fadeIn('fast');*/
   })
 
   $("#btnstadistic").click(function(){
-    $('#datastudent').fadeOut('fast', function(){
-      $("#datastudent").load("/profile/public/studentstatistic", function(){
-        $('#datastudent').fadeIn('fast');
-      });
+    $('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+    $('#datastudent').html('');
+    $("#datastudent").load("/profile/public/studentstatistic", function(){
+      $('#loadingDiv').html('');
     });
   })
 
   $("#btnlaboral").click(function(){
-    $('#datastudent').fadeOut('fast', function(){
-      $("#datastudent").load("/profile/public/studentlaboral", function(){
-        $('#datastudent').fadeIn('fast');
-      });
+    $('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+    $('#datastudent').html('');
+    $("#datastudent").load("/profile/public/studentlaboral", function(){
+      $('#loadingDiv').html('');
     });
   })
 
   $("#btninters").click(function(){
-    $('#datastudent').fadeOut('fast', function(){
-      $("#datastudent").load("/profile/public/studentinterest", function(){
-        $('#datastudent').fadeIn('fast');
-      });
+    $('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+    $('#datastudent').html('');
+    $("#datastudent").load("/profile/public/studentinterest", function(){
+      $('#loadingDiv').html('');
     });
   })
 

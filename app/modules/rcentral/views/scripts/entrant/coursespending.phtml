@@ -68,20 +68,7 @@
 				</select>
 			</div>
 			<div class="col-md-3 col-md-offset-2">
-				<?php if ($this->dataProfile['registerValidate'] != 'no'): ?>
-					<h5 id="dataProfile" value="yes" class="pull-right text-success"><span class="glyphicon glyphicon-record"> Apto para Validar</span></h5>
-				<?php else: ?>
-					<?php if ($this->dataProfile['family'] == 'no'){
-						$emptyProfileF = 'Falta Datos Familiares';
-					} 
-					if ($this->dataProfile['academic'] == 'no'){
-						$emptyProfileA = ' | Falta Datos Academicos';
-					}
-					if ($this->dataProfile['statistic'] == 'no'){
-						$emptyProfileS = ' | Falta Datos Estadisticos';
-					} ?>
-					<h5 id="dataProfile" value="no" class="pull-right text-danger" title="<?php echo $emptyProfileF.$emptyProfileA.$emptyProfileS ?>"><span class="glyphicon glyphicon-record"></span> No Apto Para Validar</h5>
-				<?php endif ?>
+				
 			</div>
 		</div>
 	<?php endif ?>

@@ -131,50 +131,50 @@ class Admin_PasswordController extends Zend_Controller_Action
             if ($this->getRequest()->isPost()){
                 $formData = $this->getRequest()->getPost();
                 unset($formData["enviar"]);
-                if ($formData['acla']) {
-                    $module = $this->sesion->rol['module'];
-                    $passant=md5($formData["acla"]);
-                    $eid=$formData['eid'];
-                    $oid=$formData['oid'];
-                    $pid=$formData['pid'];
-                    $uid=$formData['uid'];
-                    $where=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid);
-                    $datauser=$bdu->_getFilter($where);
-                    $datauser=$datauser[0];
-                    if ($datauser['password']==$passant) {
-                        if (($formData["ncla"]<>"" && $formData["rcla"]<>"")) {
-                            if (($formData["ncla"]==$formData["rcla"])) {
-                                $password=md5($formData["ncla"]);
-                                $data['password']=$password;
-                                $pk['eid']=$eid;
-                                $pk['oid']=$oid;
-                                $pk['uid']=$uid;
-                                $pk['pid']=$pid;
-                                $pk['escid']=$formData['escid'];
-                                $pk['subid']=$formData['subid'];                                
-                                $bdu->_update($data,$pk);
-                                    // $where_=array();
-                                    // $where_ = array("username"=>$uid);
-                                    // $datac = array("password"=> $password);
-                                    // $campus = new Api_Model_DbTable_Campususer();
-                                    // $campus->_update($where_,$datac);
+                // if ($formData['acla']) {
+                //     $module = $this->sesion->rol['module'];
+                //     $passant=md5($formData["acla"]);
+                //     $eid=$formData['eid'];
+                //     $oid=$formData['oid'];
+                //     $pid=$formData['pid'];
+                //     $uid=$formData['uid'];
+                //     $where=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid);
+                //     $datauser=$bdu->_getFilter($where);
+                //     $datauser=$datauser[0];
+                //     if ($datauser['password']==$passant) {
+                //         if (($formData["ncla"]<>"" && $formData["rcla"]<>"")) {
+                //             if (($formData["ncla"]==$formData["rcla"])) {
+                //                 $password=md5($formData["ncla"]);
+                //                 $data['password']=$password;
+                //                 $pk['eid']=$eid;
+                //                 $pk['oid']=$oid;
+                //                 $pk['uid']=$uid;
+                //                 $pk['pid']=$pid;
+                //                 $pk['escid']=$formData['escid'];
+                //                 $pk['subid']=$formData['subid'];                                
+                //                 $bdu->_update($data,$pk);
+                //                     // $where_=array();
+                //                     // $where_ = array("username"=>$uid);
+                //                     // $datac = array("password"=> $password);
+                //                     // $campus = new Api_Model_DbTable_Campususer();
+                //                     // $campus->_update($where_,$datac);
                     
-                                $this->_helper->redirector('index','index',$module);
-                            }
-                            else{
-                                $this->_helper->redirector('index','index',$module);
-                            }
-                        }
-                        else{
-                            $this->_helper->redirector('index','index',$module);
-                        }   
-                    }
-                    else{
-                        $this->_helper->redirector('index','index',$module);
-                    }
+                //                 $this->_helper->redirector('index','index',$module);
+                //             }
+                //             else{
+                //                 $this->_helper->redirector('index','index',$module);
+                //             }
+                //         }
+                //         else{
+                //             $this->_helper->redirector('index','index',$module);
+                //         }   
+                //     }
+                //     else{
+                //         $this->_helper->redirector('index','index',$module);
+                //     }
 
-                }
-                else{
+                // }
+                // else{
                     if (($formData["ncla"]<>"" && $formData["rcla"]<>"")) {
 
                         if (($formData["ncla"]==$formData["rcla"])) {
@@ -205,7 +205,7 @@ class Admin_PasswordController extends Zend_Controller_Action
                     else{
                         $this->view->mensaje=1;
                     }
-                }
+                // }
             }
         }
         catch (Exception $ex) 
