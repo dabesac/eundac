@@ -4107,7 +4107,11 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .nav > li > a:hover,
 .nav > li > a:focus {
   text-decoration: none;
+<<<<<<< HEAD
+  color: #428bca;
+=======
   /*color: #fff;*/
+>>>>>>> 793d2202a10c63dec08718d96ea58dde3b372bad
   border-radius: 0;
 }
 

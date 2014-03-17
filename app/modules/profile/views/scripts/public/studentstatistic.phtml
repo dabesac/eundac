@@ -2,7 +2,7 @@
 
   <div class="row">
 	<div class="col-md-9 col-md-offset-1">
-	  	<h3 class="text-muted"><span class="glyphicon glyphicon-list-alt"></span> Datos Estadisticos</h3>
+	  	<h3 class="text-muted"><span class="glyphicon glyphicon-list-alt"></span> Datos Estadísticos</h3>
 	</div>
 	<div class="col-md-2 ">
 		<?php if ($this->statistic): ?>
@@ -27,12 +27,12 @@
 	<div class="row">
 		<div class="col-md-2">
 			<br><br><br>
-			<h5 class="text-muted text-right"><strong>Datos Economicos</strong></h5>
+			<h5 class="text-muted text-right"><strong>Datos Económicos</strong></h5>
 		</div>
 		<div class="col-md-4">
 			<br><br>
 			<blockquote>
-			<h5><span class="text-muted">Depende Economicamente de </span>
+			<h5><span class="text-muted">Depende Económicamente de </span>
 				<?php if($this->statistic["dependencia"]=="P"){
 					echo "Padres";
 				}elseif($this->statistic["dependencia"]=="SP"){
@@ -79,7 +79,7 @@
 					echo "Otros";
 				}?></h5>
 			
-			<h5><span class="text-muted">Numero de Habitantes </span><?php echo $this->statistic["num_personas"]?></h5>
+			<h5><span class="text-muted">Número de Habitantes </span><?php echo $this->statistic["num_personas"]?></h5>
 
 			<h5><span class="text-muted">Tipo de Vivienda </span>
 				<?php if($this->statistic["tipo_vivienda"]=="CI"){
@@ -111,7 +111,7 @@
 					echo "Precario Inconcluso";
 				}?></h5>
 
-			<h5><span class="text-muted">Numero de Habitaciones </span><?php echo $this->statistic["num_habitacion"]?></h5>
+			<h5><span class="text-muted">Número de Habitaciones </span><?php echo $this->statistic["num_habitacion"]?></h5>
 
 			<h5><span class="text-muted">Servicio con los que Cuenta </span>
 				<?php if($this->statistic["servicios"]=="ALD"){
@@ -155,7 +155,7 @@
 					echo "Solo";
 				}?></h5>
 
-			<h5><span class="text-muted">Lugar de Alimentacion </span>
+			<h5><span class="text-muted">Lugar de Alimentación </span>
 				<?php if($this->statistic["lugar_alimentacion"]=="CU"){
 					echo "Comedor Universitario";
 				}elseif($this->statistic["lugar_alimentacion"]=="P"){
@@ -168,7 +168,7 @@
 					echo "Otros";
 				}?></h5>
 
-			<h5><span class="text-muted">Costo de Alimentacion </span>S/. <?php echo $this->statistic["costo_alimento"]?></h5>
+			<h5><span class="text-muted">Costo de Alimentación </span>S/. <?php echo $this->statistic["costo_alimento"]?></h5>
 				
 			<h5><span class="text-muted">Tiene Problemas con su Alimentación </span>
 				<?php if($this->statistic["prob_alimento"]=="N"){

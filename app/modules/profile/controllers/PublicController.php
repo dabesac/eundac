@@ -124,7 +124,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $subid=$this->sesion->subid;
             $fullname=$this->sesion->infouser['fullname'];
             $dateborn=$this->sesion->infouser['birthday'];
-
+            $this->view->avatar_default=$this->sesion->infouser['sex'];
             $data=array("eid"=>$eid,"oid"=>$oid,"pid"=>$pid,"uid"=>$uid,"escid"=>$escid,"subid"=>$subid, "perid"=>$perid,"rid"=>$rid);
 
             $datos[0]=array("eid"=>$eid,"oid"=>$oid,"fullname"=>$fullname, "uid"=>$uid, "pid"=>$pid, "birthday"=>$dateborn, "escid"=>$escid, "subid"=>$subid);
