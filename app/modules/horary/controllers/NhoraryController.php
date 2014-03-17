@@ -60,8 +60,8 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         }
     }
 
-    public function fillhoraryAction()
-    {  
+    public function fillhoraryAction(){  
+        $this->_helper->layout()->disableLayout();
         $eid=$this->sesion->eid;
         $oid=$this->sesion->oid;
         $pid=base64_decode($this->_getParam('pid'));
@@ -101,7 +101,7 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $wher['subid']=$subid;
         $wher['teach_pid']=$pid;
         $wher['teach_uid']=$uid;
-
+        // print_r($wher);exit();
         $dathora=$hora->_getFilter($wher);
         if ($dathora) $this->view->dathora=1;
     }

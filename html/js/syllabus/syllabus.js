@@ -1,8 +1,7 @@
 $(document).ready(function() {
 
 		$("#save_sylabus").click(function(){
-			/*$("#loading_overlay").css({diplay:black});*/
-			
+			save_syllabus();
 		});
 
 		var $params = {};
@@ -14,7 +13,7 @@ $(document).ready(function() {
 		$params[$.base64.encode('turno')]=$.trim($("#turno_hidden").val());
 		$params[$.base64.encode('type_rate')]=$.trim($.base64.encode($type_rate));
 
-		/*$("#close_sylabus").click(function(){
+		$("#close_sylabus").click(function(){
 			$.ajax({
 				url: $("#frmSyllabus").attr('action'),
 				type: 'POST',
@@ -23,7 +22,7 @@ $(document).ready(function() {
 					$("#campo").html($data);
 				}
 			});
-		});*/
+		});
 
 		$("#crearunidad").click(function(){
 			$params[$.base64.encode('unit')]=$.trim($.base64.encode('1'));
@@ -58,12 +57,10 @@ function save_syllabus(){
 		type: 'POST',
 		data:$("#frmSyllabus").serialize(),
 		success: function ($data){
-				
+			
 		},
 		error : function($error){
 				alert("error al Guardar");
 		}
 	});
 }
-// function load_units(){
-// }
