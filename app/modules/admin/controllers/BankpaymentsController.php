@@ -215,10 +215,13 @@ class Admin_BankpaymentsController extends Zend_Controller_Action {
                 $formdata = $this->getRequest()->getPost();
                 if ($form->isValid($formdata)){
                     unset($formdata['save']);
+                    unset($formdata['anios']);
                     $formdata['processed'] = 'N';
+                    $formdata['payment_date']= date('Y-m-d', strtotime($formdata['payment_date']));
                     $bank = new Api_Model_DbTable_Bankreceipts();
-                    $bank->_save($formdata);
-                    $this->_helper->redirector('index');
+                    if ($bank->_save($formdata)) {
+                        $this->_helper->redirector('index');                        
+                    }
                 }
                 else{
                     $form->populate($formdata);

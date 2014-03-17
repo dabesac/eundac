@@ -148,7 +148,7 @@ class Profile_PrivateController extends Zend_Controller_Action {
             $dblaboral=new Api_Model_DbTable_Jobs();
             $where=array("eid"=>$eid,"pid"=>$pid);
             $laboral=$dblaboral->_getFilter($where);
-            print_r($laboral);
+            // print_r($laboral);
             $this->view->laboral=$laboral;
         }catch(exception $e){
             print "Error : ".$e->getMessage();

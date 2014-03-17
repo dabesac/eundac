@@ -208,42 +208,39 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
     }
 
 
-          public function listcourseAction()
+   public function listcourseAction()
       {
         try{
-                     $this->_helper->getHelper('layout')->disableLayout();
-                     $where['eid']=$this->sesion->eid;
-                     $where['oid']=$this->sesion->oid;
-                     $where['uid']=$this->_getParam("uid");
-                     $this->view->uid=$uid; 
-                     $where['perid']=$this->_getParam("perid");
-                     $this->view->perid=$perid; 
-                     $where['escid']=$this->_getParam("escid");
-                     $this->view->escid=$escid; 
-                     $where['pid']=$this->_getParam("pid");
-                     $this->view->pid=$pid; 
-                     $where['subid']=$this->_getParam("subid");
-                     $this->view->sedid=$sedid; 
-                     $dbcurricula=new Api_Model_DbTable_Studentxcurricula();
-                     $datcur=$dbcurricula->_getOne($where);
-                     $where['curid']=$datcur['curid'];
-                     $this->view->curid=$curid; 
+            $this->_helper->getHelper('layout')->disableLayout();
+            $where['eid']=$this->sesion->eid;
+            $where['oid']=$this->sesion->oid;
+            $where['uid']=$this->_getParam("uid");
+            $this->view->uid=$uid; 
+            $where['perid']=$this->_getParam("perid");
+            $this->view->perid=$perid; 
+            $where['escid']=$this->_getParam("escid");
+            $this->view->escid=$escid; 
+            $where['pid']=$this->_getParam("pid");
+            $this->view->pid=$pid; 
+            $where['subid']=$this->_getParam("subid");
+            $this->view->sedid=$sedid; 
+            $dbcurricula=new Api_Model_DbTable_Studentxcurricula();
+            $datcur=$dbcurricula->_getOne($where);
+            $where['curid']=$datcur['curid'];
+            $this->view->curid=$curid; 
 
-                    require_once 'Zend/Loader.php';
-                    Zend_Loader::loadClass('Zend_Rest_Client');
-                     $base_url = 'http://localhost:8080/';
-                     $endpoint = '/s1st3m4s/und4c/delete_course';
-                     $data = array('uid' => $where['uid'], 'pid' => $where['pid'], 'escid' => $where['escid'],'subid' =>$where['subid'],'eid' =>$where['eid'],'oid' =>$where['oid'],'perid'=>$where['perid'],'curid'=>$where['curid']);
-                     $client = new Zend_Rest_Client($base_url);
-                     $httpClient = $client->getHttpClient();
-                     $httpClient->setConfig(array("timeout" => 680));
-                     $response = $client->restget($endpoint,$data);
-                     $lista=$response->getBody();
-                      // print_r($lista);
-                     $data = Zend_Json::decode($lista);
-                     $this->view->cursos=$data; 
+            $request = array( 'uid'   => base64_encode($where['uid']), 
+                              'pid'   => base64_encode($where['pid']), 
+                              'escid' => base64_encode($where['escid']),
+                              'subid' => base64_encode($where['subid']),
+                              'eid'   => base64_encode($where['eid']),
+                              'oid'   => base64_encode($where['oid']),
+                              'perid' => base64_encode($where['perid']),
+                              'curid' => base64_encode($where['curid'] ) );
 
-                     // print_r($data);                 
+            $server = new Eundac_Connect_Api('delete_course', $request);
+            $data = $server->connectAuth();
+            $this->view->cursos = $data;
           }   
                   
          catch (Exception $ex)

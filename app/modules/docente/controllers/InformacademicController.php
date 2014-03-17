@@ -183,6 +183,9 @@ class Docente_InformacademicController extends Zend_Controller_Action {
                             $dataend = array('state' => 'C');
                             if ($inform ->_update($dataend,$pk)) $this->view->cierre=1;
                         }
+                        else{
+                            $this->view->clave=1;
+                        }
                     }
                 }
             $wherecour = array('eid' => $eid, 'oid' => $oid,'perid' => $perid, 'uid' => $uid, 'pid' => $pid);

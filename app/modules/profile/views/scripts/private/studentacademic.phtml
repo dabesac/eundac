@@ -1,11 +1,11 @@
 <div class="panel panel-info">
   <div class="panel-heading">
-    <h4>Datos Academicos</h4>
+    <h4>Datos Académicos</h4>
   </div>
 
   <div class="panel-body">
-    <?php if($this->acadata){?>
-      <?php foreach ($this->acadata as $academic) {?>
+    <?php if($this->acadata){ ?>
+      <?php foreach ($this->acadata as $academic) { ?>
         <div class="panel panel-default">
           <div class="panel-heading">
             <h5><b><?php echo $academic['institution']?></b></h5>
@@ -13,7 +13,7 @@
           <div class="panel-body">
             <table class="table">
               <tr>
-                <td>Tipo de Institucion 
+                <td>Tipo de Institución 
                   <h5><b>
                     <?php if($academic['type']=="ES"){
                       echo "Estatal";
@@ -27,8 +27,8 @@
                 <td>Nivel de Estudio <h5><b><?php echo $academic['title']?></b></h5></td>
               </tr>
               <tr>
-                <td>Año de Finalizacion <h5><b><?php echo $academic['year_end']?></b></h5></td>
-                <td>Localizacion <h5><b>Francia</b></h5></td>
+                <td>Año de Finalización <h5><b><?php echo $academic['year_end']?></b></h5></td>
+                <td>Localización <h5><b>Francia</b></h5></td>
               </tr>
             </table>
           </div>        
@@ -37,9 +37,8 @@
     }else{
       ?>
       <center><h5>No tiene Datos, Sugerir que Actualize su Perfil</h5></center>
-    <?
+    <?php
     }
     ?>
   </div>
-
 </div>

@@ -314,7 +314,7 @@
                 <td class="text-center"><?php echo $course['courseid'] ?></td>
                 <td><?php echo $this->coursesName[$c][0]['name'] ?></td>
                 <td class="text-center"><?php echo $this->coursesName[$c][0]['credits'] ?></td>
-                <td id="courseTurno<?php echo $course['courseid'] ?>" class="text-center"><?php echo $course['turno'] ?></td>
+                <td id="courseTurno<?php echo $course['courseid'] ?>" turno="<?php echo $course['turno'] ?>" class="text-center"><?php echo $course['turno'] ?></td>
                 <td id="teacherTurno<?php echo $course['courseid'] ?>"><?php echo $this->teachers[$c][0]['last_name0'].' '.$this->teachers[$c][0]['last_name1'].' '.$this->teachers[$c][0]['first_name']  ?> </td>
                 <td class="text-center <?php echo $classtdVeces ?>"><strong><?php echo $this->coursesName[$c]['veces'] + 1 ?> Vez</strong></td>
                 <td class="text-center <?php echo $classButtons ?> butonsCourses">
@@ -344,9 +344,11 @@
             </tr>
             <script>
                 $("#showEditAlert<?php echo $course['courseid'] ?>").click(function(){
+                    var courseTurno = $('#courseTurno<?php echo $course['courseid'] ?>').attr('turno');
+                    courseTurno = $.base64.encode(courseTurno);
                     $('.alertSpace').addClass('hidden');
                     $(".iluminate").removeClass('warning danger');
-                    $("#editAlert<?php echo $course['courseid'] ?>").load("/register/registerstudent/editturno/uid/<?php echo base64_encode($course['uid']) ?>/pid/<?php echo base64_encode($course['pid']) ?>/escid/<?php echo base64_encode($course['escid']) ?>/subid/<?php echo base64_encode($course['subid']) ?>/courseid/<?php echo base64_encode($course['courseid']) ?>/curid/<?php echo base64_encode($course['curid']) ?>/turno/<?php echo base64_encode($course['turno']) ?>", function(){
+                    $("#editAlert<?php echo $course['courseid'] ?>").load("/register/registerstudent/editturno/uid/<?php echo base64_encode($course['uid']) ?>/pid/<?php echo base64_encode($course['pid']) ?>/escid/<?php echo base64_encode($course['escid']) ?>/subid/<?php echo base64_encode($course['subid']) ?>/courseid/<?php echo base64_encode($course['courseid']) ?>/curid/<?php echo base64_encode($course['curid']) ?>/turno/" + courseTurno, function(){
                         $("#editAlert<?php echo $course['courseid'] ?>").removeClass('hidden');
                     });
                     $("#fila<?php echo $course['courseid'] ?>").addClass('warning');
@@ -514,11 +516,10 @@
                 stateReg = 'M';
                 var num = 1;
                 var i   = 1;
-                $("#students li").each(function(){
-                    var classli = $(this).attr('class');
+                $("#students > li").each(function(){
                     var cssli = $(this).css('display');
                     var filtradoli = $(this).attr('filtrado');
-                    if (classli != 'hidden' && cssli != 'none' && !filtradoli) {
+                    if (cssli != 'none' && !filtradoli) {
                         $('#studentNum'+[i]).html(num);
                         num++;
                     };
@@ -555,11 +556,10 @@
                     $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
                     var num = 1;
                     var i   = 1;
-                    $("#students li").each(function(){
-                        var classli = $(this).attr('class');
+                    $("#students > li").each(function(){
                         var cssli = $(this).css('display');
                         var filtradoli = $(this).attr('filtrado');
-                        if (classli != 'hidden' && cssli != 'none' && !filtradoli) {
+                        if (cssli != 'none' && !filtradoli) {
                             $('#studentNum'+[i]).html(num);
                             num++;
                         };
@@ -592,11 +592,10 @@
                     $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
                     var num = 1;
                     var i   = 1;
-                    $("#students li").each(function(){
-                        var classli = $(this).attr('class');
+                    $("#students > li").each(function(){
                         var cssli = $(this).css('display');
                         var filtradoli = $(this).attr('filtrado');
-                        if (classli != 'hidden' && cssli != 'none' && !filtradoli) {
+                        if (cssli != 'none' && !filtradoli) {
                             $('#studentNum'+[i]).html(num);
                             num++;
                         };
@@ -629,11 +628,10 @@
                     $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
                     var num = 1;
                     var i   = 1;
-                    $("#students li").each(function(){
-                        var classli = $(this).attr('class');
+                    $("#students > li").each(function(){
                         var cssli = $(this).css('display');
                         var filtradoli = $(this).attr('filtrado');
-                        if (classli != 'hidden' && cssli != 'none' && !filtradoli) {
+                        if (cssli != 'none' && !filtradoli) {
                             $('#studentNum'+[i]).html(num);
                             num++;
                         };

@@ -6,7 +6,7 @@ $(function () {
                 spacingBottom: 30
             },
             title: {
-                text: 'Rendimiento Academico'
+                text: 'Rendimiento Académico'
             },
             subtitle: {
                 text: '* Cursos',
@@ -60,7 +60,7 @@ $(function () {
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Total Asitencias'
+                    text: 'Total Asistencias'
                 }
             },
             legend: {
