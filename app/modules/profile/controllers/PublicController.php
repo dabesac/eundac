@@ -443,14 +443,14 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
-    public function studentsavefamilyAction(){
+    public function studentnewfamilyAction(){
         try{
             $this->_helper->layout()->disableLayout();
 
             $eid=$this->sesion->eid;
             $pid=$this->sesion->pid;
 
-            $form=new Profile_Form_Family();
+            $form = new Profile_Form_Family();
             $this->view->form=$form;
 
             $dbfamily=new Api_Model_DbTable_Family();
@@ -465,8 +465,8 @@ class Profile_PublicController extends Zend_Controller_Action {
                     $assigneeYes = 1;
                 }
             }
-            if ($assigneeYes == 0) {
-                $form->assignee->addMultiOption('S', 'Si');
+            if ($assigneeYes == 1) {
+                $form->assignee->removeMultiOption('S');
             }
 
             $attrib=array("type");
@@ -475,58 +475,10 @@ class Profile_PublicController extends Zend_Controller_Action {
             $ma=0;
             foreach ($relation as $rel) {
                 if($rel["type"]=="PA"){
-                    $pa=1;
+                   $form->type->removeMultiOption("PA");
                 }
                 if($rel["type"]=="MA"){
-                    $ma=1;
-                }
-            }
-            if ($pa==0) {
-                $form->type->addMultiOption("PA","Padre");
-            }
-            if ($ma==0) {
-                $form->type->addMultiOption("MA","Madre");
-            }
-            $form->type->addMultiOption("HE","Hermano/a");
-            $form->type->addMultiOption("HI","Hijo/a");
-
-
-            if ($this->getRequest()->isPost()) {
-                $formdata=$this->getRequest()->getPost();
-                print_r($formdata);
-                if ($form->isValid($formdata)) {
-
-                    $type=$formdata["type"];
-                    $assignee=$formdata["assignee"];
-                    unset($formdata["save"]);
-                    unset($formdata["type"]);
-                    unset($formdata["assignee"]);
-                    $formdata["birthday"]=$formdata["year"]."-".$formdata["month"]."-".$formdata["day"];
-                    unset($formdata["year"]);
-                    unset($formdata["month"]);
-                    unset($formdata["day"]);
-                    if($formdata["type"]=="PA"){
-                        $formdata["sex"]="M";
-                    }elseif($formdata["type"]=="MA"){
-                        $formdata["sex"]="F";
-                    }
-                    $formdata["eid"]=$eid;
-                    trim($formdata["numdoc"]);
-                    if($formdata["live"]=="N")
-                        {
-                            $formdata["ocupacy"]="_";
-                            $formdata["phone"]="_";
-                            $formdata["address"]="_";
-                        }
-
-                    $save=$dbfamily->_save($formdata);
-                    
-                    //print_r($save);
-
-                    $relationdata=array("eid"=>$eid, "pid"=>$pid , "famid"=>$save,"type"=>$type,"assignee"=>$assignee);
-                    //print_r($relationdata);
-                    $saver=$dbrelation->_save($relationdata);
-
+                    $form->type->removeMultiOption("MA");
                 }
             }
 
@@ -545,6 +497,11 @@ class Profile_PublicController extends Zend_Controller_Action {
             $eid = $this->sesion->eid;
             $pid = $this->sesion->pid;
 
+            $dataFamiliar = array(  'eid'   => $eid,
+                                    'pid'   => $pid,
+                                    'famid' => $famid );
+            $this->view->dataFamiliar = $dataFamiliar;
+
             $familyDb = new Api_Model_DbTable_Family();
             $relationDb = new Api_Model_DbTable_Relationship();
             $form=new Profile_Form_Family();
@@ -554,34 +511,18 @@ class Profile_PublicController extends Zend_Controller_Action {
             
             $interruptor = 0;
             $typeRel = $relationtype['type'];
-            if($typeRel=="PA"){
-                $form->type->addMultiOption("PA","Padre");
-            }
-            if($typeRel=="MA"){
-                $form->type->addMultiOption("MA","Madre");
-            }
 
-            $pa=0;
-            $ma=0;
             $where=array("eid"=>$eid, "pid"=>$pid);
             $attrib=array("type");
             $relation=$relationDb->_getFilter($where, $attrib);
             foreach ($relation as $rel) {
-                if($rel["type"]=="PA"){
-                    $pa=1;
+                if($rel["type"]=="PA" and $typeRel != 'PA'){
+                    $form->type->removeMultiOption("PA");
                 }
-                if($rel["type"]=="MA"){
-                    $ma=1;
+                if($rel["type"]=="MA" and $typeRel != 'MA'){
+                    $form->type->removeMultiOption("MA");
                 }
             }
-            if ($pa==0) {
-                $form->type->addMultiOption("PA","Padre");
-            }
-            if ($ma==0) {
-                $form->type->addMultiOption("MA","Madre");
-            }
-            $form->type->addMultiOption("HE","Hermano/a");
-            $form->type->addMultiOption("HI","Hijo/a");
 
             $where = array('eid'=>$eid, 'famid'=>$famid);
             $family = $familyDb->_getOne($where);
@@ -602,64 +543,97 @@ class Profile_PublicController extends Zend_Controller_Action {
                     }
                 }
             }
-            if ($assigneeYes == 0) {
-                $form->assignee->addMultiOption('S', 'Si');
+            if ($assigneeYes != 0) {
+                $form->assignee->removeMultiOption('S');
             }
-
-            
 
             $birthdayDivide = explode("-", $family['birthday']);
             $family['year'] = $birthdayDivide[0];
             $family['month'] = $birthdayDivide[1];
             $family['day'] = $birthdayDivide[2];
-
             
             //$form->type->setAttrib('disabled', 'disabled');
             $this->view->form=$form;
             $form->populate($family);
 
-            if ($this->getRequest()->isPost()) {
-                $formdata=$this->getRequest()->getPost();
-                if ($form->isValid($formdata)) {
-                    $type=$formdata["type"];
-                    $assignee=$formdata["assignee"];
-                    unset($formdata["type"]);
-                    unset($formdata["assignee"]);
-                    $formdata["birthday"]=$formdata["year"]."-".$formdata["month"]."-".$formdata["day"];
-                    unset($formdata["year"]);
-                    unset($formdata["month"]);
-                    unset($formdata["day"]);
-                    if($formdata["type"]=="PA"){
-                        $formdata["sex"]="M";
-                    }elseif($formdata["type"]=="MA"){
-                        $formdata["sex"]="F";
-                    }
-
-                    if($formdata["live"]=="N")
-                        {
-                            $formdata["ocupacy"]="_";
-                            $formdata["phone"]="_";
-                            $formdata["address"]="_";
-                        }
-
-                    $where = array('eid'=>$eid, 'pid'=>$pid, 'famid'=>$famid);
-                    $relationdata=array("type"=>$type,"assignee"=>$assignee);
-                    
-                    $saver=$relationDb->_update($relationdata, $where);
-                    
-                    $where = array('eid'=>$eid, 'famid'=>$famid);
-                    $save=$familyDb->_update($formdata, $where);
-                    //print_r($relationdata);
-
-                    //print_r("Se Guardo con Exito");
-                }
-            }
-
-
         } catch (Exception $e) {
             print 'Error '.$e->getMessage();
         }
     }
+
+    public function studentsavefamilyAction(){
+        $this->_helper->layout()->disableLayout();
+
+        $familyDb   = new Api_Model_DbTable_Family();
+        $relationDb = new Api_Model_DbTable_Relationship();
+
+        $eid = $this->sesion->eid;
+        $pid = $this->sesion->pid;
+
+        $form = new Profile_Form_Family();
+        $formData = $this->getRequest()->getPost();
+        if ($form->isValid($formData)) {
+            if ($formData['whySend'] == 'Save') {
+                unset($formData['whySend']);
+                $formData["birthday"] = $formData["year"]."-".$formData["month"]."-".$formData["day"];
+                unset($formData["year"]);
+                unset($formData["month"]);
+                unset($formData["day"]);
+                
+                if ($formData['type'] == 'MA') {
+                    $formData['sex'] = 'F';
+                }elseif ($formData['type'] == 'PA') {
+                    $formData['sex'] = 'M';
+                }
+
+                $formData["eid"] = $eid;
+                trim($formData["numdoc"]);
+
+                $relationData = array(  "eid"      => $eid, 
+                                        "pid"      => $pid , 
+                                        "type"     => $formData["type"],
+                                        "assignee" => $formData["assignee"] );
+                unset($formData["type"]);
+                unset($formData["assignee"]);
+
+                $save = $familyDb->_save($formData);
+                if ($save) {
+                    $relationData['famid'] = $save;
+                    if ($relationDb->_save($relationData)) {
+                        echo 'true';
+                    }
+                }
+            }else {
+                unset($formData['whySend']);
+                $pkRelationship = array('eid'   => $formData['eid'],
+                                        'pid'   => $formData['pid'],
+                                        'famid' => $formData['famid'] );
+                $pkFamiliar = array('eid'   => $formData['eid'],
+                                    'famid' => $formData['famid'] );
+                unset($formData['eid']);
+                unset($formData['pid']);
+                unset($formData['famid']);
+
+                $formData["birthday"] = $formData["year"]."-".$formData["month"]."-".$formData["day"];
+                unset($formData["year"]);
+                unset($formData["month"]);
+                unset($formData["day"]);
+
+                $relationData = array(  "type"     => $formData["type"],
+                                        "assignee" => $formData["assignee"] );
+                unset($formData["type"]);
+                unset($formData["assignee"]);
+                if ($relationDb->_update($relationData, $pkRelationship)) {
+                    if ($familyDb->_update($formData, $pkFamiliar)) {
+                        echo "true";
+                    }
+                }
+            }
+        }else{
+            echo "falta";
+        }
+    }
+
 
     public function studentremovefamilyAction(){
         try {

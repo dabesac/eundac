@@ -2,7 +2,7 @@
 <br>
 <div class="row container">
 	<div class="col-md-8">
-		<h4 class="text-muted">Editar a <span class="text-info"><?php echo $this->nameFamily ?></span></h4>
+		<h4 class="text-muted">Ingrese un Nuevo <span class="text-info">Familiar</span></h4>
 	</div>
 	<div class="col-md-2">
 		<a id="save" href="##" class="btn btn-info form-control">Guardar</a>
@@ -13,6 +13,9 @@
 </div>
 <hr>
 <div class="container">
+	<p class="text-muted"><span class="glyphicon glyphicon-exclamation-sign"></span> Seleccione un parentésco para empezar, puede ser tu Mamá, Papá, etc....</p>
+</div>
+<div class="container">
 	<div id="emptyForm" class="alert alert-warning hidden">
 		<h4>Asegurese que todo esta en orden</h4>
 		<p>No se pudo guardar los datos, asegurese de haber rellenado el formulario correctamente...</p>
@@ -20,10 +23,7 @@
 </div>
 <br>
 <form id="formFamily">
-	<input type="hidden" name="whySend" value="Update">
-	<input type="hidden" name="eid" value="<?php echo $this->dataFamiliar['eid'] ?>">
-	<input type="hidden" name="pid" value="<?php echo $this->dataFamiliar['pid'] ?>">
-	<input type="hidden" name="famid" value="<?php echo $this->dataFamiliar['famid'] ?>">
+	<input type="hidden" name="whySend" value="Save">
 	<div class="row container">
 		<div class="col-md-2">
 			<p class="text-muted">Parentesco</p>
@@ -112,14 +112,6 @@
 
 <script>
 	//Navegación
-	var live = $('#live').val();
-	if (live == 'N') {
-		$('.liveOptions').addClass('hidden');
-		$('.liveOptions').val('0');
-		$('#assignee, #health').val('N');
-		$('#noLive').removeClass('hidden');
-	}
-
 	$('#month, #year').change(function(){
 		appendDays();
 	});
@@ -208,4 +200,27 @@
 		};
 	}
 
+	/*$("#save").click(function(){
+		$("#form").submit()
+	})
+	$("#form").submit(function(){
+		$.ajax({
+			type: "POST",
+			url: $(this).attr("action"),
+			data: $(this).serialize(),
+			success: function(data){
+				$("#datastudent").html(data);
+            	$("#datastudent").html('<br><br><center><img src="/img/spinner.gif" alt="" /></center>');
+            	$("#datastudent").fadeOut('fast', function(){
+            		$("#datastudent").load('/profile/public/studentfamily', function(){
+            			$("#datastudent").fadeIn('fast');
+            		});
+            	});
+			}
+		})
+		return false;
+	})*/
+
+
+   
 </script>

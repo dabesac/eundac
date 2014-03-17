@@ -77,15 +77,22 @@
                                     <td class="text-center text-info">S/. <?php echo $payment['amount']?></td>
                                     <td class="text-center text-danger"><?php echo $payment['operation']?></td>
                                 </tr>
-                                <?php if ($payment['amount'] < $montoPaga): ?>
+                                <?php if ($payment['amount'] < $montoPaga){ 
+                                    $reintegro = $montoPaga - $payment['amount']; 
+                                    foreach ($this->paymentsConditional as $pay){ 
+                                        if ($pay['amount'] <= $reintegro){ 
+                                            $payment['amount'] = $payment['amount'] + $pay['amount'];
+                                        }
+                                    }
+                                    if ($payment['amount'] < $montoPaga){ ?>
                                     <tr>
                                         <td class="text-center text-danger" colspan="4">Falta un reintegro de S/. <?php echo $montoPaga - $payment['amount'] ?></td>
                                     </tr>
-
-                                <?php 
-                                    $faltaReintegro = 'si';
-                                    $classButtonValidate = 'disabled';
-                                endif ?>
+                                    <?php   
+                                        $faltaReintegro = 'si';
+                                        $classButtonValidate = 'disabled';
+                                    }
+                                } ?>
                             <?php endif ?>
                         <?php endforeach ?>
                     <?php endforeach ?>
