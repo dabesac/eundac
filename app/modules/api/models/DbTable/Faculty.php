@@ -74,7 +74,7 @@ class Api_Model_DbTable_Faculty extends Zend_Db_Table_Abstract
 	}
 
 
-	 public function _getFilter($where=null,$attrib=null,$orders=null){
+ 	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
 			if($where['eid']=='' || $where['oid']=='') return false;
 				$select = $this->_db->select();
