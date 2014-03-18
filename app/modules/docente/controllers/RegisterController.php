@@ -75,6 +75,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->partial = $partial;
         $this->view->students = $data_notes_students;
         $this->view->url = $url;
+        $this->view->perid=$perid;
 
     }
     public function targetprintAction(){
