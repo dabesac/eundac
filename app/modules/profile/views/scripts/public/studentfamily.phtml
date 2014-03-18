@@ -17,36 +17,32 @@
 	<div class="row">
     	<?php $c = 0;
     	foreach ($this->famdata as $fam) {?>
-		<div class="col-md-6">
+		<div class="col-md-6" id="familiar<?php echo $fam[0]['famid'] ?>">
+			<div class="row">
+				<div id="alertRemove<?php echo $fam[0]['famid'] ?>" class="col-md-12 alertRemove hidden">
+					<div class="alert alert-danger">
+						<div class="row">
+							<div class="col-md-6">
+								<p>Seguro que desea eliminar a <?php echo $fam[0]['firtsname'] ?>? <span id="loadingDiv<?php echo $fam[0]['famid'] ?>"></span></p>
+							</div>
+							<div class="col-md-3">
+								<a href="##" class="btn btn-default form-control closeAlertsRemove">Cancelar</a>
+							</div>
+							<div class="col-md-3">
+								<a href="##" famid="<?php echo $fam[0]['famid']?>"  class="btn btn-danger form-control removeBtn">Eliminar</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="panel panel-warning">
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-1">
-							<a href="##" id="remove<?php echo $fam[0]['famid']?>" class="pull-right text-warning" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
-							<script>
-							  	$("#remove<?php echo $fam[0]['famid']?>").click(function(){
-							    	bootbox.confirm("Seguro que desea eliminar <?php echo $fam[0]['firtsname']?>", function(result) {
-							        	if (result)
-							        	{
-							          		$("#editform").load("/profile/public/studentremovefamily/famid/<?php echo $fam[0]['famid']?>");
-							          		$('#editform').html("");
-							          		$("#datastudent").load("/profile/public/studentfamily");
-							        	}
-							      	});
-							  	});
-							</script>
+							<a href="##" famid="<?php echo $fam[0]['famid']?>" class="pull-right text-warning showAlertRemove" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
 						</div>
 						<div class="col-md-1 col-md-offset-10">
-							<a href="##" id="edit<?php echo $fam[0]['famid']?>" class="text-warning" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
-							<script>
-								$("#edit<?php echo $fam[0]['famid']?>").click(function(){
-									$('#datastudent').fadeOut('fast', function(){
-										$('#datastudent').load("/profile/public/studenteditfamily/famid/<?php echo $fam[0]['famid']?>", function(){
-											$('#datastudent').fadeIn('fast');
-										});
-									});
-								})
-							</script>
+							<a href="##" famid="<?php echo $fam[0]['famid']?>" class="text-warning editarBtn" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
 						</div>
 					</div>
 					<br><br>
@@ -133,16 +129,41 @@
 </div>
 
 <script>
+	//Eliminar Familiar
+	$('.showAlertRemove').click(function(){
+		var famid = $(this).attr('famid');
+		$('.alertRemove').addClass('hidden');
+		$('#alertRemove' + famid).removeClass('hidden');
+	});
+	$('.closeAlertsRemove').click(function(){
+		$('.alertRemove').addClass('hidden');
+	});
+	$('.removeBtn').click(function(){
+		var famid = $(this).attr('famid');
+		removeFamiliar(famid);
+	});
+
+	//Editar Familiar
+	$('.editarBtn').click(function(){
+		var famid = $(this).attr('famid');
+		$('#datastudent').addClass('hidden');
+		$('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+		$('#editform').removeClass('hidden');
+		$('#editform').load('/profile/public/studenteditfamily/famid/' + famid, function(){
+			$('#loadingDiv').html('');
+		});
+	});
 
 	$('a').hover(function(){
     	$(this).tooltip('toggle');
   	});
   	
 	$("#newFamily").click(function(){
-		$('#datastudent').fadeOut('fast', function(){
-			$('#datastudent').load('/profile/public/studentnewfamily', function(){
-				$('#datastudent').fadeIn('fast');
-			});
+		$('#datastudent').addClass('hidden');
+		$('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
+		$('#editform').removeClass('hidden');
+		$('#editform').load('/profile/public/studentnewfamily', function(){
+			$('#loadingDiv').html('');
 		});
 	});
 
@@ -158,4 +179,19 @@
 			$('#alertCompleteProfile').addClass('hidden');
 		},
 	});
+
+	//Functions
+	function removeFamiliar(famid){
+		$('#loadingDiv' + famid).html('<img src="/img/spinner.gif" alt="Loading..." />');
+		$.ajax({
+			url : '/profile/public/studentremovefamily/',
+			data : {famid : famid},
+			success : function(data){
+				if (data == 'true') {
+					$('#loadingDiv' + famid).html('');
+					$('#familiar' + famid).addClass('hidden');
+				};
+			}
+		});
+	}
 </script>

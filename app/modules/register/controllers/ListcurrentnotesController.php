@@ -43,7 +43,7 @@ class Register_ListcurrentnotesController extends Zend_Controller_Action {
                 $c=0;
                 $nc++;
 
-                if ($coid['notafinal']<11) {
+                if ($coid['notafinal'] and $coid['notafinal']<11) {
                     $coursesDis[$coursesD]['courseid'] = $coid['courseid'];
                     $coursesDis[$coursesD]['curid'] = $coid['curid'];
                     $coursesD++;

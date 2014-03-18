@@ -14,9 +14,11 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
     public function indexAction()
     {	
     	//echo "hfh";
+        $eid=$this->sesion->eid;
+        $oid=$this->sesion->oid;
+        $where=array('eid'=>$eid,'oid'=>$oid);
         $dbfaculty=new Api_Model_DbTable_Faculty();
-        $where=array('eid'=>$eid);
-        $dataf=$dbfaculty->_getAll();
+        $dataf=$dbfaculty->_getAll($where);
         $this->view->dataf=$dataf;
     }
 
@@ -110,11 +112,35 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
             $formData['observation']=null;
         }
 
-    	//print_r($formData);
+    	print_r($formData);exit();
     	$distr = new Distribution_Model_DbTable_Distribution();
     	$distr->_update($formData,$pk);
 
     }
 
+    public function closedistributionAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $state=base64_decode($this->_getParam("state"));
+            $escid=base64_decode($this->_getParam("escid"));
+            $subid=base64_decode($this->_getParam("subid"));
+            $distid=base64_decode($this->_getParam("distid"));
+            $perid=base64_decode($this->_getParam("perid"));
+            $comment=base64_decode($this->_getParam("comment"));
+            $dbdistribution=new Distribution_Model_DbTable_Distribution();
+            $pk=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,
+                            'perid'=>$perid);
+            if ($state=="C") {
+                $data=array('state'=>"C",'comments'=>null);
+            }
 
+            $dbdistribution->_update($data,$pk);
+        
+        } catch (Exception $e) {
+            print "Error:".$e->getMessage();
+        }
+
+    }
 }

@@ -96,7 +96,7 @@ class Distribution_PrintdistributionController extends Zend_Controller_Action {
                     }
 
                     $whereteach=array('eid' => $eid, 'oid' => $oid, 
-                                'escid' => $escid, 'perid' => $perid);
+                                'escid' => $escid,'subid'=>$subid, 'perid' => $perid);
                     $distteacher = new Api_Model_DbTable_Coursexteacher();
                     $dataallteacher = $distteacher->_getAllTeacherXPeriodXEscid($whereteach);
                     $this->view->allteachers = $dataallteacher;

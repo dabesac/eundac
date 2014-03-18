@@ -11,26 +11,50 @@ ob_start();
 </div>
 <div style="text-align: center; font-size:16px;margin-top:10px"><b> RECORD DE NOTAS </b></div> <br/>
 <?php 
-    $d=1;
-    $c=1;
-    $j=0;
     if ($this->data) {
-        $len=count($this->data);
+        $d=0;
+        $c=0;
+        $j=0;
         $semes[$j]=$this->data[$j]['semid'];
         $se[$j]=$semes[$j];
-        for ($i=0; $i < $len; $i++) { 
-            $semid=$this->data[$i]['semid'];
-            if ($semid==$c) {
-                $d++;
-            }
-            else{
-                $c++;
-                $j++;
-                $semes[$d]=$semid;
-                $se[$j]=$semes[$d];
-            }
+        $len=count($this->data);
+        if ($semes[0]=="0") {
+            for ($i=0; $i < $len; $i++) { 
+                $semid=$this->data[$i]['semid'];
+                if ($semid==$c) {
+                    $d++;
+                }
+                else{
+                    $c++;
+                    $j++;
+                    $semes[$d]=$semid;
+                    $se[$j]=$semes[$d];
+                }
+            }               
+        }
+        else{
+            $d=0;
+            $c=1;
+            $j=0;
+            $semes[$j]=$this->data[$j]['semid'];
+            $se[$j]=$semes[$j];
+            for ($i=0; $i < $len; $i++) { 
+                $semid=$this->data[$i]['semid'];
+                if ($semid==$c) {
+                    $d++;
+                }
+                else{
+                    $c++;
+                    $j++;
+                    $semes[$d]=$semid;
+                    $se[$j]=$semes[$d];
+                }
+            }    
         }
         $len1=count($se);
+        // print_r($len);
+        // print_r($len1);
+        // print_r($se);exit();
         for ($f=0; $f < $len1; $f++) { 
             ?>
                 <table style="width:100%; margin-bottom:15px" border=" 1px">
@@ -110,7 +134,7 @@ ob_start();
     
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('RecordNotas -'.$this->person['pid'].'.pdf','D');
-    // $mpdf -> Output();  
+    // $mpdf->Output('RecordNotas -'.$this->person['pid'].'.pdf','D');
+    $mpdf -> Output();  
 
 ?>

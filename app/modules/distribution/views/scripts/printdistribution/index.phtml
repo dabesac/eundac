@@ -551,8 +551,7 @@ foreach ($this->allteachers as $allteachers){
     $e = new Api_Model_DbTable_Speciality();
     $es = $e->_getOne($whereespe);
     $infoescuela = $es['name'];
-
-    if($escidorigenusuario<>$allteachers['escid']){ ?>
+    if($escidorigenusuario<>$allteachers['escid']){ ?>  
         <h5><?php echo 'Docente de Apoyo :'.$infoescuela?></h5>
         <h5><?php echo $list_p1[0]['last_name0']." ".$list_p1[0]['last_name1'].", ".$list_p1[0]['first_name']?></h5>
         <table style="width: 100%">
@@ -598,7 +597,6 @@ foreach ($this->allteachers as $allteachers){
         <?php  
     }
 } ?>
-<!--   -->
 <br><br>
 <div style="margin-left: 65%">
     <h5 style="border-top: solid 1px #000; text-align: center">

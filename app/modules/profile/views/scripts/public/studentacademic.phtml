@@ -31,7 +31,7 @@
             </tr>
       <?php $c = 1;
       foreach ($this->acadata as $academic) {?>
-            <tr>
+            <tr id="academic<?php echo $academic['acid'] ?>">
               <td><h5><?php echo $c?></h5></td>
               <td><h5><?php echo $academic['institution']?></h5></td>
               <td><h5>
@@ -58,51 +58,30 @@
                 }
                 ?></h5></td>
               <td align="center"><h5><?php echo $academic['year_end']?></h5></td>
-              <td><h5><a id="delete<?php echo $academic['acid']?>" class="text-warning" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
-                <script>
-                  $("#delete<?php echo $academic['acid']?>").click(function(){
-                    $('#datastudent').fadeOut('fast', function(){
-                      $('#datastudent').load('/profile/public/studenteditacademic/acid/<?php echo $academic['acid']?>', function(){
-                        $('#datastudent').fadeIn('fast');
-                      });
-                    });
-                  })
-                </script></h5></td>
-                <td><h5><a class="text-warning" id="remove<?php echo $academic['acid']?>" href="##" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
-                <script>
-                  $("#remove<?php echo $academic['acid']?>").click(function(){
-                    bootbox.confirm("Seguro que desea eliminar <?php echo $academic['institution']?>", function(result) {
-                        if (result)
-                          $("#editform").load("/profile/public/studentremoveacademic/eid/<?php echo $this->data['eid']?>/pid/<?php echo $this->data['pid']?>/acid/<?php echo $academic['acid']?>");
-                          $('#editform').html("");
-                          $("#datastudent").load("/profile/public/studentacademic");
-                      })  
-                  })
-                </script></h5></td>
+               <td><h5>
+                  <a id="delete<?php echo $academic['acid'] ?>" class="text-warning" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+               </h5></td>
+                <td><h5>
+                  <a class="text-warning showAlertRemove" acid="<?php echo $academic['acid']?>" href="##" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
+                </h5></td>
             </tr>
-                <!--
-              </div>
-              <div class="col-md-1 pull-right">
-                
-              </div>
-            </div>
-
-            <br>
-            <blockquote>
-              <h4> <span class="glyphicon glyphicon-link text-muted"></span> </h4>
-            </blockquote>
-            <hr class="featurette-divider">
-
-            <div class="row">
-              <div class="col-md-4 col-md-offset-2">
-                <h4><span class="text-muted">Tipo de Institución </span>
-                  </h4>
-                <h4><span class="text-muted">Año de Finalización </span></h4>
-              </div>
-              <div class="col-md-4">
-                <h4><span class="text-muted">Nivel de Estudio</span>
-                  </h4>
-                <h4><span class="text-muted">Localización </span></h4>-->
+            <tr id="alertRemove<?php echo $academic['acid'] ?>" class="alertRemove hidden">
+               <td colspan="7">
+                  <div class="alert alert-danger">
+                  <div class="row">
+                     <div class="col-md-8">
+                        <p>Seguro que desea eliminar a <?php echo $academic['institution'] ?> <span id="loadingDiv<?php echo $academic['acid'] ?>"></span></p>
+                     </div>
+                     <div class="col-md-2">
+                        <a href="##" class="btn btn-default form-control closeAlertRemove">Cancelar</a>
+                     </div>
+                     <div class="col-md-2">
+                        <a href="##" acid="<?php echo $academic['acid'] ?>" class="btn btn-danger form-control removeBtn">Eliminar</a>
+                     </div>
+                  </div>
+                  </div>
+               </td>
+            </tr>
       <?php $c++;
       }?>
           </table>
@@ -121,6 +100,19 @@
 </div>
 
 <script>
+   $('.showAlertRemove').click(function(){
+      var acid = $(this).attr('acid');
+      $('#alertRemove' + acid).removeClass('hidden');
+   });
+   $('.closeAlertRemove').click(function(){
+      $('.alertRemove').addClass('hidden');
+   });
+   $('.removeBtn').click(function(){
+      var acid = $(this).attr('acid');
+      removeAcademic(acid);
+   });
+
+
   $('a').hover(function(){
     $(this).tooltip('toggle');
   });
@@ -131,7 +123,7 @@
         $('#datastudent').fadeIn('fast');
       });
     });
-  })
+  });
 
   var eid = $('#eid').val();
   var oid = $('#oid').val();
@@ -146,4 +138,20 @@
       $('#alertCompleteProfile').addClass('hidden');
     },
   });
+
+  //Funciones
+  function removeAcademic(acid){
+      $('#loadingDiv' + acid).html('<img src="/img/spinner.gif" alt="Loading..." />');
+      $.ajax({
+         url    : '/profile/public/studentremoveacademic/',
+         data   : {acid : acid},
+         success: function(data){
+            if (data == 'true') {
+               $('#loadingDiv' + acid).html('');
+               $('.alertRemove').addClass('hidden');
+               $('#academic' + acid).addClass('hidden');
+            };
+         }
+      });
+  }
 </script>

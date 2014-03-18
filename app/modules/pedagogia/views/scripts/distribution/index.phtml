@@ -20,7 +20,7 @@
 		<h5 class="text-info">Año</h5>
 		<select class="form-control" name="Anio" id="anio">
 			<option value="">Seleccione Año</option>
-			<?php $anio = date(Y);
+			<?php $anio = date('Y');
 			for ($i=$anio; $i >= 1993 ; $i--) { ?>
  				<option value="<?php echo $i?>"><?php echo $i?></option>
  			<?php } ?>

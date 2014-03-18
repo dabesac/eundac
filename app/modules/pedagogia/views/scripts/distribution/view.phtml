@@ -2,6 +2,29 @@
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>-->
 
 <?php if ($this->dis): ?>
+	<div class="row">
+		<div class="col-md-2 col-md-offset-1">
+			<h5 class="text-muted">
+				<strong>Leyenda</strong>
+			</h5>
+		</div>
+		<div class="col-md-2">
+			<h5 class="text-muted">
+				<img src="/img/circulo-verde.png"><span class="text-success"> Activo</span>
+			</h5>
+		</div>
+		<div class="col-md-2">
+			<h5 class="text-muted">
+				<img src="/img/circulo-rojo.png"><span class="text-danger"> Cerrado/Inactivo</span>
+			</h5>
+		</div>
+		<div class="col-md-2">
+			<h5 class="text-muted">
+				<img src="/img/circulo-amarillo.png"><span class="text-warning"> Observado</span>
+			</h5>
+		</div>
+	</div>
+	<hr>
 	<table class="table table-hover" style="font-size:14px">
 	<thead>
 		<tr>
@@ -9,8 +32,10 @@
 			<th>Nombre de la Escuela</th>
 			<th>Fecha de Registro</th>
 			<th>Ver</th>
-			<th>Observacion</th>
-			<th class="text-center">Impresion</th>
+			<th class="text-center">Estado</th>
+			<th>Observación</th>
+			<th class="text-center">Impresión</th>
+			<th class="text-center">Cerrar Distribución</th>
 		</tr>
 
 	</thead>
@@ -18,21 +43,51 @@
 	<tbody>
 		<?php
 		$i=0;
+		// print_r($this->dis);exit();
 		foreach ($this->dis as $distrib) {
-			$i++;			
+			$i++;
+			switch ($distrib['state']) {
+				case 'A': 	$state = "<img src='/img/circulo-verde.png'>"; 
+							$namestate = "Activo";
+							break;
+				case 'I': 	$state = "<img src='/img/circulo-rojo.png'>"; 
+							$namestate = "Inactivo";
+							break;
+				case 'C': 	$state = "<img src='/img/circulo-rojo.png'>"; 
+							$namestate = "Cerrado";
+							break;
+				case 'O': 	$state = "<img src='/img/circulo-amarillo.png'>"; 
+							$namestate = "Observado";
+							break;
+			}
+			if ($distrib['state']!="B") {
 			?>
 			<tr>
 				<td><?php echo $i?></td>
 				<td><?php echo $distrib['name']?></td>
 				<td ><?php echo $distrib['number']?></td>
 				<td>
-				<h4><a id="seeDistribution<?php echo $distrib['number']?>" href="#" title="Ver" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Eliminar Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')">
-                <span class="glyphicon glyphicon-eye-open"></span></a></h4>				
+					<h4><a id="seeDistribution<?php echo $distrib['number']?>" href="#" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Eliminar Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')"><span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" title="Ver"></span>
+	                </a></h4>	
 				</td>
+				<td class="text-center">
+					<?php 
+					if ($distrib['comments']<>""){	
+						?>
+						<span class='correc' title="AVISO" data-container="body" data-toggle="popover" data-content="<?php echo $distrib['comments']?>"><?php echo $state?></span>
+					<?php	
+					}
+					else{	?>
+						<span class='span' data-toggle="tooltip" title="<?php echo $namestate?>"><?php echo $state?></span>
+					<?php	
+					}
+					?>
+				</td>
+					
 				<td><span title="eescriba" rel="tooltip" placeholder="escribaa" id="<?php echo $i?>"  value='editar'>
 				<?php if($distrib['observation']=='')
 				{
-				  echo "Haga doble clic para editar su observacion";
+				  echo "Haga doble clic para editar su observación";
 				}
 				else
 				{
@@ -44,6 +99,18 @@
 
 				<td class="text-center"><h4><a href='/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>' data-dismiss="modal" aria-hidden="true" style="float:center"><span class="glyphicon glyphicon-print"></span></a></h4></td>
 				<!--  Nombre: <span class="editText">Fulanito de tal</span> -->
+				<!-- <td class="closedis text-center"> <a title='Eliminar un registro' href="#"><span class="glyphicon glyphicon-pencil"></span></a></td> -->
+				<td class="text-center">
+					<?php if ($distrib['state']!="C") {	?>
+					<h4><a class="closedis" href="#" distid='<?php echo base64_encode($distrib['distid'])?>' perid='<?php echo base64_encode($distrib['perid'])?>' escid='<?php echo base64_encode($distrib['escid']);?>' subid='<?php echo base64_encode($distrib['subid'])?>'><span class="glyphicon glyphicon-lock" data-toggle="tooltip" title="Cerrar Distribución"></span></a></h4>
+					<?php
+					}
+					else{	?>
+						<h4><a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Desactivada"></span></a></h4>
+					<?php
+					}
+					?>
+				</td>
 			</tr>
 
 			
@@ -69,18 +136,16 @@
 
                     //e.preventDefault();                 
                     //alert(url);
-                    $("#destino").load("/pedagogia/distribution/distribution/", {escid: "<?php echo $distrib['escid']?>", distid: "<?php echo $distrib['distid']?>",perid: "<?php echo $distrib['perid']?>",subid: "<?php echo $distrib['subid']?>",observation: text}, function(){
-                	});
+                    	$("#destino").load("/pedagogia/distribution/distribution/", {escid: "<?php echo $distrib['escid']?>", distid: "<?php echo $distrib['distid']?>",perid: "<?php echo $distrib['perid']?>",subid: "<?php echo $distrib['subid']?>",observation: text}, function(){
+                		});
 
-                    }
+                    };
                 });
             // });
         	</script>
 
 			<?php
-
-
-
+			}			
 		}
 		?>
 	</tbody>
@@ -94,9 +159,58 @@
 	</div>
 <?php endif ?>
 
+<!-- Modal -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog" style="width:30%">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">ESTA SEGURO DE CERRAR LA DISTRIBUCIÓN?</h4>
+      </div>
+      <div class="modal-body">
+        	<button id="aceptars" type="button" class="btn btn-success">Aceptar</button>
+        	<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="cargaqui"></div>
 <script>
-
+	$("#cargaqui").hide();
+	$(".glyphicon").tooltip();
 	$(".span").tooltip();
-</script>
+	$(function () {
+		$('.correc').popover('show');
+	});
+	setTimeout(function() {
+	  $('.correc').popover('hide');
+	}, 10000);
 
+	$("#periods","#anios","#faculty").change(function(){
+		$('.correc').popover('hide');
+	});
+
+	$(".closedis").click(function(){
+		$("#myModal").modal("show");
+		var params = {
+			escid:$(this).attr('escid'),
+			subid:$(this).attr('subid'),
+			distid:$(this).attr('distid'),
+			perid:$(this).attr('perid')
+		};
+		$("#aceptars").click(function(){
+			$("#myModal").modal("hide");
+			$('#myModal').on('hidden.bs.modal', function (e) {
+				var perid = $('#periods').val();
+				var facid = $('#faculty').val();
+				var url1=("/pedagogia/distribution/closedistribution/state/<?php echo base64_encode("C")?>/escid/"+params['escid']+"/subid/"+params['subid']+"/distid/"+params['distid']+"/perid/"+params['perid']+"/comments/<?php echo base64_encode("S")?>/");
+				$("#cargaqui").load(url1);
+				// $('#data').html('<center><img class="text-center" src="/img/spinner.gif"></center>');
+				var url2=("/pedagogia/distribution/view/perid/"+perid+"/facid/"+facid);
+				$('#data').load(url2);
+				$('.correc').popover('hide');
+			})
+		});
+	});
+</script>
  <div id="destino"></div> 
