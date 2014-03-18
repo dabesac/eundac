@@ -32,6 +32,7 @@ $ldistri =$this->ldistribution;
 	$('#dataDistribution').html('<center><img src="/img/spinner.gif" alt="" /></center>');
 	$('#dataDistribution').load('/distribution/distribution/showdistribution/anio/' + anio);
 	$('#anio').change(function(){
+		$('.obser').popover('hide');
 		$('#dataDistribution').html('<center><img src="/img/spinner.gif" alt="" /></center>');
 		var anio = $(this).val();
 		$('#dataDistribution').load('/distribution/distribution/showdistribution/anio/' + anio);

@@ -70,10 +70,39 @@ class Distribution_DistributionController extends Zend_Controller_Action {
 
     public function newAction(){    
         $anio = $this->_getParam('anio');
-        $this->view->anio = $anio;
-        
+        $this->view->anio = $anio;        
         $form = new Distribution_Form_Distribution();
         $this->view->form = $form;
+
+    }
+
+    public function sendistributionAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $state=base64_decode($this->_getParam("state"));
+            $escid=base64_decode($this->_getParam("escid"));
+            $subid=base64_decode($this->_getParam("subid"));
+            $distid=base64_decode($this->_getParam("distid"));
+            $perid=base64_decode($this->_getParam("perid"));
+            $comment=base64_decode($this->_getParam("comment"));
+            $dbdistribution=new Distribution_Model_DbTable_Distribution();
+            $pk=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,
+                            'perid'=>$perid);
+            if ($comment) {
+                $data=array('state'=>"A",'comments'=>"Ya corrigió su distribución REVISALÓ");
+            }
+            else{
+                $data=array('state'=>"A");
+            }
+
+            if ($dbdistribution->_update($data,$pk)) {
+                $this->_redirect("/distribution/distribution/index");
+            }
+        } catch (Exception $e) {
+            print "Error:".$e->getMessage();
+        }
 
     }
 
