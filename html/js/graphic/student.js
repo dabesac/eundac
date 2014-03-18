@@ -6,7 +6,7 @@ $(function () {
                 spacingBottom: 30
             },
             title: {
-                text: 'Rendimiento Académico'
+                text: 'Avance Académico'
             },
             subtitle: {
                 text: '* Cursos',
