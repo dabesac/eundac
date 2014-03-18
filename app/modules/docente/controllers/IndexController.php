@@ -18,13 +18,15 @@ class Docente_IndexController extends Zend_Controller_Action {
     public function indexAction()
     {
       try{
-         //DataBases
+         //DataBases //Avance de Notas
+         $periodsxCourseDb              = new Api_Model_DbTable_PeriodsCourses();
          $coursesxTeacherDb             = new Api_Model_DbTable_Coursexteacher();
          $courseDb                      = new Api_Model_DbTable_Course();
          $syllabusDb                    = new Api_Model_DbTable_Syllabus();
          $syllabusUnitsDb               = new Api_Model_DbTable_Syllabusunits();
          $syllabusUnitsContentDb        = new Api_Model_DbTable_Syllabusunitcontent();
          $syllabusUnitsContentControlDb = new Api_Model_DbTable_ControlActivity();
+         $registerxCourseDB             = new Api_Model_DbTable_Registrationxcourse();
          //___________________________________________________________
 
          $eid   = $this->sesion->eid;
@@ -39,7 +41,7 @@ class Docente_IndexController extends Zend_Controller_Action {
                         'pid'   => $pid,
                         'perid' => $perid );
 
-         $attrib = array('courseid', 'curid', 'turno', 'escid', 'subid');
+         $attrib = array('courseid', 'curid', 'turno', 'escid', 'subid', 'perid');
          $courses = $coursesxTeacherDb->_getFilter($where, $attrib);
          $c = 0;
          foreach ($courses as $course) {
@@ -48,10 +50,10 @@ class Docente_IndexController extends Zend_Controller_Action {
                            'oid'      => $oid,
                            'curid'    => $course['curid'],
                            'courseid' => $course['courseid'] );
-            $attrib = array('name');
+            $attrib = array('name', 'type');
             $coursesName[$c] = $courseDb->_getFilter($where, $attrib);
 
-            //Syllabus
+            //Estado de Acta
             $where = array('eid'      => $eid, 
                            'oid'      => $oid,
                            'curid'    => $course['curid'],
@@ -60,6 +62,12 @@ class Docente_IndexController extends Zend_Controller_Action {
                            'escid'    => $course['escid'],
                            'subid'    => $course['subid'],
                            'perid'    => $perid );
+
+            $attrib = array('state_record');
+            $stateRecord = $periodsxCourseDb->_getFilter($where, $attrib);
+            $coursesStateRecord[$c] = $stateRecord[0]['state_record'];
+
+            //Syllabus
             $attrib = array('units');
             $coursesSyllabus = $syllabusDb->_getFilter($where, $attrib);
             $totalUnits = $coursesSyllabus[0]['units'];
@@ -87,13 +95,47 @@ class Docente_IndexController extends Zend_Controller_Action {
                }else{
                   $contents = 0;
                }
-               $progressSessions[$c] = intval((100 * $contents)/$totalContents);
+               $progressSessions[$c]['totalContents'] = $totalContents;
+               $progressSessions[$c]['contents'] = $contents;
+               $progressSessions[$c]['porcentaje'] = intval((100 * $contents)/$totalContents);
+               $progressSessions[$c]['porcentaje'] = $progressSessions[$c]['porcentaje']. '%';
             }else{
-               $progressSessions[$c] = 'FS';
+               $progressSessions[$c]['porcentaje'] = 'FS';
+            }
+
+            //Avance de Notas
+            if ($porcentajeSyllabus[$c] == 100) {
+              $where = array( 'eid'      => $eid,
+                              'oid'      => $oid, 
+                              'courseid' => $course['courseid'],
+                              'curid'    => $course['curid'],
+                              'escid'    => $course['escid'],
+                              'subid'    => $course['subid'],
+                              'turno'    => $course['turno'],
+                              'perid'    => $perid,
+                              'state'    => 'M' );
+               if ($coursesName[$c][0]['type'] == 'O') {
+                  $attrib = array('uid', 'promedio1');
+                  $allStudents = $registerxCourseDB->_getFilter($where, $attrib);
+                  $students = count($allStudents);
+                  $notasRellenadas = 0;
+                  foreach ($allStudents as $student) {
+                     if ($student['promedio1']) {
+                        $notasRellenadas++; 
+                     }
+                  }
+                  $progressNotas[$c]['totalStudents'] = $students;
+                  $progressNotas[$c]['notasRellenadas'] = $notasRellenadas;
+                  $progressNotas[$c]['porcentaje'] = intval((100 * $notasRellenadas) / $students);
+               }else{
+
+               }
+            }else{
+               $progressNotas[$c]['porcentaje'] = 'FS';
             }
             
             $c++;
-         }//Final del Foerach Principal
+         }//Final del Foreach Principal
 
          $this->view->courses = $courses;
          $this->view->coursesName = $coursesName;
@@ -104,8 +146,14 @@ class Docente_IndexController extends Zend_Controller_Action {
          //Enviando Porcentaje de Sesiones
          $this->view->progressSessions = $progressSessions;
 
+         //Enviando Porcentaje de Llenado de Notas
+         $this->view->progressNotas = $progressNotas;
 
-         //print_r($progressSessions);
+         //Slider de Noticias // DataBases
+         $newsDb = new Api_Model_DbTable_News();
+         $news = $newsDb->_getLastNews();
+         $this->view->news = $news;
+
 
          $tb_periods = new Api_Model_DbTable_Periods();
          $where_1 = array(
