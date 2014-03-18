@@ -237,15 +237,17 @@
   	});
   	
 	$('#editInfo').click(function(){
-		$('#datastudent').fadeOut('fast', function(){
-			$('#datastudent').load('/profile/public/studenteditinfo', function(){
-				$('#datastudent').fadeIn('fast');
-			});
+		$('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+		$('#datastudent').addClass('hidden');
+		$('#editform').removeClass('hidden');
+		$('#editform').load('/profile/public/studenteditinfo', function(){
+			$('#loadingDiv').html('');
 		});
 	});
 
 	$('#editInfoCareer').click(function(){
 		$('#datastudent').addClass('hidden');
+		$('#editform').removeClass('hidden');
 		$('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
 		$('#editform').load('/profile/public/studentformsign/', function(){
 			$('#loadingDiv').html('');

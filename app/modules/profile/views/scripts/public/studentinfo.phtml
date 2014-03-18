@@ -84,10 +84,12 @@
 
   $('#backprofileTab a').click(function (e) {
     e.preventDefault()
-    $('#datastudent').fadeOut('fast', function(){
-      $("#datastudent").load("/profile/public/studentmaininfo", function(){
-        $('#datastudent').fadeIn('fast');
-      });
+    $('#editform, #datastudent').html('');
+    $('#datastudent').removeClass('hidden');
+    $('#editform').addClass('hidden');
+    $('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+    $("#datastudent").load("/profile/public/studentmaininfo", function(){
+      $('#loadingDiv').html('');
     });
     $('#masinfoTab a:last').tab('show');
     $("#divBtnProfile").fadeOut("fast");

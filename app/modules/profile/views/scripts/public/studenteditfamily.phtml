@@ -150,12 +150,9 @@
 		};
 	});
 
-	$('#backFamilyBtn').click(function(){
-      	$("#datastudent").fadeOut('fast', function(){
-      		$('#datastudent').load('/profile/public/studentfamily', function(){
-				$('#datastudent').fadeIn('fast');
-			});
-      	});
+  	$('#backFamilyBtn').click(function(){
+      	$("#editform").addClass('hidden');
+  		$('#datastudent').removeClass('hidden');
   	})
 
 
@@ -168,7 +165,8 @@
 			success: function(data){
 				if (data == 'true') {
 					$('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
-					$('#datastudent').html('');
+					$('#datastudent, #editform').html('');
+					$('#datastudent').removeClass('hidden');
 					$('#datastudent').load('/profile/public/studentfamily', function(){
 						$('#loadingDiv').html('');
 					});

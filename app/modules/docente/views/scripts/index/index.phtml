@@ -1,3 +1,50 @@
+<!--<div class="panel panel-default">
+    <div class="row container">
+        <div class="col-md-12">
+            <br>
+            <h4 class="text-muted">Avance de <span class="text-info">Cursos</span><span class="pull-right glyphicon glyphicon-book"></span></h4>
+        </div>
+    </div>
+    <hr>
+    <div class="row container">
+        <div class="col-md-12">
+        <?php $c = 0; ?>
+        <?php foreach ($this->courses as $course): ?>
+            <div class="panel panel-default">
+                <div class="container">
+                    <div class="col-md-9">
+                        <h4 class="text-info"><?php echo $this->coursesName[$c][0]['name'] ?> <small><?php echo $course['courseid'] ?></small></h4>
+                    </div>
+                    <div class="col-md-1">
+                        <?php if ($this->porcentajeSyllabus[$c] <= 25){
+                            $color = 'text-danger';
+                        }elseif ($this->porcentajeSyllabus[$c] <= 99) {
+                            $color = 'text-warning';
+                        }elseif ($this->porcentajeSyllabus[$c] == 100) {
+                            $color = 'text-success';
+                        }?>
+                        <h4 class="<?php echo $color ?>"><span class="glyphicon glyphicon-book"></span> <small class="<?php echo $color ?>"><?php echo $this->porcentajeSyllabus[$c] ?> %</small></h4>
+                    </div>
+                    <div class="col-md-1">
+                        <?php print_r($this->progressSessions[$c]) ?>
+                        <?php if ($this->progressSessions[$c] == 'FS'){
+                            $progress = 'FS';
+                        }else{
+                            $progress = $this->progressSessions[$c].' %';
+                        } ?>
+                        <h4 class="text-danger"><span class="glyphicon glyphicon-dashboard"></span> <small class="text-danger"><?php echo $progress ?></small></h4>
+                    </div>
+                    <div class="col-md-1">
+                        <h4 class="text-success"><span class="glyphicon glyphicon-saved"></span> <small class="text-success">100 %</small></h4>
+                    </div>
+                </div>
+            </div>
+        <?php $c++; ?>
+        <?php endforeach ?>
+        </div>
+    </div>
+</div>-->
+
 <div class="row">
   	<div class="col-md-6">
         <div class ="col-md-3 content-calendar">

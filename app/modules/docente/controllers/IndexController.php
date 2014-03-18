@@ -18,28 +18,117 @@ class Docente_IndexController extends Zend_Controller_Action {
     public function indexAction()
     {
       try{
-            $tb_periods = new Api_Model_DbTable_Periods();
-            $where_1 = array(
-                    'eid'=>$this->sesion->eid,
-                    'oid'=>$this->sesion->oid,
-                    'perid'=>$this->sesion->period->perid
-                );
-            $dat_period = $tb_periods->_getOne($where_1);
-            $date_1 = new Zend_Date($dat_period['start_register_note_p']);
-            $day_1 = $date_1->get(Zend_Date::DAY); 
-            $day_last = $date_1->get(Zend_Date::WEEKDAY);
-            $mounth = $date_1->get(Zend_Date::MONTH_NAME);
-            $this->view->day_1=$day_1;
-            $this->view->day_last=$day_last;
-            $this->view->mounth=$mounth;
+         //DataBases
+         $coursesxTeacherDb             = new Api_Model_DbTable_Coursexteacher();
+         $courseDb                      = new Api_Model_DbTable_Course();
+         $syllabusDb                    = new Api_Model_DbTable_Syllabus();
+         $syllabusUnitsDb               = new Api_Model_DbTable_Syllabusunits();
+         $syllabusUnitsContentDb        = new Api_Model_DbTable_Syllabusunitcontent();
+         $syllabusUnitsContentControlDb = new Api_Model_DbTable_ControlActivity();
+         //___________________________________________________________
 
-            $date_2 = new Zend_Date($dat_period['start_register_note_s']);
-            $day_2 = $date_2->get(Zend_Date::DAY); 
-            $day_last_2 = $date_2->get(Zend_Date::WEEKDAY);
-            $mounth_2 = $date_2->get(Zend_Date::MONTH_NAME);
-            $this->view->day_2=$day_2;
-            $this->view->day_last2=$day_last_2;
-            $this->view->mounth_2=$mounth_2;
+         $eid   = $this->sesion->eid;
+         $oid   = $this->sesion->oid;
+         $pid   = $this->sesion->pid;
+         $uid   = $this->sesion->uid;
+         $perid = '13A';
+
+         $where = array('eid'   => $eid,
+                        'oid'   => $oid,
+                        'uid'   => $uid,
+                        'pid'   => $pid,
+                        'perid' => $perid );
+
+         $attrib = array('courseid', 'curid', 'turno', 'escid', 'subid');
+         $courses = $coursesxTeacherDb->_getFilter($where, $attrib);
+         $c = 0;
+         foreach ($courses as $course) {
+            //Nombre de Cursos
+            $where = array('eid'      => $eid, 
+                           'oid'      => $oid,
+                           'curid'    => $course['curid'],
+                           'courseid' => $course['courseid'] );
+            $attrib = array('name');
+            $coursesName[$c] = $courseDb->_getFilter($where, $attrib);
+
+            //Syllabus
+            $where = array('eid'      => $eid, 
+                           'oid'      => $oid,
+                           'curid'    => $course['curid'],
+                           'courseid' => $course['courseid'],
+                           'turno'    => $course['turno'],
+                           'escid'    => $course['escid'],
+                           'subid'    => $course['subid'],
+                           'perid'    => $perid );
+            $attrib = array('units');
+            $coursesSyllabus = $syllabusDb->_getFilter($where, $attrib);
+            $totalUnits = $coursesSyllabus[0]['units'];
+            if ($totalUnits) {
+               $attrib = array('unit');
+               $syllabusUnits = $syllabusUnitsDb->_getFilter($where, $attrib);
+               if ($syllabusUnits) {
+                  $units = count($syllabusUnits);
+                  $porcentajeSyllabus[$c] = (100 * $units)/$totalUnits;
+               }else{
+                  $porcentajeSyllabus[$c] = 0;
+               }
+            }else{
+               $porcentajeSyllabus[$c] = 0;
+            }
+
+            //Avance de Clases
+            if ($porcentajeSyllabus[$c] == 100) {
+               $attrib = array('session');
+               $contentsSyllabus = $syllabusUnitsContentDb->_getFilter($where, $attrib);
+               $totalContents = count($contentsSyllabus);
+               $contentControl = $syllabusUnitsContentControlDb->_getFilter($where, $attrib);
+               if ($contentControl) {
+                  $contents = count($contentControl);
+               }else{
+                  $contents = 0;
+               }
+               $progressSessions[$c] = intval((100 * $contents)/$totalContents);
+            }else{
+               $progressSessions[$c] = 'FS';
+            }
+            
+            $c++;
+         }//Final del Foerach Principal
+
+         $this->view->courses = $courses;
+         $this->view->coursesName = $coursesName;
+
+         //Enviando Porcentaje de Syllabus
+         $this->view->porcentajeSyllabus = $porcentajeSyllabus;
+
+         //Enviando Porcentaje de Sesiones
+         $this->view->progressSessions = $progressSessions;
+
+
+         //print_r($progressSessions);
+
+         $tb_periods = new Api_Model_DbTable_Periods();
+         $where_1 = array(
+                 'eid'=>$this->sesion->eid,
+                 'oid'=>$this->sesion->oid,
+                 'perid'=>$this->sesion->period->perid
+             );
+         $dat_period = $tb_periods->_getOne($where_1);
+         $date_1 = new Zend_Date($dat_period['start_register_note_p']);
+         $day_1 = $date_1->get(Zend_Date::DAY); 
+         $day_last = $date_1->get(Zend_Date::WEEKDAY);
+         $mounth = $date_1->get(Zend_Date::MONTH_NAME);
+         $this->view->day_1=$day_1;
+         $this->view->day_last=$day_last;
+         $this->view->mounth=$mounth;
+
+         $date_2 = new Zend_Date($dat_period['start_register_note_s']);
+         $day_2 = $date_2->get(Zend_Date::DAY); 
+         $day_last_2 = $date_2->get(Zend_Date::WEEKDAY);
+         $mounth_2 = $date_2->get(Zend_Date::MONTH_NAME);
+         $this->view->day_2=$day_2;
+         $this->view->day_last2=$day_last_2;
+         $this->view->mounth_2=$mounth_2;
 
             
             //print_r($courses);
