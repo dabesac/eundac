@@ -69,7 +69,8 @@
                         $deuda = $montoaPagar - $paymentConditionalTotal; ?>
                         <h5 class="text-danger">Debe un Reintegro de S/.<?php echo $deuda ?>.00 </h5>
                     <?php 
-                        $classButtonValidate = 'disabled';  
+                        $classButtonValidate = 'disabled';
+                        $faltaReintegro = 'Si';  
                     }else { ?>
                         <h5 class="text-danger">Pago S/.<?php echo $paymentConditionalTotal ?>.00, Todo en Orden</h5>
                     <?php }?>
@@ -99,7 +100,7 @@
             </div>
         <?php if ($this->matriculaCondicional == 'Si' and !$this->paymentsConditional): ?>
             <h5 class="text-danger">Pagos Condicionales <strong>No Tiene</strong></h5>
-        <?php elseif ($this->matriculaCondicional == 'Si' and $faltaReintegro == 'si'): ?>
+        <?php elseif ($this->matriculaCondicional == 'Si' and $faltaReintegro == 'Si'): ?>
             <h5 class="text-danger">Pagos Condicionales <strong>Falta Reintegro</strong></h5>
          <?php elseif ($this->matriculaCondicional == 'Si'): ?>
             <h5 class="text-danger">Pagos Condicionales <strong>Todo en Orden</strong></h5>

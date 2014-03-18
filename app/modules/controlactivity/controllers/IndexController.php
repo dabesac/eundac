@@ -87,7 +87,7 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
                     $firstTime = "No";
                 }
 
-                $attrib = array('perid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
+                $attrib = array('perid', 'escid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
                 $where = array('eid' => $eid, 
                             'oid'=>$oid, 
                             'perid'=>$perid,
@@ -150,32 +150,34 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
 
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
-            $subid = base64_decode($this->getParam('subid'));
-            $curid = base64_decode($this->getParam('curid'));
+            $subid    = base64_decode($this->getParam('subid'));
+            $escid    = base64_decode($this->getParam('escid'));
+            $curid    = base64_decode($this->getParam('curid'));
             $courseid = base64_decode($this->getParam('courseid'));
-            $turno = base64_decode($this->getParam('turno'));
-            $unit = base64_decode($this->getParam('unit'));
-            $session = base64_decode($this->getParam('session'));
-            $week = base64_decode($this->getParam('week'));
-            $perid = base64_decode($this->getParam('perid'));
+            $turno    = base64_decode($this->getParam('turno'));
+            $unit     = base64_decode($this->getParam('unit'));
+            $session  = base64_decode($this->getParam('session'));
+            $week     = base64_decode($this->getParam('week'));
+            $perid    = base64_decode($this->getParam('perid'));
 
-            $where = array('eid' => $eid, 
-                            'oid'=>$oid, 
-                            'perid'=>$perid, 
-                            'subid'=>$subid, 
-                            'courseid'=>$courseid, 
-                            'curid'=>$curid,
-                            'turno'=>$turno,
-                            'unit'=>$unit,
-                            'week'=>$week,
-                            'session'=>$session);
+            $where = array( 'eid'      => $eid, 
+                            'oid'      => $oid, 
+                            'perid'    => $perid, 
+                            'escid'    => $escid, 
+                            'subid'    => $subid, 
+                            'courseid' => $courseid, 
+                            'curid'    => $curid,
+                            'turno'    => $turno,
+                            'unit'     => $unit,
+                            'week'     => $week,
+                            'session'  => $session);
 
             $where['datecheck'] = date('Y-m-d');
             $where['state'] = 'D';
 
             $save = $controlsyllabusDb->_save($where);
             if ($save) {
-                $this->_redirect('/controlactivity/index/index/courseid/'.base64_encode($courseid).'/curid/'.base64_encode($curid).'/turno/'.base64_encode($turno).'/perid/'.base64_encode($perid).'/subid/'.base64_encode($subid));
+                $this->_redirect('/controlactivity/index/index/courseid/'.base64_encode($courseid).'/curid/'.base64_encode($curid).'/turno/'.base64_encode($turno).'/perid/'.base64_encode($perid).'/subid/'.base64_encode($subid).'/escid/'.base64_encode($escid));
             }
 
         } catch (Exception $e) {

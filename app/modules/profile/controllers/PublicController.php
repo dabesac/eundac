@@ -1155,7 +1155,7 @@ class Profile_PublicController extends Zend_Controller_Action {
                 $name[$nc]=$dbcuract->_getInfoCourse($where,$attrib);
                 $nc++;
 
-                if ($cur['notafinal']<11) {
+                if ($cur['notafinal'] and $cur['notafinal']<11) {
                     $coursesDis[$coursesD]['courseid'] = $cur['courseid'];
                     $coursesDis[$coursesD]['curid'] =$cur['curid'];
                     $coursesD++;
@@ -1192,6 +1192,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $this->view->name=$name;
             $this->view->curact=$curact;
             $this->view->notasAplazados = $notasAplazados;
+
         }catch(exception $e){
             print "Error : ".$e->getMessage();
         }
