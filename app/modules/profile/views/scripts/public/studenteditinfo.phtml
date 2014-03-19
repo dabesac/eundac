@@ -1,38 +1,106 @@
-<ul class="nav nav-pills nav-stacked" id="backeditBtn">
-	<li><a href="##" id="backedit"><h5>Volver</h5></a></li>
-</ul>
-
-<h4 class="text-muted">Editar <span class="text-info">Información Principal</span></h4><br>
+<div class="panel panel-default">
+<br>
+<div class="row container">
+	<div class="col-md-8">
+		<h4 class="text-muted">Editar <span class="text-info">Información Principal</span></h4>
+	</div>
+	<div class="col-md-2">
+		<a id="saveinfo" href="##" class="btn btn-success form-control">Guardar</a>
+	</div>
+	<div class="col-md-2">
+		<a id="backFamilyBtn" href="##" class="btn btn-default form-control">Volver</a>
+	</div>
+</div>
+<hr>
+<div class="container">
+	<div id="emptyForm" class="alert alert-warning hidden">
+		<h4>Asegurese que todo esta en orden</h4>
+		<p>No se pudo guardar los datos, asegurese de haber rellenado el formulario correctamente...</p>
+	</div>
+</div>
+<br>
 <form id="form">
-	<div class="row">
-		<div class="col-md-6">
+	<div class="row container">
+		<div class="col-md-3">
 			<h5 class="text-muted">Tipo de Documento</h5>
 			<?php echo $this->form->typedoc ?><br>
-
-			<h5 class="text-muted">Fecha de Nacimiento</h5>
-			<div class="row">
-				<div class="col-md-4"><?php print $this->form->year ?></div>
-				<div class="col-md-4"><?php print $this->form->month ?></div>
-				<div class="col-md-4"><?php print $this->form->day ?></div>
-			</div><br>
-			
-			<h5 class="text-muted">Email Personal</h5>
-			<?php echo $this->form->mail_person ?><br>
-
-			<h5 class="text-muted">Celular</h5>
-			<?php echo $this->form->cellular ?><br>	
-
-			<h5 class="text-muted">País</h5>
-			<?php echo $this->form->country ?><br>
-
-			<h5 class="text-muted">Provincia</h5>
-			<?php echo $this->form->country_p ?><br>	
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-4">
 			<h5 class="text-muted">Número de Documento</h5>
 			<?php echo $this->form->numdoc?><br>
-		
+		</div>
+		<div class="col-md-5">
+			<h5 class="text-muted">Fecha de Nacimiento</h5>
 			<div class="row">
+				<div class="col-md-4">
+					<?php echo $this->form->year ?>
+				</div>
+				<div class="col-md-4">
+					<?php echo $this->form->month ?>
+				</div>
+				<div class="col-md-4">
+					<?php echo $this->form->day ?>
+				</div>
+			</div><br>
+		</div>	
+	</div>
+	<div class="row container">
+		<div class="col-md-6">	
+			<h5 class="text-muted">Email Personal</h5>
+			<?php echo $this->form->mail_person ?><br>
+		</div>
+		<div class="col-md-6">
+			<h5 class="text-muted">Email de Trabajo</h5>
+			<?php echo $this->form->mail_work ?><br>
+		</div>	
+	</div>
+	<div class="row container">
+		<div class="col-md-3">
+			<h5 class="text-muted">Sexo</h5>
+			<?php echo $this->form->sex?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Estado Civil</h5>
+			<?php echo $this->form->civil?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Celular</h5>
+			<?php echo $this->form->cellular ?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Teléfono Fijo</h5>
+			<?php echo $this->form->phone ?><br>
+		</div>	
+	</div>
+	<div class="row container">
+		<div class="col-md-3">
+			<h5 class="text-muted">País</h5>
+			<?php echo $this->form->country?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Departamento</h5>
+			<?php echo $this->form->country_s?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Provincia</h5>
+			<?php echo $this->form->country_p ?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Distrito</h5>
+			<?php echo $this->form->country_d?><br>
+		</div>	
+	</div>	
+		<div class="col-md-6">
+			<!-- <h5 class="text-muted">Celular</h5>
+			<?php echo $this->form->cellular ?><br>	 -->
+
+			<!-- <h5 class="text-muted">País</h5>
+			<?php echo $this->form->country ?><br> -->
+
+			<!-- <h5 class="text-muted">Provincia</h5>
+			<?php echo $this->form->country_p ?><br> -->
+		
+			<!-- <div class="row">
 				<div class="col-md-6">
 					<h5 class="text-muted">Sexo</h5>
 					<?php echo $this->form->sex?>
@@ -41,25 +109,26 @@
 					<h5 class="text-muted">Estado Civil</h5>
 					<?php echo $this->form->civil?>
 				</div>
-			</div><br>
+			</div><br> -->
 
-			<h5 class="text-muted">Email de Trabajo</h5>
-			<?php echo $this->form->mail_work ?><br>
+			<!-- <h5 class="text-muted">Email de Trabajo</h5>
+			<?php echo $this->form->mail_work ?><br> -->
 
-			<h5 class="text-muted">Teléfono Fijo</h5>
-			<?php echo $this->form->phone ?><br>
+			<!-- <h5 class="text-muted">Teléfono Fijo</h5>
+			<?php echo $this->form->phone ?><br> -->
 
-			<h5 class="text-muted">Departamento</h5>
-			<?php echo $this->form->country_s?><br>
+			<!-- <h5 class="text-muted">Departamento</h5>
+			<?php echo $this->form->country_s?><br> -->
 
-			<h5 class="text-muted">Distrito</h5>
-			<?php echo $this->form->country_d?><br>
+			<!-- <h5 class="text-muted">Distrito</h5>
+			<?php echo $this->form->country_d?><br> -->
 
 			<!-- <input type="submit" value="Guardar" class="btn btn-info pull-right"></td> -->
 		</div>
-	</div>
 </form>
-<div class='col-md-2 col-md-offset-10'><button id ='enviar' class='btn btn-success'>Actualizar</button></div>
+<br>
+</div>
+
 
 <script>
 	// $('#mail_person, #mail_work').attr('type', 'email');

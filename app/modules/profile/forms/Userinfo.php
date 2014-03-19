@@ -18,26 +18,47 @@ class Profile_Form_Userinfo extends Zend_Form{
         $typedoc->setAttrib("class","form-control");
 
 
-        $year = new Zend_Form_Element_Text("year");
-        $year->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $year->setAttrib("maxlength", "4")->setAttrib("pattern","[0-9]{4}");
-        $year->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
-        $year->setAttrib("title","Año");
-        $year->setAttrib("class","form-control");
+        $year = new Zend_Form_Element_Select("year");
+        $year   ->removeDecorator('Label')
+                ->setRequired(true)
+                ->setAttrib("class","form-control")
+                ->setAttrib("title","Año")
+                ->addMultiOption("","Año");
+        $anio = date('Y');
+        for ($i = $anio; $i >= 1940 ; $i--) { 
+            $year->addMultiOption($i, $i);
+        }
+        
 
-        $month= new Zend_Form_Element_Text("month");
-        $month->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $month->setAttrib("maxlength", "2")->setAttrib("pattern","[0-9]{2}");
-        $month->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
-        $month->setAttrib("title","Mes");
-        $month->setAttrib("class","form-control");
+        $month= new Zend_Form_Element_Select("month");
+        $month  ->removeDecorator('Label')
+                ->setRequired(true)
+                ->setAttrib("class","form-control")
+                ->setAttrib("title","Mes")
+                ->addMultiOptions(array(''   => 'Mes',
+                                        '01' => 'Enero',
+                                        '02' => 'Febrero',
+                                        '03' => 'Marzo',
+                                        '04' => 'Abril',
+                                        '05' => 'Mayo',
+                                        '06' => 'Junio',
+                                        '07' => 'Julio',
+                                        '08' => 'Agosto',
+                                        '09' => 'Septiembre',
+                                        '10' => 'Octubre',
+                                        '11' => 'Noviembre',
+                                        '12' => 'Diciembre' ));
+                
 
-        $day= new Zend_Form_Element_Text("day");
-        $day->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $day->setAttrib("maxlength", "2")->setAttrib("pattern","[0-9]{2}");
-        $day->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
-        $day->setAttrib("title","Dia");
-        $day->setAttrib("class","form-control");
+        $day= new Zend_Form_Element_Select("day");
+        $day->removeDecorator('Label')
+            ->setRequired(true)
+            ->setAttrib("title","Dia")
+            ->setAttrib("class", "form-control")
+            ->addMultiOption("", "Día");
+        for ($i=1; $i <= 31 ; $i++) { 
+            $day->addMultiOption($i, $i);
+        }
 
         $sex = new Zend_Form_Element_Select('sex');
         $sex->removeDecorator('HtmlTag')->removeDecorator('Label');     

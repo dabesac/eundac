@@ -69,8 +69,9 @@ class Admin_PersonController extends Zend_Controller_Action{
                     $frmdata['eid']=$eid;
                     $frmdata['location']='-';
                     $frmdata['created']=date('Y-m-d h:m:s');
-                    $frmdata['register']=$register;                  
-                    $reg_= new Api_Model_DbTable_Person();                          
+                    $frmdata['register']=$register;
+                    $frmdata['birthday']=date('Y-m-d',strtotime($frmdata['birthday']));
+                    $reg_= new Api_Model_DbTable_Person();
                     if ($reg_->_save($frmdata)) {
                         $this->view->valor=1;
                     }
@@ -106,6 +107,7 @@ class Admin_PersonController extends Zend_Controller_Action{
                     trim($frmdata['address']);
                     $frmdata['updated']=date('Y-m-d h:m:s'); 
                     $frmdata['modified']=$modified;
+                    $frmdata['birthday']=date('Y-m-d',strtotime($frmdata['birthday']));
                     $pk['eid']=$eid;
                     $pk['pid']=$pid;                   
                     $reg_= new Api_Model_DbTable_Person();
