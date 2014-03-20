@@ -258,6 +258,23 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dbperson=new Api_Model_DbTable_Person();
             $where=array("eid"=>$eid, "pid"=>$pid);
             $person=$dbperson->_getOne($where);
+
+            if ($person['location']) {
+                $wheres=array('disid'=>$person['location']);
+                $bdubigeo=new Api_Model_DbTable_CountryDistrict();
+                $dataubigeo=$bdubigeo->_infoUbigeo($wheres);
+                $dataubigeo=$dataubigeo[0];                
+                $person['country']=$dataubigeo['coid'];
+                $person['country_s']=$dataubigeo['cosid'];
+                $person['country_p']=$dataubigeo['proid'];
+                $person['country_d']=$dataubigeo['disid'];
+                $this->view->dataubigeo=$dataubigeo;
+                $this->view->veri=1;
+            }
+            else{
+                $this->view->veri=0;
+            }
+
             $person["year"]=substr($person["birthday"], 0, 4);
             $person["month"]=substr($person["birthday"], 5, 2);
             $person["day"]=substr($person["birthday"], 8, 2);
@@ -265,8 +282,8 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             if ($this->getRequest()->isPost()){
                 $formdata=$this->getRequest()->getPost();
-                
                 if ($form->isValid($formdata)){
+                    // print_r($formData);
                     $formdata['location']=$formdata['country_d'];
                     $formdata['birthday']=$formdata['year']."-".$formdata['month']."-".$formdata['day'];
                     unset($formdata['country']);
@@ -285,19 +302,12 @@ class Profile_PublicController extends Zend_Controller_Action {
                 else{
                     $form->populate($formdata);
                     $this->view->data=$formdata;                    
-                    if ($formdata['country']) {
-                        $this->view->country=1;
-                    }
-                    if ($formdata['country_s']) {
-                        $this->view->country_s=1;
-                    }
-                    if ($formdata['country_p']) {
-                        $this->view->country_p=1;
-                    }
+                    // print_r($formdata);
                 }
             }
             else{
                 $form->populate($person);
+                // print_r($person);exit();
             }
             $this->view->form=$form;
         }catch(exception $e){

@@ -1,51 +1,181 @@
-<!--<div class="panel panel-default">
-    <div class="row container">
-        <div class="col-md-12">
+<!--Panel de Avance de Cursos-->
+<div class="panel panel-default">
+    <div class="row">
+        <div class="container">
+        <div class="col-md-12" style="background-color: #f5f5f5;">
             <br>
             <h4 class="text-muted">Avance de <span class="text-info">Cursos</span><span class="pull-right glyphicon glyphicon-book"></span></h4>
+            <br>
+        </div>
         </div>
     </div>
-    <hr>
-    <div class="row container">
-        <div class="col-md-12">
-        <?php $c = 0; ?>
-        <?php foreach ($this->courses as $course): ?>
-            <div class="panel panel-default">
-                <div class="container">
-                    <div class="col-md-9">
-                        <h4 class="text-info"><?php echo $this->coursesName[$c][0]['name'] ?> <small><?php echo $course['courseid'] ?></small></h4>
+    <br>
+    <div class="row">
+    <div class="container">
+    <?php $c = 0; ?>
+    <?php foreach ($this->courses as $course): ?>
+    <div class="col-md-6">
+        <div class="panel panel-default" style="background-color: #f5f5f5;">
+            <div class="container">
+
+                <div class="col-md-6">
+                    <h5 class="text-info"><?php echo $this->coursesName[$c][0]['name'] ?> <small><?php echo $course['courseid'] ?></small></h5>
+                </div>
+                <div class="col-md-2">
+                    <?php if ($this->porcentajeSyllabus[$c] == 0){
+                        $color = 'text-danger';
+                        $avisoSilabo = 'Empiece a rellenar su sílabo';
+                    }elseif ($this->porcentajeSyllabus[$c] <= 25) {
+                        $color = 'text-warning';
+                        $avisoSilabo = 'Termine de rellenar su sílabo';
+                    }elseif ($this->porcentajeSyllabus[$c] <= 99) {
+                        $color = 'text-warning';
+                        $avisoSilabo = 'Ya le falta poco, complete su sílabo';
+                    }elseif ($this->porcentajeSyllabus[$c] == 100) {
+                        $color = 'text-success';
+                        $avisoSilabo = 'Sílabo completado';
+                    }?>
+                    <h5 class="progressIcons" title="<?php echo $avisoSilabo ?>">
+                        <?php 
+                        $urlSyllabus = 'syllabus/syllabus/index'.   '/courseid/'.base64_encode($course['courseid']).
+                                                                    '/curid/'.base64_encode($course['curid']).
+                                                                    '/escid/'.base64_encode($course['escid']).
+                                                                    '/subid/'.base64_encode($course['subid']).
+                                                                    '/turno/'.base64_encode($course['turno']).
+                                                                    '/perid/'.base64_encode($course['perid']) ; ?>
+                        <a href="<?php echo $urlSyllabus ?>" class="<?php echo $color ?> " ><span class="glyphicon glyphicon-book"></span></a>
+                        <small class="<?php echo $color ?>"><?php echo $this->porcentajeSyllabus[$c] ?> %</small>
+                    </h5>
+                </div>
+                <div class="col-md-2">
+                    <?php if ($this->progressSessions[$c]['porcentaje']  == 'FS'){
+                        $classSessions = 'text-danger';
+                        $avisoSessions = 'Primero termine de rellenar su sílabo';
+                        $urlControlActivity = '##';
+                    }else{
+                        $classSessions = 'text-success';
+                        $avisoSessions = $this->progressSessions[$c]['contents'].' de '.$this->progressSessions[$c]['totalContents'].' sesiones realizadas';
+
+                        $urlControlActivity = '/controlactivity/index/index'.   '/courseid/'.base64_encode($course['courseid']).
+                                                                                '/curid/'.base64_encode($course['curid']).
+                                                                                '/escid/'.base64_encode($course['escid']).
+                                                                                '/subid/'.base64_encode($course['subid']).
+                                                                                '/turno/'.base64_encode($course['turno']).
+                                                                                '/perid/'.base64_encode($course['perid']) ;
+                    } ?>
+                    <h5 class="progressIcons" title="<?php echo $avisoSessions ?>">
+                        <a href="<?php echo $urlControlActivity ?>" class="<?php echo $classSessions ?> " ><span class="glyphicon glyphicon-dashboard"></span></a>
+                        <small class="<?php echo $classSessions ?>"><?php echo $this->progressSessions[$c]['porcentaje'] ?></small>
+                    </h5>
+                </div>
+                <div class="col-md-2">
+                    <?php if ($this->progressNotas[$c]['porcentaje'] == 'FS'){
+                        $classNotas = 'text-danger';
+                        $progressNotas = 'FS';
+                        $avisoNotas = 'Primero termine de rellenar su sílabo';
+                        $faltaSilabo = 'SI';
+                        $urlNotas = '##';
+                    }elseif ($this->progressNotas[$c]['porcentaje'] <= 25){
+                        $classNotas = 'text-danger';
+                        $progressNotas = $this->progressNotas[$c]['porcentaje'].' %';
+                        $avisoNotas = $this->progressNotas[$c]['notasRellenadas'].' de '.$this->progressNotas[$c]['totalStudents'].' completados';
+                        $faltaSilabo = 'No';
+                    }elseif ($this->progressNotas[$c]['porcentaje'] <= 99){
+                        $classNotas = 'text-warning';
+                        $progressNotas = $this->progressNotas[$c]['porcentaje'].' %';
+                        $avisoNotas = $this->progressNotas[$c]['notasRellenadas'].' de '.$this->progressNotas[$c]['totalStudents'].' completados';
+                        $faltaSilabo = 'No';
+                    }
+                    elseif ($this->progressNotas[$c]['porcentaje'] == 100){
+                        $classNotas = 'text-success';
+                        $progressNotas = $this->progressNotas[$c]['porcentaje'].' %';
+                        $avisoNotas = 'Todas las Notas Rellenadas';
+                        $faltaSilabo = 'No';
+                    } 
+                    if ($faltaSilabo == 'No') {
+                        $urlNotas = '/docente/fillnotes/target'.    '/'.base64_encode('escid').'/'.base64_encode($course['escid']).
+                                                                    '/'.base64_encode('subid').'/'.base64_encode($course['subid']).
+                                                                    '/'.base64_encode('courseid').'/'.base64_encode($course['courseid']).
+                                                                    '/'.base64_encode('turno').'/'.base64_encode($course['turno']).
+                                                                    '/'.base64_encode('perid').'/'.base64_encode($course['perid']).
+                                                                    '/'.base64_encode('curid').'/'.base64_encode($course['curid']).
+                                                                    '/'.base64_encode('state').'/'.base64_encode($this->coursesStateRecord[$c]);
+                    }
+                    ?>
+                    
+                    <h5 class="progressIcons" title="<?php echo $avisoNotas ?>">
+                        <a href="<?php echo $urlNotas ?>" class="<?php echo $classNotas ?>" ><span class="glyphicon glyphicon-saved"></span></a>
+                        <small class="<?php echo $classNotas ?>"><?php echo $progressNotas ?></small>
+                    </h5>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <?php $c++; ?>
+    <?php endforeach ?>
+    </div><!--Div Container-->
+    </div><!--Div Row-->
+</div>
+<!--Panel de Avance de Cursos-->
+    
+<link rel="stylesheet" href="/css/sliderNews.css">
+<!--Slider de Noticias-->
+    <div class="row">
+    <div id="newsSlider" class="slider">
+        <?php $slideActive = 0; ?>
+        <?php foreach ($this->news as $new): ?>
+            <?php if ($slideActive == 0){
+                $classSlide = 'slideActive';
+                $slideActive = 1;
+            } else {
+                $classSlide = '';
+            }?>
+        <div class="slide <?php echo $classSlide ?>">
+            <div class="col-md-4">
+                <br>
+                <h3 class="text-center text-primary"><?php echo $new['title'] ?></h3>
+            </div>
+            <div class="col-md-8">
+                <blockquote>
+                    <br>
+                    <p><?php echo substr($new['description'], 0, 190) ?>... <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link showData">Seguir leyendo</a></p>
+                </blockquote>
+            </div>
+        </div>
+        <?php endforeach ?>
+    </div>
+    </div>
+    <?php foreach ($this->news as $new): ?>
+        <div id="data<?php echo $new['newid'] ?>" class="data">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-6">
+
                     </div>
-                    <div class="col-md-1">
-                        <?php if ($this->porcentajeSyllabus[$c] <= 25){
-                            $color = 'text-danger';
-                        }elseif ($this->porcentajeSyllabus[$c] <= 99) {
-                            $color = 'text-warning';
-                        }elseif ($this->porcentajeSyllabus[$c] == 100) {
-                            $color = 'text-success';
-                        }?>
-                        <h4 class="<?php echo $color ?>"><span class="glyphicon glyphicon-book"></span> <small class="<?php echo $color ?>"><?php echo $this->porcentajeSyllabus[$c] ?> %</small></h4>
-                    </div>
-                    <div class="col-md-1">
-                        <?php print_r($this->progressSessions[$c]) ?>
-                        <?php if ($this->progressSessions[$c] == 'FS'){
-                            $progress = 'FS';
-                        }else{
-                            $progress = $this->progressSessions[$c].' %';
-                        } ?>
-                        <h4 class="text-danger"><span class="glyphicon glyphicon-dashboard"></span> <small class="text-danger"><?php echo $progress ?></small></h4>
-                    </div>
-                    <div class="col-md-1">
-                        <h4 class="text-success"><span class="glyphicon glyphicon-saved"></span> <small class="text-success">100 %</small></h4>
+                    <div class="col-md-6">
+                        <p><?php echo $new['description'] ?></p>
                     </div>
                 </div>
             </div>
-        <?php $c++; ?>
-        <?php endforeach ?>
         </div>
+    <?php endforeach ?>
+    <div style="height: 500px;"></div>
+    <!--<div class="col-md-1 text-center">
+        <br><br>
+        <a href="##" class="text-muted previousSlide">
+            <span class="glyphicon glyphicon-chevron-left text-center"></span>
+        </a>
     </div>
-</div>-->
+    <div class="col-md-1 text-center">
+        <br><br>
+        <a href="##" class="text-muted nextSlide">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>-->
 
-<div class="row">
+
+<!--<div class="row">
   	<div class="col-md-6">
         <div class ="col-md-3 content-calendar">
             <div class="content-day">
@@ -83,7 +213,75 @@
         </div>
   </div>
   <div id="graphic-survey" class="col-md-6"></div>
-</div>
+</div>-->
 <script type="text/javascript">
-	$("#graphic-survey").load("/docente/index/xcourses");
+	//$("#graphic-survey").load("/docente/index/xcourses");
+
+    $('.progressIcons').hover(function(){
+        $(this).tooltip('toggle');  
+    });
+
+    //Slider
+    $('.data').slideUp();
+    
+    setInterval(function(){sliderForward();}, 5000);
+
+    $('.nextSlide').click(function(){
+        sliderForward();
+    });
+    $('.previousSlide').click(function(){
+        sliderBackward();
+    });
+
+    $('.showData').click(function(){
+        $('html,body').animate({
+            scrollTop: $("#newsSlider").offset().top
+        }, 500);
+        var newid = $(this).attr('newid');
+        $('#data' + newid).slideDown();
+    })
+
+    function sliderForward(){
+        $('.data').slideUp();
+        var size = $('.slider').find('.slide').size();
+        $('.slider').find('.slide').each(function(index, value){
+            if ($(value).hasClass('slideActive')) {
+                $($('.slider').find('.slide').get(index)).slideUp(function(){
+                    $(value).removeClass('slideActive');
+                });
+
+                if (index+1 < size) {
+                    $($('.slider').find('.slide').get(index+1)).slideDown('slow');
+                    $($('.slider').find('.slide').get(index+1)).addClass('slideActive');
+                    return false;
+                }else{
+                    $($('.slider').find('.slide').get(0)).slideDown('slow');
+                    $($('.slider').find('.slide').get(0)).addClass('slideActive');
+                    return false;
+                };
+            };
+        });
+    }
+
+    function sliderBackward(){
+        var size = $('.slider').find('.slide').size();
+        $('.slider').find('.slide').each(function(index, value){
+            if ($(value).hasClass('slideActive')) {
+                $(value).slideUp();
+                $($('.slider').find('.slide').get(index)).slideUp(function(){
+                    $(value).removeClass('slideActive');
+                });
+
+                if (index == 0) {
+                    $($('.slider').find('.slide').get(size-1)).slideDown();
+                    $($('.slider').find('.slide').get(size-1)).addClass('slideActive');
+                    return false;
+                }else{
+                    $($('.slider').find('.slide').get(index-1)).slideDown();
+                    $($('.slider').find('.slide').get(index-1)).addClass('slideActive');
+                    return false;
+                };
+            };
+        });
+    }
 </script>

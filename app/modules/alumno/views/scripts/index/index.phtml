@@ -1,9 +1,66 @@
+<style>
+    .sandrops{
+        width     : 85%;
+        height	  : 50%;
+        z-index   : 1;
+        background: #FFFFFF;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        position  : fixed;
+        left      : 6%;
+        top       : 38%;
+    }
+</style>
+<!-- <link rel="stylesheet" type="text/css" href="/css/dashboard.css"> -->
+<div class="panel panel-default">
+	<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+	  	<!-- Indicators -->
+	  	<!-- <ol class="carousel-indicators">
+	    	<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+	    	<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+	    	<li data-target="#carousel-example-generic" data-slide-to="2"></li>
+	  	</ol> -->
+	  	<?php 
+	  	$j=1;
+	  	?>
+	  	<!-- Wrapper for slides -->
+	  	<div class="carousel-inner">
+	    	<div class="item active">
+	    		<div class="col-md-9 col-md-offset-1"><h4>NOTICIA Nº <?php echo $j?></h4></div>
+	    		<div id="sandro<?php echo $j?>"></div>
+	      		<!-- <center><img src="/img/1.png" alt="..." style="z-index:1"></center> -->
+	      		<!-- <div class="carousel-caption">
+	       			Hola
+	      		</div> --><br>
+	      		<div class="col-md-2 pull-right"><a href="#" class="solo" clave="<?php echo $j?>"><span class="glyphicon glyphicon-chevron-down"></span></a></div>
+	    	</div>
+	    	<?php
+	    	for ($i=$j+1; $i < 6; $i++) {	?>
+	    		<div class="item">
+	    			<div class="col-md-10 col-md-offset-1"><h4>NOTICIA Nº <?php echo $i?></h4></div>
+	      			<div id="sandro<?php echo $i?>">
+	      				<!-- <center><img src="/img/1.png"></center> -->
+	      			</div>
+	      			<!-- <div class="carousel-caption">
+	       				Hola
+	      			</div> --><br>
+	      			<div class="col-md-1 pull-right"><a href="#" class="solo" clave="<?php echo $i?>"><span class="glyphicon glyphicon-chevron-down"></span></a></div>
+	    		</div>
+	    	<?php	    		
+	    	}
+	    	?>
+	  	</div>
 
-
-
-<link rel="stylesheet" type="text/css" href="/css/dashboard.css">
-
-<div class="container-fluid showFirst">
+	  	<!-- Controls -->
+	  	<a href="#carousel-example-generic" data-slide="prev">
+	    	<span class="glyphicon glyphicon-chevron-left"></span>
+	  	</a>
+	  	<a href="#carousel-example-generic" data-slide="next">
+	    	<span class="glyphicon glyphicon-chevron-right pull-right"></span>
+	  	</a>
+	</div>
+</div>	
+<!-- <div class="container-fluid showFirst">
 	<div class="row">
 		<br>
 		<div class="col-md-8 col-md-offset-1">
@@ -89,7 +146,7 @@
 			</a>
 		</div>
 	</div>
-</div>
+</div> -->
 
 
 <div id="grafics" class="container-fluid" style="height: 600px;">
@@ -154,6 +211,17 @@
 </div>
 
 <script>
+	$(".solo").click(function(){
+		var clave=$(this).attr('clave');
+		$("#sandro"+clave).append("<center class='sandrops'><img src='/img/"+clave+".png' alt='...'></center>");
+		// $(".solo").html("<span class='glyphicon glyphicon-chevron-up'></span>");
+	});
+
+	$('#carousel-example-generic').on('slide.bs.carousel', function () {
+		// alert("Hola");
+		var clave=$(this).attr('clave');
+	  	$(".sandrops").remove();
+	});
 	$('a').hover(function(){
 		$(this).tooltip('toggle');
 	});

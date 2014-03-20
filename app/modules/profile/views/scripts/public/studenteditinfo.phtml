@@ -1,38 +1,100 @@
-<ul class="nav nav-pills nav-stacked" id="backeditBtn">
-	<li><a href="##" id="backedit"><h5>Volver</h5></a></li>
-</ul>
-
-<h4 class="text-muted">Editar <span class="text-info">Información Principal</span></h4><br>
-<form id="form">
-	<div class="row">
-		<div class="col-md-6">
+<div class="panel panel-default">
+<br>
+<div class="row container">
+	<div class="col-md-8">
+		<h4 class="text-muted">Editar <span class="text-info">Información Principal</span></h4>
+	</div>
+	<div class="col-md-2">
+		<a id="saveinfo" href="##" class="btn btn-success form-control">Guardar</a>
+	</div>
+	<div class="col-md-2">
+		<a id="backInfoBtn" href="##" class="btn btn-default form-control">Volver</a>
+	</div>
+</div>
+<hr>
+<br>
+<form id="forminfo">
+	<div class="row container">
+		<div class="col-md-3">
 			<h5 class="text-muted">Tipo de Documento</h5>
 			<?php echo $this->form->typedoc ?><br>
-
+		</div>
+		<div class="col-md-4">
+			<h5 class="text-muted">Número de Documento</span></h5>
+			<?php echo $this->form->numdoc?><br>
+		</div>
+		<div class="col-md-5">
 			<h5 class="text-muted">Fecha de Nacimiento</h5>
 			<div class="row">
-				<div class="col-md-4"><?php print $this->form->year ?></div>
-				<div class="col-md-4"><?php print $this->form->month ?></div>
-				<div class="col-md-4"><?php print $this->form->day ?></div>
+				<div class="col-md-4">
+					<?php echo $this->form->year ?>
+				</div>
+				<div class="col-md-4">
+					<?php echo $this->form->month ?>
+				</div>
+				<div class="col-md-4">
+					<?php echo $this->form->day ?>
+				</div>
 			</div><br>
-			
-			<h5 class="text-muted">Email Personal</h5>
+		</div>	
+	</div>
+	<div class="row container">
+		<div class="col-md-3">
+			<h5 class="text-muted">Sexo</span></h5>
+			<?php echo $this->form->sex?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Estado Civil</span></h5>
+			<?php echo $this->form->civil?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Celular</span></h5>
+			<?php echo $this->form->cellular ?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Teléfono Fijo</h5>
+			<?php echo $this->form->phone ?><br>
+		</div>	
+	</div>
+	<div class="row container">
+		<div class="col-md-3">
+			<h5 class="text-muted">País</span></h5>
+			<?php echo $this->form->country?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Departamento</span></h5>
+			<?php echo $this->form->country_s?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Provincia</span></h5>
+			<?php echo $this->form->country_p ?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Distrito</span></h5>
+			<?php echo $this->form->country_d?><br>
+		</div>	
+	</div>	
+	<div class="row container">
+		<div class="col-md-6">	
+			<h5 class="text-muted">Email Personal</span></h5>
 			<?php echo $this->form->mail_person ?><br>
-
-			<h5 class="text-muted">Celular</h5>
-			<?php echo $this->form->cellular ?><br>	
-
-			<h5 class="text-muted">País</h5>
-			<?php echo $this->form->country ?><br>
-
-			<h5 class="text-muted">Provincia</h5>
-			<?php echo $this->form->country_p ?><br>	
 		</div>
 		<div class="col-md-6">
-			<h5 class="text-muted">Número de Documento</h5>
-			<?php echo $this->form->numdoc?><br>
+			<h5 class="text-muted">Email de Trabajo</h5>
+			<?php echo $this->form->mail_work ?><br>
+		</div>	
+	</div>
+		<div class="col-md-6">
+			<!-- <h5 class="text-muted">Celular</h5>
+			<?php echo $this->form->cellular ?><br>	 -->
+
+			<!-- <h5 class="text-muted">País</h5>
+			<?php echo $this->form->country ?><br> -->
+
+			<!-- <h5 class="text-muted">Provincia</h5>
+			<?php echo $this->form->country_p ?><br> -->
 		
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-md-6">
 					<h5 class="text-muted">Sexo</h5>
 					<?php echo $this->form->sex?>
@@ -41,80 +103,116 @@
 					<h5 class="text-muted">Estado Civil</h5>
 					<?php echo $this->form->civil?>
 				</div>
-			</div><br>
+			</div><br> -->
 
-			<h5 class="text-muted">Email de Trabajo</h5>
-			<?php echo $this->form->mail_work ?><br>
+			<!-- <h5 class="text-muted">Email de Trabajo</h5>
+			<?php echo $this->form->mail_work ?><br> -->
 
-			<h5 class="text-muted">Teléfono Fijo</h5>
-			<?php echo $this->form->phone ?><br>
+			<!-- <h5 class="text-muted">Teléfono Fijo</h5>
+			<?php echo $this->form->phone ?><br> -->
 
-			<h5 class="text-muted">Departamento</h5>
-			<?php echo $this->form->country_s?><br>
+			<!-- <h5 class="text-muted">Departamento</h5>
+			<?php echo $this->form->country_s?><br> -->
 
-			<h5 class="text-muted">Distrito</h5>
-			<?php echo $this->form->country_d?><br>
+			<!-- <h5 class="text-muted">Distrito</h5>
+			<?php echo $this->form->country_d?><br> -->
 
 			<!-- <input type="submit" value="Guardar" class="btn btn-info pull-right"></td> -->
 		</div>
-	</div>
 </form>
-<div class='col-md-2 col-md-offset-10'><button id ='enviar' class='btn btn-success'>Actualizar</button></div>
+<br>
+</div>
+
 
 <script>
 	// $('#mail_person, #mail_work').attr('type', 'email');
 	// $('input').attr('required', 'true');
-	// $('#country_d').attr('required', 'true');
-
+	// $('#country_s,#country_p,#country_d').disable();
+	$("#country_s").attr('disabled','disabled');
+	$("#country_p").attr('disabled','disabled');
+	$("#country_d").attr('disabled','disabled');
 	// $("#save").click(function(){
 	// 	$('#form').submit();
 	// })
-	var valor='PE';
-	$("#country option[value="+valor+"]").attr("selected",true);
-	var url="/profile/public/countrystate/coid/"+valor;
-    $("#country_s").load(url);
+	var veri="<?php echo $this->veri?>";
+	if (veri=="1") {
+		$('#country_s').removeAttr('disabled');
+        $('#country_p').removeAttr('disabled');
+        $('#country_d').removeAttr('disabled');
+		// alert(veri);
+		var valor="<?php echo $this->dataubigeo['coid']?>";
+		$("#country option[value="+valor+"]").attr("selected",true);
+		// var url="/profile/public/countrystate/coid/"+valor;
+	 // 	$("#country_s").load(url);
 
-	$("#enviar").click(function(){   
+	 // 	var valors="<?php echo $this->dataubigeo['cosid']?>";
+		// $("#country_s option[value="+valors+"]").attr("selected",true);
+		// var url="/profile/public/countryprovince/cosid/"+valors;
+	 // 	$("#country_p").load(url);
+	};
+	if (veri=="0") {
+		$('#country_s').removeAttr('disabled');
+		// alert(veri);
+		var valor="PE";
+		$("#country option[value="+valor+"]").attr("selected",true);
+		var url="/profile/public/countrystate/coid/"+valor;
+	 	$("#country_s").load(url);		
+	};
+
+	$("#saveinfo").click(function(){   
         var url="/profile/public/studenteditinfo/";
-     
+        // data=$("#forminfo").serialize();
+        // alert(data);
         $.ajax({
             url: url,
             type: 'POST',
-            data:$("#form").serialize(),
+            data:$("#forminfo").serialize(),
             success: function (data){
-                $("#datastudent").html(data);
+            	$("#loadingDiv").html(data);
+            	$('#datastudent, #editform').html('');
             }
+
         });
     });
+
+    $('#backInfoBtn').click(function(){
+ 		$('#editform').addClass('hidden');
+ 		$("#info").fadeOut('fast', function(){
+			$("#info").load('/profile/public/studentinfo', function(){
+				$("#info").fadeIn('fast');
+			});
+		});
+  	})
+
     var clave="<?php echo $this->clave?>";
     if (clave==1) {
-    	$("#datastudent").fadeOut('fast', function(){
-			$("#datastudent").load('/profile/public/studentinfo', function(){
-				$("#datastudent").fadeIn('fast');
+    	$("#info").fadeOut('fast', function(){
+			$("#info").load('/profile/public/studentinfo', function(){
+				$("#info").fadeIn('fast');
 			});
 		});    	
     };
 
-    var country="<?php echo $this->country?>";
-    if (country==1) {
-    	var datacountry="<?php echo $this->data['country']?>";
-    	var url="/profile/public/countrystate/coid/"+datacountry;
-    	$("#country_s").load(url);
-    };
+    // var country="<?php echo $this->country?>";
+    // if (country==1) {
+    // 	var datacountry="<?php echo $this->data['country']?>";
+    // 	var url="/profile/public/countrystate/coid/"+datacountry;
+    // 	$("#country_s").load(url);
+    // };
 
-    var country_s="<?php echo $this->country_s?>";
-    if (country_s==1) {
-    	var datacountry_s="<?php echo $this->data['country_s']?>";
-    	var url="/profile/public/countryprovince/cosid/"+datacountry_s;
-    	$("#country_p").load(url);
-    };
+    // var country_s="<?php echo $this->country_s?>";
+    // if (country_s==1) {
+    // 	var datacountry_s="<?php echo $this->data['country_s']?>";
+    // 	var url="/profile/public/countryprovince/cosid/"+datacountry_s;
+    // 	$("#country_p").load(url);
+    // };
 
-    var country_p="<?php echo $this->country_p?>";
-    if (country_p==1) {
-    	var datacountry_p="<?php echo $this->data['country_p']?>";
-    	var url="/profile/public/countrydistrict/proid/"+datacountry_p;
-    	$("#country_d").load(url);
-    };
+    // var country_p="<?php echo $this->country_p?>";
+    // if (country_p==1) {
+    // 	var datacountry_p="<?php echo $this->data['country_p']?>";
+    // 	var url="/profile/public/countrydistrict/proid/"+datacountry_p;
+    // 	$("#country_d").load(url);
+    // };
     
 	// $("#form").submit(function(){
 	// 	$.ajax({
@@ -144,6 +242,7 @@
   	})
 
   	$("#country").change(function(){
+  		$('#country_s').removeAttr('disabled');
 	    var coid=$(this).val();
     	// var coid=$("#country").val();
     	var url="/profile/public/countrystate/coid/"+coid;
@@ -151,6 +250,7 @@
     });
 
     $("#country_s").change(function(){
+    	$('#country_p').removeAttr('disabled');
 	    var cosid=$(this).val();
     	// var coid=$("#country").val();
     	var url="/profile/public/countryprovince/cosid/"+cosid;
@@ -158,6 +258,7 @@
     });
 
     $("#country_p").change(function(){
+    	$('#country_d').removeAttr('disabled');
 	    var proid=$(this).val();
     	// var coid=$("#country").val();
     	var url="/profile/public/countrydistrict/proid/"+proid;
