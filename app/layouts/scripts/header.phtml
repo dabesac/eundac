@@ -45,41 +45,17 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cambiar clave <b class="caret"></b></a>
                     <ul id="form-change" class="dropdown-menu">
                         <li>
-                        <!-- <form id="frmclave" name="frmclave" action="/admin/password/keychange/" method="POST" enctype="application/x-www-form-urlencoded">
-                            <div class="form-group" style="margin-left:2%; width:233px">
-                                <input type="password" class="form-control" id="acla" name="acla" placeholder="Contraseña Actual" title="Contraseña Actual" required>
-                            </div>
-                            <div class="form-group" style="margin-left:2%; width:233px">
-                                <input type="password" class="form-control" id="ncla" name="ncla" placeholder="Nueva Contraseña" title="Nueva Contraseña" required>
-                            </div>
-                            <div class="form-group" style="margin-left:2%; width:233px">
-                                <input type="password" class="form-control" id="rcla" name="rcla" placeholder="Repetir Nueva Contraseña" title="Repetir Nueva Contraseña" required>
-                            </div>                   
-                            <div id='sms'></div>
-                            <input type="hidden" value="<?php echo $sesion->eid?>" name="eid">
-                            <input type="hidden" value="<?php echo $sesion->oid?>" name="oid">
-                            <input type="hidden" value="<?php echo $sesion->rid?>" name="rid">
-                            <input type="hidden" value="<?php echo $sesion->uid?>" name="uid">
-                            <input type="hidden" value="<?php echo $sesion->pid?>" name="pid">
-                            <input type="hidden" value="<?php echo $sesion->escid?>" name="escid">
-                            <input type="hidden" value="<?php echo $sesion->subid?>" name="subid">
-
-                            <div id="sms2"></div>
-                            <div class="modal-footer">
-                                <button id='guardar1' type="submit" class="btn btn-taipa btn-block">Cambiar</button>
-                            </div>
-                        </form> -->
-                        <form role="form">
+                        <form role="form" id='default_change'>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="exampleInputEmail1" placeholder="Contraseña Actual">
+                                <input type="password" class="form-control" id="password_actual" placeholder="Contraseña Actual">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Nueva Contraseña">
+                                <input type="password" class="form-control" id="password_change" placeholder="Nueva Contraseña">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Repetir Nueva Contraseña">
+                                <input type="password" class="form-control" id="password_verify" placeholder="Repetir Nueva Contraseña">
                             </div>
-                            <button type="submit" class="btn btn-taipa btn-block">Cambiar</button>
+                            <button type="submit" id='valida_password' class="btn btn-taipa btn-block">Cambiar</button>
                         </form>
                         </li>
                     </ul>
@@ -90,8 +66,10 @@
         </div><!-- /.navbar-collapse -->
     </div>
 </nav>
-
+<script type="text/javascript" src='/external_library/md5/md5.js'></script>
+<script type="text/javascript" src='/external_library/md5/change.js'></script>
 <script>
+    // $(document).ready(PI.onReady);
     // var url=("/admin/password/keychange/");
     // $("#form-change").load(url);
     var rol = $('#rol').val();

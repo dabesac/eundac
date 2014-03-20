@@ -112,7 +112,7 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
             $formData['observation']=null;
         }
 
-    	print_r($formData);exit();
+    	// print_r($formData);exit();
     	$distr = new Distribution_Model_DbTable_Distribution();
     	$distr->_update($formData,$pk);
 
