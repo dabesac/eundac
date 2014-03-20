@@ -279,6 +279,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                     'media'=>$formData['media'],
                     'sources'=>$formData['sources'],
                     'evaluation'=>$formData['evaluation'],
+                    'methodology'=>$formData['methodology'],
                     );
                 $syll= new Api_Model_DbTable_Syllabus();
                 if ($syll->_update($data,$pk)){
