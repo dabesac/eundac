@@ -17,8 +17,8 @@
     <?php 
     if($this->acadata) 
       {?> 
-  <div class="row">
-    <div class="col-md-10 col-md-offset-1">
+  <div class="row container">
+    <div class="col-md-12">
       <div class="panel panel-warning">
         <div class="panel-body">
           <table class="table table-hover">
@@ -28,6 +28,7 @@
               <th><h5><strong>Tipo</strong></h5></th>
               <th class="text-center"><h5><strong>Nivel de Estudio</strong></h5></th>
               <th class="text-center"><h5><strong>Año de Finalización</strong></h5></th>
+              <th class="text-center"><h5><strong>Ubicación</strong></h5></th>
             </tr>
       <?php $c = 1;
       foreach ($this->acadata as $academic) {?>
@@ -57,10 +58,11 @@
                   echo "Otros";
                 }
                 ?></h5></td>
-              <td align="center"><h5><?php echo $academic['year_end']?></h5></td>
-               <td><h5>
-                  <a id="delete<?php echo $academic['acid'] ?>" class="text-warning" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
-               </h5></td>
+                <td align="center"><h5><?php echo $academic['year_end']?></h5></td>
+                <td id="location<?php echo $academic['acid']?>" acid="<?php echo $academic['acid']?>" class="text-center text-info"><h5><span class="glyphicon glyphicon-globe"></span></h5></td>  
+                <td><h5>
+                  <a acid="<?php echo $academic['acid'] ?>" class="edits text-warning" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+                </h5></td>
                 <td><h5>
                   <a class="text-warning showAlertRemove" acid="<?php echo $academic['acid']?>" href="##" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
                 </h5></td>
@@ -82,6 +84,18 @@
                   </div>
                </td>
             </tr>
+            <tr class="alertRemoves<?php echo $academic['acid'] ?> hidden">
+                <td colspan="4"></td>
+                <td colspan="4">
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p><?php echo $academic['location'] ?></span></p>
+                            </div>
+                        </div>
+                  </div>
+               </td>
+            </tr>
       <?php $c++;
       }?>
           </table>
@@ -100,6 +114,15 @@
 </div>
 
 <script>
+    $("#location").hover(function(){
+        var acid = $(this).attr('acid');
+        $('.alertRemoves'+acid).removeClass('hidden');
+    });
+    $("#location").mouseleave(function(){
+        var acid = $(this).attr('acid');
+        $('.alertRemoves'+acid).addClass('hidden');
+    });
+
    $('.showAlertRemove').click(function(){
       var acid = $(this).attr('acid');
       $('#alertRemove' + acid).removeClass('hidden');
@@ -120,6 +143,15 @@
   $("#newAcademic").click(function(){
     $('#datastudent').fadeOut('fast', function(){
       $('#datastudent').load('/profile/public/studentsaveacademic', function(){
+        $('#datastudent').fadeIn('fast');
+      });
+    });
+  });
+
+  $(".edits").click(function(){
+    var acid=$(this).attr('acid');
+    $('#datastudent').fadeOut('fast', function(){
+      $('#datastudent').load('/profile/public/studenteditacademic/acid/'+acid, function(){
         $('#datastudent').fadeIn('fast');
       });
     });

@@ -718,20 +718,29 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             $form=new Profile_Form_Academic();
             $this->view->form=$form;
+            $this->view->veri=0;
 
             if ($this->getRequest()->isPost()) {
                 $formdata=$this->getRequest()->getPost();
                 if($form->isValid($formdata)){
                     unset($formdata["save"]);
+                    $formdata['location']=$formdata['country_d'];
+                    unset($formdata['country']);
+                    unset($formdata['country_s']);
+                    unset($formdata['country_p']);
+                    unset($formdata['country_d']);
                     $formdata["eid"]=$eid;
                     $formdata["pid"]=$pid;
-                    trim($formdata["location"]);
+                    // trim($formdata["location"]);
                     trim($formdata["type"]);
                     trim($formdata["institution"]);
                     trim($formdata["year_end"]);
                     trim($formdata["title"]);
-                    $academic=$dbacademic->_save($formdata);
-                    print_r("Se Guardo con Exito");
+                    
+                    if ($academic=$dbacademic->_save($formdata)) {
+                        $this->view->clave=1;
+                    }
+                    // print_r("Se Guardó conÉxito");
                 }
             }
         }catch(exception $e){
@@ -742,11 +751,9 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studenteditacademicAction(){
         try {
             $this->_helper->layout()->disableLayout();
-
             $eid = $this->sesion->eid;
             $pid = $this->sesion->pid;
             $acid = $this->getParam('acid');
-
             $this->view->acid = $acid;
 
             $academicDb = new Api_Model_DbTable_Academicrecord();
@@ -754,19 +761,44 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             $where = array('acid'=>$acid, 'eid'=>$eid, 'pid'=>$pid);
             $academic = $academicDb->_getOne($where);
+            //print_r($where);            
+            if ($academic['location']) {
+                $wheres=array('disid'=>$academic['location']);
+                $bdubigeo=new Api_Model_DbTable_CountryDistrict();
+                $dataubigeo=$bdubigeo->_infoUbigeo($wheres);
+                $dataubigeo=$dataubigeo[0];                
+                $academic['country']=$dataubigeo['coid'];
+                $academic['country_s']=$dataubigeo['cosid'];
+                $academic['country_p']=$dataubigeo['proid'];
+                $academic['country_d']=$dataubigeo['disid'];
+                $this->view->dataubigeo=$dataubigeo;
+                $this->view->veri=1;
+            }
+            else{
+                $this->view->veri=0;
+            }
 
-            //print_r($where);
-            
-            $this->view->form=$form;
-            $form->populate($academic);
-            if ($this->getRequest()->isPost())
-            {
+            if ($this->getRequest()->isPost()){
                 $formdata = $this->getRequest()->getPost();
-                if ($form->isValid($formdata))
-                { 
-                    $update = $academicDb->_update($formdata, $where);
+                if ($form->isValid($formdata)){ 
+                    $formdata['location']=$formdata['country_d'];
+                    unset($formdata['country']);
+                    unset($formdata['country_s']);
+                    unset($formdata['country_p']);
+                    unset($formdata['country_d']);
+                    if($academicDb->_update($formdata, $where)){
+                        $this->view->clave=1;
+                    }
+                    ;
+                }
+                else{
+                    $form->populate($formdata);
                 }
             }
+            else{
+                $form->populate($academic);                
+            }
+            $this->view->form=$form;
         } catch (Exception $e) {
             print 'Error'.$e->getMessage();
         }

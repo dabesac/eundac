@@ -1,59 +1,145 @@
-<ul class="nav nav-pills nav-stacked" id="backeditBtn">
+<div class="panel panel-default">
+	<br>
+		<div class="row container">
+			<div class="col-md-8">
+				<h4 class="text-muted">Editar <span class="text-info">Datos Académicos</span></h4>
+			</div>
+			<div class="col-md-2">
+				<a id="saveacade" href="##" class="btn btn-success form-control">Guardar</a>
+			</div>
+			<div class="col-md-2">
+				<a id="backeditBtn" href="##" class="btn btn-default form-control">Volver</a>
+			</div>
+		</div>
+	<hr>
+	<br>
+<!-- <ul class="nav nav-pills nav-stacked" id="backeditBtn">
 	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
-</ul>
+</ul> -->
 
-<form id="form" action="/profile/public/studenteditacademic/acid/<?php echo $this->acid?>" method="post">
-
-<div class="col-sm-12">
-	<h4>Información Académica</h4>
-	<table class="table">
-		<tr>
-			<td><label>Nombre de la Institución</label><?php print $this->form->institution?></td>
-			<td><label>Tipo</label><?php print $this->form->type?></td>
-		</tr>
-		<tr>
-			<td><label>Localización: País | Departamento | Provincia | Distrito</label><?php print $this->form->location?></td>
-		</tr>
-		<tr>
-			<td><label>Título</label><?php print $this->form->title?></td>
-			<td><label>Año de Finalización</label><?php print $this->form->year_end?></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><a id="save" href="##" class="btn btn-info pull-right">Guardar</a></td>
-		</tr>
-	</table>
+	<form id="formacade" method="post">
+		<div class="row container">
+				<div class="col-md-8">
+					<h5 class="text-muted">Nombre de la Institución</h5>
+					<?php echo $this->form->institution ?><br>
+				</div>
+				<div class="col-md-4">
+					<h5 class="text-muted">Tipo</h5>
+					<?php echo $this->form->type?><br>
+				</div>	
+			</div>
+			<div class="row container">
+				<div class="col-md-3">
+					<h5 class="text-muted">País</span></h5>
+					<?php echo $this->form->country?><br>
+				</div>
+				<div class="col-md-3">
+					<h5 class="text-muted">Departamento</span></h5>
+					<?php echo $this->form->country_s?><br>
+				</div>
+				<div class="col-md-3">
+					<h5 class="text-muted">Provincia</span></h5>
+					<?php echo $this->form->country_p ?><br>
+				</div>
+				<div class="col-md-3">
+					<h5 class="text-muted">Distrito</span></h5>
+					<?php echo $this->form->country_d?><br>
+				</div>	
+			</div>	
+			<div class="row container">
+				<div class="col-md-8">
+					<h5 class="text-muted">Título</h5>
+					<?php echo $this->form->title?><br>
+				</div>
+				<div class="col-md-4">	
+					<h5 class="text-muted">Año de Finalización</h5>
+					<?php echo $this->form->year_end?><br>
+				</div>	
+			</div>
+	</form>
 </div>
 
 <script>
-	$("#save").click(function(){
-		$("#form").submit()
-	})
-	$("#form").submit(function(){
-		$.ajax({
-			type: 'POST',
-			url: $(this).attr('action'),
-			data: $(this).serialize(),
-			success: function(data){
-				$("#datastudent").html(data);
-            	$("#datastudent").html('<br><br><center><img src="/img/spinner.gif" alt="" /></center>');
-            	$("#datastudent").fadeOut('fast', function(){
-            		$("#datastudent").load('/profile/public/studentacademic', function(){
-            			$("#datastudent").fadeIn('fast');
-            		});
-            	});
-			}
-		})
-		return false;
-	})
+	$("#saveacade").click(function(){   
+        var url="/profile/public/studenteditacademic/acid/<?php echo $this->acid?>";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data:$("#formacade").serialize(),
+            success: function (data){
+            	$("#datastudent").html(data);
+            }
 
-	$('#backeditBtn a').click(function (e) {
+        });
+    });
+
+    var clave="<?php echo $this->clave?>";
+    if (clave==1) {
+        $("#datastudent").html('<br><br><center><img src="/img/spinner.gif" alt="" /></center>');
+        $("#datastudent").fadeOut('fast', function(){
+	        $("#datastudent").load('/profile/public/studentacademic', function(){
+	        	$("#datastudent").fadeIn('fast');
+    			$('#loadingDiv').addClass('hidden');
+	        });
+        });
+	};
+	// $("#save").click(function(){
+	// 	$("#form").submit()
+	// })
+	// $("#form").submit(function(){
+	// 	$.ajax({
+	// 		type: 'POST',
+	// 		url: $(this).attr('action'),
+	// 		data: $(this).serialize(),
+	// 		success: function(data){
+	// 			$("#datastudent").html(data);
+ //            	$("#datastudent").html('<br><br><center><img src="/img/spinner.gif" alt="" /></center>');
+ //            	$("#datastudent").fadeOut('fast', function(){
+ //            		$("#datastudent").load('/profile/public/studentacademic', function(){
+ //            			$("#datastudent").fadeIn('fast');
+ //            		});
+ //            	});
+	// 		}
+	// 	})
+	// 	return false;
+	// })
+	var veri="<?php echo $this->veri?>";
+	if (veri=="1") {
+		$('#country_s').removeAttr('disabled');
+        $('#country_p').removeAttr('disabled');
+        $('#country_d').removeAttr('disabled');
+        
+		var valor="<?php echo $this->dataubigeo['coid']?>";
+		$("#country option[value="+valor+"]").attr("selected",true);
+	};
+	$('#backeditBtn').click(function (e) {
     	e.preventDefault()
       	$("#datastudent").fadeOut('fast', function(){
       		$('#datastudent').load('/profile/public/studentacademic', function(){
 				$('#datastudent').fadeIn('fast');
 			});
       	});
-  	})
+  	});
+
+  	$("#country").change(function(){
+  		$('#country_s').removeAttr('disabled');
+	    var coid=$(this).val();
+    	var url="/profile/public/countrystate/coid/"+coid;
+    	$("#country_s").load(url);
+    });
+
+    $("#country_s").change(function(){
+    	$('#country_p').removeAttr('disabled');
+	    var cosid=$(this).val();
+    	var url="/profile/public/countryprovince/cosid/"+cosid;
+    	$("#country_p").load(url);
+    });
+
+    $("#country_p").change(function(){
+    	$('#country_d').removeAttr('disabled');
+	    var proid=$(this).val();
+    	var url="/profile/public/countrydistrict/proid/"+proid;
+    	$("#country_d").load(url);
+    });
    
 </script>

@@ -142,7 +142,7 @@ class Profile_Form_Userinfo extends Zend_Form{
         $country_p->setRequired(true)->addErrorMessage("Campo Obligatorio");
         $country_p->setRegisterInArrayValidator(false); 
         $country_p->setAttrib("class","form-control");
-        $country_p->addMultiOption("","- Seleccione una Provincia -");
+        $country_p->addMultiOption("","- Seleccione un Departamento -");
         foreach ($datap as $datap) {
             $country_p->addMultiOption($datap['proid'],$datap['name_p']);            
         }
@@ -155,7 +155,7 @@ class Profile_Form_Userinfo extends Zend_Form{
         $country_d->setRequired(true)->addErrorMessage("Campo Obligatorio");
         $country_d->setRegisterInArrayValidator(false); 
         $country_d->setAttrib("class","form-control");
-        $country_d->addMultiOption("","- Seleccione un Distrito -");
+        $country_d->addMultiOption("","- Seleccione una Provincia -");
         foreach ($datad as $datad) {
             $country_d->addMultiOption($datad['disid'],$datad['name_d']);            
         }

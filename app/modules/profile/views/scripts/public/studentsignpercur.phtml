@@ -9,16 +9,16 @@
 	<div class="col-md-12">
 		<div class="row">
 			<div class="col-md-3">
-				<h5 class="text-center text-muted">Leyenda</h5>
+				<h4 class="text-center text-muted"><b>Leyenda</b></h4>
 			</div>
 			<div class="col-md-3">
-				<h5 class="text-center text-success"><span class="glyphicon glyphicon-record"></span> Aprobado</h5>
+				<h5 class="text-center text-success"><img src="/img/circulo-verde.png"> Aprobado</h5>
 			</div>
 			<div class="col-md-3">
-				<h5 class="text-center text-danger"><span class="glyphicon glyphicon-record"></span> Falta/Desaprobado</h5>
+				<h5 class="text-center text-danger"><img src="/img/circulo-rojo.png">  Falta/Desaprobado</h5>
 			</div>
 			<div class="col-md-3">
-				<h5 class="text-center text-warning"><span class="glyphicon glyphicon-record"></span> Llevando</h5>
+				<h5 class="text-center text-warning"><img src="/img/circulo-amarillo.png">  Llevando</h5>
 			</div>
 		</div>
 		<br>
@@ -92,6 +92,7 @@
 										<?php 
 										if($est<>1){
 											if($notafinal>=11){
+												$img = 'verde';
 												$color = 'success';
 												$stateCourse = 'Aprobado';
 											}else{
@@ -99,27 +100,31 @@
 												foreach ($this->courlleact as $cact) {
 													if($this->courlle[$c][0]['courseid']==$cact['courseid']){
 														if($cact['state']=="M"){
+															$img = 'amarillo';
 															$color = 'warning';
 															$stateCourse = 'Llevando';
 															$pinto=1;
 														}else{
+															$img = 'rojo';
 															$color = 'danger';
-															$stateCourse = 'Te Jalaste :(';
+															$stateCourse = 'Desaprobado';
 															$pinto=1;
 														}
 													}
 												}
 												if($pinto==0){
+													$img = 'rojo';
 													$color = 'danger';
-													$stateCourse = 'Te Jalaste :(';
+													$stateCourse = 'Desaprobado';
 												}
 											}
 										}elseif($est==1){
 											$est=0;
+											$img = 'rojo';
 											$color = 'danger';
-											$stateCourse = 'Aun No Llevas';
+											$stateCourse = 'Aún No Llevas';
 										} ?>
-										<span title="<?php echo $stateCourse ?>" class="glyphicon glyphicon-record text-<?php echo $color ?>"></span>
+										<span title="<?php echo $stateCourse ?>" class=" text-<?php echo $color ?>"><img src="/img/circulo-<?php echo $img?>.png"></span>
 									</td>
 									<td class="text-center">
 										<?php if($turno[$c]){?>

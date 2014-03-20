@@ -101,8 +101,8 @@ class Horary_NhoraryController extends Zend_Controller_Action {
         $wher['subid']=$subid;
         $wher['teach_pid']=$pid;
         $wher['teach_uid']=$uid;
-        // print_r($wher);exit();
         $dathora=$hora->_getFilter($wher);
+        // print_r($dathora);exit();
         if ($dathora) $this->view->dathora=1;
     }
     public function validatetimeAction()
