@@ -26,19 +26,18 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $where['perid']=base64_decode($this->_getParam('perid'));
 
             $tb_period = new Api_Model_DbTable_Periods();
-            $data_period =$tb_period->_getOne($where);
+            $where_per = array(
+                    'eid' => $this->sesion->eid,
+                    'oid' => $this->sesion->oid,
+                    'perid' => base64_decode($this->_getParam('perid')),
+                    );
+            $data_period =$tb_period->_getOne($where_per);
 
-            $date_stard = $data_period['class_start_date'];
-            $date_end = $data_period['class_end_date'];
+            $date_stard_t = $this->converterdate((string)$data_period['class_start_date']);
+            $date_end_t = $this->converterdate((string)$data_period['class_end_date']);
 
-            $data_stard = new Zend_Date($date_stard);
-            $date_stard =$data_stard->get(Zend_Date::DATE_LONG);
-            // echo $data_stard->get('dd/mm/yyyy');
-            $data_end = new Zend_Date($date_end);
-            $date_end = $data_end->toString(Zend_Date::DATE_LONG);
-
-            $this->view->date_stard = $date_stard;
-            $this->view->date_end = $date_end;
+            $this->view->date_stard = $date_stard_t;
+            $this->view->date_end =  $date_end_t;
 
 
             $this->view->where=$where;
@@ -155,9 +154,6 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $where['turno']=base64_decode($this->_getParam('turno'));
             $where['subid']=base64_decode($this->_getParam('subid'));
             $where['perid']=base64_decode($this->_getParam('perid'));
-
-
-        
             $this->view->where=$where;
             // $this->view->escid=$where['escid'];
             // $this->view->curid=$where['curid'];
@@ -208,54 +204,63 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $percur= new Api_Model_DbTable_PeriodsCourses();
             $periodocurso= $percur->_getOne($wherepercur);
             $this->view->periodocurso=$periodocurso;
-            // print_r($wherepercur);exit();
-
             $form= new Syllabus_Form_Syllabus();
             if ($periodocurso["type_rate"]=="C") $form->methodology->setRequired(true)->addErrorMessage('Rellene Metodologia');
             $form->populate($datsyl);
-
-            if ($this->getRequest()->isPost())
-            {
-                $formData = $this->getRequest()->getPost();
-                $pk['perid']=$where['perid'];
-                $pk['curid']=$where['curid'];
-                $pk['escid']=$where['escid'];
-                $pk['courseid']=$where['courseid'];                   
-                $pk['eid']=$where['eid'];
-                $pk['oid']=$where['oid'];
-                $pk['turno']=$where['turno'];
-                $pk['subid']=$where['subid'];
-                $syll= new Api_Model_DbTable_Syllabus();
-                $state='C';
-                $data=array('sumilla'=>$formData['sumilla'],'competency'=>$formData['competency'],'capacity'=>$formData['capacity'],
-                            'units'=>$formData['units'],'media'=>$formData['media'],'sources'=>$formData['sources'],
-                            'evaluation'=>$formData['evaluation']);
-                if ($form->isValid($formData)) 
-                    {   
-                        $data['state']=$state;
-                        if ($syll->_update($data,$pk)){ ?>
-                            <script type="text/javascript">
-                                alert("Se cerró el Silabo");
-                                // window.location.reload();
-                            </script>
-                        <?php
-                            $ban="1";
-                            $this->view->ban=$ban;
-                        }
-                    }
-                else{ 
-                    // print_r($data);
-                    // print_r($pk);exit();
-                    $syll->_update($data,$pk);
-                    $this->view->msgclose=1;
-                }
-            }
             $this->view->form=$form;
+
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
     }
+    public function closureAction(){
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $form = new Syllabus_Form_Syllabus();
+        $tb_units = new Api_Model_DbTable_Syllabusunits();
 
+        if ($this->getRequest()->isPost()) {
+            $formData = $this->getRequest()->getPost();
+            $type_rate = base64_decode($formData['type_rate']);
+            if ($type_rate=='C') $form->methodology->setRequired(true)->addErrorMessage('Rellene Metodologia');
+            if ($form->isValid($formData)) {
+                $escid = base64_decode($formData['escid']);
+                $subid = base64_decode($formData['subid']);
+                $perid = base64_decode($formData['perid']);
+                $curid = base64_decode($formData['curid']);
+                $courseid = base64_decode($formData['courseid']);
+                $turno = base64_decode($formData['turno']);
+                $params = array(
+                    'eid' => $eid,
+                    'oid' => $oid,
+                    'escid' => $escid,
+                    'subid' => $subid,
+                    'perid' => $perid,
+                    'curid' => $curid,
+                    'courseid' => $courseid,
+                    'turno' => $turno,
+                    );
+                $data_units = $tb_units ->_getFilter($params);
+                $count = count($data_units);
+                if ($count == $formData['units']) {
+                        $update = array('state'=>'C');
+                        $syllabus= new Api_Model_DbTable_Syllabus();
+                        if ($syllabus->_update($update,$params)){ 
+                            $json = array('status' => true, );
+                        }
+                 }else{
+                    $json = array('status' => false,);
+                 }
+               
+            }else{
+                $json = array('status' => false, );
+            }
+        }
+        $this->_helper->layout()->disableLayout();
+        $this->_response->setHeader('Content-Type', 'application/json'); 
+        $this->view->json = Zend_Json::encode($json);                  
+
+    }
     public function savemodifiedAction(){
         try {
             if ($this->getRequest()->isPost())
@@ -271,6 +276,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                         'turno'=>base64_decode($formData['turno']),
                         'perid'=>base64_decode($formData['perid']),
                     );
+                if(base64_decode($formData['perid'])=='C') $data['methodology']=$formData['methodology'];
                 $data=array(
                     'sumilla'=>$formData['sumilla'],
                     'competency'=>$formData['competency'],
@@ -279,7 +285,6 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                     'media'=>$formData['media'],
                     'sources'=>$formData['sources'],
                     'evaluation'=>$formData['evaluation'],
-                    'methodology'=>$formData['methodology'],
                     );
                 $syll= new Api_Model_DbTable_Syllabus();
                 if ($syll->_update($data,$pk)){
@@ -644,28 +649,68 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
 
     public function viewAction(){
         try {
+            $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $courseid = base64_decode($this->_getParam("courseid"));
-            $turno = base64_decode($this->_getParam("turno"));
-            $curid = base64_decode($this->_getParam("curid"));
-            $escid = base64_decode($this->_getParam("escid"));
-            $subid = base64_decode($this->_getParam("subid"));
-            $perid = base64_decode($this->_getParam("perid"));
+
+            $params = $this->getRequest()->getParams();
+            $paramsdecode = array();
+                foreach ( $params as $key => $value ){
+                    if($key!="module" && $key!="controller" && $key!="action"){
+                        $paramsdecode[base64_decode($key)] = base64_decode($value);
+                    }
+            }
+
+            $params = $paramsdecode;
+            $subid= trim($params['subid']);
+            $escid= trim($params['escid']);
+            $curid = trim($params['curid']);
+            $courseid= trim($params['courseid']);
+            $turno= trim($params['turno']);
+            $perid = trim($params['perid']);
+            $unit= trim($params['unit']);
+            $type_rate = trim($params['type_rate']);
+            $data = array(
+                    'eid'=>$eid,
+                    'oid'=>$oid,
+                    'subid'=>$subid,
+                    'escid'=>$escid,
+                    'curid'=>$curid,
+                    'courseid'=>$courseid,
+                    'turno'=>$turno,
+                    'perid'=>$perid,
+                    'unit'=>$unit,
+                );
+
+
             $this->view->subid=$subid;
             $this->view->perid=$perid;
             $this->view->escid=$escid;
             $this->view->curid=$curid;
             $this->view->courseid=$courseid;
-            $this->view->pid=$this->sesion->pid;
             $this->view->turno=$turno;
-            $this->view->infouser=$this->sesion->infouser;
-            
-            $whereper['eid']=$eid;
-            $whereper['pid']=$this->sesion->pid;
-            $per= new Api_Model_DbTable_Person();
-            $persona=$per->_getOne($whereper);
-            $this->view->persona=$persona;
+
+            $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $dbspeciality = new Api_Model_DbTable_Speciality();
+            $speciality = $dbspeciality ->_getOne($wheres);
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $dbspeciality->_getOne($wher);
+
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names." <br> ".$namep;
+
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
             $wherecur['eid']=$eid;
             $wherecur['oid']=$oid;
@@ -677,27 +722,35 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $percurso = new Api_Model_DbTable_PeriodsCourses();
             $datcurso = $percurso->_getInfocourseXescidXperidXcourseXturno($wherecur);
             $this->view->curso = $datcurso;
-            
-            $wheresc['eid']=$eid;
-            $wheresc['oid']=$oid;
-            $wheresc['escid']=$escid;
-            $wheresc['subid']=$subid;
-            $esc = new Api_Model_DbTable_Speciality();
-            $escuela = $esc ->_getOne($wheresc);
-            $this->view->escuela=$escuela;
 
             $wherefac['eid']=$eid;
             $wherefac['oid']=$oid;
-            $wherefac['facid']=$escuela['facid'];
+            $wherefac['facid']=$speciality['facid'];
             $fac = new Api_Model_DbTable_Faculty();
             $facu = $fac ->_getOne($wherefac);
-            $this->view->facu=$facu;
+            $namef=strtoupper($facu['name']);
             
             $whereperi['eid']=$eid;
             $whereperi['oid']=$oid;
             $whereperi['perid']=$perid;
+
             $bdperiodo = new Api_Model_DbTable_Periods();
             $periods = $bdperiodo->_getOne($whereperi);
+            
+            $where_per = array(
+                    'eid' => $this->sesion->eid,
+                    'oid' => $this->sesion->oid,
+                    'perid' => $perid,
+                    );
+
+            $date_stard_t = $this->converterdate((string)$periods['class_start_date']);
+            $date_end_t = $this->converterdate((string)$periods['class_end_date']);
+
+            $this->view->date_stard = $date_stard_t;
+            $this->view->date_end =  $date_end_t;
+
+           
+
             $this->view->periods=$periods; 
             
             $wheresyl['eid']=$eid;
@@ -712,14 +765,22 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $silabo = $dbsilabos->_getOne($wheresyl);
             $this->view->silabo=$silabo;
 
+            $whereper['eid']=$eid;
+            $whereper['pid']=$silabo['teach_pid'];
+            $per= new Api_Model_DbTable_Person();
+            $persona=$per->_getOne($whereper);
+            $this->view->infouser=$persona;
+
             $syluni = new Api_Model_DbTable_Syllabusunits();
             $datsyluni=$syluni->_getAllXSyllabus($wheresyl);
             $this->view->datunidades=$datsyluni;
 
-            $buscar=array('eid'=>$wheresyl['eid'],'oid'=>$wheresyl['oid'],'curid'=>$wheresyl['curid'],
-                'escid'=>$wheresyl['escid'],'subid'=>$wheresyl['subid'],'courseid'=>$wheresyl['courseid']);
-            $syl_sumg=new Api_Model_DbTable_Course();
-            $this->view->sumgral=$syl_sumg->_getOne($buscar);
+            $wheredic=array('eid' => $eid, 'oid' => $oid, 'escid' => $escid , 'is_director' => 'S');
+            $dic = new Api_Model_DbTable_UserInfoTeacher();
+            $direc = $dic->_getFilter($wheredic,$attrib=null,$orders=null);
+            $whereper['pid']=$direc[0]['pid'];
+            $director = $per->_getOne($whereper);
+            $this->view->director = $director;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -877,5 +938,27 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
+    }
+
+    function converterdate($date = null){
+            $date_literal = split('-', $date);
+            if ($date !='') {
+                 switch ($date_literal['1']) {
+                    case 1: $strm = "Enero";break;
+                    case 2: $strm = "Febrero";break;
+                    case 3: $strm = "Marzo";break;
+                    case 4: $strm = "Abril";break;
+                    case 5: $strm = "Mayo";break;
+                    case 6: $strm = "Junio";break;
+                    case 7: $strm = "Julio";break;
+                    case 8: $strm = "Agosto";break;
+                    case 9: $strm = "Setiembre";break;
+                    case 10: $strm = "Octubre";break;
+                    case 11: $strm = "Noviembre";break;
+                    case 12: $strm = "Diciembre";break;
+                }
+                $date = $date_literal[2]." de ".$strm." del ".$date_literal[0];
+            } 
+        return $date;
     }
 }

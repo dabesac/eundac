@@ -338,3 +338,12 @@ body{
 	.menu-eundac-fooder{
 		background-color: #363C46;
 	}
+
+.data-header-info{
+	position: fixed !important;
+	z-index: 999;
+	margin-top: -86px;
+}
+.info-background{
+	background-color: #f8f8f8;
+}
