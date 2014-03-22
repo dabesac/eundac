@@ -89,7 +89,7 @@ class Rcentral_PeriodsController extends Zend_Controller_Action {
           $frmdata['updated']=date("Y-m-d h:m:s");
           $frmdata['modified']=$uid;
           $frmdata['register']=$uid;
-          $frmdata['state']='B';
+          $frmdata['state']='T';
       
       
           $dbper=new Api_Model_DbTable_Periods();
