@@ -60,6 +60,11 @@
 </div>
 
 <script>
+
+	$("#country_s").attr('disabled','disabled');
+	$("#country_p").attr('disabled','disabled');
+	$("#country_d").attr('disabled','disabled');
+	
 	$("#saveacade").click(function(){   
         var url="/profile/public/studenteditacademic/acid/<?php echo $this->acid?>";
         $.ajax({
@@ -82,6 +87,25 @@
     			$('#loadingDiv').addClass('hidden');
 	        });
         });
+	};
+
+	var veri="<?php echo $this->veri?>";
+	if (veri=="1") {
+		$('#country_s').removeAttr('disabled');
+        $('#country_p').removeAttr('disabled');
+        $('#country_d').removeAttr('disabled');
+		// alert(veri);
+		var valor="<?php echo $this->dataubigeo['coid']?>";
+		$("#country option[value="+valor+"]").attr("selected",true);
+	};
+
+	if (veri=="0") {
+		$('#country_s').removeAttr('disabled');
+		// alert(veri);
+		var valor="PE";
+		$("#country option[value="+valor+"]").attr("selected",true);
+		var url="/profile/public/countrystate/coid/"+valor;
+	 	$("#country_s").load(url);		
 	};
 	// $("#save").click(function(){
 	// 	$("#form").submit()

@@ -50,19 +50,23 @@
             <center>
             <select  id="state" name="state" class="form-control">
             <?php if($estado=='A'){?>
+            <option value="<?php echo $estado?>">Activo</option>
             <option value="T">Temporal</option>  
             <option value="C">Cerrado</option> 
             <?php }?>
             <?php if($estado=='I'){//I=iniciado?>
+            <option value="<?php echo $estado?>">Iniciado</option>
             <option value="A">Activo</option>  
             <option value="T">Temporal</option>
             <option value="C">Cerrado</option> 
             <?php }?>
             <?php if($estado=='T'){?>
+            <option value="<?php echo $estado?>">Temporal</option>
             <option value="A">Activo</option>  
             <option value="C">Cerrado</option> 
             <?php }?>
-            <?php if($estado=='C'){?>  
+            <?php if($estado=='C'){?>
+            <option value="<?php echo $estado?>">Cerrado</option>  
             <option value="T">Temporal</option> 
             <?php }?>                            
             </select>

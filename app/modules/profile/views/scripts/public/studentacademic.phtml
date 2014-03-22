@@ -59,7 +59,7 @@
                 }
                 ?></h5></td>
                 <td align="center"><h5><?php echo $academic['year_end']?></h5></td>
-                <td id="location<?php echo $academic['acid']?>" acid="<?php echo $academic['acid']?>" class="text-center text-info"><h5><span class="glyphicon glyphicon-globe"></span></h5></td>  
+                <td acid="<?php echo $academic['acid']?>" class=" location text-center text-info"><h5><span class="glyphicon glyphicon-globe"></span></h5></td>  
                 <td><h5>
                   <a acid="<?php echo $academic['acid'] ?>" class="edits text-warning" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
                 </h5></td>
@@ -85,12 +85,24 @@
                </td>
             </tr>
             <tr class="alertRemoves<?php echo $academic['acid'] ?> hidden">
-                <td colspan="4"></td>
-                <td colspan="4">
+                <td colspan="5"></td>
+                <td colspan="1" style="width:20%">
                     <div class="alert alert-info">
                         <div class="row">
-                            <div class="col-md-8">
-                                <p><?php echo $academic['location'] ?></span></p>
+                            <div class="col-md-12">
+                                <?php
+                                    if ($academic['clave']=='1') {  ?>
+                                        <small><b>País:</b> <?php echo $academic['name_c']?></small><br>
+                                        <small><b>Departamento:</b> <?php echo $academic['name_s']?></small><br>
+                                        <small><b>Provincia:</b> <?php echo $academic['name_p']?></small><br>
+                                        <small><b>Distrito:</b> <?php echo $academic['name_d']?></small><br>
+                                    <?php    
+                                    }
+                                    else{   ?>
+                                        <small><?php echo $academic['location'] ?></span></small>
+                                    <?php
+                                    }
+                                ?>
                             </div>
                         </div>
                   </div>
@@ -114,11 +126,11 @@
 </div>
 
 <script>
-    $("#location").hover(function(){
+    $(".location").hover(function(){
         var acid = $(this).attr('acid');
         $('.alertRemoves'+acid).removeClass('hidden');
     });
-    $("#location").mouseleave(function(){
+    $(".location").mouseleave(function(){
         var acid = $(this).attr('acid');
         $('.alertRemoves'+acid).addClass('hidden');
     });
