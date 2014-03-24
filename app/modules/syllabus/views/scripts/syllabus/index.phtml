@@ -1,5 +1,5 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Llenado de Sílabo');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a> <button data-toggle="modal" data-target="#Modalpreviewsyllabus" type="button" id="preview_syllbus" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Vista Previa</button> <button type="button" id="save_sylabus" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button><button id="close_sylabus" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cerrar</button>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a> <button data-toggle="modal" data-target="#Modalpreviewsyllabus" type="button" id="preview_syllbus" class="btn btn-info"><span class="glyphicon glyphicon-eye-open"></span> Vista Previa</button> <button type="button" id="save_sylabus" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button><button id="close_sylabus" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cerrar</button>');?>
 
 <div>
 	<center>
@@ -25,7 +25,7 @@
 		  			<?php 
 		  			if ($this->periodocurso['type_rate']=="C") { ?>
 			  			<th>ÁREA:</th>
-			  			<td><?php echo $tipo ?></td>
+			  			<td></td>
 		  			<?php
 		  			}?>
 		  			<th>CÓDIGO:</th>
@@ -62,21 +62,19 @@
 </div>
 <div id="campo"></div>
 <div id="savedefault"></div>
-<a data-toggle="modal" href="#myModal" class="btn btn-primary btn-lg">Launch demo modal</a>
   <!-- Modal -->
-  <div class="modal fade" id="Modalpreviewsyllabus" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="Modalpreviewsyllabus" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Modal title</h4>
+          <h4 class="modal-title text-primary"><span class='glyphicon glyphicon-eye-open'></span> Llenado de Sílabo Vista Previa</h4>
         </div>
-        <div class="modal-body">
-          ...
+        <div class="modal-body" id="content_preview_syllbus">
+          
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

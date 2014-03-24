@@ -276,8 +276,8 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                         'turno'=>base64_decode($formData['turno']),
                         'perid'=>base64_decode($formData['perid']),
                     );
-                if(base64_decode($formData['perid'])=='C') $data['methodology']=$formData['methodology'];
-                $data=array(
+                if(base64_decode($formData['type_rate'])=='C') {
+                     $data=array(
                     'sumilla'=>$formData['sumilla'],
                     'competency'=>$formData['competency'],
                     'capacity'=>$formData['capacity'],
@@ -286,6 +286,19 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                     'sources'=>$formData['sources'],
                     'evaluation'=>$formData['evaluation'],
                     );
+                }if(base64_decode($formData['type_rate'])=='C') {
+                     $data=array(
+                    'sumilla'=>$formData['sumilla'],
+                    'competency'=>$formData['competency'],
+                    'capacity'=>$formData['capacity'],
+                    'units'=>$formData['units'],
+                    'media'=>$formData['media'],
+                    'sources'=>$formData['sources'],
+                    'evaluation'=>$formData['evaluation'],
+                    'methodology'=>$formData['methodology'],
+                    );
+                }
+
                 $syll= new Api_Model_DbTable_Syllabus();
                 if ($syll->_update($data,$pk)){
                     $json = array('status' => true);
@@ -668,7 +681,6 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $courseid= trim($params['courseid']);
             $turno= trim($params['turno']);
             $perid = trim($params['perid']);
-            $unit= trim($params['unit']);
             $type_rate = trim($params['type_rate']);
             $data = array(
                     'eid'=>$eid,
@@ -679,7 +691,6 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                     'courseid'=>$courseid,
                     'turno'=>$turno,
                     'perid'=>$perid,
-                    'unit'=>$unit,
                 );
 
 

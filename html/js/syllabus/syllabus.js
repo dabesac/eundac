@@ -82,6 +82,6 @@ function preview_syllbus(){
 	$params[$.base64.encode('type_rate')]=$.trim($.base64.encode($type_rate));
 
 	$.get('/syllabus/syllabus/view',$params,function($responds){
-		
+		$("#content_preview_syllbus").html($responds);
 	})
 }
