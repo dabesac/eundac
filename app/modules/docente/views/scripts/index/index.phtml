@@ -5,7 +5,7 @@
         <div class="container">
         <div class="col-md-12" style="background-color: #f5f5f5;">
             <br>
-            <h4 class="text-muted">Avance de <span class="text-info">Cursos</span><span class="pull-right glyphicon glyphicon-book"></span></h4>
+            <h4 class="text-muted"><span class="text-info">Avance de Cursos</span> Periodo <?php echo $this->perid ?><span class="pull-right glyphicon glyphicon-book"></span></h4>
             <br>
         </div>
         </div>
@@ -13,6 +13,8 @@
     <br>
     <div class="row">
     <div class="container">
+    <?php if ($this->courses): ?>
+        
     <?php $c = 0; ?>
     <?php foreach ($this->courses as $course): ?>
     <div class="col-md-6">
@@ -115,6 +117,9 @@
     </div>
     <?php $c++; ?>
     <?php endforeach ?>
+    <?php else: ?>
+        <h4 class="text-muted text-center">No tiene cursos en <span class="text-info">este periodo</span></h4>
+    <?php endif ?>
     </div><!--Div Container-->
     </div><!--Div Row-->
 </div>
@@ -163,7 +168,8 @@
         <div class="row">
             <div class="col-md-6">
                 <figure>
-                    <img src="/imgsNews/<?php echo $newData['img'] ?>" alt="Imagen">
+                    <br>
+                    <img src="/imgsNews/<?php echo $newData['img'] ?>" alt="Imagen" class="img img-responsive">
                 </figure>
             </div>
             <div class="col-md-6 allDescription">
@@ -179,7 +185,8 @@
 <br>
 
 <!-- Avance Academico Solo Para Directores-->
-<div class="container">
+<input id="rid" type="hidden" value="<?php echo $this->rid ?>">
+<div id="avanceDirectores" class="container">
 <div class="panel panel-default">
     <div class="panel panel-header">
         <div class="row">
@@ -196,7 +203,7 @@
     <div id="academicProgress" class="panel panel-body">
         <div class="row">
             <div class="col-md-6">
-                <div id="showEmptySyllabus" class="panel panel-default progressIcons" title="<?php echo $this->totalEmptySyllabus ?> Docentes aún Faltan Completar sus Sílabos">
+                <div id="showEmptySyllabus" class="panel panel-default progressIcons" title="<?php echo $this->emptySyllabus ?> Docentes aún Faltan Completar sus Sílabos">
                     <div class="container">
                         <?php if ($this->totalEmptySyllabus == $totalTeachers) {
                             $classSilabo = 'text-success';
@@ -223,8 +230,8 @@
                                         <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'] ?>
                                         <small class="text-muted">turno <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['turno'] ?></small>
                                     </p> 
-                                    <?php $coursesEmpty++; ?>
                                 <?php endif ?>
+                                <?php $coursesEmpty++; ?>
                             <?php endforeach ?>
                         </div>
                     <?php endforeach ?>
@@ -317,6 +324,11 @@
 </div>-->
 <script type="text/javascript">
 	//$("#graphic-survey").load("/docente/index/xcourses");
+   
+    var rid = $('#rid').val();
+    if (rid != 'DR') {
+        $('#avanceDirectores').addClass('hidden');
+    };
 
     $('.progressIcons').hover(function(){
         $(this).tooltip('toggle');  
