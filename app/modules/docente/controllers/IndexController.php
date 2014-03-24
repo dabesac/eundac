@@ -35,7 +35,7 @@ class Docente_IndexController extends Zend_Controller_Action {
         $rid   = $this->sesion->rid;
         $subid = $this->sesion->subid;
         $escid = $this->sesion->escid;
-        $perid = '13A';
+        $perid = $this->sesion->period->perid;
 
         $where = array('eid'   => $eid,
                     'oid'   => $oid,
