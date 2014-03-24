@@ -1,27 +1,27 @@
-<?php
-	if($this->semester) { ?>
-		<div class='alert alert-success' style='text-align:center'>
-			<center style='font-size:20px'><b>SEMESTRES</b></center>
-		<?php
-			foreach($this->semester as $semester) { ?>			 
-				<a id='semester<?php echo $semester['semid']?>' href="#" class='btn btn-success' semid='<?php echo $semester['semid']?>' style='margin-left:40px;margin-rigth:15px'><b><?php echo $semester['name']?></b>
-				</a>				
-				<script type="text/javascript">
-					$("#semester<?php echo $semester['semid']?>").click(function(){
-						$this=$(this);
-						semid=$this.attr('semid');
-						var url='/horary/semester/horarysemester/semid/'+semid;
-						// alert(semid);
-						$('#changehorary').html("<img src='/img/spinner.gif'>Cargando....");
-						$('#changehorary').load(url);
-						});
-				</script>
-		<?php
-		}	?>
-		</div>
-	<?php
-	}else {  ?>
-		<div class='alert alert-danger'>NO HAY REGISTRO.</div>
-	<?php
-	}	?>
-		<div id='changehorary'></div>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Listado de Horarios');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<div class="row">
+	<div class="col-md-3 col-md-offset-2">
+		<h5 class="text-info">Año</span></h5>
+		<?php echo $this->fm->anio ?><br>
+	</div>
+	<div class="col-md-3 col-md-offset-1">
+		<h5 class="text-info">Periodo</span></h5>
+		<?php echo $this->fm->perids ?><br>
+	</div>
+</div>
+<div id="loading"></div>
+<div id='changehorary'></div>
+<script type="text/javascript">
+	$("#anio").change(function(){
+		var anio=$(this).val();
+		var url=("/horary/semester/periodlist/anio/"+anio);
+		$("#perids").load(url);
+	});
+
+	$("#perids").change(function(){
+		var perid=$(this).val();
+		var url=("/horary/semester/semesterlist/perid/"+perid);
+		$("#loading").load(url);
+	});
+</script>

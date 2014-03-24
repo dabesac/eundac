@@ -258,6 +258,23 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dbperson=new Api_Model_DbTable_Person();
             $where=array("eid"=>$eid, "pid"=>$pid);
             $person=$dbperson->_getOne($where);
+
+            if ($person['location']) {
+                $wheres=array('disid'=>$person['location']);
+                $bdubigeo=new Api_Model_DbTable_CountryDistrict();
+                $dataubigeo=$bdubigeo->_infoUbigeo($wheres);
+                $dataubigeo=$dataubigeo[0];                
+                $person['country']=$dataubigeo['coid'];
+                $person['country_s']=$dataubigeo['cosid'];
+                $person['country_p']=$dataubigeo['proid'];
+                $person['country_d']=$dataubigeo['disid'];
+                $this->view->dataubigeo=$dataubigeo;
+                $this->view->veri=1;
+            }
+            else{
+                $this->view->veri=0;
+            }
+
             $person["year"]=substr($person["birthday"], 0, 4);
             $person["month"]=substr($person["birthday"], 5, 2);
             $person["day"]=substr($person["birthday"], 8, 2);
@@ -265,8 +282,8 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             if ($this->getRequest()->isPost()){
                 $formdata=$this->getRequest()->getPost();
-                
                 if ($form->isValid($formdata)){
+                    // print_r($formData);
                     $formdata['location']=$formdata['country_d'];
                     $formdata['birthday']=$formdata['year']."-".$formdata['month']."-".$formdata['day'];
                     unset($formdata['country']);
@@ -285,19 +302,12 @@ class Profile_PublicController extends Zend_Controller_Action {
                 else{
                     $form->populate($formdata);
                     $this->view->data=$formdata;                    
-                    if ($formdata['country']) {
-                        $this->view->country=1;
-                    }
-                    if ($formdata['country_s']) {
-                        $this->view->country_s=1;
-                    }
-                    if ($formdata['country_p']) {
-                        $this->view->country_p=1;
-                    }
+                    // print_r($formdata);
                 }
             }
             else{
                 $form->populate($person);
+                // print_r($person);exit();
             }
             $this->view->form=$form;
         }catch(exception $e){
@@ -680,6 +690,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $oid=$this->sesion->oid;
             $pid=$this->sesion->pid;
 
+
             $data=array('eid' => $eid, 
                         'oid' => $oid, 
                         'pid' => $pid );
@@ -688,7 +699,23 @@ class Profile_PublicController extends Zend_Controller_Action {
             $where=array(   "eid" => $eid,
                             "pid" => $pid);
             $acadata=$dbacadata->_getFilter($where);
-            //print_r($acadata);
+            $bdubigeo=new Api_Model_DbTable_CountryDistrict();
+            $i=0;
+            foreach ($acadata as $acadata1) {
+                $wheres=array('disid'=>$acadata1['location']);
+                $dataubigeo=$bdubigeo->_infoUbigeo($wheres);
+                if ($dataubigeo) {
+                    $acadata[$i]['name_c']=strtoupper($dataubigeo[0]['name_c']);
+                    $acadata[$i]['name_s']=strtoupper($dataubigeo[0]['name_s']);
+                    $acadata[$i]['name_p']=strtoupper($dataubigeo[0]['name_p']);
+                    $acadata[$i]['name_d']=strtoupper($dataubigeo[0]['name_d']);
+                    $acadata[$i]['clave']="1";
+                }
+                else{
+                    $acadata[$i]['clave']="0";
+                }
+                $i++;
+            }
 
             $this->view->data=$data;
             $this->view->acadata=$acadata;
@@ -708,20 +735,29 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             $form=new Profile_Form_Academic();
             $this->view->form=$form;
+            $this->view->veri=0;
 
             if ($this->getRequest()->isPost()) {
                 $formdata=$this->getRequest()->getPost();
                 if($form->isValid($formdata)){
                     unset($formdata["save"]);
+                    $formdata['location']=$formdata['country_d'];
+                    unset($formdata['country']);
+                    unset($formdata['country_s']);
+                    unset($formdata['country_p']);
+                    unset($formdata['country_d']);
                     $formdata["eid"]=$eid;
                     $formdata["pid"]=$pid;
-                    trim($formdata["location"]);
+                    // trim($formdata["location"]);
                     trim($formdata["type"]);
                     trim($formdata["institution"]);
                     trim($formdata["year_end"]);
                     trim($formdata["title"]);
-                    $academic=$dbacademic->_save($formdata);
-                    print_r("Se Guardo con Exito");
+                    
+                    if ($academic=$dbacademic->_save($formdata)) {
+                        $this->view->clave=1;
+                    }
+                    // print_r("Se Guardó conÉxito");
                 }
             }
         }catch(exception $e){
@@ -732,11 +768,9 @@ class Profile_PublicController extends Zend_Controller_Action {
     public function studenteditacademicAction(){
         try {
             $this->_helper->layout()->disableLayout();
-
             $eid = $this->sesion->eid;
             $pid = $this->sesion->pid;
             $acid = $this->getParam('acid');
-
             $this->view->acid = $acid;
 
             $academicDb = new Api_Model_DbTable_Academicrecord();
@@ -744,19 +778,48 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             $where = array('acid'=>$acid, 'eid'=>$eid, 'pid'=>$pid);
             $academic = $academicDb->_getOne($where);
-
-            //print_r($where);
-            
-            $this->view->form=$form;
-            $form->populate($academic);
-            if ($this->getRequest()->isPost())
-            {
-                $formdata = $this->getRequest()->getPost();
-                if ($form->isValid($formdata))
-                { 
-                    $update = $academicDb->_update($formdata, $where);
+            if ($academic['location']) {
+                $wheres=array('disid'=>$academic['location']);
+                $bdubigeo=new Api_Model_DbTable_CountryDistrict();
+                $dataubigeo=$bdubigeo->_infoUbigeo($wheres);
+                if ($dataubigeo) {
+                    $dataubigeo=$dataubigeo[0];                
+                    $academic['country']=$dataubigeo['coid'];
+                    $academic['country_s']=$dataubigeo['cosid'];
+                    $academic['country_p']=$dataubigeo['proid'];
+                    $academic['country_d']=$dataubigeo['disid'];
+                    $this->view->dataubigeo=$dataubigeo;
+                    $this->view->veri=1;                   
+                }
+                else{
+                    $this->view->veri=0;
                 }
             }
+            else{
+                $this->view->veri=0;
+            }
+
+            if ($this->getRequest()->isPost()){
+                $formdata = $this->getRequest()->getPost();
+                if ($form->isValid($formdata)){ 
+                    $formdata['location']=$formdata['country_d'];
+                    unset($formdata['country']);
+                    unset($formdata['country_s']);
+                    unset($formdata['country_p']);
+                    unset($formdata['country_d']);
+                    if($academicDb->_update($formdata, $where)){
+                        $this->view->clave=1;
+                    }
+                    ;
+                }
+                else{
+                    $form->populate($formdata);
+                }
+            }
+            else{
+                $form->populate($academic);                
+            }
+            $this->view->form=$form;
         } catch (Exception $e) {
             print 'Error'.$e->getMessage();
         }

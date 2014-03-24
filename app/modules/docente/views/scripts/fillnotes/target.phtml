@@ -21,7 +21,7 @@ if($this->partial==2) {
 $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> '. $partial_text.' ' .$infocourse['name'].' Turno '.$this->turno.'');
 
  if ($this->state_record == 'A' || $this->state_record == 'B') { 
-        $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+        $this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->perid).'" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
                             <buttom  class="btn btn-info" id="save_notes" disabled ><span class="glyphicon glyphicon-save"></span> Guardar</buttom><buttom  class="btn btn-danger" id="closure-record"><span class="glyphicon  glyphicon-log-out"></span> Cerrar Acta</buttom>
                             ');
 }?>

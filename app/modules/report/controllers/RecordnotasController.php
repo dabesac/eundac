@@ -123,7 +123,7 @@
                 'date_impression'=>date('Y-m-d H:i:s'),
                 'pid_print'=>$uidim
                 );
-            // $dbimpression->_save($data);            
+            $dbimpression->_save($data);            
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'recordnotas');
             $dataim = $dbimpression->_getFilter($wheri);
