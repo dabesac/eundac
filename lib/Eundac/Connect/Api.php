@@ -35,7 +35,6 @@ class Eundac_Connect_Api extends Zend_Rest_Client{
       $this->_url="/".base64_encode($this->_user)."/".base64_encode($this->_password).'/'.$this->_model;
       $response = $this->restget($this->_url,$this->_params);
       $data = Zend_Json::decode($response->getBody());
-
       return $data;
     }
 
