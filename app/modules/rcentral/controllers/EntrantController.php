@@ -19,7 +19,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
 
-    	$perid = $this->sesion->period->perid;
+    	$perid = '14A';
     	$this->view->perid = $perid;
 
     	$where = array(	'eid'   => $eid,
@@ -103,7 +103,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
-		$perid = $this->sesion->period->perid;
+		$perid = '14A';
 		
 		$where = array(	'eid'            => $eid,
 						'oid'            => $oid,
@@ -187,7 +187,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
-		$perid = $this->sesion->period->perid;
+		$perid = '14A';
 		$dataStudent = array(	'uid'   => $uid,
 								'pid'   => $pid,
 								'subid' => $subid,
@@ -342,7 +342,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
         $eid   = $this->sesion->eid;    
         $oid   = $this->sesion->oid;
-        $perid = $this->sesion->period->perid;
+        $perid = '14A';
 
         
 
