@@ -79,31 +79,30 @@ class Rcentral_PeriodsController extends Zend_Controller_Action {
 
         $form=new Rcentral_Form_Periods();
         $this->view->form=$form;
-      if ($this->getRequest()->isPost())
-       {
-        $frmdata=$this->getRequest()->getPost();
-        
-          unset($frmdata['guardar']);      
-          $frmdata['eid']=$eid;
-          $frmdata['oid']=$oid;
-          $frmdata['updated']=date("Y-m-d h:m:s");
-          $frmdata['modified']=$uid;
-          $frmdata['register']=$uid;
-          $frmdata['state']='T';
-      
-      
-          $dbper=new Api_Model_DbTable_Periods();
-          if($per=$dbper->_save($frmdata))
-               { 
-            ?><script>
-                    alert('Se agregó un nuevo periodo');
-              </script>
-            <?php 
-            } 
+        if ($this->getRequest()->isPost()){
+            $frmdata=$this->getRequest()->getPost();
+            if ($form->isValid($frmdata)) {
+                unset($frmdata['guardar']);      
+                $frmdata['eid']=$eid;
+                $frmdata['oid']=$oid;
+                $frmdata['updated']=date("Y-m-d h:m:s");
+                $frmdata['modified']=$uid;
+                $frmdata['register']=$uid;
+                $frmdata['state']='T';
+
+                // print_r($frmdata);exit();
+                $dbper=new Api_Model_DbTable_Periods();
+                if($per=$dbper->_save($frmdata)){   ?>
+                <script>
+                        alert('Se agregó un nuevo periodo');
+                  </script>
+                <?php 
+                } 
                 else{
-        $form->populate($frmdata);
-      }
-   }
+                    $form->populate($frmdata);
+                }
+            }
+        }
     }
 
 
