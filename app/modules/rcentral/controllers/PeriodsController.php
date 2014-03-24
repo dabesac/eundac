@@ -24,7 +24,8 @@ class Rcentral_PeriodsController extends Zend_Controller_Action {
         $this->_helper->layout()->disableLayout();
         $where['eid']= $this->sesion->eid;
         $where['oid']= $this->sesion->oid;
-        $anio=$this->_getParam('anio');            
+        $anio=$this->_getParam('anio');
+        $this->view->anio=$anio; 
         $where['year'] = substr($anio, 2, 3);
         $periodos = new Api_Model_DbTable_Periods();
         $lper=$periodos->_getPeriodsxYears($where);
@@ -83,6 +84,8 @@ class Rcentral_PeriodsController extends Zend_Controller_Action {
         if ($this->getRequest()->isPost()){
             $frmdata=$this->getRequest()->getPost();
             if ($form->isValid($frmdata)) {
+                $anio=$frmdata['anio'];
+                unset($frmdata['anio']);      
                 unset($frmdata['guardar']);      
                 $frmdata['eid']=$eid;
                 $frmdata['oid']=$oid;
@@ -92,16 +95,18 @@ class Rcentral_PeriodsController extends Zend_Controller_Action {
                 $frmdata['state']='T';
 
                 $dbper=new Api_Model_DbTable_Periods();
-                if($per=$dbper->_save($frmdata)){   ?>
-                <script>
-                        alert('Se agregó un nuevo periodo');
-                  </script>
-                <?php 
+                if($per=$dbper->_save($frmdata)){
+                    $this->view->anio=$anio;
+                    $this->view->clave=1;
                 } 
                 else{
                     $form->populate($frmdata);
                 }
             }
+        }
+        else{
+            $anio=$this->_getParam('anio');
+            $this->view->anio=$anio;
         }
     }
 

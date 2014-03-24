@@ -90,9 +90,10 @@
 </div>
 
 <script type="text/javascript">
-    $("#newperiod").click(function(){   
+    $("#newperiod").click(function(){
+        var anio="<?php echo $this->anio?>";   
         $('#myModal').modal('show');            
-        var url="/rcentral/periods/nuevo/";
+        var url="/rcentral/periods/nuevo/anio/"+anio;
         $("#nuevo_periodo").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
         $("#nuevo_periodo").load(url);
     });

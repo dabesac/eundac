@@ -81,6 +81,7 @@
 			<td><?php print $this->form->end_register_note_s;?></td>
 		</tr>
 	</table>
+    <input type="hidden" name ="anio" value="<?php echo $this->anio?>">
 </form>
 
 
@@ -148,5 +149,15 @@
             dateFormat: 'dd/mm/yy'
            
         });
-    });      
+    });
+    var clave="<?php echo $this->clave?>";
+    if (clave=="1") {
+        var anio="<?php echo $this->anio?>";
+        // alert(anio);
+        $('#myModal').modal('hide');
+        $('#myModal').on('hidden.bs.modal', function (e) {
+            $("#lanios option[value="+anio+"]").attr("selected",true);
+            $("#peri").load("/rcentral/periods/listar/anio/"+anio);
+        });
+    };
 </script>
