@@ -81,5 +81,17 @@
         $(location).attr('href', '/profile/public/student');
       };
     };
- </script>
 
+    $(window).scroll(function(){
+        var scroll = $(window).scrollTop();
+        if( scroll >= 106){
+            $("#header-info").addClass('data-header-info');
+            $("#nav-secundary").addClass('info-background');
+        }
+        else{
+            
+            $("#header-info").removeClass('data-header-info');
+            $("#nav-secundary").removeClass('info-background');
+        }
+    });
+ </script>

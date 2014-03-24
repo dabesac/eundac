@@ -57,11 +57,14 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
             $this->_acl->addRole(new Zend_Acl_Role($this->_role));
             $logout = "default/index/salir";
             $error = "default/error/error";
+            $msg = "error/msg/msg";
             $this->_acl->add(new Zend_Acl_Resource($logout));
             $this->_acl->add(new Zend_Acl_Resource($error));
+            $this->_acl->add(new Zend_Acl_Resource($msg));
             $this->_acl->allow($this->_role, $logout);
             $this->_acl->allow($this->_role, $error);
-
+            $this->_acl->allow($this->_role, $msg);
+            
             if (!isset($this->_parent)) {
                 $permissionTable = new Default_Model_DbTable_Premission();
                 $permission = $permissionTable->_getResource_Role($eid,$oid,$this->_role);

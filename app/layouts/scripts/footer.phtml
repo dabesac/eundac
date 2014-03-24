@@ -4,6 +4,8 @@
         exit();
     }
     $sesion = $auth->getStorage()->read();
+    $uid = $sesion->uid;
+    $uid_ = substr($uid, 0,2);
     $parent = $sesion->rol['parent'];
     $home = $sesion->rol['module'];
     $permission_recource = new Default_Model_DbTable_Premission();
@@ -47,7 +49,7 @@
           <ul class="nav nav-pills nav-justified footerText footerBtnHover">
           <li class="active"><a href="/<?php echo $home?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
             <?php 
-                if ($menu) {
+                if ($menu && $uid_!='14') {
                 foreach ($menu as $key => $value) { ?>
                 <li class="dropdown dropup">
                     <a href="#" class="dropdown-toggle menu-main" data-toggle="dropdown"><span class="glyphicon glyphicon-<?php echo $value['icon']?>"></span> <?php echo $value['name']?></a>

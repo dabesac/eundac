@@ -21,6 +21,7 @@ $(document).ready(function(){
 	    for (var prop in $params ) {
 	        result += '' + prop + '/' + $params[prop]  + '/'; 
 	    }
+	    
 	var $url_temp = "/syllabus/syllabus/content/"+result;
 	$.get($url_temp,function($respons){
 		$("#load_content_unit").html($respons);

@@ -25,7 +25,7 @@ $curso=$this->curso[0];
 $total=$curso['hours_theoretical']+$curso['hours_practical']; 
 $tmps = split("-",$this->silabo['created']);
 $mes =$tmps[1];
-$tmps[2]=substr($tmps[2], 0,2);
+$F[2]=substr($tmps[2], 0,2);
 switch ($mes) {
     case 1: $strm = "Enero";break;
     case 2: $strm = "Febrero";break;
@@ -42,7 +42,7 @@ switch ($mes) {
 } 
 ?>
 <div>
-    <h4 style="text-align: center; font-size: 15px;">SILABO</h4>
+    <h4 style="text-align: center; font-size: 15px;">SÍLABO</h4>
     <h4 style="text-align: center; font-size: 14px;"><?php echo $curso['name']?></h4>
 </div>
 <div style="margin-left:30px">
@@ -53,7 +53,7 @@ switch ($mes) {
     <?php if ($curso["type_rate"]=='C') {
         $num=0; ?>
         <tr>
-            <td><b>1.<?php echo $num=$num+1 ?> AREA:</b></td>
+            <td><b>1.<?php echo $num=$num+1 ?> ÁREA:</b></td>
             <td ><?php echo $tipo?></td>          
         </tr>
     <?php }?>
@@ -72,7 +72,7 @@ switch ($mes) {
             <td><?php echo strtoupper($this->turno)?></td>
         </tr>
         <tr>
-            <td><b>1.<?php echo $num=$num+1 ?> CREDITOS:</b></td>
+            <td><b>1.<?php echo $num=$num+1 ?> CRÉDITOS:</b></td>
             <td> <?php echo $curso['credits']?></td>   
         </tr>
         <tr>
@@ -247,7 +247,7 @@ switch ($mes) {
       <?php if ($curso['type_rate']=='C') {
         $rom="I"; ?>
         <div style="margin-left:30px; float:left; margin-bottom:20px">
-            <h5>V. ESTRATEGIAS METODÓLOGICAS</h5>
+            <h5>V. ESTRATEGIAS METODOLÓGICAS</h5>
             <div class="detalle"><?php echo $silabo['methodology']?></div>
         </div> 
       <?php }?>
