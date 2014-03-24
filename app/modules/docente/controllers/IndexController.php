@@ -37,6 +37,9 @@ class Docente_IndexController extends Zend_Controller_Action {
         $escid = $this->sesion->escid;
         $perid = $this->sesion->period->perid;
 
+        //Enviar el periodo
+        $this->view->perid = $perid;
+
         $where = array('eid'   => $eid,
                     'oid'   => $oid,
                     'uid'   => $uid,
@@ -154,6 +157,7 @@ class Docente_IndexController extends Zend_Controller_Action {
         $newsRolDb = new Api_Model_DbTable_NewsRol();
         $news = $newsDb->_getLastNews();
 
+
         if ($rid == 'DR') {
             $rol = 'DC';
         }else{
@@ -171,6 +175,7 @@ class Docente_IndexController extends Zend_Controller_Action {
             $existe = 'Si';
             if ($newsRol) {
                 if ($newsRol[0]['rid'] == $rol) {
+                    $newsFilter[$c]['newid']       = $new['newid'];
                     $newsFilter[$c]['title']       = $new['title'];
                     $newsFilter[$c]['description'] = $new['description'];
                     $newsFilter[$c]['img']         = $new['img'];
@@ -178,6 +183,7 @@ class Docente_IndexController extends Zend_Controller_Action {
                     $c++;
                 }
             }else{
+                $newsFilter[$c]['newid']       = $new['newid'];
                 $newsFilter[$c]['title']       = $new['title'];
                 $newsFilter[$c]['description'] = $new['description'];
                 $newsFilter[$c]['img']         = $new['img'];
@@ -191,121 +197,123 @@ class Docente_IndexController extends Zend_Controller_Action {
         $this->view->news = $newsFilter;
 
         //Avacen Academico Solo Para Directores
-        //DataBases
-        $personDb = new Api_Model_DbTable_Person();
-        $reportAcademicDb = new Api_Model_DbTable_Addreportacadadm();
-        //____________________________________________________________________
-
         $this->view->rid = $rid;
+        if ($rid == 'DR') {
+            //DataBases
+            $personDb = new Api_Model_DbTable_Person();
+            $reportAcademicDb = new Api_Model_DbTable_Addreportacadadm();
+            //____________________________________________________________________
 
-        $where = array( 'eid'     => $eid,
-                        'oid'     => $oid,
-                        'subid'   => $subid,
-                        'escid'   => $escid,
-                        'perid'   => $perid,
-                        'is_main' => 'S' );
+            $this->view->rid = $rid;
 
-        $attrib = array('uid', 'pid', 'escid', 'subid', 'courseid', 'curid', 'turno');
-        $orders = array('uid');
+            $where = array( 'eid'     => $eid,
+                            'oid'     => $oid,
+                            'subid'   => $subid,
+                            'escid'   => $escid,
+                            'perid'   => $perid,
+                            'is_main' => 'S' );
 
-        $courses = $coursesxTeacherDb->_getFilter($where, $attrib, $orders);
-        //print_r($teachers);
+            $attrib = array('uid', 'pid', 'escid', 'subid', 'courseid', 'curid', 'turno');
+            $orders = array('uid');
 
-        $teacherUid         = 0;
-        $c                  = 0;
-        $coursesEmpty       = 0;
-        $totalTeachers      = 0;
-        $totalEmptySyllabus = 0;
-        $countERA           = 0;
-        //Total de Profesores
-        foreach ($courses as $course) {
-            if ($course['uid'] != $teacherUid) {
-                $teacherUid = $course['uid'];
+            $courses = $coursesxTeacherDb->_getFilter($where, $attrib, $orders);
+            //print_r($teachers);
 
-                $where = array(
-                                'eid' => $eid,
-                                'oid' => $oid,
-                                'subid' => $course['subid'],
-                                'escid' => $course['escid'],
-                                'uid' => $course['uid'],
-                                'pid' => $course['pid'],
-                                'perid' => $perid );
+            $teacherUid         = 0;
+            $c                  = 0;
+            $coursesEmpty       = 0;
+            $totalTeachers      = 0;
+            $totalEmptySyllabus = 0;
+            $countERA           = 0;
+            //Total de Profesores
+            foreach ($courses as $course) {
+                if ($course['uid'] != $teacherUid) {
+                    $teacherUid = $course['uid'];
 
-                $attrib = array('state');
-               
-                //Reporte Academico
-                $reportAcademic = $reportAcademicDb->_getFilter($where, $attrib);
-                if (!$reportAcademic) {
                     $where = array(
                                     'eid' => $eid,
-                                    'pid' => $course['pid'] );
+                                    'oid' => $oid,
+                                    'subid' => $course['subid'],
+                                    'escid' => $course['escid'],
+                                    'uid' => $course['uid'],
+                                    'pid' => $course['pid'],
+                                    'perid' => $perid );
 
-                    $person = $personDb->_getFilter($where);
-                    $teachersEmptyReport[$countERA]['name'] = $person[0]['last_name0'].' '.$person[0]['last_name1'].' '.$person[0]['first_name'];
-                    $countERA++;
-                }
-                $totalTeachers++;
-            }
-            $where = array( 'eid'      => $eid,
-                            'oid'      => $oid,
-                            'perid'    => $perid,
-                            'escid'    => $course['escid'],
-                            'subid'    => $course['subid'],
-                            'courseid' => $course['courseid'],
-                            'curid'    => $course['curid'],
-                            'turno'    => $course['turno'] );
+                    $attrib = array('state');
+                   
+                    //Reporte Academico
+                    $reportAcademic = $reportAcademicDb->_getFilter($where, $attrib);
+                    if (!$reportAcademic) {
+                        $where = array(
+                                        'eid' => $eid,
+                                        'pid' => $course['pid'] );
 
-            //Syllabus
-            $syllabus = $syllabusUnitsContentDb->_getFilter($where);
-            if (!$syllabus) {
-                $existe = 'No';
-                foreach ($teachersEmptySyllabus as $teacher) {
-                    if ($course['uid'] == $teacher['uid']) {
-                        $existe = 'Si';
+                        $person = $personDb->_getFilter($where);
+                        $teachersEmptyReport[$countERA]['name'] = $person[0]['last_name0'].' '.$person[0]['last_name1'].' '.$person[0]['first_name'];
+                        $countERA++;
                     }
+                    $totalTeachers++;
                 }
-                if ($existe == 'No') {
-                    $where = array( 'eid' => $eid,
-                                    'pid' => $course['pid'] );
-
-                    $person = $personDb->_getFilter($where);
-                    $teachersEmptySyllabus[$c]['uid'] = $course['uid'];
-                    $teachersEmptySyllabus[$c]['name'] = $person[0]['last_name0'].' '.$person[0]['last_name1'].' '.$person[0]['first_name'];
-
-                    $totalEmptySyllabus++;
-                    $c++;
-                }
-                $where = array( 'eid' => $eid,
-                                'oid' => $oid,
+                $where = array( 'eid'      => $eid,
+                                'oid'      => $oid,
+                                'perid'    => $perid,
+                                'escid'    => $course['escid'],
+                                'subid'    => $course['subid'],
                                 'courseid' => $course['courseid'],
-                                'curid' => $course['curid'] );
+                                'curid'    => $course['curid'],
+                                'turno'    => $course['turno'] );
 
-                $attrib = array('name');
-                $courseName = $courseDb->_getFilter($where);
-                $coursesEmptySyllabus[$course['uid']][$coursesEmpty]['name']  = $courseName[0]['name'];
-                $coursesEmptySyllabus[$course['uid']][$coursesEmpty]['turno'] = $course['turno'];
-                $coursesEmpty++;
-            }else{
-                $coursesEmpty = 0;
+                //Syllabus
+                $syllabus = $syllabusUnitsContentDb->_getFilter($where);
+                if (!$syllabus) {
+                    $existe = 'No';
+                    foreach ($teachersEmptySyllabus as $teacher) {
+                        if ($course['uid'] == $teacher['uid']) {
+                            $existe = 'Si';
+                        }
+                    }
+                    if ($existe == 'No') {
+                        $where = array( 'eid' => $eid,
+                                        'pid' => $course['pid'] );
+
+                        $person = $personDb->_getFilter($where);
+                        $teachersEmptySyllabus[$c]['uid'] = $course['uid'];
+                        $teachersEmptySyllabus[$c]['name'] = $person[0]['last_name0'].' '.$person[0]['last_name1'].' '.$person[0]['first_name'];
+
+                        $totalEmptySyllabus++;
+                        $c++;
+                    }
+                    $where = array( 'eid' => $eid,
+                                    'oid' => $oid,
+                                    'courseid' => $course['courseid'],
+                                    'curid' => $course['curid'] );
+
+                    $attrib = array('name');
+                    $courseName = $courseDb->_getFilter($where);
+                    $coursesEmptySyllabus[$course['uid']][$coursesEmpty]['name']  = $courseName[0]['name'];
+                    $coursesEmptySyllabus[$course['uid']][$coursesEmpty]['turno'] = $course['turno'];
+                    $coursesEmpty++;
+                }else{
+                    $coursesEmpty = 0;
+                }
+
+                
+
             }
 
-            
+            $this->view->totalTeachers      = $totalTeachers;
+            //Enviando Datos de Silabos
+            $this->view->emptySyllabus      = $totalEmptySyllabus;
+            $this->view->totalEmptySyllabus = $totalTeachers - $totalEmptySyllabus;
 
+            $this->view->teachersEmptySyllabus = $teachersEmptySyllabus;
+            $this->view->coursesEmptySyllabus = $coursesEmptySyllabus;
+
+            //Enviando Datos de Reporte
+            $this->view->emptyReport = $countERA;
+            $this->view->totalEmptyReport = $totalTeachers - $countERA;
+            $this->view->teachersEmptyReport = $teachersEmptyReport;
         }
-
-
-        $this->view->totalTeachers      = $totalTeachers;
-        //Enviando Datos de Silabos
-        $this->view->emptySyllabus      = $totalEmptySyllabus;
-        $this->view->totalEmptySyllabus = $totalTeachers - $totalEmptySyllabus;
-
-        $this->view->teachersEmptySyllabus = $teachersEmptySyllabus;
-        $this->view->coursesEmptySyllabus = $coursesEmptySyllabus;
-
-        //Enviando Datos de Reporte
-        $this->view->emptyReport = $countERA;
-        $this->view->totalEmptyReport = $totalTeachers - $countERA;
-        $this->view->teachersEmptyReport = $teachersEmptyReport;
 
 
 

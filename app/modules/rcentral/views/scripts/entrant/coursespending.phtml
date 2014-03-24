@@ -202,9 +202,11 @@
 		//Tooltips
 		$('#dataProfile').tooltip();
 
+		//Pago
+		var statePayment = $('#statePayment').val();
 		//DataProfile
 		var dataProfile = $('#dataProfile').attr('value');
-		if (dataProfile == 'no') {
+		if (dataProfile == 'no' || statePayment == 'No') {
 			$('#validateBtn, #observedBtn, #reservedBtn').attr('disabled', 'true');
 		};
 

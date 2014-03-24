@@ -10,6 +10,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
     	}
     	$login = $sesion->getStorage()->read();
     	$this->sesion = $login;
+    	$this->sesion->period->perid = '14A';
     }
     public function indexAction(){	
     	//DataBases
@@ -19,7 +20,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
 
-    	$perid = '14A';
+    	$perid = $this->sesion->period->perid;
     	$this->view->perid = $perid;
 
     	$where = array(	'eid'   => $eid,
@@ -103,7 +104,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
-		$perid = '14A';
+		$perid = $this->sesion->period->perid;
 		
 		$where = array(	'eid'            => $eid,
 						'oid'            => $oid,
@@ -187,7 +188,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
-		$perid = '14A';
+		$perid = $this->sesion->period->perid;
 		$dataStudent = array(	'uid'   => $uid,
 								'pid'   => $pid,
 								'subid' => $subid,
@@ -345,7 +346,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
         $eid   = $this->sesion->eid;    
         $oid   = $this->sesion->oid;
-        $perid = '14A';
+        $perid = $this->sesion->period->perid;
 
         
 
