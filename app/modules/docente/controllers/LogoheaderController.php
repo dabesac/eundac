@@ -55,7 +55,7 @@ class Docente_LogoheaderController extends Zend_Controller_Action {
                 if (!$upload->receive()) {
                     $this->view->message = 'Error receiving the file';
                    
-                }
+                }   
                 $tamano=getimagesize($nombre_fichero);
                 $tipo=substr($tamano['mime'],6,10);
                 switch ($tipo) {
@@ -121,7 +121,8 @@ class Docente_LogoheaderController extends Zend_Controller_Action {
                 $formData['header']=$eid."_".$oid."_".$escid."_".$subid;
 
                 if($esc->_update($formData,$pk)){
-                    $this->_helper->redirector('index','logoheader','docente');
+                    $this->_redirect('/docente/logoheader/index'); 
+
                 }
             }
 

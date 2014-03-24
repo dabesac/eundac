@@ -19,7 +19,7 @@ class Register_ChangeratesController extends Zend_Controller_Action{
  			$this->sesion->eid;
  			$this->sesion->oid;
  			$this->sesion->rid;
- 			$perid='13A';
+ 			$perid=$this->sesion->period->perid;
  			$this->view->perid=$perid;
  			$fm=new Register_Form_Buscar();
 			$this->view->fm=$fm;
@@ -34,7 +34,7 @@ class Register_ChangeratesController extends Zend_Controller_Action{
 	public function getuserAction(){
 		try {
 			$this->_helper->layout()->disableLayout();
-			$perid='13A';
+			$perid=$this->sesion->period->perid;
  			$this->view->perid=$perid;
           	$uid= $this->_getParam('uid');
           	$where['uid'] = $uid;

@@ -37,11 +37,15 @@
             <h5>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h5>
             <h5>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
             <h5>Tipo de Pago <br><span class="text-info"><?php echo $this->rate[0]['name'] ?></span></h5>
-            <?php if ($this->paymentDateData['tiempo'] == 'yes' and $this->paymentDateData['pago'] == 'yes'): ?>
-                <h6 class="text-success"><span class="glyphicon glyphicon-record"></span> Todo en Orden con el Págo</h6>
+            <?php if ($this->paymentData): ?>
+                <?php if ($this->paymentDateData['tiempo'] == 'yes' and $this->paymentDateData['pago'] == 'yes'): ?>
+                    <h6 class="text-success"><span class="glyphicon glyphicon-record"></span> Todo en Orden con el Págo</h6>
+                <?php else: ?>
+                    <h6 class="text-danger"><span class="glyphicon glyphicon-record"></span> Pago a Destiempo</h6>
+                    <h6 class="text-muted">Debe un <span class="text-danger">reintegro de un <?php echo $this->paymentDateData['porcentaje'] ?> %</span>,<br> osea <span class="text-danger">S/. <?php echo $this->paymentDateData['cantidad'] ?></span></h6>
+                <?php endif ?>
             <?php else: ?>
-                <h6 class="text-danger"><span class="glyphicon glyphicon-record"></span> Pago a Destiempo</h6>
-                <h6 class="text-muted">Debe un <span class="text-danger">reintegro de un <?php echo $this->paymentDateData['porcentaje'] ?> %</span>,<br> osea <span class="text-danger">S/. <?php echo $this->paymentDateData['cantidad'] ?></span></h6>
+                <h6 class="text-danger"><span class="glyphicon glyphicon-record"></span> Falta Pago</h6>
             <?php endif ?>
         </blockquote>
     </div>
