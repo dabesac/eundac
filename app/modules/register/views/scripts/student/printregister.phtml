@@ -5,7 +5,7 @@ ob_start();
 ?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <div>
-    <div style="text-align:left; font-size:12px;"><b>Codigo: </b><?php echo strtoupper($this->uid)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Alumno: </b> <?php echo strtoupper($this->fullname)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Semestre: </b><?php echo strtoupper($this->regmatr['semid'])?>
+    <div style="text-align:left; font-size:12px;"><b>Código: </b><?php echo strtoupper($this->uid)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Alumno: </b> <?php echo strtoupper($this->fullname)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Semestre: </b><?php echo strtoupper($this->regmatr['semid'])?>
     </div>
 </div>
 <link rel="stylesheet" type="text/css" href="/css/print.css">
@@ -15,7 +15,7 @@ ob_start();
             <th class='small'>Código Curso</th>
             <th >Nombre Curso</th>
             <th class='small'>Condición</th>
-            <th class='small'>Creditos</th>
+            <th class='small'>Créditos</th>
             <th class='small'>Semestre</th>
             <th class='small'>Turno</th>
             <th class=''>Docente</th>
@@ -51,7 +51,7 @@ ob_start();
     $mpdf->SetHTMLFooter($this->footer,'O');
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('Pre-Matricula-'.$this->uid.'.pdf','D');
+    $mpdf->Output('Pre-Matrícula-'.$this->uid.'.pdf','D');
     // $mpdf -> Output();  
    
 ?>
