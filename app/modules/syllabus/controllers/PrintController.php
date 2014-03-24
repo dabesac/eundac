@@ -78,17 +78,19 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $bdperiodo = new Api_Model_DbTable_Periods();
             $periods = $bdperiodo->_getOne($whereperi);
             
-            $date_stard = $periods['class_start_date'];
-            $date_end = $periods['class_end_date'];
+            $where_per = array(
+                    'eid' => $this->sesion->eid,
+                    'oid' => $this->sesion->oid,
+                    'perid' => $perid,
+                    );
 
-            $data_stard = new Zend_Date($date_stard);
-            $date_stard =$data_stard->get(Zend_Date::DATE_LONG);
-            // echo $data_stard->get('dd/mm/yyyy');
-            $data_end = new Zend_Date($date_end);
-            $date_end = $data_end->toString(Zend_Date::DATE_LONG);
+            $date_stard_t = $this->converterdate((string)$periods['class_start_date']);
+            $date_end_t = $this->converterdate((string)$periods['class_end_date']);
 
-            $this->view->date_stard = $date_stard;
-            $this->view->date_end = $date_end;
+            $this->view->date_stard = $date_stard_t;
+            $this->view->date_end =  $date_end_t;
+
+           
 
             $this->view->periods=$periods; 
             
@@ -170,5 +172,27 @@ class Syllabus_PrintController extends Zend_Controller_Action {
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
+    }
+
+    function converterdate($date = null){
+            $date_literal = split('-', $date);
+            if ($date !='') {
+                 switch ($date_literal['1']) {
+                    case 1: $strm = "Enero";break;
+                    case 2: $strm = "Febrero";break;
+                    case 3: $strm = "Marzo";break;
+                    case 4: $strm = "Abril";break;
+                    case 5: $strm = "Mayo";break;
+                    case 6: $strm = "Junio";break;
+                    case 7: $strm = "Julio";break;
+                    case 8: $strm = "Agosto";break;
+                    case 9: $strm = "Setiembre";break;
+                    case 10: $strm = "Octubre";break;
+                    case 11: $strm = "Noviembre";break;
+                    case 12: $strm = "Diciembre";break;
+                }
+                $date = $date_literal[2]." de ".$strm." del ".$date_literal[0];
+            } 
+        return $date;
     }
 }

@@ -30,7 +30,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$data_courses = $tb_periods_course->_getCourseTeacher($where);
 		
         $tb_course= new Api_Model_DbTable_Course();
-
+        $tb_specialyti = new Api_Model_DbTable_Speciality();
 
 		$faculty=array();
 
@@ -44,7 +44,13 @@ class Docente_NotasController extends Zend_Controller_Action{
 		        $where_1['courseid']=$tmp_course['courseid']; 
 	            $course_name=$tb_course->_getOne($where_1);
 				$data_courses[$key]['name_course']	=	$course_name['name'];
+				$name_speciality = $tb_specialyti->_getOne($where_1);
+				$data_courses[$key]['specialyti'] = $name_speciality['name'];
 			}
+
+			$this->view->data_courses = $data_courses;
+
+
 			$l=count($data_courses);
 			$a=0;
 			$faculty[$a]['facid']=$data_courses[0]['facid'];

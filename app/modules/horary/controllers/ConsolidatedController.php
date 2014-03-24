@@ -47,9 +47,9 @@
                         'subid'=>base64_encode($subid),
                         'uid'=>base64_encode($uid)
                     );
-
                 $server = new Eundac_Connect_Api($module,$data);
                 $data = $server->connectAuth();
+                // print_r($data);exit();
                 $this->view->horarys=$data; 
             }   
  			
