@@ -1,0 +1,96 @@
+<table class="table table-hover">
+	<tr class="active">
+		<th>#</th>
+		<th>Título</th>
+		<th class="col-md-5">Descripción</th>
+		<th class="text-center">Para</th>
+		<th class="text-center">Tipo</th>
+		<th class="text-center">Fécha</th>
+		<th class="text-center">Estado</th>
+	</tr>
+	<?php $c = 0; ?>
+	<?php foreach ($this->allNews as $new): ?>
+	<tr>
+		<td><?php echo $c + 1 ?></td>
+		<td><?php echo $new['title'] ?></td>
+		<td><?php echo substr($new['description'], 0, 75) ?>.......</td>
+		<td class="text-center"><?php echo $this->namesRol[$c]['name'] ?></td>
+		<td class="text-center">
+			<?php if ($new['type'] == 'NE'){
+				echo "Informativo";
+			}else{
+				echo "Sistema";
+			}?>
+		</td>
+		<td class="text-center"><?php echo date('d-m-Y', strtotime($new['created'])) ?></td>
+			<?php if ($new['state'] == 'A') {
+				$classState = 'text-success';
+			}else{
+				$classState = 'text-danger';
+			}?>
+		<td class="text-center"><strong class="<?php echo $classState ?>"><?php echo $new['state'] ?></strong></td>
+		<td><a href="##" title="Editar" newid="<?php echo $new['newid'] ?>" class="edit btnsCrud"><span class="glyphicon glyphicon-pencil"></span></a></td>
+		<td><a href="##" title="Eliminar" newid="<?php echo $new['newid'] ?>" class="showDeleteAlert btnsCrud"><span class="glyphicon glyphicon-remove"></span></a></td>
+	</tr>
+	<tr id="deleteAlert<?php echo $new['newid'] ?>" class="hidden deleteAlert">
+		<td colspan="3"></td>
+		<td colspan="6">
+			<div class="alert alert-danger">
+				<div class="row">
+					<div class="col-md-6">
+						<p>Esta Seguro que desea borrar <?php echo $new['title'] ?>?</p>
+					</div>
+					<div class="col-md-3">
+						<a href="##" rid="<?php echo $this->namesRol[$c]['rid'] ?>" newid="<?php echo $new['newid'] ?>" class="delete btn btn-danger form-control">Eliminar</a>
+					</div>
+					<div class="col-md-3">	
+						<a href="##" class="closeAlert btn btn-default form-control">Cancelar</a>
+					</div>
+				</div>
+			</div>
+		</td>
+	</tr>
+	<?php $c++ ?>
+	<?php endforeach ?>
+</table>
+
+<script>
+	$('.btnsCrud').hover(function(){
+		$(this).tooltip('toggle');
+	})
+
+	$('.edit').click(function(){
+		$('#modalAddNew').modal('show');
+		var newid = $(this).attr('newid');
+		$('#formNew').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+		$('#formNew').load('/admin/news/new/newid/' + newid);
+
+	})
+
+	$('.showDeleteAlert').click(function(){
+		$('.deleteAlert').addClass('hidden');
+		var newid = $(this).attr('newid');
+		$('#deleteAlert' + newid).removeClass('hidden');
+	});
+
+	$('.closeAlert').click(function(){
+		$('.deleteAlert').addClass('hidden');
+	});
+
+	$('.delete').click(function(){
+		var newid = $(this).attr('newid');
+		var rid = $(this).attr('rid');
+
+		$.ajax({
+			url : '/admin/news/delete/',
+			data : {newid : newid,
+					rid : rid },
+			success: function(data){
+				if (data == 'true') {
+					$('.deleteAlert').addClass('hidden');
+					$('#formNew').load('/admin/news/new/newid/' + newid);
+				};
+			}
+		});
+	});
+</script>

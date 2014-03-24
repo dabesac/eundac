@@ -1,0 +1,120 @@
+<div class="row">
+	<div id="alertEmptyData" class="alert alert-warning hidden">
+		<h4><span class="glyphicon glyphicon-exclamation-sign"></span> Falta Completar! <small>Asegúrese que todos los datos sean correctos.... ¬¬</small></h4>
+
+	</div>
+</div>
+
+<form id="formNewAdd">
+	<input id="whySubmit" type="hidden" name="whySubmit" value="<?php echo $this->whySubmit ?>">
+	<input type="hidden" name="newid" value="<?php echo $this->newid ?>">
+	<input type="hidden" name="stateRol" value="<?php echo $this->rid ?>">
+	<div class="row">
+	<div class="col-md-12">
+		<p class="text-muted">Título</p>
+		<?php echo $this->formNew->title ?>
+		<br>
+		<div class="row">
+			<div class="col-md-6">
+			<p class="text-muted">
+				<?php echo $this->formNew->img ?>
+			</p>
+			<div class="panel panel-default" style="height : 291px; padding: 6px;">
+				<?php if ($this->imgNew) {
+					$srcImg = '/imgsNews/'.$this->imgNew;
+
+				}else {
+					$srcImg = '##';
+				}?>
+				<img id="previewImg" class="hidden" src="<?php echo $srcImg ?>" alt="Imagen Subida" width="100%" height="275px">
+				<div id="iconImg">
+					<br><br><br><br>
+					<h1 class="text-muted text-center"><span class="glyphicon glyphicon-picture"></span><br></h1>
+				</div>
+			</div>
+			</div>
+			<div class="col-md-6">
+				<p class="text-muted">Descripción</p>
+				<?php echo $this->formNew->description ?>
+			</div>
+		</div>
+	</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-md-2">
+			<p class="text-muted">Para</p>
+			<?php echo $this->formNew->rid ?>
+		</div>
+		<div class="col-md-2">
+			<p class="text-muted">Tipo</p>
+			<?php echo $this->formNew->type ?>
+		</div>
+		<div class="col-md-2">
+			<p class="text-muted">Estado</p>
+			<?php echo $this->formNew->state ?>
+		</div>
+		<div class="col-md-3">
+			<p><br></p>
+			<input type="submit" value="Guardar" class="btn btn-success form-control">
+		</div>
+		<div class="col-md-3">
+			<p><br></p>	
+			<a href="##" class="btn btn-default form-control closeModal">Cancelar</a>
+		</div>
+	</div>
+</form>
+<script>
+	$('.closeModal').click(function(){
+    	$('#modalAddNew').modal('hide');
+    });
+
+	//Preview Imagen
+	var whySubmit = $('#whySubmit').val();
+	if (whySubmit == 'update') {
+		$('#previewImg').removeClass('hidden');
+    	$('#iconImg').addClass('hidden');
+	};
+	
+    $("#img").change(function(){
+    	$('#previewImg').removeClass('hidden');
+    	$('#iconImg').addClass('hidden');
+        readURL(this);
+    });
+
+   	$('#formNewAdd').submit(function(){
+   		var formData = new FormData($(this)[0]);
+
+   		$.ajax({
+   			type: 'post',
+			url : '/admin/news/savenew/',
+			data: formData,
+		    contentType: false,
+		    processData: false,
+			success : function(data){
+				alert(data);
+				if (data == 'true') {
+					$('#listDataNews').load('/admin/news/listnews');
+					$('#modalAddNew').modal('hide');
+				}else if (data == 'Invalido'){
+					$('#alertEmptyData').removeClass('hidden');
+				};
+			}
+		})
+		return false;
+   	})
+
+   	//Funciones
+    //Previsualizar Imagenes
+	function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#previewImg').attr('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>

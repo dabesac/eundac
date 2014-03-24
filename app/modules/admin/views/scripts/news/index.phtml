@@ -1,0 +1,51 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Lista de Noticias');?>
+<?php $this->placeholder('Btnnav')->append(' <a href="/admin/" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Regresar</a>
+		<a id="new" data-toggle="modal" data-target="#modalAddNew" href="##" class="btn btn-info" ><span class="glyphicon glyphicon-plus-sign"></span> Nuevo</a>');?>
+
+<div id="listDataNews" class="container">
+	
+</div>
+
+<!--Modal Para Ingresar Nueva Noticia-->
+<div class="modal fade" id="modalAddNew" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog" style="width: 80%;">
+    <div class="modal-content">
+      	<div class="modal-header">
+        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        	<h4 class="modal-title text-muted" id="myModalLabel"><span class="glyphicon glyphicon-plus-sign"></span> Nueva <span class="text-info">Noticia</span></h4>
+      	</div>
+      	<div id="formNew" class="modal-body">
+      		
+      	</div>
+	</div>
+</div>
+</div>
+
+<script>
+	$('#listDataNews').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+	$('#listDataNews').load('/admin/news/listnews');
+
+    $('#new').click(function(){
+    	$('#formNew').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+    	$('#formNew').load('/admin/news/new');
+    });
+
+   	/*$('#save').click(function(){
+    	saveNew();
+    });*/
+    
+    //Funciones
+    //Previsualizar Imagenes
+	function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#previewImg').attr('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+</script>
