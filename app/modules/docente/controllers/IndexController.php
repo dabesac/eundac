@@ -15,36 +15,38 @@ class Docente_IndexController extends Zend_Controller_Action {
       $this->sesion = $login;   
     }
     
-    public function indexAction()
-    {
-      try{
-         //DataBases //Avance de Notas
-         $periodsxCourseDb              = new Api_Model_DbTable_PeriodsCourses();
-         $coursesxTeacherDb             = new Api_Model_DbTable_Coursexteacher();
-         $courseDb                      = new Api_Model_DbTable_Course();
-         $syllabusDb                    = new Api_Model_DbTable_Syllabus();
-         $syllabusUnitsDb               = new Api_Model_DbTable_Syllabusunits();
-         $syllabusUnitsContentDb        = new Api_Model_DbTable_Syllabusunitcontent();
-         $syllabusUnitsContentControlDb = new Api_Model_DbTable_ControlActivity();
-         $registerxCourseDB             = new Api_Model_DbTable_Registrationxcourse();
-         //___________________________________________________________
+    public function indexAction(){
+    try{
+        //DataBases //Avance de Notas
+        $periodsxCourseDb              = new Api_Model_DbTable_PeriodsCourses();
+        $coursesxTeacherDb             = new Api_Model_DbTable_Coursexteacher();
+        $courseDb                      = new Api_Model_DbTable_Course();
+        $syllabusDb                    = new Api_Model_DbTable_Syllabus();
+        $syllabusUnitsDb               = new Api_Model_DbTable_Syllabusunits();
+        $syllabusUnitsContentDb        = new Api_Model_DbTable_Syllabusunitcontent();
+        $syllabusUnitsContentControlDb = new Api_Model_DbTable_ControlActivity();
+        $registerxCourseDB             = new Api_Model_DbTable_Registrationxcourse();
+        //___________________________________________________________
 
-         $eid   = $this->sesion->eid;
-         $oid   = $this->sesion->oid;
-         $pid   = $this->sesion->pid;
-         $uid   = $this->sesion->uid;
-         $perid = '13A';
+        $eid   = $this->sesion->eid;
+        $oid   = $this->sesion->oid;
+        $pid   = $this->sesion->pid;
+        $uid   = $this->sesion->uid;
+        $rid   = $this->sesion->rid;
+        $subid = $this->sesion->subid;
+        $escid = $this->sesion->escid;
+        $perid = $this->sesion->period->perid;
 
-         $where = array('eid'   => $eid,
-                        'oid'   => $oid,
-                        'uid'   => $uid,
-                        'pid'   => $pid,
-                        'perid' => $perid );
+        $where = array('eid'   => $eid,
+                    'oid'   => $oid,
+                    'uid'   => $uid,
+                    'pid'   => $pid,
+                    'perid' => $perid );
 
-         $attrib = array('courseid', 'curid', 'turno', 'escid', 'subid', 'perid');
-         $courses = $coursesxTeacherDb->_getFilter($where, $attrib);
-         $c = 0;
-         foreach ($courses as $course) {
+        $attrib = array('courseid', 'curid', 'turno', 'escid', 'subid', 'perid');
+        $courses = $coursesxTeacherDb->_getFilter($where, $attrib);
+        $c = 0;
+        foreach ($courses as $course) {
             //Nombre de Cursos
             $where = array('eid'      => $eid, 
                            'oid'      => $oid,
@@ -54,14 +56,14 @@ class Docente_IndexController extends Zend_Controller_Action {
             $coursesName[$c] = $courseDb->_getFilter($where, $attrib);
 
             //Estado de Acta
-            $where = array('eid'      => $eid, 
-                           'oid'      => $oid,
-                           'curid'    => $course['curid'],
-                           'courseid' => $course['courseid'],
-                           'turno'    => $course['turno'],
-                           'escid'    => $course['escid'],
-                           'subid'    => $course['subid'],
-                           'perid'    => $perid );
+            $where = array( 'eid'      => $eid, 
+                            'oid'      => $oid,
+                            'curid'    => $course['curid'],
+                            'courseid' => $course['courseid'],
+                            'turno'    => $course['turno'],
+                            'escid'    => $course['escid'],
+                            'subid'    => $course['subid'],
+                            'perid'    => $perid );
 
             $attrib = array('state_record');
             $stateRecord = $periodsxCourseDb->_getFilter($where, $attrib);
@@ -72,87 +74,254 @@ class Docente_IndexController extends Zend_Controller_Action {
             $coursesSyllabus = $syllabusDb->_getFilter($where, $attrib);
             $totalUnits = $coursesSyllabus[0]['units'];
             if ($totalUnits) {
-               $attrib = array('unit');
-               $syllabusUnits = $syllabusUnitsDb->_getFilter($where, $attrib);
-               if ($syllabusUnits) {
-                  $units = count($syllabusUnits);
-                  $porcentajeSyllabus[$c] = (100 * $units)/$totalUnits;
-               }else{
-                  $porcentajeSyllabus[$c] = 0;
-               }
+                $attrib = array('unit');
+                $syllabusUnits = $syllabusUnitsDb->_getFilter($where, $attrib);
+                if ($syllabusUnits) {
+                    $units = count($syllabusUnits);
+                    $porcentajeSyllabus[$c] = (100 * $units)/$totalUnits;
+                }else{
+                    $porcentajeSyllabus[$c] = 0;
+                }
             }else{
-               $porcentajeSyllabus[$c] = 0;
+                $porcentajeSyllabus[$c] = 0;
             }
 
             //Avance de Clases
             if ($porcentajeSyllabus[$c] == 100) {
-               $attrib = array('session');
-               $contentsSyllabus = $syllabusUnitsContentDb->_getFilter($where, $attrib);
-               $totalContents = count($contentsSyllabus);
-               $contentControl = $syllabusUnitsContentControlDb->_getFilter($where, $attrib);
-               if ($contentControl) {
-                  $contents = count($contentControl);
-               }else{
-                  $contents = 0;
-               }
-               $progressSessions[$c]['totalContents'] = $totalContents;
-               $progressSessions[$c]['contents'] = $contents;
-               $progressSessions[$c]['porcentaje'] = intval((100 * $contents)/$totalContents);
-               $progressSessions[$c]['porcentaje'] = $progressSessions[$c]['porcentaje']. '%';
+                $attrib = array('session');
+                $contentsSyllabus = $syllabusUnitsContentDb->_getFilter($where, $attrib);
+                $totalContents = count($contentsSyllabus);
+                $contentControl = $syllabusUnitsContentControlDb->_getFilter($where, $attrib);
+                if ($contentControl) {
+                    $contents = count($contentControl);
+                }else{
+                    $contents = 0;
+                }
+                $progressSessions[$c]['totalContents'] = $totalContents;
+                $progressSessions[$c]['contents'] = $contents;
+                $progressSessions[$c]['porcentaje'] = intval((100 * $contents)/$totalContents);
+                $progressSessions[$c]['porcentaje'] = $progressSessions[$c]['porcentaje']. '%';
             }else{
                $progressSessions[$c]['porcentaje'] = 'FS';
             }
 
             //Avance de Notas
             if ($porcentajeSyllabus[$c] == 100) {
-              $where = array( 'eid'      => $eid,
-                              'oid'      => $oid, 
-                              'courseid' => $course['courseid'],
-                              'curid'    => $course['curid'],
-                              'escid'    => $course['escid'],
-                              'subid'    => $course['subid'],
-                              'turno'    => $course['turno'],
-                              'perid'    => $perid,
-                              'state'    => 'M' );
-               if ($coursesName[$c][0]['type'] == 'O') {
-                  $attrib = array('uid', 'promedio1');
-                  $allStudents = $registerxCourseDB->_getFilter($where, $attrib);
-                  $students = count($allStudents);
-                  $notasRellenadas = 0;
-                  foreach ($allStudents as $student) {
-                     if ($student['promedio1']) {
-                        $notasRellenadas++; 
-                     }
-                  }
-                  $progressNotas[$c]['totalStudents'] = $students;
-                  $progressNotas[$c]['notasRellenadas'] = $notasRellenadas;
-                  $progressNotas[$c]['porcentaje'] = intval((100 * $notasRellenadas) / $students);
-               }else{
-
-               }
+                $where = array( 'eid'      => $eid,
+                                'oid'      => $oid, 
+                                'courseid' => $course['courseid'],
+                                'curid'    => $course['curid'],
+                                'escid'    => $course['escid'],
+                                'subid'    => $course['subid'],
+                                'turno'    => $course['turno'],
+                                'perid'    => $perid,
+                                'state'    => 'M' );
+                if ($coursesName[$c][0]['type'] == 'O') {
+                    $attrib = array('uid', 'promedio1');
+                    $allStudents = $registerxCourseDB->_getFilter($where, $attrib);
+                    $students = count($allStudents);
+                    $notasRellenadas = 0;
+                    foreach ($allStudents as $student) {
+                        if ($student['promedio1']) {
+                            $notasRellenadas++; 
+                        }
+                    }
+                    $progressNotas[$c]['totalStudents'] = $students;
+                    $progressNotas[$c]['notasRellenadas'] = $notasRellenadas;
+                    $progressNotas[$c]['porcentaje'] = intval((100 * $notasRellenadas) / $students);
+                }
             }else{
-               $progressNotas[$c]['porcentaje'] = 'FS';
+                $progressNotas[$c]['porcentaje'] = 'FS';
             }
             
             $c++;
-         }//Final del Foreach Principal
+        }//Final del Foreach Principal
 
-         $this->view->courses = $courses;
-         $this->view->coursesName = $coursesName;
+        $this->view->courses = $courses;
+        $this->view->coursesName = $coursesName;
 
-         //Enviando Porcentaje de Syllabus
-         $this->view->porcentajeSyllabus = $porcentajeSyllabus;
+        //Enviando Porcentaje de Syllabus
+        $this->view->porcentajeSyllabus = $porcentajeSyllabus;
 
-         //Enviando Porcentaje de Sesiones
-         $this->view->progressSessions = $progressSessions;
+        //Enviando Porcentaje de Sesiones
+        $this->view->progressSessions = $progressSessions;
 
-         //Enviando Porcentaje de Llenado de Notas
-         $this->view->progressNotas = $progressNotas;
+        //Enviando Porcentaje de Llenado de Notas
+        $this->view->progressNotas = $progressNotas;
 
-         //Slider de Noticias // DataBases
-         $newsDb = new Api_Model_DbTable_News();
-         $news = $newsDb->_getLastNews();
-         $this->view->news = $news;
+        //Slider de Noticias // DataBases
+        $newsDb = new Api_Model_DbTable_News();
+        $newsRolDb = new Api_Model_DbTable_NewsRol();
+        $news = $newsDb->_getLastNews();
+
+        if ($rid == 'DR') {
+            $rol = 'DC';
+        }else{
+            $rol = $rid;
+        }
+
+        $c = 0;
+        foreach ($news as $new) {
+            $where = array( 'eid'   => $eid,
+                            'oid'   => $oid,
+                            'newid' => $new['newid'] );
+
+            $attrib = array('newid', 'rid');
+            $newsRol = $newsRolDb->_getFilter($where, $attrib);
+            $existe = 'Si';
+            if ($newsRol) {
+                if ($newsRol[0]['rid'] == $rol) {
+                    $newsFilter[$c]['title']       = $new['title'];
+                    $newsFilter[$c]['description'] = $new['description'];
+                    $newsFilter[$c]['img']         = $new['img'];
+                    $newsFilter[$c]['type']        = $new['type'];
+                    $c++;
+                }
+            }else{
+                $newsFilter[$c]['title']       = $new['title'];
+                $newsFilter[$c]['description'] = $new['description'];
+                $newsFilter[$c]['img']         = $new['img'];
+                $newsFilter[$c]['type']        = $new['type'];
+                $c++;
+            }
+            if ($c == 4) {
+                break;
+            }
+        }  
+        $this->view->news = $newsFilter;
+
+        //Avacen Academico Solo Para Directores
+        //DataBases
+        $personDb = new Api_Model_DbTable_Person();
+        $reportAcademicDb = new Api_Model_DbTable_Addreportacadadm();
+        //____________________________________________________________________
+
+        $this->view->rid = $rid;
+
+        $where = array( 'eid'     => $eid,
+                        'oid'     => $oid,
+                        'subid'   => $subid,
+                        'escid'   => $escid,
+                        'perid'   => $perid,
+                        'is_main' => 'S' );
+
+        $attrib = array('uid', 'pid', 'escid', 'subid', 'courseid', 'curid', 'turno');
+        $orders = array('uid');
+
+        $courses = $coursesxTeacherDb->_getFilter($where, $attrib, $orders);
+        //print_r($teachers);
+
+        $teacherUid         = 0;
+        $c                  = 0;
+        $coursesEmpty       = 0;
+        $totalTeachers      = 0;
+        $totalEmptySyllabus = 0;
+        $countERA           = 0;
+        //Total de Profesores
+        foreach ($courses as $course) {
+            if ($course['uid'] != $teacherUid) {
+                $teacherUid = $course['uid'];
+
+                $where = array(
+                                'eid' => $eid,
+                                'oid' => $oid,
+                                'subid' => $course['subid'],
+                                'escid' => $course['escid'],
+                                'uid' => $course['uid'],
+                                'pid' => $course['pid'],
+                                'perid' => $perid );
+
+                $attrib = array('state');
+               
+                //Reporte Academico
+                $reportAcademic = $reportAcademicDb->_getFilter($where, $attrib);
+                if (!$reportAcademic) {
+                    $where = array(
+                                    'eid' => $eid,
+                                    'pid' => $course['pid'] );
+
+                    $person = $personDb->_getFilter($where);
+                    $teachersEmptyReport[$countERA]['name'] = $person[0]['last_name0'].' '.$person[0]['last_name1'].' '.$person[0]['first_name'];
+                    $countERA++;
+                }
+                $totalTeachers++;
+            }
+            $where = array( 'eid'      => $eid,
+                            'oid'      => $oid,
+                            'perid'    => $perid,
+                            'escid'    => $course['escid'],
+                            'subid'    => $course['subid'],
+                            'courseid' => $course['courseid'],
+                            'curid'    => $course['curid'],
+                            'turno'    => $course['turno'] );
+
+            //Syllabus
+            $syllabus = $syllabusUnitsContentDb->_getFilter($where);
+            if (!$syllabus) {
+                $existe = 'No';
+                foreach ($teachersEmptySyllabus as $teacher) {
+                    if ($course['uid'] == $teacher['uid']) {
+                        $existe = 'Si';
+                    }
+                }
+                if ($existe == 'No') {
+                    $where = array( 'eid' => $eid,
+                                    'pid' => $course['pid'] );
+
+                    $person = $personDb->_getFilter($where);
+                    $teachersEmptySyllabus[$c]['uid'] = $course['uid'];
+                    $teachersEmptySyllabus[$c]['name'] = $person[0]['last_name0'].' '.$person[0]['last_name1'].' '.$person[0]['first_name'];
+
+                    $totalEmptySyllabus++;
+                    $c++;
+                }
+                $where = array( 'eid' => $eid,
+                                'oid' => $oid,
+                                'courseid' => $course['courseid'],
+                                'curid' => $course['curid'] );
+
+                $attrib = array('name');
+                $courseName = $courseDb->_getFilter($where);
+                $coursesEmptySyllabus[$course['uid']][$coursesEmpty]['name']  = $courseName[0]['name'];
+                $coursesEmptySyllabus[$course['uid']][$coursesEmpty]['turno'] = $course['turno'];
+                $coursesEmpty++;
+            }else{
+                $coursesEmpty = 0;
+            }
+
+            
+
+        }
+
+
+        $this->view->totalTeachers      = $totalTeachers;
+        //Enviando Datos de Silabos
+        $this->view->emptySyllabus      = $totalEmptySyllabus;
+        $this->view->totalEmptySyllabus = $totalTeachers - $totalEmptySyllabus;
+
+        $this->view->teachersEmptySyllabus = $teachersEmptySyllabus;
+        $this->view->coursesEmptySyllabus = $coursesEmptySyllabus;
+
+        //Enviando Datos de Reporte
+        $this->view->emptyReport = $countERA;
+        $this->view->totalEmptyReport = $totalTeachers - $countERA;
+        $this->view->teachersEmptyReport = $teachersEmptyReport;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
          $tb_periods = new Api_Model_DbTable_Periods();

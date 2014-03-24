@@ -96,7 +96,7 @@ class Rcentral_PeriodsController extends Zend_Controller_Action {
           if($per=$dbper->_save($frmdata))
                { 
             ?><script>
-                    alert('se agrego un nuevo periodo');
+                    alert('Se agregó un nuevo periodo');
               </script>
             <?php 
             } 

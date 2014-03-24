@@ -276,7 +276,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                         'turno'=>base64_decode($formData['turno']),
                         'perid'=>base64_decode($formData['perid']),
                     );
-                if(base64_decode($formData['type_rate'])=='C') {
+                if(base64_decode($formData['type_rate'])=='O') {
                      $data=array(
                     'sumilla'=>$formData['sumilla'],
                     'competency'=>$formData['competency'],
@@ -298,7 +298,6 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                     'methodology'=>$formData['methodology'],
                     );
                 }
-
                 $syll= new Api_Model_DbTable_Syllabus();
                 if ($syll->_update($data,$pk)){
                     $json = array('status' => true);

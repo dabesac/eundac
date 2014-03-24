@@ -1,4 +1,5 @@
 <!--Panel de Avance de Cursos-->
+<div class="container">
 <div class="panel panel-default">
     <div class="row">
         <div class="container">
@@ -117,10 +118,13 @@
     </div><!--Div Container-->
     </div><!--Div Row-->
 </div>
-<!--Panel de Avance de Cursos-->
+</div>
+
     
 <link rel="stylesheet" href="/css/sliderNews.css">
 <!--Slider de Noticias-->
+<div class="row">
+    <div class="col-md-12">
     <div class="row">
     <div id="newsSlider" class="slider">
         <?php $slideActive = 0; ?>
@@ -132,35 +136,132 @@
                 $classSlide = '';
             }?>
         <div class="slide <?php echo $classSlide ?>">
-            <div class="col-md-4">
+            <div class="col-md-4 title">
                 <br>
-                <h3 class="text-center text-primary"><?php echo $new['title'] ?></h3>
+                <?php if ($new['type'] == 'NE') {
+                    $icon = 'glyphicon glyphicon-info-sign';
+                }else if ($new['type'] == 'SY') {
+                    $icon = 'glyphicon glyphicon-envelope';
+                }?>
+                <h3 class="text-center"><span class="<?php echo $icon ?>"></span> <?php echo $new['title'] ?></h3>
             </div>
-            <div class="col-md-8">
-                <blockquote>
+            <div class="col-md-8 content">
                     <br>
-                    <p><?php echo substr($new['description'], 0, 190) ?>... <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link showData">Seguir leyendo</a></p>
-                </blockquote>
+                    <p><?php echo substr($new['description'], 0, 150) ?>.........
+                        <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link showData">Seguir leyendo</a>
+                        <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link hideData hidden">Leer menos</a>
+                    </p>
             </div>
         </div>
         <?php endforeach ?>
     </div>
     </div>
-    <?php foreach ($this->news as $new): ?>
-        <div id="data<?php echo $new['newid'] ?>" class="data">
-            <div class="jumbotron">
-                <div class="row">
-                    <div class="col-md-6">
+    
+    <div class="row">
+    <?php foreach ($this->news as $newData): ?>
+    <div id="data<?php echo $newData['newid'] ?>" class="data">
+        <div class="row">
+            <div class="col-md-6">
+                <figure>
+                    <img src="/imgsNews/<?php echo $newData['img'] ?>" alt="Imagen">
+                </figure>
+            </div>
+            <div class="col-md-6 allDescription">
+                <br><br>
+                <p><?php echo $newData['description'] ?></p>
+            </div>
+        </div>
+    </div>
+    <?php endforeach ?>
+    </div>
+    </div>
+</div>
+<br>
 
+<!-- Avance Academico Solo Para Directores-->
+<div class="container">
+<div class="panel panel-default">
+    <div class="panel panel-header">
+        <div class="row">
+        <div class="container">
+            <div class="col-md-11">
+                <h4 class="text-muted">Avance <span class="text-info">Académico</span></h4>
+            </div>
+            <div class="col-md-1">
+                <h4 class="text-muted text-center"><span class="glyphicon glyphicon-user"></span></h4>
+            </div>
+        </div>
+        </div>
+    </div>    
+    <div id="academicProgress" class="panel panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="showEmptySyllabus" class="panel panel-default progressIcons" title="<?php echo $this->totalEmptySyllabus ?> Docentes aún Faltan Completar sus Sílabos">
+                    <div class="container">
+                        <?php if ($this->totalEmptySyllabus == $totalTeachers) {
+                            $classSilabo = 'text-success';
+                        }else {
+                            $classSilabo = 'text-danger';
+                        }?> 
+                       <h5>Sílabos <strong class="pull-right <?php echo $classSilabo ?> " ><?php echo $this->totalEmptySyllabus.'/'.$this->totalTeachers ?></strong></h5>
                     </div>
-                    <div class="col-md-6">
-                        <p><?php echo $new['description'] ?></p>
+                </div>
+                <div id="listEmptySilabo">
+                    <div class="panel panel-default">
+                    <p class="text-danger text-center">Fálta Sílabo</p>
+                    <div class="row">
+                    <div class="container">
+                    <?php foreach ($this->teachersEmptySyllabus as $teacher): ?>
+                        <div class="col-md-6">
+                            <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
+                        </div>
+                        <div class="col-md-6">
+                            <?php $coursesEmpty = 0; ?>
+                            <?php foreach ($this->coursesEmptySyllabus as $course): ?>
+                                <?php if ($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]): ?>
+                                    <p>
+                                        <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'] ?>
+                                        <small class="text-muted">turno <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['turno'] ?></small>
+                                    </p> 
+                                    <?php $coursesEmpty++; ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </div>
+                    <?php endforeach ?>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="showEmptyReport" class="panel panel-default progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar el Reporte Académico">
+                    <div class="container">
+                        <?php if ($this->totalEmptyReport == $totalTeachers){
+                            $classReport = 'text-success';
+                        }else{
+                            $classReport = 'text-danger';
+                        }?>
+                       <h5>Reporte Academico <strong class="pull-right <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong></h5>
+                    </div>
+                </div>
+                <div id="listEmptyReport">
+                    <div class="panel panel-default">
+                    <p class="text-center text-danger">Falta Reporte Académico</p>
+                    <div class="container">
+                        <?php foreach ($this->teachersEmptyReport as $teacher): ?>
+                            <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
+                        <?php endforeach ?>
+                    </div>
                     </div>
                 </div>
             </div>
         </div>
-    <?php endforeach ?>
-    <div style="height: 500px;"></div>
+    </div>
+</div>
+</div>
+<div style="height: 400px;"></div>
+
+
     <!--<div class="col-md-1 text-center">
         <br><br>
         <a href="##" class="text-muted previousSlide">
@@ -222,9 +323,9 @@
     });
 
     //Slider
-    $('.data').slideUp();
+    $('.data, #listEmptySilabo, #listEmptyReport').slideUp();
     
-    setInterval(function(){sliderForward();}, 5000);
+    var sliderGo = setInterval(function(){sliderForward();}, 4500);
 
     $('.nextSlide').click(function(){
         sliderForward();
@@ -234,12 +335,31 @@
     });
 
     $('.showData').click(function(){
+        clearInterval(sliderGo);
         $('html,body').animate({
             scrollTop: $("#newsSlider").offset().top
         }, 500);
         var newid = $(this).attr('newid');
         $('#data' + newid).slideDown();
+        $('.showData').addClass('hidden');
+        $('.hideData').removeClass('hidden');
     })
+
+    $('.hideData').click(function(){
+        $('.data').slideUp();
+        $('.showData').removeClass('hidden');
+        $('.hideData').addClass('hidden');
+        sliderGo = setInterval(function(){sliderForward();}, 4500);
+    })
+
+    //Avance Academico
+    $('#showEmptySyllabus').hover(function(){
+        $('#listEmptySilabo').slideToggle();
+    });
+    $('#showEmptyReport').hover(function(){
+        $('#listEmptyReport').slideToggle();
+    });
+
 
     function sliderForward(){
         $('.data').slideUp();

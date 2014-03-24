@@ -129,7 +129,7 @@ $("#load").click(function(){
     
     url="/register/changerates/asignationrate/eid/<?php echo base64_encode($this->data[0]['eid'])?>/oid/<?php echo base64_encode($this->data[0]['oid'])?>/uid/<?php echo base64_encode($this->data[0]['uid'])?>/pid/<?php echo base64_encode($this->data[0]['pid'])?>/escid/<?php echo base64_encode($this->data[0]['escid'])?>/subid/<?php echo base64_encode($this->data[0]['subid'])?>/perid/<?php echo base64_encode($this->perid)?>";
     
-    // alert(url);
+    //alert(url);
     $("#change").load(url);
 });
 

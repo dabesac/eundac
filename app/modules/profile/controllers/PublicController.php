@@ -690,6 +690,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $oid=$this->sesion->oid;
             $pid=$this->sesion->pid;
 
+
             $data=array('eid' => $eid, 
                         'oid' => $oid, 
                         'pid' => $pid );
@@ -698,7 +699,23 @@ class Profile_PublicController extends Zend_Controller_Action {
             $where=array(   "eid" => $eid,
                             "pid" => $pid);
             $acadata=$dbacadata->_getFilter($where);
-            //print_r($acadata);
+            $bdubigeo=new Api_Model_DbTable_CountryDistrict();
+            $i=0;
+            foreach ($acadata as $acadata1) {
+                $wheres=array('disid'=>$acadata1['location']);
+                $dataubigeo=$bdubigeo->_infoUbigeo($wheres);
+                if ($dataubigeo) {
+                    $acadata[$i]['name_c']=strtoupper($dataubigeo[0]['name_c']);
+                    $acadata[$i]['name_s']=strtoupper($dataubigeo[0]['name_s']);
+                    $acadata[$i]['name_p']=strtoupper($dataubigeo[0]['name_p']);
+                    $acadata[$i]['name_d']=strtoupper($dataubigeo[0]['name_d']);
+                    $acadata[$i]['clave']="1";
+                }
+                else{
+                    $acadata[$i]['clave']="0";
+                }
+                $i++;
+            }
 
             $this->view->data=$data;
             $this->view->acadata=$acadata;
@@ -761,18 +778,22 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             $where = array('acid'=>$acid, 'eid'=>$eid, 'pid'=>$pid);
             $academic = $academicDb->_getOne($where);
-            //print_r($where);            
             if ($academic['location']) {
                 $wheres=array('disid'=>$academic['location']);
                 $bdubigeo=new Api_Model_DbTable_CountryDistrict();
                 $dataubigeo=$bdubigeo->_infoUbigeo($wheres);
-                $dataubigeo=$dataubigeo[0];                
-                $academic['country']=$dataubigeo['coid'];
-                $academic['country_s']=$dataubigeo['cosid'];
-                $academic['country_p']=$dataubigeo['proid'];
-                $academic['country_d']=$dataubigeo['disid'];
-                $this->view->dataubigeo=$dataubigeo;
-                $this->view->veri=1;
+                if ($dataubigeo) {
+                    $dataubigeo=$dataubigeo[0];                
+                    $academic['country']=$dataubigeo['coid'];
+                    $academic['country_s']=$dataubigeo['cosid'];
+                    $academic['country_p']=$dataubigeo['proid'];
+                    $academic['country_d']=$dataubigeo['disid'];
+                    $this->view->dataubigeo=$dataubigeo;
+                    $this->view->veri=1;                   
+                }
+                else{
+                    $this->view->veri=0;
+                }
             }
             else{
                 $this->view->veri=0;

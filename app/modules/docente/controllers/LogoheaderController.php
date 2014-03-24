@@ -55,13 +55,13 @@ class Docente_LogoheaderController extends Zend_Controller_Action {
                 if (!$upload->receive()) {
                     $this->view->message = 'Error receiving the file';
                    
-                }
+                }   
                 $tamano=getimagesize($nombre_fichero);
                 $tipo=substr($tamano['mime'],6,10);
                 switch ($tipo) {
-                    case 'png':
-                        $original=imagecreatefrompng($nombre_fichero);                        
-                        break;
+                    // case 'png':
+                    //     $original=imagecreatefrompng($nombre_fichero);                        
+                    //     break;
                     case 'jpeg':
                         $original=imagecreatefromjpeg($nombre_fichero);
                         break;    
@@ -98,9 +98,9 @@ class Docente_LogoheaderController extends Zend_Controller_Action {
                 $cal=90;
 
                 switch ($tipo) {
-                    case 'png':
-                        imagepng($lienzo,$nombre_fichero,9);
-                        break;
+                    // case 'png':
+                    //     imagepng($lienzo,$nombre_fichero,9);
+                    //     break;
                     case 'jpeg':
                         imagejpeg($lienzo,$nombre_fichero,$cal);
                         break;    
@@ -120,9 +120,9 @@ class Docente_LogoheaderController extends Zend_Controller_Action {
                 $pk['subid']=$subid;
                 $formData['header']=$eid."_".$oid."_".$escid."_".$subid;
 
-
                 if($esc->_update($formData,$pk)){
-                    $this->_redirect('/docente/logoheader/index');
+                    $this->_redirect('/docente/logoheader/index'); 
+
                 }
             }
 
