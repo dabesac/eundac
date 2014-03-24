@@ -6,6 +6,7 @@ class Rcentral_Form_Periods extends Zend_Form{
         $perid=new Zend_Form_Element_Text('perid');
 		$perid->setAttrib("class","form-control"); 
         $perid->removeDecorator('HtmlTag')->removeDecorator('Label');
+        $perid->setRequired(true)->addErrorMessage('Este campo es requerido');
         //$perid->setAttrib("size", "3");
         $perid->setAttrib("maxlength","3");
 
