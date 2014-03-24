@@ -19,7 +19,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
 
-    	$perid = '14A';
+    	$perid = $this->sesion->period->perid;
     	$this->view->perid = $perid;
 
     	$where = array(	'eid'   => $eid,
@@ -103,7 +103,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
-		$perid = '14A';
+		$perid = $this->sesion->period->perid;
 		
 		$where = array(	'eid'            => $eid,
 						'oid'            => $oid,
@@ -187,7 +187,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
-		$perid = '14A';
+		$perid = $this->sesion->period->perid;
 		$dataStudent = array(	'uid'   => $uid,
 								'pid'   => $pid,
 								'subid' => $subid,
@@ -231,19 +231,22 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 						'subid' => $subid,
 						'perid' => $perid );
 
+
         $attrib = array('date_payment', 'amount', 'ratid');
         $paymentData = $paymentDb->_getFilter($where, $attrib);
-        $paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
-       	$paymentData[0]['date_payment'] = date("d-m-Y", strtotime($paymentData[0]['date_payment']));
-        $this->view->paymentData = $paymentData;
+        if ($paymentData) {
+	        $paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
+	       	$paymentData[0]['date_payment'] = date("d-m-Y", strtotime($paymentData[0]['date_payment']));
+	        $this->view->paymentData = $paymentData;
+			//Tipo de Pago
+			$where = array(	'eid'   => $eid,
+							'oid'   => $oid,
+							'ratid' => $paymentData[0]['ratid'], 
+							'perid' => $perid );
+			$rate = $rateDb->_getFilter($where);
+			$this->view->rate = $rate;
+        }
 
-		//Tipo de Pago
-		$where = array(	'eid'   => $eid,
-						'oid'   => $oid,
-						'ratid' => $paymentData[0]['ratid'], 
-						'perid' => $perid );
-		$rate = $rateDb->_getFilter($where);
-		$this->view->rate = $rate;
 
 		//$Comparar fechas y pagos
 		$paymentDate = $paymentData[0]['date_payment'];
@@ -342,7 +345,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
         $eid   = $this->sesion->eid;    
         $oid   = $this->sesion->oid;
-        $perid = '14A';
+        $perid = $this->sesion->period->perid;
 
         
 
