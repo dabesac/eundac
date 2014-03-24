@@ -4,16 +4,17 @@
 <?php
 $tipo=($this->periodocurso['type_rate']=="O")? "OBJETIVOS": "COMPETENCIAS"; ?>
 
-<?php if ($this->msgclose=="1") { ?>
-	<div class="panel panel-default" style="margin: 0px 80px 0px 80px">
-		<div class="panel-body">
-			<div class="alert alert-danger" style="font-size:18px">
-				<b>Aviso: </b>Rellene los campos obligatorios para Cerrar el Sílabo.
-			</div>
+
+
+<div style='display:none' id='error-syllabus' class="panel panel-default" style="margin: 0px 80px 0px 80px">
+	<div class="panel-body">
+		<div class="alert alert-danger" style="font-size:18px">
+			<b>Aviso: </b>Rellene los campos obligatorios para Cerrar el Silabo.
 		</div>
 	</div>
+</div>
 
-<?php }
+<?php 
 if ($this->periodocurso['type_rate']!="O" && $this->periodocurso['type_rate']!="C") { ?>
 	<div class="panel panel-default" style="margin: 0px 80px 0px 80px">
 		<div class="panel-body">
@@ -177,6 +178,7 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 <input type="hidden" id='curid_hidden' name ="curid" value="<?php echo base64_encode($this->periodocurso['curid'])?>">
 <input type="hidden" id='courseid_hidden' name ="courseid" value="<?php echo base64_encode($this->periodocurso['courseid'])?>">
 <input type="hidden" id='turno_hidden'name ="turno" value="<?php echo base64_encode($this->periodocurso['turno'])?>">
+<input type="hidden" id='type_hidden'name ="type_rate" value="<?php echo base64_encode($this->periodocurso['type_rate'])?>">
 </form>
 <div class="modal fade" id="myModalSyllabus" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 

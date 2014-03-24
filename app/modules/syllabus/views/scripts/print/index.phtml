@@ -25,7 +25,7 @@ $curso=$this->curso[0];
 $total=$curso['hours_theoretical']+$curso['hours_practical']; 
 $tmps = split("-",$this->silabo['created']);
 $mes =$tmps[1];
-$tmps[2]=substr($tmps[2], 0,2);
+$F[2]=substr($tmps[2], 0,2);
 switch ($mes) {
     case 1: $strm = "Enero";break;
     case 2: $strm = "Febrero";break;

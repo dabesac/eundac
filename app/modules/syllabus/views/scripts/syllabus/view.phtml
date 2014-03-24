@@ -1,119 +1,110 @@
-<style type="text/css">
-.indent { 
-    margin-left: 30px;
-}
-.detalle { 
-    font-size: 12px; 
-    text-align: justify; 
-    margin-left: 30px;
-}
-td, th{
-    padding-right: 10px;
-}
-</style>
-
 <?php
 $curso=$this->curso[0];
-$total=$curso['hours_theoretical']+$curso['hours_practical']; ?>
-<div>
-    <center>
-        <b>FACULTAD DE <?php echo strtoupper($this->facu['name'])?><br>
-        ESCUELA DE FORMACIÓN PROFESIONAL DE <?php echo strtoupper($this->escuela['name'])?></b>
-    </center>
-</div>
+$total=$curso['hours_theoretical']+$curso['hours_practical']; 
+$tmps = split("-",$this->silabo['created']);
+$mes =$tmps[1];
+$F[2]=substr($tmps[2], 0,2);
+switch ($mes) {
+    case 1: $strm = "Enero";break;
+    case 2: $strm = "Febrero";break;
+    case 3: $strm = "Marzo";break;
+    case 4: $strm = "Abril";break;
+    case 5: $strm = "Mayo";break;
+    case 6: $strm = "Junio";break;
+    case 7: $strm = "Julio";break;
+    case 8: $strm = "Agosto";break;
+    case 9: $strm = "Setiembre";break;
+    case 10: $strm = "Octubre";break;
+    case 11: $strm = "Noviembre";break;
+    case 12: $strm = "Diciembre";break;
+} 
+?>
 <div>
     <h4 style="text-align: center; font-size: 15px;">SILABO</h4>
     <h4 style="text-align: center; font-size: 14px;"><?php echo $curso['name']?></h4>
 </div>
-<div>
-    <center>
-        <a href="/syllabus/syllabus/index/courseid/<?php echo base64_encode($this->courseid)?>/turno/<?php echo base64_encode($this->turno)?>/escid/<?php echo base64_encode($this->escid)?>/curid/<?php echo base64_encode($this->curid)?>/subid/<?php echo base64_encode($this->subid)?>/perid/<?php echo base64_encode($this->perid)?>" class="btn btn-info"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>
-    </center>
-</div>
 <div style="margin-left:30px">
-    <h3 style="text-align: left; font-size: 14px;">I. DATOS GENERALES</h3>
+    <h5 style="text-align: left;">I. DATOS GENERALES</h5>
 </div>
 <div>
     <table style="margin-left: 20%;text-align: left; font-size: 12px">
     <?php if ($curso["type_rate"]=='C') {
         $num=0; ?>
         <tr>
-            <th>1.<?php echo $num=$num+1 ?> AREA:</th>
-            <td ><?php echo $tipo?></td>          
+            <td><b>1.<?php echo $num=$num+1 ?> AREA:</b></td>
+            <td ></td>          
         </tr>
     <?php }?>
         <tr>
-            <th>1.<?php echo $num=$num+1 ?> CÓDIGO:</th>
+            <td><b>1.<?php echo $num=$num+1 ?> CÓDIGO:</b></td>
             <td><?php echo $curso['courseid']?></td>
         </tr>
         <tr>
-            <th>1.<?php echo $num=$num+1 ?> PREQUISITO:</th>
-            <td><?php echo $curso["req_1"]." ".$curso["req_2"]." ".$curso["req_3"];?></td>
+            <td><b>1.<?php echo $num=$num+1 ?> PREQUISITO:</b></td>
+            <td>
+                <?php echo ($curso["req_1"] || $curso["req_2"] || $curso["req_3"])? $curso["req_1"]." ".$curso["req_2"]." ".$curso["req_3"]:"NINGUNO";?>
+            </td>
         </tr>
         <tr>
-            <th>1.<?php echo $num=$num+1 ?> SECCIÓN:</th>
+            <td><b>1.<?php echo $num=$num+1 ?> SECCIÓN:</b></td>
             <td><?php echo strtoupper($this->turno)?></td>
         </tr>
         <tr>
-            <th>1.<?php echo $num=$num+1 ?> CREDITOS:</th>
+            <td><b>1.<?php echo $num=$num+1 ?> CREDITOS:</b></td>
             <td> <?php echo $curso['credits']?></td>   
         </tr>
         <tr>
-            <th>1.<?php echo $num=$num+1 ?> EXTENSIÓN HORARIA:</th>
+            <td><b>1.<?php echo $num=$num+1 ?> EXTENSIÓN HORARIA:</b></td>
             <td> <?php echo "HT: ".$curso['hours_theoretical']."  "."HP: ". $curso['hours_practical']." "."TH: ".$total?></td>
         </tr>
         <tr>
-            <th>1.<?php echo $num=$num+1 ?> SEMESTRE ACADÉMICO:</th>
+            <td><b>1.<?php echo $num=$num+1 ?> SEMESTRE ACADÉMICO:</b></td>
             <td><?php echo strtoupper($curso['semid'])?></td>
             
         </tr>
         <tr>
-            <th>1.<?php echo $num=$num+1 ?> DURACIÓN:</th>
-            <td><?php echo "Desde: ".$this->periods['class_start_date']."  "."Hasta: ".$this->periods['class_end_date']?></td>
+            <td><b>1.<?php echo $num=$num+1 ?> DURACIÓN:</b></td>
+            <td><?php echo "Desde: ".$this->date_stard."  "."Hasta: ".$this->date_end?></td>
         </tr>
         <tr>
-            <th>1.<?php echo $num=$num+1 ?> DOCENTE:</th>
-            <td><?php echo $this->infouser['fullname']?></td>
+            <td><b>1.<?php echo $num=$num+1 ?> DOCENTE:</b></td>
+            <td><?php echo $this->infouser['last_name0']." ".$this->infouser['last_name1'].", ".$this->infouser['first_name']?></td>
         </tr>
         <tr>
-            <th></th>
-            <td><strong>e-mail:</strong> <?php echo $this->persona['mail_person']?></td>
+            <td></td>
+            <td><strong>e-mail:</strong> <?php echo $this->infouser['mail_person']?></td>
         </tr>
     </table>
 </div>
 <div>
 <?php if($this->silabo) { 
     $silabo=$this->silabo;?>
-        <div style="margin-left:30px">
-            <h5>II. SUMILLA GENERAL</h5>
-            <div class='detalle'><?php echo $sumgral['course_sumilla']?></div>
-        </div>
-        <div style="margin-left:30px">
-            <h5>III. SUMILLA ESPECIFICA</h5>
+        <div style="margin-left:30px; margin-bottom:20px">
+            <h5>II. SUMILLA</h5>
             <div class='detalle'><?php echo $silabo['sumilla']?></div>
         </div>
         <?php if ($curso["type_rate"]=="C") {?>
-        <div style="margin-left:30px">
-            <h5>IV. COMPETENCIAS Y CAPACIDADES</h5>
+        <div style="margin-left:30px; margin-bottom:20px">
+            <h5>III. COMPETENCIAS Y CAPACIDADES</h5>
             <h5 class='indent'>3.1 COMPETENCIAS</h5>
             <div class='detalle'><?php echo $silabo['competency']?></div>
             <h5 class='indent'>3.2 CAPACIDADES</h5>
             <div class='detalle'><?php echo $silabo['capacity']?></div>
         </div>
         <?php } elseif ($curso["type_rate"]=="O") { ?>
-        <div style="margin-left:30px">
-            <h5>IV. OBJETIVOS</h5>
-            <h5 class='indent'>4.1 OBJETIVO GENERAL</h5>
+        <div style="margin-left:30px; margin-bottom:20px">
+            <h5>III. OBJETIVOS</h5>
+            <h5 class='indent'>3.1 OBJETIVO GENERAL</h5>
             <div class='detalle'><?php echo $silabo['competency']?></div>
-            <h5 class='indent'>4.2 OBJETIVOS ESPECÍFICOS</h5>
+            <h5 class='indent'>3.2 OBJETIVOS ESPECÍFICOS</h5>
             <div class='detalle'><?php echo $silabo['capacity']?></div>
         </div>
         <div>
         <?php }
         if ($curso["type_rate"]=="C") { ?>
-            <h5 style="margin-left:30px">V. PROGRAMACIÓN DE UNIDADES</h5>
+            <h5 style="margin-left:30px; margin-bottom:20px">IV. PROGRAMACIÓN DE UNIDADES</h5>
         <?php } elseif ($curso["type_rate"]=="O") { ?>
-            <h5 style="margin-left:30px">V. PROGRAMACIÓN DE CONTENIDOS</h5>
+            <h5 style="margin-left:30px; margin-bottom:20px">IV. PROGRAMACIÓN DE CONTENIDOS</h5>
         <?php } ?>
         </div>
         <?php
@@ -131,37 +122,41 @@ $total=$curso['hours_theoretical']+$curso['hours_practical']; ?>
                     $wherecont['turno']=$unidades['turno'];
                     $wherecont['unit']=$unidades['unit'];
                     $contenidos=$unicon->_getAllXUnit($wherecont); ?>
-                    <div class="col-lg-11">
-                        <table class="table table-bordered table-condensed table-striped flotacarajo" style="margin-left:60px; margin-bottom:20px">
+                    <div>
+                        <table class='table table-bordered'>
                             <tr>
-                                <td colspan='4'><b>UNIDAD <?php echo $unidades['unit']?>:</b> <?php echo $unidades['name']?></td>
+                                <td colspan='6' ><b>UNIDAD <?php echo $unidades['unit']?>:</b> <?php echo $unidades['name']?></td>
                             </tr>
                             <tr>
-                                <td colspan='4'><b>Objetivo Específico:</b> <?php echo $unidades['objetive']?></td>
+                                <td colspan='6' ><b>Objetivo Específico:</b> <?php echo $unidades['objetive']?></td>
                             </tr>
                             <?php if ($contenidos) { ?>
                             <tr>
-                                <th style="width:30px">Semana</th>
-                                <th style="width:30px">Sesión</th>
-                                <th>Contenidos</th>
-                                <th>Estrategias</th>
+                                <th> Semana</th>
+                                <th>Sesión</th>
+                                <th >Contenidos</th>
+                                <th >Estrategias</th>
+                                <th >Indicadores de Logro</th>
+                                <th >Instrumentos</th>
                             </tr>
                             <?php
                             foreach ($contenidos as $uniconte) { ?>
                             <tr>
-                                <td><?php echo $uniconte['week']?></td>
-                                <td><?php echo $uniconte['session']?></td>
-                                <td><?php echo $uniconte['obj_content']?></td>
-                                <td><?php echo $uniconte['obj_strategy']?></td>
+                                <td ><?php echo $uniconte['week']?></td>
+                                <td ><?php echo $uniconte['session']?></td>
+                                <td ><?php echo $uniconte['obj_content']?></td>
+                                <td ><?php echo $uniconte['obj_strategy']?></td>
+                                <td ><?php echo $uniconte['com_indicators']?></td>
+                                <td ><?php echo $uniconte['com_instruments']?></td>
                             </tr>
                             <?php }
                             }?>
                             <tr>
-                                <td colspan='4'><b>Lectura:</b> <?php echo $unidades['reading']?></td>
+                                <td colspan='6'><b>Lectura:</b> <?php echo $unidades['reading']?></td>
                             </tr>
                             <?php if ($unidades['activity']<>"") { ?>
                             <tr>
-                                <td colspan="4"><b>Actividad:</b> <?php echo $unidades['activity']?></td>
+                                <td colspan="6"><b>Actividad:</b> <?php echo $unidades['activity']?></td>
                             </tr> 
                             <?php
                         }?>
@@ -180,8 +175,8 @@ $total=$curso['hours_theoretical']+$curso['hours_practical']; ?>
                     $wherecont['turno']=$unidades['turno'];
                     $wherecont['unit']=$unidades['unit'];
                     $contenidos=$unicon->_getAllXUnit($wherecont); ?>
-                    <div class="col-lg-11">
-                        <table class="table table-bordered table-condensed table-striped" style="margin-left:60px; margin-bottom:20px">
+                    <div>
+                        <table class='table table-bordered'>
                             <tr>
                                 <td colspan='7'><b>UNIDAD <?php echo $unidades['unit']?>:</b> <?php echo $unidades['name']?></td>
                             </tr>
@@ -193,24 +188,24 @@ $total=$curso['hours_theoretical']+$curso['hours_practical']; ?>
                             </tr>
                             <?php if ($contenidos) { ?>
                             <tr>
-                                <th style="width:30px">Semana</th>
-                                <th style="width:30px">Sesión</th>
+                                <th >Semana</th>
+                                <th >Sesión</th>
                                 <th>Conceptual</th>
                                 <th>Procedimental</th>
                                 <th>Actitudinal</th>
-                                <th>Indicadores de Desempeño</th>
+                                <th>Indicadores de Logro</th>
                                 <th>Instrumentos de Evaluación</th>
                             </tr>
                             <?php
                             foreach ($contenidos as $uniconte) { ?>
                             <tr>
-                                <td><?php echo $uniconte['week']?></td>
-                                <td><?php echo $uniconte['session']?></td>
-                                <td><?php echo $uniconte['com_conceptual']?></td>
-                                <td><?php echo $uniconte['com_procedimental']?></td>
-                                <td><?php echo $uniconte['com_actitudinal']?></td>
-                                <td><?php echo $uniconte['com_indicators']?></td>
-                                <td><?php echo $uniconte['com_instruments']?></td>
+                                <td ><?php echo $uniconte['week']?></td>
+                                <td ><?php echo $uniconte['session']?></td>
+                                <td ><?php echo $uniconte['com_conceptual']?></td>
+                                <td ><?php echo $uniconte['com_procedimental']?></td>
+                                <td ><?php echo $uniconte['com_actitudinal']?></td>
+                                <td ><?php echo $uniconte['com_indicators']?></td>
+                                <td ><?php echo $uniconte['com_instruments']?></td>
                             </tr>
                             <?php }
                             }?>
@@ -226,23 +221,41 @@ $total=$curso['hours_theoretical']+$curso['hours_practical']; ?>
                 }
             }
         }?>
-
+    <div style='padding-left:30px;'>
       <?php if ($curso['type_rate']=='C') {
         $rom="I"; ?>
-        <div style="margin-left:30px; float:left">
-            <h5>VI. ESTRATEGIAS METODÓLOGICAS</h5>
-            <div class="detalle"><?php echo $silabo['methodology']?></div>
-        </div> 
+        <h5>V. ESTRATEGIAS METODÓLOGICAS</h5>
+        <div class="detalle"><?php echo $silabo['methodology']?></div>
       <?php }?>
-        <div style="margin-left:30px; float:left">
-            <h5>VI<?php echo $rom?>. MEDIOS Y MATERIALES</h5>
-            <div class="detalle"><?php echo $silabo['media']?></div>
+        <h5 style="margin-bottom:20px">V<?php echo $rom?>. MEDIOS Y MATERIALES</h5>
+        <div class="detalle" style="margin-bottom:30px"><?php echo $silabo['media']?></div>
 
-            <h5>VII<?php echo $rom?>. SISTEMA DE EVALUACIÓN</h5>
-            <div class="detalle"><?php echo $silabo['evaluation']?></div>
+        <h5 style="margin-bottom:20px">VI<?php echo $rom?>. SISTEMA DE EVALUACIÓN</h5>
+        <div class="detalle" style="margin-bottom:30px"><?php echo $silabo['evaluation']?></div>
 
-            <h5>VIII<?php echo $rom?>. FUENTES DE INFORMACIÓN</h5>
-            <div class="detalle"><?php echo $silabo['sources']?></div>
-        </div>
+        <h5 style="margin-bottom:20px">VII<?php echo $rom?>. FUENTES DE INFORMACIÓN</h5>
+        <div class="detalle" style="margin-bottom:30px"><?php echo $silabo['sources']?></div>
+        <div style="text-align: right; margin-top: 30px">Cerro de Pasco, <?php echo $tmps[2]." de ".$strm." del ".$tmps[0]?>.</div>
+    </div>
 <?php }?>
+</div>
+<br>
+<table style="margin-top:120px; width: 100%">
+    <tr>
+        <td style='text-align: center'>
+            <p style='width: 400px; border-top: solid 1px #000'>
+                <?php echo $this->infouser['last_name0']." ".$this->infouser['last_name1'].", ".$this->infouser['first_name']?><br>
+                <span style="border: none; font-weight: bold;">DOCENTE</span>
+            </p>
+        </td>
+        <td style='text-align: center'>
+            <p style='width: 400px; border-top: solid 1px #000'>
+                <?php echo $this->director['last_name0']." ".$this->director['last_name1'].", ".$this->director['first_name'];?><br>
+                <span style="border: none; font-weight: bold;">DIRECTOR</span>
+            </p>
+        </td>
+    </tr>
+</table>
+<div style='text-align: center; margin-left: 30%; margin-top:100px'>
+    <p style='width:200px ;border-top: solid 1px #000; font-weight: bold'>V° B° Comisión de Sílabo</p>
 </div>
