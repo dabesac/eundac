@@ -1,152 +1,59 @@
-<style>
-    .sandrops{
-        width     : 85%;
-        height	  : 50%;
-        z-index   : 1;
-        background: #FFFFFF;
-        overflow-y: hidden;
-        overflow-x: hidden;
-        position  : fixed;
-        left      : 6%;
-        top       : 38%;
-    }
-</style>
-<!-- <link rel="stylesheet" type="text/css" href="/css/dashboard.css"> -->
-<div class="panel panel-default">
-	<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-	  	<!-- Indicators -->
-	  	<!-- <ol class="carousel-indicators">
-	    	<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-	    	<li data-target="#carousel-example-generic" data-slide-to="1"></li>
-	    	<li data-target="#carousel-example-generic" data-slide-to="2"></li>
-	  	</ol> -->
-	  	<?php 
-	  	$j=1;
-	  	?>
-	  	<!-- Wrapper for slides -->
-	  	<div class="carousel-inner">
-	    	<div class="item active">
-	    		<div class="col-md-9 col-md-offset-1"><h4>NOTICIA Nº <?php echo $j?></h4></div>
-	    		<div id="sandro<?php echo $j?>"></div>
-	      		<!-- <center><img src="/img/1.png" alt="..." style="z-index:1"></center> -->
-	      		<!-- <div class="carousel-caption">
-	       			Hola
-	      		</div> --><br>
-	      		<div class="col-md-2 pull-right"><a href="#" class="solo" clave="<?php echo $j?>"><span class="glyphicon glyphicon-chevron-down"></span></a></div>
-	    	</div>
-	    	<?php
-	    	for ($i=$j+1; $i < 6; $i++) {	?>
-	    		<div class="item">
-	    			<div class="col-md-10 col-md-offset-1"><h4>NOTICIA Nº <?php echo $i?></h4></div>
-	      			<div id="sandro<?php echo $i?>">
-	      				<!-- <center><img src="/img/1.png"></center> -->
-	      			</div>
-	      			<!-- <div class="carousel-caption">
-	       				Hola
-	      			</div> --><br>
-	      			<div class="col-md-1 pull-right"><a href="#" class="solo" clave="<?php echo $i?>"><span class="glyphicon glyphicon-chevron-down"></span></a></div>
-	    		</div>
-	    	<?php	    		
-	    	}
-	    	?>
-	  	</div>
 
-	  	<!-- Controls -->
-	  	<a href="#carousel-example-generic" data-slide="prev">
-	    	<span class="glyphicon glyphicon-chevron-left"></span>
-	  	</a>
-	  	<a href="#carousel-example-generic" data-slide="next">
-	    	<span class="glyphicon glyphicon-chevron-right pull-right"></span>
-	  	</a>
-	</div>
-</div>	
-<!-- <div class="container-fluid showFirst">
-	<div class="row">
-		<br>
-		<div class="col-md-8 col-md-offset-1">
-			<div id="mainSlider" class="slider">
-
-				<div id="slide_1" class="slide slide_active">
-					<div class="transparent">
-						<div class="row text">
-							<div class="col-md-6 col-md-offset-1">
-								<h2>Pagos - Matrícula 14A</h2>
-								<p>Ya salió los montos para la matrícula 14A</p>
-							</div>
-							<div class="col-md-2 col-md-offset-2">
-								<br><br><br><br><br><br>
-								<a href="#infoContainer" class="btn btn-info"><span class="glyphicon glyphicon-info-sign"></span> Más Información</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div id="slide_2" class="slide">
-					<div class="transparent">
-						<div class="row text">
-							<div class="col-md-6 col-md-offset-1">
-								<h2></h2>
-								<p></p>
-							</div>
-							<div class="col-md-2 col-md-offset-2">
-								<br><br><br><br><br><br>
-								<a href="#infoContainer" class="btn btn-info"><span class="glyphicon glyphicon-info-sign"></span> Más Información</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div id="slide_3" class="slide">
-					<div class="transparent">
-						<div class="row text">
-							<div class="col-md-6 col-md-offset-1">
-								<h2></h2>
-								<p></p>
-							</div>
-							<div class="col-md-2 col-md-offset-2">
-								<br><br><br><br><br><br>
-								<a href="#infoContainer" class="btn btn-info"><span class="glyphicon glyphicon-info-sign"></span> Más Información</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-			<div class="row">
-				<div class="col-md-1">
-					<a id="leftBtn" class="text-warning" href="##"><span class="glyphicon glyphicon-chevron-left"></span></a>
-				</div>
-				<div class="col-md-10"><hr></div>
-				<div class="col-md-1">
-					<a id="rightBtn" class="text-warning pull-right" href="##"><span class="glyphicon glyphicon-chevron-right"></span></a>
-				</div>
-			</div>
-		</div>
-
-		<div id="allLeft_1" class="col-md-2">
-			<a id="btnProfile" href="/profile/public/student" class="btn form-control">
-				<div class="panel panel-info">
-					<h2 class="text-center"><span class="glyphicon glyphicon-user text-primary"></span></h2>
-					<h4 class="text-center text-muted">Mí Perfil</h4>
-				</div>
-			</a>
-			<br><br><br><br><br><br><br>
-			<a id="btnGrafics" href="#grafics" class="btn form-control">
-				<div class="panel panel-info">
-					<h2 class="text-center"><span class="glyphicon glyphicon-stats text-primary"></span></h2>
-					<h4 class="text-center text-muted">Gráficas</h4>
-				</div>
-			</a>
-			<br><br><br><br><br><br><br>
-			<a id="btnJobs" href="#jobs" class="btn form-control">
-				<div class="panel panel-info">
-					<h2 class="text-center"><span class="glyphicon glyphicon-briefcase text-primary"></span></h2>
-					<h4 class="text-center text-muted">Ofertas Laborales</h4>
-				</div>
-			</a>
-		</div>
-	</div>
-</div> -->
+<!--Slider News-->
+<link rel="stylesheet" href="/css/sliderNews.css" />
+<div class="row">
+    <div class="col-md-12">
+    <div class="row">
+    <div id="newsSlider" class="slider">
+        <?php $slideActive = 0; ?>
+        <?php foreach ($this->news as $new): ?>
+            <?php if ($slideActive == 0){
+                $classSlide = 'slideActive';
+                $slideActive = 1;
+            } else {
+                $classSlide = '';
+            }?>
+        <div class="slide <?php echo $classSlide ?>">
+            <div class="col-md-4 title">
+                <br>
+                <?php if ($new['type'] == 'NE') {
+                    $icon = 'glyphicon glyphicon-info-sign';
+                }else if ($new['type'] == 'SY') {
+                    $icon = 'glyphicon glyphicon-envelope';
+                }?>
+                <h3 class="text-center"><span class="<?php echo $icon ?>"></span> <?php echo $new['title'] ?></h3>
+            </div>
+            <div class="col-md-8 content">
+                    <br>
+                    <p><?php echo substr($new['description'], 0, 150) ?>.........
+                        <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link showData">Seguir leyendo</a>
+                        <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link hideData hidden">Leer menos</a>
+                    </p>
+            </div>
+        </div>
+        <?php endforeach ?>
+    </div>
+    </div>
+    
+    <div class="row">
+    <?php foreach ($this->news as $newData): ?>
+    <div id="data<?php echo $newData['newid'] ?>" class="data">
+        <div class="row">
+            <div class="col-md-6">
+                <figure>
+                    <img src="/imgsNews/<?php echo $newData['img'] ?>" alt="Imagen">
+                </figure>
+            </div>
+            <div class="col-md-6 allDescription">
+                <br><br>
+                <p><?php echo $newData['description'] ?></p>
+            </div>
+        </div>
+    </div>
+    <?php endforeach ?>
+    </div>
+    </div>
+</div>
 
 
 <div id="grafics" class="container-fluid" style="height: 600px;">
@@ -226,120 +133,49 @@
 		$(this).tooltip('toggle');
 	});
 
-	setInterval(function(){sliderForward();}, 5000);
-	$('#moreInfo').addClass('hidden');
-	$('#moreInfo').transition({ scale: 0 });
+	$('.data').slideUp();
 
-	$('#rightBtn').click(function(){
-		sliderForward();
-	});
+	var sliderGo = setInterval(function(){sliderForward();}, 4500);
 
-	$('#leftBtn').click(function(){
-		sliderBackward();
-	});
+	$('.showData').click(function(){
+        clearInterval(sliderGo);
+        $('html,body').animate({
+            scrollTop: $("#newsSlider").offset().top
+        }, 500);
+        var newid = $(this).attr('newid');
+        $('#data' + newid).slideDown();
+        $('.showData').addClass('hidden');
+        $('.hideData').removeClass('hidden');
+    })
 
-	function sliderForward(){
-		var size = $('.slider').find('.slide').size();
-		$('.slider').find('.slide').each(function(index, value){
-			if ($(value).hasClass('slide_active')) {
-				$($('.slider').find('.slide').get(index)).slideUp(function(){
-					$(value).removeClass('slide_active');
-				});
+    $('.hideData').click(function(){
+        $('.data').slideUp();
+        $('.showData').removeClass('hidden');
+        $('.hideData').addClass('hidden');
+        sliderGo = setInterval(function(){sliderForward();}, 4500);
+    })
 
-				if (index+1 < size) {
-					$($('.slider').find('.slide').get(index+1)).slideDown('slow');
-					$($('.slider').find('.slide').get(index+1)).addClass('slide_active');
-					return false;
-				}else{
-					$($('.slider').find('.slide').get(0)).slideDown('slow');
-					$($('.slider').find('.slide').get(0)).addClass('slide_active');
-					return false;
-				};
-			};
-		});
-	}
+ 	function sliderForward(){
+        $('.data').slideUp();
+        var size = $('.slider').find('.slide').size();
+        $('.slider').find('.slide').each(function(index, value){
+            if ($(value).hasClass('slideActive')) {
+                $($('.slider').find('.slide').get(index)).slideUp(function(){
+                    $(value).removeClass('slideActive');
+                });
 
-	function sliderBackward(){
-		var size = $('.slider').find('.slide').size();
-		$('.slider').find('.slide').each(function(index, value){
-			if ($(value).hasClass('slide_active')) {
-				$(value).slideUp();
-				$($('.slider').find('.slide').get(index)).slideUp(function(){
-					$(value).removeClass('slide_active');
-				});
+                if (index+1 < size) {
+                    $($('.slider').find('.slide').get(index+1)).slideDown('slow');
+                    $($('.slider').find('.slide').get(index+1)).addClass('slideActive');
+                    return false;
+                }else{
+                    $($('.slider').find('.slide').get(0)).slideDown('slow');
+                    $($('.slider').find('.slide').get(0)).addClass('slideActive');
+                    return false;
+                };
+            };
+        });
+    }
 
-				if (index == 0) {
-					$($('.slider').find('.slide').get(size-1)).slideDown();
-					$($('.slider').find('.slide').get(size-1)).addClass('slide_active');
-					return false;
-				}else{
-					$($('.slider').find('.slide').get(index-1)).slideDown();
-					$($('.slider').find('.slide').get(index-1)).addClass('slide_active');
-					return false;
-				};
-			};
-		});
-	}
-
-	$('.slider').mouseenter(function(){
-		$('.slider').transition({scale: 1.02});
-	});
-	$('.slider').mouseleave(function(){
-		$('.slider').transition({scale: 1});
-	});
-
-	//mas Informacion
-	$('.btn-info').click(function(){
-		$('#moreInfo').removeClass('hidden', function(){
-			$('#moreInfo').transition({ scale: 1 });
-		});
-	});
-
-	$('#hidemoreInfo').click(function(){
-		$('#moreInfo').transition({ scale: 0 }, function(){
-			$('#moreInfo').addClass('hidden');
-		});
-	});
-
-	//Boton Perfil
-	$('#btnProfile').mouseenter(function(){
-		$('#btnProfile').transition({ scale: 1.05 });
-	});
-	$('#btnProfile').mouseleave(function(){
-		$('#btnProfile').transition({ scale: 1 });
-	});
-
-	//Boton Trabajos
-	$('#btnJobs').mouseenter(function(){
-		$('#btnJobs').transition({ scale: 1.05 });
-	});
-	$('#btnJobs').mouseleave(function(){
-		$('#btnJobs').transition({ scale: 1 });
-	});
-	$("#btnJobs").click(function () {
-	    $('html,body').animate({
-	        scrollTop: $("#jobs").offset().top
-	    }, 500);
-	});
-
-	//Boton Grafics
-	$('#btnGrafics').mouseenter(function(){
-		$('#btnGrafics').transition({ scale: 1.05 });
-	});
-	$('#btnGrafics').mouseleave(function(){
-		$('#btnGrafics').transition({ scale: 1 });
-	});
-	$("#btnGrafics").click(function () {
-	    $('html,body').animate({
-	        scrollTop: $("#grafics").offset().top
-	    }, 500);
-	});
-	
-	//Volver a Top
-	$(".backTopBtn").click(function () {
-	    $('html,body').animate({
-	        scrollTop: $("body").offset().top
-	    }, 500);
-	});
 </script>
 

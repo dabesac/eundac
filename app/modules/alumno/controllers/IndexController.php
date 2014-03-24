@@ -16,8 +16,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
     public function indexAction()
     {
         try {
-
-
             $where['uid']=$this->sesion->uid;
             $where['eid']=$this->sesion->eid;
             $where['oid']=$this->sesion->oid;
@@ -137,6 +135,45 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $this->view->dat_assist = $result;
             //print_r($data_courses);exit();
 
+            //news Alumno
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+
+            $newDb = new Api_Model_DbTable_News();
+            $newsRolDb = new Api_Model_DbTable_NewsRol();
+
+            $news = $newDb->_getLastNews();
+
+            $c = 0;
+            foreach ($news as $new) {
+                $where = array( 'eid'   => $eid,
+                                'oid'   => $oid,
+                                'newid' => $new['newid'] );
+
+                print_r($where);
+                $attrib = array('newid', 'rid');
+                $newsRol = $newsRolDb->_getFilter($where, $attrib);
+                $existe = 'Si';
+                if ($newsRol) {
+                    if ($newsRol[0]['rid'] == $rol) {
+                        $newsFilter[$c]['title']       = $new['title'];
+                        $newsFilter[$c]['description'] = $new['description'];
+                        $newsFilter[$c]['img']         = $new['img'];
+                        $newsFilter[$c]['type']        = $new['type'];
+                        $c++;
+                    }
+                }else{
+                    $newsFilter[$c]['title']       = $new['title'];
+                    $newsFilter[$c]['description'] = $new['description'];
+                    $newsFilter[$c]['img']         = $new['img'];
+                    $newsFilter[$c]['type']        = $new['type'];
+                    $c++;
+                }
+                if ($c == 4) {
+                    break;
+                }
+            }  
+            $this->view->news = $newsFilter;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
