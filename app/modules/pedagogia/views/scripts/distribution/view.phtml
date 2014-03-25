@@ -72,7 +72,7 @@
 				</td>
 				<td class="text-center">
 					<?php 
-					if ($distrib['comments']<>""){	
+					if ($distrib['comments']<>"" && $distrib['state']<>'O'){	
 						?>
 						<span class='correc' title="AVISO" data-container="body" data-toggle="popover" data-content="<?php echo $distrib['comments']?>"><?php echo $state?></span>
 					<?php	

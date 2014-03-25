@@ -158,7 +158,10 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
             $tiempo=split(":", $hora);
             $hora=$tiempo[0];
             $min=$tiempo[1];
-            $hora=$hora.":".$min.":01";
+            // $hora=$hora.":".$min.":01";
+            $min1=$hora.":".$min.":00";
+            $min2 = strtotime ( '+01 second' , strtotime ( $min1 ) ) ;
+            $hora = date ( 'H:i:s' , $min2 );
 
             $sql=$this->_db->query("select * from horary_periods where eid='$eid' and oid='$oid' 
                                     and perid='$perid' and teach_uid='$uid' and day='$day' 
@@ -177,9 +180,9 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
             $tiempo=split(":", $hora);
             $hora=$tiempo[0];
             $min=$tiempo[1];
-            $min=intval($min-1);
-            $hora=$hora.":".$min.":00";
-            
+            $min1=$hora.":".$min.":00";
+            $min2 = strtotime ( '-01 second' , strtotime ( $min1 ) ) ;
+            $hora = date ( 'H:i:s' , $min2 );
             $sql=$this->_db->query("select * from horary_periods where eid='$eid' and oid='$oid' 
                                     and perid='$perid' and teach_uid='$uid' and day='$day' 
                                     and '$hora' between hora_ini and hora_fin ");
