@@ -106,35 +106,31 @@ class Docente_NotasController extends Zend_Controller_Action{
 	public function coursesAction(){
         $this->_helper->layout()->disablelayout();
 
-        $perid = trim($this->_getParam("perid"));
+        $params = array();
+       	$params = $this->getRequest()->getParams();
+       	$perid = trim($params['perid']);
+       	$escid = trim($params['escid']);
+       	$courseid = trim($params['courseid']);
+       	$curid = trim($params['curid']);
+       	$turno = trim($params['turno']);
+       	$escidorigen = trim($params['escido']);
+       	$turnoorigen = trim($params['turnoo']);
 
-        $escid = trim($this->_getParam("escid"));
-        $curid = trim($this->_getParam("curid"));
-        $turno = trim($this->_getParam("turno"));
-        $courseid =trim($this->_getParam("courseid"));
-
-        // $escid = $this->_getParam("escid");
-        // $turno = $this->_getParam("turno");
-        
-        $courseidorigen = trim($this->_getParam("courseidorigen"));
-        $turnoorigen = trim($this->_getParam("turnoorigen"));
-        $escidorigen = trim($this->_getParam("escidorigen"));
-      
-
-       	
-        if($courseid==$courseidorigen)
-        {
-        	$silabo = new Api_Model_DbTable_Syllabus();
-        	if($silabo->_getDuplicasilabo($perid,$escid,$courseid,$curid,$turno,$escidorigen,$turnoorigen))
-        	{
-        		
-        	}
-        }
-        else
-        {
-        	echo "no son cursos compatibles";
-        }
-
+    	try {
+    		$silabo = new Api_Model_DbTable_Syllabus();
+    		$data= $silabo->_getDuplicasilabo($perid,$escid,$courseid,$curid,$turno,$escidorigen,$turnoorigen);
+	    	if($data['duplicar_silabo5']==1)
+	    	{
+	    		$json = array('status' => true, );
+	    	}else{
+	    		$json =  array('status' => false, );
+	    	}
+    	} catch (Exception $e) {
+    		$json = array('status' => false, );
+    	}
+       
+    	$this->_response->setHeader('Content-Type', 'application/json');
+        $this->view->json= Zend_Json::encode($json);  
 	}
 
 	public function persetage_notes($data=array(),$partial){

@@ -150,6 +150,15 @@
                                     '/escid/'.  base64_encode($this->dataStudent['escid']) .
                                     '/subid/'.  base64_encode($this->dataStudent['subid']) ?>
         <a id="printRegister" class="btn btn-default <?php echo $classPrint ?> form-control" target="_blank" href="<?php echo $urlPrintRegister ?>"><span class="glyphicon glyphicon-print"></span> Imprimir Matricula</a>
+        <br></br>
+       <!--  <button type='button' id="movilidad_estudiantil" class="btn btn-default <?php echo $classPrint ?> form-control" target="_blank" 
+            href="<?php echo $urlPrintRegister ?>" 
+            data-uid="<?php echo base64_decode($this->dataStudent['uid'])?>"
+            data-pid="<?php echo base64_decode($this->dataStudent['pid'])?>"
+            data-escid="<?php echo base64_decode($this->dataStudent['escid'])?>"
+            data-subid="<?php echo base64_decode($this->dataStudent['subid'])?>"
+            data-perid="<?php echo base64_decode($this->dataStudent['perid'])?>"
+            ><span class="glyphicon glyphicon-inbox"></span> Movilidad Estudiantil </button> -->
     </div>
 </div>
 <hr>
@@ -634,6 +643,10 @@
         $('.validateRegister, .butonsCourses').removeClass('hidden');
     });
     
+    //movilidad estudiantil
+    $('#movilidad_estudiantil').click(function(){
+        console.log($(this).data());
+    });
 </script>
 
 <?php else: ?>
