@@ -62,7 +62,7 @@ switch ($mes) {
             <td><?php echo $curso['courseid']?></td>
         </tr>
         <tr>
-            <td><b>1.<?php echo $num=$num+1 ?> PREQUISITO:</b></td>
+            <td><b>1.<?php echo $num=$num+1 ?> PREREQUISITO:</b></td>
             <td>
                 <?php echo ($curso["req_1"] || $curso["req_2"] || $curso["req_3"])? $curso["req_1"]." ".$curso["req_2"]." ".$curso["req_3"]:"NINGUNO";?>
             </td>

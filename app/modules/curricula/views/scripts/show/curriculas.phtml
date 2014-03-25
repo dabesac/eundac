@@ -11,7 +11,7 @@ if ($this->curriculas) {
 		<th>Estado</th>
 		<th>Año</th>
 		<th>Ver</th>
-		 <th>Imprimir</th>
+		<th>Imprimir</th>
                         
 	</tr>
 	<?php
@@ -30,7 +30,7 @@ if ($this->curriculas) {
 			<td><?php echo $curriculas['name']?></td>
 			<td><?php echo $estado?></td>
 			<td><?php echo $curriculas['year']?></td>
-			<td><a href="/curricula/show/seecurricula/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>" ><span class="glyphicon glyphicon-folder-open"></span></a></td>
+			<td><a id="seecurri" href="/curricula/show/seecurricula/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>" ><span class="glyphicon glyphicon-folder-open"></span></a></td>
             <td><a href="/curricula/show/print/subid/<?php echo base64_encode($curriculas['subid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/curid/<?php echo base64_encode($curriculas['curid'])?>/state/<?php echo base64_encode($curriculas['state'])?>"><span class="glyphicon glyphicon-print"></span></a></td>
                   
                         

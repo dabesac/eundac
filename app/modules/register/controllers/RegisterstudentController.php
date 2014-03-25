@@ -233,8 +233,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             foreach ($courses as $course) {
                 //Obteniendo Cursos
                 $attrib = array('courseid', 'curid', 'name', 'credits');
-                $where = array( 
-                                'eid'     =>$eid, 
+                $where = array( 'eid'     =>$eid, 
                                 'oid'     =>$oid, 
                                 'escid'   =>$escid, 
                                 'subid'   =>$subid,
@@ -774,7 +773,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $where['pid'] = base64_decode($this->_getParam('pid'));
             $where['escid'] = base64_decode($this->_getParam('escid'));
             $where['subid'] = base64_decode($this->_getParam('subid'));
-            $where['perid'] = $this->sesion->period->perid;
+            $where['perid'] = $this->_getParam('perid',$this->sesion->period->perid);
             $where['eid'] = $this->sesion->eid;        
             $where['oid'] = $this->sesion->oid;        
 

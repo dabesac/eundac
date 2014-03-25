@@ -10,6 +10,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
     	}
     	$login = $sesion->getStorage()->read();
     	$this->sesion = $login;
+    	$this->sesion->period->perid = '14A';
     }
     public function indexAction(){	
     	//DataBases
@@ -19,7 +20,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
 
-    	$perid = '14A';
+    	$perid = $this->sesion->period->perid;
     	$this->view->perid = $perid;
 
     	$where = array(	'eid'   => $eid,
@@ -103,7 +104,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
-		$perid = '14A';
+		$perid = $this->sesion->period->perid;
 		
 		$where = array(	'eid'            => $eid,
 						'oid'            => $oid,
@@ -187,7 +188,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
-		$perid = '14A';
+		$perid = $this->sesion->period->perid;
 		$dataStudent = array(	'uid'   => $uid,
 								'pid'   => $pid,
 								'subid' => $subid,
@@ -345,7 +346,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
         $eid   = $this->sesion->eid;    
         $oid   = $this->sesion->oid;
-        $perid = '14A';
+        $perid = $this->sesion->period->perid;
 
         
 
@@ -439,6 +440,17 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 	        $server = new Eundac_Connect_Api('pendig_cachimbos', $request);
 	        $data = $server->connectAuth();
 	        $this->view->data = $data;
+
+	        //Total de Creditos
+	        $totalCredits = 0;
+	        $courseid = 0;
+	        foreach ($data as $course) {
+	        	if ($course['courseid'] != $courseid) {
+	        		$totalCredits = $totalCredits + $course['credits'];
+	        		$courseid = $course['courseid'];
+	        	}
+	        }
+	        $this->view->totalCredits = $totalCredits;
         }
         $c = 0;
         foreach ($data as $course) {
@@ -479,7 +491,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$pid = $this->sesion->pid;
 
 		$data = $this->getRequest()->getPost();
-		
+
 		if ($data['whySend'] == 'M') {
 			$state = 'M';
 		}else if ($data['whySend'] == 'O'){

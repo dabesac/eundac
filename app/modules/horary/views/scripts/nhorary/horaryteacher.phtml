@@ -169,17 +169,31 @@ $horaoriginal=$this->horarios;
 
    ?>
 <div class="row" style="margin: 0px">
-    <div class='col-md-12' id='encabezado'>
-        <div class="cajadia">Hora:</div>
-        <div class="cajadia" style='margin-left:3px'>Lunes</div>
-        <div class="cajadia" style='margin-left:3px'>Martes</div>
-        <div class="cajadia" style='margin-left:2px'>Miércoles</div>
-        <div class="cajadia" style='margin-left:2px'>Jueves</div>
-        <div class="cajadia" style='margin-left:2px'>Viernes</div>
-        <div class="cajadia" style='margin-left:2px'>Sábado</div>
+    <div class="col-md-12">
+        <div class='arreglo pull-left'>
+            <div class='cajadia'><b>Hora:</b></div>
+        </div>
+        <div class='arreglo pull-left'>
+            <div class='cajadia'><b>Lunes</b></div>
+        </div>
+        <div class='arreglo pull-left'>    
+            <div class='cajadia'><b>Martes</b></div>
+        </div>    
+        <div class='arreglo pull-left'>    
+            <div class='cajadia'><b>Miércoles</b></div>
+        </div>        
+        <div class='arreglo pull-left'>    
+            <div class='cajadia'><b>Jueves</b></div>
+        </div>        
+        <div class='arreglo pull-left'>    
+            <div class='cajadia'><b>Viernes</b></div>
+        </div>        
+        <div class='arreglo pull-left'>    
+            <div class='cajadia'><b>Sábado</b></div>
+        </div>    
     </div>
-    <div class='col-md-12 pull-left' style='margin-bottom:40px'>    
-        <div class='pull-left' style='width:144px'>
+    <div class='col-md-12'>    
+        <div class='pull-left' style='width:14%'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { ?>
                 <div class="cajadentro"><?php echo $hora[$i]['hora'] ?></div>
@@ -190,7 +204,7 @@ $horaoriginal=$this->horarios;
         <?php
                $dat=$this->horarios;
         ?>
-        <div class='pull-left' style='width:144px'>
+        <div class='pull-left' style='width:14%'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
                 $band=0;
@@ -208,7 +222,7 @@ $horaoriginal=$this->horarios;
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                 ?>
-                                <div class="cajadentro" style="margin-left:2px; background-color:<?php echo $dat[$s]["color"] ?>">
+                                <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>">
                                     <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/subid/<?php echo $dat[$s]['subid'] ?>/perid/<?php echo $dat[$s]['perid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>"
 
                                      type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
@@ -225,13 +239,13 @@ $horaoriginal=$this->horarios;
                     }
                 }
                 if ($band==1 && $c==0){ ?>
-                    <div class="cajadentro" style='margin-left:2px'></div>
+                    <div class="cajadentro"></div>
                 <?php
                 }
             }
             ?>
         </div>
-        <div class='pull-left' style='width:144px'>
+        <div class='pull-left' style='width:14%'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
                 $band=0;
@@ -249,7 +263,7 @@ $horaoriginal=$this->horarios;
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                 ?>
-                                <div class="cajadentro" style="margin-left:2px; background-color:<?php echo $dat[$s]["color"] ?>">
+                                <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>">
                                     <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/subid/<?php echo $dat[$s]['subid'] ?>/perid/<?php echo $dat[$s]['perid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
@@ -264,13 +278,13 @@ $horaoriginal=$this->horarios;
                     }
                 }
                 if ($band==1 && $c==0){ ?>
-                    <div class="cajadentro" style="margin-left:2px" ></div>
+                    <div class="cajadentro"></div>
                 <?php
                 }
             }
             ?>
         </div>
-        <div class='pull-left' style='width:144px'>
+        <div class='pull-left' style='width:14%'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
                 $band=0;
@@ -289,7 +303,7 @@ $horaoriginal=$this->horarios;
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
 
                                 ?>
-                                <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>">
+                                <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>">
                                     <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/subid/<?php echo $dat[$s]['subid'] ?>/perid/<?php echo $dat[$s]['perid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
@@ -304,14 +318,14 @@ $horaoriginal=$this->horarios;
                     }
                 }
                 if ($band==1 && $c==0){ ?>
-                    <div class="cajadentro" style="margin-left:3px" ></div>
+                    <div class="cajadentro" ></div>
                 <?php
                 }
             }
             ?>
         </div>
 
-         <div class='pull-left' style='width:144px'>
+         <div class='pull-left' style='width:14%'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
                 $band=0;
@@ -329,7 +343,7 @@ $horaoriginal=$this->horarios;
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                 ?>
-                                <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>">
+                                <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>">
                                     <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/subid/<?php echo $dat[$s]['subid'] ?>/perid/<?php echo $dat[$s]['perid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
@@ -344,14 +358,14 @@ $horaoriginal=$this->horarios;
                     }
                 }
                 if ($band==1 && $c==0){ ?>
-                    <div class="cajadentro" style="margin-left:3px"></div>
+                    <div class="cajadentro"></div>
                 <?php
                 }
             }
             ?>
         </div>
 
-        <div class='pull-left' style='width:144px'>
+        <div class='pull-left' style='width:14%'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
                 $band=0;
@@ -368,7 +382,7 @@ $horaoriginal=$this->horarios;
                             if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                 $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                 ?>
-                                <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>">
+                                <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>">
                                     <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/subid/<?php echo $dat[$s]['subid'] ?>/perid/<?php echo $dat[$s]['perid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
@@ -383,13 +397,13 @@ $horaoriginal=$this->horarios;
                     }
                 }
                 if ($band==1 && $c==0){ ?>
-                    <div class="cajadentro" style="margin-left:3px"></div>
+                    <div class="cajadentro"></div>
                 <?php
                 }
             }
             ?>
         </div>
-        <div class='pull-left' style='width:144px'>
+        <div class='pull-left' style='width:14%'>
             <?php
             for ($i=$inih; $i <= $finh; $i++) { 
                 $band=0;
@@ -409,7 +423,7 @@ $horaoriginal=$this->horarios;
 
                                 ?>
 
-                                <div class="cajadentro" style="margin-left:3px; background-color:<?php echo $dat[$s]["color"] ?>">
+                                <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>">
                                     <a id="cajahora" href="/horary/nhorary/deletehorary/uid/<?php echo $horaoriginal[0]['teach_uid'] ?>/pid/<?php echo $horaoriginal[0]['teach_pid'] ?>/escid/<?php echo $dat[$s]['escid'] ?>/subid/<?php echo $dat[$s]['subid'] ?>/perid/<?php echo $dat[$s]['perid'] ?>/courseid/<?php echo $dat[$s]['courseid'] ?>/turno/<?php echo $dat[$s]['turno'] ?>/curid/<?php echo $dat[$s]['curid'] ?>/horaini/<?php echo $horaoriginal[$s]['hora_ini'] ?>/horafin/<?php echo $horaoriginal[$s]['hora_fin'] ?>/diasemana/<?php echo $horaoriginal[$s]['day'] ?>" type="button" class="close" title="Eliminar Horario" style="margin-right:1px" onclick="return confirm('Esta Seguro que desea eliminar el horario?');">x</a>
                                     <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
                                 </div>
@@ -424,7 +438,7 @@ $horaoriginal=$this->horarios;
                     }
                 }
                 if ($band==1 && $c==0){ ?>
-                    <div class="cajadentro" style="margin-left:3px"></div>
+                    <div class="cajadentro"></div>
                 <?php
                 }
             }

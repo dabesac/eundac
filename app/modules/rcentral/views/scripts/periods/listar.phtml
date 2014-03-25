@@ -1,24 +1,22 @@
-<table class="table">
-	<tr>
-    	<td class="span2">
-       		<img src="/img/circulo-verde.png"><b>ACTIVO</b>
-       	</td>
-      	<td class="span3">
-      		    <img src="/img/circulo-rojo.png" width='30' height='30'><b>CERRADO</b>
-      	</td>
-  	    <td class="span2">
-  		    <img src="/img/circulo-amarillo.png"><b>TEMPORAL</b>
-  	    </td>
-  	    <td class="span2">
-  		    <img src="/img/circulo-azul.png"><b>INICIADO</b>
-   	    </td>
-   	    <td style="text-align: right">
-            <button id="newper" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Nuevo</button>
-<!-- 			<a id="#"  class="btn btn-info" onclick="javascript: window.open('/rcentral/periods/nuevo/','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=0,fullscreen=yes,dependent=no,width=600,height=600')"> 
-   			<i class="glyphicon glyphicon-pencil"></i>Nuevo</a> -->
-   	    </td>   				
-	</tr>
-</table>
+<br>
+<div class="row">
+    <div class="col-md-2">
+        <h4 class="text-center text-muted"><b>Leyenda</b></h4>
+    </div>
+    <div class="col-md-2">
+        <h5 class="text-center text-success"><img src="/img/circulo-verde.png"> Activo</h5>
+    </div>
+    <div class="col-md-2">
+        <h5 class="text-center text-danger"><img src="/img/circulo-rojo.png"> Cerrado</h5>
+    </div>
+    <div class="col-md-2">
+        <h5 class="text-center text-warning"><img src="/img/circulo-amarillo.png"> Temporal</h5>
+    </div>
+    <div class="col-md-2">
+        <h5 class="text-center text-info"><img src="/img/circulo-azul.png"> Iniciado</h5>
+    </div>
+</div><br><br>
+
 <table class="table  table-bordered table-condensed table-striped">
 <thead>
     <tr>
@@ -83,7 +81,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                
             </div>
             <div class="modal-body">
                 <div id='nuevo_periodo'></div>
@@ -93,9 +90,10 @@
 </div>
 
 <script type="text/javascript">
-    $("#newper").click(function(){   
+    $("#newperiod").click(function(){
+        var anio="<?php echo $this->anio?>";   
         $('#myModal').modal('show');            
-        var url="/rcentral/periods/nuevo/";
+        var url="/rcentral/periods/nuevo/anio/"+anio;
         $("#nuevo_periodo").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
         $("#nuevo_periodo").load(url);
     });
