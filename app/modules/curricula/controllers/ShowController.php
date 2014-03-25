@@ -92,6 +92,8 @@ class Curricula_ShowController extends Zend_Controller_Action
             $curid=base64_decode($this->_getParam('curid'));
             $escid=base64_decode($this->_getParam('escid'));
             $subid=base64_decode($this->_getParam('subid'));
+            $facid=substr($escid,0,1);
+            $this->view->facid=$facid;
             $this->view->eid=$eid;
             $this->view->oid=$oid;
             $this->view->escid=$escid;
@@ -118,7 +120,9 @@ class Curricula_ShowController extends Zend_Controller_Action
             $data['oid']=$oid;
             $data['escid']=$escid;
             $data['curid']=$curid;
-            $cursocur=$cursos->_getFilter($data);
+            $order=array('semid','courseid');
+            $cursocur=$cursos->_getFilter($data,$attrib=null,$order);
+            // print_r($cursocur);exit();
             $this->view->cursos=$cursocur;
             $esc = new Api_Model_DbTable_Speciality();
             $dat['eid']=$eid;
