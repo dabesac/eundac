@@ -1,4 +1,62 @@
-<!--Panel de Avance de Cursos-->
+<link rel="stylesheet" href="/css/sliderNews.css">
+<!--Slider de Noticias-->
+<div class="row">
+    <div class="col-md-12">
+    <div class="row">
+    <div id="newsSlider" class="slider">
+        <?php $slideActive = 0; ?>
+        <?php foreach ($this->news as $new): ?>
+            <?php if ($slideActive == 0){
+                $classSlide = 'slideActive';
+                $slideActive = 1;
+            } else {
+                $classSlide = '';
+            }?>
+        <div class="slide <?php echo $classSlide ?>">
+            <div class="col-md-4 title">
+                <br>
+                <?php if ($new['type'] == 'NE') {
+                    $icon = 'glyphicon glyphicon-info-sign';
+                }else if ($new['type'] == 'SY') {
+                    $icon = 'glyphicon glyphicon-envelope';
+                }?>
+                <h3 class="text-center"><span class="<?php echo $icon ?>"></span> <?php echo $new['title'] ?></h3>
+            </div>
+            <div class="col-md-8 content">
+                    <br>
+                    <p><?php echo substr($new['description'], 0, 150) ?>.........
+                        <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link showData">Seguir leyendo</a>
+                        <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link hideData hidden">Leer menos</a>
+                    </p>
+            </div>
+        </div>
+        <?php endforeach ?>
+    </div>
+    </div>
+    
+    <div class="row">
+    <?php foreach ($this->news as $newData): ?>
+    <div id="data<?php echo $newData['newid'] ?>" class="data">
+        <div class="row">
+            <div class="col-md-6">
+                <figure>
+                    <br>
+                    <img src="/imgsNews/<?php echo $newData['img'] ?>" alt="Imagen" class="img img-responsive">
+                </figure>
+            </div>
+            <div class="col-md-6 allDescription">
+                <br><br>
+                <p><?php echo $newData['description'] ?></p>
+            </div>
+        </div>
+    </div>
+    <?php endforeach ?>
+    </div>
+    </div>
+</div>
+
+<br><br> 
+<!--Panel deAvance de Cursos-->
 <div class="container">
 <div class="panel panel-default">
     <div class="row">
@@ -124,65 +182,6 @@
     </div><!--Div Row-->
 </div>
 </div>
-
-    
-<link rel="stylesheet" href="/css/sliderNews.css">
-<!--Slider de Noticias-->
-<div class="row">
-    <div class="col-md-12">
-    <div class="row">
-    <div id="newsSlider" class="slider">
-        <?php $slideActive = 0; ?>
-        <?php foreach ($this->news as $new): ?>
-            <?php if ($slideActive == 0){
-                $classSlide = 'slideActive';
-                $slideActive = 1;
-            } else {
-                $classSlide = '';
-            }?>
-        <div class="slide <?php echo $classSlide ?>">
-            <div class="col-md-4 title">
-                <br>
-                <?php if ($new['type'] == 'NE') {
-                    $icon = 'glyphicon glyphicon-info-sign';
-                }else if ($new['type'] == 'SY') {
-                    $icon = 'glyphicon glyphicon-envelope';
-                }?>
-                <h3 class="text-center"><span class="<?php echo $icon ?>"></span> <?php echo $new['title'] ?></h3>
-            </div>
-            <div class="col-md-8 content">
-                    <br>
-                    <p><?php echo substr($new['description'], 0, 150) ?>.........
-                        <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link showData">Seguir leyendo</a>
-                        <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link hideData hidden">Leer menos</a>
-                    </p>
-            </div>
-        </div>
-        <?php endforeach ?>
-    </div>
-    </div>
-    
-    <div class="row">
-    <?php foreach ($this->news as $newData): ?>
-    <div id="data<?php echo $newData['newid'] ?>" class="data">
-        <div class="row">
-            <div class="col-md-6">
-                <figure>
-                    <br>
-                    <img src="/imgsNews/<?php echo $newData['img'] ?>" alt="Imagen" class="img img-responsive">
-                </figure>
-            </div>
-            <div class="col-md-6 allDescription">
-                <br><br>
-                <p><?php echo $newData['description'] ?></p>
-            </div>
-        </div>
-    </div>
-    <?php endforeach ?>
-    </div>
-    </div>
-</div>
-<br>
 
 <!-- Avance Academico Solo Para Directores-->
 <input id="rid" type="hidden" value="<?php echo $this->rid ?>">

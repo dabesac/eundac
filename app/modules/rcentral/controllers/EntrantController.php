@@ -440,6 +440,17 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 	        $server = new Eundac_Connect_Api('pendig_cachimbos', $request);
 	        $data = $server->connectAuth();
 	        $this->view->data = $data;
+
+	        //Total de Creditos
+	        $totalCredits = 0;
+	        $courseid = 0;
+	        foreach ($data as $course) {
+	        	if ($course['courseid'] != $courseid) {
+	        		$totalCredits = $totalCredits + $course['credits'];
+	        		$courseid = $course['courseid'];
+	        	}
+	        }
+	        $this->view->totalCredits = $totalCredits;
         }
         $c = 0;
         foreach ($data as $course) {
@@ -480,7 +491,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$pid = $this->sesion->pid;
 
 		$data = $this->getRequest()->getPost();
-		
+
 		if ($data['whySend'] == 'M') {
 			$state = 'M';
 		}else if ($data['whySend'] == 'O'){

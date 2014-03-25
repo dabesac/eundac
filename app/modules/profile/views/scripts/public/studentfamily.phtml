@@ -189,7 +189,7 @@
 			success : function(data){
 				if (data == 'true') {
 					$('#loadingDiv' + famid).html('');
-					$('#familiar' + famid).addClass('hidden');
+					$('#datastudent').load('/profile/public/studentfamily');
 				};
 			}
 		});
