@@ -202,7 +202,18 @@
                                             <?php }else{?>
                                                 <span class='glyphicon glyphicon-info-sign text-danger'></span>
                                             <?php }?></h5>
-                                        
+                                        <h5 class='text-persentage-couser' >Duplicar Sílabo al Curso de: 
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-block btn-primary dropdown-toggle btn-sm" data-toggle="dropdown">
+                                                Seleccione<span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                 <?php foreach ($this->data_courses as $key => $value) {
+                                                    if($value['courseid']==$courses['courseid'] && $value['escid']!=$courses['escid']){?>
+                                                    <li><a class='duplicate-syllabus' perid='<?php echo $this->perid?>' escid='<?php echo $value['escid']?>' courseid='<?php echo $value['courseid']?>' curid='<?php echo $value['curid']?>' turno='<?php echo $value['turno']?>' escido='<?php echo $courses['escid']?>' turnoo='<?php echo $courses['turno']?>'value='<?php echo $value['courseid']?>'><?php echo $value['name_course'];?> | Turno  <?php echo $value['turno']?> | <?php echo $value['specialyti']?></a></li>
+                                                    <?php }}?>
+                                            </ul>
+                                        </div>
                                     </div>
 
                                 <?php }
@@ -229,12 +240,27 @@
 <div id='sil'></div>
 
 
-
 <div class="modal fade" id="modal-persentage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
 </div><!-- /.modal -->
-
+<script type="text/javascript" src='/js/jquery-1.11.0.js'></script>
 <script>
+    $(".duplicate-syllabus").click(function(){
+        if(confirm("Esta seguro de duplicar \nel silabo")){
+            $parmas = {};
+            $parmas ['perid'] =$(this).attr('perid');
+            $parmas ['escid'] =$(this).attr('escid');
+            $parmas ['courseid'] =$(this).attr('courseid');
+            $parmas ['curid'] =$(this).attr('curid');
+            $parmas ['turno'] =$(this).attr('turno');
+            $parmas ['escido'] =$(this).attr('escido');
+            $parmas ['turnoo'] =$(this).attr('turnoo');
+            $.get("/docente/notas/courses",$parmas,function($data){
+                console.log($data);
+            });
+        };
+    });
+
     $('#otherPicture').fadeOut('slow');
 
     $(".load-persentage").click(function(){
@@ -247,9 +273,7 @@
         return false;
     });
 
-
-
-    $(function () {
-        $('[data-toggle=tooltip]').tooltip({ placement: 'bottom' }) ;
-    });
+    // $(function () {
+    //     $('[data-toggle=tooltip]').tooltip({ placement: 'bottom' }) ;
+    // });
 </script>

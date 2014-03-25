@@ -99,14 +99,10 @@ class Api_Model_DbTable_Syllabus extends Zend_Db_Table_Abstract
     		//if ($perid=='' || $escid=='' || $courseid==''|| $curid=='' || $turno=='' || $escidorigen=='' || $turnoorigen=='' ) return false;
 
             $sql = $this->_db->query("select * from duplicar_silabo5('$perid','$escid','$courseid','$curid','$turno','$escidorigen','$turnoorigen')");
-            						  
-            
 			$row=$sql->fetchAll();
 			if ($row)
 			return $row;
 	       	return false;   
-
-
                      
         }  catch (Exception $ex){
             print "Ehh".$ex->getMessage();

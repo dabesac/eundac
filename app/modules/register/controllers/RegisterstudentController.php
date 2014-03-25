@@ -233,8 +233,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             foreach ($courses as $course) {
                 //Obteniendo Cursos
                 $attrib = array('courseid', 'curid', 'name', 'credits');
-                $where = array( 
-                                'eid'     =>$eid, 
+                $where = array( 'eid'     =>$eid, 
                                 'oid'     =>$oid, 
                                 'escid'   =>$escid, 
                                 'subid'   =>$subid,
