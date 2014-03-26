@@ -144,21 +144,21 @@
         else:
             $classPrint = '';
         endif ?>
-        <?php $urlPrintRegister =  '/register/registerstudent/printcopiaficha'. 
+        <?php $urlPrintRegister =  '/register/registerstudent/print'. 
                                     '/uid/'.    base64_encode($this->dataStudent['uid']) .
                                     '/pid/'.    base64_encode($this->dataStudent['pid']) .
                                     '/escid/'.  base64_encode($this->dataStudent['escid']) .
                                     '/subid/'.  base64_encode($this->dataStudent['subid']) ?>
         <a id="printRegister" class="btn btn-default <?php echo $classPrint ?> form-control" target="_blank" href="<?php echo $urlPrintRegister ?>"><span class="glyphicon glyphicon-print"></span> Imprimir Matricula</a>
         <br></br>
-       <!--  <button type='button' id="movilidad_estudiantil" class="btn btn-default <?php echo $classPrint ?> form-control" target="_blank" 
+        <button type='button' id="movilidad_estudiantil" class="btn btn-default <?php echo $classPrint ?> form-control" target="_blank" 
             href="<?php echo $urlPrintRegister ?>" 
-            data-uid="<?php echo base64_decode($this->dataStudent['uid'])?>"
-            data-pid="<?php echo base64_decode($this->dataStudent['pid'])?>"
-            data-escid="<?php echo base64_decode($this->dataStudent['escid'])?>"
-            data-subid="<?php echo base64_decode($this->dataStudent['subid'])?>"
-            data-perid="<?php echo base64_decode($this->dataStudent['perid'])?>"
-            ><span class="glyphicon glyphicon-inbox"></span> Movilidad Estudiantil </button> -->
+            data-uid="<?php echo base64_encode($this->dataStudent['uid'])?>"
+            data-pid="<?php echo base64_encode($this->dataStudent['pid'])?>"
+            data-escid="<?php echo base64_encode($this->dataStudent['escid'])?>"
+            data-subid="<?php echo base64_encode($this->dataStudent['subid'])?>"
+            data-perid="<?php echo base64_encode($this->dataStudent['perid'])?>"
+            ><span class="glyphicon glyphicon-inbox"></span> Movilidad Estudiantil </button>
     </div>
 </div>
 <hr>
@@ -314,7 +314,7 @@
                     <a id="showEditAlert<?php echo $course['courseid'] ?>" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
                 </td>
                 <td class="text-center <?php echo $classButtons ?> butonsCourses">
-                    <a id="showAlert<?php echo $course['courseid'] ?>" href="##" title="Eliminar Curso" class="text-danger"><span class="glyphicon glyphicon-remove"></span></a>
+                    <a id="showAlert<?php //echo $course['courseid'] ?>" href="##" title="Eliminar Curso" class="text-danger"><span class="glyphicon glyphicon-remove"></span></a>
                 </td>
                 <td class="text-center text-success tdValidate hidden">Matriculado</td>
                 <td class="text-center text-warning tdObserved hidden">Observado</td>
@@ -645,8 +645,15 @@
     
     //movilidad estudiantil
     $('#movilidad_estudiantil').click(function(){
-        console.log($(this).data());
+        $parmas = $(this).data();
+        $.get(
+            '/register/registerstudent/mobility',
+            $parmas,
+            function($data){
+                console.log($data);
+        });
     });
+
 </script>
 
 <?php else: ?>

@@ -209,7 +209,7 @@
                                             </button>
                                             <ul class="dropdown-menu" role="menu">
                                                  <?php foreach ($this->data_courses as $key => $value) {
-                                                    if($value['courseid']==$courses['courseid'] && $value['escid']!=$courses['escid']){?>
+                                                    if($value['courseid']==$courses['courseid']){?>
                                                     <li><a class='duplicate-syllabus' perid='<?php echo $this->perid?>' escid='<?php echo $value['escid']?>' courseid='<?php echo $value['courseid']?>' curid='<?php echo $value['curid']?>' turno='<?php echo $value['turno']?>' escido='<?php echo $courses['escid']?>' turnoo='<?php echo $courses['turno']?>'value='<?php echo $value['courseid']?>'><?php echo $value['name_course'];?> | Turno  <?php echo $value['turno']?> | <?php echo $value['specialyti']?></a></li>
                                                     <?php }}?>
                                             </ul>
