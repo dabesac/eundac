@@ -14,7 +14,6 @@
             }?>
         <div class="slide <?php echo $classSlide ?>">
             <div class="col-md-6 title">
-                <br>
                 <?php if ($new['type'] == 'NE') {
                     $icon = 'glyphicon glyphicon-info-sign';
                 }else if ($new['type'] == 'SY') {
@@ -23,7 +22,6 @@
                 <h3 class="text-center"><span class="<?php echo $icon ?>"></span> <?php echo $new['title'] ?></h3>
             </div>
             <div class="col-md-6 content">
-                    <br>
                     <p><?php echo substr($new['description'], 0, 125) ?>.........
                         <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link showData">Seguir leyendo</a>
                         <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link hideData hidden">Leer menos</a>
