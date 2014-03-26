@@ -161,6 +161,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
                         $newsFilter[$c]['description'] = $new['description'];
                         $newsFilter[$c]['img']         = $new['img'];
                         $newsFilter[$c]['type']        = $new['type'];
+                        $newsFilter[$c]['created']     = $new['created'];
                         $c++;
                     }
                 }else{
@@ -169,6 +170,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
                     $newsFilter[$c]['description'] = $new['description'];
                     $newsFilter[$c]['img']         = $new['img'];
                     $newsFilter[$c]['type']        = $new['type'];
+                    $newsFilter[$c]['created']     = $new['created'];
                     $c++;
                 }
                 if ($c == 4) {

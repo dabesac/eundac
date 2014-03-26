@@ -106,11 +106,9 @@ class Register_ChangeratesController extends Zend_Controller_Action{
         $date['ratid'] = base64_decode($this->_getParam('ratid'));
         $date['date_payment'] = base64_decode($this->_getParam('date_payment'));
         $date['document_auth'] = base64_decode($this->_getParam('document_auth'));
-        $fm->populate($date);
-        $this->view->fm=$fm;
-        if ($this->getRequest()->isPost()) {
+
+            if ($this->getRequest()->isPost()) {
                 $frmdata=$this->getRequest()->getPost();
-                    // print_r($frmdata);
                 if ($fm->isValid($frmdata)) {
                     unset($frmdata['send']);
                     trim($frmdata['ratid']);
@@ -132,25 +130,32 @@ class Register_ChangeratesController extends Zend_Controller_Action{
                     unset($frmdata['perid']);
                     unset($frmdata['guardar']);
                     $frmdata['modified']=$this->sesion->uid;
-                    $frmdata['updated']=date('Y-m-d h:m:s');
+                    $frmdata['updated']=date('Y-m-d h:i:s');
                     $reg_= new Api_Model_DbTable_Payments();
                     if (!$frmdata['date_payment']) {
                         $frmdata['date_payment'] = null;
                     }
                     // print_r($frmdata);
                     // print_r($pks); exit();
-                    $reg_->_update($frmdata,$pks);
-                    $this->_redirect("/register/changerates/");
+                    if ($reg_->_update($frmdata,$pks)) {
+                        $this->view->uidc=$pks['uid'];
+                        $this->view->clave=1;
+                    }
+                    // $this->_redirect("/register/changerates/");
                 }
-                else
-                {
+                else{
+                    $fm->populate($frmdata);
                     echo "Ingrese nuevamente por favor";
                 }
             }
+            else{
+                $fm->populate($date);
+            }
+        $this->view->fm=$fm;
         } catch (Exception $e) {
             
         }
-	}
+    }
 
     public function asignationrateAction(){
         try {

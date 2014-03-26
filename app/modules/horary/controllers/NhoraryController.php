@@ -233,7 +233,7 @@ class Horary_NhoraryController extends Zend_Controller_Action {
             $horateach=$hora->_getHoraryXteacherXday($eid,$oid,$perid,$escid,$subid,$uid,$hora_ini,$hora_fin,$data['day']);
             $intervalHouri=$hora->_intervalHoraryi($eid,$oid,$perid,$uid,$data['day'],$hora_ini);
             $intervalHourf=$hora->_intervalHoraryf($eid,$oid,$perid,$uid,$data['day'],$hora_fin);
-
+            
             if ($horateach or $horaexis or $horasem or $intervalHouri or $intervalHourf){ ?>
                 <script type="text/javascript">
                 alert("Ya existe un horario -En el mismo semestre -Del mismo curso ó El docente tiene otro horario en otra escuela , no debe duplicar el horario.");

@@ -6,12 +6,11 @@ class Register_Form_Changerate extends Zend_Form{
                 
         $sesion  = Zend_Auth::getInstance();
         $login = $sesion->getStorage()->read();
-        // print_r($login->period->perid);
     
         $eid = $login->eid;
         $oid = $login->oid;
-        $peri = '13A';
-        //$peri = $login->period->perid;
+        // $peri = '13A';
+        $peri = $login->period->perid;
 
         $perid=new Zend_Form_Element_Text('perid');
         $perid->setAttrib("readonly","true");
@@ -33,7 +32,7 @@ class Register_Form_Changerate extends Zend_Form{
         $ratid->setAttrib('class','form-control');
         $where['eid']=$eid;
         $where['oid']=$oid;
-        $where['perid']='13A';
+        $where['perid']=$peri;
         $ratid->addMultiOption("",'- Seleccione -');
         $bdrate = new Api_Model_DbTable_Rates();
         $lrate= $bdrate->_getFilter($where);
@@ -46,7 +45,7 @@ class Register_Form_Changerate extends Zend_Form{
      
         $doc= new Zend_Form_Element_Text('document_auth');
         $doc->setAttrib('class','form-control');
-        // $doc->setRequired(true)->addErrorMessage('Este campo es requerido y solo acepta numeros');
+        $doc->setRequired(true)->addErrorMessage('Este campo es requerido');
 
 
               

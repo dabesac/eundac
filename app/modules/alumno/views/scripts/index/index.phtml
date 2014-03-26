@@ -1,6 +1,7 @@
+<link rel="stylesheet" href="/css/sliderNews.css" />
+<link rel="stylesheet" href="/css/dashboard.css" />
 
 <!--Slider News-->
-<link rel="stylesheet" href="/css/sliderNews.css" />
 <div class="row">
     <div class="col-md-12">
     <div class="row">
@@ -14,8 +15,8 @@
                 $classSlide = '';
             }?>
         <div class="slide <?php echo $classSlide ?>">
-            <div class="col-md-4 title">
-                <br>
+            <div class="col-md-6 title">
+                
                 <?php if ($new['type'] == 'NE') {
                     $icon = 'glyphicon glyphicon-info-sign';
                 }else if ($new['type'] == 'SY') {
@@ -23,9 +24,8 @@
                 }?>
                 <h3 class="text-center"><span class="<?php echo $icon ?>"></span> <?php echo $new['title'] ?></h3>
             </div>
-            <div class="col-md-8 content">
-                    <br>
-                    <p><?php echo substr($new['description'], 0, 150) ?>.........
+            <div class="col-md-6 content">
+                    <p><?php echo substr($new['description'], 0, 125) ?>.........
                         <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link showData">Seguir leyendo</a>
                         <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link hideData hidden">Leer menos</a>
                     </p>
@@ -39,15 +39,24 @@
     <?php foreach ($this->news as $newData): ?>
     <div id="data<?php echo $newData['newid'] ?>" class="data">
         <div class="row">
-            <div class="col-md-6">
-                <figure>
-                	<br>
-                    <img src="/imgsNews/<?php echo $newData['img'] ?>" alt="Imagen" class="img img-responsive">
-                </figure>
-            </div>
+            <div id="newImg<?php echo $newData['newid'] ?>" class="newImg col-md-6"></div>
+            <script>
+                var newId = "<?php echo $newData['newid'] ?>";
+                var newImg = "<?php echo $newData['img'] ?>";
+                $('#newImg' + newId).css("background-image", "url('/imgsNews/" + newImg + "')");
+            </script>
             <div class="col-md-6 allDescription">
                 <br><br>
+                <?php if ($newData['type'] == 'NE') {
+                    $iconNew = 'info-sign';
+                }else {
+                    $iconNew = 'envelope';
+                } ?>
+                <span class="glyphicon glyphicon-<?php echo $iconNew ?>"></span> Información <date class="text-muted"><?php echo date('d-m-Y', strtotime($newData['created'])) ?></date>
+                <br><br><br>
                 <p><?php echo $newData['description'] ?></p>
+                <br><br>
+                <span class="pull-right text-muted"><span class="glyphicon glyphicon-leaf"></span> Oficina de Informática</span>
             </div>
         </div>
     </div>
@@ -57,66 +66,57 @@
 </div>
 
 
-<div id="grafics" class="container-fluid" style="height: 600px;">
-	<hr>
-	<br>
-	<div class="row">
-		<div class="col-md-11">
-			<blockquote>
-				<h4 class="text-info">Gráficas <span class="text-muted">Estadísticas</span> Periodo <?php echo $this->perid ?></h4>
-			</blockquote>
-		</div>
-		<div class="col-md-1">
-			<blockquote>
-				<h4><a title="Regresar" class="text-info backTopBtn" href="##"><span class="glyphicon glyphicon-eject"></span></a></h4>
-			</blockquote>
-		</div>
+<br>
+<div class="titlesMain">
+<div class="row container">
+	<div class="col-md-11">
+		<h4 class="text-info">Gráficas Estadísticas <span class="text-muted">Periodo <?php echo $this->perid ?></span></h4>
 	</div>
-	<hr>
-	<div class="row">
-		<div class="col-md-12">
-			<script type="text/javascript">
-		    var $data_courses = <?php echo $this->datos?>;
-		    var $courses = <?php echo $this->courses?>;
-		    var $dat_assist = <?php echo $this->dat_assist?>;
-			</script>
-			<script type="text/javascript" src="/js/graphic/student.js"></script>
-			<script src="/external_library/highcharts/js/highcharts.js"></script>
-			<script src="/external_library/highcharts/modules/exporting.js"></script>
-			<div class="row">
-			    <div class="col-md-12">
-			        <div class="row">
-			            <div class="col-md-6 content-graphic">
-			                <div id="container_performance" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
-			            </div>
-			            <div class="col-md-6 content-graphic">
-			                <div id="container_assistence" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
-			            </div>
-			        </div>
-			    </div>
-			</div>
+	<div class="iconMain col-md-1">
+		<h4><span class="glyphicon glyphicon-stats pull-right"></span></h4>
+	</div>
+</div>
+</div>
+<div class="graphics">
+<br>
+<div class="row container">
+	<div class="col-md-12">
+		<script type="text/javascript">
+	    var $data_courses = <?php echo $this->datos?>;
+	    var $courses = <?php echo $this->courses?>;
+	    var $dat_assist = <?php echo $this->dat_assist?>;
+		</script>
+		<script type="text/javascript" src="/js/graphic/student.js"></script>
+		<script src="/external_library/highcharts/js/highcharts.js"></script>
+		<script src="/external_library/highcharts/modules/exporting.js"></script>
+		<div class="row">
+		    <div class="col-md-12">
+		        <div class="row">
+		            <div class="col-md-6 content-graphic">
+		                <div id="container_performance" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
+		            </div>
+		            <div class="col-md-6 content-graphic">
+		                <div id="container_assistence" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
+		            </div>
+		        </div>
+		    </div>
 		</div>
 	</div>
 </div>
-
-<div id="jobs" class="container-fluid" style="height: 600px;">
-	<hr>
-	<br>
-	<div class="row">
-		<div class="col-md-11">
-			<blockquote>
-				<h3 class="text-info">Ofertas <span class="text-muted">Laborales</span></h3>
-			</blockquote>
-		</div>
-		<div class="col-md-1">
-			<blockquote>
-				<h3><a title="Regresar" class="text-info backTopBtn" href="##"><span class="glyphicon glyphicon-eject"></span></a></h3>
-			</blockquote>
-		</div>
-	</div>
-	<hr>
-
+<br>
 </div>
+
+<!--<br>
+<div class="titlesMain">
+<div class="row container">
+    <div class="col-md-11">
+        <h4 class="text-info">Ofertas <span class="text-muted">Laborales</span></h4>
+    </div>
+    <div class="iconMain col-md-1">
+        <h4><span class="glyphicon glyphicon-stats pull-right"></span></h4>
+    </div>
+</div>
+</div>-->
 
 <script>
 	$(".solo").click(function(){
