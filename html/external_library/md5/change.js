@@ -1,6 +1,6 @@
     	
 var  msg = $('<div class="progress" style="height:10px;"></div>');
-var msg_t = $('<span>La Contraseña no Considen</span>');
+var msg_1 = $('<span>La Contraseña no Considen</span>');
 
 var  empty = CryptoJS.MD5('');
 var change = {
@@ -40,13 +40,13 @@ var change = {
     	msg.html(message)
     },
     verify_equal: function(){
-        $(this).after(msg_t);
+        $(this).after(msg_1);
     	password_change = $("#password_change").val();
     	equal = $(this).val();
         if (password_change == equal) {
-            msg_t=('La Contraseña Considen')
+            msg_t=('Las Contraseña Coinciden')
         }else{
-            msg_t('La Contraseña no Considen')
+            msg_t=('Las Contraseña no coinciden')
         }
         msg_1.html(msg_t)
     	// if (typeof(equal) != typeof(empty) && typeof(password_change) != typeof(empty)) {
