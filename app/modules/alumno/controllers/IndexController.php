@@ -136,9 +136,11 @@ class Alumno_IndexController extends Zend_Controller_Action {
             //print_r($data_courses);exit();
             $perid = $this->sesion->period->perid;
             $this->view->perid = $perid;
+
             //news Alumno
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
+            $rid = $this->sesion->rid;
 
             $newDb = new Api_Model_DbTable_News();
             $newsRolDb = new Api_Model_DbTable_NewsRol();
@@ -153,9 +155,8 @@ class Alumno_IndexController extends Zend_Controller_Action {
 
                 $attrib = array('newid', 'rid');
                 $newsRol = $newsRolDb->_getFilter($where, $attrib);
-                $existe = 'Si';
                 if ($newsRol) {
-                    if ($newsRol[0]['rid'] == $rol) {
+                    if ($newsRol[0]['rid'] == $rid) {
                         $newsFilter[$c]['newid']       = $new['newid'];
                         $newsFilter[$c]['title']       = $new['title'];
                         $newsFilter[$c]['description'] = $new['description'];
