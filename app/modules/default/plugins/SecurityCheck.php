@@ -7,7 +7,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
      *
      */
     private $_acl = null;
-    const MODULE_NO_AUTH='default';A
+    const MODULE_NO_AUTH='default';
     private $_controller;
     private $_module;
     private $_action;
