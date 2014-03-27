@@ -989,5 +989,172 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         } 
     }
 
+    public function mobilityAction(){
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $uid = base64_decode($this->_getParam('uid'));
+        $pid = base64_decode($this->_getParam('pid'));
+        $escid = base64_decode($this->_getParam('escid'));
+        $subid = base64_decode($this->_getParam('subid'));
+        $perid = base64_decode($this->_getParam('perid'));
+        $regid = $uid.$perid;
+        $where = array(
+            'eid' => $eid, 
+            'oid' => $oid, 
+            'uid' => $uid, 
+            'pid' => $pid, 
+            'escid' => $escid, 
+            'subid' => $subid, 
+            'perid' => $perid, 
+            'regid' => $regid, 
+            );
+        $tb_registration_course = new Api_Model_DbTable_Registrationxcourse();
+        $tb_assitance_course = new Api_Model_DbTable_StudentAssistance();
+        $tb_periods_course = new Api_Model_DbTable_PeriodsCourses();
+        $tb_user_infouser = new Api_Model_DbTable_UserInfoTeacher();
+        $tb_course_teacher = new Api_Model_DbTable_Coursexteacher();
+        $where_use = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'escid'=>$escid,
+                'is_director'=>'S'
+                );
+        $data_director =$tb_user_infouser->_getFilter($where_use); 
+        $data_regiter_course = $tb_registration_course->_getFilter($where);
+        if($data_regiter_course){
+            foreach ($data_regiter_course as $key => $value) {
+                $where_1 = array(
+                        'eid'=>$value['eid'],
+                        'oid'=>$value['oid'],
+                        'perid'=>$value['perid'],
+                        'courseid'=>$value['courseid'],
+                        'curid'=>$value['curid'],
+                        'escid'=>$value['escid'],
+                        'subid'=>$value['subid'],
+                        'turno'=>'M',
+                    );
+                $data_t = $where_1;
+                $data_course = $tb_periods_course->_getOne($where_1);
+                if (!$data_course) {
+                    $where_1['turno'] =$value['turno']; 
+                    $data_course = $tb_periods_course->_getOne($where_1);
+                    $data_course['turno']='M';
+                    $data_course['register']=$this->sesion->uid;
+                    $data_course['modified']=$this->sesion->uid;
+                    $data_course['state']='B';
+                    unset($data_course['closure_date']);
 
+                    if($tb_periods_course->_save($data_course)){
+                        $where_1['turno']=$value['turno'];
+                        $where_1['is_main']='S';
+                        $data_course_teacher = $tb_course_teacher->_getFilter($where_1);
+                        $data_course_teacher[0]['is_com']='S';
+                        $data_course_teacher[0]['hours_total']= 0;
+                        $data_course_teacher[0]['turno']= 'M';
+                        $data_course_teacher[0]['pid']=$data_director[0]['pid'];
+                        $data_course_teacher[0]['uid']=$data_director[0]['uid'];
+                        if ($tb_course_teacher->_save($data_course_teacher[0])) {
+                            $where_1['turno']=$value['turno'];
+                            $where_1['coursoid']=$value['courseid'];
+                            $where_1['pid']=$value['pid'];
+                            $where_1['uid']=$value['uid'];
+                            if ($tb_assitance_course->_delete($where_1)) {
+                                $where_1['regid']=$value['regid'];
+                                if ($tb_registration_course->_delete($where_1)) {
+                                    unset($where_1['coursoid']);
+                                    $data_t['turno']='M';
+                                    $data_t['pid']=$value['pid'];
+                                    $data_t['uid']=$value['uid'];
+                                    $data_t['regid']=$value['regid'];
+                                    $data_t['register']=$this->sesion->uid;
+                                    $data_t['approved']=$this->sesion->uid;
+                                    $data_t['modified']=$this->sesion->uid;
+                                    $data_t['updated']=date('Y-m-d H:m:s');
+                                    $data_t['state']='M';
+                                    if ($tb_registration_course->_save($data_t)) {
+                                        $json = array(
+                                            'status' => true, 
+                                            );
+                                    }else{
+                                        $json = array(
+                                            'status' => false,
+                                            'error'=>'Error al guardar curso nuevo'
+                                        );
+                                    }
+                                }else{
+                                    $json = array(
+                                        'status' => false,
+                                        'error'=>'Error al eliminar curso'
+                                    );
+                                }
+                            }else{
+                                $json = array(
+                                    'status' => false,
+                                    'error'=>'Error al eliminar asistencia'
+                                );
+                            }
+                        }
+                        else{
+                            $json = array(
+                            'status' => false,
+                            'error'=>'Error al guardar docente'
+                            );
+                        }
+                    }else{
+                        $json = array(
+                            'status' => false,
+                            'error'=>'Error al guardar curso'
+                        );
+                    }
+                }else{
+                    $where_1['turno']=$value['turno'];
+                    $where_1['coursoid']=$value['courseid'];
+                    $where_1['pid']=$value['pid'];
+                    $where_1['uid']=$value['uid'];
+                    if ($tb_assitance_course->_delete($where_1)) {
+                        $where_1['regid']=$value['regid'];
+                        if ($tb_registration_course->_delete($where_1)) {
+                            unset($where_1['coursoid']);
+                            $where_1['turno']='M';
+                            $where_1['register']=$this->sesion->uid;
+                            $where_1['approved']=$this->sesion->uid;
+                            $where_1['modified']=$this->sesion->uid;
+                            $where_1['updated']=date('Y-m-d H:m:s');
+                            $where_1['state']='M';
+                            if ($tb_registration_course->_save($where_1)) {
+                                $json = array(
+                                    'status' => true, 
+                                    );
+                            }
+                        }
+                    }else{
+                         unset($where_1['coursoid']);
+                        $where_1['turno']='M';
+                        $where_1['register']=$this->sesion->uid;
+                        $where_1['approved']=$this->sesion->uid;
+                        $where_1['modified']=$this->sesion->uid;
+                        $where_1['updated']=date('Y-m-d H:m:s');
+                        $where_1['regid']=$value['regid'];
+                        $where_1['state']='M';
+                        if ($tb_registration_course->_save($where_1)) {
+                            $json = array(
+                                'status' => true, 
+                                );
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            $json = array(
+                'status' => false,
+                'error'=>'sin pre matricula', 
+            );
+        }
+        exit();
+        $this->_helper->layout()->disableLayout();
+        $this->_response->setHeader('Content-Type', 'application/json');                   
+        $this->view->json = Zend_Json::encode($json);
+
+    }
 }

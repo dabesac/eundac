@@ -13,8 +13,7 @@
                 $classSlide = '';
             }?>
         <div class="slide <?php echo $classSlide ?>">
-            <div class="col-md-4 title">
-                <br>
+            <div class="col-md-6 title">
                 <?php if ($new['type'] == 'NE') {
                     $icon = 'glyphicon glyphicon-info-sign';
                 }else if ($new['type'] == 'SY') {
@@ -22,9 +21,8 @@
                 }?>
                 <h3 class="text-center"><span class="<?php echo $icon ?>"></span> <?php echo $new['title'] ?></h3>
             </div>
-            <div class="col-md-8 content">
-                    <br>
-                    <p><?php echo substr($new['description'], 0, 150) ?>.........
+            <div class="col-md-6 content">
+                    <p><?php echo substr($new['description'], 0, 125) ?>.........
                         <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link showData">Seguir leyendo</a>
                         <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link hideData hidden">Leer menos</a>
                     </p>
@@ -35,18 +33,28 @@
     </div>
     
     <div class="row">
+
     <?php foreach ($this->news as $newData): ?>
     <div id="data<?php echo $newData['newid'] ?>" class="data">
         <div class="row">
-            <div class="col-md-6">
-                <figure>
-                    <br>
-                    <img src="/imgsNews/<?php echo $newData['img'] ?>" alt="Imagen" class="img img-responsive">
-                </figure>
-            </div>
+            <div id="newImg<?php echo $newData['newid'] ?>" class="newImg col-md-6"></div>
+            <script>
+                var newId = "<?php echo $newData['newid'] ?>";
+                var newImg = "<?php echo $newData['img'] ?>";
+                $('#newImg' + newId).css("background-image", "url('/imgsNews/" + newImg + "')");
+            </script>
             <div class="col-md-6 allDescription">
                 <br><br>
+                <?php if ($newData['type'] == 'NE') {
+                    $iconNew = 'info-sign';
+                }else {
+                    $iconNew = 'envelope';
+                } ?>
+                <span class="glyphicon glyphicon-<?php echo $iconNew ?>"></span> Información <date class="text-muted"><?php echo date('d-m-Y', strtotime($newData['created'])) ?></date>
+                <br><br><br>
                 <p><?php echo $newData['description'] ?></p>
+                <br><br>
+                <span class="pull-right text-muted"><span class="glyphicon glyphicon-leaf"></span> Oficina de Informática</span>
             </div>
         </div>
     </div>
@@ -56,18 +64,18 @@
 </div>
 
 <br><br> 
-<!--Panel deAvance de Cursos-->
-<div class="container">
-<div class="panel panel-default">
+<!--Panel de Avance de Cursos-->
+<div class="avanceCursos container">
     <div class="row">
         <div class="container">
-        <div class="col-md-12" style="background-color: #f5f5f5;">
-            <br>
-            <h4 class="text-muted"><span class="text-info">Avance de Cursos</span> Periodo <?php echo $this->perid ?><span class="pull-right glyphicon glyphicon-book"></span></h4>
+        <div class="titleAvanceCursos col-md-12">
+            <div class="title text-muted"><h4><span class="text-info">Avance de Cursos</span> Periodo <?php echo $this->perid ?></h4></div>
+            <div class="iconAvance"><h4><span class="glyphicon glyphicon-book"></span></h4></div>
             <br>
         </div>
         </div>
     </div>
+    <div class="allCursos">
     <br>
     <div class="row">
     <div class="container">
@@ -76,9 +84,8 @@
     <?php $c = 0; ?>
     <?php foreach ($this->courses as $course): ?>
     <div class="col-md-6">
-        <div class="panel panel-default" style="background-color: #f5f5f5;">
+        <div class="curso">
             <div class="container">
-
                 <div class="col-md-6">
                     <h5 class="text-info"><?php echo $this->coursesName[$c][0]['name'] ?> <small><?php echo $course['courseid'] ?></small></h5>
                 </div>
@@ -180,40 +187,46 @@
     <?php endif ?>
     </div><!--Div Container-->
     </div><!--Div Row-->
+    <br>
+    </div>
 </div>
-</div>
-
+<br><br>
 <!-- Avance Academico Solo Para Directores-->
 <input id="rid" type="hidden" value="<?php echo $this->rid ?>">
 <div id="avanceDirectores" class="container">
-<div class="panel panel-default">
-    <div class="panel panel-header">
-        <div class="row">
-        <div class="container">
-            <div class="col-md-11">
-                <h4 class="text-muted">Avance <span class="text-info">Académico</span></h4>
-            </div>
-            <div class="col-md-1">
-                <h4 class="text-muted text-center"><span class="glyphicon glyphicon-user"></span></h4>
-            </div>
+    <div class="row">
+    <div class="container">
+        <div class="titleAvanceCursos col-md-12">
+            <div class="title"><h4 class="text-muted"><span class="text-info">Avance Académico</span> Periodo <?php echo $this->perid ?></h4></div>
+            <div class="iconAvance"><h4><span class="glyphicon glyphicon-user"></span></h4></div>
         </div>
-        </div>
-    </div>    
-    <div id="academicProgress" class="panel panel-body">
+    </div>
+    </div>
+        
+    
+    <div class="allCursos">
+        <br>
+        <?php echo $var ?>
+        <?php if ($this->totalTeachers != 0): ?>
         <div class="row">
+            <div class="container">
             <div class="col-md-6">
-                <div id="showEmptySyllabus" class="panel panel-default progressIcons" title="<?php echo $this->emptySyllabus ?> Docentes aún Faltan Completar sus Sílabos">
+                <div class="curso">
+                <div class="container">
+                <div id="showEmptySyllabus" class="progressIcons" title="<?php echo $this->emptySyllabus ?> Docentes aún Faltan Completar sus Sílabos">
                     <div class="container">
-                        <?php if ($this->totalEmptySyllabus == $totalTeachers) {
+                        <?php if ($this->totalEmptySyllabus == $this->totalTeachers) {
                             $classSilabo = 'text-success';
                         }else {
                             $classSilabo = 'text-danger';
                         }?> 
-                       <h5>Sílabos <strong class="pull-right <?php echo $classSilabo ?> " ><?php echo $this->totalEmptySyllabus.'/'.$this->totalTeachers ?></strong></h5>
+                       <h5 class="text-info">Sílabo <strong class="pull-right <?php echo $classSilabo ?> " ><?php echo $this->totalEmptySyllabus.'/'.$this->totalTeachers ?></strong></h5>
                     </div>
                 </div>
-                <div id="listEmptySilabo">
-                    <div class="panel panel-default">
+                </div>
+                </div>
+                <div id="listEmptySyllabus" class="dataSliderAvance">
+                <div class="container">
                     <p class="text-danger text-center">Fálta Sílabo</p>
                     <div class="row">
                     <div class="container">
@@ -236,22 +249,26 @@
                     <?php endforeach ?>
                     </div>
                     </div>
-                    </div>
+                </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div id="showEmptyReport" class="panel panel-default progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar el Reporte Académico">
+                <div class="curso">
+                <div class="container">
+                <div id="showEmptyReport" class="progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar el Reporte Académico">
                     <div class="container">
-                        <?php if ($this->totalEmptyReport == $totalTeachers){
+                        <?php if ($this->totalEmptyReport == $this->totalTeachers){
                             $classReport = 'text-success';
                         }else{
                             $classReport = 'text-danger';
                         }?>
-                       <h5>Reporte Academico <strong class="pull-right <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong></h5>
+                       <h5 class="text-info">Reporte Academico <strong class="pull-right <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong></h5>
                     </div>
                 </div>
-                <div id="listEmptyReport">
-                    <div class="panel panel-default">
+                </div>
+                </div>
+                <div id="listEmptyReport" class="dataSliderAvance">
+                    <div class="container">
                     <p class="text-center text-danger">Falta Reporte Académico</p>
                     <div class="container">
                         <?php foreach ($this->teachersEmptyReport as $teacher): ?>
@@ -261,12 +278,15 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
+        <?php else: ?>
+            <h4 class="text-muted text-center">No hay avance que mostrar para <span class="text-info">este periodo</span></h4>
+        <?php endif ?>
+        <br>
     </div>
 </div>
-</div>
-<div style="height: 400px;"></div>
-
+<div style="height: 200px;"></div>
 
     <!--<div class="col-md-1 text-center">
         <br><br>
@@ -334,7 +354,7 @@
     });
 
     //Slider
-    $('.data, #listEmptySilabo, #listEmptyReport').slideUp();
+    $('.data, #listEmptySyllabus, #listEmptyReport').slideUp();
     
     var sliderGo = setInterval(function(){sliderForward();}, 4500);
 
@@ -365,7 +385,7 @@
 
     //Avance Academico
     $('#showEmptySyllabus').hover(function(){
-        $('#listEmptySilabo').slideToggle();
+        $('#listEmptySyllabus').slideToggle();
     });
     $('#showEmptyReport').hover(function(){
         $('#listEmptyReport').slideToggle();

@@ -92,7 +92,6 @@
 		    contentType: false,
 		    processData: false,
 			success : function(data){
-				alert(data);
 				if (data == 'true') {
 					$('#listDataNews').load('/admin/news/listnews');
 					$('#modalAddNew').modal('hide');
