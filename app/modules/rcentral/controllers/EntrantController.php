@@ -235,9 +235,10 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
         $attrib = array('date_payment', 'amount', 'ratid');
         $paymentData = $paymentDb->_getFilter($where, $attrib);
-        if ($paymentData) {
-	        $paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
-	       	$paymentData[0]['date_payment'] = date("d-m-Y", strtotime($paymentData[0]['date_payment']));
+        if ($paymentData and $paymentData[0]['amount'] != 0) {
+			$paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
+			$paymentData[0]['date_fix']     = date('d-m-Y', strtotime($paymentData[0]['date_payment']));
+	       	$paymentData[0]['date_payment'] = $paymentData[0]['date_payment'];
 	        $this->view->paymentData = $paymentData;
 			//Tipo de Pago
 			$where = array(	'eid'   => $eid,
@@ -250,12 +251,14 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
 
 		//$Comparar fechas y pagos
-		$paymentDate = $paymentData[0]['date_payment'];
+		$paymentDate = strtotime($paymentData[0]['date_payment']);
 		$paymentAmount = $paymentData[0]['amount'];
-		$paymentNormal = date('d-m-Y', strtotime($rate[0]['f_ini_tn']));
-		$paymentIncrement1 = date('d-m-Y', strtotime($rate[0]['f_fin_ti1']));
-		$paymentIncrement2 = date('d-m-Y', strtotime($rate[0]['f_fin_ti2']));
-		$paymentIncrement3 = date('d-m-Y', strtotime($rate[0]['f_fin_ti3']));
+		$paymentNormal = strtotime($rate[0]['f_fin_tnd']);
+		$paymentIncrement1 = strtotime($rate[0]['f_fin_ti1']);
+		$paymentIncrement2 = strtotime($rate[0]['f_fin_ti2']);
+		$paymentIncrement3 = strtotime($rate[0]['f_fin_ti3']);
+
+		
 		if ($paymentDate <= $paymentNormal) {
 			$paymentDateData['tiempo'] = 'yes';
 			$paymentDateData['cantidad'] = $rate[0]['t_normal'];
@@ -272,12 +275,14 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 			$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento3'];
 			$paymentDateData['cantidad'] = $rate[0]['t_incremento3'];
 		}
-		if ($paymentAmount = $paymentData[0]['amount'] >= $paymentDateData['cantidad']) {
+
+		if ($paymentAmount >= $paymentDateData['cantidad']) {
 			$paymentDateData['pago'] = 'yes';
 		}else {
 			$paymentDateData['pago'] = 'no';
 		}
 		$this->view->paymentDateData = $paymentDateData;
+
 		
 		//Relleno Datos del Perfil
         	$dataProfile['registerValidate'] = 'yes	';
