@@ -264,22 +264,22 @@
             <div class="col-md-6">
                 <div class="curso avance">
                 <div class="container">
-                <div id="showEmptyReport" class="progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar el Reporte Académico">
+                <div id="showEmptyReport" class="progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar su Informe Académico">
                     <div class="container">
                         <?php if ($this->totalEmptyReport == $this->totalTeachers){
                             $classReport = 'text-success';
                         }else{
                             $classReport = 'text-danger';
                         }?>
-                       <h5 class="text-info">Reporte Academico <strong class="pull-right <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong></h5>
+                       <h5 class="text-info">Informe Académico <strong class="pull-right <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong></h5>
                     </div>
                 </div>
                 </div>
                 </div>
                 <div id="listEmptyReport" class="dataSliderAvance">
                     <div class="container">
-                    <p class="text-center text-danger">Falta Reporte Académico
-                        <?php if ($this->emptyReport >= 5): ?>
+                    <p class="text-center text-danger">Falta Informe Académico
+                        <?php if ($this->emptyReport >= 10): ?>
                             <span class="text-muted">Algunos de los docentes son:</span>
                         <?php endif ?>
                     </p>
@@ -287,10 +287,12 @@
                         <?php 
                         $maxProfes = 0;
                         foreach ($this->teachersEmptyReport as $teacher): ?>
-                            <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
+                            <div class="col-md-6">
+                                <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
+                            </div>
                         <?php 
                             $maxProfes++;
-                            if ($maxProfes == 5) {
+                            if ($maxProfes == 10) {
                                 break;
                             }
                         endforeach ?>
