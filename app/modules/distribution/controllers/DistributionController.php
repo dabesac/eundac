@@ -91,12 +91,12 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $pk=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,
                             'perid'=>$perid);
             if ($comment) {
-                $data=array('state'=>"A",'comments'=>"Ya corrigió su distribución REVISALÓ");
+                $data=array('state'=>"A",'comments'=>"Ya corrigió su distribución REVÍSALO");
             }
             else{
                 $data=array('state'=>"A");
             }
-
+            
             if ($dbdistribution->_update($data,$pk)) {
                 $this->_redirect("/distribution/distribution/index");
             }

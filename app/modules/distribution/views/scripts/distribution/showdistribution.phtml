@@ -92,13 +92,14 @@ $ldistri =$this->ldistribution;
 		<td class="text-center <?php echo $state?>">
 			<?php
 			if ($distri['observation']!='' && $distri['observation']!="''" && $distri['state']=='O') {	?>
-				<img class="obser1" src="/img/circulo-<?php echo $img?>.png"><span class='obser text-<?php echo $state?>' title="Observado" data-container="body" data-toggle="popover" data-content="DISTRIBUCIÓN OBSERVADA POR PEDAGOGÍA" observation='<?php echo $distri['observation']?>' distid='<?php echo $distid;?>' perid='<?php echo $perid;?>' escid='<?php echo base64_encode($distri['escid']);?>' subid='<?php echo base64_encode($distri['subid'])?>'>
+				<span class='obser text-<?php echo $state?>' title="Observado" data-container="body" data-toggle="popover" data-content="DISTRIBUCIÓN OBSERVADA POR PEDAGOGÍA" observation='<?php echo $distri['observation']?>' distid='<?php echo $distid;?>' perid='<?php echo $perid;?>' escid='<?php echo base64_encode($distri['escid']);?>' subid='<?php echo base64_encode($distri['subid'])?>'>
+				<img src="/img/circulo-<?php echo $img?>.png">	
 				</span>
 			<?php	
 			}
 			else{
 			?>
-				<img src="/img/circulo-<?php echo $img?>.png"><span title="<?php echo $namestate?>" data-toggle="popover" class="text-<?php echo $state?>"></span>
+				<span title="<?php echo $namestate?>" data-toggle="popover" class="text-<?php echo $state?>"><img src="/img/circulo-<?php echo $img?>.png"></span>
 			<?php	
 			}
 			?>
@@ -237,7 +238,7 @@ $ldistri =$this->ldistribution;
 
 <script>
 // $("#valids").hide();
-$('.obser1').hover(function(){   
+$('.obser').hover(function(){   
 	$('#myModals').modal('show');	
 	var params = {
 		observation:$(this).attr('observation'),

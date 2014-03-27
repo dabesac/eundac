@@ -37,7 +37,7 @@
   <div id='list'>
   </div>
 </div>
-
+<div id='changes'></div>
 <script type="text/javascript">
     
     $("#lock").click(function(){
@@ -58,7 +58,7 @@
     	subid = tmp[0];
     	esc = tmp[1];
    		url="/bienestar/specialitylock/listlock/escid/"+esc+"/subid/"+subid+"/office/"+office+"/reason/"+reason+"/type_doc/"+type_doc+"/date/"+date+"/detail/"+detail+"/state/A";
-   		$("#list").html("<center><img src='/img/carga.gif'></center>");
+   		$("#list").html("<center><img src='/img/spinner.gif'></center>");
     	$("#list").load(url);    	
 	});    
 
@@ -80,21 +80,21 @@
     	subid = tmp[0];
     	esc = tmp[1];
    		url="/bienestar/specialitylock/listunlock/escid/"+esc+"/subid/"+subid+"/office/"+office+"/reason/"+reason+"/type_doc/"+type_doc+"/date/"+date+"/detail/"+detail+"/state/B";
-   		$("#list").html("<center><img src='/img/carga.gif'></center>");
+   		$("#list").html("<center><img src='/img/spinner.gif'></center>");
     	$("#list").load(url);    	
 	}); 
 
     $("#facid").change(function(){
-    var facid=$(this).val();
-    url="/bienestar/specialitylock/getspeciality/facid/"+facid;
-    $("#escid").load(url);
+        var facid=$(this).val();
+        url="/bienestar/specialitylock/getspeciality/facid/"+facid;
+        $("#escid").load(url);
 	});
 
     $(function() {
-    $( "#date_lock" ).datepicker({
-      changeMonth: true,
-      changeYear: true,
-      dateFormat: 'yy-mm-dd'  
-      });
+        $( "#date_lock" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy-mm-dd'  
+        });
     });
 </script>
