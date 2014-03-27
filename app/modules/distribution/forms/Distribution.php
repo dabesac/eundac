@@ -53,7 +53,7 @@ class Distribution_Form_Distribution extends Zend_Form{
         $state->setAttrib("class","form-control");
         $state->addMultiOption("B","Borrador");
         $state->addMultiOption("A","Activo");
-        $state->addMultiOption("C","Cerrado");
+        /*$state->addMultiOption("C","Cerrado");*/
         
         $this-> addElements(array($perid, $number, $datepress, $dateaccept, $state));
     }

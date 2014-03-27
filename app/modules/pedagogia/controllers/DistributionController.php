@@ -20,6 +20,10 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
         $dbfaculty=new Api_Model_DbTable_Faculty();
         $dataf=$dbfaculty->_getAll($where);
         $this->view->dataf=$dataf;
+
+        $perid=$this->sesion->period->perid;
+        $this->view->perid=$perid;
+
     }
 
     public function viewAction(){	
@@ -29,6 +33,9 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
     		$oid=$this->sesion->oid;
     		$perid=$this->_getParam('perid');
             $facid=$this->_getParam('facid');
+            $borrador=$this->_getParam('borrador');
+
+
             $distri= new Distribution_Model_DbTable_Distribution();
             $dbescuela= new Api_Model_DbTable_Speciality();
             if ($facid=="TODO") {
@@ -64,9 +71,12 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
                     }
                 }
             }
+            if ($borrador=="B") {
+                $this->view->valor=1;
+            }
             // print_r($dis);exit();
             $this->view->dis=$dis;
-    	}catch(Exception $ex){
+        }catch(Exception $ex){
             print "Error: Cargar ".$ex->getMessage();
 
     	}

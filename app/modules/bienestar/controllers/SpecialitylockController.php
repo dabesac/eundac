@@ -125,7 +125,6 @@ class Bienestar_SpecialitylockController extends Zend_Controller_Action {
 			$where=array('subid'=>$subid,'eid'=>$eid,'oid'=>$oid,'pid'=>$pid,'escid'=>$escid,'uid'=>$uid,'perid'=>$perid,
 				         'office_lock'=>$office_lock,'type_doc_lock'=>$type_doc_lock,'date_lock'=>$date_lock,'reason_lock'=>$reason_lock,
 				         'detail_lock'=>$detail_lock,'uid_lock'=>$uid_lock,'date_reg'=>$date_reg,'state'=>"B");
-			// print_r($where);
 			$dblock = new Api_Model_DbTable_Lockandunlock();
 			if ($dblock->_save($where)) {
 	            $pk = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'pid'=>$pid,'uid'=>$uid);
