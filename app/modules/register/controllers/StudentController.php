@@ -28,46 +28,66 @@ class Register_StudentController extends Zend_Controller_Action {
             $where=array(
                         'eid'=>$eid, 'oid'=>$oid, 
                         'escid'=>$escid,'subid'=>$subid,
-                        'regid'=>$uid.$perid,
                         'pid'=>$pid,'uid'=>$uid,
+                        'regid'=>$uid.$perid,
                         'perid'=>$perid);
-            
+            $where_payment = array(
+                    'eid'=>$eid, 'oid'=>$oid, 
+                    'escid'=>$escid,'subid'=>$subid,
+                    'pid'=>$pid,'uid'=>$uid,
+                    'perid'=>$perid
+                );
             $base_registration = new Api_Model_DbTable_Registration();
             $base_payment= new Api_Model_DbTable_Payments();
-        
+            $regid = base64_encode($uid.$perid);
+            $data = array(
+                        'eid'=>$eid, 
+                        'oid'=>$oid, 
+                        'regid'=>$uid.$perid,
+                        'pid'=>$pid,
+                        'uid'=>$uid,
+                        'escid'=>$escid,
+                        'subid'=>$subid,
+                        'perid'=>$perid,
+                        'semid'=>0,
+                        'credits'=>0,
+                        'date_register'=>date('Y-m-d H:m:s'),
+                        'register'=>$uid,
+                        'created'=>date('Y-m-d H:m:s'),
+                        'state'=>'B',
+                        'count'=>0,
+                    );
+            $data_1 = array(
+                    'eid'=>$eid, 
+                    'oid'=>$oid, 
+                    'uid'=>$uid,
+                    'pid'=>$pid,
+                    'escid'=>$escid,
+                    'subid'=>$subid,
+                    'perid'=>$perid,
+                    'ratid'=>20,
+                    'amount'=>0,
+                    'register'=>$uid,
+                    'created'=>date('Y-m-d H:m:s'),
+            );
+            if (is_array($base_registration->_getOne($where)) && is_array($base_payment->_getOne($where_payment))) {
+                $this->_redirect("/register/student/start/regid/".$regid);
+            }
+            elseif (!is_array($base_registration->_getOne($where)) && !is_array($base_payment->_getOne($where))) {
+                if ($base_registration->_save($data) && $base_payment->_save($data_1)) {
+                    $this->_redirect("/register/student/start/regid/".$regid);
+                }
+            }elseif (!is_array($base_registration->_getOne($where))) {
+                if ($base_registration->_save($data)) {
+                    $this->_redirect("/register/student/start/regid/".$regid);
+                }
+            }elseif (!is_array($base_payment->_getOne($where))) {
+                print_r($data_1);
 
-            if ($base_registration->_getOne($where)) {
+                if ($base_payment->_save($data_1)) {
+                    $this->_redirect("/register/student/start/regid/".$regid);
+                }
             }
-            else{
-                $where['semid']=0;
-                $where['credits']=0;
-                $where['register']=$uid;
-                $where['created']=date("Y-m-d H:m:s");
-                $where['state']='B';
-                $where['count']=0;
-                $where['modified']=$uid;
-                $where['date_register']=date("Y-m-d H:m:s");
-                if ($base_registration->_save($where)) 
-                    $regid=base64_encode($uid.$perid);
-            }
-
-            unset($where['regid']);
-            if ($base_payment->_getOne($where)) {
-            }
-            else{
-                
-                $where['ratid']=39;
-                $where['amount']=0;
-                $where['register']=$uid;
-                $where['created']=date("Y-m-d");
-                if ($base_payment->_save($where))
-                    $regid=base64_encode($uid.$perid);
-            }
-            
-            $regid=base64_encode($uid.$perid);
-
-            $this->_redirect("/register/student/start/regid/".$regid);
-            
         } catch (Exception $e) {
             print "Error index Registration ".$e->$getMessage();
         }
@@ -98,7 +118,6 @@ class Register_StudentController extends Zend_Controller_Action {
 
             $base_registration= new Api_Model_DbTable_Registration();
             $data_register = $base_registration->_getOne($where);
-
             $state = trim($data_register['state']);
             $deleted = trim($data_register['count']);
             $this->view->deleted=$deleted;
@@ -405,7 +424,6 @@ class Register_StudentController extends Zend_Controller_Action {
             $regid  =   trim($params['regid']);
             $deleted1 = intVal(trim($params['deleted']));
 
-            
             if ($deleted1 < 5) {
 
             $where = array(
@@ -422,18 +440,16 @@ class Register_StudentController extends Zend_Controller_Action {
 
                 $base_registration = new Api_Model_DbTable_Registration();
 
-                // if ($base_registration->_update($data,$where)) {
+                if ($base_registration->_update($data,$where)) {
 
                     $n = $base_registration->_delete($where);
-                        
                         $json = array(
                             'status'=>true,
                             'de'=>$deleted,
                             'deleted'=>$deleted1,
                         );
-                // }
+                }
 
-                //print_r($where); exit();
               
             }
             else{
@@ -443,7 +459,6 @@ class Register_StudentController extends Zend_Controller_Action {
                         );
             }
 
-         
             try {
                 
             } catch (Exception $e) {
@@ -452,7 +467,6 @@ class Register_StudentController extends Zend_Controller_Action {
                         'error' => $e,
                         );
             }
-
             $this->_helper->layout->disableLayout();
             $this->_response->setHeader('Content-Type', 'application/json');   
             $this->view->data = $json;

@@ -1,40 +1,70 @@
     	
-var  msg = $('<div class="progress" style="height:10px;"></div>');
-var msg_1 = $('<span>La Contraseña no Considen</span>');
+var  msg = $('<div id="control_foortres" class="progress" style="height:10px;"></div>');
+var msg_1 = $('<span>La Contraseña no Considen</span>') ;
 
-var  empty = CryptoJS.MD5('');
 var change = {
 	onReady : function() {
     	$('#valida_password').click(change.valid_pass);
     	$("#password_change").keyup(change.verify_fortress);
     	$("#password_verify").keyup(change.verify_equal);
+        $("#li_change").click(change.enabled);
     },
     valid_pass : function(){
-    	pass_actual = CryptoJS.MD5($("#password_actual").val());
-    	pass_change = CryptoJS.MD5($("#password_change").val());
-    	pass_verify = CryptoJS.MD5($("#password_verify").val());
-		if (typeof(pass_change) == typeof(pass_verify)) {
-			// data = {};
-            console.log(pass_change + " "+ pass_verify);
-            alert("csscsssd");
+    	var pass_actual = ($("#password_actual").val());
+    	var pass_change = ($("#password_change").val());
+    	var pass_verify = ($("#password_verify").val());
+		if (
+                (typeof(pass_change) == typeof(pass_verify)) &&
+                (pass_change != '') && (pass_verify != '' ) && (pass_actual != '' )
+            ) {
+                $post_data = {}
+                $post_data['pass_actual']=(pass_actual)
+                $post_data['pass_change']=(pass_change)
+                $post_data['pass_verify']=(pass_verify)
+                $.ajax({
+                    url:"/passwodorchange",
+                    type:'POST',
+                    data:$post_data,
+                    success: function($respons){
+                        if ($respons.status == true) {
+                            $("#password_actual").val('')
+                            $("#password_change").val('')
+                            $("#password_verify").val('')
+                            $("#control_foortres").hide()
+                            msg_1.html('Contraseña Cambiada')
+                        }
+                        if($respons.status == false && $respons.error == 0) {
+                            $parent  = $("#password_actual").parent()
+                            $parent.addClass('has-error')
+                            $parent.tooltip('show')
+                            $("#password_actual").val('')
+                            $("#password_change").val('')
+                            $("#password_verify").val('')
+                            $("#control_foortres").hide()
+                            // msg_1.hide()
+                        }
+                    },
+                    error: function($error){
+                        alert("SFSFSFs");
+                    }
+                });
+                return false;
 		}else{
-            console.log(pass_change + " "+ pass_verify);
-            alert("diferfsvvsdv");
+            $("#form-change").children(change.addClass_error)
         }
+        // return false;
     },
     verify_fortress: function(){
     	$(this).after(msg);
     	password = $(this).val().length;
     	if (password < 6) {
-    		password * 10;
-    		message = '<div class="progress-bar progress-bar-danger" style="width:'+password+'%"><span class="sr-only">30% Complete (danger)</span></div>';
+            width = 50 - (password*5);
+    		message = '<div class="progress-bar progress-bar-danger" style="width:'+ width +'%"><span class="sr-only">30% Complete (danger)</span></div>';
     	}else{
     		if (password < 10) {
-    				password *15;
-		    		message = '<div class="progress-bar progress-bar-warning" style="width: '+password+'%"><span class="sr-only">20% Complete (warning)</span></div>';
+		    		message = '<div class="progress-bar progress-bar-warning" style="width: '+password * 3+'%"><span class="sr-only">20% Complete (warning)</span></div>';
     		}else{
-    				password * 20 ;
-		    		message = '<div class="progress-bar progress-bar-success" style="width: '+password+'%"><span class="sr-only">35% Complete (success)</span></div>';
+		    		message = '<div class="progress-bar progress-bar-success" style="width: '+password * 5+'%"><span class="sr-only">35% Complete (success)</span></div>';
     		}
     	}
     	msg.html(message)
@@ -54,6 +84,11 @@ var change = {
     	// }else{
     	// 	console.log("eror");
     	// }
+    },
+    enabled:function(){
+        $("#form-change").addClass('active')
+    },
+    addClass_error:function(){
     }
 };
 $(document).ready(change.onReady);

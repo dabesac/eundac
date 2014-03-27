@@ -19,8 +19,14 @@ body{
 }
 
 .ver{background: url(../img/bgm.png) no-repeat right center;}
-#form-change{width: 245px}
-
+#form-change{
+	width: 245px;
+	padding:10px;
+	right: 4%;
+}
+.active{
+	display: block;
+}
 .container{
 	width: 100%;
 }
