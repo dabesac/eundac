@@ -1,4 +1,15 @@
     <link rel="stylesheet" href="/css/sliderNews.css">
+
+<!--Grafica Docentes-->
+<!--<div id="graficaSlide" class="grafica">
+
+    <a href="##">
+    <div class="graficaBotons">
+        <span class="glyphicon glyphicon-stats iconGrafica"></span>
+    </div>
+    </a>
+</div>-->
+
 <!--Slider de Noticias-->
 <div class="row">
     <div class="col-md-12">
@@ -243,7 +254,8 @@
                             <?php foreach ($this->coursesEmptySyllabus as $course): ?>
                                 <?php if ($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]): ?>
                                     <p>
-                                        <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'] ?>
+                                        <small><span class="glyphicon glyphicon-book text-muted"></span></small>
+                                        <?php echo ucwords(strtolower($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'])) ?>
                                         <small class="text-muted">turno <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['turno'] ?></small>
                                     </p> 
                                 <?php endif ?>
@@ -365,7 +377,11 @@
 </div>-->
 <script type="text/javascript">
 	//$("#graphic-survey").load("/docente/index/xcourses");
-   
+    
+    /*$('#graficaSlide').animate({
+        left: "-=500",
+    }, 1);*/
+
     var rid = $('#rid').val();
     if (rid != 'DR') {
         $('#avanceDirectores').addClass('hidden');
