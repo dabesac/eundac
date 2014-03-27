@@ -30,6 +30,7 @@ class Register_Form_Changerate extends Zend_Form{
       
         $ratid= new Zend_Form_Element_Select('ratid');
         $ratid->setAttrib('class','form-control');
+        $ratid->setRequired(true)->addErrorMessage('Este campo es requerido');
         $where['eid']=$eid;
         $where['oid']=$oid;
         $where['perid']=$peri;

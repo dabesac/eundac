@@ -179,7 +179,6 @@ class Register_ChangeratesController extends Zend_Controller_Action{
                               
                 if ($this->getRequest()->isPost()) {
                     $frmdata=$this->getRequest()->getPost();
-                    // print_r($frmdata);
                         if ($fm->isValid($frmdata)) {
                             unset($frmdata['guardar']);
                             trim($frmdata['ratid']);
@@ -189,12 +188,17 @@ class Register_ChangeratesController extends Zend_Controller_Action{
                             $frmdata['register']=$this->sesion->uid;
                             $frmdata['created']=date('Y-m-d h:m:s');
                             $reg_= new Api_Model_DbTable_Payments();
-                            $reg_->_save($frmdata);
-                            $this->_redirect("/register/changerates/");
+                            // $reg_->_save($frmdata);
+                            // print_r($frmdata['uid']);exit();
+                            if ($reg_->_save($frmdata)) {
+                                $this->view->uidc=$frmdata['uid'];
+                                $this->view->clave=1;
+                            }
+                            // $this->_redirect("/register/changerates/");
                         }
-                        else
-                        {
+                        else{
                             echo "Ingrese nuevamente por favor";
+                            $fm->populate($frmdata);
                         }
                 }
         } catch (Exception $e) {
