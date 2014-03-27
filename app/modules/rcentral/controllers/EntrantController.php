@@ -520,6 +520,8 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 										'date_register' => date('Y-m-d h:m:s'),
 										'register'      => $uid,
 										'created'       => date('Y-m-d h:m:s'), 
+										'updated'       => date('Y-m-d h:m:s'),
+										'modified'       => $uid, 
 										'state'         => $state,
 										'count'         => '0' ); 
 
@@ -542,6 +544,8 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 												'uid'      => $data['uid'],
 												'register' => $uid,
 												'approved' => $uid,
+												'updated'  => date('Y-m-d h:m:s'),
+												'modified' => $uid, 
 												'created'  => date('Y-m-d h:m:s'), 
 												'state'    => $state ); 
 

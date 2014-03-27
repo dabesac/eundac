@@ -96,6 +96,11 @@
 	background-color: #f5f5f5;
 	border-right: 4px #015292 solid; 
 	position: relative;
+	margin-bottom: 20px;
+}
+
+.avance{
+	margin-bottom: 0;
 }
 
 .curso:before{
