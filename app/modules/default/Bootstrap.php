@@ -47,6 +47,15 @@ class Default_Bootstrap extends Zend_Application_Module_Bootstrap
                                 )
                             )
             );
+        $router->addRoute('passwodorchange',
+                    new Zend_Controller_Router_Route('passwodorchange',
+                            array(
+                                'module'     => 'default',
+                                'controller' => 'password',
+                                'action'     => 'change'
+                                )
+                            )
+            );
     }
     
 }

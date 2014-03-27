@@ -6,7 +6,7 @@
 		<br>
 		<?php
 		if ($this->header) {	?>
-			<img width="120px" src="/logo/<?php echo $this->header ?>"> 
+			<img width="120px" src="/logo/<?php echo $this->header ?>" onerror="imgError(this);"> 
 		<?php
 		}
 		else{	?>
@@ -31,12 +31,18 @@
 				<h6 class="text-faculty">Facultad de <?php echo $this->facultad?></h6>
 				<h6 class="text-speciality">Escuela de Formación Profesional de <?php echo $this->speciality?></h6>
 			</div>
-		<div class='col-md-2'><img src="/logo/<?php echo $this->header ?>" style="width:100px"></div>
+		<div class='col-md-2'><img src="/logo/<?php echo $this->header ?>" style="width:100px" onerror="imgError(this);"></div>
 	</div>
 	<br>
 </div>
 
 <script type="text/javascript">
+	function imgError(image) {
+		var imagen = 'blanco'; 
+	    image.onerror = "";
+	    image.src = "/logo/"+imagen;
+	    return true;
+	}
 	$("#view").hide();
 
 	var clave="<?php echo $this->header?>";

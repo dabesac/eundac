@@ -15,16 +15,42 @@
               <tr>
                 <td>Tipo de Institución 
                   <h5><b>
-                    <?php if($academic['type']=="ES"){
+                    <?php
+                    if($academic['type']=="E"){
                       echo "Estatal";
-                    }elseif($academic['type']=="PA"){
+                    }elseif($academic['type']=="P"){
                       echo "Particular";
-                    }elseif($academic['type']=="PQ"){
+                    }elseif($academic['type']=="PA"){
                       echo "Parroquial";
-                    }?>
+                    }
+                    ?>
                   </b></h5>
                 </td>
-                <td>Nivel de Estudio <h5><b><?php echo $academic['title']?></b></h5></td>
+                <td>Nivel de Estudio <h5><b>
+                    <?php
+                        switch ($academic['title']) {
+                            case 'SE':
+                                echo "Secundaria";
+                                break;
+                            case 'SU':
+                                echo "Superior";
+                                break;    
+                            case 'DI':
+                                echo "Diplomado";
+                                break;
+                            case 'PT':
+                                echo "Post Grado";
+                                break;
+                            case 'PH':
+                                echo "PHD";
+                                break;
+                            case 'O':
+                                echo "Otros";
+                                break;
+                        }
+                    ?>
+
+                </b></h5></td>
               </tr>
               <tr>
                 <td>Año de Finalización <h5><b><?php echo $academic['year_end']?></b></h5></td>
