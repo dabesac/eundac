@@ -42,6 +42,7 @@ class Api_Model_DbTable_Payments extends Zend_Db_Table_Abstract
                     and pid='".$data['pid']."'";
                 $row = $this->fetchRow($str);
             if($row) return $row->toArray();
+            
             }  catch (Exception $ex){
                 print "Error Generar el registro de su pago".$ex->getMessage();
             }

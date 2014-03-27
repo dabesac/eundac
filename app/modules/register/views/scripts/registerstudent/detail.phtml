@@ -32,15 +32,17 @@
 <?php if ($this->courses): ?>
     <div class="col-md-3">
         <blockquote>
+            <div id="showDetailPayment">
             <?php if ($this->pagoAtiempo == 'yes'): ?>
-                <h5>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h5>
+                <h5>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_fix'] ?></span></h5>
             <?php else: ?>
-                <h5>Fecha de Pago <span class="text-danger"><?php echo $this->paymentData[0]['date_payment'] ?> (Destiempo)</span></h5>
+                <h5>Fecha de Pago <span class="text-danger"><?php echo $this->paymentData[0]['date_fix'] ?> (Destiempo)</span></h5>
             <?php endif ?>
-            <h5>Monto <span class="text-info" id="hoverDetailPayment">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
-            <h5>Concepto <span class="text-info" id="hoverDetailPayment"><?php echo $this->rate[0]['name'] ?> </span></h5>
+            <h5>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
+            <h5>Concepto <span class="text-info"><?php echo $this->rate[0]['name'] ?> </span></h5>
+            </div>
             <div class="col-md-12" id='detailPayment' style="position: absolute; z-index: 2; background: white;">
-                <h6 class="text-info">Pagos Normales</h6>
+                <h6 class="text-info text-center"><strong>Pagos Normales</strong></h6>
                 <table class="table">
                     <tr>
                         <th class="text-center">Pago</th>
@@ -57,7 +59,7 @@
                 </table>
                 <hr>
             <?php if ($this->matriculaCondicional == 'Si'): ?>
-                <h6 class="text-danger">Pagos Condicionales</h6>
+                <h6 class="text-danger text-center"><strong>Pagos Condicionales</strong></h6>
                 <?php if ($this->paymentsConditional): ?>
                     <?php foreach ($this->paymentsConditional as $payment): ?>
                         <?php $paymentConditionalTotal =  $paymentConditionalTotal + $payment['amount'];?>
@@ -65,14 +67,17 @@
                     <?php foreach ($this->coursesCondition as $coursesC): ?>
                         <?php $montoaPagar = $montoaPagar + ($coursesC['montoxCredito'] * $coursesC['credits']); ?>
                     <?php endforeach ?>
+                    <h5 class="text-muted">Pago Realizado <span class="text-danger">S/.<?php echo $paymentConditionalTotal ?>.00 </span></h5>
                     <?php if ($paymentConditionalTotal < $montoaPagar ){
                         $deuda = $montoaPagar - $paymentConditionalTotal; ?>
-                        <h5 class="text-danger">Debe un Reintegro de S/.<?php echo $deuda ?>.00 </h5>
+                        <p class="small text-danger">El monto que pago esta incompleto </p>
+                        <h5 class="text-muted">Monto Correcto <span class="text-danger">S/.<?php echo $montoaPagar ?>.00 </span></h5>
+                        <h5 class="text-muted">Debe un Reintegro de <span class="text-danger">S/.<?php echo $deuda ?>.00 </span></h5>
                     <?php 
                         $classButtonValidate = 'disabled';
                         $faltaReintegro = 'Si';  
                     }else { ?>
-                        <h5 class="text-danger">Pago S/.<?php echo $paymentConditionalTotal ?>.00, Todo en Orden</h5>
+                        <h5 class="text-success text-center">Todo en Orden</h5>
                     <?php }?>
                 <?php else: ?>
                     <h5 class="text-muted text-center">Falta <span class="text-danger">Pagos</span></h5>
@@ -95,7 +100,15 @@
                 endif ?>
             <?php endif ?>
             <?php if ($this->pagoAtiempo == 'no'): ?>
-                <h6 class="text-muted">El pago deberia ser con un <span class="text-danger">incremento del <?php echo $this->tipePayment['porcentaje'] ?> %</span></h6>
+                <h6 class="text-danger text-center"><strong>Pago a Destiempo</strong></h6>
+                <?php if ($this->tipePayment['pago_completo'] == 'yes'): ?>
+                    <h5 class="text-muted">Pago un incremento de <?php echo $this->tipePayment['porcentaje'] ?> % <br><span class="text-success">Todo en Orden</span></h5>
+                <?php else: ?>
+                    <h5 class="text-muted">Debe un <span class="text-danger">incremento del <?php echo $this->tipePayment['porcentaje'] ?> %</span></h5>
+                    <h5 class="text-muted">Monto Correcto <span class="text-danger">S/. <?php echo $this->tipePayment['incremento'] ?> </span></h5>
+                <?php 
+                $classButtonValidate = 'disabled';
+                endif ?>
             <?php endif ?>
             </div>
         <?php if ($this->matriculaCondicional == 'Si' and !$this->paymentsConditional): ?>
@@ -105,6 +118,12 @@
          <?php elseif ($this->matriculaCondicional == 'Si'): ?>
             <h5 class="text-danger">Pagos Condicionales <strong>Todo en Orden</strong></h5>
         <?php endif ?>
+        <!--Verificando si existe Pago-->
+        <?php if (!$this->paymentData): ?>
+            <h5 class="text-danger"><span class="glyphicon glyphicon-record"></span> Falta Pago</h5>
+        <?php 
+            $classButtonValidate = 'disabled';
+        endif ?>
 
             <?php if (!$this->condition and $this->matriculaCondicional == 'No'): 
                 $classCondition = 'hidden';
@@ -116,7 +135,7 @@
                 $classCondition      = 'text-danger';
                 $classButtonValidate = 'disabled';
             endif ?>
-            <h5 class="<?php echo $classCondition ?>"><span id="condition">Condiciones <span class="glyphicon glyphicon-flag"></span></span></h5>
+            <p class="<?php echo $classCondition ?>"><span id="condition">Condiciones <span class="glyphicon glyphicon-flag"></span></span></p>
             <div class="col-md-6" id='conditionInfo' style="position: absolute; z-index: 2; background: white;">
                 <?php if ($this->condition): ?>
                     <?php foreach ($this->condition as $condition): ?>
@@ -275,7 +294,7 @@
         endif ?>
     </div>
 </div>
-<div class="row">
+<div id="totalCredits" class="row">
     <div class="col-md-6 col-md-offset-1">
         <h4 class="text-muted">Total Creditos <span class="text-info"><?php echo $this->fullCredits ?></span></h4>
     </div>
@@ -314,7 +333,7 @@
                     <a id="showEditAlert<?php echo $course['courseid'] ?>" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
                 </td>
                 <td class="text-center <?php echo $classButtons ?> butonsCourses">
-                    <a id="showAlert<?php //echo $course['courseid'] ?>" href="##" title="Eliminar Curso" class="text-danger"><span class="glyphicon glyphicon-remove"></span></a>
+                    <a id="showAlert<?php echo $course['courseid'] ?>" href="##" title="Eliminar Curso" class="text-danger"><span class="glyphicon glyphicon-remove"></span></a>
                 </td>
                 <td class="text-center text-success tdValidate hidden">Matriculado</td>
                 <td class="text-center text-warning tdObserved hidden">Observado</td>
@@ -451,7 +470,7 @@
     //Navegación
     //Detalle de Pago
     $('#detailPayment').slideUp();
-    $('#hoverDetailPayment').hover(function(){
+    $('#showDetailPayment').hover(function(){
         $('#detailPayment').slideToggle();
     });
 
@@ -499,9 +518,9 @@
         $('#waitingSpinner').html('<br><center><img src="/img/spinner.gif" alt="Cargando....." /></center><br>');
         $.get("/register/registerstudent/validate/escid/<?php echo base64_encode($this->dataStudent['escid']) ?>/subid/<?php echo base64_encode($this->dataStudent['subid']) ?>/uid/<?php echo base64_encode($this->dataStudent['uid']) ?>/pid/<?php echo base64_encode($this->dataStudent['pid']) ?>/state/<?php echo base64_encode($this->stateRegister) ?>", function(status){
             if (status.status == true) {
-                $('.iluminate').removeClass('warning info');
+                $('.iluminate').removeClass('warning info danger');
                 $('.iluminate').addClass('success');
-                $('.butonsCourses, #stateRegister').addClass('hidden');
+                $('.butonsCourses, #stateRegister, .alertSpace').addClass('hidden');
                 $('#validateRegister').addClass('disabled');
                 $('.tdValidate, #successValidate, #printRegister').removeClass('hidden');
                 $('#waitingSpinner').html('');
@@ -546,7 +565,7 @@
                     $('#openConfirmAlert, #reservedRegister, #validateRegister, #printRegister, #observedRegister, #activeRegister').addClass('disabled');
                     $('#stateRegister, #confirmDelete').addClass('hidden');
                     $('#waitingSpinner').html('');
-                    $('#studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('hidden');
+                    $('#studentRow<?php echo $this->dataStudent['uid'] ?>, #totalCredits').addClass('hidden');
                     var num = 1;
                     var i   = 1;
                     $("#students > li").each(function(){
@@ -577,7 +596,7 @@
                     state : $.base64.encode("<?php echo $this->stateRegister ?>") },
             success: function(data){
                 if (data == 'true') {
-                    $('#stateRegister, .butonsCourses').addClass('hidden');
+                    $('#stateRegister, .butonsCourses, td strong, .alertSpace').addClass('hidden');
                     $('#reservedRegister, #validateRegister, #printRegister, #observedRegister, #activeRegister').addClass('disabled');
                     $('#observedSuccessRegister, .tdObserved').removeClass('hidden');
                     $('.iluminate, #studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('warning');
@@ -613,7 +632,7 @@
                     state : $.base64.encode("<?php echo $this->stateRegister ?>") },
             success: function(data){
                 if (data == 'true') {
-                    $('#stateRegister, .butonsCourses, td strong').addClass('hidden');
+                    $('#stateRegister, .butonsCourses, td strong, .alertSpace').addClass('hidden');
                     $('#reservedRegister, #validateRegister, #printRegister, #observedRegister, #activeRegister, #reservedRegister').addClass('disabled');
                     $('#reservedSuccessRegister, .tdReserved').removeClass('hidden');
                     $('.iluminate, #studentRow<?php echo $this->dataStudent['uid'] ?>').addClass('info');

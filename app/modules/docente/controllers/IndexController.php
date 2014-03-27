@@ -26,6 +26,7 @@ class Docente_IndexController extends Zend_Controller_Action {
         $syllabusUnitsContentDb        = new Api_Model_DbTable_Syllabusunitcontent();
         $syllabusUnitsContentControlDb = new Api_Model_DbTable_ControlActivity();
         $registerxCourseDB             = new Api_Model_DbTable_Registrationxcourse();
+        $specialityDB                  = new Api_Model_DbTable_Speciality();
         //___________________________________________________________
 
         $eid   = $this->sesion->eid;
@@ -40,11 +41,12 @@ class Docente_IndexController extends Zend_Controller_Action {
         //Enviar el periodo
         $this->view->perid = $perid;
 
-        $where = array('eid'   => $eid,
-                    'oid'   => $oid,
-                    'uid'   => $uid,
-                    'pid'   => $pid,
-                    'perid' => $perid );
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'uid'   => $uid,
+                        'pid'   => $pid,
+                        'perid' => $perid,
+                        'is_main' => 'S' );
 
         $attrib = array('courseid', 'curid', 'turno', 'escid', 'subid', 'perid');
         $courses = $coursesxTeacherDb->_getFilter($where, $attrib);
@@ -57,6 +59,14 @@ class Docente_IndexController extends Zend_Controller_Action {
                            'courseid' => $course['courseid'] );
             $attrib = array('name', 'type');
             $coursesName[$c] = $courseDb->_getFilter($where, $attrib);
+
+            //Escuela a la que Pertence el curso
+            $where = array( 'eid' => $eid,
+                            'oid' => $oid,
+                            'escid' => $course['escid'],
+                            'subid' => $course['subid'] );
+            $attrib = array('name');
+            $coursesSpecialityName[$c] = $specialityDB->_getFilter($where, $attrib);
 
             //Estado de Acta
             $where = array( 'eid'      => $eid, 
@@ -140,8 +150,9 @@ class Docente_IndexController extends Zend_Controller_Action {
             $c++;
         }//Final del Foreach Principal
 
-        $this->view->courses = $courses;
-        $this->view->coursesName = $coursesName;
+        $this->view->courses               = $courses;
+        $this->view->coursesName           = $coursesName;
+        $this->view->coursesSpecialityName = $coursesSpecialityName;
 
         //Enviando Porcentaje de Syllabus
         $this->view->porcentajeSyllabus = $porcentajeSyllabus;
@@ -208,12 +219,12 @@ class Docente_IndexController extends Zend_Controller_Action {
 
             $this->view->rid = $rid;
 
-            $where = array( 'eid'     => $eid,
-                            'oid'     => $oid,
-                            'subid'   => $subid,
-                            'escid'   => $escid,
-                            'perid'   => $perid,
-                            'is_main' => 'S' );
+            $where = array( 'eid'            => $eid,
+                            'oid'            => $oid,
+                            'subid'          => $subid,
+                            'left(escid, 3)' => $escid,
+                            'perid'          => $perid,
+                            'is_main'        => 'S' );
 
             $attrib = array('uid', 'pid', 'escid', 'subid', 'courseid', 'curid', 'turno');
             $orders = array('uid');
@@ -232,8 +243,7 @@ class Docente_IndexController extends Zend_Controller_Action {
                 if ($course['uid'] != $teacherUid) {
                     $teacherUid = $course['uid'];
 
-                    $where = array(
-                                    'eid' => $eid,
+                    $where = array( 'eid' => $eid,
                                     'oid' => $oid,
                                     'subid' => $course['subid'],
                                     'escid' => $course['escid'],

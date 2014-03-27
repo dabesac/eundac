@@ -29,22 +29,27 @@
                         echo "(Particular)";
                     endif ?>
                </span></h6><br>
-            <h4 class="text-muted">Total Creditos <span id="totalCredits" class="text-info"><img src="/img/spinner.gif" alt="Loading..."></span></h4>
+            <h4 class="text-muted">Total Creditos <span id="totalCredits" class="text-info">0</span></h4>
         </blockquote>
     </div>
 
     <div class="col-md-3">
         <blockquote>
-            <h5>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_payment'] ?></span></h5>
+            <h5>Fecha de Pago <span class="text-info"><?php echo $this->paymentData[0]['date_fix'] ?></span></h5>
             <h5>Monto <span class="text-info">S/. <?php echo $this->paymentData[0]['amount'] ?> </span></h5>
             <h5>Tipo de Pago <br><span class="text-info"><?php echo $this->rate[0]['name'] ?></span></h5>
             <?php if ($this->paymentData): ?>
                 <?php $statePayment = 'Si'; ?>
                 <?php if ($this->paymentDateData['tiempo'] == 'yes' and $this->paymentDateData['pago'] == 'yes'): ?>
                     <h6 class="text-success"><span class="glyphicon glyphicon-record"></span> Todo en Orden con el Págo</h6>
+                <?php elseif ($this->paymentDateData['tiempo'] == 'no' and $this->paymentDateData['pago'] == 'yes'): ?>
+                    <h6 class="text-success"><span class="glyphicon glyphicon-record"></span> Todo en Orden con el Págo</h6>
+                <?php elseif ($this->paymentDateData['tiempo'] == 'yes' and $this->paymentDateData['pago'] == 'no'): ?>
+                    <h6 class="text-danger"><span class="glyphicon glyphicon-record"></span> Pago Incompleto</h6>
+                    <h6 class="text-muted">El pago <span class="text-danger">debería ser S/. <?php echo $this->paymentDateData['cantidad'] ?> 
                 <?php else: ?>
                     <h6 class="text-danger"><span class="glyphicon glyphicon-record"></span> Pago a Destiempo</h6>
-                    <h6 class="text-muted">Debe un <span class="text-danger">reintegro de un <?php echo $this->paymentDateData['porcentaje'] ?> %</span>,<br> osea <span class="text-danger">S/. <?php echo $this->paymentDateData['cantidad'] ?></span></h6>
+                    <h6 class="text-muted">Debe un <span class="text-danger">reintegro de un <?php echo $this->paymentDateData['porcentaje'] ?> %</span><br> El pago <span class="text-danger">debería ser S/. <?php echo $this->paymentDateData['cantidad'] ?></span></h6>
                 <?php endif ?>
             <?php else: ?>
                 <?php $statePayment = 'No'; ?>

@@ -9,6 +9,8 @@
     $speciality = $sesion->speciality->name;
     $module = $sesion->rol['module'];
     $rol = $sesion->rid;
+    $uid = $sesion->uid;
+    $pid = $sesion->pid;
     
 ?>
 <input type="hidden" id="rol" value="<?php echo $rol ?>">
@@ -40,28 +42,22 @@
             <ul class="nav navbar-nav navbar-right">
 		        <li class="ver"><a href="/<?php echo $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
                 <li class="ver"><a href="/profile/<?php echo ($rol=='AL')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Ver perfil </a></li>
-
-
-                <li class="ver dropdown">
+                <li class="ver dropdown" id='li_change'>
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cambiar clave <b class="caret"></b></a>
-                    <ul id="form-change" class="dropdown-menu">
-                        <li>
-                        <form role="form" id='default_change'>
-                            <div class="form-group">
-                                <input type="password" class="form-control" id="password_actual" placeholder="Contraseña Actual">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control" id="password_change" placeholder="Nueva Contraseña">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control" id="password_verify" placeholder="Repetir Nueva Contraseña">
-                            </div>
-                            <button type="submit" id='valida_password' class="btn btn-taipa btn-block">Cambiar</button>
-                        </form>
-                        </li>
-                    </ul>
                 </li>          
-
+                <div class="dropdown-menu" id='form-change'>
+                    <div class="form-group" data-toggle="tooltip" title="Ingrese clave correcta" data-placement='left'>
+                        <input type="password" class="form-control" name="password_actual" id="password_actual" placeholder="Contraseña Actual">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="password_change" id="password_change" placeholder="Nueva Contraseña">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="password_verify" id="password_verify" placeholder="Repetir Nueva Contraseña">
+                    </div>
+                    <button 
+                        type="submit" id='valida_password' class="btn btn-taipa btn-block">Cambiar</button>
+                </div>
                 <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> <b>Cerrar Sessión</b></a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
