@@ -247,7 +247,7 @@ $('.obser').hover(function(){
 		distid1:$(this).attr('distid'),
 		perid1:$(this).attr('perid')
 	};
-	var sms="<h4><b>Este es la observación: </b>"+params['observation']+"</h4>";
+	var sms="<h5><b>Este es la observación: </b>"+params['observation']+"</h5>";
 	$('#obs').html(sms);
 	$("#sendis").click(function(){
 		$("#myModals").modal("hide");
