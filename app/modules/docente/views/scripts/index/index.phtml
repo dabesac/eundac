@@ -1,4 +1,15 @@
     <link rel="stylesheet" href="/css/sliderNews.css">
+
+<!--Grafica Docentes-->
+<!--<div id="graficaSlide" class="grafica">
+
+    <a href="##">
+    <div class="graficaBotons">
+        <span class="glyphicon glyphicon-stats iconGrafica"></span>
+    </div>
+    </a>
+</div>-->
+
 <!--Slider de Noticias-->
 <div class="row">
     <div class="col-md-12">
@@ -243,7 +254,8 @@
                             <?php foreach ($this->coursesEmptySyllabus as $course): ?>
                                 <?php if ($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]): ?>
                                     <p>
-                                        <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'] ?>
+                                        <small><span class="glyphicon glyphicon-book text-muted"></span></small>
+                                        <?php echo ucwords(strtolower($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'])) ?>
                                         <small class="text-muted">turno <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['turno'] ?></small>
                                     </p> 
                                 <?php endif ?>
@@ -264,22 +276,22 @@
             <div class="col-md-6">
                 <div class="curso avance">
                 <div class="container">
-                <div id="showEmptyReport" class="progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar el Reporte Académico">
+                <div id="showEmptyReport" class="progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar su Informe Académico">
                     <div class="container">
                         <?php if ($this->totalEmptyReport == $this->totalTeachers){
                             $classReport = 'text-success';
                         }else{
                             $classReport = 'text-danger';
                         }?>
-                       <h5 class="text-info">Reporte Academico <strong class="pull-right <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong></h5>
+                       <h5 class="text-info">Informe Académico <strong class="pull-right <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong></h5>
                     </div>
                 </div>
                 </div>
                 </div>
                 <div id="listEmptyReport" class="dataSliderAvance">
                     <div class="container">
-                    <p class="text-center text-danger">Falta Reporte Académico
-                        <?php if ($this->emptyReport >= 5): ?>
+                    <p class="text-center text-danger">Falta Informe Académico
+                        <?php if ($this->emptyReport >= 10): ?>
                             <span class="text-muted">Algunos de los docentes son:</span>
                         <?php endif ?>
                     </p>
@@ -287,10 +299,12 @@
                         <?php 
                         $maxProfes = 0;
                         foreach ($this->teachersEmptyReport as $teacher): ?>
-                            <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
+                            <div class="col-md-6">
+                                <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
+                            </div>
                         <?php 
                             $maxProfes++;
-                            if ($maxProfes == 5) {
+                            if ($maxProfes == 10) {
                                 break;
                             }
                         endforeach ?>
@@ -363,7 +377,11 @@
 </div>-->
 <script type="text/javascript">
 	//$("#graphic-survey").load("/docente/index/xcourses");
-   
+    
+    /*$('#graficaSlide').animate({
+        left: "-=500",
+    }, 1);*/
+
     var rid = $('#rid').val();
     if (rid != 'DR') {
         $('#avanceDirectores').addClass('hidden');
