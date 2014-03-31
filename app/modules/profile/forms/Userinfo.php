@@ -81,7 +81,7 @@ class Profile_Form_Userinfo extends Zend_Form{
 
         $mail_person= new Zend_Form_Element_Text("mail_person");
         $mail_person->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $mail_person->setRequired(true)->addErrorMessage('Ingrese un e-mail correcto');
+        //$mail_person->setRequired(true)->addErrorMessage('Ingrese un e-mail correcto');
         $mail_person->setAttrib("maxlength", "50");
         $mail_person->setAttrib("title","Email");
         $mail_person->setAttrib("class","form-control");
@@ -93,7 +93,7 @@ class Profile_Form_Userinfo extends Zend_Form{
         // $mail_work->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $mail_work->setAttrib("title","Email Work");
         $mail_work->setAttrib("class","form-control");
-        $mail_work->addValidator('EmailAddress',true);
+        //$mail_work->addValidator('EmailAddress',true);
 
         $phone= new Zend_Form_Element_Text("phone");
         $phone->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
@@ -104,7 +104,7 @@ class Profile_Form_Userinfo extends Zend_Form{
 
         $cellular= new Zend_Form_Element_Text("cellular");
         $cellular->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        $cellular->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        //$cellular->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $cellular->setAttrib("maxlength", "9")->setAttrib("pattern","[0-9]{9}");
         $cellular->setAttrib("title","Celular");
         $cellular->setAttrib("class","form-control");
@@ -114,7 +114,7 @@ class Profile_Form_Userinfo extends Zend_Form{
 
         $country=new Zend_Form_Element_Select('country');
         $country->removeDecorator('HtmlTag')->removeDecorator('Label');
-        $country->setRequired(true)->addErrorMessage("Campo Obligatorio");
+        //$country->setRequired(true)->addErrorMessage("Campo Obligatorio");
         $country->setAttrib("class","form-control");
         $country->addMultiOption("","- Seleccione -");        
         foreach ($data as $data) {
@@ -126,7 +126,7 @@ class Profile_Form_Userinfo extends Zend_Form{
 
         $country_s=new Zend_Form_Element_Select('country_s');
         $country_s->removeDecorator('HtmlTag')->removeDecorator('Label');
-        $country_s->setRequired(true)->addErrorMessage("Campo Obligatorio");
+        //$country_s->setRequired(true)->addErrorMessage("Campo Obligatorio");
         $country_s->setRegisterInArrayValidator(false); 
         $country_s->setAttrib("class","form-control");
         $country_s->addMultiOption("","- Seleccione un Departamento -");
@@ -139,7 +139,7 @@ class Profile_Form_Userinfo extends Zend_Form{
 
         $country_p=new Zend_Form_Element_Select('country_p');
         $country_p->removeDecorator('HtmlTag')->removeDecorator('Label');
-        $country_p->setRequired(true)->addErrorMessage("Campo Obligatorio");
+        //$country_p->setRequired(true)->addErrorMessage("Campo Obligatorio");
         $country_p->setRegisterInArrayValidator(false); 
         $country_p->setAttrib("class","form-control");
         $country_p->addMultiOption("","- Seleccione un Departamento -");
@@ -152,7 +152,7 @@ class Profile_Form_Userinfo extends Zend_Form{
 
         $country_d=new Zend_Form_Element_Select('country_d');
         $country_d->removeDecorator('HtmlTag')->removeDecorator('Label');
-        $country_d->setRequired(true)->addErrorMessage("Campo Obligatorio");
+        //$country_d->setRequired(true)->addErrorMessage("Campo Obligatorio");
         $country_d->setRegisterInArrayValidator(false); 
         $country_d->setAttrib("class","form-control");
         $country_d->addMultiOption("","- Seleccione una Provincia -");

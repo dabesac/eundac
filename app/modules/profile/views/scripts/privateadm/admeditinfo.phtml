@@ -1,5 +1,8 @@
 <div class="panel panel-default">
-	<form action="/profile/privateadm/admeditinfo" method="post" id="form">
+	<form id="form">
+	<input type="hidden" name="eid" value="<?php echo $this->dataPerson['eid'] ?>">
+	<input type="hidden" name="pid" value="<?php echo $this->dataPerson['pid'] ?>">
+
 	<div class="container">
 		<div class="row">
 			<div class="col-md-8">
@@ -16,25 +19,22 @@
 		<hr>
 		<div class="row text-muted">
 			<div class="col-md-6">
-				<p>DNI</p>
-				<?php echo $this->form->numdoc ?><br>
-
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-4">
+						<p>DNI</p>
+						<?php echo $this->form->numdoc ?>
+					</div>
+					<div class="col-md-4">
 						<p>Sexo</p>
 						<?php echo $this->form->sex ?>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<p>Estado Civil</p>
 						<?php echo $this->form->civil ?>
 					</div>
 				</div><br>
 
-				<p>Email Personal</p>
-				<?php echo $this->form->mail_work ?>
-			</div>
-			<div class="col-md-6">
-				<p>Fecha de Nacimiento</p>
+				<p class="text-center">Fecha de Nacimiento</p>
 				<div class="row">
 					<div class="col-sm-4">
 						<?php echo $this->form->year?>
@@ -46,6 +46,35 @@
 						<?php echo $this->form->day?>
 					</div>
 				</div><br>
+				
+				<div class="row">
+					<div class="col-md-6">
+						<p>País</p>
+						<?php echo $this->form->country?>
+					</div>
+					<div class="col-md-6">
+						<p>Departamento</p>
+						<?php echo $this->form->country_s?>
+					</div>
+				</div><br>
+		
+				<p>Email Personal</p>
+				<?php echo $this->form->mail_work ?>
+			</div>
+			<div class="col-md-6">
+				
+
+				<div class="row">
+					<div class="col-sm-6">
+						<p>Provincia</p>
+						<?php echo $this->form->country_p?>
+					</div>
+					<div class="col-sm-6">
+						<p>Distríto</p>
+						<?php echo $this->form->country_d?>
+					</div>
+				</div><br>
+
 				<div class="row">
 					<div class="col-md-6">
 						<p>Telefono Fijo</p>
@@ -68,15 +97,18 @@
 
 <script>
 	/*$("#form").submit(function(){
-		var formdata = new FormData($(this)[0]);
+		var formData = new FormData($(this)[0]);
 		$.ajax({
 			type : 'post',
 			url  : '/profile/privateadm/saveinfo',
+			data : formData,
+			contentType : false,
 			processData : false,
 			success : function(data){
 				alert(data);
 			}
 		})
+		return false;
 	})*/
 	
 
