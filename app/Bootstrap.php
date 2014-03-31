@@ -53,9 +53,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $layout = $this->getResource('layout');
         $view = $view = $layout->getView();
         $view->placeholder('Textnav')
-                ->setPrefix("<div class=\"col-md-6\">\n    
-                        <h4 class=\"text-nav\">\n")
-                ->setSeparator("</h4>\n</div>");
+                ->setPrefix("<h4 class=\"text-nav\">\n")
+                ->setSeparator("</h4>");
         $view->placeholder('Btnnav')
                 ->setPrefix("<div class=\"pull-left\">\n")
                 ->setSeparator("</div>");

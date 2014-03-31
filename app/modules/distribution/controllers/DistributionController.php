@@ -103,20 +103,22 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                             'perid'=>$perid);
             $dataobs=$ldistribution->_getUltimateObservation($pk);
             $dataobs=$dataobs[0];
-            $pk['logobdistrid']=$dataobs['logobdistrid'];
             $data=array('comments'=>$comment,'state'=>$state);
-            // print_r($pk);
-            // print_r($data);exit();
-            // if ($comment) {
-            //     $data=array('state'=>"A",'comments'=>"Ya corrigió su distribución REVÍSALO");
-            // }
-            // else{
-            //     $data=array('state'=>"A");
-            // }
-            if ($ldistribution->_update($data,$pk)) {
-                // $dbdistribution->_update($data,$pk);
-                $this->_redirect("/distribution/distribution/index");
-
+            if ($dataobs) {
+                $pk['logobdistrid']=$dataobs['logobdistrid'];
+                if ($ldistribution->_update($data,$pk)) {
+                    // $dbdistribution->_update($data,$pk);
+                    $this->_redirect("/distribution/distribution/index");
+                }
+            }
+            else{
+                $datadis=$dbdistribution->_getFilter($pk);
+                $formData=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,
+                                'perid'=>$perid,'observation'=>$datadis[0]['observation'],'register'=>$this->sesion->uid,
+                                'comments'=>$comment,'state'=>'A');
+                if ($ldistribution->_save($formData)) {
+                    $this->_redirect("/distribution/distribution/index");
+                }
             }
         } catch (Exception $e) {
             print "Error:".$e->getMessage();

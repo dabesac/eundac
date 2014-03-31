@@ -7,7 +7,7 @@
 	</div>
 	<div class="col-md-1">
 		<blockquote>
-			<h2><a id="managementCourses" data-placement="left" data-toggle="popover" data-container="body" data-content="Click aqui para administrar todos tus cursos" class="text-warning" href="/docente/notas" title="Administrar Cursos"><span class="glyphicon glyphicon-book"></a></span></h2>
+			<h2><a class="text-warning" href="/docente/notas" title="Administrar Cursos"><span class="glyphicon glyphicon-book"></a></span></h2>
 		</blockquote>
 	</div>
 </div>
@@ -105,15 +105,6 @@ endforeach ?>
 <script>
 	$('#horary').load('/horary/seehorary/index');
 	$('#horary').fadeOut('slow');
-
-	$('#managementCourses').popover('show');	
-	setTimeout(function(){
-		$('#managementCourses').popover('hide')
-	}, 4000);
-
-	$('#managementCourses').hover(function (){
-		$('#managementCourses').popover('toggle');
-	});
 
 	$('#horaryBtn').click(function(){
 		$('#coursesData').fadeOut('fast', function(){

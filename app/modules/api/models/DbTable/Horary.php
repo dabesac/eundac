@@ -193,4 +193,33 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
             print "Error: Interval Horary".$e->getMessage();
         }
     }
+    public function _get_horary_x_syllabus($where=array()){
+        try {
+            if($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where ['uid']==''|| $where ['pid']=='' ) return false;        
+            $sql=$this->_db->query("
+                    select t.groups,t.hours_t,hours_p,t.percentage,
+                    h.hora_ini,h.hora_fin,h.type_class,h.semid,h.day, 
+                    s.*
+                    from base_course_x_teacher t
+                    inner join 
+                    horary_periods as h
+                    on t.eid=h.eid and t.oid = h.oid and t.escid = h.escid and t.subid = h.subid and
+                    t.courseid = h.courseid and t.curid = h.curid and t.turno = h.turno 
+                    left join base_syllabus_units_content s
+                    on h.eid=s.eid and h.oid = s.oid and h.escid=s.escid and 
+                    h.subid = s.subid and h.perid=s.perid and h.courseid=s.courseid and 
+                    h.curid = s.curid and h.turno =s.turno 
+                    where 
+                    t.eid='".$where['eid']."' and t.oid='".$where['oid']."' and
+                    t.is_main='S' and t.perid='".$where['perid']."' and
+                    t.uid='".$where['uid']."' and t.pid='".$where['pid']."'
+                    order by h.courseid , h.turno
+            ");
+            $rows = $sql->fetchAll();
+            if ($rows) return $rows;
+            return false; 
+        } catch (Exception $e) {
+            print "Error: Interval Horary".$e->getMessage();
+        }
+    }
  }
