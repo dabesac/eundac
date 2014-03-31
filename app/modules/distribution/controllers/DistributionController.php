@@ -50,18 +50,28 @@ class Distribution_DistributionController extends Zend_Controller_Action {
        		$rows_distribution =$distribution->_getDistributionsxYear($data);
     
             $bdhorary = new Api_Model_DbTable_HoursBeginClasses();
+            $ldistribution=new Distribution_Model_DbTable_logObsrvationDistribution();
             $i=0;
             foreach ($rows_distribution as $periodos) {
+                $distid=$periodos['distid'];
                 $perid=$periodos['perid'];
                 $escid=$periodos['escid'];
                 $subid=$periodos['subid'];
                 $wheres=array('eid'=>$data['eid'],'oid'=>$data['oid'],'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
-
+                $wheresp=array('eid'=>$data['eid'],'oid'=>$data['oid'],'distid'=>$distid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
+                $dataobs=$ldistribution->_getUltimateObservation($wheresp);
+                if ($dataobs) {
+                    $rows_distribution[$i]['observation']=$dataobs[0]['observation'];
+                    $rows_distribution[$i]['state']=$dataobs[0]['state'];
+                }
+                
                 $datahours=$bdhorary->_getFilter($wheres);
                 $rows_distribution[$i]['hours']=$datahours; 
                 $i++;
             }
-       		if ($rows_distribution) $this->view->ldistribution=$rows_distribution ;
+            // print_r($rows_distribution);
+
+            if ($rows_distribution) $this->view->ldistribution=$rows_distribution ;
         } catch (Exception $e) {
             print 'Error'.$e->getMessage();
         }
@@ -86,19 +96,27 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $subid=base64_decode($this->_getParam("subid"));
             $distid=base64_decode($this->_getParam("distid"));
             $perid=base64_decode($this->_getParam("perid"));
-            $comment=base64_decode($this->_getParam("comment"));
+            $comment=$this->_getParam("comment");
             $dbdistribution=new Distribution_Model_DbTable_Distribution();
+            $ldistribution=new Distribution_Model_DbTable_logObsrvationDistribution();
             $pk=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,
                             'perid'=>$perid);
-            if ($comment) {
-                $data=array('state'=>"A",'comments'=>"Ya corrigió su distribución REVÍSALO");
-            }
-            else{
-                $data=array('state'=>"A");
-            }
-            
-            if ($dbdistribution->_update($data,$pk)) {
+            $dataobs=$ldistribution->_getUltimateObservation($pk);
+            $dataobs=$dataobs[0];
+            $pk['logobdistrid']=$dataobs['logobdistrid'];
+            $data=array('comments'=>$comment,'state'=>$state);
+            // print_r($pk);
+            // print_r($data);exit();
+            // if ($comment) {
+            //     $data=array('state'=>"A",'comments'=>"Ya corrigió su distribución REVÍSALO");
+            // }
+            // else{
+            //     $data=array('state'=>"A");
+            // }
+            if ($ldistribution->_update($data,$pk)) {
+                // $dbdistribution->_update($data,$pk);
                 $this->_redirect("/distribution/distribution/index");
+
             }
         } catch (Exception $e) {
             print "Error:".$e->getMessage();

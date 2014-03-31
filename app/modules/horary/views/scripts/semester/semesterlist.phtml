@@ -1,11 +1,35 @@
 <?php
 	if($this->semester) { ?>
-		<div class='alert alert-success' style='text-align:center'>
-			<center style='font-size:20px'><b>SEMESTRES</b></center>
+		<div class='alert alert-info' style='text-align:center'>
+			<center style='font-size:20px'><b><span class='glyphicon glyphicon-th-list'></span> SEMESTRES</b></center><br>
 		<?php
-			foreach($this->semester as $semester) { ?>			 
-				<a id='semester<?php echo $semester['semid']?>' href="#" class='btn btn-success' semid='<?php echo $semester['semid']?>' style='margin-left:40px;margin-rigth:15px'><b><?php echo $semester['name']?></b>
-				</a>				
+			foreach($this->semester as $semester) {
+				?>			 
+				<!-- <a id='semester<?php echo $semester['semid']?>' href="#" class='btn btn-success' semid='<?php echo $semester['semid']?>' style='margin-left:40px;margin-rigth:15px'><b><?php echo $semester['name']?></b>
+				</a> -->
+				<!-- Split button -->
+				<div class="btn-group" style='margin-left:2%'>
+				  	<button id='semester<?php echo $semester['semid']?>' semid='<?php echo $semester['semid']?>' type="button" class="btn btn-primary"><?php echo $semester['name']?></button>
+				  	<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+					   	<span class="caret"></span>
+					    <!-- <span class="sr-only">Toggle Dropdown</span> -->
+				  	</button>
+				  	<ul class="dropdown-menu" role="menu">
+				  		<?php
+							$len=count($semester['turnos']);
+							// print_r($semester['turnos']);exit();
+							$turno=$semester['turnos'];
+							for ($i=0; $i < $len; $i++) { ?>	
+				    				<li>
+				    					<a href="#" class='turno' semid='<?php echo $semester['semid']?>' turno='<?php echo $turno[$i]['turno']?>'><?php echo "TURNO - ".$turno [$i]['turno']?>
+				    					</a>
+				    				</li>
+									<!-- <input type="checkbox"> -->
+							<?php								
+							}
+						?>	
+				  	</ul>
+				</div>
 				<script type="text/javascript">
 					$("#semester<?php echo $semester['semid']?>").click(function(){
 						var perid="<?php echo $this->perid?>";
@@ -14,7 +38,7 @@
 						var url='/horary/semester/horarysemester/semid/'+semid+'/perid/'+perid;
 						$('#changehorary').html("<img src='/img/spinner.gif'>Cargando....");
 						$('#changehorary').load(url);
-						});
+					});
 				</script>
 		<?php
 		}	?>
@@ -24,3 +48,13 @@
 		<div class='alert alert-danger'>NO HAY REGISTRO.</div>
 	<?php
 	}	?>
+	<script type="text/javascript">
+		$(".turno").click(function(){
+			var perid="<?php echo $this->perid?>";
+			var semid=$(this).attr('semid');
+			var turno=$(this).attr('turno');
+			var url='/horary/semester/horarysemester/semid/'+semid+'/perid/'+perid+'/turno/'+turno;
+			$('#changehorary').html("<img src='/img/spinner.gif'>Cargando....");
+			$('#changehorary').load(url);
+		});
+	</script>

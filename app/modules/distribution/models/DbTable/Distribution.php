@@ -100,7 +100,7 @@ class Distribution_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 			if ($data['eid']=='' || $data['oid']==''|| $data['escid']=='' || $data['subid']=='') return false;
 			$wherestr="eid='".$data['eid']."' and oid='".$data['oid']."' and escid='".$data['escid']."' and subid='".$data['subid']."' and left(perid,2)='".$data['year']."'";
 			//$order="perid asc";
-			$rows= $this->fetchAll($wherestr,$order);
+			$rows= $this->fetchAll($wherestr);
 			if ($rows) return $rows->toArray();
 			return false;
 		} catch (Exception $e) {

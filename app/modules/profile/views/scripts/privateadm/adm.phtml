@@ -1,32 +1,31 @@
 <div class="row">
-  <br>
-  <div class="col-md-1">
-    <img alt="Foto de Perfil" align="center">
-    <!--<img src="/fotos/<?php echo $this->person['uid']?>.jpg" title="">-->
-  </div>
-  <div class="col-md-5">
-    <h3 class="text-right"><b><?php echo $this->person[0]['last_name0']." ".$this->person[0]['last_name1']?><span class="text-muted"> <?php echo $this->person[0]['first_name']?></span></b></h3>
-    <br>
-    <h5 class="text-right">Código <b><?php echo $this->person['uid']?></b></h5>
-  </div>
-  <div class="col-md-6">
-    <blockquote>
-      <h3>Facultad de <?php echo $this->facesp[0]['nomfac']?></h3>
-      <h3>Escuela de <?php echo $this->facesp[0]['nomesc']?></h3>
-    </blockquote>
+    <div class="col-md-1 col-md-offset-1">
+        <img alt="Foto de Perfil" align="center">
+        <!--<img src="/fotos/<?php echo $this->person['uid']?>.jpg" title="">-->
+    </div>
+    <div class="col-md-4">
+        <h3 class="text-right"><b><?php echo $this->person[0]['last_name0']." ".$this->person[0]['last_name1']?><span class="text-muted"> <?php echo $this->person[0]['first_name']?></span></b></h3>
+        <br>
+        <h5 class="text-right">Código <b><?php echo $this->person['uid']?></b></h5>
+    </div>
+    <div class="col-md-6">
+        <blockquote>
+            <h3>Facultad de <?php echo $this->facesp[0]['nomfac']?></h3>
+            <h3>Escuela de <?php echo $this->facesp[0]['nomesc']?></h3>
+        </blockquote>
   </div>
 </div>
 
 <div style="display: block; width: 100%; ">
 	<ul class="nav nav-tabs" id="profileTab">
-		<li class="active"><a href="#courses"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Cursos a Cargo</h5></a></li>
-    <li><a href="#academicRecord"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Historial Académico</h5></a></li>
+		<!-- <li class="active"><a href="#courses"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Cursos a Cargo</h5></a></li> -->
+    <li class="active"><a href="#academicRecord"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Historial Académico</h5></a></li>
     <li><a href="#info"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Datos Personales</h5></a></li>
 		<li><a class="hidden"></a></li>
 	</ul>
 	<div class="tab-content">
-    <div class="tab-pane active in fade" id="courses"></div>
-    <div class="tab-pane fade" id="academicRecord"></div>
+    <!-- <div class="tab-pane active in fade" id="courses"></div> -->
+    <div class="tab-pane active in fade" id="academicRecord"></div>
     <div class="tab-pane fade" id="info">
       <div id="admData"></div>
       <div id="editData"></div>
@@ -36,7 +35,7 @@
 
 
 <script>
-  $('#courses').load("/profile/privateadm/coursescurrent");
+  // $('#courses').load("/profile/privateadm/coursescurrent");
   $("#academicRecord").load("/docente/report/index");
   $("#admData").load("/profile/privateadm/adminfo");
   $('#editData').fadeOut('fast');

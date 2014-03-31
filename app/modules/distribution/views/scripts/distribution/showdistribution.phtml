@@ -61,6 +61,7 @@ $ldistri =$this->ldistribution;
 		$image="";
 		$state = ($distri['state']=='A')?"class='success'":"";
 		$i++; 
+
 		switch ($distri['state']) {
 			case 'A': 	$state = "success"; 
 						$namestate = "Activo";
@@ -91,7 +92,7 @@ $ldistri =$this->ldistribution;
 		<td class="text-center"><?php echo $approv;?></td>
 		<td class="text-center <?php echo $state?>">
 			<?php
-			if ($distri['observation']!='' && $distri['observation']!="''" && $distri['state']=='O') {	?>
+			if ($distri['state']=='O') {	?>
 				<span class='obser text-<?php echo $state?>' title="Observado" data-container="body" data-toggle="popover" data-content="DISTRIBUCIÓN OBSERVADA POR PEDAGOGÍA" observation='<?php echo $distri['observation']?>' distid='<?php echo $distid;?>' perid='<?php echo $perid;?>' escid='<?php echo base64_encode($distri['escid']);?>' subid='<?php echo base64_encode($distri['subid'])?>'>
 				<img src="/img/circulo-<?php echo $img?>.png">	
 				</span>
@@ -183,57 +184,79 @@ $ldistri =$this->ldistribution;
 </div>
 
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div id='hourbegin'></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+  	<div class="modal-dialog">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      		</div>
+      		<div class="modal-body">
+        		<div id='hourbegin'></div>
+        	</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
+      		</div>
+    	</div><!-- /.modal-content -->
+  	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 
 <!-- Modal Modificar-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div id='updatehour'></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+  	<div class="modal-dialog">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      		</div>
+      		<div class="modal-body">
+        		<div id='updatehour'></div>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
+      		</div>
+    	</div><!-- /.modal-content -->
+  	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 <!-- Corregir distribución-->
 <div class="modal fade" id="myModals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 class="modal-title text-danger text-center" id="myModalLabel"><b>Revise su distribución</b></h3>
-      </div>
-      <div class="modal-body">
-        <div class="alert alert-info" style="width:90%; margin-left:5%"><h4><b>Sí corrigío la distribución click aquí <button id="sendis" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-send"></span></button></b> para que pedagogía lo revise</h4></div>
-      	<div id="obs"></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+  	<div class="modal-dialog">
+    	<div class="modal-content">
+     		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        		<h3 class="modal-title text-danger text-center" id="myModalLabel"><b>Revise su distribución</b></h3>
+        	</div>
+      		<div class="modal-body">
+        		<div class="alert alert-info" style="width:90%; margin-left:5%"><h4><b>Sí corrigió la distribución y desea hacer un comentario click aquí <button id="sendiss" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-send"></span></button></b></h4></div>
+      			<div id="obs"></div>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-danger" data-dismiss="modal" >Cancelar</button>
+      		</div>
+    	</div><!-- /.modal-content -->
+  	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<div class="modal fade" id="Modals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  	<div class="modal-dialog">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        	<h3 class="modal-title text-danger text-center" id="myModalLabel"><b>Revise su distribución</b></h3>
+	      	</div>
+	      	<div class="modal-body">
+	      		<div>
+	      			<div class="text-info"><b>Si desea ingresa un comentario: </b></div><br>
+	      			<textarea id="comentss" rows="4" class="form-control" placeholder="Ingrese Comentario" cols="80"></textarea>
+	      		</div>
+	      	</div>
+	      	<div class="modal-footer">
+	      		<button id="sendis" type="button" class="btn btn-success"><span class="glyphicon glyphicon-send"></span> Enviar Distribución</button>
+	        	<button id='cancel'type="button" class="btn btn-danger" data-dismiss="modal" >Cancelar</button>
+	      	</div>
+    	</div><!-- /.modal-content -->
+  	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <div id="valids"></div>
 
 <script>
@@ -249,18 +272,24 @@ $('.obser').hover(function(){
 	};
 	var sms="<h5><b>Este es la observación: </b>"+params['observation']+"</h5>";
 	$('#obs').html(sms);
-	$("#sendis").click(function(){
+	$("#sendiss").click(function(){
 		$("#myModals").modal("hide");
-		$('#myModals').on('hidden.bs.modal', function (e) {
-			var url="/distribution/distribution/sendistribution/state/<?php echo base64_encode("A")?>/escid/"+params['escid1']+"/subid/"+params['subid1']+"/distid/"+params['distid1']+"/perid/"+params['perid1']+"/comment/<?php echo base64_encode("S")?>/";
-			$("#valids").load(url);
-			$('.obser').popover('hide');
+		$("#Modals").modal("show");
+		$("#sendis").click(function(){
+			var coments=$("#comentss").val();
+			coments=coments.trim();
+			// alert(coments);
+			$("#Modals").modal("hide");
+			$('#Modals').on('hidden.bs.modal', function (e) {
+				var url="/distribution/distribution/sendistribution/state/<?php echo base64_encode("A")?>/escid/"+params['escid1']+"/subid/"+params['subid1']+"/distid/"+params['distid1']+"/perid/"+params['perid1']+"/comment/"+coments;
+				$("#valids").load(url);
+				$('.obser').popover('hide');
+			})
 		})
-	});
+	})
 });
-
-$("#sendis").click(function(){
-	$("#myModals").modal("hide");
+$('#cancel').click(function(){
+	$('#myModals').modal('show');
 });
 
 $("#sendp").click(function(){
