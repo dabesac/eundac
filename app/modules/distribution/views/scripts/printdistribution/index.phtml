@@ -100,10 +100,11 @@ for($n = 0; $n <= 2; $n++){
                             $turno = $rk['turno'];
                             $semid = $rk['semid'];
                             $wherecourse = array(
-                                'eid' => $teachers['eid'], 'oid' => $teachers['oid'], 'curid' => $curso['curid'], 
-                                'escid' => $curso['escid'], 'subid' => $curso['subid'], 'courseid' => $curso['courseid']);
+                                'eid' => $teachers['eid'], 'oid' => $teachers['oid'], 'curid' => $rk['curid'], 
+                                'escid' => $rk['escid'], 'subid' => $rk['subid'], 'courseid' => $rk['courseid']);
+                            // print_r($wherecourse);exit();
                             $tmp = $nc->_getOne($wherecourse);                
-                            
+                            // print_r($tmp);exit();
                             // Leer Escuela
                             $whereespe=array('eid' => $rk['eid'], 'oid' => $rk['oid'],
                                 'escid' => $rk['escid'], 'subid' => $rk['subid']);

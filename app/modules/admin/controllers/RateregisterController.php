@@ -58,7 +58,8 @@ class Admin_RateregisterController extends Zend_Controller_Action {
             $data['eid']=$eid;
             $data['oid']=$oid;
             $data['perid']=$perid;
-            $datatasas=$dbtasas->_getFilter($data);
+            $order=array('ratid');
+            $datatasas=$dbtasas->_getFilter($data,null,$order);
             $this->view->tasas=$datatasas;
         }
     public function newAction(){

@@ -1,4 +1,6 @@
-<link rel="stylesheet" href="/css/sliderNews.css">
+    <link rel="stylesheet" href="/css/sliderNews.css">
+
+
 <!--Slider de Noticias-->
 <div class="row">
     <div class="col-md-12">
@@ -62,8 +64,63 @@
     </div>
     </div>
 </div>
+<br>
 
+<!--Grafica Docentes-->
+<!--<script type="text/javascript" src="/js/graphic/docente.js"></script>
+<script src="/external_library/highcharts/js/highcharts.js"></script>
+<script src="/external_library/highcharts/modules/exporting.js"></script>
+
+<div id="graficaSlide" class="grafica">
+    <div class="graficaTitle">
+        <p class="text-muted">Gráfica de la encuesta realizada en el periodo 13B</p>
+    </div>
+    <a id="openSlideGrafica" href="##">
+    <div class="openGraficaBotons">
+        <p><span class="glyphicon glyphicon-stats"></span> Visualizar Gráfica</p>
+    </div>
+    </a>
+    <a id="closeSlideGrafica" href="##">
+    <div class="closeGraficaBotons hidden">
+        <p><span class="glyphicon glyphicon-stats"></span> Cerrar Gráfica</p>
+    </div>
+    </a>
+    <div class="botonsCourses">
+        <div class="row">
+            <div class="col-md-1 col-md-offset-3">
+                <a class="text-muted pull-right" href="##"><span-glyphicon class="glyphicon glyphicon-chevron-left"></span-glyphicon></a>
+            </div>
+            <div class="col-md-4 text-center text-muted">Investigacion Operativa</div>
+            <div class="col-md-1">
+                <a class="text-muted" href="##"><span-glyphicon class="glyphicon glyphicon-chevron-right"></span-glyphicon></a>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    var $coursesName = <?php echo $this->coursesName ?>;
+    /*var $courses = <?php echo $this->courses?>;
+    var $dat_assist = <?php echo $this->dat_assist?>;*/
+    </script>
+    <div class="dataGraficas">
+        <?php 
+        $active = 0;
+        foreach ($this->coursesBefore as $course): ?>
+            <?php if ($active == 0): ?>
+                <div class="graficaCourse activeGrafica">
+                    <div id="container_encuesta"></div>
+                </div>
+            <?php 
+            $active = 1;
+            else: ?>
+                <div class="graficaCourse">
+                    <div id="container_encuestas"></div>
+                </div>
+            <?php endif ?>
+        <?php endforeach ?>
+    </div>
+</div>-->
 <br><br> 
+
 <!--Panel de Avance de Cursos-->
 <div class="avanceCursos container">
     <div class="row">
@@ -87,7 +144,7 @@
         <div class="curso">
             <div class="container">
                 <div class="col-md-6">
-                    <h5 class="text-info"><?php echo $this->coursesName[$c][0]['name'] ?> <small><?php echo $course['courseid'] ?></small></h5>
+                    <h5 class="text-info"><span class="progressIcons" title="<?php echo $this->coursesSpecialityName[$c][0]['name'] ?>"><?php echo ucwords(strtolower($this->coursesName[$c][0]['name'])) ?></span> <small><?php echo $course['courseid'] ?></small></h5>
                 </div>
                 <div class="col-md-2">
                     <?php if ($this->porcentajeSyllabus[$c] == 0){
@@ -103,7 +160,7 @@
                         $color = 'text-success';
                         $avisoSilabo = 'Sílabo completado';
                     }?>
-                    <h5 class="progressIcons" title="<?php echo $avisoSilabo ?>">
+                    <h5>
                         <?php 
                         $urlSyllabus = 'syllabus/syllabus/index'.   '/courseid/'.base64_encode($course['courseid']).
                                                                     '/curid/'.base64_encode($course['curid']).
@@ -111,7 +168,7 @@
                                                                     '/subid/'.base64_encode($course['subid']).
                                                                     '/turno/'.base64_encode($course['turno']).
                                                                     '/perid/'.base64_encode($course['perid']) ; ?>
-                        <a href="<?php echo $urlSyllabus ?>" class="<?php echo $color ?> " ><span class="glyphicon glyphicon-book"></span></a>
+                        <a href="<?php echo $urlSyllabus ?>" class="<?php echo $color ?> progressIcons" title="<?php echo $avisoSilabo ?>"><span class="glyphicon glyphicon-book"></span></a>
                         <small class="<?php echo $color ?>"><?php echo $this->porcentajeSyllabus[$c] ?> %</small>
                     </h5>
                 </div>
@@ -131,8 +188,8 @@
                                                                                 '/turno/'.base64_encode($course['turno']).
                                                                                 '/perid/'.base64_encode($course['perid']) ;
                     } ?>
-                    <h5 class="progressIcons" title="<?php echo $avisoSessions ?>">
-                        <a href="<?php echo $urlControlActivity ?>" class="<?php echo $classSessions ?> " ><span class="glyphicon glyphicon-dashboard"></span></a>
+                    <h5>
+                        <a href="<?php echo $urlControlActivity ?>" class="<?php echo $classSessions ?> progressIcons" title="<?php echo $avisoSessions ?>"><span class="glyphicon glyphicon-dashboard"></span></a>
                         <small class="<?php echo $classSessions ?>"><?php echo $this->progressSessions[$c]['porcentaje'] ?></small>
                     </h5>
                 </div>
@@ -171,12 +228,11 @@
                     }
                     ?>
                     
-                    <h5 class="progressIcons" title="<?php echo $avisoNotas ?>">
-                        <a href="<?php echo $urlNotas ?>" class="<?php echo $classNotas ?>" ><span class="glyphicon glyphicon-saved"></span></a>
+                    <h5>
+                        <a href="<?php echo $urlNotas ?>" class="<?php echo $classNotas ?> progressIcons" title="<?php echo $avisoNotas ?>"><span class="glyphicon glyphicon-saved"></span></a>
                         <small class="<?php echo $classNotas ?>"><?php echo $progressNotas ?></small>
                     </h5>
                 </div>
-
             </div>
         </div>
     </div>
@@ -187,7 +243,6 @@
     <?php endif ?>
     </div><!--Div Container-->
     </div><!--Div Row-->
-    <br>
     </div>
 </div>
 <br><br>
@@ -211,7 +266,7 @@
         <div class="row">
             <div class="container">
             <div class="col-md-6">
-                <div class="curso">
+                <div class="curso avance">
                 <div class="container">
                 <div id="showEmptySyllabus" class="progressIcons" title="<?php echo $this->emptySyllabus ?> Docentes aún Faltan Completar sus Sílabos">
                     <div class="container">
@@ -227,10 +282,16 @@
                 </div>
                 <div id="listEmptySyllabus" class="dataSliderAvance">
                 <div class="container">
-                    <p class="text-danger text-center">Fálta Sílabo</p>
+                    <p class="text-danger text-center">Fálta Sílabo
+                        <?php if ($this->emptySyllabus >= 5): ?>
+                            <span class="text-muted">Algunos de los docentes son:</span>
+                        <?php endif ?>
+                    </p>
                     <div class="row">
                     <div class="container">
-                    <?php foreach ($this->teachersEmptySyllabus as $teacher): ?>
+                    <?php 
+                    $maxProfes = 0;
+                    foreach ($this->teachersEmptySyllabus as $teacher): ?>
                         <div class="col-md-6">
                             <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
                         </div>
@@ -239,41 +300,60 @@
                             <?php foreach ($this->coursesEmptySyllabus as $course): ?>
                                 <?php if ($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]): ?>
                                     <p>
-                                        <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'] ?>
+                                        <small><span class="glyphicon glyphicon-book text-muted"></span></small>
+                                        <?php echo ucwords(strtolower($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'])) ?>
                                         <small class="text-muted">turno <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['turno'] ?></small>
                                     </p> 
                                 <?php endif ?>
                                 <?php $coursesEmpty++; ?>
                             <?php endforeach ?>
                         </div>
-                    <?php endforeach ?>
+                    <?php 
+                        $maxProfes++;
+                        if ($maxProfes == 5) {
+                            break;
+                        }
+                    endforeach ?>
                     </div>
                     </div>
                 </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="curso">
+                <div class="curso avance">
                 <div class="container">
-                <div id="showEmptyReport" class="progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar el Reporte Académico">
+                <div id="showEmptyReport" class="progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar su Informe Académico">
                     <div class="container">
                         <?php if ($this->totalEmptyReport == $this->totalTeachers){
                             $classReport = 'text-success';
                         }else{
                             $classReport = 'text-danger';
                         }?>
-                       <h5 class="text-info">Reporte Academico <strong class="pull-right <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong></h5>
+                       <h5 class="text-info">Informe Académico <strong class="pull-right <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong></h5>
                     </div>
                 </div>
                 </div>
                 </div>
                 <div id="listEmptyReport" class="dataSliderAvance">
                     <div class="container">
-                    <p class="text-center text-danger">Falta Reporte Académico</p>
+                    <p class="text-center text-danger">Falta Informe Académico
+                        <?php if ($this->emptyReport >= 10): ?>
+                            <span class="text-muted">Algunos de los docentes son:</span>
+                        <?php endif ?>
+                    </p>
                     <div class="container">
-                        <?php foreach ($this->teachersEmptyReport as $teacher): ?>
-                            <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
-                        <?php endforeach ?>
+                        <?php 
+                        $maxProfes = 0;
+                        foreach ($this->teachersEmptyReport as $teacher): ?>
+                            <div class="col-md-6">
+                                <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
+                            </div>
+                        <?php 
+                            $maxProfes++;
+                            if ($maxProfes == 10) {
+                                break;
+                            }
+                        endforeach ?>
                     </div>
                     </div>
                 </div>
@@ -286,7 +366,7 @@
         <br>
     </div>
 </div>
-<div style="height: 200px;"></div>
+<div style="height: 500px;"></div>
 
     <!--<div class="col-md-1 text-center">
         <br><br>
@@ -343,7 +423,21 @@
 </div>-->
 <script type="text/javascript">
 	//$("#graphic-survey").load("/docente/index/xcourses");
-   
+    
+    $('#openSlideGrafica').click(function(){
+        $('.openGraficaBotons').addClass('hidden');
+        $('.closeGraficaBotons').removeClass('hidden');
+        $(".openGraficaBotons, .closeGraficaBotons").animate({ "left": "+=50%" }, "slow", function(){
+        });
+    });
+
+    $('#closeSlideGrafica').click(function(){
+        $('.openGraficaBotons').removeClass('hidden');
+        $('.closeGraficaBotons').addClass('hidden');
+        $(".openGraficaBotons, .closeGraficaBotons").animate({ "left": "-=50%" }, "slow", function(){
+        });
+    });
+
     var rid = $('#rid').val();
     if (rid != 'DR') {
         $('#avanceDirectores').addClass('hidden');

@@ -10,6 +10,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
       }
       $login = $sesion->getStorage()->read();
       $this->sesion = $login;
+      $this->sesion->period->perid = '14A';
     }
     public function indexAction(){
         try{
@@ -126,7 +127,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $person = $personDb->_getInfoUser($where);
             $this->view->person = $person;
             
-            //Información de Pago
+            //Información de Condición
             $where = array( 'eid'   => $eid, 
                             'oid'   => $oid, 
                             'uid'   => $uid, 
@@ -134,38 +135,43 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                             'escid' => $escid, 
                             'subid' => $subid,
                             'perid' => $perid );
-            $attrib = array('date_payment', 'amount', 'ratid');
-            $paymentData = $paymentDb->_getFilter($where, $attrib);
-            $paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
-            $this->view->paymentData = $paymentData;
 
-            //Detalle de Pago
-            $paymentsDetail = $paymentsDetailDb->_getFilter($where);
-            $this->view->paymentsDetail = $paymentsDetail;
-
-            //Información de Condición
             $attrib = array('doc_authorize', 'comments');
             $condition = $conditionDb->_getFilter($where, $attrib);
             $this->view->condition = $condition;
+            
+            //Información de Pago
+            $attrib = array('date_payment', 'amount', 'ratid');
+            $paymentData = $paymentDb->_getFilter($where, $attrib);
+            if ($paymentData) {
+                $paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
+                $paymentData[0]['date_fix'] = date('d-m-Y', strtotime($paymentData[0]['date_payment']));
+                $this->view->paymentData = $paymentData;
 
-            //Información de Taza
-            $where = array( 'eid'   => $eid, 
-                            'oid'   => $oid, 
-                            'ratid' => $paymentData[0]['ratid'], 
-                            'perid' => $perid );
-            $rate = $rateDb->_getFilter($where);
-            $this->view->rate = $rate;
+                //Detalle de Pago
+                $paymentsDetail = $paymentsDetailDb->_getFilter($where);
+                $this->view->paymentsDetail = $paymentsDetail;
+
+                //Información de Taza
+                $where = array( 'eid'   => $eid, 
+                                'oid'   => $oid, 
+                                'ratid' => $paymentData[0]['ratid'], 
+                                'perid' => $perid );
+                $rate = $rateDb->_getFilter($where);
+                $this->view->rate = $rate;
+            }
 
             //Verificar Fecha de Pago
-            $datePago       = date('Y-m-d', strtotime($paymentData[0]['date_payment']));
-            $dateNormal     = date('Y-m-d', strtotime($rate[0]['f_ini_tn']));
-            $dateIncrement1 = date('Y-m-d', strtotime($rate[0]['f_fin_ti1']));
-            $dateIncrement2 = date('Y-m-d', strtotime($rate[0]['f_fin_ti2']));
-            $dateIncrement3 = date('Y-m-d', strtotime($rate[0]['f_fin_ti3']));
+            $datePago       = strtotime($paymentData[0]['date_payment']);
+            $dateNormal     = strtotime($rate[0]['f_fin_tnd']);
+            $dateIncrement1 = strtotime($rate[0]['f_fin_ti1']);
+            $dateIncrement2 = strtotime($rate[0]['f_fin_ti2']);
+            $dateIncrement3 = strtotime($rate[0]['f_fin_ti3']);
 
+            $montoPagado = $paymentData[0]['amount'];
 
             $pagoAtiempo = 'yes';
-            /*if ($datePago <= $dateNormal) {
+            if ($datePago <= $dateNormal) {
                 $tipePayment['tipoPago'] = 'AT';
             }elseif ($datePago <= $dateIncrement1){
                 $tipePayment['tipoPago']   = 'I1';
@@ -177,7 +183,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $tipePayment['incremento'] = $rate[0]['t_incremento2'];
                 $tipePayment['porcentaje'] = $rate[0]['v_t_incremento2'];
                 $pagoAtiempo = 'no';
-            }elseif ($datePago <= $dateIncrement2){
+            }elseif ($datePago <= $dateIncrement3){
                 $tipePayment['tipoPago']    = 'I3';
                 $tipePayment['incremento'] = $rate[0]['t_incremento3'];
                 $tipePayment['porcentaje'] = $rate[0]['v_t_incremento2'];
@@ -185,7 +191,14 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             }else {
                 $tipePayment['tipoPago']    = 'FT';
                 $pagoAtiempo = 'no';
-            }*/
+            }
+            
+            if ($montoPagado >= $tipePayment['incremento']) {
+                $tipePayment['pago_completo'] = 'yes';
+            }else{
+                 $tipePayment['pago_completo'] = 'no';
+            }
+
             $this->view->tipePayment = $tipePayment;
             $this->view->pagoAtiempo  = $pagoAtiempo;
 
@@ -354,6 +367,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'perid' => $perid,
                         'regid' => $regid,
                         'state' => $state );
+
 
         $data = array(  'modified' => $this->sesion->uid,
                         'updated'  => date('Y-m-d h:m:s') );
