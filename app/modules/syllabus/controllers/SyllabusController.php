@@ -31,7 +31,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                     'oid' => $this->sesion->oid,
                     'perid' => base64_decode($this->_getParam('perid')),
                     );
-            $data_period =$tb_period->_getOne($where_per);
+            $data_period =$tb_period->_getOnePeriod($where_per);
 
             $date_stard_t = $this->converterdate((string)$data_period['class_start_date']);
             $date_end_t = $this->converterdate((string)$data_period['class_end_date']);

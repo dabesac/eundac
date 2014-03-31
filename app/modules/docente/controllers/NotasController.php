@@ -66,9 +66,10 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$this->view->faculty=$faculty;
 
 		$base_period = new Api_Model_DbTable_Periods();
-	    $data_period = $base_period->_getOne($where);
+	    $data_period = $base_period->_getOnePeriod($where);
 	    $period_tm_act_ini = $base_period->_get_periods_ini_temp_activo($where);
 	    
+
 	    $li = '';
 		 if ($period_tm_act_ini) {
 		 	foreach ($period_tm_act_ini as $key => $value) {
@@ -92,7 +93,6 @@ class Docente_NotasController extends Zend_Controller_Action{
             }
 	        
 	    }
-
 	    $persetage = $this->persetage_notes($data_courses,$partial);
 
 		$this->view->data=$persetage;

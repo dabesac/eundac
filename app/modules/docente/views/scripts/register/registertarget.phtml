@@ -58,8 +58,8 @@ $text_partial = ($this->partial==1)? 'Primer Partial':'Segundo Partial';
 
 						<?php if ($this->partial == 2) {
 							if ($student['notafinal']== -3 ) { $retirados++;}
-							if ($student['notafinal'] > 10 && $student['notafinal'] <=20 ) { $aprobados++; $back1="active text-primary";}
-							if ($student['notafinal'] >= 0 && $student['notafinal'] <=10 ) { $jalados++; $back1="danger text-danger";}
+							elseif ($student['notafinal'] > 10 && $student['notafinal'] <=20 ) { $aprobados++; $back1="active text-primary";}
+							elseif ($student['notafinal'] >= 0 && $student['notafinal'] <=10 ) { $jalados++; $back1="danger text-danger";}
 							}
 
 						?>
@@ -88,19 +88,18 @@ $text_partial = ($this->partial==1)? 'Primer Partial':'Segundo Partial';
 							<td class='text-center warning' colspan='9'>Retirado</td>
 							<td class='text-center warning' >R</td>
 						<?php }else{ ?>
-						<td class='text-center <?php echo ($student['nota1_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota1_ii']?></td>
-						<td class='text-center <?php echo ($student['nota2_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota2_ii']?></td>
-						<td class='text-center <?php echo ($student['nota3_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota3_ii']?></td>
-						<td class='text-center <?php echo ($student['nota4_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota4_ii']?></td>
-						<td class='text-center <?php echo ($student['nota5_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota5_ii']?></td>
-						<td class='text-center <?php echo ($student['nota6_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota6_ii']?></td>
-						<td class='text-center <?php echo ($student['nota7_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota7_ii']?></td>
-						<td class='text-center <?php echo ($student['nota8_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota8_ii']?></td>
-						<td class='text-center <?php echo ($student['nota9_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo $student['nota9_ii']?></td>
-						<td class='text-center <?php echo $back1?>'><?php echo $student['promedio2']?></td>
-						<td class='text-center <?php echo $back1?>'><?php echo $student['notafinal']?></td>
+						<td class='text-center <?php echo ($student['nota1_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo (is_null($student['nota1_ii']))? '&nbsp;': $student['nota1_ii']?></td>
+						<td class='text-center <?php echo ($student['nota2_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo (is_null($student['nota2_ii']))? '&nbsp;': $student['nota2_ii']?></td>
+						<td class='text-center <?php echo ($student['nota3_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo (is_null($student['nota3_ii']))? '&nbsp;': $student['nota3_ii']?></td>
+						<td class='text-center <?php echo ($student['nota4_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo (is_null($student['nota4_ii']))? '&nbsp;': $student['nota4_ii']?></td>
+						<td class='text-center <?php echo ($student['nota5_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo (is_null($student['nota5_ii']))? '&nbsp;': $student['nota5_ii']?></td>
+						<td class='text-center <?php echo ($student['nota6_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo (is_null($student['nota6_ii']))? '&nbsp;': $student['nota6_ii']?></td>
+						<td class='text-center <?php echo ($student['nota7_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo (is_null($student['nota7_ii']))? '&nbsp;': $student['nota7_ii']?></td>
+						<td class='text-center <?php echo ($student['nota8_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo (is_null($student['nota8_ii']))? '&nbsp;': $student['nota8_ii']?></td>
+						<td class='text-center <?php echo ($student['nota9_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo (is_null($student['nota9_ii']))? '&nbsp;': $student['nota9_ii']?></td>
+						<td class='text-center <?php echo $back1?>' ><?php echo $student['promedio2']?></td>
+						<td class='text-center <?php echo $back1?>' ><?php echo $student['notafinal']?></td>
 					<?php }}?>
-
 					</tr>
 				<?php }?>
 				</tbody>
