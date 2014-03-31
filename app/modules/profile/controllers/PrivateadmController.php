@@ -133,6 +133,11 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
             print "Error ".$e->getMessage();
         }
     }
+
+    public function saveinfoAction(){
+        $this->_helper->layout()->disableLayout();
+        echo 'Joder';
+    }
     
 
 

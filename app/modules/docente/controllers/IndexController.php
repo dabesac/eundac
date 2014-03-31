@@ -17,7 +17,7 @@ class Docente_IndexController extends Zend_Controller_Action {
     
     public function indexAction(){
     try{
-        //DataBases //Avance de Notas
+        //DataBases
         $periodsxCourseDb              = new Api_Model_DbTable_PeriodsCourses();
         $coursesxTeacherDb             = new Api_Model_DbTable_Coursexteacher();
         $courseDb                      = new Api_Model_DbTable_Course();
@@ -327,50 +327,31 @@ class Docente_IndexController extends Zend_Controller_Action {
             $this->view->teachersEmptyReport = $teachersEmptyReport;
         }
 
+        $where = array( 'eid' => $eid,
+                        'oid' => $oid,
+                        'uid' => $uid,
+                        'pid' => $pid,
+                        'perid' => '13B');
 
+        $coursesBefore = $coursesxTeacherDb->_getFilter($where);
 
+        $c = 0;
+        foreach ($coursesBefore as $course) {
+            //Nombre de los Cursos
+            $where = array( 'eid'      => $eid,
+                            'oid'      => $oid,
+                            'courseid' => $course['courseid'],
+                            'curid'    => $course['curid'] );
+            $attrib = array('name');
+            $courseName = $courseDb->_getFilter($where, $attrib);
+            $encuestaCoursesName[$c] = $courseName[0]['name'];
+            $c++;
+        }   
+        $this->view->coursesBefore       = $coursesBefore;
+        $this->view->encuestaCoursesName = $encuestaCoursesName;
 
+        }catch (Exception $e) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-         $tb_periods = new Api_Model_DbTable_Periods();
-         $where_1 = array(
-                 'eid'=>$this->sesion->eid,
-                 'oid'=>$this->sesion->oid,
-                 'perid'=>$this->sesion->period->perid
-             );
-         $dat_period = $tb_periods->_getOne($where_1);
-         $date_1 = new Zend_Date($dat_period['start_register_note_p']);
-         $day_1 = $date_1->get(Zend_Date::DAY); 
-         $day_last = $date_1->get(Zend_Date::WEEKDAY);
-         $mounth = $date_1->get(Zend_Date::MONTH_NAME);
-         $this->view->day_1=$day_1;
-         $this->view->day_last=$day_last;
-         $this->view->mounth=$mounth;
-
-         $date_2 = new Zend_Date($dat_period['start_register_note_s']);
-         $day_2 = $date_2->get(Zend_Date::DAY); 
-         $day_last_2 = $date_2->get(Zend_Date::WEEKDAY);
-         $mounth_2 = $date_2->get(Zend_Date::MONTH_NAME);
-         $this->view->day_2=$day_2;
-         $this->view->day_last2=$day_last_2;
-         $this->view->mounth_2=$mounth_2;
-
-            
-            //print_r($courses);
-        }
-        catch (Exception $e) {           
         }
     }
     public function subjectsAction()

@@ -159,8 +159,13 @@ class Profile_Form_Userinfo extends Zend_Form{
         foreach ($datad as $datad) {
             $country_d->addMultiOption($datad['disid'],$datad['name_d']);            
         }
+
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit -> removeDecorator('HtmlTag')->removeDecorator('Label')
+                -> setAttrib('class', 'form-control btn btn-success')
+                -> setLabel('Guardar');
         
         $this->addElements(array($numdoc, $typedoc, $year, $month, $day, $sex, $civil, 
-            $mail_person, $mail_work, $phone, $cellular,$country,$country_s,$country_p,$country_d));
+            $mail_person, $mail_work, $phone, $cellular,$country,$country_s,$country_p,$country_d, $submit));
     }
 }

@@ -1,71 +1,86 @@
-<ul class="nav nav-pills nav-stacked" id="backeditBtn">
-	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
-</ul>
+<div class="panel panel-default">
+	<form action="/profile/privateadm/admeditinfo" method="post" id="form">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8">
+				<h3 class="text-muted"><span class="glyphicon glyphicon-user"></span> Información <span class="text-info">Principal</span></h3>
+			</div>
+			<div class="col-md-2">
+				<?php echo $this->form->submit ?>
+			</div>
+			<div class="col-md-2">
+				<br>
+				<a href="##" class="form-control btn btn-default" id="backeditBtn">Volver</a>
+			</div>
+		</div>
+		<hr>
+		<div class="row text-muted">
+			<div class="col-md-6">
+				<p>DNI</p>
+				<?php echo $this->form->numdoc ?><br>
 
-<form action="/profile/privateadm/admeditinfo" method="post" id="form">
-<div class="col-sm-12">
-	<h4>Información Principal</h4>
-	<table class="table">
-		<tr>
-			<td><label>DNI </label><br><?php print $this->form->numdoc?></td>
-			<td><label>Fecha de Nacimiento </label><br>
+				<div class="row">
+					<div class="col-md-6">
+						<p>Sexo</p>
+						<?php echo $this->form->sex ?>
+					</div>
+					<div class="col-md-6">
+						<p>Estado Civil</p>
+						<?php echo $this->form->civil ?>
+					</div>
+				</div><br>
+
+				<p>Email Personal</p>
+				<?php echo $this->form->mail_work ?>
+			</div>
+			<div class="col-md-6">
+				<p>Fecha de Nacimiento</p>
 				<div class="row">
 					<div class="col-sm-4">
-						<?php print $this->form->year?>
+						<?php echo $this->form->year?>
 					</div>
 					<div class="col-sm-4">
-						<?php print $this->form->month?>
+						<?php echo $this->form->month?>
 					</div>
 					<div class="col-sm-4">
-						<?php print $this->form->day?>
+						<?php echo $this->form->day?>
 					</div>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<td><label>Sexo <?php print $this->form->sex;?></label></td>
-			<td><label>Estado Civil <?php print $this->form->civil;?></label></td>
-		</tr>
-		<tr>
-			<td><label>E-mail </label><br><?php print $this->form->mail_person?></td>
-			<td><label>E-mail de Trabajo </label><br><?php print $this->form->mail_work?></td>
-		</tr>
-		<tr>
-			<td><label>Teléfono Fijo </label><br><?php print $this->form->phone?></td>
-			<td><label>Celular </label><br><?php print $this->form->cellular?></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><a href="##" id="save" class="btn btn-info pull-right">Guardar</a></td>
-		</tr>
-	</table>
+				</div><br>
+				<div class="row">
+					<div class="col-md-6">
+						<p>Telefono Fijo</p>
+						<?php echo $this->form->phone ?>
+					</div>
+					<div class="col-md-6">
+						<p>Celular</p>
+						<?php echo $this->form->cellular ?>
+					</div>
+				</div><br>
+
+				<p>Email de Trabajo</p>
+				<?php echo $this->form->mail_work ?>
+			</div>
+		</div>
+		<br>
+	</div>
+	</form>
 </div>
 
 <script>
-	$("#save").click(function(){
-		$("#form").submit()
-	})
-	$("#form").submit(function(){
+	/*$("#form").submit(function(){
+		var formdata = new FormData($(this)[0]);
 		$.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            success: function(data){ 
-            	$("#editData").html(data);
-            	$('#editData').html('<br><center><img src="/img/spinner.gif"/></center>')
-            	$('#admData').load('/profile/privateadm/adminfo', function(){
-            		$('#editData').fadeOut('fast', function(){
-            			$('#admData').fadeIn('fast');
-            		});
-            	});
-       	   	}
-        }); 
-        return false;
-	})
+			type : 'post',
+			url  : '/profile/privateadm/saveinfo',
+			processData : false,
+			success : function(data){
+				alert(data);
+			}
+		})
+	})*/
 	
 
-	$('#backeditBtn a').click(function (e) {
-    	e.preventDefault()
+	$('#backeditBtn').click(function(){
     	$('#editData').fadeOut('fast', function(){
       		$('#admData').fadeIn('fast');
     	});

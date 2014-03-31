@@ -1,14 +1,5 @@
     <link rel="stylesheet" href="/css/sliderNews.css">
 
-<!--Grafica Docentes-->
-<!--<div id="graficaSlide" class="grafica">
-
-    <a href="##">
-    <div class="graficaBotons">
-        <span class="glyphicon glyphicon-stats iconGrafica"></span>
-    </div>
-    </a>
-</div>-->
 
 <!--Slider de Noticias-->
 <div class="row">
@@ -73,8 +64,63 @@
     </div>
     </div>
 </div>
+<br>
 
+<!--Grafica Docentes-->
+<!--<script type="text/javascript" src="/js/graphic/docente.js"></script>
+<script src="/external_library/highcharts/js/highcharts.js"></script>
+<script src="/external_library/highcharts/modules/exporting.js"></script>
+
+<div id="graficaSlide" class="grafica">
+    <div class="graficaTitle">
+        <p class="text-muted">Gráfica de la encuesta realizada en el periodo 13B</p>
+    </div>
+    <a id="openSlideGrafica" href="##">
+    <div class="openGraficaBotons">
+        <p><span class="glyphicon glyphicon-stats"></span> Visualizar Gráfica</p>
+    </div>
+    </a>
+    <a id="closeSlideGrafica" href="##">
+    <div class="closeGraficaBotons hidden">
+        <p><span class="glyphicon glyphicon-stats"></span> Cerrar Gráfica</p>
+    </div>
+    </a>
+    <div class="botonsCourses">
+        <div class="row">
+            <div class="col-md-1 col-md-offset-3">
+                <a class="text-muted pull-right" href="##"><span-glyphicon class="glyphicon glyphicon-chevron-left"></span-glyphicon></a>
+            </div>
+            <div class="col-md-4 text-center text-muted">Investigacion Operativa</div>
+            <div class="col-md-1">
+                <a class="text-muted" href="##"><span-glyphicon class="glyphicon glyphicon-chevron-right"></span-glyphicon></a>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    var $coursesName = <?php echo $this->coursesName ?>;
+    /*var $courses = <?php echo $this->courses?>;
+    var $dat_assist = <?php echo $this->dat_assist?>;*/
+    </script>
+    <div class="dataGraficas">
+        <?php 
+        $active = 0;
+        foreach ($this->coursesBefore as $course): ?>
+            <?php if ($active == 0): ?>
+                <div class="graficaCourse activeGrafica">
+                    <div id="container_encuesta"></div>
+                </div>
+            <?php 
+            $active = 1;
+            else: ?>
+                <div class="graficaCourse">
+                    <div id="container_encuestas"></div>
+                </div>
+            <?php endif ?>
+        <?php endforeach ?>
+    </div>
+</div>-->
 <br><br> 
+
 <!--Panel de Avance de Cursos-->
 <div class="avanceCursos container">
     <div class="row">
@@ -378,9 +424,19 @@
 <script type="text/javascript">
 	//$("#graphic-survey").load("/docente/index/xcourses");
     
-    /*$('#graficaSlide').animate({
-        left: "-=500",
-    }, 1);*/
+    $('#openSlideGrafica').click(function(){
+        $('.openGraficaBotons').addClass('hidden');
+        $('.closeGraficaBotons').removeClass('hidden');
+        $(".openGraficaBotons, .closeGraficaBotons").animate({ "left": "+=50%" }, "slow", function(){
+        });
+    });
+
+    $('#closeSlideGrafica').click(function(){
+        $('.openGraficaBotons').removeClass('hidden');
+        $('.closeGraficaBotons').addClass('hidden');
+        $(".openGraficaBotons, .closeGraficaBotons").animate({ "left": "-=50%" }, "slow", function(){
+        });
+    });
 
     var rid = $('#rid').val();
     if (rid != 'DR') {
