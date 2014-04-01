@@ -67,7 +67,7 @@
 <br>
 
 
-
+<!--Grafica Docentes-->
 <!--<div id="graficaSlide" class="grafica">
     <div class="graficaTitle">
         <p class="text-muted">Gráfica de la encuesta realizada en el periodo 13B</p>
@@ -88,38 +88,37 @@
                 <div class="col-md-1 col-md-offset-3">
                     <a class="text-muted pull-right" id="backGrafica" href="##"><span class="glyphicon glyphicon-chevron-left"></span></a>
                 </div>
-                <div class="col-md-4 text-center text-muted">Investigacion Operativa</div>
+                <div id="nameCourse" class="col-md-4 text-center text-muted"><?php echo $this->encuestaCoursesName[0] ?></div>
                 <div class="col-md-1">
                     <a class="text-muted" id="nextGrafica" href="##"><span class="glyphicon glyphicon-chevron-right"></span></a>
                 </div>
             </div>
         </div>
+        <!--Grafica Docentes
+        <script type="text/javascript" src="/js/graphic/docente.js"></script>
+        <script src="/external_library/highcharts/js/highcharts.js"></script>
+        <script src="/external_library/highcharts/modules/exporting.js"></script>
         <div class="dataGraficas">
-            <script type="text/javascript">
-            var datosEncuesta = <?php echo $this->datosEncuesta ?>;
-            </script>
             <?php 
             $active = 0;
             $c = 0;
             foreach ($this->coursesBefore as $course): ?>
-                <?php if ($active == 0): ?>
-                    <div class="graficaCourse activeGrafica">
-                        <div id="container_encuesta<?php echo $c ?>"></div>
-                    </div>
-                <?php 
-                $c++;
-                $active = 1;
-                else: ?>
-                    <div class="graficaCourse">
-                        <div id="container_encuesta<?php echo $c ?>"></div>
-                    </div>
-                <?php endif ?>
-            <?php endforeach ?>
-            <input type="text" id="cantidadCursos" value="<?php echo $c ?>" />
-            Grafica Docentes
-            <script type="text/javascript" src="/js/graphic/docente.js"></script>
-            <script src="/external_library/highcharts/js/highcharts.js"></script>
-            <script src="/external_library/highcharts/modules/exporting.js"></script>
+                <?php if ($active == 0) {
+                    $classActive = 'activeGrafica';
+                    $active = 1;
+                }else{
+                    $classActive = '';
+                } ?>
+                <div class="graficaCourse <?php echo $classActive ?>" courseid="<?php echo $course['courseid'] ?>" nameCourse="<?php echo $this->encuestaCoursesName[$c] ?>">
+                    <span class="hidden" id="dataCourses<?php echo $course['courseid'] ?>"><?php print_r($this->datosEncuesta) ?></span>
+                    <script type="text/javascript">
+                        var datosEncuesta = <?php echo $this->datosEncuesta ?>;
+                    </script>
+                    <div id="container_encuesta<?php echo $course['courseid'] ?>" ></div>
+                </div>
+            <?php 
+            $c++;
+            endforeach ?>
         </div>
         <div class="dataPreguntas">
             <p class="text-info"><strong>Leyenda de Preguntas de la Encuesta</strong></p>
@@ -533,6 +532,7 @@
         });
     }
 
+    //Funciones para Graficas de Cursos
     function coursesForward(){
         var size = $('.dataGraficas').find('.graficaCourse').size();
         $('.dataGraficas').find('.graficaCourse').each(function(index, value){
@@ -544,10 +544,14 @@
                 if (index+1 < size) {
                     $($('.dataGraficas').find('.graficaCourse').get(index+1)).slideDown('slow');
                     $($('.dataGraficas').find('.graficaCourse').get(index+1)).addClass('activeGrafica');
+                    var nameCourse = $($('.dataGraficas').find('.graficaCourse').get(index+1)).attr('nameCourse');
+                    $('#nameCourse').html(nameCourse)
                     return false;
                 }else{
                     $($('.dataGraficas').find('.graficaCourse').get(0)).slideDown('slow');
                     $($('.dataGraficas').find('.graficaCourse').get(0)).addClass('activeGrafica');
+                    var nameCourse = $($('.dataGraficas').find('.graficaCourse').get(0)).attr('nameCourse');
+                    $('#nameCourse').html(nameCourse)
                     return false;
                 };
             };
@@ -566,10 +570,14 @@
                 if (index == 0) {
                     $($('.dataGraficas').find('.graficaCourse').get(size-1)).slideDown();
                     $($('.dataGraficas').find('.graficaCourse').get(size-1)).addClass('activeGrafica');
+                    var nameCourse = $($('.dataGraficas').find('.graficaCourse').get(size-1)).attr('nameCourse');
+                    $('#nameCourse').html(nameCourse)
                     return false;
                 }else{
                     $($('.dataGraficas').find('.graficaCourse').get(index-1)).slideDown();
                     $($('.dataGraficas').find('.graficaCourse').get(index-1)).addClass('activeGrafica');
+                    var nameCourse = $($('.dataGraficas').find('.graficaCourse').get(index-1)).attr('nameCourse');
+                    $('#nameCourse').html(nameCourse)
                     return false;
                 };
             };

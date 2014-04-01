@@ -60,28 +60,27 @@
 	height: 100%;
 	width: 50%;
 }
+.grafica .allDataGrafica .dataPreguntas{
+	height: 100%;
+	left: 0;
+	padding: 13px 30px 20px 20px;
+	position: absolute;
+	top: 60px;
+	width: 50%;
+	z-index: 3;
+}
 
 .grafica .allDataGrafica .dataGraficas .graficaCourse{
 	display: none;
-	position: absolute;
 	height: 100%;
+	position: relative;
 	width: 100%;
-	z-index: 3;
 }
 
 .grafica .allDataGrafica .dataGraficas .activeGrafica{
 	display: block;
 }
 
-.grafica .allDataGrafica .dataPreguntas{
-	height: 100%;
-	left: 0;
-	padding: 25px 30px 20px 20px;
-	position: absolute;
-	top: 60px;
-	width: 50%;
-	z-index: 3;
-}
 
 .grafica .graficaTitle{
 	height: 100%;

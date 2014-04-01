@@ -329,8 +329,9 @@ class Docente_IndexController extends Zend_Controller_Action {
 
         //Grafica para Encuesta
         //DataBases
-        $pollDb = new Api_Model_DbTable_Poll();
-        $pollQuestionsDb = new Api_Model_DbTable_PollQuestion();
+        $pollDb                      = new Api_Model_DbTable_Poll();
+        $pollQuestionsDb             = new Api_Model_DbTable_PollQuestion();
+        $pollQuestionsAlternativesDb = new Api_Model_DbTable_PollAlternatives();
 
         //Preguntas
         $where = array( 'eid' => $eid,
@@ -342,8 +343,9 @@ class Docente_IndexController extends Zend_Controller_Action {
         $where = array( 'eid' => $eid,
                         'oid' => $oid,
                         'pollid' => $poll[0]['pollid']);
-        $attrib = array('question');
-        $pollQuestions = $pollQuestionsDb->_getFilter($where, $attrib);
+        $attrib = array('qid', 'question');
+        $order = array('qid');
+        $pollQuestions = $pollQuestionsDb->_getFilter($where, $attrib, $order);
 
         $this->view->pollQuestions = $pollQuestions;
 
@@ -369,10 +371,32 @@ class Docente_IndexController extends Zend_Controller_Action {
         }   
         $this->view->coursesBefore       = $coursesBefore;
         $this->view->encuestaCoursesName = $encuestaCoursesName;
-        //print_r($encuestaCoursesName);
 
-        $numeracion = 2;
-        for ($i=0; $i < 10; $i++) { 
+        $alternatives[0] = '-';
+        $c = 0;
+        foreach ($pollQuestions as $question) {
+            $where = array( 'eid' => $eid,
+                            'oid' => $oid,
+                            'qid' => $question['qid'] );
+            $attrib = array('alternative');
+            $alternativesQuestion = $pollQuestionsAlternativesDb->_getFilter($where, $attrib);
+            $existe = 0;
+            foreach ($alternativesQuestion as $alternativeQuestion) {
+                foreach ($alternatives as $alternative) {
+                    if ($alternativeQuestion['alternative'] == $alternative) {
+                        $existe = 1;
+                    }
+                }
+                if ($existe == 0) {
+                    $alternatives[$c] = $alternativeQuestion['alternative'];
+                    $c++;
+                }
+            }
+        }
+        //print_r($alternatives);
+
+        $numeracion = 5;
+        for ($i=0; $i < 12; $i++) { 
             $dataSiempre[$i] = $numeracion++;
         }
 
@@ -380,13 +404,16 @@ class Docente_IndexController extends Zend_Controller_Action {
                             '0' =>  array(
                                         'name' => 'Siempre',
                                         'data' => $dataSiempre
-                                        )
+                                        ),
+                            '1' =>  array(
+                                        'name' => 'Nunca',
+                                        'data' => $dataSiempre
+                                    )
                             );
 
         $datosEncuesta = Zend_Json::encode($datosEncuesta);
 
         $this->view->datosEncuesta = $datosEncuesta;
-        //print_r($datosEncuesta);
 
         }catch (Exception $e) {
 

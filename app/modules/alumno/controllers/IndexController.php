@@ -128,7 +128,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
                                 ),
                          );
 
-            print_r($data_assistences['asistio']);
             $result = Zend_Json::encode($result);
             $data_courses = Zend_Json::encode($data_courses);
             

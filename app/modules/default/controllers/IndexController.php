@@ -151,7 +151,7 @@ class IndexController extends Zend_Controller_Action {
                     }
 
                     //Insertar pago y Matricula Para Cachimbos
-                    $paymentDb     = new Api_Model_DbTable_Payments();
+                    $paymentDb = new Api_Model_DbTable_Payments();
 
                     $where = array( 'eid'   => $eid,
                                     'oid'   => $oid,
@@ -159,7 +159,7 @@ class IndexController extends Zend_Controller_Action {
                                     'subid' => $data->subid,
                                     'pid'   => $data->pid,
                                     'uid'   => $uid,
-                                    'perid' => '13A' );
+                                    'perid' => $data->period->perid );
 
                     $payment = $paymentDb->_getFilter($where);
 
@@ -170,7 +170,7 @@ class IndexController extends Zend_Controller_Action {
                                                 'subid'    => $data->subid,
                                                 'pid'      => $data->pid,
                                                 'uid'      => $data->uid,
-                                                'perid'    => '13A',
+                                                'perid'    => $data->period->perid,
                                                 'ratid'    => '10',
                                                 'amount'   => '0',
                                                 'register' => $data->uid );
