@@ -1,3 +1,7 @@
+var cantidadCursos = $('#cantidadCursos').val();
+alert(cantidadCursos);
+
+
 $(function () {
         $('#container_encuesta').highcharts({
             chart: {
@@ -45,36 +49,6 @@ $(function () {
                     }
                 }
             },
-            series: [{
-                name: 'Siempre',
-                data: [5, -1, -1, 4, 2, 6, 3, 4, 7, 2, -1, -1]
-            }, {
-                name: 'Casi Siempre',
-                data: [2, -1, -1, 5, 5, 3, 4, 4, 7, 2, -1, -1]
-            }, {
-                name: 'Aveces',
-                data: [2, -1, -1, 2, 5, 3, 4, 4, 7, 2, -1, -1]
-            }, {
-                name: 'Nunca',
-                data: [2, -1, -1, 3, 5, 3, 4, 4, 7, 2, -1, -1]
-            }, {
-                name: 'Si',
-                data: [-1, 3, 4, -1, -1, -1, -1, -1, -1, -1, -1, 5]
-            }, {
-                name: 'No',
-                data: [-1, 2, 2, -1, -1, -1, -1, -1, -1, -1, -1, 7]
-            }, {
-                name: 'Muy Bueno',
-                data: [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5, -1]
-            }, {
-                name: 'Bueno',
-                data: [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 3, -1]
-            }, {
-                name: 'Regular',
-                data: [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6, -1]
-            }, {
-                name: 'Malo',
-                data: [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 7, -1]
-            }],
+            series: datosEncuesta
         });
     });

@@ -327,6 +327,26 @@ class Docente_IndexController extends Zend_Controller_Action {
             $this->view->teachersEmptyReport = $teachersEmptyReport;
         }
 
+        //Grafica para Encuesta
+        //DataBases
+        $pollDb = new Api_Model_DbTable_Poll();
+        $pollQuestionsDb = new Api_Model_DbTable_PollQuestion();
+
+        //Preguntas
+        $where = array( 'eid' => $eid,
+                        'oid' => $oid,
+                        'perid' => '13B');
+        $attrib = array('pollid');
+        $poll = $pollDb->_getFilter($where);
+        
+        $where = array( 'eid' => $eid,
+                        'oid' => $oid,
+                        'pollid' => $poll[0]['pollid']);
+        $attrib = array('question');
+        $pollQuestions = $pollQuestionsDb->_getFilter($where, $attrib);
+
+        $this->view->pollQuestions = $pollQuestions;
+
         $where = array( 'eid' => $eid,
                         'oid' => $oid,
                         'uid' => $uid,
@@ -349,6 +369,24 @@ class Docente_IndexController extends Zend_Controller_Action {
         }   
         $this->view->coursesBefore       = $coursesBefore;
         $this->view->encuestaCoursesName = $encuestaCoursesName;
+        //print_r($encuestaCoursesName);
+
+        $numeracion = 2;
+        for ($i=0; $i < 10; $i++) { 
+            $dataSiempre[$i] = $numeracion++;
+        }
+
+        $datosEncuesta  = array(
+                            '0' =>  array(
+                                        'name' => 'Siempre',
+                                        'data' => $dataSiempre
+                                        )
+                            );
+
+        $datosEncuesta = Zend_Json::encode($datosEncuesta);
+
+        $this->view->datosEncuesta = $datosEncuesta;
+        //print_r($datosEncuesta);
 
         }catch (Exception $e) {
 
@@ -357,7 +395,6 @@ class Docente_IndexController extends Zend_Controller_Action {
     public function subjectsAction()
     {
         try {
-
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $escid = $this->sesion->escid;

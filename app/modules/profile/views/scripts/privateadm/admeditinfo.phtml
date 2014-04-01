@@ -1,4 +1,6 @@
+
 <div class="panel panel-default">
+
 	<form id="form">
 	<input type="hidden" name="eid" value="<?php echo $this->dataPerson['eid'] ?>">
 	<input type="hidden" name="pid" value="<?php echo $this->dataPerson['pid'] ?>">
@@ -17,86 +19,146 @@
 			</div>
 		</div>
 		<hr>
-		<div class="row text-muted">
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-4">
-						<p>DNI</p>
-						<?php echo $this->form->numdoc ?>
-					</div>
-					<div class="col-md-4">
-						<p>Sexo</p>
-						<?php echo $this->form->sex ?>
-					</div>
-					<div class="col-md-4">
-						<p>Estado Civil</p>
-						<?php echo $this->form->civil ?>
-					</div>
-				</div><br>
-
-				<p class="text-center">Fecha de Nacimiento</p>
-				<div class="row">
-					<div class="col-sm-4">
-						<?php echo $this->form->year?>
-					</div>
-					<div class="col-sm-4">
-						<?php echo $this->form->month?>
-					</div>
-					<div class="col-sm-4">
-						<?php echo $this->form->day?>
-					</div>
-				</div><br>
-				
-				<div class="row">
-					<div class="col-md-6">
-						<p>País</p>
-						<?php echo $this->form->country?>
-					</div>
-					<div class="col-md-6">
-						<p>Departamento</p>
-						<?php echo $this->form->country_s?>
-					</div>
-				</div><br>
-		
-				<p>Email Personal</p>
-				<?php echo $this->form->mail_work ?>
-			</div>
-			<div class="col-md-6">
-				
-
-				<div class="row">
-					<div class="col-sm-6">
-						<p>Provincia</p>
-						<?php echo $this->form->country_p?>
-					</div>
-					<div class="col-sm-6">
-						<p>Distríto</p>
-						<?php echo $this->form->country_d?>
-					</div>
-				</div><br>
-
-				<div class="row">
-					<div class="col-md-6">
-						<p>Telefono Fijo</p>
-						<?php echo $this->form->phone ?>
-					</div>
-					<div class="col-md-6">
-						<p>Celular</p>
-						<?php echo $this->form->cellular ?>
-					</div>
-				</div><br>
-
-				<p>Email de Trabajo</p>
-				<?php echo $this->form->mail_work ?>
+		<div id="alertsEmptyData" class="row hidden">
+			<div class="col-md-12">
+				<div class="alert alert-warning">
+					<a href="##" class="close closeAlerts">&times;</a>
+					<p><strong>Faltan Datos!</strong> Verifique que lleno todos los datos correctamente</p>
+				</div>
 			</div>
 		</div>
-		<br>
+		<div class="row text-muted">
+			<div class="col-md-6">
+				<div class="panel panel-default container">
+					<br>
+					<p class="text-center"><strong>Datos Principales</strong></p>
+					<div class="row">
+						<div class="col-md-4">
+							<p>DNI</p>
+							<?php echo $this->form->numdoc ?>
+						</div>
+						<div class="col-md-4">
+							<p>Sexo</p>
+							<?php echo $this->form->sex ?>
+						</div>
+						<div class="col-md-4">
+							<p>Estado Civil</p>
+							<?php echo $this->form->civil ?>
+						</div>
+					</div><br>
+
+					<p class="text-center"><strong>Fecha de Nacimiento</strong></p>
+					<div class="row">
+						<div class="col-sm-4">
+							<?php echo $this->form->year?>
+						</div>
+						<div class="col-sm-4">
+							<?php echo $this->form->month?>
+						</div>
+						<div class="col-sm-4">
+							<?php echo $this->form->day?>
+						</div>
+					</div><br>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<br>
+					<div class="container">
+						<p class="text-center"><strong>Lugar Donde Radica</strong></p>
+						<div class="row">
+							<div class="col-sm-6">
+								<p>País</p>
+								<?php echo $this->form->country ?>
+							</div>
+							<div class="col-sm-6">
+								<p>Departamento</p>
+								<?php echo $this->form->country_s ?>
+							</div>
+						</div><br>
+
+						<div class="row">
+							<div class="col-sm-6">
+								<p>Provincia</p>
+								<?php echo $this->form->country_p ?>
+							</div>
+							<div class="col-sm-6">
+								<p>Distríto</p>
+								<?php echo $this->form->country_d ?>
+							</div>
+						</div><br>
+					</div>
+				</div>
+			</div>
+	
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<br>
+					<div class="container">
+						<p class="text-center"><strong>Información Adicional</strong></p>
+						<div class="row">
+							<div class="col-md-3">
+								<p>Celular</p>
+								<?php echo $this->form->cellular ?>
+							</div>
+							<div class="col-md-3">
+								<p>Telefono Fijo</p>
+								<?php echo $this->form->phone ?>
+							</div>
+							<div class="col-md-3">
+								<p>Email Personal</p>
+								<?php echo $this->form->mail_person ?>
+							</div>
+							<div class="col-md-3">
+								<p>Email de Trabajo</p>
+								<?php echo $this->form->mail_work ?>
+							</div>
+						</div>
+					</div>
+					<br>
+				</div>
+			</div>
+
+		</div>
 	</div>
 	</form>
 </div>
 
 <script>
-	/*$("#form").submit(function(){
+	$('.closeAlerts').click(function(){
+		$('#alertsEmptyData').addClass('hidden');
+	})
+	
+	$("#country_s").attr('disabled','disabled');
+	$("#country_p").attr('disabled','disabled');
+	$("#country_d").attr('disabled','disabled');
+
+
+	$("#country").change(function(){
+  		$('#country_s').removeAttr('disabled');
+	    var coid=$(this).val();
+    	// var coid=$("#country").val();
+    	var url="/profile/public/countrystate/coid/"+coid;
+    	$("#country_s").load(url);
+    });
+
+    $("#country_s").change(function(){
+    	$('#country_p').removeAttr('disabled');
+	    var cosid=$(this).val();
+    	// var coid=$("#country").val();
+    	var url="/profile/public/countryprovince/cosid/"+cosid;
+    	$("#country_p").load(url);
+    });
+
+ 	$("#country_p").change(function(){
+    	$('#country_d').removeAttr('disabled');
+	    var proid=$(this).val();
+    	// var coid=$("#country").val();
+    	var url="/profile/public/countrydistrict/proid/"+proid;
+    	$("#country_d").load(url);
+    });
+
+	$("#form").submit(function(){
 		var formData = new FormData($(this)[0]);
 		$.ajax({
 			type : 'post',
@@ -105,11 +167,18 @@
 			contentType : false,
 			processData : false,
 			success : function(data){
-				alert(data);
+				if (data == 1) {
+					$('#editData').html('');
+					$('#admData').fadeIn('fast');
+					$('#admData').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
+					$('#admData').load('/profile/privateadm/adminfo');
+				}else{
+					$('#alertsEmptyData').removeClass('hidden');
+				};
 			}
 		})
 		return false;
-	})*/
+	})
 	
 
 	$('#backeditBtn').click(function(){

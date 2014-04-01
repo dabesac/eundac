@@ -66,12 +66,9 @@
 </div>
 <br>
 
-<!--Grafica Docentes-->
-<!--<script type="text/javascript" src="/js/graphic/docente.js"></script>
-<script src="/external_library/highcharts/js/highcharts.js"></script>
-<script src="/external_library/highcharts/modules/exporting.js"></script>
 
-<div id="graficaSlide" class="grafica">
+
+<!--<div id="graficaSlide" class="grafica">
     <div class="graficaTitle">
         <p class="text-muted">Gráfica de la encuesta realizada en el periodo 13B</p>
     </div>
@@ -85,38 +82,53 @@
         <p><span class="glyphicon glyphicon-stats"></span> Cerrar Gráfica</p>
     </div>
     </a>
-    <div class="botonsCourses">
-        <div class="row">
-            <div class="col-md-1 col-md-offset-3">
-                <a class="text-muted pull-right" href="##"><span-glyphicon class="glyphicon glyphicon-chevron-left"></span-glyphicon></a>
-            </div>
-            <div class="col-md-4 text-center text-muted">Investigacion Operativa</div>
-            <div class="col-md-1">
-                <a class="text-muted" href="##"><span-glyphicon class="glyphicon glyphicon-chevron-right"></span-glyphicon></a>
+    <div class="allDataGrafica">
+        <div class="botonsCourses">
+            <div class="row">
+                <div class="col-md-1 col-md-offset-3">
+                    <a class="text-muted pull-right" id="backGrafica" href="##"><span class="glyphicon glyphicon-chevron-left"></span></a>
+                </div>
+                <div class="col-md-4 text-center text-muted">Investigacion Operativa</div>
+                <div class="col-md-1">
+                    <a class="text-muted" id="nextGrafica" href="##"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                </div>
             </div>
         </div>
-    </div>
-    <script type="text/javascript">
-    var $coursesName = <?php echo $this->coursesName ?>;
-    /*var $courses = <?php echo $this->courses?>;
-    var $dat_assist = <?php echo $this->dat_assist?>;*/
-    </script>
-    <div class="dataGraficas">
-        <?php 
-        $active = 0;
-        foreach ($this->coursesBefore as $course): ?>
-            <?php if ($active == 0): ?>
-                <div class="graficaCourse activeGrafica">
-                    <div id="container_encuesta"></div>
-                </div>
+        <div class="dataGraficas">
+            <script type="text/javascript">
+            var datosEncuesta = <?php echo $this->datosEncuesta ?>;
+            </script>
             <?php 
-            $active = 1;
-            else: ?>
-                <div class="graficaCourse">
-                    <div id="container_encuestas"></div>
-                </div>
-            <?php endif ?>
-        <?php endforeach ?>
+            $active = 0;
+            $c = 0;
+            foreach ($this->coursesBefore as $course): ?>
+                <?php if ($active == 0): ?>
+                    <div class="graficaCourse activeGrafica">
+                        <div id="container_encuesta<?php echo $c ?>"></div>
+                    </div>
+                <?php 
+                $c++;
+                $active = 1;
+                else: ?>
+                    <div class="graficaCourse">
+                        <div id="container_encuesta<?php echo $c ?>"></div>
+                    </div>
+                <?php endif ?>
+            <?php endforeach ?>
+            <input type="text" id="cantidadCursos" value="<?php echo $c ?>" />
+            Grafica Docentes
+            <script type="text/javascript" src="/js/graphic/docente.js"></script>
+            <script src="/external_library/highcharts/js/highcharts.js"></script>
+            <script src="/external_library/highcharts/modules/exporting.js"></script>
+        </div>
+        <div class="dataPreguntas">
+            <p class="text-info"><strong>Leyenda de Preguntas de la Encuesta</strong></p>
+            <ol class="text-muted">
+                <?php foreach ($this->pollQuestions as $question): ?>
+                    <li><?php echo $question['question'] ?></li>
+                <?php endforeach ?>
+            </ol>
+        </div>
     </div>
 </div>-->
 <br><br> 
@@ -424,19 +436,7 @@
 <script type="text/javascript">
 	//$("#graphic-survey").load("/docente/index/xcourses");
     
-    $('#openSlideGrafica').click(function(){
-        $('.openGraficaBotons').addClass('hidden');
-        $('.closeGraficaBotons').removeClass('hidden');
-        $(".openGraficaBotons, .closeGraficaBotons").animate({ "left": "+=50%" }, "slow", function(){
-        });
-    });
-
-    $('#closeSlideGrafica').click(function(){
-        $('.openGraficaBotons').removeClass('hidden');
-        $('.closeGraficaBotons').addClass('hidden');
-        $(".openGraficaBotons, .closeGraficaBotons").animate({ "left": "-=50%" }, "slow", function(){
-        });
-    });
+    
 
     var rid = $('#rid').val();
     if (rid != 'DR') {
@@ -448,7 +448,7 @@
     });
 
     //Slider
-    $('.data, #listEmptySyllabus, #listEmptyReport').slideUp();
+    $('.data, #listEmptySyllabus, #listEmptyReport, .allDataGrafica').slideUp();
     
     var sliderGo = setInterval(function(){sliderForward();}, 4500);
 
@@ -475,6 +475,31 @@
         $('.showData').removeClass('hidden');
         $('.hideData').addClass('hidden');
         sliderGo = setInterval(function(){sliderForward();}, 4500);
+    })
+
+    //Navegacion Grafica
+    $('#openSlideGrafica').click(function(){
+        $('.allDataGrafica').slideDown();
+        $('.openGraficaBotons').addClass('hidden');
+        $('.closeGraficaBotons').removeClass('hidden');
+        $(".openGraficaBotons, .closeGraficaBotons").animate({ "left": "+=50%" }, "slow", function(){
+        });
+    });
+
+    $('#closeSlideGrafica').click(function(){
+        $('.allDataGrafica').slideUp();
+        $('.openGraficaBotons').removeClass('hidden');
+        $('.closeGraficaBotons').addClass('hidden');
+        $(".openGraficaBotons, .closeGraficaBotons").animate({ "left": "-=50%" }, "slow", function(){
+        });
+    });
+
+    $('#nextGrafica').click(function(){
+        coursesForward();
+    })
+
+    $('#backGrafica').click(function(){
+        coursesBackward();
     })
 
     //Avance Academico
@@ -508,22 +533,43 @@
         });
     }
 
-    function sliderBackward(){
-        var size = $('.slider').find('.slide').size();
-        $('.slider').find('.slide').each(function(index, value){
-            if ($(value).hasClass('slideActive')) {
+    function coursesForward(){
+        var size = $('.dataGraficas').find('.graficaCourse').size();
+        $('.dataGraficas').find('.graficaCourse').each(function(index, value){
+            if ($(value).hasClass('activeGrafica')) {
+                $($('.dataGraficas').find('.graficaCourse').get(index)).slideUp(function(){
+                    $(value).removeClass('activeGrafica');
+                });
+
+                if (index+1 < size) {
+                    $($('.dataGraficas').find('.graficaCourse').get(index+1)).slideDown('slow');
+                    $($('.dataGraficas').find('.graficaCourse').get(index+1)).addClass('activeGrafica');
+                    return false;
+                }else{
+                    $($('.dataGraficas').find('.graficaCourse').get(0)).slideDown('slow');
+                    $($('.dataGraficas').find('.graficaCourse').get(0)).addClass('activeGrafica');
+                    return false;
+                };
+            };
+        });
+    }
+
+    function coursesBackward(){
+        var size = $('.dataGraficas').find('.graficaCourse').size();
+        $('.dataGraficas').find('.graficaCourse').each(function(index, value){
+            if ($(value).hasClass('activeGrafica')) {
                 $(value).slideUp();
-                $($('.slider').find('.slide').get(index)).slideUp(function(){
-                    $(value).removeClass('slideActive');
+                $($('.dataGraficas').find('.graficaCourse').get(index)).slideUp(function(){
+                    $(value).removeClass('activeGrafica');
                 });
 
                 if (index == 0) {
-                    $($('.slider').find('.slide').get(size-1)).slideDown();
-                    $($('.slider').find('.slide').get(size-1)).addClass('slideActive');
+                    $($('.dataGraficas').find('.graficaCourse').get(size-1)).slideDown();
+                    $($('.dataGraficas').find('.graficaCourse').get(size-1)).addClass('activeGrafica');
                     return false;
                 }else{
-                    $($('.slider').find('.slide').get(index-1)).slideDown();
-                    $($('.slider').find('.slide').get(index-1)).addClass('slideActive');
+                    $($('.dataGraficas').find('.graficaCourse').get(index-1)).slideDown();
+                    $($('.dataGraficas').find('.graficaCourse').get(index-1)).addClass('activeGrafica');
                     return false;
                 };
             };
