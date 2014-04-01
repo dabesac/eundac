@@ -20,12 +20,19 @@
 	  	<nav  class="navbar navbar-default" role="navigation">
 			<div id='header-info' class='container'>
 				<div class="row" id="nav-secundary">
-				<div ><?php echo $this->placeholder('Textnav') ?></div>
- 					<div class="col-md-5 pull-right">
-						<?php echo $this->placeholder('Btnnav') ?>
-		 				<?php echo $this->render('_search.phtml') ?>
- 					</div>
+					<div class="col-md-12">
+						<div class='row'>
+							<div id="nav-secundary-text" class="col-md-6">
+								<?php echo $this->placeholder('Textnav') ?>
+							</div>
+							<div class="col-md-5 pull-right">
+								<?php echo $this->placeholder('Btnnav') ?>
+				 				<?php echo $this->render('_search.phtml') ?>
+							</div>
+						</div>
+					</div>
 				</div>
+				
 			</div>	
 		</nav>
 		<div id="wrapper">

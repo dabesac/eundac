@@ -23,7 +23,8 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
 
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $perid=$this->sesion->period->perid;
+            // $perid=$this->sesion->period->perid;
+            $perid=base64_decode($this->_getParam('perid'));
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
             $pid=$this->sesion->pid;
@@ -100,6 +101,7 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
                 $where1['pid']=$pid;
                 $datcur=$curso->_getFilter($where1);
                 $this->view->cursos=$datcur;
+                $this->view->perid=$perid;
             }
 
         } catch (Exception $ex) {
@@ -112,7 +114,8 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $perid=$this->sesion->period->perid;
+            // $perid=$this->sesion->period->perid;
+            $perid=$this->_getParam('perid');
             $faculty=$this->sesion->faculty->name;
             $this->view->faculty=$faculty;
 

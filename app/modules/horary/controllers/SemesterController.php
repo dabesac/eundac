@@ -48,6 +48,14 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'perid'=>$perid);
 			$sem= new Api_Model_DbTable_Semester();
 			$dsem=$sem->_getSemesterXPeriodsXEscid($where);
+			$i=0;
+			foreach ($dsem as $semes) {
+				$where['semid']=$semes['semid'];
+				$turnosxsem=$sem->_getSemesterXPeriodsXEscidXTurno($where);
+				$dsem[$i]['turnos']=$turnosxsem;
+				$i++;
+			}
+			// $len=count($turnosxsem);
 			$this->view->semester=$dsem;
 			
 			// $eid=$this->sesion->eid;
@@ -72,6 +80,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			$escid=$this->sesion->escid;
 			$semid=$this->_getParam('semid');
 			$perid=$this->_getParam('perid');
+			$turno=$this->_getParam('turno');
 			$subid=$this->sesion->subid;
 			// $perid=$this->sesion->period->perid;
 			$this->view->semid=$semid;
@@ -140,9 +149,21 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			    
     			$prueba = new Eundac_Connect_Api($module,$params);
     			$data= $prueba->connectAuth();
-	        	$this->view->horarys=$data; 
-
-
+    			if ($turno) {
+    				$i=0;
+    				foreach ($data as $turnos) {
+    					$turnoss=$turnos['turno'];
+    					if ($turno==$turnoss) {
+    						$datatur[$i]=$turnos;
+    						$i++;
+    					}
+    				}
+    				$this->view->turno=$turno;
+	        		$this->view->horarys=$datatur;
+    			}
+    			else{
+	        		$this->view->horarys=$data;    				
+    			}
 
 	        	$where=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
 	        	$cper= new Api_Model_DbTable_PeriodsCourses();
@@ -183,6 +204,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		$faculty=$this->sesion->faculty->name;
 		$semid=base64_decode($this->_getParam('semid'));
 		$perid=base64_decode($this->_getParam('perid'));
+		$turno=base64_decode($this->_getParam('turno'));
 		$subid=$this->sesion->subid;
 		// $perid=$this->sesion->period->perid;
 		$this->view->semid=$semid;
@@ -251,8 +273,23 @@ class Horary_SemesterController extends Zend_Controller_Action{
 
 		    $prueba = new Eundac_Connect_Api($module,$params);
     		$data= $prueba->connectAuth();
-		    //$data = $server->connectAuth();	     
-	        $this->view->horarys=$data;
+		    //$data = $server->connectAuth();
+		    if ($turno) {
+				$i=0;
+				foreach ($data as $turnos) {
+					$turnoss=$turnos['turno'];
+					if ($turno==$turnoss) {
+						$datatur[$i]=$turnos;
+						$i++;
+					}
+				}
+				$this->view->turno=$turno;
+        		$this->view->horarys=$datatur;
+			}
+			else{
+        		$this->view->horarys=$data;    				
+			}     
+	        // $this->view->horarys=$data;
 	        $spe=array();
 	        $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
 	        $esc = new Api_Model_DbTable_Speciality();
@@ -279,7 +316,16 @@ class Horary_SemesterController extends Zend_Controller_Action{
 
 	        $where=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
 	        $cper= new Api_Model_DbTable_PeriodsCourses();
-	        $dcur=$cper->_getCoursesxPeriodxspecialityxsemester($where);
+	        if ($turno) {
+    			$where['turno']=$turno;
+    			$dcur=$cper->_getCoursesxPeriodxspecialityxsemesterxturno($where);
+    			$this->view->turno=$turno;
+    			$nameimpre='horarysemester'.$semid.$turno;
+    		}
+    		else{
+	        	$dcur=$cper->_getCoursesxPeriodxspecialityxsemester($where);    			
+	        	$nameimpre='horarysemester'.$semid;
+    		}
 
 	        $len=count($dcur);
 	        	for ($i=0; $i < $len; $i++) { 
@@ -306,13 +352,13 @@ class Horary_SemesterController extends Zend_Controller_Action{
                 'escid'=>$escid,
                 'subid'=>$subid,
                 'pid'=>$this->sesion->pid,
-                'type_impression'=>'horarysemester'.$semid,
+                'type_impression'=>$nameimpre,
                 'date_impression'=>date('Y-m-d H:i:s'),
                 'pid_print'=>$uidim
                 );
             $dbimpression->_save($data);
 
-            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'horarysemester'.$semid);
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>$nameimpre);
             $dataim = $dbimpression->_getFilter($wheri);
             
             $co=count($dataim);
