@@ -86,7 +86,7 @@ var change = {
     	// }
     },
     enabled:function(){
-        $("#form-change").addClass('active')
+        $("#form-change").addClass('activePassword')
     },
     addClass_error:function(){
     }
