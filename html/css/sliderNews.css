@@ -60,6 +60,8 @@
 	height: 100%;
 	width: 50%;
 }
+
+
 .grafica .allDataGrafica .dataPreguntas{
 	height: 100%;
 	left: 0;
@@ -72,18 +74,25 @@
 
 .grafica .allDataGrafica .dataGraficas .graficaCourse{
 	display: none;
-	height: 100%;
+	height: 80%;
+	position: absolute;
+	width: 99%;
+}
+
+.grafica .allDataGrafica .dataGraficas .graficaCourse .graficaenSi{
+	/*height: 100%;
 	position: relative;
-	width: 100%;
+	width: 100%;*/
 }
 
 .grafica .allDataGrafica .dataGraficas .activeGrafica{
-	display: block;
+	display: inline-block;
 }
 
 
 .grafica .graficaTitle{
 	height: 100%;
+
 	font-size: 18px;
 	padding-top: 12px;
 	position: absolute;

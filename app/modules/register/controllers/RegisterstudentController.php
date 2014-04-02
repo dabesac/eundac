@@ -10,7 +10,6 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
       }
       $login = $sesion->getStorage()->read();
       $this->sesion = $login;
-      $this->sesion->period->perid = '14A';
     }
     public function indexAction(){
         try{
@@ -774,9 +773,23 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                             'subid' => $subid,
                             'curid' => $curid );
 
-        $server = new Eundac_Connect_Api('validate', $request);
+        /*$server = new Eundac_Connect_Api('validate', $request);
         $data = $server->connectAuth();
-        $this->view->data = $data;
+        $this->view->data = $data;*/
+
+        require_once 'Zend/Loader.php';
+        Zend_Loader::loadClass('Zend_Rest_Client');
+        $base_url = 'http://172.16.0.210:8080/';
+        $endpoint = '/'.base64_encode('s1st3m4s').'/'.base64_encode('und4c').'/validate';
+        $client = new Zend_Rest_Client($base_url);
+        $httpClient = $client->getHttpClient();
+        $httpClient->setConfig(array("timeout" => 30000));
+        $response = $client->restget($endpoint,$request);
+        $lista=$response->getBody();
+        if ($lista){
+            $data = Zend_Json::decode($lista);
+            $this->view->data = $data;
+        }
         
     }
 
