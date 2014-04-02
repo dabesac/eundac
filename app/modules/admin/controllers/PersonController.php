@@ -51,30 +51,41 @@ class Admin_PersonController extends Zend_Controller_Action{
             $this->_helper->layout()->disableLayout();
  			$eid=$this->sesion->eid;
  			$register=$this->sesion->uid;
- 			$fm=new Admin_Form_Personnew();
- 			$this->view->fm=$fm;
- 			if ($this->getRequest()->isPost())
-            {
+            $user=$this->_getParam('u');
+            $fm=new Admin_Form_Personnew();
+            $this->view->fm=$fm;
+            if ($this->getRequest()->isPost()){   
+
                 $frmdata=$this->getRequest()->getPost();
-                
-                if ($fm->isValid($frmdata))
-                {                    
+
+                if ($fm->isValid($frmdata)){                    
+                    
                     $this->view->pid=$frmdata['pid'];
                     unset($frmdata['Guardar']);
                     trim($frmdata['last_name0']);
                     trim($frmdata['last_name1']);
                     trim($frmdata['first_name']);
-                    strtoupper($frmdata['last_name0']);
-                    strtoupper($frmdata['last_name1']);
+                    $frmdata['last_name0']=strtoupper($frmdata['last_name0']);
+                    $frmdata['last_name1']=strtoupper($frmdata['last_name1']);
+                    $frmdata['first_name']=ucwords($frmdata['first_name']);
                     $frmdata['eid']=$eid;
                     $frmdata['location']='-';
                     $frmdata['created']=date('Y-m-d h:m:s');
                     $frmdata['register']=$register;
                     $frmdata['birthday']=date('Y-m-d',strtotime($frmdata['birthday']));
                     $reg_= new Api_Model_DbTable_Person();
+                    if ($frmdata['user']=='A') {
+                        $this->view->user=2;
+                    }
+                    unset($frmdata['user']);
                     if ($reg_->_save($frmdata)) {
                         $this->view->valor=1;
                     }
+                }
+            }
+            else{
+                if ($user=='A') {
+                    $this->view->user=$user;                    
                 }
             }
  			

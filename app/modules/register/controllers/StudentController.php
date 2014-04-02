@@ -599,8 +599,19 @@ class Register_StudentController extends Zend_Controller_Action {
                         'semestre'=>base64_encode($semester));
             if(!$subject = $cache->load("$name_cache")) {
 
-                $server = new Eundac_Connect_Api('pendig_absolute',$where);
-                $subject = $server->connectAuth();
+                // $server = new Eundac_Connect_Api('pendig_absolute',$where);
+                // $subject = $server->connectAuth();
+                // $cache->save($subject,$name_cache);
+                require_once 'Zend/Loader.php';
+                Zend_Loader::loadClass('Zend_Rest_Client');
+                $base_url = 'http://localhost:8080/';
+                $route = '/'.base64_encode("s1st3m4s").'/'.base64_encode("und4c").'/pendig_absolute';
+                $client = new Zend_Rest_Client($base_url);
+                $httpClient = $client->getHttpClient();
+                $httpClient->setConfig(array("timeout" => 680));
+                $response = $client->restget($route,$where);
+                $lista=$response->getBody();
+                $subject = Zend_Json::decode($lista);
                 $cache->save($subject,$name_cache);
 
             }

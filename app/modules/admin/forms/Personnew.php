@@ -38,7 +38,7 @@ class Admin_Form_Personnew extends Zend_Form{
         $typedoc->setLabel("Ingrese el Tipo de Documento: ");
         $typedoc->removeDecorator('Label');
         $typedoc->setAttrib('class','form-control');
-        $typedoc->addMultiOption('','- Seleccione -');
+        // $typedoc->addMultiOption('','- Seleccione -');
         $typedoc->addMultiOption('D',"DNI");
         $typedoc->addMultiOption('P',"Pasaporte");
 
@@ -57,7 +57,7 @@ class Admin_Form_Personnew extends Zend_Form{
         $civil =new Zend_Form_Element_Select('civil');
         $civil->setRequired(true)->addErrorMessage('Este campo es requerido');
         $civil->setAttrib('class','form-control');
-        $civil->addMultiOption('','- Seleccione -');
+        // $civil->addMultiOption('','- Seleccione -');
         $civil->addMultiOption("S","Soltero");
         $civil->addMultiOption("C","Casado");
         $civil->addMultiOption("V","Viudo");
@@ -68,7 +68,7 @@ class Admin_Form_Personnew extends Zend_Form{
         $sex =new Zend_Form_Element_Select('sex');
         $sex->setRequired(true)->addErrorMessage('Este campo es requerido');
         $sex->setAttrib('class','form-control');
-        $sex->addMultiOption('','- Seleccione -');
+        // $sex->addMultiOption('','- Seleccione -');
         $sex->addMultiOption("M","Masculino");
         $sex->addMultiOption("F","Femenino");
         $sex->removeDecorator('Label')->removeDecorator("HtmlTag");

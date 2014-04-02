@@ -70,6 +70,23 @@
             // $data = $record->_getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid);
             $data = $record->_getRecordNotasAlumno_H($escid,$uid,$eid,$oid,$subid,$pid);
             // print_r($data);exit();
+            $len=count($data);            
+            $j=1;
+            $s=1;
+            $in=0;
+            for ($i=0; $i < $len; $i++) { 
+                if ($data[$i]['semid']==$data[$j]['semid']) {
+                    $s++;
+                }
+                else{
+                    $countsem[$in]['cant']=$s;
+                    $countsem[$in]['semid']=$data[$i]['semid'];
+                    $s=1;
+                    $in++;
+                }
+                $j++;
+            }
+            $this->view->countsem=$countsem;
             $this->view->data=$data;
             $where['eid']=$eid;
             $where['oid']=$oid;
