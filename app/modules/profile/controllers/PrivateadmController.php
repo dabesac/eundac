@@ -57,6 +57,13 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
+            
+            //DataBases
+            $dbperson=new Api_Model_DbTable_Person();
+            $country_dDb = new Api_Model_DbTable_CountryDistrict();
+            $country_pDb = new Api_Model_DbTable_CountryProvince();
+            $country_sDb = new Api_Model_DbTable_CountryState();
+            $countryDb   = new Api_Model_DbTable_Country();
 
             $uid=$this->sesion->uid;
             $pid=$this->sesion->pid;
@@ -67,13 +74,37 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
 
             $data=array("eid"=>$eid,"pid"=>$pid);
 
-            $dbperson=new Api_Model_DbTable_Person();
             $where=array("eid"=>$eid, "pid"=>$pid);
             $datos[3]=$dbperson->_getOne($where);
+
+            if($datos[3]['location']) {
+                //Distrito
+                $where = array( 'disid' => $datos[3]['location'] );
+                $distrito = $country_dDb->_getOne($where);
+                $datosUbicacion['distrito'] = $distrito['name_d'];
+
+                //Provincia
+                $where = array( 'proid' => $distrito['proid'] );
+                $provincia = $country_pDb->_getOne($where);
+                $datosUbicacion['provincia'] = $provincia['name_p'];
+
+                //Departamento
+                $where = array( 'cosid' => $provincia['cosid'] );
+                $departamento = $country_sDb->_getOne($where);
+                $datosUbicacion['departamento'] = $departamento['name_s'];
+
+                //Departamento
+                $where = array( 'coid' => $departamento['coid'] );
+                $pais = $countryDb->_getOne($where);
+                $datosUbicacion['pais'] = $pais['name_c'];
+
+                $this->view->datosUbicacion = $datosUbicacion;
+            }
            
             $dbdetingreso=new Api_Model_DbTable_Studentsignin();
             $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "pid"=>$pid, "uid"=>$uid);
             $datos[4]=$dbdetingreso->_getOne($where);
+
             //print_r($datos);
 
             $this->view->data=$data;
@@ -87,6 +118,13 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
     public function admeditinfoAction(){
         try{
             $this->_helper->layout()->disableLayout();
+
+            //DataBases
+            $dbperson=new Api_Model_DbTable_Person();
+            $country_dDb = new Api_Model_DbTable_CountryDistrict();
+            $country_pDb = new Api_Model_DbTable_CountryProvince();
+            $country_sDb = new Api_Model_DbTable_CountryState();
+
             $eid=$this->sesion->eid;
             $pid=$this->sesion->pid;
 
@@ -95,13 +133,30 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
 
             $this->view->dataPerson = $dataPerson;
 
-            $dbperson=new Api_Model_DbTable_Person();
             $where=array("eid"=>$eid, "pid"=>$pid);
             $person=$dbperson->_getOne($where);
             $person["year"]=substr($person["birthday"], 0, 4);
             $person["month"]=substr($person["birthday"], 5, 2);
             $person["day"]=substr($person["birthday"], 8, 2);
             //print_r($person);
+            if ($person['location']) {
+                //Distrito
+                $where = array( 'disid' => $person['location'] );
+                $country_d = $country_dDb->_getOne($where);
+
+                //Provincia
+                $where = array( 'proid' => $country_d['proid'] );
+                $country_p = $country_pDb->_getOne($where);
+
+                //Departamento
+                $where = array( 'cosid' => $country_p['cosid'] );
+                $country_s = $country_sDb->_getOne($where);
+
+                $person['country_d'] = $person['location'];
+                $person['country_p'] = $country_d['proid'];
+                $person['country_s'] = $country_p['cosid'];
+                $person['country']   = $country_s['coid'];
+            }
 
             $form= new Profile_Form_Userinfo();
             $this->view->form=$form;
@@ -114,14 +169,31 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
 
     public function saveinfoAction(){
         $this->_helper->layout()->disableLayout();
+
+        $personDb = new Api_Model_DbTable_Person();
         $form= new Profile_Form_Userinfo();
 
         $formData = $this->getRequest()->getPost();
 
         if ($form->isValid($formData)){ 
-            print_r($formData);
+            $pk = array('eid' => $formData['eid'],
+                        'pid' => $formData['pid'] );
+
+            $formData['birthday'] = $formData['year'].'-'.$formData['month'].'-'.$formData['day'];
+
+            $formData['location'] = $formData['country_d'];
+
+            unset(  $formData['eid'], $formData['pid'], $formData['submit'],
+                    $formData['country'], $formData['country_s'], $formData['country_p'], $formData['country_d'],
+                    $formData['year'], $formData['month'], $formData['day'] );
+
+            if ($personDb->_update($formData, $pk)) {
+                echo 1;
+            }else{
+                echo 2;
+            }
         }else{
-            echo "Invalido";
+            echo 0;
         }
     }
     
