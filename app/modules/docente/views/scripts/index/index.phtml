@@ -68,7 +68,7 @@
 
 
 <!--Grafica Docentes-->
-<!--<div id="graficaSlide" class="grafica">
+<div id="graficaSlide" class="grafica">
     <div class="graficaTitle">
         <p class="text-muted">Gráfica de la encuesta realizada en el periodo 13B</p>
     </div>
@@ -94,7 +94,7 @@
                 </div>
             </div>
         </div>
-        <!--Grafica Docentes
+        <!--Grafica Docentes-->
         <script type="text/javascript" src="/js/graphic/docente.js"></script>
         <script src="/external_library/highcharts/js/highcharts.js"></script>
         <script src="/external_library/highcharts/modules/exporting.js"></script>
@@ -109,13 +109,8 @@
                 }else{
                     $classActive = '';
                 } ?>
-                <div class="graficaCourse <?php echo $classActive ?>" courseid="<?php echo $course['courseid'] ?>" nameCourse="<?php echo $this->encuestaCoursesName[$c] ?>">
-                    <span class="hidden" id="dataCourses<?php echo $course['courseid'] ?>"><?php print_r($this->datosEncuesta) ?></span>
-                    <script type="text/javascript">
-                        var datosEncuesta = <?php echo $this->datosEncuesta ?>;
-                    </script>
-                    <div id="container_encuesta<?php echo $course['courseid'] ?>" ></div>
-                </div>
+                <span class="hidden" id="dataCourses<?php echo $course['courseid'] ?>"><?php print_r($this->dataEncuesta[$c]) ?></span>
+                <div class="graficaCourse <?php echo $classActive ?>" courseid="<?php echo $course['courseid'] ?>" nameCourse="<?php echo $this->encuestaCoursesName[$c] ?>" id="container_encuesta<?php echo $course['courseid'] ?>" ></div>
             <?php 
             $c++;
             endforeach ?>
@@ -129,7 +124,7 @@
             </ol>
         </div>
     </div>
-</div>-->
+</div>
 <br><br> 
 
 <!--Panel de Avance de Cursos-->
