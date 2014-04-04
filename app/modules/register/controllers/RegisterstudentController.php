@@ -10,7 +10,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
       }
       $login = $sesion->getStorage()->read();
       $this->sesion = $login;
-      $this->sesion->period->perid = '14A';
+      // $this->sesion->period->perid = '14A';
     }
     public function indexAction(){
         try{

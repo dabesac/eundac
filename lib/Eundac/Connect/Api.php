@@ -17,9 +17,8 @@ class Eundac_Connect_Api extends Zend_Rest_Client{
   **/
 
 
-
-	const API_HOST_SERVER ="http://api.undac.edu.pe:8080/";
-  //const API_HOST_SERVER ="http://172.16.0.210:8080/";
+	//const API_HOST_SERVER ="http://api.undac.edu.pe:8080/";
+  const API_HOST_SERVER ="http://172.16.0.210:8080/";
 	//const API_HOST_SERVER ="http://localhost:8080/";
 
 
@@ -29,7 +28,7 @@ class Eundac_Connect_Api extends Zend_Rest_Client{
 
     public function __construct($model,$params){
       $this->setUri(self::API_HOST_SERVER);
-      $this->setConfig(array("timeout" => 180000));
+      $this->setConfig(array("timeout" => 680));
       $this->_params=$params;
       $this->_model=$model;
     }

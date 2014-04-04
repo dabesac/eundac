@@ -74,7 +74,7 @@
                         <h5 class="text-muted">Monto Correcto <span class="text-danger">S/.<?php echo $montoaPagar ?>.00 </span></h5>
                         <h5 class="text-muted">Debe un Reintegro de <span class="text-danger">S/.<?php echo $deuda ?>.00 </span></h5>
                     <?php 
-                        $classButtonValidate = 'disabled';
+                        // $classButtonValidate = 'disabled';
                         $faltaReintegro = 'Si';  
                     }else { ?>
                         <h5 class="text-success text-center">Todo en Orden</h5>
@@ -96,7 +96,7 @@
                     <?php endforeach ?>
                     </table>
                 <?php 
-                $classButtonValidate = 'disabled';
+                // $classButtonValidate = 'disabled';
                 endif ?>
             <?php endif ?>
             <?php if ($this->pagoAtiempo == 'no'): ?>
@@ -107,7 +107,7 @@
                     <h5 class="text-muted">Debe un <span class="text-danger">incremento del <?php echo $this->tipePayment['porcentaje'] ?> %</span></h5>
                     <h5 class="text-muted">Monto Correcto <span class="text-danger">S/. <?php echo $this->tipePayment['incremento'] ?> </span></h5>
                 <?php 
-                $classButtonValidate = 'disabled';
+                // $classButtonValidate = 'disabled';
                 endif ?>
             <?php endif ?>
             </div>
@@ -133,7 +133,7 @@
                 $conditions     = 'Si';
             elseif (!$this->condition and $this->matriculaCondicional == 'Si'):
                 $classCondition      = 'text-danger';
-                $classButtonValidate = 'disabled';
+                // $classButtonValidate = 'disabled';
             endif ?>
             <p class="<?php echo $classCondition ?>"><span id="condition">Condiciones <span class="glyphicon glyphicon-flag"></span></span></p>
             <div class="col-md-6" id='conditionInfo' style="position: absolute; z-index: 2; background: white;">
@@ -406,7 +406,7 @@
         <a id="activeRegister" href="##" class="btn btn-success form-control <?php echo $classActive ?>">Activar</a>
         <br><br>
         <div class="validateRegister <?php echo $classValidate ?>">
-            <a id="validateRegister" href="##" class="btn btn-success form-control <?php echo $classButtonValidate ?>">Validar</a>
+             <a id="validateRegister" href="##" class="btn btn-success form-control <?php echo $classButtonValidate ?>">Validar</a>
             <br><br>
         </div>
         <div class="reservedRegister <?php echo $classInteractions ?>">
