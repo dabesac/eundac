@@ -604,8 +604,8 @@ class Register_StudentController extends Zend_Controller_Action {
                 // $cache->save($subject,$name_cache);
                 require_once 'Zend/Loader.php';
                 Zend_Loader::loadClass('Zend_Rest_Client');
-                $base_url = 'http://localhost:8080/';
-                $route = '/'.base64_encode("s1st3m4s").'/'.base64_encode("und4c").'/pendig_absolute';
+                $base_url = 'http://api.undac.edu.pe:8080/';
+                $route = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/pendig_absolute';
                 $client = new Zend_Rest_Client($base_url);
                 $httpClient = $client->getHttpClient();
                 $httpClient->setConfig(array("timeout" => 680));
