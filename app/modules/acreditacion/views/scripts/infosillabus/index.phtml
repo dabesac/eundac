@@ -1,0 +1,50 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list-alt"></span> Informe sobre el grado de Cumplimiento del Sílabus');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<div class="row">
+	<div class="col-md-2 col-md-offset-1">
+		<h5 class="text-muted">
+			<strong>Leyenda</strong>
+		</h5>
+	</div>
+	<div class="col-md-2">
+		<h5 class="text-muted">
+			<img src="/img/circulo-verde.png"><span class="text-success"></span>
+		</h5>
+	</div>
+	<div class="col-md-2">
+		<h5 class="text-muted">
+			<img src="/img/circulo-rojo.png"><span class="text-danger"></span>
+		</h5>
+	</div>
+	<div class="col-md-2">
+		<h5 class="text-muted">
+			<img src="/img/circulo-amarillo.png"><span class="text-warning"></span>
+		</h5>
+	</div>
+</div>
+<?php
+	if ($this->data) {
+		$i=1;
+		$j=0;
+		$data=$this->data;
+		$len=count($data);
+
+		while ($j < $len) {
+			if ($data[$j]['uid']==$data[$i]['uid']) {	
+			?>
+			<div>
+				<ul>
+					<ol><?php echo $j?></ol>
+					<ol><?php echo $data[$j]['uid']?></ol>
+					<ol><?php echo $data[$j]['last_name0']." ".$data[$j]['last_name1'].", ".$data[$j]['first_name']?></ol>
+				</ul>
+			</div>
+			<?php
+				$i++;
+			}
+			else{
+				$j++;
+			}
+		}
+	}
+?>

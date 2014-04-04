@@ -30,9 +30,10 @@
 		</td>
 	</tr>
 </table>
-<div id="loadgraduated"></div>
+<div id="loadgraduated" class='alert alert-info col-md-6 col-md-offset-3'></div>
 
 <script type="text/javascript">
+$("#loadgraduated").hide();
 $("#facid").change(function(){
 	var facid = $(this).val();
 	if (!facid) {
@@ -51,7 +52,8 @@ $("#generargraduated").click(function(){
 	var tmpp = tmp.split('--');
 	var escid = tmpp[0];
 	var subid = tmpp[1];
-	$("#loadgraduated").html("<div><center><img src='/img/carga.gif'></center></div>");
+	$("#loadgraduated").show();
+	$("#loadgraduated").html("<div><center><h3><img src='/img/spinner.gif'> Generando...</h3></center></div>");
 	$("#loadgraduated").load("/admin/generategraduated/generated/escid/"+escid+"/subid/"+subid);
 });
 </script>
