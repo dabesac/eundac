@@ -1,36 +1,38 @@
-<div class='wrapper'>
-	<div class='container-izquierda'>
-    	<div class='logo'><img src="/img/logo_03.png"></div>
-		<div id="banner-fade">
-        	<ul class="bjqs">
-          		<li><img src="/img/1.png" title=""></li>
-          		<li><img src="/img/2.png" title=""></li>
-          		<li><img src="/img/3.png" title=""></li>
-          		<li><img src="/img/4.png" title=""></li>
-          		<li><img src="/img/5.png" title=""></li>
-        	</ul>
-      	</div>
+<header class="headerLogin">
+	<figure>
+		<img src="/img/undac.png" alt="Logo" class="logoUniversidad">
+	</figure>
+	<div class="nombreUniversidad">
+		Universidad Nacional <br>
+		Daniel Alcides Carrión
 	</div>
-	<div class='container-derecha'>
-   		<div>
-        	<h5>BIENVENIDO - Inicio Sesión</h5>
-        	<hr>
-      	</div>
-    	<div class='datos'>
-    		<form id="<?php  print $this->form->getname()?>"  name="<?php print $this->form->getname()?>" action="<?php print $this->form->getaction()?>" method="POST" enctype="application/x-www-form-urlencoded">
-		    	<?php //print $this->form->eid ?>
-		        <?php //print $this->form->oid ?>
-		        <div class="col-lg-8"><?php print $this->form->rid ?></div>		    
-	    		<div class="col-lg-8"><?php print $this->form->usuario ?></div>
-	    		<div class="col-lg-8"><?php print $this->form->clave?></div>
-				<div class="col-lg-8"><?php print $this->form->enviar?></div>
-	    		 
-        	</form>
-        	<?php if ($this->msgerror){?>
-		                <div style="color: red; border: 1px solid #zzz;padding-bottom: 30px;padding-top: 5px"><?php echo $this->msgerror?></div>
-		        <?php } 
-		        ?>
-      	</div>
+</header>
+
+<div class="imagenFondo">
+
+</div>
+
+<div class="navegacion">
+	<div class="logoUser">
+		<figure>
+			<img class="logoUserMuneco" src="/img/logoLogin.jpg" alt="LogoLogin">
+		</figure>
+	</div>
+	<div class="bienvenido">
+		<h4>BIENVENIDO - Inicio Sesión</h4>
+	</div>
+	<div class="botones">
+		<form id="<?php  print $this->form->getname()?>"  name="<?php print $this->form->getname()?>" action="<?php print $this->form->getaction()?>" method="POST" enctype="application/x-www-form-urlencoded">
+	    	<?php //print $this->form->eid ?>
+	        <?php //print $this->form->oid ?>
+	        <?php print $this->form->rid ?>		    
+    		<?php print $this->form->usuario ?>
+    		<?php print $this->form->clave?>
+			<?php print $this->form->enviar?>
+    	</form>
+    	<?php if ($this->msgerror){?>
+            <div style="color: red; border: 1px solid #zzz;padding-bottom: 30px;padding-top: 5px"><?php echo $this->msgerror?></div>
+	    <?php } ?>
 	</div>
 </div>
 
