@@ -2,115 +2,146 @@
 /* CSS Document */
 
 body{
-  font-family: 'Abel', Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  line-height: 20px;
-  background-color: #363637;
-  background-image:url(img/textura_02.jpg);
-  background-repeat:repeat-x;
-  color: #666;
-  padding:0px;
-  margin:0px;
-  -webkit-font-smoothing: antialiased;
-  
+	background: #2F3646;
+	font-size: 16px;
 }
 
-h3{font-weight: normal;}
-a{ color: #0044CC;
-	height:30px;
-	display:block;
-	font-size:14px;
-	text-decoration: none;
- }
-.wrapper{
+.headerLogin{
+	background: #353535;
+	border-radius: 0 0 30px 30px;
+	box-shadow: 1px 1px 1px 2.2px rgba(0, 0, 0, 0.2);
+	color : white;
+	font-size: 0.7em;
+	height: 50px;
+	left: 20%;
+	overflow: hidden;
 	position: relative;
-	top: 110px;
-	margin:0 auto;
-	background: #e0e0e0;
- 	width:730px;
- 	height:335px;
- 	border-radius: 5px;
+	top: 0;
+	width: 200px;
 }
 
-.container-izquierda{
-	
-	float:left;
-	/*background-image:url(img/img3_05.png);
-	background-repeat:no-repeat;*/
-	width:50%;
-	height:100%;
-}
-.container-izquierda .logo{
-	margin:-2px 15px;
-    position: absolute;
-    z-index: 2;}
-
-  
-.container-derecha{
-	float: right;
-	width:50%;
-	height:100%;
-	border-radius: 5px;
-	text-align:center;
-	padding-top:10px;}
-
-.container-derecha p{
-	text-align: left;
-	width: 383px;
-	margin-left: 15px;
+.headerLogin figure .logoUniversidad{
+	float: left;
+	margin-left: 1.8em;
+	margin-top: 0.5em;
+	width: 35px;
 }
 
-.datos{
-	margin: 0 auto;
-	}
-
-.datos input[type='text']{
-	background: url("../img/icono1_03.gif") no-repeat scroll right #fff;
-	width: 220px;
-	margin-bottom: 10px;
+.headerLogin .nombreUniversidad{
+	font-weight: bold;
+	position: absolute;
+	margin-top: 0.9em;
+	right: 22px;
+	text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+	text-align: center;
+	top: 0;
 }
 
-.datos input[type='password']{
-	background:url("../img/icono2_03.gif") no-repeat scroll right #fff;
-	width: 220px;
+.imagenFondo{
+	background-image: url('/img/panoramicaUndac.jpg');
+	background-size: 100% 100%;
+	box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+	height: 450px;
+	left: 10%;
+	top: 17%;
+	position: absolute;
+	width: 80%;
 }
 
-.datos input[type='text'], .datos input[type='password'] {
-	margin-left: 22%;
-	border-radius: 5px;
-	
+.imagenFondo:before{
+	border-bottom: 120px solid transparent;
+	border-left: 120px solid #353535;
+	content: '';
+	position: absolute;
+	z-index: 2;
 }
 
-.datos select {
-	display: block;
-	margin-bottom: 10px;
-	margin-left: 22%;
-	border-radius: 5px;
-	width: 220px;
+.imagenFondo:after{
+	left: 8px;
+	top: 8px;
+	border-bottom: 120px solid transparent;
+	border-left: 120px solid #063F9D;
+	content: '';
+	position: absolute;
 }
 
-.datos input[type='submit']{
-	width: 220px;
-	margin-left: 22%;
+.navegacion{
+	background: white;
+	box-shadow: 2px 2px 2px 4px rgba(0, 0, 0, 0.3);
+	height: 490px;
+	position: absolute;
+	right: 12%;
+	top: 14%;
+	width: 23%;
+	z-index: 2;
 }
 
+.navegacion:before{
+	left: 0px;
+	top: 0px;
+	border-bottom: 80px solid transparent;
+	border-left: 80px solid #353535;
+	content: '';
+	position: absolute;
+	z-index: 2;
+}
 
-/* Basic jQuery Slider essential styles */
+.navegacion:after{
+	left: 4px;
+	top: 4px;
+	border-bottom: 80px solid transparent;
+	border-left: 80px solid #063F9D;
+	content: '';
+	position: absolute;
+}
 
-ul.bjqs{position:relative; list-style:none;padding:0;margin:0;overflow:hidden; display:none;}
-li.bjqs-slide{position:absolute; display:none;}
-ul.bjqs-controls{list-style:none;margin:0;padding:0;z-index:9999;}
-ul.bjqs-controls.v-centered li a{position:absolute;}
-ul.bjqs-controls.v-centered li.bjqs-next a{right:0; display: none;}/*modificado*/
-ul.bjqs-controls.v-centered li.bjqs-prev a{left:0; display: none;}/*modificado*/
-ol.bjqs-markers{list-style: none; padding: 0; margin: 0; width:100%;}
-ol.bjqs-markers.h-centered{text-align: center; display: none;}/*modificado*/
-ol.bjqs-markers li{display:inline;}
-ol.bjqs-markers li a{display:inline-block;}
-p.bjqs-caption{display:block;width:96%;margin:0;padding:2%;position:absolute;bottom:0;}
+.navegacion .logoUser{
+	background: white;
+	border-radius: 50%;
+	border : 2px solid #CECECE;
+	position: absolute;
+	right: 30%;
+	top: 3%;
+	height: 140px;
+	width: 140px;
+}
+
+.navegacion .logoUser figure .logoUserMuneco{
+	position: absolute;
+	top: 20%;
+	left: 15%;
+	width: 100px;
+	/*height: 50px;
+	width: 50px*/;
+}
+
+.navegacion .bienvenido{
+	position: relative;
+	color: #353535;
+	text-align: center;
+	top: 35%;
+}
+
+.navegacion .botones{
+	margin: 1.5em;
+	position: relative;
+	top: 38%;
+}
+
+.navegacion .botones form input{
+	margin-top: 1em;
+	box-shadow: 1px 1px 1px 1px #CFD0D1;	
+}
+
+.navegacion .botones form #rid{
+	box-shadow: 1px 1px 1px 1px #CFD0D1;
+
+}
 
 .errors li{
    color:red;
-   list-style: none;
    font-size:10px;
+   list-style: none;
+   margin: 0;
+   float:left;
 }

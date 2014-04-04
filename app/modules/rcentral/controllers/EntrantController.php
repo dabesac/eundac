@@ -531,23 +531,24 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 				for ($i=1; $i <= $sizeCourses; $i++) { 
 					$courseid = substr($data['Course'.$i], 3);
 					$turno    = substr($data['Course'.$i], 0 , 1);
-					$dataSaveCourse = array(	'eid'      => $eid,
-												'oid'      => $oid,
-												'perid'    => $data['perid'],
-												'courseid' => trim($courseid),
-												'escid'    => $data['escid'],
-												'subid'    => $data['subid'],
-												'curid'    => $data['curid'],
-												'turno'    => $turno,
-												'regid'    => $data['uid'].$data['perid'],
-												'pid'      => $data['pid'],
-												'uid'      => $data['uid'],
-												'register' => $uid,
-												'approved' => $uid,
-												'updated'  => date('Y-m-d h:m:s'),
-												'modified' => $uid, 
-												'created'  => date('Y-m-d h:m:s'), 
-												'state'    => $state ); 
+					$dataSaveCourse = array('eid'           => $eid,
+											'oid'           => $oid,
+											'perid'         => $data['perid'],
+											'courseid'      => trim($courseid),
+											'escid'         => $data['escid'],
+											'subid'         => $data['subid'],
+											'curid'         => $data['curid'],
+											'turno'         => $turno,
+											'regid'         => $data['uid'].$data['perid'],
+											'pid'           => $data['pid'],
+											'uid'           => $data['uid'],
+											'register'      => $uid,
+											'approved'      => $uid,
+											'approved_date' => date('Y-m-d h:m:s'),
+											'updated'       => date('Y-m-d h:m:s'),
+											'modified'      => $uid, 
+											'created'       => date('Y-m-d h:m:s'), 
+											'state'         => $state ); 
 
 					if (!$registerxCourseDb->_save($dataSaveCourse)) {
 						$interruptor = 1;

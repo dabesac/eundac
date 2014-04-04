@@ -11,6 +11,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
       $login = $sesion->getStorage()->read();
       $this->sesion = $login;
     }
+    
     public function indexAction(){
         try{
             $where['subid'] = $this->sesion->subid;        
@@ -625,10 +626,11 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                         'uid'=>$uid,
                         'state'=>$state );
 
-        $dataRegisterxCourse = array(   'modified' => $this->sesion->uid,
-                                        'approved' => $this->sesion->uid,
-                                        'updated'  => date('Y-m-d h:m:s'),
-                                        'state'    => 'M' );
+        $dataRegisterxCourse = array(   'modified'      => $this->sesion->uid,
+                                        'approved'      => $this->sesion->uid,
+                                        'approved_date' => date('Y-m-d h:m:s'),
+                                        'updated'       => date('Y-m-d h:m:s'),
+                                        'state'         => 'M' );
         if ($registerxcourseDb->_updatestateregister($dataRegisterxCourse, $where)) {
             $dataRegister = array(  'modified' => $this->sesion->uid,
                                     'updated'  => date('Y-m-d h:m:s'),
@@ -780,7 +782,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
         $base_url = 'http://172.16.0.210:8080/';
-        $endpoint = '/'.base64_encode('s1st3m4s').'/'.base64_encode('und4c').'/validate';
+        $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/validate';
         $client = new Zend_Rest_Client($base_url);
         $httpClient = $client->getHttpClient();
         $httpClient->setConfig(array("timeout" => 30000));
