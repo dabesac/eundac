@@ -1,0 +1,52 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Lista de Egresados por Año de Ingreso');?>
+<?php $this->placeholder('Btnnav')->append(' <a href="/docente/index" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Regresar</a>');?>
+
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="panel panel-default">
+
+			<div class="container">
+				<br>
+				<div class="row">
+					<div class="col-md-8">
+						<div class="col-md-1">
+							<span class="glyphicon glyphicon-info-sign text-muted" style="font-size: 25px; margin-top: 6px;"></span>
+						</div>
+						<div class="col-md-11">
+							<p class="text-muted"> Seleccione una año para que mire la cantidad de egresados de acuerdo al año de ingreso.</p>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<select name="Anio" id="anio" class="form-control" style="margin-top: 6px;">
+							<option value="">Año de Ingreso</option>
+							<?php for ($i=$this->currentYear-4; $i >= 1965 ; $i--) { ?> 
+									<option value="<?php echo $i ?>"><?php echo $i ?></option>
+							<?php } ?>
+						</select>
+					</div>
+				</div>
+				<br>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div id="data" class="panel panel-default">
+
+	</div>
+</div>
+
+<script>
+	$('#data').addClass('hidden');
+	$('#anio').change(function(){
+		$('#data').removeClass('hidden');
+		$('#data').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center><br>')
+
+		var anio = $(this).val();
+		$('#data').load('/acreditacion/egresados/listegresados/anio/' + anio, function(){
+
+		});
+	})
+</script>

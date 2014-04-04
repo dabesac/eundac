@@ -344,6 +344,19 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
         }
     }
 
+    public function _getEgresadosxAnioxEscuela(){
+        /*try{        
+            $sql = $this->_db->query("
+		  	select * from egresados_anio('4SI','2005')
+			
+            ");
+            if ($sql) return $sql->fetchAll();
+            return false;           
+        }catch (Exception $ex){
+            print "Error: Obteniendo los nombres completos y el codigo de usuario adscrito a una escuela del rol ingresado".$ex->getMessage();
+        }*/
+    }
+
     public function _getGraduatedXFacultyXSchoolXPeriod($where=array()){
         try {
             if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='') return false;

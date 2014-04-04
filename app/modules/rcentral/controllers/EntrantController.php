@@ -384,14 +384,17 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 						'uid' 	=> $uid,
 						'perid' => $perid );
 
+        $dataRegister = $registerDb->_getFilter($where);
+
         $data = $registerxCourseDb->_getFilter($where, $attrib);
         if ($data[0]['state'] and $data[0]['state'] <> 'I') {
         	$this->view->stateStudent = $data[0]['state'];
         	$this->view->exist = 'Yes';
         	$c = 0;
+        	$totalCredits = 0;
         	foreach ($data as $course) {
         		//Nombre Cursos
-        		$attrib = array('name');
+        		$attrib = array('name', 'credits');
         		$where = array(	'eid'      => $eid, 
 								'oid'      => $oid,
 								'escid'    => $escid,
@@ -399,7 +402,11 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 								'courseid' => $course['courseid'],
 								'curid'    => $course['curid'] );
 
+
         		$coursesName[$c] = $courseDb->_getFilter($where, $attrib);
+
+        		//Cantidad de Creditos
+        		$totalCredits = $totalCredits + $coursesName[$c][0]['credits'];
 
         		//Nombre Profes
         		$attrib = array('pid', 'uid');
@@ -414,24 +421,29 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
         		$teacher = $coursexTeacherDb->_getFilter($where, $attrib);
 
-        		$where = array(	'eid'      => $eid, 
-								'oid'      => $oid,
-								'escid'    => $escid,
-								'subid'    => $subid,
-								'pid' => $teacher[0]['pid'], 
-								'uid' => $teacher[0]['uid'], );
+        		$where = array(	'eid'   => $eid, 
+								'oid'   => $oid,
+								'escid' => $escid,
+								'subid' => $subid,
+								'pid'   => $teacher[0]['pid'], 
+								'uid'   => $teacher[0]['uid'], );
 
         		$coursesTeachers[$c] = $coursexTeacherDb->_getinfoTeacher($where);
 
-        		$teachers = $coursexTeacherDb->_getFilter($where, $attrib);
+        		//$teachers = $coursexTeacherDb->_getFilter($where, $attrib);
 
         		$c++;
         	}
         	$this->view->data = $data;
         	$this->view->coursesName = $coursesName;
         	$this->view->coursesTeachers = $coursesTeachers;
+        	$this->view->totalCredits = $totalCredits;
         }elseif ($courses[0]['state'] == 'I' or !$courses[0]['state']){
-        	$this->view->stateStudent = 'I';
+        	if ($dataRegister[0]['state']) {
+        		$this->view->stateStudent = $dataRegister[0]['state'];
+        	}else{
+        		$this->view->stateStudent = 'N';
+        	}
 	       
 	       	$request = array( 	'eid'   => base64_encode($eid),
 								'oid'   => base64_encode($oid),
@@ -497,6 +509,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
 		$data = $this->getRequest()->getPost();
 
+
 		if ($data['whySend'] == 'M') {
 			$state = 'M';
 		}else if ($data['whySend'] == 'O'){
@@ -508,24 +521,43 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		}
 
 		if (!$data['exist'] and $state != 'E') {
-			$dataSaveRegister = array(	'eid'           => $eid,
-										'oid'           => $oid,
-										'regid'         => $data['uid'].$data['perid'],
-										'pid'           => $data['pid'],
-										'uid'           => $data['uid'],
-										'escid'         => $data['escid'],
-										'subid'         => $data['subid'],
-										'perid'         => $data['perid'],
-										'semid'         => '1',
-										'date_register' => date('Y-m-d h:m:s'),
-										'register'      => $uid,
-										'created'       => date('Y-m-d h:m:s'), 
-										'updated'       => date('Y-m-d h:m:s'),
-										'modified'       => $uid, 
-										'state'         => $state,
-										'count'         => '0' ); 
+			if ($data['stateStudent'] == 'I') {
+				$pk = array('eid'   => $eid,
+							'oid'   => $oid,
+							'regid' => $data['uid'].$data['perid'],
+							'pid'   => $data['pid'],
+							'uid'   => $data['uid'],
+							'escid' => $data['escid'],
+							'subid' => $data['subid'],
+							'perid' => $data['perid'],
+							'state' => $data['stateStudent'] ); 
 
-			if ($registerDb->_save($dataSaveRegister)) {
+				$dataUpdateRegister = array('modified' => $uid,
+											'updated'  => date('Y-m-d h:m:s'),
+											'state'    => $state );
+				$saveRegister = $registerDb->_update($dataUpdateRegister, $pk);
+			}else{
+				$dataSaveRegister = array(	'eid'           => $eid,
+											'oid'           => $oid,
+											'regid'         => $data['uid'].$data['perid'],
+											'pid'           => $data['pid'],
+											'uid'           => $data['uid'],
+											'escid'         => $data['escid'],
+											'subid'         => $data['subid'],
+											'perid'         => $data['perid'],
+											'semid'         => '1',
+											'date_register' => date('Y-m-d h:m:s'),
+											'register'      => $uid,
+											'created'       => date('Y-m-d h:m:s'), 
+											'updated'       => date('Y-m-d h:m:s'),
+											'modified'       => $uid, 
+											'state'         => $state,
+											'count'         => '0' ); 
+				$saveRegister = $registerDb->_save($dataSaveRegister);
+			}
+
+
+			if ($saveRegister) {
 				$sizeCourses = $data['CantidadCursos'];
 				$interruptor = 0;
 				for ($i=1; $i <= $sizeCourses; $i++) { 
