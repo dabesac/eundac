@@ -327,6 +327,29 @@ class Docente_IndexController extends Zend_Controller_Action {
             $this->view->teachersEmptyReport = $teachersEmptyReport;
         }
 
+        //Grafica para Encuesta
+        //DataBases
+        $pollDb                      = new Api_Model_DbTable_Poll();
+        $pollQuestionsDb             = new Api_Model_DbTable_PollQuestion();
+        $pollAlternativesDb = new Api_Model_DbTable_PollAlternatives();
+        $pollResultsDb = new Api_Model_DbTable_PollResults();
+
+        //Preguntas
+        $where = array( 'eid' => $eid,
+                        'oid' => $oid,
+                        'perid' => '13B');
+        $attrib = array('pollid');
+        $poll = $pollDb->_getFilter($where);
+        
+        $where = array( 'eid' => $eid,
+                        'oid' => $oid,
+                        'pollid' => $poll[0]['pollid']);
+        $attrib = array('qid', 'question');
+        $order = array('qid');
+        $pollQuestions = $pollQuestionsDb->_getFilter($where, $attrib, $order);
+
+        $this->view->pollQuestions = $pollQuestions;
+
         $where = array( 'eid' => $eid,
                         'oid' => $oid,
                         'uid' => $uid,
@@ -350,6 +373,94 @@ class Docente_IndexController extends Zend_Controller_Action {
         $this->view->coursesBefore       = $coursesBefore;
         $this->view->encuestaCoursesName = $encuestaCoursesName;
 
+        $answers[0] = '-';
+        $c = 0;
+        $altC = 0;
+        foreach ($pollQuestions as $question) {
+            $where = array( 'eid' => $eid,
+                            'oid' => $oid,
+                            'qid' => $question['qid'] );
+            $attrib = array('alternative', 'atlid');
+            $alternativesQuestion[$question['qid']] = $pollAlternativesDb->_getFilter($where, $attrib);
+            $existe = 0;
+            foreach ($alternativesQuestion[$question['qid']] as $alternativeQuestion) {
+                foreach ($answers as $answer) {
+                    if ($alternativeQuestion['alternative'] == $answer) {
+                        $existe = 1;
+                    }
+                }
+                if ($existe == 0) {
+                    $answers[$c] = $alternativeQuestion['alternative'];
+                    $c++;
+                }
+            }
+        }
+
+        $cNames = 0;
+        foreach ($answers as $answer) {
+            $answersName[$cNames] = $answer;
+            $c = 0;
+            foreach ($pollQuestions as $question) {
+                foreach ($alternativesQuestion[$question['qid']] as $alternative) {
+                    if ($answer == $alternative['alternative']) {
+                        $answersAlternatives[$answer][$c] = $alternative['atlid'];
+                        $c++;
+                    }
+                }
+            }
+            $cNames++;
+        }
+
+        foreach ($coursesBefore as $course) {
+            $numPregunta = 0;
+            foreach ($pollQuestions as $question) {
+                $where = array( 'eid'   => $eid,
+                                'oid'   => $oid,
+                                'code'  => 'curid:'.$course['curid'].'-courseid:'.$course['courseid'].'-turno:'.$course['turno'],
+                                'escid' => $course['escid'],
+                                'subid' => $course['subid'],
+                                'qid'   => $question['qid'] );
+                
+                $attrib = array('altid');
+                $pollResults = $pollResultsDb->_getFilter($where, $attrib);
+                foreach ($answers as $answer) {
+                    $resultTotal[$question['qid']][$answer] = 0;
+                    foreach ($pollResults as $result) {
+                        foreach ($answersAlternatives[$answer] as $alternative) {
+                            if ($result['altid'] == $alternative) {
+                                $resultTotal[$question['qid']][$answer] = $resultTotal[$question['qid']][$answer] + 1;
+                                $existeAlt = 0;
+                            }else{
+                                $existeAlt = 1;
+                            }
+                        }
+                    }
+                    if ($resultTotal[$question['qid']][$answer] == 0) {
+                        $resultTotal[$question['qid']][$answer] = -1;
+                    }
+                    $resultTotalxAnswer[$course['courseid']][$course['escid']][$answer][$numPregunta] = $resultTotal[$question['qid']][$answer];
+                }
+                $numPregunta++;
+            }
+        }
+
+        //print_r($resultTotalxAnswer);
+
+        $numeroCurso = 0;
+        foreach ($coursesBefore as $course) {
+            $c = 0;
+            foreach ($answers as $answer) {
+                //print_r($answer);
+                $datosEncuesta[$course['courseid']][$course['escid']][$c]['name'] = $answer;
+                $datosEncuesta[$course['courseid']][$course['escid']][$c]['data'] = $resultTotalxAnswer[$course['courseid']][$course['escid']][$answer];
+                $c++;
+            }
+            $dataEncuesta[$numeroCurso] = Zend_Json::encode($datosEncuesta[$course['courseid']][$course['escid']]);
+            $numeroCurso++;
+        }
+
+        $this->view->dataEncuesta = $dataEncuesta;
+
         }catch (Exception $e) {
 
         }
@@ -357,7 +468,6 @@ class Docente_IndexController extends Zend_Controller_Action {
     public function subjectsAction()
     {
         try {
-
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $escid = $this->sesion->escid;

@@ -113,5 +113,25 @@ class Api_Model_DbTable_Semester extends Zend_Db_Table_Abstract
         }
     }
 
+    public function _getSemesterXPeriodsXEscidXTurno($where=null){
+        try{
+            if ($where['escid']=="" || $where['perid']=="" || $where['eid']=="" || $where['oid']=="" || $where['semid']=="") return false;
+			$sub_select=$this->_db->select()
+				->from(array('pc' => 'base_periods_courses'),array('turno'))
+					->where("eid = ?",$where['eid'])->where("oid = ?",$where['oid'])
+					->where("perid = ?",$where['perid'])->where("escid = ?",$where['escid'])
+					->where("semid = ?",$where['semid'])
+					->group(array('turno'))
+					->order(array('turno'));
+			
+			$results = $sub_select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;         
+        }  catch (Exception $ex){
+            print "Error: Obteniendo semestres".$ex->getMessage();
+        }
+    }
+
 }
 

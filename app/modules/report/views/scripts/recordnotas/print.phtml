@@ -12,112 +12,74 @@ ob_start();
 <div style="text-align: center; font-size:16px;margin-top:10px"><b> RECORD DE NOTAS </b></div> <br/>
 <?php 
     if ($this->data) {
-        $d=0;
+        $countsem=$this->countsem;
         $c=0;
-        $j=0;
-        $semes[$j]=$this->data[$j]['semid'];
-        $se[$j]=$semes[$j];
-        $len=count($this->data);
-        if ($semes[0]=="0") {
-            for ($i=0; $i < $len; $i++) { 
-                $semid=$this->data[$i]['semid'];
-                if ($semid==$c) {
-                    $d++;
-                }
-                else{
-                    $c++;
-                    $j++;
-                    $semes[$d]=$semid;
-                    $se[$j]=$semes[$d];
-                }
-            }               
-        }
-        else{
-            $d=0;
-            $c=1;
-            $j=0;
-            $semes[$j]=$this->data[$j]['semid'];
-            $se[$j]=$semes[$j];
-            for ($i=0; $i < $len; $i++) { 
-                $semid=$this->data[$i]['semid'];
-                if ($semid==$c) {
-                    $d++;
-                }
-                else{
-                    $c++;
-                    $j++;
-                    $semes[$d]=$semid;
-                    $se[$j]=$semes[$d];
-                }
-            }    
-        }
-        $len1=count($se);
-        // print_r($len);
-        // print_r($len1);
-        // print_r($se);exit();
-        for ($f=0; $f < $len1; $f++) { 
-            ?>
-                <table style="width:100%; margin-bottom:15px" border=" 1px">
-                    <tr style='background:#E5E5E5'>
-                        <th colspan='6' style='font-size:12px; '><?php print $se[$f]."º SEMESTRE"?></th>
-                    </tr>
-                    <tr>
-                        <th class='small-50'>Periodo</th>
-                        <th class='small-50'>Curso</th>
-                        <th >Nombre Curso</th>
-                        <th class='small'>Turno</th>
-                        <th class='small'>Créditos</th>
-                        <th class='small-70'>Prom. Final</th>
-                    </tr>
-                    <?php
-                    foreach ($this->data as $nota) {
-                        if ($nota['semid']==$se[$f]) {
-                    ?>
+        $len=count($this->countsem);
+        for ($i=0; $i < $len; $i++) { 
+            
+        ?>
+        <table style="width:100%; margin-bottom:20px;" border=" 1px">
+            <tr style='background:#E5E5E5'>
+                <th colspan='6' style='font-size:12px; '><?php echo $countsem[$i]['semid']."º SEMESTRE"?></th>
+            </tr>
+            <tr>
+                <th class='small-50'>Periodo</th>
+                <th class='small-50'>Curso</th>
+                <th >Nombre Curso</th>
+                <th class='small'>Turno</th>
+                <th class='small'>Créditos</th>
+                <th class='small-70'>Prom. Final</th>
+            </tr>
+            <?php
+                $notas=$this->data;
+                for ($j=0; $j < $countsem[$i]['cant']; $j++) {
+                    if ($notas[$c]['semid']==$countsem[$i]['semid']) { ?>
                         <tr>
-                            <td class="center"><?php print $nota['perid'] ?></td>
-                            <td class="center"><?php print $nota['courseid']?></td>
-                            <td><?php print $nota['name']?></td>
-                            <td class="center"> <?php print $nota['turno']?></td>
-                            <td class="center"><?php print $nota['creditos']?></td>
+                            <td class="center"><?php print $notas[$c]['perid'] ?></td>
+                            <td class="center"><?php print $notas[$c]['courseid']?></td>
+                            <td><?php print $notas[$c]['name']?></td>
+                            <td class="center"> <?php print $notas[$c]['turno']?></td>
+                            <td class="center"><?php print $notas[$c]['creditos']?></td>
                             <?php           
-                            if ($nota['nota']=='' ){
+                            if ($notas[$c]['nota']=='' ){
                                 ?> <td class="center"><?php print "-"?></td> <?php
                             }
                             else{
 
-                                if ($nota['nota']=='-3' ){
+                                if ($notas[$c]['nota']=='-3' ){
                                     ?> <td class="center" style='color:red'><?php print "R"?></td> <?php   
                                 }
                                 else{       
 
-                                    if ($nota['nota']=='-2' ){
+                                    if ($notas[$c]['nota']=='-2' ){
                                         ?> <td class="center" style='color:red'><?php print "N. P."?></td> <?php
                                     }
                                     else{
 
-                                        if ($nota['nota']>10) {
-                                            ?> <td class="center" border-style:'solid'; style='color:blue'><?php print $nota['nota']?></td> <?php
+                                        if ($notas[$c]['nota']>10) {
+                                            ?> <td class="center" border-style:'solid'; style='color:blue'><?php print $notas[$c]['nota']?></td> <?php
                                         }
                                         else{
 
-                                            if ($nota['nota']!=10) {
-                                                ?> <td class="center" style='color:red;'><?php print $nota['nota']?></td> <?php
+                                            if ($notas[$c]['nota']!=10) {
+                                                ?> <td class="center" style='color:red;'><?php print $notas[$c]['nota']?></td> <?php
                                             }
                                             else{
-                                                ?> <td class="center" style='color:red;'><?php print $nota['nota']?></td> <?php
+                                                ?> <td class="center" style='color:red;'><?php print $notas[$c]['nota']?></td> <?php
                                             }
                                         }
                                     }
                                 }
                             }
                             ?>
-                        </tr>        
-                    <?php
-                        }
+                        </tr>                            
+                    <?php    
                     }
-                    ?>
-                </table>    
-                <?php
+                    $c++;
+                }
+            ?>
+        </table>
+    <?php    
         }
     }
 ?>

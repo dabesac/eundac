@@ -122,7 +122,7 @@
         <?php if (!$this->paymentData): ?>
             <h5 class="text-danger"><span class="glyphicon glyphicon-record"></span> Falta Pago</h5>
         <?php 
-            $classButtonValidate = 'disabled';
+            // $classButtonValidate = 'disabled';
         endif ?>
 
             <?php if (!$this->condition and $this->matriculaCondicional == 'No'): 
@@ -455,7 +455,7 @@
                         escid: $.base64.encode("<?php echo $this->dataStudent['escid'] ?>"),
                         subid: $.base64.encode("<?php echo $this->dataStudent['subid'] ?>"),
                         curid: $.base64.encode("<?php echo $this->dataStudent['curid'] ?>") },
-            timeout: 15000,
+            timeout: 30000,
             success: function(data){
                 $("#coursesperCurriculum").html(data);
             },

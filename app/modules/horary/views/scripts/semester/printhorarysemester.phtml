@@ -7,8 +7,10 @@ ob_start();
 <link rel="stylesheet" type="text/css" href="/css/print.css">
 
 <div style="text-align: center; font-size:16px;margin-top:10px">
-    <b> HORARIO <?php echo strtoupper($this->semid)?>º SEMESTRE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-   PERIODO <?php echo strtoupper($this->perid)?> </b>
+    <b> HORARIO <?php echo strtoupper($this->semid)?>º SEMESTRE  &nbsp;&nbsp;<?php if ($this->turno) {
+       echo "TURNO ".$this->turno;
+   }?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+   PERIODO <?php echo strtoupper($this->perid)?></b>
 </div> 
 <br/>
 <?php 

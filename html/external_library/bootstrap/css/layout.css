@@ -24,8 +24,8 @@ body{
 	padding:10px;
 	right: 4%;
 }
-.active{
-	/*display: block;*/
+.activePassword{
+	display: block;
 }
 .container{
 	width: 100%;

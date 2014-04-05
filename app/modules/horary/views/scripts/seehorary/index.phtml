@@ -97,7 +97,7 @@ if ($this->horarios) {
         <b>HORARIO DOCENTE</b>
     </div>
     <div class="col-md-2 pull-rigth" style="margin-top:20px">
-        <center><a href="/horary/seehorary/print/" class="btn btn-success" ><i class="glyphicon glyphicon-print"></i> Imprimir</a></center>
+        <center><a href="/horary/seehorary/print/perid/<?php echo $this->perid?>" class="btn btn-success" ><i class="glyphicon glyphicon-print"></i> Imprimir</a></center>
     </div>
 </div>
 <div class="row">        
@@ -151,7 +151,7 @@ if ($this->horarios) {
                                 if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                     $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                     ?>
-                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
+                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?><span class="pull-right" style="margin-right:1%">( <?php echo $dat[$s]['turno']?> )</span></div>
                                     <?php    
                                     $c++;
                                 } else { 
@@ -187,7 +187,7 @@ if ($this->horarios) {
                                 if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                     $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                     ?>
-                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
+                                    <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?><span class="pull-right" style="margin-right:1%">( <?php echo $dat[$s]['turno']?> )</span></div>
                                     <?php    
                                     $c++;
                                 } else { 
@@ -224,7 +224,7 @@ if ($this->horarios) {
                                     if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                         $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                         ?>
-                                        <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
+                                        <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?><span class="pull-right" style="margin-right:1%">( <?php echo $dat[$s]['turno']?> )</span></div>
                                         <?php    
                                         $c++;
                                     } else { 
@@ -260,7 +260,7 @@ if ($this->horarios) {
                                     if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                         $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                         ?>
-                                        <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
+                                        <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?><span class="pull-right" style="margin-right:1%">( <?php echo $dat[$s]['turno']?> )</span></div>
                                         <?php    
                                         $c++;
                                     } else { 
@@ -296,7 +296,7 @@ if ($this->horarios) {
                                     if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                         $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                         ?>
-                                        <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
+                                        <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?><span class="pull-right" style="margin-right:1%">( <?php echo $dat[$s]['turno']?> )</span></div>
                                         <?php    
                                         $c++;
                                     } else { 
@@ -332,7 +332,7 @@ if ($this->horarios) {
                                     if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) { 
                                         $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
                                         ?>
-                                        <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?></div>
+                                        <div class="cajadentro" style="background-color:<?php echo $dat[$s]["color"] ?>"><?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?><span class="pull-right" style="margin-right:1%">( <?php echo $dat[$s]['turno']?> )</span></div>
                                         <?php    
                                         $c++;
                                     } else { 

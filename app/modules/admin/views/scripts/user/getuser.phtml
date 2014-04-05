@@ -67,12 +67,33 @@
     }
     else{
     ?>
-    <div class="alert alert-info" style='font-size:15px'><b>El usuario no se ENCUENTRA registrado en el SISTEMA...
-        Registrar Aqui </b><a class='btn btn-info' href="/admin/person/new"><span class='glyphicon glyphicon-pencil'>Nuevo</a></div>
+    <div class="alert alert-info" style='font-size:15px'><b>El usuario no se ENCUENTRA registrado en el SISTEMA...        Registrar Aqui </b><a id='newperson' class='btn btn-info' href="#"><span class='glyphicon glyphicon-pencil'></span> Nuevo</a></div>
     <?php
-    exit();
     }
     ?>
     </table>
           
 </div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style='width:1000px;'>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title"><b class='text-info'> <center> NUEVA PERSONA </center></b></h2>
+            </div>
+            <div class="modal-body">
+                <div id='nueva_persona'></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#newperson").click(function(){   
+        $('#myModal').modal('show');            
+        var url="/admin/person/new/u/A";
+        $("#nueva_persona").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
+        $("#nueva_persona").load(url);
+    });
+
+</script>
