@@ -499,8 +499,9 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$this->_helper->layout()->disableLayout();
 
 		//DataBases
-		$registerDb = new Api_Model_DbTable_Registration();
+		$registerDb        = new Api_Model_DbTable_Registration();
 		$registerxCourseDb = new Api_Model_DbTable_Registrationxcourse();
+		$assistanceDb      = new Api_Model_DbTable_StudentAssistance();
 		//__________________________________
 		$eid = $this->sesion->eid;
 		$oid = $this->sesion->oid;
@@ -628,7 +629,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 						'escid' => $data['escid'],
 						'subid' => $data['subid'],
 						'perid' => $data['perid'],
-						'state' => $data['stateStudent'] ); 
+						'state' => $data['stateStudent'] );
 
 			$dataToDelete =array(	'modified' => $uid,
                         			'updated'  => date('Y-m-d h:m:s') );

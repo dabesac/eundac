@@ -1,0 +1,13 @@
+<?php if ($this->estandares): ?>
+	<table class="table">
+		<tr>
+			<th>#</th>
+		</tr>
+		<?php foreach ($this->estandares as $estandar): ?>
+			<?php print_r($estandar['number']) ?>
+		<?php endforeach ?>
+	</table>
+<?php else: ?>
+	<br>
+	<h4 class="text-center text-muted">Aún no se Genera los<span class="text-danger"> Estandares para este Periodo</span></h4>
+<?php endif ?>

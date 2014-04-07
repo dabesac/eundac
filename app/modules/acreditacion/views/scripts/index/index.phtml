@@ -1,52 +1,59 @@
-<script type="text/javascript">
-    // var $cources = <?php echo $this->courses?>;
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Lista de Estándares');?>
+<?php $this->placeholder('Btnnav')->append(' <a href="/docente/index" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Regresar</a>');?>
+
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<div class="panel panel-default">
+			<div class="row container">
+			<div class="col-md-6">
+				<div class="col-md-1" style="margin-top: 4px">
+					<h3><span class="glyphicon glyphicon-info-sign text-muted"></span></h3>
+				</div>
+				<div class="col-md-11">
+					<br>
+					<p class="text-muted">Para visualizar los estandares seleccione un año y luego el periodo.</p>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<br>
+				<select class="form-control" name="Anio" id="anio">
+					<option value="">Año</option>
+					<?php 
+					for ($i=$this->anio; $i >= 2005; $i--) { ?>
+					 	<option value="<?php echo $i ?>"><?php echo $i ?></option>
+					<?php } ?>
+				</select>
+			</div>
+			<div class="col-md-4">
+				<br>
+				<select class="form-control" name="Periodo" id="perid">
+					<option value="">Periodo</option>
+				</select>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+		<div id="dataEstandares" class="panel panel-default hidden">
+		</div>
+	</div>
+</div>
+
+<script>
+	$('#anio').change(function(){
+		var anio = $(this).val();
+		$('#perid').html("<option value=''>Cargando...</option>");
+		$('#perid').load('/acreditacion/index/listperiods/anio/' + anio);
+	});
+
+	$('#perid').change(function(){
+		var anio  = $('#anio').val();
+		var perid = $(this).val();
+		$('#dataEstandares').removeClass('hidden');
+		$('#dataEstandares').html('<br><center><img src="/img/spinner.gif" alt="Cargando...." /></center><br>');
+		$('#dataEstandares').load('/acreditacion/index/listestandares/anio/' + anio + '/perid/' + perid);
+	})
 </script>
-<script src="/external_library/highcharts/js/highcharts.js"></script>
-<script src="/external_library/highcharts/modules/exporting.js"></script>
-<script type="text/javascript" src="/js/graphic/accreditation.js"></script>
-<div id="container_standards"></div>
-
-<?php if ($this->dimensions) {
-    foreach ($this->dimensions as $key => $standards) {?>
-    <div class="panel panel-default">
-        <div class="panel-heading"><?php echo $standards['description']?></div>
-            <table class="table table-bordered">
-             <thead>
-                <tr class='active'>
-                    <th>Factores</th>
-                    <th>Criterios</th>
-                    <th>Estandares</th>
-                    <th>Fuente de Verificacion</th>
-                    <th>Estimacion</th>
-                    <th>Validacion</th>
-                </tr>
-              </thead>
-              <tbody>
-              <?php foreach ($standards['factores_id'] as $key => $factores){?>
-                    <tr>
-                        <td rowspan='<?php echo count($factores['criterid'])+1?>'><?php echo $factores['description']?></td>
-                        <?php if(!empty($factores['criterid'])){echo "<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>";} ?>
-                    </tr>
-                    <?php if (!empty($factores['criterid'])){?>
-                        <tr>
-                            <td rowspan='2'>rrrrrrr</td>
-                            <td rowspan='2'>sss</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td >rrrrrrr</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                     <?php   ?>
-                    <?php }
-                } ?>
-
-              </tbody>
-        </table>
-    </div>
-<?php }}?>
-
