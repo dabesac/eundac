@@ -637,6 +637,11 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 			if ($registerxCourseDb->_updatestateregister($dataToDelete, $pk)) {
 	            if ($registerDb->_update($dataToDelete, $pk)){
 	                $registerDb->_delete($pk);
+	                
+                	$pk['state'] = 'B';
+                	$dataUpdateRegister = array('state' => 'I' );
+                	$registerDb->_update($dataUpdateRegister, $pk);
+	                
 	                echo 'true';
 	            }else{
 	                echo 'false';

@@ -7,9 +7,7 @@ class Eundac_Connect_Api extends Zend_Rest_Client{
   **@param auth ***
   ** user password
   **/
-  //protected $_user = 's3lf.040c0c030$0$0';
-  protected $_user = 's1st3m4s';
-  //protected $_password = '__999c0n$um3r999__';
+  protected $_user = 's3lf.040c0c030$0$0';
   protected $_password = '__999c0n$um3r999__';
   protected $_auth = false;
   /**

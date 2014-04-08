@@ -45,6 +45,7 @@
 <script>
 	$('#anio').change(function(){
 		var anio = $(this).val();
+		$('#dataEstandares').addClass('hidden');
 		$('#perid').html("<option value=''>Cargando...</option>");
 		$('#perid').load('/acreditacion/index/listperiods/anio/' + anio);
 	});

@@ -354,15 +354,17 @@
                 </td>
             </tr>
             <tr>
-                <td id="editAlert<?php echo $course['courseid'] ?>" class="hidden alertSpace" colspan="10"></td>
+                <td id="editAlert<?php echo $course['courseid'] ?>" class="hidden alertSpace editAlert" colspan="10"></td>
             </tr>
             <script>
                 $("#showEditAlert<?php echo $course['courseid'] ?>").click(function(){
                     var courseTurno = $('#courseTurno<?php echo $course['courseid'] ?>').attr('turno');
+                    var courseid = "<?php echo $course['courseid'] ?>";
                     courseTurno = $.base64.encode(courseTurno);
                     $('.alertSpace').addClass('hidden');
                     $(".iluminate").removeClass('warning danger');
-                    $("#editAlert<?php echo $course['courseid'] ?>").load("/register/registerstudent/editturno/uid/<?php echo base64_encode($course['uid']) ?>/pid/<?php echo base64_encode($course['pid']) ?>/escid/<?php echo base64_encode($course['escid']) ?>/subid/<?php echo base64_encode($course['subid']) ?>/courseid/<?php echo base64_encode($course['courseid']) ?>/curid/<?php echo base64_encode($course['curid']) ?>/turno/" + courseTurno, function(){
+                    $(".editAlert").html('');
+                    $("#editAlert" + courseid).load("/register/registerstudent/editturno/uid/<?php echo base64_encode($course['uid']) ?>/pid/<?php echo base64_encode($course['pid']) ?>/escid/<?php echo base64_encode($course['escid']) ?>/subid/<?php echo base64_encode($course['subid']) ?>/courseid/<?php echo base64_encode($course['courseid']) ?>/curid/<?php echo base64_encode($course['curid']) ?>/turno/" + courseTurno, function(){
                         $("#editAlert<?php echo $course['courseid'] ?>").removeClass('hidden');
                     });
                     $("#fila<?php echo $course['courseid'] ?>").addClass('warning');
