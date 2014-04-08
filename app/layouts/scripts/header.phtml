@@ -69,15 +69,15 @@
     // $(document).ready(PI.onReady);
     // var url=("/admin/password/keychange/");
     // $("#form-change").load(url);
-    // var rol = $('#rol').val();
-    // if (rol == 'AL' || rol == 'EG') {
-    //   var fullProfile = $('#fullProfile').val();
-    //   var allCurrentUrl = window.location.pathname;
-    //   var currentUrl = allCurrentUrl.substr(0, 23);
-    //   if (fullProfile == 'no' && currentUrl != '/profile/public/student') {
-    //     $(location).attr('href', '/profile/public/student');
-    //   };
-    // };
+    var rol = $('#rol').val();
+    if (rol == 'AL' || rol == 'EG') {
+      var fullProfile = $('#fullProfile').val();
+      var allCurrentUrl = window.location.pathname;
+      var currentUrl = allCurrentUrl.substr(0, 23);
+      if (fullProfile == 'no' && currentUrl != '/profile/public/student') {
+        $(location).attr('href', '/profile/public/student');
+      };
+    };
 
     $(window).scroll(function(){
         var scroll = $(window).scrollTop();

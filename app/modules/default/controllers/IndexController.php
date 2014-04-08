@@ -153,29 +153,33 @@ class IndexController extends Zend_Controller_Action {
                     //Insertar pago y Matricula Para Cachimbos
                     $paymentDb = new Api_Model_DbTable_Payments();
 
-                    $where = array( 'eid'   => $eid,
-                                    'oid'   => $oid,
-                                    'escid' => $data->escid,
-                                    'subid' => $data->subid,
-                                    'pid'   => $data->pid,
-                                    'uid'   => $uid,
-                                    'perid' => $data->period->perid );
+                    $cachimbo = substr($uid, 0, 2);
+                    if ($cachimbo == '14') {
+                        $where = array( 'eid'   => $eid,
+                                        'oid'   => $oid,
+                                        'escid' => $data->escid,
+                                        'subid' => $data->subid,
+                                        'pid'   => $data->pid,
+                                        'uid'   => $uid,
+                                        'perid' => $data->period->perid );
 
-                    $payment = $paymentDb->_getFilter($where);
+                        $payment = $paymentDb->_getFilter($where);
 
-                    if(!$payment){
-                        $dataPayment = array(   'eid'      => $eid,
-                                                'oid'      => $oid,
-                                                'escid'    => $data->escid,
-                                                'subid'    => $data->subid,
-                                                'pid'      => $data->pid,
-                                                'uid'      => $data->uid,
-                                                'perid'    => $data->period->perid,
-                                                'ratid'    => '10',
-                                                'amount'   => '0',
-                                                'register' => $data->uid );
-                        $paymentDb->_save($dataPayment);
+                        if(!$payment){
+                            $dataPayment = array(   'eid'      => $eid,
+                                                    'oid'      => $oid,
+                                                    'escid'    => $data->escid,
+                                                    'subid'    => $data->subid,
+                                                    'pid'      => $data->pid,
+                                                    'uid'      => $data->uid,
+                                                    'perid'    => $data->period->perid,
+                                                    'ratid'    => '10',
+                                                    'amount'   => '0',
+                                                    'register' => $data->uid );
+                            $paymentDb->_save($dataPayment);
+                        }
                     }
+
                     
 
                     // Set info User
@@ -270,7 +274,6 @@ class IndexController extends Zend_Controller_Action {
                         //else
                         $this->_redirect($urlmod);
                     }
-                    print_r($data);
                 }else {
                     switch ($result->getCode()) {
                         case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:

@@ -4,15 +4,15 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
 
     public function init()
     {
-    	$sesion  = Zend_Auth::getInstance();
-    	if(!$sesion->hasIdentity() ){
-    		$this->_helper->redirector('index',"index",'default');
-    	}
-    	$login = $sesion->getStorage()->read();
-    	// if (!$login->modulo=="graduated"){
-    	// 	$this->_helper->redirector('index','index','default');
-    	// }
-    	$this->sesion = $login;
+        $sesion  = Zend_Auth::getInstance();
+        if(!$sesion->hasIdentity() ){
+            $this->_helper->redirector('index',"index",'default');
+        }
+        $login = $sesion->getStorage()->read();
+        // if (!$login->modulo=="graduated"){
+        //  $this->_helper->redirector('index','index','default');
+        // }
+        $this->sesion = $login;
     }
     
     public function indexAction()
@@ -23,6 +23,8 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $facultyDb = new Api_Model_DbTable_Faculty();
             //_____________________
             $haveSpeciality = 'No';
+            $rol=$this->sesion->rol['module'];
+            $this->view->rol=$rol;
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $rid = $this->sesion->rid;
@@ -306,14 +308,14 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $perid = base64_decode($this->_getParam('perid'));
             $anho = base64_decode($this->_getParam('anho'));
 
-            $where = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid);
-            $esc = new Api_Model_DbTable_Speciality();
-            $data_esc = $esc->_getFilter($where, $attrib=null, $orders=null);
-            $this->view->school = $data_esc[0];
+            // $where = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid);
+            // $esc = new Api_Model_DbTable_Speciality();
+            // $data_esc = $esc->_getFilter($where, $attrib=null, $orders=null);
+            // $this->view->school = $data_esc[0];
 
-            $fac = new Api_Model_DbTable_Faculty();
-            $data_fac = $fac->_getOne($where=array('eid' => $eid, 'oid' => $oid, 'facid' => $facid));
-            $this->view->faculty = $data_fac;
+            // $fac = new Api_Model_DbTable_Faculty();
+            // $data_fac = $fac->_getOne($where=array('eid' => $eid, 'oid' => $oid, 'facid' => $facid));
+            // $this->view->faculty = $data_fac;
             
             $user= new Api_Model_DbTable_Users();
             if($perid!='T'){
@@ -354,6 +356,76 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $this->view->escid=$escid;
             $this->view->perid=$perid;
             $this->view->anho=$anho;
+
+            $whered['eid']=$eid;
+            $whered['oid']=$oid;
+            $whered['facid']= $facid;
+            $dbfaculty = new Api_Model_DbTable_Faculty();
+            $faculty = $dbfaculty ->_getOne($whered);
+            $namef = strtoupper($faculty['name']);
+
+            $wheres['eid']=$eid;
+            $wheres['oid']=$oid;
+            $wheres['escid']=$escid;
+            $wheres['facid']=$facid;
+              
+            $spe=array();
+            $dbspeciality = new Api_Model_DbTable_Speciality();
+            $speciality = $dbspeciality ->_getFilter($wheres);                  
+            $parent=$speciality[0]['parent'];
+            $subid=$speciality[0]['subid'];
+    
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $dbspeciality->_getOne($wher);
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality[0]['name'];
+            }
+            else{
+                $spe['esc']=$speciality[0]['name'];
+                $spe['parent']='';      
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names." <br> ".$namep;            
+                  
+            $namelogo = (!empty($speciality[0]['header']))?$speciality[0]['header']:"blanco";
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+
+            $uid=$this->sesion->uid;
+            $uidim=$this->sesion->pid;
+            $pid=$uidim;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'impresion_egresados_'.$perid,
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+            $dbimpression->_save($data);            
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_egresados_'.$perid);
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=count($dataim);
+            $codigo=$co." - ".$uidim;
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+            
+            $this->view->header=$header;
+            $this->view->footer=$footer;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }

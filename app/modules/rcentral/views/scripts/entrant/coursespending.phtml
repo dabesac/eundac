@@ -46,7 +46,7 @@
 </div>
 
 <?php if ($this->data): ?>
-	<?php if ($this->stateStudent == 'I'): ?>
+	<?php if ($this->stateStudent == 'I' or $this->stateStudent == 'N'): ?>
 		<div id="allTurnosDiv" class="row">
 			<div class="col-md-6">
 				<h5 class="text-muted pull-right"><span class="glyphicon glyphicon-info-sign"></span> Puede seleccionar todos los turnos de una sola vez</h5>
@@ -246,7 +246,7 @@
 			$('.messageTh').removeClass('hidden');
 			$('.stateRegister').addClass('text-info');
 			$('.stateRegister').html('<strong>Reservado</strong>');
-		}else if (stateStudent == 'I'){
+		}else if (stateStudent == 'I' || stateStudent == 'N'){
 			$('.tdOtherState').addClass('hidden');
 			$('.deleteBtnGroup').addClass('hidden');
 
