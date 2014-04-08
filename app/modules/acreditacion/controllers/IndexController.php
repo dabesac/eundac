@@ -14,7 +14,7 @@ class Acreditacion_IndexController extends Zend_Controller_Action {
     }
 
     public function indexAction()
-    {	 
+    {  
         $eid = $this->sesion->eid; 
         $oid = $this->sesion->oid; 
         $escid = $this->sesion->escid; 

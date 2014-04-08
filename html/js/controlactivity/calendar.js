@@ -1,8 +1,9 @@
 $(function() {
     $( "#calendar_datapiket" ).datepicker()
 });
-var next_day = 0
-var day_previous = 0
+var next_date = new Date()
+var next_day = 1
+var day_previous = 1
 var tr_today_day = $('<div class="tg-today" style="height:1008px;margin-bottom:-1008px;">&nbsp;</div>')
 var tg_col0	= $('<div id="tgCol0" class="tg-col-eventwrapper" style="height:1008px;margin-bottom:-1008px;"><div class="tg-gutter">')
 var tg_over_div = $('<div class="tg-hourmarker tg-nowmarker" id="tgnowmarker" style="top:539px;">')
@@ -13,65 +14,113 @@ var tg_day_other = $('<td class="tg-col-today tg-weekend">').append(tg_col0,tg_o
 // var now = new Date();
 // now.setDate(now.getDate()+28);
 // alert(now);
+date = new Date()
+day_month_digit = date.getDay() /***dia de la semana **/
+month_digit = date.getMonth() /***mes actual**/
+year_digit = date.getFullYear() /** año actual**/
+date_month = date.getDate()  /****dia del mes actual */
+
 var calendar = {
 	init:function(){
-		date = new Date()
-		day_month_digit = date.getDay()
-		month_digit = date.getMonth()
-		year_digit = date.getYear()
-		date_month = date.getDate() 
+		 
 		day_letters = change_day(date_month,day_month_digit,month_digit)
 		data_calenadar()
 		calendar.calendar_day(day_letters,day_month_digit,month_digit,year_digit)
 		// console.log(data_calenadar)
 		$("#nav-secundary-text").find('h4').append(
 			$('<div class="btn-group">').append(
-				$('<button type="button" class="btn btn-default">Hoy</button>'),
-				$('<button type="button" class="btn btn-default id="next_day"><span class="glyphicon glyphicon-chevron-left"></span></button>'),
-				$('<button type="button" class="btn btn-default id="day_previous"><span class="glyphicon glyphicon-chevron-right"></span></button>')
+				$('<button type="button" class="btn btn-default" id="btn_default_day">Hoy</button>'),
+				$('<button type="button" class="btn btn-default" id="btn_day_previous" ><span class="glyphicon glyphicon-chevron-left"></span></button>'),
+				$('<button type="button" class="btn btn-default" id="btn_next_day" ><span class="glyphicon glyphicon-chevron-right"></span></button>')
 			),
 			$('<span style="font-size: 13px;">').text()
 		)
 		$("#weekViewAllDaywk .st-s").click(calendar.add_event_all_day)
-		$("next_day").click(calendar.next_day)
-
+		$("#btn_next_day").click(calendar.next_day)
+		$("#btn_day_previous").click(calendar.previous_day)
+		$("#btn_default_day").click(calendar.default_day)
+		$("#btn_week").click(calendar.default_week)
+	},
+	default_week:function(){
+		$("#contenedor_prueba").load("/controlactivity/index/save")
+	},
+	default_day:function(){
+		
 	},
 	default_session:function(data){
 		sss = data.period.class_start_date.split('-')
 		date = new Date(sss)
 		date_1 = new Date()
-		if (date==date_1) {
+		if (date == date_1) {
 			console.log(date)
 		}
 		// data.period.class_start_date
 	},
+	/****
+	**** cambio de calenadrio por día 
+	****/
 	next_day:function(){
-		next_day = next_day ++
+		// next_day ++
+		day_add = date_month+1
+		date_next = new Date(year_digit,month_digit,day_add)
+		day_week = date_next.getDay()
+		day_month = date_next.getDate()
+		month=date_next.getMonth()
+		year=date_next.getFullYear()
+
+		day_month_digit = day_week /***dia de la semana **/
+		month_digit = month /***mes actual**/
+		year_digit = year /** año actual**/
+		date_month = day_month  /****dia del mes actual */
+
+		day_letters = change_day(day_month,day_week,month)
+		calendar.calendar_day(day_letters)
+	},
+	/****
+	***** regreso de día 
+	*****/
+	previous_day:function(){
+		// day_previous ++
+		decrease = date_month - 1
+		pevious_date = new Date(year_digit,month_digit,decrease)
+		day_week = pevious_date.getDay()
+		day_month = pevious_date.getDate()
+		month=pevious_date.getMonth()
+		year=pevious_date.getFullYear()
+
+		day_month_digit = day_week /***dia de la semana **/
+		month_digit = month /***mes actual**/
+		year_digit = year /** año actual**/
+		date_month = day_month  /****dia del mes actual */
+
+		day_letters = change_day(day_month,day_week,month)
+		calendar.calendar_day(day_letters)
 	},
 	add_event_all_day:function(){
 		position = $("#weekViewAllDaywk").position()
 		console.log(position) 
-		// tr = $(this).parent()
-		// table = $(this).parent().length
-		// console.log(table)
-		// // $("#weekViewAllDayBgwk").height(height)
-		// $("#weekViewAllDaywk table.st-grid").append(
-		// 	$('<tr>').append(
-		// 		$('<td class="st-c">').append(
-		// 			$('<div class="st-c-pos">').append(
-		// 			$('<div class="ca-evp13 rb-n" style="border:1px solid #1587BD;color:#1d1d1d;background-color:#9FC6E7">').append(
-		// 				$('<div class="rb-ni">').append(
-		// 					$('<span class="evt-lk ca-elp13">').text("ddddd")
-		// 				)
-		// 			)
-		// 			)
-		// 		)
-		// 	)
-		// )
+		tr = $(this).parent()
+		table = $(this).parent().length
+		console.log(table)
+		// $("#weekViewAllDayBgwk").height(height)
+		$("#weekViewAllDaywk table.st-grid").append(
+			$('<tr>').append(
+				$('<td class="st-c">').append(
+					$('<div class="st-c-pos">').append(
+					$('<div class="ca-evp13 rb-n" style="border:1px solid #1587BD;color:#1d1d1d;background-color:#9FC6E7">').append(
+						$('<div class="rb-ni">').append(
+							$('<span class="evt-lk ca-elp13">').text("(sin titulo)")
+						)
+					)
+					)
+				)
+			)
+		)
 	},
 	calendar_day:function(day_letters,day,month,year){
+
 		// var table = $('')
-		$("#topcontainerwk").append('<table class="wk-weektop" cellpadding="0" cellspacing="0">')
+		$("#topcontainerwk").html('<table class="wk-weektop" cellpadding="0" cellspacing="0">')
 		$("#topcontainerwk table").append(
 			$('<tr class="wk-daynames" >').append(
 				$('<td class="wk-tzlabel" style="width:60px" rowspan="3">').text('GMT-05'),
@@ -97,7 +146,7 @@ var calendar = {
 			$('<tr class="wk-webcontent"><td class="wk-webcontent-td">')
 		)
 		
-		$("#scrolltimedeventswk div").append('<table id="tgTable" class="tg-timedevents" cellpadding="0" cellspacing="0" style="height:1010px">')
+		$("#scrolltimedeventswk div").html('<table id="tgTable" class="tg-timedevents" cellpadding="0" cellspacing="0" style="height:1010px">')
 		$("#scrolltimedeventswk div	table").append(
 			$('<tr height="1">').append(
 				$('<td style="width:60px;"></td>'),

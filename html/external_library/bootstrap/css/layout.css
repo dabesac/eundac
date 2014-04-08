@@ -526,3 +526,12 @@ body{
 	left: 0;
 	top: 0;
 }
+/***************week********/
+.tg-col{
+	border-left: 1px solid #ddd;
+	vertical-align: top;
+}
+/*====================project social======================*/
+.project-social{
+	background-color: #f7fdff;
+} 
