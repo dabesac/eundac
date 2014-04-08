@@ -13,26 +13,48 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
         $this->sesion = $login;
     }
     public $id_user_openerp;
+
     public function indexAction()
     {
         try {
             /**
             ** @param /***atributos para sql**
             ******/
-            $attributes = array('id');
+            $connect = new Eundac_Connect_openerp();
             $query= array(
+                    array(
+                        'column'=>'identification_id',
+                        'operator'=>'=',
+                        'value'=>$this->sesion->infouser['numdoc'],
+                        'type'=>'string'
+                    )
+                ); 
+            $attributes = array('idate(format)');
+            $ids = $connect->search('hr.employee',$query);
+            $identification_id = $connect->read($ids,$attributes,'hr.employee');
+            $this->id_user_openerp=$identification_id[0]['id'];
+
+             $query_1= array(
                     array(
                         'column'=>'author',
                         'operator'=>'=',
-                        'value'=>$this->sesion->infouser['numdoc']
+                        'value'=>trim($this->id_user_openerp),
+                        'type'=>'int'
+                    ),array(
+                        'column'=>'state',
+                        'operator'=>'=',
+                        'value'=>'E',
+                        'type'=>'string'
                     )
-                );
-            $data_project = array();
-            $connect = new Eundac_Connect_openerp();
-            $ids = $connect->search('inv.pro.project',$query);
+                );  
+            
+            // $data_project = array();
+            $ids = $connect->search('inv.pro.project',$query_1);
             if ($ids) {
+                $attributes = array('id','name');
                 $data_project = $connect->read($ids,$attributes,'inv.pro.project');
             }
+            print_r($data_project);
             $this->view->data_project=$data_project;
             // $data = array(
             //     'state'=>'A',
