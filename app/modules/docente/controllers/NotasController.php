@@ -21,7 +21,7 @@ class Docente_NotasController extends Zend_Controller_Action{
 
 		$escid = $this->sesion->escid;
 		$facultyBloqued = $escid[0];
-		if ($facultyBloqued == 4 or $facultyBloqued == 6) {
+		if ($facultyBloqued == 4) {
 			$this->view->facultyBloqued = $facultyBloqued;
 		}
 

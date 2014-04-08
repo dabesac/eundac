@@ -40,7 +40,7 @@ class Docente_IndexController extends Zend_Controller_Action {
 
         //Bloquear Ingenieria
         $facultyBloqued = $escid[0];
-        if ($facultyBloqued == 4 or $facultyBloqued == 6 ) {
+        if ($facultyBloqued == 4) {
             $this->view->facultyBloqued = $facultyBloqued;
         }
 
