@@ -53,7 +53,6 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
            
     }
 
-
     public function newprojectAction(){
         $form = new Acreditacion_Form_Project();
         if ($this->getRequest()->isPost()) {

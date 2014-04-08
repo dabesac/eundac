@@ -14,51 +14,74 @@ class Acreditacion_IndexController extends Zend_Controller_Action {
     }
 
     public function indexAction()
-    {
-        try {
+    {  
+        $eid = $this->sesion->eid; 
+        $oid = $this->sesion->oid; 
+        $escid = $this->sesion->escid; 
+        $perid = $this->sesion->period->perid; 
+        $anio = date('Y'); 
+        $this->view->anio = $anio;
 
-            
+    }
 
-            
-        } catch (Exception $e) {
-            
+    public function listperiodsAction(){
+        $this->_helper->layout()->disableLayout();
+        //DataBases
+        $periodsDb = new Api_Model_DbTable_Periods();
+        $eid  = $this->sesion->eid;
+        $oid  = $this->sesion->oid;
+        $anio = $this->_getParam('anio');
+        $anio = substr($anio, 2, 4);
+
+        $where = array( 'eid'  => $eid,
+                        'oid'  => $oid,
+                        'year' => $anio);
+
+        $periods = $periodsDb->_getPeriodsxYears($where);
+        $c = 0;
+        foreach ($periods as $period) {
+            $periodFilter = substr($period['perid'], 2, 1);
+            if ($periodFilter == 'A' or $periodFilter == 'B') {
+                $periodsFilter[$c]['perid'] = $period['perid'];
+                $periodsFilter[$c]['name'] = $period['name'];
+            }
+            $c++;
         }
-
-           
-    }
-
-  function connect (){
-           //   // include('/xmlrpc/lib/xmlrpc.inc');
-           //  $user = 'admin';
-           //  $password = 'sistemas';
-           //  $dbname = 'prueba';
-           //  $server_url = 'http://localhost:8069/xmlrpc/';
-
-           //  if(isset($_COOKIE["user_id"]) == true)  {
-           //     if($_COOKIE["user_id"]>0) {
-           //     return $_COOKIE["user_id"];
-           //     }
-           // }
-
-           // $sock = new xmlrpc_demo_client_client($server_url.'common');
-           // $msg = new xmlrpcmsg('login');
-           // $msg->addParam(new xmlrpcval($dbname, "string"));
-           // $msg->addParam(new xmlrpcval($user, "string"));
-           // $msg->addParam(new xmlrpcval($password, "string"));
-           // $resp =  $sock->send($msg);
-           // $val = $resp->value();
-           // $id = $val->scalarval();
-           // setcookie("user_id",$id,time()+3600);
-           // if($id > 0) {
-           //     return $id;
-           // }else{
-           //     return -1;
-           // }
+        $this->view->periods = $periodsFilter;
 
     }
 
+    public function listestandaresAction(){
+        $this->_helper->layout()->disableLayout();
+        //DataBases
+        $eid   = $this->sesion->eid; 
+        $oid   = $this->sesion->oid; 
+        $escid = $this->sesion->escid;
+        $perid = $this->_getParam('perid');
+        $anio  = $this->_getParam('anio');
 
-    public function listforelementsAction(){
-    	
+        $request = array(   'eid'   => base64_encode($eid),
+                            'oid'   => base64_encode($oid),
+                            'escid' => base64_encode($escid),
+                            'anio'  => base64_encode($anio),
+                            'perid' => base64_encode($perid) );
+
+        require_once 'Zend/Loader.php';
+        Zend_Loader::loadClass('Zend_Rest_Client');
+
+        $base_url = 'http://api.undac.edu.pe:8080/';
+        //$base_url = 'http://172.16.0.110:8080/';
+        $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/liststandares_acredit';
+        //$endpoint = '/'.base64_encode('s1st3m4s').'/'.base64_encode('und4c').'/liststandares_acredit';
+        $client = new Zend_Rest_Client($base_url);
+        $httpClient = $client->getHttpClient();
+        $httpClient->setConfig(array("timeout" => 30000));
+        $response = $client->restget($endpoint,$request);
+        $lista=$response->getBody();
+        if ($lista){
+            $estandares = Zend_Json::decode($lista);
+            $this->view->estandares = $estandares;
+        }
+        //print_r($estandares);
     }
 }

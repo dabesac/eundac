@@ -35,6 +35,8 @@
 
 ?>
 
+<input type="hidden" id="facultyBloqued" value="<?php echo $this->facultyBloqued ?>">
+
 <div id="coursesPrincipal">
 <div class="container">
     <div class="row">
@@ -267,6 +269,14 @@
 </div><!-- /.modal -->
 <script type="text/javascript" src='/js/jquery-1.11.0.js'></script>
 <script>
+    //Bloqueara Ingenieria
+    var facultyBloqued = $('#facultyBloqued').val();
+    if (facultyBloqued) {
+        alert('Estimad@ Docente se le infórma que su facultad se encuentra realizando cambios administrativos(Directores), por esa razón el sistema se encuentra bloqueado. Gracias.');
+        $(location).attr("href", "/docente/index/index");
+    };
+    //_______________________
+
     $('#Btnhorarys').click(function(){
         var perid=$(this).attr('perid');
         $('#horary').load('/horary/seehorary/index/perid/'+perid);

@@ -40,7 +40,6 @@
 	    <a href="##" class="btn btn-default cancel">Cancelar</a>
 	</form>
 		<script>
-			var courseid = $('#courseid').val();
 
 			var turnoActual = $('#turnoActual').val();
 			var name = $('#docente' + turnoActual).text();
@@ -55,11 +54,13 @@
 			});
 
 			$("#editCourse").click(function(){
+				var name = $('#docente' + turnoActual).text();
 				$.ajax({
 					type   : 'post',
 					url    : '/register/registerstudent/updatecourseperturno',
 					data   : $('#formEditTurno').serialize(),
 					success: function(data){
+						courseid = $('#courseid').val();
 						if (data == 'true') {
 							$(".iluminate").removeClass('danger warning');
 							$("#courseTurno" + courseid).html(turnoActual);
@@ -73,6 +74,7 @@
 
 		 	$(".cancel").click(function(){
 		        $("#editAlert<?php echo $this->data['courseid'] ?>").addClass('hidden');
+		        $("#editAlert<?php echo $this->data['courseid'] ?>").html('');
 		        $(".iluminate").removeClass('danger warning');
 		    });
 

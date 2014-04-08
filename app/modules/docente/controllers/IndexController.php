@@ -38,6 +38,12 @@ class Docente_IndexController extends Zend_Controller_Action {
         $escid = $this->sesion->escid;
         $perid = $this->sesion->period->perid;
 
+        //Bloquear Ingenieria
+        $facultyBloqued = $escid[0];
+        if ($facultyBloqued == 4) {
+            $this->view->facultyBloqued = $facultyBloqued;
+        }
+
         //Enviar el periodo
         $this->view->perid = $perid;
 

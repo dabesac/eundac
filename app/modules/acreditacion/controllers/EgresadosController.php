@@ -14,28 +14,57 @@ class Acreditacion_EgresadosController extends Zend_Controller_Action {
     }
 
     public function indexAction(){	
+    	$specialityDb = new Api_Model_DbTable_Speciality();
+
     	$currentYear = date('Y');
     	$this->view->currentYear = $currentYear;
-	   	/*$model = "standares_acredit";
-    	$params = array(
-			'eid' => base64_encode($this->sesion->eid),
-			'oid' =>base64_encode($this->sesion->oid),
-            'escid' => base64_encode($this->sesion->escid),
-    		'anio' => base64_encode('2013'),
-    		);
-    	$prueba = new Eundac_Connect_Api($model,$params);
-    	$data= $prueba->connectAuth();
-    	$this->view->dimensions = $data;
-    	print_r($data);*/
+
+    	$escid = $this->sesion->escid;
+		$subid = $this->sesion->subid;
+		$eid   = $this->sesion->eid;
+		$oid   = $this->sesion->oid;
+
+    	$where = array(	'eid'   => $eid,
+						'oid'   => $oid,
+						'escid' => $escid,
+						'subid' => $subid );
+		$attrib = array('name');
+		$specialityName = $specialityDb->_getFilter($where, $attrib);
+		$this->view->specialityName = $specialityName[0]['name'];
     }
 
     public function listegresadosAction(){
     	$this->_helper->layout()->disableLayout();
 
-    	$userDb = new Api_Model_DbTable_Users();
+		$anio  = $this->_getParam('anio');
+		$escid = $this->sesion->escid;
+		$subid = $this->sesion->subid;
+		$eid   = $this->sesion->eid;
+		$oid   = $this->sesion->oid;
 
-    	$egresados = $userDb->_getEgresadosxAnioxEscuela();
+		$this->view->anio = $anio;
 
-    	$anio = $this->_getParam('anio');
+		$userDb       = new Api_Model_DbTable_Users();
+		$specialityDb = new Api_Model_DbTable_Speciality();
+
+    	$egresados = $userDb->_getEgresadosxAnioxEscuela($escid, $anio);
+    	$this->view->egresados = $egresados;
+
+    	$numEgresados = count($egresados);
+    	$this->view->numEgresados = $numEgresados;
+
+    	$c = 0;
+    	foreach ($egresados as $egresado) {
+			$where = array(	'eid'   => $eid,
+							'oid'   => $oid,
+							'escid' => $egresado['escid'],
+							'subid' => $subid );
+			$attrib = array('name');
+			$specialityName[$c] = $specialityDb->_getFilter($where, $attrib);
+			$c++;
+    	}
+
+		$this->view->specialityName = $specialityName;
+
     }
 }

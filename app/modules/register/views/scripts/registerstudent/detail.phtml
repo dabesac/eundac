@@ -74,7 +74,7 @@
                         <h5 class="text-muted">Monto Correcto <span class="text-danger">S/.<?php echo $montoaPagar ?>.00 </span></h5>
                         <h5 class="text-muted">Debe un Reintegro de <span class="text-danger">S/.<?php echo $deuda ?>.00 </span></h5>
                     <?php 
-                        // $classButtonValidate = 'disabled';
+                        $classButtonValidate = 'disabled';
                         $faltaReintegro = 'Si';  
                     }else { ?>
                         <h5 class="text-success text-center">Todo en Orden</h5>
@@ -96,7 +96,7 @@
                     <?php endforeach ?>
                     </table>
                 <?php 
-                // $classButtonValidate = 'disabled';
+                $classButtonValidate = 'disabled';
                 endif ?>
             <?php endif ?>
             <?php if ($this->pagoAtiempo == 'no'): ?>
@@ -107,7 +107,7 @@
                     <h5 class="text-muted">Debe un <span class="text-danger">incremento del <?php echo $this->tipePayment['porcentaje'] ?> %</span></h5>
                     <h5 class="text-muted">Monto Correcto <span class="text-danger">S/. <?php echo $this->tipePayment['incremento'] ?> </span></h5>
                 <?php 
-                // $classButtonValidate = 'disabled';
+                $classButtonValidate = 'disabled';
                 endif ?>
             <?php endif ?>
             </div>
@@ -122,7 +122,7 @@
         <?php if (!$this->paymentData): ?>
             <h5 class="text-danger"><span class="glyphicon glyphicon-record"></span> Falta Pago</h5>
         <?php 
-            // $classButtonValidate = 'disabled';
+            $classButtonValidate = 'disabled';
         endif ?>
 
             <?php if (!$this->condition and $this->matriculaCondicional == 'No'): 
@@ -133,7 +133,7 @@
                 $conditions     = 'Si';
             elseif (!$this->condition and $this->matriculaCondicional == 'Si'):
                 $classCondition      = 'text-danger';
-                // $classButtonValidate = 'disabled';
+                $classButtonValidate = 'disabled';
             endif ?>
             <p class="<?php echo $classCondition ?>"><span id="condition">Condiciones <span class="glyphicon glyphicon-flag"></span></span></p>
             <div class="col-md-6" id='conditionInfo' style="position: absolute; z-index: 2; background: white;">
@@ -310,6 +310,7 @@
                 <th>Curso</th>
                 <th class="text-center">Creditos</th>
                 <th class="text-center">Turno</th>
+                <th class="text-center">Semestre</th>
                 <th>Profesor</th>
                 <th class="text-center">Llevando por</th>
         <?php $c = 0;
@@ -327,6 +328,7 @@
                 <td><?php echo $this->coursesName[$c][0]['name'] ?></td>
                 <td class="text-center"><?php echo $this->coursesName[$c][0]['credits'] ?></td>
                 <td id="courseTurno<?php echo $course['courseid'] ?>" turno="<?php echo $course['turno'] ?>" class="text-center"><?php echo $course['turno'] ?></td>
+                <td class="text-center text-muted"><strong><?php echo $this->coursesName[$c][0]['semid'] ?></strong></td>
                 <td id="teacherTurno<?php echo $course['courseid'] ?>"><?php echo $this->teachers[$c][0]['last_name0'].' '.$this->teachers[$c][0]['last_name1'].' '.$this->teachers[$c][0]['first_name']  ?> </td>
                 <td class="text-center <?php echo $classtdVeces ?>"><strong><?php echo $this->coursesName[$c]['veces'] + 1 ?> Vez</strong></td>
                 <td class="text-center <?php echo $classButtons ?> butonsCourses">
@@ -352,15 +354,17 @@
                 </td>
             </tr>
             <tr>
-                <td id="editAlert<?php echo $course['courseid'] ?>" class="hidden alertSpace" colspan="10"></td>
+                <td id="editAlert<?php echo $course['courseid'] ?>" class="hidden alertSpace editAlert" colspan="10"></td>
             </tr>
             <script>
                 $("#showEditAlert<?php echo $course['courseid'] ?>").click(function(){
                     var courseTurno = $('#courseTurno<?php echo $course['courseid'] ?>').attr('turno');
+                    var courseid = "<?php echo $course['courseid'] ?>";
                     courseTurno = $.base64.encode(courseTurno);
                     $('.alertSpace').addClass('hidden');
                     $(".iluminate").removeClass('warning danger');
-                    $("#editAlert<?php echo $course['courseid'] ?>").load("/register/registerstudent/editturno/uid/<?php echo base64_encode($course['uid']) ?>/pid/<?php echo base64_encode($course['pid']) ?>/escid/<?php echo base64_encode($course['escid']) ?>/subid/<?php echo base64_encode($course['subid']) ?>/courseid/<?php echo base64_encode($course['courseid']) ?>/curid/<?php echo base64_encode($course['curid']) ?>/turno/" + courseTurno, function(){
+                    $(".editAlert").html('');
+                    $("#editAlert" + courseid).load("/register/registerstudent/editturno/uid/<?php echo base64_encode($course['uid']) ?>/pid/<?php echo base64_encode($course['pid']) ?>/escid/<?php echo base64_encode($course['escid']) ?>/subid/<?php echo base64_encode($course['subid']) ?>/courseid/<?php echo base64_encode($course['courseid']) ?>/curid/<?php echo base64_encode($course['curid']) ?>/turno/" + courseTurno, function(){
                         $("#editAlert<?php echo $course['courseid'] ?>").removeClass('hidden');
                     });
                     $("#fila<?php echo $course['courseid'] ?>").addClass('warning');
@@ -406,7 +410,7 @@
         <a id="activeRegister" href="##" class="btn btn-success form-control <?php echo $classActive ?>">Activar</a>
         <br><br>
         <div class="validateRegister <?php echo $classValidate ?>">
-             <a id="validateRegister" href="##" class="btn btn-success form-control <?php echo $classButtonValidate ?>">Validar</a>
+            <a id="validateRegister" href="##" class="btn btn-success form-control <?php echo $classButtonValidate ?>">Validar</a>
             <br><br>
         </div>
         <div class="reservedRegister <?php echo $classInteractions ?>">
