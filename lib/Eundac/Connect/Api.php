@@ -23,7 +23,6 @@ class Eundac_Connect_Api extends Zend_Rest_Client{
 	//const API_HOST_SERVER ="http://localhost:8080/";
 
 
-
   protected $_params = array(); 
   protected $_model = null;
   protected $_url= null;

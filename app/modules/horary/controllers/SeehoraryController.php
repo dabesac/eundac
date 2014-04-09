@@ -25,15 +25,19 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             $oid=$this->sesion->oid;
             // $perid=$this->sesion->period->perid;
             $perid=base64_decode($this->_getParam('perid'));
-            $escid=$this->sesion->escid;
-            $subid=$this->sesion->subid;
+            $escid=base64_decode($this->_getParam('escid'));
+            $subid=base64_decode($this->_getParam('subid'));
+            if (substr($escid,0,3)=="2ES") {
+                $escid="2ES";
+            }
+            // $escid=$this->sesion->escid;
+            // $subid=$this->sesion->subid;
             $pid=$this->sesion->pid;
             $uid=$this->sesion->uid;
 
             $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
             $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
-            $datahours=$bd_hours->_getFilter($wheres);   
-            
+            $datahours=$bd_hours->_getFilter($wheres);
             if ($datahours) {
                 $hora=new Api_Model_DbTable_Horary();
                 if ($datahours[0]['hours_begin_afternoon']) {
@@ -47,7 +51,6 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
                     }
                     $len=count($valhorasm);
                     $w=0;
-                            
                     for ($g=0; $g < $len + 1 ; $g++) { 
                         if ($valhorasm[$g]==$valhorast[0] && $w==0) {
                             $valhoras[0]=$datahours[0]['hours_begin'];
@@ -84,14 +87,20 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
                 $where['eid']=$eid;
                 $where['oid']=$oid;
                 $where['perid']=$perid;
+                $where['escid']=$escid;
                 $where['subid']=$subid;
                 $where['teach_uid']=$uid;
                 $where['teach_pid']=$pid;
                 $order=array('courseid');
-                // print_r($where);
-                $dathora=$hora->_getFilter($where,'',$order);
-                // print_r($dathora);
+                if ($where['escid']=='2ES') {
+                    $dathora=$hora->_getHoraryxTeacherXPeriodXTodasEsc($where);
+                }
+                else{
+                    $dathora=$hora->_getFilter($where,$attrib=null,$order);
+                }
+                // print_r($dathora);exit();
                 $this->view->horarios=$dathora;
+
                 $curso=new Api_Model_DbTable_Coursexteacher();
                 $where1['eid']=$eid;
                 $where1['oid']=$oid;
@@ -99,7 +108,13 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
                 $where1['perid']=$perid;
                 $where1['subid']=$subid;
                 $where1['pid']=$pid;
-                $datcur=$curso->_getFilter($where1);
+                if ($where1['escid']=="2ES") {
+                    $datcur=$curso->_getOneCoursexTeacherXPeriodXTodasEsc($where1);                    
+                }
+                else{
+                    $datcur=$curso->_getFilter($where1);                    
+                }
+                // print_r($datcur);exit();
                 $this->view->cursos=$datcur;
                 $this->view->perid=$perid;
             }

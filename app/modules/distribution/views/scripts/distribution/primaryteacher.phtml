@@ -162,7 +162,9 @@
                         <center>
                             <?php
                             if ($teacher['courseasig']) {   ?>
-                                <a href="#" onclick="javascript: window.open('/horary/nhorary/fillhorary/pid/<?php echo base64_encode($teacher['pid'])?>/uid/<?php echo base64_encode($teacher['uid'])?>/escid/<?php print base64_encode($teacher['escid'])?>/subid/<?php echo base64_encode($teacher['subid'])?>/perid/<?php echo base64_encode($this->perid)?>','Asignación Horario','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=1200,height=720')" rel="tooltip" title="Asignar Horarios"><span class="glyphicon glyphicon-calendar"></span></a>
+                                <a href="#" onclick="javascript: window.open('/horary/nhorary/fillhorary/pid/<?php echo base64_encode($teacher['pid'])?>/uid/<?php echo base64_encode($teacher['uid'])?>/escid/<?php
+                                if ($teacher['escid']=="2ES") { print base64_encode($this->escid);}
+                                else{ print base64_encode($teacher['escid']);} ?>/subid/<?php echo base64_encode($teacher['subid'])?>/perid/<?php echo base64_encode($this->perid)?>','Asignación Horario','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=1200,height=720')" rel="tooltip" title="Asignar Horarios"><span class="glyphicon glyphicon-calendar"></span></a>
                             <?php
                             }
                             else{ ?>
