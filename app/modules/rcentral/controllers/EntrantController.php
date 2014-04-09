@@ -100,72 +100,68 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
     	$facid = $this->_getParam('facid');
 
-    	if ($facid == 4) {
-    		$this->view->facultyBloqued = $facid;
-    	}else{
-			$eid   = $this->sesion->eid;
-			$oid   = $this->sesion->oid;
-			$subid = $this->sesion->subid;
-			$perid = $this->sesion->period->perid;
-			
-			$where = array(	'eid'            => $eid,
-							'oid'            => $oid,
-							'left(escid, 1)' => $facid,
-							'subid'          => $subid,
-							'state'          => 'A',
-							'left(uid, 2)'   => $perid['0'].$perid['1'] );
+		$eid   = $this->sesion->eid;
+		$oid   = $this->sesion->oid;
+		$subid = $this->sesion->subid;
+		$perid = $this->sesion->period->perid;
+		
+		$where = array(	'eid'            => $eid,
+						'oid'            => $oid,
+						'left(escid, 1)' => $facid,
+						'subid'          => $subid,
+						'state'          => 'A',
+						'left(uid, 2)'   => $perid['0'].$perid['1'] );
 
-			$attrib = array('uid', 'pid', 'escid');
-			$order = array('escid');
+		$attrib = array('uid', 'pid', 'escid');
+		$order = array('escid');
 
-			$students = $userDb->_getFilter($where, $attrib, $order);
+		$students = $userDb->_getFilter($where, $attrib, $order);
 
-			$c = 0;
-			foreach ($students as $student) {
-				//Estado de Matricula
-				$attrib = array('state');
-				$where = array(	'eid'   => $eid,
-								'oid'   => $oid,
-								'subid' => $subid,
-								'escid' => $student['escid'],
-								'uid'   => $student['uid'],
-								'pid'   => $student['pid'],
-								'perid' => $perid );
-				$checkStudent = $registerDb->_getFilter($where, $attrib);
-				if ($checkStudent[0]['state'] == 'I' or !$checkStudent[0]['state']) {
-					$studentState[$c]['state'] = 'Ingresantes';
-				}elseif ($checkStudent[0]['state'] == 'M'){
-					$studentState[$c]['state'] = 'Matriculados';
-				}elseif ($checkStudent[0]['state'] == 'O'){
-					$studentState[$c]['state'] = 'Observados';
-				}elseif ($checkStudent[0]['state'] == 'R'){
-					$studentState[$c]['state'] = 'Reservados';
-				}
-
-				$where  = array('eid'   => $eid,
-								'oid'   => $oid,
-								'subid' => $subid,
-								'escid' => $student['escid'],
-								'uid'   => $student['uid'],
-								'pid'   => $student['pid'] );
-
-				$studentEntrant[$c] = $userDb->_getInfoUser($where);
-
-				$attrib = array('name', 'escid', 'subid');
-				$where = array(	'eid'   => $eid,
-								'oid'   => $oid,
-								'subid' => $subid,
-								'escid' => $student['escid'] );
-
-				$studentSpeciality[$c] = $specialityDb->_getFilter($where, $attrib);
-
-				$c++;
+		$c = 0;
+		foreach ($students as $student) {
+			//Estado de Matricula
+			$attrib = array('state');
+			$where = array(	'eid'   => $eid,
+							'oid'   => $oid,
+							'subid' => $subid,
+							'escid' => $student['escid'],
+							'uid'   => $student['uid'],
+							'pid'   => $student['pid'],
+							'perid' => $perid );
+			$checkStudent = $registerDb->_getFilter($where, $attrib);
+			if ($checkStudent[0]['state'] == 'I' or !$checkStudent[0]['state']) {
+				$studentState[$c]['state'] = 'Ingresantes';
+			}elseif ($checkStudent[0]['state'] == 'M'){
+				$studentState[$c]['state'] = 'Matriculados';
+			}elseif ($checkStudent[0]['state'] == 'O'){
+				$studentState[$c]['state'] = 'Observados';
+			}elseif ($checkStudent[0]['state'] == 'R'){
+				$studentState[$c]['state'] = 'Reservados';
 			}
 
-			$this->view->studentEntrant    = $studentEntrant;
-			$this->view->studentState      = $studentState;
-			$this->view->studentSpeciality = $studentSpeciality;
-    	}
+			$where  = array('eid'   => $eid,
+							'oid'   => $oid,
+							'subid' => $subid,
+							'escid' => $student['escid'],
+							'uid'   => $student['uid'],
+							'pid'   => $student['pid'] );
+
+			$studentEntrant[$c] = $userDb->_getInfoUser($where);
+
+			$attrib = array('name', 'escid', 'subid');
+			$where = array(	'eid'   => $eid,
+							'oid'   => $oid,
+							'subid' => $subid,
+							'escid' => $student['escid'] );
+
+			$studentSpeciality[$c] = $specialityDb->_getFilter($where, $attrib);
+
+			$c++;
+		}
+
+		$this->view->studentEntrant    = $studentEntrant;
+		$this->view->studentState      = $studentState;
+		$this->view->studentSpeciality = $studentSpeciality;
 
 	}
 

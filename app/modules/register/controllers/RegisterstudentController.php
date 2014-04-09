@@ -396,7 +396,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
         $base_url = 'http://localhost:8080/';
-        $endpoint = '/s1st3m4s/und4c/validate';
+        $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/validate';
         $data = array('uid' => $uid, 'pid' => $pid, 'escid' => $escid,'subid' =>$subid,'eid' =>$eid,'oid' =>$oid,'perid'=>$perid,'curid'=>$curid);
         $client = new Zend_Rest_Client($base_url);
         $httpClient = $client->getHttpClient();

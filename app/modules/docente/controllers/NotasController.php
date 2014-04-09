@@ -19,12 +19,6 @@ class Docente_NotasController extends Zend_Controller_Action{
 
 		//Bloquear Docentes
 
-		$escid = $this->sesion->escid;
-		$facultyBloqued = $escid[0];
-		if ($facultyBloqued == 4) {
-			$this->view->facultyBloqued = $facultyBloqued;
-		}
-
 		$where['eid']=$this->sesion->eid;
 		$where['oid']=$this->sesion->oid;
 		$where['uid']=$this->sesion->uid;
