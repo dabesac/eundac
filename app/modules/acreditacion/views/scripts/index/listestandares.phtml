@@ -1,0 +1,70 @@
+<link rel="stylesheet" href="/css/estandares.css" />
+
+<?php if ($this->estandares): ?>
+ 	<?php foreach ($this->estandares as $estandar): ?>
+		<div class="estandar">
+			<div class="estandarNombre">
+				<?php echo ucwords(strtolower($estandar['description'])) ?>
+			</div>
+			<a estandarNumber="<?php echo $estandar['number'] ?>" class="showEstandarBtn" href="##">
+			<div class="estandarCodigo">
+				<?php echo $estandar['number'] ?>
+			</div>
+			</a>
+		</div>
+		<div id="estandarData<?php echo $estandar['number'] ?>" class="estandarData">
+			<?php foreach ($estandar['factores_id'] as $factor): ?>
+				<div class="factor text-info">
+					<span class="glyphicon glyphicon-flag text-muted"></span> <?php echo ucwords(strtolower($factor['name'])) ?> <small class="text-muted"><?php echo $factor['number'] ?></small>
+				</div>
+				<?php if ($factor['criterid']): ?>
+				<div class="factorData">
+					<div class="row">
+						<?php 
+						$c = 0;
+						foreach ($factor['criterid'] as $criterio): ?>
+							<div class="criterio">
+								<div class="criterioTitulo">
+									<span class="glyphicon glyphicon-tags text-muted"></span> <?php echo $criterio['estandares'][0]['namestandar'] ?> 
+									<div class="pull-right text-muted"><?php echo $criterio['estandares'][0]['numstandar_school'] ?></div>
+								</div>
+
+								<div class="criterioData">
+									<table class="table table-bordered table-hover">
+									<?php foreach ($criterio['estandares'][0]['sources'] as $fuente): ?>
+										<tr>
+											<td class="col-md-10 fuenteName">
+												<span class="glyphicon glyphicon-tag text-muted"></span> <?php echo $fuente['name'] ?>
+											</td>
+											<td class="col-md-1 text-center">
+												<?php echo $fuente['codefuente'] ?>
+											</td>	
+											<td class="col-md-1 text-center">
+												<?php echo substr($fuente['result'], 0, 5) ?>
+											</td>
+										</tr>
+									<?php endforeach ?>
+									</table>
+								</div>
+							</div>
+						<?php endforeach ?>
+					</div>
+				</div>
+				<?php endif ?>
+				<br>
+			<?php endforeach ?>
+		</div>
+ 	<?php endforeach ?>
+	<script>
+		$('.estandarData').slideUp();
+
+		$('.showEstandarBtn').click(function(){
+			$('.estandarData').slideUp();
+			var estandarNumber = $(this).attr('estandarNumber');
+			$('#estandarData' + estandarNumber).slideDown();
+		})
+	</script>
+<?php else: ?>
+	<br>
+	<h4 class="text-center text-muted">Aún no se Genera los<span class="text-danger"> Estandares para este Periodo</span></h4>
+<?php endif ?>

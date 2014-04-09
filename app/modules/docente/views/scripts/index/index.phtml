@@ -1,5 +1,5 @@
-    <link rel="stylesheet" href="/css/sliderNews.css">
-
+<link rel="stylesheet" href="/css/sliderNews.css">
+<input type="hidden" id="facultyBloqued" value="<?php echo $this->facultyBloqued ?>" />
 
 <!--Slider de Noticias-->
 <div class="row">
@@ -430,7 +430,11 @@
 <script type="text/javascript">
 	//$("#graphic-survey").load("/docente/index/xcourses");
     
-    
+    //Bloquear Codigo
+    var facultyBloqued = $('#facultyBloqued').val();
+    if (facultyBloqued) {
+        $('#avanceDirectores, .avanceCursos').addClass('hidden');
+    };
 
     var rid = $('#rid').val();
     if (rid != 'DR') {

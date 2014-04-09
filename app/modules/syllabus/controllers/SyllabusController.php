@@ -745,7 +745,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $whereperi['perid']=$perid;
 
             $bdperiodo = new Api_Model_DbTable_Periods();
-            $periods = $bdperiodo->_getOne($whereperi);
+            $periods = $bdperiodo->_getOnePeriod($whereperi);
             
             $where_per = array(
                     'eid' => $this->sesion->eid,

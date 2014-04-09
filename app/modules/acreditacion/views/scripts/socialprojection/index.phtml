@@ -1,0 +1,34 @@
+<?php 
+    $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-road"></span> Mis Proyectos');
+    $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+        <a href="#Modalproject" data-toggle="modal" class="btn btn-info"><span class="glyphicon glyphicon-plus "></span> Nuevo</a>');
+?>
+
+<?php if($this->data_project){?>
+    <div class="row">
+      <div class="col-sm-6 col-md-3">
+        <div class="thumbnail project-social">
+          <img data-src="holder.js/300x200" alt="...">
+          <div class="caption">
+            <h3>Thumbnail label</h3>
+            <p>...</p>
+            <p><a href="#" class="btn btn-primary">Button</a> <a href="#" class="btn btn-default">Button</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+<?php }else{?>
+    <div class="col-md-12 cont-font-not-register">
+        <h1 class="span-not-register">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+        </h1>
+        <h3 class="text-not-register">Sin registro de proyectos </h3>
+    </div>
+<? }?>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="Modalproject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    
+  </div><!-- /.modal -->
+  <script type="text/javascript" src='/js/acreditation/social_project.js' ></script>

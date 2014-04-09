@@ -310,6 +310,7 @@
                 <th>Curso</th>
                 <th class="text-center">Creditos</th>
                 <th class="text-center">Turno</th>
+                <th class="text-center">Semestre</th>
                 <th>Profesor</th>
                 <th class="text-center">Llevando por</th>
         <?php $c = 0;
@@ -327,6 +328,7 @@
                 <td><?php echo $this->coursesName[$c][0]['name'] ?></td>
                 <td class="text-center"><?php echo $this->coursesName[$c][0]['credits'] ?></td>
                 <td id="courseTurno<?php echo $course['courseid'] ?>" turno="<?php echo $course['turno'] ?>" class="text-center"><?php echo $course['turno'] ?></td>
+                <td class="text-center text-muted"><strong><?php echo $this->coursesName[$c][0]['semid'] ?></strong></td>
                 <td id="teacherTurno<?php echo $course['courseid'] ?>"><?php echo $this->teachers[$c][0]['last_name0'].' '.$this->teachers[$c][0]['last_name1'].' '.$this->teachers[$c][0]['first_name']  ?> </td>
                 <td class="text-center <?php echo $classtdVeces ?>"><strong><?php echo $this->coursesName[$c]['veces'] + 1 ?> Vez</strong></td>
                 <td class="text-center <?php echo $classButtons ?> butonsCourses">
@@ -352,15 +354,17 @@
                 </td>
             </tr>
             <tr>
-                <td id="editAlert<?php echo $course['courseid'] ?>" class="hidden alertSpace" colspan="10"></td>
+                <td id="editAlert<?php echo $course['courseid'] ?>" class="hidden alertSpace editAlert" colspan="10"></td>
             </tr>
             <script>
                 $("#showEditAlert<?php echo $course['courseid'] ?>").click(function(){
                     var courseTurno = $('#courseTurno<?php echo $course['courseid'] ?>').attr('turno');
+                    var courseid = "<?php echo $course['courseid'] ?>";
                     courseTurno = $.base64.encode(courseTurno);
                     $('.alertSpace').addClass('hidden');
                     $(".iluminate").removeClass('warning danger');
-                    $("#editAlert<?php echo $course['courseid'] ?>").load("/register/registerstudent/editturno/uid/<?php echo base64_encode($course['uid']) ?>/pid/<?php echo base64_encode($course['pid']) ?>/escid/<?php echo base64_encode($course['escid']) ?>/subid/<?php echo base64_encode($course['subid']) ?>/courseid/<?php echo base64_encode($course['courseid']) ?>/curid/<?php echo base64_encode($course['curid']) ?>/turno/" + courseTurno, function(){
+                    $(".editAlert").html('');
+                    $("#editAlert" + courseid).load("/register/registerstudent/editturno/uid/<?php echo base64_encode($course['uid']) ?>/pid/<?php echo base64_encode($course['pid']) ?>/escid/<?php echo base64_encode($course['escid']) ?>/subid/<?php echo base64_encode($course['subid']) ?>/courseid/<?php echo base64_encode($course['courseid']) ?>/curid/<?php echo base64_encode($course['curid']) ?>/turno/" + courseTurno, function(){
                         $("#editAlert<?php echo $course['courseid'] ?>").removeClass('hidden');
                     });
                     $("#fila<?php echo $course['courseid'] ?>").addClass('warning');

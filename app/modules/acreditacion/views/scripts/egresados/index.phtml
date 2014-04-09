@@ -2,7 +2,7 @@
 <?php $this->placeholder('Btnnav')->append(' <a href="/docente/index" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Regresar</a>');?>
 
 <div class="row">
-	<div class="col-md-6 col-md-offset-3">
+	<div id="selectAnio" class="col-md-6 col-md-offset-3">
 		<div class="panel panel-default">
 
 			<div class="container">
@@ -13,7 +13,7 @@
 							<span class="glyphicon glyphicon-info-sign text-muted" style="font-size: 25px; margin-top: 6px;"></span>
 						</div>
 						<div class="col-md-11">
-							<p class="text-muted"> Seleccione una año para que mire la cantidad de egresados de acuerdo al año de ingreso.</p>
+							<p class="text-muted"> Seleccione una año para que visualice la cantidad de egresados de acuerdo al año de ingreso.</p>
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -30,17 +30,37 @@
 
 		</div>
 	</div>
+	<div id="cantEgresados" style="position: absolute; z-index: 2; right: 9.5%; " class="col-md-4 hidden">
+		<div class="panel panel-default" style="height: 92px; ">
+			<div class="container">
+				<h5 class="text-center text-muted">Cantidad de Egresados <span class="text-info"><?php echo $this->specialityName ?></span></h5>
+				<h3 id="numEgresados" class="text-muted text-center">0</h3 id="numEgresados">
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="container">
-	<div id="data" class="panel panel-default">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div id="data" class="panel panel-default">
 
+			</div>
+		</div>
 	</div>
 </div>
 
 <script>
 	$('#data').addClass('hidden');
 	$('#anio').change(function(){
+		var dataHidden = $('#data').hasClass('hidden');
+		if (dataHidden) {
+			$('#selectAnio').animate({ "left": "-=16%" }, "slow" ,function(){
+				$('#cantEgresados').removeClass('hidden');
+
+			});
+		};
+
 		$('#data').removeClass('hidden');
 		$('#data').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center><br>')
 
