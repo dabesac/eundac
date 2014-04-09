@@ -16,19 +16,18 @@ class Alumno_TutorshipController extends Zend_Controller_Action {
     	$escid = $this->sesion->escid;
 
         $query = array(
-	                 array(	'column'   =>'author',
-							'operator' =>'=',
-							'value'    =>$this->sesion->infouser['numdoc'] )
+	                 array(	'column'   => 'state',
+							'operator' => '=',
+							'value'    => 'A',
+							'type'     => 'string' )
             		);
-
-        /*$data_project = array();
-        $connect = new Eundac_Connect_openerp();
-        $ids = $connect->search('inv.pro.project',$query);
+        $data_project = array();
+        $server = new Eundac_Connect_openerp();
+        /*$ids = $server->search('sede', $query);
         if ($ids) {
-            $data_project = $connect->read($ids, $attributes, 'inv.pro.project');
-        }
-        print_r($query);
-        $this->view->data_project=$data_project;*/
+            $data_project = $server->read($ids, $attributes, 'sedes');
+        }*/
+        print_r($data_project);
     }
 
 }
