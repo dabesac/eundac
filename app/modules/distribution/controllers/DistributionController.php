@@ -17,7 +17,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
     public function indexAction()
     {   
         try {
-            $periodActive = '14B';
+            $periodActive = $this->sesion->period->perid;
             $yearActive = substr($periodActive, 0, 2);
             $yearActive = '20'.$yearActive;
             $this->view->yearActive = $yearActive;
@@ -117,6 +117,8 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                                 'perid'=>$perid,'observation'=>$datadis[0]['observation'],'register'=>$this->sesion->uid,
                                 'comments'=>$comment,'state'=>'A');
                 if ($ldistribution->_save($formData)) {
+                    $data=array("state"=>'A');
+                    $dbdistribution->_update($data,$pk);
                     $this->_redirect("/distribution/distribution/index");
                 }
             }
@@ -606,6 +608,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->view->perid=$perid;
             $this->view->subid=$subid;
             $this->view->distid=$distid;
+            $this->view->escid=$escid;
             $where['eid']=$eid;
             $where['oid']=$oid;
             $where['escid']=$escid;
@@ -697,6 +700,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->view->perid=$perid;
             $this->view->subid=$subid;
             $this->view->distid=$distid;
+            $this->view->escid=$escid;
             $where['eid']=$eid;
             $where['oid']=$oid;
             $where['escid']=$escid;
