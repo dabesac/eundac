@@ -62,7 +62,12 @@
             </div>
         </div>
     </div>
-
+<?php elseif ($this->facultyBloqued): ?>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<h4 class="text-muted text-center">Lo Sentimos! En estos momentos la <span class="text-danger">Facultad de Ingenieria</span> esta sufriendo cambios en las <span class="text-danger">Direcciónes de sus Escuelas,</span> no habrá matricula hasta que la situación se solucióne...</span></h4>
+		</div>
+	</div>
 <?php else: ?>
 	<h4 class="text-muted text-center">No Existen <span class="text-danger">Registros</span></h4>
 <?php endif ?>

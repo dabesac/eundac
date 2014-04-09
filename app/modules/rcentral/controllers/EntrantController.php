@@ -100,7 +100,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
     	$facid = $this->_getParam('facid');
 
-
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
@@ -163,6 +162,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$this->view->studentEntrant    = $studentEntrant;
 		$this->view->studentState      = $studentState;
 		$this->view->studentSpeciality = $studentSpeciality;
+
 	}
 
 	public function detailregisterAction(){
