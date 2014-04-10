@@ -14,21 +14,34 @@ class Alumno_TutorshipController extends Zend_Controller_Action {
 
     public function listtutorsAction(){
     	$escid = $this->sesion->escid;
-
-        /*$query = array(
-	                 array(	'column'   => 'state',
-							'operator' => '=',
-							'value'    => 'A',
-							'type'     => 'string' )
-            		);
-        $data_project = array();
         $server = new Eundac_Connect_openerp();
-        $ids = $server->search('sede', $query);
-        if ($ids) {
-            $data_project = $server->read($ids, $attributes, 'sede');
+
+        $query = array(
+                      array( 'column'   => 'of_id',
+                            'operator' => '=',
+                            'value'    => '4SI',
+                            'type'     => 'string' )
+                    );
+        $data_project = array();
+        $idsDepartment = $server->search('hr.department', $query);
+        $attributes = array();
+        if ($idsDepartment) {
+            $data_project = $server->read($idsDepartment, $attributes, 'hr.department');
         }
         
-        print_r($data_project);*/
+        $departmentId = $data_project[0]['id'];
+
+        $query = array(
+                    array(  'column'   => 'department_id',
+                            'operator' => '=',
+                            'value'    => $departmentId,
+                            'type'     => 'string' )
+                    );
+
+        $idsTutoring = $server->search('tutoring', $query);
+        print_r($idsTutoring);
+
+
     }
 
 }

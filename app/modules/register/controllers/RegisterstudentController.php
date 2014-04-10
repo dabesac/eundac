@@ -10,6 +10,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
       }
       $login = $sesion->getStorage()->read();
       $this->sesion = $login;
+
     }
     
     public function indexAction(){
@@ -77,7 +78,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $estados = $state;
             $bdu = new Api_Model_DbTable_Registration();        
             $str = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
-            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados, $subid);  
+            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados);  
             $this->view->datos=$datos;
         }
     }
