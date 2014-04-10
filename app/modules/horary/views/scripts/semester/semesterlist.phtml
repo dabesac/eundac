@@ -9,7 +9,7 @@
 				</a> -->
 				<!-- Split button -->
 				<div class="btn-group" style='margin-left:2%'>
-				  	<button id='semester<?php echo $semester['semid']?>' semid='<?php echo $semester['semid']?>' type="button" class="btn btn-primary"><?php echo $semester['name']?></button>
+				  	<button semid='<?php echo $semester['semid']?>' type="button" class="semester btn btn-primary"><?php echo $semester['name']?></button>
 				  	<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 					   	<span class="caret"></span>
 					    <!-- <span class="sr-only">Toggle Dropdown</span> -->
@@ -48,13 +48,21 @@
 		<div class='alert alert-danger'>NO HAY REGISTRO.</div>
 	<?php
 	}	?>
-	<script type="text/javascript">
-		$(".turno").click(function(){
-			var perid="<?php echo $this->perid?>";
-			var semid=$(this).attr('semid');
-			var turno=$(this).attr('turno');
-			var url='/horary/semester/horarysemester/semid/'+semid+'/perid/'+perid+'/turno/'+turno;
-			$('#changehorary').html("<img src='/img/spinner.gif'>Cargando....");
-			$('#changehorary').load(url);
-		});
-	</script>
+<script type="text/javascript">
+	$(".semester").click(function(){
+		var semid=$(this).attr('semid');
+		var perid="<?php echo $this->perid?>";
+		var url='/horary/semester/horarysemester/semid/'+semid+'/perid/'+perid+'/turno/A';
+		$('#changehorary').html("<img src='/img/spinner.gif'>Cargando....");
+		$('#changehorary').load(url);
+	});
+
+	$(".turno").click(function(){
+		var perid="<?php echo $this->perid?>";
+		var semid=$(this).attr('semid');
+		var turno=$(this).attr('turno');
+		var url='/horary/semester/horarysemester/semid/'+semid+'/perid/'+perid+'/turno/'+turno;
+		$('#changehorary').html("<img src='/img/spinner.gif'>Cargando....");
+		$('#changehorary').load(url);
+	});
+</script>
