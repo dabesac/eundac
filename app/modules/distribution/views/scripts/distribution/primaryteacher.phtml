@@ -39,18 +39,24 @@
                         </center>
                         <script type="text/javascript">
                             $("#state_<?php echo $i?>").click(function(){
-                                var distid="<?php echo $this->distid?>";
-                                var perid="<?php echo $this->perid?>";
-                                var tipo=$(this).attr('dat');
-                                var tmp=tipo.split(";--;");
-                                var uid=tmp[0];
-                                var escid=tmp[1];
-                                var pid=tmp[2];
-                                var subid=tmp[3];
-                                var content=tmp[4];
-                                var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/STA";
-                                // alert(url);
-                                $("#chargeteacher").load(url);
+                                var teacherasig="<?php echo $teacher['courseasig']?>";
+                                if (teacherasig=="") {
+                                    var distid="<?php echo $this->distid?>";
+                                    var perid="<?php echo $this->perid?>";
+                                    var tipo=$(this).attr('dat');
+                                    var tmp=tipo.split(";--;");
+                                    var uid=tmp[0];
+                                    var escid=tmp[1];
+                                    var pid=tmp[2];
+                                    var subid=tmp[3];
+                                    var content=tmp[4];
+                                    var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/STA";
+                                    // alert(url);
+                                    $("#chargeteacher").load(url);
+                                    
+                                } else{
+                                    alert("EL docente ya tiene asignado un curso no se puede inhabilitar");
+                                };
                             });
                         </script>
                     </td>

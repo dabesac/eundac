@@ -10,15 +10,15 @@
         <td>
             	<center>           
 
-<a href="#myModal" role="button" class="btn btn-primary new_cur" data-toggle="modal"
+<a href="#Modal" role="button" class="btn btn-primary new_cur" data-toggle="modal"
     ><span class='glyphicon glyphicon-plus'></span> Agregar Nuevo Codigo</a> 
 
-	 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	 <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close " data-dismiss="modal" aria-hidden="true"></button>
-          <h4 class="modal-title"><center><b>AGREGAR NUEVO USUARIO AL SISTEMAS:</b></center></h4>
+          <h4 class="modal-title"><center><b>AGREGAR NUEVO USUARIO AL SISTEMA:</b></center></h4>
         </div>
         <div class="modal-body cont_new_cur">
         <form name='<?php echo $this->fm->getName();?>' id='<?php echo $this->fm->getName();?>' action="<?php echo $this->fm->getAction();?>" method="post" >
@@ -147,12 +147,33 @@
 <?php } 
 else { ?>
     <div class="alert alert-success">
-        <p> No tiene ningun Usuario con este DNI primero debe crear la Persona dirajase aqui <a  target='_black' class="btn btn-success" href="/admin/person/new/">Nueva Persona</a>  
+        <p> No tiene ningun Usuario con este DNI primero debe crear la Persona dirajase aqui <a id='newperson' class="btn btn-success" href="#">Nueva Persona</a>  
 	 </p>
     </div>
 <?php }?>
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style='width:1000px;'>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title"><b class='text-info'> <center> NUEVA PERSONA </center></b></h2>
+            </div>
+            <div class="modal-body">
+                <div id='nueva_persona'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    $("#newperson").click(function(){   
+        $('#myModal').modal('show');            
+        var url="/admin/person/new/r/A";
+        $("#nueva_persona").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
+        $("#nueva_persona").load(url);
+    });
+
     $(function() {
         $( "#fingreso" ).datepicker({
             changeMonth: true,
