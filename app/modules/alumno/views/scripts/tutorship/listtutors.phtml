@@ -1,10 +1,46 @@
+<link rel="stylesheet" href="/css/tutoring.css">
+
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Lista de Tutores');?>
 <?php $this->placeholder('Btnnav')->append(' <a href="/alumno/index" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Regresar</a>');?>
 
-<div class="row">
-	<div class="col-md-10 col-md-offset-1">
-		<div class="panel panel-default">
-				
+<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Elija un tutor</p>
+<?php 
+$c = 0;
+foreach ($this->tutors as $tutor): ?>
+	<div class="tutor">
+		<div class="tutorNombre text-muted">
+			<span class="glyphicon glyphicon-user"></span> <?php echo $tutor['employee_id'][1] ?>
+		</div>
+		<div class="tutorCantidad">
+			<?php echo $this->totalStudents[$c].'/'.$tutor['number'] ?>
+		</div>
+		<div class="tutorEstado">
+			<?php echo $this->stateTutor[$c] ?>
+		</div>
+		<div class="tutorRegistrarse">
+			<a regid="<?php echo $this->dataStudent['regid'] ?>" tutoringId="<?php echo $tutor['id'] ?>" class="btn btn-success form-control registerBtn" href="##">Registrarse</a>
 		</div>
 	</div>
-</div>
+<?php 
+$c++;
+endforeach ?>
+
+<script>
+	$('.registerBtn').click(function(){
+		var dataSend = new Array();
+		dataSend['tutoringid'] = $(this).attr('tutoringId');
+		dataSend['regid']      = $(this).attr('regid');
+		registerStudent(dataSend);
+	});
+
+	function registerStudent(dataSend){
+		$.ajax({
+			url    : '/alumno/tutorship/registerstudent/',
+			data   : {	tutoringid : dataSend['tutoringid'],
+						regid      : dataSend['regid'] },
+			success: function(data){
+				alert(data);
+			}
+		})
+	}
+</script>
