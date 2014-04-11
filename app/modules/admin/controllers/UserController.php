@@ -163,15 +163,22 @@ class Admin_UserController extends Zend_Controller_Action{
                     $where=array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid);
                     $dbrol=new Api_Model_DbTable_Rol();
                     $datarol=$dbrol->_getOne($where);
-                    $prefix=$datarol['prefix'];                
+                    $prefix=$datarol['prefix'];
                     $frmdata['uid']=$frmdata['pid'].$prefix;                
                     $frmdata['created']=date('Y-m-d h:m:s');
                     $frmdata['register']=$register;
                     $frmdata['password']=md5($frmdata['uid']);                  
                     $reg_= new Api_Model_DbTable_Users();
-                    // print_r($frmdata);exit();
-                    $reg_->_save($frmdata);
-                    $this->_redirect("/admin/user/new");                           
+                    if ($reg_->_save($frmdata)) {
+                        if ($frmdata['rid']=="DC" || $frmdata['rid']=="JP") {
+                            $data=array('eid'=>$frmdata['eid'],'oid'=>$frmdata['oid'],'uid'=>$frmdata['uid'],
+                                'pid'=>$frmdata['pid'],'escid'=>$frmdata['escid'],'subid'=>$frmdata['subid'],
+                                'is_director'=>"N");
+                            $dbinfoteacher=new Api_Model_DbTable_Infoteacher();
+                            $dbinfoteacher->_save($data);
+                        }
+                        $this->_redirect("/admin/user/new/");  
+                    }
                 }
                 else
                 {

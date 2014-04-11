@@ -13,30 +13,30 @@
  	}
 
  	public function indexAction(){
- 		try {
-            $this->_helper->layout()->disableLayout();
+        $this->_helper->layout()->disableLayout();
 
- 			$eid=$this->sesion->eid;
- 			$oid=$this->sesion->oid;
- 			$escid=$this->sesion->escid;
- 			$uid=$this->sesion->uid;
- 			$pid=$this->sesion->pid;
- 			$subid=$this->sesion->subid;
- 			$perid=$this->sesion->period->perid;
+        $eid=$this->sesion->eid;
+        $oid=$this->sesion->oid;
+        $escid=$this->sesion->escid;
+        $uid=$this->sesion->uid;
+        $pid=$this->sesion->pid;
+        $subid=$this->sesion->subid;
+        $perid=$this->sesion->period->perid;
 
-            $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
-            $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
-            $datahours=$bd_hours->_getFilter($wheres);
-            
-            if ($datahours) {
-                $valhoras[0]=$datahours[0]['hours_begin'];
-                $hora=new Api_Model_DbTable_Horary();
-                for ($k=0; $k < 20; $k++) { 
-                    $dho=$hora->_getsumminutes($valhoras[$k],'50');
-                    $valhoras[$k+1]=$dho[0]['hora'];
-                }
-                $this->view->valhoras=$valhoras;
+        $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
+        $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
+        $datahours=$bd_hours->_getFilter($wheres);
+        
+        if ($datahours) {
+            $valhoras[0]=$datahours[0]['hours_begin'];
+            $hora=new Api_Model_DbTable_Horary();
+            for ($k=0; $k < 20; $k++) { 
+                $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                $valhoras[$k+1]=$dho[0]['hora'];
+            }
+            $this->view->valhoras=$valhoras;
 
+ 		    try {
                 $module = "horary_student";
 
                 $data = array(  
@@ -50,12 +50,13 @@
                 $server = new Eundac_Connect_Api($module,$data);
                 $data = $server->connectAuth();
                 // print_r($data);exit();
-                $this->view->horarys=$data; 
-            }   
- 			
- 		} catch (Exception $e) {
- 			print "Error: get Horary".$e->getMessage();
- 		}
+                $this->view->horarys=$data;   
+            
+            } catch (Exception $e) {
+                // print "Error: get Horary".$e->getMessage();
+                $this->view->error="A";
+            }
+        }
  	}
 
  	public function printconsolidatedAction(){
