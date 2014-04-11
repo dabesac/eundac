@@ -1,34 +1,29 @@
-<div>
-	<h4>
-		<span class="glyphicon glyphicon-th-list"></span> 
-		GESTIÓN CURRÍCULA
-	</h4>
-</div>
-<div>
-	<table class="table table-hover span10">
-		<tr>
-			<th>Facultad:</th>
-			<td>
-				<select id="facid" class="form-control" style="width:280px">
-					<option value="">- Seleccione -</option>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-th-list"></span> Gestión Currícula');?>
+<div class='row'>
+	<div class='col-md-12 col-md-offset-2'>
+		<div class='col-md-1'>Facultad:</div>
+		<div class='col-md-3'>
+			<select id="facid" class="form-control" style="width:280px">
+				<option value="">- Seleccione -</option>
+				<?php
+				if ($this->facultad) { 
+					foreach ($this->facultad as $facultad) { ?>
+						<option value="<?php echo $facultad['facid']?>"><?php echo $facultad['name']?></option>
 					<?php
-					if ($this->facultad) { 
-						foreach ($this->facultad as $facultad) { ?>
-							<option value="<?php echo $facultad['facid']?>"><?php echo $facultad['name']?></option>
-						<?php
-						}
-					}?>
-				</select>
-			</td>
-			<th>Escuela:</th>
-			<td>
-				<select id="escid" class="form-control" style="width:280px">
-					<option value="">- Seleccione -</option>
-				</select>
-			</td>
-		</tr>
-	</table>
-</div>
+					}
+				}?>
+			</select>
+		</div>
+		<div class='col-md-1'>Escuela:</div>
+		<div class='col-md-3'>
+			<select id="escid" class="form-control" style="width:280px">
+				<option value="">- Primero seleccione una Facultad -</option>
+			</select>
+
+		</div>
+	</div>
+</div><br><hr><br>
+
 <div id="curriculas"></div>
 
 <script type="text/javascript">

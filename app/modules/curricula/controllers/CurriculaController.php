@@ -230,6 +230,11 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                         $formData['created']=date('Y-m-d h:m:s');
                         $formData['register']=$this->sesion->uid;
                         $base_course = new Api_Model_DbTable_Course();
+                        $formData['req_1'] = (!empty($formData['req_1']))?$formData['req_1']:null;
+                        $formData['req_2'] = (!empty($formData['req_2']))?$formData['req_2']:null;
+                        $formData['req_3'] = (!empty($formData['req_3']))?$formData['req_3']:null;
+                        $formData['course_equivalence'] = (!empty($formData['course_equivalence']))?$formData['course_equivalence']:null;
+                        $formData['course_equivalence_2'] = (!empty($formData['course_equivalence_2']))?$formData['course_equivalence_2']:null;
                         $base_course->_save($formData);
                         $this->view->msg=1;
                     }else{
