@@ -411,7 +411,7 @@ body{
 	position: relative;
 }
 .st-bg-td-last{
-	background: #eaeaea;
+	background: #fbeed5;
 }
 .st-bg-all{
 	position: absolute;
@@ -439,11 +439,11 @@ body{
 	width: 100%;
 }
 .tg-markercell{
-	height: 42px;
+	height: 54px;
 }
 .tg-dualmarker{
-	height: 20px;
-	margin-bottom: 20px;	
+	height: 27px;
+	margin-bottom: 27px;	
 }
 .tg-dualmarker, .tg-dualmarker60{
 	border-bottom: 1px dotted #ddd;
@@ -451,7 +451,7 @@ body{
 	font-size: 1px;
 }
 .tg-today{
-	background-color: #fafafa;
+	background-color: #fcf8e3;
 }
 .tg-col-today{
 	vertical-align:top;
@@ -531,7 +531,37 @@ body{
 	border-left: 1px solid #ddd;
 	vertical-align: top;
 }
+
+/*****events calendar*****/
+.chip{
+	position: absolute;
+	cursor: default;
+	color: #222;
+	font-size: 12px;
+}
+
 /*====================project social======================*/
 .project-social{
 	background-color: #f7fdff;
 } 
+
+/******add archive*******/
+div.upload {
+    width: 157px;
+    height: 57px;
+    /*background-color: #dfddd7;*/
+    overflow: hidden;
+    border: solid 3px #dfddd7;
+    border-style: dashed;	
+    -moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+}
+
+div.upload input {
+    display: block !important;
+    width: 300px !important;
+    height: 57px !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+}

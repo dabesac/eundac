@@ -79,16 +79,14 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<input type='hidden' id="syl_perid_hidd" value='<?php echo $this->where['perid'] ?>' >
+<input type='hidden' id="syl_subid_hidd" value='<?php echo $this->where['subid']?>' >
+<input type='hidden' id="syl_turno_hidd" value='<?php echo $this->where['turno']?>' >
+<input type='hidden' id="syl_courseid_hidd" value='<?php echo $this->where['courseid']?>' >
+<input type='hidden' id="syl_curid_hidd" value='<?php echo $this->where['curid']?>' >
+<input type='hidden' id="syl_escid_hidd" value='<?php echo $this->where['escid']?>' >
 
+<script type="text/javascript" src="/external_library/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="/external_library/ckeditor/adapters/jquery.js"></script>
+<script type="text/javascript" src="/js/syllabus/syllabus.js"></script>
 
-<script type="text/javascript">
-	var perid="<?php echo base64_encode($this->where['perid'])?>";
-	var subid="<?php echo base64_encode($this->where['subid'])?>";
-	var turno="<?php echo base64_encode($this->where['turno'])?>";
-	var courseid="<?php echo base64_encode($this->where['courseid'])?>";
-	var curid="<?php echo base64_encode($this->where['curid'])?>";
-	var escid="<?php echo base64_encode($this->where['escid'])?>";
-
-	$('#campo').html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
-	$("#campo").load("/syllabus/syllabus/viewfrm/perid/"+perid+"/subid/"+subid+"/turno/"+turno+"/courseid/"+courseid+"/curid/"+curid+"/escid/"+escid);
-</script>

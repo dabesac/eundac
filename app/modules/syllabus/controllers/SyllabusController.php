@@ -464,6 +464,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                 $perid = trim($params['perid']);
                 $unit= trim($params['unit']);
                 $type_rate = trim($params['type_rate']);
+                // print_r($params);exit();
                 $data = array(
                         'eid'=>$eid,
                         'oid'=>$oid,
@@ -533,18 +534,33 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
         $this->_helper->layout()->disableLayout();
+
         if ($this->getRequest()->isPost()) {
             $data= $this->getRequest()->getPost();
-            $subid=base64_decode($data['subid']);
-            $escid=base64_decode($data['escid']);
-            $curid=base64_decode($data['curid']);
-            $courseid=base64_decode($data['courseid']);
-            $turno=base64_decode($data['turno']);
-            $perid=base64_decode($data['perid']);
-            $unit=base64_decode($data['unit']);
-            $type_rate=base64_decode($data['type_rate']);
+            $subid=($data['subid']);
+            $escid=($data['escid']);
+            $curid=($data['curid']);
+            $courseid=($data['courseid']);
+            $turno=($data['turno']);
+            $perid=($data['perid']);
+            $unit=($data['unit']);
+            $type_rate=($data['type_rate']);
+            $tb_units_content = new Api_Model_DbTable_Syllabusunitcontent();
 
-            $params= array(
+             $where = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'curid'=>$curid,
+                'courseid'=>$courseid,
+                'turno'=>$turno,
+                'perid'=>$perid,
+                'week'=>$data['week'],
+                'session'=>$data['session']
+                );
+
+             $params= array(
                 'eid'=>$eid,
                 'oid'=>$oid,
                 'subid'=>$subid,
@@ -557,26 +573,32 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                 'week'=>$data['week'],
                 'session'=>$data['session']
                 );
-
-            if ($type_rate == 'O') {
-                $params['obj_content'] = $data['obj_content'];
-                $params['obj_strategy'] = $data['obj_strategy'];
-                $params['com_indicators'] = $data['com_indicators'];
-                $params['com_instruments'] = $data['com_instruments'];
-            }elseif ($type_rate == 'C') {
-                $params['com_conceptual'] = $data['com_conceptual'];
-                $params['com_procedimental'] = $data['com_procedimental'];
-                $params['com_actitudinal'] = $data['com_actitudinal'];
-                $params['com_indicators'] = $data['com_indicators'];
-                $params['com_instruments'] = $data['com_instruments'];
-            }
+                if ($type_rate == 'O') {
+                    $params['obj_content'] = $data['obj_content'];
+                    $params['obj_strategy'] = $data['obj_strategy'];
+                    $params['com_indicators'] = $data['com_indicators'];
+                    $params['com_instruments'] = $data['com_instruments'];
+                }elseif ($type_rate == 'C') {
+                    $params['com_conceptual'] = $data['com_conceptual'];
+                    $params['com_procedimental'] = $data['com_procedimental'];
+                    $params['com_actitudinal'] = $data['com_actitudinal'];
+                    $params['com_indicators'] = $data['com_indicators'];
+                    $params['com_instruments'] = $data['com_instruments'];
+                }
             try {
-                $tb_units_content = new Api_Model_DbTable_Syllabusunitcontent();
-                if ($tb_units_content->_save($params)) {
+                if (!$tb_units_content->_getFilter($where)) {
+                    if ($tb_units_content->_save($params)) {
                         $json = array('status' => true, );
+                    }else{
+                        $json = array('status' => false,'error'=>2);
+
                     }
+                }else{
+                    $json = array('status' => false,'error'=>1);
+                }
+
             } catch (Exception $e) {
-                $json = array('status' => false, );
+                $json = array('status' => false,'error'=>2);
             }
         }
 
@@ -603,7 +625,6 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                         'week'=>$data_form['week'],
                         'session'=>$data_form['session']
                     );
-
                  if ($type_rate == 'O') {
                     $data['obj_content'] = $data_form['obj_content'];
                     $data['obj_strategy'] = $data_form['obj_strategy'];
@@ -621,6 +642,8 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                     $tb_units_content = new Api_Model_DbTable_Syllabusunitcontent();
                     if ($tb_units_content->_update($data,$pk)) {
                         $json = array('status'=>true);
+                    }else{
+                        $json = array('status'=>false);
                     }
                 } catch (Exception $e) {
                     $json = array('status'=>false,);
@@ -649,6 +672,8 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                 $tb_units_content = new Api_Model_DbTable_Syllabusunitcontent();
                 if ($tb_units_content->_delete($params)) {
                     $json = array('status'=>true);
+                }else{
+                    $json = array('status'=>false);
                 }
             } catch (Exception $e) {
                     $json = array('status'=>false);

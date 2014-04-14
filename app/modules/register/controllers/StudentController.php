@@ -133,12 +133,12 @@ class Register_StudentController extends Zend_Controller_Action {
                 $condition_credits=0;
                 $condition_semester='3';
 
-            	$cont_conmment=null;
+                $cont_conmment=null;
 
                 if ($data_condition) {
 
                     foreach ($data_condition  as $condition) {
-						
+                        
                         if ($condition['num_registration'] !='') {
                             $cont_conmment['num_registration']="Usted esta Permitido llevar 
                                         un curso por  ". $condition['num_registration'].
@@ -240,7 +240,7 @@ class Register_StudentController extends Zend_Controller_Action {
                         }
                         $this->view->veces = $veces;
                         $this->view->veces_subject=$veces_subject;
-                   	}
+                    }
                     else{
                         $cantidad =count($subject);
 
@@ -933,16 +933,16 @@ class Register_StudentController extends Zend_Controller_Action {
                 $base_person = new Api_Model_DbTable_Person();
 
                 $data_subjects = $base_registration_subjet->_getAll($where,$order);
-				$matricula = new Api_Model_DbTable_Registration();
-				$wheremat = array(
-						'eid'=>$eid,'oid'=>$oid,
-						'escid'=>$escid,'subid'=>$subid,
-						'pid'=>$pid,'uid'=>$uid,
-						'regid'=>$regid,'perid'=>$perid,
-				);
-				$regmatr = $matricula->_getRegister($wheremat);
+                $matricula = new Api_Model_DbTable_Registration();
+                $wheremat = array(
+                        'eid'=>$eid,'oid'=>$oid,
+                        'escid'=>$escid,'subid'=>$subid,
+                        'pid'=>$pid,'uid'=>$uid,
+                        'regid'=>$regid,'perid'=>$perid,
+                );
+                $regmatr = $matricula->_getRegister($wheremat);
 
-				if ($regmatr) $this->view->regmatr = $regmatr;
+                if ($regmatr) $this->view->regmatr = $regmatr;
 
                 // $attrib =array('pid','last_name0');
 

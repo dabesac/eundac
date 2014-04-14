@@ -1,7 +1,8 @@
+<script type="text/javascript" src='/js/acreditation/social_project.js' ></script>
 <?php 
     $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-road"></span> Mis Proyectos');
     $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
-        <a href="#Modalproject" data-toggle="modal" class="btn btn-info"><span class="glyphicon glyphicon-plus "></span> Nuevo</a>');
+        <a href="#Modalproject" id="add_project" data-toggle="modal" class="btn btn-info"><span class="glyphicon glyphicon-plus "></span> Nuevo</a>');
 ?>
 
 <?php if($this->data_project){?>
@@ -31,4 +32,3 @@
   <div class="modal fade" id="Modalproject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     
   </div><!-- /.modal -->
-  <script type="text/javascript" src='/js/acreditation/social_project.js' ></script>

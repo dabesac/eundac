@@ -1,5 +1,4 @@
-<script type="text/javascript" src="/external_library/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="/external_library/ckeditor/adapters/jquery.js"></script>
+
 
 <?php
 $tipo=($this->periodocurso['type_rate']=="O")? "OBJETIVOS": "COMPETENCIAS"; ?>
@@ -25,7 +24,7 @@ if ($this->periodocurso['type_rate']!="O" && $this->periodocurso['type_rate']!="
 	</div>
 <?php }?>
 
-<form name="<?php echo $this->form->getName(); ?>" id='frmSyllabus' action="/syllabus/syllabus/viewfrm" method="post" enctype="multipart/form-data">
+<form name="<?php echo $this->form->getName(); ?>" id='frmSyllabus' enctype="multipart/form-data">
 <?php
 $rom="";
 if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="C") {
@@ -92,7 +91,7 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 	        	<div id="collapse2" class="panel-collapse collapse">
 	              	<div class="panel-body">
 	                	<h5 style="float:left">Ingrese Cantidad de Unidades: </h5>
-	                	<div style="width:60px; float:left; margin-left:30px"><?php echo $this->form->units?></div>
+	                	<?php echo $this->form->units?>
 	                	<a data-toggle="modal" data-target="#myModalSyllabus" id="crearunidad" class="btn btn-info" style="margin-left:30px"><span class="glyphicon glyphicon-pencil"></span>Crear Unidades</a>
 	              	</div>
 	         	</div>
@@ -184,15 +183,7 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 
 </div>
 <script type="text/javascript">
-	var $send_units = false;
-	var $type_rate = "<?php echo $this->periodocurso['type_rate']?>";
-	$("#units").keypress(function(){
-		$send_units = true;
-	});
-	$("#units").keyup(function(){
-		$send_units = true;
-	});
+	
 	
 
 </script>
-<script type="text/javascript" src="/js/syllabus/syllabus.js"></script>
