@@ -86,6 +86,24 @@
 <input type='hidden' id="syl_curid_hidd" value='<?php echo $this->where['curid']?>' >
 <input type='hidden' id="syl_escid_hidd" value='<?php echo $this->where['escid']?>' >
 
+<div class="modal fade" id="myModal_acccept_colse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Modal title</h4>
+        </div>
+        <div class="modal-body">
+          Esta seguro de Cerrar Sílabo 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+          <button type="button" id="accept_close_syllabus" class="btn btn-primary">Aceptar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script type="text/javascript" src="/external_library/ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="/external_library/ckeditor/adapters/jquery.js"></script>
 <script type="text/javascript" src="/js/syllabus/syllabus.js"></script>

@@ -19,6 +19,8 @@ var syllabus = {
 		$('#campo').html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>")
 		$("#campo").load("/syllabus/syllabus/viewfrm/perid/"+perid+"/subid/"+subid+"/turno/"+turno+"/courseid/"+courseid+"/curid/"+curid+"/escid/"+escid,syllabus.created_units)
 		$("#save_sylabus").click(syllabus.save_content_syllabus)
+		$("#close_sylabus").click(syllabus.close_sylabus)
+		$("#Modalpreviewsyllabus").click(syllabus.preview_syllbus)
 	},
 	created_units:function(){
 	    $('textarea#sumilla,textarea#methodology,textarea#media,textarea#evaluation,textarea#sources,textarea#competency,textarea#capacity').ckeditor();
@@ -506,6 +508,38 @@ var syllabus = {
 					// alert("error al Guardar")
 			}
 		})
+	},
+	close_sylabus:function(){
+		//$("#accept_close_syllabus").modal('show')
+		$.ajax({
+				url: "/syllabus/syllabus/closure",
+				type: 'POST',
+				data:$("#frmSyllabus").serialize(),
+				success: function ($data){
+					if ($data.status == true) {
+                     window.location.href=window.location.href;
+					}else{
+						$("#error-syllabus").show()
+					}
+				},
+				error: function($error){
+					alert("Ocurrio un error al cerrar síllbus");
+				}
+			});
+	},
+	preview_syllbus :function(){
+		var $params = {};
+		$params[$.base64.encode('subid')]=$.trim($("#subid_hidden").val());
+		$params[$.base64.encode('perid')]=$.trim($("#perid_hidden").val());
+		$params[$.base64.encode('escid')]=$.trim($("#escid_hidden").val());
+		$params[$.base64.encode('curid')]=$.trim($("#curid_hidden").val());
+		$params[$.base64.encode('courseid')]=$.trim($("#courseid_hidden").val());
+		$params[$.base64.encode('turno')]=$.trim($("#turno_hidden").val());
+		$params[$.base64.encode('type_rate')]=$.trim($.base64.encode($type_rate));
+
+	$.get('/syllabus/syllabus/view',$params,function($responds){
+		$("#content_preview_syllbus").html($responds);
+	})
 	}
 }
 $(document).ready(syllabus.init)
