@@ -80,18 +80,18 @@
 	<input type="hidden" id="totalCreditsHidden" value="<?php echo $this->totalCredits ?>">
 	<div class="row" id="allData">
 		<div class="col-md-10">
+			<form id="formPreRegister">
 			<table class="table table-hover">
 				<tr class="active">
 					<th class="text-center col-md-1">#</th>
 					<th class="text-center col-md-1">Codigo</th>
 					<th class="col-md-4">Curso</th>
-					<th class?="text-center">Creditos</th>
+					<th class="text-center">Creditos</th>
 					<th class="text-center col-md-1">Turno</th>
 					<th class="col-md-3">Docente</th>
 					<th class="text-center col-md-1 cantSignStudents">#Mat</th>
 					<th class="messageTh"></th>
 				</tr>
-			<form id="formPreRegister">
 				<input name="stateStudent" id="stateStudent" type="hidden" value="<?php echo $this->stateStudent ?>">
 				<input type="hidden" name="pid" value="<?php echo $this->dataStudent['pid'] ?>">
 				<input id="uid" type="hidden" name="uid" value="<?php echo $this->dataStudent['uid'] ?>">
@@ -182,8 +182,8 @@
 					endif ?>
 				<?php endforeach ?>
 				<input type="hidden" name="CantidadCursos" value="<?php echo $c ?>">
-			</form>
 			</table>
+			</form>
 		</div>
 
 		<!--Botones de Validación-->

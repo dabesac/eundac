@@ -3,35 +3,53 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Lista de Tutores');?>
 <?php $this->placeholder('Btnnav')->append(' <a href="/alumno/index" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Regresar</a>');?>
 
-<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Elija un tutor</p>
+<div id="inscriptionData">
+<p class="parrafo text-muted"><span class="glyphicon glyphicon-info-sign"></span> Registrese al tutor de su agrado:</p>
 <?php 
 $c = 0;
 foreach ($this->tutors as $tutor): ?>
+
 	<div class="tutor">
 		<div class="tutorNombre text-muted">
 			<span class="glyphicon glyphicon-user"></span> <?php echo $tutor['employee_id'][1] ?>
 		</div>
-		<div class="tutorCantidad">
+		<?php 
+		if ($this->totalStudents[$c] == 1) {
+		 	$titleCantidad = $this->totalStudents[$c].' Alumno Registrado';
+		}else{
+			$titleCantidad = $this->totalStudents[$c].' Alumnos Registrados';
+		} ?>
+		<div class="tutorCantidad" title="<?php echo $titleCantidad ?>">
 			<?php echo $this->totalStudents[$c].'/'.$tutor['number'] ?>
 		</div>
-		<div class="tutorEstado">
-			<?php echo $this->stateTutor[$c] ?>
+		<div class="tutorEstado" title="<?php echo $this->stateTutor[$c]['nameState'] ?>">
+			<?php echo $this->stateTutor[$c]['state'] ?>
 		</div>
+		<?php if ($this->stateTutor[$c]['state'] == 'C	') {
+			$classRegisterBtn = 'disabled';
+		} ?>
 		<div class="tutorRegistrarse">
-			<a regid="<?php echo $this->dataStudent['regid'] ?>" tutoringId="<?php echo $tutor['id'] ?>" class="btn btn-success form-control registerBtn" href="##">Registrarse</a>
+			<a regid="<?php echo $this->dataStudent['regid'] ?>" tutoringId="<?php echo $tutor['id'] ?>" class="btn btn-success form-control registerBtn <?php echo $classRegisterBtn ?>" href="##">Registrarse</a>
 		</div>
 	</div>
 <?php 
 $c++;
 endforeach ?>
+</div>
 
 <script>
+	$('.tutorCantidad, .tutorEstado').hover(function(){
+		$(this).tooltip('toggle');
+	});
+
 	$('.registerBtn').click(function(){
 		var dataSend = new Array();
 		dataSend['tutoringid'] = $(this).attr('tutoringId');
 		dataSend['regid']      = $(this).attr('regid');
 		registerStudent(dataSend);
 	});
+
+
 
 	function registerStudent(dataSend){
 		$.ajax({

@@ -86,9 +86,11 @@ class Alumno_TutorshipController extends Zend_Controller_Action {
             $idsStudents = $server->search('tutoring.students', $query);
             $totalStudents[$c] = count($idsStudents);
             if ($totalStudents[$c] == $tutor['number']) {
-                $stateTutor[$c] = 'C';
+                $stateTutor[$c]['state']     = 'C';
+                $stateTutor[$c]['nameState'] = 'Cerrado';
             }else{
-                $stateTutor[$c] = 'A';
+                $stateTutor[$c]['state']     = 'A';
+                $stateTutor[$c]['nameState'] = 'Abierto';
             }
             $c++;
         }

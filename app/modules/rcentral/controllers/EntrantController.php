@@ -510,7 +510,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
 		$data = $this->getRequest()->getPost();
 
-
 		if ($data['whySend'] == 'M') {
 			$state = 'M';
 		}else if ($data['whySend'] == 'O'){
@@ -520,7 +519,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		}else if ($data['whySend'] == 'E'){
 			$state = 'E';
 		}
-
 		if (!$data['exist'] and $state != 'E') {
 			if ($data['stateStudent'] == 'I') {
 				$pk = array('eid'   => $eid,
