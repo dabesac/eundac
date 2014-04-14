@@ -219,6 +219,27 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
             }            
         }
 
+    public function _getOneCoursexTeacherXPeriodXTodasEsc($where=array()){
+		try{
+			if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' || $where["perid"]=='' || $where["subid"]=='' || $where["pid"]=='') return false;
+			$select = $this->_db->select()
+								->from(array('ct'=>'base_course_x_teacher'))
+								->where('ct.eid = ?', $where['eid'])
+								->where('ct.oid = ?', $where['oid'])
+								->where('ct.perid = ?', $where['perid'])
+								->where('ct.subid = ?', $where['subid'])
+								->where('ct.pid = ?', $where['pid'])
+								->where('left(ct.escid, 3) = ?', $where['escid'])
+								->order(array('courseid'));
+
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;  
+		}catch (Exception $e){
+			print "Error: Read All Teacher ".$e->getMessage();
+		}
+	}
 	
     
 }

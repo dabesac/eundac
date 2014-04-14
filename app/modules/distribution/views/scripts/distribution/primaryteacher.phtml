@@ -39,18 +39,24 @@
                         </center>
                         <script type="text/javascript">
                             $("#state_<?php echo $i?>").click(function(){
-                                var distid="<?php echo $this->distid?>";
-                                var perid="<?php echo $this->perid?>";
-                                var tipo=$(this).attr('dat');
-                                var tmp=tipo.split(";--;");
-                                var uid=tmp[0];
-                                var escid=tmp[1];
-                                var pid=tmp[2];
-                                var subid=tmp[3];
-                                var content=tmp[4];
-                                var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/STA";
-                                // alert(url);
-                                $("#chargeteacher").load(url);
+                                var teacherasig="<?php echo $teacher['courseasig']?>";
+                                if (teacherasig=="") {
+                                    var distid="<?php echo $this->distid?>";
+                                    var perid="<?php echo $this->perid?>";
+                                    var tipo=$(this).attr('dat');
+                                    var tmp=tipo.split(";--;");
+                                    var uid=tmp[0];
+                                    var escid=tmp[1];
+                                    var pid=tmp[2];
+                                    var subid=tmp[3];
+                                    var content=tmp[4];
+                                    var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/STA";
+                                    // alert(url);
+                                    $("#chargeteacher").load(url);
+                                    
+                                } else{
+                                    alert("EL docente ya tiene asignado un curso no se puede inhabilitar");
+                                };
                             });
                         </script>
                     </td>
@@ -162,7 +168,9 @@
                         <center>
                             <?php
                             if ($teacher['courseasig']) {   ?>
-                                <a href="#" onclick="javascript: window.open('/horary/nhorary/fillhorary/pid/<?php echo base64_encode($teacher['pid'])?>/uid/<?php echo base64_encode($teacher['uid'])?>/escid/<?php print base64_encode($teacher['escid'])?>/subid/<?php echo base64_encode($teacher['subid'])?>/perid/<?php echo base64_encode($this->perid)?>','Asignación Horario','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=1200,height=720')" rel="tooltip" title="Asignar Horarios"><span class="glyphicon glyphicon-calendar"></span></a>
+                                <a href="#" onclick="javascript: window.open('/horary/nhorary/fillhorary/pid/<?php echo base64_encode($teacher['pid'])?>/uid/<?php echo base64_encode($teacher['uid'])?>/escid/<?php
+                                if ($teacher['escid']=="2ES") { print base64_encode($this->escid);}
+                                else{ print base64_encode($teacher['escid']);} ?>/subid/<?php echo base64_encode($teacher['subid'])?>/perid/<?php echo base64_encode($this->perid)?>','Asignación Horario','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=1200,height=720')" rel="tooltip" title="Asignar Horarios"><span class="glyphicon glyphicon-calendar"></span></a>
                             <?php
                             }
                             else{ ?>

@@ -43,15 +43,16 @@ class Admin_PersonController extends Zend_Controller_Action{
         	}			
  		} catch (Exception $e) {
  			print "Error: get Person".$e->getMessage();
- 		}
- 	}
+        }
+    }
 
- 	public function newAction(){
- 		try {
+    public function newAction(){
+        try {
             $this->_helper->layout()->disableLayout();
- 			$eid=$this->sesion->eid;
- 			$register=$this->sesion->uid;
+            $eid=$this->sesion->eid;
+            $register=$this->sesion->uid;
             $user=$this->_getParam('u');
+            $rcentral=$this->_getParam('r');
             $fm=new Admin_Form_Personnew();
             $this->view->fm=$fm;
             if ($this->getRequest()->isPost()){   
@@ -77,7 +78,12 @@ class Admin_PersonController extends Zend_Controller_Action{
                     if ($frmdata['user']=='A') {
                         $this->view->user=2;
                     }
+                    if ($frmdata['rcentral']=='A') {
+                        $this->view->rcentral=3;
+                    }
                     unset($frmdata['user']);
+                    unset($frmdata['rcentral']);
+
                     if ($reg_->_save($frmdata)) {
                         $this->view->valor=1;
                     }
@@ -87,12 +93,15 @@ class Admin_PersonController extends Zend_Controller_Action{
                 if ($user=='A') {
                     $this->view->user=$user;                    
                 }
+                if ($rcentral=='A') {
+                    $this->view->rcentral=$rcentral;                    
+                }
             }
- 			
- 		} catch (Exception $e) {
- 			print "Error: new Person".$e->getMessage();
- 		}
- 	}
+            
+        } catch (Exception $e) {
+            print "Error: new Person".$e->getMessage();
+        }
+    }
 
     public function updatepersonAction(){
         try {

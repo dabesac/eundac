@@ -36,5 +36,26 @@ class Api_Model_DbTable_ControlActivity extends Zend_Db_Table_Abstract
 			print "Error al Guardar Control Syllabus".$e->getMessage();
 		}
 	}
+	/*Devuele la ultima sesion de clases guardada*/
+	public function _getUltimateclass($where=null){
+		try {
+				$select = $this->_db->select();
+				$select->from("base_syllabus_content_controller")
+				   		->where("eid = ?",$where['eid'])->where("oid = ?",$where['oid'])
+				   		->where("escid = ?",$where['escid'])->where("courseid = ?",$where['courseid'])
+				   		->where("perid = ?",$where['perid'])->where("state = ?",$where['state'])
+				   		->order(array('session DESC','week DESC'))
+				   		->limit(1);
+// "select * from base_syllabus_content_controller
+// where escid='4SI' and perid='14A' and courseid='94302' and state='D'
+// order by session DESC,week DESC limit 1"
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+		} catch (Exception $e) {
+			print "Error: Read Get Ultimate Class".$e->getMessage();
+		}
+	}
 	
 }

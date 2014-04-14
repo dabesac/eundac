@@ -23,28 +23,29 @@
         $btn_alp = true;
     }
 
-
-  if ($this->faculty){
-  foreach ($this->faculty as $number) {
-    $c++;
-    $c;
-    $fname=$number['name'];
-
-    
-    
+if ($this->faculty){
+    foreach ($this->faculty as $number) {
+        $c++;
+        $c;
+        $fname=$number['name'];
+        $k=0;
+        foreach ($this->data as $key => $coursess) {
+            if ($coursess['facid']==$number['facid'] && $k==0) { ?>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3 col-md-offset-8">
+                            <h3><a class="Btnhorarys" href="#" data-toggle="modal" data-target="#ModalHorary" perid='<?php echo base64_encode($this->perid)?>' escid='<?php echo base64_encode($coursess['escid'])?>' subid='<?php echo base64_encode($coursess['subid'])?>' class="text-info"><span class="glyphicon glyphicon-calendar" data-toggle="tooltip" title="Ver Horario"></span><b class='text-primary' style="font-size:17px"> Ver Horario</b></a></h3>
+                        </div>
+                    </div>
+                </div>
+            <?php
+            $k=1;
+            }
+        }
 
 ?>
 
-<input type="hidden" id="facultyBloqued" value="<?php echo $this->facultyBloqued ?>">
-
-<div id="coursesPrincipal">
-<div class="container">
-    <div class="row">
-        <div class="col-md-3 col-md-offset-8">
-            <h3><a id="Btnhorarys" href="#" data-toggle="modal" data-target="#ModalHorary" perid='<?php echo base64_encode($this->perid)?>'class="text-info"><span class="glyphicon glyphicon-calendar" data-toggle="tooltip" title="Ver Horario"></span><b class='text-primary' style="font-size:17px"> Ver Horario</b></a></h3>
-        </div>
-    </div>
-</div>    
+<div id="coursesPrincipal"> 
 <div class="panel-group" id="accordion">
     <div class="panel panel-primary">
         <div class="panel-heading ">
@@ -269,17 +270,12 @@
 </div><!-- /.modal -->
 <script type="text/javascript" src='/js/jquery-1.11.0.js'></script>
 <script>
-    //Bloqueara Ingenieria
-    // var facultyBloqued = $('#facultyBloqued').val();
-    // if (facultyBloqued) {
-    //     alert('Estimad@ Docente se le infórma que su facultad se encuentra realizando cambios administrativos(Directores), por esa razón el sistema se encuentra bloqueado. Gracias.');
-    //     $(location).attr("href", "/docente/index/index");
-    // };
-    //_______________________
 
     $('#Btnhorarys').click(function(){
         var perid=$(this).attr('perid');
-        $('#horary').load('/horary/seehorary/index/perid/'+perid);
+        var escid=$(this).attr('escid');
+        var subid=$(this).attr('subid');
+        $('#horary').load('/horary/seehorary/index/perid/'+perid+'/escid/'+escid+'/subid/'+subid);
     });
     $(".duplicate-syllabus").click(function(){
         if(confirm("Esta seguro de duplicar \nel silabo")){

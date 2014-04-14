@@ -139,7 +139,9 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
             $ldistribution->_save($formData);            
             // unset($formData['observation']);
             // unset($formData['register']);
-            // $distr->_update($formData,$pk);
+            $pk=array('eid'=>$eid,'oid'=>$oid,'distid'=>$distid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
+            $data=array('state'=>'O');
+            $distr->_update($data,$pk);
         }
         // $rows_distribution[$i]['observation']=$dataobs[0]['observation'];
         // }

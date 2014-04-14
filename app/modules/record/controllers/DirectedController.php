@@ -22,6 +22,7 @@ class Record_DirectedController extends Zend_Controller_Action {
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $uid=$this->_getParam('uid');
+            $perid = $this->sesion->period->perid;
             $this->view->uid=$uid;
             $where['eid']=$eid;
             $where['oid']=$oid;
@@ -30,9 +31,8 @@ class Record_DirectedController extends Zend_Controller_Action {
             $datauser=$user->_getUserXUid($where);
             $this->view->user=$datauser[0];
             
-            $year=date('Y');
-            $anio=substr($year,2,3);
-            $anio=13;
+            $anio=substr($perid,0,2);
+
             $whereper1['eid']=$eid;
             $whereper1['oid']=$oid;
             $whereper1['perid']=$anio.'J';

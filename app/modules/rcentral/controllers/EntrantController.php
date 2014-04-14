@@ -100,7 +100,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
     	$facid = $this->_getParam('facid');
 
-
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
@@ -163,6 +162,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$this->view->studentEntrant    = $studentEntrant;
 		$this->view->studentState      = $studentState;
 		$this->view->studentSpeciality = $studentSpeciality;
+
 	}
 
 	public function detailregisterAction(){
@@ -510,7 +510,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
 		$data = $this->getRequest()->getPost();
 
-
 		if ($data['whySend'] == 'M') {
 			$state = 'M';
 		}else if ($data['whySend'] == 'O'){
@@ -520,7 +519,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		}else if ($data['whySend'] == 'E'){
 			$state = 'E';
 		}
-
 		if (!$data['exist'] and $state != 'E') {
 			if ($data['stateStudent'] == 'I') {
 				$pk = array('eid'   => $eid,

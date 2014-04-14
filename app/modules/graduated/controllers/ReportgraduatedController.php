@@ -31,6 +31,7 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $facid = $this->sesion->faculty->facid;
             $escid = $this->sesion->escid;
             $is_director = $this->sesion->infouser['teacher']['is_director'];
+            
             if ($rid=="DC" && $is_director=="S"){
                 $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid);
                 $attrib = array('parent', 'name');
@@ -46,7 +47,8 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                 $attrib = array('parent', 'name');
                 $parents = $schoolDb->_getFilter($where, $attrib);
                 foreach ($parents as $parent) {
-                    if ($parent['parent']['0'] == $escid['0']) {$haveSpeciality = 'Si';
+                    if ($parent['parent']['0'] == $escid['0']) {
+                        $haveSpeciality = 'Si';
                         break;
                     }
                 }

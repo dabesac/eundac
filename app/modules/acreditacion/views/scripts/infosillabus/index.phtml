@@ -1,0 +1,144 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list-alt"></span> Informe sobre el grado de Cumplimiento del Sílabus');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<div class="row">
+	<div class="col-md-1 col-md-offset-1">
+		<h5 class="text-muted">Leyenda</h5>
+	</div>
+	<div class="col-md-2">
+		<h5 class="text-danger"><span class="glyphicon glyphicon-ban-circle"></span> Impresión Inactiva</h5>
+	</div>
+	<div class="col-md-2">
+		<h5 class="text-success"><span class="glyphicon glyphicon-print"></span> Impresiones</h5>
+	</div>
+	<div class="col-md-3">
+		<h5 class="text-danger"><span class="glyphicon glyphicon-remove"></span> No inició el desarrollo de su sílabus</h5>
+	</div>
+</div>
+<hr>
+<div class='row text-center'>
+	<b>
+		<div class='col-md-1'>#</div>
+		<div class='col-md-1'>Código</div>
+		<div class='col-md-3'>Docente</div>
+		<div class='col-md-7'>Cursos
+				<!-- <div class='col-md-2'>Cod. Curso</div> -->
+			<!-- <table class='table table-hover'>
+				<tr>
+					<th>Curso</th>
+					<th>Semana</th>
+					<th>Sesión</th>
+					<th>Unidad</th>
+					<th>Fecha</th>
+					<th>Impresión</th>
+				</tr>
+			</table> -->
+		</div>
+	</b>
+</div>
+<hr>
+<?php
+	if ($this->data) {
+		$i=0;
+		$data=$this->data;
+		$len=count($data);
+		foreach ($data as $key => $teachers) {	
+			$i++;
+			?>
+			<div>
+				<div class='row'>
+					<div class='col-md-1 text-center'><?php echo $i?></div>
+					<div class='col-md-1 text-center'><?php echo $teachers['uid']?></div>
+					<div class='col-md-3'><b><?php echo $teachers['name']?></b></div>
+					<div class='col-md-7'>
+						<div class='panel panel-default'>
+							<table class='table table-hover table-condensed table-striped'>
+									<tr>
+										<th>Curso</th>
+										<th class='text-center'>Semana</th>
+										<th class='text-center'>Sesión</th>
+										<th class='text-center'>Unidad</th>
+										<th class='text-center'>Fecha</th>
+										<th class='text-center'>Impresión</th>
+									</tr>
+								<?php
+								// print_r($teachers['courses']);
+								foreach ($teachers['courses'] as $key => $courses) {	
+								?>
+									<tr>
+										<!-- <div class='col-md-2 text-center'><?php echo $courses['courseid']?></div> -->
+										<td class='col-md-5'><?php echo $courses['courseid']." - ".$courses['namecourse']?></td>
+										<td class='col-md-1 text-center'>
+											<?php 
+											if ($courses['ultimatesession']['week']) {	
+												echo $courses['ultimatesession']['week'];
+											}
+											else{	?>
+											<span class='glyphicon glyphicon-remove text-danger' data-toggle="tooltip" title="Vacio"></span>
+											<?php
+											}
+											?>
+										</td>
+										<td class='col-md-1 text-center'>
+											<?php 
+											if ($courses['ultimatesession']['session']) {	
+												echo $courses['ultimatesession']['session'];
+											}
+											else{	?>
+											<span class='glyphicon glyphicon-remove text-danger' data-toggle="tooltip" title="Vacio"></span>
+											<?php
+											}
+											?>
+										</td>
+										<td class='col-md-1 text-center'>
+											<?php 
+											if ($courses['ultimatesession']['unit']) {	
+												echo $courses['ultimatesession']['unit'];
+											}
+											else{	?>
+											<span class='glyphicon glyphicon-remove text-danger' data-toggle="tooltip" title="Vacio"></span>
+											<?php
+											}
+											?>
+										</td>
+										<td class='col-md-2 text-center'>
+											<?php 
+											if ($courses['ultimatesession']['datecheck']) {	
+												echo $courses['ultimatesession']['datecheck'];
+											}
+											else{	?>
+											<span class='glyphicon glyphicon-remove text-danger' data-toggle="tooltip" title="Vacio"></span>
+											<?php
+											}
+											?>
+										</td>
+										<td class='col-md-1 text-center'>
+											<?php 
+											if ($courses['ultimatesession']['week']) {
+											?>
+											<a href="/acreditacion/infosillabus/printadvance/escid/<?php echo base64_encode($courses['ultimatesession']['escid'])?>/subid/<?php echo base64_encode($courses['ultimatesession']['subid'])?>/curid/<?php echo base64_encode($courses['ultimatesession']['curid'])?>/courseid/<?php echo base64_encode($courses['ultimatesession']['courseid'])?>/turno/<?php echo base64_encode($courses['ultimatesession']['turno'])?>/perid/<?php echo base64_encode($courses['ultimatesession']['perid'])?>/nameteach/<?php echo base64_encode($teachers['name'])?>/uid/<?php echo base64_encode($teachers['uid'])?>/pid/<?php echo base64_encode($teachers['pid'])?>"><span class='glyphicon glyphicon-print text-success' data-toggle="tooltip" title="Imprimir">
+											</span></a>
+											<?php
+											}
+											else{	?>
+											<span class='glyphicon glyphicon-ban-circle text-danger' data-toggle="tooltip" title="Inactivo"></span>
+											<?php
+											}
+											?>
+											
+										</td>
+									</tr>	
+								<?php	
+								}
+								?>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div><br>
+			<?php
+		}
+	}
+?>
+<script type="text/javascript">
+	$('.glyphicon').tooltip();
+</script>

@@ -2,12 +2,12 @@
     <form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/rcentral/code/listuser/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
     <center><p class='alert-success' style="font-size: 16px"><b>Buscar nro DNI para generar Código: </b><?php echo $this->fm->pid?></p></center >
   </form>
-<div id="filtrorol"> </div>  
+<div id="cargadatos_"> </div>  
 
 <script>
     $("#pid").keypress(function (e) {     
         if(e == 13 || e.which==13 || e.which==0){           
-            $('#filtrorol').html("<img src='/img/spinner.gif'> Cargando....");
+            $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
             $("#frmFiltroDoc").submit();
         }
     });   
@@ -18,7 +18,7 @@
         url: $(this).attr('action'),
         data: $(this).serialize(),
         success: function(data) {                        
-            $('#filtrorol').html(data);                                 
+            $('#cargadatos_').html(data);                                 
             }
         }); 
         return false;

@@ -1,0 +1,89 @@
+.parrafo{
+	font-size: 16px;
+	left: 15%;
+	margin-bottom: 16px;
+	position: relative;
+}
+
+.tutor{
+	height: 50px;
+	font-size: 1.1em;
+	left: 15%;
+	position: relative;
+	top: 0;
+	width: 70%;
+	margin-bottom: 1em;
+}
+
+.tutor .tutorNombre{
+	background: #F8F8F8;
+	font-size: 1.1em;
+	border-left: 6px solid #015292;
+	height: 100%;
+	left: 0;
+	padding: 0.8em;
+	position: absolute;
+	top: 0;
+	width: 50%;
+}
+
+.tutor .tutorNombre span{
+	color: #015292;
+}
+
+.tutor .tutorCantidad{
+	background: #353535;
+	border-right: 3px solid #202020;
+	color: white;
+	height: 100%;
+	font-size: 1.3em;
+	font-weight: bold;
+	padding: 0.6em;
+	position: absolute;
+	text-align: center;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+	top: 0;
+	left: 50%;
+	width: 8%
+}
+
+.tutor .tutorEstado{
+	background: #353535;
+	border-left: 3px solid #202020;
+	color: white;
+	height: 100%;
+	left: 58%;
+	font-size: 1.3em;
+	padding: 0.6em;
+	position: absolute;
+	text-align: center;
+	top: 0;
+	width: 6%;
+}
+
+.tutor .tutorEstado:after{
+	background: transparent;
+	border: 2px solid white;
+	border-radius: 50%;
+	content: '';
+	left: 24.8%;
+	height: 1.4em;
+	top: 0.6em;
+	position: absolute;
+	width: 50%;
+}
+
+.tutor .tutorRegistrarse{
+	position: absolute;
+	height: 100%;
+	left: 64%;
+	top: 0;
+	width: 34%;
+}
+
+.tutor .tutorRegistrarse a{
+	font-size: 1.3em;
+	padding: 0.5em;
+	height: 100%;
+	border-radius: 0;
+}

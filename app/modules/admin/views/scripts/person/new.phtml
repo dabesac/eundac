@@ -39,9 +39,14 @@
         <div class='col-md-1'>E-mail de Trabajo</div>
         <div class='col-md-3'><?php echo $this->fm->mail_work?></div>
     </div></br></br>
-    <?php if ($this->user) {    ?>
+    <?php 
+    if ($this->user) {    ?>
         <input type="hidden" name='user' value='<?php echo $this->user?>'>
     <?php            
+    }
+    if ($this->rcentral) {  ?>
+        <input type="hidden" name='rcentral' value='<?php echo $this->rcentral?>'>
+    <?php    
     }
     ?>
 </form>
@@ -72,11 +77,18 @@
         $('#myModal').modal('hide');
         $('#myModal').on('hidden.bs.modal', function (e) {
             var user="<?php echo $this->user?>";
+            var rcentral="<?php echo $this->rcentral?>";
             if (user==2) {
                 var url="/admin/user/getuser/pid/"+pid;
             }
             else{
-                var url="/admin/person/getperson/pid/"+pid;                
+                if (rcentral==3) {
+                    var url="/rcentral/code/listuser/pid/"+pid;
+                }
+                else{
+                    var url="/admin/person/getperson/pid/"+pid;                
+                };
+                // var url="/admin/person/getperson/pid/"+pid;                
             };
             $("#cargadatos_").html("<img src='/img/spinner.gif' />Cargando....");
             $("#cargadatos_").load(url);

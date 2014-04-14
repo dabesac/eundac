@@ -28,6 +28,34 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
         }
     }
 
+    public function _getHoraryxTeacherXPeriodXTodasEsc($where=null){
+        try{
+            if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' || $where["perid"]=='' || $where["subid"]=='' || $where["teach_uid"]=='' || $where['teach_pid']=='') return false;
+            $select = $this->_db->select()
+                                ->from(array('hp'=>'horary_periods'),
+                                                array('hp.day','hp.hora_ini','hp.hora_fin','hp.teach_uid','hp.escid','hp.courseid',
+                                                    'hp.curid','hp.subid','hp.oid','hp.perid',
+                                                      'hp.semid','s.name','hp.turno'))
+                                ->join(array('s'=>'base_speciality'),
+                                                'hp.escid=s.escid and hp.subid=s.subid')
+                                ->where('hp.eid = ?', $where['eid'])
+                                ->where('hp.oid = ?', $where['oid'])
+                                ->where('hp.perid = ?', $where['perid'])
+                                ->where('hp.subid = ?', $where['subid'])
+                                ->where('hp.teach_uid = ?', $where['teach_uid'])
+                                ->where('hp.teach_pid = ?', $where['teach_pid'])
+                                ->where('left(hp.escid, 3) = ?', $where['escid'])
+                                ->order(array('hp.courseid'));
+
+                $results = $select->query();
+                $rows = $results->fetchAll();
+                if ($rows) return $rows;
+                return false;  
+        }catch (Exception $e){
+            print "Error: Read All Teacher ".$e->getMessage();
+        }
+    }
+
     /*La función suma los minutos de una hora indicada*/
     public function _getsumminutes($hora,$nummin){
         $sql=$this->_db->query("select time '$hora' + interval '$nummin minutes' as hora");

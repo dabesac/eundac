@@ -1,29 +1,96 @@
 <?php
-    $hora=array();
-    $j=1;
+    $hora=array();  
     $hour_begin=array();
-    $hour_begin=$this->valhoras;
-    for ($i=0; $i <= 20; $i++) { 
-        $hour[$i]=substr($hour_begin[$i],0,2);
-        $minute[$i]=substr($hour_begin[$i],3,2);
-    }
-    for ($i=0; $i <= 20; $i++) {
-        if ($hour[$i]<12) {
-            if ($hour[$j]<12) {
-                $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." am";
-            }
-            else{
-                $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." pm";
-            }
-        } 
-        else{
-            $hora[$i]['hora']=$hour[$i].":".$minute[$i]." pm - ".$hour[$j].":".$minute[$j]." pm";
+    if ($this->valhorasm or $this->valhorast) {
+        $j=1;
+        $hour_begin=$this->valhorasm;
+        $hour_begin_afternoon=$this->valhorast;
+        $len1= count($hour_begin);
+        $len2= count($hour_begin_afternoon);
+        $lentotal = $len1+$len2;
+    
+        for ($i=0; $i < $len1; $i++) { 
+            $hourm[$i]=substr($hour_begin[$i],0,2);
+            $minutem[$i]=substr($hour_begin[$i],3,2);
         }
-        $hora[$i]['h_ini']=$hour[$i];
-        $hora[$i]['h_fin']=$hour[$j];
-        $hora[$i]['m_ini']=$minute[$i];
-        $hora[$i]['m_fin']=$minute[$j];
-        $j++;
+        for ($i=0; $i < $len2; $i++) { 
+            $hourt[$i]=substr($hour_begin_afternoon[$i],0,2);
+            $minutet[$i]=substr($hour_begin_afternoon[$i],3,2);
+        }
+        for ($i=0; $i < $len1-1; $i++) {
+            if ($hourm[$i]) {
+                if ($hourm[$i]<12) {
+                    if ($hourm[$j]<12) {
+                        $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." am - ".$hourm[$j].":".$minutem[$j]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." am - ".$hourm[$j].":".$minutem[$j]." pm";
+                    }
+                } 
+                else{
+                    $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." pm - ".$hourm[$j].":".$minutem[$j]." pm";
+                }
+                $hora[$i]['h_ini']=$hourm[$i];
+                $hora[$i]['h_fin']=$hourm[$j];
+                $hora[$i]['m_ini']=$minutem[$i];
+                $hora[$i]['m_fin']=$minutem[$j];
+                $j++;            
+            }
+
+        }
+
+        $q=1;
+        for ($p=0; $p < $len2; $p++) {
+            if ($hourt[$p]) {
+                if ($hourt[$p]<12) {
+                    if ($hourt[$q]<12) {
+                        $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." am - ".$hourt[$q].":".$minutet[$q]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." am - ".$hourt[$q].":".$minutet[$q]." pm";
+                    }
+                } 
+                else{
+                    $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." pm - ".$hourt[$q].":".$minutet[$q]." pm";
+                }
+                $hora[$i]['h_ini']=$hourt[$p];
+                $hora[$i]['h_fin']=$hourt[$q];
+                $hora[$i]['m_ini']=$minutet[$p];
+                $hora[$i]['m_fin']=$minutet[$q];
+                $q++;
+                $i++;            
+            }
+        }
+    }
+    else{
+        $j=1;
+        $hour_begin=$this->valhoras;
+        $len= count($hour_begin);
+        $lentotal=$len;
+        for ($i=0; $i < $len; $i++) { 
+            $hour[$i]=substr($hour_begin[$i],0,2);
+            $minute[$i]=substr($hour_begin[$i],3,2);
+        }
+        for ($i=0; $i < $len; $i++) {
+            if ($hour[$i]) {
+                if ($hour[$i]<12) {
+                    if ($hour[$j]<12) {
+                        $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." pm";
+                    }
+                } 
+                else{
+                    $hora[$i]['hora']=$hour[$i].":".$minute[$i]." pm - ".$hour[$j].":".$minute[$j]." pm";
+                }
+                $hora[$i]['h_ini']=$hour[$i];
+                $hora[$i]['h_fin']=$hour[$j];
+                $hora[$i]['m_ini']=$minute[$i];
+                $hora[$i]['m_fin']=$minute[$j];
+                $j++;            
+            }
+        }
     }
     
     $listacolores = array();
@@ -57,7 +124,7 @@ if ($this->horarios) {
         $where['subid']=$this->horarios[$i]['subid'];
         $where['courseid']=$this->horarios[$i]['courseid'];
         $ncur=$n->_getOne($where); 
-        $this->horarios[$i]['name']=$ncur['name'];
+        $this->horarios[$i]['namec']=$ncur['name'];
         $this->horarios[$i]['abbreviation']=$ncur['abbreviation'];
         $this->horarios[$i]['credits']=$ncur['credits'];
 
@@ -68,7 +135,9 @@ if ($this->horarios) {
         $tturno=$this->horarios[$i]['turno'];
         $codcursodes=$this->horarios[$i+1]['courseid'];
         $tturnodes=$this->horarios[$i+1]['turno'];
-            if ($codcurso==$codcursodes && $tturno==$tturnodes){
+        $eescid=$this->horarios[$i]['escid'];
+        $eescids=$this->horarios[$i+1]['escid'];
+            if ($codcurso==$codcursodes && $tturno==$tturnodes && $eescid==$eescids){
                 $this->horarios[$i]['color']=$listacolores[$cco];
             } 
             else {
@@ -83,7 +152,7 @@ if ($this->horarios) {
         if ($hf>=$hmay) $hmay=$hf;
     }
     $k=0;
-    for ($z=0; $z < 20; $z++) { 
+    for ($z=0; $z < 20; $z++) {
         if ($hmen==$hora[$z]['h_ini'] && $k==0) {
             $inih=$z;
             $k=1;
@@ -362,18 +431,25 @@ if ($this->horarios) {
         </div>    
             <?php
             $n=1;
-            // print_r($this->cursos);
             for ($d=0; $d < count($this->cursos); $d++) { 
                 
                 for ($f=0; $f < count($horaoriginal); $f++) { 
                                 
-                    if ($this->cursos[$d]['courseid']==$horaoriginal[$f]['courseid'] && $this->cursos[$d]['turno']==$horaoriginal[$f]['turno']) {
-                        
+                    if ($this->cursos[$d]['courseid']==$horaoriginal[$f]['courseid'] && $this->cursos[$d]['turno']==$horaoriginal[$f]['turno'] && $this->cursos[$d]['escid']==$horaoriginal[$f]['escid']){
                     ?>
                     <div class='col-md-12' style="margin-left:5%">
                         <div class="cajacursos" style="width:5%; margin-right:1%;"><?php echo $n ?></div>
                         <div class="cajacursos" style="width:10%; margin-right:1%;background-color:<?php echo $horaoriginal[$f]["color"] ?>"><?php echo $horaoriginal[$f]['courseid'] ?></div>
-                        <div class="cajacursos" style="width:50%; margin-right:1%;"><?php echo $horaoriginal[$f]['name'] ?></div>
+                        <div class="cajacursos" style="width:50%; margin-right:1%;">
+                            <?php 
+                            if ($horaoriginal[$f]['name']) {
+                                echo $horaoriginal[$f]['namec']."---".$horaoriginal[$f]['name'];
+                            }
+                            else{
+                                echo $horaoriginal[$f]['namec'];
+                            }
+                        ?>
+                        </div>
                         <div class="cajacursos" style="width:5%; margin-right:1%;"><?php echo $horaoriginal[$f]['credits'] ?></div>
                         <div class="cajacursos" style="width:5%; margin-right:1%;"><?php echo $horaoriginal[$f]['turno'] ?></div>
                         <div class="cajacursos" style="width:5%; margin-right:1%;"><?php echo $horaoriginal[$f]['semid'] ?></div>
