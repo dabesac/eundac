@@ -122,6 +122,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $rid = $this->sesion->rid;
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
+            $perid = $this->sesion->period->perid;
             $fullname=$this->sesion->infouser['fullname'];
             $dateborn=$this->sesion->infouser['birthday'];
             $this->view->avatar_default=$this->sesion->infouser['sex'];
@@ -186,7 +187,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $subid=$this->sesion->subid;
 
             $uidveri=substr($uid,0,2);
-            $anio=date(Y);
+            $anio=date('Y');
             $anioveri=substr($anio,2,2);
 
 
@@ -224,7 +225,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dataim = $dbimpression->_getFilter($wheri);
             $co=count($dataim);
             if ($co>0) {
-                $this->view->state=C;
+                $this->view->state='C';
             }
 
             $dataStudent = array(   'eid'   => base64_encode($eid),
@@ -1208,23 +1209,28 @@ class Profile_PublicController extends Zend_Controller_Action {
             //print_r($curact);
             $nc=0;
             $coursesD = 0;
-            foreach ($curact as $cur) {
-                $where=array("eid"=>$eid, "oid"=>$oid, "perid"=>$perid, "courseid"=>$cur['courseid'], "turno"=>$cur['turno'], "curid"=>$cur['curid']);
-                $attrib=array("type_rate");
-                //print_r($where);
-                $typerate[$nc]=$dbtyperate->_getFilter($where,$attrib);
-                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cur['courseid']);
-                $attrib=array("name");
-                $name[$nc]=$dbcuract->_getInfoCourse($where,$attrib);
-                $nc++;
+            $coursesDis = null;
+            $typerate=null;
+            $name=null;
+            $notasAplazados=null;
+            if ($curact){			
+				foreach ($curact as $cur) {
+					$where=array("eid"=>$eid, "oid"=>$oid, "perid"=>$perid, "courseid"=>$cur['courseid'], "turno"=>$cur['turno'], "curid"=>$cur['curid']);
+					$attrib=array("type_rate");
+					//print_r($where);
+					$typerate[$nc]=$dbtyperate->_getFilter($where,$attrib);
+					$where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cur['courseid']);
+					$attrib=array("name");
+					$name[$nc]=$dbcuract->_getInfoCourse($where,$attrib);
+					$nc++;
 
-                if ($cur['notafinal'] and $cur['notafinal']<11) {
-                    $coursesDis[$coursesD]['courseid'] = $cur['courseid'];
-                    $coursesDis[$coursesD]['curid'] =$cur['curid'];
-                    $coursesD++;
-                }
-            }
-
+					if ($cur['notafinal'] and $cur['notafinal']<11) {
+						$coursesDis[$coursesD]['courseid'] = $cur['courseid'];
+						$coursesDis[$coursesD]['curid'] =$cur['curid'];
+						$coursesD++;
+					}
+				}
+			}
             if ($coursesD < 3) {
                 $number = $rest = substr($perid, 0, 2);
                 $letter = substr($perid, -1);
@@ -1237,17 +1243,19 @@ class Profile_PublicController extends Zend_Controller_Action {
                 }
                 $c = 0;
                 $attrib = array('notafinal', 'courseid');
-                foreach ($coursesDis as $courseDis) {
-                   $where = array('eid'=>$eid,
-                                'oid'=>$oid,
-                                'escid'=>$escid,
-                                'subid'=>$subid,
-                                'courseid'=>$courseDis['courseid'],
-                                'curid'=>$courseDis['curid'],
-                                'perid'=>$perid);
-                   $notasAplazados[$c]=$dbcuract->_getFilter($where, $attrib);
-                   $c++;
-                }
+                if ($coursesDis){
+					foreach ($coursesDis as $courseDis) {
+					   $where = array('eid'=>$eid,
+									'oid'=>$oid,
+									'escid'=>$escid,
+									'subid'=>$subid,
+									'courseid'=>$courseDis['courseid'],
+									'curid'=>$courseDis['curid'],
+									'perid'=>$perid);
+					   $notasAplazados[$c]=$dbcuract->_getFilter($where, $attrib);
+					   $c++;
+					}
+				}
             }
 
             $this->view->nc = $nc;
@@ -1286,14 +1294,15 @@ class Profile_PublicController extends Zend_Controller_Action {
             //print_r($cur);
             $courpercur=$dbcourxcur->_getCoursesXCurriculaXShool($eid,$oid,$cur['curid'],$escid);
             $c=0;
-            foreach ($courpercur as $cour) {
-                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);
-                $attrib=array("courseid","notafinal","perid","turno");
-                //print_r($where);
-                $courlle[$c]=$dbcourlle->_getFilter($where, $attrib);
-                $c++;
-            }
-            //print_r($courpercur);
+            if ($courpercur){
+				foreach ($courpercur as $cour) {
+					$where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);
+					$attrib=array("courseid","notafinal","perid","turno");
+					$courlle[$c]=$dbcourlle->_getFilter($where, $attrib);
+					$c++;
+				}
+			}
+            //print_r($courlle);
             $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid,"pid"=>$pid,"uid"=>$uid,"perid"=>$perid);
             $attrib=array("courseid","state");
             $courlleact=$dbcourlle->_getFilter($where,$attrib);
