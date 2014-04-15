@@ -54,26 +54,25 @@ if ($this->user) {
 <?php
 }?>
 <div id="registration"></div>
-
+<input type="hidden" id='hidden_uid' value="<?php echo $this->user['uid'] ?>"> 
+<input type="hidden" id='hidden_pid' value="<?php echo $this->user['pid'] ?>"> 
+<input type="hidden" id='hidden_subid' value="<?php echo $this->user['subid'] ?>"> 
+<input type="hidden" id='hidden_escid' value="<?php echo $this->user['escid'] ?>"> 
 <script type="text/javascript">
 $("#addcourse").click(function(){
 	var perid=$("#perid").val();
+	var uid=$("#hidden_uid").val();
+	var pid=$("#hidden_pid").val();
+	var escid=$("#hidden_escid").val();
+	var subid=$("#hidden_subid").val();
+
 	if (perid=="") {
 		alert("Seleccione un Periodo.");
 		return false;
 	};
-	if (perid=="13C") {
-      	// var url = "/register/validation/lcontainer/uid/<?php echo $uid."/subid/".$subid."/escid/".$escid."/pid/".$pid?>/nota/<?php echo $this->nota?>/perid/<?php echo $this->perid?>/temp/<?php echo $this->temp?>";
-      	// alert(perid);
-      	var url = "/register/validation/lcontainer/uid/<?php echo $this->user['uid']."/subid/".$this->user['subid']."/escid/".$this->user['escid']."/pid/".$this->user['pid']?>/nota/12/perid/"+perid;
-      	// alert(url);
-		$("#registration").html("<img src='/img/spinner.gif'>Cargando...");
-      	$("#registration").load(url);
-	};
-	if (perid=="13J" || perid=="13S") {
-		var url="/record/directed/register/perid/"+perid+"/uid/<?php echo $this->user['uid']?>/pid/<?php echo $this->user['pid']?>/subid/<?php echo $this->user['subid']?>/escid/<?php echo $this->user['escid']?>";
+	
+	var url="/record/directed/register/perid/"+perid+"/uid/"+uid+"/pid/"+pid+"/subid/"+subid+"/escid/"+escid+"";
 		$("#registration").html("<img src='/img/spinner.gif'>Cargando...");
 		$("#registration").load(url);
-	};
 });
 </script>
