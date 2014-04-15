@@ -68,11 +68,13 @@ class IndexController extends Zend_Controller_Action {
                     $data->infouser = new stdClass();
                     $data->rol = new stdClass();
                     $data->org = new stdClass();
+                    $data->fullProfile = new stdClass();
                     
                     $data->period->perid = $period;
                     $data->period->name = $name_period;
                     $data->period->next= $periodnext ;
                     $data->period->name_next = $name_periodnext;
+                    
                     
                     // set Speciality
                     $esc = new Api_Model_DbTable_Speciality();
