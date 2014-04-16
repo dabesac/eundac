@@ -140,9 +140,11 @@ class Docente_IndexController extends Zend_Controller_Action {
                     $allStudents = $registerxCourseDB->_getFilter($where, $attrib);
                     $students = count($allStudents);
                     $notasRellenadas = 0;
-                    foreach ($allStudents as $student) {
-                        if ($student['promedio1']) {
-                            $notasRellenadas++; 
+                    if ($allStudents) {
+                        foreach ($allStudents as $student) {
+                            if ($student['promedio1']) {
+                                $notasRellenadas++; 
+                            }
                         }
                     }
                     $progressNotas[$c]['totalStudents'] = $students;
@@ -244,6 +246,8 @@ class Docente_IndexController extends Zend_Controller_Action {
             $totalTeachers      = 0;
             $totalEmptySyllabus = 0;
             $countERA           = 0;
+            $teachersEmptySyllabus[0]['uid'] = '';
+            $teachersEmptySyllabus[0]['name'] = '';
             //Total de Profesores
             foreach ($courses as $course) {
                 if ($course['uid'] != $teacherUid) {
@@ -262,8 +266,7 @@ class Docente_IndexController extends Zend_Controller_Action {
                     //Reporte Academico
                     $reportAcademic = $reportAcademicDb->_getFilter($where, $attrib);
                     if (!$reportAcademic) {
-                        $where = array(
-                                        'eid' => $eid,
+                        $where = array( 'eid' => $eid,
                                         'pid' => $course['pid'] );
 
                         $person = $personDb->_getFilter($where);

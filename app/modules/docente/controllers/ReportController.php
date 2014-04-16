@@ -49,9 +49,13 @@ class Docente_ReportController extends Zend_Controller_Action {
                     else $aca = 1;
 
                     $adm = new Distribution_Model_DbTable_DistributionAdmin();
-                    $data_adm = $adm->_getFilter($where,$atrib=array());
-                    if ($data_adm) $data_per[$i]['admin'] = $data_adm;
-                    else $lab = 1;
+                    $data_adm = $adm->_getFilter($where);
+                    if ($data_adm){
+                        $data_per[$i]['admin'] = $data_adm;
+                    }else{
+                        $lab = 1;
+                        $data_per[$i]['admin'] = null;
+                    }
 
                     if ($lab == 1 && $aca == 1) $data_per[$i]['data'] = 0;
                     else $data_per[$i]['data'] = 1;

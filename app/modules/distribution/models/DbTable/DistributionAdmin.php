@@ -72,7 +72,7 @@ class Distribution_Model_DbTable_DistributionAdmin extends Zend_Db_Table_Abstrac
 		}
 	}
 	
-	public function _getFilter($where=null,$atrib=array()){
+	public function _getFilter($where=null,$attrib=null, $orders=null){
 		try{
 			if($where['eid']=='' || $where['oid']=='') return false;
 				$select = $this->_db->select();
