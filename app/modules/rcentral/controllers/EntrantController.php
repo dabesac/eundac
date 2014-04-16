@@ -10,8 +10,8 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
     	}
     	$login = $sesion->getStorage()->read();
     	$this->sesion = $login;
-    	$this->sesion->period->perid = '14A';
     }
+    
     public function indexAction(){	
     	//DataBases
     	$facultyDb = new Api_Model_DbTable_Faculty();

@@ -36,66 +36,114 @@ class Alumno_TutorshipController extends Zend_Controller_Action {
                         'state' => 'M' );
 
         $register = $registerDb->_getFilter($where);
-        $semid    = $register[0]['semid'];
-        $regid    = $register[0]['regid'];
 
-        $dataStudent = array( 'regid' => $regid );
-        $this->view->dataStudent = $dataStudent;
+        if ($register) {
+            $semid    = $register[0]['semid'];
+            $regid    = $register[0]['regid'];
 
-        //Consulta ERP
-        //Escuela
-        $query = array(
-                      array('column'   => 'of_id',
-                            'operator' => '=',
-                            'value'    =>  $escid,
-                            'type'     => 'string' )
-                    );
-        $idsDepartment  = $server->search('hr.department', $query);
-        $attributes     = array('id');
-        $dataSpeciality = $server->read($idsDepartment, $attributes, 'hr.department');
-        $departmentId   = $dataSpeciality[0]['id'];
+            $dataStudent = array( 'regid' => $regid );
+            $this->view->dataStudent = $dataStudent;
 
-        //Tutores de Acuerdo a Escuela y Semestre
-        $query = array(
-                    array(  'column'   => 'department_id',
-                            'operator' => '=',
-                            'value'    => $departmentId,
-                            'type'     => 'int' ),
-
-                    array(  'column'   => 'semid',
-                            'operator' => '=',
-                            'value'    => $semid,
-                            'type'     => 'int' )
-                    );
-
-        $idsTutoring = $server->search('tutoring', $query);
-        $attributes  = array();
-        $tutors      = $server->read($idsTutoring, $attributes, 'tutoring');
-
-        $this->view->tutors = $tutors;
-
-        $c = 0;
-        foreach ($tutors as $tutor) {
-            $totalStudents[$c] = 0;
+            //Consulta ERP
+            //Escuela
             $query = array(
-                    array(  'column'   => 'tutoring_id',
-                            'operator' => '=',
-                            'value'    => $tutor['id'],
-                            'type'     => 'int' )
-                );
-            $idsStudents = $server->search('tutoring.students', $query);
-            $totalStudents[$c] = count($idsStudents);
-            if ($totalStudents[$c] == $tutor['number']) {
-                $stateTutor[$c]['state']     = 'C';
-                $stateTutor[$c]['nameState'] = 'Cerrado';
-            }else{
-                $stateTutor[$c]['state']     = 'A';
-                $stateTutor[$c]['nameState'] = 'Abierto';
+                          array('column'   => 'of_id',
+                                'operator' => '=',
+                                'value'    =>  $escid,
+                                'type'     => 'string' )
+                        );
+            $idsDepartment  = $server->search('hr.department', $query);
+            $attributes     = array('id');
+            $dataSpeciality = $server->read($idsDepartment, $attributes, 'hr.department');
+            $departmentId   = $dataSpeciality[0]['id'];
+
+            //Consulta de Existencia
+            $query = array(
+                        array(  'column' => 'registered_code',
+                                'operator' => '=',
+                                'value' => $regid,
+                                'type' => 'string')
+                        );
+            $idStudent = $server->search('tutoring.students', $query);
+            if (!$idStudent) {
+            $stateStudent = 'NoExiste';
+                //Tutores de Acuerdo a Escuela y Semestre
+                $query = array(
+                            array(  'column'   => 'department_id',
+                                    'operator' => '=',
+                                    'value'    => $departmentId,
+                                    'type'     => 'int' ),
+
+                            array(  'column'   => 'semid',
+                                    'operator' => '=',
+                                    'value'    => $semid,
+                                    'type'     => 'int' )
+                            );
+
+                $idsTutoring = $server->search('tutoring', $query);
+                $attributes  = array();
+                $tutors      = $server->read($idsTutoring, $attributes, 'tutoring');
+
+                $this->view->tutors = $tutors;
+
+                $c = 0;
+                foreach ($tutors as $tutor) {
+                    $totalStudents[$c] = 0;
+                    $query = array(
+                            array(  'column'   => 'tutoring_id',
+                                    'operator' => '=',
+                                    'value'    => $tutor['id'],
+                                    'type'     => 'int' )
+                        );
+                    $idsStudents = $server->search('tutoring.students', $query);
+                    $totalStudents[$c] = count($idsStudents);
+                    if ($totalStudents[$c] == $tutor['number']) {
+                        $stateTutor[$c]['state']     = 'C';
+                        $stateTutor[$c]['nameState'] = 'Cerrado';
+                    }else{
+                        $stateTutor[$c]['state']     = 'A';
+                        $stateTutor[$c]['nameState'] = 'Abierto';
+                    }
+                    $c++;
+                }
+                $this->view->totalStudents = $totalStudents;
+                $this->view->stateTutor    = $stateTutor;
+                # code...
+            }else {
+                $stateStudent = 'Existe';
+                $attributes  = array();
+                $student     = $server->read($idStudent, $attributes, 'tutoring.students');
+                $tutorId = $student[0]['tutoring_id'][0];
+                $query = array(
+                            array(  'column'   => 'id',
+                                    'operator' => '=',
+                                    'value'    => $tutorId,
+                                    'type'     => 'int' )
+                        );
+                $idTutor = $server->search('tutoring', $query);
+                $attributes = array('employee_id');
+                $tutorName = $server->read($idTutor, $attributes, 'tutoring');
+                $tutor['name'] = $tutorName[0]['employee_id'][1];
+
+                $personId = $tutorName[0]['employee_id'][0];
+                $query = array(
+                            array(  'column'   => 'id',
+                                    'operator' => '=',
+                                    'value'    => $personId,
+                                    'type'     => 'int' )
+                        );
+
+                $idEmploye = $server->search('hr.employee', $query);
+                $attributes = array('email_personal');
+                $tutorEmail = $server->read($idEmploye, $attributes, 'hr.employee');
+                $tutor['email'] = $tutorEmail[0]['email_personal'];
+
+                $this->view->tutor = $tutor;
             }
-            $c++;
+        }else{
+            $stateStudent = 'faltaMatricula';
         }
-        $this->view->totalStudents = $totalStudents;
-        $this->view->stateTutor    = $stateTutor;
+        $this->view->stateStudent = $stateStudent;
     }
 
     public function registerstudentAction(){
