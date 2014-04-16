@@ -65,8 +65,7 @@ switch ($this->params['unit']) {
     </div>
   </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
-<script type="text/javascript">
-    var $all_units = "<?php echo $this->data_syllabus['units']?>";
-</script>
-<script type="text/javascript" src="/js/syllabus/unit.js"></script>
+<input type='hidden' id='all_units' value='<?php echo $this->data_syllabus['units']?>'>
+
+<!-- <script type="text/javascript" src="/js/syllabus/unit.js"></script> -->
 <?php }else print_r($this->json);?>

@@ -1,31 +1,33 @@
 $(function() {
     $( "#calendar_datapiket" ).datepicker()
 });
-var next_date = new Date()
-var next_day = 1
-var day_previous = 1
-var tr_today_day = $('<div class="tg-today" style="height:1008px;margin-bottom:-1008px;">&nbsp;</div>')
-var tg_col0	= $('<div id="tgCol0" class="tg-col-eventwrapper" style="height:1008px;margin-bottom:-1008px;"><div class="tg-gutter">')
-var tg_over_div = $('<div class="tg-hourmarker tg-nowmarker" id="tgnowmarker" style="top:539px;">')
-var tg_over0 = $('<div id="tgOver0" class="tg-col-overlaywrapper">').append(tg_over_div)
-var tg_over1 = $('<div id="tgOver0" class="tg-col-overlaywrapper">')
-var tg_default_day = $('<td class="tg-col-today tg-weekend">').append(tr_today_day,tg_col0,tg_over0)			
-var tg_day_other = $('<td class="tg-col-today tg-weekend">').append(tg_col0,tg_over1)
-// var now = new Date();
-// now.setDate(now.getDate()+28);
-// alert(now);
 date = new Date()
 day_month_digit = date.getDay() /***dia de la semana **/
 month_digit = date.getMonth() /***mes actual**/
 year_digit = date.getFullYear() /** año actual**/
 date_month = date.getDate()  /****dia del mes actual */
 
+// var events_default = calendar.default_session(date)
+var next_date = new Date()
+var next_day = 1
+var day_previous = 1
+var tr_today_day = $('<div class="tg-today" style="height:1296px;margin-bottom:-1296px;">&nbsp;</div>')
+var tg_col0	= $('<div class="tg-gutter">')
+var tg_over_div = $('<div class="tg-hourmarker tg-nowmarker" id="tgnowmarker" style="top:539px;">')
+var tg_over0 = $('<div id="tgOver0" class="tg-col-overlaywrapper">').append(tg_over_div)
+var tg_over1 = $('<div id="tgOver0" class="tg-col-overlaywrapper">')
+var tg_default_day = $('<td class="tg-col-today tg-weekend">').append(tr_today_day,$('<div id="tgCol0" class="tg-col-eventwrapper" style="height:1296px;margin-bottom:-1296px;">').append($('<div class="tg-gutter">')),tg_over0)			
+var tg_day_other = $('<td class="tg-col-today tg-weekend">').append($('<div id="tgCol0" class="tg-col-eventwrapper" style="height:1008px;margin-bottom:-1008px;">').append($('<div class="tg-gutter">')),tg_over1)
+// var now = new Date();
+// now.setDate(now.getDate()+28);
+// alert(now);
+
 var calendar = {
 	init:function(){
 		 
 		day_letters = change_day(date_month,day_month_digit,month_digit)
 		data_calenadar()
-		calendar.calendar_day(day_letters,day_month_digit,month_digit,year_digit)
+		calendar.calendar_day(day_letters,tg_default_day)
 		// console.log(data_calenadar)
 		$("#nav-secundary-text").find('h4').append(
 			$('<div class="btn-group">').append(
@@ -48,12 +50,23 @@ var calendar = {
 		
 	},
 	default_session:function(data){
-		sss = data.period.class_start_date.split('-')
-		date = new Date(sss)
-		date_1 = new Date()
-		if (date == date_1) {
-			console.log(date)
-		}
+
+		$("#tgCol0 div.tg-gutter").
+				append(
+					$('<div class="ca-evp2 chip" style="top:27px;width:85%;">').append(
+						$('<dl class="cbrd" style="height:54px;border-color:#9FC6E7;background-color:#ccedf4;color:#777777;">').append(
+							$('<dt style="background-color:;">').text("12:30 – 1:30")
+
+						)
+
+					)
+		)
+		// sss = data.period.class_start_date.split('-')
+		// date = new Date(sss)
+		// date_1 = new Date()
+		// if (date == date_1) {
+		// 	console.log(date)
+		// }
 		// data.period.class_start_date
 	},
 	/****
@@ -74,7 +87,7 @@ var calendar = {
 		date_month = day_month  /****dia del mes actual */
 
 		day_letters = change_day(day_month,day_week,month)
-		calendar.calendar_day(day_letters)
+		calendar.calendar_day(day_letters,tg_day_other)
 	},
 	/****
 	***** regreso de día 
@@ -94,7 +107,7 @@ var calendar = {
 		date_month = day_month  /****dia del mes actual */
 
 		day_letters = change_day(day_month,day_week,month)
-		calendar.calendar_day(day_letters)
+		calendar.calendar_day(day_letters,tg_day_other)
 	},
 	add_event_all_day:function(){
 		position = $("#weekViewAllDaywk").position()
@@ -117,7 +130,7 @@ var calendar = {
 			)
 		)
 	},
-	calendar_day:function(day_letters,day,month,year){
+	calendar_day:function(day_letters,tg_default_day){
 
 		// var table = $('')
 		$("#topcontainerwk").html('<table class="wk-weektop" cellpadding="0" cellspacing="0">')
@@ -184,30 +197,30 @@ var calendar = {
 			),
 			$('<tr>').append(
 				$('<td class="tg-times-pri">').append(
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('12am'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('1am'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('2am'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('3am'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('4am'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('5am'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('6am'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('7am'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('8am'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('9am'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('10am'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('11am'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('12pm'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('1pm'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('2pm'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('3pm'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('4pm'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('5pm'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('6pm'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('7pm'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('8pm'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('9pm'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('1pm'),
-					$('<div style="height:42px;"><div class="tg-time-pri" style="height:41px;">').text('11pm'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('12am'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('1am'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('2am'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('3am'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('4am'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('5am'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('6am'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('7am'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('8am'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('9am'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('10am'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('11am'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('12pm'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('1pm'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('2pm'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('3pm'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('4pm'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('5pm'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('6pm'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('7pm'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('8pm'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('9pm'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('1pm'),
+					$('<div style="height:54px;"><div class="tg-time-pri" style="height:41px;">').text('11pm'),
 					$('<div id="tgnowptr" class="tg-nowptr" style="left:0px;top:535px;">')
 				),
 				tg_default_day

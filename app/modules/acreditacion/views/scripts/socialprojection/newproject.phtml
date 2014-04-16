@@ -1,4 +1,4 @@
-<form>
+<form id='form_new_project'action="/acreditacion/socialprojection/newproject" type='post' enctype='multipart/form-data'>
     <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
@@ -7,11 +7,21 @@
         </div>
         <div class="modal-body">
             <?php echo $this->form->name ?>
+            <?php echo $this->form->type ?>
+            <?php echo $this->form->state ?>
+            <?php echo $this->form->num_horas ?>
+            <?php echo $this->form->min_student ?>
+            <?php echo $this->form->max_student ?>
+            <!-- <div class="upload">
+                <span class="glyphicon glyphicon-file"></span> -->
+                <?php echo $this->form->project ?>
+            <!-- </div> -->
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" id='save_project'class="btn btn-primary">Guardar</button>
         </div>
     </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
 </form>
+<script type="text/javascript" src='/js/acreditation/social_project_save.js' ></script>

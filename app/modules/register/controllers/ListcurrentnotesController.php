@@ -35,21 +35,26 @@ class Register_ListcurrentnotesController extends Zend_Controller_Action {
     		$nm=0;
             $coursesD = 0;
             $attrib=array("type_rate","courseid");
-    		foreach ($coursescp as $coid) {
-			    $where=array("eid"=>$eid,"oid"=>$oid,"escid"=>$escid,"subid"=>$subid,"curid"=>$coid['curid'],"courseid"=>$coid['courseid']);
-    			$courses[$nc]=$dbcoursescp->_getInfoCourse($where);
-                $where=array("eid"=>$eid,"oid"=>$oid,"escid"=>$escid,"subid"=>$subid,"curid"=>$coid['curid'],"courseid"=>$coid['courseid'],"perid"=>$perid, "turno"=>$coid['turno']);
-                $typerate[$nc]=$dbtyperate->_getFilter($where,$attrib);
-                $c=0;
-                $nc++;
+            $typerate=null;
+            $courses=null;
+            $notasAplazados=null;
+            $coursesDis = null;
+            if ($coursescp) {
+				foreach ($coursescp as $coid) {
+					$where=array("eid"=>$eid,"oid"=>$oid,"escid"=>$escid,"subid"=>$subid,"curid"=>$coid['curid'],"courseid"=>$coid['courseid']);
+					$courses[$nc]=$dbcoursescp->_getInfoCourse($where);
+					$where=array("eid"=>$eid,"oid"=>$oid,"escid"=>$escid,"subid"=>$subid,"curid"=>$coid['curid'],"courseid"=>$coid['courseid'],"perid"=>$perid, "turno"=>$coid['turno']);
+					$typerate[$nc]=$dbtyperate->_getFilter($where,$attrib);
+					$c=0;
+					$nc++;
 
-                if ($coid['notafinal'] and $coid['notafinal']<11) {
-                    $coursesDis[$coursesD]['courseid'] = $coid['courseid'];
-                    $coursesDis[$coursesD]['curid'] = $coid['curid'];
-                    $coursesD++;
-                }
-            }
-
+					if ($coid['notafinal'] and $coid['notafinal']<11) {
+						$coursesDis[$coursesD]['courseid'] = $coid['courseid'];
+						$coursesDis[$coursesD]['curid'] = $coid['curid'];
+						$coursesD++;
+					}
+				}
+			}
             if ($coursesD < 3) {
                 $number = $rest = substr($perid, 0, 2);
                 $letter = substr($perid, -1);
@@ -62,17 +67,19 @@ class Register_ListcurrentnotesController extends Zend_Controller_Action {
                 }
                 $c = 0;
                 $attrib = array('notafinal', 'courseid');
-                foreach ($coursesDis as $courseDis) {
-                   $where = array('eid'=>$eid,
-                                'oid'=>$oid,
-                                'escid'=>$escid,
-                                'subid'=>$subid,
-                                'courseid'=>$courseDis['courseid'],
-                                'curid'=>$courseDis['curid'],
-                                'perid'=>$perid);
-                   $notasAplazados[$c]=$dbcoursescp->_getFilter($where, $attrib);
-                   $c++;
-                }
+                if ($coursesDis){
+					foreach ($coursesDis as $courseDis) {
+					   $where = array('eid'=>$eid,
+									'oid'=>$oid,
+									'escid'=>$escid,
+									'subid'=>$subid,
+									'courseid'=>$courseDis['courseid'],
+									'curid'=>$courseDis['curid'],
+									'perid'=>$perid);
+					   $notasAplazados[$c]=$dbcoursescp->_getFilter($where, $attrib);
+					   $c++;
+					}
+				}
             }
 
             //print_r($notasAplazados);
