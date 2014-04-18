@@ -1,0 +1,14 @@
+.parrafo{
+	position: relative;
+	font-size: 16px;
+	left: 10%;
+	width: 80%;
+	margin-bottom: 1em;
+}
+
+.projects{
+	position: relative;
+	height: 50px;
+	left: 10%;
+	width: 80%;
+}
