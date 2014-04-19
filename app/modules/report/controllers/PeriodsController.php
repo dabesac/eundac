@@ -96,7 +96,7 @@
             $data = array('subid'=>$subid, 'perid'=>$perid);
             $this->view->data = $data;
 
-            $TE    = $escid['3'].$escid['4'];
+            $TE = $escid;
 
             if ($TE == 'TE') {
                 $escid = $escid['0'].$escid['1'].$escid['2'];
@@ -134,7 +134,7 @@
             if ($allteacher) {
                 $t = count($allteacher);
 
-                $teachersAlready = '';
+                $teachersAlready[0] = '';
                 for ($i=0; $i < $t; $i++) {
                     $course_tea = array();
                     $wherecour = array(

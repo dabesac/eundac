@@ -26,7 +26,7 @@ class Distribution_Form_Distribution extends Zend_Form{
                 $perid->addMultiOption($period['perid'],$period['perid'].' | '.$period['name']);
             }
         }
-        $this->view->periodsDistribution = $periodsDistribution;
+        //$this->view->periodsDistribution = $periodsDistribution;
 
         
         $number= new Zend_Form_Element_Text("number");

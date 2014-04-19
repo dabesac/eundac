@@ -2,6 +2,7 @@
 if ($this->lper ){ ?>
 	<option value=""> Seleccione...</option> 
 	<?php
+    $str = '';
     foreach ($this->lper  as $perio){
         if ($this->esdirector<>"S") {
             $str = ($this->perid==$perio['perid'])?"selected ":"";

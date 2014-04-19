@@ -171,6 +171,8 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $this->view->escid=$escid;
             $this->view->perid=$perid;
             $this->view->anho=$anho;
+
+            $left='';
             
             $user= new Api_Model_DbTable_Users();
             if($perid!='T'){
@@ -183,7 +185,7 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                             else $escid = $espec;
                         }
                         $where = array(
-                            'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 
+                            'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'facid' => $facid,
                             'perid' => $perid, 'left' => $left);
                     }
                 }else $where = array('eid' => $eid, 'oid' => $oid, 'perid' => $perid);

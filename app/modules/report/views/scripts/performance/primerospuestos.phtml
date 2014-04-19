@@ -99,6 +99,7 @@
                           </tr>
 
                           <?php $i=0; ?>  
+                          <?php if ($this->rep_alumnos): ?>
                           <?php foreach ($this->rep_alumnos as $ra) { $i=$i + 1;?>
                       <tr>
                           <td><?php echo $i; ?>  </td>
@@ -107,6 +108,7 @@
                           <td><?php echo round($ra['prom_pon'],2)?></td>
                       </tr>
                     <?php }?>
+                          <?php endif ?>
                       
                         </tbody>
 </table>

@@ -67,7 +67,10 @@
                     <center>
                     <?php 
                     $aprobados = $regcour->_get_approved($wherecant);
-                    $por = round(($aprobados[0]['count'] / $cantstu) * 100,2);
+                    $por = '';
+                    if ($cantstu > 0) {
+                        $por = round(($aprobados[0]['count'] / $cantstu) * 100,2);
+                    }
                     echo $aprobados[0]['count']." - ".$por."%";
                     ?>
                     </center>
@@ -76,7 +79,9 @@
                     <center>
                     <?php 
                     $desaprobados = $regcour->_get_disapproved_x_course($wherecant);
-                    $por=round(($desaprobados[0]['count'] / $cantstu) * 100,2);
+                    if ($cantstu > 0) {
+                        $por=round(($desaprobados[0]['count'] / $cantstu) * 100,2);
+                    }
                     echo $desaprobados[0]['count']." - ".$por."%";
                     ?>
                     </center>
@@ -85,7 +90,9 @@
                     <center>
                     <?php 
                     $retirados = $regcour->_get_retired_x_course($wherecant);
-                    $por=round(($retirados[0]['count'] / $cantstu) * 100,2);
+                    if ($cantstu > 0) {
+                        $por=round(($retirados[0]['count'] / $cantstu) * 100,2);
+                    }
                     echo $retirados[0]['count']." - ".$por."%";
                     ?>
                     </center>

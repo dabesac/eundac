@@ -46,7 +46,6 @@ class Curricula_ShowController extends Zend_Controller_Action
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $rid=$this->sesion->rid;
-            $esdirector=$this->sesion->esdirector;
             $facid=$this->_getParam('facid');
             $esc=new Api_Model_DbTable_Speciality();
             $where['eid']=$eid;

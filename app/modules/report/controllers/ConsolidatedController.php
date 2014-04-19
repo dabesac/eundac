@@ -162,12 +162,12 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
                 $this->view->facultad =$datafacid['name'];               
            }
         //Obteniendo la escuela y especialidad(si lo tuviera)
-        if ($dataescid['parent']==""){
-        $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
+        if ($dataescid[0]['parent'] == ""){
+            $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
         }else{
                 $dato['eid'] = $this->sesion->eid;    
                 $dato['oid'] = $this->sesion->oid;
-                $dato['escid'] = $dataescid['parent']; 
+                $dato['escid'] = $dataescid[0]['parent']; 
                 $dato['subid'] = $dataescid['sub']; 
                 $esc = $escuela->_getOne($dato);
                 $this->view->escuela=strtoupper($esc['name']);
@@ -376,12 +376,12 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
                 $this->view->facultad =$datafacid['name'];               
            }
         //Obteniendo la escuela y especialidad(si lo tuviera)
-        if ($dataescid['parent']==""){
+        if ($dataescid[0]['parent']==""){
         $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
         }else{
                 $dato['eid'] = $this->sesion->eid;    
                 $dato['oid'] = $this->sesion->oid;
-                $dato['escid'] = $dataescid['parent']; 
+                $dato['escid'] = $dataescid[0]['parent']; 
                 $dato['subid'] = $dataescid['sub']; 
                 $esc = $escuela->_getOne($dato);
                 $this->view->escuela=strtoupper($esc['name']);
@@ -615,12 +615,12 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
           $this->view->facultad =$datafacid['name']; 
            }
         //Obteniendo la escuela y especialidad(si lo tuviera)
-        if ($dataescid['parent']==""){
+        if ($dataescid[0]['parent']==""){
         $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
         }else{
                 $dato['eid'] = $this->sesion->eid;    
                 $dato['oid'] = $this->sesion->oid;
-                $dato['escid'] = $dataescid['parent']; 
+                $dato['escid'] = $dataescid[0]['parent']; 
                 $dato['subid'] = $dataescid['sub']; 
                 $esc = $escuela->_getOne($dato);
                 $this->view->escuela=strtoupper($esc['name']);
@@ -782,12 +782,12 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
          $this->view->facultad =$datafacid['name']; 
            }
         //Obteniendo la escuela y especialidad(si lo tuviera)
-        if ($dataescid['parent']==""){
+        if ($dataescid[0]['parent']==""){
         $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
         }else{
                 $dato['eid'] = $this->sesion->eid;    
                 $dato['oid'] = $this->sesion->oid;
-                $dato['escid'] = $dataescid['parent']; 
+                $dato['escid'] = $dataescid[0]['parent']; 
                 $dato['subid'] = $dataescid['sub']; 
                 $esc = $escuela->_getOne($dato);
                 $this->view->escuela=strtoupper($esc['name']);
