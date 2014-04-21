@@ -51,7 +51,8 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
                     }
                     $len=count($valhorasm);
                     $w=0;
-                    for ($g=0; $g < $len + 1 ; $g++) { 
+                    // print_r($len);exit();
+                    for ($g=0; $g < $len; $g++) {
                         if ($valhorasm[$g]==$valhorast[0] && $w==0) {
                             $valhoras[0]=$datahours[0]['hours_begin'];
                             for ($k=0; $k < 20; $k++) { 

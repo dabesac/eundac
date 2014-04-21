@@ -118,7 +118,7 @@
 					<th class="text-center">Sesión</th>
 					<th class="col-md-5">Clase</th>
 				</tr>
-		<?php for ($i = $c; $i <= $this->restSession ; $i++): ?>
+		<?php for ($i = $c; $i < $this->restSession ; $i++): ?>
 				<tr>
 					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['week'] ?></h5></td>
 					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['unit'] ?></h5></td>
