@@ -30,7 +30,7 @@
 	<div class="col-md-1">
 		<h5 class="text-muted">Año</h5>
 		<select class="form-control" name="Anio" id="anio">
-			<?php $anio = date(Y);
+			<?php $anio = date('Y');
 	 		for ($i=$anio; $i >=1993 ; $i--) :?> 
 	 			<option value="<?php echo $i?>"><?php echo $i ?></option>
 	 		<?php endfor?>

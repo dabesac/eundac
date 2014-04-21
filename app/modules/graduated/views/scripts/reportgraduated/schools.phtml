@@ -9,7 +9,7 @@ if ($this->facid) { ?>
 		<?php
 		foreach ($this->escuelas as $escuelas) { 	
 			if ($this->escid) $str = ($this->escid==$escuelas['escid'])?"selected ":""; ?>
-			<option <?php echo $str?> value="<?php echo $escuelas['escid']?>"><?php echo $escuelas['name']?></option>
+			<option value="<?php echo $escuelas['escid']?>"><?php echo $escuelas['name']?></option>
 		<?php
 		} 
 	}else{ ?>		

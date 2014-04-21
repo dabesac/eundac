@@ -85,6 +85,7 @@ class Graduated_GraphicgraduatedController extends Zend_Controller_Action {
             $anho = $this->_getParam('anho');
 
             $user = new Api_Model_DbTable_Users();
+            $left='';
             if($perid!='T'){
                 if ($facid!="TODO") {
                     if ($escid=="TODOEC") { 
@@ -95,7 +96,7 @@ class Graduated_GraphicgraduatedController extends Zend_Controller_Action {
                             else $escid = $espec;
                         }
                         $where = array(
-                            'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 
+                            'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'facid' => $facid, 
                             'perid' => $perid, 'left' => $left);
                     }
                 }else $where = array('eid' => $eid, 'oid' => $oid, 'perid' => $perid);
