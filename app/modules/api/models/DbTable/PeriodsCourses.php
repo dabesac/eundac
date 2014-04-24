@@ -185,7 +185,7 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
             // print_r($where);exit();
             $select = $this->_db->select()
                 ->from(array('pc'=>'base_periods_courses'),array('pc.curid','pc.escid','pc.semid','pc.courseid','pc.turno'))
-                ->join(array('c'=>'base_courses'),'pc.eid=c.eid and pc.oid=c.oid and pc.curid=c.curid and pc.escid=c.escid and pc.subid=c.subid and pc.courseid=c.courseid',array('c.name'))	
+                ->join(array('c'=>'base_courses'),'pc.eid=c.eid and pc.oid=c.oid and pc.curid=c.curid and pc.escid=c.escid and pc.subid=c.subid and pc.courseid=c.courseid',array('c.name','c.credits'))	
             	->join(array('tc'=>'base_course_x_teacher'),'pc.courseid=tc.courseid and pc.eid=tc.eid and pc.oid=tc.oid and pc.curid=tc.curid and pc.perid=tc.perid and pc.escid=tc.escid and pc.turno=tc.turno and pc.subid=tc.subid',array('tc.uid','tc.pid','tc.hours_t','tc.hours_p','tc.hours_total','tc.is_main','tc.state'))
             	->where('pc.eid = ?', $where['eid'])->where('pc.oid = ?', $where['oid'])
             	->where('pc.escid = ?', $where['escid'])->where('pc.perid = ?', $where['perid'])
@@ -210,7 +210,7 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
             // print_r($where);exit();
             $select = $this->_db->select()
                 ->from(array('pc'=>'base_periods_courses'),array('pc.curid','pc.escid','pc.semid','pc.courseid','pc.turno'))
-                ->join(array('c'=>'base_courses'),'pc.eid=c.eid and pc.oid=c.oid and pc.curid=c.curid and pc.escid=c.escid and pc.subid=c.subid and pc.courseid=c.courseid',array('c.name'))	
+                ->join(array('c'=>'base_courses'),'pc.eid=c.eid and pc.oid=c.oid and pc.curid=c.curid and pc.escid=c.escid and pc.subid=c.subid and pc.courseid=c.courseid',array('c.name','c.credits'))	
             	->join(array('tc'=>'base_course_x_teacher'),'pc.courseid=tc.courseid and pc.eid=tc.eid and pc.oid=tc.oid and pc.curid=tc.curid and pc.perid=tc.perid and pc.escid=tc.escid and pc.turno=tc.turno and pc.subid=tc.subid',array('tc.uid','tc.pid','tc.hours_t','tc.hours_p','tc.hours_total','tc.is_main','tc.state'))
             	->where('pc.eid = ?', $where['eid'])->where('pc.oid = ?', $where['oid'])
             	->where('pc.escid = ?', $where['escid'])->where('pc.perid = ?', $where['perid'])

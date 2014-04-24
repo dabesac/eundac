@@ -504,7 +504,7 @@ if ($this->horarys) {
                                     $temt=$dcurso['turno'];
                                 } ?>
                             <div class="cajacursos" style="width:37%; margin-left:8px"><?php echo $dcurso['name'].$dcurso['pract']; ?></div>
-                            <div class="cajacursos" style="width:4%; margin-left:8px"><?php echo $horaoriginal[$c]['credits'];?></div>
+                            <div class="cajacursos" style="width:4%; margin-left:8px"><?php echo $this->dcurso[$c]['credits']?></div>
                             <div class="cajacursos" style="width:4%; margin-left:8px"><?php echo $dcurso['turno'] ?></div>
                             <div class="cajacursos" style="width:30%; margin-left:8px"><?php echo $this->dcurso[$c]['namet']?></div>
                             <div class="cajacursos" style="width:3%; margin-left:8px"><?php echo $dcurso['hours_t'] ?></div>
@@ -534,6 +534,6 @@ else{
     $mpdf->SetHTMLFooter($this->footer);
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('Horario-'.$this->semid.'.pdf','D');
-    // $mpdf->Output();  
+    // $mpdf->Output('Horario-'.$this->semid.'.pdf','D');
+    $mpdf->Output();  
 ?>

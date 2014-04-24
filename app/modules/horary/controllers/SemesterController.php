@@ -104,7 +104,8 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	                $len=count($valhorasm);
 	                $w=0;
 	                        
-	                for ($g=0; $g < $len + 1 ; $g++) { 
+	                for ($g=0; $g < $len + 1 ; $g++) {
+	                	$valhorasm[$g]=(isset($valhorasm[$g]))?$valhorasm[$g]:null;
 	                    if ($valhorasm[$g]==$valhorast[0] && $w==0) {
 	                        $valhoras[0]=$datahours[0]['hours_begin'];
 	                        for ($k=0; $k < 20; $k++) { 
@@ -228,7 +229,8 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	                $len=count($valhorasm);
 	                $w=0;
 	                        
-	                for ($g=0; $g < $len + 1 ; $g++) { 
+	                for ($g=0; $g < $len + 1 ; $g++) {
+	                	$valhorasm[$g]=(isset($valhorasm[$g]))?$valhorasm[$g]:null; 
 	                    if ($valhorasm[$g]==$valhorast[0] && $w==0) {
 	                        $valhoras[0]=$datahours[0]['hours_begin'];
 	                        for ($k=0; $k < 20; $k++) { 

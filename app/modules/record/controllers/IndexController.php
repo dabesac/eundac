@@ -81,7 +81,8 @@ class Record_IndexController extends Zend_Controller_Action {
 		$attris = array("eid","oid","perid","courseid","escid","subid","curid","turno",
 				"curid","semid","type_rate","closure_date","state_record","state");
 		$orders = array("eid","curid","courseid","turno");
-		$coursename = ($formData['coursename']);
+		// $coursename = ($formData['coursename']);
+		$coursename = (isset($formData['coursename']))?$formData['coursename']:null;
 		unset($formData['coursename']);
 		$rows = $records->_getFilter($formData,$attris,$orders);
 		$lscourses=null;
@@ -160,16 +161,18 @@ class Record_IndexController extends Zend_Controller_Action {
             $info_teacher = $base_course_x_teacher->_getFilter($where);
             $speciality = $base_speciality->_getAll($where);
             $data_students = $base_register_course->_getStudentXcoursesXescidXperiods_sql($where);
-           
-            foreach ($info_teacher as $key => $value) {
-            	$where1= array(
-            		'eid' => $value['eid'],
-            		'oid' => $value['oid'],
-            		'pid' => $value['pid']);
-            	$name_teacher = $base_person->_getOne($where1);
-            	$info_teacher[$key]['name']=$name_teacher['last_name0'].
-            								" ".$name_teacher['last_name1'].
-            								",".$name_teacher['first_name']; 
+            
+            if ($info_teacher) {
+	            foreach ($info_teacher as $key => $value) {
+	            	$where1= array(
+	            		'eid' => $value['eid'],
+	            		'oid' => $value['oid'],
+	            		'pid' => $value['pid']);
+	            	$name_teacher = $base_person->_getOne($where1);
+	            	$info_teacher[$key]['name']=$name_teacher['last_name0'].
+	            								" ".$name_teacher['last_name1'].
+	            								",".$name_teacher['first_name']; 
+	            }
             }
 
             if ($data_students) {

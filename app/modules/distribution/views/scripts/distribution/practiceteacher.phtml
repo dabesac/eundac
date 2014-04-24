@@ -8,7 +8,7 @@
                     <th><center>Código</center></th>
                     <th>Apellidos y Nombres</th>
                     <th><center>Estado</center></th>
-                    <th><center>Categoria</center></th>       
+                    <th><center>Categoría</center></th>       
                     <th><center>Condición</center></th>       
                     <th><center>Dedicación</center></th>       
                     <th><center>Asignar Curso</center></th>
@@ -41,8 +41,8 @@
                         </center>
                         <script type="text/javascript">
                             $("#stateprac_<?php echo $i?>").click(function(){
-                                var teacherasig="<?php echo $teacher['courseasig']?>";
-                                if (teachers=="") {
+                                var teacherasig="<?php echo $teachers['courseasig']?>";
+                                if (teacherasig=="") {
                                     var distid="<?php echo $this->distid?>";
                                     var perid="<?php echo $this->perid?>";
                                     var tipo=$(this).attr('dat');
@@ -139,8 +139,8 @@
                             <?php
                             if ($teachers['courseasig']) {   ?>
                                 <a href="#" onclick="javascript: window.open('/horary/nhorary/fillhorary/pid/<?php echo base64_encode($teachers['pid'])?>/uid/<?php echo base64_encode($teachers['uid'])?>/escid/<?php
-                                if ($teacher['escid']=="2ES") { print base64_encode($this->escid);}
-                                else{ print base64_encode($teacher['escid']);} ?>/subid/<?php echo base64_encode($teachers['subid'])?>/perid/<?php echo base64_encode($this->perid)?>','Asignación Horario','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=1200,height=720')" rel="tooltip" title="Asignar Horarios"><span class="glyphicon glyphicon-calendar"></span></a>
+                                if ($teachers['escid']=="2ES") { print base64_encode($this->escid);}
+                                else{ print base64_encode($teachers['escid']);} ?>/subid/<?php echo base64_encode($teachers['subid'])?>/perid/<?php echo base64_encode($this->perid)?>','Asignación Horario','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=1200,height=720')" rel="tooltip" title="Asignar Horarios"><span class="glyphicon glyphicon-calendar"></span></a>
                             <?php
                             }
                             else{ ?>

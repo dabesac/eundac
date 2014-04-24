@@ -133,12 +133,12 @@ if ($this->horarios) {
 
         $codcurso=$this->horarios[$i]['courseid'];
         $tturno=$this->horarios[$i]['turno'];
-        $codcursodes=(isset($this->horarios[$i+1]['courseid']))?$this->horarios[$i+1]['courseid']:null;
-        // $tturnodes=$this->horarios[$i+1]['turno'];
-        $tturnodes=(isset($this->horarios[$i+1]['turno']))?$this->horarios[$i+1]['turno']:null;
         $eescid=$this->horarios[$i]['escid'];
-        // $eescids=$this->horarios[$i+1]['escid'];
+        $codcursodes=(isset($this->horarios[$i+1]['courseid']))?$this->horarios[$i+1]['courseid']:null;
+        $tturnodes=(isset($this->horarios[$i+1]['turno']))?$this->horarios[$i+1]['turno']:null;
         $eescids=(isset($this->horarios[$i+1]['escid']))?$this->horarios[$i+1]['escid']:null;
+        // $tturnodes=$this->horarios[$i+1]['turno'];
+        // $eescids=$this->horarios[$i+1]['escid'];
             if ($codcurso==$codcursodes && $tturno==$tturnodes && $eescid==$eescids){
                 $this->horarios[$i]['color']=$listacolores[$cco];
             } 
