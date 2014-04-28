@@ -36,6 +36,11 @@ class Alumno_ProjectsController extends Zend_Controller_Action {
         $regid = $register[0]['regid'];
         $this->view->regid = $regid;
 
+        $proyeccionMatriculado    = array('state' => 'no');
+        $investigacionMatriculado = array('state' => 'no');
+        $proyeccionSocial = '';
+        $investigacion = '';
+
         if ($register) {
             $query = array(
                         array(
@@ -52,9 +57,8 @@ class Alumno_ProjectsController extends Zend_Controller_Action {
             $projectsCronogram = $serverErp->read($idsProjectsCronogram, $attributes, 'inv.pro.project.cronogram');
             //print_r($projectsCronogram);
 
+
             if ($projectsCronogram) {
-                $proyeccionMatriculado    = array('state' => 'no');
-                $investigacionMatriculado = array('state' => 'no');
                 foreach ($projectsCronogram as $c => $projectCronogram) {
                     $query = array(
                         array(
