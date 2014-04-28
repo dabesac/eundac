@@ -61,6 +61,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $oid = $this->sesion->oid;
         $subid = $this->sesion->subid;
         $escid = $this->sesion->escid;
+        $facid = $this->sesion->faculty->facid;
 
         /*if ($state == null) {
             $pfac='T'.$escid['1'];
@@ -72,13 +73,13 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         }else*/
         if ($state) {
             if ($subid != '1901') {
-                $escid = '';
+                $facid = '';
             }
 
             $estados = $state;
             $bdu = new Api_Model_DbTable_Registration();        
             $str = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
-            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados);  
+            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$facid,$perid,$estados);  
             $this->view->datos=$datos;
         }
     }
@@ -608,15 +609,15 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $state = base64_decode($this->_getParam('state'));
         $regid = $uid.$perid;
 
-        $where = array( 'eid'=>$eid,
-                        'oid'=>$oid,
-                        'escid'=>$escid, 
-                        'subid'=>$subid, 
-                        'perid'=>$perid, 
-                        'regid'=>$regid,
-                        'pid'=>$pid,
-                        'uid'=>$uid,
-                        'state'=>$state );
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'escid' => $escid, 
+                        'subid' => $subid, 
+                        'perid' => $perid, 
+                        'regid' => $regid,
+                        'pid'   => $pid,
+                        'uid'   => $uid,
+                        'state' => $state );
 
         $dataRegisterxCourse = array(   'modified'      => $this->sesion->uid,
                                         'approved'      => $this->sesion->uid,
@@ -726,7 +727,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             if ($registerDb->_update($data, $where)){
                 echo 'true';
             }else{
-               echo 'falso';
+                echo 'falso';
             }
         }else{
             echo 'falso';
@@ -804,7 +805,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $dataescid=$escuela->_getFacspeciality($where);
             // print_r($dataescid);
             if ($dataescid) {
-              $nomfac=strtoupper($dataescid[0]['nomfac']); 
+              $nomfac=strtoupper($dataescid[0]['nomfac']);
               $this->view->facultad=$nomfac;
             }
             //Obteniendo la escuela y especialidad(si lo tuviera)

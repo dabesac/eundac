@@ -163,7 +163,7 @@ public function _getPaymentsStudent($where=null,$attrib=null,$order=null){
         if ($eid==''|| $oid==''|| $perid=='' || $str=='') return false;
             $sql=$this->_db->query("
             select 
-            m.regid,m.semid,m.credits,m.date_register, m.state as estmat,m.perid,
+            m.regid,m.semid,m.credits,m.date_register, m.state as estmat, m.perid,
             u.subid,u.uid,u.eid,u.oid,u.escid,u.pid,p.first_name,
             p.last_name0,p.last_name1
             from base_registration as m
