@@ -1,9 +1,216 @@
 <link rel="stylesheet" href="/css/projects.css">
 
-<div class="parrafo text-muted">
-	<span class="glyphicon glyphicon-info-sign"></span>	Seleccione el proyecto de su agrado :
-</div>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Lista de Proyectos');?>
+<?php $this->placeholder('Btnnav')->append(' <a href="/alumno/index" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Regresar</a>');?>
 
 <div class="projects">
-	Un Bonito Proyecto aqui
+	<span class="glyphicon glyphicon-info-sign"></span>	Seleccione el tipo de proyecto :
+	<a href="##" class="proyeccionSocial btnPro btn btn-primary">Proyección Social</a>
+	<a href="##" class="investigacion btnPro btn btn-primary">Investigación</a>
 </div>
+<div class="allData">
+	<div id="dataProyeccionSocial" class="data">
+		<?php if ($this->proyeccionSocial and $this->proyeccionMatriculado['state'] == 'no'): ?>
+			<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Te recomendamos ver el detalle de cada proyecto antes de que te registres.</p>
+		<?php 
+		$c = 0;
+		foreach ($this->proyeccionSocial as $project): ?>
+			<?php $departamento = explode('/', $project[0]['department_id'][1]) ?>
+			<div class="project text-muted">
+				<p class="number"><?php echo $c+1 ?></p>
+				<?php echo $project[0]['name'] ?>
+				<div class="cantidad"><?php echo $project['cantStudents'].'/'.$project[0]['max_student'] ?></div>
+				<a href="##" projectid="<?php echo $project[0]['id'] ?>" class="btnDetalle btn btn-info">Ver Detalles</a>
+				<a href="##" projectCronogramId="<?php echo $project['projectCronogramId'] ?>" regid="<?php echo $this->regid ?>" class="btnRegister btn btn-success">Registrarse</a>
+				<div id="detalleProyecto<?php echo $project[0]['id'] ?>" projectid="<?php echo $project[0]['id'] ?>" class="detalle">
+					<div class="autor">
+						<p><span class="glyphicon glyphicon-user"></span> <?php echo $project[0]['author'][1] ?></p>
+						<p><span class="glyphicon glyphicon-file"></span> <?php echo $project[0]['name'] ?></p>
+						<p><span class="glyphicon glyphicon-tower"></span> <?php echo $departamento[3] ?></p>
+					</div>
+					<div class="cantAlumnos">
+						<p><span class="glyphicon glyphicon-minus"></span> Minimo de Alumnos <span class="text-muted"><?php echo $project[0]['min_student'] ?></span></p> 
+						<p><span class="glyphicon glyphicon-plus"></span> Maximo de Alumnos <span class="text-muted"><?php echo $project[0]['max_student'] ?></span></p> 
+						<p><span class="glyphicon glyphicon-ok"></span> Alumnos Hasta el Momento <span class="text-muted">5</span></p> 
+					</div>
+					<div class="descripcion">
+						<strong><span class="glyphicon glyphicon-bookmark"></span> Descripcion :</strong> <br>
+						<?php echo $project[0]['comment'] ?>
+					</div>
+				</div>
+			</div>
+		<?php 
+		$c++;
+		endforeach ?>
+		<?php elseif ($this->proyeccionMatriculado['state'] == 'si'): 
+			$project = $this->proyeccionMatriculado['project'];
+			$departamento = explode('/', $project[0]['department_id'][1]);
+			?>
+			<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Ya esta registrado a un proyecto :</p>
+			<div class="registrado">
+				<div class="nombreProject">
+					<p class=""><span class="glyphicon glyphicon-folder-close"></span> <?php echo $project[0]['name'] ?></p>
+				</div>
+				<div class="autorProject">
+					<span class="glyphicon glyphicon-user"></span> <?php echo $project[0]['author'][1] ?>
+				</div>
+				<div class="detalleRegister">
+					<div class="text-muted descripcionRegister">
+						<span class="glyphicon glyphicon-bookmark"></span> Descripción : <br>
+						<?php echo $project[0]['comment'] ?>
+					</div>
+					<div class="masdetalleRegister">
+						<p><strong><?php echo $departamento[3] ?></strong></p>
+						<p>Numero de Horas <strong><?php echo $project[0]['num_horas'] ?></strong></p>
+						<p>Alumnos Registrados <strong><?php echo $this->proyeccionMatriculado['cantStudents'] ?></strong></p>
+					</div>
+				</div>
+			</div>
+		<?php else: ?>
+			<p class="h5 text-muted"><span class="glyphicon glyphicon-exclamation-sign"></span> No Existen <span class="text-danger">Proyectos para Proyección Social</span></p>
+		<?php endif ?>
+	</div>
+	<div id="dataInvestigacion" class="data">
+		<?php if ($this->investigacion and $this->investigacionMatriculado['state'] == 'no'): ?>
+		<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Te recomendamos ver el detalle de cada proyecto antes de que te registres.</p>
+		<?php 
+		$c = 0;
+		foreach ($this->investigacion as $project): ?>
+			<?php $departamento = explode('/', $project[0]['department_id'][1]) ?>
+			<div class="project text-muted">
+				<p class="number"><?php echo $c+1 ?></p>
+				<?php echo $project[0]['name'] ?>
+				<div class="cantidad"><?php echo $project['cantStudents'].'/'.$project[0]['max_student'] ?></div>
+				<a href="##" projectid="<?php echo $project[0]['id'] ?>" class="btnDetalle btn btn-info">Ver Detalles</a>
+				<a href="##" projectCronogramId="<?php echo $project['projectCronogramId'] ?>" regid="<?php echo $this->regid ?>" class="btnRegister btn btn-success">Registrarse</a>
+				<div id="detalleProyecto<?php echo $project[0]['id'] ?>" projectid="<?php echo $project[0]['id'] ?>" class="detalle">
+					<div class="autor">
+						<p><span class="glyphicon glyphicon-user"></span> <?php echo $project[0]['author'][1] ?></p>
+						<p><span class="glyphicon glyphicon-file"></span> <?php echo $project[0]['name'] ?></p>
+						<p><span class="glyphicon glyphicon-tower"></span> <?php echo $departamento[3] ?></p>
+					</div>
+					<div class="cantAlumnos">
+						<p><span class="glyphicon glyphicon-minus"></span> Minimo de Alumnos <span class="text-muted"><?php echo $project[0]['min_student'] ?></span></p> 
+						<p><span class="glyphicon glyphicon-plus"></span> Maximo de Alumnos <span class="text-muted"><?php echo $project[0]['max_student'] ?></span></p> 
+						<p><span class="glyphicon glyphicon-ok"></span> Alumnos Hasta el Momento <span class="text-muted">5</span></p> 
+					</div>
+					<div class="descripcion">
+						<strong><span class="glyphicon glyphicon-bookmark"></span> Descripcion :</strong> <br>
+						<?php echo $project[0]['comment'] ?>
+					</div>
+				</div>
+			</div>
+		<?php 
+		$c++;
+		endforeach ?>
+		
+		<?php elseif ($this->investigacionMatriculado['state'] == 'si'): 
+			$project = $this->investigacionMatriculado['project'];
+			$departamento = explode('/', $project[0]['department_id'][1]);
+			?>
+			<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Ya esta registrado a un proyecto :</p>
+			<div class="registrado">
+				<div class="nombreProject">
+					<p class=""><span class="glyphicon glyphicon-folder-close"></span> <?php echo $project[0]['name'] ?></p>
+				</div>
+				<div class="autorProject">
+					<span class="glyphicon glyphicon-user"></span> <?php echo $project[0]['author'][1] ?>
+				</div>
+				<div class="detalleRegister">
+					<div class="text-muted descripcionRegister">
+						<span class="glyphicon glyphicon-bookmark"></span> Descripción : <br>
+						<?php echo $project[0]['comment'] ?>
+					</div>
+					<div class="masdetalleRegister">
+						<p><strong><?php echo $departamento[3] ?></strong></p>
+						<p>Numero de Horas <strong><?php echo $project[0]['num_horas'] ?></strong></p>
+						<p>Alumnos Registrados <strong><?php echo $this->proyeccionMatriculado['cantStudents'] ?></strong></p>
+					</div>
+				</div>
+			</div>
+		<?php else: ?>
+			<p class="h5 text-muted"><span class="glyphicon glyphicon-exclamation-sign"></span> No Existen <span class="text-danger">Proyectos para Investigación</span></p>
+		<?php endif ?>
+	</div>
+</div>
+
+<script>
+
+$(function(){
+	//Tabs Principales
+	$('.proyeccionSocial').on('click', function(){
+		var btn      = $(this);
+		var btnD     = $('.investigacion');
+		var	dataHide = $('#dataInvestigacion');
+		var dataShow = $('#dataProyeccionSocial');
+
+		showData(dataShow, dataHide, btn, btnD);
+	});
+
+	$('.investigacion').on('click', function(){
+		var btn      = $(this);
+		var btnD     = $('.proyeccionSocial');
+		var	dataHide = $('#dataProyeccionSocial');
+		var dataShow = $('#dataInvestigacion');
+
+		showData(dataShow, dataHide, btn, btnD);
+	});
+
+	//Interaccion Detalle de Proyeccion y Investigación
+	$('.btnDetalle').on('click', function(){
+		var projectId = $(this).attr('projectid');
+		showDetalle(projectId);
+	});
+
+	//Registrar Estudiante
+	$('.btnRegister').on('click', function(){
+		$('.btnRegister').addClass('disabled');
+		$(this).append('<img src="/img/spinner.gif" alt="Loading..." />')
+
+		var data = new Array();
+		data['projectcronogramid'] = $(this).attr('projectCronogramId');
+		data['regid']              = $(this).attr('regid');
+		registerStudent(data);
+	});
+
+	//Funciones
+	function showData(dataShow, dataHide, btn, btnD){
+		$(btn).toggleClass('active');
+		$(btnD).removeClass('active');
+		$('.detalle').slideUp();
+		$(dataHide).slideUp(function(){
+			$(dataShow).slideToggle();
+		});
+	};
+
+	function showDetalle(projectId){
+		$('#detalleProyecto' + projectId).slideToggle();
+		$('.detalle').each(function(index, element){
+			var id = $(element).attr('projectid');
+			if (projectId != id) {
+				$(element).slideUp();
+			}
+		});
+		$('html, body').animate({
+			scrollTop : $('#detalleProyecto' + projectId).offset().top
+		}, 500);
+	};
+
+	function registerStudent(data){
+		$.ajax({
+			url : '/alumno/projects/registerstudent',
+			data : {projectcronogramid: data['projectcronogramid'],
+					regid             : data['regid'] },
+			success : function(data){
+				console.log(data);
+				if (data === 'true') {
+					window.location.reload();
+				}else{
+					console.log('Fail!');
+				};
+			}
+		});
+	}
+});
+
+</script>

@@ -32,7 +32,7 @@ class Alumno_TutorshipController extends Zend_Controller_Action {
                         'uid'   => $uid,
                         'pid'   => $pid,
                         'escid' => $escid,
-                        'perid' => '13B',
+                        'perid' => $perid,
                         'state' => 'M' );
 
         $register = $registerDb->_getFilter($where);
