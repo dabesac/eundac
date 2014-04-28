@@ -399,7 +399,8 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
             $eid = $where['eid'];
             $oid = $where['oid'];
             $anio = $where['anio'];
-            $facid = $where['facid'];
+            // $facid = $where['facid'];
+            $facid=(isset($where['facid']))?$where['facid']:null;
             if ($facid<>"") $facid = " and left(u.escid,1)='$facid'";
             else $facid = "";
             if ($where['escid']<>"") {
@@ -459,7 +460,8 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
             $eid = $where['eid'];
             $oid = $where['oid'];
             $anho = $where['anio'];
-            $facid = $where['facid'];
+            // $facid = $where['facid'];
+            $facid=(isset($where['facid']))?$where['facid']:null;
             if ($facid<>"") $facid = " and left(u.escid,1)='$facid'";
             else $facid = "";
             if ($where['escid']<>"") {

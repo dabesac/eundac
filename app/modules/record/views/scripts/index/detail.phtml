@@ -56,7 +56,9 @@
 		  		<th>Principal</th>
 		  		<th>Compromiso</th>
 		  	</tr>
-		  	<?php foreach ($this->info_teacher as $key => $teacher) { ?>
+		  	<?php 
+		  	if ($this->info_teacher) {		  		
+		  	foreach ($this->info_teacher as $key => $teacher) { ?>
 		  		<tr>
 		  			<td><?php echo $teacher['pid']?></td>
 		  			<td><?php echo $teacher['name']?></td>
@@ -100,7 +102,9 @@
 		  					break;
 		  			}?></td>
 		  		</tr>
-	  	<?php }?>
+	  		<?php }
+		  	}
+	  	?>
 	  </table>
 	</div>
 	<div class="panel panel-primary">
@@ -117,28 +121,33 @@
 	    		<th>Recibo</th>
 	    		<th>Resolucion</th>
 	    	</tr>
-	    	  		<?php foreach ($this->data_students as $key => $student) { ?>
-	    		<tr>
-	    			<td><?php echo $key+1?> </td>
-	    			<td><?php echo $student['uid']?></td>
-	    			<td><?php echo $student['name_complet']?></td>
-	    			<td class='text-center'><?php 
-	    				switch ($student['notafinal']) {
-	    					case '-3':
-	    						echo "Retirado";
-	    						break;
-	    					case '-2':
-	    						echo "N.S.P";
-	    						break;
-	    					default:
-	    						echo $student['notafinal'];
-	    						break;
-	    				}
-	    			?></td>
-	    			<td><?php echo $student['receipt']?></td>
+	    	  		<?php 
+	    	  		if ($this->data_students) {
+	    	  			
+	    	  		foreach ($this->data_students as $key => $student) { ?>
+			    		<tr>
+			    			<td><?php echo $key+1?> </td>
+			    			<td><?php echo $student['uid']?></td>
+			    			<td><?php echo $student['name_complet']?></td>
+			    			<td class='text-center'><?php 
+			    				switch ($student['notafinal']) {
+			    					case '-3':
+			    						echo "Retirado";
+			    						break;
+			    					case '-2':
+			    						echo "N.S.P";
+			    						break;
+			    					default:
+			    						echo $student['notafinal'];
+			    						break;
+			    				}
+			    			?></td>
+			    			<td><?php echo $student['receipt']?></td>
 
-	    		</tr>
-	    	<?php }?>
+			    		</tr>
+	    			<?php }
+	 				}
+	    		?>
 	  	</table>
 	</div>
 

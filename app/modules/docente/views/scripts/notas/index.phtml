@@ -271,11 +271,12 @@ if ($this->faculty){
 <script type="text/javascript" src='/js/jquery-1.11.0.js'></script>
 <script>
 
-    $('#Btnhorarys').click(function(){
+    $('.Btnhorarys').click(function(){
         var perid=$(this).attr('perid');
         var escid=$(this).attr('escid');
         var subid=$(this).attr('subid');
-        $('#horary').load('/horary/seehorary/index/perid/'+perid+'/escid/'+escid+'/subid/'+subid);
+        var url=("/horary/seehorary/index/perid/"+perid+"/escid/"+escid+"/subid/"+subid);
+        $('#horary').load(url);
     });
     $(".duplicate-syllabus").click(function(){
         if(confirm("Esta seguro de duplicar \nel silabo")){
