@@ -148,6 +148,7 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
         try {
             $controlsyllabusDb = new Api_Model_DbTable_ControlActivity();
 
+            $date_t = base64_encode(date('Y-m-d'));
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $subid    = base64_decode($this->getParam('subid'));
@@ -159,6 +160,7 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
             $session  = base64_decode($this->getParam('session'));
             $week     = base64_decode($this->getParam('week'));
             $perid    = base64_decode($this->getParam('perid'));
+            $date    = base64_decode($this->getParam('date',$date_t));
 
             $where = array( 'eid'      => $eid, 
                             'oid'      => $oid, 
@@ -172,7 +174,7 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
                             'week'     => $week,
                             'session'  => $session);
 
-            $where['datecheck'] = date('Y-m-d');
+            $where['datecheck'] = $date;
             $where['state'] = 'D';
 
             $save = $controlsyllabusDb->_save($where);
