@@ -15,8 +15,10 @@
 	</ul>
 	<ul id="students">
 		<?php $c = 0;
-		foreach ($this->studentEntrant as $student): ?>
-			<li id="studentRow<?php echo $student[0]['uid'] ?>" style="list-style : none; height : 37px;" state="<?php echo $this->studentState[$c]['state'] ?>"><span id="state<?php echo $student[0]['uid'] ?>" class="hidden"><?php echo $this->studentState[$c]['state'] ?></span>
+		foreach ($this->studentEntrant as $student): 
+			$studentState=(isset($this->studentState[$c]['state'])?$this->studentState[$c]['state']:null);
+			?>
+			<li id="studentRow<?php echo $student[0]['uid'] ?>" style="list-style : none; height : 37px;" state="<?php echo $studentState ?>"><span id="state<?php echo $student[0]['uid'] ?>" class="hidden"><?php echo $studentState ?></span>
 				<table class="table table-hover">
 					<tr>
 						<td id="numeracion<?php echo $c ?>" class="col-md-1 text-center"></td>
@@ -52,7 +54,8 @@
 				</table>
 			</li>
 		<?php $c++;
-		endforeach ?>
+		endforeach;
+		?>
 	</ul>
 	
 	<div class="modal fade modalRegister" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">

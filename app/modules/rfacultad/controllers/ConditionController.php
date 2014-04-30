@@ -215,19 +215,19 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
             $where['eid']=$this->sesion->eid;
             $where['oid']=$this->sesion->oid;
             $where['uid']=$this->_getParam("uid");
-            $this->view->uid=$uid; 
+            $this->view->uid=$where['uid']; 
             $where['perid']=$this->_getParam("perid");
-            $this->view->perid=$perid; 
+            $this->view->perid=$where['perid']; 
             $where['escid']=$this->_getParam("escid");
-            $this->view->escid=$escid; 
+            $this->view->escid=$where['escid']; 
             $where['pid']=$this->_getParam("pid");
-            $this->view->pid=$pid; 
+            $this->view->pid=$where['pid']; 
             $where['subid']=$this->_getParam("subid");
-            $this->view->sedid=$sedid; 
+            $this->view->sedid=$where['subid']; 
             $dbcurricula=new Api_Model_DbTable_Studentxcurricula();
             $datcur=$dbcurricula->_getOne($where);
             $where['curid']=$datcur['curid'];
-            $this->view->curid=$curid; 
+            $this->view->curid=$where['curid']; 
 
             $request = array( 'uid'   => base64_encode($where['uid']), 
                               'pid'   => base64_encode($where['pid']), 

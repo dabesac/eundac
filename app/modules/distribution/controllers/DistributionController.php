@@ -58,12 +58,12 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $escid=$periodos['escid'];
                 $subid=$periodos['subid'];
                 $wheres=array('eid'=>$data['eid'],'oid'=>$data['oid'],'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
-                $wheresp=array('eid'=>$data['eid'],'oid'=>$data['oid'],'distid'=>$distid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
-                $dataobs=$ldistribution->_getUltimateObservation($wheresp);
-                if ($dataobs) {
-                    $rows_distribution[$i]['observation']=$dataobs[0]['observation'];
-                    $rows_distribution[$i]['state']=$dataobs[0]['state'];
-                }
+                //$wheresp=array('eid'=>$data['eid'],'oid'=>$data['oid'],'distid'=>$distid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
+                //$dataobs=$ldistribution->_getUltimateObservation($wheresp);
+                //if ($dataobs) {
+                    //$rows_distribution[$i]['observation']=$dataobs[0]['observation'];
+                    //$rows_distribution[$i]['state']=$dataobs[0]['state'];
+                //}
                 
                 $datahours=$bdhorary->_getFilter($wheres);
                 $rows_distribution[$i]['hours']=$datahours; 

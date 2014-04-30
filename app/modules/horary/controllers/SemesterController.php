@@ -49,11 +49,13 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			$sem= new Api_Model_DbTable_Semester();
 			$dsem=$sem->_getSemesterXPeriodsXEscid($where);
 			$i=0;
-			foreach ($dsem as $semes) {
-				$where['semid']=$semes['semid'];
-				$turnosxsem=$sem->_getSemesterXPeriodsXEscidXTurno($where);
-				$dsem[$i]['turnos']=$turnosxsem;
-				$i++;
+			if ($dsem) {
+				foreach ($dsem as $semes) {
+					$where['semid']=$semes['semid'];
+					$turnosxsem=$sem->_getSemesterXPeriodsXEscidXTurno($where);
+					$dsem[$i]['turnos']=$turnosxsem;
+					$i++;
+				}
 			}
 			// $len=count($turnosxsem);
 			$this->view->semester=$dsem;
@@ -104,7 +106,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	                $len=count($valhorasm);
 	                $w=0;
 	                        
-	                for ($g=0; $g < $len + 1 ; $g++) {
+	                for ($g=0; $g < $len; $g++) {
 	                	$valhorasm[$g]=(isset($valhorasm[$g]))?$valhorasm[$g]:null;
 	                    if ($valhorasm[$g]==$valhorast[0] && $w==0) {
 	                        $valhoras[0]=$datahours[0]['hours_begin'];
@@ -152,12 +154,17 @@ class Horary_SemesterController extends Zend_Controller_Action{
     			$data= $prueba->connectAuth();
     			if ($turno) {
     				$i=0;
-    				foreach ($data as $turnos) {
-    					$turnoss=$turnos['turno'];
-    					if ($turno==$turnoss) {
-    						$datatur[$i]=$turnos;
-    						$i++;
-    					}
+    				if ($data) {
+	    				foreach ($data as $turnos) {
+	    					$turnoss=$turnos['turno'];
+	    					if ($turno==$turnoss) {
+	    						$datatur[$i]=$turnos;
+	    						$i++;
+	    					}
+	    				}
+    				}
+    				else{
+    					$datatur=null;
     				}
     				$this->view->turno=$turno;
 	        		$this->view->horarys=$datatur;

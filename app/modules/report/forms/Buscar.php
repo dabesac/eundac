@@ -16,7 +16,6 @@ class Report_Form_Buscar extends Zend_Form{
 
         $last_name0= new Zend_Form_Element_Text('last_name0');
         $last_name0->removeDecorator('Label')->removeDecorator('HtmlTag')->removeDecorator('Label');
-        $last_name0->setAttrib('maxlength'.'40')->setAttrib('size','40');
         $last_name0->setAttrib('onkeypress','return soloLetras(event)');
         $last_name0->setAttrib('class','form-control');
         $last_name0->setRequired(true)->addErrorMessage('Este campo es Obligatorio');

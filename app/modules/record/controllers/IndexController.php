@@ -1489,7 +1489,6 @@ class Record_IndexController extends Zend_Controller_Action {
 
             $eid =	$this->sesion->eid;
             $oid =	$this->sesion->oid;
-
             $params = $paramsdecode;
             $courseid =	trim($params['courseid']);
             $turno =	trim($params['turno']);
@@ -1497,7 +1496,8 @@ class Record_IndexController extends Zend_Controller_Action {
             $escid =	trim($params['escid']);
             $subid =	trim($params['subid']);
             $perid =	trim($params['perid']);
-            $state =	trim($params['state']);
+            $state=(isset($params['state']))?trim($params['state']):null;
+            // $state =	trim($params['state']);
             $type =	trim($params['type']);
 
             $this->view->type=$type;
