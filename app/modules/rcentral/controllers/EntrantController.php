@@ -100,17 +100,19 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
     	$facid = $this->_getParam('facid');
 
+    	$caracteres = strlen($facid);
+
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
 		$perid = $this->sesion->period->perid;
 		
-		$where = array(	'eid'            => $eid,
-						'oid'            => $oid,
-						'left(escid, 1)' => $facid,
-						'subid'          => $subid,
-						'state'          => 'A',
-						'left(uid, 2)'   => $perid['0'].$perid['1'] );
+		$where = array(	'eid'                          => $eid,
+						'oid'                          => $oid,
+						'left(escid, '.$caracteres.')' => $facid,
+						'subid'                        => $subid,
+						'state'                        => 'A',
+						'left(uid, 2)'                 => $perid['0'].$perid['1'] );
 
 		$attrib = array('uid', 'pid', 'escid');
 		$order = array('escid');

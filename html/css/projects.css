@@ -1,14 +1,1 @@
-.parrafo{
-	position: relative;
-	font-size: 16px;
-	left: 10%;
-	width: 80%;
-	margin-bottom: 1em;
-}
-
-.projects{
-	position: relative;
-	height: 50px;
-	left: 10%;
-	width: 80%;
-}
+.h5{font-size:1.5em;text-align:center}.projects{background:#353535;color:#fff;border-left:8px solid #015292;font-size:1.1em;padding-top:1em;padding-left:1.2em;position:relative;left:5%;height:50px;width:90%;}.projects a{border-radius:0;font-size:1.1em;padding:.7em}.projects .proyeccionSocial{bottom:0;height:100%;position:absolute;right:21%;width:20%}.projects .investigacion{bottom:0;height:100%;position:absolute;width:20%;right:6px}.allData{left:5%;position:relative;width:90%;}.allData .data{border-bottom:3px solid #ddd;border-left:8px solid #015292;border-right:6px solid #ddd;display:none;padding:1em;position:absolute;width:100%;}.allData .data .project{background:#f8f8f8;border-left:6px solid #015292;font-size:1.1em;font-weight:bold;margin-bottom:1em;padding-top:.5em;padding-left:2.5%;position:relative;height:40px;}.allData .data .project .number{background:#ddd;height:100%;color:#353535;font-size:1em;text-align:center;padding-top:.5em;position:absolute;left:0;top:0;width:2%}.allData .data .project .cantidad{background:#353535;border-left:6px solid #202020;color:#fff;height:100%;padding-top:.65em;position:absolute;right:30%;text-align:center;top:0;width:5%}.allData .data .project a{border-radius:0;font-size:1em;padding:.5em;position:absolute;top:0;width:15%}.allData .data .project .btnDetalle{height:100%;right:15%}.allData .data .project .btnRegister{height:100%;right:0}.allData .data .project .detalle{background:#f8f8f8;border-top:4px solid #ddd;display:none;font-size:1em;font-weight:lighter;margin-bottom:50px;left:2%;position:absolute;top:36px;z-index:2;width:63%;}.allData .data .project .detalle .autor{background:#353535;font-size:1em;color:#fff;padding:1.5em;padding-left:3em;padding-right:3em;position:relative;left:0;top:0;width:52%}.allData .data .project .detalle .cantAlumnos{border-left:4px solid #ddd;position:absolute;color:#353535;padding:1.5em;padding-left:5em;top:0;left:52%;width:48%}.allData .data .project .detalle .descripcion{background:#353535;border-top:4px solid #202020;border-bottom:4px solid #202020;color:#fff;padding:1.5em;position:relative;text-align:justify;width:100%}.allData .data .registrado{background:#f8f8f8;position:relative;}.allData .data .registrado .nombreProject{background:#f8f8f8;border-left:6px solid #353535;color:#353535;font-size:1.1em;padding:.9em;width:70%}.allData .data .registrado .autorProject{background:#353535;color:#fff;height:50px;font-size:1.1em;top:0;left:70%;padding:.9em;position:absolute;width:30%}.allData .data .registrado .detalleRegister{background:#f8f8f8;border-left:6px solid #353535;position:relative;width:100%;}.allData .data .registrado .detalleRegister .descripcionRegister{color:#353535;padding:1em;position:absolute;top:0;width:69.8%}.allData .data .registrado .detalleRegister .masdetalleRegister{background:#353535;color:#fff;padding:1em;position:relative;left:69.8%;top:-9px;width:30.2%}

@@ -38,6 +38,7 @@
 					<th class="text-center">Sesión</th>
 					<th class="col-md-5">Clase</th>
 					<th class="text-center col-md-2">Fecha de Finalización</th>
+					<!-- <th class="">Reprogramar</th> -->
 				</tr>
 		<?php foreach ($this->contentsyllabus as $content): ?>
 				<tr>
@@ -72,7 +73,7 @@
 							'/session/'.base64_encode($this->contentsyllabus[$c][0]['session']).
 							'/week/'.base64_encode($this->contentsyllabus[$c][0]['week']).
 							'/perid/'.base64_encode($this->contentsyllabus[$c][0]['perid']); ?>
-	        	<a href="/controlactivity/index/save<?php echo $url ?>" class="btn btn-danger">Marcar Clase</a>
+	        	<a id='session_checket' href="/controlactivity/index/save<?php echo $url ?>" class="btn btn-danger">Marcar Clase</a>
 	        	<a id="closeAlert" class="btn btn-default">Cancelar</a>
 	      	</p>
 	    </div>
@@ -100,7 +101,15 @@
 					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['session'] ?></h5></td>
 					<td class="col-md-5"><h5><?php echo $this->contentsyllabus[$c][0]['obj_content'] ?></h5></td>
 					
-					<td class="text-center col-md-2"><h4><a id="openAlert" class="text-success" href="##"><span class="glyphicon glyphicon-check"></span></a></h4></td>
+					<td class="text-center col-md-2">
+						<h4>
+							<input type='text' style="display:none" class='form-control date_session'>
+							<a id="openAlert" class="text-success" href="##"><span class="glyphicon glyphicon-check"></span></a>
+						</h4>
+						<a href="##" id='session_date'>Repregramar</a>
+						<a href="##" class="btn btn-primary btn-xs"style='display:none'id='save_session_date'>Guardar</a>
+						<a href="##" class="btn btn-danger btn-xs"style='display:none'id='close_session_date'>Cancelar</a>
+					</td>
 				</tr>
 			</table>
 		</div>
@@ -145,6 +154,21 @@
 </div>
 
 <script>
+	$("#session_date").click(function(){
+		var td = $(this).parent()
+		$("#openAlert").hide()
+		$(".date_session").show()
+		$("#save_session_date").show()
+		$("#close_session_date").show()
+		$(this).hide()
+	})
+	$("#close_session_date").click(function(){
+		$("#openAlert").show()
+		$("#session_date").show()
+		$(".date_session").hide()
+		$("#save_session_date").hide()
+		$(this).hide()
+	})
 	$("#alertCourse").fadeOut('fast');
 	//$('#alertCourse').fadeOut('fast');
 	$('#openAlert').click(function(){
@@ -153,4 +177,19 @@
 	$('#closeAlert').click(function(){
 		$('#alertCourse').fadeOut('slow');
 	});
+	$(".date_session").datepicker({ dateFormat: 'dd/mm/yy' })
+	$("#save_session_date").click(function(){
+		val_date = $(".date_session").val()
+		if (val_date !='' && typeof(val_date)!='undefined') {
+			date_save = val_date.split('/')
+			date_val = date_save[2]+"-"+date_save[1]+"-"+date_save[0]
+			// console.log(date_val)
+			var href = $("#session_checket").attr('href')
+			$(this).attr('href',href+"/date/"+$.base64.encode(date_val))
+		}
+	})
+	// $("#session_checket").click(function(){
+	// 	$("#session_date").find()
+	// })
+
 </script>

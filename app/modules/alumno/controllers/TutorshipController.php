@@ -32,7 +32,7 @@ class Alumno_TutorshipController extends Zend_Controller_Action {
                         'uid'   => $uid,
                         'pid'   => $pid,
                         'escid' => $escid,
-                        'perid' => '13B',
+                        'perid' => $perid,
                         'state' => 'M' );
 
         $register = $registerDb->_getFilter($where);
@@ -87,6 +87,8 @@ class Alumno_TutorshipController extends Zend_Controller_Action {
                 $this->view->tutors = $tutors;
 
                 $c = 0;
+                $totalStudents[0] = 0;
+                $stateTutor[$c] = '';
                 foreach ($tutors as $tutor) {
                     $totalStudents[$c] = 0;
                     $query = array(
