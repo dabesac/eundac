@@ -22,7 +22,7 @@ class Record_DirectedController extends Zend_Controller_Action {
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $uid=$this->_getParam('uid');
-            $perid = $this->sesion->period->perid;
+            $perid = $this->_getParam('perid',$this->sesion->period->perid);
             $this->view->uid=$uid;
             $where['eid']=$eid;
             $where['oid']=$oid;
