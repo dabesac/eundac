@@ -12,6 +12,9 @@
 					<input id="uid" type="text" class="form-control" maxlength="10"  onkeypress="return soloNumero(event)" placeholder="Ingrese Código">
 				</div>
 			</td>
+			<td>
+				<input id="checkbox" type="checkbox"  value="2">
+			</td>
 			<td class="col-lg-4">
 				<a id="search" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</a>
 			</td>
@@ -25,7 +28,11 @@ $("#search").click(function(){
 	var uid=$("#uid").val();
 	if (uid!="") {
 		$("#student").html("<img src='/img/spinner.gif'>Cargando...");
-		$("#student").load("/record/directed/student/uid/"+uid);
+		if ($('#checkbox').is(':checked')) {
+			$("#student").load("/record/directed/student/uid/"+uid+"/perid/13B");
+		}else{
+			$("#student").load("/record/directed/student/uid/"+uid);
+		}
 	}else{
 		alert("Ingrese el Código de Matricula.");
 		return false;
