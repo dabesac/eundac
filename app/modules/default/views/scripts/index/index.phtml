@@ -22,17 +22,12 @@
 		<h4>BIENVENIDO - Inicio Sesión</h4>
 	</div>
 	<div class="botones">
-		<form id="<?php  print $this->form->getname()?>"  name="<?php print $this->form->getname()?>" action="<?php print $this->form->getaction()?>" method="POST" enctype="application/x-www-form-urlencoded">
-	    	<?php //print $this->form->eid ?>
-	        <?php //print $this->form->oid ?>
-	        <?php print $this->form->rid ?>		    
-    		<?php print $this->form->usuario ?>
-    		<?php print $this->form->clave?>
-			<?php print $this->form->enviar?>
-    	</form>
-    	<?php if ($this->msgerror){?>
-            <div style="color: red; border: 1px solid #zzz;padding-bottom: 30px;padding-top: 5px"><?php echo $this->msgerror?></div>
-	    <?php } ?>
+		<form name="<?php echo $this->form->getName();?>" action="<?php echo $this->form->getAction();?>" method="post" enctype="application/x-www-form-urlecncoded">
+			<?php echo $this->form->rid ?>
+			<?php echo $this->form->usuario ?>
+			<?php echo $this->form->clave ?>
+			<?php echo $this->form->enviar ?>
+		</form>
 	</div>
 </div>
 
