@@ -30,7 +30,8 @@
 									url    : "/rcentral/entrant/detailregister/",
 									data   : {	pid  : $.base64.encode("<?php echo $student[0]['pid'] ?>"), 
 												uid  : $.base64.encode("<?php echo $student[0]['uid'] ?>"),
-												escid: $.base64.encode("<?php echo $this->studentSpeciality[$c][0]['escid'] ?>") },
+												subid: $.base64.encode("<?php echo $this->studentSpeciality[$c][0]['subid'] ?>"),
+												escid: $.base64.encode("<?php echo $this->studentSpeciality[$c][0]['escid'] ?>"), },
 									success: function(data){
 										$('#detailModal').html(data);
 										$('#coursesPending').html("<br><center>Cargando... <img src='/img/spinner.gif' alt='Loading' /></center><br>")										

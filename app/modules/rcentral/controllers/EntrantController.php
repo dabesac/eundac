@@ -185,11 +185,11 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$escid = base64_decode($this->_getParam('escid'));
 		$uid   = base64_decode($this->_getParam('uid'));
 		$pid   = base64_decode($this->_getParam('pid'));
+		$subid = base64_decode($this->_getParam('subid'));
 
 		//print_r($pid);
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
-		$subid = $this->sesion->subid;
 		$perid = $this->sesion->period->perid;
 		$dataStudent = array(	'uid'   => $uid,
 								'pid'   => $pid,
@@ -446,6 +446,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
         	}else{
         		$this->view->stateStudent = 'N';
         	}
+        	print_r($dataRegister);
 	       
 	       	$request = array( 	'eid'   => base64_encode($eid),
 								'oid'   => base64_encode($oid),
