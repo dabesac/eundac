@@ -185,11 +185,11 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$escid = base64_decode($this->_getParam('escid'));
 		$uid   = base64_decode($this->_getParam('uid'));
 		$pid   = base64_decode($this->_getParam('pid'));
+		$subid = base64_decode($this->_getParam('subid'));
 
 		//print_r($pid);
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
-		$subid = $this->sesion->subid;
 		$perid = $this->sesion->period->perid;
 		$dataStudent = array(	'uid'   => $uid,
 								'pid'   => $pid,
@@ -237,6 +237,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
         $attrib = array('date_payment', 'amount', 'ratid');
         $paymentData = $paymentDb->_getFilter($where, $attrib);
+        $rate = array();
         if ($paymentData and $paymentData[0]['amount'] != 0) {
 			$paymentData[0]['date_payment'] = substr($paymentData[0]['date_payment'], 0, 10);
 			$paymentData[0]['date_fix']     = date('d-m-Y', strtotime($paymentData[0]['date_payment']));
@@ -253,37 +254,39 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
 
 		//$Comparar fechas y pagos
-		$paymentDate = strtotime($paymentData[0]['date_payment']);
-		$paymentAmount = $paymentData[0]['amount'];
-		$paymentNormal = strtotime($rate[0]['f_fin_tnd']);
-		$paymentIncrement1 = strtotime($rate[0]['f_fin_ti1']);
-		$paymentIncrement2 = strtotime($rate[0]['f_fin_ti2']);
-		$paymentIncrement3 = strtotime($rate[0]['f_fin_ti3']);
+		if ($rate) {
+			$paymentDate = strtotime($paymentData[0]['date_payment']);
+			$paymentAmount = $paymentData[0]['amount'];
+			$paymentNormal = strtotime($rate[0]['f_fin_tnd']);
+			$paymentIncrement1 = strtotime($rate[0]['f_fin_ti1']);
+			$paymentIncrement2 = strtotime($rate[0]['f_fin_ti2']);
+			$paymentIncrement3 = strtotime($rate[0]['f_fin_ti3']);
 
-		
-		if ($paymentDate <= $paymentNormal) {
-			$paymentDateData['tiempo'] = 'yes';
-			$paymentDateData['cantidad'] = $rate[0]['t_normal'];
-		}else if($paymentDate <= $paymentIncrement1){
-			$paymentDateData['tiempo'] = 'no';
-			$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento1'];
-			$paymentDateData['cantidad'] = $rate[0]['t_incremento1'];
-		}else if($paymentDate <= $paymentIncrement2){
-			$paymentDateData['tiempo'] = 'no';
-			$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento2'];
-			$paymentDateData['cantidad'] = $rate[0]['t_incremento2'];
-		}else if($paymentDate <= $paymentIncrement3){
-			$paymentDateData['tiempo'] = 'no';
-			$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento3'];
-			$paymentDateData['cantidad'] = $rate[0]['t_incremento3'];
-		}
+			
+			if ($paymentDate <= $paymentNormal) {
+				$paymentDateData['tiempo'] = 'yes';
+				$paymentDateData['cantidad'] = $rate[0]['t_normal'];
+			}else if($paymentDate <= $paymentIncrement1){
+				$paymentDateData['tiempo'] = 'no';
+				$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento1'];
+				$paymentDateData['cantidad'] = $rate[0]['t_incremento1'];
+			}else if($paymentDate <= $paymentIncrement2){
+				$paymentDateData['tiempo'] = 'no';
+				$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento2'];
+				$paymentDateData['cantidad'] = $rate[0]['t_incremento2'];
+			}else if($paymentDate <= $paymentIncrement3){
+				$paymentDateData['tiempo'] = 'no';
+				$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento3'];
+				$paymentDateData['cantidad'] = $rate[0]['t_incremento3'];
+			}
 
-		if ($paymentAmount >= $paymentDateData['cantidad']) {
-			$paymentDateData['pago'] = 'yes';
-		}else {
-			$paymentDateData['pago'] = 'no';
+			if ($paymentAmount >= $paymentDateData['cantidad']) {
+				$paymentDateData['pago'] = 'yes';
+			}else {
+				$paymentDateData['pago'] = 'no';
+			}
+			$this->view->paymentDateData = $paymentDateData;
 		}
-		$this->view->paymentDateData = $paymentDateData;
 
 		
 		//Relleno Datos del Perfil
@@ -389,6 +392,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
         $dataRegister = $registerDb->_getFilter($where);
 
         $data = $registerxCourseDb->_getFilter($where, $attrib);
+        $courses=null;
         if ($data[0]['state'] and $data[0]['state'] <> 'I') {
         	$this->view->stateStudent = $data[0]['state'];
         	$this->view->exist = 'Yes';

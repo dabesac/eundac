@@ -5,8 +5,8 @@ ob_start();
 $perid=$this->perid;
 $course = $this->info_couser;
 $students = $this->students;
-$mpdf->mirrorMargins = 1;
-$mpdf->mirrorMargins = 1;	// Use different Odd/Even headers and footers and mirror margins
+// $mpdf->mirrorMargins = 1;
+// $mpdf->mirrorMargins = 1;	// Use different Odd/Even headers and footers and mirror margins
 
 $header = '
 <table width="100%" style="border: 1px solid #000;font-family: serif;  color: #000; ">
@@ -117,7 +117,7 @@ $header = '
     $html = ob_get_contents();
   
     $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,5,5);
-    $mpdf->SetWatermarkImage('/img/UNDAC.png',0.07,'F');
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
     $mpdf->showWatermarkImage = true;
 
     $mpdf->SetHTMLHeader($this->header);  

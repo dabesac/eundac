@@ -172,7 +172,7 @@ public function _getPaymentsStudent($where=null,$attrib=null,$order=null){
             and m.subid=u.subid
             inner join base_person as p
             on u.pid=p.pid and u.eid=p.eid 
-            where u.eid='$eid' and u.oid ='$oid' and u.rid='AL'  and m.perid = '$perid' and m.escid like '$escid%' and m.state = '$estados' $str
+            where u.eid='$eid' and u.oid ='$oid' and u.rid='AL' and u.state='A'  and m.perid = '$perid' and m.escid like '$escid%' and m.state = '$estados' $str
             order by u.escid,m.date_register, m.semid,m.credits 
             ");
         $r = $sql->fetchAll();

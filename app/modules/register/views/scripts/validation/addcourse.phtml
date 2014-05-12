@@ -68,7 +68,7 @@
 
                
               
-              <td><a href="#" value= "<?php echo $this->usuario[0]['uid']?>" id="agregados"><center><span class="glyphicon glyphicon-pencil"></span></center></a></td>
+              <td><a href="#" value= "<?php echo $this->usuario[0]['uid']?>" id="agregados" pid='<?php echo $pid?>' uid='<?php echo $uid?>' escid='<?php echo $escid?>' subid='<?php echo $subid;?>'><center><span class="glyphicon glyphicon-pencil"></span></center></a></td>
 
                <th><center><a target="black" style="float:right" class="btn btn-primary"  href="/register/validation/print/perid/<?php echo $this->perid ?>/escid/<?php echo $escid ?>/subid/<?php echo $subid ?>/uid/<?php echo $uid ?>/pid/<?php echo $pid ?>  ">Imprimir</a></center></th>
             <?php
@@ -91,10 +91,14 @@
 
    <script>
     $("#agregados").click(function(){
-      var url = "/register/validation/lcontainer/uid/<?php echo $uid."/subid/".$subid."/escid/".$escid."/pid/".$pid?>/nota/<?php echo $this->nota?>/perid/<?php echo $this->perid?>/temp/<?php echo $this->temp?>";
-      // alert(url);
+        var pid=$(this).attr('pid');
+        var uid=$(this).attr('uid');
+        var escid=$(this).attr('escid');
+        var subid=$(this).attr('subid');
+        
+        var url = "/register/validation/lcontainer/uid/"+uid+"/subid/"+subid+"/escid/"+escid+"/pid/"+pid+"/nota/<?php echo $this->nota?>/perid/<?php echo $this->perid?>/temp/<?php echo $this->temp?>";
 
-      $("#guardar").load(url);
+        $("#guardar").load(url);
 
     });
 

@@ -131,6 +131,7 @@ th, td{
     <br>    
     <?php
     $i=1;
+    $temporalh=null;
     if ($this->cursosasignados){  ?>
     <table id="vercursosasig" style="width:96%; margin:0px" class="table table-bordered table-condensed table-striped">
         <tr>
@@ -206,6 +207,8 @@ th, td{
         </form> 
         <?php
         $i=1;
+        $temporalad=null;
+        $temporal=null;
         if ($this->administrativas){ ?>
         <table id="labores" style="width:90%; margin:0px" class="table table-bordered table-condensed table-striped">
             <tr>
@@ -242,7 +245,7 @@ th, td{
     </center>     
 </div>
 <br>
-<div id='sandro'></div>
+<!-- <div id='sandro'></div> -->
 <center style="padding-left:70%" class="col-lg-4">
     <div class="cuadro col-lg-4">
         <table class="table table-hover table-bordered table-condensed" style="margin:0px">
@@ -253,7 +256,7 @@ th, td{
             $whereteach['pid']=$this->pid;
             $whereteach['perid']=$this->perid;
             $distdoc = new Distribution_Model_DbTable_DistributionTeacher();
-            $datadistdoc = $distdoc->_getFilter($whereteach,$atrib=array());
+            $datadistdoc = $distdoc->_getFilter($whereteach,$atrib=null);
             $infothacad = $datadistdoc[0]['total_hour_acad'];
             $infothadmin = $datadistdoc[0]['total_hour_admin'];
             $thoras = $infothacad+$infothadmin;

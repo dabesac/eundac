@@ -1,0 +1,22 @@
+<?php if ($this->teachersAsigned): ?>
+	<?php foreach ($this->teachersAsigned as $c => $teacher): ?>
+		<div class="teacher">
+			<p><span class="glyphicon glyphicon-user"></span> <?php echo $teacher['full_name'] ?></p>
+
+			<div class="semestre" data-toggle="tooltip" title="Semestre">
+				<?php echo $teacher['semestre'] ?>
+			</div>
+
+			<div class="cantAlumnos" title="Cantidad Maxima de Alumnos">
+				<?php echo $teacher['number'] ?>
+			</div>
+
+			<a href="##" class="btnSeeInform btn btn-info">Ver Informe</a>
+		</div>
+	<?php endforeach ?>
+	<script>
+		
+	</script>
+<?php else: ?>
+	<h4 class="text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign"></span> Aún no asigna <span class="text-danger">Tutores para este Periodo</span></h4>
+<?php endif ?>

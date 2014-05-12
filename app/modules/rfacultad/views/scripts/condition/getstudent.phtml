@@ -29,6 +29,7 @@
                             <td><?php echo $datos['uid'];?></td>                            
                             <td><?php echo $datos['last_name0']." ".$datos['last_name1'].", ".$datos['first_name'];?></td>
                             <td><?php echo $datos['escid']?></td>
+                            <?php $datos['doc_authorize']=(isset($datos['doc_authorize']))?$datos['doc_authorize']:null;?>
                             <td><?php echo $datos['doc_authorize']?></td>
                             <td>
                             <?php 

@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="/css/tutorshipReport.css" />
+
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Tutoria');?>
+<?php $this->placeholder('Btnnav')->append(' <a href="/docente/" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Regresar</a>');?>
+
+<?php if ($this->dataTutoring): 
+	$dataTutoring = $this->dataTutoring;
+	?>
+	<div class="nameTutoring">
+		<span class="glyphicon glyphicon-bookmark"></span> <?php echo $dataTutoring['name'] ?>
+		<p class="cantStudents">
+			<?php echo $dataTutoring['cant_register'].'/'.$dataTutoring['number'] ?>
+		</p>
+		<p class="nameTutor">
+			<span class="glyphicon glyphicon-user"></span> <?php echo $dataTutoring['tutor_name'] ?>
+		</p>
+	</div>
+	<div class="listStudents">
+	<?php if ($this->dataStudents): ?>
+		<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Lista de Estudiantes Registrados :</p>
+	<?php else: ?>
+		<h4 class="text-muted text-center emptyStudents"><span class="glyphicon glyphicon-exclamation-sign"></span> Aun no existe <span class="text-info">estudiantes registrados</span></h4>
+	<?php endif ?>
+	</div>
+<?php else: ?>
+	<br><h4 class="text-muted text-center"><span class="glyphicon glyphicon-exclamation-sign"></span> Usted no esta registrado <span class="text-info">para ser tutor este Periodo</span></h4>
+<?php endif ?>

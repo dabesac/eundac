@@ -145,15 +145,12 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 				$select = $this->_db->select();
 				if ($attrib=='') $select->from("base_registration_course");
 				else $select->from("base_registration_course",$attrib);
-				if ($where){
-					foreach ($where as $atri=>$value){
-						$select->where("$atri = ?", $value);
-					}
+				foreach ($where as $atri=>$value){
+					$select->where("$atri = ?", $value);
 				}
-				if ($orders){
-					foreach ($orders as $key => $order) {
-							$select->order($order);
-					}
+				if ($orders<>null || $orders<>"") {
+					if (is_array($orders))
+						$select->order($orders);
 				}
 				$results = $select->query();
 				$rows = $results->fetchAll();

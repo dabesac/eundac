@@ -146,7 +146,7 @@ class Curricula_ShowController extends Zend_Controller_Action
             $escid=base64_decode($this->_getParam('escid'));
             $subid=base64_decode($this->_getParam('subid'));
             $curid=base64_decode($this->_getParam('curid'));
-            $state=base64_decode($this->_getParam('state'));
+            // $state=base64_decode($this->_getParam('state'));
             $this->view->curid=$curid;
 
             // $this->view->eid=$eid;

@@ -54,7 +54,7 @@ class Api_Model_DbTable_Person extends Zend_Db_Table_Abstract
 	}
 
 
-public function _getAll($where,$order='',$start=0,$limit=0){
+	public function _getAll($where,$order='',$start=0,$limit=0){
 		try{
 			if ($where['eid']=='') return false; 
 			$wherestr= "eid='".$where['eid']."'";

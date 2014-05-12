@@ -1,0 +1,47 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-map-marker"></span> Extensión Universitaria');?>
+<?php $this->placeholder('Btnnav')->append('<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<form name="frmsearch" id="frmsearch" action="/acreditacion/universityextension/getstudent" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+	<div class='col-md-12'>
+		<center><div class='alert alert-info col-md-6 col-md-offset-3' style="font-size:17px"><span class='glyphicon glyphicon-info-sign'></span> Para iniciar la extensión universitaria ingrese un código de un alumno</div></center>	
+	</div>
+	<div class='row col-md-offset-4'>
+		<div class='col-md-2'><h5><b>Ingrese código:</b></h5></div>
+		<div class='col-md-3'><?php echo $this->fm->uid?></div>	
+	</div>
+</form>
+<div id="cargadatos_"></div>
+<script type="text/javascript">
+	$("#uid").keypress(function (e) {
+        if(e == 13 || e.which==13 || e.which==0){
+            var codi = $('#uid').val();
+            count=codi.length;
+            if (count==10 || count==0) {
+                $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
+                $('#frmsearch').submit();
+            }
+            else
+            {
+                alert("Ingrese un Código válido");
+                $('#uid').val('');
+                $('#cargadatos_').hide();
+            }   
+        }
+    });
+    $("#frmsearch").submit(function(){
+    	$('#cargadatos_').show();
+        $.ajax({
+        	type: 'POST',
+        	url: $(this).attr('action'),
+        	data: $(this).serialize(),
+        	success: function(data) {                        
+            	$('#cargadatos_').html(data);
+            }
+        }); 
+        return false;
+    });
+
+	function validNumber(e) {
+	    var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
+	    return ((tecla > 47 && tecla < 58) || tecla == 8);
+	}
+</script>

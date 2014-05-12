@@ -54,11 +54,11 @@ class Admin_GenerategraduatedController extends Zend_Controller_Action {
 
             $where = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'state' => 'A', 'rid' => 'AL');
             $user = new Api_Model_DbTable_Users();
-            $student = $user->_getUsersXEscidXRidXState($where);
+            $students = $user->_getUsersXEscidXRidXState($where);
             $where['state'] = 'I';
             $studentI = $user->_getUsersXEscidXRidXState($where);
-            if ($studentI) $student = array_merge($student,$studentI);
-            foreach ($student as $student){
+            if ($studentI) $student = array_merge($students,$studentI);
+            foreach ($students as $student){
                 $pid = $student['pid'];
                 $uid = $student['uid'];
                 $wherecurr = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $student['subid'], 'uid' => $uid, 'pid' => $pid);
@@ -75,7 +75,7 @@ class Admin_GenerategraduatedController extends Zend_Controller_Action {
                         $sum = 0;
                         $cont = 1;  
                         while ($cont <= 12) {
-                            foreach ($data_courses as $datos) {           
+                            foreach ($data_courses as $datos) { 
                                 $nombre = $datos['semid']; 
                                 if ($nombre == $cont){
                                     $total = $datos['cantidad_cursos']; 

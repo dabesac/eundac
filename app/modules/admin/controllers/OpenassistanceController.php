@@ -44,29 +44,30 @@ class Admin_OpenassistanceController extends Zend_Controller_Action{
 			$orders=array('semid','courseid','turno');
 			$dbcourses= new Api_Model_DbTable_PeriodsCourses();
 			$datacourses = $dbcourses->_getFilter($where,$attrib,$orders);
-			$curid='13A4SI';
-			$coursoid='13104';
-			$turno='A';					
-			$i=0;
-			$k=0;
-			foreach ($datacourses as $course) {
-				$curid=$course['curid'];
-				$courseid=$course['courseid'];
-				$turno=$course['turno'];
-				$wher=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid,'coursoid'=>$courseid,'perid'=>$perid,'turno'=>$turno);
-				$dbstate=new Api_Model_DbTable_StudentAssistance();
-				$result[$i]= $dbstate->_getState($wher);			
-				$where=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid);
-				$attrib=array('courseid','name');
-				$dbcourse = new Api_Model_DbTable_Course();
-				$datacourse[$i]= $dbcourse->_getFilter($where,$attrib);
-				$i++;
-			}
-			// print_r($result);exit();
+			if ($datacourses) {
+				$curid='13A4SI';
+				$coursoid='13104';
+				$turno='A';					
+				$i=0;
+				$k=0;
+				foreach ($datacourses as $course) {
+					$curid=$course['curid'];
+					$courseid=$course['courseid'];
+					$turno=$course['turno'];
+					$wher=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid,'coursoid'=>$courseid,'perid'=>$perid,'turno'=>$turno);
+					$dbstate=new Api_Model_DbTable_StudentAssistance();
+					$result[$i]= $dbstate->_getState($wher);			
+					$where=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid);
+					$attrib=array('courseid','name');
+					$dbcourse = new Api_Model_DbTable_Course();
+					$datacourse[$i]= $dbcourse->_getFilter($where,$attrib);
+					$i++;
+				}
+				$this->view->result=$result;
+				$this->view->datacourses=$datacourses;
+				$this->view->datacourse=$datacourse;
+			}	
 			
-			$this->view->result=$result;
-			$this->view->datacourses=$datacourses;
-			$this->view->datacourse=$datacourse;
 		} catch (Exception $e) {
 			print "Error: get Courses".$e->getMessage();
 		}

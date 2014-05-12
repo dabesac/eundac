@@ -81,7 +81,7 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
                         'perid'=>$disi['perid']);
                 $dataobs=$ldistribution->_getUltimateObservation($wher);
                 if ($dataobs) {
-                    $dis[$i]['state']=$dataobs[0]['state'];
+                    // $dis[$i]['state']=$dataobs[0]['state'];
                     $dis[$i]['comments']=$dataobs[0]['comments'];
                     $dis[$i]['observation']=$dataobs[0]['observation'];                    
                 }

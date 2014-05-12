@@ -39,10 +39,6 @@ class Alumno_TutorshipController extends Zend_Controller_Action {
 
         if ($register) {
             $semid    = $register[0]['semid'];
-            $regid    = $register[0]['regid'];
-
-            $dataStudent = array( 'regid' => $regid );
-            $this->view->dataStudent = $dataStudent;
 
             //Consulta ERP
             //Escuela
@@ -61,7 +57,7 @@ class Alumno_TutorshipController extends Zend_Controller_Action {
             $query = array(
                         array(  'column' => 'registered_code',
                                 'operator' => '=',
-                                'value' => $regid,
+                                'value' => $uid,
                                 'type' => 'string')
                         );
             $idStudent = $server->search('tutoring.students', $query);
@@ -157,18 +153,16 @@ class Alumno_TutorshipController extends Zend_Controller_Action {
         //_________________________________
 
         $tutoringId = $this->_getParam('tutoringid');
-        $regid      = $this->_getParam('regid');
         $name       = $this->sesion->infouser['fullname'];
         $uid        = $this->sesion->uid;
-        $pid        = $this->sesion->pid;
 
-        $data = array(  'create_uid'      => $uid,
-                        'create_date'     => date('Y-m-d'),
+        $data = array(  'create_uid'      => 1,
                         'state'           => 'I',
-                        'registered_code' => $regid,
+                        'registered_code' => $uid,
                         'name'            => $name,
-                        'tutoring_id'     => $tutoringId );
-        $create = $server->create('tutoring.students',$data);
+                        'tutoring_id'     => $tutoringId);
+        print_r($data);
+        $create = $server->create('tutoring.students', $data);
         if ($create) {
             echo "true";
         }else{

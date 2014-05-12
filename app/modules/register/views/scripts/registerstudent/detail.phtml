@@ -29,7 +29,13 @@
         </blockquote>
     </div>
 
-<?php if ($this->courses): ?>
+<?php if ($this->courses): 
+$classButtonValidate = null; //s
+$classInteractions = null; //s
+$classButtons = null; //s
+$classState = null; //s
+$nameState = null; //s
+?>
     <div class="col-md-3">
         <blockquote>
             <div id="showDetailPayment">
@@ -219,7 +225,7 @@
         <div id="failValidate" class="alert alert-danger fade in">
             <button class="close">&times;</button>
             <h4>Hubo un error en la validación</h4>
-            <p>surgio un error mientras se validaba la matricula......</p>
+            <p>surgio un error mientras se validaba la matrícula......</p>
         </div>
 
         <!--Avisos para la Eliminación-->
@@ -263,7 +269,7 @@
     <div id="stateRegister" class="col-md-10 col-md-offset-1">
         <?php if ($this->stateRegister == 'I'): 
         $state = 'I';
-        $claseFilas = ''; 
+        $claseFilas = '';
         elseif ($this->stateRegister == 'M'): ?>
             <div class="alert alert-success">
                 <h5 class="text-center">Matricula Realizada</h5>
@@ -406,6 +412,7 @@
         else:
             $classInteractions = '';
             $classActive = 'hidden';
+            $classValidate = null;
         endif ?>
         <a id="activeRegister" href="##" class="btn btn-success form-control <?php echo $classActive ?>">Activar</a>
         <br><br>

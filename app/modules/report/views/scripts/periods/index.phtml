@@ -5,9 +5,13 @@
 <div class="row">
 	<div class="col-md-3 col-md-offset-2">
 		<h5 class="text-muted">Escuela </h5>
-		<?php if (!$this->allSchool): 
+		<?php 
+			if (!$this->allSchool): 
 			$disabled = 'disabled';
-		endif ?>
+			else:
+				$disabled = null;
+			endif 
+		?>
 		<select id="school" class="form-control" <?php echo $disabled ?>>
 			<?php
 			if ($this->speciality) { ?>
@@ -16,7 +20,12 @@
 				<option value="<?php echo $this->allSchool?>">Todas las Especialidades</option>
 				<?php 
 				foreach ($this->speciality as $speciality) { 
-					if ($this->director) $selected = ($this->escid == $speciality['escid'])? "selected": "";
+					if ($this->director){
+						$selected = ($this->escid == $speciality['escid'])? "selected": "";	
+					}
+					else{
+						$selected = null;
+					} 
 					?>
 					<option value="<?php echo $speciality['escid'].'--'.$speciality['subid']?>" <?php echo $selected?>><?php echo $speciality['name']?></option>
 					<?php
