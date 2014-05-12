@@ -13,37 +13,39 @@
 
     public function indexAction(){
         try {
-         $where['subid'] = $this->sesion->subid;        
-         $where['facid'] =$this->sesion->faculty->facid;
-         $nomfac = $this->sesion->faculty->name;
-         $nomesc = $this->sesion->speciality->name;
-         $where['escid'] = $this->sesion->escid;
-         $rid = $this->sesion->rid;
-         $where['uid'] = $this->sesion->uid;
-         $where['pid'] = $this->sesion->pid;
-         $where['eid'] = $this->sesion->eid;
-         $where['oid'] = $this->sesion->oid;
-         $infodoc =new Api_Model_DbTable_Infoteacher();
-         $doc=$infodoc->_getOne($where);
-         $direc=$doc['is_director'];
-         $this->view->esdirector=$direc;
-         $this->view->escid=$where['escid'];
-         $this->view->nom_escuela=$nomesc;
-         $this->view->nom_fac=$nomfac;
-         $this->view->subid=$where['subid'];
-         $this->view->rid=$rid;
-         $this->view->facid=$where['facid'];
-         $fm=new Report_Form_Location();
-        if ($rid=='RF' and $facid=='TODO')
-        { $fm->facid->setAttrib("enabled", false); }
-        else 
-        {
-          if ($rid=='RC' or $rid=='VA' or $rid=='PD')
-            { $fm->facid->setAttrib("enabled", false); }
-          else
-          { $fm->facid->setAttrib("disabled", true); }
-        }
-        $this->view->fm=$fm;    
+            $where['subid'] = $this->sesion->subid;        
+            $where['facid'] = $this->sesion->faculty->facid;
+            $nomfac = $this->sesion->faculty->name;
+            $nomesc = $this->sesion->speciality->name;
+            $where['escid'] = $this->sesion->escid;
+            $rid = $this->sesion->rid;
+            $where['uid'] = $this->sesion->uid;
+            $where['pid'] = $this->sesion->pid;
+            $where['eid'] = $this->sesion->eid;
+            $where['oid'] = $this->sesion->oid;
+            $infodoc =new Api_Model_DbTable_Infoteacher();
+            $doc=$infodoc->_getOne($where);
+            $direc=$doc['is_director'];
+            $this->view->esdirector=$direc;
+            $this->view->escid=$where['escid'];
+            $this->view->nom_escuela=$nomesc;
+            $this->view->nom_fac=$nomfac;
+            $this->view->subid=$where['subid'];
+            $this->view->rid=$rid;
+            $this->view->facid=$where['facid'];
+            $fm=new Report_Form_Location();
+            if ($rid=='RF' and $where['facid']=='TODO'){ 
+                $fm->facid->setAttrib("enabled", false); 
+            }
+            else{
+                if ($rid=='RC' or $rid=='VA' or $rid=='PD'){
+                    $fm->facid->setAttrib("enabled", false); 
+                }
+                else{ 
+                    $fm->facid->setAttrib("disabled", true); 
+                }
+            }
+            $this->view->fm=$fm;    
         } catch (Exception $e) {
             print ('Error: get datos'. $e->getMessage());
             
@@ -104,7 +106,7 @@ public function listshoolAction(){
         $datos['state']='A';
         if ($where['subid'] == '1901')
         {  if ($rid=='RF') {
-              if($facid=='2'){
+              if($where['facid']=='2'){
               $escuelas = $db_esc->_getSchoolXSecundaria($where);
               $this->view->escuelas = $escuelas;
               }
@@ -137,7 +139,7 @@ public function listshoolAction(){
              $this->view->escuelas=$escuela;  
             }       
         }
-        if($escid=='2ESTY'){
+        if($where['escid']=='2ESTY'){
               $datx['eid']=$where['eid'];
               $datx['oid']=$where['oid'];
               $datx['subid']=$where['subid'];

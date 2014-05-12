@@ -58,12 +58,12 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $escid=$periodos['escid'];
                 $subid=$periodos['subid'];
                 $wheres=array('eid'=>$data['eid'],'oid'=>$data['oid'],'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
-                $wheresp=array('eid'=>$data['eid'],'oid'=>$data['oid'],'distid'=>$distid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
-                $dataobs=$ldistribution->_getUltimateObservation($wheresp);
-                if ($dataobs) {
-                    $rows_distribution[$i]['observation']=$dataobs[0]['observation'];
-                    $rows_distribution[$i]['state']=$dataobs[0]['state'];
-                }
+                //$wheresp=array('eid'=>$data['eid'],'oid'=>$data['oid'],'distid'=>$distid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
+                //$dataobs=$ldistribution->_getUltimateObservation($wheresp);
+                //if ($dataobs) {
+                    //$rows_distribution[$i]['observation']=$dataobs[0]['observation'];
+                    //$rows_distribution[$i]['state']=$dataobs[0]['state'];
+                //}
                 
                 $datahours=$bdhorary->_getFilter($wheres);
                 $rows_distribution[$i]['hours']=$datahours; 
@@ -1338,7 +1338,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $wheredis['escid']=$esciddoc;
                 $wheredis['perid']=$perid;
                 $dist = new Distribution_Model_DbTable_Distribution();
-                $distiddoc=$dist->_getFilter($wheredis,$atrib=array(),$orders=array());
+                $distiddoc=$dist->_getFilter($wheredis,$attrib=null,$orders=null);
                 $dist = $dis->_getDistribucionEscuela($eid,$oid,'2ES',$perid);
                 $distid = $distiddoc[0]['distid'];
             }
@@ -1356,7 +1356,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             
             $distadm = new Distribution_Model_DbTable_DistributionAdmin();
             $distadm->_save($datadistadm);
-            $labor = $distadm->_getFilter($pk,$atrib=array());
+            $labor = $distadm->_getFilter($pk,$attrib=null);
             $this->view->administrativas=$labor;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
@@ -1391,7 +1391,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $pkdist['escid']=$esciddoc;
                 $pkdist['perid']=$perid;
                 $dist = new Distribution_Model_DbTable_Distribution();
-                $datadist = $dist->_getFilter($pkdist,$atrib=array(),$orders=array());
+                $datadist = $dist->_getFilter($pkdist,$atrib=null,$orders=null);
 
                 $pk['escid']=$esciddoc;
                 $pk['distid']=$datadist[0]['distid'];

@@ -25,7 +25,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $this->view->facid=$where['facid'];
             $this->view->perid=$where['perid'];
             $fm=new Register_Form_Buscar();
-            $pfac='T'.$escid['1'];
+            // $pfac='T'.$escid['1'];
             $this->view->fm=$fm;
             $escuelas = new Api_Model_DbTable_Speciality();
             if($where['subid']<>'1901'){
@@ -75,7 +75,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             if ($subid != '1901') {
                 $facid = '';
             }
-
+            $nombre = null;
+            $codigo = null;
             $estados = $state;
             $bdu = new Api_Model_DbTable_Registration();        
             $str = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
@@ -176,6 +177,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $pagoAtiempo = 'yes';
             if ($datePago <= $dateNormal) {
                 $tipePayment['tipoPago'] = 'AT';
+                $tipePayment['incremento'] = null; //s
             }elseif ($datePago <= $dateIncrement1){
                 $tipePayment['tipoPago']   = 'I1';
                 $tipePayment['incremento'] = $rate[0]['t_incremento1'];
@@ -194,6 +196,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             }else {
                 $tipePayment['tipoPago']    = 'FT';
                 $pagoAtiempo = 'no';
+                $tipePayment['incremento'] = null; //s
             }
             
             if ($montoPagado >= $tipePayment['incremento']) {
@@ -271,9 +274,11 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                                 'state'   => 'M' );
                 $veces = $coursesRegisterDb->_getFilter($where, $attrib);
                 $j = 0;
-                foreach ($veces as $vez) {
-                    if ($vez['perid']['2'] != 'D' and $vez['perid']['2'] != 'E' and $vez['notafinal'] != '-3' and $vez['perid'] != $perid) {
-                        $j++;
+                if ($veces) {
+                    foreach ($veces as $vez) {
+                        if ($vez['perid']['2'] != 'D' and $vez['perid']['2'] != 'E' and $vez['notafinal'] != '-3' and $vez['perid'] != $perid) {
+                            $j++;
+                        }
                     }
                 }
                 if ($j >= 2) {

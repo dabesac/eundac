@@ -112,7 +112,10 @@
 				<?php $c = 0;
 				$courses = 0;
 				foreach ($this->data as $course): ?>
-					<?php if ($course['courseid'] != $courses): ?>
+					<?php if ($course['courseid'] != $courses): 
+						$course['name']=(isset($course['name'])?$course['name']:null);
+						$course['credits']=(isset($course['credits'])?$course['credits']:null);
+					?>
 						<tr class="listStudent <?php echo $classRowCourses ?>">
 							<td class="text-center"><?php echo $c +1 ?></td>
 							<td class="text-center"><?php echo $course['courseid'] ?></td>
@@ -138,8 +141,10 @@
 							<?php 
 							$interruptor = 0;
 							foreach ($this->data as $docente): ?>
-								<?php if ($course['courseid'] == $docente['courseid']): 
-									if ($interruptor == 0): ?>
+								<?php if ($course['courseid'] == $docente['courseid']):
+									if ($interruptor == 0):
+										$docente['docente']=(isset($docente['docente'])?$docente['docente']:null);
+									?>
 										<span id="docente<?php echo $docente['turno'].$docente['courseid'] ?>"><?php echo $docente['docente'] ?> </span>
 									<?php $interruptor = 1;
 									else : ?>

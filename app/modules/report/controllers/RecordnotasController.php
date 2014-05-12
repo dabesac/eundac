@@ -75,7 +75,9 @@
             $s=1;
             $in=0;
             for ($i=0; $i < $len; $i++) { 
-                if ($data[$i]['semid']==$data[$j]['semid']) {
+                $datai=(isset($data[$i]['semid'])?$data[$i]['semid']:null);
+                $dataj=(isset($data[$j]['semid'])?$data[$j]['semid']:null);
+                if ($datai == $dataj) {
                     $s++;
                 }
                 else{

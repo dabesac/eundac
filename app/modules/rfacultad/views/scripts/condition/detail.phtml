@@ -102,7 +102,9 @@ if (($this->condi)=='C'){ ?>
         <?php 
 
         $i=1;
-       foreach ($this->datos as $condi)    
+        if ($this->datos) {
+            
+        foreach ($this->datos as $condi)    
         { ?>
          <tr>
         <div id='det1'></div>
@@ -127,7 +129,9 @@ if (($this->condi)=='C'){ ?>
         </tr>         
            <?php
             $i++;
-        }?>
+        }
+        }
+        ?>
 </table>
 <?php }?>
 <style type="text/css">

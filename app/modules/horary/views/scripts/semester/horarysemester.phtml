@@ -8,14 +8,23 @@
         $len1= count($hour_begin);
         $len2= count($hour_begin_afternoon);
         $lentotal = $len1+$len2;
-    
-        for ($i=0; $i < $len1; $i++) { 
+        /*for ($i=0; $i < $len1; $i++) { 
             $hourm[$i]=substr($hour_begin[$i],0,2);
             $minutem[$i]=substr($hour_begin[$i],3,2);
         }
         for ($i=0; $i < $len2; $i++) { 
             $hourt[$i]=substr($hour_begin_afternoon[$i],0,2);
             $minutet[$i]=substr($hour_begin_afternoon[$i],3,2);
+        }*/
+        for ($i=0; $i < $len1; $i++) {
+            $hourm[$i]=(isset($hour_begin[$i]))?substr($hour_begin[$i],0,2):null; 
+            // $hourm[$i]=substr($hour_begin[$i],0,2);
+            $minutem[$i]=(isset($hour_begin[$i]))?substr($hour_begin[$i],3,2):null; 
+            // $minutem[$i]=substr($hour_begin[$i],3,2);
+        }
+        for ($i=0; $i < $len2; $i++) { 
+            $hourt[$i]=(isset($hour_begin_afternoon[$i]))?substr($hour_begin_afternoon[$i],0,2):null; 
+            $minutet[$i]=(isset($hour_begin_afternoon[$i]))?substr($hour_begin_afternoon[$i],3,2):null; 
         }
         for ($i=0; $i < $len1-1; $i++) {
             if ($hourm[$i] && $j<$len1) {

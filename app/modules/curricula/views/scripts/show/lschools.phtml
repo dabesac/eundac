@@ -3,7 +3,13 @@ if ($this->escuelas) { ?>
 	<option>- Seleccione Escuela -</option>
 		<?php
 		foreach ($this->escuelas as $escuelas) { 
-			if ($this->escid) $str=($this->escid==$escuelas['escid'])? "selected":""; ?>
+			if ($this->escid){
+				$str=($this->escid==$escuelas['escid'])? "selected":""; 
+			}
+			else{
+				$str=null;
+			} 
+			?>
 			<option <?php echo $str?> value="<?php echo $escuelas['escid']?>"><?php echo $escuelas['name']?></option>		
 		<?php
 		}

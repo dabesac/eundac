@@ -154,8 +154,8 @@ foreach ($this->semestre as $semestre) { ?>
         var subid="<?php echo base64_encode($subid)?>";
         var escid="<?php echo base64_encode($escid)?>";
         var curid="<?php echo base64_encode($curid)?>";
-        var state="<?php echo base64_encode($cstate)?>";
-        var url="/curricula/show/print/subid/"+subid+"/escid/"+escid+"/curid/"+curid+"/state/"+state;
+        
+        var url="/curricula/show/print/subid/"+subid+"/escid/"+escid+"/curid/"+curid;
         $(location).attr('href',url);
     });
 </script>
