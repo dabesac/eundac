@@ -73,7 +73,7 @@ class Admin_UserController extends Zend_Controller_Action{
                 $inforol[$c]= $dbrol->_getOne($whered);
                 $dbesc= new Api_Model_DbTable_Speciality();
                 $infoesc[$c]= $dbesc->_getOne($wheres);
-                $info[$c]=$inforol['rid'];
+                //$info[$c]=$inforol['rid'];
                 $c++;
             }
             $this->view->datauser=$datauser;
@@ -123,7 +123,7 @@ class Admin_UserController extends Zend_Controller_Action{
                     $inforol[$c]= $dbrol->_getOne($whered);
                     $dbesc= new Api_Model_DbTable_Speciality();
                     $infoesc[$c]= $dbesc->_getOne($wheres);
-                    $info[$c]=$inforol['rid'];
+                    //$info[$c]=$inforol[$c]['rid'];
                     $c++;
                 }
 				// print_r($datauser);

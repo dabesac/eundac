@@ -53,6 +53,8 @@ class Admin_PersonController extends Zend_Controller_Action{
             $register=$this->sesion->uid;
             $user=$this->_getParam('u');
             $rcentral=$this->_getParam('r');
+            $frmdata['user']=null;
+            $frmdata['rcentral']=null;
             $fm=new Admin_Form_Personnew();
             $this->view->fm=$fm;
             if ($this->getRequest()->isPost()){   

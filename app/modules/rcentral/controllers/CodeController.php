@@ -28,7 +28,9 @@ class Rcentral_CodeController extends Zend_Controller_Action
     public function listuserAction(){
         try {
 
-            $this->_helper->layout()->disableLayout();    
+            $this->_helper->layout()->disableLayout();
+            $uid=null;
+            $nom=null;
             $pid=$this->_getParam("pid");
             $eid = $this->sesion->eid;        
             $oid = $this->sesion->oid;

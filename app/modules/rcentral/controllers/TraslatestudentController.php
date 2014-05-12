@@ -19,6 +19,7 @@ class Rcentral_TraslatestudentController extends Zend_Controller_Action
     public function searchAction(){
         try {
             $this->_helper->layout()->disableLayout();    
+            $cred=null;
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $uid = $this->_getParam('uid');

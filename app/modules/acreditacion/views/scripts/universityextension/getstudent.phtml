@@ -1,0 +1,59 @@
+<?php
+if ($this->data_user) {		?>
+<hr>
+<div class='row col-md-8 col-md-offset-2'>
+	<div class='panel panel-primary'>
+		<div class='panel-body' style='font-size:17px'>
+			<div>
+				<div class='col-md-1'></div>
+				<div class='col-md-3 text-right'><b>Apellidos y Nombres:</b></div>	
+				<div class='col-md-6 text-info'><b><?php echo $this->data_user[0]['last_name0']." ".$this->data_user[0]['last_name1'].", ".$this->data_user[0]['first_name']?></b></div>	
+			</div><br><br>
+			<div>
+				<div class='col-md-2 text-right'><b>Escuela: </b></div>
+				<div class='col-md-4'><?php echo $this->data_school['name']?></div>
+				<div class='col-md-2 text-right'><b>Sede: </b></div>
+				<div class='col-md-4'><?php echo $this->data_subsidiary['name']?></div>				
+			</div><br><br>
+			<div>
+				<div class='col-md-2 text-right'><b>Periodo: </b></div>
+				<div class='col-md-4 '>
+					<select class='form-control'>
+					<?php
+						foreach ($this->data_period as $key => $periods) {
+							?>
+							<option value="<?php echo $periods['perid']?>"><?php echo $periods['perid']." | ".$periods['name']?></option>
+						<?php	
+						}
+					?>
+					</select>				
+				</div>				
+				<div class='col-md-2 text-right'><b>Tipo: </b></div>
+				<div class='col-md-4 '>
+					<select class='form-control'>
+						<option value="1">Movilidad Estudiantil</option>
+						<option value="2">Beca 18</option>
+						<option value="3">Pasantía</option>
+					</select>				
+				</div>
+			</div><br><br><br>
+			<div>
+				<div class='col-md-3 '>
+				</div>				
+				<div class='col-md-4 text-right'>
+					<a href="#" class='btn btn-success'><span class='glyphicon glyphicon-save'></span>Guardar</a>
+				</div>
+			</div><br><br>
+		</div>
+	</div>
+</div>
+<?php	
+}
+else{	?>
+	<hr>
+	<div class='row col-md-8 col-md-offset-2 alert alert-danger text-center'>
+		<h4><b>No existe el alumno(a)</b></h4>
+	</div>
+<?php
+}
+?>

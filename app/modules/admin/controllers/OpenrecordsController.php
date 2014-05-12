@@ -44,15 +44,20 @@ class Admin_OpenrecordsController extends Zend_Controller_Action{
 			$orders=array('semid','courseid','turno');
 			$dbcourses= new Api_Model_DbTable_PeriodsCourses();
 			$datacourses = $dbcourses->_getFilter($where,$attrib,$orders);
-			$i=0;
-			foreach ($datacourses as $course) {
-				$curid=$course['curid'];
-				$courseid=$course['courseid'];
-				$where=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid);
-				$attrib=array('courseid','name');
-				$dbcourse = new Api_Model_DbTable_Course();
-				$datacourse[$i]= $dbcourse->_getFilter($where,$attrib);
-				$i++;
+			if ($datacourses) {
+				$i=0;			
+				foreach ($datacourses as $course) {
+					$curid=$course['curid'];
+					$courseid=$course['courseid'];
+					$where=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid);
+					$attrib=array('courseid','name');
+					$dbcourse = new Api_Model_DbTable_Course();
+					$datacourse[$i]= $dbcourse->_getFilter($where,$attrib);
+					$i++;
+				}
+			}
+			else{
+				$datacourse=null;
 			}
 			$this->view->datacourses=$datacourses;
 			$this->view->datacourse=$datacourse;
