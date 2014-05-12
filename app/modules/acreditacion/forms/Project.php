@@ -16,7 +16,7 @@ Class Acreditacion_Form_Project extends Zend_Form
         		->setRequired(true)
         		->addErrorMessage('Este campo es requerido')
                ->addDecorators($this->elemnetDecorator)
-               ->setAttrib('maxlength',8)
+               // ->setAttrib('maxlength',8)
                ->setAttrib('class','form-control')
 	           // ->setAttrib('onkeypress','return soloNumero(event)')
 	           ->addValidator('NotEmpty',true,array('messages' => '*'));

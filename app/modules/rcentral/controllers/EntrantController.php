@@ -450,7 +450,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
         	}else{
         		$this->view->stateStudent = 'N';
         	}
-        	print_r($dataRegister);
 	       
 	       	$request = array( 	'eid'   => base64_encode($eid),
 								'oid'   => base64_encode($oid),

@@ -34,7 +34,7 @@
 				$classRegisterBtn = '';
 			} ?>
 			<div class="tutorRegistrarse">
-				<a regid="<?php echo $this->dataStudent['regid'] ?>" tutoringId="<?php echo $tutor['id'] ?>" class="btn btn-success form-control registerBtn <?php echo $classRegisterBtn ?>" href="##">Elegir Tutor </a>
+				<a tutoringId="<?php echo $tutor['id'] ?>" class="btn btn-success form-control registerBtn <?php echo $classRegisterBtn ?>" href="##">Elegir Tutor </a>
 			</div>
 		</div>
 	<?php 
@@ -61,9 +61,9 @@
 		function registerStudent(dataSend){
 			$.ajax({
 				url    : '/alumno/tutorship/registerstudent/',
-				data   : {	tutoringid : dataSend['tutoringid'],
-							regid      : dataSend['regid'] },
+				data   : {	tutoringid : dataSend['tutoringid'] },
 				success: function(data){
+					console.log(data);
 					if (data === 'true') {
 						window.location.reload();
 					};
