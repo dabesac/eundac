@@ -4,7 +4,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title">Nuevo Proyecto</h4>
+                  <h4 class="modal-title">Modificar Proyecto</h4>
                 </div>
                 <div class="modal-body">
                     <?php echo $this->form->name ?>
@@ -13,6 +13,7 @@
                     <?php echo $this->form->num_horas ?>
                     <?php echo $this->form->min_student ?>
                     <?php echo $this->form->max_student ?>
+                    <?php echo $this->form->id_open ?>
                     <input type='hidden' id='uid_openerp' name='uid_openerp' >
                     <input type='hidden' id = "subid_openerp" name='subid_openerp' >
                     <input type='hidden' id="escid_openerp" name='escid_openerp' >
@@ -23,7 +24,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" id='save_project'class="btn btn-primary">Guardar</button>
+                  <button type="button" id='btn_modified_project'class="btn btn-primary">Guardar</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
