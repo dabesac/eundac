@@ -1,3 +1,5 @@
+<div id="bloquearDocentes" class="docentesCapaProtectora" hidden></div>
+
 <table class="table table-hover">
 	<tr class="active">
 		<th class="text-center">#</th>
@@ -12,11 +14,13 @@
 			<td><?php echo $teacher['full_name'] ?></td>
 			<td class="text-center"><?php echo $teacher['uid'] ?></td>
 			<td class="estado text-center">
+				<span id="tdSuccess<?php echo $teacher['uid'] ?>">
 				<?php if ($teacher['asigned'] == 'yes'):?>
 					<strong class="text-success">Asignado</strong>
 				<?php else: ?>
 					No Asignado
 				<?php endif ?>
+				</span>
 
 				<div id="asignarDocente<?php echo $teacher['uid'] ?>" uid="<?php echo $teacher['uid'] ?>" class="asignarDocente">
 					<div id="loading<?php echo $teacher['uid'] ?>" class="hidden">
@@ -55,9 +59,13 @@
 		</tr>
 	<?php endforeach ?>
 </table>
-<div id="dataDocentesAsignados" class="docentesAsignados hidden">
-	Aqui van a estar todos los docentes asignados <br>
-	y mas docentes
+<div id="dataDocentesAsignados" class="docentesAsignados docentesAsignadosClose hidden">
+	<div class="title">
+		<p><span class="glyphicon glyphicon-bookmark"></span> Docentes Asignados como Tutores</p>
+	</div>
+	<div id="idListDocentesAsignados" class="listDocentesAsignados">
+		
+	</div>
 </div>
 
 <script>
@@ -67,12 +75,16 @@
 		});
 
 		$('#btnDocentesAsignados').on('click', function(){
+			$('#bloquearDocentes').fadeToggle(1000);
 			$('#dataDocentesAsignados').removeClass('hidden');
 			$(this).addClass('disabled');
 			$('#dataDocentesAsignados').toggleClass('docentesAsignadosOpen');
-			$('#dataDocentesAsignados').toggleClass('docentesAsignados');
+			$('#dataDocentesAsignados').toggleClass('docentesAsignadosClose');
 			setTimeout(function(){$('#btnDocentesAsignados').removeClass('disabled')}, 1500);
 		});
+
+		$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
+		$('#idListDocentesAsignados').load('/acreditacion/tutorship/listasignedteacher/');
 
 		$('.showAsignar').on('click', function(){
 			var uid = $(this).attr('uid');
@@ -106,8 +118,15 @@
 						$('#form' + uid).removeClass('hidden');
 					}else if(data == 2){
 						$('#asignadoSuccess' + uid).removeClass('hidden');
+						$('#tdSuccess' + uid).html('<strong class="text-success">Asignado</strong>');
 						$('#semestre' + uid).html(semid + ' Semestre');
+						$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
+						$('#idListDocentesAsignados').load('/acreditacion/tutorship/listasignedteacher/');
 					};
+					$('#loading' + uid ).addClass('hidden');
+				},
+				error : function(){
+					$('#form' + uid).removeClass('hidden');
 					$('#loading' + uid ).addClass('hidden');
 				}
 			});
