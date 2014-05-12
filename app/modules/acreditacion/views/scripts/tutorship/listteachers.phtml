@@ -1,0 +1,116 @@
+<table class="table table-hover">
+	<tr class="active">
+		<th class="text-center">#</th>
+		<th>Docente</th>
+		<th class="text-center">Codigo</th>
+		<th class="btnAsignar text-center">Estado</th>
+		<th></th>
+	</tr>
+	<?php foreach ($this->teachers as $c => $teacher): ?>
+		<tr id="trDocente<?php echo $teacher['uid'] ?>" class="trDocente">
+			<td class="text-center"><?php echo $c + 1 ?></td>
+			<td><?php echo $teacher['full_name'] ?></td>
+			<td class="text-center"><?php echo $teacher['uid'] ?></td>
+			<td class="estado text-center">
+				<?php if ($teacher['asigned'] == 'yes'):?>
+					<strong class="text-success">Asignado</strong>
+				<?php else: ?>
+					No Asignado
+				<?php endif ?>
+
+				<div id="asignarDocente<?php echo $teacher['uid'] ?>" uid="<?php echo $teacher['uid'] ?>" class="asignarDocente">
+					<div id="loading<?php echo $teacher['uid'] ?>" class="hidden">
+						<img src="/img/spinner.gif" alt="Loading">
+					</div>
+					<?php if ($teacher['asigned'] == 'no'): ?>
+						<form id="form<?php echo $teacher['uid'] ?>" uid="<?php echo $teacher['uid'] ?>" class="form">
+							<input type="hidden" name="uid" value="<?php echo $teacher['uid'] ?>" />
+							<input type="hidden" name="pid" value="<?php echo $teacher['pid'] ?>" />
+							<select id="semid<?php echo $teacher['uid'] ?>" name="semid" class="semestre form-control">
+								<option value="">Semestre</option>
+								<?php foreach ($this->semesters as $semester): ?>
+									<option value="<?php echo $semester['semid'] ?>"><?php echo $semester['name'] ?></option>
+								<?php endforeach ?>
+							</select>
+							<input type="text" class="form-control" name="cantStudents" placeholder="Cantidad de Estudiantes" />
+							<input type="submit" class="btn btn-success btnAsignar form-control" value="Asignar" />
+							<!--<a href="##" class="btn btn-success btnAsignar form-control">Asignar</a>-->
+						</form>
+
+						<div id="asignadoSuccess<?php echo $teacher['uid'] ?>" class="hidden">
+							<p class="text-success text-center"><strong>Asignado</strong></p>
+							<p id="semestre<?php echo $teacher['uid'] ?>" class="text-success"></p>
+						</div>
+
+					<?php else: ?>
+						<p class="text-success text-center"><strong>Asignado</strong></p>
+						<p class="text-success"><?php echo $teacher['semid'] ?> Semestre</p>
+					<?php endif ?>
+
+				</div>
+			</td>
+			<td class="tdAsignar text-center">
+				<a href="##" uid="<?php echo $teacher['uid'] ?>" title="Asignar" class="text-success showAsignar"><span class="glyphicon glyphicon-ok"></span></a>
+			</td>
+		</tr>
+	<?php endforeach ?>
+</table>
+<div id="dataDocentesAsignados" class="docentesAsignados hidden">
+	Aqui van a estar todos los docentes asignados <br>
+	y mas docentes
+</div>
+
+<script>
+	$(function(){
+		$('a').hover(function(){
+			$(this).tooltip('toggle');
+		});
+
+		$('#btnDocentesAsignados').on('click', function(){
+			$('#dataDocentesAsignados').removeClass('hidden');
+			$(this).addClass('disabled');
+			$('#dataDocentesAsignados').toggleClass('docentesAsignadosOpen');
+			$('#dataDocentesAsignados').toggleClass('docentesAsignados');
+			setTimeout(function(){$('#btnDocentesAsignados').removeClass('disabled')}, 1500);
+		});
+
+		$('.showAsignar').on('click', function(){
+			var uid = $(this).attr('uid');
+
+			$('.asignarDocente').each(function(index, element){
+				var block      = $(element).css('display');
+				var uidElement = $(element).attr('uid');
+				if (block != 'none' && uidElement != uid ) {
+					$(element).slideUp('fast');
+					$('#trDocente' + uidElement).removeClass('success');
+				};
+			});
+
+			$('#asignarDocente' + uid).slideToggle('fast');
+			$('#trDocente' + uid).toggleClass('success');
+		});
+
+		$('.form').submit(function(e){
+			e.preventDefault();
+			$(this).addClass('hidden');
+			var uid = $(this).attr('uid');
+			var semid = $('#semid' + uid).val();
+			$('#loading' + uid ).removeClass('hidden');
+			$.ajax({
+				type : 'post',
+				data : $(this).serialize(),
+				url : '/acreditacion/tutorship/asignardocente/',
+				success : function(data){
+					console.log(data);
+					if (data == 1) {
+						$('#form' + uid).removeClass('hidden');
+					}else if(data == 2){
+						$('#asignadoSuccess' + uid).removeClass('hidden');
+						$('#semestre' + uid).html(semid + ' Semestre');
+					};
+					$('#loading' + uid ).addClass('hidden');
+				}
+			});
+		});
+});
+</script>

@@ -53,12 +53,12 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$oid   = $this->sesion->oid;
 		$subid = $this->sesion->subid;
 
-    	$where = array(	'eid'   => $eid,
-						'oid'   => $oid,
-						'facid' => $facid,
-						'subid' => $subid,
+    	$where = array(	'eid'    => $eid,
+						'oid'    => $oid,
+						'facid'  => $facid,
+						//'subid'  => $subid,
 						'parent' => '',
-						'state' => 'A' );
+						'state'  => 'A' );
 
     	$attrib = array('name', 'escid');
 
@@ -79,7 +79,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
     	$where = array(	'eid'    => $eid,
 						'oid'    => $oid,
-						'subid'  => $subid,
+						//'subid'  => $subid,
 						'parent' => $escid,
 						'state'  => 'A' );
 
@@ -104,17 +104,17 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
-		$subid = $this->sesion->subid;
+		//$subid = $this->sesion->subid;
 		$perid = $this->sesion->period->perid;
 		
 		$where = array(	'eid'                          => $eid,
 						'oid'                          => $oid,
 						'left(escid, '.$caracteres.')' => $facid,
-						'subid'                        => $subid,
+						//'subid'                        => $subid,
 						'state'                        => 'A',
 						'left(uid, 2)'                 => $perid['0'].$perid['1'] );
 
-		$attrib = array('uid', 'pid', 'escid');
+		$attrib = array('uid', 'pid', 'escid', 'subid');
 		$order = array('escid');
 
 		$students = $userDb->_getFilter($where, $attrib, $order);
@@ -122,10 +122,10 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$c = 0;
 		foreach ($students as $student) {
 			//Estado de Matricula
-			$attrib = array('state');
+			$attrib = array('state', 'subid');
 			$where = array(	'eid'   => $eid,
 							'oid'   => $oid,
-							'subid' => $subid,
+							'subid' => $student['subid'],
 							'escid' => $student['escid'],
 							'uid'   => $student['uid'],
 							'pid'   => $student['pid'],
@@ -143,7 +143,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
 			$where  = array('eid'   => $eid,
 							'oid'   => $oid,
-							'subid' => $subid,
+							'subid' => $student['subid'],
 							'escid' => $student['escid'],
 							'uid'   => $student['uid'],
 							'pid'   => $student['pid'] );
@@ -153,7 +153,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 			$attrib = array('name', 'escid', 'subid');
 			$where = array(	'eid'   => $eid,
 							'oid'   => $oid,
-							'subid' => $subid,
+							'subid' => $student['subid'],
 							'escid' => $student['escid'] );
 
 			$studentSpeciality[$c] = $specialityDb->_getFilter($where, $attrib);
@@ -185,11 +185,11 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$escid = base64_decode($this->_getParam('escid'));
 		$uid   = base64_decode($this->_getParam('uid'));
 		$pid   = base64_decode($this->_getParam('pid'));
+		$subid = base64_decode($this->_getParam('subid'));
 
 		//print_r($pid);
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
-		$subid = $this->sesion->subid;
 		$perid = $this->sesion->period->perid;
 		$dataStudent = array(	'uid'   => $uid,
 								'pid'   => $pid,
@@ -450,6 +450,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
         	}else{
         		$this->view->stateStudent = 'N';
         	}
+        	print_r($dataRegister);
 	       
 	       	$request = array( 	'eid'   => base64_encode($eid),
 								'oid'   => base64_encode($oid),
