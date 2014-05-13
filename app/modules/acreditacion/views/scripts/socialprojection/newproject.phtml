@@ -8,11 +8,19 @@
                 </div>
                 <div class="modal-body">
                     <?php echo $this->form->name ?>
+                    <label>Tipo:</label>
                     <?php echo $this->form->type ?>
+                    <label>Cronograma:</label>
+                    <select class="form-control" id='cronogram_proj' name="id_cronogram">
+                        <option>Seleccione Cronograma</option>
+                    </select>
+                    <label>Estado:</label>
                     <?php echo $this->form->state ?>
                     <?php echo $this->form->num_horas ?>
                     <?php echo $this->form->min_student ?>
                     <?php echo $this->form->max_student ?>
+                    <?php echo $this->form->description ?>
+                    <?php echo $this->form->comment ?>
                     <input type='hidden' id='uid_openerp' name='uid_openerp' >
                     <input type='hidden' id = "subid_openerp" name='subid_openerp' >
                     <input type='hidden' id="escid_openerp" name='escid_openerp' >
@@ -28,4 +36,6 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </form>
-<?php }?>
+<?php }else{
+    echo $this->json;
+}?>

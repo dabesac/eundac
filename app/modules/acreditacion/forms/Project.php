@@ -29,10 +29,11 @@ Class Acreditacion_Form_Project extends Zend_Form
         		->addErrorMessage('Este campo es requerido')
 		           ->removeDecorator('Label')
 		           ->removeDecorator('HtmlTag')
+		           ->addMultiOption('','Seleccione')
 		           ->addMultiOption('P','Proyección Social')
 		           ->addMultiOption('I','Investigación');
 		$this->addElement($type);
-		$this->setDefaults(array('type'=>'P'));
+		// $this->setDefaults(array('type'=>'P'));
 
 		$state = new Zend_Form_Element_Select('state');
 		$state ->removeDecorator('DtDdWrapper')
@@ -41,13 +42,14 @@ Class Acreditacion_Form_Project extends Zend_Form
 		           ->setRequired(true)
         		->addErrorMessage('Este campo es requerido')
 		           ->removeDecorator('HtmlTag')
+		           ->addMultiOption('','Seleccione')
 		           ->addMultiOption('B','Borrador')
 		           ->addMultiOption('E','Enviado')
 		           ->addMultiOption('A','Aprobado')
 		           ->addMultiOption('R','Rechazado')
 		           ->addMultiOption('C','Cerrado');
 		$this->addElement($state);
-		$this->setDefaults(array('state'=>'I'));
+		// $this->setDefaults(array('state'=>'I'));
 
 
 	    $min_student = new Zend_Form_Element_Text('min_student');
@@ -86,6 +88,32 @@ Class Acreditacion_Form_Project extends Zend_Form
 	           ->addValidator('NotEmpty',true,array('messages' => '*'));
 	    $this->addElement($num_horas);
 
+	    $comment = new Zend_Form_Element_Textarea('comment');
+    	$comment  ->setRequired(true)
+	           ->setLabel('Comentario')
+	           ->setRequired(true)
+        		->addErrorMessage('Este campo es requerido')
+				->setAttrib('class','form-control')
+				->setAttrib('rows','3')
+               // ->addDecorators($this->elemnetDecorator)
+               // ->setAttrib('maxlength',8)
+	           // ->setAttrib('onkeypress','return soloNumero(event)')
+	           ->addValidator('NotEmpty',true,array('messages' => '*'));
+	    $this->addElement($comment);
+
+	    $description = new Zend_Form_Element_Textarea('description');
+    	$description  ->setRequired(true)
+	           ->setLabel('Description')
+	           ->setRequired(true)
+        		->addErrorMessage('Este campo es requerido')
+				->setAttrib('class','form-control')
+				->setAttrib('rows','3')
+               // ->addDecorators($this->elemnetDecorator)
+               // ->setAttrib('maxlength',8)
+	           // ->setAttrib('onkeypress','return soloNumero(event)')
+	           ->addValidator('NotEmpty',true,array('messages' => '*'));
+	    $this->addElement($description);
+
 	    $project = new Zend_Form_Element_File('project');
         	$project 	
        			->removeDecorator('HtmlTag')
@@ -94,7 +122,7 @@ Class Acreditacion_Form_Project extends Zend_Form
         			///->setDestination(APPLICATION_PATH.'/upload')
         		->addValidator('Count', false, 1)
        			// ->addValidator('Size', false, 902400)
-        			->addValidator('Extension', false, 'jpg,png,gif')
+        			// ->addValidator('Extension', false, 'jpg,png,gif')
    		 		->removeDecorator('Label')
    				->removeDecorator('DtDdWrapper');
    		 $this->addElement($project,'project');
