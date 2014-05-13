@@ -15,6 +15,7 @@
                         <option>Seleccione Cronograma</option>
                     </select>
                     <label>Estado:</label>
+                    <?php echo $this->form->id_open ?>
                     <?php echo $this->form->state ?>
                     <?php echo $this->form->num_horas ?>
                     <?php echo $this->form->min_student ?>
@@ -31,11 +32,15 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" id='save_project'class="btn btn-primary">Guardar</button>
+                  <button type="button"  id='btn_modified_project'class="btn btn-primary">Guardar</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </form>
+    <script type="text/javascript">
+        var data_cronograma = <?php echo $this->data_cronograman?>
+    </script>
+
 <?php }else{
     echo $this->json;
 }?>

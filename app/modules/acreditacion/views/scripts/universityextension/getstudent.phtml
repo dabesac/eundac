@@ -1,5 +1,7 @@
 <?php
-if ($this->data_user) {		?>
+if ($this->data_user) {		
+	$fullname = $this->data_user[0]['last_name0']." ".$this->data_user[0]['last_name1'].", ".$this->data_user[0]['first_name'];
+	?>
 <hr>
 <div class='row col-md-8 col-md-offset-2'>
 	<div class='panel panel-primary'>
@@ -7,7 +9,7 @@ if ($this->data_user) {		?>
 			<div>
 				<div class='col-md-1'></div>
 				<div class='col-md-3 text-right'><b>Apellidos y Nombres:</b></div>	
-				<div class='col-md-6 text-info'><b><?php echo $this->data_user[0]['last_name0']." ".$this->data_user[0]['last_name1'].", ".$this->data_user[0]['first_name']?></b></div>	
+				<div class='col-md-6 text-info'><b><?php echo $fullname?></b></div>	
 			</div><br><br>
 			<div>
 				<div class='col-md-2 text-right'><b>Escuela: </b></div>
@@ -18,7 +20,7 @@ if ($this->data_user) {		?>
 			<div>
 				<div class='col-md-2 text-right'><b>Periodo: </b></div>
 				<div class='col-md-4 '>
-					<select class='form-control'>
+					<select id='period' class='form-control'>
 					<?php
 						foreach ($this->data_period as $key => $periods) {
 							?>
@@ -30,10 +32,10 @@ if ($this->data_user) {		?>
 				</div>				
 				<div class='col-md-2 text-right'><b>Tipo: </b></div>
 				<div class='col-md-4 '>
-					<select class='form-control'>
-						<option value="1">Movilidad Estudiantil</option>
-						<option value="2">Beca 18</option>
-						<option value="3">Pasantía</option>
+					<select id='tipo' class='form-control'>
+						<option value="ME">Movilidad Estudiantil</option>
+						<option value="BE">Beca 18</option>
+						<option value="PA">Pasantía</option>
 					</select>				
 				</div>
 			</div><br><br><br>
@@ -41,12 +43,13 @@ if ($this->data_user) {		?>
 				<div class='col-md-3 '>
 				</div>				
 				<div class='col-md-4 text-right'>
-					<a href="#" class='btn btn-success'><span class='glyphicon glyphicon-save'></span>Guardar</a>
+					<a id='_save' href="#" class='btn btn-success' uid='<?php echo base64_encode($this->uid)?>' fullname='<?php echo base64_encode($fullname)?>' escid='<?php echo base64_encode($this->data_school['escid'])?>'><span class='glyphicon glyphicon-save'></span>Guardar</a>
 				</div>
 			</div><br><br>
 		</div>
 	</div>
 </div>
+<div id="saving"></div>
 <?php	
 }
 else{	?>
@@ -57,3 +60,16 @@ else{	?>
 <?php
 }
 ?>
+
+<script type="text/javascript">
+	$("#_save").click(function(){
+		var uid=$(this).attr("uid");
+		var fullname=$(this).attr("fullname");
+		var escid=$(this).attr("escid");
+		var tipo=$('#tipo').val();
+		var period=$('#period').val();
+
+		var url=("/acreditacion/universityextension/registerstudentsextension/type/"+tipo+"/perid/"+period+"/state/A/uid/"+uid+"/fullname/"+fullname+"/escid/"+escid);
+		$("#saving").load(url);
+	});
+</script>

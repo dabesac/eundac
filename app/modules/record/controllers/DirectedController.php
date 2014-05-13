@@ -27,8 +27,9 @@ class Record_DirectedController extends Zend_Controller_Action {
             $where['eid']=$eid;
             $where['oid']=$oid;
             $where['uid']=$uid;
+            $where['state']='A';
             $user= new Api_Model_DbTable_Users();
-            $datauser=$user->_getUserXUid($where);
+            $datauser=$user->_getUserXUid_state($where);
             $this->view->user=$datauser[0];
             
             $anio=substr($perid,0,2);

@@ -24,6 +24,7 @@ class Acreditacion_UniversityextensionController extends Zend_Controller_Action 
     		$eid=$this->sesion->eid;
     		$oid=$this->sesion->oid;    		
     		$uid=$this->_getParam('uid');
+    		$this->view->uid=$uid;
     		$rid="AL";
     		$where=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'rid'=>$rid);
     		$db_user=new Api_Model_DbTable_Users();
@@ -48,6 +49,62 @@ class Acreditacion_UniversityextensionController extends Zend_Controller_Action 
     			$this->view->data_subsidiary=$data_subsidiary;
     		}
     		
+    	} catch (Exception $e) {
+    		print "Error: ".$e->getMessage();
+    	}
+    }
+
+    public function registerstudentsextensionAction(){
+    	try {
+    		$this->_helper->layout()->disableLayout();
+    		//Conexxion ERP
+    		$server = new Eundac_Connect_openerp();
+
+    		$type = $this->_getParam('type');
+    		$state = $this->_getParam('state');
+    		$perid = $this->_getParam('perid');
+    		$uid = base64_decode($this->_getParam('uid'));
+    		$fullname = base64_decode($this->_getParam('fullname'));
+    		$escid = base64_decode($this->_getParam('escid'));
+    		$query =array(
+    					array( 'column'		=> 	'type',
+    						   'operator' 	=> 	'=',
+    						   'value' 		=> 	$type,
+    						   'type' 		=> 	'string'),
+
+    					array( 'column'		=> 	'state',
+    						   'operator' 	=> 	'=',
+    						   'value' 		=> 	$state,
+    						   'type' 		=> 	'string'),
+
+    					array( 'column'		=> 	'perid',
+    						   'operator' 	=> 	'=',
+    						   'value' 		=> 	$perid,
+    						   'type' 		=> 	'string'),
+    				);
+    		$typeMovilidad = $server->search('university.extension', $query);
+    		$atributes = array('id','type','perid','state','name');
+    		$dataMovilidad = $server->read($typeMovilidad, $atributes, 'university.extension');
+    		if ($dataMovilidad) {
+		    	$data = array(	'name'						=>	$fullname,
+		    					'semid'						=>	'1'	,
+		    					'university_extension_id'  	=> 	$dataMovilidad[0]['id'],
+		    					'state'						=>	'I',
+		    					'registered_code'			=> 	$uid,
+		    					'department_id'				=>	'92');	
+
+		    	$created = $server->create('university.extension.students', $data);
+		    	if ($created) {
+		    		echo "true";
+		    	}
+		    	else{
+		    		echo "false";
+		    	}
+    		}
+    		else{
+    			echo "false";
+    		}
+
     	} catch (Exception $e) {
     		print "Error: ".$e->getMessage();
     	}

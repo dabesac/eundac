@@ -5,7 +5,7 @@
 class Eundac_Connect_openerp {
 
     public $server = "http://172.16.0.211:8069/xmlrpc/";
-    public $database = "acreditacion_copia";
+    public $database = "acreditacion";
     //public $database = "acreditacion";
     public $uid = "";/**  @uid = once user succesful login then this will asign the user id */
     public $username = "admin"; /*     * * @userid = general name of user which require to login at openerp server */

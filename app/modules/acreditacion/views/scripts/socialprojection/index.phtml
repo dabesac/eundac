@@ -1,31 +1,41 @@
+<script type="text/javascript">
+    var data_cronograma = <?php echo $this->data_cronograman?>
+</script>
 <script type="text/javascript" src='/js/acreditation/social_project.js' ></script>
 <?php 
     $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-road"></span> Mis Proyectos');
     $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
         <a href="#Modalproject" id="add_project" data-toggle="modal" class="btn btn-info"><span class="glyphicon glyphicon-plus "></span> Nuevo</a>');
 ?>
+<input type='hidden' id='uid_openerp_t' value='<?php echo $this->id_user_openerp ?>' >
+<input type='hidden' id = "subid_openerp_t" value='<?php echo $this->id_subid_opem ?>' >
+<input type='hidden' id="escid_openerp_t" value='<?php echo $this->id_escid_opem ?>' >
 
-<?php if($this->data_project){?>
-    <div class="row">
+<div class="row">
+<?php if($this->data_project){
+    // print_r($this->data_project)
+    foreach ($this->data_project as $key => $value) { ?>
       <div class="col-sm-6 col-md-3">
         <div class="thumbnail project-social">
           <img data-src="holder.js/300x200" alt="...">
           <div class="caption">
-            <h3>Thumbnail label</h3>
-            <p>...</p>
-            <p><a href="#" class="btn btn-primary">Button</a> <a href="#" class="btn btn-default">Button</a></p>
+            <h3><?php echo $value['name']?></h3>
+            <p><?php echo $value['description']?></p>
+            <p>
+                <button href="#"  id_project='<?php echo $value['id']?>'class="btn btn-primary project-modified">Modificar</button> 
+                <a href="/acreditacion/socialprojection/deleteproject/id/<?php echo $value['id']?>" class="btn btn-default">Eliminar</a></p>
           </div>
         </div>
       </div>
-    </div>
-<?php }else{?>
+<?php }}else{?>
     <div class="col-md-12 cont-font-not-register">
         <h1 class="span-not-register">
             <span class="glyphicon glyphicon-exclamation-sign"></span>
         </h1>
         <h3 class="text-not-register">Sin registro de proyectos </h3>
     </div>
-<? }?>
+<?php }?>
+</div>
 
 
   <!-- Modal -->
