@@ -327,11 +327,19 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 		$server = new Eundac_Connect_openerp();
 
 		$formData = $this->getRequest()->getPost();
+
 		if ($formData['FechaAtencion'] != '' and $formData['Resumen'] != '' and $formData['Motivo'] != '') {
 			$data = array(	'f_atention' => $formData['FechaAtencion'],
 							'resumen'    => utf8_encode($formData['Resumen']),
 							'motivo'     => utf8_encode($formData['Motivo']) );
-			$create = $server->write()
+			$idStudent[0] = array($formData['idStudent']);
+			$update = $server->write('tutoring.students', $data, $idStudent);
+			//print_r($update);
+			if ($update) {
+				echo "true";
+			}else{
+				echo "false";
+			}
 		}else{
 			echo "Falta Datos";
 		}

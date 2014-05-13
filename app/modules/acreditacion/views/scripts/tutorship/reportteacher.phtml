@@ -40,6 +40,7 @@
 				<td colspan="5" style="padding: 0;">
 					<div class="moreDetail" id="moreDetail<?php echo $student['uid'] ?>" hidden>
 						<form class="formData">
+							<input type="hidden" name="idStudent" value="<?php echo $student['id'] ?>" />
 							<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Elija la fecha de atención y explique el resumen y motivo :</p>
 							<p class="dataPicker"> Fecha de Atención
 								<input class="form-control inputDataPicker" name="FechaAtencion" type="text"/>
@@ -72,6 +73,8 @@
 				uid = $(this).attr('uid');
 				$('#moreDetail' + uid).slideToggle();
 			});
+
+			//$('.inputDataPicker').dataPicker();
 
 			$('.formData').on('submit', function(e){
 				e.preventDefault();
