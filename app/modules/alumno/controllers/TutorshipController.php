@@ -150,23 +150,32 @@ class Alumno_TutorshipController extends Zend_Controller_Action {
 
         //DataBases
         $registerDb = new Api_Model_DbTable_Registration();
+        $personDb = new Api_Model_DbTable_Person();
         //_________________________________
 
         $tutoringId = $this->_getParam('tutoringid');
-        $name       = $this->sesion->infouser['fullname'];
+        $eid        = $this->sesion->eid;
         $uid        = $this->sesion->uid;
+        $pid        = $this->sesion->pid;
+
+        //Nombre sin Comas ni nada por el estilo
+        $where = array( 'eid' => $eid,
+                        'pid' => $pid);
+        $attrib = array('last_name0', 'last_name1', 'first_name');
+        $person = $personDb->_getFilter($where, $attrib);
+        $name = utf8_decode($person[0]['last_name0'].' '.$person[0]['last_name1'].' '.$person[0]['first_name']);
 
         $data = array(  'create_uid'      => 1,
+                        'creade_date'     => date('Y-m-d h:m:s'),
                         'state'           => 'I',
                         'registered_code' => $uid,
                         'name'            => $name,
                         'tutoring_id'     => $tutoringId);
-        print_r($data);
         $create = $server->create('tutoring.students', $data);
         if ($create) {
-            echo "true";
+            echo 1;
         }else{
-            echo "false";
+            echo 2;
         }
         /*$ids    = array('2');
         $create =  $connect->write('sede',$data,$ids);

@@ -1,4 +1,3 @@
-
 <?php
 
 class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
@@ -25,6 +24,7 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
             ** @param /***atributos para sql**
             ******/
             $connect = new Eundac_Connect_openerp();
+
             $query= array(
                     array(
                         'column'=>'identification_id',
@@ -33,12 +33,19 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
                         'type'=>'string'
                     )
                 ); 
+
             $attributes = array('idate(format)');
             $ids = $connect->search('hr.employee',$query);
             $identification_id = $connect->read($ids,$attributes,'hr.employee');
             $this->id_user_openerp=$identification_id[0]['id'];
             $this->view->id_user_openerp=$identification_id[0]['id'];
 
+            $query_cron = array();
+            $attributes__cron = array();
+            $ids_cronogram = $connect->search('inv.pro.cronogram',$query_cron);
+            $data_cronograman = $connect->read($ids_cronogram,$attributes__cron,'inv.pro.cronogram');
+            $this->view->data_cronograman = Zend_Json::encode($data_cronograman);
+            // print_r($data_cronograman);
             $query_subid = array(
                     array(
                         'column'=>'subid',
@@ -71,24 +78,24 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
             $this->view->id_escid_opem=$id_escid_opem[0]['id'];
 
              $query_1= array(
-                    array(
-                        'column'=>'author',
-                        'operator'=>'=',
-                        'value'=>trim($this->id_user_openerp),
-                        'type'=>'int'
-                    ),array(
-                        'column'=>'state',
-                        'operator'=>'=',
-                        'value'=>'B',
-                        'type'=>'string'
-                    )
+                    // array(
+                    //     'column'=>'author',
+                    //     'operator'=>'=',
+                    //     'value'=>trim($this->id_user_openerp),
+                    //     'type'=>'int'
+                    // ),array(
+                    //     'column'=>'state',
+                    //     'operator'=>'=',
+                    //     'value'=>'B',
+                    //     'type'=>'string'
+                    // )
                 );  
             
             // $data_project = array();
             $ids_project = $connect->search('inv.pro.project',$query_1);
             // print_r($ids_project); exit();
             if ($ids_project) {
-                $attributes = array('id','name','project');
+                $attributes = array('id','name','project','description','comment');
                 $data_project = $connect->read($ids_project,$attributes,'inv.pro.project');
             }
             $this->view->data_project=$data_project;
@@ -122,6 +129,9 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
                         'create_uid'=>1,
                         'create_date'=>date('Y-m-d H:m:s'),
                         'write_uid'=>1,
+                        'cronogram_id'=>$formData['id_cronogram'],
+                        'description'=>$formData['description'],
+                        'comment'=>$formData['comment'],
                         // 'project'=>$img,
                         'name'=>$formData['name'],
                         'author'=>trim($formData['uid_openerp']),
@@ -133,6 +143,7 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
                         'sede_id'=>trim($formData['subid_openerp']),
                         'department_id'=>trim($formData['escid_openerp']),
                     );
+                // print_r($data); exit();
                 $create =  $connect->create('inv.pro.project',$data);
                 if ($create) {
                     $upload = new Zend_File_Transfer_Adapter_Http();
@@ -147,7 +158,9 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
                     }
                     else{
                         // echo $img;
-                        echo "string";
+                        $json = array('status'=>true);
+                        $this->_response->setHeader('Content-Type', 'application/json');                   
+                        $this->view->json=Zend_Json::encode($json);
                     }
 
                 }else{
@@ -170,22 +183,36 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
         $form->addElement('hidden', 'id_open');
 
         $connect = new Eundac_Connect_openerp();
+        $query_cron = array();
+        $attributes__cron = array();
+        $ids_cronogram = $connect->search('inv.pro.cronogram',$query_cron);
+        $data_cronograman = $connect->read($ids_cronogram,$attributes__cron,'inv.pro.cronogram');
+        $this->view->data_cronograman = Zend_Json::encode($data_cronograman);
+
         if ($this->getRequest()->isPost()) {
             $formData = $this->getRequest()->getPost();
             if ($form->isValid($formData)) {
                 // print_r($formData);exit();
                 $data = array(
-                        'create_date'=>date('Y-m-d H:m:s'),
+                        // 'create_date'=>date('Y-m-d H:m:s'),
                         'name'=>$formData['name'],
+                        'cronogram_id'=>$formData['id_cronogram'],
+                        'description'=>$formData['description'],
+                        'comment'=>$formData['comment'],
                         'min_student'=>$formData['min_student'],
                         'max_student'=>$formData['max_student'],
                         'num_horas'=>$formData['num_horas'],
                         'state'=>trim($formData['state']),
                         'type'=>$formData['type'],
                     );
-                $ids[0]=$formData['id_open']; 
-                // print_r($ids);
+                // print_r($data);
+                $ids[0]=$formData['id_open'];
                 $modified =  $connect->write('inv.pro.project',$data,$ids);
+                if ($modified) {
+                    $json = array('status'=>true);
+                    $this->_response->setHeader('Content-Type', 'application/json');                   
+                    $this->view->json=Zend_Json::encode($json);
+                }
             }else{
                 $form->populate($formData);
             }
@@ -210,9 +237,13 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
         $this->_helper->layout->disableLayout();
         
     }
-
-
-    public function listforelementsAction(){
+    public function deleteprojectAction(){
+        $id = $this->getParam('id');
+        $connect = new Eundac_Connect_openerp();
+        $ids[0] = $id;
+        $data_project = $connect->unlink($ids,'inv.pro.project');
+        $this->_helper->layout->disableLayout();
+        $this->_redirect('/acreditacion/socialprojection/index');
     	
     }
 }
