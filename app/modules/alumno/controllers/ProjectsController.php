@@ -51,12 +51,11 @@ class Alumno_ProjectsController extends Zend_Controller_Action {
                             )
                     );
             
-            $idsProjectsCronogram = $serverErp->search('inv.pro.project.cronogram', $query);
+            $idsProjectsCronogram = $serverErp->search('inv.pro.project', $query);
             $attributes = array('project_id');
 
-            $projectsCronogram = $serverErp->read($idsProjectsCronogram, $attributes, 'inv.pro.project.cronogram');
+            $projectsCronogram = $serverErp->read($idsProjectsCronogram, $attributes, 'inv.pro.project');
             //print_r($projectsCronogram);
-
 
             if ($projectsCronogram) {
                 foreach ($projectsCronogram as $c => $projectCronogram) {
