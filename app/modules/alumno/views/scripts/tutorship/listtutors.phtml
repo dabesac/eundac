@@ -63,8 +63,7 @@
 				url    : '/alumno/tutorship/registerstudent/',
 				data   : {	tutoringid : dataSend['tutoringid'] },
 				success: function(data){
-					console.log(data);
-					if (data === 'true') {
+					if (data == 1) {
 						window.location.reload();
 					};
 				}
@@ -72,7 +71,7 @@
 		}
 	</script>
 
-<?php elseif ($this->stateStudent == 'Existe' and $this->tutors) : ?>
+<?php elseif ($this->stateStudent == 'Existe' and $this->tutor) : ?>
 
 	<p class="parrafo text-muted"><span class="glyphicon glyphicon-info-sign"></span> Su tutor :</p>
 	<div class="tutor">
