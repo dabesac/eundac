@@ -199,7 +199,8 @@
                     </h5>
                 </div>
                 <div class="col-md-2">
-                    <?php if ($this->progressNotas[$c]['porcentaje'] == 'FS'){
+                    <?php 
+                    if ($this->progressNotas[$c]['porcentaje'] == 'FS'){
                         $classNotas = 'text-danger';
                         $progressNotas = 'FS';
                         $avisoNotas = 'Primero termine de rellenar su sílabo';
@@ -251,6 +252,7 @@
     </div>
 </div>
 <br><br>
+
 <!-- Avance Academico Solo Para Directores-->
 <input id="rid" type="hidden" value="<?php echo $this->rid ?>">
 <div id="avanceDirectores" class="container">
