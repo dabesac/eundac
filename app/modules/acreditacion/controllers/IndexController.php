@@ -1,4 +1,3 @@
-
 <?php
 
 class Acreditacion_IndexController extends Zend_Controller_Action {
@@ -72,7 +71,6 @@ class Acreditacion_IndexController extends Zend_Controller_Action {
         $base_url = 'http://api.undac.edu.pe:8080/';
         //$base_url = 'http://172.16.0.210:8080/';
         $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/liststandares_acredit';
-        //$endpoint = '/'.base64_encode('s1st3m4s').'/'.base64_encode('und4c').'/liststandares_acredit';
         $client = new Zend_Rest_Client($base_url);
         $httpClient = $client->getHttpClient();
         $httpClient->setConfig(array("timeout" => 30000));
