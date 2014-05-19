@@ -156,12 +156,43 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 	    		}elseif ($tutor['semid'] == 12){
 	    			$semestre = 'XII';
 	    		}
-	    		$teachersAsigned[$c]['semestre'] = $semestre.' Semestre';
-	    		$teachersAsigned[$c]['number'] = $tutor['number'];
-	    		$teachersAsigned[$c]['full_name'] = $tutor['employee_id'][1];
+				$teachersAsigned[$c]['semestre']  = $semestre.' Semestre';
+				$teachersAsigned[$c]['number']    = $tutor['number'];
+				$teachersAsigned[$c]['full_name'] = utf8_encode($tutor['employee_id'][1]);
 	    	}
 	    	$this->view->teachersAsigned = $teachersAsigned;
     	}
+    }
+
+    public function cantstudentsxsemAction(){
+    	$this->_helper->layout()->disableLayout();
+    	//dataBases
+    	$registerDb = new Api_Model_DbTable_Registration();
+
+    	$semid = $this->_getParam('semid');
+
+    	if ($semid) {
+	    	$eid = $this->sesion->eid;
+	    	$oid = $this->sesion->oid;
+	    	$perid = $this->sesion->period->perid;
+	    	$escid = $this->sesion->escid;
+	    	$subid = $this->sesion->subid;
+
+	    	$where = array(	'eid'   => $eid,
+							'oid'   => $oid,
+							'perid' => $perid,
+							'semid' => $semid,
+							'escid' => $escid,
+							'subid' => $subid,
+							'state' => 'M');
+	    	$attrib = array('uid');
+	    	$students = $registerDb->_getFilter($where, $attrib);
+	    	$cantStudents = count($students);
+    	}else{
+    		$cantStudents = '-';
+    	}
+
+    	echo $cantStudents;
     }
 
     public function asignardocenteAction(){
@@ -171,7 +202,7 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 
     	$escid = $this->sesion->escid;
     	$perid = $this->sesion->period->perid;
-
+		$nameSpeciliaty = $this->sesion->speciality->name;
     	$formData = $this->getRequest()->getPost();
 
     	if ($formData['semid'] != '' and is_numeric($formData['cantStudents']) == true) {
@@ -203,7 +234,7 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 									'number'        => $formData['cantStudents'],
 									'department_id' => $dataDepartment[0]['id'],
 									'semid'         => $formData['semid'],
-									'name'          => $escid.$formData['semid'],
+									'name'          => 'Tutoria '.$nameSpeciliaty.' '.$formData['semid']. 'Semestre',
 									'perid'         => $perid );
 
 	        $create = $server->create('tutoring', $dataTutoring);
@@ -221,6 +252,7 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
     public function reportteacherAction(){
     	$server = new Eundac_Connect_openerp();
 
+    	//dataBases
 		$pid   = $this->sesion->pid;
 		$perid = $this->sesion->period->perid;
 
@@ -271,15 +303,56 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
                             'type'     => 'int' ),
                     );
 			$idsStudents = $server->search('tutoring.students', $query);
-			$attributes = array('name');
-			$dataStudents = $server->search($idsStudents, $attributes, 'tutoring.students');
+			$attributes = array('name', 'id', 'registered_code', 'f_atention', 'resumen', 'motivo');
+			$dataStudents = $server->read($idsStudents, $attributes, 'tutoring.students');
 			if ($dataStudents) {
 				$sendDataTutoring['cant_register'] = count($dataStudents);
+				foreach ($dataStudents as $c => $student) {
+					$sendDataStudents[$c]['id']         = $student['id'];
+					$sendDataStudents[$c]['full_name']  = utf8_encode($student['name']);
+					$sendDataStudents[$c]['uid']        = $student['registered_code'];
+					if ($student['f_atention']) {
+						$f_atention = date('d-m-Y', strtotime($student['f_atention']));
+					}else{
+						$f_atention = '';
+					}
+					$sendDataStudents[$c]['f_atention'] = $f_atention;
+					$sendDataStudents[$c]['resumen']    = $student['resumen'];
+					$sendDataStudents[$c]['motivo']     = $student['motivo'];
+
+				}
 			}
 		}
+		//print_r($sendDataStudents);
 
 		$this->view->dataTutoring = $sendDataTutoring;
 		$this->view->dataStudents = $sendDataStudents;
+	}
+
+	public function saveatentionAction(){
+		$this->_helper->layout()->disableLayout();
+
+		$server = new Eundac_Connect_openerp();
+
+		$formData = $this->getRequest()->getPost();
+
+		if ($formData['FechaAtencion'] != '' and $formData['Resumen'] != '' and $formData['Motivo'] != '') {
+
+			$fecha =  date('Y-m-d', strtotime($formData['FechaAtencion']));
+			//print_r($fecha);
+			$data = array(	'f_atention' => date('Y-m-d', strtotime($formData['FechaAtencion'])),
+							'resumen'    => utf8_encode($formData['Resumen']),
+							'motivo'     => utf8_encode($formData['Motivo']) );
+			$idStudent[0] = $formData['idStudent'];
+			$update = $server->write('tutoring.students', $data, $idStudent);
+			if ($update == 1) {
+				echo 1;
+			}else{
+				echo 0;
+			}
+		}else{
+			echo 2;
+		}
 	}
 
 }

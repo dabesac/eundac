@@ -35,18 +35,60 @@ class Acreditacion_UniversityextensionController extends Zend_Controller_Action 
     			$where1=array('eid'=>$eid,'oid'=>$oid,'year'=>$year);
     			$db_period=new Api_Model_DbTable_Periods();
     			$data_period=$db_period->_getPeriodsxYears($where1);
-    			$escid=$data_user[0]['escid'];
+    		 	$escid=$data_user[0]['escid'];
     			$subid=$data_user[0]['subid'];
-    			$where2=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
-    			$db_speciality=new Api_Model_DbTable_Speciality();
-    			$data_school=$db_speciality->_getOne($where2);
-    			$where3=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid);
-    			$db_subsidiary=new Api_Model_DbTable_Subsidiary();
-    			$data_subsidiary=$db_subsidiary->_getOne($where3);
-    			$this->view->data_user=$data_user;
-    			$this->view->data_period=$data_period;
-    			$this->view->data_school=$data_school;
-    			$this->view->data_subsidiary=$data_subsidiary;
+    		 	$where2=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+    		 	$db_speciality=new Api_Model_DbTable_Speciality();
+    		 	$data_school=$db_speciality->_getOne($where2);
+    		 	$where3=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid);
+    		 	$db_subsidiary=new Api_Model_DbTable_Subsidiary();
+    		 	$data_subsidiary=$db_subsidiary->_getOne($where3);
+
+    		 	$server = new Eundac_Connect_openerp();
+    		 	$query =array(
+	    	 				array( 'column'		=> 	'registered_code',
+	    	 					   'operator' 	=> 	'=',
+	    	 					   'value' 		=> 	$uid,
+	    	 					   'type' 		=> 	'string'),
+
+	    	 				array( 'column'		=> 	'state',
+	    	 					   'operator' 	=> 	'=',
+	    	 					   'value' 		=> 	'I',
+	    	 					   'type' 		=> 	'string'),
+	    	 			);
+	    	 	$typeMovilidad = $server->search('university.extension.students', $query);
+	    	 	$atributes = array('id','name','semid','state','registered_code','department_id','university_extension_id');
+	    	 	$dataMovilidad = $server->read($typeMovilidad, $atributes, 'university.extension.students');
+	    	 	if ($dataMovilidad) {
+	    	 		$prueba = $dataMovilidad;
+
+		     		foreach ($dataMovilidad as $key => $data) {
+
+			     		$query1 =array(
+			     					array( 'column'		=> 	'id',
+			     						   'operator' 	=> 	'=',
+			     						   'value' 		=> 	$data['university_extension_id'][0],
+			     						   'type' 		=> 	'string'),
+
+			     					array( 'column'		=> 	'state',
+			     						   'operator' 	=> 	'=',
+			     						   'value' 		=> 	'A',
+			     						   'type' 		=> 	'string'),
+			     				);
+
+			     		$typeMovilidad1 = $server->search('university.extension', $query1);
+			     		$atributes1 = array('id','name','type','perid');
+			     		$dataMovilidad1 = $server->read($typeMovilidad1, $atributes1, 'university.extension');
+			     		$prueba[$key]['university_extension_id'][2]=$dataMovilidad1[0]['type'];
+			    		
+		     		}
+	    	 		$this->view->dataMovilidad=$prueba;
+	    			
+	    	 	}
+    		 	$this->view->data_user=$data_user;
+    		 	$this->view->data_period=$data_period;
+    		 	$this->view->data_school=$data_school;
+    		 	$this->view->data_subsidiary=$data_subsidiary;
     		}
     		
     	} catch (Exception $e) {

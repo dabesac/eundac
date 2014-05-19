@@ -36,9 +36,10 @@
 									<option value="<?php echo $semester['semid'] ?>"><?php echo $semester['name'] ?></option>
 								<?php endforeach ?>
 							</select>
-							<input type="text" class="form-control" name="cantStudents" placeholder="Cantidad de Estudiantes" />
+							<div class="cantStudent"><span id="cantStudents<?php echo $teacher['uid'] ?>" class="cantStudentsNum" title="Cantidad de Estudiantes Matriculados">-</span>
+								<input type="text" class="form-control inputCantStudent" name="cantStudents" placeholder="# Estudiantes" />
+							</div>
 							<input type="submit" class="btn btn-success btnAsignar form-control" value="Asignar" />
-							<!--<a href="##" class="btn btn-success btnAsignar form-control">Asignar</a>-->
 						</form>
 
 						<div id="asignadoSuccess<?php echo $teacher['uid'] ?>" class="hidden">
@@ -70,7 +71,7 @@
 
 <script>
 	$(function(){
-		$('a').hover(function(){
+		$('.cantStudentsNum').hover(function(){
 			$(this).tooltip('toggle');
 		});
 
@@ -86,8 +87,9 @@
 		$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
 		$('#idListDocentesAsignados').load('/acreditacion/tutorship/listasignedteacher/');
 
+		var uid = '';
 		$('.showAsignar').on('click', function(){
-			var uid = $(this).attr('uid');
+			uid = $(this).attr('uid');
 
 			$('.asignarDocente').each(function(index, element){
 				var block      = $(element).css('display');
@@ -102,6 +104,12 @@
 			$('#trDocente' + uid).toggleClass('success');
 		});
 
+		$('.semestre').on('change', function(){
+			var semid = $(this).val();
+			$('#cantStudents' + uid).html('<img src="/img/spinner.gif" alt="C" />')
+									.load('/acreditacion/tutorship/cantstudentsxsem/semid/' + semid)
+		});
+
 		$('.form').submit(function(e){
 			e.preventDefault();
 			$(this).addClass('hidden');
@@ -113,7 +121,6 @@
 				data : $(this).serialize(),
 				url : '/acreditacion/tutorship/asignardocente/',
 				success : function(data){
-					console.log(data);
 					if (data == 1) {
 						$('#form' + uid).removeClass('hidden');
 					}else if(data == 2){

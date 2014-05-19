@@ -172,7 +172,31 @@ public function _getPaymentsStudent($where=null,$attrib=null,$order=null){
             and m.subid=u.subid
             inner join base_person as p
             on u.pid=p.pid and u.eid=p.eid 
-            where u.eid='$eid' and u.oid ='$oid' and u.rid='AL' and u.state='A'  and m.perid = '$perid' and m.escid like '$escid%' and m.state = '$estados' $str
+            where u.eid='$eid' and u.oid ='$oid' and u.rid='AL' and u.state='A' and m.perid = '$perid' and m.escid like '$escid%' and m.state = '$estados' $str
+            order by u.escid,m.date_register, m.semid,m.credits 
+            ");
+        $r = $sql->fetchAll();
+        return $r;
+        }  catch (Exception $ex){
+            print "Error: Retornando los alumnos de una escuela en un periodo".$ex->getMessage();
+        }
+    }
+
+    public function _getAlumnosXMatriculaXTodasescuelasXEstadoXSubid($eid='', $oid='',$str='',$escid='',$perid='',$estados='' , $subid=''){
+    try {
+        if ($eid==''|| $oid==''|| $perid=='' || $str=='') return false;
+            $sql=$this->_db->query("
+            select 
+            m.regid,m.semid,m.credits,m.date_register, m.state as estmat, m.perid,
+            u.subid,u.uid,u.eid,u.oid,u.escid,u.pid,p.first_name,
+            p.last_name0,p.last_name1
+            from base_registration as m
+            inner join base_users as u
+            on m.uid=u.uid and m.escid=u.escid and m.subid=u.subid and m.pid=u.pid and m.eid=u.eid and m.oid=u.oid
+            and m.subid=u.subid
+            inner join base_person as p
+            on u.pid=p.pid and u.eid=p.eid 
+            where u.eid='$eid' and u.oid ='$oid' and u.rid='AL' and u.state='A' and u.subid ='$subid'  and m.perid = '$perid' and m.escid like '$escid%' and m.state = '$estados' $str
             order by u.escid,m.date_register, m.semid,m.credits 
             ");
         $r = $sql->fetchAll();

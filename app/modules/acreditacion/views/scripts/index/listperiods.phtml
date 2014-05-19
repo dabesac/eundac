@@ -1,7 +1,7 @@
 <?php if ($this->periods): ?>
 	<option value="">Periodo</option>
 	<?php foreach ($this->periods as $period): ?>
-		<option value="<?php echo $period['perid'] ?>"><?php echo $period['name'] ?></option>
+		<option value="<?php echo $period['perid'] ?>"><?php echo $period['perid'].' | '.$period['name'] ?></option>
 	<?php endforeach ?>
 <?php else: ?>
 	<option value="">Seleccione Un Año</option>

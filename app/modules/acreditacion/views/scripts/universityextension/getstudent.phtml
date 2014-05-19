@@ -1,9 +1,49 @@
 <?php
 if ($this->data_user) {		
 	$fullname = $this->data_user[0]['last_name0']." ".$this->data_user[0]['last_name1'].", ".$this->data_user[0]['first_name'];
+	if ($this->dataMovilidad) {		?>
+		<div class='col-md-3'>
+			<div class='alert alert-success'>
+				<div style='font-size:15px'><span class='glyphicon glyphicon-check'></span><b> Ya está inscrito en: </b></div>
+				<ul>	
+				<?php
+					foreach ($this->dataMovilidad as $key => $datam) {	
+						?>
+					<li><?php 
+							switch ($datam['university_extension_id'][2]) {
+								case 'ME':
+									echo "Movilidad Estudiantil";
+									break;
+								case 'BC':
+									echo "Beca 18";
+									break;
+								case 'P':
+									echo "Pasantía";
+									break;
+								default:	
+									echo " ";
+									break;
+							}
+					?></li>
+					<?php	
+					}
+				?>
+				</ul>
+			</div>
+		</div>
+	<?php	
+	}
+	else{	?>
+		<div class='col-md-3'>
+			<div class='alert alert-danger'>
+				<div style='font-size:15px'><b>Aún no tiene inscripciones.</b></div>
+			</div>
+		</div>
+	<?php	
+	}
 	?>
-<hr>
-<div class='row col-md-8 col-md-offset-2'>
+
+<div class='col-md-9'>
 	<div class='panel panel-primary'>
 		<div class='panel-body' style='font-size:17px'>
 			<div>
@@ -33,10 +73,10 @@ if ($this->data_user) {
 				<div class='col-md-2 text-right'><b>Tipo: </b></div>
 				<div class='col-md-4 '>
 					<select id='tipo' class='form-control'>
-						<option value="ME">Movilidad Estudiantil</option>
-						<option value="BE">Beca 18</option>
-						<option value="PA">Pasantía</option>
-					</select>				
+						<option value="ME">Movilidad Estudiantil</option> 
+						<option value="BC">Beca 18</option>
+						<option value="P">Pasantía</option>
+					</select>
 				</div>
 			</div><br><br><br>
 			<div>

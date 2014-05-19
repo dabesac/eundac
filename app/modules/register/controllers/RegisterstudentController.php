@@ -55,10 +55,14 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
 
     public function liststudentAction(){
         $this->_helper->getHelper('layout')->disableLayout();
+        
+        //DataBases
+        $bdu = new Api_Model_DbTable_Registration();        
+
         $state = $this->_getParam('state');
         $perid = $this->sesion->period->perid;  
-        $eid = $this->sesion->eid;        
-        $oid = $this->sesion->oid;
+        $eid   = $this->sesion->eid;        
+        $oid   = $this->sesion->oid;
         $subid = $this->sesion->subid;
         $escid = $this->sesion->escid;
         $facid = $this->sesion->faculty->facid;
@@ -72,15 +76,19 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $this->view->datos=$datos;
         }else*/
         if ($state) {
-            if ($subid != '1901') {
-                $facid = '';
-            }
-            $nombre = null;
-            $codigo = null;
+            $nombre  = null;
+            $codigo  = null;
             $estados = $state;
-            $bdu = new Api_Model_DbTable_Registration();        
-            $str = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
-            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$facid,$perid,$estados);  
+            $str   = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
+            if ($subid != '1901' and $subid != '1905') {
+                $facid = '';
+                $datos = $bdu->_getAlumnosXMatriculaXTodasescuelasXEstado($eid, $oid,$str,$facid,$perid,$estados);
+            }elseif ($subid == '1905'){
+                $facid = '';
+                $datos = $bdu->_getAlumnosXMatriculaXTodasescuelasXEstadoXSubid($eid, $oid,$str,$facid,$perid,$estados, $subid);  
+            }elseif ($subid == '1901'){
+                $datos = $bdu->_getAlumnosXMatriculaXTodasescuelasXEstado($eid, $oid,$str,$facid,$perid,$estados);  
+            }
             $this->view->datos=$datos;
         }
     }
@@ -318,6 +326,16 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $this->view->paymentsConditional = $paymentsConditional;
                 $this->view->coursesCondition = $coursesCondition;
             }
+
+            //Pago Reintegro
+            $where = array( 'code_student' => $uid,
+                            'perid'        => $perid,
+                            'concept'      => '00000072' );
+            $paymentsReintegro = $bankReceiptsDb->_getFilter($where);
+            if ($paymentsReintegro) {
+                $this->view->paymentsReintegro = $paymentsReintegro;
+            }
+            print_r($paymentsReintegro);
 
             //Data del Estudiante
             $dataStudent = array(   'uid'   => $uid,
