@@ -11,11 +11,18 @@
                     <label>Tipo:</label>
                     <?php echo $this->form->type ?>
                     <label>Cronograma:</label>
-                    <select class="form-control" id='cronogram_proj' name="id_cronogram">
+                    <select data-index='' class="form-control" id='cronogram_proj' name="id_cronogram">
                         <option>Seleccione Cronograma</option>
                     </select>
+                    <div id='contet_conogram'>
+                        <p>
+                            <span></span>   
+                            <span></span>
+                            <span></span>
+                        </p>
+                    </div>
                     <label>Estado:</label>
-                    <?php echo $this->form->state ?>
+                    <?php echo $this->form->state?>
                     <?php echo $this->form->num_horas ?>
                     <?php echo $this->form->min_student ?>
                     <?php echo $this->form->max_student ?>
