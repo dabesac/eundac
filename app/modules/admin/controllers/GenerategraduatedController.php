@@ -9,7 +9,7 @@ class Admin_GenerategraduatedController extends Zend_Controller_Action {
     	}
     	$login = $sesion->getStorage()->read();
     	if (!$login->rol['module']=="admin"){
-    		$this->_helper->redirector('index','index','admin');
+    		$this->_helper->redirector('index','index','admin'); 
     	}
     	$this->sesion = $login;
     }
@@ -65,43 +65,42 @@ class Admin_GenerategraduatedController extends Zend_Controller_Action {
                 $curr = new Api_Model_DbTable_Studentxcurricula();
                 $data_cur = $curr->_getOne($wherecurr);
                 $curid = $data_cur['curid'];
-                
                 $course = new Api_Model_DbTable_Course();
                 $data_courses = $course->_getCountCoursesxSemester($wherecant=array('escid' => $escid, 'curid' => $curid));
-                
                 $courses = $course->_getCountCoursesxApproved($wherecour=array('uid' => $uid, 'curid' => $curid));
-                if ($data_courses){
-                    if($courses){
-                        $sum = 0;
-                        $cont = 1;  
-                        while ($cont <= 12) {
-                            foreach ($data_courses as $datos) { 
-                                $nombre = $datos['semid']; 
-                                if ($nombre == $cont){
-                                    $total = $datos['cantidad_cursos']; 
-                                    $a = 0;
-                                    foreach ($courses as $data_cour) {
-                                        if($data_cour['semid'] == $cont){
-                                            $cant = $data_cour['cantidad_cursos'];
-                                            $a++;  
-                                        }                            
-                                    }
-                                    if($a == 0) $cant = 0;
-                                    $tot = $total - $cant;
-                                    $sum = $sum + $tot;
-                                }
-                            }
-                            $cont++; 
-                        } 
-                        if($sum==0){
-                            $pk = array(
-                                'eid' => $eid, 'oid' => $oid, 'uid' => $uid, 'pid' => $pid, 
-                                'escid' => $escid, 'subid' => $student['subid']);
-                            $data = array('rid' => 'EG', 'state' => 'A', 'password' => md5($uid));
-                            $user->_update($data,$pk);
-                        }
-                    }
-                }
+                print_r($courses);echo "\t .... . . .";
+                // if ($data_courses){
+                //     if($courses){
+                //         $sum = 0;
+                //         $cont = 1;  
+                //         while ($cont <= 12) {
+                //             foreach ($data_courses as $datos) { 
+                //                 $nombre = $datos['semid']; 
+                //                 if ($nombre == $cont){
+                //                     $total = $datos['cantidad_cursos']; 
+                //                     $a = 0;
+                //                     foreach ($courses as $data_cour) {
+                //                         if($data_cour['semid'] == $cont){
+                //                             $cant = $data_cour['cantidad_cursos'];
+                //                             $a++;  
+                //                         }                            
+                //                     }
+                //                     if($a == 0) $cant = 0;
+                //                     $tot = $total - $cant;
+                //                     $sum = $sum + $tot;
+                //                 }
+                //             }
+                //             $cont++; 
+                //         } 
+                //         if($sum==0){
+                //             $pk = array(
+                //                 'eid' => $eid, 'oid' => $oid, 'uid' => $uid, 'pid' => $pid, 
+                //                 'escid' => $escid, 'subid' => $student['subid']);
+                //             $data = array('rid' => 'EG', 'state' => 'A', 'password' => md5($uid));
+                //             $user->_update($data,$pk);
+                //         }
+                //     }
+                // }
             } 
             $this->view->band = 1;
         } catch (Exception $e) {

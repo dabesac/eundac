@@ -17,7 +17,8 @@
     foreach ($this->data_project as $key => $value) { ?>
       <div class="col-sm-6 col-md-3">
         <div class="thumbnail project-social">
-          <img data-src="holder.js/300x200" alt="...">
+          <!-- <img  src="/img/project.png" data-src="/img/project.png/300x200" alt="...."> -->
+          <span class="glyphicon <?php echo ($value['type']=='P')? "glyphicon-briefcase":"glyphicon-hdd"?>" ></span>
           <div class="caption">
             <h3><?php echo $value['name']?></h3>
             <p><?php echo $value['description']?></p>

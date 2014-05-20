@@ -78,12 +78,12 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
             $this->view->id_escid_opem=$id_escid_opem[0]['id'];
 
              $query_1= array(
-                    // array(
-                    //     'column'=>'author',
-                    //     'operator'=>'=',
-                    //     'value'=>trim($this->id_user_openerp),
-                    //     'type'=>'int'
-                    // ),array(
+                    array(
+                        'column'=>'author',
+                        'operator'=>'=',
+                        'value'=>trim($this->id_user_openerp),
+                        'type'=>'int'
+                    )//,array(
                     //     'column'=>'state',
                     //     'operator'=>'=',
                     //     'value'=>'B',
@@ -95,7 +95,7 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
             $ids_project = $connect->search('inv.pro.project',$query_1);
             // print_r($ids_project); exit();
             if ($ids_project) {
-                $attributes = array('id','name','project','description','comment');
+                $attributes = array('id','name','project','description','comment','type');
                 $data_project = $connect->read($ids_project,$attributes,'inv.pro.project');
             }
             $this->view->data_project=$data_project;
@@ -230,6 +230,7 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
             $attributes = array();
             $ids = $connect->search('inv.pro.project',$query);
             $data_project = $connect->read($ids,$attributes,'inv.pro.project');
+            $this->view->data_project=Zend_Json::encode($data_project[0]);
             $form->populate($data_project[0]);
             $this->view->form=$form;
         }
