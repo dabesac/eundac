@@ -147,7 +147,7 @@ class Docente_IndexController extends Zend_Controller_Action {
                     $progressNotas[$c]['porcentaje'] = intval((100 * $notasRellenadas) / $students);
                 }
             }else{
-                $progressNotas[$c]['porcentaje'] = 'FS';
+                $progressNotas[$c]['porcentaje'] = -1;
             }
             
             $c++;

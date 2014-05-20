@@ -1,4 +1,10 @@
 <?php if ($this->estandares): ?>
+	<div class="menuEstandares">
+		<p>Estandares Aprobados</p>
+		<p>Estandares en Proceso</p>
+		<p>Estandares No Iniciados</p>
+	</div>
+
  	<?php foreach ($this->estandares as $estandar): ?>
 		<div class="estandar">
 			<div class="estandarNombre">
@@ -11,28 +17,32 @@
 			<div id="estandarData<?php echo $estandar['number'] ?>" class="estandarData" hidden>
 				<?php foreach ($estandar['factores_id'] as $factor): ?>
 					<div class="factor">
-						<p class="titleFactor"><span class="glyphicon glyphicon-flag text-muted"></span> <?php echo ucwords(strtolower($factor['name'])) ?> <small class="text-muted"><?php echo $factor['number'] ?></small></p>
+						<div class="titleFactor">
+							<p class="titleFactorNombre"><span class="glyphicon glyphicon-flag text-muted"></span> <?php echo ucwords(strtolower($factor['name'])) ?> <small class="text-muted"><?php echo $factor['number'] ?></small></p>
+						</div>
 
 						<?php if ($factor['criterid']): ?>
 							<div class="factorData">
-							<?php foreach ($factor['criterid'] as $criterio): ?>
+							<?php foreach ($factor['criterid'] as $conCriterio => $criterio): ?>
 								<div class="criterio">
 									<div class="criterioTitulo">
+										<div class="numCriterio"><?php echo $conCriterio + 1 ?></div>
 										<div class="criteroTituloNombre"><span class="glyphicon glyphicon-tags text-muted"></span> <?php echo substr($criterio['estandares'][0]['namestandar'], 0, 150) ?> </div>
 										<div class="criterioEstado">Aprobado</div>
-										<a href="##" class="btn btn-info btnShowDetailFactor"><span class="glyphicon glyphicon-plus"></span></a>
+										<a href="##" codecri="<?php echo trim($criterio['code_cri']) ?>" class="btn btn-info btnShowDetailFactor"><span class="glyphicon glyphicon-plus"></span></a>
 										<!--<div class="pull-right text-muted"><?php echo $criterio['estandares'][0]['numstandar_school'] ?></div>-->
 									</div>
-									<div class="criterioData">
+									<div class="criterioData" id="criterioData<?php echo trim($criterio['code_cri']) ?>" hidden>
 										<table class="table table-bordered table-hover">
-										<?php foreach ($criterio['estandares'][0]['sources'] as $fuente): ?>
+										<?php foreach ($criterio['estandares'][0]['sources'] as $conFuente => $fuente): ?>
 											<tr>
-												<td class="col-md-10 fuenteName">
-													<span class="glyphicon glyphicon-tag text-muted"></span> <?php echo $fuente['name'] ?>
-												</td>
+												<td class="numFuente text-center active"><?php echo $conFuente + 1 ?></td>
 												<td class="col-md-1 text-center">
 													<?php echo $fuente['codefuente'] ?>
 												</td>	
+												<td class="col-md-10 fuenteName">
+													<span class="glyphicon glyphicon-tag text-muted"></span> <?php echo $fuente['name'] ?>
+												</td>
 												<td class="col-md-1 text-center">
 													<?php echo substr($fuente['result'], 0, 5) ?>
 												</td>
@@ -57,6 +67,11 @@
 			var estandarNumber = $(this).attr('estandarNumber');
 			$('#estandarData' + estandarNumber).slideToggle();
 		})
+
+		$('.btnShowDetailFactor').on('click', function(){
+			var codeCri = $(this).attr('codecri');
+			$('#criterioData' + codeCri).slideToggle();
+		});
 	</script>
 <?php else: ?>
 	<br>
