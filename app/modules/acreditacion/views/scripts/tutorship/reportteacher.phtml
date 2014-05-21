@@ -29,30 +29,32 @@
 					<th></th>
 				</tr>
 				<?php foreach ($this->dataStudents as $c => $student): ?>
-				<tr>
+				<tr class="trStudent<?php echo $student['uid'] ?>" id="trStudentUid<?php echo $student['uid'] ?>">
 					<td class="text-center"><?php echo $c + 1 ?></td>
 					<td><?php echo $student['full_name'] ?></td>
 					<td class="text-center"><?php echo $student['uid'] ?></td>
-					<td class="text-center"><?php echo $student['f_atention'] ?></td>
+					<td class="text-center" id="tdDateAtention<?php echo $student['uid'] ?>"><?php echo $student['f_atention'] ?></td>
 					<td class="text-center"><a href="##" uid="<?php echo $student['uid'] ?>" class="btnShowMoreDetail text-success"><span class="glyphicon glyphicon-wrench"></span></a></td>
 				</tr>
-				<tr>
+				<tr class="trStudent<?php echo $student['uid'] ?>">
 				<td colspan="5" style="padding: 0;">
-					<div class="moreDetail" id="moreDetail<?php echo $student['uid'] ?>" hidden>
+					<div class="moreDetail" id="moreDetail<?php echo $student['uid'] ?>" uid="<?php echo $student['uid'] ?>" hidden>
 						<form class="formData">
 							<input type="hidden" name="idStudent" value="<?php echo $student['id'] ?>" />
 							<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Elija la fecha de atención y explique el resumen y motivo :</p>
 							<p class="dataPicker"> Fecha de Atención
-								<input class="form-control inputDataPicker" name="FechaAtencion" type="text"/>
+								<input class="form-control inputDataPicker" id="inputDataPicker<?php echo $student['uid'] ?>" name="FechaAtencion" type="text" value="<?php echo $student['f_atention'] ?>" />
 							</p>
-							<div class="resumen">
-								<p class="text-muted">Resumen</p>
-								<textarea class="form-control" name="Resumen" id="" cols="30" rows="10" placeholder="Escriba el resumen de lo actuado......"></textarea>
-							</div>
 							<div class="motivo">
 								<p class="text-muted">Motivo</p>
-								<textarea class="form-control" name="Motivo" id="" cols="30" rows="10" placeholder="Motivo de la atención......"></textarea>
+								<textarea class="form-control" name="Motivo" id="" cols="30" rows="10" placeholder="Motivo de la atención......"><?php echo $student['motivo'] ?></textarea>
 							</div>
+							<div class="resumen">
+								<p class="text-muted">Resumen</p>
+								<textarea class="form-control" name="Resumen" id="" cols="30" rows="10" placeholder="Escriba el resumen de lo actuado......"><?php echo $student['resumen'] ?></textarea>
+							</div>
+							<hr>
+							<div class="msgGuardado" id="msgGuardado<?php echo $student['uid'] ?>"></div>
 							<input type="submit" class="btnSubmitForm btn btn-info form-control" value="Guardar" />
 						</form>
 					</div>
@@ -71,19 +73,50 @@
 			var uid = '';
 			$('.btnShowMoreDetail').on('click', function(){
 				uid = $(this).attr('uid');
+				$('.moreDetail').each(function(index, element){
+					var display = $(element).css('display');
+					var elementUid = $(element).attr('uid');
+					if (uid != elementUid) {
+						$(element).slideUp();
+						$('.trStudent' + elementUid).removeClass('success');
+					};
+				});
+
 				$('#moreDetail' + uid).slideToggle();
+				$('.trStudent' + uid).toggleClass('success');
+
+				$('html body').animate({
+					scrollTop : $('#trStudentUid' + uid).offset().top,
+				}, 500);
 			});
 
-			//$('.inputDataPicker').dataPicker();
+			$('.inputDataPicker').datepicker();
 
 			$('.formData').on('submit', function(e){
 				e.preventDefault();
+				$('#msgGuardado' + uid).html('<img src="/img/spinner.gif" alt="Loading..." />');
 				$.ajax({
 					type : 'post',
 					url : '/acreditacion/tutorship/saveatention/',
 					data : $(this).serialize(),
 					success : function(data){
 						console.log(data);
+						if (data == 1) {
+							var	dateAtentionSplit = $('#inputDataPicker' + uid).val().split('/');
+							var dateAtention = '';
+							if (dateAtentionSplit[1]) {
+								dateAtention = dateAtentionSplit[1] + '-' + dateAtentionSplit[0] + '-' + dateAtentionSplit[2];
+							}else{
+								dateAtention = $('#inputDataPicker' + uid).val();
+							};
+							$('#msgGuardado' + uid).html('<span class="text-success">Se Guardaron los cambios con exito!</span>');
+							$('#tdDateAtention' + uid).html(dateAtention);
+						}else if(data == 2){
+							$('#msgGuardado' + uid).html('<span class="text-danger">Falta rellenar algunos datos</span>');
+						};
+						setTimeout(function(){
+							$('#msgGuardado' + uid).html('');
+						}, 5000);
 					}
 				});
 			});

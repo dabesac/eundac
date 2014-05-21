@@ -1,0 +1,75 @@
+<?php if ($this->programs): ?>
+	<p class="titleRegister text-muted"><span class="glyphicon glyphicon-bookmark"></span> Matricula <span class="text-info"><?php echo $this->period['name'] ?></span></p>
+	<div class="paymentBank" title="Recuerda Pagar a la Cuenta 00000052" ><span class="glyphicon glyphicon-credit-card"></span> Pago al Banco <p class="payment">S/. 0</p></div>
+	<hr>
+	<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Esto son los cursos que estan disponibles en Idiomas.</p>
+	
+	<?php foreach ($this->programs as $c => $program): ?>
+		<div class="program">
+			<div class="detailProgram">
+				<p class="courseNum"><?php echo $c + 1 ?></p>
+				<p class="courseName"><?php echo $program['courseName'] ?></p>
+				<p class="coursePrice" title="Costo"><?php echo 'S/. '.$program['price'] ?></p>
+				<a href="##" numprogram="<?php echo $c ?>" class="btnRegister btn btn-success form-control">Matricularme</a>
+			</div>
+			<div class="detailRegister" id="detailRegister<?php echo $c ?>" numprogram="<?php echo $c ?>" hidden>
+				<?php $this->paymentBank = 1 ?>
+				<?php if ($this->paymentBank): ?>
+					<p class="text-muted">¿Seguro que desea llevar este curso?, si es asi elija el turno y confirme la matricula.</p>
+					<a href="##" class="btnCloseDetailRegister btn btn-danger">No por ahora</a>
+					<form class="formCourse">
+						<input type="hidden" name="perid" value="<?php echo $program['perid'] ?>">
+						<input type="hidden" name="cid" value="<?php echo $program['courseId'] ?>">
+						<select class="selectTurno form-control" name="turno">
+							<option value="A">A</option>
+							<option value="B">B</option>
+						</select>
+						<input type="submit" class="btnConfirmRegister btn btn-info form-control" value="Si, deseo llevar este curso">
+					</form>
+				<?php else: ?>
+					<p class="text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign"></span> Aún no realizaste <span class="text-danger">ningun pago al banco.</span></p>
+				<?php endif ?>
+			</div>
+		</div>
+	<?php endforeach ?>
+
+	<script>
+	$(function(){
+		var numProgram         = '';
+		var numProgramforSlide = '';
+
+		$('.btnRegister').on('click', function(){
+			numProgram = $(this).attr('numprogram');
+
+			$('.detailRegister').each(function(index, element){
+				numProgramforSlide = $(element).attr('numprogram');
+				if (numProgramforSlide != numProgram) {
+					$(element).slideUp();
+				};
+			});
+
+			$('#detailRegister' + numProgram).slideToggle();
+		});
+
+		$('.btnCloseDetailRegister').on('click', function(){
+			$('#detailRegister' + numProgram).slideUp();
+		});
+
+		$('.paymentBank').hover(function(){
+			$(this).tooltip('toggle');
+		});
+
+		var formData = '';
+		$('.formCourse').on('submit', function(e){
+			e.preventDefault();
+			formData = $(this).serialize();
+			console.log(formData);
+		});
+	});
+	</script>
+
+<?php else: ?>
+	<p class="titleRegister text-muted"><span class="glyphicon glyphicon-bookmark"></span> Matricula <span class="text-info"><?php echo $this->period['name'] ?></span></p>
+	<hr>
+	<p class="text-muted text-center"><span class="glyphicon glyphicon-exclamation-sign"></span> Aun no existen cursos <span class="text-danger">para este periodo</span></p>	
+<?php endif ?>

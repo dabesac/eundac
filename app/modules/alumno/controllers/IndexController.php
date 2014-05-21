@@ -34,7 +34,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $datcursos=$dbcursos->_getCountCoursesxSemester($where);
             $cur=$dbcursos->_getCountCoursesxApproved($where);
 
-
             $data_all = array();
             $data_rel = array();
             if ($cur) {

@@ -1,9 +1,8 @@
 <?php if ($this->egresados): ?>
-<div class="container">
 	<input type="hidden" id="numEgresadosSend" value="<?php echo $this->numEgresados ?>" />
 	<br>
 	<table class="table table-hover table-bordered">
-		<tr class="active">
+		<tr class="success">
 			<th class="text-center">#</th>
 			<th class="text-center col-md-1">DNI</th>
 			<th>Apellidos y Nombres</th>
@@ -22,8 +21,6 @@
 		$c++;
 		endforeach ?>
 	</table>
-</div>
-
 <?php else: ?>
 	<br>
 	<h4 class="text-center text-muted">No Existen Datos de <span class="text-danger">Alumnos Egresados de <?php echo $this->anio ?></span></h4>

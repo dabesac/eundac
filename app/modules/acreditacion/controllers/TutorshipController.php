@@ -303,7 +303,7 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
                             'type'     => 'int' ),
                     );
 			$idsStudents = $server->search('tutoring.students', $query);
-			$attributes = array('name', 'id', 'registered_code', 'f_atention');
+			$attributes = array('name', 'id', 'registered_code', 'f_atention', 'resumen', 'motivo');
 			$dataStudents = $server->read($idsStudents, $attributes, 'tutoring.students');
 			if ($dataStudents) {
 				$sendDataTutoring['cant_register'] = count($dataStudents);
@@ -311,7 +311,15 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 					$sendDataStudents[$c]['id']         = $student['id'];
 					$sendDataStudents[$c]['full_name']  = utf8_encode($student['name']);
 					$sendDataStudents[$c]['uid']        = $student['registered_code'];
-					$sendDataStudents[$c]['f_atention'] = $student['f_atention'];
+					if ($student['f_atention']) {
+						$f_atention = date('d-m-Y', strtotime($student['f_atention']));
+					}else{
+						$f_atention = '';
+					}
+					$sendDataStudents[$c]['f_atention'] = $f_atention;
+					$sendDataStudents[$c]['resumen']    = $student['resumen'];
+					$sendDataStudents[$c]['motivo']     = $student['motivo'];
+
 				}
 			}
 		}
@@ -329,19 +337,21 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 		$formData = $this->getRequest()->getPost();
 
 		if ($formData['FechaAtencion'] != '' and $formData['Resumen'] != '' and $formData['Motivo'] != '') {
-			$data = array(	'f_atention' => $formData['FechaAtencion'],
+
+			$fecha =  date('Y-m-d', strtotime($formData['FechaAtencion']));
+			//print_r($fecha);
+			$data = array(	'f_atention' => date('Y-m-d', strtotime($formData['FechaAtencion'])),
 							'resumen'    => utf8_encode($formData['Resumen']),
 							'motivo'     => utf8_encode($formData['Motivo']) );
-			$idStudent[0] = array($formData['idStudent']);
+			$idStudent[0] = $formData['idStudent'];
 			$update = $server->write('tutoring.students', $data, $idStudent);
-			//print_r($update);
-			if ($update) {
-				echo "true";
+			if ($update == 1) {
+				echo 1;
 			}else{
-				echo "false";
+				echo 0;
 			}
 		}else{
-			echo "Falta Datos";
+			echo 2;
 		}
 	}
 

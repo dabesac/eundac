@@ -118,7 +118,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$order = array('escid');
 
 		$students = $userDb->_getFilter($where, $attrib, $order);
-
 		$c = 0;
 		foreach ($students as $student) {
 			//Estado de Matricula
@@ -131,7 +130,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 							'pid'   => $student['pid'],
 							'perid' => $perid );
 			$checkStudent = $registerDb->_getFilter($where, $attrib);
-			if ($checkStudent[0]['state'] == 'I' or !$checkStudent[0]['state']) {
+			if ($checkStudent[0]['state'] == 'I' or $checkStudent[0]['state'] == 'B' or !$checkStudent[0]['state']) {
 				$studentState[$c]['state'] = 'Ingresantes';
 			}elseif ($checkStudent[0]['state'] == 'M'){
 				$studentState[$c]['state'] = 'Matriculados';
@@ -160,7 +159,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
 			$c++;
 		}
-
 		$this->view->studentEntrant    = $studentEntrant;
 		$this->view->studentState      = $studentState;
 		$this->view->studentSpeciality = $studentSpeciality;

@@ -38,12 +38,6 @@ class Docente_IndexController extends Zend_Controller_Action {
         $escid = $this->sesion->escid;
         $perid = $this->sesion->period->perid;
 
-        //Bloquear Ingenieria
-        $facultyBloqued = $escid[0];
-        if ($facultyBloqued == 4) {
-            $this->view->facultyBloqued = $facultyBloqued;
-        }
-
         //Enviar el periodo
         $this->view->perid = $perid;
 
@@ -92,6 +86,7 @@ class Docente_IndexController extends Zend_Controller_Action {
             $attrib = array('units');
             $coursesSyllabus = $syllabusDb->_getFilter($where, $attrib);
             $totalUnits = $coursesSyllabus[0]['units'];
+
             if ($totalUnits) {
                 $attrib = array('unit');
                 $syllabusUnits = $syllabusUnitsDb->_getFilter($where, $attrib);
@@ -152,7 +147,7 @@ class Docente_IndexController extends Zend_Controller_Action {
                     $progressNotas[$c]['porcentaje'] = intval((100 * $notasRellenadas) / $students);
                 }
             }else{
-                $progressNotas[$c]['porcentaje'] = 'FS';
+                $progressNotas[$c]['porcentaje'] = -1;
             }
             
             $c++;

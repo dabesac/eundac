@@ -1,72 +1,46 @@
+<link rel="stylesheet" href="/css/egresadosPorAnio.css" />
+
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Lista de Egresados por Año de Ingreso');?>
 <?php $this->placeholder('Btnnav')->append(' <a href="/docente/index" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Regresar</a>');?>
 
-<div class="row">
-	<div id="selectAnio" class="col-md-6 col-md-offset-3">
-		<div class="panel panel-default">
-
-			<div class="container">
-				<br>
-				<div class="row">
-					<div class="col-md-8">
-						<div class="col-md-1">
-							<span class="glyphicon glyphicon-info-sign text-muted" style="font-size: 25px; margin-top: 6px;"></span>
-						</div>
-						<div class="col-md-11">
-							<p class="text-muted"> Seleccione una año para que visualice la cantidad de egresados de acuerdo al año de ingreso.</p>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<select name="Anio" id="anio" class="form-control" style="margin-top: 6px;">
-							<option value="">Año de Ingreso</option>
-							<?php for ($i=$this->currentYear-4; $i >= 1965 ; $i--) { ?> 
-									<option value="<?php echo $i ?>"><?php echo $i ?></option>
-							<?php } ?>
-						</select>
-					</div>
-				</div>
-				<br>
-			</div>
-
-		</div>
+<div class="tituloDescriptivo">
+	<p><span class="glyphicon glyphicon-info-sign"></span> Seleccione una año para que visualice la cantidad de egresados de acuerdo al año de ingreso</p>
+	<select name="Anio" id="anio" class="form-control selectAnio">
+		<option value="">Año de Ingreso</option>
+		<?php for ($i=$this->currentYear-4; $i >= 1965 ; $i--) { ?> 
+				<option value="<?php echo $i ?>"><?php echo $i ?></option>
+		<?php } ?>
+	</select>
+</div>
+<hr>
+<div class="menuEgresados">
+	<div class="navegacion" hidden>
+		<p><span class="glyphicon glyphicon-filter"></span> Filtre los Resultados de Egresados</p>
+		<a href="##" class="btn btn-info btnInvictos">Invictos</a>
+		<a href="##" class="btn btn-info btnBachiller">Bachiller</a>
+		<a href="##" class="btn btn-info btnTitulados">Titulados</a>
 	</div>
-	<div id="cantEgresados" style="position: absolute; z-index: 2; right: 9.5%; " class="col-md-4 hidden">
-		<div class="panel panel-default" style="height: 92px; ">
-			<div class="container">
-				<h5 class="text-center text-muted">Cantidad de Egresados <span class="text-info"><?php echo $this->specialityName ?></span></h5>
-				<h3 id="numEgresados" class="text-muted text-center">0</h3 id="numEgresados">
-			</div>
-		</div>
+	<div class="showCantidadEgresados" hidden>
+		<p><span class="glyphicon glyphicon-user"></span> Cantidad de Egresados</p>
+		<p class="cantEgresados" id="numEgresados"> </p>
 	</div>
 </div>
+<div class="listEgresados" id="dataEgresados" hidden>
 
-<div class="container">
-	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<div id="data" class="panel panel-default">
-
-			</div>
-		</div>
-	</div>
 </div>
 
 <script>
 	$('#data').addClass('hidden');
 	$('#anio').change(function(){
-		var dataHidden = $('#data').hasClass('hidden');
-		if (dataHidden) {
-			$('#selectAnio').animate({ "left": "-=16%" }, "slow" ,function(){
-				$('#cantEgresados').removeClass('hidden');
+		$('.navegacion').fadeIn('slow');
+		setTimeout(function(){$('.showCantidadEgresados, #dataEgresados').fadeIn('slow');}, 500);
 
-			});
-		};
-
-		$('#data').removeClass('hidden');
-		$('#data').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center><br>')
-
+		$('#dataEgresados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center><br>')
 		var anio = $(this).val();
-		$('#data').load('/acreditacion/egresados/listegresados/anio/' + anio, function(){
-
+		$('#dataEgresados').load('/acreditacion/egresados/listegresados/anio/' + anio, function(){
+			$('html body').animate({
+				scrollTop : $('.tituloDescriptivo').offset().top,
+			});
 		});
 	})
 </script>

@@ -44,10 +44,10 @@ Class Acreditacion_Form_Project extends Zend_Form
 		           ->removeDecorator('HtmlTag')
 		           ->addMultiOption('','Seleccione')
 		           ->addMultiOption('B','Borrador')
-		           ->addMultiOption('E','Enviado')
-		           ->addMultiOption('A','Aprobado')
-		           ->addMultiOption('R','Rechazado')
-		           ->addMultiOption('C','Cerrado');
+		           ->addMultiOption('E','Enviado');
+		           // ->addMultiOption('A','Aprobado')
+		           // ->addMultiOption('R','Rechazado')
+		           // ->addMultiOption('C','Cerrado');
 		$this->addElement($state);
 		// $this->setDefaults(array('state'=>'I'));
 
