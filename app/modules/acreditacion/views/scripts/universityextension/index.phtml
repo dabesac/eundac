@@ -1,5 +1,5 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-map-marker"></span> Extensión Universitaria');?>
-<?php $this->placeholder('Btnnav')->append('<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a> <button id="see_list" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> Ver Inscritos</button>');?>
 <form name="frmsearch" id="frmsearch" action="/acreditacion/universityextension/getstudent" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
 	<div class='row'>
 		<div class='col-md-7'>
@@ -12,6 +12,34 @@
 	</div>
 </form>
 <div id="cargadatos_"></div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style='width:70%'>
+	    <div class="modal-content">
+	      	<div class="modal-header">
+	        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        	<h4 class="modal-title text-center" id="myModalLabel"><b>INSCRITOS EXTENSIÓN UNIVERSITARIA</b></h4>
+	      	</div>
+	      	<div class="modal-body">
+	      		<div class='row'>
+		      		<div class='col-md-2 col-md-offset-2'><b>Seleccione un tipo: </b></div>
+		        	<div class='col-md-3'>
+			        	<select class='form-control' id="type_selec">
+			        		<option value='ME'>Movilidad Estudiantil</option>
+			        		<option value='BC'>Beca 18</option>
+			        		<option value='P'>Pasantía</option>
+			        	</select>	        		
+		        	</div>
+		        	<div class='col-md-2 text-center'><button class='btn btn-primary' id='see_content'><span class='glyphicon glyphicon-arrow-down'></span> Ver</button></div>
+	      		</div>
+				<div id='content_modal' class='row'></div>
+	      	</div>
+	      	<div class="modal-footer">
+	        	<button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-share"></span> Cerrar</button>
+	      	</div>
+	    </div>
+	</div>
+</div>
 <script type="text/javascript">
 	$("#uid").keypress(function (e) {
         if(e == 13 || e.which==13 || e.which==0){
@@ -46,4 +74,22 @@
 	    var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
 	    return ((tecla > 47 && tecla < 58) || tecla == 8);
 	}
+
+	$("#content_modal").fadeOut();
+	$("#see_list").click(function(){
+		$('#myModal').modal('show');
+	});
+
+	$("#see_content").click(function(){
+		var tipo=$('#type_selec').val();
+		$("#content_modal").fadeIn();
+		$("#content_modal").html("<b>"+tipo+"</b>");
+	});
+
+	$('#myModal').on('hidden.bs.modal', function (e) {
+	  	$("#content_modal").fadeOut();
+		$('#type_selec > option[value="ME"]').attr('selected', 'selected');
+	});
+
+
 </script>

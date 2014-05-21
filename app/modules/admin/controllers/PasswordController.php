@@ -181,6 +181,7 @@ class Admin_PasswordController extends Zend_Controller_Action
                             $password=md5($formData["ncla"]);
 
                             $data['password']=$password;
+                            $data['change_password']="T";
                             $pk['eid']=$eid;
                             $pk['oid']=$oid;
                             $pk['uid']=$uid;

@@ -42,7 +42,7 @@ if ($this->data_user) {
 	<?php	
 	}
 	?>
-
+	
 <div class='col-md-9'>
 	<div class='panel panel-primary'>
 		<div class='panel-body' style='font-size:17px'>
@@ -73,8 +73,8 @@ if ($this->data_user) {
 				<div class='col-md-2 text-right'><b>Tipo: </b></div>
 				<div class='col-md-4 '>
 					<select id='tipo' class='form-control'>
-						<option value="ME">Movilidad Estudiantil</option> 
-						<option value="BC">Beca 18</option>
+						<option value="ME">Movilidad Estudiantil</option>
+						<option value="BC">Beca 18</option>				
 						<option value="P">Pasantía</option>
 					</select>
 				</div>
@@ -112,4 +112,19 @@ else{	?>
 		var url=("/acreditacion/universityextension/registerstudentsextension/type/"+tipo+"/perid/"+period+"/state/A/uid/"+uid+"/fullname/"+fullname+"/escid/"+escid);
 		$("#saving").load(url);
 	});
+
+	var datass = <?php echo $this->dataMovilidad1?>;
+	if (datass) {
+		for (var i = datass.length - 1; i >= 0; i--) {
+			if (datass[i].university_extension_id[2]=='ME') {
+				$("#tipo").find('option').eq(0).remove();
+			};
+			if (datass[i].university_extension_id[2]=='BC') {
+				$("#tipo").find('option').eq(1).remove();
+			};
+			if (datass[i].university_extension_id[2]=='P') {
+				$("#tipo").find('option').eq(2).remove();
+			};
+		};		
+	};
 </script>
