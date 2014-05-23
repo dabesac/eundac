@@ -4,7 +4,7 @@
     
 class Eundac_Connect_openerp {
 
-    public $server = "http://173.255.201.167:8069/xmlrpc/";
+    public $server = "http://erp.undac.edu.pe:8069/xmlrpc/";
     public $database = "erp";
     //public $database = "acreditacion";
     public $uid = "";/**  @uid = once user succesful login then this will asign the user id */

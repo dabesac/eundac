@@ -13,6 +13,19 @@ class Acreditacion_UniversityextensionController extends Zend_Controller_Action 
     public function indexAction(){
     	try {
  			$fm = new Acreditacion_Form_Search();
+ 			//$eid=$this->sesion->eid;
+ 			//$oid=$this->sesion->oid;
+			//$server = new Eundac_Connect_openerp();
+		 	//$query =array(
+    	 	//			array( 'column'		=> 	'state',
+    	 	//				   'operator' 	=> 	'=',
+    	 	//				   'value' 		=> 	'I',
+    	 	//				   'type' 		=> 	'string')
+    	 	//		);
+    	 	//$typeMovilidad = $server->search('university.extension.students', $query);
+    	 	//$atributes = array('id','name','semid','state','registered_code','department_id','university_extension_id');
+    	 	//$dataMovilidad = $server->read($typeMovilidad, $atributes, 'university.extension.students');
+    	 	//print_r($dataMovilidad);
  			$this->view->fm=$fm;   		
     	} catch (Exception $e) {
     		print "Error: ".$e->getMessage();
@@ -59,8 +72,8 @@ class Acreditacion_UniversityextensionController extends Zend_Controller_Action 
 	    	 	$typeMovilidad = $server->search('university.extension.students', $query);
 	    	 	$atributes = array('id','name','semid','state','registered_code','department_id','university_extension_id');
 	    	 	$dataMovilidad = $server->read($typeMovilidad, $atributes, 'university.extension.students');
+	    	 	$prueba = $dataMovilidad;
 	    	 	if ($dataMovilidad) {
-	    	 		$prueba = $dataMovilidad;
 
 		     		foreach ($dataMovilidad as $key => $data) {
 
@@ -79,12 +92,17 @@ class Acreditacion_UniversityextensionController extends Zend_Controller_Action 
 			     		$typeMovilidad1 = $server->search('university.extension', $query1);
 			     		$atributes1 = array('id','name','type','perid');
 			     		$dataMovilidad1 = $server->read($typeMovilidad1, $atributes1, 'university.extension');
-			     		$prueba[$key]['university_extension_id'][2]=$dataMovilidad1[0]['type'];
+			     		if ($dataMovilidad1) {
+			     			$prueba[$key]['university_extension_id'][2]=$dataMovilidad1[0]['type'];
+			     		}
+			     		
 			    		
 		     		}
-	    	 		$this->view->dataMovilidad=$prueba;
 	    			
 	    	 	}
+	     		$json = json_encode($prueba);
+    	 		$this->view->dataMovilidad=$prueba;
+    	 		$this->view->dataMovilidad1=$json;
     		 	$this->view->data_user=$data_user;
     		 	$this->view->data_period=$data_period;
     		 	$this->view->data_school=$data_school;
@@ -133,8 +151,8 @@ class Acreditacion_UniversityextensionController extends Zend_Controller_Action 
 		    					'university_extension_id'  	=> 	$dataMovilidad[0]['id'],
 		    					'state'						=>	'I',
 		    					'registered_code'			=> 	$uid,
-		    					'department_id'				=>	'92');	
-
+		    					'department_id'				=>	'92');			  
+		    	//print_r($data);
 		    	$created = $server->create('university.extension.students', $data);
 		    	if ($created) {
 		    		echo "true";
