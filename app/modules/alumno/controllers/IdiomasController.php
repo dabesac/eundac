@@ -22,11 +22,15 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
         $this->_helper->layout()->disableLayout();
 
         //dataBases
-        $langPeriodDb  = new Api_Model_DbTable_LangPeriod();
-        $langProgramDb = new Api_Model_DbTable_LangProgram();
-        $langCoursesDb = new Api_Model_DbTable_LangCourse();
+        $langPeriodDb        = new Api_Model_DbTable_LangPeriod();
+        $langProgramDb       = new Api_Model_DbTable_LangProgram();
+        $langCoursesDb       = new Api_Model_DbTable_LangCourse();
+        $langTasaDb          = new Api_Model_DbTable_LangTasa();
+        $langProgramTasasDb  = new Api_Model_DbTable_LangProgramTasas();
+        $langProgramTurnosDb = new Api_Model_DbTable_LangProgramTurnos();
 
         $eid = $this->sesion->eid;
+        $rid = $this->sesion->rid;
 
         //Obtener Periodo Activo de Idiomas
         $where = array( 'eid'   => $eid,
@@ -42,30 +46,58 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
             $where = array( 'eid'   => $eid,
                             'perid' => $periodActive['perid'] );
 
-            $dataPrograms = $langProgramDb->_getFilter($where);
-            $sendProgram = '';
-            $anotherTurn = 'no';
-            foreach ($dataPrograms as $c => $program) {
+            $preDataPrograms = $langProgramDb->_getFilter($where);
+            foreach ($preDataPrograms as $c => $program) {
+                //Datos de Tasa
+                $where = array( 'eid'   => $eid,
+                                'cid'   => $program['cid'],
+                                'perid' => $program['perid'] );
+                $attrib = array('tasaid', 'costo');
+                $dataTasaProgram = $langProgramTasasDb->_getFilter($where, $attrib);
 
-                foreach ($sendProgram as $send) {
-                    if ($program['cid'] == $send['courseId']) {
-                        $anotherTurn = 'yes';
+                $num_cuenta = '';
+                $costo      = '';
+                foreach ($dataTasaProgram as $tasaProgram) {
+                    $where = array( 'eid'    => $eid,
+                                    'tasaid' => $tasaProgram['tasaid']);
+                    $attrib = array('code_rol', 'num_cuenta');
+
+                    $rolTasa = $langTasaDb->_getFilter($where, $attrib);
+                    if ($rid == $rolTasa[0]['code_rol']) {
+                        $num_cuenta = $rolTasa[0]['num_cuenta'];
+                        $costo      = $tasaProgram['costo'];
                     }
                 }
-                $where = array( 'eid' => $eid,
-                                'cid' => $program['cid'] );
-                $attrib = array('name', 'credits', 'prerequisite');
+                if ($num_cuenta) {
+                    //Datos de Curso
+                    $where = array( 'eid' => $eid,
+                                    'cid' => $program['cid'] );
+                    $attrib = array('name', 'credits', 'prerequisite');
 
-                $dataCourse = $langCoursesDb->_getFilter($where, $attrib);
-                $sendProgram[$c]['courseId']      = $program['cid'];
-                $sendProgram[$c]['courseName']    = $dataCourse[0]['name'];
-                $sendProgram[$c]['courseCredits'] = $dataCourse[0]['credits'];
-                $sendProgram[$c]['coursePre']     = $dataCourse[0]['prerequisite'];
-                $sendProgram[$c]['price']         = $program['amount'];
-                $sendProgram[$c]['perid']         = $periodActive['perid'];
+                    $dataCourse = $langCoursesDb->_getFilter($where, $attrib);
+
+                    $dataPrograms[$c]['courseId']      = $program['cid'];
+                    $dataPrograms[$c]['courseName']    = $dataCourse[0]['name'];
+                    $dataPrograms[$c]['courseCredits'] = $dataCourse[0]['credits'];
+                    $dataPrograms[$c]['coursePre']     = $dataCourse[0]['prerequisite'];
+                    $dataPrograms[$c]['num_cuenta']    = $num_cuenta;
+                    $dataPrograms[$c]['costo']         = $costo;
+
+                    //Turnos por Programa
+                    $where = array( 'eid'   => $eid,
+                                    'cid'   => $program['cid'],
+                                    'perid' => $program['perid'], );
+                    $attrib = array('turnoid', 'frecuencia');
+
+                    $dataTurnos = $langProgramTurnosDb->_getFilter($where, $attrib);
+                    foreach ($dataTurnos as $cProgramTurnos => $turno) {
+                       $dataPrograms[$c]['turnos'][$cProgramTurnos] = array( 'turnoid'    => $turno['turnoid'],
+                                                                            'frecuencia' => $turno['frecuencia']);
+                    }
+                }
+
             }
-
-            $this->view->programs = $sendProgram;
+            $this->view->dataPrograms = $dataPrograms;
         }
 
     }
