@@ -37,8 +37,14 @@
 						$escid=base64_encode($esc['escid']);
 						$subid_cryp=base64_encode($esc['subid']);
 						$name=($esc['name']);
-					?>
-					<option value="<?php echo $escid.";--;".$subid_cryp?>"><?php echo $name?></option>
+					?>	
+						<!--Olimpico Seteo por que no hay tiempo-->
+						<?php if ($esc['escid'] == '4MI' or $esc['escid'] == '6MI' or $esc['escid'] == '2CC' or $esc['escid'] == '10CC' or $esc['escid'] == '1AD' or $esc['escid'] == '9CE'){
+							$escuela = $esc['escid'].' | ';
+						}else{
+							$escuela = '';
+						} ?>
+						<option value="<?php echo $escid.";--;".$subid_cryp?>"><?php echo $escuela.$name ?></option>
 					<?php 
 					}
 				}else{

@@ -18,7 +18,7 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
     }
 
     public function indexAction()
-    {
+        {
         try {
             /**
             ** @param /***atributos para sql**
@@ -57,10 +57,11 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
 
             $attributes = array();
             $ids_subid = $connect->search('sede',$query_subid);
-            // print_r($ids_subid);
+            
+
             $id_subid_opem = $connect->read($ids_subid,$attributes,'sede');
-            $this->id_subid_opem=$id_subid_opem[0]['id'];
-            $this->view->id_subid_opem=$id_subid_opem[0]['id'];
+            $this->id_subid_opem= ($id_subid_opem >0)?$id_subid_opem[0]['id']:'';
+            $this->view->id_subid_opem=($id_subid_opem>0)?$id_subid_opem[0]['id']:'';
 
             $query_escid = array(
                     array(
@@ -74,32 +75,33 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
             $attributes = array();
             $ids_escid = $connect->search('hr.department',$query_escid);
             $id_escid_opem = $connect->read($ids_escid,$attributes,'hr.department');
-            $this->id_escid_opem=$id_escid_opem[0]['id'];
-            $this->view->id_escid_opem=$id_escid_opem[0]['id'];
-
-             $query_1= array(
+            $this->id_escid_opem=($id_escid_opem > 0)? $id_escid_opem[0]['id']:'';
+            $this->view->id_escid_opem=($id_escid_opem > 0)? $id_escid_opem[0]['id']:'';
+            $query_1= array(
                     array(
-                        'column'=>'author',
+                        'column'=>'employee_id',
                         'operator'=>'=',
                         'value'=>trim($this->id_user_openerp),
                         'type'=>'int'
-                    )//,array(
+                    )
+                    //,array(
                     //     'column'=>'state',
                     //     'operator'=>'=',
                     //     'value'=>'B',
                     //     'type'=>'string'
                     // )
                 );  
-            
             // $data_project = array();
-            $ids_project = $connect->search('inv.pro.project',$query_1);
-            // print_r($ids_project); exit();
+            $attributes_author = array();
+            $ids_project = $connect->search('inv.pro.authors',$query_1);
+            $ids_project_data = $connect->read($ids_project,$attributes_author,'inv.pro.authors');
+            // print_r($ids_project_data); exit();
             if ($ids_project) {
-                $attributes = array('id','name','project','description','comment','type');
+                $attributes = array('id','name','project','description','comment','type','state');
                 $data_project = $connect->read($ids_project,$attributes,'inv.pro.project');
             }
             $this->view->data_project=$data_project;
-
+            print_r($data_project);
             // $data = array(
             //     'state'=>'A',
             //     'name'=>'prueeeeeebita'

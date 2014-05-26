@@ -23,8 +23,10 @@
             <h3><?php echo $value['name']?></h3>
             <p><?php echo $value['description']?></p>
             <p>
-                <button href="#"  id_project='<?php echo $value['id']?>'class="btn btn-primary project-modified">Modificar</button> 
-                <a href="/acreditacion/socialprojection/deleteproject/id/<?php echo $value['id']?>" class="btn btn-default">Eliminar</a></p>
+                <button href="#"  id_project='<?php echo $value['id']?>'class="btn btn-primary project-modified <?php echo ($value['state']=='C')? "disabled":''?>">Modificar</button> 
+                <a href="/acreditacion/socialprojection/deleteproject/id/<?php echo $value['id']?>" class="btn btn-danger <?php echo ($value['state']=='C')? "disabled":''?>">Eliminar</a>
+                <a href="/acreditacion/socialprojection/deleteproject/id/<?php echo $value['id']?>" class="btn btn-warning <?php echo ($value['state']=='C')? "disabled":''?>">Enviar</a>
+            </p>
           </div>
         </div>
       </div>
