@@ -107,7 +107,7 @@ class Register_StudentController extends Zend_Controller_Action {
             $this->view->escid=$escid;
             $this->view->subid=$subid;
 
-            if ($escid !='2YP' && $escid !='2DE' && $escid !='3EF' && $escid='2ESTA' && $escid !='4AM' && $escid !='5AG-Y' && $uid !='8822283375' && $uid !='0122277076' && $uid !='1244207110' && $uid !='1024103023' ) {
+            if ($escid !='2YP' && $escid !='2DE' && $escid !='3EN' && $escid='2ESTA' && $escid !='4AM' && $escid !='5AG-Y' && $uid !='8822283375' && $uid !='0122277076' && $uid !='1244207110' && $uid !='1024103023' ) {
                 $this->_redirect("/alumno/");
             }
 
