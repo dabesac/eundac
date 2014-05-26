@@ -97,11 +97,11 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
             $ids_project_data = $connect->read($ids_project,$attributes_author,'inv.pro.authors');
             // print_r($ids_project_data); exit();
             if ($ids_project) {
-                $attributes = array('id','name','project','description','comment','type');
+                $attributes = array('id','name','project','description','comment','type','state');
                 $data_project = $connect->read($ids_project,$attributes,'inv.pro.project');
             }
             $this->view->data_project=$data_project;
-
+            print_r($data_project);
             // $data = array(
             //     'state'=>'A',
             //     'name'=>'prueeeeeebita'
