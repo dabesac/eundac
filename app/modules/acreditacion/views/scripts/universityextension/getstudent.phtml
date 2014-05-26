@@ -1,3 +1,4 @@
+<div id='cargaqui'>
 <?php
 if ($this->data_user) {		
 	$fullname = $this->data_user[0]['last_name0']." ".$this->data_user[0]['last_name1'].", ".$this->data_user[0]['first_name'];
@@ -90,6 +91,7 @@ if ($this->data_user) {
 	</div>
 </div>
 <div id="saving"></div>
+
 <?php	
 }
 else{	?>
@@ -100,8 +102,21 @@ else{	?>
 <?php
 }
 ?>
+</div>
 
+<div class='alert alert-danger col-md-8 col-md-offset-2' id='no_guarda'>
+	<center><h4><span class='glyphicon glyphicon-question-sign'></span> No se pudo guardar el registro</h4></center>
+</div>
+<div class='alert alert-danger col-md-8 col-md-offset-2' id='no_guarda1'>
+	<center><h4><span class='glyphicon glyphicon-question-sign'></span> No existe el tipo de extensión universitaria en el ERP</h4></center>
+</div>
+<div class='alert alert-success col-md-8 col-md-offset-2' id='guardar'>
+	<center><h4><span class='glyphicon glyphicon-ok'></span> Se guardó con éxito el registro</h4></center>
+</div>
 <script type="text/javascript">
+	$("#guardar").fadeOut();
+	$("#no_guarda").fadeOut();
+	$("#no_guarda1").fadeOut();
 	$("#_save").click(function(){
 		var uid=$(this).attr("uid");
 		var fullname=$(this).attr("fullname");
@@ -111,6 +126,7 @@ else{	?>
 
 		var url=("/acreditacion/universityextension/registerstudentsextension/type/"+tipo+"/perid/"+period+"/state/A/uid/"+uid+"/fullname/"+fullname+"/escid/"+escid);
 		$("#saving").load(url);
+		
 	});
 
 	var datass = <?php echo $this->dataMovilidad1?>;

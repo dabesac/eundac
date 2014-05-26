@@ -190,14 +190,16 @@ class Admin_PasswordController extends Zend_Controller_Action
                             $pk['subid']=$subid;
                             
                             $bdu = new Api_Model_DbTable_Users();
-                            $bdu->_update($data,$pk);
+                            $veri=$bdu->_update($data,$pk);
                                 // $where_=array();
                                 // $where_ = array("username"=>$uid);
                                 // $datac = array("password"=> $password);
                                 // $campus = new Api_Model_DbTable_Campususer();
                                 // $campus->_update($where_,$datac);
-                
-                            $this->view->mensaje=3;
+                            if ($veri) {
+                                $this->view->mensaje=3;                                
+                            }
+                            
                         }
                         else{
                             $this->view->mensaje=2;
