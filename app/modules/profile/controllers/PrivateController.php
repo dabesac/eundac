@@ -257,7 +257,7 @@ class Profile_PrivateController extends Zend_Controller_Action {
             if ($courpercur){
 	            foreach ($courpercur as $cour) {
 	                $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid, "courseid"=>$cour['courseid'], "curid"=>$cur['curid'],"pid"=>$pid,"uid"=>$uid);
-	                $attrib=array("courseid","notafinal","perid");
+	                $attrib=array("courseid","notafinal","perid", 'turno');
 	                //print_r($where);
 	                $courlle[$c]=$dbcourlle->_getFilter($where, $attrib);
 	                $c++;
@@ -265,7 +265,7 @@ class Profile_PrivateController extends Zend_Controller_Action {
             }
             //print_r($courpercur);
             $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "subid"=>$subid,"pid"=>$pid,"uid"=>$uid,"perid"=>$perid);
-            $attrib=array("courseid","state");
+            $attrib=array("courseid","state", 'turno', 'perid');
             $courlleact=$dbcourlle->_getFilter($where,$attrib);
             //print_r($courlle);
 

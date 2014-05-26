@@ -37,7 +37,7 @@
     
     <div class="row">
     <?php foreach ($this->news as $newData): ?>
-    <div id="data<?php echo $newData['newid'] ?>" class="data">
+    <div id="data<?php echo $newData['newid'] ?>" class="data" hidden>
         <div class="row">
             <div id="newImg<?php echo $newData['newid'] ?>" class="newImg col-md-6"></div>
             <script>
@@ -70,7 +70,7 @@
 <div class="titlesMain">
 <div class="row container">
 	<div class="col-md-11">
-		<h4 class="text-info">Gráficas Estadísticas <span class="text-muted">Periodo 13B<?php //echo $this->perid ?></span></h4>
+		<h4 class="text-info">Gráficas Estadísticas <span class="text-muted"><?php echo $this->perid ?></span></h4>
 	</div>
 	<div class="iconMain col-md-1">
 		<h4><span class="glyphicon glyphicon-stats pull-right"></span></h4>
@@ -134,7 +134,6 @@
 		$(this).tooltip('toggle');
 	});
 
-	$('.data').slideUp();
 
 	var sliderGo = setInterval(function(){sliderForward();}, 4500);
 

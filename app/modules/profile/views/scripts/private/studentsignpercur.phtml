@@ -16,17 +16,18 @@
 					<div class="panel-body">
 						<table class="table">
 							<tr>
-								<th><center>Código</center></th>
-								<th>Cursos</th>
-								<th><center>Créditos</center></th>
-								<th><center>Tipo</center></th>
-								<th><center>Requisito</center></th>
-								<th>Nota</th>
-								<th>Estado</th>
+								<th class="text-center">Código</th>
+								<th class="col-md-4">Curso</th>
+								<th class="text-center">Créditos</th>
+								<th class="text-center">Tipo</th>
+								<th class="text-center">Requisito</th>
+								<th class="text-center">Nota</th>
+								<th class="text-center">Estado</th>
+								<th class="text-center">Sílabo</th>
 							</tr>
 					<?php
 					$semid=$sem['semid'];
-						foreach ($this->courpercur as $courses) {
+						foreach ($this->courpercur as $cCursos => $courses) {
 							if($courses['semid']==$semid) {?>
 								<tr>
 									<td align="center"><?php echo $courses['courseid']?></td>
@@ -92,6 +93,7 @@
 											<img src="/img/circulo-rojo.png">
 										<?php }?>
 									</td>
+									<td class="text-center"><a title="Imprimir Sílabo" href="/syllabus/print/index/courseid/<?php echo base64_encode($courses['courseid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/escid/<?php echo base64_encode($courses['escid'])?>/turno/<?php echo base64_encode($this->courlle[$cCursos][0]['turno'])?>/perid/<?php echo base64_encode($this->courlle[$cCursos][0]['perid'])?>/subid/<?php echo base64_encode($courses['subid'])?>"><span class="glyphicon glyphicon-book"></span></a></td>
 								</tr>
 							<?php $c++;
 							}

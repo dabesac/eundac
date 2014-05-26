@@ -36,7 +36,7 @@
     <div class="row">
 
     <?php foreach ($this->news as $newData): ?>
-    <div id="data<?php echo $newData['newid'] ?>" class="data">
+    <div id="data<?php echo $newData['newid'] ?>" class="data" hidden>
         <div class="row">
             <div id="newImg<?php echo $newData['newid'] ?>" class="newImg col-md-6"></div>
             <script>
@@ -81,7 +81,7 @@
         <p><span class="glyphicon glyphicon-stats"></span> Cerrar Gráfica</p>
     </div>
     </a>
-    <div class="allDataGrafica">
+    <div class="allDataGrafica" hidden>
         <div class="botonsCourses">
             <div class="row">
                 <div class="col-md-1 col-md-offset-3">
@@ -199,30 +199,26 @@
                     </h5>
                 </div>
                 <div class="col-md-2">
-                    <?php 
-                    if ($this->progressNotas[$c]['porcentaje'] == 'FS'){
-                        $classNotas = 'text-danger';
-                        $progressNotas = 'FS';
-                        $avisoNotas = 'Primero termine de rellenar su sílabo';
-                        $faltaSilabo = 'SI';
+                    <?php
+                    if ($this->progressNotas[$c]['porcentaje'] < 0) {
+                        $faltaSilabo = 'Si';
+                        $avisoNotas = 'Primero rellene su silabo';
                         $urlNotas = '##';
-                    }elseif ($this->progressNotas[$c]['porcentaje'] <= 25){
+                    }elseif ($this->progressNotas[$c]['porcentaje'] == 0) {
+                        $faltaSilabo = 'No';
                         $classNotas = 'text-danger';
-                        $progressNotas = $this->progressNotas[$c]['porcentaje'].' %';
-                        $avisoNotas = $this->progressNotas[$c]['notasRellenadas'].' de '.$this->progressNotas[$c]['totalStudents'].' completados';
+                        $avisoNotas = 'No se lleno ninguna nota aun';
+                    }elseif ($this->progressNotas[$c]['porcentaje'] >= 25 and $this->progressNotas[$c]['porcentaje'] <= 99) {
                         $faltaSilabo = 'No';
-                    }elseif ($this->progressNotas[$c]['porcentaje'] <= 99){
                         $classNotas = 'text-warning';
-                        $progressNotas = $this->progressNotas[$c]['porcentaje'].' %';
-                        $avisoNotas = $this->progressNotas[$c]['notasRellenadas'].' de '.$this->progressNotas[$c]['totalStudents'].' completados';
+                        $avisoNotas = 'Se llenaron las notas parcialmente';
+                    }elseif ($this->progressNotas[$c]['porcentaje'] == 100) {
                         $faltaSilabo = 'No';
-                    }
-                    elseif ($this->progressNotas[$c]['porcentaje'] == 100){
                         $classNotas = 'text-success';
-                        $progressNotas = $this->progressNotas[$c]['porcentaje'].' %';
-                        $avisoNotas = 'Todas las Notas Rellenadas';
-                        $faltaSilabo = 'No';
-                    } 
+                        $avisoNotas = 'Se llenaron todas las notas';
+                    }
+                    
+
                     if ($faltaSilabo == 'No') {
                         $urlNotas = '/docente/fillnotes/target'.    '/'.base64_encode('escid').'/'.base64_encode($course['escid']).
                                                                     '/'.base64_encode('subid').'/'.base64_encode($course['subid']).
@@ -286,7 +282,7 @@
                 </div>
                 </div>
                 </div>
-                <div id="listEmptySyllabus" class="dataSliderAvance">
+                <div id="listEmptySyllabus" class="dataSliderAvance" hidden>
                 <div class="container">
                     <p class="text-danger text-center">Falta Sílabo
                         <?php if ($this->emptySyllabus >= 5): ?>
@@ -340,7 +336,7 @@
                 </div>
                 </div>
                 </div>
-                <div id="listEmptyReport" class="dataSliderAvance">
+                <div id="listEmptyReport" class="dataSliderAvance" hidden>
                     <div class="container">
                     <p class="text-center text-danger">Falta Informe Académico
                         <?php if ($this->emptyReport >= 10): ?>
@@ -372,64 +368,10 @@
         <br>
     </div>
 </div>
-<div style="height: 500px;"></div>
+<div style="height: 150px;"></div>
 
-    <!--<div class="col-md-1 text-center">
-        <br><br>
-        <a href="##" class="text-muted previousSlide">
-            <span class="glyphicon glyphicon-chevron-left text-center"></span>
-        </a>
-    </div>
-    <div class="col-md-1 text-center">
-        <br><br>
-        <a href="##" class="text-muted nextSlide">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-        </a>
-    </div>-->
-
-
-<!--<div class="row">
-  	<div class="col-md-6">
-        <div class ="col-md-3 content-calendar">
-            <div class="content-day">
-                <div class ="content-date pull-left">
-                    <h5 class ='text-calendar' ><?php echo strtoupper($this->mounth)?></h5>
-                    <h1 class="text-calendar calendar-text-day"><?php echo strtoupper($this->day_1)?></h1>
-                    <h5 class='text-calendar'><?php echo strtoupper($this->day_last)?></h5>
-                </div>
-                <div class ="contet-add-cal pull-right">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </div>
-            </div>
-            <div class="content-event">
-                <span class="glyphicon glyphicon-book pull-left icon-event"></span>
-                <h5 class='text-calendar text-event-title text-center'>Inicio Llenado de Notas</h5>
-                <h3 class="text-calendar text-detail-event">Ingereso de Notas Primer Parcial</h3>
-            </div>
-        </div>
-        <div class ="col-md-3 content-calendar">
-            <div class="content-day">
-                <div class ="content-date pull-left">
-                    <h5 class ='text-calendar' ><?php echo strtoupper($this->mounth_2)?></h5>
-                    <h1 class="text-calendar calendar-text-day"><?php echo strtoupper($this->day_2)?></h1>
-                    <h5 class='text-calendar'><?php echo strtoupper($this->day_last)?></h5>
-                </div>
-                <div class ="contet-add-cal pull-right">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </div>
-            </div>
-            <div class="content-event">
-                <span class="glyphicon glyphicon-book pull-left icon-event"></span>
-                <h5 class='text-calendar text-event-title text-center'>Inicio Llenado de Notas</h5>
-                <h3 class="text-calendar text-detail-event">Ingereso de Notas Segundo Parcial</h3>
-            </div>
-        </div>
-  </div>
-  <div id="graphic-survey" class="col-md-6"></div>
-</div>-->
+   
 <script type="text/javascript">
-	//$("#graphic-survey").load("/docente/index/xcourses");
-    
     //Bloquear Codigo
 
     var rid = $('#rid').val();
@@ -442,8 +384,6 @@
     });
 
     //Slider
-    $('.data, #listEmptySyllabus, #listEmptyReport, .allDataGrafica').slideUp();
-    
     var sliderGo = setInterval(function(){sliderForward();}, 4500);
 
     $('.nextSlide').click(function(){
