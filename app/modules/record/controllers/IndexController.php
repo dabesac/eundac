@@ -41,8 +41,6 @@ class Record_IndexController extends Zend_Controller_Action {
 		$data= array("escid","subid","name");
 		$rows = $speciality->_getFilter($where,$data='');
 
-		
-
 		if ($rows) $this->view->specialitys=$rows;
 		// set speciality for director
 		
