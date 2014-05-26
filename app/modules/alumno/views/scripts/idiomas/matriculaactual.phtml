@@ -1,3 +1,40 @@
-<p class="titleMatriculaActual text-muted"><span class="glyphicon glyphicon-bookmark"></span> Matricula <span class="text-info">Actual</span></p>
+<p class="titleMatriculaActual text-muted"><span class="glyphicon glyphicon-bookmark"></span> Matricula <span class="text-info"><?php echo $this->period['name'] ?></span></p>
 <hr>
-<p class="text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign"></span> Aún no tiene matricula <span class="text-danger">en este periodo.</span></p>
+<?php if ($this->dataCourses): ?>
+	<?php foreach ($this->dataCourses as $c => $course): ?>
+		<div class="course">
+			<div class="headerCourse">
+				<div class="iconCourse"><span class="glyphicon glyphicon-book"></span></div>
+				<div class="nameCourse"><?php echo $course['name'] ?></div>
+				<div class="turnoCourse">Turno <?php echo $course['turno'] ?></div>
+				<div class="teacherCourse"><span class="glyphicon glyphicon-user"></span> AREBALO FULANO, Sebastian</div>
+			</div>
+			<div class="detailCourse">
+				<div class="notasCourse">
+					<table class="table table-hover table-bordered">
+						<tr class="active">
+							<th class="text-center">Nota 1</th>
+							<th class="text-center">Nota 2</th>
+							<th class="text-center">Nota 3</th>
+							<th class="text-center">Nota 4</th>
+							<th class="text-center">Nota Final</th>
+						</tr>
+						<tr>
+							<td class="text-center">12</td>
+							<td class="text-center">15</td>
+							<td class="text-center">16</td>
+							<td class="text-center">11</td>
+							<td class="text-center">15</td>
+						</tr>
+					</table>
+				</div>
+				<div class="detailTurno">
+					<div class="titleFrecuencia"><span class="glyphicon glyphicon-time"></span> Frecuencia</div>
+					<p class="text-muted"><?php echo $course['frecuencia'] ?></p>
+				</div>
+			</div>
+		</div>
+	<?php endforeach ?>
+<?php else: ?>
+	<p class="text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign"></span> Aún no tiene matricula <span class="text-danger">en este periodo.</span></p>
+<?php endif ?>

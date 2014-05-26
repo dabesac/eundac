@@ -6,31 +6,30 @@
 <div class="idiomasIntegrity">
 	<div class="menuIdiomas">
 		<a href="##" id="showMatricula" show="idDivMatricula" class="btnInteractive btn btn-info form-control active">Matricula</a>
-		<a href="##" id="showRecord" show="idDivRecord" class="btnInteractive btn btn-success form-control">Record de Matriculas</a>
-		<a href="##" id="showMatriculaActual" show="idDivMatriculaActual" class="btnInteractive btn btn-warning form-control">Matricula Actual</a>
+		<a href="##" id="showMatriculaActual" show="idDivMatriculaActual" class="btnInteractive btn btn-success form-control">Matricula Actual</a>
+		<a href="##" id="showRecord" show="idDivRecord" class="btnInteractive btn btn-warning form-control">Record de Matriculas</a>
 	</div>
 
 	<div class="matricula divInteractive" id="idDivMatricula">
 
 	</div>
-	<div class="recordMatriculas divInteractive" id="idDivRecord" hidden>
+	<div class="matriculaActual divInteractive" id="idDivMatriculaActual" hidden>
 
 	</div>
-	<div class="matriculaActual divInteractive" id="idDivMatriculaActual" hidden>
+	<div class="recordMatriculas divInteractive" id="idDivRecord" hidden>
 
 	</div>
 </div>
 
 <script>
 	$('#idDivMatricula').load('/alumno/idiomas/matricula/');
-	$('#idDivRecord').load('/alumno/idiomas/recordregisters/');
 	$('#idDivMatriculaActual').load('/alumno/idiomas/matriculaactual/');
+	$('#idDivRecord').load('/alumno/idiomas/recordregisters/');
 
 	var whatDiv = '';
 	$('.btnInteractive').on('click', function(){
 		whatDiv = $(this).attr('show');
-		$('.divInteractive').slideUp('fast', function(){
-			$('#' + whatDiv).slideDown('fast');
-		});
+		$('.divInteractive').slideUp('fast');
+		$('#' + whatDiv).slideDown('fast');
 	});
 </script>
