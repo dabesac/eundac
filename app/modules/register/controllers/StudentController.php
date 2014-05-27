@@ -70,6 +70,11 @@ class Register_StudentController extends Zend_Controller_Action {
                     'register'=>$uid,
                     'created'=>date('Y-m-d H:m:s'),
             );
+
+            if ( $escid !='7DE' && $escid !='2YP' && $escid !='2DE' && $escid !='3EN' && $escid='2ESTA' && $escid !='4AM' && $escid !='5AG-Y' && $uid !='8822283375' && $uid !='0122277076' && $uid !='1244207110' && $uid !='1024103023' && $uid !='1028103059' && $uid!='0922342017' && $uid!='0922345028' && $uid !='1242293208') {
+                $this->_redirect("/alumno/");
+            }
+
             if (is_array($base_registration->_getOne($where)) && is_array($base_payment->_getOne($where_payment))) {
                 $this->_redirect("/register/student/start/regid/".$regid);
             }
@@ -107,9 +112,7 @@ class Register_StudentController extends Zend_Controller_Action {
             $this->view->escid=$escid;
             $this->view->subid=$subid;
 
-            if ($escid !='2YP' && $escid !='2DE' && $escid !='3EN' && $escid='2ESTA' && $escid !='4AM' && $escid !='5AG-Y' && $uid !='8822283375' && $uid !='0122277076' && $uid !='1244207110' && $uid !='1024103023' ) {
-                $this->_redirect("/alumno/");
-            }
+           
 
             $regid=base64_decode($this->_getParam('regid'));
             $this->view->regid=$regid;
@@ -309,11 +312,9 @@ class Register_StudentController extends Zend_Controller_Action {
 
             }
 
-
-
             $base_payment = new Api_Model_DbTable_Payments();
             $data_payment=$base_payment->_getOne($where);
-
+            
             unset($where['perid']);
             $register_paymnets = $base_payment->_getAll($where);
 

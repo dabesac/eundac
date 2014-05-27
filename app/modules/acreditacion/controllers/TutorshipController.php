@@ -20,7 +20,7 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
     public function listteachersAction(){
     	$this->_helper->layout()->disableLayout();
 
-    	$server = new Eundac_Connect_openerp();
+    	//$server = new Eundac_Connect_openerp();
 
     	//DataBase
 		$teacherDb  = new Api_Model_DbTable_Users();
@@ -76,9 +76,23 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 	        $idTeacher = $server->search('tutoring', $query);
 	        if ($idTeacher) {
 	        	$teachersData[$c]['asigned'] = 'yes';
-		        $attributes = array('semid');
+		        $attributes = array('semid', 'number', 'id');
 		        $dataTeacher = $server->read($idTeacher, $attributes, 'tutoring');
-	        	$teachersData[$c]['semid'] = $dataTeacher[0]['semid'];
+				$teachersData[$c]['semid']      = $dataTeacher[0]['semid'];
+				$teachersData[$c]['number']     = $dataTeacher[0]['number'];
+				$teachersData[$c]['tutoringId'] = $dataTeacher[0]['id'];
+	        	$query = array(
+                      array(	'column'   => 'tutoring_id',
+	                            'operator' => '=',
+	                            'value'    =>  $dataTeacher[0]['id'],
+	                            'type'     => 'int' ),
+	                    );
+				$idsStudents = $server->search('tutoring.students', $query);
+				if ($idsStudents) {
+					$teachersData[$c]['alreadyStudents'] = 'yes';
+				}else{
+					$teachersData[$c]['alreadyStudents'] = 'no';
+				}
 	        }else{
 				$teachersData[$c]['asigned'] = 'no';
 				$teachersData[$c]['semid']   = '-';
@@ -239,14 +253,56 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 
 	        $create = $server->create('tutoring', $dataTutoring);
 	        if ($create) {
-	            echo 2;
+	        	$result = array('tutoringId' =>	$create,
+								'success'    => 2);
 	        }else{
-	        	echo 1;
+	        	$result = array('tutoringId' =>	'',
+								'success'    => 2);
             }
+            print json_encode($result);
     	}else{
-    		echo 1;
+    		echo '0-1';
     	}
 
+    }
+
+    public function editasignaciondocenteAction(){
+    	$this->_helper->layout()->disableLayout();
+
+    	$server = new Eundac_Connect_openerp();
+
+    	$formData = $this->getRequest()->getPost();
+    	if (is_numeric($formData['cantStudents']) == true) {
+	        if ($formData['semid']) {
+	    		$data = array(	'number' => $formData['cantStudents'],
+								'semid'  => $formData['semid'] );
+	        }else{
+	        	$data = array(	'number' => $formData['cantStudents'] );
+	        }
+			$idTutoring[0] = $formData['tutoringId'];
+			$update = $server->write('tutoring', $data, $idTutoring);
+			if ($update == 1) {
+				$result = array('success' => 1);
+			}else{
+				$result = array('success' => 2);
+			}
+            print json_encode($result);
+    	}else{
+    		echo 0;
+    	}
+
+    }
+
+    public function desasignedteacherAction(){
+    	$this->_helper->layout()->disableLayout();
+
+    	$server = new Eundac_Connect_openerp();
+    	$tutoringId = $this->_getParam('tutoringid');
+    	$tId[0] = $tutoringId;
+        $deleteTutoring = $server->unlink($tId, 'tutoring');
+        if ($deleteTutoring == 1) {
+        	echo 1;
+        }
     }
 
     public function reportteacherAction(){

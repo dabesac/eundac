@@ -1,36 +1,107 @@
-<?php if ($this->egresados): ?>
+<?php if ($this->dataEgresados): ?>
 	<input type="hidden" id="numEgresadosSend" value="<?php echo $this->numEgresados ?>" />
-	<br>
-	<table class="table table-hover table-bordered">
+	<table class="table table-bordered">
 		<tr class="success">
-			<th class="text-center">#</th>
+			<th class="text-center col-md-1">#</th>
 			<th class="text-center col-md-1">DNI</th>
 			<th>Apellidos y Nombres</th>
-			<th class="text-center">Escuela</th>
+			<th class="text-center col-md-3">Escuela</th>
+			<th class="col-md-2 text-center bachillerColumn hidden">Fecha de Resolución Bachiller</th>
+			<th class="col-md-2 text-center tituloColumn hidden">Fecha de Resolución Titulo</th>
 		</tr>
-		<?php 
-		$c = 0;
-		foreach ($this->egresados as $egresado): ?>
-			<tr>
-				<td class="text-center"><?php echo $c + 1 ?></td>
-				<td class="text-center"><?php echo $egresado['numdoc'] ?></td>
-				<td><?php echo $egresado['nombre'] ?></td>
-				<td class="text-center"><?php echo $this->specialityName[$c][0]['name'] ?></td>
-			</tr>
-		<?php 
-		$c++;
-		endforeach ?>
 	</table>
+	<ul id="ulEgresados">
+		<?php foreach ($this->dataEgresados as $c => $egresado): ?>
+			<li>
+				<?php if ($egresado['grados']): ?>
+					<?php foreach ($egresado['grados'] as $grado): 
+						$name = $name.$grado['grado'];
+					endforeach ?>
+					<span class="hidden"><?php echo $name ?></span>
+				<?php endif ?>
+				<table class="table table-hover table-bordered">
+					<tr>
+						<td class="text-center col-md-1"><?php echo $c + 1 ?></td>
+						<td class="text-center col-md-1"><?php echo $egresado['dni'] ?></td>
+						<td><?php echo $egresado['fullName'] ?></td>
+						<td class="text-center col-md-3"><?php echo $egresado['nameEscuela'] ?></td>
+						<td class="col-md-2 text-center bachillerColumn hidden"><?php echo $egresado['fechaBachiller'] ?></td>
+						<td class="col-md-2 text-center tituloColumn hidden"><?php echo $egresado['fechaTitulo'] ?></td>
+					</tr>
+				</table>
+			</li>
+		<?php endforeach ?>
+	</ul>
 <?php else: ?>
 	<br>
 	<h4 class="text-center text-muted">No Existen Datos de <span class="text-danger">Alumnos Egresados de <?php echo $this->anio ?></span></h4>
 	<br>
 <?php endif ?>
 <script>
-	var	numEgresados = $('#numEgresadosSend').val();
-	if (numEgresados) {
-		$('#numEgresados').html(numEgresados);
-	}else{
-		$('#numEgresados').html(0);
-	};
+	$(function(){
+		var	numEgresados = $('#numEgresadosSend').val();
+		if (numEgresados) {
+			$('#numEgresados').html(numEgresados);
+		}else{
+			$('#numEgresados').html(0);
+		};
+
+		//Filtrar por Grado de Titulo
+		var dataFilter    = '';
+		var preDataFilter = '';
+		var otherData     = new Array();
+		var active        = '';
+		var currentLiText = '';
+
+		//Poderoso boton de Filtro
+		$('.btnsFilter').on('click', function(){
+			otherData[0]  = '';
+			otherData[1]  = '';
+			otherData[2]  = '';
+			
+			$(this).toggleClass('active');
+
+			$('.btnsFilter').each(function(index, element){
+				active = $(element).hasClass('active');
+				preDataFilter = $(element).attr('data');
+				if (active) {
+					if (preDataFilter == 'Invicto') {
+						otherData[0] = preDataFilter;
+					}else if(preDataFilter == 'Bachiller'){
+						otherData[1] = preDataFilter;
+					}else if(preDataFilter == 'Titulado'){
+						otherData[2] = preDataFilter;
+					};
+				};
+			});
+
+			dataFilter = otherData[0] + otherData[1] + otherData[2];
+			filterData(dataFilter);
+
+			if (otherData[1] == 'Bachiller') {
+				$('.bachillerColumn').removeClass('hidden');
+			}else{
+				$('.bachillerColumn').addClass('hidden');
+			};
+
+			if (otherData[2] == 'Titulado') {
+				$('.tituloColumn').removeClass('hidden');
+			}else{
+				$('.tituloColumn').addClass('hidden');
+			};
+
+		});
+
+	    function filterData(dataFilter){
+	        $('#ulEgresados > li').each(function(){
+	            currentLiText = $(this).text();
+	            showCurrentLi = currentLiText.indexOf(dataFilter) !== -1;
+	            $(this).toggle(showCurrentLi);
+	        });
+	        $('html body').animate({
+				scrollTop : $('.tituloDescriptivo').offset().top,
+			});
+	    };
+
+	});
 </script>

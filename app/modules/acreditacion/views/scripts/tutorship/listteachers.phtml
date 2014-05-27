@@ -23,35 +23,70 @@
 				</span>
 
 				<div id="asignarDocente<?php echo $teacher['uid'] ?>" uid="<?php echo $teacher['uid'] ?>" class="asignarDocente">
-					<div id="loading<?php echo $teacher['uid'] ?>" class="hidden">
+					<div id="loading<?php echo $teacher['uid'] ?>" hidden>
 						<img src="/img/spinner.gif" alt="Loading">
 					</div>
-					<?php if ($teacher['asigned'] == 'no'): ?>
-						<form id="form<?php echo $teacher['uid'] ?>" uid="<?php echo $teacher['uid'] ?>" class="form">
-							<input type="hidden" name="uid" value="<?php echo $teacher['uid'] ?>" />
-							<input type="hidden" name="pid" value="<?php echo $teacher['pid'] ?>" />
-							<select id="semid<?php echo $teacher['uid'] ?>" name="semid" class="semestre form-control">
-								<option value="">Semestre</option>
-								<?php foreach ($this->semesters as $semester): ?>
-									<option value="<?php echo $semester['semid'] ?>"><?php echo $semester['name'] ?></option>
-								<?php endforeach ?>
-							</select>
-							<div class="cantStudent"><span id="cantStudents<?php echo $teacher['uid'] ?>" class="cantStudentsNum" title="Cantidad de Estudiantes Matriculados">-</span>
-								<input type="text" class="form-control inputCantStudent" name="cantStudents" placeholder="# Estudiantes" />
-							</div>
-							<input type="submit" class="btn btn-success btnAsignar form-control" value="Asignar" />
-						</form>
-
-						<div id="asignadoSuccess<?php echo $teacher['uid'] ?>" class="hidden">
-							<p class="text-success text-center"><strong>Asignado</strong></p>
-							<p id="semestre<?php echo $teacher['uid'] ?>" class="text-success"></p>
+					<?php if ($teacher['asigned'] == 'no'):
+						$formNew         = '';
+						$divAsignado     = 'hidden';
+						$cantStudent     = '';
+						$semesterAsigned = '';
+						$tutoringId      = '';
+						$existEdit       = '';
+					else:
+						$formNew         = 'hidden';
+						$divAsignado     = '';
+						$cantStudent     = $teacher['number'];
+						$semesterAsigned = $teacher['semid'];
+						$tutoringId      = $teacher['tutoringId'];
+						$existEdit       = 'existEdit';
+					endif ?>
+					<!--Nuevo-->
+					<form id="form<?php echo $teacher['uid'] ?>" uid="<?php echo $teacher['uid'] ?>" class="form" <?php echo $formNew ?>>
+						<input type="hidden" name="uid" value="<?php echo $teacher['uid'] ?>" />
+						<input type="hidden" name="pid" value="<?php echo $teacher['pid'] ?>" />
+						<select id="semid<?php echo $teacher['uid'] ?>" name="semid" class="semestre form-control">
+							<option value="">Semestre</option>
+							<?php foreach ($this->semesters as $semester): ?>
+								<option value="<?php echo $semester['semid'] ?>"><?php echo $semester['name'] ?></option>
+							<?php endforeach ?>
+						</select>
+						<div class="cantStudent"><span class="cantStudentsNum cantStudents<?php echo $teacher['uid'] ?>" title="Cantidad de Estudiantes Matriculados">-</span>
+							<input type="text" class="form-control inputCantStudent" id="inputCantStudent<?php echo $teacher['uid'] ?>" name="cantStudents" placeholder="# Estudiantes" />
 						</div>
+						<input type="submit" class="btn btn-success btnAsignar form-control" value="Asignar" />
+					</form>
 
-					<?php else: ?>
-						<p class="text-success text-center"><strong>Asignado</strong></p>
-						<p class="text-success"><?php echo $teacher['semid'] ?> Semestre</p>
-					<?php endif ?>
-
+					<!--Editar-->
+					<form id="formEdit<?php echo $teacher['uid'] ?>" class="formEdit" hidden>
+						<input type="hidden" id="inputTutoring<?php echo $teacher['uid'] ?>" name="tutoringId" value="<?php echo $tutoringId ?>" />
+						<?php if ($teacher['alreadyStudents'] == 'yes'): 
+							$stateSelect = 'disabled';
+						else:
+							$stateSelect = '';
+						endif ?>
+						<select id="semidEdit<?php echo $teacher['uid'] ?>" uid="<?php echo $teacher['uid'] ?>" name="semid" class="semestre form-control" value="<?php echo $semester ?>" <?php echo $stateSelect ?>>
+							<option value="">Semestre</option>
+							<?php foreach ($this->semesters as $semester): ?>
+								<option value="<?php echo $semester['semid'] ?>"><?php echo $semester['name'] ?></option>
+							<?php endforeach ?>
+						</select>
+						<div class="cantStudent "><span class="cantStudentsNum cantStudents<?php echo $teacher['uid'] ?>" title="Cantidad de Estudiantes Matriculados">-</span>
+							<input type="text" class="form-control inputCantStudent" id="inputCantStudentEdit<?php echo $teacher['uid'] ?>" name="cantStudents" placeholder="# Estudiantes" value="<?php echo $cantStudent ?>"/>
+						</div>
+						<input type="submit" class="btn btn-success btnAsignar form-control" value="Guardar" />
+						<a href="##" class="cancelEditAsignacion btn btn-danger form-control" uid="<?php echo $teacher['uid'] ?>">Cancelar</a>
+						<script>
+							$("#semidEdit<?php echo $teacher['uid'] ?>").val("<?php echo $semesterAsigned ?>");
+						</script>
+					</form>				
+	
+					<!--Div de Asignación-->
+					<div id="divAsignado<?php echo $teacher['uid'] ?>" class="divAsignado <?php echo $existEdit ?>" <?php echo $divAsignado ?>>
+						<p class="text-success text-center">Asignado al <strong id="semestreStrong<?php echo $teacher['uid'] ?>"> <?php echo $semesterAsigned ?> Semestre</strong></p>
+						<a href="##" class="btnEditAsignacion btn btn-info form-control" uid="<?php echo $teacher['uid'] ?>">Editar</a>
+						<a href="##" id="btnDelete<?php echo $teacher['uid'] ?>" class="btnDeleteAsignacion btn btn-danger form-control">Desasignar</a>
+					</div>
 				</div>
 			</td>
 			<td class="tdAsignar text-center">
@@ -71,9 +106,19 @@
 
 <script>
 	$(function(){
+		//BackEnd y Carga de Datos
 		$('.cantStudentsNum').hover(function(){
 			$(this).tooltip('toggle');
 		});
+
+		$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
+		$('#idListDocentesAsignados').load('/acreditacion/tutorship/listasignedteacher/');
+
+		//Navegación UX
+		var uid        = '';
+		var uidElement = '';
+		var semid      = '';
+		var tutoringId = '';
 
 		$('#btnDocentesAsignados').on('click', function(){
 			$('#bloquearDocentes').fadeToggle(1000);
@@ -84,59 +129,155 @@
 			setTimeout(function(){$('#btnDocentesAsignados').removeClass('disabled')}, 1500);
 		});
 
-		$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
-		$('#idListDocentesAsignados').load('/acreditacion/tutorship/listasignedteacher/');
-
-		var uid = '';
 		$('.showAsignar').on('click', function(){
 			uid = $(this).attr('uid');
 
 			$('.asignarDocente').each(function(index, element){
-				var block      = $(element).css('display');
-				var uidElement = $(element).attr('uid');
-				if (block != 'none' && uidElement != uid ) {
+				uidElement = $(element).attr('uid');
+				if (uidElement != uid ) {
 					$(element).slideUp('fast');
 					$('#trDocente' + uidElement).removeClass('success');
 				};
 			});
 
+			$('.formEdit').slideUp();
+			$('.existEdit').slideDown();
+
 			$('#asignarDocente' + uid).slideToggle('fast');
 			$('#trDocente' + uid).toggleClass('success');
 		});
 
-		$('.semestre').on('change', function(){
-			var semid = $(this).val();
-			$('#cantStudents' + uid).html('<img src="/img/spinner.gif" alt="C" />')
-									.load('/acreditacion/tutorship/cantstudentsxsem/semid/' + semid)
+		$('.btnEditAsignacion').on('click', function(){
+			$('#divAsignado' + uid).slideUp();
+			$('#formEdit' + uid).slideDown();
+		});
+		
+		$('.cancelEditAsignacion').on('click', function(){
+			$('#formEdit' + uid).slideUp();
+			$('#divAsignado' + uid).slideDown();
 		});
 
+
+		$('.semestre').on('change', function(){
+			semid = $(this).val();
+			$('.cantStudents' + uid).html('<img src="/img/spinner.gif" alt="C" />')
+									.load('/acreditacion/tutorship/cantstudentsxsem/semid/' + semid);
+		});
+
+
+		$('.semestre').each(function(){
+			semid = $(this).val();
+			uid   = $(this).attr('uid');
+			if (semid) {
+				$('.cantStudents' + uid).html('<img src="/img/spinner.gif" alt="C" />')
+										.load('/acreditacion/tutorship/cantstudentsxsem/semid/' + semid);
+			};
+		});
+
+		//Interaccion con Base De Datos
+
+		//Guardar
 		$('.form').submit(function(e){
 			e.preventDefault();
-			$(this).addClass('hidden');
-			var uid = $(this).attr('uid');
-			var semid = $('#semid' + uid).val();
-			$('#loading' + uid ).removeClass('hidden');
+			$(this).slideUp();
+			semid = $('#semid' + uid).val();
+			cantStudents = $('#inputCantStudent' + uid).val();
+			$('#loading' + uid ).slideDown();
 			$.ajax({
 				type : 'post',
-				data : $(this).serialize(),
 				url : '/acreditacion/tutorship/asignardocente/',
+				data : $(this).serialize(),
+				dataType : 'json',
 				success : function(data){
-					if (data == 1) {
-						$('#form' + uid).removeClass('hidden');
-					}else if(data == 2){
-						$('#asignadoSuccess' + uid).removeClass('hidden');
+					if (data.success === 1) {
+						$('#form' + uid).slideDown();
+					}else if(data.success === 2){
+						$('#divAsignado' + uid).slideDown()
+												.addClass('existEdit');
+
 						$('#tdSuccess' + uid).html('<strong class="text-success">Asignado</strong>');
-						$('#semestre' + uid).html(semid + ' Semestre');
-						$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
-						$('#idListDocentesAsignados').load('/acreditacion/tutorship/listasignedteacher/');
+						$('#semestreStrong' + uid).html(semid + ' Semestre');
+
+						$('#inputTutoring' + uid).val(data.tutoringId);
+						$('#semidEdit' + uid).val(semid);
+						$('#inputCantStudentEdit' + uid).val(cantStudents);
+
+						$('#cantStudentsEdit' + uid).html('<img src="/img/spinner.gif" alt="C" />')
+													.load('/acreditacion/tutorship/cantstudentsxsem/semid/' + semid)
+
+						$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+													.load('/acreditacion/tutorship/listasignedteacher/');
 					};
-					$('#loading' + uid ).addClass('hidden');
+					$('#loading' + uid ).slideUp();
 				},
 				error : function(){
-					$('#form' + uid).removeClass('hidden');
-					$('#loading' + uid ).addClass('hidden');
+					$('#form' + uid).slideDown();
+					$('#loading' + uid ).slideUp();
 				}
 			});
 		});
+		
+		//Editar
+		$('.formEdit').submit(function(e){
+			e.preventDefault();
+			$(this).slideUp();
+			$('#loading' + uid).slideDown();
+			semid = $('#semidEdit' + uid).val();
+
+			$.ajax({
+				type : 'post',
+				url : '/acreditacion/tutorship/editasignaciondocente/',
+				data : $(this).serialize(),
+				dataType : 'json',
+				success : function(data){
+					if (data.success === 1) {
+						$('#semestreStrong' + uid).html(semid + ' Semestre');
+						$('#divAsignado' + uid).slideDown();
+
+						$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+													.load('/acreditacion/tutorship/listasignedteacher/');
+					}else{
+						$('#formEdit' + uid).slideDown();
+					};
+					$('#loading' + uid ).slideUp();
+				},
+				error : function(){
+					$('#formEdit' + uid).slideDown();
+					$('#loading' + uid ).slideUp();
+				}
+			});
+		});
+
+		//Eliminar
+
+		$('.btnDeleteAsignacion').on('click', function(){
+			$('#loading' + uid ).slideDown();
+			$('#divAsignado' + uid).slideUp();
+			tutoringId = $('#inputTutoring' + uid).val();
+			$.ajax({
+				url : '/acreditacion/tutorship/desasignedteacher/',
+				data : {tutoringid : tutoringId},
+				success : function(data){
+					if (data == 1) {
+						$('#tdSuccess' + uid).html('No Asignado');
+						$('#form' + uid).slideDown();
+						$('#divAsignado' + uid).removeClass('existEdit');
+						$('#semestreStrong' + uid).html('');
+
+						$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+													.load('/acreditacion/tutorship/listasignedteacher/');
+					}else{
+						$('#formEdit' + uid).slideDown();
+					};
+					$('#loading' + uid ).slideUp();
+				},
+				error : function(){
+					$('#divAsignado' + uid).slideDown();
+					$('#loading' + uid ).slideUp();
+				}
+			});
+		});
+		
+
 });
 </script>

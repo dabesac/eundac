@@ -82,7 +82,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         if ($infocourse) {
             $this->view->infocourse = $infocourse;
         }
-
+        // print_r($infocourse);
         $base_students = new Api_Model_DbTable_Registrationxcourse();
         $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
         if ($data_notes_students) {
