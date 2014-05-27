@@ -13,20 +13,63 @@ class Acreditacion_UniversityextensionController extends Zend_Controller_Action 
     public function indexAction(){
     	try {
  			$fm = new Acreditacion_Form_Search();
- 			//$eid=$this->sesion->eid;
- 			//$oid=$this->sesion->oid;
-			//$server = new Eundac_Connect_openerp();
-		 	//$query =array(
-    	 	//			array( 'column'		=> 	'state',
-    	 	//				   'operator' 	=> 	'=',
-    	 	//				   'value' 		=> 	'I',
-    	 	//				   'type' 		=> 	'string')
-    	 	//		);
-    	 	//$typeMovilidad = $server->search('university.extension.students', $query);
-    	 	//$atributes = array('id','name','semid','state','registered_code','department_id','university_extension_id');
-    	 	//$dataMovilidad = $server->read($typeMovilidad, $atributes, 'university.extension.students');
-    	 	//print_r($dataMovilidad);
  			$this->view->fm=$fm;   		
+    	} catch (Exception $e) {
+    		print "Error: ".$e->getMessage();
+    	}
+    }
+
+    public function getstudentinscriptionAction(){
+    	try {
+    		$this->_helper->layout()->disableLayout();
+    		$tipo=$this->_getParam('tipo');
+    		$server = new Eundac_Connect_openerp();
+		 	$query =array(
+    	 				array( 'column'		=> 	'type',
+    	 					   'operator' 	=> 	'=',
+    	 					   'value' 		=> 	$tipo,
+    	 					   'type' 		=> 	'string'),
+
+    	 				array( 'column'		=> 	'state',
+    	 					   'operator' 	=> 	'=',
+    	 					   'value' 		=> 	'A',
+    	 					   'type' 		=> 	'string')
+    	 			);
+    	 	$typeMovilidad = $server->search('university.extension', $query);
+    	 	$atributes = array('id','name','perid','state','type');
+    	 	$dataMovilidad = $server->read($typeMovilidad, $atributes, 'university.extension');
+
+    	 	if ($dataMovilidad) {
+    	 		$query =array(
+	    	 				array( 'column'		=> 	'state',
+	    	 					   'operator' 	=> 	'=',
+	    	 					   'value' 		=> 	'I',
+	    	 					   'type' 		=> 	'string')
+	    	 			);
+	    	 	$typeMovilidad = $server->search('university.extension.students', $query);
+	    	 	$atributes = array('department_id','name','state','university_extension_id','registered_code','id');
+	    	 	$dataMovilidad1 = $server->read($typeMovilidad, $atributes, 'university.extension.students');
+	    	 	if ($dataMovilidad1) {
+	    	 		$i=0;
+	    	 		foreach ($dataMovilidad1 as $key => $value) {
+	    	 			//print_r($value['university_extension_id']['0']);
+	    	 			$valor1=$dataMovilidad[0]['id'];
+	    	 			$valor2=$value['university_extension_id'][0];
+	    	 			if ($valor1 == $valor2) {
+	    	 				$liststudents[$i]=$value;
+	    	 				$i++;
+	    	 			}
+	    	 			
+	    	 		}
+	    	 	}
+				$this->view->liststudents=$liststudents;   	 	
+    	 		$this->view->clave=1;
+    	 	} else {
+    	 		$this->view->clave=0;
+    	 	}
+    	 	
+    	 	$this->view->data=$dataMovilidad;
+    	 	//print_r($dataMovilidad);
     	} catch (Exception $e) {
     		print "Error: ".$e->getMessage();
     	}
@@ -145,24 +188,42 @@ class Acreditacion_UniversityextensionController extends Zend_Controller_Action 
     		$typeMovilidad = $server->search('university.extension', $query);
     		$atributes = array('id','type','perid','state','name');
     		$dataMovilidad = $server->read($typeMovilidad, $atributes, 'university.extension');
+    		//print_r($dataMovilidad);
+    		$this->view->clave=0;
     		if ($dataMovilidad) {
+    			$query = array(
+    						array(  'column'	=>	'of_id',
+    								'operator'	=>	'=',
+    								'value'		=>	$escid,
+    								'type'		=>	'string'
+	    							)
+    				);
+
+    			$bd = $server->search('hr.department', $query);
+	    		$atributes = array('id');
+	    		$data = $server->read($bd, $atributes, 'hr.department');
+
 		    	$data = array(	'name'						=>	$fullname,
 		    					'semid'						=>	'1'	,
 		    					'university_extension_id'  	=> 	$dataMovilidad[0]['id'],
 		    					'state'						=>	'I',
 		    					'registered_code'			=> 	$uid,
-		    					'department_id'				=>	'92');			  
+		    					'department_id'				=>	$data[0]['id']);			  
 		    	//print_r($data);
 		    	$created = $server->create('university.extension.students', $data);
 		    	if ($created) {
-		    		echo "true";
+		    		//echo "true";
+		    		$this->view->clave=1;
+		    		$this->view->uid=$uid;
 		    	}
 		    	else{
-		    		echo "false";
+		    		//echo "false";
+		    		$this->view->clave=2;
 		    	}
     		}
     		else{
-    			echo "false";
+    			//echo "false";
+    			$this->view->clave=3;
     		}
 
     	} catch (Exception $e) {
