@@ -16,12 +16,12 @@
 <div class="menuEgresados">
 	<div class="navegacion" hidden>
 		<p><span class="glyphicon glyphicon-filter"></span> Filtre los Resultados de Egresados</p>
-		<a href="##" class="btn btn-info btnInvictos">Invictos</a>
-		<a href="##" class="btn btn-info btnBachiller">Bachiller</a>
-		<a href="##" class="btn btn-info btnTitulados">Titulados</a>
+		<a href="##" id="btnInvictos" data="Invicto" class="btn btn-info btnsFilter btnInvictos">Invictos</a>
+		<a href="##" id="btnBachiller" data="Bachiller" class="btn btn-info btnsFilter btnBachiller">Bachiller</a>
+		<a href="##" id="btnTitulados" data="Titulado" class="btn btn-info btnsFilter btnTitulados">Titulados</a>
 	</div>
 	<div class="showCantidadEgresados" hidden>
-		<p><span class="glyphicon glyphicon-user"></span> Cantidad de Egresados</p>
+		<p><span class="glyphicon glyphicon-user"></span> Cantidad de Egresados <span id="putAnio"></span></p>
 		<p class="cantEgresados" id="numEgresados"> </p>
 	</div>
 </div>
@@ -30,17 +30,24 @@
 </div>
 
 <script>
-	$('#data').addClass('hidden');
-	$('#anio').change(function(){
-		$('.navegacion').fadeIn('slow');
-		setTimeout(function(){$('.showCantidadEgresados, #dataEgresados').fadeIn('slow');}, 500);
+	$(function(){
+		$('#data').addClass('hidden');
+		var anio = '';
+		$('#anio').change(function(){
+			$('.navegacion').fadeIn('slow');
+			setTimeout(function(){$('.showCantidadEgresados, #dataEgresados').fadeIn('slow');}, 500);
 
-		$('#dataEgresados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center><br>')
-		var anio = $(this).val();
-		$('#dataEgresados').load('/acreditacion/egresados/listegresados/anio/' + anio, function(){
-			$('html body').animate({
-				scrollTop : $('.tituloDescriptivo').offset().top,
+			$('#dataEgresados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center><br>')
+			$('#numEgresados').html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>');
+			
+			anio = $(this).val();
+			$('#putAnio').html(anio);
+
+			$('#dataEgresados').load('/acreditacion/egresados/listegresados/anio/' + anio, function(){
+				$('html body').animate({
+					scrollTop : $('.tituloDescriptivo').offset().top,
+				});
 			});
 		});
-	})
+	});
 </script>

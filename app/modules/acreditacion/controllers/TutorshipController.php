@@ -20,7 +20,7 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
     public function listteachersAction(){
     	$this->_helper->layout()->disableLayout();
 
-    	$server = new Eundac_Connect_openerp();
+    	//$server = new Eundac_Connect_openerp();
 
     	//DataBase
 		$teacherDb  = new Api_Model_DbTable_Users();
