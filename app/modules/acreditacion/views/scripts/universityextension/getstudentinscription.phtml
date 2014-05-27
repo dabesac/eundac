@@ -1,0 +1,42 @@
+<?php
+$clave=$this->clave;
+if ($clave==1) {	
+	if ($this->liststudents) {	?>
+		<br>	
+		<table class='table table-rows table-hover'>
+			<tr>
+				<th class='text-center'>#</th>
+				<th class='text-center'>Código</th>
+				<th class='text-center'>Apellidos y Nombres</th>
+				<th class='text-center'>Escuela</th>
+			</tr>	
+	<?php
+		foreach ($this->liststudents as $key => $lista) {
+			$uid=$lista['registered_code'];
+			$name=$lista['name'];
+			$escuela=$lista['department_id'][1];	?>
+				<tr>
+					<td class='text-center'><?php echo $key+1?></td>
+					<td class='text-center'><?php echo $uid?></td>
+					<td><?php echo $name?></td>
+					<td><?php echo $escuela?></td>
+				</tr>
+			<?php
+		}
+		?>
+		</table>
+	<?php	
+	}
+
+	?>
+		
+<?php		
+} 
+
+else {	?>
+	<br>
+	<div class='alert alert-info col-md-8 col-md-offset-2'><center><h5><span class='glyphicon glyphicon-info-sign'></span> No se encuentran registros para este tipo de Extensión Universitaria</h5></center></div>
+<?php	
+}
+
+?>
