@@ -31,84 +31,62 @@
 						$divAsignado     = 'hidden';
 						$cantStudent     = '';
 						$semesterAsigned = '';
+						$tutoringId      = '';
 						$existEdit       = '';
 					else:
 						$formNew         = 'hidden';
 						$divAsignado     = '';
 						$cantStudent     = $teacher['number'];
 						$semesterAsigned = $teacher['semid'];
+						$tutoringId      = $teacher['tutoringId'];
 						$existEdit       = 'existEdit';
 					endif ?>
-						<!--Nuevo-->
-						<form id="form<?php echo $teacher['uid'] ?>" uid="<?php echo $teacher['uid'] ?>" class="form" <?php echo $formNew ?>>
-							<input type="hidden" name="uid" value="<?php echo $teacher['uid'] ?>" />
-							<input type="hidden" name="pid" value="<?php echo $teacher['pid'] ?>" />
-							<select id="semid<?php echo $teacher['uid'] ?>" name="semid" class="semestre form-control">
-								<option value="">Semestre</option>
-								<?php foreach ($this->semesters as $semester): ?>
-									<option value="<?php echo $semester['semid'] ?>"><?php echo $semester['name'] ?></option>
-								<?php endforeach ?>
-							</select>
-							<div class="cantStudent"><span class="cantStudentsNum cantStudents<?php echo $teacher['uid'] ?>" title="Cantidad de Estudiantes Matriculados">-</span>
-								<input type="text" class="form-control inputCantStudent" id="inputCantStudent<?php echo $teacher['uid'] ?>" name="cantStudents" placeholder="# Estudiantes" />
-							</div>
-							<input type="submit" class="btn btn-success btnAsignar form-control" value="Asignar" />
-						</form>
-
-						<!--Editar-->
-						<form id="formEdit<?php echo $teacher['uid'] ?>" class="formEdit" hidden>
-							<input type="hidden" id="inputTutoring<?php echo $teacher['uid'] ?>" name="tutoringId" value="" />
-							<select id="semidEdit<?php echo $teacher['uid'] ?>" uid="<?php echo $teacher['uid'] ?>" name="semid" class="semestre form-control" value="<?php echo $semester ?>">
-								<option value="">Semestre</option>
-								<?php foreach ($this->semesters as $semester): ?>
-									<option value="<?php echo $semester['semid'] ?>"><?php echo $semester['name'] ?></option>
-								<?php endforeach ?>
-							</select>
-							<div class="cantStudent "><span class="cantStudentsNum cantStudents<?php echo $teacher['uid'] ?>" title="Cantidad de Estudiantes Matriculados">-</span>
-								<input type="text" class="form-control inputCantStudent" id="inputCantStudentEdit<?php echo $teacher['uid'] ?>" name="cantStudents" placeholder="# Estudiantes" value="<?php echo $cantStudent ?>"/>
-							</div>
-							<input type="submit" class="btn btn-success btnAsignar form-control" value="Guardar" />
-							<a href="##" class="cancelEditAsignacion btn btn-danger form-control" uid="<?php echo $teacher['uid'] ?>">Cancelar</a>
-							<script>
-								$("#semidEdit<?php echo $teacher['uid'] ?>").val("<?php echo $semesterAsigned ?>");
-							</script>
-						</form>				
-		
-						<!--Div de Asignación-->
-						<div id="divAsignado<?php echo $teacher['uid'] ?>" class="divAsignado <?php echo $existEdit ?>" <?php echo $divAsignado ?>>
-							<p class="text-success text-center">Asignado al <strong id="semestreStrong<?php echo $teacher['uid'] ?>"> <?php echo $semesterAsigned ?> Semestre</strong></p>
-							<a href="##" class="btnEditAsignacion btn btn-info form-control" uid="<?php echo $teacher['uid'] ?>">Editar</a>
-							<a href="##" id="btnDelete<?php echo $teacher['uid'] ?>" class="btnDeleteAsignacion btn btn-danger form-control">Desasignar</a>
+					<!--Nuevo-->
+					<form id="form<?php echo $teacher['uid'] ?>" uid="<?php echo $teacher['uid'] ?>" class="form" <?php echo $formNew ?>>
+						<input type="hidden" name="uid" value="<?php echo $teacher['uid'] ?>" />
+						<input type="hidden" name="pid" value="<?php echo $teacher['pid'] ?>" />
+						<select id="semid<?php echo $teacher['uid'] ?>" name="semid" class="semestre form-control">
+							<option value="">Semestre</option>
+							<?php foreach ($this->semesters as $semester): ?>
+								<option value="<?php echo $semester['semid'] ?>"><?php echo $semester['name'] ?></option>
+							<?php endforeach ?>
+						</select>
+						<div class="cantStudent"><span class="cantStudentsNum cantStudents<?php echo $teacher['uid'] ?>" title="Cantidad de Estudiantes Matriculados">-</span>
+							<input type="text" class="form-control inputCantStudent" id="inputCantStudent<?php echo $teacher['uid'] ?>" name="cantStudents" placeholder="# Estudiantes" />
 						</div>
-						<!--<form id="formEdit<?php echo $teacher['uid'] ?>" class="formEdit" hidden>
-							<input type="hidden" name="tutoringId" value="<?php echo $teacher['tutoringId'] ?>" />
-							<?php if ($teacher['alreadyStudents'] == 'no'): 
-								$hiddenSelectEdit = '';
-							else :
-								$hiddenSelectEdit = 'disabled';
-							endif ?>
-							<select id="semid<?php echo $teacher['uid'] ?>" uid="<?php echo $teacher['uid'] ?>" name="semid" class="semestre form-control" <?php echo $hiddenSelectEdit ?>>
-								<option value="">Semestre</option>
-								<?php foreach ($this->semesters as $semester): ?>
-									<option value="<?php echo $semester['semid'] ?>"><?php echo $semester['name'] ?></option>
-								<?php endforeach ?>
-							</select>
-							<div class="cantStudent"><span id="cantStudents<?php echo $teacher['uid'] ?>" class="cantStudentsNum" title="Cantidad de Estudiantes Matriculados">-</span>
-								<input type="text" class="form-control inputCantStudent" name="cantStudents" placeholder="# Estudiantes" value="<?php echo $teacher['number'] ?>"/>
-							</div>
-							<input type="submit" class="btn btn-success btnAsignar form-control" value="Guardar" />
-							<a href="##" class="cancelEditAsignacion btn btn-danger form-control" uid="<?php echo $teacher['uid'] ?>">Cancelar</a>
-							<script>
-								$("#semid<?php echo $teacher['uid'] ?>").val("<?php echo $teacher['semid'] ?>");
-							</script>
-						</form>
-						<div class="divAsignado" id="divAsignado<?php echo $teacher['uid'] ?>">
-							<p class="text-success text-center">Asignado al <strong id="semestreStrong<?php echo $teacher['uid'] ?>"><?php echo $teacher['semid'] ?> Semestre</strong></p>
-							<a href="##" class="btnEditAsignacion btn btn-info form-control" uid="<?php echo $teacher['uid'] ?>">Editar</a>
-							<?php if ($teacher['alreadyStudents'] == 'no'): ?>
-								<a href="##" tutoringid="<?php echo $teacher['tutoringId'] ?>" class="btnDeleteAsignacion btn btn-danger form-control">Desasignar</a>
-							<?php endif ?>
-						</div>-->
+						<input type="submit" class="btn btn-success btnAsignar form-control" value="Asignar" />
+					</form>
+
+					<!--Editar-->
+					<form id="formEdit<?php echo $teacher['uid'] ?>" class="formEdit" hidden>
+						<input type="hidden" id="inputTutoring<?php echo $teacher['uid'] ?>" name="tutoringId" value="<?php echo $tutoringId ?>" />
+						<?php if ($teacher['alreadyStudents'] == 'yes'): 
+							$stateSelect = 'disabled';
+						else:
+							$stateSelect = '';
+						endif ?>
+						<select id="semidEdit<?php echo $teacher['uid'] ?>" uid="<?php echo $teacher['uid'] ?>" name="semid" class="semestre form-control" value="<?php echo $semester ?>" <?php echo $stateSelect ?>>
+							<option value="">Semestre</option>
+							<?php foreach ($this->semesters as $semester): ?>
+								<option value="<?php echo $semester['semid'] ?>"><?php echo $semester['name'] ?></option>
+							<?php endforeach ?>
+						</select>
+						<div class="cantStudent "><span class="cantStudentsNum cantStudents<?php echo $teacher['uid'] ?>" title="Cantidad de Estudiantes Matriculados">-</span>
+							<input type="text" class="form-control inputCantStudent" id="inputCantStudentEdit<?php echo $teacher['uid'] ?>" name="cantStudents" placeholder="# Estudiantes" value="<?php echo $cantStudent ?>"/>
+						</div>
+						<input type="submit" class="btn btn-success btnAsignar form-control" value="Guardar" />
+						<a href="##" class="cancelEditAsignacion btn btn-danger form-control" uid="<?php echo $teacher['uid'] ?>">Cancelar</a>
+						<script>
+							$("#semidEdit<?php echo $teacher['uid'] ?>").val("<?php echo $semesterAsigned ?>");
+						</script>
+					</form>				
+	
+					<!--Div de Asignación-->
+					<div id="divAsignado<?php echo $teacher['uid'] ?>" class="divAsignado <?php echo $existEdit ?>" <?php echo $divAsignado ?>>
+						<p class="text-success text-center">Asignado al <strong id="semestreStrong<?php echo $teacher['uid'] ?>"> <?php echo $semesterAsigned ?> Semestre</strong></p>
+						<a href="##" class="btnEditAsignacion btn btn-info form-control" uid="<?php echo $teacher['uid'] ?>">Editar</a>
+						<a href="##" id="btnDelete<?php echo $teacher['uid'] ?>" class="btnDeleteAsignacion btn btn-danger form-control">Desasignar</a>
+					</div>
 				</div>
 			</td>
 			<td class="tdAsignar text-center">
@@ -140,6 +118,7 @@
 		var uid        = '';
 		var uidElement = '';
 		var semid      = '';
+		var tutoringId = '';
 
 		$('#btnDocentesAsignados').on('click', function(){
 			$('#bloquearDocentes').fadeToggle(1000);
@@ -195,41 +174,12 @@
 			};
 		});
 
-		/*var tutoringId = '';
-		$('.btnDeleteAsignacion').on('click', function(){
-			$('#loading' + uid ).slideDown();
-			$('#divAsignado' + uid).slideUp();
-			tutoringId = $(this).attr('tutoringid');
-			$.ajax({
-				url : '/acreditacion/tutorship/desasignedteacher/',
-				data : {tutoringid : tutoringId},
-				success : function(data){
-					console.log(data);
-					if (data == 1) {
-						$('#tdSuccess' + uid).html('No Asignado');
-						$('#form' + uid).slideDown();
-						/*$('#semestreStrong' + uid).html(semid + ' Semestre');
+		//Interaccion con Base De Datos
 
-						$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
-						$('#idListDocentesAsignados').load('/acreditacion/tutorship/listasignedteacher/');
-					}else{
-						//$('#formEdit' + uid).slideDown();
-					};
-					$('#loading' + uid ).slideUp();
-				},
-				error : function(){
-					$('#divAsignado' + uid).slideDown();
-					$('#loading' + uid ).slideUp();
-				}
-			});
-		});
-
-		var dataReceive = '';
-		var formData = '';
+		//Guardar
 		$('.form').submit(function(e){
 			e.preventDefault();
 			$(this).slideUp();
-			uid = $(this).attr('uid');
 			semid = $('#semid' + uid).val();
 			cantStudents = $('#inputCantStudent' + uid).val();
 			$('#loading' + uid ).slideDown();
@@ -242,11 +192,12 @@
 					if (data.success === 1) {
 						$('#form' + uid).slideDown();
 					}else if(data.success === 2){
-						$('#divAsignado' + uid).slideDown();
+						$('#divAsignado' + uid).slideDown()
+												.addClass('existEdit');
+
 						$('#tdSuccess' + uid).html('<strong class="text-success">Asignado</strong>');
 						$('#semestreStrong' + uid).html(semid + ' Semestre');
 
-						$('#btnDelete' + uid).attr('tutoringid', data.tutoringId);
 						$('#inputTutoring' + uid).val(data.tutoringId);
 						$('#semidEdit' + uid).val(semid);
 						$('#inputCantStudentEdit' + uid).val(cantStudents);
@@ -254,8 +205,8 @@
 						$('#cantStudentsEdit' + uid).html('<img src="/img/spinner.gif" alt="C" />')
 													.load('/acreditacion/tutorship/cantstudentsxsem/semid/' + semid)
 
-						$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
-						$('#idListDocentesAsignados').load('/acreditacion/tutorship/listasignedteacher/');
+						$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+													.load('/acreditacion/tutorship/listasignedteacher/');
 					};
 					$('#loading' + uid ).slideUp();
 				},
@@ -265,12 +216,13 @@
 				}
 			});
 		});
-
+		
+		//Editar
 		$('.formEdit').submit(function(e){
 			e.preventDefault();
 			$(this).slideUp();
 			$('#loading' + uid).slideDown();
-			semid = $('#semid' + uid).val();
+			semid = $('#semidEdit' + uid).val();
 
 			$.ajax({
 				type : 'post',
@@ -278,13 +230,12 @@
 				data : $(this).serialize(),
 				dataType : 'json',
 				success : function(data){
-					console.log(data);
 					if (data.success === 1) {
 						$('#semestreStrong' + uid).html(semid + ' Semestre');
 						$('#divAsignado' + uid).slideDown();
 
-						$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
-						$('#idListDocentesAsignados').load('/acreditacion/tutorship/listasignedteacher/');
+						$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+													.load('/acreditacion/tutorship/listasignedteacher/');
 					}else{
 						$('#formEdit' + uid).slideDown();
 					};
@@ -295,6 +246,38 @@
 					$('#loading' + uid ).slideUp();
 				}
 			});
-		});*/
+		});
+
+		//Eliminar
+
+		$('.btnDeleteAsignacion').on('click', function(){
+			$('#loading' + uid ).slideDown();
+			$('#divAsignado' + uid).slideUp();
+			tutoringId = $('#inputTutoring' + uid).val();
+			$.ajax({
+				url : '/acreditacion/tutorship/desasignedteacher/',
+				data : {tutoringid : tutoringId},
+				success : function(data){
+					if (data == 1) {
+						$('#tdSuccess' + uid).html('No Asignado');
+						$('#form' + uid).slideDown();
+						$('#divAsignado' + uid).removeClass('existEdit');
+						$('#semestreStrong' + uid).html('');
+
+						$('#idListDocentesAsignados').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+													.load('/acreditacion/tutorship/listasignedteacher/');
+					}else{
+						$('#formEdit' + uid).slideDown();
+					};
+					$('#loading' + uid ).slideUp();
+				},
+				error : function(){
+					$('#divAsignado' + uid).slideDown();
+					$('#loading' + uid ).slideUp();
+				}
+			});
+		});
+		
+
 });
 </script>

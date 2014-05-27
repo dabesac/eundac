@@ -20,7 +20,7 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
     public function listteachersAction(){
     	$this->_helper->layout()->disableLayout();
 
-    	$server = new Eundac_Connect_openerp();
+    	//$server = new Eundac_Connect_openerp();
 
     	//DataBase
 		$teacherDb  = new Api_Model_DbTable_Users();
@@ -408,6 +408,14 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 			}
 		}else{
 			echo 2;
+		}
+	}
+
+	public function infotutoriaAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
 		}
 	}
 
