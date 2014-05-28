@@ -71,7 +71,7 @@ class Register_StudentController extends Zend_Controller_Action {
                     'created'=>date('Y-m-d H:m:s'),
             );
 
-            if ( $escid !='7DE' && $escid !='2YP' && $escid !='2DE' && $escid !='3EN' && $escid='2ESTA' && $escid !='4AM' && $escid !='5AG-Y' && $uid !='8822283375' && $uid !='0122277076' && $uid !='1244207110' && $uid !='1024103023' && $uid !='1028103059' && $uid!='0922342017' && $uid!='0922345028' && $uid !='1242293208' && $uid!='0619103011' && $uid!='0929102043' && $uid!='0722307504') {
+            if ( $escid !='7DE' && $escid !='2YP' && $escid !='2DE' && $escid !='3EN' && $escid='2ESTA' && $escid !='4AM' && $escid !='5AG-Y' && $uid !='8822283375' && $uid !='0122277076' && $uid !='1244207110' && $uid !='1024103023' && $uid !='1028103059' && $uid!='0922342017' && $uid!='0922345028' && $uid !='1242293208' && $uid!='0619103011' && $uid!='0929102043' && $uid!='0722307504' && $uid !='1028103110' && $uid !='1028103264' ) {
                 $this->_redirect("/alumno/");
             }
 
