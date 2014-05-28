@@ -411,4 +411,12 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 		}
 	}
 
+	public function infotutoriaAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
 }
