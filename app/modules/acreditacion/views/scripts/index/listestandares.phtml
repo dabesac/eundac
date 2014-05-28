@@ -1,17 +1,28 @@
 <?php if ($this->estandares): ?>
+	<p class="text-muted titleStandar"><span class="glyphicon glyphicon-stats"></span> Lista de Estandares</p>
 	<div class="menuEstandares">
-		<p>Estandares Aprobados</p>
-		<p>Estandares en Proceso</p>
-		<p>Estandares No Iniciados</p>
+		<div class="standaresState standaresCumplidos">
+			<p class="nameStateStandar">Cumplidos</p>
+			<p class="cantStandar" id="numCantStandarCumplidos"></p>
+		</div>
+		<div class="standaresState standaresAMedias">
+			<p class="nameStateStandar">A Medias</p>
+			<p class="cantStandar">0</p>
+		</div>
+		<div class="standaresState standaresNoCumplidos">
+			<p class="nameStateStandar">No Cumplidos</p>
+			<p class="cantStandar" id="numCantStandarIncumplidos"></p>
+		</div>
 	</div>
 
  	<?php foreach ($this->estandares as $estandar): ?>
 		<div class="estandar">
-			<div class="estandarNombre">
-				<?php echo ucwords(strtolower($estandar['description'])) ?>
-			</div>
-			<a estandarNumber="<?php echo $estandar['number'] ?>" class="showEstandarBtn btn" href="##">
-				<?php echo $estandar['number'] ?>
+			<a estandarNumber="<?php echo $estandar['number'] ?>" class="showEstandarBtn" href="##">
+				<div class="estandarNombre">
+					<?php echo ucwords(strtolower($estandar['description'])) ?>
+				</div>
+				<div class="standarCumplidos" id="standarCumplidos<?php echo $estandar['number'] ?>" title="Cumplidos"></div>
+				<div class="standarNoCumplidos" id="standarNoCumplidos<?php echo $estandar['number'] ?>" title="No Cumplidos"></div>
 			</a>
 
 			<div id="estandarData<?php echo $estandar['number'] ?>" class="estandarData" hidden>
@@ -25,30 +36,81 @@
 							<div class="factorData">
 							<?php foreach ($factor['criterid'] as $conCriterio => $criterio): ?>
 								<div class="criterio">
-									<div class="criterioTitulo">
+									<?php 
+									$contAprobados    = 0; 
+									$contAMedias      = 0; 
+									$contDesaprobados = 0; 
+									$cantFuentes      = 0; 
+									?>
+									<?php foreach ($criterio['estandares'][0]['sources'] as $conFuente => $fuente): 
+										if (is_numeric($fuente['result'])) {
+											if ($fuente['result'] >= 1 and $fuente['result'] <= 99) {
+												$contAMedias++;
+											}elseif ($fuente['result'] == 100){
+												$contAprobados++;
+											}else{
+												$contDesaprobados++;
+											}
+										}else{
+											if ($fuente['result'] == 'SI') {
+												$contAprobados++;
+											}else{
+												$contDesaprobados++;
+											}
+										}
+									endforeach ?>
+									<?php $cantFuentes = $conFuente + 1; ?>
+									<?php if ($contAprobados == $cantFuentes): 
+										$stateCriterio = 'Cumplido';
+										$colorStateCriterio = 'cumplido';
+									else :
+										$stateCriterio = 'No Cumplido';
+										$colorStateCriterio = 'noCumplido';
+									endif ?>
+								<a href="##" codecri="<?php echo trim($criterio['code_cri']) ?>" class="btnShowDetailFactor">
+									<div class="criterioTitulo" pertenece="<?php echo $estandar['number'] ?>" valor="<?php echo $colorStateCriterio ?>">
 										<div class="numCriterio"><?php echo $conCriterio + 1 ?></div>
-										<div class="criteroTituloNombre"><span class="glyphicon glyphicon-tags text-muted"></span> <?php echo substr($criterio['estandares'][0]['namestandar'], 0, 150) ?> </div>
-										<div class="criterioEstado">Aprobado</div>
-										<a href="##" codecri="<?php echo trim($criterio['code_cri']) ?>" class="btn btn-info btnShowDetailFactor"><span class="glyphicon glyphicon-plus"></span></a>
+										<div class="criteroTituloNombre"><span class="glyphicon glyphicon-tags"></span> <?php echo substr($criterio['estandares'][0]['namestandar'], 0, 150) ?> </div>
+										<div class="criteriosAprobados" title="Cumplidos"><?php echo $contAprobados ?></div>
+										<div class="criteriosMedio" title="A Medias"><?php echo $contAMedias ?></div>
+										<div class="criteriosDesaprobados" title="No Cumplidos"><?php echo $contDesaprobados ?></div>
 										<!--<div class="pull-right text-muted"><?php echo $criterio['estandares'][0]['numstandar_school'] ?></div>-->
 									</div>
+								</a>
 									<div class="criterioData" id="criterioData<?php echo trim($criterio['code_cri']) ?>" hidden>
-										<table class="table table-bordered table-hover">
-										<?php foreach ($criterio['estandares'][0]['sources'] as $conFuente => $fuente): ?>
-											<tr>
-												<td class="numFuente text-center active"><?php echo $conFuente + 1 ?></td>
-												<td class="col-md-1 text-center">
-													<?php echo $fuente['codefuente'] ?>
-												</td>	
-												<td class="col-md-10 fuenteName">
-													<span class="glyphicon glyphicon-tag text-muted"></span> <?php echo $fuente['name'] ?>
-												</td>
-												<td class="col-md-1 text-center">
-													<?php echo substr($fuente['result'], 0, 5) ?>
-												</td>
-											</tr>
-										<?php endforeach ?>
-										</table>
+										<div class="detailCriterio">
+											<div class="fullNameCriterio">
+												<strong><span class="glyphicon glyphicon-bookmark"></span> Nombre Completo | Criterio</strong>
+												<p><?php echo $criterio['estandares'][0]['namestandar'] ?></p>
+											</div>
+											<p class="nameStateCriterio">Estado</p>
+											<p class="stateCriterio <?php echo $colorStateCriterio ?>"><?php echo $stateCriterio ?></p>		
+										</div>
+										<div class="tableCriterios">
+											<p class="text-muted"><span class="glyphicon glyphicon-pushpin"></span> Lista de Fuentes</p>
+											<table class="table table-bordered table-hover">
+												<tr class="active">
+													<th class="text-center">#</th>
+													<th class="text-center">Código</th>
+													<th>Fuente</th>
+													<th class="text-center">Resultado</th>
+												</tr>
+											<?php foreach ($criterio['estandares'][0]['sources'] as $conFuente => $fuente): ?>
+												<tr>
+													<td class="numFuente text-center active"><?php echo $conFuente + 1 ?></td>
+													<td class="text-center">
+														<?php echo $fuente['codefuente'] ?>
+													</td>	
+													<td class="fuenteName">
+														<span class="glyphicon glyphicon-tag text-muted"></span> <?php echo $fuente['name'] ?>
+													</td>
+													<td class="text-center">
+														<?php echo $fuente['result'] ?>
+													</td>
+												</tr>
+											<?php endforeach ?>
+											</table>
+										</div>
 									</div>
 
 								</div>
@@ -61,16 +123,62 @@
 		</div>
  	<?php endforeach ?>
 	<script>
-		$('.estandarData').slideUp();
+		$(function(){
+			$('.estandarData').slideUp();
 
-		$('.showEstandarBtn').click(function(){
-			var estandarNumber = $(this).attr('estandarNumber');
-			$('#estandarData' + estandarNumber).slideToggle();
-		})
+			$('.showEstandarBtn').click(function(){
+				var estandarNumber = $(this).attr('estandarNumber');
+				$('#estandarData' + estandarNumber).slideToggle();
+				$('html body').animate({
+					scrollTop : $('#estandarData' + estandarNumber).offset().top,
+				}, 500);
+			})
 
-		$('.btnShowDetailFactor').on('click', function(){
-			var codeCri = $(this).attr('codecri');
-			$('#criterioData' + codeCri).slideToggle();
+			$('.btnShowDetailFactor').on('click', function(){
+				var codeCri = $(this).attr('codecri');
+				$('#criterioData' + codeCri).slideToggle();
+			});
+
+			var perteneceBefore = '-';
+			var pertenece       = '';
+			var cumplio         = '';
+			var cantCumplidos   = 0;
+			var cantIncumplidos = 0;
+			$('.criterioTitulo').each(function(index, element){
+				pertenece = $(element).attr('pertenece');
+				if (pertenece != perteneceBefore) {
+					cantCumplidos   = 0;
+					cantIncumplidos = 0;
+					perteneceBefore = pertenece;
+				}
+				cumplio = $(element).attr('valor');
+				if (cumplio == 'cumplido') {
+					cantCumplidos++;
+				}else{
+					cantIncumplidos++;
+				};
+				$('#standarCumplidos' + pertenece).html(cantCumplidos)
+													.attr('valor', cantCumplidos);
+				$('#standarNoCumplidos' + pertenece).html(cantIncumplidos)
+													.attr('valor', cantIncumplidos);
+
+			});
+
+			cantIncumplidos = 0;
+			$('.standarNoCumplidos').each(function(index, element){
+				cantIncumplidos = parseInt(cantIncumplidos) + parseInt($(element).attr('valor'));
+			});
+			$('#numCantStandarIncumplidos').html(cantIncumplidos);
+
+			cantCumplidos = 0;
+			$('.standarCumplidos').each(function(index, element){
+				cantCumplidos = parseInt(cantCumplidos) + parseInt($(element).attr('valor'));
+			});
+			$('#numCantStandarCumplidos').html(cantCumplidos);
+
+			$('.criteriosAprobados, .criteriosDesaprobados, .criteriosMedio, .standarCumplidos, .standarAMedias, .standarNoCumplidos').hover(function(){
+				$(this).tooltip('toggle');
+			});
 		});
 	</script>
 <?php else: ?>
