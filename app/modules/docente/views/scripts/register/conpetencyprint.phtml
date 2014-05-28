@@ -158,11 +158,7 @@ address {
         <?php foreach ($this->students as $key => $student) {?>
             <tr>
 
-                <?php if ($this->partial == 1) {
-                    if (intval($student['nota4_i']) >=  intval($course['min_note']) && intval($student['nota4_i']) <=20) {$aprobados ++;}
-                    if (intval($student['nota4_i']) <  intval($course['min_note']) && intval($student['nota4_i']) >=0) {$aprobados ++;}
-                    if ( $student['nota4_i'] == -3 ) {$retirados ++;}
-                }?>
+                
                 <?php if ($this->partial == 2) {
                     if (intval($student['notafinal']) >=  intval($course['min_note']) && intval($student['notafinal']) <=20) {$aprobados ++;}
                     if (intval($student['notafinal']) <  intval($course['min_note']) && intval($student['notafinal']) >=0) {$jalados ++;}
@@ -211,12 +207,14 @@ address {
     </tbody>
 </table>
 
-<address>
-  <strong>Aprobados</strong>  <?php echo $aprobados?><br>
-  <strong>Desaprobados</strong>  <?php echo $jalados?><br>
-  <strong>Retirados</strong>  <?php echo $retirados?><br>
-  <strong>Total</strong>  <?php echo $aprobados+$jalados+$retirados?>
-</address>
+<?php if ($this->partial == 2) { ?>
+    <address>
+        <strong>Aprobados</strong>  <?php echo $aprobados?><br>
+        <strong>Desaprobados</strong>  <?php echo $jalados?><br>
+        <strong>Retirados</strong>  <?php echo $retirados?><br>
+        <strong>Total</strong>  <?php echo $aprobados+$jalados+$retirados?>
+    </address>
+<?php }?>
 
 <?php 
     
