@@ -46,11 +46,11 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
 
             //Programas Disponibles
             $where = array( 'eid'   => $eid,
-                            'perid' => $periodActive['perid'] );
+                            'perid' => $periodActive['perid'],
+                            'state' => 'A' );
 
             $preDataPrograms = $langProgramDb->_getFilter($where);
-
-            $validate = 'no';
+            $validate = 0;
             foreach ($preDataPrograms as $c => $program) {
                 //Verificando si ya esta Pre-Matriculado
                 $where = array( 'eid'   => $eid,
@@ -59,67 +59,74 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                                 'pid'   => $pid );
                 $attrib = array('state', 'turno');
                 $alreadyRegister = $langRegisterCourseDb->_getFilter($where, $attrib);
+
+                $yaNoEntrar = 0;
                 if ($alreadyRegister[0]['state'] == 'I') {
                     $dataPrograms[$c]['alreadyRegister'] = 'yes';
                     $dataPrograms[$c]['turnoRegistrado'] = $alreadyRegister[0]['turno'];
                 }elseif($alreadyRegister[0]['state'] == 'M'){
-                    $validate = 'yes';
-                    break;
+                    $validate++;
+                    $yaNoEntrar = 1;
                 }else{
                     $dataPrograms[$c]['alreadyRegister'] = 'no';
                 }
-
-                //Datos de Tasa
-                $where = array( 'eid'   => $eid,
-                                'cid'   => $program['cid'],
-                                'perid' => $program['perid'] );
-                $attrib = array('tasaid', 'costo');
-                $dataTasaProgram = $langProgramTasasDb->_getFilter($where, $attrib);
-
-                $num_cuenta = '';
-                $costo      = '';
-                foreach ($dataTasaProgram as $tasaProgram) {
-                    $where = array( 'eid'    => $eid,
-                                    'tasaid' => $tasaProgram['tasaid']);
-                    $attrib = array('code_rol', 'num_cuenta');
-
-                    $rolTasa = $langTasaDb->_getFilter($where, $attrib);
-                    if ($rid == $rolTasa[0]['code_rol']) {
-                        $num_cuenta = $rolTasa[0]['num_cuenta'];
-                        $costo      = $tasaProgram['costo'];
-                    }
-                }
-                if ($num_cuenta) {
-                    //Datos de Curso
-                    $where = array( 'eid' => $eid,
-                                    'cid' => $program['cid'] );
-                    $attrib = array('name', 'credits', 'prerequisite');
-
-                    $dataCourse = $langCoursesDb->_getFilter($where, $attrib);
-
-                    $dataPrograms[$c]['courseId']      = $program['cid'];
-                    $dataPrograms[$c]['courseName']    = $dataCourse[0]['name'];
-                    $dataPrograms[$c]['courseCredits'] = $dataCourse[0]['credits'];
-                    $dataPrograms[$c]['coursePre']     = $dataCourse[0]['prerequisite'];
-                    $dataPrograms[$c]['costo']         = $costo;
-                    $dataPrograms[$c]['studentId']     = $pid;
-                    $dataPrograms[$c]['perid']         = $program['perid'];
-
-                    //Turnos por Programa
+                if ($yaNoEntrar == 0) {
+                    //Datos de Tasa
                     $where = array( 'eid'   => $eid,
                                     'cid'   => $program['cid'],
-                                    'perid' => $program['perid'], );
-                    $attrib = array('turnoid', 'frecuencia');
+                                    'perid' => $program['perid'] );
+                    $attrib = array('tasaid', 'costo');
+                    $dataTasaProgram = $langProgramTasasDb->_getFilter($where, $attrib);
 
-                    $dataTurnos = $langProgramTurnosDb->_getFilter($where, $attrib);
-                    foreach ($dataTurnos as $cProgramTurnos => $turno) {
-                       $dataPrograms[$c]['turnos'][$cProgramTurnos] = array( 'turnoid'    => $turno['turnoid'],
-                                                                             'frecuencia' => $turno['frecuencia']);
+                    $num_cuenta = '';
+                    $costo      = '';
+                    foreach ($dataTasaProgram as $tasaProgram) {
+                        $where = array( 'eid'    => $eid,
+                                        'tasaid' => $tasaProgram['tasaid']);
+                        $attrib = array('code_rol', 'num_cuenta');
+
+                        $rolTasa = $langTasaDb->_getFilter($where, $attrib);
+                        if ($rid == $rolTasa[0]['code_rol']) {
+                            $num_cuenta = $rolTasa[0]['num_cuenta'];
+                            $costo      = $tasaProgram['costo'];
+                        }
+                    }
+                    if ($num_cuenta) {
+                        //Datos de Curso
+                        $where = array( 'eid' => $eid,
+                                        'cid' => $program['cid'] );
+                        $attrib = array('name', 'credits', 'prerequisite');
+
+                        $dataCourse = $langCoursesDb->_getFilter($where, $attrib);
+
+                        $dataPrograms[$c]['courseId']      = $program['cid'];
+                        $dataPrograms[$c]['courseName']    = $dataCourse[0]['name'];
+                        $dataPrograms[$c]['courseCredits'] = $dataCourse[0]['credits'];
+                        $dataPrograms[$c]['coursePre']     = $dataCourse[0]['prerequisite'];
+                        $dataPrograms[$c]['costo']         = $costo;
+                        $dataPrograms[$c]['studentId']     = $pid;
+                        $dataPrograms[$c]['perid']         = $program['perid'];
+
+                        //Turnos por Programa
+                        $where = array( 'eid'   => $eid,
+                                        'cid'   => $program['cid'],
+                                        'perid' => $program['perid'], );
+                        $attrib = array('turnoid', 'frecuencia');
+
+                        $dataTurnos = $langProgramTurnosDb->_getFilter($where, $attrib);
+                        foreach ($dataTurnos as $cProgramTurnos => $turno) {
+                           $dataPrograms[$c]['turnos'][$cProgramTurnos] = array( 'turnoid'    => $turno['turnoid'],
+                                                                                 'frecuencia' => $turno['frecuencia']);
+                        }
                     }
                 }
-
             }
 
+            if ($validate == $c + 1 ) {
+                $validate = 'yes';
+            }else{
+                $validate = 'no';
+            }
             /*$where = array(
                             'code_student' => $pid,
                             'concept'      => '00000048' );
