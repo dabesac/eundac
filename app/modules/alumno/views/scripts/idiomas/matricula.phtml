@@ -1,8 +1,7 @@
 <p class="titleRegister text-muted"><span class="glyphicon glyphicon-bookmark"></span> Matricula <span class="text-info"><?php echo $this->period['name'] ?></span></p>
 <hr>
-<?php if ($this->dataPrograms): ?>
+<?php if ($this->dataPrograms and $this->validate == 'no'): ?>
 	<div class="paymentBank" title="Recuerda Pagar a la Cuenta <?php echo $this->num_cuenta ?>" ><span class="glyphicon glyphicon-credit-card"></span> Pago al Banco <p class="payment">S/. 0</p></div>
-	<hr>
 	<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Esto son los cursos que estan disponibles en Idiomas.</p>
 	
 	<?php foreach ($this->dataPrograms as $c => $program): ?>
@@ -161,7 +160,7 @@
 	});
 	</script>
 
-<?php elseif ($this->validate): ?>
+<?php elseif ($this->validate == 'yes'): ?>
 	<p class="text-muted text-center"><span class="glyphicon glyphicon-ok"></span> Vaya! Se matriculo a todos los cursos<span class="text-success">, dirijase a Matricula Actual para mas detalles : ) </span></p>
 <?php else: ?>
 	<p class="text-muted text-center"><span class="glyphicon glyphicon-exclamation-sign"></span> Aun no existen cursos <span class="text-danger">para este periodo</span></p>

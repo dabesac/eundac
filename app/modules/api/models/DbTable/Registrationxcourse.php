@@ -115,8 +115,8 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	public function _deletecorseregister($pk)
 	{
 		try{
-			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']==''   || $pk['regid']==''  || $pk['pid']=='' || $pk['uid']=='' || $pk['perid']=='') return false;
-			$where = "eid = '".$pk['eid']."' and oid = '".$pk['oid']."' and pid='".$pk['pid']."'  and escid = '".$pk['escid']."' and subid = '".$pk['subid']."' and regid = '".$pk['regid']."' and uid = '".$pk['uid']."'  and perid = '".$pk['perid']."'";
+			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']==''  || $pk['courseid'] == '' || $pk['curid']=='' || $pk['turno']=='' || $pk['regid']==''  || $pk['pid']=='' || $pk['uid']=='' || $pk['perid']=='') return false;
+			$where = "eid = '".$pk['eid']."' and oid = '".$pk['oid']."' and pid='".$pk['pid']."'  and escid = '".$pk['escid']."' and subid = '".$pk['subid']."'  and courseid = '".$pk['courseid']."'  and curid = '".$pk['curid']."'  and turno = '".$pk['turno']."' and regid = '".$pk['regid']."' and uid = '".$pk['uid']."'  and perid = '".$pk['perid']."'";
 			return $this->delete($where);
 			return false;
 		}catch (Exception $e){

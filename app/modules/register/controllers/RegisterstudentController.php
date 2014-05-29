@@ -601,11 +601,19 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $where['oid'] = $this->sesion->oid;
             $where['regid']=$where['uid'].$where['perid'];
 
-            $data = array(  'modified'=>$this->sesion->uid,
-                            'updated'=>date('Y-m-d h:m:s'),
-                            'state'=>'B' );
+            $pk = array('eid'      => $this->sesion->eid,
+                        'oid'      => $this->sesion->oid,
+                        'escid'    => $where['escid'],
+                        'subid'    => $where['subid'],
+                        'courseid' => $where['courseid'],
+                        'curid'    => $where['curid'],
+                        'perid'    => $where['perid'],
+                        'turno'    => $where['turno'],
+                        'regid'    => $where['regid'],
+                        'pid'      => $where['pid'],
+                        'uid'      => $where['uid'] );
             $bdmatricula_curso = new Api_Model_DbTable_Registrationxcourse();  
-            $bdmatricula_curso ->_update($data, $where);        
+            $bdmatricula_curso ->_deletecorseregister($pk);        
 
             //$this->_helper->_redirector("detail","registerstudent","register",array('uid' => base64_encode($where['uid']) ,'pid' => base64_encode($where['pid']),'escid' => base64_encode($where['escid']),'subid' => base64_encode($where['subid'])));
 
