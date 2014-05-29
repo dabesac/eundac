@@ -98,14 +98,14 @@ address {
 
                         <?php if($this->partial == 1 ){
                             if ($student['promedio1']== -3 ) { $retirados++;}
-                            if ($student['promedio1'] > 10 && $student['promedio1'] <=20 ) { $aprobados++; $back="active text-primary";}
-                            if ($student['promedio1'] >= 0 && $student['promedio1'] <=10 ) { $jalados++; $back="danger text-danger";} 
+                            if ($student['promedio1'] >= intval($course['min_note']) && $student['promedio1'] <=20 ) { $aprobados++; $back="active text-primary";}
+                            if ($student['promedio1'] >= 0 && $student['promedio1'] < intval($course['min_note']) ) { $jalados++; $back="danger text-danger";} 
                         }?>
 
                         <?php if ($this->partial == 2) {
                             if ($student['notafinal']== -3 ) { $retirados++;}
-                            if ($student['notafinal'] > 10 && $student['notafinal'] <=20 ) { $aprobados++; $back1="active text-primary";}
-                            if ($student['notafinal'] >= 0 && $student['notafinal'] <=10 ) { $jalados++; $back1="danger text-danger";}
+                            if ($student['notafinal'] >= intval($course['min_note']) && $student['notafinal'] <=20 ) { $aprobados++; $back1="active text-primary";}
+                            if ($student['notafinal'] >= 0 && $student['notafinal'] < intval($course['min_note']) ) { $jalados++; $back1="danger text-danger";}
                         }
                         ?>
 
