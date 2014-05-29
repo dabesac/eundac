@@ -414,6 +414,81 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 	public function infotutoriaAction(){
 		try {
 			$this->_helper->layout()->disableLayout();
+
+			$server = new Eundac_Connect_openerp();
+
+			$pid   = $this->sesion->pid;
+			$perid = $this->sesion->period->perid;
+
+	    	//id del Empleado
+	    	$query = array(
+	                      array('column'   => 'identification_id',
+	                            'operator' => '=',
+	                            'value'    =>  $pid,
+	                            'type'     => 'string' )
+	                    );
+			
+			$idEmployee  = $server->search('hr.employee', $query);
+			$attributes  = array('id');
+			$dataTeacher = $server->read($idEmployee, $attributes, 'hr.employee');
+	    	//Preguntar si esta asignado a alguna tutoria
+	    	$query = array(
+	                      array('column'   => 'employee_id',
+	                            'operator' => '=',
+	                            'value'    =>  $dataTeacher[0]['id'],
+	                            'type'     => 'int' ),
+
+	                      array('column'   => 'perid',
+	                            'operator' => '=',
+	                            'value'    =>  $perid,
+	                            'type'     => 'string' ),
+	                    );
+			$idTutoring   = $server->search('tutoring', $query);
+
+			$sendDataTutoring = '';
+			$sendDataStudents = '';
+			if ($idTutoring) {
+				$attributes   = array('employee_id', 'name', 'id', 'number');
+				$dataTutoring = $server->read($idTutoring, $attributes, 'tutoring');
+				//print_r($dataTutoring);
+				
+				$sendDataTutoring['id']         = $dataTutoring[0]['id'];
+				$sendDataTutoring['name']       = $dataTutoring[0]['name'];
+				$sendDataTutoring['tutor_name'] = $dataTutoring[0]['employee_id'][1];
+				$sendDataTutoring['number'] = $dataTutoring[0]['number'];
+				$sendDataTutoring['cant_register'] = 0;
+
+				//Alumnos Matriculados
+				$query = array(
+	                      array('column'   => 'tutoring_id',
+	                            'operator' => '=',
+	                            'value'    =>  $sendDataTutoring['id'],
+	                            'type'     => 'int' ),
+	                    );
+				$idsStudents = $server->search('tutoring.students', $query);
+				$attributes = array('name', 'id', 'registered_code', 'f_atention', 'resumen', 'motivo');
+				$dataStudents = $server->read($idsStudents, $attributes, 'tutoring.students');
+				if ($dataStudents) {
+					$sendDataTutoring['cant_register'] = count($dataStudents);
+					foreach ($dataStudents as $c => $student) {
+						$sendDataStudents[$c]['id']         = $student['id'];
+						$sendDataStudents[$c]['full_name']  = utf8_encode($student['name']);
+						$sendDataStudents[$c]['uid']        = $student['registered_code'];
+						if ($student['f_atention']) {
+							$f_atention = date('d-m-Y', strtotime($student['f_atention']));
+						}else{
+							$f_atention = '';
+						}
+						$sendDataStudents[$c]['f_atention'] = $f_atention;
+						$sendDataStudents[$c]['resumen']    = $student['resumen'];
+						$sendDataStudents[$c]['motivo']     = $student['motivo'];
+
+					}
+				}
+			}
+			$this->view->pid=$pid;
+			$this->view->sendDataStudents=$sendDataStudents;
+			$this->view->sendDataTutoring=$sendDataTutoring;
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
