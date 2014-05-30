@@ -65,7 +65,7 @@
 		</div>
 		<div class="menu">
 			<a id="_preview" href="#" class="btn btn-success form-control">Vista Previa</a>
-			<a id="_print" href="#" class="btn btn-success form-control">Imprimir</a>
+			<a id="_print" href="/acreditacion/tutorship/printinfotutoria/pid/<?php echo base64_encode($this->pid)?>/perid/<?php echo base64_encode($this->perid)?>" class="btn btn-success form-control">Imprimir</a>
 			<a href="##" class="btn btn-success form-control">Enviar Informe</a>
 		</div>
 		
@@ -74,16 +74,13 @@
 			<div class="modal-dialog" style='width:80%'>
 			    <div class="modal-content">
 			      	<div class="modal-body" id='_loadata'></div>
-			      	<div class="modal-footer">
-			        	<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-			      	</div>
 			    </div>
 			</div>
 		</div>
 		<script>
 			$("#_preview").click(function(){
 				var url=("/acreditacion/tutorship/infotutoria/");
-				$("#_loadata").html('<img src="/img/spinner.gif" alt="C" />');
+				$("#_loadata").html('<center><img src="/img/spinner.gif"></center>');
 				$("#_loadata").load(url);
 				$("#previewModal").modal('show');
 			});

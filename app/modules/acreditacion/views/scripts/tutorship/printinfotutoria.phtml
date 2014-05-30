@@ -1,0 +1,116 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<div style='width:100%'>
+<?php
+if ($this->sendDataTutoring) {
+	$dataTeacher=$this->sendDataTutoring;
+	?>
+	<div>
+		<div style='font-size:12px'><b>DNI: </b><?php echo $this->pid?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Docente: </b><?php echo $dataTeacher['tutor_name']?></div>
+    	<div style="text-align: center; font-size:16px;margin-top:15px"><b> INFORME DE TUTORÍA</b></div> <br/>
+  	</div>
+<?php
+	if ($this->sendDataStudents) {
+			?>
+		<br>
+		<div class="panel panel-primary">
+			<table class='table table-hover table-striped' style='width:100%'>
+				<tr>
+					<th>#</th>
+					<th>Código</th>
+					<th>Apellidos y Nombres</th>
+					<th>fecha de Atención</th>
+					<th>Motivo</th>
+					<th>Resumen</th>
+				</tr>
+			<?php
+			foreach ($this->sendDataStudents as $key => $dataS) {
+				$uid		=	$dataS['uid'];
+				$full_name  =	$dataS['full_name'];
+				$f_atention	=	$dataS['f_atention'];
+				$motivo		=	$dataS['motivo'];
+				$resumen	=	$dataS['resumen'];
+			?>
+				<tr>
+					<td><center><?php echo $key+1?></center></td>
+					<td><center><?php echo $uid?></center></td>
+					<td><?php echo $full_name?></td>
+					<td>
+						<center>
+						<?php 
+							if ($f_atention) {
+								echo $f_atention;
+							} else {	?>	
+								<center> - </center>
+							<?php	
+							}
+						?>
+						</center>
+					</td>
+					<td>
+						<?php 
+							if ($motivo) {
+								echo $motivo;
+							} else {	?>
+								<center> - </center>
+							<?php	
+							}
+						?>
+					</td>
+					<td>
+						<?php 
+							if ($resumen) {
+								echo $resumen;
+							} else {	?>
+								<center> - </center>
+							<?php	
+							}
+						?>
+					</td>
+				</tr>
+			<?php	
+			}
+			?>
+			</table>
+		</div>	
+			<?php
+		} else {	?>
+			<div class='panel panel-primary'>
+				<h5><center><b class='text-info'><span class='glyphicon glyphicon-info-sign'></span> Aún no existe alumnos registrados</b></center></h5>
+			</div>
+		<?php	
+		}
+		?>
+<?php  	
+} else {	?>
+	<div class='panel panel-primary'>
+		<h5><center><b class='text-danger'><span class='glyphicon glyphicon-info-sign'></span> No tiene ningun informe</b></center></h5>
+	</div>
+<?php	
+}
+?>
+</div>
+<?php
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4-L','','',15,15,45,18,5,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('Informe_tutoria -'.$this->pid.'.pdf','D');
+    //$mpdf -> Output();  
+?>
+
+<script type="text/javascript">
+	$(".glyphicon").tooltip();
+</script>

@@ -4,8 +4,8 @@ if ($this->sendDataTutoring) {
 	?>
 	<div class="modal-header">
     	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    	<h4 class="modal-title" id="myModalLabel"><center><span class='glyphicon glyphicon-file text-info'></span><b class='text-primary'> INFORME DE TUTORIA</b></center></h4><br>
-		<div style='font-size:15px'><b>Docente: </b><?php echo $dataTeacher['tutor_name']?></div>
+    	<h4 class="modal-title" id="myModalLabel"><center><span class='glyphicon glyphicon-briefcase text-info'></span><b class='text-primary'> INFORME DE TUTORÍA</b></center></h4><br>
+		<div style='font-size:15px'><b>DNI: </b><?php echo $this->pid?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Docente: </b><?php echo $dataTeacher['tutor_name']?></div>
   	</div>
 
 <?php
@@ -39,7 +39,7 @@ if ($this->sendDataTutoring) {
 							if ($f_atention) {
 								echo $f_atention;
 							} else {	?>
-								<span class='glyphicon glyphicon-ban-circle text-danger' data-toggle="tooltip" data-placement="top" title="No hay data"></span>
+								<span class='glyphicon glyphicon-ban-circle text-danger' data-toggle="tooltip" data-placement="top" title="No tiene fecha"></span>
 							<?php	
 							}
 						?>
@@ -49,7 +49,7 @@ if ($this->sendDataTutoring) {
 							if ($motivo) {
 								echo $motivo;
 							} else {	?>
-								<span class='glyphicon glyphicon-ban-circle text-danger'></span>
+								<span class='glyphicon glyphicon-ban-circle text-danger' data-toggle="tooltip" data-placement="top" title="No tiene un motivo"></span>
 							<?php	
 							}
 						?>
@@ -59,7 +59,7 @@ if ($this->sendDataTutoring) {
 							if ($resumen) {
 								echo $resumen;
 							} else {	?>
-								<span class='glyphicon glyphicon-ban-circle text-danger'></span>
+								<span class='glyphicon glyphicon-ban-circle text-danger' data-toggle="tooltip" data-placement="top" title="No tiene un resumen"></span>
 							<?php	
 							}
 						?>
@@ -77,16 +77,30 @@ if ($this->sendDataTutoring) {
 			</div>
 		<?php	
 		}
-
+		?>	
+	<div class="modal-footer">
+		<a id='print_informe' href="/acreditacion/tutorship/printinfotutoria/pid/<?php echo base64_encode($this->pid)?>/perid/<?php echo base64_encode($this->perid)?>" class="btn btn-success"><span class='glyphicon glyphicon-print'></span> Imprimir</a>
+    	<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+  	</div>
+<?php  	
 } else {	?>
 	<div class='panel panel-primary'>
-		<h5><center><b class='text-danger'><span class='glyphicon glyphicon-info-sign'></span> Aún no existe alumnos registrados</b></center></h5>
+		<h5><center><b class='text-danger'><span class='glyphicon glyphicon-info-sign'></span> No hay ningun informe</b></center></h5>
 	</div>
 <?php	
 }
 
 ?>
-
+<div id='load_print'></div>
 <script type="text/javascript">
-	
+	$(".glyphicon").tooltip();
+
+	$("#print_informe").click(function(){
+		var pid="<?php echo $this->pid?>";
+		var perid="<?php echo $this->perid?>";
+
+		var url=("/acreditacion/tutorship/printinfotutoria/pid/"+pid+"/perid/"+perid);
+		$("#load_print").load();
+		
+	});	
 </script>
