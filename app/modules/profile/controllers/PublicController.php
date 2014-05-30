@@ -1443,7 +1443,6 @@ class Profile_PublicController extends Zend_Controller_Action {
             $subid=base64_decode($this->_getParam('subid'));
             $this->view->pid=$pid;
             $wherep=array('eid'=>$eid,'pid'=>$pid);
-
             $dbrelation=new Api_Model_DbTable_Relationship();
             $datafami=$dbrelation->_getFilter($wherep);
             $len=count($datafami);
