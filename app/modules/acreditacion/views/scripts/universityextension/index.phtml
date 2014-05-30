@@ -83,7 +83,7 @@
 	$("#see_content").click(function(){
 		var tipo=$('#type_selec').val();
 		$("#content_modal").fadeIn();
-		$('#content_modal').html("<img src='/img/spinner.gif'> Cargando....");
+		$('#content_modal').html("<br><center><img src='/img/spinner.gif'> Cargando....</center>");
 		var url = ("/acreditacion/universityextension/getstudentinscription/tipo/"+tipo);
 		$("#content_modal").load(url);
 	});
