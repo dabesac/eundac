@@ -2,8 +2,9 @@
 $clave=$this->clave;
 if ($clave==1) {	
 	if ($this->liststudents) {	?>
-		<br>	
-		<table class='table table-rows table-hover'>
+	<br>	
+	<div class='panel panel-primary'>		
+		<table class='table table-rows table-hover table-striped'>
 			<tr>
 				<th class='text-center'>#</th>
 				<th class='text-center'>Código</th>
@@ -25,6 +26,7 @@ if ($clave==1) {
 		}
 		?>
 		</table>
+	</div>
 	<?php	
 	}
 

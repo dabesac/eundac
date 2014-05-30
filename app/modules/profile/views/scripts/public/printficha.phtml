@@ -9,7 +9,15 @@ ob_start();
 <div>
     <div style="text-align: center; font-size:25px;"><b> CONSTANCIA ESTADÍSTICA E INFORMÁTICA </b></div> <br/>
     <div style="text-align:left; font-size:15px;">
-        <b>DNI: </b><?php echo strtoupper($this->datapers['pid'])?><br>
+        <b>DNI: </b>
+            <?php
+                if ($this->datapers['numdoc']) {
+                    echo strtoupper($this->datapers['numdoc']);
+                } else {
+                    echo strtoupper($this->datapers['pid']);                     
+                }
+            ?>
+        <br>
         <b>Alumno: </b><?php echo strtoupper($this->datapers['last_name0']." ".$this->datapers['last_name1'].", ".$this->datapers['first_name'])?>
     </div>
 </div><br><br>

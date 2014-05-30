@@ -156,7 +156,16 @@ $ldistri =$this->ldistribution;
 		</td>
 		<td>
 			<center>
-				<a href="/distribution/distribution/delete/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" title="Eliminar Distribución"></span></a>
+				<?php
+					if ($distri['state']=='B') {	?>
+						<a href="/distribution/distribution/delete/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" title="Eliminar Distribución"></span></a>
+					<?php	
+					} else {	?>
+						<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="No puede eliminar la Distribución"></span></a>
+					<?php	
+					}
+					
+				?>
 			</center>
 		</td>
 		<td><center>
