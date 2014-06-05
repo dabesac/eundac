@@ -18,14 +18,14 @@
       <div class="col-sm-6 col-md-3">
         <div class="thumbnail project-social">
           <!-- <img  src="/img/project.png" data-src="/img/project.png/300x200" alt="...."> -->
-          <span class="glyphicon <?php echo ($value['type']=='P')? "glyphicon-briefcase":"glyphicon-hdd"?>" ></span>
+          <span class="glyphicon <?php echo ($value[0]['type']=='P')? "glyphicon-briefcase":"glyphicon-hdd"?>" ></span>
           <div class="caption">
-            <h3><?php echo $value['name']?></h3>
-            <p><?php echo $value['description']?></p>
+            <h3><?php echo $value[0]['name']?></h3>
+            <p><?php echo $value[0]['description']?></p>
             <p>
-                <button href="#"  id_project='<?php echo $value['id']?>'class="btn btn-primary project-modified <?php echo ($value['state']=='C')? "disabled":''?>">Modificar</button> 
-                <a href="/acreditacion/socialprojection/deleteproject/id/<?php echo $value['id']?>" class="btn btn-danger <?php echo ($value['state']=='C')? "disabled":''?>">Eliminar</a>
-                <a href="/acreditacion/socialprojection/deleteproject/id/<?php echo $value['id']?>" class="btn btn-warning <?php echo ($value['state']=='C')? "disabled":''?>">Enviar</a>
+                <button href="#"  id_project='<?php echo $value[0]['id']?>'class="btn btn-primary project-modified <?php echo ($value[0]['state']=='C')? "disabled":''?>">Modificar</button> 
+                <a href="/acreditacion/socialprojection/deleteproject/id/<?php echo $value[0]['id']?>" class="btn btn-danger <?php echo ($value[0]['state']=='C')? "disabled":''?>">Eliminar</a>
+                <a href="/acreditacion/socialprojection/deleteproject/id/<?php echo $value[0]['id']?>" class="btn btn-warning <?php echo ($value[0]['state']=='C')? "disabled":''?>">Enviar</a>
             </p>
           </div>
         </div>
@@ -43,5 +43,9 @@
 
   <!-- Modal -->
   <div class="modal fade" id="Modalproject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    
   </div><!-- /.modal -->
+  <style type="text/css">
+  .modal-ls {
+      width: 64.9999999999999999999%;
+    }
+  </style>

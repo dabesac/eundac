@@ -91,17 +91,27 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
                     //     'type'=>'string'
                     // )
                 );  
-            // $data_project = array();
+            $data_project = array();
             $attributes_author = array();
             $ids_project = $connect->search('inv.pro.authors',$query_1);
             $ids_project_data = $connect->read($ids_project,$attributes_author,'inv.pro.authors');
-            // print_r($ids_project_data); exit();
             if ($ids_project) {
-                $attributes = array('id','name','project','description','comment','type','state');
-                $data_project = $connect->read($ids_project,$attributes,'inv.pro.project');
+                foreach ($ids_project_data as $key => $value) {
+                    $query_2 = array(
+                        array(
+                            'column'=>'id',
+                            'operator'=>'=',
+                            'value'=>trim($value['project_id'][0]),
+                            'type'=>'int'
+                        )
+                    );
+                    $attributes = array();
+                    $ids_tmp_project =  $connect->search('inv.pro.project',$query_2);
+                    $data_project[$key] = $connect->read($ids_tmp_project,$attributes,'inv.pro.project');
+                }
+                // print_r($ids_project_data[0]['project_id']); exit();
             }
             $this->view->data_project=$data_project;
-            print_r($data_project);
             // $data = array(
             //     'state'=>'A',
             //     'name'=>'prueeeeeebita'
@@ -131,23 +141,36 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
                         'create_uid'=>1,
                         'create_date'=>date('Y-m-d H:m:s'),
                         'write_uid'=>1,
-                        'cronogram_id'=>$formData['id_cronogram'],
-                        'description'=>$formData['description'],
+                        'f_ini'=>$formData['f_ini'],
                         'comment'=>$formData['comment'],
-                        // 'project'=>$img,
-                        'name'=>$formData['name'],
-                        'author'=>trim($formData['uid_openerp']),
-                        'min_student'=>$formData['min_student'],
-                        'max_student'=>$formData['max_student'],
+                        'description'=>$formData['description'],
+                        'f_presentation'=> $formData['f_presentation'],
+                        'modality'=>$formData['modality'],
                         'num_horas'=>$formData['num_horas'],
+                        'cronogram_id'=>$formData['id_cronogram'],
+                        'name'=>$formData['name'],
+                        'min_student'=>$formData['min_student'],
                         'state'=>trim($formData['state']),
-                        'type'=>$formData['type'],
+                        'place'=>$formData['place'],
+                        'f_fin'=>$formData['f_fin'],
                         'sede_id'=>trim($formData['subid_openerp']),
+                        'type'=>$formData['type'],
+                        'max_student'=>$formData['max_student'],
                         'department_id'=>trim($formData['escid_openerp']),
                     );
                 // print_r($data); exit();
                 $create =  $connect->create('inv.pro.project',$data);
                 if ($create) {
+                    $data_author = array(
+                        'create_uid'=>'1',
+                        'create_date'=>date('Y-m-d H:m:s'),
+                        'write_date'=>date('Y-m-d H:m:s'),
+                        'write_uid'=>'1',
+                        'project_id'=> $create,
+                        'employee_id'=>trim($formData['uid_openerp']),
+                        );
+                    $create_author =  $connect->create('inv.pro.authors',$data_author);
+                    // print_r($data_author);exit();
                     $upload = new Zend_File_Transfer_Adapter_Http();
                     $filename = $upload->getFilename();
                     $filename = basename($filename);
@@ -194,20 +217,25 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
         if ($this->getRequest()->isPost()) {
             $formData = $this->getRequest()->getPost();
             if ($form->isValid($formData)) {
-                // print_r($formData);exit();
                 $data = array(
                         // 'create_date'=>date('Y-m-d H:m:s'),
-                        'name'=>$formData['name'],
-                        'cronogram_id'=>$formData['id_cronogram'],
-                        'description'=>$formData['description'],
+                        'write_uid'=>1,
+                        'f_ini'=>$formData['f_ini'],
                         'comment'=>$formData['comment'],
-                        'min_student'=>$formData['min_student'],
-                        'max_student'=>$formData['max_student'],
+                        'description'=>$formData['description'],
+                        'f_presentation'=> $formData['f_presentation'],
+                        'modality'=>$formData['modality'],
                         'num_horas'=>$formData['num_horas'],
+                        'cronogram_id'=>$formData['id_cronogram'],
+                        'name'=>$formData['name'],
+                        'min_student'=>$formData['min_student'],
                         'state'=>trim($formData['state']),
+                        'place'=>$formData['place'],
+                        'f_fin'=>$formData['f_fin'],
+                        'sede_id'=>trim($formData['subid_openerp']),
                         'type'=>$formData['type'],
+                        'max_student'=>$formData['max_student'],
                     );
-                // print_r($data);
                 $ids[0]=$formData['id_open'];
                 $modified =  $connect->write('inv.pro.project',$data,$ids);
                 if ($modified) {

@@ -381,7 +381,8 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 			}
 		}
 		//print_r($sendDataStudents);
-
+		$this->view->pid=$pid;
+		$this->view->perid=$perid;
 		$this->view->dataTutoring = $sendDataTutoring;
 		$this->view->dataStudents = $sendDataStudents;
 	}
@@ -415,6 +416,241 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 	public function infotutoriaAction(){
 		try {
 			$this->_helper->layout()->disableLayout();
+
+			$server = new Eundac_Connect_openerp();
+
+			$pid   = $this->sesion->pid;
+			$perid = $this->sesion->period->perid;
+
+	    	//id del Empleado
+	    	$query = array(
+	                      array('column'   => 'identification_id',
+	                            'operator' => '=',
+	                            'value'    =>  $pid,
+	                            'type'     => 'string' )
+	                    );
+			
+			$idEmployee  = $server->search('hr.employee', $query);
+			$attributes  = array('id');
+			$dataTeacher = $server->read($idEmployee, $attributes, 'hr.employee');
+	    	//Preguntar si esta asignado a alguna tutoria
+	    	$query = array(
+	                      array('column'   => 'employee_id',
+	                            'operator' => '=',
+	                            'value'    =>  $dataTeacher[0]['id'],
+	                            'type'     => 'int' ),
+
+	                      array('column'   => 'perid',
+	                            'operator' => '=',
+	                            'value'    =>  $perid,
+	                            'type'     => 'string' ),
+	                    );
+			$idTutoring   = $server->search('tutoring', $query);
+
+			$sendDataTutoring = '';
+			$sendDataStudents = '';
+			if ($idTutoring) {
+				$attributes   = array('employee_id', 'name', 'id', 'number');
+				$dataTutoring = $server->read($idTutoring, $attributes, 'tutoring');
+				//print_r($dataTutoring);
+				
+				$sendDataTutoring['id']         = $dataTutoring[0]['id'];
+				$sendDataTutoring['name']       = $dataTutoring[0]['name'];
+				$sendDataTutoring['tutor_name'] = $dataTutoring[0]['employee_id'][1];
+				$sendDataTutoring['number'] = $dataTutoring[0]['number'];
+				$sendDataTutoring['cant_register'] = 0;
+
+				//Alumnos Matriculados
+				$query = array(
+	                      array('column'   => 'tutoring_id',
+	                            'operator' => '=',
+	                            'value'    =>  $sendDataTutoring['id'],
+	                            'type'     => 'int' ),
+	                    );
+				$idsStudents = $server->search('tutoring.students', $query);
+				$attributes = array('name', 'id', 'registered_code', 'f_atention', 'resumen', 'motivo');
+				$dataStudents = $server->read($idsStudents, $attributes, 'tutoring.students');
+				if ($dataStudents) {
+					$sendDataTutoring['cant_register'] = count($dataStudents);
+					foreach ($dataStudents as $c => $student) {
+						$sendDataStudents[$c]['id']         = $student['id'];
+						$sendDataStudents[$c]['full_name']  = utf8_encode($student['name']);
+						$sendDataStudents[$c]['uid']        = $student['registered_code'];
+						if ($student['f_atention']) {
+							$f_atention = date('d-m-Y', strtotime($student['f_atention']));
+						}else{
+							$f_atention = '';
+						}
+						$sendDataStudents[$c]['f_atention'] = $f_atention;
+						$sendDataStudents[$c]['resumen']    = $student['resumen'];
+						$sendDataStudents[$c]['motivo']     = $student['motivo'];
+
+					}
+				}
+			}
+			$this->view->pid=$pid;
+			$this->view->perid=$perid;
+			$this->view->sendDataStudents=$sendDataStudents;
+			$this->view->sendDataTutoring=$sendDataTutoring;
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function printinfotutoriaAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+
+			$server = new Eundac_Connect_openerp();
+
+			$pid   = base64_decode($this->_getParam('pid'));
+			$perid = base64_decode($this->_getParam('perid'));
+
+	    	//id del Empleado
+	    	$query = array(
+	                      array('column'   => 'identification_id',
+	                            'operator' => '=',
+	                            'value'    =>  $pid,
+	                            'type'     => 'string' )
+	                    );
+			
+			$idEmployee  = $server->search('hr.employee', $query);
+			$attributes  = array('id');
+			$dataTeacher = $server->read($idEmployee, $attributes, 'hr.employee');
+	    	//Preguntar si esta asignado a alguna tutoria
+	    	$query = array(
+	                      array('column'   => 'employee_id',
+	                            'operator' => '=',
+	                            'value'    =>  $dataTeacher[0]['id'],
+	                            'type'     => 'int' ),
+
+	                      array('column'   => 'perid',
+	                            'operator' => '=',
+	                            'value'    =>  $perid,
+	                            'type'     => 'string' ),
+	                    );
+			$idTutoring   = $server->search('tutoring', $query);
+
+			$sendDataTutoring = '';
+			$sendDataStudents = '';
+			if ($idTutoring) {
+				$attributes   = array('employee_id', 'name', 'id', 'number');
+				$dataTutoring = $server->read($idTutoring, $attributes, 'tutoring');
+				//print_r($dataTutoring);
+				
+				$sendDataTutoring['id']         = $dataTutoring[0]['id'];
+				$sendDataTutoring['name']       = $dataTutoring[0]['name'];
+				$sendDataTutoring['tutor_name'] = $dataTutoring[0]['employee_id'][1];
+				$sendDataTutoring['number'] = $dataTutoring[0]['number'];
+				$sendDataTutoring['cant_register'] = 0;
+
+				//Alumnos Matriculados
+				$query = array(
+	                      array('column'   => 'tutoring_id',
+	                            'operator' => '=',
+	                            'value'    =>  $sendDataTutoring['id'],
+	                            'type'     => 'int' ),
+	                    );
+				$idsStudents = $server->search('tutoring.students', $query);
+				$attributes = array('name', 'id', 'registered_code', 'f_atention', 'resumen', 'motivo');
+				$dataStudents = $server->read($idsStudents, $attributes, 'tutoring.students');
+				if ($dataStudents) {
+					$sendDataTutoring['cant_register'] = count($dataStudents);
+					foreach ($dataStudents as $c => $student) {
+						$sendDataStudents[$c]['id']         = $student['id'];
+						$sendDataStudents[$c]['full_name']  = utf8_encode($student['name']);
+						$sendDataStudents[$c]['uid']        = $student['registered_code'];
+						if ($student['f_atention']) {
+							$f_atention = date('d-m-Y', strtotime($student['f_atention']));
+						}else{
+							$f_atention = '';
+						}
+						$sendDataStudents[$c]['f_atention'] = $f_atention;
+						$sendDataStudents[$c]['resumen']    = $student['resumen'];
+						$sendDataStudents[$c]['motivo']     = $student['motivo'];
+
+					}
+				}
+			}
+			//print_r($sendDataTutoring);exit();
+			$this->view->pid=$pid;
+			$this->view->sendDataStudents=$sendDataStudents;
+			$this->view->sendDataTutoring=$sendDataTutoring;
+
+			$eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
+
+            $eid=$this->_getParam('eid',$eid);
+
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $spe=array();
+            $dbspeciality = new Api_Model_DbTable_Speciality();
+            $speciality = $dbspeciality ->_getOne($where);                  
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $dbspeciality->_getOne($wher);
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names." <br> ".$namep;
+            
+            $whered['eid']=$eid;
+            $whered['oid']=$oid;
+            $whered['facid']= $speciality['facid'];
+            $dbfaculty = new Api_Model_DbTable_Faculty();
+            $faculty = $dbfaculty ->_getOne($whered);
+            $namef = strtoupper($faculty['name']);
+                
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            
+            $uidim=$this->sesion->pid;
+            $uid=$this->sesion->uid;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'informe_tutoria_'.$perid,
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+            $dbimpression->_save($data);            
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'informe_tutoria_'.$perid);
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=count($dataim);
+            $codigo=$co." - ".$uidim;
+
+			$header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+            $header = str_replace("h2", "h1", $header);
+            $header = str_replace("h3", "h2", $header);
+            $header = str_replace("h4", "h3", $header);
+            $header = str_replace("11%", "9%", $header);
+            
+            $this->view->header=$header;
+            $this->view->footer=$footer;
+            $this->view->pid=$pid;
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
