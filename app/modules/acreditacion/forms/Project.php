@@ -22,7 +22,70 @@ Class Acreditacion_Form_Project extends Zend_Form
 	           ->addValidator('NotEmpty',true,array('messages' => '*'));
 	    $this->addElement($name);
 
-	    $type = new Zend_Form_Element_Select('type');
+	    $place = new Zend_Form_Element_Text('place');
+    	$place  ->setRequired(true)
+	           ->setLabel('Ejecución')
+        		->setRequired(true)
+        		->addErrorMessage('Este campo es requerido')
+               ->addDecorators($this->elemnetDecorator)
+               // ->setAttrib('maxlength',8)
+               ->setAttrib('class','form-control')
+	           // ->setAttrib('onkeypress','return soloNumero(event)')
+	           ->addValidator('NotEmpty',true,array('messages' => '*'));
+	    $this->addElement($place);
+
+	    $f_fin = new Zend_Form_Element_Text('f_fin');
+    	$f_fin  ->setRequired(true)
+	           ->setLabel('Fecha Culminación')
+        		->setRequired(true)
+        		->addErrorMessage('Este campo es requerido')
+               ->addDecorators($this->elemnetDecorator)
+               // ->setAttrib('maxlength',8)
+               ->setAttrib('class','form-control')
+	           // ->setAttrib('onkeypress','return soloNumero(event)')
+	           ->addValidator('NotEmpty',true,array('messages' => '*'));
+	    $this->addElement($f_fin);
+
+	    $f_presentation = new Zend_Form_Element_Text('f_presentation');
+    	$f_presentation  ->setRequired(true)
+	           ->setLabel('Fecha Presentación')
+        		->setRequired(true)
+        		->addErrorMessage('Este campo es requerido')
+               ->addDecorators($this->elemnetDecorator)
+               // ->setAttrib('maxlength',8)
+               ->setAttrib('class','form-control')
+	           // ->setAttrib('onkeypress','return soloNumero(event)')
+	           ->addValidator('NotEmpty',true,array('messages' => '*'));
+	    $this->addElement($f_presentation);
+
+
+	    $f_ini = new Zend_Form_Element_Text('f_ini');
+    	$f_ini  ->setRequired(true)
+	           ->setLabel('Fecha Inicio')
+        		->setRequired(true)
+        		->addErrorMessage('Este campo es requerido')
+               ->addDecorators($this->elemnetDecorator)
+               // ->setAttrib('maxlength',8)
+               ->setAttrib('class','form-control')
+	           // ->setAttrib('onkeypress','return soloNumero(event)')
+	           ->addValidator('NotEmpty',true,array('messages' => '*'));
+	    $this->addElement($f_ini);
+
+
+
+	    $modality = new Zend_Form_Element_Select('modality');
+		$modality ->removeDecorator('DtDdWrapper')
+					->setAttrib('class','form-control')
+					->setRequired(true)
+        		->addErrorMessage('Este campo es requerido')
+		           ->removeDecorator('Label')
+		           ->removeDecorator('HtmlTag')
+		           ->addMultiOption('','Seleccione')
+		           ->addMultiOption('M','Monovalente')
+		           ->addMultiOption('P','Polivalente');
+		$this->addElement($modality);
+
+		$type = new Zend_Form_Element_Select('type');
 		$type ->removeDecorator('DtDdWrapper')
 					->setAttrib('class','form-control')
 					->setRequired(true)
@@ -49,7 +112,7 @@ Class Acreditacion_Form_Project extends Zend_Form
 		           // ->addMultiOption('R','Rechazado')
 		           // ->addMultiOption('C','Cerrado');
 		$this->addElement($state);
-		// $this->setDefaults(array('state'=>'I'));
+		$this->setDefaults(array('state'=>'B'));
 
 
 	    $min_student = new Zend_Form_Element_Text('min_student');
@@ -75,6 +138,7 @@ Class Acreditacion_Form_Project extends Zend_Form
 	           // ->setAttrib('onkeypress','return soloNumero(event)')
 	           ->addValidator('NotEmpty',true,array('messages' => '*'));
 	    $this->addElement($max_student);
+	    $this->setDefaults(array('max_student'=>'10','min_student'=>'0'));
 
 	    $num_horas = new Zend_Form_Element_Text('num_horas');
     	$num_horas  ->setRequired(true)
@@ -87,6 +151,7 @@ Class Acreditacion_Form_Project extends Zend_Form
 	           // ->setAttrib('onkeypress','return soloNumero(event)')
 	           ->addValidator('NotEmpty',true,array('messages' => '*'));
 	    $this->addElement($num_horas);
+	    $this->setDefaults(array('num_horas'=>'8'));
 
 	    $comment = new Zend_Form_Element_Textarea('comment');
     	$comment  ->setRequired(true)

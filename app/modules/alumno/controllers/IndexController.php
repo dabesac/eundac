@@ -33,7 +33,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $dbcursos=new Api_Model_DbTable_Course();
             $datcursos=$dbcursos->_getCountCoursesxSemester($where);
             $cur=$dbcursos->_getCountCoursesxApproved($where);
-            // echo base64_encode("139610314A");
+            // echo base64_encode("115130311314A");
 
             $data_all = array();
             $data_rel = array();

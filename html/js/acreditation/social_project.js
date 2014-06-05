@@ -89,6 +89,7 @@ var project= {
 	    project.save_modified(data)
 	},
 	save_modified:function(data){
+		// console.log("cssddsdsds")
 		$.ajax({
 			url: "/acreditacion/socialprojection/modifiedproject",
 			type:'POST',
