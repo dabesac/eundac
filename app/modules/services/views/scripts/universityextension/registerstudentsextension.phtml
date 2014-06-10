@@ -1,0 +1,22 @@
+
+<script type="text/javascript">
+	var clave = <?php echo $this->clave?>;
+	if (clave == 1) {
+		//var uid= <?php echo $this->uid?>;
+		$("#cargaqui").fadeOut();
+		$("#guardar").fadeIn();
+		//var url="/acreditacion/universityextension/getstudent/uid/"+uid;
+		//$("#cargadatos_").load(url);
+	};
+
+	if (clave == 2) {
+		$("#cargaqui").fadeOut();
+		$("#no_guarda").fadeIn();
+	};
+
+	if (clave == 3) {
+		$("#cargaqui").fadeOut();
+		$("#no_guarda1").fadeIn();
+	};
+
+</script>
