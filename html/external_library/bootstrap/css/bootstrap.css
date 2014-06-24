@@ -2307,6 +2307,8 @@ fieldset[disabled] .btn {
   border-color: #cccccc;
 }
 
+
+
 .btn-default:hover,
 .btn-default:focus,
 .btn-default:active,
@@ -2345,6 +2347,21 @@ fieldset[disabled] .btn-default.active {
 .btn-default .badge {
   color: #ffffff;
   background-color: #fff;
+}
+
+.btn-turq{
+  background-color: #1ABC9C;
+  color: #ffffff;
+
+}
+
+.btn-turq:hover,
+.btn-turq:focus,
+.btn-turq:active,
+.btn-turq.active,
+.open .dropdown-toggle.btn-turq {
+  color: #ffffff;
+  background-color: #1dd7b2;
 }
 
 .btn-primary {
