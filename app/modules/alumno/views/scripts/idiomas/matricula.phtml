@@ -43,9 +43,11 @@
 			<input type="hidden" name="perid" value="<?php echo $program['perid'] ?>">
 			<input type="hidden" name="cid" value="<?php echo $program['courseId'] ?>">
 			<input type="hidden" name="pid" value="<?php echo $program['studentId'] ?>">
+			<input type="hidden" name="subid" value="<?php echo $program['subid'] ?>">
+			<input type="hidden" name="tipo" value="<?php echo $program['tipo'] ?>">
 			<div class="detailProgram">
 				<p class="courseIcon"><span class="glyphicon glyphicon-book"></span></p>
-				<p class="courseName"><?php echo $program['courseName'] ?></p>
+				<p class="courseName"><?php echo $program['courseName'] ?> <small class="text-muted"><?php echo $program['tipoName'] ?></small></p>
 				<p class="coursePrice" title="Costo"><?php echo 'S/. '.$program['costo'] ?></p>
 				<?php if ($program['alreadyRegister'] == 'no'): ?>
 				<div class="divSelectTurno" id="selectTurno<?php echo $c ?>" numprogram="<?php echo $c ?>" hidden>
@@ -75,9 +77,11 @@
 								$esconder = '';
 							endif ?>
 							<p class="titleFrecuencia frecuenciaData<?php echo $program['courseId'] ?> changeDataTurno<?php echo $turno['turnoid'].$program['courseId'] ?>" <?php echo $esconder ?>><span class="glyphicon glyphicon-time"></span> Dias y Horario | Turno <?php echo $turno['turnoid'] ?></p>
-							<p id="frecuenciaTurno<?php echo $turno['turnoid'].$program['courseId'] ?>" class="frecuenciaData<?php echo $program['courseId'] ?> text-muted changeDataTurno<?php echo $turno['turnoid'].$program['courseId'] ?>" <?php echo $esconder ?>>
+							<p id="frecuenciaTurno<?php echo $turno['turnoid'].$program['courseId'] ?>" class="descriptionFrecuencia frecuenciaData<?php echo $program['courseId'] ?> text-muted changeDataTurno<?php echo $turno['turnoid'].$program['courseId'] ?>" <?php echo $esconder ?>>
 								<?php echo $turno['frecuencia'] ?>
 							</p>
+							<p class="docenteName frecuenciaData<?php echo $program['courseId'] ?> changeDataTurno<?php echo $turno['turnoid'].$program['courseId'] ?> text-muted" <?php echo $esconder ?>><strong class="text-info">Docente : </strong> <?php echo $turno['docente'] ?></p>
+
 						<?php endforeach ?>
 					<?php else: ?>
 						<p class="text-muted text-success" id="msgQuestionConfirm<?php echo $c ?>">Matricula Realizada</p>
@@ -85,9 +89,10 @@
 						<?php foreach ($program['turnos'] as $cTurno => $turno): ?>
 							<?php if ($program['turnoRegistrado'] == $turno['turnoid']): ?>
 								<p class="titleFrecuencia"><span class="glyphicon glyphicon-time"></span> Dias y Horario | Turno <?php echo $turno['turnoid'] ?></p>
-								<p class="text-muted">
+								<p class="text-muted descriptionFrecuencia">
 									<?php echo $turno['frecuencia'] ?>
 								</p>
+								<p class="docenteName text-muted" <?php echo $esconder ?>><strong class="text-info">Docente : </strong> <?php echo $turno['docente'] ?></p>
 							<?php endif ?>
 						<?php endforeach ?>
 					<?php endif ?>
@@ -155,7 +160,7 @@
 			$('#detailRegister' + numProgram + ', #selectTurno' + numProgram).slideUp();
 		});
 
-		$('.paymentBank, .paymentUse').hover(function(){
+		$('.paymentBank').hover(function(){
 			$(this).tooltip('toggle');
 			$('#idDetailPayment').slideToggle();
 		});
@@ -192,9 +197,9 @@
 				type : 'post',
 				url : '/alumno/idiomas/registerstudent/',
 				data : formData,
+				dataType : 'json',
 				success : function(data){
-					console.log(data);
-					if (data == 1) {
+					if (data.success === 1) {
 						$('#questionConfirm' + numProgram + ', #btnsConfirm' + numProgram + ', #selectTurno' + numProgram).slideUp();
 						$('#selectTurno' + numProgram).html('');
 						$('#btnRegister' + numProgram).html('Matriculado');
@@ -207,7 +212,6 @@
 
 						var leftMonto = parseInt(totalPago) - parseInt(nuevoMonto);
 
-						console.log(leftMonto);
 						var leftCostoPrograma = '';
 						var leftNumProgram    = '';
 						$('.btnConfirmRegister').each(function(index, element){

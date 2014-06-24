@@ -29,10 +29,12 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
         $langProgramTasasDb   = new Api_Model_DbTable_LangProgramTasas();
         $langProgramTurnosDb  = new Api_Model_DbTable_LangProgramTurnos();
         $bankReceiptDb        = new Api_Model_DbTable_Bankreceipts();
+        $personDb             = new Api_Model_DbTable_Person();
 
-        $eid = $this->sesion->eid;
-        $rid = $this->sesion->rid;
-        $pid = $this->sesion->pid;
+        $eid   = $this->sesion->eid;
+        $rid   = $this->sesion->rid;
+        $pid   = $this->sesion->pid;
+        $subid = $this->sesion->subid;
 
         //Obtener Periodo Activo de Idiomas
         $where = array( 'eid'   => $eid,
@@ -47,6 +49,7 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
             //Programas Disponibles
             $where = array( 'eid'   => $eid,
                             'perid' => $periodActive['perid'],
+                            'subid' => $subid,
                             'state' => 'A' );
 
             $preDataPrograms = $langProgramDb->_getFilter($where);
@@ -59,6 +62,8 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                 $where = array( 'eid'   => $eid,
                                 'cid'   => $program['cid'],
                                 'perid' => $program['perid'],
+                                'subid' => $program['subid'],
+                                'tipo'  => $program['tipo'],
                                 'pid'   => $pid );
                 $attrib = array('state', 'turno');
                 $dataAlreadyRegister = $langRegisterCourseDb->_getFilter($where, $attrib);
@@ -70,14 +75,16 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                     $programasPagados = 'yes';
                 }elseif($dataAlreadyRegister[0]['state'] == 'M'){
                     $validate++;
+                    $programasPagados = 'yes';
                     $yaNoEntrar = 1;
                 }else{
                     $alreadyRegister = 'no';
                 }
-                if ($yaNoEntrar == 0) {
                     //Datos de Tasa
                     $where = array( 'eid'   => $eid,
                                     'cid'   => $program['cid'],
+                                    'subid' => $program['subid'],
+                                    'tipo'  => $program['tipo'],
                                     'perid' => $program['perid'] );
                     $attrib = array('tasaid', 'costo');
                     $dataTasaProgram = $langProgramTasasDb->_getFilter($where, $attrib);
@@ -98,6 +105,7 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                             }
                         }
                     }
+                if ($yaNoEntrar == 0) {
                     if ($num_cuenta) {
                         //Datos de Curso
                         $where = array( 'eid' => $eid,
@@ -143,20 +151,42 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                             $dataPrograms[$c]['costo']         = $costo;
                             $dataPrograms[$c]['studentId']     = $pid;
                             $dataPrograms[$c]['perid']         = $program['perid'];
+                            $dataPrograms[$c]['subid']         = $program['subid'];
+                            $dataPrograms[$c]['tipo']          = $program['tipo'];
 
                             $dataPrograms[$c]['alreadyRegister'] = $alreadyRegister;
                             $dataPrograms[$c]['turnoRegistrado'] = $turnoRegistrado;
 
+                             //Datos del Tipo de Curso
+                            if ($program['tipo'] == 'N') {
+                                $dataPrograms[$c]['tipoName'] = '';
+                            }elseif ($program['tipo'] == 'I'){
+                                $dataPrograms[$c]['tipoName'] = '(Intensivo)';
+                            }elseif ($program['tipo'] == 'S'){
+                                $dataPrograms[$c]['tipoName'] = '(Super-Intensivo)';
+                            }
+
                             //Turnos por Programa
                             $where = array( 'eid'   => $eid,
                                             'cid'   => $program['cid'],
+                                            'subid' => $program['subid'],
+                                            'tipo'  => $program['tipo'],
                                             'perid' => $program['perid'], );
-                            $attrib = array('turnoid', 'frecuencia');
+                            $attrib = array('turnoid', 'frecuencia', 'docente_pid');
 
                             $dataTurnos = $langProgramTurnosDb->_getFilter($where, $attrib);
                             foreach ($dataTurnos as $cProgramTurnos => $turno) {
-                               $dataPrograms[$c]['turnos'][$cProgramTurnos] = array( 'turnoid'    => $turno['turnoid'],
-                                                                                     'frecuencia' => $turno['frecuencia']);
+                                //Datos del Docente
+                                $where = array( 'eid' => $eid,
+                                                'pid' => $turno['docente_pid'] );
+                                $attrib = array('last_name0', 'last_name1', 'first_name');
+                                $preDataPerson = $personDb->_getFilter($where, $attrib);
+
+                                $dataPrograms[$c]['turnos'][$cProgramTurnos] = array(   'turnoid'    => $turno['turnoid'],
+                                                                                        'frecuencia' => $turno['frecuencia'],
+                                                                                        'docente'    => $preDataPerson[0]['last_name0'].' '.
+                                                                                                        $preDataPerson[0]['last_name1'].' '.
+                                                                                                        $preDataPerson[0]['first_name'] );
                             }
                         }
 
@@ -173,7 +203,7 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
             //Pagos
             $cantCaracteres = strlen($num_cuenta);
             $perid = $periodActive['perid'];
-            $where = array( 'code_student'                        => $pid,
+            $where = array( //'code_student'                        => $pid,
                             'perid'                               => (string)$periodActive['perid'],
                             'right(concept, '.$cantCaracteres.')' => $num_cuenta );
 
@@ -213,8 +243,9 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
         $formData = $this->getRequest()->getPost();
 
         //Verificar Si Existe el Usuario
-        $where = array( 'eid' => $eid,
-                        'pid' => $formData['pid'] );
+        $where = array( 'eid'   => $eid,
+                        'pid'   => $formData['pid'],
+                        'subid' => $subid );
 
         $personData = $langUserDb->_getFilter($where);
         $personExist = '';
@@ -223,7 +254,8 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                                     'pid'   => $formData['pid'],
                                     'rid'   => 'AL',
                                     'pwd'   => md5($formData['pid']),
-                                    'state' => 'A' );
+                                    'state' => 'A',
+                                    'subid' => $subid );
             if ($langUserDb->_save($dataSaveUser)) {
                 $personExist = 'yes';
             }
@@ -235,7 +267,8 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
             //Verificar si ya tiene matricula ese periodo
             $where = array( 'eid'   => $eid,
                             'pid'   => $formData['pid'],
-                            'perid' => $formData['perid'] );
+                            'perid' => $formData['perid'],
+                            'subid' => $formData['subid'] );
 
             $registerData = $langRegisterDb->_getFilter($where);
 
@@ -243,7 +276,7 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                 $dataSaveRegister = array(  'eid'     => $eid,
                                             'perid'   => $formData['perid'],
                                             'pid'     => $formData['pid'],
-                                            'subid'   => $subid,
+                                            'subid'   => $formData['subid'],
                                             'created' => date('Y-m-d h:m:s'),
                                             'state'   => 'I' );
 
@@ -258,14 +291,16 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                                                     'cid'     => $formData['cid'],
                                                     'turno'   => $formData['turno'],
                                                     'pid'     => $formData['pid'],
-                                                    'subid'   => $subid,
+                                                    'subid'   => $formData['subid'],
+                                                    'tipo'    => $formData['tipo'],
                                                     'created' => date('Y-m-d h:m:s'),
                                                     'state'   => 'I' );
                 if ($langRegisterCourseDb->_save($dataSaveRegisterCourses)) {
-                    echo 1;
+                    $result = array('success' => 1);
                 }else{
-                    echo 0;
+                    $result = array('success' => 0);
                 }
+                print json_encode($result);
             }
         }
     }
@@ -297,7 +332,7 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                             'perid' => $periodActive['perid'],
                             'state' => 'M' );
 
-            $attrib = array('cid', 'turno');
+            $attrib = array('cid', 'turno', 'tipo');
 
             $preDataCourses = $langRegisterCourseDb->_getFilter($where, $attrib);
             foreach ($preDataCourses as $c => $course) {
@@ -310,6 +345,16 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                 $dataCourses[$c]['name']    = $preDataCourse[0]['name'];
                 $dataCourses[$c]['turno']   = $course['turno'];
                 $dataCourses[$c]['credits'] = $course['credits'];
+                $dataCourses[$c]['tipo']    = $course['tipo'];
+
+                //Datos del Tipo de Curso
+                if ($course['tipo'] == 'N') {
+                    $dataCourse[$c]['tipoName'] = 'Normal';
+                }elseif ($course['tipo'] == 'I'){
+                    $dataCourse[$c]['tipoName'] = 'Intensivo';
+                }elseif ($course['tipo'] == 'S'){
+                    $dataCourse[$c]['tipoName'] = 'Super-Intensivo';
+                }
 
                 //Datos del Turno
                 $where = array( 'eid'     => $eid,
@@ -337,10 +382,14 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
         $eid = $this->sesion->eid;
         $pid = $this->sesion->pid;
 
-        $where = array( 'eid' => $eid,
-                        'pid' => $pid );
+        $where = array( 'eid'   => $eid,
+                        'pid'   => $pid,
+                        'state' => 'M' );
 
-        $preDataRegisters = $langRegisterDb->_getFilter($where);
+        $attrib = '';
+        $order = array('perid DESC,');
+
+        $preDataRegisters = $langRegisterDb->_getFilter($where, $attrib, $order);
 
         if ($preDataRegisters) {
             foreach ($preDataRegisters as $c => $register) {
@@ -360,11 +409,20 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                                 'pid'   => $pid,
                                 'perid' => $register['perid'],
                                 'state' => 'M' );
-                $attrib = array('cid', 'notefin');
+                $attrib = array('cid', 'notefin', 'tipo');
 
                 $preDataCourses = $langRegisterCourseDb->_getFilter($where, $attrib);
 
                 foreach ($preDataCourses as $cCourses => $course) {
+                    //Datos del Tipo de Curso
+                    if ($course['tipo'] == 'N') {
+                        $tipoName= 'Normal';
+                    }elseif ($course['tipo'] == 'I'){
+                        $tipoName = 'Intensivo';
+                    }elseif ($course['tipo'] == 'S'){
+                        $tipoName = 'Super-Intensivo';
+                    }
+
                     $where = array(
                                     'eid' => $eid,
                                     'cid' => $course['cid'] );
@@ -373,6 +431,8 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                     $dataCourse = $langCoursesDb->_getFilter($where, $attrib);
                     $dataRegisters[$c]['courses'][$cCourses] = array(   'cid'        => $dataCourse[0]['cid'],
                                                                         'courseName' => $dataCourse[0]['name'],
+                                                                        'tipo'       => $course['tipo'],
+                                                                        'tipoName'   => $tipoName,
                                                                         'credits'    => $dataCourse[0]['credits'],
                                                                         'nota'       => $course['notefin'] );
                 }
