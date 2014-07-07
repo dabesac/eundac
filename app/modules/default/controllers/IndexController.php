@@ -18,6 +18,7 @@ class IndexController extends Zend_Controller_Action {
     		$sesion = $sesion1->getStorage()->read();
     		$this->_helper->redirector('index','index',($sesion->rol['module']));
     	}
+
     	$form = new Default_Form_Login();
     	$this->view->form = $form; 
     	if ($this->getRequest()->isPost()) {
