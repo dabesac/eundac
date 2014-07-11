@@ -8,7 +8,7 @@ class Api_Model_DbTable_CourseCompetency extends Zend_Db_Table_Abstract
     public function _getOne($where=array()){
         try {
             if ($where['eid']=="" || $where['oid']=="" || $where['escid']=="" || $where['subid']==""  ||
-                $where['courseid'] || $where['curid']=="" || $where['perid']=="" || $where['turno']==""  
+                $where['courseid']=="" || $where['curid']=="" || $where['perid']=="" || $where['turno']==""  
                ) return false;
             $wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and curid='".$where['curid']."' and escid='".$where['escid']."' and subid='".$where['subid']."' and courseid='".$where['courseid']."' and turno='".$where['turno']."' and perid='".$where['perid']."'";
                 $row = $this->fetchRow($wherestr);
@@ -22,7 +22,7 @@ class Api_Model_DbTable_CourseCompetency extends Zend_Db_Table_Abstract
     public function _save($data){
         try {
             if ($data['eid']=="" || $data['oid']=="" || $data['escid']=="" || $data['subid']==""  ||
-                $data['courseid '] || $data['curid']=="" || $data['perid']=="" || $data['turno']==""  
+                $data['courseid ']=="" || $data['curid']=="" || $data['perid']=="" || $data['turno']==""  
                ) return false;
             return $this->insert($data);
             return false;
@@ -33,7 +33,7 @@ class Api_Model_DbTable_CourseCompetency extends Zend_Db_Table_Abstract
     public function _update($data,$pk){
         try {
             if ($pk['eid']=="" || $pk['oid']=="" || $pk['escid']=="" || $pk['subid']==""  ||
-                $pk['courseid '] || $pk['curid']=="" || $pk['perid']=="" || $pk['turno']==""  
+                $pk['courseid ']=="" || $pk['curid']=="" || $pk['perid']=="" || $pk['turno']==""  
                ) return false;
             $where="eid = '".$pk['eid']."' and oid='".$pk['oid']."' and curid='".$pk['curid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and courseid='".$pk['courseid']."' and turno='".$pk['turno']."' and perid='".$pk['perid']."'";
             return $this->update($data,$where);
@@ -45,7 +45,7 @@ class Api_Model_DbTable_CourseCompetency extends Zend_Db_Table_Abstract
     public function _exists_persentage($where=array()){
         try {
             if ($where['eid']=="" || $where['oid']=="" || $where['escid']=="" || $where['subid']==""  ||
-                $where['courseid '] || $where['curid']=="" || $where['perid']=="" || $where['turno']==""  
+                $where['courseid']=="" || $where['curid']=="" || $where['perid']=="" || $where['turno']==""  
                ) return false;
             $sql = $this->_db->query("
                 select count(*) as cantidad from base_course_competency

@@ -112,7 +112,7 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
     	// $dist=$distribution->_getOne($where);
 
     	//print_r($dist);
-        $state=$dist['state'];
+        //$state=$dist['state'];
         $formData['eid']=$eid;
         $formData['oid']=$oid;
         $formData['escid']=$escid;

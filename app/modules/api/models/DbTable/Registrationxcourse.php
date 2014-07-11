@@ -785,4 +785,26 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
      		print "Error: ".$e->getMessage();
      	}
      }
+
+    public function _registration_quantity_repeat($where=null){
+    	try {
+    		if ($where['eid']=='' || $where['oid']=='' || $where['escid']=='' || $where['subid']=='' || $where['curid']=='' || $where['anio']=='') return false;
+
+    		$eid=$where['eid'];
+    		$oid=$where['oid'];
+    		$escid=$where['escid'];
+    		$subid=$where['subid'];
+    		$curid=$where['curid'];
+    		$anio=$where['anio'];
+    		$sql=$this->_db->query("
+    								select * from registration_quantity_repeat('$eid','$oid','$escid','$subid','$curid','$anio') AS (
+    								".'name'." character varying, ".'courseid'." character varying, ".'Porcentaje'." numeric
+    								);
+    			");
+    		if ($sql) return $sql->fetchAll();
+    		return false;
+    	} catch (Exception $e) {
+    		print "Error: registration_quantity_repeat ".$e->getMessage();
+    	}
+    }
 }

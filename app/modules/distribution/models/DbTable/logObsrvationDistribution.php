@@ -65,6 +65,7 @@ class Distribution_Model_DbTable_logObsrvationDistribution extends Zend_Db_Table
 								->where('escid = ?', $where['escid'])
 								->where('subid = ?', $where['subid'])
 								->where('perid = ?', $where['perid'])
+								->where('state = ?', 'O')
 								->order(array('logobdistrid DESC'))
 								->limit(1);
 			$results = $select->query();
