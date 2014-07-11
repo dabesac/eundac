@@ -1,3 +1,42 @@
 <p class="titleRecord text-muted"><span class="glyphicon glyphicon-bookmark"></span> Record de <span class="text-info">Matriculas</span></p>
 <hr>
-<p class="text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign"></span> Por ahora <span class="text-danger">no tiene matriculas.</span></p>
+<?php if ($this->dataRegisters): ?>
+	<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Matriculas realizadas por periodo</p>
+	<?php foreach ($this->dataRegisters as $c => $register): ?>
+		<div class="register">
+			<div class="anioPeriod"><?php echo $register['anio'] ?></div>
+			<div class="namePeriod">Periodo <?php echo $register['periodName'] ?></div>
+			<div class="cantCourses"><?php echo $register['cantCourses'] ?></div>
+		</div>
+		<div class="dataRegister">
+			<div class="tableCourses">
+				<table class="table table-hover table-bordered">
+					<tr class="active">
+						<th class="text-center">#</th>
+						<th class="text-center">Codigo</th>
+						<th>Curso</th>
+						<th class="text-center">Tipo</th>
+						<th class="text-center">Creditos</th>
+						<th class="text-center">Nota</th>
+					</tr>
+					<?php foreach ($register['courses'] as $cCourses => $course): ?>
+						<tr>
+							<td class="text-center"><?php echo $cCourses + 1 ?></td>
+							<td class="text-center"><?php echo $course['cid'] ?></td>
+							<td><?php echo $course['courseName'] ?></td>
+							<td class="text-center"><?php echo $course['tipoName'] ?></td>
+							<td class="text-center"><?php echo $course['credits'] ?></td>
+							<td class="text-center"><?php echo $course['nota'] ?></td>
+						</tr>
+					<?php endforeach ?>
+				</table>
+			</div>
+			<div class="dataDocente">
+	
+			</div>
+		</div>
+	<?php endforeach ?>
+
+<?php else: ?>
+	<p class="text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign"></span> Por ahora <span class="text-danger">no tiene matriculas.</span></p>
+<?php endif ?>

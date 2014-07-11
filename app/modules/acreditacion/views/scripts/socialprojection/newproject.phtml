@@ -1,39 +1,78 @@
 <?php if ($this->form) {?>
     <form id='form_new_project' >
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <div class="modal-dialog modal-ls">
+            <div class="modal-content ">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                   <h4 class="modal-title">Nuevo Proyecto</h4>
                 </div>
                 <div class="modal-body">
-                    <?php echo $this->form->name ?>
-                    <label>Tipo:</label>
-                    <?php echo $this->form->type ?>
-                    <label>Cronograma:</label>
-                    <select data-index='' class="form-control" id='cronogram_proj' name="id_cronogram">
-                        <option>Seleccione Cronograma</option>
-                    </select>
-                    <div id='contet_conogram'>
-                        <p>
-                            <span></span>   
-                            <span></span>
-                            <span></span>
-                        </p>
+                    <div class='row col-md-offset-1' >
+                        <div class='col-lg-7'>
+                            <?php echo $this->form->name ?>
+                        </div>
                     </div>
-                    <label>Estado:</label>
-                    <?php echo $this->form->state?>
-                    <?php echo $this->form->num_horas ?>
-                    <?php echo $this->form->min_student ?>
-                    <?php echo $this->form->max_student ?>
-                    <?php echo $this->form->description ?>
-                    <?php echo $this->form->comment ?>
+                    <div class='row col-md-offset-1'>
+                        <div class='col-lg-3'>
+                            <label>Tipo:</label>
+                            <?php echo $this->form->type ?>
+                            <label>Adjuntar Proyecto</label>
+                            <?php echo $this->form->project ?>
+                        </div>
+                        <div class='col-lg-3'>
+                            <label>Cronograma:</label>
+                            <select data-index='' class="form-control" id='cronogram_proj' name="id_cronogram">
+                                <option>Seleccione Cronograma</option>
+                            </select>
+                        </div>
+                        <div class='col-lg-3'>
+                            <?php echo $this->form->num_horas ?>
+                            <label>Estado:</label>
+                            <?php echo $this->form->state?>
+                        </div>
+                    </div>
+                    <!-- <div id='contet_conogram'>
+                    </div> -->
+                    <div class='row col-md-offset-1'>
+                        <h3>Fechas</h3>
+                        <div class='col-lg-3'>
+                            <?php echo $this->form->f_presentation?>
+                        </div>
+                        <div class='col-lg-3'>
+                            <?php echo $this->form->f_ini?>
+                        </div>
+                        <div class='col-lg-3'>
+                            <?php echo $this->form->f_fin?>
+                        </div>
+                    </div>
+                    <div class='row col-md-offset-1'>
+                        <div class='col-lg-4'>
+                            <h3>Modalidad y Ejecución</h3>
+                            <label>Modalidad:</label>
+                            <?php echo $this->form->modality?>
+                            <?php echo $this->form->place ?>
+                        </div>
+                        <div class='col-lg-4'>
+                                <h3>Participante</h3>
+                                <?php echo $this->form->min_student ?>
+                                <?php echo $this->form->max_student ?>
+                        </div>
+                    </div>
+                    
+                    <div class='row col-md-offset-1' >
+                        <h4>Notas</h4>
+                        <div class='col-lg-5'>
+                            <?php echo $this->form->description ?>
+                        </div>
+                        <div class='col-lg-5'>
+                            <?php echo $this->form->comment ?>
+                        </div>
+                    </div>
                     <input type='hidden' id='uid_openerp' name='uid_openerp' >
                     <input type='hidden' id = "subid_openerp" name='subid_openerp' >
                     <input type='hidden' id="escid_openerp" name='escid_openerp' >
                     <!-- <div class="upload">
                         <span class="glyphicon glyphicon-file"></span> -->
-                        <?php echo $this->form->project ?>
                     <!-- </div> -->
                 </div>
                 <div class="modal-footer">

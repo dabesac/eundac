@@ -1,18 +1,53 @@
 <p class="titleRegister text-muted"><span class="glyphicon glyphicon-bookmark"></span> Matricula <span class="text-info"><?php echo $this->period['name'] ?></span></p>
 <hr>
 <?php if ($this->dataPrograms and $this->validate == 'no'): ?>
-	<div class="paymentBank" title="Recuerda Pagar a la Cuenta <?php echo $this->num_cuenta ?>" ><span class="glyphicon glyphicon-credit-card"></span> Pago al Banco <p class="payment">S/. 0</p></div>
+	<?php if ($this->dataPayments['totalPagado']): ?>
+		<div class="paymentBank" title="Recuerda Pagar a la Cuenta <?php echo $this->num_cuenta ?>" ><span class="glyphicon glyphicon-credit-card"></span> Pago al Banco 
+			<?php if ($this->dataPayments['totalPagado']): ?>
+				<p class="payment" id="paymentTotal" pagototal="<?php echo $this->dataPayments['totalPagado'] ?>">S/. <?php echo $this->dataPayments['totalPagado'] ?></p>
+			<?php endif ?>
+		</div>
+		<div class="detailPayment" id="idDetailPayment" hidden>
+			<table class="table table-bordered">
+				<tr class="active">
+					<th class="col-md-1 text-center">#</th>
+					<th class="col-md-2 text-center">Operación</th>
+					<th class="text-center">Fecha</th>
+					<th class="text-center">Monto</th>
+				</tr>
+			<?php foreach ($this->dataPayments['detailPayment'] as $c => $payment): ?>
+				<tr>
+					<td class="text-center"><?php echo $c + 1 ?></td>
+					<td class="text-center"><?php echo $payment['numOperacion'] ?></td>
+					<td class="text-center"><?php echo $payment['diaPago'] ?></td>
+					<td class="text-center">S/. <?php echo $payment['monto'] ?></td>
+				</tr>
+			<?php endforeach ?>
+			</table>
+		</div>
+		<div class="paymentUse" title="Dinero Usado">
+			<span class="iconPaymentUse glyphicon glyphicon-play"></span>
+			<p class="titlePaymentUse"><span class="glyphicon glyphicon-usd"></span> Dinero Usado</p>
+			<p class="moneyUse" id="moneyUse" moneyuse="<?php echo $this->dataPayments['totalGastado'] ?>">S/. <?php echo $this->dataPayments['totalGastado'] ?></p>
+		</div>
+	<?php else: ?>
+		<div class="noPaymentBank" title="Recuerda Pagar a la Cuenta <?php echo $this->num_cuenta ?>" ><span class="glyphicon glyphicon-credit-card"></span> Pago al Banco <p class="payment">S/. 0</p>
+		</div>
+	<?php endif ?>
+
 	<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Esto son los cursos que estan disponibles en Idiomas.</p>
 	
 	<?php foreach ($this->dataPrograms as $c => $program): ?>
 		<div class="program">
-			<form class="formCourse">
+			<form class="formCourse" costoprograma="<?php echo $program['costo'] ?>">
 			<input type="hidden" name="perid" value="<?php echo $program['perid'] ?>">
 			<input type="hidden" name="cid" value="<?php echo $program['courseId'] ?>">
 			<input type="hidden" name="pid" value="<?php echo $program['studentId'] ?>">
+			<input type="hidden" name="subid" value="<?php echo $program['subid'] ?>">
+			<input type="hidden" name="tipo" value="<?php echo $program['tipo'] ?>">
 			<div class="detailProgram">
 				<p class="courseIcon"><span class="glyphicon glyphicon-book"></span></p>
-				<p class="courseName"><?php echo $program['courseName'] ?></p>
+				<p class="courseName"><?php echo $program['courseName'] ?> <small class="text-muted"><?php echo $program['tipoName'] ?></small></p>
 				<p class="coursePrice" title="Costo"><?php echo 'S/. '.$program['costo'] ?></p>
 				<?php if ($program['alreadyRegister'] == 'no'): ?>
 				<div class="divSelectTurno" id="selectTurno<?php echo $c ?>" numprogram="<?php echo $c ?>" hidden>
@@ -42,9 +77,11 @@
 								$esconder = '';
 							endif ?>
 							<p class="titleFrecuencia frecuenciaData<?php echo $program['courseId'] ?> changeDataTurno<?php echo $turno['turnoid'].$program['courseId'] ?>" <?php echo $esconder ?>><span class="glyphicon glyphicon-time"></span> Dias y Horario | Turno <?php echo $turno['turnoid'] ?></p>
-							<p id="frecuenciaTurno<?php echo $turno['turnoid'].$program['courseId'] ?>" class="frecuenciaData<?php echo $program['courseId'] ?> text-muted changeDataTurno<?php echo $turno['turnoid'].$program['courseId'] ?>" <?php echo $esconder ?>>
+							<p id="frecuenciaTurno<?php echo $turno['turnoid'].$program['courseId'] ?>" class="descriptionFrecuencia frecuenciaData<?php echo $program['courseId'] ?> text-muted changeDataTurno<?php echo $turno['turnoid'].$program['courseId'] ?>" <?php echo $esconder ?>>
 								<?php echo $turno['frecuencia'] ?>
 							</p>
+							<p class="docenteName frecuenciaData<?php echo $program['courseId'] ?> changeDataTurno<?php echo $turno['turnoid'].$program['courseId'] ?> text-muted" <?php echo $esconder ?>><strong class="text-info">Docente : </strong> <?php echo $turno['docente'] ?></p>
+
 						<?php endforeach ?>
 					<?php else: ?>
 						<p class="text-muted text-success" id="msgQuestionConfirm<?php echo $c ?>">Matricula Realizada</p>
@@ -52,9 +89,10 @@
 						<?php foreach ($program['turnos'] as $cTurno => $turno): ?>
 							<?php if ($program['turnoRegistrado'] == $turno['turnoid']): ?>
 								<p class="titleFrecuencia"><span class="glyphicon glyphicon-time"></span> Dias y Horario | Turno <?php echo $turno['turnoid'] ?></p>
-								<p class="text-muted">
+								<p class="text-muted descriptionFrecuencia">
 									<?php echo $turno['frecuencia'] ?>
 								</p>
+								<p class="docenteName text-muted" <?php echo $esconder ?>><strong class="text-info">Docente : </strong> <?php echo $turno['docente'] ?></p>
 							<?php endif ?>
 						<?php endforeach ?>
 					<?php endif ?>
@@ -62,8 +100,18 @@
 			<?php if ($program['alreadyRegister'] == 'no'): ?>
 				<div class="btnsConfirm" id="btnsConfirm<?php echo $c ?>">
 					<a href="##" class="btnCloseDetailRegister btn btn-danger">No por ahora</a>
-					<input type="submit" class="btnConfirmRegister btn btn-info form-control" value="Si, deseo llevar este curso" id="btnConfirmRegister<?php echo $c ?>">
-					<div class="chargeWhenRegister" id="chargeWhenRegister<?php echo $c ?>"></div>
+					<?php if (($this->dataPayments['totalPagado'] - $this->dataPayments['totalGastado']) < $program['costo']): 
+						$classPuedeMatricularse   = 'hidden';
+						$classNoPuedeMatricularse = '';
+						print_r('Joder');
+					else: 
+						$classPuedeMatricularse   = '';
+						$classNoPuedeMatricularse = 'hidden';
+					endif ?>
+						<div id="msgFaltaPago<?php echo $c ?>" class="msgFaltaPago" <?php echo $classNoPuedeMatricularse ?>><span class="glyphicon glyphicon-exclamation-sign"></span> Debe hacer el pago para llevar este curso.</div>
+
+						<input type="submit" class="btnConfirmRegister btn btn-info form-control <?php echo $classPuedeMatricularse ?>" numprogram="<?php echo $c ?>" costoprograma="<?php echo $program['costo'] ?>" value="Si, deseo llevar este curso" id="btnConfirmRegister<?php echo $c ?>">
+						<div class="chargeWhenRegister" id="chargeWhenRegister<?php echo $c ?>"></div>
 				</div>
 				<div class="msgConfirmRegister" id="msgConfirmRegister<?php echo $c ?>" hidden>
 					<span class="iconConfirm glyphicon glyphicon-thumbs-up"></span>
@@ -114,6 +162,7 @@
 
 		$('.paymentBank').hover(function(){
 			$(this).tooltip('toggle');
+			$('#idDetailPayment').slideToggle();
 		});
 
 		var changeTurno = '';
@@ -125,35 +174,59 @@
 			$('.changeDataTurno' + changeTurno + courseId).slideDown();
 		});
 
-		var formData = '';
+		var formData      = '';
+		var costoPrograma = '';
+		var totalUsado    = '';
+		var totalPago     = '';
 		$('.formCourse').on('submit', function(e){
 			e.preventDefault();
 			$('#btnConfirmRegister' + numProgram).attr('disabled', 'disabled');
 			$('#chargeWhenRegister' + numProgram).html('<img src="/img/spinner.gif" alt="L" />');
+			costoPrograma = $(this).attr('costoprograma');
 			formData = $(this).serialize();
-			registerStudent(formData, numProgram);
+			totalUsado = $('#moneyUse').attr('moneyuse');
+			totalPago  = $('#paymentTotal').attr('pagototal');
+			registerStudent(formData, numProgram, costoPrograma, totalUsado, totalPago);
 		});
 
 		//Funciones
 
 		//Registar Estudiante
-		function registerStudent(formData, numProgram){
+		function registerStudent(formData, numProgram, costoPrograma, totalUsado, totalPago){
 			$.ajax({
 				type : 'post',
 				url : '/alumno/idiomas/registerstudent/',
 				data : formData,
+				dataType : 'json',
 				success : function(data){
-					console.log(data);
-					if (data == 1) {
+					if (data.success === 1) {
 						$('#questionConfirm' + numProgram + ', #btnsConfirm' + numProgram + ', #selectTurno' + numProgram).slideUp();
 						$('#selectTurno' + numProgram).html('');
 						$('#btnRegister' + numProgram).html('Matriculado');
 						$('#msgQuestionConfirm' + numProgram + ', #msgConfirmRegister' + numProgram).slideDown();
 
+						//Disminuir el Pago Total
+						var nuevoMonto = parseInt(totalUsado) + parseInt(costoPrograma);
+						$('#moneyUse').html('S/. ' + nuevoMonto)
+									.attr('moneyuse', nuevoMonto);
+
+						var leftMonto = parseInt(totalPago) - parseInt(nuevoMonto);
+
+						var leftCostoPrograma = '';
+						var leftNumProgram    = '';
+						$('.btnConfirmRegister').each(function(index, element){
+							leftCostoPrograma = $(element).attr('costoprograma');
+							leftNumProgram    = $(element).attr('numprogram');
+							if (leftCostoPrograma > leftMonto) {
+								$(element).slideUp();
+								$('#msgFaltaPago' + leftNumProgram).slideDown();
+							};
+						});
+
 					}else{
 						$('#btnConfirmRegister' + numProgram).removeAttr('disabled', 'disabled');
 					};
-					$('#chargeWhenRegister' + numProgram).html('<img src="/img/spinner.gif" alt="L" />');
+					$('#chargeWhenRegister' + numProgram).html('');
 				}
 			});
 		};

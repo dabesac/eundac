@@ -1,5 +1,10 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Llenado Informe Académico');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button type="button" id="enviar" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar Avance</button><button type="button" id ="cerrar" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cerrar Informe</button>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');
+
+	$this->placeholder('BtnSVCRight')->append('
+		<a id="enviar" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar Avance</a>
+		<a id ="cerrar" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Cerrar Informe</a>');
+?>
 <div class='row'>
     <div class ='col-xs-12 text-center' style='font-size:18px'><b>FACULTAD DE <?php echo strtoupper($this->faculty)?></b></div>
     <div class ='col-xs-12 text-center' style='font-size:15px'><b>ESCUELA DE FORMACIÓN PROFESIONAL DE <?php echo strtoupper($this->speciality)?></b></div>

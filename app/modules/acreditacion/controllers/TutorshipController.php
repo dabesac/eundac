@@ -249,6 +249,7 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 									'department_id' => $dataDepartment[0]['id'],
 									'semid'         => $formData['semid'],
 									'name'          => 'Tutoria '.$nameSpeciliaty.' '.$formData['semid']. 'Semestre',
+									'state_inform'  => 'B',
 									'perid'         => $perid );
 
 	        $create = $server->create('tutoring', $dataTutoring);
@@ -257,7 +258,7 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 								'success'    => 2);
 	        }else{
 	        	$result = array('tutoringId' =>	'',
-								'success'    => 2);
+								'success'    => 1);
             }
             print json_encode($result);
     	}else{

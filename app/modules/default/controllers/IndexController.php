@@ -11,13 +11,14 @@ class IndexController extends Zend_Controller_Action {
     }
     
     public function indexAction()
-    {
+    {   
     	try{
     	$sesion1  = Zend_Auth::getInstance();
     	if($sesion1->hasIdentity()){
     		$sesion = $sesion1->getStorage()->read();
     		$this->_helper->redirector('index','index',($sesion->rol['module']));
     	}
+
     	$form = new Default_Form_Login();
     	$this->view->form = $form; 
     	if ($this->getRequest()->isPost()) {

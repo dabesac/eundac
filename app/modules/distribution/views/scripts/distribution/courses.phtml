@@ -1,30 +1,12 @@
 <script type="text/javascript" src="/js/distribution/distribution.js"></script>
-<!-- <br> -->
 <hr>
-<!-- <div class="row">
-	<div class="col-md-9 col-md-offset-1">
-		<blockquote>
-			<h4>Lista de <span class="text-info">Asignaturas</span></h4>
-		</blockquote>
-	</div>
-	<div class="col-md-1">
-		<blockquote>
-			<h4 class="text-info"><span class="glyphicon glyphicon-book"></span></h4>
-		</blockquote>
-	</div>
-</div> -->
 <div class="row">
 	<div class="col-md-12">
 		<center><a id="addcourses" href="#addcourse" data-toggle="modal" class="btn btn-info"><span class="glyphicon glyphicon-book"></span> Agregar Asignatura</a></center>
 	</div>
 </div>
 <br>
-<!--<div class="panel panel-default" style="margin-top:15px">
-  	<div class="panel-body">
-    	<b style="font-size:20px"><span class="glyphicon glyphicon-tasks"></span> - LISTA DE ASIGNATURAS</b>
-    	<a id="addcourses" href="#addcourse" data-toggle="modal" class="btn btn-info" style="float:right"><span class="glyphicon glyphicon-pencil"></span> <b>Agregar Asignatura</b></a>
-  	</div>
-</div>-->
+
 <?php if ($this->courses) {
 	$courses['type_rate']=array();
 	?>
@@ -62,7 +44,7 @@
 					perid=<?php echo $this->perid?>
 				>
 					<td><?php echo $i?></td>
-					<td><center><?php echo $courses['curid']?></center></td>
+					<td><center><?php echo $courses['curid']?> s</center></td>
 					<td><center><?php echo $courses['courseid']?></center></td>
 					<td><?php echo $courses['name']?></td>
 					<td><center><?php echo $courses['turno']?></center></td>

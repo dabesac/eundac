@@ -1,0 +1,146 @@
+<div id='cargaqui'>
+<?php
+if ($this->data_user) {		
+	$fullname = $this->data_user[0]['last_name0']." ".$this->data_user[0]['last_name1'].", ".$this->data_user[0]['first_name'];
+	if ($this->dataMovilidad) {		?>
+		<div class='col-md-3'>
+			<div class='alert alert-success'>
+				<div style='font-size:15px'><span class='glyphicon glyphicon-check'></span><b> Ya está inscrito en: </b></div>
+				<ul>	
+				<?php
+					foreach ($this->dataMovilidad as $key => $datam) {	
+						?>
+					<li><?php 
+							switch ($datam['university_extension_id'][2]) {
+								case 'ME':
+									echo "Movilidad Estudiantil";
+									break;
+								case 'BC':
+									echo "Beca 18";
+									break;
+								case 'P':
+									echo "Pasantía";
+									break;
+								default:	
+									echo " ";
+									break;
+							}
+					?></li>
+					<?php	
+					}
+				?>
+				</ul>
+			</div>
+		</div>
+	<?php	
+	}
+	else{	?>
+		<div class='col-md-3'>
+			<div class='alert alert-danger'>
+				<div style='font-size:15px'><b>Aún no tiene inscripciones.</b></div>
+			</div>
+		</div>
+	<?php	
+	}
+	?>
+	
+<div class='col-md-9'>
+	<div class='panel panel-primary'>
+		<div class='panel-body' style='font-size:17px'>
+			<div>
+				<div class='col-md-1'></div>
+				<div class='col-md-3 text-right'><b>Apellidos y Nombres:</b></div>	
+				<div class='col-md-6 text-info'><b><?php echo $fullname?></b></div>	
+			</div><br><br>
+			<div>
+				<div class='col-md-2 text-right'><b>Escuela: </b></div>
+				<div class='col-md-4'><?php echo $this->data_school['name']?></div>
+				<div class='col-md-2 text-right'><b>Sede: </b></div>
+				<div class='col-md-4'><?php echo $this->data_subsidiary['name']?></div>				
+			</div><br><br>
+			<div>
+				<div class='col-md-2 text-right'><b>Periodo: </b></div>
+				<div class='col-md-4 '>
+					<select id='period' class='form-control'>
+					<?php
+						foreach ($this->data_period as $key => $periods) {
+							?>
+							<option value="<?php echo $periods['perid']?>"><?php echo $periods['perid']." | ".$periods['name']?></option>
+						<?php	
+						}
+					?>
+					</select>				
+				</div>				
+				<div class='col-md-2 text-right'><b>Tipo: </b></div>
+				<div class='col-md-4 '>
+					<select id='tipo' class='form-control'>
+						<option value="ME">Movilidad Estudiantil</option>
+						<option value="BC">Beca 18</option>				
+						<option value="P">Pasantía</option>
+					</select>
+				</div>
+			</div><br><br><br>
+			<div>
+				<div class='col-md-3 '>
+				</div>				
+				<div class='col-md-4 text-right'>
+					<a id='_save' href="#" class='btn btn-success' uid='<?php echo base64_encode($this->uid)?>' fullname='<?php echo base64_encode($fullname)?>' escid='<?php echo base64_encode($this->data_school['escid'])?>'><span class='glyphicon glyphicon-save'></span>Guardar</a>
+				</div>
+			</div><br><br>
+		</div>
+	</div>
+</div>
+<div id="saving"></div>
+
+<?php	
+}
+else{	?>
+	<hr>
+	<div class='row col-md-8 col-md-offset-2 alert alert-danger text-center'>
+		<h4><b>No existe el alumno(a)</b></h4>
+	</div>
+<?php
+}
+?>
+</div>
+
+<div class='alert alert-danger col-md-8 col-md-offset-2' id='no_guarda'>
+	<center><h4><span class='glyphicon glyphicon-question-sign'></span> No se pudo guardar el registro</h4></center>
+</div>
+<div class='alert alert-danger col-md-8 col-md-offset-2' id='no_guarda1'>
+	<center><h4><span class='glyphicon glyphicon-question-sign'></span> No existe el tipo de extensión universitaria en el ERP</h4></center>
+</div>
+<div class='alert alert-success col-md-8 col-md-offset-2' id='guardar'>
+	<center><h4><span class='glyphicon glyphicon-ok'></span> Se guardó con éxito el registro</h4></center>
+</div>
+<script type="text/javascript">
+	$("#guardar").fadeOut();
+	$("#no_guarda").fadeOut();
+	$("#no_guarda1").fadeOut();
+	$("#_save").click(function(){
+		var uid=$(this).attr("uid");
+		var fullname=$(this).attr("fullname");
+		var escid=$(this).attr("escid");
+		var tipo=$('#tipo').val();
+		var period=$('#period').val();
+
+		var url=("/acreditacion/universityextension/registerstudentsextension/type/"+tipo+"/perid/"+period+"/state/A/uid/"+uid+"/fullname/"+fullname+"/escid/"+escid);
+		$("#saving").load(url);
+		
+	});
+
+	var datass = <?php echo $this->dataMovilidad1?>;
+	if (datass) {
+		for (var i = datass.length - 1; i >= 0; i--) {
+			if (datass[i].university_extension_id[2]=='ME') {
+				$("#tipo").find('option').eq(0).remove();
+			};
+			if (datass[i].university_extension_id[2]=='BC') {
+				$("#tipo").find('option').eq(1).remove();
+			};
+			if (datass[i].university_extension_id[2]=='P') {
+				$("#tipo").find('option').eq(2).remove();
+			};
+		};		
+	};
+</script>

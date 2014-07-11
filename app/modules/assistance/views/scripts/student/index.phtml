@@ -29,17 +29,20 @@ if($this->partial==2) {
 $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-calendar"></span> '. $partial_text.' ' .$infocourse['name'].' Turno '.$this->turno.'');
 
  if ($this->state == 'A' || $this->state == 'P') { 
-        $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
-        	<buttom  class="btn btn-info" id="save_assistance" disabled ><span class="glyphicon glyphicon-save"></span> Guardar</buttom>
-            <buttom  class="btn btn-danger" id="closure-assistance" onclick="closureassistance(this);"
+        $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+        	
+                            ');
+
+        $this->placeholder('BtnSVCLeft')->append('
+			<a class="btn btn-default" id="save_assistance" disabled ><span class="glyphicon glyphicon-save"></span> Guardar</a>
+            <a  class="btn btn-default" id="closure-assistance" onclick="closureassistance(this);"
 				coursoid='.$infocourse['courseid'].'
 				escid='.$infocourse['escid'].'
 				curid='.$infocourse['curid'].'
 				subid='.$infocourse['subid'].'
 				turno='.$this->turno.'
 				perid='.$this->perid.'
-		><span class="glyphicon  glyphicon-log-out"></span> Cerrar Asistencia</buttom>
-                            ');
+		><span class="glyphicon  glyphicon-log-out"></span> Cerrar Asistencia</a>');
 }else{
 	$this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');
 

@@ -33,7 +33,7 @@ class Default_Form_Login extends Zend_Form
         $data['oid'] = "1";
         $rid = new Zend_Form_Element_Select("rid");
         $rid->setRequired(true)->addErrorMessage('Este campo es requerido');
-        $rid->addMultiOption("","-Seleccione un rol-")->removeDecorator('Label');
+        $rid->addMultiOption("","Seleccione un Rol")->removeDecorator('Label');
         $rid->removeDecorator('HtmlTag')->addFilters(array('StringTrim', 'StripTags'));
         $rid->setAttrib("class","form-control");
         $rids = new Api_Model_DbTable_Rol();
@@ -71,7 +71,7 @@ class Default_Form_Login extends Zend_Form
         $clave->removeDecorator('Label')->addFilters(array('StringTrim', 'StripTags'));
         
         $submit = new Zend_Form_Element_Submit('enviar');
-        $submit->setAttrib('class', 'form-control btn btn-primary')->setLabel("Ingresar");
+        $submit->setAttrib('class', 'form-control sendForm')->setLabel("Ingresar");
 		$submit->setAttrib('id', 'enviarf');
         $submit->removeDecorator('HtmlTag');
         $this->addElements(array($rid,$usuario,$clave,$submit));        

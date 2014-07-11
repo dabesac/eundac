@@ -1,6 +1,5 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Listado de Distribuciones');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
-    <a id="newDistribution" href="/distribution/distribution/new" class="btn btn-success"><span class="glyphicon glyphicon-plus "></span> Nuevo</a>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 <?php
 $ldistri =$this->ldistribution;
 ?>
@@ -14,6 +13,9 @@ $ldistri =$this->ldistribution;
 				<option value="<?php echo $i ?>"><?php echo $i ?></option>
 			<?php endfor ?>
 		</select>
+	</div>
+	<div class="col-md-2 col-md-offset-5">
+		<a id="newDistribution" href="/distribution/distribution/new" class="btn btn-success form-control"><span class="glyphicon glyphicon-plus "></span> Nueva Distribución</a>
 	</div>
 </div>
 <hr>
