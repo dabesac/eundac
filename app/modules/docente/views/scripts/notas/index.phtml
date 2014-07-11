@@ -1,16 +1,25 @@
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> ASIGNATURAS A CARGO PERIODO - '.$this->perid.'');?>
+<link rel="stylesheet" href="/css/miscursos.css">
+
 <?php 
-    
-    $this->placeholder('Btnnav')->append('
-    <div class="btn-group">
-        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+    $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-book"></span> Asignaturas a Cargo');
+    $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
+?>
+<div class="miscursos_header">
+    <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Puede filtrar cursos de otros periodos:</p>
+    <div class="btn-group miscursos_selectPeriod">
+        <button type="button" class="btn btn-info dropdown-toggle form-control" data-toggle="dropdown">
             Seleccione Periodo <span class="caret"></span>
         </button>
-          <ul class="dropdown-menu" role="menu"> '
-            .$this->periods.
-          '</ul>
-    </div>');
-    
+        <ul class="dropdown-menu" role="menu"> 
+            <?php echo $this->periods ?>
+        </ul>
+    </div>
+</div>
+
+<hr>
+
+
+<?php 
   $c=0;
 
     $perid_tmp = null;
@@ -22,7 +31,6 @@
         $perid_tmp = str_replace('B', 'E', $this->perid);
         $btn_alp = true;
     }
-
 if ($this->faculty){
     foreach ($this->faculty as $number) {
         $c++;
@@ -31,210 +39,223 @@ if ($this->faculty){
         $k=0;
         foreach ($this->data as $key => $coursess) {
             if ($coursess['facid']==$number['facid'] && $k==0) { ?>
-                <div class="container">
+                <!--<div class="container">
                     <div class="row">
                         <div class="col-md-3 col-md-offset-8">
                             <h3><a class="Btnhorarys" href="#" data-toggle="modal" data-target="#ModalHorary" perid='<?php echo base64_encode($this->perid)?>' escid='<?php echo base64_encode($coursess['escid'])?>' subid='<?php echo base64_encode($coursess['subid'])?>' class="text-info"><span class="glyphicon glyphicon-calendar" data-toggle="tooltip" title="Ver Horario"></span><b class='text-primary' style="font-size:17px"> Ver Horario</b></a></h3>
                         </div>
                     </div>
-                </div>
+                </div>-->
             <?php
             $k=1;
             }
         }
 
 ?>
+<div id="coursesPrincipal" class="miscursos_DataCursos"> 
+    <div class="header">
+        <p class="title">
+            <b>FACULTAD <?php echo strtoupper($fname)?></b>                         
+        </p>
+    </div>
+    <div id="collapse<?php echo $c?>" class="cursos">
+        <?php 
+        $f=0;
+        foreach ($this->data as $courses) {?>
+        <div class="curso">
+             <?php $f++;
 
-<div id="coursesPrincipal"> 
-<div class="panel-group" id="accordion">
-    <div class="panel panel-primary">
-        <div class="panel-heading ">
-            <h4 class="panel-title ">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $c?>"
-                style="font-size: 18px;">
-                    <b>FACULTAD <?php echo strtoupper($fname)?></b>                         
-                </a>
-            </h4>
-        </div>
-        <div id="collapse<?php echo $c?>" class="panel-collapse collapse in">
-            <div class="panel-body" >
-                <div class='row'>
-                    <div class='col-md-11 col-md-offset-1'>
-                        <div class='row'>
+            $u_="";
+            $urlAsist ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($courses['perid'])."/".base64_encode('curid')."/".base64_encode($courses['curid'])."/".base64_encode('state')."/".base64_encode($courses['state_record']);
 
-                            <?php 
-                                $f=0;
-                                foreach ($this->data as $courses) {
-                                $f++;
+            $url_aplazado ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($perid_tmp)."/".base64_encode('curid')."/".base64_encode($courses['curid']);
 
-                                $u_="";
-                                $urlAsist ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($courses['perid'])."/".base64_encode('curid')."/".base64_encode($courses['curid'])."/".base64_encode('state')."/".base64_encode($courses['state_record']);
+            $u_ = $courses['curid'].$courses['courseid'].$courses['turno'];
+            $urlcampus = "http://campus.undac.edu.pe/courses/$u_/index.php";
+            $partial = $this->partial;
 
-                                $url_aplazado ="/".base64_encode('escid')."/".base64_encode($courses['escid'])."/".base64_encode('subid')."/".base64_encode($courses['subid'])."/".base64_encode('courseid')."/".base64_encode($courses['courseid'])."/".base64_encode('turno')."/".base64_encode($courses['turno'])."/".base64_encode('perid')."/".base64_encode($perid_tmp)."/".base64_encode('curid')."/".base64_encode($courses['curid']);
+                                 
+            if ($number['facid']==$courses['facid']) { ?>
+                <div class="titleCurso">
+                    <p class="idCurso">
+                        <?php echo $courses['courseid'] ?><br>
+                    </p>
+                    <p class="curricula">
+                        Curricula <?php echo $courses['curid']?>
+                    </p>
+                    <p class="turnoCurso">
+                        Turno <?php echo $courses['turno']?>
+                    </p>
+                </div>
+                <div class="nameCursoZone">
+                    <div class="iconCurso">
+                        <?php 
+                        if (
+                            $courses['closure_syllabus'] == 'C' && ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')
+                            ) {?>
+                            <span class='glyphicon glyphicon-ok-circle'></span>
+                        <?php }else{?>
+                            <span class='glyphicon glyphicon-book'></span>
+                        <?php }?>
+                    </div>
+                    <p class="nameCurso">
+                        <?php echo $courses['name_course'] ?>
+                    </p>
+                </div>
+                        <!--option cursos-->
+                <div class="optionsCurso">
+                    <!--Silabo-->
+                    <a id="silabo<?php echo $courses['courseid'] ?>" class="btn btn-primary form-control btnSilabo <?php echo ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')? 'margin-top-btn':''?>" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>"data-toggle="tooltip" title="Registro del Sílabo" >Sílabo</a>
 
-                                $u_ = $courses['curid'].$courses['courseid'].$courses['turno'];
-                                $urlcampus = "http://campus.undac.edu.pe/courses/$u_/index.php";
-                                $partial = $this->partial;
+                    <!--Control de Actividad--> 
+                    <a href="/controlactivity/index/index/courseid/<?php echo base64_encode($courses['courseid']) ?>/curid/<?php echo base64_encode($courses['curid']) ?>/turno/<?php echo base64_encode($courses['turno']) ?>/perid/<?php echo base64_encode($courses['perid']) ?>/escid/<?php echo base64_encode($courses['escid']) ?>/subid/<?php echo base64_encode($courses['subid']) ?>" class="btn btn-primary form-control btnControlActividad">Control de Actividad</a>
+                        
+                    <!--Notas-->
+                    <?php if($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C'){?>
+                        <?php switch ($courses['type_rate']) {
+                            case 'O': ?>
+                            <div class="btn-group btnNotas">
+                                <button class="btn btn-primary dropdown-toggle form-control" type="button" data-toggle="dropdown">
+                                    Notas <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li> <a  href="/docente/fillnotes/target<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('1')?>" data-toggle="tooltip" title="Registrar las Notas">Notas 1er Parcial</a></li>
+                                    <li> <a  href="/docente/fillnotes/target<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('2')?>" data-toggle="tooltip" title="Registrar las Notas">Notas 2do Parcial</a></li>
+                                </ul>
+                            </div>
+                        <?php break;
+                            case 'C': ?>
+                            <div class="btn-group btnNotasBtnGroup">
+                                <button class="btn btn-primary dropdown-toggle form-control" type="button" data-toggle="dropdown">
+                                   Notas <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li> <a href="/docente/fillnotes/competition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('1')?>" data-toggle="tooltip" title="Registrar las Notas">Notas 1er Parcial</a></li>
+                                    <li> <a  href="/docente/fillnotes/competition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('2')?>" data-toggle="tooltip" title="Registrar las Notas">Notas 2do Parcial</a></li>
+                                </ul>
+                            </div>
 
-                                                     
-                                if ($number['facid']==$courses['facid']) { ?>
-                                    <div class='col-md-3 cont-coruse' >
+                            <div class="btn-group btnNotasBtnGroup btnPorcentaje">
+                                  <button class="btn btn-primary form-control dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Porcentaje <span class="caret"></span>
+                                  </button>
+                                  <ul class="dropdown-menu">
+                                    <li><a <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?> class="load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('1')?>" data-toggle="tooltip" title="Asignar Porsentage" >Porcentaje 1er Parcial</a></li>
+                                    <li><a <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?> class="load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('2')?>" data-toggle="tooltip" title="Asignar Porsentage" >Porcentaje 2do Parcial</a></li>
+                                  </ul>
+                            </div>
+                        <?php break;
+                            default: ?>
+                            <div class="cursoNoAsignado">Tipo de Curso no Asignado</div>
+                         <?php       break;
+                        }?>
 
-                                        <div class="alert alert-title-course">
-                                          <h4 class='name-course'><?php echo $courses['courseid']." - ".$courses['name_course']." - Turno ".$courses['turno']?></h4>
-                                        </div>
-                                        <?php if (
-                                                    $courses['closure_syllabus'] == 'C' && ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')
+                      <!--Asistencia-->
+                    <div class="btn-group btnAsistencia">
+                          <button class="btn btn-primary dropdown-toggle form-control" type="button" data-toggle="dropdown">
+                            Asistencia <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li> <a  href="/assistance/student/index<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('1')?>" data-toggle="tooltip" title="Llenado de Asistencia" > Asistencia 1er Parcial</a></li>
+                            <li>  <a href="/assistance/student/index<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('2')?>" data-toggle="tooltip" title="Llenado de Asistencia" > Asistencia 2do Parcial</a></li>
+                          </ul>
+                    </div>
+                        
+                    <?php }else{?>
+                        <?php switch ($courses['type_rate']) {
+                            case 'O': ?>
+                                <a id="notas<?php echo $courses['courseid'] ?>" class="btn btn-primary form-control btnNotas" href="/docente/fillnotes/target<?php echo $urlAsist ?>/<?php echo base64_encode('partial') ?>/<?php echo base64_encode($partial)?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
+                        <?php break;
+                            case 'C': ?>
+                                <a class="btn btn-primary btn-sm btn-group-course " href="/docente/fillnotes/competition<?php echo $urlAsist ?>/<?php echo base64_encode('partial') ?>/<?php echo base64_encode($partial)?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
 
-                                                ) {?>
-                                                <img src="/img/closure_.png" class='img-closure-course'>
-                                        <?php }else{?>
-                                            <h1 class='span-course'><span class='glyphicon glyphicon-book'></span></h1>
-                                        <?php }?>
+                                <buttom <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?>class="btn btn-primary btn-sm btn-group-course load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode($partial)?>" data-toggle="tooltip" title="Asignar Porsentage" >Asignar % </buttom>                               
+                        <?php break;
+                            default: ?>
+                                <div class="cursoNoAsignado">Tipo de Curso No Asignado</div>
+                        <?php break;
+                        }?>
+                            
+                        <!--Asistencia-->
+                        <a class="btn btn-primary form-control btnAsistencia" href="/assistance/student/index<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode($partial)?>" data-toggle="tooltip" title="Llenado de Asistencia" > Asistencia </a>
 
-                                        <h6 >Curricula - <?php echo $courses['curid']?></h6>
-
-                                        <!--option cursos-->
-
-                                        <a id="silabo<?php echo $courses['courseid'] ?>" class="btn btn-primary btn-sm btn-group-course btn-couses-sil <?php echo ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')? 'margin-top-btn':''?>" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>"data-toggle="tooltip" title="Registro del Sílabo" >Sílabo</a>
-                                        
-                                        <a href="/controlactivity/index/index/courseid/<?php echo base64_encode($courses['courseid']) ?>/curid/<?php echo base64_encode($courses['curid']) ?>/turno/<?php echo base64_encode($courses['turno']) ?>/perid/<?php echo base64_encode($courses['perid']) ?>/escid/<?php echo base64_encode($courses['escid']) ?>/subid/<?php echo base64_encode($courses['subid']) ?>" class="btn btn-primary btn-sm">Control de Actividad</a>
-                                        
-                                       <?php if($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C'){?>
-                                            <?php switch ($courses['type_rate']) {
-                                            case 'O': ?>
-                                                <div class="btn-group">
-                                                  <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                                                    Registro de Notas <span class="caret"></span>
-                                                  </button>
-                                                  <ul class="dropdown-menu">
-                                                    <li> <a  href="/docente/fillnotes/target<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('1')?>" data-toggle="tooltip" title="Registrar las Notas">Notas 1er Parcial</a></li>
-                                                    <li> <a  href="/docente/fillnotes/target<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('2')?>" data-toggle="tooltip" title="Registrar las Notas">Notas 2do Parcial</a></li>
-                                                  </ul>
-                                                </div>
-                                        <?php       break;
-                                            case 'C': ?>
-                                                
-                                                <div class="btn-group">
-                                                  <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                                                    Registro de Notas <span class="caret"></span>
-                                                  </button>
-                                                  <ul class="dropdown-menu">
-                                                    <li> <a href="/docente/fillnotes/competition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('1')?>" data-toggle="tooltip" title="Registrar las Notas">Notas 1er Parcial</a></li>
-                                                    <li> <a  href="/docente/fillnotes/competition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('2')?>" data-toggle="tooltip" title="Registrar las Notas">Notas 2do Parcial</a></li>
-                                                  </ul>
-                                                </div>
-                                                <div class="btn-group">
-                                                  <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                                                    Porcentaje <span class="caret"></span>
-                                                  </button>
-                                                  <ul class="dropdown-menu">
-                                                    <li><a <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?> class="load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('1')?>" data-toggle="tooltip" title="Asignar Porsentage" >Porcentaje 1er Parcial</a></li>
-                                                    <li><a <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?> class="load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('2')?>" data-toggle="tooltip" title="Asignar Porsentage" >Porcentaje 2do Parcial</a></li>
-                                                  </ul>
-                                                </div>
-
-
-
-                                        <?php        break;
-                                            default: ?>
-                                                <div class="alert alert-danger">Tipo de Curso no Asignado</div>
-                                         <?php       break;
-                                        }?>
-
-                                       
-                                    <div class="btn-group">
-                                          <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                                            Asistencia <span class="caret"></span>
-                                          </button>
-                                          <ul class="dropdown-menu">
-                                            <li> <a  href="/assistance/student/index<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('1')?>" data-toggle="tooltip" title="Llenado de Asistencia" > Asistencia 1er Parcial</a></li>
-                                            <li>  <a href="/assistance/student/index<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('2')?>" data-toggle="tooltip" title="Llenado de Asistencia" > Asistencia 2do Parcial</a></li>
-                                          </ul>
-                                    </div>
-                                        
-                                        <?php }else{?>
-                                             <?php switch ($courses['type_rate']) {
-                                            case 'O': ?>
-                                                <a id="notas<?php echo $courses['courseid'] ?>" class="btn btn-primary btn-sm btn-group-course" href="/docente/fillnotes/target<?php echo $urlAsist ?>/<?php echo base64_encode('partial') ?>/<?php echo base64_encode($partial)?>" data-toggle="tooltip" title="Registrar las Notas">Notas </a>
-                                        <?php       break;
-                                            case 'C': ?>
-                                                <a class="btn btn-primary btn-sm btn-group-course " href="/docente/fillnotes/competition<?php echo $urlAsist ?>/<?php echo base64_encode('partial') ?>/<?php echo base64_encode($partial)?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
-
-                                                <buttom <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?>class="btn btn-primary btn-sm btn-group-course load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode($partial)?>" data-toggle="tooltip" title="Asignar Porsentage" >Asignar % </buttom>                               
-                                        <?php        break;
-                                            default: ?>
-                                                <div class="alert alert-danger">Tipo de Curso no Asignado</div>
-                                         <?php       break;
-                                        }?>
-
-                                        <a class="btn btn-primary btn-sm btn-group-course" href="/assistance/student/index<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode($partial)?>" data-toggle="tooltip" title="Llenado de Asistencia" > Asistencia </a>
-
-                                        <?php }?>
-
-
-
-                                        <?php if ($courses['closure_record_n']=='C' && $btn_alp) {?>
-                                            <a class="btn btn-primary btn-sm btn-group-course btn-fill-deferred" href="/register/deferred/index<?php echo $url_aplazado?>" data-toggle="tooltip" title="Llenado de Asistencia" > Aplazados</a>
-                                        <?php }?>
-                                        
+                    <?php }?>
 
 
 
-                                        <!--prosentaje de llenado de notas-->
-                                        <h5 class='text-persentage-couser'>Llenado de Notas. 
-                                            <?php echo round($courses['persetage_notes'])?>%
-                                            <?php if ($courses['persetage_notes']== 50 || $courses['persetage_notes']== 100) {?>
-                                                <span class='glyphicon glyphicon-ok-sign text-success'></span>
-                                            <?php }else{ ?>
-                                                <span class='glyphicon glyphicon-info-sign text-danger'></span>
-                                            <?php }?>
-                                        </h5>
-                                        <div class="progress-course progress progress-striped active">
-                                          <div class="progress-bar"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courses['persetage_notes']?>%">
-                                          </div>
-                                        </div>
+                    <?php if ($courses['closure_record_n']=='C' && $btn_alp) {?>
+                        <a class="btn btn-primary form-control btnAplazados btn-fill-deferred" href="/register/deferred/index<?php echo $url_aplazado?>" data-toggle="tooltip" title="Llenado de Asistencia" > Aplazados</a>
+                    <?php }?>
+                </div>
 
-                                        <h5 class='text-persentage-couser'>Llenado de Asistencia. <?php echo round($courses['persetage_assit'])?>%
-                                            <?php if ($courses['persetage_assit']== 50 || $courses['persetage_assit']== 100) {?>
-                                                <span class='glyphicon glyphicon-ok-sign text-success'></span>
-                                            <?php }else{ ?>
-                                                <span class='glyphicon glyphicon-info-sign text-danger'></span>
-                                            <?php }?>
-                                        </h5>
-                                        <div class="progress-course progress progress-striped active">
-                                          <div class="progress-bar progress-bar-danger"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courses['persetage_assit']?>%">
-                                          </div>
-                                        </div>
-                                        <h5 class='text-persentage-couser'>Llenado de Sílabo. 
-                                            <?php if ($courses['closure_syllabus']=='C') {?>
-                                                <span class='glyphicon glyphicon-ok-sign text-success'></span>
-                                            <?php }else{?>
-                                                <span class='glyphicon glyphicon-info-sign text-danger'></span>
-                                            <?php }?></h5>
-                                        <h5 class='text-persentage-couser' >Duplicar Sílabo al Curso de: 
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-block btn-primary dropdown-toggle btn-sm" data-toggle="dropdown">
-                                                Seleccione<span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu" role="menu">
-                                                 <?php foreach ($this->data_courses as $key => $value) {
-                                                    if($value['courseid']==$courses['courseid']){?>
-                                                    <li><a class='duplicate-syllabus' perid='<?php echo $this->perid?>' escid='<?php echo $value['escid']?>' courseid='<?php echo $value['courseid']?>' curid='<?php echo $value['curid']?>' turno='<?php echo $value['turno']?>' escido='<?php echo $courses['escid']?>' turnoo='<?php echo $courses['turno']?>'value='<?php echo $value['courseid']?>'><?php echo $value['name_course'];?> | Turno  <?php echo $value['turno']?> | <?php echo $value['specialyti']?></a></li>
-                                                    <?php }}?>
-                                            </ul>
-                                        </div>
-                                    </div>
 
-                                <?php }
-                            }?>
+                <div class="porcentajes">
+                    <p class="titlePorcentaje"><span class="glyphicon glyphicon-info-sign"></span> Progreso del Curso</p>
+                <!--prosentaje de llenado de notas-->
+
+                    <div class="porcentajeOneByOne">
+                        <p class='text-persentage-couser'>Llenado de Notas. 
+                            <?php if ($courses['persetage_notes']== 50 || $courses['persetage_notes']== 100) {?>
+                                <span class='glyphicon glyphicon-ok-sign text-success'></span>
+                            <?php }else{ ?>
+                                <span class='glyphicon glyphicon-exclamation-sign text-danger'></span>
+                            <?php }?>
+                        </p>
+                        <div class="progress-course progress progress-striped active text-center">
+                            <?php echo $courses['persetage_notes'] ?>%
+                            <div class="progress-bar"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courses['persetage_notes']?>%"></div>
+                        </div>
+                    </div>
+
+                    <div class="porcentajeOneByOne">
+                        <p class='text-persentage-couser'>Llenado de Asistencia.
+                            <?php if ($courses['persetage_assit']== 50 || $courses['persetage_assit']== 100) {?>
+                                <span class='glyphicon glyphicon-ok-sign text-success'></span>
+                            <?php }else{ ?>
+                                <span class='glyphicon glyphicon-exclamation-sign text-danger'></span>
+                            <?php }?>
+                        </p>
+                        <div class="progress-course progress progress-striped active text-center">
+                            <?php echo $courses['persetage_notes'] ?>%
+                            <div class="progress-bar progress-bar-danger"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courses['persetage_assit']?>%"></div>
+                        </div>
+                    </div>
+
+                    <?php if ($courses['closure_syllabus']=='C') {
+                        $iconSilaboState = 'ok-sign text-success';
+                        $nameStateSilabo = 'Completo';
+                        $colorStateSilabo = 'backSuccess';
+                    }else{
+                        $iconSilaboState = 'exclamation-sign text-danger';
+                        $nameStateSilabo = 'Incompleto';
+                        $colorStateSilabo = 'backDanger';
+                    }?>
+                    <div class="estadoSilabo">
+                        <p class=''>Estado de Sílabo</p> 
+                        <div class="state <?php echo $colorStateSilabo ?>">
+                            <?php echo $nameStateSilabo ?> <span class='glyphicon glyphicon-<?php echo $iconSilaboState ?>'></span>
+                        </div>
+                    </div>
+                        
+                    <div class="duplicateSilabo">
+                        <p class='text-persentage-couser' >Duplicar Sílabo al Curso de : </p>
+                        <div class="btnDuplicateSilabo">
+                            <button type="button" class="btn btn-primary dropdown-toggle form-control" data-toggle="dropdown">
+                                Seleccione<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                 <?php foreach ($this->data_courses as $key => $value) {
+                                    if($value['courseid']==$courses['courseid']){?>
+                                    <li><a class='duplicate-syllabus' perid='<?php echo $this->perid?>' escid='<?php echo $value['escid']?>' courseid='<?php echo $value['courseid']?>' curid='<?php echo $value['curid']?>' turno='<?php echo $value['turno']?>' escido='<?php echo $courses['escid']?>' turnoo='<?php echo $courses['turno']?>'value='<?php echo $value['courseid']?>'><?php echo $value['name_course'];?> | Turno  <?php echo $value['turno']?> | <?php echo $value['specialyti']?></a></li>
+                                    <?php }}?>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-  </div>
-</div>
+            <?php } ?>
+        </div><!--Curso-->
+        <?php }?>
+    </div>
 </div>
 <?php 
 }
@@ -261,13 +282,13 @@ if ($this->faculty){
             <div class="modal-footer">
                 <button id='cancel'type="button" class="btn btn-danger" data-dismiss="modal" ><span class="glyphicon glyphicon-log-out"></span> Salir</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div><!--/.modal-content-->
+    </div><!--/.modal-dialog-->
+</div><!-- /.modal-->
 
 <div class="modal fade" id="modal-persentage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
-</div><!-- /.modal -->
+</div><!--/.modal -->
 <script>
 
     $('.Btnhorarys').click(function(){

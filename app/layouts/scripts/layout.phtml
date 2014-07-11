@@ -13,11 +13,24 @@
 		<?php echo $this->headScript()?>
 	</head>
 	<body>
-		<div id="loading_overlay">
+		<div id="loading_overlay" class="classLoading_Overlay">
 			<div class="loading_message round_bottom">Cargando....</div>
+			<div class="loading_allBlack"></div>
 		</div>
 		<?php echo $this->render('header.phtml')?>
-	  	<nav  class="navbar navbar-default" role="navigation">
+		<div class="navigationLayout">
+		    <?php echo $this->placeholder('Textnav') ?>
+		    <?php echo $this->placeholder('Btnnav') ?>
+			<?php echo $this->render('_search.phtml') ?>
+			
+		    <?php echo $this->placeholder('BtnSVCRight') ?>
+		    <?php echo $this->placeholder('BtnSVCLeft') ?>
+		</div>
+		<div class="contentPagesMain">
+			<?php echo $this->layout()->content ?>
+		</div>
+
+	  	<!--<nav  class="navbar navbar-default" role="navigation">
 			<div id='header-info' class='container'>
 				<div class="row" id="nav-secundary">
 					<div class="col-md-12">
@@ -34,12 +47,11 @@
 				</div>
 				
 			</div>	
-		</nav>
-		<div id="wrapper">
+		</nav>-->
+		<!--<div id="wrapper">
 		    <div class="container" id='container_layout'>
-					<?php echo $this->layout()->content ?>
 		    </div>
-		</div>
+		</div>-->
 		<?php echo $this->render('footer.phtml') ?>
 	</body>
 </html>
@@ -48,7 +60,7 @@
 
 		function loadingOverlay(){
 			$("#loading_overlay .loading_message").delay(1000).fadeOut(function(){}); 
-			$("#loading_overlay").delay(500).fadeOut();  
+			$("#loading_overlay").delay(500).fadeOut();
 		}
 		
 		window.onload = function () {

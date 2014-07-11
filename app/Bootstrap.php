@@ -10,8 +10,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $view->doctype('XHTML1_STRICT');
             $view->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
             
-            $view->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.css')
-            ->headLink()->appendStylesheet('/external_library/bootstrap/css/layout.css')
+            $view->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.min.css')
+            ->headLink()->appendStylesheet('/css/layout.css')
             ->headLink()->appendStylesheet('/external_library/jquery-ui/jquery.ui.datepicker.css');
 
             $view->headScript()->prependFile('/external_library/jquery-transit/jquery.transit.min.js')
@@ -53,11 +53,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $layout = $this->getResource('layout');
         $view = $view = $layout->getView();
         $view->placeholder('Textnav')
-                ->setPrefix("<h4 class=\"text-nav\">\n")
-                ->setSeparator("</h4>");
+                ->setPrefix("<p class=\"navigationTitleMainLayout\">\n")
+                ->setPostfix("</p>");
         $view->placeholder('Btnnav')
-                ->setPrefix("<div class=\"pull-left\">\n")
-                ->setSeparator("</div>");
+                ->setPrefix("<div class=\"navigationButtonsMainLayout\">\n")
+                ->setPostfix("</div>");
+
+        $view->placeholder('BtnSVCRight')
+                ->setPrefix("<div class=\"navigationButtonsSVCLayoutRight\">\n")
+                ->setPostfix("</div>");
+
+        $view->placeholder('BtnSVCLeft')
+                ->setPrefix("<div class=\"navigationButtonsSVCLayoutLeft\">\n")
+                ->setPostfix("</div>");
     }
     
     

@@ -1,9 +1,19 @@
 
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Editar Distribución');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution/index/anio/'.$this->dataforUpdate['anio'].'" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a></a>
-	<a href="##" id="save" class="btn btn-success">Guardar</a>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution/index/anio/'.$this->dataforUpdate['anio'].'" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+	');?>
 
 <!--Mensajes-->
+<div class="row">
+	<div class="col-md-2 col-md-offset-8">
+		<a href="##" id="save" class="btn btn-success form-control" style="border-radius:0;">Guardar</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<hr>
+	</div>
+</div>
 <div class="row-fluid">
 	<div class="col-md-8 col-md-offset-2">
 		<div id="missing" class="alert alert-warning hidden">
