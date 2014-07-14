@@ -1,37 +1,24 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Distribución Academica');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/distribution/distribution" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
 
 <div style="margin-top:20px">
     <ul class="nav nav-pills nav-justified" id="distribution">
         <li class="active">
-            <a id="courses" href="#datcourses"><h4 class="text-info">Paso 1</h4></a>
+            <a id="courses" href="#datcourses"><h4 class="text-info">Paso 1 <br><small>(Lista de Asignaturas)</small></h4></a>
         </li>
         <li>
-            <a id="teachers" href="#datteachers"><h4 class="text-info">Paso 2</h4></a>
+            <a id="teachers" href="#datteachers"><h4 class="text-info">Paso 2 <br><small>(Lista de Docentes)</small></h4></a>
         </li>
         <li>
-            <a id="view" href="#datview"><h4 class="text-info">Paso 3</h4></a>
+            <a id="view" href="#datview"><h4 class="text-info">Paso 3 <br><small>(Vista Previa)</small></h4></a>
         </li>
     </ul>
 	<div class="tab-content">
         <div id="datcourses" class="tab-pane fade in active"></div>
         <div id="datteachers" class="tab-pane fade"></div>
         <div id="datview" class="tab-pane fade">
-            <br>
             <hr>
-            <div class="row">
-                <div class="col-md-9 col-md-offset-1">
-                    <blockquote>
-                        <h4>Imprimir <span class="text-info">Distribución</span></h4>
-                    </blockquote>
-                </div>
-                <div class="col-md-1">
-                    <blockquote>
-                        <h4 class="text-info"><span class="glyphicon glyphicon-print"></span></h4>
-                    </blockquote>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-md-5 col-md-offset-1">
                     <div class="jumbotron">

@@ -479,7 +479,7 @@ var syllabus = {
 			type: 'POST',
 			data:$("#frmSyllabus").serialize(),
 			success: function ($data){
-				if(f){
+				if($data.status){
 					send_units = false
 					$.get('/syllabus/syllabus/units',$params,syllabus.modal_content)
 				}

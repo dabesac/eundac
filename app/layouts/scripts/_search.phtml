@@ -1,42 +1,18 @@
 <?php $auth = Zend_Auth::getInstance();
-    if (!$auth->hasIdentity()) {
-        exit();
-    }
-    $sesion = $auth->getStorage()->read();
-    $rol = $sesion->rol['rid']; ?>
- <?php if ($rol != 'AL' && $rol !='DC'){ ?>
- <div class="col-lg-7 pull-right">
-    <form action="/profile/search" method='post'>
-      <table >
-        <th>
-         <select name='rid' class="btn btn-default dropdown-toggle">
-              <option value='AL'>Alumno</option>
-              <option value='DC'>Docente</option>
-              <option value='EG'>Egresados</option>
+   if (!$auth->hasIdentity()) {
+     exit();
+   }
+   $sesion = $auth->getStorage()->read();
+   $rol = $sesion->rol['rid']; ?>
+<?php if ($rol != 'AL' && $rol !='DC'){ ?>
+      <form action="/profile/search" method='post'>
+         <select name='rid' class="form-control">
+            <option value='AL'>Alumno</option>
+            <option value='DC'>Docente</option>
+            <option value='EG'>Egresados</option>
          </select>
-        </th>
-        <th><input type="text" class="form-control" name='uid'style="width : 150px;"></th>
-        <th><button class="btn btn-warning" type="submit" name='enviar'><span class='glyphicon glyphicon-search'></span></button></th>
-      
-      </table>
-
-
-      <!--<div class="input-group-btn">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Usuario <span class="caret"></span></button>
-          <ul class="dropdown-menu">
-            <li><a href="#">Alumno</a></li>
-            <li><a href="#">Docente</a></li>
-            <li><a href="#">Egresado</a></li>
-          </ul>
-        </div>
-        <input type="text" class="form-control">
-        <span class="input-group-btn">
-          <button class="btn btn-warning" type="button"><span class='glyphicon glyphicon-search'></span></button>
-        </span> -->
-
-
-      </div><!-- /input-group -->
-    </form>
-</div><!-- /.col-lg-6 -->
+         <input type="text" class="form-control" name='uid' placeholder="Codigo o Apellido">
+         <button class="btn btn-warning btnSubmitLayout" type="submit" name='enviar'><span class='glyphicon glyphicon-search'></span></button>
+      </form>
 <?php }?>
 
