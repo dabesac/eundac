@@ -82,13 +82,14 @@ class Syllabus_BibliotecaController extends Zend_Controller_Action {
         //dataBases
         $specialityDb = new Api_Model_DbTable_Speciality();
 
-        $escid = base64_decode($this->_getParam('escid'));
+        $escid = $this->_getParam('escid');
+        $escidExplode = explode('-', $escid);
         $eid   = $this->sesion->eid;
         $oid   = $this->sesion->oid;
         
         $where = array( 'eid'    => $eid,
                         'oid'    => $oid,
-                        'parent' => $escid,
+                        'parent' => base64_decode($escidExplode[0]),
                         'state'  => 'A' );
 
         $attrib = array('escid', 'name', 'subid');
@@ -133,11 +134,95 @@ class Syllabus_BibliotecaController extends Zend_Controller_Action {
 
             $dataCourses[$c]['courseid']     = $course['courseid'];
             $dataCourses[$c]['curid']        = $course['curid'];
+            $dataCourses[$c]['escid']        = $course['escid'];
+            $dataCourses[$c]['subid']        = $course['subid'];
+            $dataCourses[$c]['perid']        = $course['perid'];
             $dataCourses[$c]['nameCourse']   = $nameCourse[0]['name'];
+            $dataCourses[$c]['turno']        = $course['turno'];
             $dataCourses[$c]['semestre']     = $nameCourse[0]['semid'];
             $dataCourses[$c]['bibliografia'] = $course['sources'];
         }
         $this->view->dataCourses = $dataCourses;
+    }
+
+    public function printAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //dataBases
+        $courseDb     = new Api_Model_DbTable_Course();
+        $syllabusDb   = new Api_Model_DbTable_Syllabus();
+        $specialityDb = new Api_Model_DbTable_Speciality();
+        $facultyDb    = new Api_Model_DbTable_Faculty();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        $dataSilabo = explode('-', base64_decode($this->_getParam('datasilabo')));
+
+        $escid    = $dataSilabo[0];
+        $subid    = $dataSilabo[1];
+        $courseid = $dataSilabo[2];
+        $curid    = $dataSilabo[3];
+        $turno    = $dataSilabo[4];
+        $perid    = $dataSilabo[5];
+
+        $dataCourse['courseid'] = $courseid;
+        $dataCourse['curid']    = $curid;
+        $dataCourse['turno']    = $turno;
+        $dataCourse['perid']    = $perid;
+
+        $where = array( 'eid'      => $eid,
+                        'oid'      => $oid,
+                        'escid'    => $escid,
+                        'subid'    => $subid,
+                        'courseid' => $courseid,
+                        'curid'    => $curid,
+                        'turno'    => $turno,
+                        'perid'    => $perid );
+
+        $attrib = array('sources');
+
+        $preDataSilabo = $syllabusDb->_getFilter($where, $attrib);
+
+        $dataCourse['bibliografia'] = $preDataSilabo[0]['sources'];
+
+        //nombre del Curso
+        $where = array( 'eid'      => $eid,
+                        'oid'      => $oid,
+                        'courseid' => $courseid,
+                        'curid'    => $curid );
+
+        $attrib = array('name', 'semid');
+
+        $nameCourse = $courseDb->_getFilter($where, $attrib);
+
+        $dataCourse['nameCourse'] = $nameCourse[0]['name'];
+        $dataCourse['semestre']   = $nameCourse[0]['semid'];
+
+        //datos de la Escuela
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+
+        $attrib = array('name', 'facid');
+
+        $dataEscuelas = $specialityDb->_getFilter($where, $attrib);
+
+        $dataCourse['escid']       = $escid;
+        $dataCourse['nameEscuela'] = $dataEscuelas[0]['name'];
+
+        //data Facultad        
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'facid' => $dataEscuelas[0]['facid'] );
+        $attrib = array('name', 'facid');
+
+        $dataFacultad = $facultyDb->_getFilter($where, $attrib);
+        $dataCourse['facid']        = $dataEscuelas[0]['facid'];
+        $dataCourse['nameFacultad'] = $dataFacultad[0]['name'];
+
+        $this->view->dataCourse = $dataCourse;
     }
 }
 

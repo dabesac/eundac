@@ -78,12 +78,27 @@
 						perid = $(this).val();
 					});
 
+		$('#anio').on('change', function(){
+			$('#faculty').val('');
+			$('#school').html('<option value="">Escuelas</option><option value="">Primero seleccione una escuela</option>');
+			$('#speciality').html('<option value="">Especialidades</option><option value="">Primero seleccione una escuela</option>');
+
+			anio = $(this).val();
+			$('#period').html('<option value="">Cargando....</option>')
+						.load('/syllabus/biblioteca/periods/anio/' + anio, function(){
+							perid = $(this).val();
+						});
+
+			$('#idDataCursos').html('');
+		});
+
 		$('#faculty').on('change', function(){
 			facid = $(this).val();
 			$('#school').html('<option value="">Cargando...</option>')
 						.load('/syllabus/biblioteca/listschools/facid/' + facid);
 
 			$('#speciality').html('	<option value="">Especialidades</option><option value="">Primero seleccione una escuela</option>');
+			$('#idDataCursos').html('');
 		});
 
 		$('#school').on('change', function(){
@@ -95,8 +110,19 @@
 								if (existenEspecialidades != '_') {
 									$('#idDataCursos')	.html('<br><center><img src="/img/spinner.gif" alt="Cargando..." /></center>')
 														.load('/syllabus/biblioteca/listarcursos/datasearch/' + datasearch);
-								}; 
+								}else{
+									$('#idDataCursos').html('');
+								} 
 							});
+		});
+
+		$('#speciality').on('change', function(){
+			escid = $(this).val();
+			if (escid != '' && escid != '_') {
+				datasearch = perid + '-' + escid
+				$('#idDataCursos')	.html('<br><center><img src="/img/spinner.gif" alt="Cargando..." /></center>')
+									.load('/syllabus/biblioteca/listarcursos/datasearch/' + datasearch);
+			};
 		});
 	});
 </script>
