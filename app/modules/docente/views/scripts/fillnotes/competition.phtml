@@ -57,7 +57,7 @@ if($this->partial==2) {
 $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> '. $partial_text.' ' .$infocourse['name'].' Turno '.$this->turno.'');
 
  if ($this->state_record == 'A' || $this->state_record == 'B') { 
-        $this->placeholder('Btnnav')->append('<a href="/docente/notas/perid/'.base64_encode($this->perid).'" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+        $this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->perid).'" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
                             ');
 
         $this->placeholder('BtnSVCLeft')->append('
@@ -67,12 +67,12 @@ $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></
             ');
 }?>
 	
+<br><br>
 <!-- alerts-->
 <div class='row' id='cont-alerts'>
 
 </div>
 <!-- end alerts-->
-
 <?php if($this->students){
 	if($this->state_syllabus == 'C'){ ?>
 <!-- data students-->
