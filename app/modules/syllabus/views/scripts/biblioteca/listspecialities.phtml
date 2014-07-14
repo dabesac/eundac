@@ -1,0 +1,8 @@
+<?php if ($this->dataEspecialidades): ?>
+	<option value="_">Especialidades</option>
+	<?php foreach ($this->dataEspecialidades as $especialidad): ?>
+		<option value="<?php echo base64_encode($especialidad['escid']).'-'.base64_encode($especialidad['subid']) ?>"><?php echo $especialidad['name'] ?></option>
+	<?php endforeach ?>
+<?php else: ?>
+	<option value="">No tiene especialidades</option>
+<?php endif ?>
