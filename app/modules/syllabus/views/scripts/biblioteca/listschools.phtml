@@ -1,0 +1,8 @@
+<?php if ($this->dataEscuelas): ?>
+	<option value="">Escuelas</option>
+	<?php foreach ($this->dataEscuelas as $escuela): ?>
+		<option value="<?php echo base64_encode($escuela['escid']).'-'.base64_encode($escuela['subid']) ?>"><?php echo $escuela['name'] ?></option>
+	<?php endforeach ?>
+<?php else: ?>
+	<option value="">No existen escuelas</option>
+<?php endif ?>

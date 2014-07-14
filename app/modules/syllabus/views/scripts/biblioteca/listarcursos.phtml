@@ -1,0 +1,21 @@
+<?php if ($this->dataCourses): ?>
+	<table class="table table-bordered table hover">
+		<tr>
+			<th class="text-center col-md-1">#</th>
+			<th class="text-center col-md-1">Codigo</th>
+			<th>Curso</th>
+			<th class="text-center col-md-1">Semestre</th>
+		</tr>
+		<?php foreach ($this->dataCourses as $c => $course): ?>
+		<tr>
+			<td class="text-center"><?php echo $c + 1 ?></td>
+			<td class="text-center"><?php echo $course['courseid'] ?></td>
+			<td><?php echo $course['nameCourse'] ?></td>
+			<td class="text-center"><?php echo $course['semestre'] ?></td>
+			<td class="text-center"><a href="##"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+		</tr>
+		<?php endforeach ?>
+	</table>
+<?php else: ?>
+	<h4 class="text-muted"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> No hay registros <span class="text-danger">de Sílabos</span></h4>
+<?php endif ?>

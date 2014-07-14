@@ -15,78 +15,66 @@
 ?>
 <input type="hidden" id="rol" value="<?php echo $rol ?>">
 <input type="hidden" id="fullProfile" value="<?php echo $sesion->fullProfile->success ?>">
-<nav id="undac-menu" class="navbar navbar-default" role="navigation">
-    <div class="container">
-
+<nav id="undac-menu" class="navbar navbar-default navLayout" role="navigation">
       <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/<?php echo $module?>"><img src="/img/logo_03.png" alt=""></a>
-      </div>
-
-
-      <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li>
-                    <p>Bienvenido a UNDAC 2.0, <?php echo $last_name?></p>
-                    <p>Adscrito Escuela <?php echo $speciality?></p>
-                </li>
-            </ul>
-        
-            <ul class="nav navbar-nav navbar-right">
-		        <li class="ver"><a href="/<?php echo $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
-                <li class="ver"><a href="/profile/<?php echo ($rol=='AL')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Ver perfil </a></li>
-                <li class="ver dropdown" id='li_change'>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cambiar clave <b class="caret"></b></a>
-                </li>          
-                <div class="dropdown-menu" id='form-change'>
-                    <div class="form-group" data-toggle="tooltip" title="Ingrese clave correcta" data-placement='left'>
-                        <input type="password" class="form-control" name="password_actual" id="password_actual" placeholder="Contraseña Actual">
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control" name="password_change" id="password_change" placeholder="Nueva Contraseña">
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control" name="password_verify" id="password_verify" placeholder="Repetir Nueva Contraseña">
-                    </div>
-                    <button 
-                        type="submit" id='valida_password' class="btn btn-taipa btn-block">Cambiar</button>
+    <div class="btnLogo">
+        <a href="/<?php echo $module?>"><img src="/img/logo_03.png" alt=""></a>
+    </div>
+    <div class="welcomeDiv">
+        <p>Bienvenido a UNDAC 2.0, <?php echo $last_name?></p>
+        <p>Adscrito Escuela <?php echo $speciality?></p>
+    </div>
+    <div class="buttomsLayout">
+        <ul>
+            <li><a href="/<?php echo $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
+            <li><a href="/profile/<?php echo ($rol=='AL')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Mi Perfil </a></li>
+            <li><a href="##"><span class="glyphicon glyphicon-envelope"></span> Notificaciones</a></li>
+            <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> <b>Cerrar Sessión</b></a></li>
+            <!--<li class="ver dropdown" id='li_change'>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cambiar clave <b class="caret"></b></a>
+            </li>          
+            <div class="dropdown-menu" id='form-change'>
+                <div class="form-group" data-toggle="tooltip" title="Ingrese clave correcta" data-placement='left'>
+                    <input type="password" class="form-control" name="password_actual" id="password_actual" placeholder="Contraseña Actual">
                 </div>
-                <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> <b>Cerrar Sessión</b></a></li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
+                <div class="form-group">
+                    <input type="password" class="form-control" name="password_change" id="password_change" placeholder="Nueva Contraseña">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" name="password_verify" id="password_verify" placeholder="Repetir Nueva Contraseña">
+                </div>
+                <button 
+                    type="submit" id='valida_password' class="btn btn-taipa btn-block">Cambiar</button>
+            </div>-->
+        </ul>
     </div>
 </nav>
 <script type="text/javascript" src='/external_library/md5/md5.js'></script>
 <script type="text/javascript" src='/external_library/md5/change.js'></script>
 <script>
     // $(document).ready(PI.onReady);
-    var rol = $('#rol').val();
-    if (rol == 'AL' || rol == 'EG') {
-      var fullProfile = $('#fullProfile').val();
-      var allCurrentUrl = window.location.pathname;
-      var currentUrl = allCurrentUrl.substr(0, 23);
-      if (fullProfile == 'no' && currentUrl != '/profile/public/student') {
-        $(location).attr('href', '/profile/public/student');
-      };
-    };
+    $(function(){
+        var rol = $('#rol').val();
+        if (rol == 'AL' || rol == 'EG') {
+          var fullProfile = $('#fullProfile').val();
+          var allCurrentUrl = window.location.pathname;
+          var currentUrl = allCurrentUrl.substr(0, 23);
+          if (fullProfile == 'no' && currentUrl != '/profile/public/student') {
+            $(location).attr('href', '/profile/public/student');
+          };
+        };
 
-    $(window).scroll(function(){
-        var scroll = $(window).scrollTop();
-        if( scroll >= 106){
-            $("#header-info").addClass('data-header-info');
-            $("#nav-secundary").addClass('info-background');
-        }
-        else{
-            
-            $("#header-info").removeClass('data-header-info');
-            $("#nav-secundary").removeClass('info-background');
-        }
+        $(window).scroll(function(){
+            var scroll = $(window).scrollTop();
+            if( scroll >= 106){
+                $("#header-info").addClass('data-header-info');
+                $("#nav-secundary").addClass('info-background');
+            }
+            else{
+                
+                $("#header-info").removeClass('data-header-info');
+                $("#nav-secundary").removeClass('info-background');
+            }
+        });
     });
  </script>
