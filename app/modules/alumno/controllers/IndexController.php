@@ -16,7 +16,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
     public function indexAction()
     {
         try {
-            print_r($this->sesion);
             $where['uid']=$this->sesion->uid;
             $where['eid']=$this->sesion->eid;
             $where['oid']=$this->sesion->oid;
