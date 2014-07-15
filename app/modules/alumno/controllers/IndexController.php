@@ -16,6 +16,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
     public function indexAction()
     {
         try {
+            print_r($this->sesion);
             $where['uid']=$this->sesion->uid;
             $where['eid']=$this->sesion->eid;
             $where['oid']=$this->sesion->oid;
@@ -33,7 +34,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $dbcursos=new Api_Model_DbTable_Course();
             $datcursos=$dbcursos->_getCountCoursesxSemester($where);
             $cur=$dbcursos->_getCountCoursesxApproved($where);
-            echo base64_encode("084270303314A");
+            //echo base64_encode("084270303314A");
 
             $data_all = array();
             $data_rel = array();
