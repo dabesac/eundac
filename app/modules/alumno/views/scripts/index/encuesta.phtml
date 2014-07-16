@@ -1,26 +1,34 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" type="text/css" href="/css/bootstrap/bootstrap-responsive.min.css"> -->
-    <link href="/css/style.css" type="text/css" rel="stylesheet" />        
-    <script type="text/javascript" src="/external/jquery/jquery-1.9.1.js"></script>
+    <meta charset="UTF-8">
+    <title>Encuesta</title>
+    <link rel="stylesheet" href="/external_library/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/encuesta.css">
+    <link href="http://fonts.googleapis.com/css?family=Cuprum:400italic,400,700italic,700" rel="stylesheet" type="text/css">
 
-    <script src="/external/js/bootstrap.min.js"></script>      
-
+    <script type="text/javascript" src="/js/jquery-1.11.0.js"></script>
+    <script type="text/javascript" src="/external_library/bootstrap/js/bootstrap.js"></script>
 </head>
-<?php //print_r($this->cursos);
-$numcurso=count($this->cursos);
-
-?>
-
 <body>
+<?php //print_r($this->cursos);
+    $numcurso=count($this->cursos);
+?>
 <?php if ($this->cursos): ?>
-    <div class="container" >
+    <header>
+        <p class="pHeader"><span class="glyphicon glyphicon-bookmark"></span> <?php echo $this->encuesta['title']?></p>
+        <a href="/logout" class="btnClose">
+            Salir, no deseo rellenar la encuesta en este momento
+            <div class="mensageAviso">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                <p>Recuerde que la encuesta es obligatoria, tiene que rellenarla si desea entrar la sistema.</p>
+            </div>
+        </a>
+    </header>
+    <!--<div class="container" >
     <div id="contenedor-encuesta"  >
         <div class="alert alert-info">
-            <center><p style="font-size: 18px;font-weight: bold"><?php echo $this->encuesta['title']?></p></center>
+            <center><p style="font-size: 18px;font-weight: bold"></p></center>
             <center><p style="font-size: 13px"><?php echo "Objetivo: ".$this->encuesta['objective']?><b style="color: red">
             LA ENCUESTA ES PERSONAL Y ANONIMA</b></p></center>
             <div style="clear:both"></div>
@@ -102,26 +110,27 @@ $numcurso=count($this->cursos);
 <?php else: ?>
     <h2 class="text-center"><span class="text-muted"><strong>Encuesta </strong></span>No Se Matriculo a Este Periodo</h2>
 <?php endif ?>
-</body>
+-->
+    <script>
+        $(function(){
+            /*$("#enviarencuesta").click(function(e){
+          
+            var x=0;
+            var y=0;
+            //alert("<?php echo $f?>");
 
-<script>
-        $("#enviarencuesta").click(function(e){
-      
-        var x=0;
-        var y=0;
-        //alert("<?php echo $f?>");
-
-        for(x=1;x<=<?php echo $f;?>;x++){
-            var $elegido =$("input[name=registro_"+x+"]:checked");
-            if (! $elegido.val())
-                 y=1;       
-        }
-        if (y==1){
-            alert("Debe de responder todas las respuestas.");
-            e.preventDefault();
-           
-        }
+            for(x=1;x<=<?php echo $f;?>;x++){
+                var $elegido =$("input[name=registro_"+x+"]:checked");
+                if (! $elegido.val())
+                     y=1;       
+            }
+            if (y==1){
+                alert("Debe de responder todas las respuestas.");
+                e.preventDefault();
+               
+            }
+            });*/
         });
-    
-</script>
+    </script>
+</body>
 </html>

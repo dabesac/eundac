@@ -22,7 +22,7 @@ if ($this->form) { ?>
 			</tr>
 			<tr>
 				<th>Periodo: </th>
-				<td colspan="3"><?php echo $this->form->perid?></td>
+				<td colspan="3"><input type="text" class="form-control" name="perid" value="<?php echo $this->data_poll['perid'] ?>" readonly></td>
 			</tr>
 			<tr>
 				<th>Aplicar Encuesta a Todos: </th>
@@ -42,7 +42,8 @@ if ($this->form) { ?>
 		window.location.reload();
 	};
 
-    $("#formPoll").submit(function(){
+    $("#formPoll").submit(function(e){
+    	e.preventDefault();
             $.ajax({
                 type: 'POST',
                 url: $(this).attr('action'),
