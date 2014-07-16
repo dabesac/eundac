@@ -21,7 +21,7 @@ class Poll_IndexController extends Zend_Controller_Action {
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $poll = new Api_Model_DbTable_Polll();
-            $all_data = $poll->_getAll($where=array('eid' => $eid, 'oid' => $oid), $order='', $start=0, $limit=0);
+            $all_data = $poll->_getAll($where=array('eid' => $eid, 'oid' => $oid), $order=array('perid DESC'), $start=0, $limit=0);
             $this->view->poll = $all_data;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
@@ -43,6 +43,10 @@ class Poll_IndexController extends Zend_Controller_Action {
                     $formData['eid'] = $eid;
                     $formData['oid'] = $oid;
                     $formData['register'] = $this->sesion->uid;
+
+                    $formData['published'] = date('Y-m-d', strtotime($formData['published']));
+                    $formData['closed']    = date('Y-m-d', strtotime($formData['closed']));
+
                     $poll = new Api_Model_DbTable_Polll();
                     $poll->_save($formData);
                     $this->view->success=1;
@@ -64,20 +68,19 @@ class Poll_IndexController extends Zend_Controller_Action {
             $this->view->pollid = $pollid;
             $poll = new Api_Model_DbTable_Polll();
             $data_poll = $poll->_getOne($data=array('eid' => $eid, 'oid' => $oid, 'pollid' => $pollid));
+            $this->view->data_poll = $data_poll;
             $form = new Poll_Form_Poll();
+            $form->populate($data_poll);
+            $this->view->form=$form;
+
             if ($this->getRequest()->isPost()) {
                 $formData = $this->getRequest()->getPost();
-                if ($form->isValid($formData)){
-                    $pk = array('eid' => $eid, 'oid' => $oid, 'pollid' => $formData['pollid']);
-                    $poll->_update($formData,$pk);
-                    $this->view->success=1;
-                }else{
-                    $form->populate($formData);
-                    $this->view->form=$form;
-                }
-            }else{
-                $form->populate($data_poll);
-                $this->view->form=$form;
+
+                $pk = array('eid' => $eid, 'oid' => $oid, 'pollid' => $formData['pollid']);
+                $formData['published'] = date('Y-m-d', strtotime($formData['published']));
+                $formData['closed']    = date('Y-m-d', strtotime($formData['closed']));
+                $poll->_update($formData,$pk);
+                $this->view->success=1;
             }
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
