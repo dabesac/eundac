@@ -67,7 +67,7 @@ class Report_Form_Filter extends Zend_Form{
         $x->setAttrib('class','form-control'); 
         $x->setAttrib("style","height:20px;width:20px ");
 
-        if ($sesion->rid == 'RC' || $sesion->rid=='VA' || $sesion->rid=='PD')
+        if ($sesion->rid == 'RC' || $sesion->rid=='VA' || $sesion->rid=='PD' || $sesion->rid=='ES')
         {
             $x->addMultiOptions(array('xfac' => 'Totales X Facultades','xesc' => 'Totales X Escuelas','xsed' => 'Totales X Sedes',
             ))->setSeparator('');
