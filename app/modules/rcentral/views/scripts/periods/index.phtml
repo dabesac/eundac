@@ -1,7 +1,9 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-transfer"></span>   GESTIONAR PERIODO');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/admin" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar</a><a id="newperiod" href="#" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Nuevo</a>
-                            ');?>
-
+<?php $this->placeholder('Btnnav')->append('<a href="/admin" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar</a>');?>
+<div style="text-align:right;">
+    <a id="newperiod" href="#" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Nuevo</a>
+</div>
+    </br>
         <center><select class="form-control" id="lanios" name="lanios" style = 'height:35px;width:400px'>
             <option  value="">Seleccione..</option>
             <?php 

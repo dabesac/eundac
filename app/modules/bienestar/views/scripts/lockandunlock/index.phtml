@@ -1,8 +1,9 @@
+<?php 
+    $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-lock"></span> BLOQUEO Y DESBLOQUEO DE CÓDIGOS');
+    $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
+?>
 <form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltro" action="/bienestar/lockandunlock/getuser/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
 	<table class="table table-condensed table-striped">
-	    <tr>
-	        <th style="font-size:25px;" colspan='3'><center><span class="glyphicon glyphicon-lock"></span> BLOQUEO Y DESBLOQUEO DE CÓDIGOS</center></th>
-	    </tr>
 	    <tr>
 	        <td class='col-lg-5'><p style='float:right; font-size:13px'>Código del Alumno: </p></td>
 	        <td class='col-lg-3'><div style='width: 200px'><?php echo $this->fm->uid ?></td>
