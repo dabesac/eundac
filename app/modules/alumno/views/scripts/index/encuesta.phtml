@@ -11,12 +11,32 @@
     <script type="text/javascript" src="/external_library/bootstrap/js/bootstrap.js"></script>
 </head>
 <body>
-<?php //print_r($this->cursos);
-    $numcurso=count($this->cursos);
+<?php $auth = Zend_Auth::getInstance();
+
+    if (!$auth->hasIdentity()) {
+        exit();
+    }
+
+    $sesion = $auth->getStorage()->read();
+    $last_name = $sesion->infouser['fullname'];
+    $speciality = $sesion->speciality->name;
+    $module = $sesion->rol['module'];
+    $rol = $sesion->rid;
+    $uid = $sesion->uid;
+    $pid = $sesion->pid;
+    
+?>
+<?php if ($sesion->encuesta->existeEncuesta == 'Yes'): ?>
+    <input type="hidden" id="rellenoEncuesta" value="<?php echo $sesion->encuesta->rellenoEncuesta ?>">
+<?php endif ?>
+<?php
+    $numcurso  = count($this->cursos);
+    $cantFilas = ceil($numcurso / 3);
 ?>
 <?php if ($this->cursos): ?>
+    <input type="hidden" id="inputCantFilas" value="<?php echo $cantFilas ?>">
     <header>
-        <p class="pHeader"><span class="glyphicon glyphicon-bookmark"></span> <?php echo $this->encuesta['title']?></p>
+        <p class="pHeader"><span class="glyphicon glyphicon-bookmark"></span> Encuesta</p>
         <a href="/logout" class="btnClose">
             Salir, no deseo rellenar la encuesta en este momento
             <div class="mensageAviso">
@@ -25,111 +45,127 @@
             </div>
         </a>
     </header>
-    <!--<div class="container" >
-    <div id="contenedor-encuesta"  >
-        <div class="alert alert-info">
-            <center><p style="font-size: 18px;font-weight: bold"></p></center>
-            <center><p style="font-size: 13px"><?php echo "Objetivo: ".$this->encuesta['objective']?><b style="color: red">
-            LA ENCUESTA ES PERSONAL Y ANONIMA</b></p></center>
-            <div style="clear:both"></div>
-        </div>
-        
-            <form class="form-vertical" name="formEncuesta" action="/alumno/index/guardar/" method="post">
-                <table class="table table-hover table-bordered table-condensed span10" class="table table-striped">            
-                    <thead>
-                        <tr>
-                            <th colspan="2" style="font-size:14px"><center>PREGUNTAS</center></th>
-                            <?php
-                            foreach ($this->cursos as $curso){
-                                print("<th style='font-size:14px'>".$curso['name']."</th>");
-                            }                        
-                            ?>
-                     
-                		</tr>
-                    </thead>
-                    <tbody>
-                    <?php 
-                    //print_r($this->preguntas);
-                    $ff_=0;
-                    foreach ($this->preguntas as $pregunta){
-                        $ff_++;
-                        ?>
-                        <tr>
-                            <td ><?php echo $ff_?></td>
-                            <td style="width:50%"><?php echo $pregunta['question'];?></td>               
-                            <?php                         
-                            $eid = $pregunta['eid'];
-                            $oid = $pregunta['oid'];
-                            $qid = $pregunta['qid'];
+    <article>
+        <p class="text-muted"><span class="glyphicon glyphicon-info-sign text-danger"></span> Recuerde que la encuesta es personal y anonima, las preguntas las responderas por cada curso. <strong class="text-danger">Cuando hayas terminado con toda la encuesta dale a registrar encuesta en la parte de abajo.</strong></p>
+        <hr>
+        <p class="text-danger"><span class="glyphicon glyphicon-bookmark"></span> Título de la Encuesta : <span class="text-muted"><?php echo $this->encuesta['title']?></span></p>
+        <p class="text-danger"><span class="glyphicon glyphicon-screenshot"></span> Objetivo de la Encuesta : <span class="text-muted"><?php echo $this->encuesta['objective']?></span></p>
 
-                            $alternativas = new Api_Model_DbTable_PollAlternatives();
-                            
-                            foreach ($this->cursos as $curso){                        
-                           
-                			$where=array('eid'=>$eid,'oid'=>$oid,'qid'=>$qid);
-                            $regalternativas = $alternativas->_getAll($where);
-                            $f++;
-                            ?>
-                	
-                            <td style="width:40%">
+        <form class="form-vertical" name="formEncuesta" action="/alumno/index/guardar/" method="post">
+        <?php for ($i=0; $i < $cantFilas; $i++) { ?>
+            <table id="headerFixed<?php echo $i ?>" class="table headerPreguntasRelative">
+                <tr>
+                    <th class="text-center thPreguntas">Pregunta</th>
+                <?php foreach ($this->cursos as $cCursos => $curso){ ?>
+                    <?php if ($cCursos >= ($i * 3) and $cCursos < (($i + 1)* 3)): ?>
+                        <th class="text-center thCurso"> <?php echo $curso['name'] ?></th>
+                    <?php endif ?>
+                <?php } ?>
+                </tr>
+            </table>
+
+            <table id="tabla<?php echo $i ?>" class="table">            
+                <?php foreach ($this->preguntas as $cPreguntas => $pregunta){ ?>
+                    <tr>
+                        <td class="tdNamePregunta">
+                            <div class="numeracion">
+                                <?php echo $cPreguntas + 1 ?>
+                            </div>
+                            <div class="question">
+                                <?php echo $pregunta['question'];?>
+                            </div>
+                        </td>
+
+                        <?php                         
+                        $eid = $pregunta['eid'];
+                        $oid = $pregunta['oid'];
+                        $qid = $pregunta['qid'];
+
+                        $alternativas = new Api_Model_DbTable_PollAlternatives();
+                        
+                        foreach ($this->cursos as $cCursopregunta => $curso){   
+                        $where=array('eid'=>$eid,'oid'=>$oid,'qid'=>$qid);
+                        $regalternativas = $alternativas->_getAll($where);
+                        ?>
+                        
+                        <?php if ($cCursopregunta >= ($i * 3) and $cCursopregunta < (($i + 1)* 3)): ?>
+                            <td class="tdCurso">
                                 <div class="control-group">             
                                     <div class="controls" >
-                                        <?php 
-                                        $g=0;
-                                        foreach ($regalternativas as $alternativa){
-                                            $ff = ($g=='0')?"":"";
-                                        ?>
-                                            <label style="font-size:13px" class="radio"> <input <?php echo $ff; ?> type="radio" name="registro_<?php echo $f?>" value="<?php echo $pregunta['qid']."-".$alternativa['atlid'].";--;curid:".$curso['curid']."-courseid:".$curso['courseid']."-turno:".$curso['turno'];?>" ><?php echo $alternativa['alternative']?></label>
-                                        <?php 
-                                        $g++;
-                                        } 
-                                        ?>
+                                        <?php foreach ($regalternativas as $cAlternativas => $alternativa){ ?>
+                                            <label class="radio"><input class="alternativaCheck" type="radio" name="registro_<?php echo $cPreguntas.$cCursopregunta ?>" value="<?php echo $pregunta['qid']."-".$alternativa['atlid'].";--;curid:".$curso['curid']."-courseid:".$curso['courseid']."-turno:".$curso['turno'];?>" ><?php echo $alternativa['alternative']?></label>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </td>
-                            <?php
-                            }
-                            ?>
-                        </tr>  
-                        <?php 
-                    }
-                    ?>
-                    </tbody>    
-                </table>
-              	<div class="enviarencuesta span9">
-                    <input type="submit" value="REGISTRAR ENCUESTA" class="btn btn-primary" id="enviarencuesta">
-                    <a href="/index/salir" class="btn btn-danger">SALIR SISTEMA</a>
-                </div>
-
-            </form>
-        <div style="clear:both"></div>
-        
-    </div>
-    </div>
-
+                        <?php endif ?>
+                        <?php
+                        }
+                        ?>
+                    </tr>  
+                <?php } ?>
+            </table>
+        <?php } ?>
+        <input type="hidden" id="cantPreguntas" value="<?php echo $cPreguntas + 1 ?>">
+        <input type="hidden" id="cantCursos" value="<?php echo $numcurso ?>">
+        <?php print_r($cPreguntas) ?>
+      	<div class="enviarencuesta">
+            <input type="submit" value="REGISTRAR ENCUESTA" class="btn btn-info form-control" id="enviarencuesta">
+        </div>
+        </form>
 <?php else: ?>
     <h2 class="text-center"><span class="text-muted"><strong>Encuesta </strong></span>No Se Matriculo a Este Periodo</h2>
 <?php endif ?>
--->
+
     <script>
         $(function(){
-            /*$("#enviarencuesta").click(function(e){
-          
-            var x=0;
-            var y=0;
-            //alert("<?php echo $f?>");
+            var cantFilas = $('#inputCantFilas').val();
 
-            for(x=1;x<=<?php echo $f;?>;x++){
-                var $elegido =$("input[name=registro_"+x+"]:checked");
-                if (! $elegido.val())
-                     y=1;       
+            function fixedHeaderCursos(cantFilas){
+                for (var i = 0; i < cantFilas; i++) {
+                    if ($(window).scrollTop() > $('#tabla' + i).offset().top - 150) {
+                        $('.headerPreguntasRelative').removeClass('headerPreguntasFixed');
+                    }
+
+                    if ($(window).scrollTop() > $('#tabla' + i).offset().top - 80) {
+                        $('.headerPreguntasRelative').removeClass('headerPreguntasFixed');
+                        $('#headerFixed' + i).addClass('headerPreguntasFixed');
+                    } else {
+                        $('#headerFixed' + i).removeClass('headerPreguntasFixed');
+                    }
+                };
             }
-            if (y==1){
-                alert("Debe de responder todas las respuestas.");
-                e.preventDefault();
-               
-            }
-            });*/
+
+            
+            $(window).scroll(function(){
+                fixedHeaderCursos(cantFilas);
+            });
+
+
+            var cantRespondidos = 0;
+            var cantPreguntas   = $('#cantPreguntas').val();
+            var cantCursos      = $('#cantCursos').val();
+
+            var cantTotalesPreguntas = cantPreguntas * cantCursos;
+            $("#enviarencuesta").on('click', function(e){
+                cantRespondidos = 0;
+                $('.alternativaCheck').each(function(index, element){
+                    if ($(this).is(':checked')) {
+                        cantRespondidos++;
+                    };
+                })
+
+                if (cantRespondidos !== cantTotalesPreguntas) {
+                    alert("Debe de responder todas las respuestas.");
+                    e.preventDefault();
+                };
+            });
+
+            var rellenoEncuesta = $('#rellenoEncuesta').val();
+
+            if (rellenoEncuesta == 'Yes') {
+                $(location).attr('href', '/alumno');
+            };
         });
     </script>
 </body>
