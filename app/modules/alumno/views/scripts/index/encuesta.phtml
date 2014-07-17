@@ -11,6 +11,24 @@
     <script type="text/javascript" src="/external_library/bootstrap/js/bootstrap.js"></script>
 </head>
 <body>
+<?php $auth = Zend_Auth::getInstance();
+
+    if (!$auth->hasIdentity()) {
+        exit();
+    }
+
+    $sesion = $auth->getStorage()->read();
+    $last_name = $sesion->infouser['fullname'];
+    $speciality = $sesion->speciality->name;
+    $module = $sesion->rol['module'];
+    $rol = $sesion->rid;
+    $uid = $sesion->uid;
+    $pid = $sesion->pid;
+    
+?>
+<?php if ($sesion->encuesta->existeEncuesta == 'Yes'): ?>
+    <input type="hidden" id="rellenoEncuesta" value="<?php echo $sesion->encuesta->rellenoEncuesta ?>">
+<?php endif ?>
 <?php
     $numcurso  = count($this->cursos);
     $cantFilas = ceil($numcurso / 3);
@@ -142,6 +160,12 @@
                     e.preventDefault();
                 };
             });
+
+            var rellenoEncuesta = $('#rellenoEncuesta').val();
+
+            if (rellenoEncuesta == 'Yes') {
+                $(location).attr('href', '/alumno');
+            };
         });
     </script>
 </body>

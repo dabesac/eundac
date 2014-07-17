@@ -72,6 +72,11 @@
             $(location).attr('href', '/alumno/index/encuesta');
         };
 
+        var urlEncuesta = window.location.pathname;
+        if (urlEncuesta == '/alumno/student/index' && rellenoEncuesta == 'Yes') {
+            $(location).attr('href', '/alumno');
+        };
+
         $(window).scroll(function(){
             var scroll = $(window).scrollTop();
             if( scroll >= 106){
