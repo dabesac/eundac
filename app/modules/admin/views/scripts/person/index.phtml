@@ -1,6 +1,10 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> Gestión Persona');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><button id="newper" type="button" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Nueva Persona</button>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
+<div style="text-align:right">
+    <button id="newper" type="button" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Nueva Persona</button>
+</div>
+</br>
 <form name="frmFiltroDoc" id ="frmFiltroDoc" action="/admin/person/getperson" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
     <table class="table table-hover table-bordered">
         <tr>

@@ -1,14 +1,7 @@
-
-<div class='row' id='header-info'>
-	<div class='col-xs-7  col-md-offset-1 	header-registration-course'>
-		<h4 class='text-header-registration'> <span class='glyphicon glyphicon-list' style='color:#1abc9c;'></span> 
-		Lista de Recursos
-		</h4>
-	</div>
-	<div class="col-md-4">
-        <a href="/admin/acl/index" class='btn btn-default'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
-		<button mid='<?php echo base64_encode($this->mid)?>' id="btn-new-resouce" href="/admin/acl/newresource" class='btn btn-info' ><span class='glyphicon glyphicon-plus-sign'></span> Nuevo</button>
-	</div>
+<?php $this->placeholder('Btnnav')->append('<a href="/admin/acl/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> LISTA DE RECURSOS');?>
+<div style="text-align:right">
+	<button mid='<?php echo base64_encode($this->mid)?>' id="btn-new-resouce" href="/admin/acl/newresource" class='btn btn-info' ><span class='glyphicon glyphicon-plus-sign'></span> Nuevo</button>
 </div>
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">

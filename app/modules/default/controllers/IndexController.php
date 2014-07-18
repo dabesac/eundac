@@ -153,6 +153,51 @@ class IndexController extends Zend_Controller_Action {
                         $data->fullProfile->success = 'no';
                     }
 
+                    //Verificar si hay encuesta activa
+                    $data->encuesta->existeEncuesta  = 'No';
+                    $data->encuesta->rellenoEncuesta = '-';
+
+                    if ($rid == 'AL') {
+                        $pollDb         = new Api_Model_DbTable_Poll();
+                        $pollQuestionDb = new Api_Model_DbTable_PollQuestion();
+                        $pollResultsDb  = new Api_Model_DbTable_PollResults();
+                        $where = array(
+                                        'eid'   => $eid,
+                                        'oid'   => $oid,
+                                        'state' => 'A' );
+                        $attrib = array('pollid');
+
+                        $dataPoll = $pollDb->_getFilter($where, $attrib);
+                        if ($dataPoll) {
+                            $where = array( 'eid'    => $eid,
+                                            'oid'    => $oid,
+                                            'pollid' => $dataPoll[0]['pollid'],
+                                            'state'  => 'A' );
+                            $attrib = array('qid');
+
+                            $dataQuestion = $pollQuestionDb->_getFilter($where, $attrib);
+
+                            if ($dataQuestion) {
+                                $data->encuesta->existeEncuesta = 'Yes';
+
+                                $where = array(
+                                                'eid' => $eid,
+                                                'oid' => $oid,
+                                                'pid' => $data->pid,
+                                                'qid' => $dataQuestion[0]['qid']);
+
+                                $pollResult = $pollResultsDb->_getFilter($where);
+                                if ($pollResult) {
+                                   $data->encuesta->rellenoEncuesta = 'Yes';
+                                }else{
+                                   $data->encuesta->rellenoEncuesta = 'No';
+                                }
+                            }
+                        }
+                    }
+
+
+
                     //Insertar pago y Matricula Para Cachimbos
                     $paymentDb = new Api_Model_DbTable_Payments();
 
