@@ -108,7 +108,6 @@
         <?php } ?>
         <input type="hidden" id="cantPreguntas" value="<?php echo $cPreguntas + 1 ?>">
         <input type="hidden" id="cantCursos" value="<?php echo $numcurso ?>">
-        <?php print_r($cPreguntas) ?>
       	<div class="enviarencuesta">
             <input type="submit" value="REGISTRAR ENCUESTA" class="btn btn-info form-control" id="enviarencuesta">
         </div>
@@ -156,7 +155,7 @@
                 })
 
                 if (cantRespondidos !== cantTotalesPreguntas) {
-                    alert("Debe de responder todas las respuestas.");
+                    alert("Debe de contestar todas las preguntas para registrar la encuesta.");
                     e.preventDefault();
                 };
             });
