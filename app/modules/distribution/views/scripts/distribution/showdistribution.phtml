@@ -169,7 +169,7 @@ $ldistri =$this->ldistribution;
 			<?php
 			if ($distri['state']=='C' || $distri['state']=='I') { ?>
 				<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Distribución Cerrado"></span></a>
-				<div class="btn-group">
+				<!-- <div class="btn-group">
 				  	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 				    Action <span class="caret"></span>
 				  	</button>
@@ -180,7 +180,7 @@ $ldistri =$this->ldistribution;
 				    	<li class="divider"></li>
 				    	<li><a href="#">Separated link</a></li>
 				  	</ul>
-				</div>
+				</div> -->
 				<?php
 			}elseif ($distri['state']=="A" || $distri['state']=="B" || $distri['state']=='O') {
 				if ($hours) {
@@ -315,11 +315,12 @@ $('.obser').hover(function(){
 		$("#Modals").modal("show");
 		$("#sendis").click(function(){
 			var coments=$("textarea#comentss").val();
-			var state="<?php echo base64_encode('A')?>";
+			var state="<?php echo base64_encode('C')?>";
 			coments=coments.trim();
 			//alert(coments);
 			$("#Modals").modal("hide");
 			$('#Modals').on('hidden.bs.modal', function (e) {
+				$('.obser').popover('hide');
 				var url1="/distribution/distribution/sendistribution/";
 				var dataString = 'state='+state+'&escid='+params['escid1']+'&subid='+params['subid1']+'&distid='+params['distid1']+'&perid='+params['perid1']+'&comment=' + coments;
 
@@ -331,6 +332,7 @@ $('.obser').hover(function(){
 		            	$('#obsvalids').html(data);
 		            }
 		        });
+
 				// var url="/distribution/distribution/sendistribution/state/<?php echo base64_encode("A")?>/escid/"+params['escid1']+"/subid/"+params['subid1']+"/distid/"+params['distid1']+"/perid/"+params['perid1']+"/comment/"+coments;
 				// $('.obser').popover('hide');
 			});

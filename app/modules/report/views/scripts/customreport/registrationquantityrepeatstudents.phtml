@@ -1,0 +1,152 @@
+<?php
+if ($this->data) {
+	$data=$this->data;
+	$cant=count($data);
+	$vfinal=$data[$cant-1]['veces'];
+    $s=1;
+	for ($i=2; $i <= $vfinal; $i++) { 
+		$c=0;
+		for ($j=0; $j < $cant; $j++) { 
+			if ($data[$j]['veces']==$i) {
+				$c=$c+1;
+			}
+		}
+		$s++;
+		$cantidad[$s]=$c;
+	}
+	?>
+	<ul id='myReport' class="nav nav-pills nav-justified">
+		<li class="active">
+	    	<a href="#" id='val2' class='panel panel-primary'>
+	      		<span class="badge pull-right"><?php echo $cantidad['2']?></span>
+	      		<b>Los que llevaron 2 veces</b>
+	    	</a>
+	 	</li>
+		<?php
+		for ($i=3; $i <= $vfinal; $i++) { 	?>
+		  	<li>
+		    	<a href="#" id='val<?php echo $i?>' class='panel panel-primary'>
+		      		<span class="badge pull-right"><?php echo $cantidad[$i]?></span>
+		      		<b>Los que llevaron <?php echo $i?> veces</b>
+		    	</a>
+		 	</li>
+		<?php	
+		}
+		?>
+	</ul>		
+	<br>		
+	<div id='viewprincipal2' valor='2' class='table-responsive'>
+		<table class='table table-hover'>
+			<tr class='info'>
+				<th class='text-center'>#</th>
+				<th class='text-center'>DNI</th>
+				<th class='text-center'>Código</th>
+				<th class='text-center'>Apellidos y Nombres</th>
+				<th class='text-center'>Veces Llevadas</th>
+			</tr>
+		<?php
+		$co=1;
+		foreach ($data as $key => $students) {
+	 		$vecess=$students['veces'];
+	 		if($vecess=='2'){	?>
+		 		<tr>
+		 			<td class='text-center'><?php echo $co?></td>
+		 			<td class='text-center'><?php echo $students['pid']?></td>
+		 			<td class='text-center'><?php echo $students['uid']?></td>
+		 			<td><?php echo $students['full_name']?></td>
+		 			<td class='text-center'><?php echo $students['veces']?></td>
+		 		</tr>
+		 		<?php
+		 		$co++;
+	 		}
+	 	}
+		
+		?>
+		</table>
+	</div>
+	<?php
+	for ($i=3; $i <= $vfinal; $i++) { 	?>
+  	<div id='viewprincipal<?php echo $i?>' class='hidden table-responsive' valor='<?php echo $i?>'>
+		<table class='table table-hover'>
+			<tr class='info'>
+				<th class='text-center'>#</th>
+				<th class='text-center'>DNI</th>
+				<th class='text-center'>Código</th>
+				<th class='text-center'>Apellidos y Nombres</th>
+				<th class='text-center'>Veces Llevadas</th>
+			</tr>
+		<?php
+		$co=1;
+		foreach ($data as $key => $students) {
+	 		$vecess=$students['veces'];
+	 		if($vecess==$i){	?>
+		 		<tr>
+		 			<td class='text-center'><?php echo $co?></td>
+		 			<td class='text-center'><?php echo $students['pid']?></td>
+		 			<td class='text-center'><?php echo $students['uid']?></td>
+		 			<td><?php echo $students['full_name']?></td>
+		 			<td class='text-center'><?php echo $students['veces']?></td>
+		 		</tr>
+		 		<?php
+		 		$co++;
+	 		}
+	 	}
+		?>
+		</table>
+	</div>
+	<?php	
+	}	
+}
+else{	?>
+	<br>
+	<div class='row'>
+		<div class="col-md-12">
+			<div class='alert alert-danger col-md-4 col-md-offset-4'>
+				<p><b><h4><center><span class='glyphicon glyphicon-exclamation-sign' ></span> No se entontraron registros</center></h4></b></p>
+			</div>			
+		</div>		
+	</div>
+<?php
+}
+?>
+<script type="text/javascript">
+	$('#myReport a').click(function (e) {
+	  	e.preventDefault()
+	  	$(this).tab('show')
+	});
+	$("#val2").click(function(){
+		$("#viewprincipal3").addClass('hidden');
+		$("#viewprincipal4").addClass('hidden');
+		$("#viewprincipal5").addClass('hidden');
+		$("#viewprincipal6").addClass('hidden');
+		$("#viewprincipal2").removeClass('hidden');
+	});
+	$("#val3").click(function(){
+		$("#viewprincipal2").addClass('hidden');
+		$("#viewprincipal4").addClass('hidden');
+		$("#viewprincipal5").addClass('hidden');
+		$("#viewprincipal6").addClass('hidden');
+		$("#viewprincipal3").removeClass('hidden');
+	});
+	$("#val4").click(function(){
+		$("#viewprincipal3").addClass('hidden');
+		$("#viewprincipal2").addClass('hidden');
+		$("#viewprincipal5").addClass('hidden');
+		$("#viewprincipal6").addClass('hidden');
+		$("#viewprincipal4").removeClass('hidden');
+	});
+	$("#val5").click(function(){
+		$("#viewprincipal3").addClass('hidden');
+		$("#viewprincipal4").addClass('hidden');
+		$("#viewprincipal2").addClass('hidden');
+		$("#viewprincipal6").addClass('hidden');
+		$("#viewprincipal5").removeClass('hidden');
+	});
+	$("#val6").click(function(){
+		$("#viewprincipal3").addClass('hidden');
+		$("#viewprincipal4").addClass('hidden');
+		$("#viewprincipal5").addClass('hidden');
+		$("#viewprincipal2").addClass('hidden');
+		$("#viewprincipal6").removeClass('hidden');
+	});
+</script>

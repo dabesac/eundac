@@ -130,21 +130,25 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             if ($dataobs) {
                 $pk['logobdistrid']=$dataobs['logobdistrid'];
                 if ($ldistribution->_update($data,$pk)) {
+                    unset($pk['logobdistrid']);
+                    unset($data['comments']);
+                    $pk['distid']=$dataobs['distid'];
+                    $data['state']='A';
                     $dbdistribution->_update($data,$pk);
                     $this->_redirect("/distribution/distribution/");
                 }
             }
-            else{
-                $datadis=$dbdistribution->_getFilter($pk);
-                $formData=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,
-                                'perid'=>$perid,'observation'=>$datadis[0]['observation'],'register'=>$this->sesion->uid,
-                                'comments'=>$comment,'state'=>'A');
-                if ($ldistribution->_save($formData)) {
-                    $data=array("state"=>'A');
-                    $dbdistribution->_update($data,$pk);
-                    $this->_redirect("/distribution/distribution/index");
-                }
-            }
+            // else{
+            //     $datadis=$dbdistribution->_getFilter($pk);
+            //     $formData=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,
+            //                     'perid'=>$perid,'observation'=>$datadis[0]['observation'],'register'=>$this->sesion->uid,
+            //                     'comments'=>$comment,'state'=>'A');
+            //     if ($ldistribution->_save($formData)) {
+            //         $data=array("state"=>'A');
+            //         $dbdistribution->_update($data,$pk);
+            //         $this->_redirect("/distribution/distribution/index");
+            //     }
+            // }
         } catch (Exception $e) {
             print "Error:".$e->getMessage();
         }

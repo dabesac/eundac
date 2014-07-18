@@ -1,0 +1,14 @@
+<?php
+	if ($this->dataspec) {	?>
+		<option value="nada">-- Seleccione una Escuela --</option>
+		<?php
+		foreach ($this->dataspec as $key => $specialitys) {	?>
+			<option value='<?php echo $specialitys['escid']."|".$specialitys['subid']?>'><?php echo $specialitys['name']?></option>		
+		<?php	
+		}
+	}
+	else{	?>
+		<option value="">-- No tiene escuelas --</option>
+	<?php
+	}	
+?>
