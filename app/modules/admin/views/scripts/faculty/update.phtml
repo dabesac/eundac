@@ -1,9 +1,12 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> MODIFICAR FACULTAD');?>
+<?php $this->placeholder('Btnnav')->append(' <a href="/admin/faculty" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Regresar</a>');?>
+
 <form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded">
 
 <div class="row">
-  <div class="col-sm-8"><h2>Modificar Facultad</h2></div>
+  <div class="col-sm-8"></div>
   <div class="col-sm-2"><?php print $this->form->update;?></div>
-  <div class="col-sm-1"><br><a href="/admin/faculty"  class="btn btn-danger  " >Cancelar</a></br></div>
+  <div class="col-sm-1"><br><a href="/admin/faculty"class="btn btn-danger">Cancelar</a></br></div>
 </div>
 
 <table class="table span6 table-striped table-bordered">
