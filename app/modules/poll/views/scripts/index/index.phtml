@@ -1,24 +1,22 @@
-<div class="panel panel-primary" style="padding: 2px">
-	<div class="panel-heading" style="padding: 6px">
-		<center><b style="font-size:15px; color: white">GESTIÓN ENCUESTAS</b></center>
+ <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> GESTION DE ENCUESTA');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<div class="row">
+	<div class="col-md-2 col-md-offset-10">
+		<a id="create_poll" href="#poll_create" class="btn btn-info form-control" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> Nueva Encuesta</a>
 	</div>
 </div>
-
-<div style="margin-bottom: 20px">
-	<center><a id="create_poll" href="#poll_create" class="btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> Nueva Encuesta</a></center>
-</div>
+<hr>
 
 <?php
 if ($this->poll) { ?>
-	<table class="table">
-		<tr>
-			<th>#</th>
+	<table class="table table-bordered table-hover">
+		<tr class="active">
+			<th class="text-center">#</th>
 			<th>Título Encuesta</th>
-			<th>Periodo</th>
-			<th>Publicación</th>
-			<th>Cierre</th>
-			<th>Estado</th>
-			<th colspan="2">Operación</th>
+			<th class="text-center">Periodo</th>
+			<th class="text-center">Publicación</th>
+			<th class="text-center">Cierre</th>
+			<th class="text-center">Estado</th>
 		</tr>
 		<?php
 		$c = 1;
@@ -27,33 +25,20 @@ if ($this->poll) { ?>
 			else $img = "/img/circulo-rojo.png";
 			?>
 			<tr>
-				<td><?php echo $c?></td>
+				<td class="text-center"><?php echo $c?></td>
 				<td><?php echo $data_poll['title']?></td>
-				<td><?php echo $data_poll['perid']?></td>
-				<td><?php echo $data_poll['published']?></td>
-				<td><?php echo $data_poll['closed']?></td>
-				<td>
-					<center>
-						<img src="<?php echo $img?>" title="<?php echo ($data_poll['state']=="A")? "Activa": "Cerrada"?>" rel="tooltip">
-					</center>
+				<td class="text-center"><?php echo $data_poll['perid']?></td>
+				<td class="text-center"><?php echo $data_poll['published']?></td>
+				<td class="text-center"><?php echo $data_poll['closed']?></td>
+				<td class="text-center">
+					<img src="<?php echo $img?>" title="<?php echo ($data_poll['state']=="A")? "Activa": "Cerrada"?>" rel="tooltip">
 				</td>
-				<td>
-					<center>
-						<a href="#poll_update" id="update_poll_<?php echo $data_poll['pollid']?>" title="Editar Encuesta" rel="tooltip" data-toggle="modal"><span class="glyphicon glyphicon-edit"></span></a>
-					</center>
+				<td class="text-center">
+					<a href="#poll_update" pollid="<?php echo $data_poll['pollid']?>" class="btnUpdatePoll" title="Editar Encuesta" rel="tooltip" data-toggle="modal"><span class="glyphicon glyphicon-edit"></span></a>
 				</td>
-				<td>
-					<center>
-						<a href="/poll/index/questions/pollid/<?php echo base64_encode($data_poll['pollid'])?>" title="Agregar Preguntas" rel="tooltip"><span class="glyphicon glyphicon-list"></span></a>
-					</center>
+				<td class="text-center">
+					<a href="/poll/index/questions/pollid/<?php echo base64_encode($data_poll['pollid'])?>" title="Agregar Preguntas" rel="tooltip"><span class="glyphicon glyphicon-list"></span></a>
 				</td>
-				<script type="text/javascript">
-					$("#update_poll_<?php echo $data_poll['pollid']?>").click(function(){
-						var pollid = "<?php echo $data_poll['pollid']?>";
-						$("#load_poll_update").html("<img src='/img/carga.gif'>");
-						$("#load_poll_update").load("/poll/index/update/pollid/"+pollid);
-					});
-				</script>
 			</tr>
 			<?php
 			$c++;
@@ -67,7 +52,7 @@ if ($this->poll) { ?>
       	<div class="modal-content">
         	<div class="modal-header">
           		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          		<h4 class="modal-title"><span class="glyphicon glyphicon-list"></span> - NUEVA ENCUESTA</h4>
+          		<h4 class="modal-title"><span class="glyphicon glyphicon-list"></span> - Nueva Encuesta</h4>
         	</div>
         	<div id="load_poll_create" class="modal-body"></div>
         	<div class="modal-footer">
@@ -85,12 +70,12 @@ if ($this->poll) { ?>
       	<div class="modal-content">
         	<div class="modal-header">
           		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          		<h4 class="modal-title"><span class="glyphicon glyphicon-list"></span> - MODIFICAR ENCUESTA</h4>
+          		<h4 class="modal-title"><span class="glyphicon glyphicon-list"></span> Modificar Encuesta</h4>
         	</div>
         	<div id="load_poll_update" class="modal-body"></div>
         	<div class="modal-footer">
-          		<a href="#" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
-          		<a href="#" id="update_new_poll" class="btn btn-success">
+          		<a href="##" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+          		<a href="##" id="update_new_poll" class="btn btn-success">
 					<span class='glyphicon glyphicon-floppy-disk'></span> Guardar
 				</a>
         	</div>
@@ -98,19 +83,30 @@ if ($this->poll) { ?>
     </div>
 </div>
 
-<script type="text/javascript">
-$("#create_poll").click(function(){
-	$("#load_poll_create").html("<img src='/img/carga.gif'>");
-	$("#load_poll_create").load("/poll/index/new/");
-});
+<script>
+	$(function(){
+		$("a, img").tooltip();
 
-$("#creating_poll").click(function(){
-    $("#formPollcreate").submit();
-});
+		$("#create_poll").on('click', function(){
+			$("#load_poll_create")	.html("<br><center><img src='/img/spinner.gif'></center>")
+									.load("/poll/index/new/");
+		});
 
-$("#update_new_poll").click(function(){
-    $("#formPoll").submit();
-});
+		$("#creating_poll").on('click', function(){
+		    $("#formPollcreate").submit();
+		});
 
-$("a, img").tooltip();
+
+		var pollid = '';
+
+		$(".btnUpdatePoll").on('click', function(){
+			var pollid = $(this).attr('pollid');
+			$("#load_poll_update")	.html("<br><center><img src='/img/spinner.gif'></center>")
+									.load("/poll/index/update/pollid/"+pollid);
+		});
+
+		$("#update_new_poll").on('click', function(){
+		    $("#formPoll").submit();
+		});
+	});
 </script>

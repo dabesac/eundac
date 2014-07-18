@@ -1,0 +1,7 @@
+<?php if ($this->periods): ?>
+	<?php foreach ($this->periods as $period): ?>
+		<option value="<?php echo base64_encode($period['perid']) ?>"><?php echo $period['perid'].' | '.$period['name'] ?></option>
+	<?php endforeach ?>
+<?php else: ?>
+	<option value="">No existen periodos para ese año</option>
+<?php endif ?>

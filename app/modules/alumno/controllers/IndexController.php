@@ -504,6 +504,8 @@ class Alumno_IndexController extends Zend_Controller_Action {
 
     public function guardarAction()
     {
+        $rid = $this->sesion->rid;
+
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
         $escid = $this->sesion->escid;
@@ -541,8 +543,12 @@ class Alumno_IndexController extends Zend_Controller_Action {
             }
 
         }
-        
-        $this->_redirect("/");
+        $this->sesion->encuesta->rellenoEncuesta = 'Yes';
+        if ($rid == 'AL') {
+            $this->_redirect("/alumno");
+        }else if ($rid == 'DC'){
+            $this->_redirect("/docente");
+        }
 
     }
 

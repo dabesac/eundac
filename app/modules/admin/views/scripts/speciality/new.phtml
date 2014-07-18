@@ -1,14 +1,10 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Nueva Escuela');?>
+<?php $this->placeholder('Btnnav')->append(' <a href="/admin/speciality/  " class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Regresar</a>');?>
 <form id="<?php echo $this->form->getName();?>" name="<?php echo $this->form->getName();?>" action="<?php echo $this->form->getAction();?>"method="Post" enctype="application/x-www-form-urlencode">  
+  
   <div class="flotacarajo">
-    <table class="table table-hover">
-      <tr>
-        <th style="font-size:20px;"><br>
-            NUEVA ESCUELA
-              <div style="float:right; margin-left:10px"><?php echo $this->form->send?></div><br>
-              <a style="float:right" class="btn btn-danger" href="/admin/speciality/">Cancelar</a>
-        </th>
-      </tr>
-    </table>
+    <div style="float:right; margin-left:10px"><?php echo $this->form->send?></div><br>
+    <a style="float:right" class="btn btn-danger" href="/admin/speciality/">Cancelar</a>  
   </div>	
 	<div class="flotacarajo">
       <table class="table table-striped table-hover ">

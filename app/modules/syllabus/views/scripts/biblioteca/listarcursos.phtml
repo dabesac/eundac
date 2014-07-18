@@ -1,0 +1,81 @@
+<?php if ($this->dataCourses): ?>
+	<table class="table table-bordered table-hover">
+		<tr class="active">
+			<th class="text-center col-md-1">#</th>
+			<th class="text-center col-md-1">Codigo</th>
+			<th>Curso</th>
+			<th class="text-center col-md-1">Turno</th>
+			<th class="text-center col-md-1">Semestre</th>
+		</tr>
+		<?php foreach ($this->dataCourses as $c => $course): ?>
+		<tr>
+			<td class="text-center"><?php echo $c + 1 ?></td>
+			<td class="text-center"><?php echo $course['courseid'] ?></td>
+			<td><?php echo $course['nameCourse'] ?></td>
+			<td class="text-center"><?php echo $course['turno'] ?></td>
+			<td class="text-center"><?php echo $course['semestre'] ?></td>
+			<td class="text-center">
+				<a data-toggle="modal" data-target="#modalBibliografia<?php echo $course['courseid'].$course['subid'] ?>">
+				  <span class="glyphicon glyphicon-eye-open"></span>
+				</a>
+			</td>
+			<td class="text-center">
+				<?php if ($course['bibliografia']): 
+					$url = '/syllabus/biblioteca/print/datasilabo/'.base64_encode($course['escid'].'-'.$course['subid'].'-'.$course['courseid'].'-'.$course['curid'].'-'.$course['turno'].'-'.$course['perid']); 
+				else:
+					$url = '##';
+				endif ?>
+
+				<a href="<?php echo $url ?>">
+				  <span class="glyphicon glyphicon-print"></span>
+				</a>
+			</td>
+		</tr>
+
+		<?php endforeach ?>
+	</table>
+
+
+	<!-- Modales para la bibliografia-->
+	<?php foreach ($this->dataCourses as $course): ?>
+		<div class="modal fade" id="modalBibliografia<?php echo $course['courseid'].$course['subid'] ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		      			<div class="row">
+		      				<div class="col-md-7">
+	        					<h4>Bibliografía - <?php echo $course['nameCourse'] ?></h4>
+		      				</div>
+		      				<div class="col-md-3">
+		      					<?php if ($course['bibliografia']): 
+		      						$url = '/syllabus/biblioteca/print/datasilabo/'.base64_encode($course['escid'].'-'.$course['subid'].'-'.$course['courseid'].'-'.$course['curid'].'-'.$course['turno'].'-'.$course['perid']); 
+		      					else:
+		      						$url = '##';
+		      					endif ?>
+		        				<a href="<?php echo $url ?>" class="btn btn-info form-control">Imprimir</a>
+		      				</div><div class="col-md-2">
+		        				<button type="button" class="btn btn-default form-control" data-dismiss="modal">Regresar</button>
+		      				</div>
+		      			</div>
+		      		</div>
+		      		<div class="modal-body">
+		      			<?php if ($course['bibliografia']): ?>
+			        		<?php echo $course['bibliografia'] ?>
+		      			<?php else: ?>
+		      				<h4 class="text-muted text-center"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> El docente aun no <span class="text-danger">rellena la Bibliografía</span></h4>
+		      			<?php endif ?>
+		      		</div>
+		      		<div class="modal-footer">
+		      			<div class="row">
+		      				<div class="col-md-2 col-md-offset-10">
+		        				<button type="button" class="btn btn-default form-control" data-dismiss="modal">Regresar</button>
+		      				</div>
+		      			</div>
+		      		</div>
+	    		</div>
+	  		</div>
+		</div>
+	<?php endforeach ?>
+<?php else: ?>
+	<h4 class="text-muted text-center"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> No hay registros <span class="text-danger">de Sílabos</span></h4>
+<?php endif ?>

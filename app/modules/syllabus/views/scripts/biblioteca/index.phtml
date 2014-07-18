@@ -1,0 +1,128 @@
+<link rel="stylesheet" href="/css/bibliografia.css">
+<?php 
+	$this->placeholder('Btnnav')->append('<a href="/biblioteca" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
+
+	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-bookmark"></span> Bibliografia de Silabos');
+	$anio = date('Y');
+ ?>
+
+<div class="biblioteca_header">
+	 <p class="text-muted parrafo"><span class="glyphicon glyphicon-info-sign"></span> Elija el año y periodo</p>
+
+	 <div class="selectSide selectAnio">
+		<p>Año</p>
+		<select name="anio" id="anio" class="form-control">
+			<?php for ($i = $anio; $i > 1970; $i--): ?>
+				<option value="<?php echo base64_encode($i) ?>"><?php echo $i ?></option>
+			<?php endfor ?>
+		</select>
+	 </div>
+
+	 <div class="selectSide selectPeriod">	
+		<p>Periodo</p>
+		<select name="periodo" id="period" class="form-control"></select>
+	 </div>
+</div>
+<hr>
+
+<div class="biblioteca_filtrarSide">
+	<div class="selectSide selectFaculty">
+		<p>Facultad</p>
+		<select name="faculty" id="faculty" class="form-control">
+			<?php if ($this->dataFaculty): ?>
+				<option value="">Facultades</option>
+				<?php foreach ($this->dataFaculty as $faculty): ?>
+					<option value="<?php echo base64_encode($faculty['facid']) ?>"><?php echo $faculty['name'] ?></option>
+				<?php endforeach ?>
+			<?php else: ?>
+				<option value="">No hay facultades</option>
+			<?php endif ?>
+		</select>
+	</div>	
+
+	<div class="selectSide selectSchool">
+		<p>Escuela</p>
+		<select name="school" id="school" class="form-control">
+			<option value="">Escuelas</option>
+			<option value="">Primero seleccione una facultad</option>
+		</select>
+	</div>	
+
+	<div class="selectSide selectSpeciality">
+		<p>Especialidad</p>
+		<select name="speciality" id="speciality" class="form-control">
+			<option value="">Especialidades</option>
+			<option value="">Primero seleccione una escuela</option>
+		</select>
+	</div>	
+</div>
+
+<hr>
+
+<div id="idDataCursos" class="dataCursos">
+	
+</div>
+
+<script>
+	$(function(){
+		var anio  = $('#anio').val();
+		var facid = '';
+		var escid = '';
+		var perid = '';
+
+		var existenEspecialidades = '';
+		var datasearch            = '';
+
+		$('#period').html('<option value="">Cargando....</option>')
+					.load('/syllabus/biblioteca/periods/anio/' + anio, function(){
+						perid = $(this).val();
+					});
+
+		$('#anio').on('change', function(){
+			$('#faculty').val('');
+			$('#school').html('<option value="">Escuelas</option><option value="">Primero seleccione una escuela</option>');
+			$('#speciality').html('<option value="">Especialidades</option><option value="">Primero seleccione una escuela</option>');
+
+			anio = $(this).val();
+			$('#period').html('<option value="">Cargando....</option>')
+						.load('/syllabus/biblioteca/periods/anio/' + anio, function(){
+							perid = $(this).val();
+						});
+
+			$('#idDataCursos').html('');
+		});
+
+		$('#faculty').on('change', function(){
+			facid = $(this).val();
+			$('#school').html('<option value="">Cargando...</option>')
+						.load('/syllabus/biblioteca/listschools/facid/' + facid);
+
+			$('#speciality').html('	<option value="">Especialidades</option><option value="">Primero seleccione una escuela</option>');
+			$('#idDataCursos').html('');
+		});
+
+		$('#school').on('change', function(){
+			escid = $(this).val();
+			$('#speciality').html('<option value="">Cargando...</option>')
+							.load('/syllabus/biblioteca/listspecialities/escid/' + escid, function(){
+								existenEspecialidades = $(this).val();
+								datasearch = perid + '-' + escid;
+								if (existenEspecialidades != '_') {
+									$('#idDataCursos')	.html('<br><center><img src="/img/spinner.gif" alt="Cargando..." /></center>')
+														.load('/syllabus/biblioteca/listarcursos/datasearch/' + datasearch);
+								}else{
+									$('#idDataCursos').html('');
+								} 
+							});
+		});
+
+		$('#speciality').on('change', function(){
+			escid = $(this).val();
+			if (escid != '' && escid != '_') {
+				datasearch = perid + '-' + escid
+				$('#idDataCursos')	.html('<br><center><img src="/img/spinner.gif" alt="Cargando..." /></center>')
+									.load('/syllabus/biblioteca/listarcursos/datasearch/' + datasearch);
+			};
+		});
+	});
+</script>

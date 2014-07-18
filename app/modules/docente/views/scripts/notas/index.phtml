@@ -1,9 +1,7 @@
 <link rel="stylesheet" href="/css/miscursos.css">
 
-<?php 
-    $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-book"></span> Asignaturas a Cargo');
-    $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
-?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-book"></span> Asignaturas a Cargo');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 <div class="miscursos_header">
     <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Puede filtrar cursos de otros periodos:</p>
     <div class="btn-group miscursos_selectPeriod">
@@ -135,7 +133,7 @@ if ($this->faculty){
                                 </ul>
                             </div>
 
-                            <div class="btn-group btnNotasBtnGroup btnPorcentaje">
+                            <div class="btn-group btnNotasBtnGroup btnPorcentajeGroup">
                                   <button class="btn btn-primary form-control dropdown-toggle" type="button" data-toggle="dropdown">
                                     Porcentaje <span class="caret"></span>
                                   </button>
@@ -167,9 +165,9 @@ if ($this->faculty){
                                 <a id="notas<?php echo $courses['courseid'] ?>" class="btn btn-primary form-control btnNotas" href="/docente/fillnotes/target<?php echo $urlAsist ?>/<?php echo base64_encode('partial') ?>/<?php echo base64_encode($partial)?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
                         <?php break;
                             case 'C': ?>
-                                <a class="btn btn-primary btn-sm btn-group-course " href="/docente/fillnotes/competition<?php echo $urlAsist ?>/<?php echo base64_encode('partial') ?>/<?php echo base64_encode($partial)?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
+                                <a class="btn btn-primary btnNotasBtnGroup " href="/docente/fillnotes/competition<?php echo $urlAsist ?>/<?php echo base64_encode('partial') ?>/<?php echo base64_encode($partial)?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
 
-                                <buttom <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?>class="btn btn-primary btn-sm btn-group-course load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode($partial)?>" data-toggle="tooltip" title="Asignar Porsentage" >Asignar % </buttom>                               
+                                <buttom <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?>class="btn btn-primary btnPorcentaje form-control load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode($partial)?>" data-toggle="tooltip" title="Asignar Porsentage" >Asignar % </buttom>                               
                         <?php break;
                             default: ?>
                                 <div class="cursoNoAsignado">Tipo de Curso No Asignado</div>
@@ -202,7 +200,7 @@ if ($this->faculty){
                             <?php }?>
                         </p>
                         <div class="progress-course progress progress-striped active text-center">
-                            <?php echo $courses['persetage_notes'] ?>%
+                            <span><?php echo $courses['persetage_notes'] ?>%</span>
                             <div class="progress-bar"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courses['persetage_notes']?>%"></div>
                         </div>
                     </div>
@@ -216,7 +214,7 @@ if ($this->faculty){
                             <?php }?>
                         </p>
                         <div class="progress-course progress progress-striped active text-center">
-                            <?php echo $courses['persetage_notes'] ?>%
+                            <span><?php echo $courses['persetage_assit'] ?>%</span>
                             <div class="progress-bar progress-bar-danger"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courses['persetage_assit']?>%"></div>
                         </div>
                     </div>
@@ -237,20 +235,20 @@ if ($this->faculty){
                         </div>
                     </div>
                         
-                    <div class="duplicateSilabo">
+                    <!--<div class="duplicateSilabo">
                         <p class='text-persentage-couser' >Duplicar Sílabo al Curso de : </p>
                         <div class="btnDuplicateSilabo">
                             <button type="button" class="btn btn-primary dropdown-toggle form-control" data-toggle="dropdown">
                                 Seleccione<span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                 <?php foreach ($this->data_courses as $key => $value) {
+                                 <?php /*foreach ($this->data_courses as $key => $value) {
                                     if($value['courseid']==$courses['courseid']){?>
                                     <li><a class='duplicate-syllabus' perid='<?php echo $this->perid?>' escid='<?php echo $value['escid']?>' courseid='<?php echo $value['courseid']?>' curid='<?php echo $value['curid']?>' turno='<?php echo $value['turno']?>' escido='<?php echo $courses['escid']?>' turnoo='<?php echo $courses['turno']?>'value='<?php echo $value['courseid']?>'><?php echo $value['name_course'];?> | Turno  <?php echo $value['turno']?> | <?php echo $value['specialyti']?></a></li>
-                                    <?php }}?>
+                                    <?php }}*/?>
                             </ul>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             <?php } ?>
         </div><!--Curso-->

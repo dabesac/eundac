@@ -1,0 +1,49 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start();
+?>
+<?php $dataCourse = $this->dataCourse ?>
+
+<table>
+	<tr>
+		<td><h4>Curso: <?php echo $dataCourse['nameCourse'] ?></h4></td>
+	</tr>
+	<tr>
+		<td><h4>Turno: <?php echo $dataCourse['turno'] ?></h4></td>
+	</tr>
+	<tr>
+		<td><h4>Semestre: <?php echo $dataCourse['semestre'] ?></h4></td>
+	</tr>
+	<tr>
+		<td><h4>Facultad de <?php echo $dataCourse['nameFacultad'] ?></h4></td>
+	</tr>
+	<tr>
+		<td><h4>Escuela de <?php echo $dataCourse['nameEscuela'] ?></h4></td>
+	</tr>
+</table>
+<br>
+<table>
+	<tr>
+		<td><h4>Bibliografia :</h4></td>
+	</tr>
+	<tr>
+		<td><?php echo $dataCourse['bibliografia'] ?></td>
+	</tr>
+</table>
+
+<?php 
+    
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4','','',13,15,40,18,8,5);
+
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    ob_end_clean();
+
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('SILABO -'.$curso['courseid'].'.pdf','D');
+    // $mpdf->Output(); 
+  
+?>

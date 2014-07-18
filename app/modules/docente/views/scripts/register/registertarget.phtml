@@ -8,10 +8,14 @@ $text_partial = ($this->partial==1)? 'Primer Partial':'Segundo Partial';
 ?>
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> REGISTRO DE NOTAS - '. $text_partial.' ' .$this->infocourse['name'].' Turno '.$this->turno.'');
 
-        $this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->perid).'" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
-        	<a href="/docente/register/targetprint'.$this->url.'" class="btn btn-info"><span class="glyphicon glyphicon-print"></span> Imprimir</a>
+        $this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->perid).'" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+                            ');
+
+        $this->placeholder('BtnSVCRight')->append('
+        	<a href="/docente/register/targetprint'.$this->url.'" class="btn btn-default"><span class="glyphicon glyphicon-print"></span> Imprimir</a>
                             ');
 ?>
+<br><br>
 <?php if ($this->students) { ?>
 	<div class='row'>
 		<div class='col-md-12 table-responsive'>

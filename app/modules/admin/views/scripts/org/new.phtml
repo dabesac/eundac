@@ -1,7 +1,9 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-briefcase"></span> NUEVA ORGANIZACION');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/admin/org" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 <form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded">
 
 	<div class="row">
-	  <div class="col-sm-8"><h2>Nueva Organizacion</h2></div>
+	  <div class="col-sm-8"></div>
 	  <div class="col-sm-2"><?php print $this->form->save;?></div>
 	  <div class="col-sm-1"><br><a href="/admin/org"  class="btn btn-danger  " >Cancelar</a></br></div>
 	</div>

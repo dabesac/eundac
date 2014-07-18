@@ -1,21 +1,20 @@
+<?php 
+	$this->placeholder('Btnnav')->append('<a href="/poll" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
+	
+	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-pencil"></span> Gestión de Preguntas');
+?>
+
 <?php
 if ($this->data_poll) { ?>
-	<div class="panel panel-default">
-		<center style="font-size: 15px"><?php echo $this->data_poll['title']?></center>
+	<div class="row">
+		<div class="col-md-9">
+			<h4 class="text-muted">Titulo de la Encuesta: <span class="text-info"><?php echo $this->data_poll['title']?></span></h4>
+		</div>
+		<div class="col-md-3" style="padding-top: 3px;">
+			<a id="new_question" href="#question_create" class="btn btn-info form-control" data-toggle="modal">Nueva Pregunta</a>
+		</div>
 	</div>
-	<table class="table" style="margin-bottom: 20px">
-		<tr>
-			<th colspan="2"><center style="font-size: 15px">GESTIÓN PREGUNTAS</center></th>
-		</tr>
-		<tr>
-			<td>
-				<center><a id="new_question" href="#question_create" class="btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-pencil"></span> Nueva Pregunta</a></center>
-			</td>
-			<td>
-				<center><a href="/poll/" class="btn btn-warning"><span class="glyphicon glyphicon-arrow-left"></span> Regresar Encuestas</a></center>
-			</td>
-		</tr>
-	</table>
+	<hr>
 	<?php
 	if ($this->data_ques) { ?>
 		<div class="panel-group" id="accordion" style="margin: 0px 100px 0px 100px">
@@ -77,7 +76,9 @@ if ($this->data_poll) { ?>
 			} ?>
     	</div>
 	<?php
-	}
+	}else{ ?>
+		<h4 class="text-muted text-center"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Aun no existe preguntas, <span class="text-danger">cree algunas para empezar.</span></h4>
+	<?php }
 }?>
 <div id="loaddelete"></div>
 
