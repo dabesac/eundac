@@ -70,12 +70,15 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$base_period = new Api_Model_DbTable_Periods();
 	    $data_period = $base_period->_getOnePeriod($where);
 	    $period_tm_act_ini = $base_period->_get_periods_ini_temp_activo($where);
-	    
+
 
 	    $li = '';
 		 if ($period_tm_act_ini) {
 		 	foreach ($period_tm_act_ini as $key => $value) {
-                $li = "<li><a href=/docente/notas/index/perid/".base64_encode($value['perid']).">".$value['name']." | ".$value['perid']."</a></li> \n" . $li;
+		 		$p = substr($value['perid'], 2, 1);
+		 		if($p!='J'){
+                	$li = "<li><a href=/docente/notas/index/perid/".base64_encode($value['perid']).">".$value['name']." | ".$value['perid']."</a></li> \n" . $li;
+                }
 			}
 		}
 	    $this->view->periods = $li;
