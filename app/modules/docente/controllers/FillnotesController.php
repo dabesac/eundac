@@ -91,7 +91,8 @@ class Docente_FillnotesController extends Zend_Controller_Action {
 
        
     }
-
+    public function targetdirAction()
+    {}
     public function savetargetnotesAction(){
         
         $params = $this->getRequest()->getParams();
