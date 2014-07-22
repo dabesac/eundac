@@ -81,7 +81,18 @@ if ($this->data_user) {
 				</div>
 			</div><br><br><br>
 			<div>
-				<div class='col-md-3 '>
+				<div class='col-md-2 text-right'><b>Semestre: </b></div>
+				<div class='col-md-2'>
+					<select class='form-control'>
+						<?php 
+						for ($i=0; $i < 15; $i++) {		?>
+							<option value='<?php echo $i+1?>'><?php echo $i+1?></option>
+						<?php	
+						}
+						?>
+					</select>
+				</div>
+				<div class='col-md-1 '>
 				</div>				
 				<div class='col-md-4 text-right'>
 					<a id='_save' href="#" class='btn btn-success' uid='<?php echo base64_encode($this->uid)?>' fullname='<?php echo base64_encode($fullname)?>' escid='<?php echo base64_encode($this->data_school['escid'])?>'><span class='glyphicon glyphicon-save'></span>Guardar</a>
@@ -103,7 +114,6 @@ else{	?>
 }
 ?>
 </div>
-
 <div class='alert alert-danger col-md-8 col-md-offset-2' id='no_guarda'>
 	<center><h4><span class='glyphicon glyphicon-question-sign'></span> No se pudo guardar el registro</h4></center>
 </div>
@@ -117,6 +127,7 @@ else{	?>
 	$("#guardar").fadeOut();
 	$("#no_guarda").fadeOut();
 	$("#no_guarda1").fadeOut();
+
 	$("#_save").click(function(){
 		var uid=$(this).attr("uid");
 		var fullname=$(this).attr("fullname");

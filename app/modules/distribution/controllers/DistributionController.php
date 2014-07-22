@@ -58,12 +58,12 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $escid=$periodos['escid'];
                 $subid=$periodos['subid'];
                 $wheres=array('eid'=>$data['eid'],'oid'=>$data['oid'],'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
-                //$wheresp=array('eid'=>$data['eid'],'oid'=>$data['oid'],'distid'=>$distid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
-                //$dataobs=$ldistribution->_getUltimateObservation($wheresp);
-                //if ($dataobs) {
-                    //$rows_distribution[$i]['observation']=$dataobs[0]['observation'];
+                $wheresp=array('eid'=>$data['eid'],'oid'=>$data['oid'],'distid'=>$distid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
+                $dataobs=$ldistribution->_getUltimateObservation($wheresp);
+                if ($dataobs) {
+                    $rows_distribution[$i]['observation']=$dataobs[0]['observation'];
                     //$rows_distribution[$i]['state']=$dataobs[0]['state'];
-                //}
+                }
                 
                 $datahours=$bdhorary->_getFilter($wheres);
                 $rows_distribution[$i]['hours']=$datahours; 
@@ -86,6 +86,28 @@ class Distribution_DistributionController extends Zend_Controller_Action {
 
     }
 
+    public function oksendistributionAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $state=base64_decode($this->_getParam("state"));
+            $escid=base64_decode($this->_getParam("escid"));
+            $subid=base64_decode($this->_getParam("subid"));
+            $distid=base64_decode($this->_getParam("distid"));
+            $perid=base64_decode($this->_getParam("perid"));
+            $dbdistribution=new Distribution_Model_DbTable_Distribution();
+            $pk=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,
+                            'perid'=>$perid);
+            $data=array('state'=>$state);
+            if ($dbdistribution->_update($data,$pk)) {
+                $this->_redirect("/distribution/distribution/index");
+            }
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
     public function sendistributionAction(){
         try {
             $this->_helper->layout()->disableLayout();
@@ -97,6 +119,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $distid=base64_decode($this->_getParam("distid"));
             $perid=base64_decode($this->_getParam("perid"));
             $comment=$this->_getParam("comment");
+
             $dbdistribution=new Distribution_Model_DbTable_Distribution();
             $ldistribution=new Distribution_Model_DbTable_logObsrvationDistribution();
             $pk=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,
@@ -107,21 +130,25 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             if ($dataobs) {
                 $pk['logobdistrid']=$dataobs['logobdistrid'];
                 if ($ldistribution->_update($data,$pk)) {
-                    // $dbdistribution->_update($data,$pk);
-                    $this->_redirect("/distribution/distribution/index");
-                }
-            }
-            else{
-                $datadis=$dbdistribution->_getFilter($pk);
-                $formData=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,
-                                'perid'=>$perid,'observation'=>$datadis[0]['observation'],'register'=>$this->sesion->uid,
-                                'comments'=>$comment,'state'=>'A');
-                if ($ldistribution->_save($formData)) {
-                    $data=array("state"=>'A');
+                    unset($pk['logobdistrid']);
+                    unset($data['comments']);
+                    $pk['distid']=$dataobs['distid'];
+                    $data['state']='A';
                     $dbdistribution->_update($data,$pk);
-                    $this->_redirect("/distribution/distribution/index");
+                    $this->_redirect("/distribution/distribution/");
                 }
             }
+            // else{
+            //     $datadis=$dbdistribution->_getFilter($pk);
+            //     $formData=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,
+            //                     'perid'=>$perid,'observation'=>$datadis[0]['observation'],'register'=>$this->sesion->uid,
+            //                     'comments'=>$comment,'state'=>'A');
+            //     if ($ldistribution->_save($formData)) {
+            //         $data=array("state"=>'A');
+            //         $dbdistribution->_update($data,$pk);
+            //         $this->_redirect("/distribution/distribution/index");
+            //     }
+            // }
         } catch (Exception $e) {
             print "Error:".$e->getMessage();
         }
