@@ -510,22 +510,42 @@ var syllabus = {
 		})
 	},
 	close_sylabus:function(){
-		//$("#accept_close_syllabus").modal('show')
+		$('#closeSyllabusModal').fadeIn();
 		$.ajax({
-				url: "/syllabus/syllabus/closure",
-				type: 'POST',
-				data:$("#frmSyllabus").serialize(),
-				success: function ($data){
-					if ($data.status == true) {
-                     window.location.href=window.location.href;
+			url: "/syllabus/syllabus/closure",
+			type: 'POST',
+			data:$("#frmSyllabus").serialize(),
+			success: function ($data){
+				console.log($data);
+				if ($data.status == true) {
+					setTimeout(function(){
+						$('#idStateSilabo')	.removeClass('stateNoClose')
+											.html('Sílabo Cerrado <span class="glyphicon glyphicon-ok-circle"></span>')
+											.addClass('stateClose');
+					}, 3000);
+
+					if ($data.otrosCursos == 1) {
+						setTimeout(function(){
+							$('.chargeDiv').html('<span class="text-success">Clonado <span class="glyphicon glyphicon-ok"></span></span>')
+						}, 10000);
+
+						setTimeout(function(){
+							window.location.href=window.location.href;
+						}, 12000);
 					}else{
-						$("#error-syllabus").show()
-					}
-				},
-				error: function($error){
-					alert("Ocurrio un error al cerrar síllbus");
+						setTimeout(function(){
+							window.location.href=window.location.href;
+						}, 5000);
+					};
+				}else{
+					$('#closeSyllabusModal').fadeOut();
+					$("#error-syllabus").slideDown();
+					setTimeout(function(){
+						$("#error-syllabus").slideUp();
+					}, 8000);
 				}
-			});
+			}
+		});
 	},
 	preview_syllbus :function(){
 		var $params = {};

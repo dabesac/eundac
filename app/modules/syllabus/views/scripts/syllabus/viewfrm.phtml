@@ -1,16 +1,38 @@
+<div id="closeSyllabusModal" class="divCloseSyllabusModal" hidden>
+	<div class="capaNegra"></div>
+	<div class="message">
+		<div class="cursoSide">
+			<p class="nombreCurso">
+				<?php print($this->dataCourse['name']) ?> <small>Turno <?php print($this->dataCourse['turno']) ?></small>
+			</p>
+			<p class="escuela">
+				<?php print($this->dataCourse['escuela']) ?>
+			</p>
+		</div>
+		<p id="idStateSilabo" class="stateSilabo stateNoClose">Cerrando Silabo <span class="stateDiv"><img src="/img/spinner.gif" alt="Loading..."></span></p>
+		<div class="anotherCourses">
+			<?php if ($this->dataAnotherCourses == 'no'): ?>
+				<p class="infoText text-muted"><span class="glyphicon glyphicon-info-sign"></span> No se detectaron otros turnos asignados para clonar el sílabo, o talvez ya han sido cerrados.</p>
+			<?php else: ?>
+				<p class="infoText text-muted"><span class="glyphicon glyphicon-info-sign"></span> Se detecto otros turnos a este mismo curso y en esta misma escuela, a continuación se clonara el sílabo. <br>
+				<span class="glyphicon glyphicon-exclamation-sign text-danger"></span> <strong>Recuerde que necesita <span class="text-danger">cerrar</span> el silabo del curso al que se esta clonando.</strong></p>
 
-
+				<?php foreach ($this->dataAnotherCoursesArray as $c => $course): ?>
+					<p class="anotherCurso text-muted"><?php print($this->dataCourse['name']) ?> <small>Turno <?php print($course['turno']) ?></small> <span class="chargeDiv"><img src="/img/spinner.gif" alt="Loading.."> Clonando</span></p>
+				<?php endforeach ?>
+			<?php endif ?>
+		</div>
+		<p class="paciencia text-danger"><span class="glyphicon glyphicon-time"></span> Tenga paciencia, esto puede tardar un par de minutos....</p>
+	</div>
+</div>
+<br>
 <?php
 $tipo=($this->periodocurso['type_rate']=="O")? "OBJETIVOS": "COMPETENCIAS"; ?>
 
 
 
-<div style='display:none' id='error-syllabus' class="panel panel-default" style="margin: 0px 80px 0px 80px">
-	<div class="panel-body">
-		<div class="alert alert-danger" style="font-size:18px">
-			<b>Aviso: </b>Rellene los campos obligatorios para Cerrar el Silabo.
-		</div>
-	</div>
+<div id='error-syllabus' class="alert alert-danger divErrorSyllabus" hidden>
+	<p><span class="glyphicon glyphicon-exclamation-sign"></span> Rellene todos los campos obligatorios para <strong>Cerrar el Silabo.</strong></p>
 </div>
 
 <?php 
@@ -178,6 +200,8 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 <input type="hidden" id='courseid_hidden' name ="courseid" value="<?php echo base64_encode($this->periodocurso['courseid'])?>">
 <input type="hidden" id='turno_hidden'name ="turno" value="<?php echo base64_encode($this->periodocurso['turno'])?>">
 <input type="hidden" id='type_hidden'name ="type_rate" value="<?php echo base64_encode($this->periodocurso['type_rate'])?>">
+
+<input type="hidden" id="anotherCourses" name="anotherCourses" value="<?php echo base64_encode($this->dataAnotherCourses) ?>">
 </form>
 <div class="modal fade" id="myModalSyllabus" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 

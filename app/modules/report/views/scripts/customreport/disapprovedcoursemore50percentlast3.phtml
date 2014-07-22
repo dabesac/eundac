@@ -1,0 +1,37 @@
+<?php
+if ($this->data) {	?>
+	<table class='table table-hover'>
+		<tr class='info'>
+			<th class='text-center'>#</th>
+			<th class='text-center'>Código del Curso</th>
+			<th class='text-center'>Nombre del Curso</th>
+			<th class='text-center'>Porcentaje (%)</th>
+		</tr>
+		<?php
+		foreach ($this->data as $key => $data) {	
+			$number = number_format($data['porcentaje'], 2, ',', '');
+			?>	
+			<tr>
+				<td class='text-center'><?php echo $key+1?></td>
+				<td class='text-center'><?php echo $data['courseid']?></td>
+				<td><?php echo $data['name']?></td>
+				<td class='text-center'><?php echo $number." %"?></td>
+			</tr>
+		<?php	
+		}
+		?>
+	</table>
+<?php	
+}
+else{	?>
+	<br>
+	<div class='row'>
+		<div class="col-md-12">
+			<div class='alert alert-danger col-md-6 col-md-offset-3'>
+				<p><b><h4><center><span class='glyphicon glyphicon-exclamation-sign' ></span> No se entontraron registros</center></h4></b></p>
+			</div>			
+		</div>		
+	</div>
+<?php
+}
+?>

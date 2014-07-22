@@ -36,13 +36,13 @@ $ldistri =$this->ldistribution;
 <div class="table-responsive">
 <table class="table table-hover table-condensed"> 
 	<tr>
-		<th class="col-md-1 text-center">#</th>
-		<th class="col-md-1 text-center">Periodo</th>
+		<th class="text-center">#</th>
+		<th class="text-center">Periodo</th>
 		<th >Número</th>
-		<th class="col-md-2 text-center">Fecha Aprobación</th>
-		<th class="col-md-1 text-center">Estado</th>
-		<th class="col-md-2"><center>Modificar Horario</center></th>
-		<th class="col-md-3" colspan="5"><center>Operaciones</center></th>
+		<th class="text-center">Fecha Aprobación</th>
+		<th class="text-center">Estado</th>
+		<th class="text-center"><center>Modificar Horario</center></th>
+		<th class="text-center" colspan="5"><center>Operaciones</center></th>
 	</tr>
 	<?php 
 	if ($ldistri)
@@ -134,7 +134,7 @@ $ldistri =$this->ldistribution;
 				<?php
 			}elseif ($distri['state']=="B") {
 				?>				
-					<a id="sendp" href="#" distid='<?php echo $distid;?>' perid='<?php echo $perid;?>' escid='<?php echo base64_encode($distri['escid']);?>' subid='<?php echo base64_encode($distri['subid'])?>'><span class="glyphicon glyphicon-send" data-toggle="tooltip" title="Enviar Distribución a pedagogía"></span></a>
+					<a class="sendp" href="#" distid='<?php echo $distid;?>' perid='<?php echo $perid;?>' escid='<?php echo base64_encode($distri['escid']);?>' subid='<?php echo base64_encode($distri['subid'])?>'><span class="glyphicon glyphicon-send" data-toggle="tooltip" title="Enviar Distribución a pedagogía"></span></a>
 				<?php						
 			}
 			else{	?>
@@ -144,34 +144,43 @@ $ldistri =$this->ldistribution;
 			?>
 			</center>
 		</td>
+		<td><center>
+			<a href="/distribution/distribution/edit/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>/anio/<?php echo base64_encode($this->anio) ?>"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Modificar Distribución"></span></a>
+			</center>
+		</td>
+		<td><center>
+				<?php
+				if ($distri['state']=='B') {	?>
+					<a href="/distribution/distribution/delete/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" title="Eliminar Distribución"></span></a>
+				<?php	
+				} else {	?>
+					<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="No puede eliminar la Distribución"></span></a>
+				<?php	
+				}					
+				?>
+			</center>
+		</td>
 		<td>
 			<center>
 				<a href="/distribution/printdistribution/index/escid/<?php echo base64_encode($distri['escid'])?>/subid/<?php echo base64_encode($distri['subid'])?>/perid/<?php echo $perid;?>/distid/<?php echo $distid;?>"><span class="glyphicon glyphicon-print" data-toggle="tooltip" title="Imprimir Distribución"></span></a>
-			</center>
-		</td>
-		<td>
-			<center>
-				<a href="/distribution/distribution/edit/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>/anio/<?php echo base64_encode($this->anio) ?>"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Modificar Distribución"></span></a>
-			</center>
-		</td>
-		<td>
-			<center>
-				<?php
-					if ($distri['state']=='B') {	?>
-						<a href="/distribution/distribution/delete/distid/<?php echo $distid;?>/perid/<?php echo $perid;?>"><span class="glyphicon glyphicon-trash" data-toggle="tooltip" title="Eliminar Distribución"></span></a>
-					<?php	
-					} else {	?>
-						<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="No puede eliminar la Distribución"></span></a>
-					<?php	
-					}
-					
-				?>
 			</center>
 		</td>
 		<td><center>
 			<?php
 			if ($distri['state']=='C' || $distri['state']=='I') { ?>
 				<a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Distribución Cerrado"></span></a>
+				<!-- <div class="btn-group">
+				  	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+				    Action <span class="caret"></span>
+				  	</button>
+				  	<ul class="dropdown-menu" role="menu">
+				    	<li><a href="#">Action</a></li>
+				    	<li><a href="#">Another action</a></li>
+				    	<li><a href="#">Something else here</a></li>
+				    	<li class="divider"></li>
+				    	<li><a href="#">Separated link</a></li>
+				  	</ul>
+				</div> -->
 				<?php
 			}elseif ($distri['state']=="A" || $distri['state']=="B" || $distri['state']=='O') {
 				if ($hours) {
@@ -268,7 +277,25 @@ $ldistri =$this->ldistribution;
   	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!-- MODAL ENVIAR DISTRIBUCION A PEDAGOGIA-->
+<div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  	<div class="modal-dialog" style='width:34%'>
+    	<div class="modal-content">
+	      	<div class="modal-body">
+	      		<div class='text-center text-info'>
+	      			<h4><span class='glyphicon glyphicon-info-sign'></span> Desea enviar su distribucion a pedagogía </h4>
+	      		</div>
+	      	</div>
+	      	<div class="modal-footer">
+	      		<button id="yesdis" type="button" class="btn btn-success"><span class="glyphicon glyphicon-send"></span> Enviar Distribución</button>
+	        	<button id='cancels'type="button" class="btn btn-danger" data-dismiss="modal" >Cancelar</button>
+	      	</div>
+    	</div><!-- /.modal-content -->
+  	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <div id="valids"></div>
+<div id="obsvalids"></div>
+
 
 <script>
 // $("#valids").hide();
@@ -288,30 +315,48 @@ $('.obser').hover(function(){
 		$("#Modals").modal("show");
 		$("#sendis").click(function(){
 			var coments=$("textarea#comentss").val();
+			var state="<?php echo base64_encode('C')?>";
 			coments=coments.trim();
-			// alert(coments);
+			//alert(coments);
 			$("#Modals").modal("hide");
 			$('#Modals').on('hidden.bs.modal', function (e) {
-				var url="/distribution/distribution/sendistribution/state/<?php echo base64_encode("A")?>/escid/"+params['escid1']+"/subid/"+params['subid1']+"/distid/"+params['distid1']+"/perid/"+params['perid1']+"/comment/"+coments;
-				$("#valids").load(url);
 				$('.obser').popover('hide');
-			})
-		})
-	})
+				var url1="/distribution/distribution/sendistribution/";
+				var dataString = 'state='+state+'&escid='+params['escid1']+'&subid='+params['subid1']+'&distid='+params['distid1']+'&perid='+params['perid1']+'&comment=' + coments;
+
+		        $.ajax({
+		            type: "POST",
+		            url: url1,
+		            data: dataString,
+		            success: function(data) {
+		            	$('#obsvalids').html(data);
+		            }
+		        });
+
+				// var url="/distribution/distribution/sendistribution/state/<?php echo base64_encode("A")?>/escid/"+params['escid1']+"/subid/"+params['subid1']+"/distid/"+params['distid1']+"/perid/"+params['perid1']+"/comment/"+coments;
+				// $('.obser').popover('hide');
+			});
+		});
+	});
 });
 $('#cancel').click(function(){
 	$('#myModals').modal('show');
 });
 
-$("#sendp").click(function(){
+$(".sendp").click(function(){
+	$("#sendModal").modal('show');
 	var params = {
 		escid1:$(this).attr('escid'),
 		subid1:$(this).attr('subid'),
 		distid1:$(this).attr('distid'),
 		perid1:$(this).attr('perid')
 	};
-	var url="/distribution/distribution/sendistribution/state/<?php echo base64_encode("A")?>/escid/"+params['escid1']+"/subid/"+params['subid1']+"/distid/"+params['distid1']+"/perid/"+params['perid1'];
+	$("#yesdis").click(function(){
+		var url="/distribution/distribution/oksendistribution/state/<?php echo base64_encode("A")?>/escid/"+params['escid1']+"/subid/"+params['subid1']+"/distid/"+params['distid1']+"/perid/"+params['perid1'];
 		$("#valids").load(url);
+		$("#sendModal").modal("hide");
+	});
+	
 });
 $('.glyphicon').tooltip();
 

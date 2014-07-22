@@ -85,7 +85,7 @@
 				if ($distrib['comments']<>"" && $distrib['state']=="A"){	
 					?>
 				<td class="text-center">
-					<p class="correction" comentss="<?php echo $distrib["comments"]?>">
+					<p class="correction" comentss="<?php echo $distrib["comments"]?>" observationver='<?php echo $distrib['observationver']?>'>
 						<span class='correc' title="AVISO" data-container="body" data-toggle="popover" data-content="Ya corrigió su distribución"><?php echo $state?></span>
 					</p>
 				</td>	
@@ -102,7 +102,7 @@
 				<?php
 				}
 				else{	?>
-					<td><span title="eescriba" rel="tooltip" placeholder="escribaa" id="<?php echo $i?>"  value='editar'>
+					<td><span title="Ingrese una observación" rel="tooltip" placeholder="Ingrese una observación" id="<?php echo $i?>"  value='editar'>
 					<?php if($distrib['observation']=='')
 					{
 					  echo "Haga doble clic para editar su observación";
@@ -197,10 +197,7 @@
 	</table>
 <?php else: ?>
 	<div class='col-md-10 col-md-offset-1 cont-font-not-register alert alert-info'>
-		<h3 class="text-info text-center"><b>No existen datos de esta escuela en este periodo...</b></h3>	    
-	    <h1 class='span-not-register'>
-	        <span class='glyphicon glyphicon-exclamation-sign' ></span>
-	    </h1>
+		<h3 class="text-info text-center"><span class='glyphicon glyphicon-exclamation-sign' ></span> <b>No existen datos de esta facultad en este periodo...</b></h3> 
 	</div>
 <?php endif ?>
 
@@ -242,7 +239,8 @@
 <script>
 	$(".correction").hover(function(){
 		var comentss=$(this).attr('comentss');
-		var sms="<h4><b class='text-info'>Comentario de parte del director de la respectiva escuela: </b><br><br>"+comentss+"<hr></h4>";
+		var observationv=$(this).attr('observationver');
+		var sms="<h4><b class='text-info'>Comentario de parte del director de la respectiva escuela: </b><br><br>"+comentss+"<hr></h4><br><br><h5><b class='text-success'>Esto era la observación: </b><br> "+observationv+ "</h5>";
 		$('#comments').html(sms);
 		$("#myModals").modal("show");
 	});

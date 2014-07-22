@@ -80,10 +80,14 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
                 $wher=array('eid'=>$disi['eid'],'oid'=>$disi['oid'],'escid'=>$disi['escid'],'subid'=>$disi['subid'],'distid'=>$disi['distid'],
                         'perid'=>$disi['perid']);
                 $dataobs=$ldistribution->_getUltimateObservation($wher);
-                if ($dataobs) {
+                $dataobsc=$ldistribution->_getUltimateObservationstatec($wher);
+                if ($dataobsc) {
                     // $dis[$i]['state']=$dataobs[0]['state'];
-                    $dis[$i]['comments']=$dataobs[0]['comments'];
-                    $dis[$i]['observation']=$dataobs[0]['observation'];                    
+                    $dis[$i]['observationver']=$dataobsc[0]['observation'];
+                    $dis[$i]['comments']=$dataobsc[0]['comments'];
+                }
+                if ($dataobs) {
+                    $dis[$i]['observation']=$dataobs[0]['observation'];
                 }
                 $i++;
             }
@@ -112,7 +116,7 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
     	// $dist=$distribution->_getOne($where);
 
     	//print_r($dist);
-        $state=$dist['state'];
+        //$state=$dist['state'];
         $formData['eid']=$eid;
         $formData['oid']=$oid;
         $formData['escid']=$escid;
@@ -126,19 +130,22 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
         // }
 
         // if ($obs!="''" && $obs!="") {
-        $ldistribution=new Distribution_Model_DbTable_logObsrvationDistribution();
-        $wheresp=array('eid'=>$eid,'oid'=>$oid,'distid'=>$distid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
-        $datao=$ldistribution->_getUltimateObservation($wheresp);
-        $dataobs=trim($datao[0]['observation']);
+        //$wheresp=array('eid'=>$eid,'oid'=>$oid,'distid'=>$distid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
+        //$datao=$ldistribution->_getUltimateObservation($wheresp);
+        //$dataobs=trim($datao[0]['observation']);
+        //print_r($datao);
+        //print_r($formData);
+
     
-        if ($dataobs<>$obs) {
-            $formData['state']='O';
+        if ($obs) {
+            $ldistribution=new Distribution_Model_DbTable_logObsrvationDistribution();
+            $formData['state']='A';
             $formData['observation']=$obs;
             $formData['register']=$this->sesion->uid;
-            $distr = new Distribution_Model_DbTable_Distribution();
             $ldistribution->_save($formData);            
             // unset($formData['observation']);
             // unset($formData['register']);
+            $distr = new Distribution_Model_DbTable_Distribution();
             $pk=array('eid'=>$eid,'oid'=>$oid,'distid'=>$distid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
             $data=array('state'=>'O');
             $distr->_update($data,$pk);

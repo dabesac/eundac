@@ -1,0 +1,353 @@
+<?php 
+  	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tasks"></span> Reportes Personalizados');
+  	$this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
+?>
+<br>
+<div class='row text-right'>
+	<div class='col-md-12'>
+		<div class='col-md-2 col-md-offset-1'><b>Seleccione una facultad: </b></div>
+		<div class='col-md-3'>
+			<select id='seletfac' class='form-control'>
+				<option value="nada">-- Seleccione Facultad --</option>
+					<?php
+						if ($this->data) {
+							foreach ($this->data as $key => $facultys) {	
+								if ($facultys['facid']!='TODO' && $facultys['facid']!='NINGUN') {
+								?>
+									<option value='<?php echo $facultys['facid']?>'><?php echo $facultys['name']?></option>
+							<?php
+								}
+							}
+						}
+					?>
+			</select>
+		</div>
+		<div class='col-md-2'><b>Seleccione una Escuela: </b></div>
+		<div class='col-md-3'>
+			<select id='seletspec' class='form-control'>
+				<option value="nada">-- Seleccione una Facultad --</option>
+			</select>
+		</div>
+	</div>	
+</div><br>
+<div class='row hidden' id="contenido">
+	<div class="col-md-10 col-md-offset-2">
+	  	<div class="col-md-5">
+	    	<div class="thumbnail">
+	      		<div class="caption">
+	        		<h3><span class='text-primary'><b>Cantidad de Matrículas</b></span></h3>
+	        		<p><b>Alumnos matriculados por 2º, 3º, 4º, 5º ..., a un curso en los ultimos 4 periodos.</b></p>
+	        		<p class='text-right'><a id='report1' href="#" data-toggle="modal" data-target="#myModal1" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
+	      		</div>
+	    	</div>
+	  	</div>
+	  	<div class="col-md-5">
+	    	<div class="thumbnail">
+	      		<div class="caption">
+	        		<h3><span class='text-primary'><b>Desaprobados mayor a 50%</b></span></h3>
+	        		<p><b>Curso cuyo grado de desaprobados es mayor al 50% en los ultimos 3 anios.</b></p>
+	        		<p class='text-right'><a id="report2" href="#" data-toggle="modal" data-target="#myModal2" class="btn btn-success" role="button"><span class='glyphicon glyphicon-circle-arrow-up'></span> Ver reporte</a></p>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+	<div class="col-md-10 col-md-offset-2">
+	  	<div class="col-md-5">
+	    	<div class="thumbnail">
+	      		<div class="caption">
+	        		<h3><span class='text-primary'><b>Promedio Académico</b></span></h3>
+	        		<p><b>Alumnos que mejoran y/o disminuyen su promedio academico en los ultimos 4 periodos.</b></p>
+	        		<p class='text-right'><a href="#" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
+	      		</div>
+	    	</div>
+	  	</div>
+	  	<div class="col-md-5">
+	    	<div class="thumbnail">
+	      		<div class="caption">
+	        		<h3><span class='text-primary'><b>Frecuencia de Ingreso</b></span></h3>
+	        		<p><b>identificar frecuencia de ingreso al sistema por alumno/docente/administrativo.</b></p>
+	        		<p class='text-right'><a href="#" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+</div>
+<!-- Modal Reporte 1-->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style='width:80%'>
+	    <div class="modal-content">
+	      	<div class="modal-header" style='background:#e5e5e5'>
+	        	<button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><span class="glyphicon glyphicon-log-out"> Cerrar</span></button>
+	        	<center><h3 class="modal-title" id="myModalLabel"><span class='glyphicon glyphicon-list-alt'></span><span class='text-primary'><b> Cantidad de Matrículas</b></span></h3></center>
+	      	</div>
+		    <div class="modal-body">
+	      		<div class='panel panel-primary'>
+	      			<br>	      		
+		      		<div class='row text-right'>
+		      			<div class='col-md-12'>
+		      				<div class='col-md-2 col-md-offset-1'><b>Seleccione un Año: </b></div>
+		      				<div class='col-md-3'>
+		      					<select id='seletanio' class='form-control'>
+		      						<option value="vacio">-- Seleccione Año --</option>
+		      							<?php
+		      								if ($this->anio) {
+		      									for ($i=$this->anio; $i >= 1991; $i--) { 
+		      									?>
+		      										<option value='<?php echo $i?>'><?php echo $i?></option>
+		      									<?php
+		      									}
+		      								}
+		      							?>
+		      					</select>
+		      				</div>
+		      				<div class='col-md-2'><b>Seleccione un Periodo: </b></div>
+		      				<div class='col-md-3'>
+		      					<select id='seletperiod' class='form-control'>
+		      						<option>-- Seleccione un Año --</option>
+		      					</select>
+		      				</div>
+		      			</div>	
+		      		</div><br>
+		      		<div class='row text-right'>
+		      			<div class='col-md-12'>
+		      				<div class='col-md-2  col-md-offset-1'><b>Seleccione una Currícula: </b></div>
+		      				<div class='col-md-3'>
+		      					<select id='seletcurri' class='form-control'>
+		      						<option>-- Seleccione una Escuela --</option>
+		      					</select>
+		      				</div>
+		      				<div class='col-md-2'><b>Seleccione un Curso: </b></div>
+		      				<div class='col-md-3'>
+		      					<select id='seletcurso' class='form-control'>
+		      						<option value='vacios'>-- Seleccione una Currícula --</option>
+		      					</select>
+		      				</div>
+		      			</div>	
+		      		</div><br>
+		      		<div class='row'>
+		      			<div class='col-md-12'>
+		      				<div class='col-md-4 col-md-offset-5'><a id='viewReports' href="#" class='btn btn-primary disabled'>Ver reporte</a></div>
+		      			</div>	
+		      		</div><br>
+		      		<div id='data_end'></div>
+	      		</div>
+	      	</div>
+	      	<!-- <div class="modal-footer">
+	        	<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+	      	</div> -->
+	    </div>
+	</div>
+</div>
+
+<!-- Modal Reporte 2-->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style='width:60%'>
+	    <div class="modal-content">
+	      	<div class="modal-header" style='background:#e5e5e5'>
+	        	<button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><span class="glyphicon glyphicon-log-out"> Cerrar</span></button>
+	        	<center><h3 class="modal-title" id="myModalLabel"><span class='glyphicon glyphicon-circle-arrow-up'></span><span class='text-primary'><b> Desaprobados mayor a 50%</b></span></h3></center>
+	      	</div>	      	
+		    <div class="modal-body">
+		    	<div class='panel panel-primary'>
+	      			<br>	      		
+		      		<div class='row text-right'>
+		      			<div class='col-md-12 col-md-offset-1'>
+		      				<div class='col-md-2'><b>Seleccione un Año: </b></div>
+		      				<div class='col-md-2'>
+		      					<select id='seletanio1' class='form-control'>
+		      						<option>-- Seleccione Año --</option>
+		      							<?php
+		      								if ($this->anio) {
+		      									for ($i=$this->anio; $i >= 1991; $i--) { 
+		      									?>
+		      										<option value='<?php echo $i?>'><?php echo $i?></option>
+		      									<?php
+		      									}
+		      								}
+		      							?>
+		      					</select>
+		      				</div>
+		      				<div class='col-md-2 '><b>Seleccione una Currícula: </b></div>
+		      				<div class='col-md-4'>
+		      					<select id='seletcurri1' class='form-control'>
+		      						<option>-- Seleccione una Escuela --</option>
+		      					</select>
+		      				</div>		      				
+		      			</div>	
+		      		</div><br>
+		      		<div class='row'>
+		      			<div class='col-md-12'>
+		      				<div class='col-md-4 col-md-offset-5'><a id='viewReports1' href="#" class='btn btn-primary disabled'>Ver reporte</a></div>
+		      			</div>	
+		      		</div><br>
+		    		<div id="dataLoad"></div>	
+	      		</div>
+	      	</div>
+	    </div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	$("#seletfac").change(function(){
+		var facid=$("#seletfac").val();
+		var url=("/report/customreport/getspeciality/facid/"+$.base64.encode(facid));
+		$("#seletspec").html("<img src='/img/spinner.gif'> Cargando....");
+		$("#seletspec").load(url);
+
+		if (facid=='nada') {
+			$("#contenido").addClass("hidden");
+		};
+	});
+
+	$("#seletspec").change(function(){
+		$("#contenido").removeClass("hidden");
+		var valor=$("#seletspec").val();
+
+		if (valor=='nada') {
+			$("#contenido").addClass("hidden");
+		}
+		else{
+			var ss=$("#seletspec").val();
+			var vari=ss.split("|");
+			var escid=vari[0];
+			var subid=vari[1];
+			var url=("/report/customreport/getcurricula/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid));
+			$("#seletcurri").html("<img src='/img/spinner.gif'> Cargando....");
+			$("#seletcurri").load(url);
+
+			$("#seletcurri1").html("<img src='/img/spinner.gif'> Cargando...");
+			$("#seletcurri1").load(url);
+		};
+	});
+
+	$('#myModal1').on('shown.bs.modal', function (e) {
+		var valor1=$("#seletcurri").val();
+
+		if (valor1=='vacio') {
+			$("#data_end").empty();
+			$("#viewReports").addClass('disabled');
+			$('#seletcurso > option[value=]').attr('selected', 'selected');
+		};
+	});
+
+	var anioo=<?php echo $this->anio?>;
+	if (anioo) {
+		$('#seletanio > option[value='+anioo+']').attr('selected', 'selected');
+		$('#seletanio1 > option[value='+anioo+']').attr('selected', 'selected');
+		var vanio=$("#seletanio").val();
+		var url=("/report/customreport/getperiods/anio/"+$.base64.encode(vanio));
+		$("#seletperiod").html("<img src='/img/spinner.gif'> Cargando....");
+		$("#seletperiod").load(url);
+	};
+
+	$("#seletanio").change(function(){
+		var vanio=$("#seletanio").val();
+		var url=("/report/customreport/getperiods/anio/"+$.base64.encode(vanio));
+		$("#seletperiod").html("<img src='/img/spinner.gif'> Cargando....");
+		$("#seletperiod").load(url);
+	});
+
+	$("#seletcurri").change(function(){
+		var valorr=$("#seletcurri").val();
+		var s=valorr.split("|");
+		var curid=s[0];
+		var escid=s[1];
+		var url=("/report/customreport/getcourses/curid/"+$.base64.encode(curid)+"/escid/"+$.base64.encode(escid))
+		$("#seletcurso").html("<img src='/img/spinner.gif'> Cargando....");
+		$("#seletcurso").load(url);
+	});
+
+	$("#seletcurso").change(function(){
+		var vcurso=$("#seletcurso").val();
+		var vperiod=$("#seletperiod").val();
+		if (vcurso!='' ) {
+			$("#viewReports").removeClass('disabled');			
+		}
+		else{
+			$("#viewReports").addClass('disabled');	
+		};
+	});
+
+	$("#viewReports").click(function(){
+		var anio=$("#seletanio").val();
+		var perid=$("#seletperiod").val();
+		var valor=$("#seletspec").val();
+		var vari=valor.split("|");
+		var escid=vari[0];
+		var subid=vari[1];
+		var valorr=$("#seletcurri").val();
+		var s=valorr.split("|");
+		var curid=s[0];
+		var courseid=$("#seletcurso").val();
+
+		if (anio=='vacio') {
+			alert("Seleccione un Año");
+			return false;
+		}
+		else if (perid=='') {
+			alert("Seleccione un Periodo");
+			return false;
+		}
+		else if (valorr=='vacio'){
+			alert("Seleccione una Currícula");
+			return false;	
+		}
+		else if (courseid==''){
+			alert("Seleccione un Curso");
+		}
+		else{
+			var url=("/report/customreport/registrationquantityrepeatstudents/perid/"+$.base64.encode(perid)+"/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid)+"/courseid/"+$.base64.encode(courseid));
+			$("#data_end").html("<img src='/img/spinner.gif'> Cargando....");
+			$("#data_end").load(url);			
+		};
+	});
+
+	$("#seletcurri1").change(function(){
+		var x=$("#seletcurri1").val();
+
+		if (x!='') {
+			$("#viewReports1").removeClass('disabled');			
+		}
+		else{
+			$("#viewReports1").addClass('disabled');	
+		};
+	});
+
+	$("#viewReports1").click(function(){
+		var ee=$("#seletspec").val();
+		var ees=ee.split("|");
+		var escid=ees[0];
+		var subid=ees[1];
+
+		var cc=$("#seletcurri1").val();
+		var ccs=cc.split("|");
+		var curid=ccs[0];
+
+		var anio=$("#seletanio1").val();
+		if (cc=='vacio'){
+			alert("Seleccione una Currícula");
+			return false;	
+		}
+		else if (anio=='vacio'){
+			alert("Seleccione un Año");
+			return false;		
+		}
+		else{
+			var url=("/report/customreport/disapprovedcoursemore50percentlast3/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid)+"/anio/"+$.base64.encode(anio));
+
+			$("#dataLoad").html("<img src='/img/spinner.gif'> Cargando...");
+			$("#dataLoad").load(url);			
+		};
+
+	});
+
+	$('#myModal2').on('shown.bs.modal', function (e) {
+		var valor2=$("#seletcurri1").val();
+
+		if (valor2=='vacio') {
+			$("#dataLoad").empty();
+			$("#viewReports1").addClass('disabled');	
+		};
+	});
+</script>
