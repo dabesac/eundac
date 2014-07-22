@@ -55,7 +55,6 @@
 <script type="text/javascript" src='/external_library/md5/md5.js'></script>
 <script type="text/javascript" src='/external_library/md5/change.js'></script>
 <script>
-    // $(document).ready(PI.onReady);
     $(function(){
         var rol = $('#rol').val();
         if (rol == 'AL' || rol == 'EG') {
@@ -71,20 +70,5 @@
         if (rellenoEncuesta && rellenoEncuesta == 'No') {
             $(location).attr('href', '/alumno/index/encuesta');
         };
-
-        
-
-        $(window).scroll(function(){
-            var scroll = $(window).scrollTop();
-            if( scroll >= 106){
-                $("#header-info").addClass('data-header-info');
-                $("#nav-secundary").addClass('info-background');
-            }
-            else{
-                
-                $("#header-info").removeClass('data-header-info');
-                $("#nav-secundary").removeClass('info-background');
-            }
-        });
     });
  </script>
