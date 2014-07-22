@@ -14,25 +14,28 @@ class Docente_NotasController extends Zend_Controller_Action{
 
 	public function indexAction(){
 
+		//DataBases
+		$tb_periods_course = new Api_Model_DbTable_PeriodsCourses();
+		$tb_specialyti     = new Api_Model_DbTable_Speciality();
+		$tb_course         = new Api_Model_DbTable_Course();
+		$base_period       = new Api_Model_DbTable_Periods();
+
 		$perid_encode = base64_encode($this->sesion->period->perid);
 		$perid = base64_decode($this->_getParam('perid',$perid_encode));
 
-		//Bloquear Docentes
 
-		$where['eid']=$this->sesion->eid;
-		$where['oid']=$this->sesion->oid;
-		$where['uid']=$this->sesion->uid;
-		$where['pid']=$this->sesion->pid;
-		$where['perid']=$perid;
-		$where['is_main']='S';
-		$this->view->uid=$where['uid'];
+		$where['eid']     = $this->sesion->eid;
+		$where['oid']     = $this->sesion->oid;
+		$where['uid']     = $this->sesion->uid;
+		$where['pid']     = $this->sesion->pid;
+		$where['perid']   = $perid;
+		$where['is_main'] = 'S';
+
+		$this->view->uid = $where['uid'];
 
 		$this->view->perid= $perid;
-		$tb_periods_course = new Api_Model_DbTable_PeriodsCourses();
 		$data_courses = $tb_periods_course->_getCourseTeacher($where);
 		
-        $tb_course= new Api_Model_DbTable_Course();
-        $tb_specialyti = new Api_Model_DbTable_Speciality();
 
 		$faculty=array();
 
@@ -67,7 +70,6 @@ class Docente_NotasController extends Zend_Controller_Action{
 		}
 		$this->view->faculty=$faculty;
 
-		$base_period = new Api_Model_DbTable_Periods();
 	    $data_period = $base_period->_getOnePeriod($where);
 	    $period_tm_act_ini = $base_period->_get_periods_ini_temp_activo($where);
 	    
