@@ -75,86 +75,54 @@ table{
 </table>
 <div style="text-align:center; font-size:15px; margin-bottom:2%"><b>ASISTENCIA - PERIODO <?php echo $perid ?> </b></div>
 <table class='table-print' id='talassist'>
-        <thead>
-            <tr>
-                <th rowspan='2'>#</th>
-                <th rowspan='2'>Apellidos y Nombres</th>
-                <th colspan='2' class='text-center success'>Semana 1</th>
-                <th colspan='2' class='text-center warning'>Semana 2</th>
-                <th colspan='2' class='text-center success'>Semana 3</th>
-                <th colspan='2' class='text-center warning'>Semana 4</th>
-                <th colspan='2' class='text-center success'>Semana 5</th>
-                <th colspan='2' class='text-center warning'>Semana 6</th>
-                <th colspan='2' class='text-center success'>Semana 7</th>
-                <th colspan='2' class='text-center warning'>Semana 8</th>
-                <?php if ($this->partial == 1) {?>
-                <th colspan='1' rowspan='2' class='text-center primary'>Ex.1er Parcial</th>
-                <?php }?>
-                <?php if ($this->partial == 2) {?>
-                <th colspan='1' rowspan='2' class='text-center primary'>Ex.2do Parcial</th>
-                <?php }?>
+    <thead>
+        <tr>
+            <th rowspan="2">#</th>
+            <th rowspan="2">Apellidos y Nombres</th>
+            <th colspan='2' class='text-center success'>Semana 1</th>
+            <th colspan='2' class='text-center warning'>Semana 2</th>
+            <th colspan='2' class='text-center success'>Semana 3</th>
+            <th colspan='2' class='text-center warning'>Semana 4</th>
+            <th colspan='2' class='text-center success'>Semana 5</th>
+            <th colspan='2' class='text-center warning'>Semana 6</th>
+            <th colspan='2' class='text-center success'>Semana 7</th>
+            <th colspan='2' class='text-center warning'>Semana 8</th>
+            <?php if ($this->partial == 1) {?>
+            <th class='text-center primary'>Ex.1er Parcial</th>
+            <?php }?>
+            <?php if ($this->partial == 2) {?>
+            <th class='text-center primary'>Ex.2do Parcial</th>
+            <?php }?>
 
-            </tr>
-            <tr id='tb-header-info'>
-                <th class='text-sesion-assist '>sesión 1</th>
-                <th class='text-sesion-assist '>sesión 2</th>
-                <th class='text-sesion-assist '>sesión 3</th>
-                <th class='text-sesion-assist '>sesión 4</th>
-                <th class='text-sesion-assist '>sesión 5</th>
-                <th class='text-sesion-assist '>sesión 6</th>
-                <th class='text-sesion-assist '>sesión 7</th>
-                <th class='text-sesion-assist '>sesión 8</th>
-                <th class='text-sesion-assist '>sesión 9</th>
-                <th class='text-sesion-assist '>sesión 10</th>
-                <th class='text-sesion-assist '>sesión 11</th>
-                <th class='text-sesion-assist '>sesión 12</th>
-                <th class='text-sesion-assist '>sesión 13</th>
-                <th class='text-sesion-assist '>sesión 14</th>
-                <th class='text-sesion-assist '>sesión 15</th>
-                <th class='text-sesion-assist '>sesión 16</th>
-                <th class='text-sesion-assist active'></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($this->infoassist as $key => $register) {?>
-            <tr >
-                <td class='text-name'><?php echo $key+1?></td>
-                <td class='text-name'><?php echo $register['last_name0']." ".$register['last_name1']." ,".$register['first_name']?></td>
-                <?php if ($this->partial==1) { ?>
-                    <td class='text-center'>
-                        <?php switch ($register['a_sesion_1']) {
-                            case 'A':
-                                echo "<img class='img-icon' src='/img/check-icon.png'>";
-                                break;
-                            case 'R':
-                                echo "<img class='img-icon' src='/img/R-icon.png'>";
-                                break;
-                            case 'T':
-                                echo "<img class='img-icon' src='/img/T-icon.png'>";
-                                break;
-                            case 'F':
-                                echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                                break;
-                        }?>
-                    </td>
-                    <td class='text-center'>
-                        <?php switch ($register['a_sesion_2']) {
-                            case 'A':
-                                echo "<img class='img-icon' src='/img/check-icon.png'>";
-                                break;
-                            case 'R':
-                                echo "<img class='img-icon' src='/img/R-icon.png'>";
-                                break;
-                            case 'T':
-                                echo "<img class='img-icon' src='/img/T-icon.png'>";
-                                break;
-                            case 'F':
-                                echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                                break;
-                        }?>
-                    </td>
+        </tr>
+        <tr id='tb-header-info'>
+            <th class='text-sesion-assist '>sesión 1</th>
+            <th class='text-sesion-assist '>sesión 2</th>
+            <th class='text-sesion-assist '>sesión 3</th>
+            <th class='text-sesion-assist '>sesión 4</th>
+            <th class='text-sesion-assist '>sesión 5</th>
+            <th class='text-sesion-assist '>sesión 6</th>
+            <th class='text-sesion-assist '>sesión 7</th>
+            <th class='text-sesion-assist '>sesión 8</th>
+            <th class='text-sesion-assist '>sesión 9</th>
+            <th class='text-sesion-assist '>sesión 10</th>
+            <th class='text-sesion-assist '>sesión 11</th>
+            <th class='text-sesion-assist '>sesión 12</th>
+            <th class='text-sesion-assist '>sesión 13</th>
+            <th class='text-sesion-assist '>sesión 14</th>
+            <th class='text-sesion-assist '>sesión 15</th>
+            <th class='text-sesion-assist '>sesión 16</th>
+            <th class='text-sesion-assist active'></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->infoassist as $key => $register) {?>
+        <tr >
+            <td class='text-name'><?php echo $key+1?></td>
+            <td class='text-name'><?php echo $register['last_name0']." ".$register['last_name1']." ,".$register['first_name']?></td>
+            <?php if ($this->partial==1) { ?>
                 <td class='text-center'>
-                    <?php switch ($register['a_sesion_3']) {
+                    <?php switch ($register['a_sesion_1']) {
                         case 'A':
                             echo "<img class='img-icon' src='/img/check-icon.png'>";
                             break;
@@ -170,7 +138,7 @@ table{
                     }?>
                 </td>
                 <td class='text-center'>
-                    <?php switch ($register['a_sesion_4']) {
+                    <?php switch ($register['a_sesion_2']) {
                         case 'A':
                             echo "<img class='img-icon' src='/img/check-icon.png'>";
                             break;
@@ -185,492 +153,524 @@ table{
                             break;
                     }?>
                 </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_5']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_6']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_7']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_8']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_9']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_10']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_11']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_12']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_13']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_14']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_15']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_16']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_17']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <?php }?>
-                <?php if ($this->partial ==  2) {?>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_18']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_19']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_20']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_21']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_22']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_23']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_24']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_25']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_26']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_27']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_28']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_29']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_30']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_31']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_32']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_33']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <td class='text-center'>
-                    <?php switch ($register['a_sesion_34']) {
-                        case 'A':
-                            echo "<img class='img-icon' src='/img/check-icon.png'>";
-                            break;
-                        case 'R':
-                            echo "<img class='img-icon' src='/img/R-icon.png'>";
-                            break;
-                        case 'T':
-                            echo "<img class='img-icon' src='/img/T-icon.png'>";
-                            break;
-                        case 'F':
-                            echo "<img  class='img-icon' src='/img/close-icon.png'>";
-                            break;
-                    }?>
-                </td>
-                <?php }?>
-            </tr>
-           <?php }?>
-        </tbody>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_3']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_4']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_5']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_6']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_7']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_8']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_9']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_10']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_11']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_12']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_13']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_14']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_15']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_16']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_17']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <?php }?>
+            <?php if ($this->partial ==  2) {?>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_18']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_19']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_20']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_21']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_22']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_23']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_24']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_25']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_26']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_27']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_28']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_29']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_30']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_31']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_32']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_33']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <td class='text-center'>
+                <?php switch ($register['a_sesion_34']) {
+                    case 'A':
+                        echo "<img class='img-icon' src='/img/check-icon.png'>";
+                        break;
+                    case 'R':
+                        echo "<img class='img-icon' src='/img/R-icon.png'>";
+                        break;
+                    case 'T':
+                        echo "<img class='img-icon' src='/img/T-icon.png'>";
+                        break;
+                    case 'F':
+                        echo "<img  class='img-icon' src='/img/close-icon.png'>";
+                        break;
+                }?>
+            </td>
+            <?php }?>
+        </tr>
+       <?php }?>
+    </tbody>
 </table>
 
 <?php 

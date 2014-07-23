@@ -2,7 +2,11 @@
 <?php 
 	$url = "/syllabus/print/index/courseid/".base64_encode($this->curso['courseid'])."/curid/".base64_encode($this->where['curid'])."/escid/".base64_encode($this->where['escid'])."/turno/".base64_encode($this->where['turno'])."/subid/".base64_encode($this->where['subid'])."/perid/". base64_encode($this->where['perid'])."";
 
- $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a><a href="'.$url.'" type="button" id="imprimir" class="btn btn-success"><span class="glyphicon glyphicon-print"></span> Imprimir</a>');?>
+ $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar </a>');
+
+ $this->placeholder('BtnSVCRight')->append('<a href="'.$url.'" type="button" id="imprimir" class="btn btn-default"><span class="glyphicon glyphicon-print"></span> Imprimir</a>')
+
+ ?>
 <div>
 	<center>
 		
@@ -60,11 +64,8 @@
 		</div>
 	</div>
 </div></br>
-<div class='col-md-10 col-md-offset-1 cont-font-not-register alert alert-success'>
-    <h3 class='text-not-register'><b>SÍLABO LISTO</b></h3>
-    <h2 class='text-not-register'><i> YA PUEDE IMPRIMIRLO </i></h2>
-    <h1 class='span-not-register'>
-        <span class='glyphicon glyphicon-exclamation-sign' ></span>
-    </h1>
+
+<div class="alert alert-success text-center">
+	<p><span class="glyphicon glyphicon-ok-circle"></span> El sílabo esta completado, <strong>ya puede imprimirlo.</strong> </p>
 </div>
 

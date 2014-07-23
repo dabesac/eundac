@@ -108,13 +108,12 @@
         <?php } ?>
         <input type="hidden" id="cantPreguntas" value="<?php echo $cPreguntas + 1 ?>">
         <input type="hidden" id="cantCursos" value="<?php echo $numcurso ?>">
-        <?php print_r($cPreguntas) ?>
       	<div class="enviarencuesta">
             <input type="submit" value="REGISTRAR ENCUESTA" class="btn btn-info form-control" id="enviarencuesta">
         </div>
         </form>
 <?php else: ?>
-    <h2 class="text-center"><span class="text-muted"><strong>Encuesta </strong></span>No Se Matriculo a Este Periodo</h2>
+    <h2 class="text-center text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> <span class="text-muted"><strong>Encuesta </strong></span>No Se Matriculo a Este Periodo</h2>
 <?php endif ?>
 
     <script>
@@ -156,7 +155,7 @@
                 })
 
                 if (cantRespondidos !== cantTotalesPreguntas) {
-                    alert("Debe de responder todas las respuestas.");
+                    alert("Debe de contestar todas las preguntas para registrar la encuesta.");
                     e.preventDefault();
                 };
             });

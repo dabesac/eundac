@@ -785,4 +785,56 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
      		print "Error: ".$e->getMessage();
      	}
      }
+
+    public function _registration_quantity_repeat($where=null){
+    	try {
+    		if ($where['eid']=='' || $where['oid']=='' || $where['escid']=='' || $where['subid']=='' || $where['curid']=='' || $where['perid']=='' || $where['courseid']=='') return false;
+
+    		$eid=$where['eid'];
+    		$oid=$where['oid'];
+    		$escid=$where['escid'];
+    		$subid=$where['subid'];
+    		$curid=$where['curid'];
+    		$perid=$where['perid'];
+    		$courseid=$where['courseid'];
+    		$sql=$this->_db->query("
+    			select * from registration_quantity_repeat('$curid','$courseid','$escid','$perid','$eid','$oid','$subid') AS 
+    			(
+    				 ".'uid'." character varying,
+    				 ".'veces'." bigint
+    			)
+    			");
+    		if ($sql) return $sql->fetchAll();
+    		return false;
+    	} catch (Exception $e) {
+    		print "Error: registration_quantity_repeat ".$e->getMessage();
+    	}
+    }
+
+    public function _disapprovedcoursemore50percentlast3($where=null){
+    	try {
+    		if ($where['eid']=='' || $where['oid']=='' || $where['escid']=='' || $where['subid']=='' || $where['curid']=='' || $where['anio']=='') return false;
+
+    		$eid=$where['eid'];
+    		$oid=$where['oid'];
+    		$escid=$where['escid'];
+    		$subid=$where['subid'];
+    		$curid=$where['curid'];
+    		$anio=$where['anio'];
+    		
+    		$sql=$this->_db->query("
+				select * from disapproved_course_more_50percent_last3('$eid','$oid','$escid','$subid','$curid','$anio') AS
+				(
+					".'name'." character varying,
+					".'courseid'." character varying,
+					".'porcentaje'." numeric
+				)
+    			");
+
+    		if ($sql) return $sql->fetchAll();
+    		return false;
+    	} catch (Exception $e) {
+    		print "Error: disapprovedcoursemore50percentlast3 ".$e->getMessage();
+    	}
+    }
 }

@@ -1,0 +1,18 @@
+<?php
+	if ($this->dataperiod) {	?>
+		<option value="">-- Seleccione un Periodo --</option>
+		<?php
+		foreach ($this->dataperiod as $key => $periods) {	
+			$peridd=substr($periods['perid'],2,1);
+			if ($peridd=='A' || $peridd=='B' || $peridd=='N') {
+			?>
+			<option value='<?php echo $periods['perid']?>'><?php echo $periods['perid']."| ".$periods['name']?></option>		
+		<?php	
+			}
+		}
+	}
+	else{	?>
+		<option value="">-- No tiene ningun periodo --</option>
+	<?php
+	}	
+?>

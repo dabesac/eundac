@@ -65,6 +65,35 @@ class Distribution_Model_DbTable_logObsrvationDistribution extends Zend_Db_Table
 								->where('escid = ?', $where['escid'])
 								->where('subid = ?', $where['subid'])
 								->where('perid = ?', $where['perid'])
+								->where('state = ?', 'A')
+								->order(array('logobdistrid DESC'))
+								->limit(1);
+			$results = $select->query();
+			$rows = $results->fetchAll();
+			if ($rows) return $rows;
+			return false;
+		}catch (Exception $ex){
+			print "Error: Get Info Distribution ".$ex->getMessage();
+		}
+		// $sql="select * from base_log_observation_distribution 
+		// 	where eid='20154605046' and oid='1' and escid='4MI' and subid='1901' and state='O'
+		// 	order by logobdistrid desc
+		// 	limit 1";
+	}
+
+	public function _getUltimateObservationstatec($where=null){
+		try{
+			if ($where['eid']=='' ||  $where['oid']=='' || $where['distid']=='' || $where['escid']=='' || $where['subid']=='' || $where['perid']=='') return false;
+			// $wherestr = "eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and subid='".$where['subid']."' and distid='".$where['distid']."' and perid='".$where['perid']."'";
+			$select = $this->_db->select()
+								->from("base_log_observation_distribution")
+								->where('eid = ?', $where['eid'])
+								->where('oid = ?', $where['oid'])
+								->where('distid = ?', $where['distid'])
+								->where('escid = ?', $where['escid'])
+								->where('subid = ?', $where['subid'])
+								->where('perid = ?', $where['perid'])
+								->where('state = ?', 'C')
 								->order(array('logobdistrid DESC'))
 								->limit(1);
 			$results = $select->query();
