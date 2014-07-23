@@ -1,6 +1,6 @@
 <?php
 
-class Record_IndexController extends Zend_Controller_Action {
+class Admin_ExtraController extends Zend_Controller_Action {
 
     public function init()
     {
@@ -18,7 +18,6 @@ class Record_IndexController extends Zend_Controller_Action {
     
     public function indexAction()
     {
-		
 		$speciality= new Api_Model_DbTable_Speciality();
 		$where['eid'] = $this->sesion->eid;
 		$where['oid'] = $this->sesion->oid;
