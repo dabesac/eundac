@@ -14,6 +14,10 @@ class Record_DirectedController extends Zend_Controller_Action {
     }
     
     public function indexAction(){
+        
+            $this->view->usuario=$this->sesion->rid;
+            
+        
     }
 
     public function studentAction(){
