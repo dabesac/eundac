@@ -1,6 +1,6 @@
 <?php
 
-class Docente_DocumentsController extends Zend_Controller_Action {
+class Syllabus_FollowupController extends Zend_Controller_Action {
 
     public function init()
     {
@@ -16,6 +16,6 @@ class Docente_DocumentsController extends Zend_Controller_Action {
     }
     
     public function indexAction(){
-    
+      print_r("JOder");
     }
 }      

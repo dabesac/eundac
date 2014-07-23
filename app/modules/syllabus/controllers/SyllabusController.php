@@ -227,8 +227,10 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             if ($existenOtros == 0) {
                 $dataAnotherCourses = 'no';
                 $dataAnotherCoursesArray = array();
+            }else{
+                $dataAnotherCourses = substr($dataAnotherCourses, 0, -1);
             }
-            $dataAnotherCourses = substr($dataAnotherCourses, 0, -1);
+            
             $this->view->dataAnotherCourses = $dataAnotherCourses;
 
             $this->view->dataAnotherCoursesArray = $dataAnotherCoursesArray;

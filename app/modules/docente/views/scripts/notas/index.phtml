@@ -60,6 +60,7 @@ if ($this->faculty){
         <?php 
         $f=0;
         foreach ($this->data as $courses) {?>
+        <?php if ($number['facid']==$courses['facid']) { ?>
         <div class="curso">
              <?php $f++;
 
@@ -73,7 +74,7 @@ if ($this->faculty){
             $partial = $this->partial;
 
                                  
-            if ($number['facid']==$courses['facid']) { ?>
+             ?>
                 <div class="titleCurso">
                     <p class="idCurso">
                         <?php echo $courses['courseid'] ?><br>
@@ -250,8 +251,8 @@ if ($this->faculty){
                         </div>
                     </div>-->
                 </div>
-            <?php } ?>
         </div><!--Curso-->
+            <?php } ?>
         <?php }?>
     </div>
 </div>
