@@ -33,7 +33,7 @@ $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-calendar
         	
                             ');
 
-        $this->placeholder('BtnSVCLeft')->append('
+        $this->placeholder('BtnSVCRight')->append('
 			<a class="btn btn-default" id="save_assistance" disabled ><span class="glyphicon glyphicon-save"></span> Guardar</a>
             <a  class="btn btn-default" id="closure-assistance" onclick="closureassistance(this);"
 				coursoid='.$infocourse['courseid'].'
@@ -50,6 +50,7 @@ $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-calendar
 
 <?php $partial = $this->partial;
 if ($this->infoassist) { ?>
+<br><br><br>
 <div class='row student-assist' >
 	<div class='col-md-12'>
 	<table class='table' id='talassist'>

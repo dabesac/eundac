@@ -1,21 +1,1 @@
-<?php
-
-class Syllabus_FollowupController extends Zend_Controller_Action {
-
-    public function init()
-    {
-      $sesion  = Zend_Auth::getInstance();
-      if(!$sesion->hasIdentity() ){
-        $this->_helper->redirector('index',"index",'default');
-      }
-      $login = $sesion->getStorage()->read();
-      if (!$login->rol['module']=="docente"){
-        $this->_helper->redirector('index','index','default');
-      }
-      $this->sesion = $login;   
-    }
-    
-    public function indexAction(){
-      print_r("JOder");
-    }
-}      
+<?phpclass Syllabus_FollowupController extends Zend_Controller_Action {    public function init()    {      $sesion  = Zend_Auth::getInstance();      if(!$sesion->hasIdentity() ){        $this->_helper->redirector('index',"index",'default');      }      $login = $sesion->getStorage()->read();      if (!$login->rol['module']=="docente"){        $this->_helper->redirector('index','index','default');      }      $this->sesion = $login;       }        public function indexAction(){      //dataBases      $facultyDb = new Api_Model_DbTable_Faculty();      $eid = $this->sesion->eid;      $oid = $this->sesion->oid;      //Preparar select para facultad      $where = array('eid'   => $eid,                     'oid'   => $oid,                     'state' => 'A' );      $preDataFaculties = $facultyDb->_getFilter($where);      foreach ($preDataFaculties as $c => $faculty) {         if ($faculty['facid'] != 'TODO') {            $dataFaculties[$c]['facid'] = $faculty['facid'];            $dataFaculties[$c]['name'] = $faculty['name'];         }      }      $this->view->dataFaculties = $dataFaculties;    }   public function listdocentesAction(){      $this->_helper->layout()->disableLayout();      //DataBases      $personDb         = new Api_Model_DbTable_Person();      $coursesTeacherDb = new Api_Model_DbTable_Coursexteacher();      $eid   = $this->sesion->eid;      $oid   = $this->sesion->oid;      $perid = $this->sesion->period->perid;      $datasearch = base64_decode($this->_getParam('datasearch'));      $datasearch = explode('-', $datasearch);      $escid = $datasearch[0];      $subid = $datasearch[1];      $where = array('eid'     => $eid,                     'oid'     => $oid,                     'escid'   => $escid,                     'subid'   => $subid,                     'perid'   => $perid,                     'is_main' => 'S' );      $attrib = array('uid', 'pid', 'courseid', 'curid');      $order = array('pid ASC');      $preDataTeachers = $coursesTeacherDb->_getFilter($where, $attrib, $order);      $pidExist  = '';      $cTeachers = 0;      $cCursos   = 0;      foreach ($preDataTeachers as $teacher) {         //cantidad de Cursos         $dataTeacher[$cTeachers]['cursos'][$cCursos]['courseid'] = $teacher['courseid'];         //Cantidad de docentes asignados         if ($teacher['pid'] != $pidExist) {            $cCursos  = 0;            $pidExist = $teacher['pid'];            //Nombre del Docente            $where = array('eid' => $eid,                           'pid' => $teacher['pid'] );            $attrib = array('last_name0', 'last_name1', 'first_name');            $teacherName = $personDb->_getFilter($where, $attrib);            $dataTeacher[$cTeachers]['uid']      = $teacher['uid'];            $dataTeacher[$cTeachers]['fullName'] = $teacherName[0]['last_name0'].' '.$teacherName[0]['last_name1'].' '.$teacherName[0]['first_name'];            $cTeachers++;         }         $cCursos++;      }      $this->view->dataTeacher = $dataTeacher;      print_r($dataTeacher);   }}      

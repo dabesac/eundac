@@ -1,2 +1,80 @@
-<br>
-JOder la vista
+<?php 
+	$this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
+
+	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-time"></span> Seguimiento de Sesiones');
+ ?>
+ <link rel="stylesheet" href="/css/followup.css">
+
+ <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Para empezar seleccione la facultad y escuela de la que desea la información.</p>
+
+ <hr>
+
+<div class="selectZone">
+	<select name="facultad" id="idFacultadSelect" class="selectOne form-control">
+		<option value="">Seleccione Facultad</option>
+		<?php if ($this->dataFaculties): ?>
+			<?php foreach ($this->dataFaculties as $faculty): ?>
+				<option value="<?php echo base64_encode($faculty['facid']) ?>"><?php echo $faculty['name'] ?></option>				
+			<?php endforeach ?>
+		<?php endif ?>
+	</select>
+
+	<select name="escuela" id="idSchoolSelect" class="selectOne selectSchool form-control">
+		<option value="">Seleccione una Escuela</option>
+		<option value="">Primero seleccione una facultad ¬¬</option>
+	</select>
+
+	<select name="especialidad" id="idSpecialitySelect" class="selectOne selectSpeciality form-control">
+		<option value="">Seleccione una Especialidad</option>
+		<option value="">Primero seleccione una escuela ¬¬</option>
+	</select>
+</div>
+<hr>
+<div id="dataSyllabus" class="followUp_dataSyllabus">
+	
+</div>
+<script>
+	$(function(){
+		var facid = '';
+		var escid = '';
+
+		$('#idFacultadSelect').on('change', function(){
+			$('#dataSyllabus').html('');
+			$('#idSpecialitySelect').html('<option value="">Seleccione una Especialidad</option><option value="">Primero seleccione una escuela ¬¬</option');
+			facid = $(this).val();
+			if (!facid) {
+				$('#idSchoolSelect').html('<option value="">Seleccione una Escuela</option><option value="">Primero seleccione una escuela ¬¬</option');
+			}else{
+				$('#idSchoolSelect').html('<option value="">Cargando...</option>')
+									.load('/syllabus/biblioteca/listschools/facid/' + facid);
+			}
+		});
+
+		var existeEspecialidades = '';
+		$('#idSchoolSelect').on('change', function(){
+			escid = $(this).val();
+			if (escid) {
+				$('#idSpecialitySelect').html('<option value="">Cargando...</option>')
+										.load('/syllabus/biblioteca/listspecialities/escid/' + escid, function(){
+											existeEspecialidades = $(this).val();
+											if (existeEspecialidades != '_') {
+												$('#dataSyllabus').load('/syllabus/followup/listdocentes/datasearch/' + escid);
+											}else{
+												$('#dataSyllabus').html('');
+											};
+										});
+			}else{
+				$('#dataSyllabus').html('');
+			}
+		});
+
+		$('#idSpecialitySelect').on('change', function(){
+			escid = $(this).val();
+			if (escid != '_') {
+				$('#dataSyllabus').load('/syllabus/followup/listdocentes/datasearch/' + escid);
+			}else{
+				$('#dataSyllabus').html('');
+			}
+		});
+	});
+</script>

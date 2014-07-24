@@ -201,7 +201,7 @@ if ($this->faculty){
                             <?php }?>
                         </p>
                         <div class="progress-course progress progress-striped active text-center">
-                            <span><?php echo $courses['persetage_notes'] ?>%</span>
+                            <span><?php echo round($courses['persetage_notes']) ?>%</span>
                             <div class="progress-bar"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courses['persetage_notes']?>%"></div>
                         </div>
                     </div>
@@ -215,7 +215,7 @@ if ($this->faculty){
                             <?php }?>
                         </p>
                         <div class="progress-course progress progress-striped active text-center">
-                            <span><?php echo $courses['persetage_assit'] ?>%</span>
+                            <span><?php echo round($courses['persetage_assit']) ?>%</span>
                             <div class="progress-bar progress-bar-danger"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courses['persetage_assit']?>%"></div>
                         </div>
                     </div>
