@@ -1,0 +1,28 @@
+<?php
+if ($this->data) {	?>
+	<div>
+		<table class='table table-hover'>
+			<tr>
+				<tr>#</tr>
+				<tr>Nombre Escuela</tr>
+				<tr>Frecuencia</tr>
+			</tr>
+			<?php
+			foreach ($this->data as $key => $lista) {	?>
+				<tr>
+					<td><?php echo $key+1?></td>
+					<td><?php echo $lista['escid']?></td>
+					<td><?php echo $lista['cantidad']?></td>
+				</tr>	
+			<?php	
+			}
+			?>
+		</table>
+	</div>
+<?php	
+}
+else{	?>
+
+<?php
+}
+?>
