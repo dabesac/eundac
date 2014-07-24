@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/css/miscursos.css">
 
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-book"></span> Asignaturas a Cargo');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 <div class="miscursos_header">
     <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Puede filtrar cursos de otros periodos:</p>
     <div class="btn-group miscursos_selectPeriod">
@@ -60,6 +60,7 @@ if ($this->faculty){
         <?php 
         $f=0;
         foreach ($this->data as $courses) {?>
+        <?php if ($number['facid']==$courses['facid']) { ?>
         <div class="curso">
              <?php $f++;
 
@@ -73,7 +74,7 @@ if ($this->faculty){
             $partial = $this->partial;
 
                                  
-            if ($number['facid']==$courses['facid']) { ?>
+             ?>
                 <div class="titleCurso">
                     <p class="idCurso">
                         <?php echo $courses['courseid'] ?><br>
@@ -250,20 +251,15 @@ if ($this->faculty){
                         </div>
                     </div>-->
                 </div>
-            <?php } ?>
         </div><!--Curso-->
+            <?php } ?>
         <?php }?>
     </div>
 </div>
 <?php 
 }
 }else{ ?>
-    <div class='col-md-12 cont-font-not-register'>
-        <h1 class='span-not-register'>
-            <span class='glyphicon glyphicon-exclamation-sign'></span>
-        </h1>
-        <h3 class='text-not-register'>Ningún Curso Asignados</h3>
-    </div>
+    <h4 class="text-muted text-center"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> No le asignaron ningun curso <span class="text-danger">este periodo.</span></h4>
 <?php } ?>
 
 <div id='sil'></div>

@@ -14,138 +14,144 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
     }
 
     public function indexAction(){
-        try {
-
-            $where['eid']=$this->sesion->eid;
-            $where['oid']=$this->sesion->oid;
-            $where['escid']=base64_decode($this->_getParam('escid'));
-            $where['curid']=base64_decode($this->_getParam('curid'));
-            $where['courseid']=base64_decode($this->_getParam('courseid'));
-            $where['turno']=base64_decode($this->_getParam('turno'));
-            $where['subid']=base64_decode($this->_getParam('subid'));
-            $where['perid']=base64_decode($this->_getParam('perid'));
-
-            $tb_period = new Api_Model_DbTable_Periods();
-            $where_per = array(
-                    'eid' => $this->sesion->eid,
-                    'oid' => $this->sesion->oid,
-                    'perid' => base64_decode($this->_getParam('perid')),
-                    );
-            $data_period =$tb_period->_getOnePeriod($where_per);
-
-            $date_stard_t = $this->converterdate((string)$data_period['class_start_date']);
-            $date_end_t = $this->converterdate((string)$data_period['class_end_date']);
-
-            $this->view->date_stard = $date_stard_t;
-            $this->view->date_end =  $date_end_t;
-
-
-            $this->view->where=$where;
-            $syl= new Api_Model_DbTable_Syllabus();
-            $datsyl=$syl->_getOne($where);
-            $this->view->num=$datsyl['number'];
-            
-            if ($datsyl['state']=='C') {
-                $escid=base64_encode($where['escid']);
-                $curid=base64_encode($where['curid']);
-                $courseid=base64_encode($where['courseid']);
-                $turno=base64_encode($where['turno']);
-                $subid=base64_encode($where['subid']);
-                $perid=base64_encode($where['perid']);
-                $params = array('escid'=>$escid,'curid'=>$curid,'courseid'=>$courseid,'turno'=>$turno,'subid'=>$subid,'perid'=>$perid);
-                $this->_helper->redirector('viewimpress','syllabus','syllabus', $params);
-            }
-
-            $datasum=array('eid'=>$where['eid'],'oid'=>$where['oid'],'curid'=>$where['curid'],
-                'escid'=>$where['escid'],'subid'=>$where['subid'],'courseid'=>$where['courseid']);
-            
-            $querysum=new Api_Model_DbTable_Course();
-            $this->view->sumgral=$querysum->_getOne($datasum);
-
-
-            if (!$datsyl) {
-                $data['eid']=$where['eid'];
-                $data['oid']=$where['oid'];
-                $data['escid']=$where['escid'];
-                $data['curid']=$where['curid'];
-                $data['courseid']=$where['courseid'];
-                $data['turno']=$where['turno'];
-                $data['subid']=$where['subid'];
-                $data['perid']=$where['perid'];
-                $data['number']=$where['perid'].$where['escid'].$where['courseid'].$where['turno'];
-                $data['units']='4';
-                $data['teach_uid']=$this->sesion->uid;
-                $data['teach_pid']=$this->sesion->pid;
-                $data['register']=$this->sesion->uid;
-                $data['created']=date('Y-m-d');
-                $data['state']='B';
-                $syl->_save($data);
-                $datsyl=$syl->_getOne($where);
-            }
-            // $this->view->syllabus=$datsyl;
-
-            $facid=substr($where['escid'],0,1);
-            $wherefac['eid']=$where['eid'];
-            $wherefac['oid']=$where['oid'];
-            $wherefac['facid']=$facid;
-            $fac = new Api_Model_DbTable_Faculty();
-            $facultad=$fac->_getOne($wherefac);
-            $this->view->facultad=$facultad;
-
-            $whereesc['eid']=$where['eid'];
-            $whereesc['oid']=$where['oid'];
-            $whereesc['escid']=$where['escid'];
-            $whereesc['subid']=$where['subid'];
-            $esc= new Api_Model_DbTable_Speciality();
-            $escuelas=$esc->_getOne($whereesc);
-            $this->view->escuelas=$escuelas;
-
-            $wherecour['eid']=$where['eid'];
-            $wherecour['oid']=$where['oid'];
-            $wherecour['curid']=$where['curid'];
-            $wherecour['escid']=$where['escid'];
-            $wherecour['subid']=$where['subid'];
-            $wherecour['courseid']=$where['courseid'];
-            $cour= new Api_Model_DbTable_Course();
-            $curso=$cour->_getOne($wherecour);
-            $this->view->curso=$curso;
-
-            $wheredoc['eid']=$where['eid'];
-            $wheredoc['oid']=$where['oid'];
-            $wheredoc['escid']=$where['escid'];
-            $wheredoc['subid']=$where['subid'];
-            $wheredoc['courseid']=$where['courseid'];
-            $wheredoc['curid']=$where['curid'];
-            $wheredoc['perid']=$where['perid'];
-            $wheredoc['turno']=$where['turno'];
-            $wheredoc['uid'] = $this->sesion->uid;
-            $wheredoc['pid'] = $this->sesion->pid;
-            $doc= new Api_Model_DbTable_Coursexteacher();
-            $docente=$doc->_getOne($wheredoc);
-            $this->view->docente=$docente;
-
-            $whereper['eid']=$where['eid'];
-            $whereper['pid']=$this->sesion->pid;
-            $per= new Api_Model_DbTable_Person();
-            $persona=$per->_getOne($whereper);
-            $this->view->persona=$persona;
-
-            $percur= new Api_Model_DbTable_PeriodsCourses();
-            $periodocurso= $percur->_getOne($wheredoc);
-            $this->view->periodocurso=$periodocurso;
+        //DataBases
+        $tb_period = new Api_Model_DbTable_Periods();
 
 
 
+        $where['eid']      = $this->sesion->eid;
+        $where['oid']      = $this->sesion->oid;
+        $where['escid']    = base64_decode($this->_getParam('escid'));
+        $where['curid']    = base64_decode($this->_getParam('curid'));
+        $where['courseid'] = base64_decode($this->_getParam('courseid'));
+        $where['turno']    = base64_decode($this->_getParam('turno'));
+        $where['subid']    = base64_decode($this->_getParam('subid'));
+        $where['perid']    = base64_decode($this->_getParam('perid'));
 
-        } catch (Exception $e) {
-            print "Error: ".$e->getMessage();
+
+        //
+        $where_per = array(
+                'eid' => $this->sesion->eid,
+                'oid' => $this->sesion->oid,
+                'perid' => base64_decode($this->_getParam('perid')),
+                );
+        $data_period =$tb_period->_getOnePeriod($where_per);
+
+        $date_stard_t = $this->converterdate((string)$data_period['class_start_date']);
+        $date_end_t = $this->converterdate((string)$data_period['class_end_date']);
+
+        $this->view->date_stard = $date_stard_t;
+        $this->view->date_end =  $date_end_t;
+
+
+        $this->view->where=$where;
+        $syl= new Api_Model_DbTable_Syllabus();
+        $datsyl=$syl->_getOne($where);
+        $this->view->num=$datsyl['number'];
+        
+        if ($datsyl['state']=='C') {
+            $escid=base64_encode($where['escid']);
+            $curid=base64_encode($where['curid']);
+            $courseid=base64_encode($where['courseid']);
+            $turno=base64_encode($where['turno']);
+            $subid=base64_encode($where['subid']);
+            $perid=base64_encode($where['perid']);
+            $params = array('escid'=>$escid,'curid'=>$curid,'courseid'=>$courseid,'turno'=>$turno,'subid'=>$subid,'perid'=>$perid);
+            $this->_helper->redirector('viewimpress','syllabus','syllabus', $params);
         }
+
+        $datasum=array('eid'=>$where['eid'],'oid'=>$where['oid'],'curid'=>$where['curid'],
+            'escid'=>$where['escid'],'subid'=>$where['subid'],'courseid'=>$where['courseid']);
+        
+        $querysum=new Api_Model_DbTable_Course();
+        $this->view->sumgral=$querysum->_getOne($datasum);
+
+
+        if (!$datsyl) {
+            $data['eid']=$where['eid'];
+            $data['oid']=$where['oid'];
+            $data['escid']=$where['escid'];
+            $data['curid']=$where['curid'];
+            $data['courseid']=$where['courseid'];
+            $data['turno']=$where['turno'];
+            $data['subid']=$where['subid'];
+            $data['perid']=$where['perid'];
+            $data['number']=$where['perid'].$where['escid'].$where['courseid'].$where['turno'];
+            $data['units']='4';
+            $data['teach_uid']=$this->sesion->uid;
+            $data['teach_pid']=$this->sesion->pid;
+            $data['register']=$this->sesion->uid;
+            $data['created']=date('Y-m-d');
+            $data['state']='B';
+            $syl->_save($data);
+            $datsyl=$syl->_getOne($where);
+        }
+        // $this->view->syllabus=$datsyl;
+
+        $facid=substr($where['escid'],0,1);
+        $wherefac['eid']=$where['eid'];
+        $wherefac['oid']=$where['oid'];
+        $wherefac['facid']=$facid;
+        $fac = new Api_Model_DbTable_Faculty();
+        $facultad=$fac->_getOne($wherefac);
+        $this->view->facultad=$facultad;
+
+        $whereesc['eid']=$where['eid'];
+        $whereesc['oid']=$where['oid'];
+        $whereesc['escid']=$where['escid'];
+        $whereesc['subid']=$where['subid'];
+        $esc= new Api_Model_DbTable_Speciality();
+        $escuelas=$esc->_getOne($whereesc);
+        $this->view->escuelas=$escuelas;
+
+        $wherecour['eid']=$where['eid'];
+        $wherecour['oid']=$where['oid'];
+        $wherecour['curid']=$where['curid'];
+        $wherecour['escid']=$where['escid'];
+        $wherecour['subid']=$where['subid'];
+        $wherecour['courseid']=$where['courseid'];
+        $cour= new Api_Model_DbTable_Course();
+        $curso=$cour->_getOne($wherecour);
+        $this->view->curso=$curso;
+
+        $wheredoc['eid']=$where['eid'];
+        $wheredoc['oid']=$where['oid'];
+        $wheredoc['escid']=$where['escid'];
+        $wheredoc['subid']=$where['subid'];
+        $wheredoc['courseid']=$where['courseid'];
+        $wheredoc['curid']=$where['curid'];
+        $wheredoc['perid']=$where['perid'];
+        $wheredoc['turno']=$where['turno'];
+        $wheredoc['uid'] = $this->sesion->uid;
+        $wheredoc['pid'] = $this->sesion->pid;
+        $doc= new Api_Model_DbTable_Coursexteacher();
+        $docente=$doc->_getOne($wheredoc);
+        $this->view->docente=$docente;
+
+        $whereper['eid']=$where['eid'];
+        $whereper['pid']=$this->sesion->pid;
+        $per= new Api_Model_DbTable_Person();
+        $persona=$per->_getOne($whereper);
+        $this->view->persona=$persona;
+
+        $percur= new Api_Model_DbTable_PeriodsCourses();
+        $periodocurso= $percur->_getOne($wheredoc);
+        $this->view->periodocurso=$periodocurso;
     }
 
     public function viewfrmAction(){
         try {
+            //dataBases
+            $periodsTeacherDb = new Api_Model_DbTable_Coursexteacher();
+            $courseDb         = new Api_Model_DbTable_Course();
+            $schoolDb         = new Api_Model_DbTable_Speciality;
+            $syl              = new Api_Model_DbTable_Syllabus();
 
             $this->_helper->layout()->disableLayout();
+            
+            $pid = $this->sesion->pid;
+            $uid = $this->sesion->uid;
+            
             $where['eid']=$this->sesion->eid;
             $where['oid']=$this->sesion->oid;
             $where['escid']=base64_decode($this->_getParam('escid'));
@@ -155,12 +161,86 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $where['subid']=base64_decode($this->_getParam('subid'));
             $where['perid']=base64_decode($this->_getParam('perid'));
             $this->view->where=$where;
+
+            $dataCourse['turno'] = $where['turno'];
+
+            //Datos del Curso
+            $whereCourse = array(   'eid'      => $where['eid'],
+                                    'oid'      => $where['oid'],
+                                    'courseid' => $where['courseid'],
+                                    'curid'    => $where['curid'] );
+            $attrib = array('name');
+
+            $preDataCourse = $courseDb->_getFilter($whereCourse, $attrib);
+            $dataCourse['name'] = $preDataCourse[0]['name'];
+
+            $whereCourse = array(   'eid'   => $where['eid'],
+                                    'oid'   => $where['oid'],
+                                    'escid' => $where['escid'],
+                                    'subid' => $where['subid']);
+            $attrib = array('name');
+
+            $preDataEscuela = $schoolDb->_getFilter($whereCourse, $attrib);
+            $dataCourse['escuela'] = $preDataEscuela[0]['name'];
+
+            $this->view->dataCourse = $dataCourse;
+
+            //consultar si lleva el mismo curso pero en otro turno
+            $whereOtherCourse = array(  'eid'      => $where['eid'],
+                                        'oid'      => $where['oid'],
+                                        'pid'      => $pid,
+                                        'uid'      => $uid,
+                                        'escid'    => $where['escid'],
+                                        'subid'    => $where['subid'],
+                                        'curid'    => $where['curid'],
+                                        'courseid' => $where['courseid'],
+                                        'perid'    => $where['perid'] );
+
+            $preDataAnotherCourses = $periodsTeacherDb->_getFilter($whereOtherCourse);
+            $existenOtros = 0;
+
+            $cOtrosCursos = 0;
+            foreach ($preDataAnotherCourses as $c => $course) {
+                if ($course['turno'] != $where['turno']) {
+                    $whereOtherCourse = array(  'eid'       => $where['eid'],
+                                                'oid'       => $where['oid'],
+                                                'teach_pid' => $pid,
+                                                'escid'     => $where['escid'],
+                                                'subid'     => $where['subid'],
+                                                'curid'     => $where['curid'],
+                                                'courseid'  => $where['courseid'],
+                                                'perid'     => $where['perid'],
+                                                'turno'     => $course['turno'] );
+
+                    $attrib = array('state');
+                    $stateSilabo = $syl->_getFilter($whereOtherCourse, $attrib);
+                    
+                    if (!$stateSilabo or $stateSilabo[0]['state'] != 'C') {
+                        $existenOtros = 1;
+                        $dataAnotherCourses = $dataAnotherCourses.$course['turno'].'-';
+                        $dataAnotherCoursesArray[$cOtrosCursos] = $course['turno'];
+                        $cOtrosCursos++;
+                    }
+                }
+            }
+            
+            if ($existenOtros == 0) {
+                $dataAnotherCourses = 'no';
+                $dataAnotherCoursesArray = array();
+            }else{
+                $dataAnotherCourses = substr($dataAnotherCourses, 0, -1);
+            }
+            
+            $this->view->dataAnotherCourses = $dataAnotherCourses;
+
+            $this->view->dataAnotherCoursesArray = $dataAnotherCoursesArray;
+
+            
             // $this->view->escid=$where['escid'];
             // $this->view->curid=$where['curid'];
             // $this->view->courseid=$where['courseid'];
             // $this->view->subid=$where['subid'];
             // $this->view->perid=$where['perid'];
-            $syl= new Api_Model_DbTable_Syllabus();
             $datsyl=$syl->_getOne($where);
             $this->view->num=$datsyl['number'];
 
@@ -169,7 +249,6 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             
             $querysum=new Api_Model_DbTable_Course();
             $this->view->sumgral=$querysum->_getOne($datasum);
-
 
             if (!$datsyl) {
                 $data['eid']=$where['eid'];
@@ -213,6 +292,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
+
     public function closureAction(){
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
@@ -230,6 +310,9 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                 $curid = base64_decode($formData['curid']);
                 $courseid = base64_decode($formData['courseid']);
                 $turno = base64_decode($formData['turno']);
+
+                $anotherCourses = base64_decode($formData['anotherCourses']);
+
                 $params = array(
                     'eid' => $eid,
                     'oid' => $oid,
@@ -246,8 +329,26 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                         $update = array('state'=>'C');
                         $syllabus= new Api_Model_DbTable_Syllabus();
                         if ($syllabus->_update($update,$params)){ 
-                            $json = array('status' => true, );
+                            $json['otrosCursos'] = 0;
+                            if ($anotherCourses != 'no') {
+                                $json['otrosCursos'] = 1;
+                                $turnos = explode('-', $anotherCourses);
+                                $cDuplicates = 0;
+                                foreach ($turnos as $cTurnos => $turnoC) {
+                                    $data= $syllabus->_getDuplicasilabo($perid,$escid,$courseid,$curid,$turnoC,$escid,$turno);
+                                    if ($data) {
+                                        $cDuplicates++;
+                                    }
+                                }
+
+                                if ($cDuplicates == ($cTurnos + 1)) {
+                                    $json['status'] = true;
+                                }
+                            }else{
+                                $json['status'] = true;
+                            }
                         }
+
                  }else{
                     $json = array('status' => false,);
                  }
@@ -258,9 +359,10 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
         }
         $this->_helper->layout()->disableLayout();
         $this->_response->setHeader('Content-Type', 'application/json'); 
-        $this->view->json = Zend_Json::encode($json);                  
+        $this->view->json = Zend_Json::encode($json);
 
     }
+
     public function savemodifiedAction(){
         try {
             if ($this->getRequest()->isPost())
@@ -314,6 +416,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
         $this->_response->setHeader('Content-Type', 'application/json');                   
         $this->view->data = Zend_Json::encode($json); 
     }
+
     public function viewimpressAction(){
         try {
             $where['eid']=$this->sesion->eid;
@@ -379,6 +482,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
+
     public function unitsAction(){
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
@@ -488,8 +592,8 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                 $this->view->params = $params;
                 $this->view->form=$form;
             }
-
     }
+
     public function contentAction(){
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
@@ -530,6 +634,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
         $this->_helper->layout()->disableLayout();
         
     }
+
     public function addcontentAction(){
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
@@ -605,6 +710,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
         $this->_response->setHeader('Content-Type', 'application/json');
         $this->view->json = Zend_Json::encode($json);
     }
+
     public function modifycontentAction(){
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
@@ -820,6 +926,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
+
     public function savedefaultAction(){
         try {
             $this->_helper->layout()->disableLayout();

@@ -161,36 +161,49 @@ class IndexController extends Zend_Controller_Action {
                         $pollDb         = new Api_Model_DbTable_Poll();
                         $pollQuestionDb = new Api_Model_DbTable_PollQuestion();
                         $pollResultsDb  = new Api_Model_DbTable_PollResults();
+                        $registerDb     = new Api_Model_DbTable_Registration();
                         $where = array(
                                         'eid'   => $eid,
                                         'oid'   => $oid,
                                         'state' => 'A' );
-                        $attrib = array('pollid');
+                        $attrib = array('pollid', 'perid');
 
                         $dataPoll = $pollDb->_getFilter($where, $attrib);
+
                         if ($dataPoll) {
-                            $where = array( 'eid'    => $eid,
-                                            'oid'    => $oid,
-                                            'pollid' => $dataPoll[0]['pollid'],
-                                            'state'  => 'A' );
-                            $attrib = array('qid');
 
-                            $dataQuestion = $pollQuestionDb->_getFilter($where, $attrib);
+                            //Verificar si se matriculo al peridodo anterior
 
-                            if ($dataQuestion) {
-                                $data->encuesta->existeEncuesta = 'Yes';
+                            $where = array( 'eid'   => $eid,
+                                            'oid'   => $oid,
+                                            'perid' => $perid,
+                                            'state' => 'M');
 
-                                $where = array(
-                                                'eid' => $eid,
-                                                'oid' => $oid,
-                                                'pid' => $data->pid,
-                                                'qid' => $dataQuestion[0]['qid']);
+                            $isRegister = $registerDb->_getFilter($where);
+                            if ($isRegister) {
+                                $where = array( 'eid'    => $eid,
+                                                'oid'    => $oid,
+                                                'pollid' => $dataPoll[0]['pollid'],
+                                                'state'  => 'A' );
+                                $attrib = array('qid');
 
-                                $pollResult = $pollResultsDb->_getFilter($where);
-                                if ($pollResult) {
-                                   $data->encuesta->rellenoEncuesta = 'Yes';
-                                }else{
-                                   $data->encuesta->rellenoEncuesta = 'No';
+                                $dataQuestion = $pollQuestionDb->_getFilter($where, $attrib);
+
+                                if ($dataQuestion) {
+                                    $data->encuesta->existeEncuesta = 'Yes';
+
+                                    $where = array(
+                                                    'eid' => $eid,
+                                                    'oid' => $oid,
+                                                    'pid' => $data->pid,
+                                                    'qid' => $dataQuestion[0]['qid']);
+
+                                    $pollResult = $pollResultsDb->_getFilter($where);
+                                    if ($pollResult) {
+                                       $data->encuesta->rellenoEncuesta = 'Yes';
+                                    }else{
+                                       $data->encuesta->rellenoEncuesta = 'No';
+                                    }
                                 }
                             }
                         }
