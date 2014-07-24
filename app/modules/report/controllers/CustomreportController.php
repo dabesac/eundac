@@ -146,4 +146,23 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			print "Error: ".$e->getMessage();
 		}
 	}
+
+	public function frequencyaccessxweekAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+			$eid=$this->sesion->eid;
+			$oid=$this->sesion->oid;
+			$rid='AL';
+			$fecha='2014-06-27';
+			$where=array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid,'fecha'=>$fecha);
+
+			$dbconsult = new Api_Model_DbTable_Logs();
+			$data = $dbconsult->_getFrequencyAccessXweek($where);
+			if ($data) {
+				$this->view->data=$data;
+			}
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
 }

@@ -142,8 +142,24 @@
 			    						break;
 			    				}
 			    			?></td>
-			    			<td><?php echo $student['receipt']?></td>
-
+			    			<td><?php 
+			    				if ($student['receipt']) {
+			    					echo $student['receipt'];
+			    				}
+			    				// else{	
+			    				// 	switch ($student['notafinal']) {
+				    			// 		case '-3':
+				    			// 			echo "";
+				    			// 			break;
+				    			// 		case '-2':
+				    			// 			echo "";
+				    			// 			break;
+				    			// 		default:				    			
+				    			// 			break;
+				    			// 	}	
+			    				// }
+			    				?>			    					
+			    			</td>
 			    		</tr>
 	    			<?php }
 	 				}
