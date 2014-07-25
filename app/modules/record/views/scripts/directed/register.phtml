@@ -411,7 +411,7 @@ $("#closerecord").click(function(){
         return false;
     };
     var tmp = f_acta.split("/");
-    var f_acta = tmp[2]+"-"+tmp[1]+"-"+tmp[0];
+    var f_acta = tmp[2]+"-"+tmp[0]+"-"+tmp[1];
     var url = "/record/directed/modifyregister/courseid/"+courseid+"/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/curid/"+curid+"/turno/"+turno+"/uid/"+uid+"/pid/"+pid+"/f_acta/"+f_acta+"/option/C";
     // alert(url);
     $("#header_cursos").hide();

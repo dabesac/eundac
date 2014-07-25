@@ -10,8 +10,10 @@ class Default_Form_Login extends Zend_Form
         $eid->setRequired(true);
         $eids = new Api_Model_DbTable_Entity();
         $rows_eids=$eids->_getAll();
-        foreach ($rows_eids as $_eid ){
-        	$eid->addMultiOption(base64_encode($_eid['eid']),$_eid['name']);
+        if ($rows_eids) {
+            foreach ($rows_eids as $_eid ){
+            	$eid->addMultiOption(base64_encode($_eid['eid']),$_eid['name']);
+            }            
         }
         $eid->setAttrib("readonly","");
         
