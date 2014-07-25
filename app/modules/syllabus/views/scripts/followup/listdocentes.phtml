@@ -1,0 +1,14 @@
+<?php if ($this->dataTeacher): ?>
+	<table class="table table-bordered">
+		<tr>
+			<th>#</th>
+			<th>Apellidos y Nombres</th>
+		</tr>
+	<?php foreach ($this->dataTeacher as $c => $teacher): ?>
+		<tr>
+			<td><?php echo $c + 1 ?></td>
+			<td><?php echo $teacher['fullName'] ?></td>
+		</tr>
+	<?php endforeach ?>
+	</table>
+<?php endif ?>

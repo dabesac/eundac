@@ -11,14 +11,14 @@
 		</div>
 		<p id="idStateSilabo" class="stateSilabo stateNoClose">Cerrando Silabo <span class="stateDiv"><img src="/img/spinner.gif" alt="Loading..."></span></p>
 		<div class="anotherCourses">
-			<?php if ($this->dataAnotherCourses == 'no'): ?>
+			<?php if (!$this->dataAnotherCourses): ?>
 				<p class="infoText text-muted"><span class="glyphicon glyphicon-info-sign"></span> No se detectaron otros turnos asignados para clonar el sílabo, o talvez ya han sido cerrados.</p>
 			<?php else: ?>
 				<p class="infoText text-muted"><span class="glyphicon glyphicon-info-sign"></span> Se detecto otros turnos a este mismo curso y en esta misma escuela, a continuación se clonara el sílabo. <br>
 				<span class="glyphicon glyphicon-exclamation-sign text-danger"></span> <strong>Recuerde que necesita <span class="text-danger">cerrar</span> el silabo del curso al que se esta clonando.</strong></p>
 
-				<?php foreach ($this->dataAnotherCoursesArray as $c => $course): ?>
-					<p class="anotherCurso text-muted"><?php print($this->dataCourse['name']) ?> <small>Turno <?php print($course['turno']) ?></small> <span class="chargeDiv"><img src="/img/spinner.gif" alt="Loading.."> Clonando</span></p>
+				<?php foreach ($this->dataAnotherCourses as $c => $course): ?>
+					<p class="anotherCurso text-muted"><?php print($this->dataCourse['name']) ?> <small>Turno <?php print($course['turno'].' | '.$course['curid']) ?></small> <span class="chargeDiv"><img src="/img/spinner.gif" alt="Loading.."> Clonando</span></p>
 				<?php endforeach ?>
 			<?php endif ?>
 		</div>
@@ -201,7 +201,17 @@ if ($this->periodocurso['type_rate']=="O" || $this->periodocurso['type_rate']=="
 <input type="hidden" id='turno_hidden'name ="turno" value="<?php echo base64_encode($this->periodocurso['turno'])?>">
 <input type="hidden" id='type_hidden'name ="type_rate" value="<?php echo base64_encode($this->periodocurso['type_rate'])?>">
 
-<input type="hidden" id="anotherCourses" name="anotherCourses" value="<?php echo base64_encode($this->dataAnotherCourses) ?>">
+<?php if ($this->dataAnotherCourses): ?>
+	<input type="hidden" name="existenCursos" value="yes">
+	<?php foreach ($this->dataAnotherCourses as $c => $course): ?>
+		<input type="hidden" name="turno<?php echo $c ?>" value="<?php echo $course['turno'] ?>">
+		<input type="hidden" name="curid<?php echo $c ?>" value="<?php echo $course['curid'] ?>">
+		<input type="hidden" name="escid<?php echo $c ?>" value="<?php echo $course['escid'] ?>">
+	<?php endforeach ?>
+		<input type="hidden" name="cantOtrosCursos" value="<?php echo $c ?>">
+<?php else: ?>
+	<input type="hidden" name="existenCursos" value="no">
+<?php endif ?>
 </form>
 <div class="modal fade" id="myModalSyllabus" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
