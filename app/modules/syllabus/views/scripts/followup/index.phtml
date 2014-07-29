@@ -58,7 +58,8 @@
 										.load('/syllabus/biblioteca/listspecialities/escid/' + escid, function(){
 											existeEspecialidades = $(this).val();
 											if (existeEspecialidades != '_') {
-												$('#dataSyllabus').load('/syllabus/followup/listdocentes/datasearch/' + escid);
+												$('#dataSyllabus')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+																	.load('/syllabus/followup/listdocentes/datasearch/' + escid);
 											}else{
 												$('#dataSyllabus').html('');
 											};
@@ -71,7 +72,8 @@
 		$('#idSpecialitySelect').on('change', function(){
 			escid = $(this).val();
 			if (escid != '_') {
-				$('#dataSyllabus').load('/syllabus/followup/listdocentes/datasearch/' + escid);
+				$('#dataSyllabus')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+									.load('/syllabus/followup/listdocentes/datasearch/' + escid);
 			}else{
 				$('#dataSyllabus').html('');
 			}
