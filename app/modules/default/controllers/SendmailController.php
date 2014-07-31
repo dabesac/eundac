@@ -12,52 +12,77 @@ class SendmailController extends Zend_Controller_Action{
 	}
 
 	public function indexAction(){
-		try {
-            $eid = $this->sesion->eid;
-            $oid = $this->sesion->oid;           
-            $where = array('eid' => $eid, 'oid' => $oid, 'state' => 'A');
-            $fac= new Api_Model_DbTable_Faculty();
-            $facultad=$fac->_getFilter($where,$attrib=null,$orders=null);
-            // print_r($facultad);
-            $this->view->facultades=$facultad;
-		} catch (Exception $e) {
-			print "Error: ".$e->getMessage();
-		}
+      //dataBases
+      $facultyDb = new Api_Model_DbTable_Faculty();
+
+      $eid = $this->sesion->eid;
+      $oid = $this->sesion->oid;
+
+      $where = array('eid'   => $eid, 
+                     'oid'   => $oid, 
+                     'state' => 'A');
+      $dataFaculties = $facultyDb->_getFilter($where);
+      $this->view->dataFaculties = $dataFaculties;
 	}
 
-            public function enviarAction(){
-            try {
-                  $this->_helper->layout()->disableLayout();
-                  $de = $this->_getParam('de');
-                  $para = $this->_getParam('para');
-                  $asunto = $this->_getParam('asunto');
-                  $contenido = $this->_getParam('contenido');  
-                  $this->view->para=$para;
-                  $this->view->asunto=$asunto;
-                  $this->view->contenido=$contenido;
-              }
-                  catch (Exception $e) {
-                  print "Error: ".$e->getMessage();
+   public function listschoolsAction(){
+      $this->_helper->layout()->disableLayout();
+
+      //DataBases
+      $schoolDb = new Api_Model_DbTable_Speciality();
+
+      $eid = $this->sesion->eid;
+      $oid = $this->sesion->oid;
+
+      $facid = base64_decode($this->_getParam('code'));
+
+      $dataSchools = array();
+      if ($facid != "TODO") {
+         $where = array('eid'   => $eid,
+                        'oid'   => $oid,
+                        'facid' => $facid,
+                        'state' => 'A' );
+         $preDataSchools = $schoolDb->_getFilter($where);
+         foreach ($preDataSchools as $c => $school) {
+            if ($school['parent'] == '') {
+               $dataSchools[$c]['escid'] = $school['escid'];
+               $dataSchools[$c]['name']  = $school['name'];
             }
+         }
+      }else{
+         $dataSchools = 'all';
       }
+      $this->view->dataSchools = $dataSchools;
+   }
 
-          public function schoolsAction(){
-        try {
-            $this->_helper->layout()->disableLayout();
-            $eid = $this->sesion->eid;
-            $oid = $this->sesion->oid;
-            $facid = $this->_getParam('facid');
-            if ($facid=="TODO") $this->view->facid=$facid;
-            else{
-                $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid, 'state' => 'A');
-                $es = new Api_Model_DbTable_Speciality();
-                $escu = $es->_getFilter($where);
-                $this->view->escuelas=$escu;
-            }
-        } catch (Exception $e) {
-            print "Error: ".$e->getMessage();
-        }
-    }
+   public function listspecialitiesAction(){
+      $this->_helper->layout()->disableLayout();
 
-	
+      //dataBase
+      $specialityDb = new Api_Model_DbTable_Speciality();
+
+      $escid = base64_decode($this->_getParam('code'));
+
+      $eid = $this->sesion->eid;
+      $oid = $this->sesion->oid;
+
+      $where = array('eid'    => $eid,
+                     'oid'    => $oid,
+                     'parent' => $escid,
+                     'state'  => 'A' );
+
+      $dataSpeciality = $specialityDb->_getFilter($where);
+
+      $this->view->dataSpeciality = $dataSpeciality;
+   }
+
+   public function enviarAction(){
+      $mail = new Zend_Mail();
+      $mail->setBodyText('My Nice Test Text');
+      $mail->setBodyHtml('My Nice <b>Test</b> Text');
+      $mail->setFrom('somebody@example.com', 'Some Sender');
+      $mail->addTo('somebody_else@example.com', 'Some Recipient');
+      $mail->setSubject('TestSubject');
+      $mail->send();
+   }
 }

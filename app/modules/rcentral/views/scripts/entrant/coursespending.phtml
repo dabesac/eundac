@@ -193,19 +193,17 @@
 
 		<!--Botones de Validación-->
 		<div class="col-md-2">
-			<div class="panel panel-default">
-				<div class="container">
-					<br>
-					<a id="validateBtn" href="##" class="btn btn-success form-control btnProcessRegister">Validar</a>
+			<div class="panel panel-default" style="padding:10px">
+				<br>
+				<a id="validateBtn" href="##" class="btn btn-success form-control btnProcessRegister">Validar</a>
+				<br><br>
+				<a id="observedBtn" href="##" class="btn btn-warning form-control btnProcessRegister">Observar</a>
+				<br><br>
+				<a id="reservedBtn" href="##" class="btn btn-info form-control btnProcessRegister">Reservar</a>
+				<br><br>
+				<div class="deleteBtnGroup">
+					<a id="deleteBtn" href="##" class="btn btn-danger form-control btnProcessRegister">Eliminar</a>
 					<br><br>
-					<a id="observedBtn" href="##" class="btn btn-warning form-control btnProcessRegister">Observar</a>
-					<br><br>
-					<a id="reservedBtn" href="##" class="btn btn-info form-control btnProcessRegister">Reservar</a>
-					<br><br>
-					<div class="deleteBtnGroup">
-						<a id="deleteBtn" href="##" class="btn btn-danger form-control btnProcessRegister">Eliminar</a>
-						<br><br>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -221,6 +219,13 @@
 
 		//Pago
 		var statePayment = $('#statePayment').val();
+
+		//Tiempo de Matricula
+		var tiempoMatricula = $('#tiempoMatricula').val();
+		if (tiempoMatricula == 'no') {
+			$('.btnProcessRegister').attr('disabled', 'true');
+		};
+
 		//DataProfile
 		var dataProfile = $('#dataProfile').attr('value');
 		if (dataProfile == 'no') {
@@ -231,6 +236,7 @@
 		var uid = $('#uid').val();
 
 		//Bloquear Botones y otras Cosas de acuerdo al estado
+
 		var stateStudent = $('#stateStudent').val();
 		if (stateStudent == 'M') {
 			$('.tdIniciado, .cantSignStudents').addClass('hidden');
