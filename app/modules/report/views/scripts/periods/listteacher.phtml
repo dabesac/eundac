@@ -22,29 +22,35 @@
 						<!--State Silabo-->
 						<?php 
 							$state = 'noSuccess';
+							$icon = '<span class="glyphicon glyphicon-remove-circle"></span>';
 						 ?>
 						<?php if ($course['stateSyllabus'] == 1):
 							$state = 'success';
+							$icon = '<span class="glyphicon glyphicon-ok-circle"></span>';
 						endif ?>
-						<div class="cursoOneByOne cursoSilabo <?php echo $state ?>">Sílabo <span class="glyphicon glyphicon-ok-circle"></span></div>
+						<div class="cursoOneByOne cursoSilabo <?php echo $state ?>">Sílabo <?php echo $icon ?></div>
 
 						<!--statate 1er Parcial-->
 						<?php 
 							$state = 'noSuccess';
+							$icon = '<span class="glyphicon glyphicon-remove-circle"></span>';
 						 ?>
 						<?php if ($course['statePrimerParcial'] == 1):
 							$state = 'success';
+							$icon = '<span class="glyphicon glyphicon-ok-circle"></span>';
 						endif ?>
-						<div class="cursoOneByOne cursoParcial1 <?php echo $state ?>">1er Parcial <span class="glyphicon glyphicon-ok-circle"></span></div>
+						<div class="cursoOneByOne cursoParcial1 <?php echo $state ?>">1er Parcial <?php echo $icon ?></div>
 
 						<!--statate 2do Parcial-->
 						<?php 
 							$state = 'noSuccess';
+							$icon = '<span class="glyphicon glyphicon-remove-circle"></span>';
 						 ?>
 						<?php if ($course['stateSecondParcial'] == 1):
 							$state = 'success';
+							$icon = '<span class="glyphicon glyphicon-ok-circle"></span>';
 						endif ?>
-						<div class="cursoOneByOne cursoParcial2 <?php echo $state ?>">2do Parcial <span class="glyphicon glyphicon-ok-circle"></span></div>
+						<div class="cursoOneByOne cursoParcial2 <?php echo $state ?>">2do Parcial <?php echo $icon ?></div>
 					</div>
 				<?php endforeach ?>
 			</div>

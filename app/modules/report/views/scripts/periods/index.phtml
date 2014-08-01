@@ -42,10 +42,15 @@
 											.load('/report/periods/listteacher/data/' + periodCurrent);
 		
 		$('#selectAnio').on('change', function(){
+			$('#avanceAcademico_DataDocentes').html('');
 			anio = $(this).val();
 
 			$('#selectPeriod')	.html('<option>Cargando...</option>')
-								.load('/report/periods/listperiods/anio/' + anio);
+								.load('/report/periods/listperiods/anio/' + anio, function(){
+									period = $(this).val();
+									$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+																		.load('/report/periods/listteacher/data/' + period);
+								});
 		});
 
 		$('#selectPeriod').on('change', function(){
