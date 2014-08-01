@@ -22,6 +22,7 @@
       		</div>
 		  	<div class="modal-body">
 		  		<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Elija los destinatarios del correo: </p>
+		  		<form id="formMail">
 		    	<div class="row text-muted">
 		    		<div class="col-md-4">
 						<p>Facultad</p>
@@ -64,18 +65,19 @@
 		    	</div>
 		    	<hr>
 				<p class="text-muted">Título:</p>
-				<input class="form-control" type="text" placeholder="Motivo del correo...">	
+				<input class="form-control" type="text" name="tituloCorreo" placeholder="Motivo del correo...">	
 				<br>
 		    	<p class="text-muted">Redacción:</p>
-		    	<textarea class="form-control" name="cuerpoCorreo" placeholder="Escriba el correo aqui..." rows="10"></textarea>
+		    	<textarea id="cuerpoCorreo" class="form-control" name="cuerpoCorreo" placeholder="Escriba el correo aqui..." rows="10"></textarea>
+		  		</form>
 		  	</div>
 	      	<div class="modal-footer">
 	      		<div class="row">
 	      			<div class="col-md-9">
-						<p id="whoSend" class="text muted"></p>
+						<p id="whoSend" class="text-muted" style="padding-top: 8px;"></p>
 	      			</div>
 		      		<div class="col-md-3">
-		      			<a href="##" id="sendEmail" class="btn btn-success form-control">Enviar</a>
+		      			<a href="##" id="sendMail" class="btn btn-success form-control">Enviar</a>
 		        		<!--<button type="button" class="btn btn-default form-control" data-dismiss="modal">Salir</button>-->
 		      		</div>
 	      		</div>
@@ -84,23 +86,86 @@
   	</div>
 </div>
 
+<script type="text/javascript" src="/external_library/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="/external_library/ckeditor/adapters/jquery.js"></script>
+
 <script>
 	$(function(){
 		var codeF  = '';
 		var codeSc = '';
+		var codeSp = '';
+		var codeDe = '';
+		var nameF  = '';
+		var nameSc = '';
+		var nameSp = '';
+		var nameDe = '';
+
+		//$('#cuerpoCorreo').ckeditor();
 
 		$('#selectFaculty').on('change', function(){
 			codeF = $(this).val();
 
-			$('#selectSchool')	.html('<option value="">Cargando...</option>')
-								.load('/default/sendmail/listschools/code/' + codeF);
+			if (codeF) {
+				$('#selectSchool')	.html('<option value="">Cargando...</option>')
+									.load('/default/sendmail/listschools/code/' + codeF);
+				nameF        = 'El correo se enviara a la Facultad de ' + $('#selectFaculty option:selected').text();
+			}else{
+				$('#selectSchool').html('<option value="">Seleccione una Escuela</option><option>Primero seleccione una Facultad ¬¬</option>');
+				$('#selectSpeciality').html('<option value="">Seleccione una Especialidad</option><option>Primero seleccione una Escuela ¬¬</option>');
+
+				nameF        = '';
+			};
+			$('#whoSend').html('<span class="glyphicon glyphicon-exclamation-sign text-danger"></span> ' + nameF + nameDe);
 		});
 
 		$('#selectSchool').on('change', function(){
 			codeSc = $(this).val();
 
-			$('#selectSpeciality')	.html('<option value="">Cargando...</option>')
-									.load('/default/sendmail/listspecialities/code/' + codeSc);
+			if (codeSc) {
+				$('#selectSpeciality')	.html('<option value="">Cargando...</option>')
+										.load('/default/sendmail/listspecialities/code/' + codeSc);
+				nameSc = ' - Escuela de ' + $('#selectSchool option:selected').text();
+			}else{
+				$('#selectSpeciality').html('<option value="">Seleccione una Especialidad</option><option>Primero seleccione una Escuela ¬¬</option>');
+
+				nameSc = '';
+			};
+			$('#whoSend').html('<span class="glyphicon glyphicon-exclamation-sign text-danger"></span> ' + nameF + nameSc + nameDe);
 		});
+
+		$('#selectSpeciality').on('change', function(){
+			codeSp = $(this).val();
+
+			if (codeSp) {
+				nameSp = ' - Especialidad de ' + $('#selectSpeciality option:selected').text();
+			}else{
+				nameSp = '';
+			};
+			$('#whoSend').html('<span class="glyphicon glyphicon-exclamation-sign text-danger"></span> ' + nameF + nameSc + nameSp + nameDe);
+		});
+
+		$('#selectDestinatarios').on('change', function(){
+			codeDe = $(this).val();
+
+			if (codeDe) {
+				nameDe = ' - ' + $('#selectDestinatarios option:selected').text();
+			}else{
+				nameDe = '';
+			};
+			$('#whoSend').html('<span class="glyphicon glyphicon-exclamation-sign text-danger"></span> ' + nameF + nameSc + nameSp + nameDe);
+		});
+
+		$('#sendMail').on('click', function(){
+			$.ajax({
+				type     : 'post',
+				url      : '/default/sendmail/send',
+				data     : $('#formMail').serialize(),
+				//dataType : 'json',
+				success  : function(data){
+					console.log(data);
+				}
+			});
+		});
+
 	});
 </script>

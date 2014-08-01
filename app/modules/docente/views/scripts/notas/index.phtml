@@ -133,7 +133,8 @@ if ($this->faculty){
                                     <li> <a  href="/docente/fillnotes/competition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('2')?>" data-toggle="tooltip" title="Registrar las Notas">Notas 2do Parcial</a></li>
                                 </ul>
                             </div>
-
+                            
+                            <?php /* 
                             <div class="btn-group btnNotasBtnGroup btnPorcentajeGroup">
                                   <button class="btn btn-primary form-control dropdown-toggle" type="button" data-toggle="dropdown">
                                     Porcentaje <span class="caret"></span>
@@ -143,6 +144,7 @@ if ($this->faculty){
                                     <li><a <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?> class="load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('2')?>" data-toggle="tooltip" title="Asignar Porsentage" >Porcentaje 2do Parcial</a></li>
                                   </ul>
                             </div>
+                            */?>
                         <?php break;
                             default: ?>
                             <div class="cursoNoAsignado">Tipo de Curso no Asignado</div>
@@ -168,7 +170,8 @@ if ($this->faculty){
                             case 'C': ?>
                                 <a class="btn btn-primary btnNotasBtnGroup " href="/docente/fillnotes/competition<?php echo $urlAsist ?>/<?php echo base64_encode('partial') ?>/<?php echo base64_encode($partial)?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
 
-                                <buttom <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?>class="btn btn-primary btnPorcentaje form-control load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode($partial)?>" data-toggle="tooltip" title="Asignar Porsentage" >Asignar % </buttom>                               
+                                <?php /*<buttom <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?>class="btn btn-primary btnPorcentaje form-control load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode($partial)?>" data-toggle="tooltip" title="Asignar Porsentage" >Asignar % </buttom>
+                                */?>                               
                         <?php break;
                             default: ?>
                                 <div class="cursoNoAsignado">Tipo de Curso No Asignado</div>
