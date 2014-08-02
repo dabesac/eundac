@@ -1,17 +1,48 @@
 <?php if ($this->dataDocente): ?>
-	<?php foreach ($this->dataDocente as $c => $docente): ?>
+	<?php if ($this->dataSpecialities): ?>
+		<input type="hidden" id="existSpecialities" value="1">
+		<div class="avanceAcademicoDocentes_sideSpecialities">
+			<p class="pSpecialities"><span class="glyphicon glyphicon-flag"></span> Para su mayor comodidad se dividio los resultados por especialidades...</p>
+			<div class="selectSpecialities">
+				<select name="specialities" id="selectSpecialities" class="form-control">
+					<?php foreach ($this->dataSpecialities as $speciality): ?>
+						<option value="<?php echo $speciality['escid'] ?>"><?php echo $speciality['name'] ?></option>
+					<?php endforeach ?>
+				</select>
+			</div>
+		</div>
+		<hr>
+	<?php else: ?>
+		<input type="hidden" id="existSpecialities" value="0">		
+	<?php endif ?>
+	<ul id="idDataDocentes" class="ulDataDocentes">
+	<?php
+		$escid     = '-';
+		$cDocentes = 0;
+	?>
+	<?php foreach ($this->dataDocente as $docente): ?>
+	<?php if ($docente['escid'] != $escid):
+		$cDocentes = 1;
+		$escid = $docente['escid'];
+	endif ?>
+	<li><span class="hidden"><?php echo $docente['escid'] ?></span>
 		<div class="dataDocentes">
 			<div class="docentePersonal">
 				<div class="docenteNumber">
-					<?php echo $c + 1 ?>
+					<?php echo $cDocentes ?>
 				</div>
 				<div class="docenteName">
-					<?php echo $docente['fullName'] ?>
+					<p class="pName"><?php echo $docente['fullName'] ?></p>
+					<p class="dniDocente"><small>DNI <strong><?php echo $docente['pid'] ?></strong></small></p>
+					<?php if ($this->dataSpecialities): ?>
+						<p class="docenteSpeciality"><small>Especialidad de <?php echo $docente['nameSchool'] ?></small></p>
+					<?php endif ?>
 				</div>
 				<div class="docenteCantCursos">
 					<span class="glyphicon glyphicon-book"></span> <?php echo $docente['cantCursos'] ?>
 				</div>
 			</div>
+			
 
 			<div class="docenteCursos">
 				<?php foreach ($docente['courses'] as $cCourses => $course): ?>
@@ -30,7 +61,7 @@
 						endif ?>
 						<div class="cursoOneByOne cursoSilabo <?php echo $state ?>">Sílabo <?php echo $icon ?></div>
 
-						<!--statate 1er Parcial-->
+						<!--state 1er Parcial-->
 						<?php 
 							$state = 'noSuccess';
 							$icon = '<span class="glyphicon glyphicon-remove-circle"></span>';
@@ -41,7 +72,7 @@
 						endif ?>
 						<div class="cursoOneByOne cursoParcial1 <?php echo $state ?>">1er Parcial <?php echo $icon ?></div>
 
-						<!--statate 2do Parcial-->
+						<!--state 2do Parcial-->
 						<?php 
 							$state = 'noSuccess';
 							$icon = '<span class="glyphicon glyphicon-remove-circle"></span>';
@@ -55,7 +86,61 @@
 				<?php endforeach ?>
 			</div>
 		</div>
+	</li>
+	<?php 
+		$cDocentes++;
+	 ?>
 	<?php endforeach ?>
+	</ul>
+	<?php if ($this->dataSpecialities): ?>
+		<h4 id="noExistData" class="text-muted text-center" hidden><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Ups, No existe datos, <span class="text-danger">intente con otra especialidad...</span></h4>
+	<?php endif ?>
+	<script>
+		$(function(){
+			var existSpecialities = $('#existSpecialities').val();
+
+			if (existSpecialities == 1) {
+				var speid         = $('#selectSpecialities').val();
+				var currentLiText = '';
+				var existData     = 1;
+
+				if (true) {};
+				$("#idDataDocentes > li").each(function(){
+					currentLiText = $(this).text(),
+		            showCurrentLi = currentLiText.indexOf(speid) !== -1;
+		            $(this).toggle(showCurrentLi);
+		            if (showCurrentLi) {
+		        		existData = 0;
+		            };
+		        });
+	            if (existData == 1) {
+		        	$('#noExistData').slideDown('fast');
+		        };
+
+				$('#selectSpecialities').on('change', function(){
+					$('#noExistData').slideUp('fast');
+			        speid = $(this).val();
+
+			        existData = 1;
+			        $("#idDataDocentes > li").each(function(){
+						currentLiText = $(this).text(),
+			            showCurrentLi = currentLiText.indexOf(speid) !== -1;
+			            $(this).toggle(showCurrentLi);
+			            if (showCurrentLi) {
+			        		existData = 0;
+			            };
+			        });
+			        if (existData == 1) {
+			        	$('#noExistData').slideDown('fast');
+			        };
+
+			        $('html, body').animate({
+						scrollTop : $('#selectPeriod').offset().top,
+					}, 500);
+			    });
+			};
+		});
+	</script>
 <?php else: ?>
 	<h4 class="text-muted text-center"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> No existen docentes en este <span class="text-danger">periodo</span></h4>
 <?php endif ?>

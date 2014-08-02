@@ -46,6 +46,7 @@
         $personDb        = new Api_Model_DbTable_Person();
         $courseDb        = new Api_Model_DbTable_Course();
         $syllabusDb      = new Api_Model_DbTable_Syllabus();
+        $specialityDb    = new Api_Model_DbTable_Speciality();
         $courseTeacherDb = new Api_Model_DbTable_Coursexteacher();
         $coursePeriodsDb = new Api_Model_DbTable_PeriodsCourses();
 
@@ -54,14 +55,43 @@
         $eid   = $this->sesion->eid;
         $oid   = $this->sesion->oid;
         $escid = $this->sesion->escid;
+        $subid = $this->sesion->subid;
 
-        $where = array( 'eid'     => $eid,
-                        'oid'     => $oid,
-                        'escid'   => $escid,
-                        'perid'   => $perid,
-                        'is_main' => 'S' );
-        $order = array('pid ASC');
-        $attrib = array('pid', 'uid');
+        //Verificar si tiene especialidades
+        $dataSpecialities = array();
+
+        $where = array( 'eid'    => $eid,
+                        'oid'    => $oid,
+                        'parent' => $escid,
+                        'subid'  => $subid,
+                        'state'  => 'A' );
+        $attrib = '';
+        $order = array('escid ASC');
+        $dataSpecialities = $specialityDb->_getFilter($where, $attrib, $order);
+
+        if ($dataSpecialities) {
+            $tamEscid = strlen($escid);
+            $where = array( 'eid'                        => $eid,
+                            'oid'                        => $oid,
+                            'left(escid, '.$tamEscid.')' => $escid,
+                            'subid'                      => $subid,
+                            'perid'                      => $perid,
+                            'is_main'                    => 'S' );
+        }else{
+            $where = array( 'eid'     => $eid,
+                            'oid'     => $oid,
+                            'escid'   => $escid,
+                            'subid'   => $subid,
+                            'perid'   => $perid,
+                            'is_main' => 'S' );
+        }
+
+        $this->view->dataSpecialities = $dataSpecialities;
+
+        //Data Principal
+
+        $order = array('escid ASC', 'pid ASC');
+        $attrib = array('pid', 'uid', 'escid', 'subid');
         $preDataTeachers = $courseTeacherDb->_getFilter($where, $attrib, $order);
 
         //Profesores registrados y dictando en ese periodo
@@ -76,8 +106,21 @@
                 $dataPerson = $personDb->_getFilter($where, $attrib);
 
                 $dataDocente[$cTeachers]['fullName'] = $dataPerson[0]['last_name0'].' '.$dataPerson[0]['last_name1'].' '.$dataPerson[0]['first_name'];
-                $dataDocente[$cTeachers]['pid'] = $teacher['pid'];
-                $dataDocente[$cTeachers]['uid'] = $teacher['uid'];
+                $dataDocente[$cTeachers]['pid']      = $teacher['pid'];
+                $dataDocente[$cTeachers]['uid']      = $teacher['uid'];
+                $dataDocente[$cTeachers]['escid']    = $teacher['escid'];
+                $dataDocente[$cTeachers]['subid']    = $teacher['subid'];
+
+                //nombre de la Escuela
+                $where = array( 'eid'   => $eid,
+                                'oid'   => $oid,
+                                'escid' => $teacher['escid'],
+                                'subid' => $teacher['subid'] );
+
+                $attrib = array('name');
+                $nameSchool = $specialityDb->_getFilter($where, $attrib);
+                $dataDocente[$cTeachers]['nameSchool'] = $nameSchool[0]['name'];
+
 
                 $pidTeacher = $teacher['pid'];
                 $cTeachers++;
@@ -92,7 +135,8 @@
                             'uid'     => $teacher['uid'],
                             'perid'   => $perid,
                             'is_main' => 'S',
-                            'escid'   => $escid );
+                            'escid'   => $teacher['escid'],
+                            'subid'   => $teacher['subid'] );
 
             $dataCourse = $courseTeacherDb->_getFilter($where);
             foreach ($dataCourse as $cCourses => $course) {
