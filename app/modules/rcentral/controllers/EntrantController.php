@@ -253,29 +253,40 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 
 		//$Comparar fechas y pagos
 		if ($rate) {
-			$paymentDate = strtotime($paymentData[0]['date_payment']);
-			$paymentAmount = $paymentData[0]['amount'];
-			$paymentNormal = strtotime($rate[0]['f_fin_tnd']);
-			$paymentIncrement1 = strtotime($rate[0]['f_fin_ti1']);
-			$paymentIncrement2 = strtotime($rate[0]['f_fin_ti2']);
-			$paymentIncrement3 = strtotime($rate[0]['f_fin_ti3']);
+			$todayDate = date('Y-m-d');
 
-			
+			$paymentDate = date('Y-m-d', strtotime($paymentData[0]['date_payment']));
+			$paymentAmount = $paymentData[0]['amount'];
+			$paymentNormal = date('Y-m-d', strtotime($rate[0]['f_fin_tnd']));
+			$paymentIncrement1 = date('Y-m-d', strtotime($rate[0]['f_fin_ti1']));
+			$paymentIncrement2 = date('Y-m-d', strtotime($rate[0]['f_fin_ti2']));
+			$paymentIncrement3 = date('Y-m-d', strtotime($rate[0]['f_fin_ti3']));
+
 			if ($paymentDate <= $paymentNormal) {
-				$paymentDateData['tiempo'] = 'yes';
-				$paymentDateData['cantidad'] = $rate[0]['t_normal'];
+				$paymentDateData['tiempoMatricula'] = 'yes';
+				$paymentDateData['tiempo']          = 'yes';
+				$paymentDateData['cantidad']        = $rate[0]['t_normal'];
 			}else if($paymentDate <= $paymentIncrement1){
-				$paymentDateData['tiempo'] = 'no';
-				$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento1'];
-				$paymentDateData['cantidad'] = $rate[0]['t_incremento1'];
+				$paymentDateData['tiempoMatricula'] = 'yes';
+				$paymentDateData['tiempo']          = 'no';
+				$paymentDateData['porcentaje']      = $rate[0]['v_t_incremento1'];
+				$paymentDateData['cantidad']        = $rate[0]['t_incremento1'];
 			}else if($paymentDate <= $paymentIncrement2){
-				$paymentDateData['tiempo'] = 'no';
-				$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento2'];
-				$paymentDateData['cantidad'] = $rate[0]['t_incremento2'];
+				$paymentDateData['tiempoMatricula'] = 'yes';
+				$paymentDateData['tiempo']          = 'no';
+				$paymentDateData['porcentaje']      = $rate[0]['v_t_incremento2'];
+				$paymentDateData['cantidad']        = $rate[0]['t_incremento2'];
 			}else if($paymentDate <= $paymentIncrement3){
-				$paymentDateData['tiempo'] = 'no';
-				$paymentDateData['porcentaje'] = $rate[0]['v_t_incremento3'];
-				$paymentDateData['cantidad'] = $rate[0]['t_incremento3'];
+				$paymentDateData['tiempoMatricula'] = 'yes';
+				$paymentDateData['tiempo']          = 'no';
+				$paymentDateData['porcentaje']      = $rate[0]['v_t_incremento3'];
+				$paymentDateData['cantidad']        = $rate[0]['t_incremento3'];
+			}
+			
+			if ($todayDate <= $paymentIncrement3) {
+				$paymentDateData['tiempoMatricula'] = 'yes';
+			}else{
+				$paymentDateData['tiempoMatricula'] = 'no';
 			}
 
 			if ($paymentAmount >= $paymentDateData['cantidad']) {
@@ -286,7 +297,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 			$this->view->paymentDateData = $paymentDateData;
 		}
 
-		
 		//Relleno Datos del Perfil
         	$dataProfile['registerValidate'] = 'yes	';
         	//Family

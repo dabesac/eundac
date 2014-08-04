@@ -516,7 +516,6 @@ var syllabus = {
 			type: 'POST',
 			data:$("#frmSyllabus").serialize(),
 			success: function ($data){
-				console.log($data);
 				if ($data.status == true) {
 					setTimeout(function(){
 						$('#idStateSilabo')	.removeClass('stateNoClose')
