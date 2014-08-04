@@ -22,6 +22,10 @@ public function recordreceiptsAction()
 		$recibo = new Api_Model_DbTable_Bankreceipts();
 		$listar = $recibo->_getbankreceiptsXAnio($anio);
 		$this->view->listarrecibos=$listar;
+
+
+	
+
 		} 
 	catch (Exception $ex)
 		{
@@ -35,7 +39,15 @@ public function loadreceiptsAction()
 		$this->_helper->layout()->disableLayout();
 		$fecha = $this->_getParam("fecha");
 		$turno = $this->_getParam("turno");
-		$perid='14A';
+
+		$data_ac = array(
+			'eid' => $this->sesion->eid,
+			'oid' => $this->sesion->oid,
+			);
+
+		$perid_activo=new Api_Model_DbTable_Periods();
+        $pe_ac=$perid_activo->_getPeriodsCurrent($data_ac);
+        $perid=$pe_ac['perid'];
 		$data = array(
 			'fecha' => base64_encode($fecha),
 			'turno' =>base64_encode($turno),

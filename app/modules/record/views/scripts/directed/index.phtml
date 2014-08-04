@@ -12,7 +12,8 @@
 					</div>
 				</td>
 				<td>
-					<input id="checkbox" type="checkbox"  value="2">
+					<label for="chck"><?php echo date('Y')-1 ?></label>
+					<input id="checkbox" type="checkbox" name="chck"  value="2">
 				</td>
 				<td class="col-lg-4">
 					<a id="search" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</a>
@@ -23,12 +24,14 @@
 	<script type="text/javascript">
 		$("#search").click(function(){
 			var uid=$("#uid").val();
+			var anios="<?php echo date('Y') ?>";
+			anio = anios.substring(2);
 			if (uid!="") {
 				$("#student").html("<img src='/img/spinner.gif'>Cargando...");
 				if ($('#checkbox').is(':checked')) {
-					$("#student").load("/record/directed/student/uid/"+uid+"/perid/13B");
+					$("#student").load("/record/directed/student/uid/"+uid+"/perid/13");
 				}else{
-					$("#student").load("/record/directed/student/uid/"+uid);
+					$("#student").load("/record/directed/student/uid/"+uid+"/perid/"+anio );
 				}
 			}else{
 				alert("Ingrese el Código de Matricula.");
@@ -49,7 +52,7 @@
 			</td>
 			 <td><select id="anios" class='form-control' name="anios" style="width: 90px" >
                     <?php 
-                    $anio= date('Y');
+                    $anio= date('Y')-2;
                     $i=0;
                     for($i = ($anio+1);$i>=2000;$i--){
                         if ($anio==$i) $t = "selected";
@@ -69,10 +72,9 @@
 	$("#search").click(function(){
 	var uid=$("#uid").val();
 	var anios=$("#anios").val();
-	anio = anios.substring(2);
 	if (uid!="") {
 		
-		$("#student").load("/record/directed/student/uid/"+uid+"/perid/"+anio+"B");
+		$("#student").load("/record/directed/student/uid/"+uid+"/perid/"+anios);
 	}else{
 		alert("Ingrese el Código de Matricula.");
 		return false;
