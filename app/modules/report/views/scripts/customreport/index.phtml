@@ -2,76 +2,81 @@
   	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tasks"></span> Reportes Personalizados');
   	$this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
 ?>
-<br>
-<div class='row text-right'>
-	<div class='col-md-12'>
-		<div class='col-md-2 col-md-offset-1'><b>Seleccione una facultad: </b></div>
-		<div class='col-md-3'>
-			<select id='seletfac' class='form-control'>
-				<option value="nada">-- Seleccione Facultad --</option>
-					<?php
-						if ($this->data) {
-							foreach ($this->data as $key => $facultys) {	
-								if ($facultys['facid']!='TODO' && $facultys['facid']!='NINGUN') {
-								?>
-									<option value='<?php echo $facultys['facid']?>'><?php echo $facultys['name']?></option>
-							<?php
+<div class="panel panel-primary col-md-10 col-md-offset-1">
+	<br>
+	<div class='row text-right'>
+		<div class='col-md-12'>
+			<div class='col-md-2 col-md-offset-1'><b>Seleccione una facultad: </b></div>
+			<div class='col-md-3'>
+				<select id='seletfac' class='form-control'>
+					<option value="nada">-- Seleccione Facultad --</option>
+						<?php
+							if ($this->data) {
+								foreach ($this->data as $key => $facultys) {	
+									if ($facultys['facid']!='TODO' && $facultys['facid']!='NINGUN') {
+									?>
+										<option value='<?php echo $facultys['facid']?>'><?php echo $facultys['name']?></option>
+								<?php
+									}
 								}
 							}
-						}
-					?>
-			</select>
+						?>
+				</select>
+			</div>
+			<div class='col-md-2'><b>Seleccione una Escuela: </b></div>
+			<div class='col-md-3'>
+				<select id='seletspec' class='form-control'>
+					<option value="nada">-- Seleccione una Facultad --</option>
+				</select>
+			</div>
+		</div>	
+	</div><br>
+	<div class='row hidden' id="contenido">
+		<div class="col-md-10 col-md-offset-2">
+		  	<div class="col-md-5">
+		    	<div class="thumbnail">
+		      		<div class="caption">
+		        		<h3><span class='text-primary'><b>Cantidad de Matrículas</b></span></h3>
+		        		<p><b>Alumnos matriculados por 2º, 3º, 4º, 5º ..., a un curso en los ultimos 4 periodos.</b></p>
+		        		<p class='text-right'><a id='report1' href="#" data-toggle="modal" data-target="#myModal1" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
+		      		</div>
+		    	</div>
+		  	</div>
+		  	<div class="col-md-5">
+		    	<div class="thumbnail">
+		      		<div class="caption">
+		        		<h3><span class='text-primary'><b>Desaprobados mayor a 50%</b></span></h3>
+		        		<p><b>Curso cuyo grado de desaprobados es mayor al 50% en los ultimos 3 años.</b></p>
+		        		<p class='text-right'><a id="report2" href="#" data-toggle="modal" data-target="#myModal2" class="btn btn-success" role="button"><span class='glyphicon glyphicon-circle-arrow-up'></span> Ver reporte</a></p>
+		      		</div>
+		    	</div>
+		  	</div>
 		</div>
-		<div class='col-md-2'><b>Seleccione una Escuela: </b></div>
-		<div class='col-md-3'>
-			<select id='seletspec' class='form-control'>
-				<option value="nada">-- Seleccione una Facultad --</option>
-			</select>
+	</div>
+	<div class='row'>
+		<div class="col-md-10 col-md-offset-2">
+		  	<div class="col-md-5">
+		    	<div class="thumbnail">
+		      		<div class="caption">
+		        		<h3><span class='text-primary'><b>Promedio Académico</b></span></h3>
+		        		<p><b>Alumnos que mejoran y/o disminuyen su promedio académico en los ultimos 4 periodos.</b></p>
+		        		<p class='text-right'><a href="#" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
+		      		</div>
+		    	</div>
+		  	</div>
+		  	<div class="col-md-5">
+		    	<div class="thumbnail">
+		      		<div class="caption">
+		        		<h3><span class='text-primary'><b>Frecuencia de Ingreso</b></span></h3>
+		        		<p><b>Identificar frecuencia de ingreso al sistema por alumno/docente/administrativo.</b></p>
+		        		<p class='text-right'><a id="report3" href="#" data-toggle="modal" data-target="#myModal3" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
+		      		</div>
+		    	</div>
+		  	</div>
 		</div>
 	</div>	
-</div><br>
-<div class='row hidden' id="contenido">
-	<div class="col-md-10 col-md-offset-2">
-	  	<div class="col-md-5">
-	    	<div class="thumbnail">
-	      		<div class="caption">
-	        		<h3><span class='text-primary'><b>Cantidad de Matrículas</b></span></h3>
-	        		<p><b>Alumnos matriculados por 2º, 3º, 4º, 5º ..., a un curso en los ultimos 4 periodos.</b></p>
-	        		<p class='text-right'><a id='report1' href="#" data-toggle="modal" data-target="#myModal1" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
-	      		</div>
-	    	</div>
-	  	</div>
-	  	<div class="col-md-5">
-	    	<div class="thumbnail">
-	      		<div class="caption">
-	        		<h3><span class='text-primary'><b>Desaprobados mayor a 50%</b></span></h3>
-	        		<p><b>Curso cuyo grado de desaprobados es mayor al 50% en los ultimos 3 anios.</b></p>
-	        		<p class='text-right'><a id="report2" href="#" data-toggle="modal" data-target="#myModal2" class="btn btn-success" role="button"><span class='glyphicon glyphicon-circle-arrow-up'></span> Ver reporte</a></p>
-	      		</div>
-	    	</div>
-	  	</div>
-	</div>
-	<div class="col-md-10 col-md-offset-2">
-	  	<div class="col-md-5">
-	    	<div class="thumbnail">
-	      		<div class="caption">
-	        		<h3><span class='text-primary'><b>Promedio Académico</b></span></h3>
-	        		<p><b>Alumnos que mejoran y/o disminuyen su promedio academico en los ultimos 4 periodos.</b></p>
-	        		<p class='text-right'><a href="#" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
-	      		</div>
-	    	</div>
-	  	</div>
-	  	<div class="col-md-5">
-	    	<div class="thumbnail">
-	      		<div class="caption">
-	        		<h3><span class='text-primary'><b>Frecuencia de Ingreso</b></span></h3>
-	        		<p><b>identificar frecuencia de ingreso al sistema por alumno/docente/administrativo.</b></p>
-	        		<p class='text-right'><a id="report3" href="#" data-toggle="modal" data-target="#myModal3" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
-	      		</div>
-	    	</div>
-	  	</div>
-	</div>
 </div>
+
 <!-- Modal Reporte 1-->
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog" style='width:80%'>
@@ -199,36 +204,39 @@
 		    	<div class='panel panel-primary'>
 	      			<br>	      		
 		      		<div class='row text-right'>
-		      			<div class='col-md-12 col-md-offset-1'>
-		      				<div class='col-md-2'><b>Seleccione un Año: </b></div>
-		      				<div class='col-md-2'>
-		      					<select id='seletanio1' class='form-control'>
-		      						<option>-- Seleccione Año --</option>
-		      							<?php
-		      								if ($this->anio) {
-		      									for ($i=$this->anio; $i >= 1991; $i--) { 
+		      			<div class='col-md-12'>
+		      				<div class='col-md-2'><b>Seleccione una Fecha: </b></div>
+		      				<div class='col-md-4'>
+		      					<input id="fecha" type="text" name="fecha" class="form-control" title="Fecha" value="<?php echo date('Y-m-d')?>">
+		      				</div>
+		      				<div class='col-md-2 '><b>Seleccione un Rol: </b></div>
+		      				<div class='col-md-4'>
+		      					<select id='seletrol' class='form-control'>
+		      						<option value="vacio">-- Seleccione Rol --</option>
+		      						<?php
+		      							if ($this->datarol) {
+		      								foreach ($this->datarol as $key => $datarol1) {
+		      									if ($datarol1['rid']=='AL' || $datarol1['rid']=='DC') {
 		      									?>
-		      										<option value='<?php echo $i?>'><?php echo $i?></option>
-		      									<?php
+		      									<option value='<?php echo $datarol1['rid']?>'><?php echo $datarol1['name']?></option>
+		      								<?php		
 		      									}
 		      								}
-		      							?>
-		      					</select>
-		      				</div>
-		      				<div class='col-md-2 '><b>Seleccione una Currícula: </b></div>
-		      				<div class='col-md-4'>
-		      					<select id='seletcurri1' class='form-control'>
-		      						<option>-- Seleccione una Escuela --</option>
+		      								?>
+		      								<option value="otros">Administrativo</option>
+		      								<?php
+		      							}
+		      						?>
 		      					</select>
 		      				</div>		      				
 		      			</div>	
 		      		</div><br>
 		      		<div class='row'>
 		      			<div class='col-md-12'>
-		      				<div class='col-md-4 col-md-offset-5'><a id='viewReports1' href="#" class='btn btn-primary disabled'>Ver reporte</a></div>
+		      				<div class='col-md-4 col-md-offset-5'><a id='viewReports2' href="#" class='btn btn-primary disabled'>Ver reporte</a></div>
 		      			</div>	
 		      		</div><br>
-		    		<div id="dataLoad"></div>	
+		    		<div id="dataload1"></div>	
 	      		</div>
 	      	</div>
 	    </div>
@@ -236,6 +244,22 @@
 </div>
 
 <script type="text/javascript">
+	$(function() {
+        $( "#fecha" ).datepicker({
+            inline:true,
+            minDate: new Date(2013, 0, 1),
+            maxDate: new Date(2020, 12, 31),
+            dateFormat: 'yy-mm-dd',
+            //beforeShowDay: fechitas
+        })
+        //     .bind(
+        //     'dateSelected',
+        //     function(e,selectedDate, $td)
+        //     {
+        //         console.log('esta es la fecha' + selectedDate);
+        //     }
+        // );
+    });
 
 	$("#seletfac").change(function(){
 		var facid=$("#seletfac").val();
@@ -346,7 +370,7 @@
 		}
 		else{
 			var url=("/report/customreport/registrationquantityrepeatstudents/perid/"+$.base64.encode(perid)+"/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid)+"/courseid/"+$.base64.encode(courseid));
-			$("#data_end").html("<img src='/img/spinner.gif'> Cargando....");
+			$("#data_end").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
 			$("#data_end").load(url);			
 		};
 	});
@@ -384,7 +408,7 @@
 		else{
 			var url=("/report/customreport/disapprovedcoursemore50percentlast3/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid)+"/anio/"+$.base64.encode(anio));
 
-			$("#dataLoad").html("<img src='/img/spinner.gif'> Cargando...");
+			$("#dataLoad").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
 			$("#dataLoad").load(url);			
 		};
 
@@ -397,5 +421,36 @@
 			$("#dataLoad").empty();
 			$("#viewReports1").addClass('disabled');	
 		};
+	});
+
+	$("#seletrol").change(function(){
+		var r=$("#seletrol").val();
+
+		if (r!='') {
+			$("#viewReports2").removeClass('disabled');			
+		}
+		else{
+			$("#viewReports2").addClass('disabled');	
+		};
+	});
+
+	$("#viewReports2").click(function(){
+		var fechita=$("#fecha").val();
+		var rid=$("#seletrol").val();
+		if (fechita==''){
+			alert("Seleccione una Fecha");
+			return false;	
+		}
+		else if (rid=='vacio'){
+			alert("Seleccione un Rol");
+			return false;		
+		}
+		else{
+			var url=("/report/customreport/frequencyaccessxweek/rid/"+$.base64.encode(rid)+"/fecha/"+$.base64.encode(fechita));
+
+			$("#dataload1").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
+			$("#dataload1").load(url);			
+		};
+
 	});
 </script>

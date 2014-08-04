@@ -18,6 +18,11 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$where=array('eid'=>$eid,'oid'=>$oid);
 			$datafac=$dbconsultfaculty->_getFilter($where);
 			$anio=date('Y');
+
+			$dbconsultrol = new Api_Model_DbTable_Rol();
+			$datarol=$dbconsultrol->_getAllACL($where,$order=array('name'));
+			
+			$this->view->datarol=$datarol;
 			$this->view->anio=$anio;
 			$this->view->data=$datafac;
 
@@ -152,14 +157,28 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$this->_helper->layout()->disableLayout();
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
-			$rid='AL';
-			$fecha='2014-06-27';
-			$where=array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid,'fecha'=>$fecha);
+			$rid=base64_decode($this->_getParam('rid'));
+			$fecha=base64_decode($this->_getParam('fecha'));
 
-			$dbconsult = new Api_Model_DbTable_Logs();
-			$data = $dbconsult->_getFrequencyAccessXweek($where);
-			if ($data) {
-				$this->view->data=$data;
+			if ($rid=='AL' or $rid=='DC') {
+				$where=array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid,'fecha'=>$fecha);
+				$dbconsult = new Api_Model_DbTable_Logs();
+				$dbconsultspecialty = new Api_Model_DbTable_Speciality();
+				$data = $dbconsult->_getFrequencyAccessXweek($where);
+				if ($data) {
+						unset($where['rid']);
+						unset($where['fecha']);
+					foreach ($data as $key => $escuelas) {
+						$where['escid']=$escuelas['escid'];
+						$data1 = $dbconsultspecialty->_getFilter($where);
+						$data[$key]['name'] = $data1[0]['name'];
+						$data[$key]['subid'] = $data1[0]['subid'];
+					}
+					$this->view->data=$data;
+				}				
+			}
+			else{
+				
 			}
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
