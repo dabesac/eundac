@@ -60,6 +60,7 @@ if ($this->faculty){
         <?php 
         $f=0;
         foreach ($this->data as $courses) {?>
+        <?php if ($number['facid']==$courses['facid']) { ?>
         <div class="curso">
              <?php $f++;
 
@@ -73,7 +74,7 @@ if ($this->faculty){
             $partial = $this->partial;
 
                                  
-            if ($number['facid']==$courses['facid']) { ?>
+             ?>
                 <div class="titleCurso">
                     <p class="idCurso">
                         <?php echo $courses['courseid'] ?><br>
@@ -132,7 +133,8 @@ if ($this->faculty){
                                     <li> <a  href="/docente/fillnotes/competition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('2')?>" data-toggle="tooltip" title="Registrar las Notas">Notas 2do Parcial</a></li>
                                 </ul>
                             </div>
-
+                            
+                            <?php /* 
                             <div class="btn-group btnNotasBtnGroup btnPorcentajeGroup">
                                   <button class="btn btn-primary form-control dropdown-toggle" type="button" data-toggle="dropdown">
                                     Porcentaje <span class="caret"></span>
@@ -142,6 +144,7 @@ if ($this->faculty){
                                     <li><a <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?> class="load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('2')?>" data-toggle="tooltip" title="Asignar Porsentage" >Porcentaje 2do Parcial</a></li>
                                   </ul>
                             </div>
+                            */?>
                         <?php break;
                             default: ?>
                             <div class="cursoNoAsignado">Tipo de Curso no Asignado</div>
@@ -167,7 +170,8 @@ if ($this->faculty){
                             case 'C': ?>
                                 <a class="btn btn-primary btnNotasBtnGroup " href="/docente/fillnotes/competition<?php echo $urlAsist ?>/<?php echo base64_encode('partial') ?>/<?php echo base64_encode($partial)?>" data-toggle="tooltip" title="Registrar las Notas">Notas</a>
 
-                                <buttom <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?>class="btn btn-primary btnPorcentaje form-control load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode($partial)?>" data-toggle="tooltip" title="Asignar Porsentage" >Asignar % </buttom>                               
+                                <?php /*<buttom <?php echo ($courses['state']=='P' || $courses['state']=='C' )? 'disabled':''?>class="btn btn-primary btnPorcentaje form-control load-persentage" href="/docente/fillnotes/persentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode($partial)?>" data-toggle="tooltip" title="Asignar Porsentage" >Asignar % </buttom>
+                                */?>                               
                         <?php break;
                             default: ?>
                                 <div class="cursoNoAsignado">Tipo de Curso No Asignado</div>
@@ -200,7 +204,7 @@ if ($this->faculty){
                             <?php }?>
                         </p>
                         <div class="progress-course progress progress-striped active text-center">
-                            <span><?php echo $courses['persetage_notes'] ?>%</span>
+                            <span><?php echo round($courses['persetage_notes']) ?>%</span>
                             <div class="progress-bar"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courses['persetage_notes']?>%"></div>
                         </div>
                     </div>
@@ -214,7 +218,7 @@ if ($this->faculty){
                             <?php }?>
                         </p>
                         <div class="progress-course progress progress-striped active text-center">
-                            <span><?php echo $courses['persetage_assit'] ?>%</span>
+                            <span><?php echo round($courses['persetage_assit']) ?>%</span>
                             <div class="progress-bar progress-bar-danger"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $courses['persetage_assit']?>%"></div>
                         </div>
                     </div>
@@ -250,8 +254,8 @@ if ($this->faculty){
                         </div>
                     </div>-->
                 </div>
-            <?php } ?>
         </div><!--Curso-->
+            <?php } ?>
         <?php }?>
     </div>
 </div>

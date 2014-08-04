@@ -185,29 +185,45 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
 
             $this->view->dataCourse = $dataCourse;
 
-            //consultar si lleva el mismo curso pero en otro turno
-            $whereOtherCourse = array(  'eid'      => $where['eid'],
-                                        'oid'      => $where['oid'],
-                                        'pid'      => $pid,
-                                        'uid'      => $uid,
-                                        'escid'    => $where['escid'],
-                                        'subid'    => $where['subid'],
-                                        'curid'    => $where['curid'],
-                                        'courseid' => $where['courseid'],
-                                        'perid'    => $where['perid'] );
+            //Verificar si los otros cursos son de otra especialidad
+            $whereEscuela = array(  'eid'   => $where['eid'],
+                                    'oid'   => $where['oid'],
+                                    'escid' => $where['escid'],
+                                    'subid' => $where['subid'] );
+
+            $attrib = array('parent');
+
+            $parentData = $schoolDb->_getFilter($whereEscuela, $attrib);
+
+            if ($parentData[0]['parent']) {
+                $escid = $parentData[0]['parent'];
+            }else{
+                $escid = $where['escid'];
+            }
+
+            $tamEscid = strlen($escid);
+
+            //consultar si lleva el mismo curso pero en otro turno u otra especialidad
+            $whereOtherCourse = array(  'eid'                        => $where['eid'],
+                                        'oid'                        => $where['oid'],
+                                        'pid'                        => $pid,
+                                        'uid'                        => $uid,
+                                        'left(escid, '.$tamEscid.')' => $escid,
+                                        'subid'                      => $where['subid'],
+                                        'courseid'                   => $where['courseid'],
+                                        'perid'                      => $where['perid'] );
 
             $preDataAnotherCourses = $periodsTeacherDb->_getFilter($whereOtherCourse);
-            $existenOtros = 0;
 
+            $dataAnotherCourses = array();
             $cOtrosCursos = 0;
             foreach ($preDataAnotherCourses as $c => $course) {
-                if ($course['turno'] != $where['turno']) {
+                if ($course['turno'] != $where['turno'] or $course['curid'] != $where['curid']) {
                     $whereOtherCourse = array(  'eid'       => $where['eid'],
                                                 'oid'       => $where['oid'],
                                                 'teach_pid' => $pid,
-                                                'escid'     => $where['escid'],
+                                                'escid'     => $course['escid'],
                                                 'subid'     => $where['subid'],
-                                                'curid'     => $where['curid'],
                                                 'courseid'  => $where['courseid'],
                                                 'perid'     => $where['perid'],
                                                 'turno'     => $course['turno'] );
@@ -216,24 +232,17 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                     $stateSilabo = $syl->_getFilter($whereOtherCourse, $attrib);
                     
                     if (!$stateSilabo or $stateSilabo[0]['state'] != 'C') {
-                        $existenOtros = 1;
-                        $dataAnotherCourses = $dataAnotherCourses.$course['turno'].'-';
-                        $dataAnotherCoursesArray[$cOtrosCursos] = $course['turno'];
+                        $dataAnotherCourses[$cOtrosCursos]['turno'] = $course['turno'];
+                        $dataAnotherCourses[$cOtrosCursos]['curid'] = $course['curid'];
+                        $dataAnotherCourses[$cOtrosCursos]['escid'] = $course['escid'];
                         $cOtrosCursos++;
                     }
                 }
             }
             
-            if ($existenOtros == 0) {
-                $dataAnotherCourses = 'no';
-                $dataAnotherCoursesArray = array();
-            }
-            $dataAnotherCourses = substr($dataAnotherCourses, 0, -1);
             $this->view->dataAnotherCourses = $dataAnotherCourses;
 
-            $this->view->dataAnotherCoursesArray = $dataAnotherCoursesArray;
 
-            
             // $this->view->escid=$where['escid'];
             // $this->view->curid=$where['curid'];
             // $this->view->courseid=$where['courseid'];
@@ -327,23 +336,15 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                         $update = array('state'=>'C');
                         $syllabus= new Api_Model_DbTable_Syllabus();
                         if ($syllabus->_update($update,$params)){ 
-                            $json['otrosCursos'] = 0;
-                            if ($anotherCourses != 'no') {
+                            if ($formData['existenCursos'] != 'no') {
+                                for ($i=0; $i <= $formData['cantOtrosCursos'] ; $i++) { 
+                                    $syllabus->_getDuplicasilabo($perid,$formData['escid'.$i],$courseid,$formData['curid'.$i],$formData['turno'.$i],$escid,$turno);
+                                }
                                 $json['otrosCursos'] = 1;
-                                $turnos = explode('-', $anotherCourses);
-                                $cDuplicates = 0;
-                                foreach ($turnos as $cTurnos => $turnoC) {
-                                    $data= $syllabus->_getDuplicasilabo($perid,$escid,$courseid,$curid,$turnoC,$escid,$turno);
-                                    if ($data) {
-                                        $cDuplicates++;
-                                    }
-                                }
-
-                                if ($cDuplicates == ($cTurnos + 1)) {
-                                    $json['status'] = true;
-                                }
+                                $json['status']      = true;
                             }else{
-                                $json['status'] = true;
+                                $json['otrosCursos'] = 0;
+                                $json['status']      = true;
                             }
                         }
 

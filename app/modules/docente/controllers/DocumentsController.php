@@ -1,9 +1,9 @@
 <?php
 
-class Docente_IndexController extends Zend_Controller_Action {
+class Docente_DocumentsController extends Zend_Controller_Action {
 
-    public function init()
-    {
+   public function init()
+   {
       $sesion  = Zend_Auth::getInstance();
       if(!$sesion->hasIdentity() ){
         $this->_helper->redirector('index',"index",'default');
@@ -13,10 +13,9 @@ class Docente_IndexController extends Zend_Controller_Action {
         $this->_helper->redirector('index','index','default');
       }
       $this->sesion = $login;   
-    }
+   }
     
-    public function indexAction(){
+   public function indexAction(){
     
-    }
-
+   }
 }      

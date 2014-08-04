@@ -29,8 +29,10 @@ class Syllabus_BibliotecaController extends Zend_Controller_Action {
 
         $preDataFaculties = $facultyDb->_getFilter($where);
         foreach ($preDataFaculties as $c => $faculty) {
-            $dataFaculty[$c]['facid'] = $faculty['facid'];
-            $dataFaculty[$c]['name']  = $faculty['name'];
+            if ($faculty['facid'] != 'TODO') {
+                $dataFaculty[$c]['facid'] = $faculty['facid'];
+                $dataFaculty[$c]['name']  = $faculty['name'];
+            }
         }
         $this->view->dataFaculty = $dataFaculty;
     } 
@@ -82,14 +84,14 @@ class Syllabus_BibliotecaController extends Zend_Controller_Action {
         //dataBases
         $specialityDb = new Api_Model_DbTable_Speciality();
 
-        $escid = $this->_getParam('escid');
+        $escid = base64_decode($this->_getParam('escid'));
         $escidExplode = explode('-', $escid);
         $eid   = $this->sesion->eid;
         $oid   = $this->sesion->oid;
         
         $where = array( 'eid'    => $eid,
                         'oid'    => $oid,
-                        'parent' => base64_decode($escidExplode[0]),
+                        'parent' => $escidExplode[0],
                         'state'  => 'A' );
 
         $attrib = array('escid', 'name', 'subid');
@@ -112,8 +114,12 @@ class Syllabus_BibliotecaController extends Zend_Controller_Action {
         $eid   = $this->sesion->eid;
         $oid   = $this->sesion->oid;
         $perid = base64_decode($dataSearchExplode[0]);
-        $escid = base64_decode($dataSearchExplode[1]);
-        $subid = base64_decode($dataSearchExplode[2]);
+
+        $dataSearchExplode = base64_decode($dataSearchExplode[1]);
+        $dataSearchExplode = explode('-', $dataSearchExplode);
+        
+        $escid = $dataSearchExplode[0];
+        $subid = $dataSearchExplode[1];
 
         $where = array( 'eid'   => $eid,
                         'oid'   => $oid,

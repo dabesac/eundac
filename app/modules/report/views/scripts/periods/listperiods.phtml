@@ -1,5 +1,4 @@
 <?php if ($this->periods): ?>
-	<option value="">Seleccione un Periodo</option>
 	<?php foreach ($this->periods as $period): ?>
 		<option value="<?php echo $period['perid']?>"><?php echo $period['perid'].' | '.$period['name'] ?></option>
 	<?php endforeach ?>
