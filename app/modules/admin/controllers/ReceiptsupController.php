@@ -43,11 +43,13 @@ public function loadreceiptsAction()
 		$data_ac = array(
 			'eid' => $this->sesion->eid,
 			'oid' => $this->sesion->oid,
+			'state'=>'I'
 			);
+		$periodDB=new Api_Model_DbTable_Periods();
+		
+        $pe_ini=$periodDB->_getFilter($data_ac);
+        $perid=$pe_ini[0]['perid'];
 
-		$perid_activo=new Api_Model_DbTable_Periods();
-        $pe_ac=$perid_activo->_getPeriodsCurrent($data_ac);
-        $perid=$pe_ac['perid'];
 		$data = array(
 			'fecha' => base64_encode($fecha),
 			'turno' =>base64_encode($turno),
