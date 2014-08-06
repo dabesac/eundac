@@ -24,6 +24,8 @@
 		<!-- <li class="active"><a href="#courses"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Cursos a Cargo</h5></a></li> -->
     <li class="active"><a href="#academicRecord"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Historial Académico</h5></a></li>
     <li><a href="#info"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Datos Personales</h5></a></li>
+    <li><a href="#password"> <h5><span class="glyphicon glyphicon-th-large text-muted"></span>Contraseña</h5></a>
+    </li>
 		<li><a class="hidden"></a></li>
 	</ul>
 	<div class="tab-content">
@@ -33,6 +35,9 @@
       <div id="admData"></div>
       <div id="editData"></div>
     </div>
+    <div class="tab-pane fade" id="password">
+      <div id="cambioPassWord"></div>
+    </div>
 	</div>
 </div>
 
@@ -41,6 +46,7 @@
   // $('#courses').load("/profile/privateadm/coursescurrent");
   $("#academicRecord").load("/docente/report/index");
   $("#admData").load("/profile/privateadm/adminfo");
+  $("#password").load("/profile/privateadm/changepassword");
   $('#editData').fadeOut('fast');
 
   //$("#signin").load("/profile/privateadm/admlog/");

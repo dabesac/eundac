@@ -1548,6 +1548,66 @@ class Profile_PublicController extends Zend_Controller_Action {
         }
     }
 
+
+// accion para cambiar la contrasela en el perfil--------------------------------------------------
+    public function changepasswordAction(){
+        $this->_helper->layout()->disableLayout();
+    }
+
+    public function savepasswordAction(){
+        $this->_helper->layout()->disableLayout();
+        $formData = $this->getRequest()->getPost();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $uid = $this->sesion->uid;
+        $pid = $this->sesion->pid;
+        $escid = $this->sesion->escid;
+        $subid = $this->sesion->subid;
+
+        //codofica
+        $oldpass = md5($formData['oldpass']);
+        $newpass = md5($formData['newpass']);
+        $repnewpass = md5($formData['repnewpass']);
+        //verifica campos vacios
+        if ( $formData['oldpass'] <> "" &&  $formData['newpass'] <> "" && $formData['repnewpass'] <>""){
+            $where = array(
+                    'eid'=>$eid,
+                    'oid'=>$oid,
+                    'uid'=>$uid,
+                    'pid'=>$pid,
+                    'escid'=>$escid,
+                    'password'=>$oldpass
+            );
+            $tb_user = new Api_Model_DbTable_Users();
+            
+            if (is_array($tb_user->_getFilter($where))) {
+                 if($newpass===$repnewpass){
+                            $data['password']=$newpass;
+                            $data['change_password']="T";
+                            $pk['eid']=$eid;
+                            $pk['oid']=$oid;
+                            $pk['uid']=$uid;
+                            $pk['pid']=$pid;
+                            $pk['escid']=$escid;
+                            $pk['subid']=$subid;
+                            
+                            $bdu = new Api_Model_DbTable_Users();
+                            $veri=$bdu->_update($data,$pk);
+                            if ($veri) {
+                                print_r(4);
+                            }
+                 }else{
+                    print_r(3);
+                 }
+            } else {
+                print_r(2);
+            }          
+        }else{
+            print_r(1);
+        }
+    }
+
     // public function studentsignrealizedAction()
     // {
     //     try{
