@@ -248,7 +248,7 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 									'number'        => $formData['cantStudents'],
 									'department_id' => $dataDepartment[0]['id'],
 									'semid'         => $formData['semid'],
-									'name'          => 'Tutoria '.$nameSpeciliaty.' '.$formData['semid']. 'Semestre',
+									'name'          => 'Tutoria '.$nameSpeciliaty.' '.$formData['semid'].' Semestre',
 									'state_inform'  => 'B',
 									'perid'         => $perid );
 
