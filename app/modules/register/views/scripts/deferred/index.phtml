@@ -1,3 +1,7 @@
+<?php 
+    $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> APLAZADOS');
+    $this->placeholder('Btnnav')->append('<a href="/docente/notas" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
+?>
 <style type="text/css">
 	.nota{
 		width: 53px;
@@ -36,7 +40,6 @@
 
 <p class="text-muted"><strong>Curso</strong> <?php echo $this->infocurso["name"]?></p>
 <hr>
-
 
 <?php if ($this->students_register) { ?>
 <div class='row notas' >

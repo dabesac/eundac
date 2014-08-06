@@ -121,8 +121,11 @@ class Admin_PasswordController extends Zend_Controller_Action
             $escid = base64_decode($this->_getParam("escid"));
             $pid = base64_decode($this->_getParam("pid"));
             $subid = base64_decode($this->_getParam("subid"));
+
             $where = array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid,'uid'=>$uid,'escid'=>$escid,'pid'=>$pid,'subid'=>$subid);
+           
             $this->view->where=$where;
+            
             $fm=new Admin_Form_Keychange();
             $bdu = new Api_Model_DbTable_Users();
             $fm->guardar->setLabel("Guardar");

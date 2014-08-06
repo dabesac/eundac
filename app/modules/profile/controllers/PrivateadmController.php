@@ -299,6 +299,13 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
         }
     }
 
+    public function changepasswordAction()
+    {
+        // $this->_helper->layout()->disableLayout();
+        // if ($this->getRequest()->isPost()){
 
-
+            
+        // }
+    }
+    
 }
