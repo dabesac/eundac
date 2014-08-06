@@ -44,7 +44,8 @@ public function loadreceiptsAction()
         // $subject = $server->connectAuth();
         require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
-        $base_url = 'http://api.undac.edu.pe:8080/';
+        //$base_url = 'http://api.undac.edu.pe:8080/';
+        $base_url = 'http://localhost:8080/';
         $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/up_receipt';
         // $endpoint = '/'.base64_encode('s1st3m4s').'/'.base64_encode('und4c').'/up_receipt';
 		// $data = array('fecha' => $fecha,'turno' =>$turno,'perid' =>$perid);

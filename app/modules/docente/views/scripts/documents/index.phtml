@@ -1,5 +1,59 @@
+<link rel="stylesheet" href="/css/documents.css">
 <?php
 	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tint"></span> Documentos');
 
 	$this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
  ?>
+
+<div class="documents_header">
+	<p class="parrafoHeader"><span class="glyphicon glyphicon-info-sign"></span> Lista de documentos enviados:</p>
+	<a href="##" data-toggle="modal" data-target="#newDocumentModal" class="btnNew btn btn-info form-control">Nuevo Documento</a>
+</div>
+<hr>
+
+
+<!--Modal para el nuevo Documento-->
+<div class="modal fade" id="newDocumentModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        		<h4 class="modal-title" id="myModalLabel">Nuevo Documento</h4>
+			</div>
+			<div class="modal-body">
+				<p class="text-warning"><span class="glyphicon glyphicon-flag"></span> Rellene todo lo necesario para la emisión del documento...</p>
+				<hr>
+				<div class="tipeDocument">
+					<p class="parrafoTD">Tipo de Documento:</p>
+					<select name="tipeDocument" id="idSelectTipeDocument" class="form-control selectTD">
+						<option value="RActa">Reapertura de Acta</option>
+						<option value="RSilabo">Reapertura de Sílabo</option>
+						<option value="RAsistencia">Reapertura de Asistencia</option>
+						<option value="RInformeA">Reapertura de Informe Academico</option>
+						<option value="RInformeT">Reapertura de Informe de Tutoría</option>
+					</select>
+				</div>
+				<hr>
+				<div class="issueAndNumber">
+					<p class="issueAndNumberObO issue">Solicitud</p>
+					<p class="issueAndNumberObO numberIssue">Numero 00001</p>
+				</div>
+				<div class="dataPerson">
+					<p>Remitente : De La Cruz Vilchez, Ana</p>
+					<p>Fecha : Domingo 3 de Julio del 2014</p>
+				</div>
+				<hr>
+				<div class="abstractDocument">
+					<p>Resumen:</p>
+					<textarea class="form-control" name="abstractDocument" rows="10"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="btnFooterSide">
+					<p class="btnFooterSideObO pFooter"><span class="glyphicon glyphicon-exclamation-sign"></span> Asegurese de que todo este en orden <strong>antes de enviar el documento...</strong></p>
+					<a href="##" class="btn btn-success form-control btnFooterSideObO btnFooter">Enviar</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

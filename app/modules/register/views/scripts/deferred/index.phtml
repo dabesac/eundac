@@ -13,21 +13,30 @@
 </style>
 <script type="text/javascript" src="/js/notes/note-deferred.js"></script>
 
-<?php if ($this->state=='C') $disabled="disabled";?>
+<?php 
+	$this->placeholder('Btnnav')->append('<a href="/docente/notas" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
 
-<div class="row">
-  <div class="col-xs-12 col-sm-6 col-md-8"><h4><span class='glyphicon glyphicon-pencil' ></span> Llenado de Aplazados <?php echo $this->infocurso['name']?></h4></div>
-  <div class="col-xs-6 col-sm-6 col-md-4">
-  	<a href="/docente/notas" class="btn btn-default"><span class='glyphicon glyphicon-arrow-left'></span> Regresar</a>
-  	<?php if ($this->students_register && $this->state !='C') { ?>
-  		<button class='btn btn-info' id='save_notas' disabled > <span class='glyphicon glyphicon-save'></span> Guardar</button>
-	  	<button class='btn btn-danger' id='closed_record'  <?php echo $disabled?> > <span class='glyphicon glyphicon-log-out'></span> Cerrar Acta</button>
-  	<?php }?>
-  	<?php if ($this->state=='C' ) { ?>
-  		<a href="/register/deferred/printdeferred/curid/<?php echo base64_encode($this->infocurso['curid'])?>/escid/<?php echo base64_encode($this->infocurso['escid'])?>/subid/<?php echo base64_encode($this->infocurso['subid'])?>/courseid/<?php echo base64_encode($this->infocurso['courseid'])?>/turno/<?php echo base64_encode($this->students_register[0]['turno'])?>/perid/<?php echo base64_encode($this->students_register[0]['perid'])?>" class='btn btn-primary'><span class="glyphicon glyphicon-print"></span> Imprimir</a>
-  	<?php }?>
-  </div>
-</div>
+	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-adjust" ></span> Llenado de Aplazados');
+ ?>
+
+<?php if ($this->state=='C') $disabled="disabled";?>
+  	
+<?php if ($this->students_register && $this->state !='C') { ?>
+	<?php 
+		$this->placeholder('BtnSVCRight')->append('<button class="btn btn-default" id="save_notas" disabled > <span class="glyphicon glyphicon-save text-info"></span> Guardar</button>
+			<button class="btn btn-default" id="closed_record" '.$disabled.'> <span class="glyphicon glyphicon-log-out text-danger"></span> Cerrar Acta</button>');
+	 ?>
+<?php }?>
+<?php if ($this->state=='C' ) { ?>
+	<?php 
+		$this->placeholder('BtnSVCRight')->append('<a href="/register/deferred/printdeferred/curid/'.base64_encode($this->infocurso["curid"]).'/escid/'.base64_encode($this->infocurso['escid']).'/subid/'.base64_encode($this->infocurso['subid']).'/courseid/'.base64_encode($this->infocurso['courseid']).'/turno/'.base64_encode($this->students_register[0]['turno']).'/perid/'.base64_encode($this->students_register[0]['perid']).'"'.' class="btn btn-default"><span class="glyphicon glyphicon-print text-info"></span> Imprimir</a>');
+	 ?>
+<?php }?>
+
+
+<p class="text-muted"><strong>Curso</strong> <?php echo $this->infocurso["name"]?></p>
+<hr>
+
 
 <?php if ($this->students_register) { ?>
 <div class='row notas' >
@@ -96,12 +105,6 @@
 <input type='hidden' id='record-subid' name='subid' value='<?php echo $this->students_register[0]['subid']?>'>
 <input type='hidden' id='record-perid' name='perid' value='<?php echo $this->students_register[0]['perid']?>'>
 <?php }else{ ?>
-	<!-- <img src="/img/009.png" width='90px'> -->
-	<div class='col-md-12 cont-font-not-register'>
-		<h1 class='span-not-register'>
-			<span class='glyphicon glyphicon-exclamation-sign'></span>
-		</h1>
-		<h3 class='text-not-register'>No se encontró ningun Registro  </h3>
-	</div>
+	<h4 class="text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Aún no se genera los aplazados para esta escuela, <span class="text-danger">espere a que los otros docentes terminen con sus cursos, o talvez no tenga estudiantes desaprobados...</span></h4>	
 <?php }?>
 
