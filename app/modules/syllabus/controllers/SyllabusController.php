@@ -427,7 +427,21 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
             $where['subid']=base64_decode($this->_getParam('subid'));
             $where['perid']=base64_decode($this->_getParam('perid'));
             $this->view->where=$where;
-            // print_r($where);exit();
+
+            $tb_period = new Api_Model_DbTable_Periods();
+            $where_per = array(
+                    'eid' => $this->sesion->eid,
+                    'oid' => $this->sesion->oid,
+                    'perid' => base64_decode($this->_getParam('perid')),
+                    );
+            $data_period =$tb_period->_getOnePeriod($where_per);
+
+            $date_stard_t = $this->converterdate((string)$data_period['class_start_date']);
+            $date_end_t = $this->converterdate((string)$data_period['class_end_date']);
+
+            $this->view->date_stard = $date_stard_t;
+            $this->view->date_end =  $date_end_t;
+
             $syl= new Api_Model_DbTable_Syllabus();
             $datsyl=$syl->_getOne($where);
             $this->view->num=$datsyl['number'];
