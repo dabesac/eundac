@@ -83,25 +83,29 @@ class Docente_IndexController extends Zend_Controller_Action {
             $coursesStateRecord[$c] = $stateRecord[0]['state_record'];
 
             //Syllabus
-            $attrib = array('units');
+            $attrib = array('units', 'state');
             $coursesSyllabus = $syllabusDb->_getFilter($where, $attrib);
             $totalUnits = $coursesSyllabus[0]['units'];
 
-            if ($totalUnits) {
-                $attrib = array('unit');
-                $syllabusUnits = $syllabusUnitsDb->_getFilter($where, $attrib);
-                if ($syllabusUnits) {
-                    $units = count($syllabusUnits);
-                    $porcentajeSyllabus[$c] = (100 * $units)/$totalUnits;
+            if ($coursesSyllabus[0]['state'] != 'C') {
+                if ($totalUnits) {
+                    $attrib = array('unit');
+                    $syllabusUnits = $syllabusUnitsDb->_getFilter($where, $attrib);
+                    if ($syllabusUnits) {
+                        $units = count($syllabusUnits);
+                        $porcentajeSyllabus[$c] = (100 * $units)/$totalUnits;
+                    }else{
+                        $porcentajeSyllabus[$c] = 0;
+                    }
                 }else{
                     $porcentajeSyllabus[$c] = 0;
                 }
             }else{
-                $porcentajeSyllabus[$c] = 0;
+                $porcentajeSyllabus[$c] = 100;
             }
 
             //Avance de Clases
-            if ($porcentajeSyllabus[$c] == 100) {
+            if ($coursesSyllabus[0]['state'] == 'C') {
                 $attrib = array('session');
                 $contentsSyllabus = $syllabusUnitsContentDb->_getFilter($where, $attrib);
                 $totalContents = count($contentsSyllabus);
@@ -120,7 +124,7 @@ class Docente_IndexController extends Zend_Controller_Action {
             }
 
             //Avance de Notas
-            if ($porcentajeSyllabus[$c] == 100) {
+            if ($coursesSyllabus[0]['state'] == 'C') {
                 $where = array( 'eid'      => $eid,
                                 'oid'      => $oid, 
                                 'courseid' => $course['courseid'],
