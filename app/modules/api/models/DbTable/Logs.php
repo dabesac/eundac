@@ -112,6 +112,7 @@ class Api_Model_DbTable_Logs extends Zend_Db_Table_Abstract
 
 			$date = new Zend_Date($where['fecha']);
 			$date->sub('7', Zend_Date::DAY);
+			//saca la fecha en formato de postgres...
 			$fecha=$date->get('c');
 			$sql = $this->_db
                     ->query("
