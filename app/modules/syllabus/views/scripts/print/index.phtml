@@ -21,6 +21,7 @@ td, th{
 </style>
 
 <?php
+
 $curso=$this->curso[0];
 $total=$curso['hours_theoretical']+$curso['hours_practical']; 
 $tmps = split("-",$this->silabo['created']);
@@ -76,8 +77,10 @@ switch ($mes) {
             <td> <?php echo $curso['credits']?></td>   
         </tr>
         <tr>
-            <td><b>1.<?php echo $num=$num+1 ?> EXTENSIÓN HORARIA:</b></td>
-            <td> <?php echo "HT: ".$curso['hours_theoretical']."  "."HP: ". $curso['hours_practical']." "."TH: ".$total?></td>
+            <td>EXTENSIÓN HORARIA:</td>
+            <td>HT: <?php echo $this->docente['hours_t']?>  HP: <?php echo $this->docente['hours_p']?> TH: <?php echo $this->docente['hours_total']?></td>
+            <!-- <td><b>1.<?php echo $num=$num+1 ?> EXTENSIÓN HORARIA:</b></td>
+            <td> <?php echo "HT: ".$curso['hours_theoretical']."  "."HP: ". $curso['hours_practical']." "."TH: ".$total?></td> -->
         </tr>
         <tr>
             <td><b>1.<?php echo $num=$num+1 ?> SEMESTRE ACADÉMICO:</b></td>
@@ -284,7 +287,7 @@ switch ($mes) {
 <div style='text-align: center; margin-left: 30%; margin-top:100px'>
     <p style='width:200px ;border-top: solid 1px #000; font-weight: bold'>V° B° Comisión de Sílabo</p>
 </div>
-<?php 
+<?php   
     
     $html = ob_get_contents();
   

@@ -159,7 +159,7 @@ class SendmailController extends Zend_Controller_Action{
                         'port'     => 587, 
                         'auth'     => 'login', 
                         'username' => 'informatica@undac.edu.pe', 
-                        'password' => 'jkskse93' );
+                        'password' => '1nf0rm4t1c4000123' );
 
       $mailTransport = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $config); 
       Zend_Mail::setDefaultTransport($mailTransport);
