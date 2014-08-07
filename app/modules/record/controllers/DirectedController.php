@@ -16,8 +16,6 @@ class Record_DirectedController extends Zend_Controller_Action {
     public function indexAction(){
         
             $this->view->usuario=$this->sesion->rid;
-            
-        
     }
 
     public function studentAction(){
@@ -35,6 +33,7 @@ class Record_DirectedController extends Zend_Controller_Action {
             $user= new Api_Model_DbTable_Users();
             $datauser=$user->_getUserXUid_state($where);
             $this->view->user=$datauser[0];
+            
             $rid=$this->sesion->rid;
             if ($rid == 'AD') {
                 //solo si es admin
@@ -95,9 +94,16 @@ class Record_DirectedController extends Zend_Controller_Action {
             $cur1=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
             $wherecur['state']="C";
             $cur2=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
-            if ($cur0 || $cur1 || $cur2) {
-                $cur=array_merge($cur0,$cur1,$cur2);
+            $rol=$this->sesion->eid;
+            print_r($facultad);
+            if ($rol ==='AD') {
+                if ($cur0 || $cur1 || $cur2) {
+                    $cur=array_merge($cur0,$cur1,$cur2);
+                }
+            }else{
+                $cur=array_merge($cur0,$cur1);    
             }
+            
             $this->view->curriculas=$cur;
 
             $wheresc['eid']=$eid;
