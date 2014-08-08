@@ -303,11 +303,9 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
     {
         try {
             $this->_helper->layout()->disableLayout();
-            
         } catch (Exception $e) {
             print 'Error'.$e->getMessage();
         }
-
     }
     public function savepasswordAction(){
         try {

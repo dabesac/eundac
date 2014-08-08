@@ -94,15 +94,22 @@ class Record_DirectedController extends Zend_Controller_Action {
             $cur1=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
             $wherecur['state']="C";
             $cur2=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
-            $rol=$this->sesion->eid;
-            print_r($facultad);
-            if ($rol ==='AD') {
-                if ($cur0 || $cur1 || $cur2) {
+            $rol=$this->sesion->rid;
+            
+            if ($rol =='AD') {
+                if($cur0 && !$cur1 && !$cur2){
+                    $cur=$cur0;
+                }else{
                     $cur=array_merge($cur0,$cur1,$cur2);
                 }
             }else{
-                $cur=array_merge($cur0,$cur1);    
+                if ($cur0 && !$cur1) {
+                    $cur=$cur0;
+                }elseif ($cur0 && $cur1) {
+                    $cur=array_merge($cur0,$cur1);
+                }
             }
+            
             
             $this->view->curriculas=$cur;
 

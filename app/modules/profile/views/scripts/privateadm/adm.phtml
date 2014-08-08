@@ -31,12 +31,15 @@
 	<div class="tab-content">
     <!-- <div class="tab-pane active in fade" id="courses"></div> -->
     <div class="tab-pane active in fade" id="academicRecord"></div>
+
     <div class="tab-pane fade" id="info">
       <div id="admData"></div>
       <div id="editData"></div>
     </div>
+
     <div class="tab-pane fade" id="password">
       <div id="cambioPassWord"></div>
+
     </div>
 	</div>
 </div>
@@ -46,8 +49,8 @@
   // $('#courses').load("/profile/privateadm/coursescurrent");
   $("#academicRecord").load("/docente/report/index");
   $("#admData").load("/profile/privateadm/adminfo");
-  $("#password").load("/profile/privateadm/changepassword");
   $('#editData').fadeOut('fast');
+  $("#cambioPassWord").load("/profile/privateadm/changepassword");
 
   //$("#signin").load("/profile/privateadm/admlog/");
 
