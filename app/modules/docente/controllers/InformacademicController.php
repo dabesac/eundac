@@ -191,6 +191,7 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $wherecour = array('eid' => $eid, 'oid' => $oid,'perid' => $perid, 'uid' => $uid, 'pid' => $pid);
             $percour= new Api_Model_DbTable_PeriodsCourses();
             $coursesdoc=$percour->_getInfoCourseXTeacher($wherecour);
+            print_r($wherecour);
             if ($coursesdoc) {
                 $tam = count($coursesdoc);
                 $wherecours = array('eid' => $eid, 'oid' => $oid);
