@@ -112,6 +112,7 @@ class Api_Model_DbTable_Logs extends Zend_Db_Table_Abstract
 
 			$date = new Zend_Date($where['fecha']);
 			$date->sub('7', Zend_Date::DAY);
+			//saca la fecha en formato de postgres...
 			$fecha=$date->get('c');
 			$sql = $this->_db
                     ->query("
@@ -132,29 +133,30 @@ class Api_Model_DbTable_Logs extends Zend_Db_Table_Abstract
 		}
 	}
 
-	// public function _getFrequencyAccessXweekXotros($where=null){
-	// 	try {
-	// 		if ($where['eid']=='' || $where['oid']=='' || $where['fecha']=='' || $where['rid']=='') return false;
+	public function _getFrequencyAccessXweekXotros($where=null){
+		try {
+			if ($where['eid']=='' || $where['oid']=='' || $where['fecha']=='') return false;
 
-	// 		$date = new Zend_Date($where['fecha']);
-	// 		$date->sub('7', Zend_Date::DAY);
-	// 		$fecha=$date->get('c');
-	// 		$sql = $this->_db
- //                    ->query("
- //                            select u.escid, count(*) as cantidad  from logaccess AS la
-	// 						inner join base_users as u
-	// 						on la.eid=u.eid and la.oid=u.oid and la.rid=u.rid and la.pid=u.pid and la.uid=u.uid
-	// 						where la.eid='".$where['eid']."' 
-	// 						and la.oid='".$where['oid']."' 
-	// 						and la.rid='".$where['rid']."'
-	// 						and la.datestart between '".$fecha."' and '".$where['fecha']."'
-	// 						group by u.escid
-	// 						order by cantidad DESC
- //                    ");
- //            if ($sql) return $sql->fetchAll();
-	// 		return false;
-	// 	} catch (Exception $e) {	
-	// 		print "Error: Get Frequency Access x week ".$e->getMessage();
-	// 	}
-	// }
+			$date = new Zend_Date($where['fecha']);
+			$date->sub('7', Zend_Date::DAY);
+			$fecha=$date->get('c');
+			$sql = $this->_db
+                    ->query("
+                            select u.escid, count(*) as cantidad  from logaccess AS la
+							inner join base_users as u
+							on la.eid=u.eid and la.oid=u.oid and la.rid=u.rid and la.pid=u.pid and la.uid=u.uid
+							where la.eid='".$where['eid']."' 
+							and la.oid='".$where['oid']."' 
+							and la.rid!='AL'
+							and la.rid!='DC'
+							and la.datestart between '".$fecha."' and '".$where['fecha']."'
+							group by u.escid
+							order by cantidad DESC
+                    ");
+            if ($sql) return $sql->fetchAll();
+			return false;
+		} catch (Exception $e) {	
+			print "Error: Get Frequency Access x week ".$e->getMessage();
+		}
+	}
 }
