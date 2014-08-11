@@ -1,9 +1,8 @@
+<link rel="stylesheet" href="/css/profile.css">
 <?php 
     $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> Mi Perfil');
     $this->placeholder('Btnnav')->append('<a href="/alumno" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
 ?>
-<script src="/js/bootbox.min.js"></script>
-
 <input type="hidden" id="successProfile" value="<?php echo $this->success ?>">
 <div id="alertCompleteProfile" class="alert alert-danger hidden">
 	<h4><span class="glyphicon glyphicon-exclamation-sign"></span> ACTUALIZA TU PERFIL : Información Estadística y Socio-Económica</h4>
@@ -30,7 +29,32 @@
 	<p class="pull-right"><a id="btnCompleteProfile" href="##" class="btn btn-default"><span class="text-success">Actualizar Perfil</span></a></p>
 	<br><br>
 </div>
-<div class="container">
+
+<div class="studentProfile_main">
+	<figure class="ObO"><img class='img-avatar' src="/fotos/<?php echo $this->datos[0]['uid']?>.jpg" onerror="imgError(this);" alt="Foto de Perfil" align="center" ></figure>
+	<div class="ObO dataStudent">
+		<p class="fullName"><?php echo $this->datos[0]['fullname']?></p>
+		<p>DNI <strong><?php echo $this->datos[0]['pid']?></strong></p>
+		<p>Código <strong><?php echo $this->datos[0]['uid']?></strong></p>
+	</div>
+	<div class="ObO dataSchool">
+		<p>Facultad de <?php echo $this->datos[1][0]['nomfac']?></p>
+		<p>Escuela de <?php echo $this->datos[1][0]['nomesc']?></p>
+	</div>
+</div>
+<div class="studentProfile_buttonsSide">
+	<a href="##" class="btnObO btnCurrent btnActive" goto="signinCurrent">Matricula Actual</a>
+	<a href="##" class="btnObO btnCurricula" goto="signinCurriculum">Matrículas por Currícula</a>
+	<a href="##" class="btnObO btnRealized" goto="signinRealized">Matrículas Realizadas</a>
+	<a href="##" class="btnObO btnMoreAboutMe" goto="info">Mas Acerca de Mi</a>
+</div>
+<div class="studentProfile_dataButtonsSide">
+	<div id="signinCurrent" class="dataContainer dataContainerActive"></div>
+	<div id="signinCurriculum" class="dataContainer"></div>
+	<div id="signinRealized" class="dataContainer"></div>
+	<div id="info" class="dataContainer"></div>
+</div>
+<!--<div class="container">
 	<div class="panel panel-default">
 	<div class="row">
 		<br>
@@ -55,9 +79,8 @@
 		  		href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>"><span class="glyphicon glyphicon-print"></span></a></h2>
 		</div>
 	</div>
-	</div><!--Panel-->
+	</div>
 </div>
-
 <div class="container">
 	<div>
 		<ul class="nav nav-tabs" id="profileTab">
@@ -74,7 +97,8 @@
 			<div class="tab-pane fade" id="info" ></div>
 		</div>
 	</div>
-</div>
+</div>-->
+
 
 <script>
 function imgError(image) {
@@ -84,45 +108,40 @@ function imgError(image) {
     return true;
 }
 
-$(function () {
-	//Actualizar perfil
-	var successProfile = $('#successProfile').val();
-	if (successProfile == 'no') {
-		$('#alertCompleteProfile').removeClass('hidden');
-    	$('#profileTab li:eq(3) a').tab('show');
-	};
-	$('#btnCompleteProfile').click(function(){
-		$('html,body').animate({
-	        scrollTop: $("#profileTab").offset().top
-	    }, 500);
+	$(function () {
+		//Actualizar perfil
+		var successProfile = $('#successProfile').val();
+		if (successProfile == 'no') {
+			$('#alertCompleteProfile').removeClass('hidden');
+	    	$('#profileTab li:eq(3) a').tab('show');
+		};
+		$('#btnCompleteProfile').click(function(){
+			$('html,body').animate({
+		        scrollTop: $("#profileTab").offset().top
+		    }, 500);
+		});
+		//--------------------------------------------------------------------------------------------------
+
+		//loadData
+		$("#signinCurrent").load("/profile/public/studentsigncurrent");
+
+		$('#signinCurriculum').load('/profile/public/studentsignpercur');
+
+	    $("#signinRealized").load("/register/registerealized/index/pid/<?php echo $this->data['pid']?>/uid/<?php echo $this->data['uid']?>/escid/<?php echo $this->data['escid']?>/subid/<?php echo $this->data['subid']?>/perid/<?php echo $this->data['perid']?>/rid/<?php echo $this->data['rid']?>");
+
+		$("#info").load("/profile/public/studentinfo");
+		//-------------------------------------------------------------------------------------------------
+
+		//Change Data
+		var goTo = '';
+		$('.btnObO').on('click', function(){
+			$('.btnObO').removeClass('btnActive');
+			$(this).addClass('btnActive');
+			goTo = $(this).attr('goto');
+			$('.dataContainer').fadeOut('fast');
+			$('#' + goTo).fadeIn('fast');
+		});
+		//---------------------------------------------------
 	});
-
-	$('#printRecord').popover('show');
-	setTimeout(function() {
-	  $('#printRecord').popover('hide');
-	}, 4000);
-
-	$('#printRecord').click(function(){
-		$('#printRecord').popover('destroy');
-	});
-
-	$('#printRecord').hover(function(){
-		$('#printRecord').popover('toggle');
-	});
-
-	$("#signinCurrent").load("/profile/public/studentsigncurrent");
-
-	$('#signinCurriculum').load('/profile/public/studentsignpercur');
-
-    $("#signinRealized").load("/register/registerealized/index/pid/<?php echo $this->data['pid']?>/uid/<?php echo $this->data['uid']?>/escid/<?php echo $this->data['escid']?>/subid/<?php echo $this->data['subid']?>/perid/<?php echo $this->data['perid']?>/rid/<?php echo $this->data['rid']?>");
-
-	$("#info").load("/profile/public/studentinfo");
-
-	$('#profileTab a').click(function (e) {
-		e.preventDefault()
-	    $(this).tab('show');
-	});
-	  
-});
 </script>
 
