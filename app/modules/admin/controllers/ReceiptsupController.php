@@ -23,9 +23,6 @@ public function recordreceiptsAction()
 		$listar = $recibo->_getbankreceiptsXAnio($anio);
 		$this->view->listarrecibos=$listar;
 
-
-	
-
 		} 
 	catch (Exception $ex)
 		{
@@ -48,9 +45,25 @@ public function loadreceiptsAction()
 		$periodDB=new Api_Model_DbTable_Periods();
 		
         $pe_ini=$periodDB->_getFilter($data_ac);
-        $perid=$pe_ini[0]['perid'];
-
-		$data = array(
+        if ($pe_ini) {
+        	$perid=$pe_ini[0]['perid'];
+        	
+        }else{
+        	$data_ac = array(
+			'eid' => $this->sesion->eid,
+			'oid' => $this->sesion->oid,
+			'state'=>'A'
+			);
+			$pe_act=$periodDB->_getFilter($data_ac);
+			if ($pe_act) {
+				$perid=$pe_act[0]['perid'];
+				
+			}else{
+				print_r("<h4>No se encontro periodo</h4>");
+			}
+        }
+        
+        $data = array(
 			'fecha' => base64_encode($fecha),
 			'turno' =>base64_encode($turno),
 			'perid' =>base64_encode($perid));
@@ -58,8 +71,7 @@ public function loadreceiptsAction()
         // $subject = $server->connectAuth();
         require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
-        //$base_url = 'http://api.undac.edu.pe:8080/';
-        $base_url = 'http://localhost:8080/';
+        $base_url = 'http://api.undac.edu.pe:8080/';
         $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/up_receipt';
         // $endpoint = '/'.base64_encode('s1st3m4s').'/'.base64_encode('und4c').'/up_receipt';
 		// $data = array('fecha' => $fecha,'turno' =>$turno,'perid' =>$perid);
