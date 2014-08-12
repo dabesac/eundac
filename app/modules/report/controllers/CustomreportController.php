@@ -41,6 +41,8 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$dbconsultperiods = new Api_Model_DbTable_Periods();
 			$where=array('eid'=>$eid,'oid'=>$oid,'year'=>$year);
 			$dataperiod=$dbconsultperiods->_getPeriodsxYears($where);
+
+			$this->view->peridAct=$this->sesion->period->perid;
 			$this->view->dataperiod=$dataperiod;
 
 		} catch (Exception $e) {
@@ -122,7 +124,127 @@ class Report_CustomreportController extends Zend_Controller_Action{
 					$data[$key]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];
 				}
 				$this->view->data=$data;
+				$this->view->where=$where;
 			}
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function printregistrationquantityrepeatstudentsAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+
+			$dbconsult = new Api_Model_DbTable_Registrationxcourse();
+			$dbspeciality = new Api_Model_DbTable_Speciality();
+			$dbconsultusers = new Api_Model_DbTable_Users();
+			$dbcourse = new Api_Model_DbTable_Course();
+
+			$eid=base64_decode($this->_getParam('eid'));
+			$oid=base64_decode($this->_getParam('oid'));
+			$perid=base64_decode($this->_getParam('perid'));
+			$escid=base64_decode($this->_getParam('escid'));
+			$subid=base64_decode($this->_getParam('subid'));
+			$curid=base64_decode($this->_getParam('curid'));
+			$courseid=base64_decode($this->_getParam('courseid'));
+			$veces = $this->_getParam('veces');
+		
+			$wherec=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid);
+			$datacourse=$dbcourse->_getOne($wherec);
+			$this->view->datacourse=$datacourse;
+
+			$period1=substr($perid,0,2);
+			$letra=substr($perid,2,1);
+			$period1=$period1-2;
+			if ($period1<10) {
+				$period1='0'.$period1;
+			}
+			$period1=$period1.$letra;
+			$this->view->perid1=$period1;
+			$this->view->perid=$perid;
+
+
+			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'perid'=>$perid,'courseid'=>$courseid,'veces'=>$veces);
+			$data=$dbconsult->_registration_quantity_repeat($where);
+			if ($data) {
+				$datav=array();
+				$j=0;
+				$wheres=array('eid'=>$eid,'oid'=>$oid);
+
+				foreach ($data as $key => $students) {
+					if ($students['veces']==$veces) {
+						$datav[$j]=$students;
+						$wheres['uid']=$students['uid'];
+						$data1=$dbconsultusers->_getUserXUid($wheres);
+						$datav[$j]['pid']=$data1[0]['pid'];
+						$datav[$j]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];
+						$j++;
+					}
+				}
+				$this->view->data=$datav;
+			}
+			$whered= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $speciality = $dbspeciality ->_getOne($whered);                  
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $dbspeciality->_getOne($wher);
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names." <br> ".$namep;
+            
+            $wheref['eid']=$eid;
+            $wheref['oid']=$oid;
+            $wheref['facid']= $speciality['facid'];
+            $dbfaculty = new Api_Model_DbTable_Faculty();
+            $faculty = $dbfaculty ->_getOne($wheref);
+            $namef = strtoupper($faculty['name']);
+  
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+
+            $dbimpression = new Api_Model_DbTable_Impresscourse();
+            
+            $uidim=$this->sesion->pid;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'perid'=>$perid,
+                'courseid'=>$courseid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'curid'=>$curid,
+                'turno'=>'A',
+                'register'=>$uidim,
+                'created'=>date('Y-m-d H:i:s'),
+                'code'=>'rp1_cantidad_matriculas_'.$veces
+                );
+
+            //$dbimpression->_save($data);            
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'code'=>'rp1_cantidad_matriculas_'.$veces);
+            $dataim = $dbimpression->_getFilter($wheri);
+            $co=count($dataim);
+            $codigo=$co." - ".$uidim;
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+            
+            $this->view->uid=$uidim;
+            $this->view->header=$header;
+            $this->view->footer=$footer;
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}

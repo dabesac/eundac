@@ -149,4 +149,28 @@ class Api_Model_DbTable_Speciality extends Zend_Db_Table_Abstract
          	print "Error: Read ".$ex->getMessage();
         } 
     }
+    //retorna la escuela de una nueva facultad
+    public function _getSchoolnewFaculty($where=array()){
+    	try {
+    		if ($where['escid']=='') return false;
+
+    		if ($where['escid']=='9CE') {
+    			$cad="AD";
+    		}
+    		else{
+    			$cad=substr($where['escid'],-2);
+    		}
+    		
+    		$select = $this->_db->select()
+    							->from(array('s'=>'base_speciality'))
+    							->where('right(s.escid,2) = ?', $cad)
+    							->where('s.escid != ?',$where['escid']);
+    		$results = $select->query();			
+			$rows = $results->fetchAll();
+			if($rows) return $rows;
+			return false;
+    	} catch (Exception $e) {
+    		print("Error: Read Get School New Faculty").$e->getMessage();
+    	}
+    }
 }

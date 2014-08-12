@@ -264,30 +264,63 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                 if ($courseid) {
                     $base_cur= new Api_Model_DbTable_Curricula();
                     $curant=$base_cur->_getCurriculaAnterior($curid,$escid);
-                    $wherecour=array('eid'=>$eid,'oid'=>$oid,
+
+                    if (!$curant[0]['curricula_ant']) {
+                        $dbschool = new Api_Model_DbTable_Speciality();
+                        $dataschool= $dbschool->_getSchoolnewFaculty($where=array('escid'=>$escid));
+
+                        $curant=$base_cur->_getCurriculaAnterior($curid,$dataschool[0]['escid']);
+                        $wherecour=array('eid'=>$eid,'oid'=>$oid,
+                                  'curid'=>$curant[0]['curricula_ant'],'escid'=>$dataschool[0]['escid'],
+                                  'subid'=>$subid, 'state'=>"A");
+
+                        $course = new Api_Model_DbTable_Course();
+                        $wherecourse=array('eid'=>$eid,'oid'=>$oid,
+                                      'curid'=>$curid,'escid'=>$escid,
+                                      'subid'=>$subid,'courseid'=>$courseid);
+                        $coursedata=$course->_getOne($wherecourse);
+
+                        $datacourses_ant=$course->_getFilter($wherecour,$attrib=null,$orders=array('semid','courseid asc'));
+                        $wherecour['curid']=$curid;
+                        $wherecour['escid']=$escid;
+                        $datacourses=$course->_getFilter($wherecour,$attrib=null,$orders=array('semid','courseid asc'));
+                    }
+                    else{
+                        $wherecour=array('eid'=>$eid,'oid'=>$oid,
                                   'curid'=>$curant[0]['curricula_ant'],'escid'=>$escid,
                                   'subid'=>$subid, 'state'=>"A");
 
-                    $course = new Api_Model_DbTable_Course();
-                    $wherecourse=array('eid'=>$eid,'oid'=>$oid,
-                                  'curid'=>$curid,'escid'=>$escid,
-                                  'subid'=>$subid,'courseid'=>$courseid);
-                    $coursedata=$course->_getOne($wherecourse);
+                        $course = new Api_Model_DbTable_Course();
+                        $wherecourse=array('eid'=>$eid,'oid'=>$oid,
+                                      'curid'=>$curid,'escid'=>$escid,
+                                      'subid'=>$subid,'courseid'=>$courseid);
+                        $coursedata=$course->_getOne($wherecourse);
 
-                    $datacourses_ant=$course->_getFilter($wherecour,$attrib=null,$orders=array('semid','courseid asc'));
-                    $wherecour['curid']=$curid;
-                    $datacourses=$course->_getFilter($wherecour,$attrib=null,$orders=array('semid','courseid asc'));
+                        $datacourses_ant=$course->_getFilter($wherecour,$attrib=null,$orders=array('semid','courseid asc'));
+                        $wherecour['curid']=$curid;
+                        $datacourses=$course->_getFilter($wherecour,$attrib=null,$orders=array('semid','courseid asc'));
+                    }
                 }
                 $form= new Rcentral_Form_Course();
-                foreach ($datacourses_ant as $datacourses_ant) {
-                    $form->course_equivalence->addMultiOption($datacourses_ant['courseid'],$datacourses_ant['courseid']." | ".$datacourses_ant['name']);
-                    $form->course_equivalence_2->addMultiOption($datacourses_ant['courseid'],$datacourses_ant['courseid']." | ".$datacourses_ant['name']);
+                if ($datacourses_ant) {
+                    foreach ($datacourses_ant as $datacourses_ant) {
+                        $form->course_equivalence->addMultiOption($datacourses_ant['courseid'],$datacourses_ant['courseid']." | ".$datacourses_ant['name']);
+                        $form->course_equivalence_2->addMultiOption($datacourses_ant['courseid'],$datacourses_ant['courseid']." | ".$datacourses_ant['name']);
+                    }                    
                 }
-                foreach ($datacourses as $datacourses) {
-                    $form->req_1->addMultiOption($datacourses['courseid'],$datacourses['courseid']." | ".$datacourses['name']);
-                    $form->req_2->addMultiOption($datacourses['courseid'],$datacourses['courseid']." | ".$datacourses['name']);
-                    $form->req_3->addMultiOption($datacourses['courseid'],$datacourses['courseid']." | ".$datacourses['name']);
+                else{
+                    $form->course_equivalence->addMultiOption('','No tiene currícula anterior');
+                    $form->course_equivalence_2->addMultiOption('','No tiene currícula anterior');
+                    $this->view->clave='1';
                 }
+                if ($datacourses) {
+                    foreach ($datacourses as $datacourses) {
+                        $form->req_1->addMultiOption($datacourses['courseid'],$datacourses['courseid']." | ".$datacourses['name']);
+                        $form->req_2->addMultiOption($datacourses['courseid'],$datacourses['courseid']." | ".$datacourses['name']);
+                        $form->req_3->addMultiOption($datacourses['courseid'],$datacourses['courseid']." | ".$datacourses['name']);
+                    }
+                }
+                
                 $form->courseid->setAttrib('readonly','readonly');
                 if ($this->getRequest()->isPost()) {
                     $formData = $this->getRequest()->getPost();

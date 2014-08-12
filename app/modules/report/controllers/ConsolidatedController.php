@@ -445,23 +445,24 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $espec = $this->_getParam('espec');
         $this->view->tipo =$tipo;
         $this->view->semid =$semid;         
+        $where = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
         
         if ($espec) {
             $escid=$espec;
         }
 
         $wheres = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
-        $where = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
     
         $base_faculty =  new Api_Model_DbTable_Faculty();
         $base_speciality =  new Api_Model_DbTable_Speciality();        
 
         $speciality = $base_speciality ->_getOne($where);
+        
         $whe=array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']); 
         $dataf = $base_faculty->_getOne($whe);
         $namef = strtoupper($dataf['name']);
 
-        $parent=$speciality['parent'];
+        $parent=$espec;
         $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
         $parentesc= $base_speciality->_getOne($wher);
 
@@ -484,6 +485,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $namefinal=$names." <br> ".$namep;
 
         $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+        //exit();
 
         $sem= new Api_Model_DbTable_Registration();
         $alumno= new Api_Model_DbTable_Registrationxcourse();
@@ -495,9 +497,9 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
             $where['eid']=$datos['eid'];
             $where['oid']=$datos['oid'];
             $where['escid']=$datos['escid'];
+            $where['subid']=$datos['subid'];
             $where['uid']=$datos['uid'];
             $where['perid']=$datos['perid'];
-
             $dataalu= $alumno->_getFilter($where);
             $i=0;
             foreach ($dataalu as $dat) {
@@ -529,7 +531,6 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
             $lsem[$j]['cantidad'] = $i;
             $j++;
         }
-        
         $this->view->data=$lsem;
         $this->view->perid=$perid;
 
