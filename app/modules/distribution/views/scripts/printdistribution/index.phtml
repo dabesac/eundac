@@ -541,9 +541,9 @@ if($this->practiceteachers){ ?>
 $g=0;
 foreach ($this->allteachers as $allteachers){
     $g++;
-    $whereuser = array('eid' => $allteachers['eid'], 'oid' => $allteachers['oid'], 'uid' => $allteachers['uid']);
+    $whereuser = array('eid' => $allteachers['eid'], 'oid' => $allteachers['oid'], 'uid' => $allteachers['uid'], 'state' => 'A');
     $usuario = new Api_Model_DbTable_Users();
-    $list_p1 = $usuario ->_getUserXUid($whereuser);
+    $list_p1 = $usuario ->_getUserXUid_state($whereuser);
     $escidorigenusuario = $list_p1[0]['escid'];
 
     $whereespe = array(
@@ -614,6 +614,6 @@ foreach ($this->allteachers as $allteachers){
     $mpdf->SetHTMLFooter($this->footer);
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('INFORME DISTRIBUCION - '.$this->perid.'.pdf','D');
-    // $mpdf->Output();
+    // $mpdf->Output('INFORME DISTRIBUCION - '.$this->perid.'.pdf','D');
+    $mpdf->Output();
 ?>    

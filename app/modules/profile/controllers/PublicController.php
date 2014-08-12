@@ -1185,88 +1185,164 @@ class Profile_PublicController extends Zend_Controller_Action {
 
     public function studentsigncurrentAction()
     {
-        try{
-            $this->_helper->layout()->disableLayout();
-            $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;
-            $pid=$this->sesion->pid;
-            $uid=$this->sesion->uid;
-            $escid=$this->sesion->escid;
-            $subid=$this->sesion->subid;
-            $perid=$this->sesion->period->perid;
-            $rid=$this->sesion->rid;
+        $this->_helper->layout()->disableLayout();
+        //DataBases
+        $courseDb         = new Api_Model_DbTable_Course();
+        $registerCourseDb = new Api_Model_DbTable_Registrationxcourse();
+        $periodsCourseDb  = new Api_Model_DbTable_PeriodsCourses();
 
-            $data=array("pid"=>$pid, "uid"=>$uid, "escid"=>$escid, "subid"=>$subid, "perid"=>$perid, "rid"=>$rid);
-            $this->view->data=$data;
+        $eid   = $this->sesion->eid;
+        $oid   = $this->sesion->oid;
+        $uid   = $this->sesion->uid;
+        $pid   = $this->sesion->pid;
+        $escid = $this->sesion->escid;
+        $subid = $this->sesion->subid;
+        $perid = $this->sesion->period->perid;
 
-            $dbcuract=new Api_Model_DbTable_Registrationxcourse();
-            $dbtyperate=new Api_Model_DbTable_PeriodsCourses();
+        $letterPeriod = $perid[2];
+        $anioPeriod   = $perid[0].$perid[1];
+        $aplazados    = 'no';
 
-            $where=array("eid"=>$eid, "oid"=>$oid, "pid"=>$pid, "uid"=>$uid, "perid"=>$perid, 'state'=>'M');
-            $attrib=array("courseid", "turno","curid","promedio1","promedio2","nota4_i","nota9_i","nota4_ii","nota9_ii","notafinal", 'state');
-            //print_r($this->sesion);
-            $curact=$dbcuract->_getFilter($where, $attrib);
-            //print_r($curact);
-            $nc=0;
-            $coursesD = 0;
-            $coursesDis = null;
-            $typerate=null;
-            $name=null;
-            $notasAplazados=null;
-            if ($curact){			
-				foreach ($curact as $cur) {
-					$where=array("eid"=>$eid, "oid"=>$oid, "perid"=>$perid, "courseid"=>$cur['courseid'], "turno"=>$cur['turno'], "curid"=>$cur['curid']);
-					$attrib=array("type_rate");
-					//print_r($where);
-					$typerate[$nc]=$dbtyperate->_getFilter($where,$attrib);
-					$where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid, "courseid"=>$cur['courseid']);
-					$attrib=array("name");
-					$name[$nc]=$dbcuract->_getInfoCourse($where,$attrib);
-					$nc++;
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'pid'   => $pid,
+                        'uid'   => $uid,
+                        'escid' => $escid,
+                        'subid' => $subid,
+                        'perid' => $perid,
+                        'state' => 'M' );
+        $order = array('courseid ASC');
+        $attrib = '';
 
-					if ($cur['notafinal'] and $cur['notafinal']<11) {
-						$coursesDis[$coursesD]['courseid'] = $cur['courseid'];
-						$coursesDis[$coursesD]['curid'] =$cur['curid'];
-						$coursesD++;
-					}
-				}
-			}
-            if ($coursesD < 3) {
-                $number = $rest = substr($perid, 0, 2);
-                $letter = substr($perid, -1);
-                if ($letter == 'A') {
-                    $letter = 'D';
-                    $perid = $number.$letter;
+        $preDataCourses = $registerCourseDb->_getFilter($where, $attrib, $order);
+
+        $dataCourses['courses'] = array();
+        if ($preDataCourses) {
+            foreach ($preDataCourses as $c => $course) {
+                //nombre y otros datos del Curso
+                $where = array( 'eid'      => $eid,
+                                'oid'      => $oid,
+                                'escid'    => $escid,
+                                'subid'    => $subid,
+                                'courseid' => $course['courseid'],
+                                'curid'    => $course['curid'] );
+                $attrib = array('name', 'semid', 'credits');
+                $dataPerCourse = $courseDb->_getFilter($where, $attrib);
+                $dataCourses['courses'][$c]['courseid'] = $course['courseid'];
+                $dataCourses['courses'][$c]['curid']    = $course['curid'];
+                $dataCourses['courses'][$c]['name']     = $dataPerCourse[0]['name'];
+                $dataCourses['courses'][$c]['semid']    = $dataPerCourse[0]['semid'];
+                $dataCourses['courses'][$c]['credits']  = $dataPerCourse[0]['credits'];
+
+                //Sacara Notas De acurdo al tipo
+                $where = array( 'eid'      => $eid,
+                                'oid'      => $oid,
+                                'escid'    => $escid,
+                                'subid'    => $subid,
+                                'courseid' => $course['courseid'],
+                                'curid'    => $course['curid'],
+                                'perid'    => $perid );
+                $attrib = array('type_rate');
+                $dataTypeCourse = $periodsCourseDb->_getFilter($where, $attrib);
+                $courseType = $dataTypeCourse[0]['type_rate'];
+                if ($courseType == 'C') {
+                    //Notas Generales
+                    $dataCourses['courses'][$c]['notaUnidad1'] = $course['nota4_i'];
+                    $dataCourses['courses'][$c]['notaUnidad2'] = $course['nota9_i'];
+                    $dataCourses['courses'][$c]['notaUnidad3'] = $course['nota4_ii'];
+                    $dataCourses['courses'][$c]['notaUnidad4'] = $course['nota9_ii'];
+
+                    //Notas Detalladas
+                    $dataCourses['courses'][$c]['calificacion1Unidad1'] = $course['nota1_i'];
+                    $dataCourses['courses'][$c]['calificacion2Unidad1'] = $course['nota2_i'];
+                    $dataCourses['courses'][$c]['calificacion3Unidad1'] = $course['nota3_i'];
+
+                    $dataCourses['courses'][$c]['calificacion1Unidad2'] = $course['nota6_i'];
+                    $dataCourses['courses'][$c]['calificacion2Unidad2'] = $course['nota7_i'];
+                    $dataCourses['courses'][$c]['calificacion3Unidad2'] = $course['nota8_i'];
+
+                    $dataCourses['courses'][$c]['calificacion1Unidad3'] = $course['nota1_ii'];
+                    $dataCourses['courses'][$c]['calificacion2Unidad3'] = $course['nota2_ii'];
+                    $dataCourses['courses'][$c]['calificacion3Unidad3'] = $course['nota3_ii'];
+
+                    $dataCourses['courses'][$c]['calificacion1Unidad4'] = $course['nota6_ii'];
+                    $dataCourses['courses'][$c]['calificacion2Unidad4'] = $course['nota7_ii'];
+                    $dataCourses['courses'][$c]['calificacion3Unidad4'] = $course['nota8_ii'];
+
+                    //notaFinal
+                    $dataCourses['courses'][$c]['notaFinal'] = $course['notafinal'];
                 }else{
-                    $letter = 'E';
-                    $perid = $number.$letter;
+                    //notas Generales
+                    $dataCourses['courses'][$c]['parcial1'] = $course['promedio1'];
+                    $dataCourses['courses'][$c]['parcial2'] = $course['promedio2'];
+
+                    //Notas Detalladas
+                    $dataCourses['courses'][$c]['calificacion1Parcial1'] = $course['nota1_i'];
+                    $dataCourses['courses'][$c]['calificacion2Parcial1'] = $course['nota2_i'];
+                    $dataCourses['courses'][$c]['calificacion3Parcial1'] = $course['nota3_i'];
+                    $dataCourses['courses'][$c]['calificacion4Parcial1'] = $course['nota4_i'];
+                    $dataCourses['courses'][$c]['calificacion5Parcial1'] = $course['nota5_i'];
+                    $dataCourses['courses'][$c]['calificacion6Parcial1'] = $course['nota6_i'];
+                    $dataCourses['courses'][$c]['calificacion7Parcial1'] = $course['nota7_i'];
+                    $dataCourses['courses'][$c]['calificacion8Parcial1'] = $course['nota8_i'];
+                    $dataCourses['courses'][$c]['calificacion9Parcial1'] = $course['nota9_i'];
+
+                    $dataCourses['courses'][$c]['calificacion1Parcial2'] = $course['nota1_ii'];
+                    $dataCourses['courses'][$c]['calificacion2Parcial2'] = $course['nota2_ii'];
+                    $dataCourses['courses'][$c]['calificacion3Parcial2'] = $course['nota3_ii'];
+                    $dataCourses['courses'][$c]['calificacion4Parcial2'] = $course['nota4_ii'];
+                    $dataCourses['courses'][$c]['calificacion5Parcial2'] = $course['nota5_ii'];
+                    $dataCourses['courses'][$c]['calificacion6Parcial2'] = $course['nota6_ii'];
+                    $dataCourses['courses'][$c]['calificacion7Parcial2'] = $course['nota7_ii'];
+                    $dataCourses['courses'][$c]['calificacion8Parcial2'] = $course['nota8_ii'];
+                    $dataCourses['courses'][$c]['calificacion9Parcial2'] = $course['nota9_ii'];
+
+                    //notaFinal
+                    $dataCourses['courses'][$c]['notaFinal'] = $course['notafinal'];
                 }
-                $c = 0;
-                $attrib = array('notafinal', 'courseid');
-                if ($coursesDis){
-					foreach ($coursesDis as $courseDis) {
-					   $where = array('eid'=>$eid,
-									'oid'=>$oid,
-									'escid'=>$escid,
-									'subid'=>$subid,
-									'courseid'=>$courseDis['courseid'],
-									'curid'=>$courseDis['curid'],
-									'perid'=>$perid);
-					   $notasAplazados[$c]=$dbcuract->_getFilter($where, $attrib);
-					   $c++;
-					}
-				}
+                $dataCourses['courses'][$c]['existAplazado'] = 'no';
+                if ($dataCourses['courses'][$c]['notaFinal'] < 11) {
+                    $aplazados = 'yes';
+                    $dataCourses['courses'][$c]['existAplazado'] = 'yes';
+                    if ($letterPeriod == 'A') {
+                        $peridoAplazados = $anioPeriod.'D';
+                    }elseif ($letterPeriod == 'B') {
+                        $peridoAplazados = $anioPeriod.'E';
+                    }
+
+                    $where = array( 'eid'      => $eid,
+                                    'oid'      => $oid,
+                                    'pid'      => $pid,
+                                    'uid'      => $uid,
+                                    'escid'    => $escid,
+                                    'subid'    => $subid,
+                                    'perid'    => $peridoAplazados,
+                                    'courseid' => $course['courseid'],
+                                    'curid'    => $course['curid'],
+                                    'state'    => 'M' );
+                    $attrib = array('notafinal');
+                    $dataAplazados = $registerCourseDb->_getFilter($where, $attrib);
+                    if ($dataAplazados[0]['notafinal'] == '-2') {
+                        $dataCourses['courses'][$c]['aplazado']      = 'N.S.P.';
+                        $dataCourses['courses'][$c]['colorAplazado'] = 'disapprovedBack';
+                    }elseif ($dataAplazados[0]['notafinal'] < 11){
+                        $dataCourses['courses'][$c]['aplazado']      = $dataAplazados[0]['notafinal'];
+                        $dataCourses['courses'][$c]['colorAplazado'] = 'disapprovedBack';
+                    }elseif ($dataAplazados[0]['notafinal'] >= 11) {
+                        $dataCourses['courses'][$c]['aplazado']      = $dataAplazados[0]['notafinal'];
+                        $dataCourses['courses'][$c]['colorAplazado'] = 'approvedBack';
+                    }
+                }else{
+                    $dataCourses['courses'][$c]['colorAplazado'] = '';
+                    $dataCourses['courses'][$c]['aplazado']      = '';
+                }
             }
-
-            $this->view->nc = $nc;
-            $this->view->typerate=$typerate;
-            $this->view->name=$name;
-            $this->view->curact=$curact;
-            $this->view->notasAplazados = $notasAplazados;
-
-        }catch(exception $e){
-            print "Error : ".$e->getMessage();
+            $dataCourses['type']      = $courseType;
+            $dataCourses['period']    = $perid;
+            $dataCourses['cantidad']  = $c + 1;
+            $dataCourses['aplazados'] = $aplazados;
         }
+        $this->view->dataCourses = $dataCourses;
     }
 
     public function studentsignpercurAction()

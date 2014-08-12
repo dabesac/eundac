@@ -1,0 +1,147 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+$perid=$this->perid;
+$course = $this->infocourse;
+$students = $this->students;
+$mpdf->mirrorMargins = 1;
+
+$aprobados = 0;
+$jalados = 0;
+$retirados = 0;
+?>
+<style type="text/css">
+address {
+  margin-top: 10px;
+  font-size: 8px;
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+
+}
+.table-bordered {
+  width: 100%;
+  font-size:10px;
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  border: 1px solid #000;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.text-name{
+    text-align: left;
+    border: 0.5px solid #2c242c;
+}
+.text-center, {
+  text-align: center;
+  border: 0.5px solid #2c242c;
+  padding: 0.3em;
+}
+.header{
+  background-color: #ebe9eb;
+}
+</style>
+
+<table style="font-size: 14px;float: left; width: 100%; border-bottom: 20px">
+    <tr>             
+        <td style="text-align: center"><b>INFORME DE APLAZADOS - <?php echo strtoupper($this->perid)?>  </b></td>
+    </tr>
+</table>
+<br>
+<table style="font-size: 12px;width: 100%; border-bottom: 2px">
+    <tr>
+        <td style="text-align: left;padding-left:10px"> <b>A</b> : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DIRECTOR DE LA ESCUELA DE FORMACIÓN PROFESIONAL <?php echo strtoupper($this->speciality)?></td>
+    </tr>
+    <tr>
+        <td style="text-align: left; padding-left:10px;"><b>DE</b> :  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->lasname?></td>
+    </tr>
+    <tr>
+        <td style="text-align: left; padding-left:10px;"><b>ASUNTO</b> : &nbsp;&nbsp;<u>Detalle del informe de Aplazados periodo <?php echo $this->perid?></u></td>
+    </tr>
+</table>
+<p style="border-bottom:1px solid #000"></p>
+<br>
+<?php
+    if ($this->students) {
+        foreach ($this->students as $key => $student) {
+            if ($student['notafinal']== -2 ) { $retirados++;}
+            if ($student['notafinal'] > 10 && $student['notafinal'] <=20 ) { $aprobados++;}
+            if ($student['notafinal'] >= 0 && $student['notafinal'] <=10 ) { $jalados++;} 
+        }
+    }
+    ?>
+<table class='table table-bordered'>
+    <tr>
+        <th class='text-center' style="width:45%">Asignatura</th>
+        <th class='text-center' style="width:5%">Turno</th>
+        <th class='text-center' style="width:10%">Semestre</th>
+        <th class='text-center' style="width:10%">Matriculados</th>
+        <th class='text-center' style="width:10%">Aprobados</th>
+        <th class='text-center' style="width:10%">Desaprobados</th>
+        <th class='text-center' style="width:10%">No se Presentaron</th>
+    </tr>
+    <tr>
+        <td class="text-name" style="padding-left:5px"><?php echo "<b>".$course['courseid']."</b> | ".$course['name']?></td>
+        <td class="text-center"><?php echo $this->turno?></td>
+        <td class="text-center"><?php echo $course['semid'] ?></td>
+        <td class="text-center"><?php echo count($students)?></td>
+        <td class='text-center'><?php echo $aprobados?><br></td>
+        <td class='text-center'><?php echo $jalados?><br></td>
+        <td class='text-center'><?php echo $retirados?><br></td>
+    </tr>
+</table>
+<br>
+<?php if ($this->students) { ?>
+    <div class='row'>
+        <div class='col-md-12 table-responsive'>
+            <table class='table table-bordered'>
+                <thead>
+                    <tr>
+                        <th class='text-center'>#</th>
+                        <th class='text-center' >Código</th>
+                        <th class='text-center'>Apellidos y Nombres</th>
+                        <th class='text-center' >Recibo</th>
+                        <th class='text-center' >Nota</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($this->students as $key => $student) { ?>
+                    <tr>
+                        <td class='text-center'><?php echo $key+1?></td>
+                        <td class='text-center'><?php echo $student['uid']?></td>
+                        <td class='text-name' style="padding-left:10px"><?php echo $student['name_complet']?>
+                        <td class='text-center'><?php echo $student['receipt']?></td>
+                        <td class='text-center'><?php echo ($student['notafinal']==-2)?'N.S.P':$student['notafinal']?></td>
+                    </tr>
+                <?php }?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php }?>
+<!-- <address>
+  <strong>Aprobados</strong>  <?php echo $aprobados?><br>
+  <strong>Desaprobados</strong>  <?php echo $jalados?><br>
+  <strong>No se Presentaron</strong>  <?php echo $retirados?><br>
+  <strong>Total</strong>  <?php echo $aprobados+$jalados+$retirados?>
+</address> -->
+
+
+<?php 
+    
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,8,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf-> Output('Informe_Aplazados_'.$course['name'].'-'.$this->turno.'.pdf','D');
+    // $mpdf->Output();
+ 
+?>

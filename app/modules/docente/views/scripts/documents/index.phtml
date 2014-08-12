@@ -1,4 +1,9 @@
 <link rel="stylesheet" href="/css/documents.css">
+<?php 
+	if ($this->dataDocente) {
+		$dataDocente = $this->dataDocente;
+	}
+ ?>
 <?php
 	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tint"></span> Documentos');
 
@@ -39,8 +44,8 @@
 					<p class="issueAndNumberObO numberIssue">Numero 00001</p>
 				</div>
 				<div class="dataPerson">
-					<p>Remitente : De La Cruz Vilchez, Ana</p>
-					<p>Fecha : Domingo 3 de Julio del 2014</p>
+					<p>Remitente : <?php echo $dataDocente['fullName'] ?></p>
+					<p>Fecha : <?php echo $dataDocente['fecha'] ?></p>
 				</div>
 				<hr>
 				<div class="abstractDocument">

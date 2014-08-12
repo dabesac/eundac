@@ -178,7 +178,20 @@ class Report_CustomreportController extends Zend_Controller_Action{
 				}				
 			}
 			else{
-				
+				$where=array('eid'=>$eid,'oid'=>$oid,'fecha'=>$fecha);
+				$dbconsult = new Api_Model_DbTable_Logs();
+				$dbconsultspecialty = new Api_Model_DbTable_Speciality();
+				$data = $dbconsult->_getFrequencyAccessXweekXotros($where);
+				if ($data) {
+						unset($where['fecha']);
+					foreach ($data as $key => $escuelas) {
+						$where['escid']=$escuelas['escid'];
+						$data1 = $dbconsultspecialty->_getFilter($where);
+						$data[$key]['name'] = $data1[0]['name'];
+						$data[$key]['subid'] = $data1[0]['subid'];
+					}
+					$this->view->data=$data;
+				}
 			}
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
