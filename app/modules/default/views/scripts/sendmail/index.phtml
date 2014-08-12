@@ -1,171 +1,96 @@
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-envelope"></span> Gestión Correos Electronicos');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/admin" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list-alt"></span> ENVIAR CORREO ELECTRONICO');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/admin" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
-<div class="row">
-	<div class="col-md-9">
-		<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Lista de correos enviados.</p>
-	</div>
-	<div class="col-md-3">
-		<a id="openNewModal" data-toggle="modal" data-target="#newModal" href="##" class="btn btn-info form-control">Nuevo Correo</a>
-	</div>
-</div>
-<hr>
-<h4 class="text-muted text-center"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> No existe <span class="text-danger">correos</span></h4>
+<table class="table table-hover table-condensed">
+	<tr>
+		<th>Facultad:</th>
+		<td class="col-lg-3">
+			<select id="facid" class="form-control">
+				<option>- Seleccione la Facultad -</option>
+				<?php
+				if ($this->facultades) {
+					foreach ($this->facultades as $facultades) { 
+						$str = ($this->facid==$facultades['facid'])?"selected ":""; ?>
+						<option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
+					<?php
+					}
+				} ?>
+			</select>
+		</td>
+		<th>Escuela:</th>
+		<td>
+			<select id="escid" class="form-control" style="width:260px">
+				<option value="">- Seleccione la Escuela -</option>
+			</select>
+		</td>
+		<th>Rol:</th>
+		<td  >
+			<div class="col-lg-6"> 
+			      <span  class="input-group-addon">
+			        <input style='float: left' type="radio" name="group2" value="1"> <font style='float: left'> &nbsp; &nbsp; Docente </font><br>
+			      </span>
+			 </div> <br><br>
 
-<!--Modal Nuevo Correo-->
-<div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  	<div class="modal-dialog" style="width: 1200px;">
-    	<div class="modal-content" style="border-radius:0;">
-      		<div class="modal-header">
-        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        		<h4 class="modal-title" id="myModalLabel">Enviar Correo</h4>
-      		</div>
-		  	<div class="modal-body">
-		  		<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Elija los destinatarios del correo: </p>
-		  		<form id="formMail">
-		    	<div class="row text-muted">
-		    		<div class="col-md-4">
-						<p>Facultad</p>
-						<select name="selectFaculty" id="selectFaculty" class="form-control">
-							<option value="">Seleccione una Facultad</option>
-							<?php if ($this->dataFaculties): ?>
-							<?php foreach ($this->dataFaculties as $c => $faculty): ?>
-								<option value="<?php echo base64_encode($faculty['facid']) ?>"><?php echo $faculty['name'] ?></option>
-							<?php endforeach ?>
-							<?php endif ?>
-						</select>
-		    		</div>
+			 <div class="col-lg-6">
+			      <span  class="input-group-addon">
+			        <input style='float: left' type="radio" name="group2" value="2"> <font style='float: left'>  &nbsp; &nbsp;Alumno</font><br>
+			      </span>
+			 </div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="6">
+			<center><a id="generar" href="#" class="btn btn-success"><span class="glyphicon glyphicon-envelope"></span>&nbsp; Redactar</a></center>
+		</td>
+	</tr>
+</table>
+<div id="cargadatos"></div>
 
-		    		<div class="col-md-4">
-						<p>Escuela</p>
-						<select name="selectSchool" id="selectSchool" class="form-control">
-							<option value="">Seleccione una Escuela</option>
-							<option value="">Seleccione primero una facultad ¬¬</option>
-						</select>
-		    		</div>
+<script type="text/javascript">
 
-		    		<div class="col-md-4">
-						<p>Especialidad</p>
-						<select name="selectSpeciality" id="selectSpeciality" class="form-control">
-							<option value="">Seleccione una Especialidad</option>
-							<option value="">Seleccione primero una escuela ¬¬</option>
-						</select>
-		    		</div>
-		    	</div>
-		    	<hr>
-		    	<div class="row text-muted">
-		    		<div class="col-md-4">
-						<p>¿Para?</p>
-						<select name="selectDestinatarios" id="selectDestinatarios" class="form-control">
-							<option value="">¿Para quienes sera el correo?</option>
-							<option value="AL">Alumnos</option>
-							<option value="DC">Docentes</option>
-						</select>
-		    		</div>
-		    	</div>
-		    	<hr>
-				<p class="text-muted">Título:</p>
-				<input class="form-control" type="text" name="tituloCorreo" placeholder="Motivo del correo...">	
-				<br>
-		    	<p class="text-muted">Redacción:</p>
-		    	<textarea id="cuerpoCorreo" class="form-control" name="cuerpoCorreo" placeholder="Escriba el correo aqui..." rows="10"></textarea>
-		  		</form>
-		  	</div>
-	      	<div class="modal-footer">
-	      		<div class="row">
-	      			<div class="col-md-9">
-						<p id="whoSend" class="text-muted" style="padding-top: 8px;"></p>
-	      			</div>
-		      		<div class="col-md-3">
-		      			<a href="##" id="sendMail" class="btn btn-success form-control">Enviar</a>
-		        		<!--<button type="button" class="btn btn-default form-control" data-dismiss="modal">Salir</button>-->
-		      		</div>
-	      		</div>
-	      	</div>
-    	</div>
-  	</div>
-</div>
+$("#facid").change(function(){
+	var facid=$(this).val();
+	$("#escid").load("/default/sendmail/schools/facid/"+facid);
+});
 
-<script type="text/javascript" src="/external_library/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="/external_library/ckeditor/adapters/jquery.js"></script>
+// $(document).ready(function()
+// {
+//         $("input[name=group2]").click(function () {   
+//         var tipo=$('input:radio[name=group2]:checked').val(); 
+//         alert(tipo);
+//         var perid = $("#periodo_c").val();
+//         var facid = $("#facid").val();
+//         var tescid = $("#escid").val(); 
+//         var espec = $("#especialidad").val();
+//         var xx=tescid.split(";--;");
+//         var escid=xx[0];
+//         var subid=xx[1];
 
-<script>
-	$(function(){
-		var codeF  = '';
-		var codeSc = '';
-		var codeSp = '';
-		var codeDe = '';
-		var nameF  = '';
-		var nameSc = '';
-		var nameSp = '';
-		var nameDe = '';
+//         if (tipo=="3" || tipo=="6")  {  
+//         var $url = '/report/consolidated/registerxsemester/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
+//         } 
+   
+//          });
+// });
+			
 
-		//$('#cuerpoCorreo').ckeditor();
 
-		$('#selectFaculty').on('change', function(){
-			codeF = $(this).val();
 
-			if (codeF) {
-				$('#selectSchool')	.html('<option value="">Cargando...</option>')
-									.load('/default/sendmail/listschools/code/' + codeF);
-				nameF        = 'El correo se enviara a la Facultad de ' + $('#selectFaculty option:selected').text();
-			}else{
-				$('#selectSchool').html('<option value="">Seleccione una Escuela</option><option>Primero seleccione una Facultad ¬¬</option>');
-				$('#selectSpeciality').html('<option value="">Seleccione una Especialidad</option><option>Primero seleccione una Escuela ¬¬</option>');
+$("#generar").click(function(){
 
-				nameF        = '';
-			};
-			$('#whoSend').html('<span class="glyphicon glyphicon-exclamation-sign text-danger"></span> ' + nameF + nameDe);
-		});
+        var facid = $("#facid").val();
+        alert(facid);
+        var tescid = $("#escid").val(); 
+        var espec = $("#especialidad").val();
+        var xx=tescid.split(";--;");
+        var escid=xx[0];
+        var subid=xx[1];
 
-		$('#selectSchool').on('change', function(){
-			codeSc = $(this).val();
+        
 
-			if (codeSc) {
-				$('#selectSpeciality')	.html('<option value="">Cargando...</option>')
-										.load('/default/sendmail/listspecialities/code/' + codeSc);
-				nameSc = ' - Escuela de ' + $('#selectSchool option:selected').text();
-			}else{
-				$('#selectSpeciality').html('<option value="">Seleccione una Especialidad</option><option>Primero seleccione una Escuela ¬¬</option>');
 
-				nameSc = '';
-			};
-			$('#whoSend').html('<span class="glyphicon glyphicon-exclamation-sign text-danger"></span> ' + nameF + nameSc + nameDe);
-		});
-
-		$('#selectSpeciality').on('change', function(){
-			codeSp = $(this).val();
-
-			if (codeSp) {
-				nameSp = ' - Especialidad de ' + $('#selectSpeciality option:selected').text();
-			}else{
-				nameSp = '';
-			};
-			$('#whoSend').html('<span class="glyphicon glyphicon-exclamation-sign text-danger"></span> ' + nameF + nameSc + nameSp + nameDe);
-		});
-
-		$('#selectDestinatarios').on('change', function(){
-			codeDe = $(this).val();
-
-			if (codeDe) {
-				nameDe = ' - ' + $('#selectDestinatarios option:selected').text();
-			}else{
-				nameDe = '';
-			};
-			$('#whoSend').html('<span class="glyphicon glyphicon-exclamation-sign text-danger"></span> ' + nameF + nameSc + nameSp + nameDe);
-		});
-
-		$('#sendMail').on('click', function(){
-			$.ajax({
-				type     : 'post',
-				url      : '/default/sendmail/send',
-				data     : $('#formMail').serialize(),
-				//dataType : 'json',
-				success  : function(data){
-					console.log(data);
-				}
-			});
-		});
-
-	});
+   
+});
+	// $('#cargadatos').html("<img src='/img/spinner.gif'>Cargando...");
+	// $("#cargadatos").load(url);
 </script>

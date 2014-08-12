@@ -186,6 +186,7 @@ class RegisternotesactasController extends Zend_Controller_Action{
 
 	public function closeactaAction(){
 		try {
+			//cierra acta
 			$this->_helper->layout()->disableLayout();
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
@@ -201,14 +202,14 @@ class RegisternotesactasController extends Zend_Controller_Action{
 			$this->view->perid=$perid;
 			$this->view->turno=$turno;
 			$this->view->subid=$subid;
-			$pk['eid']=$eid;
-			$pk['oid']=$oid;
-			$pk['perid']=$perid;
-			$pk['courseid']=$courseid;
 			$pk['escid']=$escid;
 			$pk['subid']=$subid;
 			$pk['curid']=$curid;
 			$pk['turno']=$turno;
+			$pk['eid']=$eid;
+			$pk['oid']=$oid;
+			$pk['perid']=$perid;
+			$pk['courseid']=$courseid;
 	        $data['state_record']='C';
 	        $data['state']='C';
 			$cur= new Api_Model_DbTable_PeriodsCourses();

@@ -41,7 +41,7 @@
                     <center>
                     <?php 
                     if($datacourses['state']=='C'){ ?>
-                        <input class="form-control" maxlength="3" type="text" value="<?php echo $datacourses['percentage'];?>" name="percentage[<?php echo $i-1 ?>]" style="width: 60px" onkeypress="return validNumber(event)"required>
+                        <input class="form-control disabled" disabled maxlength="3" type="text" value="<?php echo $datacourses['percentage'];?>" name="percentage[<?php echo $i-1 ?>]" style="width: 60px" onkeypress="return validNumber(event)"required>
                         <?php   
                     }else{ ?>
                         <input class="form-control" maxlenght="3" type="text" value="<?php echo $datacourses['percentage'];?>" name="percentage[<?php echo $i-1 ?>]" style="width: 60px"  title="Cierre el Acta del Curso Primero" rel="tooltip" disabled required>
