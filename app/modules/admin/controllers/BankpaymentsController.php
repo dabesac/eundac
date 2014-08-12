@@ -201,6 +201,7 @@ class Admin_BankpaymentsController extends Zend_Controller_Action {
             $str['operation']=$operation ;
             $str['code_student']=$uid;
             $datos['processed']="N";
+            
             if ($recban->_update($datos,$str)) { 
                 $this->_helper->redirector("index");
             }
