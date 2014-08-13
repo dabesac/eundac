@@ -108,9 +108,9 @@
         var subid = "<?php echo $this->subid?>"; 
         var tipo = "<?php echo $this->tipo?>";                
         var semid = $("#semid").val();        
-        if (semid=="") {alert ("Debe de seleccionar un Semestre");return false;}        
+        if (semid=="") {alert ("Debe de seleccionar un Semestre");return false;}
         var url="/report/consolidated/printstudentregistrationxsemester/semid/"+semid+"/perid/"+perid+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo;
-         window.location.href = url;
+        window.location.href = url;
     });    
     
 </script>

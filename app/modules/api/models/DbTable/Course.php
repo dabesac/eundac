@@ -76,7 +76,7 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
 				if ($rows) return $rows;
 				return false;
 		}catch (Exception $e){
-			print "Error: Read Filter Course ".$e->getMessage();
+			//print "Error: Read Filter Course ".$e->getMessage();
 		}
 	}
 
