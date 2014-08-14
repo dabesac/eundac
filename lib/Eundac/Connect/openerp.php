@@ -6,7 +6,7 @@ class Eundac_Connect_openerp {
 
     public $server = "http://erp.undac.edu.pe:8069/xmlrpc/";
     //public $database = "erp";
-    public $database = "acreditacion";
+    public $database = "acreditacion_demo";
     public $uid = "";/**  @uid = once user succesful login then this will asign the user id */
     public $username = "admin"; /*     * * @userid = general name of user which require to login at openerp server */
     public $password = "sistemas";/** @password = password require to login at openerp server * */
@@ -65,10 +65,8 @@ class Eundac_Connect_openerp {
         $msg->addParam(new xmlrpcval($values, "struct"));/** parameters of the methods with values....  */
         $resp = $client->send($msg);
 
-
-
         if ($resp->faultCode())
-            return false; /* if the record is not created  */
+            return false;
         else
             return $resp->value()->scalarval();  /* return new generated id of record */
     }

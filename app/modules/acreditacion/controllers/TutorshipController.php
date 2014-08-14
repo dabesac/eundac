@@ -188,13 +188,31 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
     	if ($semid) {
 	    	$eid = $this->sesion->eid;
 	    	$oid = $this->sesion->oid;
-	    	$perid = $this->sesion->period->perid;
 	    	$escid = $this->sesion->escid;
 	    	$subid = $this->sesion->subid;
+	    	$perid = $this->sesion->period->perid;
+
+			//sacar el Periodo Anterior	    	
+			$peridAnio   = $perid[0].$perid[1];
+			$peridLetter = $perid[2];
+	    	if ($peridLetter == 'A' and $semid != 1) {
+				$peridAnio   = $peridAnio - 1;
+				$peridBefore = $peridAnio.'B';
+	    	}elseif($peridLetter == 'B'){
+	    		$peridBefore = $peridAnio.'A';
+	    	}
+
+			//semestre anterior
+			if ($semid == 1) {
+				$peridAnio   = $peridAnio - 1;
+				$peridBefore = $peridAnio.'A';
+			}else{
+				$semid = $semid - 1;
+			}
 
 	    	$where = array(	'eid'   => $eid,
 							'oid'   => $oid,
-							'perid' => $perid,
+							'perid' => $peridBefore,
 							'semid' => $semid,
 							'escid' => $escid,
 							'subid' => $subid,
