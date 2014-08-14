@@ -1,9 +1,10 @@
 <center><h5 >
   	<strong>FACULTAD DE <?php echo strtoupper($this->facultad)?> - </strong>
   	<strong>ESCUELA DE  <?php echo strtoupper($this->escuela)?> -</strong>
-  	<?php if ($this->especialidad){ ?>
-  	<strong>ESPECIALIDAD DE  <?php echo strtoupper($this->especialidad)?> -</strong>	
-  	<?php }?>
+  	    <?php 
+        if ($this->especialidad){ ?>
+  	        <strong>ESPECIALIDAD DE  <?php echo strtoupper($this->especialidad)?> -</strong>	
+  	    <?php }?>
   	<strong>PERIODO <?php echo strtoupper($this->perid)?></strong>
 </center></h5>
 <div>
@@ -91,25 +92,27 @@
         var perid = "<?php echo $this->perid?>";  
         var escid = "<?php echo $this->escid?>";
         var espec = "<?php echo $this->espec?>";
-        var subid = "<?php echo $this->subid?>"; 
+        var subid = "<?php echo $this->subid?>";
+        var subid1 = "<?php echo $this->subid1?>"; 
         var tipo = "<?php echo $this->tipo?>";                
         var semid = $("#semid").val();        
         if (semid=="") {alert ("Debe de seleccionar un curso");return false;}        
-        var url="/report/consolidated/studentregistrationxsemester/semid/"+semid+"/perid/"+perid+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo;
+        var url="/report/consolidated/studentregistrationxsemester/semid/"+semid+"/perid/"+perid+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo+"/subid1/"+subid1;
         $("#det").html("<img src='/img/spinner.gif' />Cargando....");
         $("#det").load(url);
 
     });      
-        $("#imprimir").click(function(){
+    $("#imprimir").click(function(){
         //var escid = $("#escid").val();        
         var perid = "<?php echo $this->perid?>";  
         var escid = "<?php echo $this->escid?>";
         var espec = "<?php echo $this->espec?>";
-        var subid = "<?php echo $this->subid?>"; 
+        var subid = "<?php echo $this->subid?>";
+        var subid1 = "<?php echo $this->subid1?>"; 
         var tipo = "<?php echo $this->tipo?>";                
         var semid = $("#semid").val();        
         if (semid=="") {alert ("Debe de seleccionar un Semestre");return false;}
-        var url="/report/consolidated/printstudentregistrationxsemester/semid/"+semid+"/perid/"+perid+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo;
+        var url="/report/consolidated/printstudentregistrationxsemester/semid/"+semid+"/perid/"+perid+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo+"/subid1/"+subid1;
         window.location.href = url;
     });    
     

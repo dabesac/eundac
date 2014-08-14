@@ -1,8 +1,7 @@
 <?php
 class Report_ConsolidatedController extends Zend_Controller_Action {
 
-    public function init()
-    {
+    public function init(){
           $sesion  = Zend_Auth::getInstance();
           if(!$sesion->hasIdentity() ){
             $this->_helper->redirector('index',"index",'default');
@@ -11,14 +10,15 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
           $this->sesion = $login; 
     }
 
-  public function indexAction()
-    {
+    public function indexAction(){
         try {
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $rid = $this->sesion->rid;
             $facid = $this->sesion->faculty->facid;
             $escid = $this->sesion->escid;
+            $perid = $this->sesion->period->perid;
+            
             $is_director = $this->sesion->infouser['teacher']['is_director'];
             if ($rid=="DR" && $is_director=="S"){
                 $rid="DIREC";
@@ -33,6 +33,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
             $anio = date('Y');
             $this->view->anio = $anio;
             $this->view->rid = $rid;
+            $this->view->perid = $perid;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -137,50 +138,66 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
     public function registerxcourseAction(){
       try{
         $this->_helper->layout()->disableLayout();
-        $where['eid'] = $this->sesion->eid;
-        $where['oid'] = $this->sesion->oid;
-        $where['perid'] = $this->_getParam('perid');
-        $where['escid'] = $this->_getParam('escid');
-        $where['espec'] = $this->_getParam('espec');
-        $where['facid'] = $this->_getParam('facid');
-        $where['subid'] = $this->_getParam('subid');
-        $where['tipo'] = $this->_getParam('tipo');
-        $this->view->subid=$where['subid'];
-        $this->view->escid=$where['escid'];
-        $this->view->facid=$where['facid'];
-        $this->view->espec=$where['espec'];
-        $this->view->perid=$where['perid'];
-        $this->view->tipo=$where['tipo'];
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $perid = $this->_getParam('perid');
+        $escid = $this->_getParam('escid');
+        $espec = $this->_getParam('espec');
+        $facid = $this->_getParam('facid');
+        $subid = $this->_getParam('subid');
+        $subid1 = $this->_getParam('subid1');
+        $tipo = $this->_getParam('tipo');
+        $this->view->subid=$subid;
+        $this->view->subid1=$subid1;
+        $this->view->escid=$escid;
+        $this->view->facid=$facid;
+        $this->view->espec=$espec;
+        $this->view->perid=$perid;
+        $this->view->tipo=$tipo;
 
+        if ($espec) {
+            $escid=$espec;
+        }
+        else{
+            $escid=$escid;   
+        }
+        $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid);
          // Obteniendo la facultad
         $escuela= new Api_Model_DbTable_Speciality();
         $dataescid=$escuela->_getFacspeciality($where);
-        // print_r($dataescid);
+      
         if ($dataescid) {
-                $fac= new Api_Model_DbTable_Faculty();
-                $datafacid=$fac->_getOne($where);
-                $this->view->facultad =$datafacid['name'];               
-           }
+            unset($where['escid']);
+            $where['facid']=$facid;
+            $fac= new Api_Model_DbTable_Faculty();
+            $datafacid=$fac->_getOne($where);
+            $this->view->facultad =$datafacid['name'];               
+        }
         //Obteniendo la escuela y especialidad(si lo tuviera)
         if ($dataescid[0]['parent'] == ""){
             $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
         }else{
-                $dato['eid'] = $this->sesion->eid;    
-                $dato['oid'] = $this->sesion->oid;
-                $dato['escid'] = $dataescid[0]['parent']; 
-                $dato['subid'] = $dataescid['sub']; 
-                $esc = $escuela->_getOne($dato);
-                $this->view->escuela=strtoupper($esc['name']);
-                $dataescid=$escuela->_getOne($where);
-                $this->view->especialidad= strtoupper($dataescid['name']);
-            }
-        $data['eid']=$where['eid'];
-        $data['oid']=$where['oid'];
-        if ($where['espec']) {  $data['escid']=$where['espec'];  }
-        else{ $data['escid']=$where['escid']; }
+            $this->view->especialidad= strtoupper($dataescid[0]['nomesc']);
+            $dato['eid'] = $this->sesion->eid;    
+            $dato['oid'] = $this->sesion->oid;
+            $dato['escid'] = $dataescid[0]['parent']; 
+            $dato['subid'] = $subid; 
+            $esc = $escuela->_getOne($dato);
+            $this->view->escuela=strtoupper($esc['name']);
+        }
+        $data['eid']=$eid;
+        $data['oid']=$oid;
+        if ($espec) {
+            $data['escid']=$espec;  
+        }
+        else{ 
+            $data['escid']=$escid; 
+        }
+
         $cur= new Api_Model_DbTable_Curricula();
         $lcur=$cur->_getFilter($data);
         $this->view->curriculas =$lcur; 
+        //exit();
       }
       catch (Exception $e){
         print "Error:" .$e->getMessage();
@@ -207,36 +224,45 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
       }
 
     }
-        public function studentregistrationAction(){
-      try{
-        $this->_helper->layout()->disableLayout();
-        $where['eid'] = $this->sesion->eid;
-        $where['oid'] = $this->sesion->oid;
-        $where['perid'] = $this->_getParam('perid');
-        $where['curid'] = $this->_getParam('curid');
-        $where['turno'] = $this->_getParam('turno');
-        $where['courseid'] = $this->_getParam('courseid');
-        $where['subid'] = $this->_getParam('subid');
-        $where['tipo'] = $this->_getParam('tipo');
-        $this->view->tipo =$where['tipo']; 
-        $escid = $this->_getParam('escid');
-        $espec = $this->_getParam('espec');
-        if ($espec) {  $where['escid']=$espec;  }
-        else{ $where['escid']=$escid; }
-        $tcur= new Api_Model_DbTable_PeriodsCourses();
-        $tipo=$tcur->_getOne($where);
-        $this->view->tcur =$tipo['type_rate']; 
-        $cur= new Api_Model_DbTable_Registrationxcourse();
-        $lcur=$cur->_getStudentXcoursesXescidXperiods($where);
-        // print_r($lcur);
-        $this->view->data=$lcur;
+    public function studentregistrationAction(){
+        try{
+            $this->_helper->layout()->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $perid = $this->_getParam('perid');
+            $curid = $this->_getParam('curid');
+            $turno = $this->_getParam('turno');
+            $courseid = $this->_getParam('courseid');
+            $subid = $this->_getParam('subid');
+            $subid1 = $this->_getParam('subid1');
+            $tipo = $this->_getParam('tipo');
+            $this->view->tipo =$tipo; 
+            $escid = $this->_getParam('escid');
+            $espec = $this->_getParam('espec');
 
-      }
-      catch (Exception $e){
-        print "Error:" .$e->getMessage();
-      }
+            if ($espec) {  
+                $escid=$espec;  
+                $subid=$subid1;
+            }
+            else{ 
+                $escid=$escid; 
+                $subid=$subid;   
+            }
 
+            $tcur= new Api_Model_DbTable_PeriodsCourses();
+            $where=array('eid'=>$eid,'oid'=>$oid,'courseid'=>$courseid,'escid'=>$escid,'perid'=>$perid,'subid'=>$subid,
+                        'turno'=>$turno,'curid'=>$curid);
+            $tipo=$tcur->_getOne($where);
+            $this->view->tcur =$tipo['type_rate']; 
+            $cur= new Api_Model_DbTable_Registrationxcourse();
+            $lcur=$cur->_getStudentXcoursesXescidXperiods($where);
+            $this->view->data=$lcur;
+        }
+        catch (Exception $e){
+            print "Error:" .$e->getMessage();
+        }
     }
+
     public function printregisterxcourseAction(){
       try{
         $this->_helper->layout()->disableLayout();
@@ -245,37 +271,57 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $perid = $this->_getParam('perid');
         $curid = $this->_getParam('curid');
         $subid = $this->_getParam('subid');
+        $subid1 = $this->_getParam('subid1');
         $turno = $this->_getParam('turno');
         $courseid = $this->_getParam('courseid');
-        $tipo = $this->_getParam('tipo');
         $escid = $this->_getParam('escid');
         $espec = $this->_getParam('espec');
         
-        $where = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'curid'=>$curid,'subid'=>$subid,'turno'=>$turno,'courseid'=>$courseid,'tipo'=>$tipo);
+        if ($espec) {
+            $where = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$espec,'curid'=>$curid,'subid'=>$subid1,'turno'=>$turno,'courseid'=>$courseid);
+            $whe = array('eid'=>$eid,'oid'=>$oid,'escid'=>$espec,'curid'=>$curid,'subid'=>$subid1,'courseid'=>$courseid);
+            $wher = array('eid'=>$eid,'oid'=>$oid,'escid'=>$espec,'subid'=>$subid1);
+        }   
+
+        else{
+            $where = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'curid'=>$curid,'subid'=>$subid,'turno'=>$turno,'courseid'=>$courseid);
+            $whe = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'curid'=>$curid,'subid'=>$subid,'courseid'=>$courseid);
+            $wher = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+        }
+        $tcur= new Api_Model_DbTable_PeriodsCourses();
+        $tipo=$tcur->_getOne($where);
+        $this->view->tipoc=$tipo['type_rate'];
+
         $cur= new Api_Model_DbTable_Registrationxcourse();
         $lcur=$cur->_getStudentXcoursesXescidXperiods($where);
+
         $this->view->data=$lcur;
         $course= new Api_Model_DbTable_Course();
-        $lcourse=$course->_getOne($where);
+        $lcourse=$course->_getOne($whe);
         $this->view->turno = $turno;
         $this->view->courseid =$lcourse['name']; 
-        $this->view->perid = $where['perid']; 
-        $this->view->tipo =$where['tipo']; 
+        $this->view->perid = $perid; 
+
+        $tipo = $this->_getParam('tipo');
+        $this->view->tipo =$tipo; 
         
 
         $base_speciality =  new Api_Model_DbTable_Speciality();        
         $base_faculty =  new Api_Model_DbTable_Faculty();
+
+        $speciality = $base_speciality ->_getOne($wher);
+        $parent=$speciality['parent'];
+        $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+        $parentesc= $base_speciality->_getOne($wher);
+
         if ($espec){
-            $where['escid']=$espec;
-            $speciality = $base_speciality ->_getOne($where);
+            $escid=$espec;
+            $subid=$subid1;
             $whe=array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']); 
-            $parent=$speciality['parent'];
-            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
-            $parentesc= $base_speciality->_getOne($wher);
         }
         else{
-            $where['escid']=$escid;
-            $speciality = $base_speciality ->_getOne($where);
+            $escid=$escid;
+            $subid=$subid;
             $whe=array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']); 
         }
         $dataf = $base_faculty->_getOne($whe);
@@ -297,9 +343,6 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $namefinal=$names." <br> ".$namep;
 
         $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
-
-        // $escid=$this->sesion->escid;
-        // $where['escid']=$escid;
 
         $dbimpression = new Api_Model_DbTable_Impresscourse();
         
@@ -324,7 +367,6 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
             'created'=>date('Y-m-d H:i:s'),
             'code'=>$code
             );
-        
         $dbimpression->_save($data);            
 
         $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>$code);
@@ -351,46 +393,62 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
     public function registerxsemesterAction(){
       try{
         $this->_helper->layout()->disableLayout();
-        $where['eid'] = $this->sesion->eid;
-        $where['oid'] = $this->sesion->oid;
-        $where['perid'] = $this->_getParam('perid');
-        $where['escid'] = $this->_getParam('escid');
-        $where['espec'] = $this->_getParam('espec');
-        $where['facid'] = $this->_getParam('facid');
-        $where['subid'] = $this->_getParam('subid');
-        $where['tipo'] = $this->_getParam('tipo');
-        $this->view->subid=$where['subid'];
-        $this->view->escid=$where['escid'];
-        $this->view->facid=$where['facid'];
-        $this->view->espec=$where['espec'];
-        $this->view->perid=$where['perid'];
-        $this->view->tipo=$where['tipo'];
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $perid = $this->_getParam('perid');
+        $escid = $this->_getParam('escid');
+        $espec = $this->_getParam('espec');
+        $facid = $this->_getParam('facid');
+        $subid = $this->_getParam('subid');
+        $subid1 = $this->_getParam('subid1');
+        $tipo = $this->_getParam('tipo');
+
+        $this->view->subid=$subid;
+        $this->view->subid1=$subid1;
+        $this->view->escid=$escid;
+        $this->view->facid=$facid;
+        $this->view->espec=$espec;
+        $this->view->perid=$perid;
+        $this->view->tipo=$tipo;
 
          // Obteniendo la facultad
+        if ($espec) {
+            $where = array('eid'=>$eid,'oid'=>$oid,'escid'=>$espec);
+        }
+        else{
+            $where = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid);            
+        }
         $escuela= new Api_Model_DbTable_Speciality();
         $dataescid=$escuela->_getFacspeciality($where);
-        // print_r($dataescid);
+
         if ($dataescid) {
                 $fac= new Api_Model_DbTable_Faculty();
+                unset($where['escid']);
+                $where['facid']=$facid;
                 $datafacid=$fac->_getOne($where);
-                $this->view->facultad =$datafacid['name'];               
+                $this->view->facultad =$datafacid['name'];
            }
         //Obteniendo la escuela y especialidad(si lo tuviera)
         if ($dataescid[0]['parent']==""){
-        $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
+            $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
         }else{
-                $dato['eid'] = $this->sesion->eid;    
-                $dato['oid'] = $this->sesion->oid;
-                $dato['escid'] = $dataescid[0]['parent']; 
-                $dato['subid'] = $dataescid['sub']; 
-                $esc = $escuela->_getOne($dato);
-                $this->view->escuela=strtoupper($esc['name']);
-                $dataescid=$escuela->_getOne($where);
-                $this->view->especialidad= strtoupper($dataescid['name']);
+            $namef=strtoupper($dataescid[0]['nomesc']);
+            $this->view->especialidad= $namef;
+            $dato=array('eid'=>$eid,'oid'=>$oid,'escid'=>$dataescid[0]['parent'],'subid'=>$subid);
+            $esc = $escuela->_getOne($dato);            
+            $this->view->escuela=strtoupper($esc['name']);
+            //$dataescid=$escuela->_getOne($where);
             }
 
-        if ($where['espec']) {  $where['escid']=$where['espec']; }
-        
+        if ($espec) {  
+            $where['escid']=$espec; 
+        }
+        else{
+            $where['escid']=$escid;    
+        }
+        unset($where['facid']);
+        $where['perid']=$perid;
+
         $sem= new Api_Model_DbTable_Semester();
         $lsem=$sem->_getSemesterXPeriodsXEscid($where);
         $this->view->semester=$lsem; 
@@ -404,21 +462,30 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
     public function studentregistrationxsemesterAction(){
       try{
         $this->_helper->layout()->disableLayout();
-        $where['eid'] = $this->sesion->eid;
-        $where['oid'] = $this->sesion->oid;
-        $where['perid'] = $this->_getParam('perid');
-        $where['curid'] = $this->_getParam('curid');
-        $where['turno'] = $this->_getParam('turno');
-        $where['courseid'] = $this->_getParam('courseid');
-        $where['subid'] = $this->_getParam('subid');
-        $where['semid'] = $this->_getParam('semid');
-        $where['tipo'] = $this->_getParam('tipo');
-        $this->view->tipo =$where['tipo'];
-        $this->view->semid =$where['semid']; 
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $perid = $this->_getParam('perid');
+        $curid = $this->_getParam('curid');
+        $turno = $this->_getParam('turno');
+        $courseid = $this->_getParam('courseid');
+        $subid = $this->_getParam('subid');
+        $subid1 = $this->_getParam('subid1');
+        $semid = $this->_getParam('semid');
+        $tipo = $this->_getParam('tipo');
+
+        $this->view->tipo = $tipo;
+        $this->view->semid =$semid; 
         $escid = $this->_getParam('escid');
         $espec = $this->_getParam('espec');
-        if ($espec) {  $where['escid']=$espec;  }
-        else{ $where['escid']=$escid; }
+
+        if ($espec) {  
+            $escid=$espec;  
+        }
+        else{ 
+            $escid=$escid; 
+        }
+        $where=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
+
         $sem= new Api_Model_DbTable_Registration();
         $lsem=$sem->_getStudentXespXsemester($where);
         $this->view->data=$lsem;
@@ -439,33 +506,35 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $oid = $this->sesion->oid;
         $perid = $this->_getParam('perid');
         $subid = $this->_getParam('subid');
+        $subid1 = $this->_getParam('subid1');
         $semid = $this->_getParam('semid');
         $tipo = $this->_getParam('tipo');
         $escid = $this->_getParam('escid');
         $espec = $this->_getParam('espec');
         $this->view->tipo =$tipo;
-        $this->view->semid =$semid;         
-        $where = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+        $this->view->semid =$semid;
         
         if ($espec) {
             $escid=$espec;
+            $where = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid1);
+        }
+        else{
+            $where = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);   
         }
 
-        $wheres = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
     
         $base_faculty =  new Api_Model_DbTable_Faculty();
         $base_speciality =  new Api_Model_DbTable_Speciality();        
 
         $speciality = $base_speciality ->_getOne($where);
-        
         $whe=array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']); 
         $dataf = $base_faculty->_getOne($whe);
         $namef = strtoupper($dataf['name']);
+        
 
-        $parent=$espec;
+        $parent=$speciality['parent'];
         $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
         $parentesc= $base_speciality->_getOne($wher);
-
 
         if ($parentesc) {
             $pala='ESPECIALIDAD DE ';
@@ -485,14 +554,16 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $namefinal=$names." <br> ".$namep;
 
         $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
-        //exit();
 
+        $wheres = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
         $sem= new Api_Model_DbTable_Registration();
         $alumno= new Api_Model_DbTable_Registrationxcourse();
         $alumnos= new Api_Model_DbTable_Curricula();
+
         $lsem=$sem->_getStudentXespXsemester($wheres);
         $attrib=array('name');
         $j=0;
+
         foreach ($lsem as $datos) {
             $where['eid']=$datos['eid'];
             $where['oid']=$datos['oid'];
@@ -589,46 +660,59 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
 
 
     public function registerxspecialityAction(){
-      try{
+    try{
         $this->_helper->layout()->disableLayout();
-        $where['eid'] = $this->sesion->eid;
-        $where['oid'] = $this->sesion->oid;
-        $where['perid'] = $this->_getParam('perid');
-        $where['escid'] = $this->_getParam('escid');
-        $where['espec'] = $this->_getParam('espec');
-        $where['facid'] = $this->_getParam('facid');
-        $where['subid'] = $this->_getParam('subid');
-        $where['tipo'] = $this->_getParam('tipo');
-        $this->view->subid=$where['subid'];
-        $this->view->escid=$where['escid'];
-        $this->view->facid=$where['facid'];
-        $this->view->espec=$where['espec'];
-        $this->view->perid=$where['perid'];
-        $this->view->tipo=$where['tipo'];
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $perid = $this->_getParam('perid');
+        $escid = $this->_getParam('escid');
+        $espec = $this->_getParam('espec');
+        $facid = $this->_getParam('facid');
+        $subid = $this->_getParam('subid');
+        $subid1 = $this->_getParam('subid1');
+        $tipo = $this->_getParam('tipo');
+        $this->view->subid=$subid;
+        $this->view->subid1=$subid1;
+        $this->view->escid=$escid;
+        $this->view->facid=$facid;
+        $this->view->espec=$espec;
+        $this->view->perid=$perid;
+        $this->view->tipo=$tipo;
 
-         // Obteniendo la facultad
+        if ($espec) {
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$espec,'subid'=>$subid1);
+        }
+        else{
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+        }
+        // Obteniendo la facultad
         $escuela= new Api_Model_DbTable_Speciality();
         $dataescid=$escuela->_getFacspeciality($where);
-        // print_r($dataescid);
+        
         if ($dataescid) {
-          $fac= new Api_Model_DbTable_Faculty();
-          $datafacid=$fac->_getOne($where);
-          $this->view->facultad =$datafacid['name']; 
-           }
+            $wher=array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid);
+            $fac= new Api_Model_DbTable_Faculty();
+            $datafacid=$fac->_getOne($wher);
+            $this->view->facultad =$datafacid['name']; 
+        }
         //Obteniendo la escuela y especialidad(si lo tuviera)
         if ($dataescid[0]['parent']==""){
-        $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
-        }else{
-                $dato['eid'] = $this->sesion->eid;    
-                $dato['oid'] = $this->sesion->oid;
-                $dato['escid'] = $dataescid[0]['parent']; 
-                $dato['subid'] = $dataescid['sub']; 
-                $esc = $escuela->_getOne($dato);
-                $this->view->escuela=strtoupper($esc['name']);
-                $dataescid=$escuela->_getOne($where);
-                $this->view->especialidad= strtoupper($dataescid['name']);
-            }
-        if ($where['espec']) {  $where['escid']=$where['espec']; }
+            $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
+        }
+        else{
+            $this->view->especialidad= strtoupper($dataescid[0]['nomesc']);
+
+            $dato=array('eid'=>$eid,'oid'=>$oid,'escid'=>$dataescid[0]['parent'],'subid'=>$subid);
+            $esc = $escuela->_getOne($dato);
+            $this->view->escuela=strtoupper($esc['name']);
+            $dataescid=$escuela->_getOne($where);
+        }
+
+        if ($espec){  
+            $escid=$espec; 
+        }
+        unset($where['subid']);
+        $where['perid']=$perid;
         $student= new Api_Model_DbTable_Registration();
         $lstudent=$student->_getStudentXspeciality($where);
         $this->view->data=$lstudent; 
@@ -650,9 +734,9 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $espec = $this->_getParam('espec');
         $facid = $this->_getParam('facid');
         $subid = $this->_getParam('subid');
+        $subid1 = $this->_getParam('subid1');
         $tipo = $this->_getParam('tipo');
-        $where=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'espec'=>$espec,
-                    'facid'=>$facid,'subid'=>$subid,'tipo'=>$tipo);
+
         $this->view->subid=$subid;
         $this->view->escid=$escid;
         $this->view->facid=$facid;
@@ -661,13 +745,13 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $this->view->tipo=$tipo;
 
         $base_faculty =  new Api_Model_DbTable_Faculty();    
-        $whe=array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid); 
+        $whe=array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid);
         $dataf = $base_faculty->_getOne($whe);
         $namef = strtoupper($dataf['name']);
 
         $base_speciality =  new Api_Model_DbTable_Speciality();        
         if ($espec) {
-            $where1 = array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'escid'=>$espec);    
+            $where1 = array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid1,'escid'=>$espec);    
             $speciality = $base_speciality ->_getOne($where1);
         }
         else{
@@ -699,7 +783,13 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
 
         $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
         
-        if ($where['espec']) {  $where['escid']=$where['espec']; }
+        if ($espec) {  
+            $where['escid']=$espec; 
+        }
+        else{
+            $where['escid']=$escid;    
+        }
+        $where=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid);
         $student= new Api_Model_DbTable_Registration();
         $lstudent=$student->_getStudentXspeciality($where);
         $this->view->data=$lstudent; 
@@ -712,9 +802,11 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
 
         if ($espec) {
             $code='matriculados_escuela_'.$espec;
+            $subid=$subid1;
         }
         else{
             $code='matriculados_escuela_'.$escid;
+            $subid=$subid;
         }
 
         $data = array(
@@ -755,62 +847,74 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
     }
 
     public function countregisterxcourseAction(){
-        try{
+    try{
         $this->_helper->layout()->disableLayout();
         $rid = $this->sesion->rid;
-        $where['eid'] = $this->sesion->eid;
-        $where['oid'] = $this->sesion->oid;
-        $where['perid'] = $this->_getParam('perid');
-        $where['escid'] = $this->_getParam('escid');
-        $where['espec'] = $this->_getParam('espec');
-        $where['facid'] = $this->_getParam('facid');
-        $where['subid'] = $this->_getParam('subid');
-        $where['tipo'] = $this->_getParam('tipo');
-        $this->view->subid=$where['subid'];
-        $this->view->escid=$where['escid'];
-        $this->view->facid=$where['facid'];
-        $this->view->espec=$where['espec'];
-        $this->view->perid=$where['perid'];
-        $this->view->tipo=$where['tipo'];
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $perid = $this->_getParam('perid');
+        $escid = $this->_getParam('escid');
+        $espec = $this->_getParam('espec');
+        $facid = $this->_getParam('facid');
+        $subid = $this->_getParam('subid');
+        $subid1 = $this->_getParam('subid1');
+        $tipo = $this->_getParam('tipo');
+        $this->view->subid=$subid;
+        $this->view->subid1=$subid1;
+        $this->view->escid=$escid;
+        $this->view->facid=$facid;
+        $this->view->espec=$espec;
+        $this->view->perid=$perid;
+        $this->view->tipo=$tipo;
 
          // Obteniendo la facultad
+        if ($espec) {
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$espec);
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$espec,'perid'=>$perid);
+            $whe=array('perid'=>$perid,'eid'=>$eid,'oid'=>$oid,'subid'=>$subid1,'escid'=>$espec);
+        }
+        else{
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid);
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'perid'=>$perid);
+            $whe=array('perid'=>$perid,'eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'escid'=>$escid);
+        }
         $escuela= new Api_Model_DbTable_Speciality();
         $dataescid=$escuela->_getFacspeciality($where);
-        // print_r($dataescid);
         if ($dataescid) {
-         $fac= new Api_Model_DbTable_Faculty();
-         $datafacid=$fac->_getOne($where);
-         $this->view->facultad =$datafacid['name']; 
+            unset($where['escid']);
+            $where['facid']=$facid;
+            $fac= new Api_Model_DbTable_Faculty();
+            $datafacid=$fac->_getOne($where);
+            $this->view->facultad =$datafacid['name']; 
            }
         //Obteniendo la escuela y especialidad(si lo tuviera)
         if ($dataescid[0]['parent']==""){
-        $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
-        }else{
-                $dato['eid'] = $this->sesion->eid;    
-                $dato['oid'] = $this->sesion->oid;
-                $dato['escid'] = $dataescid[0]['parent']; 
-                $dato['subid'] = $dataescid['sub']; 
-                $esc = $escuela->_getOne($dato);
-                $this->view->escuela=strtoupper($esc['name']);
-                $dataescid=$escuela->_getOne($where);
-                $this->view->especialidad= strtoupper($dataescid['name']);
-            }
-        if ($where['espec']) {  $where['escid']=$where['espec']; }
+            $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
+        }
+        else{
+            $this->view->especialidad= strtoupper($dataescid[0]['nomesc']);
+            $dato['eid'] = $this->sesion->eid;    
+            $dato['oid'] = $this->sesion->oid;
+            $dato['escid'] = $dataescid[0]['parent']; 
+            $dato['subid'] = $subid; 
+            $esc = $escuela->_getOne($dato);
+            $this->view->escuela=strtoupper($esc['name']);
+            //$dataescid=$escuela->_getOne($where);
+        }
+
         $sem= new Api_Model_DbTable_Semester();
-        $lsem=$sem->_getSemesterXPeriodsXEscid($where);
+        $lsem=$sem->_getSemesterXPeriodsXEscid($wher);
         $this->view->semester=$lsem;
 
-           $pc = new Api_Model_DbTable_PeriodsCourses();
-              if ($rid=='RF' || $rid=='RC' || $rid=='VA')
-             {               
-             $listacursos = $pc->_getCountStudentxCourse($where);
-             $this->view->listacursos=$listacursos;
-            }
-            if ($rid=='DR')
-             {
-            $where['subid'] = $this->sesion->subid;
-            $this->view->listacursos = $pc->_getCountStudentxCourse($where);
-            }
+        $pc = new Api_Model_DbTable_PeriodsCourses();        
+        if ($rid=='RF' || $rid=='RC' || $rid=='VA'){               
+            $listacursos = $pc->_getCountStudentxCourse($whe);
+            $this->view->listacursos=$listacursos;
+        }
+        if ($rid=='DR'){
+            $whe['subid'] = $this->sesion->subid;
+            $this->view->listacursos = $pc->_getCountStudentxCourse($whe);
+        }
 
       }
       catch (Exception $e){
@@ -830,6 +934,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $espec = $this->_getParam('espec');
         $facid = $this->_getParam('facid');
         $subid = $this->_getParam('subid');
+        $subid1 = $this->_getParam('subid1');
         $tipo = $this->_getParam('tipo');
 
         $this->view->subid=$subid;
@@ -841,7 +946,6 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
 
         $where=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,
                     'espec'=>$espec,'facid'=>$facid,'subid'=>$subid,'tipo'=>$tipo);
-
         $base_faculty =  new Api_Model_DbTable_Faculty();    
         $whe=array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid); 
         $dataf = $base_faculty->_getOne($whe);
@@ -849,13 +953,14 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
 
         $base_speciality =  new Api_Model_DbTable_Speciality();        
         if ($espec) {
-            $where1 = array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'escid'=>$espec);    
+            $where1 = array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid1,'escid'=>$espec);    
             $speciality = $base_speciality ->_getOne($where1);
         }
         else{
             $where1 = array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'escid'=>$escid);
             $speciality = $base_speciality ->_getOne($where1);
         }
+
 
         $parent=$speciality['parent'];
         $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
@@ -879,26 +984,25 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
 
         $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
-        if ($espec) {  $where['escid']=$espec; }
+        if ($espec) {  
+            $where['escid']=$espec; 
+            $where['subid']=$subid1; 
+        }
         $sem= new Api_Model_DbTable_Semester();
         $lsem=$sem->_getSemesterXPeriodsXEscid($where);
         
         $this->view->semester=$lsem;
 
-           $pc = new Api_Model_DbTable_PeriodsCourses();
-              if ($rid=='RF' || $rid=='RC' || $rid=='VA')
-             {               
-             $listacursos = $pc->_getCountStudentxCourse($where);
-             $this->view->listacursos=$listacursos;
+        $pc = new Api_Model_DbTable_PeriodsCourses();
+            if ($rid=='RF' || $rid=='RC' || $rid=='VA'){               
+                $listacursos = $pc->_getCountStudentxCourse($where);
+                $this->view->listacursos=$listacursos;
             }
-            if ($rid=='DR')
-            {
-            $where['subid'] = $this->sesion->subid;
-            $this->view->listacursos = $pc->_getCountStudentxCourse($where);
+            
+            if ($rid=='DR'){
+                $where['subid'] = $this->sesion->subid;
+                $this->view->listacursos = $pc->_getCountStudentxCourse($where);
             }
-
-        // $escid=$this->sesion->escid;
-        // $where['escid']=$escid;
 
         $dbimpression = new Api_Model_DbTable_Countimpressionall();
         
@@ -918,16 +1022,15 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
             'oid'=>$oid,
             'uid'=>$uid,
             'escid'=>$escid,
-            'subid'=>$subid,
+            'subid'=>$where['subid'],
             'pid'=>$pid,
             'type_impression'=>$code,
             'date_impression'=>date('Y-m-d H:i:s'),
             'pid_print'=>$uidim
             );
-
         $dbimpression->_save($data);            
 
-        $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>$code);
+        $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$where['subid'],'type_impression'=>$code);
         $dataim = $dbimpression->_getFilter($wheri);
         
         $co=count($dataim);        

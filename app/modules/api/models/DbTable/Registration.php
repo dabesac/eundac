@@ -376,7 +376,7 @@ public function _getPaymentsStudent($where=null,$attrib=null,$order=null){
         }
     }
 
-        //matricula de un alimno x especialidad x semestre
+        //matricula de un alumno x especialidad x semestre
     public function _getStudentXespXsemester($where=null){ 
         try{            
             $sql = $this->_db->query("

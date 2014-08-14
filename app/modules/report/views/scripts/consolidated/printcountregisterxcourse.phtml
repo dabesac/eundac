@@ -4,7 +4,6 @@ include_once($dir);
 ob_start(); 
 $tipo=$this->tipo;
 $a="REPORTE CANTIDAD MATRICULADOS POR CURSO";
-
 ?> 
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
@@ -71,7 +70,12 @@ if ($this->listacursos){
   
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('Escuela -'.$this->escid.'.pdf','D');
+    if ($this->espec) {
+        $mpdf->Output('Escuela -'.$this->espec.'.pdf','D');
+    }
+    else{
+        $mpdf->Output('Escuela -'.$this->escid.'.pdf','D');
+    }
     // $mpdf->Output();
   
 ?>
