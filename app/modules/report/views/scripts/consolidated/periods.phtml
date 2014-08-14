@@ -1,6 +1,6 @@
 <?php 
 if ($this->lper){ ?>
-	<option value="">Seleccione Periodo</option>
+	<option value="">- Seleccione Periodo -</option>
 	<?php
     foreach ($this->lper as $perio){ ?>
         <option value="<?php echo $perio['perid']?>"><?php echo $perio['perid']." | ".$perio['name']?></option>
@@ -12,3 +12,9 @@ if ($this->lper){ ?>
     <option value=""><?php echo $this->anio?>--No tienen ningun periodo</option>
     <?php
 } ?> 
+<script>
+	$(document).ready(function() {
+		var perid='<?php echo $this->perid?>';
+    	$("#periodo_c > option[value="+perid+"]").attr('selected', 'selected');
+	});
+</script>
