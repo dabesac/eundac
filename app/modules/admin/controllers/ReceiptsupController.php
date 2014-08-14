@@ -62,7 +62,6 @@ public function loadreceiptsAction()
 				print_r("<h4>No se encontro periodo</h4>");
 			}
         }
-        
         $data = array(
 			'fecha' => base64_encode($fecha),
 			'turno' =>base64_encode($turno),

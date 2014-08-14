@@ -51,7 +51,13 @@
 								<option value="<?php echo $semester['semid'] ?>"><?php echo $semester['name'] ?></option>
 							<?php endforeach ?>
 						</select>
-						<div class="cantStudent"><span class="cantStudentsNum cantStudents<?php echo $teacher['uid'] ?>" title="Cantidad de Estudiantes Matriculados">-</span>
+						<div class="cantStudent">
+							<span title="Cantidad de Estudiantes Matriculados">
+								<span class="cantStudents<?php echo $teacher['uid'] ?> cantStudentsNum">-</span>
+								<div id="messageRefernecial<?php echo $teacher['uid'] ?>" class="messageSemesterReferencial" hidden>
+									<span class="glyphicon glyphicon-exclamation-sign"></span> La cantidad de matriculados hace referencia al semestre anterior...
+								</div>
+							</span>
 							<input type="text" class="form-control inputCantStudent" id="inputCantStudent<?php echo $teacher['uid'] ?>" name="cantStudents" placeholder="# Estudiantes" />
 						</div>
 						<input type="submit" class="btn btn-success btnAsignar form-control" value="Asignar" />
@@ -162,6 +168,11 @@
 			semid = $(this).val();
 			$('.cantStudents' + uid).html('<img src="/img/spinner.gif" alt="C" />')
 									.load('/acreditacion/tutorship/cantstudentsxsem/semid/' + semid);
+
+			$('#messageRefernecial' + uid).fadeIn('fast');
+			setTimeout(function(){
+				$('#messageRefernecial' + uid).fadeOut('fast');
+			}, 5000);
 		});
 
 

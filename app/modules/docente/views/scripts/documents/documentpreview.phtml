@@ -1,0 +1,14 @@
+<?php if ($this->dataDocument): ?>
+<?php $dataDocument = $this->dataDocument ?>
+	<p class="msgPreview"><span class="glyphicon glyphicon-eye-open"></span> Vista Previa</p>
+	<p class="titleDocument"><?php echo $dataDocument['title'] ?></p>
+	<div class="dataDocenteSide">
+		<p><strong>Remitente</strong> <?php echo $dataDocument['remitente'] ?></p>
+		<p><strong>DNI</strong> <?php echo $dataDocument['dni'] ?></p>
+		<p><strong>Fecha</strong> <?php echo $dataDocument['date'] ?></p>
+		<p><strong>Motivo</strong> <?php echo $dataDocument['motivo'] ?></p>
+	</div>
+	<div class="detailDocument">
+		<p><?php echo $dataDocument['detail'] ?></p>
+	</div>
+<?php endif ?>
