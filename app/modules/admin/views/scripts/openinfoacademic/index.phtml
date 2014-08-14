@@ -28,7 +28,7 @@
 					if ($this->periods) { ?>
 						<option value="">- Seleccione Periodo -</option>
 						<?php
-						foreach ($this->periods as $periods) { 
+						foreach ($this->periods as $periods) {
 							if($this->perid) $select = ($this->perid == $periods['perid'])? "selected": "";?>
 							<option value="<?php echo $periods['perid']?>" <?php echo $select?>><?php echo $periods['perid'].' | '.$periods['name']?></option>
 							<?php
