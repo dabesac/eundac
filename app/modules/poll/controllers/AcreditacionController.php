@@ -19,8 +19,11 @@ class Poll_AcreditacionController extends Zend_Controller_Action {
         $server = new Eundac_Connect_openerp();
 
         $this->_helper->layout()->disableLayout();
-
-        $perid = $this->sesion->period->perid;
+        
+        $uid      = $this->sesion->uid;
+        $escid    = $this->sesion->escid;
+        $perid    = $this->sesion->period->perid;
+        $fullName = $this->sesion->infouser['fullname'];
 
         $query = array(
                     array(  'column'   => 'perid',
@@ -34,13 +37,19 @@ class Poll_AcreditacionController extends Zend_Controller_Action {
                             'type'     => 'string' ),
                 );
         $idEncuesta   = $server->search('poll.undac', $query);
-        $attributes  = array('id', 'name', 'fuente_id', 'objetive');
+        $attributes  = array('id', 'name', 'fuente_id', 'objective');
         $preDataEncuesta = $server->read($idEncuesta, $attributes, 'poll.undac');
 
+        $dataEncuesta = array();
+
         if ($preDataEncuesta) {
-            $dataEncuesta['id']     = $preDataEncuesta[0]['id'];
-            $dataEncuesta['name']   = utf8_encode($preDataEncuesta[0]['name']);
-            $dataEncuesta['fuente'] = utf8_encode($preDataEncuesta[0]['fuente_id'][1]);
+            $dataEncuesta['id']          = $preDataEncuesta[0]['id'];
+            $dataEncuesta['name']        = utf8_encode($preDataEncuesta[0]['name']);
+            $dataEncuesta['objetive']    = utf8_encode($preDataEncuesta[0]['objective']);
+            $dataEncuesta['source']      = utf8_encode($preDataEncuesta[0]['fuente_id'][1]);
+            $dataEncuesta['codeStudent'] = $uid;
+            $dataEncuesta['fullName']    = $fullName;
+            $dataEncuesta['escid']       = $escid;
 
             $query = array(
                             array(  'column'   => 'poll_id',
@@ -57,45 +66,66 @@ class Poll_AcreditacionController extends Zend_Controller_Action {
             $attributes = array('id', 'position', 'name');
             $preDataQuestions = $server->read($idsQuestion, $attributes, 'poll.questions');
 
-            print_r($preDataQuestions);
-
-            print_r("<br><br><br>");
-
-            $menorPosition = $preDataQuestions[0]['position'];
-            $dataEncuesta['questions'][0] = array( 'id'       => $preDataQuestions[0]['id'],
-                                                    'name'     => $preDataQuestions[0]['name'],
-                                                    'position' => $preDataQuestions[0]['position'] );
-            $cQuestionsFix = 0;
             foreach ($preDataQuestions as $c => $question) {
-                if ($question['position'] < $menorPosition) {
-                    $menorPosition = $question['position'];
+                $positionQuestion[$c] = $question['position'];
+            }
+            array_multisort($positionQuestion, SORT_ASC, $preDataQuestions);
 
-                    $interruptorMenor = 0;
-                    foreach ($dataEncuesta['questions'] as $cQuestions => $questionFix) {
-                        if ($menorPosition < $questionFix['position'] and $interruptorMenor != 1) {
-                            $idQuestion       = $questionFix['id'];
-                            $nameQuestion     = $questionFix['name'];
-                            $positionQuestion = $questionFix['position'];
-                            $dataEncuesta['questions'][$cQuestions] = array('id'       => $question['id'],
-                                                                            'name'     => $question['name'],
-                                                                            'position' => $question['position'] );
-                            $interruptorMenor = 1;
-                            $cQuestionsFix = $cQuestions + 1;
-                        }
-                    }
-                    print_r($menorPosition);
-                    $dataEncuesta['questions'][$cQuestions + 1] = array('id'       => $idQuestion,
-                                                                        'name'     => $nameQuestion,
-                                                                        'position' => $positionQuestion );
-                }elseif ($menorPosition != $question['position']){  
-                    $dataEncuesta['questions'][$cQuestionsFix] = array( 'id'       => $question['id'],
-                                                                        'name'     => $question['name'],
-                                                                        'position' => $question['position'] );
-                    $cQuestionsFix++;
+            foreach ($preDataQuestions as $c => $question) {
+                $dataEncuesta['questions'][$c] = array( 'id'   => $question['id'],
+                                                        'name' => utf8_encode($question['name']) );
+
+                //alternativas por preguntas
+                $query = array(
+                                array(  'column'   => 'questions_id',
+                                        'operator' => '=',
+                                        'value'    =>  $question['id'],
+                                        'type'     => 'int' ),
+
+                                array(  'column'   => 'state',
+                                        'operator' => '=',
+                                        'value'    =>  'A',
+                                        'type'     => 'string' ),
+                            );
+                $idsAlternatives = $server->search('poll.alternatives', $query);
+                $attributes = array('id', 'position', 'name');
+                $preDataAlternatives = $server->read($idsAlternatives, $attributes, 'poll.alternatives');
+                foreach ($preDataAlternatives as $cAlternatives => $alternative) {
+                    $positionAlternatives[$cAlternatives] = $alternative['position'];
+                }
+                array_multisort($positionAlternatives, SORT_ASC, $preDataAlternatives);
+                $indiceAlternativas = 'a';
+                //$alphas = range('A', 'Z');
+                foreach ($preDataAlternatives as $cAlternatives => $alternative) {
+                    $dataEncuesta['questions'][$c]['alternatives'][$cAlternatives] = array( 'id'       => $alternative['id'],
+                                                                                            'indice'   => $indiceAlternativas,
+                                                                                            'name'     => utf8_encode($alternative['name']),
+                                                                                            'position' => $alternative['position'] );
+                    $indiceAlternativas++;
                 }
             }
-            
-            print_r($dataEncuesta['questions']);
+            $dataEncuesta['cantQuestions'] = $c;
+        }
+        $this->view->dataEncuesta = $dataEncuesta;
+    }
+
+    public function sendpollAction(){
+        $this->_helper->layout->disableLayout();
+
+        $formData = $this->getRequest()->getPost();
+
+        if ($formData) {
+            $amountQuestions = $formData['cantPreguntas'];
+            for ($i=0; $i < $amountQuestions; $i++) { 
+                $dataSend[$i] = array(  'code'             => $formData['code'],
+                                        'name'             => trim($formData['name']),
+                                        'escid'            => $formData['escid'],
+                                        'pollid'           => $formData['pollid'],
+                                        ['question_id'][0] => array($formData['question'.$i]),
+                                        'alternative_id'   => $formData['alternative'.$i] );
+            }
+            $dataSend = json_encode($dataSend);
+            print_r($dataSend);
         }
     }
 
