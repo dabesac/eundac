@@ -1,6 +1,46 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-certificate"></span> CONVALIDACIÓN, DIRIGIDOS Y SUBSANACIÓN');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
+<?php if ($this->usuario!='AD') { ?>
+	<div>
+		<table class="table table-hover">
+			<tr>
+				<td><p style="float:right; padding-right: 20px">Ingrese Código de Matricula:</p></td>
+				<td class="col-lg-3">
+					<div class="col-lg-9">
+						<input id="uid" type="text" class="form-control" maxlength="10"  onkeypress="return soloNumero(event)" placeholder="Ingrese Código">
+					</div>
+				</td>
+				<td>
+					<label for="chck"><?php echo date('Y')-1 ?></label>
+					<input id="checkbox" type="checkbox" name="chck"  value="2">
+				</td>
+				<td class="col-lg-4">
+					<a id="search" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<script type="text/javascript">
+		$("#search").click(function(){
+			var uid=$("#uid").val();
+			var anios="<?php echo date('Y') ?>";
+			anio = anios.substring(2);
+			if (uid!="") {
+				$("#student").html("<img src='/img/spinner.gif'>Cargando...");
+				if ($('#checkbox').is(':checked')) {
+					$("#student").load("/record/directed/student/uid/"+uid+"/perid/13");
+				}else{
+					$("#student").load("/record/directed/student/uid/"+uid+"/perid/"+anio );
+				}
+			}else{
+				alert("Ingrese el Código de Matricula.");
+				return false;
+			};
+		});
+	</script>
+
+<?php } elseif ($this->usuario=='AD'){ ?>
 <div>
 	<table class="table table-hover">
 		<tr>
@@ -10,33 +50,44 @@
 					<input id="uid" type="text" class="form-control" maxlength="10"  onkeypress="return soloNumero(event)" placeholder="Ingrese Código">
 				</div>
 			</td>
-			<td>
-				<input id="checkbox" type="checkbox"  value="2">
-			</td>
+			 <td><select id="anios" class='form-control' name="anios" style="width: 90px" >
+                    <?php 
+                    $anio= date('Y')-1;
+                    $i=0;
+                    for($i = ($anio+1);$i>=1990;$i--){
+                        if ($anio==$i) $t = "selected";
+                        else $t="";
+                        ?>            
+                    <option value="<?php echo $i?>"<?php echo $t?>><?php echo $i?></option>
+                    <?php }?>
+                </select>
+            </td>
 			<td class="col-lg-4">
 				<a id="search" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</a>
 			</td>
 		</tr>
 	</table>
 </div>
-<div id="student"></div>
-
-<script type="text/javascript">
-$("#search").click(function(){
+<script type="text/javascript" >
+	$("#search").click(function(){
 	var uid=$("#uid").val();
+	var anios=$("#anios").val();
 	if (uid!="") {
-		$("#student").html("<img src='/img/spinner.gif'>Cargando...");
-		if ($('#checkbox').is(':checked')) {
-			$("#student").load("/record/directed/student/uid/"+uid+"/perid/13B");
-		}else{
-			$("#student").load("/record/directed/student/uid/"+uid);
-		}
+		
+		$("#student").load("/record/directed/student/uid/"+uid+"/perid/"+anios);
 	}else{
 		alert("Ingrese el Código de Matricula.");
 		return false;
 	};
 });
+</script>
 
+<?php } ?>
+
+<div id="student"></div>
+
+
+<script >
 function soloNumero(e){
 	key = e.keyCode || e.which;
 	tecla = String.fromCharCode(key).toLowerCase();

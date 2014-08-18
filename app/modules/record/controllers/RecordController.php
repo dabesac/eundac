@@ -13,7 +13,7 @@ class Record_RecordController extends Zend_Controller_Action {
     public function indexAction()
     {
     	try{
-    		$where['eid']=$this->eid;
+           	$where['eid']=$this->eid;
     		$where['oid']=$this->oid;
     		$perid=$this->perid;
     		$this->view->perid=$this->perid;

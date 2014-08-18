@@ -6,7 +6,7 @@ class Eundac_Connect_openerp {
 
     public $server = "http://erp.undac.edu.pe:8069/xmlrpc/";
     //public $database = "erp";
-    public $database = "acreditacion";
+    public $database = "acreditacion_demo";
     public $uid = "";/**  @uid = once user succesful login then this will asign the user id */
     public $username = "admin"; /*     * * @userid = general name of user which require to login at openerp server */
     public $password = "sistemas";/** @password = password require to login at openerp server * */
@@ -204,5 +204,4 @@ class Eundac_Connect_openerp {
             //return ( $resp->value() );
     }
 }
-
 

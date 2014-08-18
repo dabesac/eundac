@@ -8,7 +8,7 @@ if ($this->escid) { ?>
 		<option value="TODOEP">Todas las Especialidades.</option>
 		<?php
 		foreach ($this->especialidad as $especialidad) { ?>
-			<option <?php echo $str?> value="<?php echo $especialidad['escid']?>"><?php echo $especialidad['name']?></option>
+			<option <?php echo $str?> value="<?php echo $especialidad['subid']."--".$especialidad['escid']?>"><?php echo $especialidad['name']?></option>
 			<?php
 		} 
 	}else{ ?>

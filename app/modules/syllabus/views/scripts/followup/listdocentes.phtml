@@ -1,0 +1,73 @@
+<?php if ($this->dataTeacher): ?>
+	<?php foreach ($this->dataTeacher as $c => $teacher): ?>
+		<div class="followUp_docenteData">
+			<div class="numberDocente"><?php echo $c + 1 ?></div>
+			<div class="docenteName"><span class="glyphicon glyphicon-user"></span> <?php echo $teacher['fullName'] ?> <p class="courseCant"><span class="glyphicon glyphicon-book"></span> <?php echo $teacher['cantCourses'] ?></p></div>
+			<div class="cursos">
+				<?php foreach ($teacher['courses'] as $cCourse => $course): ?>
+					<div class="curso" courseid="<?php echo $course['courseid'].$course['turno'] ?>">
+						<div class="courseNumber"><?php echo $cCourse + 1 ?></div>
+						<div class="courseName"><?php echo $course['name']?> <small>(Turno <?php echo $course['turno'] ?>)</small></div>
+						<?php if ($course['llenoSilabo'] == 'yes'): ?>
+							<div class="courseUnidad">Unidad <?php echo $course['currentUnit'] ?></div>
+							<div class="courseSesion">Sesión <?php echo $course['currentSession'] ?></div>
+						<?php else: ?>
+							<div class="courseNoSilabo text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> No relleno el sílabo</div>
+						<?php endif ?>
+					</div>
+					<div id="dataCurso<?php echo $course['courseid'].$course['turno'] ?>" class="dataCurso" hidden>
+						<?php if ($course['llenoSilabo'] == 'yes'): ?>
+							<?php $cantSesiones = 0 ?>
+							<p class="parrafoDataCurso"><span class="glyphicon glyphicon-bookmark"></span> Vista detallada de Unidades y Sesiones.</p>
+							<div class="units">
+							<?php foreach ($course['units'] as $cUnits => $unit): ?>
+								<div class="unit">
+									<p class="titleUnit"> Unidad <?php echo $cUnits + 1 ?></p>
+									<hr>
+									<p class="parrafoUnit"><span class="glyphicon glyphicon-info-sign"></span> Sesiones por unidad:</p>
+									<div class="sesiones">
+										<?php for ($i=1; $i <= $unit['cantSesiones']; $i++) { ?>
+											<?php 
+											$classIcon = '';
+											if ($cantSesiones < $course['currentSession']):
+												$classIcon = 'cumplido';
+											endif ?>
+											
+
+											<span class="iconSesion glyphicon glyphicon-record <?php echo $classIcon ?>"></span>
+											<?php 
+											$residuo = $i % 3;
+											if (($i % 12) == 0): ?>
+												<br>
+											<?php endif ?>
+											<?php
+											$cantSesiones++;
+											?>
+										<?php } ?>
+									</div>
+								</div>
+							<?php endforeach ?>
+							</div>
+						<?php else: ?>
+							<p class="parrafoDataCurso"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> No lleno el Sílabo.</p>
+						<?php endif ?>
+					</div>
+				<?php endforeach ?>
+			</div>
+		</div>
+	<?php endforeach ?>
+	<script>
+	$(function(){
+		var courseid = '';
+		$('.curso').on('click', function(){
+			courseid = $(this).attr('courseid');
+
+			$(this).toggleClass('cursoActive');
+
+			$('#dataCurso' + courseid).slideToggle('fast');
+		});
+	});
+	</script>
+<?php else: ?>
+
+<?php endif ?>

@@ -1,158 +1,62 @@
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tasks"></span> Avance Academico');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-time"></span> Avance Académico');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php 
+	$anio = date('Y');
+ ?>
 
-<hr class="featurette-divider">
-<div class="row">
-	<div class="col-md-3 col-md-offset-2">
-		<h5 class="text-muted">Escuela </h5>
-		<?php 
-			if (!$this->allSchool): 
-			$disabled = 'disabled';
-			else:
-				$disabled = null;
-			endif 
-		?>
-		<select id="school" class="form-control" <?php echo $disabled ?>>
-			<?php
-			if ($this->speciality) { ?>
+<link rel="stylesheet" href="/css/avanceAcademico.css">
 
-				<option value="">Seleccione Escuela</option>
-				<option value="<?php echo $this->allSchool?>">Todas las Especialidades</option>
-				<?php 
-				foreach ($this->speciality as $speciality) { 
-					if ($this->director){
-						$selected = ($this->escid == $speciality['escid'])? "selected": "";	
-					}
-					else{
-						$selected = null;
-					} 
-					?>
-					<option value="<?php echo $speciality['escid'].'--'.$speciality['subid']?>" <?php echo $selected?>><?php echo $speciality['name']?></option>
-					<?php
-				}
-			}else{ ?>
-				<option value="">- No hay Escuelas Disponibles -</option>
-			<?php
-			}?>
+<input type="hidden" id="periodCurrent" value="<?php echo $this->dataVista['period'] ?>">
+<div class="avanceAcademicoHeader">
+	<p class="text-muted parrafoHeader"><span class="glyphicon glyphicon-info-sign"></span> Puede filtrar otros periodos si lo desea:</p>
+	
+	<div class="select selectAnio">
+		<select name="anio" id="selectAnio" class="form-control">
+			<?php for ($i=$anio; $i >= 1990; $i--) { ?>
+				<option value="<?php echo $i ?>"><?php echo $i ?></option>
+			<?php } ?>
 		</select>
 	</div>
-	<div class="col-md-1">
-		<h5 class="text-muted">Año</h5>
-		<select class="form-control" name="Anio" id="anio">
-			<?php $anio = date('Y');
-	 		for ($i=$anio; $i >=1993 ; $i--) :?> 
-	 			<option value="<?php echo $i?>"><?php echo $i ?></option>
-	 		<?php endfor?>
-	 	</select>
+	
+	<div class="select selectPeriod">
+		<select name="period" id="selectPeriod" class="form-control">
+		</select>
 	</div>
-	<div class="col-md-3">
-		<h5 class="text-muted">Periodo</h5>
-		<select class="form-control" name="Periodo" id="period"></select>
-	</div>
-	<div class="col-md-3">
-		<h5><br></h5>
-		<a id="showData" href="#data" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></a>
-	</div>
+</div>
+<hr>
+<div id="avanceAcademico_DataDocentes" class="avanceAcademicoDocentes">
 
 </div>
-<br>
-<hr class="featurette-diveder">
-<br>
-<div id="data"></div>
-
 <script>
-	var vardiv = $('#school').val().split('--');
-	var escid = vardiv[0];
-	var subid = vardiv[1];
+	$(function(){
+		var periodCurrent = $('#periodCurrent').val();
+		var anio          = $('#selectAnio').val();
+		var period        = '';
 
-	$('#school').change(function(){
-		$('#school option:selected').each(function(){
-			vardiv = $(this).val().split('--');
-			escid = vardiv[0];
-			subid = vardiv[1];
-		});
-	});
+		$('#selectPeriod')	.html('<option>Cargando...</option>')
+							.load('/report/periods/listperiods/anio/' + anio, function(){
+								$(this).val(periodCurrent);
+							});
 
-
-	//Filtras  Periodos por años -------------------
-	var anio = $('#anio').val();
-	$.get('/report/periods/listperiods/anio/'+anio, function(data){
-	$('#period').html(data);
-	});
-	$('#anio').change(function(){
-		$('#anio option:selected').each(function(){
+		$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+											.load('/report/periods/listteacher/data/' + periodCurrent);
+		
+		$('#selectAnio').on('change', function(){
+			$('#avanceAcademico_DataDocentes').html('');
 			anio = $(this).val();
-			$('#period').html("Cargando <img src='/img/spinner.gif' alt='Cargando...' /></center>");
-			$.get('/report/periods/listperiods/anio/'+anio, function(data){
-				$('#period').html(data);
-			});
+
+			$('#selectPeriod')	.html('<option>Cargando...</option>')
+								.load('/report/periods/listperiods/anio/' + anio, function(){
+									period = $(this).val();
+									$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+																		.load('/report/periods/listteacher/data/' + period);
+								});
 		});
-	});
-	//------------------------------------------------
 
-
-	var perid = $('#period').val();
-	$('#period').change(function(){
-		$('#period option:selected').each(function(){
-			perid = $(this).val();
+		$('#selectPeriod').on('change', function(){
+			period = $(this).val();
+			$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+												.load('/report/periods/listteacher/data/' + period);
 		});
-	});
-
-	$('#showData').click(function(){
-		$('#data').html("<br><center>Cargando... <img src='/img/spinner.gif' alt='Cargando...' /></center>");
-		$('#data').load("/report/periods/listteacher/perid/" + perid + "/escid/" + escid + "/subid/" + subid);
 	});
 </script>
-
-<!--<div>
-	<table class="table table-condensed">
-		<tr>
-			<th>Escuela: </th>
-			<td>
-				
-			</td>
-			<th>Periodo: </th>
-			<td>
-				<select id="perid" class="form-control">
-					<?php 
-					if ($this->periods) { ?>
-						<option value="">- Seleccione Periodo -</option>
-						<?php
-						foreach ($this->periods as $periods) { 
-							if($this->perid) $select = ($this->perid == $periods['perid'])? "selected": "";?>
-							<option value="<?php echo $periods['perid']?>" <?php echo $select?>><?php echo $periods['perid'].' | '.$periods['name']?></option>
-							<?php
-						}
-					}else{ ?>
-						<option value="">- No hay Periodos Disponibles -</option>
-						<?php
-					}?>
-				</select>
-			</td>
-			<td>
-				<a id="searching" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</a>
-			</td>
-		</tr>
-	</table>
-</div>
-<div id="loaddata"></div>
-<script type="text/javascript">
-	$("#searching").click(function(){
-		var tmp = $("#escid").val();
-		var perid = $("#perid").val();
-		if (tmp == "") {
-			alert("Seleccione una Escuela."); 
-			return false;
-		};
-		if (perid == "") {
-			alert("Seleccione un Periodo."); 
-			return false;
-		};
-		var tmpp = tmp.split('--');
-		var escid = tmpp[0];
-		var subid = tmpp[1];
-		var url = "/report/periods/listteacher/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
-		$("#loaddata").html("<img src='/img/spinner.gif'>Cargando...");
-		$("#loaddata").load(url);
-	});
-</script>-->

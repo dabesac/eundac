@@ -21,6 +21,7 @@ td, th{
 </style>
 
 <?php
+
 $curso=$this->curso[0];
 $total=$curso['hours_theoretical']+$curso['hours_practical']; 
 $tmps = split("-",$this->silabo['created']);
@@ -284,7 +285,7 @@ switch ($mes) {
 <div style='text-align: center; margin-left: 30%; margin-top:100px'>
     <p style='width:200px ;border-top: solid 1px #000; font-weight: bold'>V° B° Comisión de Sílabo</p>
 </div>
-<?php 
+<?php   
     
     $html = ob_get_contents();
   

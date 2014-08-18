@@ -35,7 +35,6 @@ class Docente_NotasController extends Zend_Controller_Action{
 
 		$this->view->perid= $perid;
 		$data_courses = $tb_periods_course->_getCourseTeacher($where);
-		
 
 		$faculty=array();
 

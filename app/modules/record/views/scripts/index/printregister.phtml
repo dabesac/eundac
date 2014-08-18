@@ -428,7 +428,7 @@ if ($t_footer>100 and $t_footer<=150)
 $html = ob_get_contents();
 // $mpdf=new mPDF('utf-8','A4','','',15,15,75,15,15);
 if ($type=='C') {
-	$mpdf = new mPDF('utf-8',array(200,307),'','',5,5,36,18,8,8);
+	$mpdf = new mPDF('utf-8','A4','','',5,5,36,18,8,8);
 	
 }elseif ($type=='O') {
 	$mpdf = new mPDF('utf-8','A4','','',5,5,40,25,8,8);
@@ -438,5 +438,6 @@ $mpdf->SetHTMLFooter($footer);
 ob_end_clean();
 $mpdf -> WriteHTML($html);
 $mpdf->Output('Registro-'.$course['courseid'].'turno'.$course['turno'].'.pdf','D');
+//$mpdf -> Output();
   
 ?>

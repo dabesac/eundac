@@ -18,6 +18,7 @@ class Record_IndexController extends Zend_Controller_Action {
     
     public function indexAction()
     {
+		
 		$speciality= new Api_Model_DbTable_Speciality();
 		$where['eid'] = $this->sesion->eid;
 		$where['oid'] = $this->sesion->oid;

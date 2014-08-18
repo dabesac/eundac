@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Encuesta</title>
+    <link rel="stylesheet" href="/external_library/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/encuesta.css">
+    <link href="http://fonts.googleapis.com/css?family=Cuprum:400italic,400,700italic,700" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="/js/jquery-1.11.0.js"></script>
+    <script type="text/javascript" src="/external_library/bootstrap/js/bootstrap.js"></script>
+</head>
+<body>
+    <?php 
+        $dataEncuesta = $this->dataEncuesta;
+     ?>
+    <header>
+        <p class="pHeader"><span class="glyphicon glyphicon-bookmark"></span> Encuesta</p>
+        <a href="/logout" class="btnClose">
+            Salir, no deseo rellenar la encuesta en este momento
+            <div class="mensageAviso">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                <p>Recuerde que la encuesta es obligatoria, tiene que rellenarla si desea entrar la sistema.</p>
+            </div>
+        </a>
+    </header>
+    <?php if ($dataEncuesta['questions']): ?>
+    <div class="titleEncuestaSide">
+        <p><span class="glyphicon glyphicon-bullhorn"></span> <strong>Titulo</strong> <?php echo $dataEncuesta['name'] ?></p>
+        <p><span class="glyphicon glyphicon-asterisk"></span> <strong>Objetivo</strong> <?php echo $dataEncuesta['objetive'] ?></p>
+        <p><span class="glyphicon glyphicon-flag"></span> <strong>Fuente de Verificación</strong> <?php echo $dataEncuesta['source'] ?></p>
+    </div>
+    <hr>
+    <form id="formEncuesta">
+    <input type="hidden" name="code" value="<?php echo $dataEncuesta['codeStudent'] ?>">
+    <input type="hidden" name="name" value="<?php echo $dataEncuesta['fullName'] ?>">
+    <input type="hidden" name="escid" value="<?php echo $dataEncuesta['escid'] ?>">
+    <input type="hidden" name="pollid" value="<?php echo $dataEncuesta['id'] ?>">
+    <input type="hidden" name="cantPreguntas" value="<?php echo $dataEncuesta['cantQuestions'] ?>">
+    <div class="dataPreguntas">
+        <?php foreach ($dataEncuesta['questions'] as $c => $question): ?>
+            <input type="hidden" name="question<?php echo $c ?>" value="<?php echo $question['id'] ?>">
+            <input type="hidden" class="alternativeAnswer" id="alternativeAnswer<?php echo $question['id'] ?>" name="alternative<?php echo $c ?>" value="">
+            <div class="pregunta">
+                <div class="preguntaHead">
+                    <div class="preguntaObO preguntaNumber">
+                        <?php echo $c + 1 ?>
+                    </div>
+                    <div class="preguntaObO preguntaName">
+                        <?php echo $question['name'] ?>
+                    </div>
+                    <div class="preguntaObO preguntaState" id="preguntaState<?php echo $question['id'] ?>">
+                        <span class="glyphicon glyphicon-record"></span>
+                    </div>
+                </div>
+                <div class="alternativesSide">
+                    <div class="leftSide"></div>
+                    <?php foreach ($question['alternatives'] as $cAlternatives => $alternative): ?>
+                        <div class="alternative alternative<?php echo $question['id'] ?>" questionid="<?php echo $question['id'] ?>" alternativeid="<?php echo $alternative['id'] ?>">
+                            <div class="alternativeObO alternativeIndice">
+                                <?php echo $alternative['indice'].')' ?>
+                            </div>
+                            <div class="alternativeObO alternativeName">
+                                <?php echo $alternative['name'] ?>
+                            </div>
+                            <div class="alternativeObO alternativeState">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </div>
+                        </div>
+                    <?php endforeach ?>
+                </div>
+            </div>
+        <?php endforeach ?>
+    </div>
+    <div class="buttomSide">
+        <a class="btnSendPoll" id="idBtnSendPoll" href="##">Enviar Encuesta</a>
+    </div>
+    </form>
+    <script>
+        $(function(){
+            var questionid    = '';
+            var alternativeid = '';
+
+            $('.alternative').on('click', function(){
+                questionid    = $(this).attr('questionid');
+                alternativeid = $(this).attr('alternativeid');
+                $('.alternative' + questionid).removeClass('alternativeActive');
+                $(this).addClass('alternativeActive');
+                $('#alternativeAnswer' + questionid).val(alternativeid);
+                $('#preguntaState' + questionid).addClass('preguntaStateActive');
+            });
+
+            var emptyAnswer = '';
+            var formData    = '';
+            $('#idBtnSendPoll').on('click', function(){
+                emptyAnswer = 0;
+                $('.alternativeAnswer').each(function(index, element){
+                    if (!$(this).val()) {
+                        emptyAnswer = 1;
+                    };
+                });
+                if (emptyAnswer == 0) {
+                    formData = $('#formEncuesta').serialize();
+                    sendPoll(formData);
+                }else{
+                    console.log('Falta responder algunas preguntas');
+                };
+            });
+
+            //Funciones
+            function sendPoll(formData){
+                $.ajax({
+                    type : 'post',
+                    url : '/poll/acreditacion/sendpoll',
+                    data : formData,
+                    success : function(data){
+                        console.log(data);
+                    }
+                });
+            };
+        });
+    </script>
+    <?php else: ?>
+        <h4 class?"text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> No existe preguntas</h4>
+    <?php endif ?>
+</body>
+</html>

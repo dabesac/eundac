@@ -1,0 +1,38 @@
+<?php
+if ($this->data) {	?>
+	<div>
+		<div class='alert alert-info col-md-8 col-md-offset-2'>
+			<span class='glyphicon glyphicon-info-sign'></span> Muesta la Frecuencia de acceso al sistema de una semana antes de la fecha elegida
+		</div>
+		<table class='table table-hover'>
+			<tr>
+				<th class='text-center'>#</th>
+				<th class='text-center'>Nombre Escuela</th>
+				<th class='text-center'>Frecuencia</th>
+			</tr>
+			<?php
+			foreach ($this->data as $key => $lista) {	?>
+				<tr>
+					<td class='text-center'><?php echo $key+1?></td>
+					<td><?php echo $lista['name']?></td>
+					<td class='text-center'><?php echo $lista['cantidad']?></td>
+				</tr>	
+			<?php	
+			}
+			?>
+		</table>
+	</div>
+<?php	
+}
+else{	?>
+	<br>
+	<div class='row'>
+		<div class="col-md-12">
+			<div class='alert alert-danger col-md-6 col-md-offset-3'>
+				<p><b><h4><center><span class='glyphicon glyphicon-exclamation-sign' ></span> No se entontraron registros</center></h4></b></p>
+			</div>			
+		</div>		
+	</div>
+<?php
+}
+?>

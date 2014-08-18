@@ -14,6 +14,8 @@ class Record_DirectedController extends Zend_Controller_Action {
     }
     
     public function indexAction(){
+        
+            $this->view->usuario=$this->sesion->rid;
     }
 
     public function studentAction(){
@@ -22,7 +24,7 @@ class Record_DirectedController extends Zend_Controller_Action {
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $uid=$this->_getParam('uid');
-            $perid = $this->_getParam('perid',$this->sesion->period->perid);
+            $perid = $this->_getParam('perid');
             $this->view->uid=$uid;
             $where['eid']=$eid;
             $where['oid']=$oid;
@@ -32,8 +34,20 @@ class Record_DirectedController extends Zend_Controller_Action {
             $datauser=$user->_getUserXUid_state($where);
             $this->view->user=$datauser[0];
             
-            $anio=substr($perid,0,2);
+            $rid=$this->sesion->rid;
+            if ($rid == 'AD') {
+                //solo si es admin
+                $anio=$perid;
+                $a= substr($anio, 2, 4);
+                $data=array('eid'=>$eid,'oid'=>$oid,'year'=>$a);
+                $dbperiod= new Api_Model_DbTable_Periods();
+                $dataperiod = $dbperiod->_getPeriodsxYears($data);
+                $this->view->periods=$dataperiod;
 
+            }else{
+                //si no es adim
+
+            $anio=$perid;
             $whereper1['eid']=$eid;
             $whereper1['oid']=$oid;
             $whereper1['perid']=$anio.'J';
@@ -43,7 +57,10 @@ class Record_DirectedController extends Zend_Controller_Action {
             $periods[1]=$peri->_getOnePeriod($whereper1);
             $whereper1['perid']=$anio.'C';
             $periods[2]=$peri->_getOnePeriod($whereper1);
-            $this->view->periods=$periods;
+            $this->view->periods=$periods; 
+            }
+            
+            
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -75,11 +92,25 @@ class Record_DirectedController extends Zend_Controller_Action {
             $cur0=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
             $wherecur['state']="T";
             $cur1=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
-            if ($cur0) {
-                if ($cur1) $cur=array_merge($cur0,$cur1);
-                else $cur=$cur0;
+            $wherecur['state']="C";
+            $cur2=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
+            $rol=$this->sesion->rid;
+            
+            if ($rol =='AD') {
+                if($cur0 && !$cur1 && !$cur2){
+                    $cur=$cur0;
+                }else{
+                    $cur=array_merge($cur0,$cur1,$cur2);
+                }
+            }else{
+                if ($cur0 && !$cur1) {
+                    $cur=$cur0;
+                }elseif ($cur0 && $cur1) {
+                    $cur=array_merge($cur0,$cur1);
+                }
             }
-            elseif ($cur1) $cur=$cur1;
+            
+            
             $this->view->curriculas=$cur;
 
             $wheresc['eid']=$eid;

@@ -328,7 +328,8 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
             print $ex->getMessage();
         }
     }
-            public function _get3superiorXcurricula($where=null)
+
+    public function _get3superiorXcurricula($where=null)
         {
             //print(utf8_encode($perid).utf8_decode($escid).utf8_decode($curid).$eid.$oid);
             try{
@@ -339,7 +340,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     $escid=$where['escid'];
                     $sql=$this->_db->query(" 
                    SELECT REGID,M.UID,LAST_NAME0,LAST_NAME1,FIRST_NAME,SEMID,
-                    ROUND(
+                    (
                     (
                     SELECT SUM(CAST((CASE WHEN NOTAFINAL='-3' THEN '0' WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) * CREDITS) from BASE_REGISTRATION_COURSE AS MC1
                     INNER JOIN BASE_COURSES AS C1
@@ -382,7 +383,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
                     )
                     ) > 12
-                    ORDER BY PROM_POND DESC ,LAST_NAME0,LAST_NAME1,FIRST_NAME  LIMIT (SELECT ROUND(COUNT(*)*0.3) FROM BASE_REGISTRATION AS M
+                    ORDER BY PROM_POND DESC  LIMIT (SELECT ROUND(COUNT(*)*0.3) FROM BASE_REGISTRATION AS M
                     INNER JOIN BASE_PERSON AS P
                     ON M.PID=P.PID AND M.STATE='M' INNER JOIN BASE_STUDENT_CURRICULA AS AC
                     ON M.UID=AC.UID AND M.ESCID=AC.ESCID
@@ -433,7 +434,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     $escid=$where['escid'];
                     $sql=$this->_db->query(" 
                    SELECT REGID,M.UID,LAST_NAME0,LAST_NAME1,FIRST_NAME,SEMID,
-                    ROUND(
+                    (
                     (
                     SELECT SUM(CAST((CASE WHEN NOTAFINAL='-3' THEN '0' WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) * CREDITS) from BASE_REGISTRATION_COURSE AS MC1
                     INNER JOIN BASE_COURSES AS C1
@@ -476,7 +477,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
                     )
                     ) > 12
-                    ORDER BY PROM_POND DESC ,LAST_NAME0,LAST_NAME1,FIRST_NAME  LIMIT (SELECT ROUND(COUNT(*)*0.5) FROM BASE_REGISTRATION AS M
+                    ORDER BY PROM_POND DESC  LIMIT (SELECT ROUND(COUNT(*)*0.5) FROM BASE_REGISTRATION AS M
                     INNER JOIN BASE_PERSON AS P
                     ON M.PID=P.PID AND M.STATE='M' INNER JOIN BASE_STUDENT_CURRICULA AS AC
                     ON M.UID=AC.UID AND M.ESCID=AC.ESCID
@@ -519,7 +520,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
 
 
 
-                public function _getPrimerospuestos($where=null)
+    public function _getPrimerospuestos($where=null)
         {
             try{
                 if ($where['perid']=="" || $where['escid']=="" || $where['curid']=="" || $where['semid']=="" || $where['eid']=="" || $where['oid']="") return false;

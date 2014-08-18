@@ -92,6 +92,6 @@ else{ $a="REPORTES MATRICULADOS POR SEMESTRE"; }
     ob_end_clean();
     $mpdf -> WriteHTML($html);
     $mpdf->Output('Semestre-'.$this->semid.'.pdf','D');
-    // $mpdf->Output();
+    //$mpdf->Output();
  
 ?>

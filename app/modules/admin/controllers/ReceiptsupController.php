@@ -22,6 +22,7 @@ public function recordreceiptsAction()
 		$recibo = new Api_Model_DbTable_Bankreceipts();
 		$listar = $recibo->_getbankreceiptsXAnio($anio);
 		$this->view->listarrecibos=$listar;
+
 		} 
 	catch (Exception $ex)
 		{
@@ -35,8 +36,33 @@ public function loadreceiptsAction()
 		$this->_helper->layout()->disableLayout();
 		$fecha = $this->_getParam("fecha");
 		$turno = $this->_getParam("turno");
-		$perid='14A';
-		$data = array(
+
+		$data_ac = array(
+			'eid' => $this->sesion->eid,
+			'oid' => $this->sesion->oid,
+			'state'=>'I'
+			);
+		$periodDB=new Api_Model_DbTable_Periods();
+		
+        $pe_ini=$periodDB->_getFilter($data_ac);
+        if ($pe_ini) {
+        	$perid=$pe_ini[0]['perid'];
+        	
+        }else{
+        	$data_ac = array(
+			'eid' => $this->sesion->eid,
+			'oid' => $this->sesion->oid,
+			'state'=>'A'
+			);
+			$pe_act=$periodDB->_getFilter($data_ac);
+			if ($pe_act) {
+				$perid=$pe_act[0]['perid'];
+				
+			}else{
+				print_r("<h4>No se encontro periodo</h4>");
+			}
+        }
+        $data = array(
 			'fecha' => base64_encode($fecha),
 			'turno' =>base64_encode($turno),
 			'perid' =>base64_encode($perid));

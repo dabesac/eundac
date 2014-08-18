@@ -91,6 +91,7 @@ $text_partial = ($this->partial==1)? 'Primer Partial':'Segundo Partial';
 						if ($student['promedio2'] == -3 ) { ?>
 							<td class='text-center warning' colspan='9'>Retirado</td>
 							<td class='text-center warning' >R</td>
+							<td class="text-center warning">R</td>
 						<?php }else{ ?>
 						<td class='text-center <?php echo ($student['nota1_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo (is_null($student['nota1_ii']))? '&nbsp;': $student['nota1_ii']?></td>
 						<td class='text-center <?php echo ($student['nota2_ii'] >= 10 )?'text-primary':'text-danger' ?>'><?php echo (is_null($student['nota2_ii']))? '&nbsp;': $student['nota2_ii']?></td>

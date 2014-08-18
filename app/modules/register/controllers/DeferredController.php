@@ -413,7 +413,7 @@ class Register_DeferredController extends Zend_Controller_Action {
             'created'=>date('Y-m-d H:i:s'),
             'code'=>'aplazados'
             );
-        $dbimpression->_save($data);            
+        //$dbimpression->_save($data);            
 
         $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>'aplazados');
         $dataim = $dbimpression->_getFilter($wheri);
@@ -438,6 +438,139 @@ class Register_DeferredController extends Zend_Controller_Action {
         $this->view->header=$header;
         $this->view->footer=$footer;
         $this->_helper->layout->disableLayout();
+    }
+
+    public function printinfosdeferredAction(){
+        try {
+            $params = $this->getRequest()->getParams();
+
+            if(count($params) > 3){
+
+                $paramsdecode = array();
+                
+                foreach ( $params as $key => $value ){
+                    if($key!="module" && $key!="controller" && $key!="action"){
+                        $paramsdecode[base64_decode($key)] = base64_decode($value);
+                    }
+                }
+                $params = $paramsdecode;
+            }
+            /***********paramets***********/
+            $oid        = trim($params['oid']);
+            $eid        = trim($params['eid']);
+            $escid        = trim($params['escid']);
+            $subid        = trim($params['subid']);                    
+            $courseid    = trim($params['courseid']);
+            $curid        = trim($params['curid']);
+            $turno        = trim($params['turno']);
+            $perid        = trim($params['perid']);
+            $partial      = trim($params['partial']); 
+            $action      = trim($params['action']);
+
+            $where = null;
+            $url = null;
+            $where = array(
+                'oid'=>$oid, 
+                'eid'=>$eid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'courseid'=>$courseid,
+                'curid'=>$curid,
+                'turno'=>$turno,
+                'perid'=>$perid,
+                );
+            $base_courses = new Api_Model_DbTable_Course();
+            $infocourse = $base_courses->_getOne($where);
+
+            $base_students = new Api_Model_DbTable_Registrationxcourse();
+            $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
+
+            $base_faculty   =   new Api_Model_DbTable_Faculty();
+            $base_speciality =  new Api_Model_DbTable_Speciality();
+            $info_speciality =  $base_speciality->_getOne($where);
+
+            $speciality = $base_speciality ->_getOne($where);
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $base_speciality->_getOne($wher);
+
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names." <br> ".$namep;
+
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+
+            $escid=$this->sesion->escid;
+            $where['escid']=$escid;
+            $this->view->turno = $turno;
+            $this->view->perid = $perid;
+            $this->view->partial = $partial;
+            $this->view->students = $data_notes_students;
+            $namef = strtoupper($this->sesion->faculty->name);
+            $this->view->lasname= $this->sesion->infouser['fullname'];
+
+            $dbimpression = new Api_Model_DbTable_Impresscourse();
+            
+            $uidim=$this->sesion->pid;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'perid'=>$perid,
+                'courseid'=>$courseid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'curid'=>$curid,
+                'turno'=>$turno,
+                'register'=>$uidim,
+                'created'=>date('Y-m-d H:i:s'),
+                'code'=>'aplazados_info'
+                );
+            $dbimpression->_save($data);            
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>'aplazados_info');
+            $dataim = $dbimpression->_getFilter($wheri);
+            $co=count($dataim);
+            $codigo=$co." - ".$uidim;
+            $this->view->codigo=$codigo;
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+            $header = str_replace("h2", "h3", $header);
+            $header = str_replace("h3", "h5", $header);
+            $header = str_replace("h4", "h6", $header);
+            $header = str_replace("11%", "9%", $header);
+
+            $footer = str_replace("h4", "h5", $footer);
+            $footer = str_replace("h5", "h6", $footer);
+            
+            $this->view->header=$header;
+            $this->view->footer=$footer;
+            $this->view->turno = $turno;
+            $this->view->perid = $perid;
+            $this->view->partial = $partial;
+            $this->view->students = $data_notes_students;
+            $this->view->infocourse = $infocourse;
+            $namef = strtoupper($this->sesion->faculty->name);
+            $this->view->lasname= $this->sesion->infouser['fullname'];
+            $this->_helper->layout->disableLayout();    
+
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
     }
     public function registerdeferredAction(){
         try {

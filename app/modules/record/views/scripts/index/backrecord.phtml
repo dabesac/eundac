@@ -44,13 +44,13 @@ table {
 	font-family: "Arial";
 	font-size:11px; 
 	text-align: center;
-	margin-left:52%;
+	margin-left:52%; 
 }
 .date_record{
 	font-family: "Arial";
 	font-size: 11px;
 	margin-left: 30%;
-	margin-top: 136px;
+	margin-top: 134px;
 }
 .acuerdo {
 
@@ -103,10 +103,11 @@ table {
 <?php
 
 	$html = ob_get_contents();
-	$mpdf=new mPDF('utf-8','A4','','',15,15,55,15,15);
+	$mpdf=new mPDF('utf-8','A4','','',15,15,54,15,15);
 	$mpdf->SetHTMLHeader($header);
 	ob_end_clean();
 	$mpdf -> WriteHTML($html);
 	$mpdf->Output('Acta-'.$course['courseid'].'turno'.$course['turno'].'.pdf','D'); 
+	// $mpdf->Output();
 ?>
 

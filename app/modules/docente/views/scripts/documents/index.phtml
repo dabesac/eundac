@@ -1,0 +1,178 @@
+<link rel="stylesheet" href="/css/documents.css">
+<?php 
+	if ($this->dataDocente) {
+		$dataDocente = $this->dataDocente;
+		$dataDocument = $this->dataDocument;
+	}
+ ?>
+<?php
+	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tint"></span> Documentos');
+
+	$this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
+ ?>
+
+<div class="documents_header">
+	<p class="parrafoHeader"><span class="glyphicon glyphicon-info-sign"></span> Lista de documentos enviados:</p>
+	<a href="##" data-toggle="modal" data-target="#newDocumentModal" class="btnNew btn btn-info form-control">Nuevo Documento</a>
+</div>
+<hr>
+
+<div id="idListDocuments" class="documents_lisDocuments">
+	
+</div>
+
+
+
+
+<!--Modal para el nuevo Documento-->
+<div class="modal fade" id="newDocumentModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        		<h4 class="modal-title" id="myModalLabel">Nuevo Documento</h4>
+			</div>
+			<?php if ($dataDocument['documentsType']): ?>
+			<div class="modal-body">
+				<div id="idDocumentPreview" class="documentPreview" hidden>
+				</div>
+
+				<p class="text-warning"><span class="glyphicon glyphicon-flag"></span> Rellene todo lo necesario para la emisión del documento...</p>
+				<hr>
+				<form id="formDocument">
+				<input type="hidden" name="erpId" value="<?php echo $dataDocente['erpId'] ?>">
+				<input type="hidden" name="fullName" value="<?php echo $dataDocente['fullName'] ?>">
+				<input type="hidden" name="dni" value="<?php echo $dataDocente['pid'] ?>">
+				<input type="hidden" name="oficinaEnvio" value="<?php echo $dataDocument['oficinaEnvio'] ?>">
+				<input type="hidden" name="numero" value="<?php echo $dataDocument['acumulado'] ?>">
+				<input type="hidden" name="nameDate" value="<?php echo $dataDocente['fecha'] ?>">
+				<div class="tipeDocument">
+					<div class="tipeDocumentObO divSelectTD">
+						<p class="parrafoTDM">Tipo de Documento:</p>
+						<select name="typeDocument" id="idSelectTipeDocument" class="form-control selectTDM">
+							<?php foreach ($dataDocument['documentsType'] as $c => $document): ?>
+								<option value="<?php echo $document['id'].'-'.$document['name'] ?>"><?php echo $document['name'] ?></option>
+							<?php endforeach ?>
+						</select>
+					</div>
+					<div class="tipeDocumentObO divSelectM">
+						<p class="parrafoTDM">Motivo</p>
+						<select name="motivo" id="idSelectMotivo" class="form-control selectTDM">
+							<option value="openAct">Re-apertura Acta</option>
+							<option value="openAssistance">Re-apertura Asistencia</option>
+							<option value="openSyllabus">Re-apertura Sílabo</option>
+							<option value="openAcademicReport">Re-apertura Informe Academico</option>
+							<option value="openTutorshipReport">Re-apertura Informe de Tutoría</option>
+						</select>
+					</div>
+				</div>
+				<hr>
+				<div class="issueAndNumber">
+					<?php $hiddenDocumentType = '' ?>
+					<?php foreach ($dataDocument['documentsType'] as $c => $document): ?>
+						<p class="issueAndNumberObO issue issue<?php echo $document['id'] ?>" <?php echo $hiddenDocumentType ?>><?php echo $document['name'] ?></p>
+						<?php $hiddenDocumentType = 'hidden' ?>
+					<?php endforeach ?>
+					<p class="issueAndNumberObO numberIssue">Numero <?php echo $dataDocente['pid'].'-'.$dataDocument['acumulado'] ?></p>
+				</div>
+				<div class="dataPerson">
+					<p>Remitente : <?php echo $dataDocente['fullName'] ?></p>
+					<p>Fecha : <?php echo $dataDocente['fecha'] ?></p>
+						
+					<!--Motivo-->
+					<p id="pMotivoopenAct" class="pMotivo">Motivo : Re-apertura de Acta</p>
+					<p id="pMotivoopenAssistance" class="pMotivo" hidden>Motivo : Re-apertura de Asistencia</p>
+					<p id="pMotivoopenSyllabus" class="pMotivo" hidden>Motivo : Re-apertura de Silabo</p>
+					<p id="pMotivoopenAcademicReport" class="pMotivo" hidden>Motivo : Re-apertura de Informe Academico</p>
+					<p id="pMotivoopenTutorshipReport" class="pMotivo" hidden>Motivo : Re-apertura de Informe de Tutoría</p>
+					<!--__________________________________________-->
+				</div>
+				<hr>
+				<div class="abstractDocument">
+					<p>Detalle:</p>
+					<textarea class="form-control" name="abstractDocument" rows="10"></textarea>
+				</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<div class="btnFooterSide">
+					<p id="idParrafoWarning" class="btnFooterSideObO pWarning" hidden><span class="glyphicon glyphicon-exclamation-sign"></span> Rellene el detalle del documento primero...</p>
+
+					<p id="idVistaPreviaSide" class="btnFooterSideObO pWarning pPreview" hidden><span class="glyphicon glyphicon-exclamation-sign"></span> Esta en la vista previa, si desea puede <a id="idBtnBackFromPreview" class="btnBackFromPreview btn btn-warning" href="##">Regresar</a></p>
+
+					<p class="btnFooterSideObO pFooter"><span class="glyphicon glyphicon-exclamation-sign"></span> Asegurese de que todo este en orden <strong>antes de enviar el documento...</strong></p>
+					<a href="##" id="btnDocumentPreview" class="btn btn-success form-control btnFooterSideObO btnFooter">Vista Previa y Enviar</a>
+					<a href="##" id="btnSendDocument" class="btn btn-success form-control btnFooterSideObO btnFooter hidden">Enviar</a>
+				</div>
+			</div>
+			<?php else: ?>
+			<div class="modal-body">
+				<p class="text-muted text-center"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Aun no se crean los documentos <span class="text-danger">que usted puede emitir...</span></p>
+			</div>
+			<?php endif ?>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(function(){
+		$('#idListDocuments')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+								.load('/docente/documents/listdocumentssend');
+
+		var idIssue  = '';
+		var idMotivo = '';
+
+		$('#idSelectTipeDocument').on('change', function(){
+			idIssue = $(this).val();
+			$('.issue, .numberIssue').fadeOut('fast');
+			$('.issue' + idIssue).fadeIn('fast');
+		});
+
+		$('#idSelectMotivo').on('change', function(){
+			idMotivo = $(this).val();
+			$('.pMotivo').fadeOut('fast');
+			$('#pMotivo' + idMotivo).fadeIn('fast');
+		});
+
+		$('#idBtnBackFromPreview').on('click', function(){
+			$('#btnSendDocument').addClass('hidden');
+			$('#btnDocumentPreview').removeClass('hidden');
+			$('#idVistaPreviaSide, #idDocumentPreview').slideUp('fast');
+		});
+
+		$('#btnDocumentPreview').on('click', function(){
+			$('#idDocumentPreview').html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>');
+
+			$.ajax({
+				type : 'post',
+				url : '/docente/documents/documentpreview',
+				data : $('#formDocument').serialize(),
+				success : function(data){
+					if (data != 0) {
+						$('#idDocumentPreview') .html(data)
+												.slideDown('fast');
+						$('#idVistaPreviaSide').slideDown('fast');
+						$('#btnDocumentPreview').addClass('hidden');
+						$('#btnSendDocument').removeClass('hidden');
+					}else{
+						$('#idParrafoWarning').slideDown('fast');
+						setTimeout(function(){
+							$('#idParrafoWarning').slideUp('fast');
+						}, 5000);
+					};
+				}
+			});
+		});
+
+		$('#btnSendDocument').on('click', function(){
+			$.ajax({
+				type : 'post',
+				url : '/docente/documents/senddocument',
+				data : $('#formDocument').serialize(),
+				success : function(data){
+					console.log(data);
+				}
+			});
+		});	
+	});
+</script>

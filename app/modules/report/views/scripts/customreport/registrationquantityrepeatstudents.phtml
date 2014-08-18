@@ -1,6 +1,7 @@
 <?php
 if ($this->data) {
 	$data=$this->data;
+	$where=$this->where;
 	$cant=count($data);
 	$vfinal=$data[$cant-1]['veces'];
     $s=1;
@@ -33,9 +34,11 @@ if ($this->data) {
 		<?php	
 		}
 		?>
-	</ul>		
-	<br>		
-	<div id='viewprincipal2' valor='2' class='table-responsive'>
+	</ul>	
+	<div id='viewprincipal2' valor='2' class='table-responsive' style="margin-top:5px">
+		<div class="col-md-2 pull-right" style="margin-bottom:5px">
+			<a href="/report/customreport/printregistrationquantityrepeatstudents/eid/<?php echo base64_encode($where['eid'])?>/oid/<?php echo base64_encode($where['oid'])?>/escid/<?php echo base64_encode($where['escid'])?>/subid/<?php echo base64_encode($where['subid'])?>/curid/<?php echo base64_encode($where['curid'])?>/perid/<?php echo base64_encode($where['perid'])?>/courseid/<?php echo base64_encode($where['courseid'])?>/veces/<?php echo '2'?>" class="btn btn-success" ><span class="glyphicon glyphicon-print "></span> Imprimir</a>
+		</div>
 		<table class='table table-hover'>
 			<tr class='info'>
 				<th class='text-center'>#</th>
@@ -66,7 +69,10 @@ if ($this->data) {
 	</div>
 	<?php
 	for ($i=3; $i <= $vfinal; $i++) { 	?>
-  	<div id='viewprincipal<?php echo $i?>' class='hidden table-responsive' valor='<?php echo $i?>'>
+  	<div id='viewprincipal<?php echo $i?>' class='hidden table-responsive' valor='<?php echo $i?>' style="margin-top:5px">
+  		<div class="col-md-2 pull-right" style="margin-bottom:5px">
+			<a href="/report/customreport/printregistrationquantityrepeatstudents/eid/<?php echo base64_encode($where['eid'])?>/oid/<?php echo base64_encode($where['oid'])?>/escid/<?php echo base64_encode($where['escid'])?>/subid/<?php echo base64_encode($where['subid'])?>/curid/<?php echo base64_encode($where['curid'])?>/perid/<?php echo base64_encode($where['perid'])?>/courseid/<?php echo base64_encode($where['courseid'])?>/veces/<?php echo $i?>" class="btn btn-success" ><span class="glyphicon glyphicon-print "></span> Imprimir</a>
+		</div>
 		<table class='table table-hover'>
 			<tr class='info'>
 				<th class='text-center'>#</th>
@@ -110,39 +116,39 @@ else{	?>
 }
 ?>
 <script type="text/javascript">
-	$('#myReport a').click(function (e) {
+	$('#myReport a').on('click',function (e) {
 	  	e.preventDefault()
 	  	$(this).tab('show')
 	});
-	$("#val2").click(function(){
+	$("#val2").on('click', function(){
 		$("#viewprincipal3").addClass('hidden');
 		$("#viewprincipal4").addClass('hidden');
 		$("#viewprincipal5").addClass('hidden');
 		$("#viewprincipal6").addClass('hidden');
 		$("#viewprincipal2").removeClass('hidden');
 	});
-	$("#val3").click(function(){
+	$("#val3").on('click', function(){
 		$("#viewprincipal2").addClass('hidden');
 		$("#viewprincipal4").addClass('hidden');
 		$("#viewprincipal5").addClass('hidden');
 		$("#viewprincipal6").addClass('hidden');
 		$("#viewprincipal3").removeClass('hidden');
 	});
-	$("#val4").click(function(){
+	$("#val4").on('click', function(){
 		$("#viewprincipal3").addClass('hidden');
 		$("#viewprincipal2").addClass('hidden');
 		$("#viewprincipal5").addClass('hidden');
 		$("#viewprincipal6").addClass('hidden');
 		$("#viewprincipal4").removeClass('hidden');
 	});
-	$("#val5").click(function(){
+	$("#val5").on('click', function(){
 		$("#viewprincipal3").addClass('hidden');
 		$("#viewprincipal4").addClass('hidden');
 		$("#viewprincipal2").addClass('hidden');
 		$("#viewprincipal6").addClass('hidden');
 		$("#viewprincipal5").removeClass('hidden');
 	});
-	$("#val6").click(function(){
+	$("#val6").on('click', function(){
 		$("#viewprincipal3").addClass('hidden');
 		$("#viewprincipal4").addClass('hidden');
 		$("#viewprincipal5").addClass('hidden');

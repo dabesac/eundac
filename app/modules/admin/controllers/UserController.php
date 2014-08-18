@@ -9,6 +9,10 @@ class Admin_UserController extends Zend_Controller_Action{
  		$login = $sesion->getStorage()->read();
  		$this->sesion = $login;
  	}
+    public function mundoAction()
+    {
+        echo "hola mundo de mierda";exit();
+    }
 
 	public function indexAction(){
 		try {

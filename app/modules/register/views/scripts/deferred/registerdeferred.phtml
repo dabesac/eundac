@@ -1,42 +1,57 @@
+<?php 
+    $this->placeholder('Btnnav')->append('<a href="/docente/notas" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
+
+    $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-align-justify" ></span> Registro de Aplazados');
+ ?>
 <div class="row">
-  <div class="col-xs-12 col-sm-6 col-md-8"><h4><span class='glyphicon glyphicon-align-justify' ></span> Registro de Aplazados <?php echo $this->infocurso['name']?></h4></div>
-  <div class="col-xs-6 col-sm-6 col-md-4">
-  	<a href="/docente/notas" class="btn btn-default"><span class='glyphicon glyphicon-arrow-left'></span> Regresar</a>
+    <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-8 col-md-offset-2 text-center">
+            <h4>
+                <!-- <span class='glyphicon glyphicon-align-justify' ></span> 
+                Registro de Aplazados  -->
+                <center><b><u><?php echo $this->infocurso['name']?></u></b></center>
+            </h4>            
+        </div>
+        <div class="pull-right">
+            <a href="/register/deferred/printinfosdeferred<?php echo $this->urlpersentage?>" class='btn btn-success' style="float-left"><span class="glyphicon glyphicon-print"></span> Imprimir Informe</a>    
+        </div>
+    </div>
+    <br>
+    <!-- <div class="col-xs-6 col-sm-6 col-md-4">
+        <a href="/docente/notas" class="btn btn-default"><span class='glyphicon glyphicon-arrow-left'></span> Regresar</a>
 
-		<a href="/register/deferred/printdeferred<?php echo $this->urlpersentage?>" class='btn btn-primary'><span class="glyphicon glyphicon-print"></span> Imprimir</a>
-  </div>
-</div>
+        <a href="/register/deferred/printdeferred<?php echo $this->urlpersentage?>" class='btn btn-primary'><span class="glyphicon glyphicon-print"></span> Imprimir Informe</a>
+    </div> -->
+</div><br>
 <div class="row">
-  <div class="col-md-10 col-md-offset-1">
-  <table class="table"> 
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Código</th>
-      <th>Apelliods y Nombres</th>
-      <th>Recibo</th>
-      <th>Nota</th>
-    </tr>
-  </thead>
-  <tbody>
-
-    <?php 
-      foreach ($this->students_register as $key => $register){
-        $aux[$key]=$register['name'];
-      }
-      array_multisort($aux,SORT_ASC,$this->students_register);
-    ?>
-
-    <?php foreach ($this->students_register as $key => $register) { ?>
-      <tr>
-        <td><?php echo $key+1?></td>
-        <td><?php echo $register['uid']?></td>
-        <td><?php echo $register['name']?></td>
-        <td><?php echo $register['receipt']?></td>
-        <td><?php echo ($register['notafinal']== -2)? 'N.S.P':$register['notafinal']?></td>
-      </tr>
-    <?php }?>
-  </tbody>
-</table>
-</div>
+    <div class="col-md-10 col-md-offset-1">
+        <table class="table table-condensed table-hover table-striped"> 
+            <thead>
+                <tr>    
+                    <th class='text-center'>#</th>
+                    <th class='text-center'>Código</th>
+                    <th class='text-center'>Apellidos y Nombres</th>
+                    <th class='text-center'>Recibo</th>
+                    <th class='text-center'>Nota</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php 
+                foreach ($this->students_register as $key => $register){
+                    $aux[$key]=$register['name'];
+                }
+                    array_multisort($aux,SORT_ASC,$this->students_register);
+            
+                foreach ($this->students_register as $key => $register) { ?>
+                    <tr>
+                        <td class='text-center'><?php echo $key+1?></td>
+                        <td class='text-center'><?php echo $register['uid']?></td>
+                        <td><?php echo $register['name']?></td>
+                        <td class='text-center'><?php echo $register['receipt']?></td>
+                        <td class='text-center'><?php echo ($register['notafinal']== -2)? 'N.S.P':$register['notafinal']?></td>
+                    </tr>
+                <?php }?>
+            </tbody>
+        </table>
+    </div>
 </div>

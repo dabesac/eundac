@@ -1,11 +1,10 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-th-list"></span> REPORTE GENERAL');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
-
-<table class="table table-hover table-condensed">
-        <tr>
-        <th colspan="2">Año:</th>
-        <td>
-            <select id="anho" class="form-control" style="width:100px">
+<div class="row">
+    <div class="col-md-12 text-right">
+        <div class="col-md-1 col-md-offset-2"><b>Año: </b></div>
+        <div class="col-md-2">
+            <select id="anho" class="form-control">
                 <option value="">- Año -</option>
                 <?php
                 for ($i=$this->anio;$i>=1965;$i--) { ?>
@@ -13,19 +12,19 @@
                 <?php }
                 ?>
             </select>
-        </td>
-        <th >Periodo:</th>
-        <td >
+        </div>
+        <div class="col-md-1"><b>Periodo: </b></div>
+        <div class="col-md-2">
             <select id="periodo_c" class="form-control">
-                <option value="">- Seleccione -</option>
+                <option value="">- Seleccione un Año -</option>
             </select>
-        </td>
-        <td></td>
-
-    </tr>
-    <tr>
-        <th>Facultad:</th>
-        <td>
+        </div>
+    </div>
+</div><br>
+<div class="row">
+    <div class="col-md-12 text-right">
+        <div class="col-md-1"><b>Facultad: </b></div>
+        <div class="col-md-3">
             <select id="facid" class="form-control">
                 <option>- Seleccione la Facultad -</option>
                 <?php
@@ -37,28 +36,33 @@
                     }
                 } ?>
             </select>
-        </td>
-        <th>Escuela:</th>
-        <td>
-            <select id="escid" class="form-control" style="width:260px">
+        </div>
+
+        <div class="col-md-1"><b>Escuela: </b></div>
+        <div class="col-md-3">
+           <select id="escid" class="form-control" style="width:260px">
                 <option value="">- Seleccione la Escuela -</option>
             </select>
-        </td>
-        <th>Especialidad:</th>
-        <td>
+        </div>
+
+        <div class="col-md-1"><b>Especialidad: </b></div>
+        <div class="col-md-3">
             <select id="especialidad" class="form-control" style="width:260px">
                 <option value="">- Seleccione la Especialidad -</option>
             </select>
-        </td>
-    </tr>
-
-    <tr>
-        <td colspan="6">
-            <center><a id="generar" href="#" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-down"></span></a></center>
-        </td>
-    </tr>
-</table>
+        </div>        
+    </div>
+</div><br>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-1 col-md-offset-5">
+            <center><a id="generar" href="#" class="btn btn-success"><span class="glyphicon glyphicon-arrow-down"></span> Ver Reportes</a></center>
+        </div>
+    </div>
+</div>
+<hr>
 <div id="cargadatos"></div>
+
 <script type="text/javascript">
 var rid="<?php echo $this->rid ?>";
 if (rid=="RF" || rid=="DIREC") {
@@ -66,12 +70,27 @@ if (rid=="RF" || rid=="DIREC") {
     var facid=$("#facid").val();
     // alert("/report/Consolidated/schools/facid/"+facid);
     $("#escid").load("/report/consolidated/schools/facid/"+facid);
-    if (rid=="DIREC") {
-        $("#escid").attr("disabled",true);
-        var escid='<?php echo $this->escid?>';
-        $("#especialidad").load("/report/consolidated/speciality/escid/"+escid);
-    };
+        if (rid=="DIREC") {
+            $("#escid").attr("disabled",true);
+            var escid='<?php echo $this->escid?>';
+            $("#especialidad").load("/report/consolidated/speciality/escid/"+escid);
+        };
 };
+$(document).ready(function(){
+    var anio="<?php echo $this->anio?>";
+    $("#anho option[value="+anio+"]").attr('selected','selected');
+
+    var anio = $("#anho").val();
+    var url = "/report/consolidated/periods/anio/"+anio;
+    $("#periodo_c").load(url);
+}); 
+
+$("#anho").change(function(){
+    var anio = $(this).val();
+    var url = "/report/consolidated/periods/anio/"+anio;
+    $("#periodo_c").load(url);
+});
+
 $("#facid").change(function(){
     var facid=$(this).val();
     $("#escid").load("/report/consolidated/schools/facid/"+facid);
@@ -92,20 +111,16 @@ $("#especialidad").change(function(){
     var facid=$(this).val();   
 });
 
-$("#anho").change(function(){
-    var anio = $(this).val();
-    var url = "/report/consolidated/periods/anio/"+anio;
-    $("#periodo_c").load(url);
-});
 
 $("#generar").click(function(){
     var facid = $("#facid").val();
     var tescid = $("#escid").val();
     var xx1 = tescid.split(";--;");
     var escid = xx1[0];
-    //alert(escid);
     var subid = xx1[1];
+
     var espec = $("#especialidad").val();
+
     var anho = $("#anho").val();
     var periodo = $("#periodo_c").val();
     var xx = periodo.split(";--;");
@@ -116,6 +131,7 @@ $("#generar").click(function(){
         return false;
     };
     var url="/report/consolidated/windows/facid/"+facid+"/escid/"+escid+"/espec/"+espec+"/perid/"+perid+"/subid/"+subid;
+    // console.log(url);
     $('#cargadatos').html("<img src='/img/spinner.gif'>Cargando...");
     $("#cargadatos").load(url);
 });

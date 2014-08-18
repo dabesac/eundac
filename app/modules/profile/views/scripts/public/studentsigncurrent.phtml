@@ -1,145 +1,254 @@
-<div class="row">
-	<div class="col-md-1 col-md-offset-1">
-		<h2 class="text-right"><span class="glyphicon glyphicon-stats text-muted"></span></h2> 
-	</div>
-	<div class="col-md-6">
-		<h3><blockquote>Matrícula Actual <strong class="text-muted"><?php echo $this->data['perid']?></strong></blockquote></h3>
-	</div>
-	<div class="col-md-2 col-md-offset-1">
-		<br>
-		<h2 class="text-right"><a id="comprimir" class="text-warning" href="##" title="Comprimir"><span class="glyphicon glyphicon-th-large"></span></a>
-		<a id="extender" class="text-warning" href="##" title="Extender"><span class="glyphicon glyphicon-th"></span></a></h2>
-	</div>
-	<div class="col-md-1">
-		<h2></h2>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-4 col-md-offset-1">
-		<p class="lead"><span class="text-muted">Cantidad de Cursos </span><?php echo $this->nc ?></p>
+<?php 
+	$dataCourses = $this->dataCourses;
+ ?>
+
+<div class="studentSignCurrent_header">
+	<p class="studentSignCurrent_periodo">Periodo <?php echo $dataCourses['period'] ?></p>
+	<?php if ($dataCourses['courses']): ?>
+		<?php if ($dataCourses['cantidad'] == 1):
+			$proNombre = 'Curso';
+		else:
+			$proNombre = 'Cursos';
+		endif ?>
+		<p class="studentSignCurrent_parrafo"><span class="glyphicon glyphicon-book"></span> Estas llevando <?php echo $dataCourses['cantidad'].' '.$proNombre ?></p>
+	<?php endif ?>
+	<div class="studentSignCurrent_btnSides">
+		<a href="##" class="btnObOSignCurrent btnGeneralView btnObOSignCurrentActive ObOActive" goto="coursesGeneralView">Vista General</a>
+		<a href="##" class="btnObOSignCurrent btnDetailView" goto="coursesDetailView">Vista Detallada</a>
 	</div>
 </div>
 
-<div id="notasComprimidas" class="row">
-	<div id="horary_notas" class="col-md-10 col-md-offset-1">
-		<div class="panel panel-warning">
-			<div class="panel-body">
-				<?php if($this->curact){?>
-				<table class="table table-hover">
-					<tr>
-						<th><center>Cursos</center></th>
-						<th><center>Turno</center></th>
-						<?php if($this->typerate[0][0]['type_rate']=="O"){?>
-							<th><center>Unidad 1</center></th>
-							<th><center>Unidad 2</center></th>
-						<?php }elseif($this->typerate[0][0]['type_rate']=="C"){?>
-							<th><center>Unidad 1</center></th>
-							<th><center>Unidad 2</center></th>
-							<th><center>Unidad 3</center></th>
-							<th><center>Unidad 4</center></th>
-						<?php }?>
-							<th><center>Promedio Final</center></th>
-						<?php if ($this->notasAplazados[0]): ?>
-							<th class="text-center">Aplazados</th>
-						<?php endif ?>
-					</tr>
-
-					<?php  $c=0;
-					foreach ($this->curact as $curact) {?>
-							<tr>
-						<?php if($this->typerate[$c][0]['type_rate']=="O"){?>
-								<td><h5><?php echo $this->name[$c][0]['name']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['turno']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['promedio1']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['promedio2']?></h5></td>
-								<td><h5 align="center"><b><?php echo $curact['notafinal']?></b></h5></td>
-						<?php }elseif($this->typerate[$c][0]['type_rate']=="C"){?>
-								<td><h5><?php echo $this->name[$c][0]['name']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['turno']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['nota4_i']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['nota9_i']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['nota4_ii']?></h5></td>
-								<td><h5 align="center"><?php echo $curact['nota9_ii']?></h5></td>
-								<td><h5 align="center"><b><?php echo $curact['notafinal']?></b></h5></td>
-						<?php }?>
-							<?php foreach ($this->notasAplazados as $notaAplazados): ?>
-								<?php if ($curact['courseid'] == $notaAplazados[0]['courseid']): ?>
-									<td><h5 align="center"><b><?php echo $notaAplazados[0]['notafinal']?></b></h5></td>
-								<?php endif ?>
-							<?php endforeach ?>
-							</tr>
-						<?php $c++;
-					}?>
-				</table>
-				<?php }else{?>
-					<h5 align="center">No Tiene Matrícula Actual | Valídelo en Registro de Facultad</h5>
-				<?php }?>
-			</div>
+<?php if ($dataCourses['courses']): ?>
+	<div id="coursesGeneralView" class="studentSignCurrent_viewCourses studentSignCurrent_viewActive">
+		<div class="studentSignCurrent_generalView">
+			<table class="table table-bordered">
+				<tr class="active">
+					<th class="text-center">#</th>
+					<th>Curso</th>
+				<?php if ($dataCourses['type'] == 'C'): ?>
+					<th class="text-center">Unidad 1</th>
+					<th class="text-center">Unidad 2</th>
+					<th class="text-center">Unidad 3</th>
+					<th class="text-center">Unidad 4</th>
+				<?php else: ?>
+					<th class="text-center">Primer Parcial</th>
+					<th class="text-center">Segundo Parcial</th>
+				<?php endif ?>
+					<th class="text-center">Nota Final</th>
+				<?php if ($dataCourses['aplazados'] == 'yes'): ?>
+					<th class="text-center">Aplazado</th>
+				<?php endif ?>
+				</tr>
+			<?php foreach ($dataCourses['courses'] as $c => $course): ?>
+				<tr>
+					<td class="text-center"><?php echo $c + 1 ?></td>
+					<td><?php echo $course['name'] ?></td>
+				<?php if ($dataCourses['type'] == 'C'): ?>
+					<?php 
+						$cantNotas = 4;
+						for ($i=1; $i <= $cantNotas; $i++) { 
+							if ($course['notaUnidad'.$i] < 11) {
+								$colorNota = 'disapproved';
+								$nota = $course['notaUnidad'.$i];
+							}elseif ($course['notaUnidad'.$i] >= 11){
+								$colorNota = 'approved';
+								$nota = $course['notaUnidad'.$i];
+							}else{
+								$colorNota = 'disapproved';
+								$nota = '-';
+							} ?>
+							<td class="text-center <?php echo $colorNota ?>"><strong><?php echo $nota ?></strong></td>
+						<?php }
+					 ?>
+				<?php else: ?>
+					<td class="text-center"><?php echo $course['parcial1'] ?></td>
+					<td class="text-center"><?php echo $course['parcial2'] ?></td>
+				<?php endif ?>
+				<?php if ($course['notaFinal'] < 11):
+					$colorNota = 'disapprovedBack';
+				elseif ($course['notaFinal'] >= 11):
+					$colorNota = 'approvedBack';
+				endif ?>
+					<td class="text-center <?php echo $colorNota ?>"><strong><?php echo $course['notaFinal'] ?></strong></td>
+				<?php if ($dataCourses['aplazados'] == 'yes'): ?>
+					<td class="text-center <?php echo $course['colorAplazado'] ?>"><strong><?php echo $course['aplazado'] ?></strong></td>
+				<?php endif ?>
+				</tr>
+			<?php endforeach ?>
+			</table>
+		</div>
+		<div class="studentSignCurrent_myHorary">
+			<a href="##" class="btnMyHorary">Mi Horario</a>
 		</div>
 	</div>
-	<div class="col-md-1">
-		<br><br><br><br><br><br><br>
-		<blockquote>
-			<h3><a id="btnHorary" data-toggle="popover" data-placement="left" data-container="body" data-content="Mira aqui tu horario" href="##" title="Ver Horario" class="text-warning"><span class="glyphicon glyphicon-calendar"></span></a></h3>
-		</blockquote>
+
+	<div id="coursesDetailView" class="studentSignCurrent_viewCourses">
+		<div class="studentSignCurrent_coursesDetail">
+			<?php foreach ($dataCourses['courses'] as $c => $course): ?>
+				<div class="course">
+					<div class="course_infoSide">
+						<p class="parrafoNameCourse"><?php echo $course['name'] ?></p>
+						<div class="course_infoSideUno">
+							<p class="parrafoDetailPerCourse">Codigo <strong><?php echo $course['courseid'] ?></strong></p>
+							<p class="parrafoDetailPerCourse">Curricula <strong><?php echo $course['curid'] ?></strong></p>
+						</div>
+						<div class="course_infoSideDos">
+							<p class="parrafoDetailPerCourse">Semestre <strong><?php echo $course['semid'] ?></strong></p>
+							<p class="parrafoDetailPerCourse">Creditos <strong><?php echo $course['credits'] ?></strong></p>
+						</div>
+					</div>
+					<div class="course_NotasPromocionales">
+						<?php if ($dataCourses['type'] == 'C'): ?>
+							<div class="unidadObo unidadUno">
+								<p class="titleUnity">1era Unidad</p>
+								<div class="notasDetail">
+									<?php for ($i=1; $i <= 3; $i++) { ?>
+										<span class="notaPerCourse notaPerCourse<?php echo $i ?>"><?php echo $course['calificacion'.$i.'Unidad1'] ?></span>
+									<?php } ?>
+									<?php if ($course['notaUnidad1'] < 11):
+										$colorNota = 'disapprovedBack';
+									else:
+										$colorNota = 'approvedBack';
+									endif ?>
+									<span class="notaPerCourse notaPerCourseUnidad <?php echo $colorNota ?>"><?php echo $course['notaUnidad1'] ?></span>
+								</div>
+							</div>
+							<div class="unidadObo unidadDos">
+								<p class="titleUnity">2da Unidad</p>
+								<div class="notasDetail">
+									<?php for ($i=1; $i <= 3; $i++) { ?>
+										<span class="notaPerCourse notaPerCourse<?php echo $i ?>"><?php echo $course['calificacion'.$i.'Unidad2'] ?></span>
+									<?php } ?>	
+									<?php if ($course['notaUnidad2'] < 11):
+										$colorNota = 'disapprovedBack';
+									else:
+										$colorNota = 'approvedBack';
+									endif ?>
+									<span class="notaPerCourse notaPerCourseUnidad <?php echo $colorNota ?>"><?php echo $course['notaUnidad2'] ?></span>
+								</div>
+							</div>
+							<div class="unidadObo unidadTres">
+								<p class="titleUnity">3ra Unidad</p>
+								<div class="notasDetail">
+									<?php for ($i=1; $i <= 3; $i++) { ?>
+										<span class="notaPerCourse notaPerCourse<?php echo $i ?>"><?php echo $course['calificacion'.$i.'Unidad3'] ?></span>
+									<?php } ?>
+									<?php if ($course['notaUnidad3'] < 11):
+										$colorNota = 'disapprovedBack';
+									else:
+										$colorNota = 'approvedBack';
+									endif ?>
+									<span class="notaPerCourse notaPerCourseUnidad <?php echo $colorNota ?>"><?php echo $course['notaUnidad3'] ?></span>
+								</div>
+							</div>
+							<div class="unidadObo unidadCuatro">
+								<p class="titleUnity">4ta Unidad</p>
+								<div class="notasDetail">
+									<?php for ($i=1; $i <= 3; $i++) { ?>
+										<span class="notaPerCourse notaPerCourse<?php echo $i ?>"><?php echo $course['calificacion'.$i.'Unidad4'] ?></span>
+									<?php } ?>
+									<?php if ($course['notaUnidad4'] < 11):
+										$colorNota = 'disapprovedBack';
+									else:
+										$colorNota = 'approvedBack';
+									endif ?>
+									<span class="notaPerCourse notaPerCourseUnidad <?php echo $colorNota ?>"><?php echo $course['notaUnidad4'] ?></span>
+								</div>
+							</div>
+						<?php else: ?>
+							<div class="unidadObo2 parcialUno">
+								<p class="titleUnity">1er Parcial</p>
+								<div class="notasDetail">
+									<?php for ($i=1; $i <= 9; $i++) { ?>
+										<?php if ($course['calificacion'.$i.'Parcial1'] < 11): 
+											$colorNota = 'disapproved';
+										else:
+											$colorNota = 'approved';
+										endif ?>
+										<span class="notaPerCourseO notaPerCourseO<?php echo $i.' '.$colorNota ?>"><?php echo $course['calificacion'.$i.'Parcial1'] ?></span>
+									<?php } ?>
+									<?php if ($course['parcial1'] < 11):
+										$colorNota = 'disapprovedBack';
+									else:
+										$colorNota = 'approvedBack';
+									endif ?>
+									<span class="notaPerCourseO notaPerCourseParcial <?php echo $colorNota ?>"><?php echo $course['parcial1'] ?></span>
+								</div>
+							</div>
+							<div class="unidadObo2 parcialDos">
+								<p class="titleUnity">2do Parcial</p>
+								<div class="notasDetail">
+									<?php for ($i=1; $i <= 9; $i++) { ?>
+										<?php if ($course['calificacion'.$i.'Parcial2'] < 11): 
+											$colorNota = 'disapproved';
+										else:
+											$colorNota = 'approved';
+										endif ?>
+										<span class="notaPerCourseO notaPerCourseO<?php echo $i.' '.$colorNota ?>"><?php echo $course['calificacion'.$i.'Parcial2'] ?></span>
+									<?php } ?>
+									<?php if ($course['parcial2'] < 11):
+										$colorNota = 'disapprovedBack';
+									else:
+										$colorNota = 'approvedBack';
+									endif ?>
+									<span class="notaPerCourseO notaPerCourseParcial <?php echo $colorNota ?>"><?php echo $course['parcial2'] ?></span>
+								</div>
+							</div>
+						<?php endif ?>
+					</div>
+					<?php if ($course['existAplazado'] == 'yes'): ?>
+						<div class="course_notasFinal">
+							<div class="notaFinalcA">
+								<p class="titleNotaFinal">Nota Final</p>
+								<?php if ($course['notaFinal'] < 11):
+									$colorNota = 'disapprovedBack';
+								else:
+									$colorNota = 'approvedBack';
+								endif ?>
+								<span class="spanNotaFinal <?php echo $colorNota ?>"><?php echo $course['notaFinal'] ?></span>
+							</div>
+							<div class="notaAplazados">
+								<p class="titleAplazados">Aplazado</p>
+								<?php if ($course['aplazado'] < 11):
+									$colorNota = 'disapprovedBack';
+								else:
+									$colorNota = 'approvedBack';
+								endif ?>
+								<span class="spanNotaAplazado <?php echo $colorNota ?>"><?php echo $course['aplazado'] ?></span>
+							</div>
+						</div>
+					<?php else: ?>
+						<div class="course_notasFinal">
+							<div class="courseNotaFinalsA">
+								<p class="titleNotaFinal">Nota Final</p>
+								<?php if ($course['notaFinal'] < 11):
+									$colorNota = 'disapprovedBack';
+								else:
+									$colorNota = 'approvedBack';
+								endif ?>
+								<span class="spanNotaFinal <?php echo $colorNota ?>"><?php echo $course['notaFinal'] ?></span>
+							</div>
+						</div>
+					<?php endif ?>
+				</div>
+			<?php endforeach ?>
+		</div>
 	</div>
-</div>
-<div id="horary" class="row">
-	<div id="horaryData" class="col-md-11"></div>
-	<div class="col-md-1">
-		<br><br><br><br><br><br><br>
-		<blockquote>
-			<h3><a id="btnCourses" href="##" title="Volver" class="text-warning"><span class="glyphicon glyphicon-book"></span></a></h3>
-		</blockquote>
-	</div>
-</div>
 
-<div id="notasExtendidas" class="panel panel-warning">
-	<div class="panel-body">
-	</div>
-</div>
+	<script>
+		$(function(){
+			var goTo = '';
+			$('.btnObOSignCurrent').on('click', function(){
+				$('.btnObOSignCurrent').removeClass('btnObOSignCurrentActive');
+				$(this).addClass('btnObOSignCurrentActive');
 
-<script>
-	$('#extender').hover(function(){
-		$('#extender').tooltip('toggle');
-	});
-	
-	$('#comprimir').hover(function(){
-		$('#comprimir').tooltip('toggle');
-	});
-
-	$('#btnHorary').hover(function(){
-		$('#btnHorary').tooltip('toggle');
-	});
-
-	$('#btnCourses').hover(function(){
-		$('#btnCourses').tooltip('toggle');
-	});
-
-	$('#notasExtendidas').fadeOut('fast');
-	$('#horary').slideUp();
-	$('#horaryData').load('/horary/consolidated/index')
-	$('#notasExtendidas').load('/register/listcurrentnotes');
-	$('#notasExtendidas').fadeOut('slow');
-
-	$('#extender').click(function(){
-		$('#notasComprimidas').fadeOut('fast', function(){
-			$('#horary').fadeOut('fast', function(){
-				$('#notasExtendidas').fadeIn('fast');
+				goTo = $(this).attr('goto');
+				$('.studentSignCurrent_viewCourses').fadeOut('fast');
+				$('#' + goTo).fadeIn('fast');
 			});
 		});
-	});
-
-	$('#comprimir').click(function(){
-		$('#notasExtendidas').fadeOut('fast', function(){
-			$('#notasComprimidas').fadeIn('slow');
-		});
-	});
-
-	$('#btnHorary, #btnCourses').click(function(){
-		$('#notasComprimidas').slideToggle();
-		$('#horary').removeClass('hidden');
-		$('#horary').slideToggle();
-	});
-</script>
-
+	</script>
+<?php else: ?>
+	<br>
+	<h4 class="text-muted text-center"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Aun no validas tu matricula a <span class="text-danger">este periodo...</span></h4>
+<?php endif ?>
