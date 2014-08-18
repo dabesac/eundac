@@ -117,14 +117,14 @@ class Poll_AcreditacionController extends Zend_Controller_Action {
         if ($formData) {
             $amountQuestions = $formData['cantPreguntas'];
             for ($i=0; $i < $amountQuestions; $i++) { 
-                $dataSend[$i] = array(  'code'             => $formData['code'],
-                                        'name'             => trim($formData['name']),
-                                        'escid'            => $formData['escid'],
-                                        'pollid'           => $formData['pollid'],
-                                        ['question_id'][0] => array($formData['question'.$i]),
-                                        'alternative_id'   => $formData['alternative'.$i] );
+                $dataSend[$i] = array(  'code'                => $formData['code'],
+                                        'name'                => trim($formData['name']),
+                                        'escid'               => $formData['escid'],
+                                        'pollid'              => $formData['pollid'],
+                                        'question_id'         => $formData['question'.$i],
+                                        ['alternative_id'][0] => array($formData['alternative'.$i]) );
             }
-            $dataSend = json_encode($dataSend);
+            $dataSend['dataPoll'] = json_encode($dataSend);
             print_r($dataSend);
         }
     }
