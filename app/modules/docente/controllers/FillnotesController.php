@@ -92,7 +92,69 @@ class Docente_FillnotesController extends Zend_Controller_Action {
        
     }
     public function targetdirAction()
-    {}
+    {$params = $this->getRequest()->getParams();
+        $paramsdecode = array();
+        foreach ( $params as $key => $value ){
+            if($key!="module" && $key!="controller" && $key!="action"){
+                $paramsdecode[base64_decode($key)] = base64_decode($value);
+            }
+        }
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $params = $paramsdecode;
+        $courseid = trim($params['courseid']);
+        $turno = trim($params['turno']);
+        $perid = trim($params['perid']);
+        $curid = trim($params['curid']);
+        $escid = trim($params['escid']);
+        $subid = trim($params['subid']);
+        $partial = trim($params['partial']);
+        $state_record = trim($params['state']);
+
+        //$this->view->partial=$partial;
+        //$this->view->turno=$turno;
+        $this->view->perid=$perid;
+
+        $where = array(
+                'eid' => $eid, 'oid' => $oid,
+                'escid' => $escid,'subid' => $subid,
+                'courseid' => $courseid,'turno' => $turno,
+                'perid' => $perid,'curid'=>$curid,
+            );
+
+        $base_period_course = new Api_Model_DbTable_PeriodsCourses();
+        $state_record_c = $base_period_course ->_getOne($where);
+        $this->view->state_record = $state_record_c['state_record'];
+        $this->view->state_course = $state_record_c['state'];
+
+        $urlpersentage ="/".base64_encode('oid')."/".base64_encode($oid)."/".
+                        base64_encode('eid')."/".base64_encode($eid)."/".
+                        base64_encode('escid')."/".base64_encode($escid)."/".
+                        base64_encode('subid')."/".base64_encode($subid)."/".
+                        base64_encode('courseid')."/".base64_encode($courseid)."/".
+                        base64_encode('curid')."/".base64_encode($curid)."/".
+                        base64_encode('turno')."/".base64_encode($turno)."/".
+                        base64_encode('perid')."/".base64_encode($perid)."/".
+                        base64_encode('partial')."/".base64_encode($partial);
+
+        if ($state_record_c) {
+            if ($state_record_c['state'] == 'S' || $state_record_c['state'] == 'C' ) {
+                $this->_redirect('/docente/register/registertargetdirected'.$urlpersentage."/".base64_encode('action')."/".base64_encode('N'));
+            }
+               
+        }
+
+        $base_courses = new Api_Model_DbTable_Course();
+        $infocourse = $base_courses->_getOne($where);
+        if ($infocourse) {
+            $this->view->infocourse = $infocourse;
+        }
+        // print_r($infocourse);
+        $base_students = new Api_Model_DbTable_Registrationxcourse();
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
+        if ($data_notes_students) {
+            $this->view->students = $data_notes_students;
+        }}
     public function savetargetnotesAction(){
         
         $params = $this->getRequest()->getParams();
@@ -550,6 +612,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
                                 'porc3_u4' => $txtspporcentaje3
                             );
                         }
+                        
                         $base_persentage->_update($data,$pk);
                     }
                     $this->view->ejcutarcerrar = true;
@@ -1282,6 +1345,75 @@ class Docente_FillnotesController extends Zend_Controller_Action {
             return $data;
     }
 
-    
+public function modifyregisterdirectedAction(){
+    $this->_helper->layout()->disableLayout();
+        try {
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $regid=$this->_getParam("regid");
+            $escid=$this->_getParam("escid");
+            $curid=$this->_getParam("curid");
+            $courseid=$this->_getParam("courseid");
+            $uid=$this->_getParam("uid");
+            $pid=$this->_getParam("pid");
+            $turno=$this->_getParam("turno");
+            $subid=$this->_getParam("subid");
+            $perid=$this->_getParam("perid");
+            $notafinal=$this->_getParam("notafinal");
+            $receipt=$this->_getParam("receipt");
+            $resolution=$this->_getParam("resolution");
+            $option=$this->_getParam("option");
+            $f_acta=$this->_getParam("f_acta");
+            $this->view->uid = $uid;
+            $this->view->pid = $pid;
+            $this->view->perid = $perid;
+            $this->view->escid = $escid;
+            $this->view->subid = $subid;
 
+            $urlpersentage ="/".base64_encode('oid')."/".base64_encode($oid)."/".
+                        base64_encode('eid')."/".base64_encode($eid)."/".
+                        base64_encode('escid')."/".base64_encode($escid)."/".
+                        base64_encode('subid')."/".base64_encode($subid)."/".
+                        base64_encode('courseid')."/".base64_encode($courseid)."/".
+                        base64_encode('curid')."/".base64_encode($curid)."/".
+                        base64_encode('turno')."/".base64_encode($turno)."/".
+                        base64_encode('perid')."/".base64_encode($perid)."/".
+                        base64_encode('partial')."/".base64_encode($partial);
+
+            $bdmatricurso=new Api_Model_DbTable_Registrationxcourse();
+                $pk['eid']=$eid;
+                $pk['oid']=$oid;
+                $pk['escid']=$escid;
+                $pk['subid']=$subid;
+                $pk['courseid']=$courseid;
+                $pk['curid']=$curid;
+                $pk['regid']=$regid;
+                $pk['turno']=$turno;
+                $pk['pid']=$pid;
+                $pk['uid']=$uid;
+                $pk['perid']=$perid;
+                $data['notafinal']=$notafinal;
+                //$data['receipt']=$receipt;
+                //$data['document_auth']=$resolution;
+                $data['updated']=date('Y-m-d');
+                $data['modified']=$this->sesion->uid;
+                if ($bdmatricurso->_updatenoteregister($data,$pk)) {
+                    $this->_redirect('/docente/fillnotes/targetdir'.$urlpersentage."/".base64_encode('action')."/".base64_encode('N'));
+                }
+                if ($option=="C") {
+                $pk=array('eid' => $eid, 'oid' => $oid, 'courseid' => $courseid,
+                        'perid' => $perid, 'escid' => $escid, 'subid' => $subid,
+                        'curid' => $curid, 'turno' => $turno);
+                $dat=array('state' => 'C', 'state_record' => 'C', 'closure_date' => date('Y-m-d'),
+                        'modified' => $this->sesion->uid);
+                $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
+                if ($dbperiodocurso->_update($dat,$pk)){
+                    $this->_redirect('/docente/register/registertargetdirected'.$urlpersentage."/".base64_encode('action')."/".base64_encode('N'));
+                }
+            }
+                
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
 }

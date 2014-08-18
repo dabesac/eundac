@@ -500,7 +500,7 @@ class Record_DirectedController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
-
+    
     public function printAction(){
         try {
             $this->_helper->layout()->disableLayout();

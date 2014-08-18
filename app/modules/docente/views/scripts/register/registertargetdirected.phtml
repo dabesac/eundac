@@ -1,0 +1,32 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-book"></span> Asignaturas a Cargo');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php if ($this->students) { ?>
+	<div class='row'>
+		<div class='col-md-12 table-responsive'>
+			<table class='table table-bordered'>
+				<thead>
+					<tr>
+						<th class='text-center'>#</th>
+						<th class='text-center'	>Codigo</th>
+						<th >Apellidos y Nombres</th>
+						<th class='text-center'	>Nota</th>
+						<th class='text-center'	>Recibo</th>
+						<th class='text-center'	>Men</th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php foreach ($this->students as $key => $student) {	 ?>
+					<tr>				
+						<td class='text-center'><?php echo $key+1?></td>
+						<td class='text-center'><?php echo $student['uid']?></td>
+						<td ><?php echo $student['name_complet']?></td>					
+						<td class='text-center'><?php echo $student['notafinal']?></td>
+						<td class='text-center'><?php echo $student['receipt']?></td>
+						<td class='text-center'><?php echo $student['document_auth']?></td>
+					</tr>
+				<?php }?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+<?php }?>
