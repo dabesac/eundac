@@ -98,7 +98,7 @@
         var semid = $("#semid").val();        
         if (semid=="") {alert ("Debe de seleccionar un curso");return false;}        
         var url="/report/consolidated/studentregistrationxsemester/semid/"+semid+"/perid/"+perid+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo+"/subid1/"+subid1;
-        $("#det").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#det").html("<center><img src='/img/spinner.gif' /> Cargando....</center");
         $("#det").load(url);
 
     });      
