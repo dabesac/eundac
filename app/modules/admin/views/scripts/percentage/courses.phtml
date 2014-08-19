@@ -1,0 +1,131 @@
+<?php
+//print_r($this->datacourses;exit();)
+if ($this->datacourses) { ?>
+<table class="table table-striped table-bordered" style="margin-top: 15px;">
+    <tr>
+        <th colspan='7'><center><h5><b>INFORMACIÓN DE LOS CURSOS</b></h5></center></th>
+        <th colspan='2'><center><h5><b>OPERACION</h5></b></center></th>
+    </tr>
+    <tr>
+        <th><center>#</center></th>
+        <th><center>Sem.</center></th>   
+        <th><center>Curricula</center></th>        
+        <th><center>Código</center></th>
+        <th><center>Nombre Curso</center></th>
+        <th><center>Turno</center></th>         
+        <th><center>Calificación</center></th>
+        <th><center>Porcentaje</center></th>
+    </tr>
+    <tr>
+<?php
+    $c=0;
+    $s=0;
+    foreach ($this->datacourses as $course) {
+        $c++;
+        $escid=$course['escid'];
+        $subid=$course['subid'];
+        $courseid=$course['courseid'];
+        $curid=$course['curid'];    
+        $perid=$course['perid'];
+        $semid=$course['semid'];
+        $turno=$course['turno'];
+        $state=$course['state'];
+        $tr=$course['type_rate'];
+        $closedate=$course['closure_date'];
+        $urlAsist ="/".base64_encode('escid')."/".base64_encode($course['escid'])."/".base64_encode('subid')."/".base64_encode($course['subid'])."/".base64_encode('courseid')."/".base64_encode($course['courseid'])."/".base64_encode('turno')."/".base64_encode($course['turno'])."/".base64_encode('perid')."/".base64_encode($course['perid'])."/".base64_encode('curid')."/".base64_encode($course['curid'])."/".base64_encode('state')."/".base64_encode($course['state_record']);
+    ?>
+        <td><center><?php echo $c?></center></td>
+        <td><center><?php echo $semid?></center></td>
+        <td><center><?php echo $curid?></center></td>
+        <td><center><?php echo $courseid?></center></td>
+        <td><?php echo $this->datacourse[$c-1][0]['name']?> </td>
+        <td><center><?php echo $turno?></center></td>
+        <?php
+            switch ($tr) {
+                case 'O':   ?>
+                    <td><center><?php echo "Objetivo";?></center></td>
+                    <td><center>--------</center></td>
+                <?php    
+                    break;
+                case 'C':   ?>
+                    <td><center><?php echo "Competencia"?></center></td>
+                    <td>
+                        <center>
+                                <a href="#" class="load-persentage1" url="/admin/percentage/percentagecompetition<?php echo $urlAsist."/".base64_encode('partial')."/".base64_encode('1')?>" data-toggle="tooltip" title="Asignar Porsentage" >Editar</a>
+                        </center>
+                    </td>
+                <?php    
+                    break;
+                default:    ?>
+                    <td><center><?php echo ""?></center></td>
+                <?php    
+                break;    
+            }
+        ?>
+    </tr>
+    <?php   
+    $s++;
+    }
+?>
+</table>
+
+<?php       
+}
+else{
+?>
+    <div class="alert alert-info" style='margin-top:20px; font-size:15px'> No existen <b>Actas</b></div>
+<?php
+}
+?>
+<!-- Modal 1 -->
+<div class="modal fade" id="modal-persentage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
+aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id='close-modal-persentage'>&times;</button>
+          <h4 class="modal-title text-primary">Modificar Porcentaje</h4>
+        </div>
+        <div class="modal-body">    
+            <div class='row'>
+                <div class='col-xs-4'>
+                    <h4>Porcentajes Unidad</h4> 
+                </div>
+                <div class="col-xs-4">
+                    <select class="form-control" id="unid">
+                        <option selected>---Elija Unidad---</option>
+                        <option value="<?php echo "/".base64_encode('unid')."/".base64_encode('1')?>">unidad 1</option>
+                        <option value="<?php echo "/".base64_encode('unid')."/".base64_encode('2')?>">unidad 2</option>
+                        <option value="<?php echo "/".base64_encode('unid')."/".base64_encode('3')?>">unidad 3</option>
+                        <option value="<?php echo "/".base64_encode('unid')."/".base64_encode('4')?>">unidad 4</option>
+                    </select>                
+                </div>
+                <div class="col-xs-4">
+                    <a href='#' type="button" class="btn btn-primary" id='load-persentage'><span class='glyphicon glyphicon-pencil'></span> Modificar</a>
+                </div>  
+            </div> 
+            <div id='percentage-unid'></div>
+        </div>
+        <div class="modal-footer">
+        <a href="/admin/percentage/" class='btn btn-info'><span class='glyphicon glyphicon-circle-arrow-left'></span> Regresar</a>
+    </div>
+
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+</div>
+
+<script type="text/javascript">
+
+$(".load-persentage1").click(function(){
+    var url= $(this).attr('url');
+    $("#modal-persentage").modal('show');
+        $("#load-persentage").click(function(){
+            var unid = $("#unid").val();
+            var $url = url+unid;
+            $.get($url,function($data){
+                $("#percentage-unid").html($data);
+            });
+        });
+});
+</script>

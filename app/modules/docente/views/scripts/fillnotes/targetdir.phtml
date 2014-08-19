@@ -1,0 +1,114 @@
+<?php $course=$this->infocourse?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> '.$course["name"]);?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<div class='row' style="margin-top:40px;">
+        <div class='col-md-12'>
+            
+            <table class='table' id='table-notes'>
+                <thead>
+                    <tr><th></th></tr>
+                    <tr>
+                        <th colspan="6" style="font-size:16px"><center>CURSO DIRIJIGO</center></th>
+                    </tr>
+                    <tr>
+                        <th>N°</th>
+                        <th>Cod Matricula</th>
+                        <th>Apellidos y Nombres</th>                    
+                        <th>Nota Final</th>
+                        <th>Recibo</th>
+                        <th>Resolucion</th>
+                        <th>Opcion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($this->students as $key => $register) { ?>
+                    <tr>
+                    <form id="frmmodifyregister" name="frmmodifyregister" action="/docente/fillnotes/modifyregisterdirected/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+                    <td class='td-edit-note'>
+                        <img src="" id="edit-note-<?php echo $key?>" style="position:absolute;">
+                        <span class='pull-left ' id='num-edit-note-<?php echo $key?>'><?php echo $key + 1 ?></span>
+                    </td>
+                    <td><?php echo $register['uid']?></td>
+                    <td><?php echo $register['name_complet']?></td>
+                    <td>
+                        <input id="notamodify" name="notafinal" type="text" class="form-control" style="width:50px" onkeypress="return soloNumero(event)" value="<?php echo $register['notafinal'];?>"><label class="msg text-error"></label>
+                    </td>
+                    <td>
+                        <input id="recibo" name="receipt" type="text" class="form-control" style="width:200px" onkeypress="return soloNumero(event)"  disabled value="<?php echo $register['receipt'];?>">
+                    </td>
+                    <td>
+                        <input id="resol" name="resolution" type="text" class="form-control" style="width:350px" disabled value="<?php echo $register['document_auth'];?>">
+                    </td>
+                    <td>
+                        <input type="submit" value="Guardar" class="btn btn-success">
+                    </td>
+                    <td>
+                        <input id="regid" name="regid" type="hidden" value="<?php echo $register['regid'];?>">
+                        <input id="courseid" name="courseid" type="hidden" value="<?php echo $register['courseid'];?>">
+                        <input id="escid" name="escid" type="hidden" value="<?php echo $register['escid'];?>">
+                        <input id="perid" name="perid" type="hidden" value="<?php echo $register['perid'];?>">
+                        <input id="subid" name="subid" type="hidden" value="<?php echo $register['subid'];?>">
+                        <input id="uid "name="uid" name="uid" type="hidden" value="<?php echo $register['uid'];?>">
+                        <input id="pid" name="pid" type="hidden" value="<?php echo $register['pid'];?>">
+                        <input id="curid" name="curid" type="hidden" value="<?php echo $register['curid'];?>">
+                        <input id="turno" name="turno" type="hidden" value="<?php echo $register['turno'];?>">
+                    </td>
+                    </form>
+                    </tr>
+                    <?php }?>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="modal-footer">
+            <!--<a href="#" id="savemodify" class="btn btn-success">Guardar</a>-->
+            <a href="#" id="closerecord" class="btn btn-warning">Cerrar Acta</a>
+        </div>
+</div>
+
+<script>
+    $(function(){
+
+        $('#frmmodifyregister').on('submit', function(e){
+            e.preventDefault();
+            $.ajax({
+                url:'/docente/fillnotes/modifyregisterdirected/',
+                type: 'post',
+                data : $('#frmmodifyregister').serialize(),
+                success: function(data){
+                    $('#header_alumnos').html(data); 
+                }
+            });
+        });
+
+    });
+function soloNumero(e){
+    key = e.keyCode || e.which;
+    tecla = String.fromCharCode(key).toLowerCase();
+    letras = "0123456789";
+    especiales = [8,37,39,46];
+    tecla_especial = false
+    for(var i in especiales){
+        if(key == especiales[i]){
+            tecla_especial = true;
+            break;
+        } 
+    }
+    if(letras.indexOf(tecla)==-1 && !tecla_especial)
+    return false;
+};
+$("#closerecord").click(function(){
+    var perid = $("#perid").val();
+    var courseid = $("#courseid").val();
+    var escid = $("#escid").val();
+    var subid = $("#subid").val();
+    var curid = $("#curid").val();
+    var turno = $("#turno").val();
+    var uid = $("#uid").val();
+    var pid = $("#pid").val();
+    var url = "/docente/fillnotes/modifyregisterdirected/courseid/"+courseid+"/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/curid/"+curid+"/turno/"+turno+"/uid/"+uid+"/pid/"+pid+"/option/C";
+    //alert(url);
+    //$("#header_alumnos").load(url);
+});
+</script>   
+

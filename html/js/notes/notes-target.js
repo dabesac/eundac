@@ -125,7 +125,7 @@ $(document).ready(function() {
             $("#save_notes").attr('disabled',true);
             $edition_notes = false;
         }
-    });
+    }   );
     
     $("#closure-record").click(function(){
         
@@ -148,7 +148,7 @@ $(document).ready(function() {
 
         $.ajax({
             url:$url,
-            success: function($data){
+            success: function($data){1
                 if ($data.status == true) {
                     window.location.href = window.location.href; 
                 }else{

@@ -78,6 +78,70 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->perid=$perid;
 
     }
+
+    public function registertargetdirectedAction(){
+        $params = $this->getRequest()->getParams();
+        if(count($params) > 3){
+
+            $paramsdecode = array();
+            
+            foreach ( $params as $key => $value ){
+                if($key!="module" && $key!="controller" && $key!="action"){
+                    $paramsdecode[base64_decode($key)] = base64_decode($value);
+                }
+            }
+            $params = $paramsdecode;
+        }
+        /***********paramets***********/
+        $oid        = trim($params['oid']);
+        $eid        = trim($params['eid']);
+        $escid        = trim($params['escid']);
+        $subid        = trim($params['subid']);                    
+        $courseid    = trim($params['courseid']);
+        $curid        = trim($params['curid']);
+        $turno        = trim($params['turno']);
+        $perid        = trim($params['perid']);
+        $partial      = trim($params['partial']);
+        $action      = trim($params['action']);
+
+        $where = null;
+        $url = null;
+        $where = array(
+            'oid'=>$oid, 
+            'eid'=>$eid,
+            'escid'=>$escid,
+            'subid'=>$subid,
+            'courseid'=>$courseid,
+            'curid'=>$curid,
+            'turno'=>$turno,
+            'perid'=>$perid,
+            );
+        $url ="/".base64_encode('oid')."/".base64_encode($oid)."/".
+                        base64_encode('eid')."/".base64_encode($eid)."/".
+                        base64_encode('escid')."/".base64_encode($escid)."/".
+                        base64_encode('subid')."/".base64_encode($subid)."/".
+                        base64_encode('courseid')."/".base64_encode($courseid)."/".
+                        base64_encode('curid')."/".base64_encode($curid)."/".
+                        base64_encode('turno')."/".base64_encode($turno)."/".
+                        base64_encode('perid')."/".base64_encode($perid)."/".
+                        base64_encode('action')."/".base64_encode('I')."/".
+                        base64_encode('partial')."/".base64_encode($partial);
+
+        $base_courses = new Api_Model_DbTable_Course();
+        $infocourse = $base_courses->_getOne($where);
+        $this->view->infocourse = $infocourse;
+
+        $base_students = new Api_Model_DbTable_Registrationxcourse();
+        $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
+
+        $this->view->turno = $turno;
+        $this->view->partial = $partial;
+        $this->view->students = $data_notes_students;
+        $this->view->url = $url;
+        $this->view->perid=$perid;
+
+    }
+
     public function targetprintAction(){
         $params = $this->getRequest()->getParams();
         if(count($params) > 3){
@@ -378,7 +442,6 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->lasname= $this->sesion->infouser['fullname'];
 
         $dbimpression = new Api_Model_DbTable_Impresscourse();
-        
         $uidim=$this->sesion->pid;
         $code="notas_competencia - ".$partial;
         $data = array(
