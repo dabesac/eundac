@@ -99,7 +99,7 @@ class Register_StudentController extends Zend_Controller_Action {
     }
     
     public function startAction(){
-        try {
+       try {
 
             $eid=$this->sesion->eid;
             $oid= $this->sesion->oid;
@@ -398,9 +398,6 @@ class Register_StudentController extends Zend_Controller_Action {
             {
                 $this->view->message_paymnet = "Error Las Tasas no Existen";
             }
-            
-
-
 
         } catch (Exception $e) {
             print "Error start Registration ".$e->$getMessage();
@@ -625,7 +622,7 @@ class Register_StudentController extends Zend_Controller_Action {
             return $subject;
             
         } catch (Exception $e) {
-            print "Error: in load subject".$e->getMessage();
+            //print "Error: in load subject".$e->getMessage();
         }
     }
 
