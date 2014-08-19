@@ -1,0 +1,40 @@
+<?php $periodo=$this->peract?>
+<table style='margin-top:20px' class='table table-striped'>
+	<tr>
+		<td><h4><div style='margin-left:40px'>Periodo:</h4></td>
+		<td><div id="period" style='width: 200px; margin-left:10px'><input type="text" class="form-control" name="perid" value="<?php echo $periodo['perid']?>"disabled></div></td>
+		<td><h4><div style='margin-left:40px'>Escuela:</h4></td>
+		<td><div style='width: 250px; margin-left:10px'><?php echo $this->fm->esc?></td>
+		<td><div style='margin-left:40px'><a href="#" id='ver' class='btn btn-info'>Ver</a></td>
+	</tr>
+</table> 
+<div id='viewcourses'></div>
+<script>
+	$("#ver").click(function(){
+    	var escid = $("#esc").val();
+    	var perid = '14A';//$("#period").val();
+    	if (escid=="") {alert("Seleccione una escuela");$("#escid").focus();return false;}
+        var tmp=escid.split(";--;");
+        var escid=tmp[0];
+        var subid=tmp[1];
+        var fecha= new Date();
+        var anio= fecha.getFullYear();
+        var tm=anio.toString();
+        var tmp1 = tm.substr(2,4);
+        var vari = tmp1.concat('D');
+        var vari1 = tmp1.concat('E');
+        
+        if (perid==vari || perid==vari1) {
+            alert('No tiene accesso.');
+            //var url="/admin/openrecords/getaplazed/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
+            //$("#viewcourses").html("<center><img src='/img/carga.gif' /></center>");
+            //$("#viewcourses").load(url);
+        }
+        else{
+            var url="/admin/percentage/courses/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
+            $("#viewcourses").html("<center><img src='/img/carga.gif' /></center>");
+            $("#viewcourses").load(url);
+        };
+
+    });
+</script>

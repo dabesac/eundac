@@ -25,7 +25,7 @@
 		$cDocentes = 1;
 		$escid = $docente['escid'];
 	endif ?>
-	<li><span class="hidden"><?php echo $docente['escid'] ?></span>
+	<li><span class="hidden"><?php echo $docente['espid'] ?></span>
 		<div class="dataDocentes">
 			<div class="docentePersonal">
 				<div class="docenteNumber">
@@ -40,6 +40,22 @@
 				</div>
 				<div class="docenteCantCursos">
 					<span class="glyphicon glyphicon-book"></span> <?php echo $docente['cantCursos'] ?>
+				</div>
+				<div class="docenteImpresiones">
+					<?php 
+						$url = '##'; 
+						$classReport = 'reportNoSuccess';
+					?>
+					<?php if ($docente['stateReport'] == 'yes'): 
+							$url = '/docente/informacademic/print'. '/pid/'.base64_encode($docente['pid']).
+																	'/uid/'.base64_encode($docente['uid']).
+																	'/escid/'.base64_encode($docente['escid']).
+																	'/subid/'.base64_encode($docente['subid']).
+																	'/perid/'.base64_encode($docente['perid']);
+							$classReport = 'reportSuccess';
+					endif ?>
+					<a class="btnPrintObO <?php echo $classReport ?>" href="<?php echo $url ?>">Informe Académico</a>
+					<a class="btnPrintObO btnPrintHorary" href="##">Horario</a>
 				</div>
 			</div>
 			

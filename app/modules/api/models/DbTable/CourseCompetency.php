@@ -35,6 +35,7 @@ class Api_Model_DbTable_CourseCompetency extends Zend_Db_Table_Abstract
             if ($pk['eid']=="" || $pk['oid']=="" || $pk['escid']=="" || $pk['subid']==""  ||
                 $pk['courseid']=="" || $pk['curid']=="" || $pk['perid']=="" || $pk['turno']==""  
                ) return false;
+
             $where="eid = '".$pk['eid']."' and oid='".$pk['oid']."' and curid='".$pk['curid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and courseid='".$pk['courseid']."' and turno='".$pk['turno']."' and perid='".$pk['perid']."'";
             return $this->update($data,$where);
             return false;
@@ -89,6 +90,48 @@ class Api_Model_DbTable_CourseCompetency extends Zend_Db_Table_Abstract
         } catch (Exception $e) {
             echo "Error: read  complete persentage".$e->getMessage();
             
+        }
+    }
+    public function _modifypercentage($where=null){
+        try {
+            if ($where['eid']=='' || $where['oid']=='' || $where['escid']=='' || $where['subid']=='' || 
+                $where['curid']=='' || $where['courseid']=='' || $where['turno']=='' || $where['perid']=='' || 
+                $where['txtppporcentaje1']=='' || $where['txtppporcentaje2']=='' || $where['txtppporcentaje3']=='' || 
+                $where['unid']=='') return false;
+
+            $eid=$where['eid'];
+            $oid=$where['oid'];
+            $escid=$where['escid'];
+            $subid=$where['subid'];
+            $curid=$where['curid'];
+            $courseid=$where['courseid'];
+            $turno=$where['turno'];
+            $perid=$where['perid'];
+            $p1=$where['txtppporcentaje1'];
+            $p2=$where['txtppporcentaje2'];
+            $p3=$where['txtppporcentaje3'];
+            $unid=$where['unid'];           
+            
+            $sql=$this->_db->query("
+                select * from change_recalculate_notes_competency('$eid','$oid','$escid','$subid','$curid','$courseid','$turno','$perid','$p1','$p2','$p3','$unid') AS
+                (
+                    ".'DNI'." character varying,
+                    ".'CODIGO'." character varying,
+                    ".'nota1'." character varying,
+                    ".'nota2'." character varying,
+                    ".'nota3'." character varying,
+                    ".'promedio'." integer,
+                    ".'PROMEDIO1'." character varying,
+                    ".'PROMEDIO2'." character varying,
+                    ".'PROMEDIO3'." character varying,
+                    ".'PROMEDIO4'." character varying,
+                    ".'NOTAFINAL'." integer
+                )
+                "); 
+            if ($sql) return $sql->fetchAll();
+            return false;
+        } catch (Exception $e) {
+            print "Error: disapprovedcoursemore50percentlast3 ".$e->getMessage();
         }
     }
 }

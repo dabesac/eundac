@@ -65,8 +65,10 @@ class Eundac_Connect_openerp {
         $msg->addParam(new xmlrpcval($values, "struct"));/** parameters of the methods with values....  */
         $resp = $client->send($msg);
 
+
+
         if ($resp->faultCode())
-            return false;
+            return false; /* if the record is not created  */
         else
             return $resp->value()->scalarval();  /* return new generated id of record */
     }
@@ -202,5 +204,4 @@ class Eundac_Connect_openerp {
             //return ( $resp->value() );
     }
 }
-
 
