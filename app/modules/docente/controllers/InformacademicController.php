@@ -258,7 +258,9 @@ class Docente_InformacademicController extends Zend_Controller_Action {
     }
     public function printAction(){
         try {
-            
+            //dataBases
+            $personDb = new Api_Model_DbTable_Person();
+
             $this->_helper->layout()->disableLayout();
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
@@ -272,7 +274,14 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $perid = base64_decode($this->_getParam("perid"));
             $this->view->speciality = $this->sesion->speciality->name;
             $namef = strtoupper($this->sesion->faculty->name);
-            $this->view->infouser = $this->sesion->infouser['fullname'];
+
+            $where = array( 'eid' => $eid,
+                            'pid' => $pid );
+            $attrib = array('last_name0', 'last_name1', 'first_name');
+
+            $preDataPerson = $personDb->_getFilter($where, $attrib);
+
+            $this->view->infouser = $preDataPerson[0]['last_name0'].' '.$preDataPerson[0]['last_name1'].' '.$preDataPerson[0]['first_name'];
             $this->view->perid = $perid;
 
             $wherecour = array('eid' => $eid, 'oid' => $oid, 
@@ -285,6 +294,7 @@ class Docente_InformacademicController extends Zend_Controller_Action {
                 $wherecours = array('eid' => $eid, 'oid' => $oid);
                 $cour = new Api_Model_DbTable_Course();
                 for ($i=0; $i < $tam; $i++) { 
+                    $wherecours['escid'] = $coursesdoc[$i]['escid'];
                     $wherecours['curid'] = $coursesdoc[$i]['curid'];
                     $wherecours['escid'] = $coursesdoc[$i]['escid'];
                     $wherecours['subid'] = $coursesdoc[$i]['subid'];
@@ -294,7 +304,6 @@ class Docente_InformacademicController extends Zend_Controller_Action {
                 }
             }
             $this->view->datacourses=$coursesdoc;
-
 
             $whereinf = array(
                     'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid,

@@ -11,9 +11,52 @@
  	}
 
  	public function indexAction(){
+        //DataBases
+        $facultyDb = new Api_Model_DbTable_Faculty();
+        $schooldDb = new Api_Model_DbTable_Speciality();
+
         $period = $this->sesion->period->perid;
+        $rid    = $this->sesion->rid;
+        $eid    = $this->sesion->eid;
+        $oid    = $this->sesion->oid;
+        $facid  = $this->sesion->faculty->facid;
+        $subid  = $this->sesion->subid;
+        $escid  = $this->sesion->escid;
 
         $dataVista['period'] = $period;
+        $dataVista['rid']    = $rid;
+        $dataVista['escid']  = $escid;
+        $dataVista['subid']  = $subid;
+
+        if ($rid == 'RF') {
+            $dataVista['escid']  = '';
+
+            $where = array( 'eid'   => $eid,
+                            'oid'   => $oid,
+                            'facid' => $facid,
+                            'subid' => $subid,
+                            'state' => 'A',
+                            'parent' => '' );
+            $attrib = array('name', 'escid', 'subid', 'parent');
+            $preDataSchool = $schooldDb->_getFilter($where, $attrib);
+            foreach ($preDataSchool as $c => $school) {
+                $dataSchool[$c]['escid'] = $school['escid'];
+                $dataSchool[$c]['subid'] = $school['subid'];
+                $dataSchool[$c]['name']  = $school['name'];
+            }
+            $this->view->dataSchool = $dataSchool;
+        }elseif ($rid == 'RC'){
+            $dataVista['escid']  = '';
+
+            $preDataFaculty = $facultyDb->_getAll();
+            foreach ($preDataFaculty as $c => $faculty) {
+                if ($faculty['state'] == 'A' and $faculty['facid'] != 'TODO') {
+                    $dataFaculty[$c]['facid'] = $faculty['facid'];
+                    $dataFaculty[$c]['name']  = $faculty['name'];
+                }
+            }
+            $this->view->dataFaculty = $dataFaculty;
+        }
 
         $this->view->dataVista = $dataVista;
  	}
@@ -42,20 +85,27 @@
 
  	public function listteacherAction(){
         $this->_helper->layout()->disableLayout();
-        //DataBases
-        $personDb        = new Api_Model_DbTable_Person();
-        $courseDb        = new Api_Model_DbTable_Course();
-        $syllabusDb      = new Api_Model_DbTable_Syllabus();
-        $specialityDb    = new Api_Model_DbTable_Speciality();
-        $courseTeacherDb = new Api_Model_DbTable_Coursexteacher();
-        $coursePeriodsDb = new Api_Model_DbTable_PeriodsCourses();
 
-        $perid = $this->_getParam('data');
+        //DataBases
+        $personDb         = new Api_Model_DbTable_Person();
+        $courseDb         = new Api_Model_DbTable_Course();
+        $syllabusDb       = new Api_Model_DbTable_Syllabus();
+        $specialityDb     = new Api_Model_DbTable_Speciality();
+        $courseTeacherDb  = new Api_Model_DbTable_Coursexteacher();
+        $coursePeriodsDb  = new Api_Model_DbTable_PeriodsCourses();
+        $academicReportDb = new Api_Model_DbTable_Addreportacadadm();
+
+        $data      = $this->_getParam('data');
+        $data      = explode('-', $data);
+        $perid     = base64_decode($data[0]);
+        $dataEscid = base64_decode($data[1]);
+        $dataEscid = explode('-', $dataEscid);
+        $escid     = $dataEscid[0];
+        $subid     = $dataEscid[1];
 
         $eid   = $this->sesion->eid;
         $oid   = $this->sesion->oid;
-        $escid = $this->sesion->escid;
-        $subid = $this->sesion->subid;
+        $rid   = $this->sesion->rid;
 
         //Verificar si tiene especialidades
         $dataSpecialities = array();
@@ -77,6 +127,7 @@
                             'subid'                      => $subid,
                             'perid'                      => $perid,
                             'is_main'                    => 'S' );
+            $tieneEspecialidades = 'yes';
         }else{
             $where = array( 'eid'     => $eid,
                             'oid'     => $oid,
@@ -84,6 +135,7 @@
                             'subid'   => $subid,
                             'perid'   => $perid,
                             'is_main' => 'S' );
+            $tieneEspecialidades = 'no';
         }
 
         $this->view->dataSpecialities = $dataSpecialities;
@@ -108,8 +160,15 @@
                 $dataDocente[$cTeachers]['fullName'] = $dataPerson[0]['last_name0'].' '.$dataPerson[0]['last_name1'].' '.$dataPerson[0]['first_name'];
                 $dataDocente[$cTeachers]['pid']      = $teacher['pid'];
                 $dataDocente[$cTeachers]['uid']      = $teacher['uid'];
-                $dataDocente[$cTeachers]['escid']    = $teacher['escid'];
+                $dataDocente[$cTeachers]['escid']    = $escid;
                 $dataDocente[$cTeachers]['subid']    = $teacher['subid'];
+                $dataDocente[$cTeachers]['perid']    = $perid;
+
+                if ($tieneEspecialidades == 'yes') {
+                    $dataDocente[$cTeachers]['espid'] = $teacher['escid'];
+                }else{
+                    $dataDocente[$cTeachers]['espid'] = '-';
+                }
 
                 //nombre de la Escuela
                 $where = array( 'eid'   => $eid,
@@ -121,6 +180,24 @@
                 $nameSchool = $specialityDb->_getFilter($where, $attrib);
                 $dataDocente[$cTeachers]['nameSchool'] = $nameSchool[0]['name'];
 
+                //verificar el Informe Academico
+                $where = array( 'eid'   => $eid,
+                                'oid'   => $oid,
+                                'escid' => $escid,
+                                'subid' => $teacher['subid'],
+                                'uid'   => $teacher['uid'],
+                                'pid'   => $teacher['pid'],
+                                'perid' => $perid );
+
+                $attrib = array('state');
+
+                $preDataReport = $academicReportDb->_getFilter($where, $attrib);
+
+                $dataDocente[$cTeachers]['stateReport'] = 'no';
+                if ($preDataReport[0]['state'] and $preDataReport[0]['state'] == 'C') {
+                    $dataDocente[$cTeachers]['stateReport'] = 'yes';
+                }
+
 
                 $pidTeacher = $teacher['pid'];
                 $cTeachers++;
@@ -129,13 +206,18 @@
 
         //Cursos de esos profesores
         foreach ($dataDocente as $cTeachers => $teacher) {
+            if ($tieneEspecialidades == 'yes') {
+                $escidSearch = $teacher['espid'];
+            }else{
+                $escidSearch = $teacher['escid'];
+            }
             $where = array( 'eid'     => $eid,
                             'oid'     => $oid,
                             'pid'     => $teacher['pid'],
                             'uid'     => $teacher['uid'],
                             'perid'   => $perid,
                             'is_main' => 'S',
-                            'escid'   => $teacher['escid'],
+                            'escid'   => $escidSearch,
                             'subid'   => $teacher['subid'] );
 
             $dataCourse = $courseTeacherDb->_getFilter($where);
