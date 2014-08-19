@@ -71,9 +71,9 @@ class Register_StudentController extends Zend_Controller_Action {
                     'created'=>date('Y-m-d H:m:s'),
             );
 
-            if ( $escid !='7DE' && $escid !='2YP' && $escid !='2DE' && $escid !='3EN' && $escid='2ESTA' && $escid !='4AM' && $escid !='5AG-Y' && $uid !='8822283375' && $uid !='0122277076' && $uid !='1244207110' && $uid !='1024103023' && $uid !='1028103059' && $uid!='0922342017' && $uid!='0922345028' && $uid !='1242293208' && $uid!='0619103011' && $uid!='0929102043' && $uid!='0722307504' && $uid !='1028103110' && $uid !='1028103264' && $uid !='1244703163' && $uid != '1241303515' && $uid !='0922203013' && $uid !='0812323015' && $uid !='0722343028' && $uid !='0823403070' && $uid !='1294403094' && $uid !='0894203024' && $uid !='0724203062') {
+            /*if ( $escid !='7DE' && $escid !='2YP' && $escid !='2DE' && $escid !='3EN' && $escid='2ESTA' && $escid !='4AM' && $escid !='5AG-Y' && $uid !='8822283375' && $uid !='0122277076' && $uid !='1244207110' && $uid !='1024103023' && $uid !='1028103059' && $uid!='0922342017' && $uid!='0922345028' && $uid !='1242293208' && $uid!='0619103011' && $uid!='0929102043' && $uid!='0722307504' && $uid !='1028103110' && $uid !='1028103264' && $uid !='1244703163' && $uid != '1241303515' && $uid !='0922203013' && $uid !='0812323015' && $uid !='0722343028' && $uid !='0823403070' && $uid !='1294403094' && $uid !='0894203024' && $uid !='0724203062') {
                 $this->_redirect("/alumno/");
-            }
+            }*/
 
             if (is_array($base_registration->_getOne($where)) && is_array($base_payment->_getOne($where_payment))) {
                 $this->_redirect("/register/student/start/regid/".$regid);

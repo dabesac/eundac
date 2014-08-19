@@ -81,7 +81,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
             $this->_redirect('/assistance/student/assistence'.$url_assit);
 
         }
-
+        
         if ($infoassist) {
             foreach ($infoassist as $key => $value) {
                 $where['pid']=$value['pid'];
@@ -225,7 +225,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 'a_sesion_34' => $a_sesion_33,
                 );
             
-        }
+        }        
         if ($data) {
 
             try {
@@ -238,6 +238,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 'escid'=>$escid, 'subid'=>$subid,
                 'perid'=>$perid,
                 );
+
                 $base_assistance = new Api_Model_DbTable_StudentAssistance();
                 if ($base_assistance->_update($data,$pk)) {
                     $json = array(
@@ -650,7 +651,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
             $assist_31 = 0; $assist_32 = 0; $assist_33 = 0;$assist_34 = 0;
 
             foreach ($infoassist_t as $key => $infoassist) {
-
+                
                 if ($partial==1) {
                     if ($infoassist['a_sesion_1']=='R' || $infoassist['a_sesion_1']=='A' || $infoassist['a_sesion_1']=='F' || $infoassist['a_sesion_1']=='T') {
                         $assist_1++;
@@ -685,13 +686,13 @@ class Assistance_StudentController extends Zend_Controller_Action {
                         $assist_14++;
                     }if ($infoassist['a_sesion_15']=='R' || $infoassist['a_sesion_15']=='A' || $infoassist['a_sesion_15']=='F' || $infoassist['a_sesion_15']=='T') {
                         $assist_15++;
+                    }if ($infoassist['a_sesion_16']=='R' || $infoassist['a_sesion_16']=='A' || $infoassist['a_sesion_16']=='F' || $infoassist['a_sesion_16']=='T') {
+                        $assist_16++;
                     }
                 }
                 if ($partial == 2) {
 
-                    if ($infoassist['a_sesion_16']=='R' || $infoassist['a_sesion_16']=='A' || $infoassist['a_sesion_16']=='F' || $infoassist['a_sesion_16']=='T') {
-                        $assist_16++;
-                    }if ($infoassist['a_sesion_17']=='R' || $infoassist['a_sesion_17']=='A' || $infoassist['a_sesion_17']=='F' || $infoassist['a_sesion_17']=='T') {
+                    if ($infoassist['a_sesion_17']=='R' || $infoassist['a_sesion_17']=='A' || $infoassist['a_sesion_17']=='F' || $infoassist['a_sesion_17']=='T') {
                         $assist_17++;
                     }
                     if ($infoassist['a_sesion_18']=='R' || $infoassist['a_sesion_18']=='A' || $infoassist['a_sesion_18']=='F' || $infoassist['a_sesion_18']=='T') {
@@ -736,7 +737,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                     $count == $assist_1 && $count == $assist_2 &&  $count == $assist_3 && $count == $assist_4 && 
                     $count == $assist_5 && $count == $assist_6  && $count == $assist_7 && $count == $assist_8 &&
                     $count == $assist_9 && $count == $assist_10 && $count == $assist_11 && $count == $assist_12 &&
-                    $count == $assist_13 && $count == $assist_14 && $count == $assist_15 
+                    $count == $assist_13 && $count == $assist_14 && $count == $assist_15 && $count == $assist_16 
                     ) {
                         $data = array(
                             'state' => 'P',
@@ -745,7 +746,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
             }
             if ($partial == 2) {
                 if (
-                    $count == $assist_16 &&  $count == $assist_17 && $count == $assist_18 && $count == $assist_19 && $count == $assist_20 && $count == $assist_21 &&
+                    $count == $assist_17 && $count == $assist_18 && $count == $assist_19 && $count == $assist_20 && $count == $assist_21 &&
                     $count == $assist_22 && $count == $assist_23 && $count == $assist_24 && $count == $assist_25 &&
                     $count == $assist_26 && $count == $assist_27 && $count == $assist_28 && $count == $assist_29 && 
                     $count == $assist_30 && $count == $assist_31 && $count == $assist_32 
@@ -755,6 +756,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                             );   
                     }
             }
+            
             if ($data) {
                 try {
                     if ($base_assistance->_updateAll($data,$where)) {
@@ -770,7 +772,6 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 } catch (Exception $e) {
                     $json = array(
                         'status'=>false,
-
                         );
                 }
             }else{
@@ -788,7 +789,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
         }
 
         $this->_helper->layout->disableLayout();
-        $this->_response->setHeader('Content-Type', 'application/json');                   
+        $this->_response->setHeader('Content-Type', 'application/json');
         $this->view->data = $json;
     }
 
@@ -1005,15 +1006,15 @@ class Assistance_StudentController extends Zend_Controller_Action {
                         $assist_14++;
                     }if ($infoassist['a_sesion_15']=='R' || $infoassist['a_sesion_15']=='A' || $infoassist['a_sesion_15']=='F' || $infoassist['a_sesion_15']=='T') {
                         $assist_15++;
+                    }if ($infoassist['a_sesion_16']=='R' || $infoassist['a_sesion_16']=='A' || $infoassist['a_sesion_16']=='F' || $infoassist['a_sesion_16']=='T') {
+                        $assist_16++;
                     }if ($infoassist['state']=='P' || $infoassist['state']=='C') {
                         $state++;
                     }
 
                 }
                 if ($partial == 2) {
-                    if ($infoassist['a_sesion_16']=='R' || $infoassist['a_sesion_16']=='A' || $infoassist['a_sesion_16']=='F' || $infoassist['a_sesion_16']=='T') {
-                        $assist_16++;
-                    }if ($infoassist['a_sesion_17']=='R' || $infoassist['a_sesion_17']=='A' || $infoassist['a_sesion_17']=='F' || $infoassist['a_sesion_17']=='T') {
+                    if ($infoassist['a_sesion_17']=='R' || $infoassist['a_sesion_17']=='A' || $infoassist['a_sesion_17']=='F' || $infoassist['a_sesion_17']=='T') {
                         $assist_17++;
                     }
                     if ($infoassist['a_sesion_18']=='R' || $infoassist['a_sesion_18']=='A' || $infoassist['a_sesion_18']=='F' || $infoassist['a_sesion_18']=='T') {

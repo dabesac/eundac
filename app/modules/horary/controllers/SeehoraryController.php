@@ -22,7 +22,7 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             $this->_helper->layout()->disableLayout();
 
             $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;
+            $oid=$this->sesion->oid;            
             // $perid=$this->sesion->period->perid;
             $perid=base64_decode($this->_getParam('perid'));
             $escid=base64_decode($this->_getParam('escid'));
