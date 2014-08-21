@@ -73,16 +73,16 @@
 
 <div class ='row'>
 	<?php 
-	if ($this->register_paymnets) {
-	if ($this->amount_payment >= $this->amount_assing ) {	?>
+	if ($this->register_paymnets) { ?>
 
-		<div class="col-md-9">
-			<div class='col-md-offset-9'>
-				<h4>Total Créditos
-					<span id='total_credits' class='label label-primary' value="<?php echo $this->total_credits?>"> <?php echo $this->total_credits?></span>
-				</h4>
-			</div>
-			<hr>
+	<div class="col-md-9">
+		<div class='col-md-offset-9'>
+			<h4>Total Créditos
+				<span id='total_credits' class='label label-primary' value="<?php echo $this->total_credits?>"> <?php echo $this->total_credits?></span>
+			</h4>
+		</div>
+		<hr>
+	<?php if ($this->amount_payment >= $this->amount_assing ) {	?>
 			
 			<?php 
 				if($this->subjects){?>
@@ -227,17 +227,16 @@
 					</div>	
 				</div>
 			<?php }?>
-		</div>
-	<?php }
-		else {?>
+	<?php } else {?>
 			<h4 class='text-muted text-center'><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> :( Pago no registrado</h4>
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3">
 				<small class="text-center text-muted">Si usted pago el dia de hoy, recuerde que tiene que esperar un tiempo aproximado de <strong class="text-danger">12 horas</strong> para que la operación se cargue al sistema; caso contrario puede <a href="/register/student" class="text-danger">Actualizar</a> su págo. Si persiste el problema envie un correo a <strong class="text-danger">informatica@undac.edu.pe</strong> o acerquece a la <strong>Oficina de Informatica...</strong></small>
 				</div>	
 			</div>
-	<?php	}
-	} else { ?>
+	<?php } ?>
+	</div>
+	<?php } else { ?>
 		<div class='row'>
 			<div class='alert alert-block alert-danger fade in col-md-5 col-md-offset-1' >
 				<button type="button" class="close" data-dismiss="alert-danger" aria-hidden="true">×</button>
