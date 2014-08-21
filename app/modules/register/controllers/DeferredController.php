@@ -84,7 +84,7 @@ class Register_DeferredController extends Zend_Controller_Action {
                                         $infostudent['first_name'];
                 $where1 = array(
                     'code_student'=>$student['uid'],
-                    'perid'=>$perid,'processed'=>'N');
+                    'perid'=>$perid,'processed'=>'N','concept'=>'00000021');
                 $receipts = $base_bankreceipts->_getFilter($where1);
                 $students_register[$key]['receipts']= $receipts; 
                 } 
