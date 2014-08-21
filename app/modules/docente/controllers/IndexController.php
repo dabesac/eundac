@@ -13,8 +13,6 @@ class Docente_IndexController extends Zend_Controller_Action {
         $this->_helper->redirector('index','index','default');
       }
       $this->sesion = $login;   
-      $this->sesion->period->perid='14A';
-      
     }
     
     public function indexAction(){

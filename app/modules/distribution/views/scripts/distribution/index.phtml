@@ -1,43 +1,61 @@
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Listado de Distribuciones');?>
+<link rel="stylesheet" href="/css/distributionIndex.css">
+
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Distribuciones');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
-<?php
-$ldistri =$this->ldistribution;
-?>
-<div class="row">
-	<div class="col-md-2 col-md-offset-1">
-		<h6 class="text-muted pull-right"><span class="glyphicon glyphicon-filter"></span> Filtre por Año</h6>
-	</div>
-	<div class="col-md-2">
+
+<input id="yearComing" type="hidden" value="<?php echo $this->anio ?>">
+
+<div class="distribution_header">
+	<p class="distribution_headerObO distribution_headerParrafo"><span class="glyphicon glyphicon-info-sign"></span> Puede filtrar distribuciones de otros años:</p>
+	<div class="distribution_headerObO selectAnio">
 		<select class="form-control" name="Año" id="anio">
 			<?php for ($i=$this->yearActive; $i >= 1993 ; $i--) : ?>
 				<option value="<?php echo $i ?>"><?php echo $i ?></option>
 			<?php endfor ?>
 		</select>
 	</div>
-	<div class="col-md-2 col-md-offset-5">
-		<a id="newDistribution" href="/distribution/distribution/new" class="btn btn-success form-control"><span class="glyphicon glyphicon-plus "></span> Nueva Distribución</a>
-	</div>
+	<a id="newDistribution" href="/distribution/distribution/new" class="distribution_headerObO distribution_headerBtnNewDist btn btn-success form-control"><span class="glyphicon glyphicon-plus"></span> Nueva Distribución</a>
 </div>
 <hr>
-<input id="yearComing" type="hidden" value="<?php echo $this->anio ?>">
+<!--<div class="distribution_leyendaSide">
+	<p class="distribution_leyendaObO parrafoL">
+		Leyenda
+	</p>
+	<p class="distribution_leyendaObO activo">
+		<span class="glyphicon glyphicon-record iconDist semaforoVerde"></span> <span class="iconDesc">Activo</span>
+	</p>
+	<p class="distribution_leyendaObO enviado">
+		<span class="glyphicon glyphicon-record iconDist semaforoEnviado"></span> <span class="iconDesc">Enviado</span>
+	</p>
+	<p class="distribution_leyendaObO observado">
+		<span class="glyphicon glyphicon-record iconDist semaforoObservado"></span> <span class="iconDesc">Observado</span>
+	</p>
+	<p class="distribution_leyendaObO borrador">
+		<span class="glyphicon glyphicon-record iconDist semaforoBorrador"></span> <span class="iconDesc">Borrador</span>
+	</p>
+	<p class="distribution_leyendaObO inactivo">
+		<span class="glyphicon glyphicon-record iconDist semaforoInactivo"></span> <span class="iconDesc">Inactivo</span>
+	</p>
+</div>-->
 
 <div id="dataDistribution"></div>
 
 <script>
+	$(function(){
+		var year = $('#yearComing').attr('value');
+		if (year) {
+			$('#anio').val(year);
+		}
 
-	var year = $('#yearComing').attr('value');
-	if (year) {
-		$('#anio').val(year);
-	}
-
-	var anio = $('#anio').val();
-	$('#dataDistribution').html('<center><img src="/img/spinner.gif" alt="" /></center>');
-	$('#dataDistribution').load('/distribution/distribution/showdistribution/anio/' + anio);
-	$('#anio').change(function(){
-		$('.obser').popover('hide');
+		var anio = $('#anio').val();
 		$('#dataDistribution').html('<center><img src="/img/spinner.gif" alt="" /></center>');
-		var anio = $(this).val();
 		$('#dataDistribution').load('/distribution/distribution/showdistribution/anio/' + anio);
-		$('#newDistribution').attr('href', '/distribution/distribution/new/anio/'+anio);
+		$('#anio').change(function(){
+			$('.obser').popover('hide');
+			$('#dataDistribution').html('<center><img src="/img/spinner.gif" alt="" /></center>');
+			anio = $(this).val();
+			$('#dataDistribution').load('/distribution/distribution/showdistribution/anio/' + anio);
+			$('#newDistribution').attr('href', '/distribution/distribution/new/anio/'+anio);
+		});
 	});
 </script>
