@@ -100,7 +100,6 @@ class Register_StudentController extends Zend_Controller_Action {
     
     public function startAction(){
        try {
-
             $eid=$this->sesion->eid;
             $oid= $this->sesion->oid;
             $escid=$this->sesion->escid;
@@ -313,7 +312,7 @@ class Register_StudentController extends Zend_Controller_Action {
             }
 
             $base_payment = new Api_Model_DbTable_Payments();
-            $data_payment=$base_payment->_getOne($where);
+            $data_payment = $base_payment->_getOne($where);
             
             unset($where['perid']);
             $register_paymnets = $base_payment->_getAll($where);
@@ -321,12 +320,7 @@ class Register_StudentController extends Zend_Controller_Action {
             $this->view->register_paymnets=$register_paymnets;
 
             if ($data_payment) {
-
-                if ($data_payment['amount']==0) {
-
-
-                }
-
+                $existPayment = 1;
                 $ratid  =   $data_payment['ratid'];
                 $amount_payment = $data_payment['amount'];
                 $date_payments = $data_payment['date_payment'];
@@ -335,31 +329,52 @@ class Register_StudentController extends Zend_Controller_Action {
                                     'eid'=>$eid,'oid'=>$oid,
                                     'ratid'=>$ratid,'perid'=>$perid);
                 $assign_payment =   $base_rates->_getOne($where_payment);
-
-                if ($assign_payment) {
-
+                
+                if ($data_payment['amount'] == 0) {
+                    $amount_payment = 0;
+                    $existPayment = 0;
+                    $this->view->existPayment = $existPayment;
+                    $dateToday = date('Y-m-d');
+                    if ($assign_payment) {
+                        $f_fin_tn  =   date('Y-m-d', strtotime($assign_payment['f_fin_tnd']));
+                        $f_fin_ti1  =   date('Y-m-d', strtotime($assign_payment['f_fin_ti1']));
+                        $f_fin_ti2  =   date('Y-m-d', strtotime($assign_payment['f_fin_ti2']));
+                    }
                     $t_normal   =   $assign_payment['t_normal'];
+                    if ($dateToday < $f_fin_tn) {
+                        $amount_assing = $t_normal;
+                    }elseif ($f_fin_tn < $dateToday and $dateToday < $f_fin_ti1){
+                        $amount_assing = $assign_payment['t_incremento1'];
+                    }elseif ($f_fin_ti1 < $dateToday && $dateToday < $f_fin_ti2){
+                        $amount_assing = $assign_payment['t_incremento2'];
+                    }else{
+                        $amount_assing = "Monto no Aceptado";
+                    }
+                }else{
+                    if ($assign_payment) {
+                        $t_normal   =   $assign_payment['t_normal'];
 
-                    $date_payment=strtotime($date_payments);
-                    $f_fin_tn  =   strtotime($assign_payment['f_fin_tnd'].'11:59:00');
-                    $f_fin_ti1  =   strtotime($assign_payment['f_fin_ti1'].'11:59:00'); 
-                    $f_fin_ti2  =   strtotime($assign_payment['f_fin_ti2'].'11:59:00');
+                        $date_payment=strtotime($date_payments);
+                        $f_fin_tn  =   strtotime($assign_payment['f_fin_tnd'].'11:59:00');
+                        $f_fin_ti1  =   strtotime($assign_payment['f_fin_ti1'].'11:59:00'); 
+                        $f_fin_ti2  =   strtotime($assign_payment['f_fin_ti2'].'11:59:00');
 
-                    switch ($date_payment) {
+                        switch ($date_payment) {
 
-                        case $date_payment < $f_fin_tn:
-                            $amount_assing = $t_normal;
-                            break;
-                        case ($f_fin_tn < $date_payment && $date_payment < $f_fin_ti1):
-                            $amount_assing = $assign_payment['t_incremento1'];
-                            break;
-                        case ($f_fin_ti1 < $date_payment && $date_payment < $f_fin_ti2):
-                            $amount_assing = $assign_payment['t_incremento2'];
-                            break;
-                        default:
-                            $amount_assing = "Monto no Aceptado";
-                            break;
-                    }  
+                            case $date_payment < $f_fin_tn:
+                                $amount_assing = $t_normal;
+                                break;
+                            case ($f_fin_tn < $date_payment && $date_payment < $f_fin_ti1):
+                                $amount_assing = $assign_payment['t_incremento1'];
+                                break;
+                            case ($f_fin_ti1 < $date_payment && $date_payment < $f_fin_ti2):
+                                $amount_assing = $assign_payment['t_incremento2'];
+                                break;
+                            default:
+                                $amount_assing = "Monto no Aceptado";
+                                break;
+                        }  
+                    }
                 }
 
                 if ($amount_payment >= $amount_assing) {
@@ -393,9 +408,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
                 $this->view->name_reates=$assign_payment['name'];
                 //print_r($data_payment);
-            }
-            else
-            {
+            }else {
                 $this->view->message_paymnet = "Error Las Tasas no Existen";
             }
 

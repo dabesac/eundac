@@ -23,7 +23,8 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $uid = $this->sesion->uid;
             $escid = $this->sesion->escid;
             $subid = $this->sesion->subid;
-            $perid = $this->sesion->period->perid;
+            //$perid = $this->sesion->period->perid;
+            $perid = '14A';
             $this->view->speciality = $this->sesion->speciality->name;
             $this->view->faculty = $this->sesion->faculty->name;
             $this->view->infouser = $this->sesion->infouser['fullname'];
@@ -51,7 +52,8 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $uid = $this->sesion->uid;
             $escid = $this->sesion->escid;
             $subid = $this->sesion->subid;
-            $perid = $this->sesion->period->perid;
+            //$perid = $this->sesion->period->perid;
+            $perid = '14A';
                 
             $whereinf = array(
                     'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid,
@@ -135,7 +137,8 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $uid = $this->sesion->uid;
             $escid = $this->sesion->escid;
             $subid = $this->sesion->subid;
-            $perid = $this->sesion->period->perid;
+            //$perid = $this->sesion->period->perid;
+            $perid = '14A';
             $this->view->speciality = $this->sesion->speciality->name;
             $this->view->faculty = $this->sesion->faculty->name;
             $this->view->infouser = $this->sesion->infouser['fullname'];
@@ -220,7 +223,8 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $uid = $this->sesion->uid;
             $escid = $this->sesion->escid;
             $subid = $this->sesion->subid;
-            $perid = $this->sesion->period->perid;
+            //$perid = $this->sesion->period->perid;
+            $perid = '14A';
 
             $this->view->datacourses=$coursesdoc;
             $this->view->speciality = $this->sesion->speciality->name;
