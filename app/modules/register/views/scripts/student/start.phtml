@@ -81,7 +81,7 @@
 		<hr>
 	<?php if ($this->existPayment == 1 and $this->register_paymnets): ?>
 		<?php if ($this->amount_payment >= $this->amount_assing): ?>
-			<?php if ($this->subjects): ?>
+			<?php if ($this->subjects and $this->doneDistribution == 1): ?>
 			<table class=' table table-hover '>
 				<thead>
 					<tr>

@@ -100,6 +100,9 @@ class Register_StudentController extends Zend_Controller_Action {
     
     public function startAction(){
        try {
+            //DataBases
+            $distributionDb = new Distribution_Model_DbTable_Distribution();
+
             $eid=$this->sesion->eid;
             $oid= $this->sesion->oid;
             $escid=$this->sesion->escid;
@@ -329,6 +332,23 @@ class Register_StudentController extends Zend_Controller_Action {
                                     'eid'=>$eid,'oid'=>$oid,
                                     'ratid'=>$ratid,'perid'=>$perid);
                 $assign_payment =   $base_rates->_getOne($where_payment);
+
+                //Verificar la distribucion
+                $whereDist = array(
+                                    'eid'   => $eid,
+                                    'oid'   => $oid,
+                                    'perid' => $perid,
+                                    'escid' => $escid,
+                                    'subid' => $subid );
+                $attrib = array('state');
+                $dataDistribution = $distributionDb->_getFilter($whereDist, $attrib);
+
+                $doneDistribution = 0;
+                if ($dataDistribution and $dataDistribution[0]['state'] == 'C') {
+                    $doneDistribution = 1;
+                }
+
+                $this->view->doneDistribution = $doneDistribution;
 
 
                 if ($data_payment['amount'] == 0) {
