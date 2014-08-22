@@ -329,11 +329,11 @@ class Register_StudentController extends Zend_Controller_Action {
                                     'eid'=>$eid,'oid'=>$oid,
                                     'ratid'=>$ratid,'perid'=>$perid);
                 $assign_payment =   $base_rates->_getOne($where_payment);
-                
+
+
                 if ($data_payment['amount'] == 0) {
                     $amount_payment = 0;
                     $existPayment = 0;
-                    $this->view->existPayment = $existPayment;
                     $dateToday = date('Y-m-d');
                     if ($assign_payment) {
                         $f_fin_tn  =   date('Y-m-d', strtotime($assign_payment['f_fin_tnd']));
@@ -341,11 +341,11 @@ class Register_StudentController extends Zend_Controller_Action {
                         $f_fin_ti2  =   date('Y-m-d', strtotime($assign_payment['f_fin_ti2']));
                     }
                     $t_normal   =   $assign_payment['t_normal'];
-                    if ($dateToday < $f_fin_tn) {
+                    if ($dateToday <= $f_fin_tn) {
                         $amount_assing = $t_normal;
-                    }elseif ($f_fin_tn < $dateToday and $dateToday < $f_fin_ti1){
+                    }elseif ($f_fin_tn < $dateToday and $dateToday <= $f_fin_ti1){
                         $amount_assing = $assign_payment['t_incremento1'];
-                    }elseif ($f_fin_ti1 < $dateToday && $dateToday < $f_fin_ti2){
+                    }elseif ($f_fin_ti1 < $dateToday && $dateToday <= $f_fin_ti2){
                         $amount_assing = $assign_payment['t_incremento2'];
                     }else{
                         $amount_assing = "Monto no Aceptado";
@@ -376,6 +376,7 @@ class Register_StudentController extends Zend_Controller_Action {
                         }  
                     }
                 }
+                $this->view->existPayment = $existPayment;
 
                 if ($amount_payment >= $amount_assing) {
                     # code...
