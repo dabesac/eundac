@@ -68,7 +68,7 @@
  			$eid = $this->sesion->eid;
  			$oid = $this->sesion->oid;
 
- 			$anio = $this->getParam('anio');
+ 			$anio = $this->_getParam('anio');
  			$anio = substr($anio, -2);
 
  			$periodsDb = new Api_Model_DbTable_Periods();
