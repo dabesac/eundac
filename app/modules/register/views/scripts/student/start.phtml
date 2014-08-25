@@ -72,9 +72,6 @@
 </div>
 
 <div class ='row'>
-	<?php 
-	if ($this->register_paymnets) { ?>
-
 	<div class="col-md-9">
 		<div class='col-md-offset-9'>
 			<h4>Total Créditos
@@ -82,10 +79,9 @@
 			</h4>
 		</div>
 		<hr>
-	<?php if ($this->amount_payment >= $this->amount_assing ) {	?>
-			
-			<?php 
-				if($this->subjects){?>
+	<?php if ($this->existPayment == 1 and $this->register_paymnets): ?>
+		<?php if ($this->amount_payment >= $this->amount_assing): ?>
+			<?php if ($this->subjects and $this->doneDistribution == 1): ?>
 			<table class=' table table-hover '>
 				<thead>
 					<tr>
@@ -99,153 +95,144 @@
 						<th class="small-200" colspan="2">Docente</th>
 					</tr>
 				</thead>
-			<?php	foreach ($this->subjects as $key => $subject) { ?>
-
-				<?php 
+				<?php foreach ($this->subjects as $key => $subject): ?>
+					<?php 
 					$content_veces = null;
 					$content = null;
 					$style_reg = null;
 					$disabled_reg = null;
 					$btnsuccess = null;
-
-					if($subject['veces'] >= 2){
+					?>
+					
+					<?php if ($subject['veces'] >= 2):
 						$class='danger';
 						$addClass = 'btn-danger';
-					}
-					else{
-						 $class='';
-						 $addClass='';	
-					}
+					else:
+						$class='';
+						$addClass='';
+					endif ?>
+					
+					<?php if (isset($subject['veces_cur'])): ?>
+						<?php if ($subject['veces_cur']==1):
+							$veces_cur='veces_cur';
+							$content_veces=$subject['veces']+1;
+							$content="Requisito: Debe presentar una solicitud a Decanura de su Facultar  y Compromiso";
+						endif ?>
+					<?php else:
+						$veces_cur='';
+					endif ?>
 
-					if (isset($subject['veces_cur'])) {
-						if($subject['veces_cur']==1 ){
-
-						$veces_cur='veces_cur';
-						$content_veces=$subject['veces']+1;
-						$content="Requisito: Debe presentar una solicitud a Decanura de su Facultar  y Compromiso";
-						}
-						
-					}else {$veces_cur='';}
-
-				?>
-				<?php if (isset($subject['register'])) {
-					if($subject['register'] == 1  ){
-
+					<?php if (isset($subject['register'])): ?>
+						<?php if ($subject['register'] == 1):
 							$display_reg="display:none";
 							$btnsuccess='btn-success';
 							$display_mod="";
 							// $style_reg="";
-							
-						}
-					 else{
-					 	
+						else:
+							$display_reg="";
+							$display_mod="display:none";
+							// $disabled_reg = "disabled";
+							// $style_reg="display:none";
+						endif ?>
+						<?php if (isset($subject['register'] ) && $subject['register'] == 1  && $this->state != "B"):
+							$style_reg="";
+						elseif ($this->state !="B"):
+							$style_reg="display:none";
+						endif ?>
+					<?php else:
 						$display_reg="";
 						$display_mod="display:none";
-						// $disabled_reg = "disabled";
-						// $style_reg="display:none";
-					 }
+					endif ?>
+					<tbody>
+						<tr class='<?php echo $class?> tr-<?php echo $subject['courseid']?> tr-<?php echo $subject['courseid'].$subject['turno']?>' id='<?php echo $veces_cur?>' 
+							rel="popover" data-placement='bottom' 
+							data-original-title="Matricula por <?php echo $content_veces ?> Vez" 
+							data-content="<?php echo $content?>" data-trigger='hover'
 
-					if(isset($subject['register'] ) && $subject['register'] == 1  && $this->state != "B" ){
-							$style_reg="";
-						}
-					 elseif ($this->state !="B") {
-							$style_reg="display:none";
-					 }
-				}else{
-					$display_reg="";
-					$display_mod="display:none";}
-				?>
+							style="<?php echo $style_reg?>"
+							>
+							<td class="center"><?php echo $subject['courseid']?></td>
+							<td><?php echo $subject['name']?></td>
+							<td class="center"><?php 
+									if (trim($subject['type'])=='O') 
+											echo "Obligatorio";
+									if (trim($subject['type'])=='E')
+											echo "Electivo";	
+							?></td>
+							<td class="center"><?php echo $subject['credits']?></td>
+							<td class="center"><?php echo $subject['semid'] ?></td>
+							<td class="center"><?php echo $subject['veces'] ?></td>
+							<td class="center"><?php echo $subject['turno'] ?></td>
+							<td><?php echo $subject['docente'] ?></td>
+							<td>
+							<?php if ($this->veces < 2 || $this->condition_register == 1): ?>
+								<?php if ($this->state == "B"): ?>
+									<button class='btn-register register-<?php echo $subject['courseid']?>-<?php echo $subject['turno']?> btn <?php echo $addClass?>'
+											
+											courseid='<?php echo $subject['courseid']?>'
+											curid='<?php echo $subject['curid']?>'
+											turno='<?php echo $subject['turno']?>'
+											credits='<?php echo $subject['credits']?>'
+											regid='<?php echo $this->regid?>'
+											escid='<?php echo $this->escid?>'
+											subid='<?php echo $this->subid?>'
+											perid='<?php echo $this->perid?>'
+											veces='<?php print_r ($this->veces)?>'
+											condition='<?php echo $this->condition_credits?>'
+											style='<?php echo $display_reg?>'
+											<?php echo $disabled_reg;?>
+										 	onclick='register_subject(this)'>
+											<span 	class='glyphicon glyphicon-unchecked'></span>
+									</button>
 
-				<tbody>
-					<tr class='<?php echo $class?> tr-<?php echo $subject['courseid']?> tr-<?php echo $subject['courseid'].$subject['turno']?>' id='<?php echo $veces_cur?>' 
-						rel="popover" data-placement='bottom' 
-						data-original-title="Matricula por <?php echo $content_veces ?> Vez" 
-						data-content="<?php echo $content?>" data-trigger='hover'
-
-						style="<?php echo $style_reg?>"
-						>
-						<td class="center"><?php echo $subject['courseid']?></td>
-						<td><?php echo $subject['name']?></td>
-						<td class="center"><?php 
-								if (trim($subject['type'])=='O') 
-										echo "Obligatorio";
-								if (trim($subject['type'])=='E')
-										echo "Electivo";	
-						?></td>
-						<td class="center"><?php echo $subject['credits']?></td>
-						<td class="center"><?php echo $subject['semid'] ?></td>
-						<td class="center"><?php echo $subject['veces'] ?></td>
-						<td class="center"><?php echo $subject['turno'] ?></td>
-						<td><?php echo $subject['docente'] ?></td>
-						<td>
-							
-							<?php if ($this->veces < 2 || $this->condition_register == 1 ) { 
-								if ($this->state == "B"){?>
-								
-							<button class='btn-register register-<?php echo $subject['courseid']?>-<?php echo $subject['turno']?> btn <?php echo $addClass?>'
-									
-									courseid='<?php echo $subject['courseid']?>'
-									curid='<?php echo $subject['curid']?>'
-									turno='<?php echo $subject['turno']?>'
-									credits='<?php echo $subject['credits']?>'
-									regid='<?php echo $this->regid?>'
-									escid='<?php echo $this->escid?>'
-									subid='<?php echo $this->subid?>'
-									perid='<?php echo $this->perid?>'
-									veces='<?php print_r ($this->veces)?>'
-									condition='<?php echo $this->condition_credits?>'
-									style='<?php echo $display_reg?>'
-									<?php echo $disabled_reg;?>
-								 	onclick='register_subject(this)'>
-									<span 	class='glyphicon glyphicon-unchecked'></span>
-							</button>
-
-							<button class='modified-<?php echo $subject['courseid']?>-<?php echo $subject['turno']?> btn <?php echo $btnsuccess?>' 
-									courseid='<?php echo $subject['courseid']?>'
-									curid='<?php echo $subject['curid']?>'
-									turno='<?php echo $subject['turno']?>'
-									regid='<?php echo $this->regid?>'
-									escid='<?php echo $this->escid?>'
-									subid='<?php echo $this->subid?>'
-									veces='<?php print_r($this->veces)?>'
-									perid='<?php echo $this->perid?>'
-									condition='<?php echo $this->condition_credits?>'
-									onclick='modified_subjet(this)' 
-									style='<?php echo $display_mod ?>'>
-								<span class='glyphicon glyphicon-check'></span>
-							</button>
-							<?php }}?>
-						</td>
-					</tr>
-				</tbody>
-		
-			<?php }?></table><?php }else{?>
+									<button class='modified-<?php echo $subject['courseid']?>-<?php echo $subject['turno']?> btn <?php echo $btnsuccess?>' 
+											courseid='<?php echo $subject['courseid']?>'
+											curid='<?php echo $subject['curid']?>'
+											turno='<?php echo $subject['turno']?>'
+											regid='<?php echo $this->regid?>'
+											escid='<?php echo $this->escid?>'
+											subid='<?php echo $this->subid?>'
+											veces='<?php print_r($this->veces)?>'
+											perid='<?php echo $this->perid?>'
+											condition='<?php echo $this->condition_credits?>'
+											onclick='modified_subjet(this)' 
+											style='<?php echo $display_mod ?>'>
+										<span class='glyphicon glyphicon-check'></span>
+									</button>
+								<?php endif ?>
+							<?php endif ?>		
+							</td>
+						</tr>
+					</tbody>
+				<?php endforeach ?>
+				</table>
+			<?php else: ?>
 				<h4 class='text-muted text-center'><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Cursos no registrados <span class="text-danger">por parte del director...</span></h4>
 				<div class="row">
 					<div class="col-md-6 col-md-offset-3">
 						<small class="text-muted">Al parecer la distribución de su escuela no a sido <strong class="text-danger">cargada al sistema</strong>, o caso contrario a sido <strong class="text-danger">observada</strong>; espere tranquilo o acerquece a su dirección a exigir que se regularice el trámite...</small>
 					</div>	
 				</div>
-			<?php }?>
-	<?php } else {?>
-			<h4 class='text-muted text-center'><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> :( Pago no registrado</h4>
+			<?php endif ?>
+		<?php else: ?>
+			<h4 class='text-muted text-center'><span class="glyphicon glyphicon-exclamation-sign text-danger"></span>  Pago incompleto</h4>
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3">
-				<small class="text-center text-muted">Si usted pago el dia de hoy, recuerde que tiene que esperar un tiempo aproximado de <strong class="text-danger">12 horas</strong> para que la operación se cargue al sistema; caso contrario puede <a href="/register/student" class="text-danger">Actualizar</a> su págo. Si persiste el problema envie un correo a <strong class="text-danger">informatica@undac.edu.pe</strong> o acerquece a la <strong>Oficina de Informatica...</strong></small>
+					<small class="text-muted">Al parecer el pago de la matricula esta <strong class="text-danger">incompleta</strong>, o tal vez exista un error en su tasa, si tiene alguna resolución llevela a la <strong class="text-danger">Oficina de Informatica</strong>...</small>
 				</div>	
 			</div>
-	<?php } ?>
-	</div>
-	<?php } else { ?>
-		<div class='row'>
-			<div class='alert alert-block alert-danger fade in col-md-5 col-md-offset-1' >
-				<button type="button" class="close" data-dismiss="alert-danger" aria-hidden="true">×</button>
-				<h4>Error de Pago</h4>
-				<p> <?php echo $this->message_paymnet?></p>
+		<?php endif ?>
+	<?php else: ?>
+		<h4 class='text-muted text-center'><span class="glyphicon glyphicon-exclamation-sign text-danger"></span>  :( Pago no registrado</h4>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<small class="text-muted">Si usted pago el dia de hoy, recuerde que tiene que esperar un tiempo aproximado de <strong class="text-danger">12 horas</strong> para que la operación se cargue al sistema; caso contrario puede <a href="/register/student" class="text-danger">Actualizar</a> su págo. Si persiste el problema envie un correo a <strong class="text-danger">informatica@undac.edu.pe</strong> o acerquece a la Oficina de Informatica...</small>
 			</div>	
 		</div>
-	<?php } 
-	if($this->error_cur){ ?>
+	<?php endif ?>
+	</div>
+	
+	<?php if ($this->error_cur): ?>
 		<div class='row'>
 			<div class='alert alert-block alert-danger fade in col-md-5 col-md-offset-1' >
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -253,39 +240,41 @@
 				<p>Envie un correo a informatica@undac.edu.pe o acercase a la oficina de informatica </p>
 			</div>
 		</div>
-	<?php }?>
-		<div class='col-md-3'>
-			<h5 class='text-danger '><strong>CONDICIONES APROBADAS</strong></h5>
-			<div class='alert alert-info'>
-				<p class='text-primary'>
-				Segun Resolución de Consejo Universitario <b>Nº 0304-2012-UNDAC-CU</b> Usted tiene la opción para llevar <b>un </b> crédito adicional, asi como la opcion de matricularse a 3 semestres.
-				</p>
-			</div>
-		<?php if($this->cont_conmment){ 
-				if($this->cont_conmment['num_registration'] != ""){ ?> 
-					<h5 class='text-danger '><strong>MATRICULA CONDICIONAL</strong></h5>
-					<div class='alert alert-info'>
-						<p class='text-primary'>
-							<?php echo $this->cont_conmment['num_registration']?>
-						</p>
-					</div>
-				<?php } if(isset($this->cont_conmment['credits'])){ ?>
-					<h5 class='text-danger '><strong>CREDITOS</strong></h5>
-					<div class='alert alert-info'>
-						<p class='text-primary'>
-							<?php echo $this->cont_conmment['credits']?>
-						</p>
-					</div>
-				<?php }  if(isset($this->cont_conmment['semester'])){ ?>
-					<h5 class='text-danger '><strong>Semestres</strong></h5>
-					<div class='alert alert-info'>
-						<p class='text-primary'>
-							<?php echo $this->cont_conmment['semester']?>
-						</p>
-					</div>
-				<?php }  ?>
-		<?php  } ?>
+	<?php endif ?>
+	<div class='col-md-3'>
+		<h5 class='text-danger '><strong>CONDICIONES APROBADAS</strong></h5>
+		<div class='alert alert-info'>
+			<p class='text-primary'>
+			Segun Resolución de Consejo Universitario <b>Nº 0304-2012-UNDAC-CU</b> Usted tiene la opción para llevar <b>un </b> crédito adicional, asi como la opcion de matricularse a 3 semestres.
+			</p>
 		</div>
+		<?php if ($this->cont_conmment): ?>
+			<?php if ($this->cont_conmment['num_registration'] != ""): ?>
+				<h5 class='text-danger '><strong>MATRICULA CONDICIONAL</strong></h5>
+				<div class='alert alert-info'>
+					<p class='text-primary'>
+						<?php echo $this->cont_conmment['num_registration']?>
+					</p>
+				</div>
+			<?php endif ?>
+			<?php if (isset($this->cont_conmment['credits'])): ?>
+				<h5 class='text-danger '><strong>CREDITOS</strong></h5>
+				<div class='alert alert-info'>
+					<p class='text-primary'>
+						<?php echo $this->cont_conmment['credits']?>
+					</p>
+				</div>
+			<?php endif ?>
+			<?php if (isset($this->cont_conmment['semester'])): ?>
+				<h5 class='text-danger '><strong>Semestres</strong></h5>
+				<div class='alert alert-info'>
+					<p class='text-primary'>
+						<?php echo $this->cont_conmment['semester']?>
+					</p>
+				</div>
+			<?php endif ?>
+		<?php endif ?>
+	</div>
 </div>
 
 
