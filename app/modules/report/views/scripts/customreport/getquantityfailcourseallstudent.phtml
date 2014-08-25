@@ -1,9 +1,111 @@
 <?php
 if ($this->data) {	
-	print_r($this->data);
-	$val=max($this->data['veces']);
-	echo $val;
+	$data=$this->data;	
+	$i=0;
+	foreach ($data as $key => $value) {
+		$veces[$i]=$value['veces'];
+		$i++;
+	}
+	$valmin= min($veces);
+	$valmax= max($veces);
+	$cant=count($data);
+	$s=1;
+	for ($i=$valmin; $i <= $valmax; $i++) { 
+		$c=0;
+		for ($j=0; $j < $cant; $j++) { 
+			if ($data[$j]['veces']==$i) {
+				$c=$c+1;
+			}
+		}
+		$s++;
+		$cantidad[$s]=$c;
+	}
 	?>
+	<ul id='myReport1' class="nav nav-pills nav-justified">
+		<li class="active">
+	    	<a href="#" id='val<?php echo $valmin?>' class='panel panel-primary'>
+	      		<span class="badge pull-right"><?php echo $cantidad['2']?></span>
+	      		<b>Los que llevarán <?php echo $valmin+1?>º vez un curso</b>
+	    	</a>
+	 	</li>
+		<?php
+		for ($i=3; $i <= $valmax; $i++) { 	?>
+		  	<li>
+		    	<a href="#" id='val<?php echo $i?>' class='panel panel-primary'>
+		      		<span class="badge pull-right"><?php echo $cantidad[$i]?></span>
+		      		<b>Los que llevarán <?php echo $i+1?>º vez un curso</b>
+		    	</a>
+		 	</li>
+		<?php	
+		}
+		?>
+	</ul>
+	<div id='viewprincipal<?php echo $valmin?>' valor='<?php echo $valmin?>' class='table-responsive' style="margin-top:5px">
+		<div class="col-md-2 pull-right" style="margin-bottom:5px">
+			<a href="#<?php echo $valmin?>" class="btn btn-success" ><span class="glyphicon glyphicon-print "></span> Imprimir</a>
+		</div>
+		<table class='table table-hover'>
+			<tr class='info'>
+				<th class='text-center'>#</th>
+				<th class='text-center'>Código</th>
+				<th class='text-center'>Alumno</th>
+				<th class='text-center'>Curso</th>
+				<th class='text-center'>Veces</th>
+				<th class='text-center'>Notafinal</th>
+			</tr>
+		<?php
+		$co=1;
+		foreach ($data as $key => $students) {
+	 		$vecess=$students['veces'];
+	 		if($vecess=='2'){	?>
+		 		<tr>
+		 			<td class='text-center'><?php echo $co?></td>
+		 			<td class='text-center'><?php echo $students['pid']?></td>
+		 			<td class='text-center'><?php echo $students['uid']?></td>
+		 			<td><?php echo $students['full_name']?></td>
+		 			<td class='text-center'><?php echo $students['veces']?></td>
+		 		</tr>
+		 		<?php
+		 		$co++;
+	 		}
+	 	}
+		
+		?>
+		</table>
+	</div>
+	<?php
+	for ($i=3; $i <= $vfinal; $i++) { 	?>
+  	<div id='viewprincipal<?php echo $i?>' class='hidden table-responsive' valor='<?php echo $i?>' style="margin-top:5px">
+  		<div class="col-md-2 pull-right" style="margin-bottom:5px">
+			<a href="/report/customreport/printregistrationquantityrepeatstudents/eid/<?php echo base64_encode($where['eid'])?>/oid/<?php echo base64_encode($where['oid'])?>/escid/<?php echo base64_encode($where['escid'])?>/subid/<?php echo base64_encode($where['subid'])?>/curid/<?php echo base64_encode($where['curid'])?>/perid/<?php echo base64_encode($where['perid'])?>/courseid/<?php echo base64_encode($where['courseid'])?>/veces/<?php echo $i?>" class="btn btn-success" ><span class="glyphicon glyphicon-print "></span> Imprimir</a>
+		</div>
+		<table class='table table-hover'>
+			<tr class='info'>
+				<th class='text-center'>#</th>
+				<th class='text-center'>DNI</th>
+				<th class='text-center'>Código</th>
+				<th class='text-center'>Apellidos y Nombres</th>
+				<th class='text-center'>Veces Llevadas</th>
+			</tr>
+		<?php
+		$co=1;
+		foreach ($data as $key => $students) {
+	 		$vecess=$students['veces'];
+	 		if($vecess==$i){	?>
+		 		<tr>
+		 			<td class='text-center'><?php echo $co?></td>
+		 			<td class='text-center'><?php echo $students['pid']?></td>
+		 			<td class='text-center'><?php echo $students['uid']?></td>
+		 			<td><?php echo $students['full_name']?></td>
+		 			<td class='text-center'><?php echo $students['veces']?></td>
+		 		</tr>
+		 		<?php
+		 		$co++;
+	 		}
+	 	}
+		?>
+		</table>
+	</div>
 	<table class="table table-hover">
 		<tr class="info">
 			<th class='text-center'>#</th>
@@ -14,15 +116,15 @@ if ($this->data) {
 			<th class='text-center'>Notafinal</th>
 		</tr>
 		<?php
-			foreach ($this->data as $key => $data) {
+			foreach ($data as $key => $info) {
 				?>
 				<tr>
 					<td class='text-center'><?php echo $key+1?></td>
-					<td class='text-center'><?php echo $data['uid']?></td>
-					<td><?php echo $data['full_name']?></td>
-					<td><?php echo $data['namecur']?></td>
-					<td class='text-center'><?php echo $data['veces']?></td>
-					<td class='text-center'><?php echo $data['notafinal']?></td>
+					<td class='text-center'><?php echo $info['uid']?></td>
+					<td><?php echo $info['full_name']?></td>
+					<td><?php echo $info['namecur']?></td>
+					<td class='text-center'><?php echo $info['veces']?></td>
+					<td class='text-center'><?php echo $info['notafinal']?></td>
 				</tr>
 			<?php	
 			}
@@ -31,3 +133,44 @@ if ($this->data) {
 <?php	
 }
 ?>
+<script>
+	$('#myReport a').on('click',function (e) {
+	  	e.preventDefault()
+	  	$(this).tab('show')
+	});
+	$("#val2").on('click', function(){
+		$("#viewprincipal3").addClass('hidden');
+		$("#viewprincipal4").addClass('hidden');
+		$("#viewprincipal5").addClass('hidden');
+		$("#viewprincipal6").addClass('hidden');
+		$("#viewprincipal2").removeClass('hidden');
+	});
+	$("#val3").on('click', function(){
+		$("#viewprincipal2").addClass('hidden');
+		$("#viewprincipal4").addClass('hidden');
+		$("#viewprincipal5").addClass('hidden');
+		$("#viewprincipal6").addClass('hidden');
+		$("#viewprincipal3").removeClass('hidden');
+	});
+	$("#val4").on('click', function(){
+		$("#viewprincipal3").addClass('hidden');
+		$("#viewprincipal2").addClass('hidden');
+		$("#viewprincipal5").addClass('hidden');
+		$("#viewprincipal6").addClass('hidden');
+		$("#viewprincipal4").removeClass('hidden');
+	});
+	$("#val5").on('click', function(){
+		$("#viewprincipal3").addClass('hidden');
+		$("#viewprincipal4").addClass('hidden');
+		$("#viewprincipal2").addClass('hidden');
+		$("#viewprincipal6").addClass('hidden');
+		$("#viewprincipal5").removeClass('hidden');
+	});
+	$("#val6").on('click', function(){
+		$("#viewprincipal3").addClass('hidden');
+		$("#viewprincipal4").addClass('hidden');
+		$("#viewprincipal5").addClass('hidden');
+		$("#viewprincipal2").addClass('hidden');
+		$("#viewprincipal6").removeClass('hidden');
+	});
+</script>
