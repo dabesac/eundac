@@ -837,4 +837,58 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     		print "Error: disapprovedcoursemore50percentlast3 ".$e->getMessage();
     	}
     }
+
+    public function get_quantity_fail_course_all_students($where=null){
+    	try {
+    		if ($where['eid']=='' || $where['oid']=='' || $where['escid']=='' || $where['subid']=='' || $where['curid']=='') return false;
+
+    		$eid=$where['eid'];
+    		$oid=$where['oid'];
+    		$escid=$where['escid'];
+    		$subid=$where['subid'];
+    		$curid=$where['curid'];    		
+    		
+    		$sql=$this->_db->query("
+    			select * from get_quantity_fail_course_all_students('$eid','$oid','$escid','$subid','$curid') AS
+				(
+					".'courseid'." character varying,
+					".'uid'." character varying,
+					".'veces'." bigint,
+					".'notafinal'." integer
+				)
+    			");
+
+    		if ($sql) return $sql->fetchAll();
+    		return false;
+    	} catch (Exception $e) {
+    		print "Error: get_quantity_fail_course_all_students ".$e->getMessage();
+    	}
+    }
+
+    public function not_registration_students_all($where=null){
+    	try {
+    		if ($where['eid']=='' || $where['oid']=='' || $where['escid']=='' || $where['subid']=='' || $where['rid']=='') return false;
+
+    		$eid=$where['eid'];
+    		$oid=$where['oid'];
+    		$escid=$where['escid'];
+    		$subid=$where['subid'];
+    		$rid=$where['rid'];    		
+    		
+    		$sql=$this->_db->query("
+    			select u.eid,u.oid,u.uid,u.pid,u.escid,u.subid,u.rid,u.state from base_users as u
+				full outer join base_registration as r
+				on u.eid=r.eid and u.oid=r.oid and u.escid=r.escid and u.subid=r.subid and u.pid=r.pid and 
+				u.uid=r.uid
+				where u.eid='$eid' and u.oid='$oid' and u.escid='$escid' and u.subid='$subid' and u.rid='$rid' and r.regid is null
+				and u.state='A' 
+				order by u.uid DESC, u.pid
+    			");
+
+    		if ($sql) return $sql->fetchAll();
+    		return false;
+    	} catch (Exception $e) {
+    		print "Error: not_registration_students_all ".$e->getMessage();
+    	}
+    }
 }

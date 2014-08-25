@@ -1,0 +1,33 @@
+<?php
+if ($this->data) {	
+	print_r($this->data);
+	$val=max($this->data['veces']);
+	echo $val;
+	?>
+	<table class="table table-hover">
+		<tr class="info">
+			<th class='text-center'>#</th>
+			<th class='text-center'>Código</th>
+			<th class='text-center'>Alumno</th>
+			<th class='text-center'>Curso</th>
+			<th class='text-center'>Veces</th>
+			<th class='text-center'>Notafinal</th>
+		</tr>
+		<?php
+			foreach ($this->data as $key => $data) {
+				?>
+				<tr>
+					<td class='text-center'><?php echo $key+1?></td>
+					<td class='text-center'><?php echo $data['uid']?></td>
+					<td><?php echo $data['full_name']?></td>
+					<td><?php echo $data['namecur']?></td>
+					<td class='text-center'><?php echo $data['veces']?></td>
+					<td class='text-center'><?php echo $data['notafinal']?></td>
+				</tr>
+			<?php	
+			}
+		?>
+	</table>
+<?php	
+}
+?>

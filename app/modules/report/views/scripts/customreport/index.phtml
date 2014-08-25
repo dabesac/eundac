@@ -52,6 +52,26 @@
 		    	</div>
 		  	</div>
 		</div>
+		<div class="col-md-10 col-md-offset-2">
+		  	<div class="col-md-5">
+		    	<div class="thumbnail">
+		      		<div class="caption">
+		        		<h3><span class='text-primary'><b>Alumnos con cursos por 3º vez</b></span></h3>
+		        		<p><b>Se muestra a todos los alumnos que van a llevar algun curso por tercera vez.</b></p>
+		        		<p class='text-right'><a id='report5' href="#" data-toggle="modal" data-target="#myModal5" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
+		      		</div>
+		    	</div>
+		  	</div>
+		  	<div class="col-md-5">
+		    	<div class="thumbnail">
+		      		<div class="caption">
+		        		<h3><span class='text-primary'><b>Alumnos que no tuvieron ninguna matrícula</b></span></h3>
+		        		<p><b>Alumnos que nunca realizaron por lo menos una matrícula desde su ingreso.</b></p>
+		        		<p class='text-right'><a id="report6" href="#" data-toggle="modal" data-target="#myModal6" class="btn btn-success" role="button"><span class='glyphicon glyphicon-circle-arrow-up'></span> Ver reporte</a></p>
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
 	</div>
 	<div class='row'>
 		<div class="col-md-10 col-md-offset-2">
@@ -201,6 +221,7 @@
 	      	<div class="modal-header" style='background:#e5e5e5'>
 	        	<button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><span class="glyphicon glyphicon-log-out"> Cerrar</span></button>
 	        	<center><h3 class="modal-title" id="myModalLabel"><span class='glyphicon glyphicon-stats'></span><span class='text-primary'><b> Frecuencia de Ingreso </b></span></h3></center>
+	        	<p><b>Identificar frecuencia de ingreso al sistema por alumno/docente/administrativo.</b></p>
 	      	</div>	      	
 		    <div class="modal-body">
 		    	<div class='panel panel-primary'>
@@ -245,6 +266,65 @@
 	</div>
 </div>
 
+<!-- Modal Reporte 5-->
+<div class="modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style='width:80%'>
+	    <div class="modal-content">
+	      	<div class="modal-header" style='background:#e5e5e5'>
+	        	<button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><span class="glyphicon glyphicon-log-out"> Cerrar</span></button>
+	        	<center><h3 class="modal-title" id="myModalLabel"><span class='glyphicon glyphicon-circle-arrow-up'></span><span class='text-primary'><b> Alumnos con cursos por 3º vez</b></span></h3></center>
+	        	<p><b>Se muestra a todos los alumnos que van a llevar algun curso por tercera vez.</b></p>
+	      	</div>	      	
+		    <div class="modal-body">
+		    	<div class='panel panel-primary'>
+	      			<br>	      		
+		      		<div class='row text-right'>
+		      			<div class='col-md-12 col-md-offset-1'>
+		      				<div class='col-md-3 '><b>Seleccione una Currícula: </b></div>
+		      				<div class='col-md-4'>
+		      					<select id='seletcurri2' class='form-control'>
+		      						<option>-- Seleccione una Escuela --</option>
+		      					</select>
+		      				</div>		      				
+		      			</div>	
+		      		</div><br>
+		      		<div class='row'>
+		      			<div class='col-md-12'>
+		      				<div class='col-md-4 col-md-offset-5'><a id='viewReports5' href="#" class='btn btn-primary disabled'>Ver reporte</a></div>
+		      			</div>	
+		      		</div><br>
+		    		<div id="dataload5"></div>	
+	      		</div>
+	      	</div>
+	    </div>
+	</div>
+</div>
+
+<!-- Modal Reporte 3-->
+<div class="modal fade" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style='width:60%'>
+	    <div class="modal-content">
+	      	<div class="modal-header" style='background:#e5e5e5'>
+	        	<button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><span class="glyphicon glyphicon-log-out"> Cerrar</span></button>	        	
+	        	<center><h3 class="modal-title" id="myModalLabel"><span class='glyphicon glyphicon-stats'></span><span class='text-primary'><b> Alumnos que no tuvieron ninguna matrícula</b></span></h3></center>
+		        <p><b>Alumnos que nunca realizaron por lo menos una matrícula desde su ingreso.</b></p>	        	
+	      	</div>
+
+		    <div class="modal-body">
+		    	<div class='panel panel-primary'>
+	      			<br>
+		      		<div class='row'>
+		      			<div class='col-md-12'>
+		      				<div class='col-md-4 col-md-offset-5'><a id='viewReports6' href="#" class='btn btn-primary'>Ver reporte</a></div>
+		      			</div>	
+		      		</div><br>
+		    		<div id="dataload6"></div>	
+	      		</div>
+	      	</div>
+	    </div>
+	</div>
+</div>
+
 <script type="text/javascript">
 	$(function() {
         $( "#fecha" ).datepicker({
@@ -254,13 +334,6 @@
             dateFormat: 'yy-mm-dd',
             //beforeShowDay: fechitas
         })
-        //     .bind(
-        //     'dateSelected',
-        //     function(e,selectedDate, $td)
-        //     {
-        //         console.log('esta es la fecha' + selectedDate);
-        //     }
-        // );
     });
 
 	$("#seletfac").change(function(){
@@ -292,6 +365,9 @@
 
 			$("#seletcurri1").html("<img src='/img/spinner.gif'> Cargando...");
 			$("#seletcurri1").load(url);
+
+			$("#seletcurri2").html("<img src='/img/spinner.gif'> Cargando...");
+			$("#seletcurri2").load(url);
 		};
 	});
 
@@ -388,6 +464,17 @@
 		};
 	});
 
+	$("#seletcurri2").on('change', function(){
+		var x=$("#seletcurri2").val();		
+
+		if (x!='') {
+			$("#viewReports5").removeClass('disabled');			
+		}
+		else{
+			$("#viewReports5").addClass('disabled');	
+		};
+	});
+
 	$("#viewReports1").click(function(){
 		var ee=$("#seletspec").val();
 		var ees=ee.split("|");
@@ -425,6 +512,15 @@
 		};
 	});
 
+	$('#myModal5').on('shown.bs.modal', function (e) {
+		var valor3=$("#seletcurri2").val();
+
+		if (valor3=='vacio') {
+			$("#dataload5").empty();
+			$("#viewReports5").addClass('disabled');	
+		};
+	});
+
 	$("#seletrol").change(function(){
 		var r=$("#seletrol").val();
 
@@ -454,5 +550,47 @@
 			$("#dataload1").load(url);			
 		};
 
+	});
+
+	$("#viewReports5").on('click', function(){
+		var valescid=$("#seletspec").val();
+		var valcurid=$("#seletcurri2").val();
+
+		if (valescid==''){
+			alert("Seleccione una Escuela");
+			return false;	
+		}
+		else if (valcurid==''){
+			alert("Seleccione una Currícula");
+			return false;		
+		}
+		else{
+			
+			var s1=valescid.split('|');
+			var escid=s1[0];
+			var subid=s1[1];
+			var s2=valcurid.split('|');
+			var curid=s2[0];
+			var url=("/report/customreport/getquantityfailcourseallstudent/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid));			
+			$("#dataload5").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
+			$("#dataload5").load(url);
+		};
+	});
+
+	$("#viewReports6").on('click', function(){
+		var valescid=$("#seletspec").val();
+
+		if (valescid==''){
+			alert("Seleccione una Escuela");
+			return false;	
+		}
+		else{			
+			var s1=valescid.split('|');
+			var escid=s1[0];
+			var subid=s1[1];
+			var url=("/report/customreport/notregistrationstudentsall/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid));			
+			$("#dataload6").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
+			$("#dataload6").load(url);
+		};
 	});
 </script>

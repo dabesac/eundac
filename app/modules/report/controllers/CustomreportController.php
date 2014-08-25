@@ -319,4 +319,70 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			print "Error: ".$e->getMessage();
 		}
 	}
+	
+	public function getquantityfailcourseallstudentAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+			$eid=$this->sesion->eid;
+			$oid=$this->sesion->oid;
+			$escid=base64_decode($this->_getParam('escid'));
+			$subid=base64_decode($this->_getParam('subid'));
+			$curid=base64_decode($this->_getParam('curid'));
+
+			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid);
+
+			$dbconsultdata = new Api_Model_DbTable_Registrationxcourse();
+			$data=$dbconsultdata->get_quantity_fail_course_all_students($where);
+			if ($data) {
+				$values=$data;
+				$dbconsultusers = new Api_Model_DbTable_Users();
+				$dbconsultcurso = new Api_Model_DbTable_Course();
+				$wherec=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid);
+				$wheres=array('eid'=>$eid,'oid'=>$oid);
+				foreach ($values as $key => $datall) {
+					$wherec['courseid']=$datall['courseid'];
+					$datacourse=$dbconsultcurso->_getOne($wherec);
+					$data[$key]['namecur']=$datacourse['name'];
+					$wheres['uid']=$datall['uid'];
+					$data1=$dbconsultusers->_getUserXUid($wheres);					
+					$data[$key]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];					
+				}
+				$this->view->data=$data;				
+			}
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function notregistrationstudentsallAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+			$eid=$this->sesion->eid;
+			$oid=$this->sesion->oid;
+			$escid=base64_decode($this->_getParam('escid'));
+			$subid=base64_decode($this->_getParam('subid'));
+			$rid="AL";
+
+			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'rid'=>$rid);
+			$dbconsultdata = new Api_Model_DbTable_Registrationxcourse();
+			$data=$dbconsultdata->not_registration_students_all($where);
+			if ($data) {
+				$dbconsultusers = new Api_Model_DbTable_Users();
+				$dbconsultspecialty = new Api_Model_DbTable_Speciality();
+				$whereu=array('eid'=>$eid,'oid'=>$oid);
+				$wheres=array('eid'=>$eid,'oid'=>$oid);
+				foreach ($data as $key => $info) {
+					$whereu['uid']=$info['uid'];
+					$data1=$dbconsultusers->_getUserXUid($whereu);
+					$data[$key]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];
+					// $wheres=array('escid'=>$escid,'subid'=>$subid);
+					// $datae=$dbconsultspecialty->_getOne($wheres);
+					// $data[$key]['namespec']=$datae['name'];
+				}
+				$this->view->data=$data;
+			}
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
 }
