@@ -196,10 +196,10 @@ class Admin_ExtraController extends Zend_Controller_Action {
 		$this->_helper->layout()->disableLayout();		
 		$eid = $this->sesion->eid;
 		$oid = $this->sesion->oid;
-		$tmpescid = split(";--;",$this->getParam('escid'));
+		$tmpescid = split(";--;",$this->_getParam('escid'));
 		$escid = base64_decode($tmpescid[0]);
 		$subid = base64_decode($tmpescid[1]);
-		$perid = base64_decode($this->getParam('perid'));
+		$perid = base64_decode($this->_getParam('perid'));
 		$formData= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
 		$this->view->courses = $this->_loadCourses($formData);
 		$this->view->perid = $perid;
