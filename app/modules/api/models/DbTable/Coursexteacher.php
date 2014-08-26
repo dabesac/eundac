@@ -154,7 +154,8 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 								->where('ct.oid = ?', $where['oid'])
 								->where('ct.perid = ?', $where['perid'])
 								->where('ct.subid = ?', $where['subid'])
-								->where('ct.escid = ?', $where['escid']);
+								->where('ct.escid = ?', $where['escid'])
+								->where('ct.is_main = ?', $where['is_main']);
 
 				$results = $select->query();
 				$rows = $results->fetchAll();

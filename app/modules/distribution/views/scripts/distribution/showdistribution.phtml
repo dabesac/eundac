@@ -47,9 +47,16 @@ $ldistri =$this->ldistribution;
 				<div class="distObO distName">
 					<?php echo $num ?>
 				</div>
-				<div class="distObO distState">
-					<?php echo $nameState ?>
-				</div>
+
+				<?php if ($distri['state'] == 'O'): ?>
+					<div class="distObO distState obser" title="Observado" data-container="body" data-toggle="popover" data-content="DISTRIBUCIÓN OBSERVADA POR PEDAGOGÍA" observation='<?php echo $distri['observation']?>' distid='<?php echo $distid;?>' perid='<?php echo $perid;?>' escid='<?php echo base64_encode($distri['escid']);?>' subid='<?php echo base64_encode($distri['subid'])?>'>
+						<?php echo $nameState ?>
+					</div>
+				<?php else: ?>
+					<div class="distObO distState">
+						<?php echo $nameState ?>
+					</div>
+				<?php endif ?>
 				<div class="distObO distDateAproved">
 					<?php if ($approv): ?>
 						<?php echo $approv ?>
