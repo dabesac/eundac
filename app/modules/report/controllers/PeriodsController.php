@@ -88,6 +88,7 @@
 
         //DataBases
         $personDb         = new Api_Model_DbTable_Person();
+        $userDb           = new Api_Model_DbTable_Users();
         $courseDb         = new Api_Model_DbTable_Course();
         $syllabusDb       = new Api_Model_DbTable_Syllabus();
         $specialityDb     = new Api_Model_DbTable_Speciality();
@@ -185,15 +186,23 @@
                 $nameSchool = $specialityDb->_getFilter($where, $attrib);
                 $dataDocente[$cTeachers]['nameSchool'] = $nameSchool[0]['name'];
 
+                //verificar a que escuela pertenece
+                $where = array( 'eid'   => $eid,
+                                'oid'   => $oid,
+                                'pid'   => $teacher['pid'],
+                                'uid'   => $teacher['uid'],
+                                'state' => 'A' );
+                $attrib = array('escid');
+                $preDataUser = $userDb->_getFilter($where, $attrib);
+
                 //verificar el Informe Academico
                 $where = array( 'eid'   => $eid,
                                 'oid'   => $oid,
-                                'escid' => $escid,
+                                'escid' => $preDataUser[0]['escid'],
                                 'subid' => $teacher['subid'],
                                 'uid'   => $teacher['uid'],
                                 'pid'   => $teacher['pid'],
                                 'perid' => $perid );
-
                 $attrib = array('state');
 
                 $preDataReport = $academicReportDb->_getFilter($where, $attrib);
