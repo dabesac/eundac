@@ -1,0 +1,66 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<div>
+    <div style="text-align:left; font-size:12px;">
+        <b>Currícula: </b><?php echo strtoupper($this->curid)?>
+    </div>
+</div>
+<style type='text/css'>
+    .text-center{
+        text-align: center;;
+    }
+</style>
+<div class="text-center" style="font-size:16px;margin-top:13px"><b> REPORTE DE ALUMNOS CON CURSOS PENDIENTES</b></div>
+<p class="text-center" style="font-size:12px;"><b>Llevarán <?php echo $this->veces?>º vez el curso mostrado</b></p><br>
+<?php 
+    if ($this->data) {
+        ?>
+        <table class="table table-hover" style="width:100%">
+            <tr class="info">
+                <th class='text-center small'>#</th>
+                <th class='text-center small-50'>Código</th>
+                <th class='text-center '>Alumno(a)</th>
+                <th class='text-center small-200'>Curso</th>
+                <th class='text-center small-50'>Veces Llevadas</th>
+                <th class='text-center small'>Notafinal</th>
+            </tr>
+            <?php
+                $co=0;
+                foreach ($this->data as $key => $info) {
+                    $co++;
+                    ?>
+                    <tr>
+                        <td class='text-center'><?php echo $co?></td>
+                        <td class='text-center'><?php echo $info['uid']?></td>
+                        <td><?php echo $info['full_name']?></td>
+                        <td><?php echo $info['namecur']?></td>
+                        <td class='text-center'><?php echo $info['veces']?></td>
+                        <td class='text-center'><?php echo $info['notafinal']?></td>
+                    </tr>
+                <?php
+                }
+            ?>
+        </table>
+    <?php 
+    }
+    
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,8,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('Reporte_alumnos_cursos_pendientes_'.$this->curid.'.pdf','D');
+    //$mpdf -> Output();  
+
+?>

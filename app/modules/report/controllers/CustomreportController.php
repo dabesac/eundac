@@ -66,6 +66,24 @@ class Report_CustomreportController extends Zend_Controller_Action{
 		}
 	}
 
+	public function specialityxschollAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $escid = base64_decode($this->_getParam('escid'));
+            $subid = base64_decode($this->_getParam('subid'));
+            
+            $where = array('eid' => $eid, 'oid' => $oid, 'parent' => $escid);
+            $es = new Api_Model_DbTable_Speciality();
+            $especia = $es->_getFilter($where,$attrib=null,$orders=null);
+            $this->view->especialidad=$especia;
+            
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
 	public function getcurriculaAction(){
 		try {
 			$this->_helper->layout()->disableLayout();
@@ -110,11 +128,14 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$perid=base64_decode($this->_getParam('perid'));
 			$escid=base64_decode($this->_getParam('escid'));
 			$subid=base64_decode($this->_getParam('subid'));
+			$escid1=base64_decode($this->_getParam('escid1'),$escid);
+			$subid1=base64_decode($this->_getParam('subid1'),$subid);
 			$curid=base64_decode($this->_getParam('curid'));
 			$courseid=base64_decode($this->_getParam('courseid'));
 
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'perid'=>$perid,'courseid'=>$courseid);
 			$data=$dbconsult->_registration_quantity_repeat($where);
+
 			if ($data) {
 				$wheres=array('eid'=>$eid,'oid'=>$oid);
 				foreach ($data as $key => $students) {
@@ -124,8 +145,12 @@ class Report_CustomreportController extends Zend_Controller_Action{
 					$data[$key]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];
 				}
 				$this->view->data=$data;
-				$this->view->where=$where;
 			}
+
+			$this->view->where=$where;
+			$this->view->escid1=$escid1;
+			$this->view->subid1=$subid1;
+
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
@@ -145,6 +170,8 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$perid=base64_decode($this->_getParam('perid'));
 			$escid=base64_decode($this->_getParam('escid'));
 			$subid=base64_decode($this->_getParam('subid'));
+			$escid1=base64_decode($this->_getParam('escid1'),$escid);
+			$subid1=base64_decode($this->_getParam('subid1'),$subid);
 			$curid=base64_decode($this->_getParam('curid'));
 			$courseid=base64_decode($this->_getParam('courseid'));
 			$veces = $this->_getParam('veces');
@@ -186,7 +213,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$whered= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
             $speciality = $dbspeciality ->_getOne($whered);                  
             $parent=$speciality['parent'];
-            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid1);
             $parentesc= $dbspeciality->_getOne($wher);
             if ($parentesc) {
                 $pala='ESPECIALIDAD DE ';
@@ -228,7 +255,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
                 'code'=>'rp1_cantidad_matriculas_'.$veces
                 );
 
-            //$dbimpression->_save($data);            
+            $dbimpression->_save($data);            
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'code'=>'rp1_cantidad_matriculas_'.$veces);
             $dataim = $dbimpression->_getFilter($wheri);
@@ -258,16 +285,115 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$oid=$this->sesion->oid;
 			$escid=base64_decode($this->_getParam('escid'));
 			$subid=base64_decode($this->_getParam('subid'));
+			$escid1=base64_decode($this->_getParam('escid1'));
+			$subid1=base64_decode($this->_getParam('subid1'));
 			$curid=base64_decode($this->_getParam('curid'));
 			$anio=base64_decode($this->_getParam('anio'));
 
-			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'anio'=>$anio);
-
+			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'anio'=>$anio);			
 			$data=$dbconsult->_disapprovedcoursemore50percentlast3($where);
 
 			if ($data) {
+				$this->view->where=$where;
 				$this->view->data=$data;
 			}
+			$this->view->escid1=$escid1;
+			$this->view->subid1=$subid1;
+			
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function printdisapprovedcoursemore50percentlast3Action(){
+		try {
+			$dbconsult = new Api_Model_DbTable_Registrationxcourse();
+			$dbspeciality = new Api_Model_DbTable_Speciality();
+			$dbconsultfaculty = new Api_Model_DbTable_Faculty();
+
+			$this->_helper->layout()->disableLayout();
+			$eid=base64_decode($this->_getParam('eid'));
+			$oid=base64_decode($this->_getParam('oid'));
+			$escid=base64_decode($this->_getParam('escid'));
+			$subid=base64_decode($this->_getParam('subid'));
+			$escid1=base64_decode($this->_getParam('escid1'));
+			$subid1=base64_decode($this->_getParam('subid1'));
+			$curid=base64_decode($this->_getParam('curid'));
+			$anio=base64_decode($this->_getParam('anio'));
+
+			$anio1= $anio-3;
+			
+			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'anio'=>$anio);
+			$data=$dbconsult->_disapprovedcoursemore50percentlast3($where);
+            $this->view->data=$data;
+            $this->view->anio=$anio;
+            $this->view->anio1=$anio1;
+            $this->view->escid=$escid;
+
+			$whered= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $speciality = $dbspeciality ->_getOne($whered);                  
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid1);            
+            $parentesc= $dbspeciality->_getOne($wher);
+
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names." <br> ".$namep;
+            
+            $wheref['eid']=$eid;
+            $wheref['oid']=$oid;
+            $wheref['facid']= $speciality['facid'];
+            $dbfaculty = new Api_Model_DbTable_Faculty();
+            $faculty = $dbfaculty ->_getOne($wheref);
+            $namef = strtoupper($faculty['name']);
+  
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            
+            $uidim=$this->sesion->pid;
+            $pid=$uidim;
+            $uid=$this->sesion->uid;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'rp2_desaprobados_50%_desde_'.$anio1.'_hasta_'.$anio,
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+
+            $dbimpression->_save($data);
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'rp2_desaprobados_50%_desde_'.$anio1.'_hasta_'.$anio);
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=count($dataim);
+            $codigo=$co." - ".$uidim;
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+
+            $this->view->uid=$uidim;
+            $this->view->header=$header;
+            $this->view->footer=$footer;
 			
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
@@ -281,6 +407,8 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$oid=$this->sesion->oid;
 			$rid=base64_decode($this->_getParam('rid'));
 			$fecha=base64_decode($this->_getParam('fecha'));
+
+			$wheres=array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid,'fecha'=>$fecha);
 
 			if ($rid=='AL' or $rid=='DC') {
 				$where=array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid,'fecha'=>$fecha);
@@ -315,11 +443,110 @@ class Report_CustomreportController extends Zend_Controller_Action{
 					$this->view->data=$data;
 				}
 			}
+			$this->view->where=$wheres;
+
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
 	}
-	
+
+	public function printfrequencyaccessxweekAction(){
+		try {
+			$dbconsult = new Api_Model_DbTable_Logs();
+			$dbconsultspecialty = new Api_Model_DbTable_Speciality();
+
+			$this->_helper->layout()->disableLayout();
+			$eid=base64_decode($this->_getParam('eid'));
+			$oid=base64_decode($this->_getParam('oid'));
+			$rid=base64_decode($this->_getParam('rid'));
+			$fecha=base64_decode($this->_getParam('fecha'));
+
+			$date = new Zend_Date($fecha);
+			$date->sub('7', Zend_Date::DAY);
+			$fecha1=$date->get('c');
+			$fecha1=substr($fecha1,0,10);
+
+			$this->view->fecha=$fecha;
+			$this->view->fecha1=$fecha1;
+
+			if ($rid=='AL' or $rid=='DC') {
+				$where=array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid,'fecha'=>$fecha);			
+				$data = $dbconsult->_getFrequencyAccessXweek($where);
+				if ($data) {
+						unset($where['rid']);
+						unset($where['fecha']);
+					foreach ($data as $key => $escuelas) {
+						$where['escid']=$escuelas['escid'];
+						$data1 = $dbconsultspecialty->_getFilter($where);
+						$data[$key]['name'] = $data1[0]['name'];
+						$data[$key]['subid'] = $data1[0]['subid'];
+					}
+					$this->view->data=$data;
+				}				
+			}
+			else{
+				$where=array('eid'=>$eid,'oid'=>$oid,'fecha'=>$fecha);
+				$data = $dbconsult->_getFrequencyAccessXweekXotros($where);
+				if ($data) {
+						unset($where['fecha']);
+					foreach ($data as $key => $escuelas) {
+						$where['escid']=$escuelas['escid'];
+						$data1 = $dbconsultspecialty->_getFilter($where);
+						$data[$key]['name'] = $data1[0]['name'];
+						$data[$key]['subid'] = $data1[0]['subid'];
+					}
+					$this->view->data=$data;
+				}
+			}
+
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            
+            $uidim=$this->sesion->pid;
+            $pid=$uidim;
+            $uid=$this->sesion->uid;
+            $escid="TODOEC";
+            $subid="1901";
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'rp5_frecuencia_acceso_sistema',
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+
+            $dbimpression->_save($data);
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'rp5_frecuencia_acceso_sistema');
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=count($dataim);
+            $codigo=$co." - ".$uidim;
+
+            $namef="TODAS LAS FACULTADES";
+            $namefinal="TODAS LAS ESCUELAS";
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("FACULTAD DE ?facultad",$namef,$header);
+            $header = str_replace("ESCUELA DE FORMACIÓN PROFESIONAL DE ?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+
+            $this->view->uid=$uidim;
+            $this->view->header=$header;
+            $this->view->footer=$footer;
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
 	public function getquantityfailcourseallstudentAction(){
 		try {
 			$this->_helper->layout()->disableLayout();
@@ -327,6 +554,8 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$oid=$this->sesion->oid;
 			$escid=base64_decode($this->_getParam('escid'));
 			$subid=base64_decode($this->_getParam('subid'));
+			$escid1=base64_decode($this->_getParam('escid1'));
+			$subid1=base64_decode($this->_getParam('subid1'));
 			$curid=base64_decode($this->_getParam('curid'));
 
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid);
@@ -347,8 +576,124 @@ class Report_CustomreportController extends Zend_Controller_Action{
 					$data1=$dbconsultusers->_getUserXUid($wheres);					
 					$data[$key]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];					
 				}
-				$this->view->data=$data;				
+				$this->view->data=$data;
 			}
+
+			$this->view->where=$where;
+			$this->view->escid1=$escid1;
+			$this->view->subid1=$subid1;
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function printgetquantityfailcourseallstudentAction(){
+		try {
+			$dbconsultdata = new Api_Model_DbTable_Registrationxcourse();
+			$dbspeciality = new Api_Model_DbTable_Speciality();
+			$dbconsultfaculty = new Api_Model_DbTable_Faculty();
+			$dbconsultusers = new Api_Model_DbTable_Users();
+			$dbconsultcurso = new Api_Model_DbTable_Course();
+			$this->_helper->layout()->disableLayout();
+			$eid=base64_decode($this->_getParam('eid'));
+			$oid=base64_decode($this->_getParam('oid'));
+			$escid=base64_decode($this->_getParam('escid'));
+			$subid=base64_decode($this->_getParam('subid'));
+			$escid1=base64_decode($this->_getParam('escid1'));
+			$subid1=base64_decode($this->_getParam('subid1'));
+			$curid=base64_decode($this->_getParam('curid'));
+			$veces=base64_decode($this->_getParam('veces'));
+			
+			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid);
+			
+			$data=$dbconsultdata->get_quantity_fail_course_all_students($where);
+			if ($data) {
+				$values=$data;
+				$wherec=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid);
+				$wheres=array('eid'=>$eid,'oid'=>$oid);
+				foreach ($values as $key => $datall) {
+					$wherec['courseid']=$datall['courseid'];
+					$datacourse=$dbconsultcurso->_getOne($wherec);
+					$data[$key]['namecur']=$datacourse['name'];
+					$wheres['uid']=$datall['uid'];
+					$data1=$dbconsultusers->_getUserXUid($wheres);					
+					$data[$key]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];					
+				}
+				$c=0;
+				foreach ($data as $key => $value) {
+					if ($veces==$value['veces']) {
+						$data1[$c]=$value;
+						$c++;
+					}
+				}
+				$this->view->data=$data1;
+			}
+			$whered= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $speciality = $dbspeciality ->_getOne($whered);                  
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid1);            
+            $parentesc= $dbspeciality->_getOne($wher);
+
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names." <br> ".$namep;
+            
+            $wheref['eid']=$eid;
+            $wheref['oid']=$oid;
+            $wheref['facid']= $speciality['facid'];
+            $dbfaculty = new Api_Model_DbTable_Faculty();
+            $faculty = $dbfaculty ->_getOne($wheref);
+            $namef = strtoupper($faculty['name']);
+  
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            
+            $uidim=$this->sesion->pid;
+            $pid=$uidim;
+            $uid=$this->sesion->uid;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'rp3_alumnos_cursos_pendientes_'.$curid.'_veces_'.$veces,
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+
+            $dbimpression->_save($data);
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'rp3_alumnos_cursos_pendientes_'.$curid.'_veces_'.$veces);
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=count($dataim);
+            $codigo=$co." - ".$uidim;
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+
+            $this->view->uid=$uidim;
+            $this->view->header=$header;
+            $this->view->footer=$footer;
+			$this->view->veces=$veces+1;
+			$this->view->curid=$curid;
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
@@ -356,32 +701,135 @@ class Report_CustomreportController extends Zend_Controller_Action{
 
 	public function notregistrationstudentsallAction(){
 		try {
+			$dbconsultdata = new Api_Model_DbTable_Registrationxcourse();
+			$dbconsultusers = new Api_Model_DbTable_Users();
+			$dbconsultspecialty = new Api_Model_DbTable_Speciality();
+
 			$this->_helper->layout()->disableLayout();
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
 			$escid=base64_decode($this->_getParam('escid'));
 			$subid=base64_decode($this->_getParam('subid'));
+			$escid1=base64_decode($this->_getParam('escid1'));
+			$subid1=base64_decode($this->_getParam('subid1'));
 			$rid="AL";
 
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'rid'=>$rid);
-			$dbconsultdata = new Api_Model_DbTable_Registrationxcourse();
 			$data=$dbconsultdata->not_registration_students_all($where);
 			if ($data) {
-				$dbconsultusers = new Api_Model_DbTable_Users();
-				$dbconsultspecialty = new Api_Model_DbTable_Speciality();
 				$whereu=array('eid'=>$eid,'oid'=>$oid);
 				$wheres=array('eid'=>$eid,'oid'=>$oid);
 				foreach ($data as $key => $info) {
 					$whereu['uid']=$info['uid'];
 					$data1=$dbconsultusers->_getUserXUid($whereu);
 					$data[$key]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];
-					// $wheres=array('escid'=>$escid,'subid'=>$subid);
-					// $datae=$dbconsultspecialty->_getOne($wheres);
-					// $data[$key]['namespec']=$datae['name'];
 				}
 				$this->view->data=$data;
 			}
+			$this->view->where=$where;
+			$this->view->escid1=$escid1;
+			$this->view->subid1=$subid1;
+
 		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function printnotregistrationstudentsallAction(){
+		try {
+			$dbconsultdata = new Api_Model_DbTable_Registrationxcourse();
+			$dbconsultusers = new Api_Model_DbTable_Users();
+			$dbconsultspecialty = new Api_Model_DbTable_Speciality();
+
+			$this->_helper->layout()->disableLayout();
+			$eid=base64_decode($this->_getParam('eid'));
+			$oid=base64_decode($this->_getParam('oid'));
+			$escid=base64_decode($this->_getParam('escid'));
+			$subid=base64_decode($this->_getParam('subid'));
+			$escid1=base64_decode($this->_getParam('escid1'));
+			$subid1=base64_decode($this->_getParam('subid1'));
+			$rid="AL";
+			$this->view->escid=$escid;
+			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'rid'=>$rid);
+			
+			$data=$dbconsultdata->not_registration_students_all($where);
+			if ($data) {
+				$whereu=array('eid'=>$eid,'oid'=>$oid);
+				$wheres=array('eid'=>$eid,'oid'=>$oid);
+				foreach ($data as $key => $info) {
+					$whereu['uid']=$info['uid'];
+					$data1=$dbconsultusers->_getUserXUid($whereu);
+					$data[$key]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];
+				}
+				$this->view->data=$data;
+			}
+
+			$whered= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $speciality = $dbconsultspecialty ->_getOne($whered);                  
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid1);			
+            $parentesc= $dbconsultspecialty->_getOne($wher);
+
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namefinal=$names." <br> ".$namep;
+            
+            $wheref['eid']=$eid;
+            $wheref['oid']=$oid;
+            $wheref['facid']= $speciality['facid'];
+            $dbfaculty = new Api_Model_DbTable_Faculty();
+            $faculty = $dbfaculty ->_getOne($wheref);
+            $namef = strtoupper($faculty['name']);
+  
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            
+            $uidim=$this->sesion->pid;
+            $pid=$uidim;
+            $uid=$this->sesion->uid;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'rp4_alumnos_ninguna_matricula',
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+
+            $dbimpression->_save($data);
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'rp4_alumnos_ninguna_matricula');
+            $dataim = $dbimpression->_getFilter($wheri);
+            
+            $co=count($dataim);
+            $codigo=$co." - ".$uidim;
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+
+            $this->view->uid=$uidim;
+            $this->view->header=$header;
+            $this->view->footer=$footer;
+
+		} catch (Exception $e) {	
 			print "Error: ".$e->getMessage();
 		}
 	}

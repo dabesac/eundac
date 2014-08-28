@@ -15,7 +15,7 @@ ob_start();
         <b>Hasta: </b>El periodo <b><?php echo strtoupper($this->perid)?></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     </div>
 </div>
-<div style="text-align: center; font-size:16px;margin-top:10px"><b> REPORTE CANTIDAD DE MATRÍCULAS </b></div> <br/>
+<div style="text-align: center; font-size:16px;margin-top:13px"><b> REPORTE CANTIDAD DE MATRÍCULAS </b></div> <br/>
 <?php 
     if ($this->data) {
         ?>
@@ -55,7 +55,7 @@ ob_start();
     
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    // $mpdf->Output('RecordNotas -'.$this->person['pid'].'.pdf','D');
-    $mpdf -> Output();  
+    $mpdf->Output('Reporte_cantidad_matriculas_'.$this->datacourse['courseid'].'.pdf','D');
+    // $mpdf -> Output();  
 
 ?>

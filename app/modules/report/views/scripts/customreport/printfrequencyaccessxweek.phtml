@@ -1,0 +1,60 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<style type="text/css">
+    .text-center{
+        text-align:center;
+    } 
+</style>
+<div style='text-align:left; font-size:13px'>
+    <p><b>Desde: &nbsp;</b><?php echo $this->fecha1?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hasta: &nbsp;</b> <?php echo $this->fecha?></p>
+</div>
+<?php
+if ($this->data) {  ?>
+    <div style="text-align: center; font-size:16px;margin-top:20px"><b> REPORTE FRECUENCIA DE INGRESO AL SISTEMA</b></div><br>
+    <table class='table table-hover' style="width:100%">
+        <tr>
+            <th class='text-center small-50'>#</th>
+            <th class="text-center small-100">Código</th>
+            <th class='text-center'>Nombre Escuela</th>
+            <th class='text-center'>Frecuencia</th>
+        </tr>
+        <?php
+        foreach ($this->data as $key => $lista) {   ?>
+            <tr>
+                <td class='text-center'><?php echo $key+1?></td>
+                <td class='text-center'><?php echo $lista['escid']?></td>
+                <td style="padding-left:5px;"><?php echo $lista['name']?></td>
+                <td class='text-center'><?php echo $lista['cantidad']?></td>
+            </tr>   
+        <?php   
+        }
+        ?>
+    </table>
+<?php    
+}
+else{   ?>
+    <div style="text-align: center; font-size:12px;margin-top:10px"><b> No se encontraron registros</b></div><br/>
+<?php    
+}
+?>
+<?php 
+        
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,8,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf -> Output('Reporte_frecuencia_acceso_sistema.pdf','D');
+    //$mpdf -> Output();
+?>

@@ -2,12 +2,12 @@
   	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tasks"></span> Reportes Personalizados');
   	$this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
 ?>
-<div class="panel panel-primary col-md-10 col-md-offset-1">
+<div class="panel panel-primary col-md-12">
 	<br>
-	<div class='row text-right'>
+	<div class='row text-center'>
 		<div class='col-md-12'>
-			<div class='col-md-2 col-md-offset-1'><b>Seleccione una facultad: </b></div>
-			<div class='col-md-3'>
+			<div class='col-md-2'><b>Seleccione una facultad: </b></div>
+			<div class='col-md-2'>
 				<select id='seletfac' class='form-control'>
 					<option value="nada">-- Seleccione Facultad --</option>
 						<?php
@@ -24,13 +24,19 @@
 				</select>
 			</div>
 			<div class='col-md-2'><b>Seleccione una Escuela: </b></div>
-			<div class='col-md-3'>
+			<div class='col-md-2'>
 				<select id='seletspec' class='form-control'>
 					<option value="nada">-- Seleccione una Facultad --</option>
 				</select>
 			</div>
-		</div>	
-	</div><br>
+			<div class='col-md-2'><b>Seleccione una Especialidad: </b></div>
+			<div class='col-md-2'>
+				<select id='seletspecia' class='form-control'>
+					<option value="nada">-- Seleccione una Especialidad --</option>
+				</select>
+			</div>
+		</div>
+	</div><br><br>
 	<div class='row hidden' id="contenido">
 		<div class="col-md-10 col-md-offset-2">
 		  	<div class="col-md-5">
@@ -56,18 +62,18 @@
 		  	<div class="col-md-5">
 		    	<div class="thumbnail">
 		      		<div class="caption">
-		        		<h3><span class='text-primary'><b>Alumnos con cursos por 3º vez</b></span></h3>
-		        		<p><b>Se muestra a todos los alumnos que van a llevar algun curso por tercera vez.</b></p>
-		        		<p class='text-right'><a id='report5' href="#" data-toggle="modal" data-target="#myModal5" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
+		        		<h3><span class='text-primary'><b>Alumnos con cursos pendientes</b></span></h3>
+		        		<p><b>Se muestra a todos los alumnos que van a llevar algun curso por 3º, 4º, 5º ... vez.</b></p>
+		        		<p class='text-right'><a id='report5' href="#" data-toggle="modal" data-target="#myModal5" class="btn btn-success" role="button"><span class='glyphicon glyphicon-warning-sign'></span> Ver reporte</a></p>
 		      		</div>
 		    	</div>
 		  	</div>
 		  	<div class="col-md-5">
 		    	<div class="thumbnail">
 		      		<div class="caption">
-		        		<h3><span class='text-primary'><b>Alumnos que no tuvieron ninguna matrícula</b></span></h3>
+		        		<h3><span class='text-primary'><b>Alumnos sin ninguna matrícula</b></span></h3>
 		        		<p><b>Alumnos que nunca realizaron por lo menos una matrícula desde su ingreso.</b></p>
-		        		<p class='text-right'><a id="report6" href="#" data-toggle="modal" data-target="#myModal6" class="btn btn-success" role="button"><span class='glyphicon glyphicon-circle-arrow-up'></span> Ver reporte</a></p>
+		        		<p class='text-right'><a id="report6" href="#" data-toggle="modal" data-target="#myModal6" class="btn btn-success" role="button"><span class='glyphicon glyphicon-tower'></span> Ver reporte</a></p>
 		      		</div>
 		    	</div>
 		  	</div>
@@ -75,7 +81,7 @@
 	</div>
 	<div class='row'>
 		<div class="col-md-10 col-md-offset-2">
-		  	<div class="col-md-5">
+		  	<!-- <div class="col-md-5">
 		    	<div class="thumbnail">
 		      		<div class="caption">
 		        		<h3><span class='text-primary'><b>Promedio Académico</b></span></h3>
@@ -83,13 +89,13 @@
 		        		<p class='text-right'><a href="#" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
 		      		</div>
 		    	</div>
-		  	</div>
+		  	</div> -->
 		  	<div class="col-md-5">
 		    	<div class="thumbnail">
 		      		<div class="caption">
 		        		<h3><span class='text-primary'><b>Frecuencia de Ingreso</b></span></h3>
 		        		<p><b>Identificar frecuencia de ingreso al sistema por alumno/docente/administrativo.</b></p>
-		        		<p class='text-right'><a id="report3" href="#" data-toggle="modal" data-target="#myModal3" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
+		        		<p class='text-right'><a id="report3" href="#" data-toggle="modal" data-target="#myModal3" class="btn btn-success" role="button"><span class='glyphicon glyphicon-stats'></span> Ver reporte</a></p>
 		      		</div>
 		    	</div>
 		  	</div>
@@ -272,8 +278,8 @@
 	    <div class="modal-content">
 	      	<div class="modal-header" style='background:#e5e5e5'>
 	        	<button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><span class="glyphicon glyphicon-log-out"> Cerrar</span></button>
-	        	<center><h3 class="modal-title" id="myModalLabel"><span class='glyphicon glyphicon-circle-arrow-up'></span><span class='text-primary'><b> Alumnos con cursos por 3º vez</b></span></h3></center>
-	        	<p><b>Se muestra a todos los alumnos que van a llevar algun curso por tercera vez.</b></p>
+	        	<center><h3 class="modal-title" id="myModalLabel"><span class='glyphicon glyphicon-warning-sign'></span><span class='text-primary'><b> Alumnos con cursos pendientes</b></span></h3></center>
+	        	<p><b>Se muestra a todos los alumnos que van a llevar algun curso por 3º, 4º, 5º ... vez.</b></p>
 	      	</div>	      	
 		    <div class="modal-body">
 		    	<div class='panel panel-primary'>
@@ -300,13 +306,13 @@
 	</div>
 </div>
 
-<!-- Modal Reporte 3-->
+<!-- Modal Reporte 6-->
 <div class="modal fade" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog" style='width:60%'>
 	    <div class="modal-content">
 	      	<div class="modal-header" style='background:#e5e5e5'>
 	        	<button type="button" class="btn btn-danger pull-right" data-dismiss="modal"><span class="glyphicon glyphicon-log-out"> Cerrar</span></button>	        	
-	        	<center><h3 class="modal-title" id="myModalLabel"><span class='glyphicon glyphicon-stats'></span><span class='text-primary'><b> Alumnos que no tuvieron ninguna matrícula</b></span></h3></center>
+	        	<center><h3 class="modal-title" id="myModalLabel"><span class='glyphicon glyphicon-tower'></span><span class='text-primary'><b> Alumnos que no tuvieron ninguna matrícula</b></span></h3></center>
 		        <p><b>Alumnos que nunca realizaron por lo menos una matrícula desde su ingreso.</b></p>	        	
 	      	</div>
 
@@ -326,6 +332,8 @@
 </div>
 
 <script type="text/javascript">
+	$("#contenido").fadeOut();
+
 	$(function() {
         $( "#fecha" ).datepicker({
             inline:true,
@@ -333,10 +341,10 @@
             maxDate: new Date(2020, 12, 31),
             dateFormat: 'yy-mm-dd',
             //beforeShowDay: fechitas
-        })
+        });
     });
 
-	$("#seletfac").change(function(){
+	$("#seletfac").on('change', function(){
 		var facid=$("#seletfac").val();
 		var url=("/report/customreport/getspeciality/facid/"+$.base64.encode(facid));
 		$("#seletspec").html("<img src='/img/spinner.gif'> Cargando....");
@@ -347,20 +355,30 @@
 		};
 	});
 
-	$("#seletspec").change(function(){
+	$("#seletspec").on('change', function(){
+		$("#contenido").fadeIn();
 		$("#contenido").removeClass("hidden");
 		var valor=$("#seletspec").val();
 
 		if (valor=='nada') {
+			$("#contenido").fadeOut();
 			$("#contenido").addClass("hidden");
 		}
 		else{
+			$("#dataload6").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
+			$("#dataload6").empty();
 			var ss=$("#seletspec").val();
 			var vari=ss.split("|");
 			var escid=vari[0];
 			var subid=vari[1];
 			var url=("/report/customreport/getcurricula/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid));
-			$("#seletcurri").html("<img src='/img/spinner.gif'> Cargando....");
+
+			var urlspe=("/report/customreport/specialityxscholl/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid));
+
+			$("#seletspecia").html("<img src='/img/spinner.gif'> Cargando...");
+			$("#seletspecia").load(urlspe);
+
+			$("#seletcurri").html("<img src='/img/spinner.gif'> Cargando...");
 			$("#seletcurri").load(url);
 
 			$("#seletcurri1").html("<img src='/img/spinner.gif'> Cargando...");
@@ -368,6 +386,30 @@
 
 			$("#seletcurri2").html("<img src='/img/spinner.gif'> Cargando...");
 			$("#seletcurri2").load(url);
+
+
+		};
+	});
+
+	$("#seletspecia").on('change', function(){
+		var esss=$("#seletspecia").val();
+		if (esss) {
+			$("#dataload6").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
+			$("#dataload6").empty();
+			var esss=$("#seletspecia").val();
+			var vari=esss.split("|");
+			var escid=vari[0];
+			var subid=vari[1];
+			var url=("/report/customreport/getcurricula/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid));
+
+			$("#seletcurri").html("<img src='/img/spinner.gif'> Cargando...");
+			$("#seletcurri").load(url);
+
+			$("#seletcurri1").html("<img src='/img/spinner.gif'> Cargando...");
+			$("#seletcurri1").load(url);
+
+			$("#seletcurri2").html("<img src='/img/spinner.gif'> Cargando...");
+			$("#seletcurri2").load(url);			
 		};
 	});
 
@@ -375,6 +417,7 @@
 		var valor1=$("#seletcurri").val();
 
 		if (valor1=='vacio') {
+			$("#data_end").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
 			$("#data_end").empty();
 			$("#viewReports").addClass('disabled');
 			$('#seletcurso > option[value=]').attr('selected', 'selected');
@@ -391,14 +434,14 @@
 		$("#seletperiod").load(url);
 	};
 
-	$("#seletanio").change(function(){
+	$("#seletanio").on('change', function(){
 		var vanio=$("#seletanio").val();
 		var url=("/report/customreport/getperiods/anio/"+$.base64.encode(vanio));
 		$("#seletperiod").html("<img src='/img/spinner.gif'> Cargando....");
 		$("#seletperiod").load(url);
 	});
 
-	$("#seletcurri").change(function(){
+	$("#seletcurri").on('change', function(){
 		var valorr=$("#seletcurri").val();
 		var s=valorr.split("|");
 		var curid=s[0];
@@ -408,7 +451,7 @@
 		$("#seletcurso").load(url);
 	});
 
-	$("#seletcurso").change(function(){
+	$("#seletcurso").on('change', function(){
 		var vcurso=$("#seletcurso").val();
 		var vperiod=$("#seletperiod").val();
 		if (vcurso!='' ) {
@@ -419,17 +462,34 @@
 		};
 	});
 
-	$("#viewReports").click(function(){
+	$("#viewReports").on('click', function(){
 		var anio=$("#seletanio").val();
 		var perid=$("#seletperiod").val();
-		var valor=$("#seletspec").val();
-		var vari=valor.split("|");
-		var escid=vari[0];
-		var subid=vari[1];
 		var valorr=$("#seletcurri").val();
 		var s=valorr.split("|");
 		var curid=s[0];
 		var courseid=$("#seletcurso").val();
+		var valor=$("#seletspec").val();
+		var sp=$("#seletspecia").val();
+		if (sp!='nada') {
+			var sp=sp.split("|");
+			var escid=sp[0];
+			var subid=sp[1];
+
+			var vari=valor.split("|");
+			var escid1=vari[0];
+			var subid1=vari[1];			
+			
+			var url=("/report/customreport/registrationquantityrepeatstudents/perid/"+$.base64.encode(perid)+"/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid)+"/courseid/"+$.base64.encode(courseid))+"/escid1/"+$.base64.encode(escid1)+"/subid1/"+$.base64.encode(subid1);
+		}
+		else{
+			var vari=valor.split("|");
+			var escid=vari[0];
+			var subid=vari[1];			
+
+			var url=("/report/customreport/registrationquantityrepeatstudents/perid/"+$.base64.encode(perid)+"/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid)+"/courseid/"+$.base64.encode(courseid));
+		};
+		
 
 		if (anio=='vacio') {
 			alert("Seleccione un Año");
@@ -447,13 +507,12 @@
 			alert("Seleccione un Curso");
 		}
 		else{
-			var url=("/report/customreport/registrationquantityrepeatstudents/perid/"+$.base64.encode(perid)+"/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid)+"/courseid/"+$.base64.encode(courseid));
 			$("#data_end").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
 			$("#data_end").load(url);			
 		};
 	});
 
-	$("#seletcurri1").change(function(){
+	$("#seletcurri1").on('change', function(){
 		var x=$("#seletcurri1").val();
 
 		if (x!='') {
@@ -475,17 +534,33 @@
 		};
 	});
 
-	$("#viewReports1").click(function(){
-		var ee=$("#seletspec").val();
-		var ees=ee.split("|");
-		var escid=ees[0];
-		var subid=ees[1];
-
+	$("#viewReports1").on('click', function(){
 		var cc=$("#seletcurri1").val();
 		var ccs=cc.split("|");
 		var curid=ccs[0];
 
 		var anio=$("#seletanio1").val();
+		var ee=$("#seletspec").val();
+		var sp=$("#seletspecia").val();
+		if (sp!='nada') {
+			var sp=sp.split("|");
+			var escid=sp[0];
+			var subid=sp[1];
+
+			var ess=ee.split("|");
+			var escid1=ess[0];
+			var subid1=ess[1];
+
+			var url=("/report/customreport/disapprovedcoursemore50percentlast3/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid)+"/anio/"+$.base64.encode(anio))+"/escid1/"+$.base64.encode(escid1)+"/subid1/"+$.base64.encode(subid1);
+		}
+		else{
+			var ees=ee.split("|");
+			var escid=ees[0];
+			var subid=ees[1];
+
+			var url=("/report/customreport/disapprovedcoursemore50percentlast3/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid)+"/anio/"+$.base64.encode(anio));
+		};
+
 		if (cc=='vacio'){
 			alert("Seleccione una Currícula");
 			return false;	
@@ -495,10 +570,8 @@
 			return false;		
 		}
 		else{
-			var url=("/report/customreport/disapprovedcoursemore50percentlast3/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid)+"/anio/"+$.base64.encode(anio));
-
 			$("#dataLoad").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
-			$("#dataLoad").load(url);			
+			$("#dataLoad").load(url);	
 		};
 
 	});
@@ -507,6 +580,7 @@
 		var valor2=$("#seletcurri1").val();
 
 		if (valor2=='vacio') {
+			$("#dataLoad").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
 			$("#dataLoad").empty();
 			$("#viewReports1").addClass('disabled');	
 		};
@@ -516,12 +590,13 @@
 		var valor3=$("#seletcurri2").val();
 
 		if (valor3=='vacio') {
+			$("#dataload5").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
 			$("#dataload5").empty();
 			$("#viewReports5").addClass('disabled');	
 		};
 	});
 
-	$("#seletrol").change(function(){
+	$("#seletrol").on('change',function(){
 		var r=$("#seletrol").val();
 
 		if (r!='') {
@@ -532,7 +607,7 @@
 		};
 	});
 
-	$("#viewReports2").click(function(){
+	$("#viewReports2").on('click',function(){
 		var fechita=$("#fecha").val();
 		var rid=$("#seletrol").val();
 		if (fechita==''){
@@ -555,23 +630,37 @@
 	$("#viewReports5").on('click', function(){
 		var valescid=$("#seletspec").val();
 		var valcurid=$("#seletcurri2").val();
-
-		if (valescid==''){
+		if (valescid=='nada'){
 			alert("Seleccione una Escuela");
 			return false;	
 		}
-		else if (valcurid==''){
+		else if (valcurid=='vacio'){
 			alert("Seleccione una Currícula");
 			return false;		
 		}
 		else{
-			
-			var s1=valescid.split('|');
-			var escid=s1[0];
-			var subid=s1[1];
 			var s2=valcurid.split('|');
 			var curid=s2[0];
-			var url=("/report/customreport/getquantityfailcourseallstudent/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid));			
+			var sp=$("#seletspecia").val();
+			if (sp!='nada') {
+				var sp=sp.split("|");
+				var escid=sp[0];
+				var subid=sp[1];
+
+				var s1=valescid.split("|");
+				var escid1=s1[0];
+				var subid1=s1[1];
+
+				var url=("/report/customreport/getquantityfailcourseallstudent/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid))+"/escid1/"+$.base64.encode(escid1)+"/subid1/"+$.base64.encode(subid1);
+			}
+			else{
+				var s1=valescid.split('|');
+				var escid=s1[0];
+				var subid=s1[1];
+
+				var url=("/report/customreport/getquantityfailcourseallstudent/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid)+"/curid/"+$.base64.encode(curid));
+			};
+			console.log(sp);			
 			$("#dataload5").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
 			$("#dataload5").load(url);
 		};
@@ -584,11 +673,26 @@
 			alert("Seleccione una Escuela");
 			return false;	
 		}
-		else{			
-			var s1=valescid.split('|');
-			var escid=s1[0];
-			var subid=s1[1];
-			var url=("/report/customreport/notregistrationstudentsall/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid));			
+		else{
+			var sp=$("#seletspecia").val();
+			if (sp!='nada') {
+				var sp=sp.split("|");
+				var escid=sp[0];
+				var subid=sp[1];
+
+				var s1=valescid.split("|");
+				var escid1=s1[0];
+				var subid1=s1[1];
+				
+				var url=("/report/customreport/notregistrationstudentsall/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid))+"/escid1/"+$.base64.encode(escid1)+"/subid1/"+$.base64.encode(subid1);
+			}
+			else{
+				var s1=valescid.split('|');
+				var escid=s1[0];
+				var subid=s1[1];
+
+				var url=("/report/customreport/notregistrationstudentsall/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid));
+			};			
 			$("#dataload6").html("<center><img src='/img/spinner.gif'> Cargando...</center><br>");
 			$("#dataload6").load(url);
 		};
