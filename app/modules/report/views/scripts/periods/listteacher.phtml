@@ -1,3 +1,7 @@
+<?php 
+	$dataGlobal = $this->dataGlobal;
+ ?>
+
 <?php if ($this->dataDocente): ?>
 	<?php if ($this->dataSpecialities): ?>
 		<input type="hidden" id="existSpecialities" value="1">
@@ -11,10 +15,18 @@
 				</select>
 			</div>
 		</div>
-		<hr>
 	<?php else: ?>
 		<input type="hidden" id="existSpecialities" value="0">		
 	<?php endif ?>
+	<?php 
+		$urlPrint = '/report/periods/print/data/'.base64_encode($dataGlobal['perid']).
+												'-'.base64_encode($dataGlobal['escid']).
+												'-'.base64_encode($dataGlobal['subid']);
+	 ?>
+	<div class="avanceAcademico_impressSide">
+		<p class="iObO pImpressSide"><span class="glyphicon glyphicon-info-sign"></span> Puede imprimir los resultados...</p>
+		<a href="<?php echo $urlPrint ?>" class="iObO btnPrint"><span class="glyphicon glyphicon-print"></span> Imprimir</a>
+	</div>
 	<ul id="idDataDocentes" class="ulDataDocentes">
 	<?php
 		$escid     = '-';
@@ -75,7 +87,9 @@
 							$state = 'success';
 							$icon = '<span class="glyphicon glyphicon-ok-circle"></span>';
 						endif ?>
-						<div class="cursoOneByOne cursoSilabo <?php echo $state ?>">Sílabo <?php echo $icon ?></div>
+						<div class="cursoOneByOne cursoSilabo <?php echo $state ?>">Sílabo <?php echo $icon ?>
+							<a href="##" class="btnPrintSilabo">Imprimir</a>
+						</div>
 
 						<!--state 1er Parcial-->
 						<?php 

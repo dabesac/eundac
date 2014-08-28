@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="/css/avanceAcademico.css">
 
 <input type="hidden" id="rol" value="<?php echo $dataVista['rid'] ?>">
-<input type="hidden" id="escid" value="<?php echo base64_encode($dataVista['escid'].'-'.$dataVista['subid']) ?>">
+<input type="hidden" id="escid" value="<?php echo $dataVista['dataEscid'] ?>">
 <input type="hidden" id="periodCurrent" value="<?php echo base64_encode($dataVista['period']) ?>">
 <div class="avanceAcademicoHeader">
 	<p class="text-muted parrafoHeader"><span class="glyphicon glyphicon-info-sign"></span> Puede filtrar otros periodos si lo desea:</p>
@@ -26,7 +26,6 @@
 		</select>
 	</div>
 </div>
-<hr>
 	
 <?php if ($dataVista['rid'] == 'RF'): ?>
 	<div class="registroFacultadSide">
@@ -40,8 +39,7 @@
 			</select>
 		</div>
 	</div>
-	<hr>
-<?php elseif ($dataVista['rid'] == 'RC'): ?>
+<?php elseif ($dataVista['rid'] == 'RC' or $dataVista['rid'] == 'ES'): ?>
 	<div class="registroCentralSide">
 		<p class="rcObO parrafoRC"><span class="glyphicon glyphicon-info-sign"></span> Seleccione facultad y escuela:</p>
 		<div class="rcObO select selectFaculty">
@@ -59,7 +57,6 @@
 			</select>
 		</div>
 	</div>
-	<hr>
 <?php endif ?>
 <div id="avanceAcademico_DataDocentes" class="avanceAcademicoDocentes">
 
@@ -73,9 +70,10 @@
 		var dataEscid = $('#escid').val();
 		var data      = period + '-' + dataEscid;
 
+		console.log(dataEscid);
+
 		$('#selectPeriod')	.html('<option>Cargando...</option>')
 							.load('/report/periods/listperiods/anio/' + anio, function(){
-								console.log(period);
 								$(this).val(period);
 							});
 
@@ -117,7 +115,7 @@
 					$('#avanceAcademico_DataDocentes').html('');
 				};
 			});
-		}else if (rid == 'RC'){
+		}else if (rid == 'RC' || rid == 'ES'){
 			$('#selectFaculty').on('change', function(){
 				facid = $(this).val();
 				$('#avanceAcademico_DataDocentes')	.html('');

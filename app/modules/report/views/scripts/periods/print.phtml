@@ -1,13 +1,13 @@
  <?php
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
-ob_start();    
+ob_start();
+$dataGlobal = $this->dataGlobal;
 ?>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
-<div style="text-align: center; margin-bottom:3%"><b>REPORTE AVANCE ACADÉMICO - PERIODO <?php echo strtoupper($this->perid)?></b></div>    
-<?php
-if ($this->data_teacher) { ?>
+<div style="text-align: center; margin-bottom:3%"><b>REPORTE AVANCE ACADÉMICO - PERIODO <?php echo strtoupper($dataGlobal['perid'])?></b></div>    
+<?php if ($this->dataDocente): ?>
 	<table style="width:100%; font-size: 9px;" border="1">
 		<tr>
 			<th>#</th>
@@ -15,71 +15,60 @@ if ($this->data_teacher) { ?>
 			<th>Asignaturas</th>
 			<th>Turno</th>
 			<th>Silabo</th>
-			<th>F.C. Silabus</th>
 			<th>1° Parcial</th>
 			<th>2° Parcial</th>
 			<th>F.C. Acta</th>
 		</tr>
-		<?php 
-		$c=1;
-		foreach ($this->data_teacher as $teachers) { ?>
-			<tr>
-				<td rowspan="<?php echo $teachers['cantidad_courses']+2?>"><?php echo $c?></td>
-				<td rowspan="<?php echo $teachers['cantidad_courses']+2?>">
-					<?php echo $teachers['full_name']." - ".$teachers['uid']?>
-				</td>
-				<td colspan="7"></td>
-			</tr>
-			<?php
-				foreach ($teachers['courses'] as $courses) { 
-					?>
+			<?php foreach ($this->dataDocente as $c => $docente): ?>
+				<tr>
+					<td rowspan="<?php echo $docente['cantCursos']+2?>"><?php echo $c + 1?></td>
+					<td rowspan="<?php echo $docente['cantCursos']+2?>">
+						<?php echo $docente['fullName']." - ".$docente['uid']?>
+					</td>
+					<td colspan="7"></td>
+				</tr>
+				<?php foreach ($docente['courses'] as $cCourse => $course): ?>
 					<tr>
 						<td>
-							<?php echo $courses['courseid']." - ".$courses['name']?>
+							<?php echo $course['courseid']." - ".$course['name'] ?> 
+							<?php if ($dataGlobal['existEsp'] == 1): ?>
+								<small>(<?php echo $course['nameSpecilaity'] ?>)</small>
+							<?php endif ?>
 						</td>
 						<td>
-							<center><?php echo $courses['turno']?></center>
+							<center><?php echo $course['turno']?></center>
 						</td>
 						<td>
 							<center>
 								<?php
-								if ($courses['state_syllabus'] == 'C') echo "SI";
-								else echo "NO"; ?>
-							</center>
-						</td>
-						<td>
-								<?php 
-								$f_=$courses['create_syllabus'];
-       									$tf =split(" ",$f_);
-        								echo $tf[0];
-								?>
-						</td>
-						<td>
-							<center>
-								<?php 
-								if ($courses['state_course'] == "P" || $courses['state_course'] == "C" || $courses['state_course'] == "S") echo "SI";
+								if ($course['stateSyllabus'] == '1') echo "SI";
 								else echo "NO"; ?>
 							</center>
 						</td>
 						<td>
 							<center>
 								<?php 
-								if ($courses['state_course']=="C" || $courses['state_course'] == "S") echo "SI";
+								if ($course['statePrimerParcial'] == '1') echo "SI";
 								else echo "NO"; ?>
 							</center>
 						</td>
 						<td>
 							<center>
 								<?php 
-								echo $courses['closure_date_course'];
+								if ($course['stateSecondParcial']=="1") echo "SI";
+								else echo "NO"; ?>
+							</center>
+						</td>
+						<td>
+							<center>
+								<?php 
+								echo $course['closureDate'];
 								?>
 									
 							</center>
 						</td>
 					</tr>
-
-					<?php
-				}?>
+				<?php endforeach ?>
 				<tr>
 					<td></td>
 					<td></td>
@@ -87,13 +76,22 @@ if ($this->data_teacher) { ?>
 					<td></td>
 					<td></td>
 				</tr>
+			<?php endforeach ?>
+		<?php 
+		$c=1;
+		foreach ($this->data_teacher as $teachers) { ?>
+			<?php
+				foreach ($teachers['courses'] as $courses) { 
+					?>
+
+					<?php
+				}?>
 			<?php
 			$c++;
 		}?>
 	</table>
+<?php endif ?>
 <?php
-} 
-    
     $html = ob_get_contents();
   
     $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,10,5);
@@ -105,7 +103,7 @@ if ($this->data_teacher) { ?>
     ob_end_clean();
 
     $mpdf -> WriteHTML($html);
-  	$mpdf->Output('Escuela-'.$this->escid.'.pdf','D');
-    // $mpdf->Output(); 
+  	$mpdf->Output('Escuela-'.$dataGlobal['escid'].'.pdf','D');
+    // $mpdf->Output();
   
 ?>
