@@ -268,6 +268,8 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $this->_helper->layout()->disableLayout();
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
+
+            $escidAct = $this->sesion->escid;
             // $formData = $this->getRequest()->getPost();
     
             $pid = base64_decode($this->_getParam("pid"));
@@ -288,11 +290,18 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $this->view->infouser = $preDataPerson[0]['last_name0'].' '.$preDataPerson[0]['last_name1'].' '.$preDataPerson[0]['first_name'];
             $this->view->perid = $perid;
 
-            $wherecour = array('eid' => $eid, 'oid' => $oid, 
-                'perid' => $perid, 'uid' => $uid, 'pid' => $pid);
-            // print_r($wherecour);exit();
             $percour= new Api_Model_DbTable_PeriodsCourses();
-            $coursesdoc=$percour->_getInfoCourseXTeacher($wherecour);
+            if ($escidAct == $escid) {
+                $wherecour = array('eid' => $eid, 'oid' => $oid, 
+                    'perid' => $perid, 'uid' => $uid, 'pid' => $pid);
+                // print_r($wherecour);exit();
+                $coursesdoc=$percour->_getInfoCourseXTeacher($wherecour);
+            }else{
+                $wherecour = array('eid' => $eid, 'oid' => $oid, 
+                    'perid' => $perid, 'uid' => $uid, 'pid' => $pid, 'escid' => $escidAct);
+                // print_r($wherecour);exit();
+                $coursesdoc=$percour->_getInfoCourseXTeacherDiferentEsc($wherecour);
+            }
             if ($coursesdoc) {
                 $tam = count($coursesdoc);
                 $wherecours = array('eid' => $eid, 'oid' => $oid);

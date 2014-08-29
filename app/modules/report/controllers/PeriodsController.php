@@ -46,7 +46,7 @@
                 $dataSchool[$c]['name']  = $school['name'];
             }
             $this->view->dataSchool = $dataSchool;
-        }elseif ($rid == 'RC' or $rid == 'ES'){
+        }elseif ($rid == 'RC' or $rid == 'ES' or $rid == 'CU' or $rid == 'VA'){
             $dataVista['dataEscid']  = '';
 
             $preDataFaculty = $facultyDb->_getAll();
@@ -166,7 +166,7 @@
                 $dataDocente[$cTeachers]['fullName'] = $dataPerson[0]['last_name0'].' '.$dataPerson[0]['last_name1'].' '.$dataPerson[0]['first_name'];
                 $dataDocente[$cTeachers]['pid']      = $teacher['pid'];
                 $dataDocente[$cTeachers]['uid']      = $teacher['uid'];
-                $dataDocente[$cTeachers]['escid']    = $escid;
+                $dataDocente[$cTeachers]['escid']    = $teacher['escid'];
                 $dataDocente[$cTeachers]['subid']    = $teacher['subid'];
                 $dataDocente[$cTeachers]['perid']    = $perid;
 
@@ -190,10 +190,11 @@
                 $where = array( 'eid'   => $eid,
                                 'oid'   => $oid,
                                 'pid'   => $teacher['pid'],
-                                'uid'   => $teacher['uid'],
-                                'state' => 'A' );
+                                'uid'   => $teacher['uid'] );
                 $attrib = array('escid');
                 $preDataUser = $userDb->_getFilter($where, $attrib);
+
+                $dataDocente[$cTeachers]['escidOrigen'] = $preDataUser[0]['escid'];
 
                 //verificar el Informe Academico
                 $where = array( 'eid'   => $eid,
@@ -204,7 +205,6 @@
                                 'pid'   => $teacher['pid'],
                                 'perid' => $perid );
                 $attrib = array('state');
-
                 $preDataReport = $academicReportDb->_getFilter($where, $attrib);
 
                 $dataDocente[$cTeachers]['stateReport'] = 'no';
@@ -217,6 +217,12 @@
                 $cTeachers++;
             }
         }
+
+        //Ordenar por nombre
+        foreach ($dataDocente as $c => $docente) {
+            $nombreDocente[$c] = $docente['fullName'];
+        }
+        array_multisort($dataDocente, SORT_ASC, $nombreDocente);
 
         //Cursos de esos profesores
         foreach ($dataDocente as $cTeachers => $teacher) {
@@ -245,6 +251,8 @@
                 $dataDocente[$cTeachers]['courses'][$cCourses] = array( 'courseid' => $course['courseid'],
                                                                         'curid'    => $course['curid'],
                                                                         'turno'    => $course['turno'],
+                                                                        'escid'    => $course['escid'],
+                                                                        'subid'    => $course['subid'],
                                                                         'name'     => $nameCourse[0]['name'] );
 
                 //Verificar si lleno Silabo
@@ -293,6 +301,233 @@
         $this->view->dataDocente = $dataDocente;
     }
 
+    public function shownotasAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //dataBases
+        $personDb         = new Api_Model_DbTable_Person();
+        $courseDb         = new Api_Model_DbTable_Course();
+        $periodsCourseDb  = new Api_Model_DbTable_PeriodsCourses();
+        $registerCourseDb = new Api_Model_DbTable_Registrationxcourse();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        $data = base64_decode($this->_getParam('data'));
+
+        $data     = explode('-', $data);
+        $escid    = $data[0];
+        $subid    = $data[1];
+        $courseid = $data[2];
+        $curid    = $data[3];
+        $turno    = $data[4];
+        $perid    = $data[5];
+        $parcial  = $data[6];
+
+        //datos del Curso
+        $where = array( 'eid'      => $eid,
+                        'oid'      => $oid,
+                        'courseid' => $courseid,
+                        'curid'    => $curid,
+                        'escid'    => $escid,
+                        'subid'    => $subid );
+
+        $attrib = array('name', 'semid', 'credits');
+        $preDataCourse = $courseDb->_getFilter($where, $attrib);
+
+        $dataCourse = array('courseid' => $courseid,
+                            'curid'    => $curid,
+                            'name'     => $preDataCourse[0]['name'],
+                            'credits'  => $preDataCourse[0]['credits'],
+                            'semid'    => $preDataCourse[0]['semid'],
+                            'parcial'  => $parcial );
+
+        //verificar si el curso es por objetivo o competencia
+        $where = array( 'eid'      => $eid,
+                        'oid'      => $oid,
+                        'courseid' => $courseid,
+                        'curid'    => $curid,
+                        'escid'    => $escid,
+                        'subid'    => $subid,
+                        'turno'    => $turno,
+                        'perid'    => $perid );
+        $attrib = array('type_rate');
+        $typeCourse = $periodsCourseDb->_getFilter($where, $attrib);
+        $typeCourse = $typeCourse[0]['type_rate'];
+        $dataCourse['type'] = $typeCourse;
+
+        //Estudiantes de ese curso
+        $where = array( 'eid'      => $eid,
+                        'oid'      => $oid,
+                        'courseid' => $courseid,
+                        'curid'    => $curid,
+                        'escid'    => $escid,
+                        'subid'    => $subid,
+                        'turno'    => $turno,
+                        'perid'    => $perid,
+                        'state'    => 'M' );
+        $preDataStudents = $registerCourseDb->_getFilter($where);
+
+        if ($preDataStudents) {
+            foreach ($preDataStudents as $c => $student) {
+                //nombres y Apellidos
+                $where = array( 'eid' => $eid,
+                                'pid' => $student['pid'] );
+
+                $attrib = array('last_name0', 'last_name1', 'first_name');
+                $preDataPerson = $personDb->_getFilter($where, $attrib);
+
+                $dataCourse['students'][$c]['fullName'] = $preDataPerson[0]['last_name0'].' '.$preDataPerson[0]['last_name1'].' '.$preDataPerson[0]['first_name'];
+                $dataCourse['students'][$c]['pid']      = $student['pid'];
+                $dataCourse['students'][$c]['uid']      = $student['uid'];
+
+                if ($parcial == 1) {
+                    if ($typeCourse == 'O') {
+                        for ($i=1; $i <= 9; $i++) { 
+                            if ($student['nota'.$i.'_i'] >= 11) {
+                                $dataCourse['students'][$c]['notaClass'.$i] = 'notaApproved';
+                            }else{
+                                $dataCourse['students'][$c]['notaClass'.$i] = 'notaDisapproved';
+                            }
+                            $dataCourse['students'][$c]['nota'.$i] = $student['nota'.$i.'_i'];
+                        }
+
+                        $dataCourse['students'][$c]['promedio'] = $student['promedio1'];
+                        if ($student['promedio1'] == '-3') {
+                            $dataCourse['students'][$c]['promedio'] = 'R';
+                            $dataCourse['students'][$c]['promClass'] = 'promedioDisapproved';
+                        }elseif ($student['promedio1'] >= 11) {
+                            $dataCourse['students'][$c]['promClass'] = 'promedioApproved';
+                        }else{
+                            $dataCourse['students'][$c]['promClass'] = 'promedioDisapproved';
+                        }
+                    }elseif ($typeCourse == 'C'){
+                        for ($i=1; $i <= 9; $i++) { 
+                            if ($i == 4 or $i == 9) {
+                                $dataCourse['students'][$c]['nota'.$i] = $student['nota'.$i.'_i'];
+                                if ($student['nota'.$i.'_i'] == '-3') {
+                                    $dataCourse['students'][$c]['nota'.$i] = 'R';
+                                    $dataCourse['students'][$c]['notaClass'.$i] = 'unityDisapproved';
+                                }elseif ($student['nota'.$i.'_i'] >= 11) {
+                                    $dataCourse['students'][$c]['notaClass'.$i] = 'unityApproved';
+                                }else{
+                                    $dataCourse['students'][$c]['notaClass'.$i] = 'unityDisapproved';
+                                }
+                            }elseif ($i != 5) {
+                                if ($student['nota'.$i.'_i'] >= 11) {
+                                    $dataCourse['students'][$c]['notaClass'.$i] = 'notaApproved';
+                                }else{
+                                    $dataCourse['students'][$c]['notaClass'.$i] = 'notaDisapproved';
+                                }
+                                $dataCourse['students'][$c]['nota'.$i] = $student['nota'.$i.'_i'];
+                            }
+                        }
+                    }
+                }elseif ($parcial == 2){
+                    if ($typeCourse == 'O') {
+                        $dataCourse['students'][$c]['promedio1'] = $student['promedio1'];
+                        for ($i=1; $i <= 9; $i++) { 
+                            if ($student['nota'.$i.'_ii'] >= 11) {
+                                $dataCourse['students'][$c]['notaClass'.$i] = 'notaApproved';
+                            }else{
+                                $dataCourse['students'][$c]['notaClass'.$i] = 'notaDisapproved';
+                            }
+                            $dataCourse['students'][$c]['nota'.$i] = $student['nota'.$i.'_ii'];
+                        }
+
+                        $dataCourse['students'][$c]['promedio'] = $student['promedio2'];
+                        if ($student['promedio2'] == '-3') {
+                            $dataCourse['students'][$c]['promedio'] = 'R';
+                            $dataCourse['students'][$c]['promClass'] = 'promedioDisapproved';
+                        }elseif ($student['promedio2'] >= 11) {
+                            $dataCourse['students'][$c]['promClass'] = 'promedioApproved';
+                        }else{
+                            $dataCourse['students'][$c]['promClass'] = 'promedioDisapproved';
+                        }
+                    }elseif ($typeCourse == 'C'){
+                        for ($i=1; $i <= 9; $i++) { 
+                            if ($i == 4 or $i == 9) {
+                                $dataCourse['students'][$c]['nota'.$i] = $student['nota'.$i.'_ii'];
+                                if ($student['nota'.$i.'_ii'] == '-3') {
+                                    $dataCourse['students'][$c]['nota'.$i] = 'R';
+                                    $dataCourse['students'][$c]['notaClass'.$i] = 'unityDisapproved';
+                                }elseif ($student['nota'.$i.'_ii'] >= 11) {
+                                    $dataCourse['students'][$c]['notaClass'.$i] = 'unityApproved';
+                                }else{
+                                    $dataCourse['students'][$c]['notaClass'.$i] = 'unityDisapproved';
+                                }
+                            }elseif ($i != 5) {
+                                if ($student['nota'.$i.'_ii'] >= 11) {
+                                    $dataCourse['students'][$c]['notaClass'.$i] = 'notaApproved';
+                                }else{
+                                    $dataCourse['students'][$c]['notaClass'.$i] = 'notaDisapproved';
+                                }
+                                $dataCourse['students'][$c]['nota'.$i] = $student['nota'.$i.'_ii'];
+                            }
+                        }
+                    }
+                    $dataCourse['students'][$c]['notaFinal'] = $student['notafinal'];
+                    if ($student['notafinal'] == '-3') {
+                        $dataCourse['students'][$c]['notaFinal'] = 'R';
+                        $dataCourse['students'][$c]['notaFinalClass'] = 'promedioDisapproved';
+                    }elseif ($student['notafinal'] >= 11) {
+                        $dataCourse['students'][$c]['notaFinalClass'] = 'promedioApproved';
+                    }else{
+                        $dataCourse['students'][$c]['notaFinalClass'] = 'promedioDisapproved';
+                    }
+
+                    //Buscar Aplazados
+                    if ($student['notafinal'] > 0 and $student['notafinal'] < 11) {
+                        $anioPeriod   = $perid[0].$perid[1];
+                        $letterPeriod = $perid[2];
+                        if ($letterPeriod == 'A') {
+                            $periodAplazados = $anioPeriod.'D';
+                        }elseif ($letterPeriod == 'B'){
+                            $periodAplazados = $anioPeriod.'E';
+                        }
+
+                        //Buscar Nota
+                        $where = array( 'eid'      => $eid,
+                                        'oid'      => $oid,
+                                        'escid'    => $escid,
+                                        'subid'    => $subid,
+                                        'courseid' => $courseid,
+                                        'curid'    => $curid,
+                                        'turno'    => $turno,
+                                        'uid'      => $student['uid'],
+                                        'pid'      => $student['pid'],
+                                        'perid'    => $periodAplazados );
+                        $attrib = array('notafinal');
+
+                        $notaAplazado = $registerCourseDb->_getFilter($where, $attrib);
+                        if ($notaAplazado[0]['notafinal']) {
+                            $dataCourse['students'][$c]['notaAplazados'] = $notaAplazado[0]['notafinal'];
+                            if ($notaAplazado[0]['notafinal'] == '-2') {
+                                $dataCourse['students'][$c]['classAplazados'] = 'notaDisapproved';
+                                $dataCourse['students'][$c]['notaAplazados'] = 'NSP';
+                            }elseif ($notaAplazado[0]['notafinal'] >= 11) {
+                                $dataCourse['students'][$c]['classAplazados'] = 'notaApproved';
+                            }else{
+                                $dataCourse['students'][$c]['classAplazados'] = 'notaDisapproved';
+                            }
+                        }else{
+                            $dataCourse['students'][$c]['notaAplazados'] = '';
+                            $dataCourse['students'][$c]['classAplazados'] = '';
+                        }
+                    }else{
+                        $dataCourse['students'][$c]['notaAplazados'] = '';
+                        $dataCourse['students'][$c]['classAplazados'] = '';
+                    }
+                }
+            }
+            //Ordenar por Nombre
+            foreach ($dataCourse['students'] as $c => $student) {
+                $fullName[$c] = $student['fullName'];
+            }
+            array_multisort($dataCourse['students'], SORT_ASC, $fullName);
+        }
+        $this->view->dataCourse = $dataCourse;
+    }
 
 
     public function printAction(){
@@ -300,11 +535,11 @@
             $this->_helper->layout()->disableLayout();
 
             //DataBases
-            $courseDb        = new Api_Model_DbTable_Course();
-            $syllabusDb      = new Api_Model_DbTable_Syllabus();
-            $coursePeriodsDb = new Api_Model_DbTable_PeriodsCourses();
-            $courseTeacherDb = new Api_Model_DbTable_Coursexteacher();
-            $specialityDb    = new Api_Model_DbTable_Speciality();        
+            $courseDb         = new Api_Model_DbTable_Course();
+            $syllabusDb       = new Api_Model_DbTable_Syllabus();
+            $coursePeriodsDb  = new Api_Model_DbTable_PeriodsCourses();
+            $courseTeacherDb  = new Api_Model_DbTable_Coursexteacher();
+            $specialityDb     = new Api_Model_DbTable_Speciality();        
             $personDb         = new Api_Model_DbTable_Person();
             $academicReportDb = new Api_Model_DbTable_Addreportacadadm();
             
@@ -409,6 +644,13 @@
                     $cTeachers++;
                 }
             }
+
+            //Ordenar por nombre
+            foreach ($dataDocente as $c => $docente) {
+                $nombreDocente[$c] = $docente['fullName'];
+            }
+            array_multisort($dataDocente, SORT_ASC, $nombreDocente);
+
 
             //Cursos de esos profesores
             foreach ($dataDocente as $cTeachers => $teacher) {
