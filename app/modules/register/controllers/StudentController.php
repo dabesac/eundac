@@ -1016,13 +1016,13 @@ class Register_StudentController extends Zend_Controller_Action {
                     'escid'=>$escid,
                     'subid'=>$subid,
                     'pid'=>$pid,
-                    'type_impression'=>'prematricula',
+                    'type_impression'=>'prematricula_'.$perid,
                     'date_impression'=>date('Y-m-d h:m:s'),
                     'pid_print'=>$uidim
                     );
                 $dbimpression->_save($data);
 
-                $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'prematricula');
+                $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'prematricula_'.$perid);
                 $dataim = $dbimpression->_getFilter($wheri);
                 
                 $co=count($dataim);

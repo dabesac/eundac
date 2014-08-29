@@ -1,0 +1,61 @@
+<?php
+if ($this->data) {	
+	$where=$this->where;
+	$escid1=$this->escid1;
+	$subid1=$this->subid1;	
+	?>
+	<div class="col-md-2 pull-right" style="margin-bottom:10px">
+		<a href="/report/customreport/printnotregistrationstudentsall/eid/<?php echo base64_encode($where['eid'])?>/oid/<?php echo base64_encode($where['oid'])?>/escid/<?php echo base64_encode($where['escid'])?>/subid/<?php echo base64_encode($where['subid'])?>/escid1/<?php echo base64_encode($escid1)?>/subid1/<?php echo base64_encode($subid1)?>" class='btn btn-success'><span class="glyphicon glyphicon-print"></span> Imprimir</a>
+	</div>
+	<table class="table table-hover">
+		<tr class="info">
+			<th class='text-center'>#</th>
+			<th class='text-center'>DNI</th>
+			<th class='text-center'>Código</th>
+			<th class='text-center'>Alumno</th>
+			<th class="text-center">Estado</th>
+			<!-- <th class="text-center">Escuela</th> -->
+		</tr>
+		<?php
+			foreach ($this->data as $key => $data) {
+				?>
+				<tr>
+					<td class="text-center"><?php echo $key+1?></td>
+					<td class="text-center"><?php echo $data['pid']?></td>
+					<td class="text-center"><?php echo $data['uid']?></td>
+					<td><?php echo $data['full_name']?></td>
+					<td class="text-center">
+						<?php 
+							switch ($data['state']) {
+								case 'A':
+									echo "Activo";
+									break;
+								case 'I':
+									echo "Inactivo";
+									break;
+								case 'E':
+									echo "Eliminado";
+									break;								
+								default:
+									echo "nulo";
+									break;
+							}
+						?>
+					</td>
+				</tr>
+			<?php	
+			}
+		?>
+	</table>
+<?php	
+}
+else{	?>
+<hr>
+<div class="row text-center">
+	<div class="alert alert-activa col-md-4 col-md-offset-4">
+		<h4><span class="text-info glyphicon glyphicon-info-sign"></span><b class="text-muted"> No se encontraron registros</b></h4>
+	</div>	
+</div>
+<?php
+}
+?>
