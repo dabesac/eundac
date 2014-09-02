@@ -502,7 +502,7 @@ class Profile_PublicController extends Zend_Controller_Action {
         try {
             $this->_helper->layout()->disableLayout();
 
-            $famid = $this->getParam('famid');
+            $famid = $this->_getParam('famid');
             $this->view->famid = $famid;
 
             $eid = $this->sesion->eid;
@@ -652,7 +652,7 @@ class Profile_PublicController extends Zend_Controller_Action {
 
             $eid = $this->sesion->eid;
             $pid = $this->sesion->pid;
-            $famid = $this->getParam('famid');
+            $famid = $this->_getParam('famid');
 
             $familyDb = new Api_Model_DbTable_Family();
             $relationDb = new Api_Model_DbTable_Relationship();
@@ -771,7 +771,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $this->_helper->layout()->disableLayout();
             $eid = $this->sesion->eid;
             $pid = $this->sesion->pid;
-            $acid = $this->getParam('acid');
+            $acid = $this->_getParam('acid');
             $this->view->acid = $acid;
 
             $academicDb = new Api_Model_DbTable_Academicrecord();
@@ -1026,7 +1026,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $this->_helper->layout->disableLayout();
             $eid=$this->sesion->eid;
             $pid=$this->sesion->pid;
-            $lid = $this->getParam('lid');
+            $lid = $this->_getParam('lid');
 
             $this->view->lid = $lid;
 
@@ -1130,7 +1130,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $pid=$this->sesion->pid;
-            $iid = $this->getParam('iid');
+            $iid = $this->_getParam('iid');
 
             $this->view->iid = $iid;
 

@@ -99,7 +99,7 @@
         if (curid=="") {alert ("Debe de seleccionar una curricula");return false;}
         if (courseid=="") {alert ("Debe de seleccionar un curso");return false;}        
         var url="/report/consolidated/studentregistration/courseid/"+courseid+"/curid/"+curid+"/perid/"+perid+"/turno/"+turno+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo+"/subid1/"+subid1;
-        $("#det").html("<img src='/img/spinner.gif' />Cargando....");
+        $("#det").html("<center><img src='/img/spinner.gif' /> Cargando....</center");
         $("#det").load(url);
     });    
 

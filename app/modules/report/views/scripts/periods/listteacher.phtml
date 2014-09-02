@@ -1,3 +1,7 @@
+<?php 
+	$dataGlobal = $this->dataGlobal;
+ ?>
+
 <?php if ($this->dataDocente): ?>
 	<?php if ($this->dataSpecialities): ?>
 		<input type="hidden" id="existSpecialities" value="1">
@@ -11,10 +15,18 @@
 				</select>
 			</div>
 		</div>
-		<hr>
 	<?php else: ?>
 		<input type="hidden" id="existSpecialities" value="0">		
 	<?php endif ?>
+	<?php 
+		$urlPrint = '/report/periods/print/data/'.base64_encode($dataGlobal['perid']).
+												'-'.base64_encode($dataGlobal['escid']).
+												'-'.base64_encode($dataGlobal['subid']);
+	 ?>
+	<div class="avanceAcademico_impressSide">
+		<p class="iObO pImpressSide"><span class="glyphicon glyphicon-info-sign"></span> Puede imprimir los resultados...</p>
+		<a href="<?php echo $urlPrint ?>" class="iObO btnPrint"><span class="glyphicon glyphicon-print"></span> Imprimir</a>
+	</div>
 	<ul id="idDataDocentes" class="ulDataDocentes">
 	<?php
 		$escid     = '-';
@@ -25,7 +37,7 @@
 		$cDocentes = 1;
 		$escid = $docente['escid'];
 	endif ?>
-	<li><span class="hidden"><?php echo $docente['escid'] ?></span>
+	<li><span class="hidden"><?php echo $docente['espid'] ?></span>
 		<div class="dataDocentes">
 			<div class="docentePersonal">
 				<div class="docenteNumber">
@@ -41,6 +53,22 @@
 				<div class="docenteCantCursos">
 					<span class="glyphicon glyphicon-book"></span> <?php echo $docente['cantCursos'] ?>
 				</div>
+				<div class="docenteImpresiones">
+					<?php 
+						$url = '##'; 
+						$classReport = 'reportNoSuccess';
+					?>
+					<?php if ($docente['stateReport'] == 'yes'): 
+							$url = '/docente/informacademic/print'. '/pid/'.base64_encode($docente['pid']).
+																	'/uid/'.base64_encode($docente['uid']).
+																	'/escid/'.base64_encode($docente['escidOrigen']).
+																	'/subid/'.base64_encode($docente['subid']).
+																	'/perid/'.base64_encode($docente['perid']);
+							$classReport = 'reportSuccess';
+					endif ?>
+					<a class="btnPrintObO <?php echo $classReport ?>" href="<?php echo $url ?>">Informe Académico</a>
+					<a class="btnPrintObO btnPrintHorary" href="##">Horario</a>
+				</div>
 			</div>
 			
 
@@ -52,14 +80,26 @@
 
 						<!--State Silabo-->
 						<?php 
-							$state = 'noSuccess';
-							$icon = '<span class="glyphicon glyphicon-remove-circle"></span>';
+							$state         = 'noSuccess';
+							$icon          = '<span class="glyphicon glyphicon-remove-circle"></span>';
+							$urlPrintSyllabus = '##';
 						 ?>
 						<?php if ($course['stateSyllabus'] == 1):
 							$state = 'success';
 							$icon = '<span class="glyphicon glyphicon-ok-circle"></span>';
+							$urlPrintSyllabus = '/syllabus/print/index'	.'/courseid/'.base64_encode($course['courseid'])
+																		.'/turno/'.base64_encode($course['turno'])
+																		.'/curid/'.base64_encode($course['curid'])
+																		.'/escid/'.base64_encode($course['escid'])
+																		.'/subid/'.base64_encode($course['subid'])
+																		.'/perid/'.base64_encode($dataGlobal['perid']);
+
 						endif ?>
-						<div class="cursoOneByOne cursoSilabo <?php echo $state ?>">Sílabo <?php echo $icon ?></div>
+						<div class="cursoOneByOne cursoSilabo <?php echo $state ?>">Sílabo <?php echo $icon ?>
+							<?php if ($course['stateSyllabus'] == 1): ?>
+								<a href="<?php echo $urlPrintSyllabus ?>" class="btnPerCourseObO">Imprimir</a>
+							<?php endif ?>
+						</div>
 
 						<!--state 1er Parcial-->
 						<?php 
@@ -70,7 +110,17 @@
 							$state = 'success';
 							$icon = '<span class="glyphicon glyphicon-ok-circle"></span>';
 						endif ?>
-						<div class="cursoOneByOne cursoParcial1 <?php echo $state ?>">1er Parcial <?php echo $icon ?></div>
+						<div class="cursoOneByOne cursoParcial1 <?php echo $state ?>">1er Parcial <?php echo $icon ?>
+							<?php if ($course['statePrimerParcial'] == 1): ?>
+								<?php  
+									$dataSend = base64_encode(	$course['escid'].'-'.$course['subid'].'-'
+																.$course['courseid'].'-'.$course['curid'].'-'
+																.$course['turno'].'-'.$dataGlobal['perid'].'-'
+																.'1');
+								?>
+								<a href="##" datasend="<?php echo $dataSend ?>" data-toggle="modal" data-target="#idModalNotas" class="btnPerCourseObO btnShowNotas">Ver Notas</a>
+							<?php endif ?>
+						</div>
 
 						<!--state 2do Parcial-->
 						<?php 
@@ -81,7 +131,17 @@
 							$state = 'success';
 							$icon = '<span class="glyphicon glyphicon-ok-circle"></span>';
 						endif ?>
-						<div class="cursoOneByOne cursoParcial2 <?php echo $state ?>">2do Parcial <?php echo $icon ?></div>
+						<div class="cursoOneByOne cursoParcial2 <?php echo $state ?>">2do Parcial <?php echo $icon ?>
+							<?php if ($course['stateSecondParcial'] == 1): ?>
+								<?php  
+									$dataSend = base64_encode(	$course['escid'].'-'.$course['subid'].'-'
+																.$course['courseid'].'-'.$course['curid'].'-'
+																.$course['turno'].'-'.$dataGlobal['perid'].'-'
+																.'2');
+								?>
+								<a href="##" datasend="<?php echo $dataSend ?>" data-toggle="modal" data-target="#idModalNotas" class="btnPerCourseObO btnShowNotas">Ver Notas</a>
+							<?php endif ?>
+						</div>
 					</div>
 				<?php endforeach ?>
 			</div>
@@ -92,12 +152,23 @@
 	 ?>
 	<?php endforeach ?>
 	</ul>
+	<!--Modal Para las notas por Curso-->
+	<div class="modal fade avanceAcademico_modalNotas" id="idModalNotas">
+		<div class="modal-dialog">
+			<div id="idDataNotas" class="modal-content">
+
+			</div>
+		</div>
+	</div>
 	<?php if ($this->dataSpecialities): ?>
 		<h4 id="noExistData" class="text-muted text-center" hidden><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Ups, No existe datos, <span class="text-danger">intente con otra especialidad...</span></h4>
 	<?php endif ?>
 	<script>
 		$(function(){
+			//Variables
 			var existSpecialities = $('#existSpecialities').val();
+			var dataSend = '';
+			//--------------------------------------
 
 			if (existSpecialities == 1) {
 				var speid         = $('#selectSpecialities').val();
@@ -139,6 +210,23 @@
 					}, 500);
 			    });
 			};
+
+			$('.btnShowNotas').on('click', function(){
+				$('#idDataNotas').html('<br><br><center><img src="/img/spinner.gif" alt="Loading..."></center><br><br>');
+				dataSend = $(this).attr('datasend');
+				showNotas(dataSend);
+
+			});
+
+			function showNotas(dataSend){
+				$.ajax({
+					url     : '/report/periods/shownotas',
+					data    : {data : dataSend},
+					success : function(data){
+						$('#idDataNotas').html(data);
+					}
+				});
+			}
 		});
 	</script>
 <?php else: ?>

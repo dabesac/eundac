@@ -1,6 +1,6 @@
 function retired_assist (obj) {
 		$("#toserver").modal('show');
-
+		
 		var $icon = $(obj);
 		var $parent = $(obj).parent();
 		var $parent = $parent.parent();
@@ -94,7 +94,7 @@ function retired_assist (obj) {
 		var $index = $($obj).attr('index');
 		var $indexall = $($obj).attr('indexall');
 		var $value_1 = $("#index-"+$indexall+"-"+$index).attr("assistance");
-
+		
 		/******removed class****/
 		if ($value_1=="A"){
 			$("#index-"+$indexall+"-"+$index).removeClass("glyphicon-ok-circle");
@@ -159,15 +159,17 @@ function retired_assist (obj) {
 		$assist[$.base64.encode('subid')] =$.base64.encode($.trim($($objet).attr('subid'))); 
 		$assist[$.base64.encode('perid')] =$.base64.encode($.trim($($objet).attr('perid'))); 
 		$assist[$.base64.encode('partial')] = $.base64.encode($partial); 
-
-		for (var prop in $assist){
+		
+		for (var prop in $assist){			
 			result += '' + prop + '/' + $assist[prop] + '/';
 		}
 		var $url = '/assistance/student/closureassistance/' + result;
+
 		$.ajax({
         	url:$url,
 	        async:false,
 	        success:function($data){
+
 	        	if ($data.status == true) {
 	        		$(".modal-title").html('Asistencia se Cerro Satisfactoriamente');
                      window.location.href=window.location.href;
@@ -194,7 +196,6 @@ function retired_assist (obj) {
 		for (var prop in $assist ) {
             result += '' + prop + '/' + $assist[prop]  + '/'; 
         }  
-
         result = result.substring(0, result.length-1);
         result = result + '/' + $.base64.encode('partial') + '/' + $.base64.encode($partial);
     	var $url = '/assistance/student/savefile/' + result;
@@ -337,7 +338,6 @@ function retired_assist (obj) {
 						}
 
 					});
-
 					if ($information) {
 						savefile();
 					}

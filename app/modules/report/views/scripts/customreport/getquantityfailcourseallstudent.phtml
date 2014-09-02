@@ -1,0 +1,137 @@
+<?php
+if ($this->data) {
+	$where=$this->where;
+	$escid1=$this->escid1;
+	$subid1=$this->subid1;	
+	$data=$this->data;	
+	$i=0;
+	foreach ($data as $key => $value) {
+		$veces[$i]=$value['veces'];
+		$i++;
+	}
+	$valmin= min($veces);
+	$valmax= max($veces);
+	$cant=count($data);
+	$s=1;
+	for ($i=$valmin; $i <= $valmax; $i++) { 
+		$c=0;
+		for ($j=0; $j < $cant; $j++) { 
+			if ($data[$j]['veces']==$i) {
+				$c++;
+			}
+		}
+		$s++;
+		$cantidad[$s]=$c;
+	}
+	?>
+	<ul id='myReport1' class="nav nav-pills nav-justified">
+		<li class="active">
+	    	<a href="#pill<?php echo $valmin?>" id='val<?php echo $valmin?>' class='panel panel-primary' role='tab' data-toggle='tab'>
+	      		<span class="badge pull-right"><?php echo $cantidad[$valmin]?></span>
+	      		<b><?php echo $valmin+1?>º vez un curso</b>
+	    	</a>
+	 	</li>
+		<?php
+		for ($i=$valmin+1; $i <= $valmax; $i++) { 	?>
+		  	<li>
+		    	<a href="#pill<?php echo $i?>" id='val<?php echo $i?>' class='panel panel-primary' role='tab' data-toggle='tab'>
+		      		<span class="badge pull-right"><?php echo $cantidad[$i]?></span>
+		      		<b><?php echo $i+1?>º vez un curso</b>
+		    	</a>
+		 	</li>
+		<?php	
+		}
+		?>
+	</ul>
+	<div class='table-responsive tab-content' style="margin-top:5px">
+		<div class="tab-pane fade in active" id='pill<?php echo $valmin?>'>
+			<div class="col-md-2 pull-right" style="margin-bottom:5px">
+				<a href="/report/customreport/printgetquantityfailcourseallstudent/eid/<?php echo base64_encode($where['eid'])?>/oid/<?php echo base64_encode($where['oid'])?>/escid/<?php echo base64_encode($where['escid'])?>/subid/<?php echo base64_encode($where['subid'])?>/curid/<?php echo base64_encode($where['curid'])?>/veces/<?php echo base64_encode($valmin)?>/escid1/<?php echo base64_encode($escid1)?>/subid1/<?php echo base64_encode($subid1)?>" class="btn btn-success" ><span class="glyphicon glyphicon-print "></span> Imprimir</a>
+			</div>
+			<table class="table table-hover">
+				<tr class="info">
+					<th class='text-center'>#</th>
+					<th class='text-center'>Código</th>
+					<th class='text-center'>Alumno(a)</th>
+					<th class='text-center'>Curso</th>
+					<th class='text-center'>Veces Llevadas</th>
+					<th class='text-center'>Notafinal</th>
+				</tr>
+				<?php
+					$co=0;
+					foreach ($data as $key => $info) {
+						if ($info['veces']==$valmin) {
+							$co++;
+						?>
+						<tr>
+							<td class='text-center'><?php echo $co?></td>
+							<td class='text-center'><?php echo $info['uid']?></td>
+							<td><?php echo $info['full_name']?></td>
+							<td><?php echo $info['namecur']?></td>
+							<td class='text-center'><?php echo $info['veces']?></td>
+							<td class='text-center'><?php echo $info['notafinal']?></td>
+						</tr>
+					<?php	
+						}
+					}
+				?>
+			</table>
+		</div>
+	<?php
+	for ($i=$valmin+1; $i <= $valmax; $i++) { 	?>		
+			
+	  	<div class='tab-pane fade' id='pill<?php echo $i?>'>
+		  	<div class="col-md-2 pull-right" style="margin-bottom:5px">
+				<a href="/report/customreport/printgetquantityfailcourseallstudent/eid/<?php echo base64_encode($where['eid'])?>/oid/<?php echo base64_encode($where['oid'])?>/escid/<?php echo base64_encode($where['escid'])?>/subid/<?php echo base64_encode($where['subid'])?>/curid/<?php echo base64_encode($where['curid'])?>/veces/<?php echo base64_encode($i)?>/escid1/<?php echo base64_encode($escid1)?>/subid1/<?php echo base64_encode($subid1)?>" class="btn btn-success" ><span class="glyphicon glyphicon-print "></span> Imprimir</a>
+			</div>
+			<table class="table table-hover">
+				<tr class="info">
+					<th class='text-center'>#</th>
+					<th class='text-center'>Código</th>
+					<th class='text-center'>Alumno</th>
+					<th class='text-center'>Curso</th>
+					<th class='text-center'>Veces Llevadas</th>
+					<th class='text-center'>Notafinal</th>
+				</tr>
+				<?php
+					$co=0;
+					foreach ($data as $key => $info) {
+						if ($info['veces']==$i) {
+							$co++;
+						?>
+						<tr>
+							<td class='text-center'><?php echo $co?></td>
+							<td class='text-center'><?php echo $info['uid']?></td>
+							<td><?php echo $info['full_name']?></td>
+							<td><?php echo $info['namecur']?></td>
+							<td class='text-center'><?php echo $info['veces']?></td>
+							<td class='text-center'><?php echo $info['notafinal']?></td>
+						</tr>
+					<?php	
+						}
+					}
+				?>
+			</table>
+		</div>	  	
+	<?php	
+	}
+	?>
+	</div>
+<?php	
+}
+else{	?>
+<hr>
+<div class="row text-center">
+	<div class="alert alert-activa col-md-4 col-md-offset-4">
+		<h4><span class="text-info glyphicon glyphicon-info-sign"></span><b class="text-muted"> No se encontraron registros</b></h4>
+	</div>	
+</div>
+<?php
+}
+?>
+<script>
+	$('#myReport1 a').on('click',function (e) {
+	  	e.preventDefault()
+	  	$(this).tab('show')
+	});
+</script>

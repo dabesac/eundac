@@ -24,12 +24,12 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
 
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
-            $escid = base64_decode($this->getParam('escid'));
-            $subid = base64_decode($this->getParam('subid'));
-            $curid = base64_decode($this->getParam('curid'));
-            $courseid = base64_decode($this->getParam('courseid'));
-            $turno = base64_decode($this->getParam('turno'));
-            $perid = base64_decode($this->getParam('perid'));
+            $escid = base64_decode($this->_getParam('escid'));
+            $subid = base64_decode($this->_getParam('subid'));
+            $curid = base64_decode($this->_getParam('curid'));
+            $courseid = base64_decode($this->_getParam('courseid'));
+            $turno = base64_decode($this->_getParam('turno'));
+            $perid = base64_decode($this->_getParam('perid'));
 
             $where = array('eid'=>$eid, 'oid'=>$oid, 'courseid'=>$courseid, 'curid'=>$curid);
             $attrib = array('name');
@@ -151,16 +151,16 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
             $date_t = base64_encode(date('Y-m-d'));
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
-            $subid    = base64_decode($this->getParam('subid'));
-            $escid    = base64_decode($this->getParam('escid'));
-            $curid    = base64_decode($this->getParam('curid'));
-            $courseid = base64_decode($this->getParam('courseid'));
-            $turno    = base64_decode($this->getParam('turno'));
-            $unit     = base64_decode($this->getParam('unit'));
-            $session  = base64_decode($this->getParam('session'));
-            $week     = base64_decode($this->getParam('week'));
-            $perid    = base64_decode($this->getParam('perid'));
-            $date    = base64_decode($this->getParam('date',$date_t));
+            $subid    = base64_decode($this->_getParam('subid'));
+            $escid    = base64_decode($this->_getParam('escid'));
+            $curid    = base64_decode($this->_getParam('curid'));
+            $courseid = base64_decode($this->_getParam('courseid'));
+            $turno    = base64_decode($this->_getParam('turno'));
+            $unit     = base64_decode($this->_getParam('unit'));
+            $session  = base64_decode($this->_getParam('session'));
+            $week     = base64_decode($this->_getParam('week'));
+            $perid    = base64_decode($this->_getParam('perid'));
+            $date    = base64_decode($this->_getParam('date',$date_t));
 
             $where = array( 'eid'      => $eid, 
                             'oid'      => $oid, 

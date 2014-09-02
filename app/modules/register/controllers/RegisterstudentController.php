@@ -687,10 +687,10 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
         $perid = $this->sesion->period->perid;
-        $escid = base64_decode($this->getParam('escid'));
-        $subid = base64_decode($this->getParam('subid'));
-        $pid = base64_decode($this->getParam('pid'));
-        $uid = base64_decode($this->getParam('uid'));
+        $escid = base64_decode($this->_getParam('escid'));
+        $subid = base64_decode($this->_getParam('subid'));
+        $pid = base64_decode($this->_getParam('pid'));
+        $uid = base64_decode($this->_getParam('uid'));
         $state = base64_decode($this->_getParam('state'));
         $regid = $uid.$perid;
 
@@ -731,10 +731,10 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
         $perid = $this->sesion->period->perid;
-        $escid = base64_decode($this->getParam('escid'));
-        $subid = base64_decode($this->getParam('subid'));
-        $pid = base64_decode($this->getParam('pid'));
-        $uid = base64_decode($this->getParam('uid'));
+        $escid = base64_decode($this->_getParam('escid'));
+        $subid = base64_decode($this->_getParam('subid'));
+        $pid = base64_decode($this->_getParam('pid'));
+        $uid = base64_decode($this->_getParam('uid'));
         $state = base64_decode($this->_getParam('state'));
 
         $regid = $uid.$perid;

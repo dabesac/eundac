@@ -2,11 +2,14 @@
 <?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 <?php 
 	$anio = date('Y');
+	$dataVista = $this->dataVista;
  ?>
 
 <link rel="stylesheet" href="/css/avanceAcademico.css">
 
-<input type="hidden" id="periodCurrent" value="<?php echo $this->dataVista['period'] ?>">
+<input type="hidden" id="rol" value="<?php echo $dataVista['rid'] ?>">
+<input type="hidden" id="escid" value="<?php echo $dataVista['dataEscid'] ?>">
+<input type="hidden" id="periodCurrent" value="<?php echo base64_encode($dataVista['period']) ?>">
 <div class="avanceAcademicoHeader">
 	<p class="text-muted parrafoHeader"><span class="glyphicon glyphicon-info-sign"></span> Puede filtrar otros periodos si lo desea:</p>
 	
@@ -23,24 +26,56 @@
 		</select>
 	</div>
 </div>
-<hr>
+	
+<?php if ($dataVista['rid'] == 'RF'): ?>
+	<div class="registroFacultadSide">
+		<p class="rfObO parrafoRF"><span class="glyphicon glyphicon-info-sign"></span> Seleccione una escuela para empezar:</p>
+		<div class="rfObO selectSchool">
+			<select name="school" id="selectSchool" class="form-control">
+				<option value="">Escuela</option>
+				<?php foreach ($this->dataSchool as $c => $school): ?>
+					<option value="<?php echo base64_encode($school['escid'].'-'.$school['subid']) ?>"><?php echo $school['name'] ?></option>
+				<?php endforeach ?>
+			</select>
+		</div>
+	</div>
+<?php elseif ($dataVista['rid'] == 'RC' or $dataVista['rid'] == 'ES' or $dataVista['rid'] == 'CU' or $dataVista['rid'] == 'VA'): ?>
+	<div class="registroCentralSide">
+		<p class="rcObO parrafoRC"><span class="glyphicon glyphicon-info-sign"></span> Seleccione facultad y escuela:</p>
+		<div class="rcObO select selectFaculty">
+			<select name="faculty" id="selectFaculty" class="form-control">
+				<option value="">Facultad</option>
+				<?php foreach ($this->dataFaculty as $c => $faculty): ?>
+					<option value="<?php echo base64_encode($faculty['facid']) ?>"><?php echo $faculty['name'] ?></option>
+				<?php endforeach ?>
+			</select>
+		</div>
+		<div class="rcObO select selectSchool">
+			<select name="school" id="selectSchool" class="form-control">
+				<option value="">Escuela</option>
+				<option value="">Seleccione una facultad primero</option>
+			</select>
+		</div>
+	</div>
+<?php endif ?>
 <div id="avanceAcademico_DataDocentes" class="avanceAcademicoDocentes">
 
 </div>
 <script>
 	$(function(){
-		var periodCurrent = $('#periodCurrent').val();
-		var anio          = $('#selectAnio').val();
-		var period        = '';
+		var rid       = $('#rol').val();
+		var period    = $('#periodCurrent').val();
+		var anio      = $('#selectAnio').val();
+		var facid     = '';
+		var dataEscid = $('#escid').val();
+		var data      = period + '-' + dataEscid;
+
 
 		$('#selectPeriod')	.html('<option>Cargando...</option>')
 							.load('/report/periods/listperiods/anio/' + anio, function(){
-								$(this).val(periodCurrent);
+								$(this).val(period);
 							});
 
-		$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
-											.load('/report/periods/listteacher/data/' + periodCurrent);
-		
 		$('#selectAnio').on('change', function(){
 			$('#avanceAcademico_DataDocentes').html('');
 			anio = $(this).val();
@@ -48,15 +83,55 @@
 			$('#selectPeriod')	.html('<option>Cargando...</option>')
 								.load('/report/periods/listperiods/anio/' + anio, function(){
 									period = $(this).val();
-									$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
-																		.load('/report/periods/listteacher/data/' + period);
+									if (dataEscid) {
+									data = period + '-' + dataEscid;
+										$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+																			.load('/report/periods/listteacher/data/' + data);
+									};
 								});
 		});
 
 		$('#selectPeriod').on('change', function(){
 			period = $(this).val();
-			$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
-												.load('/report/periods/listteacher/data/' + period);
+			if (dataEscid) {
+				data = period + '-' + dataEscid;
+				$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+													.load('/report/periods/listteacher/data/' + data);
+			};
 		});
+
+		if (rid == 'DR') {
+			$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+												.load('/report/periods/listteacher/data/' + data);
+		}else if (rid == 'RF'){
+			$('#selectSchool').on('change', function(){
+				dataEscid = $(this).val();
+				if (dataEscid) {
+					data = period + '-' + dataEscid;
+					$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+														.load('/report/periods/listteacher/data/' + data);
+				}else{
+					$('#avanceAcademico_DataDocentes').html('');
+				};
+			});
+		}else if (rid == 'RC' || rid == 'ES' || rid == 'CU' || rid == 'VA'){
+			$('#selectFaculty').on('change', function(){
+				facid = $(this).val();
+				$('#avanceAcademico_DataDocentes')	.html('');
+				$('#selectSchool')	.html('<option value="">Cargando...</option')
+									.load('/default/global/listspecialities/data/' + facid);
+			});
+
+			$('#selectSchool').on('change', function(){
+				dataEscid = $(this).val();
+				if (dataEscid) {
+					data = period + '-' + dataEscid;
+					$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+														.load('/report/periods/listteacher/data/' + data);
+				}else{
+					$('#avanceAcademico_DataDocentes').html('');
+				};
+			});
+		};
 	});
 </script>

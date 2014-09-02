@@ -1,5 +1,3 @@
-<hr>
-
 <div>
 	<ul class="nav nav-tabs" id="listteachers">
 	  	<li class="active"><a href="#primaryteacher">Docentes</a></li>
@@ -14,23 +12,25 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-var perid="<?php echo $this->perid?>";
-var escid="<?php echo $this->escid?>";
-var subid="<?php echo $this->subid?>";
-var distid="<?php echo $this->distid?>";
+<script>
+	$(function(){
+		var perid="<?php echo $this->perid?>";
+		var escid="<?php echo $this->escid?>";
+		var subid="<?php echo $this->subid?>";
+		var distid="<?php echo $this->distid?>";
 
-$("#primaryteacher").html("<img src='/img/spinner.gif'>Cargando...");
-$("#primaryteacher").load("/distribution/distribution/primaryteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
+		$("#primaryteacher").html("<img src='/img/spinner.gif'>Cargando...");
+		$("#primaryteacher").load("/distribution/distribution/primaryteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
 
-$("#practiceteacher").html("<img src='/img/spinner.gif'>Cargando...");
-$("#practiceteacher").load("/distribution/distribution/practiceteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
+		$("#practiceteacher").html("<img src='/img/spinner.gif'>Cargando...");
+		$("#practiceteacher").load("/distribution/distribution/practiceteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
 
-$("#supportteacher").html("<img src='/img/spinner.gif' />Cargando....");
-$("#supportteacher").load("/distribution/distribution/supportteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
+		$("#supportteacher").html("<img src='/img/spinner.gif' />Cargando....");
+		$("#supportteacher").load("/distribution/distribution/supportteacher/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/distid/"+distid);
 
-$('#listteachers a').click(function (e) {
-  	e.preventDefault()
-  	$(this).tab('show')
-});
+		$('#listteachers a').click(function (e) {
+		  	e.preventDefault()
+		  	$(this).tab('show')
+		});
+	});
 </script>

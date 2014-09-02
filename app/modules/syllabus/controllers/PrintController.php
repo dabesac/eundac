@@ -19,11 +19,11 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $courseid = base64_decode($this->_getParam("courseid"));
-            $turno = base64_decode($this->_getParam("turno"));
-            $curid = base64_decode($this->_getParam("curid"));
-            $escid = base64_decode($this->_getParam("escid"));
-            $subid = base64_decode($this->_getParam("subid"));
-            $perid = base64_decode($this->_getParam("perid"));
+            $turno    = base64_decode($this->_getParam("turno"));
+            $curid    = base64_decode($this->_getParam("curid"));
+            $escid    = base64_decode($this->_getParam("escid"));
+            $subid    = base64_decode($this->_getParam("subid"));
+            $perid    = base64_decode($this->_getParam("perid"));
             $this->view->subid=$subid;
             $this->view->perid=$perid;
             $this->view->escid=$escid;

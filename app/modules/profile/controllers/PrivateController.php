@@ -20,11 +20,11 @@ class Profile_PrivateController extends Zend_Controller_Action {
 	public function studentAction()
     {
         try{
-        	$uid=base64_decode($this->getParam("uid"));
-        	$pid=base64_decode($this->getParam("pid"));
-        	$escid=base64_decode($this->getParam("escid"));
-        	$eid=base64_decode($this->getParam("eid"));
-            $oid=base64_decode($this->getParam("oid"));
+        	$uid=base64_decode($this->_getParam("uid"));
+        	$pid=base64_decode($this->_getParam("pid"));
+        	$escid=base64_decode($this->_getParam("escid"));
+        	$eid=base64_decode($this->_getParam("eid"));
+            $oid=base64_decode($this->_getParam("oid"));
 
         	//print_r($uid." ".$pid." ".$escid." ".$eid);
 
@@ -55,12 +55,12 @@ class Profile_PrivateController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->getParam("eid");
-            $oid=$this->getParam("oid");
-            $pid=$this->getParam("pid");
-            $uid=$this->getParam("uid");
-            $escid=$this->getParam("escid");
-            $subid=$this->getParam("subid");
+            $eid=$this->_getParam("eid");
+            $oid=$this->_getParam("oid");
+            $pid=$this->_getParam("pid");
+            $uid=$this->_getParam("uid");
+            $escid=$this->_getParam("escid");
+            $subid=$this->_getParam("subid");
 
             $data=array("eid"=>$eid,"pid"=>$pid);
 
@@ -84,8 +84,8 @@ class Profile_PrivateController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->getParam("eid");
-            $pid=$this->getParam("pid");
+            $eid=$this->_getParam("eid");
+            $pid=$this->_getParam("pid");
 
 
             $famdata=$famrel= array();
@@ -113,8 +113,8 @@ class Profile_PrivateController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->getParam("eid");
-            $pid=$this->getParam("pid");
+            $eid=$this->_getParam("eid");
+            $pid=$this->_getParam("pid");
 
             $dbacadata=new Api_Model_DbTable_Academicrecord();
             $where=array("eid"=>$eid,"pid"=>$pid);
@@ -141,8 +141,8 @@ class Profile_PrivateController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->getParam("eid");
-            $pid=$this->getParam("pid");
+            $eid=$this->_getParam("eid");
+            $pid=$this->_getParam("pid");
 
 
             $dblaboral=new Api_Model_DbTable_Jobs();
@@ -159,8 +159,8 @@ class Profile_PrivateController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->getParam("eid");
-            $pid=$this->getParam("pid");
+            $eid=$this->_getParam("eid");
+            $pid=$this->_getParam("pid");
 
             $dbinteres=new Api_Model_DbTable_Interes();
             $where=array("eid"=>$eid,"pid"=>$pid);
@@ -178,13 +178,13 @@ class Profile_PrivateController extends Zend_Controller_Action {
     {
         try{
             $this->_helper->layout()->disableLayout();
-            $eid=$this->getParam("eid");
-            $oid=$this->getParam("oid");
-            $pid=$this->getParam("pid");
-            $uid=$this->getParam("uid");
-            $escid=$this->getParam("escid");
-            $subid=$this->getParam("subid");
-            $rid=$this->getParam("rid");
+            $eid=$this->_getParam("eid");
+            $oid=$this->_getParam("oid");
+            $pid=$this->_getParam("pid");
+            $uid=$this->_getParam("uid");
+            $escid=$this->_getParam("escid");
+            $subid=$this->_getParam("subid");
+            $rid=$this->_getParam("rid");
             $perid=$this->sesion->period->perid;
 
             $data=array("eid"=>$eid,"oid"=>$oid,"pid"=>$pid,"uid"=>$uid,"escid"=>$escid,"subid"=>$subid, "perid"=>$perid,"rid"=>$rid);
@@ -232,13 +232,13 @@ class Profile_PrivateController extends Zend_Controller_Action {
         try{
             $this->_helper->layout()->disableLayout();
             
-            $pid=$this->getParam("pid");
-            $uid=$this->getParam("uid");
-            $escid=$this->getParam("escid");
-            $subid=$this->getParam("subid");
+            $pid=$this->_getParam("pid");
+            $uid=$this->_getParam("uid");
+            $escid=$this->_getParam("escid");
+            $subid=$this->_getParam("subid");
          
-            $eid=$this->getParam("eid");
-            $oid=$this->getParam("oid");            
+            $eid=$this->_getParam("eid");
+            $oid=$this->_getParam("oid");            
             $perid=$this->sesion->period->perid;
             
 
