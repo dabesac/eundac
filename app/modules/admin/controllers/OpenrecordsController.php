@@ -40,15 +40,20 @@ class Admin_OpenrecordsController extends Zend_Controller_Action{
 			$subid = $this->_getParam('subid');
 			$escid = $this->_getParam('escid');
 			$where=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'subid'=>$subid,'escid'=>$escid);
-			$attrib=array('perid','semid','escid','subid','courseid','curid','turno','type_rate','closure_date','state','state_record');
+			$attrib=array('perid','escid','semid','subid','courseid','curid','turno','type_rate','closure_date','state','state_record');
 			$orders=array('semid','courseid','turno');
 			$dbcourses= new Api_Model_DbTable_PeriodsCourses();
 			$datacourses = $dbcourses->_getFilter($where,$attrib,$orders);
 			if ($datacourses) {
-				$i=0;			
+				$i=0;	
+				$k=0;		
 				foreach ($datacourses as $course) {
 					$curid=$course['curid'];
 					$courseid=$course['courseid'];
+					$turno=$course['turno'];
+					$wher=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid,'coursoid'=>$courseid,'perid'=>$perid,'turno'=>$turno);
+					$dbstate=new Api_Model_DbTable_StudentAssistance();
+					$result[$i]= $dbstate->_getState($wher);			
 					$where=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid);
 					$attrib=array('courseid','name');
 					$dbcourse = new Api_Model_DbTable_Course();
@@ -59,6 +64,7 @@ class Admin_OpenrecordsController extends Zend_Controller_Action{
 			else{
 				$datacourse=null;
 			}
+			$this->view->result=$result;
 			$this->view->datacourses=$datacourses;
 			$this->view->datacourse=$datacourse;
 		} catch (Exception $e) {

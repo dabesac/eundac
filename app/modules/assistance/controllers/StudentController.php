@@ -609,6 +609,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
 
     public function closureassistanceAction()
     {
+        $uid = $this->sesion->uid;
         $params = $this->getRequest()->getParams();
             if(count($params) > 3){
                 $paramsdecode = array();
@@ -630,6 +631,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $subid = trim($params['subid']);
         $perid = trim($params['perid']);
         $partial = trim($params['partial']);
+        $part = 'Asistencia '.$partial.' Parcial Cerrar';
 
         $base_assistance = new Api_Model_DbTable_StudentAssistance();
         $where = array(
@@ -639,6 +641,9 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 'perid' => $perid,'curid'=>$curid,);
 
         $infoassist_t = $base_assistance ->_getAll($where);
+        $dat = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid,'courseid'=>$coursoid,'curid'=>$curid,'turno'=>$turno,'document_type'=>$part,'register'=>$uid);
+        $bdlog= new Api_Model_DbTable_Loginspectionall();
+        $insertdata = $bdlog->_save($dat);
         if ($infoassist_t) {
             $count = count($infoassist_t); 
             $assist_1 = 0; $assist_2 = 0; $assist_3 = 0;$assist_4 = 0;$assist_5 = 0;

@@ -1,0 +1,383 @@
+<?php
+//print_r($this->$datacoursesill);exit();
+//echo $this->men;exit();
+if ($this->datacourses) { ?>
+<table class="table table-bordered" style="margin-top: 15px;">
+    <tr>
+        <th colspan='7' style="background:#585858;color:#ffffff"><center><h5><b>INFORMACIÓN DE LOS CURSOS</b></h5></center></th>
+        <th colspan='3' style="background:#585858;color:#ffffff"><center><h5><b>ACTAS</h5></b></center></th>
+        <th colspan='2'style="background:#585858;color:#ffffff"><center><h5><b>ASISTENCIAS</h5></b></center></th>
+        <th style="background:#585858;color:#ffffff"><center><h5><b>SILABO</h5></b></center></th>
+    </tr>
+    <tr>
+        <th><center>#</center></th>
+        <th><center>Sem.</center></th>   
+        <th><center>Curricula</center></th>        
+        <th><center>Código</center></th>
+        <th><center>Nombre Curso</center></th>
+        <th><center>Turno</center></th>         
+        <th><center>Calificación</center></th>
+        <th style="background:#EEF1F7"><center>Fecha Acta</center></th>
+        <th style="background:#EEF1F7"><center>1° Parcial</center></th>
+        <th style="background:#EEF1F7"><center>2° Parcial</center></th>
+        <th><center>1° Parcial</center></th>
+        <th><center>2° Parcial</center></th>
+        <th style="background:#F0F0F0"><center>Opcion</center></th>
+    </tr>
+<?php
+    $c=0;
+    $s=0;
+    foreach ($this->datacourses as $course) {
+        $c++;
+        $escid=$course['escid'];
+        $subid=$course['subid'];
+        $courseid=$course['courseid'];
+        $curid=$course['curid'];
+        $perid=$course['perid'];
+        $semid=$course['semid'];
+        $turno=$course['turno'];
+        $state=$course['state'];
+        $stateassistance=$this->result[$s][0]['state'];
+        $tr=$course['type_rate'];
+        $closedate=$course['closure_date'];
+        if ($closedate<>"") {
+            $tmp = split("-", $course['closure_date']);
+            $closedate= $tmp[2]."/".$tmp[1]."/".$tmp[0];
+        }
+    ?>
+    <tr>
+        <td><center class="badge"><?php echo $c?></center></td>
+        <td><center><?php echo $semid?></center></td>
+        <td><center><?php echo $curid?></center></td>
+        <td><center><?php echo $courseid?></center></td>
+        <td><?php echo $this->datacourse[$c-1][0]['name']?> </td>
+        <td><center><?php echo $turno?></center></td>
+        <?php
+            switch ($tr) {
+                case 'O':   ?>
+                    <td><center><?php echo "Obj."?></center></td>
+                <?php    
+                    break;
+                case 'C':   ?>
+                    <td><center><?php echo "Comp."?></center></td>
+                <?php    
+                    break;
+                default:    ?>
+                    <td><center><?php echo ""?></center></td>
+                <?php    
+                break;    
+            }
+        ?>
+        <td style="background:#EEF1F7"><center><?php echo $closedate?></center></td>
+        <td style="background:#EEF1F7">
+            <center>
+                <?php 
+                if ($state=='P' || $state=='C') {  ?>
+                    <a id='loading<?php echo $s?>' data-toggle="modal" href="#myModal"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
+                    <script type="text/javascript">
+                    $("#loading<?php echo $s?>").click(function(){
+                        
+                        url="/admin/academicmanagement/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('A')?>/state_record/<?php echo base64_encode('A')?>/partial/<?php echo base64_encode('Acta 1 Parcial Abrir')?>";
+                        // alert(url);
+                        $("#view").load(url);
+                    });
+                    </script>
+                <?php
+                }
+                else{   ?>
+                    <a id='loads<?php echo $s?>' data-toggle="modal" href="#Modal"><span class="glyphicon glyphicon-lock"></span> Cerrar</a>
+                    <script type="text/javascript">
+                    $("#loads<?php echo $s?>").click(function(){
+                        
+                        url="/admin/academicmanagement/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('P')?>/state_record/<?php echo base64_encode('A')?>/partial/<?php echo base64_encode('Acta 1 Parcial Cerrar')?>";
+                        // alert(url);
+                        $("#view1").load(url);
+                    });
+                    </script>
+                <?php    
+                }
+                ?>
+            </center>
+        </td>
+        <td style="background:#EEF1F7">
+            <center>
+                <?php 
+                if ($state=='C') {  ?>
+                    <a id='load<?php echo $s?>' data-toggle="modal" href="#myModal"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
+                    <script type="text/javascript">
+                    $("#load<?php echo $s?>").click(function(){
+                        
+                        url="/admin/academicmanagement/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('P')?>/state_record/<?php echo base64_encode('A')?>/partial/<?php echo base64_encode('Acta 2 Parcial Abrir')?>";
+                        // alert(url);
+                        $("#view").load(url);
+                    });
+                    </script>
+                <?php
+                }
+                else{   ?>
+                    <a id='lo<?php echo $s?>' data-toggle="modal" href="#Modal"><span class="glyphicon glyphicon-lock"></span> Cerrar</a>
+                    <script type="text/javascript">
+                    $("#lo<?php echo $s?>").click(function(){
+                        
+                        url="/admin/academicmanagement/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('C')?>/state_record/<?php echo base64_encode('C')?>/partial/<?php echo base64_encode('Acta 2 Parcial Cerrar')?>";
+                        // alert(url);
+                        $("#view1").load(url);
+                    });
+                    </script>
+                <?php    
+                }
+                ?>
+            </center>
+        </td>
+        <td>
+            <center>
+                <?php 
+                if ($stateassistance=='P' || $stateassistance=='C') {  ?>
+                    <a id='loadingas<?php echo $s?>' data-toggle="modal" href="#myModalasist"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
+                    <script type="text/javascript">
+                    $("#loadingas<?php echo $s?>").click(function(){
+                        url="/admin/academicmanagement/updatestateassistance/perid/<?php echo base64_encode($perid)?>/coursoid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('A')?>/partial/<?php echo base64_encode('Asistencia 1 Parcial Abrir')?>";
+                        // alert(url);
+                        $("#view").load(url);
+                    }); 
+                    </script>
+                <?php
+                }
+                else{   ?>
+                    <a id='loadsas<?php echo $s?>' data-toggle="modal" href="#Modalasist"><span class="glyphicon glyphicon-lock"></span> Cerrar</a>
+                    <script type="text/javascript">
+                    $("#loadsas<?php echo $s?>").click(function(){
+                        url="/admin/academicmanagement/updatestateassistance/perid/<?php echo base64_encode($perid)?>/coursoid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('P')?>/partial/<?php echo base64_encode('Asistencia 1 Parcial Cerrar')?>";
+                        $("#view1").load(url);
+                    });
+                    </script>
+                <?php    
+                }
+                ?>
+            </center>
+        </td>
+        <td>
+            <center>
+                <?php 
+                if ($stateassistance=='C') {  ?>
+                    <a id='loadas<?php echo $s?>' data-toggle="modal" href="#myModalasist"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
+                    <script type="text/javascript">
+                    $("#loadas<?php echo $s?>").click(function(){
+                        
+                        url="/admin/academicmanagement/updatestateassistance/perid/<?php echo base64_encode($perid)?>/coursoid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('P')?>/partial/<?php echo base64_encode('Asistencia 2 Parcial Abrir')?>";
+                        // alert(url);
+                        $("#view").load(url);
+                    });
+                    </script>
+                <?php
+                }
+                else{   ?>
+                    <a id='loas<?php echo $s?>' data-toggle="modal" href="#Modalasist"><span class="glyphicon glyphicon-lock"></span> Cerrar</a>
+                    <script type="text/javascript">
+                    $("#loas<?php echo $s?>").click(function(){
+                        
+                        url="/admin/academicmanagement/updatestateassistance/perid/<?php echo base64_encode($perid)?>/coursoid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('C')?>/partial/<?php echo base64_encode('Asistencia 2 Parcial Cerrar')?>";
+                        // alert(url);
+                        $("#view1").load(url);
+                    });
+                    </script>
+                <?php    
+                }
+                ?>
+            </center>
+        </td>
+        <td style="background:#F0F0F0">
+            <center>
+                <?php 
+                if ($this->datacourse[$s]['s_sillabus'] =='C') {  ?>
+                    <a id='loadingsil<?php echo $s?>' data-toggle="modal" href="#myModalsil"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
+                    <script type="text/javascript">
+                    $("#loadingsil<?php echo $s?>").click(function(){
+                        
+                        url="/admin/academicmanagement/updatestatesilabus/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('B')?>/partial/<?php echo base64_encode('Silabo Abrir')?>";
+                        // alert(url);
+                        $("#view").load(url);
+                    });
+                    </script>
+                <?php
+                }
+                else{   ?>
+                    <a id='loadssil<?php echo $s?>' data-toggle="modal" href="#Modalsil"><span class="glyphicon glyphicon-lock"></span> Cerrar</a>
+                    <script type="text/javascript">
+                    $("#loadssil<?php echo $s?>").click(function(){
+                        
+                        url="/admin/academicmanagement/updatestatesilabus/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('C')?>/partial/<?php echo base64_encode('Silabo Cerrar')?>";
+                        // alert(url);
+                        $("#view1").load(url);
+                    });
+                    </script>
+                <?php    
+                }
+                ?>
+            </center>
+        </td>
+    </tr>
+    <?php   
+    $s++;
+    }
+?>
+</table>
+<!-- MODAL ACTAS -->
+<!-- Modal 1 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+          <center><h3 class="modal-title" style='color: black' ><img style='width:40px'src="/img/unlock.png" ><b> SE ABRIÓ EL ACTA DE ESTE CURSO</b></br> para el parcial correspondiente</h3></center>
+          <div id='view'></div>            
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+              <div class="col-md-2 col-md-offset-10">
+                  <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+              </div>
+            </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal 2 -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+            <center><h3 class="modal-title" style='color:black' ><img style='width:40px'src="/img/candado.png" ><b> SE CERRÓ EL ACTA DE ESTE CURSO</b></br> para el parcial correspondiente</h3></center>
+            <div id='view1'></div>
+            
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+              <div class="col-md-2 col-md-offset-10">
+                  <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+              </div>
+            </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- MODAL ASISTENCIAS -->
+<!-- Modal 1 -->
+<div class="modal fade" id="myModalasist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+          <center><h3 class="modal-title" style='color: black' ><img style='width:40px'src="/img/unlock.png" ><b> SE ABRIÓ LA ASISTENCIA DE ESTE CURSO</b></br> para el parcial correspondiente</h3></center>
+          <div id='view'></div>            
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+              <div class="col-md-2 col-md-offset-10">
+                  <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+              </div>
+            </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal 2 -->
+<div class="modal fade" id="Modalasist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+            <center><h3 class="modal-title" style='color:black' ><img style='width:40px'src="/img/candado.png" ><b> SE CERRÓ LA ASISTENCIA DE ESTE CURSO</b></br> para el parcial correspondiente</h3></center>
+            <div id='view1'></div>
+            
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+              <div class="col-md-2 col-md-offset-10">
+                  <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+              </div>
+            </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- MODAL SILABUS -->
+<!-- Modal 1 -->
+<div class="modal fade" id="myModalsil" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+          <center><h3 class="modal-title" style='color: black' ><img style='width:40px'src="/img/unlock.png" ><b> SE ABRIÓ EL ACTA DE SÍLABO DE ESTE CURSO</b></h3></center>
+          <div id='view'></div>            
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+              <div class="col-md-2 col-md-offset-10">
+                  <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+              </div>
+            </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal 2 -->
+<div class="modal fade" id="Modalsil" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+            <center><h3 class="modal-title" style='color:black' ><img style='width:40px'src="/img/candado.png" ><b> SE CERRÓ EL ACTA DE SÍLABO DE ESTE CURSO</b></h3></center>
+            <div id='view1'></div>
+            
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+              <div class="col-md-2 col-md-offset-10">
+                  <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+              </div>
+            </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+$ ('#myModal'). on('hidden.bs.modal',function()  { 
+    url="/admin/academicmanagement/courses/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    $("#viewcourses").load(url);  
+});
+
+$ ('#Modal'). on('hidden.bs.modal',function()  { 
+    url="/admin/academicmanagement/courses/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    $("#viewcourses").load(url);  
+});
+$ ('#myModalasist'). on('hidden.bs.modal',function()  { 
+    url="/admin/academicmanagement/courses/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    $("#viewcourses").load(url);  
+});
+
+$ ('#Modalasist'). on('hidden.bs.modal',function()  { 
+    url="/admin/academicmanagement/courses/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    $("#viewcourses").load(url);  
+});
+$ ('#myModalsil'). on('hidden.bs.modal',function()  { 
+    url="/admin/academicmanagement/courses/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    $("#viewcourses").load(url);  
+});
+
+$ ('#Modalsil'). on('hidden.bs.modal',function()  { 
+    url="/admin/academicmanagement/courses/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    $("#viewcourses").load(url);  
+});
+</script>
+<?php    
+}
+else{
+?>
+    <div class="alert alert-info" style='margin-top:20px; font-size:15px'> No existen <b>Actas</b></div>
+<?php
+}
+?>
+

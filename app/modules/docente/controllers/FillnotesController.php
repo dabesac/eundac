@@ -306,7 +306,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
     }
 
     public function closuretargetAction(){
-
+        $uid = $this->sesion->uid;
         $params = $this->getRequest()->getParams();
         if(count($params) > 3){
 
@@ -345,6 +345,11 @@ class Docente_FillnotesController extends Zend_Controller_Action {
             );
         $base_registration_course = new Api_Model_DbTable_Registrationxcourse();
         $result_target = $base_registration_course->_closuretarget($where);
+
+        $part='Acta '.$partial.' Pacrial Cerrar';
+        $dat = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid,'courseid'=>$courseid,'curid'=>$curid,'turno'=>$turno,'document_type'=>$part,'register'=>$uid);
+        $bdlog= new Api_Model_DbTable_Loginspectionall();
+        $insertdata = $bdlog->_save($dat);
 
         $notes_target = (isset($result_target) && count($result_target)>0)?$result_target[0]:array();
         $validate = false;
@@ -1020,6 +1025,7 @@ class Docente_FillnotesController extends Zend_Controller_Action {
 
 
     function closurerecordcompetitionAction(){
+        $uid = $this->sesion->uid;
         $params = $this->getRequest()->getParams();
         if(count($params) > 3){
 
@@ -1063,6 +1069,10 @@ class Docente_FillnotesController extends Zend_Controller_Action {
         $base_registration_course = new Api_Model_DbTable_Registrationxcourse();
         $result_conpetency = $base_registration_course->_closureconpetency($where);
         
+        $part='Acta '.$partial.' Pacrial Cerrar';
+        $dat = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid,'courseid'=>$courseid,'curid'=>$curid,'turno'=>$turno,'document_type'=>$part,'register'=>$uid);
+        $bdlog= new Api_Model_DbTable_Loginspectionall();
+        $insertdata = $bdlog->_save($dat);
 
         $notes_conpetency = (isset($result_conpetency) && count($result_conpetency)>0)?$result_conpetency[0]:array();
         $validate = false;

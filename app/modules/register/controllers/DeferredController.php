@@ -209,6 +209,7 @@ class Register_DeferredController extends Zend_Controller_Action {
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
+        $uid = $this->sesion->uid;
 
         /****parametros get***/
         $courseid = trim($params['courseid']);
@@ -217,6 +218,10 @@ class Register_DeferredController extends Zend_Controller_Action {
         $perid  =   trim($params['perid']);
         $escid =    trim($params['escid']);
         $subid  =   trim($params['subid']);
+        $part = 'Aplazados Cerrar';
+        $dat = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid,'courseid'=>$courseid,'curid'=>$curid,'turno'=>$turno,'document_type'=>$part,'register'=>$uid);
+        $bdlog= new Api_Model_DbTable_Loginspectionall();
+        $insertdata = $bdlog->_save($dat);
 
         $where = array(
             'eid' => $eid, 'oid' => $oid,
