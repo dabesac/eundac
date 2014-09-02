@@ -1,27 +1,36 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> GESTION DE USUARIOS');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/admin/user/index" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 <form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/admin/user/getusernew" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
     <table class="table span9 table-striped table-bordered table-condensed">
+    <tr class="info">
+        <td class='text-center'>
+            <p><span class='glyphicon glyphicon-exclamation-sign'> </span> Primero, busque una Persona por su DNI</p>
+        </td>
+    </tr>
         <tr>
             <td>
-                <p style='font-size: 15px; float:left; margin-right:20px'>Buscar Usuario con su número de DNI: <div style='width: 250px;float:left'><?php echo $this->fm->pid?></p>
-            </td>
-            <td>
-            <center><a href="/admin/user" class="btn btn-danger" >Cancelar</a></center>
+                <p style='font-size: 15px; float:left; margin-right:20px'>Ingrese Número de DNI: <div style='width: 250px;float:left'><?php echo $this->fm->pid?></p>
             </td>
         </tr>
         <tr>
+            <td class='text-center'>
+                <button type="button" id="btnBuscar" data-loading-text="buscando..." class="btn btn-success"><span class='glyphicon glyphicon-search'></span> Buscar
+                </button>
+            </td>
         </tr>   
     </table>
 </form>
-<div  id="cargadatos_"></div> 
+<div id="cargadatos_"></div> 
 <script>
-    $("#pid").keypress(function (e) {
+    $("#pid").keypress(function(e) {
         if(e == 13 || e.which==13 || e.which==0){
             var codi =  $('#pid').val();
             count=codi.length;
             if (count==8 || count==0)
             {
-                $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-                $("#frmFiltroDoc").submit();
+                btn = $("#btnBuscar")
+                buscarDatos();
+                btn.button('loading')
             }
             else
             {
@@ -30,18 +39,24 @@
             }
         }
     });
-    
-    $("#frmFiltroDoc").submit(function(){
+    $("#btnBuscar").click(function() {
+        btn = $(this)
+        buscarDatos();
+        btn.button('loading')
+    });
+    function buscarDatos(){
+        $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
         $.ajax({
         type: 'POST',
-        url: $(this).attr('action'),
-        data: $(this).serialize(),
+        url: $("#frmFiltroDoc").attr('action'),
+        data: $("#frmFiltroDoc").serialize(),
         success: function(data) {                        
-            $('#cargadatos_').html(data);                                 
+            $('#cargadatos_').html(data);    
+            btn.button('reset');
             }
         }); 
         return false;
-    });
+    }
 
 function validNumber(e) {
     var tecla = document.all ? tecla = e.keyCode : tecla = e.which;

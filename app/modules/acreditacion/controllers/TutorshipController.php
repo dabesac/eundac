@@ -14,7 +14,6 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
     }
 
     public function indexAction(){
-
     }
 
     public function listteachersAction(){
@@ -41,7 +40,7 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 						'rid'   => 'DC' );
     	$attrib = array('uid', 'pid');
 
-    	$teachers = $teacherDb->_getFilter($where, $attrib);
+		$teachers = $teacherDb->_getFilter($where, $attrib);
     	foreach ($teachers as $c => $teacher) {
     		$where = array(	'eid' => $eid,
     						'pid' => $teacher['pid'] );
@@ -177,7 +176,6 @@ class Acreditacion_TutorshipController extends Zend_Controller_Action {
 	    	$this->view->teachersAsigned = $teachersAsigned;
     	}
     }
-
     public function cantstudentsxsemAction(){
     	$this->_helper->layout()->disableLayout();
     	//dataBases
