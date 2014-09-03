@@ -9,7 +9,7 @@ class Api_Model_DbTable_News extends Zend_Db_Table_Abstract
 	
 	public function _getLastNews(){
 		try{
-            $sql=$this->_db->query("select * from base_system_news limit 20");
+            $sql=$this->_db->query("select * from base_system_news where state = 'A' limit 20");
         	$r = $sql->fetchAll();
         	return $r;
 		}catch (Exception $e){

@@ -2,9 +2,9 @@
 <?php 
 	$url = "/syllabus/print/index/courseid/".base64_encode($this->curso['courseid'])."/curid/".base64_encode($this->where['curid'])."/escid/".base64_encode($this->where['escid'])."/turno/".base64_encode($this->where['turno'])."/subid/".base64_encode($this->where['subid'])."/perid/". base64_encode($this->where['perid'])."";
 
- $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar </a>');
+ $this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->where['perid']).'" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar </a>');
 
- $this->placeholder('BtnSVCRight')->append('<a href="'.$url.'" type="button" id="imprimir" class="btn btn-default"><span class="glyphicon glyphicon-print"></span> Imprimir</a>')
+ $this->placeholder('BtnSVCRight')->append('<a href="'.$url.'" type="button" id="imprimir" class="btn btn-default"><span class="glyphicon glyphicon-print text-info"></span> Imprimir</a>')
 
  ?>
 <div>

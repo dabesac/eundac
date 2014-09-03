@@ -814,6 +814,9 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $curid = trim($params['curid']);
         $state = trim($params['state']);
         $partial = trim($params['partial']);
+
+        $this->view->perid = $perid;
+
         $where = array(
                 'eid' => $eid, 'oid' => $oid,
                 'escid' => $escid,'subid' => $subid,

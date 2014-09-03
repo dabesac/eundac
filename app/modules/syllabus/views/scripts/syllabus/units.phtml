@@ -61,7 +61,7 @@ switch ($this->params['unit']) {
     </div>
     <div class="modal-footer" id='footer_syllabus'>
       <?php echo ($this->params['unit'] < $this->data_syllabus['units'] )? '<button data-status="'.$this->status.'" type="button" class="btn btn-default" id="btn_next_unit">Siguiente <span class="glyphicon glyphicon-arrow-right"></span></button>':''?>
-      <button type="button" class="btn btn-dager" data-dismiss="modal">Cerrar</button>
+      <button type="button" class="btn btn-dager" id="btn_close_unit" data-dismiss="modal">Cerrar</button>
     </div>
   </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->

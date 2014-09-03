@@ -8,7 +8,7 @@ if($this->partial==2) {
 
 $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> '. $partial_text.' ' .$infocourse['name'].' Turno '.$this->turno.'');
 
-$this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+$this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->perid).'" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
                             ');
 
         $this->placeholder('BtnSVCRight')->append('
