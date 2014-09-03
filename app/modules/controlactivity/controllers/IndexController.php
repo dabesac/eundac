@@ -31,6 +31,8 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
             $turno = base64_decode($this->_getParam('turno'));
             $perid = base64_decode($this->_getParam('perid'));
 
+            $this->view->perid = $perid;
+            print_r($perid);
             $where = array('eid'=>$eid, 'oid'=>$oid, 'courseid'=>$courseid, 'curid'=>$curid);
             $attrib = array('name');
             $coursename = $coursesDb->_getFilter($where, $attrib);
