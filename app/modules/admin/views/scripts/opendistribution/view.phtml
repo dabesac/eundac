@@ -102,7 +102,7 @@
 				<td class="text-center">
 					<?php if ($distrib['state']=="C") {	?>
 					<h4>
-						<a class="abrirDis" href="#" distid='<?php echo base64_encode($distrib['distid'])?>' perid='<?php echo base64_encode($distrib['perid'])?>' escid='<?php echo $distrib['escid'];?>' subid='<?php echo base64_encode($distrib['subid'])?>'>
+						<a class="abrirDis" href="#" data-toggle="modal" data-target="#myModal" distid='<?php echo base64_encode($distrib['distid'])?>' perid='<?php echo base64_encode($distrib['perid'])?>' escid='<?php echo base64_encode($distrib['escid']);?>' subid='<?php echo base64_encode($distrib['subid'])?>'>
 							<span class="glyphicon glyphicon-circle-arrow-right" data-toggle="tooltip" title="pulse para abrir">								
 							</span>
 						</a>
@@ -134,7 +134,7 @@
 	</table>
 <?php else: ?>
 	<div class='col-md-10 col-md-offset-1 cont-font-not-register alert alert-info'>
-		<h3 class="text-info text-center"><span class='glyphicon glyphicon-exclamation-sign' ></span> <b>NO EXISTEN DISTRIBUCIONES EN ESTE PERIODO</b></h3> 
+		<h3 class="text-info text-center"><span class='glyphicon glyphicon-exclamation-sign' ></span> <b>NO EXISTEN DISTRIBUCIONES DE ESTA FACULTAD</b></h3> 
 	</div>
 <?php endif ?>
 
@@ -148,77 +148,53 @@
         <h4 class="modal-title" id="myModalLabel"><span class='text-info'><b>ESTA SEGURO DE "ABRIR" LA DISTRIBUCIÓN? </b></span></h4>
       </div>
       <div class="modal-body text-right">
-        	<button id="aceptars" type="button" class="btn btn-success"><span class='glyphicon glyphicon-ok'></span> Aceptar</button>
+        	<button id="aceptar" type="button" class="btn btn-success"><span class='glyphicon glyphicon-ok'></span> Aceptar</button>
         	<button type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Cancelar</button>
       </div>
     </div>
   </div>
 </div>
 
-
-
 <script>
 $(function(){
+	var ajax_data;
 	$(".glyphicon").tooltip();
 	$("span").tooltip();
 	$(".abrirDis").click(function(e){
-		e.preventDefault();
-		var data = {
-			'escid' : $("this").attr('escid'), 
-			'subid' : $(".this").attr('subid'),
-			'distid' : $(".this").attr('distid'),
-			'repid' : $(".this").attr('repid'),
+		ajax_data = {
+			'escid' : $(this).attr('escid'), 
+			'subid' : $(this).attr('subid'),
+			'distid' : $(this).attr('distid'),
+			'perid' : $(this).attr('perid'),
 		};
-		alert(data['escid']);
-		//$("#myModal").modal("show");
-
+	});
+	$("#aceptar").click(function(e) {
+		e.preventDefault();
+		$.ajax({
+            type : 'post',
+            url : '/admin/opendistribution/opendistribution/',
+            data : ajax_data,
+            success: function(data){
+            	$("#myModal").modal("hide");
+    		}
+		});
+	});
+	$ ('#myModal').on('hidden.bs.modal',function()  { 
+		var perid = $('#periods').val();
+			var facid = $('#faculty').val();
+			var ajax_dat = {
+			"perid" : perid,
+			"facid" : facid
+		};
+		$.ajax({
+			type : 'post',
+			url : '/admin/opendistribution/view/',
+			data : ajax_dat,
+			success: function(data){
+				$('#data').html(data);
+			}
+		});
 	});
 });
-
-
-
-	/*$(".glyphicon").tooltip();
-	$(".span").tooltip();
-
-	$(".abrirDis").click(function(){
-		alert("se abre");
-		$("#myModal").modal("show");
-		var params = {
-			escid:$(this).attr('escid'),
-			subid:$(this).attr('subid'),
-			distid:$(this).attr('distid'),
-			perid:$(this).attr('perid')
-		};
-		$("#aceptars").click(function(){
-			$("#myModal").modal("hide");
-			$('#myModal').on('hidden.bs.modal', function (e) {
-				var perid = $('#periods').val();
-				var facid = $('#faculty').val();
-
-				var url1=("/admin/opendistribution/open/state/<?php echo base64_encode("C")?>/escid/"+params['escid']+"/subid/"+params['subid']+"/distid/"+params['distid']+"/perid/"+params['perid']);
-				$("#cargaqui").load(url1);
-				alert("/admin/opendistribution/open/state/<?php echo base64_encode("C")?>/escid/"+params['escid']+"/subid/"+params['subid']+"/distid/"+params['distid']+"/perid/"+params['perid']));
-				var datos={
-					"state":'<?php echo base64_encode("C")?>',
-					"escid":params['escid'],
-					"subid":,
-					"distid":,
-					"perid":
-				};
-				$.aja({
-					type:"post",
-					url:'/admin/opendistribution/opend/',
-					data:,
-					success:function(data){
-						$("#cargaqui").load(data);
-					}
-				});
-				var url2=("/pedagogia/distribution/view/perid/"+perid+"/facid/"+facid);
-				$('#data').load(url2);
-				$('.correc').popover('hide');
-			})
-		});
-	});*/
-
 </script>
  <div id="destino"></div> 

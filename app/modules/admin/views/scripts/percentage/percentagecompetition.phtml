@@ -1,0 +1,138 @@
+<?php if($this->cont == 1){?>
+	<form id="frmCompetition" class='form-inline'> 
+		<div class="panel panel-primary">
+				<div class='row' >
+					<div class='col-md-offset-1' id='unid-1' index='1'>
+						<center><h4>Porcentajes Unidad <?php echo $this->unidad?></h4></center>
+				    	<?php echo $this->form->getElement("hdeid"); ?>
+						<?php echo $this->form->getElement("hdoid"); ?>
+						<?php echo $this->form->getElement("hdescid"); ?>
+						<?php echo $this->form->getElement("hdsubid"); ?>
+					    <?php echo $this->form->getElement("hdcurid"); ?>
+						<?php echo $this->form->getElement("hdcourseid"); ?>
+						<?php echo $this->form->getElement("hdperid"); ?>
+						<?php echo $this->form->getElement("hdturno"); ?>		
+						<input type="hidden" name="hdunid" value="<?php echo $this->unidad?>" id="hdunid">
+						<label>Proced.</label>
+						<div class="form-group">
+							<?php echo $this->form->txtppporcentaje1?>
+					  	</div>
+					  	<label>Concep.</label>
+					  	<div class="form-group">
+							<?php echo $this->form->txtppporcentaje2?>
+					  	</div>
+					  	<label>Actitud.</label>
+					  	<div class="form-group">
+							<?php echo $this->form->txtppporcentaje3?>
+					  	</div>
+					  	<div class="form-group">
+					  		<h6 class='text-addition'><span class='glyphicon' id='addition-1'></span></h6>
+					  	</div>
+					</div>
+				</div>
+			<div class='row' >
+				<div class='col-md-offset-5'>
+	       			<!-- <button type="button" class="btn btn-primary" id='save-persentage'><span class='glyphicon glyphicon-floppy-disk' ></span> Guardar</button> -->
+	       			<input type="submit" value="Guardar" class="btn btn-success" id="save-persentage">
+				</div>
+			</div>
+			<br>
+		</div>
+	</form>
+<?php }else{?>
+	<div id="percen">
+		<center><h3>
+			<p class='text-danger'>
+				No se ha ingresado el porcentaje correspondiente a esa unidad
+			</p>
+		</h3></center>
+	</div>
+
+<?php }?>
+<div id="percen"></div>
+<script >
+$(function(){
+        $('#frmCompetition').on('submit', function(e){
+            e.preventDefault();
+            $.ajax({
+                url:'/admin/percentage/modifypercentagecompetition/',
+                type: 'post',
+                data : $('#frmCompetition').serialize(),
+                success: function(data){
+                	$('#percen').html(data);
+                	window.location.href='/admin/percentage/index/';
+                }
+            });
+        });
+
+    });
+	$(".data-uni-1").keyup(function(){
+		var $persentaje = $(this).val();
+		var div = $(this).parent();
+		var div1 = $(div).parent();
+		addition($(div1));
+	});
+
+	function addition($obj){
+		var $addition =0;
+		var $index = $obj.attr('index');
+		$persenage = {};
+		$data = false;
+		$($obj[0].children).each(function () {
+        	if(this.firstElementChild != null){
+        		if (this.firstElementChild.nodeName == 'INPUT') {
+        			$text_input = $(this.firstElementChild);
+        			$value =  $text_input.val();
+        			$name = $text_input.attr('name');
+        			if ($value != "") {
+        				$data = true;
+        				$persenage[$name] = $.trim($value);
+        			}
+        		}
+        	}
+		});
+
+		if ($persenage['txtppporcentaje1']) { $addition += intval($persenage['txtppporcentaje1'])};
+		if ($persenage['txtppporcentaje2']) { $addition += intval($persenage['txtppporcentaje2'])};
+		if ($persenage['txtppporcentaje3']) { $addition += intval($persenage['txtppporcentaje3'])};
+
+		if ($addition == 100) {
+			$("#addition-1").removeClass('glyphicon-remove-circle text-danger');
+			$("#addition-1").addClass('glyphicon-ok-circle text-success');
+			$("#save-persentage").attr('disabled',false);
+		}
+		else{
+			$("#save-persentage").attr('disabled',true);
+			//$("#addition-"+$index).removeClass('glyphicon-ok-circle text-success');
+			$("#addition-"+$index).addClass('glyphicon-remove-circle text-danger');
+		}
+
+	}
+
+	function intval (mixed_var, base) {
+	    var tmp;
+	    var type = typeof(mixed_var);
+	     if (type === 'boolean') {
+	        return +mixed_var;
+	    } else if (type === 'string') {
+	        tmp = parseInt(mixed_var, base || 10);
+	        return (isNaN(tmp) || !isFinite(tmp)) ? 0 : tmp;    } else if (type === 'number' && isFinite(mixed_var)) {
+	        return mixed_var | 0;
+	    } else {
+	        return 0;
+	    }
+	}
+
+</script>
+<style type="text/css">
+	.text-addition{
+		font-size: 20px;
+	}
+	.errors {
+		list-style: none;
+		color: red;
+	}
+	.form-group{
+		margin-right: 20px;
+	}
+</style>

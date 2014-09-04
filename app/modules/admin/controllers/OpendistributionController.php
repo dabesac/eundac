@@ -53,7 +53,7 @@ class Admin_OpendistributionController extends Zend_Controller_Action{
                 
                 #######################################################
 
-                $distri= new Distribution_Model_DbTable_Distribution();
+            $distri= new Distribution_Model_DbTable_Distribution();
             $dbescuela= new Api_Model_DbTable_Speciality();
             $ldistribution=new Distribution_Model_DbTable_logObsrvationDistribution();
             if ($facid=="TODO") {
@@ -96,7 +96,6 @@ class Admin_OpendistributionController extends Zend_Controller_Action{
                 $dataobs=$ldistribution->_getUltimateObservation($wher);
                 $dataobsc=$ldistribution->_getUltimateObservationstatec($wher);
                 if ($dataobsc) {
-                    // $dis[$i]['state']=$dataobs[0]['state'];
                     $dis[$i]['observationver']=$dataobsc[0]['observation'];
                     $dis[$i]['comments']=$dataobsc[0]['comments'];
                 }
@@ -111,7 +110,41 @@ class Admin_OpendistributionController extends Zend_Controller_Action{
                 } catch (Exception $e) {
                         
                 }
-                
-
+        }
+        public function opendistributionAction(){
+                try {
+                    $this->_helper->layout()->disableLayout();
+                    $eid=$this->sesion->eid;
+                    $oid=$this->sesion->oid;
+                    $escid=base64_decode($this->_getParam("escid"));
+                    $subid=base64_decode($this->_getParam("subid"));
+                    $distid=base64_decode($this->_getParam("distid"));
+                    $perid=base64_decode($this->_getParam("perid"));
+                    $state="B";
+                    print_r("llega");
+                    //datos para log
+                    $uid=$this->sesion->uid;
+                    $document= "distribucion";
+                    $dat = array(
+                        'eid'=>$eid,
+                        'oid'=>$oid,
+                        'escid'=>$escid,
+                        'subid'=>$subid,
+                        'perid'=>$perid,
+                        'document_type'=>$document,
+                        'register'=>$uid);
+                    $bdlog= new Api_Model_DbTable_Loginspectionall();
+                    if ($insertdata = $bdlog->_save($dat)) {
+                        print_r("log");
+                    }
+                    $dbdistribution=new Distribution_Model_DbTable_Distribution();
+                    $pk=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,'perid'=>$perid);
+                    $data=array('state'=>$state);
+                    if ($dbdistribution->_update($data,$pk)) {
+                        print_r("cambio");   
+                    }
+                } catch (Exception $e) {
+                        print 'Error '.$e->getMessage();
+                }
         }
 }

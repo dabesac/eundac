@@ -39,7 +39,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
        		$data['escid']=$this->sesion->escid;
        		$data['subid']=$this->sesion->subid;
 
-            $anio = $this->getParam('anio');
+            $anio = $this->_getParam('anio');
             $this->view->anio = $anio;
             $anio = substr($anio, 2, 2);
             $data['year'] = $anio;

@@ -12,3 +12,12 @@ else{	?>
 <?php	
 }    
 ?>
+<script>
+	$(function(){
+		var perid='<?php echo $this->perid?>';	
+		$("#perids option[value="+perid+"]").attr('selected','selected');
+		var perid=$("#perids").val();
+		var url=("/horary/semester/semesterlist/perid/"+perid);
+		$("#loading").load(url);
+	});	
+</script>

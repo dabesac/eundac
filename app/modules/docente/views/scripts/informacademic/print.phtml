@@ -40,6 +40,7 @@ ob_start();
 	<tr>
 		<th style="border: 1px solid #555"><center>#</center></th>
 		<th style="border: 1px solid #555"><center>Asignaturas</center></th>
+		<th style="border: 1px solid #555"><center>Escuela</center></th>
 		<th style="border: 1px solid #555"><center>Turno</center></th>
 		<th style="border: 1px solid #555"><center>Semestre</center></th>
 		<th style="border: 1px solid #555"><center>% Desarrollado</center></th>
@@ -54,6 +55,7 @@ ob_start();
 	  	<tr>
 	  		<td style="border: 1px solid #555"><?php echo $i ?></td>
 			<td style="border: 1px solid #555"><?php echo $datacourses['name'] ?></td>
+			<td style="border: 1px solid #555"><center><?php echo $datacourses['escid'] ?></center></td>
 			<td style="border: 1px solid #555"><center><?php echo $datacourses['turno'] ?></center></td>
 			<td style="border: 1px solid #555"><center><?php echo $datacourses['semid'] ?></center></td>
 			<td style="border: 1px solid #555"><center><?php echo $datacourses['percentage']." %" ?></center></td>

@@ -29,12 +29,11 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
     public function viewAction(){	
     	try{            
             $this->_helper->layout()->disablelayout();
-    		$eid=$this->sesion->eid;
-    		$oid=$this->sesion->oid;
-    		$perid=$this->_getParam('perid');
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $perid = base64_decode($this->_getParam('perid'));
             $facid=$this->_getParam('facid');
             $borrador=$this->_getParam('borrador');
-
 
             $distri= new Distribution_Model_DbTable_Distribution();
             $dbescuela= new Api_Model_DbTable_Speciality();

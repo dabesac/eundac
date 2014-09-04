@@ -1,117 +1,270 @@
-<div class="row">
-  <?php
-  $escid = $this->escid;
-   if ($escid!='TODOEC') { ?> 
-  <div class="col-lg-6">
-    <div  class="input-group">
-      <span  class="input-group-addon alert-info">
-        <input style='float: left' type="radio" name="group2" value="1"> <font style='float: left'> &nbsp; &nbsp; MATRICULADOS POR CURSOS</font><br>
-      </span>
-    </div>
-  </div>
-<div class="col-lg-6">
-    <div  class="input-group">
-      <span  class="input-group-addon alert-info">
-        <input style='float: left' type="radio" name="group2" value="2"> <font style='float: left'> &nbsp; &nbsp; AVANCE DE NOTAS</font><br>
-      </span>
-    </div>
-  </div>
-  <?php }?>
-    <div class="col-lg-6">
-    <div  class="input-group">
-      <span  class="input-group-addon alert-info">
-        <input style='float: left' type="radio" name="group2" value="3"> <font style='float: left'> &nbsp; &nbsp;MATRICULADOS POR SEMESTRES </font><br>
-      </span>
-    </div>
-  </div>
-   <?php if ($escid!='TODOEC') { ?> 
-    <div class="col-lg-6">
-    <div  class="input-group">
-      <span  class="input-group-addon alert-info">
-        <input style='float: left' type="radio" name="group2" value="4"> <font style='float: left'> &nbsp; &nbsp; CANTIDAD DE MATRICULADOS POR CURSO</font><br>
-      </span>
-    </div>
-  </div>
-  <?php }?>
-    <div class="col-lg-6">
-    <div  class="input-group">
-      <span  class="input-group-addon alert-info">
-        <input style='float: left' type="radio" name="group2" value="5"> <font style='float: left'> &nbsp; &nbsp; MATRICULADOS POR ESCUELA</font><br>
-      </span>
-    </div>
-  </div>
-    <div class="col-lg-6">
-    <div  class="input-group">
-      <span  class="input-group-addon alert-info">
-        <input style='float: left' type="radio" name="group2" value="6"> <font style='float: left'> &nbsp; &nbsp;  CONSOLIDADO POR SEMESTRE</font><br>
-      </span>
-    </div>
-  </div>
-<!--   <div class="col-lg-6">
-    <div  class="input-group">
-      <span  class="input-group-addon alert-info">
-        <input style='float: left' type="radio" name="group2" value="7"> <font style='float: left'> &nbsp; &nbsp;  CANTIDAD DE TURNOS POR ESCUELA</font><br>
-      </span>
-    </div>
-  </div>  -->
-</div>
 <style type="text/css">
-  .modal-dialog
-  {
-    width: 900px;
-  }
+    .modal-dialog{
+        width: 900px;
+    }
+    .sdis{        
+        margin: 1em; 
+        font-size: 1.1em;
+        background-color: #c5cef0;
+        color: #282828;
+    }
+    .modal-footer{
+        text-align: right;
+    }    
 </style>
+<div class="panel panel-default">
+    
+<?php
+$escid = $this->escid;
+if ($escid!='TODOEC') { ?> 
+    <div class="row">
+        <div class="col-md-4">
+            <div class='sdis' id='report1'>
+                <button class='btn btn-primary'><span id='srepor1' class='glyphicon glyphicon-unchecked'></span></button>
+                <span>
+                    <!-- <input style='float: left' type="radio" name="group2" value="1"> -->
+                    <font><b> &nbsp; &nbsp; MATRICULADOS POR CURSOS</b></font><br>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class='sdis' id='report2'>
+                <button class='btn btn-primary'><span id='srepor2' class='glyphicon glyphicon-unchecked'></span></button>
+                <span>
+                    <!-- <input style='float: left' type="radio" name="group2" value="1"> -->
+                    <font><b> &nbsp; &nbsp; AVANCE DE NOTAS</b></font><br>
+                </span>
+            </div>
+        </div>
+<?php }?>
+        <div class="col-md-4">
+            <div class='sdis' id='report3'>
+                <button class='btn btn-primary'><span id='srepor3' class='glyphicon glyphicon-unchecked'></span></button>
+                <span>
+                    <!-- <input style='float: left' type="radio" name="group2" value="1"> -->
+                    <font><b> &nbsp; &nbsp; MATRICULADOS POR SEMESTRES </b></font><br>
+                </span>
+            </div>
+        </div>
+    </div>    
+    <div class="row">
+    <?php if ($escid!='TODOEC') { ?> 
+        <div class="col-md-4">
+            <div class='sdis' id='report4'>
+                <button class='btn btn-primary'><span id='srepor4' class='glyphicon glyphicon-unchecked'></span></button>
+                <span>
+                    <!-- <input style='float: left' type="radio" name="group2" value="1"> -->
+                    <font><b> &nbsp; &nbsp; CANTIDAD DE MATRICULADOS POR CURSO</b></font><br>
+                </span>
+            </div>
+        </div>
+    <?php }?>
+        <div class="col-lg-4">
+            <div class='sdis' id='report5'>
+                <button class='btn btn-primary'><span id='srepor5' class='glyphicon glyphicon-unchecked'></span></button>
+                <span>
+                    <!-- <input style='float: left' type="radio" name="group2" value="1"> -->
+                    <font><b> &nbsp; &nbsp; MATRICULADOS POR ESCUELA</b></font><br>
+                </span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class='sdis' id='report6'>
+                <button class='btn btn-primary'><span id='srepor6' class='glyphicon glyphicon-unchecked'></span></button>
+                <span>
+                    <!-- <input style='float: left' type="radio" name="group2" value="1"> -->
+                    <font><b> &nbsp; &nbsp; CONSOLIDADO POR SEMESTRE</b></font><br>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- <div class="col-lg-6">
+        <div  class="input-group">
+            <span  class="input-group-addon alert-info">
+                <input style='float: left' type="radio" name="group2" value="7">
+                <font style='float: left'> &nbsp; &nbsp;  CANTIDAD DE TURNOS POR ESCUELA</font><br>
+            </span>
+        </div>
+    </div> -->
+<div class="modal fade" id='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>&hellip;</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Salir</button>
+            </div>            
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
-$(document).ready(function()
-{
-        $("input[name=group2]").click(function () {   
-        var tipo=$('input:radio[name=group2]:checked').val(); 
+$(document).ready(function(){
+    $("#report1").on('click', function(){
+        $("#srepor1").removeClass("glyphicon-unchecked");
+        $("#srepor1").addClass("glyphicon-check");
+        var tipo='1'; 
         var perid = $("#periodo_c").val();
         var facid = $("#facid").val();
         var tescid = $("#escid").val(); 
         var espec = $("#especialidad").val();
+        var subid1 = "";
+        if (espec) {
+            espec= espec.split("--");
+            subid1=espec[0];
+            espec=espec[1];
+        };
+
         var xx=tescid.split(";--;");
         var escid=xx[0];
         var subid=xx[1];
-        if (tipo=="1" || tipo=="2" )  {  
-        var $url = '/report/consolidated/registerxcourse/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
 
-        } 
-        if (tipo=="3" || tipo=="6")  {  
-        var $url = '/report/consolidated/registerxsemester/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;        
-        } 
-        if (tipo=="4")  {  
-        var $url = '/report/consolidated/countregisterxcourse/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
-        }
-        if (tipo=="5")  {  
-        var $url = '/report/consolidated/registerxspeciality/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
-        }
-         if (tipo=="7")  {  
-        // var $url = '/report/consolidated/totalturnosxspeciality/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
-        }
-        // alert($url);
+        var $url = '/report/consolidated/registerxcourse/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo+"/subid1/"+subid1;
+        
         $("#modal").modal('show');
+        $(".modal-body").html('<center><img src="/img/spinner.gif" /> Cargando...</center>');
         $(".modal-body").load($url);
-         });
+    });
+
+    $("#report2").on('click', function(){
+        $("#srepor2").removeClass("glyphicon-unchecked");
+        $("#srepor2").addClass("glyphicon-check");
+        var tipo='2'; 
+        var perid = $("#periodo_c").val();
+        var facid = $("#facid").val();
+        var tescid = $("#escid").val(); 
+        var espec = $("#especialidad").val();
+        var subid1 = "";
+        if (espec) {
+            espec= espec.split("--");
+            subid1=espec[0];
+            espec=espec[1];
+        };
+
+        var xx=tescid.split(";--;");
+        var escid=xx[0];
+        var subid=xx[1];
+
+        var $url = '/report/consolidated/registerxcourse/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo+"/subid1/"+subid1;
+        
+        $("#modal").modal('show');
+        $(".modal-body").html('<center><img src="/img/spinner.gif" /> Cargando...</center>');
+        $(".modal-body").load($url);
+    });
+
+    $("#report3").on('click', function(){
+        $("#srepor3").removeClass("glyphicon-unchecked");
+        $("#srepor3").addClass("glyphicon-check");
+        var tipo='3'; 
+        var perid = $("#periodo_c").val();
+        var facid = $("#facid").val();
+        var tescid = $("#escid").val(); 
+        var espec = $("#especialidad").val();
+        var subid1 = "";
+        if (espec) {
+            espec= espec.split("--");
+            subid1=espec[0];
+            espec=espec[1];
+        };
+
+        var xx=tescid.split(";--;");
+        var escid=xx[0];
+        var subid=xx[1];
+
+        var $url = '/report/consolidated/registerxsemester/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo+"/subid1/"+subid1;
+        
+        $("#modal").modal('show');
+        $(".modal-body").html('<center><img src="/img/spinner.gif" /> Cargando...</center>');
+        $(".modal-body").load($url);
+    });
+
+    $("#report4").on('click', function(){
+        $("#srepor4").removeClass("glyphicon-unchecked");
+        $("#srepor4").addClass("glyphicon-check");
+        var tipo='4'; 
+        var perid = $("#periodo_c").val();
+        var facid = $("#facid").val();
+        var tescid = $("#escid").val(); 
+        var espec = $("#especialidad").val();
+        var subid1 = "";
+        if (espec) {
+            espec= espec.split("--");
+            subid1=espec[0];
+            espec=espec[1];
+        };
+
+        var xx=tescid.split(";--;");
+        var escid=xx[0];
+        var subid=xx[1];
+
+        var $url = '/report/consolidated/countregisterxcourse/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo+"/subid1/"+subid1;
+        
+        $("#modal").modal('show');
+        $(".modal-body").html('<center><img src="/img/spinner.gif" /> Cargando...</center>');
+        $(".modal-body").load($url);
+    });
+
+    $("#report5").on('click', function(){
+        $("#srepor5").removeClass("glyphicon-unchecked");
+        $("#srepor5").addClass("glyphicon-check");
+        var tipo='5'; 
+        var perid = $("#periodo_c").val();
+        var facid = $("#facid").val();
+        var tescid = $("#escid").val(); 
+        var espec = $("#especialidad").val();
+        var subid1 = "";
+        if (espec) {
+            espec= espec.split("--");
+            subid1=espec[0];
+            espec=espec[1];
+        };
+
+        var xx=tescid.split(";--;");
+        var escid=xx[0];
+        var subid=xx[1];
+
+        var $url = '/report/consolidated/registerxspeciality/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo+"/subid1/"+subid1;
+        
+        $("#modal").modal('show');
+        $(".modal-body").html('<center><img src="/img/spinner.gif" /> Cargando...</center>');
+        $(".modal-body").load($url);
+    });
+
+    $("#report6").on('click', function(){
+        $("#srepor6").removeClass("glyphicon-unchecked");
+        $("#srepor6").addClass("glyphicon-check");
+        var tipo='6'; 
+        var perid = $("#periodo_c").val();
+        var facid = $("#facid").val();
+        var tescid = $("#escid").val(); 
+        var espec = $("#especialidad").val();
+        var subid1 = "";
+        if (espec) {
+            espec= espec.split("--");
+            subid1=espec[0];
+            espec=espec[1];
+        };
+
+        var xx=tescid.split(";--;");
+        var escid=xx[0];
+        var subid=xx[1];
+
+        var $url = '/report/consolidated/registerxsemester/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo+"/subid1/"+subid1;
+        
+        $("#modal").modal('show');
+        $(".modal-body").html('<center><img src="/img/spinner.gif" /> Cargando...</center>');
+        $(".modal-body").load($url);
+    });
+    $('#modal').on('hidden.bs.modal', function (e) {
+        $("#srepor1,#srepor2,#srepor3,#srepor4,#srepor5,#srepor6").removeClass("glyphicon-check");
+        $("#srepor1, #srepor2,#srepor3,#srepor4,#srepor5,#srepor6").addClass("glyphicon-unchecked");
+    })
 });
 </script>
-
-<div class="modal fade" id='modal'>
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p>One fine body&hellip;</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Salir</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 
 

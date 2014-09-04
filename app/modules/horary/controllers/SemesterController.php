@@ -15,6 +15,8 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		try {
 			$fm=new Horary_Form_HoraryPeriods();
 			$this->view->fm=$fm;
+			$anio=date('Y');
+            $this->view->anio=$anio;            
 		} catch (Exception $e) {
 			print "Error: get semester".$e->getMessage();
 		}
@@ -23,6 +25,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	public function periodlistAction(){
 		try {
 			$this->_helper->layout()->disableLayout();
+			$perid=$this->sesion->period->perid;
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
 			$anio=$this->_getParam('anio');
@@ -31,6 +34,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	        $where = array('eid'=> $eid,'oid'=> $oid,'year'=> $anio);
 	        $period = $periodsDb->_getPeriodsxYears($where);
 	        $this->view->period=$period;
+			$this->view->perid=$perid;
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}

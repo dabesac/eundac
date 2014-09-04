@@ -75,15 +75,15 @@ class Acreditacion_InfosillabusController extends Zend_Controller_Action{
 
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
-            $escid = base64_decode($this->getParam('escid'));
-            $subid = base64_decode($this->getParam('subid'));
-            $curid = base64_decode($this->getParam('curid'));
-            $courseid = base64_decode($this->getParam('courseid'));
-            $turno = base64_decode($this->getParam('turno'));
-            $perid = base64_decode($this->getParam('perid'));
-            $nameteach = base64_decode($this->getParam('nameteach'));
-            $uid=base64_decode($this->getParam('uid'));
-            $pid=base64_decode($this->getParam('pid'));
+            $escid = base64_decode($this->_getParam('escid'));
+            $subid = base64_decode($this->_getParam('subid'));
+            $curid = base64_decode($this->_getParam('curid'));
+            $courseid = base64_decode($this->_getParam('courseid'));
+            $turno = base64_decode($this->_getParam('turno'));
+            $perid = base64_decode($this->_getParam('perid'));
+            $nameteach = base64_decode($this->_getParam('nameteach'));
+            $uid=base64_decode($this->_getParam('uid'));
+            $pid=base64_decode($this->_getParam('pid'));
 
             $where = array('eid'=>$eid, 'oid'=>$oid, 'courseid'=>$courseid, 'curid'=>$curid);
             $attrib = array('name');

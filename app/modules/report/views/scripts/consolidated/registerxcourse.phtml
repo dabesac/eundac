@@ -68,18 +68,19 @@
 </div>
 <script>
 
- $("#curid").change(function(){
-        var curid = $(this).val();        
+    $("#curid").change(function(){
+        var curid = $(this).val();
         var perid = "<?php echo $this->perid?>"; 
         var escid = "<?php echo $this->escid?>";
         var espec = "<?php echo $this->espec?>";  
         $("#courseid").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#courseid").load("/report/consolidated/coursesxcurricula/curid/"+curid+"/perid/"+perid+"/escid/"+escid+"/espec/"+espec);
+        var url=("/report/consolidated/coursesxcurricula/curid/"+curid+"/perid/"+perid+"/escid/"+escid+"/espec/"+espec);
+        $("#courseid").load(url);
     }); 
 
     $("#courseid").change(function(){
-    var curso = $(this).val();                                
-                         });
+        var curso = $(this).val();
+    });
 
 
     $("#generar1").click(function(){
@@ -87,7 +88,8 @@
         var perid = "<?php echo $this->perid?>";  
         var escid = "<?php echo $this->escid?>";
         var espec = "<?php echo $this->espec?>";
-        var subid = "<?php echo $this->subid?>"; 
+        var subid = "<?php echo $this->subid?>";
+        var subid1 = "<?php echo $this->subid1?>"; 
         var tipo = "<?php echo $this->tipo?>";                
         var curid = $("#curid").val();        
         var curso = $("#courseid").val(); 
@@ -96,8 +98,8 @@
         var turno=tmp[1]; 
         if (curid=="") {alert ("Debe de seleccionar una curricula");return false;}
         if (courseid=="") {alert ("Debe de seleccionar un curso");return false;}        
-        var url="/report/consolidated/studentregistration/courseid/"+courseid+"/curid/"+curid+"/perid/"+perid+"/turno/"+turno+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo;
-        $("#det").html("<img src='/img/spinner.gif' />Cargando....");
+        var url="/report/consolidated/studentregistration/courseid/"+courseid+"/curid/"+curid+"/perid/"+perid+"/turno/"+turno+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo+"/subid1/"+subid1;
+        $("#det").html("<center><img src='/img/spinner.gif' /> Cargando....</center");
         $("#det").load(url);
     });    
 
@@ -106,7 +108,8 @@
         var perid = "<?php echo $this->perid?>";  
         var escid = "<?php echo $this->escid?>";
         var espec = "<?php echo $this->espec?>";
-        var subid = "<?php echo $this->subid?>"; 
+        var subid = "<?php echo $this->subid?>";
+        var subid1 = "<?php echo $this->subid1?>";  
         var tipo = "<?php echo $this->tipo?>";                
         var curid = $("#curid").val();        
         var curso = $("#courseid").val(); 
@@ -115,8 +118,8 @@
         var turno=tmp[1]; 
         if (curid=="") {alert ("Debe de seleccionar una curricula");return false;}
         if (courseid=="") {alert ("Debe de seleccionar un curso");return false;}        
-        var url="/report/consolidated/printregisterxcourse/courseid/"+courseid+"/curid/"+curid+"/perid/"+perid+"/turno/"+turno+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo;
-       window.location.href = url;
+        var url="/report/consolidated/printregisterxcourse/courseid/"+courseid+"/curid/"+curid+"/perid/"+perid+"/turno/"+turno+"/escid/"+escid+"/espec/"+espec+"/subid/"+subid+"/tipo/"+tipo+"/subid1/"+subid1;        
+        window.location.href = url;
        // $("#det").load(url);
 
     });     

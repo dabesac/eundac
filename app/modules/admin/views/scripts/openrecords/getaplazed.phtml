@@ -116,7 +116,6 @@ else{
         <div class="modal-body">
             <center><h3 class="modal-title" style='color:black' ><img style='width:40px'src="/img/candado.png" ><b> SE CERRÓ EL ACTA DE APLAZADOS DE ESTE CURSO</b></h3></center>
             <div id='view1'></div>
-            
         </div>
         <div class="modal-footer">
           <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
@@ -128,12 +127,12 @@ else{
 <script type="text/javascript">
 
 $ ('#myModal'). on('hidden.bs.modal',function()  { 
-    url="/admin/openrecords/getaplazed/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    url="/admin/academicmanagement/getaplazed/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
     $("#viewcourses").load(url);  
 });
 
 $ ('#Modal'). on('hidden.bs.modal',function()  { 
-    url="/admin/openrecords/getaplazed/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    url="/admin/academicmanagement/getaplazed/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
     $("#viewcourses").load(url);  
 });
 </script>

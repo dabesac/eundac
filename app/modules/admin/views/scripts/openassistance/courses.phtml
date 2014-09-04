@@ -1,5 +1,5 @@
 <?php
-if ($this->datacourses) { ?>
+if ($this->datacourses) { ?>    
 <table class="table table-striped table-bordered" style="margin-top: 15px;">
     <tr>
         <th colspan='7'><center><h5><b>INFORMACIÓN DE LOS CURSOS</b></h5></center></th>
@@ -106,7 +106,7 @@ if ($this->datacourses) { ?>
                         
                         url="/admin/openassistance/updatestate/perid/<?php echo base64_encode($perid)?>/coursoid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('C')?>";
                         // alert(url);
-                        $("#view1").load(url);
+                        $("#view1").load(url);  
                     });
                     </script>
                 <?php    

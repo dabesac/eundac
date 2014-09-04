@@ -46,7 +46,7 @@
     <ul>
         <li class="active"><a href="/<?php echo $home?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
         <?php 
-        if ($menu && $uid_!='14') {
+        if ($menu) {
         foreach ($menu as $cF => $value) { ?>
         <li class="slideButtonLayout" slideupnumber="<?php echo $cF ?>">
             <a href="##"><span class="glyphicon glyphicon-<?php echo $value['icon']?>"></span> <?php echo $value['name']?></a>

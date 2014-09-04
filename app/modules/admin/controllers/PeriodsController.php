@@ -20,7 +20,7 @@ class Admin_PeriodsController extends Zend_Controller_Action{
          	// print_r($data);
             $perio = new Api_Model_DbTable_Periods();
             $data=$perio->_getPeriodsxYears($data);
-         	// print_r($lper); 
+         	// print_r($lper);
         	$this->view->data=$data; 
 			
 		} catch (Exception $e) {

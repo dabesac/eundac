@@ -361,6 +361,36 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 		}
 	}
 
+	 public function _getInfoCourseXTeacherDiferentEsc($where=null){
+		try {
+			if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where['uid']=='' || $where['pid']=='') return false; 
+				$select = $this->_db->select()
+						->from(array('pc'=>'base_periods_courses'),
+								array('pc.eid','pc.oid','pc.subid','pc.escid','pc.curid','pc.perid',
+									'pc.courseid','pc.turno','pc.semid','pc.state',
+									'pc.state_record'))
+						->join(array('ct'=>'base_course_x_teacher'),
+								'ct.eid=pc.eid and ct.oid=pc.oid and ct.courseid=pc.courseid and 
+								ct.curid=pc.curid and ct.perid=pc.perid and ct.escid=pc.escid and 
+								ct.turno=pc.turno and ct.subid=pc.subid',
+								array('ct.uid','ct.pid','ct.percentage','ct.is_main','ct.is_com','ct.distid'))
+						->where('ct.is_main = ?','S')
+						->where('ct.eid = ?',$where['eid'])
+						->where('ct.oid = ?',$where['oid'])
+						->where('ct.pid = ?',$where['pid'])
+						->where('ct.uid = ?',$where['uid'])
+						->where('ct.perid = ?',$where['perid'])
+						->where('ct.escid = ?',$where['escid'])
+						->order('pc.courseid','pc.turno');
+				$results = $select->query();
+				$rows = $results->fetchAll();
+				if ($rows) return $rows;
+				return false;
+		} catch (Exception $e) {
+			print "Error: Read Course_Teacher";
+		}
+	}
+
 	  /*Devuelve los Cursos que no tienen docentes Distribución*/
 	public function _getCoursesIsNotTeacher($where=null){
 	    try{
@@ -379,22 +409,19 @@ class Api_Model_DbTable_PeriodsCourses extends Zend_Db_Table_Abstract
 	    }
 	}
 
-	  /*devuelve CANTIDAD DE ALUMNOS MATRICULADO POR CURSO SEGUN PARAMETROS*/
-public function _getCountStudentxCourse($where=null)
-  {
+/*devuelve CANTIDAD DE ALUMNOS MATRICULADO POR CURSO SEGUN PARAMETROS*/
+public function _getCountStudentxCourse($where=null){
     try{
-      if($where['perid']==""||$where['eid']==""||$where['oid']==""||$where['subid']==""||$where['escid']=="") return false;
+      	if($where['perid']==""||$where['eid']==""||$where['oid']==""||$where['subid']==""||$where['escid']=="") return false;
      
-      $str = " select  P.semid,C.curid,C.courseid,C.name,MC.turno,count(*) matriculados from base_periods_courses P inner join base_courses C 
-on P.eid=C.eid and P.subid=C.subid and P.escid=C.escid and P.oid=C.oid and P.curid=C.curid and P.courseid=C.courseid INNER JOIN base_registration_course MC
-on MC.courseid=C.courseid AND MC.escid=P.escid AND MC.curid=C.curid AND MC.perid=P.perid AND  MC.turno=P.turno AND MC.oid=P.oid AND MC.eid=P.eid AND MC.subid=C.subid and (MC.state='M' or MC.state='S' or  MC.state='C')
-where   P.eid='".$where['eid']."' and P.oid='".$where['oid']."' and P.escid='".$where['escid']."' and P.subid='".$where['subid']."' and P.perid='".$where['perid']."' 
-group by name, P.semid,C.curid,C.courseid, MC.turno
-order by p.semid
-
+      	$str = " select  P.semid,C.curid,C.courseid,C.name,MC.turno,count(*) matriculados from base_periods_courses P inner join base_courses C 
+		on P.eid=C.eid and P.subid=C.subid and P.escid=C.escid and P.oid=C.oid and P.curid=C.curid and P.courseid=C.courseid INNER JOIN base_registration_course MC
+		on MC.courseid=C.courseid AND MC.escid=P.escid AND MC.curid=C.curid AND MC.perid=P.perid AND  MC.turno=P.turno AND MC.oid=P.oid AND MC.eid=P.eid AND MC.subid=C.subid and (MC.state='M' or MC.state='S' or  MC.state='C')
+		where   P.eid='".$where['eid']."' and P.oid='".$where['oid']."' and P.escid='".$where['escid']."' and P.subid='".$where['subid']."' and P.perid='".$where['perid']."' 
+		group by name, P.semid,C.curid,C.courseid, MC.turno
+		order by p.semid
         ";
-
-      
+        
         $sql = $this->_db->query($str);
         if ($sql) return $sql->fetchAll();
         return false;           

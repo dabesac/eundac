@@ -1,0 +1,65 @@
+<?php 
+	$dataDocente = $this->dataDocente;
+ ?>
+
+<div class="documents_documentHeader">
+	<div class="ddObO document_numeracion">
+		#
+	</div>
+	<div class="ddObO ddObOHeader document_name">
+		Nombre
+	</div>
+	<div class="ddObO ddObOHeader document_issue">
+		Motivo
+	</div>
+	<div class="ddObO ddObOHeader document_state">
+		Estado
+	</div>
+</div>
+<div class="documents_document">
+	<div class="ddObO document_numeracion">
+		1
+	</div>
+	<div class="ddObO document_name">
+		Solicitud N. 04078854-1
+	</div>
+	<div class="ddObO document_issue">
+		Re-apertura de acta
+	</div>
+	<div class="ddObO document_state">
+		Aprobado
+	</div>
+	<a href="##" data-toggle="modal" data-target="#modalDetail" class="ddObO document_btnView">
+		Visualizar
+	</a>
+</div>
+
+<div id="modalDetail" class="modal fade">
+	<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<p class="stateLabel">Estado : <span class="register">Registrado</span></p>
+			<buttom class="closeModal" type="buttom" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></buttom>
+		</div>
+		<div class="modal-body">
+			<p class="detail_titleDocument">Solicitud N. 04078854-1</p>
+			<div class="detail_infoDocument">
+				<p><strong>Remite:</strong> <?php echo $dataDocente['fullName'] ?></p>
+				<p><strong>DNI:</strong> <?php echo $dataDocente['pid'] ?></p>
+				<p><strong>Fecha:</strong> 11 de Agosto del 2014</p>
+				<p><strong>Motivo:</strong> Re-apertura de Acta</p>
+			</div>
+			<hr>
+			<div class="detail_detailDocument">
+				<p class="detail_parrafoDetailTittle">Detalle</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro a officia, architecto nostrum necessitatibus. Perspiciatis voluptatem veniam officiis unde dolore esse delectus numquam praesentium natus. Rem quod voluptatem, eius debitis? Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla recusandae dicta, fugiat, nihil at, libero animi ullam rem commodi temporibus labore tempora error quasi corporis asperiores unde totam sed pariatur.</p>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<div class="btnSide">
+				<a class="btnCloseMoreDetail" data-dismiss="modal" href="##">Cerrar</a>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>

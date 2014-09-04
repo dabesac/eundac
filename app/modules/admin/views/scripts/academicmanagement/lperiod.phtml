@@ -1,0 +1,16 @@
+<?php 
+	if ($this->dataperiod)
+	{
+		echo "<option value=''><center> -Seleccione un periodo- </center></option>";
+	    foreach ($this->dataperiod  as $perio){
+	        ?>
+	        <option value="<?php echo $perio['perid']?>"><?php echo $perio['perid']." | ".$perio['name']?></option>
+	        <?php
+	    }
+	}
+	else{
+	    ?>
+	        <option value="">No tienen ningun periodo</option>
+	    <?php
+	}
+?> 

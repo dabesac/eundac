@@ -1,0 +1,78 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<style type="text/css">
+    .text-center{
+        text-align:center;
+    } 
+</style>
+<?php
+if ($this->data) {  ?>
+    <div style="text-align: center; font-size:16px;margin-top:20px"><b> REPORTE ALUMNOS SIN NINGUNA MATRÍCULA</b></div><br/>
+   <table class="table table-hover" style="width:100%">
+        <tr class="info">
+            <th class='text-center'>#</th>
+            <th class='text-center'>DNI</th>
+            <th class='text-center'>Código</th>
+            <th class='text-center'>Alumno</th>
+            <th class="text-center">Estado</th>
+            <!-- <th class="text-center">Escuela</th> -->
+        </tr>
+        <?php
+            foreach ($this->data as $key => $data) {
+                ?>
+                <tr>
+                    <td class="text-center"><?php echo $key+1?></td>
+                    <td class="text-center"><?php echo $data['pid']?></td>
+                    <td class="text-center"><?php echo $data['uid']?></td>
+                    <td><?php echo $data['full_name']?></td>
+                    <td class="text-center">
+                        <?php 
+                            switch ($data['state']) {
+                                case 'A':
+                                    echo "Activo";
+                                    break;
+                                case 'I':
+                                    echo "Inactivo";
+                                    break;
+                                case 'E':
+                                    echo "Eliminado";
+                                    break;                              
+                                default:
+                                    echo "nulo";
+                                    break;
+                            }
+                        ?>
+                    </td>
+                </tr>
+            <?php   
+            }
+        ?>
+    </table>
+<?php    
+}
+else{   ?>
+    <div style="text-align: center; font-size:12px;margin-top:10px"><b> No se encontraron registros</b></div><br/>
+<?php    
+}
+?>
+<?php 
+        
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,8,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    //$mpdf -> Output('Reporte_alumnos_sin_matricula_'.$this->escid.'.pdf','D');
+    $mpdf -> Output();
+?>

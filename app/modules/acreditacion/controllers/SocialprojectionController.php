@@ -247,7 +247,7 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
                 $form->populate($formData);
             }
         }else{
-            $id = $this->getParam('id');
+            $id = $this->_getParam('id');
             $form->id_open->setValue($id);
             $query= array(
                 array(
@@ -269,7 +269,7 @@ class Acreditacion_SocialprojectionController extends Zend_Controller_Action {
         
     }
     public function deleteprojectAction(){
-        $id = $this->getParam('id');
+        $id = $this->_getParam('id');
         $connect = new Eundac_Connect_openerp();
         $ids[0] = $id;
         $data_project = $connect->unlink($ids,'inv.pro.project');

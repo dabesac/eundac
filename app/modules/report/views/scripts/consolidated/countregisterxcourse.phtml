@@ -1,79 +1,87 @@
-<center><h5 >
-  	<strong>FACULTAD DE <?php echo strtoupper($this->facultad)?> - </strong>
-  	<strong>ESCUELA DE  <?php echo strtoupper($this->escuela)?> -</strong>
-  	<?php if ($this->especialidad){ ?>
-  	<strong>ESPECIALIDAD DE  <?php echo strtoupper($this->especialidad)?> -</strong>	
-  	<?php }?>
-  	<strong>PERIODO <?php echo strtoupper($this->perid)?></strong>
-</center></h5>
-	<div class="panel panel-primary">
+<center>
+    <h5 >
+  	    <strong>FACULTAD DE <?php echo strtoupper($this->facultad)?> - </strong>
+  	    <strong>ESCUELA DE  <?php echo strtoupper($this->escuela)?> -</strong>
+  	    <?php if ($this->especialidad){ ?>
+  	    <strong>ESPECIALIDAD DE  <?php echo strtoupper($this->especialidad)?> -</strong>	
+  	    <?php }?>
+  	    <strong>PERIODO <?php echo strtoupper($this->perid)?></strong>
+    </h5>
+</center>
+<div class="panel panel-primary">
   	<div class="panel-heading">
 		<h5 class="panel-title">
-	  	<span class='glyphicon glyphicon-list'></span>      
- <strong>REPORTE CANTIDAD MATRICULADOS POR CURSO</strong> 
-	  	<div class='pull-right'>
-	  		<a id="imprimir" class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span></a>
-	  	</div>
-	  </h5>
+	  	    <span class='glyphicon glyphicon-list'></span>      
+            <strong>REPORTE CANTIDAD MATRICULADOS POR CURSO</strong> 
+	  	    <div class='pull-right'>
+	  		   <a id="imprimir" class='btn btn-xs btn-success'><span class='glyphicon glyphicon-print'></span></a>
+	  	    </div>
+	    </h5>
   	</div><br>
-<table class="table  table-condensed table-bordered table-striped" >    
-    </table>
+    <table class="table  table-condensed table-bordered table-striped"></table>
     <?php 
-foreach ($this->semester as $sem){
-            $cont=$sem['semid']?>
-<br>
-<div class="datos-columna" style="font-size: 15px; color: #428bca;"><h4><CENTER><b> SEMESTRE <?php echo $cont;?>   </b></h4><CENTER>  </div>
+    foreach ($this->semester as $sem){
+        $cont=$sem['semid']?>
+        <br>
+        <div class="datos-columna" style="font-size: 15px; color: #428bca;">
+            <h4>
+                <center>
+                    <b> SEMESTRE <?php echo $cont;?></b>
+                </center>  
+            </h4>
+        </div>
 
-<table class="table  table-condensed table-bordered table-striped">
-   <thead>
-    <tr style="margin-left: 0px;margin-right: 15px; font-size: 12px; background: #428bca; color: #D2F6F9;">
-        <th class="span1"><center>#</center></th>
-        <th class="span1"><center>Sem.</center></th>
-        <th class="span1"><center>Curricula</center></th>        
-        <th ><center>Curso</center></th>
-        <th class="span1"><center>Turno</center></th>        
-        <th class="span2"><center>Alumnos Matriculados</center></th>
-    </tr>
-    </thead>
-<?php
-$r=0;
-if ($this->listacursos){  
-    foreach ($this->listacursos as $curso){
-        $cursoid=$curso['courseid'];
-        $curid=$curso['curid'];
-        $semid=$curso['semid'];       
-        $turno =$curso['turno']; 
-        $cantidad=$curso['matriculados'];   
-          if ($curso['semid']==$cont){  
-            $r++;?>    
-            <tr >
-                <td ><center><?php echo $r?></center></td>                    
-                <td ><?php echo $semid?></td>
-                <td ><?php echo $curid?></td>                
-                <td ><?php echo $curso['name']?></td>
-                <td ><center><?php echo $turno?></center></td>
-                <td ><center><?php echo $cantidad;?></center></td>           
-            </tr>
+        <table class="table  table-condensed table-bordered table-striped">
+            <thead>
+                <tr style="margin-left: 0px;margin-right: 15px; font-size: 12px; background: #428bca; color: #D2F6F9;">
+                    <th class="span1"><center>#</center></th>
+                    <th class="span1"><center>Sem.</center></th>
+                    <th class="span1"><center>Curricula</center></th>        
+                    <th ><center>Curso</center></th>
+                    <th class="span1"><center>Turno</center></th>        
+                    <th class="span2"><center>Alumnos Matriculados</center></th>
+                </tr>
+            </thead>
             <?php
-            }       
-        }
-        } 
-?>
-</table>
-<?php } ?> 
+            $r=0;
+            if ($this->listacursos){  
+                foreach ($this->listacursos as $curso){
+                    $cursoid=$curso['courseid'];
+                    $curid=$curso['curid'];
+                    $semid=$curso['semid'];       
+                    $turno =$curso['turno']; 
+                    $cantidad=$curso['matriculados'];   
+                    if ($curso['semid']==$cont){  
+                        $r++;?>    
+                        <tr >
+                            <td ><center><?php echo $r?></center></td>                    
+                            <td ><?php echo $semid?></td>
+                            <td ><?php echo $curid?></td>                
+                            <td ><?php echo $curso['name']?></td>
+                            <td ><center><?php echo $turno?></center></td>
+                            <td ><center><?php echo $cantidad;?></center></td>           
+                        </tr>
+                    <?php
+                    }       
+                }
+            } 
+            ?>
+        </table>
+    <?php } ?> 
 </div>
 	
-  <script type="text/javascript">
-     $("#imprimir").click(function () {   
+<script type="text/javascript">
+    $("#imprimir").click(function(){   
         var tipo="<?php echo $this->tipo?>"; 
         var perid = "<?php echo $this->perid?>";
         var facid = "<?php echo $this->facid?>";
         var escid = "<?php echo $this->escid?>"; 
         var espec = "<?php echo $this->espec?>";
         var subid = "<?php echo $this->subid?>";
+        var subid1 = "<?php echo $this->subid1?>";
 
-        var $url = '/report/consolidated/printcountregisterxcourse/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo;
+        var $url = '/report/consolidated/printcountregisterxcourse/perid/'+ perid+'/escid/'+escid+'/espec/'+espec+'/facid/'+facid+'/subid/'+subid+'/tipo/'+tipo+'/subid1/'+subid1;
         window.location.href = $url;
-         });
+    });
 </script>
 

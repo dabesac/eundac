@@ -534,6 +534,6 @@ else{
     $mpdf->SetHTMLFooter($this->footer);
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    // $mpdf->Output('Horario-'.$this->semid.'.pdf','D');
-    $mpdf->Output();  
+    $mpdf->Output('Horario-'.$this->semid.'.pdf','D');
+    //$mpdf->Output();  
 ?>

@@ -1,0 +1,63 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<style type="text/css">
+    .text-center{
+        text-align:center;
+    } 
+</style>
+    <div style="margin-top:10px">
+        <b>Desde:</b> el Año <b><?php echo $this->anio1?></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        
+        <b>Hasta: </b>el Año <b><?php echo $this->anio?></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
+<?php
+if ($this->data) {  ?>
+    <div style="text-align: center; font-size:16px;margin-top:18px"><b> REPORTE DE CURSOS CUYO GRADO DE DESAPROBADOS ES 50%</b></div><br/>
+    <table class='table' style="width:100%; margin-top:10px">
+        <tr class='info'>
+            <th class='text-center'>#</th>
+            <th class='text-center'>Código del Curso</th>
+            <th class='text-center'>Nombre del Curso</th>
+            <th class='text-center'>Porcentaje (%)</th>
+        </tr>
+        <?php
+        foreach ($this->data as $key => $data) {    
+            $number = number_format($data['porcentaje'], 2, ',', '');
+            ?>  
+            <tr>
+                <td class='text-center'><?php echo $key+1?></td>
+                <td class='text-center'><?php echo $data['courseid']?></td>
+                <td><?php echo $data['name']?></td>
+                <td class='text-center'><?php echo $number." %"?></td>
+            </tr>
+        <?php   
+        }
+        ?>
+    </table>
+<?php    
+}
+else{   ?>
+    <div style="text-align: center; font-size:12px;margin-top:10px"><b> No se encontraron registros</b></div><br/>
+<?php    
+}
+?>
+<?php 
+        
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,8,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf -> Output('Reporte_desaprobados_mayor_50%_'.$this->escid.'.pdf','D');
+    //$mpdf -> Output();
+?>

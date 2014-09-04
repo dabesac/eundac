@@ -71,9 +71,9 @@ class Register_StudentController extends Zend_Controller_Action {
                     'created'=>date('Y-m-d H:m:s'),
             );
 
-            if ( $escid !='7DE' && $escid !='2YP' && $escid !='2DE' && $escid !='3EN' && $escid='2ESTA' && $escid !='4AM' && $escid !='5AG-Y' && $uid !='8822283375' && $uid !='0122277076' && $uid !='1244207110' && $uid !='1024103023' && $uid !='1028103059' && $uid!='0922342017' && $uid!='0922345028' && $uid !='1242293208' && $uid!='0619103011' && $uid!='0929102043' && $uid!='0722307504' && $uid !='1028103110' && $uid !='1028103264' && $uid !='1244703163' && $uid != '1241303515' && $uid !='0922203013' && $uid !='0812323015' && $uid !='0722343028' && $uid !='0823403070' && $uid !='1294403094' && $uid !='0894203024' && $uid !='0724203062') {
+            /*if ( $escid !='7DE' && $escid !='2YP' && $escid !='2DE' && $escid !='3EN' && $escid='2ESTA' && $escid !='4AM' && $escid !='5AG-Y' && $uid !='8822283375' && $uid !='0122277076' && $uid !='1244207110' && $uid !='1024103023' && $uid !='1028103059' && $uid!='0922342017' && $uid!='0922345028' && $uid !='1242293208' && $uid!='0619103011' && $uid!='0929102043' && $uid!='0722307504' && $uid !='1028103110' && $uid !='1028103264' && $uid !='1244703163' && $uid != '1241303515' && $uid !='0922203013' && $uid !='0812323015' && $uid !='0722343028' && $uid !='0823403070' && $uid !='1294403094' && $uid !='0894203024' && $uid !='0724203062') {
                 $this->_redirect("/alumno/");
-            }
+            }*/
 
             if (is_array($base_registration->_getOne($where)) && is_array($base_payment->_getOne($where_payment))) {
                 $this->_redirect("/register/student/start/regid/".$regid);
@@ -99,7 +99,9 @@ class Register_StudentController extends Zend_Controller_Action {
     }
     
     public function startAction(){
-        try {
+       try {
+            //DataBases
+            $distributionDb = new Distribution_Model_DbTable_Distribution();
 
             $eid=$this->sesion->eid;
             $oid= $this->sesion->oid;
@@ -313,7 +315,7 @@ class Register_StudentController extends Zend_Controller_Action {
             }
 
             $base_payment = new Api_Model_DbTable_Payments();
-            $data_payment=$base_payment->_getOne($where);
+            $data_payment = $base_payment->_getOne($where);
             
             unset($where['perid']);
             $register_paymnets = $base_payment->_getAll($where);
@@ -321,12 +323,7 @@ class Register_StudentController extends Zend_Controller_Action {
             $this->view->register_paymnets=$register_paymnets;
 
             if ($data_payment) {
-
-                if ($data_payment['amount']==0) {
-
-
-                }
-
+                $existPayment = 1;
                 $ratid  =   $data_payment['ratid'];
                 $amount_payment = $data_payment['amount'];
                 $date_payments = $data_payment['date_payment'];
@@ -336,31 +333,70 @@ class Register_StudentController extends Zend_Controller_Action {
                                     'ratid'=>$ratid,'perid'=>$perid);
                 $assign_payment =   $base_rates->_getOne($where_payment);
 
-                if ($assign_payment) {
+                //Verificar la distribucion
+                $whereDist = array(
+                                    'eid'   => $eid,
+                                    'oid'   => $oid,
+                                    'perid' => $perid,
+                                    'escid' => $escid,
+                                    'subid' => $subid );
+                $attrib = array('state');
+                $dataDistribution = $distributionDb->_getFilter($whereDist, $attrib);
 
-                    $t_normal   =   $assign_payment['t_normal'];
-
-                    $date_payment=strtotime($date_payments);
-                    $f_fin_tn  =   strtotime($assign_payment['f_fin_tnd'].'11:59:00');
-                    $f_fin_ti1  =   strtotime($assign_payment['f_fin_ti1'].'11:59:00'); 
-                    $f_fin_ti2  =   strtotime($assign_payment['f_fin_ti2'].'11:59:00');
-
-                    switch ($date_payment) {
-
-                        case $date_payment < $f_fin_tn:
-                            $amount_assing = $t_normal;
-                            break;
-                        case ($f_fin_tn < $date_payment && $date_payment < $f_fin_ti1):
-                            $amount_assing = $assign_payment['t_incremento1'];
-                            break;
-                        case ($f_fin_ti1 < $date_payment && $date_payment < $f_fin_ti2):
-                            $amount_assing = $assign_payment['t_incremento2'];
-                            break;
-                        default:
-                            $amount_assing = "Monto no Aceptado";
-                            break;
-                    }  
+                $doneDistribution = 0;
+                if ($dataDistribution and $dataDistribution[0]['state'] == 'C') {
+                    $doneDistribution = 1;
                 }
+
+                $this->view->doneDistribution = $doneDistribution;
+
+
+                if ($data_payment['amount'] == 0) {
+                    $amount_payment = 0;
+                    $existPayment = 0;
+                    $dateToday = date('Y-m-d');
+                    if ($assign_payment) {
+                        $f_fin_tn  =   date('Y-m-d', strtotime($assign_payment['f_fin_tnd']));
+                        $f_fin_ti1  =   date('Y-m-d', strtotime($assign_payment['f_fin_ti1']));
+                        $f_fin_ti2  =   date('Y-m-d', strtotime($assign_payment['f_fin_ti2']));
+                    }
+                    $t_normal   =   $assign_payment['t_normal'];
+                    if ($dateToday <= $f_fin_tn) {
+                        $amount_assing = $t_normal;
+                    }elseif ($f_fin_tn < $dateToday and $dateToday <= $f_fin_ti1){
+                        $amount_assing = $assign_payment['t_incremento1'];
+                    }elseif ($f_fin_ti1 < $dateToday && $dateToday <= $f_fin_ti2){
+                        $amount_assing = $assign_payment['t_incremento2'];
+                    }else{
+                        $amount_assing = "Monto no Aceptado";
+                    }
+                }else{
+                    if ($assign_payment) {
+                        $t_normal   =   $assign_payment['t_normal'];
+
+                        $date_payment=strtotime($date_payments);
+                        $f_fin_tn  =   strtotime($assign_payment['f_fin_tnd'].'11:59:00');
+                        $f_fin_ti1  =   strtotime($assign_payment['f_fin_ti1'].'11:59:00'); 
+                        $f_fin_ti2  =   strtotime($assign_payment['f_fin_ti2'].'11:59:00');
+
+                        switch ($date_payment) {
+
+                            case $date_payment < $f_fin_tn:
+                                $amount_assing = $t_normal;
+                                break;
+                            case ($f_fin_tn < $date_payment && $date_payment < $f_fin_ti1):
+                                $amount_assing = $assign_payment['t_incremento1'];
+                                break;
+                            case ($f_fin_ti1 < $date_payment && $date_payment < $f_fin_ti2):
+                                $amount_assing = $assign_payment['t_incremento2'];
+                                break;
+                            default:
+                                $amount_assing = "Monto no Aceptado";
+                                break;
+                        }  
+                    }
+                }
+                $this->view->existPayment = $existPayment;
 
                 if ($amount_payment >= $amount_assing) {
                     # code...
@@ -393,14 +429,9 @@ class Register_StudentController extends Zend_Controller_Action {
 
                 $this->view->name_reates=$assign_payment['name'];
                 //print_r($data_payment);
-            }
-            else
-            {
+            }else {
                 $this->view->message_paymnet = "Error Las Tasas no Existen";
             }
-            
-
-
 
         } catch (Exception $e) {
             print "Error start Registration ".$e->$getMessage();
@@ -625,7 +656,7 @@ class Register_StudentController extends Zend_Controller_Action {
             return $subject;
             
         } catch (Exception $e) {
-            print "Error: in load subject".$e->getMessage();
+            //print "Error: in load subject".$e->getMessage();
         }
     }
 
@@ -985,13 +1016,13 @@ class Register_StudentController extends Zend_Controller_Action {
                     'escid'=>$escid,
                     'subid'=>$subid,
                     'pid'=>$pid,
-                    'type_impression'=>'prematricula',
+                    'type_impression'=>'prematricula_'.$perid,
                     'date_impression'=>date('Y-m-d h:m:s'),
                     'pid_print'=>$uidim
                     );
                 $dbimpression->_save($data);
 
-                $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'prematricula');
+                $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'prematricula_'.$perid);
                 $dataim = $dbimpression->_getFilter($wheri);
                 
                 $co=count($dataim);

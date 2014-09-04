@@ -61,7 +61,7 @@ class Admin_Form_Speciality extends Zend_Form{
 
         $state = new Zend_Form_Element_Select('state');
         $state->removeDecorator('HtmlTag')->removeDecorator('Label');
-        $state->setAttrib('class','form-control');     
+        $state->setAttrib('class','form-control');
         $state->setRequired(true)->addErrorMessage('Es necesario que selecciones un estado.');
         $state->addMultiOption("","- Seleccione Estado -");
         $state->addMultiOption("A","Activo");

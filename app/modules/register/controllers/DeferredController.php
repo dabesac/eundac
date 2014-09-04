@@ -84,7 +84,7 @@ class Register_DeferredController extends Zend_Controller_Action {
                                         $infostudent['first_name'];
                 $where1 = array(
                     'code_student'=>$student['uid'],
-                    'perid'=>$perid,'processed'=>'N');
+                    'perid'=>$perid,'processed'=>'N','concept'=>'00000021');
                 $receipts = $base_bankreceipts->_getFilter($where1);
                 $students_register[$key]['receipts']= $receipts; 
                 } 
@@ -209,6 +209,7 @@ class Register_DeferredController extends Zend_Controller_Action {
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
+        $uid = $this->sesion->uid;
 
         /****parametros get***/
         $courseid = trim($params['courseid']);
@@ -217,6 +218,10 @@ class Register_DeferredController extends Zend_Controller_Action {
         $perid  =   trim($params['perid']);
         $escid =    trim($params['escid']);
         $subid  =   trim($params['subid']);
+        $part = 'Aplazados Cerrar';
+        $dat = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid,'courseid'=>$courseid,'curid'=>$curid,'turno'=>$turno,'document_type'=>$part,'register'=>$uid);
+        $bdlog= new Api_Model_DbTable_Loginspectionall();
+        $insertdata = $bdlog->_save($dat);
 
         $where = array(
             'eid' => $eid, 'oid' => $oid,
