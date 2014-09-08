@@ -1,3 +1,4 @@
+
 <?php
 if ($this->user) { 
 	$whereesc['eid']=$this->user['eid'];
@@ -11,41 +12,52 @@ if ($this->user) {
 	$wheresub['subid']=$this->user['subid'];
 	$sub= new Api_Model_DbTable_Subsidiary();
 	$datsub=$sub->_getOne($wheresub)?>
-<table class="table table-striped">
-	<tr>
-		<th>Cod. Mat.</th>
-		<th>DNI</th>
-		<th>Apellidos y Nombres</th>
-		<th>Escuela</th>
-		<th>Sede</th>
-		<th class='text-center'>Seleccione Periodo</th>
-		<th class='text-center'>Agregar</th>
-	</tr>
-	<tr>
-		<td><?php echo $this->user['uid']?></td>
-		<td><?php echo $this->user['pid']?></td>
-		<td><?php echo $this->user['last_name0']." ".$this->user['last_name1'].", ".$this->user['first_name']?></td>
-		<td><?php echo $datesc['name']?></td>
-		<td><?php echo $datsub['name']?></td>
-		<td class="col-lg-3">
-			<select id="perid" class="form-control">
-				<?php
-				if ($this->periods) { ?>
-					<option value="">- Seleccione -</option>
+	
+	<div class="panel">
+		<div class="col-xs-2 col1">
+			<span id="titu1">ALUMNO:</span>
+		</div>
+		<div class="col-xs-7 col2" >
+			<div class="col-xs-12">
+				<span class="glyphicon glyphicon-user"></span> <?php echo $this->user['last_name0']." ".$this->user['last_name1'].", ".$this->user['first_name']?>
+			</div>
+			<div class="col-xs-12">
+				Cod: <?php echo $this->user['uid']?>
+			</div>
+			<div class="col-xs-12">
+				DNI: <?php echo $this->user['pid']?>
+			</div>
+			<div class="col-xs-12">
+				<p class="escuela">Escuela Profecional de:
+				<?php echo $datesc['name']?>-
+				<?php echo $datsub['name']?></p>
+			</div>
+		</div>
+		<div class="col-xs-3 col3">
+			<div class="col-xs-12">
+			<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Seleccione un <span class="text-success">Periodo</span> al cual ingresara el <span class="text-success">Curso</span></p>
+				<p id="Periodo" class=""></p>
+				<select id="perid" class="form-control">
 					<?php
-					foreach ($this->periods as $periods) { ?>
-						<option value="<?php echo $periods['perid']?>"><?php echo $periods['perid']." | ".$periods['name']?></option>
-					<?php
-					}
-				}else{ ?>
-					<option value="">No hay periodos.</option>
-				<?php 
-				}?>
-			</select>
-		</td>
-		<td class='text-center'><a id="addcourse" href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
-	</tr>
-</table>
+					if ($this->periods) { ?>
+						<option value="">- Seleccione periodo-</option>
+						<?php
+						foreach ($this->periods as $periods) { ?>
+							<option name="selec" value="<?php echo $periods['perid']?>"><?php echo $periods['perid']." | ".$periods['name']?></option>
+						<?php
+						}
+					}else{ ?>
+						<option value="">No hay periodos.</option>
+					<?php 
+					}?>
+				</select>
+			</div>
+			<div>
+				<button id="addcourse" class="btn btn-success" href="#"><span class="glyphicon glyphicon-plus"></span> Agregar</button>
+			</div>
+		</div>
+	</div>
+
 <?php
 }else{ ?>
 <div class="alert alert-info">
@@ -65,12 +77,10 @@ $("#addcourse").click(function(){
 	var pid=$("#hidden_pid").val();
 	var escid=$("#hidden_escid").val();
 	var subid=$("#hidden_subid").val();
-
 	if (perid=="") {
-		alert("Seleccione un Periodo.");
+		$("#perid").focus();
 		return false;
 	};
-	
 	var url="/record/directed/register/perid/"+perid+"/uid/"+uid+"/pid/"+pid+"/subid/"+subid+"/escid/"+escid+"";
 		$("#registration").html("<img src='/img/spinner.gif'>Cargando...");
 		$("#registration").load(url);
