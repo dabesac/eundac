@@ -177,7 +177,7 @@ class Admin_AcademicmanagementController extends Zend_Controller_Action
 			$data=array('state'=>$state);
 			$bd= new Api_Model_DbTable_StudentAssistance();
 			$updatedata= $bd->_updateAll($data,$pk);
-			$dat = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid,'courseid'=>$courseid,'curid'=>$curid,'turno'=>$turno,'document_type'=>$partial,'register'=>$uid);
+			$dat = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid,'courseid'=>$coursoid,'curid'=>$curid,'turno'=>$turno,'document_type'=>$partial,'register'=>$uid);
 			$bdlog= new Api_Model_DbTable_Loginspectionall();
 			$insertdata = $bdlog->_save($dat);
 		} catch (Exception $e) {

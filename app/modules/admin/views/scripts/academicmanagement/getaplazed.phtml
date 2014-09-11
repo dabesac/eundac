@@ -1,3 +1,9 @@
+<style>
+  .title{
+    background:#585858;
+    color:#ffffff;
+  }
+</style>
 <?php
 if ($this->datacourses) { ?>
 <table class="table table-striped table-bordered" style="margin-top: 15px;">
@@ -5,16 +11,16 @@ if ($this->datacourses) { ?>
         <th colspan='10' style="background:#585858;color:#ffffff"><center><h5><b>INFORMACIÓN DE LAS ACTAS</b></h5></center></th>
     </tr>
     <tr>
-        <th style="background:#585858;color:#ffffff"><center>#</center></th>
-        <th style="background:#585858;color:#ffffff"><center>Sem.</center></th>   
-        <th style="background:#585858;color:#ffffff"><center>Curricula</center></th>
-        <th style="background:#585858;color:#ffffff"><center>Código</center></th>
-        <th style="background:#585858;color:#ffffff"><center>Nombre Curso</center></th>
-        <th style="background:#585858;color:#ffffff"><center>Turno</center></th>
-        <th style="background:#585858;color:#ffffff"><center>DNI</center></th>         
-        <th style="background:#585858;color:#ffffff"><center>Docente</center></th>
-        <th style="background:#585858;color:#ffffff"><center>Fecha Acta</center></th>
-        <th style="background:#585858;color:#ffffff"><center>Operación</center></th>
+        <th class="title"><center>#</center></th>
+        <th class="title"><center>Sem.</center></th>   
+        <th class="title"><center>Curricula</center></th>
+        <th class="title"><center>Código</center></th>
+        <th class="title"><center>Nombre Curso</center></th>
+        <th class="title"><center>Turno</center></th>
+        <th class="title"><center>DNI</center></th>         
+        <th class="title"><center>Docente</center></th>
+        <th class="title"><center>Fecha Acta</center></th>
+        <th class="title"><center>Operación</center></th>
     </tr>
 <?php
     $c=0;
