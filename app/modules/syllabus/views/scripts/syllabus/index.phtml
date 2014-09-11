@@ -2,32 +2,79 @@
 <?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
 <?php $this->placeholder('BtnSVCRight')->append('
-	<a data-toggle="modal" data-target="#Modalpreviewsyllabus" id="preview_syllbus" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span> Vista Previa</a>
+	<a data-toggle="modal" data-target="#Modalpreviewsyllabus" id="preview_syllbus" class="btn btn-default"><span class="glyphicon glyphicon-eye-open text-info"></span> Vista Previa</a>
 
-	<a id="save_sylabus" class="btn btn-default"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</a>
+	<a id="save_sylabus" class="btn btn-default"><span class="glyphicon glyphicon-floppy-disk text-success"></span> Guardar</a>
 
-	<a id="close_sylabus" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Cerrar</a>');?>
+	<a id="close_sylabus" class="btn btn-default"><span class="glyphicon glyphicon-remove text-danger"></span> Cerrar</a>');?>
 
 <link rel="stylesheet" href="/css/syllabus.css">
 
-
-
-<div>
-	<center>
-		
-		<h4><b>FACULTAD DE <?php echo strtoupper($this->facultad['name']);?></b></h4>
-		<h5><b>ESCUELA DE FORMACIÓN PROFESIONAL DE <?php echo strtoupper($this->escuelas['name']);?></b></h5>
-		<h5><div class="panel panel-primary" style="padding: 2px; width:350px;">
-    	<div class="panel-heading" style="padding: 6px">
-        <center><b style="font-size:16px; color: white; "><?php echo $this->num ?> <br>CURSO: <?php echo $this->curso['name']?></b>
-        </center>
-   		</div>
-		</div></h5>
-	</center>
+<div class="syllabusFill_Header">
+	<p class="syllabusFill_HeaderFacultyName">FACULTAD DE <?php echo strtoupper($this->facultad['name']);?></p>
+	<p class="syllabusFill_HeaderSchoolName">ESCUELA DE FORMACIÓN PROFESIONAL DE <?php echo strtoupper($this->escuelas['name']);?></p>
+	<div class="syllabusFill_HeaderCubeSide">
+		<p class="pCubeSide courseNum"><?php echo $this->num ?></p>
+		<p class="pCubeSide courseName"><?php echo $this->curso['name']?></p>
+	</div>
 </div>
 
-<div>
-            
+<hr>
+
+<div class="syllabusFill_dataCourse">
+	<div class="syllabusFill_ObO syllabusFill_firstData">
+		<table class="syllabusFill_table">
+			<tr>
+				<td>Código</td>
+				<td><strong><?php echo $this->curso['courseid']?></strong></td>
+			</tr>
+			<tr>
+				<td>Requisito</td>
+				<td><strong>
+					<?php if ($this->curso['req_1'] or $this->curso['req_2'] or $this->curso['req_3']): ?>
+					<strong><?php echo $this->curso['req_1'] ?> <?php echo $this->curso['req_2'] ?> <?php echo $this->curso['req_3'] ?></strong>
+					<?php else: ?>
+						-
+					<?php endif ?>
+				</strong></td>
+			</tr>
+			<tr>
+				<td>Créditos</td>
+				<td><strong><?php echo $this->curso['credits']?></strong></td>
+			</tr>
+			<tr>
+				<td>Semestre</td>
+				<td><strong><?php echo $this->curso['semid']?></strong></td>
+			</tr>
+			<tr>
+				<td>Docente</td>
+				<td><strong><?php echo $this->persona['last_name0']." ".$this->persona['last_name1'].", ".$this->persona['first_name']?></strong></td>
+			</tr>
+		</table>
+	</div>
+	<div class="syllabusFill_ObO syllabusFill_secondData">
+		<table class="syllabusFill_table">
+			<tr>
+				<td>Sección</td>
+				<td><strong><?php echo $this->where['turno']?></strong></td>
+			</tr>
+			<tr>
+				<td>Extensión Horaria</td>
+				<td><strong>HT: <?php echo $this->docente['hours_t']?>	HP: <?php echo $this->docente['hours_p']?> TH: <?php echo $this->docente['hours_total']?></strong></td>
+			</tr>
+			<tr>
+				<td>Duración</td>
+				<td><strong><?php echo $this->date_stard ?>	Hasta: <?php echo $this->date_end ?></strong></td>
+			</tr>
+			<tr>
+				<td>Correo Electronico</td>
+				<td><strong><?php echo $this->persona['mail_person']?></strong></td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<!--<div>
 	<h5 style="margin: 0px 80px 0px 80px"><b>I. DATOS GENERALES:</b></h5> <br>
 	<div class="panel panel-default" style="margin: 0px 80px 0px 80px">
 		<div class="panel-heading">
@@ -70,7 +117,7 @@
 		  	</table>
 		</div>
 	</div>
-</div>
+</div>-->
 <div id="campo"></div>
 <div id="savedefault"></div>
   <!-- Modal -->

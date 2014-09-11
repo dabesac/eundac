@@ -20,7 +20,7 @@ var syllabus = {
 		$("#campo").load("/syllabus/syllabus/viewfrm/perid/"+perid+"/subid/"+subid+"/turno/"+turno+"/courseid/"+courseid+"/curid/"+curid+"/escid/"+escid,syllabus.created_units)
 		$("#save_sylabus").click(syllabus.save_content_syllabus)
 		$("#close_sylabus").click(syllabus.close_sylabus)
-		$("#Modalpreviewsyllabus").click(syllabus.preview_syllbus)
+		$("#preview_syllbus").click(syllabus.preview_syllbus)
 	},
 	created_units:function(){
 	    $('textarea#sumilla,textarea#methodology,textarea#media,textarea#evaluation,textarea#sources,textarea#competency,textarea#capacity').ckeditor();
@@ -75,6 +75,7 @@ var syllabus = {
 		syllabus.load_unit_content($unit)
 		$("#btn_next_unit").click(syllabus.next_units)
 		$("#btn_back_unit").click(syllabus.back_units)
+		$("#btn_close_unit").click(syllabus.update_unit)
 	},
 	next_units:function(){
 		var $unit = parseInt($.base64.decode($("#unit_hidden").val()))

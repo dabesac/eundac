@@ -3,11 +3,10 @@
     if ($this->datauser and $this->datauser[0]){ 
         
     ?>
-
-    <table class="table span9 table-bordered">
+    <table class="table table-bordered table-hover">
         <thead>
         <tr>
-                <th><center>#</center></th>
+                <th><center>N°</center></th>
                 <th><center>Código</center></th>
                 <th><center>DNI</center></th>
                 <th>Apellidos y Nombres</th>
@@ -23,29 +22,33 @@
             $c++;
           ?>
             <tr>
-                <td><center><?php echo $c?></center></td>
+                <td><center><span class="label label-default"><?php echo $c?></span></center></td>
                 <td><center><?php echo $info['uid']?></center></td>
                 <td><center><?php echo $info['pid']?></center></td>
                 <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
                 <td><center><?php echo $this->inforol[$c-1]['name']?></center></td>
                 <td><center><?php echo $this->infoesc[$c-1]['name']?></center></td>
                 <?php
+                    $x=0;
                 switch ($info['state']) {
                     case 'A':
                         ?><td ><center>ACTIVO</center></td><?php
                         break;
                     case 'I':
-                        ?><td ><center>INACTIVO</center></td><?php
+                        $x=1;
+                        ?><td class="danger" ><center>INACTIVO</center></td><?php
                         break;
                     case 'B':
-                        ?><td ><center>BOQUEADO</center></td><?php
+                        $x=2;
+                        ?><td class="warning"><center>BOQUEADO</center></td><?php
                         break;
                     case 'S':
-                        ?><td ><center>SUSPENDIDO</center></td><?php
-                        break;
+                        $x=2;
+                        ?><td class="warning"><center>SUSPENDIDO</center></td><?php
                         break;
                     case 'E':
-                        ?><td ><center>BAJA</center></td><?php
+                        $x=1;
+                        ?><td class="danger"><center>BAJA</center></td><?php
                         break;
                     case '':
                         ?><td><center></center></td><?php
@@ -53,14 +56,15 @@
                 }
                 ?>
                 <td><center>
-                <?php
-                if (($this->inforol[$c-1]['rid']!='AL') and ($this->inforol[$c-1]['rid']!='EG') and ($this->inforol[$c-1]['rid']!='')) { ?>
-                    <a href="/admin/user/updateuser/uid/<?php echo base64_encode($info['uid'])?>/pid/<?php echo base64_encode($info['pid'])?>/escid/<?php echo base64_encode($info['escid'])?>/subid/<?php echo base64_encode($info['subid'])?>"><span class='glyphicon glyphicon-pencil'></span></a></center></td>
-                <?php
-                }
-                ?>      
+                    <?php
+                    if (($this->inforol[$c-1]['rid']!='AL') and ($this->inforol[$c-1]['rid']!='EG') and ($this->inforol[$c-1]['rid']!='')) { ?>
+                        <a class="btn btn-info" href="/admin/user/updateuser/uid/<?php echo base64_encode($info['uid'])?>/pid/<?php echo base64_encode($info['pid'])?>/escid/<?php echo base64_encode($info['escid'])?>/subid/<?php echo base64_encode($info['subid'])?>"><span class='glyphicon glyphicon-cog'></span> Ajustes </a>
+                    <?php } ?>
+                    <?php if ($x==0 or $x==2) {?>
+                        <button name="<?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?>" rol="<?php echo $this->inforol[$c-1]['name']?>" uid="<?php echo base64_encode($info['uid'])?>" rid="<?php echo base64_encode($info['rid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" data-toggle="modal" href="#modalContraseña" class="btn btn-primary keychange"><span class="glyphicon glyphicon-refresh"></span> PassWord</button>
+                    <?php } ?>
+                </center></td>
                 <!-- <td><center><a href=""><span class='glyphicon glyphicon-trash'></span></a></center></td> -->
-
             </tr>
           <?php  
         }  
@@ -72,15 +76,13 @@
     }
     ?>
     </table>
-          
 </div>
-
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" style='width:1000px;'>
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title"><b class='text-info'> <center> NUEVA PERSONA </center></b></h2>
+                <h2 class="modal-title"><b class='text-info'> <center>NUEVA PERSONA </center></b></h2>
             </div>
             <div class="modal-body">
                 <div id='nueva_persona'></div>
@@ -88,12 +90,101 @@
         </div>
     </div>
 </div>
+    <!--Modal by CH-P -->
+<div class="modal" id="modalContraseña">
+     <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Cambio de Contraseña de : </h4>
+          <div class="panel panel-info" style="padding:3px;">
+          <p class="danger"><span id="infonom"></span><span class="badge pull-right" id="inforol"></span></p>
+          </div>
+        </div>
+        <div class="modal-body row">
+        <form role="form" class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-xs-4" for="inputPass">Ingrese la contraseña</label>
+                <div class="col-xs-8">
+                <input type="password" class="form-control" id="pass1" placeholder="clave">
+                </div>
+            </div>
+            <div class="form-group has-feedback">
+                <label class="control-label col-xs-4" for="inputPass1">Repita la contraseña</label>
+                <div class="col-xs-8">
+                <input type="password" class="form-control" id="repass1" placeholder="Repita clave">
+                </div>
+            </div>
+            <div class="has-error text-center hidden" >
+                <h3 id="respuesta">Error</h3>
+            </div>
+        </form>
+        </div>
+        <div class="modal-footer">
+          <a href="#" id="cerrarContraseña" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+          <a href="#" id="guardarContraseña" class="btn btn-success">Guardar</a>
+       </div>
+      </div>
+    </div>
+</div>
+
 <script type="text/javascript">
-    $("#newperson").click(function(){   
-        $('#myModal').modal('show');            
+    $("#newperson").click(function(){
+        $('#myModal').modal('show');
         var url="/admin/person/new/u/A";
         $("#nueva_persona").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
         $("#nueva_persona").load(url);
     });
+</script>
+<script>
+    var rid;
+    var uid;
+    var pid;
+    var escid;
+    var subid;
+    var pas1;
+    var pas2;
 
+    $(".keychange").click( function(){
+        rid = $(this).attr('rid');
+        uid = $(this).attr('uid');
+        pid = $(this).attr('pid');
+        subid = $(this).attr('subid');
+        escid = $(this).attr('escid');
+
+        rol = $(this).attr('rol');
+        name = $(this).attr('name');
+        $("#respuesta").parent().addClass('hidden');
+        $("#pass1").val('');
+        $("#repass1").val('');
+        $("#infonom").html(name);
+        $("#inforol").html(rol);
+    });
+
+    $("#guardarContraseña").click(function(){
+        pas1 = $("#pass1").val();
+        pas2 = $("#repass1").val();
+        $("#respuesta").parent().removeClass('hidden');
+        $("#respuesta").html("Cargando...");
+            var ajax_data = {
+                "pid" : pid,
+                "uid" : uid,
+                "rid" : rid,
+                "escid" : escid,
+                "subid" : subid,
+                "pas1": pas1,
+                "pas2": pas2
+            };
+            $.ajax({
+                type : 'post',
+                url : '/admin/user/changepassword/',
+                data : ajax_data,
+                success: function(data){
+                    $("#respuesta").html(data);
+                    $("#pass1").val("");
+                    $("#repass1").val("");
+                    
+                }
+            });
+    });
 </script>

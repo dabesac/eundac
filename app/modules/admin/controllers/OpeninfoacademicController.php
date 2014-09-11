@@ -65,10 +65,6 @@
 			$escid=base64_decode($this->_getParam('escid'));
 			$state=base64_decode($this->_getParam('state'));
 			$pid=base64_decode($this->_getParam('pid'));
-			print_r($perid);
-			print_r($escid);
-			print_r($state);
-			print_r($pid);
 			$query=new Api_Model_DbTable_Infoacademic();
 			$query->_update($escid,$perid,$state,$pid);
 			

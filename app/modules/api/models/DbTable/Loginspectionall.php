@@ -14,7 +14,7 @@ class Api_Model_DbTable_Loginspectionall extends Zend_Db_Table_Abstract
 			return $this->insert($data);
 			return false;
 		}catch (Exception $e){	
-				print "Error: Save base_log_inspection_all ".$e->getMessage();
+				print "Error: Save LogAccess ".$e->getMessage();
 		}
 	}
 }

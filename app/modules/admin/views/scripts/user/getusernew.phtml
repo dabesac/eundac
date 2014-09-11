@@ -4,16 +4,14 @@
             // print_r($this->datauser);exit();
         
     ?>
-
     <table class="table span9 table-bordered table-striped">
-        <tr>
-            <th colspan='4'>
+        <tr >
+            <th colspan='4' style="background-color:black; color:white; font-weight:900; ">
             <b><h4><center>Listado de usuarios de <?php echo $this->datauser[0]['last_name0']." ".$this->datauser[0]['last_name1'].", ".$this->datauser[0]['first_name'];?> con DNI Nº <?php echo $this->datauser[0]['pid']?></center></b></h4>
             </th>
             <th>
-                <center><a id='loading'data-toggle="modal" href="#myModal" class='btn btn-info'><span class="glyphicon glyphicon-pencil"></span>Agregar Usuario</a></center>   
+                <center><a id='loading'data-toggle="modal" href="#myModal" class='btn btn-info'><span class="glyphicon glyphicon-plus"> </span> Agregar Usuario</a></center>   
             </th>    
-
         </tr>
         <tr>
                 <th><center>#</center></th>
@@ -28,7 +26,7 @@
             $c++;
           ?>
             <tr>
-                <td><center><?php echo $c?></center></td>
+                <td><center><span class="label label-default"><?php echo $c?></span></center></td>
                 <td><center><?php echo $info['uid']?></center></td>
                 <td><center><?php echo $this->inforol[$c-1]['name']?></center></td>
                 <td><center><?php echo $this->infoesc[$c-1]['name']?></center></td>

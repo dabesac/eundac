@@ -9,11 +9,7 @@ class Admin_UserController extends Zend_Controller_Action{
  		$login = $sesion->getStorage()->read();
  		$this->sesion = $login;
  	}
-    public function mundoAction()
-    {
-        echo "hola mundo de mierda";exit();
-    }
-
+    
 	public function indexAction(){
 		try {
  			$fm=new Admin_Form_Buscar();
@@ -22,13 +18,13 @@ class Admin_UserController extends Zend_Controller_Action{
  			print "Error: User".$e->getMessage();
  		}
 	}
-
 	public function getuserAction(){
  		try {
 			$this->_helper->layout()->disableLayout();
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
             $pid=$this->_getParam('pid');
+            
             if ($pid) {
                 $where=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid);
                 $dbuser=new Api_Model_DbTable_Users();
@@ -249,6 +245,50 @@ class Admin_UserController extends Zend_Controller_Action{
                 }
             }
 
+
+        } catch (Exception $e) {
+            print "Error: update User".$ex->getMessage();
+        }
+    }
+    public function changepasswordAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $uid=base64_decode($this->_getParam('uid'));
+            $pid=base64_decode($this->_getParam('pid'));
+            $rid=base64_decode($this->_getParam('rid'));
+            $escid=base64_decode($this->_getParam('escid'));
+            $subid=base64_decode($this->_getParam('subid'));
+            $pass1=$this->_getParam('pas1');
+            $pass2=$this->_getParam('pas2');
+            //codofica
+            $newpass = md5($pass1);
+            $repnewpass = md5($pass2);
+        //verifica campos vacios
+            if ($pass1 <>"" && $pass2 <>""){
+                     if($newpass===$repnewpass){
+                                $data['password']=$newpass;
+                                $data['change_password']="T";
+                                $pk['eid']=$eid;
+                                $pk['oid']=$oid;
+                                $pk['uid']=$uid;
+                                $pk['pid']=$pid;
+                                $pk['escid']=$escid;
+                                $pk['subid']=$subid;
+                                $bdu = new Api_Model_DbTable_Users();
+                                $veri=$bdu->_update($data,$pk);
+                                if ($veri) {
+                                    print_r("<span class='label label-success'>¡ SE CAMBIO LA CONTRASEÑA !</span>");
+                                }else{
+                                    print_r("<span class='label label-danger'>¡ERROR! : faltan datos</span>");
+                                }
+                     }else{
+                        print_r("<span class='label label-danger'>¡ERROR! : Las contraseñas no coinsiden</span>");
+                     }
+            }else{
+                print_r("<span class='label label-danger'>¡ERROR! : la contraseña no puede ser vacia</span>");
+            }
 
         } catch (Exception $e) {
             print "Error: update User".$ex->getMessage();
