@@ -1,22 +1,24 @@
-<form id="<?php echo $this->fm->getName();?>" name="<?php echo $this->fm->getName();?>" action="/admin/user/newuser"method="Post" enctype="application/x-www-fm-urlencode">
-	<table>
-		<tr>
-			<th>Sede: </th>
-			<td><div style='width: 200px;'><?php echo $this->fm->subid;?></td>
-			<th>Escuela: </th>
-			<td><div style='width: 200px;'><?php echo $this->escid;?></td>
-		</tr>
-		<tr>
-			<th>Rol: </th>
-			<td><div style='width: 200px'><?php echo $this->fm->rid?></td>
-			<th>Estado: </th>
-			<td><div style='width: 200px'><?php echo $this->fm->state?></td>
-		</tr>	
-		<tr>
-			<th>Comentario: </th>
-			<td colspan='4'><div style='width: 450px'><?php echo $this->fm->comments?></td>
-		</tr>
-		</table><br>
+<form class="form" id="<?php echo $this->fm->getName();?>" name="<?php echo $this->fm->getName();?>" action="/admin/user/newuser"method="Post" enctype="application/x-www-fm-urlencode">
+	<div class="form-group">
+		<label class="control-label" for="">Sede: </label>
+		<?php echo $this->fm->subid;?>
+	</div>
+	<div class="form-group">
+		<label class="control-label" for="">Escuela: </label>
+		<?php echo $this->escid;?>
+    </div>
+	<div class="form-group">
+		<label class="control-label" for="">Rol: </label>
+		<?php echo $this->fm->rid?>
+    </div>
+	<div class="form-group">
+		<label class="control-label" for="">Estado: </label>
+		<?php echo $this->fm->state?>
+    </div>
+    <div class="form-group">
+		<label class="control-label" for="">Comentario: </label>
+		<?php echo $this->fm->comments?>
+    </div>
 	<div style='margin-left:250px'><?php echo $this->fm->Guardar?></div>
 <input type="hidden" name='pid' value='<?php echo $this->pid?>'>
 </form>

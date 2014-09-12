@@ -17,16 +17,4 @@ class Api_Model_DbTable_Loginspectionall extends Zend_Db_Table_Abstract
 				print "Error: Save LogAccess ".$e->getMessage();
 		}
 	}
-	public function _update($where, $data)
-	{
-		try{
-			if ($data['eid']=='' ||  $data['oid']=='' ||  $data['tokenid']=='') return false;
-			$sql="eid='".$data['eid']."' and oid='".$data['oid']."' and tokenid='".$data['tokenid']."'
-					and uid='".$data['uid']."' and pid='".$data['pid']."'";
-			return $this->update($where,$sql);
-			return false;
-		}catch (Exception $e){
-			print "Error: Save LogAccess ".$e->getMessage();
-		}
-	}
 }

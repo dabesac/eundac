@@ -1,45 +1,53 @@
 <?php 
-$rid=$this->rid;
+$rol=$this->rid;
 if ($this->curriculas) { 
 
 ?>
-<table class="table table-striped table-condensed span9">
+
+<table class="table table-striped table-bordered table-condensed span9">
+	<thead>
 	<tr>
 		<th>#</th>
-		<th>Cod. Cur.</th>
+		<th>Cod. Cur.</th> 	
 		<th>Nombre Currícula</th>
 		<th>Estado</th>
 		<th>Año</th>
 		<th>Ver</th>
 		<th>Imprimir</th>
-                        
+		<?php if($rol==="DR"){?>
+		<th>Rellenar Sumilla</th>
+		<?php } ?>                        
 	</tr>
+	</thead>
+	<tbody>
 	<?php
 	$c=1;
 	foreach ($this->curriculas as $curriculas) { 
 		switch ($curriculas['state']) {
-			case 'T': $estado="Temporal"; break;
-			case 'A': $estado="Activo"; break;
-            case 'C': $estado="Cerrado"; break;
-			case 'B': $estado="Borrador"; break;
+			case 'T': $estado="Temporal"; $color="#E0FF11"; break;
+			case 'A': $estado="Activo"; $color="#7BD521"; break;
+            case 'C': $estado="Cerrado"; $color="#EE4E4E"; break;
+			case 'B': $estado="Borrador"; $color="#4E9FEF"; break;
 		}
 		?>
 		<tr>
 			<td><?php echo $c?></td>
 			<td><?php echo $curriculas['curid']?></td>
-			<td><?php echo $curriculas['name']?></td>
-			<td><?php echo $estado?></td>
-			<td><?php echo $curriculas['year']?></td>
-			<td><a id="seecurri" href="/curricula/show/seecurricula/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>" ><span class="glyphicon glyphicon-folder-open"></span></a></td>
-            <td><a href="/curricula/show/print/subid/<?php echo base64_encode($curriculas['subid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/curid/<?php echo base64_encode($curriculas['curid'])?>/state/<?php echo base64_encode($curriculas['state'])?>"><span class="glyphicon glyphicon-print"></span></a></td>
-                  
-                        
+			<td><p><?php echo $curriculas['name']?></p></td>
+			<td style="background:<?php echo $color?>" class="text-center"><?php echo $estado?></td>
+			<td class="text-center"><?php echo $curriculas['year']?></td>
+			<td class="text-center"><a href="/curricula/show/seecurricula/curid/<?php echo base64_encode($curriculas['curid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/subid/<?php echo base64_encode($curriculas['subid'])?>" ><span class="glyphicon glyphicon-folder-open"></span></a></td>
+            <td class="text-center"><a href="/curricula/show/print/subid/<?php echo base64_encode($curriculas['subid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/curid/<?php echo base64_encode($curriculas['curid'])?>/state/<?php echo base64_encode($curriculas['state'])?>"><span class="glyphicon glyphicon-print"></span></a></td>
+            <?php if($rol==="DR"){?>
+				<td class="text-center"><a  href="/curricula/show/seecurriculamanager/subid/<?php echo base64_encode($curriculas['subid'])?>/escid/<?php echo base64_encode($curriculas['escid'])?>/curid/<?php echo base64_encode($curriculas['curid'])?>"><span class="glyphicon glyphicon-pencil"></span> Agregar Sumilla</a></td>
+			<?php } ?>
 		</tr>
 	<?php
 	$c++;
 	}?>
+	</tbody>
 </table>
 <?php 
 }else{ ?>
-	<div class="alert alert-success span9">No hay registro de Currículas en esta Escuela.</div>
+	<div class="alert alert-success text-center"><span class="glyphicon glyphicon-exclamation-sign">Atencion</span> No hay registro de Currículas.</div>
 <?php }?>

@@ -2,7 +2,6 @@
 class Curricula_ShowController extends Zend_Controller_Action
 {
     public function init(){
-
            $sesion  = Zend_Auth::getInstance();
             if(!$sesion->hasIdentity() ){
                   //$this->_helper->redirector('index',"index",'default');
@@ -13,7 +12,6 @@ class Curricula_ShowController extends Zend_Controller_Action
             // }
             $this->sesion = $login;
     }
-
     public function indexAction(){
         try {
             $eid=$this->sesion->eid;
@@ -26,10 +24,7 @@ class Curricula_ShowController extends Zend_Controller_Action
             $facultad=$facu->_getAll($where);
             $this->view->facultad=$facultad;
             if ($rid=="DR" && $this->sesion->infouser['teacher']['is_director']=="S"){
-                $escid=$this->sesion->escid;
-                $this->view->escid=$escid;
-                $facid=$this->sesion->faculty->facid;
-                $this->view->facid=$facid;
+                $this->_helper->redirector('viewmanager','show','curricula');
             }
             if ($rid=="RF"){
                 $facid=$this->sesion->faculty->facid;
@@ -39,7 +34,35 @@ class Curricula_ShowController extends Zend_Controller_Action
             print "Error: ".$e->getMessage();
         }
     }
+    public function viewmanagerAction(){
+        try {
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $facid=$this->sesion->faculty->facid;
+            $escid=$this->sesion->escid;
+            $subid=$this->sesion->subid;
 
+            $escDb=new Api_Model_DbTable_Speciality();
+            //$allSpeciality =$escDb->_getFilter($where,$attrib);
+            $where1 = array('eid'=>$eid,'oid'=>$oid,'facid'=>$facid,'subid'=>$subid,'parent'=>$escid);
+            $attrib = array('escid','name','state');
+            $order = array('name');
+            $especialidades = $escDb->_getFilter($where1,$attrib,$order);
+            $this->view->especialidades = $especialidades;
+            
+            $datos["eid"] = $this->sesion->eid;
+            $datos["oid"] = $this->sesion->oid;           
+            $datos["facName"] = $this->sesion->faculty->name;
+            $datos["facid"] = $this->sesion->faculty->facid;
+            $datos["escName"] = $this->sesion->speciality->name;
+            $datos["escid"] = $this->sesion->escid;
+            
+            $this->view->datos = $datos;
+            //print_r($this->sesion);
+        } catch (Exception $e) {
+            print "Error".$e ->getMessage();
+        }
+    }
       public function lschoolsAction(){
         try {
             $this->_helper->layout()->disableLayout();
@@ -75,10 +98,24 @@ class Curricula_ShowController extends Zend_Controller_Action
             $where['eid']=$eid;
             $where['oid']=$oid;
             $where['escid']=$escid;
+            $curriculas2=$cur->_getFilter($where);
+            if ($rid=="DR" && $this->sesion->infouser['teacher']['is_director']=="S"){
+                $where['state'] = "T";
+                $curriculas0=$cur->_getFilter($where);
+                $where['state'] = "A";
+                $curriculas1 =$cur->_getFilter($where);
 
-            $curriculas=$cur->_getFilter($where);
-            $this->view->curriculas=$curriculas;
-            
+                if($curriculas0 xor $curriculas1){
+                    if ($curriculas0) {
+                        $this->view->curriculas=$curriculas0;
+                    }elseif ($curriculas1){
+                        $this->view->curriculas=$curriculas1;
+                    }
+                }elseif ($curriculas0 and $curriculas1){
+                    $this->view->curriculas = array_merge($curriculas0,$curriculas1);
+            }}else{
+            $this->view->curriculas=$curriculas2;
+            }
             
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
@@ -86,18 +123,21 @@ class Curricula_ShowController extends Zend_Controller_Action
     }
     public function seecurriculaAction(){
         try {
+            $rid=$this->sesion->rid;
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $curid=base64_decode($this->_getParam('curid'));
             $escid=base64_decode($this->_getParam('escid'));
             $subid=base64_decode($this->_getParam('subid'));
             $facid=substr($escid,0,1);
+
             $this->view->facid=$facid;
             $this->view->eid=$eid;
             $this->view->oid=$oid;
             $this->view->escid=$escid;
             $this->view->subid=$subid;
             $this->view->curid=$curid;
+            
             $rid=$this->sesion->rid;
             $this->view->rid=$rid;
             $cur= new Api_Model_DbTable_Curricula();
@@ -245,6 +285,7 @@ class Curricula_ShowController extends Zend_Controller_Action
             $header = str_replace("?codigo", $codigo, $header);
           
             $this->view->header=$header;
+
             $this->view->footer=$footer;
         }
         catch (Exception $ex)
@@ -252,4 +293,72 @@ class Curricula_ShowController extends Zend_Controller_Action
             print "Error: Cargar Curriculas".$ex->getMessage();
         }
     }      
+    public function seecurriculamanagerAction(){
+        try {
+            $datos["eid"]=$this->sesion->eid;
+            $datos["oid"]=$this->sesion->oid;
+            $datos["escName"]=$this->sesion->speciality->name;
+            $datos["curid"]=base64_decode($this->_getParam('curid'));
+            $datos["escid"]=base64_decode($this->_getParam('escid'));
+            $datos["subid"]=base64_decode($this->_getParam('subid'));
+            $datos["facid"]=substr($escid,0,1);
+            $rid=$this->sesion->rid;
+            $this->view->rid=$rid;
+            $cur= new Api_Model_DbTable_Curricula();
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['escid']=$escid;
+            $where['subid']=$subid;
+            $where['curid']=$curid;
+            $coursesDb = new Api_Model_DbTable_Course();
+            $this->view->semestre=$semestre;
+            $cursos = $coursesDb->_getCoursesXCurriculaXShool($datos["eid"],$datos["oid"],$datos["curid"],$datos["escid"]);
+            $this->view->escuela=$datos["escName"];
+            $this->view->curid=$datos["curid"];
+            $this->view->escid=$datos["escid"];
+
+
+            $this->view->cursos=$cursos;
+
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+    public function saveAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $server = new Eundac_Connect_openerp();
+            $datos["eid"]=$this->sesion->eid;
+            $datos["oid"]=$this->sesion->oid;
+
+            $formData = $this->getRequest()->getPost();
+
+            $formData['escid'] = base64_decode($formData['escid']);
+            $formData['curid'] = base64_decode($formData['curid']);
+            //enviando datos al serv
+
+            $eid   = $this->sesion->eid;
+            $oid   = $this->sesion->oid;
+
+            $where = array( 'eid'   => $eid,
+                            'oid'   => $oid,
+                            'escid' => $formData['escid'],
+                            'subid' => $subid,
+                            'curid'   => $formData['curid'] 
+                            );
+            
+            $curriculaDb = new Api_Model_DbTable_Curricula();
+            $curricula = $curriculaDb->_getOne($where);
+
+            if ($curricula) {
+                print_r("hay");
+                print_r($curricula);
+            }else{
+                print_r("no hay");
+            }
+
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
 }

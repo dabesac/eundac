@@ -1,24 +1,38 @@
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> CREAR USUARIO');?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> GESTION DE USUARIOS');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
 <form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/admin/user/getuser" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
     <table class="table span9 table-striped table-bordered table-condensed">
-        <tr>
-            <td colspan='3'><a href="/admin/user/new" style='float:right' class='btn btn-info'><span class='glyphicon glyphicon-pencil'></span> Nuevo Usuario</a></td>
+        <tr class="info">
+            <td colspan='2' class="text-center"><span class='glyphicon glyphicon-exclamation-sign'> </span> Busque Usuarios por uno de los siguientes campos</td>
+            <td><a href="/admin/user/new" style='float:right' class='btn btn-info'><span class='glyphicon glyphicon-plus'></span> Nuevo Usuario</a></td>
         </tr>
-        <tr>
-            <td><center>DNI</center></td>
-            <td><center>Nombres y Apellidos</center></td>
+        <tr style="background:black ;color:white;font-weight: 900; ">
+            <td><center>Buscar por DNI</center></td>
+            <td><center>Buscar por Nombres y Apellidos</center></td>
             <td><center>Buscar por Código Usuario</center></td>
         </tr>
-        <tr>                    
+        <tr>
             <td><center><div style='width: 200px'><?php echo $this->fm->pid ?></center></td>
             <td><center><div style='width: 400px'><?php echo $this->fm->name ?></center></td>
             <td><center><div style='width: 200px'><?php echo $this->fm->uid ?></center></td>
         </tr>
+        <tr>
+            <td colspan='3' class='text-center'>
+            <button type="button" id="btnBuscar" data-loading-text="buscando..." class="btn btn-success"><span class='glyphicon glyphicon-search'></span> Buscar
+            </button>
+            </td>
+        </tr>
     </table>
+
 </form>
-<div  id="cargadatos_"></div> 
+<div id="datos">
+    <!--respuestas -->
+</div>
+<div  id="cargadatos_">
+    <!--lista de usuarios -->
+</div> 
+
 <script>
     $("#name, #pid, #uid").keypress(function (e) {
         if(e == 13 || e.which==13 || e.which==0){
@@ -27,39 +41,50 @@
             count=codi.length;
             if (count==8 || count==0)
             {
-                $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-                $("#frmFiltroDoc").submit();
+                btn = $("#btnBuscar")
+                enviarDatos();
+                btn.button('loading')
             }
             else
             {
                 alert("Ingrese un DNI valido");
                 $('#pid').val('');
+                $('#pid').focus();
             }
             var codi1 = $('#uid').val();
             count1=codi1.length;
             if (count1==10 || count1==0) {
-                $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
-                $('#frmFiltroDoc').submit();
+                btn = $("#btnBuscar")
+                enviarDatos();
+                btn.button('loading')
             }
             else
             {
                 alert("Ingrese un Código válido");
                 $('#uid').val('');
+                $('#uid').focus();
             }   
         }
     });
-    
-    $("#frmFiltroDoc").submit(function(){
+    var btn;
+    $("#btnBuscar").click(function() {
+        btn = $(this)
+        enviarDatos();
+        btn.button('loading')
+    });
+    function enviarDatos() {
+        $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
         $.ajax({
-        type: 'POST',
-        url: $(this).attr('action'),
-        data: $(this).serialize(),
-        success: function(data) {                        
-            $('#cargadatos_').html(data);                                 
+            type: 'POST',
+            url: $("#frmFiltroDoc").attr('action'),
+            data: $("#frmFiltroDoc").serialize(),
+            success: function(data) {
+                $('#cargadatos_').html(data);
+                btn.button('reset');
             }
         }); 
         return false;
-    });
+    }
 
 function validNumber(e) {
     var tecla = document.all ? tecla = e.keyCode : tecla = e.which;
@@ -78,7 +103,6 @@ function soloLetras(e){
                 break;
             }
         }
-
         if(letras.indexOf(tecla)==-1 && !tecla_especial){
             return false;
         }

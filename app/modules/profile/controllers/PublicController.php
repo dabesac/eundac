@@ -1670,7 +1670,6 @@ class Profile_PublicController extends Zend_Controller_Action {
                             $pk['pid']=$pid;
                             $pk['escid']=$escid;
                             $pk['subid']=$subid;
-                            
                             $bdu = new Api_Model_DbTable_Users();
                             $veri=$bdu->_update($data,$pk);
                             if ($veri) {

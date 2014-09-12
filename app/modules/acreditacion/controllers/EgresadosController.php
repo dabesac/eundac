@@ -1,4 +1,3 @@
-
 <?php
 
 class Acreditacion_EgresadosController extends Zend_Controller_Action {

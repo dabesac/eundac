@@ -9,7 +9,7 @@ $facid=$this->facid;
 		<tr>
 			<th>Facultad:</th>
 			<td>
-				<select class='form-control' style='height:35px;width:350px' id="facid">
+				<select class='form-control' id="facid">
 
 					<option value="">- Seleccione Facultad -</option>
 					<?php if ($this->facultad) {
@@ -45,7 +45,7 @@ $facid=$this->facid;
 	</table>
 </div>
 <div id="datos" class="flotacarajo span9"></div>
-
+	
 <script type="text/javascript">
 	var $facid_temp = "<?php echo $facid?>";
 	$("#escid").load("/curricula/show/lschools/facid/" + $facid_temp);
@@ -62,7 +62,6 @@ if (escid) {
 
 $("#facid").change(function(){
 	var facid=$(this).val();
-	// alert(facid);
 	var url = "/curricula/show/lschools/facid/"+facid;
 	$("#escid").load("/curricula/show/lschools/facid/"+facid);
 });
