@@ -1,0 +1,23 @@
+<?php $syllabusContent = $this->syllabusContent ?>
+
+<p class="otherSesion_title otherSesion_titleSeFa">Sesiones Faltantes</p>
+<?php if ($syllabusContent): ?>
+	<?php foreach ($syllabusContent as $c => $content): ?>
+		<div class="otherSesionsObO_session sessionRest">
+			<div class="osObO otherSesionsObO_unity">
+				Unidad <?php echo $content['unit'] ?>
+			</div>
+			<div class="osObO otherSesionsObO_week">
+				Semana <?php echo $content['week'] ?>
+			</div>
+			<div class="osObO otherSesionsObO_sessionO">
+				Sesión <?php echo $content['session'] ?>
+			</div>
+			<div class="osObO otherSesionsObO_name">
+				<?php echo $content['name'] ?>
+			</div>
+		</div>
+	<?php endforeach ?>
+<?php else: ?>
+	<p class="otherSesion_parrafoGreat"><span class="glyphicon glyphicon-ok"></span> Vaya! termino todo su sílabo <strong>con exito...</strong></p>
+<?php endif ?>

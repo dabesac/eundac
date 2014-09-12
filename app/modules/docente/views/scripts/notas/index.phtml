@@ -110,8 +110,17 @@ if ($this->faculty){
                     <!--Silabo-->
                     <a id="silabo<?php echo $courses['courseid'] ?>" class="btn btn-primary form-control btnSilabo <?php echo ($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C')? 'margin-top-btn':''?>" href="/syllabus/syllabus/index/escid/<?php echo base64_encode($courses['escid'])?>/curid/<?php echo base64_encode($courses['curid'])?>/courseid/<?php echo base64_encode($courses['courseid'])?>/turno/<?php echo base64_encode($courses['turno'])?>/subid/<?php echo base64_encode($courses['subid'])?>/perid/<?php echo base64_encode($courses['perid'])?>"data-toggle="tooltip" title="Registro del Sílabo" >Sílabo</a>
 
-                    <!--Control de Actividad--> 
-                    <a href="/controlactivity/index/index/courseid/<?php echo base64_encode($courses['courseid']) ?>/curid/<?php echo base64_encode($courses['curid']) ?>/turno/<?php echo base64_encode($courses['turno']) ?>/perid/<?php echo base64_encode($courses['perid']) ?>/escid/<?php echo base64_encode($courses['escid']) ?>/subid/<?php echo base64_encode($courses['subid']) ?>" class="btn btn-primary form-control btnControlActividad">Control de Actividad</a>
+                    <!--Control de Actividad-->
+                    <?php 
+                        $urlActivity = '/controlactivity/index/index/data/'.base64_encode(
+                                                                            $courses['escid'].'-'.
+                                                                            $courses['subid'].'-'.
+                                                                            $courses['perid'].'-'.
+                                                                            $courses['courseid'].'-'.
+                                                                            $courses['curid'].'-'.
+                                                                            $courses['turno'].'-' );
+                     ?> 
+                    <a href="<?php echo $urlActivity ?>" class="btn btn-primary form-control btnControlActividad">Control de Actividad</a>
                         
                     <!--Notas-->
                     <?php if($courses['closure_record_n']=='P' || $courses['closure_record_n']=='C'){?>

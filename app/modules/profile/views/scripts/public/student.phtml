@@ -142,8 +142,8 @@ function imgError(image) {
 			$('.btnObO').removeClass('btnActive');
 			$(this).addClass('btnActive');
 			goTo = $(this).attr('goto');
-			$('.dataContainer').fadeOut('fast');
-			$('#' + goTo).fadeIn('fast');
+			$('.dataContainer').removeClass('dataContainerActive');
+			$('#' + goTo).addClass('dataContainerActive');
 		});
 		//---------------------------------------------------
 	});
