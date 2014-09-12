@@ -303,6 +303,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
     public function closureAction(){
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
+        $uid = $this->sesion->uid;
         $form = new Syllabus_Form_Syllabus();
         $tb_units = new Api_Model_DbTable_Syllabusunits();
 
@@ -319,6 +320,9 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                 $turno = base64_decode($formData['turno']);
 
                 $anotherCourses = base64_decode($formData['anotherCourses']);
+                /*$dat = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid,'courseid'=>$courseid,'curid'=>$curid,'turno'=>$turno,'document_type'=>'Silabo Cerrar','register'=>$uid);
+                $bdlog= new Api_Model_DbTable_Loginspectionall();
+                $insertdata = $bdlog->_save($dat);*/
 
                 $params = array(
                     'eid' => $eid,

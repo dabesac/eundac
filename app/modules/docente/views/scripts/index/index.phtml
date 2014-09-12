@@ -215,7 +215,7 @@
                     </small>
                 </a>
             </div>
-        <?php $c++; ?>
+            <?php $c++; ?>
         <?php endforeach ?>
         <?php else: ?>
             <h4 class="text-muted text-center">No tiene cursos en <span class="text-info">este periodo</span></h4>
@@ -235,88 +235,99 @@
         <?php if ($this->totalTeachers != 0): ?>
             <div class="informacionDirector">
                 <div class="infoPerData">
-                    <div id="showEmptySyllabus" class="progressIcons" title="<?php echo $this->emptySyllabus ?> Docentes aún Faltan Completar sus Sílabos">
-                        <?php if ($this->totalEmptySyllabus == $this->totalTeachers) {
-                            $classSilabo = 'backSuccess';
-                        }else {
-                            $classSilabo = 'backDanger';
-                        }?> 
+                    <div class="infoPerData_header">
+                        <div id="showEmptySyllabus" class="progressIcons" title="<?php echo $this->emptySyllabus ?> Docentes aún Faltan Completar sus Sílabos">
+                            <?php if ($this->totalEmptySyllabus == $this->totalTeachers) {
+                                $classSilabo = 'backSuccess';
+                            }else {
+                                $classSilabo = 'backDanger';
+                            }?> 
 
-                        <p class="nameCurso">Sílabo</p>
+                            <p class="nameCurso">Sílabo</p>
 
-                        <strong class="cantDocentes iconoNotas <?php echo $classSilabo ?> " ><?php echo $this->totalEmptySyllabus.'/'.$this->totalTeachers ?></strong>
+                            <strong class="cantDocentes iconoNotas <?php echo $classSilabo ?> " ><?php echo $this->totalEmptySyllabus.'/'.$this->totalTeachers ?></strong>
+                        </div>
                     </div>
 
-                </div>
-                <div id="listEmptySyllabus" class="dataSliderAvance" hidden>
-                    <p class="title"><span class="glyphicon glyphicon-exclamation-sign"></span> Falta Sílabo
-                        <?php if ($this->emptySyllabus >= 5): ?>
-                            <span class="">Algunos de los docentes son:</span>
+                    <div id="listEmptySyllabus" class="dataSliderAvance">
+                        <?php if ($this->totalEmptySyllabus == $this->totalTeachers): ?>
+                            <p class="titleSuccess"><span class="glyphicon glyphicon-ok-circle"></span> Todos los docentes completaron su sílabo.</p>
+                        <?php else: ?>
+                            <p class="title"><span class="glyphicon glyphicon-exclamation-sign"></span> Falta Sílabo
+                                <?php if ($this->emptySyllabus >= 5): ?>
+                                    <span class=""> - Algunos de los docentes son:</span>
+                                <?php endif ?>
+                            </p>
                         <?php endif ?>
-                    </p>
-                    <?php 
-                    $maxProfes = 0;
-                    foreach ($this->teachersEmptySyllabus as $teacher): ?>
-                        <div class="docente">
-                            <div class="docenteName">
-                                <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
+                        <?php 
+                        $maxProfes = 0;
+                        foreach ($this->teachersEmptySyllabus as $teacher): ?>
+                            <div class="docente">
+                                <div class="docenteName">
+                                    <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
+                                </div>
+                                <div class="docenteCursos">
+                                    <?php $coursesEmpty = 0; ?>
+                                    <?php foreach ($this->coursesEmptySyllabus as $course): ?>
+                                        <?php if ($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]): ?>
+                                            <p>
+                                                <small><span class="glyphicon glyphicon-book text-muted"></span></small>
+                                                <?php echo ucwords(strtolower($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'])) ?>
+                                                <small class="text-muted">turno <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['turno'] ?></small>
+                                            </p> 
+                                        <?php endif ?>
+                                        <?php $coursesEmpty++; ?>
+                                    <?php endforeach ?>
+                                </div>
                             </div>
-                            <div class="docenteCursos">
-                                <?php $coursesEmpty = 0; ?>
-                                <?php foreach ($this->coursesEmptySyllabus as $course): ?>
-                                    <?php if ($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]): ?>
-                                        <p>
-                                            <small><span class="glyphicon glyphicon-book text-muted"></span></small>
-                                            <?php echo ucwords(strtolower($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'])) ?>
-                                            <small class="text-muted">turno <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['turno'] ?></small>
-                                        </p> 
-                                    <?php endif ?>
-                                    <?php $coursesEmpty++; ?>
-                                <?php endforeach ?>
-                            </div>
-                        </div>
-                    <?php 
-                        $maxProfes++;
-                        if ($maxProfes == 5) {
-                            break;
-                        }
-                    endforeach ?>
+                        <?php 
+                            $maxProfes++;
+                            if ($maxProfes == 4) {
+                                break;
+                            }
+                        endforeach ?>
+                    </div>
                 </div>
             </div>
 
             <div class="informacionDirector">
                 <div class="infoPerData">
-                    <div id="showEmptyReport" class="progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar su Informe Académico">
-                        <?php if ($this->totalEmptyReport == $this->totalTeachers){
-                            $classReport = 'backSuccess';
-                        }else{
-                            $classReport = 'backDanger';
-                        }?>
-                        <p class="nameCurso">Informe Académico</p>
+                    <div class="infoPerData_header">
+                        <div id="showEmptyReport" class="progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar su Informe Académico">
+                            <?php if ($this->totalEmptyReport == $this->totalTeachers){
+                                $classReport = 'backSuccess';
+                            }else{
+                                $classReport = 'backDanger';
+                            }?>
+                            <p class="nameCurso">Informe Académico</p>
 
-                        <strong class="cantDocentes iconoNotas <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong>
+                            <strong class="cantDocentes iconoNotas <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong>
+                        </div>
+                    </div>
+
+                    <div id="listEmptyReport" class="dataSliderAvance">
+                        <?php if ($this->totalEmptyReport == $this->totalTeachers): ?>
+                            <p class="titleSuccess"><span class="glyphicon glyphicon-ok-circle"></span> Todos los docentes completaron su informe.</p>
+                        <?php else: ?>
+                            <p class="title titleInforme"><span class="glyphicon glyphicon-exclamation-sign"></span> Falta Informe Académico
+                                <?php if ($this->emptyReport >= 10): ?>
+                                    <span class=""> - Algunos de los docentes son:</span>
+                                <?php endif ?>
+                            </p>
+                        <?php endif ?>
+                        <?php 
+                        $maxProfes = 0;
+                        foreach ($this->teachersEmptyReport as $teacher): ?>
+                            <p class="docenteInforme"><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
+                        <?php 
+                            $maxProfes++;
+                            if ($maxProfes == 10) {
+                                break;
+                            }
+                        endforeach ?>
                     </div>
                 </div>
-
-                <div id="listEmptyReport" class="dataSliderAvance" hidden>
-                    <p class="title titleInforme"><span class="glyphicon glyphicon-exclamation-sign"></span> Falta Informe Académico
-                        <?php if ($this->emptyReport >= 10): ?>
-                            <span class="">Algunos de los docentes son:</span>
-                        <?php endif ?>
-                    </p>
-                    <?php 
-                    $maxProfes = 0;
-                    foreach ($this->teachersEmptyReport as $teacher): ?>
-                            <p class="docenteInforme"><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
-                    <?php 
-                        $maxProfes++;
-                        if ($maxProfes == 10) {
-                            break;
-                        }
-                    endforeach ?>
-                </div>
             </div>
-
 
         <?php else: ?>
             <h4 class="text-muted text-center">No hay avance que mostrar para <span class="text-info">este periodo</span></h4>
@@ -396,14 +407,6 @@
     $('#backGrafica').click(function(){
         coursesBackward();
     })
-
-    //Avance Academico
-    $('#showEmptySyllabus').hover(function(){
-        $('#listEmptySyllabus').slideToggle();
-    });
-    $('#showEmptyReport').hover(function(){
-        $('#listEmptyReport').slideToggle();
-    });
 
 
     function sliderForward(){

@@ -23,11 +23,13 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $uid = $this->sesion->uid;
             $escid = $this->sesion->escid;
             $subid = $this->sesion->subid;
-            //$perid = $this->sesion->period->perid;
-            $perid = '14A';
+
+            $perid = base64_decode($this->_getParam('data'));
+
+            $this->view->perid      = $perid;
             $this->view->speciality = $this->sesion->speciality->name;
-            $this->view->faculty = $this->sesion->faculty->name;
-            $this->view->infouser = $this->sesion->infouser['fullname'];
+            $this->view->faculty    = $this->sesion->faculty->name;
+            $this->view->infouser   = $this->sesion->infouser['fullname'];
             $whereinf = array('eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid,
                     'perid' => $perid, 'pid' => $pid, 'uid' => $uid);
     
@@ -35,7 +37,7 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $informedoc = $inform->_getOne($whereinf);
 
             if ($informedoc['state']=='C') {
-                $this->_helper->redirector('viewimpression','informacademic','docente');
+                $this->redirect('/docente/informacademic/viewimpression/data/'.base64_encode($perid).'');
             }
 
         } catch (Exception $e) {
@@ -46,26 +48,25 @@ class Docente_InformacademicController extends Zend_Controller_Action {
     public function saveinfoAction(){
         try {
             $this->_helper->layout()->disableLayout();
-            $eid = $this->sesion->eid;
-            $oid = $this->sesion->oid;
-            $pid = $this->sesion->pid;
-            $uid = $this->sesion->uid;
+            $eid   = $this->sesion->eid;
+            $oid   = $this->sesion->oid;
+            $pid   = $this->sesion->pid;
+            $uid   = $this->sesion->uid;
             $escid = $this->sesion->escid;
             $subid = $this->sesion->subid;
-            //$perid = $this->sesion->period->perid;
-            $perid = '14A';
-                
-            $whereinf = array(
-                    'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid,
-                    'perid' => $perid, 'pid' => $pid, 'uid' => $uid);
-    
-            $inform = new Api_Model_DbTable_Addreportacadadm();
-            $informedoc = $inform->_getOne($whereinf);
-            
 
             if ($this->getRequest()->isPost()){
                 $formData = $this->getRequest()->getPost();
                 if ($formData) {                    
+                    $perid = base64_decode($formData['perid']);
+                        
+                    $whereinf = array(
+                            'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid,
+                            'perid' => $perid, 'pid' => $pid, 'uid' => $uid);
+            
+                    $inform = new Api_Model_DbTable_Addreportacadadm();
+                    $informedoc = $inform->_getOne($whereinf);
+                    
                     $cont=count($formData['courseid']);
                     $courtea = new Api_Model_DbTable_Coursexteacher();
                     for ($i=0; $i < $cont ; $i++){ 
@@ -128,17 +129,19 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             print "Error ".$e->getMessage();
         }
     }
+
     public function closeinfoAction(){
         try {
             $this->_helper->layout()->disableLayout();
-            $eid = $this->sesion->eid;
-            $oid = $this->sesion->oid;
-            $pid = $this->sesion->pid;
-            $uid = $this->sesion->uid;
+            $eid   = $this->sesion->eid;
+            $oid   = $this->sesion->oid;
+            $pid   = $this->sesion->pid;
+            $uid   = $this->sesion->uid;
             $escid = $this->sesion->escid;
             $subid = $this->sesion->subid;
-            //$perid = $this->sesion->period->perid;
-            $perid = '14A';
+            
+            $perid = base64_decode($this->_getParam('data'));
+
             $this->view->speciality = $this->sesion->speciality->name;
             $this->view->faculty = $this->sesion->faculty->name;
             $this->view->infouser = $this->sesion->infouser['fullname'];
@@ -217,24 +220,24 @@ class Docente_InformacademicController extends Zend_Controller_Action {
     public function viewimpressionAction(){
         try{
             // $this->_helper->layout()->disableLayout();
-            $eid = $this->sesion->eid;
-            $oid = $this->sesion->oid;
-            $pid = $this->sesion->pid;
-            $uid = $this->sesion->uid;
+            $eid   = $this->sesion->eid;
+            $oid   = $this->sesion->oid;
+            $pid   = $this->sesion->pid;
+            $uid   = $this->sesion->uid;
             $escid = $this->sesion->escid;
             $subid = $this->sesion->subid;
-            //$perid = $this->sesion->period->perid;
-            $perid = '14A';
 
-            $this->view->datacourses=$coursesdoc;
-            $this->view->speciality = $this->sesion->speciality->name;
-            $this->view->faculty = $this->sesion->faculty->name;
-            $this->view->infouser = $this->sesion->infouser['fullname'];
-            $this->view->perid = $perid;
-            $this->view->escid = $escid;
-            $this->view->subid = $subid;
-            $this->view->pid = $pid;
-            $this->view->uid = $uid;
+            $perid = base64_decode($this->_getParam('data'));
+
+            $this->view->datacourses =$coursesdoc;
+            $this->view->speciality  = $this->sesion->speciality->name;
+            $this->view->faculty     = $this->sesion->faculty->name;
+            $this->view->infouser    = $this->sesion->infouser['fullname'];
+            $this->view->perid       = $perid;
+            $this->view->escid       = $escid;
+            $this->view->subid       = $subid;
+            $this->view->pid         = $pid;
+            $this->view->uid         = $uid;
 
             $wherecour = array('eid' => $eid, 'oid' => $oid,'perid' => $perid, 'uid' => $uid, 'pid' => $pid);
             $percour= new Api_Model_DbTable_PeriodsCourses();
@@ -268,6 +271,8 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $this->_helper->layout()->disableLayout();
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
+
+            $escidAct = $this->sesion->escid;
             // $formData = $this->getRequest()->getPost();
     
             $pid = base64_decode($this->_getParam("pid"));
@@ -288,11 +293,18 @@ class Docente_InformacademicController extends Zend_Controller_Action {
             $this->view->infouser = $preDataPerson[0]['last_name0'].' '.$preDataPerson[0]['last_name1'].' '.$preDataPerson[0]['first_name'];
             $this->view->perid = $perid;
 
-            $wherecour = array('eid' => $eid, 'oid' => $oid, 
-                'perid' => $perid, 'uid' => $uid, 'pid' => $pid);
-            // print_r($wherecour);exit();
             $percour= new Api_Model_DbTable_PeriodsCourses();
-            $coursesdoc=$percour->_getInfoCourseXTeacher($wherecour);
+            if ($escidAct == $escid) {
+                $wherecour = array('eid' => $eid, 'oid' => $oid, 
+                    'perid' => $perid, 'uid' => $uid, 'pid' => $pid);
+                // print_r($wherecour);exit();
+                $coursesdoc=$percour->_getInfoCourseXTeacher($wherecour);
+            }else{
+                $wherecour = array('eid' => $eid, 'oid' => $oid, 
+                    'perid' => $perid, 'uid' => $uid, 'pid' => $pid, 'escid' => $escidAct);
+                // print_r($wherecour);exit();
+                $coursesdoc=$percour->_getInfoCourseXTeacherDiferentEsc($wherecour);
+            }
             if ($coursesdoc) {
                 $tam = count($coursesdoc);
                 $wherecours = array('eid' => $eid, 'oid' => $oid);

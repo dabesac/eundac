@@ -1,27 +1,12 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Distribución');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
-
-<!-- <div class="row">
-	<br><br>
-	<div class="col-md-9 col-md-offset-1">
-		<blockquote>
-			<h2>Distribución</h2>
-		</blockquote>
-	</div>
-	<div class="col-md-1">
-		<blockquote>
-			<h2><span class="glyphicon glyphicon-bookmark text-warning"></span></h2>
-		</blockquote>
-	</div>
-</div>
-<hr> -->
+<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 <div class="row">
 	<div class="col-md-1 col-md-offset-1">
 		<h5 class="text-info">Año</h5>
 		<select class="form-control" name="Anio" id="anio">
 			<option value="">Seleccione Año</option>
 			<?php $anio = date('Y');
-			for ($i=$anio; $i >= 1993 ; $i--) { ?>
+			for ($i=$anio; $i >= 2000 ; $i--) { ?>
  				<option value="<?php echo $i?>"><?php echo $i?></option>
  			<?php } ?>
 		</select>
@@ -45,70 +30,77 @@
  			} ?>
 		</select>
 	</div>
-	<div class="col-md-3 text-center">
-		<h5 class="text-info">Mostrar Distribuciones<br> en Borrador</h5>
-	    <input type="checkbox" id="borrador">
-	</div>
-	<div class="col-md-1 col-md-offset-5">
-		<br><br>
-		<a id="show" href="#" class="btn btn-success">Mostrar</a>
+	<div class="col-md-3">
+		<h5 class="text-info" oncontextmenu='return false;' onmousedown='return false;' onselectstart='return false;'>_</h5>
+		<a id="show" href="#" class="btn btn-success">Mostrar Distribucion</a>
 	</div>
 </div>
 <hr>
 <br>
 <div id="data"></div>
+<div class="row">
+<div id="error1" class="alert alert-warning text-center col-xs-12">
+	<h3><strong>Error!</strong> Seleccione un Periodo</h3>
+</div>
+	<div id="error2" class="alert alert-warning text-center col-xs-12">
+		<h3><strong>Error!</strong> Seleccione una Facultad</h3>
+	</div>
+</div>
 
-<div id="alert" class="alert alert-warning text-center">
-	<h4><strong>Error!</strong> Seleccione un Periodo</h4>
-</div>
-<div id="alert1" class="alert alert-warning text-center">
-	<h4><strong>Error!</strong> Seleccione una Facultad</h4>
-</div>
 
 <script>
-	$('#alert').fadeOut('fast');
-	$('#alert1').fadeOut('fast');
+	$('#error1').fadeOut('fast');
+	$('#error2').fadeOut('fast');
 	$('#anio').change(function(){
 		$('#anio option:selected').each(function(){
 			var anio = $(this).val();
-			$.get('/report/periods/listperiods/anio/'+anio, function(data){
-				$('#periods').html(data);
-			});
+			var ajax_data = {
+                            "anio" : anio,
+                            };
+			$.ajax({
+                type : 'post',
+                url : '/admin/opendistribution/lperiodo/',
+                data : ajax_data,
+                success: function(data){
+            		$('#periods').html(data);
+            
+                }
+            });
+
 		});
 	});
 
 	$('#show').click(function(){
-		// $('.correc').popover('hide');
+		
 		var perid = $('#periods').val();
 		var facid = $('#faculty').val();
 		if (perid){
 			if (facid) {
-			    var check =  $(this).attr('checked');
-			    if (borrador.checked == 1){
-			    	$('.correc').popover('hide');
-			        var b="B";
-			        $("#data").show();
-					$('#data').html('<center><img class="text-center" src="/img/spinner.gif"></center>');
-					$('#data').load('/pedagogia/distribution/view/perid/'+perid+'/facid/'+facid+"/borrador/"+b);
-					$('#alert1').hide();
-					$('#alert').hide();
-			    }
-			    else{
 					$("#data").show();
+					$('#error1').fadeOut('fast');
+					$('#error2').fadeOut('fast');
 					$('#data').html('<center><img class="text-center" src="/img/spinner.gif"></center>');
-					$('#data').load('/pedagogia/distribution/view/perid/'+perid+'/facid/'+facid);
-					$('#alert1').hide();
-					$('#alert').hide();
-				}	
+					var ajax_data = {
+                            "perid" : perid,
+                            "facid" : facid,
+                            };
+					$.ajax({
+		                type : 'post',
+		                url : '/admin/opendistribution/view/',
+		                data : ajax_data,
+		                success: function(data){
+		            		$('#data').html(data);
+		                }
+		            });	
 			}
 			else{
 				$("#data").hide();
-				$('#alert').fadeOut('fast');
-				$('#alert1').fadeIn('slow');
+				$('#error1').fadeOut('fast');
+				$('#error2').fadeIn('slow');
 			}
 		}else{
 			$("#data").hide();
-			$('#alert').fadeIn('slow');
+			$('#error1').fadeIn('slow');
 		}
 	});
 </script>

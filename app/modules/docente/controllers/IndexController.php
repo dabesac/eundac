@@ -87,7 +87,7 @@ class Docente_IndexController extends Zend_Controller_Action {
             $coursesSyllabus = $syllabusDb->_getFilter($where, $attrib);
             $totalUnits = $coursesSyllabus[0]['units'];
 
-            if ($coursesSyllabus[0]['state'] != 'C') {
+            if ($coursesSyllabus[0]['state'] == 'C') {
                 if ($totalUnits) {
                     $attrib = array('unit');
                     $syllabusUnits = $syllabusUnitsDb->_getFilter($where, $attrib);
@@ -101,7 +101,7 @@ class Docente_IndexController extends Zend_Controller_Action {
                     $porcentajeSyllabus[$c] = 0;
                 }
             }else{
-                $porcentajeSyllabus[$c] = 100;
+                $porcentajeSyllabus[$c] = 'FS';
             }
 
             //Avance de Clases
@@ -238,15 +238,16 @@ class Docente_IndexController extends Zend_Controller_Action {
 
             $courses = $coursesxTeacherDb->_getFilter($where, $attrib, $orders);
             //print_r($teachers);
-
-            $teacherUid         = 0;
-            $c                  = 0;
-            $coursesEmpty       = 0;
-            $totalTeachers      = 0;
-            $totalEmptySyllabus = 0;
-            $countERA           = 0;
-            $teachersEmptySyllabus[0]['uid'] = '';
+            
+            $teacherUid                       = 0;
+            $c                                = 0;
+            $coursesEmpty                     = 0;
+            $totalTeachers                    = 0;
+            $totalEmptySyllabus               = 0;
+            $countERA                         = 0;
+            $teachersEmptySyllabus[0]['uid']  = '';
             $teachersEmptySyllabus[0]['name'] = '';
+            $coursesEmptySyllabus             = array();
             //Total de Profesores
             foreach ($courses as $course) {
                 if ($course['uid'] != $teacherUid) {
@@ -264,7 +265,7 @@ class Docente_IndexController extends Zend_Controller_Action {
                    
                     //Reporte Academico
                     $reportAcademic = $reportAcademicDb->_getFilter($where, $attrib);
-                    if (!$reportAcademic) {
+                    if ($reportAcademic[0]['state'] != 'C') {
                         $where = array( 'eid' => $eid,
                                         'pid' => $course['pid'] );
 
@@ -283,9 +284,11 @@ class Docente_IndexController extends Zend_Controller_Action {
                                 'curid'    => $course['curid'],
                                 'turno'    => $course['turno'] );
 
+                $attrib = array('state');
+
                 //Syllabus
-                $syllabus = $syllabusUnitsContentDb->_getFilter($where);
-                if (!$syllabus) {
+                $syllabus = $syllabusDb->_getFilter($where, $attrib);
+                if ($syllabus[0]['state'] != 'C') {
                     $existe = 'No';
                     foreach ($teachersEmptySyllabus as $teacher) {
                         if ($course['uid'] == $teacher['uid']) {

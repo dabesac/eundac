@@ -1,195 +1,299 @@
+<link rel="stylesheet" href="/css/controlActivity.css">
+
+<?php $dataCourse = $this->dataCourse ?>
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Control de Actividad');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->perid).'" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php 
+	$idsCourse = base64_encode(	$dataCourse['perid'].'-'.
+								$dataCourse['escid'].'-'.
+								$dataCourse['subid'].'-'.
+								$dataCourse['courseid'].'-'.
+								$dataCourse['curid'].'-'.
+								$dataCourse['turno'] );
+ ?>
+<input type="hidden" id="currentDate" value="<?php echo $dataCourse['currentDate'] ?>">
 
-<div class="row">
-	<div class="col-md-9 col-md-offset-1">
-		<blockquote>
-			<h4 class="text-muted">Curso <span class="text-info"><?php echo $this->coursename[0]['name'] ?></span></h4>
-		</blockquote>
-	</div>
-	<div class="col-md-1">
-		<blockquote>
-			<h4 class="text-info"><span class="glyphicon glyphicon-book"></span></h4>
-		</blockquote>
-	</div>
+<div class="controlActivity_header">
+	<p class="controlActivity_p"><?php echo $dataCourse['name'] ?> <small>Turno <?php echo $dataCourse['turno'] ?></small></p>
 </div>
+<?php if ($dataCourse['syllabus'] == 'C'): ?>
+	<?php if ($dataCourse['finishSyllabus'] == 0): ?>
+		<div class="controlActivity_Title thingsCompletDis">
+			<p class="pCurrentSession">Clase en curso...</p>
+		</div>
+	<?php endif ?>
+	<!-- Clases en curso -->
+	<?php foreach ($dataCourse['syllabusContent'] as $cContent => $content): ?>
+		<?php if ($cContent == $dataCourse['indexCurrent']):
+			$classSession = 'currentSesionActive';
+		else:
+			$classSession = '';
+		endif ?>
+		<div id="sessionCurrent<?php echo $cContent ?>" class="controlActivity_currentSesion <?php echo $classSession ?>">
+			<form id="formSession<?php echo $cContent ?>">
+				<input type="hidden" name="idsCourse" value="<?php echo $idsCourse ?>">
+				<input type="hidden" name="currentDate" value="<?php echo $dataCourse['currentDate'] ?>">
+				<input type="hidden" id="whySend<?php echo $cContent ?>" name="whySend" value="">
 
-<div class="row">
-	<div class="col-md-10 col-md-offset-1">
+				<input type="hidden" name="unit" value="<?php echo $content['unit'] ?>">
+				<input type="hidden" name="week" value="<?php echo $content['week'] ?>">
+				<input type="hidden" name="session" value="<?php echo $content['session'] ?>">
 
-<?php if ($this->completeSyllabus == 'Si'): ?>
-	<div class="alert alert-success fade in">
-		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      	<h4>Completo con exito su silabo :D</h4>
-      	<p>Ya finalizo con todas las clases de su silabo.......</p>
-    </div>
-<?php endif ?>
+				<div class="cSesObOUnity controlActivity_Unidad">
+					<p class="parrafoObO">Unidad <?php echo $content['unit'] ?></p>
+				</div>
+				<div class="cSesObOUnity controlActivity_Week">
+					<p class="parrafoObO">Semana <?php echo $content['week'] ?></p>
+				</div>
+				<div class="cSesObOUnity controlActivity_Sesion">
+					<p class="parrafoObO">Sesion <?php echo $content['session'] ?></p>
+				</div>
+				<div class="controlActivity_Name">
+					<p class="parrafoName"><?php echo $content['name'] ?></p>
+					<textarea id="textArea<?php echo $cContent ?>" class="controlActivity_textArea" name="comentClase" cols="20" rows="5" placeholder="Comente algo relevante que sucedio en la clase..."></textarea>
+				</div>
+				<!--Text Area-->
+				<a href="##" class="controlActivity_Btns controlActivity_BtnComent" idtextarea="<?php echo $cContent ?>"><span class="parrafoBtn">Comentar</span></a>
 
-<?php if ($this->contentsyllabus): ?>
+				<!-- Clase realizada -->
+				<div class="controlActivity_DivRealizedSesion">
+					<a href="##" class="btnSessionRealized" idsession="<?php echo $cContent ?>">
+						<span class="parrafoBtn">Marcar Clase</span>
+						<span id="chargeBtnRealized<?php echo $cContent ?>" class="chargeBtnRealized"></span>
+					</a>
+					<p class="controlActivity_currentDate">Marque la clase como realizada con la fecha actual <strong><?php echo $dataCourse['currentDate'] ?></strong></p>
+				</div>
 
-	<?php $c = 0;
-	if ($this->firstTime == 'No'): ?>
-		<h4 class="text-muted" style="opacity : 0.8">Clases <span class="text-info">Pasadas</span></h4>
-		<div id="pastSession" class="panel panel-warning" style="opacity : 0.8">
-			<table class="table table-bordered table-hover">
-				<tr>
-					<th class="text-center">Semana</th>
-					<th class="text-center">Unidad</th>
-					<th class="text-center">Sesión</th>
-					<th class="col-md-5">Clase</th>
-					<th class="text-center col-md-2">Fecha de Finalización</th>
-					<!-- <th class="">Reprogramar</th> -->
-				</tr>
-		<?php foreach ($this->contentsyllabus as $content): ?>
-				<tr>
-					<td class="text-center"><h5><?php echo $content[0]['week'] ?></h5></td>
-					<td class="text-center"><h5><?php echo $content[0]['unit'] ?></h5></td>
-					<td class="text-center"><h5><?php echo $content[0]['session'] ?></h5></td>
-					<td><h5><?php echo $content[0]['obj_content'] ?></h5></td>
-					<td class="text-center"><h5><?php echo $this->controlsyllabus[$c][0]['datecheck'] ?></h5></td>
-				</tr>
-				<?php $c++;
-				if ($c == $this->realizedSession): 
-					break;
+				<!-- Cambiar fecha -->
+				<div id="dateChange<?php echo $cContent ?>" class="controlActivity_SideChangeDate">
+					<div class="sideBox">
+						<input type="text" id="idDateChange<?php echo $cContent ?>" class="dateChange" name="dateChange">
+						<a href="##" class="btnRegisterOtherDate" idsession="<?php echo $cContent ?>">
+							Registrar con esta fecha
+							<span id="chargeChangeData<?php echo $cContent ?>"></span>
+						</a>
+					</div>
+				</div>
+				<a href="##" class="controlActivity_Btns controlActivity_BtnChangeDate" idchangedate="<?php echo $cContent ?>"><span class="parrafoBtn">Cambiar Fecha</span></a>
+
+			</form>
+		</div>
+	<?php endforeach ?>
+	
+	<!-- Clases faltantes -->
+	<div class="controlActivity_otherSesions">
+		<div id="idDivSesionRest" class="otherSesionsObO">
+			<p class="otherSesion_title otherSesion_titleSeFa">Sesiones Faltantes</p>
+			<?php foreach ($dataCourse['syllabusContent'] as $c => $content): ?>
+				<?php if ($c > $dataCourse['indexCurrent']):
+					$classSession = 'sessionActive';
+				else:
+					$classSession = '';
 				endif ?>
-		<?php endforeach ?>
-			</table>
+				<div id="sessionRest<?php echo $c ?>" class="otherSesionsObO_session sessionRest <?php echo $classSession ?>">
+					<div class="osObO otherSesionsObO_unity">
+						<p class="parrafoDef">Unidad <?php echo $content['unit'] ?></p>
+					</div>
+					<div class="osObO otherSesionsObO_week">
+						<p class="parrafoDef">Semana <?php echo $content['week'] ?></p>
+					</div>
+					<div class="osObO otherSesionsObO_sessionO">
+						<p class="parrafoDef">Sesión <?php echo $content['session'] ?></p>
+					</div>
+					<div class="osObO otherSesionsObO_name">
+						<?php echo $content['name'] ?>
+					</div>
+				</div>
+			<?php endforeach ?>
+			
+			<!-- Mensage para clases finalizadas -->
+			<?php if ($dataCourse['indexCurrent'] != ($cContent + 1)):
+				$classMessage = '';
+			else:
+				$classMessage = 'sessionActive';
+			endif ?>
+			<p class="otherSesion_parrafoGreat thingsCompletApp <?php echo $classMessage ?>"><span class="glyphicon glyphicon-ok"></span> Vaya! termino todo su sílabo <strong>con exito...</strong></p>
+
+			<?php if ($dataCourse['indexCurrent'] == ($cContent)):
+				$classMessage = 'sessionActive';
+			else:
+				$classMessage = '';
+			endif ?>
+			<p class="otherSesion_parrafoLessOne thingsLastSession thingsCompletDis <?php echo $classMessage ?>"><span class="glyphicon glyphicon-exclamation-sign"></span> Al parecer le falta solo una sesión <strong>que esta en curso...</strong></p>
 		</div>
 
-	<?php endif ?>
-
-
-<?php if ($this->completeSyllabus == 'No'): ?>
-		<div id="alertCourse" class="alert alert-danger fade in">
-	      	<h4>Seguro que deseas marca la clase como realizada</h4>
-	      	<p>Una vez que la cambies no habra marcha atras</p>
-	      	<p>
-	      		<?php $url = '/courseid/'.base64_encode($this->contentsyllabus[$c][0]['courseid']).
-							'/curid/'.base64_encode($this->contentsyllabus[$c][0]['curid']).
-							'/turno/'.base64_encode($this->contentsyllabus[$c][0]['turno']).
-							'/escid/'.base64_encode($this->contentsyllabus[$c][0]['escid']).
-							'/subid/'.base64_encode($this->contentsyllabus[$c][0]['subid']).
-							'/unit/'.base64_encode($this->contentsyllabus[$c][0]['unit']).
-							'/session/'.base64_encode($this->contentsyllabus[$c][0]['session']).
-							'/week/'.base64_encode($this->contentsyllabus[$c][0]['week']).
-							'/perid/'.base64_encode($this->contentsyllabus[$c][0]['perid']); ?>
-	        	<a id='session_checket' href="/controlactivity/index/save<?php echo $url ?>" class="btn btn-danger">Marcar Clase</a>
-	        	<a id="closeAlert" class="btn btn-default">Cancelar</a>
-	      	</p>
-	    </div>
-	
+		<!-- Clases Realizadas -->
+		<div id="idDivSesionRealized" class="otherSesionsObO">
+			<p class="otherSesion_title otherSesion_titleSeRe">Sesiones Realizadas</p>
+			<?php foreach ($dataCourse['syllabusContentInverse'] as $c => $content): ?>
+				<?php if ($c > $dataCourse['indexRealized']):
+					$classSession = 'sessionActive';
+				else:
+					$classSession = '';
+				endif ?>
+				<div id="sessionRealized<?php echo $c ?>" class="otherSesionsObO_session sessionRealized <?php echo $classSession ?>">
+					<div class="osObO otherSesionsObO_unity">
+						<p class="parrafoDef">Unidad <?php echo $content['unit'] ?></p>
+					</div>
+					<div class="osObO otherSesionsObO_week">
+						<p class="parrafoDef">Semana <?php echo $content['week'] ?></p>
+					</div>
+					<div class="osObO otherSesionsObO_sessionO">
+						<p class="parrafoDef">Sesión <?php echo $content['session'] ?></p>
+					</div>
+					<div class="osObO otherSesionsObO_name">
+						<?php echo $content['name'] ?>
+					</div>
+					<p id="dateRealized<?php echo $c ?>" class="osObO otherSesionsObO_dateCheck">
+						<?php echo $content['dateCheck'] ?>
+					</p>
+				</div>
+			<?php endforeach ?>
 			
-	
-	<?php if ($this->finalSession == 1): ?>
-		<h4 class="text-muted">Clase en <span class="text-info">Curso</span></h4>
-	<?php else: ?>
-		<h4 class="text-muted">Clase <span class="text-info">Final</span></h4>
-	<?php endif ?>
-
-		<div id="presentSession" class="panel panel-warning">
-			<table class="table table-bordered table-hover">
-				<tr>
-					<th class="text-center">Semana</th>
-					<th class="text-center">Unidad</th>
-					<th class="text-center">Sesión</th>
-					<th>Clase</th>
-					<th></th>
-				</tr>
-				<tr>
-					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['week'] ?></h5></td>
-					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['unit'] ?></h5></td>
-					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['session'] ?></h5></td>
-					<td class="col-md-5"><h5><?php echo $this->contentsyllabus[$c][0]['obj_content'] ?></h5></td>
-					
-					<td class="text-center col-md-2">
-						<h4>
-							<input type='text' style="display:none" class='form-control date_session'>
-							<a id="openAlert" class="text-success" href="##"><span class="glyphicon glyphicon-check"></span></a>
-						</h4>
-						<a href="##" id='session_date'>Reprogramar</a>
-						<a href="##" class="btn btn-primary btn-xs"style='display:none'id='save_session_date'>Guardar</a>
-						<a href="##" class="btn btn-danger btn-xs"style='display:none'id='close_session_date'>Cancelar</a>
-					</td>
-				</tr>
-			</table>
+			<!-- Mensage para marcar clases -->
+			<?php if ($dataCourse['indexCurrent'] != 0):
+				$classMessage = '';
+			else:
+				$classMessage = 'sessionActive';
+			endif ?>
+			<p class="otherSesion_parrafoEmpty thingsStartedSession <?php echo $classMessage ?>"><span class="glyphicon glyphicon-exclamation-sign"></span> Aun no realizó ninguna clase, <strong>no se olvide de marcarla como hecha si ya la termino...</strong></p>
 		</div>
-
-		<?php if ($this->finalSession == 1): ?>
-			
-		<h4 class="text-muted" style="opacity : 0.8">Futuras <span class="text-info">Clases</span></h4>
-		<?php $c++; ?>
-			
-		<div id="futureSession" style="opacity : 0.8" class="panel panel-warning">
-			<table class="table table-bordered table-hover">
-				<tr>
-					<th class="text-center">Semana</th>
-					<th class="text-center">Unidad</th>
-					<th class="text-center">Sesión</th>
-					<th class="col-md-5">Clase</th>
-				</tr>
-		<?php for ($i = $c; $i < $this->restSession ; $i++): ?>
-				<tr>
-					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['week'] ?></h5></td>
-					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['unit'] ?></h5></td>
-					<td class="text-center"><h5><?php echo $this->contentsyllabus[$c][0]['session'] ?></h5></td>
-					<td><h5><?php echo $this->contentsyllabus[$c][0]['obj_content'] ?></h5></td>
-					<td class="col-md-2"></td>
-				</tr>
-		<?php $c++;
-		endfor ?>
-			</table>
-		</div>
-
-		<?php endif ?>
-		
-<?php endif ?>	
-
-<?php else: ?>
-	
-	<h4 class="text-center text-danger"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> No existen registros, <span class="text-danger">tal vez no relleno su silabo aun....</span></h4>
-
-<?php endif ?>
-
 	</div>
-</div>
 
-<script>
-	$("#session_date").click(function(){
-		var td = $(this).parent()
-		$("#openAlert").hide()
-		$(".date_session").show()
-		$("#save_session_date").show()
-		$("#close_session_date").show()
-		$(this).hide()
-	})
-	$("#close_session_date").click(function(){
-		$("#openAlert").show()
-		$("#session_date").show()
-		$(".date_session").hide()
-		$("#save_session_date").hide()
-		$(this).hide()
-	})
-	$("#alertCourse").fadeOut('fast');
-	//$('#alertCourse').fadeOut('fast');
-	$('#openAlert').click(function(){
-		$('#alertCourse').fadeIn('slow');
-	});
-	$('#closeAlert').click(function(){
-		$('#alertCourse').fadeOut('slow');
-	});
-	$(".date_session").datepicker({ dateFormat: 'dd/mm/yy' })
-	$("#save_session_date").click(function(){
-		val_date = $(".date_session").val()
-		if (val_date !='' && typeof(val_date)!='undefined') {
-			date_save = val_date.split('/')
-			date_val = date_save[2]+"-"+date_save[1]+"-"+date_save[0]
-			// console.log(date_val)
-			var href = $("#session_checket").attr('href')
-			$(this).attr('href',href+"/date/"+$.base64.encode(date_val))
-		}
-	})
-	// $("#session_checket").click(function(){
-	// 	$("#session_date").find()
-	// })
+	<script>
+		$(function(){
+			var idsCourse     = $('#idsCourse').val();
+			var cantSesiones  = 0;
+			var sessionAppear = 0;
+			var idSession     = 0;
+			var idFormSession = '';
+			var idTextArea    = '';
+			var idChangeDate  = '';
+			var formSession   = '';
+			var dateRealized  = '';
 
-</script>
+			//Comentarios de clase
+			$('.controlActivity_BtnComent').on('click', function(){
+				$(this).toggleClass('controlActivity_BtnComentActive');
+
+				idTextArea = $(this).attr('idtextarea');
+				if ($('#textArea' + idTextArea).hasClass('controlActivity_textAreaActive')) {
+					$('#textArea' + idTextArea)	.removeClass('controlActivity_textAreaActive')
+												.addClass('controlActivity_textAreaInactive');
+				}else {
+					$('#textArea' + idTextArea)	.removeClass('controlActivity_textAreaInactive')
+												.addClass('controlActivity_textAreaActive');
+				};
+			});
+
+			//Cambiar de Fecha
+			$('.dateChange').datepicker();
+			$('.controlActivity_BtnChangeDate').on('click', function(){
+				$(this).toggleClass('controlActivity_BtnChangeDateActive');
+
+				idChangeDate = $(this).attr('idchangedate');
+				if ($('#dateChange' + idChangeDate).hasClass('controlActivity_SideChangeDateActive')) {
+					$('#dateChange' + idChangeDate)	.removeClass('controlActivity_SideChangeDateActive')
+													.addClass('controlActivity_SideChangeDateInactive');
+				}else {
+					$('#dateChange' + idChangeDate)	.removeClass('controlActivity_SideChangeDateInactive')
+													.addClass('controlActivity_SideChangeDateActive');
+				};
+			});
+
+			//marcar como realizado
+			//Realizado hoy;
+			$('.btnSessionRealized').on('click', function(){
+				idFormSession = $(this).attr('idsession');
+				dateRealized = $('#currentDate').val();
+				
+				$('#chargeBtnRealized' + idFormSession).html('<img src="/img/spinner.gif" alt="Loading...">');
+
+				$('#whySend' + idFormSession).val('N');
+				formSession = $('#formSession' + idFormSession).serialize();
+				registerSession(formSession, dateRealized);
+			});
+
+			//Realizado cambiando la fecha
+			$('.btnRegisterOtherDate').on('click', function(){
+				idFormSession = $(this).attr('idsession');
+				dateRealized = $('#idDateChange' + idFormSession).val();
+				if(dateRealized){
+					dateRealized = dateRealized.split('/');
+					dateRealized = dateRealized[1] + '-' + dateRealized[0] + '-' + dateRealized[2];
+					$('#chargeChangeData' + idFormSession).html('<img src="/img/spinner.gif" alt="Loading...">');
+					$('#whySend' + idFormSession).val('O');
+					formSession = $('#formSession' + idFormSession).serialize();
+					registerSession(formSession, dateRealized);
+				}
+			});
+
+			//Funciones
+			function registerSession(formSession, dateRealized){
+				$.ajax({
+					type     : 'post',
+					url      : '/controlactivity/index/savesession/',
+					data     : formSession,
+					dataType : 'json',
+					success  : function(data){
+						if (data.success === 1) {
+							//desaparecer Clases Actual
+							$('.controlActivity_currentSesion').each(function(index, element){
+								if ($(element).hasClass('currentSesionActive')) {
+									idSession = index;
+									return false;
+								};
+							});
+							$('#sessionCurrent' + idSession).removeClass('currentSesionActive');
+							idSession++;
+							$('#sessionCurrent' + idSession).addClass('currentSesionActive');
+
+							//Desaparecer de Sesiones Faltantes
+							$('.sessionRest').each(function(index, element){
+								if ($(element).hasClass('sessionActive')) {
+									idSession = index;
+									return false;
+								};
+							});
+							$('#sessionRest' + idSession).addClass('sessionHideUp');
+							setTimeout(function(){
+								$('#sessionRest' + idSession).removeClass('sessionActive');
+							}, 300);
+
+							//Aparecer en Sesiones Realizadas
+							cantSesiones = 0;
+							$('.sessionRealized').each(function(index, element){
+								if (!$(element).hasClass('sessionActive')) {
+									cantSesiones++;
+								};
+							});
+							sessionAppear = cantSesiones - 1;
+							$('#sessionRealized' + sessionAppear)	.addClass('sessionActive');
+							$('#dateRealized' + sessionAppear).html(dateRealized);
+
+							//Aparecer y Desaparecer mensajes
+							$('.thingsStartedSession').slideUp();
+							if (cantSesiones == 1) {
+								$('.thingsCompletDis').slideUp();
+								$('.thingsCompletApp').slideDown();
+							}else if(cantSesiones == 2){
+								$('.thingsLastSession').slideDown();
+							};
+						}else{
+
+						};
+					}
+				});
+		
+			}
+
+			/*$('#idDivSesionRest')	.html('<br><br><center><img src="/img/spinner.gif" alt=""></center>')
+									.load('/controlactivity/index/sesionrest/data/' + idsCourse);
+
+			$('#idDivSesionRealized')	.html('<br><br><center><img src="/img/spinner.gif" alt=""></center>')
+										.load('/controlactivity/index/sesionrealized/data/'+idsCourse);*/
+		});
+	</script>
+<?php else: ?>
+	<p class="messageEmpty"><span class="glyphicon glyphicon-exclamation-sign"></span> Al parecer no completo <strong>su sílabo...</strong></p>
+<?php endif ?>

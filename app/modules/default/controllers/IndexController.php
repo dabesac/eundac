@@ -63,17 +63,18 @@ class IndexController extends Zend_Controller_Action {
                     $data  = $authAdapter->getResultRowObject(array('eid','oid','uid','escid','pid','rid','subid'));
                     $userinfo  = $authAdapter->getResultRowObject(array('eid','oid','uid','escid','pid','rid','subid'));
                     // Begin Var
-                    $data->period = new stdClass();
-                    $data->faculty = new stdClass();
-                    $data->speciality = new stdClass();
-                    $data->infouser = new stdClass();
-                    $data->rol = new stdClass();
-                    $data->org = new stdClass();
+                    $data->period      = new stdClass();
+                    $data->faculty     = new stdClass();
+                    $data->speciality  = new stdClass();
+                    $data->infouser    = new stdClass();
+                    $data->rol         = new stdClass();
+                    $data->org         = new stdClass();
                     $data->fullProfile = new stdClass();
+                    $data->encuesta    = new stdClass();
                     
-                    $data->period->perid = $period;
-                    $data->period->name = $name_period;
-                    $data->period->next= $periodnext ;
+                    $data->period->perid     = $period;
+                    $data->period->name      = $name_period;
+                    $data->period->next      = $periodnext ;
                     $data->period->name_next = $name_periodnext;
                     
                     
@@ -173,10 +174,18 @@ class IndexController extends Zend_Controller_Action {
                         if ($dataPoll) {
 
                             //Verificar si se matriculo al peridodo anterior
+                            $anioPeriod   = $period[0].$period[1];
+                            $letterPeriod = $period[2];
+                            if ($letterPeriod == 'B') {
+                                $periodBefore = $anioPeriod.'A';
+                            }elseif ($letterPeriod == 'A'){
+                                $anioPeriod = $anioPeriod - 1;
+                                $periodBefore = $anioPeriod.'B';
+                            }
 
                             $where = array( 'eid'   => $eid,
                                             'oid'   => $oid,
-                                            'perid' => $perid,
+                                            'perid' => $periodBefore,
                                             'state' => 'M');
 
                             $isRegister = $registerDb->_getFilter($where);

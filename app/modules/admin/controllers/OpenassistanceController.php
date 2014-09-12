@@ -47,7 +47,7 @@ class Admin_OpenassistanceController extends Zend_Controller_Action{
 			if ($datacourses) {
 				$curid='13A4SI';
 				$coursoid='13104';
-				$turno='A';					
+				$turno='A';				
 				$i=0;
 				$k=0;
 				foreach ($datacourses as $course) {

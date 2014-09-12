@@ -17,173 +17,178 @@ class Controlactivity_IndexController extends Zend_Controller_Action {
     
     public function indexAction()
     {
-        try{
-            $controlsyllabusDb = new Api_Model_DbTable_ControlActivity();
-            $contentsyllabusDb = new Api_Model_DbTable_Syllabusunitcontent();
-            $coursesDb = new Api_Model_DbTable_Course();
+        $coursesDb         = new Api_Model_DbTable_Course();
+        $coursesPeriodsDb  = new Api_Model_DbTable_PeriodsCourses();
+        $syllabusDb        = new Api_Model_DbTable_Syllabus();
+        $syllabusContentDb = new Api_Model_DbTable_Syllabusunitcontent();
+        $syllabusControlDb = new Api_Model_DbTable_ControlActivity();
 
-            $eid = $this->sesion->eid;
-            $oid = $this->sesion->oid;
-            $escid = base64_decode($this->_getParam('escid'));
-            $subid = base64_decode($this->_getParam('subid'));
-            $curid = base64_decode($this->_getParam('curid'));
-            $courseid = base64_decode($this->_getParam('courseid'));
-            $turno = base64_decode($this->_getParam('turno'));
-            $perid = base64_decode($this->_getParam('perid'));
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
 
-            $where = array('eid'=>$eid, 'oid'=>$oid, 'courseid'=>$courseid, 'curid'=>$curid);
-            $attrib = array('name');
-            $coursename = $coursesDb->_getFilter($where, $attrib);
-            $this->view->coursename = $coursename;
+        $data = base64_decode($this->_getParam('data'));
+        $data = explode('-', $data);
 
-            $attrib = array('session');
-            $where = array('eid' => $eid, 
-                            'oid'=>$oid, 
-                            'perid'=>$perid,
-                            'escid'=>$escid, 
-                            'subid'=>$subid, 
-                            'courseid'=>$courseid, 
-                            'curid'=>$curid,
-                            'turno'=>$turno);
-              
-            $controlsyllabus = $controlsyllabusDb->_getFilter($where, $attrib);
-            $contentsyllabus = $contentsyllabusDb->_getFilter($where, $attrib);
+        $escid    = $data[0];
+        $subid    = $data[1];
+        $perid    = $data[2];
+        $courseid = $data[3];
+        $curid    = $data[4];
+        $turno    = $data[5];
 
-            $c = 0;    
-            $index = 0;
-            $firstTime = "Si";
-            if ($contentsyllabus) {
-                if ($controlsyllabus) {
-                    foreach ($controlsyllabus as $session) {
-                        $c++;
-                    }
-                    $this->view->realizedSession = $c;
+        $currentDate = date('d-m-Y');
+        $dataCourse['currentDate']  = $currentDate;
 
-                    for ($i = 0; $i < $c; $i++) { 
-                        $attrib = array('perid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
-                        $where = array('eid' => $eid, 
-                                    'oid'=>$oid, 
-                                    'perid'=>$perid, 
-                                    'subid'=>$subid, 
-                                    'courseid'=>$courseid, 
-                                    'curid'=>$curid,
-                                    'turno'=>$turno,
-                                    'session'=>$controlsyllabus[$i]['session']);
-                        $contentsyllabus[$index] = $contentsyllabusDb->_getFilter($where, $attrib);
+        //Datos de Curso
+        $where = array( 'eid'      => $eid,
+                        'oid'      => $oid,
+                        'escid'    => $escid,
+                        'subid'    => $subid,
+                        'courseid' => $courseid,
+                        'curid'    => $curid );
+        $attrib = array('name', 'credits');
+        $preDataCourse = $coursesDb->_getFilter($where, $attrib);
 
-                        $attrib = array('datecheck');
-                        $where = array('eid' => $eid, 
-                                    'oid'=>$oid, 
-                                    'perid'=>$perid, 
-                                    'subid'=>$subid, 
-                                    'courseid'=>$courseid, 
-                                    'curid'=>$curid,
-                                    'turno'=>$turno,
-                                    'session'=>$controlsyllabus[$i]['session']);
-                        $controlsyllabus[$index] = $controlsyllabusDb->_getFilter($where, $attrib);
+        $dataCourse['name']     = $preDataCourse[0]['name'];
+        $dataCourse['perid']    = $perid;
+        $dataCourse['escid']    = $escid;
+        $dataCourse['subid']    = $subid;
+        $dataCourse['courseid'] = $courseid;
+        $dataCourse['curid']    = $curid;
+        $dataCourse['turno']    = $turno;
+        $dataCourse['credits']  = $preDataCourse[0]['credits'];
 
-                        $index++;
-                    }
-                    $firstTime = "No";
-                }
+        //Curso Objetivo o Competencia
+        $where = array( 'eid'      => $eid,
+                        'oid'      => $oid,
+                        'perid'    => $perid,
+                        'escid'    => $escid,
+                        'subid'    => $subid,
+                        'courseid' => $courseid,
+                        'curid'    => $curid,
+                        'turno'    => $turno );
+        $attrib = array('type_rate');
 
-                $attrib = array('perid', 'escid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
-                $where = array('eid' => $eid, 
-                            'oid'=>$oid, 
-                            'perid'=>$perid,
-                            'escid'=>$escid, 
-                            'subid'=>$subid, 
-                            'courseid'=>$courseid, 
-                            'curid'=>$curid,
-                            'turno'=>$turno,
-                            'session'=>$contentsyllabus[$index]['session']);
-                $contentsyllabus[$index] = $contentsyllabusDb->_getFilter($where, $attrib);
+        $preDataTypeCourse = $coursesPeriodsDb->_getFilter($where, $attrib);
+        if ($preDataTypeCourse[0]['type_rate'] == 'O') {
+            $nameSession = 'obj_content';
+        }else{
+            $nameSession = 'com_conceptual';
+        }
 
+        //Verificar si el syllabo esta rellenado
+        $attrib = array('state');
 
-                if ($contentsyllabus[$index] == null) {
-                    $completeSyllabus = 'Si';
-                }else{
-                    $completeSyllabus = 'No';
-                }
-                $index++;
+        $preDataSyllabus = $syllabusDb->_getFilter($where, $attrib);
 
-                $c = 0;    
-                foreach ($contentsyllabus as $session) {
-                    $c++;
-                }
-                $this->view->restSession = $c;
+        $dataCourse['syllabus'] = $preDataSyllabus[0]['state'];
 
-                $finalSession = 0;
-                for ($i = $index; $i < $c ; $i++) { 
-                    //echo $i.' ';
-                    $attrib = array('perid', 'subid', 'courseid', 'curid', 'turno', 'unit', 'session', 'week', 'obj_content');
-                    $where = array('eid' => $eid, 
-                                'oid'=>$oid, 
-                                'perid'=>$perid, 
-                                'subid'=>$subid, 
-                                'courseid'=>$courseid, 
-                                'curid'=>$curid,
-                                'turno'=>$turno,
-                                'session'=>$contentsyllabus[$i]['session']);
-                    $contentsyllabus[$index] = $contentsyllabusDb->_getFilter($where, $attrib);
-                    $index++;
-                    $finalSession = 1;
-                }
-
-                $this->view->finalSession = $finalSession;
-
-                $this->view->firstTime = $firstTime;
-                $this->view->completeSyllabus = $completeSyllabus;
-             
-                $this->view->contentsyllabus = $contentsyllabus;
-                $this->view->controlsyllabus = $controlsyllabus;
+        if ($dataCourse['syllabus'] == 'C') {
+            $attrib = '';
+            $order  = array('session ASC');
+            $preDataSyllabusContent = $syllabusContentDb->_getFilter($where, $attrib, $order);
+            foreach ($preDataSyllabusContent as $c => $content) {
+                $dataCourse['syllabusContent'][$c] = array( 'unit'    => $content['unit'],
+                                                            'week'    => $content['week'],
+                                                            'session' => $content['session'],
+                                                            'name'    => $content[$nameSession] );
             }
+
+            $preDataSyllabusControl = $syllabusControlDb->_getFilter($where);
+            if ($preDataSyllabusControl) {
+                $manySessionRealized = count($preDataSyllabusControl);
+                $indexCurrentSession = $manySessionRealized;
+            }else{
+                $indexCurrentSession = 0;
+            }
+            $dataCourse['indexCurrent'] = $indexCurrentSession;
+
+            $dataCourse['finishSyllabus'] = 0;
+
+            if ($indexCurrentSession == ($c + 1)) {
+                $dataCourse['finishSyllabus'] = 1;
+            }
+
+
+
+            //clases realizadas
+            $attrib = '';
+            $order  = array('session DESC');
+            $preDataSyllabusContent = $syllabusContentDb->_getFilter($where, $attrib, $order);
+            foreach ($preDataSyllabusContent as $c => $content) {
+                $dataCourse['syllabusContentInverse'][$c] = array(  'unit'      => $content['unit'],
+                                                                    'week'      => $content['week'],
+                                                                    'session'   => $content['session'],
+                                                                    'name'      => $content[$nameSession],
+                                                                    'dateCheck' => '' );
+
+                //Fecha de realización
+                $where = array( 'eid'      => $eid,
+                                'oid'      => $oid,
+                                'perid'    => $perid,
+                                'escid'    => $escid,
+                                'subid'    => $subid,
+                                'courseid' => $courseid,
+                                'curid'    => $curid,
+                                'unit'     => $content['unit'],
+                                'week'     => $content['week'],
+                                'session'  => $content['session'] );
+                $attrib = array('datecheck');
+
+                $preDateCheck = $syllabusControlDb->_getFilter($where, $attrib);
+                if ($preDateCheck[0]['datecheck']) {
+                    $dataCourse['syllabusContentInverse'][$c]['dateCheck'] = date('d-m-Y', strtotime($preDateCheck[0]['datecheck']));
+                }
+
+            }
+            $dataCourse['indexRealized'] = $c - $indexCurrentSession;
         }
-            catch (Exception $e) {           
-        }
+
+        $this->view->dataCourse = $dataCourse;
     }
 
-    public function saveAction()
+
+    public function savesessionAction()
     {
-        try {
-            $controlsyllabusDb = new Api_Model_DbTable_ControlActivity();
+        $this->_helper->layout()->disableLayout();
+        //DataBases
+        $syllabusControlDb = new Api_Model_DbTable_ControlActivity();
 
-            $date_t = base64_encode(date('Y-m-d'));
-            $eid = $this->sesion->eid;
-            $oid = $this->sesion->oid;
-            $subid    = base64_decode($this->_getParam('subid'));
-            $escid    = base64_decode($this->_getParam('escid'));
-            $curid    = base64_decode($this->_getParam('curid'));
-            $courseid = base64_decode($this->_getParam('courseid'));
-            $turno    = base64_decode($this->_getParam('turno'));
-            $unit     = base64_decode($this->_getParam('unit'));
-            $session  = base64_decode($this->_getParam('session'));
-            $week     = base64_decode($this->_getParam('week'));
-            $perid    = base64_decode($this->_getParam('perid'));
-            $date    = base64_decode($this->_getParam('date',$date_t));
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
 
-            $where = array( 'eid'      => $eid, 
-                            'oid'      => $oid, 
-                            'perid'    => $perid, 
-                            'escid'    => $escid, 
-                            'subid'    => $subid, 
-                            'courseid' => $courseid, 
-                            'curid'    => $curid,
-                            'turno'    => $turno,
-                            'unit'     => $unit,
-                            'week'     => $week,
-                            'session'  => $session);
+        $formData = $this->getRequest()->getPost();
 
-            $where['datecheck'] = $date;
-            $where['state'] = 'D';
+        $idsCourse = base64_decode($formData['idsCourse']);
+        $idsCourse = explode('-', $idsCourse);
 
-            $save = $controlsyllabusDb->_save($where);
-            if ($save) {
-                $this->_redirect('/controlactivity/index/index/courseid/'.base64_encode($courseid).'/curid/'.base64_encode($curid).'/turno/'.base64_encode($turno).'/perid/'.base64_encode($perid).'/subid/'.base64_encode($subid).'/escid/'.base64_encode($escid));
-            }
+        $dataSave = array(  'eid'      => $eid,
+                            'oid'      => $oid,
+                            'perid'    => $idsCourse[0],
+                            'escid'    => $idsCourse[1],
+                            'subid'    => $idsCourse[2],
+                            'courseid' => $idsCourse[3],
+                            'curid'    => $idsCourse[4],
+                            'turno'    => $idsCourse[5],
+                            'unit'     => $formData['unit'],
+                            'week'     => $formData['week'],
+                            'session'  => $formData['session'],
+                            'comment'  => $formData['comentClase'],
+                            'state'    => 'D',
+                            'created'  => date('Y-m-d h:m:s') );
 
-        } catch (Exception $e) {
-            print 'Error'.$e->getMessage();
+        // Tipo de envio
+        if ($formData['whySend'] == 'N') {
+            $dataSave['datecheck'] = date('Y-m-d h:m:s', strtotime($formData['currentDate']));
+        }else if ($formData['whySend'] == 'O'){
+            $dataSave['datecheck'] = date('Y-m-d h:m:s', strtotime($formData['dateChange']));
         }
+
+        if ($syllabusControlDb->_save($dataSave)) {
+            $result = array('success' => 1);
+        }else{
+            $result = array('success' => 0);
+        }
+        print (json_encode($result));
     }
 }

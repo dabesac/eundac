@@ -1,0 +1,143 @@
+<style>
+  .title{
+    background:#585858;
+    color:#ffffff;
+  }
+</style>
+<?php
+if ($this->datacourses) { ?>
+<table class="table table-striped table-bordered" style="margin-top: 15px;">
+    <tr>
+        <th colspan='10' style="background:#585858;color:#ffffff"><center><h5><b>INFORMACIÓN DE LAS ACTAS</b></h5></center></th>
+    </tr>
+    <tr>
+        <th class="title"><center>#</center></th>
+        <th class="title"><center>Sem.</center></th>   
+        <th class="title"><center>Curricula</center></th>
+        <th class="title"><center>Código</center></th>
+        <th class="title"><center>Nombre Curso</center></th>
+        <th class="title"><center>Turno</center></th>
+        <th class="title"><center>DNI</center></th>         
+        <th class="title"><center>Docente</center></th>
+        <th class="title"><center>Fecha Acta</center></th>
+        <th class="title"><center>Operación</center></th>
+    </tr>
+<?php
+    $c=0;
+    $s=0;
+    foreach ($this->datacourses as $course) {
+        $c++;
+        $escid=$course['escid'];
+        $subid=$course['subid'];
+        $courseid=$course['courseid'];
+        $curid=$course['curid'];
+        $perid=$course['perid'];
+        $semid=$course['semid'];
+        $turno=$course['turno'];
+        $state=$course['state'];
+        $tr=$course['type_rate'];
+        $closedate=$course['closure_date'];
+        if ($closedate<>"") {
+            $tmp = split("-", $course['closure_date']);
+            $closedate= $tmp[2]."/".$tmp[1]."/".$tmp[0];
+        }
+        $namecourse=$this->datacourse[$c-1][0]['name'];
+        $pid=$this->infoteacher[$c-1][0]['pid'];
+        $name=$this->infoteacher[$c-1][0]['last_name0']." ".$this->infoteacher[$c-1][0]['last_name1'].", ".$this->infoteacher[$c-1][0]['first_name'];
+    ?>
+    <tr>
+        <td><center><?php echo $c?></center></td>
+        <td><center><?php echo $semid?></center></td>
+        <td><center><?php echo $curid?></center></td>
+        <td><center><?php echo $courseid?></center></td>
+        <td><?php echo $namecourse?> </td>
+        <td><center><?php echo $turno?></center></td>
+        <td><center><?php echo $pid?></center></td>
+        <td><?php echo $name?></td>
+        <td><center><?php echo $closedate?></center></td>
+        <td>
+            <center>
+                <?php 
+                if ($state=='C') {  ?>
+                    <a id='loading<?php echo $s?>' data-toggle="modal" href="#myModal"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
+                    <script type="text/javascript">
+                    $("#loading<?php echo $s?>").click(function(){
+                        
+                        url="/admin/academicmanagement/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('A')?>/partial/<?php echo base64_encode('Aplazados Abrir')?>";
+                        $("#view").load(url);
+                    });
+                    </script>
+                <?php
+                }
+                else{   ?>
+                    <a id='loads<?php echo $s?>' data-toggle="modal" href="#Modal"><span class="glyphicon glyphicon-lock"></span> Cerrar</a>
+                    <script type="text/javascript">
+                    $("#loads<?php echo $s?>").click(function(){
+                        
+                        url="/admin/academicmanagement/updatestate/perid/<?php echo base64_encode($perid)?>/courseid/<?php echo base64_encode($courseid)?>/escid/<?php echo base64_encode($escid)?>/subid/<?php echo base64_encode($subid)?>/curid/<?php echo base64_encode($curid)?>/turno/<?php echo base64_encode($turno)?>/state/<?php echo base64_encode('C')?>/partial/<?php echo base64_encode('Aplazados Cerrar')?>";
+                        $("#view1").load(url);
+                    });
+                    </script>
+                <?php    
+                }
+                ?>
+            </center>
+        </td>
+    </tr>
+    <?php   
+    $s++;
+    }
+?>
+</table>
+<?php    
+}
+else{
+?>
+    <div class="alert alert-info" style='margin-top:20px; font-size:15px'> No existen <b>Actas</b></div>
+<?php
+}
+?>
+
+<!-- Modal 1 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+          <center><h3 class="modal-title" style='color: black' ><img style='width:40px'src="/img/unlock.png" ><b> SE ABRIÓ EL ACTA DE APLAZADOS DE ESTE CURSO</b></h3></center>
+          <div id='view'></div>            
+        </div>
+        <div class="modal-footer">
+          <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal 2 -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">        
+        <div class="modal-body">
+            <center><h3 class="modal-title" style='color:black' ><img style='width:40px'src="/img/candado.png" ><b> SE CERRÓ EL ACTA DE APLAZADOS DE ESTE CURSO</b></h3></center>
+            <div id='view1'></div>
+            
+        </div>
+        <div class="modal-footer">
+          <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+$ ('#myModal'). on('hidden.bs.modal',function()  { 
+    url="/admin/academicmanagement/getaplazed/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    $("#viewcourses").load(url);  
+});
+
+$ ('#Modal'). on('hidden.bs.modal',function()  { 
+    url="/admin/academicmanagement/getaplazed/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
+    $("#viewcourses").load(url);  
+});
+</script>

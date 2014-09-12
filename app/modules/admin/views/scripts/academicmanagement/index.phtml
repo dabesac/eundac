@@ -1,0 +1,120 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-file"></span> ABRIR ACTAS, ASISTENCIAS, SILABO');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>  
+<div class="alert alert-info">
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <div class="col-md-1 col-md-offset-2"><h4>Año:</h4></div>
+            <div class="col-md-2">
+                <?php echo $this->fm->anio?>
+            </div>
+            <div class="col-md-1"><h4>Periodo:</h4></div>
+            <div class="col-md-2">
+                <?php echo $this->fm->period?>
+            </div>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <div class="col-md-1"><b>Facultad: </b></div>
+            <div class="col-md-3">      
+                <select id="facid" class="form-control">
+                    <option>- Seleccione la Facultad -</option>
+                    <?php
+                    if ($this->facultades) {
+                        foreach ($this->facultades as $facultades) { 
+                            $str = ($this->facid==$facultades['facid'])?"selected ":""; ?>
+                            <option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
+                        <?php
+                        }
+                    } ?>
+                </select>
+            </div>
+
+            <div class="col-md-1"><b>Escuela: </b></div>
+            <div class="col-md-3">
+               <select id="escid" class="form-control" style="width:260px">
+                    <option value="">- Seleccione la Escuela -</option>
+                </select>
+            </div>
+
+            <div class="col-md-1"><b>Especialidad: </b></div>
+            <div class="col-md-3">
+                <select id="especialidad" class="form-control" style="width:260px">
+                    <option value="">- Seleccione la Especialidad -</option>
+                </select>
+            </div>        
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-1 col-md-offset-5">
+                <center><a id="ver" href="#" class="btn btn-info"><span class="glyphicon glyphicon-arrow-down"></span> Ver </a></center>
+            </div>
+        </div>
+    </div> 
+</div>
+<div id='viewcourses'></div>
+<script>
+    $("#anio").change(function(){
+        var anio = $(this).val();
+        // alert(anio);
+        $("#period").load("/admin/academicmanagement/lperiod/anio/"+anio);
+    });
+    $("#facid").change(function(){
+        var facid=$(this).val();
+        $("#escid").load("/admin/academicmanagement/schools/facid/"+facid);
+        if (facid=="TODO") {
+            alert("seleccione una facultad ");
+        };
+    });
+
+    $("#escid").change(function(){
+        var tescid = $("#escid").val();
+        if (tescid=="TODOEC") {
+            alert("seleccione una escuela ");
+        };
+        var xx1 = tescid.split(";--;");
+        var escid = xx1[0];
+        var subid = xx1[1];
+        $("#especialidad").load("/admin/academicmanagement/speciality/escid/"+escid);
+    });
+    $("#especialidad").change(function(){
+        var facid=$(this).val();   
+    });
+
+    $("#ver").click(function(){
+    	var escid = $("#escid").val();
+    	var perid = $("#period").val();
+        var speciability = $("#especialidad").val();         
+        var anio = $('#anio').val();
+        if (facid=='' || escid=='' || perid=='') {
+            alert("Seleccione la Facultad, Escuela y el Periodo Académico.");
+            return false;
+        };
+        if (speciability==""){
+            var tmp=escid.split(";--;");
+            var escid=tmp[0];
+            var subid=tmp[1];
+        }else{
+            var tmp=speciability.split("--");
+            var subid=tmp[0]; 
+            var escid=tmp[1];             
+        }
+        var tmp1 = anio.substr(2, 4);
+        var vari = tmp1.concat('D');
+        var vari1 = tmp1.concat('E');
+        if (perid==vari || perid==vari1) {
+            // alert('No tiene accesso.');
+            var url="/admin/academicmanagement/getaplazed/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
+            $("#viewcourses").html("<center><img src='/img/carga.gif' /></center>");
+            $("#viewcourses").load(url);
+        }
+        else{
+            var url="/admin/academicmanagement/courses/perid/"+perid+"/escid/"+escid+"/subid/"+subid;
+            $("#viewcourses").html("<center><img src='/img/carga.gif' /></center>");
+            $("#viewcourses").load(url);
+            
+        };
+
+    });
+</script>

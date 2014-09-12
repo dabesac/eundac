@@ -39,7 +39,7 @@
 			</select>
 		</div>
 	</div>
-<?php elseif ($dataVista['rid'] == 'RC' or $dataVista['rid'] == 'ES'): ?>
+<?php elseif ($dataVista['rid'] == 'RC' or $dataVista['rid'] == 'ES' or $dataVista['rid'] == 'CU' or $dataVista['rid'] == 'VA'): ?>
 	<div class="registroCentralSide">
 		<p class="rcObO parrafoRC"><span class="glyphicon glyphicon-info-sign"></span> Seleccione facultad y escuela:</p>
 		<div class="rcObO select selectFaculty">
@@ -70,7 +70,6 @@
 		var dataEscid = $('#escid').val();
 		var data      = period + '-' + dataEscid;
 
-		console.log(dataEscid);
 
 		$('#selectPeriod')	.html('<option>Cargando...</option>')
 							.load('/report/periods/listperiods/anio/' + anio, function(){
@@ -115,11 +114,11 @@
 					$('#avanceAcademico_DataDocentes').html('');
 				};
 			});
-		}else if (rid == 'RC' || rid == 'ES'){
+		}else if (rid == 'RC' || rid == 'ES' || rid == 'CU' || rid == 'VA'){
 			$('#selectFaculty').on('change', function(){
 				facid = $(this).val();
 				$('#avanceAcademico_DataDocentes')	.html('');
-				$('#selectSchool')	.html('<option value="">Loading...</option')
+				$('#selectSchool')	.html('<option value="">Cargando...</option')
 									.load('/default/global/listspecialities/data/' + facid);
 			});
 
