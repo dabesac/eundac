@@ -1,0 +1,224 @@
+<?php
+    $hours=$this->datahours[0]['hours_begin'];
+    $hour=substr($hours,0,2);
+    $minute=substr($hours,3,2);
+    $hour=intval($hour);
+?>
+<div class="information">
+    <b>Nota:</b> Las horas académicas son de 50 minutos a partir de la HORA DE INICIO.
+</div><br>
+<div class="col-md-12">
+    <div class="col-md-6 text-center">
+        <b>Tipo de Curso (Electivo):</b>
+    </div>
+    <div class="col-md-3">
+        <select id="tipoelectivoprac" class="form-control">
+            <option value="">-- Seleccione --</option>
+            <option value="S">Sí</option>
+            <option value="N" selected="selected">No</option>
+        </select>
+    </div>
+</div><br><br><br>
+<div class="col md 12">
+    <div class="col-md-3">
+        <b>Tipo de Clase:</b>
+    </div>
+    <div class="col-md-3">
+        <select id="tipoclaseprac" class="form-control">
+            <option value="">-- Seleccione --</option>
+            <option value="T">Teoria</option>
+            <option value="P">Práctica</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <b>Día:</b>
+    </div>
+    <div class="col-md-3">
+        <select id="diaprac" class="form-control">
+            <option value="">-- Seleccione --</option>
+            <option value="0">Lunes</option>
+            <option value="1">Martes</option>
+            <option value="2">Miércoles</option>
+            <option value="3">Jueves</option>
+            <option value="4">Viernes</option>
+            <option value="5">Sábado</option>
+        </select>
+    </div>
+</div><br><br>
+<div class="col-md-12 text-center">
+    <h4><span class='glyphicon glyphicon-time text-muted'></span><b> Hora de Inicio:</b></h4>
+</div><br>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-3">
+            <b>Hora:</b>
+        </div>
+        <div class="col-md-3">
+            <select id="hora_iniprac" class="form-control">
+                <?php
+                for ($i=$hour; $i <= 23 ; $i++) { ?>
+                    <option value="<?php
+                                    if ($i<=9) echo "0".$i;
+                                    else echo $i;
+                                    ?>">
+                                    <?php
+                                    if ($i<=9) echo "0".$i;
+                                    else echo $i;
+                                    ?>
+                    </option>
+                <?php
+                }
+                ?>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <b>Minutos: </b>
+        </div>
+        <div class="col-md-3">
+            <select id="min_iniprac" class="form-control">
+                <option value="00">00</option>
+                <?php
+                    for ($i=10; $i < 60; $i=$i+10) {  ?>
+                        <option value="<?php echo $i?>"><?php echo $i?></option>
+                    <?php
+                    }
+                ?>
+            </select>
+        </div>
+    </div>
+</div><br><br>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-6 text-center">
+            <b>Cantidad de Horas Académicas:</b>
+        </div>
+        <div class="col-md-4">
+            <select id="horasacademicasprac" class="form-control">
+                <?php
+                    for ($i=0; $i < 11; $i++) {     ?>
+                        <option value="<?php echo $i?>"><?php echo $i?></option>
+                    <?php
+                    }
+                ?>
+            </select>
+        </div>
+    </div>
+</div><br>
+<div id="cargaaquiprac"></div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button id="guardarhoraprac" href="#" class="btn btn-success"><span class='glyphicon glyphicon-save'></span> Guardar</button>
+        <button class="btn btn-danger cancelprac"><span class='glyphicon glyphicon-log-out'></span> Cancelar</button>
+    </div>
+</div>
+<script>
+    var minute="<?php echo $minute?>";
+    $('#min_iniprac > option[value='+minute+']').attr('selected', 'selected');
+
+    $(".cancelprac").on('click', function(){
+        $('#mymodalhorasclasePrac').modal('hide');
+    });
+
+    $("#guardarhoraprac").on('click', function(){
+        var dia=$("#diaprac").val();
+        var h_ini=$("#hora_iniprac").val();
+        var m_ini=$("#min_iniprac").val();
+        var hacad=$("#horasacademicasprac").val();
+        var tipo_clase=$("#tipoclaseprac").val();
+        var electivo=$("#tipoelectivoprac").val();
+        var uid="<?php echo $this->usuario[0]['uid'] ?>";
+        var pid="<?php echo $this->usuario[0]['pid'] ?>";
+        var hora_ini=h_ini+":"+m_ini+":00";
+
+        if (tipo_clase=="") {
+            alert("Debe seleccionar el tipo de clase.");
+            return false;
+        };
+        if (dia=="") {
+            alert("Debe seleccionar el día de la clase.");
+            return false;
+        };
+        if (hacad=="0") {
+            alert("Debe seleccionar la cantidad de horas académicas.");
+            return false;
+        }
+        else{
+            var ajax_valid = {
+                            "uid"       : uid,
+                            "pid"       : pid,
+                            "escid"     : escid,
+                            "subid"     : subid,
+                            "perid"     : perid,
+                            "dia"       : dia,
+                            "hora_ini"  : hora_ini,
+                            "hora_acad" : hacad,
+                            "courseid"  : courseid,
+                            "turno"     : turno,
+                            "curid"     : curid,
+                            "semid"     : semid,
+                            "tipoclase" : tipo_clase,
+                            "electivo"  : electivo
+                            };
+
+            $.ajax({
+                type : 'post',
+                url  : '/horary/nhorary/validatetime/',
+                data : ajax_valid,
+                success:function(data){
+                    if (data.status == true) {
+                        $("#inloadhoraryPrac").empty();
+                        $("#cargaaquiprac").empty();
+                        $("#cargaaquiprac").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+                        $("#cargaaquiprac").html("<center><p class='text-success'><b>Se guardó con éxito</b></p></center>");
+                        $("#mymodalhorasclasePrac").modal("hide");
+                        var ajaxdata = {
+                            "uid"   : $.base64.encode(uid),
+                            "pid"   : $.base64.encode(pid),
+                            "escid" : $.base64.encode(escid),
+                            "subid" : $.base64.encode(subid),
+                            "perid" : $.base64.encode(perid)
+                            };
+                        $("#inloadhoraryPrac").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+                        $.ajax({
+                            type : 'post',
+                            url  : '/horary/nhorary/fillhoraryprac/',
+                            data : ajaxdata,
+                            success: function(data){
+                                $("#inloadhoraryPrac").html(data);
+                            }
+                        });
+
+                        var adata = {
+                                        "uid"   : $.base64.encode(uid),
+                                        "pid"   : $.base64.encode(pid),
+                                        "escid" : $.base64.encode(escid),
+                                        "subid" : $.base64.encode(subid),
+                                        "perid" : $.base64.encode(perid)
+                                        };
+                        $("#asighoursPrac").empty();
+                        $("#asighoursPrac").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+                        $.ajax({
+                            type : 'post',
+                            url  : '/horary/nhorary/asignationhoursprac/',
+                            data : adata,
+                            success: function(data){
+                                $("#asighoursPrac").html(data);
+                            }
+                        });
+
+
+                    }
+                    else
+                    {
+                        $("#cargaaquiprac").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+                        $("#cargaaquiprac").html("<center><p class='text-danger'><b>"+data.sms+"</b></p></center>");
+                    }
+                }
+            });
+        }
+    });
+
+    $('#mymodalhorasclasePrac').on('hidden.bs.modal', function (e){
+        $('#myModalhoraryPrac').modal('show');
+    });
+</script>

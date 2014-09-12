@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <style type="text/css">
-.cuadro{    
+.cuadro{
     background-color: #fff;
     border-radius: 5px;
     border: 1px solid silver;
@@ -43,12 +43,12 @@ th, td{
             <th><center>Currícula</center></th>
             <th><center>Asignaturas</center></th>
             <th><center>Comprom.</center></th>
-            <?php    
+            <?php
             $uid=$this->uid;
-            $riddoc=substr($uid,8,2); 
+            $riddoc=substr($uid,8,2);
             if($riddoc=='DC'){ ?>
             	<th><center>Principal</center></th>
-            <?php 
+            <?php
             } ?>
             <th><center>Grupos</center></th>
             <th><center>#H.T.</center></th>
@@ -76,22 +76,22 @@ th, td{
                     <input type="checkbox" id="compromiso" value="N" title="Compromiso">
                 </center>
             </td>
-            <?php    
+            <?php
             $uid=$this->uid;
-            $riddoc=substr($uid,8,2); 
+            $riddoc=substr($uid,8,2);
             if($riddoc=='DC'){ ?>
                 <td>
                     <center>
                         <input type="checkbox" id="princ" value="N" title="Principal">
                     </center>
                 </td>
-            <?php  
+            <?php
             } ?>
             <td>
                 <center>
                     <select id="grupos" class="form-control" style="width:60px">
                         <?php
-                        for($i=1; $i<=20; $i++){ ?>            
+                        for($i=1; $i<=20; $i++){ ?>
                             <option value="<?php echo $i?>"><?php echo $i?></option>
                         <?php }?>
                     </select>
@@ -102,7 +102,7 @@ th, td{
                     <!-- <input type="text" class="form-control" style="width:80px"> -->
                     <!-- <div type="text" id="hteoria" class="form-control" style="width:60px"></div> -->
                     <select id="hteoria" class="form-control" style="width:80px">
-                        <option value="">Teória</option>                        
+                        <option value="">Teória</option>
                     </select>
                 </center>
             </td>
@@ -128,7 +128,7 @@ th, td{
             </td>
         </tr>
     </table>
-    <br>    
+    <br>
     <?php
     $i=1;
     $temporalh=null;
@@ -145,24 +145,24 @@ th, td{
             <th><center>#H.T.</center></th>
             <th><center>#H.P.</center></th>
             <th><center>#T.T.</center></th>
-            <th><center>Eliminar</center></th>       
+            <th><center>Eliminar</center></th>
         </tr>
-        <?php              
+        <?php
             foreach ($this->cursosasignados as $cursos){ ?>
                 <tr>
-                    <td><?php echo $i?></td>            
+                    <td><?php echo $i?></td>
                     <td><?php echo $cursos['courseid']?></td>
                     <td><?php echo $cursos['name']?></td>
                     <td><center><?php echo $cursos['turno']?></center></td>
                     <td><center><?php echo $cursos['semid']?></center></td>
                     <td>
                         <center>
-                            <?php 
+                            <?php
                             if($cursos['is_com']=='S') echo "SI";
                             elseif($cursos['is_com']=='N') echo "NO"; ?>
                         </center>
                     </td>
-                    <?php 
+                    <?php
                         $temporalh=$temporalh+$cursos['hours_total'];
                     ?>
                     <td><center><?php echo $cursos['groups']?></center></td>
@@ -199,12 +199,12 @@ th, td{
                     <th colspan="2"># Horas</th>
                 </tr>
                 <tr>
-                    <td><?php echo $this->form->work;?></td> 
-                    <td style="width:100px"><?php echo $this->form->hours;?></td> 
-                    <td><?php echo $this->form->enviar;?></td>      
+                    <td><?php echo $this->form->work;?></td>
+                    <td style="width:100px"><?php echo $this->form->hours;?></td>
+                    <td><?php echo $this->form->enviar;?></td>
                 </tr>
             </table>
-        </form> 
+        </form>
         <?php
         $i=1;
         $temporalad=null;
@@ -215,10 +215,10 @@ th, td{
                 <th><center>#</center></th>
                 <th>Labor Administrativa</th>
                 <th><center># Horas</center></th>
-                <th><center>Eliminar</center></th>        
+                <th><center>Eliminar</center></th>
             </tr>
             <?php
-            foreach ($this->administrativas as $admin){ 
+            foreach ($this->administrativas as $admin){
                 $y=$admin['hours'];
                 $temporalad=$temporalad+$y;
                 $temporal=$temporal+$y;?>
@@ -231,7 +231,7 @@ th, td{
                     </td>
                 </tr>
             <?php
-            $i++;   
+            $i++;
             } ?>
             <tr>
                 <td colspan='2' >Total Horas Administrativas</td>
@@ -239,13 +239,12 @@ th, td{
                 <td></td>
             </tr>
         </table>
-        <?php 
-        } ?>  
+        <?php
+        } ?>
     <div id="ghorasadmin"></div>
-    </center>     
+    </center>
 </div>
 <br>
-<!-- <div id='sandro'></div> -->
 <center style="padding-left:70%" class="col-lg-4">
     <div class="cuadro col-lg-4">
         <table class="table table-hover table-bordered table-condensed" style="margin:0px">
@@ -260,16 +259,16 @@ th, td{
             $infothacad = $datadistdoc[0]['total_hour_acad'];
             $infothadmin = $datadistdoc[0]['total_hour_admin'];
             $thoras = $infothacad+$infothadmin;
-            if($infothacad>=30){ ?>   
-                <script> 
+            if($infothacad>=30){ ?>
+                <script>
                     alert('Sus Horas Teóricas exceden a 30\n Revise sus horas.');
-                </script> 
+                </script>
             <?php
             }
-            if($thoras>40) { ?>   
-                <script> 
+            if($thoras>40) { ?>
+                <script>
                     alert('Sus Horas Totales exceden a 40\n Revise sus horas.');
-                </script> 
+                </script>
             <?php
             } ?>
             <tr>
@@ -281,7 +280,7 @@ th, td{
                 <td><center><?php echo $infothadmin?></center></td>
             </tr>
             <tr>
-                <th>Total Horas:</th>       
+                <th>Total Horas:</th>
                 <td><center><?php echo $thoras?></center></td>
             </tr>
             <tr>
@@ -300,9 +299,9 @@ th, td{
     };
 
  	$("#curid").change(function(){
-        var curid = $(this).val();  
-        var escid = "<?php echo $this->escid?>";   
-        var perid = "<?php echo $this->perid?>";   
+        var curid = $(this).val();
+        var escid = "<?php echo $this->escid?>";
+        var perid = "<?php echo $this->perid?>";
         var url = "/distribution/distribution/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/perid/"+perid;
         // alert(url);
         $("#courseid").load(url);
@@ -311,9 +310,9 @@ th, td{
     $("#courseid").change(function(){
         var courseid = $(this).val();
         var curid = $("#curid").val();
-        var escid = "<?php echo $this->escid?>";   
-        var perid = "<?php echo $this->perid?>";   
-        var subid = "<?php echo $this->subid?>";   
+        var escid = "<?php echo $this->escid?>";
+        var perid = "<?php echo $this->perid?>";
+        var subid = "<?php echo $this->subid?>";
         var url1 = "/distribution/distribution/hourstheoretical/courseid/"+courseid+"/escid/"+escid+"/perid/"+perid+"/subid/"+subid+"/curid/"+curid;
         $("#hteoria").load(url1);
 
@@ -333,17 +332,17 @@ th, td{
         $("#totalhoras").attr("value",tt);
     });
 
-    $("#princ").click(function(){  
+    $("#princ").click(function(){
         var value =  $(this).attr('value');
         if (value == "N") $("#princ").attr("value","S");
         else $("#princ").attr("value","N");
     });
 
-    $("#compromiso").click(function(){  
+    $("#compromiso").click(function(){
         var g = $(this).attr('value');
         if (g == "N") $("#compromiso").attr("value","S");
         else $("#compromiso").attr("value","N");
-    }); 
+    });
 
     $("#agregarcurso").hover(function(){
         var grupos= eval($("#grupos").val());
@@ -352,11 +351,11 @@ th, td{
 
         if (ht!='' || hp!='') {
             var tt=(grupos*hp)+ht;
-            $("#totalhoras").attr("value",tt);   
+            $("#totalhoras").attr("value",tt);
         }
         else{
             var tt="-";
-            $("#totalhoras").attr("value",tt);      
+            $("#totalhoras").attr("value",tt);
         }
     });
 
@@ -377,7 +376,7 @@ th, td{
         var totalhoras=$("#totalhoras").val();
         var compromiso=$("#compromiso").val();
         var princ=$("#princ").val();
-        
+
         if (curso=='' || hteoria=='' || hpractica=='') {
             alert("Seleccione un Curso, Horas Teóricas y Horas Prácticas.");
             return false;
@@ -388,7 +387,7 @@ th, td{
             estado='A';
             principal='S';
         };
-        
+
         if(hteoria==0){
             if(hpractica==0 && grupos==0){
                 estado='L';
@@ -397,7 +396,7 @@ th, td{
                 estado='P';
                 principal='N';
             };
-           
+
         };
 
         if (princ=="S") {
@@ -409,22 +408,22 @@ th, td{
         var courseid=tmp[0];
         var semid=tmp[1];
         var turno=tmp[2];
-        
+
         var url="/distribution/distribution/saveasigncourse/curid/"+curid+"/courseid/"+courseid+"/turno/"+turno+"/semid/"+semid+"/grupos/"+grupos+"/hteoria/"+hteoria+"/hpractica/"+hpractica+"/totalhoras/"+totalhoras+"/compromiso/"+compromiso+"/uid/"+uid+"/pid/"+pid+"/distid/"+distid+"/perid/"+perid+"/principal/"+principal+"/estado/"+estado+"/esciddoc/"+esciddoc+"/subiddoc/"+subiddoc;
         // alert(url);
         $("#guardarcursosasig").load(url);
     });
 
     $("#hsadmin").submit(function(){
-        $("#labores").hide();        
+        $("#labores").hide();
         $.ajax({
             type: 'POST',
             url: $(this).attr('action'),
             data: $(this).serialize(),
-            success: function(data) {                        
-                $('#ghorasadmin').html(data);                                 
+            success: function(data) {
+                $('#ghorasadmin').html(data);
             }
-        }); 
+        });
         return false;
     });
 

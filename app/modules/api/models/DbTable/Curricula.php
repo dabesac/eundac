@@ -15,7 +15,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
 				print "Error: curricula ".$e->getMessage();
 		}
 	}
-	
+
 	public function _update($data,$pk)
 	{
 		try{
@@ -51,7 +51,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                 $wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and (state='A' or state='T')";
             if ($limit==0) $limit=null;
             if ($start==0) $start=null;
-            
+
             $rows=$this->fetchAll($wherestr,$order,$start,$limit);
             if($rows) return $rows->toArray();
             return false;
@@ -59,12 +59,12 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
             print "Error: Read All Course ".$e->getMessage();
         }
     }
-	
+
 	public function _delete($data)
 	{
 		try{
 			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']=='' || $data['curid']=='') return false;
-			$where = 	"eid = '".$data['eid']."' and oid='".$data['oid']."' and escid='".$data['escid']."' and subid='".$data['subid']."' and curid='".$data['curid']."' ";			
+			$where = 	"eid = '".$data['eid']."' and oid='".$data['oid']."' and escid='".$data['escid']."' and subid='".$data['subid']."' and curid='".$data['curid']."' ";
 			return $this->delete($where);
 			return false;
 		}catch (Exception $e){
@@ -72,7 +72,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
 		}
 	}
 
-	
+
 	public function _getOne($where=array()){
 		try{
 			if ($where['eid']=='' ||  $where['oid']=='' || $where['escid']=='' || $where['subid']=='' || $where['curid']=='') return false;
@@ -85,7 +85,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
 		}
 	}
 
-	
+
  	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
 			if($where['eid']=='' || $where['oid']=='') return false;
@@ -130,7 +130,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     ORDER BY CAST(c.SEMID AS INTEGER)
                 ");
                 if ($sql) return $sql->fetchAll();
-                return false;  
+                return false;
         } catch (Exception $e) {
             print "Error: Read AmountCourses".$e->getMessage();
         }
@@ -142,19 +142,19 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
    //       try{
 			//  $sub_select = $select = $this->_db->select()
 			// ->from(array('MC' => 'BASE_REGISTRATION_COURSE'))
-			// 	->join(array('M' => 'BASE_REGISTRATION'),'MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE="M" AND MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE="M" AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) > 10', 
-			// 			array('COUNT' => 'COUNT(*)')); 
-			 
+			// 	->join(array('M' => 'BASE_REGISTRATION'),'MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE="M" AND MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE="M" AND (CASE WHEN NOTAFINAL ='' THEN 0 ELSE CAST(NOTAFINAL AS INTEGER) END) > 10',
+			// 			array('COUNT' => 'COUNT(*)'));
+
 
 			//  $select = $this->_db->select()->distinct()
 			// ->from(array('PC' => 'BASE_PERIODS_COURSES'),array('PC.SEMID','NAME','PC.COURSEID'),array('APROBADOS'=>$sub_select))
 			// 	->join(array('C' => 'BASE_COURSES'),'PC.COURSEID=C.COURSEID AND PC.ESCID=C.ESCID AND PC.CURID=C.CURID AND PC.OID=C.OID AND PC.EID=C.EID AND PC.SUBID=C.SUBID')
 			// 	->where('PERID = ?', $where['PERID'])->where('PC.ESCID = ?', $where['ESCID'])->where('PC.CURID = ?', $where['CURID'])
 			// 	->where("u.uid NOT IN ?", $sub_select) ;
-			// $results = $select->query();			
+			// $results = $select->query();
 			// $rows = $results->fetchAll();
 			// if($rows) return $rows;
-			// return false;	
+			// return false;
    //       }catch (Exception $ex) {
    //           print $ex->getMessage();
    //       }
@@ -167,17 +167,17 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                 if ($where['perid']=="" || $where['escid']=="" || $where['curid']=="" || $where['eid']=="" || $where['oid']=="") return false;
                 else
                 {
-                    $sql=$this->_db->query(" 
+                    $sql=$this->_db->query("
                     select distinct curid,cast(semid as integer),perid,escid from base_periods_courses
                     where perid='".$where['perid']."' AND ESCID='".$where['escid']."' AND CURID='".$where['curid']."'  AND eid='".$where['eid']."' AND oid='".$where['oid']."'
                     ORDER BY SEMID asc
                     ");
-               return $sql->fetchAll(); 
+               return $sql->fetchAll();
                 }
             }  catch (Exception $ex){
                 print "Error: Lecturando semestre de curricula ".$ex->getMessage();
-            }   
-                       
+            }
+
         }
 
 
@@ -186,7 +186,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                if ($where['escid']=="" || $where['curid']=="" || $where['perid']=="" || $where['eid']=="" || $where['oid']=="") return false;
                else
                {
-                $sql=$this->_db->query(" 
+                $sql=$this->_db->query("
 			SELECT DISTINCT PC.SEMID,NAME,PC.COURSEID,
                 (
                     SELECT COUNT(*) FROM BASE_REGISTRATION_COURSE AS MC
@@ -264,11 +264,11 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     INNER JOIN BASE_REGISTRATION AS M
                     ON MC.REGID=M.REGID AND MC.PID=M.PID AND MC.ESCID=M.ESCID AND MC.UID=M.UID AND MC.PERID=M.PERID AND MC.EID=M.EID AND MC.OID=M.OID AND MC.SUBID=M.SUBID AND MC.STATE='M'
                     WHERE MC.PERID=PC.PERID AND MC.CURID=PC.CURID AND MC.ESCID=PC.ESCID AND MC.COURSEID=PC.COURSEID AND MC.EID=PC.EID AND MC.OID=PC.OID AND MC.SUBID=PC.SUBID AND M.STATE='M'
-                )>0 
+                )>0
                 )
                 ORDER BY SEMID,COURSEID
             ");
-            return $sql->fetchAll(); 
+            return $sql->fetchAll();
                }
             }  catch (Exception $ex){
                 print "Error: Lecturando cursos con estadisticas de rendimientos ".$ex->getMessage();
@@ -278,7 +278,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
     public function _getSemesterXCurricula($curid="",$subid="",$escid="",$oid="",$eid="")
     {
         try
-        {            
+        {
             $sql = $this->_db->query("
             SELECT DISTINCT CAST (c.SEMID AS INTEGER),s.name FROM base_courses as c
             inner join base_semester as s
@@ -287,8 +287,8 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
             ORDER BY CAST(c.SEMID AS INTEGER)
             ");
             if ($sql) return $sql->fetchAll();
-            return false;           
-        }  
+            return false;
+        }
         catch (Exception $ex)
         {
             print "Error: Obteniendo datos de tabla 'Matricula Curso'".$ex->getMessage();
@@ -298,13 +298,13 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
     public function _getCurriculaAnterior($curid="",$escid="")
     {
         try
-        {            
+        {
             $sql = $this->_db->query("
             select curricula_ant('$curid','$escid');
             ");
             if ($sql) return $sql->fetchAll();
-            return false;           
-        }  
+            return false;
+        }
         catch (Exception $ex)
         {
             print "Error: Obteniendo Curricula anterior".$ex->getMessage();
@@ -316,13 +316,13 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
         try
         {
             if ($where['escid']=="" || $where['perid']=="" || $where['eid']=="" || $where['oid']=="") return false;
-            $sql=$this->_db->query(" 
-                select curid,name,escid,state from base_curricula 
+            $sql=$this->_db->query("
+                select curid,name,escid,state from base_curricula
                 where escid='".$where['escid']."'  and curid in (select curid from base_periods_courses
                 where perid='".$where['perid']."' and escid='".$where['escid']."')
             ");
-            return $sql->fetchAll(); 
-        }  
+            return $sql->fetchAll();
+        }
         catch (Exception $ex)
         {
             print $ex->getMessage();
@@ -338,7 +338,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                 {
                     $perid=$where['perid'];
                     $escid=$where['escid'];
-                    $sql=$this->_db->query(" 
+                    $sql=$this->_db->query("
                    SELECT REGID,M.UID,LAST_NAME0,LAST_NAME1,FIRST_NAME,SEMID,
                     (
                     (
@@ -367,7 +367,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     WHERE PERID='$perid' AND M.ESCID='$escid' AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
                     INNER JOIN BASE_COURSES AS C1
                     ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
-                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND 
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND
                     CAST((CASE WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) > 10)>=(SELECT sum(credits) FROM BASE_COURSES WHERE ESCID=M.ESCID AND cast(semid as integer)=m.semid AND CURID=AC.CURID )
                     AND ROUND(
                     (
@@ -387,11 +387,11 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     INNER JOIN BASE_PERSON AS P
                     ON M.PID=P.PID AND M.STATE='M' INNER JOIN BASE_STUDENT_CURRICULA AS AC
                     ON M.UID=AC.UID AND M.ESCID=AC.ESCID
-                    WHERE PERID='$perid' AND M.ESCID='$escid'  
+                    WHERE PERID='$perid' AND M.ESCID='$escid'
                     AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
                     INNER JOIN BASE_COURSES AS C1
                     ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
-                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND 
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND
                     CAST((CASE WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) > 10)>=(SELECT sum(credits) FROM BASE_COURSES WHERE ESCID=M.ESCID AND cast(semid as integer)=m.semid AND CURID=AC.CURID ) AND
                     ROUND(
                     (
@@ -407,19 +407,19 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
                     )
                     ) > 12)
-                    OFFSET 0            
-                    ");                
-                 return $sql->fetchAll(); 
+                    OFFSET 0
+                    ");
+                 return $sql->fetchAll();
                 }
             }  catch (Exception $ex){
                 ///print "Error: Lecturando semestre de curricula ".$ex->getMessage();
-                ?> 
-                <script type="text/javascript"> 
-                        alert("Para mostrar registro Falta ingresar notas de los direrentes cursos"); 
-                </script> 
+                ?>
+                <script type="text/javascript">
+                        alert("Para mostrar registro Falta ingresar notas de los direrentes cursos");
+                </script>
                 <?php
-            }   
-                       
+            }
+
         }
 
 
@@ -432,7 +432,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                 {
                     $perid=$where['perid'];
                     $escid=$where['escid'];
-                    $sql=$this->_db->query(" 
+                    $sql=$this->_db->query("
                    SELECT REGID,M.UID,LAST_NAME0,LAST_NAME1,FIRST_NAME,SEMID,
                     (
                     (
@@ -461,7 +461,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     WHERE PERID='$perid' AND M.ESCID='$escid' AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
                     INNER JOIN BASE_COURSES AS C1
                     ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
-                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND 
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND
                     CAST((CASE WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) > 10)>=(SELECT sum(credits) FROM BASE_COURSES WHERE ESCID=M.ESCID AND cast(semid as integer)=m.semid AND CURID=AC.CURID )
                     AND ROUND(
                     (
@@ -477,15 +477,15 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
                     )
                     ) > 12
-                    ORDER BY PROM_POND DESC  LIMIT (SELECT ROUND(COUNT(*)*0.5) FROM BASE_REGISTRATION AS M
+                    ORDER BY PROM_POND DESC  LIMIT (SELECT ROUND(COUNT(*)*0.2) FROM BASE_REGISTRATION AS M
                     INNER JOIN BASE_PERSON AS P
                     ON M.PID=P.PID AND M.STATE='M' INNER JOIN BASE_STUDENT_CURRICULA AS AC
                     ON M.UID=AC.UID AND M.ESCID=AC.ESCID
-                    WHERE PERID='$perid' AND M.ESCID='$escid'  
+                    WHERE PERID='$perid' AND M.ESCID='$escid'
                     AND (SELECT SUM(CREDITS) FROM BASE_REGISTRATION_COURSE AS MC1
                     INNER JOIN BASE_COURSES AS C1
                     ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
-                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND 
+                    WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID AND
                     CAST((CASE WHEN NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) > 10)>=(SELECT sum(credits) FROM BASE_COURSES WHERE ESCID=M.ESCID AND cast(semid as integer)=m.semid AND CURID=AC.CURID ) AND
                     ROUND(
                     (
@@ -501,21 +501,21 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     WHERE REGID=M.REGID AND CAST(SEMID AS INTEGER)=M.SEMID AND MC1.PERID=M.PERID
                     )
                     ) > 12)
-                    OFFSET 0            
-           
+                    OFFSET 0
+
 
                     ");
-               return $sql->fetchAll(); 
+               return $sql->fetchAll();
                 }
             }  catch (Exception $ex){
                 ///print "Error: Lecturando semestre de curricula ".$ex->getMessage();
-                ?> 
-                <script type="text/javascript"> 
-                        alert("Para mostrar registro Falta ingresar notas de los direrentes cursos"); 
-                </script> 
+                ?>
+                <script type="text/javascript">
+                        alert("Para mostrar registro Falta ingresar notas de los direrentes cursos");
+                </script>
                 <?php
-            }   
-                       
+            }
+
         }
 
 
@@ -530,7 +530,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                 $escid=$where['escid'];
                 $curid=$where['curid'];
                 $semid=$where['semid'];
-                $sql=$this->_db->query(" 
+                $sql=$this->_db->query("
                select m.UID,LAST_NAME0 || ' ' || LAST_NAME1 || ', ' || FIRST_NAME AS nom,m.semid,mc.regid,mc.curid,sum(c.credits),
                 (
                     select sum(credits) from base_registration_course  as mc1
@@ -551,18 +551,18 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     inner join base_courses as c1
                     ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
                     where regid=mc.regid and cast(semid as integer)=m.semid and mc1.curid=mc.curid and mc1.perid=mc.perid
-                ) 
+                )
                 )) as prom_pon
                  from base_registration as m inner join base_registration_course as mc
-                on m.regid=mc.regid and m.perid=mc.perid 
+                on m.regid=mc.regid and m.perid=mc.perid
                 inner join base_person  p
-                on m.pid = p.pid 
+                on m.pid = p.pid
                 INNER JOIN base_courses AS C
                 ON MC.CURID=C.CURID AND MC.COURSEID=C.COURSEID AND MC.ESCID=C.ESCID
                 where mc.curid='$curid' and mc.perid='$perid' and mc.escid='$escid' and m.semid='$semid' and m.state='M'
 
                                 group by m.uid,nom,m.semid,mc.regid,mc.curid,mc.perid
-                                order by semid,case when 
+                                order by semid,case when
                                 (
                     select sum(credits) from base_registration_course  as mc1
                     inner join base_courses as c1
@@ -575,34 +575,34 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     inner join base_courses as c1
                     ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
                     where regid=mc.regid  and cast(semid as integer)=m.semid and mc1.curid=mc.curid and mc1.perid=mc.perid
-                    and cast(notafinal as integer) > 10 
+                    and cast(notafinal as integer) > 10
                 ) end desc,prom_pon desc
-                
+
                     ");
                return $sql->fetchAll();
                 }
             }  catch (Exception $ex){
                 // print "Error:Para mostrar registro Falta ingresar notas de los direrentes cursos";
-                ?> 
-                <script type="text/javascript"> 
-                        alert("Para mostrar registro Falta ingresar notas de los direrentes cursos"); 
-                    </script> 
-                <?php 
-            }   
-                       
+                ?>
+                <script type="text/javascript">
+                        alert("Para mostrar registro Falta ingresar notas de los direrentes cursos");
+                    </script>
+                <?php
+            }
+
         }
 
         public function _getPromedioPonderadoXUid($where=null)
         {
             try{
-                            
+
                 $perid=$where['perid'];
                 $escid=$where['escid'];
                 $curid=$where['curid'];
                 $semid=$where['semid'];
                 $uid=$where['uid'];
 
-                $sql=$this->_db->query(" 
+                $sql=$this->_db->query("
                select m.UID,LAST_NAME0 || ' ' || LAST_NAME1 || ', ' || FIRST_NAME AS nom,
                 (
                     select sum(credits) from base_registration_course  as mc1
@@ -623,26 +623,26 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
                     inner join base_courses as c1
                     ON MC1.CURID=C1.CURID AND MC1.COURSEID=C1.COURSEID AND MC1.ESCID=C1.ESCID AND (MC1.STATE='M' or MC1.STATE='C')
                     where regid=mc.regid and cast(semid as integer)=m.semid and mc1.curid=mc.curid and mc1.perid=mc.perid
-                ) 
+                )
                 )) as prom_pon
                  from base_registration as m inner join base_registration_course as mc
-                on m.regid=mc.regid and m.perid=mc.perid 
+                on m.regid=mc.regid and m.perid=mc.perid
                 inner join base_person  p
-                on m.pid = p.pid 
+                on m.pid = p.pid
                 INNER JOIN base_courses AS C
                 ON MC.CURID=C.CURID AND MC.COURSEID=C.COURSEID AND MC.ESCID=C.ESCID
                 where mc.curid='$curid' and mc.perid='$perid' and mc.escid='$escid' and m.semid='$semid' and m.state='M' and m.uid='$uid'
 
                                 group by m.uid,nom,m.semid,mc.regid,mc.curid,mc.perid
-                                                
+
                     ");
                return $sql->fetchAll();
-    
+
             }  catch (Exception $ex){
                 print "Error:Para mostrar registro Falta ingresar notas de los direrentes cursos";
-           
-            }   
-                       
+
+            }
+
         }
 
 

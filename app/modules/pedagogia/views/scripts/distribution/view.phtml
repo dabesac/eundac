@@ -51,19 +51,19 @@
 		// print_r($this->dis);exit();
 		foreach ($this->dis as $distrib) {
 			switch ($distrib['state']) {
-				case 'A': 	$state = "<img src='/img/circulo-verde.png'>"; 
+				case 'A': 	$state = "<img src='/img/circulo-verde.png'>";
 							$namestate = "Activo";
 							break;
-				case 'I': 	$state = "<img src='/img/circulo-rojo.png'>"; 
+				case 'I': 	$state = "<img src='/img/circulo-rojo.png'>";
 							$namestate = "Inactivo";
 							break;
-				case 'C': 	$state = "<img src='/img/circulo-rojo.png'>"; 
+				case 'C': 	$state = "<img src='/img/circulo-rojo.png'>";
 							$namestate = "Cerrado";
 							break;
-				case 'O': 	$state = "<img src='/img/circulo-amarillo.png'>"; 
+				case 'O': 	$state = "<img src='/img/circulo-amarillo.png'>";
 							$namestate = "Observado";
 							break;
-				case 'B': 	$state = "<img src='/img/circulo-azul.png'>"; 
+				case 'B': 	$state = "<img src='/img/circulo-azul.png'>";
 							$namestate = "Borrador";
 							break;
 			}
@@ -78,24 +78,24 @@
 				<td class="text-center" style="width:6%"><?php echo substr($distrib['created'],0,10)?></td>
 				<td  class="text-center">
 					<h4><a id="seeDistribution<?php echo $distrib['number']?>" href="#" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Ver distribución','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')"><span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" title="Ver"></span>
-	                </a></h4>	
+	                </a></h4>
 				</td>
 				<!-- <td> -->
-				<?php 
-				if ($distrib['comments']<>"" && $distrib['state']=="A"){	
+				<?php
+				if ($distrib['comments']<>"" && $distrib['state']=="A"){
 					?>
 				<td class="text-center">
 					<p class="correction" comentss="<?php echo $distrib["comments"]?>" observationver='<?php echo $distrib['observationver']?>'>
 						<span class='correc' title="AVISO" data-container="body" data-toggle="popover" data-content="Ya corrigió su distribución"><?php echo $state?></span>
 					</p>
-				</td>	
-				<?php	
+				</td>
+				<?php
 				}
 				else{	?>
 				<td class='text-center'>
 					<span class='span' data-toggle="tooltip" title="<?php echo $namestate?>"><?php echo $state?></span>
-				</td>	
-				<?php	
+				</td>
+				<?php
 				}
 				if ($distrib['state']=="C") {	?>
 					<td class="text-center text-danger"><h5><span title="Desactivado" rel="tooltip" class="glyphicon glyphicon-ban-circle"></span></h5>
@@ -109,13 +109,13 @@
 					}
 					else
 					{
-					  echo trim($distrib['observation']);	
+					  echo trim($distrib['observation']);
 					}
 
 					?></span></td>
 				<?php
 				}
-				?>					
+				?>
 
 
 				<td class="text-center"><h4><a href='/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>' data-dismiss="modal" aria-hidden="true" style="float:center"><span class="glyphicon glyphicon-print"></span></a></h4></td>
@@ -134,16 +134,27 @@
 				</td>
 			</tr>
 
-			
-			<script> 
+
+			<script>
             // $(function(){
+            	var state="<?php echo $distrib['state'] ?>";
+            	var comments="<?php echo $distrib['comments'] ?>";
+
+            	if (state=='A' && comments!='') {
+            		var id="<?php echo $i?>";
+            		$("#"+id).empty();
+            		$("#"+id).html("Haga doble clic para editar su observación");
+            	};
             	$('#seeDistribution<?php echo $distrib['number']?>').hover(function(){
 					$('#seeDistribution<?php echo $distrib['number']?>').tooltip('toggle');
 				});
 
                 $('#<?php echo $i?>').dblclick( function(){
-                    var text = $(this).text();
-
+                	var state="<?php echo $distrib['state'] ?>";
+                	if (state!='O') {
+	                    $("#<?php echo $i?>").empty();
+                	};
+	                var text = $(this).text();
 					text=text.trim();
                     //alert(text);
 
@@ -155,7 +166,7 @@
 
                     //alert("Campo actualizado");
 
-                    //e.preventDefault();                 
+                    //e.preventDefault();
                     //alert(url);
                     	$("#destino").load("/pedagogia/distribution/distribution/", {escid: "<?php echo $distrib['escid']?>", distid: "<?php echo $distrib['distid']?>",perid: "<?php echo $distrib['perid']?>",subid: "<?php echo $distrib['subid']?>",observation: text}, function(){
                 		});
@@ -177,27 +188,27 @@
 				<td class="text-center"><?php echo substr($distrib['created'],0,10)?></td>
 				<td class="text-center">
 					<h4><a id="seeDistribution<?php echo $distrib['number']?>" href="#" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Eliminar Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')"><span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" title="Ver"></span>
-	                </a></h4>	
+	                </a></h4>
 				</td>
 				<td class="text-center">
 					<span class='span' data-toggle="tooltip" title="<?php echo $namestate?>"><?php echo $state?></span>
 				</td>
-					
+
 				<td class="text-center text-danger"><h5><span title="Desactivado" rel="tooltip" class="glyphicon glyphicon-ban-circle"></span></h5>
-				</td>				
+				</td>
 				<td class="text-center"><h4><a href='/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>' data-dismiss="modal" aria-hidden="true" style="float:center"><span class="glyphicon glyphicon-print"></span></h4></td>
 				<td class="text-center text-danger"><h5><span title="Desactivado" rel="tooltip" class="glyphicon glyphicon-ban-circle"></span></h5>
 				</td>
 			</tr>
-			<?php	
-			}			
+			<?php
+			}
 		}
 		?>
 	</tbody>
 	</table>
 <?php else: ?>
 	<div class='col-md-10 col-md-offset-1 cont-font-not-register alert alert-info'>
-		<h3 class="text-info text-center"><span class='glyphicon glyphicon-exclamation-sign' ></span> <b>No existen datos de esta facultad en este periodo...</b></h3> 
+		<h3 class="text-info text-center"><span class='glyphicon glyphicon-exclamation-sign' ></span> <b>No existen datos de esta facultad en este periodo...</b></h3>
 	</div>
 <?php endif ?>
 
@@ -235,6 +246,7 @@
     	</div><!-- /.modal-content -->
   	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div id="destino"></div>
 
 <script>
 	$(".correction").hover(function(){
@@ -280,17 +292,16 @@
 		$("#aceptars").click(function(){
 			$("#myModal").modal("hide");
 			$('#myModal').on('hidden.bs.modal', function (e) {
-				var perid = $('#periods').val();
+				var perid = $('#seletperiod').val();
 				var facid = $('#faculty').val();
 				var url1=("/pedagogia/distribution/closedistribution/state/<?php echo base64_encode("C")?>/escid/"+params['escid']+"/subid/"+params['subid']+"/distid/"+params['distid']+"/perid/"+params['perid']);
 				// alert(url1);
 				$("#cargaqui").load(url1);
 				// $('#data').html('<center><img class="text-center" src="/img/spinner.gif"></center>');
-				var url2=("/pedagogia/distribution/view/perid/"+perid+"/facid/"+facid);
+				var url2=("/pedagogia/distribution/view/perid/"+$.base64.encode(perid)+"/facid/"+facid);
 				$('#data').load(url2);
 				$('.correc').popover('hide');
 			})
 		});
 	});
 </script>
- <div id="destino"></div> 

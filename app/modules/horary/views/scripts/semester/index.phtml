@@ -14,21 +14,24 @@
 <div id='changehorary'></div>
 <script type="text/javascript">
 	$(function(){
-		var anio='<?php echo $this->anio?>';	
+		var anio='<?php echo $this->anio?>';
 		$("#anio option[value="+anio+"]").attr('selected','selected');
 		var anio=$("#anio").val();
 		var url=("/horary/semester/periodlist/anio/"+anio);
+		$("#perids").html("<option value=''>Cargando...</option>");
 		$("#perids").load(url);
 	});
 	$("#anio").change(function(){
 		var anio=$(this).val();
 		var url=("/horary/semester/periodlist/anio/"+anio);
+		$("#perids").html("<option value=''>Cargando...</option>");
 		$("#perids").load(url);
 	});
 
 	$("#perids").change(function(){
 		var perid=$(this).val();
 		var url=("/horary/semester/semesterlist/perid/"+perid);
+		$("#loading").html("<center><img src='/img/spinner.gif'/> Cargando...</center>");
 		$("#loading").load(url);
 	});
 </script>

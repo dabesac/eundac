@@ -64,7 +64,7 @@
  	public function listperiodsAction(){
  		try {
  			$this->_helper->layout()->disableLayout();
- 			
+
  			$eid = $this->sesion->eid;
  			$oid = $this->sesion->oid;
 
@@ -75,8 +75,7 @@
  			$where = array('eid'=>$eid, 'oid'=>$oid, 'year'=>$anio);
  			//print_r($where);
  			$periods = $periodsDb->_getPeriodsxYears($where);
- 			
- 			$this->view->periods = $periods;
+            $this->view->periods = $periods;
 
  		} catch (Exception $e) {
  			print 'Error '.$e->getMessage();
@@ -270,12 +269,12 @@
                 $attrib = array('state_record', 'state');
                 $stateActas = $coursePeriodsDb->_getFilter($where, $attrib);
 
-                
+
                 $dataDocente[$cTeachers]['courses'][$cCourses]['statePrimerParcial'] = 0;
                 if ($stateActas and $stateActas[0]['state'] == 'P') {
                     $dataDocente[$cTeachers]['courses'][$cCourses]['statePrimerParcial'] = 1;
                 }
-                
+
                 $dataDocente[$cTeachers]['courses'][$cCourses]['stateSecondParcial'] = $stateActas[0]['state'];
                 if ($stateActas and $stateActas[0]['state'] == 'C') {
                     $dataDocente[$cTeachers]['courses'][$cCourses]['statePrimerParcial'] = 1;
@@ -304,10 +303,10 @@
             $syllabusDb      = new Api_Model_DbTable_Syllabus();
             $coursePeriodsDb = new Api_Model_DbTable_PeriodsCourses();
             $courseTeacherDb = new Api_Model_DbTable_Coursexteacher();
-            $specialityDb    = new Api_Model_DbTable_Speciality();        
+            $specialityDb    = new Api_Model_DbTable_Speciality();
             $personDb         = new Api_Model_DbTable_Person();
             $academicReportDb = new Api_Model_DbTable_Addreportacadadm();
-            
+
 
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
@@ -451,7 +450,7 @@
                                     'oid'   => $oid,
                                     'escid' => $course['escid'],
                                     'subid' => $teacher['subid'] );
-                    
+
 
                     $attrib = array('name');
                     $nameSchool = $specialityDb->_getFilter($where, $attrib);
@@ -481,12 +480,12 @@
                     $stateActas = $coursePeriodsDb->_getFilter($where, $attrib);
 
                     $dataDocente[$cTeachers]['courses'][$cCourses]['closureDate'] = '-';
-                    
+
                     $dataDocente[$cTeachers]['courses'][$cCourses]['statePrimerParcial'] = 0;
                     if ($stateActas and $stateActas[0]['state'] == 'P') {
                         $dataDocente[$cTeachers]['courses'][$cCourses]['statePrimerParcial'] = 1;
                     }
-                    
+
                     $dataDocente[$cTeachers]['courses'][$cCourses]['stateSecondParcial'] = 0;
                     if ($stateActas and $stateActas[0]['state'] == 'C') {
                         $dataDocente[$cTeachers]['courses'][$cCourses]['statePrimerParcial'] = 1;
@@ -506,7 +505,7 @@
     //         $where['escid']=$escid;
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            
+
             $uid=$this->sesion->uid;
             $uidim=$this->sesion->pid;
             $pid=$uidim;
@@ -522,12 +521,12 @@
                 'date_impression'=>date('Y-m-d H:i:s'),
                 'pid_print'=>$uidim
                 );
-            $dbimpression->_save($data);            
+            $dbimpression->_save($data);
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'informe_academico_'.$perid);
             $dataim = $dbimpression->_getFilter($wheri);
             $co=count($dataim);
-            
+
             $codigo=$co." - ".$uidim;
             $this->view->codigo=$codigo;
 
@@ -538,7 +537,7 @@
             $header = str_replace("?logo", $namelogo, $header);
             $header = str_replace("?codigo", $codigo, $header);
             $header = str_replace("10%", "8%", $header);
-            
+
             $this->view->header=$header;
             $this->view->footer=$footer;
  		} catch (Exception $e) {

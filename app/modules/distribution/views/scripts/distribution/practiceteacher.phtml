@@ -1,42 +1,42 @@
 <div style="margin-top:20px">
         <?php
 
-        if ($this->teachers){   ?> 
+        if ($this->teachers){   ?>
             <table class="table table-condensed table-striped table-hover">
                 <tr>
-                    <th><center>#</center></th>       
+                    <th><center>#</center></th>
                     <th><center>Código</center></th>
                     <th>Apellidos y Nombres</th>
                     <th><center>Estado</center></th>
-                    <th><center>Categoría</center></th>       
-                    <th><center>Condición</center></th>       
-                    <th><center>Dedicación</center></th>       
+                    <th><center>Categoría</center></th>
+                    <th><center>Condición</center></th>
+                    <th><center>Dedicación</center></th>
                     <th><center>Asignar Curso</center></th>
                     <th><center>Asignar Horario</center></th>
                     <th><center>Carga Académica</center></th>
                 </tr>
-            <?php   
+            <?php
             $i=1;
             foreach ($this->teachers as $teachers){ ?>
                 <tr>
-                    <td><center><?php echo $i?></center></td>    
+                    <td><center><?php echo $i?></center></td>
                     <td><center><?php echo $teachers['uid']?></center></td>
                     <td>
                         <?php echo $teachers['last_name0']." ".$teachers['last_name1'].", ".$teachers['first_name']?>
                     </td>
                     <td>
                         <center>
-                        <?php 
+                        <?php
                         if($teachers['state']=='A'){ ?>
                             <a href="#" id='stateprac_<?php echo $i?>' dat="<?php echo $teachers['uid'].";--;".$teachers['escid'].";--;".$teachers['pid'].";--;".$teachers['subid'].";--;I"?>">
                                 <img src="/img/circulo-verde.png" width="20" height="20" rel="tooltip" title="Inhabilitar Docente">
                             </a>
                         <?php
-                        }else{ ?> 
+                        }else{ ?>
                             <a href="#" id='stateprac_<?php echo $i?>' dat="<?php echo $teachers['uid'].";--;".$teachers['escid'].";--;".$teachers['pid'].";--;".$teachers['subid'].";--;A"?>">
                                 <img src="/img/circulo-rojo.png" width="20" height="20" rel="tooltip" title="Habilitar Docente">
                             </a>
-                        <?php 
+                        <?php
                         } ?>
                         </center>
                         <script type="text/javascript">
@@ -64,10 +64,10 @@
                     <td><?php echo $teachers['category']?></td>
                     <td>
                         <select id="condisionprac_<?php echo $i?>" class="form-control">
-                            <option value="">- Seleccione -</option> 
-                            <?php 
+                            <option value="">- Seleccione -</option>
+                            <?php
                             $condi = array('Contratado','Ordinario');
-                            for ($c=0; $c < 2; $c++) { 
+                            for ($c=0; $c < 2; $c++) {
                                 $selected=($teachers['condision']==strtoupper($condi[$c]))? "selected":"";?>
                                 <option value="<?php echo $teachers['uid'].";--;".$teachers['escid'].";--;".$teachers['pid'].";--;".$teachers['subid'].";--;".strtoupper($condi[$c])?>" <?php echo $selected?>><?php echo $condi[$c]?></option>
                                 <?php
@@ -91,12 +91,12 @@
                             var content=tmp[4];
                             var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/CON";
                             // alert(url);
-                            $("#chargepracticeteacher").load(url); 
+                            $("#chargepracticeteacher").load(url);
                         });
                     </script>
                     <td>
                         <select id="dedicacionprac_<?php echo $i?>" class="form-control">
-                            <option value="">- Seleccione -</option> 
+                            <option value="">- Seleccione -</option>
                             <?php
                             $dedi[0]['val']='TIEMPOCOMPLETO';
                             $dedi[0]['name']='Tiempo Completo';
@@ -104,13 +104,13 @@
                             $dedi[1]['name']='Dedicación Exclusiva';
                             $dedi[2]['val']='TIEMPOPARCIAL';
                             $dedi[2]['name']='Tiempo Parcial';
-                            for ($c=0; $c < 3; $c++) { 
+                            for ($c=0; $c < 3; $c++) {
                                 $selected=($teachers['dedication']==strtoupper($dedi[$c]['val']))? "selected":"";?>
                                 <option value="<?php echo $teachers['uid'].";--;".$teachers['escid'].";--;".$teachers['pid'].";--;".$teachers['subid'].";--;".$dedi[$c]['val']?>" <?php echo $selected?>><?php echo $dedi[$c]['name']?></option>
                                 <?php
                             } ?>
                         </select>
-                    </td> 
+                    </td>
                     <script>
                         $("#dedicacionprac_<?php echo $i?>").change(function(){
                             var distid="<?php echo $this->distid?>";
@@ -125,10 +125,10 @@
                             var escid=tmp[1];
                             var pid=tmp[2];
                             var subid=tmp[3];
-                            var content=tmp[4];                                         
+                            var content=tmp[4];
                             var url="/distribution/distribution/modifyteacher/perid/"+perid+"/distid/"+distid+"/uid/"+uid+"/escid/"+escid+"/pid/"+pid+"/subid/"+subid+"/content/"+content+"/option/DED";
                             // alert(url);
-                            $("#chargepracticeteacher").load(url); 
+                            $("#chargepracticeteacher").load(url);
                         });
                     </script>
                     <td>
@@ -138,14 +138,12 @@
                         <center>
                             <?php
                             if ($teachers['courseasig']) {   ?>
-                                <a href="#" onclick="javascript: window.open('/horary/nhorary/fillhorary/pid/<?php echo base64_encode($teachers['pid'])?>/uid/<?php echo base64_encode($teachers['uid'])?>/escid/<?php
-                                if ($teachers['escid']=="2ES") { print base64_encode($this->escid);}
-                                else{ print base64_encode($teachers['escid']);} ?>/subid/<?php echo base64_encode($teachers['subid'])?>/perid/<?php echo base64_encode($this->perid)?>','Asignación Horario','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=1200,height=720')" rel="tooltip" title="Asignar Horarios"><span class="glyphicon glyphicon-calendar"></span></a>
+                                <a class='asighoraryprac' href="#" pid='<?php echo base64_encode($teachers['pid'])?>' uid='<?php echo base64_encode($teachers['uid'])?>' escid='<?php if ($teachers['escid']=='2ES') { echo base64_encode($this->escid);}else{echo base64_encode($teachers['escid']);}?>' subid='<?php echo base64_encode($teachers['subid'])?>' perid='<?php echo base64_encode($this->perid)?>'><span class="glyphicon glyphicon-calendar"></span></a>
                             <?php
                             }
                             else{ ?>
                                 <a><span rel="tooltip" title="Deshabilitado" class="glyphicon glyphicon-ban-circle"></span></a>
-                            <?php    
+                            <?php
                             }
                             ?>
                         </center>
@@ -159,19 +157,19 @@
                             }
                             else{ ?>
                                 <a href="#"><span rel="tooltip" title="Deshabilitado" class="glyphicon glyphicon-ban-circle"></span></a>
-                            <?php    
+                            <?php
                             }
                             ?>
                         </center>
                     </td>
                 </tr>
                 <?php
-            $i++;   
+            $i++;
             }
         ?>
     </table>
     <?php
-    } 
+    }
     else{ ?>
         <div class="alert alert-info">
             <b>Información: </b>No existen datos de Jefes de Prácticas.
@@ -181,7 +179,89 @@
     ?>
 </div>
 <div id='chargepracticeteacher'></div>
+
+<!-- Modal Asignar Horario-->
+<div class="modal fade" id="myModalhoraryPrac" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" style="width:95%">
+        <div class="modal-content">
+            <div class="modal-body" id='inloadhoraryPrac'></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal Horas clases-->
+<div class="modal fade" id="mymodalhorasclasePrac" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color:#428BCA"><b><center>Ingresar Horario</center></b></h3>
+            </div>
+            <div class="modal-body" id='asighoursPrac'></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal eliminar horario del jefe de practicas-->
+<div class="modal fade" id="myModalPrac" style="margin-top:10%" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:30%">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h4 class="modal-title text-danger" id="myModalLabel"><span class='glyphicon glyphicon-dashboard'></span><b> ESTA SEGURO DE ELIMINAR EL HORARIO DE ESTE CURSO? </b></h4>
+      </div>
+      <div class="modal-body text-right">
+            <button id="aceptarsPrac" type="button" class="btn btn-success"><span class='glyphicon glyphicon-ok'></span> Aceptar</button>
+            <button id='cancelPrac' type="button" class="btn btn-danger"><span class='glyphicon glyphicon-log-out'></span> Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
-$('img[rel=tooltip]').tooltip();
-$('a[rel=tooltip]').tooltip();
+    $('img[rel=tooltip]').tooltip();
+    $('a[rel=tooltip]').tooltip();
+
+    $(".asighoraryprac").on('click', function(){
+        $('#myModalhoraryPrac').modal('show');
+        var pid=$(this).attr('pid');
+        var uid=$(this).attr('uid');
+        var escid=$(this).attr('escid');
+        var subid=$(this).attr('subid');
+        var perid=$(this).attr('perid');
+
+        var ajax_data = {
+                        "uid"   : uid,
+                        "pid"   : pid,
+                        "escid" : escid,
+                        "subid" : subid,
+                        "perid" : perid
+                        };
+        $("#inloadhoraryPrac").empty();
+        $("#inloadhoraryPrac").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+        $.ajax({
+            type : 'post',
+            url  : '/horary/nhorary/fillhoraryprac/',
+            data : ajax_data,
+            success: function(data){
+                $("#inloadhoraryPrac").html(data);
+            }
+        });
+        $("#asighoursPrac").empty();
+        $("#asighoursPrac").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+        $.ajax({
+            type : 'post',
+            url  : '/horary/nhorary/asignationhoursprac/',
+            data : ajax_data,
+            success: function(data){
+                $("#asighoursPrac").html(data);
+            }
+        });
+    });
+
+    $("#cancelPrac").on('click', function(){
+        $("#myModalPrac").modal('hide');
+    });
+
+    $('#myModalPrac').on('hidden.bs.modal', function (e){
+        $('#myModalhoraryPrac').modal('show');
+    });
 </script>
