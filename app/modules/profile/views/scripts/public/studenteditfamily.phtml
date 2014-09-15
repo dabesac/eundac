@@ -1,6 +1,5 @@
-<div class="panel panel-default">
 <br>
-<div class="row container">
+<div class="row">
 	<div class="col-md-8">
 		<h4 class="text-muted">Editar a <span class="text-info"><?php echo $this->nameFamily ?></span></h4>
 	</div>
@@ -12,11 +11,9 @@
 	</div>
 </div>
 <hr>
-<div class="container">
-	<div id="emptyForm" class="alert alert-warning hidden">
-		<h4>Asegurese que todo esta en orden</h4>
-		<p>No se pudo guardar los datos, asegurese de haber rellenado el formulario correctamente...</p>
-	</div>
+<div id="emptyForm" class="alert alert-warning hidden">
+	<h4>Asegurese que todo esta en orden</h4>
+	<p>No se pudo guardar los datos, asegurese de haber rellenado el formulario correctamente...</p>
 </div>
 <br>
 <form id="formFamily">
@@ -24,7 +21,7 @@
 	<input type="hidden" name="eid" value="<?php echo $this->dataFamiliar['eid'] ?>">
 	<input type="hidden" name="pid" value="<?php echo $this->dataFamiliar['pid'] ?>">
 	<input type="hidden" name="famid" value="<?php echo $this->dataFamiliar['famid'] ?>">
-	<div class="row container">
+	<div class="row">
 		<div class="col-md-2">
 			<p class="text-muted">Parentesco</p>
 			<?php echo $this->form->type?>
@@ -39,7 +36,7 @@
 		</div>
 	</div>
 	<br>
-	<div class="row container">
+	<div class="row">
 		<div class="col-md-2">
 			<p class="text-muted">Tipo de Documento</p>
 			<?php echo $this->form->typedoc ?>
@@ -73,7 +70,7 @@
 	</div>
 	<br>
 	<hr>
-	<div class="row container">
+	<div class="row">
 		<div class="col-md-2">
 			<p class="text-muted">Vive?</p>
 			<?php echo $this->form->live ?>
@@ -92,7 +89,7 @@
 		</div>
 	</div>
 	<br>
-	<div class="row container">
+	<div class="row">
 		<div class="col-md-2">
 			<p class="text-muted liveOptions">Es tu Apoderado/a?</p>
 			<?php echo $this->form->assignee ?>

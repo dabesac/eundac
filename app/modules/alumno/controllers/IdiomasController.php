@@ -41,6 +41,7 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                         'state' => 'A');
         $attrib = array('name', 'perid');
         $dataPeriod = $langPeriodDb->_getFilter($where, $attrib);
+        $dataPrograms = array();
         if ($dataPeriod) {
             $periodActive['perid'] = $dataPeriod[0]['perid'];
             $periodActive['name']  = $dataPeriod[0]['name'];
@@ -316,6 +317,7 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
         $eid = $this->sesion->eid;
         $pid = $this->sesion->pid;
 
+        $dataCourses = array();
         //Obtener Periodo Activo de Idiomas
         $where = array( 'eid'   => $eid,
                         'state' => 'A');
@@ -344,18 +346,17 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                 $dataCourses[$c]['cid']     = $course['cid'];
                 $dataCourses[$c]['name']    = $preDataCourse[0]['name'];
                 $dataCourses[$c]['turno']   = $course['turno'];
-                $dataCourses[$c]['credits'] = $course['credits'];
+                $dataCourses[$c]['credits'] = $preDataCourse[0]['credits'];
                 $dataCourses[$c]['tipo']    = $course['tipo'];
 
                 //Datos del Tipo de Curso
                 if ($course['tipo'] == 'N') {
-                    $dataCourse[$c]['tipoName'] = 'Normal';
+                    $dataCourses[$c]['tipoName'] = 'Normal';
                 }elseif ($course['tipo'] == 'I'){
-                    $dataCourse[$c]['tipoName'] = 'Intensivo';
+                    $dataCourses[$c]['tipoName'] = 'Intensivo';
                 }elseif ($course['tipo'] == 'S'){
-                    $dataCourse[$c]['tipoName'] = 'Super-Intensivo';
+                    $dataCourses[$c]['tipoName'] = 'Super-Intensivo';
                 }
-
                 //Datos del Turno
                 $where = array( 'eid'     => $eid,
                                 'cid'     => $course['cid'],
