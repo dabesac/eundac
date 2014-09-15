@@ -472,7 +472,7 @@ else{   ?>
 ?>
 <script>
     $(".deletehour").on('click', function(){
-        $("#myModal").modal('show');
+        $("#myModalPrac").modal('show');
         var uid = $(this).attr('uid');
         var pid = $(this).attr('pid');
         var escid = $(this).attr('escid');
@@ -486,7 +486,7 @@ else{   ?>
         var diasemana = $(this).attr('diasemana');
 
 
-        $("#aceptars").on('click', function(){
+        $("#aceptarsPrac").on('click', function(){
             var ajax_datall = {
                         "uid"   : uid,"pid"   : pid,
                         "escid" : escid,"subid" : subid,
@@ -495,14 +495,13 @@ else{   ?>
                         "horaini" : horaini,"horafin" : horafin,
                         "diasemana" : diasemana
                         };
-            $("#myModal").modal('hide');
+            $("#myModalPrac").modal('hide');
             var url='/horary/nhorary/deletehorary/';
             $.ajax({
                 type : 'post',
                 url : url,
                 data : ajax_datall,
                 success: function($data){
-                    // console.log($data);
                     if ($data.status == true) {
                         var ddata = {
                             "uid"   : uid,
@@ -512,14 +511,14 @@ else{   ?>
                             "perid" : perid
                             };
 
-                        $("#inloadhorary").empty();
-                        $("#inloadhorary").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+                        $("#inloadhoraryPrac").empty();
+                        $("#inloadhoraryPrac").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
                         $.ajax({
                             type : 'post',
-                            url  : '/horary/nhorary/fillhorary/',
+                            url  : '/horary/nhorary/fillhoraryprac/',
                             data : ddata,
                             success: function($_data){
-                                $("#inloadhorary").html($_data);
+                                $("#inloadhoraryPrac").html($_data);
                             }
                         });
                     };

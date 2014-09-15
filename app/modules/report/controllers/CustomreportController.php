@@ -1,4 +1,4 @@
-<?php 
+<?php
 class Report_CustomreportController extends Zend_Controller_Action{
 
 	public function init(){
@@ -21,7 +21,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 
 			$dbconsultrol = new Api_Model_DbTable_Rol();
 			$datarol=$dbconsultrol->_getAllACL($where,$order=array('name'));
-			
+
 			$this->view->datarol=$datarol;
 			$this->view->anio=$anio;
 			$this->view->data=$datafac;
@@ -73,12 +73,12 @@ class Report_CustomreportController extends Zend_Controller_Action{
             $oid = $this->sesion->oid;
             $escid = base64_decode($this->_getParam('escid'));
             $subid = base64_decode($this->_getParam('subid'));
-            
+
             $where = array('eid' => $eid, 'oid' => $oid, 'parent' => $escid);
             $es = new Api_Model_DbTable_Speciality();
             $especia = $es->_getFilter($where,$attrib=null,$orders=null);
             $this->view->especialidad=$especia;
-            
+
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -109,7 +109,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$escid=base64_decode($this->_getParam('escid'));
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
-			$dbconsultcurso = new Api_Model_DbTable_Course();		
+			$dbconsultcurso = new Api_Model_DbTable_Course();
 			$datacourse=$dbconsultcurso->_getCoursesXCurriculaXShool($eid,$oid,$curid,$escid);
 			$this->view->datacourse=$datacourse;
 
@@ -175,7 +175,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$curid=base64_decode($this->_getParam('curid'));
 			$courseid=base64_decode($this->_getParam('courseid'));
 			$veces = $this->_getParam('veces');
-		
+
 			$wherec=array('eid'=>$eid,'oid'=>$oid,'curid'=>$curid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid);
 			$datacourse=$dbcourse->_getOne($wherec);
 			$this->view->datacourse=$datacourse;
@@ -211,7 +211,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 				$this->view->data=$datav;
 			}
 			$whered= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
-            $speciality = $dbspeciality ->_getOne($whered);                  
+            $speciality = $dbspeciality ->_getOne($whered);
             $parent=$speciality['parent'];
             $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid1);
             $parentesc= $dbspeciality->_getOne($wher);
@@ -222,23 +222,23 @@ class Report_CustomreportController extends Zend_Controller_Action{
             }
             else{
                 $spe['esc']=$speciality['name'];
-                $spe['parent']='';  
+                $spe['parent']='';
             }
             $names=strtoupper($spe['esc']);
             $namep=strtoupper($spe['parent']);
             $namefinal=$names." <br> ".$namep;
-            
+
             $wheref['eid']=$eid;
             $wheref['oid']=$oid;
             $wheref['facid']= $speciality['facid'];
             $dbfaculty = new Api_Model_DbTable_Faculty();
             $faculty = $dbfaculty ->_getOne($wheref);
             $namef = strtoupper($faculty['name']);
-  
+
             $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
             $dbimpression = new Api_Model_DbTable_Impresscourse();
-            
+
             $uidim=$this->sesion->pid;
 
             $data = array(
@@ -255,7 +255,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
                 'code'=>'rp1_cantidad_matriculas_'.$veces
                 );
 
-            $dbimpression->_save($data);            
+            $dbimpression->_save($data);
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'code'=>'rp1_cantidad_matriculas_'.$veces);
             $dataim = $dbimpression->_getFilter($wheri);
@@ -268,7 +268,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
             $header = str_replace("?escuela",$namefinal,$header);
             $header = str_replace("?logo", $namelogo, $header);
             $header = str_replace("?codigo", $codigo, $header);
-            
+
             $this->view->uid=$uidim;
             $this->view->header=$header;
             $this->view->footer=$footer;
@@ -290,7 +290,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$curid=base64_decode($this->_getParam('curid'));
 			$anio=base64_decode($this->_getParam('anio'));
 
-			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'anio'=>$anio);			
+			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'anio'=>$anio);
 			$data=$dbconsult->_disapprovedcoursemore50percentlast3($where);
 
 			if ($data) {
@@ -299,7 +299,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			}
 			$this->view->escid1=$escid1;
 			$this->view->subid1=$subid1;
-			
+
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
@@ -322,7 +322,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$anio=base64_decode($this->_getParam('anio'));
 
 			$anio1= $anio-3;
-			
+
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'anio'=>$anio);
 			$data=$dbconsult->_disapprovedcoursemore50percentlast3($where);
             $this->view->data=$data;
@@ -331,9 +331,9 @@ class Report_CustomreportController extends Zend_Controller_Action{
             $this->view->escid=$escid;
 
 			$whered= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
-            $speciality = $dbspeciality ->_getOne($whered);                  
+            $speciality = $dbspeciality ->_getOne($whered);
             $parent=$speciality['parent'];
-            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid1);            
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid1);
             $parentesc= $dbspeciality->_getOne($wher);
 
             if ($parentesc) {
@@ -343,23 +343,23 @@ class Report_CustomreportController extends Zend_Controller_Action{
             }
             else{
                 $spe['esc']=$speciality['name'];
-                $spe['parent']='';  
+                $spe['parent']='';
             }
             $names=strtoupper($spe['esc']);
             $namep=strtoupper($spe['parent']);
             $namefinal=$names." <br> ".$namep;
-            
+
             $wheref['eid']=$eid;
             $wheref['oid']=$oid;
             $wheref['facid']= $speciality['facid'];
             $dbfaculty = new Api_Model_DbTable_Faculty();
             $faculty = $dbfaculty ->_getOne($wheref);
             $namef = strtoupper($faculty['name']);
-  
+
             $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            
+
             $uidim=$this->sesion->pid;
             $pid=$uidim;
             $uid=$this->sesion->uid;
@@ -380,7 +380,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'rp2_desaprobados_50%_desde_'.$anio1.'_hasta_'.$anio);
             $dataim = $dbimpression->_getFilter($wheri);
-            
+
             $co=count($dataim);
             $codigo=$co." - ".$uidim;
 
@@ -394,7 +394,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
             $this->view->uid=$uidim;
             $this->view->header=$header;
             $this->view->footer=$footer;
-			
+
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
@@ -425,7 +425,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 						$data[$key]['subid'] = $data1[0]['subid'];
 					}
 					$this->view->data=$data;
-				}				
+				}
 			}
 			else{
 				$where=array('eid'=>$eid,'oid'=>$oid,'fecha'=>$fecha);
@@ -470,7 +470,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$this->view->fecha1=$fecha1;
 
 			if ($rid=='AL' or $rid=='DC') {
-				$where=array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid,'fecha'=>$fecha);			
+				$where=array('eid'=>$eid,'oid'=>$oid,'rid'=>$rid,'fecha'=>$fecha);
 				$data = $dbconsult->_getFrequencyAccessXweek($where);
 				if ($data) {
 						unset($where['rid']);
@@ -482,7 +482,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 						$data[$key]['subid'] = $data1[0]['subid'];
 					}
 					$this->view->data=$data;
-				}				
+				}
 			}
 			else{
 				$where=array('eid'=>$eid,'oid'=>$oid,'fecha'=>$fecha);
@@ -502,7 +502,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
             $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            
+
             $uidim=$this->sesion->pid;
             $pid=$uidim;
             $uid=$this->sesion->uid;
@@ -525,7 +525,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'rp5_frecuencia_acceso_sistema');
             $dataim = $dbimpression->_getFilter($wheri);
-            
+
             $co=count($dataim);
             $codigo=$co." - ".$uidim;
 
@@ -573,8 +573,8 @@ class Report_CustomreportController extends Zend_Controller_Action{
 					$datacourse=$dbconsultcurso->_getOne($wherec);
 					$data[$key]['namecur']=$datacourse['name'];
 					$wheres['uid']=$datall['uid'];
-					$data1=$dbconsultusers->_getUserXUid($wheres);					
-					$data[$key]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];					
+					$data1=$dbconsultusers->_getUserXUid($wheres);
+					$data[$key]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];
 				}
 				$this->view->data=$data;
 			}
@@ -603,9 +603,9 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$subid1=base64_decode($this->_getParam('subid1'));
 			$curid=base64_decode($this->_getParam('curid'));
 			$veces=base64_decode($this->_getParam('veces'));
-			
+
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid);
-			
+
 			$data=$dbconsultdata->get_quantity_fail_course_all_students($where);
 			if ($data) {
 				$values=$data;
@@ -616,8 +616,8 @@ class Report_CustomreportController extends Zend_Controller_Action{
 					$datacourse=$dbconsultcurso->_getOne($wherec);
 					$data[$key]['namecur']=$datacourse['name'];
 					$wheres['uid']=$datall['uid'];
-					$data1=$dbconsultusers->_getUserXUid($wheres);					
-					$data[$key]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];					
+					$data1=$dbconsultusers->_getUserXUid($wheres);
+					$data[$key]['full_name']=$data1[0]['last_name0']." ".$data1[0]['last_name1'].", ".$data1[0]['first_name'];
 				}
 				$c=0;
 				foreach ($data as $key => $value) {
@@ -629,9 +629,9 @@ class Report_CustomreportController extends Zend_Controller_Action{
 				$this->view->data=$data1;
 			}
 			$whered= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
-            $speciality = $dbspeciality ->_getOne($whered);                  
+            $speciality = $dbspeciality ->_getOne($whered);
             $parent=$speciality['parent'];
-            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid1);            
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid1);
             $parentesc= $dbspeciality->_getOne($wher);
 
             if ($parentesc) {
@@ -641,23 +641,23 @@ class Report_CustomreportController extends Zend_Controller_Action{
             }
             else{
                 $spe['esc']=$speciality['name'];
-                $spe['parent']='';  
+                $spe['parent']='';
             }
             $names=strtoupper($spe['esc']);
             $namep=strtoupper($spe['parent']);
             $namefinal=$names." <br> ".$namep;
-            
+
             $wheref['eid']=$eid;
             $wheref['oid']=$oid;
             $wheref['facid']= $speciality['facid'];
             $dbfaculty = new Api_Model_DbTable_Faculty();
             $faculty = $dbfaculty ->_getOne($wheref);
             $namef = strtoupper($faculty['name']);
-  
+
             $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            
+
             $uidim=$this->sesion->pid;
             $pid=$uidim;
             $uid=$this->sesion->uid;
@@ -678,7 +678,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'rp3_alumnos_cursos_pendientes_'.$curid.'_veces_'.$veces);
             $dataim = $dbimpression->_getFilter($wheri);
-            
+
             $co=count($dataim);
             $codigo=$co." - ".$uidim;
 
@@ -751,7 +751,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			$rid="AL";
 			$this->view->escid=$escid;
 			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'rid'=>$rid);
-			
+
 			$data=$dbconsultdata->not_registration_students_all($where);
 			if ($data) {
 				$whereu=array('eid'=>$eid,'oid'=>$oid);
@@ -765,9 +765,9 @@ class Report_CustomreportController extends Zend_Controller_Action{
 			}
 
 			$whered= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
-            $speciality = $dbconsultspecialty ->_getOne($whered);                  
+            $speciality = $dbconsultspecialty ->_getOne($whered);
             $parent=$speciality['parent'];
-            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid1);			
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid1);
             $parentesc= $dbconsultspecialty->_getOne($wher);
 
             if ($parentesc) {
@@ -777,23 +777,23 @@ class Report_CustomreportController extends Zend_Controller_Action{
             }
             else{
                 $spe['esc']=$speciality['name'];
-                $spe['parent']='';  
+                $spe['parent']='';
             }
             $names=strtoupper($spe['esc']);
             $namep=strtoupper($spe['parent']);
             $namefinal=$names." <br> ".$namep;
-            
+
             $wheref['eid']=$eid;
             $wheref['oid']=$oid;
             $wheref['facid']= $speciality['facid'];
             $dbfaculty = new Api_Model_DbTable_Faculty();
             $faculty = $dbfaculty ->_getOne($wheref);
             $namef = strtoupper($faculty['name']);
-  
+
             $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            
+
             $uidim=$this->sesion->pid;
             $pid=$uidim;
             $uid=$this->sesion->uid;
@@ -814,7 +814,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'rp4_alumnos_ninguna_matricula');
             $dataim = $dbimpression->_getFilter($wheri);
-            
+
             $co=count($dataim);
             $codigo=$co." - ".$uidim;
 
@@ -829,7 +829,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
             $this->view->header=$header;
             $this->view->footer=$footer;
 
-		} catch (Exception $e) {	
+		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
 	}

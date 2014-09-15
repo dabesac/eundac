@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="/css/style.css"> -->
 
 <style type="text/css">
-.cuadro{    
+.cuadro{
     background-color: #fff;
     border-radius: 5px;
     border: 1px solid silver;
@@ -34,12 +34,12 @@
         	<h4><b><center>VISTA PRELIMINAR GENERAL (Docente - Asignatura)</center></b></h4>
         </td>
         <td>
-            <a style="float:right" class='btn btn-danger' onclick="javascript: window.close();"><span class="glyphicon glyphicon-eject"></span> Cerrar</a>
+            <a style="float:right" class='btn btn-danger' data-dismiss="modal"><span class="glyphicon glyphicon-eject"></span> Cerrar</a>
         </td>
     </tr>
 </table>
 
-<?php 
+<?php
 if ($this->teacherwcInfo) { ?>
     <div class="row">
         <h5 class="text-danger text-center">Docentes sin Cursos</h5>
@@ -64,9 +64,9 @@ if ($this->teacherwcInfo) { ?>
     </div>
 <?php }?>
 
-<?php 
-if ($this->courses) { 
-    foreach ($this->teachers as $teachers) { 
+<?php
+if ($this->courses) {
+    foreach ($this->teachers as $teachers) {
     $user = new Api_Model_DbTable_Users();
     $data_user = $user->_getUserXUid($where=array('eid' => $this->eid, 'oid' => $this->oid, 'uid' => $teachers)); ?>
     <div id="academica" class="cuadro">
@@ -91,7 +91,7 @@ if ($this->courses) {
         foreach ($this->courses as $courses) {
             if ($courses['uid'] == $teachers) {
                 $where = array(
-                    'eid' => $courses['eid'], 'oid' => $courses['oid'], 'curid' => $courses['curid'], 
+                    'eid' => $courses['eid'], 'oid' => $courses['oid'], 'curid' => $courses['curid'],
                     'escid' => $courses['escid'], 'subid' => $courses['subid'], 'courseid' => $courses['courseid']);
                 $cour = new Api_Model_DbTable_Course();
                 $data_cour = $cour->_getOne($where);

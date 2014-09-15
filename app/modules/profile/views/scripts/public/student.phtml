@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/css/profile.css">
-<?php 
+<?php
     $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> Mi Perfil');
     $this->placeholder('Btnnav')->append('<a href="/alumno" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
 ?>
@@ -60,14 +60,14 @@
 </div>
 
 <script>
-	function imgError(image) {
-		var avatar = '<?php echo $this->avatar_default?>'; 
-	    image.onerror = "";
-	    image.src = "/img/default_avatar_"+avatar+".jpg";
-	    return true;
-	}
-
 	$(function () {
+		function imgError(image) {
+			var avatar = '<?php echo $this->avatar_default?>'; 
+		    image.onerror = "";
+		    image.src = "/img/default_avatar_"+avatar+".jpg";
+		    return true;
+		}
+		
 		//Actualizar perfil
 		var successProfile = $('#successProfile').val();
 		if (successProfile == 'no') {

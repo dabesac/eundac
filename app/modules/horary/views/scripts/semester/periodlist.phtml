@@ -4,20 +4,21 @@ if ($this->period) {
     foreach ($this->period as $periodos) {
     	?>
     	<option value="<?php echo $periodos['perid']?>"><?php echo $periodos['perid']." | ".$periodos['name']?></option>
-    <?php	
+    <?php
     }
 }
 else{	?>
 	<option value="">No existen periodos</option>
-<?php	
-}    
+<?php
+}
 ?>
 <script>
 	$(function(){
-		var perid='<?php echo $this->perid?>';	
+		var perid='<?php echo $this->perid?>';
 		$("#perids option[value="+perid+"]").attr('selected','selected');
 		var perid=$("#perids").val();
 		var url=("/horary/semester/semesterlist/perid/"+perid);
+        $("#loading").html("<center><img src='/img/spinner.gif'/> Cargando...</center>");
 		$("#loading").load(url);
-	});	
+	});
 </script>

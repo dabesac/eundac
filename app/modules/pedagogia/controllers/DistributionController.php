@@ -12,7 +12,7 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
 	}
 
     public function indexAction()
-    {	
+    {
     	//echo "hfh";
         $eid=$this->sesion->eid;
         $oid=$this->sesion->oid;
@@ -21,13 +21,37 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
         $dataf=$dbfaculty->_getAll($where);
         $this->view->dataf=$dataf;
 
+        $anio = date('Y');
+        $this->view->anio=$anio;
         $perid=$this->sesion->period->perid;
         $this->view->perid=$perid;
 
     }
 
-    public function viewAction(){	
-    	try{            
+    public function getperiodsAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+
+            $anio = $this->_getParam('anio');
+            $anio = substr($anio, -2);
+
+            $periodsDb = new Api_Model_DbTable_Periods();
+            $where = array('eid'=>$eid, 'oid'=>$oid, 'year'=>$anio);
+            //print_r($where);
+            $periods = $periodsDb->_getPeriodsxYears($where);
+            $this->view->periods = $periods;
+
+            $this->view->peridAct=$this->sesion->period->perid;
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function viewAction(){
+    	try{
             $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
@@ -67,7 +91,7 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
                     if ($datadis[0]) {
                         $dis[$i]=$datadis[0];
                         $dis[$i]['name']=$datae['name'];
-                        $i++;                   
+                        $i++;
                     }
                 }
             }
@@ -135,13 +159,13 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
         //print_r($datao);
         //print_r($formData);
 
-    
+
         if ($obs) {
             $ldistribution=new Distribution_Model_DbTable_logObsrvationDistribution();
             $formData['state']='A';
             $formData['observation']=$obs;
             $formData['register']=$this->sesion->uid;
-            $ldistribution->_save($formData);            
+            $ldistribution->_save($formData);
             // unset($formData['observation']);
             // unset($formData['register']);
             $distr = new Distribution_Model_DbTable_Distribution();
@@ -180,14 +204,13 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
                 $data=array('state'=>"C",'comments'=>null);
             }
             $dbdistribution->_update($data,$pk);
-            // print_r($data);
-            // print_r($pk);exit();
+
             if ($dataobs) {
                 $pk['logobdistrid']=$dataobs[0]['logobdistrid'];
                 $ldistribution->_update($data,$pk);
             }
-            
-        
+
+
         } catch (Exception $e) {
             print "Error:".$e->getMessage();
         }
