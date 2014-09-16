@@ -1,4 +1,4 @@
-<?php 
+<?php
     // $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> APLAZADOS');
     // $this->placeholder('Btnnav')->append('<a href="/docente/notas" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
 ?>
@@ -17,22 +17,22 @@
 </style>
 <script type="text/javascript" src="/js/notes/note-deferred.js"></script>
 
-<?php 
+<?php
 	$this->placeholder('Btnnav')->append('<a href="/docente/notas" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
 
 	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-adjust" ></span> Llenado de Aplazados');
  ?>
 
 <?php if ($this->state=='C') $disabled="disabled";?>
-  	
+
 <?php if ($this->students_register && $this->state !='C') { ?>
-	<?php 
+	<?php
 		$this->placeholder('BtnSVCRight')->append('<button class="btn btn-default" id="save_notas" disabled > <span class="glyphicon glyphicon-save text-info"></span> Guardar</button>
 			<button class="btn btn-default" id="closed_record" '.$disabled.'> <span class="glyphicon glyphicon-log-out text-danger"></span> Cerrar Acta</button>');
 	 ?>
 <?php }?>
 <?php if ($this->state=='C' ) { ?>
-	<?php 
+	<?php
 		$this->placeholder('BtnSVCRight')->append('<a href="/register/deferred/printdeferred/curid/'.base64_encode($this->infocurso["curid"]).'/escid/'.base64_encode($this->infocurso['escid']).'/subid/'.base64_encode($this->infocurso['subid']).'/courseid/'.base64_encode($this->infocurso['courseid']).'/turno/'.base64_encode($this->students_register[0]['turno']).'/perid/'.base64_encode($this->students_register[0]['perid']).'"'.' class="btn btn-default"><span class="glyphicon glyphicon-print text-info"></span> Imprimir</a>');
 	 ?>
 <?php }?>
@@ -65,33 +65,33 @@
                 edicion="false"
                 style="color:<?php echo ($registro['notafinal'] != -2)?'#000':'#FC4141'; ?>;"
 		>
-			
+
 			<td><?php echo $key+1?> <span id='edit_nota_<?php echo $key?>' class='text-success glyphicon'></span>
 			</td>
 			<td><?php echo $registro['uid']?></td>
 			<td><?php echo  $registro['name'] ?></td>
 			<td class='td_select_<?php echo $key?> td_select'>
-			
+
 					<select class='form-control select_receipt' index='<?php echo $key ?>' name='receipt' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?>  <?php echo $disabled?> >
 						<option value="<?php echo $registro['receipt']?>"><?php echo ($registro['receipt'] != "")?$registro['receipt']:'Seleccione'; ?></option>
 						<?php foreach ($registro['receipts'] as $key => $value) { ?>
 						<option value='<?php echo $value['operation']?>'><?php echo $value['operation']?></option>
 						<?php }?>
 					</select>
-				
+
 			</td>
 			<td class='td_input_<?php echo $key?> td_input' >
-				<input type='text'  name='notafinal' maxlength='2' style="color:<?php echo ($registro['notafinal'] != -2)?'#000':'#FC4141'; ?>;" class='form-control nota' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?> value='<?php echo ($registro['notafinal'] != -2)?$registro['notafinal']:'NP'; ?>' index='<?php echo $key?>'  <?php echo $disabled?> ></td>
+				<input type='text'  name='notafinal' maxlength='2' style="color:<?php echo ($registro['notafinal'] != -2)?'#000':'#FC4141'; ?>;" class='form-control nota' <?php echo ($registro['notafinal'] != -2)?'':'disabled'; ?> value='<?php echo ($registro['notafinal'] != -2)?$registro['notafinal']:'NP'; ?>' index='<?php echo $key?>'  <?php echo $disabled?> onpaste='return false' ></td>
 			<td class='success'>
 				<?php
 					if ($this->state != "C") {
 					if ($registro['notafinal'] != -2) { ?>
-						<span class='glyphicon glyphicon-eye-open presented' 
+						<span class='glyphicon glyphicon-eye-open presented'
 							action='0' onclick='not_present(this);'
 							index='<?php echo $key?>'></span>
 					<?php }else{ ?>
-						<span class='glyphicon glyphicon-eye-close presented' 
-							action='1' onclick='not_present(this);' 
+						<span class='glyphicon glyphicon-eye-close presented'
+							action='1' onclick='not_present(this);'
 							index='<?php echo $key?>'></span>
 					<?php }}?>
 			</td>
@@ -108,6 +108,6 @@
 <input type='hidden' id='record-subid' name='subid' value='<?php echo $this->students_register[0]['subid']?>'>
 <input type='hidden' id='record-perid' name='perid' value='<?php echo $this->students_register[0]['perid']?>'>
 <?php }else{ ?>
-	<h4 class="text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Aún no se genera los aplazados para esta escuela, <span class="text-danger">espere a que los otros docentes terminen con sus cursos, o talvez no tenga estudiantes desaprobados...</span></h4>	
+	<h4 class="text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Aún no se genera los aplazados para esta escuela, <span class="text-danger">espere a que los otros docentes terminen con sus cursos, o talvez no tenga estudiantes desaprobados...</span></h4>
 <?php }?>
 

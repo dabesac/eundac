@@ -14,7 +14,7 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
         }
         $this->sesion = $login;
         // print_r($this->sesion);
-    
+
     }
     public function indexAction()
     {
@@ -22,7 +22,7 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             $this->_helper->layout()->disableLayout();
 
             $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;            
+            $oid=$this->sesion->oid;
             // $perid=$this->sesion->period->perid;
             $perid=base64_decode($this->_getParam('perid'));
             $escid=base64_decode($this->_getParam('escid'));
@@ -55,7 +55,7 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
                     for ($g=0; $g < $len; $g++) {
                         if ($valhorasm[$g]==$valhorast[0] && $w==0) {
                             $valhoras[0]=$datahours[0]['hours_begin'];
-                            for ($k=0; $k < 20; $k++) { 
+                            for ($k=0; $k < 20; $k++) {
                                 $dho=$hora->_getsumminutes($valhoras[$k],'50');
                                 $valhoras[$k+1]=$dho[0]['hora'];
                             }
@@ -73,12 +73,12 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
                             $j++;
                         }
                         $endtarde=$valhorast[$j-1];
-                        $this->view->valhorast=$valhorast; 
-                    }    
+                        $this->view->valhorast=$valhorast;
+                    }
                 }
                 else{
                     $valhoras[0]=$datahours[0]['hours_begin'];
-                    for ($k=0; $k < 20; $k++) { 
+                    for ($k=0; $k < 20; $k++) {
                         $dho=$hora->_getsumminutes($valhoras[$k],'50');
                         $valhoras[$k+1]=$dho[0]['hora'];
                     }
@@ -110,10 +110,10 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
                 $where1['subid']=$subid;
                 $where1['pid']=$pid;
                 if ($where1['escid']=="2ES") {
-                    $datcur=$curso->_getOneCoursexTeacherXPeriodXTodasEsc($where1);                    
+                    $datcur=$curso->_getOneCoursexTeacherXPeriodXTodasEsc($where1);
                 }
                 else{
-                    $datcur=$curso->_getFilter($where1);                    
+                    $datcur=$curso->_getFilter($where1);
                 }
                 // print_r($datcur);exit();
                 $this->view->cursos=$datcur;
@@ -145,10 +145,10 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
 
             $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
             $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
-            $datahours=$bd_hours->_getFilter($wheres);   
+            $datahours=$bd_hours->_getFilter($wheres);
             $valhoras[0]=$datahours[0]['hours_begin'];
             $hora=new Api_Model_DbTable_Horary();
-            for ($k=0; $k < 20; $k++) { 
+            for ($k=0; $k < 20; $k++) {
                 $dho=$hora->_getsumminutes($valhoras[$k],'50');
                 $valhoras[$k+1]=$dho[0]['hora'];
             }
@@ -192,15 +192,15 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             }
             else{
                 $spe['esc']=$desc['name'];
-                $spe['parent']='';  
+                $spe['parent']='';
                 $this->view->spe=$spe;
             }
             $names=strtoupper($spe['esc']);
             $namep=strtoupper($spe['parent']);
             $namefinal=$names." <br> ".$namep;
-            $namef = strtoupper($faculty);  
+            $namef = strtoupper($faculty);
 
-            $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'uid'=>$uid,'subid'=>$subid,'pid'=>$pid); 
+            $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'uid'=>$uid,'subid'=>$subid,'pid'=>$pid);
             $user = new Api_Model_DbTable_Users();
             $duser = $user->_getInfoUser($wheres);
             $this->view->duser=$duser;
@@ -208,7 +208,7 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             $namelogo = (!empty($desc['header']))?$desc['header']:"blanco";
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            
+
             $uidim=$this->sesion->pid;
             $pid=$uidim;
             $uid=$this->sesion->uid;
@@ -229,7 +229,7 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'horarydocente'.$semid);
             $dataim = $dbimpression->_getFilter($wheri);
-            
+
             $co=count($dataim);
             $codigo=$co." - ".$uidim;
             $header=$this->sesion->org['header_print'];
@@ -249,6 +249,6 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             print $ex->getMessage();
         }
     }
-    
-   
+
+
 }
