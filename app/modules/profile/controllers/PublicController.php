@@ -1197,8 +1197,7 @@ class Profile_PublicController extends Zend_Controller_Action {
         $pid   = $this->sesion->pid;
         $escid = $this->sesion->escid;
         $subid = $this->sesion->subid;
-        //$perid = $this->sesion->period->perid;
-        $perid = '14A';
+            $perid = $this->sesion->period->perid;
 
         $letterPeriod = $perid[2];
         $anioPeriod   = $perid[0].$perid[1];
