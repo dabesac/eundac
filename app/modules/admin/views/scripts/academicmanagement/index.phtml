@@ -18,13 +18,15 @@
             <div class="col-md-1"><b>Facultad: </b></div>
             <div class="col-md-3">      
                 <select id="facid" class="form-control">
-                    <option>- Seleccione la Facultad -</option>
+                    <option>- Seleccione -</option>
                     <?php
                     if ($this->facultades) {
                         foreach ($this->facultades as $facultades) { 
-                            $str = ($this->facid==$facultades['facid'])?"selected ":""; ?>
-                            <option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
-                        <?php
+                            if($facultades['facid']!='TODO'){
+                            $str = ($this->facid==$facultades['facid'])?"selected ":""; 
+                            ?>
+                                <option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
+                        <?php }
                         }
                     } ?>
                 </select>
@@ -63,9 +65,6 @@
     $("#facid").change(function(){
         var facid=$(this).val();
         $("#escid").load("/admin/academicmanagement/schools/facid/"+facid);
-        if (facid=="TODO") {
-            alert("seleccione una facultad ");
-        };
     });
 
     $("#escid").change(function(){

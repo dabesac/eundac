@@ -67,23 +67,15 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $escid = $this->sesion->escid;
         $facid = $this->sesion->faculty->facid;
 
-        /*if ($state == null) {
-            $pfac='T'.$escid['1'];
-            $estados='I';
-            $bdu = new Api_Model_DbTable_Registration();        
-            $str = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
-            $datos= $bdu->_getAlumnosXMatriculaXTodasescuelasxEstado($eid, $oid,$str,$escid['1'],$perid,$estados, $subid);  
-            $this->view->datos=$datos;
-        }else*/
         if ($state) {
             $nombre  = null;
             $codigo  = null;
             $estados = $state;
             $str   = " and ( upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$nombre%' and u.uid like '$codigo%')";
-            if ($subid != '1901' and $subid != '1905') {
+            if ($subid != '1901' and $subid != '1905' and $subid != '1906') {
                 $facid = '';
                 $datos = $bdu->_getAlumnosXMatriculaXTodasescuelasXEstado($eid, $oid,$str,$facid,$perid,$estados);
-            }elseif ($subid == '1905'){
+            }elseif ($subid == '1905' or $subid == '1906'){
                 $facid = '';
                 $datos = $bdu->_getAlumnosXMatriculaXTodasescuelasXEstadoXSubid($eid, $oid,$str,$facid,$perid,$estados, $subid);  
             }elseif ($subid == '1901'){

@@ -120,7 +120,7 @@ class Poll_AcreditacionController extends Zend_Controller_Action {
                 $dataSend[$i] = array(  'code'                => $formData['code'],
                                         'name'                => trim($formData['name']),
                                         'escid'               => $formData['escid'],
-                                        'pollid'              => $formData['pollid'],
+                                        'poll_id'             => $formData['pollid'],
                                         'question_id'         => $formData['question'.$i],
                                         ['alternative_id'][0] => array($formData['alternative'.$i]) );
             }

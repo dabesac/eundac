@@ -8,190 +8,192 @@
 			<a href="##" id="newFamily" class="btn btn-default" title="Nuevo"><span class="text-muted">Nuevo</span></a>
 		</div>
 	</div>
-<input type="hidden" id="eid" value="<?php echo $this->dataStudent['eid'] ?>">
-<input type="hidden" id="oid" value="<?php echo $this->dataStudent['oid'] ?>">
-<input type="hidden" id="pid" value="<?php echo $this->dataStudent['pid'] ?>">
-<div class="panel-body">
-    <?php if($this->famdata){
-    	$c=0;?>
-	<div class="row">
-    	<?php $c = 0;
-    	foreach ($this->famdata as $fam) {?>
-		<div class="col-md-6" id="familiar<?php echo $fam[0]['famid'] ?>">
-			<div class="row">
-				<div id="alertRemove<?php echo $fam[0]['famid'] ?>" class="col-md-12 alertRemove hidden">
-					<div class="alert alert-danger">
+	<input type="hidden" id="eid" value="<?php echo $this->dataStudent['eid'] ?>">
+	<input type="hidden" id="oid" value="<?php echo $this->dataStudent['oid'] ?>">
+	<input type="hidden" id="pid" value="<?php echo $this->dataStudent['pid'] ?>">
+
+	<div class="panel-body">
+	    <?php if($this->famdata){
+	    	$c=0;?>
+		<div class="row">
+	    	<?php $c = 0;
+	    	foreach ($this->famdata as $fam) {?>
+			<div class="col-md-6" id="familiar<?php echo $fam[0]['famid'] ?>">
+				<div class="row">
+					<div id="alertRemove<?php echo $fam[0]['famid'] ?>" class="col-md-12 alertRemove hidden">
+						<div class="alert alert-danger">
+							<div class="row">
+								<div class="col-md-6">
+									<p>Seguro que desea eliminar a <?php echo $fam[0]['firtsname'] ?>? <span id="loadingDiv<?php echo $fam[0]['famid'] ?>"></span></p>
+								</div>
+								<div class="col-md-3">
+									<a href="##" class="btn btn-default form-control closeAlertsRemove">Cancelar</a>
+								</div>
+								<div class="col-md-3">
+									<a href="##" famid="<?php echo $fam[0]['famid']?>"  class="btn btn-danger form-control removeBtn">Eliminar</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-warning">
+					<div class="panel-body">
 						<div class="row">
-							<div class="col-md-6">
-								<p>Seguro que desea eliminar a <?php echo $fam[0]['firtsname'] ?>? <span id="loadingDiv<?php echo $fam[0]['famid'] ?>"></span></p>
+							<div class="col-md-1">
+								<a href="##" famid="<?php echo $fam[0]['famid']?>" class="pull-right text-warning showAlertRemove" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
 							</div>
-							<div class="col-md-3">
-								<a href="##" class="btn btn-default form-control closeAlertsRemove">Cancelar</a>
-							</div>
-							<div class="col-md-3">
-								<a href="##" famid="<?php echo $fam[0]['famid']?>"  class="btn btn-danger form-control removeBtn">Eliminar</a>
+							<div class="col-md-1 col-md-offset-10">
+								<a href="##" famid="<?php echo $fam[0]['famid']?>" class="text-warning editarBtn" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
 							</div>
 						</div>
+						<br><br>
+						<div class="row">
+							<div class="col-md-9">
+							<blockquote>
+								<h4><span class="glyphicon glyphicon-user text-muted"></span> <?php echo $fam[0]['lastname']?> <b class="text-muted"><?php echo $fam[0]['firtsname']?></b></h4>
+							</blockquote>
+							</div>
+							<div class="col-md-3">
+							<blockquote>
+								<h5 class="text-left">
+								<?php if($this->famrel[$c]['type']=="PA"){
+					    			echo "Padre";
+					    		}elseif($this->famrel[$c]['type']=="MA"){
+									echo "Madre";
+					    		}elseif($this->famrel[$c]['type']=="HI"){
+									echo "Hijo/a";
+					    		}elseif($this->famrel[$c]['type']=="HE"){
+									echo "Hermano/a";
+					    		}?></h5>
+					    		<h6 class="text-muted">
+					    			<?php if($this->famrel[$c]['assignee']=="S"){
+					    				echo "Apoderado";
+					    			}?></h6>
+					    	</blockquote>
+							</div>
+						</div>
+						<?php if($this->famrel[$c]['assignee']=="N"){?>
+		    				<br>
+		    			<?php }?>
+						<hr class="featurette-divider">
+						<table class="table table-bordered table-hover table-striped">
+							<tr>
+								<th class="text-center"><h5 class="text-muted"><?php if($fam[0]['typedoc']=="D"){
+						    			echo 'DNI';
+						    		}else{
+										echo 'Pasaporte';
+						    		}?></h5></th>
+								<th class="text-center"><h5 class="text-muted">Fecha de Nacimiento</h5></th>
+								<th class="text-center"><h5 class="text-muted">Vive?</h5></th>
+							</tr>
+							<tr>
+								<td class="text-center"><h5><?php echo $fam[0]['numdoc']?></h5></td>
+								<td class="text-center"><h5><?php echo $fam[0]['birthday']?></h5></td>
+								<td class="text-center"><h5><?php if($fam[0]['live']=="S"){
+					    				echo "Si";
+					    			}else{
+										echo "No";
+					    			}?></h5></td>
+							</tr>
+						</table>
+						
+						<?php if ($fam[0]['live']=="S"): ?>
+						<hr class="featurette-divider">
+
+						<table class="table table-bordered table-hover table-striped">
+							<tr>
+								<th class="text-center"><h5 class="text-muted">Teléfono|Celular</h5></th>
+								<th class="text-center"><h5 class="text-muted">Dirección</h5></th>
+								<th class="text-center"><h5 class="text-muted">Ocupación</h5></th>
+							</tr>
+							<tr>
+					    		<td class="text-center"><h5><?php echo $fam[0]['phone']?></h5></td>
+					    		<td class="text-center"><h5><?php echo $fam[0]['address']?></h5></td>
+					    		<td class="text-center"><h5><?php echo $fam[0]['ocupacy']?></h5></td>
+							</tr>
+						</table>
+						<?php endif ?>
+
 					</div>
 				</div>
 			</div>
-			<div class="panel panel-warning">
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-md-1">
-							<a href="##" famid="<?php echo $fam[0]['famid']?>" class="pull-right text-warning showAlertRemove" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
-						</div>
-						<div class="col-md-1 col-md-offset-10">
-							<a href="##" famid="<?php echo $fam[0]['famid']?>" class="text-warning editarBtn" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
-						</div>
-					</div>
-					<br><br>
-					<div class="row">
-						<div class="col-md-9">
-						<blockquote>
-							<h4><span class="glyphicon glyphicon-user text-muted"></span> <?php echo $fam[0]['lastname']?> <b class="text-muted"><?php echo $fam[0]['firtsname']?></b></h4>
-						</blockquote>
-						</div>
-						<div class="col-md-3">
-						<blockquote>
-							<h5 class="text-left">
-							<?php if($this->famrel[$c]['type']=="PA"){
-				    			echo "Padre";
-				    		}elseif($this->famrel[$c]['type']=="MA"){
-								echo "Madre";
-				    		}elseif($this->famrel[$c]['type']=="HI"){
-								echo "Hijo/a";
-				    		}elseif($this->famrel[$c]['type']=="HE"){
-								echo "Hermano/a";
-				    		}?></h5>
-				    		<h6 class="text-muted">
-				    			<?php if($this->famrel[$c]['assignee']=="S"){
-				    				echo "Apoderado";
-				    			}?></h6>
-				    	</blockquote>
-						</div>
-					</div>
-					<?php if($this->famrel[$c]['assignee']=="N"){?>
-	    				<br>
-	    			<?php }?>
-					<hr class="featurette-divider">
-					<table class="table table-bordered table-hover table-striped">
-						<tr>
-							<th class="text-center"><h5 class="text-muted"><?php if($fam[0]['typedoc']=="D"){
-					    			echo 'DNI';
-					    		}else{
-									echo 'Pasaporte';
-					    		}?></h5></th>
-							<th class="text-center"><h5 class="text-muted">Fecha de Nacimiento</h5></th>
-							<th class="text-center"><h5 class="text-muted">Vive?</h5></th>
-						</tr>
-						<tr>
-							<td class="text-center"><h5><?php echo $fam[0]['numdoc']?></h5></td>
-							<td class="text-center"><h5><?php echo $fam[0]['birthday']?></h5></td>
-							<td class="text-center"><h5><?php if($fam[0]['live']=="S"){
-				    				echo "Si";
-				    			}else{
-									echo "No";
-				    			}?></h5></td>
-						</tr>
-					</table>
-					
-					<?php if ($fam[0]['live']=="S"): ?>
-					<hr class="featurette-divider">
-
-					<table class="table table-bordered table-hover table-striped">
-						<tr>
-							<th class="text-center"><h5 class="text-muted">Teléfono|Celular</h5></th>
-							<th class="text-center"><h5 class="text-muted">Dirección</h5></th>
-							<th class="text-center"><h5 class="text-muted">Ocupación</h5></th>
-						</tr>
-						<tr>
-				    		<td class="text-center"><h5><?php echo $fam[0]['phone']?></h5></td>
-				    		<td class="text-center"><h5><?php echo $fam[0]['address']?></h5></td>
-				    		<td class="text-center"><h5><?php echo $fam[0]['ocupacy']?></h5></td>
-						</tr>
-					</table>
-					<?php endif ?>
-
-				</div>
-			</div>
+			<?php $c++; 
+			}?>
 		</div>
-		<?php $c++; 
-		}?>
-	</div>
-    <?php }else{?>
-      <center><h5>No tiene Datos Por favor Actualize su Perfil</h5></center>
-    <?php
-	}
-	?>
-  </div>
-
+	    <?php }else{?>
+	      <center><h5>No tiene Datos Por favor Actualize su Perfil</h5></center>
+	    <?php
+		}
+		?>
+	 </div>
 </div>
 
 <script>
 	//Eliminar Familiar
-	$('.showAlertRemove').click(function(){
-		var famid = $(this).attr('famid');
-		$('.alertRemove').addClass('hidden');
-		$('#alertRemove' + famid).removeClass('hidden');
-	});
-	$('.closeAlertsRemove').click(function(){
-		$('.alertRemove').addClass('hidden');
-	});
-	$('.removeBtn').click(function(){
-		var famid = $(this).attr('famid');
-		removeFamiliar(famid);
-	});
-
-	//Editar Familiar
-	$('.editarBtn').click(function(){
-		var famid = $(this).attr('famid');
-		$('#datastudent').addClass('hidden');
-		$('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
-		$('#editform').removeClass('hidden');
-		$('#editform').load('/profile/public/studenteditfamily/famid/' + famid, function(){
-			$('#loadingDiv').html('');
+	$(function(){
+		$('.showAlertRemove').click(function(){
+			var famid = $(this).attr('famid');
+			$('.alertRemove').addClass('hidden');
+			$('#alertRemove' + famid).removeClass('hidden');
 		});
-	});
-
-	$('a').hover(function(){
-    	$(this).tooltip('toggle');
-  	});
-  	
-	$("#newFamily").click(function(){
-		$('#datastudent').addClass('hidden');
-		$('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
-		$('#editform').removeClass('hidden');
-		$('#editform').load('/profile/public/studentnewfamily', function(){
-			$('#loadingDiv').html('');
+		$('.closeAlertsRemove').click(function(){
+			$('.alertRemove').addClass('hidden');
 		});
-	});
+		$('.removeBtn').click(function(){
+			var famid = $(this).attr('famid');
+			removeFamiliar(famid);
+		});
 
-	var eid = $('#eid').val();
-	var oid = $('#oid').val();
-  	var pid = $('#pid').val();
-	$.ajax({
-		url : '/profile/public/validatefullprofile',
-		data : { 	eid : eid,
-					oid : oid,
-					pid : pid },
-		success: function(data){
-			$('#alertCompleteProfile').addClass('hidden');
-		},
-	});
+		//Editar Familiar
+		$('.editarBtn').click(function(){
+			var famid = $(this).attr('famid');
+			$('#datastudent').addClass('hidden');
+			$('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+			$('#editform').removeClass('hidden');
+			$('#editform').load('/profile/public/studenteditfamily/famid/' + famid, function(){
+				$('#loadingDiv').html('');
+			});
+		});
 
-	//Functions
-	function removeFamiliar(famid){
-		$('#loadingDiv' + famid).html('<img src="/img/spinner.gif" alt="Loading..." />');
+		$('a').hover(function(){
+	    	$(this).tooltip('toggle');
+	  	});
+	  	
+		$("#newFamily").click(function(){
+			$('#datastudent').addClass('hidden');
+			$('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
+			$('#editform').removeClass('hidden');
+			$('#editform').load('/profile/public/studentnewfamily', function(){
+				$('#loadingDiv').html('');
+			});
+		});
+
+		var eid = $('#eid').val();
+		var oid = $('#oid').val();
+	  	var pid = $('#pid').val();
 		$.ajax({
-			url : '/profile/public/studentremovefamily/',
-			data : {famid : famid},
-			success : function(data){
-				if (data == 'true') {
-					$('#loadingDiv' + famid).html('');
-					$('#datastudent').load('/profile/public/studentfamily');
-				};
-			}
+			url : '/profile/public/validatefullprofile',
+			data : { 	eid : eid,
+						oid : oid,
+						pid : pid },
+			success: function(data){
+				$('#alertCompleteProfile').addClass('hidden');
+			},
 		});
-	}
+
+		//Functions
+		function removeFamiliar(famid){
+			$('#loadingDiv' + famid).html('<img src="/img/spinner.gif" alt="Loading..." />');
+			$.ajax({
+				url : '/profile/public/studentremovefamily/',
+				data : {famid : famid},
+				success : function(data){
+					if (data == 'true') {
+						$('#loadingDiv' + famid).html('');
+						$('#datastudent').load('/profile/public/studentfamily');
+					};
+				}
+			});
+		}
+	});
 </script>

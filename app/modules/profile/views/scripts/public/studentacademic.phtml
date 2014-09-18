@@ -1,201 +1,200 @@
 <div class="panel panel-info">
-  <div class="row">
-    <div class="col-md-9 col-md-offset-1">
-      <h3 class="text-muted"><span class="glyphicon glyphicon-briefcase"> </span> Datos Académicos</h3>
-    </div>
-    <div class="col-md-2 ">
-      <br>
-      <a href="##" id="newAcademic" class="btn btn-default" title="Nuevo"><span class="text-muted">Nuevo</span></a>
-    </div>
-  </div>
-
-  <input type="hidden" id="eid" value="<?php echo $this->data['eid'] ?>">
-  <input type="hidden" id="oid" value="<?php echo $this->data['oid'] ?>">
-  <input type="hidden" id="pid" value="<?php echo $this->data['pid'] ?>">
-
-  <div class="panel-body">
-    <?php 
-    if($this->acadata) 
-      {?> 
-  <div class="row container">
-    <div class="col-md-12">
-      <div class="panel panel-warning">
-        <div class="panel-body">
-          <table class="table table-hover">
-            <tr>
-              <th><h5><strong>#</strong></h5></th>
-              <th><h5><strong>Institución</strong></h5></th>
-              <th><h5><strong>Tipo</strong></h5></th>
-              <th class="text-center"><h5><strong>Nivel de Estudio</strong></h5></th>
-              <th class="text-center"><h5><strong>Año de Finalización</strong></h5></th>
-              <th class="text-center"><h5><strong>Ubicación</strong></h5></th>
-            </tr>
-      <?php $c = 1;
-      foreach ($this->acadata as $academic) {?>
-            <tr id="academic<?php echo $academic['acid'] ?>">
-              <td><h5><?php echo $c?></h5></td>
-              <td><h5><?php echo $academic['institution']?></h5></td>
-              <td><h5>
-                <?php if($academic['type']=="E"){
-                  echo "Estatal";
-                }elseif($academic['type']=="P"){
-                  echo "Particular";
-                }elseif($academic['type']=="PA"){
-                  echo "Parroquial";
-                }?></h5></td>
-              <td align="center"><h5>
-                <?php if($academic['title']=="SE"){
-                  echo "Secundaria";
-                }elseif($academic['title']=="SU"){
-                  echo "Superior";
-                }elseif($academic['title']=="DI"){
-                  echo "Diplomado";
-                }elseif($academic['title']=="PT"){
-                  echo "Post Grado";
-                }elseif($academic['title']=="PH"){
-                  echo "PHD";
-                }elseif($academic['title']=="O"){
-                  echo "Otros";
-                }
-                ?></h5></td>
-                <td align="center"><h5><?php echo $academic['year_end']?></h5></td>
-                <td acid="<?php echo $academic['acid']?>" class=" location text-center text-info"><h5><span class="glyphicon glyphicon-globe"></span></h5></td>  
-                <td><h5>
-                  <a acid="<?php echo $academic['acid'] ?>" class="edits text-warning" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
-                </h5></td>
-                <td><h5>
-                  <a class="text-warning showAlertRemove" acid="<?php echo $academic['acid']?>" href="##" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
-                </h5></td>
-            </tr>
-            <tr id="alertRemove<?php echo $academic['acid'] ?>" class="alertRemove hidden">
-               <td colspan="7">
-                  <div class="alert alert-danger">
-                  <div class="row">
-                     <div class="col-md-8">
-                        <p>Seguro que desea eliminar a <?php echo $academic['institution'] ?> <span id="loadingDiv<?php echo $academic['acid'] ?>"></span></p>
-                     </div>
-                     <div class="col-md-2">
-                        <a href="##" class="btn btn-default form-control closeAlertRemove">Cancelar</a>
-                     </div>
-                     <div class="col-md-2">
-                        <a href="##" acid="<?php echo $academic['acid'] ?>" class="btn btn-danger form-control removeBtn">Eliminar</a>
-                     </div>
-                  </div>
-                  </div>
-               </td>
-            </tr>
-            <tr class="alertRemoves<?php echo $academic['acid'] ?> hidden">
-                <td colspan="5"></td>
-                <td colspan="1" style="width:20%">
-                    <div class="alert alert-info">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <?php
-                                    if ($academic['clave']=='1') {  ?>
-                                        <small><b>País:</b> <?php echo $academic['name_c']?></small><br>
-                                        <small><b>Departamento:</b> <?php echo $academic['name_s']?></small><br>
-                                        <small><b>Provincia:</b> <?php echo $academic['name_p']?></small><br>
-                                        <small><b>Distrito:</b> <?php echo $academic['name_d']?></small><br>
-                                    <?php    
-                                    }
-                                    else{   ?>
-                                        <small><?php echo $academic['location'] ?></span></small>
-                                    <?php
-                                    }
-                                ?>
-                            </div>
-                        </div>
-                  </div>
-               </td>
-            </tr>
-      <?php $c++;
-      }?>
-          </table>
+    <div class="row">
+        <div class="col-md-9 col-md-offset-1">
+            <h3 class="text-muted"><span class="glyphicon glyphicon-briefcase"> </span> Datos Académicos</h3>
         </div>
-      </div>
-    </div>        
-  </div>
-    <?php }else{
-    ?>
-      <center><h5 class="text-muted">No tiene Datos Por favor Actualize su Perfil</h5></center>
-    <?php  
-    }
-    ?>
-  </div>
+        <div class="col-md-2 ">
+            <br>
+            <a href="##" id="newAcademic" class="btn btn-default" title="Nuevo"><span class="text-muted">Nuevo</span></a>
+        </div>
+    </div>
 
+    <input type="hidden" id="eid" value="<?php echo $this->data['eid'] ?>">
+    <input type="hidden" id="oid" value="<?php echo $this->data['oid'] ?>">
+    <input type="hidden" id="pid" value="<?php echo $this->data['pid'] ?>">
+
+    <div class="panel-body">
+        <?php if ($this->acadata): ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-warning">
+                        <div class="panel-body">
+                            <table class="table table-hover">
+                                <tr>
+                                  <th><h5><strong>#</strong></h5></th>
+                                  <th><h5><strong>Institución</strong></h5></th>
+                                  <th><h5><strong>Tipo</strong></h5></th>
+                                  <th class="text-center"><h5><strong>Nivel de Estudio</strong></h5></th>
+                                  <th class="text-center"><h5><strong>Año de Finalización</strong></h5></th>
+                                  <th class="text-center"><h5><strong>Ubicación</strong></h5></th>
+                                </tr>
+                                <?php foreach ($this->acadata as $c => $academic): ?>
+                                    <tr id="academic<?php echo $academic['acid'] ?>">
+                                        <td><h5><?php echo $c + 1 ?></h5></td>
+                                        <td><h5><?php echo $academic['institution']?></h5></td>
+                                        <td><h5>
+                                            <?php if($academic['type']=="E"){
+                                              echo "Estatal";
+                                            }elseif($academic['type']=="P"){
+                                              echo "Particular";
+                                            }elseif($academic['type']=="PA"){
+                                              echo "Parroquial";
+                                            }?></h5></td>
+                                        <td align="center"><h5>
+                                            <?php if($academic['title']=="SE"){
+                                              echo "Secundaria";
+                                            }elseif($academic['title']=="SU"){
+                                              echo "Superior";
+                                            }elseif($academic['title']=="DI"){
+                                              echo "Diplomado";
+                                            }elseif($academic['title']=="PT"){
+                                              echo "Post Grado";
+                                            }elseif($academic['title']=="PH"){
+                                              echo "PHD";
+                                            }elseif($academic['title']=="O"){
+                                              echo "Otros";
+                                            }
+                                            ?></h5></td>
+                                        <td align="center"><h5><?php echo $academic['year_end']?></h5></td>
+                                        <td acid="<?php echo $academic['acid']?>" class=" location text-center text-info"><h5><span class="glyphicon glyphicon-globe"></span></h5></td>  
+                                        <td><h5>
+                                            <a acid="<?php echo $academic['acid'] ?>" class="edits text-warning" href="##" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        </h5></td>
+
+                                        <td><h5>
+                                            <a class="text-warning showAlertRemove" acid="<?php echo $academic['acid']?>" href="##" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
+                                        </h5></td>
+                                    </tr>
+                                    <tr id="alertRemove<?php echo $academic['acid'] ?>" class="alertRemove hidden">
+                                        <td colspan="7">
+                                            <div class="alert alert-danger">
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <p>Seguro que desea eliminar a <?php echo $academic['institution'] ?> <span id="loadingDiv<?php echo $academic['acid'] ?>"></span></p>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <a href="##" class="btn btn-default form-control closeAlertRemove">Cancelar</a>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <a href="##" acid="<?php echo $academic['acid'] ?>" class="btn btn-danger form-control removeBtn">Eliminar</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="alertRemoves<?php echo $academic['acid'] ?> hidden">
+                                        <td colspan="5"></td>
+                                        <td colspan="1" style="width:20%">
+                                            <div class="alert alert-info">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <?php
+                                                            if ($academic['clave']=='1') {  ?>
+                                                                <small><b>País:</b> <?php echo $academic['name_c']?></small><br>
+                                                                <small><b>Departamento:</b> <?php echo $academic['name_s']?></small><br>
+                                                                <small><b>Provincia:</b> <?php echo $academic['name_p']?></small><br>
+                                                                <small><b>Distrito:</b> <?php echo $academic['name_d']?></small><br>
+                                                            <?php    
+                                                            }
+                                                            else{   ?>
+                                                                <small><?php echo $academic['location'] ?></small>
+                                                            <?php
+                                                            }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach ?>
+                            </table>
+                        </div>
+                    </div>
+                </div>        
+            </div>
+        <?php else: ?>
+            <center><h5 class="text-muted">No tiene Datos Por favor Actualize su Perfil</h5></center>
+        <?php endif ?>
+    </div>
 </div>
 
 <script>
-    $(".location").click(function(){
-        var acid = $(this).attr('acid');
-        $('.alertRemoves'+acid).removeClass('hidden');
-    });
-    $(".location").mouseleave(function(){
-        var acid = $(this).attr('acid');
-        $('.alertRemoves'+acid).addClass('hidden');
-    });
+    $(function(){
+        $(".location").click(function(){
+            var acid = $(this).attr('acid');
+            $('.alertRemoves'+acid).removeClass('hidden');
+        });
+        $(".location").mouseleave(function(){
+            var acid = $(this).attr('acid');
+            $('.alertRemoves'+acid).addClass('hidden');
+        });
 
-   $('.showAlertRemove').click(function(){
-      var acid = $(this).attr('acid');
-      $('#alertRemove' + acid).removeClass('hidden');
-   });
-   $('.closeAlertRemove').click(function(){
-      $('.alertRemove').addClass('hidden');
-   });
-   $('.removeBtn').click(function(){
-      var acid = $(this).attr('acid');
-      removeAcademic(acid);
-   });
+       $('.showAlertRemove').click(function(){
+          var acid = $(this).attr('acid');
+          $('#alertRemove' + acid).removeClass('hidden');
+       });
+       $('.closeAlertRemove').click(function(){
+          $('.alertRemove').addClass('hidden');
+       });
+       $('.removeBtn').click(function(){
+          var acid = $(this).attr('acid');
+          removeAcademic(acid);
+       });
 
 
-  $('a').hover(function(){
-    $(this).tooltip('toggle');
-  });
-
-  $("#newAcademic").click(function(){
-    $('#datastudent').fadeOut('fast', function(){
-      $('#datastudent').load('/profile/public/studentsaveacademic', function(){
-        $('#datastudent').fadeIn('fast');
+      $('a').hover(function(){
+        $(this).tooltip('toggle');
       });
-    });
-  });
 
-  $(".edits").click(function(){
-    var acid=$(this).attr('acid');
-    $('#datastudent').fadeOut('fast', function(){
-      $('#datastudent').load('/profile/public/studenteditacademic/acid/'+acid, function(){
-        $('#datastudent').fadeIn('fast');
+        $("#newAcademic").click(function(){
+            $('#datastudent').addClass('hidden');
+            $('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
+            $('#editform')
+                .removeClass('hidden')
+                .load('/profile/public/studentsaveacademic', function(){
+                    $('#loadingDiv').html('');
+                });
+        });
+
+      $(".edits").click(function(){
+        var acid = $(this).attr('acid');
+        $('#datastudent').addClass('hidden');
+        $('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+        $('#editform')
+            .removeClass('hidden')
+            .load('/profile/public/studenteditacademic/acid/' + acid, function(){
+                $('#loadingDiv').html('');
+            });
       });
-    });
-  });
 
-  var eid = $('#eid').val();
-  var oid = $('#oid').val();
-  var pid = $('#pid').val();
+      var eid = $('#eid').val();
+      var oid = $('#oid').val();
+      var pid = $('#pid').val();
 
-  $.ajax({
-    url : '/profile/public/validatefullprofile',
-    data : {  eid : eid,
-              oid : oid,
-              pid : pid },
-    success: function(data){
-      $('#alertCompleteProfile').addClass('hidden');
-    },
-  });
-
-  //Funciones
-  function removeAcademic(acid){
-      $('#loadingDiv' + acid).html('<img src="/img/spinner.gif" alt="Loading..." />');
       $.ajax({
-         url    : '/profile/public/studentremoveacademic/',
-         data   : {acid : acid},
-         success: function(data){
-            if (data == 'true') {
-               $('#loadingDiv' + acid).html('');
-               $('.alertRemove').addClass('hidden');
-               $('#academic' + acid).addClass('hidden');
-            };
-         }
+        url : '/profile/public/validatefullprofile',
+        data : {  eid : eid,
+                  oid : oid,
+                  pid : pid },
+        success: function(data){
+          $('#alertCompleteProfile').addClass('hidden');
+        },
       });
-  }
+
+      //Funciones
+      function removeAcademic(acid){
+          $('#loadingDiv' + acid).html('<img src="/img/spinner.gif" alt="Loading..." />');
+          $.ajax({
+             url    : '/profile/public/studentremoveacademic/',
+             data   : {acid : acid},
+             success: function(data){
+                if (data == 'true') {
+                   $('#loadingDiv' + acid).html('');
+                   $('.alertRemove').addClass('hidden');
+                   $('#academic' + acid).addClass('hidden');
+                };
+             }
+          });
+      }
+    });
 </script>

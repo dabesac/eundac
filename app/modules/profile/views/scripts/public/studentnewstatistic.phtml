@@ -1,4 +1,4 @@
-<div class="row container">
+<div class="row">
 	<div class="col-md-8">
 		<h4 class="text-muted">Ingrese sus <span class="text-info">Datos Estadísticos</span></h4>
 	</div>
@@ -9,71 +9,70 @@
 		<a id="backeditBtn" href="##" class="btn btn-default form-control">Volver</a>
 	</div>
 	<hr><br>
-
-
-	<form id="form" action="/profile/public/studentnewstatistic" method="post">
-		<table class="table">
-			<tr>
-				<td><label>Tiene Conocimiento en Computación? </label><?php print $this->form->cono_comp?></td>
-			</tr>
-
-			<tr>
-				<th><h4><b>Datos Económicos</b></h4></th>
-			</tr>
-			<tr>
-				<td><label>De quién depende económicamente? </label><?php print $this->form->dependencia?></td>
-				<td><label>Algunas personas dependen de Usted? </label><?php print $this->form->dependen_ud?></td>
-			</tr>
-			<tr>
-				<td id="cuantos"><label>Cúantos? </label><?php print $this->form->num_dep_ud?></td>
-			</tr>
-
-			<tr></tr>
-			<tr>
-				<th><h4><b>Vivienda</b></h4></th>
-			</tr>
-			<tr>
-				<td><label>Su vivienda es? </label><?php print $this->form->vivienda?></td>
-				<td><label>Cúantas Personas Viven con Usted?</label><?php print $this->form->num_personas?></td>
-			</tr>
-			<tr>
-				<td><label>Tipo</label><?php print $this->form->tipo_vivienda?></td>
-				<td>
-					<label>Material</label><?php print $this->form->mat_vivienda?>
-				</td>
-			</tr>
-			<tr>
-				<td><label>Número de Habitaciones</label><?php print $this->form->num_habitacion?></td>
-				<td><label>Con qué servicios cuenta?</label><?php print $this->form->servicios?></td>
-			</tr>
-			
-
-
-			<tr></tr>
-			<tr>
-				<th><h4><b>Personal</b></h4></th>
-			</tr>
-			<tr>
-				<td><label>Vive con?</label><?php print $this->form->vive_con?></td>
-				<td><label>Lugar de Alimentación</label><?php print $this->form->lugar_alimentacion?></td>
-			</tr>
-			<tr>
-				<td><label>Costo</label>
-					<div class="row">
-						
-						<div class="col-sm-1">
-							<h4>S/.</h4>
-						</div>
-						<div class="col-sm-10">
-							<?php print $this->form->costo_alimento?>
-						</div>
-					</div>
-				</td>
-				<td><label>Tiene algun problema con su alimentación?</label><?php print $this->form->prob_alimento?></td>
-			</tr>
-		</table>
-	</form>
 </div>
+
+<form id="form" action="/profile/public/studentnewstatistic" method="post">
+	<table class="table">
+		<tr>
+			<td><label>Tiene Conocimiento en Computación? </label><?php print $this->form->cono_comp?></td>
+		</tr>
+
+		<tr>
+			<th><h4><b>Datos Económicos</b></h4></th>
+		</tr>
+		<tr>
+			<td><label>De quién depende económicamente? </label><?php print $this->form->dependencia?></td>
+			<td><label>Algunas personas dependen de Usted? </label><?php print $this->form->dependen_ud?></td>
+		</tr>
+		<tr>
+			<td id="cuantos"><label>Cúantos? </label><?php print $this->form->num_dep_ud?></td>
+		</tr>
+
+		<tr></tr>
+		<tr>
+			<th><h4><b>Vivienda</b></h4></th>
+		</tr>
+		<tr>
+			<td><label>Su vivienda es? </label><?php print $this->form->vivienda?></td>
+			<td><label>Cúantas Personas Viven con Usted?</label><?php print $this->form->num_personas?></td>
+		</tr>
+		<tr>
+			<td><label>Tipo</label><?php print $this->form->tipo_vivienda?></td>
+			<td>
+				<label>Material</label><?php print $this->form->mat_vivienda?>
+			</td>
+		</tr>
+		<tr>
+			<td><label>Número de Habitaciones</label><?php print $this->form->num_habitacion?></td>
+			<td><label>Con qué servicios cuenta?</label><?php print $this->form->servicios?></td>
+		</tr>
+		
+
+
+		<tr></tr>
+		<tr>
+			<th><h4><b>Personal</b></h4></th>
+		</tr>
+		<tr>
+			<td><label>Vive con?</label><?php print $this->form->vive_con?></td>
+			<td><label>Lugar de Alimentación</label><?php print $this->form->lugar_alimentacion?></td>
+		</tr>
+		<tr>
+			<td><label>Costo</label>
+				<div class="row">
+					
+					<div class="col-sm-1">
+						<h4>S/.</h4>
+					</div>
+					<div class="col-sm-10">
+						<?php print $this->form->costo_alimento?>
+					</div>
+				</div>
+			</td>
+			<td><label>Tiene algun problema con su alimentación?</label><?php print $this->form->prob_alimento?></td>
+		</tr>
+	</table>
+</form>
 
 <script>
 	$("#save").click(function(){

@@ -100,18 +100,20 @@
 												$stateCourse = 'Aprobado';
 											}else{
 												$pinto=0;
-												foreach ($this->courlleact as $cact) {
-													if($this->courlle[$c][0]['courseid']==$cact['courseid']){
-														if($cact['state']=="M"){
-															$img = 'amarillo';
-															$color = 'warning';
-															$stateCourse = 'Llevando';
-															$pinto=1;
-														}else{
-															$img = 'rojo';
-															$color = 'danger';
-															$stateCourse = 'Desaprobado';
-															$pinto=1;
+												if ($this->courlleact) {
+													foreach ($this->courlleact as $cact) {
+														if($this->courlle[$c][0]['courseid']==$cact['courseid']){
+															if($cact['state']=="M"){
+																$img = 'amarillo';
+																$color = 'warning';
+																$stateCourse = 'Llevando';
+																$pinto=1;
+															}else{
+																$img = 'rojo';
+																$color = 'danger';
+																$stateCourse = 'Desaprobado';
+																$pinto=1;
+															}
 														}
 													}
 												}

@@ -35,9 +35,12 @@ class Record_IndexController extends Zend_Controller_Action {
 		if ($this->sesion->rid=="RF" and $this->sesion->subid<>"1901"){
 			//$where['facid']=$this->sesion->faculty->facid;
 			$where['subid']=$this->sesion->subid;
-
-			
 		}
+
+		$wher = array('eid' => $where['eid'], 'oid' => $where['oid'], 'state' => 'A');
+		$fac= new Api_Model_DbTable_Faculty();
+        $facultad=$fac->_getFilter($where,$attrib=null,$orders=null);
+        $this->view->facultades=$facultad;
 		
 		$data= array("escid","subid","name");
 		$rows = $speciality->_getFilter($where,$data='');
@@ -47,7 +50,47 @@ class Record_IndexController extends Zend_Controller_Action {
 		
 		
 	}
+	public function schoolsAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $rid = $this->sesion->rid;
+            $escid = $this->sesion->escid;
+            $subid = $this->sesion->subid;
+            $facid = $this->_getParam('facid');        
+
+            $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid);
+            $es = new Api_Model_DbTable_Speciality();
+            $escu = $es->_getSchoolXFacultyNOTParent($where);
+            $this->view->escuelas=$escu;
+            
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
 	
+    public function specialityAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $subid = $this->sesion->subid;
+            $data = $this->_getParam('escid');
+            $escid = base64_decode($data);
+            if ($escid=="TODOEC") {
+                $this->view->escid=$escid;}
+            else{
+                $where = array('eid' => $eid, 'oid' => $oid, 'parent' => $escid);
+                $es = new Api_Model_DbTable_Speciality();
+                $especia = $es->_getFilter($where,$attrib=null,$orders=null);
+                $this->view->especialidad=$especia;
+            }
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
 	public function listAction()
 	{
 		$this->_helper->layout()->disableLayout();
@@ -55,24 +98,36 @@ class Record_IndexController extends Zend_Controller_Action {
 			$formData = $this->getRequest()->getPost();
 			$formData['eid'] = $this->sesion->eid;
 			$formData['oid'] = $this->sesion->oid;
-			$tmpescid = split(";--;",$formData['escid']);
-			$formData['escid'] = base64_decode($tmpescid[0]);
-			$formData['subid'] = base64_decode($tmpescid[1]);
+			if((empty($formData['speciality'])==true)){
+				$tmpescid = split(";--;",$formData['escid']);
+				$formData['escid'] = base64_decode($tmpescid[0]);
+				$formData['subid'] = base64_decode($tmpescid[1]);
+			}else{
+				$tmpescid = split("--",$formData['speciality']);
+				$formData['subid'] = base64_decode($tmpescid[0]);
+				$formData['escid'] = base64_decode($tmpescid[1]);
+
+			}
+			
 			$formData['perid'] = base64_decode($formData['perid']);
 			$this->view->escid=$formData['escid'];
 			$this->view->subid=$formData['subid'];
 			$this->view->perid=$formData['perid'];
+			$this->view->data=$formData;
+			$data['eid'] = $formData['eid'];
+			$data['oid'] = $formData['oid'];
+			$data['perid'] = $formData['perid'];
+			$data['escid'] = $formData['escid'];
+			$data['subid'] = $formData['subid'];
+			$data['coursename'] = $formData['coursename'];
 			//verify status period
 			$periods = new Api_Model_DbTable_Periods();
 			$rowperiod = $periods->_getOne($formData);
 			if ($rowperiod ) $this->view->stateperiod=$rowperiod['state'];
 			unset($formData['year']);
-			$this->view->courses = $this->_loadCourses($formData);
+			$this->view->courses = $this->_loadCourses($data);
 			$this->view->rid =$this->sesion->rid;
-
 		}
-				 
-		
 	}
 	
 	private function _loadCourses($formData=null){		
