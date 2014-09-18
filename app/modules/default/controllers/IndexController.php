@@ -172,20 +172,12 @@ class IndexController extends Zend_Controller_Action {
                         $dataPoll = $pollDb->_getFilter($where, $attrib);
 
                         if ($dataPoll) {
-
-                            //Verificar si se matriculo al peridodo anterior
-                            $anioPeriod   = $period[0].$period[1];
-                            $letterPeriod = $period[2];
-                            if ($letterPeriod == 'B') {
-                                $periodBefore = $anioPeriod.'A';
-                            }elseif ($letterPeriod == 'A'){
-                                $anioPeriod = $anioPeriod - 1;
-                                $periodBefore = $anioPeriod.'B';
-                            }
+                            //Verificar si se matriculo al peridodo de la encuesta
+                            $periodEncuesta = $dataPoll[0]['perid'];
 
                             $where = array( 'eid'   => $eid,
                                             'oid'   => $oid,
-                                            'perid' => $periodBefore,
+                                            'perid' => $periodEncuesta,
                                             'state' => 'M');
 
                             $isRegister = $registerDb->_getFilter($where);

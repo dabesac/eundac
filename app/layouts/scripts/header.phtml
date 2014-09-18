@@ -32,7 +32,7 @@
             <li><a href="/<?php echo $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
             <li><a href="/profile/<?php echo ($rol=='AL')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Mi Perfil </a></li>
             <li><a href="##"><span class="glyphicon glyphicon-envelope"></span> Notificaciones</a></li>
-            <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> <b>Cerrar Sessión</b></a></li>
+            <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> Cerrar Sessión</a></li>
         </ul>
     </div>
 </nav>
@@ -50,6 +50,7 @@
           };
         };
 
+        
         var rellenoEncuesta = $('#rellenoEncuesta').val();
         if (rellenoEncuesta && rellenoEncuesta == 'No') {
             $(location).attr('href', '/alumno/index/encuesta');
