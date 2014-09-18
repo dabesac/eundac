@@ -156,7 +156,7 @@ class IndexController extends Zend_Controller_Action {
                     //Verificar si hay encuesta activa
                     $data->encuesta->existeEncuesta  = 'No';
                     $data->encuesta->rellenoEncuesta = '-';
-
+            
                     if ($rid == 'AL') {
                         $pollDb         = new Api_Model_DbTable_Poll();
                         $pollQuestionDb = new Api_Model_DbTable_PollQuestion();
