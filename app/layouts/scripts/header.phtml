@@ -11,7 +11,7 @@
     $rol = $sesion->rid;
     $uid = $sesion->uid;
     $pid = $sesion->pid;
-    
+
 ?>
 <?php if ($sesion->encuesta->existeEncuesta == 'Yes'): ?>
     <input type="hidden" id="rellenoEncuesta" value="<?php echo $sesion->encuesta->rellenoEncuesta ?>">

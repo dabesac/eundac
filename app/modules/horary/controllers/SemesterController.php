@@ -8,7 +8,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
  		}
  		$login = $sesion->getStorage()->read();
  		$this->sesion = $login;
- 		
+
 	}
 
 	public function indexAction(){
@@ -16,7 +16,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			$fm=new Horary_Form_HoraryPeriods();
 			$this->view->fm=$fm;
 			$anio=date('Y');
-            $this->view->anio=$anio;            
+            $this->view->anio=$anio;
 		} catch (Exception $e) {
 			print "Error: get semester".$e->getMessage();
 		}
@@ -63,7 +63,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			}
 			// $len=count($turnosxsem);
 			$this->view->semester=$dsem;
-			
+
 			// $eid=$this->sesion->eid;
 			// $oid=$this->sesion->oid;
 			// $anio=substr($anio,2,2);
@@ -96,7 +96,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
         	$bd_hours= new Api_Model_DbTable_HoursBeginClasses();
         	$datahours=$bd_hours->_getFilter($wheres);
 
-        	if ($datahours) {   
+        	if ($datahours) {
         		$hora=new Api_Model_DbTable_Horary();
 	        	if ($datahours[0]['hours_begin_afternoon']) {
 	                $valhorasm[0]=$datahours[0]['hours_begin'];
@@ -109,12 +109,12 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	                }
 	                $len=count($valhorasm);
 	                $w=0;
-	                        
+
 	                for ($g=0; $g < $len; $g++) {
 	                	$valhorasm[$g]=(isset($valhorasm[$g]))?$valhorasm[$g]:null;
 	                    if ($valhorasm[$g]==$valhorast[0] && $w==0) {
 	                        $valhoras[0]=$datahours[0]['hours_begin'];
-	                        for ($k=0; $k < 20; $k++) { 
+	                        for ($k=0; $k < 20; $k++) {
 	                            $dho=$hora->_getsumminutes($valhoras[$k],'50');
 	                            $valhoras[$k+1]=$dho[0]['hora'];
 	                        }
@@ -132,18 +132,18 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	                        $j++;
 	                    }
 	                    $endtarde=$valhorast[$j-1];
-	                    $this->view->valhorast=$valhorast; 
-	                }    
+	                    $this->view->valhorast=$valhorast;
+	                }
             	}
             	else{
 	                $valhoras[0]=$datahours[0]['hours_begin'];
-	                for ($k=0; $k < 20; $k++) { 
+	                for ($k=0; $k < 20; $k++) {
 	                    $dho=$hora->_getsumminutes($valhoras[$k],'50');
 	                    $valhoras[$k+1]=$dho[0]['hora'];
 	                }
 	                $this->view->valhoras=$valhoras;
             	}
-		        
+
 		        $module = 'horary_course';
 			    $params = array(
 			        				'escid' => base64_encode($escid),
@@ -153,7 +153,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			        				'subid'=>base64_encode($subid),
 			        				'semid'=>base64_encode($semid)
 			        				);
-			    
+
     			$prueba = new Eundac_Connect_Api($module,$params);
     			$data= $prueba->connectAuth();
     			if ($turno) {
@@ -174,7 +174,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	        		$this->view->horarys=$datatur;
     			}
     			else{
-	        		$this->view->horarys=$data;    				
+	        		$this->view->horarys=$data;
     			}
 
 	        	$where=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
@@ -201,7 +201,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	        	$this->view->dcurso=$dcur;
 		    }
 
-			
+
 		} catch (Exception $e) {
 			print "Error: get horary semester".$e->getMessage();
 		}
@@ -223,57 +223,57 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		$this->view->perid=$perid;
 
 		$wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
-        	$bd_hours= new Api_Model_DbTable_HoursBeginClasses();
-        	$datahours=$bd_hours->_getFilter($wheres);
+        $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
+        $datahours=$bd_hours->_getFilter($wheres);
 
-        	if ($datahours) {   
-        		$hora=new Api_Model_DbTable_Horary();
-	        	if ($datahours[0]['hours_begin_afternoon']) {
-	                $valhorasm[0]=$datahours[0]['hours_begin'];
-	                $valhorast[0]=$datahours[0]['hours_begin_afternoon'];
-	                $k=0;
-	                while ($valhorasm[$k] < $datahours[0]['hours_begin_afternoon']) {
-	                    $dho=$hora->_getsumminutes($valhorasm[$k],'50');
-	                    $valhorasm[$k+1]=$dho[0]['hora'];
-	                    $k++;
-	                }
-	                $len=count($valhorasm);
-	                $w=0;
-	                        
-	                for ($g=0; $g < $len + 1 ; $g++) {
-	                	$valhorasm[$g]=(isset($valhorasm[$g]))?$valhorasm[$g]:null; 
-	                    if ($valhorasm[$g]==$valhorast[0] && $w==0) {
-	                        $valhoras[0]=$datahours[0]['hours_begin'];
-	                        for ($k=0; $k < 20; $k++) { 
-	                            $dho=$hora->_getsumminutes($valhoras[$k],'50');
-	                            $valhoras[$k+1]=$dho[0]['hora'];
-	                        }
-	                        $this->view->valhoras=$valhoras;
-	                        $w=1;
-	                    }
-	                }
-	                if ($w==0) {
-	                	unset($valhorasm[$k]);
-	                    $this->view->valhorasm=$valhorasm;
-	                    $j=0;
-	                    while ( $j < 12) {
-	                        $dho=$hora->_getsumminutes($valhorast[$j],'50');
-	                        $valhorast[$j+1]=$dho[0]['hora'];
-	                        $j++;
-	                    }
-	                    $endtarde=$valhorast[$j-1];
-	                    $this->view->valhorast=$valhorast; 
-	                }    
-            	}
-            	else{
-	                $valhoras[0]=$datahours[0]['hours_begin'];
-	                for ($k=0; $k < 20; $k++) { 
-	                    $dho=$hora->_getsumminutes($valhoras[$k],'50');
-	                    $valhoras[$k+1]=$dho[0]['hora'];
-	                }
-	                $this->view->valhoras=$valhoras;
-            	}
-		    	
+        if ($datahours) {
+        	$hora=new Api_Model_DbTable_Horary();
+        	if ($datahours[0]['hours_begin_afternoon']) {
+                $valhorasm[0]=$datahours[0]['hours_begin'];
+                $valhorast[0]=$datahours[0]['hours_begin_afternoon'];
+                $k=0;
+                while ($valhorasm[$k] < $datahours[0]['hours_begin_afternoon']) {
+                    $dho=$hora->_getsumminutes($valhorasm[$k],'50');
+                    $valhorasm[$k+1]=$dho[0]['hora'];
+                    $k++;
+                }
+                $len=count($valhorasm);
+                $w=0;
+
+                for ($g=0; $g < $len; $g++) {
+                    $valhorasm[$g]=(isset($valhorasm[$g]))?$valhorasm[$g]:null;
+                    if ($valhorasm[$g]==$valhorast[0] && $w==0) {
+                        $valhoras[0]=$datahours[0]['hours_begin'];
+                        for ($k=0; $k < 20; $k++) {
+                            $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                            $valhoras[$k+1]=$dho[0]['hora'];
+                        }
+                        $this->view->valhoras=$valhoras;
+                        $w=1;
+                    }
+                }
+                if ($w==0) {
+                    unset($valhorasm[$k]);
+                    $this->view->valhorasm=$valhorasm;
+                    $j=0;
+                    while ( $j < 12) {
+                        $dho=$hora->_getsumminutes($valhorast[$j],'50');
+                        $valhorast[$j+1]=$dho[0]['hora'];
+                        $j++;
+                    }
+                    $endtarde=$valhorast[$j-1];
+                    $this->view->valhorast=$valhorast;
+                }
+            }
+            else{
+                $valhoras[0]=$datahours[0]['hours_begin'];
+                for ($k=0; $k < 20; $k++) {
+                    $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                    $valhoras[$k+1]=$dho[0]['hora'];
+                }
+                $this->view->valhoras=$valhoras;
+            }
+
 	        $module = 'horary_course';
 		    $params = array(
 		        				'escid' => base64_encode($escid),
@@ -300,8 +300,8 @@ class Horary_SemesterController extends Zend_Controller_Action{
         		$this->view->horarys=$datatur;
 			}
 			else{
-        		$this->view->horarys=$data;    				
-			}     
+        		$this->view->horarys=$data;
+			}
 	        // $this->view->horarys=$data;
 	        $spe=array();
 	        $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
@@ -319,13 +319,13 @@ class Horary_SemesterController extends Zend_Controller_Action{
         	}
         	else{
         		$spe['esc']=$desc['name'];
-        		$spe['parent']=''; 	
+        		$spe['parent']='';
         		$this->view->spe=$spe;
         	}
 	        $names=strtoupper($spe['esc']);
             $namep=strtoupper($spe['parent']);
             $namefinal=$names." <br> ".$namep;
-            $namef = strtoupper($faculty);	
+            $namef = strtoupper($faculty);
 
 	        $where=array('eid'=>$eid,'oid'=>$oid,'subid'=>$subid,'perid'=>$perid,'escid'=>$escid,'semid'=>$semid);
 	        $cper= new Api_Model_DbTable_PeriodsCourses();
@@ -336,12 +336,12 @@ class Horary_SemesterController extends Zend_Controller_Action{
     			$nameimpre='horarysemester'.$semid.$turno;
     		}
     		else{
-	        	$dcur=$cper->_getCoursesxPeriodxspecialityxsemester($where);    			
+	        	$dcur=$cper->_getCoursesxPeriodxspecialityxsemester($where);
 	        	$nameimpre='horarysemester'.$semid;
     		}
 
 	        $len=count($dcur);
-	        	for ($i=0; $i < $len; $i++) { 
+	        	for ($i=0; $i < $len; $i++) {
 	        		$uid=$dcur[$i]['uid'];
 	        		$where=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid);
 	        		$user= new Api_Model_DbTable_Users();
@@ -353,7 +353,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
         	$namelogo = (!empty($desc['header']))?$desc['header']:"blanco";
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            
+
             $uidim=$this->sesion->pid;
             $pid=$uidim;
             $uid=$this->sesion->uid;
@@ -373,10 +373,10 @@ class Horary_SemesterController extends Zend_Controller_Action{
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>$nameimpre);
             $dataim = $dbimpression->_getFilter($wheri);
-            
+
             $co=count($dataim);
             $codigo=$co." - ".$uidim;
-            
+
 
             $header=$this->sesion->org['header_print'];
             $footer=$this->sesion->org['footer_print'];

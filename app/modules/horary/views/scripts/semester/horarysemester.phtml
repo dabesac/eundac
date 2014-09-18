@@ -164,8 +164,7 @@ if ($this->horarys) {
         if($hf>=$hmay) $hmay=$hf;
 
     }
-    // print_r($this->horarys);
-    // exit();
+
     $k=0;
     if ($hour_begin) {
         for ($z=0; $z < $lentotal; $z++) {
@@ -238,8 +237,12 @@ if ($this->horarys) {
                 $dia=$dat[$s]['day'];
                 $f=0;
                 if ($dia==1) {
-                    if (($dat[$s]['hora_ini']==$dat[$s+1]['hora_ini']) && ($dat[$s]['day']==1 && $dat[$s+1]['day']==1)) {
-                        if ($this->horarys[$s]['hora_ini']!=$this->horarys[$s]['hora_fin'] && $this->horarys[$s+1]['hora_ini']!=$this->horarys[$s+1]['hora_fin']){
+                    $datshora_ini=(isset($dat[$s+1]['hora_ini']))?$dat[$s+1]['hora_ini']:null;
+                    $datshora_day=(isset($dat[$s+1]['day']))?$dat[$s+1]['day']:null;
+                    if (($dat[$s]['hora_ini']==$datshora_ini) && ($dat[$s]['day']==1 && $datshora_day==1)) {
+                        $horaryshora_ini=(isset($this->horarys[$s+1]['hora_ini']))?$this->horarys[$s+1]['hora_ini']:null;
+                        $horaryshora_fin=(isset($this->horarys[$s+1]['hora_fin']))?$this->horarys[$s+1]['hora_fin']:null;
+                        if ($this->horarys[$s]['hora_ini']!=$this->horarys[$s]['hora_fin'] && $horaryshora_ini!=$horaryshora_fin){
                                 $hsplit1=split(":", $dat[$s+1]['hora_ini']);
                                 $h1=$hsplit1[0];
                                 $m1=$hsplit1[1];
@@ -311,8 +314,12 @@ if ($this->horarys) {
                 $dia=$dat[$s]['day'];
                 $f=0;
                 if ($dia==2) {
-                    if (($dat[$s]['hora_ini']==$dat[$s+1]['hora_ini']) && ($dat[$s]['day']==2 && $dat[$s+1]['day']==2)) {
-                        if ($this->horarys[$s]['hora_ini']!=$this->horarys[$s]['hora_fin'] && $this->horarys[$s+1]['hora_ini']!=$this->horarys[$s+1]['hora_fin']){
+                    $datshora_ini=(isset($dat[$s+1]['hora_ini']))?$dat[$s+1]['hora_ini']:null;
+                    $datshora_day=(isset($dat[$s+1]['day']))?$dat[$s+1]['day']:null;
+                    if (($dat[$s]['hora_ini']==$datshora_ini) && ($dat[$s]['day']==2 && $datshora_day==2)) {
+                        $horaryshora_ini=(isset($this->horarys[$s+1]['hora_ini']))?$this->horarys[$s+1]['hora_ini']:null;
+                        $horaryshora_fin=(isset($this->horarys[$s+1]['hora_fin']))?$this->horarys[$s+1]['hora_fin']:null;
+                        if ($this->horarys[$s]['hora_ini']!=$this->horarys[$s]['hora_fin'] && $horaryshora_ini!=$horaryshora_fin){
                                 $hsplit1=split(":", $dat[$s+1]['hora_ini']);
                                 $h1=$hsplit1[0];
                                 $m1=$hsplit1[1];
@@ -384,8 +391,12 @@ if ($this->horarys) {
                 $dia=$dat[$s]['day'];
                 $f=0;
                 if ($dia==3) {
-                    if (($dat[$s]['hora_ini']==$dat[$s+1]['hora_ini']) && ($dat[$s]['day']==3 && $dat[$s+1]['day']==3)) {
-                        if ($this->horarys[$s]['hora_ini']!=$this->horarys[$s]['hora_fin'] && $this->horarys[$s+1]['hora_ini']!=$this->horarys[$s+1]['hora_fin']){
+                    $datshora_ini=(isset($dat[$s+1]['hora_ini']))?$dat[$s+1]['hora_ini']:null;
+                    $datshora_day=(isset($dat[$s+1]['day']))?$dat[$s+1]['day']:null;
+                    if (($dat[$s]['hora_ini']==$datshora_ini) && ($dat[$s]['day']==3 && $datshora_day==3)) {
+                        $horaryshora_ini=(isset($this->horarys[$s+1]['hora_ini']))?$this->horarys[$s+1]['hora_ini']:null;
+                        $horaryshora_fin=(isset($this->horarys[$s+1]['hora_fin']))?$this->horarys[$s+1]['hora_fin']:null;
+                        if ($this->horarys[$s]['hora_ini']!=$this->horarys[$s]['hora_fin'] && $horaryshora_ini!=$horaryshora_fin){
                                 $hsplit1=split(":", $dat[$s+1]['hora_ini']);
                                 $h1=$hsplit1[0];
                                 $m1=$hsplit1[1];
@@ -457,8 +468,12 @@ if ($this->horarys) {
                 $dia=$dat[$s]['day'];
                 $f=0;
                 if ($dia==4) {
-                    if (($dat[$s]['hora_ini']==$dat[$s+1]['hora_ini']) && ($dat[$s]['day']==4 && $dat[$s+1]['day']==4)) {
-                        if ($this->horarys[$s]['hora_ini']!=$this->horarys[$s]['hora_fin'] && $this->horarys[$s+1]['hora_ini']!=$this->horarys[$s+1]['hora_fin']){
+                    $datshora_ini=(isset($dat[$s+1]['hora_ini']))?$dat[$s+1]['hora_ini']:null;
+                    $datshora_day=(isset($dat[$s+1]['day']))?$dat[$s+1]['day']:null;
+                    if (($dat[$s]['hora_ini']==$datshora_ini) && ($dat[$s]['day']==4 && $datshora_day==4)) {
+                        $horaryshora_ini=(isset($this->horarys[$s+1]['hora_ini']))?$this->horarys[$s+1]['hora_ini']:null;
+                        $horaryshora_fin=(isset($this->horarys[$s+1]['hora_fin']))?$this->horarys[$s+1]['hora_fin']:null;
+                        if ($this->horarys[$s]['hora_ini']!=$this->horarys[$s]['hora_fin'] && $horaryshora_ini!=$horaryshora_fin){
                                 $hsplit1=split(":", $dat[$s+1]['hora_ini']);
                                 $h1=$hsplit1[0];
                                 $m1=$hsplit1[1];
@@ -530,10 +545,12 @@ if ($this->horarys) {
                 $dia=$dat[$s]['day'];
                 $f=0;
                 if ($dia==5) {
-                    $dathora_ini=(isset($dat[$s+1]['hora_ini']))?$dat[$s+1]['hora_ini']:null;
-                    $dathora_day=(isset($dat[$s+1]['day']))?$dat[$s+1]['day']:null;
-                    if (($dat[$s]['hora_ini']==$dathora_ini) && ($dat[$s]['day']==5 && $dathora_day==5)) {
-                        if ($this->horarys[$s]['hora_ini']!=$this->horarys[$s]['hora_fin'] && $this->horarys[$s+1]['hora_ini']!=$this->horarys[$s+1]['hora_fin']){
+                    $datshora_ini=(isset($dat[$s+1]['hora_ini']))?$dat[$s+1]['hora_ini']:null;
+                    $datshora_day=(isset($dat[$s+1]['day']))?$dat[$s+1]['day']:null;
+                    if (($dat[$s]['hora_ini']==$datshora_ini) && ($dat[$s]['day']==5 && $datshora_day==5)) {
+                        $horaryshora_ini=(isset($this->horarys[$s+1]['hora_ini']))?$this->horarys[$s+1]['hora_ini']:null;
+                        $horaryshora_fin=(isset($this->horarys[$s+1]['hora_fin']))?$this->horarys[$s+1]['hora_fin']:null;
+                        if ($this->horarys[$s]['hora_ini']!=$this->horarys[$s]['hora_fin'] && $horaryshora_ini!=$horaryshora_fin){
                                 $hsplit1=split(":", $dat[$s+1]['hora_ini']);
                                 $h1=$hsplit1[0];
                                 $m1=$hsplit1[1];
@@ -605,8 +622,12 @@ if ($this->horarys) {
                 $dia=$dat[$s]['day'];
                 $f=0;
                 if ($dia==6) {
-                    if (($dat[$s]['hora_ini']==$dat[$s+1]['hora_ini']) && ($dat[$s]['day']==6 && $dat[$s+1]['day']==6)) {
-                        if ($this->horarys[$s]['hora_ini']!=$this->horarys[$s]['hora_fin'] && $this->horarys[$s+1]['hora_ini']!=$this->horarys[$s+1]['hora_fin']){
+                    $datshora_ini=(isset($dat[$s+1]['hora_ini']))?$dat[$s+1]['hora_ini']:null;
+                    $datshora_day=(isset($dat[$s+1]['day']))?$dat[$s+1]['day']:null;
+                    if (($dat[$s]['hora_ini']==$datshora_ini) && ($dat[$s]['day']==6 && $datshora_day==6)) {
+                        $horaryshora_ini=(isset($this->horarys[$s+1]['hora_ini']))?$this->horarys[$s+1]['hora_ini']:null;
+                        $horaryshora_fin=(isset($this->horarys[$s+1]['hora_fin']))?$this->horarys[$s+1]['hora_fin']:null;
+                        if ($this->horarys[$s]['hora_ini']!=$this->horarys[$s]['hora_fin'] && $horaryshora_ini!=$horaryshora_fin){
                                 $hsplit1=split(":", $dat[$s+1]['hora_ini']);
                                 $h1=$hsplit1[0];
                                 $m1=$hsplit1[1];
