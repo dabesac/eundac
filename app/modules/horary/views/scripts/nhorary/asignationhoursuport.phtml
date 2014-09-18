@@ -1,0 +1,224 @@
+<?php
+    $hours=$this->datahours[0]['hours_begin'];
+    $hour=substr($hours,0,2);
+    $minute=substr($hours,3,2);
+    $hour=intval($hour);
+?>
+<div class="information">
+    <b>Nota:</b> Las horas académicas son de 50 minutos a partir de la HORA DE INICIO.
+</div><br>
+<div class="col-md-12">
+    <div class="col-md-6 text-center">
+        <b>Tipo de Curso (Electivo):</b>
+    </div>
+    <div class="col-md-3">
+        <select id="tipoelectivosuport" class="form-control">
+            <option value="">-- Seleccione --</option>
+            <option value="S">Sí</option>
+            <option value="N" selected="selected">No</option>
+        </select>
+    </div>
+</div><br><br><br>
+<div class="col md 12">
+    <div class="col-md-3">
+        <b>Tipo de Clase:</b>
+    </div>
+    <div class="col-md-3">
+        <select id="tipoclasesuport" class="form-control">
+            <option value="">-- Seleccione --</option>
+            <option value="T">Teoria</option>
+            <option value="P">Práctica</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <b>Día:</b>
+    </div>
+    <div class="col-md-3">
+        <select id="diasuport" class="form-control">
+            <option value="">-- Seleccione --</option>
+            <option value="0">Lunes</option>
+            <option value="1">Martes</option>
+            <option value="2">Miércoles</option>
+            <option value="3">Jueves</option>
+            <option value="4">Viernes</option>
+            <option value="5">Sábado</option>
+        </select>
+    </div>
+</div><br><br>
+<div class="col-md-12 text-center">
+    <h4><span class='glyphicon glyphicon-time text-muted'></span><b> Hora de Inicio:</b></h4>
+</div><br>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-3">
+            <b>Hora:</b>
+        </div>
+        <div class="col-md-3">
+            <select id="hora_inisuport" class="form-control">
+                <?php
+                for ($i=$hour; $i <= 23 ; $i++) { ?>
+                    <option value="<?php
+                                    if ($i<=9) echo "0".$i;
+                                    else echo $i;
+                                    ?>">
+                                    <?php
+                                    if ($i<=9) echo "0".$i;
+                                    else echo $i;
+                                    ?>
+                    </option>
+                <?php
+                }
+                ?>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <b>Minutos: </b>
+        </div>
+        <div class="col-md-3">
+            <select id="min_inisuport" class="form-control">
+                <option value="00">00</option>
+                <?php
+                    for ($i=10; $i < 60; $i=$i+10) {  ?>
+                        <option value="<?php echo $i?>"><?php echo $i?></option>
+                    <?php
+                    }
+                ?>
+            </select>
+        </div>
+    </div>
+</div><br><br>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-6 text-center">
+            <b>Cantidad de Horas Académicas:</b>
+        </div>
+        <div class="col-md-4">
+            <select id="horasacademicasuport" class="form-control">
+                <?php
+                    for ($i=0; $i < 11; $i++) {     ?>
+                        <option value="<?php echo $i?>"><?php echo $i?></option>
+                    <?php
+                    }
+                ?>
+            </select>
+        </div>
+    </div>
+</div><br>
+<div id="cargaaquisuport"></div>
+<div class="modal-footer">
+    <div class="pull-right">
+        <button id="guardarhorasuport" href="#" class="btn btn-success"><span class='glyphicon glyphicon-save'></span> Guardar</button>
+        <button class="btn btn-danger cancelsuport"><span class='glyphicon glyphicon-log-out'></span> Cancelar</button>
+    </div>
+</div>
+<script>
+    var minute="<?php echo $minute?>";
+    $('#min_inisuport > option[value='+minute+']').attr('selected', 'selected');
+
+    $(".cancelsuport").on('click', function(){
+        $('#mymodalhorasclaseSuport').modal('hide');
+    });
+
+    $("#guardarhorasuport").on('click', function(){
+        var dia=$("#diasuport").val();
+        var h_ini=$("#hora_inisuport").val();
+        var m_ini=$("#min_inisuport").val();
+        var hacad=$("#horasacademicasuport").val();
+        var tipo_clase=$("#tipoclasesuport").val();
+        var electivo=$("#tipoelectivosuport").val();
+        var uid="<?php echo $this->usuario[0]['uid'] ?>";
+        var pid="<?php echo $this->usuario[0]['pid'] ?>";
+        var hora_ini=h_ini+":"+m_ini+":00";
+
+        if (tipo_clase=="") {
+            alert("Debe seleccionar el tipo de clase.");
+            return false;
+        };
+        if (dia=="") {
+            alert("Debe seleccionar el día de la clase.");
+            return false;
+        };
+        if (hacad=="0") {
+            alert("Debe seleccionar la cantidad de horas académicas.");
+            return false;
+        }
+        else{
+            var ajax_valid = {
+                            "uid"       : uid,
+                            "pid"       : pid,
+                            "escid"     : escid,
+                            "subid"     : subid,
+                            "perid"     : perid,
+                            "dia"       : dia,
+                            "hora_ini"  : hora_ini,
+                            "hora_acad" : hacad,
+                            "courseid"  : courseid,
+                            "turno"     : turno,
+                            "curid"     : curid,
+                            "semid"     : semid,
+                            "tipoclase" : tipo_clase,
+                            "electivo"  : electivo
+                            };
+
+            $.ajax({
+                type : 'post',
+                url  : '/horary/nhorary/validatetime/',
+                data : ajax_valid,
+                success:function(data){
+                    if (data.status == true) {
+                        $("#inloadhorarySuport").empty();
+                        $("#cargaaquisuport").empty();
+                        $("#cargaaquisuport").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+                        $("#cargaaquisuport").html("<center><p class='text-success'><b>Se guardó con éxito</b></p></center>");
+                        $("#mymodalhorasclaseSuport").modal("hide");
+                        var ajaxdata = {
+                            "uid"   : $.base64.encode(uid),
+                            "pid"   : $.base64.encode(pid),
+                            "escid" : $.base64.encode(escid),
+                            "subid" : $.base64.encode(subid),
+                            "perid" : $.base64.encode(perid)
+                            };
+                        $("#inloadhorarySuport").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+                        $.ajax({
+                            type : 'post',
+                            url  : '/horary/nhorary/fillhorarysuport/',
+                            data : ajaxdata,
+                            success: function(data){
+                                $("#inloadhorarySuport").html(data);
+                            }
+                        });
+
+                        var adata = {
+                                        "uid"   : $.base64.encode(uid),
+                                        "pid"   : $.base64.encode(pid),
+                                        "escid" : $.base64.encode(escid),
+                                        "subid" : $.base64.encode(subid),
+                                        "perid" : $.base64.encode(perid)
+                                        };
+                        $("#asighoursSuport").empty();
+                        $("#asighoursSuport").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+                        $.ajax({
+                            type : 'post',
+                            url  : '/horary/nhorary/asignationhoursuport/',
+                            data : adata,
+                            success: function(data){
+                                $("#asighoursSuport").html(data);
+                            }
+                        });
+
+
+                    }
+                    else
+                    {
+                        $("#cargaaquisuport").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+                        $("#cargaaquisuport").html("<center><p class='text-danger'><b>"+data.sms+"</b></p></center>");
+                    }
+                }
+            });
+        }
+    });
+
+    $('#mymodalhorasclaseSuport').on('hidden.bs.modal', function (e){
+        $('#myModalhorarySuport').modal('show');
+    });
+</script>

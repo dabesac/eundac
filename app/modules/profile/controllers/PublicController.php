@@ -1197,7 +1197,8 @@ class Profile_PublicController extends Zend_Controller_Action {
         $pid   = $this->sesion->pid;
         $escid = $this->sesion->escid;
         $subid = $this->sesion->subid;
-        $perid = $this->sesion->period->perid;
+        //$perid = $this->sesion->period->perid;
+        $perid = '14A';
 
         $letterPeriod = $perid[2];
         $anioPeriod   = $perid[0].$perid[1];
@@ -1322,15 +1323,17 @@ class Profile_PublicController extends Zend_Controller_Action {
                                     'state'    => 'M' );
                     $attrib = array('notafinal');
                     $dataAplazados = $registerCourseDb->_getFilter($where, $attrib);
-                    if ($dataAplazados[0]['notafinal'] == '-2') {
-                        $dataCourses['courses'][$c]['aplazado']      = 'N.S.P.';
-                        $dataCourses['courses'][$c]['colorAplazado'] = 'disapprovedBack';
-                    }elseif ($dataAplazados[0]['notafinal'] < 11){
-                        $dataCourses['courses'][$c]['aplazado']      = $dataAplazados[0]['notafinal'];
-                        $dataCourses['courses'][$c]['colorAplazado'] = 'disapprovedBack';
-                    }elseif ($dataAplazados[0]['notafinal'] >= 11) {
-                        $dataCourses['courses'][$c]['aplazado']      = $dataAplazados[0]['notafinal'];
-                        $dataCourses['courses'][$c]['colorAplazado'] = 'approvedBack';
+                    if ($dataAplazados) {
+                        if ($dataAplazados[0]['notafinal'] == '-2') {
+                            $dataCourses['courses'][$c]['aplazado']      = 'N.S.P.';
+                            $dataCourses['courses'][$c]['colorAplazado'] = 'disapprovedBack';
+                        }elseif ($dataAplazados[0]['notafinal'] < 11){
+                            $dataCourses['courses'][$c]['aplazado']      = $dataAplazados[0]['notafinal'];
+                            $dataCourses['courses'][$c]['colorAplazado'] = 'disapprovedBack';
+                        }elseif ($dataAplazados[0]['notafinal'] >= 11) {
+                            $dataCourses['courses'][$c]['aplazado']      = $dataAplazados[0]['notafinal'];
+                            $dataCourses['courses'][$c]['colorAplazado'] = 'approvedBack';
+                        }
                     }
                 }else{
                     $dataCourses['courses'][$c]['colorAplazado'] = '';

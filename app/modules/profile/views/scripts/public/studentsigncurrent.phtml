@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$dataCourses = $this->dataCourses;
  ?>
 
@@ -44,9 +44,9 @@
 					<td class="text-center"><?php echo $c + 1 ?></td>
 					<td><?php echo $course['name'] ?></td>
 				<?php if ($dataCourses['type'] == 'C'): ?>
-					<?php 
+					<?php
 						$cantNotas = 4;
-						for ($i=1; $i <= $cantNotas; $i++) { 
+						for ($i=1; $i <= $cantNotas; $i++) {
 							if ($course['notaUnidad'.$i] < 11) {
 								$colorNota = 'disapproved';
 								$nota = $course['notaUnidad'.$i];
@@ -64,12 +64,14 @@
 					<td class="text-center"><?php echo $course['parcial1'] ?></td>
 					<td class="text-center"><?php echo $course['parcial2'] ?></td>
 				<?php endif ?>
-				<?php if ($course['notaFinal'] < 11):
-					$colorNota = 'disapprovedBack';
-				elseif ($course['notaFinal'] >= 11):
-					$colorNota = 'approvedBack';
-				endif ?>
-					<td class="text-center <?php echo $colorNota ?>"><strong><?php echo $course['notaFinal'] ?></strong></td>
+				<?php if ($course['notaFinal']): ?>
+					<?php if ($course['notaFinal'] < 11):
+						$colorNota = 'disapprovedBack';
+					elseif ($course['notaFinal'] >= 11):
+						$colorNota = 'approvedBack';
+					endif ?>
+				<?php endif ?>
+						<td class="text-center <?php echo $colorNota ?>"><strong><?php echo $course['notaFinal'] ?></strong></td>
 				<?php if ($dataCourses['aplazados'] == 'yes'): ?>
 					<td class="text-center <?php echo $course['colorAplazado'] ?>"><strong><?php echo $course['aplazado'] ?></strong></td>
 				<?php endif ?>
@@ -118,7 +120,7 @@
 								<div class="notasDetail">
 									<?php for ($i=1; $i <= 3; $i++) { ?>
 										<span class="notaPerCourse notaPerCourse<?php echo $i ?>"><?php echo $course['calificacion'.$i.'Unidad2'] ?></span>
-									<?php } ?>	
+									<?php } ?>
 									<?php if ($course['notaUnidad2'] < 11):
 										$colorNota = 'disapprovedBack';
 									else:
@@ -160,7 +162,7 @@
 								<p class="titleUnity">1er Parcial</p>
 								<div class="notasDetail">
 									<?php for ($i=1; $i <= 9; $i++) { ?>
-										<?php if ($course['calificacion'.$i.'Parcial1'] < 11): 
+										<?php if ($course['calificacion'.$i.'Parcial1'] < 11):
 											$colorNota = 'disapproved';
 										else:
 											$colorNota = 'approved';
@@ -179,7 +181,7 @@
 								<p class="titleUnity">2do Parcial</p>
 								<div class="notasDetail">
 									<?php for ($i=1; $i <= 9; $i++) { ?>
-										<?php if ($course['calificacion'.$i.'Parcial2'] < 11): 
+										<?php if ($course['calificacion'.$i.'Parcial2'] < 11):
 											$colorNota = 'disapproved';
 										else:
 											$colorNota = 'approved';
@@ -243,8 +245,16 @@
 				$(this).addClass('btnObOSignCurrentActive');
 
 				goTo = $(this).attr('goto');
-				$('.studentSignCurrent_viewCourses').fadeOut('fast');
-				$('#' + goTo).fadeIn('fast');
+
+				$('.studentSignCurrent_viewCourses').removeClass('studentSignCurrent_viewActive');
+				$('#' + goTo).addClass('studentSignCurrent_viewActive');
+			});
+
+			$(".btnMyHorary").on('click',function(){
+				$("#myhoraryModal").modal('show');
+				var url="/horary/consolidated/index";
+				$("#loadmyhorary").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+				$("#loadmyhorary").load(url);
 			});
 		});
 	</script>
@@ -252,3 +262,13 @@
 	<br>
 	<h4 class="text-muted text-center"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Aun no validas tu matricula a <span class="text-danger">este periodo...</span></h4>
 <?php endif ?>
+<!-- Modal eliminar horario-->
+<div class="modal fade" id="myhoraryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  	<div class="modal-dialog" style="width:90%">
+  		<div class="modal-content">
+      		<div class="modal-body">
+				<div id="loadmyhorary"></div>
+      		</div>
+    	</div>
+  	</div>
+</div>

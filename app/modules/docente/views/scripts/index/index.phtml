@@ -91,7 +91,7 @@
         <script src="/external_library/highcharts/js/highcharts.js"></script>
         <script src="/external_library/highcharts/modules/exporting.js"></script>
         <div class="dataGraficas">
-            <?php 
+            <?php
             $active = 0;
             $c = 0;
             foreach ($this->coursesBefore as $course): ?>
@@ -103,7 +103,7 @@
                 } ?>
                 <span class="hidden" id="dataCourses<?php echo $course['courseid'] ?>"><?php print_r($this->dataEncuesta[$c]) ?></span>
                 <div class="graficaCourse <?php echo $classActive ?>" courseid="<?php echo $course['courseid'] ?>" nameCourse="<?php echo $this->encuestaCoursesName[$c] ?>" id="container_encuesta<?php echo $course['courseid'] ?>" ></div>
-            <?php 
+            <?php
             $c++;
             endforeach ?>
         </div>
@@ -123,7 +123,7 @@
         <?php foreach ($this->courses as $course): ?>
             <div class="curso">
                 <p class="nameCurso"><span class="progressIcons" title="<?php echo $this->coursesSpecialityName[$c][0]['name'] ?>"><?php echo ucwords(strtolower($this->coursesName[$c][0]['name'])) ?></span> <small><?php echo $course['courseid'] ?></small></p>
-                
+
                 <!--Silabo-->
                 <?php if ($this->porcentajeSyllabus[$c] == 0){
                     $color = 'backDanger';
@@ -138,7 +138,7 @@
                     $color = 'backSuccess';
                     $avisoSilabo = 'Sílabo completado';
                 }?>
-                <?php 
+                <?php
                 $urlSyllabus = 'syllabus/syllabus/index'.   '/courseid/'.base64_encode($course['courseid']).
                                                             '/curid/'.base64_encode($course['curid']).
                                                             '/escid/'.base64_encode($course['escid']).
@@ -151,7 +151,7 @@
                         <?php echo $this->porcentajeSyllabus[$c] ?> %
                     </small>
                 </a>
-                    
+
                 <!--Progreso de Sesiones-->
                 <?php if ($this->progressSessions[$c]['porcentaje']  == 'FS'){
                     $classSessions = 'backDanger';
@@ -196,7 +196,7 @@
                     $classNotas = 'backSuccess';
                     $avisoNotas = 'Se llenaron todas las notas';
                 }
-                
+
 
                 if ($faltaSilabo == 'No') {
                     $urlNotas = '/docente/fillnotes/target'.    '/'.base64_encode('escid').'/'.base64_encode($course['escid']).
@@ -208,14 +208,14 @@
                                                                 '/'.base64_encode('state').'/'.base64_encode($this->coursesStateRecord[$c]);
                 }
                 ?>
-                    
+
                 <a href="<?php echo $urlNotas ?>" class="<?php echo $classNotas ?> progressIcons iconosAvance iconoNotas" title="<?php echo $avisoNotas ?>"><span class="glyphicon glyphicon-saved"></span>
                     <small class="<?php echo $classNotas ?>">
                         <?php echo $progressNotas ?>
                     </small>
                 </a>
             </div>
-        <?php $c++; ?>
+            <?php $c++; ?>
         <?php endforeach ?>
         <?php else: ?>
             <h4 class="text-muted text-center">No tiene cursos en <span class="text-info">este periodo</span></h4>
@@ -230,7 +230,7 @@
         <div class="title"><span>Avance Académico</span> Periodo <?php echo $this->perid ?></div>
         <div class="iconAvance"><span class="glyphicon glyphicon-user"></span></div>
     </div>
-    
+
     <div class="allCursos">
         <?php if ($this->totalTeachers != 0): ?>
             <div class="informacionDirector">
@@ -241,7 +241,7 @@
                                 $classSilabo = 'backSuccess';
                             }else {
                                 $classSilabo = 'backDanger';
-                            }?> 
+                            }?>
 
                             <p class="nameCurso">Sílabo</p>
 
@@ -259,7 +259,7 @@
                                 <?php endif ?>
                             </p>
                         <?php endif ?>
-                        <?php 
+                        <?php
                         $maxProfes = 0;
                         foreach ($this->teachersEmptySyllabus as $teacher): ?>
                             <div class="docente">
@@ -274,13 +274,13 @@
                                                 <small><span class="glyphicon glyphicon-book text-muted"></span></small>
                                                 <?php echo ucwords(strtolower($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'])) ?>
                                                 <small class="text-muted">turno <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['turno'] ?></small>
-                                            </p> 
+                                            </p>
                                         <?php endif ?>
                                         <?php $coursesEmpty++; ?>
                                     <?php endforeach ?>
                                 </div>
                             </div>
-                        <?php 
+                        <?php
                             $maxProfes++;
                             if ($maxProfes == 4) {
                                 break;
@@ -315,11 +315,11 @@
                                 <?php endif ?>
                             </p>
                         <?php endif ?>
-                        <?php 
+                        <?php
                         $maxProfes = 0;
                         foreach ($this->teachersEmptyReport as $teacher): ?>
                             <p class="docenteInforme"><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
-                        <?php 
+                        <?php
                             $maxProfes++;
                             if ($maxProfes == 10) {
                                 break;
@@ -336,7 +336,7 @@
     </div>
 </div>
 
-   
+
 <script type="text/javascript">
     //Bloquear Codigo
 
@@ -346,7 +346,7 @@
     };
 
     $('.progressIcons').hover(function(){
-        $(this).tooltip('toggle');  
+        $(this).tooltip('toggle');
     });
 
     //Slider

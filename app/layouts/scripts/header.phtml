@@ -11,7 +11,7 @@
     $rol = $sesion->rid;
     $uid = $sesion->uid;
     $pid = $sesion->pid;
-    
+
 ?>
 <?php if ($sesion->encuesta->existeEncuesta == 'Yes'): ?>
     <input type="hidden" id="rellenoEncuesta" value="<?php echo $sesion->encuesta->rellenoEncuesta ?>">
@@ -35,7 +35,7 @@
             <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> <b>Cerrar Sessión</b></a></li>
             <!--<li class="ver dropdown" id='li_change'>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cambiar clave <b class="caret"></b></a>
-            </li>          
+            </li>
             <div class="dropdown-menu" id='form-change'>
                 <div class="form-group" data-toggle="tooltip" title="Ingrese clave correcta" data-placement='left'>
                     <input type="password" class="form-control" name="password_actual" id="password_actual" placeholder="Contraseña Actual">
@@ -46,7 +46,7 @@
                 <div class="form-group">
                     <input type="password" class="form-control" name="password_verify" id="password_verify" placeholder="Repetir Nueva Contraseña">
                 </div>
-                <button 
+                <button
                     type="submit" id='valida_password' class="btn btn-taipa btn-block">Cambiar</button>
             </div>-->
         </ul>

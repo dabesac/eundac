@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/css/profile.css">
-<?php 
+<?php
     $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> Mi Perfil');
     $this->placeholder('Btnnav')->append('<a href="/alumno" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
 ?>
@@ -78,7 +78,7 @@
 		</div>
 		<div class="col-md-1">
 			<br>
-		  	<h2> 
+		  	<h2>
 		  	<a id="printRecord" class="text-warning" data-placement="left" data-toggle="popover" title="Record de Notas" data-container="body" data-content="Imprime aqui tu record de notas"
 		  		href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>"><span class="glyphicon glyphicon-print"></span></a></h2>
 		</div>
@@ -103,10 +103,9 @@
 	</div>
 </div>-->
 
-
 <script>
 function imgError(image) {
-	var avatar = '<?php echo $this->avatar_default?>'; 
+	var avatar = '<?php echo $this->avatar_default?>';
     image.onerror = "";
     image.src = "/img/default_avatar_"+avatar+".jpg";
     return true;
@@ -142,8 +141,8 @@ function imgError(image) {
 			$('.btnObO').removeClass('btnActive');
 			$(this).addClass('btnActive');
 			goTo = $(this).attr('goto');
-			$('.dataContainer').fadeOut('fast');
-			$('#' + goTo).fadeIn('fast');
+			$('.dataContainer').removeClass('dataContainerActive');
+			$('#' + goTo).addClass('dataContainerActive');
 		});
 		//---------------------------------------------------
 	});

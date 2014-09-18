@@ -1,5 +1,5 @@
 <?php
-if ($this->usuarios){ 
+if ($this->usuarios){
 $dbescid = new Api_Model_DbTable_Speciality();
 $dbinfotea = new Api_Model_DbTable_UserInfoTeacher();?>
 <table class="table table-condensed table-striped table-hover">
@@ -9,8 +9,8 @@ $dbinfotea = new Api_Model_DbTable_UserInfoTeacher();?>
         <th><center>Apellidos y Nombres</center></th>
         <th><center>Escuela</center></th>
         <th><center>Categoria</center></th>
-        <th><center>Condición</center></th>       
-        <th><center>Dedicación</center></th>       
+        <th><center>Condición</center></th>
+        <th><center>Dedicación</center></th>
         <th><center>Gestionar</center></th>
         <th><center>Asignar Horario</center></th>
         <th><center>Carga Académica</center></th>
@@ -20,7 +20,7 @@ $dbinfotea = new Api_Model_DbTable_UserInfoTeacher();?>
     foreach ($this->usuarios as $user){
         $rid=substr($user['uid'], 8,2);
         if($user['state']=='A'){
-            if($rid=='DC' or $rid=='JP'){ 
+            if($rid=='DC' or $rid=='JP'){
                 $whereesc['eid'] = $whereinfo['eid'] = $user['eid'];
                 $whereesc['oid'] = $whereinfo['oid'] = $user['oid'];
                 $whereesc['escid'] = $whereinfo['escid'] = $user['escid'];
@@ -44,12 +44,12 @@ $dbinfotea = new Api_Model_DbTable_UserInfoTeacher();?>
                         <center>
                             <?php
                             if ($user['courseasig']) {   ?>
-                                <a href="#" onclick="javascript: window.open('/horary/nhorary/fillhorary/pid/<?php echo base64_encode($user['pid'])?>/uid/<?php echo base64_encode($user['uid'])?>/escid/<?php print base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/perid/<?php echo base64_encode($this->perid)?>','Asignación Horario','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=1200,height=720')" rel="tooltip" title="Asignar Horarios"><span class="glyphicon glyphicon-calendar"></span></a>
+                                <a class='asighorarysuport' href="#" pid='<?php echo base64_encode($user['pid'])?>' uid='<?php echo base64_encode($user['uid'])?>' escid='<?php echo base64_encode($this->escid)?>' subid='<?php echo base64_encode($this->subid)?>' perid='<?php echo base64_encode($this->perid)?>'><span class="glyphicon glyphicon-calendar"></span></a>
                             <?php
                             }
                             else{ ?>
                                 <a><span rel="tooltip" title="Deshabilitado" class="glyphicon glyphicon-ban-circle"></span></a>
-                            <?php    
+                            <?php
                             }
                             ?>
                         </center>
@@ -63,14 +63,14 @@ $dbinfotea = new Api_Model_DbTable_UserInfoTeacher();?>
                             }
                             else{ ?>
                                 <a href="#"><span rel="tooltip" title="Deshabilitado" class="glyphicon glyphicon-ban-circle"></span></a>
-                            <?php    
+                            <?php
                             }
                             ?>
                         </center>
                     </td>
                 </tr>
-            <?php  
-            $i++; 
+            <?php
+            $i++;
             }
         }
     } ?>
@@ -83,6 +83,88 @@ $dbinfotea = new Api_Model_DbTable_UserInfoTeacher();?>
 <?php
 }?>
 
+
+<!-- Modal Asignar Horario-->
+<div class="modal fade" id="myModalhorarySuport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" style="width:95%">
+        <div class="modal-content">
+            <div class="modal-body" id='inloadhorarySuport'></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal Horas clases-->
+<div class="modal fade" id="mymodalhorasclaseSuport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color:#428BCA"><b><center>Ingresar Horario</center></b></h3>
+            </div>
+            <div class="modal-body" id='asighoursSuport'></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal eliminar horario del docente apoyo-->
+<div class="modal fade" id="myModalSuport" style="margin-top:10%" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:30%">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4 class="modal-title text-danger" id="myModalLabel"><span class='glyphicon glyphicon-dashboard'></span><b> ESTA SEGURO DE ELIMINAR EL HORARIO DE ESTE CURSO? </b></h4>
+            </div>
+            <div class="modal-body text-right">
+                <button id="aceptarsSuport" type="button" class="btn btn-success"><span class='glyphicon glyphicon-ok'></span> Aceptar</button>
+                <button id='cancelSuport' type="button" class="btn btn-danger"><span class='glyphicon glyphicon-log-out'></span> Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
-$('a[rel=tooltip]').tooltip();
+    $('a[rel=tooltip]').tooltip();
+
+    $(".asighorarysuport").on('click', function(){
+        $('#myModalhorarySuport').modal('show');
+        var pid=$(this).attr('pid');
+        var uid=$(this).attr('uid');
+        var escid=$(this).attr('escid');
+        var subid=$(this).attr('subid');
+        var perid=$(this).attr('perid');
+
+        var ajax_data = {
+                        "uid"   : uid,
+                        "pid"   : pid,
+                        "escid" : escid,
+                        "subid" : subid,
+                        "perid" : perid
+                        };
+        $("#inloadhorarySuport").empty();
+        $("#inloadhorarySuport").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+        $.ajax({
+            type : 'post',
+            url  : '/horary/nhorary/fillhorarysuport/',
+            data : ajax_data,
+            success: function(data){
+                $("#inloadhorarySuport").html(data);
+            }
+        });
+        $("#asighoursSuport").empty();
+        $("#asighoursSuport").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+        $.ajax({
+            type : 'post',
+            url  : '/horary/nhorary/asignationhoursuport/',
+            data : ajax_data,
+            success: function(data){
+                $("#asighoursSuport").html(data);
+            }
+        });
+    });
+
+    $("#cancelSuport").on('click', function(){
+        $("#myModalSuport").modal('hide');
+    });
+
+    $('#myModalSuport').on('hidden.bs.modal', function (e){
+        $('#myModalhorarySuport').modal('show');
+    });
 </script>

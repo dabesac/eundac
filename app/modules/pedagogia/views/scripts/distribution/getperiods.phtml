@@ -1,0 +1,12 @@
+<?php if ($this->periods): ?>
+    <?php foreach ($this->periods as $period): ?>
+        <option value="<?php echo $period['perid']?>"><?php echo $period['perid'].' | '.$period['name'] ?></option>
+    <?php endforeach ?>
+<?php else: ?>
+    <option value="">No Existen Periodos</option>
+<?php endif ?>
+
+<script>
+    var peridAct = "<?php echo $this->peridAct?>";
+    $('#seletperiod > option[value='+peridAct+']').attr('selected', 'selected');
+</script>

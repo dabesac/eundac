@@ -6,7 +6,7 @@ $nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usua
 <div class="modal-header">
     <div class="row">
         <div class="col-md-1 pull-right">
-            <button id='closeall' class="btn btn-danger"><span class='glyphicon glyphicon-log-out'></span> Cerrar</button>
+            <button id='closeallprac' class="btn btn-danger"><span class='glyphicon glyphicon-log-out'></span> Cerrar</button>
         </div>
         <div class="col-md-11 text-center">
             <span class="glyphicon glyphicon-calendar"></span>
@@ -24,7 +24,7 @@ $nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usua
     <div class="col-md-12 text-center">
         <?php
         if ($this->cursos) {
-        	$listacolores = array();
+            $listacolores = array();
             $listacolores[0] = "#FA8D74";
             $listacolores[1] = "#A3CFE0";
             $listacolores[2] = "#CBE487";
@@ -41,8 +41,8 @@ $nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usua
             $listacolores[13] = "#C4E6CE";
             $listacolores[14] = "#B4DAA1";
 
-        	$len=count($this->cursos);
-        	$cco=0;
+            $len=count($this->cursos);
+            $cco=0;
             $j=1;
 
             for ($i=0; $i < $len; $i++) {
@@ -60,28 +60,27 @@ $nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usua
             }
 
             foreach ($this->cursos as $curso) {
-        		?>
-        		<a class="courseasig" href='#' escid="<?php echo $curso['escid']; ?>" subid="<?php echo $curso['subid']; ?>" perid="<?php echo $curso['perid']; ?>" courseid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
+                ?>
+                <a class="courseasigprac" href='#' escid="<?php echo $curso['escid']; ?>" subid="<?php echo $curso['subid']; ?>" perid="<?php echo $curso['perid']; ?>" courseid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
 
                     <div class="course" style="background-color:<?php echo $curso['color']?>;color:black">
                         <span class="glyphicon glyphicon-book"></span>
                         <?php echo $curso['name'];?> - <?php echo $curso['turno'];?>
                     </div>
-        		</a>
+                </a>
 
-        	<?php
-        	}
+            <?php
+            }
         }
         ?>
     </div>
 </div><br>
-<div id="horariocurso"></div>
+<div id="horariocursoPrac"></div>
 
 <script>
 
-$(".courseasig").on('click', function(){
-    $("#myModalhorary").modal('hide');
-    $("#myModalhorary2").modal('hide');
+$(".courseasigprac").on('click', function(){
+    $("#myModalhoraryPrac").modal('hide');
     escid=$(this).attr('escid');
     subid=$(this).attr('subid');
     perid=$(this).attr('perid');
@@ -90,12 +89,11 @@ $(".courseasig").on('click', function(){
     curid=$(this).attr('curid');
     semid=$(this).attr('semid');
 
-    $("#mymodalhorasclase").modal("show");
-    $("#mymodalhorasclase2").modal("show");
+    $("#mymodalhorasclasePrac").modal("show");
 });
 
-$("#closeall").on('click', function(){
-    $("#myModalhorary").modal('hide');
+$("#closeallprac").on('click', function(){
+    $("#myModalhoraryPrac").modal('hide');
 });
 
 var dathora="<?php echo $this->dathora?>";
@@ -113,14 +111,14 @@ if (dathora=='1') {
                     "subid" : $.base64.encode(subid),
                     "perid" : $.base64.encode(perid)
                     };
-    $("#horariocurso").empty();
-    $("#horariocurso").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+    $("#horariocursoPrac").empty();
+    $("#horariocursoPrac").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
     $.ajax({
         type : 'post',
-        url  : '/horary/nhorary/horaryteacher/',
+        url  : '/horary/nhorary/horaryteacherprac/',
         data : ajax_data1,
         success: function(data){
-            $("#horariocurso").html(data);
+            $("#horariocursoPrac").html(data);
         }
     });
 };
