@@ -174,9 +174,11 @@ class IndexController extends Zend_Controller_Action {
                         if ($dataPoll) {
                             //Verificar si se matriculo al peridodo de la encuesta
                             $periodEncuesta = $dataPoll[0]['perid'];
-
+ 
                             $where = array( 'eid'   => $eid,
                                             'oid'   => $oid,
+                                            'pid'   => $data->pid,
+                                            'uid'   => $data->uid,
                                             'perid' => $periodEncuesta,
                                             'state' => 'M');
 
@@ -239,8 +241,6 @@ class IndexController extends Zend_Controller_Action {
                             $paymentDb->_save($dataPayment);
                         }
                     }
-
-
 
                     // Set info User
                     $user = new Api_Model_DbTable_Users();
