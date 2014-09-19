@@ -18,7 +18,6 @@ class Record_IndexController extends Zend_Controller_Action {
     
     public function indexAction()
     {
-		
 		$speciality= new Api_Model_DbTable_Speciality();
 		$where['eid'] = $this->sesion->eid;
 		$where['oid'] = $this->sesion->oid;
@@ -39,7 +38,7 @@ class Record_IndexController extends Zend_Controller_Action {
 
 		$wher = array('eid' => $where['eid'], 'oid' => $where['oid'], 'state' => 'A');
 		$fac= new Api_Model_DbTable_Faculty();
-        $facultad=$fac->_getFilter($where,$attrib=null,$orders=null);
+        $facultad=$fac->_getFilter($wher,$attrib=null,$orders=null);
         $this->view->facultades=$facultad;
 		
 		$data= array("escid","subid","name");
@@ -47,9 +46,8 @@ class Record_IndexController extends Zend_Controller_Action {
 
 		if ($rows) $this->view->specialitys=$rows;
 		// set speciality for director
-		
-		
 	}
+
 	public function schoolsAction(){
         try {
             $this->_helper->layout()->disableLayout();
@@ -175,7 +173,6 @@ class Record_IndexController extends Zend_Controller_Action {
 	
 	public function detailAction()
 	{
-
 			$params = $this->getRequest()->getParams();
 	            $paramsdecode = array();
 	            foreach ( $params as $key => $value ){
