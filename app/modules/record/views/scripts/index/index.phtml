@@ -5,7 +5,7 @@
 		color: white;
 	}
 	#cont {
-		border-right: 1px solid white: ;		
+		border-right: 1px solid white;		
 	}
 </style>
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Administración de Cursos');?>
@@ -16,9 +16,18 @@
 		<tr>
 			<th class="col-lg-1" id="titulo">Año</th>
 			<th class="col-lg-2" id="titulo">Periodo</th>
-			<th class="col-lg-2" id="titulo">Facultad</th>
+			<?php 
+			if($this->rid<>'DR' && $this->rid<>'RF'){?>
+				<th class="col-lg-2" id="titulo">Facultad</th>
+			<?php	
+			}?>
 			<th class="col-lg-2" id="titulo">Escuela(s)</th>
-			<th class="col-lg-2" id="titulo">Especialidad</th>
+			<?php 
+			if($this->rid<>'DR' && $this->rid<>'RF'){?>
+				<th class="col-lg-2" id="titulo">Especialidad</th>
+			<?php	
+			}
+			?>
 			<th class="col-lg-2" id="titulo">Nombre Curso</th>
 			<th class="col-lg-1" id="titulo">Operaciones</th>
 		</tr>
@@ -41,31 +50,61 @@
 					<option value="">Selección un periodo</option>
 				</select>
 			</td>
+			<!-- facultad -->
+			<?php 
+			if($this->rid<>'DR' && $this->rid<>'RF'){?>
 			<td id="cont">
 				<select id="facid" name="facid" class="form-control">
-                    <option>- Seleccione -</option>
-                    <?php
-                    if ($this->facultades) {
-                        foreach ($this->facultades as $facultades) { 
-                            if($facultades['facid']!='TODO'){
-                            $str = ($this->facid==$facultades['facid'])?"selected ":""; 
-                            ?>
-                                <option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
-                        <?php }
-                        }
-                    } ?>
+	                <option>- Seleccione -</option>
+	                  	<?php
+	                   	foreach ($this->facultades as $facultades) {
+	                   		if ($facultades['facid']!='TODO'){
+	                   		$facid_en=base64_encode($facultades['facid']);?>
+	                		<option value="<?php echo $facid_en?>"><?php echo $facultades['name']?></option>
+	                    	<?php
+	                    	}
+	                    }?>
                 </select>
 			</td>
+			<?php	
+			}?>
+			<!-- fin facultad -->
 			<td id="cont">
-				<select id="escid" name="escid"  class="form-control" style="width:260px">
-                    <option value="">- Seleccione  -</option>
-                </select>
+				<select id="escid" name="escid" class="form-control">
+				<?php 
+				if($this->rid=='DR' || $this->rid=='RF'){
+					$specialitys =$this->specialitys;
+					if ($specialitys){
+						foreach ($specialitys as $esc){
+							$escid=base64_encode($esc['escid']);
+							$subid_cryp=base64_encode($esc['subid']);
+							$name=($esc['name']);
+						?>	
+							<!--Olimpico Seteo por que no hay tiempo-->
+							<?php if ($esc['escid'] == '4MI' or $esc['escid'] == '6MI' or $esc['escid'] == '2CC' or $esc['escid'] == '10CC' or $esc['escid'] == '1AD' or $esc['escid'] == '9CE'){
+								$escuela = $esc['escid'].' | ';
+							}else{
+								$escuela = '';
+							} ?>
+							<option value="<?php echo $escid.";--;".$subid_cryp?>"><?php echo $escuela.$name ?></option>
+						<?php 
+						}
+					} 
+				}else{?>
+					<option value="">-Seleccione-</option>
+				<?php
+				}?>
+				</select>
 			</td>
-			<td id="cont">
-				<select id="especialidad" name="speciality" class="form-control" style="width:260px">
-                    <option value="">- Seleccione -</option>
-                </select>
-			</td>
+			<?php 
+			if($this->rid<>'DR' && $this->rid<>'RF'){?>
+				<td id="cont">
+					<select id="especialidad" name="speciality" class="form-control" style="width:260px">
+                    	<option value="">- Seleccione -</option>
+                	</select>
+				</td>
+			<?php	
+			}?>
 			<td id="cont">
 				<input type="text" name="coursename" id="coursename" class="form-control">
 			</td>
@@ -88,12 +127,10 @@ $(function() {
 		$("#perid").load("/record/index/periods/year/"+year);		
 	});
 	$("#perid").load("/record/index/periods/year/"+year_a);
-
 	$("#facid").change(function(){
 		var facid = $(this).val();
 		$("#escid").load("/record/index/schools/facid/"+facid);
 	});
-
 	$("#escid").change(function(){
 		var tescid = $(this).val();
 		var xx1 = tescid.split(";--;");
@@ -102,11 +139,6 @@ $(function() {
 		$("#especialidad").load("/record/index/speciality/escid/"+escid);
 	});
 	$("#sendform").click(function(e){
-		var facid = $("#facid").val()
-		var escid = $("#escid").val();     
-		if (facid=='' || escid=='' || perid=='') {
-            alert("Seleccione la Facultad, Escuela.");
-            return false;}
 		e.preventDefault();
 		$(".loadcourses").html("<img src='/img/spinner.gif'>Cargando....");
 		$.ajax({
