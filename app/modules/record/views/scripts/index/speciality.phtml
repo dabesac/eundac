@@ -10,7 +10,7 @@ if ($this->escid) { ?>
 			$escid=base64_encode($especialidad['escid']);
 			$subid_cryp=base64_encode($especialidad['subid']);
 			?>
-			<option <?php echo $str?> value="<?php echo $subid_cryp."--".$escid?>"><?php echo $especialidad['name']?></option>
+			<option value="<?php echo $subid_cryp."--".$escid?>"><?php echo $especialidad['name']?></option>
 			<?php
 		} 
 	}else{ ?>
