@@ -92,6 +92,7 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
 
                     $num_cuenta = '';
                     $costo      = '';
+                    $tasaid     = '';
                     foreach ($dataTasaProgram as $tasaProgram) {
                         $where = array( 'eid'    => $eid,
                                         'tasaid' => $tasaProgram['tasaid']);
@@ -101,6 +102,7 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                         if ($rid == $rolTasa[0]['code_rol']) {
                             $num_cuenta = $rolTasa[0]['num_cuenta'];
                             $costo      = $tasaProgram['costo'];
+                            $tasaid     = $tasaProgram['tasaid'];
                             if ($programasPagados == 'yes') {
                                 $costoProgramasPagados = $costoProgramasPagados + $costo;
                             }
@@ -154,6 +156,7 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
                             $dataPrograms[$c]['perid']         = $program['perid'];
                             $dataPrograms[$c]['subid']         = $program['subid'];
                             $dataPrograms[$c]['tipo']          = $program['tipo'];
+                            $dataPrograms[$c]['tasaid']        = $tasaid;
 
                             $dataPrograms[$c]['alreadyRegister'] = $alreadyRegister;
                             $dataPrograms[$c]['turnoRegistrado'] = $turnoRegistrado;
@@ -237,6 +240,7 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
         $langUserDb           = new Api_Model_DbTable_LangUser();
         $langRegisterDb       = new Api_Model_DbTable_LangRegister();
         $langRegisterCourseDb = new Api_Model_DbTable_LangRegisterCourse();
+        $langStudentTasaDb    = new Api_Model_DbTable_LangStudentTasa();
 
         $eid   = $this->sesion->eid;
         $subid = $this->sesion->subid;
@@ -265,12 +269,25 @@ class Alumno_IdiomasController extends Zend_Controller_Action {
         }
         
         if ($personExist) {
-            //Verificar si ya tiene matricula ese periodo
+            //Verificar si ya se ingreso su tasa
             $where = array( 'eid'   => $eid,
                             'pid'   => $formData['pid'],
                             'perid' => $formData['perid'],
                             'subid' => $formData['subid'] );
+            
+            $pdTasa = $langStudentTasaDb->_getFilter($where);
+            if (!$pdTasa) {
+                $dataTasaSave = array(  'eid'     => $eid,
+                                        'pid'     => $formData['pid'],
+                                        'perid'   => $formData['perid'],
+                                        'subid'   => $formData['subid'],
+                                        'tasaid'  => $formData['tasaid'],
+                                        'created' => date('Y-m-d h:m:s') );
 
+                $langStudentTasaDb->_save($dataTasaSave);
+            }
+
+            //Verificar si ya tiene matricula ese periodo
             $registerData = $langRegisterDb->_getFilter($where);
 
             if (!$registerData) {

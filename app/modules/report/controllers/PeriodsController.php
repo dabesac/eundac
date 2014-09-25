@@ -99,7 +99,7 @@
         $data      = explode('-', $data);
         $perid     = base64_decode($data[0]);
         $dataEscid = base64_decode($data[1]);
-        $dataEscid = explode('-', $dataEscid);
+        $dataEscid = explode('|', $dataEscid);
         $escid     = $dataEscid[0];
         $subid     = $dataEscid[1];
 
