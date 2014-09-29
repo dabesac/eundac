@@ -1,80 +1,83 @@
-<br>
-<div class="row">
-    <div class="col-md-2">
-        <h4 class="text-center text-muted"><b>Leyenda</b></h4>
-    </div>
-    <div class="col-md-2">
-        <h5 class="text-center text-success"><img src="/img/circulo-verde.png"> Activo</h5>
-    </div>
-    <div class="col-md-2">
-        <h5 class="text-center text-danger"><img src="/img/circulo-rojo.png"> Cerrado</h5>
-    </div>
-    <div class="col-md-2">
-        <h5 class="text-center text-warning"><img src="/img/circulo-amarillo.png"> Temporal</h5>
-    </div>
-    <div class="col-md-2">
-        <h5 class="text-center text-info"><img src="/img/circulo-azul.png"> Iniciado</h5>
-    </div>
-</div><br><br>
-
 <table class="table  table-bordered table-condensed table-striped">
 <thead>
-    <tr>
+    <tr id="trfr">
       <th class="span1">#</th> 
       <th class="span2">CODIGO PERIODO</th>
       <th >NOMBRE DEL PERIODO</th>
       <th class="span2">FINICIO CLASES</th>
-      <th class="span2">FFIN CLASES</th>
+      <th class="span2">FIN CLASES</th>
       <th class="span2">RESOLUCION</th>
       <th class="span1">ESTADO</th>
-      <th class="span1">OPERACIONES</th>
+      <th class="span1">EDITAR</th>
     </tr>
 </thead>
     <?php
-    if ($this->lper)
-    {  
+    if ($this->lper){
       $i=1;
-      foreach ($this->lper as $periodo)    
+      foreach ($this->lper as $periodo)
         { $estado=$periodo['state']; ?>
-            <tr>               
+            <tr>
                 <td><?php echo $i;?></td>
                 <td><?php echo $periodo['perid'];?></td>
                 <td><?php echo $periodo['name'];?></td>
                 <td><?php echo $periodo['class_start_date'];?></td>
                 <td><?php echo $periodo['class_end_date'];?></td>
-                <td><?php echo $periodo['document_auth'];?></td> 
-                <td>
+                <td><?php echo $periodo['document_auth'];?></td>
                 <?php if($estado=='I'){?>
-                    <img src="/img/circulo-azul.png" id="editar_<?php echo $escid.$r; ?>" rel="tooltip" title="<?php echo $titulo?>"  />
-                       <td>
-                       <a href="#"  onclick="javascript: window.open('/rcentral/periods/modificar/perid/<?php echo $periodo['perid'];?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=600,height=550')">
-                                 <i class="glyphicon glyphicon-pencil"></i></a>
+                  <td class="text-center">
+                    <img src="/img/circulo-azul.png"/>
+                  </td >
+                  <td class="td-1">
+                      <div class="btn btn-primary btn-1" perid="<?php echo $periodo['perid'];?>"
+                       data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".bs-example-modal-lg">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                      </div>
+                  </td>
                 <?php } ?>
                 <?php if($estado=='A'){?>
-                    <img src="/img/circulo-verde.png" id="editar_<?php echo $escid.$r; ?>" rel="tooltip" title="<?php echo $titulo?>"  />
-                       <td>
-                       <a href="#"  onclick="javascript: window.open('/rcentral/periods/modificar/perid/<?php echo $periodo['perid'];?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=600,height=550')">
-                                 <i class="glyphicon glyphicon-pencil"></i></a>
+                  <td class="text-center">
+                    <img src="/img/circulo-verde.png" />
+                  </td>
+                  <td class="td-1">
+                      <div perid="<?php echo $periodo['perid'];?>"
+                      class="btn btn-primary btn-1" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".bs-example-modal-lg">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                      </div>
+                  </td>
                 <?php } ?>
                 <?php if($estado=='T'){?>
-                    <img src="/img/circulo-amarillo.png" id="editar_<?php echo $escid.$r; ?>" rel="tooltip" title="<?php echo $titulo?>"  />
-                       <td>
-                       <a href="#"  onclick="javascript: window.open('/rcentral/periods/modificar/perid/<?php echo $periodo['perid'];?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=600,height=550')">
-                                 <i class="glyphicon glyphicon-pencil"></i></a>
+                <td class="text-center">
+                    <img src="/img/circulo-amarillo.png" />
+                </td>
+                  <td class="td-1">
+                    <div perid="<?php echo $periodo['perid'];?>" class="btn btn-primary btn-1" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".bs-example-modal-lg">
+                      <span class="glyphicon glyphicon-pencil"></span>
+                    </div>
+                  </td>
                 <?php } ?>
                 <?php if($estado=='C'){?>
-                    <img src="/img/circulo-rojo.png" id="editar_<?php echo $escid.$r; ?>" rel="tooltip" title="<?php echo $titulo?>"  />
-                       <td>
-                       <a href="#"  onclick="javascript: window.open('/rcentral/periods/modificar/perid/<?php echo $periodo['perid'];?>','Periodo','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=600,height=550')">
-                                 <i class="glyphicon glyphicon-pencil"></i></a>
+                  <td class="text-center">
+                    <img src="/img/circulo-rojo.png"/>
+                  </td>
+                  <td class="td-1">
+                      <div perid="<?php echo $periodo['perid'];?>"
+                        class="btn btn-primary btn-1" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target=".bs-example-modal-lg">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                      </div>
+                  </td>
                 <?php } ?>
-               </td>
             </tr>
            <?php
              $i++;
         }
-    }
-    ?>
+    }else{?>
+        <tr>
+          <td colspan="8" class="text-center">
+            <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> NO EXISTEN REGISTROS DE<span class="text-success"> PERIODOS</span> EN ESTE AÑO</p>
+          </td>
+        </tr>
+
+    <?php } ?>
     </table>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -88,21 +91,48 @@
         </div>
     </div>
 </div>
+<div class="modal fade bs-example-modal-lg" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <div class="row">
+              <div class="col-xs-offset-1 col-xs-4 tutilo" x>MODIFICAR DATOS DE <span class="text-info">PERIODO</span></div>
+              <div class="col-xs-2" style="font-size: 20px;"><span class="label label-info" id="peridMod" ></span></div>
+              </div>
+            </div>
+            <div class="modal-body">
+            <div id='edicion'>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
+    var anio=$("#lanios").val();
+    var perid;
     $("#newperiod").click(function(){
         var anio="<?php echo $this->anio?>";   
-        $('#myModal').modal('show');            
+        $('#myModal').modal('show');
         var url="/rcentral/periods/nuevo/anio/"+anio;
         $("#nuevo_periodo").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
         $("#nuevo_periodo").load(url);
     });
+
+    $(".btn-1").click(function(){
+      perid=$(this).attr("perid");
+      $("#peridMod").html(perid);
+      var url="/rcentral/periods/modificar/perid/"+perid;
+      $("#edicion").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
+      $("#edicion").load(url);
+    });
+    $('#myModal2').on('hidden.bs.modal', function (e) {
+        $("#lanios option[value="+anio+"]").attr("selected",true);
+        $("#peri").load("/rcentral/periods/listar/anio/"+"<?php echo $this->anio; ?>");
+    });
+    $('#myModal').on('hidden.bs.modal', function (e) {
+        $("#lanios option[value="+anio+"]").attr("selected",true);
+        $("#peri").load("/rcentral/periods/listar/anio/"+"<?php echo $this->anio; ?>");
+    });
 </script>
-
-
-
-
-
-
-
-

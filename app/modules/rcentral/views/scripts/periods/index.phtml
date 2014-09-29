@@ -1,30 +1,45 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-transfer"></span>   GESTIONAR PERIODO');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/admin" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar</a>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/admin" class="form-control btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar</a>');?>
+<link rel="stylesheet" href="/css/periodsStyles.css">
 <div style="text-align:right;">
     <a id="newperiod" href="#" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Nuevo</a>
 </div>
-    </br>
-        <center><select class="form-control" id="lanios" name="lanios" style = 'height:35px;width:400px'>
-            <option  value="">Seleccione..</option>
+        <center>
+        <p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Seleccione un <span class="text-success"> Año</span></p>
+        <select class="form-control" id="lanios" name="lanios" style = 'height:35px;width:400px'>
             <?php 
             $anio= date('Y');
             $i=0;
             for($i = ($anio+1);$i>=1991;$i--){
-                if ($anio==$i) $t = " selected ";
+                if ($anio==$i) $t = "selected ";
                 else $t="";
                 ?>
-            
-            <option value="<?php echo $i?>" <?php echo $t?>><?php echo $i?></option>
+            <option value="<?php echo $i?>" <?php echo $t?> ><?php echo $i?></option>
             <?php }?>
         </select></center><br>
- 
 <div id="peri"></div>
 
 <script>
+    var anio;
     $("#lanios").change(function(){
-        var anio = $(this).val();
-       $("#peri").load("/rcentral/periods/listar/anio/"+anio);
+        anio = $(this).val();
+        var ajaxData ={
+            "anio": anio,
+        };
+        console.log(ajaxData);
+
+        $.ajax({
+        url: '/rcentral/periods/listar/',
+        type : 'post',
+        data: ajaxData,
+        success: function(data){
+            $('#peri').html(data);
+            }
+        });
     });
-    var anio_ = "<?php echo $anio?>";
-    $("#peri").load("/rcentral/periods/listar/anio/"+anio_);   
+    var anioR = "<?php echo $anio?>";
+    $("#peri").html("<?php echo $anio?>");
+    $("#peri").load("/rcentral/periods/listar/anio/"+anioR);
+
+    
 </script>

@@ -1,0 +1,47 @@
+  .btn-1{
+    border-radius: 0px;
+    margin: 0px;
+    width: 100%;
+  }
+  .td-1{
+    padding: 0px !important;
+    margin: 0px;
+  }
+  .label{
+        border-radius: 0px;
+    }
+    .panel1{
+        border-radius: 0px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        margin: 0px;
+    }
+    .panel2{
+        border-radius: 0px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        margin: 0px;
+    }
+    .panel3{
+        border-radius: 0px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        margin: 0px;
+    }
+    .span11{
+        color: #F1C40F;
+    }
+    .span12{
+        color: #8E44AD;
+    }
+    .row2{
+        padding-top: 20px;
+    }
+    .col21{
+        border: 1px solid #999;
+        padding-bottom: 10px;
+    }
+    #trfr{
+        background: #34495E;
+        color:white;
+    }

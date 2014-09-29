@@ -22,7 +22,9 @@
 </div>
 
 <script>
-	$('#idDivMatricula').load('/alumno/idiomas/matricula/');
+	$('#idDivMatricula')
+		.html('<center><img src="/img/spinner.gif" alt="Loading..."></center>')
+		.load('/alumno/idiomas/matricula/');
 	$('#idDivMatriculaActual').load('/alumno/idiomas/matriculaactual/');
 	$('#idDivRecord').load('/alumno/idiomas/recordregisters/');
 

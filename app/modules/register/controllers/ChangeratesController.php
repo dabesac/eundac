@@ -11,9 +11,7 @@ class Register_ChangeratesController extends Zend_Controller_Action{
  			$this->_helper->redirector('index','index','default');
  		}
 		$this->sesion = $login;
-
 	}
-
 	public function indexAction(){
 		try {
  			$this->sesion->eid;
