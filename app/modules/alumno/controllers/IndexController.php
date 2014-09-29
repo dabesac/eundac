@@ -419,35 +419,38 @@ class Alumno_IndexController extends Zend_Controller_Action {
     public function encuestaAction()
     {
         $this->_helper->layout()->disableLayout();        
-        $eid = $this->sesion->eid;  
-        $oid = $this->sesion->oid;      
+        $eid   = $this->sesion->eid;  
+        $oid   = $this->sesion->oid;      
         $escid = $this->sesion->escid;       
-        $uid = $this->sesion->uid;      
-        $pid=$this->sesion->pid;
-        $perid= $this->sesion->period->perid;
+        $uid   = $this->sesion->uid;      
+        $pid   = $this->sesion->pid;
+        //$perid = $this->sesion->period->perid;
+        $perid = '14A';
         $subid = $this->sesion->subid;
-        $rid = $this->sesion->rid;
+        $rid   = $this->sesion->rid;
 
         $registerDb = new Api_Model_DbTable_Registration();
-        $where = array('eid'=>$eid, 
-                        'oid'=>$oid, 
-                        'pid'=>$pid, 
-                        'uid'=>$uid, 
-                        'escid'=>$escid, 
-                        'subid'=>$subid, 
-                        'perid'=>'14A');
+        $where = array( 'eid'   => $eid, 
+                        'oid'   => $oid, 
+                        'pid'   => $pid, 
+                        'uid'   => $uid, 
+                        'escid' => $escid, 
+                        'subid' => $subid, 
+                        'perid' => $perid );
         $attrib = array('state');
         $register = $registerDb->_getFilter($where, $attrib);
 
         if ($register[0]['state'] == 'M' && $rid == 'AL') {
             $data['eid']=$eid;
             $data['oid']=$oid;
-            $where = array('eid'=>$eid,'oid'=>$oid,);
+            $where = array( 'eid' => $eid,
+                            'oid' => $oid );
             $encuestas = new  Api_Model_DbTable_Polll();
-            $encuesta=$encuestas->_getEncuestaActiva($where);
+            $encuesta = $encuestas->_getEncuestaActiva($where);
             //print_r($encuesta);
             if($encuesta)
             {
+                $peridEncuesta = $encuesta['perid'];
                 $this->view->encuesta=$encuesta;
                 $pollid=$encuesta['pollid'];
                 $where1 = array('eid'=>$eid,'oid'=>$oid,'pollid'=>$pollid);
@@ -460,7 +463,12 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 $this->view->preguntas=$preguntas;
 
                 $cursos = new Api_Model_DbTable_Registrationxcourse();
-                $where2=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'uid'=>$uid,'pid'=>$pid,'perid'=>$perid);
+                $where2=array(  'eid'   => $eid,
+                                'oid'   => $oid,
+                                'escid' => $escid,
+                                'uid'   => $uid,
+                                'pid'   => $pid,
+                                'perid' => $peridEncuesta );
                 //print_r($where2);
                 $curs=$cursos->_getFilter($where2);
                 //print_r($curs);
@@ -472,23 +480,20 @@ class Alumno_IndexController extends Zend_Controller_Action {
 
                     foreach ($curs as $curso) 
                     {
-                        $data['eid']=$eid;
-                        $data['oid']=$oid;
-                        $data['escid']=$escid;
-                        $data['subid']=$curso['subid'];
-                        $data['courseid']=$curso['courseid'];
-                        $data['curid']=$curso['curid'];
+                        $data['eid']      = $eid;
+                        $data['oid']      = $oid;
+                        $data['escid']    = $escid;
+                        $data['subid']    = $curso['subid'];
+                        $data['courseid'] = $curso['courseid'];
+                        $data['curid']    = $curso['curid'];
                         
                         //print_r($data);
 
                         $c_=$c->_getOne($data);
-                        //print_r($c_);
                         $c_['turno']=$curso['turno'];
                         $cur[]=$c_;
-                        //print_r($cur);
                     }
                 }
-                //print_r($curso);
                 if(!$cur)
                 {
                     $this->_redirect('/profile/public/student');

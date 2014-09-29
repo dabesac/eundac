@@ -1,56 +1,56 @@
 <input type="hidden" id="successProfile" value="<?php echo $this->success ?>">
+
 <div class="row">
-  <br>
-  <div class="col-md-10">
+    <br>
+    <div class="col-md-10">
+        <div id="maininfo"></div>
 
-    <div id="maininfo"></div>
-
-    <div id="loadingDiv"></div>
+        <div id="loadingDiv"></div>
     
-      <div id="datastudent"></div>
+        <div id="datastudent"></div>
     
-    <div id="editform" class="panel panel-default"></div>
-    
-
-  </div>
-  <div class="col-md-2">
-    <div id="divBtnProfile" class="panel panel-default">
-      <ul class="nav nav-pills nav-stacked" id="backprofileTab">
-        <li><a href="##" id="btnProfile">Volver al Perfil</a></li>
-      </ul>
+        <div id="editform" class="panel panel-default" style="padding:10px;"></div>
     </div>
-    <div class="panel panel-default">
-      <ul class="nav nav-pills nav-stacked" id="masinfoTab">
-        <li><a href="##" id="btnfamily" class="">1. Datos Familiares</a></li>
-        <li><a href="##" id="btnacademic" class="">2. Datos Académico</a></li>
-        <li><a href="##" id="btnlaboral" class="">3. Datos Laborales</a></li>
-        <li><a href="##" id="btnstadistic" class="">4. Datos Estadístico</a></li>
-        <li><a href="##" id="btninters" class="">5. Intereses</a></li>
-        
-        <li class="hidden"><a></a></li>
-      </ul>
-        <?php 
-        $urlPrintFicha = '/profile/public/printficha'.  '/eid/'.$this->dataStudent['eid'].
-                                                        '/oid/'.$this->dataStudent['oid'].
-                                                        '/pid/'.$this->dataStudent['pid'].
-                                                        '/uid/'.$this->dataStudent['uid'].
-                                                        '/escid/'.$this->dataStudent['escid'].
-                                                        '/subid/'.$this->dataStudent['subid'];
-        ?>
-      <ul id='printficha' class="nav nav-pills nav-stacked"></ul>
-      <!-- <a href="#" class='btn btn-success btn-lg'><span class="glyphicon glyphicon-print"></span> Imprimir Ficha</a> -->
-    </div>
+
+    <div class="col-md-2">
+        <div id="divBtnProfile" class="panel panel-default">
+            <ul class="nav nav-pills nav-stacked" id="backprofileTab">
+                <li><a href="##" id="btnProfile">Volver al Perfil</a></li>
+            </ul>
+        </div>
+
+        <div class="panel panel-default">
+            <ul class="nav nav-pills nav-stacked" id="masinfoTab">
+                <li><a href="##" id="btnfamily" class="">1. Datos Familiares</a></li>
+                <li><a href="##" id="btnacademic" class="">2. Datos Académico</a></li>
+                <li><a href="##" id="btnlaboral" class="">3. Datos Laborales</a></li>
+                <li><a href="##" id="btnstadistic" class="">4. Datos Estadístico</a></li>
+                <li><a href="##" id="btninters" class="">5. Intereses</a></li>
+                
+                <li class="hidden"><a></a></li>
+            </ul>
+
+            <?php 
+            $urlPrintFicha = '/profile/public/printficha'.  '/eid/'.$this->dataStudent['eid'].
+                                                            '/oid/'.$this->dataStudent['oid'].
+                                                            '/pid/'.$this->dataStudent['pid'].
+                                                            '/uid/'.$this->dataStudent['uid'].
+                                                            '/escid/'.$this->dataStudent['escid'].
+                                                            '/subid/'.$this->dataStudent['subid'];
+            ?>
+            <ul id='printficha' class="nav nav-pills nav-stacked"></ul>
+        </div>
+
         <button id='veri' class="form-class text-center btn btn-success btn-sm" style="width:170px"><span class="glyphicon glyphicon-refresh"></span> Si llenó todo pulse aquí</button>
-    <div class="panel panel-default">
-      <ul class="nav nav-pills nav-stacked">
-      <li class="text-center">
-        <a href="##" id="btnpassword" class="">Cambio de contraseña</a>
-      </li>
-    </ul>  
-    </div>
-    
 
-  </div>
+        <div class="panel panel-default">
+            <ul class="nav nav-pills nav-stacked">
+                <li class="text-center">
+                <a href="##" id="btnpassword" class="">Cambio de contraseña</a>
+                </li>
+            </ul>  
+        </div>
+    </div>
 </div><!-- div row -->
 
 

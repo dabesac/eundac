@@ -1,253 +1,87 @@
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<script src="/js/jquery-1.11.0.js"></script>
-<script src="/external_library/bootstrap/js/bootstrap.js"></script>
-<script src="/external_library/bootstrap/js/jquery.functions.js"></script>
-<link rel="stylesheet" type="text/css" href="/external_library/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/css/style.css">
-<link rel="stylesheet" type="text/css" href="/external_library/bootstrap/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/horary.css">
 <?php
 $usuario=$this->usuario;
-$nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usuario[0]['first_name']; 
+$nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usuario[0]['first_name'];
 ?>
-<div style="background:#F9F9F9">
-    <table class="table" style="background: #428bca; color: white">
-        <tr>
-            <td>
-                <h4 class="text-center" style="margin-left:50%"><b>ASIGNAR HORARIO</b></h4>
-            </td>
-            <td>
-                <a style="float:right" class='btn btn-danger' onclick="javascript: window.close();"><span class="glyphicon glyphicon-eject"></span> Cerrar</a>
-            </td>
-        </tr>
-    </table>
-    <div class="col-md-12"><b class="text-info">Docente: </b><?php echo strtoupper($nombredocente)?>
-    </div><br><br>
+<div class="modal-header">
     <div class="row">
-        <div class="alert alert-info" style="font-size:15px; width:90%; margin-left:5%">
-            <button type="button" class="close" data-dismiss="alert">x</button>
-            <b style="font-size:18px">Información:</b> Click en el curso para agregar el horario, para eliminar el horario dar click en cualquiera de las (x).
+        <div class="col-md-1 pull-right">
+            <button id='closeall' class="btn btn-danger"><span class='glyphicon glyphicon-log-out'></span> Cerrar</button>
+        </div>
+        <div class="col-md-11 text-center">
+            <span class="glyphicon glyphicon-calendar"></span>
+            <b class='text-primary'>ASIGNAR HORARIO | </b>
+            <b><?php echo strtoupper($nombredocente)?> <span class='text-primary'>|</span></b>
         </div>
     </div>
-    <div class="row panel panel-default"><br>
-        <div class="col-md-12 text-center">
-            <?php
-            if ($this->cursos) {
-            	$listacolores = array();
-                $listacolores[0] = "#FA8D74";
-                $listacolores[1] = "#A3CFE0";
-                $listacolores[2] = "#CBE487";
-                $listacolores[3] = "#FAF48D";
-                $listacolores[4] = "#FCB16B";
-                $listacolores[5] = "#CCF0EE";
-                $listacolores[6] = "#DFDFDF";
-                $listacolores[7] = "#81FF86";
-                $listacolores[8] = "#CD88FD";
-                $listacolores[9] = "#F59FFC";
-                $listacolores[10] = "#A58CFF";
-                $listacolores[11] = "#F2BBBB";
-                $listacolores[12] = "#D8BADA";
-                $listacolores[13] = "#C4E6CE";
-                $listacolores[14] = "#B4DAA1"; 	
+    <div class="row">
+        <div class="infor">
+            <b>Información:</b> Click en el curso para agregar el horario, para eliminar el horario dar click en cualquiera de las (X).
+        </div>
+    </div>
+</div>
+<div class="row courses">
+    <div class="col-md-12 text-center">
+        <?php
+        if ($this->cursos) {
+        	$listacolores = array();
+            $listacolores[0] = "#FA8D74";
+            $listacolores[1] = "#A3CFE0";
+            $listacolores[2] = "#CBE487";
+            $listacolores[3] = "#FAF48D";
+            $listacolores[4] = "#FCB16B";
+            $listacolores[5] = "#CCF0EE";
+            $listacolores[6] = "#DFDFDF";
+            $listacolores[7] = "#81FF86";
+            $listacolores[8] = "#CD88FD";
+            $listacolores[9] = "#F59FFC";
+            $listacolores[10] = "#A58CFF";
+            $listacolores[11] = "#F2BBBB";
+            $listacolores[12] = "#D8BADA";
+            $listacolores[13] = "#C4E6CE";
+            $listacolores[14] = "#B4DAA1";
 
-            	$len=count($this->cursos);
-            	$cco=0;
-                $j=1;
-            	for ($i=0; $i < $len; $i++) { 
-                    $codcurso=$this->cursos[$i]['courseid'];
-            	    $turno=$this->cursos[$i]['turno'];
-                    $codcursodes=$this->cursos[$j]['courseid'];
-            	    $turnodes=$this->cursos[$j]['turno'];
-            	   if ($codcurso==$codcursodes && $turno==$turnodes) {
-            	        $this->cursos[$i]['color']=$listacolores[$cco];
-            	    } else {
-            	        $this->cursos[$i]['color']=$listacolores[$cco];    
-            	        $cco++;
-            	    }
-                $j++;    
+        	$len=count($this->cursos);
+        	$cco=0;
+            $j=1;
+
+            for ($i=0; $i < $len; $i++) {
+                $codcurso=$this->cursos[$i]['courseid'];
+                $turno=$this->cursos[$i]['turno'];
+                $codcursodes=(!empty($this->cursos[$j]['courseid']))?$this->cursos[$j]['courseid']:null;
+                $turnodes=(!empty($this->cursos[$j]['turno']))?$this->cursos[$j]['turno']:null;
+                if ($codcurso==$codcursodes && $turno==$turnodes) {
+                    $this->cursos[$i]['color']=$listacolores[$cco];
+                } else {
+                    $this->cursos[$i]['color']=$listacolores[$cco];
+                    $cco++;
                 }
-
-                foreach ($this->cursos as $curso) { 
-                    $n=new Api_Model_DbTable_Course();
-                    $where['eid']=$curso['eid'];
-                    $where['oid']=$curso['oid'];
-                    $where['escid']=$curso['escid'];
-                    $where['subid']=$curso['subid'];
-                    $where['courseid']=$curso['courseid'];
-                    $where['curid']=$curso['curid'];
-            		$ncur=$n->_getOne($where);
-            		?>
-            		<a class="courseasig" href='#' data-toggle="modal" data-target="#mymodalhorasclase" escid="<?php echo $curso['escid']; ?>" subid="<?php echo $curso['subid']; ?>" perid="<?php echo $curso['perid']; ?>" courseid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
-            			<div class="row col-sm-3 col-sm-offset-1 panel pull-left" style="background-color:<?php echo $curso["color"] ?>; color:black">
-                            <?php echo $ncur['name'];?> - <?php echo $curso['turno'];?>
-                        </div>
-            		</a>
-
-            	<?php	
-            	}
+            $j++;
             }
-            ?>
-        </div>
+
+            foreach ($this->cursos as $curso) {
+        		?>
+        		<a class="courseasig" href='#' escid="<?php echo $curso['escid']; ?>" subid="<?php echo $curso['subid']; ?>" perid="<?php echo $curso['perid']; ?>" courseid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
+
+                    <div class="course" style="background-color:<?php echo $curso['color']?>;color:black">
+                        <span class="glyphicon glyphicon-book"></span>
+                        <?php echo $curso['name'];?> - <?php echo $curso['turno'];?>
+                    </div>
+        		</a>
+
+        	<?php
+        	}
+        }
+        ?>
     </div>
-    <!-- <div class="row">
-        <div class="col-md-12">
-            <center><a href="/distribution/distribution/primaryteacher" class="btn btn-warning"><i class="icon icon-arrow-left icon-white"></i>Regresar</a></center><br>
-        </div>
-    </div> -->
-    <!-- Modal Nuevo-->
-    <div class="modal fade" id="mymodalhorasclase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3 style="color:#428BCA"><b><center>Ingresar Horario</center></b></h3>
-          </div>
-          <div class="modal-body">
-            <div class="alert alert-success">
-                <button type="button" class="close" data-dismiss="alert">x</button>
-                <b style="font-size:15px">Nota:</b> Las horas académicas son de 50 minutos a partir de la HORA DE INICIO.
-            </div>
-                <table class="table table-striped">
-                    <tr>
-                        <th><h5><b>Tipo de clase:</b></h5>
-                            <div style='width: 200px'>
-                                <select id="tipoclase" class="input-medium; form-control">
-                                    <option value="">-- Seleccione --</option>
-                                    <option value="T">Teoria</option>
-                                    <option value="P">Práctica</option>
-                                </select>
-                            </div>    
-                        </th>
-                        <th><h5><b>Día:</b></h5>
-                            <select id="dia" class="input-medium; form-control">
-                                <option value="">-- Seleccione --</option>
-                                <option value="0">Lunes</option>
-                                <option value="1">Martes</option>
-                                <option value="2">Miércoles</option>
-                                <option value="3">Jueves</option>
-                                <option value="4">Viernes</option>
-                                <option value="5">Sábado</option>
-                            </select>
-                        </th>
-                    </tr>
+</div><br>
+<div id="horariocurso"></div>
 
-                    <tr>
-                        <th colspan="2"><h5><b>Hora de Inicio:</b></h5></th>
-                    </tr>
-                    <?php
-                        $hours=$this->datahours[0]['hours_begin'];
-                        $hour=substr($hours,0,2);
-                        $minute=substr($hours,3,2);
-                        $hour=intval($hour);
-                    ?>
-                    <tr>
-                        <td><h5>Hora:</h5>
-                            <div style='width: 150px'> 
-                                <select id="hora_ini" class="input-mini; form-control">
-                                <?php    
-                                for ($i=$hour; $i <= 22 ; $i++) { ?>
-                                    <option value="<?php
-                                                    if ($i<=9) echo "0".$i;
-                                                    else echo $i;
-                                                    ?>">
-                                                    <?php
-                                                    if ($i<=9) echo "0".$i;
-                                                    else echo $i;
-                                                    ?>
-                                    </option>
-                                <?php
-                                }
-                                ?>
-                                </select>
-                            </div>    
-                        </td>
-                        <td><h5>Minuto:</h5>
-                            <div style='width: 150px'>
-                                <select id="min_ini" class="input-mini; form-control">
-                                    <option value="00" <?php 
-                                                        if ($minute=="00"){ ?> 
-                                                            selected
-                                                        <?php    
-                                                        }
-                                                        ?>
-                                    >00</option>
-                                    <option value="10" <?php 
-                                                        if ($minute=="10"){ ?> 
-                                                            selected
-                                                        <?php    
-                                                        }
-                                                        ?>
-                                    >10</option>
-                                    <option value="20" <?php 
-                                                        if ($minute=="20"){ ?> 
-                                                            selected
-                                                        <?php    
-                                                        }
-                                                        ?>
-                                    >20</option>
-                                    <option value="30"  <?php 
-                                                        if ($minute=="30"){ ?> 
-                                                            selected
-                                                        <?php    
-                                                        }
-                                                        ?>
-                                    >30</option>
-                                    <option value="40"  <?php 
-                                                        if ($minute=="40"){ ?> 
-                                                            selected
-                                                        <?php    
-                                                        }
-                                                        ?>
-                                    >40</option>
-                                    <option value="50"  <?php 
-                                                        if ($minute=="50"){ ?> 
-                                                            selected
-                                                        <?php    
-                                                        }
-                                                        ?>
-                                    >50</option>
-                                </select>
-                            </div>    
-                        </td>
-                    </tr>
+<script>
 
-                    <tr colspan="2">
-                        <th><h5><b>Cantidad de Horas Académicas:</h5></b></th>
-                        <td>
-                            <select id="horasacademicas" class="input-mini; form-control">
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
-                        </td>
-                    </tr>
-
-                    <tr colspan="2"><td></td><td></td></tr>
-                </table>
-          </div>
-          <div class="modal-footer">
-            <a id="guardarhora" href="#" class="btn btn-success"> Guardar</a>
-            <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <div id="cargaaqui"></div>
-    <div id="horariocurso"></div>
-</div>    
-
-
-<script type="text/javascript">
-
-$(".courseasig").click(function(){
+$(".courseasig").on('click', function(){
+    $("#myModalhorary").modal('hide');
+    $("#myModalhorary2").modal('hide');
     escid=$(this).attr('escid');
     subid=$(this).attr('subid');
     perid=$(this).attr('perid');
@@ -255,52 +89,39 @@ $(".courseasig").click(function(){
     turno=$(this).attr('turno');
     curid=$(this).attr('curid');
     semid=$(this).attr('semid');
+
+    $("#mymodalhorasclase").modal("show");
+    $("#mymodalhorasclase2").modal("show");
 });
 
-var dathora="<?php echo $this->dathora; ?>";
+$("#closeall").on('click', function(){
+    $("#myModalhorary").modal('hide');
+});
+
+var dathora="<?php echo $this->dathora?>";
 var d_uid="<?php echo $this->usuario[0]['uid'] ?>";
 var d_pid="<?php echo $this->usuario[0]['pid'] ?>";
 var escid="<?php echo $this->cursos[0]['escid']?>";
 var subid="<?php echo $this->cursos[0]['subid']?>";
 var perid="<?php echo $this->cursos[0]['perid']?>";
-// alert(dathora);
-if (dathora=="1") {
-    url="/horary/nhorary/horaryteacher/uid/"+d_uid+"/pid/"+d_pid+"/escid/"+escid+"/subid/"+subid+"/perid/"+perid;
-    $("#horariocurso").html("<img src='/img/spinner.gif'> Cargando....");
-    $("#horariocurso").load(url);
+
+if (dathora=='1') {
+    var ajax_data1 = {
+                    "uid"   : $.base64.encode(d_uid),
+                    "pid"   : $.base64.encode(d_pid),
+                    "escid" : $.base64.encode(escid),
+                    "subid" : $.base64.encode(subid),
+                    "perid" : $.base64.encode(perid)
+                    };
+    $("#horariocurso").empty();
+    $("#horariocurso").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+    $.ajax({
+        type : 'post',
+        url  : '/horary/nhorary/horaryteacher/',
+        data : ajax_data1,
+        success: function(data){
+            $("#horariocurso").html(data);
+        }
+    });
 };
-// var curso;
-// $("#mymodalhorasclase").click(function(){
-// //     // $("#mymodalhorasclase").show();
-// //     // $('#mymodalhorasclase').modal('show');
-// });
-
-$("#guardarhora").click(function(){
-    var dia=$("#dia").val();
-    var h_ini=$("#hora_ini").val();
-    var m_ini=$("#min_ini").val();
-    var hacad=$("#horasacademicas").val();
-    var tipo_clase=$("#tipoclase").val();
-    var uid="<?php echo $this->usuario[0]['uid'] ?>";
-    var pid="<?php echo $this->usuario[0]['pid'] ?>";
-    var hora_ini=h_ini+":"+m_ini+":00";
-
-
-    if (tipo_clase=="") {
-        alert("Debe seleccionar el tipo de clase.");
-        return false;
-    };
-	if (dia=="") {
-		alert("Debe seleccionar el día de la clase.");
-		return false;
-	};
-    if (hacad=="0") {
-        alert("Debe seleccionar la cantidad de horas académicas.");
-        return false;
-    }
-    else{
-		var url="/horary/nhorary/validatetime/uid/"+uid+"/escid/"+escid+"/subid/"+subid+"/perid/"+perid+"/pid/"+pid+"/dia/"+dia+"/hora_ini/"+hora_ini+"/hora_acad/"+hacad+"/courseid/"+courseid+"/turno/"+turno+"/curid/"+curid+"/semid/"+semid+"/tipoclase/"+tipo_clase;
-		$("#cargaaqui").load(url);
-	}
-});
 </script>

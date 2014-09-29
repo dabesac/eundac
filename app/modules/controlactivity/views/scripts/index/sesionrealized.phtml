@@ -1,0 +1,8 @@
+<?php $syllabusContent = $this->syllabusContent ?>
+
+<p class="otherSesion_title otherSesion_titleSeRe">Sesiones Realizadas</p>
+<?php if ($syllabusContent): ?>
+	<?php print_r($syllabusContent) ?>
+<?php else: ?>
+	<p class="otherSesion_parrafoEmpty"><span class="glyphicon glyphicon-exclamation-sign"></span> Aun no realizo ninguna clase, <strong>no se olvide de marcarla como hecha si ya la termino...</strong></p>
+<?php endif ?>

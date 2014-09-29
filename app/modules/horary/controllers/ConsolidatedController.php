@@ -26,11 +26,11 @@
         $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
         $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
         $datahours=$bd_hours->_getFilter($wheres);
-        
+
         if ($datahours) {
             $valhoras[0]=$datahours[0]['hours_begin'];
             $hora=new Api_Model_DbTable_Horary();
-            for ($k=0; $k < 20; $k++) { 
+            for ($k=0; $k < 20; $k++) {
                 $dho=$hora->_getsumminutes($valhoras[$k],'50');
                 $valhoras[$k+1]=$dho[0]['hora'];
             }
@@ -39,7 +39,7 @@
  		    try {
                 $module = "horary_student";
 
-                $data = array(  
+                $data = array(
                         'escid' => base64_encode($escid),
                         'eid' =>base64_encode($eid),
                         'oid' =>base64_encode($oid),
@@ -49,9 +49,8 @@
                     );
                 $server = new Eundac_Connect_Api($module,$data);
                 $data = $server->connectAuth();
-                // print_r($data);exit();
-                $this->view->horarys=$data;   
-            
+                $this->view->horarys=$data;
+
             } catch (Exception $e) {
                 // print "Error: get Horary".$e->getMessage();
                 $this->view->error="A";
@@ -72,14 +71,15 @@
 	        $subid=$this->sesion->subid;
 	        $perid=$this->sesion->period->perid;
 	        $this->view->uid=$uid;
-            
+            $this->view->pid=$pid;
+
             $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
             $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
             $datahours=$bd_hours->_getFilter($wheres);
-            if ($datahours) {   
+            if ($datahours) {
                 $valhoras[0]=$datahours[0]['hours_begin'];
                 $hora=new Api_Model_DbTable_Horary();
-                for ($k=0; $k < 20; $k++) { 
+                for ($k=0; $k < 20; $k++) {
                     $dho=$hora->_getsumminutes($valhoras[$k],'50');
                     $valhoras[$k+1]=$dho[0]['hora'];
                 }
@@ -87,7 +87,7 @@
 
                 $module = "horary_student";
 
-                $data = array(  
+                $data = array(
                         'escid' => base64_encode($escid),
                         'eid' =>base64_encode($eid),
                         'oid' =>base64_encode($oid),
@@ -98,7 +98,7 @@
 
                 $server = new Eundac_Connect_Api($module,$data);
                 $data = $server->connectAuth();
-               
+
                 $this->view->horarys=$data;
                 // print_r($data);
                 $spe=array();
@@ -115,14 +115,14 @@
                 }
                 else{
                     $spe['esc']=$desc['name'];
-                    $spe['parent']='';  
+                    $spe['parent']='';
                 }
                 $names=strtoupper($spe['esc']);
                 $namep=strtoupper($spe['parent']);
                 $namefinal=$names." <br> ".$namep;
                 $namef = strtoupper($faculty);
 
-                $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'uid'=>$uid,'subid'=>$subid,'pid'=>$pid); 
+                $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'uid'=>$uid,'subid'=>$subid,'pid'=>$pid);
                 $user = new Api_Model_DbTable_Users();
                 $duser = $user->_getInfoUser($wheres);
                 $this->view->duser=$duser;
@@ -130,7 +130,7 @@
                 $namelogo = (!empty($desc['header']))?$desc['header']:"blanco";
 
                 $dbimpression = new Api_Model_DbTable_Countimpressionall();
-                
+
                 $uidim=$this->sesion->pid;
 
                 $data = array(
@@ -144,14 +144,14 @@
                     'date_impression'=>date('Y-m-d H:i:s'),
                     'pid_print'=>$uidim
                     );
-                $dbimpression->_save($data);            
+                $dbimpression->_save($data);
 
                 $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'consolidadohorary');
                 $dataim = $dbimpression->_getFilter($wheri);
-                
+
                 $co=count($dataim);
                 $codigo=$co." - ".$uidim;
-                
+
                 $h1="h1";
                 $h2="h2";
                 $h3="h3";
@@ -163,8 +163,8 @@
                 $header = str_replace("?logo", $namelogo, $header);
                 $header = str_replace("?codigo", $codigo, $header);
                 $header = str_replace("h2", $h1, $header);
-                $header = str_replace("h3", $h1, $header);
-                $header = str_replace("h4", $h2, $header);
+                $header = str_replace("h3", $h2, $header);
+                $header = str_replace("h4", $h3, $header);
                 $header = str_replace("11%", "9%", $header);
 
                 $this->view->header=$header;

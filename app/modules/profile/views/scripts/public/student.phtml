@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/css/profile.css">
-<?php 
+<?php
     $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> Mi Perfil');
     $this->placeholder('Btnnav')->append('<a href="/alumno" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
 ?>
@@ -58,60 +58,14 @@
 	<div id="signinRealized" class="dataContainer"></div>
 	<div id="info" class="dataContainer"></div>
 </div>
-<!--<div class="container">
-	<div class="panel panel-default">
-	<div class="row">
-		<br>
-		<div class="col-md-1">
-			<img class='img-avatar' src="/fotos/<?php echo $this->datos[0]['uid']?>.jpg" onerror="imgError(this);" alt="Foto de Perfil" align="center" >
-		</div>
-		<div class="col-md-5">
-			<h3 class="text-right"><b><?php echo $this->datos[0]['fullname']?></b></h3>
-			<br>
-			<h5 class="text-right">Código <b><?php echo $this->datos[0]['uid']?></b></h5>
-		</div>
-		<div class="col-md-5">
-			<blockquote>
-				<h3>Facultad de <?php echo $this->datos[1][0]['nomfac']?></h3>
-				<h3>Escuela de <?php echo $this->datos[1][0]['nomesc']?></h3>
-			</blockquote>
-		</div>
-		<div class="col-md-1">
-			<br>
-		  	<h2> 
-		  	<a id="printRecord" class="text-warning" data-placement="left" data-toggle="popover" title="Record de Notas" data-container="body" data-content="Imprime aqui tu record de notas"
-		  		href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>"><span class="glyphicon glyphicon-print"></span></a></h2>
-		</div>
-	</div>
-	</div>
-</div>
-<div class="container">
-	<div>
-		<ul class="nav nav-tabs" id="profileTab">
-			<li class="active"><a href="#signinCurrent" id="btnmainsignin"><h5 class="text-info"><span class="glyphicon glyphicon-th text-muted"></span> Matrícula Actual</h5></a></li>
-			<li><a href="#signinCurriculum"><h5 class="text-info"><span class="glyphicon glyphicon-th text-muted"></span> Matrículas por Currícula</h5></a></li>
-			<li><a href="#signinRealized"><h5 class="text-info"><span class="glyphicon glyphicon-th text-muted"></span> Matrículas Realizadas</h5></a></li>
-			<li><a href="#info" id="btnmaininfo"><h5 class="text-info"><span class="glyphicon glyphicon-th text-muted"></span> Información</h5></a></li>
-			<li><a class="hidden"></a></li>
-		</ul>
-		<div class="tab-content" style="margin: 0px; padding: 0px; min-height: 500px;" >
-			<div class="tab-pane  active in fade" id="signinCurrent"></div>
-			<div class="tab-pane fade" id="signinCurriculum"></div>
-			<div class="tab-pane fade" id="signinRealized"></div>
-			<div class="tab-pane fade" id="info" ></div>
-		</div>
-	</div>
-</div>-->
-
 
 <script>
-function imgError(image) {
-	var avatar = '<?php echo $this->avatar_default?>'; 
-    image.onerror = "";
-    image.src = "/img/default_avatar_"+avatar+".jpg";
-    return true;
-}
-
+	function imgError(image) {
+		var avatar = '<?php echo $this->avatar_default?>'; 
+	    image.onerror = "";
+	    image.src = "/img/default_avatar_"+avatar+".jpg";
+	    return true;
+	}
 	$(function () {
 		//Actualizar perfil
 		var successProfile = $('#successProfile').val();
@@ -142,8 +96,8 @@ function imgError(image) {
 			$('.btnObO').removeClass('btnActive');
 			$(this).addClass('btnActive');
 			goTo = $(this).attr('goto');
-			$('.dataContainer').fadeOut('fast');
-			$('#' + goTo).fadeIn('fast');
+			$('.dataContainer').removeClass('dataContainerActive');
+			$('#' + goTo).addClass('dataContainerActive');
 		});
 		//---------------------------------------------------
 	});

@@ -77,9 +77,7 @@ $("#agregados").click(function(){
         var subid=$(this).attr('subid');
         var url = "/register/validation/lcontainer/uid/"+uid+"/subid/"+subid+"/escid/"+escid+"/pid/"+pid+"/nota/<?php echo $this->nota?>/perid/<?php echo $this->perid?>/temp/<?php echo $this->temp?>";
         $("#guardar").load(url);
-
     });
-
     $("#uid").keyup(function () {
         var vuid = $(this).val();
         if (isNaN(vuid))

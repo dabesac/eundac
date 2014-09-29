@@ -28,7 +28,7 @@
 	</div>
 	<div class="col-md-3">
 		<h5 class="text-info">Periodo</h5>
-		<select name="Periods" id="periods" class="form-control">
+		<select id="seletperiod" class="form-control">
 			<option value="">Primero Seleccione un Año</option>
 		</select>
 	</div>
@@ -37,10 +37,10 @@
 		<select name="faculty" id="faculty" class="form-control">
 			<option value="">Seleccione Facultad</option>
 			<?php
-			foreach ($this->dataf as $dataf) {	
+			foreach ($this->dataf as $dataf) {
 				if ($dataf['facid']<>"NINGUN") { ?>
  					<option value="<?php echo $dataf['facid']?>"><?php echo strtoupper($dataf['name'])?></option>
-				<?php		
+				<?php
 				}
  			} ?>
 		</select>
@@ -68,18 +68,28 @@
 <script>
 	$('#alert').fadeOut('fast');
 	$('#alert1').fadeOut('fast');
+
+	var anioo=<?php echo $this->anio?>;
+	if (anioo) {
+		$('#anio > option[value='+anioo+']').attr('selected', 'selected');
+		var vanio=$("#anio").val();
+		var url=("/pedagogia/distribution/getperiods/anio/"+vanio);
+		$("#seletperiod").html("Cargando....");
+		$("#seletperiod").load(url);
+	}
+
 	$('#anio').change(function(){
 		$('#anio option:selected').each(function(){
 			var anio = $(this).val();
-			$.get('/report/periods/listperiods/anio/'+anio, function(data){
-				$('#periods').html(data);
+			$.get('/pedagogia/distribution/getperiods/anio/'+anio, function(data){
+				$('#seletperiod').html(data);
 			});
 		});
 	});
 
 	$('#show').click(function(){
 		// $('.correc').popover('hide');
-		var perid = $('#periods').val();
+		var perid = $('#seletperiod').val();
 		var facid = $('#faculty').val();
 		if (perid){
 			if (facid) {
@@ -89,17 +99,17 @@
 			        var b="B";
 			        $("#data").show();
 					$('#data').html('<center><img class="text-center" src="/img/spinner.gif"></center>');
-					$('#data').load('/pedagogia/distribution/view/perid/'+perid+'/facid/'+facid+"/borrador/"+b);
+					$('#data').load('/pedagogia/distribution/view/perid/'+$.base64.encode(perid)+'/facid/'+facid+"/borrador/"+b);
 					$('#alert1').hide();
 					$('#alert').hide();
 			    }
 			    else{
 					$("#data").show();
 					$('#data').html('<center><img class="text-center" src="/img/spinner.gif"></center>');
-					$('#data').load('/pedagogia/distribution/view/perid/'+perid+'/facid/'+facid);
+					$('#data').load('/pedagogia/distribution/view/perid/'+$.base64.encode(perid)+'/facid/'+facid);
 					$('#alert1').hide();
 					$('#alert').hide();
-				}	
+				}
 			}
 			else{
 				$("#data").hide();

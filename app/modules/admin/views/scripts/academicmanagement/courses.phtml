@@ -1,28 +1,38 @@
+<style>
+  .title{
+    background:#585858;
+    color:#ffffff;
+  }  
+  tr:hover{
+    background: #EEF1F7;
+  }
+  .trcolor{
+    background:#EEF1F7;
+  }
+</style>
 <?php
-//print_r($this->$datacoursesill);exit();
-//echo $this->men;exit();
 if ($this->datacourses) { ?>
 <table class="table table-bordered" style="margin-top: 15px;">
     <tr>
-        <th colspan='7' style="background:#585858;color:#ffffff"><center><h5><b>INFORMACIÓN DE LOS CURSOS</b></h5></center></th>
-        <th colspan='3' style="background:#585858;color:#ffffff"><center><h5><b>ACTAS</h5></b></center></th>
-        <th colspan='2'style="background:#585858;color:#ffffff"><center><h5><b>ASISTENCIAS</h5></b></center></th>
-        <th style="background:#585858;color:#ffffff"><center><h5><b>SILABO</h5></b></center></th>
+        <th colspan='7' class='title'><center><h5><b>INFORMACIÓN DE LOS CURSOS</b></h5></center></th>
+        <th colspan='3' class='title'><center><h5><b>ACTAS</h5></b></center></th>
+        <th colspan='2' class='title'><center><h5><b>ASISTENCIAS</h5></b></center></th>
+        <th class='title'><center><h5><b>SILABO</h5></b></center></th>
     </tr>
     <tr>
-        <th><center>#</center></th>
-        <th><center>Sem.</center></th>   
-        <th><center>Curricula</center></th>        
-        <th><center>Código</center></th>
-        <th><center>Nombre Curso</center></th>
-        <th><center>Turno</center></th>         
-        <th><center>Calificación</center></th>
-        <th style="background:#EEF1F7"><center>Fecha Acta</center></th>
-        <th style="background:#EEF1F7"><center>1° Parcial</center></th>
-        <th style="background:#EEF1F7"><center>2° Parcial</center></th>
-        <th><center>1° Parcial</center></th>
-        <th><center>2° Parcial</center></th>
-        <th style="background:#F0F0F0"><center>Opcion</center></th>
+        <th class='title'><center>#</center></th>
+        <th class='title'><center>Sem.</center></th>   
+        <th class='title'><center>Curricula</center></th>        
+        <th class='title'><center>Código</center></th>
+        <th class='title'><center>Nombre Curso</center></th>
+        <th class='title'><center>Turno</center></th>         
+        <th class='title'><center>Calificación</center></th>
+        <th class='title'><center>Fecha Acta</center></th>
+        <th class='title'><center>1° Parcial</center></th>
+        <th class='title'><center>2° Parcial</center></th>
+        <th class='title'><center>1° Parcial</center></th>
+        <th class='title'><center>2° Parcial</center></th>
+        <th class='title'><center>Opcion</center></th>
     </tr>
 <?php
     $c=0;
@@ -45,7 +55,7 @@ if ($this->datacourses) { ?>
             $closedate= $tmp[2]."/".$tmp[1]."/".$tmp[0];
         }
     ?>
-    <tr>
+    <tr class="table-hover">
         <td><center class="badge"><?php echo $c?></center></td>
         <td><center><?php echo $semid?></center></td>
         <td><center><?php echo $curid?></center></td>
@@ -68,8 +78,8 @@ if ($this->datacourses) { ?>
                 break;    
             }
         ?>
-        <td style="background:#EEF1F7"><center><?php echo $closedate?></center></td>
-        <td style="background:#EEF1F7">
+        <td class="trcolor"><center><?php echo $closedate?></center></td>
+        <td class="trcolor">
             <center>
                 <?php 
                 if ($state=='P' || $state=='C') {  ?>
@@ -99,7 +109,7 @@ if ($this->datacourses) { ?>
                 ?>
             </center>
         </td>
-        <td style="background:#EEF1F7">
+        <td class="trcolor">
             <center>
                 <?php 
                 if ($state=='C') {  ?>
@@ -186,7 +196,7 @@ if ($this->datacourses) { ?>
                 ?>
             </center>
         </td>
-        <td style="background:#F0F0F0">
+        <td class="trcolor">
             <center>
                 <?php 
                 if ($this->datacourse[$s]['s_sillabus'] =='C') {  ?>
@@ -346,7 +356,7 @@ if ($this->datacourses) { ?>
 
 $ ('#myModal'). on('hidden.bs.modal',function()  { 
     url="/admin/academicmanagement/courses/perid/<?php echo $perid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/";
-    $("#viewcourses").load(url);  
+    $("#viewcourses").load(url); 
 });
 
 $ ('#Modal'). on('hidden.bs.modal',function()  { 

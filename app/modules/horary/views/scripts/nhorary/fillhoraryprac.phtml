@@ -1,0 +1,125 @@
+<link rel="stylesheet" type="text/css" href="/css/horary.css">
+<?php
+$usuario=$this->usuario;
+$nombredocente=$usuario[0]['last_name0']." ".$usuario[0]['last_name1']." ".$usuario[0]['first_name'];
+?>
+<div class="modal-header">
+    <div class="row">
+        <div class="col-md-1 pull-right">
+            <button id='closeallprac' class="btn btn-danger"><span class='glyphicon glyphicon-log-out'></span> Cerrar</button>
+        </div>
+        <div class="col-md-11 text-center">
+            <span class="glyphicon glyphicon-calendar"></span>
+            <b class='text-primary'>ASIGNAR HORARIO | </b>
+            <b><?php echo strtoupper($nombredocente)?> <span class='text-primary'>|</span></b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="infor">
+            <b>Información:</b> Click en el curso para agregar el horario, para eliminar el horario dar click en cualquiera de las (X).
+        </div>
+    </div>
+</div>
+<div class="row courses">
+    <div class="col-md-12 text-center">
+        <?php
+        if ($this->cursos) {
+            $listacolores = array();
+            $listacolores[0] = "#FA8D74";
+            $listacolores[1] = "#A3CFE0";
+            $listacolores[2] = "#CBE487";
+            $listacolores[3] = "#FAF48D";
+            $listacolores[4] = "#FCB16B";
+            $listacolores[5] = "#CCF0EE";
+            $listacolores[6] = "#DFDFDF";
+            $listacolores[7] = "#81FF86";
+            $listacolores[8] = "#CD88FD";
+            $listacolores[9] = "#F59FFC";
+            $listacolores[10] = "#A58CFF";
+            $listacolores[11] = "#F2BBBB";
+            $listacolores[12] = "#D8BADA";
+            $listacolores[13] = "#C4E6CE";
+            $listacolores[14] = "#B4DAA1";
+
+            $len=count($this->cursos);
+            $cco=0;
+            $j=1;
+
+            for ($i=0; $i < $len; $i++) {
+                $codcurso=$this->cursos[$i]['courseid'];
+                $turno=$this->cursos[$i]['turno'];
+                $codcursodes=(!empty($this->cursos[$j]['courseid']))?$this->cursos[$j]['courseid']:null;
+                $turnodes=(!empty($this->cursos[$j]['turno']))?$this->cursos[$j]['turno']:null;
+                if ($codcurso==$codcursodes && $turno==$turnodes) {
+                    $this->cursos[$i]['color']=$listacolores[$cco];
+                } else {
+                    $this->cursos[$i]['color']=$listacolores[$cco];
+                    $cco++;
+                }
+            $j++;
+            }
+
+            foreach ($this->cursos as $curso) {
+                ?>
+                <a class="courseasigprac" href='#' escid="<?php echo $curso['escid']; ?>" subid="<?php echo $curso['subid']; ?>" perid="<?php echo $curso['perid']; ?>" courseid="<?php echo $curso['courseid']; ?>" turno="<?php echo $curso['turno']; ?>" curid="<?php echo $curso['curid']; ?>" semid="<?php echo $curso['semid']; ?>">
+
+                    <div class="course" style="background-color:<?php echo $curso['color']?>;color:black">
+                        <span class="glyphicon glyphicon-book"></span>
+                        <?php echo $curso['name'];?> - <?php echo $curso['turno'];?>
+                    </div>
+                </a>
+
+            <?php
+            }
+        }
+        ?>
+    </div>
+</div><br>
+<div id="horariocursoPrac"></div>
+
+<script>
+
+$(".courseasigprac").on('click', function(){
+    $("#myModalhoraryPrac").modal('hide');
+    escid=$(this).attr('escid');
+    subid=$(this).attr('subid');
+    perid=$(this).attr('perid');
+    courseid=$(this).attr('courseid');
+    turno=$(this).attr('turno');
+    curid=$(this).attr('curid');
+    semid=$(this).attr('semid');
+
+    $("#mymodalhorasclasePrac").modal("show");
+});
+
+$("#closeallprac").on('click', function(){
+    $("#myModalhoraryPrac").modal('hide');
+});
+
+var dathora="<?php echo $this->dathora?>";
+var d_uid="<?php echo $this->usuario[0]['uid'] ?>";
+var d_pid="<?php echo $this->usuario[0]['pid'] ?>";
+var escid="<?php echo $this->cursos[0]['escid']?>";
+var subid="<?php echo $this->cursos[0]['subid']?>";
+var perid="<?php echo $this->cursos[0]['perid']?>";
+
+if (dathora=='1') {
+    var ajax_data1 = {
+                    "uid"   : $.base64.encode(d_uid),
+                    "pid"   : $.base64.encode(d_pid),
+                    "escid" : $.base64.encode(escid),
+                    "subid" : $.base64.encode(subid),
+                    "perid" : $.base64.encode(perid)
+                    };
+    $("#horariocursoPrac").empty();
+    $("#horariocursoPrac").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+    $.ajax({
+        type : 'post',
+        url  : '/horary/nhorary/horaryteacherprac/',
+        data : ajax_data1,
+        success: function(data){
+            $("#horariocursoPrac").html(data);
+        }
+    });
+};
+</script>

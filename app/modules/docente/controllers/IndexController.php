@@ -238,15 +238,16 @@ class Docente_IndexController extends Zend_Controller_Action {
 
             $courses = $coursesxTeacherDb->_getFilter($where, $attrib, $orders);
             //print_r($teachers);
-
-            $teacherUid         = 0;
-            $c                  = 0;
-            $coursesEmpty       = 0;
-            $totalTeachers      = 0;
-            $totalEmptySyllabus = 0;
-            $countERA           = 0;
-            $teachersEmptySyllabus[0]['uid'] = '';
+            
+            $teacherUid                       = 0;
+            $c                                = 0;
+            $coursesEmpty                     = 0;
+            $totalTeachers                    = 0;
+            $totalEmptySyllabus               = 0;
+            $countERA                         = 0;
+            $teachersEmptySyllabus[0]['uid']  = '';
             $teachersEmptySyllabus[0]['name'] = '';
+            $coursesEmptySyllabus             = array();
             //Total de Profesores
             foreach ($courses as $course) {
                 if ($course['uid'] != $teacherUid) {

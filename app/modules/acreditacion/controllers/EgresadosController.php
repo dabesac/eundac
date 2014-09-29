@@ -12,7 +12,7 @@ class Acreditacion_EgresadosController extends Zend_Controller_Action {
         $this->sesion = $login;
     }
 
-    public function indexAction(){	
+    public function indexAction(){
     	$specialityDb = new Api_Model_DbTable_Speciality();
 
     	$currentYear = date('Y');

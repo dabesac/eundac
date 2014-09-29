@@ -320,9 +320,9 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                 $turno = base64_decode($formData['turno']);
 
                 $anotherCourses = base64_decode($formData['anotherCourses']);
-                $dat = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid,'courseid'=>$courseid,'curid'=>$curid,'turno'=>$turno,'document_type'=>'Silabo Cerrar','register'=>$uid);
+                /*$dat = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid,'courseid'=>$courseid,'curid'=>$curid,'turno'=>$turno,'document_type'=>'Silabo Cerrar','register'=>$uid);
                 $bdlog= new Api_Model_DbTable_Loginspectionall();
-                $insertdata = $bdlog->_save($dat);
+                $insertdata = $bdlog->_save($dat);*/
 
                 $params = array(
                     'eid' => $eid,

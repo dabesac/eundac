@@ -1,0 +1,530 @@
+<?php
+    $hora=array();
+    $hour_begin=array();
+    if ($this->valhorasm or $this->valhorast) {
+        $j=1;
+        $hour_begin=$this->valhorasm;
+        $hour_begin_afternoon=$this->valhorast;
+        $len1= count($hour_begin);
+        $len2= count($hour_begin_afternoon);
+        $lentotal = $len1+$len2;
+        for ($i=0; $i < $len1; $i++) {
+            $hourm[$i]=(!empty($hour_begin[$i]))?substr($hour_begin[$i],0,2):null;
+            $minutem[$i]=(!empty($hour_begin[$i]))?substr($hour_begin[$i],3,2):null;
+        }
+
+        for ($i=0; $i < $len2; $i++) {
+            $hourt[$i]=(!empty($hour_begin_afternoon[$i]))?substr($hour_begin_afternoon[$i],0,2):null;
+            $minutet[$i]=(!empty($hour_begin_afternoon[$i]))?substr($hour_begin_afternoon[$i],3,2):null;
+        }
+        for ($i=0; $i < $len1-1; $i++) {
+            $hourm[$i]=(!empty($hourm[$i]))?$hourm[$i]:null;
+            $hourm[$j]=(!empty($hourm[$j]))?$hourm[$j]:null;
+            $minutem[$i]=(!empty($minutem[$i]))?$minutem[$i]:null;
+            $minutem[$j]=(!empty($minutem[$j]))?$minutem[$j]:null;
+            if ($hourm[$i]) {
+                if ($hourm[$i]<12) {
+                    if ($hourm[$j]<12) {
+                        $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." am - ".$hourm[$j].":".$minutem[$j]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." am - ".$hourm[$j].":".$minutem[$j]." pm";
+                    }
+                }
+                else{
+                    $hora[$i]['hora']=$hourm[$i].":".$minutem[$i]." pm - ".$hourm[$j].":".$minutem[$j]." pm";
+                }
+                $hora[$i]['h_ini']=$hourm[$i];
+                $hora[$i]['h_fin']=$hourm[$j];
+                $hora[$i]['m_ini']=$minutem[$i];
+                $hora[$i]['m_fin']=$minutem[$j];
+                $j++;
+            }
+
+        }
+        $q=1;
+        for ($p=0; $p < $len2; $p++) {
+            $hourt[$p]=(!empty($hourt[$p]))?$hourt[$p]:null;
+            $hourt[$q]=(!empty($hourt[$q]))?$hourt[$q]:null;
+            $minutet[$p]=(!empty($minutet[$p]))?$minutet[$p]:null;
+            $minutet[$q]=(!empty($minutet[$q]))?$minutet[$q]:null;
+            if ($hourt[$p]) {
+                if ($hourt[$p]<12) {
+                    if ($hourt[$q]<12) {
+                        $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." am - ".$hourt[$q].":".$minutet[$q]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." am - ".$hourt[$q].":".$minutet[$q]." pm";
+                    }
+                }
+                else{
+                    $hora[$i]['hora']=$hourt[$p].":".$minutet[$p]." pm - ".$hourt[$q].":".$minutet[$q]." pm";
+                }
+                $hora[$i]['h_ini']=$hourt[$p];
+                $hora[$i]['h_fin']=$hourt[$q];
+                $hora[$i]['m_ini']=$minutet[$p];
+                $hora[$i]['m_fin']=$minutet[$q];
+                $q++;
+                $i++;
+            }
+        }
+    }
+    else{
+        $j=1;
+        $hour_begin=$this->valhoras;
+        $len= count($hour_begin);
+        $lentotal = $len;
+
+        for ($i=0; $i < $len; $i++) {
+            $hour[$i]=substr($hour_begin[$i],0,2);
+            $minute[$i]=substr($hour_begin[$i],3,2);
+        }
+        for ($i=0; $i < $len; $i++) {
+            $hour[$i]=(!empty($hour[$i]))?$hour[$i]:null;
+            $hour[$j]=(!empty($hour[$j]))?$hour[$j]:null;
+            $minute[$i]=(!empty($minute[$i]))?$minute[$i]:null;
+            $minute[$j]=(!empty($minute[$j]))?$minute[$j]:null;
+            if ($hour[$i]) {
+                if ($hour[$i]<12) {
+                    if ($hour[$j]<12) {
+                        $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." am";
+                    }
+                    else{
+                        $hora[$i]['hora']=$hour[$i].":".$minute[$i]." am - ".$hour[$j].":".$minute[$j]." pm";
+                    }
+                }
+                else{
+                    $hora[$i]['hora']=$hour[$i].":".$minute[$i]." pm - ".$hour[$j].":".$minute[$j]." pm";
+                }
+                $hora[$i]['h_ini']=$hour[$i];
+                $hora[$i]['h_fin']=$hour[$j];
+                $hora[$i]['m_ini']=$minute[$i];
+                $hora[$i]['m_fin']=$minute[$j];
+                $j++;
+            }
+        }
+    }
+
+    $listacolores = array();
+    $listacolores[0] = "#FA8D74";
+    $listacolores[1] = "#A3CFE0";
+    $listacolores[2] = "#CBE487";
+    $listacolores[3] = "#FAF48D";
+    $listacolores[4] = "#FCB16B";
+    $listacolores[5] = "#CCF0EE";
+    $listacolores[6] = "#DFDFDF";
+    $listacolores[7] = "#81FF86";
+    $listacolores[8] = "#CD88FD";
+    $listacolores[9] = "#F59FFC";
+    $listacolores[10] = "#A58CFF";
+    $listacolores[11] = "#F2BBBB";
+    $listacolores[12] = "#D8BADA";
+    $listacolores[13] = "#C4E6CE";
+    $listacolores[14] = "#B4DAA1";
+if ($this->horarios) {
+    $len=count($this->horarios);
+    $hmen=13;
+    $hmay=13;
+    for ($i=0; $i < $len; $i++) {
+        $n=new Api_Model_DbTable_Course();
+        $where['eid']=$this->horarios[$i]['eid'];
+        $where['oid']=$this->horarios[$i]['oid'];
+        $where['escid']=$this->horarios[$i]['escid'];
+        $where['curid']=$this->horarios[$i]['curid'];
+        $where['subid']=$this->horarios[$i]['subid'];
+        $where['courseid']=$this->horarios[$i]['courseid'];
+        $ncur=$n->_getOne($where);
+
+        $this->horarios[$i]['name']=$ncur['name'];
+        $this->horarios[$i]['abbreviation']=$ncur['abbreviation'];
+        if ($this->horarios[$i]['type_class']=="P") $this->horarios[$i]['type_class']="(P)";
+        else $this->horarios[$i]['type_class']="";
+        $ncursos=$this->ncursos;
+        for ($j=0; $j < $ncursos; $j++) {
+            if ($this->horarios[$i]['courseid']==$this->datcursos[$j]['courseid'] && $this->horarios[$i]['turno']==$this->datcursos[$j]['turno']) {
+                $this->horarios[$i]['color']=$listacolores[$this->datcursos[$j]['num']];
+            }
+        }
+
+        $hsplit=split(":", $this->horarios[$i]['hora_ini']);
+        $hi=$hsplit[0];
+        $hsplit=split(":", $this->horarios[$i]['hora_fin']);
+        $hf=$hsplit[0];
+
+        if ($hi<=$hmen) $hmen=$hi;
+        if ($hf>=$hmay) $hmay=$hf;
+    }
+    // print_r($hi);
+    $k=0;
+    if ($hour_begin) {
+        for ($z=0; $z < $lentotal; $z++) {
+            $hora[$z]['h_ini']=(!empty($hora[$z]['h_ini']))?$hora[$z]['h_ini']:null;
+            $hora[$z]['h_fin']=(!empty($hora[$z]['h_fin']))?$hora[$z]['h_fin']:null;
+            if ($hmen==$hora[$z]['h_ini'] && $k==0) {
+                $inih=$z;
+                $k=1;
+            }
+            if ($hmay==$hora[$z]['h_fin']) {
+                $finh=$z;
+            }
+        }
+    }
+
+$horaoriginal=$this->horarios;
+$uid=$horaoriginal[0]['teach_uid'];
+$pid=$horaoriginal[0]['teach_pid'];
+?>
+<div class="princbox">
+    <div class="daysbox">
+        <div class="daybox">HORAS</div>
+    </div>
+    <div class="daysbox">
+        <div class="daybox">LUNES</div>
+    </div>
+    <div class="daysbox">
+        <div class="daybox">MARTES</div>
+    </div>
+    <div class="daysbox">
+        <div class="daybox">MIÉRCOLES</div>
+    </div>
+    <div class="daysbox">
+        <div class="daybox">JUEVES</div>
+    </div>
+    <div class="daysbox">
+        <div class="daybox">VIERNES</div>
+    </div>
+    <div class="daysbox">
+        <div class="daybox">SÁBADO</div>
+    </div>
+</div>
+
+<div class="allbox">
+    <div class="allhoursbox">
+        <?php
+            for ($i=$inih; $i <= $finh; $i++) { ?>
+                <div class="hoursbox">
+                    <?php echo $hora[$i]['hora']?>
+                </div>
+            <?php
+            }
+        ?>
+    </div>
+    <div class='coursesbox'>
+        <?php
+        for ($i=$inih; $i <= $finh; $i++) {
+            $band=0;
+            $c=0;
+            $dat=$this->horarios;
+            //print_r($dat);
+            for ($s=0; $s < $len; $s++) {
+                $hsplit=split(":", $dat[$s]['hora_ini']);
+                $h=$hsplit[0];
+                $m=$hsplit[1];
+                $dia=$dat[$s]['day'];
+
+                if ($dia==1) {
+                    if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
+                        if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) {
+                            $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
+                            ?>
+                            <div class="coursebox" style="background-color:<?php echo $dat[$s]["color"] ?>">
+                                <a href="#" type="button" class="close deletehour" uid='<?php echo base64_encode($uid)?>' pid='<?php echo base64_encode($pid)?>' escid='<?php echo base64_encode($dat[$s]['escid'])?>' subid='<?php echo base64_encode($dat[$s]['subid'])?>' perid='<?php echo base64_encode($dat[$s]['perid'])?>' courseid='<?php echo base64_encode($dat[$s]['courseid'])?>' turno='<?php echo base64_encode($dat[$s]['turno'])?>' curid='<?php echo base64_encode($dat[$s]['curid'])?>' horaini='<?php echo base64_encode($horaoriginal[$s]['hora_ini'])?>'horafin='<?php echo base64_encode($horaoriginal[$s]['hora_fin'])?>' diasemana='<?php echo base64_encode($horaoriginal[$s]['day'])?>'>&times;</a>
+                                <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
+                            </div>
+                            <?php
+                            $c++;
+                        } else {
+                            $band=1;
+                        }
+                    }
+                } else {
+                    $band=1;
+                }
+            }
+
+            if ($band==1 && $c==0){ ?>
+                <div class="coursebox">&nbsp;</div>
+            <?php
+            }
+            elseif ($band==0 && $c==0) {
+                ?><div class="coursebox">&nbsp;</div><?php
+            }
+        }
+        ?>
+    </div>
+    <div class='coursesbox'>
+        <?php
+        for ($i=$inih; $i <= $finh; $i++) {
+            $band=0;
+            $c=0;
+            $dat=$this->horarios;
+            //print_r($dat);
+            for ($s=0; $s < $len; $s++) {
+                $hsplit=split(":", $dat[$s]['hora_ini']);
+                $h=$hsplit[0];
+                $m=$hsplit[1];
+                $dia=$dat[$s]['day'];
+
+                if ($dia==2) {
+                    if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
+                        if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) {
+                            $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
+                            ?>
+                            <div class="coursebox" style="background-color:<?php echo $dat[$s]["color"] ?>">
+                                <a href="#" type="button" class="close deletehour" uid='<?php echo base64_encode($uid)?>' pid='<?php echo base64_encode($pid)?>' escid='<?php echo base64_encode($dat[$s]['escid'])?>' subid='<?php echo base64_encode($dat[$s]['subid'])?>' perid='<?php echo base64_encode($dat[$s]['perid'])?>' courseid='<?php echo base64_encode($dat[$s]['courseid'])?>' turno='<?php echo base64_encode($dat[$s]['turno'])?>' curid='<?php echo base64_encode($dat[$s]['curid'])?>' horaini='<?php echo base64_encode($horaoriginal[$s]['hora_ini'])?>'horafin='<?php echo base64_encode($horaoriginal[$s]['hora_fin'])?>' diasemana='<?php echo base64_encode($horaoriginal[$s]['day'])?>'>&times;</a>
+                                <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
+                            </div>
+                            <?php
+                            $c++;
+                        } else {
+                            $band=1;
+                        }
+                    }
+                } else {
+                    $band=1;
+                }
+            }
+            if ($band==1 && $c==0){ ?>
+                <div class="coursebox">&nbsp;</div>
+            <?php
+            }
+            elseif ($band==0 && $c==0) {
+                ?><div class="coursebox">&nbsp;</div><?php
+            }
+        }
+        ?>
+    </div>
+    <div class='coursesbox'>
+        <?php
+        for ($i=$inih; $i <= $finh; $i++) {
+            $band=0;
+            $c=0;
+            $dat=$this->horarios;
+            //print_r($dat);
+            for ($s=0; $s < $len; $s++) {
+                $hsplit=split(":", $dat[$s]['hora_ini']);
+                $h=$hsplit[0];
+                $m=$hsplit[1];
+                $dia=$dat[$s]['day'];
+
+                if ($dia==3) {
+                    if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
+                        if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) {
+                            $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
+                            ?>
+                            <div class="coursebox" style="background-color:<?php echo $dat[$s]["color"] ?>">
+                                <a href="#" type="button" class="close deletehour" uid='<?php echo base64_encode($uid)?>' pid='<?php echo base64_encode($pid)?>' escid='<?php echo base64_encode($dat[$s]['escid'])?>' subid='<?php echo base64_encode($dat[$s]['subid'])?>' perid='<?php echo base64_encode($dat[$s]['perid'])?>' courseid='<?php echo base64_encode($dat[$s]['courseid'])?>' turno='<?php echo base64_encode($dat[$s]['turno'])?>' curid='<?php echo base64_encode($dat[$s]['curid'])?>' horaini='<?php echo base64_encode($horaoriginal[$s]['hora_ini'])?>'horafin='<?php echo base64_encode($horaoriginal[$s]['hora_fin'])?>' diasemana='<?php echo base64_encode($horaoriginal[$s]['day'])?>'>&times;</a>
+                                <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
+                            </div>
+                            <?php
+                            $c++;
+                        } else {
+                            $band=1;
+                        }
+                    }
+                } else {
+                    $band=1;
+                }
+            }
+            if ($band==1 && $c==0){ ?>
+                <div class="coursebox">&nbsp;</div>
+            <?php
+            }
+            elseif ($band==0 && $c==0) {
+                ?><div class="coursebox">&nbsp;</div><?php
+            }
+        }
+        ?>
+    </div>
+    <div class='coursesbox'>
+        <?php
+        for ($i=$inih; $i <= $finh; $i++) {
+            $band=0;
+            $c=0;
+            $dat=$this->horarios;
+            //print_r($dat);
+            for ($s=0; $s < $len; $s++) {
+                $hsplit=split(":", $dat[$s]['hora_ini']);
+                $h=$hsplit[0];
+                $m=$hsplit[1];
+                $dia=$dat[$s]['day'];
+
+                if ($dia==4) {
+                    if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
+                        if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) {
+                            $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
+                            ?>
+                            <div class="coursebox" style="background-color:<?php echo $dat[$s]["color"] ?>">
+                                <a href="#" type="button" class="close deletehour" uid='<?php echo base64_encode($uid)?>' pid='<?php echo base64_encode($pid)?>' escid='<?php echo base64_encode($dat[$s]['escid'])?>' subid='<?php echo base64_encode($dat[$s]['subid'])?>' perid='<?php echo base64_encode($dat[$s]['perid'])?>' courseid='<?php echo base64_encode($dat[$s]['courseid'])?>' turno='<?php echo base64_encode($dat[$s]['turno'])?>' curid='<?php echo base64_encode($dat[$s]['curid'])?>' horaini='<?php echo base64_encode($horaoriginal[$s]['hora_ini'])?>'horafin='<?php echo base64_encode($horaoriginal[$s]['hora_fin'])?>' diasemana='<?php echo base64_encode($horaoriginal[$s]['day'])?>'>&times;</a>
+                                <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
+                            </div>
+                            <?php
+                            $c++;
+                        } else {
+                            $band=1;
+                        }
+                    }
+                } else {
+                    $band=1;
+                }
+            }
+            if ($band==1 && $c==0){ ?>
+                <div class="coursebox">&nbsp;</div>
+            <?php
+            }
+            elseif ($band==0 && $c==0) {
+                ?><div class="coursebox">&nbsp;</div><?php
+            }
+        }
+        ?>
+    </div>
+    <div class='coursesbox'>
+        <?php
+        for ($i=$inih; $i <= $finh; $i++) {
+            $band=0;
+            $c=0;
+            $dat=$this->horarios;
+            //print_r($dat);
+            for ($s=0; $s < $len; $s++) {
+                $hsplit=split(":", $dat[$s]['hora_ini']);
+                $h=$hsplit[0];
+                $m=$hsplit[1];
+                $dia=$dat[$s]['day'];
+
+                if ($dia==5) {
+                    if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
+                        if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) {
+                            $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
+                            ?>
+                            <div class="coursebox" style="background-color:<?php echo $dat[$s]["color"] ?>">
+                                <a href="#" type="button" class="close deletehour" uid='<?php echo base64_encode($uid)?>' pid='<?php echo base64_encode($pid)?>' escid='<?php echo base64_encode($dat[$s]['escid'])?>' subid='<?php echo base64_encode($dat[$s]['subid'])?>' perid='<?php echo base64_encode($dat[$s]['perid'])?>' courseid='<?php echo base64_encode($dat[$s]['courseid'])?>' turno='<?php echo base64_encode($dat[$s]['turno'])?>' curid='<?php echo base64_encode($dat[$s]['curid'])?>' horaini='<?php echo base64_encode($horaoriginal[$s]['hora_ini'])?>'horafin='<?php echo base64_encode($horaoriginal[$s]['hora_fin'])?>' diasemana='<?php echo base64_encode($horaoriginal[$s]['day'])?>'>&times;</a>
+                                <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
+                            </div>
+                            <?php
+                            $c++;
+                        } else {
+                            $band=1;
+                        }
+                    }
+                } else {
+                    $band=1;
+                }
+            }
+            if ($band==1 && $c==0){ ?>
+                <div class="coursebox">&nbsp;</div>
+            <?php
+            }
+            elseif ($band==0 && $c==0) {
+                ?><div class="coursebox">&nbsp;</div><?php
+            }
+        }
+        ?>
+    </div>
+    <div class='coursesbox'>
+        <?php
+        for ($i=$inih; $i <= $finh; $i++) {
+            $band=0;
+            $c=0;
+            $dat=$this->horarios;
+            //print_r($dat);
+            for ($s=0; $s < $len; $s++) {
+                $hsplit=split(":", $dat[$s]['hora_ini']);
+                $h=$hsplit[0];
+                $m=$hsplit[1];
+                $dia=$dat[$s]['day'];
+
+                if ($dia==6) {
+                    if ($this->horarios[$s]['hora_ini']!=$this->horarios[$s]['hora_fin']){
+                        if ($hora[$i]['h_ini']==$h && $hora[$i]['m_ini']==$m) {
+                            $this->horarios[$s]['hora_ini']= $hora[$i]['h_fin'].":".$hora[$i]['m_fin'].":00";
+                            ?>
+                             <div class="coursebox" style="background-color:<?php echo $dat[$s]["color"] ?>">
+                               <a href="#" type="button" class="close deletehour" uid='<?php echo base64_encode($uid)?>' pid='<?php echo base64_encode($pid)?>' escid='<?php echo base64_encode($dat[$s]['escid'])?>' subid='<?php echo base64_encode($dat[$s]['subid'])?>' perid='<?php echo base64_encode($dat[$s]['perid'])?>' courseid='<?php echo base64_encode($dat[$s]['courseid'])?>' turno='<?php echo base64_encode($dat[$s]['turno'])?>' curid='<?php echo base64_encode($dat[$s]['curid'])?>' horaini='<?php echo base64_encode($horaoriginal[$s]['hora_ini'])?>'horafin='<?php echo base64_encode($horaoriginal[$s]['hora_fin'])?>' diasemana='<?php echo base64_encode($horaoriginal[$s]['day'])?>'>&times;</a>
+                                <?php echo $dat[$s]['abbreviation'].$dat[$s]['type_class'] ?>
+                            </div>
+                            <?php
+                            $c++;
+                        } else {
+                            $band=1;
+                        }
+                    }
+                } else {
+                    $band=1;
+                }
+            }
+            if ($band==1 && $c==0){ ?>
+                <div class="coursebox">&nbsp;</div>
+            <?php
+            }
+            elseif ($band==0 && $c==0) {
+                ?><div class="coursebox">&nbsp;</div><?php
+            }
+        }
+        ?>
+    </div>
+</div>
+<?php
+}
+else{   ?>
+    <div class='col-md-12 text-center'>No se encontró registros</div>
+<?php
+}
+?>
+<script>
+    $(".deletehour").on('click', function(){
+        $("#myModalPrac").modal('show');
+        var uid = $(this).attr('uid');
+        var pid = $(this).attr('pid');
+        var escid = $(this).attr('escid');
+        var subid = $(this).attr('subid');
+        var courseid = $(this).attr('courseid');
+        var turno = $(this).attr('turno');
+        var perid = $(this).attr('perid');
+        var curid = $(this).attr('curid');
+        var horaini = $(this).attr('horaini');
+        var horafin = $(this).attr('horafin');
+        var diasemana = $(this).attr('diasemana');
+
+
+        $("#aceptarsPrac").on('click', function(){
+            var ajax_datall = {
+                        "uid"   : uid,"pid"   : pid,
+                        "escid" : escid,"subid" : subid,
+                        "perid" : perid,"curid" : curid,
+                        "turno" : turno,"courseid" : courseid,
+                        "horaini" : horaini,"horafin" : horafin,
+                        "diasemana" : diasemana
+                        };
+            $("#myModalPrac").modal('hide');
+            var url='/horary/nhorary/deletehorary/';
+            $.ajax({
+                type : 'post',
+                url : url,
+                data : ajax_datall,
+                success: function($data){
+                    if ($data.status == true) {
+                        var ddata = {
+                            "uid"   : uid,
+                            "pid"   : pid,
+                            "escid" : escid,
+                            "subid" : subid,
+                            "perid" : perid
+                            };
+
+                        $("#inloadhoraryPrac").empty();
+                        $("#inloadhoraryPrac").html("<center><img src='/img/spinner.gif' /> Cargando...</center>");
+                        $.ajax({
+                            type : 'post',
+                            url  : '/horary/nhorary/fillhoraryprac/',
+                            data : ddata,
+                            success: function($_data){
+                                $("#inloadhoraryPrac").html($_data);
+                            }
+                        });
+                    };
+                }
+            });
+        });
+
+    });
+</script>

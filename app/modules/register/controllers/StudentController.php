@@ -220,55 +220,55 @@ class Register_StudentController extends Zend_Controller_Action {
 
                         if ($subject) {
                              foreach ($subject as $key => $course) {
+                                $subject[$key]['veces_cur'] = null;
+                                $subject[$key]['register']=0;
 
-                            $subject[$key]['veces_cur'] = null;
-                            $subject[$key]['register']=0;
+                                // $subject[$key]['veces'];
+                                $N=count($course_reg);
 
-                            // $subject[$key]['veces'];
-                            $N=count($course_reg);
+                                for ($i=0; $i < $N; $i++) {
 
-                            for ($i=0; $i < $N; $i++) {
-
-                                if($course['courseid'] == $course_reg[$i]['courseid'] && $course['turno'] == $course_reg[$i]['turno']){
-                                    $subject[$key]['register']=1;
+                                    if($course['courseid'] == $course_reg[$i]['courseid'] && $course['turno'] == $course_reg[$i]['turno']){
+                                        $subject[$key]['register']=1;
+                                    }
+                                   
                                 }
-                               
+
+                                if($course['veces'] >= 2)
+                                {
+                                    $subject[$key]['veces_cur']=1;
+                                    $veces_subject = array(
+                                                    'veces'=> $course['veces'],
+                                                    'courseid'=>$course['courseid'],);
+                                    $veces = $course['veces'];
+                                }
+
+
                             }
-
-                            if($course['veces'] >= 2)
-                            {
-                                $subject[$key]['veces_cur']=1;
-                                $veces_subject = array(
-                                                'veces'=> $course['veces'],
-                                                'courseid'=>$course['courseid'],);
-                                $veces = $course['veces'];
-                            }
-
-
-                        }
                         }
                         $this->view->veces = $veces;
                         $this->view->veces_subject=$veces_subject;
                     }
                     else{
-                        $cantidad =count($subject);
+                        if ($subject) {
+                            $cantidad =count($subject);
 
-                        
-                        foreach ($subject as $key => $courses) {
+                            
+                            foreach ($subject as $key => $courses) {
 
-                            if($courses['veces'] >= 2)
-                            {
-                                $subject[$key]['veces_cur']=1;
-                                $veces_subject = array(
-                                                'veces'=> $course['veces'],);
-                                 
-                                $veces = $courses['veces'];
+                                if($courses['veces'] >= 2)
+                                {
+                                    $subject[$key]['veces_cur']=1;
+                                    $veces_subject = array(
+                                                    'veces'=> $course['veces'],);
+                                     
+                                    $veces = $courses['veces'];
+                                }
                             }
+                          
+                            $this->view->veces = $veces;
+                            $this->view->veces_subject=$veces_subject;
                         }
-                      
-                        $this->view->veces = $veces;
-                        $this->view->veces_subject=$veces_subject;
-
                     }
 
 

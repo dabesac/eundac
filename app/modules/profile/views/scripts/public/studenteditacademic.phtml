@@ -1,169 +1,140 @@
-<div class="panel panel-default">
-	<br>
-		<div class="row container">
-			<div class="col-md-8">
-				<h4 class="text-muted">Editar <span class="text-info">Datos Académicos</span></h4>
-			</div>
-			<div class="col-md-2">
-				<a id="saveacade" href="##" class="btn btn-success form-control">Guardar</a>
-			</div>
-			<div class="col-md-2">
-				<a id="backeditBtn" href="##" class="btn btn-default form-control">Volver</a>
-			</div>
+<br>
+	<div class="row">
+		<div class="col-md-8">
+			<h4 class="text-muted">Editar <span class="text-info">Datos Académicos</span></h4>
 		</div>
-	<hr>
-	<br>
-<!-- <ul class="nav nav-pills nav-stacked" id="backeditBtn">
-	<li><a href="#" id="backedit"><h5>Volver</h5></a></li>
-</ul> -->
-
-	<form id="formacade" method="post">
-		<div class="row container">
-				<div class="col-md-8">
-					<h5 class="text-muted">Nombre de la Institución</h5>
-					<?php echo $this->form->institution ?><br>
-				</div>
-				<div class="col-md-4">
-					<h5 class="text-muted">Tipo</h5>
-					<?php echo $this->form->type?><br>
-				</div>	
-			</div>
-			<div class="row container">
-				<div class="col-md-3">
-					<h5 class="text-muted">País</span></h5>
-					<?php echo $this->form->country?><br>
-				</div>
-				<div class="col-md-3">
-					<h5 class="text-muted">Departamento</span></h5>
-					<?php echo $this->form->country_s?><br>
-				</div>
-				<div class="col-md-3">
-					<h5 class="text-muted">Provincia</span></h5>
-					<?php echo $this->form->country_p ?><br>
-				</div>
-				<div class="col-md-3">
-					<h5 class="text-muted">Distrito</span></h5>
-					<?php echo $this->form->country_d?><br>
-				</div>	
-			</div>	
-			<div class="row container">
-				<div class="col-md-8">
-					<h5 class="text-muted">Título</h5>
-					<?php echo $this->form->title?><br>
-				</div>
-				<div class="col-md-4">	
-					<h5 class="text-muted">Año de Finalización</h5>
-					<?php echo $this->form->year_end?><br>
-				</div>	
-			</div>
-	</form>
-</div>
+		<div class="col-md-2">
+			<a id="saveacade" href="##" class="btn btn-info form-control">Guardar</a>
+		</div>
+		<div class="col-md-2">
+			<a id="backeditBtn" href="##" class="btn btn-default form-control">Volver</a>
+		</div>
+	</div>
+<hr>
+<br>
+<form id="formacade" method="post">
+	<div class="row">
+		<div class="col-md-8">
+			<h5 class="text-muted">Nombre de la Institución</h5>
+			<?php echo $this->form->institution ?><br>
+		</div>
+		<div class="col-md-4">
+			<h5 class="text-muted">Tipo</h5>
+			<?php echo $this->form->type?><br>
+		</div>	
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<h5 class="text-muted">País</h5>
+			<?php echo $this->form->country?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Departamento</h5>
+			<?php echo $this->form->country_s?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Provincia</h5>
+			<?php echo $this->form->country_p ?><br>
+		</div>
+		<div class="col-md-3">
+			<h5 class="text-muted">Distrito</h5>
+			<?php echo $this->form->country_d?><br>
+		</div>	
+	</div>	
+	<div class="row">
+		<div class="col-md-8">
+			<h5 class="text-muted">Título</h5>
+			<?php echo $this->form->title?><br>
+		</div>
+		<div class="col-md-4">	
+			<h5 class="text-muted">Año de Finalización</h5>
+			<?php echo $this->form->year_end?><br>
+		</div>	
+	</div>
+</form>
 
 <script>
+	$(function(){
+		$("#country_s").attr('disabled','disabled');
+		$("#country_p").attr('disabled','disabled');
+		$("#country_d").attr('disabled','disabled');
+		
+		$("#saveacade").click(function(){   
+	        var url="/profile/public/studenteditacademic/acid/<?php echo $this->acid?>";
+	        $.ajax({
+	            url: url,
+	            type: 'POST',
+	            data:$("#formacade").serialize(),
+	            success: function (data){
+	            	$("#datastudent").html(data);
+	            }
 
-	$("#country_s").attr('disabled','disabled');
-	$("#country_p").attr('disabled','disabled');
-	$("#country_d").attr('disabled','disabled');
-	
-	$("#saveacade").click(function(){   
-        var url="/profile/public/studenteditacademic/acid/<?php echo $this->acid?>";
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data:$("#formacade").serialize(),
-            success: function (data){
-            	$("#datastudent").html(data);
-            }
-
-        });
-    });
-
-    var clave="<?php echo $this->clave?>";
-    if (clave==1) {
-        $("#datastudent").html('<br><br><center><img src="/img/spinner.gif" alt="" /></center>');
-        $("#datastudent").fadeOut('fast', function(){
-	        $("#datastudent").load('/profile/public/studentacademic', function(){
-	        	$("#datastudent").fadeIn('fast');
-    			$('#loadingDiv').addClass('hidden');
 	        });
-        });
-	};
+	    });
 
-	var veri="<?php echo $this->veri?>";
-	if (veri=="1") {
-		$('#country_s').removeAttr('disabled');
-        $('#country_p').removeAttr('disabled');
-        $('#country_d').removeAttr('disabled');
-		// alert(veri);
-		var valor="<?php echo $this->dataubigeo['coid']?>";
-		$("#country option[value="+valor+"]").attr("selected",true);
-	};
+	    var clave="<?php echo $this->clave?>";
+	    if (clave==1) {
+	        $('#loadingDiv').html('<br><center><img src="/img/spinner.gif" alt="Loading" /></center>');
+			$('#datastudent, #editform').html('');
+			$('#datastudent')
+				.removeClass('hidden')
+				.load('/profile/public/studentacademic', function(){
+					$('#loadingDiv').html('');
+				});
+		};
 
-	if (veri=="0") {
-		$('#country_s').removeAttr('disabled');
-		// alert(veri);
-		var valor="PE";
-		$("#country option[value="+valor+"]").attr("selected",true);
-		var url="/profile/public/countrystate/coid/"+valor;
-	 	$("#country_s").load(url);		
-	};
-	// $("#save").click(function(){
-	// 	$("#form").submit()
-	// })
-	// $("#form").submit(function(){
-	// 	$.ajax({
-	// 		type: 'POST',
-	// 		url: $(this).attr('action'),
-	// 		data: $(this).serialize(),
-	// 		success: function(data){
-	// 			$("#datastudent").html(data);
- //            	$("#datastudent").html('<br><br><center><img src="/img/spinner.gif" alt="" /></center>');
- //            	$("#datastudent").fadeOut('fast', function(){
- //            		$("#datastudent").load('/profile/public/studentacademic', function(){
- //            			$("#datastudent").fadeIn('fast');
- //            		});
- //            	});
-	// 		}
-	// 	})
-	// 	return false;
-	// })
-	var veri="<?php echo $this->veri?>";
-	if (veri=="1") {
-		$('#country_s').removeAttr('disabled');
-        $('#country_p').removeAttr('disabled');
-        $('#country_d').removeAttr('disabled');
-        
-		var valor="<?php echo $this->dataubigeo['coid']?>";
-		$("#country option[value="+valor+"]").attr("selected",true);
-	};
-	$('#backeditBtn').click(function (e) {
-    	e.preventDefault()
-      	$("#datastudent").fadeOut('fast', function(){
-      		$('#datastudent').load('/profile/public/studentacademic', function(){
-				$('#datastudent').fadeIn('fast');
-			});
-      	});
-  	});
+		var veri="<?php echo $this->veri?>";
+		if (veri=="1") {
+			$('#country_s').removeAttr('disabled');
+	        $('#country_p').removeAttr('disabled');
+	        $('#country_d').removeAttr('disabled');
+			// alert(veri);
+			var valor="<?php echo $this->dataubigeo['coid']?>";
+			$("#country option[value="+valor+"]").attr("selected",true);
+		};
 
-  	$("#country").change(function(){
-  		$('#country_s').removeAttr('disabled');
-	    var coid=$(this).val();
-    	var url="/profile/public/countrystate/coid/"+coid;
-    	$("#country_s").load(url);
-    });
+		if (veri=="0") {
+			$('#country_s').removeAttr('disabled');
+			// alert(veri);
+			var valor="PE";
+			$("#country option[value="+valor+"]").attr("selected",true);
+			var url="/profile/public/countrystate/coid/"+valor;
+		 	$("#country_s").load(url);		
+		};
+		
+		var veri="<?php echo $this->veri?>";
+		if (veri=="1") {
+			$('#country_s').removeAttr('disabled');
+	        $('#country_p').removeAttr('disabled');
+	        $('#country_d').removeAttr('disabled');
+	        
+			var valor="<?php echo $this->dataubigeo['coid']?>";
+			$("#country option[value="+valor+"]").attr("selected",true);
+		};
+		$('#backeditBtn').click(function (e) {
+	      	$("#editform").addClass('hidden');
+	  		$('#datastudent').removeClass('hidden');
+	  	});
 
-    $("#country_s").change(function(){
-    	$('#country_p').removeAttr('disabled');
-	    var cosid=$(this).val();
-    	var url="/profile/public/countryprovince/cosid/"+cosid;
-    	$("#country_p").load(url);
-    });
+	  	$("#country").change(function(){
+	  		$('#country_s').removeAttr('disabled');
+		    var coid=$(this).val();
+	    	var url="/profile/public/countrystate/coid/"+coid;
+	    	$("#country_s").load(url);
+	    });
 
-    $("#country_p").change(function(){
-    	$('#country_d').removeAttr('disabled');
-	    var proid=$(this).val();
-    	var url="/profile/public/countrydistrict/proid/"+proid;
-    	$("#country_d").load(url);
-    });
-   
+	    $("#country_s").change(function(){
+	    	$('#country_p').removeAttr('disabled');
+		    var cosid=$(this).val();
+	    	var url="/profile/public/countryprovince/cosid/"+cosid;
+	    	$("#country_p").load(url);
+	    });
+
+	    $("#country_p").change(function(){
+	    	$('#country_d').removeAttr('disabled');
+		    var proid=$(this).val();
+	    	var url="/profile/public/countrydistrict/proid/"+proid;
+	    	$("#country_d").load(url);
+	    });
+	});
 </script>

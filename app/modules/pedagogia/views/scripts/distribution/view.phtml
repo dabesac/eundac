@@ -1,204 +1,199 @@
-
-    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>-->
-
 <?php if ($this->dis): ?>
-	<div class="row">
-		<div class="col-md-2 col-md-offset-1">
-			<h5 class="text-muted">
-				<strong>Leyenda</strong>
-			</h5>
-		</div>
-		<div class="col-md-2">
-			<h5 class="text-muted">
-				<img src="/img/circulo-verde.png"><span class="text-success"> Activo</span>
-			</h5>
-		</div>
-		<div class="col-md-2">
-			<h5 class="text-muted">
-				<img src="/img/circulo-rojo.png"><span class="text-danger"> Cerrado/Inactivo</span>
-			</h5>
-		</div>
-		<div class="col-md-2">
-			<h5 class="text-muted">
-				<img src="/img/circulo-amarillo.png"><span class="text-warning"> Observado</span>
-			</h5>
-		</div>
-		<div class="col-md-2">
-			<h5 class="text-muted">
-				<img src="/img/circulo-azul.png"><span class="text-info"> Borrador</span>
-			</h5>
-		</div>
-	</div>
-	<hr>
-	<table class="table table-hover" style="font-size:14px">
-	<thead>
-		<tr>
-			<th class="text-center">#</th>
-			<th class="text-center">Nombre de la Escuela</th>
-			<th class="text-center">Fecha de Registro</th>
-			<th class="text-center">Ver</th>
-			<th class="text-center">Estado</th>
-			<th class="text-center">Observación</th>
-			<th class="text-center">Impresión</th>
-			<th class="text-center">Cerrar Distribución</th>
-		</tr>
+    <div class="row">
+        <div class="col-md-2 col-md-offset-1">
+            <h5 class="text-muted">
+                <strong>Leyenda</strong>
+            </h5>
+        </div>
+        <div class="col-md-2">
+            <h5 class="text-muted">
+                <img src="/img/circulo-amarillo.png"><span class="text-warning"> <b>Recibido</b></span>
+            </h5>
+        </div>
+        <div class="col-md-2">
+            <h5 class="text-muted">
+                <img src="/img/circulo-rojo.png"><span class="text-danger"> <b>Observado</b></span>
+            </h5>
+        </div>
+        <div class="col-md-2">
+            <h5 class="text-muted">
+                <img src="/img/circulo-verde.png"><span class="text-success"> <b>Todo esta Correcto</b></span>
+            </h5>
+        </div>
+        <div class="col-md-2">
+            <h5 class="text-muted">
+                <img src="/img/circulo-azul.png"><span class="text-info"> <b>Borrador</b></span>
+            </h5>
+        </div>
+    </div>
+    <hr>
+    <table class="table table-hover table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th class="text-center">#</th>
+            <th class="text-center">Nombre de la Escuela</th>
+            <th class="text-center">Estado</th>
+            <th class="text-center">Fecha de Registro</th>
+            <th class="text-center">Ver Distribución</th>
+            <th class="text-center">Observación</th>
+            <th class="text-center">Impresión</th>
+            <th class="text-center">Cerrar Distribución</th>
+        </tr>
+    </thead>
 
-	</thead>
+    <tbody>
+        <?php
+        $i=0;
+        foreach ($this->dis as $distrib) {
+            switch ($distrib['state']) {
+                case 'A':   $state = "<img src='/img/circulo-amarillo.png'>";
+                            $namestate = "Recibido";
+                            $nomstate="warning";
+                            break;
+                case 'I':   $state = "<img src='/img/circulo-verde.png'>";
+                            $namestate = "Inactivo";
+                            $nomstate="success";
+                            break;
+                case 'C':   $state = "<img src='/img/circulo-verde.png'>";
+                            $namestate = "Todo esta Correcto";
+                            $nomstate="success";
+                            break;
+                case 'O':   $state = "<img src='/img/circulo-rojo.png'>";
+                            $namestate = "Observado";
+                            $nomstate="danger";
+                            break;
+                case 'B':   $state = "<img src='/img/circulo-azul.png'>";
+                            $namestate = "Borrador";
+                            $nomstate="info";
+                            break;
+            }
+            $valor=$this->valor;
+            if ($distrib['state']!="B" && $valor<>1) {
+                $i++;
+            ?>
+                <tr>
+                    <td class="text-center <?php echo $nomstate?>"><?php echo $i?></td>
+                    <td class="<?php echo $nomstate?>"><?php echo $distrib['name']?></td>
+                    <?php
+                    if ($distrib['comments']<>"" && $distrib['state']=="A"){
+                        ?>
+                        <td class="text-center <?php echo $nomstate?>">
+                            <p class="correction" comentss="<?php echo $distrib["comments"]?>" observationver='<?php echo $distrib['observationver']?>'>
+                                <span class='correc' title="AVISO" data-container="body" data-toggle="popover" data-content="Ya corrigió su distribución"><?php echo $state?></span>
+                            </p>
+                        </td>
+                    <?php
+                    }
+                    else{   ?>
+                        <td class='text-center <?php echo $nomstate?>'>
+                            <span class='span' data-toggle="tooltip" title="<?php echo $namestate?>"><?php echo $state?></span>
+                        </td>
+                    <?php
+                    }
+                    ?>
+                    <td class="text-center <?php echo $nomstate?>"><?php echo substr($distrib['created'],0,10)?></td>
+                    <td  class="text-center">
+                        <h4>
+                            <a class='btn btn-info' id="seeDistribution<?php echo $distrib['number']?>" href="#" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Ver distribución','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')">
+                                <span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" title="Ver"></span> Verificar
+                            </a>
+                        </h4>
+                    </td>
+                    <?php
+                    if ($distrib['state']=="C" || $distrib['state']=='O') {   ?>
+                        <td class="text-center text-danger">
+                            <h4>
+                                <span title="Desactivado" rel="tooltip" class="glyphicon glyphicon-ban-circle"></span>
+                            </h4>
+                        </td>
+                    <?php
+                    }
+                    else{   ?>
+                        <td class="text-center">
+                            <h4>
+                                <a href="#" class="observation btn btn-warning" perid='<?php echo base64_encode($distrib['perid'])?>' escid='<?php echo base64_encode($distrib['escid'])?>' subid='<?php echo base64_encode($distrib['subid'])?>' distid='<?php echo base64_encode($distrib['distid'])?>' facid='<?php echo $this->facid?>'>
+                                    <span class='glyphicon glyphicon-exclamation-sign' data-toggle="tooltip" title="Observar"></span> Observar
+                                </a>
+                            </h4>
+                        </td>
+                    <?php
+                    }
+                    ?>
 
-	<tbody>
-		<?php
-		$i=0;
-		// print_r($this->dis);exit();
-		foreach ($this->dis as $distrib) {
-			switch ($distrib['state']) {
-				case 'A': 	$state = "<img src='/img/circulo-verde.png'>"; 
-							$namestate = "Activo";
-							break;
-				case 'I': 	$state = "<img src='/img/circulo-rojo.png'>"; 
-							$namestate = "Inactivo";
-							break;
-				case 'C': 	$state = "<img src='/img/circulo-rojo.png'>"; 
-							$namestate = "Cerrado";
-							break;
-				case 'O': 	$state = "<img src='/img/circulo-amarillo.png'>"; 
-							$namestate = "Observado";
-							break;
-				case 'B': 	$state = "<img src='/img/circulo-azul.png'>"; 
-							$namestate = "Borrador";
-							break;
-			}
-			$valor=$this->valor;
-			if ($distrib['state']!="B" && $valor<>1) {
-				$i++;
-			?>
-			<tr>
-				<td class="text-center"><?php echo $i?></td>
-				<td><?php echo $distrib['name']?></td>
-				<!-- <td  class="text-center"><?php echo $distrib['number']?></td> -->
-				<td class="text-center" style="width:6%"><?php echo substr($distrib['created'],0,10)?></td>
-				<td  class="text-center">
-					<h4><a id="seeDistribution<?php echo $distrib['number']?>" href="#" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Ver distribución','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')"><span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" title="Ver"></span>
-	                </a></h4>	
-				</td>
-				<!-- <td> -->
-				<?php 
-				if ($distrib['comments']<>"" && $distrib['state']=="A"){	
-					?>
-				<td class="text-center">
-					<p class="correction" comentss="<?php echo $distrib["comments"]?>" observationver='<?php echo $distrib['observationver']?>'>
-						<span class='correc' title="AVISO" data-container="body" data-toggle="popover" data-content="Ya corrigió su distribución"><?php echo $state?></span>
-					</p>
-				</td>	
-				<?php	
-				}
-				else{	?>
-				<td class='text-center'>
-					<span class='span' data-toggle="tooltip" title="<?php echo $namestate?>"><?php echo $state?></span>
-				</td>	
-				<?php	
-				}
-				if ($distrib['state']=="C") {	?>
-					<td class="text-center text-danger"><h5><span title="Desactivado" rel="tooltip" class="glyphicon glyphicon-ban-circle"></span></h5>
-				<?php
-				}
-				else{	?>
-					<td><span title="Ingrese una observación" rel="tooltip" placeholder="Ingrese una observación" id="<?php echo $i?>"  value='editar'>
-					<?php if($distrib['observation']=='')
-					{
-					  echo "Haga doble clic para editar su observación";
-					}
-					else
-					{
-					  echo trim($distrib['observation']);	
-					}
+                    <td class="text-center">
+                        <h4>
+                            <a class='btn btn-success' href='/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>' data-dismiss="modal" aria-hidden="true" style="float:center">
+                                <span class="glyphicon glyphicon-print"></span> Imprimir
+                            </a>
+                        </h4>
+                    </td>
 
-					?></span></td>
-				<?php
-				}
-				?>					
+                    <td class="text-center">
+                        <?php
+                        if ($distrib['state']!="C") { ?>
+                            <h4>
+                                <a class="closedis btn btn-danger" href="#" distid='<?php echo base64_encode($distrib['distid'])?>' perid='<?php echo base64_encode($distrib['perid'])?>' escid='<?php echo base64_encode($distrib['escid']);?>' subid='<?php echo base64_encode($distrib['subid'])?>'>
+                                    <span class="glyphicon glyphicon-lock" data-toggle="tooltip" title="Cerrar Distribución"></span> Cerrar
+                                </a>
+                            </h4>
+                        <?php
+                        }
+                        else{   ?>
+                            <h4>
+                                <a href="#" class="text-danger">
+                                    <span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Desactivada"></span>
+                                </a>
+                            </h4>
+                        <?php
+                        }
+                        ?>
+                    </td>
+                </tr>
+            <?php
+            }
+            elseif($distrib['state']=="B" && $valor==1){
+                $i++;
+            ?>
+            <tr>
+                <td class="text-center info"><?php echo $i?></td>
+                <td class="info"><?php echo $distrib['name']?></td>
+                <td class="text-center info">
+                    <span class='span' data-toggle="tooltip" title="<?php echo $namestate?>"><?php echo $state?></span>
+                </td>
+                <td class="text-center info"><?php echo substr($distrib['created'],0,10)?></td>
+                <td  class="text-center">
+                    <h4>
+                        <a class='btn btn-info' id="seeDistribution<?php echo $distrib['number']?>" href="#" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Ver distribución','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')">
+                            <span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" title="Ver"></span> Verificar
+                        </a>
+                    </h4>
+                </td>
 
-
-				<td class="text-center"><h4><a href='/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>' data-dismiss="modal" aria-hidden="true" style="float:center"><span class="glyphicon glyphicon-print"></span></a></h4></td>
-				<!--  Nombre: <span class="editText">Fulanito de tal</span> -->
-				<!-- <td class="closedis text-center"> <a title='Eliminar un registro' href="#"><span class="glyphicon glyphicon-pencil"></span></a></td> -->
-				<td class="text-center">
-					<?php if ($distrib['state']!="C") {	?>
-					<h4><a class="closedis" href="#" distid='<?php echo base64_encode($distrib['distid'])?>' perid='<?php echo base64_encode($distrib['perid'])?>' escid='<?php echo base64_encode($distrib['escid']);?>' subid='<?php echo base64_encode($distrib['subid'])?>'><span class="glyphicon glyphicon-lock" data-toggle="tooltip" title="Cerrar Distribución"></span></a></h4>
-					<?php
-					}
-					else{	?>
-						<h4><a href="#"><span class="glyphicon glyphicon-ban-circle" data-toggle="tooltip" title="Desactivada"></span></a></h4>
-					<?php
-					}
-					?>
-				</td>
-			</tr>
-
-			
-			<script> 
-            // $(function(){
-            	$('#seeDistribution<?php echo $distrib['number']?>').hover(function(){
-					$('#seeDistribution<?php echo $distrib['number']?>').tooltip('toggle');
-				});
-
-                $('#<?php echo $i?>').dblclick( function(){
-                    var text = $(this).text();
-
-					text=text.trim();
-                    //alert(text);
-
-                    $(this).empty().html('<input type="text" class="form-control" value="'+text+'">').find('input').focus();
-                	}).keypress( function(e){
-                    if(e.keyCode == 13){
-                        var text = $('input', this).val();
-                        $(this).html( text );
-
-                    //alert("Campo actualizado");
-
-                    //e.preventDefault();                 
-                    //alert(url);
-                    	$("#destino").load("/pedagogia/distribution/distribution/", {escid: "<?php echo $distrib['escid']?>", distid: "<?php echo $distrib['distid']?>",perid: "<?php echo $distrib['perid']?>",subid: "<?php echo $distrib['subid']?>",observation: text}, function(){
-                		});
-                		$('.correc').popover('hide');
-
-                    };
-                });
-            // });
-        	</script>
-
-			<?php
-			}
-			elseif($distrib['state']=="B" && $valor==1){
-				$i++;
-			?>
-			<tr>
-				<td class="text-center"><?php echo $i?></td>
-				<td><?php echo $distrib['name']?></td>
-				<td class="text-center"><?php echo substr($distrib['created'],0,10)?></td>
-				<td class="text-center">
-					<h4><a id="seeDistribution<?php echo $distrib['number']?>" href="#" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Eliminar Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')"><span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" title="Ver"></span>
-	                </a></h4>	
-				</td>
-				<td class="text-center">
-					<span class='span' data-toggle="tooltip" title="<?php echo $namestate?>"><?php echo $state?></span>
-				</td>
-					
-				<td class="text-center text-danger"><h5><span title="Desactivado" rel="tooltip" class="glyphicon glyphicon-ban-circle"></span></h5>
-				</td>				
-				<td class="text-center"><h4><a href='/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>' data-dismiss="modal" aria-hidden="true" style="float:center"><span class="glyphicon glyphicon-print"></span></h4></td>
-				<td class="text-center text-danger"><h5><span title="Desactivado" rel="tooltip" class="glyphicon glyphicon-ban-circle"></span></h5>
-				</td>
-			</tr>
-			<?php	
-			}			
-		}
-		?>
-	</tbody>
-	</table>
+                <td class="text-center text-danger">
+                    <h4>
+                        <span title="Desactivado" rel="tooltip" class="glyphicon glyphicon-ban-circle"></span>
+                    </h4>
+                </td>
+                <td class="text-center">
+                    <h4>
+                        <a class='btn btn-success'href='/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>' data-dismiss="modal" aria-hidden="true" style="float:center">
+                            <span class="glyphicon glyphicon-print"></span> Imprimir
+                        </a>
+                    </h4>
+                </td>
+                <td class="text-center text-danger"><h5><span title="Desactivado" rel="tooltip" class="glyphicon glyphicon-ban-circle"></span></h5>
+                </td>
+            </tr>
+            <?php
+            }
+        }
+        ?>
+    </tbody>
+    </table>
 <?php else: ?>
-	<div class='col-md-10 col-md-offset-1 cont-font-not-register alert alert-info'>
-		<h3 class="text-info text-center"><span class='glyphicon glyphicon-exclamation-sign' ></span> <b>No existen datos de esta facultad en este periodo...</b></h3> 
-	</div>
+    <div class='col-md-10 col-md-offset-1 cont-font-not-register alert alert-info'>
+        <h3 class="text-info text-center"><span class='glyphicon glyphicon-exclamation-sign' ></span> <b>No existen datos de esta facultad en este periodo...</b></h3>
+    </div>
 <?php endif ?>
 
 <div id="cargaqui"></div>
@@ -208,11 +203,11 @@
     <div class="modal-content">
       <div class="modal-body">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel"><span class='text-info'><b>ESTA SEGURO DE CERRAR LA DISTRIBUCIÓN? </b></span></h4>
+        <h4 class="modal-title"><span class='text-info'><b>ESTA SEGURO(A) DE CERRAR LA DISTRIBUCIÓN? </b></span></h4>
       </div>
       <div class="modal-body text-right">
-        	<button id="aceptars" type="button" class="btn btn-success"><span class='glyphicon glyphicon-ok'></span> Aceptar</button>
-        	<button type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Cancelar</button>
+            <button id="aceptars" type="button" class="btn btn-success"><span class='glyphicon glyphicon-ok'></span> Aceptar</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Cancelar</button>
       </div>
     </div>
   </div>
@@ -220,77 +215,146 @@
 
 <!-- Corregir distribución-->
 <div class="modal fade" id="myModals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  	<div class="modal-dialog">
-    	<div class="modal-content">
-      		<div class="modal-header">
-        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        		<h3 class="modal-title text-danger text-center" id="myModalLabel"><b>Comentario de la distribución</b></h3>
-      		</div>
-      		<div class="modal-body">
-      			<div id="comments"></div>
-      		</div>
-      		<div class="modal-footer">
-        		<button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
-      		</div>
-    	</div><!-- /.modal-content -->
-  	</div><!-- /.modal-dialog -->
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title text-danger text-center"><b>Comentario de la distribución</b></h3>
+            </div>
+            <div class="modal-body">
+                <div id="comments"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" >Cerrar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!-- Modal de observaciones -->
+<div class="modal fade" id="myModalobs" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title text-primary"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> <b><u>OBSERVAR</u></b></h3>
+            </div>
+            <div class="modal-body">
+                <h4><b class='text-success'>Ingrese una Observación:</b></h4>
+                <textarea id="boxobservation" rows="7" class="form-control" placeholder="Ingrese todas las observaciones que desee" cols="80"></textarea>
+                <div id="destino"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="obsdis" type="button" class="btn btn-warning"><span class="glyphicon glyphicon-exclamation-sign"></span> Enviar la Observación</button>
+                <button id='cancel'type="button" class="btn btn-danger" data-dismiss="modal" ><span class='glyphicon glyphicon-log-out'></span> Cancelar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 <script>
-	$(".correction").hover(function(){
-		var comentss=$(this).attr('comentss');
-		var observationv=$(this).attr('observationver');
-		var sms="<h4><b class='text-info'>Comentario de parte del director de la respectiva escuela: </b><br><br>"+comentss+"<hr></h4><br><br><h5><b class='text-success'>Esto era la observación: </b><br> "+observationv+ "</h5>";
-		$('#comments').html(sms);
-		$("#myModals").modal("show");
-	});
+    $(".correction").hover(function(){
+        var comentss=$(this).attr('comentss');
+        var observationv=$(this).attr('observationver');
+        var sms="<h4><b class='text-info'>Comentario de parte del director de la respectiva escuela: </b><br><br>"+comentss+"<hr></h4><br><br><h5><b class='text-success'>Esto era la observación: </b><br> "+observationv+ "</h5>";
+        $('#comments').html(sms);
+        $("#myModals").modal("show");
+    });
 
-	// $("#cargaqui").hide();
-	$(".glyphicon").tooltip();
-	$(".span").tooltip();
+    $(".glyphicon").tooltip();
+    $(".span").tooltip();
 
-	$(function () {
-		$('.correc').popover('show');
-	});
-	setTimeout(function() {
-	  $('.correc').popover('hide');
-	}, 10000);
+    $(function () {
+        $('.correc').popover('show');
+    });
+    setTimeout(function() {
+      $('.correc').popover('hide');
+    }, 7000);
 
-	$("#faculty").change(function(){
-		$('.correc').popover('hide');
-		$("#data").hide();
-	});
-	$("#periods").change(function(){
-		$('.correc').popover('hide');
-		$("#data").hide();
-	});
-	$("#anios").change(function(){
-		$('.correc').popover('hide');
-		$("#data").hide();
-	});
+    $("#faculty").change(function(){
+        $('.correc').popover('hide');
+        $("#data").hide();
+    });
+    $("#periods").change(function(){
+        $('.correc').popover('hide');
+        $("#data").hide();
+    });
+    $("#anios").change(function(){
+        $('.correc').popover('hide');
+        $("#data").hide();
+    });
 
-	$(".closedis").click(function(){
-		$("#myModal").modal("show");
-		var params = {
-			escid:$(this).attr('escid'),
-			subid:$(this).attr('subid'),
-			distid:$(this).attr('distid'),
-			perid:$(this).attr('perid')
-		};
-		$("#aceptars").click(function(){
-			$("#myModal").modal("hide");
-			$('#myModal').on('hidden.bs.modal', function (e) {
-				var perid = $('#periods').val();
-				var facid = $('#faculty').val();
-				var url1=("/pedagogia/distribution/closedistribution/state/<?php echo base64_encode("C")?>/escid/"+params['escid']+"/subid/"+params['subid']+"/distid/"+params['distid']+"/perid/"+params['perid']);
-				// alert(url1);
-				$("#cargaqui").load(url1);
-				// $('#data').html('<center><img class="text-center" src="/img/spinner.gif"></center>');
-				var url2=("/pedagogia/distribution/view/perid/"+perid+"/facid/"+facid);
-				$('#data').load(url2);
-				$('.correc').popover('hide');
-			})
-		});
-	});
+    $(".closedis").click(function(){
+        $("#myModal").modal("show");
+        var params = {
+            escid:$(this).attr('escid'),
+            subid:$(this).attr('subid'),
+            distid:$(this).attr('distid'),
+            perid:$(this).attr('perid')
+        };
+        $("#aceptars").click(function(){
+            $("#myModal").modal("hide");
+            $('#myModal').on('hidden.bs.modal', function (e) {
+                $('.correc').popover('hide');
+
+                var perid = $('#seletperiod').val();
+                var facid = $('#faculty').val();
+
+                var url1=("/pedagogia/distribution/closedistribution/state/<?php echo base64_encode('C')?>/escid/"+params['escid']+"/subid/"+params['subid']+"/distid/"+params['distid']+"/perid/"+params['perid']);
+                $("#cargaqui").load(url1);
+
+                var url2=("/pedagogia/distribution/view/perid/"+$.base64.encode(perid)+"/facid/"+facid);
+                $('#data').html('<center><img class="text-center" src="/img/spinner.gif"></center>');
+                $('#data').load(url2);
+            })
+        });
+    });
+
+    $(".observation").on('click', function(){
+        var perid=$(this).attr('perid');
+        var escid=$(this).attr('escid');
+        var subid=$(this).attr('subid');
+        var distid=$(this).attr('distid');
+        var facid=$(this).attr('facid');
+        $("#myModalobs").modal('show');
+        $("#obsdis").on('click', function(){
+            var observation=$("textarea#boxobservation").val();
+            observation=observation.trim();
+            if (observation) {
+                var dataobs = {
+                          "perid"   : perid,
+                          "escid"   : escid,
+                          "subid"   : subid,
+                         "distid"   : distid,
+                    "observation"   : $.base64.encode(observation)
+                };
+
+                $.ajax({
+                    type : 'post',
+                    url  : '/pedagogia/distribution/distribution/',
+                    data : dataobs,
+                    success: function(data){
+                        if (data.status == true) {
+                            $("#myModalobs").modal('hide');
+                            $('#myModalobs').on('hidden.bs.modal', function (e) {
+                                $('#data').html('<center><img src="/img/spinner.gif"> Cargando...</center>');
+                                $('#data').load('/pedagogia/distribution/view/perid/'+perid+'/facid/'+facid);
+                            });
+                        }
+                        else{
+                            $("#destino").html("<h5 class='text-danger'><b>No se pudo observar esta distribución</b></h5>");
+                        }
+                    }
+                });
+            }
+            else{
+                $("#destino").html("<h5 class='text-info'><b>¡ Ingrese una observación !</b></h5>");
+            };
+        });
+    });
+
+    $('#myModalobs').on('hidden.bs.modal', function (e) {
+        $("#destino").empty();
+    });
 </script>
- <div id="destino"></div> 
