@@ -35,7 +35,6 @@ class Record_DirectedController extends Zend_Controller_Action {
             $this->view->user=$datauser[0];
             
             $rid=$this->sesion->rid;
-
             if ($rid == 'AD') {
                 //solo si es admin
                 $anio=$perid;
@@ -98,38 +97,15 @@ class Record_DirectedController extends Zend_Controller_Action {
             $rol=$this->sesion->rid;
             
             if ($rol =='AD') {
-                /*if($cur0 && !$cur1 && !$cur2){
+                if($cur0 && !$cur1 && !$cur2){
                     $cur=$cur0;
                 }else{
                     $cur=array_merge($cur0,$cur1,$cur2);
-                }*/
-                $cur=array_merge($cur0,$cur1,$cur2);
-                if($cur==""){
-                    $cur=array_merge($cur0,$cur1);
-                    if($cur==""){
-                        $cur=array_merge($cur1,$cur2);
-                        if($cur==""){
-                            $cur=array_merge($cur0,$cur2);
-                            if($cur==""){
-                                $cur=$cur0;
-                                if($cur==""){
-                                    $cur=$cur1;
-                                    if($cur==""){
-                                        $cur=$cur2;
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             }else{
-                if ($cur0 xor $cur1) {
-                    if($cur0){
-                        $cur=$cur0;
-                    }else{
-                        $cur=$cur1;
-                    }
-                }else{
+                if ($cur0 && !$cur1) {
+                    $cur=$cur0;
+                }elseif ($cur0 && $cur1) {
                     $cur=array_merge($cur0,$cur1);
                 }
             }

@@ -1,0 +1,39 @@
+<?php 
+if ($this->facid) { ?>
+	<option selected value="TODOEC">Todas las escuelas.</option>
+<?php
+}else{
+	if ($this->escuelas) { ?>
+		<option value="">- Seleccione Escuela -</option>
+		<!-- <option value="TODOEC">Todas las Escuelas.</option> -->
+		<?php
+		if($this->rid=='DR'){
+			foreach ($this->escuelas as $escuelas) {
+				$escid=base64_encode($escuelas['escid']);
+				$subid_cryp=base64_encode($escuelas['subid']); 
+				//$str = ($this->escid==$escuelas['escid'])?"selected ":"";  
+				if($this->esc==$escuelas['escid']){?>
+					<option value="<?php echo $escid.";--;".$subid_cryp?>"><?php echo $escuelas['name']?></option>
+				<?php
+				}	
+			}
+		}else{
+			foreach ($this->escuelas as $escuelas) { 	
+				if ($this->escid){
+					$str = ($this->escid==$escuelas['escid'])?"selected ":""; 
+				}
+				else{
+					$str = null;
+				}
+				$escid=base64_encode($escuelas['escid']);
+				$subid_cryp=base64_encode($escuelas['subid']); 
+				?>				
+				<option <?php echo $str?> value="<?php echo $escid.";--;".$subid_cryp?>"><?php echo $escuelas['name']?></option>
+			<?php
+			}
+		}	
+	}else{ ?>		
+		<option value="">No tiene ningun registro.</option>
+	<?php
+	} 
+}?>

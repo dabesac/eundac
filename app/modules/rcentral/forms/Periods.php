@@ -73,8 +73,7 @@ class Rcentral_Form_Periods extends Zend_Form{
 		$submit->setLabel("Guardar");
         $submit->setAttrib("class","btn btn-success");
 
-        $this->addElements(array($perid,$eid,$oid,$nperiodo,$fechaini,$fechafin,$state,
-        	$fip1, $ffp1,$fip2,$ffp2, $document_auth,$finimat,$ffinmat,$submit)); 
-
+        $this->addElements(array($perid,$eid,$oid,$nperiodo,$fechaini,$fechafin,
+        	$fip1, $ffp1,$fip2,$ffp2, $document_auth,$finimat,$ffinmat,$submit));
     }
 }

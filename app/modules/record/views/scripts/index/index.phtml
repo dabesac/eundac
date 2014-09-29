@@ -1,17 +1,38 @@
+<style>
+	#titulo{
+		background: #086A87;
+		border-right: 1px solid #A9D0F5;
+		color: white;
+	}
+	#cont {
+		border-right: 1px solid white;		
+	}
+</style>
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Administración de Cursos');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/" class="form-control btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
 <form id="formRecord" name="formRecord" action="/record/index/list/" method="post">
-	<table class="table table-hover table-condensed">
+	<table class="table table-striped">
 		<tr>
-			<th class="col-lg-1">Año</th>
-			<th class="col-lg-2">Periodo</th>
-			<th class="col-lg-2">Escuela(s)</th>
-			<th class="col-lg-2">Nombre Curso</th>
-			<th class="col-lg-1">Operaciones</th>
+			<th class="col-lg-1" id="titulo">Año</th>
+			<th class="col-lg-2" id="titulo">Periodo</th>
+			<?php 
+			if($this->rid<>'DR' && $this->rid<>'RF'){?>
+				<th class="col-lg-2" id="titulo">Facultad</th>
+			<?php	
+			}?>
+			<th class="col-lg-2" id="titulo">Escuela(s)</th>
+			<?php 
+			if($this->rid<>'DR' && $this->rid<>'RF'){?>
+				<th class="col-lg-2" id="titulo">Especialidad</th>
+			<?php	
+			}
+			?>
+			<th class="col-lg-2" id="titulo">Nombre Curso</th>
+			<th class="col-lg-1" id="titulo">Operaciones</th>
 		</tr>
-		<tr>
-			<td>
+		<tr class="active">
+			<td id="cont">
 				<select name="year" id="year" class="form-control">
 				<?php 
 				for($i=date('Y')+1;$i>=1965;$i--){
@@ -24,37 +45,69 @@
 				?>
 				</select>
 			</td>
-			<td>
+			<td id="cont">
 				<select id="perid" name="perid" class="form-control">
 					<option value="">Selección un periodo</option>
 				</select>
 			</td>
-			<td>
+			<!-- facultad -->
+			<?php 
+			if($this->rid<>'DR' && $this->rid<>'RF'){?>
+			<td id="cont">
+				<select id="facid" name="facid" class="form-control">
+	                <option>- Seleccione -</option>
+	                  	<?php
+	                   	foreach ($this->facultades as $facultades) {
+	                   		if ($facultades['facid']!='TODO'){
+	                   		$facid_en=base64_encode($facultades['facid']);?>
+	                		<option value="<?php echo $facid_en?>"><?php echo $facultades['name']?></option>
+	                    	<?php
+	                    	}
+	                    }?>
+                </select>
+			</td>
+			<?php	
+			}?>
+			<!-- fin facultad -->
+			<td id="cont">
 				<select id="escid" name="escid" class="form-control">
 				<?php 
-				$specialitys =$this->specialitys;
-				if ($specialitys){
-					foreach ($specialitys as $esc){
-						$escid=base64_encode($esc['escid']);
-						$subid_cryp=base64_encode($esc['subid']);
-						$name=($esc['name']);
-					?>	
-						<!--Olimpico Seteo por que no hay tiempo-->
-						<?php if ($esc['escid'] == '4MI' or $esc['escid'] == '6MI' or $esc['escid'] == '2CC' or $esc['escid'] == '10CC' or $esc['escid'] == '1AD' or $esc['escid'] == '9CE'){
-							$escuela = $esc['escid'].' | ';
-						}else{
-							$escuela = '';
-						} ?>
-						<option value="<?php echo $escid.";--;".$subid_cryp?>"><?php echo $escuela.$name ?></option>
-					<?php 
-					}
-				}else{
-				?>
-					<option value="">Selección una escuela</option>
-				<?php } ?>
+				if($this->rid=='DR' || $this->rid=='RF'){
+					$specialitys =$this->specialitys;
+					if ($specialitys){
+						foreach ($specialitys as $esc){
+							$escid=base64_encode($esc['escid']);
+							$subid_cryp=base64_encode($esc['subid']);
+							$name=($esc['name']);
+						?>	
+							<!--Olimpico Seteo por que no hay tiempo-->
+							<?php if ($esc['escid'] == '4MI' or $esc['escid'] == '6MI' or $esc['escid'] == '2CC' or $esc['escid'] == '10CC' or $esc['escid'] == '1AD' or $esc['escid'] == '9CE'){
+								$escuela = $esc['escid'].' | ';
+							}else{
+								$escuela = '';
+							} ?>
+							<option value="<?php echo $escid.";--;".$subid_cryp?>"><?php echo $escuela.$name ?></option>
+						<?php 
+						}
+					}else?>
+					<option value="">-Seleccione-</option>
+				<?php
+				}else{?>
+					<option value="">-Seleccione-</option>
+				<?php
+				}?>
 				</select>
 			</td>
-			<td>
+			<?php 
+			if($this->rid<>'DR' && $this->rid<>'RF'){?>
+				<td id="cont">
+					<select id="especialidad" name="speciality" class="form-control" style="width:260px">
+                    	<option value="">- Seleccione -</option>
+                	</select>
+				</td>
+			<?php	
+			}?>
+			<td id="cont">
 				<input type="text" name="coursename" id="coursename" class="form-control">
 			</td>
 			<td><input type="submit" name="send" id="sendform" value="Buscar" class="form-control btn btn-success"></td>
@@ -76,6 +129,17 @@ $(function() {
 		$("#perid").load("/record/index/periods/year/"+year);		
 	});
 	$("#perid").load("/record/index/periods/year/"+year_a);
+	$("#facid").change(function(){
+		var facid = $(this).val();
+		$("#escid").load("/record/index/schools/facid/"+facid);
+	});
+	$("#escid").change(function(){
+		var tescid = $(this).val();
+		var xx1 = tescid.split(";--;");
+		var escid = xx1[0];
+		var subid = xx1[1];
+		$("#especialidad").load("/record/index/speciality/escid/"+escid);
+	});
 	$("#sendform").click(function(e){
 		e.preventDefault();
 		$(".loadcourses").html("<img src='/img/spinner.gif'>Cargando....");

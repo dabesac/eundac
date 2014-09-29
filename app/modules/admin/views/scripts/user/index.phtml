@@ -4,7 +4,7 @@
 <form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/admin/user/getuser" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
     <table class="table span9 table-striped table-bordered table-condensed">
         <tr class="info">
-            <td colspan='2' class="text-center"><span class='glyphicon glyphicon-exclamation-sign'> </span> Busque Usuarios por uno de los siguientes campos</td>
+            <td colspan='2' class="text-center"><span class='glyphicon glyphicon-exclamation-sign text-danger'> </span> <span class="text-muted"> Busque Usuarios por uno de los siguientes campos</span></td>
             <td><a href="/admin/user/new" style='float:right' class='btn btn-info'><span class='glyphicon glyphicon-plus'></span> Nuevo Usuario</a></td>
         </tr>
         <tr style="background:black ;color:white;font-weight: 900; ">
@@ -32,8 +32,21 @@
 <div  id="cargadatos_">
     <!--lista de usuarios -->
 </div> 
-
 <script>
+    $(function(){
+        $("#name").focus(function() {
+            $("#pid").val("");
+            $("#uid").val("");
+        });
+        $("#pid").focus(function() {
+            $("#name").val("");
+            $("#uid").val("");
+        });
+        $("#uid").focus(function() {
+            $("#name").val("");
+            $("#pid").val("");
+        });
+    });
     $("#name, #pid, #uid").keypress(function (e) {
         if(e == 13 || e.which==13 || e.which==0){
             var codi =  $('#pid').val();

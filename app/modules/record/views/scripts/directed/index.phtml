@@ -1,29 +1,21 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-certificate"></span> CONVALIDACIÓN, DIRIGIDOS Y SUBSANACIÓN');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/" class="form-control btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> Regresar </a>');?>
-<br>
+<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
 <?php if ($this->usuario!='AD') { ?>
 	<div>
-		
-		<table class="table table-striped table-condensed">
+		<table class="table table-hover">
 			<tr>
-				<td class="col-xs-3">
-					<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Ingrese Código de Matricula: </p>
-				</td>
-			<td class="col-xs-5">
-				<div class="col-xs-9">
-					<input id="uid" type="text" class="form-control" maxlength="10"  onkeypress="return soloNumero(event)" placeholder="Código De Alumno">
-				</div>
-			</td>
-				<td class="col-xs-3">
-					<div class="checkbox">
-						<label>
-						<input id="checkbox" type="checkbox">
-						<?php echo date('Y')-1 ?>
-						</label>
+				<td><p style="float:right; padding-right: 20px">Ingrese Código de Matricula:</p></td>
+				<td class="col-lg-3">
+					<div class="col-lg-9">
+						<input id="uid" type="text" class="form-control" maxlength="10"  onkeypress="return soloNumero(event)" placeholder="Ingrese Código">
 					</div>
 				</td>
-				<td class="col-xs-1">
+				<td>
+					<label for="chck"><?php echo date('Y')-1 ?></label>
+					<input id="checkbox" type="checkbox" name="chck"  value="2">
+				</td>
+				<td class="col-lg-4">
 					<a id="search" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</a>
 				</td>
 			</tr>
@@ -50,18 +42,15 @@
 
 <?php } elseif ($this->usuario=='AD'){ ?>
 <div>
-	<table class="table table-striped table-condensed">
+	<table class="table table-hover">
 		<tr>
-			<td class="col-xs-3">
-				<p class="text-muted"><span class="glyphicon glyphicon-info-sign"></span> Ingrese Código de Matricula y seleccione un año para comenzar</p>
-			</td>
-			<td class="col-lg-5">
+			<td><p style="float:right; padding-right: 20px">Ingrese Código de Matricula:</p></td>
+			<td class="col-lg-3">
 				<div class="col-lg-9">
-					<input id="uid" type="text" class="form-control" maxlength="10"  onkeypress="return soloNumero(event)" placeholder="Código De Alumno">
+					<input id="uid" type="text" class="form-control" maxlength="10"  onkeypress="return soloNumero(event)" placeholder="Ingrese Código">
 				</div>
 			</td>
-			<td class="col-xs-3">
-			 <select id="anios" class='form-control' name="anios" style="width: 90px" >
+			 <td><select id="anios" class='form-control' name="anios" style="width: 90px" >
                     <?php 
                     $anio= date('Y')-1;
                     $i=0;
@@ -73,7 +62,7 @@
                     <?php }?>
                 </select>
             </td>
-			<td class="col-xs-1">
+			<td class="col-lg-4">
 				<a id="search" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</a>
 			</td>
 		</tr>
@@ -81,10 +70,10 @@
 </div>
 <script type="text/javascript" >
 	$("#search").click(function(){
-	$("#student").html("<img src='/img/spinner.gif'>Cargando...");
 	var uid=$("#uid").val();
 	var anios=$("#anios").val();
 	if (uid!="") {
+		
 		$("#student").load("/record/directed/student/uid/"+uid+"/perid/"+anios);
 	}else{
 		alert("Ingrese el Código de Matricula.");
@@ -95,7 +84,7 @@
 
 <?php } ?>
 
-<div id="student" class="text-center"></div>
+<div id="student"></div>
 
 
 <script >
