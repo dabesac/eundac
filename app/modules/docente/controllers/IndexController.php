@@ -214,8 +214,8 @@ class Docente_IndexController extends Zend_Controller_Action {
                 break;
             }
         }  
-        $this->view->news = $newsFilter;
-
+        $this->view->news = $newsFilter;  
+        
         //Avacen Academico Solo Para Directores
         $this->view->rid = $rid;
         if ($rid == 'DR') {
