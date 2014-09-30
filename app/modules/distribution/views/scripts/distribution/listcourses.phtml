@@ -21,113 +21,119 @@ if ($this->courses){ ?>
             <td><div><input type="checkbox" value="F" index='6'class="turno-fill-col">F</div></td>
         </tr>
         <?php           
-            $i=0;
-            foreach ($this->courses as $courses){ 
-                $wherecour['eid']=$courses['eid'];
-                $wherecour['oid']=$courses['oid'];
-                $wherecour['courseid']=$courses['courseid'];
-                $wherecour['curid']=$courses['curid'];
-                $wherecour['escid']=$courses['escid'];
-                $wherecour['subid']=$courses['subid'];
-                $wherecour['perid']=$this->perid;
-                $orders = array('courseid ASC','turno ASC');
-                $percursos = new Api_Model_DbTable_PeriodsCourses();
-                $percourse=$percursos->_getFilter($wherecour,$attrib=null,$orders);
-                $turnexis=array();
-                if ($percourse) {
-                    $tam=count($percourse);
-                    $turn = array('A','B','C','D','E','F');
-                    $ct=0;
-                    for ($ii=0; $ii < $tam; $ii++) {
-                        for ($j=0; $j < 6; $j++) { 
-                            if ($turn[$j]==$percourse[$ii]['turno']) {
-                                $turnexis[$turn[$j]]=$turn[$j];
-                                $j=6;
-                                $ct++;
-                            }
+        $i=0;
+        foreach ($this->courses as $courses){ 
+            $wherecour['eid']=$courses['eid'];
+            $wherecour['oid']=$courses['oid'];
+            $wherecour['courseid']=$courses['courseid'];
+            $wherecour['curid']=$courses['curid'];
+            $wherecour['escid']=$courses['escid'];
+            $wherecour['subid']=$courses['subid'];
+            $wherecour['perid']=$this->perid;
+            $orders = array('courseid ASC','turno ASC');
+            $percursos = new Api_Model_DbTable_PeriodsCourses();
+            $percourse=$percursos->_getFilter($wherecour,$attrib=null,$orders);
+            $turnexis=array('A' => '',
+                            'B' => '',
+                            'C' => '',
+                            'D' => '',
+                            'E' => '',
+                            'F' => '' );;
+            if ($percourse) {
+                $tam=count($percourse);
+                $turn = array('A','B','C','D','E','F');
+                $ct=0;
+
+                for ($ii=0; $ii < $tam; $ii++) {
+                    for ($j=0; $j < 6; $j++) { 
+                        if ($turn[$j]==$percourse[$ii]['turno']) {
+                            $turnexis[$turn[$j]]=$turn[$j];
+                            $j=6;
+                            $ct++;
                         }
                     }
                 }
-                // print_r($turnexis);
-                ?>
-                <tr>
-                    <td><?php echo $i+1?></td>
-                    <td><center><?php echo $courses['courseid']?></center></td>
-                    <td><?php echo $courses['name']?></td>
-                    <td>
-                        <center><?php echo ($courses['type']=='O')? "Obligatorio":"Electivo";?></center>
-                    </td>
-                    <td>
+            }
+            //print_r($turnexis);
+            ?>
+            <tr>
+                <td><?php echo $i+1?></td>
+                <td><center><?php echo $courses['courseid']?></center></td>
+                <td><?php echo $courses['name']?></td>
+                <td>
+                    <center><?php echo ($courses['type']=='O')? "Obligatorio":"Electivo";?></center>
+                </td>
+                <td>
+                    <?php
+                    if ($turnexis['A']=="A") { ?>
+                        <input class ='one-turno-course' index='1' type="checkbox" id="A" name="turno[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."A".";--;".$courses['subid']?>" checked>A
                         <?php
-                        if ($turnexis['A']=="A") { ?>
-                            <input class ='one-turno-course' index='1' type="checkbox" id="A" name="turno[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."A".";--;".$courses['subid']?>" <?php echo ($courses['turno']=="A")?"":"checked";?> >A
-                            <?php
-                        }else{ ?>
-                            <input class ='one-turno-course' index='1' type="checkbox" id="A" name="turno[<?php echo $i?>]" value="A">A
-                        <?php
-                        }?>
-                    </td>
-                    <td>
-                        <?php
-                        if ($turnexis['B']=="B") { ?>
-                            <input class ='one-turno-course' index='2' type="checkbox" id="B" name="turno1[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."B".";--;".$courses['subid']?>" checked>B
-                        <?php
-                        }else{ ?>
-                            <input class ='one-turno-course' index='2' type="checkbox" id="B" name="turno1[<?php echo $i?>]" value="B">B
-                        <?php
-                        }?>
-                    </td>
-                    <td>
-                        <?php
-                        if ($turnexis['C']=="C") { ?>
-                            <input class ='one-turno-course' index='3' type="checkbox" id="C" name="turno2[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."C".";--;".$courses['subid']?>" checked>C
-                        <?php
-                        }else{ ?>
-                            <input class ='one-turno-course' index='3' type="checkbox" id="C" name="turno2[<?php echo $i?>]" value="C">C
-                        <?php
-                        }?>
-                    </td>
-                    <td>
-                        <?php
-                        if ($turnexis['D']=="D") { ?>
-                            <input class ='one-turno-course' index='4' type="checkbox" id="D" name="turno3[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."D".";--;".$courses['subid']?>" checked>D
-                        <?php
-                        }else{ ?>
-                            <input class ='one-turno-course' index='4' type="checkbox" id="D" name="turno3[<?php echo $i?>]" value="D">D
-                        <?php
-                        }?>
-                    </td>
-                    <td>
-                        <?php
-                        if ($turnexis['E']=="E") { ?>
-                            <input class ='one-turno-course' index='5' type="checkbox" id="E" name="turno4[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."E".";--;".$courses['subid']?>" checked>E
-                        <?php
-                        }else{ ?>
-                            <input class ='one-turno-course' index='5' type="checkbox" id="E" name="turno4[<?php echo $i?>]" value="E">E
-                        <?php
-                        }?>
-                    </td>
-                    <td>
-                        <?php
-                        if ($turnexis['F']=="F") { ?>
-                            <input class ='one-turno-course' index='6' type="checkbox" id="F" name="turno5[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."F".";--;".$courses['subid']?>" checked>F
-                        <?php
-                        }else{ ?>
-                            <input index='6' type="checkbox" id="F" name="turno5[<?php echo $i?>]" value="F">F
-                        <?php
-                        }?>
-                    </td>
-                </tr>
-                <input type="hidden" value="<?php echo $courses['courseid'];?>" name="courseid[]">
-                <input type="hidden" value="<?php echo $courses['curid'];?>" name="curid">
-                <input type="hidden" value="<?php echo $courses['subid'];?>" name="subid">
-                <input type="hidden" value="<?php echo $this->semid;?>" name="semid">
-                <input type="hidden" value="<?php echo $this->perid;?>" name="perid">
-                <input type="hidden" value="<?php echo $this->distid;?>" name="distid">
-                <input type="hidden" value="<?php echo $this->escid;?>" name="escid">
-                <?php                
-               $i++;  
-               } ?>
+                    }else{ ?>
+                        <input class ='one-turno-course' index='1' type="checkbox" id="A" name="turno[<?php echo $i?>]" value="A">A
+                    <?php
+                    }?>
+                </td>
+                <td>
+                    <?php
+                    if ($turnexis['B']=="B") { ?>
+                        <input class ='one-turno-course' index='2' type="checkbox" id="B" name="turno1[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."B".";--;".$courses['subid']?>" checked>B
+                    <?php
+                    }else{ ?>
+                        <input class ='one-turno-course' index='2' type="checkbox" id="B" name="turno1[<?php echo $i?>]" value="B">B
+                    <?php
+                    }?>
+                </td>
+                <td>
+                    <?php
+                    if ($turnexis['C']=="C") { ?>
+                        <input class ='one-turno-course' index='3' type="checkbox" id="C" name="turno2[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."C".";--;".$courses['subid']?>" checked>C
+                    <?php
+                    }else{ ?>
+                        <input class ='one-turno-course' index='3' type="checkbox" id="C" name="turno2[<?php echo $i?>]" value="C">C
+                    <?php
+                    }?>
+                </td>
+                <td>
+                    <?php
+                    if ($turnexis['D']=="D") { ?>
+                        <input class ='one-turno-course' index='4' type="checkbox" id="D" name="turno3[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."D".";--;".$courses['subid']?>" checked>D
+                    <?php
+                    }else{ ?>
+                        <input class ='one-turno-course' index='4' type="checkbox" id="D" name="turno3[<?php echo $i?>]" value="D">D
+                    <?php
+                    }?>
+                </td>
+                <td>
+                    <?php
+                    if ($turnexis['E']=="E") { ?>
+                        <input class ='one-turno-course' index='5' type="checkbox" id="E" name="turno4[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."E".";--;".$courses['subid']?>" checked>E
+                    <?php
+                    }else{ ?>
+                        <input class ='one-turno-course' index='5' type="checkbox" id="E" name="turno4[<?php echo $i?>]" value="E">E
+                    <?php
+                    }?>
+                </td>
+                <td>
+                    <?php
+                    if ($turnexis['F']=="F") { ?>
+                        <input class ='one-turno-course' index='6' type="checkbox" id="F" name="turno5[<?php echo $i?>]" value="<?php echo $courses['courseid'].";--;".$courses['curid'].";--;".$courses['escid'].";--;".$courses['semid'].";--;".$this->perid.";--;"."F".";--;".$courses['subid']?>" checked>F
+                    <?php
+                    }else{ ?>
+                        <input index='6' type="checkbox" id="F" name="turno5[<?php echo $i?>]" value="F">F
+                    <?php
+                    }?>
+                </td>
+            </tr>
+            <input type="hidden" value="<?php echo $courses['courseid'];?>" name="courseid[]">
+            <input type="hidden" value="<?php echo $courses['curid'];?>" name="curid">
+            <input type="hidden" value="<?php echo $courses['subid'];?>" name="subid">
+            <input type="hidden" value="<?php echo $this->semid;?>" name="semid">
+            <input type="hidden" value="<?php echo $this->perid;?>" name="perid">
+            <input type="hidden" value="<?php echo $this->distid;?>" name="distid">
+            <input type="hidden" value="<?php echo $this->escid;?>" name="escid">
+            <?php                
+           $i++;  
+           } ?>
         <tr>
             <th colspan="10">
                 <center>

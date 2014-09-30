@@ -64,6 +64,7 @@
 					<td class="text-center"><?php echo $course['parcial1'] ?></td>
 					<td class="text-center"><?php echo $course['parcial2'] ?></td>
 				<?php endif ?>
+				<?php $colorNota = '' ?>
 				<?php if ($course['notaFinal']): ?>
 					<?php if ($course['notaFinal'] < 11):
 						$colorNota = 'disapprovedBack';
@@ -71,7 +72,7 @@
 						$colorNota = 'approvedBack';
 					endif ?>
 				<?php endif ?>
-						<td class="text-center <?php echo $colorNota ?>"><strong><?php echo $course['notaFinal'] ?></strong></td>
+					<td class="text-center <?php echo $colorNota ?>"><strong><?php echo $course['notaFinal'] ?></strong></td>
 				<?php if ($dataCourses['aplazados'] == 'yes'): ?>
 					<td class="text-center <?php echo $course['colorAplazado'] ?>"><strong><?php echo $course['aplazado'] ?></strong></td>
 				<?php endif ?>

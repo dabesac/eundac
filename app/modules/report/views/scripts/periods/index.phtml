@@ -34,7 +34,7 @@
 			<select name="school" id="selectSchool" class="form-control">
 				<option value="">Escuela</option>
 				<?php foreach ($this->dataSchool as $c => $school): ?>
-					<option value="<?php echo base64_encode($school['escid'].'-'.$school['subid']) ?>"><?php echo $school['name'] ?></option>
+					<option value="<?php echo base64_encode($school['escid'].'|'.$school['subid']) ?>"><?php echo $school['name'] ?></option>
 				<?php endforeach ?>
 			</select>
 		</div>

@@ -3,40 +3,42 @@
 class Default_Form_Login extends Zend_Form
 {
     public function init(){
+        //DataBases
+        $rids = new Api_Model_DbTable_Rol();
+
         /* Form Elements & Other Definitions Here ... */
         $this->setName("frmLogin");
         $this->setAttrib("class","form-control");
-        $eid = new Zend_Form_Element_Select("eid");
+        /*$eid = new Zend_Form_Element_Select("eid");
         $eid->setRequired(true);
         $eids = new Api_Model_DbTable_Entity();
         $rows_eids=$eids->_getAll();
         foreach ($rows_eids as $_eid ){
-        	$eid->addMultiOption(base64_encode($_eid['eid']),$_eid['name']);
+            $eid->addMultiOption(base64_encode($_eid['eid']),$_eid['name']);
         }
-        $eid->setAttrib("readonly","");
+        $eid->setAttrib("readonly","");*/
         
-        $oid = new Zend_Form_Element_Select("oid");
+        /*$oid = new Zend_Form_Element_Select("oid");
         $oid->setRequired(true);
         $oid->removeDecorator('Label');
         $oid->removeDecorator('HtmlTag');        
-		$data['eid'] = "20154605046";
         $oids = new Api_Model_DbTable_Org();
         $rows_oids=$oids->_getAll($data);
         $oid->addMultiOption(base64_encode(""),"Seleccione");
         if ($rows_oids){
-	        foreach ($rows_oids as $_oid ){
-	            $oid->addMultiOption(base64_encode($_oid['oid']),$_oid['name']);
-	        }
+            foreach ($rows_oids as $_oid ){
+                $oid->addMultiOption(base64_encode($_oid['oid']),$_oid['name']);
+            }
         }
-        $oid->setAttrib("readonly","");
+        $oid->setAttrib("readonly","");*/
         
+        $data['eid'] = "20154605046";
         $data['oid'] = "1";
         $rid = new Zend_Form_Element_Select("rid");
         $rid->setRequired(true)->addErrorMessage('Este campo es requerido');
         $rid->addMultiOption("","Seleccione un Rol")->removeDecorator('Label');
         $rid->removeDecorator('HtmlTag')->addFilters(array('StringTrim', 'StripTags'));
         $rid->setAttrib("class","form-control");
-        $rids = new Api_Model_DbTable_Rol();
         $order = array('name');
         $rrows_oids=$rids->_getAllACL($data, $order);
         if ($rrows_oids){

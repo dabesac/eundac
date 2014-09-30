@@ -27,7 +27,7 @@
         $dataVista['rid']       = $rid;
         $dataVista['escid']     = $escid;
         $dataVista['subid']     = $subid;
-        $dataVista['dataEscid'] = base64_encode($escid.'-'.$subid);
+        $dataVista['dataEscid'] = base64_encode($escid.'|'.$subid);
 
         if ($rid == 'RF') {
             $dataVista['dataEscid']  = '';

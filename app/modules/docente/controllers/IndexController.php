@@ -183,6 +183,7 @@ class Docente_IndexController extends Zend_Controller_Action {
         }
 
         $c = 0;
+        $newsFilter = array();
         foreach ($news as $new) {
             $where = array( 'eid'   => $eid,
                             'oid'   => $oid,

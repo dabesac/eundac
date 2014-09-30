@@ -176,22 +176,23 @@
                 </a>
 
                 <?php
-                if ($this->progressNotas[$c]['porcentaje'] < 0) {
+                $cualquiera = (isset($this->progressNotas[$c]['porcentaje'])?$this->progressNotas[$c]['porcentaje']:null);
+                if ($cualquiera < 0) {
                     $faltaSilabo = 'Si';
                     $avisoNotas = 'Primero rellene su silabo';
                     $classNotas = 'backDanger';
                     $progressNotas = "0%";
                     $urlNotas = '##';
-                }elseif ($this->progressNotas[$c]['porcentaje'] == 0) {
+                }elseif ($cualquiera == 0) {
                     $faltaSilabo = 'No';
                     $classNotas = 'backDanger';
                     $progressNotas = "0%";
                     $avisoNotas = 'No se lleno ninguna nota aun';
-                }elseif ($this->progressNotas[$c]['porcentaje'] >= 25 and $this->progressNotas[$c]['porcentaje'] <= 99) {
+                }elseif ($cualquiera >= 25 and $cualquiera <= 99) {
                     $faltaSilabo = 'No';
                     $classNotas = 'backWarning';
                     $avisoNotas = 'Se llenaron las notas parcialmente';
-                }elseif ($this->progressNotas[$c]['porcentaje'] == 100) {
+                }elseif ($cualquiera == 100) {
                     $faltaSilabo = 'No';
                     $classNotas = 'backSuccess';
                     $avisoNotas = 'Se llenaron todas las notas';
@@ -269,7 +270,8 @@
                                 <div class="docenteCursos">
                                     <?php $coursesEmpty = 0; ?>
                                     <?php foreach ($this->coursesEmptySyllabus as $course): ?>
-                                        <?php if ($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]): ?>
+                                        <?php $cualquieraDos = (isset($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty])?$this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]: null) ?>
+                                        <?php if ($cualquieraDos): ?>
                                             <p>
                                                 <small><span class="glyphicon glyphicon-book text-muted"></span></small>
                                                 <?php echo ucwords(strtolower($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'])) ?>

@@ -194,16 +194,17 @@ class Register_StudentController extends Zend_Controller_Action {
                     $subject= $this->load_subject($curid,$perid,$condition_semester);
 
                     if ($student_condidtion) {
-                                 
-                        foreach ($subject as $key =>  $delete_subject) {
-                            $Num = count($student_condidtion);
-                            // $i=0;   
-                            for ($k=0; $k < $Num; $k++) {
-                                if ($delete_subject['courseid']== $student_condidtion[$k]['courseid']) {
+                        if ($subject) {
+                            foreach ($subject as $key =>  $delete_subject) {
+                                $Num = count($student_condidtion);
+                                // $i=0;   
+                                for ($k=0; $k < $Num; $k++) {
+                                    if ($delete_subject['courseid']== $student_condidtion[$k]['courseid']) {
 
-                                    unset($subject[$key]);
-                                 } 
-                            }                                
+                                        unset($subject[$key]);
+                                     } 
+                                }                                
+                            }
                         }
                     }
 
