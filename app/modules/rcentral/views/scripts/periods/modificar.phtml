@@ -1,196 +1,173 @@
-          <!-- <script src="/external/jquery/jquery-1.9.1.js"></script>
-        <script src="/external/jquery/ui/minified/jquery-ui.custom.min.js"></script>
-        <script src="/external/jquery/external/globalize.js"></script>
-         <script src="/external/jquery/external/jquery.mousewheel.js"></script>
-         <script src="/external/jquery/external/jshint.js"></script>
-         <script src="/external/jquery/external/qunit.js"></script>
-         <script src="/external/login/js/bjqs-1.3.min.js"></script>
-         <script src="/external/login/js/scripts.js"></script>
-         <link rel="stylesheet" type="text/css" href="/external/jquery/themes/redmond/jquery-ui.css">    
-         <script src="/external/bootstrap/js/bootstrap.min.js"></script> >
-        <link rel="stylesheet" type="text/css" href="/external/bootstrap/css/bootstrap.css">
-         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" /-->  
-         <script src="/external/js/jquery-1.11.0.js"></script>
-        <script src="/external_library/bootstrap/js/bootstrap.js"></script>
-        <script src="/external_library/bootstrap/js/jquery.functions.js"></script>
-        <link rel="stylesheet" type="text/css" href="/external_library/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="/css/style.css">
-        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-
-        
-<form name="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="post" enctype="application/x-www-form-urlencoded">
-	<table style="font-size:12px" width="100%" class="table-hover table-condensed table-striped">
-    	        <div class="panel panel-primary" style="padding: 2px">
-            <div class="panel-heading" style="padding: 6px">
-            <center><b style="font-size:15px; color: white">MODIFICAR PERIODO</b></center>
+<form id="frmModificar" role="form">
+    <div class="col-md-12 panel">
+        <div class="row">
+            <div class="col-md-3">
+                <p><span class="glyphicon glyphicon-chevron-right span11"></span> <span class="text-muted"> Perido</span></p>
+                <?php print $this->form->perid->setAttrib('disable','disable');?>
+            </div>
+            <div class="col-md-9">
+                <p><span class="glyphicon glyphicon-chevron-right span11"></span><span class="text-muted"> Nombre</span></p>
+                <?php print $this->form->name;?>
             </div>
         </div>
-                <tr>
-         <th colspan="3" ><center><?php echo $this->form->guardar?></center></th>
-         <th><br><a style="float:left" href='/distribucion/distribucion/listar' class='btn btn-danger' onclick="javascript: window.close();">
-            <i class="icon-eject icon-white"></i>Cerrar</a>
-        </th>
-        </tr>
-        <tr>
-        	<th  ><center>PERIODO</center></th>
-            <th  colspan="3"><center>NOMBRE PERIODO</center></th>
-      	</tr>
-        <tr>
-        	<td ><center><?php print $this->form->perid->setAttrib('disable','disable');?></center></td>
-            <td  colspan="3"><center> <?php print $this->form->name;?></center></td>
-      	</tr>
-        <tr>
-        	<th><center>ESTADO</center></th>
-            <th colspan="3"><center>RESOLUCION</center></th>
-      	</tr>
-        <tr>
-		<?php
-        $estado=$this->estado;?>
-        <td>
-            <center>
+        <div class="row row2">
+            <div class="col-md-3">
+                <p><span class="glyphicon glyphicon-chevron-right span11"></span> <span class="text-muted"> Estado<span class="glyphicon glyphicon-sort-by-attributes-alt"></span></span></p>
+                <?php $estado=$this->estado;?>
+                <center>
             <select  id="state" name="state" class="form-control">
-            <?php if($estado=='A'){?>
-            <option value="<?php echo $estado?>">Activo</option>
-            <option value="T">Temporal</option>  
-            <option value="C">Cerrado</option> 
-            <?php }?>
-            <?php if($estado=='I'){//I=iniciado?>
-            <option value="<?php echo $estado?>">Iniciado</option>
-            <option value="A">Activo</option>  
-            <option value="T">Temporal</option>
-            <option value="C">Cerrado</option> 
-            <?php }?>
-            <?php if($estado=='T'){?>
-            <option value="<?php echo $estado?>">Temporal</option>
-            <option value="A">Activo</option>  
-            <option value="C">Cerrado</option> 
-            <?php }?>
-            <?php if($estado=='C'){?>
-            <option value="<?php echo $estado?>">Cerrado</option>  
-            <option value="T">Temporal</option> 
-            <?php }?>                            
+                <?php if($estado=='A'){?>
+                    <option value="<?php echo $estado?>">Activo</option>
+                    <option value="T">Temporal</option>  
+                    <option value="C">Cerrado</option> 
+                <?php }?>
+                <?php if($estado=='I'){//I=iniciado?>
+                    <option value="<?php echo $estado?>">Iniciado</option>
+                    <option value="A">Activo</option>  
+                    <option value="T">Temporal</option>
+                    <option value="C">Cerrado</option> 
+                <?php }?>
+                <?php if($estado=='T'){?>
+                    <option value="<?php echo $estado?>">Temporal</option>
+                    <option value="A">Activo</option>  
+                    <option value="C">Cerrado</option> 
+                <?php }?>
+                <?php if($estado=='C'){?>
+                    <option value="<?php echo $estado?>">Cerrado</option>  
+                    <option value="T">Temporal</option> 
+                <?php }?>                            
             </select>
             </center>
-        </td>
-
-           	<th colspan="3"><center><?php print $this->form->document_auth;?></center></th>
-     	</tr>
-		<tr>
-        	<th colspan="2"><center>FECHA CLASES</center></th>
-            <th colspan="2"><center>FECHA MATRICULA</center></th>
-      	</tr>
-        <tr>
-        	<th ><center>Inicio</center></th>
-            <th ><center>Fin</center></th>
-            <th ><center>Inicio</center></th>
-            <th ><center>Fin</center></th>
-      	</tr>
-        <tr>
-        	<td ><center><?php print $this->form->class_start_date;?></center></td>
-            <td ><center><?php print $this->form->class_end_date;?></center></td>
-            <td ><center><?php print $this->form->start_registration;?></center></td>
-            <td ><center><?php print $this->form->end_registration;?></center></td>
-      	</tr>
-        <tr>
-        	<th colspan="2"><center>FECHA INGRESO NOTAS PRIMER PARCIAL</center></th>
-            <th colspan="2"><center>FECHA INGRESO NOTAS SEGUNDO PARCIAL</center></th>
-       	</tr>
-        <tr>
-        	<th ><center>Inicio</center></th>
-            <th ><center>Fin</center></th>
-            <th ><center>Inicio</center></th>
-            <th ><center>Fin</center></th>
-		</tr>
-        <tr>
-        	<td ><center><?php print $this->form->start_register_note_p;?></center></td>
-            <td ><center><?php print $this->form->end_register_note_p;?></center></td>
-            <td ><center><?php print $this->form->start_register_note_s;?></center></td>
-            <td ><center><?php print $this->form->end_register_note_s;?></center></td>
-		</tr>
-	</table>
-    
-   
+            </div>
+            <div class="col-md-9">
+                <p><span class="glyphicon glyphicon-chevron-right span11"></span><span class="text-muted"> Resolucion</span></span></p>
+                <?php print $this->form->document_auth;?>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 panel panel2">
+        <div class="col-md-6 col21">
+            <div class="text-center col-md-12">
+                <h4 class="text-info">Fecha de Clases</h4>
+            </div>
+            <div class="col-md-6">
+                <label>Inicio <span class="glyphicon glyphicon-play span12"></span></label>
+                <?php print $this->form->class_start_date;?>
+            </div>
+            <div class="col-md-6"> 
+                <label>Fin <span class="glyphicon glyphicon-stop span12"></span></label>
+                <?php print $this->form->class_end_date;?>
+            </div>
+        </div>
+        <div class="col-md-6 col21">
+            <div class="text-center col-md-12">
+                <h4 class="text-info">Fecha de Matricula</h4>
+            </div>
+            <div class="col-md-6"> 
+                <label>Inicio <span class="glyphicon glyphicon-play span12"></span></label>
+                <?php print $this->form->start_registration;?>
+            </div>
+            <div class="col-md-6"> 
+                <label>Fin <span class="glyphicon glyphicon-stop span12"></span></label> 
+                <?php print $this->form->end_registration;?>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 panel panel3">
+        <div class="col-md-6 col21">
+            <div class="text-center col-md-12">
+                <h4 class="text-info">Ingreso de Notas Primer Parcial</h4>
+            </div>
+            <div class="col-md-6">
+                <label>Inicio <span class="glyphicon glyphicon-play span12"></span></label>
+                <?php print $this->form->start_register_note_p;?>
+            </div>
+            <div class="col-md-6"> 
+                <label>Fin <span class="glyphicon glyphicon-stop span12"></span></label>
+                <?php print $this->form->end_register_note_p;?>
+            </div>
+        </div>
+        <div class="col-md-6 col21">
+            <div class="text-center col-md-12">
+                <h4 class="text-info">Ingreso de Notas Segundo Parcial</h4>
+            </div>
+            <div class="col-md-6"> 
+                <label>Inicio <span class="glyphicon glyphicon-play span12"></span></label>
+                <?php print $this->form->start_register_note_s;?>
+            </div>
+            <div class="col-md-6"> 
+                <label>Fin <span class="glyphicon glyphicon-stop span12"></span></label> 
+                <?php print $this->form->end_register_note_s;?>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-6 col-md-3">
+            <a class='btn btn-danger form-control' onclick="$('#myModal2').modal('hide');"><span class="glyphicon glyphicon-remove"></span>  Cerrar</a>
+        </div>
+        <div class="col-md-3">
+            <a id="guardar2" class="form-control btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</a>
+        </div>
+    </div>
+    <input type="hidden" name="periodo" id="periodo" value="" class="form-control">
 </form>
-
-
-
-
-
-
 <script>
-        $(function() {
+    var anio=$("#lanios").val();
+    var valor = $("#perid").val();
+    $("#periodo").val(valor);    
+    $('#guardar2').click(function(e) {
+        e.preventDefault();
+        var perid = valor;
+        $.ajax({
+            url: '/rcentral/periods/guardar/',
+            type : 'post',
+            data: $('#frmModificar').serialize(),
+            success: function(data){
+                $('#myModal2').modal('hide');
+            }
+        });
+    });
+</script>
+<script>
+    $(function(){
         $( "#class_start_date" ).datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'dd/mm/yy'
             
         });
-    });      
-</script>
-
-<script>
-        $(function() {
         $( "#class_end_date" ).datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'dd/mm/yy'
         });
-    });      
-</script>
-
-<script>
-        $(function() {
         $( "#start_registration" ).datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'dd/mm/yy'
         });
-    });      
-</script>
-
-<script>
-        $(function() {
         $( "#end_registration" ).datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'dd/mm/yy'
         });
-    });      
-</script>
-
-  
-<script>
-        $(function() {
         $( "#start_register_note_p" ).datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'dd/mm/yy'
         });
-    });      
-</script>
-
-<script>
-        $(function() {
+    
         $( "#end_register_note_p" ).datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'dd/mm/yy'
         });
-    });      
-</script>
-
-<script>
-        $(function() {
+        
         $( "#start_register_note_s" ).datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: 'dd/mm/yy'            
         });
-    });      
-</script>
-
-<script>
-        $(function() {
         $( "#end_register_note_s" ).datepicker({
             changeMonth: true,
             changeYear: true,

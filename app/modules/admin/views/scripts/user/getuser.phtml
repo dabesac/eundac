@@ -1,3 +1,23 @@
+<style>
+    .popovr{   
+        display: inline-block;
+        float: right;
+    }
+    .popover{
+        border-radius: 0px;
+    }
+    .btn{
+        height: 
+    }
+    li{
+        list-style: none;
+        min-width: ;
+    }
+    .change{
+        cursor:  pointer;
+        display: inline-block;
+    }
+</style>
 <div id="idperson">
     <?php
     if ($this->datauser and $this->datauser[0]){ 
@@ -6,14 +26,14 @@
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
-                <th><center>N°</center></th>
-                <th><center>Código</center></th>
-                <th><center>DNI</center></th>
+                <th>N°</th>
+                <th>Código</th>
+                <th>DNI</th>
                 <th>Apellidos y Nombres</th>
-                <th><center>Rol</center></th>
-                <th><center>Escuela</center></th>
-                <th><center>Estado</center></th>
-                <th><center>Operación</center></th>
+                <th>Rol</th>
+                <th>Escuela</th>
+                <th>Estado</th>
+                <th>Operación</th>
         </tr>
         </thead>
     <?php
@@ -22,49 +42,88 @@
             $c++;
           ?>
             <tr>
-                <td><center><span class="label label-default"><?php echo $c?></span></center></td>
-                <td><center><?php echo $info['uid']?></center></td>
-                <td><center><?php echo $info['pid']?></center></td>
+                <td><span class="label label-default"><?php echo $c?></span></td>
+                <td><?php echo $info['uid']?></td>
+                <td><?php echo $info['pid']?></td>
                 <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
-                <td><center><?php echo $this->inforol[$c-1]['name']?></center></td>
-                <td><center><?php echo $this->infoesc[$c-1]['name']?></center></td>
+                <td><?php echo $this->inforol[$c-1]['name']?></td>
+                <td><?php echo $this->infoesc[$c-1]['name']?></td>
                 <?php
                     $x=0;
+                    $estado='<a class="text-success change" state="A" >Activo</a><br/>
+                            <a class="text-warning change" state="B" >Bloqueado</a><br/>
+                            <a class="text-warning change" state="S" >Suspendido</a><br/>
+                            <a class="text-danger change" state="I" >Inactivo</a><br/>
+                            <a class="text-danger change" state="E" >Baja</a>';
+                    $temp=$this->inforol[$c-1]['rid']; 
+                    $rol =$this->rol;
                 switch ($info['state']) {
                     case 'A':
-                        ?><td ><center>ACTIVO</center></td><?php
+                        ?><td style="padding:0px;" class="success"> ACTIVO
+                        <?php if($rol=="AD"){ ?>
+                        <p data-html='true' uid="<?php echo base64_encode($info['uid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" index="<?php echo $c?>" class=" popovr btn btn-success" data-toggle="popover" title="ESTADO" data-content='<?php echo $estado ?>'
+                        ><span class="glyphicon glyphicon-edit"></span></p>
+                        <?php } ?>
+                        </td><?php
                         break;
                     case 'I':
                         $x=1;
-                        ?><td class="danger" ><center>INACTIVO</center></td><?php
+                        ?><td style="padding:0px;" class="danger">INACTIVO 
+                        <?php if($rol=="AD"){ ?>
+                        <button data-html='true' uid="<?php echo base64_encode($info['uid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" index="<?php echo $c?>" class=" popovr btn btn-danger" data-toggle="popover" title="ESTADO" data-content='<?php echo $estado ?>'
+                        ><span class="glyphicon glyphicon-edit"></span></button>
+                        <?php } ?>
+                        </td><?php
                         break;
                     case 'B':
                         $x=2;
-                        ?><td class="warning"><center>BOQUEADO</center></td><?php
+                        ?><td style="padding:0px;" class="warning">BOQUEADO 
+                        <?php if($rol=="AD"){ ?>
+                        <button data-html='true' uid="<?php echo base64_encode($info['uid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" index="<?php echo $c?>" class=" popovr btn btn-warning" data-toggle="popover" title="ESTADO" data-content='<?php echo $estado ?>'
+                        ><span class="glyphicon glyphicon-edit"></span></button>
+                        <?php } ?>
+                        </td><?php
                         break;
                     case 'S':
                         $x=2;
-                        ?><td class="warning"><center>SUSPENDIDO</center></td><?php
+                        ?><td style="padding:0px;" class="warning">SUSPENDIDO 
+                        <?php if($rol=="AD"){ ?>
+                        <button data-html='true' uid="<?php echo base64_encode($info['uid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" index="<?php echo $c?>" class=" popovr btn btn-warning" data-toggle="popover" title="ESTADO" data-content='<?php echo $estado ?>'
+                        ><span class="glyphicon glyphicon-edit"></span></button>
+                        <?php } ?>
+                        </td><?php
                         break;
                     case 'E':
                         $x=1;
-                        ?><td class="danger"><center>BAJA</center></td><?php
+                        ?><td style="padding:0px;" class="danger">BAJA
+                        <?php if($rol=="AD"){ ?>
+                        <button data-html='true' uid="<?php echo base64_encode($info['uid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" index="<?php echo $c?>" class=" popovr btn btn-danger" data-toggle="popover" title="ESTADO" data-content='<?php echo $estado ?>'
+                        ><span class="glyphicon glyphicon-edit"></span></button>
+                        <?php } ?>
+                        </td><?php
                         break;
                     case '':
-                        ?><td><center></center></td><?php
-                        break;                            
-                }
-                ?>
-                <td><center>
-                    <?php
-                    if (($this->inforol[$c-1]['rid']!='AL') and ($this->inforol[$c-1]['rid']!='EG') and ($this->inforol[$c-1]['rid']!='')) { ?>
-                        <a class="btn btn-info" href="/admin/user/updateuser/uid/<?php echo base64_encode($info['uid'])?>/pid/<?php echo base64_encode($info['pid'])?>/escid/<?php echo base64_encode($info['escid'])?>/subid/<?php echo base64_encode($info['subid'])?>"><span class='glyphicon glyphicon-cog'></span> Ajustes </a>
-                    <?php } ?>
-                    <?php if ($x==0 or $x==2) {?>
+                        $x=3;
+                        ?><td class="info">Unallocated</td><?php
+                        break;
+                } ?>
+
+                <td style="padding:0px; padding-left:5px;">
+                    <!-- ADMIN    -->
+                 <?php if (($temp!='AL') and ($temp!='EG') and ($temp!='')) { ?>
+
+                        <button class="btn btn-info ajuste_user" data-toggle="modal" uid="<?php echo base64_encode($info['uid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" href='#modal-Ajustes' ><span class='glyphicon glyphicon-cog'></span> Ajustes </button>
+
+
+                <?php }?>
+                                                <!-- PASSWORD -->            
+
+            <?php if($temp != "EG"){ ?>
+                <?php if ($x==0 or $x==2) {?>
                         <button name="<?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?>" rol="<?php echo $this->inforol[$c-1]['name']?>" uid="<?php echo base64_encode($info['uid'])?>" rid="<?php echo base64_encode($info['rid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" data-toggle="modal" href="#modalContraseña" class="btn btn-primary keychange"><span class="glyphicon glyphicon-refresh"></span> PassWord</button>
-                    <?php } ?>
-                </center></td>
-                <!-- <td><center><a href=""><span class='glyphicon glyphicon-trash'></span></a></center></td> -->
+                <?php } ?>
+            <?php } ?>
+                </td>
             </tr>
           <?php  
         }  
@@ -82,7 +141,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title"><b class='text-info'> <center>NUEVA PERSONA </center></b></h2>
+                <h2 class="modal-title"><b class='text-info'> NUEVA PERSONA </b></h2>
             </div>
             <div class="modal-body">
                 <div id='nueva_persona'></div>
@@ -127,16 +186,39 @@
       </div>
     </div>
 </div>
+                                    <!-- /.modal-content -->
+<div class="modal fade" id="modal-Ajustes" tabindex="-1" aria-labelledby="myModalLabel" role="dialog" aria-data-target=".bs-example-modal-sm" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4>MODIFICAR USUARIO</h4>
+            </div>
+            <div class="modal-body" id="config">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
     $("#newperson").click(function(){
         $('#myModal').modal('show');
         var url="/admin/person/new/u/A";
-        $("#nueva_persona").html("</br></br><center><img src='/img/spinner.gif'> Cargando...</center>");
+        $("#nueva_persona").html("</br></br><img src='/img/spinner.gif'> Cargando...");
         $("#nueva_persona").load(url);
     });
 </script>
 <script>
+$(function(){
+    $('.popovr').popover({
+        placement : 'right'
+    });
+    var etiqueta;
     var rid;
     var uid;
     var pid;
@@ -144,6 +226,67 @@
     var subid;
     var pas1;
     var pas2;
+    var estado;
+    $('.popovr').click(function(event) {
+        etiqueta=$(this);
+        $('.popovr').not(this).popover('hide');
+        uid=$(this).attr('uid');
+        pid=$(this).attr('pid');
+        escid=$(this).attr('escid');
+        subid=$(this).attr('subid');
+
+        $(".change").click(function(event) {
+            estado = $(this).attr('state');
+            var ajaxData={
+                "estado":estado,
+                "uid": uid,
+                "pid": pid,
+                "escid": escid,
+                "subid": subid,
+            };
+            $.ajax({
+                type : 'post',
+                url : '/admin/user/updatestate/',
+                data : ajaxData,
+                success: function(data){
+                    if (data=="1") {
+                        $(this).popover('hide');
+                        etiqueta.parent().html("<img src='/img/spinner.gif'>");
+                        $.ajax({
+                            type: 'POST',
+                            url: $("#frmFiltroDoc").attr('action'),
+                            data: $("#frmFiltroDoc").serialize(),
+                            success: function(data) {
+                                $('#cargadatos_').html(data);
+                            }
+                        }); 
+                    };
+                }
+            });
+        });
+    });
+    
+    $(".ajuste_user").click(function(event) {
+        uid = $(this).attr('uid');
+        pid = $(this).attr('pid');
+        subid = $(this).attr('subid');
+        escid = $(this).attr('escid');
+        var ajax_data = {
+                "pid" : pid,
+                "uid" : uid,
+                "escid" : escid,
+                "subid" : subid,
+            };
+        $.ajax({
+            type : 'get',
+            url : '/admin/user/updateuser/',
+            data : ajax_data,
+            success: function(data){
+                $("#config").html(data);
+            }
+        });
+
+    });
 
     $(".keychange").click( function(){
         rid = $(this).attr('rid');
@@ -183,8 +326,8 @@
                     $("#respuesta").html(data);
                     $("#pass1").val("");
                     $("#repass1").val("");
-                    
                 }
             });
     });
+});
 </script>
