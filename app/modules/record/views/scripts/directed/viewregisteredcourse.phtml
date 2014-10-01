@@ -1,16 +1,16 @@
-<?php 
+<?php
 if ($this->cursitoutilizado){ ?>
 <div id="datos">
     <div><center><h5>Alumnos Matriculados en el Curso <?php echo $this->datacourse['courseid']." - ".$this->datacourse['name']?></h5></center></div>
     <div>
         <table class="table table-hover">
-            <tr style="background: #006aba; color: #000;">
-                <th>#</th> 
+            <tr class='text-center active'>
+                <th>#</th>
                 <th>Código</th>
                 <th>Nombre</th>
                 <th>Currícula</th>
                 <th>Turno</th>
-                <th>Resolución</th>   
+                <th>Resolución</th>
             </tr>
             <?php
             if ($this->cursitoutilizado){
@@ -28,7 +28,7 @@ if ($this->cursitoutilizado){ ?>
                     $i++;
                 }
             }?>
-        </table>      
+        </table>
     </div>
 </div>
 <?php

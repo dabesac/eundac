@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
-   
-    /** 
+
+    /**
      * @var Zend_Acl object
      *
      */
@@ -24,18 +24,18 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
         $this->_action= $this->getRequest()->getActionName();
 
         $resource_tmp = "{$this->_module}/{$this->_controller}/{$this->_action}";
-        
+
         $auth= Zend_Auth::getInstance();
-        
+
         if ($auth->hasIdentity()) {
             if (!$this->_acl->isAllowed($this->_role,$resource_tmp)) {
                 $request->setModuleName('default')
-                        ->setControllerName('error') 
+                        ->setControllerName('error')
                         ->setActionName('error');
             }
         }else{
              $request->setModuleName('default')
-                        ->setControllerName('index') 
+                        ->setControllerName('index')
                         ->setActionName('index');
         }
     }
@@ -48,7 +48,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
     public function _iniAcl(){
         $this->_acl = new Zend_Acl();
         $auth= Zend_Auth::getInstance();
-        
+
         if ($auth->hasIdentity()) {
             $this->_role= $auth->getStorage()->read()->rid;
             $this->_parent = $auth->getStorage()->read()->rol['parent'];
@@ -64,7 +64,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
             $this->_acl->allow($this->_role, $logout);
             $this->_acl->allow($this->_role, $error);
             $this->_acl->allow($this->_role, $msg);
-            
+
             if (!isset($this->_parent)) {
                 $permissionTable = new Default_Model_DbTable_Premission();
                 $permission = $permissionTable->_getResource_Role($eid,$oid,$this->_role);
@@ -83,7 +83,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
                        $this->_acl->deny($this->_role, $resourceToken);
                     }
                 }
-            } 
+            }
         }
     }
 }

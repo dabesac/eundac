@@ -1,4 +1,4 @@
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-certificate"></span> CONVALIDACIÓN, DIRIGIDOS Y SUBSANACIÓN');?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-certificate"></span> DIRIGIDOS Y SUBSANACIÓN');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
 <?php if ($this->usuario!='AD') { ?>
@@ -25,11 +25,12 @@
 		$("#search").click(function(){
 			var uid=$("#uid").val();
 			var anios="<?php echo date('Y') ?>";
-			anio = anios.substring(2);
+			var anio = anios.substring(2);
+			var anioantes =anio-1;
 			if (uid!="") {
 				$("#student").html("<img src='/img/spinner.gif'>Cargando...");
 				if ($('#checkbox').is(':checked')) {
-					$("#student").load("/record/directed/student/uid/"+uid+"/perid/13");
+					$("#student").load("/record/directed/student/uid/"+uid+"/perid/"+anioantes);
 				}else{
 					$("#student").load("/record/directed/student/uid/"+uid+"/perid/"+anio );
 				}
@@ -51,13 +52,13 @@
 				</div>
 			</td>
 			 <td><select id="anios" class='form-control' name="anios" style="width: 90px" >
-                    <?php 
+                    <?php
                     $anio= date('Y')-1;
                     $i=0;
                     for($i = ($anio+1);$i>=1990;$i--){
                         if ($anio==$i) $t = "selected";
                         else $t="";
-                        ?>            
+                        ?>
                     <option value="<?php echo $i?>"<?php echo $t?>><?php echo $i?></option>
                     <?php }?>
                 </select>
@@ -73,7 +74,6 @@
 	var uid=$("#uid").val();
 	var anios=$("#anios").val();
 	if (uid!="") {
-		
 		$("#student").load("/record/directed/student/uid/"+uid+"/perid/"+anios);
 	}else{
 		alert("Ingrese el Código de Matricula.");
@@ -98,9 +98,42 @@ function soloNumero(e){
 	    if(key == especiales[i]){
 			tecla_especial = true;
 	  		break;
-	    } 
+	    }
 	}
     if(letras.indexOf(tecla)==-1 && !tecla_especial)
     return false;
 };
+
+$("#uid").keypress(function (e) {
+    if(e == 13 || e.which==13 || e.which==0){
+        var cod = $('#uid').val();
+        count=cod.length;
+        if (count==10 || count==0) {
+        	var uid=$("#uid").val();
+            var anioall=$("#anios").val();
+            if (anioall) {
+                var anio=anioall;
+            }
+            else{
+                var anios="<?php echo date('Y') ?>";
+                var anio = anios.substring(2);
+                var anioantes =anio-1;
+            };
+
+            $("#student").html("<img src='/img/spinner.gif'>Cargando...");
+
+            if ($('#checkbox').is(':checked')) {
+                $("#student").load("/record/directed/student/uid/"+uid+"/perid/"+anioantes);
+            }else{
+				$("#student").load("/record/directed/student/uid/"+uid+"/perid/"+anio);
+			}
+        }
+        else
+        {
+            alert("Ingrese un Código válido");
+            $('#uid').val('');
+            $('#uid').focus();
+        }
+    }
+});
 </script>

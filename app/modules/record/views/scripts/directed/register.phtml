@@ -1,111 +1,125 @@
 <div id="Datos">
     <form id="frmdirected" name="frmdirected" action="/record/directed/savedirected/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
-    <table class="table table-striped table-hover">
-        <tr>
-            <th><center>Currículas</center></th>
-            <th><center>Asignatura</center></th>
-            <th colspan="3"><center>Reportes</center></th>
-        </tr>
-        <tr>
-            <td>
-                <select id="curid" class="form-control">
-                    <option value="">-Seleccione-</option>
-                    <?php
-                    foreach ($this->curriculas  as $curricula){ ?>
-                        <option value="<?php echo $curricula['curid']."--".$curricula['escid']."--".$curricula['subid']?>"><?php echo $curricula['curid']?></option>
+
+        <div class="row">
+            <div class="col-md-12 text-success">
+                <div class="col-md-3 col-md-offset-1 text-center"><b>Asignatura</b></div>
+                <div class="col-md-6 col-md-offset-1 text-center"><b>Reportes</b></div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-3 col-md-offset-1 text-center">
+                    <select id="courseid" name="courseid" class="form-control">
                         <?php
-                    }?>
-                </select>
-            </td>
-            <td>
-                <select id="courseid" name="courseid" class="form-control">
-                    <option value="">- Seleccione Asignatura -</option>
-                </select>
-            </td>
-            <td>
-                <center>
-                    <a href="#" class="btn btn-default" id="vermatriculadoscurso"><span class="glyphicon glyphicon-list-alt"></span> Matriculados en la Asignatura</a>
-                </center>
-            </td>
-            <td>
-                <a href="#total_registered"  data-toggle="modal" class="btn btn-default"><span class="glyphicon glyphicon-book"></span> Matriculas Totales</a>
-            </td>
-            <td>
-                <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-list"></span> Cursos Pendientes</a>
-            </td>
-        </tr>
-        <tr>
-            <th class="col-lg-3"><center>Ingrese la Nota</center></th>
-            <th class="col-lg-7"><center>Recibo</center></th>
-            <th colspan="3"><center>Resolución</center></th>
-        </tr>
-        <tr>
-            <td>
-                <center>
-                    <input type="text" id="nota" name="nota" class="form-control" style="width:50px" onkeypress="return soloNumero(event)"><label class="msg text-error"></label>
-                </center>
-            </td>
-            <td>
-                <center>
-                    <input type="text" id="recibo" name="recibo" class="form-control" onBlur="CheckUserName(this);" style="width:200px" onkeypress="return soloNumero(event)">
-                </center>
-            </td>
-            <td colspan="3">
-                <center>
-                    <input type="text" id="resolucion" name="resolucion" class="form-control" style="width:350px">
-                </center>
-            </td>
-        </tr>
-        <tr>
-            <th><center>Seleccione el Turno</center></th>
-            <th><center>Seleccione Escuela / Docente</center></th>
-            <th colspan="3"><center>Seleccione el Docente</center></th>
-        </tr>
-        <tr>
-            <td>
-                <center>
-                    <select id="turno" name="turno" class="form-control" style="width:80px">
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                        <option value="F">F</option>
-                        <option value="G">G</option>
-                        <option value="H">H</option>
-                        <option value="I">I</option>
-                        <option value="J">J</option>
-                        <option value="K">K</option>
-                        <option value="L">L</option>
-                        <option value="M">M</option>
-                        <option value="N">N</option>
-                        <option value="O">O</option>
-                        <option value="P">P</option>
-                        <option value="R">R</option>
-                        <option value="S">S</option>
+                        if ($this->cursos) { ?>
+                            <option value="">- Seleccione Asignatura -</option>
+                            <?php
+                            foreach ($this->cursos as $cursos) {
+                                if ($cursos['no_apto']==1) {    ?>
+                                    <option class='text-danger' value="<?php echo $cursos['courseid']."--".$cursos['curid']."--".$cursos['semid']."--".$cursos['credits']?>"><?php echo $cursos['courseid']." | ".$cursos['name']." - Créditos: ".$cursos['credits']?></option>
+                                <?php
+                                }
+                                else{   ?>
+                                    <option class='text-success' value="<?php echo $cursos['courseid']."--".$cursos['curid']."--".$cursos['semid']."--".$cursos['credits']?>"><b><?php echo $cursos['courseid']." | ".$cursos['name']." - Créditos: ".$cursos['credits']?></b></option>
+                                <?php
+                                }
+                                ?>
+                            <?php
+                            }
+                        }else{ ?>
+                            <option value="">No tiene Ninguna Asignatura.</option>
+                        <?php
+                        }?>
                     </select>
-                </center>
-            </td>
-            <td>
-                <select id="escid" class="form-control">
-                    <option value="">- Seleccione Escuela -</option>
-                    <?php 
-                    if ($this->lescuelas){
-                        foreach ($this->lescuelas as $escu){ ?>
-                            <option value="<?php echo $escu['escid'].";--;".$escu['subid']?>"><?php echo $escu['name']?></option>
-                        <?php                                 
-                        }
-                    } ?>
-                </select>
-            </td>
-            <td colspan="3">
-                <center>
-                    <select id='docente_reg' name='docente_reg' class="form-control" style="width:350px">
-                        <option value="">- Seleccione Docente -</option>
-                    </select>
-                </center>
-            </td>
-        </tr>
+                </div>
+                <div class="col-md-6 col-md-offset-1 text-center">
+                    <div class="col-md-3 col-md-offset-1">
+                        <a href="#" class="btn btn-default" id="vermatriculadoscurso"><span class="glyphicon glyphicon-list-alt"></span> Matriculados en la Asignatura</a>
+                    </div>
+                    <div class="col-md-2 col-md-offset-1">
+                        <a id='vermatriculastotales' href="#total_registered"  data-toggle="modal" class="btn btn-default"><span class="glyphicon glyphicon-book"></span> Matriculas Totales</a>
+                    </div>
+                    <div class="col-md-1 col-md-offset-1">
+                        <a id='vercursospendientes' href="#" class="btn btn-default"><span class="glyphicon glyphicon-list"></span> Cursos Pendientes</a>
+                    </div>
+                </div>
+            </div><br><br><br><br>
+            <div class="col-md-12 text-center text-success">
+                <div class="col-md-2 col-md-offset-1"><b>Ingrese la Nota</b></div>
+                <div class="col-md-2 col-md-offset-1"><b>Recibo</b></div>
+                <div class="col-md-3 col-md-offset-1"><b>Resolución</b></div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-2 col-md-offset-1">
+                    <center>
+                        <input type="text" id="nota" name="nota" class="form-control" style="width:50px" onpaste="return false"><label class="msg text-error"></label>
+                    </center>
+                </div>
+                <div class="col-md-2 col-md-offset-1">
+                    <center>
+                        <input type="text" id="recibo" name="recibo" class="form-control" onBlur="CheckUserName(this);" onkeypress="return soloNumero(event)">
+                    </center>
+                </div>
+                <div class="col-md-3 col-md-offset-1">
+                    <center>
+                        <input type="text" id="resolucion" name="resolucion" class="form-control">
+                    </center>
+                </div>
+            </div><br><br><br><br>
+            <div class="col-md-12 text-center text-success">
+                <div class="col-md-2 col-md-offset-1"><b>Seleccione Turno</b></div>
+                <div class="col-md-2 col-md-offset-1"><b>Seleccione Escuela del Docente</b></div>
+                <div class="col-md-4 col-md-offset-1"><b>Seleccione Docente</b></div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-2 col-md-offset-1">
+                    <center>
+                        <select id="turno" name="turno" class="form-control" style="width:80px">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                            <option value="J">J</option>
+                            <option value="K">K</option>
+                            <option value="L">L</option>
+                            <option value="M">M</option>
+                            <option value="N">N</option>
+                            <option value="O">O</option>
+                            <option value="P">P</option>
+                            <option value="R">R</option>
+                            <option value="S">S</option>
+                        </select>
+                    </center>
+                </div>
+                <div class="col-md-4">
+                    <center>
+                        <select id="escid" class="form-control">
+                            <option value="">- Seleccione Escuela -</option>
+                            <?php
+                            if ($this->lescuelas){
+                                foreach ($this->lescuelas as $escu){ ?>
+                                    <option value="<?php echo $escu['escid'].";--;".$escu['subid']?>"><?php echo $escu['name']?></option>
+                                <?php
+                                }
+                            } ?>
+                        </select>
+                    </center>
+                </div>
+                <div class="col-md-4">
+                    <center>
+                        <select id='docente_reg' name='docente_reg' class="form-control" >
+                            <option value="">- Seleccione Docente -</option>
+                        </select>
+                    </center>
+                </div>
+
+            </div>
+        </div>
+    <table class="table table-striped table-hover">
         <tr>
             <td colspan="5">
                 <center>
@@ -129,42 +143,40 @@ if ($this->cursosconvalidados){ ?>
 <div id="lista">
     <div><h5><center><b>CURSOS REALIZADOS</b></center></h5></div>
     <div>
-        <div style="display: block; height: 150px; overflow: auto;margin: 0px;" >
+        <div>
             <table class="table table-hover">
-                <tr style="background: #ccc; color: #000000;">
-                    <th>#</th> 
-                    <th>Currícula</th>
-                    <th>Código</th>
-                    <th>Nombre Curso</th>
-                    <th>Creditos</th>
-                    <th>Turno</th>
-                    <th>Resolución</th>
-                    <th>Recibo</th>
-                    <th>Notafinal</th>
-                    <th>Pre-registro</th>
-                    <th>Modificar</th>
+                <tr class='active'>
+                    <th class="text-center">#</th>
+                    <th class="text-center">Currícula</th>
+                    <th class="text-center">Código</th>
+                    <th class="text-center">Nombre Curso</th>
+                    <th class="text-center">Creditos</th>
+                    <th class="text-center">Turno</th>
+                    <th class="text-center">Resolución</th>
+                    <th class="text-center">Recibo</th>
+                    <th class="text-center">Notafinal</th>
+                    <th class="text-center">Pre-registro</th>
+                    <th class="text-center">Modificar</th>
                 </tr>
                 <?php
                     $i=1;
                     foreach ($this->cursosconvalidados as $convalidado){ ?>
                         <tr>
-                            <td><?php echo $i;?></td>
-                            <td><center><?php echo $convalidado['curid'];?></center></td>
-                            <td><center><?php echo $convalidado['courseid'];?></center></td>
+                            <td class="text-center"><?php echo $i;?></td>
+                            <td class="text-center"><?php echo $convalidado['curid'];?></td>
+                            <td class="text-center"><?php echo $convalidado['courseid'];?></td>
                             <td><?php echo $convalidado['name_course'];?></td>
-                            <td><center><?php echo $convalidado['credits'];?></center></td>
-                            <td><center><?php echo $convalidado['turno'];?></center></td>
+                            <td class="text-center"><?php echo $convalidado['credits'];?></td>
+                            <td class="text-center"><?php echo $convalidado['turno'];?></td>
                             <td><?php echo $convalidado['document_auth'];?></td>
-                            <td size="12px"><?php echo $convalidado['receipt'];?></td>
-                            <td><center><?php echo $convalidado['notafinal'];?></center></td>
-                            <td>
-                                <center>
-                                    <a href="/record/directed/print/perid/<?php echo base64_encode($this->perid) ?>/escid/<?php echo base64_encode($this->escid) ?>/subid/<?php echo base64_encode($this->subid) ?>/uid/<?php echo base64_encode($this->uid) ?>/pid/<?php echo base64_encode($this->pid) ?>/courseid/<?php echo base64_encode($convalidado['courseid']) ?>/curid/<?php echo base64_encode($convalidado['curid']) ?>/turno/<?php echo base64_encode($convalidado['turno']) ?> "><span class="glyphicon glyphicon-print"></span></a>
-                                </center>
+                            <td class="text-center" size="12px"><?php echo $convalidado['receipt'];?></td>
+                            <td class="text-center"><?php echo $convalidado['notafinal'];?></td>
+                            <td class="text-center">
+                                <a href="/record/directed/print/perid/<?php echo base64_encode($this->perid) ?>/escid/<?php echo base64_encode($this->escid) ?>/subid/<?php echo base64_encode($this->subid) ?>/uid/<?php echo base64_encode($this->uid) ?>/pid/<?php echo base64_encode($this->pid) ?>/courseid/<?php echo base64_encode($convalidado['courseid']) ?>/curid/<?php echo base64_encode($convalidado['curid']) ?>/turno/<?php echo base64_encode($convalidado['turno']) ?> "><span class="glyphicon glyphicon-print"></span></a>
                             </td>
-                            <?php  
+                            <?php
                              if ($convalidado['state']<>'C' and $convalidado['state_record']<>'C'){ ?>
-                            <td>
+                            <td class="text-center">
                                 <a id="modifyregister_<?php echo $i?>" data-toggle="modal" href="#modify" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
                             </td>
                             <script type="text/javascript">
@@ -184,9 +196,9 @@ if ($this->cursosconvalidados){ ?>
                                 $("#pidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['pid']?>");
                             });
                             </script>
-                            <?php 
+                            <?php
                             }else{ ?>
-                            <td>
+                            <td class="text-center">
                                 <a href="#" title="No se puede Modificar el Registro."><span class="glyphicon glyphicon-ban-circle"></span></a>
                             </td>
                             <?php
@@ -196,8 +208,8 @@ if ($this->cursosconvalidados){ ?>
                         $i++;
                     } ?>
             </table>
-        </div>        
-    </div> 
+        </div>
+    </div>
 </div>
 <?php
 } ?>
@@ -294,159 +306,89 @@ if ($this->cursosconvalidados){ ?>
         </div>
     </div>
 </div>
-
+<div id="barraLateral">
+    <div id="barraNav">
+        <div class="row">
+            <div class="col-md-3">
+                <h5 class="text-center"><a href="##" id="closeLateral" class="btn btn-default"><span class="text-danger">Cerrar</span></a></h5>
+            </div>
+        </div>
+    </div>
+    <br><br><br>
+    <div id="coursesperCurriculum">
+    </div>
+    <br>
+    <h4 id="mensajeTryAgain" class="text-muted text-center hidden">:( Hubo un <span class="text-danger">problema</span> en nuestros servidores pero puede <a id="tryAgainCurriculum" href="##" class="btn btn-link text-success">Intentar Nuevamente</a></h4>
+</div>
 <style type="text/css">
     .modal-dialog { width: 900px; }
     #course_curri, #registereds { margin-top: 15px; }
+
+    #barraLateral{
+        width     : 40%;
+        height    : 100%;
+        z-index   : 5;
+        background: white;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        position  : fixed;
+        left      : 60%;
+        top       : 0%;
+    }
+
+    /*.modal-dialog{
+        width : 1200px;
+        z-index   : 2;
+    }*/
+
+    #barraNav{
+        position: fixed;
+        z-index   : 1;
+        height: 55px;
+        width: 39%;
+        background-color : #d9534f;
+    }
 </style>
-
+<script type="text/javascript" src="/js/notes/jquery.jstepper.js"></script>
 <script>
-$(function () {
-    $("#course_curri").html("<img src='/img/spinner.gif'>Cargando...");
-    $("#course_curri").load("/profile/private/studentsignpercur/pid/<?php echo $this->pid?>/uid/<?php echo $this->uid?>/escid/<?php echo $this->escid?>/subid/<?php echo $this->subid?>/eid/<?php echo $this->eid?>/oid/<?php echo $this->oid?>");
-    $("#registereds").html("<img src='/img/spinner.gif'>Cargando...");
-    $("#registereds").load("/register/registerealized/index/pid/<?php echo $this->pid?>/uid/<?php echo $this->uid?>/escid/<?php echo $this->escid?>/subid/<?php echo $this->subid?>/perid/<?php echo $this->perid?>/rid/AL");
-
-    $('#directedTab a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show');
-    });
-});
-</script>
-
-<script>
-$("#f_acta").datepicker();
-
-$("#savemodify").click(function(){
-    $("#header_cursos").hide();
-    $("#lista").hide();
-    $("#frmmodifyregister").submit();
+$('#barraLateral').addClass('hidden');
+$("#barraLateral").animate({ "left": "+=40%" }, "slow" );
+//Barra Lateral
+$('#vercursospendientes').click(function(){
+    $('#barraLateral').removeClass('hidden');
+    $("#coursesperCurriculum").addClass('abierto');
+    $("#barraLateral").animate({ "left": "-=40%" }, "slow" );
+    $('#mensajeTryAgain').addClass('hidden');
+    sendDataBarra();
 });
 
-$('#frmmodifyregister').submit(function() {  
+$('#closeLateral').on('click', function(){
+    $("#barraLateral").animate({ "left": "+=40%" }, "slow" );
+    // $('#barraLateral').addClass('hidden');
+});
+
+function sendDataBarra(){
+    $("#coursesperCurriculum").html('<br><center>Cargando <img src="/img/spinner.gif" alt="Wait" /></center>');
     $.ajax({
-        type: 'POST',
-        url: $(this).attr('action'),
-        data: $(this).serialize(),
-        success: function(data) { 
-            $('#header_alumnos').html(data);  
+        url    : '/register/registerstudent/coursespercurriculum',
+        data   : {  pid  : $.base64.encode("<?php echo $this->dataStudent['pid'] ?>"),
+                    uid  : $.base64.encode("<?php echo $this->dataStudent['uid'] ?>"),
+                    escid: $.base64.encode("<?php echo $this->dataStudent['escid'] ?>"),
+                    subid: $.base64.encode("<?php echo $this->dataStudent['subid'] ?>"),
+                    curid: $.base64.encode("<?php echo $this->dataStudent['curid'] ?>") },
+        timeout: 30000,
+        success: function(data){
+            $("#coursesperCurriculum").html(data);
+        },
+        error: function(){
+            $("#coursesperCurriculum").html('');
+            $('#mensajeTryAgain').removeClass('hidden');
         }
-    });          
-    return false;
-});
-
- $("#curid").change(function(){
-    var curricula = $(this).val();
-    if (curricula=="") {
-        alert("Seleccione Currícula");
-        return false;
-    };
-    var tmp = curricula.split('--');
-    var curid= tmp[0];
-    var escid= tmp[1];
-    var subid= tmp[2];
-    var url="/record/directed/coursesxcurricula/curid/"+curid+"/escid/"+escid+"/subid/"+subid;
-    $("#courseid").load(url);
-}); 
-
-$("#vermatriculadoscurso").click(function(){    
-    var curso = $("#courseid").val();
-    if (curso=="") {
-        alert("Seleccione un Curso.");
-        return false;
-    };
-    var perid = "<?php echo $this->perid?>";
-    var subid = "<?php echo $this->subid?>";
-    var escid = "<?php echo $this->escid?>";
-    var tmp=curso.split("--");
-    var cursoid=tmp[0];
-    var curid=tmp[1];
-    var url = "/record/directed/viewregisteredcourse/subid/"+subid+"/escid/"+escid+"/curid/"+curid+"/courseid/"+cursoid+"/perid/"+perid;
-    $("#header_cursos").html("<img src='/img/spinner.gif'>Cargando..."); 
-    $("#header_cursos").load(url);
-});
-
-$("#escid").change(function(){
-    var escuela = $(this).val();
-    if (escuela=="") {
-        alert("Seleccione una Escuela.");
-        return false;
-    };
-    tmp=escuela.split(';--;');
-    escid=tmp[0];
-    $("#docente_reg").load("/record/directed/teacherxschool/escid/"+escid);
-});
-
-$("#registerstudent").click(function(){
-    $("#header_alumnos").html("<img src='/img/spinner.gif'>Cargando..."); 
-    $('#frmdirected').submit();
-});
-
-$('#frmdirected').submit(function() {  
-    $.ajax({
-        type: 'POST',
-        url: $(this).attr('action'),
-        data: $(this).serialize(),
-        success: function(data) { 
-            $("#header_cursos").hide();
-            $("#lista").hide();
-            $('#header_alumnos').html(data);
-        }
-    });          
-    return false;
-});
-
-$("#closerecord").click(function(){
-    var f_acta = $("#f_acta").val();
-    var perid = $("#peridmodify").val();
-    var courseid = $("#courseidmodify").val();
-    var escid = $("#escidmodify").val();
-    var subid = $("#subidmodify").val();
-    var curid = $("#curidmodify").val();
-    var turno = $("#turnomodify").val();
-    var uid = $("#uidmodify").val();
-    var pid = $("#pidmodify").val();
-    if (f_acta=="") {
-        alert("Seleccione la fecha de Cierre de Acta.");
-        return false;
-    };
-    var tmp = f_acta.split("/");
-    var f_acta = tmp[2]+"-"+tmp[0]+"-"+tmp[1];
-    var url = "/record/directed/modifyregister/courseid/"+courseid+"/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/curid/"+curid+"/turno/"+turno+"/uid/"+uid+"/pid/"+pid+"/f_acta/"+f_acta+"/option/C";
-    // alert(url);
-    $("#header_cursos").hide();
-    $("#lista").hide();
-    $("#header_alumnos").html("<img src='/img/spinner.gif'>Cargando..."); 
-    $("#header_alumnos").load(url);
-});
-
-$("#nota, #notamodify").blur(function(){
-    var vnota = $(this).val();
-    if ( vnota > 20 || vnota < -3 ){
-        $("#nota, #notamodify").val("");
-        $(".msg").html("* Ingrese de 0 a 20");
-    }                   
-});
-
-var total_letras_notas = 2;
-$('#nota, #notamodify').keyup(function(){
-    var longitud = $(this).val().length;
-    var resto = total_letras_notas - longitud;
-    $('#numero').html(resto);
-    if(resto <= 0) $('#nota, #notamodify').attr("maxlength", 2);
-});
-
-var total_letras_recibo = 12;
-$('#recibo, #recibomodify').keyup(function(){
-    var longi = $(this).val().length;
-    var rest = total_letras_recibo - longi;
-    $('#numero').html(rest);
-    if(rest <= 0) $('#recibo, #recibomodify').attr("maxlength", 12);
-});
-
-$("#resolucion, #resolmodify").keyup(function(){
-    var r = $(this).val();
-    $("#resolucion, #resolmodify").val(r.toUpperCase());
+    })
+}
+$('#tryAgainCurriculum').click(function(){
+    sendDataBarra();
+    $('#mensajeTryAgain').addClass('hidden');
 });
 
 function CheckUserName(ele) {
@@ -463,9 +405,229 @@ function soloNumero(e){
         if(key == especiales[i]){
             tecla_especial = true;
             break;
-        } 
+        }
     }
     if(letras.indexOf(tecla)==-1 && !tecla_especial)
     return false;
 };
+
+$(function() {
+    $("#course_curri").html("<img src='/img/spinner.gif'>Cargando...");
+    $("#course_curri").load("/profile/private/studentsignpercur/pid/<?php echo $this->pid?>/uid/<?php echo $this->uid?>/escid/<?php echo $this->escid?>/subid/<?php echo $this->subid?>/eid/<?php echo $this->eid?>/oid/<?php echo $this->oid?>");
+    $("#registereds").html("<img src='/img/spinner.gif'>Cargando...");
+    $("#registereds").load("/register/registerealized/index/pid/<?php echo $this->pid?>/uid/<?php echo $this->uid?>/escid/<?php echo $this->escid?>/subid/<?php echo $this->subid?>/perid/<?php echo $this->perid?>/rid/AL");
+
+    $('#directedTab a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show');
+    });
+
+    $("#nota, #notamodify").jStepper({minValue:0, maxValue:20, minLength:2});
+
+    $("#f_acta").datepicker();
+
+    $("#savemodify").click(function(){
+        var nota=$("#nota").val();
+        var recibo1=$("#recibomodify").val();
+        if (!nota) {
+            alert("Ingrese una Nota");
+            $("#notamodify").focus();
+            return false;
+        };
+        if (!recibo1) {
+            alert("Ingrese un Recibo");
+            $("recibomodify").focus();
+            return false;
+        };
+
+        $("#header_cursos").hide();
+        $("#lista").hide();
+        $("#frmmodifyregister").submit();
+    });
+
+    $('#frmmodifyregister').submit(function() {
+        $.ajax({
+            type: 'POST',
+            url: '/record/directed/savedirected/',
+            data: $(this).serialize(),
+            success: function(data) {
+                $('#header_alumnos').html(data);
+            }
+        });
+        return false;
+    });
+
+    $("#vermatriculadoscurso").click(function(){
+        var curso = $("#courseid").val();
+        if (curso=="") {
+            alert("Seleccione un Curso.");
+            return false;
+        };
+        var perid = "<?php echo $this->perid?>";
+        var subid = "<?php echo $this->subid?>";
+        var escid = "<?php echo $this->escid?>";
+        var tmp=curso.split("--");
+        var cursoid=tmp[0];
+        var curid=tmp[1];
+        var url = "/record/directed/viewregisteredcourse/subid/"+subid+"/escid/"+escid+"/curid/"+curid+"/courseid/"+cursoid+"/perid/"+perid;
+        $("#header_cursos").html("<img src='/img/spinner.gif'>Cargando...");
+        $("#header_cursos").load(url);
+    });
+
+    $("#registerstudent").click(function(){
+        var courseid=$("#courseid").val();
+        var nota=$("#nota").val();
+        var recibo=$("#recibo").val();
+        var resolucion=$("#resolucion").val();
+        var docente_reg=$("#docente_reg").val();
+
+        if (!courseid) {
+            alert("Seleccione Un Curso");
+            $('#courseid').focus();
+            return false;
+        }
+        if (!resolucion) {
+            alert("Ingrese una Resolución");
+            $('#resolucion').focus();
+            return false;
+        }
+        if (!docente_reg) {
+            alert("Seleccione Un Docente");
+            $('#docente_reg').focus();
+            return false;
+        };
+        $("#header_alumnos").html("<img src='/img/spinner.gif'>Cargando...");
+        $.ajax({
+            type: 'POST',
+            url : '/record/directed/savedirected/',
+            data: $('#frmdirected').serialize(),
+            success: function(data) {
+                $("#header_cursos").hide();
+                $("#lista").hide();
+                $('#header_alumnos').html(data);
+            }
+        });
+        return false;
+
+        // $('#frmdirected').submit();
+    });
+
+    // $('#frmdirected').submit(function() {
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: $(this).attr('action'),
+    //         data: $(this).serialize(),
+    //         success: function(data) {
+    //             $("#header_cursos").hide();
+    //             $("#lista").hide();
+    //             $('#header_alumnos').html(data);
+    //         }
+    //     });
+    //     return false;
+    // });
+
+    $("#closerecord").click(function(){
+        var f_acta = $("#f_acta").val();
+        var perid = $("#peridmodify").val();
+        var courseid = $("#courseidmodify").val();
+        var escid = $("#escidmodify").val();
+        var subid = $("#subidmodify").val();
+        var curid = $("#curidmodify").val();
+        var turno = $("#turnomodify").val();
+        var uid = $("#uidmodify").val();
+        var pid = $("#pidmodify").val();
+        if (f_acta=="") {
+            alert("Seleccione la fecha de Cierre de Acta.");
+            return false;
+        };
+        var tmp = f_acta.split("/");
+        var f_acta = tmp[2]+"-"+tmp[0]+"-"+tmp[1];
+        var url = "/record/directed/modifyregister/courseid/"+courseid+"/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/curid/"+curid+"/turno/"+turno+"/uid/"+uid+"/pid/"+pid+"/f_acta/"+f_acta+"/option/C";
+        // alert(url);
+        $("#header_cursos").hide();
+        $("#lista").hide();
+        $("#header_alumnos").html("<img src='/img/spinner.gif'>Cargando...");
+        $("#header_alumnos").load(url);
+    });
+
+    // $("#nota, #notamodify").blur(function(){
+    //     var vnota = $(this).val();
+    //     if ( vnota > 20 || vnota < -3 ){
+    //         $("#nota, #notamodify").val("");
+    //         $(".msg").html("* Ingrese de 0 a 20");
+    //     }
+    // });
+
+    // var total_letras_notas = 2;
+    // $('#nota, #notamodify').keyup(function(){
+    //     var longitud = $(this).val().length;
+    //     var resto = total_letras_notas - longitud;
+    //     $('#numero').html(resto);
+    //     if(resto <= 0) $('#nota, #notamodify').attr("maxlength", 2);
+    // });
+
+    $("#escid").change(function(){
+        var escuela = $(this).val();
+        if (escuela=="") {
+            alert("Seleccione una Escuela.");
+            return false;
+        };
+        tmp=escuela.split(';--;');
+        escid=tmp[0];
+        $("#docente_reg").load("/record/directed/teacherxschool/escid/"+escid);
+    });
+
+    var total_letras_recibo = 12;
+    $('#recibo, #recibomodify').keyup(function(){
+        var longi = $(this).val().length;
+        var rest = total_letras_recibo - longi;
+        $('#numero').html(rest);
+        if(rest <= 0) $('#recibo, #recibomodify').attr("maxlength", 12);
+    });
+
+    $("#resolucion, #resolmodify").keyup(function(){
+        var r = $(this).val();
+        $("#resolucion, #resolmodify").val(r.toUpperCase());
+    });
+
+
+    $("#vermatriculadoscurso").hover(
+        function(){
+            $("#vermatriculadoscurso").css("background-color","#5CB0DE");
+            $("#vermatriculadoscurso").css("border-color","#46B8DA");
+            $("#vermatriculadoscurso").css("color","#FFF");
+        },
+        function(){
+            $("#vermatriculadoscurso").css("background-color","#FFF");
+            $("#vermatriculadoscurso").css("border-color","#CCC");
+            $("#vermatriculadoscurso").css("color","#333");
+        }
+    );
+
+    $("#vermatriculastotales").hover(
+        function(){
+            $("#vermatriculastotales").css("background-color","#5CB85C");
+            $("#vermatriculastotales").css("border-color","#4CAE4C");
+            $("#vermatriculastotales").css("color","#FFF");
+        },
+        function(){
+            $("#vermatriculastotales").css("background-color","#FFF");
+            $("#vermatriculastotales").css("border-color","#CCC");
+            $("#vermatriculastotales").css("color","#333");
+        }
+    );
+
+    $("#vercursospendientes").hover(
+        function(){
+            $("#vercursospendientes").css("background-color","#F0AD4E");
+            $("#vercursospendientes").css("border-color","#EEA236");
+            $("#vercursospendientes").css("color","#FFF");
+        },
+        function(){
+            $("#vercursospendientes").css("background-color","#FFF");
+            $("#vercursospendientes").css("border-color","#CCC");
+            $("#vercursospendientes").css("color","#333");
+        }
+    );
+});
 </script>

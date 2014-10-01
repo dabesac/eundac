@@ -254,6 +254,8 @@
 
 
 <script>
+
+$(function(){
     $(".correction").hover(function(){
         var comentss=$(this).attr('comentss');
         var observationv=$(this).attr('observationver');
@@ -357,4 +359,5 @@
     $('#myModalobs').on('hidden.bs.modal', function (e) {
         $("#destino").empty();
     });
+});
 </script>

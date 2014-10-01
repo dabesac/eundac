@@ -12,10 +12,9 @@ class Record_DirectedController extends Zend_Controller_Action {
     	// }
     	$this->sesion = $login;
     }
-    
+
     public function indexAction(){
-        
-            $this->view->usuario=$this->sesion->rid;
+        $this->view->usuario=$this->sesion->rid;
     }
 
     public function studentAction(){
@@ -33,7 +32,7 @@ class Record_DirectedController extends Zend_Controller_Action {
             $user= new Api_Model_DbTable_Users();
             $datauser=$user->_getUserXUid_state($where);
             $this->view->user=$datauser[0];
-            
+
             $rid=$this->sesion->rid;
             if ($rid == 'AD') {
                 //solo si es admin
@@ -55,12 +54,12 @@ class Record_DirectedController extends Zend_Controller_Action {
             $periods[0]=$peri->_getOnePeriod($whereper1);
             $whereper1['perid']=$anio.'S';
             $periods[1]=$peri->_getOnePeriod($whereper1);
-            $whereper1['perid']=$anio.'C';
-            $periods[2]=$peri->_getOnePeriod($whereper1);
-            $this->view->periods=$periods; 
+            // $whereper1['perid']=$anio.'C';
+            // $periods[2]=$peri->_getOnePeriod($whereper1);
+            $this->view->periods=$periods;
             }
-            
-            
+
+
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -84,34 +83,70 @@ class Record_DirectedController extends Zend_Controller_Action {
             $this->view->escid = $escid;
             $this->view->subid = $subid;
 
-            $wherecur['eid']=$eid;
-            $wherecur['oid']=$oid;
-            $wherecur['escid']=$escid;
-            $wherecur['state']="A";
-            $curiculas = new Api_Model_DbTable_Curricula();
-            $cur0=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
-            $wherecur['state']="T";
-            $cur1=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
-            $wherecur['state']="C";
-            $cur2=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
-            $rol=$this->sesion->rid;
-            
-            if ($rol =='AD') {
-                if($cur0 && !$cur1 && !$cur2){
-                    $cur=$cur0;
-                }else{
-                    $cur=array_merge($cur0,$cur1,$cur2);
+
+            //identificando una curricula asignada al alumno
+            $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'uid'=>$uid,'pid'=>$pid);
+            $DBCurricula = new Api_Model_DbTable_Studentxcurricula();
+            $datacurri = $DBCurricula->_getsearch($wheres);
+            $curid=$datacurri['curid'];
+
+            $dataStudent=array('pid'=>$pid,'uid'=>$uid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid);
+            $this->view->dataStudent=$dataStudent;
+
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['escid']=$escid;
+            $where['subid']=$subid;
+            $where['curid']=$curid;
+            $where['state']="A";
+            $dbcurso = new Api_Model_DbTable_Course();
+            $orders=array('semid','courseid');
+            $curso=  $dbcurso->_getFilter($where,$attrib=null,$orders);
+
+            $wheress=array('escid'=>$escid,'uid'=>$uid,'curid'=>$curid);
+            foreach ($curso as $c => $data) {
+                $wheress['courseid']=$data['courseid'];
+                $data=$dbcurso->_getCourseLlevo($wheress);
+
+                if ($data[0]['apto']==1) {
+                    unset($curso[$c]);
                 }
-            }else{
-                if ($cur0 && !$cur1) {
-                    $cur=$cur0;
-                }elseif ($cur0 && $cur1) {
-                    $cur=array_merge($cur0,$cur1);
+                elseif ($data[0]['apto']==2) {
+                    $curso[$c]['no_apto']=1;
+                }
+                else{
+                    $curso[$c]['no_apto']=0;
                 }
             }
-            
-            
-            $this->view->curriculas=$cur;
+            $this->view->cursos = $curso;
+            // $wherecur['eid']=$eid;
+            // $wherecur['oid']=$oid;
+            // $wherecur['escid']=$escid;
+            // $wherecur['state']="A";
+            // $curiculas = new Api_Model_DbTable_Curricula();
+            // $cur0=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
+            // $wherecur['state']="T";
+            // $cur1=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
+            // $wherecur['state']="C";
+            // $cur2=$curiculas->_getFilter($wherecur,$attrib=null,$orders='curid');
+            // $rol=$this->sesion->rid;
+
+            // if ($rol =='AD') {
+            //     if($cur0 && !$cur1 && !$cur2){
+            //         $cur=$cur0;
+            //     }else{
+            //         $cur=array_merge($cur0,$cur1,$cur2);
+            //     }
+            // }else{
+            //     if ($cur0 && !$cur1) {
+            //         $cur=$cur0;
+            //     }elseif ($cur0 && $cur1) {
+            //         $cur=array_merge($cur0,$cur1);
+            //     }
+            // }
+
+
+            // $this->view->curriculas=$cur;
 
             $wheresc['eid']=$eid;
             $wheresc['oid']=$oid;
@@ -119,14 +154,14 @@ class Record_DirectedController extends Zend_Controller_Action {
             $rescu = new Api_Model_DbTable_Speciality();
             $lista = $rescu->_getFilter($wheresc,$attrib=null,$orders='escid');
             $this->view->lescuelas = $lista;
-            
+
             $wheresub['eid']=$eid;
             $wheresub['oid']=$oid;
             $wheresub['subid']=$subid;
             $wheresub['escid']=$escid;
             $wheresub['uid']=$uid;
             $wheresub['pid']=$pid;
-            $wheresub['perid']=$perid;            
+            $wheresub['perid']=$perid;
             $dblistarcon = new Api_Model_DbTable_Registrationxcourse();
             $convalidados = $dblistarcon->_getFilter($wheresub,$attrib=null,$orders='courseid');
             if ($convalidados) {
@@ -137,17 +172,17 @@ class Record_DirectedController extends Zend_Controller_Action {
                 $wherecourse['subid']=$subid;
                 $cours= new Api_Model_DbTable_Course();
                 $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
-                for ($i=0; $i < $tamm; $i++) { 
-                    $wherepercourse=array('eid' => $eid, 'oid' => $oid, 
+                for ($i=0; $i < $tamm; $i++) {
+                    $wherepercourse=array('eid' => $eid, 'oid' => $oid,
                                 'courseid' => $convalidados[$i]['courseid'], 'escid' => $escid,
                                 'perid' => $perid, 'turno' => $convalidados[$i]['turno'],
                                 'subid' => $subid, 'curid' => $convalidados[$i]['curid']);
                     $wherecourse['curid']=$convalidados[$i]['curid'];
                     $wherecourse['courseid']=$convalidados[$i]['courseid'];
-                    
+
                     $dbcourse=$cours->_getOne($wherecourse);
                     $datacourseperiod=$dbperiodocurso->_getOne($wherepercourse);
-                    
+
                     $convalidados[$i]['state_record']=$datacourseperiod['state_record'];
                     $convalidados[$i]['name_course']=$dbcourse['name'];
                     $convalidados[$i]['credits']=$dbcourse['credits'];
@@ -167,7 +202,7 @@ class Record_DirectedController extends Zend_Controller_Action {
             $curid= $this->_getParam("curid");
             $escid= $this->_getParam("escid");
             $subid= $this->_getParam("subid");
-          
+
             $where['eid']=$eid;
             $where['oid']=$oid;
             $where['escid']=$escid;
@@ -175,8 +210,26 @@ class Record_DirectedController extends Zend_Controller_Action {
             $where['subid']=$subid;
             $where['state']="A";
             $dbcurso = new Api_Model_DbTable_Course();
-            $curso=  $dbcurso->_getFilter($where,$attrib=null,$orders='semid');
+            $orders=array('semid','courseid');
+            $curso=  $dbcurso->_getFilter($where,$attrib=null,$orders);
+
+            foreach ($curso as $c => $data) {
+                $wheress=array('escid'=>$escid,'uid'=>'0924401019','curid'=>$curid,'courseid'=>$data['courseid']);
+                $data=$dbcurso->_getCourseLlevo($wheress);
+
+                if ($data[0]['apto']==1) {
+                    unset($curso[$c]);
+                }
+                elseif ($data[0]['apto']==2) {
+                    $curso[$c]['no_apto']=1;
+                }
+                else{
+                    $curso[$c]['no_apto']=0;
+                }
+            }
+
             $this->view->cursos = $curso;
+
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -215,7 +268,7 @@ class Record_DirectedController extends Zend_Controller_Action {
                 $per= new Api_Model_DbTable_Person();
                 $tam=count($curso);
                 $whereper['eid']=$eid;
-                for ($i=0; $i < $tam; $i++) { 
+                for ($i=0; $i < $tam; $i++) {
                     $whereper['pid']=$curso[$i]['pid'];
                     $person=$per->_getOne($whereper);
                     $curso[$i]['fullname']=$person['last_name0']." ".$person['last_name1'].", ".$person['first_name'];
@@ -264,7 +317,6 @@ class Record_DirectedController extends Zend_Controller_Action {
                 $nota = $formdata['nota'];
                 $recibo = $formdata['recibo'];
                 $reso = $formdata['resolucion'];
-
                 $tmpcourseid = split('--', $formdata['courseid']);
                 $courseid = $tmpcourseid[0];
                 $curid = $tmpcourseid[1];
@@ -274,7 +326,7 @@ class Record_DirectedController extends Zend_Controller_Action {
                 $tmpdocente_reg = split(';--;', $formdata['docente_reg']);
                 $uid_doc = $tmpdocente_reg[0];
                 $pid_doc = $tmpdocente_reg[1];
-         
+
                 $regid=$uid.$perid;
                 $this->view->uid = $uid;
                 $this->view->pid = $pid;
@@ -294,12 +346,12 @@ class Record_DirectedController extends Zend_Controller_Action {
                 // $req = $reqcourse->_getOne($wherecourse);
                 // $inforequisitos = $req['req_1']." | ".$req['req_2']." | ".$req['req_3'];
                 // print_r($inforequisitos);
-                  
-                // $dbveces = new Admin_Model_DbTable_Cursos();       
+
+                // $dbveces = new Admin_Model_DbTable_Cursos();
                 // $vecesllevadas=  $dbveces->_getCursosXAlumnoXVeces($escid,$uid,$curricula,$curso);
                 // print_r($vecesllevadas);
-          
-                // $dbcursopen = new Admin_Model_DbTable_Cursos();     
+
+                // $dbcursopen = new Admin_Model_DbTable_Cursos();
                 // $cursoapto=  $dbcursopen->_getCursoXllevo($escid,$uid,$curricula,$curso);
                 // print_r($cursoapto);
 
@@ -424,7 +476,7 @@ class Record_DirectedController extends Zend_Controller_Action {
                 $wherecourse['oid']=$oid;
                 $wherecourse['escid']=$escid;
                 $wherecourse['subid']=$subid;
-                for ($i=0; $i < $tamm; $i++) { 
+                for ($i=0; $i < $tamm; $i++) {
                     $wherecourse['curid']=$convalidados[$i]['curid'];
                     $wherecourse['courseid']=$convalidados[$i]['courseid'];
                     $cours= new Api_Model_DbTable_Course();
@@ -510,8 +562,8 @@ class Record_DirectedController extends Zend_Controller_Action {
                 $wherecourse['escid']=$escid;
                 $wherecourse['subid']=$subid;
                 $cours= new Api_Model_DbTable_Course();
-                for ($i=0; $i < $tamm; $i++) { 
-                    $wherepercourse=array('eid' => $eid, 'oid' => $oid, 
+                for ($i=0; $i < $tamm; $i++) {
+                    $wherepercourse=array('eid' => $eid, 'oid' => $oid,
                                 'courseid' => $convalidados[$i]['courseid'], 'escid' => $escid,
                                 'perid' => $perid, 'turno' => $convalidados[$i]['turno'],
                                 'subid' => $subid, 'curid' => $convalidados[$i]['curid']);
@@ -520,7 +572,7 @@ class Record_DirectedController extends Zend_Controller_Action {
 
                     $dbcourse=$cours->_getOne($wherecourse);
                     $datacourseperiod=$dbperiodocurso->_getOne($wherepercourse);
-                    
+
                     $convalidados[$i]['state_record']=$datacourseperiod['state_record'];
                     $convalidados[$i]['name_course']=$dbcourse['name'];
                     $convalidados[$i]['credits']=$dbcourse['credits'];
@@ -531,7 +583,7 @@ class Record_DirectedController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
-    
+
     public function printAction(){
         try {
             $this->_helper->layout()->disableLayout();

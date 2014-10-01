@@ -5,7 +5,7 @@
 	<div class="panel-body">
 		<?php if($this->courpercur){ ?>
 		<div class="panel panel-primary">
-			<?php 
+			<?php
 			$semid=0;
 			$c=0;
 			foreach ($this->courpercur as $sem) {
@@ -55,8 +55,9 @@
 									</td>
 									<td align='center'><!-- Imprimir mayor nota -->
 										<?php
+										$est=null;
 										if($this->courlle[$c]){
-											$notafinal=$this->courlle[$c]['notafinal'];
+											$notafinal=(isset($this->courlle[$c]['notafinal']))?$this->courlle[$c]['notafinal']:null;
 											foreach ($this->courlle[$c] as $notaf) {
 												if($notaf['notafinal']>=$notafinal){
 													$notafinal=$notaf['notafinal'];
@@ -100,7 +101,7 @@
 						}?>
 						</table>
 					</div>
-				<?php  
+				<?php
 				}?>
 			<?php }?>
 		</div><!-- Panel de Semestres -->

@@ -4,8 +4,8 @@ if ($this->cursosconvalidados){ ?>
     <div>
         <div style="display: block; height: 150px; overflow: auto;margin: 0px;" >
             <table class="table table-hover">
-                <tr style="background: #ccc; color: #000000;">
-                    <th>#</th> 
+                <tr class="text-center active">
+                    <th>#</th>
                     <th>Currícula</th>
                     <th>Código</th>
                     <th>Nombre Curso</th>
@@ -35,7 +35,7 @@ if ($this->cursosconvalidados){ ?>
                                     <a href="/record/directed/print/perid/<?php echo base64_encode($this->perid) ?>/escid/<?php echo base64_encode($this->escid) ?>/subid/<?php echo base64_encode($this->subid) ?>/uid/<?php echo base64_encode($this->uid) ?>/pid/<?php echo base64_encode($this->pid) ?>/courseid/<?php echo base64_encode($convalidado['courseid']) ?>/curid/<?php echo base64_encode($convalidado['curid']) ?>/turno/<?php echo base64_encode($convalidado['turno']) ?> "><span class="glyphicon glyphicon-print"></span></a>
                                 </center>
                             </td>
-                            <?php  
+                            <?php
                              if ($convalidado['state']<>'C' and $convalidado['state_record']<>'C'){ ?>
                             <td>
                                 <a id="modifyregister_<?php echo $i?>" data-toggle="modal" href="#modify" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
@@ -57,7 +57,7 @@ if ($this->cursosconvalidados){ ?>
                                 $("#pidmodify").val("<?php echo $this->cursosconvalidados[$i-1]['pid']?>");
                             });
                             </script>
-                            <?php 
+                            <?php
                             }else{ ?>
                             <td>
                                 <a href="#" title="No se puede Modificar el Registro."><span class="glyphicon glyphicon-ban-circle"></span></a>
@@ -69,7 +69,7 @@ if ($this->cursosconvalidados){ ?>
                         $i++;
                     } ?>
             </table>
-        </div>        
-    </div> 
+        </div>
+    </div>
 <?php
 } ?>

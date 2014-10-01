@@ -7,6 +7,8 @@
 <?php endif ?>
 
 <script>
-    var peridAct = "<?php echo $this->peridAct?>";
-    $('#seletperiod > option[value='+peridAct+']').attr('selected', 'selected');
+    $(function(){
+        var peridAct = "<?php echo $this->peridAct?>";
+        $('#seletperiod > option[value='+peridAct+']').attr('selected', 'selected');
+    });
 </script>

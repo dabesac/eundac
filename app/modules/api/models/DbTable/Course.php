@@ -10,7 +10,7 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
 		try {
 				if ($data['eid']=='' || $data['oid']=='' || $data['curid']=='' || $data['escid']=='' || $data['subid']=='' || $data['courseid']=='' || $data['semid']=='') return false;
 				return $this->insert($data);
-				return false;			
+				return false;
 		} catch (Exception $e) {
 			print "Error: Save Course".$e->getMessage();
 		}
@@ -49,7 +49,7 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
 				$wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and curid='".$where['curid']."' and escid='".$where['escid']."' and subid='".$where['subid']."'";
 			if ($limit==0) $limit=null;
 			if ($start==0) $start=null;
-			
+
 			$rows=$this->fetchAll($wherestr,$order,$start,$limit);
 			if($rows) return $rows->toArray();
 			return false;
@@ -80,11 +80,21 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
 		}
 	}
 
-	    /* Retorna el nro de veces que llevo un curso un alumno  */
+	/* Retorna el nro de veces que llevo un curso un alumno  */
     public function _getCoursesXStudentXV($where=null){
         if ($where['escid']==''|| $where['uid']==''|| $where['curid']=='' || $where['courseid']=='') return false;
             $sql=$this->_db->query("
-                    select llevo_course('".$where['escid']."','".$where['uid']."','".$where['curid']."','".$where['courseid']."') as veces          
+                    select llevo_course('".$where['escid']."','".$where['uid']."','".$where['curid']."','".$where['courseid']."') as veces
+               ");
+        $r = $sql->fetchAll();
+        return $r;
+    }
+
+    // Retorna mas rápido el nro de veces que llevo un curso un alumno
+    public function _getvecesXstudentfast($where=null){
+        if ($where['escid']==''|| $where['uid']==''|| $where['curid']=='' || $where['courseid']=='') return false;
+            $sql=$this->_db->query("
+                    select veces_alumno('".$where['escid']."','".$where['uid']."','".$where['curid']."','".$where['courseid']."') as veces
                ");
         $r = $sql->fetchAll();
         return $r;
@@ -99,7 +109,7 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
             $r = $this->fetchAll($str,"cast(semid as integer),courseid");
             if ($r) return $r->toArray ();
             return false;
-        }  
+        }
         catch (Exception $ex)
         {
             print "Error: Leer todos los cursos de una curricula ".$ex->getMessage();
@@ -109,7 +119,7 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
     public function _getCourseLlevo($where=null){
         if ($where['escid']==''|| $where['uid']==''|| $where['curid']=='' || $where['courseid']=='') return false;
             $sql=$this->_db->query("
-                    select state_llevo1('".$where['escid']."','".$where['uid']."','".$where['curid']."','".$where['courseid']."') as apto          
+                    select state_llevo1('".$where['escid']."','".$where['uid']."','".$where['curid']."','".$where['courseid']."') as apto
                ");
         $r = $sql->fetchAll();
         return $r;
@@ -127,20 +137,20 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
             ((SELECT COUNT(*) CANTIDAD_CURSOS FROM BASE_COURSES
             WHERE ESCID='".$where['escid']."' AND CURID='".$where['curid']."' AND STATE='A' AND TYPE='O' AND SEMID=C.SEMID
             )+
-            (CASE WHEN (SELECT COUNT(*) FROM BASE_COURSES 
+            (CASE WHEN (SELECT COUNT(*) FROM BASE_COURSES
             WHERE ESCID='".$where['escid']."' AND CURID='".$where['curid']."' AND TYPE='E'  AND STATE='A' AND SEMID=C.SEMID
-            )>1 THEN 1 ELSE (SELECT COUNT(*) FROM BASE_COURSES 
+            )>1 THEN 1 ELSE (SELECT COUNT(*) FROM BASE_COURSES
             WHERE ESCID='".$where['escid']."' AND CURID='".$where['curid']."' AND TYPE='E'  AND STATE='A' AND SEMID=C.SEMID
             ) END)) AS CANTIDAD_CURSOS
             FROM BASE_COURSES AS C INNER JOIN BASE_SEMESTER AS S
             on C.EID=S.EID AND C.OID=S.OID AND  C.SEMID=S.SEMID  AND C.STATE='A'
-            where C.ESCID='".$where['escid']."' AND C.CURID='".$where['curid']."' 
+            where C.ESCID='".$where['escid']."' AND C.CURID='".$where['curid']."'
             group by C.SEMID order by C.SEMID
            ");
-           
+
            $row=$sql->fetchAll();
-           return $row;  
-        } 
+           return $row;
+        }
         catch (Exception $ex)
         {
             // print "Error: Leer todos los cursos de una curricula ".$ex->getMessage();
@@ -157,14 +167,14 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
             $sql=$this->_db->query("
 			SELECT C.SEMID, COUNT(*) CANTIDAD_CURSOS FROM BASE_COURSES AS C
             INNER JOIN  BASE_REGISTRATION_COURSE AS MC
-            ON C.EID=MC.EID AND C.OID=MC.OID AND C.ESCID=MC.ESCID AND C.COURSEID=MC.COURSEID AND C.CURID=MC.CURID 
+            ON C.EID=MC.EID AND C.OID=MC.OID AND C.ESCID=MC.ESCID AND C.COURSEID=MC.COURSEID AND C.CURID=MC.CURID
             WHERE UID='".$where['uid']."' AND CAST((CASE WHEN  NOTAFINAL='' THEN '0' ELSE NOTAFINAL END) AS INTEGER) > 10 AND MC.CURID='".$where['curid']."'
             GROUP BY C.SEMID ORDER BY C.SEMID
            ");
-           
+
            $row=$sql->fetchAll();
-           return $row;  
-        } 
+           return $row;
+        }
         catch (Exception $ex)
         {
             // print "Error: Leer todos los cursos de una curricula ".$ex->getMessage();

@@ -1,7 +1,7 @@
 
 <table class="table table-hover table-condensed">
         <thead>
-        <tr>    
+        <tr>
                 <th >Nro</th>
                 <th >Código</th>
                 <th >Apellidos y Nombres</th>
@@ -26,13 +26,13 @@
                        ?>
                         <tr>
                             <td><?php echo $i;?></td>
-                            <td><?php echo $datos['uid'];?></td>                            
+                            <td><?php echo $datos['uid'];?></td>
                             <td><?php echo $datos['last_name0']." ".$datos['last_name1'].", ".$datos['first_name'];?></td>
                             <td><?php echo $datos['escid']?></td>
                             <?php $datos['doc_authorize']=(isset($datos['doc_authorize']))?$datos['doc_authorize']:null;?>
                             <td><?php echo $datos['doc_authorize']?></td>
                             <td>
-                            <?php 
+                            <?php
                             $mat = new Api_Model_DbTable_Registration();
                             $rmat = $mat->_getOne($where);
                             if ($rmat){
@@ -41,16 +41,16 @@
                                     <?php
                                         $condicion=$this->condicion;
                                         $url= "uid/".base64_encode($datos['uid'])."/pid/".base64_encode($datos['pid'])."/escid/".base64_encode($datos['escid'])."/subid/".base64_encode($datos['subid'])."/condi/".base64_encode($condicion);
-                                    ?>  
+                                    ?>
                                     <a id='<?php echo 'a'.$datos['uid']?>'  onclick="javascript: window.open('/rfacultad/condition/detail/<?php echo $url?>','Eliminar Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=750,height=750')" class='<?php if ($this->condicion =='C') {echo 'btn   btn-warning ';} if ($this->condicion =='S') {echo 'btn   btn-primary';} ?>'>
                                     <i class=" icon-pencil icon-white"></i>
-                                    <?php if ($this->condicion =='C') {?><?php echo 'Agregar Condición';} if ($this->condicion =='S') {echo 'Crear';}?></a> 
+                                    <?php if ($this->condicion =='C') {?><?php echo 'Agregar Condición';} if ($this->condicion =='S') {echo 'Crear';}?></a>
                                 <?php
                                 } else {?>
                                     <span style="color: red">Pre matriculado</span>
                                 <?php } ?>
                             <?php
-                            } 
+                            }
                             else {?>
                                 <span style="color: blue">Sin Matricula</span>
                             <?php
@@ -63,7 +63,7 @@
                     }
                 }
                 ?>
-            </tbody>  
+            </tbody>
     </table>
-        <div style="clear:both"></div>  
+        <div style="clear:both"></div>
 

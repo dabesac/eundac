@@ -2,8 +2,16 @@
 if ($this->cursos) { ?>
 	<option value="">- Seleccione Asignatura -</option>
 	<?php
-	foreach ($this->cursos as $cursos) { ?>
-		<option value="<?php echo $cursos['courseid']."--".$cursos['curid']."--".$cursos['semid']."--".$cursos['credits']?>"><?php echo $cursos['courseid']." | ".$cursos['name']." - Creditos: ".$cursos['credits']?></option>
+	foreach ($this->cursos as $cursos) {
+        if ($cursos['no_apto']==1) {    ?>
+            <option class='text-danger' value="<?php echo $cursos['courseid']."--".$cursos['curid']."--".$cursos['semid']."--".$cursos['credits']?>"><?php echo $cursos['courseid']." | ".$cursos['name']." - Créditos: ".$cursos['credits']?></option>
+        <?php
+        }
+        else{   ?>
+            <option class='text-success' value="<?php echo $cursos['courseid']."--".$cursos['curid']."--".$cursos['semid']."--".$cursos['credits']?>"><b><?php echo $cursos['courseid']." | ".$cursos['name']." - Créditos: ".$cursos['credits']?></b></option>
+        <?php
+        }
+        ?>
 	<?php
 	}
 }else{ ?>
