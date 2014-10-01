@@ -1,0 +1,81 @@
+	.panel{
+		box-shadow: 5px 5px 5px 0px;
+		border-radius: 0px;
+		border: 0px;
+		text-align: left;
+		height: 130px;
+	}
+	.col1{
+		background: rgb(220,220,220);
+		height: 130px;
+		border-right: 5px solid black;
+  		text-align: center;
+  		padding-top: 34px;
+	}
+	.col2{
+		border-radius: 0px;
+		background: #CC3333;
+		text-transform: capitalize;
+		font-weight: bold;
+		color:white;
+		height: 130px;
+	}
+	.col3{
+		border-radius: 0px;
+		height: 130px;
+	}
+	.escuela{
+		font-size: 20px;
+		color: #00CC66;
+	}
+	#addcourse{
+		position: absolute;
+		bottom: 5px;
+		left: 80px;
+		width: 50%;
+	}
+	#titu1{
+		font-size: 40px;
+	}
+	.col4{
+		background: rgb(220,220,220);
+		height: 80px;
+		border-right: 5px solid black;
+ 
+	}
+	.col5{
+		background: rgb(220,220,220);
+		text-transform: capitalize;
+		font-weight: bold;
+		color:white;
+		height: 80px;
+		border-right: 5px solid black;
+	}
+	.col6{
+		background: rgb(220,220,220); 
+		height: 80px;
+	}
+	.btn3{
+		
+    box-shadow: rgba(0, 0, 0, 0.298039) 2px 2px 5px 0px;
+    color: rgb(255, 255, 255);
+    display: block;
+    float: right;
+    height: 25px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    width: 134px;
+    perspective-origin: 67px 13px;
+    transform-origin: 67px 13px;
+    background: rgba(0, 0, 0, 0) -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(41, 170, 226)), to(rgb(0, 113, 188))) repeat scroll 0% 0% / auto padding-box border-box;
+    border-top: 1px solid rgb(150, 209, 248);
+    border-right: 0px none rgb(255, 255, 255);
+    border-bottom: 0px none rgb(255, 255, 255);
+    border-left: 0px none rgb(255, 255, 255);
+    border-radius: 7px 7px 7px 7px;
+    font: normal normal normal 18px/normal CenturyGothicRegular, serif;
+    list-style: none outside none;
+    margin: 14px 0px 0px 14px;
+    
+	}

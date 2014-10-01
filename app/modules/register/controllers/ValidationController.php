@@ -23,10 +23,11 @@ class Register_ValidationController extends Zend_Controller_Action
         $eid= $this->sesion->eid;
         $oid= $this->sesion->oid;
         $temp = ($this->_getParam("temp"));
-    
+        print_r($temp);
         $form=new Register_Form_Search;
         $form->buscar->setLabel("Buscar");
         $this->view->form=$form;  
+
         $perid='14C';
         $this->view->perid = $perid;
         $this->view->temp = $temp;
@@ -45,7 +46,6 @@ class Register_ValidationController extends Zend_Controller_Action
         if($uid<>""){
           $usuario=  $dbusuario->_getFilter($data);  
         }
-         
         //print_r($usuario[0]['uid']);
         $this->view->usuario = $usuario;          
   
@@ -248,7 +248,7 @@ class Register_ValidationController extends Zend_Controller_Action
                                 $data['subid']= $subid;
                                 $data['state_record']= 'A';
                                 $data['type_rate']= 'O';
-                                $data['register']=$uidreg;
+                                $data['register']=$this;
                                 $data['semid']= $semid;
                                 $data['state']= 'A'; 
 

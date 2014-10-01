@@ -18,45 +18,53 @@ class Record_IndexController extends Zend_Controller_Action {
     
     public function indexAction()
     {
+		
 		$speciality= new Api_Model_DbTable_Speciality();
 		$where['eid'] = $this->sesion->eid;
 		$where['oid'] = $this->sesion->oid;
 		$where['state'] ='A';
+		$fac=$this->sesion->faculty->facid;
+		$this->view->fac=$fac;
+		$this->view->rid= $this->sesion->rid;
 		if ($this->is_director=="S"){
 			$where['escid']=$this->sesion->escid;
 			$where['subid']=$this->sesion->subid;
 		}
 		if ($this->sesion->rid=="RF" and $this->sesion->subid=="1901"){
 			$where['facid']=$this->sesion->faculty->facid;
-		
+			//echo $where['facid'];exit();	
 		}
 
 		if ($this->sesion->rid=="RF" and $this->sesion->subid<>"1901"){
 			//$where['facid']=$this->sesion->faculty->facid;
-			$where['subid']=$this->sesion->subid;
+			$where['subid']=$this->sesion->subid;		
 		}
-
+		
+		$data= array("escid","subid","name");
+		$rows = $speciality->_getFilter($where,$data='');
+		if ($rows) $this->view->specialitys=$rows;
+		// set speciality for director
+		//facultades
 		$wher = array('eid' => $where['eid'], 'oid' => $where['oid'], 'state' => 'A');
 		$fac= new Api_Model_DbTable_Faculty();
         $facultad=$fac->_getFilter($wher,$attrib=null,$orders=null);
         $this->view->facultades=$facultad;
 		
-		$data= array("escid","subid","name");
-		$rows = $speciality->_getFilter($where,$data='');
-
-		if ($rows) $this->view->specialitys=$rows;
-		// set speciality for director
 	}
-
+	
 	public function schoolsAction(){
         try {
             $this->_helper->layout()->disableLayout();
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
             $rid = $this->sesion->rid;
+            $this->view->rid=$rid;
             $escid = $this->sesion->escid;
             $subid = $this->sesion->subid;
-            $facid = $this->_getParam('facid');        
+            $facid = base64_decode($this->_getParam('facid'));
+            $esc = $this->_getParam('escid');
+            $this->view->esc=$esc;
+
 
             $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid);
             $es = new Api_Model_DbTable_Speciality();
@@ -67,7 +75,7 @@ class Record_IndexController extends Zend_Controller_Action {
             print "Error: ".$e->getMessage();
         }
     }
-	
+
     public function specialityAction(){
         try {
             $this->_helper->layout()->disableLayout();
@@ -104,28 +112,24 @@ class Record_IndexController extends Zend_Controller_Action {
 				$tmpescid = split("--",$formData['speciality']);
 				$formData['subid'] = base64_decode($tmpescid[0]);
 				$formData['escid'] = base64_decode($tmpescid[1]);
-
 			}
-			
 			$formData['perid'] = base64_decode($formData['perid']);
 			$this->view->escid=$formData['escid'];
 			$this->view->subid=$formData['subid'];
 			$this->view->perid=$formData['perid'];
-			$this->view->data=$formData;
-			$data['eid'] = $formData['eid'];
-			$data['oid'] = $formData['oid'];
-			$data['perid'] = $formData['perid'];
-			$data['escid'] = $formData['escid'];
-			$data['subid'] = $formData['subid'];
-			$data['coursename'] = $formData['coursename'];
 			//verify status period
 			$periods = new Api_Model_DbTable_Periods();
 			$rowperiod = $periods->_getOne($formData);
 			if ($rowperiod ) $this->view->stateperiod=$rowperiod['state'];
 			unset($formData['year']);
-			$this->view->courses = $this->_loadCourses($data);
+			unset($formData['facid']);
+			unset($formData['speciality']);
+			$this->view->courses = $this->_loadCourses($formData);
 			$this->view->rid =$this->sesion->rid;
+
 		}
+				 
+		
 	}
 	
 	private function _loadCourses($formData=null){		
@@ -173,6 +177,7 @@ class Record_IndexController extends Zend_Controller_Action {
 	
 	public function detailAction()
 	{
+
 			$params = $this->getRequest()->getParams();
 	            $paramsdecode = array();
 	            foreach ( $params as $key => $value ){

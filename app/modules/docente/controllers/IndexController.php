@@ -183,6 +183,7 @@ class Docente_IndexController extends Zend_Controller_Action {
         }
 
         $c = 0;
+        $newsFilter = array();
         foreach ($news as $new) {
             $where = array( 'eid'   => $eid,
                             'oid'   => $oid,
@@ -214,8 +215,8 @@ class Docente_IndexController extends Zend_Controller_Action {
                 break;
             }
         }  
-        $this->view->news = $newsFilter;
-
+        $this->view->news = $newsFilter;  
+        
         //Avacen Academico Solo Para Directores
         $this->view->rid = $rid;
         if ($rid == 'DR') {

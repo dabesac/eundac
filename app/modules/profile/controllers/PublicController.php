@@ -1322,6 +1322,8 @@ class Profile_PublicController extends Zend_Controller_Action {
                                     'state'    => 'M' );
                     $attrib = array('notafinal');
                     $dataAplazados = $registerCourseDb->_getFilter($where, $attrib);
+                    $dataCourses['courses'][$c]['aplazado'] = '';
+                    $dataCourses['courses'][$c]['colorAplazado'] = '';
                     if ($dataAplazados) {
                         if ($dataAplazados[0]['notafinal'] == '-2') {
                             $dataCourses['courses'][$c]['aplazado']      = 'N.S.P.';

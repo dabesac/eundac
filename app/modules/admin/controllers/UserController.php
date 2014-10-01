@@ -78,7 +78,10 @@ class Admin_UserController extends Zend_Controller_Action{
             }
             $this->view->datauser=$datauser;
             $this->view->infoesc=$infoesc;
-            $this->view->inforol=$inforol;          
+            $this->view->inforol=$inforol; 
+            $rol=$this->sesion->rid;
+            $this->view->rol=$rol;
+            
         } catch (Exception $e) {
             print "Error: get User".$e->getMessage();
         }
@@ -203,15 +206,17 @@ class Admin_UserController extends Zend_Controller_Action{
         }
     }
 
-
     public function updateuserAction(){
         try {
+            $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
+
             $uid = base64_decode($this->_getParam('uid'));
             $pid = base64_decode($this->_getParam('pid'));
             $escid = base64_decode($this->_getParam('escid'));
             $subid = base64_decode($this->_getParam('subid'));
+
             $where=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid);
             $attrib=array('uid','escid','subid','pid','rid','state','comments');
             $dbuser = new Api_Model_DbTable_Users();
@@ -225,6 +230,7 @@ class Admin_UserController extends Zend_Controller_Action{
             if ($this->getRequest()->isPost())
             {
                 $frmdata=$this->getRequest()->getPost();
+
                 if ($fm->isValid($frmdata))
                 {                    
                     unset($frmdata['Actualizar']);
@@ -236,12 +242,11 @@ class Admin_UserController extends Zend_Controller_Action{
                     $pk['subid']=$subid;
                     $pk['uid']=$uid;                                               
                     $reg_= new Api_Model_DbTable_Users();
-                    $reg_->_update($frmdata,$pk);
-                    $this->_redirect("/admin/user");                           
+                    $reg_->_update($frmdata,$pk);                          
                 }
                 else
                 {
-                    echo "Ingrese nuevamente por favor";
+                    echo "Error de Datos";
                 }
             }
 
@@ -250,6 +255,26 @@ class Admin_UserController extends Zend_Controller_Action{
             print "Error: update User".$ex->getMessage();
         }
     }
+    public function updatestateAction()
+    {
+        try {
+            $this->_helper->layout()->disableLayout();
+            $pk['eid']=$this->sesion->eid;
+            $pk['oid']=$this->sesion->oid;
+            $pk['pid']=base64_decode($this->_getParam('pid'));
+            $pk['escid']=base64_decode($this->_getParam('escid'));
+            $pk['subid']=base64_decode($this->_getParam('subid'));
+            $pk['uid']=base64_decode($this->_getParam('uid'));
+            $data['state']=$this->_getParam('estado');
+            $reg_= new Api_Model_DbTable_Users();
+            if($reg_->_update($data,$pk)){
+                print_r("1");
+            }
+        } catch (Exception $e) {
+            print_r("Error");
+        }
+    }
+
     public function changepasswordAction(){
         try {
             $this->_helper->layout()->disableLayout();
