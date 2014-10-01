@@ -28,6 +28,72 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             print 'Error Controlador Index'.$e->getMessage();
         }
     }
+
+    public function docentesdistributionAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //DataBases
+        $personDb         = new Api_Model_DbTable_Person();
+        $coursesTeacherDb = new Api_Model_DbTable_Coursexteacher();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        $distributionId = base64_decode($this->_getParam('distributionid'));
+        $distributionId = explode('|', $distributionId);
+        $perid  = $distributionId[0];
+        $escid  = $distributionId[1];
+        $subid  = $distributionId[2];
+        $distid = $distributionId[3];
+
+        $dataDocente['perid']  = $perid;
+        $dataDocente['escid']  = $escid;
+        $dataDocente['subid']  = $subid;
+        $dataDocente['distid'] = $distid;
+
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'perid' => $perid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+        $attrib = array('pid', 'uid');
+        $order = array('pid ASC');
+        $pdDocentes = $coursesTeacherDb->_getFilter($where, $attrib, $order);
+
+        $prevPid = '-';
+        $cD = 0;
+        $dataDocente['docentes'] = array();
+        if ($pdDocentes) {
+            foreach ($pdDocentes as $docente) {
+                if ($docente['pid'] != $prevPid) {
+                    //Datos Docente
+                    $where = array( 'eid' => $eid,
+                                    'pid' => $docente['pid'] );
+                    $attrib = array('last_name0', 'last_name1', 'first_name');
+                    $pdDatosDocente = $personDb->_getFilter($where, $attrib);
+
+                    $dataDocente['docentes'][$cD] = array(  'uid'      => $docente['uid'],
+                                                            'pid'      => $docente['pid'],
+                                                            'escid'    => $escid,
+                                                            'subid'    => $subid,
+                                                            'fullName' => $pdDatosDocente[0]['last_name0'].' '.
+                                                                            $pdDatosDocente[0]['last_name1'].' '.
+                                                                            $pdDatosDocente[0]['first_name'] );
+
+                    $prevPid = $docente['pid'];
+                    $cD++;
+                }
+            }
+
+            //Ordenar por nombre
+            foreach ($dataDocente['docentes'] as $c => $docente) {
+                $fullName[$c] = $docente['fullName'];
+            }
+            array_multisort($fullName, SORT_ASC, $dataDocente['docentes']);
+        }
+
+        $this->view->dataDocente = $dataDocente;
+    }
     
     public function showdistributionAction(){
         try {

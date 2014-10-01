@@ -327,7 +327,6 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             if ($paymentsReintegro) {
                 $this->view->paymentsReintegro = $paymentsReintegro;
             }
-            print_r($paymentsReintegro);
 
             //Data del Estudiante
             $dataStudent = array(   'uid'   => $uid,

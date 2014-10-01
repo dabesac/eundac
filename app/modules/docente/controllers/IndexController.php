@@ -347,9 +347,9 @@ class Docente_IndexController extends Zend_Controller_Action {
         $pollResultsDb = new Api_Model_DbTable_PollResults();
 
         //Preguntas
-        $where = array( 'eid' => $eid,
-                        'oid' => $oid,
-                        'perid' => '13B');
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'perid' => '14A');
         $attrib = array('pollid');
         $poll = $pollDb->_getFilter($where);
         
@@ -362,11 +362,11 @@ class Docente_IndexController extends Zend_Controller_Action {
 
         $this->view->pollQuestions = $pollQuestions;
 
-        $where = array( 'eid' => $eid,
-                        'oid' => $oid,
-                        'uid' => $uid,
-                        'pid' => $pid,
-                        'perid' => '13B');
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'uid'   => $uid,
+                        'pid'   => $pid,
+                        'perid' => '14A');
 
         $coursesBefore = $coursesxTeacherDb->_getFilter($where);
 
@@ -437,13 +437,15 @@ class Docente_IndexController extends Zend_Controller_Action {
                 $pollResults = $pollResultsDb->_getFilter($where, $attrib);
                 foreach ($answers as $answer) {
                     $resultTotal[$question['qid']][$answer] = 0;
-                    foreach ($pollResults as $result) {
-                        foreach ($answersAlternatives[$answer] as $alternative) {
-                            if ($result['altid'] == $alternative) {
-                                $resultTotal[$question['qid']][$answer] = $resultTotal[$question['qid']][$answer] + 1;
-                                $existeAlt = 0;
-                            }else{
-                                $existeAlt = 1;
+                    if ($pollResults) {
+                        foreach ($pollResults as $result) {
+                            foreach ($answersAlternatives[$answer] as $alternative) {
+                                if ($result['altid'] == $alternative) {
+                                    $resultTotal[$question['qid']][$answer] = $resultTotal[$question['qid']][$answer] + 1;
+                                    $existeAlt = 0;
+                                }else{
+                                    $existeAlt = 1;
+                                }
                             }
                         }
                     }
@@ -477,6 +479,7 @@ class Docente_IndexController extends Zend_Controller_Action {
 
         }
     }
+
     public function subjectsAction()
     {
         try {

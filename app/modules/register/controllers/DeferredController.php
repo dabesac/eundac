@@ -38,9 +38,9 @@ class Register_DeferredController extends Zend_Controller_Action {
             $turno= trim($params['turno']);
             $perid = trim($params['perid']);
             $curid = trim($params['curid']);
-            $state = trim($params['state']);
+            // $state = trim($params['state']);
 
-            $this->view->state=$state;
+            // $this->view->state=$state;
 
             $urlpersentage ="/".base64_encode('oid')."/".base64_encode($oid)."/".
                 base64_encode('eid')."/".base64_encode($eid)."/".
