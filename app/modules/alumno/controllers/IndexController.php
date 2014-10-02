@@ -436,11 +436,11 @@ class Alumno_IndexController extends Zend_Controller_Action {
                         'uid'   => $uid, 
                         'escid' => $escid, 
                         'subid' => $subid, 
-                        'perid' => $perid );
-        $attrib = array('state');
+                        'perid' => $perid,
+                        'state' => 'M' );
         $register = $registerDb->_getFilter($where, $attrib);
 
-        if ($register[0]['state'] == 'M' && $rid == 'AL') {
+        if ($register and $rid == 'AL') {
             $data['eid']=$eid;
             $data['oid']=$oid;
             $where = array( 'eid' => $eid,
@@ -477,7 +477,6 @@ class Alumno_IndexController extends Zend_Controller_Action {
                 $cur=array();
                 if($curs)
                 {
-
                     foreach ($curs as $curso) 
                     {
                         $data['eid']      = $eid;

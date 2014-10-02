@@ -790,10 +790,6 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                             'subid' => $subid,
                             'curid' => $curid );
 
-        /*$server = new Eundac_Connect_Api('validate', $request);
-        $data = $server->connectAuth();
-        $this->view->data = $data;*/
-
         require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
 
@@ -804,10 +800,16 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $httpClient->setConfig(array("timeout" => 30000));
         $response = $client->restget($endpoint,$request);
         $lista=$response->getBody();
+        $data = '';
         if ($lista){
             $data = Zend_Json::decode($lista);
-            $this->view->data = $data;
+        }else{
+            $dataSearch = array('escid' => base64_decode($escid),
+                                'uid'   => base64_decode($uid),
+                                'curid' => base64_decode($curid) );
+            $data = $coursesDb->_getCoursesPerCurriculum($dataSearch);
         }
+        $this->view->data = $data;
         
     }
 
