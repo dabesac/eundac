@@ -262,7 +262,6 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 			$rows = $results->fetchAll();
 			if ($rows) return $rows;
 			return false;
-			print_r($rows);
 		} catch (Exception $e) {
 			print "Error: Read Courses per Curriculum... ".$e->getMessage();
 		}

@@ -790,7 +790,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                             'subid' => $subid,
                             'curid' => $curid );
 
-        require_once 'Zend/Loader.php';
+        /*require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
 
         $base_url = 'http://api.undac.edu.pe:8080/';
@@ -799,8 +799,9 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $httpClient = $client->getHttpClient();
         $httpClient->setConfig(array("timeout" => 30000));
         $response = $client->restget($endpoint,$request);
-        $lista=$response->getBody();
-        $data = '';
+        $lista=$response->getBody();*/
+        $data  = '';
+        $lista = null;
         if ($lista){
             $data = Zend_Json::decode($lista);
         }else{
