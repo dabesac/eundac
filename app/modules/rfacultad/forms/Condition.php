@@ -38,6 +38,7 @@ class Rfacultad_Form_Condition extends Zend_Form
         $nsemestre->addMultiOption("3","3");
         $nsemestre->addMultiOption("4","4");       
         $nsemestre->addMultiOption("5","5");       
+        $nsemestre->addMultiOption("6","6");       
 
         $ncreditos = new Zend_Form_Element_Select('credits');
         $ncreditos->setAttrib("class","span1");
