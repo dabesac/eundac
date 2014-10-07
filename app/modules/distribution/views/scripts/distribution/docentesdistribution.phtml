@@ -1,0 +1,35 @@
+<?php 
+	$dataDocente = $this->dataDocente;
+ ?>
+
+ <div class="header">
+ 	<a href="##" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></a>
+ 	<p><glyphicon class="glyphicon glyphicon-folder-close"></glyphicon> Carga Académica</p>
+ 	<p>Periodo <?php echo $dataDocente['perid'] ?></p>
+ </div>
+<div class="bodyModal">
+	<?php if ($dataDocente['docentes']): ?>
+		<p><span class="glyphicon glyphicon-info-sign"></span> Lista de docentes asignados a este periódo...</p>
+
+		<table class="tableAlter">
+			<tr>
+				<th>#</th>
+				<th>Apellidos y Nombres</th>
+				<th class="text-center">DNI</th>
+			</tr>
+			<?php foreach ($dataDocente['docentes'] as $c => $docente): ?>
+				<tr>
+					<td><?php echo $c + 1 ?></td>
+					<td><?php echo $docente['fullName'] ?></td>
+					<td class="text-center"><?php echo $docente['pid'] ?></td>
+					<td>
+						<a href="/distribution/distribution/printreportdistri/subid/<?php echo base64_encode($dataDocente['subid'])?>/escid/<?php print base64_encode($dataDocente['escid'])?>/uid/<?php print base64_encode($docente['uid'])?>/pid/<?php print base64_encode($docente['pid'])?>/distid/<?php echo base64_encode($dataDocente['distid'])?>/perid/<?php echo base64_encode($dataDocente['perid'])?>">Carga Académica</a>
+					</td>
+				</tr>
+			<?php endforeach ?>
+
+		</table>
+	<?php else: ?>
+		<h4 class="text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> No hay datos, intentelo mas tarde</h4>
+	<?php endif ?>
+</div>

@@ -246,6 +246,27 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getCoursesPerCurriculum($data = null){
+		try {
+			if ($data['escid'] == '' || $data['uid'] == '' || $data['curid'] == '') return false;
+			$results = $this->_db->query("
+				select * from courses_pending_wjrs('".$data['escid']."', '".$data['uid']."', '".$data['curid']."')".'
+				AS
+				(
+				  "courseid" character varying,
+				  "name" character varying,
+				  "semid" integer,
+				  "credits" double precision,
+				  "veces" integer
+				)');
+			$rows = $results->fetchAll();
+			if ($rows) return $rows;
+			return false;
+		} catch (Exception $e) {
+			print "Error: Read Courses per Curriculum... ".$e->getMessage();
+		}
+	}
+
 	   /*Devuelve el record segun la funcion Record de Notas */
     public function _getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid){
          try{    

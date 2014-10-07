@@ -327,7 +327,6 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             if ($paymentsReintegro) {
                 $this->view->paymentsReintegro = $paymentsReintegro;
             }
-            print_r($paymentsReintegro);
 
             //Data del Estudiante
             $dataStudent = array(   'uid'   => $uid,
@@ -791,11 +790,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                             'subid' => $subid,
                             'curid' => $curid );
 
-        /*$server = new Eundac_Connect_Api('validate', $request);
-        $data = $server->connectAuth();
-        $this->view->data = $data;*/
-
-        require_once 'Zend/Loader.php';
+        /*require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
 
         $base_url = 'http://api.undac.edu.pe:8080/';
@@ -804,11 +799,18 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         $httpClient = $client->getHttpClient();
         $httpClient->setConfig(array("timeout" => 30000));
         $response = $client->restget($endpoint,$request);
-        $lista=$response->getBody();
+        $lista=$response->getBody();*/
+        $data  = '';
+        $lista = null;
         if ($lista){
             $data = Zend_Json::decode($lista);
-            $this->view->data = $data;
+        }else{
+            $dataSearch = array('escid' => base64_decode($escid),
+                                'uid'   => base64_decode($uid),
+                                'curid' => base64_decode($curid) );
+            $data = $coursesDb->_getCoursesPerCurriculum($dataSearch);
         }
+        $this->view->data = $data;
         
     }
 
