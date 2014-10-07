@@ -511,6 +511,7 @@ class Record_DirectedController extends Zend_Controller_Action {
             $resolution=$this->_getParam("resolution");
             $option=$this->_getParam("option");
             $f_acta=$this->_getParam("f_acta");
+
             $this->view->uid = $uid;
             $this->view->pid = $pid;
             $this->view->perid = $perid;
@@ -538,13 +539,30 @@ class Record_DirectedController extends Zend_Controller_Action {
                     $this->view->msg=1;
                 }
             }elseif ($option=="C") {
-                $pk=array('eid' => $eid, 'oid' => $oid, 'courseid' => $courseid,
-                        'perid' => $perid, 'escid' => $escid, 'subid' => $subid,
-                        'curid' => $curid, 'turno' => $turno);
-                $data=array('state' => 'C', 'state_record' => 'C', 'closure_date' => $f_acta,
-                        'modified' => $this->sesion->uid, 'updated' => date('Y-m-d'));
-                if ($dbperiodocurso->_update($data,$pk)){
-                    $this->view->msg=1;
+                $pk1['eid']=$eid;
+                $pk1['oid']=$oid;
+                $pk1['escid']=$escid;
+                $pk1['subid']=$subid;
+                $pk1['courseid']=$courseid;
+                $pk1['curid']=$curid;
+                $pk1['regid']=$regid;
+                $pk1['turno']=$turno;
+                $pk1['pid']=$pid;
+                $pk1['uid']=$uid;
+                $pk1['perid']=$perid;
+                $data1['notafinal']=$notafinal;
+                $data1['receipt']=$receipt;
+                $data1['document_auth']=$resolution;
+
+                if ($bdmatricurso->_updatenoteregister($data1,$pk1)) {
+                    $pk=array('eid' => $eid, 'oid' => $oid, 'courseid' => $courseid,
+                            'perid' => $perid, 'escid' => $escid, 'subid' => $subid,
+                            'curid' => $curid, 'turno' => $turno);
+                    $data=array('state' => 'C', 'state_record' => 'C', 'closure_date' => $f_acta,
+                            'modified' => $this->sesion->uid, 'updated' => date('Y-m-d'));
+                    if ($dbperiodocurso->_update($data,$pk)){
+                        $this->view->msg=1;
+                    }
                 }
             }
             $wheresub['eid']=$eid;

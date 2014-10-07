@@ -177,7 +177,7 @@ if ($this->cursosconvalidados){ ?>
                             <?php
                              if ($convalidado['state']<>'C' and $convalidado['state_record']<>'C'){ ?>
                             <td class="text-center">
-                                <a id="modifyregister_<?php echo $i?>" data-toggle="modal" href="#modify" title="Modificar el Registro."><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a id="modifyregister_<?php echo $i?>" class='modifiregid' data-toggle="modal" href="#modify" title="Modificar el Registro." regid='<?php echo $this->cursosconvalidados[$i-1]['regid']?>'><span class="glyphicon glyphicon-pencil"></span></a>
                             </td>
                             <script type="text/javascript">
                             $("#modifyregister_<?php echo $i?>").click(function(){
@@ -427,8 +427,9 @@ $(function() {
     $("#f_acta").datepicker();
 
     $("#savemodify").click(function(){
-        var nota=$("#nota").val();
+        var nota=$("#notamodify").val();
         var recibo1=$("#recibomodify").val();
+        var f_acta=$("#f_acta").val();
         if (!nota) {
             alert("Ingrese una Nota");
             $("#notamodify").focus();
@@ -436,26 +437,42 @@ $(function() {
         };
         if (!recibo1) {
             alert("Ingrese un Recibo");
-            $("recibomodify").focus();
+            $("#recibomodify").focus();
+            return false;
+        };
+        if (!f_acta) {
+            alert("Seleccione una Fecha");
+            $("#f_acta").focus();
             return false;
         };
 
         $("#header_cursos").hide();
         $("#lista").hide();
-        $("#frmmodifyregister").submit();
-    });
 
-    $('#frmmodifyregister').submit(function() {
+        // $("#frmmodifyregister").submit();
         $.ajax({
             type: 'POST',
-            url: '/record/directed/savedirected/',
-            data: $(this).serialize(),
+            url: '/record/directed/modifyregister/option/M',
+            data: $("#frmmodifyregister").serialize(),
             success: function(data) {
+                console.log($("#frmmodifyregister"));
                 $('#header_alumnos').html(data);
             }
         });
         return false;
     });
+
+    // $('#frmmodifyregister').submit(function() {
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: '/record/directed/savedirected/',
+    //         data: $(this).serialize(),
+    //         success: function(data) {
+    //             $('#header_alumnos').html(data);
+    //         }
+    //     });
+    //     return false;
+    // });
 
     $("#vermatriculadoscurso").click(function(){
         var curso = $("#courseid").val();
@@ -536,13 +553,31 @@ $(function() {
         var turno = $("#turnomodify").val();
         var uid = $("#uidmodify").val();
         var pid = $("#pidmodify").val();
+        var notafinal=$("#notamodify").val();
+        var recibomodify=$("#recibomodify").val();
+        var resolucion1=$("#resolmodify").val();
+        var regid=$(".modifiregid").attr('regid');
+
+        if (!notafinal) {
+            alert("Ingrese una Nota");
+            return false;
+        };
+        if (!recibomodify) {
+            alert("Ingrese un Recibo");
+            return false;
+        };
+        if (!resolucion1) {
+            alert("Ingrese una Resolución");
+            return false;
+        };
         if (f_acta=="") {
             alert("Seleccione la fecha de Cierre de Acta.");
             return false;
         };
+
         var tmp = f_acta.split("/");
         var f_acta = tmp[2]+"-"+tmp[0]+"-"+tmp[1];
-        var url = "/record/directed/modifyregister/courseid/"+courseid+"/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/curid/"+curid+"/turno/"+turno+"/uid/"+uid+"/pid/"+pid+"/f_acta/"+f_acta+"/option/C";
+        var url = "/record/directed/modifyregister/courseid/"+courseid+"/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/curid/"+curid+"/turno/"+turno+"/uid/"+uid+"/pid/"+pid+"/f_acta/"+f_acta+"/option/C/notafinal/"+notafinal+"/receipt/"+recibomodify+"/resolution/"+resolucion1+"/regid/"+regid;
         // alert(url);
         $("#header_cursos").hide();
         $("#lista").hide();

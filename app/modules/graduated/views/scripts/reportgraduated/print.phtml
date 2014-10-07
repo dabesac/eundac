@@ -3,7 +3,7 @@ $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start();
 ?>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="/css/print.css">
 <div style='text-align:center; font-size:15px; margin-bottom:3%'>
     <b>REPORTE - EGRESADOS | PERIODO - <?php echo strtoupper($this->perid)?></b>
@@ -14,17 +14,17 @@ ob_start();
         <th>Cod. Mat.</th>
         <th>DNI</th>
         <th>Apellidos y Nombres</th>
-        <?php 
+        <?php
         if ($this->especialidad) { ?>
             <th>Escuela/Especialidad</th>
-        <?php 
+        <?php
         } ?>
         <th>Currícula</th>
     </tr>
     <?php
     $c=1;
     $escu= new Api_Model_DbTable_Speciality();
-    foreach ($this->egresados as $egre) { 
+    foreach ($this->egresados as $egre) {
         $whereesc =array(
                 'eid' => $egre['eid'], 'oid' => $egre['oid'],
                 'subid' => $egre['subid'], 'escid' => $egre['escid']);
@@ -34,10 +34,10 @@ ob_start();
             <td><center><?php echo $egre['uid']?></center></td>
             <td><center><?php echo $egre['pid']?></center></td>
             <td><?php echo $egre['fullname']?></td>
-            <?php 
+            <?php
             if ($this->especialidad) { ?>
                 <td><?php echo $dat['name']?></td>
-            <?php 
+            <?php
             } ?>
             <td><center><?php echo $egre['curid']?></center></td>
         </tr>
@@ -45,17 +45,17 @@ ob_start();
     $c++;
     } ?>
 </table>
-<?php 
-    
+<?php
+
     $html = ob_get_contents();
-  
+
     $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,5,5);
 
-    $mpdf->SetHTMLHeader($this->header);  
+    $mpdf->SetHTMLHeader($this->header);
     $mpdf->SetHTMLFooter($this->footer,'O');
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    // $mpdf->Output('REPORTE -'.$this->escid.'.pdf','D');
-    $mpdf->Output();
- 
+    $mpdf->Output('REPORTE -'.$this->escid.'.pdf','D');
+    // $mpdf->Output();
+
 ?>
