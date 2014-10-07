@@ -790,26 +790,20 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                             'subid' => $subid,
                             'curid' => $curid );
 
-        /*require_once 'Zend/Loader.php';
+        require_once 'Zend/Loader.php';
         Zend_Loader::loadClass('Zend_Rest_Client');
 
         $base_url = 'http://api.undac.edu.pe:8080/';
-        $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/validate';
+        $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/pending_validate';
         $client = new Zend_Rest_Client($base_url);
         $httpClient = $client->getHttpClient();
         $httpClient->setConfig(array("timeout" => 30000));
         $response = $client->restget($endpoint,$request);
-        $lista=$response->getBody();*/
-        $data  = '';
-        $lista = null;
+        $lista=$response->getBody();
         if ($lista){
             $data = Zend_Json::decode($lista);
-        }else{
-            $dataSearch = array('escid' => base64_decode($escid),
-                                'uid'   => base64_decode($uid),
-                                'curid' => base64_decode($curid) );
-            $data = $coursesDb->_getCoursesPerCurriculum($dataSearch);
         }
+
         $this->view->data = $data;
         
     }
