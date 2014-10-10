@@ -1,6 +1,10 @@
 <?php if ($this->periods): ?>
 	<?php foreach ($this->periods as $period): ?>
-		<option value="<?php echo $period['perid']?>"><?php echo $period['perid'].' | '.$period['name'] ?></option>
+		<?php if ( $period['state']=='A' ) {?>
+			<option selected value="<?php echo $period['perid']?>"><?php echo $period['perid'].' | '.$period['name'] ?></option>
+		<?php } else {?>
+		<option value="<?php echo $period['perid']?>"><?php echo $period['perid'].' | '.$period['name'] ?></option>	
+		<?php } ?>
 	<?php endforeach ?>
 <?php else: ?>
 	<option value="">No Existen Periodos</option>

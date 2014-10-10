@@ -36,6 +36,7 @@
                 <th>Operación</th>
         </tr>
         </thead>
+
     <?php
         $c=0;
         foreach ($this->datauser as $info) {
@@ -50,11 +51,13 @@
                 <td><?php echo $this->infoesc[$c-1]['name']?></td>
                 <?php
                     $x=0;
-                    $estado='<a class="text-success change" state="A" >Activo</a><br/>
-                            <a class="text-warning change" state="B" >Bloqueado</a><br/>
-                            <a class="text-warning change" state="S" >Suspendido</a><br/>
-                            <a class="text-danger change" state="I" >Inactivo</a><br/>
-                            <a class="text-danger change" state="E" >Baja</a>';
+                    $estado='<div class="form-group" style="margin:0px">
+                        <input type="text" placeholder="Resolucion N°" id="ndoc" class="form-control" id="inputError2"></div>
+                    <a class="text-success change" state="A" ><span class="glyphicon glyphicon-transfer"></span> Activo</a><br/>
+                            <a class="text-warning change" state="B" ><span class="glyphicon glyphicon-transfer"></span> Bloqueado</a><br/>
+                            <a class="text-warning change" state="S" ><span class="glyphicon glyphicon-transfer"></span> Suspendido</a><br/>
+                            <a class="text-danger change" state="I" ><span class="glyphicon glyphicon-transfer"></span> Inactivo</a><br/>
+                            <a class="text-danger change" state="E" ><span class="glyphicon glyphicon-transfer"></span> Baja</a>';
                     $temp=$this->inforol[$c-1]['rid']; 
                     $rol =$this->rol;
                 switch ($info['state']) {
@@ -110,17 +113,17 @@
 
                 <td style="padding:0px; padding-left:5px;">
                     <!-- ADMIN    -->
-                 <?php if (($temp!='AL') and ($temp!='EG') and ($temp!='')) { ?>
+                 <?php if ($temp=='DC' and $x==0 and $rol=="AD") { ?>
 
-                        <button class="btn btn-info ajuste_user" data-toggle="modal" uid="<?php echo base64_encode($info['uid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" href='#modal-Ajustes' ><span class='glyphicon glyphicon-cog'></span> Ajustes </button>
-
+                        <button class="btn btn-info ajuste_user" data-toggle="modal" uid="<?php echo base64_encode($info['uid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" href='#modal-Ajustes' ><span class='glyphicon glyphicon-certificate'></span> Dirección </button>
 
                 <?php }?>
                                                 <!-- PASSWORD -->            
 
             <?php if($temp != "EG"){ ?>
                 <?php if ($x==0 or $x==2) {?>
-                        <button name="<?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?>" rol="<?php echo $this->inforol[$c-1]['name']?>" uid="<?php echo base64_encode($info['uid'])?>" rid="<?php echo base64_encode($info['rid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" data-toggle="modal" href="#modalContraseña" class="btn btn-primary keychange"><span class="glyphicon glyphicon-refresh"></span> PassWord</button>
+
+                        <button name="<?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?>" rol="<?php echo $this->inforol[$c-1]['name']?>" uid="<?php echo base64_encode($info['uid'])?>" rid="<?php echo base64_encode($info['rid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" data-toggle="modal" href="#modalContraseña" class="btn btn-primary keychange <?php if ($rol=="SP"): ?>form-control<?php endif ?>"><span class="glyphicon glyphicon-refresh"></span>PASSWORD </button>
                 <?php } ?>
             <?php } ?>
                 </td>
@@ -150,14 +153,14 @@
     </div>
 </div>
     <!--Modal by CH-P -->
-<div class="modal" id="modalContraseña">
+<div class="modal fade" id="modalContraseña" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
      <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
           <h4 class="modal-title">Cambio de Contraseña de : </h4>
           <div class="panel panel-info" style="padding:3px;">
-          <p class="danger"><span id="infonom"></span><span class="badge pull-right" id="inforol"></span></p>
+          <p class="danger"><span id="infonom"></span><span style="font-size:17px" class="label label-info pull-right" id="inforol"></span></p>
           </div>
         </div>
         <div class="modal-body row">
@@ -190,31 +193,27 @@
 <div class="modal fade" id="modal-Ajustes" tabindex="-1" aria-labelledby="myModalLabel" role="dialog" aria-data-target=".bs-example-modal-sm" aria-hidden="false">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4>MODIFICAR USUARIO</h4>
-            </div>
             <div class="modal-body" id="config">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
 </div>
-
 <script type="text/javascript">
     $("#newperson").click(function(){
         $('#myModal').modal('show');
         var url="/admin/person/new/u/A";
-        $("#nueva_persona").html("</br></br><img src='/img/spinner.gif'> Cargando...");
+        $("#nueva_persona").change(function() {
+        });
         $("#nueva_persona").load(url);
     });
 </script>
 <script>
 $(function(){
+    $("#sueldob, #porc1").change(function() {
+            var x=$("#sueldob").val();
+            var y=$("#porc1").val();
+           $("#totalporc1").html(x*y);
+});
     $('.popovr').popover({
         placement : 'right'
     });
@@ -227,6 +226,7 @@ $(function(){
     var pas1;
     var pas2;
     var estado;
+    var ndoc;
     $('.popovr').click(function(event) {
         etiqueta=$(this);
         $('.popovr').not(this).popover('hide');
@@ -236,6 +236,15 @@ $(function(){
         subid=$(this).attr('subid');
 
         $(".change").click(function(event) {
+            x=$("#ndoc");
+            ndoc = x.val();
+            if (ndoc==""){
+                alert("le falta el num de resolucion");
+                x.parent().addClass('has-error');                
+                x.parent().addClass('has-feedback');
+                x.focus();
+                return false;
+            }
             estado = $(this).attr('state');
             var ajaxData={
                 "estado":estado,
@@ -243,6 +252,7 @@ $(function(){
                 "pid": pid,
                 "escid": escid,
                 "subid": subid,
+                "ndoc":ndoc
             };
             $.ajax({
                 type : 'post',
@@ -270,7 +280,7 @@ $(function(){
         uid = $(this).attr('uid');
         pid = $(this).attr('pid');
         subid = $(this).attr('subid');
-        escid = $(this).attr('escid');
+        escid = $(this).attr('escid');  
         var ajax_data = {
                 "pid" : pid,
                 "uid" : uid,
@@ -278,7 +288,7 @@ $(function(){
                 "subid" : subid,
             };
         $.ajax({
-            type : 'get',
+            type : 'post',
             url : '/admin/user/updateuser/',
             data : ajax_data,
             success: function(data){
