@@ -138,7 +138,76 @@ $strprint = "/record/index/printavence/"
 		></span></td>
 		<td class="center"><span class="glyphicon <?php echo $sp?> txthover"
 		data-toggle="tooltip" title="Estado del segundo parcial"></span></td>
-		<td><?php echo $date;?></td>
+		<td><?php
+		 	if($date=='' && $this->rid =="DR"){?>
+		 		<div class="dataup" style="width:130px;">
+					<div class="fecha" style='float: left'>
+						<input id="f_acta<?php echo $s?>" name="f_acta" type="text" class="form-control" style="width:90px;height:24px;">
+					</div>
+					<div class="guardar">
+						<a href="#" style='margin-top: 2px;margin-left: 6px;' class="btn btn-info btn-xs"
+							id='savedata<?php echo $s?>'
+							dacourseid="<?php echo $course['courseid']?>"
+							daturno="<?php echo $course['turno']?>"
+							dacurid="<?php echo $course['curid']?>"
+							daescid="<?php echo $course['escid']?>"
+							dasubid="<?php echo $course['subid']?>"
+							daperid="<?php echo $course['perid']?>"
+							>
+							<span class='glyphicon glyphicon-floppy-disk'></span>
+						</a>
+						<script>
+							$("#f_acta<?php echo $s?>").datepicker();
+							$("#savedata<?php echo $s?>").click(function(e){
+								var f_acta = $("#f_acta<?php echo $s?>").val();
+								if (f_acta=="") {
+							        alert("Seleccione la fecha de Cierre de Acta.");
+							        return false;
+							    };
+								var tmp = f_acta.split("/")	
+								var date = tmp[2]+'-'+tmp[0]+'-'+tmp[1];
+								var ajaxData ={
+									'escid' : $(this).attr('daescid'),
+									'curid' : $(this).attr('dacurid'),
+									'subid' : $(this).attr('dasubid'),
+									'perid' : $(this).attr('daperid'),
+									'courseid' : $(this).attr('dacourseid'),
+									'turno' : $(this).attr('daturno'),
+									'closure_date' : date,
+									'state_record' : 'C',
+									'state' : 'C' 
+								};
+								e.preventDefault();
+								$.ajax({
+									type : 'post',
+									url : '/record/index/updatestatecourse/',
+									data : ajaxData,
+									success : function(data){
+										var perid = $("#perid").val();
+										var escid = $("#escid").val();
+										var ajax_dat = {
+											"perid" : perid,
+											"escid" : escid,
+										};
+										$.ajax({
+											type : "POST",
+											url : "/record/index/list/",
+											data : ajax_dat,
+											success : function(data){
+												$(".loadcourses").html(data);
+											}
+										});
+									}
+								});
+							});
+						</script>
+					</div>
+				</div>
+		 	<?php
+		 	}else { 
+		 		echo $date;
+		 	}?>
+		</td>
 		<td>
 			<button type="button" 
 			class="btn btn-primary btn-xs"
