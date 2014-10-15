@@ -45,18 +45,17 @@ class Record_DirectedController extends Zend_Controller_Action {
 
             }else{
                 //si no es adim
-
-            $anio=$perid;
-            $whereper1['eid']=$eid;
-            $whereper1['oid']=$oid;
-            $whereper1['perid']=$anio.'J';
-            $peri= new Api_Model_DbTable_Periods();
-            $periods[0]=$peri->_getOnePeriod($whereper1);
-            $whereper1['perid']=$anio.'S';
-            $periods[1]=$peri->_getOnePeriod($whereper1);
-            // $whereper1['perid']=$anio.'C';
-            // $periods[2]=$peri->_getOnePeriod($whereper1);
-            $this->view->periods=$periods;
+                $anio=$perid;
+                $whereper1['eid']=$eid;
+                $whereper1['oid']=$oid;
+                $whereper1['perid']=$anio.'J';
+                $peri= new Api_Model_DbTable_Periods();
+                $periods[0]=$peri->_getOnePeriod($whereper1);
+                $whereper1['perid']=$anio.'S';
+                $periods[1]=$peri->_getOnePeriod($whereper1);
+                // $whereper1['perid']=$anio.'C';
+                // $periods[2]=$peri->_getOnePeriod($whereper1);
+                $this->view->periods=$periods;
             }
 
 

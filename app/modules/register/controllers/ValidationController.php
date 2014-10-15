@@ -8,103 +8,165 @@ class Register_ValidationController extends Zend_Controller_Action
     		$this->_helper->redirector('index',"index",'default');
     	}
     	$login = $sesion->getStorage()->read();
-    	
+
     	$this->sesion = $login;
 	}
 
-    public function indexAction() 
-    {
-      $this->_helper->redirector("addcourse");
+    public function indexAction(){
+      // $this->_helper->redirector("addcourse");
     }
 
-    public function addcourseAction() 
-    {
-        $usuario = null;
-        $eid= $this->sesion->eid;
-        $oid= $this->sesion->oid;
-        $temp = ($this->_getParam("temp"));
-        print_r($temp);
-        $form=new Register_Form_Search;
-        $form->buscar->setLabel("Buscar");
-        $this->view->form=$form;  
+    public function addcourseAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
 
-        $perid='14C';
-        $this->view->perid = $perid;
-        $this->view->temp = $temp;
-        $rid='AL';
-        $uid = $this->_getParam("uid");
-        $db=new  Api_Model_DbTable_Periods();
-        $where['eid']=$eid;
-        $where['oid']=$oid;
-        $d=$db->_getFilter($where);
-        $dbusuario = new Api_Model_DbTable_Users();//ADMIN
-        $state='A';
-        $data['eid']=$eid;
-        $data['oid']=$oid;
-        $data['uid']=$uid;
-        $data['state']=$state;
-        if($uid<>""){
-          $usuario=  $dbusuario->_getFilter($data);  
+            $facidSesion=$this->sesion->faculty->facid;
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+            // $temp = ($this->_getParam("temp"));
+            // print_r($temp);exit();
+            $uid= base64_decode($this->_getParam('uid'));
+            $anio=date('Y');
+            $anio=substr($anio,2,2);
+            $perid=$anio.'C';
+
+            $dbusuario = new Api_Model_DbTable_Users();//ADMIN
+            $data['eid']=$eid;
+            $data['oid']=$oid;
+            $data['uid']=$uid;
+            $data['state']='A';
+            $usuario=  $dbusuario->_getFilter($data);
+            if ($usuario) {
+                $speciality = new Api_Model_DbTable_Speciality();
+                $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$usuario[0]['escid'],'subid'=>$usuario[0]['subid']);
+                $datas = $speciality->_getOne($wheres);
+
+                if ($facidSesion==$datas['facid']) {
+                    $usuario[0]['name_speciality']=$datas['name'];
+                    $persona = new Api_Model_DbTable_Person();
+                    $data['eid']=$eid;
+                    $data['pid']=$usuario[0]['pid'];
+                    $list_p = $persona ->_getOne($data);
+                    $usuario[0]['full_name']=$list_p['last_name0'].' '.$list_p['last_name1'].', '.$list_p['first_name'];
+
+
+                    unset($wheres['escid']);
+                    $subsidiary = new Api_Model_DbTable_Subsidiary();
+                    $datass = $subsidiary->_getOne($wheres);
+                    $usuario[0]['name_subsidiary']=$datass['name'];
+                }
+                else{
+                    $this->view->notuser='N';
+                }
+            }
+            $this->view->usuario = $usuario;
+            $this->view->perid = $perid;
+
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
         }
-        //print_r($usuario[0]['uid']);
-        $this->view->usuario = $usuario;          
-  
+
     }
 
     public function lcontainerAction(){
-      try {
-            $this->_helper->layout()->disableLayout();
-            //$perid = ($this->_getParam("perid"));
-            $escid = ($this->_getParam("escid"));
-            $subid = ($this->_getParam("subid"));
-            $uid = ($this->_getParam("uid"));
-            $pid = ($this->_getParam("pid"));
-            $nota = ($this->_getParam("nota"));
-            $perid = ($this->_getParam("perid"));
-            $eid= $this->sesion->eid;
-            $oid= $this->sesion->oid;
-            $userregistra= $this->sesion->uid;
-            $temp = ($this->_getParam("temp"));
-            // echo $perid;
-            // $perid='12C';
-            $this->view->nota = $nota;
-            $this->view->uid = $uid;
-            $this->view->perid = $perid;
-            $this->view->pid = $pid;
-            $this->view->user = $userregistra;
-            $this->view->temp = $temp;
-            $this->view->eid = $eid;
-            $this->view->oid = $oid;
-            $this->view->subid = $subid;
-        
- 
-            $curiculas = new Api_Model_DbTable_Curricula();
-            $where['eid']=$eid;
-            $where['oid']=$oid;
-            $where['escid']=$escid;
-            $cur=$curiculas->_getCurriculasXSchoolXstateAT($where);
-            $this->view->curriculas=$cur;
+        $this->_helper->layout()->disableLayout();
 
-            $dblistarconvalidacion = new Api_Model_DbTable_Registrationxcourse();
-            $data['perid']=$perid;
-            $data['uid']=$uid;
-            $data['escid']=$escid;
-            $data['subid']=$subid;
-            $data['eid']=$eid;
-            $data['oid']=$oid;
+        $eid= $this->sesion->eid;
+        $oid= $this->sesion->oid;
+        $escid = base64_decode($this->_getParam("escid"));
+        $subid = base64_decode($this->_getParam("subid"));
+        $uid = base64_decode($this->_getParam("uid"));
+        $pid = base64_decode($this->_getParam("pid"));
+        $perid = base64_decode($this->_getParam("perid"));
+        // $nota = ($this->_getParam("nota"));
 
-            $convalidados = $dblistarconvalidacion->_getFilter($data);  
-            $this->view->cursosconvalidados = $convalidados;
-            // print_r($convalidados);
+        $userregistra= $this->sesion->uid;
+        $temp = ($this->_getParam("temp"));
 
-            
-        }  catch (Exception $ex){
-            print "Error: Selecciona rescuelas ".$ex->getMessage();
+        //identificando una curricula asignada al alumno
+        $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'uid'=>$uid,'pid'=>$pid);
+        $DBCurricula = new Api_Model_DbTable_Studentxcurricula();
+        $datacurri = $DBCurricula->_getsearch($wheres);
+        if ($datacurri) {
+            $curid=$datacurri['curid'];
         }
+
+        $this->view->pid = $pid;
+        $this->view->uid = $uid;
+        $this->view->escid = $escid;
+        $this->view->subid = $subid;
+        $this->view->perid = $perid;
+        $this->view->user = $userregistra;
+        $peridSession=$this->sesion->period->perid;
+
+        try {
+            $request = array(   'eid' => base64_encode($eid),
+                                'oid' => base64_encode($oid),
+                                'perid' => base64_encode($peridSession),
+                                'pid' => base64_encode($pid),
+                                'uid' => base64_encode($uid),
+                                'escid' => base64_encode($escid),
+                                'subid' => base64_encode($subid),
+                                'curid' => base64_encode($curid));
+
+            require_once 'Zend/Loader.php';
+            Zend_Loader::loadClass('Zend_Rest_Client');
+
+            $base_url = 'http://api.undac.edu.pe:8080/';
+            $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/pending_validate';
+            $client = new Zend_Rest_Client($base_url);
+            $httpClient = $client->getHttpClient();
+            $httpClient->setConfig(array("timeout" => 30000));
+            $response = $client->restget($endpoint,$request);
+            $lista=$response->getBody();
+
+            if ($lista){
+                $data = Zend_Json::decode($lista);
+            }
+            $this->view->data=$data;
+
+        } catch (Exception $e) {
+            $this->view->msg='1';
+            $this->view->data='1';
+        }
+
+        // $curiculas = new Api_Model_DbTable_Curricula();
+        // $where['eid']=$eid;
+        // $where['oid']=$oid;
+        // $where['escid']=$escid;
+        // $cur=$curiculas->_getCurriculasXSchoolXstateAT($where);
+        // $this->view->curriculas=$cur;
     }
 
-    public function coursexcurriculaAction() 
-    {
+    public function viewallcoursesAction(){
+        $this->_helper->layout()->disableLayout();
+
+        $eid= $this->sesion->eid;
+        $oid= $this->sesion->oid;
+        $escid = base64_decode($this->_getParam("escid"));
+        $subid = base64_decode($this->_getParam("subid"));
+        $uid = base64_decode($this->_getParam("uid"));
+        $pid = base64_decode($this->_getParam("pid"));
+        $perid = base64_decode($this->_getParam("perid"));
+
+        $dblistarconvalidacion = new Api_Model_DbTable_Registrationxcourse();
+
+        $wheress=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'uid'=>$uid,'pid'=>$pid,'perid'=>$perid);
+        $convalidados = $dblistarconvalidacion->_getFilter($wheress);
+        if ($convalidados) {
+            $read=array('eid'=>$eid,'oid'=>$oid,'curid'=>$info['curid'],'escid'=>$escid,'subid'=>$subid);
+            foreach ($convalidados as $g => $info) {
+                $read['curid']=$info['curid'];
+                $read['courseid']=$info['courseid'];
+                $dbcourse = new Api_Model_DbTable_Course();
+                $datainfo = $dbcourse->_getFilter($read);
+                $convalidados[$g]['namecourse'] = $datainfo[0]['name'];
+            }
+        }
+        $this->view->cursosconvalidados = $convalidados;
+
+    }
+    public function coursexcurriculaAction(){
         $this->_helper->layout()->disableLayout();
         $eid= $this->sesion->eid;
         $oid= $this->sesion->oid;
@@ -116,603 +178,161 @@ class Register_ValidationController extends Zend_Controller_Action
         $nota= $this->_getParam("nota");
       	$dbcurso = new Api_Model_DbTable_Course();       //admin
       	$curso=  $dbcurso->_getCoursesXCurriculaXShool($eid,$oid,$curid,$escid);
-	
+
       	$this->view->cursito = $curso;
       	$this->view->eid = $eid;
-      $this->view->oid = $oid;
-      $this->view->subid = $subid;
+        $this->view->oid = $oid;
+        $this->view->subid = $subid;
    }
 
-   public function  saveAction() 
-    {
-       
-       $eid= $this->sesion->eid;
-       $oid= $this->sesion->oid;
-       $uid = $this->_getParam("uid");
-       $escid = $this->_getParam("escid");
-       $subid = $this->_getParam("subid");
-       $perid = $this->_getParam("perid");
-       $curid = $this->_getParam("curid");
-       $nota = $this->_getParam("nota");
-       $semid = $this->_getParam("semid");
-       $pid = $this->_getParam("pid");
-       $reso = $this->_getParam("reso");
-       $courseid = $this->_getParam("courseid");
-
-      // $turno = $this->_getParam("turno");
-       $credi = $this->_getParam("credi");
-       $uidreg = $this->_getParam("uidreg");  
-     //  echo "aki vienen datos para guardar";//break;
-       $temp = $this->_getParam("temp");
-      $this->view->eid = $eid;
-      $this->view->oid = $oid;
-      $this->view->subid = $subid;
-       if($temp<>'1')
-      {
+    public function saveAction(){
         $this->_helper->layout()->disableLayout();
-        $this->view->temp = $temp;
-      }
-      $requisitos = new Api_Model_DbTable_Course ();
-      $dat['eid']=$eid;
-      $dat['oid']=$oid;
-      $dat['subid']=$subid;
-      $dat['escid']=$escid;
-      $dat['courseid']=$courseid;
-      $dat['curid']=$curid;
-      $req = $requisitos ->_getOne($dat);
 
-      $inforequisitos = $req['req_1']." | ".$req['req_2']." | ".$req['req_3'];
+        $eid= $this->sesion->eid;
+        $oid= $this->sesion->oid;
+        $uidreg = $this->sesion->uid;
 
-      $dbveces = new Api_Model_DbTable_Course();
-      $where['escid']=$escid;
-      $where['uid']=$uid;
-      $where['curid']=$curid;
-      $where['courseid']=$courseid;
-      $vecesllevadas=  $dbveces->_getCoursesXStudentXV($where);
-      // print_r($vecesllevadas);
-      if($temp=='1')
-      {
-        $cursoapto[0]['apto']==0;
-        //break;      
-      }
-      else
-      {
-        //print_r($where);
+        $pid = base64_decode($this->_getParam("pid"));
+        $uid = base64_decode($this->_getParam("uid"));
+        $escid = base64_decode($this->_getParam("escid"));
+        $subid = base64_decode($this->_getParam("subid"));
+        $perid = base64_decode($this->_getParam("perid"));
+        $curid = base64_decode($this->_getParam("curid"));
+        $nota = base64_decode($this->_getParam("nota"));
+        $semid = base64_decode($this->_getParam("semid"));
+        $resolution = base64_decode($this->_getParam("resolution"));
+        $courseid = base64_decode($this->_getParam("courseid"));
+        $credits = base64_decode($this->_getParam("credits"));
+        $type_rate = base64_decode($this->_getParam("type_rate"));
 
-       $dbcursopen = new Api_Model_DbTable_Course();       
-       $cursoapto=  $dbcursopen->_getCourseLlevo($where);
-       //print_r($cursoapto);
-      }
-      if($cursoapto[0]['apto']==1)
-        {
-            ?>
+        $cont=0;
 
-            <script>
-            //var veces = "<?php $vecesllevadas[0]['veces'];?>";
-            alert("El curso ya ha sido llevado y aprobado");
-            //alert(veces);
-            </script>
-           
-            <td style="background: #ccc; color; #000;" ><h4><center><?php echo "El curso ya ha sido llevado y aprobado";
-            echo " | #veces llevadas ".$vecesllevadas[0]['veces'];?></center></h4></td>
-           
-            <?php
+        //verificando acta del curso.
+        $wherepc=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,
+                     'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>'A');
+
+        $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
+        $dataperiodocurso = $dbperiodocurso->_getOne($wherepc);
+
+        if (!$dataperiodocurso) {
+            $wherepc['state_record']='C';
+            $wherepc['type_rate']=$type_rate;
+            $wherepc['receipt']='N';
+            $wherepc['resolution']='NULL';
+            $wherepc['semid']=$semid;
+            $wherepc['closure_date']=date('Y-m-d');
+            $wherepc['register']=$uidreg;
+            $wherepc['state']='C';
+            if ($dbperiodocurso->_save($wherepc)) {
+                $cont++;
+            }
         }
-           else
-        {
-           if($cursoapto[0]['apto']==0)
-           {
-            // echo "puede llevar";
-            // echo "llevo #veces ".$vecesllevadas[0]['veces'];
-            $regid=$uid.$perid;
-           $turno='A';
-           $dbmatricula = new Api_Model_DbTable_Registration ();
-            $mat['eid']=$eid;
-            $mat['oid']=$oid;
-            $mat['escid']=$escid;
-            $mat['subid']=$subid;
-            $mat['regid']=$regid;
-            $mat['pid']=$pid;
-            $mat['uid']=$uid;
-            $mat['perid']=$perid;
-          //  print_r($mat);
 
+        //verificando asignacion del curso a un docente.
+        $wherecxt=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid,
+                        'curid'=>$curid,'turno'=>'A','perid'=>$perid,'uid'=>'DOCCONV01','pid'=>'CONV01');
 
-          
-                             
-               if($dbmatricula->_getOne($mat))
-               {
-                 //print_r($dbmatricula);
-                 //echo "tiene matricula";
-                      $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
-                      $periodo['eid']=$eid;
-                      $periodo['oid']=$oid;
-                      $periodo['courseid']=$courseid;
-                      $periodo['escid']=$escid;
-                      $periodo['perid']=$perid;
-                      $periodo['turno']=$turno;
-                      $periodo['subid']=$subid;
-                      $periodo['curid']=$curid;
+        $dbcoursexteacher = new Api_Model_DbTable_Coursexteacher();
+        $datacoursexteacher = $dbcoursexteacher->_getOne($wherecxt);
+        if (!$datacoursexteacher) {
+            $wherecxt['is_main']='S';
+            $wherecxt['semid']=$semid;
+            $wherecxt['state']='A';
+            if ($dbcoursexteacher->_save($wherecxt)) {
+                $cont++;
+            }
+        }
 
+        //verificando matricula del alumno
+        $whererg=array('eid'=>$eid,'oid'=>$oid,'regid'=>$uid.$perid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,
+                        'subid'=>$subid,'perid'=>$perid);
 
-                      if($dbperiodocurso->_getOne($periodo))
-                        {     
-                                  //echo "el periodo esta creado";
-                                $data['perid']= $perid;
-                                $data['curid']= $curid;
-                                $data['escid']= $escid;
-                                $data['courseid']= $courseid;
-                                $data['turno']= 'A';
-                                $data['eid']= $eid;
-                                $data['oid']= $oid;
-                                $data['subid']= $subid;
-                                $data['state_record']= 'A';
-                                $data['type_rate']= 'O';
-                                $data['register']=$this;
-                                $data['semid']= $semid;
-                                $data['state']= 'A'; 
+        $dbregistration = new Api_Model_DbTable_Registration();
+        $dataregistration = $dbregistration->_getOne($whererg);
 
-                                   $pk['perid']=$perid;
-                                   $pk['escid']=$escid;
-                                   $pk['curid']=$curid;
-                                   $pk['turno']=$turno;
-                                   $pk['subid']=$subid;
-                                   $pk['eid']=$eid;
-                                   $pk['oid']=$oid;
-                                   $pk['courseid']=$courseid;
-                    
+        if (!$dataregistration) {
+            $whererg['semid']='0';
+            $whererg['credits']=$credits;
+            $whererg['date_register']=date('Y-m-d');
+            $whererg['document_auth']=$resolution;
+            $whererg['register']=$uidreg;
+            $whererg['created']=date('Y-m-d');
+            $whererg['state']='M';
+            $whererg['count']='0';
+            if ($dbregistration->_save($whererg)) {
+                $cont++;
+            }
+        }
 
-                                
-                                $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
-                                $dbperiodocurso->_update($data,$pk);
-                           
+        //verificando matricula por cursos del alumno
+        $wherergxc=array('eid'=>$eid,'oid'=>$oid,'regid'=>$uid.$perid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,
+                        'subid'=>$subid,'courseid'=>$courseid,'curid'=>$curid,'turno'=>'A','perid'=>$perid);
 
-                                          $da2['courseid']= $courseid;
-                                          $da2['escid']= $escid;
-                                          $da2['perid']= $perid;
-                                          $da2['uid']= $uid;
-                                          $da2['pid']= $pid;
-                                          $da2['regid']= $regid;
-                                          $da2['turno']= 'A';
-                                          $da2['eid']= $eid;
-                                          $da2['oid']= $oid;
-                                          $da2['subid']= $subid;
-                                         // $data2['total_creditos']= $credi;//ojo
-                                          $da2['notafinal']= $nota;
-                                          $da2['register']= $uidreg;
-                                          $da2['receipt']= "N";
-                                          $da2['document_auth']= $reso;
-                                          $da2['curid']= $curid;
-                                          $da2['state']= 'M';
-                                          $da2['approved']= $uidreg;
-// print_r($datas2);
-                                        
+        $dbregistrationxcourse = new Api_Model_DbTable_Registrationxcourse();
+        $dataregistrationxcourse = $dbregistrationxcourse->_getOne($wherergxc);
 
-                                  $dbmatriculacurso = new Api_Model_DbTable_Registrationxcourse();
-                                  
+        if (!$dataregistrationxcourse) {
+            $wherergxc['notafinal']=$nota;
+            $wherergxc['receipt']='N';
+            $wherergxc['register']=$uidreg;
+            $wherergxc['created']=date('Y-m-d');
+            $wherergxc['approved']=$uidreg;
+            $wherergxc['approved_date']=date('Y-m-d');
+            $wherergxc['document_auth']=$resolution;
+            $wherergxc['state']='M';
+            if ($dbregistrationxcourse->_save($wherergxc)) {
+                $cont++;
+                $json['status']=true;
+            }
+        }
+        elseif ($dataregistrationxcourse['notafinal']<11) {
+            $dataupdated=array('notafinal'=>$nota,'document_auth'=>$resolution,'modified'=>$uidreg,'updated'=>date('Y-m-d'));
+            $dbregistrationxcourse->_update($dataupdated,$wherergxc);
 
-                                  $escuela = $dbmatriculacurso->_save($da2);
+            $dataupdated1=array('document_auth'=>$resolution,'modified'=>$uidreg,'updated'=>date('Y-m-d'));
+            $dbregistration->_update($dataupdated1,$whererg);
+        }
 
-                                     $da3['eid']=$eid;
-                                     $da3['oid']=$oid;
-                                     $da3['escid']=$escid;
-                                     $da3['subid']=$subid;
-                                     $da3['courseid']=$courseid;
-                                     $da3['curid']=$curid;
-                                     $da3['turno']='A';
-                                     $da3['perid']=$perid;
-                                     $da3['uid']='DOCCONV01';
-                                     $da3['pid']='CONV01';
+        if (!($cont>0 && $json['status'])) {
+            $json['status']=false;
+        }
+        $this->_response->setHeader('Content-Type', 'application/json');
+        $this->view->data = $json;
+    }
 
-                      
-                                $dbdocentes = new Api_Model_DbTable_Coursexteacher();
-
-                                if($dbdocentes->_getOne($da3))
-                                  {
-
-                                  }
-
-                                  else
-                                  {
-                                  $da4['eid']= $eid;
-                                  $da4['oid']= $oid;
-                                  $da4['escid']= $escid;
-                                  $da4['subid']= $subid;
-                                  $da4['courseid']= $courseid;
-                                  $da4['turno']= 'A';
-                                  $da4['curid']= $curid;
-                                  $da4['perid']= $perid;
-                                  $da4['uid']= 'DOCCONV01';
-                                  $da4['pid']= 'CONV01';
-                                  $da4['semid']= $semid;
-                                  $da4['is_main']= 'S';
-                                  $da4['state']= 'A';
-
-                   
-                                 $dbdocente = new Api_Model_DbTable_Coursexteacher();
-                                 $docente = $dbdocente->_save($da4);
-                                   }
-
-                        }
-
-                       else
-                       {
-                           // echo "NO TIENE PERIODO Y SE CREA";
-                                $da5['perid']= $perid;
-                                $da5['curid']= $curid;
-                                $da5['escid']= $escid;
-                                $da5['courseid']= $courseid;
-                                $da5['turno']= 'A';
-                                $da5['eid']= $eid;
-                                $da5['oid']= $oid;
-                                $da5['subid']= $subid;
-                                $da5['state_record']= 'A';
-                                $da5['type_rate']= 'O';
-                                $da5['register']=$uidreg;
-                                $da5['receipt']= 'N';
-                                $da5['resolution']= 'NULL';
-                                $da5['semid']= $semid;
-                                $da5['closure_date']= date("Y-m-d");
-                                $da5['state']= 'A';
-
-
-                                $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
-
-                                if($dbperiodocurso->_save($da5))
-                                {
-                                          $da6['cursoid']= $curso;
-                                          $da6['escid']= $escid;
-                                          $da6['perid']= $perid;
-                                          $da6['uid']= $uid;
-                                          $da6['pid']= $pid;
-                                          $da6['regid']= $regid;
-                                          $da6['turno']= 'A';
-                                          $da6['eid']= $eid;
-                                          $da6['oid']= $oid;
-                                          $da6['subid']= $subid;
-                                         // $data2['total_creditos']= $credi;//ojo
-                                          $da6['notafinal']= $nota;
-                                          $da6['register']= $uidreg;
-                                          $da6['receipt']= "N";
-                                          $da6['document_auth']= $reso;
-                                          $da6['curid']= $curid;
-                                          $da6['state']= 'M';
-                                          $da6['approved']= $uidreg;
-
-
-                                           $dbmatriculacurso = new Api_Model_DbTable_Registrationxcourse();
-                                        $escuela = $dbmatriculacurso->_save($da6);
-                                         
-      
-                                  $da7['eid']= $eid;
-                                  $da7['oid']= $oid;
-                                  $da7['escid']= $escid;
-                                  $da7['subid']= $subid;
-                                  $da7['courseid']= $courseid;
-                                  $da7['turno']= 'A';
-                                  $da7['curid']= $curid;
-                                  $da7['perid']= $perid;
-                                  $da7['uid']= 'DOCCONV01';
-                                  $da7['pid']= 'CONV01';
-                                  $da7['semid']= $semid;
-
-
-                                $dbdocentes = new Api_Model_DbTable_Coursexteacher();
-                     
-
-                                if($dbdocentes->_getOne($da7))
-                                {
-                                    //echo "hay profe";
-                                  }
-                                  else
-                                  {
-                                    //echo "no hay profe y se crea";
-                                  $da8['eid']= $eid;
-                                  $da8['oid']= $oid;
-                                  $da8['escid']= $escid;
-                                  $da8['subid']= $subid;
-                                  $da8['courseid']= $courseid;
-                                  $da8['turno']= 'A';
-                                  $da8['curid']= $curid;
-                                  $da8['perid']= $perid;
-                                  $da8['uid']= 'DOCCONV01';
-                                  $da8['pid']= 'CONV01';
-                                  $da8['semid']= $semid;
-                                  $da8['is_main']= 'S';
-                                  $da8['state']= 'A';
-
-
-                   
-                                 $dbdocente = new Api_Model_DbTable_Coursexteacher();
-                                 $docente = $dbdocente->_save($da8);
-                                  }
-
-
-                                  } 
-                        } 
-              }
-
-              else
-              {
-                $da9['regid']= $regid;
-                $da9['pid']= $pid;
-                $da9['escid']= $escid;
-                $da9['uid']= $uid;
-                $da9['perid']= $perid;
-                $da9['eid']= $eid;
-                $da9['oid']= $oid;
-                $da9['subid']= $subid;
-                $da9['semid']='0';
-                $da9['credits']= $credi;
-                $da9['register']= $uidreg;
-                $da9['state']= "M";
-                $da9['document_auth']= $reso;
-                $da9['date_register']= date("Y-m-d");
-                $da9['created']= date("Y-m-d");
-                $da9['count']= 0;
-
-              $dbmatricula = new Api_Model_DbTable_Registration();
-              $dbmatricula->_save($da9);
-
-             $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
-                $period['eid']=$eid;
-                $period['oid']=$oid;
-                $period['courseid']=$courseid;
-                $period['escid']=$escid;
-                $period['perid']=$perid;
-                $period['escid']=$escid;
-                $period['turno']=$turno;
-                $period['subid']=$subid;
-                $period['curid']=$curid;
-
-                   $period1['perid']=$perid;
-                   $period1['curid']=$curid;
-                   $period1['escid']=$escid;
-                   $period1['turno']=$turno;
-                   $period1['courseid']=$courseid;
-                   $period1['eid']=$eid;
-                   $period1['oid']=$oid;
-
-
-
-             if($dbperiodocurso->_getOne($period)){
-              if($dbperiodocurso->_getFilter($period1))
-                       {
-                                  $da10['courseid']= $courseid;
-                                  $da10['escid']= $escid;
-                                  $da10['perid']= $perid;
-                                  $da10['uid']= $uid;
-                                  $da10['pid']= $pid;
-                                  $da10['regid']= $regid;
-                                  $da10['turno']= 'A';
-                                  $da10['eid']= $eid;
-                                  $da10['oid']= $oid;
-                                  $da10['subid']= $subid;
-                                 //$data2['total_creditos']= $credi;//ojo
-                                  $da10['notafinal']= $nota;
-                                  $da10['register']= $uidreg;
-                                  $da10['receipt']= "N";
-                                  $da10['document_auth']= $reso;
-                                  $da10['curid']= $curid;
-                                  $da10['state']= 'M';
-                                  $da10['approved']= $uidreg;
-
-                                   
-                                $dbmatriculacurso = new Api_Model_DbTable_Registrationxcourse();
-                                $escuela = $dbmatriculacurso->_save($da10);
-                           
-                                     $da11['eid']=$eid;
-                                     $da11['oid']=$oid;
-                                     $da11['escid']=$escid;
-                                     $da11['subid']=$subid;
-                                     $da11['courseid']=$courseid;
-                                     $da11['curid']=$curid;
-                                     $da11['turno']='A';
-                                     $da11['perid']=$perid;
-                                     $da11['uid']='DOCCONV01';
-                                     $da11['pid']='CONV01';
-                                     $dbdocentes = new Api_Model_DbTable_Coursexteacher();
-
-                                if($dbdocentes->_getOne($da11))
-                                 {
-
-                                  }
-                                  else
-                                  {
-                                  $da12['eid']= $eid;
-                                  $da12['oid']= $oid;
-                                  $da12['escid']= $escid;
-                                  $da12['subid']= $subid;
-                                  $da12['courseid']= $courseid;
-                                  $da12['turno']= 'A';
-                                  $da12['curid']= $curid;
-                                  $da12['perid']= $perid;
-                                  $da12['uid']= 'DOCCONV01';
-                                  $da12['pid']= 'CONV01';
-                                  $da12['semid']= $semid;
-                                  $da12['is_main']= 'S';
-                                  $da12['state']= 'A';
-
-                   
-                                 $dbdocente = new Api_Model_DbTable_Coursexteacher();
-                                 $docente = $dbdocente->_save($da12);
-                                  }
-                                  
-
-                        }
-                        
-                      } //ojoooooooooooooooooooooooooooooo
-                     else
-                        {
-                                $da13['perid']= $perid;
-                                $da13['curid']= $curid;
-                                $da13['escid']= $escid;
-                                $da13['courseid']= $courseid;
-                                $da13['turno']= 'A';
-                                $da13['eid']= $eid;
-                                $da13['oid']= $oid;
-                                $da13['subid']= $subid;
-                                $da13['state_record']= 'A';
-                                $da13['type_rate']= 'O';
-                                $da13['register']=$uidreg;
-                                $da13['receipt']= 'N';
-                                $da13['resolution']= 'NULL';
-                                $da13['semid']= $semid;
-                                $da13['closure_date']= date("Y-m-d");
-                                $da13['state']= 'A';
-
-
-                         $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
-
-                         if($dbperiodocurso->_save($da13))
-                                {
-
-                                  $da14['cursoid']= $curso;
-                                  $da14['escid']= $escid;
-                                  $da14['perid']= $perid;
-                                  $da14['uid']= $uid;
-                                  $da14['pid']= $pid;
-                                  $da14['regid']= $regid;
-                                  $da14['turno']= 'A';
-                                  $da14['eid']= $eid;
-                                  $da14['oid']= $oid;
-                                  $da14['subid']= $subid;
-                                  //$data2['total_creditos']= $credi;//ojo
-                                  $da14['notafinal']= $nota;
-                                  $da14['register']= $uidreg;
-                                  $da14['receipt']= "N";
-                                  $da14['document_auth']= $reso;
-                                  $da14['curid']= $curid;
-                                  $da14['state']= 'M';
-                                  $da14['approved']= $uidreg;
-
-
-                                $dbmatriculacurso = new Api_Model_DbTable_Registrationxcourse ();
-                                $escuela = $dbmatriculacurso->_save($da14);
-                                 
-                               // echo "para guardar en docentes";
-
-                                     $da15['eid']=$eid;
-                                     $da15['oid']=$oid;
-                                     $da15['escid']=$escid;
-                                     $da15['subid']=$subid;
-                                     $da15['courseid']=$courseid;
-                                     $da15['curid']=$curid;
-                                     $da15['turno']='A';
-                                     $da15['perid']=$perid;
-                                     $da15['uid']='DOCCONV01';
-                                     $da15['pid']='CONV01';
-                                     $dbdocentes = new Api_Model_DbTable_Coursexteacher();
-                                     
-                                if($dbdocentes->_getOne($da15))
-                                {
-
-                                  }
-                                  else
-                                  {
-                                  $da16['eid']= $eid;
-                                  $da16['oid']= $oid;
-                                  $da16['escid']= $escid;
-                                  $da16['subid']= $subid;
-                                  $da16['courseid']= $courseid;
-                                  $da16['turno']= 'A';
-                                  $da16['curid']= $curid;
-                                  $da16['perid']= $perid;
-                                  $da16['uid']= 'DOCCONV01';
-                                  $da16['pid']= 'CONV01';
-                                  $da16['semid']= $semid;
-                                  $da16['is_main']= 'S';
-                                  $da16['state']= 'A';
-
-                   
-                                 $dbdocente = new Api_Model_DbTable_Coursexteacher();
-                                 $docente = $dbdocente->_save($da16);
-                                  }
-
-                             }
-
-                       }
-
-              }
-
-            $datm['perid']=$perid;
-            $datm['uid']=$uid;
-            $datm['escid']=$escid;
-            $datm['subid']=$subid;
-            $datm['eid']=$eid;
-            $datm['oid']=$oid;
-            $dblistarconvalidacion = new Api_Model_DbTable_Registrationxcourse();
-            $convalidados = $dblistarconvalidacion->_getFilter($datm); 
-            //print_r($convalidados); 
-            $this->view->cursosconvalidados = $convalidados;
-
-            
-        
-             }
-           else
-           {
-             ?>
-
-            <script>
-            alert("No puede llevar el curso ya que no cumplio con el Prerequisito Necesario");
-            </script>
-
-             <td  style="background: #ccc; color: #ff0000;"><h4><center><?php echo "No puede llevar el curso ya que no cumplio con el Prerequisito ".$inforequisitos;
-             echo " | #veces llevadas: ".$vecesllevadas[0]['veces']; ?>
-             </center></h4></td>
-
-            <script>
-                
-                
-                if(confirm("Esta seguro de continuar \nAgregando el Curso a pesar de no haber aprobado el prerequisito"))
-
-                document.location.href="/register/directd/student/temp/1/uid/<?php echo $uid?>/escid/<?php echo $escid?>/subid/<?php echo $subid?>/perid/<?php echo $perid?>/curid/<?php echo $curid?>/nota/<?php echo $nota?>/semid/<?php echo $semid?>/pid/<?php echo $pid ?>/reso/<?php echo $reso?>/courseid/<?php echo $courseid?>/credi/<?php echo $credi?>/uidreg/<?php echo $uidreg?>";
-    
-                else
-                window.close();
-                
-              </script>
-
-             <td> <div id="agregar"></div></td>
-             <?php
-           }
-         }
-
-  }
-  public function printAction() 
-          {
+    public function printAction(){
             // $this->_helper->layout()->disableLayout();
-                
-             $eid= $this->sesion->eid;
-             $oid= $this->sesion->oid;
-            
-             $uid = $this->_getParam("uid");
-             $pid = $this->_getParam("pid");
-             $escid = $this->_getParam("escid");
-             $subid = $this->_getParam("subid");
-             $perid = $this->_getParam("perid");
+
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+
+            $uid = $this->_getParam("uid");
+            $pid = $this->_getParam("pid");
+            $escid = $this->_getParam("escid");
+            $subid = $this->_getParam("subid");
+            $perid = $this->_getParam("perid");
              //$curid = $this->_getParam("curid");
              //echo $perid;
-              
-                  $this->view->uid = $uid;
-                  $this->view->pid = $pid;
-                  $this->view->perid = $perid;
-                  $this->view->pid = $pid;
-                  $this->view->escid = $escid;
-                  $this->view->subid = $subid;
-                  $this->view->eid = $eid;
-                  $this->view->oid = $oid;
-              $print['eid']=$eid;
-              $print['oid']=$oid;
-              $print['perid']=$perid;
-              $print['uid']=$uid;
-              $print['escid']=$escid;
-              $print['subid']=$subid;
-              
+
+            $this->view->uid = $uid;
+            $this->view->pid = $pid;
+            $this->view->perid = $perid;
+            $this->view->pid = $pid;
+            $this->view->escid = $escid;
+            $this->view->subid = $subid;
+            $this->view->eid = $eid;
+            $this->view->oid = $oid;
+            $print['eid']=$eid;
+            $print['oid']=$oid;
+            $print['perid']=$perid;
+            $print['uid']=$uid;
+            $print['escid']=$escid;
+            $print['subid']=$subid;
+
 
               $dblistarconvalidacion = new Api_Model_DbTable_Registrationxcourse();
-              $convalidados = $dblistarconvalidacion->_getFilter($print);  
-                      
+              $convalidados = $dblistarconvalidacion->_getFilter($print);
+
               $this->view->cursosconvalidados = $convalidados;
 
           }
@@ -754,7 +374,7 @@ class Register_ValidationController extends Zend_Controller_Action
                 if ($form->isValid($frmdata)) {
                   unset($frmdata['Guardar']);
                    $frmdata['modified']=$this->sesion->uid;
-                               
+
                     $reg_= new Api_Model_DbTable_Registrationxcourse();
                     $reg_->_updatenoteregister($frmdata,$d);
                     $this->_redirect("/register/validation");
@@ -767,14 +387,14 @@ class Register_ValidationController extends Zend_Controller_Action
 
 
 
-            
+
 
           }catch (Exception $e) {
             print "Error index Registration ".$e->$getMessage();
-        }          
+        }
 
      }
 
 
-	
+
 }

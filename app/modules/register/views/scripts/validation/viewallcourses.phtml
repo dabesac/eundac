@@ -1,0 +1,36 @@
+<?php
+if ($this->cursosconvalidados) {    ?>
+    <table class="table table-condensed table-bordered table-hover">
+        <tr class="active">
+            <th class='text-center'>#</th>
+            <th class='text-center'>Currícula</th>
+            <th class='text-center'>Código</th>
+            <th class='text-center'>Curso</th>
+            <th class='text-center'>Turno</th>
+            <th class='text-center'>Resolución</th>
+            <th class='text-center'>Nota</th>
+        </tr>
+        <?php
+        foreach ($this->cursosconvalidados as $a => $datas) {   ?>
+            <tr>
+                <td class='text-center'><?php echo $a+1?></td>
+                <td class='text-center'><?php echo $datas['curid']?></td>
+                <td class='text-center'><?php echo $datas['courseid']?></td>
+                <td><?php echo $datas['namecourse']?></td>
+                <td class='text-center'><?php echo $datas['turno']?></td>
+                <td><?php echo $datas['document_auth']?></td>
+                <td class='text-center'><?php echo $datas['notafinal']?></td>
+            </tr>
+        <?php
+        }
+        ?>
+    </table>
+<?php
+}
+else{   ?>
+    <div class="row">
+        <div class="alert alert-info text-center col-md-4 col-md-offset-4"><span class='glyphicon glyphicon-info-sign'></span> No tiene cursos convalidados.</div>
+    </div>
+<?php
+}
+?>

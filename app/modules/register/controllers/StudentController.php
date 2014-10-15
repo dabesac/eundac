@@ -11,7 +11,7 @@ class Register_StudentController extends Zend_Controller_Action {
         $login = $sesion->getStorage()->read();
         $this->sesion = $login;
     }
-    
+
     public function indexAction()
     {
         // print_r($this->sesion);
@@ -26,13 +26,13 @@ class Register_StudentController extends Zend_Controller_Action {
             $perid=$this->sesion->period->perid;
 
             $where=array(
-                        'eid'=>$eid, 'oid'=>$oid, 
+                        'eid'=>$eid, 'oid'=>$oid,
                         'escid'=>$escid,'subid'=>$subid,
                         'pid'=>$pid,'uid'=>$uid,
                         'regid'=>$uid.$perid,
                         'perid'=>$perid);
             $where_payment = array(
-                    'eid'=>$eid, 'oid'=>$oid, 
+                    'eid'=>$eid, 'oid'=>$oid,
                     'escid'=>$escid,'subid'=>$subid,
                     'pid'=>$pid,'uid'=>$uid,
                     'perid'=>$perid
@@ -41,8 +41,8 @@ class Register_StudentController extends Zend_Controller_Action {
             $base_payment= new Api_Model_DbTable_Payments();
             $regid = base64_encode($uid.$perid);
             $data = array(
-                        'eid'=>$eid, 
-                        'oid'=>$oid, 
+                        'eid'=>$eid,
+                        'oid'=>$oid,
                         'regid'=>$uid.$perid,
                         'pid'=>$pid,
                         'uid'=>$uid,
@@ -58,8 +58,8 @@ class Register_StudentController extends Zend_Controller_Action {
                         'count'=>0,
                     );
             $data_1 = array(
-                    'eid'=>$eid, 
-                    'oid'=>$oid, 
+                    'eid'=>$eid,
+                    'oid'=>$oid,
                     'uid'=>$uid,
                     'pid'=>$pid,
                     'escid'=>$escid,
@@ -97,7 +97,7 @@ class Register_StudentController extends Zend_Controller_Action {
             print "Error index Registration ".$e->$getMessage();
         }
     }
-    
+
     public function startAction(){
        try {
             //DataBases
@@ -114,12 +114,12 @@ class Register_StudentController extends Zend_Controller_Action {
             $this->view->escid=$escid;
             $this->view->subid=$subid;
 
-           
+
 
             $regid=base64_decode($this->_getParam('regid'));
             $this->view->regid=$regid;
             $where=array(
-                        'eid'=>$eid, 'oid'=>$oid, 
+                        'eid'=>$eid, 'oid'=>$oid,
                         'escid'=>$escid,'subid'=>$subid,
                         'regid'=>$regid,
                         'pid'=>$pid,'uid'=>$uid,
@@ -147,12 +147,12 @@ class Register_StudentController extends Zend_Controller_Action {
                 if ($data_condition) {
 
                     foreach ($data_condition  as $condition) {
-                        
+
                         if ($condition['num_registration'] !='') {
-                            $cont_conmment['num_registration']="Usted esta Permitido llevar 
+                            $cont_conmment['num_registration']="Usted esta Permitido llevar
                                         un curso por  ". $condition['num_registration'].
                                         "  con Resolicion   ".$condition['doc_authorize'];
-                            $condition_register = 1; 
+                            $condition_register = 1;
                         }
 
                         if ($condition['credits'] !='') {
@@ -197,18 +197,18 @@ class Register_StudentController extends Zend_Controller_Action {
                         if ($subject) {
                             foreach ($subject as $key =>  $delete_subject) {
                                 $Num = count($student_condidtion);
-                                // $i=0;   
+                                // $i=0;
                                 for ($k=0; $k < $Num; $k++) {
                                     if ($delete_subject['courseid']== $student_condidtion[$k]['courseid']) {
 
                                         unset($subject[$key]);
-                                     } 
-                                }                                
+                                     }
+                                }
                             }
                         }
                     }
 
-                   
+
                     $base_registration_subjet = new Api_Model_DbTable_Registrationxcourse();
                     $where['regid']=$uid.$perid;
                     $where['curid']=$curid;
@@ -232,7 +232,7 @@ class Register_StudentController extends Zend_Controller_Action {
                                     if($course['courseid'] == $course_reg[$i]['courseid'] && $course['turno'] == $course_reg[$i]['turno']){
                                         $subject[$key]['register']=1;
                                     }
-                                   
+
                                 }
 
                                 if($course['veces'] >= 2)
@@ -254,7 +254,7 @@ class Register_StudentController extends Zend_Controller_Action {
                         if ($subject) {
                             $cantidad =count($subject);
 
-                            
+
                             foreach ($subject as $key => $courses) {
 
                                 if($courses['veces'] >= 2)
@@ -262,11 +262,11 @@ class Register_StudentController extends Zend_Controller_Action {
                                     $subject[$key]['veces_cur']=1;
                                     $veces_subject = array(
                                                     'veces'=> $course['veces'],);
-                                     
+
                                     $veces = $courses['veces'];
                                 }
                             }
-                          
+
                             $this->view->veces = $veces;
                             $this->view->veces_subject=$veces_subject;
                         }
@@ -275,7 +275,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
                     if ($perid != '13N' ) {
                             if($veces < 2 ){
-                            
+
                             if ($data_register['semid']==0) {
                                $this->view->assign_semester=0;
                                $this->view->assign_credist=0;
@@ -293,7 +293,7 @@ class Register_StudentController extends Zend_Controller_Action {
                             $this->view->assign_semester=$data_register['semid'];
                             $this->view->total_credits=$data_register['credits'];
                             $this->view->assign_credist=11+$condition_credits;
-                            
+
                         }
                     }
                     else
@@ -317,7 +317,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
             $base_payment = new Api_Model_DbTable_Payments();
             $data_payment = $base_payment->_getOne($where);
-            
+
             unset($where['perid']);
             $register_paymnets = $base_payment->_getAll($where);
 
@@ -377,7 +377,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
                         $date_payment=strtotime($date_payments);
                         $f_fin_tn  =   strtotime($assign_payment['f_fin_tnd'].'11:59:00');
-                        $f_fin_ti1  =   strtotime($assign_payment['f_fin_ti1'].'11:59:00'); 
+                        $f_fin_ti1  =   strtotime($assign_payment['f_fin_ti1'].'11:59:00');
                         $f_fin_ti2  =   strtotime($assign_payment['f_fin_ti2'].'11:59:00');
 
                         switch ($date_payment) {
@@ -394,7 +394,7 @@ class Register_StudentController extends Zend_Controller_Action {
                             default:
                                 $amount_assing = "Monto no Aceptado";
                                 break;
-                        }  
+                        }
                     }
                 }
                 $this->view->existPayment = $existPayment;
@@ -440,7 +440,7 @@ class Register_StudentController extends Zend_Controller_Action {
     }
 
     public  function regiterdeletedAction()
-    {      
+    {
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $pid=$this->sesion->infouser['pid'];
@@ -487,7 +487,7 @@ class Register_StudentController extends Zend_Controller_Action {
                         );
                 }
 
-              
+
             }
             else{
 
@@ -497,7 +497,7 @@ class Register_StudentController extends Zend_Controller_Action {
             }
 
             try {
-                
+
             } catch (Exception $e) {
                 $json = array(
                         'status'=>false,
@@ -505,13 +505,13 @@ class Register_StudentController extends Zend_Controller_Action {
                         );
             }
             $this->_helper->layout->disableLayout();
-            $this->_response->setHeader('Content-Type', 'application/json');   
+            $this->_response->setHeader('Content-Type', 'application/json');
             $this->view->data = $json;
 
 
     }
-    
-    
+
+
     public function registartionAction(){
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
@@ -537,13 +537,13 @@ class Register_StudentController extends Zend_Controller_Action {
                 'perid'=>$perid,'regid'=>$regid,
                     'uid'=>$uid,'pid'=>$pid);
             $data=array('state'=>"I",'approved'=>$uid,);
-            
+
 
             try {
 
                 $base_registration =  new Api_Model_DbTable_Registration();
                 $base_registration_subjet =new Api_Model_DbTable_Registrationxcourse();
-                
+
                 if ($total > 0) {
 
                     if($base_registration_subjet->_update_pre_registration($data,$pk)){
@@ -583,7 +583,7 @@ class Register_StudentController extends Zend_Controller_Action {
             }
 
             $this->_helper->layout->disableLayout();
-            $this->_response->setHeader('Content-Type', 'application/json');   
+            $this->_response->setHeader('Content-Type', 'application/json');
             $this->view->data = Zend_Json::encode($json);
 
 
@@ -593,7 +593,7 @@ class Register_StudentController extends Zend_Controller_Action {
         try {
 
             if ($curid=='' || $perid=='' ) return array();
-            
+
             // echo $curid; exit();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
@@ -625,7 +625,7 @@ class Register_StudentController extends Zend_Controller_Action {
             $backendOptions);
 
             $where = array(
-                        'uid' => base64_encode($uid), 
+                        'uid' => base64_encode($uid),
                         'pid' => base64_encode($pid),
                         'escid' => base64_encode($escid),
                         'subid' =>base64_encode($subid),
@@ -655,7 +655,7 @@ class Register_StudentController extends Zend_Controller_Action {
             }
 
             return $subject;
-            
+
         } catch (Exception $e) {
             //print "Error: in load subject".$e->getMessage();
         }
@@ -688,17 +688,17 @@ class Register_StudentController extends Zend_Controller_Action {
             $veces = trim($params['veces']);
             $credits_cur = trim($params['credits']);
             $condition_credits = intVal(trim($params['condition']));
-            
+
             $created_resolu=1;
             try {
 
                 $where=array(
-                        'eid'=>$eid, 'oid'=>$oid, 
+                        'eid'=>$eid, 'oid'=>$oid,
                         'escid'=>$escid,'subid'=>$subid,
                         'regid'=>$regid,
                         'pid'=>$pid,'uid'=>$uid,
                         'perid'=>$perid);
-            
+
 
                 $base_registration_subjet = new Api_Model_DbTable_Registrationxcourse();
                 $base_registration = new Api_Model_DbTable_Registration();
@@ -706,7 +706,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
                     $credits_register = $base_registration -> _getOne($where);
 
-                    
+
                    if ($perid != '13N' ) {
                          if($veces >= 2 ){
 
@@ -730,20 +730,20 @@ class Register_StudentController extends Zend_Controller_Action {
                                 if($this->sesion->escid=='2EP' )
                                     $credits_assing[0]['semester_creditsz']=22;
                             }
-                        } 
+                        }
                     }else{
                         $credits_assing[0]['semester_creditsz']=11+$condition_credits;
 
-                    }               
+                    }
 
-                    
-                    
+
+
                     $credits_asing= intval($credits_assing[0]['semester_creditsz']);
                     $credits_val = intval($credits_register['credits']) + intval($credits_cur);
 
 
                     if($credits_asing >= $credits_val)
-                    {   
+                    {
                         $data = array(
                             'eid'=>$eid,'oid'=>$oid,
                             'escid'=>$escid,'subid'=>$subid,
@@ -788,7 +788,7 @@ class Register_StudentController extends Zend_Controller_Action {
                             }
 
 
-                                $json   =   array(  
+                                $json   =   array(
                                     'status'=>true,
                                     'total_credits'=>$credits_register['credits'],
                                     'semester'=>$credits_register['semid'],
@@ -799,21 +799,21 @@ class Register_StudentController extends Zend_Controller_Action {
                     }
                     else{
 
-                        $json   =   array(  
+                        $json   =   array(
                             'status'=>false,
                             );
-                            
+
                     }
-                
+
             } catch (Exception $e) {
                 $json = array(
                     'status'=>false,
                     'error'=>$e);
             }
-            
+
             $this->_helper->layout->disableLayout();
-            $this->_response->setHeader('Content-Type', 'application/json');   
-            $this->view->data = $json; 
+            $this->_response->setHeader('Content-Type', 'application/json');
+            $this->view->data = $json;
 
     }
 
@@ -859,7 +859,7 @@ class Register_StudentController extends Zend_Controller_Action {
             try {
 
                 $where=array(
-                        'eid'=>$eid, 'oid'=>$oid, 
+                        'eid'=>$eid, 'oid'=>$oid,
                         'escid'=>$escid,'subid'=>$subid,
                         'regid'=>$regid,
                         'pid'=>$pid,'uid'=>$uid,
@@ -870,7 +870,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
 
                 if ($base_registration_subjet->_delete($where_subjet)) {
-                    
+
                             $credits_register = $base_registration -> _getOne($where);
 
                             if($credits_register['semid']!= 0 && $veces < 2){
@@ -886,12 +886,12 @@ class Register_StudentController extends Zend_Controller_Action {
                                     }
                                 elseif($veces >= 2)
                                 {
-                                    $credits_assing[0]['semester_creditsz']=11+$condition_credits; 
+                                    $credits_assing[0]['semester_creditsz']=11+$condition_credits;
                                 }
 
                             }
 
-                            $json   =   array(  
+                            $json   =   array(
                                 'status'=>true,
                                 'total_credits'=>$credits_register['credits'],
                                 'semester'=>$credits_register['semid'],
@@ -899,19 +899,19 @@ class Register_StudentController extends Zend_Controller_Action {
                                 );
                 }
 
-             
-                
+
+
             } catch (Exception $e) {
                 $json = array(
                     'status'=>false,
                     'error'=>$e);
-                
+
             }
 
             $this->_helper->layout->disableLayout();
-            $this->_response->setHeader('Content-Type', 'application/json');   
+            $this->_response->setHeader('Content-Type', 'application/json');
             $this->view->data = $json;
-        
+
     }
 
     public function printregisterAction()
@@ -921,7 +921,7 @@ class Register_StudentController extends Zend_Controller_Action {
                 $oid = $this->sesion->oid;
                 $pid = $this->sesion->infouser['pid'];
                 $uid = $this->sesion->uid;
-                
+
                 $namef = strtoupper($this->sesion->faculty->name);
                 $fullname = $this->sesion->infouser['fullname'];
 
@@ -948,14 +948,14 @@ class Register_StudentController extends Zend_Controller_Action {
                 }
                 else{
                     $spe['esc']=$speciality['name'];
-                    $spe['parent']='';  
+                    $spe['parent']='';
                 }
                 $names=strtoupper($spe['esc']);
                 $namep=strtoupper($spe['parent']);
                 $namefinal=$names." <br> ".$namep;
 
                 $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
-                
+
                 $where = array(
                     'eid'=>$eid,'oid'=>$oid,
                     'escid'=>$escid,'subid'=>$subid,
@@ -1003,11 +1003,11 @@ class Register_StudentController extends Zend_Controller_Action {
 
                    $data_subjects [$key]['name_t']  = $data_pid_teacher[0]['nameteacher'];
 
-                } 
+                }
                 $this->view->data_subjects  =   $data_subjects;
 
                 $dbimpression = new Api_Model_DbTable_Countimpressionall();
-                
+
                 $uidim=$this->sesion->pid;
 
                 $data = array(
@@ -1025,10 +1025,10 @@ class Register_StudentController extends Zend_Controller_Action {
 
                 $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'prematricula_'.$perid);
                 $dataim = $dbimpression->_getFilter($wheri);
-                
+
                 $co=count($dataim);
                 $codigo=$co." - ".$uidim;
-                
+
                 $header=$this->sesion->org['header_print'];
                 $footer=$this->sesion->org['footer_print'];
                 $header = str_replace("?facultad",$namef,$header);
@@ -1046,6 +1046,6 @@ class Register_StudentController extends Zend_Controller_Action {
         }
     }
 
-    
+
 
 }
