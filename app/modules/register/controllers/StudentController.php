@@ -16,7 +16,6 @@ class Register_StudentController extends Zend_Controller_Action {
     {
         // print_r($this->sesion);
         try {
-            echo $this->sesion->uid.$this->sesion->period->perid;
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $uid=$this->sesion->uid;

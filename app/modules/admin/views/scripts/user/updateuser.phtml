@@ -1,31 +1,95 @@
-<form id="<?php echo $this->fm->getName();?>" name="<?php echo $this->fm->getName();?>" action="<?php echo $this->fm->getAction();?>"method="POST" enctype="application/x-www-fm-urlencode">
-	<table>
-		<tr>
-			<th>Sede: </th>
-			<td><div style='width: 200px;'><?php echo $this->fm->subid;?></td>
-			<th>Escuela: </th>
-			<td><div style='width: 200px;'><?php echo $this->fm->escid;?></td>
-		</tr>
-		<tr>
-			<th>Rol: </th>
-			<td><div style='width: 200px'><?php echo $this->fm->rid?></td>
-			<th>Estado: </th>
-			<td><div style='width: 200px'><?php echo $this->fm->state?></td>
-		</tr>	
-		<tr>
-			<th>Comentario: </th>
-			<td colspan='4'><div style='width: 450px'><?php echo $this->fm->comments?></td>
-		</tr>
-		</table><br>
-	<div style='margin-left:250px'><?php echo $this->fm->Actualizar?></div>
-<input type="hidden" name='rid' value='<?php echo $this->rid?>'>
-</form>
+<?php 
+	switch ($this->user['state']) {
+                    case 'A':
+                    	$x="ACTIVO";$class="label-success";
+                        break;
+                    case 'I':
+                        $x="INACTIVO";$class="label-danger";
+                        break;
+                    case 'B':
+                        $x="BLOQUEADO";$class="label-warning";
+                        break;
+                    case 'S':
+                        $x="SUSPENDIDO";$class="label-warning";
+                        break;
+                    case 'E':
+                        $x="BAJA";$class="label-danger";
+                        break;
+                    case '':
+                        $x="Error";$class="label-info";
+                        break;
+                } ?>
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+<div class="col-md-12 text-center"><h4 class="modal-title">AJUSTES DE USUARIO</h4></div>
+<div class=" col-md-12 panel panel-info">
+<p class="text-right">ESTADO DE USUARIO: <span style="font-size:15px;" class="label <?php echo($class); ?>" id="infoState"><?php echo($x); ?></span></p>    
+</div>
+<div class="row text-right">
+</div>
+<br><br>
+<div id="tabla2" class="row">
+	<div class="col-md-12 text-center "><p class="label label-info" style="font-size:17px; display:inline">Escuela: <?php echo($this->speciality['name']); ?></p></div>
+	<br>
+	<?php if($this->director){ 
+		$y=1	?>
+			<div class="text-center alert alert-info"><span class="glyphicon glyphicon-info-sign"></span>LA ESCUELA TIENE DIRECTOR ASIGNADO <br><br>
+			<div class="col-md-6 text-center">Director: </div>
+			<div class="col-md-6"><span class=""><span class="text-danger glyphicon glyphicon-star"></span>  <?php echo $this->director[0]['last_name0']." ".$this->director[0]['last_name1'].", ".$this->director[0]['first_name'] ?></span></div>
+			<br>
+			</div>
+	<?php } else {  
+		$y=0;?>
+		<div class="text-center alert alert-danger"><span class="glyphicon glyphicon-info-sign"></span>LA ESCUELA NO TIENE DIRECTOR ASIGNADO <br><br></div>
 
-<script type="text/javascript">
-	$("#subid").change(function(){
-    var subid=$(this).val();
-    // alert(subid);
-    url="/admin/user/filterspeciality/subid/"+subid;
-    $("#escid").load(url);
-});             
-</script>  
+	<?php } ?>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2 ">
+			<button id="changeDirector" type="button" data-toggle="tooltip" data-placement="bottom" title="click para asignar nuevo Director" class="form-control btn btn-danger">Asignar "Docente" Actual</button>
+		</div>
+	</div>
+</div>
+<form id="frmDir">
+	<input type="hidden" name="subid" value="<?php echo $this->user['subid']?>">
+	<input type="hidden" name="escid" value="<?php echo $this->user['escid']?>">
+	<input type="hidden" name="pidDoc" value="<?php echo $this->user['pid']?>">
+	<input type="hidden" name="uidDoc" value="<?php echo $this->user['uid']?>">
+	<input type="hidden" name="uidDir" value="<?php echo $this->director[0]['uid']?>">
+	<input type="hidden" name="pidDir" value="<?php echo $this->director[0]['pid']?>">
+</form>
+<div id="sms" class="text-center alert alert-danger" style="display:none">
+	
+</div>
+<?php if ($this->rid=="DC") {?>
+<script>
+	var pos=0;
+	$("#changeDirector").tooltip();
+	$("#principal").click(function(event){
+		if (pos==0) {
+			$("#tabla1").fadeOut('slow', function() {
+				$("#tabla2").fadeIn('slow');
+			});
+			pos=1;
+		}else{
+			$("#tabla2").fadeOut('slow', function() {
+				$("#tabla1").fadeIn('slow');
+			});
+			pos=0;
+		};
+	});
+	$("#changeDirector").click(function(event) {
+		state="<?php echo($x); ?>";
+		if (state=="ACTIVO") {
+			$.ajax({
+                type : 'post',
+                url : '/admin/user/saveupdate',
+                data : $('#frmDir').serialize(),
+                success: function(data){
+                	$("#sms").html(data);
+                	$("#sms").fadeIn('fast');
+                }
+            });
+		} else{
+		};
+	});
+</script>
+<?php } ?>

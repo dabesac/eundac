@@ -2,23 +2,26 @@
 <?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 <div class="row">
 	<div class="col-md-1 col-md-offset-1">
-		<h5 class="text-info">Año</h5>
+		<label for="Anio">Año</label>
 		<select class="form-control" name="Anio" id="anio">
 			<option value="">Seleccione Año</option>
 			<?php $anio = date('Y');
 			for ($i=$anio; $i >= 2000 ; $i--) { ?>
- 				<option value="<?php echo $i?>"><?php echo $i?></option>
- 			<?php } ?>
+				<?php if ($i==$anio){ ?>
+					<option  value="<?php echo $i?>" selected><?php echo $i?></option> 	
+				<?php }else{ ?>
+	 				<option value="<?php echo $i?>"><?php echo $i?></option> 	
+ 			<?php } } ?>
 		</select>
 	</div>
 	<div class="col-md-3">
-		<h5 class="text-info">Periodo</h5>
+		<label for="Periods">Periodo</label>
 		<select name="Periods" id="periods" class="form-control">
 			<option value="">Primero Seleccione un Año</option>
 		</select>
 	</div>
 	<div class="col-md-3">
-		<h5 class="text-info">Facultad</h5>
+		<label for="faculty" class="">Facultad</label>
 		<select name="faculty" id="faculty" class="form-control">
 			<option value="">Seleccione Facultad</option>
 			<?php
@@ -31,8 +34,8 @@
 		</select>
 	</div>
 	<div class="col-md-3">
-		<h5 class="text-info" oncontextmenu='return false;' onmousedown='return false;' onselectstart='return false;'>_</h5>
-		<a id="show" href="#" class="btn btn-success">Mostrar Distribucion</a>
+		<label for="show">Mostrar</label>
+		<a id="show" href="#" class=" form-control btn btn-success">Mostrar Distribucion</a>
 	</div>
 </div>
 <hr>
@@ -51,27 +54,36 @@
 <script>
 	$('#error1').fadeOut('fast');
 	$('#error2').fadeOut('fast');
+$(function () {
+	var ajax_data = {
+		"anio" : <?php echo $anio ?>,
+	};
+	$.ajax({
+		type : 'post',
+		url : '/admin/opendistribution/lperiodo/',
+        data : ajax_data,
+        success: function(data){
+            $('#periods').html(data);
+        }
+	});
+});
+	
 	$('#anio').change(function(){
-		$('#anio option:selected').each(function(){
 			var anio = $(this).val();
 			var ajax_data = {
-                            "anio" : anio,
-                            };
+				"anio" : anio,
+			};
 			$.ajax({
                 type : 'post',
                 url : '/admin/opendistribution/lperiodo/',
                 data : ajax_data,
                 success: function(data){
             		$('#periods').html(data);
-            
                 }
             });
-
-		});
 	});
 
 	$('#show').click(function(){
-		
 		var perid = $('#periods').val();
 		var facid = $('#faculty').val();
 		if (perid){
