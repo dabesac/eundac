@@ -1,90 +1,127 @@
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-certificate"></span> CONVALIDACIÓN');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
-
-<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getName(); ?>" action="<?php echo $this->form->getAction(); ?>" method="POST" enctype="application/x-www-form-urlencoded">
-    
-    <center><table class="table table-hover">
-        <thead>
-        <tr>
-            <th><center>BUSQUEDA DE ALUMNOS</center></th>
-        </tr>
-        <tr>
-            <td>Ingrese Codigo del Alumno que Convalidara</td>
-        </tr>
-        </thead>
-        <tr>
-            <td><?php echo $this->form->uid; ?></td>
-         </tr>
-    </table></center>
-    <table class="table table-hover">
-        <thead>
+<?php
+if ($this->usuario) {
+    if ($this->notuser!='N') {  ?>
+        <br><br>
+        <table class='table table-hover table-condensed'>
             <tr>
-                <th>Codigo</th>
-                <th>DNI</th>
-                <th>Nombre</th>
-                <th>Escuela</th>
-                <th>Sede</th>
-                <th>Agregar curso</th>
-                <th>Cursos Convalidados</th>
+                <th class="text-center">#</th>
+                <th class="text-center">DNI</th>
+                <th class="text-center">Código</th>
+                <th class="text-center">Apellidos y Nombres</th>
+                <th class="text-center">Escuela</th>
+                <th class="text-center">Sede</th>
+                <th class="text-center">Agregar Curso</th>
+                <th class="text-center">Cursos Convalidados</th>
             </tr>
-        </thead>
             <?php
-                $perids=$this->perid;
-                if ($this->usuario){
-                    $i=1;
-                    $pid=$this->usuario[0]['pid'];
-                    $eid=$this->usuario[0]['eid'];
-                    $oid=$this->usuario[0]['oid'];
-                    $uid=$this->usuario[0]['uid'];
-                    $escid=$this->usuario[0]['escid'];
-                    $subid=$this->usuario[0]['subid'];
-                    $where['eid']=$eid;
-                    $where['oid']=$oid;
-                    $where['escid']=$escid;
-                    $where['subid']=$subid;
-                    $dbescuela = new Api_Model_DbTable_Speciality();
-                    $escuela = $dbescuela ->_getOne($where);   
-                    $infoescuela = $escuela['name'];
-                    $persona = new Api_Model_DbTable_Person();
-                    $data['eid']=$eid;
-                    $data['pid']=$pid;
-                    $list_p = $persona ->_getOne($data);
-                    $info2 = $list_p['last_name0']." ".$list_p['last_name1']." ".$list_p['first_name'];
+            foreach ($this->usuario as $i => $data) {   ?>
+                <tr>
+                    <td class="text-center"><?php echo $i+1?></td>
+                    <td class="text-center"><?php echo $data['pid']?></td>
+                    <td class="text-center"><?php echo $data['uid']?></td>
+                    <td><?php echo $data['full_name']?></td>
+                    <td><?php echo $data['name_speciality']?></td>
+                    <td><?php echo $data['name_subsidiary']?></td>
+                    <td class="text-center"><button id='addCourses' class="btn btn-success" pid='<?php echo base64_encode($data['pid'])?>' uid='<?php echo base64_encode($data['uid'])?>' escid='<?php echo base64_encode($data['escid'])?>' subid='<?php echo base64_encode($data['subid'])?>' perid='<?php echo base64_encode($this->perid)?>' ><span class='glyphicon glyphicon-pencil'></span> Agregar</button></td>
+                    <td class="text-center"><button id='viewAll' class="btn btn-info" pid='<?php echo base64_encode($data['pid'])?>' uid='<?php echo base64_encode($data['uid'])?>' escid='<?php echo base64_encode($data['escid'])?>' subid='<?php echo base64_encode($data['subid'])?>' perid='<?php echo base64_encode($this->perid)?>'><span class='glyphicon glyphicon-list'></span> Ver</button></td>
+                </tr>
+            <?php
+            }
             ?>
+        </table>
 
-              <td><?php echo $uid;?></td>
-                <td><?php echo $pid?></td>
-                <td><?php echo $info2;?></td>
-  
-                <td><?php echo $infoescuela;?></td>
-                
-                <td><?php echo $subid;?></td>
-              <td><a class="btn btn-primary form-control" href="#" value= "<?php echo $this->usuario[0]['uid']?>" id="agregados" pid='<?php echo $pid?>' uid='<?php echo $uid?>' escid='<?php echo $escid?>' subid='<?php echo $subid;?>'><center><span class="glyphicon glyphicon-pencil"></span></center></a></td>
+        <!-- Modal Agregar Curso -->
+        <div class="modal fade" id="addCourseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog" style='width:60%'>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title text-center text-info" id="myModalLabel"><span class='glyphicon glyphicon-subtitles'></span><b> AGREGAR CURSO</b></h4>
+                    </div>
+                    <div id='loadInfo' class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button id='closemodal' type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Cerrar</button>
+                        <button id='savecoursec' type="button" class="btn btn-success"><span class='glyphicon glyphicon-save'></span> Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-               <th><center><a target="black" style="float:right" class="btn btn-primary form-control"  href="/register/validation/print/perid/<?php echo $this->perid ?>/escid/<?php echo $escid ?>/subid/<?php echo $subid ?>/uid/<?php echo $uid ?>/pid/<?php echo $pid ?>  ">Imprimir</a></center></th>
-            <?php
+        <!-- Modal Mostrar todos Curso -->
+        <div class="modal fade" id="viewcoursesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog" style='width:70%'>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title text-center text-info" id="myModalLabel"><span class='glyphicon glyphicon-th-list'></span><b> LISTA DE CURSOS CONVALIDADOS</b></h4>
+                    </div>
+                    <div id='loadallInfo' class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php
+    }
+    else{   ?>
+        <hr>
+        <div class="alert alert-warning text-center col-md-4 col-md-offset-4"><span class='glyphicon glyphicon-info-sign'></span> <b>El usuario no pertence a su facultad</b></div>
+    <?php
     }
     ?>
-    </table>
-</form>
-<div id="carga_periodos_"></div>
-<div id="guardar"></div>
+<?php
+}
+else{   ?>
+    <hr>
+    <div class="alert alert-danger text-center col-md-4 col-md-offset-4"><span class='glyphicon glyphicon-info-sign'></span> No exiten registros en el Sistema</div>
+<?php
+}
+?>
+<!-- Modal -->
+<div class="modal fade" id="mensajeGuardado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style='width:40%'>
+        <div class="modal-content">
+            <div id='smsError' class="modal-body"></div>
+            <div class="modal-footer">
+                <button id='closemodalmensaje' type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
-$("#agregados").click(function(){
-        var pid=$(this).attr('pid');
-        var uid=$(this).attr('uid');
-        var escid=$(this).attr('escid');
-        var subid=$(this).attr('subid');
-        var url = "/register/validation/lcontainer/uid/"+uid+"/subid/"+subid+"/escid/"+escid+"/pid/"+pid+"/nota/<?php echo $this->nota?>/perid/<?php echo $this->perid?>/temp/<?php echo $this->temp?>";
-        $("#guardar").load(url);
+$(function(){
+    $("#addCourses").on('click', function(){
+        $("#addCourseModal").modal('show');
+
+        var pid=$("#addCourses").attr('pid');
+        var uid=$("#addCourses").attr('uid');
+        var escid=$("#addCourses").attr('escid');
+        var subid=$("#addCourses").attr('subid');
+        var perid=$("#addCourses").attr('perid');
+
+        var url='/register/validation/lcontainer/pid/'+pid+'/uid/'+uid+'/escid/'+escid+'/subid/'+subid+'/perid/'+perid;
+        $("#loadInfo").html('<center class="text-muted"><img src="/img/spinner.gif" /> Cargando Cursos Permitidos...</center>');
+        $("#loadInfo").load(url);
     });
-    $("#uid").keyup(function () {
-        var vuid = $(this).val();
-        if (isNaN(vuid))
-        {
-          $(this).val("");
-        }
+
+    $("#viewAll").on('click',function(){
+        $("#viewcoursesModal").modal('show');
+        var pid=$("#addCourses").attr('pid');
+        var uid=$("#addCourses").attr('uid');
+        var escid=$("#addCourses").attr('escid');
+        var subid=$("#addCourses").attr('subid');
+        var perid=$("#addCourses").attr('perid');
+
+        var url='/register/validation/viewallcourses/pid/'+pid+'/uid/'+uid+'/escid/'+escid+'/subid/'+subid+'/perid/'+perid;
+        $("#loadallInfo").html('<center class="text-muted"><img src="/img/spinner.gif" /> Cargando Cursos</center>');
+        $("#loadallInfo").load(url);
     });
+
+    $("#closemodal").on('click', function(){
+        $("addCourseModal").modal('hide');
+    });
+});
 </script>
-
-

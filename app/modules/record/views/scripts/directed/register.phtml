@@ -14,8 +14,8 @@
                             <option value="">- Seleccione Asignatura -</option>
                             <?php
                             foreach ($this->cursos as $cursos) {
-                                if ($cursos['no_apto']==1) {    ?>
-                                    <option class='text-danger' value="<?php echo $cursos['courseid']."--".$cursos['curid']."--".$cursos['semid']."--".$cursos['credits']?>"><?php echo $cursos['courseid']." | ".$cursos['name']." - Créditos: ".$cursos['credits']?></option>
+                                if (!$cursos['no_apto']==1) {    ?>
+                                    <!-- <option class='text-danger' value="<?php echo $cursos['courseid']."--".$cursos['curid']."--".$cursos['semid']."--".$cursos['credits']?>"><?php echo $cursos['courseid']." | ".$cursos['name']." - Créditos: ".$cursos['credits']?></option> -->
                                 <?php
                                 }
                                 else{   ?>
@@ -318,7 +318,7 @@ if ($this->cursosconvalidados){ ?>
     <div id="coursesperCurriculum">
     </div>
     <br>
-    <h4 id="mensajeTryAgain" class="text-muted text-center hidden">:( Hubo un <span class="text-danger">problema</span> en nuestros servidores pero puede <a id="tryAgainCurriculum" href="##" class="btn btn-link text-success">Intentar Nuevamente</a></h4>
+    <h4 id="mensajeTryAgain" class="text-muted text-center hidden">Hubo un <span class="text-danger">problema</span> en nuestros servidores pero puede <a id="tryAgainCurriculum" href="##" class="btn btn-link text-success">Intentar Nuevamente</a></h4>
 </div>
 <style type="text/css">
     .modal-dialog { width: 900px; }
