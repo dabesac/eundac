@@ -42,5 +42,17 @@ class Api_Model_DbTable_Infoteacher extends Zend_Db_Table_Abstract
 			print "Error: Get Info Teacher ".$ex->getMessage();
 		}
 	}
+	public function _getPrincipal($pk=null)
+	{
+		try{
+			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']==''|| $pk['is_director']=='') return false;
+			$where = "eid='".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and is_director='".$pk['is_director']."'";
+			$row = $this->fetchRow($where);
+			if ($row) return $row->toArray();
+			return false;
+		}catch (Exception $ex){
+			print "Error: Get Info Teacher ".$ex->getMessage();
+		}
+	}
 
 }

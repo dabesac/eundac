@@ -1,6 +1,6 @@
 <?php
 class Admin_OpendistributionController extends Zend_Controller_Action{
-	public function init(){
+    public function init(){
                 $sesion  = Zend_Auth::getInstance();
                 if(!$sesion->hasIdentity() ){
                         $this->_helper->redirector('index',"index",'default');
@@ -9,7 +9,7 @@ class Admin_OpendistributionController extends Zend_Controller_Action{
                 $this->sesion = $login;
         }
         public function indexAction(){
-		
+        
                 $eid = $this->sesion->eid;
                 $oid = $this->sesion->oid;
                 $where=array('eid'=>$eid,'oid'=>$oid);
@@ -22,7 +22,7 @@ class Admin_OpendistributionController extends Zend_Controller_Action{
                 print_r($facultades);exit();*/
                 $this->view->dataf=$dataf;
                 
-	}
+    }
         public function lperiodoAction(){
                 try {
                         $this->_helper->layout()->disableLayout();
@@ -56,6 +56,7 @@ class Admin_OpendistributionController extends Zend_Controller_Action{
             $distri= new Distribution_Model_DbTable_Distribution();
             $dbescuela= new Api_Model_DbTable_Speciality();
             $ldistribution=new Distribution_Model_DbTable_logObsrvationDistribution();
+            $this->view->rol=$this->sesion->rid;
             if ($facid=="TODO") {
                 $where=array("eid"=>$eid, "oid"=>$oid,"perid"=>$perid);
                 $order=array('escid');
@@ -120,8 +121,7 @@ class Admin_OpendistributionController extends Zend_Controller_Action{
                     $subid=base64_decode($this->_getParam("subid"));
                     $distid=base64_decode($this->_getParam("distid"));
                     $perid=base64_decode($this->_getParam("perid"));
-                    $state="B";
-                    print_r("llega");
+                    $state=$this->_getParam("state");
                     //datos para log
                     $uid=$this->sesion->uid;
                     $document= "distribucion";
@@ -135,13 +135,13 @@ class Admin_OpendistributionController extends Zend_Controller_Action{
                         'register'=>$uid);
                     $bdlog= new Api_Model_DbTable_Loginspectionall();
                     if ($insertdata = $bdlog->_save($dat)) {
-                        print_r("log");
+                        
                     }
                     $dbdistribution=new Distribution_Model_DbTable_Distribution();
                     $pk=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'distid'=>$distid,'perid'=>$perid);
                     $data=array('state'=>$state);
                     if ($dbdistribution->_update($data,$pk)) {
-                        print_r("cambio");   
+                        print_r("cambio");
                     }
                 } catch (Exception $e) {
                         print 'Error '.$e->getMessage();

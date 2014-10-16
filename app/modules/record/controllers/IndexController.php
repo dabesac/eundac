@@ -1761,8 +1761,35 @@ class Record_IndexController extends Zend_Controller_Action {
             $this->view->listacursos = $lcourses;
 
             //print_r($lcourses);
-
-
 	}
+
+	public function updatestatecourseAction(){
+    	try{
+    		$this->_helper->layout()->disableLayout();
+    		$eid = $this->sesion->eid;
+    		$oid = $this->sesion->oid;
+    		$form_Data = $this->getRequest()->getPost();
+
+    		$where['eid'] = $eid;
+    		$where['oid'] = $oid;
+    		$where['escid'] = $form_Data['escid'];
+    		$where['subid'] = $form_Data['subid'];
+    		$where['curid'] = $form_Data['curid'];
+    		$where['perid'] = $form_Data['perid'];
+    		$where['courseid'] = $form_Data['courseid'];
+    		$where['turno'] = $form_Data['turno'];
+
+    		$data['closure_date'] = $form_Data['closure_date'];
+    		$data['state_record'] = $form_Data['state_record'];
+    		$data['state'] = $form_Data['state'];
+
+    		$updatedata = new Api_Model_DbTable_PeriodsCourses();
+    		$updata = $updatedata->_update($data,$where);
+    		$this->view->updata=$updata;
+
+    	} catch(Exception $e){
+    		print 'Error: '.$e->getMessage();
+    	}
+    }
 	
 }

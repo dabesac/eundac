@@ -1,53 +1,34 @@
-<style type="text/css">
-	.importante:hover{
-		font-size: 22px;
-	}
-	
-	strong{
-		font-size: 24px;
-		color:black;
-	}
-	span{
-		font-size: 20px;
-	}
-	th{
-		background:black;
-		color: #fff
-	}
-
-</style>
 <?php if ($this->dis): ?>
-	<div class="row" style="height:70px; border-top: 1px dotted gray; border-bottom: 1px dotted gray;">
-		
-		<div class="col-md-2 col-md-offset-1">
-			<h5 class="text-muted">
-				<strong>Leyenda</strong>
-			</h5>
-		</div>
-		<div class="col-md-2">
-			<h5 class="text-muted">
-				<img src="/img/circulo-verde.png"><span class="text-success importante"> Enviado</span>
-			</h5>
-		</div>
-		<div class="col-md-2">
-			<h5 class="text-muted">
-				<img src="/img/circulo-azul.png"><span class="text-info importante"> Borrador</span>
-			</h5>
-		</div>
-		<div class="col-md-2">
-			<h5 class="text-muted">
-				<img src="/img/circulo-amarillo.png"><span class="text-warning importante"> Observado</span>
-			</h5>
-		</div>
-		<div class="col-md-2">
-			<h5 class="text-muted">
-				<img src="/img/circulo-rojo.png"><span class="text-danger importante"> Cerrado/Inactivo</span>
-			</h5>
-		</div>
-	</div>
+		<div class="row">
+        <div class="col-md-2 col-md-offset-1">
+            <h5 class="text-muted">
+                <strong>Leyenda</strong>
+            </h5>
+        </div>
+        <div class="col-md-2">
+            <h5 class="text-muted">
+                <img src="/img/circulo-amarillo.png"><span class="text-warning"> <b>Recibido</b></span>
+            </h5>
+        </div>
+        <div class="col-md-2">
+            <h5 class="text-muted">
+                <img src="/img/circulo-rojo.png"><span class="text-danger"> <b>Observado</b></span>
+            </h5>
+        </div>
+        <div class="col-md-2">
+            <h5 class="text-muted">
+                <img src="/img/circulo-verde.png"><span class="text-success"> <b>Todo esta Correcto</b></span>
+            </h5>
+        </div>
+        <div class="col-md-2">
+            <h5 class="text-muted">
+                <img src="/img/circulo-azul.png"><span class="text-info"> <b>Borrador</b></span>
+            </h5>
+        </div>
+    </div>
 	<hr>
-	<table class="table table-hover table-striped" style="font-size:14px">
-	<caption><h2 style="color:red;background: rgba(30,144,255,.5);">Distribuciones</h2></caption>
+	<table class="table table-hover table-condensed table-bordered" style="font-size:14px">
+	<caption><h2>Distribuciones</h2></caption>
 	<thead>
 		<tr>
 			<th class="text-center">#</th>
@@ -65,61 +46,63 @@
 		$i=0;
 		foreach ($this->dis as $distrib) {
 			switch ($distrib['state']) {
-				case 'A': 	$state = "<img src='/img/circulo-verde.png'>"; 
+				case 'A': 	$state = "<img src='/img/circulo-amarillo.png'>"; 
 							$namestate = "Enviado";
+							$clase="warning";
 							break;
-				case 'I': 	$state = "<img src='/img/circulo-rojo.png'>"; 
+				case 'I': 	$state = "<span style='font-size:24px' class='glyphicon glyphicon-info-sign'></span>"; 
 							$namestate = "Inactivo";
+							$clase="active";
+							$temp="active";
 							break;
-				case 'C': 	$state = "<img src='/img/circulo-rojo.png'>"; 
-							$namestate = "Cerrado";
+				case 'C': 	$state = "<img src='/img/circulo-verde.png'>"; 
+							$namestate = "Correcto";
+							$clase="success";
 							break;
-				case 'O': 	$state = "<img src='/img/circulo-amarillo.png'>"; 
+				case 'O': 	$state = "<img src='/img/circulo-rojo.png'>"; 
 							$namestate = "Observado";
+							$clase="danger";
 							break;
 				case 'B': 	$state = "<img src='/img/circulo-azul.png'>"; 
 							$namestate = "Borrador";
+							$clase="info";
 							break;
 			}
 			$valor=$this->valor;
-			
 				$i++;
 			?>
-			<tr>
-				
+			<tr style="padding:0px">
 				<td class="text-center"><?php echo $i?></td>
-				<td class="text-center"><?php echo $distrib['name']?></td> 
-				<td class="text-center" style="width:6%"><?php echo substr($distrib['created'],0,10)?></td>
+				<td class="text-center <?php echo $clase ?>" > <p class="text-<?php echo $clase ?>"><?php echo $distrib['name']?></p> </td> 
+				<td class="text-center" ><?php echo substr($distrib['created'],0,10)?></td>
 				<td  class="text-center">
-					<h4><a id="seeDistribution<?php echo $distrib['number']?>" href="#" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Ver distribución','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')"><span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" title="Ver"></span>
-	                </a></h4>	
+					<a data-toggle="tooltip" title="Ver" id="seeDistribution<?php echo $distrib['number']?>" href="#" onclick="javascript: window.open('/distribution/printdistribution/index/perid/<?php echo base64_encode($distrib['perid'])?>/distid/<?php echo base64_encode($distrib['distid'])?>/escid/<?php echo base64_encode($distrib['escid'])?>/subid/<?php echo base64_encode($distrib['subid'])?>/t/U','Ver distribución','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=850,height=750')"><span class="glyphicon glyphicon-eye-open"></span>
+	                </a>
 				</td>
-
 				<td class='text-center'>
-					<span class='span' data-toggle="tooltip" title="<?php echo $namestate?>"><?php echo $state?></span>
+					<span data-toggle="tooltip" title="<?php echo $namestate?>"><?php echo $state?></span>
 				</td>
-
-				<td class="text-center">
+				<td class="text-center ">
+				<?php if ($this->rol=="AD") {?>
+					<?php if ($distrib['state']=="C" or $distrib['state']=="O" or $distrib['state']=="A" or $distrib['state']=="I") { ?>
+						<a class="abrirDis btn btn-info form-control" state="B" data-toggle="modal" data-target="#myModal" distid='<?php echo base64_encode($distrib['distid'])?>' perid='<?php echo base64_encode($distrib['perid'])?>' escid='<?php echo base64_encode($distrib['escid']);?>' subid='<?php echo base64_encode($distrib['subid'])?>'><span class="glyphicon glyphicon-edit"></span> En borrador</a>
+						<?php } elseif($distrib['state']=="B"){?>
+							<a class="btn btn-success form-control aceptar" state="C" data-toggle="modal" data-target="#myModal" distid='<?php echo base64_encode($distrib['distid'])?>' perid='<?php echo base64_encode($distrib['perid'])?>' escid='<?php echo base64_encode($distrib['escid']);?>' subid='<?php echo base64_encode($distrib['subid'])?>'> <span class="glyphicon glyphicon-check"></span> Aceptar</a>
+					<?php }else{ ?>
+				<?php } ?>	
+				<?php } else { ?>
 					<?php if ($distrib['state']=="C") {	?>
-					<h4>
-						<a class="abrirDis" href="#" data-toggle="modal" data-target="#myModal" distid='<?php echo base64_encode($distrib['distid'])?>' perid='<?php echo base64_encode($distrib['perid'])?>' escid='<?php echo base64_encode($distrib['escid']);?>' subid='<?php echo base64_encode($distrib['subid'])?>'>
-							<span class="glyphicon glyphicon-circle-arrow-right" data-toggle="tooltip" title="pulse para abrir">								
-							</span>
-						</a>
-					</h4>
-					<?php
-					}
-					else{?>
-					<h4>
-							<span class="glyphicon glyphicon-ban-circle bloqueado" data-toggle="tooltip" title="Desactivada"></span>
-					</h4>
-					<?php
-					}
-					?>
+							<a class="abrirDis btn btn-info form-control" state="O" href="#" data-toggle="modal" data-target="#myModal" distid='<?php echo base64_encode($distrib['distid'])?>' perid='<?php echo base64_encode($distrib['perid'])?>' escid='<?php echo base64_encode($distrib['escid']);?>' subid='<?php echo base64_encode($distrib['subid'])?>'>
+								<span class="glyphicon glyphicon-circle-arrow-right">
+								</span>
+							</a>
+						
+						<?php }else{ ?>
+								<span class="glyphicon glyphicon-ban-circle " data-toggle="tooltip" title="Desactivada"></span>
+						<?php } ?>
+				<?php } ?>
 				</td>
 			</tr>
-
-			
 			<script> 
             $(function(){
             	$('#seeDistribution<?php echo $distrib['number']?>').hover(function(){
@@ -127,9 +110,7 @@
 				});
             });
         	</script>
-			<?php				
-		}
-		?>
+			<?php } ?>
 	</tbody>
 	</table>
 <?php else: ?>
@@ -139,12 +120,12 @@
 <?php endif ?>
 <div id="cargaqui"></div>
 <!-- Modal -->
-<div class="modal fade" id="myModal" style="margin-top:10%">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:10%">
   <div class="modal-dialog" style="width:30%">
     <div class="modal-content">
       <div class="modal-body">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel"><span class='text-info'><b>ESTA SEGURO DE "ABRIR" LA DISTRIBUCIÓN? </b></span></h4>
+        <h4 class="modal-title" id="myModalLabel"><span class='text-info'><b>ESTA SEGURO DE "MODIFICAR" LA DISTRIBUCIÓN? </b></span></h4>
       </div>
       <div class="modal-body text-right">
         	<button id="aceptar" type="button" class="btn btn-success"><span class='glyphicon glyphicon-ok'></span> Aceptar</button>
@@ -153,19 +134,25 @@
     </div>
   </div>
 </div>
+
+
 <script>
 $(function(){
 	var ajax_data;
-	$(".glyphicon").tooltip();
 	$("span").tooltip();
-	$(".abrirDis").click(function(e){
+	$("a").tooltip();
+	$(".abrirDis, .aceptar").click(function(e){
 		ajax_data = {
 			'escid' : $(this).attr('escid'), 
 			'subid' : $(this).attr('subid'),
 			'distid' : $(this).attr('distid'),
 			'perid' : $(this).attr('perid'),
+			'state' : $(this).attr('state')
+
 		};
+		console.log(ajax_data);
 	});
+
 	$("#aceptar").click(function(e) {
 		e.preventDefault();
 		$.ajax({
@@ -173,6 +160,7 @@ $(function(){
             url : '/admin/opendistribution/opendistribution/',
             data : ajax_data,
             success: function(data){
+            	console.log(data);
             	$("#myModal").modal("hide");
     		}
 		});
@@ -195,4 +183,3 @@ $(function(){
 	});
 });
 </script>
- <div id="destino"></div> 

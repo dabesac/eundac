@@ -1,0 +1,59 @@
+<?php
+if ($this->cursosconvalidados) {    ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-1 col-md-offset-10">
+                <a href='/register/validation/print/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/uid/<?php echo base64_encode($this->uid)?>/pid/<?php echo base64_encode($this->pid)?>/perid/<?php echo base64_encode($this->perid)?>' id='printAllcourses' class="btn btn-default"><span class='glyphicon glyphicon-print'></span> Imprimir</a>
+            </div>
+        </div>
+    </div><br>
+    <table class="table table-condensed table-bordered table-hover">
+        <tr class="active">
+            <th class='text-center'>#</th>
+            <th class='text-center'>Currícula</th>
+            <th class='text-center'>Código</th>
+            <th class='text-center'>Curso</th>
+            <th class='text-center'>Turno</th>
+            <th class='text-center'>Resolución</th>
+            <th class='text-center'>Nota</th>
+        </tr>
+        <?php
+        foreach ($this->cursosconvalidados as $a => $datas) {   ?>
+            <tr>
+                <td class='text-center'><?php echo $a+1?></td>
+                <td class='text-center'><?php echo $datas['curid']?></td>
+                <td class='text-center'><?php echo $datas['courseid']?></td>
+                <td><?php echo $datas['namecourse']?></td>
+                <td class='text-center'><?php echo $datas['turno']?></td>
+                <td><?php echo $datas['document_auth']?></td>
+                <td class='text-center'><?php echo $datas['notafinal']?></td>
+            </tr>
+        <?php
+        }
+        ?>
+    </table>
+<?php
+}
+else{   ?>
+    <div class="row">
+        <div class="alert alert-info text-center col-md-4 col-md-offset-4"><span class='glyphicon glyphicon-info-sign'></span> No tiene cursos convalidados.</div>
+    </div>
+<?php
+}
+?>
+<script type="text/javascript">
+$(function() {
+    $("#printAllcourses").hover(
+        function(){
+            $("#printAllcourses").css("background-color","#5CB85C");
+            $("#printAllcourses").css("border-color","#4CAE4C");
+            $("#printAllcourses").css("color","#FFF");
+        },
+        function(){
+            $("#printAllcourses").css("background-color","#FFF");
+            $("#printAllcourses").css("border-color","#CCC");
+            $("#printAllcourses").css("color","#333");
+        }
+    );
+});
+</script>
