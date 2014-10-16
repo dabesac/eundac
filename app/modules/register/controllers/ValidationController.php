@@ -89,53 +89,64 @@ class Register_ValidationController extends Zend_Controller_Action
         $datacurri = $DBCurricula->_getsearch($wheres);
         if ($datacurri) {
             $curid=$datacurri['curid'];
-        }
 
-        $this->view->pid = $pid;
-        $this->view->uid = $uid;
-        $this->view->escid = $escid;
-        $this->view->subid = $subid;
-        $this->view->perid = $perid;
-        $this->view->user = $userregistra;
-        $peridSession=$this->sesion->period->perid;
+            $this->view->pid = $pid;
+            $this->view->uid = $uid;
+            $this->view->escid = $escid;
+            $this->view->subid = $subid;
+            $this->view->perid = $perid;
+            $this->view->user = $userregistra;
+            $peridSession=$this->sesion->period->perid;
 
-        try {
-            $request = array(   'eid' => base64_encode($eid),
-                                'oid' => base64_encode($oid),
-                                'perid' => base64_encode($peridSession),
-                                'pid' => base64_encode($pid),
-                                'uid' => base64_encode($uid),
-                                'escid' => base64_encode($escid),
-                                'subid' => base64_encode($subid),
-                                'curid' => base64_encode($curid));
+            try {
+                $request = array(   'eid' => base64_encode($eid),
+                                    'oid' => base64_encode($oid),
+                                    'perid' => base64_encode($peridSession),
+                                    'pid' => base64_encode($pid),
+                                    'uid' => base64_encode($uid),
+                                    'escid' => base64_encode($escid),
+                                    'subid' => base64_encode($subid),
+                                    'curid' => base64_encode($curid));
 
-            require_once 'Zend/Loader.php';
-            Zend_Loader::loadClass('Zend_Rest_Client');
+                require_once 'Zend/Loader.php';
+                Zend_Loader::loadClass('Zend_Rest_Client');
 
-            $base_url = 'http://api.undac.edu.pe:8080/';
-            $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/pending_validate';
-            $client = new Zend_Rest_Client($base_url);
-            $httpClient = $client->getHttpClient();
-            $httpClient->setConfig(array("timeout" => 30000));
-            $response = $client->restget($endpoint,$request);
-            $lista=$response->getBody();
+                $base_url = 'http://api.undac.edu.pe:8080/';
+                $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/pending_validate';
+                $client = new Zend_Rest_Client($base_url);
+                $httpClient = $client->getHttpClient();
+                $httpClient->setConfig(array("timeout" => 30000));
+                $response = $client->restget($endpoint,$request);
+                $lista=$response->getBody();
 
-            if ($lista){
-                $data = Zend_Json::decode($lista);
+                if ($lista){
+                    $data = Zend_Json::decode($lista);
+                }
+                $this->view->data=$data;
+                $this->view->notcurid='0';
+
+            } catch (Exception $e) {
+                $this->view->msg='1';
+                $this->view->data='1';
             }
-            $this->view->data=$data;
-
-        } catch (Exception $e) {
-            $this->view->msg='1';
-            $this->view->data='1';
         }
+        else{
+            $curiculas = new Api_Model_DbTable_Curricula();
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['escid']=$escid;
+            $cur=$curiculas->_getCurriculasXSchoolXstateAT($where);
+            $this->view->curriculas=$cur;
+            $this->view->notcurid='1';
+            $this->view->msg='0';
+            $this->view->data='1';
+            $this->view->pid = $pid;
+            $this->view->uid = $uid;
+            $this->view->escid = $escid;
+            $this->view->subid = $subid;
+            $this->view->perid = $perid;
 
-        // $curiculas = new Api_Model_DbTable_Curricula();
-        // $where['eid']=$eid;
-        // $where['oid']=$oid;
-        // $where['escid']=$escid;
-        // $cur=$curiculas->_getCurriculasXSchoolXstateAT($where);
-        // $this->view->curriculas=$cur;
+        }
     }
 
     public function viewallcoursesAction(){
@@ -148,6 +159,12 @@ class Register_ValidationController extends Zend_Controller_Action
         $uid = base64_decode($this->_getParam("uid"));
         $pid = base64_decode($this->_getParam("pid"));
         $perid = base64_decode($this->_getParam("perid"));
+
+        $this->view->escid=$escid;
+        $this->view->subid=$subid;
+        $this->view->uid=$uid;
+        $this->view->pid=$pid;
+        $this->view->perid=$perid;
 
         $dblistarconvalidacion = new Api_Model_DbTable_Registrationxcourse();
 
@@ -164,26 +181,45 @@ class Register_ValidationController extends Zend_Controller_Action
             }
         }
         $this->view->cursosconvalidados = $convalidados;
-
     }
+
     public function coursexcurriculaAction(){
         $this->_helper->layout()->disableLayout();
         $eid= $this->sesion->eid;
         $oid= $this->sesion->oid;
-        $curid= $this->_getParam("curid");
-        $escid= $this->_getParam("escid");
-        $subid= $this->_getParam("subid");
-        $uid= $this->_getParam("uid");
-        $pid= $this->_getParam("pid");
-        $nota= $this->_getParam("nota");
-      	$dbcurso = new Api_Model_DbTable_Course();       //admin
-      	$curso=  $dbcurso->_getCoursesXCurriculaXShool($eid,$oid,$curid,$escid);
+        $curid= base64_decode($this->_getParam("curid"));
+        $escid= base64_decode($this->_getParam("escid"));
+        $subid= base64_decode($this->_getParam("subid"));
+          $uid= base64_decode($this->_getParam("uid"));
+          $pid= base64_decode($this->_getParam("pid"));
+         // $nota= base64_decode($this->_getParam("nota"));
+        $peridSession= $this->sesion->period->perid;
 
-      	$this->view->cursito = $curso;
-      	$this->view->eid = $eid;
-        $this->view->oid = $oid;
-        $this->view->subid = $subid;
-   }
+      	$request = array(   'eid' => base64_encode($eid),
+                            'oid' => base64_encode($oid),
+                            'perid' => base64_encode($peridSession),
+                            'pid' => base64_encode($pid),
+                            'uid' => base64_encode($uid),
+                            'escid' => base64_encode($escid),
+                            'subid' => base64_encode($subid),
+                            'curid' => base64_encode($curid));
+
+        require_once 'Zend/Loader.php';
+        Zend_Loader::loadClass('Zend_Rest_Client');
+
+        $base_url = 'http://api.undac.edu.pe:8080/';
+        $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/pending_validate';
+        $client = new Zend_Rest_Client($base_url);
+        $httpClient = $client->getHttpClient();
+        $httpClient->setConfig(array("timeout" => 30000));
+        $response = $client->restget($endpoint,$request);
+        $lista=$response->getBody();
+
+        if ($lista){
+            $data = Zend_Json::decode($lista);
+        }
+        $this->view->data=$data;
+    }
 
     public function saveAction(){
         $this->_helper->layout()->disableLayout();
@@ -301,43 +337,117 @@ class Register_ValidationController extends Zend_Controller_Action
     }
 
     public function printAction(){
-            // $this->_helper->layout()->disableLayout();
+        $this->_helper->layout()->disableLayout();
 
-            $eid= $this->sesion->eid;
-            $oid= $this->sesion->oid;
+        $eid= $this->sesion->eid;
+        $oid= $this->sesion->oid;
 
-            $uid = $this->_getParam("uid");
-            $pid = $this->_getParam("pid");
-            $escid = $this->_getParam("escid");
-            $subid = $this->_getParam("subid");
-            $perid = $this->_getParam("perid");
-             //$curid = $this->_getParam("curid");
-             //echo $perid;
+        $uid = base64_decode($this->_getParam("uid"));
+        $pid = base64_decode($this->_getParam("pid"));
+        $escid = base64_decode($this->_getParam("escid"));
+        $subid = base64_decode($this->_getParam("subid"));
+        $perid = base64_decode($this->_getParam("perid"));
 
-            $this->view->uid = $uid;
-            $this->view->pid = $pid;
-            $this->view->perid = $perid;
-            $this->view->pid = $pid;
-            $this->view->escid = $escid;
-            $this->view->subid = $subid;
-            $this->view->eid = $eid;
-            $this->view->oid = $oid;
-            $print['eid']=$eid;
-            $print['oid']=$oid;
-            $print['perid']=$perid;
-            $print['uid']=$uid;
-            $print['escid']=$escid;
-            $print['subid']=$subid;
+        $this->view->perid=$perid;
+        $this->view->perid=$perid;
+        //$curid = $this->_getParam("curid");
+        //echo $perid;
+        $print['eid']=$eid;
+        $print['oid']=$oid;
+        $print['perid']=$perid;
+        $print['uid']=$uid;
+        $print['escid']=$escid;
+        $print['subid']=$subid;
 
+        $dblistarconvalidacion = new Api_Model_DbTable_Registrationxcourse();
+        $convalidados = $dblistarconvalidacion->_getFilter($print);
 
-              $dblistarconvalidacion = new Api_Model_DbTable_Registrationxcourse();
-              $convalidados = $dblistarconvalidacion->_getFilter($print);
+        if ($convalidados) {
+            $read=array('eid'=>$eid,'oid'=>$oid,'curid'=>$info['curid'],'escid'=>$escid,'subid'=>$subid);
+            foreach ($convalidados as $g => $info) {
+                $read['curid']=$info['curid'];
+                $read['courseid']=$info['courseid'];
+                $dbcourse = new Api_Model_DbTable_Course();
+                $datainfo = $dbcourse->_getFilter($read);
+                $convalidados[$g]['namecourse'] = $datainfo[0]['name'];
+            }
+        }
 
-              $this->view->cursosconvalidados = $convalidados;
+        $where['eid']=$eid;
+        $where['oid']=$oid;
+        $where['escid']=$escid;
+        $where['subid']=$subid;
 
-          }
+        $spe=array();
+        $dbspeciality = new Api_Model_DbTable_Speciality();
+        $speciality = $dbspeciality ->_getOne($where);
+        $parent=$speciality['parent'];
+        $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+        $parentesc= $dbspeciality->_getOne($wher);
+        if ($parentesc) {
+            $pala='ESPECIALIDAD DE ';
+            $spe['esc']=$parentesc['name'];
+            $spe['parent']=$pala.$speciality['name'];
+        }
+        else{
+            $spe['esc']=$speciality['name'];
+            $spe['parent']='';
+        }
+        $names=strtoupper($spe['esc']);
+        $namep=strtoupper($spe['parent']);
+        $namefinal=$names." <br> ".$namep;
 
-  public function updateAction(){
+        $whered['eid']=$eid;
+        $whered['oid']=$oid;
+        $whered['facid']= $speciality['facid'];
+        $dbfaculty = new Api_Model_DbTable_Faculty();
+        $faculty = $dbfaculty ->_getOne($whered);
+        $namef = strtoupper($faculty['name']);
+
+        $wheres=array('eid'=>$eid,'pid'=>$pid);
+        $dbperson = new Api_Model_DbTable_Person();
+        $person= $dbperson ->_getOne($wheres);
+
+        $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+
+        $dbimpression = new Api_Model_DbTable_Countimpressionall();
+
+        $uidim=$this->sesion->pid;
+
+        $data = array(
+            'eid'=>$eid,
+            'oid'=>$oid,
+            'uid'=>$uid,
+            'escid'=>$escid,
+            'subid'=>$subid,
+            'pid'=>$pid,
+            'type_impression'=>'registro_notas_'.$perid,
+            'date_impression'=>date('Y-m-d H:i:s'),
+            'pid_print'=>$uidim
+            );
+        $dbimpression->_save($data);
+
+        $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'registro_notas_'.$perid);
+        $dataim = $dbimpression->_getFilter($wheri);
+
+        $co=count($dataim);
+        $codigo=$co." - ".$uidim;
+
+        $header=$this->sesion->org['header_print'];
+        $footer=$this->sesion->org['footer_print'];
+        $header = str_replace("?facultad",$namef,$header);
+        $header = str_replace("?escuela",$namefinal,$header);
+        $header = str_replace("?logo", $namelogo, $header);
+        $header = str_replace("?codigo", $codigo, $header);
+
+        $this->view->uid=$uid;
+        $this->view->person=$person;
+        $this->view->header=$header;
+        $this->view->footer=$footer;
+        $this->view->cursosconvalidados = $convalidados;
+    }
+
+    public function updateAction(){
       try {
             $eid= $this->sesion->eid;
             $oid= $this->sesion->oid;

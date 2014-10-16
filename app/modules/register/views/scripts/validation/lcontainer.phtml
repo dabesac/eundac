@@ -2,15 +2,17 @@
 if ($this->data) {
     if ($this->msg!='1') {   ?>
         <div class="row">
+            <?php
+            if ($this->notcurid!='1') {    ?>
             <div class="col-md-12">
                 <div class="col-md-4 text-center">Curso <br>
                     <select name="courseid" id="courseid" class='form-control'>
-                        <option value="">- Seleccione un Curso-</option>
+                        <option value="">- Seleccione un Curso -</option>
                         <?php
-                            foreach ($this->data as $i => $datas) { ?>
-                                <option value="<?php echo $datas['courseid'].'|'.$datas['semid'].'|'.$datas['credits'].'|'.$datas['curid'].'|'.$datas['type']?>"><?php echo $datas['courseid']." | ".$datas['name']?></option>
-                            <?php
-                            }
+                        foreach ($this->data as $i => $datas) { ?>
+                            <option value="<?php echo $datas['courseid'].'|'.$datas['semid'].'|'.$datas['credits'].'|'.$datas['curid'].'|'.$datas['type']?>"><?php echo $datas['courseid']." | ".$datas['name']?></option>
+                        <?php
+                        }
                         ?>
                     </select>
                 </div>
@@ -23,11 +25,45 @@ if ($this->data) {
                     <input id='resolution' name='resolution' type="text" class="form-control">
                 </div>
             </div>
-            <input id='pid' class='hidden' type="text" name="pid" value="<?php echo base64_encode($this->pid)?>">
-            <input id='ofuid' class='hidden' type="text" name="uid" value="<?php echo base64_encode($this->uid)?>">
-            <input id='escid' class='hidden' type="text" name="escid" value="<?php echo base64_encode($this->escid)?>">
-            <input id='subid' class='hidden' type="text" name="subid" value="<?php echo base64_encode($this->subid)?>">
-            <input id='perid' class='hidden' type="text" name="perid" value="<?php echo base64_encode($this->perid)?>">
+            <?php
+            }
+            else{   ?>
+            <div class="col-md-12">
+                <div class="col-md-4 col-md-offset-2 text-center">Currícula <br>
+                    <select name="valcurid" id="valcurid" class="form-control">
+                        <option value="">- Seleccione una Currícula-</option>
+                        <?php
+                        foreach ($this->curriculas as $k => $datacuri) {    ?>
+                            <option value="<?php echo base64_encode($datacuri['curid'])?>"><?php echo $datacuri['name']?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="col-md-4 text-center">Curso
+                    <select name="courseid" id="courseid" class='form-control'>
+                        <option value="">- Primero eliga una Currícula -</option>
+                    </select>
+                </div>
+            </div><br><br><br><br>
+            <div class="col-md-12">
+                <div class="col-md-2 col-md-offset-2 text-center">Nota <br>
+                    <div style='width:60px; margin-left:17px;'>
+                        <input id='nota' name='nota' type="text" class='form-control text-center' maxlength="2">
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">Resolución <br>
+                    <input id='resolution' name='resolution' type="text" class="form-control">
+                </div>
+            </div>
+            <?php
+            }
+            ?>
+        <input id='pid' class='hidden' type="text" name="pid" value="<?php echo base64_encode($this->pid)?>">
+        <input id='ofuid' class='hidden' type="text" name="uid" value="<?php echo base64_encode($this->uid)?>">
+        <input id='escid' class='hidden' type="text" name="escid" value="<?php echo base64_encode($this->escid)?>">
+        <input id='subid' class='hidden' type="text" name="subid" value="<?php echo base64_encode($this->subid)?>">
+        <input id='perid' class='hidden' type="text" name="perid" value="<?php echo base64_encode($this->perid)?>">
         </div>
     <?php
     }
@@ -47,10 +83,28 @@ else{   ?>
 <?php
 }
 ?>
+
 <script type="text/javascript" src="/js/notes/jquery.jstepper.js"></script>
 <script type="text/javascript">
 $("#nota").jStepper({minValue:-3, maxValue:20, minLength:2});
 $(function(){
+    $("#resolution").keyup(function(){
+        var r = $(this).val();
+        $("#resolution").val(r.toUpperCase());
+    });
+
+    $("#valcurid").change(function(){
+        var curid=$(this).val();
+        var pid = $("#pid").val();
+        var uid = $("#ofuid").val();
+        var escid = $("#escid").val();
+        var subid = $("#subid").val();
+
+        var url=('/register/validation/coursexcurricula/curid/'+curid+'/pid/'+pid+'/uid/'+uid+'/escid/'+escid+'/subid/'+subid);
+        $("#courseid").html('<option value="">Cargando cursos permitidos...</option>');
+        $("#courseid").load(url);
+    });
+
     $("#savecoursec").on('click', function(){
         var valcourseid=$("#courseid").val();
         var valnota=$("#nota").val();
@@ -109,11 +163,30 @@ $(function(){
             data: params,
             success: function(data) {
                 if (data.status==true) {
+                    $("#smsError").html('<center><h3><span class="text-success glyphicon glyphicon-ok-circle"></span><b class="text-success"> Se guardado con Éxito</b></h3></center>');
                     $("#addCourseModal").modal('hide');
+
+                    $('#addCourseModal').on('hidden.bs.modal', function (e) {
+                        $("#mensajeGuardado").modal('show');
+                    });
+
+                    // $('#mensajeGuardado').on('hidden.bs.modal', function (e) {
+                    //     $("#viewcoursesModal").modal('show');
+                    //     var url='/register/validation/viewallcourses/pid/'+pid+'/uid/'+uid+'/escid/'+escid+'/subid/'+subid+'/perid/'+perid;
+                    //     $("#loadallInfo").html('<center class="text-muted"><img src="/img/spinner.gif" /> Cargando Cursos</center>');
+                    //     $("#loadallInfo").load(url);
+                    // });
+                }
+                else{
+                    $("#smsError").html('<center><h3><span class="text-success glyphicon glyphicon-ok-circle"></span><b class="text-success"> Hubo un problema al guardar...</b></h3></center>');
                 };
             }
         });
 
+    });
+
+    $("#closemodalmensaje").on('click', function(){
+        $("mensajeGuardado").modal('hide');
     });
 });
 </script>

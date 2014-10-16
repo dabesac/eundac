@@ -41,7 +41,7 @@ if ($this->usuario) {
                     <div id='loadInfo' class="modal-body">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Cerrar</button>
+                        <button id='closemodal' type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Cerrar</button>
                         <button id='savecoursec' type="button" class="btn btn-success"><span class='glyphicon glyphicon-save'></span> Guardar</button>
                     </div>
                 </div>
@@ -80,6 +80,17 @@ else{   ?>
 <?php
 }
 ?>
+<!-- Modal -->
+<div class="modal fade" id="mensajeGuardado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style='width:40%'>
+        <div class="modal-content">
+            <div id='smsError' class="modal-body"></div>
+            <div class="modal-footer">
+                <button id='closemodalmensaje' type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
 $(function(){
     $("#addCourses").on('click', function(){
@@ -107,6 +118,10 @@ $(function(){
         var url='/register/validation/viewallcourses/pid/'+pid+'/uid/'+uid+'/escid/'+escid+'/subid/'+subid+'/perid/'+perid;
         $("#loadallInfo").html('<center class="text-muted"><img src="/img/spinner.gif" /> Cargando Cursos</center>');
         $("#loadallInfo").load(url);
+    });
+
+    $("#closemodal").on('click', function(){
+        $("addCourseModal").modal('hide');
     });
 });
 </script>

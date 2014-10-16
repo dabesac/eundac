@@ -14,8 +14,8 @@
                             <option value="">- Seleccione Asignatura -</option>
                             <?php
                             foreach ($this->cursos as $cursos) {
-                                if ($cursos['no_apto']==1) {    ?>
-                                    <option class='text-danger' value="<?php echo $cursos['courseid']."--".$cursos['curid']."--".$cursos['semid']."--".$cursos['credits']?>"><?php echo $cursos['courseid']." | ".$cursos['name']." - Créditos: ".$cursos['credits']?></option>
+                                if (!$cursos['no_apto']==1) {    ?>
+                                    <!-- <option class='text-danger' value="<?php echo $cursos['courseid']."--".$cursos['curid']."--".$cursos['semid']."--".$cursos['credits']?>"><?php echo $cursos['courseid']." | ".$cursos['name']." - Créditos: ".$cursos['credits']?></option> -->
                                 <?php
                                 }
                                 else{   ?>

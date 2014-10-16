@@ -1,5 +1,12 @@
 <?php
 if ($this->cursosconvalidados) {    ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-1 col-md-offset-10">
+                <a href='/register/validation/print/escid/<?php echo base64_encode($this->escid)?>/subid/<?php echo base64_encode($this->subid)?>/uid/<?php echo base64_encode($this->uid)?>/pid/<?php echo base64_encode($this->pid)?>/perid/<?php echo base64_encode($this->perid)?>' id='printAllcourses' class="btn btn-default"><span class='glyphicon glyphicon-print'></span> Imprimir</a>
+            </div>
+        </div>
+    </div><br>
     <table class="table table-condensed table-bordered table-hover">
         <tr class="active">
             <th class='text-center'>#</th>
@@ -34,3 +41,19 @@ else{   ?>
 <?php
 }
 ?>
+<script type="text/javascript">
+$(function() {
+    $("#printAllcourses").hover(
+        function(){
+            $("#printAllcourses").css("background-color","#5CB85C");
+            $("#printAllcourses").css("border-color","#4CAE4C");
+            $("#printAllcourses").css("color","#FFF");
+        },
+        function(){
+            $("#printAllcourses").css("background-color","#FFF");
+            $("#printAllcourses").css("border-color","#CCC");
+            $("#printAllcourses").css("color","#333");
+        }
+    );
+});
+</script>
