@@ -186,31 +186,38 @@
                 $dataDocente[$cTeachers]['nameSchool'] = $nameSchool[0]['name'];
 
                 //verificar a que escuela pertenece
-                $where = array( 'eid'   => $eid,
+                /*$where = array( 'eid'   => $eid,
                                 'oid'   => $oid,
                                 'pid'   => $teacher['pid'],
-                                'uid'   => $teacher['uid'] );
+                                'uid'   => $teacher['uid'],
+                                'state' => 'A' );
                 $attrib = array('escid');
                 $preDataUser = $userDb->_getFilter($where, $attrib);
-
-                $dataDocente[$cTeachers]['escidOrigen'] = $preDataUser[0]['escid'];
-
-                //verificar el Informe Academico
-                $where = array( 'eid'   => $eid,
-                                'oid'   => $oid,
-                                'escid' => $preDataUser[0]['escid'],
-                                'subid' => $teacher['subid'],
-                                'uid'   => $teacher['uid'],
-                                'pid'   => $teacher['pid'],
-                                'perid' => $perid );
-                $attrib = array('state');
-                $preDataReport = $academicReportDb->_getFilter($where, $attrib);
-
-                $dataDocente[$cTeachers]['stateReport'] = 'no';
-                if ($preDataReport[0]['state'] and $preDataReport[0]['state'] == 'C') {
-                    $dataDocente[$cTeachers]['stateReport'] = 'yes';
+                if (!$preDataUser) {
+                    print_r($where);
                 }
 
+                $dataDocente[$cTeachers]['escidOrigen'] = $preDataUser[0]['escid'];*/
+
+                //verificar el Informe Academico
+                /*'escid' => $preDataUser[0]['escid'],
+                'subid' => $teacher['subid'],*/
+                $dataDocente[$cTeachers]['reportId'] = base64_encode(   $teacher['pid'].'|'.
+                                                                        $teacher['uid'].'|'.
+                                                                        $perid );
+
+                $where = array( 'eid'   => $eid,
+                                'oid'   => $oid,
+                                'uid'   => $teacher['uid'],
+                                'pid'   => $teacher['pid'],
+                                'perid' => $perid,
+                                'state' => 'C' );
+                $preDataReport = $academicReportDb->_getFilter($where);
+
+                $dataDocente[$cTeachers]['stateReport'] = 'no';
+                if ($preDataReport) {
+                    $dataDocente[$cTeachers]['stateReport'] = 'yes';
+                }
 
                 $pidTeacher = $teacher['pid'];
                 $cTeachers++;
