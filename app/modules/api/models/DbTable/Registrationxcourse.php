@@ -15,7 +15,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 				print "Error: Registration ".$e->getMessage();
 		}
 	}
-	
+
 	public function _update($data,$pk){
 		try {
 				if ($pk['eid']=='' || $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' || $pk['courseid']=='' || $pk['curid']=='' || $pk['perid']=='' || $pk['regid']=='' || $pk['pid']=='' || $pk['uid']=='') return false;
@@ -32,7 +32,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		try{
 
 			if ($pk['eid']=='' ||  $pk['oid']=='' || $pk['escid']=='' || $pk['subid']=='' ||
-				 $pk['regid']=='' || $pk['pid']=='' || $pk['uid']=='' || 
+				 $pk['regid']=='' || $pk['pid']=='' || $pk['uid']=='' ||
 				$pk['perid']=='') return false;
 			$where = "eid = '".$pk['eid']."' and pid='".$pk['pid']."' and oid = '".$pk['oid']
 			."' and escid = '".$pk['escid']."' and uid = '".$pk['uid']."' and subid = '"
@@ -69,22 +69,22 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 			print "Error: Update State Registration Course".$e->getMessage();
 		}
 	}
-	
 
-	
+
+
 	public function _delete($data=array())
 	{
 		try{
-			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']=='' 
-				|| $data['courseid']=='' || $data['curid']=='' || $data['regid']=='' 
-				|| $data['turno']=='' || $data['pid']=='' || $data['uid']=='' 
+			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']==''
+				|| $data['courseid']=='' || $data['curid']=='' || $data['regid']==''
+				|| $data['turno']=='' || $data['pid']=='' || $data['uid']==''
 				|| $data['perid']=='') return false;
 			// print_r($data); exit();
 			$where = "eid = '".$data['eid']."' and pid='".$data['pid']."' and oid = '".$data['oid'].
 			"' and escid = '".$data['escid']."' and uid = '".$data['uid']."' and subid = '".
 			$data['subid']."' and regid = '".$data['regid']."' and perid = '".
 			$data['perid']."' and turno = '".$data['turno']."' and curid = '".
-			$data['curid']."' and courseid = '".$data['courseid']."'";			
+			$data['curid']."' and courseid = '".$data['courseid']."'";
 			return $this->delete($where);
 			return false;
 		}catch (Exception $e){
@@ -94,8 +94,8 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 
 	public function _deleteAll($data=array()){
 		try {
-			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']=='' 
-				|| $data['regid']=='' || $data['pid']=='' || $data['uid']=='' 
+			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']==''
+				|| $data['regid']=='' || $data['pid']=='' || $data['uid']==''
 				|| $data['perid']=='') return false;
 
 			$where = "eid = '".$data['eid']."' and pid='".$data['pid']."' and oid = '".$data['oid'].
@@ -106,9 +106,9 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 			return $this->delete($where);
 			return false;
 
-			
+
 		} catch (Exception $e) {
-			
+
 		}
 	}
 
@@ -123,8 +123,8 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 			print "Error: Update State Registration Course".$e->getMessage();
 		}
 	}
-	
-	
+
+
 	public function _getOne($where=array()){
 		try{
 			if ($where['eid']=='' ||  $where['oid']=='' || $where['escid']=='' || $where['subid']=='' || $where['courseid']=='' || $where['curid']=='' || $where['regid']=='' || $where['turno']=='' || $where['pid']=='' || $where['uid']=='' || $where['perid']=='') return false;
@@ -138,7 +138,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	}
 
 
-	
+
  	public function _getFilter($where=null,$attrib=null,$orders=null){
  		try {
  			if($where['eid']=='' || $where['oid']=='') return false;
@@ -165,14 +165,14 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	public function _getAll($where=null,$order='',$start=0,$limit=0){
 		try {
 
-			if ($where['eid']=='' ||  $where['oid']=='' || $where['escid']=='' || $where['subid']=='' 
+			if ($where['eid']=='' ||  $where['oid']=='' || $where['escid']=='' || $where['subid']==''
 				|| $where['curid']=='' || $where['regid']=='' || $where['pid']=='' || $where['uid']=='' || $where['perid']=='') $wherestr=null;
 			else{
 
 			$wherestr = "eid = '".$where['eid']."' and pid='".$where['pid']."' and oid = '".
-				$where['oid']."' and escid = '".$where['escid']."' and uid = '".$where['uid']."' 	
+				$where['oid']."' and escid = '".$where['escid']."' and uid = '".$where['uid']."'
 				and subid = '".$where['subid']."' and perid = '".$where['perid']."' and curid = '"
-				.$where['curid']."'"; 
+				.$where['curid']."'";
 			}
 			// print_r($wherestr); exit();
 
@@ -182,16 +182,16 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 			$rows = $this->fetchAll($wherestr,$order,$start,$limit);
 			if($rows) return $rows->toArray();
 			return false;
-			
+
 		} catch (Exception $e) {
 			print "Error: Read All Registration Subject".$e->getMessage();
 		}
 	}
-			
+
 
 	     public function _updatestr($data, $str)
 	    {
-		    try{  
+		    try{
 	        	if ($data=="") return false;
 	            return $this->update($data, $str); }
 		    catch (Exception $ex){
@@ -213,7 +213,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 				->where('rc.courseid = ?', $where['courseid'])->where('rc.turno = ?', $where['turno'])
 				->where('rc.state = ?','M')
 				->order('p.last_name0');
-			$results = $select->query();			
+			$results = $select->query();
 			$rows = $results->fetchAll();
 			if($rows) return $rows;
 			return false;
@@ -230,14 +230,14 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 				select p.last_name0 || ' ' || p.last_name1 || ', '|| p.first_name as name_complet, rc.*from base_person p
 				inner join base_registration_course rc
 				on rc.pid=p.pid and p.eid=rc.eid
-				where 
+				where
 				rc.eid='".$where['eid']."' and rc.oid='".$where['oid']."' and
 				rc.subid='".$where['subid']."' and rc.escid='".$where['escid']."' and
 				rc.curid ='".$where['curid']."' and rc.perid='".$where['perid']."' and
 				rc.courseid='".$where['courseid']."' and rc.turno='".$where['turno']."' and
 				rc.state='M'
 				order by name_complet
-			");			
+			");
 			$rows = $results->fetchAll();
 			if($rows) return $rows;
 			return false;
@@ -246,29 +246,49 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		}
 	}
 
+    public function _getCoursesPerCurriculum($data = null){
+        try {
+            if ($data['escid'] == '' || $data['uid'] == '' || $data['curid'] == '') return false;
+            $results = $this->_db->query("
+                select * from courses_pending_wjrs('".$data['escid']."', '".$data['uid']."', '".$data['curid']."')".'
+                AS
+                (
+                  "courseid" character varying,
+                  "name" character varying,
+                  "semid" integer,
+                  "credits" double precision,
+                  "veces" integer
+                )');
+            $rows = $results->fetchAll();
+            if ($rows) return $rows;
+            return false;
+        } catch (Exception $e) {
+            print "Error: Read Courses per Curriculum... ".$e->getMessage();
+        }
+    }
 	   /*Devuelve el record segun la funcion Record de Notas */
     public function _getRecordNotasAlumno($escid,$uid,$eid,$oid,$subid,$pid){
-         try{    
+         try{
             $sql = $this->_db->query("
-            	                
-                select * from record_notes('$escid','$uid','$eid','$oid','$subid','$pid') AS 
+
+                select * from record_notes('$escid','$uid','$eid','$oid','$subid','$pid') AS
                 (
                     ".'escid'." character varying,
                     ".'regid'." character varying,
                     ".'perid'." character varying,
                     ".'courseid'." character varying,
-                    ".'turno'." character varying, 
+                    ".'turno'." character varying,
                     ".'name'." character varying,
                     ".'nota'." character varying,
                     ".'semid'." integer,
                     ".'curid'." character varying,
                     ".'creditos'." double precision,
                     ".'requisito'." character varying
-                    )               
+                    )
                 ");
             // print_r($sql);
             if ($sql) return $sql->fetchAll();
-            return false;           
+            return false;
         }  catch (Exception $ex){
             print "Error: Obteniendo datos de tabla 'Matricula Curso'".$ex->getMessage();
         }
@@ -282,9 +302,9 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     				 select c.semid, c.name,rc.regid,rc.courseid, rc.curid, rc.perid, rc.turno, rc.notafinal as nota,
 						c.credits as creditos
 					from base_registration_course rc, base_courses c
-					where 
-					rc.eid=c.eid and rc.oid=c.oid and rc.escid=c.escid and rc.subid=c.subid 
-    				and rc.courseid = c.courseid and rc.curid=c.curid and 
+					where
+					rc.eid=c.eid and rc.oid=c.oid and rc.escid=c.escid and rc.subid=c.subid
+    				and rc.courseid = c.courseid and rc.curid=c.curid and
 					rc.uid='$uid' and rc.escid='$escid' and rc.pid='$pid' and rc.subid='$subid'
 					and rc.eid='$eid' and rc.oid='$oid' and (rc.state='M' or rc.state='C')
 					order by c.semid, c.courseid, c.name
@@ -297,7 +317,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     	}
     	}
     /*
-     * 
+     *
      * */
     public function _getInfoCourse($where=null,$attrib=null,$order=null){
 		try {
@@ -320,7 +340,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
                    // if ($where['eid']=='' || $where['oid']==''  || $where['courseid']=='' || $where['curid']=='' || $where['perid']=='' || $where['escid']=='' || $where['subid']=='' || $where['turno']) return false;
 
             $wherestr = "eid = '".$where['eid']."' and oid='".$where['oid']."' and courseid = '".$where['courseid']."'
-             and curid = '".$where['curid']."' and perid = '".$where['perid']."' and escid = '".$where['escid']."'  
+             and curid = '".$where['curid']."' and perid = '".$where['perid']."' and escid = '".$where['escid']."'
              and subid = '".$where['subid']."'  and turno = '".$where['turno']."' and  (state = 'M' or state = 'C')";
 
             $r = $this->fetchAll($wherestr);
@@ -329,13 +349,13 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
          }  catch (Exception $ex){
              print "Error en retornar la cantidad de alumnos matriculados".$ex->getMessage();
          }
-    } 
+    }
       /* Retorna la cantidad de alumnos prematriculados deacuerdo a la escuela, curso, turno */
     public function _getCantiPreResgistration($where=null){
          try{
              // if ($where['eid']=='' || $where['oid']==''|| $where['courseid']==''||$where['curid']==''||$where['perid']==''||$where['escid']==''||$where['subid']==''||$where['turno']=='') return false;
             $wherestr = "eid = '".$where['eid']."' and oid='".$where['oid']."' and courseid = '".$where['courseid']."'
-             and curid = '".$where['curid']."' and perid = '".$where['perid']."' and escid = '".$where['escid']."'  
+             and curid = '".$where['curid']."' and perid = '".$where['perid']."' and escid = '".$where['escid']."'
              and subid = '".$where['subid']."'  and turno = '".$where['turno']."' and  (state = 'I')";
 
             $r = $this->fetchAll($wherestr);
@@ -344,16 +364,16 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
          }  catch (Exception $ex){
              print "Error en retornar la cantidad de alumnos Pre matriculados";
          }
-     } 
+     }
 
 
     public function _getCountRegisterCourse($where=null){
     	try{
-    		
-    		if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where['curid']=="" || 
+
+    		if ($where['eid']=='' || $where['oid']=='' || $where['perid']=='' || $where['curid']=="" ||
     			$where['escid']=="" || $where['courseid']=='' || $where['turno']==''|| $where['subid']=='') return false;
-    		$sql= "eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."' 
-    				and subid = '".$where['subid']."' and perid = '".$where['perid']."' and turno = '".$where['turno']."' 
+    		$sql= "eid = '".$where['eid']."' and oid = '".$where['oid']."' and escid = '".$where['escid']."'
+    				and subid = '".$where['subid']."' and perid = '".$where['perid']."' and turno = '".$where['turno']."'
     				and curid = '".$where['curid']."' and courseid = '".$where['courseid']."' and state='M'";
     		$rows = $this->fetchAll($sql);
     		if($rows) return count($rows->toArray());
@@ -370,11 +390,11 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	    	if ($where['eid']== '' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
 	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
 	    	$sql = $this->_db->query("
-						select count(*) from base_registration_course 
+						select count(*) from base_registration_course
                         where eid='".$where['eid']."' and oid='".$where['oid']."' and
-                         perid='".$where['perid']."' and curid='".$where['curid']."' and 
-                         escid='".$where['escid']."' and courseid='".$where['courseid']."' and 
-                         turno='".$where['turno']."' and subid='".$where['subid']."' 
+                         perid='".$where['perid']."' and curid='".$where['curid']."' and
+                         escid='".$where['escid']."' and courseid='".$where['courseid']."' and
+                         turno='".$where['turno']."' and subid='".$where['subid']."'
                         AND state='M'
                     ");
 
@@ -383,7 +403,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 
 	    } catch (Exception $e) {
     		print " Error : _get_total_students_x_course ".$ex->getMessage();
-	 	   	
+
 	    }
     }
 
@@ -392,27 +412,27 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	    try {
 	    	if ($where['eid']=='' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
 	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
-	    	
+
 	    	$sql = $this->_db
                     ->query("
                             select count(*) from base_registration_course AS MC
 							inner join base_registration as m
-							 on mc.regid=m.regid and mc.pid =m.Pid and mc.escid=m.escid and 
+							 on mc.regid=m.regid and mc.pid =m.Pid and mc.escid=m.escid and
 							 mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and mc.oid=m.oid
-							  and mc.subid=m.subid 
-							  where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and 
-							  MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."' and MC.escid='".$where['escid']."' and 
-							  MC.courseid='".$where['courseid']."' and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' 
-							 AND MC.state='M' 
-							and (cast((case when notafinal='' or notafinal is null then '0' else 
-							notafinal end) as integer)>10)        
+							  and mc.subid=m.subid
+							  where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and
+							  MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."' and MC.escid='".$where['escid']."' and
+							  MC.courseid='".$where['courseid']."' and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."'
+							 AND MC.state='M'
+							and (cast((case when notafinal='' or notafinal is null then '0' else
+							notafinal end) as integer)>10)
                     ");
                 if ($sql) return $sql->fetchAll();
             return false;
 
 	    } catch (Exception $e) {
     		print " Error :  _get_disapproved_x_course".$ex->getMessage();
-	 	   	
+
 	    }
     }
 
@@ -421,30 +441,30 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	    try {
 	    	if ($where['eid']=='' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
 	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
-	    	
+
 	    	$sql = $this->_db
                     ->query("
                             select count(*) from base_registration_course AS MC
 							inner join base_registration as m
 							on mc.regid=m.regid and mc.pid =m.Pid and mc.escid=m.escid and
-							 mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and 
+							 mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and
 							 mc.oid=m.oid and mc.subid=m.subid
-							where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and MC.perid='".$where['perid']."' and 
+							where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and MC.perid='".$where['perid']."' and
 							MC.curid='".$where['curid']."' and MC.escid='".$where['escid']."' and MC.courseid='".$where['courseid']."'
-							and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."'  AND MC.state='M' and 
+							and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."'  AND MC.state='M' and
 							(cast((case when notafinal='' or notafinal is null then '0'
-							 else notafinal end) as integer)<=10) and not (cast((case when 
-							 notafinal='' or notafinal is null then '0' else notafinal end) 
-							 as integer)=-3) and not (cast((case when 
-							 notafinal='' or notafinal is null then '0' else notafinal end) 
-							 as integer)=-2)              
+							 else notafinal end) as integer)<=10) and not (cast((case when
+							 notafinal='' or notafinal is null then '0' else notafinal end)
+							 as integer)=-3) and not (cast((case when
+							 notafinal='' or notafinal is null then '0' else notafinal end)
+							 as integer)=-2)
                     ");
                 if ($sql) return $sql->fetchAll();
             return false;
 
 	    } catch (Exception $e) {
     		print " Error :  _get_disapproved_x_course".$ex->getMessage();
-	 	   	
+
 	    }
     }
 
@@ -453,26 +473,26 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	    try {
 	    	if ($where['eid']=='' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
 	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
-	    	
+
 	    	$sql = $this->_db
                     ->query("
                    		select count(*) from base_registration_course AS MC
 						inner join base_registration as m
-						on mc.regid=m.regid and mc.pid =m.Pid and mc.escid=m.escid and 
-						mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and mc.oid=m.oid and 
-						mc.subid=m.subid 
-						where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and 
+						on mc.regid=m.regid and mc.pid =m.Pid and mc.escid=m.escid and
+						mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and mc.oid=m.oid and
+						mc.subid=m.subid
+						where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and
 						MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."'
 					    and MC.escid='".$where['escid']."' and MC.courseid='".$where['courseid']."'
-					    and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' AND MC.state='M' 
-						and (cast((case when notafinal='' or notafinal is null then '0' else notafinal end) as integer)=-3)  
+					    and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' AND MC.state='M'
+						and (cast((case when notafinal='' or notafinal is null then '0' else notafinal end) as integer)=-3)
                     ");
                 if ($sql) return $sql->fetchAll();
             return false;
 
 	    } catch (Exception $e) {
     		print " Error :  _get_disapproved_x_course".$ex->getMessage();
-	 	   	
+
 	    }
     }
 
@@ -481,18 +501,18 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	    try {
 	    	if ($where['eid']=='' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
 	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
-	    	
+
 	    	$sql = $this->_db
                     ->query("
                          select count(*) from base_registration_course AS MC
 						inner join base_registration as m
-						on mc.regid=m.regid and mc.pid =m.Pid and mc.escid=m.escid and 
-						mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and mc.oid=m.oid and 
-						mc.subid=m.subid 
-						where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and 
+						on mc.regid=m.regid and mc.pid =m.Pid and mc.escid=m.escid and
+						mc.uid=m.uid and mc.perid=m.perid and mc.eid=m.eid and mc.oid=m.oid and
+						mc.subid=m.subid
+						where MC.eid='".$where['eid']."' and MC.oid='".$where['oid']."' and
 						MC.perid='".$where['perid']."' and MC.curid='".$where['curid']."'
 					    and MC.escid='".$where['escid']."' and MC.courseid='".$where['courseid']."'
-					    and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' AND MC.state='M' 
+					    and MC.turno='".$where['turno']."' and MC.subid='".$where['subid']."' AND MC.state='M'
 						and (cast((case when notafinal='' or notafinal is null then '0' else notafinal end) as integer)=-2)
                     ");
                 if ($sql) return $sql->fetchAll();
@@ -500,7 +520,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 
 	    } catch (Exception $e) {
     		print " Error :  _get_disapproved_x_course".$ex->getMessage();
-	 	   	
+
 	    }
     }
 
@@ -508,11 +528,11 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
          try{
 			 $select = $this->_db->select()
 			 	->from(array('mc' => 'base_registration_course'),array('courseid','turno','perid'))
-                ->where("perid != ?", $where['perid'])->where("uid = ?", $where['uid'])->where("notafinal != ?", '-2')->where("notafinal != ?", '-3')->where("state != ?", 'I')->where("state != ?", 'B'); 
-			$results = $select->query();			
+                ->where("perid != ?", $where['perid'])->where("uid = ?", $where['uid'])->where("notafinal != ?", '-2')->where("notafinal != ?", '-3')->where("state != ?", 'I')->where("state != ?", 'B');
+			$results = $select->query();
 			$rows = $results->fetchAll();
 			if($rows) return $rows;
-			return false;	
+			return false;
          }catch (Exception $ex) {
              print $ex->getMessage();
          }
@@ -523,28 +543,28 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
      	try {
      		if ($where['eid']=='' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
 	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
-	    	
+
 	    	$sql = $this->_db
                     ->query("
                          	    select
-		            sum(num_reg) as num_reg, 
-		            sum(nota1_i) as nota1_i, 
-		            sum(nota2_i) as nota2_i, 
-		            sum(nota3_i) as nota3_i, 
-		            sum(nota4_i) as nota4_i, 
-		            sum(nota5_i) as nota5_i, 
-		            sum(nota6_i) as nota6_i, 
-		            sum(nota7_i) as nota7_i, 
-		            sum(nota8_i) as nota8_i, 
+		            sum(num_reg) as num_reg,
+		            sum(nota1_i) as nota1_i,
+		            sum(nota2_i) as nota2_i,
+		            sum(nota3_i) as nota3_i,
+		            sum(nota4_i) as nota4_i,
+		            sum(nota5_i) as nota5_i,
+		            sum(nota6_i) as nota6_i,
+		            sum(nota7_i) as nota7_i,
+		            sum(nota8_i) as nota8_i,
 		            sum(nota9_i) as nota9_i,
-		            sum(nota1_ii) as nota1_ii, 
-		            sum(nota2_ii) as nota2_ii, 
-		            sum(nota3_ii) as nota3_ii, 
-		            sum(nota4_ii) as nota4_ii, 
-		            sum(nota5_ii) as nota5_ii, 
-		            sum(nota6_ii) as nota6_ii, 
-		            sum(nota7_ii) as nota7_ii, 
-		            sum(nota8_ii) as nota8_ii, 
+		            sum(nota1_ii) as nota1_ii,
+		            sum(nota2_ii) as nota2_ii,
+		            sum(nota3_ii) as nota3_ii,
+		            sum(nota4_ii) as nota4_ii,
+		            sum(nota5_ii) as nota5_ii,
+		            sum(nota6_ii) as nota6_ii,
+		            sum(nota7_ii) as nota7_ii,
+		            sum(nota8_ii) as nota8_ii,
 		            sum(nota9_ii) as nota9_ii
 		            from
 		            (
@@ -552,115 +572,115 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 		            (
 		            count(*) -
 		            sum(
-		            CASE 
+		            CASE
 		            WHEN promedio1 = '-3' or promedio1 = '-2' or promedio2 = '-3' or promedio2 = '-2'  THEN 1
 		            ELSE 0
 		            END
 		            )
 		            ) as num_reg ,
 		            sum(
-		            CASE 
+		            CASE
 		            WHEN length(nota1_i) = 0 or nota1_i is null  THEN 0
 		            ELSE 1
-		            END) as nota1_i, 
+		            END) as nota1_i,
 		            sum(
-		            CASE 
+		            CASE
 		            WHEN length(nota2_i) = 0 or nota2_i is null  THEN 0
 		            ELSE 1
-		            END) as nota2_i, 
+		            END) as nota2_i,
 		            sum(
-		            CASE 
+		            CASE
 		            WHEN length(nota3_i) = 0 or nota3_i is null THEN 0
 		            ELSE 1
-		            END) as nota3_i, 
+		            END) as nota3_i,
 		            sum(
-		            CASE 
+		            CASE
 		            WHEN length(nota4_i) = 0 or nota4_i is null THEN 0
 		            ELSE 1
-		            END) as nota4_i, 
+		            END) as nota4_i,
 		            sum(
-		            CASE 
+		            CASE
 		            WHEN length(nota5_i) = 0 or nota5_i is null THEN 0
 		            ELSE 1
-		            END) as nota5_i, 
+		            END) as nota5_i,
 		            sum(
-		            CASE 
+		            CASE
 		            WHEN length(nota6_i) = 0 or nota6_i is null THEN 0
 		            ELSE 1
-		            END) as nota6_i, 
+		            END) as nota6_i,
 		            sum(
-		            CASE 
+		            CASE
 		            WHEN length(nota7_i) = 0 or nota7_i is null THEN 0
 		            ELSE 1
-		            END) as nota7_i, 
+		            END) as nota7_i,
 		            sum(
-		            CASE 
+		            CASE
 		            WHEN length(nota8_i) = 0 or nota8_i is null THEN 0
 		            ELSE 1
-		            END) as nota8_i, 
+		            END) as nota8_i,
 		            sum(
-		            CASE 
+		            CASE
 		            WHEN length(nota9_i) = 0 or nota9_i is null  THEN 0
 		            ELSE 1
 		            END) as nota9_i ,
 		            sum(
-		            CASE 
+		            CASE
 		            WHEN length(nota1_ii) = 0 or nota1_ii is null THEN 0
 		            ELSE 1
-		            END) as nota1_ii, 
+		            END) as nota1_ii,
 		            sum(CASE WHEN length(nota2_ii) = 0 or nota2_ii is null THEN 0
 		            ELSE 1
-		            END) as nota2_ii, 
+		            END) as nota2_ii,
 		            sum(CASE WHEN length(nota3_ii) = 0 or nota3_ii is null THEN 0
 		            ELSE 1
-		            END) as nota3_ii, 
+		            END) as nota3_ii,
 		            sum(CASE WHEN length(nota4_ii) = 0 or nota4_ii is null THEN 0
 		            ELSE 1
-		            END) as nota4_ii, 
+		            END) as nota4_ii,
 		            sum(CASE WHEN length(nota5_ii) = 0 or nota5_ii is null THEN 0
 		            ELSE 1
-		            END) as nota5_ii, 
+		            END) as nota5_ii,
 		            sum(CASE WHEN length(nota6_ii) = 0 or nota6_ii is null THEN 0
 		            ELSE 1
-		            END) as nota6_ii, 
+		            END) as nota6_ii,
 		            sum(CASE WHEN length(nota7_ii) = 0 or nota7_ii is null THEN 0
 		            ELSE 1
-		            END) as nota7_ii, 
+		            END) as nota7_ii,
 		            sum(CASE WHEN length(nota8_ii) = 0 or nota8_ii is null THEN 0
 		            ELSE 1
-		            END) as nota8_ii, 
+		            END) as nota8_ii,
 		            sum(CASE WHEN length(nota9_ii) = 0 or nota9_ii is null THEN 0
 		            ELSE 1
 		            END) as nota9_ii
 		            from base_registration_course
 		            where
-		            curid = '".$where['curid']."' and 
-		            escid = '".$where['escid']."' and 
-		            courseid ='".$where['courseid']."' and 
-		            perid ='".$where['perid']."' and 
-		            turno ='".$where['turno']."' and 
+		            curid = '".$where['curid']."' and
+		            escid = '".$where['escid']."' and
+		            courseid ='".$where['courseid']."' and
+		            perid ='".$where['perid']."' and
+		            turno ='".$where['turno']."' and
 		           	eid = '".$where['eid']."' and
 		           	oid = '".$where['oid']."' and
-		            state = 'M' and  
-		            subid = '".$where['subid']."' 
-		            group by 
-		            nota1_i, 
-		            nota2_i, 
-		            nota3_i, 
-		            nota4_i, 
-		            nota5_i, 
-		            nota6_i, 
-		            nota7_i, 
-		            nota8_i, 
+		            state = 'M' and
+		            subid = '".$where['subid']."'
+		            group by
+		            nota1_i,
+		            nota2_i,
+		            nota3_i,
+		            nota4_i,
+		            nota5_i,
+		            nota6_i,
+		            nota7_i,
+		            nota8_i,
 		            nota9_i,
-		            nota1_ii, 
-		            nota2_ii, 
-		            nota3_ii, 
-		            nota4_ii, 
-		            nota5_ii, 
-		            nota6_ii, 
-		            nota7_ii, 
-		            nota8_ii, 
+		            nota1_ii,
+		            nota2_ii,
+		            nota3_ii,
+		            nota4_ii,
+		            nota5_ii,
+		            nota6_ii,
+		            nota7_ii,
+		            nota8_ii,
 		            nota9_ii
 		            ) temporal
                     ");
@@ -675,21 +695,21 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
      	try {
      		if ($where['eid']=='' || $where['oid']=='' || $where['courseid'] =='' || $where['turno'] =='' ||
 	    		$where['curid']=='' || $where['subid']=='' || $where['perid']=='' || $where['escid']=='') return false;
-	    	
+
 	    	$sql = $this->_db->query("
                 select
-	            sum(num_reg) as num_reg, 
-	            sum(nota1_i) as nota1_i, 
-	            sum(nota2_i) as nota2_i, 
-	            sum(nota3_i) as nota3_i,  
-	            sum(nota6_i) as nota6_i, 
-	            sum(nota7_i) as nota7_i, 
-	            sum(nota8_i) as nota8_i, 
-	            sum(nota1_ii) as nota1_ii, 
-	            sum(nota2_ii) as nota2_ii, 
-	            sum(nota3_ii) as nota3_ii, 
-	            sum(nota6_ii) as nota6_ii, 
-	            sum(nota7_ii) as nota7_ii, 
+	            sum(num_reg) as num_reg,
+	            sum(nota1_i) as nota1_i,
+	            sum(nota2_i) as nota2_i,
+	            sum(nota3_i) as nota3_i,
+	            sum(nota6_i) as nota6_i,
+	            sum(nota7_i) as nota7_i,
+	            sum(nota8_i) as nota8_i,
+	            sum(nota1_ii) as nota1_ii,
+	            sum(nota2_ii) as nota2_ii,
+	            sum(nota3_ii) as nota3_ii,
+	            sum(nota6_ii) as nota6_ii,
+	            sum(nota7_ii) as nota7_ii,
 	            sum(nota8_ii) as nota8_ii
 	            from
 	            (
@@ -697,7 +717,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	            (
 	            count(*) -
 	            sum(
-	            CASE 
+	            CASE
 	            WHEN nota4_i = '-3'  or  nota4_i = '-2'  or  nota4_ii = '-3'  or  nota4_ii = '-2'  THEN 1
 	            ELSE 0
 	            END
@@ -705,63 +725,63 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
 	            ) as num_reg ,
 	            sum(CASE WHEN nota1_i  is null or length(trim(nota1_i,'')) = 0 THEN 0
 	             ELSE 1
-	            END) as nota1_i, 
+	            END) as nota1_i,
 	            sum(CASE WHEN nota2_i  is null or length(trim(nota2_i,'')) = 0 THEN 0
 	             ELSE 1
-	            END) as nota2_i, 
+	            END) as nota2_i,
 	            sum(CASE WHEN nota3_i  is null or length(trim(nota3_i,'')) = 0 THEN 0
 	             ELSE 1
-	            END) as nota3_i, 
+	            END) as nota3_i,
 	            sum(CASE WHEN nota6_i  is null or length(trim(nota6_i,'')) = 0 THEN 0
 	             ELSE 1
-	            END) as nota6_i, 
+	            END) as nota6_i,
 	            sum(CASE WHEN nota7_i  is null or length(trim(nota7_i,'')) = 0 THEN 0
 	             ELSE 1
-	            END) as nota7_i, 
+	            END) as nota7_i,
 	            sum(CASE WHEN nota8_i  is null or length(trim(nota8_i,'')) = 0 THEN 0
 	             ELSE 1
-	            END) as nota8_i, 
+	            END) as nota8_i,
 	            sum(CASE WHEN nota1_ii  is null or length(trim(nota1_ii,'')) = 0 THEN 0
 	             ELSE 1
-	            END) as nota1_ii, 
+	            END) as nota1_ii,
 	            sum(CASE WHEN nota2_ii  is null or length(trim(nota2_ii,'')) = 0 THEN 0
 	             ELSE 1
-	            END) as nota2_ii, 
+	            END) as nota2_ii,
 	            sum(CASE WHEN nota3_ii  is null or length(trim(nota3_ii,'')) = 0 THEN 0
 	             ELSE 1
-	            END) as nota3_ii,  
+	            END) as nota3_ii,
 	            sum(CASE WHEN nota6_ii  is null or length(trim(nota6_ii,'')) = 0 THEN 0
 	             ELSE 1
-	            END) as nota6_ii, 
+	            END) as nota6_ii,
 	            sum(CASE WHEN nota7_ii  is null or length(trim(nota7_ii,'')) = 0 THEN 0
 	             ELSE 1
-	            END) as nota7_ii, 
+	            END) as nota7_ii,
 	            sum(CASE WHEN nota8_ii  is null or length(trim(nota8_ii,'')) = 0 THEN 0
 	             ELSE 1
 	            END) as nota8_ii
 	            from base_registration_course
 	            where
-	            curid = '".$where['curid']."' and 
-	            escid = '".$where['escid']."' and 
-	            courseid ='".$where['courseid']."' and 
-	            perid ='".$where['perid']."' and 
-	            turno ='".$where['turno']."' and 
-	            eid = '".$where['eid']."' and 
+	            curid = '".$where['curid']."' and
+	            escid = '".$where['escid']."' and
+	            courseid ='".$where['courseid']."' and
+	            perid ='".$where['perid']."' and
+	            turno ='".$where['turno']."' and
+	            eid = '".$where['eid']."' and
 	            oid= '".$where['oid']."' and
-	            state = 'M' and  
-	            subid = '".$where['subid']."' 
-	            group by 
-	            nota1_i, 
-	            nota2_i, 
-	            nota3_i, 
-	            nota6_i, 
-	            nota7_i, 
-	            nota8_i, 
-	            nota1_ii, 
-	            nota2_ii, 
-	            nota3_ii,  
-	            nota6_ii, 
-	            nota7_ii, 
+	            state = 'M' and
+	            subid = '".$where['subid']."'
+	            group by
+	            nota1_i,
+	            nota2_i,
+	            nota3_i,
+	            nota6_i,
+	            nota7_i,
+	            nota8_i,
+	            nota1_ii,
+	            nota2_ii,
+	            nota3_ii,
+	            nota6_ii,
+	            nota7_ii,
 	            nota8_ii
 	            ) temporal
                     ");
@@ -798,7 +818,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     		$perid=$where['perid'];
     		$courseid=$where['courseid'];
     		$sql=$this->_db->query("
-    			select * from registration_quantity_repeat('$curid','$courseid','$escid','$perid','$eid','$oid','$subid') AS 
+    			select * from registration_quantity_repeat('$curid','$courseid','$escid','$perid','$eid','$oid','$subid') AS
     			(
     				 ".'uid'." character varying,
     				 ".'veces'." bigint
@@ -821,7 +841,7 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     		$subid=$where['subid'];
     		$curid=$where['curid'];
     		$anio=$where['anio'];
-    		
+
     		$sql=$this->_db->query("
 				select * from disapproved_course_more_50percent_last3('$eid','$oid','$escid','$subid','$curid','$anio') AS
 				(
@@ -846,8 +866,8 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     		$oid=$where['oid'];
     		$escid=$where['escid'];
     		$subid=$where['subid'];
-    		$curid=$where['curid'];    		
-    		
+    		$curid=$where['curid'];
+
     		$sql=$this->_db->query("
     			select * from get_quantity_fail_course_all_students('$eid','$oid','$escid','$subid','$curid') AS
 				(
@@ -873,15 +893,15 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     		$oid=$where['oid'];
     		$escid=$where['escid'];
     		$subid=$where['subid'];
-    		$rid=$where['rid'];    		
-    		
+    		$rid=$where['rid'];
+
     		$sql=$this->_db->query("
     			select u.eid,u.oid,u.uid,u.pid,u.escid,u.subid,u.rid,u.state from base_users as u
 				full outer join base_registration as r
-				on u.eid=r.eid and u.oid=r.oid and u.escid=r.escid and u.subid=r.subid and u.pid=r.pid and 
+				on u.eid=r.eid and u.oid=r.oid and u.escid=r.escid and u.subid=r.subid and u.pid=r.pid and
 				u.uid=r.uid
 				where u.eid='$eid' and u.oid='$oid' and u.escid='$escid' and u.subid='$subid' and u.rid='$rid' and r.regid is null
-				and u.state='A' 
+				and u.state='A'
 				order by u.uid DESC, u.pid
     			");
 

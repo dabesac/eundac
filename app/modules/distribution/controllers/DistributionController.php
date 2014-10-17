@@ -13,9 +13,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
     	}
     	$this->sesion = $login;
     }
-    
+
     public function indexAction()
-    {   
+    {
         try {
             $periodActive = $this->sesion->period->perid;
             $yearActive = substr($periodActive, 0, 2);
@@ -94,7 +94,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
 
         $this->view->dataDocente = $dataDocente;
     }
-    
+
     public function showdistributionAction(){
         try {
             $this->_helper->layout()->disableLayout();
@@ -114,7 +114,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $c = 0;
 
        		$rows_distribution =$distribution->_getDistributionsxYear($data);
-    
+
             $bdhorary = new Api_Model_DbTable_HoursBeginClasses();
             $ldistribution=new Distribution_Model_DbTable_logObsrvationDistribution();
             $i=0;
@@ -130,9 +130,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                     $rows_distribution[$i]['observation']=$dataobs[0]['observation'];
                     //$rows_distribution[$i]['state']=$dataobs[0]['state'];
                 }
-                
+
                 $datahours=$bdhorary->_getFilter($wheres);
-                $rows_distribution[$i]['hours']=$datahours; 
+                $rows_distribution[$i]['hours']=$datahours;
                 $i++;
             }
             // print_r($rows_distribution);
@@ -144,9 +144,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
     }
 
 
-    public function newAction(){    
+    public function newAction(){
         $anio = $this->_getParam('anio');
-        $this->view->anio = $anio;        
+        $this->view->anio = $anio;
         $form = new Distribution_Form_Distribution();
         $this->view->form = $form;
 
@@ -231,7 +231,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                                 'perid'  => $perid,
                                 'anio'   => $anio );
         $this->view->dataforUpdate = $dataforUpdate;
-        
+
         $periodsDb = new Api_Model_DbTable_Periods();
         $distributionDb = new Distribution_Model_DbTable_Distribution();
         $form = new Distribution_Form_Distribution();
@@ -248,7 +248,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
         $form->perid->addMultioption($period[0]['perid'], $period[0]['perid'].' | '.$period[0]['name']);
         $form->perid->setAttrib("disabled", "");
 
-        $where = array( 
+        $where = array(
                         'eid'    => $eid,
                         'oid'    => $oid,
                         'escid'  => $escid,
@@ -256,7 +256,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                         'distid' => $distid,
                         'perid'  => $perid );
         $distribution = $distributionDb->_getOne($where);
-        $this->view->form = $form;      
+        $this->view->form = $form;
         $form->populate($distribution);
 
        //$form->setAction("/distribution/distribution/edit/");
@@ -264,11 +264,11 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $formData = $this->getRequest()->getPost();
             $formData['perid'] = $r['perid'];
             if ($form->isValid($formData)) {
-                $pk = array('eid'=>$data['eid'], 
-                        'oid'=>$data['oid'], 
-                        'distid'=>$data['distid'], 
-                        'escid'=>$data['escid'], 
-                        'subid'=>$data['subid'], 
+                $pk = array('eid'=>$data['eid'],
+                        'oid'=>$data['oid'],
+                        'distid'=>$data['distid'],
+                        'escid'=>$data['escid'],
+                        'subid'=>$data['subid'],
                         'perid'=>$data['perid']);
                 $formData['perid'] = base64_decode($formData['perid']);
                 $formData['modified'] = $this->sesion->uid;
@@ -333,11 +333,11 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             }elseif($formdata['whySubmit'] == 'update'){
                 unset($formdata['whySubmit']);
                 if($formdata['datepress']){
-                    $pk = array(    'eid'    => $eid, 
-                                    'oid'    => $oid, 
-                                    'escid'  => $escid, 
-                                    'subid'  => $subid, 
-                                    'distid' => $formdata['distid'], 
+                    $pk = array(    'eid'    => $eid,
+                                    'oid'    => $oid,
+                                    'escid'  => $escid,
+                                    'subid'  => $subid,
+                                    'distid' => $formdata['distid'],
                                     'perid'  => $formdata['perid'] );
                     unset($formdata['distid']);
                     unset($formdata['perid']);
@@ -355,7 +355,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             }
         }
     }
-    
+
 
     public function deleteAction()
     {
@@ -392,9 +392,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $perid = $this->_getParam("perid"); 
-            $escid = $this->_getParam("escid"); 
-            $subid = $this->_getParam("subid"); 
+            $perid = $this->_getParam("perid");
+            $escid = $this->_getParam("escid");
+            $subid = $this->_getParam("subid");
             $distid = $this->_getParam("distid");
             $this->view->escid=$escid;
             $this->view->subid=$subid;
@@ -416,7 +416,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $wherecourse['escid']=$escid;
                 $wherecourse['subid']=$subid;
                 $cours= new Api_Model_DbTable_Course();
-                for ($i=0; $i < $tam; $i++) { 
+                for ($i=0; $i < $tam; $i++) {
                     $wherecourse['curid']=$courses[$i]['curid'];
                     $wherecourse['courseid']=$courses[$i]['courseid'];
                     $dbcourse=$cours->_getOne($wherecourse);
@@ -477,8 +477,8 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                         );
         }
         $this->_helper->layout()->disablelayout();
-        $this->_response->setHeader('Content-Type', 'application/json');                   
-        $this->view->data = $json; 
+        $this->_response->setHeader('Content-Type', 'application/json');
+        $this->view->data = $json;
     }
 
     public function addcoursesAction(){
@@ -486,9 +486,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $perid = $this->_getParam("perid"); 
-            $escid = $this->_getParam("escid"); 
-            $subid = $this->_getParam("subid"); 
+            $perid = $this->_getParam("perid");
+            $escid = $this->_getParam("escid");
+            $subid = $this->_getParam("subid");
             $distid = $this->_getParam("distid");
             $this->view->perid=$perid;
             $this->view->distid=$distid;
@@ -517,8 +517,8 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $curid = $this->_getParam("curid"); 
-            $escid = $this->_getParam("escid"); 
+            $curid = $this->_getParam("curid");
+            $escid = $this->_getParam("escid");
             $semid = $this->_getParam("semid");
             $perid = $this->_getParam("perid");
             $distid = $this->_getParam("distid");
@@ -566,7 +566,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->view->perid=$perid;
             $this->view->distid=$distid;
             $tam=count($courseid);
-            
+
             $reg = new Api_Model_DbTable_PeriodsCourses();
             $where['eid'] = $data['eid'] = $eid;
             $where['oid'] = $data['oid'] = $oid;
@@ -584,7 +584,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $data['register'] = $uid;
                 $data['type_rate'] = '';
                 $data['created'] = date("Y-m-d h:m:s");
-                
+
                 if($turno_[$i]=="A"){
                     $where['turno']= $turno_[$i];
                     $data['turno'] = $turno_[$i];
@@ -635,7 +635,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
 
     public function deletecourseAction(){
         try {
-            $this->_helper->layout()->disablelayout();          
+            $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $courseid=$this->_getParam("courseid");
@@ -676,9 +676,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $perid = $this->_getParam("perid"); 
-            $escid = $this->_getParam("escid"); 
-            $subid = $this->_getParam("subid"); 
+            $perid = $this->_getParam("perid");
+            $escid = $this->_getParam("escid");
+            $subid = $this->_getParam("subid");
             $distid = $this->_getParam("distid");
             $this->view->escid=$escid;
             $this->view->subid=$subid;
@@ -694,9 +694,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $perid = $this->_getParam("perid"); 
-            $escid = $this->_getParam("escid"); 
-            $subid = $this->_getParam("subid"); 
+            $perid = $this->_getParam("perid");
+            $escid = $this->_getParam("escid");
+            $subid = $this->_getParam("subid");
             $distid = $this->_getParam("distid");
             $this->view->perid=$perid;
             $this->view->subid=$subid;
@@ -707,7 +707,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $where['escid']=$escid;
             $where['subid']=$subid;
             $where['rid']='DC';
-            $where['state']='A';  
+            $where['state']='A';
 
             $doc = new Api_Model_DbTable_Users();
             $teacher = $doc->_getUserXRidXEscidAll($where);
@@ -749,9 +749,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $uid = $this->_getParam("uid"); 
-            $pid = $this->_getParam("pid"); 
-            $subid = $this->_getParam("subid"); 
+            $uid = $this->_getParam("uid");
+            $pid = $this->_getParam("pid");
+            $subid = $this->_getParam("subid");
             $escid = $this->_getParam("escid");
             $content = $this->_getParam("content");
             $option = $this->_getParam("option");
@@ -786,9 +786,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $perid = $this->_getParam("perid"); 
-            $escid = $this->_getParam("escid"); 
-            $subid = $this->_getParam("subid"); 
+            $perid = $this->_getParam("perid");
+            $escid = $this->_getParam("escid");
+            $subid = $this->_getParam("subid");
             $distid = $this->_getParam("distid");
             $this->view->perid=$perid;
             $this->view->subid=$subid;
@@ -799,7 +799,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $where['escid']=$escid;
             $where['subid']=$subid;
             $where['rid']='JP';
-            $where['state']='A';            
+            $where['state']='A';
             $doc = new Api_Model_DbTable_Users();
             $teacher = $doc->_getUserXRidXEscidAll($where);
             $where['state']='I';
@@ -828,7 +828,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                     $datateacher[$i]['dedication']=$datainfo['dedication'];
                     $datateacher[$i]['charge']=$datainfo['charge'];
                     $datateacher[$i]['contract']=$datainfo['contract'];
-                    $whe['pid']=$datateacher[$i]['pid'];             
+                    $whe['pid']=$datateacher[$i]['pid'];
                     $datacourseteacher=$bdcourseteach->_getFilter($whe,$attrib);
                     $datateacher[$i]['courseasig']=$datacourseteacher[0]['courseid'];
                 }
@@ -845,14 +845,14 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            $perid = $this->_getParam("perid"); 
-            $escid = $this->_getParam("escid"); 
-            $subid = $this->_getParam("subid"); 
+            $perid = $this->_getParam("perid");
+            $escid = $this->_getParam("escid");
+            $subid = $this->_getParam("subid");
             $distid = $this->_getParam("distid");
             $this->view->perid=$perid;
             $this->view->distid=$distid;
 
-            $form = new Distribution_Form_Search();            
+            $form = new Distribution_Form_Search();
             $this->view->form = $form;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
@@ -861,14 +861,14 @@ class Distribution_DistributionController extends Zend_Controller_Action {
 
     public function listsupportteacherAction(){
         try {
-            $this->_helper->layout()->disablelayout();           
+            $this->_helper->layout()->disablelayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
             $name=$this->_getParam("name");
             $pid =$this->_getParam("pid");
-            $distid =$this->_getParam("distid"); 
+            $distid =$this->_getParam("distid");
             $perid =$this->_getParam("perid");
             $this->view->distid=$distid;
             $this->view->perid=$perid;
@@ -890,16 +890,16 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $whe = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
             $attrib=array('courseid');
             $len=count($datauser);
-            for ($i=0; $i < $len; $i++) {            
-                $whe['pid']=$datauser[$i]['pid'];             
+            for ($i=0; $i < $len; $i++) {
+                $whe['pid']=$datauser[$i]['pid'];
                 $datacourseteacher=$bdcourseteach->_getFilter($whe,$attrib);
                 $datauser[$i]['courseasig']=$datacourseteacher[0]['courseid'];
-                
+
             }
             $this->view->usuarios=$datauser;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
-            
+
         }
     }
 
@@ -937,7 +937,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $dist = new Distribution_Model_DbTable_Distribution();
                 $datadist = $dist->_getFilter($pkdist);
                 if(!$datadist){ ?>
-                    <script>  
+                    <script>
                         alert("No se encuentra disponible los docentes de apoyo de esa Escuela\nIntentelo mas tarde.");
                         window.close();
                     </script>
@@ -983,7 +983,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $wherecourse['eid']=$eid;
                 $wherecourse['oid']=$oid;
                 $cours= new Api_Model_DbTable_Course();
-                for ($i=0; $i < $tam; $i++) { 
+                for ($i=0; $i < $tam; $i++) {
                     $wherecourse['subid']=$courasig[$i]['subid'];
                     $wherecourse['escid']=$courasig[$i]['escid'];
                     $wherecourse['curid']=$courasig[$i]['curid'];
@@ -994,7 +994,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 }
             }
             $this->view->cursosasignados=$courasig;
-            
+
             $pk['eid']=$eid;
             $pk['oid']=$oid;
             $pk['escid']=$esciddoc;
@@ -1076,7 +1076,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $wherecourse['eid']=$eid;
                 $wherecourse['oid']=$oid;
                 $cours= new Api_Model_DbTable_Course();
-                for ($i=0; $i < $len; $i++) { 
+                for ($i=0; $i < $len; $i++) {
                     $wherecourse['subid']=$courasig[$i]['subid'];
                     $wherecourse['escid']=$courasig[$i]['escid'];
                     $wherecourse['curid']=$courasig[$i]['curid'];
@@ -1110,7 +1110,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->view->dataper1=$dataperson1;
 
             $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
-            $base_speciality =  new Api_Model_DbTable_Speciality();        
+            $base_speciality =  new Api_Model_DbTable_Speciality();
             $speciality = $base_speciality ->_getOne($where);
             $parent=$speciality['parent'];
             $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
@@ -1123,7 +1123,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             }
             else{
                 $spe['esc']=$speciality['name'];
-                $spe['parent']='';  
+                $spe['parent']='';
             }
             $names=strtoupper($spe['esc']);
             $namep=strtoupper($spe['parent']);
@@ -1131,14 +1131,14 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->view->namev=$namev;
             $namefinal=$names." <br> ".$namep;
             $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
-            
+
             $fac = array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']);
-            $base_fac =  new Api_Model_DbTable_Faculty();        
+            $base_fac =  new Api_Model_DbTable_Faculty();
             $datafa= $base_fac->_getOne($fac);
             $namef = strtoupper($datafa['name']);
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-    
+
             // $uid=$this->sesion->uid;
             $uidim=$this->sesion->pid;
             // $pid=$uidim;
@@ -1154,7 +1154,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 'date_impression'=>date('Y-m-d H:i:s'),
                 'pid_print'=>$uidim
                 );
-            $dbimpression->_save($data);            
+            $dbimpression->_save($data);
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,
                 'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica');
@@ -1162,10 +1162,10 @@ class Distribution_DistributionController extends Zend_Controller_Action {
 
             $wheri1 = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica');
             $dataim1 = $dbimpression->_getFilter($wheri1);
-            
+
             $conte = count($dataim1);
             $this->view->conte=$conte;
-            $co=count($dataim);            
+            $co=count($dataim);
             $codigo=$co." - ".$uidim;
             $header=$this->sesion->org['header_print'];
             $footer=$this->sesion->org['footer_print'];
@@ -1186,7 +1186,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->_helper->layout()->disableLayout();
             $eid= $this->sesion->eid;
             $oid= $this->sesion->oid;
-               
+
             $curid= $this->_getParam("curid");
             $escid= $this->_getParam("escid");
             $perid= $this->_getParam("perid");
@@ -1206,7 +1206,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $wherecourse['escid']=$escid;
                 $wherecourse['curid']=$curid;
                 $cours= new Api_Model_DbTable_Course();
-                for ($i=0; $i < $tam; $i++) { 
+                for ($i=0; $i < $tam; $i++) {
                     $wherecourse['subid']=$courses[$i]['subid'];
                     $wherecourse['courseid']=$courses[$i]['courseid'];
                     $dbcourse=$cours->_getOne($wherecourse);
@@ -1228,12 +1228,12 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $oid=$this->sesion->oid;
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
-            $distid =$this->_getParam("distid"); 
-            $semid =$this->_getParam("semid"); 
-            $curid =$this->_getParam("curid"); 
-            $perid =$this->_getParam("perid"); 
-            $courseid =$this->_getParam("courseid"); 
-            $grupos =$this->_getParam("grupos"); 
+            $distid =$this->_getParam("distid");
+            $semid =$this->_getParam("semid");
+            $curid =$this->_getParam("curid");
+            $perid =$this->_getParam("perid");
+            $courseid =$this->_getParam("courseid");
+            $grupos =$this->_getParam("grupos");
             $hteoria =$this->_getParam("hteoria");
             $hpractica =$this->_getParam("hpractica");
             $totalhoras =$this->_getParam("totalhoras");
@@ -1245,7 +1245,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $esciddoc =$this->_getParam("esciddoc");
             $subiddoc =$this->_getParam("subiddoc");
             $estado =$this->_getParam("estado");
-       
+
             $this->view->escid=$escid;
             $this->view->subid=$subid;
             $this->view->subiddoc=$subiddoc;
@@ -1255,7 +1255,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->view->eid=$eid;
             $this->view->oid=$oid;
             $this->view->distid=$distid;
-            $this->view->perid=$perid; 
+            $this->view->perid=$perid;
 
             $wheredoc['eid'] = $datadoccour['eid'] = $eid;
             $wheredoc['oid'] = $datadoccour['oid'] = $oid;
@@ -1278,21 +1278,23 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $datadoccour['is_main'] = $principal;
             $doccourse = new Api_Model_DbTable_Coursexteacher();
             $exiscour=$doccourse->_getFilter($wheredoc,$attrib=null,$orders=null);
-            if($exiscour and $principal=="S"){ ?>
-                <script>
-                    alert('La Asignatura ya ha sido asignada a otro Docente : Elija otra Asignatura');
-                </script>
-                <?php   
+            if($exiscour and $principal=="S"){
+                 $json = array('status'=>false,'msg'=>'La Asignatura ya ha sido asignada a otro Docente : Elija otra Asignatura');
+
+                // <script>
+                //     alert('La Asignatura ya ha sido asignada a otro Docente : Elija otra Asignatura');
+                // </script>
             }else{
                 $wheredoc['uid']=$uid;
                 $wheredoc['pid']=$pid;
                 $exisdoccour=$doccourse->_getFilter($wheredoc,$attrib=null,$orders=null);
-                if ($exisdoccour) { ?>
-                    <script type="text/javascript">
-                        alert("El Docente ya esta asignado a esta Asignatura.");
-                    </script>
-                    <?php
-                }else{
+                if ($exisdoccour) {
+                    $json = array('status'=>false,'msg'=>'El Docente ya esta asignado a esta Asignatura.');
+                    // <script type="text/javascript">
+                    //     alert("El Docente ya esta asignado a esta Asignatura.");
+                    // </script>
+                }
+                else{
                     $doccourse->_save($datadoccour);
                     $pkdistdoc['eid'] = $datadistdoc['eid'] = $eid;
                     $pkdistdoc['oid'] = $datadistdoc['oid'] = $oid;
@@ -1319,7 +1321,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                         $wheredis['perid']=$perid;
                         $dist = new Distribution_Model_DbTable_Distribution();
                         $distiddoc=$dist->_getFilter($wheredis);
-                        
+
                         $pkdistdoc['distid'] = $datadistdoc['distid'] = $distiddoc[0]['distid'];
                         $pkdistdoc['subid'] = $datadistdoc['subid'] = $subiddoc;
                         $pkdistdoc['escid'] = $datadistdoc['escid'] = $esciddoc;
@@ -1330,7 +1332,8 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                             $datadistdoc['created'] = date('Y-m-d');
                             $distdoc->_save($datadistdoc);
                         }
-                    }                    
+                    }
+                    $json = array('status'=>true,'msg'=>'Se creó el curso satisfactoriamente');
                 }
             }
 
@@ -1346,7 +1349,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 $wherecourse['eid']=$eid;
                 $wherecourse['oid']=$oid;
                 $cours= new Api_Model_DbTable_Course();
-                for ($i=0; $i < $tam; $i++) { 
+                for ($i=0; $i < $tam; $i++) {
                     $wherecourse['subid']=$courasig[$i]['subid'];
                     $wherecourse['escid']=$courasig[$i]['escid'];
                     $wherecourse['curid']=$courasig[$i]['curid'];
@@ -1357,6 +1360,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 }
             }
             $this->view->cursosasignados=$courasig;
+
+            $this->_response->setHeader('Content-Type', 'application/json');
+            $this->view->data = $json;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -1369,16 +1375,16 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $oid=$this->sesion->oid;
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
-            $subiddoc  = base64_decode($this->_getParam("subiddoc")); 
+            $subiddoc  = base64_decode($this->_getParam("subiddoc"));
             $esciddoc = base64_decode($this->_getParam('esciddoc'));
-            $courseid = base64_decode($this->_getParam("courseid")); 
+            $courseid = base64_decode($this->_getParam("courseid"));
             $distid = base64_decode($this->_getParam("distid"));
-            $turno = base64_decode($this->_getParam("turno")); 
+            $turno = base64_decode($this->_getParam("turno"));
             $curid = base64_decode($this->_getParam("curid"));
             $perid = base64_decode($this->_getParam("perid"));
             $uid = base64_decode($this->_getParam("uid"));
             $pid = base64_decode($this->_getParam("pid"));
-            
+
             $pk['eid']=$eid;
             $pk['oid']=$oid;
             $pk['escid']=$escid;
@@ -1389,11 +1395,38 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $pk['perid']=$perid;
             $pk['uid']=$uid;
             $pk['pid']=$pid;
+
             $doccour = new Api_Model_DbTable_Coursexteacher();
-            $doccour->_delete($pk);
-            $this->_redirect("/distribution/distribution/assigncourses/uid/".base64_encode($uid).
-                "/pid/".base64_encode($pid)."/distid/".base64_encode($distid)."/perid/".base64_encode($perid).
-                "/subid/".base64_encode($subiddoc)."/escid/".base64_encode($esciddoc));
+
+            if ($doccour->_delete($pk)) {
+                $horary_cour = new Api_Model_DbTable_Horary();
+                $wheress=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,
+                               'subid'=>$subid,'courseid'=>$courseid,'curid'=>$curid,
+                               'turno'=>$turno,'perid'=>$perid,'teach_uid'=>$uid,'teach_pid'=>$pid);
+                $data_hor=$horary_cour->_getFilter($wheress);
+
+                if ($data_hor) {
+                    foreach ($data_hor as $i => $data) {
+                        $pkhour=array('eid'=>$data['eid'],'oid'=>$data['oid'],'hid'=>$data['hid'],'escid'=>$data['escid'],
+                                      'subid'=>$data['subid'],'courseid'=>$data['courseid'],'curid'=>$data['curid'],
+                                      'turno'=>$data['turno'],'perid'=>$data['perid'],'teach_uid'=>$data['teach_uid'],
+                                      'teach_pid'=>$data['teach_pid'],'hora_ini'=>$data['hora_ini'],'hora_fin'=>$data['hora_fin'],
+                                      'day'=>$data['day']);
+                        $horary_cour->_delete($pkhour);
+                    }
+                }
+
+                $json = array('status'=>true,'msg'=>'Se eliminó el Curso');
+            }
+            else{
+                $json = array('status'=>false,'msg'=>'No se pudo Eliminar el Curso...');
+            }
+
+            $this->_response->setHeader('Content-Type', 'application/json');
+            $this->view->data = $json;
+            // $this->_redirect("/distribution/distribution/assigncourses/uid/".base64_encode($uid).
+            //     "/pid/".base64_encode($pid)."/distid/".base64_encode($distid)."/perid/".base64_encode($perid).
+            //     "/subid/".base64_encode($subiddoc)."/escid/".base64_encode($esciddoc));
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -1410,9 +1443,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $uid = $this->_getParam("uid");
             $pid = $this->_getParam("pid");
             $distid = $this->_getParam("distid");
-            $subiddoc = $this->_getParam("subiddoc"); 
+            $subiddoc = $this->_getParam("subiddoc");
             $esciddoc = $this->_getParam("esciddoc");
-            $work = $this->_getParam("work");            
+            $work = $this->_getParam("work");
             $hours = $this->_getParam("hours");
             $this->view->escid=$escid;
             $this->view->subid=$subid;
@@ -1423,7 +1456,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->view->eid=$eid;
             $this->view->oid=$oid;
             $this->view->distid=$distid;
-            $this->view->perid=$perid; 
+            $this->view->perid=$perid;
 
             if($esciddoc<>$escid){
                 $wheredis['eid']=$eid;
@@ -1441,12 +1474,12 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $datadistadm['uid'] = $pk['uid'] = $uid;
             $datadistadm['pid'] = $pk['pid'] = $pid;
             $datadistadm['escid'] = $pk['escid'] = $esciddoc;
-            $datadistadm['perid'] = $pk['perid'] = $perid;            
+            $datadistadm['perid'] = $pk['perid'] = $perid;
             $datadistadm['subid'] = $subiddoc;
             $datadistadm['distid'] = $distid;
             $datadistadm['work'] = $work;
             $datadistadm['hours'] = $hours;
-            
+
             $distadm = new Distribution_Model_DbTable_DistributionAdmin();
             $distadm->_save($datadistadm);
             $labor = $distadm->_getFilter($pk,$attrib=null);
@@ -1614,7 +1647,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->view->teachers = $doc;
 
             //Docentes de la Escuela
-            
+
             $teachersDb = new Api_Model_DbTable_Users();
             $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid, 'subid'=>$subid, 'rid'=>'DC', 'state'=>'A');
             $attrib = array('uid', 'pid');
@@ -1685,7 +1718,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $this->view->teachers = $doc;
 
             $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
-            $base_speciality =  new Api_Model_DbTable_Speciality();        
+            $base_speciality =  new Api_Model_DbTable_Speciality();
             $speciality = $base_speciality ->_getOne($where);
             $parent=$speciality['parent'];
             $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
@@ -1698,7 +1731,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             }
             else{
                 $spe['esc']=$speciality['name'];
-                $spe['parent']='';  
+                $spe['parent']='';
             }
             $names=strtoupper($spe['esc']);
             $namep=strtoupper($spe['parent']);
@@ -1712,14 +1745,14 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             else{
                 $namelogo = 'blanco';
             }
-            
+
             $fac = array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']);
-            $base_fac =  new Api_Model_DbTable_Faculty();        
+            $base_fac =  new Api_Model_DbTable_Faculty();
             $datafa= $base_fac->_getOne($fac);
-            $namef = strtoupper($datafa['name']);  
+            $namef = strtoupper($datafa['name']);
 
             $dbimpression = new Api_Model_DbTable_Countimpressionall();
-            
+
             $uid=$this->sesion->uid;
             $uidim=$this->sesion->pid;
             $pid=$uidim;
@@ -1736,13 +1769,13 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 'pid_print'=>$uidim
                 );
             // print_r($data);exit();
-            $dbimpression->_save($data);            
+            $dbimpression->_save($data);
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,
                 'subid'=>$subid,'type_impression'=>'vista_preliminar_general_docente_curso_'.$perid);
             $dataim = $dbimpression->_getFilter($wheri);
-                        
-            $co=count($dataim);            
+
+            $co=count($dataim);
             $codigo=$co." - ".$uidim;
 
             $header=$this->sesion->org['header_print'];
@@ -1751,7 +1784,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $header = str_replace("?escuela",$namefinal,$header);
             $header = str_replace("?logo", $namelogo, $header);
             $header = str_replace("?codigo", $codigo, $header);
-          
+
             $this->view->header=$header;
             $this->view->footer=$footer;
 
