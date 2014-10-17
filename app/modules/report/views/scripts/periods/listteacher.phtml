@@ -59,15 +59,11 @@
 						$classReport = 'reportNoSuccess';
 					?>
 					<?php if ($docente['stateReport'] == 'yes'): 
-							$url = '/docente/informacademic/print'. '/pid/'.base64_encode($docente['pid']).
-																	'/uid/'.base64_encode($docente['uid']).
-																	'/escid/'.base64_encode($docente['escidOrigen']).
-																	'/subid/'.base64_encode($docente['subid']).
-																	'/perid/'.base64_encode($docente['perid']);
-							$classReport = 'reportSuccess';
+						$url = '/docente/informacademic/printfromdirector/reportid/'.$docente['reportId'];
+						$classReport = 'reportSuccess';
 					endif ?>
 					<a class="btnPrintObO <?php echo $classReport ?>" href="<?php echo $url ?>">Informe Académico</a>
-					<a class="btnPrintObO btnPrintHorary" href="##">Horario</a>
+					<!-- <a class="btnPrintObO btnPrintHorary" href="##">Horario</a> -->
 				</div>
 			</div>
 			
