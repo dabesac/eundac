@@ -257,7 +257,9 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
                   "name" character varying,
                   "semid" integer,
                   "credits" double precision,
-                  "veces" integer
+                  "veces" integer,
+                  "type" character(1),
+                  "curid" character varying
                 )');
             $rows = $results->fetchAll();
             if ($rows) return $rows;

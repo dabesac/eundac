@@ -160,7 +160,6 @@ class Register_ValidationController extends Zend_Controller_Action
                 $where=array('escid'=>$escid,'uid'=>$uid,'curid'=>$curid);
                 $dbregistrationxcourse = new Api_Model_DbTable_Registrationxcourse();
                 $data=$dbregistrationxcourse->_getCoursesPerCurriculum($where);
-
                 $this->view->data=$data;
                 $this->view->notcurid='0';
 
@@ -234,29 +233,33 @@ class Register_ValidationController extends Zend_Controller_Action
          // $nota= base64_decode($this->_getParam("nota"));
         $peridSession= $this->sesion->period->perid;
 
-      	$request = array(   'eid' => base64_encode($eid),
-                            'oid' => base64_encode($oid),
-                            'perid' => base64_encode($peridSession),
-                            'pid' => base64_encode($pid),
-                            'uid' => base64_encode($uid),
-                            'escid' => base64_encode($escid),
-                            'subid' => base64_encode($subid),
-                            'curid' => base64_encode($curid));
+      	// $request = array(   'eid' => base64_encode($eid),
+       //                      'oid' => base64_encode($oid),
+       //                      'perid' => base64_encode($peridSession),
+       //                      'pid' => base64_encode($pid),
+       //                      'uid' => base64_encode($uid),
+       //                      'escid' => base64_encode($escid),
+       //                      'subid' => base64_encode($subid),
+       //                      'curid' => base64_encode($curid));
 
-        require_once 'Zend/Loader.php';
-        Zend_Loader::loadClass('Zend_Rest_Client');
+       //  require_once 'Zend/Loader.php';
+       //  Zend_Loader::loadClass('Zend_Rest_Client');
 
-        $base_url = 'http://api.undac.edu.pe:8080/';
-        $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/pending_validate';
-        $client = new Zend_Rest_Client($base_url);
-        $httpClient = $client->getHttpClient();
-        $httpClient->setConfig(array("timeout" => 30000));
-        $response = $client->restget($endpoint,$request);
-        $lista=$response->getBody();
+       //  $base_url = 'http://api.undac.edu.pe:8080/';
+       //  $endpoint = '/'.base64_encode('s3lf.040c0c030$0$0').'/'.base64_encode('__999c0n$um3r999__').'/pending_validate';
+       //  $client = new Zend_Rest_Client($base_url);
+       //  $httpClient = $client->getHttpClient();
+       //  $httpClient->setConfig(array("timeout" => 30000));
+       //  $response = $client->restget($endpoint,$request);
+       //  $lista=$response->getBody();
 
-        if ($lista){
-            $data = Zend_Json::decode($lista);
-        }
+       //  if ($lista){
+       //      $data = Zend_Json::decode($lista);
+       //  }
+
+        $where=array('escid'=>$escid,'uid'=>$uid,'curid'=>$curid);
+        $dbregistrationxcourse = new Api_Model_DbTable_Registrationxcourse();
+        $data=$dbregistrationxcourse->_getCoursesPerCurriculum($where);
         $this->view->data=$data;
     }
 
