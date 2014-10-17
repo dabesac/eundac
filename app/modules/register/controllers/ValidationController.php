@@ -257,10 +257,10 @@ class Register_ValidationController extends Zend_Controller_Action
        //      $data = Zend_Json::decode($lista);
        //  }
 
-        $where=array('escid'=>$escid,'uid'=>$uid,'curid'=>$curid);
-        $dbregistrationxcourse = new Api_Model_DbTable_Registrationxcourse();
-        $data=$dbregistrationxcourse->_getCoursesPerCurriculum($where);
-        $this->view->data=$data;
+        // $where=array('escid'=>$escid,'uid'=>$uid,'curid'=>$curid);
+        // $dbregistrationxcourse = new Api_Model_DbTable_Registrationxcourse();
+        // $data=$dbregistrationxcourse->_getCoursesPerCurriculum($where);
+        // $this->view->data=$data;
     }
 
     public function saveAction(){
@@ -288,7 +288,6 @@ class Register_ValidationController extends Zend_Controller_Action
         //verificando acta del curso.
         $wherepc=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,
                      'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>'A');
-
         $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
         $dataperiodocurso = $dbperiodocurso->_getOne($wherepc);
 
