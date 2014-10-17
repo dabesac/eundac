@@ -65,7 +65,6 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $infoassist = $base_assistance ->_getinfoasisstance($where);
         $state_assistence = $this->verify_closure_assistence($partial,$infoassist);
 
-
         if ($state_assistence) {
             $url_assit ="/".base64_encode('oid')."/".base64_encode($oid)."/".
                         base64_encode('eid')."/".base64_encode($eid)."/".
@@ -1064,21 +1063,20 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 }
             }
 
-
             
             if ($partial == 1) {
                 if (
                     $count == $assist_1 && $count == $assist_2 &&  $count == $assist_3 && $count == $assist_4 && 
                     $count == $assist_5 && $count == $assist_6  && $count == $assist_7 && $count == $assist_8 &&
                     $count == $assist_9 && $count == $assist_10 && $count == $assist_11 && $count == $assist_12 &&
-                    $count == $assist_13 && $count == $assist_14 && $count == $assist_15  && $count == $state
+                    $count == $assist_13 && $count == $assist_14 && $count == $assist_15 && $count == $assist_16  && $count == $state
                     ) {
                         $data = true;
                     }
             }
             if ($partial == 2) {
                 if (
-                    $count == $assist_16 && $count == $assist_17 && 
+                    $count == $assist_17 && 
                     $count == $assist_18 && $count == $assist_19 && $count == $assist_20 && $count == $assist_21 &&
                     $count == $assist_22 && $count == $assist_23 && $count == $assist_24 && $count == $assist_25 &&
                     $count == $assist_26 && $count == $assist_27 && $count == $assist_28 && $count == $assist_29 && 
