@@ -21,10 +21,11 @@ class Register_ValidationController extends Zend_Controller_Action
             $this->_helper->layout()->disableLayout();
 
             $facidSesion=$this->sesion->faculty->facid;
+            $subidSesion=$this->sesion->subid;
+
             $eid= $this->sesion->eid;
             $oid= $this->sesion->oid;
             // $temp = ($this->_getParam("temp"));
-            // print_r($temp);exit();
             $uid= base64_decode($this->_getParam('uid'));
             $anio=date('Y');
             $anio=substr($anio,2,2);
@@ -54,6 +55,40 @@ class Register_ValidationController extends Zend_Controller_Action
                     $subsidiary = new Api_Model_DbTable_Subsidiary();
                     $datass = $subsidiary->_getOne($wheres);
                     $usuario[0]['name_subsidiary']=$datass['name'];
+                }
+                elseif ($facidSesion=='TODO') {
+                    $subidStudent=$datas['subid'];
+                    if ($subidSesion==$subidStudent) {
+                        $usuario[0]['name_speciality']=$datas['name'];
+                        $persona = new Api_Model_DbTable_Person();
+                        $data['eid']=$eid;
+                        $data['pid']=$usuario[0]['pid'];
+                        $list_p = $persona ->_getOne($data);
+                        $usuario[0]['full_name']=$list_p['last_name0'].' '.$list_p['last_name1'].', '.$list_p['first_name'];
+
+
+                        unset($wheres['escid']);
+                        $subsidiary = new Api_Model_DbTable_Subsidiary();
+                        $datass = $subsidiary->_getOne($wheres);
+                        $usuario[0]['name_subsidiary']=$datass['name'];
+                    }
+                    elseif ($subidSesion=='1901' && $facidSesion='TODO' ) {
+                        $usuario[0]['name_speciality']=$datas['name'];
+                        $persona = new Api_Model_DbTable_Person();
+                        $data['eid']=$eid;
+                        $data['pid']=$usuario[0]['pid'];
+                        $list_p = $persona ->_getOne($data);
+                        $usuario[0]['full_name']=$list_p['last_name0'].' '.$list_p['last_name1'].', '.$list_p['first_name'];
+
+
+                        unset($wheres['escid']);
+                        $subsidiary = new Api_Model_DbTable_Subsidiary();
+                        $datass = $subsidiary->_getOne($wheres);
+                        $usuario[0]['name_subsidiary']=$datass['name'];
+                    }
+                    else{
+                        $this->view->notuser='N';
+                    }
                 }
                 else{
                     $this->view->notuser='N';
