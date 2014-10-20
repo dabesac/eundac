@@ -107,6 +107,55 @@
 	  	?>
 	  </table>
 	</div>
+	</div>
+	<?php
+	  if($teacher['pid'] == "TEMP01"){?>
+		  	<div class="panel panel-primary">
+		  		<div class="panel-heading">
+			  		<h5 class="panel-title"><span class='glyphicon glyphicon-plus-sign'></span><strong> Asignar Docente <span class="label label-default text-reght" ></span>
+			 		</strong></h5>
+			  	</div>
+		  			<table class="table">
+						<tr>
+				            <th><center>Seleccione Escuela / Docente</center></th>
+				            <th colspan="2"><center>Seleccione el Docente</center></th>
+				            <th> <center> Opcion</center></th>
+						</tr>
+						<tr>
+							<td>
+				                <select id="escuid" class="form-control">
+				                    <option value="">- Seleccione Escuela -</option>
+				                    <?php 
+				                    if ($this->lescuelas){
+				                        foreach ($this->lescuelas as $escu){ ?>
+				                            <option value="<?php echo $escu['escid'].";--;".$escu['subid']?>"><?php echo $escu['name']?></option>
+				                        <?php                                 
+				                        }
+				                    } ?>
+				                </select>
+				            </td>
+				            <td colspan="2">
+				                <center>
+				                    <select id='docente_reg' name='docente_reg' class="form-control" style="width:350px">
+				                        <option value="">- Seleccione Docente -</option>
+				                    </select>
+				                </center>
+				            </td>
+				            <td>
+				            	<center><a type="button" class="btn btn-success" id="savedata" 
+				            	data-dismiss="modal"
+				            	escid = '<?php echo $data_course['escid']?>'
+				            	curid =	'<?php echo $data_course['curid']?>'
+				            	subid = '<?php echo $data_course['subid']?>'
+				            	perid = '<?php echo $this->perid?>'
+				            	courseid = '<?php echo $data_course['courseid']?>'
+				            	turno = '<?php echo $this->turno?>'
+				            	href='#'><span class="glyphicon glyphicon-floppy-disk"></span> Guardar </a><center>
+				            </td>
+						</tr>
+					</table>
+		</div>
+	  	<?php   }?>
 	<div class="panel panel-primary">
 	  	<div class="panel-heading">
 	  		<h5 class="panel-title"><span class='glyphicon glyphicon-th-list'></span><strong> Alumnos Matriculados <span class="label label-default text-reght" ><?php echo $this->numregister?></span>
@@ -168,3 +217,41 @@
 	</div>
 
 </div>
+<script>
+$("#escuid").change(function(){
+    var escuela = $(this).val();
+    if (escuela=="") {
+        alert("Seleccione una Escuela.");
+        return false;
+    };
+    tmp=escuela.split(';--;');
+    escid=tmp[0];
+    $("#docente_reg").load("/record/index/teacherxschool/escid/"+escid);
+});
+$("#savedata").click(function(e){
+	var docente = $("#docente_reg").val();
+	var tmp = docente.split(';--;');
+	var uid = tmp[0];
+	var pid = tmp[1];
+	var ajaxData ={
+		'escid' : $(this).attr('escid'),
+		'curid' : $(this).attr('curid'),
+		'subid' : $(this).attr('subid'),
+		'perid' : $(this).attr('perid'),
+		'courseid' : $(this).attr('courseid'),
+		'turno' : $(this).attr('turno'),
+		'uid' : uid,
+		'pid' : pid
+	};
+	e.preventDefault();
+	$.ajax({
+		type : "post",
+		url : "/record/index/updatedatacourse/",
+		data : ajaxData,
+		success : function(data){
+			$(".loaddelete").html(data);
+			//$("#modal1").modal("hide");
+		}
+	});	
+});
+</script>
