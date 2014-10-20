@@ -233,7 +233,7 @@ class Register_ValidationController extends Zend_Controller_Action
          // $nota= base64_decode($this->_getParam("nota"));
         $peridSession= $this->sesion->period->perid;
 
-      	// $request = array(   'eid' => base64_encode($eid),
+        // $request = array(   'eid' => base64_encode($eid),
        //                      'oid' => base64_encode($oid),
        //                      'perid' => base64_encode($peridSession),
        //                      'pid' => base64_encode($pid),
@@ -257,15 +257,16 @@ class Register_ValidationController extends Zend_Controller_Action
        //      $data = Zend_Json::decode($lista);
        //  }
 
-        // $where=array('escid'=>$escid,'uid'=>$uid,'curid'=>$curid);
-        // $dbregistrationxcourse = new Api_Model_DbTable_Registrationxcourse();
-        // $data=$dbregistrationxcourse->_getCoursesPerCurriculum($where);
-        // $this->view->data=$data;
+        $where=array('escid'=>$escid,'uid'=>$uid,'curid'=>$curid);
+        $dbregistrationxcourse = new Api_Model_DbTable_Registrationxcourse();
+        $data=$dbregistrationxcourse->_getCoursesPerCurriculum($where);
+        $this->view->data=$data;
     }
 
     public function saveAction(){
         $this->_helper->layout()->disableLayout();
 
+        $json['status']=false;
         $eid= $this->sesion->eid;
         $oid= $this->sesion->oid;
         $uidreg = $this->sesion->uid;
@@ -364,10 +365,14 @@ class Register_ValidationController extends Zend_Controller_Action
         }
         elseif ($dataregistrationxcourse['notafinal']<11) {
             $dataupdated=array('notafinal'=>$nota,'document_auth'=>$resolution,'modified'=>$uidreg,'updated'=>date('Y-m-d'));
-            $dbregistrationxcourse->_update($dataupdated,$wherergxc);
 
-            $dataupdated1=array('document_auth'=>$resolution,'modified'=>$uidreg,'updated'=>date('Y-m-d'));
-            $dbregistration->_update($dataupdated1,$whererg);
+            if ($dbregistrationxcourse->_update($dataupdated,$wherergxc)) {
+                $json['status']=true;
+
+                $dataupdated1=array('document_auth'=>$resolution,'modified'=>$uidreg,'updated'=>date('Y-m-d'));
+                $dbregistration->_update($dataupdated1,$whererg);
+            }
+
         }
 
         if (!($cont>0 && $json['status'])) {
