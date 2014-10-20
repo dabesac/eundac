@@ -177,6 +177,15 @@ class Record_IndexController extends Zend_Controller_Action {
 	
 	public function detailAction()
 	{
+			$eid = $this->sesion->eid;
+			$oid = $this->sesion->oid;
+			$wheresc['eid']=$eid;
+            $wheresc['oid']=$oid;
+            $wheresc['state']="A";
+            $rescu = new Api_Model_DbTable_Speciality();
+            $lista = $rescu->_getFilter($wheresc,$attrib=null,$orders='escid');
+            $this->view->lescuelas = $lista;
+
 
 			$params = $this->getRequest()->getParams();
 	            $paramsdecode = array();
@@ -1761,6 +1770,69 @@ class Record_IndexController extends Zend_Controller_Action {
             $this->view->listacursos = $lcourses;
 
             //print_r($lcourses);
+	}
+
+	public function teacherxschoolAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+            $escid= $this->_getParam("escid");
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['escid']=$escid;
+            $where['rid']='DC';
+            $where['state']='A';
+            $r = new Api_Model_DbTable_Users();
+            $regdoc = $r->_getUsersXEscidXRidXState($where);
+            $this->view->docentes=$regdoc;
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function updatedatacourseAction(){
+    	try{
+    		$this->_helper->layout()->disableLayout();
+    		$eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+            $formData = $this->getRequest()->getPost();
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['perid']=$formData['perid'];
+            $where['escid']=$formData['escid'];
+            $where['curid']=$formData['curid'];
+            $where['subid']=$formData['subid'];
+            $where['courseid']=$formData['courseid'];
+            $where['turno']=$formData['turno'];
+            $data['uid'] =$formData['uid'];
+            $data['pid'] =$formData['pid'];
+            
+            $coursexteacher = new Api_Model_DbTable_Coursexteacher();
+            $updatedata = $coursexteacher ->_updateXcourse($data,$where);
+            $this->view->resul=$updatedata;
+    	} catch (Exception $e){
+    		print 'Error: '.$e->getMessage();
+    	}
+    }
+    public function deletecourseAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+			$formData = $this->getRequest()->getPost();
+			$formData['eid'] = $this->sesion->eid;
+			$formData['oid'] = $this->sesion->oid;
+			//coursexteacher
+			$coursexteacher = new Api_Model_DbTable_Coursexteacher();
+			$deletecoursexteacher = $coursexteacher ->_deleteadm($formData);
+			$this->view->resp=$deletecoursexteacher;
+			//periodsxcourse
+			$periodscourses= new Api_Model_DbTable_PeriodsCourses();
+			$deletepxc = $periodscourses ->_delete($formData);	
+
+		} catch (Excoption $e){
+			print "Error: ".$e->getMessage();
+		}
+		
 	}
 
 	public function updatestatecourseAction(){
