@@ -1,0 +1,123 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start();
+?>
+<style type="text/css">
+.ind {
+	padding-left: 30px;
+	font-size: 12px;
+	}
+.inden{
+	padding-left: 15px;
+	font-size: 12px;
+}
+</style>
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<table style="font-size: 12px;float: left; width: 100%; border-bottom: 20px">
+	<tr>        	   
+       	<td style="text-align: center"><b>INFORME N° <?php print $this->informedoc['number'];?> - UNDAC </b></td>
+    </tr>
+</table>
+<table style="font-size: 11px;float: left; width: 100%; border-bottom: 2px">
+    <tr>
+       	<td style="text-align: left;padding-left:10px"> A: DIRECTOR DE LA ESCUELA DE FORMACIÓN PROFESIONAL <?php echo strtoupper($this->speciality)?> </td>
+    </tr>
+    <tr>
+       	<td style="text-align: left; padding-left:10px">DE: <?php echo strtoupper($this->infouser)?></td>
+    </tr>
+    <tr>
+      	<td style="text-align: left; padding-left:10px;">ASUNTO: <b>Informe Académico y Administrativo <?php echo $this->perid?> </b></td>
+    </tr>
+</table>
+<br>
+<br>
+<div colspan="10" style="font-size: 12px"><b>I. INFORME ACADÉMICO</b></div><br>
+<div colspan="10" class="inden"><b> 1.1 Desarrollo de las Asignaturas </b></div>
+<div colspan="10" style="padding-left: 40px; font-size: 12px"><b> 1.1.1 Logros </b></div><br>
+<table style="width: 100%; font-size: 10px; border-collapse:collapse; border: 1px solid #555">
+	<tr>
+		<th style="border: 1px solid #555"><center>#</center></th>
+		<th style="border: 1px solid #555"><center>Asignaturas</center></th>
+		<th style="border: 1px solid #555"><center>Escuela</center></th>
+		<th style="border: 1px solid #555"><center>Turno</center></th>
+		<th style="border: 1px solid #555"><center>Semestre</center></th>
+		<th style="border: 1px solid #555"><center>% Desarrollado</center></th>
+		<th style="border: 1px solid #555"><center>Matriculados   N° -  %</center></th>
+		<th style="border: 1px solid #555"><center>Aprobados  N° -  %</center></th>
+		<th style="border: 1px solid #555"><center>Desaprobados  N° -  %</center></th>
+		<th style="border: 1px solid #555"><center>Retirados  N° -  %</center></th>
+	</tr>
+	<?php
+	$i=1; 
+	foreach ($this->datacourses as $datacourses) { ?>
+	  	<tr>
+	  		<td style="border: 1px solid #555"><?php echo $i ?></td>
+			<td style="border: 1px solid #555"><?php echo $datacourses['name'] ?></td>
+			<td style="border: 1px solid #555"><center><?php echo $datacourses['escid'] ?></center></td>
+			<td style="border: 1px solid #555"><center><?php echo $datacourses['turno'] ?></center></td>
+			<td style="border: 1px solid #555"><center><?php echo $datacourses['semid'] ?></center></td>
+			<td style="border: 1px solid #555"><center><?php echo $datacourses['percentage']." %" ?></center></td>
+			<td style="border: 1px solid #555">
+				<center>
+					<?php echo $datacourses['registers'] ?>
+				</center>
+			</td>
+			<td style="border: 1px solid #555">
+				<center>
+					<?php echo $datacourses['approved'] ?>
+				</center>
+			</td>
+			<td style="border: 1px solid #555">
+				<center>
+					<?php echo $datacourses['disapproved'] ?>
+				</center>
+			</td>
+			<td style="border: 1px solid #555">
+				<center>
+					<?php echo $datacourses['retired'] ?>
+				</center>
+			</td>
+		</tr>
+		<?php 
+		$i++;
+	}?>
+</table>
+<br>
+<div style="padding-left: 40px; font-size: 12px"><b>1.1.2 Medios y Materiales Educativos Utilizados por Asignatura</b></div><br>
+<div style="padding-left: 50px; font-size: 12px"><?php echo $this->informedoc['acad_medios'];?></div><br>
+<div class="inden"><b>1.2. Tutoria</b></div><br>
+<div class="ind"><?php echo $this->informedoc['acad_tutoria'];?></div><br>
+<br>
+<br>
+
+<div style="font-size: 12px"><b>II. INFORME ADMINISTRATIVO</b></div><br>
+<div class="inden"><b>2.1 Acreditación</b></div><br>
+<div class="ind"><?php print $this->informedoc['adm_acreditacion'];?></div><br>
+<div class="inden"><b>2.2. Investigación o Proyección Social</b></div><br>
+<div class="ind"><?php print $this->informedoc['adm_investigacion'];?></div><br>
+<div class="inden"><b>2.3. Asesoría de Tesis</b></div><br>
+<div class="ind"><?php print $this->informedoc['adm_asesoria'];?></div><br>
+<div class="inden"><b>2.4. Labor Administrativa (Coordinaciones, comisiones y otras)</b></div><br>
+<div class="ind"><?php print $this->informedoc['adm_labores'];?></div><br>
+
+<div style="margin-top: 50px">
+	<p align="right">----------------------------------</p>
+	<p style="padding-right:50px" align="right">Firma</p>
+</div>
+
+<?php 
+    
+    $html = ob_get_contents();
+  
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,5,5);
+
+    $mpdf->SetHTMLHeader($this->header);  
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+  	$mpdf->Output('INFORME-'.$this->perid.'.pdf','D');
+    // $mpdf->Output();
+ 
+?>

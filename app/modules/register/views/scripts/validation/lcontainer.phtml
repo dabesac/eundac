@@ -1,255 +1,179 @@
-<!-- <div id="barra-admin"> -->
 <?php
-$eid=$this->eid;
-$oid=$this->oid;
-$subid=$this->subid;
+if ($this->data) {
+    if ($this->msg!='1') {   ?>
+        <div class="row">
+            <?php
+            if ($this->notcurid!='1') {    ?>
+            <form id='frmsave' name='frmsave' action="/register/validation/save/" method='POST' enctype="application/x-www-form-urlencoded" class="form-horizontal">
+                <div class="col-md-12">
+                    <div class="col-md-4 text-center">Curso <br>
+                        <select name="courseid" id="courseid" class='form-control'>
+                            <option value="">- Seleccione un Curso -</option>
+                            <?php
+                            foreach ($this->data as $i => $datas) { ?>
+                                <option value="<?php echo base64_encode($datas['courseid'].'%%'.$datas['semid'].'%%'.$datas['credits'].'%%'.$datas['curid'].'%%'.$datas['type'])?>"><?php echo $datas['courseid']." | ".$datas['name']?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2 text-center">Nota <br>
+                        <div style='width:60px; margin-left:18px;'>
+                            <input id='nota' name='nota' type="text" class='form-control text-center' maxlength="2">
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-center">Resolución <br>
+                        <input id='resolution' name='resolution' type="text" class="form-control">
+                    </div>
+                </div>
+                <input id='pid' class='hidden' type="text" name="pid" value="<?php echo base64_encode($this->pid)?>">
+                <input id='ofuid' class='hidden' type="text" name="uid" value="<?php echo base64_encode($this->uid)?>">
+                <input id='escid' class='hidden' type="text" name="escid" value="<?php echo base64_encode($this->escid)?>">
+                <input id='subid' class='hidden' type="text" name="subid" value="<?php echo base64_encode($this->subid)?>">
+                <input id='perid' class='hidden' type="text" name="perid" value="<?php echo base64_encode($this->perid)?>">
+            </form>
 
-
-?>
-<table><div id="Datos">
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th><center>Curricula</center></th>
-            <th colspan="2"><center>Curso</center></th>
-
-            <th ><center>Ingrese la Nota</center></th>
-            <th ><center>Resolucion</center></th>
-        </tr>
-    </thead>
-    <tr>
-        <td>
-            <center>
-                <select  id="curid" name="curid" class='form-control' style='height:35px;width:100px'>
-                    <option  value="">Seleccione..</option>
-                    <?php
-                    foreach ($this->curriculas  as $curricula){
-                        ?>
-                        <option value="<?php echo $curricula['curid']?>"><?php echo $curricula['curid']?></option>
-                        <?php
-                    }?>
-                </select>
-            </center>
-        </td>
-
-        <td colspan="2">
-            <center>
-            <select  id="cursoid" name="cursoid" class='form-control' style='height:35px;width:400px'>
-                <option  value="">Seleccione</option>
-            </select></center>
-        </td>  
-
-        <td><center>
-        <input type="text" id="nota" aling="center" class='form-control' style='height:35px;width:50px' value="<?php echo $this->nota ?>"  name="firstname" /><label class="msg text-error"></label></center></td>
-        
-        <td><center>
-        <input type="text" id="resolucion" class='form-control' style='height:35px;width:400px' onBlur="CheckUserName(this);"  value="" name="firstname" /></center></td>
-
-                                              
-    </tr>
-
-    <tr>       
-        <input type="hidden" id="uidreg" class="input-small" value="<?php echo $this->user ?>" disabled='true' name="firstname" />
-    </tr>
-
-   <tr>
-        <td colspan="5"><center><a href="#" class="btn btn-info" id="agregaralumnoxx">Guardar Curso</a></center></td>
-        
-    </tr>
-    
-</table>
-    <div id="header_alumnos"></div>
-</div>
-</center>
-
-<table>
-<div >
-<center><table id="lista" class="table span12 table-hover">
-        <thead>
-        <tr style="background: #ccc; color: #000000;">
-                <th>#</th> 
-                <th >CURRICULA</th>
-                <th >CODIGO</th>
-                <th >CURSO</th>
-                <th >TURNO</th>
-                <th >RESOLUCION</th>
-                <th >NOTA</th>
-                <th >MODIFICAR</th>
-        </tr>
-        </thead>
+            <?php
+            }
+            else{   ?>
+            <form id='frmsave' name='frmsave' action="/register/validation/save/" method='POST' enctype="application/x-www-form-urlencoded" class="form-horizontal">
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-2 text-center">Currícula <br>
+                        <select name="valcurid" id="valcurid" class="form-control">
+                            <option value="">- Seleccione una Currícula-</option>
+                            <?php
+                            foreach ($this->curriculas as $k => $datacuri) {    ?>
+                                <option value="<?php echo base64_encode($datacuri['curid'])?>"><?php echo $datacuri['name']?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-md-4 text-center">Curso
+                        <select name="courseid" id="courseid" class='form-control'>
+                            <option value="">- Primero eliga una Currícula -</option>
+                        </select>
+                    </div>
+                </div><br><br><br><br>
+                <div class="col-md-12">
+                    <div class="col-md-2 col-md-offset-2 text-center">Nota <br>
+                        <div style='width:60px; margin-left:17px;'>
+                            <input id='nota' name='nota' type="text" class='form-control text-center' maxlength="2">
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-center">Resolución <br>
+                        <input id='resolution' name='resolution' class="form-control">
+                    </div>
+                </div>
+                    <input id='pid' class='hidden' type="text" name="pid" value="<?php echo base64_encode($this->pid)?>">
+                <input id='ofuid' class='hidden' type="text" name="uid" value="<?php echo base64_encode($this->uid)?>">
+                <input id='escid' class='hidden' type="text" name="escid" value="<?php echo base64_encode($this->escid)?>">
+                <input id='subid' class='hidden' type="text" name="subid" value="<?php echo base64_encode($this->subid)?>">
+                <input id='perid' class='hidden' type="text" name="perid" value="<?php echo base64_encode($this->perid)?>">
+            </form>
+            <?php
+            }
+            ?>
+        </div>
     <?php
-    //print_r($this->cursosconvalidados);
-    if ($this->cursosconvalidados)
-    {
-        $i=1;
-       foreach ($this->cursosconvalidados as $convalidado)    
-        {
-            $eid=$convalidado['eid'];
-            $oid=$convalidado['oid'];
-            $escid=$convalidado['escid'];
-            $courseid=$convalidado['courseid'];
-            $curid=$convalidado['curid'];
-            $turno=$convalidado['turno'];
-            $regid=$convalidado['regid'];
-            $pid=$convalidado['pid'];
-            $uid=$convalidado['uid'];
-            $perid=$convalidado['perid'];
-            $subid=$convalidado['subid'];
-
-            $curso = new Api_Model_DbTable_Course();
-            $dat['eid']=$eid;
-            $dat['oid']=$oid;
-            $dat['subid']=$subid;
-            $dat['escid']=$escid;
-            $dat['courseid']=$courseid;
-            $dat['curid']=$curid;
-            //print_r($dat);
-            $list_curso = $curso ->_getOne($dat);
-            $info = $list_curso['name'];
-            
-            $bestado = new Api_Model_DbTable_PeriodsCourses();
-            $dat1['eid']=$eid;
-            $dat1['oid']=$oid;
-            $dat1['courseid']=$courseid;
-            $dat1['escid']=$escid;
-            $dat1['perid']=$convalidado['perid'];
-            $dat1['turno']=$convalidado['turno'];
-            $dat1['subid']=$convalidado['subid'];
-            $dat1['curid']=$convalidado['curid'];
-            //print_r($dat1);
-            $infor = $bestado ->_getOne($dat1);
-            $estadoacta=$infor['state_record'];
-           ?>
-            <tr>
-                <td><?php echo $i;?></td>
-         
-                <td class="input-mini"><center><?php echo $convalidado['curid'];?></center></td>
-                <td class="input-mini"><center><?php echo $convalidado['courseid'];?></center></td>
-                <td><?php echo $info;?></td>
-                <td class="input-mini"><?php echo $convalidado['turno'];?></td>
-                <td class="span2"><?php echo $convalidado['document_auth'];?></td>
-                <td class="input-mini"><?php echo $convalidado['notafinal'];?></td>
-
-                <?php
-                 if ($estadoacta=='A'){
-                ?>
-                  <td><a href="/register/validation/update/escid/<?php print $escid?>/subid/<?php print $subid?>/regid/<?php print $regid?>/pid/<?php print $pid?>/uid/<?php print $uid?>/perid/<?php print $perid?>/courseid/<?php print $courseid?>/curid/<?php print $curid?>/turno/<?php print $turno?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                <?php
-                 }
-                ?>
-              </tr>
-           <?php
-             $i++;
-        }
     }
-    ?>
-    </table>
-</div>
-<table>
-
-
-
-</table>
-
-<script>
- $("#curid").change(function(){
-        var curid = $(this).val();        
-        var escid= "<?php echo $curricula['escid'];?>";   
-        var subid= "<?php echo $curricula['subid'];?>";   
-
-        url="/register/validation/coursexcurricula/curid/"+curid+"/escid/"+escid+"/subid/"+subid+"/uid/<?php echo $this->uid?>/pid/<?php echo $this->pid ?>/nota/<?php echo $this->nota?>";
-
-        $("#cursoid").html("<img src='/img/spinner.gif' />Cargando....");
-        $("#cursoid").load(url);
-    }); 
-</script>
-
-<script>
-    $("#agregaralumnoxx").click(function(){
-        
-        var curricula = $("#curid").val();
-        var cursos = $("#cursoid").val();
-        var nota = $("#nota").val();
-        var reso = $("#resolucion").val();
-        var uidreg = $("#uidreg").val();
-
-        var tmp=cursos.split(";--;");
-        var courseid=tmp[0];
-        var semid=tmp[1];
-        var creditos=tmp[2];
-         if (curricula!='' && cursos!='' && nota!='' && reso!='')
-         {
-            $("#lista").hide();
-            var url = "/register/validation/save/subid/<?php echo $curricula['subid'] ?>/escid/<?php echo $curricula['escid']?>/perid/<?php echo $this->perid ?>/uid/<?php echo $this->uid ?>/pid/<?php echo $this->pid ?>/temp/<?php echo $this->temp ?>"+"/curid/"+curricula+"/courseid/"+courseid+"/semid/"+semid+"/credi/"+creditos+"/nota/"+nota+"/reso/"+reso+"/uidreg/"+uidreg;
-            // alert(url);
-            $("#header_alumnos").load(url);
-            $("#header_alumnos").html("Cargando..."); 
-        }
-        else
-        {
-            alert("Ingrese todos los datos obligatorios");
-            return false;
-        }
-    });
-</script>
-
-<script>
-function CheckUserName(ele) {
-if (/\s/.test(ele.value)) { alert("no se permiten espacios en blanco"); }
+    else{   ?>
+        <br>
+        <div class="row">
+            <div class="alert alert-info text-center col-md-4 col-md-offset-4"><span class='glyphicon glyphicon-info-sign'></span> Hubo problemas al cargar los cursos...</div>
+        </div>
+    <?php
+    }
 }
-</script>
+else{   ?>
+    <br>
+    <div class="row">
+        <div class="alert alert-info text-center col-md-4 col-md-offset-4"><span class='glyphicon glyphicon-info-sign'></span> No tiene cursos para convalidar</div>
+    </div>
+<?php
+}
+?>
 
-<script>
-    $("#nota").keyup(function()
-    {
-        var v = $(this).val();
-        if (isNaN(v))
-        {
-            $("#nota").val("");
-            $(".msg").html("* solo se permite números");
-        }
-        else
-        {
-            if ((v > 20 || v < 1))
-            {
-                $("#nota").val("");
-                $(".msg").html("* Ingrese de 0 a 20");
-            }
-            else
-            {
-                $(".msg").html("");
-            }
-        }
+<script type="text/javascript" src="/js/notes/jquery.jstepper.js"></script>
+<script type="text/javascript">
 
+$("#nota").jStepper({minValue:-3, maxValue:20, minLength:2});
+
+$(function(){
+
+    $("#closemodalmensaje").on('click', function(){
+        $("#mensajeGuardado").modal('hide');
     });
 
-    $("#nota").blur(function()
-    {
-        var vnota = $(this).val();
-        if (vnota<11 && vnota>1)
-        {
-            $("#nota").focus();
-            $("#nota").val("");
-            $(".msg").html("* CONVALIDACION: notas aprobatorias");
-        }
-    });
-
-    $("#resolucion").keyup(function()
-    {
+    $("#resolution").keyup(function(){
         var r = $(this).val();
-        $("#resolucion").val(r.toUpperCase());
+        $("#resolution").val(r.toUpperCase());
     });
-</script>
 
-<script>
-var total_letras = 2;
-$('#nota').keyup(function() 
-{
-    var longitud = $(this).val().length;
-    var resto = total_letras - longitud;
-    $('#numero').html(resto);
-    if(resto <= 0){
-        $('#nota').attr("maxlength", 2);
-    }
+    $("#valcurid").change(function(){
+        var curid=$(this).val();
+        var pid = $("#pid").val();
+        var uid = $("#ofuid").val();
+        var escid = $("#escid").val();
+        var subid = $("#subid").val();
+
+        var url=('/register/validation/coursexcurricula/curid/'+curid+'/pid/'+pid+'/uid/'+uid+'/escid/'+escid+'/subid/'+subid);
+        $("#courseid").html('<option value="">Cargando cursos permitidos...</option>');
+        $("#courseid").load(url);
+    });
+
+    $("#savecoursec").on('click', function(){
+        var valcourseid=$("#courseid").val();
+        var valnota=$("#nota").val();
+        var valresolution=$("#resolution").val();
+
+        if (!valcourseid) {
+            alert("Seleccione un Curso.");
+            $("#courseid").focus();
+            return false;
+        };
+
+        if (!valnota) {
+            alert("Ingrese una Nota.");
+            $("#courseid").focus();
+            return false;
+        };
+
+        if (!valresolution) {
+            alert("Ingrese una Resolución.");
+            $("#courseid").focus();
+            return false;
+        };
+
+        $.ajax({
+            type: 'POST',
+            url : $("#frmsave").attr('action'),
+            data: $("#frmsave").serialize(),
+            success: function(data) {
+                console.log(data);
+                if (data.status==true) {
+                    $("#smsError").empty();
+                    $("#smsError").html('<center><h3><span class="text-success glyphicon glyphicon-ok-circle"></span><b class="text-success"> Se guardado con Éxito</b></h3></center>');
+                    $("#addCourseModal").modal('hide');
+
+                    $('#addCourseModal').on('hidden.bs.modal', function (e) {
+                        $("#mensajeGuardado").modal('show');
+                    });
+                }
+                else{
+                    $("#smsError").empty();
+                    $("#smsError").html('<center><h3><span class="text-danger glyphicon glyphicon-remove"></span><b class="text-danger"> Hubo un problema al guardar...</b></h3></center>');
+                };
+            }
+        });
+    });
+
+    $('#mensajeGuardado').on('hidden.bs.modal', function (e) {
+        $("#loadData").empty();
+        $("#loadData").html("<br><center><img src='/img/spinner.gif'/> Cargando...</center>");
+        var uid="<?php echo base64_encode($this->uid)?>";
+        var url="/register/validation/addcourse/uid/"+uid;
+        $("#loadData").load(url);
+    });
 });
 </script>

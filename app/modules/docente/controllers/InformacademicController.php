@@ -400,6 +400,188 @@ class Docente_InformacademicController extends Zend_Controller_Action {
         }
     }
 
+    public function printfromdirectorAction(){
+        //dataBases
+        $personDb          = new Api_Model_DbTable_Person();
+        $coursesTeacherDb  = new Api_Model_DbTable_Coursexteacher();
+        $courseDb          = new Api_Model_DbTable_Course();
+        $reportDb          = new Api_Model_DbTable_Addreportacadadm();
+        $registersCourseDb = new Api_Model_DbTable_Registrationxcourse();
+
+        $this->_helper->layout()->disableLayout();
+        $eid   = $this->sesion->eid;
+        $oid   = $this->sesion->oid;
+        $escid = $this->sesion->escid;
+        $subid = $this->sesion->subid;
+
+        $reportId     = base64_decode($this->_getParam('reportid'));
+        $reportId     = explode('|', $reportId);
+        $teacherPid   = $reportId[0];
+        $teacherUid   = $reportId[1];
+        $teacherPerid = $reportId[2];
+
+        $this->view->speciality = $this->sesion->speciality->name;
+        $namef = strtoupper($this->sesion->faculty->name);
+
+        $where = array( 'eid' => $eid,
+                        'pid' => $teacherPid );
+        $attrib = array('last_name0', 'last_name1', 'first_name');
+        $preDataPerson = $personDb->_getFilter($where, $attrib);
+
+        $this->view->infouser = $preDataPerson[0]['last_name0'].' '.$preDataPerson[0]['last_name1'].' '.$preDataPerson[0]['first_name'];
+        $this->view->perid    = $perid;
+
+        //Cursos llevados
+        $where = array( 'eid'     => $eid,
+                        'oid'     => $oid,
+                        'pid'     => $teacherPid,
+                        'uid'     => $teacherUid,
+                        'escid'   => $escid,
+                        'subid'   => $subid,
+                        'perid'   => $teacherPerid,
+                        'is_main' => 'S' );
+
+        $pdCourses = $coursesTeacherDb->_getFilter($where);
+
+        if ($pdCourses) {
+            foreach ($pdCourses as $c => $course) {
+                //nombre del Curso
+                $where = array( 'eid'      => $eid,
+                                'oid'      => $oid,
+                                'curid'    => $course['curid'],
+                                'courseid' => $course['courseid'],
+                                'escid'    => $course['escid'],
+                                'subid'    => $course['subid'] );
+                $pdCourse = $courseDb->_getOne($where);
+
+                //Cantidad de Matriculados
+                $where = array( 'eid'      => $eid,
+                                'oid'      => $oid,
+                                'perid'    => $teacherPerid,
+                                'escid'    => $course['escid'],
+                                'subid'    => $course['subid'],
+                                'courseid' => $course['courseid'],
+                                'curid'    => $course['curid'],
+                                'turno'    => $course['turno'] );
+                $pdRegisters   = $registersCourseDb->_getCantRegistration($where);
+
+                //Cantidad de Aprobados
+                $pdApproved    = $registersCourseDb->_get_approved($where);
+                $por           = round(($pdApproved[0]['count'] / $pdRegisters) * 100, 2);
+                $percentageApp = $pdApproved[0]['count']." - ".$por."%";
+
+                //Cantidad de Desaprobados
+                $pdDisapproved = $registersCourseDb->_get_disapproved_x_course($where);
+                $por           = round(($pdDisapproved[0]['count'] / $pdRegisters) * 100, 2);
+                $percentageDis = $pdDisapproved[0]['count']." - ".$por."%";
+
+                //Canidad de Retirados
+                $pdRetired     = $registersCourseDb->_get_retired_x_course($wherecant);
+                if (!$pdRetired) {
+                    $pdRetired[0]['count'] = 0;
+                }
+                $por           = round(($pdRetired[0]['count'] / $pdRegisters) * 100, 2);
+                $percentageRet = $pdRetired[0]['count']." - ".$por."%";
+
+                $dataCourses[$c] = array(   'escid'       => $course['escid'],
+                                            'subid'       => $course['subid'],
+                                            'curid'       => $course['curid'],
+                                            'courseid'    => $course['courseid'],
+                                            'turno'       => $course['turno'],
+                                            'semid'       => $pdCourse['semid'],
+                                            'name'        => $pdCourse['name'],
+                                            'registers'   => $pdRegisters,
+                                            'approved'    => $percentageApp,
+                                            'disapproved' => $percentageDis,
+                                            'retired'     => $percentageRet );
+            }
+        }
+
+        $this->view->datacourses = $dataCourses;
+
+        $whereinf = array(  'eid'   => $eid,
+                            'oid'   => $oid,
+                            'perid' => $teacherPerid,
+                            'pid'   => $teacherPid,
+                            'uid'   => $teacherUid );
+        $pdReport = $reportDb->_getFilter($whereinf);
+        $dataReport = array('acad_medios'       => $pdReport [0]['acad_medios'],
+                            'acad_tutoria'      => $pdReport[0]['acad_tutoria'],
+                            'adm_acreditacion'  => $pdReport[0]['adm_acreditacion'],
+                            'adm_investigacion' => $pdReport[0]['adm_investigacion'],
+                            'adm_asesoria'      => $pdReport[0]['adm_asesoria'],
+                            'adm_labores'       => $pdReport[0]['adm_labores'],
+                            'number'            => $pdReport[0]['number'] );
+        $this->view->informedoc = $dataReport;
+
+        $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+        $base_speciality =  new Api_Model_DbTable_Speciality();
+        $speciality = $base_speciality ->_getOne($where);
+        $parent=$speciality['parent'];
+        $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+        $parentesc= $base_speciality->_getOne($wher);
+
+        if ($parentesc) {
+            $pala='ESPECIALIDAD DE ';
+            $spe['esc']=$parentesc['name'];
+            $spe['parent']=$pala.$speciality['name'];
+        }
+        else{
+            $spe['esc']=$speciality['name'];
+            $spe['parent']='';  
+        }
+        $names=strtoupper($spe['esc']);
+        $namep=strtoupper($spe['parent']);
+        $namefinal=$names." <br> ".$namep;
+
+        $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+        
+        // $escid=$this->sesion->escid;
+        // $where['escid']=$escid;
+
+        $dbimpression = new Api_Model_DbTable_Countimpressionall();
+        
+        // $uid=$this->sesion->uid;
+        $uidim=$this->sesion->pid;
+        // $pid=$uidim;
+
+        $data = array(
+            'eid'             => $eid,
+            'oid'             => $oid,
+            'uid'             => $teacherPid,
+            'escid'           => $escid,
+            'subid'           => $subid,
+            'pid'             => $teacherPid,
+            'type_impression' => 'informe_academico',
+            'date_impression' => date('Y-m-d H:i:s'),
+            'pid_print'       => $uidim
+            );
+
+        $dbimpression->_save($data);
+
+        $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$teacherUid,'pid'=>$teacherPid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'informe_academico');
+        $dataim = $dbimpression->_getFilter($wheri);
+        $co=count($dataim);
+        $codigo=$co." - ".$uidim;
+
+        $header=$this->sesion->org['header_print'];
+        $footer=$this->sesion->org['footer_print'];
+        $header = str_replace("?facultad",$namef,$header);
+        $header = str_replace("?escuela",$namefinal,$header);
+        $header = str_replace("?logo", $namelogo, $header);
+        $header = str_replace("?codigo", $codigo, $header);
+        $header = str_replace("h2", "h3", $header);
+        $header = str_replace("h3", "h5", $header);
+        $header = str_replace("h4", "h6", $header);
+        $header = str_replace("11%", "9%", $header);
+
+        $footer = str_replace("h4", "h5", $footer);
+        $footer = str_replace("h5", "h6", $footer);
+        
+        $this->view->header=$header;
+        $this->view->footer=$footer;
+    }
+
 
     public function printpruebaAction(){
         try {

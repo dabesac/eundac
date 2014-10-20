@@ -1,8 +1,14 @@
-<option value="">Seleccione curso</option><?php
-    foreach ($this->cursito  as $curso){
-        ?>
-      
-          <option value="<?php echo $curso['courseid'].";--;".$curso['semid'].";--;".$curso['credits']?>"><?php echo $curso['courseid']." | ".$curso['name']." | ".$curso['credits']?> </option>
-        <?php  
-        }
+<?php
+if ($this->data) {  ?>
+    <option value="">Seleccione curso</option>
+    <?php
+    foreach ($this->data as $i => $datas) { ?>
+        <option value="<?php echo base64_encode($datas['courseid'].'%%'.$datas['semid'].'%%'.$datas['credits'].'%%'.$datas['curid'].'%%'.$datas['type'])?>"><?php echo $datas['courseid']." | ".$datas['name']?></option>
+    <?php
+    }
+}
+else{   ?>
+    <option value="">No tiene cursos</option>
+<?php
+}
 ?>

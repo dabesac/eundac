@@ -11,10 +11,9 @@ if ($this->cursos) { ?>
             <option class='text-success' value="<?php echo $cursos['courseid']."--".$cursos['curid']."--".$cursos['semid']."--".$cursos['credits']?>"><b><?php echo $cursos['courseid']." | ".$cursos['name']." - Créditos: ".$cursos['credits']?></b></option>
         <?php
         }
-        ?>
-	<?php
 	}
 }else{ ?>
 	<option value="">No tiene Ninguna Asignatura.</option>
 <?php
-}?>
+}
+?>

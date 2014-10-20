@@ -66,7 +66,7 @@ $ldistri =$this->ldistribution;
 				</div>
 				<div class="distObO distBtnsSide">
 					<?php if ($distri['state']=='C' || $distri['state']=='I'): ?>
-						<?php 
+						<?php
 							$distributionId = base64_encode($distri['perid'].'|'.
 															$distri['escid'].'|'.
 															$distri['subid'].'|'.
@@ -199,7 +199,7 @@ $ldistri =$this->ldistribution;
 
 <!-- Modal para la lista de docentes -->
 <div class="modal fade" id="modalDocentesDist" tabindex="-1">
-	<div id="dataDocentesDist" class="modal-dialog">
+	<div id="dataDocentesDist" class="modal-dialog modal-listDocentes">
 
 	</div>
 </div>

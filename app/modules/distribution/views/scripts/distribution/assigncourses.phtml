@@ -1,304 +1,327 @@
-<script src="/js/jquery-1.11.0.js"></script>
-<script src="/external_library/bootstrap/js/bootstrap.js"></script>
-<script src="/external_library/bootstrap/js/jquery.functions.js"></script>
-<link rel="stylesheet" type="text/css" href="/external_library/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/css/style.css">
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<style type="text/css">
-.cuadro{
-    background-color: #fff;
-    border-radius: 5px;
-    border: 1px solid silver;
-    padding-top: 10px;
-    padding-bottom: 15px;
-    width: 96%;
-    margin-left: 2%;
-}
-th, td{
-    font-size:12px;
-}
-</style>
-<body class="found">
-<table class="table" style="background: #428bca; color: white">
-    <tr>
-        <td>
-            <a href="/distribution/distribution/preview/perid/<?php echo base64_encode($this->perid)?>/esciddoc/<?php echo base64_encode($this->esciddoc)?>/subiddoc/<?php echo base64_encode($this->subiddoc)?>/distid/<?php echo base64_encode($this->distid)?>/uid/<?php echo base64_encode($this->uid)?>/pid/<?php echo base64_encode($this->pid)?>" class="btn btn-warning"><span class="glyphicon glyphicon-list-alt"></span> Vista Preliminar</a>
-        </td>
-        <td>
-        	<h4><b><center><?php echo $this->person['last_name0']." ".$this->person['last_name1'].", ".$this->person['first_name'] ?></center></b></h4>
-        </td>
-        <td>
-            <a style="float:right" class='btn btn-danger' onclick="javascript: window.close();"><span class="glyphicon glyphicon-eject"></span> Cerrar</a>
-        </td>
-    </tr>
-</table>
-
-<div id="academica" class="cuadro">
-    <div>
-        <h5 style="color: silver"><center><b>ACADEMICA</b></center></h5>
-    </div>
-    <center>
-    <table class="table table-condensed table-hover" style="margin-top:10px; width:96%">
+<div id="assigcoursesaall">
+    <script src="/js/jquery-1.11.0.js"></script>
+    <script src="/external_library/bootstrap/js/bootstrap.js"></script>
+    <script src="/external_library/bootstrap/js/jquery.functions.js"></script>
+    <link rel="stylesheet" type="text/css" href="/external_library/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <style type="text/css">
+    .cuadro{
+        background-color: #fff;
+        border-radius: 5px;
+        border: 1px solid silver;
+        padding-top: 10px;
+        padding-bottom: 15px;
+        width: 96%;
+        margin-left: 2%;
+    }
+    th, td{
+        font-size:12px;
+    }
+    </style>
+    <body class="found">
+    <table class="table" style="background: #428bca; color: white">
         <tr>
-            <th><center>Currícula</center></th>
-            <th><center>Asignaturas</center></th>
-            <th><center>Comprom.</center></th>
-            <?php
-            $uid=$this->uid;
-            $riddoc=substr($uid,8,2);
-            if($riddoc=='DC'){ ?>
-            	<th><center>Principal</center></th>
-            <?php
-            } ?>
-            <th><center>Grupos</center></th>
-            <th><center>#H.T.</center></th>
-            <th><center>#H.P.</center></th>
-            <th><center>#T.T.</center></th>
+            <td>
+                <a href="/distribution/distribution/preview/perid/<?php echo base64_encode($this->perid)?>/esciddoc/<?php echo base64_encode($this->esciddoc)?>/subiddoc/<?php echo base64_encode($this->subiddoc)?>/distid/<?php echo base64_encode($this->distid)?>/uid/<?php echo base64_encode($this->uid)?>/pid/<?php echo base64_encode($this->pid)?>" class="btn btn-warning"><span class="glyphicon glyphicon-list-alt"></span> Vista Preliminar</a>
+            </td>
+            <td>
+                <h4><b><center><?php echo $this->person['last_name0']." ".$this->person['last_name1'].", ".$this->person['first_name'] ?></center></b></h4>
+            </td>
+            <td>
+                <a style="float:right" class='btn btn-danger' onclick="javascript: window.close();"><span class="glyphicon glyphicon-eject"></span> Cerrar</a>
+            </td>
         </tr>
-        <tr>
-            <td>
-                <select id="curid" class="form-control" style="width:110px">
-                    <option value="">Currícula</option>
-                    <?php
-                    foreach ($this->curriculas  as $curricula){ ?>
-                        <option value="<?php echo $curricula['curid']?>"><?php echo $curricula['curid']?></option>
+    </table>
+
+    <div id="academica" class="cuadro">
+        <div>
+            <h5 style="color: silver"><center><b>ACADEMICA</b></center></h5>
+        </div>
+        <center>
+        <table class="table table-condensed table-hover" style="margin-top:10px; width:96%">
+            <tr>
+                <th><center>Currícula</center></th>
+                <th><center>Asignaturas</center></th>
+                <th><center>Comprom.</center></th>
+                <?php
+                $uid=$this->uid;
+                $riddoc=substr($uid,8,2);
+                if($riddoc=='DC'){ ?>
+                    <th><center>Principal</center></th>
+                <?php
+                } ?>
+                <th><center>Grupos</center></th>
+                <th><center>#H.T.</center></th>
+                <th><center>#H.P.</center></th>
+                <th><center>#T.T.</center></th>
+            </tr>
+            <tr>
+                <td>
+                    <select id="curid" class="form-control" style="width:110px">
+                        <option value="">Currícula</option>
                         <?php
-                    }?>
-                </select>
-            </td>
-            <td>
-                <select id="courseid" class="form-control">
-                    <option value="">Seleccione Asignatura</option>
-                </select>
-            </td>
-            <td>
-                <center>
-                    <input type="checkbox" id="compromiso" value="N" title="Compromiso">
-                </center>
-            </td>
-            <?php
-            $uid=$this->uid;
-            $riddoc=substr($uid,8,2);
-            if($riddoc=='DC'){ ?>
+                        foreach ($this->curriculas  as $curricula){ ?>
+                            <option value="<?php echo $curricula['curid']?>"><?php echo $curricula['curid']?></option>
+                            <?php
+                        }?>
+                    </select>
+                </td>
+                <td>
+                    <select id="courseid" class="form-control">
+                        <option value="">Seleccione Asignatura</option>
+                    </select>
+                </td>
                 <td>
                     <center>
-                        <input type="checkbox" id="princ" value="N" title="Principal">
+                        <input type="checkbox" id="compromiso" value="N" title="Compromiso">
                     </center>
                 </td>
-            <?php
-            } ?>
-            <td>
-                <center>
-                    <select id="grupos" class="form-control" style="width:60px">
-                        <?php
-                        for($i=1; $i<=20; $i++){ ?>
-                            <option value="<?php echo $i?>"><?php echo $i?></option>
-                        <?php }?>
-                    </select>
-                </center>
-            </td>
-            <td>
-                <center>
-                    <!-- <input type="text" class="form-control" style="width:80px"> -->
-                    <!-- <div type="text" id="hteoria" class="form-control" style="width:60px"></div> -->
-                    <select id="hteoria" class="form-control" style="width:80px">
-                        <option value="">Teória</option>
-                    </select>
-                </center>
-            </td>
-            <td>
-                <center>
-                    <!-- <div type="text" id="hpractica" class="form-control" style="width:60px"></div> -->
-                    <select id="hpractica" class="form-control" style="width:80px">
-                        <option value="">Práctica</option>
-                    </select>
-                </center>
-            </td>
-            <td>
-                <center>
-                    <input type="text" id="totalhoras" class="form-control" style="width:60px" disabled>
-                </center>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="8">
-                <center>
-                    <a href="#" class="btn btn-info" id="agregarcurso"><span class="glyphicon glyphicon-floppy-disk"></span> Agregar</a>
-                </center>
-            </td>
-        </tr>
-    </table>
-    <br>
-    <?php
-    $i=1;
-    $temporalh=null;
-    if ($this->cursosasignados){  ?>
-    <table id="vercursosasig" style="width:96%; margin:0px" class="table table-bordered table-condensed table-striped">
-        <tr>
-            <th>#</th>
-            <th>Código</th>
-            <th>Nombre Asignatura</th>
-            <th><center>Turno</center></th>
-            <th><center>Sem</center></th>
-            <th><center>Compromiso</center></th>
-            <th><center>Grupos</center></th>
-            <th><center>#H.T.</center></th>
-            <th><center>#H.P.</center></th>
-            <th><center>#T.T.</center></th>
-            <th><center>Eliminar</center></th>
-        </tr>
-        <?php
-            foreach ($this->cursosasignados as $cursos){ ?>
-                <tr>
-                    <td><?php echo $i?></td>
-                    <td><?php echo $cursos['courseid']?></td>
-                    <td><?php echo $cursos['name']?></td>
-                    <td><center><?php echo $cursos['turno']?></center></td>
-                    <td><center><?php echo $cursos['semid']?></center></td>
+                <?php
+                $uid=$this->uid;
+                $riddoc=substr($uid,8,2);
+                if($riddoc=='DC'){ ?>
                     <td>
                         <center>
-                            <?php
-                            if($cursos['is_com']=='S') echo "SI";
-                            elseif($cursos['is_com']=='N') echo "NO"; ?>
+                            <input type="checkbox" id="princ" value="N" title="Principal">
                         </center>
                     </td>
-                    <?php
-                        $temporalh=$temporalh+$cursos['hours_total'];
-                    ?>
-                    <td><center><?php echo $cursos['groups']?></center></td>
-                    <td><center><?php echo $cursos['hours_t']?></center></td>
-                    <td><center><?php echo $cursos['hours_p']?></center></td>
-                    <td><center><?php echo $cursos['hours_total']?></center></td>
-                    <td>
-                        <center><a href="/distribution/distribution/deleteasigncourse/perid/<?php echo base64_encode($this->perid)?>/subiddoc/<?php echo base64_encode($this->subiddoc)?>/esciddoc/<?php echo base64_encode($this->esciddoc)?>/courseid/<?php echo base64_encode($cursos['courseid'])?>/turno/<?php echo base64_encode($cursos['turno'])?>/curid/<?php echo base64_encode($cursos['curid'])?>/pid/<?php echo base64_encode($this->pid)?>/uid/<?php echo base64_encode($this->uid)?>/distid/<?php echo base64_encode($this->distid)?>" rel="tooltip" title="Eliminar Asignatura"><span class="glyphicon glyphicon-trash"></span>Eliminar</a></center>
-                    </td>
-                </tr>
-            <?php
-            $i++;
-            }?>
-            <tr>
-                <td colspan='9'>Total Horas Académicas</td>
-                <td><center><?php echo $temporalh;?></center></td>
-                <td></td>
+                <?php
+                } ?>
+                <td>
+                    <center>
+                        <select id="grupos" class="form-control" style="width:60px">
+                            <?php
+                            for($i=1; $i<=20; $i++){ ?>
+                                <option value="<?php echo $i?>"><?php echo $i?></option>
+                            <?php }?>
+                        </select>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                        <!-- <input type="text" class="form-control" style="width:80px"> -->
+                        <!-- <div type="text" id="hteoria" class="form-control" style="width:60px"></div> -->
+                        <select id="hteoria" class="form-control" style="width:80px">
+                            <option value="">Teória</option>
+                        </select>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                        <!-- <div type="text" id="hpractica" class="form-control" style="width:60px"></div> -->
+                        <select id="hpractica" class="form-control" style="width:80px">
+                            <option value="">Práctica</option>
+                        </select>
+                    </center>
+                </td>
+                <td>
+                    <center>
+                        <input type="text" id="totalhoras" class="form-control" style="width:60px" disabled>
+                    </center>
+                </td>
             </tr>
-    </table>
-    <?php }
-    ?>
-    <div id="guardarcursosasig"></div>
-</div>
-<br>
-<div id="administrativo" class="cuadro">
-    <div>
-        <h5 style="color: silver"><center><b>ADMINISTRATIVA</b></center></h5>
-    </div>
-    <center>
-        <form name="<?php echo $this->form->getName();?>" id="hsadmin" action="/distribution/distribution/savedistributionadmin/uid/<?php echo $this->uid?>/pid/<?php echo $this->pid?>/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid?>/esciddoc/<?php echo $this->esciddoc?>/subiddoc/<?php echo $this->subiddoc?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
-            <table style="width:90%" class="table table-condensed table-striped">
-                <tr>
-                    <th>Labor Administrativa</th>
-                    <th colspan="2"># Horas</th>
-                </tr>
-                <tr>
-                    <td><?php echo $this->form->work;?></td>
-                    <td style="width:100px"><?php echo $this->form->hours;?></td>
-                    <td><?php echo $this->form->enviar;?></td>
-                </tr>
-            </table>
-        </form>
+            <tr>
+                <td colspan="8">
+                    <center>
+                        <a href="#" class="btn btn-info" id="agregarcurso"><span class="glyphicon glyphicon-floppy-disk"></span> Agregar</a>
+                    </center>
+                </td>
+            </tr>
+        </table>
+        <div id="menssageAll"></div>
+        <br>
         <?php
         $i=1;
-        $temporalad=null;
-        $temporal=null;
-        if ($this->administrativas){ ?>
-        <table id="labores" style="width:90%; margin:0px" class="table table-bordered table-condensed table-striped">
+        $temporalh=null;
+        if ($this->cursosasignados){  ?>
+        <table id="vercursosasig" style="width:96%; margin:0px" class="table table-bordered table-condensed table-striped">
             <tr>
-                <th><center>#</center></th>
-                <th>Labor Administrativa</th>
-                <th><center># Horas</center></th>
+                <th>#</th>
+                <th>Código</th>
+                <th>Nombre Asignatura</th>
+                <th><center>Turno</center></th>
+                <th><center>Sem</center></th>
+                <th><center>Compromiso</center></th>
+                <th><center>Grupos</center></th>
+                <th><center>#H.T.</center></th>
+                <th><center>#H.P.</center></th>
+                <th><center>#T.T.</center></th>
                 <th><center>Eliminar</center></th>
             </tr>
             <?php
-            foreach ($this->administrativas as $admin){
-                $y=$admin['hours'];
-                $temporalad=$temporalad+$y;
-                $temporal=$temporal+$y;?>
+                foreach ($this->cursosasignados as $cursos){ ?>
+                    <tr>
+                        <td><?php echo $i?></td>
+                        <td><?php echo $cursos['courseid']?></td>
+                        <td><?php echo $cursos['name']?></td>
+                        <td><center><?php echo $cursos['turno']?></center></td>
+                        <td><center><?php echo $cursos['semid']?></center></td>
+                        <td>
+                            <center>
+                                <?php
+                                if($cursos['is_com']=='S') echo "SI";
+                                elseif($cursos['is_com']=='N') echo "NO"; ?>
+                            </center>
+                        </td>
+                        <?php
+                            $temporalh=$temporalh+$cursos['hours_total'];
+                        ?>
+                        <td><center><?php echo $cursos['groups']?></center></td>
+                        <td><center><?php echo $cursos['hours_t']?></center></td>
+                        <td><center><?php echo $cursos['hours_p']?></center></td>
+                        <td><center><?php echo $cursos['hours_total']?></center></td>
+                        <td>
+                            <center><a class='deletecourseAsig btn btn-danger btn-xs' href="#" perid='<?php echo base64_encode($this->perid)?>' subiddoc='<?php echo base64_encode($this->subiddoc)?>' esciddoc='<?php echo base64_encode($this->esciddoc)?>' courseid='<?php echo base64_encode($cursos['courseid'])?>' turno='<?php echo base64_encode($cursos['turno'])?>' curid='<?php echo base64_encode($cursos['curid'])?>' pid='<?php echo base64_encode($this->pid)?>' uid='<?php echo base64_encode($this->uid)?>' distid='<?php echo base64_encode($this->distid)?>' rel="tooltip" title="Eliminar Asignatura"><span class="glyphicon glyphicon-trash"></span> Eliminar</a></center>
+                        </td>
+                    </tr>
+                <?php
+                $i++;
+                }?>
                 <tr>
-                    <td><center><?php echo $i?></center></td>
-                    <td><?php echo $admin['work']?></td>
-                    <td><center><?php echo $admin['hours']?></center></td>
-                    <td>
-                        <center><a href="/distribution/distribution/deletedistributionadmin/admdistid/<?php echo base64_encode($admin['admdistid'])?>/uid/<?php echo base64_encode($this->uid)?>/pid/<?php echo base64_encode($this->pid)?>/esciddoc/<?php echo base64_encode($this->esciddoc)?>/subiddoc/<?php echo base64_encode($this->subiddoc)?>/distid/<?php echo base64_encode($this->distid)?>/perid/<?php echo base64_encode($this->perid)?>" rel="tooltip" title="Eliminar Labor Administrativa"><span class="glyphicon glyphicon-trash"></span></a>
-                    </td>
+                    <td colspan='9'>Total Horas Académicas</td>
+                    <td><center><?php echo $temporalh;?></center></td>
+                    <td></td>
                 </tr>
-            <?php
-            $i++;
-            } ?>
-            <tr>
-                <td colspan='2' >Total Horas Administrativas</td>
-                <td><center><?php echo $temporalad?></center></td>
-                <td></td>
-            </tr>
         </table>
-        <?php
-        } ?>
-    <div id="ghorasadmin"></div>
-    </center>
-</div>
-<br>
-<center style="padding-left:70%" class="col-lg-4">
-    <div class="cuadro col-lg-4">
-        <table class="table table-hover table-bordered table-condensed" style="margin:0px">
-            <?php
-            $whereteach['eid']=$this->eid;
-            $whereteach['oid']=$this->oid;
-            $whereteach['uid']=$this->uid;
-            $whereteach['pid']=$this->pid;
-            $whereteach['perid']=$this->perid;
-            $distdoc = new Distribution_Model_DbTable_DistributionTeacher();
-            $datadistdoc = $distdoc->_getFilter($whereteach,$atrib=null);
-            $infothacad = $datadistdoc[0]['total_hour_acad'];
-            $infothadmin = $datadistdoc[0]['total_hour_admin'];
-            $thoras = $infothacad+$infothadmin;
-            if($infothacad>=30){ ?>
-                <script>
-                    alert('Sus Horas Teóricas exceden a 30\n Revise sus horas.');
-                </script>
-            <?php
-            }
-            if($thoras>40) { ?>
-                <script>
-                    alert('Sus Horas Totales exceden a 40\n Revise sus horas.');
-                </script>
-            <?php
-            } ?>
-            <tr>
-                <th>T.H. Académicas:</th>
-                <td><center><?php echo $infothacad?></center></td>
-            </tr>
-            <tr>
-                <th>T.H. Administrativas:</th>
-                <td><center><?php echo $infothadmin?></center></td>
-            </tr>
-            <tr>
-                <th>Total Horas:</th>
-                <td><center><?php echo $thoras?></center></td>
-            </tr>
-            <tr>
-                <td colspan='2'><a id="updatepag" style="float:right" href="#" class="btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Actualizar</a></td>
-            </tr>
-        </table>
+        <?php }
+        ?>
+        <div id="guardarcursosasig"></div>
+
     </div>
-</center>
-</body>
+    <br>
+    <div id="administrativo" class="cuadro">
+        <div>
+            <h5 style="color: silver"><center><b>ADMINISTRATIVA</b></center></h5>
+        </div>
+        <center>
+            <form name="<?php echo $this->form->getName();?>" id="hsadmin" action="/distribution/distribution/savedistributionadmin/uid/<?php echo $this->uid?>/pid/<?php echo $this->pid?>/distid/<?php echo $this->distid?>/perid/<?php echo $this->perid?>/esciddoc/<?php echo $this->esciddoc?>/subiddoc/<?php echo $this->subiddoc?>" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+                <table style="width:90%" class="table table-condensed table-striped">
+                    <tr>
+                        <th>Labor Administrativa</th>
+                        <th colspan="2"># Horas</th>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->form->work;?></td>
+                        <td style="width:100px"><?php echo $this->form->hours;?></td>
+                        <td><?php echo $this->form->enviar;?></td>
+                    </tr>
+                </table>
+            </form>
+            <?php
+            $i=1;
+            $temporalad=null;
+            $temporal=null;
+            if ($this->administrativas){ ?>
+            <table id="labores" style="width:90%; margin:0px" class="table table-bordered table-condensed table-striped">
+                <tr>
+                    <th><center>#</center></th>
+                    <th>Labor Administrativa</th>
+                    <th><center># Horas</center></th>
+                    <th><center>Eliminar</center></th>
+                </tr>
+                <?php
+                foreach ($this->administrativas as $admin){
+                    $y=$admin['hours'];
+                    $temporalad=$temporalad+$y;
+                    $temporal=$temporal+$y;?>
+                    <tr>
+                        <td><center><?php echo $i?></center></td>
+                        <td><?php echo $admin['work']?></td>
+                        <td><center><?php echo $admin['hours']?></center></td>
+                        <td>
+                            <center><a href="/distribution/distribution/deletedistributionadmin/admdistid/<?php echo base64_encode($admin['admdistid'])?>/uid/<?php echo base64_encode($this->uid)?>/pid/<?php echo base64_encode($this->pid)?>/esciddoc/<?php echo base64_encode($this->esciddoc)?>/subiddoc/<?php echo base64_encode($this->subiddoc)?>/distid/<?php echo base64_encode($this->distid)?>/perid/<?php echo base64_encode($this->perid)?>" rel="tooltip" title="Eliminar Labor Administrativa"><span class="glyphicon glyphicon-trash"></span></a>
+                        </td>
+                    </tr>
+                <?php
+                $i++;
+                } ?>
+                <tr>
+                    <td colspan='2' >Total Horas Administrativas</td>
+                    <td><center><?php echo $temporalad?></center></td>
+                    <td></td>
+                </tr>
+            </table>
+            <?php
+            } ?>
+        <div id="ghorasadmin"></div>
+        </center>
+    </div>
+    <br>
+    <center style="padding-left:70%" class="col-lg-4">
+        <div class="cuadro col-lg-4">
+            <table class="table table-hover table-bordered table-condensed" style="margin:0px">
+                <?php
+                $whereteach['eid']=$this->eid;
+                $whereteach['oid']=$this->oid;
+                $whereteach['uid']=$this->uid;
+                $whereteach['pid']=$this->pid;
+                $whereteach['perid']=$this->perid;
+                $distdoc = new Distribution_Model_DbTable_DistributionTeacher();
+                $datadistdoc = $distdoc->_getFilter($whereteach,$atrib=null);
+                $infothacad = $datadistdoc[0]['total_hour_acad'];
+                $infothadmin = $datadistdoc[0]['total_hour_admin'];
+                $thoras = $infothacad+$infothadmin;
+                if($infothacad>=30){ ?>
+                    <script>
+                        alert('Sus Horas Teóricas exceden a 30\n Revise sus horas.');
+                    </script>
+                <?php
+                }
+                if($thoras>40) { ?>
+                    <script>
+                        alert('Sus Horas Totales exceden a 40\n Revise sus horas.');
+                    </script>
+                <?php
+                } ?>
+                <tr>
+                    <th>T.H. Académicas:</th>
+                    <td><center><?php echo $infothacad?></center></td>
+                </tr>
+                <tr>
+                    <th>T.H. Administrativas:</th>
+                    <td><center><?php echo $infothadmin?></center></td>
+                </tr>
+                <tr>
+                    <th>Total Horas:</th>
+                    <td><center><?php echo $thoras?></center></td>
+                </tr>
+                <tr>
+                    <td colspan='2'><a id="updatepag" style="float:right" href="#" class="btn btn-danger"><span class="glyphicon glyphicon-refresh"></span> Actualizar</a></td>
+                </tr>
+            </table>
+        </div>
+    </center>
+    </body>
+
+    <!-- MODAL BORRAR CURSO ASIGNADO Y HORARIOS-->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style='width:36%; top:150px'>
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class='text-info'>
+                        <h4><span class='glyphicon glyphicon-info-sign'></span><b> Desea eliminar este Curso</b><br><span class='text-muted'><h5>Tambien se eliminará su horario asignado</h5></span></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="yes" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Eliminar</button>
+                    <button id='cancel' type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancelar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
 
 <script>
+    $("#menssageAll").empty();
+
     var support = "<?php echo $this->support?>";
     if (support==1) {
         $("#administrativo").hide();
         $("#labores").hide();
     };
 
- 	$("#curid").change(function(){
+    $("#curid").change(function(){
         var curid = $(this).val();
         var escid = "<?php echo $this->escid?>";
         var perid = "<?php echo $this->perid?>";
@@ -361,7 +384,7 @@ th, td{
 
     $("#agregarcurso").click(function(){
 
-        $("#vercursosasig").hide();
+        // $("#vercursosasig").hide();
         var uid="<?php echo $this->uid?>";
         var pid="<?php echo $this->pid?>";
         var perid="<?php echo $this->perid?>";
@@ -409,9 +432,51 @@ th, td{
         var semid=tmp[1];
         var turno=tmp[2];
 
-        var url="/distribution/distribution/saveasigncourse/curid/"+curid+"/courseid/"+courseid+"/turno/"+turno+"/semid/"+semid+"/grupos/"+grupos+"/hteoria/"+hteoria+"/hpractica/"+hpractica+"/totalhoras/"+totalhoras+"/compromiso/"+compromiso+"/uid/"+uid+"/pid/"+pid+"/distid/"+distid+"/perid/"+perid+"/principal/"+principal+"/estado/"+estado+"/esciddoc/"+esciddoc+"/subiddoc/"+subiddoc;
+        var params = {     'curid' : curid,
+                        'courseid' : courseid,
+                           'turno' : turno,
+                           'semid' : semid,
+                          'grupos' : grupos,
+                         'hteoria' : hteoria,
+                       'hpractica' : hpractica,
+                      'totalhoras' : totalhoras,
+                      'compromiso' : compromiso,
+                             'uid' : uid,
+                             'pid' : pid,
+                          'distid' : distid,
+                           'perid' : perid,
+                       'principal' : principal,
+                          'estado' : estado,
+                        'esciddoc' : esciddoc,
+                        'subiddoc' : subiddoc
+                     };
+
+        $.ajax({
+            type: 'POST',
+            url: '/distribution/distribution/saveasigncourse/',
+            data: params,
+            success: function(data) {
+
+                if (data.status==true) {
+                    $("#menssageAll").html('<span class="text-success"><b>'+data.msg+'</b></span>');
+                    location.reload();
+                }
+                else{
+                    $("#menssageAll").html('<span class="text-danger"><b>'+data.msg+'</b></span>');
+                };
+                // if (data.status==true) {
+                // }
+                // else{
+                //     alert("¡ No se puedo guardar el CURSO ! INTENTALO NUEVAMENTE");
+                // };
+                // console.log(data);
+                // $("#deleteModal").modal('hide');
+                // $('#guardarcursosasig').html(data);
+            }
+        });
+        // var url="/distribution/distribution/saveasigncourse/curid/"+curid+"/courseid/"+courseid+"/turno/"+turno+"/semid/"+semid+"/grupos/"+grupos+"/hteoria/"+hteoria+"/hpractica/"+hpractica+"/totalhoras/"+totalhoras+"/compromiso/"+compromiso+"/uid/"+uid+"/pid/"+pid+"/distid/"+distid+"/perid/"+perid+"/principal/"+principal+"/estado/"+estado+"/esciddoc/"+esciddoc+"/subiddoc/"+subiddoc;
+        // $("#guardarcursosasig").load(url);
         // alert(url);
-        $("#guardarcursosasig").load(url);
     });
 
     $("#hsadmin").submit(function(){
@@ -429,6 +494,50 @@ th, td{
 
     $("#updatepag").click(function(){
         window.location.reload();
+    });
+
+    $(".deletecourseAsig").on('click', function(){
+        $("#deleteModal").modal('show');
+        var subiddoc=$(this).attr('subiddoc');
+        var esciddoc=$(this).attr('esciddoc');
+        var courseid=$(this).attr('courseid');
+        var distid=$(this).attr('distid');
+        var turno=$(this).attr('turno');
+        var curid=$(this).attr('curid');
+        var perid=$(this).attr('perid');
+        var uid=$(this).attr('uid');
+        var pid=$(this).attr('pid');
+
+        $("#yes").on('click', function(){
+            var params = {  'subiddoc' : subiddoc,
+                            'esciddoc' : esciddoc,
+                            'courseid' : courseid,
+                              'distid' : distid,
+                               'turno' : turno,
+                               'curid' : curid,
+                               'perid' : perid,
+                                 'uid' : uid,
+                                 'pid' : pid
+                         };
+
+            $.ajax({
+                type: 'POST',
+                url: '/distribution/distribution/deleteasigncourse/',
+                data: params,
+                success: function(data) {
+
+                    if (data.status==true) {
+                        $("#deleteModal").modal('hide');
+                        $("#menssageAll").html('<span class="text-success"><b>'+data.msg+'</b></span>');
+                        location.reload();
+                    }
+                    else{
+                        $("#deleteModal").modal('hide');
+                        $("#menssageAll").html('<span class="text-danger"><b>'+data.msg+'</b></span>');
+                    };
+                }
+            });
+        });
     });
 
     $('a[rel=tooltip]').tooltip();

@@ -14,8 +14,8 @@ class IndexController extends Zend_Controller_Action {
     {
     	try{
     	$sesion1  = Zend_Auth::getInstance();
-    	if($sesion1->hasIdentity()){
-    		$sesion = $sesion1->getStorage()->read();
+        if($sesion1->hasIdentity()){
+            $sesion = $sesion1->getStorage()->read();
     		$this->_helper->redirector('index','index',($sesion->rol['module']));
     	}
 
@@ -157,7 +157,7 @@ class IndexController extends Zend_Controller_Action {
                     //Verificar si hay encuesta activa
                     $data->encuesta->existeEncuesta  = 'No';
                     $data->encuesta->rellenoEncuesta = '-';
-            
+
                     if ($rid == 'AL') {
                         $pollDb         = new Api_Model_DbTable_Poll();
                         $pollQuestionDb = new Api_Model_DbTable_PollQuestion();
@@ -173,7 +173,7 @@ class IndexController extends Zend_Controller_Action {
                         if ($dataPoll) {
                             //Verificar si se matriculo al peridodo de la encuesta
                             $periodEncuesta = $dataPoll[0]['perid'];
- 
+
                             $where = array( 'eid'   => $eid,
                                             'oid'   => $oid,
                                             'pid'   => $data->pid,
