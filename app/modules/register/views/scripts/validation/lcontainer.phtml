@@ -36,34 +36,41 @@ if ($this->data) {
             <?php
             }
             else{   ?>
-            <div class="col-md-12">
-                <div class="col-md-4 col-md-offset-2 text-center">Currícula <br>
-                    <select name="valcurid" id="valcurid" class="form-control">
-                        <option value="">- Seleccione una Currícula-</option>
-                        <?php
-                        foreach ($this->curriculas as $k => $datacuri) {    ?>
-                            <option value="<?php echo base64_encode($datacuri['curid'])?>"><?php echo $datacuri['name']?></option>
-                        <?php
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="col-md-4 text-center">Curso
-                    <select name="courseid" id="courseid" class='form-control'>
-                        <option value="">- Primero eliga una Currícula -</option>
-                    </select>
-                </div>
-            </div><br><br><br><br>
-            <div class="col-md-12">
-                <div class="col-md-2 col-md-offset-2 text-center">Nota <br>
-                    <div style='width:60px; margin-left:17px;'>
-                        <input id='nota' name='nota' type="text" class='form-control text-center' maxlength="2">
+            <form id='frmsave' name='frmsave' action="/register/validation/save/" method='POST' enctype="application/x-www-form-urlencoded" class="form-horizontal">
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-2 text-center">Currícula <br>
+                        <select name="valcurid" id="valcurid" class="form-control">
+                            <option value="">- Seleccione una Currícula-</option>
+                            <?php
+                            foreach ($this->curriculas as $k => $datacuri) {    ?>
+                                <option value="<?php echo base64_encode($datacuri['curid'])?>"><?php echo $datacuri['name']?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-md-4 text-center">Curso
+                        <select name="courseid" id="courseid" class='form-control'>
+                            <option value="">- Primero eliga una Currícula -</option>
+                        </select>
+                    </div>
+                </div><br><br><br><br>
+                <div class="col-md-12">
+                    <div class="col-md-2 col-md-offset-2 text-center">Nota <br>
+                        <div style='width:60px; margin-left:17px;'>
+                            <input id='nota' name='nota' type="text" class='form-control text-center' maxlength="2">
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-center">Resolución <br>
+                        <input id='resolution' name='resolution' class="form-control">
                     </div>
                 </div>
-                <div class="col-md-6 text-center">Resolución <br>
-                    <input id='resolution' name='resolution' class="form-control">
-                </div>
-            </div>
+                    <input id='pid' class='hidden' type="text" name="pid" value="<?php echo base64_encode($this->pid)?>">
+                <input id='ofuid' class='hidden' type="text" name="uid" value="<?php echo base64_encode($this->uid)?>">
+                <input id='escid' class='hidden' type="text" name="escid" value="<?php echo base64_encode($this->escid)?>">
+                <input id='subid' class='hidden' type="text" name="subid" value="<?php echo base64_encode($this->subid)?>">
+                <input id='perid' class='hidden' type="text" name="perid" value="<?php echo base64_encode($this->perid)?>">
+            </form>
             <?php
             }
             ?>
