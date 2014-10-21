@@ -159,7 +159,7 @@ $strprint = "/record/index/printavence/"
 		<td class="center"><span class="glyphicon <?php echo $sp?> txthover"
 		data-toggle="tooltip" title="Estado del segundo parcial"></span></td>
 		<td><?php
-		 	if($date=='' && $this->rid =="DR"){?>
+		 	if($date=='' && ($this->rid =="DR" || $this->rid =="AD")){?>
 		 		<div class="dataup" style="width:130px;">
 					<div class="fecha" style='float: left'>
 						<input id="f_acta<?php echo $s?>" name="f_acta" type="text" class="form-control" style="width:90px;height:24px;">

@@ -1,0 +1,64 @@
+<?php
+	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tasks"></span> Reporte Academico');
+	$this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span>Regresar</a>');
+?>
+<table class="table  table-striped  table-condensed">
+    <tr>
+        <td><b>FACULTAD:</b></td>
+        <td>
+        	<select name="facid" id="facid" class="form-control">
+        		<option >--Seleccione--</option>
+        		<?php 
+				if ($this->faculty){
+					foreach($this->faculty as $key => $facultys){
+						if($facultys['facid']!='TODO' && $facultys['facid']!='NINGUN'){?>
+							<option value="<?php echo $facultys['facid']?>"><?php echo $facultys['name']?></option>
+						<?php 
+						}
+					}
+				}
+				?>
+        	</select>           
+        </td>
+        <td><b>ESCUELA:</b></td>
+        <td>
+            <select style='height:35px;width:300px' class='form-control' id="escu" name="escu"><option value="<?php echo $this->escid?>"><?php echo $this->nom_escuela?></option>
+            </select>
+        </td>
+        <td><b>ESPECIALIDAD:</b></td>
+        <td>
+            <select style='height:35px;width:300px' class='form-control' id="escu" name="escu"><option value="<?php echo $this->escid?>"><?php echo $this->nom_escuela?></option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><b>AÑO:</br></td>
+        <td>
+        	<select id="lanios" class='form-control' name="lanios" style="width: 90px" >
+                <?php 
+                $anio= $this->anio;
+                $i=0;
+                for($i = ($anio);$i>=1995;$i--){
+                    if ($anio==$i) $t = "selected";
+                    else $t="";
+                ?>            
+                <option value="<?php echo $i?>"<?php echo $t?>><?php echo $i?></option>
+                <?php }?>
+            </select>
+        </td>
+        <td><b>PERIODO:</b></td>
+        <td>
+            <select id="periodo_c" name="periodo" class="form-control" style="width: 170px">
+                <option value="">Primero seleccione un año</option>
+            </select>
+        </td>
+    </tr>
+</table>        
+    <div style="clear:both" ></div>  
+<div  id="cargadatos_"></div>  
+<script>
+	$("#facid").change(function(){
+		var facid = $(this).val();
+		
+	});
+</script>  
