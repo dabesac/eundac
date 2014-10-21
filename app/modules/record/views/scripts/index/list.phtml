@@ -288,7 +288,7 @@ $strprint = "/record/index/printavence/"
 		</td>
 		<td class='text-right'>
 			<?php
-			if($this->rid =="DR" && $counregister == '0' ){ ?>
+			if(($this->rid =="DR" || $this->rid == "RC") && $counregister == '0' ){ ?>
 				<a href="#" class="btn btn-info btn-xs"
 				id='delete<?php echo $s?>'
 				dcourseid="<?php echo $course['courseid']?>"
