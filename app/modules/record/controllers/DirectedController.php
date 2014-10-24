@@ -106,15 +106,14 @@ class Record_DirectedController extends Zend_Controller_Action {
             foreach ($curso as $c => $data) {
                 $wheress['courseid']=$data['courseid'];
                 $data=$dbcurso->_getCourseLlevo($wheress);
-
                 if ($data[0]['apto']==1) {
                     unset($curso[$c]);
                 }
                 elseif ($data[0]['apto']==2) {
-                    $curso[$c]['no_apto']=1;
+                    $curso[$c]['no_apto']=2;
                 }
                 else{
-                    $curso[$c]['no_apto']=0;
+                    $curso[$c]['no_apto']=1;
                 }
             }
             $this->view->cursos = $curso;

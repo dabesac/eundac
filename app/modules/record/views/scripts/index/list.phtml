@@ -5,6 +5,7 @@
 	}
 </style>
 <script >
+	var Data;
 	function detalle_acta($this){
 		var $record = {};
 
@@ -26,7 +27,7 @@
         result = result.substring(0, result.length-1);
         var $url = '/record/index/detail/'+ result;
         $("#modal").modal('show');
-        $(".modal-body").load($url);
+        $(".bodd").load($url);
 	}
 </script>
 
@@ -36,7 +37,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body bodd">
         <p>One fine body&hellip;</p>
       </div>
       <div class="modal-footer">
@@ -45,6 +46,24 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<!-- Modal Elliminar -->
+
+<div class="modal fade" id="modal1" style="margin-top:10%">
+  <div class="modal-dialog" style="width:30%">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"><span class='text-info'><b>ESTA SEGURO DE ELIMINAR EL CURSO? </b></span></h4>
+      </div>
+      <div class="modal-body text-right">
+        	<a type="button" class="btn btn-success" id="delcourse" href='#'><span class="glyphicon glyphicon-floppy-disk"></span> Si </a>
+        	<a type="button" class="btn btn-danger" data-dismiss="modal" href='#'><span class="glyphicon glyphicon-remove"></span> No </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Fin modal -->
 
 <?php 
 $stateperiod = $this->stateperiod;
@@ -74,7 +93,7 @@ $strprint = "/record/index/printavence/"
 		<th class="col-sm-1"># Matric.</th>
 		<th class="col-sm-1">Primer Parcial</th>
 		<th class="col-sm-1">Segundo Parcial</th>
-		<th class="col-sm-2">Fecha Cierre Acta</th>
+		<th class="col-sm-1">Fecha Cierre Acta</th>
 		<th class="small">Estado</th>
 	</tr>
 	
@@ -83,6 +102,7 @@ $strprint = "/record/index/printavence/"
 	
 	if ($courses){
 		$i=0;
+		$s=0;
 		foreach ($courses as $course){
 			$i++;
 			$counregister=0;
@@ -139,13 +159,15 @@ $strprint = "/record/index/printavence/"
 		<td class="center"><span class="glyphicon <?php echo $sp?> txthover"
 		data-toggle="tooltip" title="Estado del segundo parcial"></span></td>
 		<td><?php
-		 	if($date=='' && $this->rid =="DR"){?>
+		 	if($this->rid =="AD"){?>
 		 		<div class="dataup" style="width:130px;">
 					<div class="fecha" style='float: left'>
-						<input id="f_acta<?php echo $s?>" name="f_acta" type="text" class="form-control" style="width:90px;height:24px;">
+						<input value="<?php echo $date?>" id="f_acta<?php echo $s?>" name="f_acta" type="text" class="form-control" style="width:90px;height:24px;">	
 					</div>
 					<div class="guardar">
-						<a href="#" style='margin-top: 2px;margin-left: 6px;' class="btn btn-info btn-xs"
+						<a href="#" style='margin-top: 2px;margin-left: 6px;' 
+							class="btn btn-info btn-xs"
+							title="Cerrar acta"
 							id='savedata<?php echo $s?>'
 							dacourseid="<?php echo $course['courseid']?>"
 							daturno="<?php echo $course['turno']?>"
@@ -154,7 +176,7 @@ $strprint = "/record/index/printavence/"
 							dasubid="<?php echo $course['subid']?>"
 							daperid="<?php echo $course['perid']?>"
 							>
-							<span class='glyphicon glyphicon-floppy-disk'></span>
+							<span class='glyphicon glyphicon-floppy-disk' data-toggle="tooltip" title="Cerrar acta"></span>
 						</a>
 						<script>
 							$("#f_acta<?php echo $s?>").datepicker();
@@ -238,7 +260,7 @@ $strprint = "/record/index/printavence/"
 		<th colspan="7" class='text-right'>
 			OPERACIONES
 		</th>
-		<td colspan='4'>
+		<td colspan='3'>
 			<?php if ($this->rid == "RC") { ?>
 				<div class="btn-group pull-right" >
 				  	<button type="button" class="btn btn-xs btn-info">
@@ -250,7 +272,7 @@ $strprint = "/record/index/printavence/"
 				  <ul class="dropdown-menu" role="menu">
 				    <li><a href="/record/index/printconstancy/<?php echo $urldetaul?>">Constancia</a></li>
 				    <li class="divider"></li>
-				    <li><a href="/record/index/printrecord/<?php echo $urldetaul?>">Acta</a></li>
+				    <li><a href="/record/index/printrecord		/<?php echo $urldetaul?>">Acta</a></li>
 				    <li><a href="/record/index/backrecord/<?php echo $urldetaul?>">Acta Reverso</a></li>
 				    <li><a href="/record/index/recordnotnota/<?php echo $urldetaul?>">Acta sin Notas</a></li>
 				    <li><a href="/record/index/recordnotpercentaje/<?php echo $urldetaul?>">Acta sin Porcentaje</a></li>
@@ -264,16 +286,59 @@ $strprint = "/record/index/printavence/"
 			</div>
 			<?php }?>
 		</td>
-	</tr>		
-			<?php 
+		<td class='text-right'>
+			<?php
+			if(($this->rid =="DR" || $this->rid == "RC") && $counregister == '0' ){ ?>
+				<a href="#" class="btn btn-info btn-xs"
+				id='delete<?php echo $s?>'
+				dcourseid="<?php echo $course['courseid']?>"
+				dturno="<?php echo $course['turno']?>"
+				dcurid="<?php echo $course['curid']?>"
+				descid="<?php echo $course['escid']?>"
+				dsubid="<?php echo $course['subid']?>"
+				dperid="<?php echo $course['perid']?>"
+				>
+					<span class='glyphicon glyphicon-trash' data-toggle="tooltip" title="Eliminar acta"></span>
+				</a>
+				<script>
+					$("#delete<?php echo $s?>").click(function(){
+						var datos = {
+							'perid' : $(this).attr('dperid'),
+							'subid' : $(this).attr('dsubid'),
+							'escid' : $(this).attr('descid'),
+							'curid' : $(this).attr('dcurid'),
+							'courseid' : $(this).attr('dcourseid'),
+							'turno' : $(this).attr('dturno')
+						};
+						$("#modal1").modal("show");
+						$("#delcourse").click(function(e){
+							$.ajax({
+								type : "POST",
+								url : "/record/index/deletecourse/",
+								data : datos,
+								success : function(data){
+									$("#modal1").modal("hide");
+								}
+							});
+							
+						});
+					});	
+				</script>
+			<?php
 			}
+			?>
+		</td>
+	</tr>
+			<?php 
+		$s++;
+		}
 	}else{
 	?>
 		No hay ningun dato
 	<?php } ?>
 </table>
 </div>
-
+<!-- fin -->
 <script>
 	$("#openwindows").click(function (){
 		var perid=$("#perid").val();
@@ -284,5 +349,22 @@ $strprint = "/record/index/printavence/"
 	$(".txthover").tooltip({
 	    placement: "left"
 	});
-	
+	$(".glyphicon").tooltip();
+	$("#modal1").on('hidden.bs.modal',function(){
+		var perid = $("#perid").val();
+		var escid = $("#escid").val();
+		var ajax_dat = {
+			"perid" : perid,
+			"escid" : escid,
+		};
+		$.ajax({
+			type : "POST",
+			url : "/record/index/list/",
+			data : ajax_dat,
+			success : function(data){
+				$(".loadcourses").html(data);
+			}
+		});
+	});
 </script>
+	

@@ -3,7 +3,7 @@ if ($this->data) {  ?>
     <option value="">Seleccione curso</option>
     <?php
     foreach ($this->data as $i => $datas) { ?>
-        <option value="<?php echo $datas['courseid'].'|'.$datas['semid'].'|'.$datas['credits'].'|'.$datas['curid'].'|'.$datas['type']?>"><?php echo $datas['courseid']." | ".$datas['name']?></option>
+        <option value="<?php echo base64_encode($datas['courseid'].'%%'.$datas['semid'].'%%'.$datas['credits'].'%%'.$datas['curid'].'%%'.$datas['type'])?>"><?php echo $datas['courseid']." | ".$datas['name']?></option>
     <?php
     }
 }

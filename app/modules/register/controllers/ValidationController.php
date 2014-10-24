@@ -233,7 +233,7 @@ class Register_ValidationController extends Zend_Controller_Action
          // $nota= base64_decode($this->_getParam("nota"));
         $peridSession= $this->sesion->period->perid;
 
-      	// $request = array(   'eid' => base64_encode($eid),
+        // $request = array(   'eid' => base64_encode($eid),
        //                      'oid' => base64_encode($oid),
        //                      'perid' => base64_encode($peridSession),
        //                      'pid' => base64_encode($pid),
@@ -257,120 +257,133 @@ class Register_ValidationController extends Zend_Controller_Action
        //      $data = Zend_Json::decode($lista);
        //  }
 
-        // $where=array('escid'=>$escid,'uid'=>$uid,'curid'=>$curid);
-        // $dbregistrationxcourse = new Api_Model_DbTable_Registrationxcourse();
-        // $data=$dbregistrationxcourse->_getCoursesPerCurriculum($where);
-        // $this->view->data=$data;
+        $where=array('escid'=>$escid,'uid'=>$uid,'curid'=>$curid);
+        $dbregistrationxcourse = new Api_Model_DbTable_Registrationxcourse();
+        $data=$dbregistrationxcourse->_getCoursesPerCurriculum($where);
+        $this->view->data=$data;
     }
 
     public function saveAction(){
         $this->_helper->layout()->disableLayout();
 
+        $json['status']=false;
+        $cont=0;
         $eid= $this->sesion->eid;
         $oid= $this->sesion->oid;
         $uidreg = $this->sesion->uid;
+        if ($this->getRequest()->isPost()){
+            $frmdata=$this->getRequest()->getPost();
+            $splitdata=base64_decode($frmdata['courseid']);
+            $splitdata=split("%%", $splitdata);
 
-        $pid = base64_decode($this->_getParam("pid"));
-        $uid = base64_decode($this->_getParam("uid"));
-        $escid = base64_decode($this->_getParam("escid"));
-        $subid = base64_decode($this->_getParam("subid"));
-        $perid = base64_decode($this->_getParam("perid"));
-        $curid = base64_decode($this->_getParam("curid"));
-        $nota = base64_decode($this->_getParam("nota"));
-        $semid = base64_decode($this->_getParam("semid"));
-        $resolution = base64_decode($this->_getParam("resolution"));
-        $courseid = base64_decode($this->_getParam("courseid"));
-        $credits = base64_decode($this->_getParam("credits"));
-        $type_rate = base64_decode($this->_getParam("type_rate"));
+            $courseid = $splitdata[0];
+            $semid = $splitdata[1];
+            $credits = $splitdata[2];
+            $curid = $splitdata[3];
+            $type_rate = $splitdata[4];
 
-        $cont=0;
+            $pid = base64_decode($frmdata['pid']);
+            $uid = base64_decode($frmdata['uid']);
+            $escid = base64_decode($frmdata['escid']);
+            $subid = base64_decode($frmdata['subid']);
+            $perid = base64_decode($frmdata['perid']);
+            $nota = $frmdata['nota'];
+            $resolution = $frmdata['resolution'];
 
-        //verificando acta del curso.
-        $wherepc=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,
-                     'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>'A');
-        $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
-        $dataperiodocurso = $dbperiodocurso->_getOne($wherepc);
+            //verificando acta del curso.
+            $wherepc=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,
+                         'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>'A');
+            $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
+            $dataperiodocurso = $dbperiodocurso->_getOne($wherepc);
 
-        if (!$dataperiodocurso) {
-            $wherepc['state_record']='C';
-            $wherepc['type_rate']=$type_rate;
-            $wherepc['receipt']='N';
-            $wherepc['resolution']='NULL';
-            $wherepc['semid']=$semid;
-            $wherepc['closure_date']=date('Y-m-d');
-            $wherepc['register']=$uidreg;
-            $wherepc['state']='C';
-            if ($dbperiodocurso->_save($wherepc)) {
-                $cont++;
+            if (!$dataperiodocurso) {
+                $wherepc['state_record']='C';
+                $wherepc['type_rate']=$type_rate;
+                $wherepc['receipt']='N';
+                $wherepc['resolution']='NULL';
+                $wherepc['semid']=$semid;
+                $wherepc['closure_date']=date('Y-m-d');
+                $wherepc['register']=$uidreg;
+                $wherepc['state']='C';
+                if ($dbperiodocurso->_save($wherepc)) {
+                    $cont++;
+                }
+            }
+
+            //verificando asignacion del curso a un docente.
+            $wherecxt=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid,
+                            'curid'=>$curid,'turno'=>'A','perid'=>$perid,'uid'=>'DOCCONV01','pid'=>'CONV01');
+
+            $dbcoursexteacher = new Api_Model_DbTable_Coursexteacher();
+            $datacoursexteacher = $dbcoursexteacher->_getOne($wherecxt);
+            if (!$datacoursexteacher) {
+                $wherecxt['is_main']='S';
+                $wherecxt['semid']=$semid;
+                $wherecxt['state']='A';
+                if ($dbcoursexteacher->_save($wherecxt)) {
+                    $cont++;
+                }
+            }
+
+            //verificando matricula del alumno
+            $whererg=array('eid'=>$eid,'oid'=>$oid,'regid'=>$uid.$perid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,
+                            'subid'=>$subid,'perid'=>$perid);
+
+            $dbregistration = new Api_Model_DbTable_Registration();
+            $dataregistration = $dbregistration->_getOne($whererg);
+
+            if (!$dataregistration) {
+                $whererg['semid']='0';
+                $whererg['credits']=$credits;
+                $whererg['date_register']=date('Y-m-d');
+                $whererg['document_auth']=$resolution;
+                $whererg['register']=$uidreg;
+                $whererg['created']=date('Y-m-d');
+                $whererg['state']='M';
+                $whererg['count']='0';
+                if ($dbregistration->_save($whererg)) {
+                    $cont++;
+                }
+            }
+
+            //verificando matricula por cursos del alumno
+            $wherergxc=array('eid'=>$eid,'oid'=>$oid,'regid'=>$uid.$perid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,
+                            'subid'=>$subid,'courseid'=>$courseid,'curid'=>$curid,'turno'=>'A','perid'=>$perid);
+
+            $dbregistrationxcourse = new Api_Model_DbTable_Registrationxcourse();
+            $dataregistrationxcourse = $dbregistrationxcourse->_getOne($wherergxc);
+
+            if (!$dataregistrationxcourse) {
+                $wherergxc['notafinal']=$nota;
+                $wherergxc['receipt']='N';
+                $wherergxc['register']=$uidreg;
+                $wherergxc['created']=date('Y-m-d');
+                $wherergxc['approved']=$uidreg;
+                $wherergxc['approved_date']=date('Y-m-d');
+                $wherergxc['document_auth']=$resolution;
+                $wherergxc['state']='M';
+                if ($dbregistrationxcourse->_save($wherergxc)) {
+                    $cont++;
+                    $json['status']=true;
+                }
+            }
+            elseif ($dataregistrationxcourse['notafinal']<11) {
+                $dataupdated=array('notafinal'=>$nota,'document_auth'=>$resolution,'modified'=>$uidreg,'updated'=>date('Y-m-d'));
+
+                if ($dbregistrationxcourse->_update($dataupdated,$wherergxc)) {
+                    $json['status']=true;
+
+                    $dataupdated1=array('document_auth'=>$resolution,'modified'=>$uidreg,'updated'=>date('Y-m-d'));
+                    $dbregistration->_update($dataupdated1,$whererg);
+                }
+
+            }
+
+            if ($cont=0) {
+                $json['status']=false;
             }
         }
-
-        //verificando asignacion del curso a un docente.
-        $wherecxt=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'courseid'=>$courseid,
-                        'curid'=>$curid,'turno'=>'A','perid'=>$perid,'uid'=>'DOCCONV01','pid'=>'CONV01');
-
-        $dbcoursexteacher = new Api_Model_DbTable_Coursexteacher();
-        $datacoursexteacher = $dbcoursexteacher->_getOne($wherecxt);
-        if (!$datacoursexteacher) {
-            $wherecxt['is_main']='S';
-            $wherecxt['semid']=$semid;
-            $wherecxt['state']='A';
-            if ($dbcoursexteacher->_save($wherecxt)) {
-                $cont++;
-            }
-        }
-
-        //verificando matricula del alumno
-        $whererg=array('eid'=>$eid,'oid'=>$oid,'regid'=>$uid.$perid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,
-                        'subid'=>$subid,'perid'=>$perid);
-
-        $dbregistration = new Api_Model_DbTable_Registration();
-        $dataregistration = $dbregistration->_getOne($whererg);
-
-        if (!$dataregistration) {
-            $whererg['semid']='0';
-            $whererg['credits']=$credits;
-            $whererg['date_register']=date('Y-m-d');
-            $whererg['document_auth']=$resolution;
-            $whererg['register']=$uidreg;
-            $whererg['created']=date('Y-m-d');
-            $whererg['state']='M';
-            $whererg['count']='0';
-            if ($dbregistration->_save($whererg)) {
-                $cont++;
-            }
-        }
-
-        //verificando matricula por cursos del alumno
-        $wherergxc=array('eid'=>$eid,'oid'=>$oid,'regid'=>$uid.$perid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,
-                        'subid'=>$subid,'courseid'=>$courseid,'curid'=>$curid,'turno'=>'A','perid'=>$perid);
-
-        $dbregistrationxcourse = new Api_Model_DbTable_Registrationxcourse();
-        $dataregistrationxcourse = $dbregistrationxcourse->_getOne($wherergxc);
-
-        if (!$dataregistrationxcourse) {
-            $wherergxc['notafinal']=$nota;
-            $wherergxc['receipt']='N';
-            $wherergxc['register']=$uidreg;
-            $wherergxc['created']=date('Y-m-d');
-            $wherergxc['approved']=$uidreg;
-            $wherergxc['approved_date']=date('Y-m-d');
-            $wherergxc['document_auth']=$resolution;
-            $wherergxc['state']='M';
-            if ($dbregistrationxcourse->_save($wherergxc)) {
-                $cont++;
-                $json['status']=true;
-            }
-        }
-        elseif ($dataregistrationxcourse['notafinal']<11) {
-            $dataupdated=array('notafinal'=>$nota,'document_auth'=>$resolution,'modified'=>$uidreg,'updated'=>date('Y-m-d'));
-            $dbregistrationxcourse->_update($dataupdated,$wherergxc);
-
-            $dataupdated1=array('document_auth'=>$resolution,'modified'=>$uidreg,'updated'=>date('Y-m-d'));
-            $dbregistration->_update($dataupdated1,$whererg);
-        }
-
-        if (!($cont>0 && $json['status'])) {
+        else{
             $json['status']=false;
         }
         $this->_response->setHeader('Content-Type', 'application/json');
