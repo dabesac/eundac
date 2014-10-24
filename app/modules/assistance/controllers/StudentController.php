@@ -65,7 +65,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
         $infoassist = $base_assistance ->_getinfoasisstance($where);
         $state_assistence = $this->verify_closure_assistence($partial,$infoassist);
 
-        if ($state_assistence and $state_assistence == 'P') {
+
             $url_assit ="/".base64_encode('oid')."/".base64_encode($oid)."/".
                         base64_encode('eid')."/".base64_encode($eid)."/".
                         base64_encode('escid')."/".base64_encode($escid)."/".
@@ -78,6 +78,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                         base64_encode('partial')."/".base64_encode($partial);
 
             $this->_redirect('/assistance/student/assistence'.$url_assit);
+        if ($state_assistence) {
 
         }
         
