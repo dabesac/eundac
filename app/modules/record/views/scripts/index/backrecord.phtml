@@ -32,7 +32,7 @@
 	$percentage_desapro = $this->percentage_desapro;
 	$percentage_retir = $this->percentage_retir;
 	$percentage_nsp = $this->percentage_nsp;
-   
+
 ?>
 <style type="text/css">
 .normal-td
@@ -42,9 +42,9 @@
 }
 table {
 	font-family: "Arial";
-	font-size:11px; 
+	font-size:11px;
 	text-align: center;
-	margin-left:52%; 
+	margin-left:52%;
 }
 .date_record{
 	font-family: "Arial";
@@ -59,7 +59,7 @@ table {
 	text-align: left;
 }
 .magno{
-	
+
 	margin-top: 65%;
 }
 </style>
@@ -99,15 +99,15 @@ table {
 
 	<p class='acuerdo'>3 de la nota adjunta a este documento, según Resolución de Consejo Universitario Nº 1462-2009-UNDAC-C.U.</p>
 
-	
+
 <?php
 
 	$html = ob_get_contents();
-	$mpdf=new mPDF('utf-8','A4','','',15,15,54,15,15);
+	$mpdf=new mPDF('utf-8','A4','','',15,15,53,15,15);
 	$mpdf->SetHTMLHeader($header);
 	ob_end_clean();
 	$mpdf -> WriteHTML($html);
-	$mpdf->Output('Acta-'.$course['courseid'].'turno'.$course['turno'].'.pdf','D'); 
+	$mpdf->Output('Acta-'.$course['courseid'].'turno'.$course['turno'].'.pdf','D');
 	// $mpdf->Output();
 ?>
 
