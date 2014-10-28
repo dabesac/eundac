@@ -159,10 +159,10 @@ $strprint = "/record/index/printavence/"
 		<td class="center"><span class="glyphicon <?php echo $sp?> txthover"
 		data-toggle="tooltip" title="Estado del segundo parcial"></span></td>
 		<td><?php
-		 	if($date=='' && $this->rid =="DR"){?>
+		 	if($this->rid =="AD"){?>
 		 		<div class="dataup" style="width:130px;">
 					<div class="fecha" style='float: left'>
-						<input id="f_acta<?php echo $s?>" name="f_acta" type="text" class="form-control" style="width:90px;height:24px;">
+						<input value="<?php echo $date?>" id="f_acta<?php echo $s?>" name="f_acta" type="text" class="form-control" style="width:90px;height:24px;">	
 					</div>
 					<div class="guardar">
 						<a href="#" style='margin-top: 2px;margin-left: 6px;' 
@@ -288,7 +288,7 @@ $strprint = "/record/index/printavence/"
 		</td>
 		<td class='text-right'>
 			<?php
-			if($this->rid =="DR" && $counregister == '0' ){ ?>
+			if(($this->rid =="DR" || $this->rid == "RC") && $counregister == '0' ){ ?>
 				<a href="#" class="btn btn-info btn-xs"
 				id='delete<?php echo $s?>'
 				dcourseid="<?php echo $course['courseid']?>"
