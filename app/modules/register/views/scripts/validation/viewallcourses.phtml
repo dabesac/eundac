@@ -16,6 +16,7 @@ if ($this->cursosconvalidados) {    ?>
             <th class='text-center'>Turno</th>
             <th class='text-center'>Resolución</th>
             <th class='text-center'>Nota</th>
+            <th class='text-center'>Modificar</th>
         </tr>
         <?php
         foreach ($this->cursosconvalidados as $a => $datas) {   ?>
@@ -27,6 +28,7 @@ if ($this->cursosconvalidados) {    ?>
                 <td class='text-center'><?php echo $datas['turno']?></td>
                 <td><?php echo $datas['document_auth']?></td>
                 <td class='text-center'><?php echo $datas['notafinal']?></td>
+                <td class="text-center"><a href="#"><span class='glyphicon glyphicon-pencil '></span></a></td>
             </tr>
         <?php
         }
