@@ -15,27 +15,76 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 	}
 
 	public function indexAction(){
-		try {
-			$eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;
-            $is_director=$this->sesion->infouser['teacher']['is_director'];
-            if ($is_director=="S") {
-                $facid = $this->sesion->faculty->facid;
-                $escid = $this->sesion->escid;
-                $subid = $this->sesion->subid;
-                $this->view->facid = $facid;
-                $this->view->escid = $escid;
-                $this->view->subid = $subid;
-                $this->view->isdirector=$is_director;
+		$eid=$this->sesion->eid;
+        $oid=$this->sesion->oid;
+
+        //dataBases
+        $facultyDb = new Api_Model_DbTable_Faculty();
+
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'state' => 'A');
+        $attrib = array('facid', 'name');
+        $pdFaculties = $facultyDb->_getFilter($where, $attrib);
+
+        foreach ($pdFaculties as $c => $faculty) {
+            if ($faculty['facid'] != 'TODO') {
+                $dataFaculty[$c] = array(
+                                            'facid' => base64_encode($faculty['facid']),
+                                            'name'  => $faculty['name'] );
             }
-            $where=array('eid'=>$eid,'oid'=>$oid);
-            $fac= new Api_Model_DbTable_Faculty();
-            $facultad=$fac->_getAll($where);
-            $this->view->facultad=$facultad;
-		} catch (Exception $e) {
-			print "Error: ".$e->getMessage();
-		}
+        }
+        $this->view->dataFaculty = $dataFaculty;
+        //print_r($pdFaculties);
 	}
+
+    public function listcurriculumsAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //DataBases
+        $curriculumDb = new Api_Model_DbTable_Curricula();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        $dataGet = base64_decode($this->_getParam('id'));
+        $dataGet = explode('|', $dataGet);
+        $escid = $dataGet[0];
+        $subid = $dataGet[1];
+
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+        $attrib = '';
+        $order = array('year DESC');
+        $pdCurriculums = $curriculumDb->_getFilter($where, $attrib, $order);
+
+        $dataCurriculums = array();
+        if ($pdCurriculums) {
+            $cTemp  = 0;
+            $cClose = 0;
+            foreach ($pdCurriculums as $curriculum) {
+                if ($curriculum['state'] == 'A') {
+                    $dataCurriculums['active'] = array( 'curid' => $curriculum['curid'],
+                                                        'name'  => $curriculum['name'],
+                                                        'year'  => $curriculum['year'] );
+                }elseif ($curriculum['state'] == 'T'){
+                    $dataCurriculums['temporary'][$cTemp] = array(  'curid' => $curriculum['curid'],
+                                                                    'name'  => $curriculum['name'],
+                                                                    'year'  => $curriculum['year'] );
+                    $cTemp++;
+                }elseif ($curriculum['state'] == 'C'){
+                    $dataCurriculums['close'][$cClose] = array( 'curid' => $curriculum['curid'],
+                                                                'name'  => $curriculum['name'],
+                                                                'year'  => $curriculum['year'] );
+                    $cClose++;
+                }
+            }
+        }
+        $this->view->dataCurriculums = $dataCurriculums;
+        print_r($pdCurriculums);
+    }
 
 	public function schoolsAction(){
 		try {

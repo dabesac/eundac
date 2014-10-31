@@ -1,0 +1,17 @@
+<?php $dataCurriculums = $this->dataCurriculums ?>
+
+<div class="curriculums">
+	<?php if ($dataCurriculums): ?>
+	<?php foreach ($dataCurriculums as $c => $curriculum): ?>
+		<div class="curriculum">
+			<span><?php echo $c + 1 ?></span>
+			<span><?php echo $curriculum['name'] ?> <small><?php echo $curriculum['curid'] ?></small></span>
+			<span><?php echo $curriculum['year'] ?></span>
+			<div class="modify">
+				botones para modificar.....
+			</div>
+		</div>
+	<?php endforeach ?>
+	<?php endif ?>
+		
+</div>

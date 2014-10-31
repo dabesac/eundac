@@ -12,13 +12,13 @@ class GlobalController extends Zend_Controller_Action {
  		$this->sesion = $login;
     }
 
-    public function listspecialitiesAction(){
+    public function listschoolsAction(){
     	$this->_helper->layout()->disableLayout();
 
     	//DataBases
     	$schoolDb = new Api_Model_DbTable_Speciality();
     	
-    	$facid = base64_decode($this->_getParam('data'));
+    	$facid = base64_decode($this->_getParam('id'));
 
     	$eid = $this->sesion->eid;
     	$oid = $this->sesion->oid;
