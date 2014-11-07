@@ -1,4 +1,4 @@
-<style type="text/css">
+	<style type="text/css">
 	.modal-dialog
 	{
 		width: 900px;
@@ -159,10 +159,10 @@ $strprint = "/record/index/printavence/"
 		<td class="center"><span class="glyphicon <?php echo $sp?> txthover"
 		data-toggle="tooltip" title="Estado del segundo parcial"></span></td>
 		<td><?php
-		 	if($this->rid =="AD"){?>
+		 	if(($this->rid =="DR" || $this->rid =="AD") & ($date == "") ){?>
 		 		<div class="dataup" style="width:130px;">
 					<div class="fecha" style='float: left'>
-						<input value="<?php echo $date?>" id="f_acta<?php echo $s?>" name="f_acta" type="text" class="form-control" style="width:90px;height:24px;">	
+						<input  id="f_acta<?php echo $s?>" name="f_acta" type="text" class="form-control" style="width:90px;height:24px;">	
 					</div>
 					<div class="guardar">
 						<a href="#" style='margin-top: 2px;margin-left: 6px;' 

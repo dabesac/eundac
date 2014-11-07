@@ -1,0 +1,48 @@
+<?php
+if(($this->opcion)==1){
+	$reporte='APROBADOS';
+}elseif(($this->opcion)==2){
+	$reporte='DESAPROBADOS/IRREGULARES';
+}elseif(($this->opcion)==3){
+	$reporte='RETIRADOS';
+}
+?>
+<?php if($this->resp){?>
+	<table class="table table-hover table-striped">
+		<tr>
+			<th colspan="8">
+				<center>
+					REPORTE ALUMNOS <?php echo $reporte?> PERIODO <?php echo $this->periodo?>
+				</center>
+			</th>
+			<th colspan="2">
+				<center><a href="#" id="imprimir" class="btn btn-success"><i class="glyphicon glyphicon-print glyphicon-white"> </i> Imprimir</a><center>
+			</th>
+		</tr>
+		<tr>
+			<th><center>#</center></th>
+			<th colspan="6">ESCUELA</th>	
+			<th colspan="2">TOTAL</th>
+		</tr>
+		<?php
+		$i=0;
+		foreach ($this->resp as $list){?>
+		<tr>
+			<td><center><?php echo $i+1?></center></td>
+			<td colspan="6"><?php
+				foreach ($this->data as $dataspeciality) {
+					if($list['escid']==$dataspeciality['escid']){
+						echo $dataspeciality['name'];
+					}
+				}
+			 ?>
+			</td>
+			<td colspan="2"><?php echo $list['prom']?></td>
+		</tr>
+		<?php
+		$i++;
+		} ?>
+	</table>
+<?php
+}
+?>
