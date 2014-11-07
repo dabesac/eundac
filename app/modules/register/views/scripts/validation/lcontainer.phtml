@@ -98,7 +98,6 @@ else{   ?>
 <script type="text/javascript">
 
 $("#nota").jStepper({minValue:-3, maxValue:20, minLength:2});
-
 $(function(){
 
     $("#closemodalmensaje").on('click', function(){
@@ -150,7 +149,6 @@ $(function(){
             url : $("#frmsave").attr('action'),
             data: $("#frmsave").serialize(),
             success: function(data) {
-                console.log(data);
                 if (data.status==true) {
                     $("#smsError").empty();
                     $("#smsError").html('<center><h3><span class="text-success glyphicon glyphicon-ok-circle"></span><b class="text-success"> Se guardado con Éxito</b></h3></center>');

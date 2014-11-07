@@ -503,57 +503,45 @@ class Register_ValidationController extends Zend_Controller_Action
 
     public function updateAction(){
       try {
+            $this->_helper->layout()->disableLayout();
             $eid= $this->sesion->eid;
             $oid= $this->sesion->oid;
-            $escid = ($this->_getParam("escid"));
-            $subid = ($this->_getParam("subid"));
-            $uid = ($this->_getParam("uid"));
-            $pid = ($this->_getParam("pid"));
-            $perid = ($this->_getParam("perid"));
-            $regid = ($this->_getParam("regid"));
-            $courseid = ($this->_getParam("courseid"));
-            $curid = ($this->_getParam("curid"));
-            $turno = ($this->_getParam("turno"));
-            $this->view->uid=$uid;
-            $this->view->curid=$curid;
-            $this->view->courseid=$courseid;
-            $d['eid']=$eid;
-            $d['oid']=$oid;
-            $d['escid']=$escid;
-            $d['subid']=$subid;
-            $d['uid']=$uid;
-            $d['pid']=$pid;
-            $d['perid']=$perid;
-            $d['regid']=$regid;
-            $d['courseid']=$courseid;
-            $d['curid']=$curid;
-            $d['turno']=$turno;
-            $dblista = new Api_Model_DbTable_Registrationxcourse();
-            $lista = $dblista ->_getOne($d);
-            $form=new Register_Form_Changenotes;
-            $form->populate($lista);
-            $this->view->form=$form;
-            if ($this->getRequest()->isPost()) {
-              $frmdata=$this->getRequest()->getPost();
-                if ($form->isValid($frmdata)) {
-                  unset($frmdata['Guardar']);
-                   $frmdata['modified']=$this->sesion->uid;
+            $escid = base64_decode($this->_getParam("escid"));
+            $subid = base64_decode($this->_getParam("subid"));
+            $courseid = base64_decode($this->_getParam("courseid"));
+            $curid = base64_decode($this->_getParam("curid"));
+            $perid = base64_decode($this->_getParam("perid"));
+            $turno = base64_decode($this->_getParam("turno"));
+            $regid = base64_decode($this->_getParam("regid"));
+            $pid = base64_decode($this->_getParam("pid"));
+            $uid = base64_decode($this->_getParam("uid"));
 
-                    $reg_= new Api_Model_DbTable_Registrationxcourse();
-                    $reg_->_updatenoteregister($frmdata,$d);
-                    $this->_redirect("/register/validation");
-                }
-                    else
-                {
-                    echo "Ingrese nuevamente por favor";
-                }
-      }
+            $document_auth=$this->_getParam('document_auth');
+            $nota=$this->_getParam('notafinal');
 
+            $pk['eid']=$eid;
+            $pk['oid']=$oid;
+            $pk['escid']=$escid;
+            $pk['subid']=$subid;
+            $pk['courseid']=$courseid;
+            $pk['curid']=$curid;
+            $pk['perid']=$perid;
+            $pk['turno']=$turno;
+            $pk['regid']=$regid;
+            $pk['uid']=$uid;
+            $pk['pid']=$pid;
 
+            $json['status']=false;
+            $this->_response->setHeader('Content-Type', 'application/json');
+            $this->view->data = $json;
 
+            print_r($pk);
+            exit();
 
+            // $reg_= new Api_Model_DbTable_Registrationxcourse();
+            // $reg_->_updatenoteregister($frmdata,$d);
 
-          }catch (Exception $e) {
+        }catch (Exception $e) {
             print "Error index Registration ".$e->$getMessage();
         }
 
