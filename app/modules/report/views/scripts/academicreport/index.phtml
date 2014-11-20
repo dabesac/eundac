@@ -145,6 +145,7 @@ $(function () {
 			url : "/report/academicreport/list",
 			data : d_ajax,
 			success : function(data){
+				console.log(d_ajax);
 				$("#consulta").html("<center><img src='/img/carga.gif' /></center>");
 				$("#consulta").html(data);
 			}

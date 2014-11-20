@@ -16,7 +16,7 @@ if(($this->opcion)==1){
 				</center>
 			</th>
 			<th colspan="2">
-				<center><a href="#" id="imprimir" class="btn btn-success"><i class="glyphicon glyphicon-print glyphicon-white"> </i> Imprimir</a><center>
+				<center><a href="/report/academicreport/printlist/escid/<?php echo $this->escid?>/perid/<?php echo $this->periodo?>/opcion/<?php echo $this->opcion?>" id="imprimir" class="btn btn-success"><i class="glyphicon glyphicon-print glyphicon-white"> </i> Imprimir</a><center>
 			</th>
 		</tr>
 		<tr>
@@ -43,6 +43,3 @@ if(($this->opcion)==1){
 		$i++;
 		} ?>
 	</table>
-<?php
-}
-?>

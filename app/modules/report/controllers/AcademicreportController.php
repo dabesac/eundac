@@ -98,9 +98,40 @@ class Report_AcademicreportController extends Zend_Controller_Action{
 			$this->view->data=$speciality;
 			$this->view->opcion=$data['opcion'];
 			$this->view->periodo=$data['perid'];
+			$this->view->escid=$data['escid'];
 
 		}catch(Excepiton $e){
 			print "Error: ".$e->getMessage();
 		}
 	}
+	 public function printlistAction(){
+	 	try{
+	 		$this->_helper->layout()->desableLayout();
+	 		$eid= $this->sesion->eid;
+            $oid= $this->sesion->oid;
+            $data['opcion']=$this->getParam('opcion');
+            $data['escid'] =$this->getParam('escid');
+            $data['perid'] =$this->getParam('perid');
+            $where = array('escid'=>$data['escid'],'perid'=>$data['perid']);
+            $consult = new Api_Model_DbTable_Registrationxcourse();
+            $conspaciality = new Api_Model_DbTable_Speciality();
+            /*if($data['opcion']==1){
+				$resul= $consul->_firstlegends($where);
+			}elseif($data['opcion']==2){
+				$resul= $consul->_firstlegendsirregulares($where);
+			}elseif($data['opcion']==3){
+				$resul= $consul->_firstlegendsretirados($where);
+			}
+
+			$wher = array('eid'=>$eid,'oid'=>$oid);
+			$speciality = $conspaciality->_getFilter($wher);
+			$this->view->resp=$resul;
+			$this->view->data=$speciality;*/
+			$this->view->opcion=$data['opcion'];
+			$this->view->periodo=$data['perid'];
+			$this->view->escid=$data['escid'];
+	 	}catch(Exception $e){
+	 		print "Error: ".$e->getMessage();
+	 	}
+	 }
 }
