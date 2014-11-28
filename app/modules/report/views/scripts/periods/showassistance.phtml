@@ -1,0 +1,90 @@
+<?php 
+	$dataStudent = $this->dataView['students'];
+	$parcial     = $this->dataView['parcial'];
+	$idPrint     = $this->dataView['idPrint'];
+	$urlPrint    = '/assistance/student/print/id/'.$idPrint;
+	?>
+ <?php if ($dataStudent): ?>
+ 	<div class="bodyHeader">
+		<p class="bhObO bodyHeaderParrafo"><span class="glyphicon glyphicon-info-sign"></span> Lista de estudiantes...</p>
+		<div class="bhObO btnSide">
+			<div></div>
+			<div>
+				<a href="<?php echo $urlPrint ?>" class="btn btn-default form-control"><span class="glyphicon glyphicon-print text-primary"></span> Imprimir</a>
+			</div>
+		</div>
+	</div>
+ 	<div class="aDataStudent">
+ 		<div class="blockStudent">
+	 		<div class="columnNum">
+	 			<p>#</p>
+	 			<?php foreach ($dataStudent as $c => $student): ?>
+	 				<p>
+	 					<?php echo $c + 1 ?>
+	 				</p>
+	 			<?php endforeach ?>
+	 		</div>
+
+	 		<div class="columnFullName">
+	 			<p>Apellidos y Nombres</p>
+	 			<?php foreach ($dataStudent as $c => $student): ?>
+	 				<p>
+	 					<?php echo $student['fullName'] ?>
+	 				</p>
+	 			<?php endforeach ?>
+	 		</div>
+			
+			<div class="sessions">
+				<p>Sesiones</p>
+				<?php if ($parcial == 1): ?>
+					<?php for ($i = 1; $i <= 15; $i++): ?>
+				 		<div class="session session<?php echo $i ?>">
+				 			<?php if ($i == 15): ?>
+					 			<p>Exámen</p>
+				 			<?php else: ?>
+					 			<p><?php echo $i ?></p>
+				 			<?php endif ?>
+				 			<?php foreach ($dataStudent as $student): ?>
+				 				<?php $assist = $student['session_'.$i] ?>
+				 				<?php if ($assist == 'A'):
+				 					$colorText = 'text-success';
+				 				elseif ($assist == 'T'):
+				 					$colorText = 'text-info';
+				 				elseif ($assist == 'F' or $assist == 'R'):
+				 					$colorText = 'text-danger';
+				 				endif ?>
+				 				<p class="<?php echo $colorText ?>">
+				 					<?php echo $student['session_'.$i] ?>
+				 				</p>
+				 			<?php endforeach ?>
+				 		</div>
+					<?php endfor ?>
+				<?php else: ?>
+					<?php for ($i = 17; $i <= 31; $i++): ?>
+				 		<div class="session session<?php echo $i ?>">
+				 			<?php if ($i == 31): ?>
+					 			<p>Exámen</p>
+				 			<?php else: ?>
+					 			<p><?php echo $i ?></p>
+				 			<?php endif ?>
+				 			<?php foreach ($dataStudent as $student): ?>
+				 				<?php $assist = $student['session_'.$i] ?>
+				 				<?php if ($assist == 'A'):
+				 					$colorText = 'text-success';
+				 				elseif ($assist == 'T'):
+				 					$colorText = 'text-info';
+				 				elseif ($assist == 'F' or $assist == 'R'):
+				 					$colorText = 'text-danger';
+				 				endif ?>
+				 				<p class="<?php echo $colorText ?>">
+				 					<?php echo $student['session_'.$i] ?>
+				 				</p>
+				 			<?php endforeach ?>
+				 		</div>
+					<?php endfor ?>
+				<?php endif ?>
+			</div>
+ 		</div>
+ 	</div>
+
+ <?php endif ?>

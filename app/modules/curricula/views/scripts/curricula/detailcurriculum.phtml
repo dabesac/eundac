@@ -1,0 +1,42 @@
+<?php 
+	$dataView             = $this->dataView;
+	$dataCurriculum       = $dataView['dataCurriculum'];
+	$dataCurriculumBefore = $dataView['dataCurriculumBefore'];
+ ?>
+<div class="modal_body">
+	<div class="detail_first">
+	<div>
+		<p><strong>ID de Currícula</strong> <?php echo $dataCurriculum['curid'] ?></p>
+		<p><strong>Nombre Completo</strong> <?php echo $dataCurriculum['name'] ?></p>
+		<p><strong>Alias</strong> <?php echo $dataCurriculum['alias'] ?></p>
+		<p><strong>Tipo de Currícula</strong> 
+			<?php if ($dataCurriculum['type'] == 'S'):
+				echo "Semestral";
+			elseif ($dataCurriculum['type'] == 'A'):	
+				echo "Anual";
+			endif ?>
+		</p>
+	</div>
+
+	<div>
+		<div>
+			<p><strong>Año</strong> <?php echo $dataCurriculum['year'] ?></p>
+		</div>
+		<div>
+			<p><strong>Cantidad de Periódos</strong> <?php echo $dataCurriculum['number_periods'] ?></p>
+		</div>
+		<div>
+			<p><strong>Créditos Obligatorios</strong> <?php echo $dataCurriculum['mandatory_credits'] ?></p>
+			<p><strong>Créditos Electivos</strong> <?php echo $dataCurriculum['elective_credits'] ?></p>
+			<p><strong>Cursos Obligatorios</strong> <?php echo $dataCurriculum['mandatory_course'] ?></p>
+			<p><strong>Cursos Electivos</strong> <?php echo $dataCurriculum['elective_course'] ?></p>
+		</div>
+	</div>
+	</div>
+	<?php if ($dataCurriculumBefore): ?>
+	<div class="cur_equivalence">
+		<p><strong>Curricula de Equivaléncia</strong></p>
+		<p><small><?php echo $dataCurriculumBefore['curid'] ?></small> <?php echo $dataCurriculumBefore['name'] ?></p>
+	</div>
+	<?php endif ?>
+</div>

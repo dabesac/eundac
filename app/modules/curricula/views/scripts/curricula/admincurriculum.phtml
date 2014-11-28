@@ -1,0 +1,50 @@
+<?php 
+	$dataView = $this->dataView;
+ ?>
+
+<div class="modal_header">
+	<p class="title">Detalle de Currícula </p>
+	<div class="dataEsc">
+		<p><span>Facultad de </span><?php echo $dataView['nameFac'] ?></p>
+		<p><span>Escuela de </span><?php echo $dataView['nameEsc'] ?> 
+			<?php if ($dataView['isEsp'] == 'yes'): ?>
+				- <?php echo $dataView['nameEsp'] ?>
+			<?php endif ?>
+		</p>
+	</div>
+	<div class="modal_close">
+		<a class="btn btn-default form-control" href="##" data-dismiss="modal">Cerrar</a>
+	</div>
+</div>
+
+<div class="header_body">
+	<div id="idHeaderDetail">
+		<?php if ($dataView['state'] == 'B'): ?>
+			<p><span class="glyphicon glyphicon-info-sign"></span> Administre desde aqui la curricula...</p>
+			<div>
+				<a href="##" id="detailCur_btnAdminCourses">Administrar Cursos</a>
+			</div>
+			<div>
+				<a href="##" id="detailCur_btnEditCur">Editar Curricula</a>
+			</div>
+		<?php else: ?>
+			<p><span class="glyphicon glyphicon-info-sign"></span> Visualice los detalles de la currícula...</p>
+		<?php endif ?>
+	</div>
+	<div id="idHeaderEdit" class="headerEdit">
+		<p><span class="glyphicon glyphicon-info-sign"></span> Edite los cámpos necesarios...</p>
+		<div>
+			<a href="##" id="detailCur_edit_btnBackToDetail">Regresar</a>
+		</div>
+	</div>
+</div>
+
+<!-- Detalle de Curricula -->
+<div id="idDivDetailCurricula" class="detail_curricula">
+	
+</div>
+
+<!-- Editar Curricula -->
+<div id="idDivEditCurriculum" class="edit_curriculum">
+
+</div>

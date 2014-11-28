@@ -1,17 +1,259 @@
-<?php $dataCurriculums = $this->dataCurriculums ?>
+<?php $dataView = $this->dataView ?>
+<?php if ($dataView['specialities']): ?>
+	<div class="selectSpecialities">
+		<p><span class="glyphicon glyphicon-flag"></span> Esta escuela tiene especialidades, filtre entre ellas.</p>
+		<div>
+			<select class="form-control" name="speciality" id="selectSpeciality">
+				<?php foreach ($dataView['specialities'] as $speciality): ?>
+					<option value="<?php echo $speciality['escid'].'_'.$speciality['subid'] ?>"><?php echo $speciality['name'] ?></option>
+				<?php endforeach ?>
+			</select>
+		</div>
+	</div>
+	<div class="headerNew">
+		<p><span class="glyphicon glyphicon-info-sign"></span> Administre todas las curriculas pertenecientes a esta especialidad...</p>
+		<a href="##" id="btnNewModal" class="btn btn-success" data-toggle="modal" data-target="#modalNewCur">Nueva Currícula</a>
+	</div>
+<?php else: ?>
+	<input type="hidden" id="selectSpeciality" value="<?php echo $dataView['dataCurriculums'][0]['code'] ?>">
+	<div class="headerNew">
+		<p><span class="glyphicon glyphicon-info-sign"></span> Administre todas las curriculas pertenecientes a esta escuela...</p>
+		<a href="##" id="btnNewModal" class="btn btn-success" data-toggle="modal" data-target="#modalNewCur">Nueva Currícula</a>
+	</div>
+<?php endif ?>
+<?php if ($dataView['dataCurriculums']): ?>
+	<?php foreach ($dataView['dataCurriculums'] as $cS => $school): ?>
+		<div id="curriculums<?php echo $school['code'] ?>" class="curriculums" hidden>
+			<span hidden><?php echo $school['code'] ?></span>
+			<!-- Curriculas en Borrador -->
+			<?php if ($school['draft']): ?>
+				<?php $curriculumDrafts = $school['draft'] ?>
+				<div class="main main_draft">
+					<p class="draftP"><span class="glyphicon glyphicon-exclamation-sign"></span> Tiene Currículas en Borrador, haga algo con estos...</p>
+					<div id="divDraft<?php echo $school['code'] ?>" class="div_draft">
+						<?php foreach ($curriculumDrafts as $c => $curriculum): ?>
+							<?php $idJS = base64_decode($curriculum['id']) ?>
+							<div class="curriculum" id="curriculum<?php echo $idJS ?>" idactivatejs="<?php echo $idJS ?>" state="B">
+								<span><?php echo $c + 1 ?></span>
+								<span><span class="nameChangeEdit"><?php echo $curriculum['name'] ?></span> <small><?php echo $curriculum['curid'] ?></small></span>
+								<span>Año <?php echo $curriculum['year'] ?></span>
 
-<div class="curriculums">
-	<?php if ($dataCurriculums): ?>
-	<?php foreach ($dataCurriculums as $c => $curriculum): ?>
-		<div class="curriculum">
-			<span><?php echo $c + 1 ?></span>
-			<span><?php echo $curriculum['name'] ?> <small><?php echo $curriculum['curid'] ?></small></span>
-			<span><?php echo $curriculum['year'] ?></span>
-			<div class="modify">
-				botones para modificar.....
-			</div>
+								<!-- Botonera Olimpica lml!!! -->
+								<div class="modify draftModify">
+									<?php $ulrAdminCourses = '/curricula/curricula/listcourses/id/'.$curriculum['id'] ?>
+									<a href="<?php echo $ulrAdminCourses ?>" title="Administre los cursos correspondientes a esta currícula...">Administrar Cursos</a>
+									<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php echo $idJS ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+									<a href="##" class="btn_derive" ide="<?php echo $curriculum['id'] ?>" goto="<?php echo $idJS ?>">Derivar</a>
+									<a href="##" class="btn_delete" ide="<?php echo $curriculum['id'] ?>" type="delete" goto="<?php echo $idJS ?>">Eliminar</a>
+
+									<div class="derive_from_draft" fromto="<?php echo $idJS ?>">
+										<a href="##" type="active">Activar Curricula</a>
+										<a href="##" type="temporary">Mover a Temporales</a>
+										<a href="##" type="close">Cerrar Curricula</a>
+									</div>
+								</div>
+							</div>
+
+							<!--Alertas Curricula en Borrador-->
+							<div id="curriculum_confirm<?php echo $idJS ?>" fromto="<?php echo $idJS ?>" class="confirms_side">
+								<div class="confirm_side delete_curriculum" type="delete">
+									<p>Confírme si desea eliminar esta currícula...</p>
+									<a href="##" whycallme="D">Si, quiero eliminarla</a>
+									<a href="##">Cancelar</a>
+								</div>
+								<div class="confirm_side active_curriculum" type="active">
+									<p>Confírme si desea activar esta currícula, si hay otra activa ésta la remplazara...</p>
+									<a href="##" whycallme="A">Si, quiero activarla</a>
+									<a href="##">Cancelar</a>
+								</div>
+								<div class="confirm_side temporary_curriculum" type="temporary">
+									<p>Confírme si desea mover esta currícula a temporales...</p>
+									<a href="##" whycallme="T">Si, quiero moverla a temporales</a>
+									<a href="##">Cancelar</a>
+								</div>
+								<div class="confirm_side close_curriculum" type="close">
+									<p>Confírme si desea cerrar esta currícula...</p>
+									<a href="##" whycallme="C">Si, quiero cerrarla</a>
+									<a href="##">Cancelar</a>
+								</div>
+							</div>
+						<?php endforeach ?>
+						<div class="empty empty_message successClose">
+							<p><span class="glyphicon glyphicon-ok"></span> Ya no tiene nada en borradores, buen trabajo...</p>
+						</div>
+					</div>
+					<hr class="draftHr">
+				</div>
+			<?php else: ?>
+				<div class="main main_draft main_hide">
+					<p class="draftP"><span class="glyphicon glyphicon-exclamation-sign"></span> Tiene Currículas en Borrador, haga algo con estos...</p>
+					<div id="divDraft<?php echo $school['code'] ?>" class="div_draft">
+						
+						<div class="empty empty_message successClose">
+							<p><span class="glyphicon glyphicon-ok"></span> Ya no tiene nada en borradores, buen trabajo...</p>
+						</div>
+					</div>
+					<hr class="draftHr">
+				</div>
+			<?php endif ?>
+				
+
+			<!-- Curricula Activa -->
+			<?php if ($school['active']): ?>
+				<?php $curriculumActive = $school['active'] ?>
+				<?php $idJS = base64_decode($curriculumActive['id']) ?>
+				<div class="main main_active">
+					<p class="activeP"><span class="glyphicon glyphicon-ok"></span> Curricula Activa</p>
+					<div class="div_active">
+						<div id="curriculum<?php echo $idJS ?>" class="curriculum" idactivatejs="<?php echo $idJS ?>" idget="<?php echo $curriculumActive['id'] ?>" state="A">
+							<span><span class="glyphicon glyphicon-ok"></span></span>
+							<span><?php echo $curriculumActive['name'] ?> <small><?php echo $curriculumActive['curid'] ?></small></span>
+							<span>Año <?php echo $curriculumActive['year'] ?></span>
+							<!-- Botonera Olimpica lml!!! -->
+							<div class="modify active_modify">
+								<a href="##">Ver Cursos</a>
+								<a href="##" ide="<?php echo $curriculumActive['id'] ?>" idjs="<?php echo $idJS ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php else: ?>
+				<div class="main main_active">
+					<p class="activeP"><span class="glyphicon glyphicon-remove"></span> Curricula Activa</p>
+					<div class="curriculum empty div_active">
+						<p><span class="glyphicon glyphicon-exclamation-sign"></span> No hay curricula activa...</p>
+					</div>
+				</div>
+			<?php endif ?>
+			<hr class="activeHr">
+
+			<!-- Curriculas Temporales -->
+			<?php if ($school['temporary']): ?>
+				<?php $curriculumTemporaries = $school['temporary'] ?>
+				<div class="main main_temporary">
+					<p class="temporaryP"><span class="glyphicon glyphicon-time"></span> Curriculas Temporales</p>
+					<div class="div_temporary">
+						<?php foreach ($curriculumTemporaries as $c => $curriculum): ?>
+							<?php $idJS = base64_decode($curriculum['id']) ?>
+							<div id="curriculum<?php echo $idJS ?>" class="curriculum" idactivatejs="<?php echo $idJS ?>" state="T">
+								<span><?php echo $c + 1 ?></span>
+								<span><?php echo $curriculum['name'] ?> <small><?php echo $curriculum['curid'] ?></small></span>
+								<span>Año <?php echo $curriculum['year'] ?></span>
+								<div class="modify temporary_modify">
+									<a href="##">Administrar Cursos</a>
+									<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php echo $idJS ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+									<a href="##" class="btn_derive" ide="<?php echo $curriculum['id'] ?>" goto="<?php echo $idJS ?>">Derivar</a>
+
+									<div class="derive_from_draft" fromto="<?php echo $idJS ?>">
+										<a href="##" type="active">Activar Curricula</a>
+										<a href="##" type="close">Cerrar Curricula</a>
+									</div>
+								</div>
+							</div>
+
+							<!--Alertas Curricula Temporales-->
+							<div id="curriculum_confirm<?php echo $idJS ?>" fromto="<?php echo $idJS ?>" class="confirms_side">
+								<div class="confirm_side delete_curriculum" type="delete">
+									<p>Confírme si desea eliminar esta currícula...</p>
+									<a href="##" whycallme="D">Si, quiero eliminarla</a>
+									<a href="##">Cancelar</a>
+								</div>
+								<div class="confirm_side active_curriculum" type="active">
+									<p>Confírme si desea activar esta currícula, si hay otra activa ésta la remplazara...</p>
+									<a href="##" whycallme="A">Si, quiero activarla</a>
+									<a href="##">Cancelar</a>
+								</div>
+								<div class="confirm_side temporary_curriculum" type="temporary">
+									<p>Confírme si desea mover esta currícula a temporales...</p>
+									<a href="##" whycallme="T">Si, quiero moverla a temporales</a>
+									<a href="##">Cancelar</a>
+								</div>
+								<div class="confirm_side close_curriculum" type="close">
+									<p>Confírme si desea cerrar esta currícula...</p>
+									<a href="##" whycallme="C">Si, quiero cerrarla</a>
+									<a href="##">Cancelar</a>
+								</div>
+							</div>
+						<?php endforeach ?>
+						<div class="empty empty_message elseClose">
+							<p><span class="glyphicon glyphicon-exclamation-sign"></span> No hay curriculas temporales...</p>
+						</div>
+					</div>
+					<hr class="temporaryHr">
+				</div>
+			<?php else: ?>
+				<div class="main main_temporary main_hide">
+					<p class="temporaryP"><span class="glyphicon glyphicon-time"></span> Curriculas Temporales</p>
+					<div class="div_temporary">
+
+						<div class="empty empty_message elseClose">
+							<p><span class="glyphicon glyphicon-exclamation-sign"></span> No hay curriculas temporales...</p>
+						</div>
+					</div>
+					<hr class="temporaryHr">
+				</div>
+			<?php endif ?>
+			
+			<!-- Curriculas Cerradas -->
+			<?php if ($school['close']): ?>
+				<?php $curriculumClose = $school['close'] ?>
+				<div class="main main_close">
+					<p class="closeP"><span class="glyphicon glyphicon-lock"></span> Curriculas Cerradas</p>
+					<div class="div_close">
+						<?php foreach ($curriculumClose as $c => $curriculum): ?>
+							<?php $idJS = base64_decode($curriculum['id']) ?>
+							<div id="curriculum<?php echo $idJS ?>" class="curriculum" idactivatejs="<?php echo $idJS ?>" state="C">
+								<span><?php echo $c + 1 ?></span>
+								<span><?php echo $curriculum['name'] ?> <small><?php echo $curriculum['curid'] ?></small></span>
+								<span>Año <?php echo $curriculum['year'] ?></span>
+								<div class="modify close_modify">
+									<a href="##">Ver Cursos</a>
+									<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php echo $idJS ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+								</div>
+							</div>
+						<?php endforeach ?>
+					</div>
+				</div>
+			<?php else: ?>
+				<div class="main main_close">
+					<p class="closeP"><span class="glyphicon glyphicon-lock"></span> Curriculas Cerradas</p>
+					<div class="curriculum empty temporary">
+						<p><span class="glyphicon glyphicon-exclamation-sign"></span> No hay curriculas cerradas...</p>
+					</div>
+					<div class="div_close"></div>
+				</div>
+			<?php endif ?>
+			<hr class="closeHr">
+
+			<!-- No temporales (no importante en pantalla) -->
+			<?php if (!$school['temporary']): ?>
+				<div class="main main_temporary for_message">
+					<p class="temporaryP"><span class="glyphicon glyphicon-time"></span> Curriculas Temporales</p>
+					<div class="curriculum empty temporary">
+						<p><span class="glyphicon glyphicon-exclamation-sign"></span> No hay curriculas temporales...</p>
+					</div>
+					<hr class="temporaryHr">
+				</div>
+			<?php endif ?>
 		</div>
 	<?php endforeach ?>
-	<?php endif ?>
+<?php endif ?>
+
+<!-- Modal para nueva curricula -->
+<div id="modalNewCur" class="modal fade" tabindex="-1">
+	<div class="modal-dialog modal_newCur">
+		<div id="dataFormNewCur" class="modal-content">
 		
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal para detalle de curricula -->
+<div id="modalDetailCur" class="modal fade" tabindex="-1">
+	<div class="modal-dialog modal_newCur modal_detailCur">
+		<div id="dataDetailCur" class="modal-content">
+
+		</div>
+	</div>
 </div>

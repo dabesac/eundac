@@ -798,7 +798,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
     }
 
 
-     public function assistenceAction(){
+    public function assistenceAction(){
         $params = $this->getRequest()->getParams();
         $paramsdecode = array();
         foreach ( $params as $key => $value ){
@@ -828,7 +828,15 @@ class Assistance_StudentController extends Zend_Controller_Action {
                 'perid' => $perid,'curid'=>$curid,);
         $where['courseid']=$coursoid;
 
-         $url_assit ="/".base64_encode('oid')."/".base64_encode($oid)."/".
+        $url_assit = base64_encode( $escid.'|'.
+                                    $subid.'|'.
+                                    $coursoid.'|'.
+                                    $curid.'|'.
+                                    $turno.'|'.
+                                    $perid.'|'.
+                                    $state.'|'.
+                                    $partial );
+         /*$url_assit ="/".base64_encode('oid')."/".base64_encode($oid)."/".
                         base64_encode('eid')."/".base64_encode($eid)."/".
                         base64_encode('escid')."/".base64_encode($escid)."/".
                         base64_encode('subid')."/".base64_encode($subid)."/".
@@ -837,7 +845,7 @@ class Assistance_StudentController extends Zend_Controller_Action {
                         base64_encode('turno')."/".base64_encode($turno)."/".
                         base64_encode('perid')."/".base64_encode($perid)."/".
                         base64_encode('state')."/".base64_encode($state)."/".
-                        base64_encode('partial')."/".base64_encode($partial);
+                        base64_encode('partial')."/".base64_encode($partial);*/
 
         $base_assistance = new Api_Model_DbTable_StudentAssistance();
         $infoassist = $base_assistance ->_getinfoasisstance($where);
@@ -854,112 +862,153 @@ class Assistance_StudentController extends Zend_Controller_Action {
     }
 
     public function printAction(){
-                $this->_helper->layout->disableLayout();
-                $params = $this->getRequest()->getParams();
-                $paramsdecode = array();
-                foreach ( $params as $key => $value ){
-                    if($key!="module" && $key!="controller" && $key!="action"){
-                        $paramsdecode[base64_decode($key)] = base64_decode($value);
-                    }
-                }
-
-                $params = $paramsdecode;
-                $oid= trim($params['oid']);
-                $eid= trim($params['eid']);
-                $escid= trim($params['escid']);
-                $subid= trim($params['subid']);
-                $coursoid= trim($params['coursoid']);
-                $turno= trim($params['turno']);
-                $perid = trim($params['perid']);
-                $curid = trim($params['curid']);
-                $state = trim($params['state']);
-                $partial = trim($params['partial']);
-                $where = array(
-                        'eid' => $eid, 'oid' => $oid,
-                        'escid' => $escid,'subid' => $subid,
-                        'coursoid' => $coursoid,'turno' => $turno,
-                        'perid' => $perid,'curid'=>$curid,);
-
-                $where['courseid']=$coursoid;
-
-                $base_faculty   =   new Api_Model_DbTable_Faculty();
-                
-                $base_assistance = new Api_Model_DbTable_StudentAssistance();
-                $infoassist = $base_assistance ->_getinfoasisstance($where);
-                $this->view->infoassist=$infoassist;
-                $base_courses = new Api_Model_DbTable_Course();
-                $infocurso=$base_courses->_getOne($where);
-                $this->view->turno=$turno;
-                $this->view->infocourse=$infocurso;
-                $this->view->partial=$partial;
-                $this->view->state=$state;
-                $this->view->perid=$perid;
-                $this->view->lasname= $this->sesion->infouser['fullname'];
-
-                $base_speciality =  new Api_Model_DbTable_Speciality();
-                $info_speciality =  $base_speciality->_getOne($where);
-                $speciality = $base_speciality ->_getOne($where);
-                $parent=$speciality['parent'];
-                $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
-                $parentesc= $base_speciality->_getOne($wher);
-
-                if ($parentesc) {
-                    $pala='ESPECIALIDAD DE ';
-                    $spe['esc']=$parentesc['name'];
-                    $spe['parent']=$pala.$speciality['name'];
-                }
-                else{
-                    $spe['esc']=$speciality['name'];
-                    $spe['parent']='';  
-                }
-                $names=strtoupper($spe['esc']);
-                $namep=strtoupper($spe['parent']);
-                $namefinal=$names." <br> ".$namep;
-
-                $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
-    
-                // $escid=$this->sesion->escid;
-                // $where['escid']=$escid;
-
-                $dbimpression = new Api_Model_DbTable_Impresscourse();
-                
-                $uidim=$this->sesion->pid;
-                $code="asistencia - ".$partial;
-                $data = array(
-                    'eid'=>$eid,
-                    'oid'=>$oid,
-                    'perid'=>$perid,
-                    'courseid'=>$coursoid,
-                    'escid'=>$escid,
-                    'subid'=>$subid,
-                    'curid'=>$curid,
-                    'turno'=>$turno,
-                    'register'=>$uidim,
-                    'created'=>date('Y-m-d H:i:s'),
-                    'code'=>$code
-                    );
-                $dbimpression->_save($data);            
-
-                $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$coursoid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>$code);
-                $dataim = $dbimpression->_getFilter($wheri);
-                $co=count($dataim);
-                $codigo=$co." - ".$uidim;
-                $this->view->codigo=$codigo;
-                
-
-                $header=$this->sesion->org['header_print'];
-                $footer=$this->sesion->org['footer_print'];
-                $namef = strtoupper($this->sesion->faculty->name);
-                $header = str_replace("?facultad",$namef,$header);
-                $header = str_replace("?escuela",$namefinal,$header);
-                $header = str_replace("?logo", $namelogo, $header);
-                $header = str_replace("?codigo", $codigo, $header);
-                $header = str_replace("11%", "9%", $header);
-                
-                $this->view->header=$header;
-                $this->view->footer=$footer;
-                
+        $this->_helper->layout->disableLayout();
+       /* $params = $this->getRequest()->getParams();
+        $paramsdecode = array();
+        foreach ( $params as $key => $value ){
+            if($key!="module" && $key!="controller" && $key!="action"){
+                $paramsdecode[base64_decode($key)] = base64_decode($value);
             }
+        }
+
+        $params = $paramsdecode;
+        $oid= trim($params['oid']);
+        $eid= trim($params['eid']);
+        $escid= trim($params['escid']);
+        $subid= trim($params['subid']);
+        $coursoid= trim($params['coursoid']);
+        $turno= trim($params['turno']);
+        $perid = trim($params['perid']);
+        $curid = trim($params['curid']);
+        $state = trim($params['state']);
+        $partial = trim($params['partial']); */
+        
+        //DataBase
+        $courseTeacherDb = new Api_Model_DbTable_Coursexteacher();
+        $personDb        = new Api_Model_DbTable_Person();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        $id = base64_decode($this->_getParam('id'));
+        $id = explode('|', $id);
+        $escid    = $id[0];
+        $subid    = $id[1];
+        $coursoid = $id[2];
+        $curid    = $id[3];
+        $turno    = $id[4];
+        $perid    = $id[5];
+        $state    = $id[6];
+        $partial  = $id[7];
+
+         //Nombre de Docente
+        $where = array( 'oid'      => $oid, 
+                        'eid'      => $eid,
+                        'escid'    => $escid,
+                        'subid'    => $subid,
+                        'courseid' => $coursoid,
+                        'curid'    => $curid,
+                        'turno'    => $turno,
+                        'perid'    => $perid );
+        $attrib = array('pid');
+        $pdCourseTeacher = $courseTeacherDb->_getFilter($where, $attrib);
+        $docentePid = $pdCourseTeacher[0]['pid'];
+
+        $where = array( 'eid' => $eid,
+                        'pid' => $docentePid );
+        $attrib = array('last_name0', 'last_name1', 'first_name');
+
+        $pdPerson = $personDb->_getOne($where, $attrib);
+
+        $fullName = $pdPerson['last_name0'].' '.$pdPerson['last_name1'].' '.$pdPerson['first_name'];
+        //-----------------------------------------------
+
+        $where = array(
+                'eid' => $eid, 'oid' => $oid,
+                'escid' => $escid,'subid' => $subid,
+                'coursoid' => $coursoid,'turno' => $turno,
+                'perid' => $perid,'curid'=>$curid,);
+
+        $where['courseid']=$coursoid;
+
+        $base_faculty   =   new Api_Model_DbTable_Faculty();
+        
+        $base_assistance = new Api_Model_DbTable_StudentAssistance();
+        $infoassist = $base_assistance ->_getinfoasisstance($where);
+        $this->view->infoassist=$infoassist;
+        $base_courses = new Api_Model_DbTable_Course();
+        $infocurso=$base_courses->_getOne($where);
+        $this->view->turno=$turno;
+        $this->view->infocourse=$infocurso;
+        $this->view->partial=$partial;
+        $this->view->state=$state;
+        $this->view->perid=$perid;
+        $this->view->lasname= $fullName;
+
+        $base_speciality =  new Api_Model_DbTable_Speciality();
+        $info_speciality =  $base_speciality->_getOne($where);
+        $speciality = $base_speciality ->_getOne($where);
+        $parent=$speciality['parent'];
+        $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+        $parentesc= $base_speciality->_getOne($wher);
+
+        if ($parentesc) {
+            $pala='ESPECIALIDAD DE ';
+            $spe['esc']=$parentesc['name'];
+            $spe['parent']=$pala.$speciality['name'];
+        }
+        else{
+            $spe['esc']=$speciality['name'];
+            $spe['parent']='';  
+        }
+        $names=strtoupper($spe['esc']);
+        $namep=strtoupper($spe['parent']);
+        $namefinal=$names." <br> ".$namep;
+
+        $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+
+        // $escid=$this->sesion->escid;
+        // $where['escid']=$escid;
+
+        $dbimpression = new Api_Model_DbTable_Impresscourse();
+        
+        $uidim=$this->sesion->pid;
+        $code="asistencia - ".$partial;
+        $data = array(
+            'eid'=>$eid,
+            'oid'=>$oid,
+            'perid'=>$perid,
+            'courseid'=>$coursoid,
+            'escid'=>$escid,
+            'subid'=>$subid,
+            'curid'=>$curid,
+            'turno'=>$turno,
+            'register'=>$uidim,
+            'created'=>date('Y-m-d H:i:s'),
+            'code'=>$code
+            );
+        $dbimpression->_save($data);            
+
+        $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$coursoid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>$code);
+        $dataim = $dbimpression->_getFilter($wheri);
+        $co=count($dataim);
+        $codigo=$co." - ".$uidim;
+        $this->view->codigo=$codigo;
+        
+
+        $header=$this->sesion->org['header_print'];
+        $footer=$this->sesion->org['footer_print'];
+        $namef = strtoupper($this->sesion->faculty->name);
+        $header = str_replace("?facultad",$namef,$header);
+        $header = str_replace("?escuela",$namefinal,$header);
+        $header = str_replace("?logo", $namelogo, $header);
+        $header = str_replace("?codigo", $codigo, $header);
+        $header = str_replace("11%", "9%", $header);
+        
+        $this->view->header=$header;
+        $this->view->footer=$footer;
+        
+    }
 
     /*verificar asistencia llenada*/
     public function verify_closure_assistence($partial,$infoassist_t){

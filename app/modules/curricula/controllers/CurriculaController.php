@@ -42,6 +42,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
 
         //DataBases
+        $schoolsDb    = new Api_Model_DbTable_Speciality();
         $curriculumDb = new Api_Model_DbTable_Curricula();
 
         $eid = $this->sesion->eid;
@@ -52,38 +53,142 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $escid = $dataGet[0];
         $subid = $dataGet[1];
 
-        $where = array( 'eid'   => $eid,
-                        'oid'   => $oid,
-                        'escid' => $escid,
-                        'subid' => $subid );
+        //Ver si tiene especialidades
+        $where = array( 'eid'    => $eid,
+                        'oid'    => $oid,
+                        'parent' => $escid,
+                        'subid'  => $subid,
+                        'state'  => 'A' );
         $attrib = '';
-        $order = array('year DESC');
-        $pdCurriculums = $curriculumDb->_getFilter($where, $attrib, $order);
+        $order = array('escid ASC');
 
-        $dataCurriculums = array();
-        if ($pdCurriculums) {
-            $cTemp  = 0;
-            $cClose = 0;
-            foreach ($pdCurriculums as $curriculum) {
-                if ($curriculum['state'] == 'A') {
-                    $dataCurriculums['active'] = array( 'curid' => $curriculum['curid'],
-                                                        'name'  => $curriculum['name'],
-                                                        'year'  => $curriculum['year'] );
-                }elseif ($curriculum['state'] == 'T'){
-                    $dataCurriculums['temporary'][$cTemp] = array(  'curid' => $curriculum['curid'],
-                                                                    'name'  => $curriculum['name'],
-                                                                    'year'  => $curriculum['year'] );
-                    $cTemp++;
-                }elseif ($curriculum['state'] == 'C'){
-                    $dataCurriculums['close'][$cClose] = array( 'curid' => $curriculum['curid'],
+        $pdSpecialities = $schoolsDb->_getFilter($where, $attrib, $order);
+
+        $dataView['specialities'] = array();
+
+        if ($pdSpecialities) {
+            $letters = strlen($escid);
+            $where = array( 'eid'                       => $eid,
+                            'oid'                       => $oid,
+                            'left(escid, '.$letters.')' => $escid );
+            $attrib = '';
+            $order = array('escid ASC');
+            $pdCurriculums = $curriculumDb->_getFilter($where, $attrib, $order);
+
+            //lista de especialidades
+            if ($pdCurriculums) {
+                foreach ($pdSpecialities as $cSpe => $speciality) {
+                    $dataView['specialities'][$cSpe] = array(   'escid' => $speciality['escid'],
+                                                                'subid' => $speciality['subid'],
+                                                                'name'  => $speciality['name'] );
+
+                    $dataCurriculums[$cSpe]['active']    = array();
+                    $dataCurriculums[$cSpe]['temporary'] = array();
+                    $dataCurriculums[$cSpe]['close']     = array();
+                    $dataCurriculums[$cSpe]['draft']     = array();
+
+                    $cTemp  = 0;
+                    $cClose = 0;
+                    $cDraft = 0;
+                    foreach ($pdCurriculums as $curriculum) {
+                        if ($curriculum['escid'] == $speciality['escid'] and
+                            $curriculum['subid'] == $speciality['subid'] ) {
+                            $id = base64_encode($curriculum['curid'].'_'.
+                                                $curriculum['escid'].'_'.
+                                                $curriculum['subid'] );
+                            $dataCurriculums[$cSpe]['code'] = $curriculum['escid'].'_'.$curriculum['subid'];
+                            if ($curriculum['state'] == 'A') {
+                                $dataCurriculums[$cSpe]['active'] = array(  'curid' => $curriculum['curid'],
+                                                                            'name'  => $curriculum['name'],
+                                                                            'year'  => $curriculum['year'],
+                                                                            'escid' => $curriculum['escid'],
+                                                                            'subid' => $curriculum['subid'],
+                                                                            'id'    => $id );
+                            }elseif ($curriculum['state'] == 'T'){
+                                $dataCurriculums[$cSpe]['temporary'][$cTemp] = array(   'curid' => $curriculum['curid'],
+                                                                                        'name'  => $curriculum['name'],
+                                                                                        'year'  => $curriculum['year'],
+                                                                                        'escid' => $curriculum['escid'],
+                                                                                        'subid' => $curriculum['subid'],
+                                                                                        'id'    => $id );
+                                $cTemp++;
+                            }elseif ($curriculum['state'] == 'C'){
+                                $dataCurriculums[$cSpe]['close'][$cClose] = array(  'curid' => $curriculum['curid'],
+                                                                                    'name'  => $curriculum['name'],
+                                                                                    'year'  => $curriculum['year'],
+                                                                                    'escid' => $curriculum['escid'],
+                                                                                    'subid' => $curriculum['subid'],
+                                                                                    'id'    => $id );
+                                $cClose++;
+                            }elseif ($curriculum['state'] == 'B'){
+                                $dataCurriculums[$cSpe]['draft'][$cDraft] = array(  'curid' => $curriculum['curid'],
+                                                                                'name'  => $curriculum['name'],
+                                                                                'year'  => $curriculum['year'],
+                                                                                'escid' => $curriculum['escid'],
+                                                                                'subid' => $curriculum['subid'],
+                                                                                'id'    => $id );
+                                $cDraft++;
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            $dataCurriculums[0]['active']    = array();
+            $dataCurriculums[0]['temporary'] = array();
+            $dataCurriculums[0]['close']     = array();
+            $dataCurriculums[0]['draft']     = array();
+            $dataCurriculums[0]['code']      = $escid.'_'.$subid;
+
+            $where = array( 'eid'   => $eid,
+                            'oid'   => $oid,
+                            'escid' => $escid,
+                            'subid' => $subid );
+            $attrib = '';
+            $order = array('year DESC');
+            $pdCurriculums = $curriculumDb->_getFilter($where, $attrib, $order);
+
+            if ($pdCurriculums) {
+                $cTemp  = 0;
+                $cClose = 0;
+                $cDraft = 0;
+                foreach ($pdCurriculums as $curriculum) {
+                    $id = base64_encode($curriculum['curid'].'_'.
+                                        $curriculum['escid'].'_'.
+                                        $curriculum['subid'] );
+                    if ($curriculum['state'] == 'A') {
+                        $dataCurriculums[0]['active'] = array(  'curid' => $curriculum['curid'],
                                                                 'name'  => $curriculum['name'],
-                                                                'year'  => $curriculum['year'] );
-                    $cClose++;
+                                                                'year'  => $curriculum['year'],
+                                                                'escid' => $curriculum['escid'],
+                                                                'id'    => $id );
+                    }elseif ($curriculum['state'] == 'T'){
+                        $dataCurriculums[0]['temporary'][$cTemp] = array(   'curid' => $curriculum['curid'],
+                                                                            'name'  => $curriculum['name'],
+                                                                            'year'  => $curriculum['year'],
+                                                                            'escid' => $curriculum['escid'],
+                                                                            'id'    => $id );
+                        $cTemp++;
+                    }elseif ($curriculum['state'] == 'C'){
+                        $dataCurriculums[0]['close'][$cClose] = array(  'curid' => $curriculum['curid'],
+                                                                        'name'  => $curriculum['name'],
+                                                                        'year'  => $curriculum['year'],
+                                                                        'escid' => $curriculum['escid'],
+                                                                        'id'    => $id );
+                        $cClose++;
+                    }elseif ($curriculum['state'] == 'B'){
+                        $dataCurriculums[0]['draft'][$cDraft] = array(  'curid' => $curriculum['curid'],
+                                                                        'name'  => $curriculum['name'],
+                                                                        'year'  => $curriculum['year'],
+                                                                        'escid' => $curriculum['escid'],
+                                                                        'id'    => $id );
+                        $cDraft++;
+                    }
                 }
             }
         }
-        $this->view->dataCurriculums = $dataCurriculums;
-        print_r($pdCurriculums);
+        $dataView['dataCurriculums'] = $dataCurriculums;
+        $this->view->dataView = $dataView;
     }
 
 	public function schoolsAction(){
@@ -129,40 +234,452 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 	}
 
     public function newcurriculaAction(){
-        try {
-            $this->_helper->layout()->disableLayout();
-            $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;
-            $escid = base64_decode($this->_getParam('escid'));
-            $subid = base64_decode($this->_getParam('subid')); 
-            $form = new Rcentral_Form_Curricula();
-            $form->subid->setvalue($subid);
-            $form->escid_cur->setvalue($escid);
-            if ($this->getRequest()->isPost()) {
-                $formData = $this->getRequest()->getPost();
-                unset($formData['type_periods']);
-                if ($form->isValid($this->getRequest()->getPost())){
-                    $formData['eid']=$eid;
-                    $formData['oid']=$oid;
-                    $formData['created']=date('Y-m-d h:m:s');
-                    $formData['register']=$this->sesion->uid;
-                    $formData['escid']=$formData['escid_cur'];
-                    unset($formData['escid_cur']);
-                    $base_curricula = new Api_Model_DbTable_Curricula();
-                    if ($base_curricula->_save($formData)) {
-                        $this->view->escid=$formData['escid'];
-                        $this->view->subid=$formData['subid'];
-                        $this->view->act=1;
-                    }
-                }else{
-                    $this->view->form=$form;
+        $this->_helper->layout()->disableLayout();
+
+        //DataBases
+        $curriculumDb = new Api_Model_DbTable_Curricula();
+        $facultyDb    = new Api_Model_DbTable_Faculty();
+        $specialityDb = new Api_Model_DbTable_Speciality();
+
+        $ids = $this->_getParam('id');
+        $ids = explode('_', $ids);
+        $escid = $ids[0];
+        $subid = $ids[1];
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        //Verificar si es especialidad o escuela
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+        $attrib = array('parent', 'name', 'facid');
+        $pdSpeciality = $specialityDb->_getFilter($where, $attrib);
+
+        if ($pdSpeciality[0]['parent']) {
+            $where = array( 'eid'   => $eid,
+                            'oid'   => $oid,
+                            'escid' => $pdSpeciality[0]['parent'] );
+            $attrib = array('name');
+            $pdParent = $specialityDb->_getFilter($where, $attrib);
+            $dataView = array(  'isEsp'   => 'yes',
+                                'espid'   => $escid,
+                                'escid'   => $pdSpeciality[0]['parent'],
+                                'subid'   => $subid,
+                                'nameEsp' => $pdSpeciality[0]['name'],
+                                'nameEsc' => $pdParent[0]['name'] );
+
+        }else{
+            $dataView = array(  'isEsp'   => 'no',
+                                'escid'   => $escid,
+                                'subid'   => $subid,
+                                'nameEsc' => $pdSpeciality[0]['name'] );
+        }
+        //nombre de la facultad
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'facid' => $pdSpeciality[0]['facid'] );
+        $attrib = array('name');
+        $pdFaculty = $facultyDb->_getFilter($where, $attrib);
+        
+        $dataView['facid']   = $pdSpeciality[0]['facid'];
+        $dataView['nameFac'] = $pdFaculty[0]['name'];
+
+        //Curriculas anteriores
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+        $attrib = array('curid', 'name');
+        $pdCurriculums = $curriculumDb->_getFilter($where, $attrib);
+
+        $dataView['curriculumsBefore'] = array();
+        if ($pdCurriculums) {
+            foreach ($pdCurriculums as $c => $curriculum) {
+                $dataView['curriculumsBefore'][$c] = array( 'id'   => base64_encode($curriculum['curid']),
+                                                            'name' => $curriculum['curid'].' '.$curriculum['name'] );
+            }
+        }
+
+        //Form
+        $curriculumForm = new Rcentral_Form_Curricula();
+        $dataView['curriculumForm'] = $curriculumForm;
+
+        $this->view->dataView = $dataView;
+    }
+
+    public function savenewAction(){
+        $this->_helper->layout->disableLayout();
+        //DataBases
+        $curriculumDb = new Api_Model_DbTable_Curricula();
+
+        //Forms
+        $curriculumForm = new Rcentral_Form_Curricula();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $uid = $this->sesion->uid;
+
+        $formData = $this->getRequest()->getPost();
+       
+        //print_r($formData);
+        if ($curriculumForm->isValid($formData)) {
+            $id = explode('|', base64_decode($formData['id']));
+            $escid = $id[0];
+            $subid = $id[1];
+            $yearSub = mb_substr((string)$formData['year'],2,2);
+            $curid = $yearSub.$formData['type_periods'].$escid;
+
+            $dataSave = array(  'eid'               => $eid,
+                                'oid'               => $oid,
+                                'escid'             => $escid,
+                                'subid'             => $subid,
+                                'curid'             => $curid,
+                                'type'              => $formData['type'],
+                                'year'              => $formData['year'],
+                                'name'              => $formData['name'],
+                                'alias'             => $formData['alias'],
+                                'number_periods'    => $formData['number_periods'],
+                                'mandatory_credits' => $formData['mandatory_credits'],
+                                'elective_credits'  => $formData['elective_credits'],
+                                'mandatory_course'  => $formData['mandatory_course'],
+                                'elective_course'   => $formData['elective_course'],
+                                'cur_per_ant'       => base64_decode($formData['cur_per_ant']),
+                                'register'          => $uid,
+                                'state'             => 'B' );
+            if ($curriculumDb->_save($dataSave)) {
+                $result = array('success' => 1,
+                                'dataNew' => array( 'id'    => base64_encode(   $curid.'_'.
+                                                                                $escid.'_'.
+                                                                                $subid ),
+                                                    'idJs'  =>  $curid.'_'.
+                                                                $escid.'_'.
+                                                                $subid,
+                                                    'curid' => $curid,
+                                                    'name'  => $formData['name'],
+                                                    'year'  => $formData['year'] ),
+                                'errors'  => array(),
+                                'cErrors' => 0 );
+            }else{
+                $result = array('success' => 1,
+                                'errors'  => ':( Error en los servidores, intentelo mas tarde...',
+                                'cErrors' => 0 );
+            }
+        }else{
+            $result['success'] = 0;
+            $cError = 0;
+            $error['isEmpty']   = array();
+            $error['notDigits'] = array();
+            foreach ($curriculumForm->getMessages() as $tipeError) {
+                foreach ($tipeError as $error) {
+                    $result['errors'][$cError] = $error;
+                }
+                if ($cError == 2) {
+                    break;
+                }
+                $cError++;
+            }
+        }
+
+        print json_encode($result);
+    }
+
+    public function admincurriculumAction(){
+        $this->_helper->layout()->disableLayout();
+        //DataBases
+        $curriculumDb = new Api_Model_DbTable_Curricula();
+        $facultyDb    = new Api_Model_DbTable_Faculty();
+        $specialityDb = new Api_Model_DbTable_Speciality();
+
+        $state = $this->_getParam('state');
+
+        $ids = explode('_', base64_decode($this->_getParam('id')));
+        $curid = $ids[0];
+        $escid = $ids[1];
+        $subid = $ids[2];
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        //Verificar si es especialidad o escuela
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+        $attrib = array('parent', 'name', 'facid');
+        $pdSpeciality = $specialityDb->_getFilter($where, $attrib);
+
+        if ($pdSpeciality[0]['parent']) {
+            $where = array( 'eid'   => $eid,
+                            'oid'   => $oid,
+                            'escid' => $pdSpeciality[0]['parent'] );
+            $attrib = array('name');
+            $pdParent = $specialityDb->_getFilter($where, $attrib);
+            $dataView = array(  'isEsp'   => 'yes',
+                                'espid'   => $escid,
+                                'escid'   => $pdSpeciality[0]['parent'],
+                                'subid'   => $subid,
+                                'nameEsp' => $pdSpeciality[0]['name'],
+                                'nameEsc' => $pdParent[0]['name'] );
+        }else{
+            $dataView = array(  'isEsp'   => 'no',
+                                'escid'   => $escid,
+                                'subid'   => $subid,
+                                'nameEsc' => $pdSpeciality[0]['name'] );
+        }
+        //Estado de la curricula
+        $dataView['state']   = $state;
+        
+        //nombre de la facultad
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'facid' => $pdSpeciality[0]['facid'] );
+        $attrib = array('name');
+        $pdFaculty = $facultyDb->_getFilter($where, $attrib);
+        
+        $dataView['facid']   = $pdSpeciality[0]['facid'];
+        $dataView['nameFac'] = $pdFaculty[0]['name'];
+        
+        $this->view->dataView = $dataView;
+    }
+
+    public function detailcurriculumAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //DataBases
+        $curriculumDb = new Api_Model_DbTable_Curricula();
+
+        $ids = explode('_', base64_decode($this->_getParam('id')));
+        $curid = $ids[0];
+        $escid = $ids[1];
+        $subid = $ids[2];
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        //Datos de la curricula
+        $dataView['id'] = base64_encode($curid.'|'.
+                                        $escid.'|'.
+                                        $subid );
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'curid' => $curid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+        $dataCurriculum = $curriculumDb->_getOne($where);
+        $dataView['dataCurriculum']       = $dataCurriculum;
+        $dataView['dataCurriculumBefore'] = array();
+
+        //Datos de Curricula Equivalencia si la tuviera
+        if ($dataCurriculum['cur_per_ant']) {
+            $where = array( 'eid'   => $eid,
+                            'oid'   => $oid,
+                            'curid' => $dataCurriculum['cur_per_ant'],
+                            'escid' => $escid,
+                            'subid' => $subid );
+            $dataCurriculumBefore = $curriculumDb->_getOne($where);
+            $dataView['dataCurriculumBefore'] = $dataCurriculumBefore;
+        }
+        //print_r($dataCurriculum);
+
+        $this->view->dataView = $dataView;
+    }
+
+    public function editcurriculumAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //DataBases
+        $curriculumDb = new Api_Model_DbTable_Curricula();
+
+        $ids = explode('_', base64_decode($this->_getParam('id')));
+        $curid = $ids[0];
+        $escid = $ids[1];
+        $subid = $ids[2];
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        //Datos de la curricula
+        $dataView['id'] = base64_encode($curid.'_'.
+                                        $escid.'_'.
+                                        $subid );
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'curid' => $curid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+        $dataCurriculum = $curriculumDb->_getOne($where);
+
+        //Form
+        $curriculumForm = new Rcentral_Form_Curricula();
+        $dataCurriculum['cur_per_ant'] = base64_encode($dataCurriculum['cur_per_ant']);
+        $curriculumForm->populate($dataCurriculum);
+        $dataView['curriculumForm'] = $curriculumForm;
+
+        //Curriculas anteriores
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+        $attrib = array('curid', 'name');
+        $pdCurriculums = $curriculumDb->_getFilter($where, $attrib);
+
+        $dataView['curriculumsBefore'] = array();
+        if ($pdCurriculums) {
+            foreach ($pdCurriculums as $c => $curriculum) {
+                $dataView['curriculumsBefore'][$c] = array( 'id'   => base64_encode($curriculum['curid']),
+                                                            'name' => $curriculum['curid'].' '.$curriculum['name'] );
+            }
+        }
+
+        $this->view->dataView = $dataView;
+    }
+
+    public function saveeditAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //DataBases
+        $curriculumDb = new Api_Model_DbTable_Curricula();
+
+        //Forms
+        $curriculumForm = new Rcentral_Form_Curricula();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $uid = $this->sesion->uid;
+
+        $formData = $this->getRequest()->getPost();
+
+        //Variables type_periods y year que solo sirven para pasar la validación...
+            $formData['type_periods'] = 'A';
+            $formData['year']         = '1993';
+        //--------------------------------------------------------------------------
+       
+        if ($curriculumForm->isValid($formData)) {
+            $ids   = explode('_', base64_decode($formData['id']));
+            $curid = $ids[0];
+            $escid = $ids[1];
+            $subid = $ids[2];
+
+            $pk = array('eid'   => $eid,
+                        'oid'   => $oid,
+                        'curid' => $curid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+
+            $dataSave = array(  'type'              => $formData['type'],
+                                'name'              => $formData['name'],
+                                'alias'             => $formData['alias'],
+                                'number_periods'    => $formData['number_periods'],
+                                'mandatory_credits' => $formData['mandatory_credits'],
+                                'elective_credits'  => $formData['elective_credits'],
+                                'mandatory_course'  => $formData['mandatory_course'],
+                                'elective_course'   => $formData['elective_course'],
+                                'cur_per_ant'       => base64_decode($formData['cur_per_ant']),
+                                'modified'          => $uid,
+                                'updated'           => date('Y-m-d h:m:s'),
+                                'state'             => 'B' );
+
+            if ($curriculumDb->_update($dataSave, $pk)) {
+                $result = array('success' => 1,
+                                'errors'  => array(),
+                                'cErrors' => 0 );
+            }else{
+                $result = array('success' => 1,
+                                'errors'  => ':( Error en los servidores, intentelo mas tarde...',
+                                'cErrors' => 0 );
+            }
+        }else{
+            $result['success'] = 0;
+            $cError = 0;
+            $error['isEmpty']   = array();
+            $error['notDigits'] = array();
+            foreach ($curriculumForm->getMessages() as $tipeError) {
+                foreach ($tipeError as $error) {
+                    $result['errors'][$cError] = $error;
+                }
+                if ($cError == 2) {
+                    break;
+                }
+                $cError++;
+            }
+        }
+
+        print json_encode($result);
+    }
+
+    public function icallyouAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //DataBase
+        $curriculumDb = new Api_Model_DbTable_Curricula();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $uid = $this->sesion->uid;
+
+        $ids = explode('_', base64_decode($this->_getParam('id')));
+        $why = $this->_getParam('why');
+
+        $curid = $ids[0];
+        $escid = $ids[1];
+        $subid = $ids[2];
+
+        $pk = array(    'eid'   => $eid,
+                        'oid'   => $oid,
+                        'curid' => $curid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+
+        if ($why != 'D') {
+            $data_update = array('state'    => $why,
+                                'modified' => $uid,
+                                'updated'  => date('Y-m-d h:m:s') );
+
+            if ($why != 'A') {
+                if ($curriculumDb->_update($data_update, $pk)) {
+                    $result = array('success' => 1);
                 }
             }else{
-                $this->view->form=$form;
+                //buscar si hay una curricula activa para reemplazarla
+                $where = array( 'eid'   => $eid,
+                                'oid'   => $oid,
+                                'escid' => $escid,
+                                'subid' => $subid,
+                                'state' => 'A' );
+                $attrib = array('curid');
+                $pdCurriculum = $curriculumDb->_getFilter($where, $attrib);
+                if ($pdCurriculum) {
+                    $curid_active = $pdCurriculum[0]['curid'];
+                    $pk_cur_active = array( 'eid'   => $eid,
+                                            'oid'   => $oid,
+                                            'curid' => $curid_active,
+                                            'escid' => $escid,
+                                            'subid' => $subid );
+                    $data_update_active = array('state'    => 'T',
+                                                'modified' => $uid,
+                                                'updated'  => date('Y-m-d h:m:s'));
+
+                    if ($curriculumDb->_update($data_update, $pk)) {
+                        if ($curriculumDb->_update($data_update_active, $pk_cur_active)) {
+                            $result = array('success' => 1);
+                        }
+                    }
+                }else{
+                    if ($curriculumDb->_update($data_update, $pk)) {
+                        $result = array('success' => 1);
+                    }
+                }
             }
-        } catch (Exception $e) {
-            print "Error:".$e->getMessage();
+        }else{
+            //borra nada mas la wea esta
+            if ($curriculumDb->_delete($pk)) {
+                $result = array('success' => 1);
+            }
+            
         }
+        print json_encode($result);
     }
 
 	public function modifycurriculaAction(){
@@ -218,10 +735,13 @@ class Curricula_CurriculaController extends Zend_Controller_Action
             try {
                 $eid=$this->sesion->eid;
                 $oid=$this->sesion->oid;
-                $curid=base64_decode($this->_getParam('curid'));
-                $escid=base64_decode($this->_getParam('escid'));
-                $subid=base64_decode($this->_getParam('subid'));
-                $action=$this->_getParam('accion');
+
+                $ids    = explode('_', base64_decode($this->_getParam('id')));
+                $curid  = $ids[0];
+                $escid  = $ids[1];
+                $subid  = $ids[2];
+                $action = 'A';
+
                 $this->view->action=$action;
                 $this->view->eid=$eid;
                 $this->view->oid=$oid;
