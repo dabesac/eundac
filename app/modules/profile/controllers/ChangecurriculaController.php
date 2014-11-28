@@ -52,7 +52,7 @@
         $where3['escid']=$dat[0]['escid'];
         $where3['eid']=$eid;
         $where3['oid']=$oid;
-        $where3['state']='A';
+        //$where3['state']='A';
         $todcur=$curri->_getFilter($where3);
         $this->view->curriactiva=$todcur;               
             

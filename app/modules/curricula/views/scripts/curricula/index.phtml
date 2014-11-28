@@ -1,6 +1,40 @@
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-th-list"></span> Gestión Currícula');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
-<div class='row'>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-bookmark"></span> Gestión de Currículas');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+
+<?php $env = getenv('APPLICATION_ENV') ?>
+<?php if ($env === 'development'): ?>
+	<link rel="stylesheet" href="/css/adminCurriculum.css">
+	<script src="/js/admin/adminCurriculum.js"></script>
+<?php endif ?>
+
+<div class="adm_curricula">
+	<div class="header">
+		<p><span class="glyphicon glyphicon-comment"></span> Seleccione una Facultad y Escuela</p>
+		<div class="selectSide">
+			<select class="form-control" name="faculty" id="selectFaculty">
+				<option value="">Facultad</option>
+				<?php if ($this->dataFaculty): ?>
+				<?php foreach ($this->dataFaculty as $faculty): ?>
+					<option value="<?php echo $faculty['facid'] ?>"><?php echo $faculty['name'] ?></option>
+				<?php endforeach ?>
+				<?php endif ?>
+			</select>
+		</div>
+		<div class="selectSide">
+			<select class="form-control" name="school" id="selectSchool">
+				<option value="">Escuela</option>
+				<option value="">Primero seleccione una facultad ¬¬</option>
+			</select>
+		</div>
+	</div>
+
+	<div id="dataCurriculums" class="body">
+		
+	</div>
+</div>
+
+
+<!-- <div class='row'>
 	<div class='col-md-12 col-md-offset-2'>
 		<div class='col-md-1'>Facultad:</div>
 		<div class='col-md-3'>
@@ -68,4 +102,4 @@
 				$("#curriculas").html(data);
 		});
 	};
-</script>
+</script> -->

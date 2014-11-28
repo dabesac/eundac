@@ -1,0 +1,13 @@
+<?php 
+if ($this->especialidad) { ?>
+	<option value="nada">- Seleccione la Especialidad -</option>	
+	<?php
+	foreach ($this->especialidad as $especialidad) { ?>
+		<option value="<?php echo $especialidad['escid']."|".$especialidad['subid']?>"><?php echo $especialidad['name']?></option>
+		<?php
+	} 
+}else{ ?>
+	<option value="nada">No tiene ningun registro.</option>
+<?php
+}
+?>

@@ -16,10 +16,11 @@ if ($this->cursosconvalidados) {    ?>
             <th class='text-center'>Turno</th>
             <th class='text-center'>Resolución</th>
             <th class='text-center'>Nota</th>
+            <th class='text-center'>Modificar</th>
         </tr>
         <?php
         foreach ($this->cursosconvalidados as $a => $datas) {   ?>
-            <tr>
+            <tr id="rowsData<?php echo $a ?>" class='allData'>
                 <td class='text-center'><?php echo $a+1?></td>
                 <td class='text-center'><?php echo $datas['curid']?></td>
                 <td class='text-center'><?php echo $datas['courseid']?></td>
@@ -27,7 +28,39 @@ if ($this->cursosconvalidados) {    ?>
                 <td class='text-center'><?php echo $datas['turno']?></td>
                 <td><?php echo $datas['document_auth']?></td>
                 <td class='text-center'><?php echo $datas['notafinal']?></td>
+                <td class="text-center"><a trupdate="<?php echo $a ?>" class='pushUpdated' href="#"><span class='glyphicon glyphicon-pencil'></span></a></td>
             </tr>
+            <tr id="rowsUpdate<?php echo $a ?>" class="hidden rowsUpdate">
+                    <td colspan="5"></td>
+                    <td colspan="3">
+                        <form id='frmupdate' name='frmupdate' method='POST' enctype="application/x-www-form-urlencoded" class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-7">
+                                    Resolución:
+                                    <input id='document_auth' name="document_auth" type="text" class='form-control' placeholder="Nº 10283-2014-ETSR" value="<?php echo $datas['document_auth']?>">
+                                </div>
+                                <div class="col-md-2">
+                                    Nota: <input id='notafinal' name="notafinal" type="text" maxlength="2" class=' form-control' onkeypress="return soloNumero(event)">
+                                </div>
+                                <div class="col-md-1">
+                                    <br><button id='' class="saveCorrection btn btn-success btn-xs"><span class='glyphicon glyphicon-save'></span> Guardar</button>
+                                </div>
+                                <input type="text" class="hidden" name='escid' value="<?php echo base64_encode($datas['escid'])?>">
+                                <input type="text" class="hidden" name='subid' value="<?php echo base64_encode($datas['subid'])?>">
+                                <input type="text" class="hidden" name='courseid' value="<?php echo base64_encode($datas['courseid'])?>">
+                                <input type="text" class="hidden" name='curid' value="<?php echo base64_encode($datas['curid'])?>">
+                                <input type="text" class="hidden" name='perid' value="<?php echo base64_encode($datas['perid'])?>">
+                                <input type="text" class="hidden" name='turno' value="<?php echo base64_encode($datas['turno'])?>">
+                                <input type="text" class="hidden" name='regid' value="<?php echo base64_encode($datas['regid'])?>">
+                                <input type="text" class="hidden" name='pid' value="<?php echo base64_encode($datas['pid'])?>">
+                                <input type="text" class="hidden" name='uid' value="<?php echo base64_encode($datas['uid'])?>">
+                            </div>
+                        </div>
+                        </form>
+                    </td>
+            </tr>
+
         <?php
         }
         ?>
@@ -41,8 +74,31 @@ else{   ?>
 <?php
 }
 ?>
+<script type="text/javascript" src="/js/notes/jquery.jstepper.js"></script>
 <script type="text/javascript">
+
+$("#notafinal").jStepper({minValue:-3, maxValue:20, minLength:2});
+
+function soloNumero(e){
+    key = e.keyCode || e.which;
+    tecla = String.fromCharCode(key).toLowerCase();
+    letras = "0123456789-";
+    especiales = [8,37,39,46];
+    tecla_especial = false
+    for(var i in especiales){
+        if(key == especiales[i]){
+            tecla_especial = true;
+            break;
+        }
+    }
+    if(letras.indexOf(tecla)==-1 && !tecla_especial)
+    return false;
+};
+
 $(function() {
+    $(".rowsUpdate").addClass('hidden');
+    $(".allData").removeClass('info');
+
     $("#printAllcourses").hover(
         function(){
             $("#printAllcourses").css("background-color","#5CB85C");
@@ -55,5 +111,44 @@ $(function() {
             $("#printAllcourses").css("color","#333");
         }
     );
+
+    // $(".pushUpdated").on('click', function(){
+    //     var trId = $(this).attr('trupdate');
+
+    //     $('#rowsUpdate' + trId).toggleClass('hidden');
+
+    //     if (!$('#rowsUpdate' + trId).hasClass('hidden')) {
+    //         $("#rowsData" + trId).addClass('info');
+    //         $(".rowsUpdate").addClass('info');
+    //         $("#document_auth").focus();
+    //     }
+    //     else{
+    //         $("#rowsData" + trId).removeClass('info');
+    //     };
+
+    //     $("#saveCorrection").on('click', function(){
+    //         $.ajax({
+    //             type: 'POST',
+    //             url : "/register/validation/update/",
+    //             data: $("#frmupdate").serialize(),
+    //             success: function(data) {
+    //                 console.log(data);
+    //                 if (data.status==true) {
+
+    //                 }
+    //                 else{
+
+    //                 };
+    //             }
+    //         });
+    //         return false;
+    //     });
+    // });
+
+    $("#document_auth").keyup(function(){
+        var r = $(this).val();
+        $("#document_auth").val(r.toUpperCase());
+    });
+
 });
 </script>

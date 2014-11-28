@@ -119,7 +119,7 @@
 				facid = $(this).val();
 				$('#avanceAcademico_DataDocentes')	.html('');
 				$('#selectSchool')	.html('<option value="">Cargando...</option')
-									.load('/default/global/listspecialities/data/' + facid);
+									.load('/default/global/listschools/id/' + facid);
 			});
 
 			$('#selectSchool').on('change', function(){
