@@ -913,4 +913,64 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     		print "Error: not_registration_students_all ".$e->getMessage();
     	}
     }
+
+    public function _firstlegends($where=null){
+        try{
+            if($where['escid']=='' || $where['perid']=='')return false;
+            $escid = $where['escid'];
+            $perid = $where['perid'];
+
+            $sql=$this->_db->query("
+                select * from first_legends('$escid','$perid')as                
+                (
+                    ".'prom'." bigint,
+                    ".'escid'." character varying
+                )
+            ");
+            if ($sql) return $sql->fetchAll();
+    		return false;
+        }catch(Exception $e){
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function _firstlegendsirregulares($where=null){
+        try{
+            if($where['escid']=='' || $where['perid']=='')return false;
+            $escid = $where['escid'];
+            $perid = $where['perid'];
+
+            $sql=$this->_db->query("
+                select * from first_legends_irregulares('$escid','$perid')as                
+                (
+                    ".'prom'." bigint,
+                    ".'escid'." character varying
+                )
+            ");
+            if ($sql) return $sql->fetchAll();
+    		return false;
+        }catch(Exception $e){
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function _firstlegendsretirados($where=null){
+        try{
+            if($where['escid']=='' || $where['perid']=='')return false;
+            $escid = $where['escid'];
+            $perid = $where['perid'];
+
+            $sql=$this->_db->query("
+                select * from first_legends_retirados('$escid','$perid')as                
+                (
+                    ".'prom'." bigint,
+                    ".'escid'." character varying
+                )
+            ");
+            if ($sql) return $sql->fetchAll();
+    		return false;
+        }catch(Exception $e){
+            print "Error: ".$e->getMessage();
+        }
+    }
 }

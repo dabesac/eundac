@@ -1,5 +1,5 @@
 <?php
-	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tasks"></span> Reporte Academico');
+	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tasks"></span> Reporte Académico');
 	$this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span>Regresar</a>');
 ?>
 <table class="table  table-striped  table-condensed">
@@ -22,12 +22,14 @@
         </td>
         <td><b>ESCUELA:</b></td>
         <td>
-            <select style='height:35px;width:300px' class='form-control' id="escu" name="escu"><option value="<?php echo $this->escid?>"><?php echo $this->nom_escuela?></option>
+            <select style='height:35px;width:300px' class='form-control' id="escu" name="escu">
+            	<option>--Seleccione--</option>
             </select>
         </td>
         <td><b>ESPECIALIDAD:</b></td>
         <td>
-            <select style='height:35px;width:300px' class='form-control' id="escu" name="escu"><option value="<?php echo $this->escid?>"><?php echo $this->nom_escuela?></option>
+            <select style='height:35px;width:300px' class='form-control' id="specia" name="specia">
+            	<option>--Seleccione--</option>
             </select>
         </td>
     </tr>
@@ -52,13 +54,102 @@
                 <option value="">Primero seleccione un año</option>
             </select>
         </td>
+        <td><b>OPCION:</b></td>
+        <td>
+        	<select id="repid" name="repid" class="form-control" style="width: 170px">
+                <option value="nada">--Seleccione--</option>
+                <option value="1">Aprobados</option>
+                <option value="2">Desaprobados/Irregulares</option>
+                <option value="3">Retirados</option>
+            </select>
+        </td>
     </tr>
-</table>        
-    <div style="clear:both" ></div>  
-<div  id="cargadatos_"></div>  
+    <tr>
+    	<td colspan="10">
+        	<center><a href="#" id="generar" style="float:center" class="btn btn-primary"><i class="glyphicon glyphicon-list-alt glyphicon-white"> </i>Generar Reporte</a><center>
+        </td>
+    </tr>
+</table>      
+<div style="clear:both" ></div> 
+<div id="consulta"></div> 
 <script>
+$(function () {
+	var ajax_data = {
+		"anio" : <?php echo $anio ?>,
+	};
+	$.ajax({
+		type : 'post',
+		url : '/report/academicreport/lperiodo/',
+        data : ajax_data,
+        success: function(data){
+            $('#periodo_c').html(data);
+        }
+	});
+});
+	$('#lanios').change(function(){
+		var anio = $(this).val();
+		var ajax_data = {
+			"anio" : anio,
+		};
+		$.ajax({
+            type : 'post',
+            url : '/report/academicreport/lperiodo/',
+            data : ajax_data,
+            success: function(data){
+            	$('#periodo_c').html(data);
+               }
+        });
+	});
 	$("#facid").change(function(){
 		var facid = $(this).val();
+		var url = "/report/academicreport/schools/facid/"+$.base64.encode(facid);
+		$("#escu").html("<img src='/img/spinner.gif'> Cargando....");
+		$("#escu").load(url);
+	});
+	$("#escu").change(function(){
+		var xx1 =$(this).val();
+		var tmp = xx1.split('|');
+		var escid =tmp[0];
+		var subid =tmp[1];
+		var urlescu = "/report/academicreport/speciality/escid/"+$.base64.encode(escid)+"/subid/"+$.base64.encode(subid);
+		$("#specia").html("<img src='/img/spinner.gif'> Cargando....");
+		$("#specia").load(urlescu);
+	});
+	$("#generar").click(function(){
+		var facid = $('#facid').val();
+		var tescid = $('#escu').val();
+		var speciality = $("#specia").val();
+		var perid = $("#periodo_c").val();
+		var opc = $("#repid").val();
+		if(facid=='--Seleccione--' || tescid== 'nada' || opc == "nada"){
+			alert('Seleccione Facultad/Escuela/Opcion');
+			return false;
+		}else if(speciality ==  "nada"){
+			var tmp = tescid.split("|")
+			var escid = tmp[0];
+			var subid = tmp[1];
+		}else{
+			var tmp = speciality.split("|");
+			var escid = tmp[0];
+			var subid = tmp[1];
+		}
+		var d_ajax = {
+			"facid" : facid,
+			"escid" : escid,
+			"subid" : subid,
+			"perid" : perid,
+			"opcion" : opc
+		};
+		$.ajax({
+			type : "post",
+			url : "/report/academicreport/list",
+			data : d_ajax,
+			success : function(data){
+				console.log(d_ajax);
+				$("#consulta").html("<center><img src='/img/carga.gif' /></center>");
+				$("#consulta").html(data);
+			}
+		});
 		
 	});
 </script>  

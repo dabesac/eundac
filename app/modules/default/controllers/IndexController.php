@@ -33,8 +33,8 @@ class IndexController extends Zend_Controller_Action {
     			$clavecampus = $form->getValue('clave');
     			$pass = md5($clavecampus);
     			$dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
-    			$authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter,'base_users','uid','password');
-    			$authAdapter->getDbSelect()->where("state = 'A' and eid='$eid' and oid='$oid'");
+    			$authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter,'base_users','uid','password','rid');
+    			$authAdapter->getDbSelect()->where("state = 'A' and eid='$eid' and oid='$oid' and rid='$rid'");
     			$authAdapter->setIdentity($cod)->setCredential($pass);
     			$auth = Zend_Auth::getInstance();
     			$result = $auth->authenticate($authAdapter);
