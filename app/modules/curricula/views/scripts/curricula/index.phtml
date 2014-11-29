@@ -1,11 +1,12 @@
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-bookmark"></span> Gestión de Currículas');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
-
 <?php $env = getenv('APPLICATION_ENV') ?>
 <?php if ($env === 'development'): ?>
 	<link rel="stylesheet" href="/css/adminCurriculum.css">
 	<script src="/js/admin/adminCurriculum.js"></script>
 <?php endif ?>
+
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-bookmark"></span> Gestión de Currículas');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+
 
 <div class="adm_curricula">
 	<div class="header">
@@ -32,6 +33,10 @@
 		
 	</div>
 </div>
+
+<?php if ($env === 'production'): ?>
+	<script src="/js/min/adminCurriculum.min.js"></script>
+<?php endif ?>
 
 
 <!-- <div class='row'>

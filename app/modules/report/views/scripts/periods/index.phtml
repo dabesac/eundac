@@ -1,3 +1,8 @@
+<?php $env = getenv('APPLICATION_ENV') ?>
+<?php if ($env === 'development'): ?>
+	<link rel="stylesheet" href="/css/avanceAcademico.css">
+<?php endif ?>
+
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-time"></span> Avance Académico');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 <?php 
@@ -5,7 +10,6 @@
 	$dataVista = $this->dataVista;
  ?>
 
-<link rel="stylesheet" href="/css/avanceAcademico.css">
 
 <input type="hidden" id="rol" value="<?php echo $dataVista['rid'] ?>">
 <input type="hidden" id="escid" value="<?php echo $dataVista['dataEscid'] ?>">
