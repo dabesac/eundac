@@ -1,6 +1,6 @@
 <?php
 
-class Rcentral_Form_Curricula extends Zend_Form{    
+class Curricula_Form_Curricula extends Zend_Form{    
     public function init(){
 
         $this->setName("frmcurricula");
@@ -65,7 +65,7 @@ class Rcentral_Form_Curricula extends Zend_Form{
         $cur_per_ant= new Zend_Form_Element_Text("cur_per_ant");
         $cur_per_ant->removeDecorator('Label')->removeDecorator("HtmlTag");  
         $cur_per_ant->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $cur_per_ant->setAttrib("maxlength", "3");
+        $cur_per_ant->setAttrib("maxlength", "3")->setAttrib('placeholder', 'Curricula Anterior');
         $cur_per_ant->setAttrib("class","form-control");
         $cur_per_ant->setAttrib('readonly',true);        
 
@@ -73,27 +73,28 @@ class Rcentral_Form_Curricula extends Zend_Form{
         $name->removeDecorator('Label')->removeDecorator("HtmlTag");  
         $name->setRequired(true)->addErrorMessage('Este campo es requerido');      
         $name->setAttrib("maxlength", "100");
+        $name->setAttrib('placeholder', 'Nombre');
         $name->setAttrib("class","form-control");   
         $name->setAttrib("title","Nombre del Plan Curricular");
 
         $alias = new Zend_Form_Element_Text("alias");
         $alias->removeDecorator('Label')->removeDecorator("HtmlTag");  
         $alias->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $alias->setAttrib("maxlength", "100");
+        $alias->setAttrib("maxlength", "100")->setAttrib('placeholder', 'Alias');
         $alias->setAttrib("title","Alias del Plan Curricular");   
         $alias->setAttrib("class","form-control");     
 
         $number_periods = new Zend_Form_Element_Text("number_periods");
         $number_periods->removeDecorator('Label')->removeDecorator("HtmlTag");  
         $number_periods->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $number_periods->setAttrib("maxlength", "2");
+        $number_periods->setAttrib("maxlength", "2")->setAttrib('placeholder', 'Periodos');
         $number_periods->setAttrib("class","form-control");
         $number_periods->setAttrib("title","Total Periodos");        
                 
         $mandatory_credits = new Zend_Form_Element_Text("mandatory_credits");
         $mandatory_credits->removeDecorator('Label')->removeDecorator("HtmlTag");  
         $mandatory_credits->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $mandatory_credits->setAttrib("maxlength", "3");
+        $mandatory_credits->setAttrib("maxlength", "3")->setAttrib('placeholder', 'Creditos Obligatorios');
         $mandatory_credits->setAttrib("class","form-control");
         // $mandatory_credits->setAttrib("style","text-align:center");
         $mandatory_credits->setAttrib("title","Total Creditos O");        
@@ -101,7 +102,7 @@ class Rcentral_Form_Curricula extends Zend_Form{
         $elective_credits = new Zend_Form_Element_Text("elective_credits");
         $elective_credits->removeDecorator('Label')->removeDecorator("HtmlTag");  
         $elective_credits->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $elective_credits->setAttrib("maxlength", "3");
+        $elective_credits->setAttrib("maxlength", "3")->setAttrib('placeholder', 'Creditos Selectivos');
         $elective_credits->setAttrib("class","form-control");
         // $elective_credits->setAttrib("style","text-align:center");
         $elective_credits->setAttrib("title","Total Creditos Electivos");        
@@ -109,7 +110,7 @@ class Rcentral_Form_Curricula extends Zend_Form{
         $mandatory_course = new Zend_Form_Element_Text("mandatory_course");
         $mandatory_course->removeDecorator('Label')->removeDecorator("HtmlTag");  
         $mandatory_course->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $mandatory_course->setAttrib("maxlength", "3");
+        $mandatory_course->setAttrib("maxlength", "3")->setAttrib('placeholder', 'Cursos Obligatorios');
         $mandatory_course->setAttrib("class","form-control");
         // $mandatory_course->setAttrib("style","text-align:center");
         $mandatory_course->setAttrib("title","Nro Cursos O");        
@@ -117,7 +118,7 @@ class Rcentral_Form_Curricula extends Zend_Form{
         $elective_course = new Zend_Form_Element_Text("elective_course");
         $elective_course->removeDecorator('Label')->removeDecorator("HtmlTag");  
         $elective_course->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $elective_course->setAttrib("maxlength", "3");
+        $elective_course->setAttrib("maxlength", "3")->setAttrib('placeholder', 'Cursos Electivos');
         $elective_course->setAttrib("class","form-control");
         // $elective_course->setAttrib("style","text-align:center");
         $elective_course->setAttrib("title","Nro Cursos E");     

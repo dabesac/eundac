@@ -1,230 +1,225 @@
 <?php 
 	$dataCourse = $this->dataCourse;
  ?>
-<div class="modalNotas_header">
-	<p class="headerObO courseName">
-		<?php echo $dataCourse['name'] ?>
-	</p>
-	<div class="headerObO courseMoreInfo">
-		<p><strong>Codigo</strong> <?php echo $dataCourse['courseid'] ?></p>
-		<p><strong>Curricula</strong> <?php echo $dataCourse['curid'] ?></p>
-		<p><strong>Semestre</strong> <?php echo $dataCourse['semid'] ?></p>
-		<p><strong>Creditos</strong> <?php echo $dataCourse['credits'] ?></p>
+<?php if ($dataCourse['students']): ?>
+	<div class="bodyHeader">
+		<p class="bhObO bodyHeaderParrafo"><span class="glyphicon glyphicon-info-sign"></span> Lista de estudiantes...</p>
+		<?php if ($dataCourse['parcial'] == 2): ?>
+			<div class="bhObO btnSide">
+				<div>
+					<?php $urlPrint = '/docente/register/'.$dataCourse['actionPrint'].'/id/'.$dataCourse['idPrint'] ?>
+					<a href="<?php echo $urlPrint ?>" class="btn btn-default form-control"><span class="glyphicon glyphicon-print text-primary"></span> Imprimir</a>
+				</div>
+				<div>
+					<a id="idBtnShowAplazados" href="##" class="btn btn-default form-control btnAplazados"><span class="glyphicon glyphicon-filter text-danger"></span> Aplazados</a>
+				</div>
+			</div>
+		<?php else: ?>
+			<div class="bhObO btnSide">
+				<div></div>
+				<div>
+					<?php $urlPrint = '/docente/register/'.$dataCourse['actionPrint'].'/id/'.$dataCourse['idPrint'] ?>
+					<a href="<?php echo $urlPrint ?>" class="btn btn-default form-control"><span class="glyphicon glyphicon-print text-primary"></span> Imprimir</a>
+				</div>
+			</div>
+		<?php endif ?>
 	</div>
-</div>
-<div class="modalNotas_body">
-	<?php if ($dataCourse['students']): ?>
-		<div class="bodyHeader">
-			<p class="bhObO parcialName">
-				<?php if ($dataCourse['parcial'] == 1): ?>
-					Primer Parcial
-				<?php elseif ($dataCourse['parcial'] == 2): ?>
-					Segundo Parcial
-				<?php endif ?>
-			</p>
-			<p class="bhObO bodyHeaderParrafo"><span class="glyphicon glyphicon-info-sign"></span> Lista de Estudiantes:</p>
-			<?php if ($dataCourse['parcial'] == 2): ?>
-				<div class="bhObO aplazadosSide">
-					<p class="ObO pAplazados">Si desea mire las notas de aplazados...</p>
-					<a id="idBtnShowAplazados" href="##" class="ObO btnAplazados">Aplazados</a>
-				</div>	
+	<div id="idDataStudent" class="dataStudent" show="dataNormal">
+		<!-- Titulos side -->
+		<div class="student studentHeader">
+			<div class="ObO studentNum">
+				#
+			</div>
+			<div class="ObO studentName">
+				Apellidos y Nombres
+			</div>
+		<?php if ($dataCourse['type'] == 'O'): ?>
+			<?php if ($dataCourse['parcial'] == 1): ?>
+				<div class="ObO studentNotasPrimer studentNotasTitleO">
+					Notas
+					<span class="promTitle">
+						Prom
+					</span>
+				</div>
+			<?php else: ?>
+				<div class="ObO studentNotasSegundo studentNotasTitleO">
+					Notas
+					<span class="promTitle">
+						Prom
+					</span>
+					<span class="notasObO notaFinal notaFinalTitle">
+						Final
+					</span>
+				</div>
 			<?php endif ?>
+		<?php else: ?>
+			<?php if ($dataCourse['parcial'] == 1): ?>
+				<div class="ObO studentNotasPrimer studentNotasTitleC">
+					<div class="ObO unitySide1">
+						<span class="notasObO unityTitle">Unidad 1</span>
+						<span class="notasObO promTitle">Prom</span>
+					</div>
+					<div class="ObO unitySide2">
+						<span class="notasObO unityTitle">Unidad 2</span>
+						<span class="notasObO promTitle">Prom</span>
+					</div>
+				</div>
+			<?php else: ?>
+				<div class="ObO studentNotasSegundo studentNotasTitleC">
+					<div class="ObO unitySide1">
+						<span class="notasObO unityTitle">Unidad 3</span>
+						<span class="notasObO promTitle">Prom</span>
+					</div>
+					<div class="ObO unitySide2">
+						<span class="notasObO unityTitle">Unidad 4</span>
+						<span class="notasObO promTitle">Prom</span>
+					</div>
+					<span class="notasObO notaFinal notaFinalTitle">
+						Final
+					</span>
+				</div>
+			<?php endif ?>
+		<?php endif ?>
 		</div>
-		<div id="idDataStudent" class="dataStudent" show="dataNormal">
-			<!-- Titulos side -->
-			<div class="student studentHeader">
+
+
+		<?php $cAplazados = 0 ?>
+		<?php foreach ($dataCourse['students'] as $c => $student): ?>
+			<?php if ($student['notaAplazados']):
+				$cAplazados++;
+				$isAplazado = 1;
+			else:
+				$isAplazado = 0;
+			endif ?>
+			<div class="student" isaplazado="<?php echo $isAplazado ?>">
 				<div class="ObO studentNum">
-					#
+					<?php echo $c + 1 ?>
+					<span class="numberSecret" hidden>
+						<?php echo $cAplazados ?>
+					</span>
 				</div>
 				<div class="ObO studentName">
-					Apellidos y Nombres
+					<?php echo $student['fullName'] ?> <small><?php echo $student['uid'] ?></small>
 				</div>
-			<?php if ($dataCourse['type'] == 'O'): ?>
-				<?php if ($dataCourse['parcial'] == 1): ?>
-					<div class="ObO studentNotasPrimer studentNotasTitleO">
-						Notas
-						<span class="promTitle">
-							Prom
-						</span>
-					</div>
-				<?php else: ?>
-					<div class="ObO studentNotasSegundo studentNotasTitleO">
-						Notas
-						<span class="promTitle">
-							Prom
-						</span>
-						<span class="notasObO notaFinal notaFinalTitle">
-							Final
-						</span>
-					</div>
-				<?php endif ?>
-			<?php else: ?>
-				<?php if ($dataCourse['parcial'] == 1): ?>
-					<div class="ObO studentNotasPrimer studentNotasTitleC">
+			<?php if ($dataCourse['parcial'] == 1): ?>
+				<div class="ObO studentNotasPrimer">
+					<?php if ($dataCourse['type'] == 'O'): ?>
+						<?php for ($i=1; $i <= 9; $i++) { ?>
+							<span class="notasObO nota<?php echo $i.' '.$student['notaClass'.$i] ?>"><?php echo $student['nota'.$i] ?></span>
+						<?php } ?>
+						<span class="notasObO promedio <?php echo $student['promClass'] ?>"><?php echo $student['promedio'] ?></span>
+					<?php else: ?>
 						<div class="ObO unitySide1">
-							<span class="notasObO unityTitle">Unidad 1</span>
-							<span class="notasObO promTitle">Prom</span>
+							<?php for ($i=1; $i <= 4; $i++) { ?>
+								<span class="notasObO nota<?php echo $i.' '.$student['notaClass'.$i] ?>"><?php echo $student['nota'.$i] ?></span>
+							<?php } ?>
 						</div>
 						<div class="ObO unitySide2">
-							<span class="notasObO unityTitle">Unidad 2</span>
-							<span class="notasObO promTitle">Prom</span>
+							<?php for ($i=6; $i <= 9; $i++) { ?>
+								<span class="notasObO nota<?php echo $i.' '.$student['notaClass'.$i] ?>"><?php echo $student['nota'.$i] ?></span>
+							<?php } ?>
 						</div>
-					</div>
-				<?php else: ?>
-					<div class="ObO studentNotasSegundo studentNotasTitleC">
+					<?php endif ?>
+				</div>
+			<?php elseif ($dataCourse['parcial'] == 2): ?>
+				<div class="ObO studentNotasSegundo">
+					<?php if ($dataCourse['type'] == 'O'): ?>
+						<?php for ($i=1; $i <= 9; $i++) { ?>
+							<span class="notasObO nota<?php echo $i.' '.$student['notaClass'.$i] ?>"><?php echo $student['nota'.$i] ?></span>
+						<?php } ?>
+						<span class="notasObO promedio <?php echo $student['promClass'] ?>"><?php echo $student['promedio'] ?></span>
+					<?php else: ?>
 						<div class="ObO unitySide1">
-							<span class="notasObO unityTitle">Unidad 3</span>
-							<span class="notasObO promTitle">Prom</span>
+							<?php for ($i=1; $i <= 4; $i++) { ?>
+								<span class="notasObO nota<?php echo $i.' '.$student['notaClass'.$i] ?>"><?php echo $student['nota'.$i] ?></span>
+							<?php } ?>
 						</div>
 						<div class="ObO unitySide2">
-							<span class="notasObO unityTitle">Unidad 4</span>
-							<span class="notasObO promTitle">Prom</span>
+							<?php for ($i=6; $i <= 9; $i++) { ?>
+								<span class="notasObO nota<?php echo $i.' '.$student['notaClass'.$i] ?>"><?php echo $student['nota'.$i] ?></span>
+							<?php } ?>
 						</div>
-						<span class="notasObO notaFinal notaFinalTitle">
-							Final
-						</span>
-					</div>
-				<?php endif ?>
+					<?php endif ?>
+					<span class="notasObO notaFinal <?php echo $student['notaFinalClass'] ?>"><?php echo $student['notaFinal'] ?></span>
+				</div>
 			<?php endif ?>
 			</div>
+		<?php endforeach ?>
 
-
-			<?php $cAplazados = 0 ?>
-			<?php foreach ($dataCourse['students'] as $c => $student): ?>
-				<?php if ($student['notaAplazados']):
-					$cAplazados++;
-					$isAplazado = 1;
-				else:
-					$isAplazado = 0;
-				endif ?>
-				<div class="student" isaplazado="<?php echo $isAplazado ?>">
-					<div class="ObO studentNum">
-						<?php echo $c + 1 ?>
-						<span class="numberSecret" hidden>
-							<?php echo $cAplazados ?>
-						</span>
-					</div>
-					<div class="ObO studentName">
-						<?php echo $student['fullName'] ?> <small><?php echo $student['uid'] ?></small>
-					</div>
-				<?php if ($dataCourse['parcial'] == 1): ?>
-					<div class="ObO studentNotasPrimer">
-						<?php if ($dataCourse['type'] == 'O'): ?>
-							<?php for ($i=1; $i <= 9; $i++) { ?>
-								<span class="notasObO nota<?php echo $i.' '.$student['notaClass'.$i] ?>"><?php echo $student['nota'.$i] ?></span>
-							<?php } ?>
-							<span class="notasObO promedio <?php echo $student['promClass'] ?>"><?php echo $student['promedio'] ?></span>
-						<?php else: ?>
-							<div class="ObO unitySide1">
-								<?php for ($i=1; $i <= 4; $i++) { ?>
-									<span class="notasObO nota<?php echo $i.' '.$student['notaClass'.$i] ?>"><?php echo $student['nota'.$i] ?></span>
-								<?php } ?>
-							</div>
-							<div class="ObO unitySide2">
-								<?php for ($i=6; $i <= 9; $i++) { ?>
-									<span class="notasObO nota<?php echo $i.' '.$student['notaClass'.$i] ?>"><?php echo $student['nota'.$i] ?></span>
-								<?php } ?>
-							</div>
-						<?php endif ?>
-					</div>
-				<?php elseif ($dataCourse['parcial'] == 2): ?>
-					<div class="ObO studentNotasSegundo">
-						<?php if ($dataCourse['type'] == 'O'): ?>
-							<?php for ($i=1; $i <= 9; $i++) { ?>
-								<span class="notasObO nota<?php echo $i.' '.$student['notaClass'.$i] ?>"><?php echo $student['nota'.$i] ?></span>
-							<?php } ?>
-							<span class="notasObO promedio <?php echo $student['promClass'] ?>"><?php echo $student['promedio'] ?></span>
-						<?php else: ?>
-							<div class="ObO unitySide1">
-								<?php for ($i=1; $i <= 4; $i++) { ?>
-									<span class="notasObO nota<?php echo $i.' '.$student['notaClass'.$i] ?>"><?php echo $student['nota'.$i] ?></span>
-								<?php } ?>
-							</div>
-							<div class="ObO unitySide2">
-								<?php for ($i=6; $i <= 9; $i++) { ?>
-									<span class="notasObO nota<?php echo $i.' '.$student['notaClass'.$i] ?>"><?php echo $student['nota'.$i] ?></span>
-								<?php } ?>
-							</div>
-						<?php endif ?>
-						<span class="notasObO notaFinal <?php echo $student['notaFinalClass'] ?>"><?php echo $student['notaFinal'] ?></span>
-					</div>
-				<?php endif ?>
+		<?php if ($dataCourse['parcial'] == 2): ?>
+			<div id="idNotasAplazados" class="notasAplazados notasAplazadosClose">
+				<div class="notaStudentAplazados notaStudentAplazadosTitle">
+					<span class="notaAplazados titleAplazados">
+						Aplazados
+					</span>
 				</div>
-			<?php endforeach ?>
+				<?php foreach ($dataCourse['students'] as $c => $student): ?>
+					<?php if ($student['notaAplazados']): ?>
+						<div class="notaStudentAplazados">
+							<span class="notaAplazados <?php echo $student['classAplazados'] ?>">
+								<?php echo $student['notaAplazados'] ?>
+							</span>
+						</div>
+					<?php endif ?>
+				<?php endforeach ?>
+			</div>
+		<?php endif ?>
+		<?php if ($cAplazados == 0): ?>
+			<p id="idMessageListStudent" class="pMessageEmptyStudent" hidden><span class="glyphicon glyphicon-exclamation-sign"></span> No hay alumnos que fueron a aplazados...</p>
+		<?php else: ?>
+			<p id="idMessageListStudent" class="pMessageTip" hidden><strong>Tip</strong> Si algunos alumnos desaprobados no aparecen en aplazados, tal vez sea por que se jalaron mas de 3 cursos...</p>
+		<?php endif ?>
+	</div>
+	<script>
+		$(function(){
+			var isAplazado = '';
+			var show       = '';
+			var timeOut    = '';
 
-			<?php if ($dataCourse['parcial'] == 2): ?>
-				<div id="idNotasAplazados" class="notasAplazados notasAplazadosClose">
-					<div class="notaStudentAplazados notaStudentAplazadosTitle">
-						<span class="notaAplazados titleAplazados">
-							Aplazados
-						</span>
-					</div>
-					<?php foreach ($dataCourse['students'] as $c => $student): ?>
-						<?php if ($student['notaAplazados']): ?>
-							<div class="notaStudentAplazados">
-								<span class="notaAplazados <?php echo $student['classAplazados'] ?>">
-									<?php echo $student['notaAplazados'] ?>
-								</span>
-							</div>
-						<?php endif ?>
-					<?php endforeach ?>
-				</div>
-			<?php endif ?>
-			<?php if ($cAplazados == 0): ?>
-				<p id="idMessageListStudent" class="pMessageEmptyStudent" hidden><span class="glyphicon glyphicon-exclamation-sign"></span> No hay alumnos que fueron a aplazados...</p>
-			<?php else: ?>
-				<p id="idMessageListStudent" class="pMessageTip" hidden><strong>Tip</strong> Si algunos alumnos desaprobados no aparecen en aplazados, tal vez sea por que se jalaron mas de 3 cursos...</p>
-			<?php endif ?>
-		</div>
-		<script>
-			$(function(){
-				var isAplazado = '';
-				var show       = '';
-				var timeOut    = '';
+			$('#idBtnShowAplazados').on('click', function(){
+				$(this).toggleClass('aplazadosActive');
 
-				$('#idBtnShowAplazados').on('click', function(){
-					timeOut = 0;
-					show = $('#idDataStudent').attr('show');
-					if (show == 'dataNormal') {
-						$('.student').each(function(index, element){
-							isAplazado = $(element).attr('isaplazado');
-							if (isAplazado == 0) {
-								setTimeout(function(){
-									$(element).fadeOut(timeOut);
-								}, timeOut);
-								timeOut = timeOut + 7;
-							};
-						});
+				timeOut = 0;
+				show = $('#idDataStudent').attr('show');
+				if (show == 'dataNormal') {
+					$('.student').each(function(index, element){
+						isAplazado = $(element).attr('isaplazado');
+						if (isAplazado == 0) {
+							setTimeout(function(){
+								$(element).fadeOut(timeOut);
+							}, timeOut);
+							timeOut = timeOut + 7;
+						};
+					});
 
-						$('#idDataStudent') .removeAttr(show)
-											.attr('show', 'dataAplazados');
-						setTimeout(function(){
-							$('#idNotasAplazados').toggleClass('notasAplazadosOpen notasAplazadosClose');
-							$('.numberSecret').slideDown('fast');
-							$('#idMessageListStudent').slideDown('fast');
-						}, timeOut);
-					}else if (show == 'dataAplazados'){
-						$('#idMessageListStudent, .numberSecret').slideUp(timeOut);
+					$('#idDataStudent') .removeAttr(show)
+										.attr('show', 'dataAplazados');
+					setTimeout(function(){
 						$('#idNotasAplazados').toggleClass('notasAplazadosOpen notasAplazadosClose');
+						$('.numberSecret').slideDown('fast');
+						$('#idMessageListStudent').slideDown('fast');
+					}, timeOut);
+				}else if (show == 'dataAplazados'){
+					$('#idMessageListStudent, .numberSecret').slideUp(timeOut);
+					$('#idNotasAplazados').toggleClass('notasAplazadosOpen notasAplazadosClose');
 
-						$('.student').each(function(index, element){
-							isAplazado = $(element).attr('isaplazado');
-							if (isAplazado == 0) {
-								setTimeout(function(){
-									$(element).fadeIn(timeOut);
-								}, timeOut);
-								timeOut = timeOut + 5;
-							};
-						});
-						$('#idDataStudent') .removeAttr(show)
-											.attr('show', 'dataNormal');
-					};
-				});
+					$('.student').each(function(index, element){
+						isAplazado = $(element).attr('isaplazado');
+						if (isAplazado == 0) {
+							setTimeout(function(){
+								$(element).fadeIn(timeOut);
+							}, timeOut);
+							timeOut = timeOut + 5;
+						};
+					});
+					$('#idDataStudent') .removeAttr(show)
+										.attr('show', 'dataNormal');
+				};
 			});
-		</script>
-	<?php else: ?>
-		<hr>
-		<br><br>
-		<h4 class="text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> No existe alumnos <span class="text-danger">matriculados a este curso...</span></h4>
-	<?php endif ?>
-</div>
+		});
+	</script>
+<?php else: ?>
+	<hr>
+	<br><br>
+	<h4 class="text-center text-muted"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> No existe alumnos <span class="text-danger">matriculados a este curso...</span></h4>
+<?php endif ?>

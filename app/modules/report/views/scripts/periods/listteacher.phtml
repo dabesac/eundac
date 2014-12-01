@@ -109,12 +109,12 @@
 						<div class="cursoOneByOne cursoParcial1 <?php echo $state ?>">1er Parcial <?php echo $icon ?>
 							<?php if ($course['statePrimerParcial'] == 1): ?>
 								<?php  
-									$dataSend = base64_encode(	$course['escid'].'-'.$course['subid'].'-'
-																.$course['courseid'].'-'.$course['curid'].'-'
-																.$course['turno'].'-'.$dataGlobal['perid'].'-'
+									$dataSend = base64_encode(	$course['escid'].'|'.$course['subid'].'|'
+																.$course['courseid'].'|'.$course['curid'].'|'
+																.$course['turno'].'|'.$dataGlobal['perid'].'|'
 																.'1');
 								?>
-								<a href="##" datasend="<?php echo $dataSend ?>" data-toggle="modal" data-target="#idModalNotas" class="btnPerCourseObO btnShowNotas">Ver Notas</a>
+								<a href="##" datasend="<?php echo $dataSend ?>" data-toggle="modal" data-target="#idModalNotas" class="btnPerCourseObO btnShowNotas">Detalles</a>
 							<?php endif ?>
 						</div>
 
@@ -130,12 +130,12 @@
 						<div class="cursoOneByOne cursoParcial2 <?php echo $state ?>">2do Parcial <?php echo $icon ?>
 							<?php if ($course['stateSecondParcial'] == 1): ?>
 								<?php  
-									$dataSend = base64_encode(	$course['escid'].'-'.$course['subid'].'-'
-																.$course['courseid'].'-'.$course['curid'].'-'
-																.$course['turno'].'-'.$dataGlobal['perid'].'-'
+									$dataSend = base64_encode(	$course['escid'].'|'.$course['subid'].'|'
+																.$course['courseid'].'|'.$course['curid'].'|'
+																.$course['turno'].'|'.$dataGlobal['perid'].'|'
 																.'2');
 								?>
-								<a href="##" datasend="<?php echo $dataSend ?>" data-toggle="modal" data-target="#idModalNotas" class="btnPerCourseObO btnShowNotas">Ver Notas</a>
+								<a href="##" datasend="<?php echo $dataSend ?>" data-toggle="modal" data-target="#idModalNotas" class="btnPerCourseObO btnShowNotas">Detalles</a>
 							<?php endif ?>
 						</div>
 					</div>
@@ -216,7 +216,7 @@
 
 			function showNotas(dataSend){
 				$.ajax({
-					url     : '/report/periods/shownotas',
+					url     : '/report/periods/showconsolidated',
 					data    : {data : dataSend},
 					success : function(data){
 						$('#idDataNotas').html(data);

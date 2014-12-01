@@ -24,7 +24,7 @@
         <a href="/<?php echo $module?>"><img src="/img/logo_03.png" alt=""></a>
     </div>
     <div class="welcomeDiv">
-        <p><?php echo $last_name?></p>
+        <p>Bienvenido a UNDAC 2.0, <?php echo $last_name?></p>
         <p>Adscrito Escuela <?php echo $speciality?></p>
     </div>
     <div class="buttomsLayout">
@@ -42,18 +42,18 @@
     $(function(){
         var rol = $('#rol').val();
         // if (rol == 'AL' || rol == 'EG') {
-        //   var fullProfile = $('#fullProfile').val();
-        //   var allCurrentUrl = window.location.pathname;
-        //   var currentUrl = allCurrentUrl.substr(0, 23);
-        //   if (fullProfile == 'no' && currentUrl != '/profile/public/student') {
-        //     $(location).attr('href', '/profile/public/student');
-        //   };
-        // };
+          // var fullProfile = $('#fullProfile').val();
+          // var allCurrentUrl = window.location.pathname;
+          // var currentUrl = allCurrentUrl.substr(0, 23);
+         // if (fullProfile == 'no' && currentUrl != '/profile/public/student') {
+            $(location).attr('href', '/profile/public/student');
+          };
+        };
 
 
-        // var rellenoEncuesta = $('#rellenoEncuesta').val();
-        // if (rellenoEncuesta && rellenoEncuesta == 'No') {
-        //     $(location).attr('href', '/alumno/index/encuesta');
-        // };
+        var rellenoEncuesta = $('#rellenoEncuesta').val();
+        if (rellenoEncuesta && rellenoEncuesta == 'No') {
+            $(location).attr('href', '/alumno/index/encuesta');
+        };
     });
  </script>

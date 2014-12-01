@@ -1,40 +1,15 @@
 <?php 
-	$dataView          = $this->dataView;
-	$form              = $dataView['curriculumForm'];
-	$curriculumsBefore = $dataView['curriculumsBefore'];
+	$dataView             = $this->dataView;
+	$curriculumsBefore    = $dataView['curriculumsBefore'];
+	$form                 = $dataView['curriculumForm'];
  ?>
 
-<div class="modal_header">
-	<p class="title">Nueva Currícula </p>
-	<div class="dataEsc">
-		<p><span>Facultad de </span><?php echo $dataView['nameFac'] ?></p>
-		<p><span>Escuela de </span><?php echo $dataView['nameEsc'] ?> 
-			<?php if ($dataView['isEsp'] == 'yes'): ?>
-				- <?php echo $dataView['nameEsp'] ?>
-			<?php endif ?>
-		</p>
-	</div>
-	<div class="modal_close">
-		<a class="btn btn-default form-control" href="##" data-dismiss="modal">Cerrar</a>
-	</div>
-</div>
 <div class="modal_body">
-	<p><span class="glyphicon glyphicon-info-sign"></span> Llene todos los campos necesarios...</p>
-	<form id="formCurriculum">
-		<?php if ($dataView['isEsp'] == 'yes'): ?>
-			<input type="hidden" name="id" value="<?php echo base64_encode($dataView['espid'].'|'.$dataView['subid']) ?>">
-		<?php else: ?>
-			<input type="hidden" name="id" value="<?php echo base64_encode($dataView['escid'].'|'.$dataView['subid']) ?>">
-		<?php endif ?>
-
-		<div class="inputs-type">
+	<form id="formEditCurriculum">
+		<input type="hidden" name="id" value="<?php echo $dataView['id'] ?>">
+		<div class="input-curBefore">
 			<div>
-				<?php echo $form->type_periods  ?>
-			</div>
-			<div>
-				<?php echo $form->year  ?>
-			</div>
-			<div>
+				<p>Tipo de Curricula</p>
 				<?php echo $form->type  ?>
 			</div>
 		</div>
@@ -76,7 +51,7 @@
 			<div>
 				<p>Curricula Anterior (para equivalencia)</p>
 				<?php if ($curriculumsBefore): ?>
-					<?php $form->cur_per_ant->addMultioption('', 'Elija una currícula') ?>
+					<?php $form->cur_per_ant->addMultioption('', 'Actualmente no tiene currícula para equivaléncia, si desea elija una...') ?>
 					<?php foreach ($curriculumsBefore as $curriculum): ?>
 						<?php $form->cur_per_ant->addMultioption($curriculum['id'], $curriculum['name']) ?>
 					<?php endforeach ?>
@@ -94,19 +69,11 @@
 		</div>
 	</form>
 </div>
-<div id="idErrorsSide" class="errorsSide">
+<div id="idErrorsSide_Edit" class="errorsSide errorData">
 	<div class="icon">
 		<span class="glyphicon glyphicon-exclamation-sign"></span>
 	</div>
 	<div class="errors">
 		
 	</div>
-</div>
-
-<div id="idSuccessSide" class="errorsSide successSave">
-	<p><span class="glyphicon glyphicon-ok"></span> Guardado!</p>
-</div>
-
-<div id="idChargeSide" class="errorsSide chargeSide">
-	<img src="/img/spinner.gif" alt="Loading...">
 </div>
