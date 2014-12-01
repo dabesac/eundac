@@ -8,6 +8,8 @@
 
 	  	<strong> <?php echo $this->info_couser['name']?> TURNO <?php echo $this->turno?></strong>
 	  	<?php $data_course=$this->info_couser; 
+	  		$uidac="";
+	  		$pidac="";
 	  		$url="/".base64_encode('escid')."/".base64_encode($data_course['escid']).
 	  			"/".base64_encode('subid')."/".base64_encode($data_course['subid']).
 	  			"/".base64_encode('curid')."/".base64_encode($data_course['curid']).
@@ -55,12 +57,17 @@
 		  		<th>Estado</th>
 		  		<th>Principal</th>
 		  		<th>Compromiso</th>
+		  		<?php 
+		  		if($this->rid=='AD'){?>
+		  		<th>Opcion</th>
+		  		<?php
+		  		}?>
 		  	</tr>
 		  	<?php 
 		  	if ($this->info_teacher) {		  		
 		  	foreach ($this->info_teacher as $key => $teacher) { ?>
 		  		<tr>
-		  			<td><?php echo $teacher['pid']?></td>
+		  			<td id="pid<?php echo $teacher['pid']?>"><?php echo $teacher['pid']?></td>
 		  			<td><?php echo $teacher['name']?></td>
 		  			<td><?php 
 		  				switch ($teacher['state']) {
@@ -72,7 +79,7 @@
 		  						break;
 		  					case 'L':
 		  						echo 'Licencia';# code...
-		  						break;
+		  						break;	
 		  					default:
 		  						echo "";# code...
 		  						break;
@@ -80,7 +87,7 @@
 		  			?></td>
 		  			<td><?php switch ($teacher['is_main']) {
 		  				case 'S':
-		  					echo "SI";# code...
+		  					echo '<p id="active" pid="'.$teacher['pid'].'" uid="'.$teacher['uid'].'">SI<p>';
 		  					break;
 		  				case 'N':
 		  					echo "NO";# code...
@@ -101,11 +108,112 @@
 		  					echo "";# code...
 		  					break;
 		  			}?></td>
+		  			<?php 
+		  			if($this->rid=='AD'){?>
+		  			<td>
+		  				<?php
+		  				if($teacher['state']=='P'){?>
+		  					<button type="button" class="btn btn-info btn-xs"
+		  					id="reasignar<?php echo $teacher['pid']?>" 
+		  					escid="<?php echo $data_course['escid']?>"
+		  					subid="<?php echo $data_course['subid']?>"
+		  					curid="<?php echo $data_course['curid']?>"
+		  					perid="<?php echo $this->perid?>"
+		  					courseid="<?php echo $data_course['courseid']?>"
+		  					turno="<?php echo $this->turno?>"
+		  					uid= "<?php echo $teacher['uid']?>"
+		  					pid= "<?php echo $teacher['pid']?>"
+		  					>
+		  					<span class="glyphicon glyphicon-upload"></span> Principal</button>
+		  					<script>
+		  					$("#reasignar<?php echo $teacher['pid']?>").click(function(e){
+								var dataAjax = {
+									'escid' : $(this).attr('escid'),
+									'subid' : $(this).attr('subid'),
+									'curid' : $(this).attr('curid'),
+									'perid' : $(this).attr('perid'),
+									'courseid' : $(this).attr('courseid'),
+									'turno' : $(this).attr('turno'),
+									'pid' : $(this).attr('pid'),
+									'uid' : $(this).attr('uid'),
+									'uidac' : $('#active').attr('uid'),
+									'pidac' : $('#active').attr('pid')
+								};
+								console.log(dataAjax);
+								e.preventDefault;
+								$.ajax({
+									type : "post",
+									url : "/record/index/principalteacher/",
+									data : dataAjax,
+									success : function(data){
+										$('.infor').html(data);
+										$("#modal").modal("hide");
+									}
+								});
+							});	
+		  					</script>
+						<?php
+		  				}
+		  				?>		  					  				
+		  			</td><?php
+		  			}
+		  			?>
 		  		</tr>
-	  		<?php }
-		  	}
+	  		<?php }?>
+	  		</table>
+	  		<?php
+		  	}else{
 	  	?>
-	  </table>
+	  	<div>
+	  		<table class="table table-striped">
+	  					<tr><th colspan="10" style="background:#7A7A7A;color:white"><center>ASIGNAR DOCENTE</center></th></tr>
+						<tr>
+				            <th><center>Seleccione Escuela / Docente</center></th>
+				            <th colspan="2"><center>Seleccione el Docente</center></th>
+				            <th> <center> Opcion</center></th>
+						</tr>
+						<tr>
+							<td>
+				                <select id="escuid" class="form-control">
+				                    <option value="">- Seleccione Escuela -</option>
+				                    <?php 
+				                    if ($this->lescuelas){
+				                        foreach ($this->lescuelas as $escu){ 
+				                        	if($escu['escid']==$this->escuela){?>
+				                        		<option value="<?php echo $escu['escid'].";--;".$escu['subid']?>"><?php echo $escu['name']?></option>          
+				                        	<?php
+				                        	}?>
+				                            
+				                        <?php                                 
+				                        }
+				                    } ?>
+				                </select>
+				            </td>
+				            <td colspan="2">
+				                <center>
+				                    <select id='docente_reg' name='docente_reg' class="form-control" style="width:350px">
+				                        <option value="">- Seleccione Docente -</option>
+				                    </select>
+				                </center>
+				            </td>
+				            <td>
+				            	<center><a type="button" class="btn btn-success" id="savedata" 
+				            	data-dismiss="modal"
+				            	escid = '<?php echo $data_course['escid']?>'
+				            	curid =	'<?php echo $data_course['curid']?>'
+				            	subid = '<?php echo $data_course['subid']?>'
+				            	perid = '<?php echo $this->perid?>'
+				            	courseid = '<?php echo $data_course['courseid']?>'
+				            	turno = '<?php echo $this->turno?>'
+				            	opcion = '0'
+				            	href='#'><span class="glyphicon glyphicon-floppy-disk"></span> Guardar </a></center>
+				            </td>
+						</tr>
+				</table>
+		</div>
+	  	<?php 
+	  		}?>
+	  <div class="infor"></div>
 	</div>
 	</div>
 	<?php
@@ -150,6 +258,7 @@
 				            	perid = '<?php echo $this->perid?>'
 				            	courseid = '<?php echo $data_course['courseid']?>'
 				            	turno = '<?php echo $this->turno?>'
+				            	opcion = '1'
 				            	href='#'><span class="glyphicon glyphicon-floppy-disk"></span> Guardar </a><center>
 				            </td>
 						</tr>
@@ -215,7 +324,7 @@
 	    		?>
 	  	</table>
 	</div>
-
+	<div class="data"></div>
 </div>
 <script>
 $("#escuid").change(function(){
@@ -241,8 +350,10 @@ $("#savedata").click(function(e){
 		'courseid' : $(this).attr('courseid'),
 		'turno' : $(this).attr('turno'),
 		'uid' : uid,
-		'pid' : pid
+		'pid' : pid,
+		'opcion' : $(this).attr('opcion')
 	};
+	console.log(ajaxData);
 	e.preventDefault();
 	$.ajax({
 		type : "post",
