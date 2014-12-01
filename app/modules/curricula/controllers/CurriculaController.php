@@ -15,26 +15,37 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 	}
 
 	public function indexAction(){
-		$eid=$this->sesion->eid;
-        $oid=$this->sesion->oid;
-
         //dataBases
         $facultyDb = new Api_Model_DbTable_Faculty();
 
-        $where = array( 'eid'   => $eid,
-                        'oid'   => $oid,
-                        'state' => 'A');
-        $attrib = array('facid', 'name');
-        $pdFaculties = $facultyDb->_getFilter($where, $attrib);
+        $eid   = $this->sesion->eid;
+        $oid   = $this->sesion->oid;
+        $rid   = $this->sesion->rid;
+        $escid = $this->sesion->escid;
+        $subid = $this->sesion->subid;
 
-        foreach ($pdFaculties as $c => $faculty) {
-            if ($faculty['facid'] != 'TODO') {
-                $dataFaculty[$c] = array(
-                                            'facid' => base64_encode($faculty['facid']),
-                                            'name'  => $faculty['name'] );
+
+        $dataView['rid'] = $rid;
+        if ($rid == 'RC') {
+            $where = array( 'eid'   => $eid,
+                            'oid'   => $oid,
+                            'state' => 'A');
+            $attrib = array('facid', 'name');
+            $pdFaculties = $facultyDb->_getFilter($where, $attrib);
+
+            foreach ($pdFaculties as $c => $faculty) {
+                if ($faculty['facid'] != 'TODO') {
+                    $dataFaculty[$c] = array(
+                                                'facid' => base64_encode($faculty['facid']),
+                                                'name'  => $faculty['name'] );
+                }
             }
+            $dataView['faculties'] = $dataFaculty;
+        }elseif ($rid == 'DR') {
+            $dataView['id_school'] = base64_encode($escid.'|'.$subid);
         }
-        $this->view->dataFaculty = $dataFaculty;
+
+        $this->view->dataView = $dataView;
         //print_r($pdFaculties);
 	}
 
@@ -47,6 +58,9 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
+        $rid = $this->sesion->rid;
+
+        $dataView['rid'] = $rid;
 
         $dataGet = base64_decode($this->_getParam('id'));
         $dataGet = explode('|', $dataGet);
@@ -401,6 +415,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
+        $rid = $this->sesion->rid;
 
         //Verificar si es especialidad o escuela
         $where = array( 'eid'   => $eid,
@@ -429,7 +444,11 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                                 'nameEsc' => $pdSpeciality[0]['name'] );
         }
         //Estado de la curricula
-        $dataView['state']   = $state;
+        $dataView['state']  = $state;
+        $dataView['rid']    = $rid;
+        $dataView['id_cur'] = base64_encode($curid.'|'.
+                                            $escid.'|'.
+                                            $subid );
         
         //nombre de la facultad
         $where = array( 'eid'   => $eid,
@@ -499,11 +518,17 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
+        $rid = $this->sesion->rid;
+
+        $dataView['rid'] = $rid;
 
         //Datos de la curricula
         $dataView['id'] = base64_encode($curid.'_'.
                                         $escid.'_'.
                                         $subid );
+
+        $dataView['id_alone'] = base64_encode($curid);
+
         $where = array( 'eid'   => $eid,
                         'oid'   => $oid,
                         'curid' => $curid,
@@ -516,6 +541,15 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $dataCurriculum['cur_per_ant'] = base64_encode($dataCurriculum['cur_per_ant']);
         $curriculumForm->populate($dataCurriculum);
         $dataView['curriculumForm'] = $curriculumForm;
+
+        //Bloqueo para directores, esto para que regularicen los creditos...
+        if ($rid == 'DR') {
+            $curriculumForm->type->setAttrib('disabled', 'true');
+            $curriculumForm->name->setAttrib('readonly', 'true');
+            $curriculumForm->alias->setAttrib('readonly', 'true');
+            $curriculumForm->number_periods->setAttrib('readonly', 'true');
+            $curriculumForm->cur_per_ant->setAttrib('disabled', 'true');
+        }
 
         //Curriculas anteriores
         $where = array( 'eid'   => $eid,
@@ -548,12 +582,17 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
         $uid = $this->sesion->uid;
+        $rid = $this->sesion->rid;
 
         $formData = $this->getRequest()->getPost();
 
         //Variables type_periods y year que solo sirven para pasar la validación...
             $formData['type_periods'] = 'A';
             $formData['year']         = '1993';
+            if ($rid == 'DR') {
+                $formData['type']  = 'S';
+                $formData['alias'] = 'nothing';
+            }
         //--------------------------------------------------------------------------
        
         if ($curriculumForm->isValid($formData)) {
@@ -568,18 +607,27 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                         'escid' => $escid,
                         'subid' => $subid );
 
-            $dataSave = array(  'type'              => $formData['type'],
-                                'name'              => $formData['name'],
-                                'alias'             => $formData['alias'],
-                                'number_periods'    => $formData['number_periods'],
-                                'mandatory_credits' => $formData['mandatory_credits'],
-                                'elective_credits'  => $formData['elective_credits'],
-                                'mandatory_course'  => $formData['mandatory_course'],
-                                'elective_course'   => $formData['elective_course'],
-                                'cur_per_ant'       => base64_decode($formData['cur_per_ant']),
-                                'modified'          => $uid,
-                                'updated'           => date('Y-m-d h:m:s'),
-                                'state'             => 'B' );
+            if ($rid == 'DR') {
+                $dataSave = array(  'mandatory_credits' => $formData['mandatory_credits'],
+                                    'elective_credits'  => $formData['elective_credits'],
+                                    'mandatory_course'  => $formData['mandatory_course'],
+                                    'elective_course'   => $formData['elective_course'],
+                                    'modified'          => $uid,
+                                    'updated'           => date('Y-m-d h:m:s') );               
+            }else {
+                $dataSave = array(  'type'              => $formData['type'],
+                                    'name'              => $formData['name'],
+                                    'alias'             => $formData['alias'],
+                                    'number_periods'    => $formData['number_periods'],
+                                    'mandatory_credits' => $formData['mandatory_credits'],
+                                    'elective_credits'  => $formData['elective_credits'],
+                                    'mandatory_course'  => $formData['mandatory_course'],
+                                    'elective_course'   => $formData['elective_course'],
+                                    'cur_per_ant'       => base64_decode($formData['cur_per_ant']),
+                                    'modified'          => $uid,
+                                    'updated'           => date('Y-m-d h:m:s'),
+                                    'state'             => 'B' );
+            }
 
             if ($curriculumDb->_update($dataSave, $pk)) {
                 $result = array('success' => 1,
@@ -680,6 +728,127 @@ class Curricula_CurriculaController extends Zend_Controller_Action
             
         }
         print json_encode($result);
+    }
+
+     public function printAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            // $uid_update = $this->sesion->uid;
+            // $f_update = date("Y-m-d");
+
+            $ids = base64_decode($this->_getParam('id'));
+            $ids = explode('|', $ids);
+            $curid = $ids[0];
+            $escid = $ids[1];
+            $subid = $ids[2];
+            // $state=base64_decode($this->_getParam('state'));
+            $this->view->curid=$curid;
+
+            // $this->view->eid=$eid;
+            // $this->view->oid=$oid;
+            // $this->view->escid=$escid;
+            // $this->view->subid=$subid;
+            // $this->view->state=$state;
+            $bdcurricula = new Api_Model_DbTable_Curricula();
+            $where['eid']=$eid;
+            $where['oid']=$oid;
+            $where['escid']=$escid;
+            $where['subid']=$subid;
+            $where['curid']=$curid;
+            $lcurricula=$bdcurricula->_getOne($where);
+            $this->view->nombre_curricula=$lcurricula["name"];
+            $semestre=$bdcurricula->_getSemesterXCurricula($curid,$subid,$escid,$oid,$eid);
+
+            $bdcursos = new Api_Model_DbTable_Course();
+            $where1= array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid);
+            $attrib=array('semid','courseid','name','type','credits','hours_theoretical','hours_practical',
+                        'req_1','req_2','req_3','course_equivalence','course_equivalence_2');
+            $order=array('courseid');
+            $i=0;
+            foreach ($semestre as $semestre) {
+                $where1['semid']=$semestre['semid'];
+                $semestres[$i]['semid']=$semestre['semid'];
+                $semestres[$i]['name']=$semestre['name'];
+                $cursos=$bdcursos->_getFilter($where1,$attrib,$order);
+                $semestres[$i]['cursos']=$cursos;
+                $i++;
+            }
+            
+            $this->view->datasemestre=$semestres;
+
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+            $base_speciality =  new Api_Model_DbTable_Speciality();        
+            $speciality = $base_speciality ->_getOne($where);
+            $parent=$speciality['parent'];
+            $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
+            $parentesc= $base_speciality->_getOne($wher);
+
+            if ($parentesc) {
+                $pala='ESPECIALIDAD DE ';
+                $spe['esc']=$parentesc['name'];
+                $spe['parent']=$pala.$speciality['name'];
+            }
+            else{
+                $spe['esc']=$speciality['name'];
+                $spe['parent']='';  
+            }
+            $names=strtoupper($spe['esc']);
+            $namep=strtoupper($spe['parent']);
+            $namev=$names." ".$namep;
+            $this->view->namev=$namev;
+            $namefinal=$names." <br> ".$namep;
+
+            $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
+            
+            $fac = array('eid'=>$eid,'oid'=>$oid,'facid'=>$speciality['facid']);
+            $base_fac =  new Api_Model_DbTable_Faculty();        
+            $datafa= $base_fac->_getOne($fac);
+            $namef = strtoupper($datafa['name']);  
+
+            $dbimpression = new Api_Model_DbTable_Countimpressionall();
+            
+            $uid=$this->sesion->uid;
+            $uidim=$this->sesion->pid;
+            $pid=$uidim;
+
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'curricula_'.$curid,
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+            // print_r($data);exit();
+            $dbimpression->_save($data);            
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,
+                'subid'=>$subid,'type_impression'=>'curricula_'.$curid);
+            $dataim = $dbimpression->_getFilter($wheri);
+                        
+            $co=count($dataim);            
+            $codigo=$co." - ".$uidim;
+
+            $header=$this->sesion->org['header_print'];
+            $footer=$this->sesion->org['footer_print'];
+            $header = str_replace("?facultad",$namef,$header);
+            $header = str_replace("?escuela",$namefinal,$header);
+            $header = str_replace("?logo", $namelogo, $header);
+            $header = str_replace("?codigo", $codigo, $header);
+          
+            $this->view->header=$header;
+
+            $this->view->footer=$footer;
+        }
+        catch (Exception $ex)
+        {
+            print "Error: Cargar Curriculas".$ex->getMessage();
+        }
     }
 
 	public function modifycurriculaAction(){

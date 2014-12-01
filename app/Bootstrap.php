@@ -7,7 +7,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $this->bootstrap('layout');
             $layout = $this->getResource('layout');
             $view = $layout->getView();
-            $view->doctype('XHTML1_STRICT');
+            $view->doctype('HTML5');
             $view->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
             
             $env = getenv('APPLICATION_ENV');

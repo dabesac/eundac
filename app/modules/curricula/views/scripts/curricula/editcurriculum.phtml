@@ -24,7 +24,11 @@
 				<?php echo $form->alias  ?>
 			</div>
 		</div>
-		<div class="inputs-amounts">
+		<?php $class_for_director = '' ?>
+		<?php if ($dataView['rid'] == 'DR'):
+			$class_for_director = 'for_director';
+		endif ?>
+		<div class="inputs-amounts <?php echo $class_for_director ?>">
 			<div>
 				<p>N° Periódos</p>
 				<?php echo $form->number_periods  ?>
@@ -52,9 +56,18 @@
 				<p>Curricula Anterior (para equivalencia)</p>
 				<?php if ($curriculumsBefore): ?>
 					<?php $form->cur_per_ant->addMultioption('', 'Actualmente no tiene currícula para equivaléncia, si desea elija una...') ?>
-					<?php foreach ($curriculumsBefore as $curriculum): ?>
+					<?php $himself = 0 ?>
+					<?php foreach ($curriculumsBefore as $c => $curriculum): ?>
+						<?php if ($dataView['id_alone'] == $curriculum['id']):
+							$himself = 1;
+						endif ?>
 						<?php $form->cur_per_ant->addMultioption($curriculum['id'], $curriculum['name']) ?>
 					<?php endforeach ?>
+					<?php if ($himself == 1 and $c == 0): ?>
+						<?php $form->cur_per_ant->addMultioption('', 'No existen curriculas anteriores...')
+												->setAttrib('disabled', 'true')
+												->setRequired(false) ?>
+					<?php endif ?>
 				<?php else: ?>
 					<?php $form->cur_per_ant->addMultioption('', 'No existen curriculas anteriores...')
 											->setAttrib('disabled', 'true')

@@ -2,15 +2,24 @@ $(function(){
 	var dataGet    = '';
 	var curriculum = curriculum();
 
-	$('#selectFaculty').on('change', function(){
-		dataGet = $(this).val();
-		curriculum.chargeSchools(dataGet);
-	});
+	//Rol
+	var rol = $('#rol').val();
 
-	$('#selectSchool').on('change', function(){
-		dataGet = $(this).val();
+	if (rol == 'RC') {
+		$('#selectFaculty').on('change', function(){
+			dataGet = $(this).val();
+			curriculum.chargeSchools(dataGet);
+		});
+
+		$('#selectSchool').on('change', function(){
+			dataGet = $(this).val();
+			curriculum.chargeCurriculums(dataGet);
+		});
+	}else if (rol == 'DR'){
+		dataGet = $('#school').val();
 		curriculum.chargeCurriculums(dataGet);
-	});
+	};
+
 
 	//Closure curriculum
 	function curriculum(){
@@ -55,9 +64,11 @@ $(function(){
 		        };
 		    });
 
-		    $('html body').animate({
-				scrollTop : $('#selectFaculty').offset().top
-			});
+			if (rol == 'RC') {
+			    $('html body').animate({
+					scrollTop : $('#selectFaculty').offset().top
+				});
+			};
 
 		}
 

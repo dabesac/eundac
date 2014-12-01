@@ -4,30 +4,41 @@
 	<script src="/js/admin/adminCurriculum.js"></script>
 <?php endif ?>
 
+<?php 
+	$dataView = $this->dataView;
+ ?>
+
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-bookmark"></span> Gestión de Currículas');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
-
+<input type="hidden" id="rol" value="<?php echo $dataView['rid'] ?>">
 <div class="adm_curricula">
-	<div class="header">
-		<p><span class="glyphicon glyphicon-comment"></span> Seleccione una Facultad y Escuela</p>
-		<div class="selectSide">
-			<select class="form-control" name="faculty" id="selectFaculty">
-				<option value="">Facultad</option>
-				<?php if ($this->dataFaculty): ?>
-				<?php foreach ($this->dataFaculty as $faculty): ?>
-					<option value="<?php echo $faculty['facid'] ?>"><?php echo $faculty['name'] ?></option>
-				<?php endforeach ?>
-				<?php endif ?>
-			</select>
+	<?php if ($dataView['rid'] == 'RC'): ?>
+		<div class="header">
+			<p><span class="glyphicon glyphicon-comment"></span> Seleccione una Facultad y Escuela</p>
+			<div class="selectSide">
+				<select class="form-control" name="faculty" id="selectFaculty">
+					<option value="">Facultad</option>
+					<?php if ($dataView['faculties']): ?>
+					<?php foreach ($dataView['faculties'] as $faculty): ?>
+						<option value="<?php echo $faculty['facid'] ?>"><?php echo $faculty['name'] ?></option>
+					<?php endforeach ?>
+					<?php endif ?>
+				</select>
+			</div>
+			<div class="selectSide">
+				<select class="form-control" name="school" id="selectSchool">
+					<option value="">Escuela</option>
+					<option value="">Primero seleccione una facultad ¬¬</option>
+				</select>
+			</div>
 		</div>
-		<div class="selectSide">
-			<select class="form-control" name="school" id="selectSchool">
-				<option value="">Escuela</option>
-				<option value="">Primero seleccione una facultad ¬¬</option>
-			</select>
+	<?php elseif ($dataView['rid'] == 'DR'): ?>
+		<input type="hidden" id="school" value="<?php echo $dataView['id_school'] ?>">
+		<div class="header director">
+			<p><span class="glyphicon glyphicon-info-sign"></span> Todas las currículas de su escuela...</p>
 		</div>
-	</div>
+	<?php endif ?>
 
 	<div id="dataCurriculums" class="body">
 		

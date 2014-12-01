@@ -19,16 +19,34 @@
 
 <div class="header_body">
 	<div id="idHeaderDetail">
-		<?php if ($dataView['state'] == 'B'): ?>
+		<?php if ($dataView['state'] == 'B' and $dataView['rid'] == 'RC'): ?>
 			<p><span class="glyphicon glyphicon-info-sign"></span> Administre desde aqui la curricula...</p>
 			<div>
 				<a href="##" id="detailCur_btnAdminCourses">Administrar Cursos</a>
 			</div>
 			<div>
-				<a href="##" id="detailCur_btnEditCur">Editar Curricula</a>
+				<a href="##" id="detailCur_btnEditCur">Editar</a>
 			</div>
-		<?php else: ?>
+			<div>
+				<a href="/curricula/curricula/print/id/<?php echo $dataView['id_cur'] ?>" id="detailCur_btnPrintCur">Imprimir</a>
+			</div>
+		<?php elseif ($dataView['rid'] == 'RC'): ?>
 			<p><span class="glyphicon glyphicon-info-sign"></span> Visualice los detalles de la currícula...</p>
+			<div></div><div></div>
+			<div>
+				<a href="/curricula/curricula/print/id/<?php echo $dataView['id_cur'] ?>" id="detailCur_btnPrintCur">Imprimir</a>
+			</div>
+		<?php elseif ($dataView['rid'] == 'DR'): ?>
+			<p><span class="glyphicon glyphicon-info-sign"></span> Visualice los detalles de la currícula...</p>
+			<div>
+				<a href="##" id="detailCur_btnSeeCur">Cursos</a>
+			</div>
+			<div>
+				<a href="##" id="detailCur_btnEditCur">Editar</a>
+			</div>
+			<div>
+				<a href="/curricula/curricula/print/id/<?php echo $dataView['id_cur'] ?>" id="detailCur_btnPrintCur">Imprimir</a>
+			</div>
 		<?php endif ?>
 	</div>
 	<div id="idHeaderEdit" class="headerEdit">
