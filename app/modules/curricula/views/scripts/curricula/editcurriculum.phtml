@@ -1,0 +1,92 @@
+<?php 
+	$dataView             = $this->dataView;
+	$curriculumsBefore    = $dataView['curriculumsBefore'];
+	$form                 = $dataView['curriculumForm'];
+ ?>
+
+<div class="modal_body">
+	<form id="formEditCurriculum">
+		<input type="hidden" name="id" value="<?php echo $dataView['id'] ?>">
+		<div class="input-curBefore">
+			<div>
+				<p>Tipo de Curricula</p>
+				<?php echo $form->type  ?>
+			</div>
+		</div>
+
+		<div class="inputs-name">
+			<div>
+				<p>Nombre</p>
+				<?php echo $form->name  ?>
+			</div>
+			<div>
+				<p>Alias</p>
+				<?php echo $form->alias  ?>
+			</div>
+		</div>
+		<?php $class_for_director = '' ?>
+		<?php if ($dataView['rid'] == 'DR'):
+			$class_for_director = 'for_director';
+		endif ?>
+		<div class="inputs-amounts <?php echo $class_for_director ?>">
+			<div>
+				<p>N° Periódos</p>
+				<?php echo $form->number_periods  ?>
+			</div>
+			<div>
+				<p>N° Créditos Obligatorios</p>
+				<?php echo $form->mandatory_credits  ?>
+			</div>
+			<div>
+				<p>N° Créditos Electivos</p>
+				<?php echo $form->elective_credits  ?>
+			</div>
+			<div>
+				<p>N° Cursos Obligatorios</p>
+				<?php echo $form->mandatory_course  ?>
+			</div>
+			<div>
+				<p>N° Cursos Electivos</p>
+				<?php echo $form->elective_course ?>
+			</div>
+		</div>
+
+		<div class="input-curBefore">
+			<div>
+				<p>Curricula Anterior (para equivalencia)</p>
+				<?php if ($curriculumsBefore): ?>
+					<?php $form->cur_per_ant->addMultioption('', 'Actualmente no tiene currícula para equivaléncia, si desea elija una...') ?>
+					<?php $himself = 0 ?>
+					<?php foreach ($curriculumsBefore as $c => $curriculum): ?>
+						<?php if ($dataView['id_alone'] == $curriculum['id']):
+							$himself = 1;
+						endif ?>
+						<?php $form->cur_per_ant->addMultioption($curriculum['id'], $curriculum['name']) ?>
+					<?php endforeach ?>
+					<?php if ($himself == 1 and $c == 0): ?>
+						<?php $form->cur_per_ant->addMultioption('', 'No existen curriculas anteriores...')
+												->setAttrib('disabled', 'true')
+												->setRequired(false) ?>
+					<?php endif ?>
+				<?php else: ?>
+					<?php $form->cur_per_ant->addMultioption('', 'No existen curriculas anteriores...')
+											->setAttrib('disabled', 'true')
+											->setRequired(false) ?>
+				<?php endif ?>
+				<?php echo $form->cur_per_ant ?>
+			</div>
+		</div>
+
+		<div class="sendButtom">
+			<?php echo $form->save ?>
+		</div>
+	</form>
+</div>
+<div id="idErrorsSide_Edit" class="errorsSide errorData">
+	<div class="icon">
+		<span class="glyphicon glyphicon-exclamation-sign"></span>
+	</div>
+	<div class="errors">
+		
+	</div>
+</div>

@@ -1,0 +1,57 @@
+<?php 
+	$dataCourse = $this->dataCourse;
+ ?>
+<input type="hidden" id="idCourse" value="<?php echo $dataCourse['idCourse'] ?>">
+<div class="modalNotas_header">
+	<p class="headerObO courseName">
+		<?php echo $dataCourse['name'] ?>
+	</p>
+	<div class="headerObO courseMoreInfo">
+		<p><strong>Codigo</strong> <?php echo $dataCourse['courseid'] ?></p>
+		<p><strong>Curricula</strong> <?php echo $dataCourse['curid'] ?></p>
+		<p><strong>Semestre</strong> <?php echo $dataCourse['semid'] ?></p>
+		<p><strong>Creditos</strong> <?php echo $dataCourse['credits'] ?></p>
+	</div>
+</div>
+
+<div class="selectSide">
+	<?php if ($dataCourse['parcial'] == 1): ?>
+		<p>Primer Parcial</p>
+	<?php elseif ($dataCourse['parcial'] == 2): ?>
+		<p>Segundo Parcial</p>
+	<?php endif ?>
+	<div class="switchBtn">
+		<a href="##" class="btnSwitchData switchActive" goto="divDataNotas">Notas</a>
+		<a href="##" class="btnSwitchData" goto="divDataAsist">Asistencia</a>
+	</div>
+</div>
+
+<div class="modalNotas_body">
+	<div id="divDataNotas" class="dataSwitch activeData"></div>
+	<div id="divDataAsist" class="dataSwitch"></div>
+</div>
+
+<script>
+	$(function(){
+		var idCourse = $('#idCourse').val();
+
+		$('#divDataNotas, #divDataAsist').html('<br><br><center><img src="/img/spinner.gif" alt="Loading..." /></center>');
+
+		$('#divDataNotas').load('/report/periods/shownotas/data/' + idCourse);
+		$('#divDataAsist').load('/report/periods/showassistance/id/' + idCourse);
+
+		var btnSwitch = '';
+
+		$('.btnSwitchData').on('click', function(){
+			btnSwitch = $(this);
+			goTo = btnSwitch.attr('goto');
+			if (!btnSwitch.hasClass('switchActive')) {
+				$('.btnSwitchData').removeClass('switchActive');
+				btnSwitch.addClass('switchActive');
+
+				$('.dataSwitch').removeClass('activeData');
+				$('#' + goTo).addClass('activeData');
+			};
+		});
+	});
+</script>

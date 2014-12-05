@@ -164,7 +164,8 @@ class Docente_InformacademicController extends Zend_Controller_Action {
 
             if ($this->getRequest()->isPost()){
                 $formData = $this->getRequest()->getPost();
-                if ($formData) {                    
+                if ($formData) {      
+                    $perid = base64_decode($formData['perid']);
                     $cont=count($formData['courseid']);
                     $courtea = new Api_Model_DbTable_Coursexteacher();
                     for ($i=0; $i < $cont ; $i++){ 
@@ -175,25 +176,23 @@ class Docente_InformacademicController extends Zend_Controller_Action {
                         $datacourtea = array('percentage' => $formData['percentage'][$i]);
                         $courtea ->_updateXcourse($datacourtea,$pk);
                     }
-                
                     $data = array(
                     'acad_tutoria' => $formData['acad_tutoria'], 'acad_medios' => $formData['acad_medios'],
                     'adm_acreditacion' => $formData['adm_acreditacion'], 'adm_labores' => $formData['adm_labores'], 'adm_asesoria' => $formData['adm_asesoria'], 'adm_investigacion' => $formData['adm_investigacion']);
                     // if (!is_null($formData['enviar'])) {
-                        if ($form->isValid($formData)) {
-                            // print_r($formData);exit();
-                            $pk = array(
-                                'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid,
-                                'perid' => $perid, 'uid' => $uid, 'pid' => $pid);
-                            $inform ->_update($data,$pk);
-                            $dataend = array('state' => 'C');
-                            if ($inform ->_update($dataend,$pk)) $this->view->cierre=1;
-                        }
-                        else{
-                            $this->view->clave=1;
-                        }
+                    if ($form->isValid($formData)) {
+                        // print_r($formData);exit();
+                        $pk = array(
+                            'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'subid' => $subid,
+                            'perid' => $perid, 'uid' => $uid, 'pid' => $pid);
+                        $inform ->_update($data,$pk);
+                        $dataend = array('state' => 'C');
+                        if ($inform ->_update($dataend,$pk)) $this->view->cierre=1;
+                    }else{
+                        $this->view->clave=1;
                     }
                 }
+            }
             $wherecour = array('eid' => $eid, 'oid' => $oid,'perid' => $perid, 'uid' => $uid, 'pid' => $pid);
             $percour= new Api_Model_DbTable_PeriodsCourses();
             $coursesdoc=$percour->_getInfoCourseXTeacher($wherecour);
@@ -229,7 +228,7 @@ class Docente_InformacademicController extends Zend_Controller_Action {
 
             $perid = base64_decode($this->_getParam('data'));
 
-            $this->view->datacourses =$coursesdoc;
+            //$this->view->datacourses =$coursesdoc;
             $this->view->speciality  = $this->sesion->speciality->name;
             $this->view->faculty     = $this->sesion->faculty->name;
             $this->view->infouser    = $this->sesion->infouser['fullname'];

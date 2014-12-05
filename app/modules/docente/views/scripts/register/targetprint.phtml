@@ -3,6 +3,7 @@
 <?php
 $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
+$mpdf = new stdClass();
 ob_start(); 
 $perid=$this->perid;
 $course = $this->infocourse;
@@ -162,8 +163,6 @@ address {
 </address>
     
 <?php 
-
-    
     $html = ob_get_contents();
   
     $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,5,5);

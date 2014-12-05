@@ -1,0 +1,129 @@
+<?php 
+// $facid=trim(mb_substr($this->escid,0,1));
+// $escid=$this->escid; 
+// $subid=$this->subid;
+// $curid=$this->curid;
+// $state=$this->state;
+// $eid=$this->eid;
+// $oid=$this->oid;
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<div style="margin-bottom:2%; text-align:center"><h3><b><?php echo strtoupper($this->nombre_curricula)?></b></h3></div>
+<?php 
+    // print_r($this->datasemestre);exit();
+    $len=count($this->datasemestre);
+    foreach ($this->datasemestre as $semestre) {   ?>
+        <table style="margin-bottom:3%; width:100%">
+            <tr style="background:#E5E5E5">
+                <th colspan="10"><?php echo $semestre['name']?></th>
+            </tr>
+            <tr>
+                <th class="small">Código</th>
+                <th>Curso</th>
+                <th class="small">Tipo</th>
+                <th class="small">Cred</th>
+                <th class="small">Horas Teóricas</th>
+                <th class="small">Horas Prácticas</th>
+                <th class="small">Req 1</th>
+                <th class="small">Req 2</th>
+                <th class="small">Req 3</th>
+                <th class="small">Equivalencia</th>
+            </tr>
+            <?php
+            $i=0;
+            while ($semestre['semid'] == $semestre['cursos'][$i]['semid']) {    ?>
+                <tr>
+                    <td style="text-align:center"><?php echo $semestre['cursos'][$i]['courseid']?></td>
+                    <td><?php echo $semestre['cursos'][$i]['name']?></td>
+                        <?php 
+                        switch ($semestre['cursos'][$i]['type']) {
+                            case 'O':
+                                ?>
+                                <td style="text-align:center">OBLIGATORIO</td>
+                                <?php
+                                break;
+                            case 'E':
+                                ?>
+                                <td style="text-align:center">ELECTIVO</td>
+                                <?php
+                                break;    
+                            default:
+                                ?>
+                                <td style="text-align:center"></td>
+                                <?php
+                                break;                                
+                        }
+                        ?>
+                    <td style="text-align:center"><?php echo $semestre['cursos'][$i]['credits']?></td>
+                    <td style="text-align:center"><?php echo $semestre['cursos'][$i]['hours_theoretical']?></td>
+                    <td style="text-align:center"><?php echo $semestre['cursos'][$i]['hours_practical']?></td>
+                        <?php
+                            $req_1 =$semestre['cursos'][$i]['req_1'];
+                            if (is_null($req_1) || $req_1==' ') {    ?>
+                                <td style="text-align:center">-</td>        
+                            <?php    
+                            }
+                            else{
+                            ?>
+                                <td style="text-align:center"><?php echo $semestre['cursos'][$i]['req_1']?></td>
+                            <?php            
+                            }
+                            $req_2 =$semestre['cursos'][$i]['req_2'];
+                            if (is_null($req_2) || $req_2==' ') {    ?>
+                            <td style="text-align:center">-</td>        
+                            <?php    
+                            }
+                            else{
+                            ?>
+                            <td style="text-align:center"><?php echo $semestre['cursos'][$i]['req_2']?></td>
+                        <?php            
+                        }
+                            if (is_null($semestre['cursos'][$i]['req_3'])) {    ?>
+                            <td style="text-align:center">-</td>        
+                            <?php    
+                            }
+                            else{
+                            ?>
+                            <td style="text-align:center"><?php echo $semestre['cursos'][$i]['req_3']?></td>
+                        <?php
+                        }    
+                            if (is_null($semestre['cursos'][$i]['course_equivalence'])) {    ?>
+                            <td style="text-align:center">-</td>        
+                            <?php    
+                            }
+                            else{
+                            ?>
+                            <td style="text-align:center"><?php echo $semestre['cursos'][$i]['course_equivalence']?></td>
+                        <?php
+                        }    
+                        ?>
+                        ?>
+
+                </tr>  
+            <?php
+            $i++;   
+            }
+            
+            ?>
+        </table>
+    <?php     
+    }
+
+?>
+<?php 
+    $html = ob_get_contents(); 
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,5,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer);
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('Curricula - '.$this->curid.'.pdf','D');
+    // $mpdf->Output();
+
+?>
