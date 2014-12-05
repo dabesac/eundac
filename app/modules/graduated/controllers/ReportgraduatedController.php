@@ -18,79 +18,56 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
     public function indexAction()
     {
         try {
-            //DataBases
-            $schoolDb = new Api_Model_DbTable_Speciality();
-            $facultyDb = new Api_Model_DbTable_Faculty();
-            //_____________________
-            $haveSpeciality = 'No';
-            $rol=$this->sesion->rol['module'];
-            $this->view->rol=$rol;
-            $eid = $this->sesion->eid;
-            $oid = $this->sesion->oid;
-            $rid = $this->sesion->rid;
-            $facid = $this->sesion->faculty->facid;
-            $escid = $this->sesion->escid;
-            $is_director = $this->sesion->infouser['teacher']['is_director'];
-            
-            if ($rid=="DC" && $is_director=="S"){
-                $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid);
-                $attrib = array('parent', 'name');
-                $school = $schoolDb->_getFilter($where, $attrib);
-                if ($school[0]['parent']) {
-                    $specialityName = $school[0]['name'];
-                }else{
-                    $specialityName = '';
-                }
+        $facultyDb = new Api_Model_DbTable_Faculty();
+        $schooldDb = new Api_Model_DbTable_Speciality();
 
-               
-                $where = array('eid'=>$eid, 'oid'=>$oid, 'state'=>'A');
-                $attrib = array('parent', 'name');
-                $parents = $schoolDb->_getFilter($where, $attrib);
-                foreach ($parents as $parent) {
-                    if ($parent['parent']['0'] == $escid['0']) {
-                        $haveSpeciality = 'Si';
-                        break;
-                    }
-                }
-                $this->view->haveSpeciality = $haveSpeciality;
+        $period = $this->sesion->period->perid;
+        $rid    = $this->sesion->rid;
+        $eid    = $this->sesion->eid;
+        $oid    = $this->sesion->oid;
+        $facid  = $this->sesion->faculty->facid;
+        $subid  = $this->sesion->subid;
+        $escid  = $this->sesion->escid;
 
-                $schoolName = $this->sesion->speciality->name;
-                $this->view->schoolName = $schoolName;
-                $this->view->specialityName = $specialityName;
-                
-                $rid="DIREC";
-                $this->view->escid=$escid;        
+        $dataVista['period']    = $period;
+        $dataVista['rid']       = $rid;
+        $dataVista['escid']     = $escid;
+        $dataVista['subid']     = $subid;
+        $dataVista['facid']     = $facid;
+        $dataVista['dataEscid'] = base64_encode($escid.'|'.$subid);
+       
+
+        if ($rid == 'RF') {
+            $c=0;
+            $dataVista['dataEscid']  = '';
+
+            $where = array( 'eid'   => $eid,
+                            'oid'   => $oid,
+                            'facid' => $facid,
+                            'subid' => $subid,
+                            'state' => 'A',
+                            'parent' => '' );
+            $attrib = array('name', 'escid', 'subid', 'parent');
+            $preDataSchool = $schooldDb->_getFilter($where, $attrib);
+            foreach ($preDataSchool as $c => $school) {
+                $dataSchool[$c]['escid'] = $school['escid'];
+                $dataSchool[$c]['subid'] = $school['subid'];
+                $dataSchool[$c]['name']  = $school['name'];
             }
-            if ($rid=="RF" || $rid=="DIREC") {
-                $this->view->facid=$facid;
-                $where = array('eid'=>$eid, 'oid'=>$oid, 'facid'=>$facid);
-                $attrib = array('name');
-                $facultyName = $facultyDb->_getFilter($where, $attrib);
-                $this->view->facultyName = $facultyName;
-
-                $where = array('eid'=>$eid, 'oid'=>$oid, 'state'=>'A');
-                $attrib = array('parent', 'name');
-                $parents = $schoolDb->_getFilter($where, $attrib);
-
-                foreach ($parents as $parent) {
-                    $pa=(isset($parent['parent'])?$parent['parent']:null);
-                    $essub=substr($escid,1,1);
-                    $pasub=substr($pa,0,1);
-                    if ($pasub == $essub) {
-                        $haveSpeciality = 'Si';
-                        break;
-                    }
+            $this->view->dataSchool = $dataSchool;
+        }elseif ($rid == 'RC'){
+            $dataVista['dataEscid']  = '';
+            $preDataFaculty = $facultyDb->_getAll();
+            foreach ($preDataFaculty as $c => $faculty) {
+                if ($faculty['state'] == 'A' and  $faculty['facid'] != "TODO" ) {
+                    $dataFaculty[$c]['facid'] = $faculty['facid'];
+                    $dataFaculty[$c]['name']  = $faculty['name'];
                 }
-                $this->view->haveSpeciality = $haveSpeciality;
             }
-
-            $where = array('eid' => $eid, 'oid' => $oid, 'state' => 'A');
-            $fac= new Api_Model_DbTable_Faculty();
-            $facultad=$fac->_getFilter($where,$attrib=null,$orders=null);
-            $this->view->facultades=$facultad;
-            $anio = date('Y');
-            $this->view->anio = $anio;
-            $this->view->rid = $rid;
+            $this->view->dataFaculty = $dataFaculty; 
+        }
+        $this->view->dataVista = $dataVista;
+           
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -105,12 +82,8 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $escid = $this->sesion->escid;
             $is_director = $this->sesion->infouser['teacher']['is_director'];
             $facid = $this->_getParam('facid');
-            if ($rid=="DC" && $is_director=="S"){
-                if ($facid=="2") $escid=substr($escid,0,3);
-                $this->view->escid=$escid;
-            }
-            if ($facid=="TODO") $this->view->facid=$facid;
-            else{
+            
+            if ($facid!="TODOFAC"){
                 $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid);
                 $es = new Api_Model_DbTable_Speciality();
                 $escu = $es->_getSchoolXFacultyNOTParent($where);
@@ -128,8 +101,7 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $oid = $this->sesion->oid;
             $subid = $this->sesion->subid;
             $escid = $this->_getParam('escid');
-            if ($escid=="TODOEC") $this->view->escid=$escid;
-            else{
+            if ($escid!="TODOESC"){
                 $where = array('eid' => $eid, 'oid' => $oid, 'parent' => $escid);
                 $es = new Api_Model_DbTable_Speciality();
                 $especia = $es->_getFilter($where,$attrib=null,$orders=null);
@@ -143,11 +115,11 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
     public function periodsAction(){
         try {
             $this->_helper->layout()->disableLayout();
-            $eid = $this->sesion->eid;
-            $oid = $this->sesion->oid;
+            $eid   = $this->sesion->eid;
+            $oid   = $this->sesion->oid;
             $perid = $this->sesion->period->perid;
+            $anio  = $this->_getParam("anio");
             $this->view->perid = $perid;
-            $anio = $this->_getParam("anio");
             if ($eid=="" || $oid==""|| $anio=="") return false;
             $p = substr($anio, 2, 3);
             $p1=$p."A";
@@ -155,6 +127,7 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $where = array('eid' => $eid, 'oid' => $oid, 'p1' => $p1, 'p2' => $p2);
             $periodos = new Api_Model_DbTable_Periods();
             $this->view->lper = $periodos->_getPeriodsXAyB($where);
+            $this->view->an = $p;
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -169,7 +142,53 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $escid = $this->_getParam('escid');
             $espec = $this->_getParam('especialidad');
             $perid = $this->_getParam('perid');
-            $anho = $this->_getParam('anho');
+            // base de datos
+            $msj = "";
+            if ($facid!='' and $escid!='' and $perid!='') {
+                $temp=substr($perid, 0, -1);//año
+                $temp1=substr($perid,-1);//peri
+                $left='';
+
+                $user= new Api_Model_DbTable_Users();
+
+                if($temp1!='T'){
+                    if ($facid!="TODOFAC") {
+                        if ($escid=="TODOESC") {
+                            $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid, 'perid' => $perid);
+                        }else{
+                            if ($espec <> "") {
+                                if ($espec=="TODOESP") $left='S';
+                                else $escid = $espec;
+                            }
+                            $where = array(
+                                'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'facid' => $facid,
+                                'perid' => $perid, 'left' => $left);
+                        }
+                    }else $where = array('eid' => $eid, 'oid' => $oid, 'perid' => $perid);
+
+                    $egre = $user->_getGraduatedXFacultyXSchoolXPeriod($where);
+                }else{
+                    if ($facid!="TODOFAC") {
+                        if ($escid=="TODOESC") {  
+                            $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid, 'anio' => $temp);
+                        }else{
+                            if ($espec<>"") {
+                                if ($espec=="TODOESP") $left='S';
+                                else $escid = $espec;
+                            }
+                            $where = array(
+                                'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 
+                                'anio' => $temp, 'left' => $left);
+                        }
+                    }else $where = array('eid' => $eid, 'oid' => $oid, 'anio' => $temp);
+                    $egre = $user->_getGraduatedXFacultyXSchoolXAnio($where);
+                }
+                $this->view->egresados=$egre;
+            } else{
+                $msj = "Lo sentimos, tenemos un Error, Comunicarse a la oficina de INFORMATICA";
+            }
+
+/*
             $this->view->facid=$facid;
             $this->view->especialidad=$espec;
             $this->view->escid=$escid;
@@ -177,8 +196,9 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $this->view->anho=$anho;
 
             $left='';
-            
+
             $user= new Api_Model_DbTable_Users();
+
             if($perid!='T'){
                 if ($facid!="TODO") {
                     if ($escid=="TODOEC") {
@@ -193,6 +213,7 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                             'perid' => $perid, 'left' => $left);
                     }
                 }else $where = array('eid' => $eid, 'oid' => $oid, 'perid' => $perid);
+
                 $egre = $user->_getGraduatedXFacultyXSchoolXPeriod($where);
             }else{
                 $ano=substr($anho,2,4);
@@ -211,7 +232,7 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                 }else $where = array('eid' => $eid, 'oid' => $oid, 'anio' => $ano);
                 $egre = $user->_getGraduatedXFacultyXSchoolXAnio($where);
             }
-            $this->view->egresados=$egre; 
+            $this->view->egresados=$egre; */
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
