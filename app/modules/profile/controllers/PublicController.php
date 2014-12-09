@@ -136,7 +136,7 @@ class Profile_PublicController extends Zend_Controller_Action {
             $datos[1]=$dbfacesp->_getFacspeciality($where);
             $this->view->datos=$datos;
             $this->view->data = $data;
-
+            $this->view->rol = $rid;
     	}catch(exception $e){
     		print "Error : ".$e->getMessage();
     	}

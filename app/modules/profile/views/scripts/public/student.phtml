@@ -32,6 +32,7 @@
 
 <div class="studentProfile_main">
 	<figure class="ObO"><img class='img-avatar' src="/fotos/<?php echo $this->datos[0]['uid']?>.jpg" onerror="imgError(this);" alt="Foto de Perfil" align="center" ></figure>
+
 	<div class="ObO dataStudent">
 		<p class="fullName"><?php echo $this->datos[0]['fullname']?></p>
 		<p>DNI <strong><?php echo $this->datos[0]['pid']?></strong></p>
@@ -46,15 +47,29 @@
 		<a class="btnRecordNotas" href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>">Record de Notas</a>
 	</div>
 </div>
+<?php if ($this->rol=="EG") { ?>
+	
+	<div class="studentProfile_buttonsSide">
+	<a href="##" class="btnObO btnCurrent" goto="signinCurrent">Matricula Actual</a>
+	<a href="##" class="btnObO btnCurricula btnActive" goto="signinCurriculum">Matrículas por Currícula</a>
+	<a href="##" class="btnObO btnRealized" goto="signinRealized">Matrículas Realizadas</a>
+	<a href="##" class="btnObO btnMoreAboutMe" goto="info">Mas Acerca de Mi</a>
+</div>
+
+<?php } elseif($this->rol=="AL") { ?>
+	
 <div class="studentProfile_buttonsSide">
 	<a href="##" class="btnObO btnCurrent btnActive" goto="signinCurrent">Matricula Actual</a>
 	<a href="##" class="btnObO btnCurricula" goto="signinCurriculum">Matrículas por Currícula</a>
 	<a href="##" class="btnObO btnRealized" goto="signinRealized">Matrículas Realizadas</a>
 	<a href="##" class="btnObO btnMoreAboutMe" goto="info">Mas Acerca de Mi</a>
 </div>
+
+<?php } ?>
+
 <div class="studentProfile_dataButtonsSide">
-	<div id="signinCurrent" class="dataContainer dataContainerActive"></div>
-	<div id="signinCurriculum" class="dataContainer"></div>
+	<div id="signinCurrent" class="dataContainer"></div>
+	<div id="signinCurriculum" class="dataContainer dataContainerActive"></div>
 	<div id="signinRealized" class="dataContainer"></div>
 	<div id="info" class="dataContainer"></div>
 </div>

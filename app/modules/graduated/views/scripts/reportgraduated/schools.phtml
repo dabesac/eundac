@@ -1,13 +1,8 @@
 <?php 
-if ($this->facid) { ?>
-	<option selected value="TODOEC">Todas las escuelas.</option>
-<?php
-}else{
 	if ($this->escuelas) { ?>
-		<option value="">- Seleccione la Escuela -</option>
-		<option value="TODOEC">Todas las Escuelas.</option>
+		<option value="TODOESC"> **TODAS ESTA FACULTAD**</option>
 		<?php
-		foreach ($this->escuelas as $escuelas) { 	
+		foreach ($this->escuelas as $escuelas) {
 			if ($this->escid) $str = ($this->escid==$escuelas['escid'])?"selected ":""; ?>
 			<option value="<?php echo $escuelas['escid']?>"><?php echo $escuelas['name']?></option>
 		<?php
@@ -16,4 +11,4 @@ if ($this->facid) { ?>
 		<option value="">No tiene ningun registro.</option>
 	<?php
 	} 
-}?>
+?>
