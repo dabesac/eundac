@@ -33,8 +33,7 @@ class Admin_FacultyController extends Zend_Controller_Action
             if ($this->getRequest()->isPost())
             {
                 $formdata = $this->getRequest()->getPost();
-                if ($form->isValid($formdata))
-                { 
+                if ($form->isValid($formdata)) {
                     unset($formdata['save']);
                     $formdata['eid']=$eid;
                     $formdata['oid']=$oid;

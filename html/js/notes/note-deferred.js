@@ -68,7 +68,7 @@ $(document).ready(function() {
                 if($action == "true") {
 
     	          	if ($envioserver == false ) {
-                		$envioserver = true;
+                		$envioserver = true;	
                 	}
 
                 	$notas ={};
@@ -139,7 +139,7 @@ $(document).ready(function() {
 			var result = '';
 
 			for( var prop in $record){
-                result += '' + prop + '/' + $record[prop]  + '/'; 
+                result += '' + prop + '/' + $record[prop]  + '/';
 			}
             result = result.substring(0, result.length-1);
             var $url = '/register/deferred/closerecord/' + result;
@@ -166,7 +166,7 @@ $(document).ready(function() {
 						    		if (this.firstElementChild != null) {
 						    			if (this.firstElementChild.nodeName == "INPUT" || this.firstElementChild.nodeName =='SELECT') {
 
-						    				$input= $(this.firstElementChild);
+							   				$input= $(this.firstElementChild);
 			                    			$name = $input.attr("name");
 			                    			$valor = $input.val();
 			                    			if($valor != "")

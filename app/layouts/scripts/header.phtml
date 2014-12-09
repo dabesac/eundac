@@ -24,13 +24,13 @@
         <a href="/<?php echo $module?>"><img src="/img/logo_03.png" alt=""></a>
     </div>
     <div class="welcomeDiv">
-        <p>Bienvenido a UNDAC 2.0, <?php echo $last_name?></p>
+        <p><?php echo $last_name?></p>
         <p>Adscrito Escuela <?php echo $speciality?></p>
     </div>
     <div class="buttomsLayout">
         <ul>
             <li><a href="/<?php echo $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
-            <li><a href="/profile/<?php echo ($rol=='AL')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Mi Perfil </a></li>
+            <li><a href="/profile/<?php echo ($rol=='AL' or $rol=='EG')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Mi Perfil </a></li>
             <li><a href="##"><span class="glyphicon glyphicon-envelope"></span> Notificaciones</a></li>
             <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> Cerrar Sessión</a></li>
         </ul>
@@ -40,7 +40,7 @@
 <script type="text/javascript" src='/external_library/md5/change.js'></script>
 <script>
     $(function(){
-        var rol = $('#rol').val();
+        /*var rol = $('#rol').val();
         if (rol == 'AL' || rol == 'EG') {
           var fullProfile = $('#fullProfile').val();
           var allCurrentUrl = window.location.pathname;
@@ -50,10 +50,9 @@
           };
         };
 
-
         var rellenoEncuesta = $('#rellenoEncuesta').val();
         if (rellenoEncuesta && rellenoEncuesta == 'No') {
             $(location).attr('href', '/alumno/index/encuesta');
-        };
+        };*/
     });
  </script>

@@ -154,6 +154,7 @@
         //Profesores registrados y dictando en ese periodo
         $cTeachers = 0;
         $pidTeacher = 0;
+        $dataDocente = array();
         if ($preDataTeachers) {
         foreach ($preDataTeachers as $teacher) {
             if ($teacher['pid'] != $pidTeacher) {
@@ -222,13 +223,13 @@
                 $pidTeacher = $teacher['pid'];
                 $cTeachers++;
             }
-        }
 
-        //Ordenar por nombre
-        foreach ($dataDocente as $c => $docente) {
-            $nombreDocente[$c] = $docente['fullName'];
+            //Ordenar por nombre
+            foreach ($dataDocente as $c => $docente) {
+                $nombreDocente[$c] = $docente['fullName'];
+            }
+            array_multisort($dataDocente, SORT_ASC, $nombreDocente);
         }
-        array_multisort($dataDocente, SORT_ASC, $nombreDocente);
 
         //Cursos de esos profesores
         foreach ($dataDocente as $cTeachers => $teacher) {
@@ -307,21 +308,21 @@
         $this->view->dataDocente = $dataDocente;
     }
 
-    public function shownotasAction(){
+    public function showconsolidatedAction(){
+        $this->_helper->layout();
         $this->_helper->layout()->disableLayout();
 
         //dataBases
-        $personDb         = new Api_Model_DbTable_Person();
         $courseDb         = new Api_Model_DbTable_Course();
         $periodsCourseDb  = new Api_Model_DbTable_PeriodsCourses();
-        $registerCourseDb = new Api_Model_DbTable_Registrationxcourse();
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
 
-        $data = base64_decode($this->_getParam('data'));
+        $data     = base64_decode($this->_getParam('data'));
+        $idCourse = $data;
 
-        $data     = explode('-', $data);
+        $data     = explode('|', $data);
         $escid    = $data[0];
         $subid    = $data[1];
         $courseid = $data[2];
@@ -346,7 +347,38 @@
                             'name'     => $preDataCourse[0]['name'],
                             'credits'  => $preDataCourse[0]['credits'],
                             'semid'    => $preDataCourse[0]['semid'],
-                            'parcial'  => $parcial );
+                            'parcial'  => $parcial,
+                            'idCourse' => base64_encode($idCourse) );
+
+        $this->view->dataCourse = $dataCourse;
+    }
+
+    public function shownotasAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //dataBases
+        $personDb         = new Api_Model_DbTable_Person();
+        $courseDb         = new Api_Model_DbTable_Course();
+        $syllabusDb       = new Api_Model_DbTable_Syllabus();
+        $periodsCourseDb  = new Api_Model_DbTable_PeriodsCourses();
+        $registerCourseDb = new Api_Model_DbTable_Registrationxcourse();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        $data = base64_decode($this->_getParam('data'));
+
+        $data     = explode('|', $data);
+        $escid    = $data[0];
+        $subid    = $data[1];
+        $courseid = $data[2];
+        $curid    = $data[3];
+        $turno    = $data[4];
+        $perid    = $data[5];
+        $parcial  = $data[6];
+
+        
+        $dataCourse = array('parcial' => $parcial );
 
         //verificar si el curso es por objetivo o competencia
         $where = array( 'eid'      => $eid,
@@ -362,6 +394,31 @@
         $typeCourse = $typeCourse[0]['type_rate'];
         $dataCourse['type'] = $typeCourse;
 
+        //url para Impresiones
+        if ($typeCourse == 'O') {
+            $dataCourse['actionPrint'] = 'targetprint';
+            $dataCourse['idPrint'] = base64_encode( $escid.'|'.
+                                                    $subid.'|'.
+                                                    $courseid.'|'.
+                                                    $curid.'|'.
+                                                    $turno.'|'.
+                                                    $perid.'|'.
+                                                    $parcial.'|'.
+                                                    'I' );
+        }elseif ($typeCourse == 'C') {
+            $pdSyllabus = $syllabusDb->_getOne($where);
+            $dataCourse['actionPrint'] = 'conpetencyprint';
+            $dataCourse['idPrint'] = base64_encode( $escid.'|'.
+                                                    $subid.'|'.
+                                                    $courseid.'|'.
+                                                    $curid.'|'.
+                                                    $turno.'|'.
+                                                    $perid.'|'.
+                                                    $pdSyllabus['units'].'|'.
+                                                    $parcial.'|'.
+                                                    'I' ); 
+        }
+        
         //Estudiantes de ese curso
         $where = array( 'eid'      => $eid,
                         'oid'      => $oid,
@@ -387,8 +444,11 @@
                 $dataCourse['students'][$c]['pid']      = $student['pid'];
                 $dataCourse['students'][$c]['uid']      = $student['uid'];
 
+                $dataCourse['students'][$c]['notaAplazados'] = '';
+
                 if ($parcial == 1) {
                     if ($typeCourse == 'O') {
+                        
                         for ($i=1; $i <= 9; $i++) {
                             if ($student['nota'.$i.'_i'] >= 11) {
                                 $dataCourse['students'][$c]['notaClass'.$i] = 'notaApproved';
@@ -472,6 +532,7 @@
                             }
                         }
                     }
+                    
                     $dataCourse['students'][$c]['notaFinal'] = $student['notafinal'];
                     if ($student['notafinal'] == '-3') {
                         $dataCourse['students'][$c]['notaFinal'] = 'R';
@@ -535,6 +596,94 @@
         $this->view->dataCourse = $dataCourse;
     }
 
+
+    public function showassistanceAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //DataBases
+        $personDb            = new Api_Model_DbTable_Person();
+        $syllabusContentDb   = new Api_Model_DbTable_Syllabusunitcontent();
+        $studentAssistanceDb = new Api_Model_DbTable_StudentAssistance();
+
+        $id = base64_decode($this->_getParam('id'));
+
+        $dataId   = explode('|', $id);
+        $escid    = $dataId[0];
+        $subid    = $dataId[1];
+        $courseid = $dataId[2];
+        $curid    = $dataId[3];
+        $turno    = $dataId[4];
+        $perid    = $dataId[5];
+        $parcial  = $dataId[6];
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        if ($parcial == 1) {
+            $stateParcial = 'P';
+        }elseif ($parcial == 2){
+            $stateParcial = 'C';
+        }
+        $idPrint = base64_encode(   $escid.'|'.
+                                    $subid.'|'.
+                                    $courseid.'|'.
+                                    $curid.'|'.
+                                    $turno.'|'.
+                                    $perid.'|'.
+                                    $stateParcial.'|'.
+                                    $parcial );
+
+
+        //cantidad de sesiones
+        $where = array( 'eid'      => $eid,
+                        'oid'      => $oid,
+                        'escid'    => $escid,
+                        'subid'    => $subid,
+                        'perid'    => $perid,
+                        'coursoid' => $courseid,
+                        'curid'    => $curid,
+                        'turno'    => $turno );
+
+        $pdStudent = $studentAssistanceDb->_getFilter($where);
+
+        $dataStudent = array();
+        if ($pdStudent) {
+            foreach ($pdStudent as $c => $student) {
+                //Nombres
+                $where = array( 'eid' => $eid,
+                                'pid' => $student['pid'] );
+                $attrib = array('last_name0', 'last_name1', 'first_name');
+
+                $pdPerson = $personDb->_getFilter($where, $attrib);
+
+                $dataStudent[$c] = array(   'pid'      => $student['pid'],
+                                            'uid'      => $student['uid'],
+                                            'fullName' => $pdPerson[0]['last_name0'].' '.
+                                                            $pdPerson[0]['last_name1'].' '.
+                                                            $pdPerson[0]['first_name'] );
+                if ($parcial == 1) {
+                    for ($i=1; $i <= 15; $i++) { 
+                        $dataStudent[$c]['session_'.$i] = $student['a_sesion_'.$i];
+                    }
+                }else{
+                    for ($i=17; $i <= 32; $i++) { 
+                        $dataStudent[$c]['session_'.$i] = $student['a_sesion_'.$i];
+                    }
+                }
+            }
+
+            //Ordenar por nombre
+            foreach ($dataStudent as $c => $student) {
+                $fullName[$c] = $student['fullName'];
+            }
+            array_multisort($fullName, SORT_ASC, $dataStudent);
+        }
+        $dataView['students'] = $dataStudent;
+        $dataView['parcial']  = $parcial;
+        $dataView['idPrint']  = $idPrint;
+
+        $this->view->dataView = $dataView;
+    }
 
     public function printAction(){
         try {

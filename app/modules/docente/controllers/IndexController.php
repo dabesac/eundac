@@ -41,11 +41,11 @@ class Docente_IndexController extends Zend_Controller_Action {
         //Enviar el periodo
         $this->view->perid = $perid;
 
-        $where = array( 'eid'   => $eid,
-                        'oid'   => $oid,
-                        'uid'   => $uid,
-                        'pid'   => $pid,
-                        'perid' => $perid,
+        $where = array( 'eid'     => $eid,
+                        'oid'     => $oid,
+                        'uid'     => $uid,
+                        'pid'     => $pid,
+                        'perid'   => $perid,
                         'is_main' => 'S' );
 
         $attrib = array('courseid', 'curid', 'turno', 'escid', 'subid', 'perid');

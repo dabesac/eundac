@@ -1,0 +1,45 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />  
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+
+<div style='text-align:center'><b><h3>REPOTE DE ALUMNOS APROBADOS DEL PERIODO <?php echo strtoupper($this->perid)?></h3></b></div>
+<div id="datos">
+	<br></br>
+	<div style='text-align:center; margin-bottom:3%'><b> REPORTE GENERADO</b></div>
+	<table style='float:left; font-size: 11px; width:100%'>
+		<thead>
+			<tr style="background: #E5E5E5;">
+				<th>
+					<center>#</center>
+				</th>
+				<th>
+					<center>ESCUELA</center>
+				</th>
+				<th>
+					<center>TOTAL</center>
+				</th>
+			</tr>
+		</thead>
+	</table>
+</div>
+<?php 
+
+  	$html = ob_get_contents();
+  
+  	$mpdf=new mPDF('win-1252','A4','','',15,15,40,18,8,5);
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+
+  	$mpdf->SetHTMLHeader($this->header);
+  	$mpdf->SetHTMLFooter($this->footer);
+  
+  	ob_end_clean();
+  	$mpdf -> WriteHTML($html);
+  	$mpdf->Output('ReporteMatriculados-'.$perid.'.pdf','D');
+  	// $mpdf->Output();
+  
+?>

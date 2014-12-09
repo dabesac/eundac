@@ -209,7 +209,7 @@ class Report_RegistrationController extends Zend_Controller_Action
         }
         catch(Exception $ex )
         {
-                  print ("Error:".$ex->getMessage());
+            print ("Error:".$ex->getMessage());
         } 
     }
 }

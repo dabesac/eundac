@@ -1,129 +1,112 @@
-<?php if ($this->form) { ?>
-	<form role='form' method='post' action='/curricula/curricula/newcurricula' id='form_new_cur'>
-	<?php echo $this->form->subid?>
-	<?php echo $this->form->escid_cur?>
+<?php 
+	$dataView          = $this->dataView;
+	$form              = $dataView['curriculumForm'];
+	$curriculumsBefore = $dataView['curriculumsBefore'];
+ ?>
 
-	<table class="table">
-		<tr>
-			<th colspan="6"><center>Código Generado</center></th>
-		</tr>
-		<tr>
-			<td colspan="6">
-				<center>
-					<div style="width:100px"><?php echo $this->form->curid?></div>
-				</center>
-			</td>
-		</tr>
-		<tr>
-			<th><center>Año</center></th>
-			<th><center>Tipo Periodo</center></th>
-			<th><center>Periodo</center></th>
-			<th><center>Tipo Curricula</center></th>
-			<th><center>Estado</center></th>
-		</tr>
-		<tr>
-			<td style="width:100px">
-				<?php echo $this->form->year?>
-			</td>
-			<td>
-				<?php echo $this->form->type_periods?>
-			</td>
-			<td style="width:80px">
-				<?php echo $this->form->cur_per_ant?>
-			</td>
-			<td>
-				<?php echo $this->form->type?>
-			</td>
-			<td style="width:110px">
-				<?php echo $this->form->state?>
-			</td>
-		</tr>
-		<tr>
-			<th colspan="3"><center>Nombre de Plan Curricular</center></th>
-			<th colspan="2"><center>Alias de Plan Curricular</center></th>
-		</tr>
-		<tr>
-			<td colspan="3">
-				<?php echo $this->form->name?>
-			</td>
-			<td colspan="2">
-				<?php echo $this->form->alias?>
-			</td>
-		</tr>
-		<tr>
-			<th><center>N° Periodos</center></th>
-			<th><center>N° Cursos Obligatorios</center></th>
-			<th><center>N° Cursos Electivos</center></th>
-			<th><center>N° Créditos Obligatorios</center></th>
-			<th><center>N° Créditos Electivos</center></th>
-		</tr>
-		<tr>
-			<td>
-				<?php echo $this->form->number_periods?>
-			</td>
-			<td>
-				<?php echo $this->form->mandatory_course?>
-			</td>
-			<td>
-				<?php echo $this->form->elective_course?>
-			</td>
-			<td>
-				<?php echo $this->form->mandatory_credits?>
-			</td>
-			<td>
-				<?php echo $this->form->elective_credits?>
-			</td>
-		</tr>
-	</table>
+<div class="modal_header">
+	<p class="title">Nueva Currícula </p>
+	<div class="dataEsc">
+		<p><span>Facultad de </span><?php echo $dataView['nameFac'] ?></p>
+		<p><span>Escuela de </span><?php echo $dataView['nameEsc'] ?> 
+			<?php if ($dataView['isEsp'] == 'yes'): ?>
+				- <?php echo $dataView['nameEsp'] ?>
+			<?php endif ?>
+		</p>
+	</div>
+	<div class="modal_close">
+		<a class="btn btn-default form-control" href="##" data-dismiss="modal">Cerrar</a>
+	</div>
+</div>
+<div class="modal_body">
+	<p><span class="glyphicon glyphicon-info-sign"></span> Llene todos los campos necesarios...</p>
+	<form id="formCurriculum">
+		<?php if ($dataView['isEsp'] == 'yes'): ?>
+			<input type="hidden" name="id" value="<?php echo base64_encode($dataView['espid'].'|'.$dataView['subid']) ?>">
+		<?php else: ?>
+			<input type="hidden" name="id" value="<?php echo base64_encode($dataView['escid'].'|'.$dataView['subid']) ?>">
+		<?php endif ?>
+
+		<div class="inputs-type">
+			<div>
+				<?php echo $form->type_periods  ?>
+			</div>
+			<div>
+				<?php echo $form->year  ?>
+			</div>
+			<div>
+				<?php echo $form->type  ?>
+			</div>
+		</div>
+
+		<div class="inputs-name">
+			<div>
+				<p>Nombre</p>
+				<?php echo $form->name  ?>
+			</div>
+			<div>
+				<p>Alias</p>
+				<?php echo $form->alias  ?>
+			</div>
+		</div>
+		<div class="inputs-amounts">
+			<div>
+				<p>N° Periódos</p>
+				<?php echo $form->number_periods  ?>
+			</div>
+			<div>
+				<p>N° Créditos Obligatorios</p>
+				<?php echo $form->mandatory_credits  ?>
+			</div>
+			<div>
+				<p>N° Créditos Electivos</p>
+				<?php echo $form->elective_credits  ?>
+			</div>
+			<div>
+				<p>N° Cursos Obligatorios</p>
+				<?php echo $form->mandatory_course  ?>
+			</div>
+			<div>
+				<p>N° Cursos Electivos</p>
+				<?php echo $form->elective_course ?>
+			</div>
+		</div>
+
+		<div class="input-curBefore">
+			<div>
+				<p>Curricula Anterior (para equivalencia)</p>
+				<?php if ($curriculumsBefore): ?>
+					<?php $form->cur_per_ant->addMultioption('', 'Elija una currícula') ?>
+					<?php foreach ($curriculumsBefore as $curriculum): ?>
+						<?php $form->cur_per_ant->addMultioption($curriculum['id'], $curriculum['name']) ?>
+					<?php endforeach ?>
+				<?php else: ?>
+					<?php $form->cur_per_ant->addMultioption('', 'No existen curriculas anteriores...')
+											->setAttrib('disabled', 'true')
+											->setRequired(false) ?>
+				<?php endif ?>
+				<?php echo $form->cur_per_ant ?>
+			</div>
+		</div>
+
+		<div class="sendButtom">
+			<?php echo $form->save ?>
+		</div>
 	</form>
-<?php }
-?>
+</div>
+<div id="idErrorsSide" class="errorsSide">
+	<div class="icon">
+		<span class="glyphicon glyphicon-exclamation-sign"></span>
+	</div>
+	<div class="errors">
+		
+	</div>
+</div>
 
-<script>
-	var act="<?php echo $this->act?>";
-	if (act==1) {
-		window.location.reload();
-		var escu="<?php echo $this->escid?>--<?php echo $this->subid?>";
-		$("#curriculass").load("/curricula/curricula/curriculas/escid/"+$.base64.encode(escu));
-	};
+<div id="idSuccessSide" class="errorsSide successSave">
+	<p><span class="glyphicon glyphicon-ok"></span> Guardado!</p>
+</div>
 
-	var escid=$('#escid_cur').val();
-	$("#year").change(function(){
-		$("#year option:selected").each(function(){
-			var type=$("#type_periods").val();
-			var year=$(this).val();
-			if (year!='')
-				$('#curid').val(year+type+escid);
-	            $("#cur_per_ant").val(year+type);
-
-		});
-	});
-
-	$("#type_periods").change(function(){
-		$("#type_periods option:selected").each(function(){
-			var type=$(this).val();
-			var year=$("#year").val();
-			if (type!='')
-				$('#curid').val(year+type+escid);
-	            $("#cur_per_ant").val(year+type);
-
-		});
-	});
-
-	$("#save_curri").click(function(){
-			$("#form_new_cur").submit();
-	});
-
-	$("#form_new_cur").submit(function(){
-			$.ajax({
-            	type: 'POST',
-	            url: $(this).attr('action'),
-	            data: $(this).serialize(),
-            	success: function(data) { 
-					// $('#curr_new').modal('hide');
-        			$("#cont_new_cur").html(data);
-                }
-	        }); 
-	        return false;
-    });
-</script>
+<div id="idChargeSide" class="errorsSide chargeSide">
+	<img src="/img/spinner.gif" alt="Loading...">
+</div>

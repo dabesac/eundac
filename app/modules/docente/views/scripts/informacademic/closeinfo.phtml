@@ -10,7 +10,7 @@
 </div>
 <p style="font-size: 15px;text-align: center"><b> I.INFORME ACADEMICO</b></p>
 
-<form  id='frmInformacademic' name="<?php echo $this->form->getName(); ?>" action="/docente/informacademic/closeinfo" method="POST" enctype="application/x-www-form-urlencoded">
+<form  id='frmInformacademic' name="<?php echo $this->form->getName(); ?>" action="/docente/informacademic/closeinfo/data/<?php echo base64_encode($this->perid) ?>" method="POST" enctype="application/x-www-form-urlencoded">
     <input type="hidden" name="perid" value="<?php echo base64_encode($this->perid) ?>">
     <table class="table table-striped table-bordered table-condensed">
         <thead>

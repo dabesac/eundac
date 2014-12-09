@@ -255,6 +255,9 @@ class Record_IndexController extends Zend_Controller_Action {
             $this->view->info_couser = $info_couser;
             $this->view->info_teacher = $info_teacher;
             $this->view->speciality = $speciality;
+            $rid = $this->sesion->rid;
+            $this->view->rid=$rid;
+            $this->view->escuela=$escid;
 			$this->_helper->layout()->disableLayout();		
 	}
 	
@@ -1797,20 +1800,26 @@ class Record_IndexController extends Zend_Controller_Action {
     		$eid= $this->sesion->eid;
             $oid= $this->sesion->oid;
             $formData = $this->getRequest()->getPost();
-            $where['eid']=$eid;
-            $where['oid']=$oid;
-            $where['perid']=$formData['perid'];
-            $where['escid']=$formData['escid'];
-            $where['curid']=$formData['curid'];
-            $where['subid']=$formData['subid'];
-            $where['courseid']=$formData['courseid'];
-            $where['turno']=$formData['turno'];
-            $data['uid'] =$formData['uid'];
-            $data['pid'] =$formData['pid'];
-            
-            $coursexteacher = new Api_Model_DbTable_Coursexteacher();
-            $updatedata = $coursexteacher ->_updateXcourse($data,$where);
-            $this->view->resul=$updatedata;
+
+            if($formData['opcion']==0){
+            	$where = array('eid'=>$eid, 'oid'=>$oid,'perid'=>$formData['perid'],'escid'=>$formData['escid'],
+            				'curid'=>$formData['curid'],'subid'=>$formData['subid'],'courseid'=>$formData['courseid'],
+            				'turno'=>$formData['turno'],'uid'=>$formData['uid'],'pid'=>$formData['pid'],'is_main'=>'S',
+            				'state'=>'A');
+            	$coursexteacher = new Api_Model_DbTable_Coursexteacher();
+	            $updatedata = $coursexteacher ->_save($where);
+	            $this->view->resul=$updatedata;	
+    		}else{
+    			$where = array('eid'=>$eid, 'oid'=>$oid,'perid'=>$formData['perid'],'escid'=>$formData['escid'],
+            				'curid'=>$formData['curid'],'subid'=>$formData['subid'],'courseid'=>$formData['courseid'],
+            				'turno'=>$formData['turno']);
+            	$data = array('uid'=>$formData['uid'],'pid'=>$formData['pid']);
+
+    			$coursexteacher = new Api_Model_DbTable_Coursexteacher();
+	            $updatedata = $coursexteacher ->_updateXcourse($data,$where);
+	            $this->view->resul=$updatedata;	
+    		}
+     
     	} catch (Exception $e){
     		print 'Error: '.$e->getMessage();
     	}
@@ -1856,10 +1865,41 @@ class Record_IndexController extends Zend_Controller_Action {
     		$data['state'] = $form_Data['state'];
 
     		$updatedata = new Api_Model_DbTable_PeriodsCourses();
-    		$updata = $updatedata->_update($data,$where);
-    		$this->view->updata=$updata;
-
+	    	$updata = $updatedata->_update($data,$where);
+	    	$this->view->updata=$updata;
     	} catch(Exception $e){
+    		print 'Error: '.$e->getMessage();
+    	}
+    }
+
+    public function principalteacherAction(){
+    	try{
+    		$this->_helper->layout()->disableLayout();
+    		$eid = $this->sesion->eid;
+    		$oid = $this->sesion->oid;
+    		$data = $this->getRequest()->getPost();
+
+    		$coursexteacher = new Api_Model_DbTable_Coursexteacher;
+    		if($data['pidac']=="" && $data['uidac']==""){
+    			$where = array('eid'=>$eid, 'oid'=>$oid,'escid'=>$data['escid'],'subid'=>$data['subid'],
+    						'courseid'=>$data['courseid'],'curid'=>$data['curid'],'turno'=>$data['turno'],
+    						'perid'=>$data['perid'],'uid'=>$data['uid'],'pid'=>$data['pid']);
+    			$mod = array('is_main'=>'S','state'=>'A');
+    			$updatedata = $coursexteacher->_update($mod,$where);
+    		}else{
+    			$where = array('eid'=>$eid, 'oid'=>$oid,'escid'=>$data['escid'],'subid'=>$data['subid'],
+    						'courseid'=>$data['courseid'],'curid'=>$data['curid'],'turno'=>$data['turno'],
+    						'perid'=>$data['perid'],'uid'=>$data['uidac'],'pid'=>$data['pidac']);
+    			$mod = array('is_main'=>'N','state'=>'P');
+    			$updatedata = $coursexteacher->_update($mod,$where);
+    			$where2 = array('eid'=>$eid, 'oid'=>$oid,'escid'=>$data['escid'],'subid'=>$data['subid'],
+    						'courseid'=>$data['courseid'],'curid'=>$data['curid'],'turno'=>$data['turno'],
+    						'perid'=>$data['perid'],'uid'=>$data['uid'],'pid'=>$data['pid']);
+    			$mod2 = array('is_main'=>'S','state'=>'A');
+    			$updatedata2 = $coursexteacher->_update($mod2,$where2);
+    		}
+
+    	}catch(Exception $e){
     		print 'Error: '.$e->getMessage();
     	}
     }

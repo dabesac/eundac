@@ -53,7 +53,16 @@ class Docente_RegisterController extends Zend_Controller_Action {
             'turno'=>$turno,
             'perid'=>$perid,
             );
-        $url ="/".base64_encode('oid')."/".base64_encode($oid)."/".
+        $url =base64_encode($escid.'|'.
+                            $subid.'|'.
+                            $courseid.'|'.
+                            $curid.'|'.
+                            $turno.'|'.
+                            $perid.'|'.
+                            $partial.'|'.
+                            'I' );
+
+       /* $url ="/".base64_encode('oid')."/".base64_encode($oid)."/".
                         base64_encode('eid')."/".base64_encode($eid)."/".
                         base64_encode('escid')."/".base64_encode($escid)."/".
                         base64_encode('subid')."/".base64_encode($subid)."/".
@@ -62,7 +71,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
                         base64_encode('turno')."/".base64_encode($turno)."/".
                         base64_encode('perid')."/".base64_encode($perid)."/".
                         base64_encode('action')."/".base64_encode('I')."/".
-                        base64_encode('partial')."/".base64_encode($partial);
+                        base64_encode('partial')."/".base64_encode($partial);*/
 
         $base_courses = new Api_Model_DbTable_Course();
         $infocourse = $base_courses->_getOne($where);
@@ -143,7 +152,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
     }
 
     public function targetprintAction(){
-        $params = $this->getRequest()->getParams();
+        /*$params = $this->getRequest()->getParams();
         if(count($params) > 3){
 
             $paramsdecode = array();
@@ -154,32 +163,61 @@ class Docente_RegisterController extends Zend_Controller_Action {
                 }
             }
             $params = $paramsdecode;
-        }
+        }*/
+        //DataBase
+        $courseTeacherDb = new Api_Model_DbTable_Coursexteacher();
+        $personDb        = new Api_Model_DbTable_Person();
+
+        $eid        = $this->sesion->eid;
+        $oid        = $this->sesion->oid;
+
+        $id = base64_decode($this->_getParam('id'));
         /***********paramets***********/
-        $oid        = trim($params['oid']);
-        $eid        = trim($params['eid']);
-        $escid        = trim($params['escid']);
-        $subid        = trim($params['subid']);                    
-        $courseid    = trim($params['courseid']);
-        $curid        = trim($params['curid']);
-        $turno        = trim($params['turno']);
-        $perid        = trim($params['perid']);
-        $partial      = trim($params['partial']); 
-        $action      = trim($params['action']);
+
+        $id = explode('|', $id);
+        $escid    = $id[0];
+        $subid    = $id[1];
+        $courseid = $id[2];
+        $curid    = $id[3];
+        $turno    = $id[4];
+        $perid    = $id[5];
+        $partial  = $id[6];
+        $action   = $id[7];
 
         $where = null;
         $url = null;
-        $where = array(
-            'oid'=>$oid, 
-            'eid'=>$eid,
-            'escid'=>$escid,
-            'subid'=>$subid,
-            'courseid'=>$courseid,
-            'curid'=>$curid,
-            'turno'=>$turno,
-            'perid'=>$perid,
-            );
+        $where = array( 'oid'      => $oid, 
+                        'eid'      => $eid,
+                        'escid'    => $escid,
+                        'subid'    => $subid,
+                        'courseid' => $courseid,
+                        'curid'    => $curid,
+                        'turno'    => $turno,
+                        'perid'    => $perid );
 
+         //Nombre de Docente
+        $attrib = array('pid');
+        $pdCourseTeacher = $courseTeacherDb->_getFilter($where, $attrib);
+        $docentePid = $pdCourseTeacher[0]['pid'];
+
+        $where = array( 'eid' => $eid,
+                        'pid' => $docentePid );
+        $attrib = array('last_name0', 'last_name1', 'first_name');
+
+        $pdPerson = $personDb->_getOne($where, $attrib);
+
+        $fullName = $pdPerson['last_name0'].' '.$pdPerson['last_name1'].' '.$pdPerson['first_name'];
+        //--------------------------
+
+        $where = array( 'oid'      => $oid,
+                        'eid'      => $eid,
+                        'escid'    => $escid,
+                        'subid'    => $subid,
+                        'courseid' => $courseid,
+                        'curid'    => $curid,
+                        'turno'    => $turno,
+                        'perid'    => $perid );
+        
         $base_courses = new Api_Model_DbTable_Course();
         $infocourse = $base_courses->_getOne($where);
         $this->view->infocourse = $infocourse;
@@ -211,11 +249,11 @@ class Docente_RegisterController extends Zend_Controller_Action {
         
         // $escid=$this->sesion->escid;
         // $where['escid']=$escid;
-        $this->view->turno = $turno;
-        $this->view->perid = $perid;
-        $this->view->partial = $partial;
+        $this->view->turno    = $turno;
+        $this->view->perid    = $perid;
+        $this->view->partial  = $partial;
         $this->view->students = $data_notes_students;
-        $this->view->lasname= $this->sesion->infouser['fullname'];
+        $this->view->lasname  = $fullName;
         $namef = strtoupper($this->sesion->faculty->name);
 
         $dbimpression = new Api_Model_DbTable_Impresscourse();
@@ -262,6 +300,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $this->view->footer=$footer;
         $this->_helper->layout->disableLayout();
     }
+
     public function registerconpetencyAction(){
         $params = $this->getRequest()->getParams();
         if(count($params) > 3){
@@ -276,17 +315,17 @@ class Docente_RegisterController extends Zend_Controller_Action {
             $params = $paramsdecode;
         }
         /***********paramets***********/
-        $oid        = trim($params['oid']);
-        $eid        = trim($params['eid']);
-        $escid        = trim($params['escid']);
-        $subid        = trim($params['subid']);                    
-        $courseid    = trim($params['courseid']);
-        $curid        = trim($params['curid']);
-        $turno        = trim($params['turno']);
-        $perid        = trim($params['perid']);
-        $partial      = trim($params['partial']); 
-        $action      = trim($params['action']);
-        $units      = trim($params['units']);
+        $oid      = trim($params['oid']);
+        $eid      = trim($params['eid']);
+        $escid    = trim($params['escid']);
+        $subid    = trim($params['subid']);                    
+        $courseid = trim($params['courseid']);
+        $curid    = trim($params['curid']);
+        $turno    = trim($params['turno']);
+        $perid    = trim($params['perid']);
+        $partial  = trim($params['partial']); 
+        $action   = trim($params['action']);
+        $units    = trim($params['units']);
 
         $this->view->units=$units;
         $where = null;
@@ -319,7 +358,17 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $base_persentage = new Api_Model_DbTable_CourseCompetency();
         $result1 = $base_persentage->_getFilter($where,$attrib);
 
-        $url ="/".base64_encode('oid')."/".base64_encode($oid)."/".
+        $url =base64_encode($escid.'|'.
+                            $subid.'|'.
+                            $courseid.'|'.
+                            $curid.'|'.
+                            $turno.'|'.
+                            $perid.'|'.
+                            $units.'|'.
+                            $partial.'|'.
+                            'I' );
+
+        /*$url ="/".base64_encode('oid')."/".base64_encode($oid)."/".
                         base64_encode('eid')."/".base64_encode($eid)."/".
                         base64_encode('escid')."/".base64_encode($escid)."/".
                         base64_encode('subid')."/".base64_encode($subid)."/".
@@ -329,7 +378,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
                         base64_encode('perid')."/".base64_encode($perid)."/".
                         base64_encode('units')."/".base64_encode($units)."/".
                         base64_encode('action')."/".base64_encode('I')."/".
-                        base64_encode('partial')."/".base64_encode($partial);
+                        base64_encode('partial')."/".base64_encode($partial);*/
 
         $base_courses = new Api_Model_DbTable_Course();
         $infocourse = $base_courses->_getOne($where);
@@ -348,7 +397,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
     }
 
     public function conpetencyprintAction(){
-        $params = $this->getRequest()->getParams();
+       /* $params = $this->getRequest()->getParams();
         if(count($params) > 3){
 
             $paramsdecode = array();
@@ -359,9 +408,32 @@ class Docente_RegisterController extends Zend_Controller_Action {
                 }
             }
             $params = $paramsdecode;
-        }
+        }*/
+
+        //DataBase
+        $courseTeacherDb = new Api_Model_DbTable_Coursexteacher();
+        $personDb        = new Api_Model_DbTable_Person();
+
+        $eid        = $this->sesion->eid;
+        $oid        = $this->sesion->oid;
+
+        $id = base64_decode($this->_getParam('id'));
         /***********paramets***********/
-        $oid        = trim($params['oid']);
+
+        $id = explode('|', $id);
+        $escid    = $id[0];
+        $subid    = $id[1];
+        $courseid = $id[2];
+        $curid    = $id[3];
+        $turno    = $id[4];
+        $perid    = $id[5];
+        $units    = $id[6];
+        $partial  = $id[7];
+        $action   = $id[8];
+
+
+        /***********paramets***********/
+       /* $oid        = trim($params['oid']);
         $eid        = trim($params['eid']);
         $escid        = trim($params['escid']);
         $subid        = trim($params['subid']);                    
@@ -370,35 +442,52 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $turno        = trim($params['turno']);
         $perid        = trim($params['perid']);
         $partial      = trim($params['partial']); 
-        $action      = trim($params['action']);
-        $units      = trim($params['units']);
+        $action      = trim($params['action']);*/
         $this->view->units=$units;
         $where = null;
         $url = null;
-        $where = array(
-            'oid'=>$oid, 
-            'eid'=>$eid,
-            'escid'=>$escid,
-            'subid'=>$subid,
-            'courseid'=>$courseid,
-            'curid'=>$curid,
-            'turno'=>$turno,
-            'perid'=>$perid,
-            );
-        $attrib = array(
-                    'porc1_u1',
-                    'porc2_u1',    
-                    'porc3_u1',
-                    'porc1_u2',
-                    'porc2_u2',
-                    'porc3_u2',
-                    'porc1_u3',
-                    'porc2_u3',
-                    'porc3_u3',
-                    'porc1_u4',
-                    'porc2_u4',
-                    'porc3_u4' 
-            );
+        $where = array( 'oid'      => $oid,
+                        'eid'      => $eid,
+                        'escid'    => $escid,
+                        'subid'    => $subid,
+                        'courseid' => $courseid,
+                        'curid'    => $curid,
+                        'turno'    => $turno,
+                        'perid'    => $perid );
+        $attrib = array('pid');
+
+        //Nombre de Docente
+        $pdCourseTeacher = $courseTeacherDb->_getFilter($where, $attrib);
+        $docentePid = $pdCourseTeacher[0]['pid'];
+
+        $where = array( 'eid' => $eid,
+                        'pid' => $docentePid );
+        $attrib = array('last_name0', 'last_name1', 'first_name');
+
+        $pdPerson = $personDb->_getOne($where, $attrib);
+
+        $fullName = $pdPerson['last_name0'].' '.$pdPerson['last_name1'].' '.$pdPerson['first_name'];
+
+        $where = array( 'oid'      => $oid,
+                        'eid'      => $eid,
+                        'escid'    => $escid,
+                        'subid'    => $subid,
+                        'courseid' => $courseid,
+                        'curid'    => $curid,
+                        'turno'    => $turno,
+                        'perid'    => $perid );
+        $attrib = array('porc1_u1',
+                        'porc2_u1',    
+                        'porc3_u1',
+                        'porc1_u2',
+                        'porc2_u2',
+                        'porc3_u2',
+                        'porc1_u3',
+                        'porc2_u3',
+                        'porc3_u3',
+                        'porc1_u4',
+                        'porc2_u4',
+                        'porc3_u4' );
 
         $base_persentage = new Api_Model_DbTable_CourseCompetency();
         $result1 = $base_persentage->_getFilter($where,$attrib);
@@ -434,12 +523,12 @@ class Docente_RegisterController extends Zend_Controller_Action {
 
         // $escid=$this->sesion->escid;
         // $where['escid']=$escid;
-        $this->view->turno = $turno;
-        $this->view->perid = $perid;
-        $this->view->partial = $partial;
+        $this->view->turno     = $turno;
+        $this->view->perid     = $perid;
+        $this->view->partial   = $partial;
         $this->view->persetage = $result1[0];
-        $this->view->students = $data_notes_students;
-        $this->view->lasname= $this->sesion->infouser['fullname'];
+        $this->view->students  = $data_notes_students;
+        $this->view->lasname   = $fullName;
 
         $dbimpression = new Api_Model_DbTable_Impresscourse();
         $uidim=$this->sesion->pid;
