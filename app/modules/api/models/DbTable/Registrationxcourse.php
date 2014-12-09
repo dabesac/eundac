@@ -913,4 +913,53 @@ class Api_Model_DbTable_Registrationxcourse extends Zend_Db_Table_Abstract
     		print "Error: not_registration_students_all ".$e->getMessage();
     	}
     }
+
+    public function promedio_students_first($where=null){
+        try {
+            if ($where['escid']=='' || $where['subid']=='' || $where['curid']=='' || $where['courseid']=='' || $where['perid']=='') return false;
+
+            $escid=$where['escid'];
+            $subid=$where['subid'];
+            $courseid=$where['courseid'];
+            $curid=$where['curid'];
+            $perid=$where['perid'];
+
+            $sql=$this->_db->query("
+                select r.escid,r.uid,p.last_name0|| ' ' || p.last_name1|| ', ' || p.first_name as full_name,r.curid,r.courseid,veces_alumno(r.escid,r.uid, r.curid, r.courseid) as veces, r.notafinal from base_registration_course as r
+                inner join base_person as p
+                on r.eid=p.eid and r.pid=p.pid
+                where escid='$escid' and subid='$subid' and curid='$curid' and courseid='$courseid' and perid='$perid'
+                and cast(notafinal as integer)>10
+                order by uid
+                ");
+
+            if ($sql) return $sql->fetchAll();
+            return false;
+        } catch (Exception $e) {
+            print "Error: promedio_students_first ".$e->getMessage();
+        }
+    }
+
+    public function promedio_students_periods_total($where=null){
+        try {
+            if ($where['escid']=='' || $where['subid']=='' || $where['perid']=='') return false;
+
+            $escid=$where['escid'];
+            $subid=$where['subid'];
+            $perid=$where['perid'];
+
+            $sql=$this->_db->query("
+                select r.uid, r.pid, p.last_name0||' ' || p.last_name1||', '|| p.first_name as fullname, r.perid, r.semid, nota_promedio_por_periodo(r.uid, r.perid) from base_registration as r
+                inner join base_person as p
+                on r.eid=p.eid and r.pid=p.pid
+                where escid='$escid' and subid='$subid' and perid='$perid' and state='M'
+                order by semid,fullname
+                ");
+
+            if ($sql) return $sql->fetchAll();
+            return false;
+        } catch (Exception $e) {
+            print "Error: promedio_students_periods_total".$e->getMessage();
+        }
+    }
 }

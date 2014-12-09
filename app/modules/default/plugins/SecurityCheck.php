@@ -17,28 +17,28 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
         $this->_iniAcl();
     }
 
-    public function preDispatch (Zend_Controller_Request_Abstract $request){
+    // public function preDispatch (Zend_Controller_Request_Abstract $request){
 
-        $this->_module= $this->getRequest()->getModuleName();
-        $this->_controller = $this->getRequest()->getControllerName();
-        $this->_action= $this->getRequest()->getActionName();
+    //     $this->_module= $this->getRequest()->getModuleName();
+    //     $this->_controller = $this->getRequest()->getControllerName();
+    //     $this->_action= $this->getRequest()->getActionName();
 
-        $resource_tmp = "{$this->_module}/{$this->_controller}/{$this->_action}";
+    //     $resource_tmp = "{$this->_module}/{$this->_controller}/{$this->_action}";
 
-        $auth= Zend_Auth::getInstance();
+    //     $auth= Zend_Auth::getInstance();
 
-        if ($auth->hasIdentity()) {
-            if (!$this->_acl->isAllowed($this->_role,$resource_tmp)) {
-                $request->setModuleName('default')
-                        ->setControllerName('error')
-                        ->setActionName('error');
-            }
-        }else{
-             $request->setModuleName('default')
-                        ->setControllerName('index')
-                        ->setActionName('index');
-        }
-    }
+    //     if ($auth->hasIdentity()) {
+    //         if (!$this->_acl->isAllowed($this->_role,$resource_tmp)) {
+    //             $request->setModuleName('default')
+    //                     ->setControllerName('error')
+    //                     ->setActionName('error');
+    //         }
+    //     }else{
+    //          $request->setModuleName('default')
+    //                     ->setControllerName('index')
+    //                     ->setActionName('index');
+    //     }
+    // }
 
     /**
      * @param Zend_Acl $acl
