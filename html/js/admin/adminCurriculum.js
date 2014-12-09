@@ -114,6 +114,8 @@ $(function(){
 
 			//Detalle de Curricula
 			$(btn_detail_cur).on('click', function(){
+				cleanOfAlerts();
+
 				idGet = $(this).attr('ide');
 				idJs  = $(this).attr('idjs');
 				$('#dataDetailCur')
@@ -632,9 +634,16 @@ $(function(){
 
 		function view_adminCurriculum(idGet, idCur){
 			//Función de botones
+			//Editar
 			$('#detailCur_btnEditCur').on('click', function(){
 				$('#idDivDetailCurricula, #idHeaderDetail').fadeOut('fast', function(){
 					$('#idDivEditCurriculum, #idHeaderEdit').fadeIn('fast');
+				});
+			});
+
+			$('#detailCur_btnAdminCourses').on('click', function(){
+				$('#idDivDetailCurricula, #idHeaderDetail').fadeOut('fast', function(){
+					$('#idDivAdminCourses, #idHeaderAdmin').fadeIn('fast');
 				});
 			});
 
@@ -644,10 +653,11 @@ $(function(){
 				});
 			});
 
-			$('#detailCur_btnAdminCourses').on('click', function(){
-				console.log('Administrar cursos')
+			$('#detailCur_courses_btnBackToDetail').on('click', function(){
+				$('#idDivAdminCourses, #idHeaderAdmin').fadeOut('fast', function(){
+					$('#idDivDetailCurricula, #idHeaderDetail').fadeIn('fast');
+				});
 			});
-
 
 			//Cargar Detalle de curricula
 			$('#idDivDetailCurricula')
@@ -663,6 +673,12 @@ $(function(){
 					view_editCurriculum(idGet, idJs);
 				});
 
+			//Cargar administracion de Cursos
+			$('#idDivAdminCourses')
+				.html('<br><br><br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+				.load('/curricula/curricula/admincourses/id/' + idGet, function(){
+					view_adminCourses(idGet, idJs);
+				});
 		}
 
 		function view_detailCurriculum(){
@@ -723,6 +739,16 @@ $(function(){
 					.removeAttr('disabled')
 					.val('Guardar');
 			});
+		}
+
+		function view_adminCourses(){
+			console.log('Acciones para administrar los cursos listas');
+			$('section.new_course').load('/curricula/curricula/newcourse/id/' + idGet);
+
+		}
+
+		function addCourse(){
+
 		}
 
 		return {
