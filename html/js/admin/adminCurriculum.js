@@ -317,7 +317,7 @@ $(function(){
 			};
 		}
 
-		//tmre ya no se me ocurren combres D:
+		//tmre ya no se me ocurren nombres D:
 		function iCallYou(why_call_me, idGet, idJs){
 			$.ajax({
 				url  : '/curricula/curricula/icallyou',
@@ -742,13 +742,26 @@ $(function(){
 		}
 
 		function view_adminCourses(){
-			console.log('Acciones para administrar los cursos listas');
-			$('section.new_course').load('/curricula/curricula/newcourse/id/' + idGet);
+			$('section.new_course').load('/curricula/curricula/newcourse/id/' + idGet, function(){
+				addCourse();
+			});
 
+			$('#btn_add_course').on('click', function(){
+				if (!$('#id_add_new_course').hasClass('new_course_active')) {
+					$('#id_add_new_course')
+						.removeClass('new_course_hide')
+						.addClass('new_course_active');
+				}else {
+					$('#id_add_new_course')
+						.removeClass('new_course_active')
+						.addClass('new_course_hide');
+				};
+				console.log('joder');
+			});
 		}
 
 		function addCourse(){
-
+			//console.log('agregar curso');
 		}
 
 		return {

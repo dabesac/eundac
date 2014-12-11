@@ -7,11 +7,11 @@ class Curricula_Form_Course extends Zend_Form
         $courseid = new Zend_Form_Element_Text("courseid");
         $courseid   ->removeDecorator('Label')->removeDecorator("HtmlTag")
                     ->setRequired(true)
-                    ->addValidator('NotEmpty', true, array('messages' => 'Debe de ingresar el código...'))
+                    ->addValidator('NotEmpty', true, array('messages' => 'Debe de ingresar el código'))
                     ->setAttribs(array( 
                                         'class'       => 'form-control',
-                                        'title'       => 'Codigo de Curso',
-                                        'placeholder' => 'Código...'));
+                                        'title'       => 'Codigo de curso...',
+                                        'placeholder' => 'Código'));
         $this->addElement($courseid);
 
 
@@ -19,39 +19,39 @@ class Curricula_Form_Course extends Zend_Form
         $semid  ->removeDecorator('Label')->removeDecorator("HtmlTag")
                 ->setAttribs(array(
                                     'class' => 'form-control',
-                                    'title' => 'Semestre...')); 
+                                    'title' => 'Semestre')); 
         $this->addElement($semid);
 
 
         $name = new Zend_Form_Element_Text("name");
         $name   ->removeDecorator('Label')->removeDecorator("HtmlTag")
                 ->setRequired(true)
-                ->addValidator('NotEmpty', true, array('messages' => 'Debe de ingresar el nombre...'))
+                ->addValidator('NotEmpty', true, array('messages' => 'Debe de ingresar el nombre'))
                 ->setAttribs(array( 
                                     'class'       => 'form-control',
                                     'maxlength'   => '150',
                                     'title'       => 'Nombre del curso...',
-                                    'placeholder' => 'Nombre...'));
+                                    'placeholder' => 'Nombre'));
         $this->addElement($name);
 
 
         $abbreviation = new Zend_Form_Element_Text("abbreviation");
         $abbreviation ->removeDecorator('Label')->removeDecorator("HtmlTag")
                 ->setRequired(true)
-                ->addValidator('NotEmpty', true, array('messages' => 'Debe de ingresar el nombre abreviado...'))
+                ->addValidator('NotEmpty', true, array('messages' => 'Debe de ingresar el nombre abreviado'))
                 ->setAttribs(array(  
                                     'class'       => 'form-control',
                                     'maxlength'   => '30',
                                     'title'       => 'Nombre abreviado del curso...',
-                                    'placeholder' => 'Nombre abreviado...' ));
+                                    'placeholder' => 'Nombre abreviado' ));
         $this->addElement($abbreviation);
 
-
+/*
         $req_1 = new Zend_Form_Element_Select('req_1');
         $req_1  ->removeDecorator('Label')->removeDecorator("HtmlTag")
                 ->setAttribs(array(
                                     'class' => 'form-control',
-                                    'title' => 'Seleccione un requisito...')); 
+                                    'title' => 'Seleccione un requisito')); 
         $this->addElement($req_1);
 
 
@@ -59,7 +59,7 @@ class Curricula_Form_Course extends Zend_Form
         $req_2  ->removeDecorator('Label')->removeDecorator("HtmlTag")
                 ->setAttribs(array(
                                     'class' => 'form-control',
-                                    'title' => 'Agregue otro requisito...')); 
+                                    'title' => 'Agregue otro requisito')); 
         $this->addElement($req_2);
 
         
@@ -67,8 +67,8 @@ class Curricula_Form_Course extends Zend_Form
         $req_3  ->removeDecorator('Label')->removeDecorator("HtmlTag")
                 ->setAttribs(array(
                                     'class' => 'form-control',
-                                    'title' => 'Agregue otro requisito mas...')); 
-        $this->addElement($req_3);
+                                    'title' => 'Agregue otro requisito mas')); 
+        $this->addElement($req_3);*/
 
 
         $credits = new Zend_Form_Element_Text("credits");
@@ -80,7 +80,7 @@ class Curricula_Form_Course extends Zend_Form
                                     'class'       => 'form-control',
                                     'maxlength'   => '2',
                                     'title'       => 'Créditos del curso...',
-                                    'placeholder' => 'Creditos...' ));
+                                    'placeholder' => 'Creditos' ));
         $this->addElement($credits);
 
 
@@ -88,7 +88,7 @@ class Curricula_Form_Course extends Zend_Form
         $type   ->removeDecorator('Label')->removeDecorator("HtmlTag")
                 ->setAttribs(array(
                                     'class' => 'form-control',
-                                    'title' => 'Tipo de curso...'))
+                                    'title' => 'Tipo de curso'))
                 ->addMultiOptions(array(
                                         'O' => 'Obligatorio',
                                         'E' => 'Electivo' ));
@@ -99,7 +99,7 @@ class Curricula_Form_Course extends Zend_Form
         $state  ->removeDecorator('Label')->removeDecorator("HtmlTag")
                 ->setAttribs(array(
                                     'class' => 'form-control',
-                                    'title' => 'Estado de curso...'))
+                                    'title' => 'Estado de curso'))
                 ->addMultiOptions(array(
                                         'A' => 'Activo',
                                         'I' => 'Inactivo' ));
@@ -115,7 +115,7 @@ class Curricula_Form_Course extends Zend_Form
                                                 'class'       => 'form-control',
                                                 'maxlength'   => '2',
                                                 'title'       => 'Horas teóricas...',
-                                                'placeholder' => 'Horas teóricas...' ));
+                                                'placeholder' => 'Horas teóricas' ));
         $this->addElement($hours_theoretical);
 
 
@@ -128,7 +128,7 @@ class Curricula_Form_Course extends Zend_Form
                                                 'class'       => 'form-control',
                                                 'maxlength'   => '2',
                                                 'title'       => 'Horas practicas...',
-                                                'placeholder' => 'Horas practicas...' ));
+                                                'placeholder' => 'Horas practicas' ));
         $this->addElement($hours_practical);
 
 
@@ -136,7 +136,7 @@ class Curricula_Form_Course extends Zend_Form
         $year_course->removeDecorator('Label')->removeDecorator("HtmlTag")
                     ->setAttribs(array(
                                         'class' => 'form-control',
-                                        'title' => 'Semestre...'))
+                                        'title' => 'Semestre'))
                     ->addMultiOptions(array(
                                             '1' => 'Primer Año',
                                             '2' => 'Segundo Año',
