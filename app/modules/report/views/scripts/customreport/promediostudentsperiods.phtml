@@ -1,0 +1,118 @@
+<?php
+if ($this->data) {  ?>
+    <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-pills nav-justified" role="tablist">
+            <?php
+            foreach ($this->datasem as $k => $valores) {
+                if ($k==0) { ?>
+                    <li role="presentation" class="active"><a href="#<?php echo $valores['semid']?>" class='panel panel-primary' aria-controls="<?php echo $valores['semid']?>" role="tab" data-toggle="tab"><?php echo $valores['name']?></a></li>
+                <?php
+                }
+                else{   ?>
+                    <li role="presentation"><a href="#<?php echo $valores['semid']?>" class='panel panel-primary' aria-controls="<?php echo $valores['semid']?>" role="tab" data-toggle="tab"><?php echo $valores['name']?></a></li>
+                <?php
+                }
+                ?>
+            <?php
+            }
+            ?>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <?php
+            foreach ($this->datasem as $k => $valores) {
+                if ($k==0) {    ?>
+                    <div role="tabpanel" class="tab-pane active" id="<?php echo $valores['semid']?>"><br>
+                        <div class="row">
+                            <div class="imprimir col-md-1 col-md-offset-10">
+                                <a href="#" class="btn btn-success"><span class='glyphicon glyphicon-print'></span> Imprimir</a>
+                            </div>
+                            <div class="col-md-10 col-md-offset-1">
+                                <br>
+                                <table class="table table-bordered">
+                                    <tr class="info">
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">DNI</th>
+                                        <th class="text-center">Código</th>
+                                        <th class="text-center">Apellidos y Nombres</th>
+                                        <th class="text-center">Promedio</th>
+                                    </tr>
+                                    <?php
+                                    $i=1;
+                                    foreach ($this->data as $k => $lista) {
+                                        if ($lista['semid']==$valores['semid']) {
+                                            $promedio = number_format($lista['nota_promedio_por_periodo'], 2, ',', '');
+                                            ?>
+                                            <tr>
+                                                <td class="text-center"><?php echo $i?></td>
+                                                <td class="text-center"><?php echo $lista['pid']?></td>
+                                                <td class="text-center"><?php echo $lista['uid']?></td>
+                                                <td><?php echo $lista['fullname']?></td>
+                                                <td class="text-center"><?php echo $promedio?></td>
+                                            </tr>
+                                        <?php
+                                        $i++;
+                                        }
+                                    }
+                                    ?>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                }
+                else{   ?>
+                    <div role="tabpanel" class="tab-pane" id="<?php echo $valores['semid']?>"><br>
+                        <div class="row">
+                            <div class="imprimir col-md-1 col-md-offset-10">
+                                <a href="#" class="btn btn-success"><span class='glyphicon glyphicon-print'></span> Imprimir</a>
+                            </div>
+                            <div class="col-md-10 col-md-offset-1">
+                                <table class="table table-bordered">
+                                    <tr class="info">
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">DNI</th>
+                                        <th class="text-center">Código</th>
+                                        <th class="text-center">Apellidos y Nombres</th>
+                                        <th class="text-center">Promedio</th>
+                                    </tr>
+                                    <?php
+                                    $i=1;
+                                    foreach ($this->data as $k => $lista) {
+                                        if ($lista['semid']==$valores['semid']) {
+                                            $promedio = number_format($lista['nota_promedio_por_periodo'], 2, ',', '');
+                                            ?>
+                                            <tr>
+                                                <td class="text-center"><?php echo $i?></td>
+                                                <td class="text-center"><?php echo $lista['pid']?></td>
+                                                <td class="text-center"><?php echo $lista['uid']?></td>
+                                                <td><?php echo $lista['fullname']?></td>
+                                                <td class="text-center"><?php echo $promedio?></td>
+                                            </tr>
+                                        <?php
+                                        $i++;
+                                        }
+                                    }
+                                    ?>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                }
+                ?>
+            <?php
+            }
+            ?>
+        </div>
+    </div>
+<?php
+}
+?>
+<script>
+    $('#myTab a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show');
+    });
+</script>
