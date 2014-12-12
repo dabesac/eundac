@@ -1,0 +1,59 @@
+<?php 
+	$dataView       = $this->dataView;
+	$dataCurriculum = $dataView['dataCurriculum'];
+	$dataCourses    = $dataView['dataCourses'];
+ ?>
+
+<div class="modal_admin_courses">
+	<header>
+		<p><?php echo $dataCurriculum['name'] ?> <small><?php echo $dataCurriculum['curid'] ?></small></p>
+		<div>
+			<a id="btn_add_course" href="##">Agregar Curso</a>
+		</div>
+	</header>
+	<section id="id_add_new_course" class="new_course">
+		
+	</section>
+	<article>
+		<?php if ($dataCourses): ?>
+			<?php foreach ($dataCourses as $semester): ?>
+				<section class="semester">
+					<header>
+						<span class="glyphicon glyphicon-flag"></span> Semestre <?php echo $semester['semid'] ?>
+					</header>
+					<section>
+						<article class="title">
+							<span>#</span>	
+							<span>Código</span>
+							<span>Nombre</span>
+							<span>Créditos</span>
+							<span>Tipo</span>
+							<span>Requisíto</span>
+							<span>Estado</span>
+							<span></span>
+						</article>
+					<?php foreach ($semester['courses'] as $c => $course): ?>
+						<article>
+							<span><?php echo $c + 1 ?></span>	
+							<span><?php echo $course['id'] ?></span>
+							<span><?php echo $course['name'] ?></span>
+							<span><?php echo $course['credits'] ?></span>
+							<span><?php echo $course['name_type'] ?></span>
+							<span><?php echo $course['req_1'] ?></span>
+							<?php if ($course['state'] == 'A'): ?>
+								<span class="text-success"><?php echo $course['state'] ?></span>
+							<?php else: ?>
+								<span class="text-warning"><?php echo $course['state'] ?></span>
+							<?php endif ?>
+							<a href="##">Editar</a>
+						</article>
+					<?php endforeach ?>
+					</section>
+				</section>
+			<?php endforeach ?>
+		<?php else: ?>
+			<br><br><br><br><br><br><br>
+			<p><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Esta currícula no tiene cursos...</p>
+		<?php endif ?>
+	</article>
+</div>

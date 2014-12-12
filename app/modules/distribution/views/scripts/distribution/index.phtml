@@ -4,12 +4,13 @@
 <?php $this->placeholder('Btnnav')->append('<a href="/docente" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
 <input id="yearComing" type="hidden" value="<?php echo $this->anio ?>">
+<input id="currentYear" type="hidden" value="<?php echo $this->yearActive ?>">
 
 <div class="distribution_header">
 	<p class="distribution_headerObO distribution_headerParrafo"><span class="glyphicon glyphicon-info-sign"></span> Puede filtrar distribuciones de otros años:</p>
 	<div class="distribution_headerObO selectAnio">
 		<select class="form-control" name="Año" id="anio">
-			<?php for ($i=$this->yearActive; $i >= 1993 ; $i--) : ?>
+			<?php for ($i=$this->yearActive + 1; $i >= 1993 ; $i--) : ?>
 				<option value="<?php echo $i ?>"><?php echo $i ?></option>
 			<?php endfor ?>
 		</select>
@@ -25,6 +26,8 @@
 		var year = $('#yearComing').attr('value');
 		if (year) {
 			$('#anio').val(year);
+		}else {
+			$('#anio').val($('#currentYear').val());
 		}
 
 		var anio = $('#anio').val();

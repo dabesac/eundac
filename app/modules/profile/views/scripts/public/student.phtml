@@ -4,7 +4,7 @@
     $this->placeholder('Btnnav')->append('<a href="/alumno" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
 ?>
 <input type="hidden" id="successProfile" value="<?php echo $this->success ?>">
-<div id="alertCompleteProfile" class="alert alert-danger hidden">
+<!-- <div id="alertCompleteProfile" class="alert alert-danger hidden">
 	<h4><span class="glyphicon glyphicon-exclamation-sign"></span> ACTUALIZA TU PERFIL : Información Estadística y Socio-Económica</h4>
 	<p>Por favor lee las siguientes instrucciones :</p>
 	<ol>
@@ -28,10 +28,11 @@
 	<br>
 	<p class="pull-right"><a id="btnCompleteProfile" href="##" class="btn btn-default"><span class="text-success">Actualizar Perfil</span></a></p>
 	<br><br>
-</div>
+</div> -->
 
 <div class="studentProfile_main">
 	<figure class="ObO"><img class='img-avatar' src="/fotos/<?php echo $this->datos[0]['uid']?>.jpg" onerror="imgError(this);" alt="Foto de Perfil" align="center" ></figure>
+
 	<div class="ObO dataStudent">
 		<p class="fullName"><?php echo $this->datos[0]['fullname']?></p>
 		<p>DNI <strong><?php echo $this->datos[0]['pid']?></strong></p>
@@ -46,18 +47,37 @@
 		<a class="btnRecordNotas" href="/report/recordnotas/print/uid/<?php echo base64_encode($this->datos[0]['uid'])?>/escid/<?php echo base64_encode($this->datos[0]['escid'])?>/eid/<?php echo base64_encode($this->datos[0]['eid'])?>/oid/<?php echo base64_encode($this->datos[0]['oid'])?>/subid/<?php echo base64_encode($this->datos[0]['subid'])?>/pid/<?php echo base64_encode($this->datos[0]['pid'])?>">Record de Notas</a>
 	</div>
 </div>
-<div class="studentProfile_buttonsSide">
-	<a href="##" class="btnObO btnCurrent btnActive" goto="signinCurrent">Matricula Actual</a>
-	<a href="##" class="btnObO btnCurricula" goto="signinCurriculum">Matrículas por Currícula</a>
-	<a href="##" class="btnObO btnRealized" goto="signinRealized">Matrículas Realizadas</a>
-	<a href="##" class="btnObO btnMoreAboutMe" goto="info">Mas Acerca de Mi</a>
-</div>
-<div class="studentProfile_dataButtonsSide">
-	<div id="signinCurrent" class="dataContainer dataContainerActive"></div>
-	<div id="signinCurriculum" class="dataContainer"></div>
-	<div id="signinRealized" class="dataContainer"></div>
-	<div id="info" class="dataContainer"></div>
-</div>
+<?php if ($this->rol=="EG") { ?>
+	<div class="studentProfile_buttonsSide">
+		<a href="##" class="btnObO btnCurrent" goto="signinCurrent">Matricula Actual</a>
+		<a href="##" class="btnObO btnCurricula btnActive" goto="signinCurriculum">Matrículas por Currícula</a>
+		<a href="##" class="btnObO btnRealized" goto="signinRealized">Matrículas Realizadas</a>
+		<a href="##" class="btnObO btnMoreAboutMe" goto="info">Mas Acerca de Mi</a>
+	</div>
+
+	<div class="studentProfile_dataButtonsSide">
+		<div id="signinCurrent" class="dataContainer"></div>
+		<div id="signinCurriculum" class="dataContainer dataContainerActive"></div>
+		<div id="signinRealized" class="dataContainer"></div>
+		<div id="info" class="dataContainer"></div>
+	</div>
+
+<?php } elseif($this->rol=="AL") { ?>
+	<div class="studentProfile_buttonsSide">
+		<a href="##" class="btnObO btnCurrent btnActive" goto="signinCurrent">Matricula Actual</a>
+		<a href="##" class="btnObO btnCurricula" goto="signinCurriculum">Matrículas por Currícula</a>
+		<a href="##" class="btnObO btnRealized" goto="signinRealized">Matrículas Realizadas</a>
+		<a href="##" class="btnObO btnMoreAboutMe" goto="info">Mas Acerca de Mi</a>
+	</div>
+
+	<div class="studentProfile_dataButtonsSide">
+		<div id="signinCurrent" class="dataContainer dataContainerActive"></div>
+		<div id="signinCurriculum" class="dataContainer"></div>
+		<div id="signinRealized" class="dataContainer"></div>
+		<div id="info" class="dataContainer"></div>
+	</div>
+<?php } ?>
+
 
 <script>
 	function imgError(image) {
@@ -68,7 +88,7 @@
 	}
 	$(function () {
 		//Actualizar perfil
-		var successProfile = $('#successProfile').val();
+		/*var successProfile = $('#successProfile').val();
 		if (successProfile == 'no') {
 			$('#alertCompleteProfile').removeClass('hidden');
 	    	$('#profileTab li:eq(3) a').tab('show');
@@ -77,7 +97,7 @@
 			$('html,body').animate({
 		        scrollTop: $("#profileTab").offset().top
 		    }, 500);
-		});
+		});*/
 		//--------------------------------------------------------------------------------------------------
 
 		//loadData

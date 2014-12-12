@@ -1,186 +1,288 @@
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-certificate"></span> Reporte Egresados');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
-<!-- <div class="row"> <br>
-	<div class="col-md-9 col-md-offset-1">
-		<blockquote>
-			<h2 class="text-muted">Reporte <span class="text-info">Egresados
-				<?php if ($this->schoolName): ?>
-					<?php echo $this->schoolName ?>
-				<?php elseif ($this->specialityName): ?>
-					<?php echo $this->specialityName ?>
-				<?php elseif ($this->facultyName): ?>
-					<?php echo $this->facultyName[0]['name'] ?>
-				<?php endif ?>
-			</span></h2>
-		</blockquote>
-	</div>
-	<div class="col-md-1">
-		<blockquote>
-			<h2><span class="glyphicon glyphicon-user text-info"></span></h2>
-		</blockquote>
-	</div>
-</div> -->
-<!-- <hr class="featurette-divider"> -->
-<div class="row">
-	<div id="Admin">
-		<div class="col-md-3 col-md-offset-2">
-			<h5 class="text-muted">Facultad</h5>
-				<select id="facid" class="form-control">
-					<option>Seleccione la Facultad</option>
-					<?php
-					if ($this->facultades) {
-						foreach ($this->facultades as $facultades) { 
-							$str = ($this->facid==$facultades['facid'])?"selected ":""; ?>
-							<option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
-						<?php
-						}
-					} ?>
-				</select>
-		</div>
-		<div class="col-md-3">
-			<h5 class="text-muted">Escuela</h5>
-				<select id="escid" class="form-control">
-					<option value="<?php echo $this->escid ?>">Seleccione la Escuela</option>
-				</select>
-		</div>
-	</div>
-	<?php if ($this->haveSpeciality == 'No'):
-		$classSpeciality = 'hidden';
-	else:	
-		$classSpeciality = '';
-	endif ?>
-	<div id="divSpecilaity" class="col-md-3 <?php echo $classSpeciality ?>">
-		<h5 class="text-muted">Especialidad</h5>
-			<select id="especialidad" class="form-control">
-				<option value="">Seleccione la Especialidad</option>
-			</select>
-	</div>
-</div>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-globe"></span> Reporte Egresados');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php $anio = date('Y'); 
+$dataVista = $this->dataVista;
+?>
+<style>
+	.etiqueta:hover{
+		color: red;
+	}
+	input[type="checkbox"] {
+
+		transform:scale(2,2);
+   		-ms-transform:scale(2,2); /* IE 9 */
+   		-moz-transform:scale(2,2); /* Firefox */
+   		-webkit-transform:scale(2,2); /* Safari and Chrome */
+   		-o-transform:scale(2,2); /* Opera */
+	}
+	hr{
+		color: red;
+	}
+	body{
+		z-index: 1;
+	}
+	#generate{
+		background-color: #3498DB;
+	}
+	#generate:hover{
+		background-color: #2980B9;
+	}
+	#report{
+		display: none;
+		position: absolute;
+		height: 50px;
+		width: 300px;
+		background-color: #9B59B6;
+		z-index: 5;
+		top: 100px;
+		left: 500px;
+	}
+</style>
+<input type="hidden" id="rol" value="<?php echo $dataVista['rid'] ?>">
+<input type="hidden" id="escid" value="<?php echo $dataVista['dataEscid'] ?>">
+<input type="hidden" id="periodCurrent" value="<?php echo ($dataVista['period']) ?>">
 
 <div class="row">
-	<br>
-	<div class="col-md-1 col-md-offset-2">
-		<h5 class="text-muted">Año</h5>
-			<select id="anho" class="form-control" style="width:100px">
-            	<option value="">Año</option>
-            	<?php for ($i=$this->anio;$i>=1965;$i--) { ?>
-              		<option value="<?php echo $i;?>"><?php echo $i;?></option>
-            	<?php }
-            	?>
-           	</select>
-	</div>
-	<div class="col-md-5">
-		<h5 class="text-muted">Periodo </h5> 
-			<select id="periodo_c" class="form-control">
-				<option value="">Primero seleccione un Año</option>
+<div class="col-md-2">
+		<p class=""><span class="glyphicon glyphicon-info-sign"></span> Seleccione Año y periodo	:</p>
+		</div>
+	<div class="form-group">
+		<div class='col-md-5'>
+			<select name="anio" id="selectAnio" class="form-control">
+				<?php for ($i=$anio; $i >= 1990; $i--) { ?>
+					<option value="<?php echo $i ?>"><?php echo $i ?></option>
+				<?php } ?>
 			</select>
-		<br>
-	</div>
-	<div class="col-md-1">
-		<br><br>
-		<div class="checkbox">
-		  	<h5 class="text-muted"><label>
-		    	<input id="totales" type="checkbox" value="N">
-		    	Totales
-		  	</label></h5>
+		</div>
+		<div class='col-md-5'>
+			<select id="selectPeriod" class="form-control">
+			</select>
 		</div>
 	</div>
-	<div class="col-md-2">
-		<br>
-		<h3 class="text-center"><a class="btn btn-success" href="#" id="generar"><span class="glyphicon glyphicon-send"></span> Generar</a></h3>
+</div>
+<hr>
+<?php if ($dataVista['rid'] === "RC") { ?>
+	<div class="row">
+		<div class="col-md-2">
+		<p class=""><span class="glyphicon glyphicon-info-sign"></span> Seleccione facultad y escuela:</p>
+		</div>
+		<div class="col-md-5 col1">
+			<select name="faculty" id="selectFaculty" class="form-control"> 
+				<option value="TODOFAC">TODAS LAS FACULTADES</option>
+				<?php foreach ($this->dataFaculty as $c => $faculty): ?>
+					<option value="<?php echo ($faculty['facid']) ?>" cod="<?php echo $faculty['facid'] ?>"><?php echo $faculty['name'] ?></option>
+				<?php endforeach ?>
+			</select>
+		</div>
+		<div class="col-md-5 col1">
+			<select name="school" id="selectSchool" class="form-control">
+				<option value="TODOESC">TODAS LAS ESCUELAS</option>
+			</select>
+		</div>
+		<div id="div-spec" style="display:none">
+			<select name="speciality" id="selectSpeciality" class="form-control">
+			</select>
+		</div>
 	</div>
-</div>
+	<hr>
+	<script>
+		$('#selectFaculty').on('change', function(){
+				facid = $(this).val();
+				reset();
+				if (facid=='TODOFAC') {
+					$('#selectSchool').html('<option value="TODOESC">TODAS LAS ESCUELAS</option>');
 
-<hr class="featurette-divider">
-<div id="buttons">
-
-</div>
-
-<div id="cargadatos"></div>
-<div id="graphic"></div>
-
-<script type="text/javascript">
-	
-
-	var rid="<?php echo $this->rid ?>";
-	if (rid=="DIREC") {
-		$("#Admin").addClass('hidden');
-		$('#divSpecilaity').addClass('col-md-offset-2');
-		var facid=$("#facid").val();
-		$("#escid").load("/graduated/reportgraduated/schools/facid/"+facid);
-		if (rid=="DIREC") {
-			$("#escid").attr("disabled",true);
-			var escid='<?php echo $this->escid?>';
-			$.get("/graduated/reportgraduated/speciality/escid/"+escid, function(data){
-				if (data == '<option value="">No tiene Especialidades</option>')
-					$('#divSpecilaity').addClass('hidden');
-				else
-					$('#especialidad').html(data);
+				}else{
+					$('#selectSchool').html('<option value="">Cargando...</option')
+				.load('/graduated/reportgraduated/schools/facid/'+facid);
+				};
 			});
-		};
-	}else if(rid == 'RF'){
-		if (rid == 'RF') {
-			$("#facid").attr("disabled",true);
-		};
-		var facid  = $("#facid").val();
-		$("#escid").load("/graduated/reportgraduated/schools/facid/"+facid);
-	};
-			
 
-	$("#facid").change(function(){
-		var facid=$(this).val();
-		$("#escid").load("/graduated/reportgraduated/schools/facid/"+facid);
-		if (facid=="TODO") {
-			var escid="TODOEC";
-			$("#especialidad").load("/graduated/reportgraduated/speciality/escid/"+escid);
-		};
+			$('#selectSchool').on('change', function(){
+				dataEscid = $(this).val();
+ 
+				if (dataEscid =='TODOESC') {
+					$('#selectSpeciality').html('');
+				}else{
+					var ajax_data = {
+						"escid" : dataEscid
+					};
+					$.ajax({
+						type : 'post',
+						url  : '/graduated/reportgraduated/speciality/',
+						data : ajax_data,
+						success: function(data){
+							if (data!='') {
+								$(".col1").removeClass('col-md-5').addClass('col-md-3');
+								$('#div-spec').attr('class','col-md-4').addClass('has-error').show("slow");
+								$('#selectSpeciality').html(data);
+							}else{
+								reset();
+								$('#selectSpeciality').html('');
+							};
+						}
+					});
+				};
+			});
+	</script>
+<?php } elseif($dataVista['rid'] === "RF"){ ?>
+<!-- vista de RF -->
+	<div class="row">
+		<select name="faculty" id="selectFaculty" class="hide"> 
+				<option value="<?php echo $dataVista['facid']; ?>"></option>
+		</select>
+		<div class="col-md-2">
+			<p><span class="glyphicon glyphicon-info-sign"></span> Seleccione una escuela para empezar:</p>
+		</div>
+		<div class="col-md-10 col2">
+			<select name="school" id="selectSchool" class="form-control">
+				<option value="TODOESC">**TODA LA FACULTAD**</option>
+				<?php foreach ($this->dataSchool as $c => $school): ?>
+					<option value="<?php echo $school['escid'] ?>"><?php echo $school['name'] ?></option>
+				<?php endforeach ?>
+			</select>
+		</div>
+		<div id="div-spec" style="display:none">
+			<select name="speciality" id="selectSpeciality" class="form-control">
+			</select>
+		</div>
+	</div>
+	<script>
+		$('#selectSchool').on('change', function(){
+				dataEscid = $(this).val();
+					var ajax_data = {
+						"escid" : dataEscid
+					};
+					$.ajax({
+						type : 'post',
+						url  : '/graduated/reportgraduated/speciality/',
+						data : ajax_data,
+						success: function(data){
+					if (data!='') {
+						$(".col2").removeClass('col-md-10').addClass('col-md-5');
+						$('#div-spec').attr('class','col-md-5').addClass('has-error').show("slow");
+						$('#selectSpeciality').html(data);
+					}else{
+						reset();
+					};
+				}
+			});
+		});
+	</script>
+<?php } else { ?>
+<!-- vista demas usuarios -->
+<div class="row hide" id="div-spec">
+	<div class="col-md-2">
+		<p><span class="glyphicon glyphicon-info-sign"></span> Seleccione una Especialidad:</p>
+	</div>
+
+	<select name="faculty" id="selectFaculty" class="hide"> 
+		<option value="<?php echo $dataVista['facid']; ?>"></option>
+	</select>
+	<select name="school" id="selectSchool" class="hide"> 
+		<option value="<?php echo $dataVista['escid']; ?>"></option>
+	</select>
+	<div class="col-md-10 has-error">
+		<select name="speciality" id="selectSpeciality" class="form-control"></select>
+	</div>
+</div>
+<hr/>
+
+<script>
+	$(function(){
+		var ajax_data = {
+			 	"escid" : "<?php echo $dataVista['escid'] ?>"
+			};
+			$.ajax({
+				type : 'post',
+				url  : '/graduated/reportgraduated/speciality/',
+				data : ajax_data,
+				success: function(data){
+					if (data!='') {
+						$('#div-spec').removeClass('hide').append("<hr>");
+						$('#selectSpeciality').html(data);
+					}else{
+						reset();
+					};
+				}
+			});
 	});
+</script>
+<?php } ?>
 
-	$("#escid").change(function(){
-		var escid=$(this).val();
-		$("#especialidad").load("/graduated/reportgraduated/speciality/escid/"+escid);
+<div class="row">
+    <div class="col-sm-4 col-sm-offset-2" style="height:34px; background:#2ECC71;">
+    	<div class="checkbox text-center">
+	        <label id="totales">
+			    <input id="totales-act" name="check-cantidad" type="checkbox">
+			   	<span class="glyphicon glyphicon-list"></span>  ¡Click Aqui! si desea un reporte en cantidades.
+			</label>
+    	</div>
+    </div>
+	<div class="col-sm-4">
+
+		<button class="btn form-control" type="button" id="generate" data-loading-text="Buscando..."><span class="glyphicon glyphicon-play-circle"></span> Generar</button>
+	</div>
+</div>
+<br/>
+<br/>
+<div id="report">
+</div>
+<div id="reporte" class="row"></div>
+<script>
+$(function(){
+	var rid       = $('#rol').val();
+	var period    = $('#periodCurrent').val();
+	var anio      = $('#selectAnio').val();
+	var facid     = '';
+	var dataEscid = $('#escid').val();
+	var data      = period + '-' + dataEscid;
+
+	$('#selectPeriod').html('<option>Cargando...</option>').load("/graduated/reportgraduated/periods/anio/"+anio);
+	$("#selectAnio").change(function(){
+		var anio = $(this).val();
+		var url = "/graduated/reportgraduated/periods/anio/"+anio;
+		$("#selectPeriod").load(url);
 	});
-
-	$("#anho").change(function(){
-	   	var anio = $(this).val();
-	   	var url = "/graduated/reportgraduated/periods/anio/"+anio;
-	   	$("#periodo_c").load(url);
-	});
-
-	$("#totales").click(function(){
-	   	var vall = $(this).val();
-	   	if (vall=="S") $(this).val('N');
-	   	else $(this).val('S');
-	});
-
-	$("#generar").click(function(){
-		var facid = $("#facid").val();
-		var escid = $("#escid").val();
-		var espec = $("#especialidad").val();
-		var anho = $("#anho").val();
-		var periodo = $("#periodo_c").val();
-		var xx = periodo.split(";--;");
-	    var perid = xx[0];
-	    var estado = xx[1];
-		if (facid=='' || escid=='' || perid=='') {
-			alert("Seleccione la Facultad, Escuela y el Periodo Académico.");
-			return false;
+	$('#generate').on( "click", function() {
+		var btn = $(this);
+		var dir;
+    	btn.button('loading');
+		var total    = document.getElementById("totales-act").checked;
+  		var perid    = document.getElementById("selectPeriod").value;
+  		var facidt   = document.getElementById("selectFaculty").value;
+  		var escidf   = document.getElementById("selectSchool").value;
+  		var espid    = document.getElementById("selectSpeciality").value;
+		var ajax_dat = {
+		 	"perid"		: perid,
+		 	"facid"			: facidt,
+		 	"escid"			: escidf,
+		 	"especialidad"	: espid
 		};
-		var totales = $("#totales").val();
-		if (totales=="N") {
-			var url="/graduated/reportgraduated/listgraduateds/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
-			$('#cargadatos').html("<br><center><img src='/img/spinner.gif'>Cargando...</center>");
-			$("#cargadatos").load(url);
-
-			var urlg="/graduated/graphicgraduated/graphics/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
-			$("#graphic").load(urlg);
-			$('#graphic').fadeOut('slow');
+		if (total==true) {
+			dir='/graduated/reportgraduated/totalgraduateds/';
 		}else{
-			var url="/graduated/reportgraduated/totalgraduateds/facid/"+facid+"/escid/"+escid+"/especialidad/"+espec+"/perid/"+perid+"/anho/"+anho;
-			$('#cargadatos').html("<br><center><img src='/img/spinner.gif'>Cargando...</center>");
-			$("#cargadatos").load(url);
-		}
-		
+			dir='/graduated/reportgraduated/listgraduateds/';
+		};
+		$.ajax({	
+			type : 'post',
+			url  : dir,
+			data : ajax_dat,
+			success: function(data){
+				$('#reporte').html(data);
+				btn.button('reset');
+			}
+		});
 	});
+});
+	
+function reset (argument) {
+	$('#div-spec').hide( 1000, function() {
+		$('#selectSpeciality').html("");
+		$(".col1").removeClass('col-md-3').addClass('col-md-5');
+		$(".col2").removeClass('col-md-5').addClass('col-md-10');
+		$('#report').html("");
+  	} );
 
+}
 </script>

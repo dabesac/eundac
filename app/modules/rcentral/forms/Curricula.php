@@ -2,7 +2,6 @@
 
 class Rcentral_Form_Curricula extends Zend_Form{    
     public function init(){
-
         $type_periods = new Zend_Form_Element_Select('type_periods');
         $type_periods   ->removeDecorator('Label')->removeDecorator("HtmlTag")
                         ->setRequired(true)

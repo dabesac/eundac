@@ -1,122 +1,133 @@
 <?php
 
-class Rcentral_Form_Course extends Zend_Form
+class Curricula_Form_Course extends Zend_Form
 {    
     public function init()
     {
-        $this->setName("frmcourse");
-
-        $courseid= new Zend_Form_Element_Text("courseid");
-        $courseid->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $courseid->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $courseid->setAttrib("maxlength", "10")->setAttrib("style","text-align:center");;
-        $courseid->setAttrib("class","input-mini");
-        $courseid->setAttrib("title","Codigo Curso");
+        $courseid = new Zend_Form_Element_Text("courseid");
+        $courseid   ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                    ->setRequired(true)
+                    ->addValidator('NotEmpty', true, array('messages' => 'Debe ingresar el código'))
+                    ->setAttribs(array( 
+                                        'class'       => 'form-control',
+                                        'title'       => 'Codigo de curso...',
+                                        'placeholder' => 'Código',
+                                        'maxlength'   => '10'));
         $this->addElement($courseid);
 
-
-        $semid = new Zend_Form_Element_Select('semid');
-        $semid->removeDecorator('Label')->removeDecorator("HtmlTag");
-        $semid->setAttrib("class","input-medium"); 
-        $semid->addMultiOption("","- Semestre-");
-        $bdsemestre = new Api_Model_DbTable_Semester();
-            $where=array('eid'=>'20154605046','oid'=>'1');
-            $order='semid asc';
-        $semestres= $bdsemestre->_getAll($where,$order);
-        foreach ($semestres as $semestre)
-        {
-            $semid->addMultiOption($semestre['semid'],$semestre['nombre_semestre']);
-        }
-        $this->addElement($semid);
-
-
-        $name= new Zend_Form_Element_Text("name");
-        $name->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $name->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $name->setAttrib("maxlength", "100");
-        $name->setAttrib("class","input-xlarge");
-        $name->setAttrib("title","Nombre del Curso");
+       
+        $name = new Zend_Form_Element_Text("name");
+        $name   ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                ->setRequired(true)
+                ->addValidator('NotEmpty', true, array('messages' => 'Debe ingresar el nombre'))
+                ->setAttribs(array( 
+                                    'class'       => 'form-control',
+                                    'maxlength'   => '150',
+                                    'title'       => 'Nombre del curso...',
+                                    'placeholder' => 'Nombre'));
         $this->addElement($name);
 
 
-        $req_1 = new Zend_Form_Element_Select('req_1');
-        $req_1->removeDecorator('Label')->removeDecorator("HtmlTag"); 
-        $req_1->setAttrib("class","input-xlarge");   
-        $req_1->addMultiOption("","- Seleccione 1er Prerequisito-");
-        $this->addElement($req_1);
+        $abbreviation = new Zend_Form_Element_Text("abbreviation");
+        $abbreviation ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                ->setRequired(true)
+                ->addValidator('NotEmpty', true, array('messages' => 'Debe ingresar el nombre abreviado'))
+                ->setAttribs(array(  
+                                    'class'       => 'form-control',
+                                    'maxlength'   => '30',
+                                    'title'       => 'Nombre abreviado del curso...',
+                                    'placeholder' => 'Nombre abreviado' ));
+        $this->addElement($abbreviation);
 
-
-        $req_2= new Zend_Form_Element_Select("req_2");
-        $req_2->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $req_2->setAttrib("class","input-xlarge");   
-        $req_2->addMultiOption("","- Selecione 2do Prerequisito -");
-        $this->addElement($req_2);
-
-        $req_3= new Zend_Form_Element_Select("req_3");
-        $req_3->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $req_3->setAttrib("class","input-xlarge");   
-        $req_3->addMultiOption("","- Selecione 3er Prerequisito -");
-        $this->addElement($req_3);
 
         $credits = new Zend_Form_Element_Text("credits");
-        $credits->removeDecorator('Label')->removeDecorator("HtmlTag");
-        $credits->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $credits->setAttrib("maxlength", "2")->setAttrib("style","text-align:center");;
-        $credits->setAttrib("class","input-mini");
-        $credits->setAttrib("title","Nro de Creditos");
+        $credits->removeDecorator('Label')->removeDecorator("HtmlTag")
+                ->setRequired(true)
+                ->addValidator('NotEmpty', true, array('messages' => 'Debe ingresar los creditos..'))
+                ->addValidator('Digits', true, array('messages' => 'La cantidad de créditos debe ser solo números ¬¬'))
+                ->setAttribs(array( 
+                                    'class'       => 'form-control',
+                                    'maxlength'   => '2',
+                                    'title'       => 'Créditos del curso...',
+                                    'placeholder' => 'Creditos' ));
         $this->addElement($credits);
 
-        $abbreviation = new Zend_Form_Element_Text("abbreviation");
-        $abbreviation->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $abbreviation->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $abbreviation->setAttrib("maxlength", "20");
-		$abbreviation->setAttrib("class","input-medium");
-        $abbreviation->setAttrib("title","Abreviatura del Curso");
-        $this->addElement($abbreviation);
-        
 
         $type = new Zend_Form_Element_Select('type');
-        $type->removeDecorator('Label')->removeDecorator("HtmlTag");
-        $type->setAttrib("class","input-medium");  
-        $type->addMultiOption("","- Tipo de Curso -");
-        $type->addMultiOption("O","Obligatorio");
-        $type->addMultiOption("E","Electivo");
+        $type   ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                ->setAttribs(array(
+                                    'class' => 'form-control',
+                                    'title' => 'Tipo de curso'))
+                ->addMultiOptions(array(
+                                        'O' => 'Obligatorio',
+                                        'E' => 'Electivo' ));
         $this->addElement($type);
-        
-        $state = new Zend_Form_Element_Select('state');
-        $state->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $state->setAttrib("class","input-small");
-        $state->addMultiOption("A","Activo");
-        $state->addMultiOption("I","Inactivo");
-        $this->addElement($state);
+
 
         $hours_theoretical = new Zend_Form_Element_Text("hours_theoretical");
-        $hours_theoretical->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $hours_theoretical->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $hours_theoretical->setAttrib("maxlength", "2")->setAttrib("style","text-align:center");;
-        $hours_theoretical->setAttrib("class","input-mini");
-        $hours_theoretical->setAttrib("title","Nro de Horas Teoricas");        
+        $hours_theoretical  ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                            ->setRequired(true)
+                            ->addValidator('NotEmpty', true, array('messages' => 'Debe ingresar las horas teóricas..'))
+                            ->addValidator('Digits', true, array('messages' => 'Las horas teóricas debe ser solo números ¬¬'))
+                            ->setAttribs(array( 
+                                                'class'       => 'form-control',
+                                                'maxlength'   => '2',
+                                                'title'       => 'Horas teóricas...',
+                                                'placeholder' => 'Horas teóricas' ));
         $this->addElement($hours_theoretical);
 
+
         $hours_practical = new Zend_Form_Element_Text("hours_practical");
-        $hours_practical->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $hours_practical->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $hours_practical->setAttrib("maxlength", "2")->setAttrib("style","text-align:center");;
-        $hours_practical->setAttrib("class","input-mini");
-        $hours_practical->setAttrib("title","Nro de Horas Practicas");
-        $this->addElement($hours_practical); 
-        
+        $hours_practical  ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                            ->setRequired(true)
+                            ->addValidator('NotEmpty', true, array('messages' => 'Debe ingresar las horas practicas..'))
+                            ->addValidator('Digits', true, array('messages' => 'Las horas practicas debe ser solo números ¬¬'))
+                            ->setAttribs(array( 
+                                                'class'       => 'form-control',
+                                                'maxlength'   => '2',
+                                                'title'       => 'Horas practicas...',
+                                                'placeholder' => 'Horas practicas' ));
+        $this->addElement($hours_practical);
+
+
+        $semid = new Zend_Form_Element_Select('semid');
+        $semid  ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                ->setRegisterInArrayValidator(false)
+                ->setRequired(true)
+                ->addValidator('NotEmpty', true, array('messages' => 'Debe ingresar un semestre...'))
+                ->setAttribs(array(
+                                    'class' => 'form-control',
+                                    'title' => 'Semestre')); 
+        $this->addElement($semid);
+
+
         $year_course = new Zend_Form_Element_Select('year_course');
-        $year_course->removeDecorator('Label')->removeDecorator("HtmlTag"); 
-        $year_course->setAttrib("class","input-mini")->setAttrib("style","text-align:center");; 
-        $year_course->addMultiOption("","- Año de Estudio-");
-        for ($i=1;$i<=6;$i++)
-        {
-            $year_course->addMultiOption($i,$i);
-        }
+        $year_course->removeDecorator('Label')->removeDecorator("HtmlTag")
+                    ->setAttribs(array(
+                                        'class' => 'form-control',
+                                        'title' => 'Semestre'))
+                    ->addMultiOptions(array(
+                                            '1' => 'Primer Año',
+                                            '2' => 'Segundo Año',
+                                            '3' => 'Tercer Año',
+                                            '4' => 'Cuarto Año',
+                                            '5' => 'Quinto Año',
+                                            '6' => 'Sexto Año' )); 
         $this->addElement($year_course);
 
-        $course_equivalence= new Zend_Form_Element_Select("course_equivalence");
+
+        $state = new Zend_Form_Element_Select('state');
+        $state  ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                ->setAttribs(array(
+                                    'class' => 'form-control',
+                                    'title' => 'Estado de curso'))
+                ->addMultiOptions(array(
+                                        'A' => 'Activo',
+                                        'I' => 'Inactivo' ));
+        $this->addElement($state);
+
+        //Para los cursos de equivalencia me dare una fumada todavia :3
+        /*$course_equivalence = new Zend_Form_Element_Select("course_equivalence");
         $course_equivalence->removeDecorator('Label')->removeDecorator("HtmlTag");  
         $course_equivalence->setAttrib("class","input-xlarge");   
         $course_equivalence->addMultiOption("","- Selecione Curso Equivalente -");
@@ -126,7 +137,7 @@ class Rcentral_Form_Course extends Zend_Form
         $course_equivalence_2->removeDecorator('Label')->removeDecorator("HtmlTag"); 
         $course_equivalence_2->setAttrib("class","input-xlarge");    
         $course_equivalence_2->addMultiOption("","- Selecione Curso Convalidacion -");
-        $this->addElement($course_equivalence_2);
+        $this->addElement($course_equivalence_2);*/
 
     }
 }

@@ -1,0 +1,97 @@
+<?php 
+	$dataView = $this->dataView;
+	$form     = $dataView['form_course'];
+ ?>
+
+<header>
+	<p><span class="glyphicon glyphicon-info-sign"></span> Complete los campos necesarios para agregar el curso...</p>
+</header>
+<section>
+	<form id="form_add_new_course">
+		<input type="hidden" name="id" value="<?php echo $dataView['id'] ?>">
+		<div class="thre_input">
+			<div>
+				<?php echo $form->courseid ?>
+			</div>
+			<div>
+				<?php echo $form->name ?>
+			</div>
+			<div>
+				<?php echo $form->abbreviation ?>
+			</div>
+		</div>
+		
+		<div class="two_sides">
+			<div class="side_one">
+				<div class="two_inputs">
+					<div>
+						<p>Tipo de Curso</p>
+						<?php echo $form->type ?>
+					</div>
+					<div>
+						<p>Créditos</p>
+						<?php echo $form->credits ?>
+					</div>
+				</div>
+
+				<div class="two_inputs">
+					<div class="two_inputs_min">
+						<div>
+							<p>Horas Teoricas</p>
+							<?php echo $form->hours_theoretical ?>
+						</div>
+						<div>
+							<p>Horas Practicas</p>
+							<?php echo $form->hours_practical ?>
+						</div>
+					</div>
+					<div>
+						<?php if ($dataView['type'] == 'S'): ?>
+							<p>Semestre</p>
+						<?php elseif ($dataView['type'] == 'A'): ?>
+							<p>Ciclo</p>
+						<?php endif ?>
+						<?php if ($dataView['periods']): ?>
+							<?php for($c=1; $c<=$dataView['periods']; $c++): ?>
+								<?php $form->semid->addMultiOption($c, $c) ?>
+							<?php endfor ?>
+						<?php else: ?>
+							<?php $form->semid->addMultiOption('', 'Agregue una cantidad de periódos a esta curricula...') ?>
+						<?php endif ?>
+						<?php echo $form->semid ?>
+					</div>
+				</div>		
+			</div>
+			<div class="side_two">
+				<header>
+					<p>Prerequisitos</p>
+				</header>
+				<section class="select_pre">
+					<select class="form-control">
+						<option value="">Agregue prerequisitos...</option>
+					</select>
+					<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
+				</section>
+				<section class="prerequisites">
+					<!-- <article>
+						<p>Curso 1</p>
+						<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
+					</article>
+					<article>
+						<p>Curso 2</p>
+						<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
+					</article>
+					<article>
+						<p>Curso 3</p>
+						<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
+					</article> -->
+				</section>
+			</div>
+		</div>
+
+		<div class="submit_side">
+			<input type="submit" class="btn btn-success form-control" value="Agregar Curso">
+		</div>
+		
+	</form>
+</section>

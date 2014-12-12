@@ -2,15 +2,24 @@ $(function(){
 	var dataGet    = '';
 	var curriculum = curriculum();
 
-	$('#selectFaculty').on('change', function(){
-		dataGet = $(this).val();
-		curriculum.chargeSchools(dataGet);
-	});
+	//Rol
+	var rol = $('#rol').val();
 
-	$('#selectSchool').on('change', function(){
-		dataGet = $(this).val();
+	if (rol == 'RC') {
+		$('#selectFaculty').on('change', function(){
+			dataGet = $(this).val();
+			curriculum.chargeSchools(dataGet);
+		});
+
+		$('#selectSchool').on('change', function(){
+			dataGet = $(this).val();
+			curriculum.chargeCurriculums(dataGet);
+		});
+	}else if (rol == 'DR'){
+		dataGet = $('#school').val();
 		curriculum.chargeCurriculums(dataGet);
-	});
+	};
+
 
 	//Closure curriculum
 	function curriculum(){
@@ -55,9 +64,11 @@ $(function(){
 		        };
 		    });
 
-		    $('html body').animate({
-				scrollTop : $('#selectFaculty').offset().top
-			});
+			if (rol == 'RC') {
+			    $('html body').animate({
+					scrollTop : $('#selectFaculty').offset().top
+				});
+			};
 
 		}
 
@@ -103,6 +114,8 @@ $(function(){
 
 			//Detalle de Curricula
 			$(btn_detail_cur).on('click', function(){
+				cleanOfAlerts();
+
 				idGet = $(this).attr('ide');
 				idJs  = $(this).attr('idjs');
 				$('#dataDetailCur')
@@ -304,7 +317,7 @@ $(function(){
 			};
 		}
 
-		//tmre ya no se me ocurren combres D:
+		//tmre ya no se me ocurren nombres D:
 		function iCallYou(why_call_me, idGet, idJs){
 			$.ajax({
 				url  : '/curricula/curricula/icallyou',
@@ -621,9 +634,16 @@ $(function(){
 
 		function view_adminCurriculum(idGet, idCur){
 			//Función de botones
+			//Editar
 			$('#detailCur_btnEditCur').on('click', function(){
 				$('#idDivDetailCurricula, #idHeaderDetail').fadeOut('fast', function(){
 					$('#idDivEditCurriculum, #idHeaderEdit').fadeIn('fast');
+				});
+			});
+
+			$('#detailCur_btnAdminCourses').on('click', function(){
+				$('#idDivDetailCurricula, #idHeaderDetail').fadeOut('fast', function(){
+					$('#idDivAdminCourses, #idHeaderAdmin').fadeIn('fast');
 				});
 			});
 
@@ -633,10 +653,11 @@ $(function(){
 				});
 			});
 
-			$('#detailCur_btnAdminCourses').on('click', function(){
-				console.log('Administrar cursos')
+			$('#detailCur_courses_btnBackToDetail').on('click', function(){
+				$('#idDivAdminCourses, #idHeaderAdmin').fadeOut('fast', function(){
+					$('#idDivDetailCurricula, #idHeaderDetail').fadeIn('fast');
+				});
 			});
-
 
 			//Cargar Detalle de curricula
 			$('#idDivDetailCurricula')
@@ -652,11 +673,16 @@ $(function(){
 					view_editCurriculum(idGet, idJs);
 				});
 
+			//Cargar administracion de Cursos
+			$('#idDivAdminCourses')
+				.html('<br><br><br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+				.load('/curricula/curricula/admincourses/id/' + idGet, function(){
+					view_adminCourses(idGet, idJs);
+				});
 		}
 
 		function view_detailCurriculum(){
-			//Para proximas acciones en esta vista
-			console.log('para proximas acciones en esta vista, programar aqui :D');
+			//Para proximas acciones en esta vista agregar codigo aca
 		}
 
 		function view_editCurriculum(idGet, idJs){
@@ -711,6 +737,57 @@ $(function(){
 				btnSubmit
 					.removeAttr('disabled')
 					.val('Guardar');
+			});
+		}
+
+		function view_adminCourses(){
+			$('section.new_course').load('/curricula/curricula/newcourse/id/' + idGet, function(){
+				addCourse();
+			});
+
+			$('#btn_add_course').on('click', function(){
+				if (!$('#id_add_new_course').hasClass('new_course_active')) {
+					$(this)
+						.addClass('btn_cancel')
+						.html('Cancelar');
+					$(this).parent().parent().addClass('header_active');
+					$('#id_add_new_course')
+						.removeClass('new_course_hide')
+						.addClass('new_course_active');
+				}else {
+					$(this)
+						.removeClass('btn_cancel')
+						.html('Agregar Curso');
+					$(this).parent().parent().removeClass('header_active');
+					$('#id_add_new_course')
+						.removeClass('new_course_active')
+						.addClass('new_course_hide');
+
+					setTimeout(function(){
+						$('#id_add_new_course')
+							.removeClass('new_course_hide')
+					}, 300);
+				};
+			});
+
+		}
+
+		function addCourse(){
+			$('#form_add_new_course').on('submit', function(e){
+				e.preventDefault();
+
+				$.ajax({
+					type     : 'post',
+					url      : '/curricula/curricula/savecourse',
+					data     : $(this).serialize(),
+					//dataType : 'json',
+					success  : function(data){
+						console.log(data);
+					},
+					error : function(){
+						console.log('Error al guardar el curso, mas fijo que sea en la base de datos...')
+					}
+				})
 			});
 		}
 

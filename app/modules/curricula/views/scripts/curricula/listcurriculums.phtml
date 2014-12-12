@@ -10,23 +10,28 @@
 			</select>
 		</div>
 	</div>
-	<div class="headerNew">
-		<p><span class="glyphicon glyphicon-info-sign"></span> Administre todas las curriculas pertenecientes a esta especialidad...</p>
-		<a href="##" id="btnNewModal" class="btn btn-success" data-toggle="modal" data-target="#modalNewCur">Nueva Currícula</a>
-	</div>
+	<?php if ($dataView['rid'] == 'RC'): ?>
+		<div class="headerNew">
+			<p><span class="glyphicon glyphicon-info-sign"></span> Administre todas las curriculas pertenecientes a esta especialidad...</p>
+			<a href="##" id="btnNewModal" class="btn btn-success" data-toggle="modal" data-target="#modalNewCur">Nueva Currícula</a>
+		</div>
+	<?php endif ?>
 <?php else: ?>
 	<input type="hidden" id="selectSpeciality" value="<?php echo $dataView['dataCurriculums'][0]['code'] ?>">
-	<div class="headerNew">
-		<p><span class="glyphicon glyphicon-info-sign"></span> Administre todas las curriculas pertenecientes a esta escuela...</p>
-		<a href="##" id="btnNewModal" class="btn btn-success" data-toggle="modal" data-target="#modalNewCur">Nueva Currícula</a>
-	</div>
+	<?php if ($dataView['rid'] == 'RC'): ?>
+		<div class="headerNew">
+			<p><span class="glyphicon glyphicon-info-sign"></span> Administre todas las curriculas pertenecientes a esta escuela...</p>
+			<a href="##" id="btnNewModal" class="btn btn-success" data-toggle="modal" data-target="#modalNewCur">Nueva Currícula</a>
+		</div>
+	<?php endif ?>
 <?php endif ?>
+
 <?php if ($dataView['dataCurriculums']): ?>
 	<?php foreach ($dataView['dataCurriculums'] as $cS => $school): ?>
 		<div id="curriculums<?php echo $school['code'] ?>" class="curriculums" hidden>
 			<span hidden><?php echo $school['code'] ?></span>
 			<!-- Curriculas en Borrador -->
-			<?php if ($school['draft']): ?>
+			<?php if ($school['draft'] and $dataView['rid'] == 'RC'): ?>
 				<?php $curriculumDrafts = $school['draft'] ?>
 				<div class="main main_draft">
 					<p class="draftP"><span class="glyphicon glyphicon-exclamation-sign"></span> Tiene Currículas en Borrador, haga algo con estos...</p>
@@ -139,41 +144,50 @@
 								<span><?php echo $c + 1 ?></span>
 								<span><?php echo $curriculum['name'] ?> <small><?php echo $curriculum['curid'] ?></small></span>
 								<span>Año <?php echo $curriculum['year'] ?></span>
-								<div class="modify temporary_modify">
-									<a href="##">Administrar Cursos</a>
-									<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php echo $idJS ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
-									<a href="##" class="btn_derive" ide="<?php echo $curriculum['id'] ?>" goto="<?php echo $idJS ?>">Derivar</a>
+								<?php if ($dataView['rid'] == 'RC'): ?>
+									<div class="modify temporary_modify">
+										<a href="##">Administrar Cursos</a>
+										<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php echo $idJS ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+										<a href="##" class="btn_derive" ide="<?php echo $curriculum['id'] ?>" goto="<?php echo $idJS ?>">Derivar</a>
 
-									<div class="derive_from_draft" fromto="<?php echo $idJS ?>">
-										<a href="##" type="active">Activar Curricula</a>
-										<a href="##" type="close">Cerrar Curricula</a>
+										<div class="derive_from_draft" fromto="<?php echo $idJS ?>">
+											<a href="##" type="active">Activar Curricula</a>
+											<a href="##" type="close">Cerrar Curricula</a>
+										</div>
+									</div>
+								<?php elseif ($dataView['rid'] == 'DR'): ?>
+									<div class="modify active_modify">
+										<a href="##">Ver Cursos</a>
+										<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php echo $idJS ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+									</div>
+								<?php endif ?>
+							</div>
+							
+							<?php if ($dataView['rid'] == 'RC'): ?>
+								<!--Alertas Curricula Temporales-->
+								<div id="curriculum_confirm<?php echo $idJS ?>" fromto="<?php echo $idJS ?>" class="confirms_side">
+									<div class="confirm_side delete_curriculum" type="delete">
+										<p>Confírme si desea eliminar esta currícula...</p>
+										<a href="##" whycallme="D">Si, quiero eliminarla</a>
+										<a href="##">Cancelar</a>
+									</div>
+									<div class="confirm_side active_curriculum" type="active">
+										<p>Confírme si desea activar esta currícula, si hay otra activa ésta la remplazara...</p>
+										<a href="##" whycallme="A">Si, quiero activarla</a>
+										<a href="##">Cancelar</a>
+									</div>
+									<div class="confirm_side temporary_curriculum" type="temporary">
+										<p>Confírme si desea mover esta currícula a temporales...</p>
+										<a href="##" whycallme="T">Si, quiero moverla a temporales</a>
+										<a href="##">Cancelar</a>
+									</div>
+									<div class="confirm_side close_curriculum" type="close">
+										<p>Confírme si desea cerrar esta currícula...</p>
+										<a href="##" whycallme="C">Si, quiero cerrarla</a>
+										<a href="##">Cancelar</a>
 									</div>
 								</div>
-							</div>
-
-							<!--Alertas Curricula Temporales-->
-							<div id="curriculum_confirm<?php echo $idJS ?>" fromto="<?php echo $idJS ?>" class="confirms_side">
-								<div class="confirm_side delete_curriculum" type="delete">
-									<p>Confírme si desea eliminar esta currícula...</p>
-									<a href="##" whycallme="D">Si, quiero eliminarla</a>
-									<a href="##">Cancelar</a>
-								</div>
-								<div class="confirm_side active_curriculum" type="active">
-									<p>Confírme si desea activar esta currícula, si hay otra activa ésta la remplazara...</p>
-									<a href="##" whycallme="A">Si, quiero activarla</a>
-									<a href="##">Cancelar</a>
-								</div>
-								<div class="confirm_side temporary_curriculum" type="temporary">
-									<p>Confírme si desea mover esta currícula a temporales...</p>
-									<a href="##" whycallme="T">Si, quiero moverla a temporales</a>
-									<a href="##">Cancelar</a>
-								</div>
-								<div class="confirm_side close_curriculum" type="close">
-									<p>Confírme si desea cerrar esta currícula...</p>
-									<a href="##" whycallme="C">Si, quiero cerrarla</a>
-									<a href="##">Cancelar</a>
-								</div>
-							</div>
+							<?php endif ?>
 						<?php endforeach ?>
 						<div class="empty empty_message elseClose">
 							<p><span class="glyphicon glyphicon-exclamation-sign"></span> No hay curriculas temporales...</p>
