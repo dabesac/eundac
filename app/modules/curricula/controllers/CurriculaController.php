@@ -843,9 +843,10 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
+        $uid = $this->sesion->uid;
 
         $formData = $this->getRequest()->getPost();
-        print_r($formData);
+        //print_r($formData);
 
         //form para validar
         $form_course = new Curricula_Form_Course();
@@ -856,9 +857,8 @@ class Curricula_CurriculaController extends Zend_Controller_Action
             $escid = $ids[1];
             $subid = $ids[2];
 
-            //$year = round($semid/2);
-            //print_r($year);
 
+        $year = round($formData['semid']/2);
             $dataSave = array(
                                 'eid'               => $eid,
                                 'oid'               => $oid,
@@ -872,7 +872,11 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                                 'type'              => $formData['type'],
                                 'hours_theoretical' => $formData['hours_theoretical'],
                                 'hours_practical'   => $formData['hours_practical'],
-                                'state'             => 'A' );
+                                'year_course'       => round($formData['semid']/2),
+                                'state'             => 'A',
+                                'register'          => $uid,
+                                'created'           => date('Y-m-d h:i:s') );
+            print_r($dataSave);
         }else{
             $cError = 0;
             $error['isEmpty']   = array();
@@ -887,7 +891,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                 $cError++;
             }
         }
-        print_r($result);
+        //print_r($result);
     }
 
     public function printAction(){

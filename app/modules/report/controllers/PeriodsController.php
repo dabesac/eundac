@@ -29,7 +29,8 @@
         $dataVista['subid']     = $subid;
         $dataVista['dataEscid'] = base64_encode($escid.'|'.$subid);
 
-        if ($rid == 'RF' or 'DF') {
+
+        if ($rid == 'RF' or $rid == 'DF') {
             $dataVista['dataEscid']  = '';
 
             $where = array( 'eid'    => $eid,
