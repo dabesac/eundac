@@ -486,10 +486,18 @@ class Record_IndexController extends Zend_Controller_Action {
 											$info_teacher['first_name'];
 
 	        $speciality = $base_speciality ->_getOne($where);
+
+            $where ['facid'] = $speciality['facid'];
+            $name_faculty = $base_faculty->_getOne($where);
+            if($speciality['is_faculty'] == "T"){
+                $namef = strtoupper($name_faculty['previous_name']);                
+            }else{
+                $namef = strtoupper($name_faculty['name']); 
+            }
 	          
-			$where ['facid'] = $speciality['facid'];
+			/*$where ['facid'] = $speciality['facid'];
 			$name_faculty = $base_faculty->_getOne($where);
-			$namef = strtoupper($name_faculty['name']);
+			$namef = strtoupper($name_faculty['name']);*/          
 
 	        $parent=$speciality['parent'];
 	        $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
@@ -499,8 +507,7 @@ class Record_IndexController extends Zend_Controller_Action {
 	            $pala='ESPECIALIDAD DE ';
 	            $spe['esc']=$parentesc['name'];
 	            $spe['parent']=$pala.$speciality['name'];
-	        }
-	        else{
+	        }else{
 	            $spe['esc']=$speciality['name'];
 	            $spe['parent']='';  
 	        }
@@ -656,12 +663,18 @@ class Record_IndexController extends Zend_Controller_Action {
 				$info_speciality['speciality'] = $name_speciality['name'];
 			}
 
+            $where ['facid'] = $info_speciality['facid'];
+            $name_faculty = $base_faculty->_getOne($where);
 
-			$where ['facid'] = $info_speciality['facid'];
+            if ($info_speciality['is_faculty'] == "T") {
+                $info_speciality['name_faculty'] = $name_faculty['previous_name'];
+            }else{
+                $info_speciality['name_faculty'] = $name_faculty['name'];
+            }
+			/*$where ['facid'] = $info_speciality['facid'];
 			$name_faculty = $base_faculty->_getOne($where);
-			$info_speciality['name_faculty'] = $name_faculty['name'];
+			$info_speciality['name_faculty'] = $name_faculty['name'];*/
 
-			
 			$this->view->info_speciality = $info_speciality;
 			$this->view->info_couser = $info_couser;
 			$this->view->students=$data_students;
@@ -843,10 +856,16 @@ class Record_IndexController extends Zend_Controller_Action {
 				$info_speciality['speciality'] = $name_speciality['name'];
 			}
 
-
-			$where ['facid'] = $info_speciality['facid'];
+            $where ['facid'] = $info_speciality['facid'];
+            $name_faculty = $base_faculty->_getOne($where);
+            if ($info_speciality['is_faculty'] == "T") {
+                $info_speciality['name_faculty'] = $name_faculty['previous_name'];
+            }else{
+                $info_speciality['name_faculty'] = $name_faculty['name'];
+            }
+			/*$where ['facid'] = $info_speciality['facid'];
 			$name_faculty = $base_faculty->_getOne($where);
-			$info_speciality['name_faculty'] = $name_faculty['name'];
+			$info_speciality['name_faculty'] = $name_faculty['name'];*/
 
 			
 			$this->view->info_speciality = $info_speciality;
@@ -961,10 +980,16 @@ class Record_IndexController extends Zend_Controller_Action {
 				$info_speciality['speciality'] = $name_speciality['name'];
 			}
 
-
-			$where ['facid'] = $info_speciality['facid'];
+            $where ['facid'] = $info_speciality['facid'];
+            $name_faculty = $base_faculty->_getOne($where);
+            if ($info_speciality['is_faculty'] == "T") {
+                $info_speciality['name_faculty'] = $name_faculty['previous_name'];
+            }else{
+                $info_speciality['name_faculty'] = $name_faculty['name'];
+            }
+			/*$where ['facid'] = $info_speciality['facid'];
 			$name_faculty = $base_faculty->_getOne($where);
-			$info_speciality['name_faculty'] = $name_faculty['name'];
+			$info_speciality['name_faculty'] = $name_faculty['name'];*/
 
 			
 			$this->view->info_speciality = $info_speciality;
@@ -1234,10 +1259,16 @@ class Record_IndexController extends Zend_Controller_Action {
 				$info_speciality['speciality'] = $name_speciality['name'];
 			}
 
-
-			$where ['facid'] = $info_speciality['facid'];
+            $where ['facid'] = $info_speciality['facid'];
+            $name_faculty = $base_faculty->_getOne($where);
+            if ($info_speciality['is_faculty'] == "T") {
+                $info_speciality['name_faculty'] = $name_faculty['previous_name'];
+            }else{
+                $info_speciality['name_faculty'] = $name_faculty['name'];
+            }
+			/*$where ['facid'] = $info_speciality['facid'];
 			$name_faculty = $base_faculty->_getOne($where);
-			$info_speciality['name_faculty'] = $name_faculty['name'];
+			$info_speciality['name_faculty'] = $name_faculty['name'];*/
 
 			
 			$this->view->info_speciality = $info_speciality;
@@ -1410,10 +1441,16 @@ class Record_IndexController extends Zend_Controller_Action {
 				$info_speciality['speciality'] = $name_speciality['name'];
 			}
 
-
-			$where ['facid'] = $info_speciality['facid'];
+            $where ['facid'] = $info_speciality['facid'];
+            $name_faculty = $base_faculty->_getOne($where);
+            if ($info_speciality['is_faculty'] != "T") {
+                $info_speciality['name_faculty'] = $name_faculty['previous_name'];
+            }else{
+                $info_speciality['name_faculty'] = $name_faculty['name'];
+            }
+			/*$where ['facid'] = $info_speciality['facid'];
 			$name_faculty = $base_faculty->_getOne($where);
-			$info_speciality['name_faculty'] = $name_faculty['name'];
+			$info_speciality['name_faculty'] = $name_faculty['name'];*/
 
 			
 			$this->view->info_speciality = $info_speciality;
@@ -1518,10 +1555,16 @@ class Record_IndexController extends Zend_Controller_Action {
 				$info_speciality['speciality'] = $name_speciality['name'];
 			}
 
-
-			$where ['facid'] = $info_speciality['facid'];
+            $where ['facid'] = $info_speciality['facid'];
+            $name_faculty = $base_faculty->_getOne($where);
+            if ($info_speciality['is_faculty'] != "T") {
+                $info_speciality['name_faculty'] = $name_faculty['previous_name'];
+            }else{
+                $info_speciality['name_faculty'] = $name_faculty['name'];
+            }
+			/*$where ['facid'] = $info_speciality['facid'];
 			$name_faculty = $base_faculty->_getOne($where);
-			$info_speciality['name_faculty'] = $name_faculty['name'];
+			$info_speciality['name_faculty'] = $name_faculty['name'];*/
 
 			
 			$this->view->info_speciality = $info_speciality;

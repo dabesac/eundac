@@ -18,7 +18,7 @@ class Distribution_Form_Distribution extends Zend_Form{
         $where = array(
                         'eid'  => $eid,
                         'oid'  => $oid,
-                        'year' => 14 );
+                        'year' => 14 ;
 
         $periods = $periodsDb->_getPeriodsxYears($where);
         foreach ($periods as $period) {
