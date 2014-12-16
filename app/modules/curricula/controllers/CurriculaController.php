@@ -813,7 +813,10 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
 
-        $ids = explode('_', base64_decode($this->_getParam('id')));
+        $ids = $this->_getParam('id');
+        $dataView['id'] = $ids;
+
+        $ids = explode('_', base64_decode($ids));
         $curid = $ids[0];
         $escid = $ids[1];
         $subid = $ids[2];
@@ -833,6 +836,62 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $dataView['form_course'] = $form_course;
 
         $this->view->dataView = $dataView;
+    }
+
+    public function savecourseAction(){
+        $this->_helper->layout()->disableLayout();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $uid = $this->sesion->uid;
+
+        $formData = $this->getRequest()->getPost();
+        //print_r($formData);
+
+        //form para validar
+        $form_course = new Curricula_Form_Course();
+
+        if ($form_course->isValid($formData)) {
+            $ids = explode('_', base64_decode($formData['id']));
+            $curid = $ids[0];
+            $escid = $ids[1];
+            $subid = $ids[2];
+
+
+        $year = round($formData['semid']/2);
+            $dataSave = array(
+                                'eid'               => $eid,
+                                'oid'               => $oid,
+                                'curid'             => $curid,
+                                'escid'             => $escid,
+                                'subid'             => $subid,
+                                'courseid'          => $formData['courseid'],
+                                'semid'             => $formData['semid'],
+                                'name'              => $formData['name'],
+                                'abbreviation'      => $formData['abbreviation'],
+                                'type'              => $formData['type'],
+                                'hours_theoretical' => $formData['hours_theoretical'],
+                                'hours_practical'   => $formData['hours_practical'],
+                                'year_course'       => round($formData['semid']/2),
+                                'state'             => 'A',
+                                'register'          => $uid,
+                                'created'           => date('Y-m-d h:i:s') );
+            print_r($dataSave);
+        }else{
+            $cError = 0;
+            $error['isEmpty']   = array();
+            $error['notDigits'] = array();
+            foreach ($form_course->getMessages() as $tipeError) {
+                foreach ($tipeError as $error) {
+                    $result['errors'][$cError] = $error;
+                }
+                if ($cError == 2) {
+                    break;
+                }
+                $cError++;
+            }
+        }
+        //print_r($result);
     }
 
     public function printAction(){

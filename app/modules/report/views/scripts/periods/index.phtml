@@ -31,7 +31,7 @@
 	</div>
 </div>
 	
-<?php if ($dataVista['rid'] == 'RF'): ?>
+<?php if ($dataVista['rid'] == 'RF' or $dataVista['rid'] == 'DF'): ?>
 	<div class="registroFacultadSide">
 		<p class="rfObO parrafoRF"><span class="glyphicon glyphicon-info-sign"></span> Seleccione una escuela para empezar:</p>
 		<div class="rfObO selectSchool">
@@ -107,7 +107,7 @@
 		if (rid == 'DR') {
 			$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
 												.load('/report/periods/listteacher/data/' + data);
-		}else if (rid == 'RF'){
+		}else if (rid == 'RF' || rid === 'DF'){
 			$('#selectSchool').on('change', function(){
 				dataEscid = $(this).val();
 				if (dataEscid) {

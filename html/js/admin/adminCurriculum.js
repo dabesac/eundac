@@ -317,7 +317,7 @@ $(function(){
 			};
 		}
 
-		//tmre ya no se me ocurren combres D:
+		//tmre ya no se me ocurren nombres D:
 		function iCallYou(why_call_me, idGet, idJs){
 			$.ajax({
 				url  : '/curricula/curricula/icallyou',
@@ -682,8 +682,7 @@ $(function(){
 		}
 
 		function view_detailCurriculum(){
-			//Para proximas acciones en esta vista
-			console.log('para proximas acciones en esta vista, programar aqui :D');
+			//Para proximas acciones en esta vista agregar codigo aca
 		}
 
 		function view_editCurriculum(idGet, idJs){
@@ -742,13 +741,54 @@ $(function(){
 		}
 
 		function view_adminCourses(){
-			console.log('Acciones para administrar los cursos listas');
-			$('section.new_course').load('/curricula/curricula/newcourse/id/' + idGet);
+			$('section.new_course').load('/curricula/curricula/newcourse/id/' + idGet, function(){
+				addCourse();
+			});
+
+			$('#btn_add_course').on('click', function(){
+				if (!$('#id_add_new_course').hasClass('new_course_active')) {
+					$(this)
+						.addClass('btn_cancel')
+						.html('Cancelar');
+					$(this).parent().parent().addClass('header_active');
+					$('#id_add_new_course')
+						.removeClass('new_course_hide')
+						.addClass('new_course_active');
+				}else {
+					$(this)
+						.removeClass('btn_cancel')
+						.html('Agregar Curso');
+					$(this).parent().parent().removeClass('header_active');
+					$('#id_add_new_course')
+						.removeClass('new_course_active')
+						.addClass('new_course_hide');
+
+					setTimeout(function(){
+						$('#id_add_new_course')
+							.removeClass('new_course_hide')
+					}, 300);
+				};
+			});
 
 		}
 
 		function addCourse(){
+			$('#form_add_new_course').on('submit', function(e){
+				e.preventDefault();
 
+				$.ajax({
+					type     : 'post',
+					url      : '/curricula/curricula/savecourse',
+					data     : $(this).serialize(),
+					//dataType : 'json',
+					success  : function(data){
+						console.log(data);
+					},
+					error : function(){
+						console.log('Error al guardar el curso, mas fijo que sea en la base de datos...')
+					}
+				})
+			});
 		}
 
 		return {

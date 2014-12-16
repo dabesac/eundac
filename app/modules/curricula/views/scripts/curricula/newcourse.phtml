@@ -7,9 +7,8 @@
 	<p><span class="glyphicon glyphicon-info-sign"></span> Complete los campos necesarios para agregar el curso...</p>
 </header>
 <section>
-	<form>
-		<input type="hidden" name="type" value="<?php echo $dataView['type'] ?>">
-
+	<form id="form_add_new_course">
+		<input type="hidden" name="id" value="<?php echo $dataView['id'] ?>">
 		<div class="thre_input">
 			<div>
 				<?php echo $form->courseid ?>
@@ -30,6 +29,23 @@
 						<?php echo $form->type ?>
 					</div>
 					<div>
+						<p>Créditos</p>
+						<?php echo $form->credits ?>
+					</div>
+				</div>
+
+				<div class="two_inputs">
+					<div class="two_inputs_min">
+						<div>
+							<p>Horas Teoricas</p>
+							<?php echo $form->hours_theoretical ?>
+						</div>
+						<div>
+							<p>Horas Practicas</p>
+							<?php echo $form->hours_practical ?>
+						</div>
+					</div>
+					<div>
 						<?php if ($dataView['type'] == 'S'): ?>
 							<p>Semestre</p>
 						<?php elseif ($dataView['type'] == 'A'): ?>
@@ -44,17 +60,6 @@
 						<?php endif ?>
 						<?php echo $form->semid ?>
 					</div>
-				</div>
-
-				<div class="two_inputs">
-					<div>
-						<p>Horas Teoricas</p>
-						<?php echo $form->hours_theoretical ?>
-					</div>
-					<div>
-						<p>Horas Practicas</p>
-						<?php echo $form->hours_practical ?>
-					</div>
 				</div>		
 			</div>
 			<div class="side_two">
@@ -62,13 +67,13 @@
 					<p>Prerequisitos</p>
 				</header>
 				<section class="select_pre">
-					<select name="_" class="form-control">
+					<select class="form-control">
 						<option value="">Agregue prerequisitos...</option>
 					</select>
 					<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
 				</section>
 				<section class="prerequisites">
-					<article>
+					<!-- <article>
 						<p>Curso 1</p>
 						<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
 					</article>
@@ -79,13 +84,13 @@
 					<article>
 						<p>Curso 3</p>
 						<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
-					</article>
+					</article> -->
 				</section>
 			</div>
 		</div>
 
 		<div class="submit_side">
-			<a href="##" class="btn btn-success form-control">Agregar Curso</a>
+			<input type="submit" class="btn btn-success form-control" value="Agregar Curso">
 		</div>
 		
 	</form>

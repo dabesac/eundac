@@ -67,12 +67,19 @@ class Admin_Form_Speciality extends Zend_Form{
         $state->addMultiOption("A","Activo");
         $state->addMultiOption("I","Inactivo");
 
+        $is_faculty = new Zend_Form_Element_Select('is_faculty');
+        $is_faculty->removeDecorator('HtmlTag')->removeDecorator('Label');
+        $is_faculty->setAttrib('class','form-control');
+        $is_faculty->setRequired(true)->addErrorMessage('Es necesario que selecciones una opcion.');
+        $is_faculty->addMultiOption("","- Seleccione Opcion -");
+        $is_faculty->addMultiOption("F","Falso");
+        $is_faculty->addMultiOption("T","Verdadero");
 
         $submit = new Zend_Form_Element_Submit('send');
         $submit->setAttrib('class', 'btn btn-success');
         $submit->setLabel('Guardar');
         $submit->removeDecorator("HtmlTag")->removeDecorator("Label");
 
-        $this->addElements(array($escid,$facid,$subid,$name,$abbreviation,$state,$parent,$submit));        
+        $this->addElements(array($escid,$facid,$subid,$name,$abbreviation,$parent,$state,$is_faculty,$submit));        
     }
 }
