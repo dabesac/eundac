@@ -8,6 +8,7 @@ class Curricula_Form_Course extends Zend_Form
         $courseid   ->removeDecorator('Label')->removeDecorator("HtmlTag")
                     ->setRequired(true)
                     ->addValidator('NotEmpty', true, array('messages' => 'Debe ingresar el código'))
+                    ->addValidator('Digits', true, array('messages' => 'El código del curso debe ser solo números ¬¬'))
                     ->setAttribs(array( 
                                         'class'       => 'form-control',
                                         'title'       => 'Codigo de curso...',

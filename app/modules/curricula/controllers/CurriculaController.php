@@ -772,15 +772,18 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                     $cCursos = 0;
                     $cSem++;
                 }else {
-                    $dataCourses[$cSem]['courses'][$cCursos] = array(   'id'      => $course['courseid'],
-                                                                        'semid'   => $course['semid'],
-                                                                        'name'    => $course['name'],
-                                                                        'type'    => $course['type'],
-                                                                        'credits' => $course['credits'],
-                                                                        'req_1'   => $course['req_1'],
-                                                                        'req_2'   => $course['req_2'],
-                                                                        'req_3'   => $course['req_3'],
-                                                                        'state'   => $course['state'] );
+                    $dataCourses[$cSem]['courses'][$cCursos] = array(   'id'                => $course['courseid'],
+                                                                        'semid'             => $course['semid'],
+                                                                        'name'              => $course['name'],
+                                                                        'abbreviation'      => $course['abbreviation'],
+                                                                        'type'              => $course['type'],
+                                                                        'credits'           => $course['credits'],
+                                                                        'hours_theoretical' => $course['hours_theoretical'],
+                                                                        'hours_practical'   => $course['hours_practical'],
+                                                                        'req_1'             => $course['req_1'],
+                                                                        'req_2'             => $course['req_2'],
+                                                                        'req_3'             => $course['req_3'],
+                                                                        'state'             => $course['state'] );
 
                     if (!$course['req_1']) {
                         $dataCourses[$cSem]['courses'][$cCursos]['req_1'] = '-';
@@ -800,6 +803,12 @@ class Curricula_CurriculaController extends Zend_Controller_Action
             }
         }
         $dataView['dataCourses'] = $dataCourses;
+
+        //form para las ediciones
+        $dataView['form_course'] = new Curricula_Form_Course();
+        for ($i=1; $i<=$semid; $i++) { 
+            $dataView['form_course']->semid->addMultiOption($i, $i);
+        }
 
         $this->view->dataView = $dataView;
     }
@@ -841,6 +850,9 @@ class Curricula_CurriculaController extends Zend_Controller_Action
     public function savecourseAction(){
         $this->_helper->layout()->disableLayout();
 
+        //dataBase
+        $courseDb = new Api_Model_DbTable_Course();
+
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
         $uid = $this->sesion->uid;
@@ -857,8 +869,6 @@ class Curricula_CurriculaController extends Zend_Controller_Action
             $escid = $ids[1];
             $subid = $ids[2];
 
-
-        $year = round($formData['semid']/2);
             $dataSave = array(
                                 'eid'               => $eid,
                                 'oid'               => $oid,
@@ -866,6 +876,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                                 'escid'             => $escid,
                                 'subid'             => $subid,
                                 'courseid'          => $formData['courseid'],
+                                'credits'           => $formData['credits'],
                                 'semid'             => $formData['semid'],
                                 'name'              => $formData['name'],
                                 'abbreviation'      => $formData['abbreviation'],
@@ -876,8 +887,14 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                                 'state'             => 'A',
                                 'register'          => $uid,
                                 'created'           => date('Y-m-d h:i:s') );
-            print_r($dataSave);
+
+            if ($courseDb->_save($dataSave)) {
+                $result = array('success'  => 1,
+                                'errors'   => array(),
+                                'semester' => $formData['semid'] );
+            }
         }else{
+            $result['success'] = 0;
             $cError = 0;
             $error['isEmpty']   = array();
             $error['notDigits'] = array();
@@ -891,7 +908,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                 $cError++;
             }
         }
-        //print_r($result);
+        print json_encode($result);
     }
 
     public function printAction(){
