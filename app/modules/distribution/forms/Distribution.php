@@ -17,8 +17,9 @@ class Distribution_Form_Distribution extends Zend_Form{
         $periodsDb = new Api_Model_DbTable_Periods();
         $where = array(
                         'eid'  => $eid,
-                        'oid'  => $oid,
+                        'oid'  => $oid,                    
                         'year' => 15 );
+
 
         $periods = $periodsDb->_getPeriodsxYears($where);
         foreach ($periods as $period) {
