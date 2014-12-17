@@ -119,7 +119,12 @@
             $whered['facid']= $speciality['facid'];
             $dbfaculty = new Api_Model_DbTable_Faculty();
             $faculty = $dbfaculty ->_getOne($whered);
-            $namef = strtoupper($faculty['name']);
+
+            if($speciality['is_faculty'] == "T"){
+                $namef = strtoupper($faculty['previous_name']);
+            }else{
+                $namef = strtoupper($faculty['name']);
+            }
   
             $wheres=array('eid'=>$eid,'pid'=>$pid);
             $dbperson = new Api_Model_DbTable_Person();

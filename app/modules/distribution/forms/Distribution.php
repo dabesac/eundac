@@ -20,7 +20,6 @@ class Distribution_Form_Distribution extends Zend_Form{
                         'oid'  => $oid,                    
                         'year' => 15 );
 
-
         $periods = $periodsDb->_getPeriodsxYears($where);
         foreach ($periods as $period) {
             if ($period['perid']['2'] == 'A' or $period['perid']['2'] == 'B'or $period['perid']['2'] == 'N') {
