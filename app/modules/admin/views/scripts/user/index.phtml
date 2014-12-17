@@ -44,6 +44,7 @@
             $("#pid").val("");
         });
     });
+
     $("#name, #pid, #uid").keypress(function (e) {
         if(e == 13 || e.which==13 || e.which==0){
             var codi =  $('#pid').val();
@@ -84,10 +85,11 @@
     });
     function enviarDatos() {
         $('#cargadatos_').html("<img src='/img/spinner.gif'> Cargando....");
+        var formu = $("#frmFiltroDoc");
         $.ajax({
             type: 'POST',
-            url: $("#frmFiltroDoc").attr('action'),
-            data: $("#frmFiltroDoc").serialize(),
+            url: formu.attr('action'),
+            data: formu.serialize(),
             success: function(data) {
                 $('#cargadatos_').html(data);
                 btn.button('reset');

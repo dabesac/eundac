@@ -17,6 +17,24 @@
         cursor:  pointer;
         display: inline-block;
     }
+    .numer{
+        font-size: 17px;
+    }
+    .rueda{
+        transition: 2.5s ease;
+        -moz-transition: 2.5s ease; /* Firefox */
+        -webkit-transition: 2.5s ease; /* Chrome - Safari */
+        -o-transition: 2.5s ease; /* Opera */
+    }
+    .rueda:hover{
+        transform : rotate(360deg);
+        -moz-transform : rotate(360deg); /* Firefox */
+        -webkit-transform : rotate(360deg); /* Chrome - Safari */
+        -o-transform : rotate(360deg); /* Opera */
+    }
+    .keychange {
+        float: right;
+    }
 </style>
 <div id="idperson">
     <?php
@@ -43,7 +61,7 @@
             $c++;
           ?>
             <tr>
-                <td><span class="label label-default"><?php echo $c?></span></td>
+                <td class="text-center"><span class="label label-default numer"><?php echo $c?></span></td>
                 <td><?php echo $info['uid']?></td>
                 <td><?php echo $info['pid']?></td>
                 <td><?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?></td>
@@ -111,21 +129,26 @@
                         break;
                 } ?>
 
-                <td style="padding:0px; padding-left:5px;">
+                <td style="padding:0; padding-left:5px; vertical-align: middle; */" <?php if ($rol=="AD") {?> width="210px"<?php } ?> >
                     <!-- ADMIN    -->
                  <?php if ($temp=='DC' and $x==0 and $rol=="AD") { ?>
 
-                        <button class="btn btn-info ajuste_user" data-toggle="modal" uid="<?php echo base64_encode($info['uid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" href='#modal-Ajustes' ><span class='glyphicon glyphicon-certificate'></span> Dirección </button>
+                        <button class="btn btn-info ajuste_user" data-toggle="modal" uid="<?php echo base64_encode($info['uid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" rid="<?php echo base64_encode($info['rid'])?>" href='#modal-Ajustes' ><span class='glyphicon glyphicon-certificate'></span> Dirección </button>
 
                 <?php }?>
                                                 <!-- PASSWORD -->            
 
-            <?php if($temp != "EG"){ ?>
-                <?php if ($x==0 or $x==2) {?>
-
-                        <button name="<?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?>" rol="<?php echo $this->inforol[$c-1]['name']?>" uid="<?php echo base64_encode($info['uid'])?>" rid="<?php echo base64_encode($info['rid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" data-toggle="modal" href="#modalContraseña" class="btn btn-primary keychange <?php if ($rol=="SP"): ?>form-control<?php endif ?>"><span class="glyphicon glyphicon-refresh"></span>PASSWORD </button>
+            <?php if ($rol=="AD") { ?>
+                <?php if ($x==0 or $x==2) { ?>    
+                    <button name="<?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?>" rol="<?php echo $this->inforol[$c-1]['name']?>" uid="<?php echo base64_encode($info['uid'])?>" rid="<?php echo base64_encode($info['rid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" data-toggle="modal" href="#modalContraseña" class="btn btn-primary keychange <?php if ($rol=="SP"): ?>form-control<?php endif ?>">PASSWORD <span class="rueda glyphicon glyphicon-refresh"></span></button>    
+                <?php } ?>
+        <?php } else { ?>
+            <?php if($temp != "AD" ){ ?>
+                <?php if ($x==0 or $x==2) { ?>
+                    <button name="<?php echo $info['last_name0']." ".$info['last_name1'].", ".$info['first_name'];?>" rol="<?php echo $this->inforol[$c-1]['name']?>" uid="<?php echo base64_encode($info['uid'])?>" rid="<?php echo base64_encode($info['rid'])?>" pid="<?php echo base64_encode($info['pid'])?>" escid="<?php echo base64_encode($info['escid'])?>" subid="<?php echo base64_encode($info['subid'])?>" data-toggle="modal" href="#modalContraseña" class="btn btn-primary keychange <?php if ($rol=="SP"): ?>form-control<?php endif ?>"><span class="rueda glyphicon glyphicon-refresh"></span> PASSWORD </button>    
                 <?php } ?>
             <?php } ?>
+        <?php } ?>
                 </td>
             </tr>
           <?php  
@@ -178,7 +201,7 @@
                 </div>
             </div>
             <div class="has-error text-center hidden" >
-                <h3 id="respuesta">Error</h3>
+                <h3 id="respuesta"></h3>
             </div>
         </form>
         </div>
@@ -227,6 +250,53 @@ $(function(){
     var pas2;
     var estado;
     var ndoc;
+    $(".keychange").click( function(){
+        $('#respuesta').html('');
+        rid = $(this).attr('rid');
+        uid = $(this).attr('uid');
+        pid = $(this).attr('pid');
+        subid = $(this).attr('subid');
+        escid = $(this).attr('escid');
+
+        rol = $(this).attr('rol');
+        name = $(this).attr('name');
+        $("#respuesta").parent().addClass('hidden');
+        $("#pass1").val('').focus();
+        $("#repass1").val('');
+        $("#infonom").html(name);
+        $("#inforol").html(rol);
+    });
+    
+
+    $("#guardarContraseña").click(function(){
+        pas1 = $("#pass1").val();
+        pas2 = $("#repass1").val();
+        $("#respuesta").parent().removeClass('hidden');
+        $("#respuesta").html("Cargando...");
+            var ajax_data = {
+                "pid" : pid,
+                "uid" : uid,
+                "rid" : rid,
+                "escid" : escid,
+                "subid" : subid,
+                "pas1": pas1,
+                "pas2": pas2
+            };
+            $.ajax({
+                type : 'post',
+                url : '/admin/user/changepassword/',
+                data : ajax_data,
+                success: function(data){
+                    $("#respuesta").html(data);
+                    $("#pass1").val("");
+                    $("#repass1").val("");
+                }
+            });
+    });
+});
+</script>
+<?php if($this->rol=="AD"){ ?>
+<script>
     $('.popovr').click(function(event) {
         etiqueta=$(this);
         $('.popovr').not(this).popover('hide');
@@ -275,17 +345,18 @@ $(function(){
             });
         });
     });
-    
     $(".ajuste_user").click(function(event) {
         uid = $(this).attr('uid');
         pid = $(this).attr('pid');
         subid = $(this).attr('subid');
-        escid = $(this).attr('escid');  
+        escid = $(this).attr('escid');
+        rid = $(this).attr('rid');
         var ajax_data = {
                 "pid" : pid,
                 "uid" : uid,
                 "escid" : escid,
                 "subid" : subid,
+                "rid"   :rid
             };
         $.ajax({
             type : 'post',
@@ -297,47 +368,6 @@ $(function(){
         });
 
     });
-
-    $(".keychange").click( function(){
-        rid = $(this).attr('rid');
-        uid = $(this).attr('uid');
-        pid = $(this).attr('pid');
-        subid = $(this).attr('subid');
-        escid = $(this).attr('escid');
-
-        rol = $(this).attr('rol');
-        name = $(this).attr('name');
-        $("#respuesta").parent().addClass('hidden');
-        $("#pass1").val('');
-        $("#repass1").val('');
-        $("#infonom").html(name);
-        $("#inforol").html(rol);
-    });
-
-    $("#guardarContraseña").click(function(){
-        pas1 = $("#pass1").val();
-        pas2 = $("#repass1").val();
-        $("#respuesta").parent().removeClass('hidden');
-        $("#respuesta").html("Cargando...");
-            var ajax_data = {
-                "pid" : pid,
-                "uid" : uid,
-                "rid" : rid,
-                "escid" : escid,
-                "subid" : subid,
-                "pas1": pas1,
-                "pas2": pas2
-            };
-            $.ajax({
-                type : 'post',
-                url : '/admin/user/changepassword/',
-                data : ajax_data,
-                success: function(data){
-                    $("#respuesta").html(data);
-                    $("#pass1").val("");
-                    $("#repass1").val("");
-                }
-            });
-    });
-});
+    
 </script>
+<?php } ?>

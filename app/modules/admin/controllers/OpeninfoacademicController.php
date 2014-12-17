@@ -12,50 +12,59 @@
 		}
 		public function indexAction()
 		{
-			$this->sesion;
-		$eid = $this->sesion->eid;
- 		$oid = $this->sesion->oid;
- 		$rid = $this->sesion->rid;
- 		$is_director = $this->sesion->infouser['teacher']['is_director'];
+			try {
+				$eid = $this->sesion->eid;
+	 			$oid = $this->sesion->oid;
+				$facultyDb = new Api_Model_DbTable_Faculty();
+	            $preDataFaculty = $facultyDb->_getAll();
+	            $c=0;
+	            foreach ($preDataFaculty as $c => $faculty) {
+	                if ($faculty['state'] == 'A' and  $faculty['facid'] != "TODO" ) {
+	                    $dataFaculty[$c]['facid'] = $faculty['facid'];
+	                    $dataFaculty[$c]['name']  = $faculty['name'];
+	                }
+	            }
+	            $this->view->dataFaculty = $dataFaculty; 
 
-		$esc = new Api_Model_DbTable_Speciality();
- 		if ($rid == 'RF' || $rid == 'DF') {
- 			$facid = $this->sesion->faculty->facid;
- 			$where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid,'state' => 'A');
- 		}else{
- 			if ($rid == 'DC' && $is_director=='S') {
- 				$this->view->director = $is_director;
- 				$this->view->escid = $this->sesion->escid;
- 				$where = array('eid' => $eid, 'oid' => $oid, 'escid' => $this->sesion->escid,'state' => 'A');
- 			}else{
-		 		$where = array('eid' => $eid, 'oid' => $oid, 'state' => 'A');
- 			}
- 		}
-		$dataesc = $esc->_getFilter($where,$attrib=null,$orders=array('facid','escid'));
-	 	$this->view->speciality = $dataesc;
-
-	 	$this->view->perid = $this->sesion->period->perid;
- 		$where = array('eid' => $eid, 'oid' => $oid);
- 		$per = new Api_Model_DbTable_Periods();
- 		$dataper = $per->_getFilter($where,$attrib=null,$orders=array('perid'));
- 		$this->view->periods = $dataper;
-
+			} catch (Exception $e) {
+				print "Error: ".$e->getMessage();
+			}
 		}
 		public function listteacherAction()
 		{
-			$this->_helper->layout()->disableLayout();
- 			$eid = $this->sesion->eid;
- 			$oid = $this->sesion->oid;
- 			$perid = $this->_getParam('perid');
- 			$escid = $this->_getParam('escid');
- 			$subid = $this->_getParam('subid');
- 			$this->view->perid=$perid;
- 			$this->view->escid=$escid;
- 			$query=new Api_Model_DbTable_Infoacademic();
- 			$row=$query->listteacher($escid,$perid);
- 			// print_r($row);
- 			$this->view->row=$row;
-
+			try {
+				
+				$this->_helper->layout()->disableLayout();
+	 			$eid = $this->sesion->eid;
+	 			$oid = $this->sesion->oid;
+	 			$espec = $this->_getParam('especialidad');
+	 			$escid = $this->_getParam('escuela');
+	 			$anio = $this->_getParam('anio');
+	 			$perid = $this->_getParam('periodo');
+	 			$escFin;
+	 			if ($espec !="TODOESP") {
+	 				if ($escid !="TODOESC") {
+	 					if ($espec =="") {
+	 					$escFin = $escid;
+	 					} else {
+	 						$escFin = $espec;
+	 					}
+	 					$anio = substr($anio, 2);
+	 					$perid = $anio . $perid;
+	 					
+			 			$this->view->perid=$perid;
+			 			$this->view->escid=$escFin;
+			 			$dbInfoAcad=new Api_Model_DbTable_Infoacademic();
+			 			$row=$dbInfoAcad->listteacher($escid,$perid);
+			 			$this->view->row=$row;
+			 			$sms=1;
+	 				}else{$sms=2;}
+	 			} else {$sms=3;}	
+				$this->view->sms=$sms;
+			} catch (Exception $e) {
+				print "Error: ".$e->getMessage();
+			}
+			
 		}
 
 		public function updatestateAction()
@@ -63,11 +72,42 @@
 			$this->_helper->layout()->disableLayout();
 			$perid=base64_decode($this->_getParam('perid'));
 			$escid=base64_decode($this->_getParam('escid'));
-			$state=base64_decode($this->_getParam('state'));
+			$state=$this->_getParam('state');
 			$pid=base64_decode($this->_getParam('pid'));
-			$query=new Api_Model_DbTable_Infoacademic();
-			$query->_update($escid,$perid,$state,$pid);
-			
+			if ($state == "B") {
+				$state="C";
+				$json = array(
+					'status'=>true,
+					'sms'=>"Se cerro satisfactoriamente.",
+					'do'=>"btnChange btn btn-success form-control",
+					'estado'=>'C',
+					'icon'=>'glyphicon glyphicon-folder-open',
+					'text'=>'Abrir'
+				);
+				//$json = array('do'=>"btnChange btn btn-danger form-control");
+				$query=new Api_Model_DbTable_Infoacademic();
+				$query->_update($escid,$perid,$state,$pid); 
+
+			} elseif ($state == "C") {
+				$state="B";
+				$json = array(
+					'status'=>true,
+					'sms'=>"Se abrio satisfactoriamente",
+					'do'=>"btnChange btn btn-danger form-control",
+					'estado'=>'B',
+					'icon'=>'glyphicon glyphicon-folder-close',
+					'text'=>'Cerrar'
+					);
+				//$json = array('do'=>"btnChange btn btn-success form-control");
+				$query=new Api_Model_DbTable_Infoacademic();
+				$query->_update($escid,$perid,$state,$pid); 
+			}else{
+				
+				$json = array('status'=>false,'sms'=>"hubo un error");
+				//$json = array('do'=>"");
+			}
+			$this->_response->setHeader('Content-Type', 'application/json');
+			$this->view->data = $json;
 		}
 	}
 ?>
