@@ -62,26 +62,27 @@ class Admin_UserController extends Zend_Controller_Action{
             $c=0;
             $whered=array('eid'=>$eid,'oid'=>$oid);
             $wheres=array('eid'=>$eid,'oid'=>$oid);
-            foreach ($datauser as $info) {
-                $rid=$info['rid'];
-                $subid=$info['subid'];
-                $escid=$info['escid'];
-                $wheres['subid']=$subid;
-                $wheres['escid']=$escid;
-                $whered['rid']=$rid;
-                $dbrol=new Api_Model_DbTable_Rol();
-                $inforol[$c]= $dbrol->_getOne($whered);
-                $dbesc= new Api_Model_DbTable_Speciality();
-                $infoesc[$c]= $dbesc->_getOne($wheres);
-                //$info[$c]=$inforol['rid'];
-                $c++;
-            }
-            $this->view->datauser=$datauser;
+            
+            if ($datauser[0]) {
+                foreach ($datauser as $info) {
+                    $rid=$info['rid'];
+                    $subid=$info['subid'];
+                    $escid=$info['escid'];
+                    $wheres['subid']=$subid;
+                    $wheres['escid']=$escid;
+                    $whered['rid']=$rid;
+                    $dbrol=new Api_Model_DbTable_Rol();
+                    $inforol[$c]= $dbrol->_getOne($whered);
+                    $dbesc= new Api_Model_DbTable_Speciality();
+                    $infoesc[$c]= $dbesc->_getOne($wheres);
+                    $c++;
+                }
+                $this->view->datauser=$datauser;
             $this->view->infoesc=$infoesc;
             $this->view->inforol=$inforol; 
             $rol=$this->sesion->rid;
             $this->view->rol=$rol;
-            
+            }  
         } catch (Exception $e) {
             print "Error: get User".$e->getMessage();
         }
@@ -294,7 +295,8 @@ class Admin_UserController extends Zend_Controller_Action{
             $pid = base64_decode($this->_getParam('pid'));
             $escid = base64_decode($this->_getParam('escid'));
             $subid = base64_decode($this->_getParam('subid'));
-            $where=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid);
+            $rid = base64_decode($this->_getParam('rid'));
+            $where=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'rid'=>$rid);
             $attrib=array('uid','escid','subid','pid','rid','state','comments');
             $dbuser = new Api_Model_DbTable_Users();
             $fm= new Admin_Form_Usernew();

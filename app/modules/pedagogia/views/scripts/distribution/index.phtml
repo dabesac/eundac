@@ -21,7 +21,7 @@
 		<select class="form-control" name="Anio" id="anio">
 			<option value="">Seleccione Año</option>
 			<?php $anio = date('Y');
-			for ($i=$anio; $i >= 1993 ; $i--) { ?>
+			for ($i=$anio+1; $i >= 1993 ; $i--) { ?>
  				<option value="<?php echo $i?>"><?php echo $i?></option>
  			<?php } ?>
 		</select>

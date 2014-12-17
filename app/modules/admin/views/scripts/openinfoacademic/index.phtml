@@ -1,71 +1,163 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-th-list"></span> INFORME ACADEMICO');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/index" class="form-control btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<style>
+	.row-per{
+		border:1px solid blue;
+    	border-left:0px;
+    	border-right:0px;
+    	padding:2px;
+    	margin-bottom: 20px;
+	}
+	.label{
+		font-size: 14px;
+	}
+	hr{
+		border-top:1px solid green;
+	}
+	#site-scroll-top { z-index: 5; display: none; position:fixed; right: 40px; bottom: 80px; color: #898989; height: 35px; line-height: 35px; width: 35px; font-size: 16px; border-radius: 99px; background: #ECF0F1; text-align: center; }
+	#site-scroll-top:hover { text-decoration: none; color: #fff; background-color: #F37720; }
+</style>
 
-<div>
-	<table class="table table-condensed">
-		<tr>
-			<th>Escuela: </th>
-			<td>
-				<select id="escid" class="form-control">
-					<?php
-					if ($this->speciality) { ?>
-						<option value="">- Seleccione Escuela-</option>
-						<?php 
-						foreach ($this->speciality as $speciality) { 
-							if ($this->director) $selected = ($this->escid == $speciality['escid'])? "selected": "";
-							?>
-							<option value="<?php echo $speciality['escid'].'--'.$speciality['subid']?>" <?php echo $selected?>><?php echo $speciality['name']?></option>
-							<?php
-						}
-					}else{ ?>
-						<option value="">- No hay Escuelas Disponibles -</option>
-					<?php
-					}?>
-				</select>
-			</td>
-			<th>Periodo: </th>
-			<td>
-				<select id="perid" class="form-control">
-					<?php 
-					if ($this->periods) { ?>
-						<option value="">- Seleccione Periodo -</option>
-						<?php
-						foreach ($this->periods as $periods) {
-							if($this->perid) $select = ($this->perid == $periods['perid'])? "selected": "";?>
-							<option value="<?php echo $periods['perid']?>" <?php echo $select?>><?php echo $periods['perid'].' | '.$periods['name']?></option>
-							<?php
-						}
-					}else{ ?>
-						<option value="">- No hay Periodos Disponibles -</option>
-						<?php
-					}?>
-				</select>
-			</td>
-			<td>
-				<a id="searching" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</a>
-			</td>
-		</tr>
-	</table>
+	<div class="row ">
+		<div class="col-xs-2 row-per">
+			<p><span class='label label-info'>paso 1</span> <span class='text-success'>Facultad y Escuela</span></p>
+		</div>
+		<div class="col-xs-5 col1">
+			<select name="facultades" id="selected-facid" class="form-control">
+				<option value="">Facultad </option>
+				<?php foreach ($this->dataFaculty as $c => $faculty): ?>
+					<option value="<?php echo ($faculty['facid']) ?>" cod="<?php echo $faculty['facid'] ?>"><?php echo $faculty['name'] ?></option>
+				<?php endforeach ?> 
+			</select>
+		</div>
+		<div class="col-xs-5 col1">
+			<select name="escuelas" id="selected-escid" class="form-control">
+				<option value="">Escuela</option>
+			</select>
+		</div>
+		<div class="col-xs-3 hide" id="div-spec">
+			<select name="especialidades" id="selected-espid" class="form-control">
+				<option value="">Especialidad</option>
+			</select>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-2 row-per">
+			<p><span class='label label-info'>paso 2</span> <span class='text-success'>Año y Periodo</span></p>
+		</div>
+		<div class="col-xs-5">
+			<select name="" id="selected-anio" class="form-control">
+				<?php $anio = date('Y');
+				for ($i=$anio; $i >= 1990; $i--) { ?>
+					<option value="<?php echo $i ?>"><?php echo $i ?></option>
+				<?php } ?>
+			</select>
+		</div>
+		<div class="col-xs-5">
+			<select name="periodos" id="selected-perid" class="form-control">
+			Cargando...
+			</select>
+		</div>
+	</div>
+
+<div class="row">
+	<div class="col-xs-2 col-xs-offset-5">
+		<button class="btn btn-primary form-control" type="button" id="search" data-loading-text="Buscando..."><span class="glyphicon glyphicon-search"></span> Buscar Docentes</button>
+	</div>
 </div>
-<div id="loaddata"></div>
+<hr id="barra">
+<a href="" id="site-scroll-top"><span class="glyphicon glyphicon-chevron-up"></span></a>
+<div id="data">
+	<div class="alert alert-danger hide" role="alert">
+      <strong>Error!</strong> Los datos son erroneos.
+    </div>
+</div>
+<script>
+	$(function(){
+		var facu = $('#selected-facid');
+		var escu = $('#selected-escid');
+		var espe = $('#selected-espid');
+		var anio=$("#selected-anio").val()
+		$('#selected-perid').html('<option value="A">Periodo IMPAR - '+anio+'</option> <option value="B">Periodo PAR - '+anio+'</option> <option value="N">Nivelacion - '+anio+'</option>');
+		$('#selected-anio').change(function() {
+			var anio=$(this).val();
+			$('#selected-perid').html('<option value="A">Periodo IMPAR - '+anio+'</option> <option value="B">Periodo PAR - '+anio+'</option> <option value="N">Nivelacion - '+anio+'</option>');
+		});
 
-<script type="text/javascript">
-	$("#searching").click(function(){
-		var tmp = $("#escid").val();
-		var perid = $("#perid").val();
-		if (tmp == "") {
-			alert("Seleccione una Escuela."); 
+		facu.on('change', function(){
+				facid = $(this).val();
+				//reset();
+			escu.html('<option value="">Cargando...</option').load('/graduated/reportgraduated/schools/facid/'+facid);
+			reset();
+			espe.val('').html('');
+		});
+		escu.on('change', function(){
+			dataEscid = $(this).val();
+			espe.val('').html('');
+			var ajax_data = {
+				"escid" : dataEscid
+			};
+			$.ajax({
+				type : 'post',
+				url  : '/graduated/reportgraduated/speciality/',
+				data : ajax_data,
+				success: function(data){
+					if (data!='') {
+						$(".col1").removeClass('col-md-5').addClass('col-md-3');
+						$('#div-spec').attr('class','col-md-4').addClass('has-error').show(1000);
+						espe.html(data);
+					}else{
+						reset();
+						espe.html('');
+					};
+				}
+			});
+		});
+		$('#search').click(function(e) {
+			$('#data').html('');
+			var btn = $(this);
+			btn.button('loading');
+			var escuela=escu.val();
+			var especialidad=espe.val();
+			var anio     =  $('#selected-anio').val()
+			var periodo  =  $('#selected-perid').val()
+			ajax_data1={
+				"especialidad"	: especialidad,
+				"escuela"		: escuela,
+				"anio"			: anio,
+				"periodo"		: periodo
+			};
+			$.ajax({
+				type : 'post',
+				url  : '/admin/openinfoacademic/listteacher/',
+				data : ajax_data1,
+				success: function(data){
+					$('#data').html(data);
+					btn.button('reset');
+					$("#FixedWindow").animate({ scrollLeft: "-=5" }, "slow");
+				}
+			});
+		});
+		$scrollTopLink = $('#site-scroll-top');
+		$(window).scroll(function(){
+			if ($(this).scrollTop() > 100) {
+				$scrollTopLink.fadeIn();
+			} else {
+				$scrollTopLink.fadeOut();
+			}
+		});		
+		$scrollTopLink.on('click', function() {
+			$( 'html, body' ).animate({scrollTop:0}, 1000);
 			return false;
-		};
-		if (perid == "") {
-			alert("Seleccione un Periodo."); 
-			return false;
-		};
-		var tmpp = tmp.split('--');
-		var escid = tmpp[0];
-		var subid = tmpp[1];
-		var url = "/admin/openinfoacademic/listteacher/perid/"+perid+"/escid/"+escid;
-		$("#loaddata").html("<img src='/img/spinner.gif'>Cargando...");
-		$("#loaddata").load(url);
+		} );
 	});
+	function reset () {
+		$('#div-spec').hide( 1000, function() {
+			$('#selectSpeciality').html("");
+			$(".col1").removeClass('col-md-3').addClass('col-md-5');
+			$(".col2").removeClass('col-md-5').addClass('col-md-10');
+			$('#report').html("");
+  		} );
+	}
+	
 </script>

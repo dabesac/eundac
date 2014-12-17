@@ -433,7 +433,7 @@ class Horary_NhoraryController extends Zend_Controller_Action {
                 $json = array('sms'=>"¡ Ya existe un horario de otro curso en esta hora !");
             }
             elseif ($horasem) {
-            $json = array('sms'=>"¡ Ya existe un horario de un curso de este semestre en esta hora !");
+                $json = array('sms'=>"¡ Ya existe un horario de un curso de este semestre en esta hora !");
             }
             elseif ($horateach) {
                 $json = array('sms'=>"¡ Ya existe un horario del docente en esta hora !");

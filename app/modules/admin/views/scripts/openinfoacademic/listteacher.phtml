@@ -1,112 +1,94 @@
-<?php if($this->row) { ?>
-<table style="margin-top:20px ;"class="table span9 table-striped table-bordered table-condensed">
-	<tr>
-		<th><center>#</center></th>
-		<th><center>DNI</center></th>
-		<th><center>Docente</center></th>
-		<th colspan="2"><center>Operacion</center></th>
-	</tr>
-	<?php $c=1;$s=0 ; foreach($this->row as $row){?>
-		<tr>
-			<td><center><?php echo $c ?></center></td>
-			<td><center><?php echo $row['pid'];?>
-			<td><center><?php echo $row['last_name0']." ".$row['last_name1']." ".$row['first_name']?>
-			<td>
-            <center>
-                <?php 
-                if ($row['state']=='C') {  ?>
-                    <a id='loading<?php echo $s?>' data-toggle="modal" href="#Modal"><span class="glyphicon glyphicon-share-alt"></span> Abrir</a>
-                    <script type="text/javascript">
-                        $("#loading<?php echo $s?>").click(function(e){
-                            e.preventDefault();
-                            var ajax_data = {
-                            "perid" : "<?php echo base64_encode($this->perid)?>",
-                            "escid" : "<?php echo base64_encode($this->escid)?>",
-                            "pid"   : "<?php echo base64_encode($row['pid'])?>",
-                            "state" : "<?php echo base64_encode('B')?>"
-                            };
-                            $.ajax({
-                                type : 'post',
-                                url  : '/admin/openinfoacademic/updatestate/',
-                                data : ajax_data,
-                                success: function(data){
-                                    
-                                }
-                            });
-                        });
-                    </script>
-                <?php
+<style>
+    .row1{
+        padding:5px; 
+        border: 1px solid #7F8C8D;
+        margin: 2px
+    }
+    .row1:hover{
+        background-color: #BDC3C7;
+        border-left: 6px solid gray;
+    }
+    .row1:nth-child(2){
+        background-color: #E74C3C
+    }
+    .col11{
+        border-right: 1px solid gray;
+    }
+    .info1{
+        border-radius: 0px;
+    }
+</style>
+<?php $sms = $this->sms;
+$C="btnChange btn btn-success form-control";
+$A="btnChange btn btn-danger form-control";
+if ($sms==1) {?>
+    <?php if($this->row) { ?>
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="alert alert-success text-center" id="smsServ" role="alert">
+                <strong>Que bien!</strong> se encontraron <strong><?php echo count($this->row); ?></strong>  Registros. <span class="label label-success"> Los docentes que no aparecen Aun no Comenzaron a rellenar este documento.</span>
+            </div>
+        </div>
+    </div>
+    <div class="row row1">
+        <div class="col-xs-1 col11">Indice</div>
+        <div class="col-xs-2 col11">Dni</div>
+        <div class="col-xs-7 col11">Datos personales</div>
+        <div class="col-xs-2">Opcion</div>
+    </div>
+        <?php $c=1;  foreach($this->row as $row){?>
+            <div class="row row1">
+                <div class="col-xs-1 col11"><?php echo $c ?></div>
+                <div class="col-xs-2 col11"><?php echo $row['pid'];?></div>
+                <div class="col-xs-7 col11"><?php echo $row['last_name0']." ".$row['last_name1']." ".$row['first_name']?></div>
+                <div class="col-xs-2">
+                    
+                    <?php if ($row['state']=='C') {?>
+                        <button class="<?php echo $C?>" perid= "<?php echo base64_encode($this->perid)?>" escid="<?php echo base64_encode($this->escid)?>" pid="<?php echo base64_encode($row['pid'])?>" state="C"> Abrir <span class="glyphicon glyphicon-folder-open"></span></button>
+                    <?php } else { ?>
+                        <button class="<?php echo $A?>" perid= "<?php echo base64_encode($this->perid)?>" escid="<?php echo base64_encode($this->escid)?>" pid="<?php echo base64_encode($row['pid'])?>" state="B"> Cerrar <span class="glyphicon glyphicon-folder-close"></span></button>
+                    <?php } ?>
+                </div>
+            </div>
+        <?php $c++;} ?>
+    </div>
+    <script type="text/javascript">
+        $(".btnChange").click(function(e){
+            e.preventDefault();
+            var btn=$(this);
+            btn.html("Cargando... <img src='/img/spinner.gif' />");
+            var ajax_data = {
+                "perid" : $(this).attr('perid'),
+                "escid" : $(this).attr('escid'),
+                "pid"   : $(this).attr('pid'),
+                "state" : $(this).attr('state')
+            };
+            $.ajax({
+                type : 'post',
+                url  : '/admin/openinfoacademic/updatestate/',
+                data : ajax_data,
+                success: function(data){
+                    if (data.status == true) {
+                        btn.attr('class', data.do);
+                        btn.attr('state', data.estado);
+                        btn.html(data.text + " <span></span>");
+                        btn.children('span').attr('class', data.icon);
+                    };
+                    console.log(data.sms);
                 }
-                else{   ?>
-                    <a id='loads<?php echo $s?>' data-toggle="modal" href="#Modal"><span class="glyphicon glyphicon-lock"></span> Cerrar</a>
-                    <script type="text/javascript">
-                        $("#loads<?php echo $s?>").click(function(e){
-                            e.preventDefault();
-                            var ajax_data = {
-                            "perid" : "<?php echo base64_encode($this->perid)?>",
-                            "escid" : "<?php echo base64_encode($this->escid)?>",
-                            "pid"   : "<?php echo base64_encode($row['pid'])?>",
-                            "state" : "<?php echo base64_encode('C')?>"
-                            };
-                            $.ajax({
-                                type : 'post',
-                                url  : '/admin/openinfoacademic/updatestate/',
-                                data : ajax_data,
-                                success: function(data){
-                                    console.log(data);
-                                }
-                            });
-                        });
-                    </script>
-                <?php    
-                }
-                ?>
-            </center>
-        	</td>
-		</tr>
-	<?php $c++;$s++;} ?>
-</table>
-<?php } else { ?>
-<script >
-	alert("No se encontraron registros");
-</script>
-<?php } ?>
-<!-- Modal 1 -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">        
-        <div class="modal-body">
-          <center><h3 class="modal-title" style='color: black' ><img style='width:40px'><b> SE ABRIÓ EL INFORME ACADEMICO</b></h3></center>          
+            });
+        });
+    </script>
+    
+    
+    <?php } else { ?>
+        <div class="alert alert-danger" role="alert">
+            <strong> <h2>: (</h2>Lo sentimos!</strong> No tenemos registros de Informes Academicos en este periodo.
         </div>
-        <div class="modal-footer">
-          <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<!-- Modal 2 -->
-<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">        
-        <div class="modal-body">
-            <center><h3 class="modal-title" style='color:black' ><img style='width:40px'><b> SE CERRÓ EL INFORME ACADEMICO</b></h3></center>
-            
-        </div>
-        <div class="modal-footer">
-          <a type="button" class="btn btn-danger" data-dismiss="modal" href='#'>Cerrar</a>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<script type="text/javascript">
-$ ('#myModal'). on('hidden.bs.modal',function()  {
-    url="/admin/openinfoacademic/listteacher/perid/<?php echo $this->perid ?>/escid/<?php echo $this->escid;?>/"
-    $("#loaddata").load(url);  
-});
-
-$ ('#Modal'). on('hidden.bs.modal',function()  { 
-    url="/admin/openinfoacademic/listteacher/perid/<?php echo $this->perid ?>/escid/<?php echo $this->escid;?>/";
-    $("#loaddata").load(url);  
-});
-</script>
+    <?php } ?>
+<?php } elseif($sms==2 || $sms==3) { ?>
+    <div class="alert alert-danger" role="alert">
+            <strong> <h2>: (</h2>Lo sentimos!</strong> Los Datos ingresados son erroneos.
+    </div>
+<?php }?>
