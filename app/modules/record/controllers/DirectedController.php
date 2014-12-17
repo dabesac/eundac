@@ -20,6 +20,9 @@ class Record_DirectedController extends Zend_Controller_Action {
     public function studentAction(){
         try {
             $this->_helper->layout()->disableLayout();
+
+            $facidSesion=$this->sesion->faculty->facid;
+            $subidSesion=$this->sesion->subid;
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $uid=$this->_getParam('uid');
@@ -30,8 +33,65 @@ class Record_DirectedController extends Zend_Controller_Action {
             $where['uid']=$uid;
             $where['state']='A';
             $user= new Api_Model_DbTable_Users();
-            $datauser=$user->_getUserXUid_state($where);
-            $this->view->user=$datauser[0];
+            $usuario=$user->_getUserXUid_state($where);
+            if ($usuario) {
+                $speciality = new Api_Model_DbTable_Speciality();
+                $wheres=array('eid'=>$eid,'oid'=>$oid,'escid'=>$usuario[0]['escid'],'subid'=>$usuario[0]['subid']);
+                $datas = $speciality->_getOne($wheres);
+
+                if ($facidSesion==$datas['facid']) {
+                    $usuario[0]['name_speciality']=$datas['name'];
+                    $persona = new Api_Model_DbTable_Person();
+                    $data['eid']=$eid;
+                    $data['pid']=$usuario[0]['pid'];
+                    $list_p = $persona ->_getOne($data);
+                    $usuario[0]['full_name']=$list_p['last_name0'].' '.$list_p['last_name1'].', '.$list_p['first_name'];
+
+
+                    unset($wheres['escid']);
+                    $subsidiary = new Api_Model_DbTable_Subsidiary();
+                    $datass = $subsidiary->_getOne($wheres);
+                    $usuario[0]['name_subsidiary']=$datass['name'];
+                }
+                elseif ($facidSesion=='TODO') {
+                    $subidStudent=$datas['subid'];
+                    if ($subidSesion==$subidStudent) {
+                        $usuario[0]['name_speciality']=$datas['name'];
+                        $persona = new Api_Model_DbTable_Person();
+                        $data['eid']=$eid;
+                        $data['pid']=$usuario[0]['pid'];
+                        $list_p = $persona ->_getOne($data);
+                        $usuario[0]['full_name']=$list_p['last_name0'].' '.$list_p['last_name1'].', '.$list_p['first_name'];
+
+
+                        unset($wheres['escid']);
+                        $subsidiary = new Api_Model_DbTable_Subsidiary();
+                        $datass = $subsidiary->_getOne($wheres);
+                        $usuario[0]['name_subsidiary']=$datass['name'];
+                    }
+                    elseif ($subidSesion=='1901' && $facidSesion='TODO' ) {
+                        $usuario[0]['name_speciality']=$datas['name'];
+                        $persona = new Api_Model_DbTable_Person();
+                        $data['eid']=$eid;
+                        $data['pid']=$usuario[0]['pid'];
+                        $list_p = $persona ->_getOne($data);
+                        $usuario[0]['full_name']=$list_p['last_name0'].' '.$list_p['last_name1'].', '.$list_p['first_name'];
+
+
+                        unset($wheres['escid']);
+                        $subsidiary = new Api_Model_DbTable_Subsidiary();
+                        $datass = $subsidiary->_getOne($wheres);
+                        $usuario[0]['name_subsidiary']=$datass['name'];
+                    }
+                    else{
+                        $this->view->notuser='N';
+                    }
+                }
+                else{
+                    $this->view->notuser='N';
+                }
+            }
+            $this->view->user=$usuario[0];
 
             $rid=$this->sesion->rid;
             if ($rid == 'AD') {

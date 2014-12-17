@@ -1,0 +1,146 @@
+<?php 
+	$dataView       = $this->dataView;
+	$dataCurriculum = $dataView['dataCurriculum'];
+	$dataCourses    = $dataView['dataCourses'];
+	$form_course    = $dataView['form_course'];
+ ?>
+
+<div class="modal_admin_courses">
+	<header>
+		<p><?php echo $dataCurriculum['name'] ?> <small><?php echo $dataCurriculum['curid'] ?></small></p>
+		<div>
+			<a id="btn_add_course" href="##">Agregar Curso</a>
+		</div>
+	</header>
+	<section id="id_add_new_course" class="new_course">
+		
+	</section>
+	<article>
+		<?php if ($dataCourses): ?>
+			<?php foreach ($dataCourses as $semester): ?>
+				<section class="semester">
+					<header>
+						<span class="glyphicon glyphicon-flag"></span> Semestre <?php echo $semester['semid'] ?>
+					</header>
+					<section id="id_section_semester<?php echo $semester['semid'] ?>">
+						<article class="title">
+							<span>#</span>	
+							<span>Código</span>
+							<span>Nombre</span>
+							<span>Créditos</span>
+							<span>Tipo</span>
+							<span>Requisíto</span>
+							<span>Estado</span>
+							<span></span>
+						</article>
+					<?php foreach ($semester['courses'] as $c => $course): ?>
+						<div id="id_course_<?php echo $course['id'] ?>" class="all_course_data" idactivatejs="<?php echo $course['id'] ?>">
+							<article class="data_course">
+								<span><?php echo $c + 1 ?></span>	
+								<span><?php echo $course['id'] ?></span>
+								<span><?php echo $course['name'] ?></span>
+								<span><?php echo $course['credits'] ?></span>
+								<span><?php echo $course['name_type'] ?></span>
+								<span><?php echo $course['req_1'] ?></span>
+								<?php if ($course['state'] == 'A'): ?>
+									<span class="stateA"><?php echo $course['state'] ?></span>
+								<?php else: ?>
+									<span class="stateB"><?php echo $course['state'] ?></span>
+								<?php endif ?>
+								<a href="##" class="btn_edit_course">Editar</a>
+							</article>
+							<article class="edit_course">
+								<?php $form = $form_course ?>
+								<?php $form->populate($course) ?>
+
+								<form class="form_edit_course">
+									<div class="thre_input">
+										<div>
+											<?php echo $form->name ?>
+										</div>
+										<div>
+											<?php echo $form->abbreviation ?>
+										</div>
+									</div>
+									
+									<div class="two_sides">
+										<div class="side_one">
+											<div class="two_inputs">
+												<div>
+													<p>Tipo de Curso</p>
+													<?php echo $form->type ?>
+												</div>
+												<div>
+													<p>Créditos</p>
+													<?php echo $form->credits ?>
+												</div>
+											</div>
+
+											<div class="two_inputs">
+												<div class="two_inputs_min">
+													<div>
+														<p>Horas Teoricas</p>
+														<?php echo $form->hours_theoretical ?>
+													</div>
+													<div>
+														<p>Horas Practicas</p>
+														<?php echo $form->hours_practical ?>
+													</div>
+												</div>
+												<div>
+													<p>Semestre</p>
+													<?php echo $form->semid ?>
+												</div>
+											</div>		
+										</div>
+										<div class="side_two">
+											<header>
+												<p>Prerequisitos</p>
+											</header>
+											<section class="select_pre">
+												<select class="form-control">
+													<option value="">Agregue prerequisitos...</option>
+												</select>
+												<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
+											</section>
+											<section class="prerequisites">
+												<!-- <article>
+													<p>Curso 1</p>
+													<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
+												</article>
+												<article>
+													<p>Curso 2</p>
+													<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
+												</article>
+												<article>
+													<p>Curso 3</p>
+													<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
+												</article> -->
+											</section>
+										</div>
+									</div>
+									<div class="submit_side">
+										<input type="submit" class="btn btn-success form-control" value="Guardar">
+									</div>
+								</form>
+								<div id="id_error_course_side" class="error_course_side">
+									<div>
+										<span class="glyphicon glyphicon-exclamation-sign"></span>
+									</div>
+									<div>
+										<!-- Errores aqui desde JavaScript -->
+									</div>
+								</div>
+							</article>
+						</div>
+							
+					<?php endforeach ?>
+					</section>
+				</section>
+			<?php endforeach ?>
+		<?php else: ?>
+			<br><br><br><br><br><br><br>
+			<p><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Esta currícula no tiene cursos...</p>
+		<?php endif ?>
+	</article>
+</div>

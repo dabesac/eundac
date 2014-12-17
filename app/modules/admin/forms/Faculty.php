@@ -37,6 +37,18 @@ class Admin_Form_Faculty extends Zend_Form{
         $state->addMultiOption("I","Inactivo");
         $state->setAttrib("class","input-sm");
 
+        $previous_name= new Zend_Form_Element_Text("previous_name");
+        $previous_name->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $previous_name->setAttrib("maxlength", "250")->setAttrib("size", "40");
+        $previous_name->setAttrib("title","Nombre De Escuela");
+        $previous_name->setAttrib("class","input-sm");
+
+        $previous_escid= new Zend_Form_Element_Text("previous_escid");
+        $previous_escid->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
+        $previous_escid->setAttrib("maxlength", "10")->setAttrib("size", "40");
+        $previous_escid->setAttrib("title","Codigo De Escuela");
+        $previous_escid->setAttrib("class","input-sm");
+
         $submit = new Zend_Form_Element_Submit('save');
         $submit->setAttrib('class','btn btn-info');
         $submit->setLabel('Guardar');
@@ -47,6 +59,6 @@ class Admin_Form_Faculty extends Zend_Form{
         $submitup->setLabel('Actualizar');
         $submitup->removeDecorator("HtmlTag")->removeDecorator("Label");
 
-        $this->addElements(array($code,$name,$abrev,$datcre,$state,$submit,$submitup));        
+        $this->addElements(array($code,$name,$abrev,$datcre,$state,$previous_name,$previous_escid,$submit,$submitup));        
     }
 }

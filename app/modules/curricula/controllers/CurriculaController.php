@@ -730,7 +730,188 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         print json_encode($result);
     }
 
-     public function printAction(){
+    public function admincoursesAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //dataBase
+        $coursesDb    = new Api_Model_DbTable_Course();
+        $curriculumDb = new Api_Model_DbTable_Curricula();
+
+        $ids = explode('_', base64_decode($this->_getParam('id')));
+        $curid = $ids[0];
+        $escid = $ids[1];
+        $subid = $ids[2];
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'curid' => $curid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+
+        $dataCurriculum = $curriculumDb->_getOne($where);
+
+        $dataView['dataCurriculum'] = $dataCurriculum;
+
+        //Cursos de la Curricula
+        $dataView['dataCourses'] = array();
+
+        $attrib = '';
+        $order = array('semid ASC');
+
+        $pdCourses = $coursesDb->_getFilter($where, $attrib, $order);
+        if ($pdCourses) {
+            $semid   = '_';
+            $cCursos = 0;
+            $cSem    = -1;
+            foreach ($pdCourses as $c => $course) {
+                if ($course['semid'] != $semid) {
+                    $semid = $course['semid'];
+                    $cCursos = 0;
+                    $cSem++;
+                }else {
+                    $dataCourses[$cSem]['courses'][$cCursos] = array(   'id'                => $course['courseid'],
+                                                                        'semid'             => $course['semid'],
+                                                                        'name'              => $course['name'],
+                                                                        'abbreviation'      => $course['abbreviation'],
+                                                                        'type'              => $course['type'],
+                                                                        'credits'           => $course['credits'],
+                                                                        'hours_theoretical' => $course['hours_theoretical'],
+                                                                        'hours_practical'   => $course['hours_practical'],
+                                                                        'req_1'             => $course['req_1'],
+                                                                        'req_2'             => $course['req_2'],
+                                                                        'req_3'             => $course['req_3'],
+                                                                        'state'             => $course['state'] );
+
+                    if (!$course['req_1']) {
+                        $dataCourses[$cSem]['courses'][$cCursos]['req_1'] = '-';
+                    }
+
+                    if ($course['type'] == 'O') {
+                        $dataCourses[$cSem]['courses'][$cCursos]['name_type'] = 'Obligatorio';
+                    }elseif ($course['type'] == 'E'){
+                        $dataCourses[$cSem]['courses'][$cCursos]['name_type'] = 'Electivo';
+                    }else {
+                        $dataCourses[$cSem]['courses'][$cCursos]['name_type'] = 'No Tiene';
+                        $dataCourses[$cSem]['courses'][$cCursos]['type'] = 'N';
+                    }
+                    $dataCourses[$cSem]['semid'] = $course['semid'];
+                    $cCursos++;
+                }
+            }
+        }
+        $dataView['dataCourses'] = $dataCourses;
+
+        //form para las ediciones
+        $dataView['form_course'] = new Curricula_Form_Course();
+        for ($i=1; $i<=$semid; $i++) { 
+            $dataView['form_course']->semid->addMultiOption($i, $i);
+        }
+
+        $this->view->dataView = $dataView;
+    }
+
+    public function newcourseAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //DataBase
+        $curriculumDb = new Api_Model_DbTable_Curricula();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        $ids = $this->_getParam('id');
+        $dataView['id'] = $ids;
+
+        $ids = explode('_', base64_decode($ids));
+        $curid = $ids[0];
+        $escid = $ids[1];
+        $subid = $ids[2];
+
+        $where = array( 'eid'   => $eid,
+                        'oid'   => $oid,
+                        'curid' => $curid,
+                        'escid' => $escid,
+                        'subid' => $subid );
+
+        $dataCurriculum = $curriculumDb->_getOne($where);
+
+        $dataView['type']    = $dataCurriculum['type'];
+        $dataView['periods'] = $dataCurriculum['number_periods'];
+
+        $form_course = new Curricula_Form_Course();
+        $dataView['form_course'] = $form_course;
+
+        $this->view->dataView = $dataView;
+    }
+
+    public function savecourseAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //dataBase
+        $courseDb = new Api_Model_DbTable_Course();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $uid = $this->sesion->uid;
+
+        $formData = $this->getRequest()->getPost();
+        //print_r($formData);
+
+        //form para validar
+        $form_course = new Curricula_Form_Course();
+
+        if ($form_course->isValid($formData)) {
+            $ids = explode('_', base64_decode($formData['id']));
+            $curid = $ids[0];
+            $escid = $ids[1];
+            $subid = $ids[2];
+
+            $dataSave = array(
+                                'eid'               => $eid,
+                                'oid'               => $oid,
+                                'curid'             => $curid,
+                                'escid'             => $escid,
+                                'subid'             => $subid,
+                                'courseid'          => $formData['courseid'],
+                                'credits'           => $formData['credits'],
+                                'semid'             => $formData['semid'],
+                                'name'              => $formData['name'],
+                                'abbreviation'      => $formData['abbreviation'],
+                                'type'              => $formData['type'],
+                                'hours_theoretical' => $formData['hours_theoretical'],
+                                'hours_practical'   => $formData['hours_practical'],
+                                'year_course'       => round($formData['semid']/2),
+                                'state'             => 'A',
+                                'register'          => $uid,
+                                'created'           => date('Y-m-d h:i:s') );
+
+            if ($courseDb->_save($dataSave)) {
+                $result = array('success'  => 1,
+                                'errors'   => array(),
+                                'semester' => $formData['semid'] );
+            }
+        }else{
+            $result['success'] = 0;
+            $cError = 0;
+            $error['isEmpty']   = array();
+            $error['notDigits'] = array();
+            foreach ($form_course->getMessages() as $tipeError) {
+                foreach ($tipeError as $error) {
+                    $result['errors'][$cError] = $error;
+                }
+                if ($cError == 2) {
+                    break;
+                }
+                $cError++;
+            }
+        }
+        print json_encode($result);
+    }
+
+    public function printAction(){
         try {
             $this->_helper->layout()->disableLayout();
             $eid = $this->sesion->eid;

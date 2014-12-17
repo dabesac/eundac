@@ -13,7 +13,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
             $this->_helper->redirector('index','index','default');
         }
         $this->sesion = $login;
-    
+
     }
 
     public function registertargetAction(){
@@ -21,7 +21,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         if(count($params) > 3){
 
             $paramsdecode = array();
-            
+
             foreach ( $params as $key => $value ){
                 if($key!="module" && $key!="controller" && $key!="action"){
                     $paramsdecode[base64_decode($key)] = base64_decode($value);
@@ -33,7 +33,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $oid        = trim($params['oid']);
         $eid        = trim($params['eid']);
         $escid        = trim($params['escid']);
-        $subid        = trim($params['subid']);                    
+        $subid        = trim($params['subid']);
         $courseid    = trim($params['courseid']);
         $curid        = trim($params['curid']);
         $turno        = trim($params['turno']);
@@ -44,7 +44,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $where = null;
         $url = null;
         $where = array(
-            'oid'=>$oid, 
+            'oid'=>$oid,
             'eid'=>$eid,
             'escid'=>$escid,
             'subid'=>$subid,
@@ -93,7 +93,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         if(count($params) > 3){
 
             $paramsdecode = array();
-            
+
             foreach ( $params as $key => $value ){
                 if($key!="module" && $key!="controller" && $key!="action"){
                     $paramsdecode[base64_decode($key)] = base64_decode($value);
@@ -105,7 +105,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $oid        = trim($params['oid']);
         $eid        = trim($params['eid']);
         $escid        = trim($params['escid']);
-        $subid        = trim($params['subid']);                    
+        $subid        = trim($params['subid']);
         $courseid    = trim($params['courseid']);
         $curid        = trim($params['curid']);
         $turno        = trim($params['turno']);
@@ -116,7 +116,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $where = null;
         $url = null;
         $where = array(
-            'oid'=>$oid, 
+            'oid'=>$oid,
             'eid'=>$eid,
             'escid'=>$escid,
             'subid'=>$subid,
@@ -156,7 +156,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         if(count($params) > 3){
 
             $paramsdecode = array();
-            
+
             foreach ( $params as $key => $value ){
                 if($key!="module" && $key!="controller" && $key!="action"){
                     $paramsdecode[base64_decode($key)] = base64_decode($value);
@@ -186,13 +186,14 @@ class Docente_RegisterController extends Zend_Controller_Action {
 
         $where = null;
         $url = null;
-        $where = array( 'oid'      => $oid, 
+        $where = array( 'oid'      => $oid,
                         'eid'      => $eid,
                         'escid'    => $escid,
                         'subid'    => $subid,
                         'courseid' => $courseid,
                         'curid'    => $curid,
                         'turno'    => $turno,
+                        'is_main'  => 'S',
                         'perid'    => $perid );
 
          //Nombre de Docente
@@ -217,7 +218,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
                         'curid'    => $curid,
                         'turno'    => $turno,
                         'perid'    => $perid );
-        
+
         $base_courses = new Api_Model_DbTable_Course();
         $infocourse = $base_courses->_getOne($where);
         $this->view->infocourse = $infocourse;
@@ -226,7 +227,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
 
         $base_faculty   =   new Api_Model_DbTable_Faculty();
-        $base_speciality =  new Api_Model_DbTable_Speciality();        
+        $base_speciality =  new Api_Model_DbTable_Speciality();
         $speciality = $base_speciality ->_getOne($where);
         $parent=$speciality['parent'];
         $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
@@ -239,14 +240,14 @@ class Docente_RegisterController extends Zend_Controller_Action {
         }
         else{
             $spe['esc']=$speciality['name'];
-            $spe['parent']='';  
+            $spe['parent']='';
         }
         $names=strtoupper($spe['esc']);
         $namep=strtoupper($spe['parent']);
         $namefinal=$names." <br> ".$namep;
 
         $namelogo = (!empty($speciality['header']))?$speciality['header']:"blanco";
-        
+
         // $escid=$this->sesion->escid;
         // $where['escid']=$escid;
         $this->view->turno    = $turno;
@@ -257,7 +258,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $namef = strtoupper($this->sesion->faculty->name);
 
         $dbimpression = new Api_Model_DbTable_Impresscourse();
-        
+
         $uidim=$this->sesion->pid;
         $code="notas_objetivo - ".$partial;
         $data = array(
@@ -273,7 +274,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
             'created'=>date('Y-m-d H:i:s'),
             'code'=>$code
             );
-        $dbimpression->_save($data);            
+        $dbimpression->_save($data);
 
         $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>$code);
         $dataim = $dbimpression->_getFilter($wheri);
@@ -295,7 +296,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
 
         $footer = str_replace("h4", "h5", $footer);
         $footer = str_replace("h5", "h6", $footer);
-        
+
         $this->view->header=$header;
         $this->view->footer=$footer;
         $this->_helper->layout->disableLayout();
@@ -306,7 +307,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         if(count($params) > 3){
 
             $paramsdecode = array();
-            
+
             foreach ( $params as $key => $value ){
                 if($key!="module" && $key!="controller" && $key!="action"){
                     $paramsdecode[base64_decode($key)] = base64_decode($value);
@@ -318,12 +319,12 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $oid      = trim($params['oid']);
         $eid      = trim($params['eid']);
         $escid    = trim($params['escid']);
-        $subid    = trim($params['subid']);                    
+        $subid    = trim($params['subid']);
         $courseid = trim($params['courseid']);
         $curid    = trim($params['curid']);
         $turno    = trim($params['turno']);
         $perid    = trim($params['perid']);
-        $partial  = trim($params['partial']); 
+        $partial  = trim($params['partial']);
         $action   = trim($params['action']);
         $units    = trim($params['units']);
 
@@ -331,7 +332,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         $where = null;
         $url = null;
         $where = array(
-            'oid'=>$oid, 
+            'oid'=>$oid,
             'eid'=>$eid,
             'escid'=>$escid,
             'subid'=>$subid,
@@ -342,7 +343,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
             );
         $attrib = array(
                     'porc1_u1',
-                    'porc2_u1',    
+                    'porc2_u1',
                     'porc3_u1',
                     'porc1_u2',
                     'porc2_u2',
@@ -352,7 +353,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
                     'porc3_u3',
                     'porc1_u4',
                     'porc2_u4',
-                    'porc3_u4' 
+                    'porc3_u4'
             );
 
         $base_persentage = new Api_Model_DbTable_CourseCompetency();
@@ -401,7 +402,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         if(count($params) > 3){
 
             $paramsdecode = array();
-            
+
             foreach ( $params as $key => $value ){
                 if($key!="module" && $key!="controller" && $key!="action"){
                     $paramsdecode[base64_decode($key)] = base64_decode($value);
@@ -436,12 +437,12 @@ class Docente_RegisterController extends Zend_Controller_Action {
        /* $oid        = trim($params['oid']);
         $eid        = trim($params['eid']);
         $escid        = trim($params['escid']);
-        $subid        = trim($params['subid']);                    
+        $subid        = trim($params['subid']);
         $courseid    = trim($params['courseid']);
         $curid        = trim($params['curid']);
         $turno        = trim($params['turno']);
         $perid        = trim($params['perid']);
-        $partial      = trim($params['partial']); 
+        $partial      = trim($params['partial']);
         $action      = trim($params['action']);*/
         $this->view->units=$units;
         $where = null;
@@ -453,6 +454,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
                         'courseid' => $courseid,
                         'curid'    => $curid,
                         'turno'    => $turno,
+                        'is_main'  => 'S',
                         'perid'    => $perid );
         $attrib = array('pid');
 
@@ -477,7 +479,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
                         'turno'    => $turno,
                         'perid'    => $perid );
         $attrib = array('porc1_u1',
-                        'porc2_u1',    
+                        'porc2_u1',
                         'porc3_u1',
                         'porc1_u2',
                         'porc2_u2',
@@ -498,9 +500,9 @@ class Docente_RegisterController extends Zend_Controller_Action {
 
         $base_students = new Api_Model_DbTable_Registrationxcourse();
         $data_notes_students = $base_students ->_getStudentXcoursesXescidXperiods_sql($where);
-        
+
         $base_faculty   =   new Api_Model_DbTable_Faculty();
-        $base_speciality =  new Api_Model_DbTable_Speciality();        
+        $base_speciality =  new Api_Model_DbTable_Speciality();
         $speciality = $base_speciality ->_getOne($where);
         $parent=$speciality['parent'];
         $wher=array('eid'=>$eid,'oid'=>$oid,'escid'=>$parent,'subid'=>$subid);
@@ -513,7 +515,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
         }
         else{
             $spe['esc']=$speciality['name'];
-            $spe['parent']='';  
+            $spe['parent']='';
         }
         $names=strtoupper($spe['esc']);
         $namep=strtoupper($spe['parent']);
@@ -546,7 +548,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
             'created'=>date('Y-m-d H:i:s'),
             'code'=>$code
             );
-        $dbimpression->_save($data); 
+        $dbimpression->_save($data);
 
         $wheri = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'courseid'=>$courseid,'escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'turno'=>$turno,'code'=>$code);
         $dataim = $dbimpression->_getFilter($wheri);
@@ -568,7 +570,7 @@ class Docente_RegisterController extends Zend_Controller_Action {
 
         $footer = str_replace("h4", "h5", $footer);
         $footer = str_replace("h5", "h6", $footer);
-        
+
         $this->view->header=$header;
         $this->view->footer=$footer;
         $this->_helper->layout->disableLayout();

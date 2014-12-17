@@ -118,6 +118,64 @@ class Report_CustomreportController extends Zend_Controller_Action{
 		}
 	}
 
+    public function promediostudentsfirstAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+
+            $dbpromedio = new Api_Model_DbTable_Registrationxcourse();
+            $perid=base64_decode($this->_getParam('perid'));
+            $escid=base64_decode($this->_getParam('escid'));
+            $subid=base64_decode($this->_getParam('subid'));
+            $escid1=base64_decode($this->_getParam('escid1'),$escid);
+            $subid1=base64_decode($this->_getParam('subid1'),$subid);
+            $curid=base64_decode($this->_getParam('curid'));
+            $courseid=base64_decode($this->_getParam('courseid'));
+
+            $where = array('escid'=>$escid,'subid'=>$subid,'curid'=>$curid,'courseid'=>$courseid,'perid'=>$perid);
+            $data=$dbpromedio->promedio_students_first($where);
+
+            if ($data) {
+                foreach ($data as $k => $datafull) {
+                    if ($datafull['veces']!='1') {
+                        unset($data[$k]);
+                    }
+                }
+            }
+
+            $this->view->data=$data;
+
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
+    public function promediostudentsperiodsAction(){
+        try {
+            $this->_helper->layout()->disableLayout();
+            $dbsemester= new Api_Model_DbTable_Semester();
+            $dbconsultlist = new Api_Model_DbTable_Registrationxcourse();
+
+            $eid=$this->sesion->eid;
+            $oid=$this->sesion->oid;
+            $escid=base64_decode($this->_getParam('escid'));
+            $subid=base64_decode($this->_getParam('subid'));
+            $escid1=base64_decode($this->_getParam('escid1'));
+            $subid1=base64_decode($this->_getParam('subid1'));
+            $perid=base64_decode($this->_getParam('perid'));
+
+            $where= array('escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
+            $data=$dbconsultlist->promedio_students_periods_total($where);
+            $this->view->data=$data;
+
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'perid'=>$perid);
+            $dsem=$dbsemester->_getSemesterXPeriodsXEscid($where);
+            $this->view->datasem=$dsem;
+
+        } catch (Exception $e) {
+            print "Error: ".$e->getMessage();
+        }
+    }
+
 	public function registrationquantityrepeatstudentsAction(){
 		try {
 			$this->_helper->layout()->disableLayout();

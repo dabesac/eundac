@@ -29,14 +29,15 @@
         $dataVista['subid']     = $subid;
         $dataVista['dataEscid'] = base64_encode($escid.'|'.$subid);
 
-        if ($rid == 'RF') {
+
+        if ($rid == 'RF' or $rid == 'DF') {
             $dataVista['dataEscid']  = '';
 
-            $where = array( 'eid'   => $eid,
-                            'oid'   => $oid,
-                            'facid' => $facid,
-                            'subid' => $subid,
-                            'state' => 'A',
+            $where = array( 'eid'    => $eid,
+                            'oid'    => $oid,
+                            'facid'  => $facid,
+                            'subid'  => $subid,
+                            'state'  => 'A',
                             'parent' => '' );
             $attrib = array('name', 'escid', 'subid', 'parent');
             $preDataSchool = $schooldDb->_getFilter($where, $attrib);

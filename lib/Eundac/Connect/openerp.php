@@ -1,7 +1,7 @@
 <?php
-    
+
     include("xmlrpc/lib/xmlrpc.inc");
-    
+
 class Eundac_Connect_openerp {
 
     public $server = "http://erp.undac.edu.pe:8069/xmlrpc/";
@@ -22,7 +22,7 @@ class Eundac_Connect_openerp {
         if ($auth > 0) {
             $this->auth = true;
         }
-    }   
+    }
 
     public function login($username , $password, $database, $server) {
 
@@ -52,7 +52,7 @@ class Eundac_Connect_openerp {
 
         $count = 0;
         foreach ($data as $key => $value) {
-            $values[$key]= new xmlrpcval($value,'string'); 
+            $values[$key]= new xmlrpcval($value,'string');
         }
 
         // print_r($values); exit();
@@ -77,10 +77,10 @@ class Eundac_Connect_openerp {
     public function search($model_name,$query=array()){
         $client = new xmlrpc_client($this->server."object");
         $count =0;
-        for ($i=0; $i < count($query); $i++) { 
+        for ($i=0; $i < count($query); $i++) {
             if (
-                array_key_exists('column', $query[$i]) && 
-                array_key_exists('operator', $query[$i]) && 
+                array_key_exists('column', $query[$i]) &&
+                array_key_exists('operator', $query[$i]) &&
                 array_key_exists('value', $query[$i]) &&
                 array_key_exists('type', $query[$i])
                 ) {
@@ -119,7 +119,7 @@ class Eundac_Connect_openerp {
         $id_val = array();
         $count = 0;
         foreach ($data as $key => $value) {
-            $values[$key]= new xmlrpcval($value,'string'); 
+            $values[$key]= new xmlrpcval($value,'string');
         }
         foreach ($ids as $id)
             $id_val[$count++] = new xmlrpcval($id, "int");
@@ -178,9 +178,9 @@ class Eundac_Connect_openerp {
     }
 
     public function unlink($ids , $model_name) {
-        
+
         $client = new xmlrpc_client($this->server."object");
-      
+
         $client->return_type = 'phpvals';
 
         $id_val = array();
