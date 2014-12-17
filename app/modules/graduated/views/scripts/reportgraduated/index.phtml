@@ -89,14 +89,12 @@ $dataVista = $this->dataVista;
 		$('#selectFaculty').on('change', function(){
 				facid = $(this).val();
 				reset();
-				if (facid=='TODOFAC') {
-					$('#selectSchool').html('<option value="TODOESC">TODAS LAS ESCUELAS</option>');
-
-				}else{
-					$('#selectSchool').html('<option value="">Cargando...</option')
-				.load('/graduated/reportgraduated/schools/facid/'+facid);
-				};
-			});
+			if (facid=='TODOFAC') {
+				$('#selectSchool').html('<option value="TODOESC">TODAS LAS ESCUELAS</option>');
+			}else{
+				$('#selectSchool').html('<option value="">Cargando...</option').load('/graduated/reportgraduated/schools/facid/'+facid);
+			};
+		});
 
 			$('#selectSchool').on('change', function(){
 				dataEscid = $(this).val();

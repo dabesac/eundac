@@ -24,10 +24,9 @@ $(function(){
 	//Closure curriculum
 	function curriculum(){
 		var speciality    = '';
-		var showErrorTime = '';
 		var idGet         = '';
 		var idJs          = '';
-
+		var showErrorTime;
 
 		function chargeSchools(dataGet){
 			$('#dataCurriculums').html('');
@@ -292,6 +291,7 @@ $(function(){
 				$(element).children('span:nth-child(1)').html(index + 1);
 				empty_curriculums = false;
 			});
+			console.log(curriculums);
 
 			if ($(curriculums).hasClass('div_temporary')) {
 				//Si esta Vacio cambiar
@@ -365,51 +365,54 @@ $(function(){
 								$(div_to_change).html(curriculumHtml);
 								actionsPerCurriculum(idJs);
 
+								$(div_to_change).siblings('.empty').slideUp('fast');
+
 								//Agregar la que estaba activa a Temporales
-								curriculumHtml = '<div id="curriculum'+ dataCurriculumChange.idJs +'" class="curriculum showCurriculum" idactivatejs="'+ dataCurriculumChange.idJs +'" state="T">'+
-													'<span><span class="glyphicon glyphicon-ok"></span></span>'+
-													'<span>'+ dataCurriculumChange.name +'</span>'+
-													'<span>'+ dataCurriculumChange.year +'</span>'+
-													'<div class="modify temporary_modify">'+
-														'<a href="##">Administrar Cursos</a>'+
-														'<a href="##" ide="'+ dataCurriculumChange.idGet +'" idjs="'+ dataCurriculumChange.idJs +'" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>'+
-														'<a href="##" class="btn_derive" ide="'+ dataCurriculumChange.idGet +'" goto="'+ dataCurriculumChange.idJs +'">Derivar</a>'+
-														'<div class="derive_from_draft" fromto="'+ dataCurriculumChange.idJs +'">'+
-															'<a href="##" type="active">Activar Curricula</a>'+
-															'<a href="##" type="close">Cerrar Curricula</a>'+
+								if ($(curriculumBefore).attr('state')) {
+									curriculumHtml = '<div id="curriculum'+ dataCurriculumChange.idJs +'" class="curriculum showCurriculum" idactivatejs="'+ dataCurriculumChange.idJs +'" state="T">'+
+														'<span><span class="glyphicon glyphicon-ok"></span></span>'+
+														'<span>'+ dataCurriculumChange.name +'</span>'+
+														'<span>'+ dataCurriculumChange.year +'</span>'+
+														'<div class="modify temporary_modify">'+
+															'<a href="##">Administrar Cursos</a>'+
+															'<a href="##" ide="'+ dataCurriculumChange.idGet +'" idjs="'+ dataCurriculumChange.idJs +'" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>'+
+															'<a href="##" class="btn_derive" ide="'+ dataCurriculumChange.idGet +'" goto="'+ dataCurriculumChange.idJs +'">Derivar</a>'+
+															'<div class="derive_from_draft" fromto="'+ dataCurriculumChange.idJs +'">'+
+																'<a href="##" type="active">Activar Curricula</a>'+
+																'<a href="##" type="close">Cerrar Curricula</a>'+
+															'</div>'+
 														'</div>'+
 													'</div>'+
-												'</div>'+
-												'<div id="curriculum_confirm'+ dataCurriculumChange.idJs +'" fromto="'+ dataCurriculumChange.idJs +'" class="confirms_side">'+
-													'<div class="confirm_side delete_curriculum" type="delete">'+
-														'<p>Confírme si desea eliminar esta currícula...</p>'+
-														'<a href="##" whycallme="D">Si, quiero eliminarla</a>'+
-														'<a href="##">Cancelar</a>'+
-													'</div>'+
-													'<div class="confirm_side active_curriculum" type="active">'+
-														'<p>Confírme si desea activar esta currícula, si hay otra activa ésta la remplazara...</p>'+
-														'<a href="##" whycallme="A">Si, quiero activarla</a>'+
-														'<a href="##">Cancelar</a>'+
-													'</div>'+
-													'<div class="confirm_side temporary_curriculum" type="temporary">'+
-														'<p>Confírme si desea mover esta currícula a temporales...</p>'+
-														'<a href="##" whycallme="T">Si, quiero moverla a temporales</a>'+
-														'<a href="##">Cancelar</a>'+
-													'</div>'+
-													'<div class="confirm_side close_curriculum" type="close">'+
-														'<p>Confírme si desea cerrar esta currícula...</p>'+
-														'<a href="##" whycallme="C">Si, quiero cerrarla</a>'+
-														'<a href="##">Cancelar</a>'+
-													'</div>'+
-												'</div>';
+													'<div id="curriculum_confirm'+ dataCurriculumChange.idJs +'" fromto="'+ dataCurriculumChange.idJs +'" class="confirms_side">'+
+														'<div class="confirm_side delete_curriculum" type="delete">'+
+															'<p>Confírme si desea eliminar esta currícula...</p>'+
+															'<a href="##" whycallme="D">Si, quiero eliminarla</a>'+
+															'<a href="##">Cancelar</a>'+
+														'</div>'+
+														'<div class="confirm_side active_curriculum" type="active">'+
+															'<p>Confírme si desea activar esta currícula, si hay otra activa ésta la remplazara...</p>'+
+															'<a href="##" whycallme="A">Si, quiero activarla</a>'+
+															'<a href="##">Cancelar</a>'+
+														'</div>'+
+														'<div class="confirm_side temporary_curriculum" type="temporary">'+
+															'<p>Confírme si desea mover esta currícula a temporales...</p>'+
+															'<a href="##" whycallme="T">Si, quiero moverla a temporales</a>'+
+															'<a href="##">Cancelar</a>'+
+														'</div>'+
+														'<div class="confirm_side close_curriculum" type="close">'+
+															'<p>Confírme si desea cerrar esta currícula...</p>'+
+															'<a href="##" whycallme="C">Si, quiero cerrarla</a>'+
+															'<a href="##">Cancelar</a>'+
+														'</div>'+
+													'</div>';
 
-								var div_target = $('#curriculums' + speciality).find('.div_temporary');
+									var div_target = $('#curriculums' + speciality).find('.div_temporary');
 
-								$(div_target).prepend(curriculumHtml);
-								actionsPerCurriculum(dataCurriculumChange.idJs);
-
+									$(div_target).prepend(curriculumHtml);
+									actionsPerCurriculum(dataCurriculumChange.idJs);
+									enumerate(div_target);
+								};
 								enumerate(div_from_change);
-								enumerate(div_target);
 							}, 300);
 						}else if(why_call_me == 'T'){
 							var div_to_change   = $('#curriculums' + speciality).find('.div_temporary');
@@ -682,7 +685,7 @@ $(function(){
 		}
 
 		function view_detailCurriculum(){
-			//Para proximas acciones en esta vista agregar codigo aca
+			//Para proximas acciones en esta vista de detalle de curricula agregar codigo aca
 		}
 
 		function view_editCurriculum(idGet, idJs){
@@ -745,7 +748,9 @@ $(function(){
 				addCourse();
 			});
 
+			//agregar Curso
 			$('#btn_add_course').on('click', function(){
+				$('#id_error_course_side').slideUp('fast');
 				if (!$('#id_add_new_course').hasClass('new_course_active')) {
 					$(this)
 						.addClass('btn_cancel')
@@ -765,11 +770,55 @@ $(function(){
 
 					setTimeout(function(){
 						$('#id_add_new_course')
-							.removeClass('new_course_hide')
+							.removeClass('new_course_hide');
 					}, 300);
 				};
 			});
 
+			//agregar funciones por curso
+			var id_course_js;
+			$('.all_course_data').each(function(index, element){
+				id_course_js = $(element).attr('idactivatejs');
+				actionsPerCourse(id_course_js);
+			});
+
+		}
+		function actionsPerCourse(id){
+			var btn_edit_course = $('#id_course_' + id).find('.btn_edit_course');
+
+			//Editar Curso
+			$(btn_edit_course).on('click', function(){
+				var this_course  = $(btn_edit_course).parent();
+				var article_edit = $(this_course).siblings('article.edit_course');
+
+				$('article.edit_course').each(function(index, element){
+					if($(element).parent().attr('idactivatejs') != id){
+						if ($(element).hasClass('edit_course_active')) {
+							$(element).siblings('.data_course').removeClass('course_clicked');
+							$(element).siblings('.data_course').find('.btn_edit_course').html('Editar');
+							$(element).addClass('edit_course_hide');
+							setTimeout(function(){
+								$(element).removeClass('edit_course_active');
+							}, 300);
+						};
+					}
+				});
+
+				$(this_course).toggleClass('course_clicked');
+
+				if (!$(article_edit).hasClass('edit_course_active')) {
+					$(btn_edit_course).html('Cancelar');
+					$(article_edit)
+						.addClass('edit_course_active')
+						.removeClass('edit_course_hide');
+				}else {
+					$(btn_edit_course).html('Editar');
+					$(article_edit).addClass('edit_course_hide');
+					setTimeout(function(){
+						$(article_edit).removeClass('edit_course_active');
+					}, 300);
+				};
+			});
 		}
 
 		function addCourse(){
@@ -780,9 +829,24 @@ $(function(){
 					type     : 'post',
 					url      : '/curricula/curricula/savecourse',
 					data     : $(this).serialize(),
-					//dataType : 'json',
+					dataType : 'json',
 					success  : function(data){
 						console.log(data);
+
+						$('#id_error_course_side div:nth-child(2)').html('');
+						if (data.success === 1) {
+							console.log(data.semester);
+						}else if (data.success === 0){
+							data.errors.forEach(function(error){
+								$('#id_error_course_side div:nth-child(2)').append('<p>' + error + '</p>');
+							});
+
+							$('#id_error_course_side').slideDown('fast');
+							clearTimeout(showErrorTime);
+							showErrorTime = setTimeout(function(){
+								$('#id_error_course_side').slideUp('fast');
+							}, 7000);
+						};
 					},
 					error : function(){
 						console.log('Error al guardar el curso, mas fijo que sea en la base de datos...')
