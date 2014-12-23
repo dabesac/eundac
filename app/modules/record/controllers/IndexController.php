@@ -1873,13 +1873,29 @@ class Record_IndexController extends Zend_Controller_Action {
 			$formData = $this->getRequest()->getPost();
 			$formData['eid'] = $this->sesion->eid;
 			$formData['oid'] = $this->sesion->oid;
+            //impresscourse
+            $impres = new Api_Model_DbTable_Impresscourse();
+            $deleteimp = $impres -> _delete($formData);
 			//coursexteacher
 			$coursexteacher = new Api_Model_DbTable_Coursexteacher();
 			$deletecoursexteacher = $coursexteacher ->_deleteadm($formData);
-			$this->view->resp=$deletecoursexteacher;
-			//periodsxcourse
-			$periodscourses= new Api_Model_DbTable_PeriodsCourses();
-			$deletepxc = $periodscourses ->_delete($formData);	
+			//$this->view->resp=$deletecoursexteacher;	
+            //horaryperiods
+            $horary = new Api_Model_DbTable_Horary();
+            $deletehorary = $horary ->_deleteadm($formData);
+            //syllabusunitcontent
+            $silunitscontent = new Api_Model_DbTable_Syllabusunitcontent();
+            $delunitscontent = $silunitscontent->_deleteadm($formData);
+            //Syllabusunits
+            $silunits = new Api_Model_DbTable_Syllabusunits();
+            $delunits = $silunits->_deleteadm($formData);
+            //sillabus
+            $sillabus = new Api_Model_DbTable_Syllabus();
+            $deletesil = $sillabus ->_delete($formData);
+            //periodsxcourse
+            $periodscourses= new Api_Model_DbTable_PeriodsCourses();
+            $deletepxc = $periodscourses ->_delete($formData);
+
 
 		} catch (Excoption $e){
 			print "Error: ".$e->getMessage();

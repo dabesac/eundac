@@ -14,7 +14,7 @@ class Admin_Form_Openrecords extends Zend_Form{
         $anio->removeDecorator('HtmlTag');
         $anio->setRequired(true)->addErrorMessage('Este campo es requerido');
         $anio->setAttrib('class','form-control');
-        $anio->addMultiOption("","- Selecione -");
+        //$anio->addMultiOption("","- Selecione -");
         $a=date('Y');
         for ($i=$a; $i >1989 ; $i--) {
          	$anio->addMultiOption($i,$i);
@@ -24,7 +24,7 @@ class Admin_Form_Openrecords extends Zend_Form{
         $period->removeDecorator('Label');
         $period->removeDecorator('HtmlTag');
         $period->setAttrib('class','form-control');
-        $period->addMultiOption("","- Selecione un Año -");
+        //$period->addMultiOption("","- Selecione un Año -");
 
         $esc=new Zend_Form_Element_Select('esc');
         $esc->removeDecorator('Label');
