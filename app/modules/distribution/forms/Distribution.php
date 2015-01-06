@@ -13,12 +13,15 @@ class Distribution_Form_Distribution extends Zend_Form{
         $perid->removeDecorator('Label');
         $perid->removeDecorator('HtmlTag');
         $perid->setAttrib("class","form-control");
+        $perid->setRegisterInArrayValidator(false);
         $perid->addMultiOption("","Selecione Periodo");
         $periodsDb = new Api_Model_DbTable_Periods();
+        $anios=$sesion->period->perid;
+        $anio=substr($anios, 0, 2);
         $where = array(
                         'eid'  => $eid,
                         'oid'  => $oid,                    
-                        'year' => 15 );
+                        'year' => $anio );
 
         $periods = $periodsDb->_getPeriodsxYears($where);
         foreach ($periods as $period) {
@@ -39,7 +42,7 @@ class Distribution_Form_Distribution extends Zend_Form{
         $datepress= new Zend_Form_Element_Text("datepress");
         $datepress->setAttrib("class","form-control");
         $datepress->setAttrib("required","");
-        $datepress->setRequired(true);
+        // $datepress->setRequired(true);
         $datepress->removeDecorator("HtmlTag")->removeDecorator("Label");
 
         $dateaccept= new Zend_Form_Element_Text("dateaccept");
@@ -47,7 +50,7 @@ class Distribution_Form_Distribution extends Zend_Form{
         $dateaccept->removeDecorator("HtmlTag")->removeDecorator("Label");
         
         $state = new Zend_Form_Element_Select("state");
-        $state->setRequired(true);
+        // $state->setRequired(true);
         $state->removeDecorator('Label');
         $state->removeDecorator('HtmlTag');
         $state->setAttrib("class","form-control");
