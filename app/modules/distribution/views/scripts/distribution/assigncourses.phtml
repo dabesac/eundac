@@ -427,6 +427,19 @@
             principal=princ;
         };
 
+        // duplicacion de horas academicas solo para periodos de nivelacion
+        //________________________________
+
+        var n_perid = perid.substring(2,3);
+
+        if (n_perid=='N') {
+            hteoria=hteoria*2;
+            hpractica=hpractica*2;
+            totalhoras=totalhoras*2;
+        };
+        
+        //________________________________
+
         var tmp=curso.split(";--;");
         var courseid=tmp[0];
         var semid=tmp[1];
