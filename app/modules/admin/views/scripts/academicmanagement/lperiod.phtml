@@ -3,8 +3,9 @@
 	{
 		echo "<option value=''><center> -Seleccione un periodo- </center></option>";
 	    foreach ($this->dataperiod  as $perio){
+	    		$str = ($perio['state']=="A")?"selected ":""; 
 	        ?>
-	        <option value="<?php echo $perio['perid']?>"><?php echo $perio['perid']." | ".$perio['name']?></option>
+	        <option <?php echo $str?> value="<?php echo $perio['perid']?>"><?php echo $perio['perid']." | ".$perio['name']?></option>
 	        <?php
 	    }
 	}

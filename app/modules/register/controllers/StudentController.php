@@ -64,7 +64,7 @@ class Register_StudentController extends Zend_Controller_Action {
                     'escid'=>$escid,
                     'subid'=>$subid,
                     'perid'=>$perid,
-                    'ratid'=>20,
+                    'ratid'=>39,
                     'amount'=>0,
                     'register'=>$uid,
                     'created'=>date('Y-m-d H:m:s'),
@@ -272,8 +272,8 @@ class Register_StudentController extends Zend_Controller_Action {
                     }
 
 
-                    if ($perid != '13N' ) {
-                            if($veces < 2 ){
+                    if ($perid != '14N' ) {
+                        if($veces < 2 ){
 
                             if ($data_register['semid']==0) {
                                $this->view->assign_semester=0;
@@ -299,7 +299,7 @@ class Register_StudentController extends Zend_Controller_Action {
                     {
                         $this->view->assign_semester=$data_register['semid'];
                         $this->view->total_credits=$data_register['credits'];
-                        $this->view->assign_credist=11+$condition_credits;
+                        $this->view->assign_credist=9+$condition_credits;
                     }
 
                     $this->view->subjects = $subject;
@@ -687,7 +687,6 @@ class Register_StudentController extends Zend_Controller_Action {
             $veces = trim($params['veces']);
             $credits_cur = trim($params['credits']);
             $condition_credits = intVal(trim($params['condition']));
-
             $created_resolu=1;
             try {
 
@@ -706,7 +705,7 @@ class Register_StudentController extends Zend_Controller_Action {
                     $credits_register = $base_registration -> _getOne($where);
 
 
-                   if ($perid != '13N' ) {
+                   if ($perid != '14N' ) {
                          if($veces >= 2 ){
 
                         $credits_assing[0]['semester_creditsz']=11+$condition_credits;
@@ -731,7 +730,7 @@ class Register_StudentController extends Zend_Controller_Action {
                             }
                         }
                     }else{
-                        $credits_assing[0]['semester_creditsz']=11+$condition_credits;
+                        $credits_assing[0]['semester_creditsz']=9+$condition_credits;
 
                     }
 
@@ -759,7 +758,7 @@ class Register_StudentController extends Zend_Controller_Action {
 
                             $credits_register = $base_registration -> _getOne($where);
 
-                            if ($perid != '13N') {
+                            if ($perid != '14N') {
                                  if($veces >= 2 ){
 
                                     $credits_assing[0]['semester_creditsz']=11+$condition_credits;
@@ -783,7 +782,7 @@ class Register_StudentController extends Zend_Controller_Action {
                                         }
                                 }
                             }else{
-                                $credits_assing[0]['semester_creditsz']=11+$condition_credits;
+                                $credits_assing[0]['semester_creditsz']=9+$condition_credits;
                             }
 
 

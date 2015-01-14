@@ -159,72 +159,24 @@ $strprint = "/record/index/printavence/"
 		<td class="center"><span class="glyphicon <?php echo $sp?> txthover"
 		data-toggle="tooltip" title="Estado del segundo parcial"></span></td>
 		<td><?php
-		 	if(($this->rid =="DR" || $this->rid =="AD") & ($date == "") ){?>
-		 		<div class="dataup" style="width:130px;">
-					<div class="fecha" style='float: left'>
-						<input  id="f_acta<?php echo $s?>" name="f_acta" type="text" class="form-control" style="width:90px;height:24px;">	
-					</div>
-					<div class="guardar">
-						<a href="#" style='margin-top: 2px;margin-left: 6px;' 
-							class="btn btn-info btn-xs"
-							title="Cerrar acta"
-							id='savedata<?php echo $s?>'
-							dacourseid="<?php echo $course['courseid']?>"
-							daturno="<?php echo $course['turno']?>"
-							dacurid="<?php echo $course['curid']?>"
-							daescid="<?php echo $course['escid']?>"
-							dasubid="<?php echo $course['subid']?>"
-							daperid="<?php echo $course['perid']?>"
-							>
-							<span class='glyphicon glyphicon-floppy-disk' data-toggle="tooltip" title="Cerrar acta"></span>
-						</a>
-						<script>
-							$("#f_acta<?php echo $s?>").datepicker();
-							$("#savedata<?php echo $s?>").click(function(e){
-								var f_acta = $("#f_acta<?php echo $s?>").val();
-								if (f_acta=="") {
-							        alert("Seleccione la fecha de Cierre de Acta.");
-							        return false;
-							    };
-								var tmp = f_acta.split("/")	
-								var date = tmp[2]+'-'+tmp[0]+'-'+tmp[1];
-								var ajaxData ={
-									'escid' : $(this).attr('daescid'),
-									'curid' : $(this).attr('dacurid'),
-									'subid' : $(this).attr('dasubid'),
-									'perid' : $(this).attr('daperid'),
-									'courseid' : $(this).attr('dacourseid'),
-									'turno' : $(this).attr('daturno'),
-									'closure_date' : date,
-									'state_record' : 'C',
-									'state' : 'C' 
-								};
-								e.preventDefault();
-								$.ajax({
-									type : 'post',
-									url : '/record/index/updatestatecourse/',
-									data : ajaxData,
-									success : function(data){
-										var perid = $("#perid").val();
-										var escid = $("#escid").val();
-										var ajax_dat = {
-											"perid" : perid,
-											"escid" : escid,
-										};
-										$.ajax({
-											type : "POST",
-											url : "/record/index/list/",
-											data : ajax_dat,
-											success : function(data){
-												$(".loadcourses").html(data);
-											}
-										});
-									}
-								});
-							});
-						</script>
-					</div>
-				</div>
+		 	if(($this->rid =="DR" || $this->rid =="AD") & ($date == "") ){
+		 		$estado='<div class="form-group" style="margin:0px">
+                        <input  id="f_acta" placeholder="Fecha de Cierre" name="f_acta" type="text" class="form-control" ></div>
+                    	<a href="#"class="btn btn-success change" id="save"><span class="glyphicon glyphicon-floppy-saved"></span> Guardar</a><br/>';
+                $escid_cryp = base64_encode($course['escid']);
+                $perid_cryp = base64_encode($course['perid']);
+                $subid_cryp = base64_encode($course['subid']);
+		 		?>
+		 		<p data-html='true' uid="" pid="" escid="" subid="" index="" class=" popovr btn btn-info btn-xs" data-toggle="popover" title="CERRAR ACTA CON FECHA" data-content='<?php echo $estado ?>'
+		 		dacourseid="<?php echo $course['courseid']?>"
+		 		daturno="<?php echo $course['turno']?>"
+		 		dacurid="<?php echo $course['curid']?>"
+		 		daescid="<?php echo $course['escid']?>"
+		 		dasubid="<?php echo $course['subid']?>"
+		 		daperid="<?php echo $course['perid']?>"
+		 		iescid="<?php echo $escid_cryp.";--;".$subid_cryp?>"
+		 		iperid="<?php echo $perid_cryp?>"
+                        ><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" title="Cerrar Acta con Fecha"></span></p>
 		 	<?php
 		 	}else { 
 		 		echo $date;
@@ -317,6 +269,7 @@ $strprint = "/record/index/printavence/"
 								url : "/record/index/deletecourse/",
 								data : datos,
 								success : function(data){
+									//console.log(data);
 									$("#modal1").modal("hide");
 								}
 							});
@@ -340,6 +293,9 @@ $strprint = "/record/index/printavence/"
 </div>
 <!-- fin -->
 <script>
+	$('.popovr').popover({
+        placement : 'left'
+    });
 	$("#openwindows").click(function (){
 		var perid=$("#perid").val();
 		var escid=$("#escid").val();
@@ -366,5 +322,59 @@ $strprint = "/record/index/printavence/"
 			}
 		});
 	});
+	$('.popovr').click(function(event) {
+		$("#f_acta").datepicker();
+        //etiqueta=$(this);
+        $('.popovr').not(this).popover('hide');
+        courseid=$(this).attr('dacourseid');
+        turno=$(this).attr('daturno');
+        curid=$(this).attr('dacurid');
+        escid=$(this).attr('daescid');
+        subid=$(this).attr('dasubid');
+        perid=$(this).attr('daperid');
+        iescid=$(this).attr('iescid');
+        iperid=$(this).attr('iperid');
+        $("#save").click(function(e) {
+        	var f_acta = $("#f_acta").val();
+		 	if (f_acta=="") {
+		 		alert("Seleccione la fecha de Cierre de Acta.");
+		 		return false;
+		 	};
+		 	var tmp = f_acta.split("/")	
+		 	var date = tmp[2]+'-'+tmp[0]+'-'+tmp[1];
+		 	var ajaxData ={
+		 		'escid' : escid,
+		 		'curid' : curid,
+		 		'subid' : subid,
+		 		'perid' : perid,
+		 		'courseid' : courseid,
+		 		'turno' : turno,
+		 		'closure_date' : date,
+		 		'state_record' : 'C',
+		 		'state' : 'C' 
+		 	};
+		 	e.preventDefault();
+		 	$.ajax({
+		 		type : 'post',
+		 		url : '/record/index/updatestatecourse/',
+		 		data : ajaxData,
+		 		success : function(data){
+		 			var ajax_dat = {
+		 				"perid" : iperid,
+		 				"escid" : iescid,
+		 			};
+		 			$.ajax({
+		 				type : "POST",
+		 				url : "/record/index/list/",
+		 				data : ajax_dat,
+		 					success : function(data){
+		 						$(this).popover('hide');
+		 						$(".loadcourses").html(data);
+		 					}
+		 			});
+		 		}
+		 	});
+        });
+    });
 </script>
 	

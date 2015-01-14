@@ -39,5 +39,20 @@ class Api_Model_DbTable_Impresscourse extends Zend_Db_Table_Abstract
 			print "Error: Read Filter Impression Course".$e->getMessage();
 		}
 	}
+
+	public function _delete($data)
+	{
+		try{
+			if ($data['eid']=="" || $data['oid']=="" || $data['courseid']=="" || $data['escid']=='' || $data['perid']==""  || $data['turno']=='' || $data['subid']=='' || $data['curid']=='') return false;
+			$where="eid = '".$data['eid']."' and oid='".$data['oid']."' and courseid='".$data['courseid']."' 
+					and escid='".$data['escid']."' and perid='".$data['perid']."' and turno='".$data['turno']."'
+					 and subid='".$data['subid']."' and curid='".$data['curid']."' ";
+			return $this->delete($where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Delete ".$e->getMessage();
+		}
+	}
+
 	
 }

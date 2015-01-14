@@ -57,11 +57,13 @@
 </div>
 <div id='viewcourses'></div>
 <script>
+    var year_a="<?php echo date('Y');?>";
     $("#anio").change(function(){
         var anio = $(this).val();
         // alert(anio);
         $("#period").load("/admin/academicmanagement/lperiod/anio/"+anio);
     });
+    $("#period").load("/admin/academicmanagement/lperiod/anio/"+year_a);
     $("#facid").change(function(){
         var facid=$(this).val();
         $("#escid").load("/admin/academicmanagement/schools/facid/"+facid);

@@ -145,9 +145,28 @@ class Distribution_DistributionController extends Zend_Controller_Action {
 
 
     public function newAction(){
+        $form = new Distribution_Form_Distribution();
+        $eid=$this->sesion->eid;
+        $oid=$this->sesion->oid;
         $anio = $this->_getParam('anio');
         $this->view->anio = $anio;
-        $form = new Distribution_Form_Distribution();
+
+        $periodsDb = new Api_Model_DbTable_Periods();
+        $anios=$this->sesion->period->perid;
+        $anio=substr($anios, 0, 2);
+        $where = array(
+                        'eid'  => $eid,
+                        'oid'  => $oid,                    
+                        'year' => $anio + 1 );
+
+        $periods = $periodsDb->_getPeriodsxYears($where);
+        if ($periods) {
+            foreach ($periods as $period) {
+                if ($period['perid']['2'] == 'A' or $period['perid']['2'] == 'B'or $period['perid']['2'] == 'N') {
+                    $form->perid->addMultiOption($period['perid'],$period['perid'].' | '.$period['name']);
+                }
+            }
+        }
         $this->view->form = $form;
 
     }

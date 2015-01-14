@@ -36,6 +36,17 @@ class Api_Model_DbTable_Syllabusunitcontent extends Zend_Db_Table_Abstract
 			print "Error: Delete SyllabusUnitsContent ".$e->getMessage();
 		}
 	}
+
+	public function _deleteadm($data){
+		try{
+			if ($data['eid']=='' || $data['oid']=='' || $data['subid']=='' || $data['perid']=='' || $data['escid']=='' || $data['curid']=='' || $data['courseid']=='' || $data['turno']=='') return false;
+			$where = "eid = '".$data['eid']."' and oid='".$data['oid']."' and subid='".$data['subid']."' and perid='".$data['perid']."' and escid='".$data['escid']."' and curid='".$data['curid']."' and courseid='".$data['courseid']."' and turno='".$data['turno']."'";
+			return $this->delete($where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Delete SyllabusUnitsContent ".$e->getMessage();
+		}
+	}
 	
 	public function _getOne($where=array()){
 		try{
