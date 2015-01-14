@@ -299,7 +299,7 @@ class Register_StudentController extends Zend_Controller_Action {
                     {
                         $this->view->assign_semester=$data_register['semid'];
                         $this->view->total_credits=$data_register['credits'];
-                        $this->view->assign_credist=11+$condition_credits;
+                        $this->view->assign_credist=9+$condition_credits;
                     }
 
                     $this->view->subjects = $subject;
@@ -730,7 +730,7 @@ class Register_StudentController extends Zend_Controller_Action {
                             }
                         }
                     }else{
-                        $credits_assing[0]['semester_creditsz']=11+$condition_credits;
+                        $credits_assing[0]['semester_creditsz']=9+$condition_credits;
 
                     }
 
@@ -782,7 +782,7 @@ class Register_StudentController extends Zend_Controller_Action {
                                         }
                                 }
                             }else{
-                                $credits_assing[0]['semester_creditsz']=11+$condition_credits;
+                                $credits_assing[0]['semester_creditsz']=9+$condition_credits;
                             }
 
 

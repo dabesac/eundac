@@ -123,12 +123,13 @@ class Profile_PublicController extends Zend_Controller_Action {
             $escid=$this->sesion->escid;
             $subid=$this->sesion->subid;
             $perid = $this->sesion->period->perid;
+            $numdoc=$this->sesion->infouser['numdoc'];
             $fullname=$this->sesion->infouser['fullname'];
             $dateborn=$this->sesion->infouser['birthday'];
             $this->view->avatar_default=$this->sesion->infouser['sex'];
             $data=array("eid"=>$eid,"oid"=>$oid,"pid"=>$pid,"uid"=>$uid,"escid"=>$escid,"subid"=>$subid, "perid"=>$perid,"rid"=>$rid);
 
-            $datos[0]=array("eid"=>$eid,"oid"=>$oid,"fullname"=>$fullname, "uid"=>$uid, "pid"=>$pid, "birthday"=>$dateborn, "escid"=>$escid, "subid"=>$subid);
+            $datos[0]=array("eid"=>$eid,"oid"=>$oid,"fullname"=>$fullname, "uid"=>$uid, "pid"=>$pid, "numdoc"=>$numdoc,"birthday"=>$dateborn, "escid"=>$escid, "subid"=>$subid);
 
             $where=array("eid"=>$eid, "oid"=>$oid, "escid"=>$escid);
             //print_r($where);

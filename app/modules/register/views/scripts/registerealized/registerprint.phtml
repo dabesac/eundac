@@ -9,7 +9,7 @@ ob_start();
     <div style="text-align:left; font-size:12px;"><b>Código: </b><?php echo strtoupper($this->uid)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Alumno: </b><?php echo strtoupper($this->person[0]['last_name0']." ".$this->person[0]['last_name1'].", ".$this->person[0]['first_name'])?>
     </div>
 </div>
-    <div style="text-align: center; font-size:16px;margin-top:10px"><b> MATRÍCULAS REALIZADAS </b></div> <br/>
+    <div style="text-align: center; font-size:16px;margin-top:10px"><b> CONSTANCIAS DE NOTAS </b></div> <br/>
     <div>
         <?php
         foreach ($this->newperiod as $period) {
@@ -89,6 +89,6 @@ ob_start();
 
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('Matriculas Realizadas-'.$this->person[0]['pid'].'.pdf','D');
+    $mpdf->Output('Constacia_de_notas_'.$this->person[0]['pid'].'.pdf','D');
     // $mpdf->Output();  
 ?>
