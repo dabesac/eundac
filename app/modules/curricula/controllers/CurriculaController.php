@@ -625,8 +625,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                                     'elective_course'   => $formData['elective_course'],
                                     'cur_per_ant'       => base64_decode($formData['cur_per_ant']),
                                     'modified'          => $uid,
-                                    'updated'           => date('Y-m-d h:m:s'),
-                                    'state'             => 'B' );
+                                    'updated'           => date('Y-m-d h:m:s') );
             }
 
             if ($curriculumDb->_update($dataSave, $pk)) {
@@ -761,14 +760,16 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $attrib = '';
         $order = array('semid ASC');
 
-        $pdCourses = $coursesDb->_getFilter($where, $attrib, $order);
+        $pdCourses   = $coursesDb->_getFilter($where, $attrib, $order);
+        $dataCourses = array();
+
         if ($pdCourses) {
             $semid   = '_';
             $cCursos = 0;
             $cSem    = -1;
             foreach ($pdCourses as $c => $course) {
                 if ($course['semid'] != $semid) {
-                    $semid = $course['semid'];
+                    $semid   = $course['semid'];
                     $cCursos = 0;
                     $cSem++;
                 }else {
@@ -801,7 +802,17 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                     $cCursos++;
                 }
             }
+
+            //ordernar por codigo
+            foreach ($dataCourses as $cSem => $semester) {
+                $codigo = array();
+                foreach ($semester['courses'] as $c => $course) {
+                    $codigo[$c] = $course['id'];
+                }
+                array_multisort($dataCourses[$cSem]['courses'], SORT_ASC, $codigo);
+            }
         }
+
         $dataView['dataCourses'] = $dataCourses;
 
         //form para las ediciones
@@ -818,6 +829,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 
         //DataBase
         $curriculumDb = new Api_Model_DbTable_Curricula();
+        $courseDb     = new Api_Model_DbTable_Course();
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
@@ -843,6 +855,13 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 
         $form_course = new Curricula_Form_Course();
         $dataView['form_course'] = $form_course;
+
+        //All Courses
+        $where['state'] = 'A';
+        $attrib = array('courseid', 'name', 'semid');
+        $order = array('courseid ASC');
+        $dataCourses = $courseDb->_getFilter($where, $attrib, $order);
+        $dataView['data_courses'] = $dataCourses;
 
         $this->view->dataView = $dataView;
     }
