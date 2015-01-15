@@ -18,7 +18,7 @@ public function recordreceiptsAction()
 	try{
 		$module=$this->sesion->rol['module'];
 		$this->view->module->$module;
-		$anio='2014';
+		$anio='2015';
 		$recibo = new Api_Model_DbTable_Bankreceipts();
 		$listar = $recibo->_getbankreceiptsXAnio($anio);
 		$this->view->listarrecibos=$listar;

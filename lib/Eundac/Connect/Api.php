@@ -1,46 +1,46 @@
 <?php
-  /*
-    Conexion an configiracion al web Service
-  */
-class Eundac_Connect_Api extends Zend_Rest_Client{
-  /**
-  **@param auth ***
-  ** user password
-  **/
-  protected $_user = 's3lf.040c0c030$0$0';
-  protected $_password = '__999c0n$um3r999__';
-  protected $_auth = false;
-  /**
-  **
-  **@param sever Zend_Rest_Client ***
-  ** user password
-  **/
+    /*
+        Conexion an configiracion al web Service
+    */
+    class Eundac_Connect_Api extends Zend_Rest_Client{
+    /**
+    **@param auth ***
+    ** user password
+    **/
+    protected $_user = 's3lf.040c0c030$0$0';
+    protected $_password = '__999c0n$um3r999__';
+    protected $_auth = false;
+    /**
+    **
+    **@param sever Zend_Rest_Client ***
+    ** user password
+    **/
 
 
 
-	const API_HOST_SERVER ="http://api.undac.edu.pe:8080/";
-  //const API_HOST_SERVER ="http://172.16.0.110:8080/";
-  //const API_HOST_SERVER ="http://200.60.129.24:8080/";
+	const API_HOST_SERVER = "http://api.undac.edu.pe:8080/";
+    //const API_HOST_SERVER ="http://172.16.0.110:8080/";
+    //const API_HOST_SERVER ="http://200.60.129.24:8080/";
 	//const API_HOST_SERVER = "http://localhost:8080/";
 
 
-  protected $_params = array();
-  protected $_model = null;
-  protected $_url= null;
+    protected $_params = array();
+    protected $_model = null;
+    protected $_url= null;
 
     public function __construct($model,$params){
-      $this->setUri(self::API_HOST_SERVER);
-      $this->setConfig(array("timeout" => 680));
-      $this->_params=$params;
-      $this->_model=$model;
+        $this->setUri(self::API_HOST_SERVER);
+        $this->setConfig(array("timeout" => 680));
+        $this->_params=$params;
+        $this->_model=$model;
     }
 
     public function connectAuth(){
-      $client = $this->getHttpClient();
-      $this->_url="/".base64_encode($this->_user)."/".base64_encode($this->_password).'/'.$this->_model;
-      $response = $this->restget($this->_url,$this->_params);
-      $data = Zend_Json::decode($response->getBody());
-      return $data;
+        $client = $this->getHttpClient();
+        $this->_url="/".base64_encode($this->_user)."/".base64_encode($this->_password).'/'.$this->_model;
+        $response = $this->restget($this->_url,$this->_params);
+        $data = Zend_Json::decode($response->getBody());
+        return $data;
     }
 
     /*$base_url = 'http://172.16.0.110:8080/';
