@@ -18,11 +18,11 @@ $(function(){
 	}else if (rol == 'DR'){
 		dataGet = $('#school').val();
 		curriculum.chargeCurriculums(dataGet);
-	};
+	}
 
 
 	//Closure curriculum
-	function curriculum(){
+	function curriculum() {
 		var speciality    = '';
 		var idGet         = '';
 		var idJs          = '';
@@ -36,7 +36,7 @@ $(function(){
 					.load('/default/global/listschools/id/' + dataGet);
 			}else{
 				$('#selectSchool').html('<option value="">Escuela</option><option value="">Primero seleccione alguna facultad ¬¬</option>');
-			};
+			}
 		}
 
 		function chargeCurriculums(dataGet){
@@ -50,7 +50,7 @@ $(function(){
 					});
 			}else{
 				$('#dataCurriculums').html('');
-			};
+			}
 		}
 
 		function showCurBySpe(speciality){
@@ -60,14 +60,14 @@ $(function(){
 		        $(this).toggle(showCurrentLi);
 		        if (showCurrentLi) {
 		    		existData = 0;
-		        };
+		        }
 		    });
 
 			if (rol == 'RC') {
 			    $('html body').animate({
 					scrollTop : $('#selectFaculty').offset().top
 				});
-			};
+			}
 
 		}
 
@@ -109,7 +109,7 @@ $(function(){
 			//quitarle el show curriculum si lo tuviera
 			if ($(curriculumThis).hasClass('showCurriculum')) {
 				$(curriculumThis).removeClass('showCurriculum');
-			};
+			}
 
 			//Detalle de Curricula
 			$(btn_detail_cur).on('click', function(){
@@ -146,8 +146,8 @@ $(function(){
 							$(element).siblings('.btn_derive').removeClass('active_a');
 							$(element).addClass('hide_derive');
 							setTimeout(function(){$(element).removeClass('active_derive hide_derive');}, 300);
-						};
-					};
+						}
+					}
 				});
 
 				//Esconder si hay un delete abierto
@@ -159,7 +159,7 @@ $(function(){
 							$(element).removeClass('active_confirm hide_confirm');
 							$(element).parent().slideUp(150);
 						}, 300);
-					};
+					}
 				});
 
 				//Mostar y esconder derive
@@ -168,7 +168,7 @@ $(function(){
 				} else {
 					$(div_derive).addClass('hide_derive');
 					setTimeout(function(){$(div_derive).removeClass('active_derive hide_derive');}, 300);
-				};
+				}
 
 			});
 
@@ -186,7 +186,7 @@ $(function(){
 						setTimeout(function(){
 							$(element).removeClass('active_derive hide_derive');
 						}, 300);
-					};
+					}
 				});
 			});
 
@@ -212,20 +212,20 @@ $(function(){
 						if ($(element).hasClass('active_confirm')) {
 							$(element).addClass('hide_confirm');
 							setTimeout(function(){
-								$(element).removeClass('active_confirm hide_confirm')
+								$(element).removeClass('active_confirm hide_confirm');
 								$(element).parent().slideUp(150);
 							}, 300);
-						};
+						}
 					}else{
 						if (type != fromType) {
 							if ($(element).hasClass('active_confirm')) {
 								$(element).addClass('hide_confirm');
 								setTimeout(function(){
-									$(element).removeClass('active_confirm hide_confirm')
+									$(element).removeClass('active_confirm hide_confirm');
 								}, 300);
-							};
+							}
 						}
-					};
+					}
 				});
 
 				$('.btn_delete').removeClass('active_delete');
@@ -237,7 +237,7 @@ $(function(){
 
 				var confirm_alert = $('#curriculum_confirm' + goTo).find('.' + classType);
 
-				$('#curriculum_confirm' + goTo).slideDown(150)
+				$('#curriculum_confirm' + goTo).slideDown(150);
 				$(confirm_alert).addClass('active_confirm');
 
 				$(btn_dede_clicked)
@@ -252,7 +252,7 @@ $(function(){
 
 			//Confirmar cambio de estado o eliminación
 			$('#curriculum_confirm' + idActivate + ' .confirm_side a:nth-child(2)').on('click', function(){
-				var why_call_me = $(this).attr('whycallme')
+				var why_call_me = $(this).attr('whycallme');
 
 				$(this).html('<img src="/img/spinner.gif" alt="Loading..." />');
 
@@ -272,7 +272,7 @@ $(function(){
 						$(element).removeClass('active_confirm hide_confirm');
 						$(element).parent().slideUp(150);
 					}, 300);
-				};
+				}
 			});
 
 			//Verificar si hay algun driveBtns abierto...
@@ -281,7 +281,7 @@ $(function(){
 					$(element).siblings('.btn_derive').removeClass('active_a');
 					$(element).addClass('hide_derive');
 					setTimeout(function(){$(element).removeClass('active_derive hide_derive');}, 300);
-				};
+				}
 			});
 		}
 
@@ -298,8 +298,8 @@ $(function(){
 				if ($(curriculums).parent().hasClass('main_hide')) {
 					$(curriculums).parent().slideDown('fast');
 					$(curriculums).parent().siblings('.for_message').slideUp('fast');
-				};
-			};
+				}
+			}
 
 			if (empty_curriculums) {
 				$(curriculums).children('.empty_message').slideDown('fast');
@@ -310,11 +310,11 @@ $(function(){
 						$(curriculums).parent('.main').slideUp('fast');
 						$(curriculums).children('.empty_message').slideUp('fast');
 					}, 7000);
-				};
+				}
 			} else {
 				$(curriculums).siblings('.empty').slideUp('fast');
 				$(curriculums).children('.empty_message').slideUp('fast');
-			};
+			}
 		}
 
 		//tmre ya no se me ocurren nombres D:
@@ -325,7 +325,6 @@ $(function(){
 							why : why_call_me },
 				dataType : 'json',
 				success  : function(data){
-					console.log(data);
 					if (data.success === 1) {
 						cleanOfAlerts();
 
@@ -346,7 +345,7 @@ $(function(){
 								dataCurriculumChange.year  = $(curriculumBefore).children('span:nth-child(3)').html();
 								dataCurriculumChange.idJs  = $(curriculumBefore).attr('idactivatejs');
 								dataCurriculumChange.idGet = $(curriculumBefore).attr('idget');
-							};
+							}
 
 							$('#curriculum' + idJs).addClass('removeCurriculum');
 							setTimeout(function(){
@@ -411,7 +410,7 @@ $(function(){
 									$(div_target).prepend(curriculumHtml);
 									actionsPerCurriculum(dataCurriculumChange.idJs);
 									enumerate(div_target);
-								};
+								}
 								enumerate(div_from_change);
 							}, 300);
 						}else if(why_call_me == 'T'){
@@ -499,8 +498,8 @@ $(function(){
 								$('#curriculum' + idJs + ', #curriculum_confirm' + idJs).remove();
 								enumerate(div_from_change);
 							}, 300);
-						};
-					};
+						}
+					}
 				},
 				error : function(){
 
@@ -605,13 +604,13 @@ $(function(){
 								.slideDown('fast');
 							for (var i = 0; i <= data.errors.length - 1; i++) {
 								$('#idErrorsSide .errors').append('<p>' + data.errors[i] + '</p>');
-							};
+							}
 
 							clearTimeout(showErrorTime);
 							showErrorTime = setTimeout(function(){
 												$('#idErrorsSide').slideUp('fast');
 											}, 7000);
-						};
+						}
 					},
 					error : function(){
 						console.log('error de base de datos');
@@ -717,12 +716,16 @@ $(function(){
 							});
 
 							$('#curriculum' + idJs).find('span.nameChangeEdit').html(nameCurricula);
+
+							$('section.new_course').load('/curricula/curricula/newcourse/id/' + idGet, function(){
+								addCourse();
+							});
 						}else if (data.success === 0) {
 							$('#idErrorsSide_Edit .errors').html('');
 							$('#idErrorsSide_Edit').slideDown('fast');
 							for (var i = 0; i <= data.errors.length - 1; i++) {
 								$('#idErrorsSide_Edit .errors').append('<p>' + data.errors[i] + '</p>');
-							};
+							}
 
 							clearTimeout(showErrorTime);
 							showErrorTime = setTimeout(function(){
@@ -730,7 +733,7 @@ $(function(){
 											}, 7000);
 						}else if (data.success === 2) {
 							console.log('error de base de datos');
-						};
+						}
 					},
 					error : function(){
 						console.log('error de base de datos');
@@ -748,7 +751,7 @@ $(function(){
 				addCourse();
 			});
 
-			//agregar Curso
+			//Funciones para el Boton Agregar Curso
 			$('#btn_add_course').on('click', function(){
 				$('#id_error_course_side').slideUp('fast');
 				if (!$('#id_add_new_course').hasClass('new_course_active')) {
@@ -772,7 +775,7 @@ $(function(){
 						$('#id_add_new_course')
 							.removeClass('new_course_hide');
 					}, 300);
-				};
+				}
 			});
 
 			//agregar funciones por curso
@@ -783,6 +786,74 @@ $(function(){
 			});
 
 		}
+
+		function addCourse(){
+			$('#form_add_new_course').on('submit', function(e){
+				e.preventDefault();
+
+				$.ajax({
+					type     : 'post',
+					url      : '/curricula/curricula/savecourse',
+					data     : $(this).serialize(),
+					dataType : 'json',
+					success  : function(data){
+						$('#id_error_course_side div:nth-child(2)').html('');
+						if (data.success === 1) {
+							console.log(data.semester);
+						}else if (data.success === 0){
+							data.errors.forEach(function(error){
+								$('#id_error_course_side div:nth-child(2)').append('<p>' + error + '</p>');
+							});
+
+							$('#id_error_course_side').slideDown('fast');
+							clearTimeout(showErrorTime);
+							showErrorTime = setTimeout(function(){
+								$('#id_error_course_side').slideUp('fast');
+							}, 7000);
+						}
+					},
+					error : function(){
+						console.log('Error al guardar el curso, mas fijo que sea en la base de datos...');
+					}
+				});
+			});
+
+			//Agregar prerequisitos.....
+			var semester_x_pre = $('#semid').val();
+			$('#id_select_pre option').each(function(index, element){
+				if($(element).attr('class') != 0 && $(element).attr('class') < semester_x_pre) {
+					$(element).removeAttr('hidden');
+				} else {
+					$(element).attr('hidden', 'true');
+				}
+			});
+
+			$('#semid').on('change', function(){
+				semester_x_pre = parseInt($(this).val());
+				var interruptor = 0;
+				var semester_act;
+				$('#id_select_pre option').each(function(index, element){
+					semester_act = parseInt($(element).attr('class'));
+					console.log(semester_act);
+					if(semester_act > 0 && semester_act < semester_x_pre) {
+						if (interruptor == 0 && semester_act == (semester_x_pre - 1)) {
+							$('#id_select_pre').val($(element).val());
+							interruptor = 1;
+						}
+						/*if (semester_x_pre != 1) {
+						};*/
+						$(element).removeAttr('hidden');
+					} else {
+						$(element).attr('hidden', 'true');
+					}
+				});
+				/*if (semester_x_pre == 1) {
+					console.log('se eligio uno');
+					$('#id_select_pre').val('');
+				};*/
+			});
+		}
+
 		function actionsPerCourse(id){
 			var btn_edit_course = $('#id_course_' + id).find('.btn_edit_course');
 
@@ -800,64 +871,30 @@ $(function(){
 							setTimeout(function(){
 								$(element).removeClass('edit_course_active');
 							}, 300);
-						};
+						}
 					}
 				});
 
-				$(this_course).toggleClass('course_clicked');
-
 				if (!$(article_edit).hasClass('edit_course_active')) {
+					$(this_course).addClass('course_clicked');
 					$(btn_edit_course).html('Cancelar');
 					$(article_edit)
 						.addClass('edit_course_active')
 						.removeClass('edit_course_hide');
 				}else {
+					$(this_course).removeClass('course_clicked');
 					$(btn_edit_course).html('Editar');
 					$(article_edit).addClass('edit_course_hide');
 					setTimeout(function(){
 						$(article_edit).removeClass('edit_course_active');
 					}, 300);
-				};
-			});
-		}
-
-		function addCourse(){
-			$('#form_add_new_course').on('submit', function(e){
-				e.preventDefault();
-
-				$.ajax({
-					type     : 'post',
-					url      : '/curricula/curricula/savecourse',
-					data     : $(this).serialize(),
-					dataType : 'json',
-					success  : function(data){
-						console.log(data);
-
-						$('#id_error_course_side div:nth-child(2)').html('');
-						if (data.success === 1) {
-							console.log(data.semester);
-						}else if (data.success === 0){
-							data.errors.forEach(function(error){
-								$('#id_error_course_side div:nth-child(2)').append('<p>' + error + '</p>');
-							});
-
-							$('#id_error_course_side').slideDown('fast');
-							clearTimeout(showErrorTime);
-							showErrorTime = setTimeout(function(){
-								$('#id_error_course_side').slideUp('fast');
-							}, 7000);
-						};
-					},
-					error : function(){
-						console.log('Error al guardar el curso, mas fijo que sea en la base de datos...')
-					}
-				})
+				}
 			});
 		}
 
 		return {
 			chargeSchools     : chargeSchools,
 			chargeCurriculums : chargeCurriculums
-		}
+		};
 	}
 });

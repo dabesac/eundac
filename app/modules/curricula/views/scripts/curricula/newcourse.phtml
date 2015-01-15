@@ -1,6 +1,7 @@
 <?php 
-	$dataView = $this->dataView;
-	$form     = $dataView['form_course'];
+	$dataView     = $this->dataView;
+	$form         = $dataView['form_course'];
+	$data_courses = $dataView['data_courses'];
  ?>
 
 <header>
@@ -51,6 +52,7 @@
 						<?php elseif ($dataView['type'] == 'A'): ?>
 							<p>Ciclo</p>
 						<?php endif ?>
+
 						<?php if ($dataView['periods']): ?>
 							<?php for($c=1; $c<=$dataView['periods']; $c++): ?>
 								<?php $form->semid->addMultiOption($c, $c) ?>
@@ -64,11 +66,18 @@
 			</div>
 			<div class="side_two">
 				<header>
-					<p>Prerequisitos</p>
+					<p>Agrégue Prerequisitos</p>
 				</header>
 				<section class="select_pre">
-					<select class="form-control">
-						<option value="">Agregue prerequisitos...</option>
+					<select id="id_select_pre" class="form-control">
+						<?php if ($dataView['periods']): ?>
+							<option class="0" value="">No hay prerequisitos para el primer semestre...</option>
+							<?php foreach ($data_courses as $course): ?>
+								<option class="<?php echo $course['semid'] ?>" value="<?php echo base64_encode($course['courseid']) ?>" hidden><?php echo $course['courseid'].' | '.$course['name'] ?></option>
+							<?php endforeach ?>
+						<?php else: ?>
+							<option value="">Elija un semestre...</option>
+						<?php endif ?>
 					</select>
 					<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
 				</section>
