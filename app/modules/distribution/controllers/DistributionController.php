@@ -1076,7 +1076,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $mes=$fecha->get(Zend_Date::MONTH_NAME);
             $anio=$fecha->get(Zend_Date::YEAR);
             $dateact=$dia." de ".$mes." del ".$anio;
-            $this->view->anio=$anio;
+
             $this->view->dateact=$dateact;
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
@@ -1086,6 +1086,9 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $escid=base64_decode($this->_getParam('escid'));
             $subid=base64_decode($this->_getParam('subid'));
             $distid=base64_decode($this->_getParam('distid'));
+            $anio1="20".substr($perid,0,2);
+            $this->view->anio=$anio1;
+
             $where=array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'perid'=>$perid,'distid'=>$distid);
             $orders=array('curid','courseid','turno');
             $courdoc = new Api_Model_DbTable_Coursexteacher();
@@ -1169,7 +1172,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 'escid'=>$escid,
                 'subid'=>$subid,
                 'pid'=>$pid,
-                'type_impression'=>'impresion_memorandum_carga_acacemica',
+                'type_impression'=>'impresion_memorandum_carga_acacemica_'.$perid,
                 'date_impression'=>date('Y-m-d H:i:s'),
                 'pid_print'=>$uidim
                 );
@@ -1179,7 +1182,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica');
             $dataim = $dbimpression->_getFilter($wheri);
 
-            $wheri1 = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica');
+            $wheri1 = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica_'.$perid);
             $dataim1 = $dbimpression->_getFilter($wheri1);
 
             $conte = count($dataim1);
