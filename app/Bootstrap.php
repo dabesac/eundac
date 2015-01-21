@@ -19,6 +19,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 $view->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.min.css')
                 ->headLink()->appendStylesheet('/css/layout.css')
                 ->headLink()->appendStylesheet('/external_library/jquery-ui/jquery.ui.datepicker.css');
+
+                 $view->headScript()->prependFile('/js/main.js');
             }
 
             $view->headScript()->prependFile('/external_library/jquery-transit/jquery.transit.min.js')
