@@ -1,6 +1,5 @@
 <?php $env = getenv('APPLICATION_ENV') ?>
 <?php if ($env === 'development'): ?>
-	<link rel="stylesheet" href="/css/adminCurriculum.css">
 	<script src="/js/admin/adminCurriculum.js"></script>
 <?php endif ?>
 
@@ -12,11 +11,11 @@
 <?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
 <input type="hidden" id="rol" value="<?php echo $dataView['rid'] ?>">
-<div class="adm_curricula">
+<div class="main_data">
 	<?php if ($dataView['rid'] == 'RC'): ?>
-		<div class="header">
+		<header class="f_e">
 			<p><span class="glyphicon glyphicon-comment"></span> Seleccione una Facultad y Escuela</p>
-			<div class="selectSide">
+			<div>
 				<select class="form-control" name="faculty" id="selectFaculty">
 					<option value="">Facultad</option>
 					<?php if ($dataView['faculties']): ?>
@@ -26,21 +25,21 @@
 					<?php endif ?>
 				</select>
 			</div>
-			<div class="selectSide">
+			<div>
 				<select class="form-control" name="school" id="selectSchool">
 					<option value="">Escuela</option>
 					<option value="">Primero seleccione una facultad ¬¬</option>
 				</select>
 			</div>
-		</div>
+		</header>
 	<?php elseif ($dataView['rid'] == 'DR'): ?>
 		<input type="hidden" id="school" value="<?php echo $dataView['id_school'] ?>">
-		<div class="header director">
+		<header class="director">
 			<p><span class="glyphicon glyphicon-info-sign"></span> Todas las currículas de su escuela...</p>
-		</div>
+		</header>
 	<?php endif ?>
 
-	<div id="dataCurriculums" class="body">
+	<div id="dataCurriculums" class="fill_main_data data_curriculums">
 		
 	</div>
 </div>

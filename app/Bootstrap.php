@@ -18,6 +18,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             }else if ($env === 'development'){
                 $view->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.min.css')
                 ->headLink()->appendStylesheet('/css/layout.css')
+                ->headLink()->appendStylesheet('/css/app-min.css')
                 ->headLink()->appendStylesheet('/external_library/jquery-ui/jquery.ui.datepicker.css');
             }
 

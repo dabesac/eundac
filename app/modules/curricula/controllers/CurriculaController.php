@@ -317,7 +317,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         }
 
         //Form
-        $curriculumForm = new Rcentral_Form_Curricula();
+        $curriculumForm = new Curricula_Form_Curricula();
         $dataView['curriculumForm'] = $curriculumForm;
 
         $this->view->dataView = $dataView;
@@ -329,7 +329,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $curriculumDb = new Api_Model_DbTable_Curricula();
 
         //Forms
-        $curriculumForm = new Rcentral_Form_Curricula();
+        $curriculumForm = new Curricula_Form_Curricula();
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
@@ -537,7 +537,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $dataCurriculum = $curriculumDb->_getOne($where);
 
         //Form
-        $curriculumForm = new Rcentral_Form_Curricula();
+        $curriculumForm = new Curricula_Form_Curricula();
         $dataCurriculum['cur_per_ant'] = base64_encode($dataCurriculum['cur_per_ant']);
         $curriculumForm->populate($dataCurriculum);
         $dataView['curriculumForm'] = $curriculumForm;
@@ -577,7 +577,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $curriculumDb = new Api_Model_DbTable_Curricula();
 
         //Forms
-        $curriculumForm = new Rcentral_Form_Curricula();
+        $curriculumForm = new Curricula_Form_Curricula();
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
@@ -915,10 +915,8 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         }else{
             $result['success'] = 0;
             $cError = 0;
-            $error['isEmpty']   = array();
-            $error['notDigits'] = array();
-            foreach ($form_course->getMessages() as $tipeError) {
-                foreach ($tipeError as $error) {
+            foreach ($form_course->getMessages() as $typeError) {
+                foreach ($typeError as $error) {
                     $result['errors'][$cError] = $error;
                 }
                 if ($cError == 2) {
@@ -1069,7 +1067,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                 $this->view->option=$accion;
                 $this->view->curricula=$curricula;
             }else{
-                $form = new Rcentral_Form_Curricula();
+                $form = new Curricula_Form_Curricula();
                 $form->year->setAttrib("disabled",'disabled');
                 if ($this->getRequest()->isPost()) {
                     $formData = $this->getRequest()->getPost();

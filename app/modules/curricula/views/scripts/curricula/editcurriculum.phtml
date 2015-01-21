@@ -4,7 +4,7 @@
 	$form                 = $dataView['curriculumForm'];
  ?>
 
-<div class="modal_body">
+<section class="modal_body curriculum">
 	<form id="formEditCurriculum">
 		<input type="hidden" name="id" value="<?php echo $dataView['id'] ?>">
 		<div class="input-curBefore">
@@ -81,12 +81,12 @@
 			<?php echo $form->save ?>
 		</div>
 	</form>
-</div>
-<div id="idErrorsSide_Edit" class="errorsSide errorData">
-	<div class="icon">
-		<span class="glyphicon glyphicon-exclamation-sign"></span>
+	<div class="msg_side">
+		<div class="msg warning">
+			<!-- <p><span class="glyphicon glyphicon-exclamation-sign"></span> Error en algunos campos...</p> -->
+		</div>
+		<div class="msg success">
+			<p><span class="glyphicon glyphicon-ok"></span> Guardado satisfactoriamente!</p>
+		</div>
 	</div>
-	<div class="errors">
-		
-	</div>
-</div>
+</section>

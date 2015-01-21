@@ -2,9 +2,9 @@
 	$dataView = $this->dataView;
  ?>
 
-<div class="modal_header">
-	<p class="title">Detalle de Currícula </p>
-	<div class="dataEsc">
+<header class="modal_header">
+	<p>Detalle de Currícula </p>
+	<div>
 		<p><span>Facultad de </span><?php echo $dataView['nameFac'] ?></p>
 		<p><span>Escuela de </span><?php echo $dataView['nameEsc'] ?> 
 			<?php if ($dataView['isEsp'] == 'yes'): ?>
@@ -12,10 +12,10 @@
 			<?php endif ?>
 		</p>
 	</div>
-	<div class="modal_close">
+	<div>
 		<a class="btn btn-default form-control" href="##" data-dismiss="modal">Cerrar</a>
 	</div>
-</div>
+</header>
 <div class="header_body">
 	<div id="idHeaderDetail">
 		<?php if ($dataView['rid'] == 'RC'): ?>

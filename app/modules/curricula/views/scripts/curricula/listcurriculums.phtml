@@ -1,6 +1,6 @@
 <?php $dataView = $this->dataView ?>
 <?php if ($dataView['specialities']): ?>
-	<div class="selectSpecialities">
+	<header class="select_speciality">
 		<p><span class="glyphicon glyphicon-flag"></span> Esta escuela tiene especialidades, filtre entre ellas.</p>
 		<div>
 			<select class="form-control" name="speciality" id="selectSpeciality">
@@ -9,20 +9,20 @@
 				<?php endforeach ?>
 			</select>
 		</div>
-	</div>
+	</header>
 	<?php if ($dataView['rid'] == 'RC'): ?>
-		<div class="headerNew">
+		<header class="plusnew">
 			<p><span class="glyphicon glyphicon-info-sign"></span> Administre todas las curriculas pertenecientes a esta especialidad...</p>
 			<a href="##" id="btnNewModal" class="btn btn-success" data-toggle="modal" data-target="#modalNewCur">Nueva Currícula</a>
-		</div>
+		</header>
 	<?php endif ?>
 <?php else: ?>
 	<input type="hidden" id="selectSpeciality" value="<?php echo $dataView['dataCurriculums'][0]['code'] ?>">
 	<?php if ($dataView['rid'] == 'RC'): ?>
-		<div class="headerNew">
+		<header class="plusnew">
 			<p><span class="glyphicon glyphicon-info-sign"></span> Administre todas las curriculas pertenecientes a esta escuela...</p>
 			<a href="##" id="btnNewModal" class="btn btn-success" data-toggle="modal" data-target="#modalNewCur">Nueva Currícula</a>
-		</div>
+		</header>
 	<?php endif ?>
 <?php endif ?>
 
@@ -258,8 +258,8 @@
 
 <!-- Modal para nueva curricula -->
 <div id="modalNewCur" class="modal fade" tabindex="-1">
-	<div class="modal-dialog modal_newCur">
-		<div id="dataFormNewCur" class="modal-content">
+	<div class="modal-dialog modal_medium">
+		<div id="dataFormNewCur" class="modal-content new">
 		
 		</div>
 	</div>
@@ -268,8 +268,8 @@
 
 <!-- Modal para detalle de curricula -->
 <div id="modalDetailCur" class="modal fade" tabindex="-1">
-	<div class="modal-dialog modal_newCur modal_detailCur">
-		<div id="dataDetailCur" class="modal-content">
+	<div class="modal-dialog modal_medium modal_detailCur">
+		<div id="dataDetailCur" class="modal-content edit">
 
 		</div>
 	</div>
