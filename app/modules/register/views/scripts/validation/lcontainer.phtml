@@ -149,6 +149,7 @@ $(function(){
             url : $("#frmsave").attr('action'),
             data: $("#frmsave").serialize(),
             success: function(data) {
+                console.log(data);
                 if (data.status==true) {
                     $("#smsError").empty();
                     $("#smsError").html('<center><h3><span class="text-success glyphicon glyphicon-ok-circle"></span><b class="text-success"> Se guardado con Éxito</b></h3></center>');

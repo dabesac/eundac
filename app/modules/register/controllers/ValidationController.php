@@ -286,7 +286,7 @@ class Register_ValidationController extends Zend_Controller_Action
             $uid = base64_decode($frmdata['uid']);
             $escid = base64_decode($frmdata['escid']);
             $subid = base64_decode($frmdata['subid']);
-            $perid = base64_decode($frmdata['perid']);
+            $perid = "14C";//base64_decode($frmdata['perid']);
             $nota = $frmdata['nota'];
             $resolution = $frmdata['resolution'];
 
