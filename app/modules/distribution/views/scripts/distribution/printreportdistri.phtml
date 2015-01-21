@@ -13,7 +13,7 @@ $nameall1=strtoupper($name1['last_name0'])." ".strtoupper($name1['last_name1']).
 <div>
 </div>
 <div style="margin-top:15px">
-    <h2 style="text-align:center"><u>MEMORÁNDUM Nº <?php echo $this->conte."-".$this->anio?></u></h2>
+    <h2 style="text-align:center"><u>MEMORÁNDUM Nº <?php echo $this->conte." - ".$this->anio?></u></h2>
     <div style="text-align:left; font-size:12px;"><b>A  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;</b><?php echo $nameall1?></div>
     <div style="text-align:left; font-size:12px;"><b>ASUNTO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;</b>POSESIÓN DE CARGO - <?php echo $this->perid?></div>
     <div style="text-align:left; font-size:12px;"><b>FECHA &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;</b><?php echo $date?></div>
@@ -122,7 +122,7 @@ $nameall1=strtoupper($name1['last_name0'])." ".strtoupper($name1['last_name1']).
     
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('CARGA ASIGNADA -'.$name1['pid'].'.pdf','D');
-    // $mpdf -> Output();  
+    // $mpdf->Output('CARGA ASIGNADA -'.$name1['pid'].'.pdf','D');
+    $mpdf -> Output();  
 
 ?>

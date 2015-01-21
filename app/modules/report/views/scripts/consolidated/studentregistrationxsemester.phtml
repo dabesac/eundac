@@ -58,7 +58,18 @@
                $dataalu= $alumno->_getFilter($where);
                foreach ($dataalu as $dat) { ?>
 
-                <li><?php echo $dat['notafinal']; ?></li>
+                <li><?php 
+                  if ($dat['notafinal']=='-3') {
+                    echo "Ret";
+                  }
+                  elseif ($dat['notafinal']=='-2') {
+                    echo "NSP";
+                  }
+                  else{
+                    echo $dat['notafinal']; 
+                  }
+                  ?>
+                </li>
 
          <?php      }
 

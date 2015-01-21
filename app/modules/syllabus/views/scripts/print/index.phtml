@@ -102,12 +102,12 @@ switch ($mes) {
 <div>
 <?php if($this->silabo) { 
     $silabo=$this->silabo;?>
-        <div style="margin-left:30px; margin-bottom:20px">
+        <div style="margin-left:30px;">
             <h5>II. SUMILLA</h5>
             <div class='detalle'><?php echo $silabo['sumilla']?></div>
         </div>
         <?php if ($curso["type_rate"]=="C") {?>
-        <div style="margin-left:30px; margin-bottom:20px">
+        <div style="margin-left:30px;">
             <h5>III. COMPETENCIAS Y CAPACIDADES</h5>
             <h5 class='indent'>3.1 COMPETENCIAS</h5>
             <div class='detalle'><?php echo $silabo['competency']?></div>
@@ -115,7 +115,7 @@ switch ($mes) {
             <div class='detalle'><?php echo $silabo['capacity']?></div>
         </div>
         <?php } elseif ($curso["type_rate"]=="O") { ?>
-        <div style="margin-left:30px; margin-bottom:20px">
+        <div style="margin-left:30px;">
             <h5>III. OBJETIVOS</h5>
             <h5 class='indent'>3.1 OBJETIVO GENERAL</h5>
             <div class='detalle'><?php echo $silabo['competency']?></div>
@@ -125,9 +125,9 @@ switch ($mes) {
         <div>
         <?php }
         if ($curso["type_rate"]=="C") { ?>
-            <h5 style="margin-left:30px; margin-bottom:20px">IV. PROGRAMACIÓN DE UNIDADES</h5>
+            <h5 style="margin-left:30px;">IV. PROGRAMACIÓN DE UNIDADES</h5>
         <?php } elseif ($curso["type_rate"]=="O") { ?>
-            <h5 style="margin-left:30px; margin-bottom:20px">IV. PROGRAMACIÓN DE CONTENIDOS</h5>
+            <h5 style="margin-left:30px;">IV. PROGRAMACIÓN DE CONTENIDOS</h5>
         <?php } ?>
         </div>
         <?php
@@ -146,7 +146,7 @@ switch ($mes) {
                     $wherecont['unit']=$unidades['unit'];
                     $contenidos=$unicon->_getAllXUnit($wherecont); ?>
                     <div>
-                        <table style="margin-left:60px; margin-bottom:20px; font-size:12px; width:100%; border: solid 0.50px #000;border-collapse:collapse;">
+                        <table style="margin-left:60px; margin-bottom:15px; font-size:12px; width:100%; border: solid 0.50px #000;border-collapse:collapse;">
                             <tr>
                                 <td colspan='6' style="border: solid 0.50px #000; border-collapse: collapse"><b>UNIDAD <?php echo $unidades['unit']?>:</b> <?php echo $unidades['name']?></td>
                             </tr>
@@ -199,7 +199,7 @@ switch ($mes) {
                     $wherecont['unit']=$unidades['unit'];
                     $contenidos=$unicon->_getAllXUnit($wherecont); ?>
                     <div>
-                        <table style="margin-left:60px; margin-bottom:20px; font-size:12px; width:100%; border: solid 0.50px #000;border-collapse:collapse">
+                        <table style="margin-left:60px; margin-bottom:15px; font-size:12px; width:100%; border: solid 0.50px #000;border-collapse:collapse">
                             <tr>
                                 <td colspan='7' style="border: solid 0.50px #000; border-collapse: collapse"><b>UNIDAD <?php echo $unidades['unit']?>:</b> <?php echo $unidades['name']?></td>
                             </tr>
@@ -247,26 +247,26 @@ switch ($mes) {
 
       <?php if ($curso['type_rate']=='C') {
         $rom="I"; ?>
-        <div style="margin-left:30px; float:left; margin-bottom:20px">
+        <div style="margin-left:30px; float:left;">
             <h5>V. ESTRATEGIAS METODOLÓGICAS</h5>
             <div class="detalle"><?php echo $silabo['methodology']?></div>
         </div> 
       <?php }?>
         <div style="margin-left:30px; float:left">
-            <h5 style="margin-bottom:20px">V<?php echo $rom?>. MEDIOS Y MATERIALES</h5>
-            <div class="detalle" style="margin-bottom:30px"><?php echo $silabo['media']?></div>
+            <h5 style="margin-bottom:5px">V<?php echo $rom?>. MEDIOS Y MATERIALES</h5>
+            <div class="detalle" style="margin-bottom:10px"><?php echo $silabo['media']?></div>
 
-            <h5 style="margin-bottom:20px">VI<?php echo $rom?>. SISTEMA DE EVALUACIÓN</h5>
-            <div class="detalle" style="margin-bottom:30px"><?php echo $silabo['evaluation']?></div>
+            <h5 style="margin-bottom:5px">VI<?php echo $rom?>. SISTEMA DE EVALUACIÓN</h5>
+            <div class="detalle" style="margin-bottom:10px"><?php echo $silabo['evaluation']?></div>
 
-            <h5 style="margin-bottom:20px">VII<?php echo $rom?>. FUENTES DE INFORMACIÓN</h5>
-            <div class="detalle" style="margin-bottom:30px"><?php echo $silabo['sources']?></div>
+            <h5 style="margin-bottom:5px">VII<?php echo $rom?>. FUENTES DE INFORMACIÓN</h5>
+            <div class="detalle" style="margin-bottom:10px"><?php echo $silabo['sources']?></div>
         </div>
-        <div style="text-align: right; margin-top: 30px">Cerro de Pasco, <?php echo $tmps[2]." de ".$strm." del ".$tmps[0]?>.</div>
+        <div style="text-align: right; margin-top: 20px">Cerro de Pasco, <?php echo substr($tmps[2],0,2)." de ".$strm." del ".$tmps[0]?>.</div>
 <?php }?>
 </div>
 <br>
-<table style="margin-top:120px; width: 100%">
+<table style="margin-top:80px; width: 100%">
     <tr>
         <td style='text-align: center'>
             <p style='width: 400px; border-top: solid 1px #000'>
