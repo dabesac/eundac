@@ -727,6 +727,8 @@ $(function(){
 			$('#form_add_new_course').on('submit', function(e){
 				e.preventDefault();
 
+				var btn_cancel_total = $(this).parent().parent().siblings('header').find('a#btn_add_course');
+
 				var btnSubmit   = $(this).find('input[type=submit]');
 				var msg_error   = $(this).siblings('.msg_side').children('.msg.warning');
 				var msg_success = $(this).siblings('.msg_side').children('.msg.success');
@@ -740,6 +742,22 @@ $(function(){
 						console.log(data);
 						if (data.success === 1) {
 							console.log(data.semester);
+							jukeboxMsg(msg_success, msg_error, 1950);
+
+							setTimeout(function() {
+								$(btn_cancel_total)
+									.removeClass('btn_cancel')
+									.html('Agregar Curso');
+
+								$(btn_cancel_total).parent().parent().removeClass('header_active');
+
+								$('#id_add_new_course').addClass('inactive');
+
+								setTimeout(function(){
+									$('#id_add_new_course')
+										.removeClass('active inactive');
+								}, 300);
+							}, 2000);
 						}else if (data.success === 0){
 							fillErrors(msg_error, data.errors);
 							jukeboxMsg(msg_error, msg_success, 7000);
@@ -781,7 +799,16 @@ $(function(){
 			var count_pres = 0;
 			$('#id_select_pre + a').on('click', function(){
 				var course_id  = $('#id_select_pre').val();
-				if (course_id) {
+
+				//Que los cursos no sean iguales
+				var same_course = false;
+				$(prerequisites_side).children('article').each(function(){
+					if (course_id == $(this).find('input').val()) {
+						same_course = true;
+					}
+				});
+
+				if (course_id && !same_course) {
 					var course_name = $('#id_select_pre option:selected').html();
 					var interruptor_fill = false;
 
@@ -825,58 +852,39 @@ $(function(){
 						});
 				}, 300);
 			});
-			/*$(prerequisites_side).find('a').on('click', function(){
-				var prerequisite_article = $(this).parent();
-				$(prerequisite_article).addClass('inactive');
-				setTimeout(function() {
-					$(prerequisite_article).removeClass('active inactive');
-					
-					var m_empty = 0;
-					$(prerequisites_side).children('article').each(function(index, element){
-						if ($(element).hasClass('active')) {
-							m_empty++;
-						}
-					});
-					if (m_empty == 0) {
-						$(empty_p).removeClass('inactive');
-					}
-				}, 300);
-			});*/
 		}
 
 		function actionsPerCourse(id){
 			var btn_edit_course = $('#id_course_' + id).find('.btn_edit_course');
+			var course_form_edit = $('#id_course_' + id).find('form');
 
 			//Editar Curso
 			$(btn_edit_course).on('click', function(){
 				var this_course  = $(btn_edit_course).parent();
-				var article_edit = $(this_course).siblings('article.edit_course');
+				var course_edit = $(this_course).siblings('article.edit_course');
 
-				$('article.edit_course').each(function(index, element){
-					if($(element).parent().attr('idactivatejs') != id){
-						if ($(element).hasClass('active')) {
-							$(element).siblings('.data_course').removeClass('course_clicked');
-							$(element).siblings('.data_course').find('.btn_edit_course').html('Editar');
-							$(element).addClass('inactive');
-							setTimeout(function(){
-								$(element).removeClass('active inactive');
-							}, 300);
-						}
-					}
-				});
+				var course_active = $('section.semester').find('article.edit_course.active');
+				if (course_active) {
+					$(course_active).siblings('.data_course').removeClass('course_clicked');
+					$(course_active).siblings('.data_course').find('.btn_edit_course').html('Editar');
 
-				if (!$(article_edit).hasClass('active')) {
+					$(course_active).addClass('inactive');
+					setTimeout(function() {
+						$(course_active).removeClass('active inactive');
+					}, 300);
+				};
+
+				if (!$(course_edit).hasClass('active')) {
 					$(this_course).addClass('course_clicked');
 					$(btn_edit_course).html('Cancelar');
-					$(article_edit).addClass('active');
-				}else {
-					$(this_course).removeClass('course_clicked');
-					$(btn_edit_course).html('Editar');
-					$(article_edit).addClass('inactive');
-					setTimeout(function(){
-						$(article_edit).removeClass('active inactive');
-					}, 300);
+					$(course_edit).addClass('active');
 				}
+			});
+
+			//Form por curso
+			$(course_form_edit).on('submit', function(e){
+				e.preventDefault();
+				console.log('no se envio');
 			});
 		}
 

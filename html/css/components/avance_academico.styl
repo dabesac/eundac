@@ -1,0 +1,934 @@
+@import 'nib'
+
+amarillo      = #F0AD4E
+amarilloHover = #EC971F
+amarilloPhore = #FFC200
+amarilloTexto = #C67215
+azul          = #015292
+azulBack      = #DFF0D8
+azulUndac     = #063F9D
+azulHover     = #1667A7
+azulOscuro    = #024A82
+azulPhore     = #0141DE
+celeste       = #5BC0DE
+celesteHover  = #31B0D5
+moradoPhore   = #4607E1
+negro         = #353535
+negroOscuro   = #202020
+negroPlomo    = #363C46
+plomo         = #F8F8F8
+plomoOscuro   = #DDDDDD
+plomoTexto    = #999999
+plomoHr 	  = #EEEEEE
+verde         = #5CB85C
+verdeClaro    = #DFF0D8
+verdeHover    = #449D44
+verdePhore    = #016800
+verdeTexto    = #3C763D
+rojo          = #D9534F
+rojoHover     = #C9302C
+rojoPhore     = #CD0000
+rojoTexto     = #9D2222
+
+
+.avanceAcademicoHeader
+	height 40px
+	margin-bottom 1.5em
+	position relative
+	width 100%
+
+	.parrafoHeader
+		padding-top 0.9em
+		width 20%
+
+	.select
+		padding 1em
+		padding-top 0.5em
+		padding-right 0
+		position absolute
+		top 0
+		width 40%
+
+	.selectAnio
+		left 20%
+
+	.selectPeriod
+		left 60%
+
+.registroFacultadSide
+	border-top 1px plomoHr solid
+	height 80px
+	position relative
+	width 100%
+	
+	.rfObO
+		height 100%
+		position absolute
+		top 1em
+
+	.parrafoRF
+		color plomoTexto
+		left 0
+		padding-top 1em
+		width 20%
+
+	.selectSchool
+		left 20%
+		padding 1em
+		padding-right 0
+		padding-top 0.5em
+		width 80%
+
+.registroCentralSide
+	border-top 1px plomoHr solid
+	height 80px
+	position relative
+	width 100%
+
+	.rcObO
+		height 100%
+		position absolute
+		top 1em
+
+	.parrafoRC
+		color plomoTexto
+		left 0
+		padding-top 1em
+		width 20%
+
+	.select
+		padding 1em
+		padding-right 0
+		padding-top 0.5em
+		width 40%
+
+	.selectFaculty
+		left 20%
+	
+	.selectSchool
+		left 60%
+
+.avanceAcademicoDocentes
+	position relative
+	width 100%
+
+	.avanceAcademicoDocentes_sideSpecialities
+		border-top 1px plomoHr solid
+		padding-top 1em
+		margin-bottom 1em
+		height 50px
+		position relative
+		width 100%
+
+		.pSpecialities
+			color plomoTexto
+			height 100%
+			left 0
+			padding-top 0.6em
+			position absolute
+			width 40%
+
+		.selectSpecialities
+			height 100%
+			left 40%
+			padding-right 0
+			position absolute
+			width 60%
+
+	.avanceAcademico_impressSide
+		border-top 1px plomoHr solid
+		border-bottom 1px plomoHr solid
+		height 40px
+		margin-bottom 2em
+		position relative
+		width 100%
+
+		.iObO
+			height 100%
+			padding-top 0.7em
+			position absolute
+			text-align center
+			top 0
+
+		.pImpressSide
+			border-left 2px plomoOscuro solid
+			color plomoTexto
+			left 70%
+			width 20%
+
+		.btnPrint
+			background verde
+			color white
+			left 90%
+			transition all .3s
+			width 10%
+
+		.btnPrint:hover
+			background verdeHover
+			text-decoration none
+
+	.ulDataDocentes
+		padding 0
+		
+		li
+			list-style none
+
+			&>span
+				display none
+
+			.dataDocentes
+				margin-bottom 2em
+				position relative
+				width 100%
+
+				.docentePersonal
+					background plomo
+					color plomoTexto
+					font-size 1.1em
+					height 100%
+					left 0
+					overflow hidden
+					position absolute
+					transition all .3s
+					width 30%
+
+					.docenteNumber
+						left 0
+						height 100%
+						padding 0.5em
+						position absolute
+						text-align center
+						top 0
+						transition all .3s
+						width 10%
+
+					.docenteName
+						border-left 4px plomoOscuro solid
+						height 100%
+						left 10%
+						position absolute
+						top 0
+						width 100%
+
+						.pName
+							padding 0.5em
+							border-bottom 1px plomoOscuro solid
+
+						.dniDocente
+							padding-left 3em
+							margin-bottom 0.1em
+
+						.docenteSpeciality
+							padding-left 3em
+
+					.docenteImpresiones
+						bottom 0
+						border-top 1px plomoOscuro solid
+						left 10%
+						height 35px
+						position absolute
+						width 90%
+
+						.btnPrintObO
+							color plomoTexto
+							font-size 0.9em
+							padding 0.4em
+							position absolute
+							height 100%
+							left 0
+							transition all 0.3s
+							text-align center
+							top 0
+							width 100%
+
+						.btnPrintObO:hover
+							background plomoOscuro
+							text-decoration none
+
+						.btnPrintHorary
+							color rojoTexto
+							left 50%
+
+						.reportNoSuccess
+							color rojoTexto
+
+						.reportSuccess
+							color verdeTexto
+
+					.docenteCantCursos
+						left 85%
+						padding 0.8em
+						position absolute
+						text-align center
+						top 0
+						width 15%
+
+				.docenteCursos
+					border-left white 2px solid
+					position relative
+					min-height 140px
+					left 30%
+					width 70%
+
+					.curso
+						position relative
+						width 100%
+						height 40px
+
+						.cursoOneByOne
+							border-bottom 2px plomoOscuro solid
+							border-left 1px plomoOscuro solid
+							height 100%
+							overflow hidden
+							padding 0.7em
+							position absolute
+							transition all .3s
+							text-align center
+							top 0
+
+							.btnPerCourseObO
+								background celesteHover
+								color white
+								height 100%
+								left -100%
+								top 0
+								transition all .3s
+								padding 0.7em
+								overflow hidden
+								position absolute
+								width 100%
+
+						.cursoOneByOne:hover
+
+							.btnPerCourseObO
+								left 0
+								text-decoration none
+
+						.cursoNumber
+							background plomoOscuro
+							border-bottom 2px plomo solid
+							left 0
+							width 4%
+
+						.cursoName
+							background plomo
+							left 4%
+							text-align justify
+							width 51%
+
+						.cursoSilabo
+							cursor pointer
+							left 55%
+							width 15%
+
+						.cursoParcial1
+							cursor pointer
+							left 70%
+							width 15%
+
+						.cursoParcial2
+							cursor pointer
+							left 85%
+							width 15%
+
+						.success
+							color verdeTexto
+							background verde
+
+						.noSuccess
+							color rojoTexto
+							background rojo
+
+			.dataDocentes:hover
+
+				.docentePersonal
+					box-shadow 0 2px 2px rgba(negro, 0.2)
+
+					.docenteNumber
+						color azul
+
+	.avanceAcademico_modalNotas
+
+		.ObO
+			position absolute
+			height 100%
+			top 0
+
+		.modal-dialog
+			width 1000px
+
+			.modal-content
+				min-height 500px
+
+		.modalNotas_header
+			height 60px
+			position relative
+			width 100%
+
+			.headerObO
+				height 100%
+				position absolute
+				top 0
+
+			.courseName
+				background plomo
+				color azul
+				font-size 1.2em
+				left 0
+				padding 1.2em
+				width 70%
+
+			.courseMoreInfo
+				border-bottom 2px plomo solid
+				border-left 2px plomoOscuro solid
+				left 70%
+				padding .5em
+				padding-left 3em
+				width 30%
+
+				p
+					color plomoTexto
+					position relative
+					display inline-block
+					width 49%
+
+		.selectSide
+			position relative
+			width 100%
+			
+			p
+				background amarillo
+				font-size 1.1em
+				color white
+				margin-bottom 0
+				padding .5em
+				text-align center
+
+		.switchBtn
+			height 40px
+			position relative
+			
+			a
+				color amarillo
+				border-bottom 1px plomoOscuro solid
+				height 100%
+				padding-top .9em
+				position absolute
+				top 0
+				transition all .2s
+				text-align center
+				width 50%
+
+			a:hover
+				padding-top .8em
+				text-decoration none
+				
+			a:nth-child(2)
+				left 50%
+
+			.switchActive
+				color amarillo
+				border-bottom 4px amarillo solid
+				padding-top .9em
+
+			.switchActive:hover
+				padding-top .9em
+				
+
+		.dataSwitch
+			display none
+			
+		.activeData
+			animation .3s showUp
+			display block
+
+
+		.modalNotas_body
+			overflow hidden
+			position relative
+			padding-top 2em
+			width 100%
+
+			.bodyHeader
+				height 40px
+				margin-bottom .7em
+				position relative
+				width 100%
+
+				.bhObO
+					height 100%
+					position absolute
+					top 0
+
+				.bodyHeaderParrafo
+					color plomoTexto
+					padding .7em
+					padding-left 2em
+					left 0%
+					width 60%
+
+				.btnSide
+					left 60%
+					width 38.5%
+
+					div
+						position absolute
+						top 0
+						height 100%
+						width 49%
+
+						a
+							color plomoTexto
+							padding-top .7em
+							position absolute
+							height 100%
+							transition all .3s
+
+						.aplazadosActive
+							color white
+							background rojoHover
+
+							span
+								color white
+
+					div:nth-child(2)
+						left 51%
+
+			.dataStudent
+				background plomo
+				min-height 400px
+				padding 1em
+				padding-top 0
+				position relative
+
+				.student
+					background white
+					height  40px
+					margin-bottom 0.2em
+					position relative
+					transition all .2s
+					width 100%
+
+					.studentNum
+						left 0
+						border-right 2px plomoOscuro solid
+						padding 0.7em
+						text-align center
+						width 3%
+
+						.numberSecret
+							background white
+							left 0
+							height 100%
+							padding 0.7em
+							position absolute
+							top 0
+							width 100%
+
+					.studentName
+						padding 0.7em
+						left 3%
+						width 37%
+
+						small
+							color plomoTexto
+
+					.studentNotasPrimer, .studentNotasSegundo
+						left 40%
+						width 60%
+
+						.notasObO
+							border-left 1px plomoOscuro solid
+							height 100%
+							padding 0.7em
+							position absolute
+							text-align center
+							top 0
+							width 10%
+
+						.nota1
+							left 0
+
+						.nota2
+							left 10%
+
+						.nota3
+							left 20%
+						
+						.nota4
+							left 30%
+						
+						.nota5
+							left 40%
+						
+						.nota6
+							left 50%
+						
+						.nota7
+							left 60%
+						
+						.nota8
+							left 70%
+						
+						.nota9
+							left 80%
+						
+						.promedio
+							padding 0.6em
+							font-size 1.1em
+							left 90%
+
+						.notaFinal
+							left 100%
+							padding 0.6em
+							font-size 1.1em
+							width 19%
+
+						.unitySide1, .unitySide2
+							width 49%
+
+							.notasObO
+								border-left 1px plomoOscuro solid
+								height 100%
+								padding 0.7em
+								position absolute
+								text-align center
+								top 0
+								width 25%
+
+							.nota1, .nota6
+								left 0
+
+							.nota2, .nota7
+								left 25%
+
+							.nota3, .nota8
+								left 50%
+
+							.nota4, .nota9
+								border-right 1px plomoOscuro solid
+								font-size 1.1em
+								left 75%
+								padding 0.6em
+
+							.unityApproved
+								border-left 2px verde solid
+								color verdeTexto
+
+							.unityDisapproved
+								border-left 2px rojo solid
+								color rojoTexto
+
+						.unitySide2
+							left 51%
+							width 49%
+
+						.notaApproved
+							color verdeTexto
+
+						.notaDisapproved
+							color rojoTexto
+
+						.promedioApproved
+							border-left 2px verde solid
+							color verdeTexto
+
+						.promedioDisapproved
+							border-left 2px rojo solid
+							color rojoTexto
+
+					.studentNotasSegundo
+						width 51%
+					
+				.student:hover
+					box-shadow 0 0 2px rgba(negro, 0.5)
+
+				.studentHeader
+					background plomoOscuro
+					color azul
+
+					.studentNum
+						border-right 2px white solid
+
+					.studentNotasTitleO
+						border-left 1px white solid
+						padding 0.7em
+						padding-right 10%
+						text-align center
+
+						.promTitle
+							left 90%
+							border-left 2px white solid
+							font-size 1em
+							height 100%
+							padding 0.7em
+							position absolute
+							text-align center
+							top 0
+							width 10%
+
+						.notaFinalTitle
+							font-size 1em
+							border-left 2px white solid
+							padding 0.7em
+
+					.studentNotasTitleC
+						
+						.unitySide1, .unitySide2
+							
+							.unityTitle
+								border-left 1px white solid
+								left 0
+								width 75%
+
+							.promTitle
+								border-left 2px white solid
+								border-right 1px white solid
+								left 75%
+
+						.notaFinalTitle
+							font-size 1em
+							border-left 2px white solid
+							padding 0.7em
+
+				.notasAplazados
+					height 100%
+					overflow hidden
+					padding-top 0
+					position absolute
+					right 0
+					top 0
+					width 0
+
+					.notaStudentAplazados
+						height 40px
+						margin-bottom 0.2em
+						position relative
+						width 100%
+
+						.notaAplazados
+							background white
+							border-bottom 2px rojo solid
+							border-right 1em rojo solid
+							font-size 1.1em
+							height 100%
+							padding 0.6em
+							position absolute
+							text-align center
+							width 100%
+							white-space nowrap
+
+						.notaApproved
+							color verdeTexto
+
+						.notaDisapproved
+							color rojoTexto
+
+					.notaStudentAplazadosTitle
+
+						.titleAplazados
+							background plomoOscuro
+							border 0
+							color azul
+							font-size 1em
+							padding 0.6em
+				
+				.pMessageEmptyStudent
+					color plomoTexto
+					font-size 1.1em
+					margin-top 4em
+					position relative
+					text-align center
+					width 100%
+
+					span
+						color rojoTexto
+
+				.pMessageTip
+					color amarilloTexto
+					margin-top 2em
+					text-align right
+
+				.notasAplazadosOpen
+					animation .2s slideAplazadosOpen
+					width 10%
+
+				.notasAplazadosClose
+					animation .2s slideAplazadosClose
+					width 0
+
+widthSession = 6.25%
+
+.aDataStudent
+	padding 1em
+	padding-top 0
+	position relative
+	width 100%
+
+	.blockStudent
+		position relative
+		width 100%
+
+		p
+			border-bottom 1px plomoOscuro solid
+			height 40px
+			margin-bottom 0
+			padding .7em
+			text-align center
+			
+		p:nth-child(1)
+			background plomoOscuro
+			border-right 2px plomo solid
+			color azul
+			
+			
+	.columnNum
+		width 3%
+		text-align center
+		
+		p
+			border-right 2px plomoOscuro solid
+			
+	.columnFullName, .sessions
+		height 100%
+		left 3%
+		position absolute
+		top 0
+		width 37%
+
+		& > p
+			//border-bottom 1px plomoOscuro solid
+			border-right 1px plomoOscuro solid
+
+		p:nth-child(1)
+			border 0
+	
+	.columnFullName
+		
+		p
+			text-align left
+
+	.sessions
+		left 40%
+		width 60%
+
+		& > p
+			height 20px
+			padding-top 2px
+			text-align center
+
+		.session
+			left 0
+			position absolute
+			top 20px
+			width widthSession
+
+			p
+				transition all .3s
+				border-left 1px plomoOscuro solid
+				
+
+			p:nth-child(1)
+				background plomoOscuro
+				border-left 1px plomo solid
+				border-top 1px plomo solid
+				height 20px
+				padding-top 1px 
+				text-align center
+
+		.session1, .session17
+			
+			p:nth-child(1)
+				border-left 0
+
+		.session2, .session18
+			left widthSession
+
+		.session3, .session19
+			left widthSession * 2
+			
+		.session4, .session20
+			left widthSession * 3
+
+		.session5, .session21
+			left widthSession * 4
+			
+		.session6, .session22
+			left widthSession * 5
+			
+		.session7, .session23
+			left widthSession * 6
+			
+		.session8, .session24
+			left widthSession * 7
+			
+		.session9, .session25
+			left widthSession * 8
+			
+		.session10, .session26
+			left widthSession * 9
+
+		.session11, .session27
+			left widthSession * 10
+			
+		.session12, .session28
+			left widthSession * 11
+			
+		.session13, .session29
+			left widthSession * 12
+			
+		.session14, .session30
+			left widthSession * 13
+			
+		.session15, .session31
+			left widthSession * 14
+			width widthSession * 2
+			
+			p
+				border-right 1px plomoOscuro solid
+				
+		/*.session16, .session32
+			left widthSession * 15*/
+
+		.session:hover
+			
+			p:nth-child(1)
+				background azul
+				color white
+				
+			p:hover
+				color white
+
+			.text-success:hover
+				background verde
+				
+			.text-info:hover
+				background celeste
+				
+			.text-danger:hover
+				background rojo
+
+@keyframes slideAplazadosOpen {
+	from {
+		width 0%
+	}
+	to {
+		width 10%
+	}
+}
+
+@keyframes slideAplazadosClose {
+	from {
+		width 10%
+	}
+	to {
+		width 0%
+	}
+}
+
+@keyframes showUp
+	from
+		opacity 0
+	to
+		opacity 1
+

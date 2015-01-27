@@ -876,12 +876,13 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $oid = $this->sesion->oid;
         $uid = $this->sesion->uid;
 
+        $formData['pre_1'] = null;
+        $formData['pre_2'] = null;
+        $formData['pre_3'] = null;
         $formData = $this->getRequest()->getPost();
-        //print_r($formData);
 
         //form para validar
         $form_course = new Curricula_Form_Course();
-
         if ($form_course->isValid($formData)) {
             $ids = explode('_', base64_decode($formData['id']));
             $curid = $ids[0];
@@ -906,7 +907,14 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                                 'state'             => 'A',
                                 'register'          => $uid,
                                 'created'           => date('Y-m-d h:i:s') );
-
+            
+            //prerequisitos
+            for ($i=1; $i<=3 ; $i++) { 
+                if ($formData['pre_'.$i]) {
+                    $dataSave['req_'.$i] = base64_decode($formData['pre_'.$i]);
+                }
+            }
+            
             if ($courseDb->_save($dataSave)) {
                 $result = array('success'  => 1,
                                 'errors'   => array(),
