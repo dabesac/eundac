@@ -1,4 +1,4 @@
-<?php
+    <?php
  class Profile_SearchController extends Zend_Controller_Action{
 
     public function init(){

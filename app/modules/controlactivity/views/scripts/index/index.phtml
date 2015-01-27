@@ -2,7 +2,7 @@
 
 <?php $dataCourse = $this->dataCourse ?>
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Control de Actividad');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->perid).'" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->perid).'" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
 <?php 
 	$idsCourse = base64_encode(	$dataCourse['perid'].'-'.
 								$dataCourse['escid'].'-'.

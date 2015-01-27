@@ -1,0 +1,64 @@
+.text_warning
+	color amarilloTexto
+
+ul
+	padding 0
+
+ul.tabs
+	margin-bottom 2em
+	
+	li
+		display inline-block
+		
+		a
+			background white
+			border-bottom 5px plomoTexto solid
+			color plomoTexto
+			display block
+			padding .5em 1em
+			position relative
+			text-align center
+
+			&:before
+				content ""
+				border-bottom 13px solid transparent
+				border-top 13px solid transparent
+				border-left 13px solid transparent
+				border-right 13px solid transparent
+				left 50%
+				margin-left -13px
+				position absolute
+				transition all .3s
+				top 100%
+
+		a:hover
+			color azul
+			border-bottom 5px azul solid
+				
+		a.active
+			color azul
+			border-bottom 5px azul solid
+
+			&:before
+				border-top 13px solid azul
+
+.tabs_data
+	
+	.tab_data
+		display none
+
+	.tab_data.active
+		animation r_s_fadeUp .3s ease
+		display block
+
+p.no_data
+	color plomoTexto
+	text-align center
+	margin 6em
+
+	span
+		color rojoTexto
+
+p.info
+	color plomoTexto
+	margin-bottom 2em	

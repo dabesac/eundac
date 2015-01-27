@@ -7,8 +7,8 @@
 	$dataView = $this->dataView;
  ?>
 
+<?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-bookmark"></span> Gestión de Currículas');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
 <input type="hidden" id="rol" value="<?php echo $dataView['rid'] ?>">
 <div class="main_data">
