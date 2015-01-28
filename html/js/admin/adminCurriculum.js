@@ -855,37 +855,82 @@ $(function(){
 		}
 
 		function actionsPerCourse(id){
-			var btn_edit_course = $('#id_course_' + id).find('.btn_edit_course');
-			var course_form_edit = $('#id_course_' + id).find('form');
+			var course_btn_edit = $('#id_course_' + id).find('.btn_edit_course');
+			var course_row      = $('#id_course_' + id).find('article.data_course');
+			var course_article  = $('#id_course_' + id).find('article.edit_course');
 
 			//Editar Curso
-			$(btn_edit_course).on('click', function(){
-				var this_course  = $(btn_edit_course).parent();
-				var course_edit = $(this_course).siblings('article.edit_course');
+			$(course_btn_edit).on('click', function(){
+				var idget = $(this).attr('code');
 
-				var course_active = $('section.semester').find('article.edit_course.active');
+				if (!$(course_row).hasClass('course_clicked')) {
+					$(course_article)
+						.html('<img src="/img/spinner.gif" alt="Loading..." />')
+						.load('/curricula/curricula/editcourse/id/'+idGet)
+						.addClass('active');
+
+					var course_active = $('section.semester').find('article.data_course.course_clicked');
+					if (course_active) {
+						$(course_active).find('.btn_edit_course').html('Editar');
+						$(course_active).removeClass('course_clicked');
+
+						$(course_active).siblings('.edit_course').addClass('inactive');
+						setTimeout(function() {
+							$(course_active).siblings('.edit_course').removeClass('active inactive');
+						}, 300);
+					}
+
+					$(course_row).addClass('course_clicked');
+					$(course_btn_edit).html('Cancelar');
+				} else {
+					$(course_row).removeClass('course_clicked');
+					$(course_btn_edit).html('Editar');
+
+					$(course_article).addClass('inactive');
+					setTimeout(function() {
+						$(course_article).removeClass('active inactive');
+					}, 300);
+				}
+
+				/*if (!$(course_row).hasClass('course_clicked')) {
+					$(course_article)
+						.html('<img src="/img/spinner.gif" alt="Loading..." />')
+						.load('/curricula/curricula/editcourse/id/'+idGet)
+						.addClass('active');
+					$(course_row).addClass('course_clicked');
+					$(course_btn_edit).html('Cancelar');
+				}*/
+
+				/*var course_active = $('section.semester').find('article.data_course.course_clicked');
 				if (course_active) {
-					$(course_active).siblings('.data_course').removeClass('course_clicked');
-					$(course_active).siblings('.data_course').find('.btn_edit_course').html('Editar');
+					console.log('joder');
+					$(course_active).find('.btn_edit_course').html('Editar');
+					$(course_active).removeClass('course_clicked');
 
-					$(course_active).addClass('inactive');
+					/*$(course_active).addClass('inactive');
 					setTimeout(function() {
 						$(course_active).removeClass('active inactive');
 					}, 300);
-				};
-
-				if (!$(course_edit).hasClass('active')) {
-					$(this_course).addClass('course_clicked');
-					$(btn_edit_course).html('Cancelar');
-					$(course_edit).addClass('active');
-				}
+				}*/
 			});
 
 			//Form por curso
-			$(course_form_edit).on('submit', function(e){
+			/*$(course_form_edit).on('submit', function(e){
 				e.preventDefault();
 				console.log('no se envio');
-			});
+				$.ajax({
+					type     : 'post',
+					url      : '/curricula/curricula/saveeditcourse',
+					data     : $(this).serialize(),
+					//dataType : 'json',
+					success  : function(data){
+						console.log(data);
+					},
+					error : function(){
+
+					}
+				});
+			});*/
 		}
 
 

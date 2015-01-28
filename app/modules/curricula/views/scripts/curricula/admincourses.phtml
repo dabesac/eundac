@@ -47,90 +47,10 @@
 								<?php else: ?>
 									<span class="stateB"><?php echo $course['state'] ?></span>
 								<?php endif ?>
-								<a href="##" class="btn_edit_course">Editar</a>
+								<a href="##" class="btn_edit_course" code="<?php print $course['idget'] ?>">Editar</a>
 							</article>
 							<article class="edit_course">
-								<?php $form = $form_course ?>
-								<?php $form->populate($course) ?>
 
-								<form class="form_edit_course">
-									<div class="thre_input">
-										<div>
-											<?php echo $form->name ?>
-										</div>
-										<div>
-											<?php echo $form->abbreviation ?>
-										</div>
-									</div>
-									
-									<div class="two_sides">
-										<div class="side_one">
-											<div class="two_inputs">
-												<div>
-													<p>Tipo de Curso</p>
-													<?php echo $form->type ?>
-												</div>
-												<div>
-													<p>Créditos</p>
-													<?php echo $form->credits ?>
-												</div>
-											</div>
-
-											<div class="two_inputs">
-												<div class="two_inputs_min">
-													<div>
-														<p>Horas Teoricas</p>
-														<?php echo $form->hours_theoretical ?>
-													</div>
-													<div>
-														<p>Horas Practicas</p>
-														<?php echo $form->hours_practical ?>
-													</div>
-												</div>
-												<div>
-													<p>Semestre</p>
-													<?php echo $form->semid ?>
-												</div>
-											</div>		
-										</div>
-										<div class="side_two">
-											<header>
-												<p>Prerequisitos</p>
-											</header>
-											<section class="select_pre">
-												<select class="form-control">
-													<option value="">Agregue prerequisitos...</option>
-												</select>
-												<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
-											</section>
-											<section class="prerequisites">
-												<!-- <article>
-													<p>Curso 1</p>
-													<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
-												</article>
-												<article>
-													<p>Curso 2</p>
-													<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
-												</article>
-												<article>
-													<p>Curso 3</p>
-													<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
-												</article> -->
-											</section>
-										</div>
-									</div>
-									<div class="submit_side">
-										<input type="submit" class="btn btn-success form-control" value="Guardar">
-									</div>
-								</form>
-								<div id="id_error_course_side" class="error_course_side">
-									<div>
-										<span class="glyphicon glyphicon-exclamation-sign"></span>
-									</div>
-									<div>
-										<!-- Errores aqui desde JavaScript -->
-									</div>
-								</div>
 							</article>
 						</div>
 							

@@ -773,7 +773,11 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                     $cCursos = 0;
                     $cSem++;
                 }else {
-                    $dataCourses[$cSem]['courses'][$cCursos] = array(   'id'                => $course['courseid'],
+                    $dataCourses[$cSem]['courses'][$cCursos] = array(   'idget'             => base64_encode($course['courseid'].'|'.
+                                                                                                                $course['curid'].'|'.
+                                                                                                                $course['escid'].'|'.
+                                                                                                                $course['subid'] ),
+                                                                        'id'                => $course['courseid'],
                                                                         'semid'             => $course['semid'],
                                                                         'name'              => $course['name'],
                                                                         'abbreviation'      => $course['abbreviation'],
@@ -866,6 +870,18 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $this->view->dataView = $dataView;
     }
 
+    public function editcourseAction(){
+        $this->_helper->layout()->disableLayout();
+        
+        $courseDb = new Api_Model_DbTable_Course();
+
+        $ids = base64_decode($this->_getParam('id'));
+
+        //form para las ediciones
+        $dataView['course_form'] = new Curricula_Form_Course();
+        $this->view->dataView = $dataView;
+    }
+
     public function savecourseAction(){
         $this->_helper->layout()->disableLayout();
 
@@ -914,7 +930,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                     $dataSave['req_'.$i] = base64_decode($formData['pre_'.$i]);
                 }
             }
-            
+
             if ($courseDb->_save($dataSave)) {
                 $result = array('success'  => 1,
                                 'errors'   => array(),
@@ -934,6 +950,56 @@ class Curricula_CurriculaController extends Zend_Controller_Action
             }
         }
         print json_encode($result);
+    }
+
+    public function saveeditcourseAction() {
+        $this->_helper->layout()->disableLayout();
+
+        //database
+        $courseDb = new Api_Model_DbTable_Course();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        $formData = $this->getRequest()->getPost();
+
+        //form
+        $course_form = new Curricula_Form_Course();
+        if ($course_form->isValid($course_form)) {
+            $ids = explode('|', base64_decode($formData['id']));
+            $courseid = $ids[0];
+            $curid    = $ids[1];
+            $escid    = $ids[2];
+            $subid    = $ids[3];
+
+            $course_pk = array(
+                                'eid'      => $eid,
+                                'oid'      => $oid,
+                                'escid'    => $escid,
+                                'subid'    => $subid,
+                                'courseid' => $courseid,
+                                'curid'    => $curid );
+
+            $course_data_update = array('name'              => $formData['name'],
+                                        'abbreviation'      => $formData['abbreviation'],
+                                        'type'              => $formData['type'],
+                                        'credits'           => $formData['credits'],
+                                        'hours_theoretical' => $formData['hours_theoretical'],
+                                        'hours_practical'   => $formData['hours_practical'],
+                                        'semid'             => $formData['semid'] );
+        } else {
+            $result['success'] = 0;
+            $cError = 0;
+            foreach ($course_form->getMessages() as $typeError) {
+                foreach ($typeError as $error) {
+                    $result['errors'][$cError] = $error;
+                }
+                if ($cError == 2) {
+                    break;
+                }
+                $cError++;
+            }
+        }
     }
 
     public function printAction(){
