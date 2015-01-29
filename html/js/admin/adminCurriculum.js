@@ -774,29 +774,9 @@ $(function(){
 			var prerequisites_side = $('#id_select_pre').parent().siblings('.prerequisites');
 			var empty_p            = $(prerequisites_side).children('p');
 
-			$('#semid').on('change', function(){
-				semester_x_pre = parseInt($(this).val());
-				var interruptor = 0;
-				var semester_act;
-				$('#id_select_pre option').each(function(index, element){
-					semester_act = parseInt($(element).attr('semester'));
-					if(semester_act < semester_x_pre) {
-						if (interruptor == 0 && semester_act == (semester_x_pre - 1)) {
-							$('#id_select_pre option[semester=0]').html('Agregue un prerequisito...');
-							$('#id_select_pre').val($(element).val());
-							interruptor = 1;
-						}
-						$(element).removeAttr('hidden');
-					} else {
-						$(element).attr('hidden', 'true');
-					}
-				});
-				if (semester_x_pre == 1) {
-					$('#id_select_pre option[semester=0]').html('No hay prerequisitos para el primer semestre...');
-				}
-			});
-
-			var count_pres = 0;
+			prerequisite($('#semid'), $('#id_select_pre'), prerequisites_side);
+			
+			/*var count_pres = 0;
 			$('#id_select_pre + a').on('click', function(){
 				var course_id  = $('#id_select_pre').val();
 
@@ -830,12 +810,81 @@ $(function(){
 						count_pres++;
 					};
 				}
+			});*/
+		}
+
+		function prerequisite(select_semester, select_requisite, prerequisites_side){
+			var semester_x_pre = $(select_semester).val();
+			filterCoursePerSemester(select_requisite, semester_x_pre);
+
+			$(select_semester).on('change', function(){
+				semester_x_pre = parseInt($(this).val());
+				filterCoursePerSemester(select_requisite, semester_x_pre);
+			});
+
+			var empty_p    = $(prerequisites_side).children('p');
+			var count_pres = 0;
+			$(select_requisite).siblings('a').on('click', function(){
+				var course_id  = $(select_requisite).val();
+
+				//Que los cursos no sean iguales
+				var same_course = false;
+				$(prerequisites_side).children('article').each(function(){
+					if (course_id == $(this).find('input').val()) {
+						same_course = true;
+					}
+				});
+
+				if (course_id && !same_course) {
+					var course_name = $(select_requisite).children('option:selected').html();
+
+					var interruptor_fill = false;
+
+					var number_pres = 1;
+					$(prerequisites_side).children('article').each(function(index, element){
+						number_pres++;
+						count_pres++;
+					});
+
+					if (number_pres <= 3) {
+						var prerequisite_html = '<article id="prerequisite'+count_pres+'">'+
+													'<p>'+course_name+'</p>'+
+													'<input type="hidden" name="pre_'+number_pres+'" value="'+course_id+'">'+
+													'<a href="##"><span class="glyphicon glyphicon-remove"></span></a>'+
+												'</article>';
+						$(empty_p).addClass('inactive');
+						$(prerequisites_side).append(prerequisite_html);
+						actionsPerRequisite(count_pres, prerequisites_side);
+
+						count_pres++;
+					}
+				}
 			});
 		}
 
-		function actionsPerRequisite(prerequisite_id){
-			var prerequisites_side = $('#id_select_pre').parent().siblings('.prerequisites');
-			var self               = $(prerequisites_side).find('#prerequisite' + prerequisite_id);
+		function filterCoursePerSemester(select_requisite, semester){
+			var semester_act;
+			var interruptor = false;
+			$(select_requisite).children('option').each(function(){
+				semester_act = parseInt($(this).attr('semester'));
+				if(semester_act < semester) {
+					if (!interruptor && semester_act == (semester - 1)) {
+						$(select_requisite).children('option[semester=0]').html('Agregue un prerequisito...');
+						$(select_requisite).val($(this).val());
+						interruptor = true;
+					}
+					$(this).removeAttr('hidden');
+				} else {
+					$(this).attr('hidden', 'true');
+				}
+			});
+			if (semester == 1) {
+				$(select_requisite).children('option[semester=0]').html('No hay prerequisitos para el primer semestre...');
+			}
+		}
+
+		function actionsPerRequisite(prerequisite_id, prerequisites_side){
+			var self = $(prerequisites_side).find('#prerequisite' + prerequisite_id);
 
 			$(self).addClass('active');
 
@@ -846,10 +895,10 @@ $(function(){
 						.removeClass('active inactive')	
 						.remove();
 
-						$(prerequisites_side).children('article').each(function(index, element){
-							var number_pres = index + 1;
-							$(element).find('input').attr('name', 'pre_' + number_pres);
-						});
+					$(prerequisites_side).children('article').each(function(index, element){
+						var number_pres = index + 1;
+						$(element).find('input').attr('name', 'pre_' + number_pres);
+					});
 				}, 300);
 			});
 		}
@@ -866,7 +915,18 @@ $(function(){
 				if (!$(course_row).hasClass('course_clicked')) {
 					$(course_article)
 						.html('<img src="/img/spinner.gif" alt="Loading..." />')
-						.load('/curricula/curricula/editcourse/id/'+idGet)
+						.load('/curricula/curricula/editcourse/id/' + idget, function(){
+							var prerequisites_side = $(this).find('section.prerequisites');
+							prerequisite(	$(this).find('select[name=semid]'), 
+											$(this).find('section.select_pre select'),
+											prerequisites_side );
+
+							$(this).find('section.prerequisites').children('article').each(function(index){
+								actionsPerRequisite(index, prerequisites_side);
+							});
+
+							submitEditCourse($(this).find('form'));
+						})
 						.addClass('active');
 
 					var course_active = $('section.semester').find('article.data_course.course_clicked');
@@ -891,31 +951,12 @@ $(function(){
 						$(course_article).removeClass('active inactive');
 					}, 300);
 				}
-
-				/*if (!$(course_row).hasClass('course_clicked')) {
-					$(course_article)
-						.html('<img src="/img/spinner.gif" alt="Loading..." />')
-						.load('/curricula/curricula/editcourse/id/'+idGet)
-						.addClass('active');
-					$(course_row).addClass('course_clicked');
-					$(course_btn_edit).html('Cancelar');
-				}*/
-
-				/*var course_active = $('section.semester').find('article.data_course.course_clicked');
-				if (course_active) {
-					console.log('joder');
-					$(course_active).find('.btn_edit_course').html('Editar');
-					$(course_active).removeClass('course_clicked');
-
-					/*$(course_active).addClass('inactive');
-					setTimeout(function() {
-						$(course_active).removeClass('active inactive');
-					}, 300);
-				}*/
 			});
 
-			//Form por curso
-			/*$(course_form_edit).on('submit', function(e){
+		}
+
+		function submitEditCourse(form){
+			$(form).on('submit', function(e){
 				e.preventDefault();
 				console.log('no se envio');
 				$.ajax({
@@ -930,7 +971,7 @@ $(function(){
 
 					}
 				});
-			});*/
+			});
 		}
 
 

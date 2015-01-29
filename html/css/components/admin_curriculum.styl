@@ -557,7 +557,7 @@ section.modal_body.curriculum
 		padding-top 2em
 		position relative
 		
-		p
+		&>p
 			margin 0
 			text-align center
 
@@ -769,7 +769,7 @@ section.semester
 		border-bottom 1px solid plomoOscuro
 		position relative
 		height 35px
-		z-index 10
+		z-index 20
 		
 		span, a
 			height 100%
@@ -852,10 +852,14 @@ section.semester
 
 	article.edit_course
 		background white
+		border-top 1px solid transparent
 		border-bottom 2px solid amarillo
 		border-left 2px solid amarillo
 		display none
-		min-height auto
+
+		img
+			display block
+			margin  10em auto
 
 		.two_sides
 			position relative
@@ -887,6 +891,7 @@ section.semester
 				width 65%
 
 				p
+					text-align center
 					margin-bottom .4em
 				
 			div:nth-child(2)
@@ -951,7 +956,7 @@ section.semester
 					margin-bottom .2em
 
 	article.edit_course.active
-		// animation showEditCourse .3s
+		animation showEditCourse .3s
 		display block
 
 	article.edit_course.inactive

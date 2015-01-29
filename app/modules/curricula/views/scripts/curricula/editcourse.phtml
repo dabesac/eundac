@@ -1,14 +1,24 @@
-<?php $form = $this->dataView['course_form'] ?>
+<?php 
+	$id               = $this->dataView['id'];
+	$exist_periods    = $this->dataView['exist_periods'];
+	$form             = $this->dataView['course_form'];
+	$courses_pre_data = $this->dataView['courses_pre_data'];
+	$requisites_data  = $this->dataView['requisites_data'];
+
+?>
 <?php /*$form->populate($course)*/ ?>
 
 <form class="form_edit_course">
-	<input type="hidden" name="id" value="<?php print $course['idget'] ?>">
+	<input type="hidden" name="id" value="<?php print $id ?>">
 	<div class="thre_input">
 		<div>
-			<?php echo $form->name ?>
+			<?php print $form->state ?>
 		</div>
 		<div>
-			<?php echo $form->abbreviation ?>
+			<?php print $form->name ?>
+		</div>
+		<div>
+			<?php print $form->abbreviation ?>
 		</div>
 	</div>
 	
@@ -17,11 +27,11 @@
 			<div class="two_inputs">
 				<div>
 					<p>Tipo de Curso</p>
-					<?php echo $form->type ?>
+					<?php print $form->type ?>
 				</div>
 				<div>
 					<p>Créditos</p>
-					<?php echo $form->credits ?>
+					<?php print $form->credits ?>
 				</div>
 			</div>
 
@@ -29,16 +39,16 @@
 				<div class="two_inputs_min">
 					<div>
 						<p>Horas Teoricas</p>
-						<?php echo $form->hours_theoretical ?>
+						<?php print $form->hours_theoretical ?>
 					</div>
 					<div>
 						<p>Horas Practicas</p>
-						<?php echo $form->hours_practical ?>
+						<?php print $form->hours_practical ?>
 					</div>
 				</div>
 				<div>
 					<p>Semestre</p>
-					<?php echo $form->semid ?>
+					<?php print $form->semid ?>
 				</div>
 			</div>		
 		</div>
@@ -47,27 +57,34 @@
 				<p>Prerequisitos</p>
 			</header>
 			<section class="select_pre">
-				<select id="id_select_pre" class="form-control">
-					<?php if ($dataView['periods']): ?>
+				<select class="form-control">
+					<?php if ($exist_periods): ?>
 						<option semester="0" value="">No hay prerequisitos para el primer semestre...</option>
-						<?php foreach ($data_courses as $course): ?>
-							<option semester="<?php echo $course['semid'] ?>" value="<?php echo base64_encode($course['courseid']) ?>" hidden><?php echo $course['courseid'].' | '.$course['name'] ?></option>
+						<?php foreach ($courses_pre_data as $course): ?>
+							<option semester="<?php print $course['semid'] ?>" value="<?php print $course['id'] ?>" hidden><?php print $course['code'].' | '.$course['name'] ?></option>
 						<?php endforeach ?>
 					<?php else: ?>
 						<option value="">Elija un semestre...</option>
 					<?php endif ?>
 				</select>
+				<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
 			</section>
 			<section class="prerequisites">
-				<!-- <article>
-					<p>Curso 1</p>
-					<input type="hidden" name="pre_1" value="">
-					<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
-				</article>
-				<p><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue requisitos para este curso si desea...</p>
 				<input type="hidden" name="pre_1" value="">
 				<input type="hidden" name="pre_2" value="">
-				<input type="hidden" name="pre_3" value="">-->
+				<input type="hidden" name="pre_3" value="">
+				<?php if ($requisites_data): ?>
+					<?php foreach ($requisites_data as $c => $requisite): ?>
+						<article id="prerequisite<?php print $c ?>">
+							<p><?php print $requisite['code'].' | '.$requisite['name'] ?></p>
+							<input type="hidden" name="pre_<?php print $c + 1 ?>" value="<?php print $requisite['id'] ?>">
+							<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
+						</article>
+					<?php endforeach ?>
+					<p class="inactive"><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue requisitos para este curso si desea...</p>
+				<?php else: ?>
+					<p><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue requisitos para este curso si desea...</p>
+				<?php endif ?>
 			</section>
 		</div>
 	</div>
