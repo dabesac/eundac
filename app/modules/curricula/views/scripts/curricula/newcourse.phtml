@@ -73,7 +73,7 @@
 						<?php if ($dataView['periods']): ?>
 							<option semester="0" value="">No hay prerequisitos para el primer semestre...</option>
 							<?php foreach ($data_courses as $course): ?>
-								<option semester="<?php echo $course['semid'] ?>" value="<?php echo base64_encode($course['courseid']) ?>" hidden><?php echo $course['courseid'].' | '.$course['name'] ?></option>
+								<option semester="<?php echo $course['semid'] ?>" code-course="<?php print $course['courseid'] ?>" value="<?php echo base64_encode($course['courseid']) ?>" hidden><?php echo $course['courseid'].' | '.$course['name'] ?></option>
 							<?php endforeach ?>
 						<?php else: ?>
 							<option value="">Elija un semestre...</option>

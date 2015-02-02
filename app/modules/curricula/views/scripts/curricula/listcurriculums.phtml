@@ -18,12 +18,14 @@
 	<?php endif ?>
 <?php else: ?>
 	<input type="hidden" id="selectSpeciality" value="<?php echo $dataView['dataCurriculums'][0]['code'] ?>">
-	<?php if ($dataView['rid'] == 'RC'): ?>
-		<header class="plusnew">
+	<header class="plusnew">
+		<?php if ($dataView['rid'] == 'RC'): ?>
 			<p><span class="glyphicon glyphicon-info-sign"></span> Administre todas las curriculas pertenecientes a esta escuela...</p>
 			<a href="##" id="btnNewModal" class="btn btn-success" data-toggle="modal" data-target="#modalNewCur">Nueva Currícula</a>
-		</header>
-	<?php endif ?>
+		<?php elseif ($dataView['rid'] == 'RF' or $dataView['rid'] == 'CU'): ?>
+			<p><span class="glyphicon glyphicon-info-sign"></span> Estas son las curriculas de la escuela...</p>
+		<?php endif ?>
+	</header>
 <?php endif ?>
 
 <?php if ($dataView['dataCurriculums']): ?>
@@ -37,8 +39,7 @@
 					<p class="draftP"><span class="glyphicon glyphicon-exclamation-sign"></span> Tiene Currículas en Borrador, haga algo con estos...</p>
 					<div id="divDraft<?php echo $school['code'] ?>" class="div_draft">
 						<?php foreach ($curriculumDrafts as $c => $curriculum): ?>
-							<?php $idJS = base64_decode($curriculum['id']) ?>
-							<div class="curriculum" id="curriculum<?php echo $idJS ?>" idactivatejs="<?php echo $idJS ?>" state="B">
+							<div class="curriculum" id="curriculum<?php print $curriculum['idjs'] ?>" idactivatejs="<?php print $curriculum['idjs'] ?>" state="B">
 								<span><?php echo $c + 1 ?></span>
 								<span><span class="nameChangeEdit"><?php echo $curriculum['name'] ?></span> <small><?php echo $curriculum['curid'] ?></small></span>
 								<span>Año <?php echo $curriculum['year'] ?></span>
@@ -46,12 +47,11 @@
 								<!-- Botonera Olimpica lml!!! -->
 								<div class="modify draftModify">
 									<?php $ulrAdminCourses = '/curricula/curricula/listcourses/id/'.$curriculum['id'] ?>
-									<a href="<?php echo $ulrAdminCourses ?>" title="Administre los cursos correspondientes a esta currícula...">Administrar Cursos</a>
-									<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php echo $idJS ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
-									<a href="##" class="btn_derive" ide="<?php echo $curriculum['id'] ?>" goto="<?php echo $idJS ?>">Derivar</a>
-									<a href="##" class="btn_delete" ide="<?php echo $curriculum['id'] ?>" type="delete" goto="<?php echo $idJS ?>">Eliminar</a>
+									<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php print $curriculum['idjs'] ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Administrar Curricula</a>
+									<a href="##" class="btn_derive" ide="<?php echo $curriculum['id'] ?>" goto="<?php print $curriculum['idjs'] ?>">Derivar</a>
+									<a href="##" class="btn_delete" ide="<?php echo $curriculum['id'] ?>" type="delete" goto="<?php print $curriculum['idjs'] ?>">Eliminar</a>
 
-									<div class="derive_from_draft" fromto="<?php echo $idJS ?>">
+									<div class="derive_from_draft" fromto="<?php print $curriculum['idjs'] ?>">
 										<a href="##" type="active">Activar Curricula</a>
 										<a href="##" type="temporary">Mover a Temporales</a>
 										<a href="##" type="close">Cerrar Curricula</a>
@@ -60,7 +60,7 @@
 							</div>
 
 							<!--Alertas Curricula en Borrador-->
-							<div id="curriculum_confirm<?php echo $idJS ?>" fromto="<?php echo $idJS ?>" class="confirms_side">
+							<div id="curriculum_confirm<?php print $curriculum['idjs'] ?>" fromto="<?php print $curriculum['idjs'] ?>" class="confirms_side">
 								<div class="confirm_side delete_curriculum" type="delete">
 									<p>Confírme si desea eliminar esta currícula...</p>
 									<a href="##" whycallme="D">Si, quiero eliminarla</a>
@@ -87,7 +87,6 @@
 							<p><span class="glyphicon glyphicon-ok"></span> Ya no tiene nada en borradores, buen trabajo...</p>
 						</div>
 					</div>
-					<hr class="draftHr">
 				</div>
 			<?php else: ?>
 				<div class="main main_draft main_hide">
@@ -98,7 +97,6 @@
 							<p><span class="glyphicon glyphicon-ok"></span> Ya no tiene nada en borradores, buen trabajo...</p>
 						</div>
 					</div>
-					<hr class="draftHr">
 				</div>
 			<?php endif ?>
 				
@@ -106,18 +104,17 @@
 			<!-- Curricula Activa -->
 			<?php if ($school['active']): ?>
 				<?php $curriculumActive = $school['active'] ?>
-				<?php $idJS = base64_decode($curriculumActive['id']) ?>
 				<div class="main main_active">
 					<p class="activeP"><span class="glyphicon glyphicon-ok"></span> Curricula Activa</p>
 					<div class="div_active">
-						<div id="curriculum<?php echo $idJS ?>" class="curriculum" idactivatejs="<?php echo $idJS ?>" idget="<?php echo $curriculumActive['id'] ?>" state="A">
+						<div id="curriculum<?php print $curriculumActive['idjs'] ?>" class="curriculum" idactivatejs="<?php print $curriculumActive['idjs'] ?>" idget="<?php echo $curriculumActive['id'] ?>" state="A">
 							<span><span class="glyphicon glyphicon-ok"></span></span>
 							<span><?php echo $curriculumActive['name'] ?> <small><?php echo $curriculumActive['curid'] ?></small></span>
 							<span>Año <?php echo $curriculumActive['year'] ?></span>
 							<!-- Botonera Olimpica lml!!! -->
 							<div class="modify active_modify">
-								<a href="##">Ver Cursos</a>
-								<a href="##" ide="<?php echo $curriculumActive['id'] ?>" idjs="<?php echo $idJS ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+								<a href="##" ide="<?php echo $curriculumActive['id'] ?>" idjs="<?php print $curriculumActive['idjs'] ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+								<a href="/curricula/curricula/print/id/<?php echo $curriculumActive['id'] ?>">Imprimir</a>
 							</div>
 						</div>
 					</div>
@@ -133,7 +130,6 @@
 					</div>
 				</div>
 			<?php endif ?>
-			<hr class="activeHr">
 
 			<!-- Curriculas Temporales -->
 			<?php if ($school['temporary']): ?>
@@ -142,33 +138,32 @@
 					<p class="temporaryP"><span class="glyphicon glyphicon-time"></span> Curriculas Temporales</p>
 					<div class="div_temporary">
 						<?php foreach ($curriculumTemporaries as $c => $curriculum): ?>
-							<?php $idJS = base64_decode($curriculum['id']) ?>
-							<div id="curriculum<?php echo $idJS ?>" class="curriculum" idactivatejs="<?php echo $idJS ?>" state="T">
+							<div id="curriculum<?php print $curriculum['idjs'] ?>" class="curriculum" idactivatejs="<?php print $curriculum['idjs'] ?>" state="T">
 								<span><?php echo $c + 1 ?></span>
 								<span><?php echo $curriculum['name'] ?> <small><?php echo $curriculum['curid'] ?></small></span>
 								<span>Año <?php echo $curriculum['year'] ?></span>
 								<?php if ($dataView['rid'] == 'RC'): ?>
 									<div class="modify temporary_modify">
-										<a href="##">Administrar Cursos</a>
-										<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php echo $idJS ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
-										<a href="##" class="btn_derive" ide="<?php echo $curriculum['id'] ?>" goto="<?php echo $idJS ?>">Derivar</a>
+										<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php print $curriculum['idjs'] ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+										<a href="##" class="btn_derive" ide="<?php echo $curriculum['id'] ?>" goto="<?php print $curriculum['idjs'] ?>">Derivar</a>
+										<a href="##">Imprimir</a>
 
-										<div class="derive_from_draft" fromto="<?php echo $idJS ?>">
+										<div class="derive_from_draft" fromto="<?php print $curriculum['idjs'] ?>">
 											<a href="##" type="active">Activar Curricula</a>
 											<a href="##" type="close">Cerrar Curricula</a>
 										</div>
 									</div>
-								<?php elseif ($dataView['rid'] == 'DR'): ?>
+								<?php elseif ($dataView['rid'] == 'DR' or $dataView['rid'] == 'RF' or $dataView['rid'] == 'CU'): ?>
 									<div class="modify active_modify">
-										<a href="##">Ver Cursos</a>
-										<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php echo $idJS ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+										<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php print $curriculum['idjs'] ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+										<a href="/curricula/curricula/print/id/<?php print $curriculum['id'] ?>">Imprimir</a>
 									</div>
 								<?php endif ?>
 							</div>
 							
 							<?php if ($dataView['rid'] == 'RC'): ?>
 								<!--Alertas Curricula Temporales-->
-								<div id="curriculum_confirm<?php echo $idJS ?>" fromto="<?php echo $idJS ?>" class="confirms_side">
+								<div id="curriculum_confirm<?php print $curriculum['idjs'] ?>" fromto="<?php print $curriculum['idjs'] ?>" class="confirms_side">
 									<div class="confirm_side delete_curriculum" type="delete">
 										<p>Confírme si desea eliminar esta currícula...</p>
 										<a href="##" whycallme="D">Si, quiero eliminarla</a>
@@ -196,7 +191,6 @@
 							<p><span class="glyphicon glyphicon-exclamation-sign"></span> No hay curriculas temporales...</p>
 						</div>
 					</div>
-					<hr class="temporaryHr">
 				</div>
 			<?php else: ?>
 				<div class="main main_temporary main_hide">
@@ -207,7 +201,6 @@
 							<p><span class="glyphicon glyphicon-exclamation-sign"></span> No hay curriculas temporales...</p>
 						</div>
 					</div>
-					<hr class="temporaryHr">
 				</div>
 			<?php endif ?>
 			
@@ -219,13 +212,13 @@
 					<div class="div_close">
 						<?php foreach ($curriculumClose as $c => $curriculum): ?>
 							<?php $idJS = base64_decode($curriculum['id']) ?>
-							<div id="curriculum<?php echo $idJS ?>" class="curriculum" idactivatejs="<?php echo $idJS ?>" state="C">
+							<div id="curriculum<?php print $curriculum['idjs'] ?>" class="curriculum" idactivatejs="<?php print $curriculum['idjs'] ?>" state="C">
 								<span><?php echo $c + 1 ?></span>
 								<span><?php echo $curriculum['name'] ?> <small><?php echo $curriculum['curid'] ?></small></span>
 								<span>Año <?php echo $curriculum['year'] ?></span>
 								<div class="modify close_modify">
-									<a href="##">Ver Cursos</a>
-									<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php echo $idJS ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+									<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php print $curriculum['idjs'] ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
+									<a href="/curricula/curricula/print/id/<?php echo $curriculum['id'] ?>">Imprimir</a>
 								</div>
 							</div>
 						<?php endforeach ?>
@@ -240,7 +233,6 @@
 					<div class="div_close"></div>
 				</div>
 			<?php endif ?>
-			<hr class="closeHr">
 
 			<!-- No temporales (no importante en pantalla) -->
 			<?php if (!$school['temporary']): ?>
@@ -249,7 +241,6 @@
 					<div class="curriculum empty temporary">
 						<p><span class="glyphicon glyphicon-exclamation-sign"></span> No hay curriculas temporales...</p>
 					</div>
-					<hr class="temporaryHr">
 				</div>
 			<?php endif ?>
 		</div>

@@ -1,66 +1,105 @@
 <?php 
 	$dataView       = $this->dataView;
+	$role           = $dataView['role'];
 	$dataCurriculum = $dataView['dataCurriculum'];
 	$dataCourses    = $dataView['dataCourses'];
-	$form_course    = $dataView['form_course'];
  ?>
 
 <div class="modal_admin_courses">
-	<header>
-		<p><?php echo $dataCurriculum['name'] ?> <small><?php echo $dataCurriculum['curid'] ?></small></p>
-		<div>
-			<a id="btn_add_course" href="##">Agregar Curso</a>
-		</div>
-	</header>
-	<section id="id_add_new_course" class="new_course">
-		
-	</section>
+	<?php if ($role == 'RC' and $dataCurriculum['state'] != 'T' and $dataCurriculum['state'] != 'C'): ?>
+		<header>
+			<p><?php echo $dataCurriculum['name'] ?> <small><?php echo $dataCurriculum['curid'] ?></small></p>
+			<div>
+				<a id="btn_add_course" href="##">Agregar Curso</a>
+			</div>
+		</header>
+		<section id="id_add_new_course" class="new_course">
+			
+		</section>
+	<?php elseif ($role == 'RC' and $dataCurriculum['state'] != 'A' and $dataCurriculum['state'] != 'B'): ?>
+		<header class="only_p">
+			<p><?php echo $dataCurriculum['name'] ?> <small><?php echo $dataCurriculum['curid'] ?></small></p>
+		</header>
+	<?php elseif ($role == 'RF' or $role == 'DR'): ?>
+		<header class="only_p">
+			<p><?php echo $dataCurriculum['name'] ?> <small><?php echo $dataCurriculum['curid'] ?></small></p>
+		</header>
+	<?php endif ?>
 	<article>
-		<?php if ($dataCourses): ?>
-			<?php foreach ($dataCourses as $semester): ?>
-				<section class="semester">
-					<header>
-						<span class="glyphicon glyphicon-flag"></span> Semestre <?php echo $semester['semid'] ?>
-					</header>
-					<section id="id_section_semester<?php echo $semester['semid'] ?>">
-						<article class="title">
-							<span>#</span>	
-							<span>Código</span>
-							<span>Nombre</span>
-							<span>Créditos</span>
-							<span>Tipo</span>
-							<span>Requisíto</span>
-							<span>Estado</span>
-							<span></span>
-						</article>
+		<?php foreach ($dataCourses as $c_sem => $semester): ?>
+			<section class="semester">
+				<header>
+					<span class="glyphicon glyphicon-flag"></span> Semestre <?php print $semester['semid'] ?>
+				</header>
+				<section id="id_section_semester<?php echo $semester['semid'] ?>">
+				<?php if ($semester['courses']): ?>
+					<?php if ($role == 'RF' or $role == 'CU' or $dataCurriculum['state'] == 'T' or $dataCurriculum['state'] == 'C'): ?>
+						<?php $class_row="large" ?>
+					<?php else: ?>
+						<?php $class_row="" ?>
+					<?php endif ?>
+					<article class="title <?php print $class_row ?>">
+						<span>#</span>	
+						<span>Código</span>
+						<span>Nombre</span>
+						<span>Créditos</span>
+						<span>Tipo</span>
+						<span>Requisíto</span>
+						<span>Estado</span>
+						<?php if ($role == 'RC' or $role == 'DR'): ?>
+						<span></span>
+						<?php endif ?>
+					</article>
 					<?php foreach ($semester['courses'] as $c => $course): ?>
 						<div id="id_course_<?php echo $course['id'] ?>" class="all_course_data" idactivatejs="<?php echo $course['id'] ?>">
-							<article class="data_course">
+							<article class="data_course <?php print $class_row ?>">
 								<span><?php echo $c + 1 ?></span>	
 								<span><?php echo $course['id'] ?></span>
 								<span><?php echo $course['name'] ?></span>
 								<span><?php echo $course['credits'] ?></span>
 								<span><?php echo $course['name_type'] ?></span>
-								<span><?php echo $course['req_1'] ?></span>
-								<?php if ($course['state'] == 'A'): ?>
-									<span class="stateA"><?php echo $course['state'] ?></span>
-								<?php else: ?>
-									<span class="stateB"><?php echo $course['state'] ?></span>
+								<span><?php echo $course['req'] ?></span>
+								<?php if ($role == 'RF'): ?>
+									<?php if ($dataCurriculum['state'] != 'A' or $dataCurriculum['state'] != 'B'): ?>
+										<?php if ($course['state'] == 'A'): ?>
+											<span class="stateA large"><?php echo $course['state'] ?></span>
+										<?php else: ?>
+											<span class="stateI large"><?php echo $course['state'] ?></span>
+										<?php endif ?>
+									<?php endif ?>
 								<?php endif ?>
-								<a href="##" class="btn_edit_course" code="<?php print $course['idget'] ?>">Editar</a>
+								<?php if ($role == 'RC' or $role == 'DR'): ?>
+									<?php if ($dataCurriculum['state'] != 'T' and $dataCurriculum['state'] != 'C'): ?>
+										<?php if ($course['state'] == 'A'): ?>
+											<span class="stateA"><?php echo $course['state'] ?></span>
+										<?php else: ?>
+											<span class="stateI"><?php echo $course['state'] ?></span>
+										<?php endif ?>
+										<a href="##" class="btn_edit_course" code="<?php print $course['idget'] ?>">Editar</a>
+									<?php endif ?>
+								<?php endif ?>
 							</article>
 							<article class="edit_course">
 
 							</article>
 						</div>
-							
 					<?php endforeach ?>
-					</section>
+					<p class="inactive"><span class="glyphicon glyphicon-exclamation-sign"></span> Este semestre no tiene cursos...</p>
+				<?php else: ?>
+					<article class="title inactive">
+						<span>#</span>	
+						<span>Código</span>
+						<span>Nombre</span>
+						<span>Créditos</span>
+						<span>Tipo</span>
+						<span>Requisíto</span>
+						<span>Estado</span>
+						<span></span>
+					</article>
+					<p><span class="glyphicon glyphicon-exclamation-sign"></span> Este semestre no tiene cursos...</p>
+				<?php endif ?>
 				</section>
-			<?php endforeach ?>
-		<?php else: ?>
-			<br><br><br><br><br><br><br>
-			<p><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> Esta currícula no tiene cursos...</p>
-		<?php endif ?>
+			</section>
+		<?php endforeach ?>
 	</article>
 </div>

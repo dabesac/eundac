@@ -7,6 +7,7 @@ div.fill_main_data.data_curriculums
 		padding 1em
 
 		.main
+			margin-bottom 4em
 
 			& > p
 				color plomoTexto
@@ -19,9 +20,6 @@ div.fill_main_data.data_curriculums
 				color white
 				text-align left
 
-			.draftHr
-				border-top 1px rojo solid
-
 		hr
 			margin-bottom 3em
 			margin-top .8em
@@ -32,27 +30,17 @@ div.fill_main_data.data_curriculums
 			span
 				color celeste
 
-		.closeHr
-			border-top 1px celeste solid
-			
 		.activeP
 			border-bottom 1px verde solid
 			
 			span
 				color verde
 
-		.activeHr
-			border-top 1px verde solid
-
 		.temporaryP
 			border-bottom 1px amarillo solid
 
 			span
 				color amarillo
-
-		.temporaryHr
-			border-top 1px amarillo solid
-			
 
 		.div_active
 			height 55px;
@@ -132,16 +120,15 @@ div.fill_main_data.data_curriculums
 			.draftModify, .temporary_modify
 				
 				& > a
-					width 25%
+					width 50%
 
 				& > a:nth-child(2)
-					left 25%
+					left 50%
+					width 25%
 
 				& > a:nth-child(3)
-					left 50%
-
-				& > a:nth-child(4)
 					left 75%
+					width 25%
 
 				.derive_from_draft
 					border-bottom 2px solid azul
@@ -207,15 +194,16 @@ div.fill_main_data.data_curriculums
 					
 				& > a:nth-child(2)
 					left 33.3%
+					width 33.3%
 				
 				& > a:nth-child(3)
 					left 66.6%
 					width 33.4%;
 
 				.derive_from_draft
-					left 66.6%
+					left 33.3%
 					height 83px
-					width 33.4%
+					width 33.3%
 
 					a:nth-child(2)
 						color celeste
@@ -549,6 +537,11 @@ section.modal_body.curriculum
 
 	&>.header_active
 		border-top 1px solid verde
+
+	&>header.only_p
+		p
+			text-align center
+			width 100%
 		
 	&>article
 		background plomo
@@ -748,16 +741,30 @@ section.new_course.inactive
 			animation r_h_fadeDown .3s
 			
 section.semester
+	background white
 	margin-bottom 3em
 	position relative
 
 	&>header
-		background white
 		border-top 1px solid plomoOscuro
 		color azul
 		border-bottom 1px solid plomoOscuro
 		padding 1em
 		text-align center
+
+	&>section
+
+		&>p
+			color plomoTexto
+			text-align center
+			padding 5em 1em
+			
+			span
+				color rojoTexto
+
+		&>p.inactive
+			display none
+
 
 	.all_course_data
 		position relative
@@ -818,7 +825,7 @@ section.semester
 		.stateA
 			color verdeTexto
 			
-		.stateB
+		.stateI
 			color rojoTexto
 
 	article.data_course:hover
@@ -830,6 +837,30 @@ section.semester
 
 		span
 			border-right 1px solid plomo
+
+	article.large
+		
+		span:nth-of-type(3)
+			width 58%
+
+		span:nth-of-type(4)
+			left 68%
+			width 7%
+			
+		span:nth-of-type(5)
+			left 75%
+			width 10%
+
+		span:nth-of-type(6)
+			left 85%
+			width 9%
+
+		span:nth-child(7)
+			left 94%
+			width 6%
+			
+	article.title.inactive
+		display none
 
 	article.course_clicked
 		background amarillo
@@ -844,7 +875,7 @@ section.semester
 			color white
 			background rojoHover
 
-		.stateA, .stateB
+		.stateA, .stateI
 			color white
 
 	article.course_clicked:hover
@@ -852,10 +883,74 @@ section.semester
 
 	article.edit_course
 		background white
-		border-top 1px solid transparent
 		border-bottom 2px solid amarillo
 		border-left 2px solid amarillo
+		border-top 1px solid transparent
 		display none
+		min-height 300px
+		position relative
+
+		&>p
+			padding 1em
+			color plomoTexto
+			
+		textarea
+			display block
+			margin 0 auto 1em
+			padding 1em
+			border-radius 0
+			border 1px plomoOscuro solid
+			width 97%
+
+		div.cover_black
+			background rgba(black, .3)
+			display none
+			height 100%
+			position absolute
+			width 100%
+			z-index 1
+
+		.msg_delete
+			background white
+			bottom 1em
+			display none
+			padding 1em
+			position absolute
+			right 1em
+			width 45%
+			z-index 2
+
+			&>p
+				text-align center
+				color rojoTexto
+			
+			a
+				background rojo
+				border 2px rojo solid
+				border-radius 2px
+				color white
+				display inline-block
+				margin-bottom .5em
+				padding .3em
+				text-align center
+				width 48%
+
+				&:hover
+					background rojoHover
+
+			a:nth-of-type(2)
+				background white
+				color rojoTexto
+				margin-left 2%
+				
+				&:hover
+					background rojoHover
+					color white
+
+			.msg_side
+
+				.msg
+					display none
 
 		img
 			display block
@@ -879,8 +974,8 @@ section.semester
 		.thre_input, .two_inputs
 			background plomoOscuro
 			border-bottom 1px solid plomoOscuro
-			position relative
 			height 62px
+			position relative
 			
 			div
 				left 0
@@ -888,13 +983,17 @@ section.semester
 				padding 1em
 				position absolute
 				top 0
-				width 65%
+				width 15%
 
 				p
 					text-align center
 					margin-bottom .4em
 				
 			div:nth-child(2)
+				left 15%
+				width 50%
+				
+			div:nth-child(3)
 				left 65%
 				width 35%
 				
@@ -925,35 +1024,27 @@ section.semester
 					
 		.submit_side
 			border-top 2px solid plomoOscuro
-			padding 1em
+			padding 1em 0 0
 			padding-left 15em
 			padding-right 15em
-
-		.error_course_side
-			background amarillo
-			color white
-			display none
 			position relative
-			width 100%
 
-			div:nth-child(1)
-				font-size 2em
-				padding .9em
-				padding-bottom .4em
-				position relative
-				text-align center
-				width 30%
-				
-			div:nth-child(2)
-				left 30%
-				padding .5em
+			a
+				color plomoTexto
+				font-size 1.2em
 				position absolute
-				top 0
-				height 100%
-				width 70%
+				right 1em
+				top 1.3em
 
-				p
-					margin-bottom .2em
+			a:hover
+				color rojo
+
+		&>.msg_side
+			padding 0 5em 1em
+
+			.msg
+				margin-top 1em
+				display none
 
 	article.edit_course.active
 		animation showEditCourse .3s
@@ -962,53 +1053,11 @@ section.semester
 	article.edit_course.inactive
 		animation hideEditCourse .3s
 
-.errorsSide
-	display none
-	position relative
-	width 100%
-
-	.icon
-		font-size 2em
-		padding-top 1em
-		padding-bottom .6em
-		text-align center
-		width 20%
-
-	.errors
-		border-left 1px amarilloTexto solid
-		left 20%
-		height 100%
-		padding 1em
-		position absolute
-		top 0
-		width 80%
+	article.edit_course.delete
 		
-		p
-			margin-bottom 0
-
-.errorData
-	background amarillo
-	color white
-
-.errorBase
-	background rojo
-	color white
-
-.successSave
-	background verde
-	color white
-	padding 1em
-	text-align center
-	
-	p
-		margin-bottom 0
-
-.chargeSide
-	background plomo
-	text-align center
-
-	img
-		margin 1em
+		div.cover_black, .msg_delete
+			animation showCover .3s
+			display block
 	
 .detail_curricula
 	display block
@@ -1133,17 +1182,27 @@ section.semester
 
 @keyframes showEditCourse
 	from
+		opacity 0
 		margin-top -308px
 		top -308px
 	to
+		opacity 1
 		margin-top 0
 		top 0
 
 @keyframes hideEditCourse
 	from
+		opacity 1
 		margin-top 0
 		top 0
 	to
+		opacity 0
 		margin-top -308px
 		top -308px
+
+@keyframes showCover
+	from
+		opacity 0
+	to
+		opacity 1
 	

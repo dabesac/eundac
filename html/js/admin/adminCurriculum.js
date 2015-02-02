@@ -5,7 +5,7 @@ $(function(){
 	//Rol
 	var rol = $('#rol').val();
 
-	if (rol == 'RC') {
+	if (rol == 'RC' || rol == 'RF' || rol == 'CU') {
 		$('#selectFaculty').on('change', function(){
 			dataGet = $(this).val();
 			curriculum.chargeSchools(dataGet);
@@ -15,11 +15,10 @@ $(function(){
 			dataGet = $(this).val();
 			curriculum.chargeCurriculums(dataGet);
 		});
-	}else if (rol == 'DR'){
+	}else if (rol == 'DR') {
 		dataGet = $('#school').val();
 		curriculum.chargeCurriculums(dataGet);
 	}
-
 
 	//Closure curriculum
 	function curriculum() {
@@ -79,19 +78,23 @@ $(function(){
 				showCurBySpe(speciality);
 
 				//cargar Formulario por especialidad
+				if (rol == 'RC') {
+					$('#dataFormNewCur')
+						.html('<br><br><br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+						.load('/curricula/curricula/newcurricula/id/' + speciality, function(){
+							newCurriculum();
+						});
+				}
+			});
+
+			//cargar Formulario cuando no tiene especialidades
+			if (rol == 'RC') {
 				$('#dataFormNewCur')
 					.html('<br><br><br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
 					.load('/curricula/curricula/newcurricula/id/' + speciality, function(){
 						newCurriculum();
 					});
-			});
-
-			//cargar Formulario cuando no tiene especialidades
-			$('#dataFormNewCur')
-				.html('<br><br><br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
-				.load('/curricula/curricula/newcurricula/id/' + speciality, function(){
-					newCurriculum();
-				});
+			}
 
 			var idActivateJs;
 			$('.curriculum').each(function(i, element){
@@ -298,8 +301,8 @@ $(function(){
 				dataType : 'json',
 				success  : function(data){
 					if (data.success === 1) {
+						
 						cleanOfAlerts();
-
 						//Nombre y Años
 						var dataCurriculum  = new Object();
 						dataCurriculum.name = $('#curriculum' + idJs + ' span:nth-child(2)').html();
@@ -329,8 +332,8 @@ $(function(){
 														'<span>'+ dataCurriculum.name +'</span>'+
 														'<span>'+ dataCurriculum.year +'</span>'+
 														'<div class="modify active_modify">'+
-															'<a href="##">Ver Cursos</a>'+
 															'<a href="##" ide="'+ idGet +'" idjs="'+ idJs +'" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>'+
+															'<a href="/curricula/curricula/print/id/'+ idGet +'">Imprimir</a>'+
 														'</div>'+
 													'</div>';
 								$(div_to_change).html(curriculumHtml);
@@ -345,9 +348,9 @@ $(function(){
 														'<span>'+ dataCurriculumChange.name +'</span>'+
 														'<span>'+ dataCurriculumChange.year +'</span>'+
 														'<div class="modify temporary_modify">'+
-															'<a href="##">Administrar Cursos</a>'+
 															'<a href="##" ide="'+ dataCurriculumChange.idGet +'" idjs="'+ dataCurriculumChange.idJs +'" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>'+
 															'<a href="##" class="btn_derive" ide="'+ dataCurriculumChange.idGet +'" goto="'+ dataCurriculumChange.idJs +'">Derivar</a>'+
+															'<a href="/curricula/curricula/print/id/'+ idGet +'">Imprimir</a>'+
 															'<div class="derive_from_draft" fromto="'+ dataCurriculumChange.idJs +'">'+
 																'<a href="##" type="active">Activar Curricula</a>'+
 																'<a href="##" type="close">Cerrar Curricula</a>'+
@@ -399,9 +402,9 @@ $(function(){
 														'<span>'+ dataCurriculum.name +'</span>'+
 														'<span>'+ dataCurriculum.year +'</span>'+
 														'<div class="modify temporary_modify">'+
-															'<a href="##">Administrar Cursos</a>'+
 															'<a href="##" ide="'+ idGet +'" idjs="'+ idJs +'" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>'+
 															'<a href="##" class="btn_derive" ide="'+ idGet +'" goto="'+ idJs +'">Derivar</a>'+
+															'<a href="/curricula/curricula/print/id/'+ idGet +'">Imprimir</a>'+
 															'<div class="derive_from_draft" fromto="'+ idJs +'">'+
 																'<a href="##" type="active">Activar Curricula</a>'+
 																'<a href="##" type="close">Cerrar Curricula</a>'+
@@ -443,7 +446,6 @@ $(function(){
 
 							$('#curriculum' + idJs).addClass('removeCurriculum');
 
-
 							setTimeout(function(){
 								$('#curriculum' + idJs + ', #curriculum_confirm' + idJs).remove();
 								//Forma HORRIBLE de agregar div curricula activa
@@ -452,8 +454,8 @@ $(function(){
 														'<span>'+ dataCurriculum.name +'</span>'+
 														'<span>'+ dataCurriculum.year +'</span>'+
 														'<div class="modify close_modify">'+
-															'<a href="##">Ver Cursos</a>'+
 															'<a href="##" ide="'+ idGet +'" idjs="'+ idJs +'" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>'+
+															'<a href="/curricula/curricula/print/id/'+ idGet +'">Imprimir</a>'+
 														'</div>'+
 													'</div>';
 
@@ -505,8 +507,7 @@ $(function(){
 														'<span><span class="nameChangeEdit">'+ data.dataNew.name + '</span> <small>'+ data.dataNew.curid +'</small></span>' +
 														'<span>Año '+ data.dataNew.year +'</span>' +
 														'<div class="modify draftModify">' +
-															'<a href="##" title="Administre los cursos correspondientes a esta currícula...">Administrar Cursos</a>'+
-															'<a href="##" ide="'+ data.dataNew.id +'" idjs="'+ data.dataNew.idJs +'" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>'+
+															'<a href="##" ide="'+ data.dataNew.id +'" idjs="'+ data.dataNew.idJs +'" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Administrar Curricula</a>'+
 															'<a href="##" class="btn_derive" ide="'+ data.dataNew.id +'" goto="'+ data.dataNew.idJs +'">Derivar</a>'+
 															'<a href="##" class="btn_delete" ide="'+ data.dataNew.id +'" type="delete" goto="'+ data.dataNew.idJs +'">Eliminar</a>'+
 															'<div class="derive_from_draft" fromto="'+ data.dataNew.idJs +'">'+
@@ -610,12 +611,15 @@ $(function(){
 					view_detailCurriculum();
 				});
 
-			//Cargar Formulario para editar curricula
-			$('#idDivEditCurriculum')
-				.html('<br><br><br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
-				.load('/curricula/curricula/editcurriculum/id/' + idGet, function(){
-					view_editCurriculum(idGet, idJs);
-				});
+			if (rol == 'RC' || rol == 'DR') {
+				//Cargar Formulario para editar curricula
+				$('#idDivEditCurriculum')
+					.html('<br><br><br><center><img src="/img/spinner.gif" alt="Loading..." /></center>')
+					.load('/curricula/curricula/editcurriculum/id/' + idGet, function(){
+						view_editCurriculum(idGet, idJs);
+					});
+			}
+				
 
 			//Cargar administracion de Cursos
 			$('#idDivAdminCourses')
@@ -666,14 +670,12 @@ $(function(){
 							fillErrors(msg_error, data.errors);
 							jukeboxMsg(msg_error, msg_success, 7000);
 						}else if (data.success === 2) {
-							console.log('error de base de datos');
 						}
 						btnSubmit
 							.removeAttr('disabled')
 							.val('Guardar');
 					},
 					error : function(){
-						console.log('error de base de datos');
 						btnSubmit
 							.removeAttr('disabled')
 							.val('Guardar');
@@ -727,6 +729,8 @@ $(function(){
 			$('#form_add_new_course').on('submit', function(e){
 				e.preventDefault();
 
+				var form = $(this);
+
 				var btn_cancel_total = $(this).parent().parent().siblings('header').find('a#btn_add_course');
 
 				var btnSubmit   = $(this).find('input[type=submit]');
@@ -739,12 +743,58 @@ $(function(){
 					data     : $(this).serialize(),
 					dataType : 'json',
 					success  : function(data){
-						console.log(data);
 						if (data.success === 1) {
-							console.log(data.semester);
-							jukeboxMsg(msg_success, msg_error, 1950);
+							//Agregar curso a tabla forma horrible
+							var html_course = '<div id="id_course_'+data.idjs+'" class="all_course_data" idactivatejs="'+data.idjs+'">'+
+													'<article class="data_course">'+
+														'<span>#</span>	'+
+														'<span>'+data.idjs+'</span>'+
+														'<span>'+data.name+'</span>'+
+														'<span>'+data.credits+'</span>'+
+														'<span>'+data.type+'</span>'+
+														'<span>'+data.req+'</span>'+
+														'<span class="stateA">A</span>'+
+														'<a href="##" class="btn_edit_course" code="'+data.idget+'">Editar</a>'+
+													'</article>'+
+													'<article class="edit_course"></article>'+
+												'</div>';
+							$('#id_section_semester' + data.semester).append(html_course);
+							actionsPerCourse(data.idjs);
+							enumerateAgain($('#id_section_semester' + data.semester));
 
+							jukeboxMsg(msg_success, msg_error, 1700);
 							setTimeout(function() {
+								$(form).find('input[type=text]').val('');
+								$(form).find('select[name=semid]').val(1);
+
+								$('#id_select_pre').append('<option semester="'+data.semester+'" code-course="'+data.idjs+'" value="'+data.id_en+'">'+data.idjs+' | '+data.name +'</option>');
+
+								var prerequisites_side = $('#id_select_pre').parent().siblings('.prerequisites');
+								filterCoursePerSemester($('#id_select_pre'), 1);
+
+								$(prerequisites_side).children('article').each(function(){
+									var self = $(this);
+									if (1 < $(self).attr('semester')) {
+										$(self).addClass('inactive');
+										setTimeout(function() {
+											var there_more = false;
+											$(self)
+												.removeClass('active inactive')	
+												.remove();
+
+											$(prerequisites_side).children('article').each(function(index){
+												var number_pres = index + 1;
+												$(this).find('input').attr('name', 'pre_' + number_pres);
+
+												there_more = true;
+											});
+											if (!there_more) {
+												$(prerequisites_side).children('p').removeClass('inactive');
+											}
+										}, 300);
+									}
+								});
+
 								$(btn_cancel_total)
 									.removeClass('btn_cancel')
 									.html('Agregar Curso');
@@ -752,11 +802,11 @@ $(function(){
 								$(btn_cancel_total).parent().parent().removeClass('header_active');
 
 								$('#id_add_new_course').addClass('inactive');
-
 								setTimeout(function(){
 									$('#id_add_new_course')
 										.removeClass('active inactive');
 								}, 300);
+
 							}, 2000);
 						}else if (data.success === 0){
 							fillErrors(msg_error, data.errors);
@@ -764,7 +814,6 @@ $(function(){
 						}
 					},
 					error : function(){
-						console.log('Error al guardar el curso, mas fijo que sea en la base de datos...');
 					}
 				});
 			});
@@ -775,42 +824,6 @@ $(function(){
 			var empty_p            = $(prerequisites_side).children('p');
 
 			prerequisite($('#semid'), $('#id_select_pre'), prerequisites_side);
-			
-			/*var count_pres = 0;
-			$('#id_select_pre + a').on('click', function(){
-				var course_id  = $('#id_select_pre').val();
-
-				//Que los cursos no sean iguales
-				var same_course = false;
-				$(prerequisites_side).children('article').each(function(){
-					if (course_id == $(this).find('input').val()) {
-						same_course = true;
-					}
-				});
-
-				if (course_id && !same_course) {
-					var course_name = $('#id_select_pre option:selected').html();
-					var interruptor_fill = false;
-
-					var number_pres = 1;
-					$(prerequisites_side).children('article').each(function(index, element){
-						number_pres++;
-					});
-
-					if (number_pres <= 3) {
-						var prerequisite_html = '<article id="prerequisite'+count_pres+'">'+
-													'<p>'+course_name+'</p>'+
-													'<input type="hidden" name="pre_'+number_pres+'" value="'+course_id+'">'+
-													'<a href="##"><span class="glyphicon glyphicon-remove"></span></a>'+
-												'</article>';
-						$(empty_p).addClass('inactive');
-						$(prerequisites_side).append(prerequisite_html);
-						actionsPerRequisite(count_pres);
-
-						count_pres++;
-					};
-				}
-			});*/
 		}
 
 		function prerequisite(select_semester, select_requisite, prerequisites_side){
@@ -820,6 +833,29 @@ $(function(){
 			$(select_semester).on('change', function(){
 				semester_x_pre = parseInt($(this).val());
 				filterCoursePerSemester(select_requisite, semester_x_pre);
+
+				$(prerequisites_side).children('article').each(function(){
+					var self = $(this);
+					if (semester_x_pre < $(self).attr('semester')) {
+						$(self).addClass('inactive');
+						setTimeout(function() {
+							var there_more = false;
+							$(self)
+								.removeClass('active inactive')	
+								.remove();
+
+							$(prerequisites_side).children('article').each(function(index){
+								var number_pres = index + 1;
+								$(this).find('input').attr('name', 'pre_' + number_pres);
+
+								there_more = true;
+							});
+							if (!there_more) {
+								$(prerequisites_side).children('p').removeClass('inactive');
+							}
+						}, 300);
+					}
+				});
 			});
 
 			var empty_p    = $(prerequisites_side).children('p');
@@ -847,7 +883,7 @@ $(function(){
 					});
 
 					if (number_pres <= 3) {
-						var prerequisite_html = '<article id="prerequisite'+count_pres+'">'+
+						var prerequisite_html = '<article semester="'+semester_x_pre+'" id="prerequisite'+count_pres+'">'+
 													'<p>'+course_name+'</p>'+
 													'<input type="hidden" name="pre_'+number_pres+'" value="'+course_id+'">'+
 													'<a href="##"><span class="glyphicon glyphicon-remove"></span></a>'+
@@ -864,7 +900,8 @@ $(function(){
 
 		function filterCoursePerSemester(select_requisite, semester){
 			var semester_act;
-			var interruptor = false;
+			var interruptor     = false;
+			var there_something = false;
 			$(select_requisite).children('option').each(function(){
 				semester_act = parseInt($(this).attr('semester'));
 				if(semester_act < semester) {
@@ -873,11 +910,22 @@ $(function(){
 						$(select_requisite).val($(this).val());
 						interruptor = true;
 					}
+					if (semester_act != 0) {
+						there_something = true;
+					}
 					$(this).removeAttr('hidden');
 				} else {
 					$(this).attr('hidden', 'true');
 				}
 			});
+
+			if (there_something && !interruptor) {
+				$(select_requisite).children('option[semester=0]').html('Agregue un prerequisito...');
+			} else if (!there_something) {
+				$(select_requisite).children('option[semester=0]').html('No hay prerequisitos...');
+				$(select_requisite).val('');
+			}
+
 			if (semester == 1) {
 				$(select_requisite).children('option[semester=0]').html('No hay prerequisitos para el primer semestre...');
 			}
@@ -891,14 +939,21 @@ $(function(){
 			$(self).find('a').on('click', function(){
 				$(self).addClass('inactive');
 				setTimeout(function() {
+					var there_more = false;
 					$(self)
 						.removeClass('active inactive')	
 						.remove();
 
-					$(prerequisites_side).children('article').each(function(index, element){
+					$(prerequisites_side).children('article').each(function(index){
 						var number_pres = index + 1;
-						$(element).find('input').attr('name', 'pre_' + number_pres);
+						$(this).find('input').attr('name', 'pre_' + number_pres);
+
+						there_more = true;
 					});
+
+					if (!there_more) {
+						$(prerequisites_side).children('p').removeClass('inactive');
+					}
 				}, 300);
 			});
 		}
@@ -925,7 +980,7 @@ $(function(){
 								actionsPerRequisite(index, prerequisites_side);
 							});
 
-							submitEditCourse($(this).find('form'));
+							actionsEditCourse($(this).find('form'));
 						})
 						.addClass('active');
 
@@ -952,22 +1007,134 @@ $(function(){
 					}, 300);
 				}
 			});
-
 		}
 
-		function submitEditCourse(form){
+		function actionsEditCourse(form){
 			$(form).on('submit', function(e){
 				e.preventDefault();
-				console.log('no se envio');
+				var course_row = $(this).parent().siblings('.data_course');
+
+				var msg_success = $(this).siblings('.msg_side').children('.msg.success');
+				var msg_errors  = $(this).siblings('.msg_side').children('.msg.warning');
+
+				var btn_submit = $(this).find('input[type=submit]');
+				$(btn_submit)
+					.attr('disabled', 'true')
+					.val('Guardando...');
 				$.ajax({
 					type     : 'post',
 					url      : '/curricula/curricula/saveeditcourse',
 					data     : $(this).serialize(),
-					//dataType : 'json',
+					dataType : 'json',
 					success  : function(data){
-						console.log(data);
+						if (data.success === 1) {
+							if (rol == 'RC') {
+								$(course_row).children('span:nth-of-type(3)').html(data.name);
+								$(course_row).children('span:nth-of-type(4)').html(data.credits);
+								$(course_row).children('span:nth-of-type(5)').html(data.type);
+								$(course_row).children('span:nth-of-type(6)').html(data.req);
+
+								$(course_row).children('span:nth-of-type(7)').removeClass('stateA stateI');
+								$(course_row).children('span:nth-of-type(7)').addClass('state' + data.state);
+								$(course_row).children('span:nth-of-type(7)').html(data.state);
+
+								$('#id_select_pre').find('option[code-course='+data.idjs+']').html(data.idjs + ' | ' + data.name);
+
+								if (data.change_semester) {
+									$(btn_submit)
+										.val('Moviendo al Semestre ' + data.semid +'...');
+
+									jukeboxMsg(msg_success, msg_errors, 1500);
+
+									$('#id_select_pre').find('option[code-course='+data.idjs+']').attr('semester', data.semid);
+
+									filterCoursePerSemester($('#id_select_pre'), $('#form_add_new_course').find('select[name=semid]').val());
+
+									var course_article = $(course_row).siblings('.edit_course');
+									setTimeout(function() {
+										$(course_row).removeClass('course_clicked');
+										$(course_row).find('a.btn_edit_course').html('Editar');
+
+										$(course_article).addClass('inactive');
+										setTimeout(function() {
+											$(course_article).removeClass('active inactive');
+											var html_all_course = $(course_row).parent().html();
+											$(course_row).parent().remove();
+											$('#id_section_semester' + data.semid).append('<div id="id_course_'+data.idjs+'" class="all_course_data" idactivatejs="'+data.idjs+'">'+html_all_course+'</div>');
+											enumerateAgain($('#id_section_semester' + data.semester_current));
+											enumerateAgain($('#id_section_semester' + data.semid));
+											actionsPerCourse(data.idjs);
+										}, 300);
+									}, 1800);
+								} else {
+									jukeboxMsg(msg_success, msg_errors, 5000);
+									$(btn_submit)
+										.removeAttr('disabled')
+										.val('Guardar');
+								}
+							} else if (rol == 'DR') {
+								jukeboxMsg(msg_success, msg_errors, 5000);
+								$(btn_submit)
+									.removeAttr('disabled')
+									.val('Guardar');
+							}
+						} else if (data.success === 0) {
+							fillErrors(msg_errors, data.errors);
+							jukeboxMsg(msg_errors, msg_success, 7000);
+							$(btn_submit)
+								.removeAttr('disabled')
+								.val('Guardar');
+						}
 					},
 					error : function(){
+						$(btn_submit)
+							.removeAttr('disabled')
+							.val('Guardar');
+					}
+				});
+			});
+
+			//Eliminar Curso
+			var course_btn_delete = $(form).find('a[type=delete]');
+			var course_article_edit = $(form).parent();
+
+			var course_confirm_delete = $(form).siblings('.msg_delete').children('a:nth-of-type(1)');
+			var course_cancel_delete  = $(form).siblings('.msg_delete').children('a:nth-of-type(2)');
+			$(course_btn_delete).on('click', function(){
+				$(course_article_edit).addClass('delete');
+			});
+
+			$(course_cancel_delete).on('click', function(){
+				$(course_article_edit).removeClass('delete');
+			});
+
+
+			$(course_confirm_delete).on('click', function(){
+				var msg_error   = $(this).siblings('.msg_side').children('.msg.warning');
+				var msg_success = $(this).siblings('.msg_side').children('.msg.success');
+							
+				var idget = $(this).attr('code');
+				$.ajax({
+					url      : '/curricula/curricula/deletecourse',
+					data     : {id : idget},
+					dataType : 'json',
+					success  : function(data){
+						if (data.success === 1) {
+							jukeboxMsg(msg_success, msg_error, 1500);
+							setTimeout(function() {
+								$(course_article_edit).addClass('inactive');
+								setTimeout(function() {
+									$(course_article_edit).removeClass('active inactive');
+									$(course_article_edit).parent().remove();
+									enumerateAgain($(course_article_edit).parent().parent());
+								}, 300);
+							}, 1500);
+						} else if (data.success === 0) {
+							jukeboxMsg(msg_error, msg_success, 7000);
+						}
+					},
+					error : function(){
+						jukeboxMsg(msg_error, msg_success, 7000);
 
 					}
 				});
@@ -976,6 +1143,22 @@ $(function(){
 
 
 		//Funciones Globales
+		function enumerateAgain(block){
+			var there_more = false;
+			$(block).children('div.all_course_data').each(function(index){
+				$(this).children('article.data_course').children('span:nth-of-type(1)').html(index + 1);
+				there_more = true;
+			});
+
+			if (there_more) {
+				$(block).children('article.title').removeClass('inactive');
+				$(block).children('p').addClass('inactive')
+			} else {
+				$(block).children('article.title').addClass('inactive');
+				$(block).children('p').removeClass('inactive')
+			}
+		}
+
 		function jukeboxMsg(msg1, msg2, time){
 			//si tiene otro mensaje activo
 			if ($(msg2).hasClass('show')) {
@@ -1038,6 +1221,6 @@ $(function(){
 		return {
 			chargeSchools     : chargeSchools,
 			chargeCurriculums : chargeCurriculums
-		};
+		}
 	}
 });
