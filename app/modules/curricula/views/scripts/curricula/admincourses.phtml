@@ -59,7 +59,7 @@
 								<span><?php echo $course['credits'] ?></span>
 								<span><?php echo $course['name_type'] ?></span>
 								<span><?php echo $course['req'] ?></span>
-								<?php if ($role == 'RF'): ?>
+								<?php if ($role == 'RF' or $role == 'CU'): ?>
 									<?php if ($dataCurriculum['state'] != 'A' or $dataCurriculum['state'] != 'B'): ?>
 										<?php if ($course['state'] == 'A'): ?>
 											<span class="stateA large"><?php echo $course['state'] ?></span>
