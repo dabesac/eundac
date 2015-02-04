@@ -5,14 +5,9 @@
    $sesion = $auth->getStorage()->read();
    $rol = $sesion->rol['rid']; ?>
 <?php if ($rol != 'AL' && $rol !='DC'){ ?>
-      <form action="/profile/search" method='post'>
-         <select name='rid' class="form-control">
-            <option value='AL'>Alumno</option>
-            <option value='DC'>Docente</option>
-            <option value='EG'>Egresados</option>
-         </select>
-         <input type="text" class="form-control" name='uid' placeholder="Codigo o Apellido">
-         <button class="btn btn-warning btnSubmitLayout" type="submit" name='enviar'><span class='glyphicon glyphicon-search'></span></button>
+      <form id="main_search_form">
+         <input type="text" name='data' placeholder="Busque a estudiantes o docentes...">
+         <button type="submit" name='enviar'><span class='glyphicon glyphicon-search'></span></button>
       </form>
 <?php }?>
 

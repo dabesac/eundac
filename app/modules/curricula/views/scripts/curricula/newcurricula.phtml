@@ -4,9 +4,9 @@
 	$curriculumsBefore = $dataView['curriculumsBefore'];
  ?>
 
-<div class="modal_header">
+<header class="modal_header">
 	<p class="title">Nueva Currícula </p>
-	<div class="dataEsc">
+	<div>
 		<p><span>Facultad de </span><?php echo $dataView['nameFac'] ?></p>
 		<p><span>Escuela de </span><?php echo $dataView['nameEsc'] ?> 
 			<?php if ($dataView['isEsp'] == 'yes'): ?>
@@ -14,11 +14,11 @@
 			<?php endif ?>
 		</p>
 	</div>
-	<div class="modal_close">
+	<div>
 		<a class="btn btn-default form-control" href="##" data-dismiss="modal">Cerrar</a>
 	</div>
-</div>
-<div class="modal_body">
+</header>
+<section class="modal_body curriculum">
 	<p><span class="glyphicon glyphicon-info-sign"></span> Llene todos los campos necesarios...</p>
 	<form id="formCurriculum">
 		<?php if ($dataView['isEsp'] == 'yes'): ?>
@@ -93,20 +93,12 @@
 			<?php echo $form->save ?>
 		</div>
 	</form>
-</div>
-<div id="idErrorsSide" class="errorsSide">
-	<div class="icon">
-		<span class="glyphicon glyphicon-exclamation-sign"></span>
+	<div class="msg_side">
+		<div class="msg warning">
+			<!-- <p><span class="glyphicon glyphicon-exclamation-sign"></span> Error en algunos campos...</p> -->
+		</div>
+		<div class="msg success">
+			<p><span class="glyphicon glyphicon-ok"></span> Guardado satisfactoriamente!</p>
+		</div>
 	</div>
-	<div class="errors">
-		
-	</div>
-</div>
-
-<div id="idSuccessSide" class="errorsSide successSave">
-	<p><span class="glyphicon glyphicon-ok"></span> Guardado!</p>
-</div>
-
-<div id="idChargeSide" class="errorsSide chargeSide">
-	<img src="/img/spinner.gif" alt="Loading...">
-</div>
+</section>

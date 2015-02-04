@@ -2,9 +2,9 @@
 	$dataView = $this->dataView;
  ?>
 
-<div class="modal_header">
-	<p class="title">Detalle de Currícula </p>
-	<div class="dataEsc">
+<header class="modal_header">
+	<p>Detalle de Currícula </p>
+	<div>
 		<p><span>Facultad de </span><?php echo $dataView['nameFac'] ?></p>
 		<p><span>Escuela de </span><?php echo $dataView['nameEsc'] ?> 
 			<?php if ($dataView['isEsp'] == 'yes'): ?>
@@ -12,10 +12,10 @@
 			<?php endif ?>
 		</p>
 	</div>
-	<div class="modal_close">
+	<div>
 		<a class="btn btn-default form-control" href="##" data-dismiss="modal">Cerrar</a>
 	</div>
-</div>
+</header>
 <div class="header_body">
 	<div id="idHeaderDetail">
 		<?php if ($dataView['rid'] == 'RC'): ?>
@@ -32,7 +32,10 @@
 				</div>
 			<?php elseif ($dataView['state'] == 'C' or $dataView['state'] == 'T'): ?>
 				<p><span class="glyphicon glyphicon-info-sign"></span> Visualice los detalles de la currícula...</p>
-				<div></div><div></div>
+				<div></div>
+				<div>
+					<a href="##" id="detailCur_btnAdminCourses">Cursos</a>
+				</div>
 				<div>
 					<a href="/curricula/curricula/print/id/<?php echo $dataView['id_cur'] ?>" id="detailCur_btnPrintCur">Imprimir</a>
 				</div>
@@ -48,6 +51,15 @@
 			<div>
 				<a href="/curricula/curricula/print/id/<?php echo $dataView['id_cur'] ?>" id="detailCur_btnPrintCur">Imprimir</a>
 			</div>
+		<?php elseif ($dataView['rid'] == 'RF' or $dataView['rid'] == 'CU'): ?>
+			<p><span class="glyphicon glyphicon-info-sign"></span> Visualice los detalles de la currícula...</p>
+			<div></div>
+			<div>
+				<a href="##" id="detailCur_btnAdminCourses">Cursos</a>
+			</div>
+			<div>
+				<a href="/curricula/curricula/print/id/<?php echo $dataView['id_cur'] ?>" id="detailCur_btnPrintCur">Imprimir</a>
+			</div>
 		<?php endif ?>
 	</div>
 	<div id="idHeaderEdit" class="headerEdit">
@@ -57,7 +69,12 @@
 		</div>
 	</div>
 	<div id="idHeaderAdmin" class="headerEdit">
-		<p><span class="glyphicon glyphicon-info-sign"></span> Administre los cursos de esta currícula...</p>
+		<?php if ($dataView['rid'] == 'RC'): ?>
+			<p><span class="glyphicon glyphicon-info-sign"></span> Administre los cursos de esta currícula...</p>
+			
+		<?php elseif ($dataView['rid'] == 'RF' or $dataView['rid'] == 'DR' or $dataView['rid'] == 'CU'): ?>
+			<p><span class="glyphicon glyphicon-info-sign"></span> Visualice los cursos de esta currícula...</p>
+		<?php endif ?>
 		<div>
 			<a href="##" id="detailCur_courses_btnBackToDetail">Regresar</a>
 		</div>

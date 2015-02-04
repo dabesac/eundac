@@ -1,0 +1,56 @@
+.modal_medium
+	width 73%
+
+	.modal-content
+		border-left 4px verde solid
+		min-height 500px
+
+	.modal-content.new
+		border-left 4px verde solid
+		
+	.modal-content.edit
+		border-left 4px amarillo solid
+
+	header.modal_header
+		border-bottom 1px plomoOscuro solid
+		height 70px
+		position relative
+		width 100%
+		
+		&>p, div
+			height 100%
+			left 0
+			position absolute
+			top 0
+		
+		&>p
+			background plomo
+			color azul
+			font-size 1.2em
+			text-align center
+			padding-top 1.3em
+			width 25%
+
+		div:nth-of-type(1)
+			border-left 2px plomoOscuro solid
+			font-size 1.03em
+			left 25%
+			padding-left 1em
+			padding-top .7em
+			width 55%
+
+			p
+				color negroPlomo
+
+		div:nth-of-type(2)
+			left 80%
+			padding 1.3em
+			width 20%
+
+	section.modal_body
+		color plomoTexto
+		padding 1em
+		padding-bottom 0
+		padding-top 2em
+		position relative
+

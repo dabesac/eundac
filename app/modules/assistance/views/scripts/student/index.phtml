@@ -29,7 +29,7 @@ if($this->partial==2) {
 $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-calendar"></span> '. $partial_text.' ' .$infocourse['name'].' Turno '.$this->turno.'');
 
  if ($this->state == 'A' || $this->state == 'P') { 
-        $this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->perid).'" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>
+        $this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->perid).'" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>
         	
                             ');
 
@@ -44,7 +44,7 @@ $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-calendar
 				perid='.$this->perid.'
 		><span class="glyphicon  glyphicon-log-out"></span> Cerrar Asistencia</a>');
 }else{
-	$this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->perid).'" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');
+	$this->placeholder('Btnnav')->append('<a href="/docente/notas/index/perid/'.base64_encode($this->perid).'" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');
 
 }?>
 

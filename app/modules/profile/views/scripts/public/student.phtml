@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/css/profile.css">
 <?php
     $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> Mi Perfil');
-    $this->placeholder('Btnnav')->append('<a href="/alumno" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
+    $this->placeholder('Btnnav')->append('<a href="/alumno" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');
 ?>
 <input type="hidden" id="successProfile" value="<?php echo $this->success ?>">
 <!-- <div id="alertCompleteProfile" class="alert alert-danger hidden">
@@ -32,10 +32,17 @@
 
 <div class="studentProfile_main">
 	<figure class="ObO"><img class='img-avatar' src="/fotos/<?php echo $this->datos[0]['uid']?>.jpg" onerror="imgError(this);" alt="Foto de Perfil" align="center" ></figure>
-
 	<div class="ObO dataStudent">
 		<p class="fullName"><?php echo $this->datos[0]['fullname']?></p>
-		<p>DNI <strong><?php echo $this->datos[0]['pid']?></strong></p>
+		<p>DNI <strong><?php 
+							if ($this->datos[0]['numdoc']) {
+								echo $this->datos[0]['numdoc'];						
+							}
+							else{
+								echo $this->datos[0]['pid'];
+							}
+		
+		?></strong></p>
 		<p>Código <strong><?php echo $this->datos[0]['uid']?></strong></p>
 	</div>
 	<div class="ObO dataSchool">

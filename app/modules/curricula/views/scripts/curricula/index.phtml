@@ -1,6 +1,5 @@
 <?php $env = getenv('APPLICATION_ENV') ?>
 <?php if ($env === 'development'): ?>
-	<link rel="stylesheet" href="/css/adminCurriculum.css">
 	<script src="/js/admin/adminCurriculum.js"></script>
 <?php endif ?>
 
@@ -8,15 +7,15 @@
 	$dataView = $this->dataView;
  ?>
 
+<?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-bookmark"></span> Gestión de Currículas');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
 
 <input type="hidden" id="rol" value="<?php echo $dataView['rid'] ?>">
-<div class="adm_curricula">
-	<?php if ($dataView['rid'] == 'RC'): ?>
-		<div class="header">
+<div class="main_data">
+	<?php if ($dataView['rid'] == 'RC' or $dataView['rid'] == 'CU'): ?>
+		<header class="faculty_school">
 			<p><span class="glyphicon glyphicon-comment"></span> Seleccione una Facultad y Escuela</p>
-			<div class="selectSide">
+			<div>
 				<select class="form-control" name="faculty" id="selectFaculty">
 					<option value="">Facultad</option>
 					<?php if ($dataView['faculties']): ?>
@@ -26,21 +25,37 @@
 					<?php endif ?>
 				</select>
 			</div>
-			<div class="selectSide">
+			<div>
 				<select class="form-control" name="school" id="selectSchool">
 					<option value="">Escuela</option>
 					<option value="">Primero seleccione una facultad ¬¬</option>
 				</select>
 			</div>
-		</div>
+		</header>
+	<?php elseif ($dataView['rid'] == 'RF'): ?>
+		<header class="school">
+			<p><span class="glyphicon glyphicon-comment"></span> Seleccione una Escuela</p>
+			<div>
+				<select class="form-control" name="school" id="selectSchool">
+					<option value="">Escuela</option>
+					<?php if ($dataView['schools_data']): ?>
+					<?php foreach ($dataView['schools_data'] as $school): ?>
+						<option value="<?php print $school['id'] ?>"><?php print $school['name'] ?></option>
+					<?php endforeach ?>
+					<?php else: ?>
+						<option value="">No hay escuelas para mostrar</option>
+					<?php endif ?>
+				</select>
+			</div>
+		</header>
 	<?php elseif ($dataView['rid'] == 'DR'): ?>
 		<input type="hidden" id="school" value="<?php echo $dataView['id_school'] ?>">
-		<div class="header director">
+		<header class="director">
 			<p><span class="glyphicon glyphicon-info-sign"></span> Todas las currículas de su escuela...</p>
-		</div>
+		</header>
 	<?php endif ?>
 
-	<div id="dataCurriculums" class="body">
+	<div id="dataCurriculums" class="fill_main_data data_curriculums">
 		
 	</div>
 </div>
@@ -49,73 +64,3 @@
 	<script src="/js/min/adminCurriculum.min.js"></script>
 <?php endif ?>
 
-
-<!-- <div class='row'>
-	<div class='col-md-12 col-md-offset-2'>
-		<div class='col-md-1'>Facultad:</div>
-		<div class='col-md-3'>
-			<select id="facid" class="form-control" style="width:280px">
-				<option value="">- Seleccione -</option>
-				<?php
-				if ($this->facultad) { 
-					foreach ($this->facultad as $facultad) { ?>
-						<option value="<?php echo $facultad['facid']?>"><?php echo $facultad['name']?></option>
-					<?php
-					}
-				}?>
-			</select>
-		</div>
-		<div class='col-md-1'>Escuela:</div>
-		<div class='col-md-3'>
-			<select id="escid" class="form-control" style="width:280px">
-				<option value="">- Primero seleccione una Facultad -</option>
-			</select>
-
-		</div>
-	</div>
-</div><br><hr><br>
-
-<div id="curriculas"></div>
-
-<script type="text/javascript">
-	$("#facid").change(function(){
-		$("#facid option:selected").each(function(){
-			var facid=$.base64.encode($(this).val());
-			$.get('/curricula/curricula/schools',{facid:facid},function(data){
-				$("#escid").html(data);
-			});
-		})
-	});
-	$("#escid").change(function(){
-		$("#escid option:selected").each(function(){
-			var tmp=$.base64.encode($(this).val());
-			if (tmp=="") {
-				alert("Seleccione una Escuela.");
-				return false;
-			};
-			$("#curriculas").html("<img src='/img/spinner.gif'>Cargando...");
-			$.get('/curricula/curricula/curriculas',{escid:tmp},function(data){
-				$("#curriculas").html(data);
-			});
-		})
-	});
-
-	var facid = "<?php echo $this->facid?>";
-	if (facid!="") {
-		$("#facid").val(facid);
-		$("#facid").attr('disabled',true);
-		$.get('/curricula/curricula/schools',{facid:$.base64.encode(facid)},function(data){
-				$("#escid").html(data);
-		});
-	};
-
-	var isdirector = "<?php echo $this->isdirector?>";
-	if (isdirector=="S") {
-		var escid = "<?php echo $this->escid?>";
-		var subid = "<?php echo $this->subid?>";
-		$("#escid").attr('disabled',true);
-		$.get('/curricula/curricula/curriculas',{escid:$.base64.encode(escid+"--"+subid)},function(data){
-				$("#curriculas").html(data);
-		});
-	};
-</script> -->

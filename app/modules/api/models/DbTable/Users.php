@@ -114,6 +114,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
         }
     }
 
+
     public function _getUserXUid($where=null){
         try{
             if ($where['uid']=="" || $where['eid']=="" || $where['oid']=="" ) return false;
@@ -243,6 +244,93 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
         }
     }
 
+    public function _getUsuarioXNombreProAll($where=null){
+        try{
+           	$eid=$where['eid'];
+        	$cad=$where['name'];
+        	// print_r($whereds);
+          $sql=$this->_db->query("
+                select  last_name0 || ' ' || last_name1 || ' ' || first_name as full_name
+       			        ,u.uid, u.subid, u.rid, u.eid, u.oid, u.escid, u.pid, p.first_name, p.last_name0, p.last_name1, u.escid, u.state 
+       					from base_users as u
+       					inner join base_person as p
+       					on u.pid=p.pid and u.eid=p.eid
+       					where u.eid='$eid' and upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$cad%'
+            ");
+            $row=$sql->fetchAll();
+           return $row;  
+        }catch (Exception $ex) { 
+            print "Error: Retornando los datos del alumno de acuerdo a una palabra ingresada".$ex->getMessage();
+        }
+    }
+
+    public function _getUsuarioXNombreProFacultySubid($where=null){
+        try{
+			$eid   = $where['eid'];
+			$cad   = $where['name'];
+			$facid = $where['facid'];
+			$subid = $where['subid'];
+			$lf = strlen($facid);
+        	// print_r($whereds);
+          	$sql=$this->_db->query("
+                select  last_name0 || ' ' || last_name1 || ' ' || first_name as full_name
+       			        ,u.uid, u.subid, u.rid, u.eid, u.oid, u.escid, u.pid, p.first_name, p.last_name0, p.last_name1, u.escid, u.state 
+       					from base_users as u
+       					inner join base_person as p
+       					on u.pid=p.pid and u.eid=p.eid
+       					where u.eid='$eid' and left(u.escid ,'$lf')='$facid' and subid='$subid' and upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$cad%'
+            ");
+            $row=$sql->fetchAll();
+           return $row;  
+        }catch (Exception $ex) { 
+            print "Error: Retornando los datos del alumno de acuerdo a una palabra ingresada".$ex->getMessage();
+        }
+    }
+
+    public function _getUsuarioXNombreProFaculty($where=null){
+        try{
+			$eid   = $where['eid'];
+			$cad   = $where['name'];
+			$facid = $where['facid'];
+			$lf = strlen($facid);
+        	// print_r($whereds);
+          	$sql=$this->_db->query("
+                select  last_name0 || ' ' || last_name1 || ' ' || first_name as full_name
+       			        ,u.uid, u.subid, u.rid, u.eid, u.oid, u.escid, u.pid, p.first_name, p.last_name0, p.last_name1, u.escid, u.state 
+       					from base_users as u
+       					inner join base_person as p
+       					on u.pid=p.pid and u.eid=p.eid
+       					where u.eid='$eid' and left(u.escid ,'$lf')='$facid' and upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$cad%'
+            ");
+            $row=$sql->fetchAll();
+           return $row;  
+        }catch (Exception $ex) { 
+            print "Error: Retornando los datos del alumno de acuerdo a una palabra ingresada".$ex->getMessage();
+        }
+    }
+
+    public function _getUsuarioXNombreProSchool($where=null){
+        try{
+			$eid   = $where['eid'];
+			$cad   = $where['name'];
+			$escid = $where['escid'];
+			$subid = $where['subid'];
+        	// print_r($whereds);
+          	$sql=$this->_db->query("
+                select  last_name0 || ' ' || last_name1 || ' ' || first_name as full_name
+       			        ,u.uid, u.subid, u.rid, u.eid, u.oid, u.escid, u.pid, p.first_name, p.last_name0, p.last_name1, u.escid, u.state 
+       					from base_users as u
+       					inner join base_person as p
+       					on u.pid=p.pid and u.eid=p.eid
+       					where u.eid='$eid' and u.escid='$escid' and subid='$subid' and upper(last_name0) || ' ' || upper(last_name1) || ', ' || upper(first_name) like '%$cad%'
+            ");
+            $row=$sql->fetchAll();
+           	return $row;  
+        }catch (Exception $ex) { 
+            print "Error: Retornando los datos del alumno de acuerdo a una palabra ingresada".$ex->getMessage();
+        }
+    }
+
     public function _getUsersXNombre($nom='',$rid='',$eid='',$oid=''){
         try{
             $sql=$this->_db->query("
@@ -265,7 +353,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
     public function _getUsuarioXNombreXsinRol($nom='',$eid='',$oid=''){
         try{
             $sql=$this->_db->query("
-               select last_name0 || ' ' || last_name1 || ', ' || first_name as nombrecompleto
+               select last_name0 || ' ' || last_name1 || ', ' || first_name as full_name
                ,u.uid,u.rid,u.subid,u.eid,u.oid,u.escid,u.pid,p.first_name,p.last_name0,p.last_name1,u.escid from base_users as u
                inner join base_person as p
                on u.pid=p.pid and u.eid=p.eid
