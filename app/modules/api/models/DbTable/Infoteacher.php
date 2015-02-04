@@ -55,4 +55,18 @@ class Api_Model_DbTable_Infoteacher extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getDirectores($data){
+		try{
+			if($data['eid']=='' || $data['oid']=='')return false;
+			$sql=$this->_db->query("
+				select uid, pid, escid, subid from base_user_infoteacher
+				where eid='".$data['eid']."' and oid='".$data['oid']."' and is_director='S' and pid<>'TEMP01' order by escid
+				");
+			$row=$sql->fetchall();
+			return $row;
+		}catch (Exception $ex){
+			print 'Error: Get Info Teacher '.$ex->getMessage();
+		}
+	}
+
 }

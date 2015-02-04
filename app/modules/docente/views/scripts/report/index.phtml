@@ -13,9 +13,83 @@
 </div> -->
 <hr class="featurette-divider">
 
-<div class="row">
-	
-	<div class='col-md-2 text-right text-info' style='font-size:20px'><b>Seleccione un Año:</b></div>	
+<?php 
+if($this->rid=='PD'){?>
+	<div class="row">
+		<div class="col-md-2 text-info text-right" style='font-size:15px'>Escuela:</div>
+		<div class="col-md-2">
+			<select id="school" class="form-control">
+				<option value="">- Seleccione Escuela -</option>
+				<?php 
+				if ($this->lescuelas){
+				    foreach ($this->lescuelas as $escu){ 
+				        //if($escu['escid']==$this->escuela){?>
+				        <option value="<?php echo $escu['escid'].";--;".$escu['subid']?>"><?php echo $escu['name']?></option>          
+				    <?php
+				    //}?>
+				    <?php                                 
+				    }
+				} ?>
+			</select>
+		</div>
+		<div class="col-md-2 text-info text-right" style='font-size:15px'>Docente:</div>
+		<div class="col-md-2">
+			<select id='docente_reg' name='docente_reg' class="form-control" style="width:350px">
+				<option value="">- Seleccione Docente -</option>
+			</select>
+		</div>
+	</div>
+	<hr class="featurette-divider">
+	<div class="row">
+	<div class='col-md-5 text-right text-info' style='font-size:20px'><b>Seleccione un Año:</b></div>	
+	<div class="col-md-3 col-md-offset-1">
+			<select id="anio" class="form-control" style="width: 120px">
+				<option value="">- Año -</option>
+				<?php
+				$anio = date('Y');
+				for ($i=$anio; $i > 1990; $i--) { ?>
+					<option value="<?php echo $i?>"><?php echo $i?></option>
+				<?php
+				} ?>
+			</select>
+		</div>
+	</div>
+</div>
+	<hr class="featurette-divider">
+	<br>
+<div id="loaddata" style="margin-top: 20px"></div>
+<script>
+	$("#school").change(function(){
+	    var escuela = $(this).val();
+	    if (escuela=="") {
+	        alert("Seleccione una Escuela.");
+	        return false;
+	    };
+	    tmp=escuela.split(';--;');
+	    escid=tmp[0];
+	    $("#docente_reg").load("/record/index/teacherxschool/escid/"+escid);
+	});
+	$("#anio").change(function(){
+		var docen = $("#docente_reg").val();
+		if (!docen){
+			alert('Seleccione un Docente');
+			return false;
+		}
+		var anio = $(this).val();
+		tmp=docen.split(';--;');
+		doc = tmp[1];
+		if (!anio) {
+			alert("Seleccione un Año.");
+			return false;
+		};
+		$("#loaddata").html("<img src='/img/spinner.gif'>Cargando...");
+		$("#loaddata").load("/docente/report/history/anio/"+anio+"/pid/"+doc);
+	});
+</script>
+<?php
+}else{?>
+	<div class="row">
+	<div class='col-md-5 text-right text-info' style='font-size:20px'><b>Seleccione un Año:</b></div>	
 	<div class="col-md-3 col-md-offset-1">
 			<select id="anio" class="form-control" style="width: 120px">
 				<option value="">- Año -</option>
@@ -44,3 +118,7 @@ $("#anio").change(function(){
 	$("#loaddata").load("/docente/report/history/anio/"+anio);
 });
 </script>
+<?php
+}
+?>
+

@@ -1,8 +1,9 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-user"></span> Mi Perfil');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left "></span> Regresar </a>');?>
-
+<?php $rid=$this->rid;?>
 <div class="row">
     <div class="col-md-1 col-md-offset-1">
+    
         <img alt="Foto de Perfil" align="center">
         <!--<img src="/fotos/<?php echo $this->person['uid']?>.jpg" title="">-->
     </div>
@@ -13,8 +14,10 @@
     </div>
     <div class="col-md-6">
         <blockquote>
-            <h3>Facultad de <?php echo $this->facesp[0]['nomfac']?></h3>
-            <h3>Escuela de <?php echo $this->facesp[0]['nomesc']?></h3>
+            <h3><?php echo $fac = ($rid=='DR' || $rid=='DC') ? 'Facultad de '.$this->facesp[0]['nomfac'] : 'Acceso a '.$this->facesp[0]['nomfac'] ;?></h3>
+            <!-- <h3>Facultad de <?php echo $this->facesp[0]['nomfac']?></h3> -->
+            <h3><?php echo $escu = ($rid=='DR' || $rid=='DC') ? "Escuela de ".$this->facesp[0]['nomesc'] : $this->facesp[0]['nomesc'] ;?></h3>
+            <!-- <h3>Escuela de <?php echo $this->facesp[0]['nomesc']?></h3> -->
         </blockquote>
   </div>
 </div>
@@ -25,6 +28,11 @@
     <li class="active"><a href="#academicRecord"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Historial Académico</h5></a></li>
     <li><a href="#info"><h5><span class="glyphicon glyphicon-th-large text-muted"></span> Datos Personales</h5></a></li>
     <li><a href="#password"> <h5><span class="glyphicon glyphicon-th-large text-muted"></span>Contraseña</h5></a>
+    <?php if ($rid=='PD'){?>
+    <li><a href="#agenda"> <h5><span class="glyphicon glyphicon-th-list text-muted"></span> Agenda</h5></a>
+    <?php
+    }
+    ?>
     </li>
 		<li><a class="hidden"></a></li>
 	</ul>
@@ -41,6 +49,12 @@
       <div id="cambioPassWord"></div>
 
     </div>
+
+    <div class="tab-pane fade" id="agenda">
+      <div id="veragenda">
+        
+      </div>
+    </div>
 	</div>
 </div>
 
@@ -51,6 +65,7 @@
   $("#admData").load("/profile/privateadm/adminfo");
   $('#editData').fadeOut('fast');
   $("#cambioPassWord").load("/profile/privateadm/changepassword");
+  $('#agenda').load('/profile/privateadm/phonebook');
 
   //$("#signin").load("/profile/privateadm/admlog/");
 

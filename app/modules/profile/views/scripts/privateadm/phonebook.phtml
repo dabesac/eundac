@@ -1,0 +1,46 @@
+<style>
+	#colu{
+		background-color: #467	;
+		color: #fff
+	}
+</style>
+<?php 
+/*print_r($this->speciality);exit();*/
+if($this->directores){
+	$person=$this->persona;
+	$speciality=$this->speciality; ?>
+<div class="panel panel-primary">
+	<div class="panel-heading">	
+		<h5 class="panel-title"><span class="glyphicon glyphicon-th-list"></span><strong> AGENDA DE DIRECTORES</strong></h5>	
+	</div>
+<table class="table table-bordered">
+	<tr>
+		<th id="colu">N°</th>
+		<th id="colu">APELLIDOS Y NOMBRES</th>
+		<th id="colu">DNI</th>
+		<th id="colu">ESCUELA</th>
+		<th id="colu">N° CELULAR</th>
+		<th id="colu">EMAIL</th>
+	</tr>
+	<?php
+	$i=0;
+	foreach($this->directores as $data){?>
+		<tr>
+			<td><?php echo $i+1?></td>
+			<td><?php echo $person[$i]['last_name0'].' '.$person[$i]['last_name1'].', '.$person[$i]['first_name']?></td>
+			<td><?php echo $person[$i]['pid']?></td>
+			<td><?php echo $speciality[$i]['name']?></td>		
+			<td><?php echo $person[$i]['cellular']?></td>
+			<td><?php echo $person[$i]['mail_person']?></td>	
+		</tr>
+	<?php
+		$i++;
+	}
+	?>
+	<tr>
+		
+	</tr>
+</table>
+</div>
+<?php 
+}?>

@@ -19,6 +19,19 @@ class Docente_ReportController extends Zend_Controller_Action {
     public function indexAction(){
         try {
             $this->_helper->layout()->disableLayout();
+            $rid = $this->sesion->rid;
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            if($rid=='PD'){
+                $wheresc['eid']=$eid;
+                $wheresc['oid']=$oid;
+                $wheresc['state']="A";
+                $rescu = new Api_Model_DbTable_Speciality();
+                $lista = $rescu->_getFilter($wheresc,$attrib=null,$orders='escid');
+                $this->view->lescuelas = $lista;
+            }
+            $this->view->rid=$rid;
+
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -27,11 +40,20 @@ class Docente_ReportController extends Zend_Controller_Action {
     public function historyAction(){
         try {
             $this->_helper->layout()->disableLayout();
+            $rid = $this->sesion->rid;
             $eid = $this->sesion->eid;
             $oid = $this->sesion->oid;
-            $uid = $this->sesion->uid;
-            $pid = $this->sesion->pid;
-            $anio = $this->_getParam('anio');
+           /* $uid = $this->sesion->uid;
+            $pid = $this->sesion->pid;*/
+            if($rid=='PD'){
+                $anio = $this->_getParam('anio'); 
+                $pid = $this->_getParam('pid'); 
+            }else{
+                $uid = $this->sesion->uid;
+                $pid = $this->sesion->pid; 
+                $anio = $this->_getParam('anio'); 
+            }
+            
             $per = new Api_Model_DbTable_Periods();
             $data_per = $per->_getPeriodsxYears($data = array('eid' => $eid, 'oid' => $oid, 'year' => substr($anio,2,3)));
             if ($data_per) {
