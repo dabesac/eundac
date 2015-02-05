@@ -466,7 +466,7 @@ class IndexController extends Zend_Controller_Action {
                                     <div>Ingrese el siguiente código en el <b>PASO 2</b></div>
                                     <br>
                                     <div style="margin-left:10%; background:#EEEEEE; width:130px; padding:0.7em;">
-                                        <b style="margin-left:6px;">CODIGO</b><b style="background:#bfd3f2; padding:0.5em">'.$cad.'</b>
+                                        <b>CODIGO</b><b style="background:#bfd3f2; padding:0.5em; width: 0.6">'.$cad.'</b>
                                     </div>
                                     <br><br>
                                     <div>
