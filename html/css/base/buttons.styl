@@ -1,14 +1,92 @@
 a, button
 	transition all .3s ease
 
-a.vertical_center
+.vertical_center, .vertical_center_button
 	display flex
 	align-items center
 	justify-content center
 
+.vertical_center_button
 	span
 		margin-bottom 7px
 		margin-right 5px
 
+
 a:hover, a:link, a:visited, a:active, button:hover, button:link, button:visited, button:active
 	text-decoration none
+
+/*a*/.button
+	background white
+	border 1px plomoOscuro solid
+	border-radius 4px
+	box-shadow 0 0 1px rgba(black, .4) inset
+	color azul
+	display block
+	padding 1em
+	text-align center
+
+	&:hover, &:active
+		background plomoOscuro
+
+/*a*/.button--icon
+	padding .3em 0 .8em 0
+	text-align center
+	
+	span
+		font-size 1.7em
+		margin-left 5px
+		position relative
+		top 7px
+
+.button--radius 
+	border-radius 15px
+	
+/*a*/.button--success
+	color verde
+
+	&:hover, &:active
+		background verde
+		color white
+		
+/*a*/.button--print
+	color celeste
+	
+	&:hover, &:active
+		color white
+		background celeste
+
+.button--alter 
+	&:hover
+		color white
+		
+.button--alter--success
+	background verde
+	color white
+
+	&:hover
+		background verdeHover
+	
+.button--table
+	color azul
+	
+.button--table--warning
+	
+	&:hover, &.active
+		background amarillo
+		color white
+		
+.button--table--danger
+	
+	&:hover, &.active
+		background rojo
+		color white
+
+//Tamaños
+/*a*/.button--small
+	padding .5em
+
+.button--medium
+	padding .7em
+
+
+

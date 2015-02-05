@@ -1,53 +1,170 @@
+body
+	color negroTexto
+
+/*section*/.content
+	background plomo
+	width 100%
+
+	.content__header
+		background white
+		display block
+		color negroTexto
+		border-bottom 1px plomoOscuro solid
+		text-align center
+		padding .5em 0
+		
+	.content__header--interaction
+		display table
+		width 100%
+
+		p
+			display none
+			padding-left 1em
+			text-align left
+			width 50%
+
+		.interaction__content
+			display table-cell
+
+			/*.column_uno
+				display table-cell
+				width 60%
+				
+			.column_dos
+				display table-cell
+				width 40%*/
+
+		
+
+	.content__body
+		border-bottom 4px plomoOscuro solid
+		padding 1em
+		width 100%
+
+		&>article
+			margin 1.5em auto
+			vertical-align top
+
+		p.danger
+			margin 4em 1em
+
+.content--small
+	max-width 1300px
+	margin auto
+
+.content--away
+	margin-top 4em
+		
+/*section*/.content--normal
+
+	.content__header
+		color azul
+
+/*section*/.content--warning
+
+	.content__header
+		color amarillo
+
+/*section*/.content--buttons
+	background white
+	padding 1.5em 0
+	overflow hidden
+
+.content--selects
+	margin auto
+
+.group
+	margin-bottom 3em
+
+	.group__header
+		border-bottom 1px plomoOscuro solid
+		font-weight 700
+		margin-bottom .5em
+		padding .3em
+		text-align center
+
+.group--active
+	.group__header
+		color verde
+	
+.group--temporary
+	.group__header
+		color amarillo
+	
+.group--close
+	.group__header
+		color celeste
+		
 body>header
 	background azul
 	box-shadow 0 2px 1px rgba(azul, .2)
 	height 70px
 	position relative
 
-	div:nth-of-type(1)
-		height 100%
-		float left
-		left 0
-		padding 0.35em
-		top 0
-		width 17%
-
-		img
-			display block
-			margin auto
-
-	div:nth-of-type(2)
-		border-left 2px azulOscuro solid
-		display inline-block
-		height 100%
-		padding .9em
-		width 30%
-			
-		p
-			color white
-			margin-bottom .5em
-			padding 0 .2em
-			text-shadow 2px 2px 0 rgba(azulOscuro, 1)
-
-	div:nth-of-type(3)
-		float right
-		height 100%
+	nav
 		
-		ul
-			height inherit
-			
-			li
-				height inherit
-				display inline-block
+		figure
+			float left
+			height 100%
+			left 0
+			overflow hidden
+			padding 0.35em
+			top 0
+			width 17%
 
-				a
-					color white
-					height inherit
+			img
+				display block
+				margin auto
+
+		div:nth-of-type(1)
+			border-left 2px azulOscuro solid
+			display none
+			height 100%
+			padding .9em
+			width auto
+				
+			p
+				display block
+				color white
+				margin-bottom .5em
+				padding 0 .2em
+				text-shadow 2px 2px 0 rgba(azulOscuro, 1)
+
+		div:nth-of-type(2)
+			float right
+			width 18%
+			vertical-align top
+
+			&>a
+				color white
+				display block
+				font-size 2em
+				padding .6em
+				text-align center
+		
+			ul
+				background azul
+				border-top 1px azulOscuro solid
+				display none
+				margin-left -30%
+				position absolute
+				top 98%
+				width 48%
+				z-index 10
+
+				li
 					display block
-					padding 1.8em 1.5em
+					a
+						color white
+						display block
+						height inherit
+						padding 1em 1em
 
-				a:hover
-					background azulHover
+					a:hover
+						background azulHover
+
+			ul.active
+				display block
 
 body>nav
 	background plomo
@@ -146,6 +263,9 @@ body>nav
 			border-radius 0
 			position relative
 			z-index 6
+
+body>.aux
+	position relative
 			
 body>main
 	padding 2em 1em 4em
@@ -249,4 +369,3 @@ div.classLoading_Overlay
 		height 100%
 		width 100%
 		z-index 999
-		

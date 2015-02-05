@@ -7,6 +7,10 @@ $(function(){
 		}
 	});
 
+	$('#main_btn_menu').on('click', function(){
+		$(this).siblings('ul').toggleClass('active');
+	});
+
 	var global_function = global();
 	global_function.tabs($('ul.tabs'), $('ul.tabs').siblings('.tabs_data'));
 });

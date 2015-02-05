@@ -16,23 +16,30 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                         ->headLink()->appendStylesheet('/external_library/jquery-ui/jquery.ui.datepicker.css')
                         ->headLink()->appendStylesheet('/css/app-min.css');
 
-                 $view->headScript()->prependFile('/js/app-min.js');
+                $view->headScript()->appendFile('/js/app-min.js');
             }else if ($env === 'development'){
                 $view   ->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.min.css')
                         ->headLink()->appendStylesheet('/external_library/jquery-ui/jquery.ui.datepicker.css')
                         ->headLink()->appendStylesheet('/css/app-min.css');
 
-                 $view  ->headScript()->prependFile('/js/global_functions/global_functions.js')
-                        ->headScript()->prependFile('/js/main.js');
+                //Vendor
+                $view   ->headScript()->appendFile('/js/vendor/jquery-1.11.0.js')
+                        ->headScript()->appendFile('/js/vendor/underscore.js')
+                        ->headScript()->appendFile('/js/vendor/backbone.js');
+
+                //Ours
+                $view   ->headScript()->appendFile('/js/global_functions/global_functions.js')
+                        ->headScript()->appendFile('/js/init.js')
+                        ->headScript()->appendFile('/js/main.js');
             }
 
-            $view->headScript()->prependFile('/external_library/jquery-transit/jquery.transit.min.js')
-            ->headScript()->prependFile('/external_library/bootstrap/js/bootstrap.js')
-            ->headScript()->prependFile('/external_library/bootstrap/js/jquery.functions.js')
-            ->headScript()->prependFile('/external_library/base64/jquery.base64.min.js')
-            ->headScript()->prependFile('/external_library/jquery-ui/jquery.ui.datepicker.js')
-            ->headScript()->prependFile('/external_library/jquery-ui/jquery.ui.core.js')
-            ->headScript()->prependFile('/js/jquery-1.11.0.js');
+             $view->headScript()->appendFile('/external_library/jquery-transit/jquery.transit.min.js')
+            ->headScript()->appendFile('/external_library/bootstrap/js/bootstrap.js')
+            ->headScript()->appendFile('/external_library/bootstrap/js/jquery.functions.js')
+            ->headScript()->appendFile('/external_library/base64/jquery.base64.min.js')
+            ->headScript()->appendFile('/external_library/jquery-ui/jquery.ui.datepicker.js')
+            ->headScript()->appendFile('/external_library/jquery-ui/jquery.ui.core.js')
+            ;
             
             
             $view->headTitle()->setSeparator(' - ');
@@ -77,6 +84,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $view->placeholder('BtnSVCLeft')
                 ->setPrefix("<div class=\"navigationButtonsSVCLayoutLeft\">\n")
+                ->setPostfix("</div>");
+
+        $view->placeholder('AuxiliarMobile')
+                ->setPrefix("<div class=\"aux mobile\">\n")
                 ->setPostfix("</div>");
     }
     

@@ -1,5 +1,34 @@
+.float-right
+	float right
+	
+.float-left
+	float left
+
+.inline
+	display inline-block
+
+.inline_mid
+	margin auto
+
 .text_warning
 	color amarilloTexto
+	
+.text_center
+	text-align center
+	
+.text_left
+	text-align left
+	
+.text_right
+	text-align right
+
+.whit_code
+	
+	small
+		color plomoTexto
+
+.display-tablet, .display-desktop
+	display none
 
 ul
 	padding 0
@@ -59,6 +88,56 @@ p.no_data
 	span
 		color rojoTexto
 
-p.info
+.info
 	color plomoTexto
-	margin-bottom 2em	
+	margin-bottom 0
+
+.info--main
+	padding .7em 1em
+	margin-bottom 2em
+
+p.danger
+	color negroTexto
+	margin 0
+	
+	span
+		color rojoTexto
+	
+.aux.mobile
+	
+	.info
+		background rgba(black, .7)
+		padding .2em
+		text-align center
+		
+		p
+			color white
+			display inline-block
+			margin 0
+			padding .3em
+			margin-left .3em
+
+			.abbr
+				border-bottom 4px white solid
+				width 25px
+				padding 0 .2em
+				margin-right .2em
+				display inline-block
+				
+			.full
+				display none
+
+		p.tablet
+				display none
+				
+
+		p.active
+
+			span
+				color verde
+			
+			.full
+				color verde
+
+			.abbr
+				border-bottom 2px verde solid
