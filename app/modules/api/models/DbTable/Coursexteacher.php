@@ -39,6 +39,17 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 			print "Error: Update Organization ".$e->getMessage();
 		}
 	}
+	
+	public function _update_memo($data,$pk){
+		try{
+			if ($pk["eid"]=='' || $pk["oid"]=='' ||  $pk["escid"]=='' ||  $pk["subid"] =='' || $pk["perid"]=='' || $pk["uid"]=='' || $pk["pid"]=='') return false;
+			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' and perid='".$pk['perid']."' and uid='".$pk['uid']."' and pid='".$pk['pid']."'";
+			return $this->update($data, $where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Update Memo ".$e->getMessage();
+		}
+	}
 
 	public function _delete($pk){
 		try{

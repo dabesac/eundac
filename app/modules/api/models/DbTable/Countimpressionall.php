@@ -36,5 +36,25 @@ class Api_Model_DbTable_Countimpressionall extends Zend_Db_Table_Abstract
         }catch (Exception $ex){
             print "Error: Save data. ".$ex->getMessage();
         }
-    }	
+    }
+
+    public function _countMemo($data){
+    	try {
+    		if ($data['eid']=='' || $data['oid']=='' || $data['escid']=='' || $data['subid']=='' || $data['type_impression']=='') return false;
+    		$eid=$data['eid'];
+    		$oid=$data['oid'];
+    		$escid=$data['escid'];
+    		$subid=$data['subid'];
+    		$type=$data['type_impression'];
+    		$sql=$this->_db->query("
+    								select count(distinct uid) from base_count_impression
+									where eid='$eid' and oid='$oid' and escid='$escid' and
+									subid='$subid' and type_impression='$type'       			
+             					   ");          
+            return $sql->fetchAll();
+            return false;
+    	} catch (Exception $e) {
+    		print "Error: count memo".$e->getMessage();
+    	}
+    }
 }    
