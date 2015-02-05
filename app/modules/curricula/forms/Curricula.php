@@ -2,127 +2,141 @@
 
 class Curricula_Form_Curricula extends Zend_Form{    
     public function init(){
-
-        $this->setName("frmcurricula");
-
-        $curid= new Zend_Form_Element_Text("curid");
-        $curid->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $curid->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $curid->setAttrib("maxlength", "10");
-        $curid->setAttrib("class","form-control");
-        $curid->setAttrib('readonly',true);
-
-        $subid= new Zend_Form_Element_Hidden('subid');
-        $subid->removeDecorator('Label')
-                ->removeDecorator('HtmlTag')
-                ->setRequired(true)
-                ->setAttrib('class','form-control');
-        $this->addElement($subid);
-
-        $escid= new Zend_Form_Element_Hidden('escid_cur');
-        $escid->removeDecorator('Label')
-                ->removeDecorator('HtmlTag')
-                ->setRequired(true)
-                ->setAttrib('class','form-control');
-        $this->addElement($escid);
-
         $type_periods = new Zend_Form_Element_Select('type_periods');
-        $type_periods->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $type_periods->addMultiOption("","Periodo");
-        $type_periods->setAttrib("class","form-control");
-        $type_periods->addMultiOption("A","A");
-        $type_periods->addMultiOption("B","B");
+        $type_periods   ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                        ->setRequired(true)
+                        ->addValidator('NotEmpty', true, array('messages' => 'Elija un periódo...'))
+                        ->setAttribs(array('class' => 'form-control'))
+                        ->addMultiOptions(array(''  => 'Periódo',
+                                                'A' => 'A',
+                                                'B' => 'B' ));
+
 
         $year = new Zend_Form_Element_Select('year');
-        $year->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $year->setAttrib("class","form-control");
+        $year   ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                ->setRequired(true)
+                ->addValidator('NotEmpty', true, array('messages' => 'Elija un año...'))
+                ->setAttrib("class","form-control");
+
         $anioactual = (int)Date("Y");
         $year->addMultiOption("","Año");
         for ($i=$anioactual;$i>=1990;$i--){
-                $year->addMultiOption((mb_substr((string)$i,2,2)),$i);
+                $year->addMultiOption($i,$i);
         }
 
+
         $type = new Zend_Form_Element_Select('type');
-        $type->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $type->setRequired(true)->addErrorMessage('Este campo es requerido');
-        $type->addMultiOption("","Tipo Curricula");
-        $type->setAttrib("class","span3");
-        $type->setAttrib("class","form-control");
-        $type->addMultiOption("S","Semestral");
-        $type->addMultiOption("A","Anual");
+        $type   ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                ->setRequired(true)
+                ->addValidator('NotEmpty', true, array('messages' => 'Elija un tipo de currícula...'))
+                ->setAttribs(array(
+                                    'class' => 'form-control' ))
+                ->addMultiOptions(array(
+                                        ''  => 'Tipo de Curricula',
+                                        'S' => 'Semestral',
+                                        'A' => 'Anual' ));
 
-        $state = new Zend_Form_Element_Select('state');
-        $state->removeDecorator('Label')->removeDecorator("HtmlTag");
-        $state->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $state->setAttrib("class","span3"); 
-        $state->setAttrib("class","form-control");
-        $state->addMultiOption("","Estado Curricula");
-        $state->addMultiOption("A","Activa");
-        $state->addMultiOption("T","Temporal");
-        $state->addMultiOption("C","Cerrada");
-        $state->addMultiOption("B","Borrador");
 
-        $cur_per_ant= new Zend_Form_Element_Text("cur_per_ant");
-        $cur_per_ant->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $cur_per_ant->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $cur_per_ant->setAttrib("maxlength", "3")->setAttrib('placeholder', 'Curricula Anterior');
-        $cur_per_ant->setAttrib("class","form-control");
-        $cur_per_ant->setAttrib('readonly',true);        
-
-        $name= new Zend_Form_Element_Text("name");
-        $name->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $name->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $name->setAttrib("maxlength", "100");
-        $name->setAttrib('placeholder', 'Nombre');
-        $name->setAttrib("class","form-control");   
-        $name->setAttrib("title","Nombre del Plan Curricular");
+        $name = new Zend_Form_Element_Text("name");
+        $name   ->removeDecorator('Label')->removeDecorator("HtmlTag")->addDecorators(array('Errors'))
+                ->setRequired(true)
+                ->addValidator('NotEmpty', true, array('messages' => 'El nombre esta vacío...'))
+                ->setAttribs(array(
+                                    'class'       => 'form-control',
+                                    'maxlength'   => '100',
+                                    'placeholder' => 'Nombre del plan curricular...',
+                                    'title'       => 'Nombre del plan Curricular' ));
+        // ->addValidator('StringLength', true, array(0, 20, 'messages' => 'Campo obligatorio'))
+        //$name->getValidator('Digits')->setMessage('Debe ser solo numeros');
 
         $alias = new Zend_Form_Element_Text("alias");
-        $alias->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $alias->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $alias->setAttrib("maxlength", "100")->setAttrib('placeholder', 'Alias');
-        $alias->setAttrib("title","Alias del Plan Curricular");   
-        $alias->setAttrib("class","form-control");     
+        $alias  ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                ->setRequired(true)
+                ->addValidator('NotEmpty', true, array('messages' => 'El alias esta vacío...'))
+                ->setAttribs(array(
+                                    'class'       => 'form-control',
+                                    'maxlength'   => '100',
+                                    'placeholder' => 'Aliás del plan curricular...',
+                                    'title'       => 'Aliás del plan Curricular' ));
+
 
         $number_periods = new Zend_Form_Element_Text("number_periods");
-        $number_periods->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $number_periods->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $number_periods->setAttrib("maxlength", "2")->setAttrib('placeholder', 'Periodos');
-        $number_periods->setAttrib("class","form-control");
-        $number_periods->setAttrib("title","Total Periodos");        
+        $number_periods ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                        ->setRequired(true)
+                        ->addValidator('NotEmpty', true, array('messages' => 'La cantidad de periódos esta vacío...'))
+                        ->addValidator('Digits', true, array('messages' => 'La cantidad de periodos debe ser solo números ¬¬'))
+                        ->setAttribs(array(
+                                    'class'       => 'form-control',
+                                    'maxlength'   => '2',
+                                    'placeholder' => 'Cantidad de periódos...',
+                                    'title'       => 'Cantidad de periódos' ));       
                 
+
         $mandatory_credits = new Zend_Form_Element_Text("mandatory_credits");
-        $mandatory_credits->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $mandatory_credits->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $mandatory_credits->setAttrib("maxlength", "3")->setAttrib('placeholder', 'Creditos Obligatorios');
-        $mandatory_credits->setAttrib("class","form-control");
-        // $mandatory_credits->setAttrib("style","text-align:center");
-        $mandatory_credits->setAttrib("title","Total Creditos O");        
+        $mandatory_credits  ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                            ->setRequired(true)
+                            ->addValidator('NotEmpty', true, array('messages' => 'La cantidad de créditos obligatorios esta vacío...'))
+                            ->addValidator('Digits', true, array('messages' => 'Los creditos obligatorios debe ser solo números ¬¬'))
+                            ->setAttribs(array(
+                                    'class'       => 'form-control',
+                                    'maxlength'   => '3',
+                                    'placeholder' => 'Créditos obligatorios...',
+                                    'title'       => 'Créditos obligatorios' ));
+
 
         $elective_credits = new Zend_Form_Element_Text("elective_credits");
-        $elective_credits->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $elective_credits->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $elective_credits->setAttrib("maxlength", "3")->setAttrib('placeholder', 'Creditos Selectivos');
-        $elective_credits->setAttrib("class","form-control");
-        // $elective_credits->setAttrib("style","text-align:center");
-        $elective_credits->setAttrib("title","Total Creditos Electivos");        
+        $elective_credits   ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                            ->setRequired(true)
+                            ->addValidator('NotEmpty', true, array('messages' => 'La cantidad de créditos electivos esta vacío...'))
+                            ->addValidator('Digits', true, array('messages' => 'La creditos electivos debe ser solo números ¬¬'))
+                            ->setAttribs(array(
+                                    'class'       => 'form-control',
+                                    'maxlength'   => '3',
+                                    'placeholder' => 'Créditos electivos...',
+                                    'title'       => 'Créditos electivos' ));
+
 
         $mandatory_course = new Zend_Form_Element_Text("mandatory_course");
-        $mandatory_course->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $mandatory_course->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $mandatory_course->setAttrib("maxlength", "3")->setAttrib('placeholder', 'Cursos Obligatorios');
-        $mandatory_course->setAttrib("class","form-control");
-        // $mandatory_course->setAttrib("style","text-align:center");
-        $mandatory_course->setAttrib("title","Nro Cursos O");        
+        $mandatory_course   ->removeDecorator('Label')->removeDecorator("HtmlTag")
+                            ->setRequired(true)
+                            ->addValidator('NotEmpty', true, array('messages' => 'La cantidad de cursos obligatorios esta vacío...'))
+                            ->addValidator('Digits', true, array('messages' => 'La cantidad de cursos obligatorios debe ser solo números ¬¬'))
+                            ->setAttribs(array(
+                                    'class'       => 'form-control',
+                                    'maxlength'   => '3',
+                                    'placeholder' => 'Cursos obligatorios...',
+                                    'title'       => 'Cursos obligatorios' ));
+
 
         $elective_course = new Zend_Form_Element_Text("elective_course");
-        $elective_course->removeDecorator('Label')->removeDecorator("HtmlTag");  
-        $elective_course->setRequired(true)->addErrorMessage('Este campo es requerido');      
-        $elective_course->setAttrib("maxlength", "3")->setAttrib('placeholder', 'Cursos Electivos');
-        $elective_course->setAttrib("class","form-control");
-        // $elective_course->setAttrib("style","text-align:center");
-        $elective_course->setAttrib("title","Nro Cursos E");     
+        $elective_course->removeDecorator('Label')->removeDecorator("HtmlTag")
+                        ->setRequired(true)
+                        ->addValidator('NotEmpty', true, array('messages' => 'La cantidad de cursos electivos esta vacío...'))
+                        ->addValidator('Digits', true, array('messages' => 'La cantidad de cursos electivos debe ser solo números ¬¬'))
+                        ->setAttribs(array(
+                                    'class'       => 'form-control',
+                                    'maxlength'   => '3',
+                                    'placeholder' => 'Cursos electivos...',
+                                    'title'       => 'Cursos electivos' ));
+
       
-        $this->addElements(array($curid,$year,$type,$state,$cur_per_ant,$name,$alias,$number_periods,$mandatory_credits,$elective_credits,$mandatory_course,$elective_course,$type_periods));  
+        $cur_per_ant = new Zend_Form_Element_Select("cur_per_ant");
+        $cur_per_ant->removeDecorator('Label')->removeDecorator("HtmlTag")
+                    ->setRegisterInArrayValidator(false)
+                    ->setAttribs(array(
+                                    'class'       => 'form-control',
+                                    'title'       => 'Cursos electivos' ));
+
+        $save = new Zend_Form_Element_Submit('save');
+        $save   ->removeDecorator('DtDdWrapper')
+                ->setAttribs(array(
+                                    'class' => 'btn btn-success form-control'))
+                ->setLabel('Guardar');
+
+
+        $this->addElements(array(   $type_periods, $year, $type, 
+                                    $name, $alias, $number_periods, 
+                                    $mandatory_credits, $elective_credits, $mandatory_course, 
+                                    $elective_course, $cur_per_ant, $save ));  
     }
 }

@@ -26,7 +26,8 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
             $pid=$this->sesion->pid;
             $escid=$this->sesion->escid;
             $eid=$this->sesion->eid;
-            $oid=$this->sesion->oid;         
+            $oid=$this->sesion->oid;
+            $rid=$this->sesion->rid;         
  
             $dbperson=new Api_Model_DbTable_Person();
             $where=array("eid"=>$eid, "pid"=>$pid);
@@ -45,6 +46,7 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
 
             $this->view->facesp=$facesp;
             $this->view->person=$person;
+            $this->view->rid=$rid;
 
         }catch(exception $e){
             print "Error : ".$e->getMessage();
@@ -365,4 +367,32 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
         }
     }
     
+    public function phonebookAction(){
+        try{
+            $this->_helper->layout()->disableLayout();
+
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $where = array('eid'=>$eid, 'oid'=>$oid);
+            $infoteacher= new Api_Model_DbTable_Infoteacher();
+            $datadirectores = $infoteacher->_getDirectores($where);
+            $i=0;
+            foreach ($datadirectores as $data) {
+                $escid = $data['escid'];
+                $subid = $data['subid'];
+                $where = array('eid'=>$eid, 'oid'=>$oid, 'escid'=>$escid, 'subid'=>$subid);
+                $speciality = new Api_Model_DbTable_Speciality();
+                $dataspeciality[$i] = $speciality->_getOne($where);
+                $wheres = array('eid'=>$eid, 'oid'=>$oid, 'pid'=>$data['pid']);
+                $person = new Api_Model_DbTable_Person();
+                $dataperson[$i] = $person->_getOne($wheres);
+                $i++;
+            }
+            $this->view->directores=$datadirectores;
+            $this->view->persona=$dataperson;
+            $this->view->speciality=$dataspeciality;
+        } catch(Exeption $e){
+            print 'Error '.$e->getMessage();
+        }        
+    }
 }

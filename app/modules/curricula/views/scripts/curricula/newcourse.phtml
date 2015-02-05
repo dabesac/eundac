@@ -66,14 +66,14 @@
 			</div>
 			<div class="side_two">
 				<header>
-					<p>Agrégue Prerequisitos</p>
+					<p>Prerequisitos</p>
 				</header>
 				<section class="select_pre">
 					<select id="id_select_pre" class="form-control">
 						<?php if ($dataView['periods']): ?>
-							<option class="0" value="">No hay prerequisitos para el primer semestre...</option>
+							<option semester="0" value="">No hay prerequisitos para el primer semestre...</option>
 							<?php foreach ($data_courses as $course): ?>
-								<option class="<?php echo $course['semid'] ?>" value="<?php echo base64_encode($course['courseid']) ?>" hidden><?php echo $course['courseid'].' | '.$course['name'] ?></option>
+								<option semester="<?php echo $course['semid'] ?>" code-course="<?php print $course['courseid'] ?>" value="<?php echo base64_encode($course['courseid']) ?>" hidden><?php echo $course['courseid'].' | '.$course['name'] ?></option>
 							<?php endforeach ?>
 						<?php else: ?>
 							<option value="">Elija un semestre...</option>
@@ -84,16 +84,13 @@
 				<section class="prerequisites">
 					<!-- <article>
 						<p>Curso 1</p>
-						<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
-					</article>
-					<article>
-						<p>Curso 2</p>
-						<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
-					</article>
-					<article>
-						<p>Curso 3</p>
+						<input type="hidden" name="pre_1" value="">
 						<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
 					</article> -->
+					<p><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue requisitos para este curso si desea...</p>
+					<input type="hidden" name="pre_1" value="">
+					<input type="hidden" name="pre_2" value="">
+					<input type="hidden" name="pre_3" value="">
 				</section>
 			</div>
 		</div>
@@ -102,11 +99,11 @@
 			<input type="submit" class="btn btn-success form-control" value="Agregar Curso">
 		</div>
 	</form>
-	<div id="id_error_course_side" class="error_course_side">
-		<div>
-			<span class="glyphicon glyphicon-exclamation-sign"></span>
+	<div class="msg_side">
+		<div class="msg success">
+			<p><span class="glyphicon glyphicon-exclamation-sign"></span> Curso guardado satisfactoriamente!</p>
 		</div>
-		<div>
+		<div class="msg warning">
 			<!-- Errores aqui desde JavaScript -->
 		</div>
 	</div>

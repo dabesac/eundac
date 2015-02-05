@@ -6,5 +6,6 @@ html/xml
 html/fotos
 html/logo
 html/imgsNews
-html/css/*.styl
+html/node_modules
+html/gulpfile.js
 .project

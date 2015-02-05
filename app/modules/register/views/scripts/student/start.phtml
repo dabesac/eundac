@@ -6,7 +6,7 @@
 
 <?php if ($this->state == "B") { ?> 
 	<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span> Pre Matrícula Periodo '.$this->perid.'');
-	$this->placeholder('Btnnav')->append('<a href="/alumno" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
+	$this->placeholder('Btnnav')->append('<a href="/alumno" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');
 	$this->placeholder('BtnSVCRight')->append('<buttom  class="btn btn-default" id="save_register"
 	   	total="'.$this->total_credits.'" 
 	   	regid="'.$this->regid.'"
@@ -29,7 +29,7 @@
 			"/curid/".base64_encode($this->curid);						;
 		?>
 		<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-edit"></span>Matrícula Iniciada Periodo '.$this->perid.'');
-		$this->placeholder('Btnnav')->append('<a href="/alumno" class="btn btn-default form-control"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>');
+		$this->placeholder('Btnnav')->append('<a href="/alumno" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');
 		$this->placeholder('BtnSVCRight')->append('
 			<a href="'.$url.'" class="btn btn-default"><span class="glyphicon glyphicon-print text-primary"></span> Imprimir</a>
 			<buttom  class="btn btn-default"

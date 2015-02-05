@@ -16,16 +16,18 @@
 <?php if ($sesion->encuesta->existeEncuesta == 'Yes'): ?>
     <input type="hidden" id="rellenoEncuesta" value="<?php echo $sesion->encuesta->rellenoEncuesta ?>">
 <?php endif ?>
+
 <input type="hidden" id="rol" value="<?php echo $rol ?>">
 <input type="hidden" id="fullProfile" value="<?php echo $sesion->fullProfile->success ?>">
-<nav id="undac-menu" class="navbar navbar-default navLayout" role="navigation">
+
+<header>
       <!-- Brand and toggle get grouped for better mobile display -->
     <div class="btnLogo">
         <a href="/<?php echo $module?>"><img src="/img/logo_03.png" alt=""></a>
     </div>
     <div class="welcomeDiv">
         <p><?php echo $last_name?></p>
-        <p>Adscrito Escuela <?php echo $speciality?></p>
+        <p>Adscrito a <?php echo $speciality?></p>
     </div>
     <div class="buttomsLayout">
         <ul>
@@ -35,7 +37,7 @@
             <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> Cerrar Sessión</a></li>
         </ul>
     </div>
-</nav>
+</header>
 <script type="text/javascript" src='/external_library/md5/md5.js'></script>
 <script type="text/javascript" src='/external_library/md5/change.js'></script>
 <script>

@@ -70,7 +70,7 @@ class Api_Model_DbTable_Person extends Zend_Db_Table_Abstract
 	
 	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
-			if($where['eid']=='' || $where['pid']=='') return false;
+			if(!$where['eid']) return false;
 				$select = $this->_db->select();
 				if ($attrib=='') $select->from("base_person");
 				else $select->from("base_person",$attrib);

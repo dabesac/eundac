@@ -1,0 +1,220 @@
+<?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-signal"></span> Resultado de busqueda...');?>
+<?php 
+	$role         = $this->view_data['role'];
+	$simple_mode  = $this->view_data['simple_mode'];
+	$tabs_mode    = $this->view_data['tabs_mode'];
+	$many_result  = $this->view_data['many_result'];
+	$cant_result  = $this->view_data['cant_result'];
+	$tabs         = $this->view_data['tabs'];
+	$roles_finded = $this->view_data['roles_finded'];
+	$what_search  = $this->view_data['what_search'];
+	$users_data   = $this->view_data['users_data'];
+ ?>
+<div class="main_search">
+<?php if ($users_data['students'] or $users_data['graduates'] or $users_data['teachers']): ?>
+	<?php if ($simple_mode): ?>
+ 		<p class="info"><span class="glyphicon glyphicon-info-sign"></span> Estos son los resultados para <strong>'<?php print $what_search ?>'</strong></p>
+		<?php foreach ($tabs as $tab): ?>
+	 		<?php foreach ($users_data[$tab['code']] as $c => $user): ?>
+				<div class="data_search">
+					<p><?php print $tab['name'] ?> de <?php print $user['school'] ?> Facultad de <?php print $user['faculty'] ?></p>
+				 	<table class="normal">
+				 		<tr>
+				 			<th class="center">#</th>
+				 			<th>Apellidos y Nombres</th>
+				 			<th class="center">Código</th>
+				 			<th class="center">DNI</th>
+				 			<th class="center">Estádo</th>
+				 		</tr>
+			 			<tr>
+			 				<td class="center"><?php print $c + 1 ?></td>
+			 				<td><?php print $user['full_name'] ?></td>
+			 				<td class="center"><?php print $user['uid'] ?></td>
+			 				<td class="center"><?php print $user['pid'] ?></td>
+		 				<?php if ($user['state'] == 'A'): ?>
+		 					<td class="center active bold">Activo</td>
+		 				<?php else: ?>
+		 					<td class="center inactive bold">Inactivo</td>
+		 				<?php endif ?>
+		 				<?php if ($user['role'] == 'Alumno' or $user['role'] == 'Egresado'): ?>
+						
+						<!-- Roles que no imprimen record de notas -->
+		 				<?php if ($role != 'PD' and $role != 'ES' and $role != 'CU' and $role != 'DF'): ?>
+		 					<?php 
+		 						$url = '/report/recordnotas/print/uid/'.base64_encode($user['uid']).
+		 														'/escid/'.base64_encode($user['escid']).
+		 														'/eid/'.base64_encode($user['eid']).
+		 														'/oid/'.base64_encode($user['oid']).
+		 														'/subid/'.base64_encode($user['subid']).
+		 														'/pid/'.base64_encode($user['pid']);
+		 					 ?>
+			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center">Record de Notas</a></td>
+		 				<?php endif ?>
+						
+						<!-- roles que no cambian curricula -->
+			 			<?php if ($role != 'VA' and $role != 'SP' and $role != 'RE' and $role != 'PD' and $role != 'ES' and $role != 'CU' and $role != 'DF'): ?>
+			 				<?php 
+			 					$url = '/profile/changecurricula/change/uid/'.base64_encode($user['uid']).
+			 															'/pid/'.base64_encode($user['pid']);
+			 				 ?>
+			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center">Currícula</a></td>
+			 			<?php endif ?>
+						
+						<!-- Roles 	que no ven historial -->
+			 			<?php if ($role != 'PD' and $role != 'ES' and $role != 'CU' and $role != 'DF'): ?>
+							<?php 
+								$url = '/profile/search/studentsignpercur/uid/'.$user['uid'].
+																		'/pid/'.$user['pid'].
+																		'/escid/'.$user['escid'].
+																		'/subid/'.$user['subid'];
+							 ?>
+			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center">Historial</a></td>
+			 			<?php endif ?>
+			 				
+
+			 				<?php 
+			 					$url = '/profile/private/student/uid/'.base64_encode($user['uid']).
+			 													'/pid/'.base64_encode($user['pid']).
+			 													'/escid/'.base64_encode($user['escid']).
+			 													'/eid/'.base64_encode($user['eid']).
+			 													'/oid/'.base64_encode($user['oid']);
+			 				 ?>
+			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center"><span class="glyphicon glyphicon-user"></span> Perfil</a></td>
+			 			<?php elseif ($user['role'] == 'Docente'): ?>
+			 				<?php 
+			 					$url = '/profile/private/student/uid/'.base64_encode($user['uid']).
+			 													'/pid/'.base64_encode($user['pid']).
+			 													'/escid/'.base64_encode($user['escid']).
+			 													'/eid/'.base64_encode($user['eid']).
+			 													'/oid/'.base64_encode($user['oid']);
+			 				 ?>
+			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center"><span class="glyphicon glyphicon-user"></span> Perfil</a></td>
+		 				<?php endif ?>
+			 			</tr>
+			 		</table>
+				</div>
+	 		<?php endforeach ?>
+		<?php endforeach ?>
+	 <?php else: ?>
+	 	<?php if ($tabs_mode): ?>
+	 		<p class="info"><span class="glyphicon glyphicon-info-sign"></span> Estos son los resultados para <strong>'<?php print $what_search ?>'</strong> en los siguientes items...
+				<?php if ($many_result): ?>
+					<span class="text_warning">se encontro mas <?php print $cant_result - 3 ?> coincidencias, sea mas específico por favor...</span>
+				<?php endif ?>
+	 		</p>
+	 		<ul class="tabs">
+	 			<?php $active = true ?>
+	 			<?php foreach ($tabs as $c => $tab): ?>
+	 				<?php if ($active): ?>
+	 					<?php $class_li = 'active' ?>
+	 					<?php $active = false ?>
+	 				<?php else: ?>
+	 					<?php $class_li = '' ?>
+	 				<?php endif ?>
+	 				<li><a href="##" class="<?php print $class_li ?>" going-to="<?php print $c ?>"><?php print $tab['name'] ?></a></li>
+	 			<?php endforeach ?>
+	 		</ul>
+	 	<?php else: ?>
+	 		<p class="info"><span class="glyphicon glyphicon-info-sign"></span> Estos son los resultados para <strong>'<?php print $what_search ?>'</strong></p>
+	 	<?php endif ?>
+	 	<?php $active = true ?>
+		<div class="tabs_data">
+ 			<?php foreach ($tabs as $c => $tab): ?>
+	 			<?php if ($active): ?>
+					<?php $class_li = 'active' ?>
+					<?php $active = false ?>
+				<?php else: ?>
+					<?php $class_li = '' ?>
+				<?php endif ?>
+		 		<div id="tab_<?php print $c ?>" class="data_search tab_data <?php print $class_li ?>">
+		 			<?php if (!$tabs_mode): ?>
+						<p><?php print $tab['name'] ?></p>
+		 			<?php endif ?>
+					<table class="normal">
+						<tr>
+				 			<th class="center">#</th>
+				 			<th>Apellidos y Nombres</th>
+				 			<th class="center">Código</th>
+			 			<?php if ($role != 'DR'): ?>
+			 				<th class="medium center">Escuela</th>
+			 			<?php endif ?>
+				 			<th class="center">Estádo</th>
+				 		</tr>
+		 			<?php foreach ($users_data[$tab['code']] as $c => $user): ?>
+		 				<tr>
+			 				<td class="center"><?php print $c + 1 ?></td>
+			 				<td><?php print $user['full_name'] ?> <small><?php print $user['pid'] ?></small></td>
+			 				<td class="center"><?php print $user['uid'] ?></td>
+			 			<?php if ($role != 'DR'): ?>
+			 				<td class="center"><?php print $user['school'] ?></td>
+			 			<?php endif ?>
+		 				<?php if ($user['state'] == 'A'): ?>
+		 					<td class="center active bold">Activo</td>
+		 				<?php else: ?>
+		 					<td class="center inactive bold">Inactivo</td>
+		 				<?php endif ?>
+		 				<?php if ($user['role'] == 'Alumno' or $user['role'] == 'Egresado'): ?>
+
+		 				<!-- Roles que no imprimen record de notas -->
+		 				<?php if ($role != 'PD' and $role != 'ES' and $role != 'CU' and $role != 'DF'): ?>
+		 					<?php 
+		 						$url = '/report/recordnotas/print/uid/'.base64_encode($user['uid']).
+		 														'/escid/'.base64_encode($user['escid']).
+		 														'/eid/'.base64_encode($user['eid']).
+		 														'/oid/'.base64_encode($user['oid']).
+		 														'/subid/'.base64_encode($user['subid']).
+		 														'/pid/'.base64_encode($user['pid']);
+		 					 ?>
+			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center">Record de Notas</a></td>
+						<?php endif ?>
+						
+						<!-- roles que no cambian curricula -->
+			 			<?php if ($role != 'VA' and $role != 'SP' and $role != 'RE' and $role != 'PD' and $role != 'ES' and $role != 'CU' and $role != 'DF'): ?>
+			 				<?php 
+			 					$url = '/profile/changecurricula/change/uid/'.base64_encode($user['uid']).
+			 															'/pid/'.base64_encode($user['pid']);
+			 				 ?>
+			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center">Currícula</a></td>
+			 			<?php endif ?>
+			 				
+			 			<!-- Roles 	que no ven historial -->
+			 			<?php if ($role != 'PD' and $role != 'ES' and $role != 'CU' and $role != 'DF'): ?>
+							<?php 
+								$url = '/profile/search/studentsignpercur/uid/'.$user['uid'].
+																		'/pid/'.$user['pid'].
+																		'/escid/'.$user['escid'].
+																		'/subid/'.$user['subid'];
+							 ?>
+			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center">Historial</a></td>
+						<?php endif ?>
+
+			 				<?php 
+			 					$url = '/profile/private/student/uid/'.base64_encode($user['uid']).
+			 													'/pid/'.base64_encode($user['pid']).
+			 													'/escid/'.base64_encode($user['escid']).
+			 													'/eid/'.base64_encode($user['eid']).
+			 													'/oid/'.base64_encode($user['oid']);
+			 				 ?>
+			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center"><span class="glyphicon glyphicon-user"></span> Perfil</a></td>
+			 			<?php elseif ($user['role'] == 'Docente'): ?>
+			 				<?php 
+			 					$url = '/profile/private/student/uid/'.base64_encode($user['uid']).
+			 													'/pid/'.base64_encode($user['pid']).
+			 													'/escid/'.base64_encode($user['escid']).
+			 													'/eid/'.base64_encode($user['eid']).
+			 													'/oid/'.base64_encode($user['oid']);
+			 				 ?>
+			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center"><span class="glyphicon glyphicon-user"></span> Perfil</a></td>
+		 				<?php endif ?>
+			 			</tr>
+		 			<?php endforeach ?>
+					</table>
+	 			</div>
+ 			<?php endforeach ?>
+		</div>
+	<?php endif ?>
+<?php else: ?>
+	<p class="no_data"><span class="glyphicon glyphicon-exclamation-sign"></span> No hay resultados para <strong>'<?php  print $what_search ?>'</strong></p>
+<?php endif ?>
+</div>

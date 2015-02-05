@@ -12,13 +12,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             
             $env = getenv('APPLICATION_ENV');
             if ($env === 'production') {
-                $view->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.min.css')
-                ->headLink()->appendStylesheet('/css/mainlayout.css')
-                ->headLink()->appendStylesheet('/external_library/jquery-ui/jquery.ui.datepicker.css');
+                $view   ->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.min.css')
+                        ->headLink()->appendStylesheet('/external_library/jquery-ui/jquery.ui.datepicker.css')
+                        ->headLink()->appendStylesheet('/css/app-min.css');
+
+                 $view->headScript()->prependFile('/js/app-min.js');
             }else if ($env === 'development'){
-                $view->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.min.css')
-                ->headLink()->appendStylesheet('/css/layout.css')
-                ->headLink()->appendStylesheet('/external_library/jquery-ui/jquery.ui.datepicker.css');
+                $view   ->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.min.css')
+                        ->headLink()->appendStylesheet('/external_library/jquery-ui/jquery.ui.datepicker.css')
+                        ->headLink()->appendStylesheet('/css/app-min.css');
+
+                 $view  ->headScript()->prependFile('/js/global_functions/global_functions.js')
+                        ->headScript()->prependFile('/js/main.js');
             }
 
             $view->headScript()->prependFile('/external_library/jquery-transit/jquery.transit.min.js')

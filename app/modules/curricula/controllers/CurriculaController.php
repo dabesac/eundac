@@ -17,16 +17,18 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 	public function indexAction(){
         //dataBases
         $facultyDb = new Api_Model_DbTable_Faculty();
+        $schoolDb  = new Api_Model_DbTable_Speciality();
 
         $eid   = $this->sesion->eid;
         $oid   = $this->sesion->oid;
         $rid   = $this->sesion->rid;
+        $facid = $this->sesion->faculty->facid;
         $escid = $this->sesion->escid;
         $subid = $this->sesion->subid;
 
 
         $dataView['rid'] = $rid;
-        if ($rid == 'RC') {
+        if ($rid == 'RC' or $rid == 'CU') {
             $where = array( 'eid'   => $eid,
                             'oid'   => $oid,
                             'state' => 'A');
@@ -41,6 +43,25 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                 }
             }
             $dataView['faculties'] = $dataFaculty;
+        }elseif ($rid == 'RF') {
+            $ml = strlen($facid);
+            $where = array(
+                            'eid' => $eid,
+                            'oid' => $oid,
+                            'left(facid, '.$ml.')' => $facid,
+                            'subid'  => $subid,
+                            'parent' => '' );
+            $school_pd = $schoolDb->_getFilter($where);
+            $schools_data = array();
+            if ($school_pd) {
+                foreach ($school_pd as $c => $school) {
+                    if ($school['state'] == 'A') {
+                        $schools_data[$c] = array(   'id' => base64_encode($school['escid'].'|'.$school['subid']),
+                                                    'name' => $school['name'] );
+                    }
+                }
+            }
+            $dataView['schools_data'] = $schools_data;
         }elseif ($rid == 'DR') {
             $dataView['id_school'] = base64_encode($escid.'|'.$subid);
         }
@@ -107,9 +128,10 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                     foreach ($pdCurriculums as $curriculum) {
                         if ($curriculum['escid'] == $speciality['escid'] and
                             $curriculum['subid'] == $speciality['subid'] ) {
-                            $id = base64_encode($curriculum['curid'].'_'.
-                                                $curriculum['escid'].'_'.
+                            $id = base64_encode($curriculum['curid'].'|'.
+                                                $curriculum['escid'].'|'.
                                                 $curriculum['subid'] );
+                            $idjs = $curriculum['curid'].$curriculum['escid'].$curriculum['subid'];
                             $dataCurriculums[$cSpe]['code'] = $curriculum['escid'].'_'.$curriculum['subid'];
                             if ($curriculum['state'] == 'A') {
                                 $dataCurriculums[$cSpe]['active'] = array(  'curid' => $curriculum['curid'],
@@ -117,14 +139,16 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                                                                             'year'  => $curriculum['year'],
                                                                             'escid' => $curriculum['escid'],
                                                                             'subid' => $curriculum['subid'],
-                                                                            'id'    => $id );
+                                                                            'id'    => $id,
+                                                                            'idjs'  => $idjs );
                             }elseif ($curriculum['state'] == 'T'){
                                 $dataCurriculums[$cSpe]['temporary'][$cTemp] = array(   'curid' => $curriculum['curid'],
                                                                                         'name'  => $curriculum['name'],
                                                                                         'year'  => $curriculum['year'],
                                                                                         'escid' => $curriculum['escid'],
                                                                                         'subid' => $curriculum['subid'],
-                                                                                        'id'    => $id );
+                                                                                        'id'    => $id,
+                                                                                        'idjs'  => $idjs );
                                 $cTemp++;
                             }elseif ($curriculum['state'] == 'C'){
                                 $dataCurriculums[$cSpe]['close'][$cClose] = array(  'curid' => $curriculum['curid'],
@@ -132,7 +156,8 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                                                                                     'year'  => $curriculum['year'],
                                                                                     'escid' => $curriculum['escid'],
                                                                                     'subid' => $curriculum['subid'],
-                                                                                    'id'    => $id );
+                                                                                    'id'    => $id,
+                                                                                    'idjs'  => $idjs );
                                 $cClose++;
                             }elseif ($curriculum['state'] == 'B'){
                                 $dataCurriculums[$cSpe]['draft'][$cDraft] = array(  'curid' => $curriculum['curid'],
@@ -140,7 +165,8 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                                                                                 'year'  => $curriculum['year'],
                                                                                 'escid' => $curriculum['escid'],
                                                                                 'subid' => $curriculum['subid'],
-                                                                                'id'    => $id );
+                                                                                'id'    => $id,
+                                                                                'idjs'  => $idjs );
                                 $cDraft++;
                             }
                         }
@@ -167,35 +193,40 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                 $cClose = 0;
                 $cDraft = 0;
                 foreach ($pdCurriculums as $curriculum) {
-                    $id = base64_encode($curriculum['curid'].'_'.
-                                        $curriculum['escid'].'_'.
+                    $id = base64_encode($curriculum['curid'].'|'.
+                                        $curriculum['escid'].'|'.
                                         $curriculum['subid'] );
+                    $idjs = $curriculum['curid'].$curriculum['escid'].$curriculum['subid'];
                     if ($curriculum['state'] == 'A') {
                         $dataCurriculums[0]['active'] = array(  'curid' => $curriculum['curid'],
                                                                 'name'  => $curriculum['name'],
                                                                 'year'  => $curriculum['year'],
                                                                 'escid' => $curriculum['escid'],
-                                                                'id'    => $id );
+                                                                'id'    => $id,
+                                                                'idjs'  => $idjs );
                     }elseif ($curriculum['state'] == 'T'){
                         $dataCurriculums[0]['temporary'][$cTemp] = array(   'curid' => $curriculum['curid'],
                                                                             'name'  => $curriculum['name'],
                                                                             'year'  => $curriculum['year'],
                                                                             'escid' => $curriculum['escid'],
-                                                                            'id'    => $id );
+                                                                            'id'    => $id,
+                                                                            'idjs'  => $idjs );
                         $cTemp++;
                     }elseif ($curriculum['state'] == 'C'){
                         $dataCurriculums[0]['close'][$cClose] = array(  'curid' => $curriculum['curid'],
                                                                         'name'  => $curriculum['name'],
                                                                         'year'  => $curriculum['year'],
                                                                         'escid' => $curriculum['escid'],
-                                                                        'id'    => $id );
+                                                                        'id'    => $id,
+                                                                        'idjs'  => $idjs );
                         $cClose++;
                     }elseif ($curriculum['state'] == 'B'){
                         $dataCurriculums[0]['draft'][$cDraft] = array(  'curid' => $curriculum['curid'],
                                                                         'name'  => $curriculum['name'],
                                                                         'year'  => $curriculum['year'],
                                                                         'escid' => $curriculum['escid'],
-                                                                        'id'    => $id );
+                                                                        'id'    => $id,
+                                                                        'idjs'  => $idjs );
                         $cDraft++;
                     }
                 }
@@ -317,7 +348,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         }
 
         //Form
-        $curriculumForm = new Rcentral_Form_Curricula();
+        $curriculumForm = new Curricula_Form_Curricula();
         $dataView['curriculumForm'] = $curriculumForm;
 
         $this->view->dataView = $dataView;
@@ -329,7 +360,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $curriculumDb = new Api_Model_DbTable_Curricula();
 
         //Forms
-        $curriculumForm = new Rcentral_Form_Curricula();
+        $curriculumForm = new Curricula_Form_Curricula();
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
@@ -364,12 +395,10 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                                 'state'             => 'B' );
             if ($curriculumDb->_save($dataSave)) {
                 $result = array('success' => 1,
-                                'dataNew' => array( 'id'    => base64_encode(   $curid.'_'.
-                                                                                $escid.'_'.
+                                'dataNew' => array( 'id'    => base64_encode(   $curid.'|'.
+                                                                                $escid.'|'.
                                                                                 $subid ),
-                                                    'idJs'  =>  $curid.'_'.
-                                                                $escid.'_'.
-                                                                $subid,
+                                                    'idJs'  => $curid.$escid.$subid,
                                                     'curid' => $curid,
                                                     'name'  => $formData['name'],
                                                     'year'  => $formData['year'] ),
@@ -408,7 +437,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 
         $state = $this->_getParam('state');
 
-        $ids = explode('_', base64_decode($this->_getParam('id')));
+        $ids = explode('|', base64_decode($this->_getParam('id')));
         $curid = $ids[0];
         $escid = $ids[1];
         $subid = $ids[2];
@@ -469,7 +498,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         //DataBases
         $curriculumDb = new Api_Model_DbTable_Curricula();
 
-        $ids = explode('_', base64_decode($this->_getParam('id')));
+        $ids = explode('|', base64_decode($this->_getParam('id')));
         $curid = $ids[0];
         $escid = $ids[1];
         $subid = $ids[2];
@@ -511,7 +540,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         //DataBases
         $curriculumDb = new Api_Model_DbTable_Curricula();
 
-        $ids = explode('_', base64_decode($this->_getParam('id')));
+        $ids = explode('|', base64_decode($this->_getParam('id')));
         $curid = $ids[0];
         $escid = $ids[1];
         $subid = $ids[2];
@@ -537,7 +566,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $dataCurriculum = $curriculumDb->_getOne($where);
 
         //Form
-        $curriculumForm = new Rcentral_Form_Curricula();
+        $curriculumForm = new Curricula_Form_Curricula();
         $dataCurriculum['cur_per_ant'] = base64_encode($dataCurriculum['cur_per_ant']);
         $curriculumForm->populate($dataCurriculum);
         $dataView['curriculumForm'] = $curriculumForm;
@@ -577,7 +606,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $curriculumDb = new Api_Model_DbTable_Curricula();
 
         //Forms
-        $curriculumForm = new Rcentral_Form_Curricula();
+        $curriculumForm = new Curricula_Form_Curricula();
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
@@ -590,8 +619,9 @@ class Curricula_CurriculaController extends Zend_Controller_Action
             $formData['type_periods'] = 'A';
             $formData['year']         = '1993';
             if ($rid == 'DR') {
-                $formData['type']  = 'S';
-                $formData['alias'] = 'nothing';
+                $formData['type']           = 'S';
+                $formData['alias']          = 'nothing';
+                $formData['number_periods'] = 66;
             }
         //--------------------------------------------------------------------------
        
@@ -666,7 +696,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $oid = $this->sesion->oid;
         $uid = $this->sesion->uid;
 
-        $ids = explode('_', base64_decode($this->_getParam('id')));
+        $ids = explode('|', base64_decode($this->_getParam('id')));
         $why = $this->_getParam('why');
 
         $curid = $ids[0];
@@ -736,13 +766,16 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $coursesDb    = new Api_Model_DbTable_Course();
         $curriculumDb = new Api_Model_DbTable_Curricula();
 
-        $ids = explode('_', base64_decode($this->_getParam('id')));
+        $ids = explode('|', base64_decode($this->_getParam('id')));
         $curid = $ids[0];
         $escid = $ids[1];
         $subid = $ids[2];
 
         $eid = $this->sesion->eid;
         $oid = $this->sesion->oid;
+        $rid = $this->sesion->rid;
+
+        $dataView['role'] = $rid;
 
         $where = array( 'eid'   => $eid,
                         'oid'   => $oid,
@@ -754,6 +787,8 @@ class Curricula_CurriculaController extends Zend_Controller_Action
 
         $dataView['dataCurriculum'] = $dataCurriculum;
 
+        $number_periods = $dataCurriculum['number_periods'];
+
         //Cursos de la Curricula
         $dataView['dataCourses'] = array();
 
@@ -761,19 +796,29 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $order = array('semid ASC');
 
         $pdCourses   = $coursesDb->_getFilter($where, $attrib, $order);
-        $dataCourses = array();
+        //todos los semestres
+        if ($number_periods) {
+            for ($i=0; $i<$number_periods; $i++) { 
+                $dataCourses[$i]['semid']   = $i + 1;
+                $dataCourses[$i]['courses'] = array();
+            }
+        }
 
         if ($pdCourses) {
-            $semid   = '_';
             $cCursos = 0;
-            $cSem    = -1;
+            $semid   = '_';
             foreach ($pdCourses as $c => $course) {
                 if ($course['semid'] != $semid) {
-                    $semid   = $course['semid'];
                     $cCursos = 0;
-                    $cSem++;
-                }else {
-                    $dataCourses[$cSem]['courses'][$cCursos] = array(   'id'                => $course['courseid'],
+                    $semid = $course['semid'];
+                    $index_sem = $course['semid'] - 1;
+                }
+
+                $dataCourses[$index_sem]['courses'][$cCursos] = array(  'idget'             => base64_encode($course['courseid'].'|'.
+                                                                                                            $course['curid'].'|'.
+                                                                                                            $course['escid'].'|'.
+                                                                                                            $course['subid'] ),
+                                                                        'id'                => $course['courseid'],
                                                                         'semid'             => $course['semid'],
                                                                         'name'              => $course['name'],
                                                                         'abbreviation'      => $course['abbreviation'],
@@ -785,41 +830,50 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                                                                         'req_2'             => $course['req_2'],
                                                                         'req_3'             => $course['req_3'],
                                                                         'state'             => $course['state'] );
-
-                    if (!$course['req_1']) {
-                        $dataCourses[$cSem]['courses'][$cCursos]['req_1'] = '-';
+                
+                $many_req = 0;
+                for ($i_pre=1; $i_pre<=3; $i_pre++) { 
+                    if ($course['req_'.$i_pre]) {
+                        $many_req++;
                     }
-
-                    if ($course['type'] == 'O') {
-                        $dataCourses[$cSem]['courses'][$cCursos]['name_type'] = 'Obligatorio';
-                    }elseif ($course['type'] == 'E'){
-                        $dataCourses[$cSem]['courses'][$cCursos]['name_type'] = 'Electivo';
-                    }else {
-                        $dataCourses[$cSem]['courses'][$cCursos]['name_type'] = 'No Tiene';
-                        $dataCourses[$cSem]['courses'][$cCursos]['type'] = 'N';
-                    }
-                    $dataCourses[$cSem]['semid'] = $course['semid'];
-                    $cCursos++;
                 }
+                if ($many_req == 1) {
+                    $dataCourses[$index_sem]['courses'][$cCursos]['req'] = $course['req_1'];
+                } elseif ($many_req > 1) {
+                    $dataCourses[$index_sem]['courses'][$cCursos]['req'] = $course['req_1'].'...';
+                } else {
+                    $dataCourses[$index_sem]['courses'][$cCursos]['req'] = '-';
+                }
+
+                if ($course['type'] == 'O') {
+                    $dataCourses[$index_sem]['courses'][$cCursos]['name_type'] = 'Obligatorio';
+                }elseif ($course['type'] == 'E'){
+                    $dataCourses[$index_sem]['courses'][$cCursos]['name_type'] = 'Electivo';
+                }else {
+                    $dataCourses[$index_sem]['courses'][$cCursos]['name_type'] = 'No Tiene';
+                    $dataCourses[$index_sem]['courses'][$cCursos]['type'] = 'N';
+                }
+
+                if (!$number_periods) {
+                    $dataCourses[$index_sem]['semid'] = $course['semid'];
+                }
+                $cCursos++;
             }
 
+            // print_r($dataCourses);
             //ordernar por codigo
             foreach ($dataCourses as $cSem => $semester) {
-                $codigo = array();
-                foreach ($semester['courses'] as $c => $course) {
-                    $codigo[$c] = $course['id'];
+                if ($semester['courses']) {
+                    $codigo = array();
+                    foreach ($semester['courses'] as $c => $course) {
+                        $codigo[$c] = $course['id'];
+                    }
+                    array_multisort($dataCourses[$cSem]['courses'], SORT_ASC, $codigo);
                 }
-                array_multisort($dataCourses[$cSem]['courses'], SORT_ASC, $codigo);
             }
         }
 
         $dataView['dataCourses'] = $dataCourses;
-
-        //form para las ediciones
-        $dataView['form_course'] = new Curricula_Form_Course();
-        for ($i=1; $i<=$semid; $i++) { 
-            $dataView['form_course']->semid->addMultiOption($i, $i);
-        }
 
         $this->view->dataView = $dataView;
     }
@@ -837,7 +891,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $ids = $this->_getParam('id');
         $dataView['id'] = $ids;
 
-        $ids = explode('_', base64_decode($ids));
+        $ids = explode('|', base64_decode($ids));
         $curid = $ids[0];
         $escid = $ids[1];
         $subid = $ids[2];
@@ -859,9 +913,120 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         //All Courses
         $where['state'] = 'A';
         $attrib = array('courseid', 'name', 'semid');
-        $order = array('courseid ASC');
+        $order = array('semid ASC', 'courseid ASC');
         $dataCourses = $courseDb->_getFilter($where, $attrib, $order);
         $dataView['data_courses'] = $dataCourses;
+
+        $this->view->dataView = $dataView;
+    }
+
+    public function editcourseAction(){
+        $this->_helper->layout()->disableLayout();
+        
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $rid = $this->sesion->rid;
+
+        //dataBases
+        $courseDb     = new Api_Model_DbTable_Course();
+        $curriculumDb = new Api_Model_DbTable_Curricula();
+
+        $dataView['id'] = $this->_getParam('id');
+
+        $ids = explode('|', base64_decode($this->_getParam('id')));
+        $courseid = $ids[0];
+        $curid    = $ids[1];
+        $escid    = $ids[2];
+        $subid    = $ids[3];
+
+        $where = array(
+                        'eid'      => $eid,
+                        'oid'      => $oid,
+                        'escid'    => $escid,
+                        'subid'    => $subid,
+                        'curid'    => $curid,
+                        'courseid' => $courseid );
+        $course_data = $courseDb->_getOne($where);
+
+        $dataView['role'] = $rid;
+        if ($rid == 'RC') {
+            $course_form = new Curricula_Form_Course();
+            $course_form->populate($course_data);
+
+            $dataView['semester_current'] = $course_data['semid'];
+
+            //periodos de curricula
+            $dataView['exist_periods'] = false;
+            $where = array(
+                            'eid'   => $eid,
+                            'oid'   => $oid,
+                            'escid' => $escid,
+                            'subid' => $subid,
+                            'curid' => $curid );
+            $curriculum_data = $curriculumDb->_getOne($where);
+            $periods = $curriculum_data['number_periods'];
+            if ($periods) {
+                $dataView['exist_periods'] = true;
+                for ($i=1; $i<=$periods; $i++) { 
+                    $course_form->semid->addMultiOption($i, $i);
+                }
+            }
+
+            //prerequisitos
+            $where = array(
+                            'eid'   => $eid,
+                            'oid'   => $oid,
+                            'escid' => $escid,
+                            'subid' => $subid,
+                            'curid' => $curid );
+            $attrib = array('courseid', 'semid', 'name');
+            $order = array('semid ASC');
+            $courses_pre_pd = $courseDb->_getFilter($where, $attrib, $order);
+
+            $courses_pre_data = array();
+            $requisites_pd    = array();
+            if ($courses_pre_pd) {
+                foreach ($courses_pre_pd as $c => $course) {
+                    if ($course['courseid'] != $courseid) {
+                        $courses_pre_data[$c] = array(
+                                                        'id'    => base64_encode($course['courseid']),
+                                                        'code'  => $course['courseid'],
+                                                        'name'  => $course['name'],
+                                                        'semid' => $course['semid'] );
+                    }
+                    for ($i=1; $i<=3; $i++) { 
+                        if ($course_data['req_'.$i] == $course['courseid']) {
+                            $requisites_pd[$i] = array(   
+                                                        'id'    => base64_encode($course['courseid']),
+                                                        'code'  => $course['courseid'],
+                                                        'name'  => $course['name'],
+                                                        'semid' => $course['semid'] );
+
+                        }
+                    }
+                }
+            }
+
+            $requisites_data  = array();
+            if ($requisites_pd) {
+                foreach ($requisites_pd as $c => $requisite) {
+                    if ($c == 1) {
+                       $requisites_data[0] = $requisite;
+                    } else if ($c == 2) {
+                       $requisites_data[1] = $requisite;
+                    } else if ($c == 3) {
+                       $requisites_data[2] = $requisite;
+                    }
+                }
+            }
+            ksort($requisites_data);
+
+            $dataView['requisites_data']  = $requisites_data;
+            $dataView['courses_pre_data'] = $courses_pre_data;
+            $dataView['course_form']      = $course_form;
+        } else if ($rid == 'DR') {
+            $dataView['sumilla'] = $course_data['sumilla'];
+        }
 
         $this->view->dataView = $dataView;
     }
@@ -876,12 +1041,13 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $oid = $this->sesion->oid;
         $uid = $this->sesion->uid;
 
+        $formData['pre_1'] = null;
+        $formData['pre_2'] = null;
+        $formData['pre_3'] = null;
         $formData = $this->getRequest()->getPost();
-        //print_r($formData);
 
         //form para validar
         $form_course = new Curricula_Form_Course();
-
         if ($form_course->isValid($formData)) {
             $ids = explode('_', base64_decode($formData['id']));
             $curid = $ids[0];
@@ -906,19 +1072,51 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                                 'state'             => 'A',
                                 'register'          => $uid,
                                 'created'           => date('Y-m-d h:i:s') );
+            
+            //prerequisitos
+            $many_req = 0;
+            for ($i=1; $i<=3 ; $i++) { 
+                if ($formData['pre_'.$i]) {
+                    $dataSave['req_'.$i] = base64_decode($formData['pre_'.$i]);
+                    $many_req++;
+                }
+            }
+
+            if ($many_req == 1) {
+                $req = base64_decode($formData['pre_1']);
+            } elseif ($many_req > 1) {
+                $req = base64_decode($formData['pre_1']).'...';
+            } else {
+                $req = '-';
+            }
+
+            if ($formData['type'] == 'O') {
+                $type = 'Obligatorio';
+            } else if ($formData['type'] == 'E') {
+                $type = 'Electivo';
+            }
+
+            $idGet = base64_encode($formData['courseid'].'|'.
+                                   $curid.'|'.
+                                   $escid.'|'.
+                                   $subid );
 
             if ($courseDb->_save($dataSave)) {
                 $result = array('success'  => 1,
-                                'errors'   => array(),
-                                'semester' => $formData['semid'] );
+                                'semester' => $formData['semid'],
+                                'idjs'     => $formData['courseid'],
+                                'name'     => $formData['name'],
+                                'credits'  => $formData['credits'],
+                                'type'     => $type,
+                                'req'      => $req,
+                                'idget'    => $idGet,
+                                'id_en'    => base64_encode($formData['courseid']) );
             }
         }else{
             $result['success'] = 0;
             $cError = 0;
-            $error['isEmpty']   = array();
-            $error['notDigits'] = array();
-            foreach ($form_course->getMessages() as $tipeError) {
-                foreach ($tipeError as $error) {
+            foreach ($form_course->getMessages() as $typeError) {
+                foreach ($typeError as $error) {
                     $result['errors'][$cError] = $error;
                 }
                 if ($cError == 2) {
@@ -926,6 +1124,167 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                 }
                 $cError++;
             }
+        }
+        print json_encode($result);
+    }
+
+    public function saveeditcourseAction() {
+        $this->_helper->layout()->disableLayout();
+
+        //database
+        $courseDb = new Api_Model_DbTable_Course();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+        $uid = $this->sesion->uid;
+        $rid = $this->sesion->rid;
+
+        $formData = $this->getRequest()->getPost();
+
+        if ($rid == 'RC') {
+            $formData['courseid'] = '666';
+            //form
+            $course_form = new Curricula_Form_Course();
+            if ($course_form->isValid($formData)) {
+                $ids = explode('|', base64_decode($formData['id']));
+                $courseid = $ids[0];
+                $curid    = $ids[1];
+                $escid    = $ids[2];
+                $subid    = $ids[3];
+
+                $course_pk = array(
+                                    'eid'      => $eid,
+                                    'oid'      => $oid,
+                                    'escid'    => $escid,
+                                    'subid'    => $subid,
+                                    'courseid' => $courseid,
+                                    'curid'    => $curid );
+
+                $course_data_update = array('name'              => $formData['name'],
+                                            'abbreviation'      => $formData['abbreviation'],
+                                            'type'              => $formData['type'],
+                                            'credits'           => $formData['credits'],
+                                            'hours_theoretical' => $formData['hours_theoretical'],
+                                            'hours_practical'   => $formData['hours_practical'],
+                                            'semid'             => $formData['semid'],
+                                            'state'             => $formData['state'],
+                                            'updated'           => date('Y-m-d h:i:s'),
+                                            'modified'          => $uid );
+
+                //prerequisitos
+                $many_req = 0;
+                for ($i=1; $i<=3 ; $i++) { 
+                    if ($formData['pre_'.$i]) {
+                        $course_data_update['req_'.$i] = base64_decode($formData['pre_'.$i]);
+                        $many_req++;
+                    }else {
+                        $course_data_update['req_'.$i] = null;
+                    }
+                }
+
+                if ($many_req == 1) {
+                    $req = $course_data_update['req_1'];
+                } elseif ($many_req > 1) {
+                    $req = $course_data_update['req_1'].'...';
+                } else {
+                    $req = '-';
+                }
+
+                if ($formData['type'] == 'O') {
+                    $type = 'Obligatorio';
+                } elseif ($formData['type'] == 'E') {
+                    $type = 'Electivo';
+                }
+
+                $change_semester = false;
+                if ($formData['semid'] != $formData['semester_current']) {
+                    $change_semester = true;
+                }
+
+                if ($courseDb->_update($course_data_update, $course_pk)) {
+                    $result = array('success' => 1,
+                                    'idjs'    => $courseid,
+                                    'id_en'   => base64_encode($courseid),
+                                    'name'    => $formData['name'],
+                                    'credits' => $formData['credits'],
+                                    'type'    => $type,
+                                    'req'     => $req,
+                                    'state'   => $formData['state'],
+                                    'semid'   => $formData['semid'],
+                                    'semester_current' => $formData['semester_current'],
+                                    'change_semester' => $change_semester );
+                }
+            } else {
+                $result['success'] = 0;
+                $cError = 0;
+                foreach ($course_form->getMessages() as $typeError) {
+                    foreach ($typeError as $error) {
+                        $result['errors'][$cError] = $error;
+                    }
+                    if ($cError == 2) {
+                        break;
+                    }
+                    $cError++;
+                }
+            }
+        } else if ($rid == 'DR') {
+            if ($formData['sumilla']) {
+                $ids = explode('|', base64_decode($formData['id']));
+                $courseid = $ids[0];
+                $curid    = $ids[1];
+                $escid    = $ids[2];
+                $subid    = $ids[3];
+
+                $course_pk = array(
+                                    'eid'      => $eid,
+                                    'oid'      => $oid,
+                                    'escid'    => $escid,
+                                    'subid'    => $subid,
+                                    'courseid' => $courseid,
+                                    'curid'    => $curid );
+
+                $course_data_update = array(
+                                            'sumilla'  => $formData['sumilla'],
+                                            'updated'  => date('Y-m-d h:i:s'),
+                                            'modified' => $uid );
+                if ($courseDb->_update($course_data_update, $course_pk)) {
+                    $result['success'] = 1;
+                }
+            } else {
+                $result['success'] = 0;
+                $result['errors'][0] = 'Ingrese la sumilla para guardar...';
+            }
+        }
+        print json_encode($result);
+    }
+
+    public function deletecourseAction(){
+        $this->_helper->layout()->disableLayout();
+
+        //dataBases
+        $courseDb = new Api_Model_DbTable_Course();
+
+        $eid = $this->sesion->eid;
+        $oid = $this->sesion->oid;
+
+        $ids = explode('|', base64_decode($this->_getParam('id')));
+        $courseid = $ids[0];
+        $curid    = $ids[1];
+        $escid    = $ids[2];
+        $subid    = $ids[3];
+
+        $course_pk = array( 
+                            'eid'      => $eid,
+                            'oid'      => $oid,
+                            'escid'    => $escid,
+                            'subid'    => $subid,
+                            'curid'    => $curid,
+                            'courseid' => $courseid );
+
+        if ($courseDb->_delete($course_pk)) {
+            $result['success'] = 1;
+        } else {
+            $result['success'] = 0;
         }
         print json_encode($result);
     }
@@ -1069,7 +1428,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                 $this->view->option=$accion;
                 $this->view->curricula=$curricula;
             }else{
-                $form = new Rcentral_Form_Curricula();
+                $form = new Curricula_Form_Curricula();
                 $form->year->setAttrib("disabled",'disabled');
                 if ($this->getRequest()->isPost()) {
                     $formData = $this->getRequest()->getPost();

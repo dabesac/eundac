@@ -1,0 +1,135 @@
+<?php 
+	$id               = $this->dataView['id'];
+	$role             = $this->dataView['role'];
+	if ($role == 'RC') {
+		$semester_current = $this->dataView['semester_current'];
+		$exist_periods    = $this->dataView['exist_periods'];
+		$form             = $this->dataView['course_form'];
+		$courses_pre_data = $this->dataView['courses_pre_data'];
+		$requisites_data  = $this->dataView['requisites_data'];
+	} else if ($role == 'DR'){
+		$sumilla = $this->dataView['sumilla'];
+	}
+
+?>
+<?php if ($role == 'RC'): ?>
+<form class="form_edit_course">
+		
+	<div class="cover_black"></div>
+	<input type="hidden" name="id" value="<?php print $id ?>" />
+	<input type="hidden" name="semester_current" value="<?php print $semester_current ?>" />
+	<div class="thre_input">
+		<div>
+			<?php print $form->state ?>
+		</div>
+		<div>
+			<?php print $form->name ?>
+		</div>
+		<div>
+			<?php print $form->abbreviation ?>
+		</div>
+	</div>
+	
+	<div class="two_sides">
+		<div class="side_one">
+			<div class="two_inputs">
+				<div>
+					<p>Tipo de Curso</p>
+					<?php print $form->type ?>
+				</div>
+				<div>
+					<p>Créditos</p>
+					<?php print $form->credits ?>
+				</div>
+			</div>
+
+			<div class="two_inputs">
+				<div class="two_inputs_min">
+					<div>
+						<p>Horas Teoricas</p>
+						<?php print $form->hours_theoretical ?>
+					</div>
+					<div>
+						<p>Horas Practicas</p>
+						<?php print $form->hours_practical ?>
+					</div>
+				</div>
+				<div>
+					<p>Semestre</p>
+					<?php print $form->semid ?>
+				</div>
+			</div>		
+		</div>
+		<div class="side_two">
+			<header>
+				<p>Prerequisitos</p>
+			</header>
+			<section class="select_pre">
+				<select class="form-control">
+					<?php if ($exist_periods): ?>
+						<option semester="0" value="">No hay prerequisitos para el primer semestre...</option>
+						<?php foreach ($courses_pre_data as $course): ?>
+							<option semester="<?php print $course['semid'] ?>" code-course="<?php print $course['code'] ?>" value="<?php print $course['id'] ?>" hidden><?php print $course['code'].' | '.$course['name'] ?></option>
+						<?php endforeach ?>
+					<?php else: ?>
+						<option value="">Elija un semestre...</option>
+					<?php endif ?>
+				</select>
+				<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
+			</section>
+			<section class="prerequisites">
+				<input type="hidden" name="pre_1" value="">
+				<input type="hidden" name="pre_2" value="">
+				<input type="hidden" name="pre_3" value="">
+				<?php if ($requisites_data): ?>
+					<?php foreach ($requisites_data as $c => $requisite): ?>
+						<article id="prerequisite<?php print $c ?>" semester="<?php print $requisite['semid'] + 1 ?>">
+							<p><?php print $requisite['code'].' | '.$requisite['name'] ?></p>
+							<input type="hidden" name="pre_<?php print $c + 1 ?>" value="<?php print $requisite['id'] ?>">
+							<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
+						</article>
+					<?php endforeach ?>
+					<p class="inactive"><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue requisitos para este curso si desea...</p>
+				<?php else: ?>
+					<p><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue requisitos para este curso si desea...</p>
+				<?php endif ?>
+			</section>
+		</div>
+	</div>
+	<div class="submit_side">
+		<input type="submit" class="btn btn-success form-control" value="Guardar">
+
+		<a href="##" type="delete"><span class="glyphicon glyphicon-trash"></span></a>
+	</div>
+</form>
+<?php elseif ($role == 'DR'): ?>
+<p><span class="glyphicon glyphicon-info-sign"></span> Edite la sumilla del curso...</p>
+<form class="form_edit_course">
+	<input type="hidden" name="id" value="<?php print $id ?>" />
+	<textarea name="sumilla" cols="30" rows="10" placeholder="Sumilla..."><?php print $sumilla ?></textarea>
+	<div class="submit_side">
+		<input type="submit" class="btn btn-success form-control" value="Guardar">
+	</div>
+</form>
+<?php endif ?>
+<div class="msg_delete">
+	<p><span class="glyphicon glyphicon-exclamation-sign"></span> ¿Estas seguro que deseas eliminar este curso?</p>
+	<a href="##" code="<?php print $id ?>">Si, quiero eliminarlo</a>
+	<a href="##">No</a>
+	<div class="msg_side">
+		<div class="msg warning">
+			<p><span class="glyphicon glyphicon-exclamation-sign"></span> No se puede eliminar el curso, quizas ya hay registros en el, como alumnos matriculados, etc...</p>
+		</div>
+		<div class="msg success">
+			<p><span class="glyphicon glyphicon-exclamation-ok"></span> Eliminado satisfactoriamente!</p>
+		</div>
+	</div>
+</div>
+<div class="msg_side">
+	<div class="msg success">
+		<p><span class="glyphicon glyphicon-ok"></span> Guardado satisfactoriamente!</p>
+	</div>
+	<div class="msg warning">
+		<!-- Errores por JavaScript -->
+	</div>
+</div>

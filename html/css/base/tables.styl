@@ -1,0 +1,102 @@
+table
+	width 100%
+	
+	tr
+		transition all .3s
+		
+		th, td
+			padding .7em 1em
+
+		td.button
+			border-top 1px plomoOscuro solid
+			padding 0
+			position relative
+
+			a
+				background white
+				border-left 4px plomoOscuro solid
+				color azul
+				height 100%
+				left 0
+				top 0
+				position absolute
+				transition all .3s ease
+				width 100%
+
+				&:before
+					border-bottom 1px azul solid
+					content ""
+					position absolute
+					width 0
+					left 15%
+					transition inherit
+					top 0
+					height 70%
+
+			a:hover
+				border-left 4px azul solid
+
+				&:before
+					border-bottom .12em azul solid
+					width 70%
+			
+			
+				
+
+		td.button:last-child
+			border-right 1px plomoOscuro solid
+
+		td.button.medium
+			width 10%
+
+	tr:hover
+		background plomo
+		
+
+table.normal
+	
+	tr
+		th
+			background plomoOscuro
+			color negroTexto
+			
+		th
+			border-bottom 1px plomoOscuro solid
+			border-left 1px plomo solid
+
+		td
+			color negroTexto
+			border-left 1px plomoOscuro solid
+			border-bottom 1px plomoOscuro solid
+
+			small
+				color plomoTexto
+	
+		th:nth-of-type(1), td:nth-of-type(1)
+			padding .7em
+			border 0
+
+		th:nth-of-type(2), td:nth-of-type(2)
+			border-left 0
+			
+		th:nth-of-type(1), td:nth-of-type(1)
+			border-bottom 1px plomo solid
+			background azul
+			color white
+			
+		th.medium
+			width 20%
+		
+		th.center, td.center
+			text-align center
+			
+		td.active
+			color verdeTexto
+			
+		td.inactive
+			color rojoTexto
+
+		td.bold
+			font-weight 700
+
+		

@@ -1,0 +1,1208 @@
+div.fill_main_data.data_curriculums
+
+	.main_hide
+		display none
+		
+	.curriculums
+		padding 1em
+
+		.main
+			margin-bottom 4em
+
+			& > p
+				color plomoTexto
+				padding .5em
+				padding-left 1.5em
+				text-align center
+
+			.draftP
+				background rojo
+				color white
+				text-align left
+
+		hr
+			margin-bottom 3em
+			margin-top .8em
+
+		.closeP
+			border-bottom 1px celeste solid
+
+			span
+				color celeste
+
+		.activeP
+			border-bottom 1px verde solid
+			
+			span
+				color verde
+
+		.temporaryP
+			border-bottom 1px amarillo solid
+
+			span
+				color amarillo
+
+		.div_active
+			height 55px;
+
+		.curriculum
+			height 55px
+			position relative
+			margin-bottom .5em
+			width 100%
+			
+			& > span, div
+				background plomo
+				padding 1.2em
+				position absolute
+				height 100%
+				
+			& > span:nth-child(1)
+				background azul
+				color white
+				font-weight bold
+				left 0
+				text-align center
+				width 4%
+			
+			span:nth-child(2)
+				border-top 1px plomoOscuro solid
+				border-bottom 1px plomoOscuro solid
+				left 4%
+				width 44%
+				
+			span:nth-child(3)
+				border 1px plomoOscuro solid
+				left 48%
+				text-align center
+				width 7%
+
+			.modify
+				left 55%
+				width 45%
+				
+				& > a
+					background white
+					border-bottom 1px plomoOscuro solid
+					border-top 1px plomoOscuro solid
+					color azul
+					left 0
+					height 100%
+					padding-top 1.2em
+					position absolute
+					top 0
+					text-align center
+					
+				& > a:hover
+					background azul
+					color white
+
+				.active_a
+					background azul
+					color white
+
+				.active_active
+					background verde
+					color white
+					
+				.active_temporary
+					background amarillo
+					color white
+					
+				.active_close
+					background celeste
+					color white
+
+				.active_delete
+					background rojo
+					color white
+
+			.draftModify, .temporary_modify
+				
+				& > a
+					width 50%
+
+				& > a:nth-child(2)
+					left 50%
+					width 25%
+
+				& > a:nth-child(3)
+					left 75%
+					width 25%
+
+				.derive_from_draft
+					border-bottom 2px solid azul
+					border-top 2px solid azul
+					display none
+					height 123px
+					left 49%
+					padding 0
+					position absolute
+					top 99%
+					width 27%
+					z-index 5
+
+					a
+						padding .7em
+						padding-left .9em
+						display block
+						width 100%
+						
+					a:hover
+						padding-left 1.5em
+					
+					a:nth-child(1)
+						color verde
+
+					a:nth-child(1):hover
+						color white
+						background verde
+						
+					a:nth-child(2)
+						color amarillo
+
+					a:nth-child(2):hover
+						color white
+						background amarillo
+						
+					a:nth-child(3)
+						color celeste
+
+					a:nth-child(3):hover
+						color white
+						background celeste
+
+				.active_derive
+					animation showDerive .3s
+					display block
+					
+				.hide_derive
+					animation hideDerive .3s
+				
+			.active_modify, .close_modify
+				
+				a
+					width 50%
+					
+				a:nth-child(2)
+					left 50%
+
+			.temporary_modify
+
+				& > a
+					width 33.3%
+					
+				& > a:nth-child(2)
+					left 33.3%
+					width 33.3%
+				
+				& > a:nth-child(3)
+					left 66.6%
+					width 33.4%;
+
+				.derive_from_draft
+					left 33.3%
+					height 83px
+					width 33.3%
+
+					a:nth-child(2)
+						color celeste
+
+					a:nth-child(2):hover
+						color white
+						background celeste
+
+		.empty
+			background rojo
+			height 32px
+			padding .5em
+			
+			p
+				color white
+				text-align center
+				padding 0
+				width 100%
+				
+		.temporary
+			background plomo
+
+			p
+				color plomoTexto
+				
+		.successClose
+			background white
+						
+			p
+				color verde
+
+
+		.empty_message
+			display none
+			height 32px
+			padding .5em
+
+		.elseClose
+			background plomo
+			
+			p
+				color plomoTexto
+				
+		.confirms_side
+			display none
+			height 55px
+			margin-top -.5em
+			margin-bottom .5em
+			position relative
+
+		.confirm_side
+			display none
+			color white
+			height 100%
+			left 48%
+			position absolute
+			width 52%
+			
+			p, a
+				height 100%
+				left 0
+				top 0
+				position absolute
+				
+			p
+				padding .5em
+				padding-left 1.2em
+				padding-right 1.2em
+				text-align left
+				width 60%
+				
+			a
+				background white
+				text-align center
+				padding-top 1.2em
+				left 60%
+				width 27%
+
+			a:hover
+				color white
+				
+			a:nth-child(3)
+				left 87%
+				width 13%
+
+		.active_curriculum
+			background verde
+			
+			a
+				color verde
+				border-bottom 2px solid verde
+				
+			a:hover
+				background verdeHover
+
+		.temporary_curriculum
+			background amarillo
+
+			p
+				padding 1.2em
+			
+			a
+				color amarillo
+				border-bottom 2px solid amarillo
+
+			a:hover
+				background amarilloHover
+
+		.close_curriculum
+			background celeste
+
+			p
+				padding 1.2em
+			
+			a
+				color celeste
+				border-bottom 2px solid celeste
+
+			a:hover
+				background celesteHover
+
+		.delete_curriculum
+			background rojo
+
+			p
+				padding 1.2em
+			
+			a
+				color rojo
+				border-bottom 2px solid rojo
+
+			a:hover
+				background rojoHover
+			
+		.active_confirm
+			animation showConfirm .3s
+			display block
+
+		.hide_confirm
+			animation hideConfirm .3s
+
+		.showCurriculum
+			animation showCurriculum .3s
+
+		.removeCurriculum
+			animation removeCurriculum .3s
+
+.header_body
+	position relative
+	border-bottom 1px plomoHr solid
+	height 47px
+	width 100%
+
+	div
+
+		p, div
+			height 100%
+			left 0
+			position absolute
+			
+		p
+			color plomoTexto
+			padding 1em
+			width 55%
+			
+		div
+			width 15%
+
+			a
+				color azul
+				display block
+				height 100%
+				padding-top 1em
+				text-align center
+				width 100%
+
+			a:hover
+				background plomoOscuro
+			
+
+		div:nth-child(2)
+			left 55%
+			
+		div:nth-child(3)
+			left 70%
+
+		div:nth-child(4)
+			left 85%
+
+	.headerEdit
+		display none
+		
+		div:nth-child(2)
+			left 55%
+			width 45%
+
+
+section.modal_body.curriculum
+
+	.inputs-type, .inputs-name, .inputs-amounts, .input-curBefore, .sendButtom
+		border-top 1px plomoHr solid
+		height 70px
+		position relative
+		width 100%
+		
+		p
+			margin-bottom .3em
+			
+		div
+			height 100%
+			left 0
+			padding .6em
+			position absolute
+			top .5em
+			width 33.3%
+			
+		div:nth-child(2)
+			left 33.3%
+			width 33.4%
+		
+		div:nth-child(3)
+			left 66.7%
+
+	.inputs-type
+		
+		div
+			top .7em
+
+	.inputs-name, .input-curBefore, .inputs-amounts
+		height 96px
+		
+		div
+			width 50%
+			
+		div:nth-child(2)
+			left 50%
+			width 50%
+
+	.inputs-amounts
+		
+		div
+			width 20%
+
+		div:nth-child(2)
+			left 20%
+			width 20%
+		
+		div:nth-child(3)
+			left 40%
+			width 20%
+			
+		div:nth-child(4)
+			left 60%
+			
+		div:nth-child(5)
+			left 80%
+
+	.input-curBefore
+
+		div
+			width 100%
+			
+	.sendButtom
+		padding 1em 20em
+
+		input
+			height 40px
+
+	.for_director
+		background rojo
+
+		p
+			color white
+
+	.msg_side
+		padding 0 5em 1em
+		
+		.msg
+			display none
+
+.modal_admin_courses
+	color negroTexto
+	overflow hidden
+	position relative
+	width 100%
+
+	&>header
+		background white
+		box-shadow  0 1px 1px rgba(black, .2)
+		height 70px
+		padding-top 1em
+		padding-bottom 1em
+		position relative
+		width 100%
+		z-index 10
+		
+		p, div
+			left 0
+			height 100%
+			position absolute
+		
+		p
+			font-size 1.1em
+			padding .8em
+			padding-left 2em
+			width 60%
+
+		small 
+			font-size .8em
+			
+		div
+			left 60%
+			padding-right 3.5em
+			width 40%
+
+			a
+				background verde
+				color white
+				display block
+				padding .7em
+				text-align center
+
+			a:hover
+				background verdeHover
+
+			.btn_cancel
+				background rojo
+
+			.btn_cancel:hover
+				background rojoHover
+
+	&>.header_active
+		border-top 1px solid verde
+
+	&>header.only_p
+		p
+			text-align center
+			width 100%
+		
+	&>article
+		background plomo
+		min-height 320px
+		padding 1em
+		padding-top 2em
+		position relative
+		
+		&>p
+			margin 0
+			text-align center
+
+section.new_course
+	background white
+	border-bottom 2px solid verde
+	display none
+	position relative
+	width 100%
+	z-index 5
+
+	&>header
+		padding 1em
+
+		p
+			color plomoTexto
+			margin-bottom 0
+
+	.two_sides
+		position relative
+		width 100%
+
+		.side_one
+			position relative
+			width 65%
+			
+		.side_two
+			height 100%
+			left 65%
+			position absolute
+			top 0
+			width 35%
+
+	.thre_input, .two_inputs
+		background plomoOscuro
+		border-bottom 1px solid plomoOscuro
+		position relative
+		height 62px
+		
+		div
+			left 0
+			height 100%
+			padding 1em
+			position absolute
+			top 0
+			width 15%
+
+			p
+				text-align center
+				margin-bottom .4em
+			
+		div:nth-child(2)
+			left 15%
+			width 50%
+			
+		div:nth-child(3)
+			left 65%
+			width 35%
+
+	.two_inputs
+		background white
+		border 0
+		height 90px
+		
+		div:nth-child(1)
+			left 0
+			width 50%
+			
+		div:nth-child(2)
+			left 50%
+			width 50%
+
+		.two_inputs_min
+			background plomoOscuro
+			padding 0
+
+			div:nth-child(1)
+				left 0
+				width 50%
+			
+			div:nth-child(2)
+				left 50%
+				width 50%
+	
+	.submit_side
+		border-top 2px solid plomoOscuro
+		padding 1em 20em
+		
+		input
+			height 40px
+
+	.msg_side
+		padding 0 15em
+		
+		.msg
+			display none
+			margin-bottom 1em
+
+section.new_course.active
+	animation r_s_fadeUp .3s
+	display block
+
+section.new_course.inactive
+	animation r_h_fadeDown .3s
+
+.side_two
+	border-left 2px solid plomoOscuro
+	
+	header
+		border-bottom 1px solid plomoOscuro
+		padding .5em
+		padding-bottom .3em
+
+		p
+			color plomoTexto
+			margin-bottom 0
+			text-align center
+
+	section.select_pre
+		left 2%
+		position relative
+		top .5em
+		width 96%
+		
+		select
+			width 85%
+			
+		a
+			border 1px solid plomoTexto
+			color verde
+			height 100%
+			left 85%
+			padding-top .5em
+			position absolute
+			top 0
+			text-align center
+			width 15%
+
+		a:hover
+			background verde
+			color white
+			
+	section.prerequisites
+		margin-top 1em
+		border-top 1px solid plomoOscuro
+		padding .5em
+		position relative
+
+		&>p
+			color plomoTexto
+			margin 2.5em 1em
+			text-align center
+			
+		&>p.inactive
+			display none
+
+		article
+			border-bottom 1px solid rojo
+			display none
+			height 25px
+			margin-bottom .3em
+			overflow hidden
+			position relative
+
+			p
+				margin-bottom 0
+				padding .1em
+				width 90%
+				
+			a
+				color rojo
+				height 100%
+				left 90%
+				padding-top .3em
+				position absolute
+				text-align center
+				top 0
+				width 10%
+
+			a:hover
+				color rojoHover
+
+		article.active
+			animation r_s_fadeUp .3s
+			display block
+		
+		article.inactive
+			animation r_h_fadeDown .3s
+			
+section.semester
+	background white
+	margin-bottom 3em
+	position relative
+
+	&>header
+		border-top 1px solid plomoOscuro
+		color azul
+		border-bottom 1px solid plomoOscuro
+		padding 1em
+		text-align center
+
+	&>section
+
+		&>p
+			color plomoTexto
+			text-align center
+			padding 5em 1em
+			
+			span
+				color rojoTexto
+
+		&>p.inactive
+			display none
+
+
+	.all_course_data
+		position relative
+		overflow hidden
+
+	article.data_course, article.title
+		transition all .3s
+		background white
+		border-bottom 1px solid plomoOscuro
+		position relative
+		height 35px
+		z-index 20
+		
+		span, a
+			height 100%
+			left 0
+			text-align center
+			padding .5em
+			position absolute
+			width 3%
+			
+		span
+			border-right 1px solid plomoOscuro
+			
+		span:nth-child(2)
+			left 3%
+			width 7%
+			
+		span:nth-child(3)
+			left 10%
+			text-align left
+			width 50%
+
+		span:nth-child(4)
+			left 60%
+			width 7%
+			
+		span:nth-child(5)
+			left 67%
+			width 10%
+
+		span:nth-child(6)
+			left 77%
+			width 9%
+			
+		span:nth-child(7)
+			left 86%
+			width 6%
+			
+		a
+			color amarillo
+			left 92%
+			width 8%
+			
+		a:hover
+			color amarilloTexto
+
+		.stateA
+			color verdeTexto
+			
+		.stateI
+			color rojoTexto
+
+	article.data_course:hover
+		background plomo
+
+	article.title
+		background plomoOscuro
+		color plomoTexto
+
+		span
+			border-right 1px solid plomo
+
+	article.large
+		
+		span:nth-of-type(3)
+			width 58%
+
+		span:nth-of-type(4)
+			left 68%
+			width 7%
+			
+		span:nth-of-type(5)
+			left 75%
+			width 10%
+
+		span:nth-of-type(6)
+			left 85%
+			width 9%
+
+		span:nth-child(7)
+			left 94%
+			width 6%
+			
+	article.title.inactive
+		display none
+
+	article.course_clicked
+		background amarillo
+		border-bottom 1px solid amarillo
+		color white
+
+		a
+			color white
+			background rojo
+			
+		a:hover
+			color white
+			background rojoHover
+
+		.stateA, .stateI
+			color white
+
+	article.course_clicked:hover
+		background amarillo
+
+	article.edit_course
+		background white
+		border-bottom 2px solid amarillo
+		border-left 2px solid amarillo
+		border-top 1px solid transparent
+		display none
+		min-height 300px
+		position relative
+
+		&>p
+			padding 1em
+			color plomoTexto
+			
+		textarea
+			display block
+			margin 0 auto 1em
+			padding 1em
+			border-radius 0
+			border 1px plomoOscuro solid
+			width 97%
+
+		div.cover_black
+			background rgba(black, .3)
+			display none
+			height 100%
+			position absolute
+			width 100%
+			z-index 1
+
+		.msg_delete
+			background white
+			bottom 1em
+			display none
+			padding 1em
+			position absolute
+			right 1em
+			width 45%
+			z-index 2
+
+			&>p
+				text-align center
+				color rojoTexto
+			
+			a
+				background rojo
+				border 2px rojo solid
+				border-radius 2px
+				color white
+				display inline-block
+				margin-bottom .5em
+				padding .3em
+				text-align center
+				width 48%
+
+				&:hover
+					background rojoHover
+
+			a:nth-of-type(2)
+				background white
+				color rojoTexto
+				margin-left 2%
+				
+				&:hover
+					background rojoHover
+					color white
+
+			.msg_side
+
+				.msg
+					display none
+
+		img
+			display block
+			margin  10em auto
+
+		.two_sides
+			position relative
+			width 100%
+
+		.side_one
+			position relative
+			width 65%
+			
+		.side_two
+			height 100%
+			left 65%
+			position absolute
+			top 0
+			width 35%
+
+		.thre_input, .two_inputs
+			background plomoOscuro
+			border-bottom 1px solid plomoOscuro
+			height 62px
+			position relative
+			
+			div
+				left 0
+				height 100%
+				padding 1em
+				position absolute
+				top 0
+				width 15%
+
+				p
+					text-align center
+					margin-bottom .4em
+				
+			div:nth-child(2)
+				left 15%
+				width 50%
+				
+			div:nth-child(3)
+				left 65%
+				width 35%
+				
+		.two_inputs
+			background white
+			border 0
+			height 90px
+			
+			div:nth-child(1)
+				left 0
+				width 50%
+				
+			div:nth-child(2)
+				left 50%
+				width 50%
+
+			.two_inputs_min
+				background plomoOscuro
+				padding 0
+
+				div:nth-child(1)
+					left 0
+					width 50%
+				
+				div:nth-child(2)
+					left 50%
+					width 50%
+					
+		.submit_side
+			border-top 2px solid plomoOscuro
+			padding 1em 0 0
+			padding-left 15em
+			padding-right 15em
+			position relative
+
+			a
+				color plomoTexto
+				font-size 1.2em
+				position absolute
+				right 1em
+				top 1.3em
+
+			a:hover
+				color rojo
+
+		&>.msg_side
+			padding 0 5em 1em
+
+			.msg
+				margin-top 1em
+				display none
+
+	article.edit_course.active
+		animation showEditCourse .3s
+		display block
+
+	article.edit_course.inactive
+		animation hideEditCourse .3s
+
+	article.edit_course.delete
+		
+		div.cover_black, .msg_delete
+			animation showCover .3s
+			display block
+	
+.detail_curricula
+	display block
+
+.detail_first
+	color negro
+	position relative
+	width 100%
+
+	div
+
+		p
+			font-size 1.1em
+			
+			strong
+				color plomoTexto
+				font-size .9em
+	
+	& > div:nth-child(1)
+		padding 3em
+		padding-bottom 6em
+		padding-top 6em
+		width 55%
+		
+	& > div:nth-child(2)
+		border-left 2px plomoOscuro solid
+		height 100%
+		left 55%
+		padding 3em
+		padding-top 1.7em
+		position absolute
+		top 0
+		width 45%
+
+		div
+			margin-bottom 2em
+			border-bottom 1px plomoHr solid
+
+.cur_equivalence
+	border-top 1px plomoHr solid
+	margin-top 1em
+	padding 2em
+	padding-left 3em
+	position relative
+	width 100%
+
+	p
+		color negro
+		font-size 1.1em
+		
+	p:nth-child(1)
+		color plomoTexto
+		font-size 1em
+
+.edit_curriculum, .admin_courses
+	display none
+
+
+@keyframes showDerive
+	from
+		opacity 0
+		top 130%
+	to
+		opacity 1
+		top 99%
+
+@keyframes hideDerive
+	from
+		opacity 1
+		top 99%
+	to
+		opacity 0
+		top 130%
+
+@keyframes showConfirm
+	from
+		opacity 0
+		top 100%
+	to
+		opacity 1
+		top 0
+
+@keyframes hideConfirm
+	from
+		opacity 1
+		top 0
+	to
+		opacity 0
+		top 100%
+
+@keyframes showCurriculum
+	from
+		opacity 0
+		bottom 100%
+	to
+		opacity 1
+		bottom 0
+
+@keyframes removeCurriculum
+	from
+		opacity 1
+		top 0
+	to
+		opacity 0
+		top 100%
+
+@keyframes showNewCourse
+	from
+		margin-bottom -357px
+		top -357px
+	to
+		margin-bottom 0
+		top 0
+
+@keyframes hideNewCourse
+	from
+		margin-bottom 0
+		top 0
+	to
+		margin-bottom -357px
+		top -357px
+
+@keyframes showEditCourse
+	from
+		opacity 0
+		margin-top -308px
+		top -308px
+	to
+		opacity 1
+		margin-top 0
+		top 0
+
+@keyframes hideEditCourse
+	from
+		opacity 1
+		margin-top 0
+		top 0
+	to
+		opacity 0
+		margin-top -308px
+		top -308px
+
+@keyframes showCover
+	from
+		opacity 0
+	to
+		opacity 1
+	

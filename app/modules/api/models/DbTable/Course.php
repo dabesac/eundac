@@ -170,4 +170,20 @@ class Api_Model_DbTable_Course extends Zend_Db_Table_Abstract
             // print "Error: Leer todos los cursos de una curricula ".$ex->getMessage();
         }
     }
+
+    public function _delete($pk){
+        try{
+            if (!$pk['oid'] || !$pk['eid'] || !$pk['escid'] || !$pk['subid'] || !$pk['curid'] || !$pk['courseid']) return false;
+            $where = "eid = '".$pk['eid'].
+                        "'and oid       = '".$pk['oid'].
+                        "'and escid     = '".$pk['escid'].
+                        "'and subid     = '".$pk['subid'].
+                        "'and curid     = '".$pk['curid'].
+                        "' and courseid = '".$pk['courseid']."'";
+            return $this->delete($where);
+            return false;
+        }catch (Exception $e){
+            print "Error: Delete Course ".$e->getMessage();
+        }
+    }
 }
