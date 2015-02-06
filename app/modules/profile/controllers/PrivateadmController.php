@@ -391,8 +391,6 @@ class Profile_PrivateadmController extends Zend_Controller_Action {
             $this->view->directores=$datadirectores;
             $this->view->persona=$dataperson;
             $this->view->speciality=$dataspeciality;
-            $this->view->mensaje='pool pelador';
-
         } catch(Exeption $e){
             print 'Error '.$e->getMessage();
         }        
