@@ -2,7 +2,6 @@
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
-
     protected function _initViewHelpers() {
             $this->bootstrap('layout');
             $layout = $this->getResource('layout');
@@ -24,13 +23,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
                 //Vendor
                 $view   ->headScript()->appendFile('/js/vendor/jquery-1.11.0.js')
+                        ->headScript()->appendFile('/js/vendor/jquery.serializejson.min.js')
                         ->headScript()->appendFile('/js/vendor/underscore.js')
-                        ->headScript()->appendFile('/js/vendor/backbone.js');
+                        ->headScript()->appendFile('/js/vendor/backbone.js')
+                        ->headScript()->appendFile('/js/vendor/backbone.layoutmanager.js')
+                        ->headScript()->appendFile('/js/vendor/swig.js');
 
                 //Ours
-                $view   ->headScript()->appendFile('/js/global_functions/global_functions.js')
-                        ->headScript()->appendFile('/js/init.js')
-                        ->headScript()->appendFile('/js/main.js');
+                // $view   ->headScript()->appendFile('/js/global_functions/global_functions.js');
             }
 
              $view->headScript()->appendFile('/external_library/jquery-transit/jquery.transit.min.js')
@@ -52,6 +52,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $moneda = new Zend_Locale('es_PE');
             Zend_Registry::set('Zend_Locale', $moneda);
             return;
+        }
+
+        protected function _initRestRoute()
+        {
+                $this->bootstrap('frontController');
+                $frontController = Zend_Controller_Front::getInstance();
+                $restRoute = new Zend_Rest_Route($frontController);
+                $frontController->getRouter()->addRoute('default', $restRoute);
         }
 
     protected function _initDbAdaptersToRegistry()

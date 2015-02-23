@@ -1,13 +1,13 @@
 <?php
 
-class Horary_Bootstrap extends Zend_Application_Module_Bootstrap 
+class Period_Bootstrap extends Zend_Application_Module_Bootstrap 
 {
     
    protected function _initAutoload()
     {
         $autoloader = new Zend_Application_Module_Autoloader(array(
             'namespace' => 'Horary_',
-            'basePath'  => APPLICATION_PATH .'/modules/horary',
+            'basePath'  => APPLICATION_PATH .'/modules/period',
             'resourceTypes' => array (
                 'form' => array(
                     'path' => 'forms',
@@ -21,5 +21,5 @@ class Horary_Bootstrap extends Zend_Application_Module_Bootstrap
         ));
         return $autoloader;
     }
-}
+    }
 

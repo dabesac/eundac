@@ -6,19 +6,27 @@
 	p
 		color white
 		margin-bottom .2em
-		
 .msg.show
 	animation r_s_fadeUp .3s
 	display block
 
 .msg.hide
 	animation r_h_fadeDown .3s
-			
-.msg.warning
+	
+.msg--appear
+	animation message_appear 10s
+	opacity 0
+	
+.msg--warning
 	border-left 4px solid amarilloTexto
 	background amarillo
 
-.msg.success
+.msg--success
 	border-left 4px solid verdeTexto
 	background verde
+	text-align center
+
+.msg--danger
+	border-left 4px solid rojoTexto
+	background rojo
 	text-align center

@@ -32,97 +32,55 @@
 														<a href="##" class="button button--small  button--alter  button--alter--success">Nuevo <span class="glyphicon glyphicon-plus-sign"></span></a>
 													</div>');*/ ?>
 
-													
 
-<section class="content content--small">
-	<header class="content__header  content__header--interaction">
-		<p class="info"><span class="glyphicon glyphicon-info-sign"></span> Tambien existe periodos en otros años...</p>
-		<section class="interaction__content">
-			<div class="column_uno">
-				<select class="select" name="anio">
-					<?php for ($i=date('Y'); $i>1992 ; $i--): ?>
-						<option value=""><?php print $i ?></option>
-					<?php endfor ?>
-				</select>
-			</div>
-			<!--<div class="column_dos">
-				<a href="##" class="button button--medium">Nuevo</a>
-			</div> -->
-		</section>
-
+<!-- <section class="content  content--small">
+	<header class="content__header  content__header--new">
+		<p><span class="glyphicon glyphicon-plus"></span> Nuevo Periodo</p>
+		<div>
+			<a href="##" class="button button--medium">Cancelar</a>
+		</div>
 	</header>
 	<section class="content__body">
+		<form class="form form-medium">
+			<p class="info"><span class="glyphicon glyphicon-info-sign"></span> Rellene los campos necesarios...</p>
 
-		<section class="group  group--active">
-			<header class="group__header">
-				Periodo Activo
-			</header>
-			<section class="group__body">
-				<article class="item-table  item-table--active">
-					<header class="item-table__header">
-						Periodo 15A
-					</header>
-					<section class="item-table__body">
-						<p>Resolución 15 TRH-SUNDK 00001</p>
-						<p>Inicio de Clases <strong>15-04-2015</strong></p>
-						<p>Fin de Clases <strong>13-07-2015</strong></p>
-						<p class="display-tablet">Otro Dato</p>
-						<p class="display-tablet">Otro Dato Largo</p>
-						<p>Otro Dato mas Largo</p>
-					</section>
-					<footer class="item-table__footer footer--buttons footer--buttons--two">
-						<a href="##" class="button button--small button--table button--table--warning">Editar <span class="glyphicon glyphicon-pencil"></span></a>
-						<a href="##" class="button button--small button--table button--table--danger">Eliminar <span class="glyphicon glyphicon-remove"></span> </a>
-					</footer>
-				</article>
-			</section>
-		</section>
+			<div class="blow blow--input">
+				<input type="text" id="input1" required>
+				<label for="input1">Nombre</label>
+			</div>
 
-		<section class="group group--temporary">
-			<header class="group__header">
-				Periodos Temporales
-			</header>
-			<section class="group__body">
-				<article class="item-table">
-					<header class="item-table__header">
-						Periodo 15T
-					</header>
-					<section class="item-table__body">
-						<p>Resolución 15 TRH-SUNDK 00001</p>
-						<p>Inicio de Clases <strong>15-04-2015</strong></p>
-						<p>Fin de Clases <strong>13-07-2015</strong></p>
-						<p class="display-tablet">Otro Dato</p>
-						<p class="display-tablet">Otro Dato Largo</p>
-						<p>Otro Dato mas Largo</p>
-					</section>
-					<footer class="item-table__footer footer--buttons footer--buttons--two">
-						<a href="##" class="button button--small button--table button--table--warning">Editar <span class="glyphicon glyphicon-pencil"></span></a>
-						<a href="##" class="button button--small button--table button--table--danger">Eliminar <span class="glyphicon glyphicon-remove"></span> </a>
-					</footer>
-				</article>
+			<div class="blow  blow--input">
+				<input type="number" id="input2" required>
+				<label for="input2">Numero de Resolución</label>
+			</div>
 
-				<article class="item-table">
-					<header class="item-table__header">
-						Periodo 15J
-					</header>
-					<section class="item-table__body">
-						<p>Resolución 15 TRH-SUNDK 00001</p>
-						<p>Inicio de Clases <strong>15-04-2015</strong></p>
-						<p>Fin de Clases <strong>13-07-2015</strong></p>
-						<p class="display-tablet">Otro Dato</p>
-						<p class="display-tablet">Otro Dato Largo</p>
-						<p>Otro Dato mas Largo</p>
-					</section>
-					<footer class="item-table__footer footer--buttons footer--buttons--two">
-						<a href="##" class="button button--small button--table button--table--warning">Editar <span class="glyphicon glyphicon-pencil"></span></a>
-						<a href="##" class="button button--small button--table button--table--danger">Eliminar <span class="glyphicon glyphicon-remove"></span> </a>
-					</footer>
-				</article>
-			</section>
-		</section>
+			<div class="blow  blow--select">
+				<select id="select1" required>
+					<option value="">Escoja uno...</option>
+					<option value="Peru">Perú</option>
+					<option value="Escocia">Escocia</option>
+					<option value="Argentina">Argentina</option>
+				</select>
+				<label for="select1">País</label>
+			</div>
 
+			<div class="blow  blow--bolean">
+				<p>Sexo</p>
+				<div>
+					<input type="radio" name="sex" value="M" id="check1">
+					<label for="check1">Hombre <span class="glyphicon glyphicon-ok"></span></label>
+				</div>
+				<div>
+					<input type="radio" name="sex" value="F" id="check2">
+					<label for="check2">Mujer <span class="glyphicon glyphicon-ok"></span></label>
+				</div>
+			</div>
+			
+			<input type="submit" class="button  button--medium  button--submit" value="Guardar">
+		</form>
 	</section>
-</section>
+</section> -->												
+
 
 <!--<section class="preregister ok">
 	<p class="info info--main"><span class="glyphicon glyphicon-info-sign"></span> Seleccione los cursos que llevara</p>

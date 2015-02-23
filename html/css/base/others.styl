@@ -1,36 +1,61 @@
-.float-right
-	float right
-	
-.float-left
-	float left
+.spinner--block
+	display none
+	margin 11em auto
 
-.inline
-	display inline-block
+.spinner--block.fadeUp
+	display block
+	animation .3s fadeUp ease
 
-.inline_mid
-	margin auto
+.spinner--block.fadeOut
+	animation .3s fadeOut ease
 
-.text_warning
-	color amarilloTexto
-	
-.text_center
-	text-align center
-	
-.text_left
-	text-align left
-	
-.text_right
-	text-align right
+.delete-cape
+	background rgba(black, .3)
+	height 100%
+	left 0
+	position absolute
+	top 0
+	width 100%
+	z-index 3
 
-.whit_code
-	
-	small
-		color plomoTexto
+	.delete-cape__msg
+		background white
+		border-radius 7px
+		box-shadow 0 0 10px rgba(black, .4)
+		position absolute
+		padding .7em
+		top 14%
+		width 92%
+		max-width 400px
+		right 4%
 
-.display-tablet, .display-desktop
+		p
+			text-align center
+		
+		a
+			display inline-block
+			width 62%
+			
+		a:nth-of-type(2)
+			margin-left 1%
+			width 35%
+
+@media screen and (min-width:1000px)
+	.delete-cape
+		.delete-cape__msg
+			top 16%
+
+.delete-cape--interactive
 	display none
 
-ul
+.delete-cape--interactive.active
+	animation fadeUp .3s ease
+	display block
+	
+.delete-cape--interactive.inactive
+	animation fadeOut .3s ease
+
+/*ul
 	padding 0
 
 ul.tabs
@@ -80,29 +105,6 @@ ul.tabs
 		animation r_s_fadeUp .3s ease
 		display block
 
-p.no_data
-	color plomoTexto
-	text-align center
-	margin 6em
-
-	span
-		color rojoTexto
-
-.info
-	color plomoTexto
-	margin-bottom 0
-
-.info--main
-	padding .7em 1em
-	margin-bottom 2em
-
-p.danger
-	color negroTexto
-	margin 0
-	
-	span
-		color rojoTexto
-	
 .aux.mobile
 	
 	.info
@@ -140,4 +142,4 @@ p.danger
 				color verde
 
 			.abbr
-				border-bottom 2px verde solid
+				border-bottom 2px verde solid*/
