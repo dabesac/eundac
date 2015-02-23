@@ -11,6 +11,7 @@ eUndac.Views.Interaction_Header = Backbone.View.extend({
 	initialize : function(){
 		this.template = swig.compile($('#template_header_period').html());
 		this.render().afterRender();
+
 	},
 
 	render : function(){
@@ -35,9 +36,9 @@ eUndac.Views.Interaction_Header = Backbone.View.extend({
 	},
 
 	loadData : function(year){
+		this.collection.id = year;
 		$('.js_form-period-new').find('input[name=year]').val(year);
 
-		var periods = new eUndac.Collections.Admin_Periods({ id : year });
-		chargeContent($('.js_content_body'), periods);
+		chargeContent($('.js_content_body'), this.collection);
 	}
 });

@@ -51,11 +51,7 @@ class Rest_PeriodController extends Zend_Rest_Controller {
             }
         }
         
-        if ($periods_data) {
-            return $this->_helper->json->sendJson($periods_data);
-        } else {
-            return null;
-        }
+        return $this->_helper->json->sendJson($periods_data);
     }
 
 
@@ -94,6 +90,7 @@ class Rest_PeriodController extends Zend_Rest_Controller {
                                         'created'               => date('Y-m-d h:i:s') );
 
                 if ($periodDb->_save($period_save)) {
+                    //id para el nuevo modelo
                     $result['idget'] = base64_encode($period_data['code']);
                     
                     //renderear si esta en el mismo año...
@@ -104,6 +101,32 @@ class Rest_PeriodController extends Zend_Rest_Controller {
                         $result['render'] = false;
                     }
 
+                    //Si entra un activo
+                    $result['new_active'] = false;
+                    if ($period_data['state'] == 'A') {
+                        $result['new_active'] = true;
+
+                        // si hay activo en otro año
+                        $where = array(
+                                        'eid'            => $eid,
+                                        'oid'            => $oid,
+                                        'state'          => 'A' );
+                        $period_active = $periodDb->_getFilter($where);
+                        if ($period_active) {
+                            if ($period_active[0]['perid'] != $period_data['code']) {
+                                $period_active_pk = array(
+                                                            'eid'   => $eid,
+                                                            'oid'   => $oid,
+                                                            'perid' => $period_active[0]['perid'] );
+                                $period_active_update = array(
+                                                                'state'    => 'T',
+                                                                'modified' => $uid,
+                                                                'updated'  => date('Y-m-d h:i:s') );
+
+                                $periodDb->_update($period_active_update, $period_active_pk);
+                            }
+                        }
+                    }
 
                     $result['success'] = true;
                 }
@@ -158,6 +181,27 @@ class Rest_PeriodController extends Zend_Rest_Controller {
                     if ($period_active) {
                         if ($period_active[0]['perid'] != $perid) {
                             $result['new_active'] = true;
+                        }
+                    }
+
+                    // si hay activo en otro año
+                    $where = array(
+                                    'eid'            => $eid,
+                                    'oid'            => $oid,
+                                    'state'          => 'A' );
+                    $period_active = $periodDb->_getFilter($where);
+                    if ($period_active) {
+                        if ($period_active[0]['perid'] != $perid) {
+                            $period_active_pk = array(
+                                                        'eid'   => $eid,
+                                                        'oid'   => $oid,
+                                                        'perid' => $period_active[0]['perid'] );
+                            $period_active_update = array(
+                                                            'state'    => 'T',
+                                                            'modified' => $uid,
+                                                            'updated'  => date('Y-m-d h:i:s') );
+
+                            $periodDb->_update($period_active_update, $period_active_pk);
                         }
                     }
                 }

@@ -32,24 +32,15 @@ function changeContent(el_1, el_2){
 }
 
 function chargeContent(el, model){
-	if (el.children('.group').hasClass('active') || el.children('p.empty').hasClass('fadeUp')) {
-		el.children('.group').addClass('inactive');
-		el.children('p.empty').addClass('fadeOut');
-		setTimeout(function() {
-			el.children('.group').removeClass('active inactive');
-			el.children('.group').find('.item-table').remove();
-			el.children('.group').find('p.empty').slideDown('fast');
+	el.children('img').addClass('fadeUp');
+	el.children('.group').addClass('inactive');
+	setTimeout(function() {
+		el.children('.group').removeClass('active inactive');
 
-
-			el.children('p.empty').removeClass('fadeUp fadeOut');
-			
-			el.children('img').addClass('fadeUp');
-			charge();
-		}, 300);
-	} else {
-		el.children('img').addClass('fadeUp');
+		el.children('.group').find('.item-table').remove();
+		el.children('.group').find('p.empty').slideDown('fast');
 		charge();
-	}
+	}, 300);
 
 	function charge(){
 		model.fetch({
@@ -64,7 +55,7 @@ function chargeContent(el, model){
 				el.children('img').addClass('fadeOut');
 				setTimeout(function() {
 					el.children('img').removeClass('fadeUp fadeOut');
-					el.children('p.empty').addClass('fadeUp');
+					el.children('.group').addClass('active');
 				}, 300);
 				
 
@@ -123,15 +114,28 @@ function saveNew(form, model, collection, scope){
 		.val('Guardando...')
 		.attr('disabled', true);
 
+
 	model.save(null, {
 		success : function(model, response){
 			if (response.success) {
 				//agregar id al modelo
-				model.set({idget : response.idget});
+				model.set({ idget : response.idget,
+							success : false });
+
+				//si se agrega un activo
+				if (response.new_active){
+					var last_active = collection.where({state : 'A'});
+					var active = last_active[0];
+					if (active) {
+						active.set({state : 'T', state_before : 'A'});
+						active.save();
+					}
+				}
 
 				//Agregar el periodo si esta en el año indicado
 				if (response.render)
-					collection.add(model);
+					collection.add(model, {id : response.idget});
+
 
 				// Limpiando el formulario y cambiando despues de 2 seg
 				$messages_site.html(scope.template_msg_success());
@@ -211,11 +215,11 @@ function deleteItem(button, scope){
 				button.html('Eliminado :)');
 
 				setTimeout(function() {
-					scope.$el.addClass('inactive');
+					scope.$el.addClass('delete');
 					setTimeout(function() {
-						scope.$el.removeClass('active inactive');
+						scope.$el.remove();
 					}, 300);
-				}, 1500);
+				}, 1300);
 			} else {
 				button
 					.removeAttr('disabled')

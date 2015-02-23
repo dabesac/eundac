@@ -1,6 +1,8 @@
 eUndac.Collections.Admin_Periods = Backbone.Collection.extend({
 	initialize : function(options){
-		this.id = options.id;
+		if (options.id) {
+			this.id = options.id;
+		}
 		this.on('add', function(model){
 			//render de vistas
 			view = new eUndac.Views.Admin_Periods({model : model});

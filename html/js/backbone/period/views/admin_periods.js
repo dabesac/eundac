@@ -1,7 +1,7 @@
 eUndac.Views.Admin_Periods = Backbone.View.extend({
 	tagName : 'article',
 
-	className : 'item-table  item-table--interactive  active',
+	className : 'item-table',
 
 	events : {
 		'click .js_button-more-detail'    : 'moreDetail',
@@ -129,7 +129,7 @@ eUndac.Views.Admin_Periods = Backbone.View.extend({
 			if ($('.js_group_close').find('article').length === 0) {
 				$('.js_group_close').find('p.empty').fadeIn('fast');
 			}
-		}, 2100);
+		}, 2200);
 	},
 
 	toggleDeleteCape : function(){
@@ -140,33 +140,6 @@ eUndac.Views.Admin_Periods = Backbone.View.extend({
 		var $btn_delete = $(e.target);
 		
 		deleteItem($btn_delete, this);
-		
-		/*var self = this;
-		$btn_delete
-			.attr('disabled', true)
-			.html('Eliminando...');
-		this.model.destroy({
-			success : function(model, response){
-				if (response.success) {
-					$btn_delete.html('Eliminado :)');
-
-					setTimeout(function() {
-						self.$el.addClass('inactive');
-						setTimeout(function() {
-							self.$el.removeClass('active inactive');
-						}, 300);
-					}, 1500);
-				} else {
-					$btn_delete
-						.removeAttr('disabled')
-						.html('Si, estoy seguro');
-				}
-			},
-			error : function(){
-				$btn_delete
-					.removeAttr('disabled')
-					.html('Si, estoy seguro');
-			}
-		});*/
+		this.searchForEmpty();
 	}
 });

@@ -34,6 +34,14 @@
 		</main>
 
 		<?php echo $this->render('footer.phtml') ?>
+		
+		
+		<?php $env = getenv('APPLICATION_ENV'); ?>
+		<?php if ($env === 'development'): ?>
+
+			<script src="/js/backbone/routers/base.js"></script>
+			<script src="/js/main.js"></script>
+		<?php endif ?>
 	</body>
 </html>
 <script>

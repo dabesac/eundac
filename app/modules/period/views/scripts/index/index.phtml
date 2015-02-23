@@ -4,7 +4,6 @@
 
 <?php $env = getenv('APPLICATION_ENV'); ?>
 <?php if ($env === 'development'): ?>
-	<script src="/js/init.js"></script>
 
 	<script src="/js/backbone/period/models/period.js"></script>
 	<script src="/js/backbone/period/models/year.js"></script>
@@ -16,9 +15,7 @@
 	<script src="/js/backbone/period/views/admin_periods.js"></script>
 	<script src="/js/backbone/period/views/periods_form.js"></script>
 
-	<script src="/js/backbone/routers/base.js"></script>
-
-	<script src="/js/main.js"></script>
+	
 	
 <?php endif ?>
 
@@ -27,7 +24,6 @@
 
 	<section class="content__body  js_content_body">
 		<img class="spinner--block" src="/img/spinner.gif" alt="Loading...">
-		<p class="empty  empty--danger  empty--interaction  margin-large"><span class="glyphicon glyphicon-exclamation-sign"></span> No hay periodos</p>
 
 		<section class="group  group--active  group--interactive">
 			<header class="group__header">

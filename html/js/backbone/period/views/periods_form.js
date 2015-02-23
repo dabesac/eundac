@@ -10,10 +10,9 @@ eUndac.Views.Period_Form = Backbone.View.extend({
 		this.template_msg_success = swig.compile($('#template_msg_success').html());
 		this.template_msg_danger  = swig.compile($('#template_msg_danger_new').html());
 
-	//tags globales
-	this.$content_new  = $('.js_content_new');
+		//tags globales
+		this.$content_new  = $('.js_content_new');
 		this.$content_main = $('.js_content_main');
-		
 		this.render().afterRender();
 	},
 
@@ -37,9 +36,8 @@ eUndac.Views.Period_Form = Backbone.View.extend({
 
 		var period_data    = this.$form.serializeJSON();
 
-		var period_model       = new eUndac.Models.Period(period_data);
-		var period_collections = new eUndac.Collections.Admin_Periods({ id : null });
+		var period_model = new eUndac.Models.Period(period_data);
 
-		saveNew(this.$form, period_model, period_collections, this);
+		saveNew(this.$form, period_model, this.collection, this);
 	}
 });

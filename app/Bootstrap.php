@@ -30,6 +30,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                         ->headScript()->appendFile('/js/vendor/swig.js');
 
                 //Ours
+                $view   ->headScript()->appendFile('/js/init.js');
+
+
                 // $view   ->headScript()->appendFile('/js/global_functions/global_functions.js');
             }
 
