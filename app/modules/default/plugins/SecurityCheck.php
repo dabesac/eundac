@@ -34,9 +34,25 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
                         ->setActionName('error');
             }
         }else{
-             $request->setModuleName('default')
+            if ($this->_module=='default' && $this->_controller=='index') {
+                if ($this->_action=='recoverpassword' || $this->_action=='showtoken' || $this->_action=='verificationtoken' ||
+                    $this->_action=='showpassword' || $this->_action=='passwordsave') {
+
+                    $request->setModuleName($this->_module)
+                            ->setControllerName($this->_controller)
+                            ->setActionName($this->_action);
+                }
+                else{
+                    $request->setModuleName('default')
+                            ->setControllerName('index')
+                            ->setActionName('index');                
+                }
+            }
+            else{
+                $request->setModuleName('default')  
                         ->setControllerName('index')
-                        ->setActionName('index');
+                        ->setActionName('index');                
+            }
         }
     }
 

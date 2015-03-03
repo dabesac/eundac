@@ -1177,13 +1177,13 @@ class Distribution_DistributionController extends Zend_Controller_Action {
                 'date_impression'=>date('Y-m-d H:i:s'),
                 'pid_print'=>$uidim
                 );
-            $dbimpression->_save($data);
+            //$dbimpression->_save($data);
 
-            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,
-                'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica_'.$perid);
-            $dataim = $dbimpression->_getFilter($wheri);
-            $co=count($dataim);
-            $codigo=$co." - ".$uidim;
+            // $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,
+            //     'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica_'.$perid);
+            // $dataim = $dbimpression->_getFilter($wheri);
+            // $co=count($dataim);
+            // $codigo=$co." - ".$uidim;
 
             // guardar la informacion de su memorando
             $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid,
@@ -1192,26 +1192,13 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $datacxt = $bdcourseteach->_getFilter($where);
 
             if (!$datacxt[0]['nro_memo_x_perid']) {
-                $data1=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica_'.$perid);
-                $datac = $dbimpression->_countMemo($data);
-                $c=$datac[0]['count'];
-                $pk = array('eid'=>$eid,
-                            'oid'=>$oid,
-                            'escid'=>$escid,
-                            'subid'=>$subid,
-                            'perid'=>$perid,
-                            'uid'=>$uid,
-                            'pid'=>$pid
-                            );
-                $data=array('nro_memo_x_perid'=>$c);
-
-                $bdcourseteach->_update_memo($data,$pk);
-                $conte=$c;
+                $data=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>,'nro_memo_x_perid'=>$conte);
+                $bdcourseteach->_save($data);
             }
-            else{
-                $conte=$datacxt[0]['nro_memo_x_perid'];
-            }   
             //
+            $wheri1 = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica_'.$perid);
+            $dataim1 = $dbimpression->_getFilter($wheri1);
+            $conte = count($dataim1);
             $this->view->conte=$conte;
             
             $header=$this->sesion->org['header_print'];

@@ -210,6 +210,7 @@ class Admin_BankpaymentsController extends Zend_Controller_Action {
 
     public function loadreceiptAction(){
         try {
+            $uid = $this->sesion->uid;
             $form = new Admin_Form_Receipt();
             if ($this->getRequest()->isPost())
             {
@@ -219,6 +220,7 @@ class Admin_BankpaymentsController extends Zend_Controller_Action {
                     unset($formdata['anios']);
                     $formdata['processed'] = 'N';
                     $formdata['payment_date']= date('Y-m-d', strtotime($formdata['payment_date']));
+                    $formdata['created_uid'] = $uid;    
                     $bank = new Api_Model_DbTable_Bankreceipts();
                     if ($bank->_save($formdata)) {
                         $this->_helper->redirector('index');                        

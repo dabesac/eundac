@@ -407,9 +407,7 @@ class IndexController extends Zend_Controller_Action {
     		//Zend_Auth::getInstance()->clearIdentity();
     		$this->_redirect("/");
     	}
-
     }
-
 
     public function ajaxAction(){
     	$sesion  = Zend_Auth::getInstance();
@@ -430,5 +428,170 @@ class IndexController extends Zend_Controller_Action {
     	$this->view->uid= $sesion_->uid;
     	$this->view->pass= $pass;
     	$this->view->mod= $mod;
+    }
+
+    public function recoverpasswordAction(){
+        $this->_helper->layout()->disableLayout();
+        $eid = "20154605046";
+        $oid = "1";
+        $dbuser = new Api_Model_DbTable_Users();
+        $dbperson = new Api_Model_DbTable_Person();
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            
+            $where = array('eid'=>$eid,'oid'=>$oid,'uid'=>$data['user1'],'state'=>'A');
+            $duser = $dbuser->_getFilter($where);
+
+            if ($duser) {
+                $where1 = array('eid'=>$eid,'pid'=>$duser[0]['pid']);
+                $per = $dbperson->_getFilter($where1);
+
+                if ($per[0]['mail_person']) {
+                    if ($per[0]['mail_person']==$data['mail']) {
+                        $str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+                        $cad = "";
+                        for($i=0;$i<7;$i++) {
+                            $cad .= substr($str,rand(0,62),1);
+                        }
+
+                        $dir = APPLICATION_LIBRARY . "/mail/Enviarmail.php";
+                        include ($dir);
+                        $r[] = array('correo'=>$per[0]['mail_person'],'apenom'=>$per[0]['last_name0'],'escuela'=>"Bienvenido a la recuperacion del password");
+                        $f = new Enviarmail();
+                        $html = '
+                                <div>
+                                    <u><b>Recuperación de Contraseña</b></u>
+
+                                    <div>Usted está solicitando el cambio de su contraseña</div><br><br>
+                                    <div>Ingrese el siguiente código en el <b>PASO 2</b></div>
+                                    <br>
+                                    <div style="margin-left:10%; background:#EEEEEE; width:130px; padding:0.7em;">
+                                        <b>CODIGO</b><b style="background:#bfd3f2; padding:0.5em; width: 0.6">'.$cad.'</b>
+                                    </div>
+                                    <br><br>
+                                    <div>
+                                        PD: Si no solicito el cambio de su contraseña, ignore este correo.
+                                    </div>
+                                    <br><br>
+                                    Atentamente.
+                                </div>';
+                        $f->scorreo($r,$html,"Recuperación de Contraseña"); 
+
+                        if ($f) {
+                            $data_a= array('token_password'=>$cad);
+                            $where_a =array('eid'=>$eid,'oid'=>$oid,'escid'=>$duser[0]['escid'],'subid'=>$duser[0]['subid'],'pid'=>$duser[0]['pid'],'uid'=>$duser[0]['uid']);
+                            $dbuser->_update($data_a,$where_a);
+                            $json = array('status'=>true,'sms'=>"Se le envió un <b class='text-primary'>CODIGO DE VERIFICACION</b> al E-mail ingresado",
+                                    'eid'=>$eid,'oid'=>$oid,'escid'=>$duser[0]['escid'],'subid'=>$duser[0]['subid'],'pid'=>$duser[0]['pid'],'uid'=>$duser[0]['uid']);                        
+                        }   
+                    }
+                    else{
+                        $json = array('status'=>false,'mail'=>true,'smsmail'=>"El e-mail ingresado no esta registrado en el sistema");    
+                    }
+
+                }
+                else{
+                    $json = array('status'=>false,'sms'=>"No cuenta con ningun e-mail en el sistema");
+                }
+            }
+            else{
+                $json = array('fail'=>true,'sms'=>"El usuario no esta registrado en el sistema");
+            }
+        }    
+        $this->_response->setHeader('Content-Type', 'application/json');
+        print(json_encode($json));
+    }
+
+    public function showtokenAction(){
+        $this->_helper->layout()->disableLayout();
+        $eid = base64_decode($this->_getParam('eid'));
+        $oid = base64_decode($this->_getParam('oid'));
+        $escid = base64_decode($this->_getParam('escid'));
+        $subid = base64_decode($this->_getParam('subid'));
+        $pid = base64_decode($this->_getParam('pid'));
+        $uid = base64_decode($this->_getParam('uid'));
+
+        $where = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'pid'=>$pid,'uid'=>$uid);
+        $this->view->where=$where;
+    }
+
+    public function verificationtokenAction(){
+        $this->_helper->layout()->disableLayout();
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+
+            $where1 = array('eid'=>$data['eid'],
+                            'oid'=>$data['oid'],
+                            'escid'=>$data['escid'],
+                            'subid'=>$data['subid'],
+                            'pid'=>$data['pid'],
+                            'uid'=>$data['uid']);
+            $dbuser = new Api_Model_DbTable_Users();
+            $result = $dbuser->_getFilter($where1);
+            $result = $result[0];
+
+            if ($result['token_password']==$data['token']) {
+                $json = array('status'=>true,'sms'=>" El código de verificación es correcto",
+                                'eid'=>$result['eid'],
+                                'oid'=>$result['oid'],
+                                'escid'=>$result['escid'],
+                                'subid'=>$result['subid'],
+                                'pid'=>$result['pid'],
+                                'uid'=>$result['uid']);                        
+
+                $data_a= array('token_password'=>null);
+                $where_a =array('eid'=>$result['eid'],'oid'=>$result['oid'],'escid'=>$result['escid'],'subid'=>$result['subid'],'pid'=>$result['pid'],'uid'=>$result['uid']);
+                $dbuser->_update($data_a,$where_a);
+            }
+            else{
+                $json = array('status'=>false,'sms'=>" El código de verificación no es válido <br> <b>Revise otra vez su e-mail</b>");
+            }
+        }
+        $this->_response->setHeader('Content-Type', 'application/json');
+        print(json_encode($json));
+    }
+
+
+    public function showpasswordAction(){
+        $this->_helper->layout()->disableLayout();
+        $eid = base64_decode($this->_getParam('eid'));
+        $oid = base64_decode($this->_getParam('oid'));
+        $escid = base64_decode($this->_getParam('escid'));
+        $subid = base64_decode($this->_getParam('subid'));
+        $pid = base64_decode($this->_getParam('pid'));
+        $uid = base64_decode($this->_getParam('uid'));
+
+        $where1 = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'pid'=>$pid,'uid'=>$uid);
+        $this->view->where=$where1;   
+    }
+
+    public function passwordsaveAction(){
+        $this->_helper->layout()->disableLayout();
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+
+            if ($data['password1']==$data['password2']) {
+                $where2 = array('eid'=>$data['eid'],'oid'=>$data['oid'],'escid'=>$data['escid'],
+                        'subid'=>$data['subid'],'pid'=>$data['pid'],'uid'=>$data['uid']);
+
+                $dbuser_ = new Api_Model_DbTable_Users();
+
+                $dupdate = array('password'=>md5($data['password1']));
+
+                if ($dbuser_->_update($dupdate,$where2)) {
+                    $json = array('status'=>true,'sms'=>" ¡ Su contraseña fué cambiada con éxito");
+                }
+                else{
+                    $json = array('status'=>false,'sms'=>"Hubo un problema al cambiar su contraseña");
+                }
+            }
+            else{
+                $json = array('fail'=>true,'sms1'=>"La contraseñas no coinciden <br> Intente de nuevo");               
+            }
+        }
+
+        $this->_response->setHeader('Content-Type', 'application/json');
+        print(json_encode($json));
+
     }
 }

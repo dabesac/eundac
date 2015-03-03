@@ -1,0 +1,74 @@
+<form name="frmveri" id ="frmveri" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+	<div class="row">
+		<div class="col-md-4 col-md-offset-4 text-danger">
+			<center><b>PASO 2</b></center>
+			<hr style="margin-top:2px; margin-bottom:5px">
+		</div><br><br>
+		<div class="col-md-12">
+			<span class="glyphicon glyphicon-info-sign text-warning"></span><r class='text-warning'> El código de verificación se encuentra en su e-mail</r>
+		</div><br><br><br>
+		<div class="col-md-12">
+			<div class="col-md-6 text-muted">
+				<span class="glyphicon glyphicon-barcode text-primary"></span> Ingrese Código de Verificación
+			</div>
+			<div class="col-md-6">
+				<input type="text" name='token' id='token' class='form-control' maxlength="7" />
+			</div>
+			<div class="col-md-6 col-md-offset-6">
+				<div id="smstoken"></div>
+			</div>
+		</div>
+	</div><br>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-3 col-md-offset-5">
+				<button type="button" class="verificar btn btn-primary"><span class='glyphicon glyphicon-camera'></span> Verificar</button>	
+			</div>	
+		</div>	
+	</div><br>
+	<input name="eid" id="eid" type="text" value="<?php echo $this->where['eid']?>" class='hide'>
+	<input name="oid" id="oid" type="text" value="<?php echo $this->where['oid']?>" class='hide'>
+	<input name="escid" id="escid" type="text" value="<?php echo $this->where['escid']?>" class='hide'>
+	<input name="subid" id="subid" type="text" value="<?php echo $this->where['subid']?>" class='hide'>
+	<input name="pid" id="pid" type="text" value="<?php echo $this->where['pid']?>" class='hide'>
+	<input name="uid" id="uid" type="text" value="<?php echo $this->where['uid']?>" class='hide'>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<div id="smsconfir"></div>
+		</div>	
+	</div>
+</form>
+
+<script type="text/javascript">
+	$(function(){
+		$('.verificar').on('click', function(){
+			if ($('#token').val()) {
+
+				$.ajax({
+		        type : 'post',
+		        data : $("#frmveri").serialize(),
+		        url  : '/default/index/verificationtoken/',
+		        success: function(data){	
+		        	if (data.status==true) {
+						$("#smsconfir").html("<div class='text-success'><span class='glyphicon glyphicon-ok'> </span><b>"+ data.sms+"</b></div>");		        		
+						setTimeout(function(){
+							$('.modal-body').empty().fadeIn(1000).load("/default/index/showpassword/eid/"+$.base64.encode(data.eid)+"/oid/"+$.base64.encode(data.oid)+"/escid/"+$.base64.encode(data.escid)+"/subid/"+$.base64.encode(data.subid)+"/pid/"+$.base64.encode(data.pid)+"/uid/"+$.base64.encode(data.uid)+"/");
+						}, 1500);
+		        	}
+		        	else{
+		        		$("#smstoken").html("<span class='text-danger'>"+data.sms+"</span>");
+		        	};
+	            }	
+		    });
+			}
+			else{
+				$("#smstoken").html("<span class='text-danger'>Ingrese un Código de verificación</span>");
+			};
+		});
+
+		$("#token").on('focus', function(){
+			$("#smstoken").empty();
+		});
+		
+	});
+</script>
