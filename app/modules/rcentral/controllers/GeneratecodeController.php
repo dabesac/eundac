@@ -54,7 +54,6 @@ class Rcentral_GeneratecodeController extends Zend_Controller_Action{
 
 			$server = new Eundac_Connect_Api('ingresantes',$where);
             $subject = $server->connectAuth();
-            print_r($subject);exit();
 		}
 		else{
 			$this->view->name=$name_f;
