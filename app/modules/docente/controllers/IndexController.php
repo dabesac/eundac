@@ -51,111 +51,121 @@ class Docente_IndexController extends Zend_Controller_Action {
         $attrib = array('courseid', 'curid', 'turno', 'escid', 'subid', 'perid');
         $courses = $coursesxTeacherDb->_getFilter($where, $attrib);
         $c = 0;
-        foreach ($courses as $course) {
-            //Nombre de Cursos
-            $where = array('eid'      => $eid, 
-                           'oid'      => $oid,
-                           'curid'    => $course['curid'],
-                           'courseid' => $course['courseid'] );
-            $attrib = array('name', 'type');
-            $coursesName[$c] = $courseDb->_getFilter($where, $attrib);
+        if ($courses) {
+            foreach ($courses as $course) {
+                //Nombre de Cursos
+                $where = array('eid'      => $eid, 
+                               'oid'      => $oid,
+                               'curid'    => $course['curid'],
+                               'courseid' => $course['courseid'] );
+                $attrib = array('name', 'type');
+                $coursesName[$c] = $courseDb->_getFilter($where, $attrib);
 
-            //Escuela a la que Pertence el curso
-            $where = array( 'eid' => $eid,
-                            'oid' => $oid,
-                            'escid' => $course['escid'],
-                            'subid' => $course['subid'] );
-            $attrib = array('name');
-            $coursesSpecialityName[$c] = $specialityDB->_getFilter($where, $attrib);
+                //Escuela a la que Pertence el curso
+                $where = array( 'eid' => $eid,
+                                'oid' => $oid,
+                                'escid' => $course['escid'],
+                                'subid' => $course['subid'] );
+                $attrib = array('name');
+                $coursesSpecialityName[$c] = $specialityDB->_getFilter($where, $attrib);
 
-            //Estado de Acta
-            $where = array( 'eid'      => $eid, 
-                            'oid'      => $oid,
-                            'curid'    => $course['curid'],
-                            'courseid' => $course['courseid'],
-                            'turno'    => $course['turno'],
-                            'escid'    => $course['escid'],
-                            'subid'    => $course['subid'],
-                            'perid'    => $perid );
+                //Estado de Acta
+                $where = array( 'eid'      => $eid, 
+                                'oid'      => $oid,
+                                'curid'    => $course['curid'],
+                                'courseid' => $course['courseid'],
+                                'turno'    => $course['turno'],
+                                'escid'    => $course['escid'],
+                                'subid'    => $course['subid'],
+                                'perid'    => $perid );
 
-            $attrib = array('state_record');
-            $stateRecord = $periodsxCourseDb->_getFilter($where, $attrib);
-            $coursesStateRecord[$c] = $stateRecord[0]['state_record'];
+                $attrib = array('state_record');
+                $stateRecord = $periodsxCourseDb->_getFilter($where, $attrib);
+                $coursesStateRecord[$c] = $stateRecord[0]['state_record'];
 
-            //Syllabus
-            $attrib = array('units', 'state');
-            $coursesSyllabus = $syllabusDb->_getFilter($where, $attrib);
-            $totalUnits = $coursesSyllabus[0]['units'];
+                //Syllabus
+                $attrib = array('units', 'state');
+                $coursesSyllabus = $syllabusDb->_getFilter($where, $attrib);
+                $totalUnits = $coursesSyllabus[0]['units'];
 
-            if ($coursesSyllabus[0]['state'] == 'C') {
-                if ($totalUnits) {
-                    $attrib = array('unit');
-                    $syllabusUnits = $syllabusUnitsDb->_getFilter($where, $attrib);
-                    if ($syllabusUnits) {
-                        $units = count($syllabusUnits);
-                        $porcentajeSyllabus[$c] = (100 * $units)/$totalUnits;
+                if ($coursesSyllabus[0]['state'] == 'C') {
+                    if ($totalUnits) {
+                        $attrib = array('unit');
+                        $syllabusUnits = $syllabusUnitsDb->_getFilter($where, $attrib);
+                        if ($syllabusUnits) {
+                            $units = count($syllabusUnits);
+                            $porcentajeSyllabus[$c] = (100 * $units)/$totalUnits;
+                        }else{
+                            $porcentajeSyllabus[$c] = 0;
+                        }
                     }else{
                         $porcentajeSyllabus[$c] = 0;
                     }
                 }else{
-                    $porcentajeSyllabus[$c] = 0;
+                    $porcentajeSyllabus[$c] = 'FS';
                 }
-            }else{
-                $porcentajeSyllabus[$c] = 'FS';
-            }
 
-            //Avance de Clases
-            if ($coursesSyllabus[0]['state'] == 'C') {
-                $attrib = array('session');
-                $contentsSyllabus = $syllabusUnitsContentDb->_getFilter($where, $attrib);
-                $totalContents = count($contentsSyllabus);
-                $contentControl = $syllabusUnitsContentControlDb->_getFilter($where, $attrib);
-                if ($contentControl) {
-                    $contents = count($contentControl);
+                //Avance de Clases
+                if ($coursesSyllabus[0]['state'] == 'C') {
+                    $attrib = array('session');
+                    $contentsSyllabus = $syllabusUnitsContentDb->_getFilter($where, $attrib);
+                    $totalContents = count($contentsSyllabus);
+                    $contentControl = $syllabusUnitsContentControlDb->_getFilter($where, $attrib);
+                    if ($contentControl) {
+                        $contents = count($contentControl);
+                    }else{
+                        $contents = 0;
+                    }
+                    $progressSessions[$c]['totalContents'] = $totalContents;
+                    $progressSessions[$c]['contents'] = $contents;
+                    $progressSessions[$c]['porcentaje'] = intval((100 * $contents)/$totalContents);
+                    $progressSessions[$c]['porcentaje'] = $progressSessions[$c]['porcentaje']. '%';
                 }else{
-                    $contents = 0;
+                   $progressSessions[$c]['porcentaje'] = 'FS';
                 }
-                $progressSessions[$c]['totalContents'] = $totalContents;
-                $progressSessions[$c]['contents'] = $contents;
-                $progressSessions[$c]['porcentaje'] = intval((100 * $contents)/$totalContents);
-                $progressSessions[$c]['porcentaje'] = $progressSessions[$c]['porcentaje']. '%';
-            }else{
-               $progressSessions[$c]['porcentaje'] = 'FS';
-            }
 
-            //Avance de Notas
-            if ($coursesSyllabus[0]['state'] == 'C') {
-                $where = array( 'eid'      => $eid,
-                                'oid'      => $oid, 
-                                'courseid' => $course['courseid'],
-                                'curid'    => $course['curid'],
-                                'escid'    => $course['escid'],
-                                'subid'    => $course['subid'],
-                                'turno'    => $course['turno'],
-                                'perid'    => $perid,
-                                'state'    => 'M' );
-                if ($coursesName[$c][0]['type'] == 'O') {
-                    $attrib = array('uid', 'promedio1');
-                    $allStudents = $registerxCourseDB->_getFilter($where, $attrib);
-                    $students = count($allStudents);
-                    $notasRellenadas = 0;
-                    if ($allStudents) {
-                        foreach ($allStudents as $student) {
-                            if ($student['promedio1']) {
-                                $notasRellenadas++; 
+                //Avance de Notas
+                if ($coursesSyllabus[0]['state'] == 'C') {
+                    $where = array( 'eid'      => $eid,
+                                    'oid'      => $oid, 
+                                    'courseid' => $course['courseid'],
+                                    'curid'    => $course['curid'],
+                                    'escid'    => $course['escid'],
+                                    'subid'    => $course['subid'],
+                                    'turno'    => $course['turno'],
+                                    'perid'    => $perid,
+                                    'state'    => 'M' );
+                    if ($coursesName[$c][0]['type'] == 'O') {
+                        $attrib = array('uid', 'promedio1');
+                        $allStudents = $registerxCourseDB->_getFilter($where, $attrib);
+                        $students = count($allStudents);
+                        $notasRellenadas = 0;
+                        if ($allStudents) {
+                            foreach ($allStudents as $student) {
+                                if ($student['promedio1']) {
+                                    $notasRellenadas++; 
+                                }
                             }
                         }
+                        $progressNotas[$c]['totalStudents'] = $students;
+                        $progressNotas[$c]['notasRellenadas'] = $notasRellenadas;
+                        $progressNotas[$c]['porcentaje'] = intval((100 * $notasRellenadas) / $students);
                     }
-                    $progressNotas[$c]['totalStudents'] = $students;
-                    $progressNotas[$c]['notasRellenadas'] = $notasRellenadas;
-                    $progressNotas[$c]['porcentaje'] = intval((100 * $notasRellenadas) / $students);
+                }else{
+                    $progressNotas[$c]['porcentaje'] = -1;
                 }
-            }else{
-                $progressNotas[$c]['porcentaje'] = -1;
-            }
-            
-            $c++;
-        }//Final del Foreach Principal
+                
+                $c++;
+            }//Final del Foreach Principal            
+        }
+        else{
+            $courses=null;
+            $coursesName=null;
+            $coursesSpecialityName=null;
+            $porcentajeSyllabus=null;
+            $progressSessions=null;
+            $progressNotas=null;
+        }
 
         $this->view->courses               = $courses;
         $this->view->coursesName           = $coursesName;
@@ -249,79 +259,83 @@ class Docente_IndexController extends Zend_Controller_Action {
             $teachersEmptySyllabus[0]['uid']  = '';
             $teachersEmptySyllabus[0]['name'] = '';
             $coursesEmptySyllabus             = array();
-            //Total de Profesores
-            foreach ($courses as $course) {
-                if ($course['uid'] != $teacherUid) {
-                    $teacherUid = $course['uid'];
+            $teachersEmptyReport              = array();
 
-                    $where = array( 'eid' => $eid,
-                                    'oid' => $oid,
-                                    'subid' => $course['subid'],
-                                    'escid' => $course['escid'],
-                                    'uid' => $course['uid'],
-                                    'pid' => $course['pid'],
-                                    'perid' => $perid );
+            if ($courses) {
+                //Total de Profesores
+                foreach ($courses as $course) {
+                    if ($course['uid'] != $teacherUid) {
+                        $teacherUid = $course['uid'];
+
+                        $where = array( 'eid' => $eid,
+                                        'oid' => $oid,
+                                        'subid' => $course['subid'],
+                                        'escid' => $course['escid'],
+                                        'uid' => $course['uid'],
+                                        'pid' => $course['pid'],
+                                        'perid' => $perid );
+
+                        $attrib = array('state');
+                       
+                        //Reporte Academico
+                        $reportAcademic = $reportAcademicDb->_getFilter($where, $attrib);
+                        if ($reportAcademic[0]['state'] != 'C') {
+                            $where = array( 'eid' => $eid,
+                                            'pid' => $course['pid'] );
+
+                            $person = $personDb->_getFilter($where);
+                            $teachersEmptyReport[$countERA]['name'] = $person[0]['last_name0'].' '.$person[0]['last_name1'].' '.$person[0]['first_name'];
+                            $countERA++;
+                        }
+                        $totalTeachers++;
+                    }
+                    $where = array( 'eid'      => $eid,
+                                    'oid'      => $oid,
+                                    'perid'    => $perid,
+                                    'escid'    => $course['escid'],
+                                    'subid'    => $course['subid'],
+                                    'courseid' => $course['courseid'],
+                                    'curid'    => $course['curid'],
+                                    'turno'    => $course['turno'] );
 
                     $attrib = array('state');
-                   
-                    //Reporte Academico
-                    $reportAcademic = $reportAcademicDb->_getFilter($where, $attrib);
-                    if ($reportAcademic[0]['state'] != 'C') {
-                        $where = array( 'eid' => $eid,
-                                        'pid' => $course['pid'] );
 
-                        $person = $personDb->_getFilter($where);
-                        $teachersEmptyReport[$countERA]['name'] = $person[0]['last_name0'].' '.$person[0]['last_name1'].' '.$person[0]['first_name'];
-                        $countERA++;
-                    }
-                    $totalTeachers++;
-                }
-                $where = array( 'eid'      => $eid,
-                                'oid'      => $oid,
-                                'perid'    => $perid,
-                                'escid'    => $course['escid'],
-                                'subid'    => $course['subid'],
-                                'courseid' => $course['courseid'],
-                                'curid'    => $course['curid'],
-                                'turno'    => $course['turno'] );
-
-                $attrib = array('state');
-
-                //Syllabus
-                $syllabus = $syllabusDb->_getFilter($where, $attrib);
-                if ($syllabus[0]['state'] != 'C') {
-                    $existe = 'No';
-                    foreach ($teachersEmptySyllabus as $teacher) {
-                        if ($course['uid'] == $teacher['uid']) {
-                            $existe = 'Si';
+                    //Syllabus
+                    $syllabus = $syllabusDb->_getFilter($where, $attrib);
+                    if ($syllabus[0]['state'] != 'C') {
+                        $existe = 'No';
+                        foreach ($teachersEmptySyllabus as $teacher) {
+                            if ($course['uid'] == $teacher['uid']) {
+                                $existe = 'Si';
+                            }
                         }
-                    }
-                    if ($existe == 'No') {
+                        if ($existe == 'No') {
+                            $where = array( 'eid' => $eid,
+                                            'pid' => $course['pid'] );
+
+                            $person = $personDb->_getFilter($where);
+                            $teachersEmptySyllabus[$c]['uid'] = $course['uid'];
+                            $teachersEmptySyllabus[$c]['name'] = $person[0]['last_name0'].' '.$person[0]['last_name1'].' '.$person[0]['first_name'];
+
+                            $totalEmptySyllabus++;
+                            $c++;
+                        }
                         $where = array( 'eid' => $eid,
-                                        'pid' => $course['pid'] );
+                                        'oid' => $oid,
+                                        'courseid' => $course['courseid'],
+                                        'curid' => $course['curid'] );
 
-                        $person = $personDb->_getFilter($where);
-                        $teachersEmptySyllabus[$c]['uid'] = $course['uid'];
-                        $teachersEmptySyllabus[$c]['name'] = $person[0]['last_name0'].' '.$person[0]['last_name1'].' '.$person[0]['first_name'];
-
-                        $totalEmptySyllabus++;
-                        $c++;
+                        $attrib = array('name');
+                        $courseName = $courseDb->_getFilter($where);
+                        $coursesEmptySyllabus[$course['uid']][$coursesEmpty]['name']  = $courseName[0]['name'];
+                        $coursesEmptySyllabus[$course['uid']][$coursesEmpty]['turno'] = $course['turno'];
+                        $coursesEmpty++;
+                    }else{
+                        $coursesEmpty = 0;
                     }
-                    $where = array( 'eid' => $eid,
-                                    'oid' => $oid,
-                                    'courseid' => $course['courseid'],
-                                    'curid' => $course['curid'] );
-
-                    $attrib = array('name');
-                    $courseName = $courseDb->_getFilter($where);
-                    $coursesEmptySyllabus[$course['uid']][$coursesEmpty]['name']  = $courseName[0]['name'];
-                    $coursesEmptySyllabus[$course['uid']][$coursesEmpty]['turno'] = $course['turno'];
-                    $coursesEmpty++;
-                }else{
-                    $coursesEmpty = 0;
                 }
-
-                
+            }
+            else{
 
             }
 
