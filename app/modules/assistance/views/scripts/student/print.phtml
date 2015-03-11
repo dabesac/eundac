@@ -686,7 +686,7 @@ table{
 
     ob_end_clean();
     $mpdf -> WriteHTML($html);
-    $mpdf->Output('Asistencia-'.$course['name'].'-'.$this->turno.'.pdf','D');
-    // $mpdf->Output();
+    //$mpdf->Output('Asistencia-'.$course['name'].'-'.$this->turno.'.pdf','D');
+    $mpdf->Output();
  
 ?>
