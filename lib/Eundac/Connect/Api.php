@@ -18,7 +18,7 @@
 
 
 
-	const API_HOST_SERVER = "http://api.undac.edu.pe:3000/";
+	const API_HOST_SERVER = "http://api.undac.edu.pe:8080/";
     //const API_HOST_SERVER ="http://172.16.0.110:8080/";
     //const API_HOST_SERVER ="http://200.60.129.24:8080/";
 	//const API_HOST_SERVER = "http://localhost:8080/";
