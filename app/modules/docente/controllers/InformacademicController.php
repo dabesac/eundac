@@ -431,7 +431,7 @@ class Docente_InformacademicController extends Zend_Controller_Action {
         $preDataPerson = $personDb->_getFilter($where, $attrib);
 
         $this->view->infouser = $preDataPerson[0]['last_name0'].' '.$preDataPerson[0]['last_name1'].' '.$preDataPerson[0]['first_name'];
-        $this->view->perid    = $perid;
+        $this->view->perid    = $teacherPerid;
 
         //Cursos llevados
         $where = array( 'eid'     => $eid,
@@ -478,7 +478,7 @@ class Docente_InformacademicController extends Zend_Controller_Action {
                 $percentageDis = $pdDisapproved[0]['count']." - ".$por."%";
 
                 //Canidad de Retirados
-                $pdRetired     = $registersCourseDb->_get_retired_x_course($wherecant);
+                $pdRetired     = $registersCourseDb->_get_retired_x_course($where);
                 if (!$pdRetired) {
                     $pdRetired[0]['count'] = 0;
                 }
