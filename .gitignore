@@ -9,3 +9,4 @@ html/imgsNews
 html/node_modules
 html/gulpfile.js
 .project
+.csv

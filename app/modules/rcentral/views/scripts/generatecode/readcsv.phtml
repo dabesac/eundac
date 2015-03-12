@@ -1,0 +1,40 @@
+<div class="col-md-12 text-center">
+	<h4><b><u>Generar Códigos</u></b></h4>
+</div>
+<div class="row">
+	<div class="col-md-4 col-md-offset-4">
+		<div class="panel panel-primary">
+			<br>
+				<div class="row">
+					<form id="frmupload1" method="post" enctype="multipart/form-data">
+						<div class="col-md-10 col-md-offset-1 alert alert-info">
+							<span class="glyphicon glyphicon-info-sign"></span> Desea generar los códigos
+						</div><br>
+						<div class="col-md-4 col-md-offset-2">
+							<button class="btn btn-primary generar"><span class="glyphicon glyphicon-retweet"></span> Generar</button>
+						</div>
+						<div class="col-md-3 col-md-offset-1">
+							<a href="/rcentral/generatecode/index" class="btn btn-danger cancel"><span class="glyphicon glyphicon-remove"></span> Cancelar</a>
+						</div>
+						<input type="text" name='namefile' value='<?php echo $this->name?>'hidden="hidden">
+					</form>
+				</div>
+			<br>
+		</div>	 
+	</div>
+</div>
+<script>
+	$(function(){
+		$(".generar").on('click', function(){
+			$.ajax({
+		        type: 'POST',
+		        url : '/rcentral/generatecode/readcsv',
+		        data: $("#frmupload1").serialize(),
+		        success: function(data) { 
+		        	console.log(data);
+		        }
+		    }); 
+		    return false;
+		});
+	})
+</script>
