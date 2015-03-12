@@ -383,44 +383,51 @@ class Docente_IndexController extends Zend_Controller_Action {
                         'perid' => '14A');
 
         $coursesBefore = $coursesxTeacherDb->_getFilter($where);
-
+        $encuestaCoursesName=null;
         $c = 0;
-        foreach ($coursesBefore as $course) {
-            //Nombre de los Cursos
-            $where = array( 'eid'      => $eid,
-                            'oid'      => $oid,
-                            'courseid' => $course['courseid'],
-                            'curid'    => $course['curid'] );
-            $attrib = array('name');
-            $courseName = $courseDb->_getFilter($where, $attrib);
-            $encuestaCoursesName[$c] = $courseName[0]['name'];
-            $c++;
-        }   
+        if ($coursesBefore) {    
+            foreach ($coursesBefore as $course) {
+                //Nombre de los Cursos
+                $where = array( 'eid'      => $eid,
+                                'oid'      => $oid,
+                                'courseid' => $course['courseid'],
+                                'curid'    => $course['curid'] );
+                $attrib = array('name');
+                $courseName = $courseDb->_getFilter($where, $attrib);
+                $encuestaCoursesName[$c] = $courseName[0]['name'];
+                $c++;
+            }   
+        }    
+        else{
+            $coursesBefore=array();
+        }
         $this->view->coursesBefore       = $coursesBefore;
         $this->view->encuestaCoursesName = $encuestaCoursesName;
 
         $answers[0] = '-';
         $c = 0;
         $altC = 0;
-        foreach ($pollQuestions as $question) {
-            $where = array( 'eid' => $eid,
-                            'oid' => $oid,
-                            'qid' => $question['qid'] );
-            $attrib = array('alternative', 'atlid');
-            $alternativesQuestion[$question['qid']] = $pollAlternativesDb->_getFilter($where, $attrib);
-            $existe = 0;
-            foreach ($alternativesQuestion[$question['qid']] as $alternativeQuestion) {
-                foreach ($answers as $answer) {
-                    if ($alternativeQuestion['alternative'] == $answer) {
-                        $existe = 1;
+        if ($pollQuestions) {
+            foreach ($pollQuestions as $question) {
+                $where = array( 'eid' => $eid,
+                                'oid' => $oid,
+                                'qid' => $question['qid'] );
+                $attrib = array('alternative', 'atlid');
+                $alternativesQuestion[$question['qid']] = $pollAlternativesDb->_getFilter($where, $attrib);
+                $existe = 0;
+                foreach ($alternativesQuestion[$question['qid']] as $alternativeQuestion) {
+                    foreach ($answers as $answer) {
+                        if ($alternativeQuestion['alternative'] == $answer) {
+                            $existe = 1;
+                        }
+                    }
+                    if ($existe == 0) {
+                        $answers[$c] = $alternativeQuestion['alternative'];
+                        $c++;
                     }
                 }
-                if ($existe == 0) {
-                    $answers[$c] = $alternativeQuestion['alternative'];
-                    $c++;
-                }
             }
-        }
+        }    
 
         $cNames = 0;
         foreach ($answers as $answer) {
@@ -473,7 +480,7 @@ class Docente_IndexController extends Zend_Controller_Action {
         }
 
         //print_r($resultTotalxAnswer);
-
+        $dataEncuesta=null;
         $numeroCurso = 0;
         foreach ($coursesBefore as $course) {
             $c = 0;

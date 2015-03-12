@@ -24,7 +24,7 @@ class Admin_UserController extends Zend_Controller_Action{
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
             $pid=$this->_getParam('pid');
-            
+            $datauser[0] = array();
             if ($pid) {
                 $where=array('eid'=>$eid,'oid'=>$oid,'pid'=>$pid);
                 $dbuser=new Api_Model_DbTable_Users();
