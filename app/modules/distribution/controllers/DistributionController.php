@@ -1683,12 +1683,15 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $doc = array();
             $tmp_doc = '';
             $c=1;
-            foreach ($data_courses as $course) {
-                //print_r($data_courses['uid'].'--');
-                if ($tmp_doc <> $course['uid']) {
-                    $doc[$c] = $course['uid'];
-                    $tmp_doc = $course['uid'];
-                    $c++;
+
+            if ($data_courses) {
+                foreach ($data_courses as $course) {
+                    //print_r($data_courses['uid'].'--');
+                    if ($tmp_doc <> $course['uid']) {
+                        $doc[$c] = $course['uid'];
+                        $tmp_doc = $course['uid'];
+                        $c++;
+                    }
                 }
             }
             $this->view->teachers = $doc;
@@ -1702,18 +1705,22 @@ class Distribution_DistributionController extends Zend_Controller_Action {
 
             $c = 0;
             $interruptor = 0;
-            foreach ($teachers as $teacher) {
-                foreach ($data_courses as $course) {
-                    if ($teacher['uid'] == $course['uid']) {
-                        $interruptor = 1;
+            if ($teachers) {
+                foreach ($teachers as $teacher) {
+                    if ($data_courses) {
+                        foreach ($data_courses as $course) {
+                            if ($teacher['uid'] == $course['uid']) {
+                                $interruptor = 1;
+                            }
+                        }
                     }
-                }
-                if ($interruptor == 0) {
-                    $teachersWcourses[$c]['uid'] = $teacher['uid'];
-                    $teachersWcourses[$c]['pid'] = $teacher['pid'];
-                    $c++;
-                }
-                $interruptor = 0;
+                    if ($interruptor == 0) {
+                        $teachersWcourses[$c]['uid'] = $teacher['uid'];
+                        $teachersWcourses[$c]['pid'] = $teacher['pid'];
+                        $c++;
+                    }
+                    $interruptor = 0;
+                }                
             }
 
             $c = 0;

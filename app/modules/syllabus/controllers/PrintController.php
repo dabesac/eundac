@@ -87,7 +87,7 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             $this->view->date_stard = $date_stard_t;
             $this->view->date_end =  $date_end_t;           
 
-            $this->view->periods=$periods; 
+            // $this->view->periods=$periods; 
             
             $wheresyl['eid']=$eid;
             $wheresyl['oid']=$oid;
