@@ -91,7 +91,7 @@
         <tbody>
         	<?php
             $bdmatricula = new Api_Model_DbTable_Registration();
-
+            if ($this->reporte != '') {
             foreach ($this->reporte as $report)
             {
             ?>
@@ -276,6 +276,7 @@
 	        	</tr>
         	<?php 
         	}
+        	}	
             ?>
             <tr>
             	<td><center><b>TOTAL</b></center></td>

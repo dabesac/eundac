@@ -164,7 +164,7 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                                 'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'facid' => $facid,
                                 'perid' => $perid, 'left' => $left);
                         }
-                    }else $where = array('eid' => $eid, 'oid' => $oid, 'perid' => $perid);
+                    }else $where = array('eid' => $eid, 'oid' => $oid, 'perid' => $perid, 'facid' => $facid);
 
                     $egre = $user->_getGraduatedXFacultyXSchoolXPeriod($where);
                 }else{
@@ -177,10 +177,10 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                                 else $escid = $espec;
                             }
                             $where = array(
-                                'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 
+                                'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'facid' => $facid,
                                 'anio' => $temp, 'left' => $left);
                         }
-                    }else $where = array('eid' => $eid, 'oid' => $oid, 'anio' => $temp);
+                    }else $where = array('eid' => $eid, 'oid' => $oid, 'anio' => $temp, 'facid' => $facid);
                     $egre = $user->_getGraduatedXFacultyXSchoolXAnio($where);
                 }
                 $this->view->egresados=$egre;
@@ -299,7 +299,7 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                         }
                         $where = array(
                             'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 
-                            'perid' => $perid, 'left' => $left);
+                            'perid' => $perid, 'left' => $left='S');
                     }
                 }else $where = array('eid' => $eid, 'oid' => $oid, 'perid' => $perid);
                 $egre=$user->_getTotalGraduatedXFacultyXSchoolXPeriod($where);

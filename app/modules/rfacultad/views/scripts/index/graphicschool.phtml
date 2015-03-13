@@ -14,14 +14,7 @@
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Topping');
         data.addColumn('number', 'Slices');
-        data.addRows([
-       <?php
-       foreach ($this->lschool as $datos) {
-           $nombre=$datos['name'];
-           $cantidad=$datos['conteo']; ?>
-        ['<?php print $nombre?>' , <?php print $cantidad?>],
-         <?php  }?>
-        ]);
+
        var options = {
           title: 'MATRICULADOS DE LA FACULTAD DE <?php print strtoupper($namefaculty)?>',
           titleTextStyle: {color: '#0476D4'}
