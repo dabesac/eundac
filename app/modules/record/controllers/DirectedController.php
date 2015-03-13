@@ -520,6 +520,13 @@ class Record_DirectedController extends Zend_Controller_Action {
                 }
             }
 
+            $dbperiodocurso = new Api_Model_DbTable_PeriodsCourses();
+            $whereperxcur['eid']=$eid;
+            $whereperxcur['oid']=$oid;
+            $whereperxcur['escid']=$escid;
+            $whereperxcur['subid']=$subid;
+            $whereperxcur['perid']=$perid;
+
             $wheresub['eid']=$eid;
             $wheresub['oid']=$oid;
             $wheresub['subid']=$subid;
@@ -537,11 +544,19 @@ class Record_DirectedController extends Zend_Controller_Action {
                 for ($i=0; $i < $tamm; $i++) {
                     $wherecourse['curid']=$convalidados[$i]['curid'];
                     $wherecourse['courseid']=$convalidados[$i]['courseid'];
+                    $whereperxcur['curid'] =$convalidados[$i]['curid'];
+                    $whereperxcur['courseid'] =$convalidados[$i]['courseid'];
+                    $whereperxcur['turno'] =$convalidados[$i]['turno'];
                     $cours= new Api_Model_DbTable_Course();
                     $dbcourse=$cours->_getOne($wherecourse);
                     $convalidados[$i]['name_course']=$dbcourse['name'];
                     $convalidados[$i]['credits']=$dbcourse['credits'];
+                    //Para recuperar el state_record de los cursos
+                    $dataperxcour = $dbperiodocurso->_getOne($whereperxcur);
+                    $convalidados[$i]['state_record'] = $dataperxcour['state_record'];
+
                 }
+                
             }
             $this->view->cursosconvalidados = $convalidados;
             // ------------------------------------------------------------------------------------

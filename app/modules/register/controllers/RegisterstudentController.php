@@ -47,6 +47,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $lesc = $escuelas->_getspeciality($where);
                 }
             }
+//            print_r($escuelas);
             if ($lesc ) $this->view->escuelas=$lesc;
         }catch (Exception $ex){
             print "Error: Cargar ".$ex->getMessage();
@@ -422,8 +423,8 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
         if ($lista){
         $data = Zend_Json::decode($lista);
         $this->view->datos=$data;
-        }
 
+        }
     }
 
     public function editturnoAction(){
