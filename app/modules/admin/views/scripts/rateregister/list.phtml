@@ -42,7 +42,7 @@ if ($this->tasas)
             <?php if ($state=='A' || $state=='I'){?>
             <td class='text-center'> 
                 <a class='update_tasa' ratid='<?php echo $tasa['ratid']?>' perid="<?php echo $tasa['perid']?>"
-                state="<?php echo $tasa['state']?>" href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                state="<?php echo $state?>" href="#"><span class="glyphicon glyphicon-pencil"></span></a>
             </td>
             <td class='text-center'>
                 <a href="/admin/rateregister/delete/ratid/<?php print $tasa['ratid']?>/perid/<?php print $tasa['perid']?>/state/<?php print $state?>"onclick="return confirm('Esta Seguro que desea eliminar el registro?');"><span class="glyphicon glyphicon-trash"></span></a>
