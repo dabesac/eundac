@@ -215,7 +215,7 @@ class IndexController extends Zend_Controller_Action {
                     $paymentDb = new Api_Model_DbTable_Payments();
 
                     $cachimbo = substr($uid, 0, 2);
-                    if ($cachimbo == '14') {
+                    if ($cachimbo == '15') {
                         $where = array( 'eid'   => $eid,
                                         'oid'   => $oid,
                                         'escid' => $data->escid,
