@@ -91,7 +91,11 @@
 					<?php }else{ ?>
 				<?php } ?>	
 				<?php } else { ?>
-					<?php if ($distrib['state']=="C") {	?>
+					<?php if ($this->rol=="RC") {?>
+						<span class="glyphicon glyphicon-ban-circle " data-toggle="tooltip" title="Desactivada"></span>
+					<?php
+					} else{?>
+						<?php if ($distrib['state']=="C") {	?>
 							<a class="abrirDis btn btn-info form-control" state="O" href="#" data-toggle="modal" data-target="#myModal" distid='<?php echo base64_encode($distrib['distid'])?>' perid='<?php echo base64_encode($distrib['perid'])?>' escid='<?php echo base64_encode($distrib['escid']);?>' subid='<?php echo base64_encode($distrib['subid'])?>'>
 								<span class="glyphicon glyphicon-circle-arrow-right">
 								</span>
@@ -100,6 +104,8 @@
 						<?php }else{ ?>
 								<span class="glyphicon glyphicon-ban-circle " data-toggle="tooltip" title="Desactivada"></span>
 						<?php } ?>
+					<?php } ?>
+					
 				<?php } ?>
 				</td>
 			</tr>
