@@ -907,7 +907,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $this->view->semester=$lsem;
 
         $pc = new Api_Model_DbTable_PeriodsCourses();        
-        if ($rid=='RF' || $rid=='RC' || $rid=='VA'){               
+        if ($rid=='RF' || $rid=='RC' || $rid=='VA' || $rid=='PD'){               
             $listacursos = $pc->_getCountStudentxCourse($whe);
             $this->view->listacursos=$listacursos;
         }
@@ -994,7 +994,7 @@ class Report_ConsolidatedController extends Zend_Controller_Action {
         $this->view->semester=$lsem;
 
         $pc = new Api_Model_DbTable_PeriodsCourses();
-            if ($rid=='RF' || $rid=='RC' || $rid=='VA'){               
+            if ($rid=='RF' || $rid=='RC' || $rid=='VA' || $rid=='PD'){               
                 $listacursos = $pc->_getCountStudentxCourse($where);
                 $this->view->listacursos=$listacursos;
             }
