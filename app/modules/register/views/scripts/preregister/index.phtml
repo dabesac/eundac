@@ -1,279 +1,344 @@
+<?php $env = getenv('APPLICATION_ENV'); ?>
+<?php if ($env === 'development'): ?>
+	
+	<!-- Models -->	
+	<script src="/js/backbone/user/models/user_payment.js"></script>
+	<script src="/js/backbone/user/models/user_data.js"></script>
+	<script src="/js/backbone/course/models/preregister.js"></script>
+
+	<!-- Collections -->
+	<script src="/js/backbone/user/collections/user_payments.js"></script>
+	<script src="/js/backbone/course/collections/preregister_courses.js"></script>
+
+	<!-- Vistas -->
+	<script src="/js/backbone/views_global/preregister_auxiliar.js"></script>
+	<script src="/js/backbone/views_global/view-type_error.js"></script>
+	<script src="/js/backbone/views_global/preregister-paragraphs.js"></script>
+	<script src="/js/backbone/course/views/view-preregister-course.js"></script>
+	
+<?php endif ?>
+
+
+
 <?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
-<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tint"></span> Prematricula');?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tint"></span> Prematricula 15A');?>
 
 
-<?php /*$this->placeholder('AuxiliarMobile')->append('<div class="info">
-													<p class="active">
-														<span class="full">Págo</span> 
-														<span class="abbr">PR</span> 
-														<strong>S/. 35.00</strong>
-													</p>
-													<p class="active">
-														<span class="full">Pago a Realizar</span> 
-														<span class="abbr">PO</span> 
-														<strong>S/. 35.00</strong>
-													<p class="active">
-														<span class="full">Créditos Permitidos</span> 
-														<span class="abbr">CP</span> 
-														<strong>11</strong>
-													</p>
-													<p class="active">
-														<span class="full">Créditos Matriculados</span> 
-														<span class="abbr">CM</span> 
-														<strong>8</strong>
-													</p>
-												</div>');*/ ?>
+<!-- Vista normal para cursos -->
+<section id="js_content-pick-course" class="container  container--interactive active away-small-top">
+	<img id="js_main_spinner" class="spinner--block  fadeUp" src="/img/spinner.gif" alt="Loading...">
 
-<?php /*$this->placeholder('AuxiliarMobile')->append('<div class="buttons one">
-														<a href="##" class="button button--small button--print">Impirmir <span class="glyphicon glyphicon-print"></span></a>
-													</div>');*/ ?>
+	<div id="js_paragraph"></div>
 
-<?php /*$this->placeholder('AuxiliarMobile')->append('<div class="buttons">
-														<a href="##" class="button button--small  button--alter  button--alter--success">Nuevo <span class="glyphicon glyphicon-plus-sign"></span></a>
-													</div>');*/ ?>
-
-
-<!-- <section class="content  content--small">
-	<header class="content__header  content__header--new">
-		<p><span class="glyphicon glyphicon-plus"></span> Nuevo Periodo</p>
-		<div>
-			<a href="##" class="button button--medium">Cancelar</a>
-		</div>
-	</header>
-	<section class="content__body">
-		<form class="form form-medium">
-			<p class="info"><span class="glyphicon glyphicon-info-sign"></span> Rellene los campos necesarios...</p>
-
-			<div class="blow blow--input">
-				<input type="text" id="input1" required>
-				<label for="input1">Nombre</label>
-			</div>
-
-			<div class="blow  blow--input">
-				<input type="number" id="input2" required>
-				<label for="input2">Numero de Resolución</label>
-			</div>
-
-			<div class="blow  blow--select">
-				<select id="select1" required>
-					<option value="">Escoja uno...</option>
-					<option value="Peru">Perú</option>
-					<option value="Escocia">Escocia</option>
-					<option value="Argentina">Argentina</option>
-				</select>
-				<label for="select1">País</label>
-			</div>
-
-			<div class="blow  blow--bolean">
-				<p>Sexo</p>
-				<div>
-					<input type="radio" name="sex" value="M" id="check1">
-					<label for="check1">Hombre <span class="glyphicon glyphicon-ok"></span></label>
-				</div>
-				<div>
-					<input type="radio" name="sex" value="F" id="check2">
-					<label for="check2">Mujer <span class="glyphicon glyphicon-ok"></span></label>
-				</div>
-			</div>
-			
-			<input type="submit" class="button  button--medium  button--submit" value="Guardar">
-		</form>
+	<div id="js_main-data"></div>
+	
+	<section  class="content--buttons  button-large-right">
+		<a id="js_button_submit" href="##" class="button button--icon button--success  button--hidden">Prematricularme <span class="glyphicon glyphicon-ok-circle"></span></a>
 	</section>
-</section> -->												
+	<section id="js_paragraph-charge-conditional" class="content  content--interactive  content--white  content--msg-paragraph  content--msg-paragraph--danger">
+		<p>Tiene que llevar sus cursos condicionales...</p>	
+	</section>
+</section>
+
+<section id="js_content-confirm-pick" class="container  container--interactive away-small-top">
+	<div id="js_paragraph-confirm"></div>
+
+	<div id="js_main-data-confirm"></div>
+	
+	<section class="content content--buttons  content--buttons--two">
+		<a id="js_confirm--button-back" href="##" class="button button--icon  button--alter  button--alter--danger">Volver <span class="glyphicon glyphicon-remove-circle"></span></a>
+		<a id="js_confirm--button-confirm" href="##" class="button button--icon button--success">Confirmar <span class="glyphicon glyphicon-ok-circle"></span></a>
+	</section>
+	<section id="js_paragraph-charge" class="content  content--interactive  content--white  content--msg-paragraph">
+		<p>Guardando prematricula...</p>	
+	</section>
+</section>
+
+<section id="js_preregister-success" class="container  container--interactive">
+	<div id="js_success-paragraph"></div>
+	<div id="js_success-main-data"></div>
+</section>
 
 
-<!--<section class="preregister ok">
-	<p class="info info--main"><span class="glyphicon glyphicon-info-sign"></span> Seleccione los cursos que llevara</p>
+<!-- _________________________________________ T E M P L A T E S ______________________________________ -->
 
-	<section class="content content--normal">
-		<header class="content__header"><span class="glyphicon glyphicon-flag"></span> Semestre 1</header>
+<template id="template_button-submits">
+	<a href="##" class="button button--icon button--success  button--hidden  js_button-pre">Prematricularme <span class="glyphicon glyphicon-ok-circle"></span></a>
+</template>
+<!-- Template auxiliar -->
+<template id="template_auxiliar-one">
+	{%if (type === 'PA') %}
+		<div>
+			{% if (data_payments.current_payment.state == 'N') %}
+				{% set color_article = 'active' %}
+			{% elseif (data_payments.current_payment.state == 'EP' or data_payments.current_payment.state == 'OT') %}
+				{% set color_article = 'danger' %}
+			{% elseif (data_payments.current_payment.state == 'LP') %}
+				{% set color_article = 'warning' %}
+			{% endif %}
+			<article class="item-informative  item-informative--{{ color_article }}  item--informative--clicked  js_item-informative">
+				{% if (data_payments.current_payment.state != 'N') %}
+					<span><span class="glyphicon glyphicon-exclamation-sign"></span> Pago</span>
+				{% else %}
+					<span><span class="glyphicon glyphicon-ok"></span> Pago</span>
+				{% endif %}
+				<span>{{ data_payments.current_payment.total }}</span>
+
+				<section class="item-informative__detail">
+					{% if (data_payments.current_payment.state != 'EP') %}
+						<p class="text-muted text-center">Tasa <strong>{{ data_payments.current_payment.rate_name }}</strong></p>
+						{% if (data_payments.current_payment.increment) %}
+							<p class="text-muted text-center">Incremento <strong>{{ data_payments.current_payment.increment }}%</strong></p>
+						{% endif %}
+
+						{% if (data_payments.current_payments_normal) %}
+							{# Pagos normales #}
+							{% for payment in data_payments.current_payments_normal %}
+								<article class="item item--simple">
+									<p class="text-muted">Monto <strong>S/. {{ payment.amount }}</strong> </p>
+									<p class="text-muted">Operación <strong>{{ payment.operation }}</strong></p>
+									<p class="text-muted">Concépto <strong>{{ payment.concept }}</strong></p>
+								</article>
+							{% endfor %}
+
+							{# Aviso si falta pago #}
+							{% if (data_payments.current_payment.state == 'LP') %}
+								<article class="item item--simple  item--simple--warning">
+									<p class="text-center"><span class="glyphicon glyphicon-exclamation-sign"></span> Falta S/. {{ data_payments.current_payment.amount_left }}</p>
+								</article>
+								{# Aviso si el pago esta fuera de tiempo #}
+							{% elseif (data_payments.current_payment.state == 'OT') %}
+								<article class="item item--simple  item--simple--danger">
+									<p class="text-center"><span class="glyphicon glyphicon-exclamation-sign"></span> Pago fuera de tiempo...</p>
+								</article>
+							{% endif %}
+
+							{# Pagos condicionales #}
+							{% if (data_payments.current_payments_conditional) %}
+								<hr>
+								<p class="text-muted text-center">Pagos Condicionales</p>
+								{% for payment in data_payments.current_payments_conditional %}
+									<article class="item item--simple">
+										<p class="text-muted">Monto <strong>S/. {{ payment.amount }}</strong> </p>
+										<p class="text-muted">Operación <strong>{{ payment.operation }}</strong></p>
+										<p class="text-muted">Concépto <strong>{{ payment.concept }}</strong></p>
+									</article>
+								{% endfor %}
+							{% endif %}
+						{% else %}
+							<p class="empty  empty--danger"><span class="glyphicon glyphicon-exclamation-sign"></span> No realizo ningun pago...</p>
+						{% endif %}
+					{% else %}
+						<p class="empty empty--danger"><span class="glyphicon glyphicon-exclamation-sign"></span> Falta pago...</p>
+					{% endif %}
+				</section>
+			</article>
+		</div>
+		<div>
+			<article id="js_credits" class="item-informative  item-informative--warning  item-informative--comparative">
+				<span>Créditos</span>
+				<span id="js_credits_current" data-credits>0</span>
+				<span>
+					{% for semester_turn in data_credits.current_register.credits_semester %}
+						<span id="js_credit{{ semester_turn.semester + semester_turn.turn }}" class="js_credits"  
+						data-credits="{{ semester_turn.credits }}" 
+						data-st="{{ semester_turn.semester + semester_turn.turn }}" 
+						data-semester="{{ semester_turn.semester }}"
+						data-semester_roman="{{ semester_turn.semester_roman }}"
+						hidden></span>
+					{% endfor %}
+						<span id="js_conditional-credits" data-credits="11" hidden></span>
+
+						<span id="js_period-assign"></span>
+					</span>
+			</article>
+		</div>
+	{% else %}
+		<a href="##" class="button  button--small  button--print">Imprimir <span class="glyphicon glyphicon-print"></span></a>
+	{% endif %}
+</template>
+
+
+<!-- Parrafos -->
+<script type="text/template" id="template_paragraphs">
+	{% if (type === 'N') %}
+		{# Normal #}
+		<p class="info info--main"><span class="glyphicon glyphicon-info-sign"></span> Seleccione los cursos que llevara, recuerda que los creditos permitidos varian de acuerdo al semestre en que lleves mas...</p>
+	{% elseif (type === 'C') %}
+		{# Condicion #}
+		<p class="info info--main  danger-icon"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que llevaras 
+		{% if (conditional_amount == 1) %} un curso {% else %} cursos {% endif %} por tercera vez, gestiona tus documentos para regularizar tu situación...</p>
+	{% elseif (type === 'E') %}
+		{# Equivalencia #}
+		<p class="info info--main  danger-icon"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que la nueva curricula te alcanzo y todavia hay cursos que debes, haz las gestiones respectivas para que las completes...</p>
+	{% elseif (type === 'CO') %}
+		<p class="info info--main"><span class="glyphicon glyphicon-ok-circle"></span> Ok, llevaras 
+		<strong>{{ many_courses }}
+		{% if (many_courses > 1) %}
+			 cursos
+		{% else %}
+			 curso
+		{% endif %}
+			</strong> 
+		este periodo y perteneceras al <strong>{{ semester_assign }} semestre</strong>, verificalo y confirma...</p>
+	{% elseif (type === 'PS') %}
+		<p class="info  info--main"><span class="glyphicon glyphicon-info-sign"></span> Prematricula realizada, llevaras 
+		<strong>{{ many_courses }}
+		{% if (many_courses > 1) %}
+			 cursos
+		{% else %}
+			 curso
+		{% endif %}</strong> 
+		y perteneceras al <strong>{{ semester_assign }} Semestre</strong>, imprimelo y despues ve a validarlo en Registros de tu Facultad...</p>
+	{% endif %}
+</script>
+
+
+<!-- Group Semester -->
+<template id="template_group_semester">
+	<section class="content content--blue   js_semester{{ semester }}  active">
+
+		<header class="content__header  js_course"><span class="glyphicon glyphicon-flag"></span> 
+		{{ semester_roman }} Semestre 
+		{% if (type === 'X') %}
+			<small class="text-muted">(Extraordinario)</small>
+		{% endif %}
+		</header>
+		
+		<section class="content__body  js_content-semester">
+			
+		</section>
+	</section>
+</template>
+
+<!-- Curso permitido -->
+<!-- <article class="item  item--blue"></article> -->
+<template id="template_course">
+	{# Etiqueta del curso #}
+	{% if (condition) %}
+		{# condicional #}
+		<span class="item__label  item__label--danger">{{ attempt }} Vez</span>
+	{% elseif (type === 'E') %}
+		<span class="item__label  item__label--normal">Electivo</span>
+	{% endif %}
+
+	{# Cuerpo e informacions #}
+	<section class="item__body">
+		<p class="icon vertical_center"><span class="glyphicon glyphicon-book"></span></p>
+		<p class="text_left whit_code">{{ name }} <small>{{ code }}</small></p>
+		<p class="text_left"><span class="glyphicon glyphicon-user"></span> {{ teacher }}</p>
+		<p class="inline">{{ credits }} Créditos</p>
+		<p class="inline"><strong>Turno {{ turn }}</strong></p>
+	</section>
+
+	{# Footer #}
+	<footer class="item__footer">
+	{% if (typeRender != 'I') %}
+		<div class="checkbox checkbox--success">
+			<input id="course{{ code }}" type="checkbox" class="" data-st="{{ semester + turn }}">
+			<label class="js_course_checkbox" 
+				data-st="{{ semester + turn }}"
+				data-semester="{{ semester }}"
+				data-semester_roman="{{ semester_roman }}"
+				data-semester_close="{{ semester_close }}"
+				data-turn="{{ turn }}"
+				data-credits="{{ credits }}"
+				data-code="{{ code }}"
+				data-type="{{ type }}">
+				Llevar <span class="glyphicon glyphicon-ok"></span></label>
+		</div>
+	{% else %}
+		{% if (!payment_did) %}
+		<div class="checkbox checkbox--success  checkbox--disabled-danger">
+			<p>:( El pago deberia ser <strong>S/. {{ payment }}</strong></p>
+		</div>
+		{% endif %}
+	{% endif %}
+	</footer>
+</template>
+
+<!-- Error: Pago -->
+<template id="template_error-payment">
+	{% if (current_payment.state === 'LP') %}
+		{% if ( current_payment.increment ) %}
+			<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago no esta completo, debes pagar con un incrementeo del {{ current_payment.increment }}%, entonces te faltaria reintegrar <strong>S/. {{ current_payment.amount_left}}</strong>, realizalo a la cuenta <strong>72</strong> de la Universidad...</p>
+		{% else %}
+			<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago no esta completo, te falta reintegrar <strong>S/. {{ current_payment.amount_left}}</strong>, realizalo a la cuenta <strong>72</strong> de la Universidad...</p>
+		{% endif %}
+	{% elseif (current_payment.state == 'OT') %}
+		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago esta fuera de tiempo, para mas información acercate a la oficina de informatica...</p>
+	{% elseif (current_payment.state == 'EP') %}
+		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> No existe algun pago registrado, si lo realizo hoy recuerde que le toma un tiempo de 12 horas al banco para enviar los datos, si el problema persiste acerquese a la oficina de informatica...</p>
+	{% else %}
+		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Hubo un problema al traer los cursos, por favor intentalo mas tarde...</p>
+	{% endif %}
+</template>
+
+<!-- Error: Falta Distribución -->
+<template id="template_error-distribution">
+	<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Existe un problema con la distibución de cursos de parte de su director, acerquese a dirección de su escuela para mas información...</p>
+</template>
+
+
+
+<!-- Prematricula Realizada -->
+<?php /*$this->placeholder('AuxiliarMobile')->append('<div class="helper  helper--button  button-large-right  fix-alone"><a href="##" class="button  button--small  button--print">Imprimir <span class="glyphicon glyphicon-print"></span></a></div>'); */?>
+<!-- <section class="container">
+	
+
+	<section class="content  content--blue">
+		<header class="content__header">
+			Cursos (3)
+		</header>
 		
 		<section class="content__body">
-			<article class="item item--blue">
-				<section class="item__body">
-					<p class="icon vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-					<p class="text_left whit_code">Algoritmos I <small>0925412</small></p>
-					<p class="text_left"><span class="glyphicon glyphicon-user"></span> Ing. DE LA CRUZ ROCCA, Marco</p>
-					<p class="inline">5 Créditos</p>
-					<p class="inline">Turno A</p>
-					<p>1 matriculado hasta ahora...</p>
+			<section class="group  group--normal">
+				<header class="group__header">
+					I Semestre
+				</header>
+				<section class="group__body">
+					<article class="item  item--blue">
+						<section class="item__body">
+							<p class="icon vertical_center"><span class="glyphicon glyphicon-book"></span></p>
+							<p class="text_left whit_code">Algoritmos I <small>0925412</small></p>
+							<p class="text_left"><span class="glyphicon glyphicon-user"></span> Ing. DE LA CRUZ ROCCA, Marco</p>
+							<p class="inline">5 Créditos</p>
+							<p class="inline">Turno A</p>
+							<p>1 matriculado hasta ahora...</p>
+						</section>
+					</article>
+					<article class="item  item--blue">
+						<section class="item__body">
+							<p class="icon vertical_center"><span class="glyphicon glyphicon-book"></span></p>
+							<p class="text_left whit_code">Algoritmos I <small>0925412</small></p>
+							<p class="text_left"><span class="glyphicon glyphicon-user"></span> Ing. DE LA CRUZ ROCCA, Marco</p>
+							<p class="inline">5 Créditos</p>
+							<p class="inline">Turno A</p>
+							<p>1 matriculado hasta ahora...</p>
+						</section>
+					</article>
 				</section>
-				<footer class="item__footer">
-					<div class="checkbox checkbox--success">
-						<input id="course_1" type="checkbox">
-						<label for="course_1">Llevar <span class="glyphicon glyphicon-ok"></span></label>
-					</div>
-				</footer>
-			</article>
-
-			<article class="item item--blue">
-				<section class="item__body">
-					<p class="icon vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-					<p class="text_left whit_code">Calculo Psicomotriz I <small>0925412</small></p>
-					<p class="text_left"><span class="glyphicon glyphicon-user"></span> Ing. DE LA CRUZ ROCCA, Marco</p>
-					<p class="inline">3 Créditos</p>
-					<p class="inline">Turno A</p>
-					<p>1 matriculado hasta ahora...</p>
+			</section>
+			
+			<section class="group  group--normal">
+				<header class="group__header">
+					III Semestre
+				</header>
+				<section class="group__body">
+					<article class="item  item--blue">
+						<section class="item__body">
+							<p class="icon vertical_center"><span class="glyphicon glyphicon-book"></span></p>
+							<p class="text_left whit_code">Algoritmos Estadistico y Sensuales III <small>0925412</small></p>
+							<p class="text_left"><span class="glyphicon glyphicon-user"></span> Ing. DE LA CRUZ ROCCA, Marco</p>
+							<p class="inline">5 Créditos</p>
+							<p class="inline">Turno A</p>
+							<p>1 matriculado hasta ahora...</p>
+						</section>
+					</article>
 				</section>
-				<footer class="item__footer">
-					<div class="checkbox checkbox--success">
-						<input id="course_2" type="checkbox">
-						<label for="course_2">Llevar <span class="glyphicon glyphicon-ok"></span></label>
-					</div>
-				</footer>
-			</article>
+			</section>
 
-			<article class="item item--blue">
-				<section class="item__body">
-					<p class="icon vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-					<p class="text_left whit_code">Tendencias Suicidads en la Juventud Conteporanea Actual I <small>0925412</small></p>
-					<p class="text_left"><span class="glyphicon glyphicon-user"></span> Ing. DE LA CRUZ ROCCA, Marco</p>
-					<p class="inline">5 Créditos</p>
-					<p class="inline">Turno A</p>
-					<p>1 matriculado hasta ahora...</p>
-				</section>
-				<footer class="item__footer">
-					<div class="checkbox checkbox--success">
-						<input id="course_3" type="checkbox">
-						<label for="course_3">Llevar <span class="glyphicon glyphicon-ok"></span></label>
-					</div>
-				</footer>
-			</article>
-
-			<article class="item item--blue">
-				<section class="item__body">
-					<p class="icon vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-					<p class="text_left whit_code">Matematica Basica I <small>0925412</small></p>
-					<p class="text_left"><span class="glyphicon glyphicon-user"></span> Ing. DE LA CRUZ ROCCA, Marco</p>
-					<p class="inline">5 Créditos</p>
-					<p class="inline">Turno A</p>
-					<p>1 matriculado hasta ahora...</p>
-				</section>
-				<footer class="item__footer">
-					<div class="checkbox checkbox--success">
-						<input id="course_4" type="checkbox">
-						<label for="course_4">Llevar <span class="glyphicon glyphicon-ok"></span></label>
-					</div>
-				</footer>
-			</article>
-		</section>
-	</section>
-	
-	<section class="content--buttons one">
-		<a href="##" class="button button--icon button--success">Prematricularme <span class="glyphicon glyphicon-ok-circle"></span></a>
-	</section>
-</section> -->
-
-<!-- <section class="preregister error">
-	<p class="info"><span class="glyphicon glyphicon-exclamation-sign"></span> Ups!!</p>
-	<section class="content normal">
-		<header>:(</header>
-		<section>
-			<p class="danger"><span class="glyphicon glyphicon-exclamation-sign"></span> Hay un retraso en la carga académica, acerquese a dirección de su escuela para mas información...</p>
 		</section>
 	</section>
 </section> -->
-
-<!-- <section class="preregister confirm">
-	<p class="info"><span class="glyphicon glyphicon-ok"></span> Ok, llevaras estos cursos este periodo y perteneceras al <strong>IV Semestre</strong>, verificalo y confirma...</p>
-
-	<section class="content normal">
-		<header>
-			Prematricula Periodo 14A
-		</header>
-		
-		<section>
-			<article class="course">
-				<p class="vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-				<p>Algoritmos I <small>0925412</small></p>
-				<p><span class="glyphicon glyphicon-user"></span> Ing. DE LA CRUZ ROCCA, Marco</p>
-				<p>5 Créditos</p>
-				<p>Turno A</p>
-			</article>
-			<article class="course">
-				<p class="vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-				<p>Tendencias Suicidas en la Juevntud Actual Contemporanea I <small>0925412</small></p>
-				<p><span class="glyphicon glyphicon-user"></span> Ing. DE LOYOLA Y MONTOYA, Cruela de Vil</p>
-				<p>5 Créditos</p>
-				<p>Turno A</p>
-			</article>
-			<article class="course">
-				<p class="vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-				<p>Calculo Psicomotriz I <small>0925412</small></p>
-				<p><span class="glyphicon glyphicon-user"></span> Ing. DE LOYOLA, San Ignacion</p>
-				<p>10 Créditos</p>
-				<p>Turno A</p>
-			</article>
-			<article class="course">
-				<p class="vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-				<p>Tendencias Suicidas en la Juevntud Actual Contemporanea I <small>0925412</small></p>
-				<p><span class="glyphicon glyphicon-user"></span> Ing. DE LOYOLA Y MONTOYA, Cruela de Vil</p>
-				<p>5 Créditos</p>
-				<p>Turno A</p>
-			</article>
-			<article class="course">
-				<p class="vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-				<p>Calculo Psicomotriz I <small>0925412</small></p>
-				<p><span class="glyphicon glyphicon-user"></span> Ing. DE LOYOLA, San Ignacion</p>
-				<p>10 Créditos</p>
-				<p>Turno A</p>
-			</article>
-		</section>
-	</section>
-
-	<section class="content buttons one">
-		<a href="##" class="button-icon success">Confirmar <span class="glyphicon glyphicon-ok-circle"></span></a>
-	</section>
-</section> -->
-
-<!-- <section class="preregister success">
-	<p class="info"><span class="glyphicon glyphicon-ok"></span> Prematricula realizada, perteneces al <strong>IV Semestre</strong>, validelo en Registros de su Facultad...</p>
-	
-	<section class="content normal">
-		<header>
-			Prematricula Periodo 14A
-		</header>
-		
-		<section>
-			<article class="course">
-				<p class="vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-				<p>Algoritmos I <small>0925412</small></p>
-				<p><span class="glyphicon glyphicon-user"></span> Ing. DE LA CRUZ ROCCA, Marco</p>
-				<p>5 Créditos</p>
-				<p>Turno A</p>
-			</article>
-			<article class="course">
-				<p class="vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-				<p>Tendencias Suicidas en la Juevntud Actual Contemporanea I <small>0925412</small></p>
-				<p><span class="glyphicon glyphicon-user"></span> Ing. DE LOYOLA Y MONTOYA, Cruela de Vil</p>
-				<p>5 Créditos</p>
-				<p>Turno A</p>
-			</article>
-			<article class="course">
-				<p class="vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-				<p>Calculo Psicomotriz I <small>0925412</small></p>
-				<p><span class="glyphicon glyphicon-user"></span> Ing. DE LOYOLA, San Ignacion</p>
-				<p>10 Créditos</p>
-				<p>Turno A</p>
-			</article>
-			<article class="course">
-				<p class="vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-				<p>Tendencias Suicidas en la Juevntud Actual Contemporanea I <small>0925412</small></p>
-				<p><span class="glyphicon glyphicon-user"></span> Ing. DE LOYOLA Y MONTOYA, Cruela de Vil</p>
-				<p>5 Créditos</p>
-				<p>Turno A</p>
-			</article>
-			<article class="course">
-				<p class="vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-				<p>Calculo Psicomotriz I <small>0925412</small></p>
-				<p><span class="glyphicon glyphicon-user"></span> Ing. DE LOYOLA, San Ignacion</p>
-				<p>10 Créditos</p>
-				<p>Turno A</p>
-			</article>
-
-			<p class="info">
-				<strong>Total de Créditos</strong> 17
-			</p>
-		</section>
-	</section>
-</section> -->
+ 

@@ -88,7 +88,7 @@ class Api_Model_DbTable_Curricula extends Zend_Db_Table_Abstract
 
  	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
-			if($where['eid']=='' || $where['oid']=='') return false;
+			if(!$where['eid'] || !$where['oid']) return false;
 				$select = $this->_db->select();
 				if ($attrib=='') $select->from("base_curricula");
 				else $select->from("base_curricula",$attrib);

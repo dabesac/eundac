@@ -13,12 +13,11 @@
     $pid = $sesion->pid;
 
 ?>
-<?php if ($sesion->encuesta->existeEncuesta == 'Yes'): ?>
+<?php /*if ($sesion->encuesta->existeEncuesta == 'Yes'): ?>
     <input type="hidden" id="rellenoEncuesta" value="<?php print $sesion->encuesta->rellenoEncuesta ?>">
-<?php endif ?>
+<?php endif */ ?>
 
 <input type="hidden" id="rol" value="<?php print $rol ?>">
-<input type="hidden" id="fullProfile" value="<?php print $sesion->fullProfile->success ?>">
 
 <header>
     <nav>

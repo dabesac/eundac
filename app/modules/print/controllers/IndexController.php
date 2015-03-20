@@ -1,6 +1,6 @@
 <?php
 
-class Register_PreregisterController extends Zend_Controller_Action {
+class Print_IndexController extends Zend_Controller_Action {
 
     public function init()
     {
@@ -14,7 +14,6 @@ class Register_PreregisterController extends Zend_Controller_Action {
 
     public function indexAction()
     {
-        //index de la prematricula
-    }
 
+    }
 }

@@ -55,6 +55,70 @@
 .delete-cape--interactive.inactive
 	animation fadeOut .3s ease
 
+.auxiliar
+	overflow hidden
+	background rgba(black, .5)
+	
+@media screen and (min-width:1000px)
+	.auxiliar
+		position absolute
+		right 5%
+		top 120px
+		width 300px
+		z-index 15
+
+.helper--item
+	display table
+	margin-left auto
+	margin-right auto
+	max-width 500px
+	width 100%
+	
+	div
+		display table-cell
+		
+.helper--item--two
+	div
+		padding .5em
+		display table-cell
+		width 50%
+		
+@media screen and (min-width:1000px)
+	.helper--item--two
+		div
+			width 100%
+			display block
+
+.helper--button
+	padding .5em
+	
+@media screen and (min-width:1000px)
+	.helper--button
+		padding 1em
+
+	
+//capas
+.cover
+	background-color rgba(black, .5)
+	position absolute
+	height 100%
+	width 100%
+	z-index 10
+
+	.cover__msg
+		background rojo
+		box-shadow 0 0 2px rgba(black, .5)
+		color white
+		font-weight 700
+		padding .7em
+		position absolute
+		right -.4em
+		top -.4em
+
+.cover--hidden
+	display none
+
+
 /*ul
 	padding 0
 

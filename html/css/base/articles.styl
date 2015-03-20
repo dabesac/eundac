@@ -1,27 +1,50 @@
 /*article*/.item
 	background white
 	box-shadow 0 0 1px rgba(black, .2)
+	margin-bottom 1em
+	position relative
+
+	.item__label
+		box-shadow 0 0 2px rgba(black, .5)
+		padding .7em
+		position absolute
+		right -.3em
+		top -.3em
+		z-index 5
+
+	.item__label--normal
+		 background celeste
+		 color white
+
+	.item__label--danger
+		background rojo
+		color white
 	
 	.item__body
 		position relative
 		text-align center
 		
+
+		p
+			border-bottom 1px solid plomoOscuro
+			margin-bottom 0
+			margin-left 15%
+			padding .5em 1em
+
+		p.inline
+			border-bottom 0
+			
 		.icon
-			background plomoOscuro
+			background plomo
 			border-right 1px solid plomoOscuro
+			border-bottom 0
 			height 100%
 			left 0
 			margin-left 0
 			padding 0
 			position absolute
-			width 10%
+			width 15%
 
-		p
-			border-bottom 1px solid plomoOscuro
-			margin-bottom 0
-			margin-left 10%
-			padding .5em 1em
-		
 
 	.item__footer
 		text-align center
@@ -30,22 +53,118 @@
 			padding 1em
 			margin-bottom 0
 
-.item--blue
-	border-top 1px azul solid
-	border-bottom 1px plomoOscuro solid
-
-	.item__body
-		border-bottom 4px azul solid
-		
-		p:nth-child(1)
-			color azul
-
 @media screen and (min-width:700px)
 	.item
 		display inline-block
-		margin-left 2%
-		width 47%
+		width 49%
+		
+	.item:nth-child(even)
+		margin-left 1%
+		
+@media screen and (min-width:1000px)
+	.item
+		.item__body
+			.icon
+				width 10%
+			p
+				margin-left 10%
+.item--blue
 
+	.item__body
+		border-bottom 1px plomoOscuro solid
+		
+		.icon
+			color azul
+
+
+//Item informative
+.item-informative
+	display flex
+	flex-wrap wrap
+	width 100%
+	z-index 5
+
+	& > span
+		background white
+		padding .6em 0
+		text-align center
+
+	& > span:nth-of-type(1)
+		width 40%
+		
+	& > span:nth-of-type(2)
+		width 60%
+
+	& > span:last-of-type
+		border-radius 0 3px 3px 0
+
+	.item-informative__detail
+		padding-top .5em
+		padding-left .5em
+		padding-right .5em
+		background plomoOscuro
+		width 100%
+
+.item-informative--comparative
+	& > span:nth-of-type(1)
+		width 40%
+		
+	& > span:nth-of-type(2)
+		border-right 2px plomoOscuro solid
+		
+	& > span:nth-of-type(2)
+	& > span:nth-of-type(3)
+		width 30%
+		
+.item--informative--clicked
+	cursor pointer
+	position relative
+
+	.item-informative__detail
+		border-radius 0 0 3px 0
+		display none
+
+.item--informative--clicked.active
+	& > span:last-of-type
+		border-radius 0 3px 0 0
+
+	.item-informative__detail
+		animation .3s content_show ease
+		display block
+
+.item--informative--clicked.inactive
+	.item-informative__detail
+		animation .3s content_hide ease
+
+.item-informative--active
+	& > span:last-child
+		border-radius 0 5px 0 0
+
+	& > span:nth-of-type(1)
+		border-right 4px verde solid
+		color verde
+		
+	.item-informative__detail
+		border-top 1px verde solid
+
+.item-informative--warning
+	& > span:nth-of-type(1)
+		border-right 4px amarillo solid
+		color amarillo
+
+	.item-informative__detail
+		border-top 1px amarillo solid
+		
+.item-informative--danger
+	& > span:nth-of-type(1)
+		border-right 4px rojo solid
+		color rojo
+		
+	.item-informative__detail
+		border-top 1px rojo solid
+
+
+//item table
 .item-table
 	box-shadow 0 0 1px rgba(black, .2)
 	background white
@@ -180,6 +299,29 @@
 .item-table--active
 	.item-table__header 
 		border-bottom 4px verdeClaro solid
+
+
+//Items simple
+.item--simple
+	margin-bottom .5em
+	p
+		margin-bottom 0
+		padding .2em 1em
+
+.item--simple--danger
+	background rojo
+	color white
+
+.item--simple--warning
+	background amarillo
+	color white
+
+@media screen and (min-width:700px)
+	.item--simple
+		width 100%
+
+	.item--simple:nth-child(even)
+		margin-left 0
 
 //animations
 .item-table.delete

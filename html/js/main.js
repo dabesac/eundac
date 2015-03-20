@@ -57,12 +57,9 @@ function chargeContent(el, model){
 					el.children('img').removeClass('fadeUp fadeOut');
 					el.children('.group').addClass('active');
 				}, 300);
-				
-
 			}
 		});
 	}
-
 }
 
 function toggleDetail(button, content_1, content_2){

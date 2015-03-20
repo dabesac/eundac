@@ -49,7 +49,7 @@ class Api_Model_DbTable_Registration extends Zend_Db_Table_Abstract
 	
 	public function _getOne($where=array()){
 		try{
-			if ($where['eid']=='' ||  $where['oid']=='' || $where['escid']=='' || $where['subid']=='' || $where['regid']=='' || $where['pid']=='' || $where['uid']=='' || $where['perid']=='') return false;
+			if (!$where['eid'] ||  !$where['oid'] || !$where['escid'] || !$where['subid'] || !$where['regid'] || !$where['pid'] || !$where['uid'] || !$where['perid']) return false;
 			$wherestr = "eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and subid='".$where['subid']."' and regid='".$where['regid']."' and pid='".$where['pid']."' and uid='".$where['uid']."' and perid='".$where['perid']."'";
 
 			$row = $this->fetchRow($wherestr);

@@ -1,7 +1,11 @@
+.hidden
+	display none
+	
 .inline
 	display inline-block
 
 .inline_mid
+	display block
 	margin auto
 
 .text_warning
@@ -42,3 +46,26 @@
 	
 .margin-large
 	margin 12em auto
+
+@media screen and (min-width:700px)
+	.button-large-right
+		a
+			float right
+			width 50%
+			margin-bottom .5em
+			
+@media screen and (min-width:1000px)
+	.button-large-right
+		a
+			margin-bottom 1em
+			
+.away-small-top
+	margin-top 1em
+
+@media screen and (min-width:1000px)
+	.margin--desktop
+		margin 12em 18em
+
+	.fix-alone
+		a
+			width 100%

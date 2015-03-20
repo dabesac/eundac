@@ -2,9 +2,9 @@
 
 class Api_Model_DbTable_Studentcondition extends Zend_Db_Table_Abstract
 {
-	protected $_name = 'base_student_condition';
-	protected $_primary = array("temid","eid","oid","escid","subid","perid","uid","pid");
-	protected $_sequence ="s_conditionstudent"; 
+	protected $_name = 'student_condition';
+	protected $_primary = array("condition_id","eid","oid", "uid", "pid", "escid","subid","perid");
+	protected $_sequence ="s_student_condition"; 
 
 	// public function _getOne($where=array()){
 	// 	try {
@@ -29,6 +29,25 @@ class Api_Model_DbTable_Studentcondition extends Zend_Db_Table_Abstract
 				return false;
 		} catch (Exception $e) {
 			print "Error: Read All Student Condition".$e->getMessage();
+		}
+	}
+
+	public function _getAllStudent($where=null){
+		try {
+			if (!$where["eid"] || !$where["oid"] || !$where["uid"] || !$where["pid"] ||
+					 !$where["escid"] || !$where["subid"] || !$where["perid"]) return false;
+			$wherestr = "eid = '".$where['eid'].
+						"' and oid = '".$where['oid'].
+						"' and uid = '".$where['uid'].
+						"' and pid = '".$where['pid'].
+						"' and escid = '".$where['escid'].
+						"' and subid = '".$where['subid'].
+						"' and perid = '".$where['perid']."' ";
+			$rows=$this->fetchAll($wherestr);
+			if($rows) return $rows->toArray();
+			return false;
+		} catch (Exception $e) {
+			print "Error: Read All Condition by Student".$e->getMessage();
 		}
 	}
     

@@ -57,13 +57,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             return;
         }
 
-        protected function _initRestRoute()
-        {
-                $this->bootstrap('frontController');
-                $frontController = Zend_Controller_Front::getInstance();
-                $restRoute = new Zend_Rest_Route($frontController);
-                $frontController->getRouter()->addRoute('default', $restRoute);
-        }
+    protected function _initRestRoute() {
+        $this->bootstrap('frontController');
+        $frontController = Zend_Controller_Front::getInstance();
+        $restRoute = new Zend_Rest_Route($frontController);
+        $frontController->getRouter()->addRoute('default', $restRoute);
+    }
 
     protected function _initDbAdaptersToRegistry()
 	{
@@ -98,7 +97,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 ->setPostfix("</div>");
 
         $view->placeholder('AuxiliarMobile')
-                ->setPrefix("<div class=\"aux mobile\">\n")
+                ->setPrefix("<div class=\"auxiliar\">\n")
                 ->setPostfix("</div>");
     }
     

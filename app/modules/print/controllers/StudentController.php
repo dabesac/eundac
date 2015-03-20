@@ -1,6 +1,6 @@
 <?php
 
-class Register_PreregisterController extends Zend_Controller_Action {
+class Print_StudentController extends Zend_Controller_Action {
 
     public function init()
     {
@@ -12,9 +12,11 @@ class Register_PreregisterController extends Zend_Controller_Action {
         $this->sesion = $login;
     }
 
-    public function indexAction()
-    {
-        //index de la prematricula
+    public function indexAction(){
+    	print_r('Impresiones');
     }
 
+    public function preregisterAction() {
+    	print_r('Impresion preregister');
+    }
 }
