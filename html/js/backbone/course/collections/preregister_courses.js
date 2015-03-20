@@ -167,8 +167,6 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 			.data('credits', credits_max)
 			.data('semester', semester_max)
 			.html(credits_max);
-
-		console.log($('#js_period-assign').data());
 	},
 
 	buttonPreregister : function(courses_with_condition){
@@ -287,7 +285,6 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 			many_courses++;
 			course.save(null, {
 				success : function(model, response){
-					console.log(response.success);
 					if (response.success === 1) {
 						many_courses_success++;
 						if (many_courses === many_courses_success) {

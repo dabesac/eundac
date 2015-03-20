@@ -152,8 +152,6 @@ eUndac.Views.Course = Backbone.View.extend({
 			}
 		});
 
-		console.log(s_t_credits_assign);
-
 		// asignar semestre
 		var less_semester = 100;
 		unique_s_t.forEach(function(s_t){
