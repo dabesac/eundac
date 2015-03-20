@@ -19,7 +19,7 @@ $(function(){
 	// window.header_interaction = new eUndac.Views.Interaction_Header($('body'));
 
 	//Funciones globales
-	$('input[js-type=date').datepicker();
+	$('input[js-type=date]').datepicker();
 
 });
 
