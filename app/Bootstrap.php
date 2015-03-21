@@ -11,9 +11,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             
             $env = getenv('APPLICATION_ENV');
             if ($env === 'production') {
-                $view   ->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.min.css')
-                        ->headLink()->appendStylesheet('/external_library/jquery-ui/jquery.ui.datepicker.css')
-                        ->headLink()->appendStylesheet('/css/app-min.css');
+                $view->headLink()->prependStylesheet('/external_library/bootstrap/css/bootstrap.min.css')
+                     ->headLink()->appendStylesheet('/external_library/jquery-ui/jquery.ui.datepicker.css')
+                     ->headLink()->appendStylesheet('/css/app-min.css');
 
                 $view->headScript()->appendFile('/js/app-min.js');
             }else if ($env === 'development'){
@@ -26,7 +26,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                         ->headScript()->appendFile('/js/vendor/jquery.serializejson.min.js')
                         ->headScript()->appendFile('/js/vendor/underscore.js')
                         ->headScript()->appendFile('/js/vendor/backbone.js')
-                        ->headScript()->appendFile('/js/vendor/backbone.layoutmanager.js')
                         ->headScript()->appendFile('/js/vendor/swig.js');
 
                 //Ours
@@ -88,7 +87,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $layout = $this->getResource('layout');
         $view = $view = $layout->getView();
         $view->placeholder('Textnav')
-                ->setPrefix("<p class=\"navigationTitleMainLayout\">\n")
+                ->setPrefix("<p class=\"main_title_paragraph\">\n")
                 ->setPostfix("</p>");
         $view->placeholder('Btnnav')
                 ->setPrefix("<div class=\"navigationButtonsMainLayout\">\n")

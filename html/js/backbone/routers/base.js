@@ -4,6 +4,7 @@ eUndac.Routers.Base = Backbone.Router.extend({
 		'period' : 'period',
 		'register/preregister' : 'preregister'
 	},
+	
 	initialize : function(){
 		Backbone.history.start({
 			root      : '/',

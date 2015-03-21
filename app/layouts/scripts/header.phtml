@@ -29,8 +29,8 @@
             <p>Adscrito Escuela <?php print $speciality?></p>
         </div>
         <div>
-            <a href="##" id="main_btn_menu"><span class="glyphicon glyphicon-align-justify"></span></a>
-            <ul>
+            <a href="##" id="js_main-btn-menu"><span class="glyphicon glyphicon-align-justify"></span></a>
+            <ul id="js_main-menu-ul">
                 <li><a href="/<?php print $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
                 <li><a href="/profile/<?php print ($rol=='AL' or $rol=='EG')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Mi Perfil </a></li>
                 <li><a href="##"><span class="glyphicon glyphicon-envelope"></span> Notificaciones</a></li>
@@ -39,8 +39,8 @@
         </div>
     </nav>
 </header>
-<script type="text/javascript" src='/external_library/md5/md5.js'></script>
-<script type="text/javascript" src='/external_library/md5/change.js'></script>
+<!-- <script type="text/javascript" src='/external_library/md5/md5.js'></script>
+<script type="text/javascript" src='/external_library/md5/change.js'></script> -->
 <script>
     /*$(function(){
         var rol = $('#rol').val();

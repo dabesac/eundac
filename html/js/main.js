@@ -14,13 +14,13 @@ $(function(){
 	var global_function = global();
 	global_function.tabs($('ul.tabs'), $('ul.tabs').siblings('.tabs_data'));*/
 
-	//Bacbone FTW!!!
+	//Backbone FTW!!!
 	eUndac.app = new eUndac.Routers.Base();
 	// window.header_interaction = new eUndac.Views.Interaction_Header($('body'));
 
 	//Funciones globales
 	$('input[js-type=date]').datepicker();
-
+	displayMainMenu();
 });
 
 function changeContent(el_1, el_2){
@@ -227,6 +227,21 @@ function deleteItem(button, scope){
 			button
 				.removeAttr('disabled')
 				.html('Si, estoy seguro');
+		}
+	});
+}
+
+// ------ G L O B A L --------
+function displayMainMenu(){
+	$('#js_main-btn-menu').on('click', function(){
+		if (!$('#js_main-menu-ul').hasClass('active')) {
+			$('#js_main-menu-ul').addClass('active');
+		} else {
+			$('#js_main-menu-ul').addClass('inactive');
+			setTimeout(function() {
+				$('#js_main-menu-ul').removeClass('active inactive');
+			}, 300);
+
 		}
 	});
 }
