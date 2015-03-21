@@ -12,6 +12,7 @@
 
 	<!-- Vistas -->
 	<script src="/js/backbone/views_global/preregister_auxiliar.js"></script>
+	<script src="/js/backbone/views_global/preregister/preregister-delete.js"></script>
 	<script src="/js/backbone/views_global/view-type_error.js"></script>
 	<script src="/js/backbone/views_global/preregister-paragraphs.js"></script>
 	<script src="/js/backbone/course/views/view-preregister-course.js"></script>
@@ -57,14 +58,32 @@
 <section id="js_preregister-success" class="container  container--interactive">
 	<div id="js_success-paragraph"></div>
 	<div id="js_success-main-data"></div>
+
+	<section  class="content  content--buttons  button-large-right  margin-bottom-small">
+		<a id="js_button_delete_pre" href="##" class="button button--small button--danger">Eliminar Prematricula</a>
+	</section>
+
+	<div id="js_success-delete"></div>
+	
 </section>
 
 
 <!-- _________________________________________ T E M P L A T E S ______________________________________ -->
 
-<template id="template_button-submits">
-	<a href="##" class="button button--icon button--success  button--hidden  js_button-pre">Prematricularme <span class="glyphicon glyphicon-ok-circle"></span></a>
-</template>
+<script type="text/template" id="template_preregister-delete">
+	<section  class="content">
+		<article class="paragraph-msg  paragraph-msg--buttons  paragraph-msg--danger  paragraph-msg--large-right">
+			{% if (attemps > 0) %}
+				<p>Recuerda que solo te queda {{ attemps }} intentos para eliminar tu prematricula, ¿seguro que deseas continuar?</p>
+				<a href="##" class="button  button--small button--danger  js_button_cancel_delete">No</a>
+				<a href="##" class="button  button--small button--alter  button--alter--danger  js_button_confirm_delete">Si, estoy seguro</a>
+			{% else %}
+				<p><span class="glyphicon glyphicon-exclamation-sign"></span> Ya no puede eliminar su prematricula excedio las 5 veces...</p>
+			{% endif %}
+		</article>
+	</section>
+</script>
+
 <!-- Template auxiliar -->
 <template id="template_auxiliar-one">
 	{%if (type === 'PA') %}
@@ -278,67 +297,3 @@
 <template id="template_error-distribution">
 	<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Existe un problema con la distibución de cursos de parte de su director, acerquese a dirección de su escuela para mas información...</p>
 </template>
-
-
-
-<!-- Prematricula Realizada -->
-<?php /*$this->placeholder('AuxiliarMobile')->append('<div class="helper  helper--button  button-large-right  fix-alone"><a href="##" class="button  button--small  button--print">Imprimir <span class="glyphicon glyphicon-print"></span></a></div>'); */?>
-<!-- <section class="container">
-	
-
-	<section class="content  content--blue">
-		<header class="content__header">
-			Cursos (3)
-		</header>
-		
-		<section class="content__body">
-			<section class="group  group--normal">
-				<header class="group__header">
-					I Semestre
-				</header>
-				<section class="group__body">
-					<article class="item  item--blue">
-						<section class="item__body">
-							<p class="icon vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-							<p class="text_left whit_code">Algoritmos I <small>0925412</small></p>
-							<p class="text_left"><span class="glyphicon glyphicon-user"></span> Ing. DE LA CRUZ ROCCA, Marco</p>
-							<p class="inline">5 Créditos</p>
-							<p class="inline">Turno A</p>
-							<p>1 matriculado hasta ahora...</p>
-						</section>
-					</article>
-					<article class="item  item--blue">
-						<section class="item__body">
-							<p class="icon vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-							<p class="text_left whit_code">Algoritmos I <small>0925412</small></p>
-							<p class="text_left"><span class="glyphicon glyphicon-user"></span> Ing. DE LA CRUZ ROCCA, Marco</p>
-							<p class="inline">5 Créditos</p>
-							<p class="inline">Turno A</p>
-							<p>1 matriculado hasta ahora...</p>
-						</section>
-					</article>
-				</section>
-			</section>
-			
-			<section class="group  group--normal">
-				<header class="group__header">
-					III Semestre
-				</header>
-				<section class="group__body">
-					<article class="item  item--blue">
-						<section class="item__body">
-							<p class="icon vertical_center"><span class="glyphicon glyphicon-book"></span></p>
-							<p class="text_left whit_code">Algoritmos Estadistico y Sensuales III <small>0925412</small></p>
-							<p class="text_left"><span class="glyphicon glyphicon-user"></span> Ing. DE LA CRUZ ROCCA, Marco</p>
-							<p class="inline">5 Créditos</p>
-							<p class="inline">Turno A</p>
-							<p>1 matriculado hasta ahora...</p>
-						</section>
-					</article>
-				</section>
-			</section>
-
-		</section>
-	</section>
-</section> -->
- 

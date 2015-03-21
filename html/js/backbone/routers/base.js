@@ -41,7 +41,7 @@ eUndac.Routers.Base = Backbone.Router.extend({
 				var model_user = model;
 				var response_user = response;
 				var success_pre = response.current_register.state;
-				if (!success_pre) {
+				if (!success_pre || success_pre === 'B') {
 					model_user_payment.fetch({
 						success : function(model, response){
 							var state_payment = response.current_payment.state;
@@ -52,20 +52,24 @@ eUndac.Routers.Base = Backbone.Router.extend({
 							$('.js_auxiliar').html(pre_auxiliar.$el);
 
 							// condiciones
-							if (response_user.conditions && !success_pre) {
-								var conditions = response_user.conditions;
-								conditions.forEach(function(condition){
-									if (condition.code == 'CA') {
-										more_credits = condition.amount;
-									} else if (condition.code == 'SA') {
-										more_semester = condition.amount;
-									}
-								});
+							if (!success_pre || success_pre === 'B') {
+								if (response_user.conditions) {
+									var conditions = response_user.conditions;
+									conditions.forEach(function(condition){
+										if (condition.code == 'CA') {
+											more_credits = condition.amount;
+										} else if (condition.code == 'SA') {
+											more_semester = condition.amount;
+										}
+									});
+								}
 							}
+
 							// verificar pago
 							if (state_payment !== 'EP' && state_payment !== 'LP' && state_payment !== 'OT') {
 								//preregister
 								var student_courses = new eUndac.Collections.PreregisterCourses({
+																									model_user    : model_user,
 																									success_pre   : success_pre,
 																									more_semester : more_semester,
 																									more_credits  : more_credits  });
@@ -77,11 +81,13 @@ eUndac.Routers.Base = Backbone.Router.extend({
 
 						}
 					});
-				} else {
+				} else if (success_pre === 'I'){
 					var student_courses = new eUndac.Collections.PreregisterCourses({
+																						model_user    : model,
 																						success_pre   : success_pre,
 																						more_semester : more_semester,
 																						more_credits  : more_credits  });
+
 				}
 			},
 			error : function(){

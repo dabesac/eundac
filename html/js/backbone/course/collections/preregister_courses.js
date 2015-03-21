@@ -1,8 +1,10 @@
 eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 	initialize : function(options){
 		var self = this;
+		this.model_data_user = options.model_user;
+
 		var success_pre = options.success_pre;
-		if (!success_pre) {
+		if (!success_pre || success_pre === 'B') {
 			// semesters
 			var semester_render = 3;
 			if (options.more_semester) {
@@ -14,10 +16,9 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 			}
 		}
 
-
 		this.fetch({
 			success : function(models, response){
-				if (!success_pre) {
+				if (!success_pre || success_pre === 'B') {
 					//verificar si existe curso con condicion...
 					var courses_with_condition = self.where({ condition : true });
 
@@ -84,8 +85,12 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 					}
 				} else {
 					// Renderear cursos que llevara
+					var courses_carry = [];
 					var semester_assign = models.models[0].toJSON().semester_roman_assign;
-					self.renderPreSuccess(models, semester_assign);
+					models.forEach(function(course){
+						courses_carry.push(course);
+					});
+					self.renderPreSuccess(courses_carry, semester_assign);
 				}
 			},
 			error : function(){
@@ -106,7 +111,6 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 				}
 			});
 		});
-
 	},
 
 	url : '/rest/preregister',
@@ -175,6 +179,7 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 		var $button_submit  = $('#js_button_submit');
 		var $button_back    = $('#js_confirm--button-back');
 		var $button_confirm = $('#js_confirm--button-confirm');
+		
 		setTimeout(function() {
 			$button_submit.addClass('fadeUp');
 		}, 300);
@@ -233,6 +238,8 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 		$button_confirm.on('click', function(){
 			self.confirmSubmit(courses_carry);
 		});
+
+		
 	},
 
 	renderConfirmation : function(courses_carry){
@@ -312,6 +319,8 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 	},
 
 	renderPreSuccess : function(courses_carry, semester_roman_assign){
+		var $button_delete  = $('#js_button_delete_pre');
+
 		$('#js_content-confirm-pick').addClass('inactive');
 		setTimeout(function() {
 			$('#js_content-confirm-pick').removeClass('active inactive');
@@ -336,5 +345,12 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 		var pre_auxiliar = new eUndac.Views.PreregisterAuxiliar({ type : 'PR' });
 		pre_auxiliar.render();
 		$('.js_auxiliar').html(pre_auxiliar.$el);
+
+		var preregister_delete = new eUndac.Views.PreregisterDelete({ 	model : this.model_data_user,
+																		model_course : courses_carry[0] });
+
+		$button_delete.on('click', function(){
+			$('#js_msg-confirm-delete').addClass('active');
+		});
 	}
 });

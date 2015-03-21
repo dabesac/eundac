@@ -60,8 +60,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initRestRoute() {
         $this->bootstrap('frontController');
         $frontController = Zend_Controller_Front::getInstance();
-        $restRoute = new Zend_Rest_Route($frontController);
-        $frontController->getRouter()->addRoute('default', $restRoute);
+        $restRoute = new Zend_Rest_Route($frontController, array(), array('rest' => array(  'period',
+                                                                                            'course',
+                                                                                            'preregister',
+                                                                                            'userdata',
+                                                                                            'userpayment',
+                                                                                            'year')  ));
+        //$restRoute = new Zend_Rest_Route($frontController);
+        $frontController->getRouter()->addRoute('rest', $restRoute);
     }
 
     protected function _initDbAdaptersToRegistry()

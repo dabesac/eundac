@@ -67,6 +67,7 @@ class Rest_UserdataController extends Zend_Rest_Controller {
             $current_register['courses'] = null;
             if ($register_pd['state']) {
                 $current_register['state'] = $register_pd['state'];
+                $current_register['count_delete'] = $register_pd['count'];
 
                 $courses_pd = $registerCoursesDb->_getFilter($where);
                 if ($courses_pd) {
@@ -76,6 +77,25 @@ class Rest_UserdataController extends Zend_Rest_Controller {
                                                                     'code_cur' => $course['curid'] );
                     }
                 }
+            } else {
+                $register_save = array(
+                                        'eid'           => $eid,
+                                        'oid'           => $oid,
+                                        'uid'           => $uid,
+                                        'pid'           => $pid,
+                                        'escid'         => $escid,
+                                        'subid'         => $subid,
+                                        'perid'         => $perid,
+                                        'regid'         => $uid.$perid,
+                                        'semid'         => 0,
+                                        'date_register' => date('Y-m-d H:i:s'),
+                                        'register'      => $uid,
+                                        'created'       => date('Y-m-d H:i:s'),
+                                        'state'         => 'B',
+                                        'count'         => 0 );
+
+                $current_register['state'] = 'B';
+                $registerDb->_save($register_save);
             }
 
             //creditos por semester
@@ -188,7 +208,7 @@ class Rest_UserdataController extends Zend_Rest_Controller {
     }
 
     public function deleteAction() {
-        $result['success'] = 'true';
+        $result['success'] = 'delete';
         return $this->_helper->json->sendJson($result);
     }
 }

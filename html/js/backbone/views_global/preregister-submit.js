@@ -11,6 +11,5 @@ eUndac.Views.PreregisterSubmit = Backbone.View.extend({
 	render : function(){
 		var html = this.$el.html(this.template());
 		$('#js_button_submit_side').html(html);
-
 	}
 });

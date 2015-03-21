@@ -32,8 +32,8 @@ class Api_Model_DbTable_Registration extends Zend_Db_Table_Abstract
 	public function _delete($data=array())
 	{
 		try{
-			if ($data['eid']=='' ||  $data['oid']=='' || $data['escid']=='' || $data['subid']=='' || 
-				$data['regid']==''|| $data['pid']==''|| $data['uid']=='' || $data['perid']=='') return false;
+			if (!$data['eid'] ||  !$data['oid'] || !$data['escid'] || !$data['subid'] || 
+				!$data['regid']|| !$data['pid']|| !$data['uid'] || !$data['perid']) return false;
 			$where = 	"eid = '".$data['eid']."' and oid='".$data['oid']."' and escid='".
 			$data['escid']."' and subid='".$data['subid']."' and regid='".$data['regid'].
 			"' and pid='".$data['pid']."' and uid='".$data['uid']."' and perid='".$data['perid']."'";			

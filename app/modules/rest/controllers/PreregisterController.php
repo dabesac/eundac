@@ -53,7 +53,7 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
                         'regid' => $uid.$perid,
                         'perid' => $perid );
         $register_pd = $registerDb->_getOne($where);
-        if ($register_pd) {
+        if ($register_pd['state'] == 'I' or $register_pd['state'] == 'M') {
             $semester_assign       = $register_pd['semid'];
             $semester_roman_assign = $semesters_roman[$register_pd['semid']];
 
@@ -310,6 +310,11 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
 
 
     public function postAction() {
+        $result['success'] = 'post';
+        return $this->_helper->json->sendJson($result);
+    }
+
+    public function putAction() {
         //dataBases
         $registerDb       = new Api_Model_DbTable_Registration();
         $registerCourseDb = new Api_Model_DbTable_Registrationxcourse();
@@ -339,8 +344,8 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
                             'perid' => $perid,
                             'regid' => $uid.$perid );
             $register_pd = $registerDb->_getOne($where);
-            if (!$register_pd) {
-                $register_save = array(
+            if ($register_pd['state'] == 'B') {
+                $register_pk = array(
                                         'eid'           => $eid,
                                         'oid'           => $oid,
                                         'uid'           => $uid,
@@ -348,14 +353,13 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
                                         'escid'         => $escid,
                                         'subid'         => $subid,
                                         'regid'         => $uid.$perid,
-                                        'perid'         => $perid,
-                                        'semid'         => $courses_data['semester_assign'],
-                                        'date_register' => date('Y-m-d h:i:s'),
-                                        'register'      => $uid,
-                                        'created'       => date('Y-m-d h:i:s'),
-                                        'state'         => 'I',
-                                        'count'         => 0 );
-                $registerDb->_save($register_save);
+                                        'perid'         => $perid );
+
+                $register_updated_data = array(
+                                        'modified' => $uid,
+                                        'updated'  => date('Y-m-d h:i:s'),
+                                        'state'    => 'I' );
+                $registerDb->_update($register_updated_data, $register_pk);
             }
 
             //Salvar Curso
@@ -384,13 +388,31 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
         return $this->_helper->json->sendJson($result);
     }
 
-    public function putAction() {
-        $result['success'] = 'put';
-        return $this->_helper->json->sendJson($result);
-    }
-
     public function deleteAction() {
-        $result['success'] = 'true';
+        // dataBase
+        $registerDb = new Api_Model_DbTable_Registration();
+
+        $eid   = $this->sesion->eid;
+        $oid   = $this->sesion->oid;
+        $uid   = $this->sesion->uid;
+        $pid   = $this->sesion->pid;
+        $escid = $this->sesion->escid;
+        $subid = $this->sesion->subid;
+        //$perid = $this->sesion->period->perid;
+        $perid = '14A';
+
+        $register_pk = array(
+                        'eid'   => $eid,
+                        'oid'   => $oid,
+                        'uid'   => $uid,
+                        'pid'   => $pid,
+                        'escid' => $escid,
+                        'subid' => $subid,
+                        'perid' => $perid,
+                        'regid' => $uid.$perid );
+
+        $registerDb->_delete($register_pk);
+        $result['success'] = true;
         return $this->_helper->json->sendJson($result);
     }
 }
