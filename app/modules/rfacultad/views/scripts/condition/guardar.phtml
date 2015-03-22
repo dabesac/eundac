@@ -1,0 +1,68 @@
+<!-- <table class="table">
+            <tr class='tetx-center'>
+                <th>#</th>
+                <th>Detalle de Condicion</th>
+                <th>Opcion</th>
+            </tr>
+            <?php 
+            if ($this->conditionsStudent){ ?>
+            	<?php
+            	$c=1;
+            	foreach ($this->conditionsStudent as $conditions){ 	
+            		switch ($conditions['type']) {
+						case 'CO': 	$detail = "Para matricula condicional del curso ";
+									break;
+						case 'LE': 	$detail = "Para dejar el curso";
+									break;
+						case 'CR': 	$detail = "Para adicionar creditos ";								
+									break;
+						case 'SE': 	$detail = "Para dejar el curso ";
+									break;
+					}
+            		?>
+            		<tr>
+            		<td><?php echo $c ?></td>
+            		<td><?php echo $detail ?></td>
+            		<td>
+            		<a id="eliminar"
+		            uid = '<?php echo $conditions['uid']?>'
+		            pid = '<?php echo $conditions['pid']?>'
+		            escid = '<?php echo $conditions['escid']?>'
+		            subid = '<?php echo $conditions['subid']?>'
+		            perid = '<?php echo $conditions['perid']?>'
+		            type = '<?php echo $conditions['type']?>'
+		            ><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+            		</td>
+            		</tr>
+				<?php
+				$c++;
+                } ?>
+            <?php
+            }else{ ?>
+            	<tr>
+                <td colspan="6"><center><h5 class="text-info">NO SE HA CREADO UNA CONDICIÓN PARA EL ALUMNO</h4></center></td>
+            </tr> 
+            <?php
+            }
+             ?>
+</table>
+<script>
+	$("#eliminar").click(function(){
+		var ajax_data = {
+			'uid' => $(this).attr('uid'),
+			'pid' => $(this).attr('pid'),
+			'escid' => $(this).attr('escid'),
+			'subid' => $(this).attr('subid'),
+			'perid' => $(this).attr('perid'),
+			'type' => $(this).attr('type'),
+		};
+		$.ajax({
+            type : "post",
+            url : "/rfacultad/condition/eliminar/",
+            data : ajax_data,
+            success : function(data){
+                $(".conditions").html(data);
+            }
+        }); 
+	});
+</script> -->
