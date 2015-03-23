@@ -64,7 +64,7 @@ class Register_StudentController extends Zend_Controller_Action {
                     'escid'=>$escid,
                     'subid'=>$subid,
                     'perid'=>$perid,
-                    'ratid'=>20,
+                    'ratid'=>39,
                     'amount'=>0,
                     'register'=>$uid,
                     'created'=>date('Y-m-d H:m:s'),
