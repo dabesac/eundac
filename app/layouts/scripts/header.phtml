@@ -33,7 +33,10 @@
         <ul>
             <li><a href="/<?php echo $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
             <li><a href="/profile/<?php echo ($rol=='AL' or $rol=='EG')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Mi Perfil </a></li>
-            <li><a href="##"><span class="glyphicon glyphicon-envelope"></span> Notificaciones</a></li>
+            <li><a href="/profile/<?php echo ($rol=='AL' or $rol=='EG')? 'public/student':'privateadm/adm'?>" class="ficha" style="color:yellow;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Rellenar todos sus datos obligatorios para obtener la FICHA ESTADISTICA en Mas Acerca de Mí"><span class="glyphicon glyphicon-envelope"></span> <b>Ficha Estadística</b></a></li>
+            <!-- <button type="button" class="btn btn-default" >
+              Popover on bottom
+            </button> -->
             <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> Cerrar Sessión</a></li>
         </ul>
     </div>
@@ -42,13 +45,16 @@
 <script type="text/javascript" src='/external_library/md5/change.js'></script>
 <script>
     $(function(){
+        $('.ficha').hover(function(){
+            $('.ficha').popover('toggle');            
+        });
         var rol = $('#rol').val();
         if (rol == 'AL' || rol == 'EG') {
           var fullProfile = $('#fullProfile').val();
           var allCurrentUrl = window.location.pathname;
           var currentUrl = allCurrentUrl.substr(0, 23);
           if (fullProfile == 'no' && currentUrl != '/profile/public/student') {
-            $(location).attr('href', '/profile/public/student');
+            $(location).attr('href', '/profile/public/student');        
           };
         };
 

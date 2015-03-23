@@ -1,0 +1,34 @@
+<div class="col-md-12 text-center">
+	<b><u>SUBIR ARCHIVO CSV</u></b>
+</div>
+<div class="row">
+	<div class="col-md-4 col-md-offset-4">
+		<div class="panel panel-primary">
+			<br>
+				<div class="row">
+					<form id="frmupload" method="post" enctype="multipart/form-data">
+						<div class="col-md-10 col-md-offset-1">
+							<?php echo $this->form->csv ?>						
+						</div>
+						<div class="col-md-3 col-md-offset-4">
+							<?php echo $this->form->save ?>
+						</div>
+					</form>	
+				</div>
+			<br>
+		</div>	 
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$("#save").submit(function(){
+		    $.ajax({
+		        type: 'POST',
+		        url : '/rcentral/generatecode/index',
+		        data: $(this).serialize(),
+		        success: function(data) { }
+		    }); 
+		    return false;
+		});
+	});
+</script>

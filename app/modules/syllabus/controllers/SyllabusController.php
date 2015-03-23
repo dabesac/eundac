@@ -337,7 +337,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
                 $data_units = $tb_units ->_getFilter($params);
                 $count = count($data_units);
                 if ($count == $formData['units']) {
-                        $update = array('state'=>'C');
+                        $update = array('state'=>'C','date_close'=>date('Y-m-d'));
                         $syllabus= new Api_Model_DbTable_Syllabus();
                         if ($syllabus->_update($update,$params)){ 
                             if ($formData['existenCursos'] != 'no') {

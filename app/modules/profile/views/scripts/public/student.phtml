@@ -94,13 +94,18 @@
 	    return true;
 	}
 	$(function () {
-		//Actualizar perfil
-		/*var successProfile = $('#successProfile').val();
+		var successProfile = $('#successProfile').val();
+		
 		if (successProfile == 'no') {
-			$('#alertCompleteProfile').removeClass('hidden');
-	    	$('#profileTab li:eq(3) a').tab('show');
+	    	$('.btnObO').removeClass('btnActive');
+			$(".btnMoreAboutMe").addClass('btnActive');
+			
+			var goTo = $(".btnMoreAboutMe").attr('goto');
+			$('.dataContainer').removeClass('dataContainerActive');
+			$('#' + goTo).addClass('dataContainerActive');
 		};
-		$('#btnCompleteProfile').click(function(){
+		//Actualizar perfil
+		/*$('#btnCompleteProfile').click(function(){
 			$('html,body').animate({
 		        scrollTop: $("#profileTab").offset().top
 		    }, 500);

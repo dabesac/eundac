@@ -10,6 +10,7 @@
             </thead>            
             <tbody>
             <?php
+            if ($this->listacurricula) {
             foreach ($this->listacurricula as $lc){            
             ?>
             <tr>
@@ -38,6 +39,8 @@
             </tr>    
             <?php 
             }
+            }
+
             ?>
             </tbody>
         </table>

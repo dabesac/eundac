@@ -180,9 +180,9 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
         }
     }
 
-    public function _intervalHoraryicur($eid='',$oid='',$perid='',$escid='',$subid='',$semid='',$day='',$hora){
+    public function _intervalHoraryicur($eid='',$oid='',$perid='',$escid='',$subid='',$semid='',$day='',$hora,$turno){
         try {
-            if($eid=='' || $oid=='' || $perid=='' || $escid=='' || $subid=='' || $semid=='' || $day=='' || $hora=='') return false;
+            if($eid=='' || $oid=='' || $perid=='' || $escid=='' || $subid=='' || $semid=='' || $day=='' || $hora=='' || $turno=='') return false;
             $tiempo=split(":", $hora);
             $hora=$tiempo[0];
             $min=$tiempo[1];
@@ -193,7 +193,7 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
 
             $sql=$this->_db->query("select * from horary_periods where eid='$eid' and oid='$oid'
                                     and perid='$perid' and escid='$escid' and subid='$subid'
-                                    and semid='$semid' and day='$day'
+                                    and semid='$semid' and day='$day' and turno='$turno'
                                     and '$hora' between hora_ini and hora_fin ");
 
             if ($sql) return $sql->fetchAll();
@@ -203,9 +203,9 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
         }
     }
 
-    public function _intervalHoraryfcur($eid='',$oid='',$perid='',$escid='',$subid='',$semid='',$day='',$hora){
+    public function _intervalHoraryfcur($eid='',$oid='',$perid='',$escid='',$subid='',$semid='',$day='',$hora,$turno){
         try {
-            if($eid=='' || $oid=='' || $perid=='' || $escid=='' || $subid=='' || $semid=='' || $day=='' || $hora=='') return false;
+            if($eid=='' || $oid=='' || $perid=='' || $escid=='' || $subid=='' || $semid=='' || $day=='' || $hora=='' || $turno=='') return false;
             $tiempo=split(":", $hora);
             $hora=$tiempo[0];
             $min=$tiempo[1];
@@ -214,7 +214,7 @@ class Api_Model_DbTable_Horary extends Zend_Db_Table_Abstract
             $hora = date ( 'H:i:s' , $min2 );
             $sql=$this->_db->query("select * from horary_periods where eid='$eid' and oid='$oid'
                                     and perid='$perid' and escid='$escid' and subid='$subid'
-                                    and semid='$semid' and day='$day'
+                                    and semid='$semid' and day='$day' and turno='$turno'
                                     and '$hora' between hora_ini and hora_fin ");
 
             if ($sql) return $sql->fetchAll();
