@@ -1892,10 +1892,12 @@ class Record_IndexController extends Zend_Controller_Action {
             //sillabus
             $sillabus = new Api_Model_DbTable_Syllabus();
             $deletesil = $sillabus ->_delete($formData);
+            //course_competency
+            $courcomp = new Api_Model_DbTable_CourseCompetency();
+            $deletecxc = $courcomp ->_delete($formData);
             //periodsxcourse
             $periodscourses= new Api_Model_DbTable_PeriodsCourses();
             $deletepxc = $periodscourses ->_delete($formData);
-
 
 		} catch (Excoption $e){
 			print "Error: ".$e->getMessage();

@@ -1165,6 +1165,7 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $uidim=$this->sesion->pid;
             // $pid=$uidim;
 
+
             $data = array(
                 'eid'=>$eid,
                 'oid'=>$oid,
@@ -1179,16 +1180,40 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $dbimpression->_save($data);
 
             $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,
-                'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica');
+                'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica_'.$perid);
             $dataim = $dbimpression->_getFilter($wheri);
-
-            $wheri1 = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica_'.$perid);
-            $dataim1 = $dbimpression->_getFilter($wheri1);
-
-            $conte = count($dataim1);
-            $this->view->conte=$conte;
             $co=count($dataim);
             $codigo=$co." - ".$uidim;
+
+            // guardar la informacion de su memorando
+            $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid,
+                         'uid'=>$uid,'pid'=>$pid);
+            $bdcourseteach = new Api_Model_DbTable_Coursexteacher();
+            $datacxt = $bdcourseteach->_getFilter($where);
+
+            if (!$datacxt[0]['nro_memo_x_perid']) {
+                $data1=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_memorandum_carga_acacemica_'.$perid);
+                $datac = $dbimpression->_countMemo($data);
+                $c=$datac[0]['count'];
+                $pk = array('eid'=>$eid,
+                            'oid'=>$oid,
+                            'escid'=>$escid,
+                            'subid'=>$subid,
+                            'perid'=>$perid,
+                            'uid'=>$uid,
+                            'pid'=>$pid
+                            );
+                $data=array('nro_memo_x_perid'=>$c);
+
+                $bdcourseteach->_update_memo($data,$pk);
+                $conte=$c;
+            }
+            else{
+                $conte=$datacxt[0]['nro_memo_x_perid'];
+            }   
+            //
+            $this->view->conte=$conte;
+            
             $header=$this->sesion->org['header_print'];
             $footer=$this->sesion->org['footer_print'];
             $header = str_replace("?facultad",$namef,$header);
@@ -1658,12 +1683,15 @@ class Distribution_DistributionController extends Zend_Controller_Action {
             $doc = array();
             $tmp_doc = '';
             $c=1;
-            foreach ($data_courses as $course) {
-                //print_r($data_courses['uid'].'--');
-                if ($tmp_doc <> $course['uid']) {
-                    $doc[$c] = $course['uid'];
-                    $tmp_doc = $course['uid'];
-                    $c++;
+
+            if ($data_courses) {
+                foreach ($data_courses as $course) {
+                    //print_r($data_courses['uid'].'--');
+                    if ($tmp_doc <> $course['uid']) {
+                        $doc[$c] = $course['uid'];
+                        $tmp_doc = $course['uid'];
+                        $c++;
+                    }
                 }
             }
             $this->view->teachers = $doc;
@@ -1677,18 +1705,22 @@ class Distribution_DistributionController extends Zend_Controller_Action {
 
             $c = 0;
             $interruptor = 0;
-            foreach ($teachers as $teacher) {
-                foreach ($data_courses as $course) {
-                    if ($teacher['uid'] == $course['uid']) {
-                        $interruptor = 1;
+            if ($teachers) {
+                foreach ($teachers as $teacher) {
+                    if ($data_courses) {
+                        foreach ($data_courses as $course) {
+                            if ($teacher['uid'] == $course['uid']) {
+                                $interruptor = 1;
+                            }
+                        }
                     }
-                }
-                if ($interruptor == 0) {
-                    $teachersWcourses[$c]['uid'] = $teacher['uid'];
-                    $teachersWcourses[$c]['pid'] = $teacher['pid'];
-                    $c++;
-                }
-                $interruptor = 0;
+                    if ($interruptor == 0) {
+                        $teachersWcourses[$c]['uid'] = $teacher['uid'];
+                        $teachersWcourses[$c]['pid'] = $teacher['pid'];
+                        $c++;
+                    }
+                    $interruptor = 0;
+                }                
             }
 
             $c = 0;

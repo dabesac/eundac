@@ -68,7 +68,7 @@ class Admin_GenerategraduatedController extends Zend_Controller_Action {
                 $course = new Api_Model_DbTable_Course();
                 $data_courses = $course->_getCountCoursesxSemester($wherecant=array('escid' => $escid, 'curid' => $curid));
                 $courses = $course->_getCountCoursesxApproved($wherecour=array('uid' => $uid, 'curid' => $curid));
-                print_r($courses);echo "\t .... . . .";
+                // print_r($courses);echo "\t .... . . .";
                 // if ($data_courses){
                 //     if($courses){
                 //         $sum = 0;

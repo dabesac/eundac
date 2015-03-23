@@ -3,8 +3,8 @@
  ?>
 
 <div class="studentSignCurrent_header">
-	<p class="studentSignCurrent_periodo">Periodo <?php echo $dataCourses['period'] ?></p>
 	<?php if ($dataCourses['courses']): ?>
+		<p class="studentSignCurrent_periodo"> Periodo <?php echo $dataCourses['period']?> </p>
 		<?php if ($dataCourses['cantidad'] == 1):
 			$proNombre = 'Curso';
 		else:

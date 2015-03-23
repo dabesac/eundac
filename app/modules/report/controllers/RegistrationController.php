@@ -88,7 +88,7 @@ class Report_RegistrationController extends Zend_Controller_Action
             {
                 $reporte = $bdperiodo->_getSubsidiaryXPeriodsXMat($where);
             }
-            $this->view->reporte = $reporte;
+                $this->view->reporte = $reporte;
         }
         catch(Exception $ex )
         {

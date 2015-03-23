@@ -1,146 +1,253 @@
-<?php
-$escid= $this->escid;
-$subid= $this->subid;
-$uid=$this->uid;
-$pid=$this->pid;
-$perid=$this->perid;
-$oid=$this->oid;
-$eid=$this->eid;
-$condi=$this->condi;
-    ?>       
-        <!-- Texto Enriquecido-->
-        <link rel="stylesheet" type="text/css" href="/external/jwysiwyg/jquery.wysiwyg.css">
-        <script type="text/javascript" src="/external/jwysiwyg/jquery.wysiwyg.js"></script>
-        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.image.js"></script>
-        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.link.js"></script>
-        <script type="text/javascript" src="/external/jwysiwyg/wysiwyg.table.js"></script>
-
-        <script src="/js/jquery-1.11.0.js"></script>
-        <script src="/external_library/bootstrap/js/bootstrap.js"></script>
-        <script src="/external_library/bootstrap/js/jquery.functions.js"></script>
-        <link rel="stylesheet" type="text/css" href="/external_library/bootstrap/css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="/css/style.css">
-        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<?php
-if ($this->g_reg){?>
-	<center>
-	<div class="alert alert-success"><?php echo $this->g_reg?></div>
-	<a href="#" class="btn btn-danger" onclick="javascrit: window.close();">Cerrar Ventana</a>
-	</center>	
-<?php }else{?>
-	
-
-<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getName(); ?>" action="/rfacultad/condition/detail" method="POST" enctype="application/x-www-form-urlencoded">
-    <table class="table  table-striped table-bordered table-condensed " style='font-size: 12px'>
-        <tr class='alert-danger'>
-            <th colspan="4"><center><span><h4><b>CONDICION PARA MATRICULA<b/></h4></span></center></th>
-        </tr>
-        <tr >
-            <th class="span3 bloke" >Aumentar créditos</th>
-            <th class="span3 bloke">Aumentar Numero de Veces Matricula</th>
-            <th class="span3 bloke"> Cantidad de Semestres:</th>  
-            <th class="span3 bloke"> Quitar cursos:</th>        
-        </tr>
-        <tr>
-            <td><?php print $this->form->credits; ?></td>
-            <td><?php print $this->form->num_registration; ?></td>
-            <td><?php print $this->form->semester; ?></td>
-            <td ><center><a id="quitar">
-                 <img src="/img/course.png"  rel="tooltip" title="Quitar Cursos" /></a>
-             </center>
-             </td>
-        </tr>
-        <tr class='alert-success'>       
-            <td colspan="4" ><div id='cursos' class='flotacarajo span10'>                     
-            </div></td>
-        </tr>
-		<tr class='alert-success'>
-			<th>Documento Autorización</th>
-			<td colspan="3" ><?php print $this->form->doc_authorize->setAttrib("title","Resolución"); ?></td>
-		</tr>
-        <tr style="font-size: 12px" class='alert-success' >
-            <th >Detalles</th>
-            <td colspan="3">
-                <?php print $this->form->uid->setvalue($uid); ?>
-                <?php print $this->form->pid->setvalue($pid); ?>
-                <?php print $this->form->subid->setvalue($subid); ?>
-                <?php print $this->form->escid->setvalue($escid); ?>
-                <?php print $this->form->condi->setvalue($condi); ?>
-                <?php print $this->form->comments; ?>
-            </td>
-        </tr> 
-        <tr>
-			<td colspan="4"><center>
-            <?php print $this->form->guardar; ?>
-        	</center></td>
-        </tr>        
-    </table>
-</form>
-
-<script>
-     //cargamos los cursos pendientes 
-    $("#quitar").click(function(){
-
-        $("#cursos").html("<img scr='/img/spinner.gif' />Cargando...");
-        var url="/rfacultad/condition/listcourse/perid/<?php print $perid?>/escid/<?php print $escid?>/uid/<?php print $uid?>/pid/<?php print $pid?>/subid/<?php print $subid?>";
-        // alert(url);
-        $("#cursos").load(url);
-            });
-</script>
-<?php 
-if (($this->condi)=='C'){ ?>
-   <table class="table  table-striped table-bordered table-condensed " style='font-size: 12px'>
-        <tr class='alert-susses'>
-            <th colspan="4"><center><span><h4>HISTORIAL DE CONDICIONES</h4></span></center></th>
-        </tr>
-        <tr >
-            <th class="bloke" >#</th>
-            <th class="span4 bloke" >Resoluciòn</th>
-            <th class="span5 bloke">Detalle Resoluciòn</th>
-            <th class="span1 bloke">Eliminar</th>                   
-        </tr>
-        <?php 
-
-        $i=1;
-        if ($this->datos) {
-            
-        foreach ($this->datos as $condi)    
-        { ?>
-         <tr>
-        <div id='det1'></div>
-        <td> <?php print $i?> </td>
-        <td> <?php print $condi['doc_authorize']?> </td>
-        <td> <?php print $condi['comments']?> </td>       
-        <td> <a id="<?php echo $condi["cnid"] ?>">
-            <img src="/img/delete.ico"  rel="tooltip" title="Eliminar" />
-              </a>
-                    <script>                   
-                        $("#<?php echo $condi['cnid'] ?>").click(function(){    
-                            if (confirm('Esta Seguro que desea eliminar la condicion?'))
-                            {
-                                url="/rfacultad/condition/delete/cnid/<?php print $condi['cnid']?>/perid/<?php print $condi['perid']?>/escid/<?php print $condi['escid']?>/uid/<?php print $condi['uid']?>/pid/<?php print $condi['pid']?>/subid/<?php print $condi['subid']?>";
-                                $("#det1").load(url);
+<?php $data_person=$this->data_person ?>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h5 class="panel-title">
+        <span class='glyphicon glyphicon-eye-open'></span>
+        <strong>CONDICIÓN DE MATRÍCULA | PERIODO <?php echo $this->perid ?></strong>
+        <div class='pull-right'>
+        <?php  echo $data_person['last_name0'].' '.$data_person['last_name1'].' '.$data_person['first_name'] ?>
+        </div>
+      </h5>
+    </div>
+    <br>
+    <div class="col-md-12 sec">
+            <div class="col-md-offset-2 col-md-2"> 
+                <center><h4>Resolución:</h4></center>        
+             </div>
+            <div class="col-md-6">  
+                <input type="text" name="doc" id="doc" placeholder="Num de Resolución" value="" maxlength="40" size="40" class="form-control col-lg-1">    
+            </div>
+    </div>
+    <div class="col-md-12 sec">
+        <div class="col-md-12 col21">
+            <div class="text-center col-md-12">
+                <br>
+                <h4 class="text-info"><strong>CONDICION PARA AUMENTAR CREDITOS -- AUMENTAR SEMESTRES -- DEJARCURSO</strong></h4>
+            </div>
+            <div class="col-md-3">
+                <label>Aumentar semestres</label>
+                <select id="nsem" name="nsem" class="form-control">
+                    <option value="0">- Seleccione -</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>            
+            </div>
+            <div class="col-md-6"> 
+                <label>Dejar Curso </label>
+                <select id="dcurso" name="dcurso" class="form-control">
+                    <option value="ns">- Seleccione -</option>
+                        <?php
+                        if($this->cursos){
+                            foreach ($this->cursos as $cursos) {
+                                $courseid_en=base64_encode($cursos['courseid']);?>
+                                <option value="<?php echo $courseid_en?>"><?php echo $cursos['name']?></option>
+                            <?php                        
                             }
-                            else
-                            return false;
-                        });
-                    </script>
-        </td>       
-        </tr>         
-           <?php
-            $i++;
+                        }
+                        ?>
+                </select>            
+            </div>
+            <div class="col-md-3">
+                <label>Aumentar creditos </label>
+                <select id="credit" name="credit" class="form-control">
+                    <option value="0">- Seleccione -</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>            
+            </div>
+        </div>
+    </div>
+        <div class="col-md-12 sec">
+            <div class="text-center col-md-12">
+            <br>
+                <h4 class="text-info"><strong>CONDICIÓN PARA NUMERO DE VECES DE MATRICULA</strong></h4>
+            </div>
+            <div class="col-md-8"> 
+                <label>Curso </label>
+                <select id="curso" name="curso" class="form-control">
+                    <option value="ns">- Seleccione -</option>
+                        <?php
+                        if($this->cursos){
+                            foreach ($this->cursos as $cursos) {
+                                $courseid_en=base64_encode($cursos['courseid']).';--;'.$cursos['veces'];?>
+                                <option value="<?php echo $courseid_en?>"><?php echo $cursos['name']?></option>
+                            <?php                        
+                            }
+                        }
+                        ?>
+                </select>                 
+             </div>
+            <div class="col-md-4"> 
+                <label>Num Matriculas</label> 
+                <div style="font-size: 15px;padding-bottom:10px;" class="text text-info form-control veces "></div>
+                <!-- <span id="veces" class="label label-info"></span>   -->     
+            </div>
+        </div>
+
+    <div class="row">
+        <div class="col-md-offset-4 col-md-3">
+            <br>
+            <a id="guardar" class="form-control btn btn-primary"
+            uid = '<?php echo $this->uid?>'
+            pid = '<?php echo $this->pid?>'
+            escid = '<?php echo $this->escid?>'
+            subid = '<?php echo $this->subid?>'
+            perid = '<?php echo $this->perid?>'
+            curid = '<?php echo $this->curid?>'
+            ><span class="glyphicon glyphicon-floppy-disk"></span> AGREGAR</a>
+        </div>
+    </div>
+    <br>
+</div>
+<div id="condition"></div>
+<div class="condition2">
+<?php
+if ($this->conditionsStudent){ ?>
+<div class="panel panel-primary">
+        <div class="panel-heading">
+            <h5 class="panel-title"><span class='glyphicon glyphicon-th-list'></span><strong> DETALLE DE CONDICIÓN <span class="label label-default text-reght" ></span>
+            </strong></h5>
+        </div>
+        <div class="conditions">
+            
+                <table class="table">
+                    <tr class='tetx-center'>
+                        <th>#</th>
+                        <th>Detalle de Condicion</th>
+                        <th>Opcion</th>
+                    </tr>
+                    <?php
+                    $c=1;
+                    foreach ($this->conditionsStudent as $conditions){  
+                        if ($conditions['type']=='CO' || $conditions['type']=='LE'){
+                            foreach ($this->cursos as $cursos) {
+                                if($cursos['courseid']==$conditions['courseid']) {
+                                    $coursename = $cursos['name'];
+                                }                   
+                            }
+                        }
+                        switch ($conditions['type']) {
+                            case 'CO':  $detail = "Matricula condicional del curso <strong>".$coursename.'</strong> con resolución <strong>'.$conditions['doc_authorize'].'</strong>';
+                                        break;
+                            case 'LE':  $detail = "Para dejar el curso <strong>".$coursename.'</strong> con resolución <strong>'.$conditions['doc_authorize'];
+                                        break;
+                            case 'CR':  $detail = "Para adicionar ".$conditions['amount']." creditos con resolución <strong>".$conditions['doc_authorize'].'</strong>';                      
+                                        break;
+                            case 'SE':  $detail = "Para adicionar ".$conditions['amount']." semestres con resolución <strong>".$conditions['doc_authorize'].'</strong>';
+                                        break;
+                        }
+                        ?>
+                        <tr>
+                        <td><?php echo $c ?></td>
+                        <td><?php echo $detail ?></td>
+                        <td>
+                        <a class="eliminar"
+                        uid = '<?php echo $conditions['uid']?>'
+                        pid = '<?php echo $conditions['pid']?>'
+                        escid = '<?php echo $conditions['escid']?>'
+                        subid = '<?php echo $conditions['subid']?>'
+                        perid = '<?php echo $conditions['perid']?>'
+                        type = '<?php echo $conditions['type']?>'
+                        clss="<?php echo $c.'tr' ?>"
+                        ><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                        </td>
+                        </tr>
+                    <?php
+                    $coursename = "";
+                    $c++;
+                    } ?>         
+                </table>
+        </div>
+    </div>
+<?php 
+}?>
+</div>
+<script>
+
+    $('#curso').change(function(){
+        var valcod = $(this).val();
+        var xx1 = valcod.split(";--;");
+        var curso = xx1[0];
+        var nveces = xx1[1];
+        $(".veces").html(nveces)
+
+    });
+
+    $('#guardar').click(function(){
+        //cals=$(".condition2").parent();
+        var nsem = $('#nsem').val();
+        var dcurso = $('#dcurso').val();
+        var credit =$('#credit').val();
+        var valcurso = $('#curso').val();
+        var xx1 = valcurso.split(";--;");
+        var curso = xx1[0];
+        var nveces =$('#nveces').val();
+        var doc = $('#doc').val();
+        var sel = 'ns';
+        if (nsem!='0') {sel='s'};
+        if (credit!='0') {sel='s'};
+        if (dcurso!='ns') {sel='s'};
+        if (curso!='ns') {sel='s'};
+        if (sel=='ns') {
+            alert('agregue una condicion');
+            return false;
+        };
+        if (doc=="") {
+            alert('agregue una resolucion');
+            return false;
         }
-        }
-        ?>
-</table>
-<?php }?>
-<style type="text/css">
-    #nsemestre {width:128px;}
-    #ncreditos{width:128px;}
-    #vmatricula{width:125px;}
-    #detalles{width:300px;}
-</style>
-<?php }
-?>
+        var data_ajax = {
+            'uid' : $(this).attr('uid'),
+            'pid' : $(this).attr('pid'),
+            'escid' : $(this).attr('escid'),
+            'subid' : $(this).attr('subid'),
+            'perid' :  $(this).attr('perid'),
+            'nsem' : nsem,
+            'dcurso' : dcurso,
+            'credit' : credit,
+            'curso' : curso,
+            'curid' : $(this).attr('curid'),
+            'resolution' : doc
+        };
+        $.ajax({
+            type : "post",
+            url : "/rfacultad/condition/guardar/",
+            data : data_ajax,
+            success : function(data){
+                /*$(".condition").html("<div class='alert alert-success conditions' role='alert'<h3>Se ha agregado la condicion</h3></div>");
+                setTimeout(function(){
+                    $("#modal").modal('hide');
+                }, 1000);*/
+                $(".condition2").fadeOut("fast");
+                $("#condition").html(data);
 
 
+            }
+        }); 
+    });
+    $(".eliminar").click(function(e){
+        e.preventDefault();
+        cls=$(this).parent().parent();
+        var ajax_data = {
+            'uid' : $(this).attr('uid'),
+            'pid' : $(this).attr('pid'),
+            'escid' : $(this).attr('escid'),
+            'subid' : $(this).attr('subid'),
+            'perid' : $(this).attr('perid'),
+            'type' : $(this).attr('type'),
+        };
+        $.ajax({
+            type : "post",
+            url : "/rfacultad/condition/delete/",
+            data : ajax_data,
+            success : function(data){
+                cls.fadeOut("fast");
+            }
+        }); 
+    });
+</script>

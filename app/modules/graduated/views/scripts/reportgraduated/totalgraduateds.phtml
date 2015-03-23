@@ -18,6 +18,7 @@ if ($this->egresados) { ?>
 			</tr>
 			<?php 
 			$c=1;
+			$tot=0;
 			$escu= new Api_Model_DbTable_Speciality();
 			foreach ($this->egresados as $cantidad) {
 				$whereesc =array(

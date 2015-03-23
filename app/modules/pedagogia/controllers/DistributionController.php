@@ -127,8 +127,7 @@ class Pedagogia_DistributionController extends Zend_Controller_Action {
             foreach ($dis as $co => $datas) {
                 $position[$co]= $datas['order'];
             }
-            array_multisort($position, SORT_ASC, $dis);
-
+//            array_multisort($position, SORT_ASC, $dis);
             foreach ($dis as $disi) {
                 $wher=array('eid'=>$disi['eid'],'oid'=>$disi['oid'],'escid'=>$disi['escid'],'subid'=>$disi['subid'],'distid'=>$disi['distid'],
                         'perid'=>$disi['perid']);

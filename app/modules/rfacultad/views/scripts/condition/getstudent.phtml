@@ -1,3 +1,26 @@
+<style type="text/css">
+    .modal-dialog
+    {
+        width: 900px;
+    }
+</style>
+<?php //print_r($this->datos);exit(); ?>
+
+<div class="modal fade" id='modal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body bodd">
+        <p>Cargano informacion.&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Salir</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <table class="table table-hover table-condensed">
         <thead>
@@ -42,9 +65,19 @@
                                         $condicion=$this->condicion;
                                         $url= "uid/".base64_encode($datos['uid'])."/pid/".base64_encode($datos['pid'])."/escid/".base64_encode($datos['escid'])."/subid/".base64_encode($datos['subid'])."/condi/".base64_encode($condicion);
                                     ?>
-                                    <a id='<?php echo 'a'.$datos['uid']?>'  onclick="javascript: window.open('/rfacultad/condition/detail/<?php echo $url?>','Eliminar Cursos','resizable=no,location=no,menubar=no,scrollbars=yes,status=no,toolbar=no,fullscreen=yes,dependent=no,width=750,height=750')" class='<?php if ($this->condicion =='C') {echo 'btn   btn-warning ';} if ($this->condicion =='S') {echo 'btn   btn-primary';} ?>'>
+                                    <!-- /rfacultad/condition/detail/<?php echo $url?> -->
+                                    <a id='a<?php echo $datos['uid']?>' data-toggle="modal" href = "#Modalcondition" class='<?php if ($this->condicion =='C') {echo 'btn   btn-warning ';} if ($this->condicion =='S') {echo 'btn   btn-primary';} ?>' aurl="/rfacultad/condition/detail/<?php echo $url?>">
                                     <i class=" icon-pencil icon-white"></i>
                                     <?php if ($this->condicion =='C') {?><?php echo 'Agregar Condición';} if ($this->condicion =='S') {echo 'Crear';}?></a>
+                                    <script type="text/javascript">
+                                        $('#a<?php echo $datos['uid']?>').click(function(){
+                                            var url = $(this).attr('aurl')
+                                            //console.log(url);
+                                            //$("#view1").load(url);
+                                            $("#modal").modal('show');
+                                            $(".bodd").load(url);
+                                        });
+                                    </script>
                                 <?php
                                 } else {?>
                                     <span style="color: red">Pre matriculado</span>
@@ -66,4 +99,5 @@
             </tbody>
     </table>
         <div style="clear:both"></div>
+
 

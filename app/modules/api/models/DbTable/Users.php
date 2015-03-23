@@ -540,7 +540,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
             $oid = $where['oid'];
             $perid = $where['perid'];
             $facid = $where['facid'];
-            if ($facid<>"") $facid = " and left(u.escid,1)='$facid'";
+           if ($facid<>"") $facid = " and left(u.escid,1)='$facid'";
             else $facid = "";
             if ($where['escid']<>"") {
             	$escid = $where['escid'];

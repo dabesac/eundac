@@ -76,6 +76,7 @@ class Default_Form_Login extends Zend_Form
         $submit->setAttrib('class', 'form-control sendForm')->setLabel("Ingresar");
 		$submit->setAttrib('id', 'enviarf');
         $submit->removeDecorator('HtmlTag');
+
         $this->addElements(array($rid,$usuario,$clave,$submit));        
     }
 
