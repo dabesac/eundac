@@ -83,7 +83,7 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 					if (type_render_course === 'A') {
 						self.buttonPreregister(courses_with_condition);
 					}
-				} else {
+				} else if (success_pre === 'I') {
 					// Renderear cursos que llevara
 					var courses_carry = [];
 					var semester_assign = models.models[0].toJSON().semester_roman_assign;
@@ -91,6 +91,13 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 						courses_carry.push(course);
 					});
 					self.renderPreSuccess(courses_carry, semester_assign);
+				} else if (success_pre === 'M') {
+					var courses_carry_s = [];
+					var semester_assign_s = models.models[0].toJSON().semester_roman_assign;
+					models.forEach(function(course){
+						courses_carry_s.push(course);
+					});
+					self.renderRegisterSuccess(courses_carry_s, semester_assign_s);
 				}
 			},
 			error : function(){
@@ -352,5 +359,25 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 		$button_delete.on('click', function(){
 			$('#js_msg-confirm-delete').addClass('active');
 		});
+	},
+
+	renderRegisterSuccess : function(courses_carry, semester_roman_assign){
+		$('#js_register-success').addClass('active');
+
+		// render success
+		var many_courses = 0;
+		courses_carry.forEach(function(course){
+			view_course = new eUndac.Views.Course({ model : course, 
+													typeRender : 'I',
+													where_render : $('#js_reg_success-main-data') });
+			many_courses++;
+		});
+
+		var data_render = {	type : 'RS',
+							many_courses : many_courses,
+							semester_assign : semester_roman_assign, };
+
+		var view_paragraph = new eUndac.Views.Paragraphs({  data_render : data_render,
+															where_render : $('#js_reg_success-paragraph') });
 	}
 });

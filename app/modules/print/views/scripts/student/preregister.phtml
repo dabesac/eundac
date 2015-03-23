@@ -1,0 +1,57 @@
+<?php
+$dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
+include_once($dir);
+ob_start(); 
+?>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<div>
+    <div style="text-align:left; font-size:12px;"><b>Código: </b><?php echo strtoupper($this->uid)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Alumno: </b> <?php echo strtoupper($this->fullname)?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <b>Semestre: </b><?php echo strtoupper($this->regmatr['semid'])?>
+    </div>
+</div>
+<link rel="stylesheet" type="text/css" href="/css/print.css">
+<div style="text-align: center; font-size:16px;margin-top:15px"><b> PRE - MATRÍCULA <?php echo $this->perid?></b></div> <br/>
+<table style="width:100%; text-align:center; margin-top: 10px;">
+        <tr>
+            <th class='small'>Código Curso</th>
+            <th>Nombre Curso</th>
+            <th class='small'>Condición</th>
+            <th class='small'>Créditos</th>
+            <th class='small'>Semestre</th>
+            <th class='small'>Turno</th>
+            <th class=''>Docente</th>
+        </tr>
+        <?php foreach ($this->data_subjects as $key => $value) { ?>
+            <tr>
+                <td><?php echo $value['courseid']?></td>
+                <td><?php echo $value['name']?></td>
+                <td><?php if ($value['type']=='O') echo "Obligatorio";
+                            elseif ($value['type']=='E') echo "Electivo";?></td>
+                <td><?php echo $value['credits']?></td>
+                <td><?php echo $value['semid']?></td>
+                <td><?php echo $value['turno']?></td>
+                <td><?php echo $value['name_t']?></td>
+            </tr>
+        <?php }?>
+        <tr >
+            <td style='border: 0px; solid #fff;'></td>
+            <td style='border: 0px; solid #fff'></td>
+            <td border='0'>Total</td>
+            <td border='0'><strong><?php echo $this->regmatr['credits']?></strong></td>
+        </tr>
+</table>
+
+<?php 
+    
+    $html = ob_get_contents();
+
+    $mpdf=new mPDF('win-1252','A4','','',15,15,40,18,8,5);    
+    $mpdf->SetWatermarkImage('/img/undac.png',0.07,'F');
+    $mpdf->showWatermarkImage = true;
+    $mpdf->SetHTMLHeader($this->header);
+    $mpdf->SetHTMLFooter($this->footer,'O');
+    ob_end_clean();
+    $mpdf -> WriteHTML($html);
+    $mpdf->Output('Pre-Matrícula-'.$this->uid.'.pdf','D');
+    // $mpdf -> Output();  
+   
+?>

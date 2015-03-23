@@ -69,6 +69,12 @@
 	
 </section>
 
+<section id="js_register-success" class="container  container--interactive">
+	<div id="js_reg_success-paragraph"></div>
+	<div id="js_reg_success-main-data"></div>
+</section>
+
+
 
 <!-- _________________________________________ T E M P L A T E S ______________________________________ -->
 
@@ -175,7 +181,7 @@
 			</article>
 		</div>
 	{% else %}
-		<a href="##" class="button  button--small  button--print">Imprimir <span class="glyphicon glyphicon-print"></span></a>
+		<a href="/print/student/preregister" class="button  button--small  button--print">Imprimir <span class="glyphicon glyphicon-print"></span></a>
 	{% endif %}
 </template>
 
@@ -211,6 +217,15 @@
 			 curso
 		{% endif %}</strong> 
 		y perteneceras al <strong>{{ semester_assign }} Semestre</strong>, imprimelo y despues ve a validarlo en Registros de tu Facultad...</p>
+	{% elseif (type === 'RS') %}
+		<p class="info  info--main"><span class="glyphicon glyphicon-info-sign"></span> Matrícula validada, llevas 
+		<strong>{{ many_courses }}
+		{% if (many_courses > 1) %}
+			 cursos
+		{% else %}
+			 curso
+		{% endif %}</strong> 
+		y perteneces al <strong>{{ semester_assign }} Semestre</strong>, disfruta tu periódo...</p>
 	{% endif %}
 </script>
 

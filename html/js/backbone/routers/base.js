@@ -82,7 +82,7 @@ eUndac.Routers.Base = Backbone.Router.extend({
 
 						}
 					});
-				} else if (success_pre === 'I'){
+				} else if (success_pre === 'I' || success_pre === 'M'){
 					var student_courses = new eUndac.Collections.PreregisterCourses({
 																						model_user    : model,
 																						success_pre   : success_pre,
