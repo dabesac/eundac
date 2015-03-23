@@ -423,8 +423,8 @@ class Horary_NhoraryController extends Zend_Controller_Action {
                 $horaexis=$hora->_getHorary($eid,$oid,$perid,$escid,$curid,$courseid,$turno,$subid,$uid,$hora_ini,$hora_fin,$data['day']);
                 $horasem=$hora->_getHoraryXsemXturno($eid,$oid,$perid,$escid,$subid,$semid,$turno,$hora_ini,$hora_fin,$data['day']);
                 $horateach=$hora->_getHoraryXteacherXday($eid,$oid,$perid,$escid,$subid,$uid,$hora_ini,$hora_fin,$data['day']);
-                $intervalHouricur=$hora->_intervalHoraryicur($eid,$oid,$perid,$escid,$subid,$semid,$data['day'],$hora_ini);
-                $intervalHourfcur=$hora->_intervalHoraryfcur($eid,$oid,$perid,$escid,$subid,$semid,$data['day'],$hora_fin);
+                $intervalHouricur=$hora->_intervalHoraryicur($eid,$oid,$perid,$escid,$subid,$semid,$data['day'],$hora_ini,$turno);
+                $intervalHourfcur=$hora->_intervalHoraryfcur($eid,$oid,$perid,$escid,$subid,$semid,$data['day'],$hora_fin,$turno);
                 $intervalHouriteach=$hora->_intervalHoraryi($eid,$oid,$perid,$uid,$data['day'],$hora_ini);
                 $intervalHourfteach=$hora->_intervalHoraryf($eid,$oid,$perid,$uid,$data['day'],$hora_fin);
             }
