@@ -1,5 +1,5 @@
 $(function(){
-	/*$('#main_search_form').on('submit', function(e){
+	$('#main_search_form').on('submit', function(e){
 		e.preventDefault();
 		var datasearch = $(this).find('input[type=text]').val();
 		if (datasearch) {
@@ -7,19 +7,16 @@ $(function(){
 		}
 	});
 
-	$('#main_btn_menu').on('click', function(){
-		$(this).siblings('ul').toggleClass('active');
-	});
 
 	var global_function = global();
-	global_function.tabs($('ul.tabs'), $('ul.tabs').siblings('.tabs_data'));*/
+	global_function.toggleTabs($('ul.tabs'), $('ul.tabs').siblings('.tabs_data'));
 
 	//Backbone FTW!!!
 	eUndac.app = new eUndac.Routers.Base();
-	// window.header_interaction = new eUndac.Views.Interaction_Header($('body'));
 
 	//Funciones globales
 	$('input[js-type=date]').datepicker();
+
 	displayMainMenu();
 });
 
@@ -244,4 +241,21 @@ function displayMainMenu(){
 
 		}
 	});
+}
+
+function global(){
+	function toggleTabs(ul, tabs){
+		var id_tab;
+		$(ul).find('a').on('click', function(){
+			id_tab = $(this).attr('going-to');
+			$(ul).find('a.active').removeClass('active');
+			$(this).addClass('active');
+			
+			$(tabs).find('.tab_data.active').removeClass('active');
+			$('#tab_'+id_tab).addClass('active');
+		});
+	}
+	return {
+		toggleTabs : toggleTabs
+	};
 }

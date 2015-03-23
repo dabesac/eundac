@@ -49,7 +49,7 @@
 		 														'/subid/'.base64_encode($user['subid']).
 		 														'/pid/'.base64_encode($user['pid']);
 		 					 ?>
-			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center">Record de Notas</a></td>
+			 				<td class=""><a href="<?php print $url ?>" class="vertical_center">Record de Notas</a></td>
 		 				<?php endif ?>
 						
 						<!-- roles que no cambian curricula -->
@@ -58,7 +58,7 @@
 			 					$url = '/profile/changecurricula/change/uid/'.base64_encode($user['uid']).
 			 															'/pid/'.base64_encode($user['pid']);
 			 				 ?>
-			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center">Currícula</a></td>
+			 				<td class=""><a href="<?php print $url ?>" class="vertical_center">Currícula</a></td>
 			 			<?php endif ?>
 						
 						<!-- Roles 	que no ven historial -->
@@ -69,7 +69,7 @@
 																		'/escid/'.$user['escid'].
 																		'/subid/'.$user['subid'];
 							 ?>
-			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center">Historial</a></td>
+			 				<td class=""><a href="<?php print $url ?>" class="vertical_center">Historial</a></td>
 			 			<?php endif ?>
 			 				
 
@@ -80,7 +80,7 @@
 			 													'/eid/'.base64_encode($user['eid']).
 			 													'/oid/'.base64_encode($user['oid']);
 			 				 ?>
-			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center"><span class="glyphicon glyphicon-user"></span> Perfil</a></td>
+			 				<td class=""><a href="<?php print $url ?>" class="vertical_center"><span class="glyphicon glyphicon-user"></span> Perfil</a></td>
 			 			<?php elseif ($user['role'] == 'Docente'): ?>
 			 				<?php 
 			 					$url = '/profile/private/student/uid/'.base64_encode($user['uid']).
@@ -89,7 +89,7 @@
 			 													'/eid/'.base64_encode($user['eid']).
 			 													'/oid/'.base64_encode($user['oid']);
 			 				 ?>
-			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center"><span class="glyphicon glyphicon-user"></span> Perfil</a></td>
+			 				<td class=""><a href="<?php print $url ?>" class="vertical_center"><span class="glyphicon glyphicon-user"></span> Perfil</a></td>
 		 				<?php endif ?>
 			 			</tr>
 			 		</table>
@@ -166,7 +166,7 @@
 		 														'/subid/'.base64_encode($user['subid']).
 		 														'/pid/'.base64_encode($user['pid']);
 		 					 ?>
-			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center">Record de Notas</a></td>
+			 				<td class=""><a href="<?php print $url ?>" class="vertical_center">Record de Notas</a></td>
 						<?php endif ?>
 						
 						<!-- roles que no cambian curricula -->
@@ -175,7 +175,7 @@
 			 					$url = '/profile/changecurricula/change/uid/'.base64_encode($user['uid']).
 			 															'/pid/'.base64_encode($user['pid']);
 			 				 ?>
-			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center">Currícula</a></td>
+			 				<td class=""><a href="<?php print $url ?>" class="vertical_center">Currícula</a></td>
 			 			<?php endif ?>
 			 				
 			 			<!-- Roles 	que no ven historial -->
@@ -186,7 +186,7 @@
 																		'/escid/'.$user['escid'].
 																		'/subid/'.$user['subid'];
 							 ?>
-			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center">Historial</a></td>
+			 				<td class=""><a href="<?php print $url ?>" class="vertical_center">Historial</a></td>
 						<?php endif ?>
 
 			 				<?php 
@@ -196,7 +196,7 @@
 			 													'/eid/'.base64_encode($user['eid']).
 			 													'/oid/'.base64_encode($user['oid']);
 			 				 ?>
-			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center"><span class="glyphicon glyphicon-user"></span> Perfil</a></td>
+			 				<td class=""><a href="<?php print $url ?>" class="vertical_center"><span class="glyphicon glyphicon-user"></span> Perfil</a></td>
 			 			<?php elseif ($user['role'] == 'Docente'): ?>
 			 				<?php 
 			 					$url = '/profile/private/student/uid/'.base64_encode($user['uid']).
@@ -205,7 +205,7 @@
 			 													'/eid/'.base64_encode($user['eid']).
 			 													'/oid/'.base64_encode($user['oid']);
 			 				 ?>
-			 				<td class="button medium"><a href="<?php print $url ?>" class="vertical_center"><span class="glyphicon glyphicon-user"></span> Perfil</a></td>
+			 				<td class=""><a href="<?php print $url ?>" class="vertical_center"><span class="glyphicon glyphicon-user"></span> Perfil</a></td>
 		 				<?php endif ?>
 			 			</tr>
 		 			<?php endforeach ?>

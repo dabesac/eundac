@@ -151,134 +151,19 @@ body > header
 		div:nth-of-type(1)
 			left 17%
 
-/*body
-	color negroTexto
-
-body>header
-	background azul
-	box-shadow 0 2px 1px rgba(azul, .2)
-	height 70px
-	position relative
-
-	nav
-		max-width 1700px
-		margin-left auto
-		margin-right auto
-		
-	figure
-		float left
-		height 100%
-		left 0
-		overflow hidden
-		padding 0.35em
-		top 0
-		width 17%
-
-		img
-			display block
-			margin auto
-
-	div:nth-of-type(1)
-		border-left 2px azulOscuro solid
-		display none
-		height 100%
-		padding .9em
-		width auto
-			
-		p
-			display block
-			color white
-			margin-bottom .5em
-			padding 0 .2em
-			text-shadow 2px 2px 0 rgba(azulOscuro, 1)
-
-	div:nth-of-type(2)
-		float right
-		width 18%
-		vertical-align top
-
-		&>a
-			color white
-			display block
-			font-size 2em
-			padding .6em
-			text-align center
-	
-		ul
-			background azul
-			border-top 1px azulOscuro solid
-			display none
-			margin-left -30%
-			padding 0
-			position absolute
-			top 98%
-			width 48%
-			z-index 10
-
-			li
-				display block
-				a
-					color white
-					display block
-					height inherit
-					padding 1em
-
-				a:hover
-					background azulHover
-
-		ul.active
-			display block
-
-@media screen and (min-width:480px)
-
-	body>header
-		div:nth-of-type(1)
-			display inline-block
-		
-		div:nth-of-type(2)
-
-			ul
-				width 28%
-				margin-left -10%
-
-@media screen and (min-width:1024px)
-
-	body>header
-		div:nth-of-type(2)
-			width auto
-			
-			&>a
-				display none
-
-			ul
-				display block
-				position relative
-				width auto
-				margin 0
-				top 0
-				height 100%
-				z-index 0
-					
-				li
-					height 100%
-					display inline-block
-
-					a
-						padding 1.8em 2em*/
-							
-
 body>nav
 	background plomo
 	box-shadow 0 2px 1px rgba(black, .2)
 	height 35px
-	overflow hidden
+	position relative
 	
 	.navigationLayout
+		height inherit
 		margin-left auto
 		margin-right auto
 		max-width 1700px
+		overflow hidden
 		position relative
-		height inherit
 		
 	.navigationButtonsMainLayout
 		display inline-block
@@ -351,7 +236,7 @@ body>nav
 		position absolute
 		right 3em
 		top 50px
-		z-index 5
+		z-index 10
 
 		a
 			border-radius 0
@@ -422,8 +307,8 @@ body>nav
 
 		.main_title_paragraph
 			left 17%
-/*body>.aux
-	position relative*/
+body>.aux
+	position relative
 			
 body>main
 	padding 1em .5em 4em
