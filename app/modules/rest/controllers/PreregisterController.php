@@ -222,7 +222,7 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
 
                     if ($render_course) {
                         $courses_data[$c_courses] = array(
-                                                'idget'          => base64_encode($course['courseid']),
+                                                'idget'          => base64_encode($course['courseid'].$course['turno']),
                                                 'code'           => $course['courseid'],
                                                 'code_cur'       => $course['curid'],
                                                 'name'           => $course['name'],
@@ -299,7 +299,7 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
                 }
             }
         }
-
+        //print_r($courses_data);
         return $this->_helper->json->sendJson($courses_data);
     }
 

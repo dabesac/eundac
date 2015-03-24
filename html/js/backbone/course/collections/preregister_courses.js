@@ -43,13 +43,14 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 					var semesters = [];
 					var semester_each = '-';
 					var c_semesters = 0;
+					var exist;
 					models.every(function(model){
 						// cantidad de semestres
 						var semester_turn_each_self = model.toJSON().semester + model.toJSON().turn;
 						var semester_each_self = model.toJSON().semester;
 
 						// Semestre y turno para establecer creditos
-						var exist = false;
+						exist = false;
 						semesters.forEach(function(semester){
 							if (semester === semester_turn_each_self) {
 								exist = true;
