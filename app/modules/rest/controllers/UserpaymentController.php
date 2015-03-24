@@ -28,10 +28,9 @@ class Rest_UserpaymentController extends Zend_Rest_Controller {
         $rid   = $this->sesion->rid;
         $escid = $this->sesion->escid;
         $subid = $this->sesion->subid;
-        //$perid = $this->sesion->period->perid;
-        $perid = '14A';
+        $perid = $this->sesion->period->perid;
 
-        //pago de periodo actual
+        // pago de periodo actual
         $where = array(
                         'eid'   => $eid,
                         'oid'   => $oid,
