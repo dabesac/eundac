@@ -2,7 +2,7 @@
 
 class Api_Model_DbTable_Conditionstudent extends Zend_Db_Table_Abstract
 {
-	protected $_name = 'condition_student';
+	protected $_name = 'student_condition';
 	protected $_primary = array("coid","eid","oid","uid","pid","escid","subid","perid","type");
 	protected $_sequence ="s_conditionStudent";
 
@@ -21,8 +21,8 @@ class Api_Model_DbTable_Conditionstudent extends Zend_Db_Table_Abstract
 		try{
 			if($where['eid']=='' || $where['oid']=='' || $where['uid']=='' || $where['pid']=='' || $where['escid']=='' || $where['subid']=='' || $where['perid']=='') return false;
 				$select = $this->_db->select();	
-				if ($attrib=='') $select->from("condition_student");
-				else $select->from("condition_student",$attrib);
+				if ($attrib=='') $select->from("student_condition");
+				else $select->from("student_condition",$attrib);
 				foreach ($where as $atri=>$value){
 					$select->where("$atri = ?", $value);
 				}
@@ -45,7 +45,7 @@ class Api_Model_DbTable_Conditionstudent extends Zend_Db_Table_Abstract
 		try{
 
 			 $sql=$this->_db->query("
-                select  distinct on(uid,ca.subid,ca.eid,ca.oid,ca.escid,ca.pid,p.first_name,p.last_name0,p.last_name1) * from condition_student AS ca
+                select  distinct on(uid,ca.subid,ca.eid,ca.oid,ca.escid,ca.pid,p.first_name,p.last_name0,p.last_name1) * from student_condition AS ca
                 inner join base_person as p
                 on ca.pid=p.pid and ca.eid=p.eid
                 where ca.eid='$eid' and ca.oid ='$oid' and ca.escid='$escid' and ca.perid='$perid' $str
@@ -63,7 +63,7 @@ class Api_Model_DbTable_Conditionstudent extends Zend_Db_Table_Abstract
 	public function _getUsersCondition($where=null){
          try{
 			 $sub_select = $this->_db->select()
-			 	->from(array('co' => 'condition_student'),array('uid'))
+			 	->from(array('co' => 'student_condition'),array('uid'))
                 ->where("perid = ?", $where['perid'])->where("eid = ?", $where['eid'])->where("oid = ?", $where['oid'])->where("escid = ?", $where['escid']); 
 			 $select = $this->_db->select()
 			->from(array('u' => 'base_users'),array('u.eid','u.oid','u.subid','u.uid','u.escid','u.pid','p.first_name','p.last_name0','p.last_name1'))
