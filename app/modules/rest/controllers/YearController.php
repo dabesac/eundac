@@ -12,11 +12,8 @@ class Rest_YearController extends Zend_Rest_Controller {
         $this->sesion = $login;
 	}
 
-    public function headAction() {}
-    
-	public function indexAction() {
-    	$this->_helper->viewRenderer->setNoRender(true);
-
+    public function headAction() {} public function indexAction() {
+        $this->_helper->viewRenderer->setNoRender(true);
         $perid = $this->sesion->period->perid;
     	
         $year = date('Y');
@@ -31,7 +28,7 @@ class Rest_YearController extends Zend_Rest_Controller {
         $data['current'] = $currentYear;
 
         return $this->_helper->json->sendJson($data);
-	}
+    }
 
     public function getAction() {
 

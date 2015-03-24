@@ -1,5 +1,5 @@
 $(function(){
-	/*$('#main_search_form').on('submit', function(e){
+	$('#main_search_form').on('submit', function(e){
 		e.preventDefault();
 		var datasearch = $(this).find('input[type=text]').val();
 		if (datasearch) {
@@ -7,20 +7,17 @@ $(function(){
 		}
 	});
 
-	$('#main_btn_menu').on('click', function(){
-		$(this).siblings('ul').toggleClass('active');
-	});
 
 	var global_function = global();
-	global_function.tabs($('ul.tabs'), $('ul.tabs').siblings('.tabs_data'));*/
+	global_function.toggleTabs($('ul.tabs'), $('ul.tabs').siblings('.tabs_data'));
 
-	//Bacbone FTW!!!
+	//Backbone FTW!!!
 	eUndac.app = new eUndac.Routers.Base();
-	// window.header_interaction = new eUndac.Views.Interaction_Header($('body'));
 
 	//Funciones globales
-	$('input[js-type=date').datepicker();
+	$('input[js-type=date]').datepicker();
 
+	displayMainMenu();
 });
 
 function changeContent(el_1, el_2){
@@ -57,12 +54,9 @@ function chargeContent(el, model){
 					el.children('img').removeClass('fadeUp fadeOut');
 					el.children('.group').addClass('active');
 				}, 300);
-				
-
 			}
 		});
 	}
-
 }
 
 function toggleDetail(button, content_1, content_2){
@@ -232,4 +226,36 @@ function deleteItem(button, scope){
 				.html('Si, estoy seguro');
 		}
 	});
+}
+
+// ------ G L O B A L --------
+function displayMainMenu(){
+	$('#js_main-btn-menu').on('click', function(){
+		if (!$('#js_main-menu-ul').hasClass('active')) {
+			$('#js_main-menu-ul').addClass('active');
+		} else {
+			$('#js_main-menu-ul').addClass('inactive');
+			setTimeout(function() {
+				$('#js_main-menu-ul').removeClass('active inactive');
+			}, 300);
+
+		}
+	});
+}
+
+function global(){
+	function toggleTabs(ul, tabs){
+		var id_tab;
+		$(ul).find('a').on('click', function(){
+			id_tab = $(this).attr('going-to');
+			$(ul).find('a.active').removeClass('active');
+			$(this).addClass('active');
+			
+			$(tabs).find('.tab_data.active').removeClass('active');
+			$('#tab_'+id_tab).addClass('active');
+		});
+	}
+	return {
+		toggleTabs : toggleTabs
+	};
 }

@@ -20,15 +20,17 @@
 			<div class="loading_allBlack"></div>
 		</div> -->
 		<?php echo $this->render('header.phtml')?>
-		<nav class="navigationLayout">
-		    <?php echo $this->placeholder('Textnav') ?>
-		    <?php echo $this->placeholder('Btnnav') ?>
-			<?php echo $this->render('_search.phtml') ?>
-			
+		<nav>
+			<div class="navigationLayout">
+			    <?php echo $this->placeholder('Btnnav') ?>
+			    <?php echo $this->placeholder('Textnav') ?>
+				<?php echo $this->render('_search.phtml') ?>
+			</div>
 		    <?php echo $this->placeholder('BtnSVCRight') ?>
 		    <?php echo $this->placeholder('BtnSVCLeft') ?>
 		</nav>
-		<?php echo $this->placeholder('AuxiliarMobile') ?>
+		<?php //echo $this->placeholder('AuxiliarMobile') ?>
+		<div class="auxiliar  js_auxiliar"></div>
 		<main>
 			<?php echo $this->layout()->content ?>
 		</main>

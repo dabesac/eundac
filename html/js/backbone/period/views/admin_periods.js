@@ -78,7 +78,7 @@ eUndac.Views.Admin_Periods = Backbone.View.extend({
 		//render de edicion
 		var html_period_edit = template_period_edit(data);
 		this.$el.find('.js_interactive_sections').append(html_period_edit);
-		$('input[js-type=date').datepicker();
+		$('input[js-type=date]').datepicker();
 
 
 		//elementos de la vista

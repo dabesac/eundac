@@ -13,35 +13,34 @@
     $pid = $sesion->pid;
 
 ?>
-<?php if ($sesion->encuesta->existeEncuesta == 'Yes'): ?>
+<?php /*if ($sesion->encuesta->existeEncuesta == 'Yes'): ?>
     <input type="hidden" id="rellenoEncuesta" value="<?php print $sesion->encuesta->rellenoEncuesta ?>">
-<?php endif ?>
+<?php endif */ ?>
 
 <input type="hidden" id="rol" value="<?php print $rol ?>">
-<input type="hidden" id="fullProfile" value="<?php print $sesion->fullProfile->success ?>">
 
 <header>
-
-      <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="btnLogo">
-        <a href="/<?php echo $module?>"><img src="/img/logo_03.png" alt=""></a>
-    </div>
-    <div class="welcomeDiv">
-        <p><?php echo $last_name?></p>
-        <p>Adscrito a <?php echo $speciality?></p>
-    </div>
-    <div class="buttomsLayout">
-        <ul>
-            <li><a href="/<?php echo $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
-            <li><a href="/profile/<?php echo ($rol=='AL' or $rol=='EG')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Mi Perfil </a></li>
-            <li><a href="##"><span class="glyphicon glyphicon-envelope"></span> Notificaciones</a></li>
-            <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> Cerrar Sessión</a></li>
-        </ul>
-    </div>
-    
+    <nav>
+        <figure>
+            <a href="/<?php print $module?>"><img src="/img/logo_03.png" alt=""></a>
+        </figure>
+        <div>
+            <p><?php print $last_name?></p>
+            <p>Adscrito Escuela <?php print $speciality?></p>
+        </div>
+        <div>
+            <a href="##" id="js_main-btn-menu"><span class="glyphicon glyphicon-align-justify"></span></a>
+            <ul id="js_main-menu-ul">
+                <li><a href="/<?php print $module ?>"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
+                <li><a href="/profile/<?php print ($rol=='AL' or $rol=='EG')? 'public/student':'privateadm/adm'?>"><span class="glyphicon glyphicon-user"></span> Mi Perfil </a></li>
+                <li><a href="##"><span class="glyphicon glyphicon-envelope"></span> Notificaciones</a></li>
+                <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> Cerrar Sessión</a></li>
+            </ul>
+        </div>
+    </nav>
 </header>
-<script type="text/javascript" src='/external_library/md5/md5.js'></script>
-<script type="text/javascript" src='/external_library/md5/change.js'></script>
+<!-- <script type="text/javascript" src='/external_library/md5/md5.js'></script>
+<script type="text/javascript" src='/external_library/md5/change.js'></script> -->
 <script>
     /*$(function(){
         var rol = $('#rol').val();

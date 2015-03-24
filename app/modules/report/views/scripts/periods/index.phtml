@@ -1,7 +1,4 @@
 <?php $env = getenv('APPLICATION_ENV') ?>
-<?php if ($env === 'development'): ?>
-	<link rel="stylesheet" href="/css/avanceAcademico.css">
-<?php endif ?>
 
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-time"></span> Avance Académico');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/"><span class="glyphicon glyphicon-circle-arrow-left "></span></a>');?>
@@ -91,7 +88,7 @@
 									data = period + '-' + dataEscid;
 										$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
 																			.load('/report/periods/listteacher/data/' + data);
-									};
+									}
 								});
 		});
 
@@ -101,7 +98,7 @@
 				data = period + '-' + dataEscid;
 				$('#avanceAcademico_DataDocentes')	.html('<center><img src="/img/spinner.gif" alt="Loading..." /></center>')
 													.load('/report/periods/listteacher/data/' + data);
-			};
+			}
 		});
 
 		if (rid == 'DR') {
@@ -116,7 +113,7 @@
 														.load('/report/periods/listteacher/data/' + data);
 				}else{
 					$('#avanceAcademico_DataDocentes').html('');
-				};
+				}
 			});
 		}else if (rid == 'RC' || rid == 'ES' || rid == 'CU' || rid == 'VA'){
 			$('#selectFaculty').on('change', function(){
@@ -134,8 +131,8 @@
 														.load('/report/periods/listteacher/data/' + data);
 				}else{
 					$('#avanceAcademico_DataDocentes').html('');
-				};
+				}
 			});
-		};
+		}
 	});
 </script>

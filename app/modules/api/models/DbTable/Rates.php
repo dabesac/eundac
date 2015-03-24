@@ -64,7 +64,7 @@ class Api_Model_DbTable_Rates extends Zend_Db_Table_Abstract{
 	{
 		try{
 			
-			if ($where['eid']=="" || $where['oid']=="" || $where['ratid']==""  || $where['perid']=="") return false;
+			if (!$where['eid'] || !$where['oid'] || !$where['ratid']  || !$where['perid']) return false;
 			$wherestr="eid = '".$where['eid']."' and oid = '".$where['oid']."' and ratid = '".$where['ratid']."' and perid = '".$where['perid']."'";
 			$row = $this->fetchRow($wherestr);
 			if($row) return $row->toArray();

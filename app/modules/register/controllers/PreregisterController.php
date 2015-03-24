@@ -14,7 +14,7 @@ class Register_PreregisterController extends Zend_Controller_Action {
 
     public function indexAction()
     {
-
+        //index de la prematricula
     }
 
 }
