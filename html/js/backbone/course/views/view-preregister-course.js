@@ -145,9 +145,10 @@ eUndac.Views.Course = Backbone.View.extend({
 				
 				if (s_t.type !== 'X')
 					s_t_credits_assign.push({
-						s_t : s_t.s_t,
-						semester : s_t.semester,
-						credits : parseInt($('#js_credit' + s_t.s_t).data().credits) + 1
+						s_t          : s_t.s_t,
+						semester     : s_t.semester,
+						credits_pick : credits_s_t,
+						credits      : parseInt($('#js_credit' + s_t.s_t).data().credits) + 1
 					});
 			}
 		});

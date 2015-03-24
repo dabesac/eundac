@@ -58,6 +58,12 @@
 .auxiliar
 	overflow hidden
 	background rgba(black, .5)
+
+.auxiliar.fixed
+	position fixed
+	top 0
+	width 100%
+	z-index 99
 	
 @media screen and (min-width:1000px)
 	.auxiliar
@@ -67,6 +73,13 @@
 		width 300px
 		z-index 15
 
+	.auxiliar.fixed
+		position fixed
+		top 0
+		width 300px
+		top 10px
+		z-index 99
+	
 .helper--item
 	display table
 	margin-left auto

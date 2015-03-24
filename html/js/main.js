@@ -10,6 +10,7 @@ $(function(){
 
 	var global_function = global();
 	global_function.toggleTabs($('ul.tabs'), $('ul.tabs').siblings('.tabs_data'));
+	global_function.auxiliarVoh($('#js_auxiliar'));
 
 	//Backbone FTW!!!
 	eUndac.app = new eUndac.Routers.Base();
@@ -255,7 +256,18 @@ function global(){
 			$('#tab_'+id_tab).addClass('active');
 		});
 	}
+	function auxiliarVoh(aux){
+		$(window).scroll(function(){
+            if($(this).scrollTop() >= 110){
+               aux.addClass('fixed');
+            }
+            else{
+               aux.removeClass('fixed');
+            }
+        });
+	}
 	return {
-		toggleTabs : toggleTabs
+		toggleTabs  : toggleTabs,
+		auxiliarVoh : auxiliarVoh
 	};
 }
