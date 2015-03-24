@@ -1,14 +1,167 @@
 a, button
 	transition all .3s ease
 
-a.vertical_center
-	display flex
-	align-items center
-	justify-content center
-
-	span
-		margin-bottom 7px
-		margin-right 5px
-
 a:hover, a:link, a:visited, a:active, button:hover, button:link, button:visited, button:active
 	text-decoration none
+
+a[disabled]
+	pointer-events none
+
+.button
+	background-color white
+	border 1px plomoOscuro solid
+	border-radius 4px
+	box-shadow 0 0 1px rgba(black, .4) inset
+	color azul
+	display block
+	padding 1em
+	text-align center
+
+	&:hover, &:active, &:focus
+		background-color plomoOscuro
+
+.button--icon
+	padding .3em 0 .8em 0
+	text-align center
+	
+	span
+		font-size 1.7em
+		margin-left 5px
+		position relative
+		top 7px
+
+.button--radius 
+	border-radius 15px
+
+.button--danger
+	color rojoTexto
+	&:hover, &:active, &:focus
+		background-color rojo
+		color white
+	
+.button--success
+	color verde
+
+	&:hover, &:active, &:focus
+		background-color verde
+		color white
+		
+.button--print
+	color celeste
+	
+	&:hover, &:active, &:focus
+		color white
+		background-color celeste
+
+.button--alter 
+	color white
+	&:hover, &:visited
+		color white
+		
+.button--alter--success
+	background-color verde
+
+	&:hover, &:active, &:focus
+		background-color verdeHover
+
+.button--alter--new
+	background-color celeste
+	&:hover, &:active, &:focus
+		background-color celesteHover
+
+.button--alter--danger
+	background-color rojo
+	&:hover, &:active, &:focus
+		background-color rojoHover
+
+.button--table
+	color azul
+	&:focus
+		background-color white
+		color azul
+	
+.button--table--warning
+	
+	&:hover, &.active
+		background-color amarillo
+		color white
+
+.button--table--blue
+	&:hover, &:active
+		background-color azul
+		color white
+
+.button--table--danger
+	
+	&:hover, &.active
+		background-color rojo
+		color white
+
+.button--submit
+	border-radius 10px
+	border 1px verde solid
+	color verde
+	font-weight 600
+	margin-top 3rem
+	width 100%
+
+	&:hover, &:active, &:focus
+		background-color verde
+		color white
+
+@media screen and (min-width:700px)
+	.button--submit
+		width 50%
+		margin-left auto
+		margin-right auto
+	
+//Tamaños
+.button--small
+	padding .5em
+
+.button--medium
+	padding .7em
+
+
+.button-icon
+	background-color white
+	font-size 1.2em
+	display inline-block
+	border 1px plomoOscuro solid
+	height 45px
+	border-radius 50%
+	padding-top 11px
+	width 45px
+	z-index 2
+	position relative
+	
+	span
+		display block
+		text-align center
+
+	&:focus
+		background-color white
+
+.button-icon--danger
+	color rojo
+	border 2px rojo solid
+
+	&:hover, &:active, &:focus
+		background-color rojo
+		color white
+
+.button-icon--warning
+	color amarillo
+	border 2px amarillo solid
+
+	&:hover, &:active, &:focus
+		background-color amarillo
+		color white
+
+.button-icon--normal
+	color plomoTexto
+
+	&:hover, &:active, &:focus
+		background-color plomoOscuro
+		color white
+

@@ -9,10 +9,20 @@
         </div>
       </h5>
     </div>
-    <div class="col-md-12 panel panel2 col21">
+    <br>
+    <div class="col-md-12 sec">
+            <div class="col-md-offset-2 col-md-2"> 
+                <center><h4>Resolución:</h4></center>        
+             </div>
+            <div class="col-md-6">  
+                <input type="text" name="doc" id="doc" placeholder="Num de Resolución" value="" maxlength="40" size="40" class="form-control col-lg-1">    
+            </div>
+    </div>
+    <div class="col-md-12 sec">
         <div class="col-md-12 col21">
             <div class="text-center col-md-12">
-                <h4 class="text-info">CONDICION PARA AUMENTAR CREDITOS -- AUMENTAR SEMESTRES -- DEJARCURSO</h4>
+                <br>
+                <h4 class="text-info"><strong>CONDICION PARA AUMENTAR CREDITOS -- AUMENTAR SEMESTRES -- DEJARCURSO</strong></h4>
             </div>
             <div class="col-md-3">
                 <label>Aumentar semestres</label>
@@ -51,9 +61,11 @@
                 </select>            
             </div>
         </div>
-        <div class="col-md-12 col21">
+    </div>
+        <div class="col-md-12 sec">
             <div class="text-center col-md-12">
-                <h4 class="text-info">CONDICIÓN PARA NUMERO DE VECES DE MATRICULA</h4>
+            <br>
+                <h4 class="text-info"><strong>CONDICIÓN PARA NUMERO DE VECES DE MATRICULA</strong></h4>
             </div>
             <div class="col-md-8"> 
                 <label>Curso </label>
@@ -71,14 +83,15 @@
                 </select>                 
              </div>
             <div class="col-md-4"> 
-                <label>Num de veces Matricula </span></label> 
-                <div style="font-size: 23px;"><span class="label label-info form-control veces "></span></div>
+                <label>Num Matriculas</label> 
+                <div style="font-size: 15px;padding-bottom:10px;" class="text text-info form-control veces "></div>
                 <!-- <span id="veces" class="label label-info"></span>   -->     
             </div>
         </div>
-    </div>
+
     <div class="row">
         <div class="col-md-offset-4 col-md-3">
+            <br>
             <a id="guardar" class="form-control btn btn-primary"
             uid = '<?php echo $this->uid?>'
             pid = '<?php echo $this->pid?>'
@@ -91,7 +104,8 @@
     </div>
     <br>
 </div>
-<div class="condition"></div>
+<div id="condition"></div>
+<div class="condition2">
 <?php
 if ($this->conditionsStudent){ ?>
 <div class="panel panel-primary">
@@ -118,13 +132,13 @@ if ($this->conditionsStudent){ ?>
                             }
                         }
                         switch ($conditions['type']) {
-                            case 'CO':  $detail = "Matricula condicional del curso ".$coursename;
+                            case 'CO':  $detail = "Matricula condicional del curso <strong>".$coursename.'</strong> con resolución <strong>'.$conditions['doc_authorize'].'</strong>';
                                         break;
-                            case 'LE':  $detail = "Para dejar el curso ".$coursename;
+                            case 'LE':  $detail = "Para dejar el curso <strong>".$coursename.'</strong> con resolución <strong>'.$conditions['doc_authorize'];
                                         break;
-                            case 'CR':  $detail = "Para adicionar ".$conditions['amount']." creditos ";                      
+                            case 'CR':  $detail = "Para adicionar ".$conditions['amount']." creditos con resolución <strong>".$conditions['doc_authorize'].'</strong>';                      
                                         break;
-                            case 'SE':  $detail = "Para adicionar ".$conditions['amount']." semestres ";
+                            case 'SE':  $detail = "Para adicionar ".$conditions['amount']." semestres con resolución <strong>".$conditions['doc_authorize'].'</strong>';
                                         break;
                         }
                         ?>
@@ -152,6 +166,7 @@ if ($this->conditionsStudent){ ?>
     </div>
 <?php 
 }?>
+</div>
 <script>
 
     $('#curso').change(function(){
@@ -164,6 +179,7 @@ if ($this->conditionsStudent){ ?>
     });
 
     $('#guardar').click(function(){
+        //cals=$(".condition2").parent();
         var nsem = $('#nsem').val();
         var dcurso = $('#dcurso').val();
         var credit =$('#credit').val();
@@ -171,6 +187,7 @@ if ($this->conditionsStudent){ ?>
         var xx1 = valcurso.split(";--;");
         var curso = xx1[0];
         var nveces =$('#nveces').val();
+        var doc = $('#doc').val();
         var sel = 'ns';
         if (nsem!='0') {sel='s'};
         if (credit!='0') {sel='s'};
@@ -180,6 +197,10 @@ if ($this->conditionsStudent){ ?>
             alert('agregue una condicion');
             return false;
         };
+        if (doc=="") {
+            alert('agregue una resolucion');
+            return false;
+        }
         var data_ajax = {
             'uid' : $(this).attr('uid'),
             'pid' : $(this).attr('pid'),
@@ -191,16 +212,20 @@ if ($this->conditionsStudent){ ?>
             'credit' : credit,
             'curso' : curso,
             'curid' : $(this).attr('curid'),
+            'resolution' : doc
         };
         $.ajax({
             type : "post",
             url : "/rfacultad/condition/guardar/",
             data : data_ajax,
             success : function(data){
-                $(".condition").html("<div class='alert alert-success conditions' role='alert'<h3>Se ha agregado la condicion</h3></div>");
+                /*$(".condition").html("<div class='alert alert-success conditions' role='alert'<h3>Se ha agregado la condicion</h3></div>");
                 setTimeout(function(){
                     $("#modal").modal('hide');
-                }, 1000);
+                }, 1000);*/
+                $(".condition2").fadeOut("fast");
+                $("#condition").html(data);
+
 
             }
         }); 

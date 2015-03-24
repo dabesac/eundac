@@ -184,8 +184,8 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
             $order = null;
             $condition_student = $conditiondb->_getFilter($where_condition, $attrib, $order);
             $cursodb = new Api_Model_DbTable_Course();
-            $i=0;
-            /*foreach ($condition_student as $conditions) {
+            /*  $i=0;
+            foreach ($condition_student as $conditions) {
                 if($conditions['courseid']){
                     $wherecurse = array(
                                         'eid' => $where['eid'],
@@ -291,7 +291,8 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                             'type'      => 'CO',
                             'courseid'  => base64_decode($formData['curso']),
                             'curid'     => $formData['curid'],
-                            'createduid' => '46653895AD');
+                            'createduid' => $uidreg,
+                            'doc_authorize' => $formData['resolution']);
                     $savedata = $conditiondb->_save($data);
                 }
                 if($formData['dcurso']!= 'ns'){
@@ -306,7 +307,8 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                             'type'      => 'LE',
                             'courseid'  => base64_decode($formData['dcurso']),
                             'curid'     => $formData['curid'],
-                            'createduid' => $uidreg);
+                            'createduid' => $uidreg,
+                            'doc_authorize' => $formData['resolution']);
                     $savedata = $conditiondb->_save($data);
                 }
                 if($formData['credit']!= '0'){
@@ -320,7 +322,8 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                             'perid'     => $formData['perid'],
                             'type'      => 'CR',
                             'amount'  => $formData['credit'],
-                            'createduid' => $uidreg);
+                            'createduid' => $uidreg,
+                            'doc_authorize' => $formData['resolution']);
                     $savedata = $conditiondb->_save($data);
                 }
                 if($formData['nsem']!= '0'){
@@ -334,10 +337,11 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                             'perid'     => $formData['perid'],
                             'type'      => 'SE',
                             'amount'  => $formData['nsem'],
-                            'createduid' => $uidreg);
+                            'createduid' => $uidreg,
+                            'doc_authorize' => $formData['resolution']);
                     $savedata = $conditiondb->_save($data);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
                 }
-            /*$where_condition = array(
+            $where_condition = array(
                                     'eid' => $eid,
                                     'oid' => $oid,
                                     'uid' => $formData['uid'],
@@ -349,7 +353,17 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
             $order = null;
             $condition_student = $conditiondb->_getFilter($where_condition, $attrib, $order);
             $cursodb = new Api_Model_DbTable_Course();
-            $this->view->conditionsStudent = $condition_student;*/
+            $i=0;
+            $datacurso=null;
+            foreach ($condition_student as $data) {
+                if($data['courseid']){
+                    $wherecourse=array('eid'=>$eid,'oid'=>$oid,'courseid'=>$data['courseid'],'curid'=>$formData['curid'],'escid'=>$formData['escid'],'subid'=>$formData['subid']);
+                    $datacurso[$i]= $cursodb->_getOne($wherecourse);
+                }
+                $i++;
+            }
+            $this->view->conditionsStudent = $condition_student;
+            $this->view->datacurso=$datacurso;
             }
         } catch(Exeption $e){
             print("Error al Guardar datos: ").$e->getMessage();

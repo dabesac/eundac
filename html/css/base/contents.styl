@@ -1,0 +1,139 @@
+.content
+	background plomoOscuro
+	width 100%
+
+	.content__header
+		background white
+		display block
+		color negroTexto
+		border-bottom 1px plomo solid
+		text-align center
+		padding .5em .5em
+
+	.content__header--interaction
+		display table
+		width 100.1%
+
+		p
+			display none
+			padding-left 1em
+			text-align left
+			width 50%
+
+		.interaction__content
+			display table
+			width 100%
+
+			.column_uno
+				display table-cell
+				width 70%
+				
+			.column_dos
+				display table-cell
+				padding-left 1%
+				width 20%
+
+	.content__header--new
+		background celeste
+		display table
+		width 100%
+		
+		p
+			color white
+			display table-cell
+			font-weight 700
+			padding-left 1em
+			text-align left
+			font-size 1.4rem
+
+		div
+			display table-cell
+			width 10%
+
+	.content__body
+		border-bottom 4px plomoOscuro solid
+		padding 1em
+		width 100%
+
+		&>article
+			margin 1.5em auto
+			vertical-align top
+
+		p.danger
+			margin 4em 1em
+			
+.content--interactive
+	display none
+
+@media screen and (min-width:700px)
+	.content
+		.content__header--interaction
+			p
+				display table-cell
+				width 50%
+
+.content--small
+	max-width 1300px
+	margin auto
+
+@media screen and (min-width:1024px)
+	.content--small
+		width 90%
+
+.content--away
+	margin-top 4em
+		
+.content--normal
+	.content__header
+		color azul
+
+.content--warning
+	.content__header
+		color amarillo
+
+.content--buttons
+	background white
+	padding 1.5em 0
+	overflow hidden
+
+.content--selects
+	margin auto
+
+//grupos
+.group
+	margin-bottom 4em
+
+	.group__header
+		border-bottom 1px plomo solid
+		font-weight 700
+		margin-bottom .5em
+		padding .3em
+		text-align center
+
+	.group__body
+		padding 0 .5em
+		
+.group--interactive
+	display none
+
+.group--active
+	.group__header
+		color verde
+	
+.group--temporary
+	.group__header
+		color amarillo
+	
+.group--close
+	.group__header
+		color celeste
+
+
+//animaciones
+.content.active, .group.active
+	animation .3s content_show ease
+	display block
+
+.content.inactive, .group.inactive
+	animation .3s content_hide ease
+	

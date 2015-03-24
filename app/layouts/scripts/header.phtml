@@ -14,13 +14,14 @@
 
 ?>
 <?php if ($sesion->encuesta->existeEncuesta == 'Yes'): ?>
-    <input type="hidden" id="rellenoEncuesta" value="<?php echo $sesion->encuesta->rellenoEncuesta ?>">
+    <input type="hidden" id="rellenoEncuesta" value="<?php print $sesion->encuesta->rellenoEncuesta ?>">
 <?php endif ?>
 
-<input type="hidden" id="rol" value="<?php echo $rol ?>">
-<input type="hidden" id="fullProfile" value="<?php echo $sesion->fullProfile->success ?>">
+<input type="hidden" id="rol" value="<?php print $rol ?>">
+<input type="hidden" id="fullProfile" value="<?php print $sesion->fullProfile->success ?>">
 
 <header>
+
       <!-- Brand and toggle get grouped for better mobile display -->
     <div class="btnLogo">
         <a href="/<?php echo $module?>"><img src="/img/logo_03.png" alt=""></a>
@@ -37,11 +38,12 @@
             <li><a href="/logout"><span class="glyphicon glyphicon-off "></span> Cerrar Sessión</a></li>
         </ul>
     </div>
+    
 </header>
 <script type="text/javascript" src='/external_library/md5/md5.js'></script>
 <script type="text/javascript" src='/external_library/md5/change.js'></script>
 <script>
-    $(function(){
+    /*$(function(){
         var rol = $('#rol').val();
         if (rol == 'AL' || rol == 'EG') {
           var fullProfile = $('#fullProfile').val();
@@ -56,5 +58,5 @@
         if (rellenoEncuesta && rellenoEncuesta == 'No') {
             $(location).attr('href', '/alumno/index/encuesta');
         };
-    });
+    });*/
  </script>

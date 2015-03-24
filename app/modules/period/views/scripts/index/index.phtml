@@ -1,0 +1,479 @@
+<?php 
+	$period_form = $this->view_data['period_form'];
+ ?>
+
+<?php $env = getenv('APPLICATION_ENV'); ?>
+<?php if ($env === 'development'): ?>
+
+	<script src="/js/backbone/period/models/period.js"></script>
+	<script src="/js/backbone/period/models/year.js"></script>
+
+	<script src="/js/backbone/period/collections/admin_periods.js"></script>
+	<script src="/js/backbone/period/collections/years.js"></script>
+
+	<script src="/js/backbone/views_global/interaction_header.js"></script>
+	<script src="/js/backbone/period/views/admin_periods.js"></script>
+	<script src="/js/backbone/period/views/periods_form.js"></script>
+
+	
+	
+<?php endif ?>
+
+<section class="content  content--small content--interactive active  js_content_main">
+	<!--<header class="content__header  content__header--interaction  js_interaction_header"></header>-->
+
+	<section class="content__body  js_content_body">
+		<img class="spinner--block" src="/img/spinner.gif" alt="Loading...">
+
+		<section class="group  group--active  group--interactive">
+			<header class="group__header">
+				Periodo Activo
+			</header>
+			<section class="group__body  js_group_active">
+				<!-- <article class="item-table"></article>-->
+				<p class="empty  margin-small"><span class="glyphicon glyphicon-exclamation-sign"></span> No hay un periodo activo...</p>
+			</section>
+		</section>
+
+		<section class="group  group--temporary  group--interactive">
+			<header class="group__header">
+				Periodos Temporales
+			</header>
+			<section class="group__body  js_group_temporary">
+				<p class="empty  margin-small"><span class="glyphicon glyphicon-exclamation-sign"></span> No hay periodos temporales...</p>
+			</section>
+		</section>
+
+		<section class="group  group--close  group--interactive">
+			<header class="group__header">
+				Periodos Cerrados
+			</header>
+			<section class="group__body  js_group_close">
+				<p class="empty  margin-small"><span class="glyphicon glyphicon-exclamation-sign"></span> No hay periodos cerrados...</p>
+			</section>
+		</section>
+	</section>
+</section>
+
+<section class="content  content--small  content--interactive  js_content_new">
+	
+</section>
+
+
+
+
+<!-- Template header Period -->
+<template id="template_header_period">
+	<p class="info"><span class="glyphicon glyphicon-info-sign"></span> Tambien existe periodos en otros años...</p>
+	<section class="interaction__content">
+		<div class="column_uno">
+			<select class="select  js_select" name="anio">
+				{% for i in years %}
+					<option value="{{ i }}">{{ i }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="column_dos">
+			<a href="##" class="button  button--alter  button--alter--new  button--medium  js_button_new">Nuevo</a>
+		</div>
+	</section>
+</template>
+
+<!-- Template New Period -->
+<template id="js_content_new">
+	<header class="content__header  content__header--new">
+		<p><span class="glyphicon glyphicon-plus"></span> Nuevo Periodo</p>
+		<div>
+			<a href="##" class="button button--medium  js_button_cancel">Cancelar</a>
+		</div>
+	</header>
+	<section class="content__body">
+		<form class="form  form--medium   js_form-period-new" novalidate>
+			<input type="hidden" name="year" value />
+
+			<p class="info"><span class="glyphicon glyphicon-info-sign"></span> Rellene los campos necesarios...</p>
+
+			<section class="group-input  group-input--new">
+				<header class="group-input__header">
+					<span>Datos Principales</span>
+				</header>
+
+				<div class="blow  blow--input  blow--twice">
+					<?php print $period_form->code ?>
+					<label for="code">Código</label>
+				</div>
+
+				<div class="blow  blow--input  blow--twice">
+					<?php print $period_form->name ?>
+					<label for="name">Nombre</label>
+				</div>
+
+				<div class="blow  blow--input">
+					<?php print $period_form->resolution ?>
+					<label for="resolution">N° Resolución</label>
+				</div>
+			</section>
+
+			<section class="group-input  group-input--new">
+				<header class="group-input__header">
+					<span>Clases</span>
+				</header>
+
+				<div class="blow  blow--input  blow--small">
+					<?php print $period_form->class_start ?>
+					<label for="class_start">Inicio</label>
+				</div>
+
+				<div class="blow  blow--input  blow--small">
+					<?php print $period_form->class_end ?>
+					<label for="class_end">Final</label>
+				</div>
+			</section>
+
+			<section class="group-input  group-input--new">
+				<header class="group-input__header">
+					<span>Matricula</span>
+				</header>
+
+				<div class="blow  blow--input  blow--small">
+					<?php print $period_form->register_start ?>
+					<label for="register_start">Inicio</label>
+				</div>
+
+				<div class="blow  blow--input  blow--small">
+					<?php print $period_form->register_end ?>
+					<label for="register_end">Final</label>
+				</div>
+			</section>
+
+			<section class="group-input  group-input--new">
+				<header class="group-input__header">
+					<span>Primer Parcial</span>
+				</header>
+
+				<div class="blow  blow--input  blow--small">
+					<?php print $period_form->first_start ?>
+					<label for="first_start">Inicio</label>
+				</div>
+
+				<div class="blow  blow--input  blow--small">
+					<?php print $period_form->first_end ?>
+					<label for="first_end">Final</label>
+				</div>
+			</section>
+
+			<section class="group-input  group-input--new">
+				<header class="group-input__header">
+					<span>Segundo Parcial</span>
+				</header>
+
+				<div class="blow  blow--input  blow--small">
+					<?php print $period_form->second_start ?>
+					<label for="second_start">Inicio</label>
+				</div>
+
+				<div class="blow  blow--input  blow--small">
+					<?php print $period_form->second_end ?>
+					<label for="second_end">Final</label>
+				</div>
+			</section>
+
+			<section class="group-input  group-input--new">
+				<header class="group-input__header">
+					<span>Estado del Periódo</span>
+				</header>
+				<div class="blow  blow--checked  blow--checked--three">
+					<p>Estado</p>
+					<div>
+						<input type="radio" name="state" value="T" id="check1" checked>
+						<label for="check1">Temporal <span class="glyphicon glyphicon-ok"></span></label>
+					</div>
+					<div>
+						<input type="radio" name="state" value="C" id="check2">
+						<label for="check2">Cerrado <span class="glyphicon glyphicon-ok"></span></label>
+					</div>
+					<div>
+						<input type="radio" name="state" value="A" id="check3">
+						<label for="check3">Activo <span class="glyphicon glyphicon-ok"></span></label>
+					</div>
+				</div>
+			</section>
+
+			<input type="submit" class="button  button--medium  button--submit" value="Guardar">
+
+			<footer class="form__footer  form__footer--messages   js_form_messages">
+
+			</footer>
+		</form>
+	</section>
+</template>
+
+<!-- Template para mensajes -->
+<template id="template_msg_error">
+	<div class="msg  msg--warning  msg--appear">
+		{% for error in errors %}
+			<p><span class="glyphicon glyphicon-exclamation-sign"></span> {{ error }}</p>
+		{% endfor %}
+	</div>
+</template>
+
+<template id="template_msg_success">
+	<div class="msg  msg--success  msg--appear">
+		<p><span class="glyphicon glyphicon-ok"></span> Se guardó satisfactoriamente!</p>
+	</div>
+</template>
+
+<template id="template_msg_danger_new">
+	<div class="msg  msg--danger  msg--appear">
+		<p><span class="glyphicon glyphicon-exclamation-sign"></span> Ups :( Hubo un error, tal vez ya exista este periódo, en todo caso intentelo de nuevo mas tarde...</p>
+	</div>
+</template>
+
+<template id="template_msg_danger_update">
+	<div class="msg  msg--danger  msg--appear">
+		<p><span class="glyphicon glyphicon-exclamation-sign"></span> Ups :( Hubo un error, al parecer extraño, intentelo de nuevo mas tarde...</p>
+	</div>
+</template>
+
+<!-- Template period -->
+<template id="template_period">
+	<header class="item-table__header">
+		{{ name }} <small>{{ code }}</small>
+	</header>
+
+<div class="js_interactive_sections">
+	
+	<section class="item-table__body  item-table__body--interactive active js_section-no-detail">
+		<section class="detail__buttons">
+			<a href="##" class="button-icon button-icon--normal   js_button-more-detail"><span class="glyphicon glyphicon-plus"></span></a>
+		</section>
+		<p class="w-strong">Codigo <strong>{{ code }}</strong></p>
+		<p class="w-strong">Resolución <strong>{{ resolution }}</strong></p>
+		<p class="w-strong">Inicio de Clases <strong>{{ class_start }}</strong></p>
+		<p class="w-strong">Fin de Clases <strong>{{ class_end }}</strong></p>
+	</section>
+
+</div>
+</template>
+
+
+<!-- Template Detalle de periodo -->
+<template id="template_period-detail">
+	<section class="item-table__body item-table__body--detail  item-table__body--interactive  js_section-detail">
+		<div class="delete-cape  delete-cape--interactive  js_delete-cape">
+			<div class="delete-cape__msg">
+				<p class="w-strong  w-strong--danger">¿Esta seguro que desea <strong>eliminar</strong> este periódo?</p>
+				<a class="button  button--small  button--alter  button--alter--danger  js_button-delete-confirm" href="##">Si, estoy seguro</a>
+				<a class="button  button--small  button--danger  js_button-delete-cancel" href="##">No</a>
+			</div>
+		</div>
+		<section class="detail__buttons">
+			<a href="##" class="button-icon  button-icon--normal  js_button-back"><span class="glyphicon glyphicon-chevron-left"></span></a>
+			<a href="##" class="button-icon  button-icon--warning  js_button-edit"><span class="glyphicon glyphicon-pencil"></span></a>
+			<a href="##" class="button-icon  button-icon--danger  js_button-delete"><span class="glyphicon glyphicon-trash"></span></a>
+		</section>
+		<section class="group-paragraph">
+			<header class="group-paragraph__header">
+				Datos Principales
+			</header>
+			<section class="group-paragraph__body">
+				<p class="w-strong">Codigo <strong>{{ code }}</strong></p>
+				<p class="w-strong">Resolución <strong>{{ resolution }}</strong></p>
+			</section>
+		</section>
+
+		<section class="group-paragraph">
+			<header class="group-paragraph__header">
+				Clases
+			</header>
+			<section class="group-paragraph__body">
+				<p class="w-strong">Inicio <strong>{{ class_start }}</strong></p>
+				<p class="w-strong">Fin <strong>{{ class_end }}</strong></p>
+			</section>
+		</section>
+
+		<section class="group-paragraph">
+			<header class="group-paragraph__header">
+				Matricula
+			</header>
+			<section class="group-paragraph__body">
+				<p class="w-strong">Inicio <strong>{{ register_start }}</strong></p>
+				<p class="w-strong">Fin <strong>{{ register_end }}</strong></p>
+			</section>
+		</section>
+
+		<section class="group-paragraph">
+			<header class="group-paragraph__header">
+				Primer Parcial
+			</header>
+			<section class="group-paragraph__body">
+				<p class="w-strong">Inicio <strong>{{ first_start }}</strong></p>
+				<p class="w-strong">Fin <strong>{{ first_end }}</strong></p>
+			</section>
+		</section>
+
+		<section class="group-paragraph">
+			<header class="group-paragraph__header">
+				Segundo Parcial
+			</header>
+			<section class="group-paragraph__body">
+				<p class="w-strong">Inicio <strong>{{ second_start }}</strong></p>
+				<p class="w-strong">Fin <strong>{{ second_end }}</strong></p>
+			</section>
+		</section>
+	</section> 
+</template>
+
+
+<!-- Template Edicion de periodo -->
+<template id="template_period-edit">
+	<section class="item-table__body   item-table__body--edit  item-table__body--interactive  js_section-edit">
+		<section class="detail__buttons">
+			<a href="##" class="button-icon  button-icon--warning  js_button-back_detail"><span class="glyphicon glyphicon-chevron-left"></span></a>
+		</section>
+		<form class="form  form--medium   js_form-edit" novalidate>
+
+			<p class="info"><span class="glyphicon glyphicon-info-sign"></span> Edite los campos necesarios...</p>
+
+			<section class="group-input  group-input--edit">
+				<header class="group-input__header">
+					<span>Datos Principales</span>
+				</header>
+
+				<div class="blow  blow--input">
+					<?php $period_form->name->setAttrib('id', 'name{{ code }}') ?>
+					<?php $period_form->name->setValue('{{ name }}') ?>
+					<?php print $period_form->name ?>
+					<label for="name{{ code }}">Nombre</label>
+				</div>
+
+				<div class="blow  blow--input">
+					<?php $period_form->resolution->setAttrib('id', 'resolution{{ code }}') ?>
+					<?php $period_form->resolution->setValue('{{ resolution }}') ?>
+					<?php print $period_form->resolution ?>
+					<label for="resolution{{ code }}">N° Resolución</label>
+				</div>
+			</section>
+
+			<section class="group-input  group-input--edit">
+				<header class="group-input__header">
+					<span>Clases</span>
+				</header>
+
+				<div class="blow  blow--input  blow--small">
+					<?php $period_form->class_start->setAttrib('id', 'class_start{{ code }}') ?>
+					<?php $period_form->class_start->setValue('{{ class_start }}') ?>
+					<?php print $period_form->class_start ?>
+					<label for="class_start{{ code }}">Inicio</label>
+				</div>
+
+				<div class="blow  blow--input  blow--small">
+					<?php $period_form->class_end->setAttrib('id', 'class_end{{ code }}') ?>
+					<?php $period_form->class_end->setValue('{{ class_end }}') ?>
+					<?php print $period_form->class_end ?>
+					<label for="class_end{{ code }}">Final</label>
+				</div>
+			</section>
+
+			<section class="group-input  group-input--edit">
+				<header class="group-input__header">
+					<span>Matricula</span>
+				</header>
+
+				<div class="blow  blow--input  blow--small">
+					<?php $period_form->register_start->setAttrib('id', 'register_start{{ code }}') ?>
+					<?php $period_form->register_start->setValue('{{ register_start }}') ?>
+					<?php print $period_form->register_start ?>
+					<label for="register_start{{ code }}">Inicio</label>
+				</div>
+
+				<div class="blow  blow--input  blow--small">
+					<?php $period_form->register_end->setAttrib('id', 'register_end{{ code }}') ?>
+					<?php $period_form->register_end->setValue('{{ register_end }}') ?>
+					<?php print $period_form->register_end ?>
+					<label for="register_end{{ code }}">Final</label>
+				</div>
+			</section>
+
+			<section class="group-input  group-input--edit">
+				<header class="group-input__header">
+					<span>Primer Parcial</span>
+				</header>
+
+				<div class="blow  blow--input  blow--small">
+					<?php $period_form->first_start->setAttrib('id', 'first_start{{ code }}') ?>
+					<?php $period_form->first_start->setValue('{{ first_start }}') ?>
+					<?php print $period_form->first_start ?>
+					<label for="first_start{{ code }}">Inicio</label>
+				</div>
+
+				<div class="blow  blow--input  blow--small">
+					<?php $period_form->first_end->setAttrib('id', 'first_end{{ code }}') ?>
+					<?php $period_form->first_end->setValue('{{ first_end }}') ?>
+					<?php print $period_form->first_end ?>
+					<label for="first_end{{ code }}">Final</label>
+				</div>
+			</section>
+
+			<section class="group-input  group-input--edit">
+				<header class="group-input__header">
+					<span>Segundo Parcial</span>
+				</header>
+
+				<div class="blow  blow--input  blow--small">
+					<?php $period_form->second_start->setAttrib('id', 'second_start{{ code }}') ?>
+					<?php $period_form->second_start->setValue('{{ second_start }}') ?>
+					<?php print $period_form->second_start ?>
+					<label for="second_start{{ code }}">Inicio</label>
+				</div>
+
+				<div class="blow  blow--input  blow--small">
+					<?php $period_form->second_end->setAttrib('id', 'second_end{{ code }}') ?>
+					<?php $period_form->second_end->setValue('{{ second_end }}') ?>
+					<?php print $period_form->second_end ?>
+					<label for="second_end{{ code }}">Final</label>
+				</div>
+			</section>
+
+			<input type="hidden" name="state_before" value="{{ state }}">
+			<section class="group-input  group-input--new">
+				<header class="group-input__header">
+					<span>Estado del Periódo</span>
+				</header>
+				<div class="blow  blow--checked  blow--checked--three">
+					<p>Estado</p>
+					<div>
+						{% if state == 'T' %}
+							<input type="radio" name="state" value="T" id="check1{{ code }}" checked>
+						{% else %}
+							<input type="radio" name="state" value="T" id="check1{{ code }}">
+						{% endif %}
+						<label for="check1{{ code }}">Temporal <span class="glyphicon glyphicon-ok"></span></label>
+					</div>
+					<div>
+						{% if state == 'C' %}
+							<input type="radio" name="state" value="C" id="check2{{ code }}" checked>
+						{% else %}
+							<input type="radio" name="state" value="C" id="check2{{ code }}">
+						{% endif %}
+						<label for="check2{{ code }}">Cerrado <span class="glyphicon glyphicon-ok"></span></label>
+					</div>
+					<div>
+						{% if state == 'A' %}
+							<input type="radio" name="state" value="A" id="check3{{ code }}" checked>
+						{% else %}
+							<input type="radio" name="state" value="A" id="check3{{ code }}">
+						{% endif %}
+						<label for="check3{{ code }}">Activo <span class="glyphicon glyphicon-ok"></span></label>
+					</div>
+				</div>
+			</section>
+
+			<input type="submit" class="button  button--medium  button--submit" value="Guardar">
+
+			<footer class="form__footer  form__footer--messages   js_form_messages">
+
+			</footer>
+		</form>
+	</section>
+</template>

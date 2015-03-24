@@ -1,7 +1,61 @@
-.text_warning
-	color amarilloTexto
+.spinner--block
+	display none
+	margin 11em auto
 
-ul
+.spinner--block.fadeUp
+	display block
+	animation .3s fadeUp ease
+
+.spinner--block.fadeOut
+	animation .3s fadeOut ease
+
+.delete-cape
+	background rgba(black, .3)
+	height 100%
+	left 0
+	position absolute
+	top 0
+	width 100%
+	z-index 3
+
+	.delete-cape__msg
+		background white
+		border-radius 7px
+		box-shadow 0 0 10px rgba(black, .4)
+		position absolute
+		padding .7em
+		top 14%
+		width 92%
+		max-width 400px
+		right 4%
+
+		p
+			text-align center
+		
+		a
+			display inline-block
+			width 62%
+			
+		a:nth-of-type(2)
+			margin-left 1%
+			width 35%
+
+@media screen and (min-width:1000px)
+	.delete-cape
+		.delete-cape__msg
+			top 16%
+
+.delete-cape--interactive
+	display none
+
+.delete-cape--interactive.active
+	animation fadeUp .3s ease
+	display block
+	
+.delete-cape--interactive.inactive
+	animation fadeOut .3s ease
+
+/*ul
 	padding 0
 
 ul.tabs
@@ -51,14 +105,41 @@ ul.tabs
 		animation r_s_fadeUp .3s ease
 		display block
 
-p.no_data
-	color plomoTexto
-	text-align center
-	margin 6em
+.aux.mobile
+	
+	.info
+		background rgba(black, .7)
+		padding .2em
+		text-align center
+		
+		p
+			color white
+			display inline-block
+			margin 0
+			padding .3em
+			margin-left .3em
 
-	span
-		color rojoTexto
+			.abbr
+				border-bottom 4px white solid
+				width 25px
+				padding 0 .2em
+				margin-right .2em
+				display inline-block
+				
+			.full
+				display none
 
-p.info
-	color plomoTexto
-	margin-bottom 2em	
+		p.tablet
+				display none
+				
+
+		p.active
+
+			span
+				color verde
+			
+			.full
+				color verde
+
+			.abbr
+				border-bottom 2px verde solid*/
