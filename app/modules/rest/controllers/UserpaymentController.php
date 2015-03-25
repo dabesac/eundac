@@ -54,14 +54,16 @@ class Rest_UserpaymentController extends Zend_Rest_Controller {
 
             //detalles de sus pagos
             $payment_detail_pd = $paymentDetailDb->_getFilter($where);
-            $n_r = 0;
-            foreach ($payment_detail_pd as $c => $payment) {
-                $current_payments_normal[$c] = array(
-                                                    'amount'    => $payment['amount'],
-                                                    'operation' => $payment['operation'],
-                                                    'concept'   => $payment['pcid'],
-                                                    'date'      => $payment['date_payment'] );
-                $payment_total = $payment_total + $payment['amount'];
+            if ($payment_detail_pd) {
+                $n_r = 0;
+                foreach ($payment_detail_pd as $c => $payment) {
+                    $current_payments_normal[$c] = array(
+                                                        'amount'    => $payment['amount'],
+                                                        'operation' => $payment['operation'],
+                                                        'concept'   => $payment['pcid'],
+                                                        'date'      => $payment['date_payment'] );
+                    $payment_total = $payment_total + $payment['amount'];
+                }
             }
 
             //pagos condicionales

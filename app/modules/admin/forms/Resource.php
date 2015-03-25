@@ -28,13 +28,13 @@ class Admin_Form_Resource extends Zend_Form
         
         $controller= new Zend_Form_Element_Text('controller');
         $controller->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        // $controller->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        $controller->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $controller->setAttrib("title","Ingreso nombre controlador");
         $controller->setAttrib("class","form-control");
 
         $action= new Zend_Form_Element_Text('action');
         $action->removeDecorator('Label')->removeDecorator("HtmlTag")->removeDecorator("Label");
-        // $action->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
+        $action->setRequired(true)->addErrorMessage('Este campo es Obligatorio');
         $action->setAttrib("title","Ingreso nombre controlador");
         $action->setAttrib("class","form-control");
         
