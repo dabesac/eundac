@@ -1,3 +1,4 @@
+<?php print_r($this->cursos) ?>
 <?php $data_person=$this->data_person ?>
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -38,11 +39,21 @@
                 <select id="dcurso" name="dcurso" class="form-control">
                     <option value="ns">- Seleccione -</option>
                         <?php
+                        $j=0;
+                        $mostrar='si';
+                        $idcourse='nada';
                         if($this->cursos){
-                            foreach ($this->cursos as $cursos) {
-                                $courseid_en=base64_encode($cursos['courseid']);?>
-                                <option value="<?php echo $courseid_en?>"><?php echo $cursos['name']?></option>
-                            <?php                        
+                            foreach ($this->cursos as $cursos) {    
+                                
+                                if($cursos['courseid']!=$idcourse && $mostrar=='si'){
+                                    $courseid_en=base64_encode($cursos['courseid']);?>
+                                    <option value="<?php echo $courseid_en?>"><?php echo $cursos['name']?></option>
+                                <?php  
+                                    $idcourse=$cursos['courseid'];
+                                }else{
+                                    $$mostrar='si';
+                                } 
+                                                   
                             }
                         }
                         ?>
@@ -71,11 +82,20 @@
                 <select id="curso" name="curso" class="form-control">
                     <option value="ns">- Seleccione -</option>
                         <?php
+                        $mostrard='si';
+                        $idcoursed='nada';
                         if($this->cursos){
-                            foreach ($this->cursos as $cursos) {
-                                $courseid_en=base64_encode($cursos['courseid']).';--;'.$cursos['veces'];?>
-                                <option value="<?php echo $courseid_en?>"><?php echo $cursos['name']?></option>
-                            <?php                        
+                            foreach ($this->cursos as $cursos) {    
+                                
+                                if($cursos['courseid']!=$idcoursed && $mostrard=='si'){
+                                    $courseid_en=base64_encode($cursos['courseid']);?>
+                                    <option value="<?php echo $courseid_en?>"><?php echo $cursos['name']?></option>
+                                <?php  
+                                    $idcoursed=$cursos['courseid'];
+                                }else{
+                                    $$mostrard='si';
+                                } 
+                                                   
                             }
                         }
                         ?>
