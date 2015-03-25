@@ -28,9 +28,9 @@
                 <label>Aumentar semestres</label>
                 <select id="nsem" name="nsem" class="form-control">
                     <option value="0">- Seleccione -</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
                     <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
                 </select>            
             </div>
             <div class="col-md-6"> 
@@ -57,7 +57,6 @@
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
-                    <option value="6">6</option>
                 </select>            
             </div>
         </div>
@@ -83,7 +82,7 @@
                 </select>                 
              </div>
             <div class="col-md-4"> 
-                <label>Num Matriculas</label> 
+                <label>N° Matriculas</label> 
                 <div style="font-size: 15px;padding-bottom:10px;" class="text text-info form-control veces "></div>
                 <!-- <span id="veces" class="label label-info"></span>   -->     
             </div>
@@ -92,7 +91,7 @@
     <div class="row">
         <div class="col-md-offset-4 col-md-3">
             <br>
-            <a id="guardar" class="form-control btn btn-primary"
+            <a id="guardar" class="form-control btn btn-success"
             uid = '<?php echo $this->uid?>'
             pid = '<?php echo $this->pid?>'
             escid = '<?php echo $this->escid?>'
@@ -146,7 +145,7 @@ if ($this->conditionsStudent){ ?>
                         <td><?php echo $c ?></td>
                         <td><?php echo $detail ?></td>
                         <td>
-                        <a class="eliminar"
+                        <a class="btn btn-danger eliminar"
                         uid = '<?php echo $conditions['uid']?>'
                         pid = '<?php echo $conditions['pid']?>'
                         escid = '<?php echo $conditions['escid']?>'
@@ -154,7 +153,7 @@ if ($this->conditionsStudent){ ?>
                         perid = '<?php echo $conditions['perid']?>'
                         type = '<?php echo $conditions['type']?>'
                         clss="<?php echo $c.'tr' ?>"
-                        ><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                        ><span class="glyphicon glyphicon-trash"></span>Eliminar</a>
                         </td>
                         </tr>
                     <?php
@@ -223,6 +222,12 @@ if ($this->conditionsStudent){ ?>
                 setTimeout(function(){
                     $("#modal").modal('hide');
                 }, 1000);*/
+                $("#curso").val("ns");
+                $("#dcurso").val("ns");
+                $("#doc").val("");
+                $("#nsem").val("0");
+                $("#credit").val("0");
+                $(".veces").html("")
                 $(".condition2").fadeOut("fast");
                 $("#condition").html(data);
 
