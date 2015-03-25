@@ -31,8 +31,7 @@ class Rest_UserdataController extends Zend_Rest_Controller {
         $rid   = $this->sesion->rid;
         $escid = $this->sesion->escid;
         $subid = $this->sesion->subid;
-        //$perid = $this->sesion->period->perid;
-        $perid = '14A';
+        $perid = $this->sesion->period->perid;
 
         $main_info = array(
                             'id'               => base64_encode($this->sesion->uid),

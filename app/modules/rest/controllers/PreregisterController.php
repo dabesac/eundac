@@ -38,8 +38,8 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
         $escid = $this->sesion->escid;
         $subid = $this->sesion->subid;
         $curid = $this->sesion->curid;
-        //$perid = $this->sesion->period->perid;
-        $perid = '14A';
+        $perid = $this->sesion->period->perid;
+        
 
         //verificar si ya esta prematriculado
         $courses_data = null;
@@ -325,14 +325,14 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
             $courses_data = Zend_Json::decode($courses_data);
 
             //Verificar si ya existe prematricula y si no guardarla
-            $eid = $this->sesion->eid;
-            $oid = $this->sesion->oid;
-            $uid = $this->sesion->uid;
-            $pid = $this->sesion->pid;
+            $eid   = $this->sesion->eid;
+            $oid   = $this->sesion->oid;
+            $uid   = $this->sesion->uid;
+            $pid   = $this->sesion->pid;
             $escid = $this->sesion->escid;
             $subid = $this->sesion->subid;
-            //$perid = $this->sesion->period->perid;
-            $perid = '14A';
+            $perid = $this->sesion->period->perid;
+            
 
             $where = array(
                             'eid' => $eid,
@@ -398,8 +398,8 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
         $pid   = $this->sesion->pid;
         $escid = $this->sesion->escid;
         $subid = $this->sesion->subid;
-        //$perid = $this->sesion->period->perid;
-        $perid = '14A';
+        $perid = $this->sesion->period->perid;
+        
 
         $register_pk = array(
                         'eid'   => $eid,
