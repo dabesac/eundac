@@ -23,8 +23,7 @@ class Print_StudentController extends Zend_Controller_Action {
         $uid = $this->sesion->uid;
         $escid = $this->sesion->escid;
         $subid = $this->sesion->subid;
-        //$perid = $this->sesion->period->perid;
-        $perid = '14A';
+        $perid = $this->sesion->period->perid;
 
         $regid = $uid.$perid;
         $curid = $this->sesion->curid;
