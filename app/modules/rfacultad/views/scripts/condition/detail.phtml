@@ -1,4 +1,3 @@
-<?php print_r($this->cursos) ?>
 <?php $data_person=$this->data_person ?>
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -88,7 +87,7 @@
                             foreach ($this->cursos as $cursos) {    
                                 
                                 if($cursos['courseid']!=$idcoursed && $mostrard=='si'){
-                                    $courseid_en=base64_encode($cursos['courseid']);?>
+                                    $courseid_en=base64_encode($cursos['courseid']).';--;'.$cursos['veces'];?>
                                     <option value="<?php echo $courseid_en?>"><?php echo $cursos['name']?></option>
                                 <?php  
                                     $idcoursed=$cursos['courseid'];
