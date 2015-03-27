@@ -18,87 +18,91 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 
 		this.fetch({
 			success : function(models, response){
-				if (!success_pre || success_pre === 'B') {
-					//verificar si existe curso con condicion...
-					var courses_with_condition = self.where({ condition : true });
+				if (response) {
+					if (!success_pre || success_pre === 'B') {
+						//verificar si existe curso con condicion...
+						var courses_with_condition = self.where({ condition : true });
 
-					// tipo de render segun condicional
-					var result = self.verifyCondition(courses_with_condition);
+						// tipo de render segun condicional
+						var result = self.verifyCondition(courses_with_condition);
 
-					var type_render_course = 'A';
-					var type_render_paragraph = 'N';
+						var type_render_course = 'A';
+						var type_render_paragraph = 'N';
 
-					if (result.conditional && !result.conditional_allow){
-						type_render_course = 'I';
-						type_render_paragraph = 'C';
-					}
+						if (result.conditional && !result.conditional_allow){
+							type_render_course = 'I';
+							type_render_paragraph = 'C';
+						}
 
-					//render de parrafo
-					var data_render = {	type : type_render_paragraph,
-										conditional_amount : result.conditional_amount };
-					var view_paragraph = new eUndac.Views.Paragraphs({ 	data_render : data_render, 
-																		where_render : $('#js_paragraph') });
+						//render de parrafo
+						var data_render = {	type : type_render_paragraph,
+											conditional_amount : result.conditional_amount };
+						var view_paragraph = new eUndac.Views.Paragraphs({ 	data_render : data_render, 
+																			where_render : $('#js_paragraph') });
 
-					//render de cursos
-					var semesters = [];
-					var semester_each = '-';
-					var c_semesters = 0;
-					var exist;
-					models.every(function(model){
-						// cantidad de semestres
-						var semester_turn_each_self = model.toJSON().semester + model.toJSON().turn;
-						var semester_each_self = model.toJSON().semester;
+						//render de cursos
+						var semesters = [];
+						var semester_each = '-';
+						var c_semesters = 0;
+						var exist;
+						models.every(function(model){
+							// cantidad de semestres
+							var semester_turn_each_self = model.toJSON().semester + model.toJSON().turn;
+							var semester_each_self = model.toJSON().semester;
 
-						// Semestre y turno para establecer creditos
-						exist = false;
-						semesters.forEach(function(semester){
-							if (semester === semester_turn_each_self) {
-								exist = true;
+							// Semestre y turno para establecer creditos
+							exist = false;
+							semesters.forEach(function(semester){
+								if (semester === semester_turn_each_self) {
+									exist = true;
+								}
+							});
+							if (!exist) {
+								semesters.push(semester_turn_each_self);
 							}
+
+							// Renderear cursos en la cantidad de semestres establecidos
+							if (semester_each_self !== semester_each) {
+								semester_each = semester_each_self;
+								c_semesters++;
+								
+								if (c_semesters > semester_render)
+									return false;
+							}
+
+							// render
+							view_course = new eUndac.Views.Course({ model : model, 
+																	typeRender : type_render_course,
+																	where_render : $('#js_main-data') });
+
+							return true;
 						});
-						if (!exist) {
-							semesters.push(semester_turn_each_self);
+
+						// si no es condicional
+						self.putCredits(result.conditional_credits, semesters, more_credits);
+
+						//boton para validar
+						if (type_render_course === 'A') {
+							self.buttonPreregister(courses_with_condition);
 						}
-
-						// Renderear cursos en la cantidad de semestres establecidos
-						if (semester_each_self !== semester_each) {
-							semester_each = semester_each_self;
-							c_semesters++;
-							
-							if (c_semesters > semester_render)
-								return false;
-						}
-
-						// render
-						view_course = new eUndac.Views.Course({ model : model, 
-																typeRender : type_render_course,
-																where_render : $('#js_main-data') });
-
-						return true;
-					});
-
-					// si no es condicional
-					self.putCredits(result.conditional_credits, semesters, more_credits);
-
-					//boton para validar
-					if (type_render_course === 'A') {
-						self.buttonPreregister(courses_with_condition);
+					} else if (success_pre === 'I') {
+						// Renderear cursos que llevara
+						var courses_carry = [];
+						var semester_assign = models.models[0].toJSON().semester_roman_assign;
+						models.forEach(function(course){
+							courses_carry.push(course);
+						});
+						self.renderPreSuccess(courses_carry, semester_assign);
+					} else if (success_pre === 'M') {
+						var courses_carry_s = [];
+						var semester_assign_s = models.models[0].toJSON().semester_roman_assign;
+						models.forEach(function(course){
+							courses_carry_s.push(course);
+						});
+						self.renderRegisterSuccess(courses_carry_s, semester_assign_s);
 					}
-				} else if (success_pre === 'I') {
-					// Renderear cursos que llevara
-					var courses_carry = [];
-					var semester_assign = models.models[0].toJSON().semester_roman_assign;
-					models.forEach(function(course){
-						courses_carry.push(course);
-					});
-					self.renderPreSuccess(courses_carry, semester_assign);
-				} else if (success_pre === 'M') {
-					var courses_carry_s = [];
-					var semester_assign_s = models.models[0].toJSON().semester_roman_assign;
-					models.forEach(function(course){
-						courses_carry_s.push(course);
-					});
-					self.renderRegisterSuccess(courses_carry_s, semester_assign_s);
+				} else {
+					var error_view = new eUndac.Views.TypeError({ type : 'EC' });
 				}
 			},
 			error : function(){
@@ -328,16 +332,6 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 				}
 			});
 		});
-
-		/*var model_preregister = new eUndac.Models.Preregister();
-		model_preregister.save(courses_json, {
-			success : function(model, response){
-				console.log(model, response);
-			},
-			error : function(){
-				console.log('Horror');
-			}
-		});*/
 	},
 
 	renderPreSuccess : function(courses_carry, semester_roman_assign){

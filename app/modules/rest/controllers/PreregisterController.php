@@ -293,7 +293,6 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
 
                         // Si el curso es de equivalencia
 
-
                         $c_courses++;
                     }
                 }

@@ -193,7 +193,7 @@
 <script type="text/template" id="template_paragraphs">
 	{% if (type === 'N') %}
 		{# Normal #}
-		<p class="info info--main  margin-aux-desktop-medium"><span class="glyphicon glyphicon-info-sign"></span> Seleccione los cursos que llevara, recuerda que los creditos permitidos varian de acuerdo al semestre en que lleves mas...</p>
+		<p class="info info--main  margin-aux-desktop-medium"><span class="glyphicon glyphicon-info-sign"></span> Seleccione los cursos que llevara...</p>
 	{% elseif (type === 'C') %}
 		{# Condicion #}
 		<p class="info info--main  danger-icon  margin-aux-mobile  margin-aux-desktop-medium"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que llevaras 
@@ -302,7 +302,7 @@
 		{% if ( current_payment.increment ) %}
 			<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago no esta completo, debes pagar con un incremento del {{ current_payment.increment }}%, entonces te faltaría reintegrar <strong>S/. {{ current_payment.amount_left}}</strong>, realízalo a la cuenta <strong>72</strong> de la Universidad...</p>
 		{% else %}
-			<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago no esta completo, te falta reintegrar <strong>S/. {{ current_payment.amount_left}}</strong>, realizalo a la cuenta <strong>72</strong> de la Universidad...</p>
+			<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago no esta completo, o tal vez te corresponde otra tasa, si es asi presenta tu resolución de cambio a la oficina de informática, si no es asi te faltaria reintegrar <strong>S/. {{ current_payment.amount_left}}</strong>, realizalo a la cuenta <strong>72</strong> de la Universidad...</p>
 		{% endif %}
 	{% elseif (current_payment.state == 'OT') %}
 		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago esta fuera de tiempo, para mas información acercate a la oficina de informatica...</p>
@@ -310,6 +310,8 @@
 		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> No existe algún pago registrado, si lo realizo hoy recuerde que le toma un tiempo de <strong>12 horas</strong> al banco para enviar los datos, si el problema persiste acérquese a la oficina de informática...</p>
 	{% elseif (type == 'ED') %}
 		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que la distribución de cursos de su escuela aún no esta lista, acerquece a su dirección para saber mas detalles...</p>
+	{% elseif (type == 'EC') %}
+		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> No hay cursos para mostrar, <strong>tal vez no tengas asignado una currícula</strong>, en todo caso acercate a <strong>Registros Central</strong> para que verifiques tu situación...</p>
 	{% else %}
 		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Hubo un problema al mostrar los cursos, tal vez sea la conexion a internet, por favor intentalo mas tarde...</p>
 	{% endif %}

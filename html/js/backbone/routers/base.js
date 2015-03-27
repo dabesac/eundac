@@ -95,7 +95,7 @@ eUndac.Routers.Base = Backbone.Router.extend({
 				}
 			},
 			error : function(){
-				console.log('falta cerrar la distribucion');
+				console.log('Problema al traer datos de usuario...');
 			}
 		});
 		/*model_user_payment.fetch({

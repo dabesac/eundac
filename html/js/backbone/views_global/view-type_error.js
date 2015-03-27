@@ -7,7 +7,6 @@ eUndac.Views.TypeError = Backbone.View.extend({
 	},
 
 	render : function(){
-		console.log(this.options);
 		var html;
 		if (this.model) {
 			html = template_error_payment(this.model.toJSON());
