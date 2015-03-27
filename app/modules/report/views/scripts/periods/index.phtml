@@ -11,6 +11,9 @@
 <input type="hidden" id="rol" value="<?php echo $dataVista['rid'] ?>">
 <input type="hidden" id="escid" value="<?php echo $dataVista['dataEscid'] ?>">
 <input type="hidden" id="periodCurrent" value="<?php echo base64_encode($dataVista['period']) ?>">
+
+<section class="container">
+	
 <div class="avanceAcademicoHeader">
 	<p class="text-muted parrafoHeader"><span class="glyphicon glyphicon-info-sign"></span> Puede filtrar otros periodos si lo desea:</p>
 	
@@ -62,6 +65,7 @@
 <div id="avanceAcademico_DataDocentes" class="avanceAcademicoDocentes">
 
 </div>
+</section>
 <script>
 	$(function(){
 		var rid       = $('#rol').val();

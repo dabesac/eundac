@@ -10,209 +10,142 @@
 }
 
 body.login
-	background negroPlomo
+	border-right 6px plomoTexto solid
 
-header.headerLogin
-	background negro
-	border-radius 0 0 30px 30px
-	box-shadow 0.5px 1px 0.5px 1px rgba(black, 0.5)
-	height 42px
-	left 18%
-	padding 0.2em
+	&:after
+		border-bottom 100px transparent solid
+		border-left 100px azul solid
+		content ""
+		left 5px
+		position absolute
+		top 5px
+		z-index 5
+
+	&:before
+		border-bottom 90px transparent solid
+		border-left 90px negro solid
+		content ""
+		left 0
+		position absolute
+		top 0
+		z-index 6
+
+section.login-side
+	align-items center
+	display flex
+	height 100vh
+	min-height 600px
 	position relative
-	top 0
-	width 220px
 
+.login-side__body
+	flex 1
+	margin-left auto
+	margin-right auto
+	position relative
+	max-width 350px
+
+.login-side--logo
+	position absolute
+	right 1em
+	top 1em
+	height 50px
+	z-index 7
+
+.login-side__body__logo
+	text-align center
+	padding 2em
+	position relative
+	
 	figure
-		
-		.logoUniversidad
-			margin-left 18px
-			height 35px
-
-	p
-		color white
-		font-size 0.8em
-		font-weight bold
-		position absolute
-		right 30px
-		text-shadow 0.1em 0.2em 0.1em rgba(black, 0.8)
-		top 0.5em
-
-div.imagenFondo
-	background-image url('/img/panoramicaUndac.jpg')
-	background-size 100% 100%
-	box-shadow 2px 2px 3px 2px rgba(black, 0.5)
-	height 450px
-	left 8%
-	margin-top -225px
-	position absolute
-	top 50%
-	width 84%
-	z-index 2
-
-div.imagenFondo:before
-	border-bottom 120px solid transparent
-	border-left 120px negro solid
-	position absolute
-	content ""
-	z-index 2
-
-div.imagenFondo:after
-	border-bottom 120px solid transparent
-	border-left 120px azulUndac solid
-	content ""
-	left 7px
-	top 7px
-	position absolute
-	z-index 1
-
-div.navegacion
-	background white
-	box-shadow 2px 2px 3px 2px rgba(black, 0.5)
-	height 500px
-	margin-bottom 50px
-	position absolute
-	right 10%
-	top 50%
-	margin-top -250px
-	width 27%
-	z-index 3
-
-	.logoUser
+		background white
+		display inline-block
 		border-radius 50%
-		border 3px plomoOscuro solid
-		box-shadow 0.5px 1px 1px 0.5px rgba(black, 0.3)
-		height 150px
-		left 45%
-		margin-left -55px
-		padding 1.6em
-		padding-top 1.9em
+		border 1px plomoTexto solid
+		position relative
+		z-index 5
+
+	img
+		height 90px
+		margin 1.8em 1.4em
+
+	&:before
+		background plomoTexto
+		content ""
+		width 50%
+		height 2px
+		top 58%
 		position absolute
-		top 7%
-		width 150px
+		right 0
 
-		figure
+@media screen and (min-width:400px)
+	.login-side__body__logo
+		&:before
+			background white
 
-			.logoUserMuneco
-				border-radius 13%
-				width 100%
-
-	.bienvenido
+.login-side__body__welcome
+	text-align center
+	
+	p:nth-of-type(1)
 		color azul
-		font-weight light
-		font-size 1.1em
-		padding-top 0.4em
-		position absolute
-		text-align center
-		top 39%
-		width 100%
-
-	.botones
-		left 12%
-		height 44%
-		position absolute
-		top 49%
-		width 76%
-
-		.userInput
-			margin-top 1.2em
-			position relative
-			width 100%
-			
-			span
-				background plomo
-				border-bottom plomoOscuro 2px solid
-				border-left plomoOscuro 2px solid
-				border-top plomoOscuro 2px solid
-				font-size 1.2em
-				left 0
-				width 12%
-				position absolute
-				text-align center
-				padding-top 0.5em
-				top 0
-				height 100%
-				z-index 2
-
-			.iconRol:before
-				text-align center
-				font-family "iconLogin"
-				content "\e600"
-
-			.iconUser:before
-				font-family "iconLogin"
-				content "\e602"
-
-			.iconPass:before
-				font-family "iconLogin"
-				content "\e604"
-
-			input
-				border plomoOscuro 2px solid
-				border-left white 2px solid
-				border-radius 0
-				position relative
-				width 89%
-				left 11%
-				top 0
-				z-index 1
-
-			select
-				border plomoOscuro 2px solid
-				border-left white 2px solid
-				border-radius 0
-				color plomoTexto
-				position relative
-				width 89%
-				left 11%
-				top 0
-				z-index 1
-
-		.sendForm
-			position absolute
-			background azul
-			border-radius 0
-			bottom 5%
-			color white
-			transition 0.3s background
+		margin-bottom .3em
 		
-		.sendForm:hover
-			background azulHover
-
-	.recovery_password
-		bottom .5em
+	p:nth-of-type(2)
 		color plomoTexto
 		font-size .9em
-		position absolute
-		right 1em
+		
+.login-side__body__form-side
+	padding 1em
+	margin-top 2em
 
-		&:hover
-			color azul
+	select
+	input
+		margin-bottom 1.5em
 
-	p
-		position absolute
-		bottom -25px
+	input[type="submit"]
 		width 100%
 
-div.navegacion:before
-	border-bottom 120px solid transparent
-	border-left 120px negro solid
-	position absolute
-	content ""
-	z-index 2
-
-div.navegacion:after
-	border-bottom 120px solid transparent
-	border-left 120px azulUndac solid
-	content ""
-	left 7px
-	top 7px
-	position absolute
-	z-index 1
-
-.errors
-	
-	li
-		color red
-		font-size 0.8em
+	ul.errors
 		position absolute
+		top 100%
+		text-align center
+		width 100%
+
+		li
+			list-style-type none
+			display block
+			color rojoTexto
+			font-size .8em
+
+	.form-side__error
+		position absolute
+		width 100%
+		left 0
+		bottom 6.5em
+		color rojoTexto
+		font-size .9em
+		text-align center
+
+.login-side__recovery-password
+	text-align right
+	padding 1em
+
+
+
+// icons
+span.icon-user
+	&:after
+		content "\e602"
+		font-family "iconLogin"
+		font-size 1.4em
+
+span.icon-key
+	&:after
+		content "\e604"
+		font-family "iconLogin"
+		font-size 1.4em
+
+span.icon-role
+	&:after
+		content "\e600"
+		font-family "iconLogin"
+		font-size 1.4em

@@ -110,6 +110,9 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 		this.on('change', function(model){
 			var course_code = model.toJSON().code;
 			var course_turn = model.toJSON().turn;
+			var course_type = model.toJSON().type;
+
+			// carry only a turn
 			var same_course = this.where({code : course_code});
 			same_course.forEach(function(course){
 				if (course.toJSON().code === course_code && course.toJSON().turn !== course_turn) {
@@ -118,6 +121,19 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 					}
 				}
 			});
+
+
+			// carry only a elective
+			if (course_type === 'E') {
+				var same_course_elective = this.where({type : course_type});
+				same_course_elective.forEach(function(course){
+					if (course.toJSON().code != course_code) {
+						if (course.toJSON().carry) {
+							course.set({carry : false}, {silent : true});
+						}
+					}
+				});
+			}
 		});
 	},
 
@@ -234,7 +250,7 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 				if (courses_carry.length > 0) {
 					self.renderConfirmation(courses_carry);
 				} else {
-					console.log('Elija al menos un curso');
+					$('#js_paragraph-carry-less-one').addClass('active');
 				}
 			} else {
 				$('#js_paragraph-charge-conditional').addClass('active');
@@ -246,8 +262,6 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 		$button_confirm.on('click', function(){
 			self.confirmSubmit(courses_carry);
 		});
-
-		
 	},
 
 	renderConfirmation : function(courses_carry){
@@ -329,6 +343,7 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 	renderPreSuccess : function(courses_carry, semester_roman_assign){
 		var $button_delete  = $('#js_button_delete_pre');
 
+		$('#js_content-pick-course').removeClass('active');
 		$('#js_content-confirm-pick').addClass('inactive');
 		setTimeout(function() {
 			$('#js_content-confirm-pick').removeClass('active inactive');
@@ -363,6 +378,7 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 	},
 
 	renderRegisterSuccess : function(courses_carry, semester_roman_assign){
+		$('#js_content-pick-course').removeClass('active');
 		$('#js_register-success').addClass('active');
 
 		// render success

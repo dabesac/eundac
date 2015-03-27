@@ -1,45 +1,36 @@
-<header class="headerLogin">
-	<figure>
-		<img src="/img/undac.png" alt="Logo" class="logoUniversidad">
-	</figure>
-	<p class="nombreUniversidad">
-		Universidad Nacional <br>
-		Daniel Alcides Carrión
-	</p>
-</header>
-<div class="imagenFondo">
-</div>
-
-<div class="navegacion">
-
-	<div class="logoUser">
-		<figure>
-			<img class="logoUserMuneco" src="/img/logoLogin.jpg" alt="LogoLogin">
-		</figure>
-	</div>
-	<div class="bienvenido text-muted">
-		BIENVENIDO <br><small class="text-muted">Inicie sesión...</small>
-	</div>
-	<div class="botones">
-		<form name="<?php echo $this->form->getName();?>" action="<?php echo $this->form->getAction();?>" method="post" enctype="application/x-www-form-urlecncoded">
-			<div class="">
-				<span class="iconRol glyphicon text-muted"></span>
+<section class="login-side">
+	<section class="login-side__body">
+		<div class="login-side__body__logo">
+			<figure>
+				<img class="logoUserMuneco" src="/img/logoLogin.jpg" alt="LogoLogin">
+			</figure>
+		</div>
+		<section class="login-side__body__welcome">
+			<p>BIENVENIDO</p>
+			<p>Inicie sesión</p>
+		</section>
+		<form class="login-side__body__form-side" name="<?php echo $this->form->getName();?>" action="<?php echo $this->form->getAction();?>" method="post" enctype="application/x-www-form-urlecncoded">
+			<div class="select-icon">
 				<?php echo $this->form->rid ?>
+				<span class="icon-role"></span>
 			</div>
-			<div class="userInput">
-				<span class=" iconUser glyphicon text-muted"></span>
+			<div class="input-icon">
 				<?php echo $this->form->usuario ?>
+				<span class="icon-user"></span>
 			</div>
-			<div class="userInput">
-				<span class="iconPass glyphicon text-muted"></span>
+
+			<div class="input-icon">
 				<?php echo $this->form->clave ?>
+				<span class="icon-key"></span>
 			</div>
 			<?php echo $this->form->enviar ?>
-			<p class="text-danger text-center"><?php echo $this->msgerror?></p>
+			<p class="form-side__error"><?php echo $this->msgerror?></p>
 		</form>
-	</div>
-	<a href="#" id='change' class="recovery_password">¿Olvidaste tu contraseña?</a>
-</div>
+		<section class="login-side__recovery-password">
+			<a href="#" id='change' class="link">¿Olvidaste tu contraseña?</a>
+		</section>
+	</section>
+</section>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
@@ -121,12 +112,7 @@ $(function(){
 		$("#smsconf").empty();
 		$(".comprobar").html("<span class='glyphicon glyphicon-transfer'></span> Comprobar");
   	});
-	$('input[rel=tooltip]').tooltip({
-	    placement: "right"
-	});
-	$('select[rel=tooltip]').tooltip({
-	    placement: "right"
-	});
+
 	$("#oid").change(function() {
 		var oid = $(this).val();
 		var eid = $("#eid").val();

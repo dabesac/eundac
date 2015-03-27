@@ -42,7 +42,8 @@ eUndac.Routers.Base = Backbone.Router.extend({
 				var model_user = model;
 				var response_user = response;
 				var success_pre = response.current_register.state;
-				if (!success_pre || success_pre === 'B') {
+				var state_distribution = response.current_register.state_distribution;
+				if (success_pre === 'B' && state_distribution === 'C') {
 					model_user_payment.fetch({
 						success : function(model, response){
 							var state_payment = response.current_payment.state;
@@ -89,10 +90,12 @@ eUndac.Routers.Base = Backbone.Router.extend({
 																						more_semester : more_semester,
 																						more_credits  : more_credits  });
 
+				} else if (state_distribution !== 'C') {
+					var error_view = new eUndac.Views.TypeError({ type : 'ED' });
 				}
 			},
 			error : function(){
-
+				console.log('falta cerrar la distribucion');
 			}
 		});
 		/*model_user_payment.fetch({

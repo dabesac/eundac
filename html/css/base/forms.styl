@@ -273,3 +273,29 @@ textarea
 	.group-input__header
 		&:before
 			border-bottom 1px amarillo solid
+
+.input-icon
+.select-icon
+	position relative
+	
+	span
+		left .9em
+		position absolute
+		top .2em
+		transition all .3s
+
+	input
+	select
+		border 0
+		border-bottom 2px plomoTexto solid
+		box-shadow 0 0 5px rgba(white, 1)
+		padding-left 3em
+		transition all .3s
+
+	select:focus
+	input:focus
+		border-bottom 2px azul solid
+		box-shadow 0 0 5px rgba(white, 1)
+		
+		& ~ span
+			color azul

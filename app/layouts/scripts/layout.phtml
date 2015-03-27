@@ -30,7 +30,13 @@
 		    <?php echo $this->placeholder('BtnSVCLeft') ?>
 		</nav>
 		<?php //echo $this->placeholder('AuxiliarMobile') ?>
-		<div id="js_auxiliar" class="auxiliar  js_auxiliar" type="auxiliar_voh"></div>
+		<div id="js_auxiliar" class="auxiliar">
+			<div class="container container--auxiliar">
+				<div class="auxiliar--content  js_auxiliar">
+
+				</div>
+			</div>
+		</div>
 		<main>
 			<?php echo $this->layout()->content ?>
 		</main>
@@ -48,7 +54,6 @@
 </html>
 <script>
 	/*$(function(){
-
 		function loadingOverlay(){
 			$("#loading_overlay .loading_message").delay(1000).fadeOut(function(){}); 
 			$("#loading_overlay").delay(500).fadeOut();
@@ -57,17 +62,5 @@
 		window.onload = function () {
 			loadingOverlay();   
 		};
-
-		$(window).scroll(function(){
-            if($(this).scrollTop() >= 120){
-               $('.navigationButtonsSVCLayoutRight').addClass('navigationButtonsSVCFixed');
-               $('.navigationButtonsSVCLayoutLeft').addClass('navigationButtonsSVCFixed');
-            }
-            else{
-               $('.navigationButtonsSVCLayoutRight').removeClass('navigationButtonsSVCFixed');
-               $('.navigationButtonsSVCLayoutLeft').removeClass('navigationButtonsSVCFixed');
-            }
-        });
-
 	});*/
 </script>

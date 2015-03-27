@@ -80,6 +80,22 @@ eUndac.Views.Course = Backbone.View.extend({
 			}
 		});
 
+		// elective
+		if (type_course === 'E') {
+			$('[data-type=' + type_course + ']').each(function(index){
+				if ($(this).data().code !== code) {
+					if ($(this).siblings('input').prop('checked')) {
+						var credits_other = $(this).data().credits;
+						credits_current = credits_current - credits_other;
+						$('#js_credits_current')
+							.data('credits', credits_current)
+							.html(credits_current);
+						$(this).siblings('input').prop('checked', false);
+					}
+				}
+			});
+		}
+
 		// Carry course
 		var credits_assign = parseInt($('#js_period-assign').data().credits);
 		var credits_course = data_course.credits;

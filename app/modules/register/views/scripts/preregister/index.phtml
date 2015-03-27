@@ -28,9 +28,9 @@
 
 
 <!-- Vista normal para cursos -->
-<section id="js_content-pick-course" class="container  container--interactive active away-small-top">
+<section id="js_content-pick-course" class="container  container--interactive  active">
 	<img id="js_main_spinner" class="spinner--block  fadeUp" src="/img/spinner.gif" alt="Loading...">
-
+	
 	<div id="js_paragraph"></div>
 
 	<div id="js_main-data"></div>
@@ -41,9 +41,12 @@
 	<section id="js_paragraph-charge-conditional" class="content  content--interactive  content--white  content--msg-paragraph  content--msg-paragraph--danger">
 		<p>Tiene que llevar sus cursos condicionales...</p>	
 	</section>
+	<section id="js_paragraph-carry-less-one" class="content  content--interactive  content--white  content--msg-paragraph  content--msg-paragraph--warning">
+		<p>Elija al menos un curso :/</p>	
+	</section>
 </section>
 
-<section id="js_content-confirm-pick" class="container  container--interactive away-small-top">
+<section id="js_content-confirm-pick" class="container  container--interactive">
 	<div id="js_paragraph-confirm"></div>
 
 	<div id="js_main-data-confirm"></div>
@@ -190,16 +193,16 @@
 <script type="text/template" id="template_paragraphs">
 	{% if (type === 'N') %}
 		{# Normal #}
-		<p class="info info--main"><span class="glyphicon glyphicon-info-sign"></span> Seleccione los cursos que llevara, recuerda que los creditos permitidos varian de acuerdo al semestre en que lleves mas...</p>
+		<p class="info info--main  margin-aux-desktop-medium"><span class="glyphicon glyphicon-info-sign"></span> Seleccione los cursos que llevara, recuerda que los creditos permitidos varian de acuerdo al semestre en que lleves mas...</p>
 	{% elseif (type === 'C') %}
 		{# Condicion #}
-		<p class="info info--main  danger-icon"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que llevaras 
-		{% if (conditional_amount == 1) %} un curso {% else %} cursos {% endif %} por tercera vez, gestiona tus documentos para regularizar tu situación...</p>
+		<p class="info info--main  danger-icon  margin-aux-mobile  margin-aux-desktop-medium"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que llevaras 
+		{% if (conditional_amount == 1) %} un curso {% else %} cursos {% endif %} por tercera vez o mas, gestiona tus documentos para regularizar tu situación...</p>
 	{% elseif (type === 'E') %}
 		{# Equivalencia #}
-		<p class="info info--main  danger-icon"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que la nueva curricula te alcanzo y todavia hay cursos que debes, haz las gestiones respectivas para que las completes...</p>
+		<p class="info info--main  danger-icon  margin-aux-mobile  margin-aux-desktop-medium"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que la nueva curricula te alcanzo y todavia hay cursos que debes, haz las gestiones respectivas para que las completes...</p>
 	{% elseif (type === 'CO') %}
-		<p class="info info--main"><span class="glyphicon glyphicon-ok-circle"></span> Ok, llevaras 
+		<p class="info info--main  margin-aux-mobile  margin-aux-desktop-medium"><span class="glyphicon glyphicon-ok-circle"></span> Ok, llevaras 
 		<strong>{{ many_courses }}
 		{% if (many_courses > 1) %}
 			 cursos
@@ -209,7 +212,7 @@
 			</strong> 
 		este periodo y perteneceras al <strong>{{ semester_assign }} semestre</strong>, verificalo y confirma...</p>
 	{% elseif (type === 'PS') %}
-		<p class="info  info--main"><span class="glyphicon glyphicon-info-sign"></span> Prematricula realizada, llevaras 
+		<p class="info  info--main wmargin-aux-mobile  margin-aux-desktop-small"><span class="glyphicon glyphicon-info-sign"></span> Prematricula realizada, llevaras 
 		<strong>{{ many_courses }}
 		{% if (many_courses > 1) %}
 			 cursos
@@ -218,7 +221,7 @@
 		{% endif %}</strong> 
 		y perteneceras al <strong>{{ semester_assign }} Semestre</strong>, imprimelo y despues ve a validarlo en Registros de tu Facultad...</p>
 	{% elseif (type === 'RS') %}
-		<p class="info  info--main"><span class="glyphicon glyphicon-info-sign"></span> Matrícula validada, llevas 
+		<p class="info  info--main  margin-aux-mobile  margin-aux-desktop-small"><span class="glyphicon glyphicon-info-sign"></span> Matrícula validada, llevas 
 		<strong>{{ many_courses }}
 		{% if (many_courses > 1) %}
 			 cursos
@@ -297,16 +300,18 @@
 <template id="template_error-payment">
 	{% if (current_payment.state === 'LP') %}
 		{% if ( current_payment.increment ) %}
-			<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago no esta completo, debes pagar con un incrementeo del {{ current_payment.increment }}%, entonces te faltaria reintegrar <strong>S/. {{ current_payment.amount_left}}</strong>, realizalo a la cuenta <strong>72</strong> de la Universidad...</p>
+			<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago no esta completo, debes pagar con un incremento del {{ current_payment.increment }}%, entonces te faltaría reintegrar <strong>S/. {{ current_payment.amount_left}}</strong>, realízalo a la cuenta <strong>72</strong> de la Universidad...</p>
 		{% else %}
 			<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago no esta completo, te falta reintegrar <strong>S/. {{ current_payment.amount_left}}</strong>, realizalo a la cuenta <strong>72</strong> de la Universidad...</p>
 		{% endif %}
 	{% elseif (current_payment.state == 'OT') %}
 		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago esta fuera de tiempo, para mas información acercate a la oficina de informatica...</p>
 	{% elseif (current_payment.state == 'EP') %}
-		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> No existe algun pago registrado, si lo realizo hoy recuerde que le toma un tiempo de 12 horas al banco para enviar los datos, si el problema persiste acerquese a la oficina de informatica...</p>
+		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> No existe algún pago registrado, si lo realizo hoy recuerde que le toma un tiempo de <strong>12 horas</strong> al banco para enviar los datos, si el problema persiste acérquese a la oficina de informática...</p>
+	{% elseif (type == 'ED') %}
+		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que la distribución de cursos de su escuela aún no esta lista, acerquece a su dirección para saber mas detalles...</p>
 	{% else %}
-		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Hubo un problema al traer los cursos, por favor intentalo mas tarde...</p>
+		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Hubo un problema al mostrar los cursos, tal vez sea la conexion a internet, por favor intentalo mas tarde...</p>
 	{% endif %}
 </template>
 

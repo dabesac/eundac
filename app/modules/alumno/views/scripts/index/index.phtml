@@ -1,143 +1,79 @@
 <link rel="stylesheet" href="/css/sliderNews.css" />
 <link rel="stylesheet" href="/css/dashboard.css" />
 
-<!--Slider News-->
-<div class="row">
-    <div class="col-md-12">
-    <div class="row">
-    <div id="newsSlider" class="slider">
-        <?php $slideActive = 0; ?>
-        <?php foreach ($this->news as $new): ?>
-            <?php if ($slideActive == 0){
-                $classSlide = 'slideActive';
-                $slideActive = 1;
-            } else {
-                $classSlide = '';
-            }?>
-        <div class="slide <?php echo $classSlide ?>">
-            <div class="col-md-6 title">
-                
-                <?php if ($new['type'] == 'NE') {
-                    $icon = 'glyphicon glyphicon-info-sign';
-                }else if ($new['type'] == 'SY') {
-                    $icon = 'glyphicon glyphicon-envelope';
-                }?>
-                <h3 class="text-center"><span class="<?php echo $icon ?>"></span> <?php echo $new['title'] ?></h3>
+<section class="container">
+    <div class="titlesMain">
+        <div class="row container">
+            <div class="col-md-11">
+                <h4 class="text-info">Gráficas Estadísticas <span class="text-muted">14B</span></h4>
             </div>
-            <div class="col-md-6 content">
-                    <p><?php echo substr($new['description'], 0, 125) ?>.........
-                        <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link showData">Seguir leyendo</a>
-                        <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link hideData hidden">Leer menos</a>
-                    </p>
+            <div class="iconMain col-md-1">
+                <h4><span class="glyphicon glyphicon-stats pull-right"></span></h4>
             </div>
         </div>
-        <?php endforeach ?>
     </div>
-    </div>
-    
-    <div class="row">
-    <?php foreach ($this->news as $newData): ?>
-    <div id="data<?php echo $newData['newid'] ?>" class="data" hidden>
-        <div class="row">
-            <div id="newImg<?php echo $newData['newid'] ?>" class="newImg col-md-6"></div>
-            <script>
-                var newId = "<?php echo $newData['newid'] ?>";
-                var newImg = "<?php echo $newData['img'] ?>";
-                $('#newImg' + newId).css("background-image", "url('/imgsNews/" + newImg + "')");
+    <div class="graphics">
+    <br>
+    <div class="row container">
+        <div class="col-md-12">
+            <script type="text/javascript">
+            var $data_courses = <?php echo $this->datos?>;
+            var $courses = <?php echo $this->courses?>;
+            var $dat_assist = <?php echo $this->dat_assist?>;
             </script>
-            <div class="col-md-6 allDescription">
-                <br><br>
-                <?php if ($newData['type'] == 'NE') {
-                    $iconNew = 'info-sign';
-                }else {
-                    $iconNew = 'envelope';
-                } ?>
-                <span class="glyphicon glyphicon-<?php echo $iconNew ?>"></span> Información <date class="text-muted"><?php echo date('d-m-Y', strtotime($newData['created'])) ?></date>
-                <br><br><br>
-                <p><?php echo $newData['description'] ?></p>
-                <br><br>
-                <span class="pull-right text-muted"><span class="glyphicon glyphicon-leaf"></span> Oficina de Informática</span>
+            <script type="text/javascript" src="/js/graphic/student.js"></script>
+            <script src="/external_library/highcharts/js/highcharts.js"></script>
+            <script src="/external_library/highcharts/modules/exporting.js"></script>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 content-graphic">
+                            <div id="container_performance" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
+                        </div>
+                        <div class="col-md-6 content-graphic">
+                            <div id="container_assistence" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <?php endforeach ?>
+    <br>
     </div>
-    </div>
-</div>
 
-
-<br>
-<div class="titlesMain">
-<div class="row container">
-	<div class="col-md-11">
-		<h4 class="text-info">Gráficas Estadísticas <span class="text-muted">14A</span></h4>
-	</div>
-	<div class="iconMain col-md-1">
-		<h4><span class="glyphicon glyphicon-stats pull-right"></span></h4>
-	</div>
-</div>
-</div>
-<div class="graphics">
-<br>
-<div class="row container">
-	<div class="col-md-12">
-		<script type="text/javascript">
-	    var $data_courses = <?php echo $this->datos?>;
-	    var $courses = <?php echo $this->courses?>;
-	    var $dat_assist = <?php echo $this->dat_assist?>;
-		</script>
-		<script type="text/javascript" src="/js/graphic/student.js"></script>
-		<script src="/external_library/highcharts/js/highcharts.js"></script>
-		<script src="/external_library/highcharts/modules/exporting.js"></script>
-		<div class="row">
-		    <div class="col-md-12">
-		        <div class="row">
-		            <div class="col-md-6 content-graphic">
-		                <div id="container_performance" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
-		            </div>
-		            <div class="col-md-6 content-graphic">
-		                <div id="container_assistence" style="min-width: 200px; height: 400px; margin: 0 auto"></div>  
-		            </div>
-		        </div>
-		    </div>
-		</div>
-	</div>
-</div>
-<br>
-</div>
-
-<!--<br>
-<div class="titlesMain">
-<div class="row container">
-    <div class="col-md-11">
-        <h4 class="text-info">Ofertas <span class="text-muted">Laborales</span></h4>
+    <!--<br>
+    <div class="titlesMain">
+    <div class="row container">
+        <div class="col-md-11">
+            <h4 class="text-info">Ofertas <span class="text-muted">Laborales</span></h4>
+        </div>
+        <div class="iconMain col-md-1">
+            <h4><span class="glyphicon glyphicon-stats pull-right"></span></h4>
+        </div>
     </div>
-    <div class="iconMain col-md-1">
-        <h4><span class="glyphicon glyphicon-stats pull-right"></span></h4>
-    </div>
-</div>
-</div>-->
+    </div>-->
+</section>
 
 <script>
-	$(".solo").click(function(){
-		var clave=$(this).attr('clave');
-		$("#sandro"+clave).append("<center class='sandrops'><img src='/img/"+clave+".png' alt='...'></center>");
-		// $(".solo").html("<span class='glyphicon glyphicon-chevron-up'></span>");
-	});
+    $(".solo").click(function(){
+        var clave=$(this).attr('clave');
+        $("#sandro"+clave).append("<center class='sandrops'><img src='/img/"+clave+".png' alt='...'></center>");
+        // $(".solo").html("<span class='glyphicon glyphicon-chevron-up'></span>");
+    });
 
-	$('#carousel-example-generic').on('slide.bs.carousel', function () {
-		// alert("Hola");
-		var clave=$(this).attr('clave');
-	  	$(".sandrops").remove();
-	});
-	$('a').hover(function(){
-		$(this).tooltip('toggle');
-	});
+    $('#carousel-example-generic').on('slide.bs.carousel', function () {
+        // alert("Hola");
+        var clave=$(this).attr('clave');
+        $(".sandrops").remove();
+    });
+    $('a').hover(function(){
+        $(this).tooltip('toggle');
+    });
 
 
-	var sliderGo = setInterval(function(){sliderForward();}, 4500);
+    var sliderGo = setInterval(function(){sliderForward();}, 4500);
 
-	$('.showData').click(function(){
+    $('.showData').click(function(){
         clearInterval(sliderGo);
         $('html,body').animate({
             scrollTop: $("#newsSlider").offset().top
@@ -155,7 +91,7 @@
         sliderGo = setInterval(function(){sliderForward();}, 4500);
     })
 
- 	function sliderForward(){
+    function sliderForward(){
         $('.data').slideUp();
         var size = $('.slider').find('.slide').size();
         $('.slider').find('.slide').each(function(index, value){

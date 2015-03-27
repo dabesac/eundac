@@ -56,7 +56,6 @@
 	animation fadeOut .3s ease
 
 .auxiliar
-	overflow hidden
 	background rgba(black, .5)
 
 .auxiliar.fixed
@@ -67,18 +66,24 @@
 	
 @media screen and (min-width:1000px)
 	.auxiliar
-		position absolute
-		right 5%
-		top 120px
-		width 300px
 		z-index 15
+		
+		.auxiliar--content
+			background rgba(black, .5)
+			position absolute
+			right .5em
+			top 2em
+			width 300px
+			z-index 99
 
 	.auxiliar.fixed
-		position fixed
-		top 0
-		width 300px
-		top 10px
-		z-index 99
+		
+		.auxiliar--content
+			position absolute
+			right .5em
+			top 10px
+			width 300px
+			z-index 99
 	
 .helper--item
 	display table

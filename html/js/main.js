@@ -11,6 +11,7 @@ $(function(){
 	var global_function = global();
 	global_function.toggleTabs($('ul.tabs'), $('ul.tabs').siblings('.tabs_data'));
 	global_function.auxiliarVoh($('#js_auxiliar'));
+	global_function.scrollOldAux();
 
 	//Backbone FTW!!!
 	eUndac.app = new eUndac.Routers.Base();
@@ -266,8 +267,21 @@ function global(){
             }
         });
 	}
+	function scrollOldAux(){
+		$(window).scroll(function(){
+            if($(this).scrollTop() >= 120){
+               $('.navigationButtonsSVCLayoutRight').addClass('navigationButtonsSVCFixed');
+               $('.navigationButtonsSVCLayoutLeft').addClass('navigationButtonsSVCFixed');
+            }
+            else{
+               $('.navigationButtonsSVCLayoutRight').removeClass('navigationButtonsSVCFixed');
+               $('.navigationButtonsSVCLayoutLeft').removeClass('navigationButtonsSVCFixed');
+            }
+        });
+	}
 	return {
-		toggleTabs  : toggleTabs,
-		auxiliarVoh : auxiliarVoh
+		toggleTabs   : toggleTabs,
+		auxiliarVoh  : auxiliarVoh,
+		scrollOldAux : scrollOldAux
 	};
 }

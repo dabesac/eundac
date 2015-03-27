@@ -18,11 +18,12 @@ class Rest_UserdataController extends Zend_Rest_Controller {
         $semesters_roman = array( 1  => 'I', 2  => 'II', 3  => 'III', 4  => 'IV', 5  => 'V', 6  => 'VI', 7  => 'VII',
                                     8  => 'VIII', 9  => 'IX', 10 => 'X', 11 => 'XI', 12 => 'XII' );
         // dataBases
-        $registerDb = new Api_Model_DbTable_Registration();
+        $registerDb        = new Api_Model_DbTable_Registration();
         $registerCoursesDb = new Api_Model_DbTable_Registrationxcourse();
-        $coursesPeriodDb = new Api_Model_DbTable_PeriodsCourses();
-        $courseDb = new Api_Model_DbTable_Course();
-        $conditionDb = new Api_Model_DbTable_Studentcondition();
+        $coursesPeriodDb   = new Api_Model_DbTable_PeriodsCourses();
+        $courseDb          = new Api_Model_DbTable_Course();
+        $conditionDb       = new Api_Model_DbTable_Studentcondition();
+        $distributionDb    = new Distribution_Model_DbTable_Distribution();
 
         $eid   = $this->sesion->eid;
         $oid   = $this->sesion->oid;
@@ -97,61 +98,91 @@ class Rest_UserdataController extends Zend_Rest_Controller {
                 $registerDb->_save($register_save);
             }
 
-            //creditos por semester
-            $current_register['credits_semester'] = array();
+            // distribution state
             $where = array(
-                            'eid'   => $eid,
-                            'oid'   => $oid,
+                            'eid' => $eid,
+                            'oid' => $oid,
                             'escid' => $escid,
                             'subid' => $subid,
                             'perid' => $perid );
-            $attribs = array('courseid', 'curid', 'semid', 'turno');
-            $order = array('semid ASC', 'turno ASC');
-            $courses_pd = $coursesPeriodDb->_getFilter($where, $attribs, $order);
-            if ($courses_pd) {
-                $semester = '-';
-                // cont_credits_by_semester
-                $c_c_b_s = 0;
+            $current_register['state_distribution'] = null;
+            $distribution_pd = $distributionDb->_getOneDist($where);
+            if ($distribution_pd) {
+                $current_register['state_distribution'] = $distribution_pd['state'];
+            }
 
-                foreach ($courses_pd as $c => $course) {
-                    if ($course['semid'] != $semester) {
-                        $turn = $course['turno'];
-                        $semester = $course['semid'];
-                        $credits_semester[$c_c_b_s] = array(
-                                                                'semester'       => $semester,
-                                                                'semester_roman' => $semesters_roman[$semester],
-                                                                'turn'           => $turn,
-                                                                'credits'        => 0 );
-                        $c_c_b_s++;
-                    } elseif ($course['turno'] != $turn) {
-                        $turn = $course['turno'];
-                        $credits_semester[$c_c_b_s] = array(
-                                                                'semester'       => $semester,
-                                                                'semester_roman' => $semesters_roman[$semester],
-                                                                'turn'           => $turn,
-                                                                'credits'        => 0 );
-                        $c_c_b_s++;
-                    }
-                }
+            $current_register['credits_semester'] = array();
+            if ($distribution_pd['state'] == 'C') {
+                //creditos por semester si la distribución esta cerrada
+                $where = array(
+                                'eid'   => $eid,
+                                'oid'   => $oid,
+                                'escid' => $escid,
+                                'subid' => $subid,
+                                'perid' => $perid );
+                $attribs = array('courseid', 'curid', 'semid', 'turno');
+                $order = array('semid ASC', 'turno ASC');
+                $courses_pd = $coursesPeriodDb->_getFilter($where, $attribs, $order);
+                if ($courses_pd) {
+                    $semester = '-';
+                    // cont_credits_by_semester
+                    $c_c_b_s = 0;
 
-                foreach ($courses_pd as $c => $course) {
-                    $where = array(
-                                    'eid'      => $eid,
-                                    'oid'      => $oid,
-                                    'escid'    => $escid,
-                                    'subid'    => $subid,
-                                    'courseid' => $course['courseid'],
-                                    'curid'    => $course['curid'] );
-                    $course_pd = $courseDb->_getOne($where);
-                    foreach ($credits_semester as $c_s_t => $semester_turn) {
-                        if ($course['semid'] == $semester_turn['semester'] and 
-                            $course['turno'] == $semester_turn['turn']) {
-                            $credits_semester[$c_s_t]['credits'] = $semester_turn['credits'] + (int)$course_pd['credits'];
+                    foreach ($courses_pd as $c => $course) {
+                        $where = array(
+                                        'eid'      => $eid,
+                                        'oid'      => $oid,
+                                        'escid'    => $escid,
+                                        'subid'    => $subid,
+                                        'courseid' => $course['courseid'],
+                                        'curid'    => $course['curid'] );
+                        $course_pd = $courseDb->_getOne($where);
+
+                        $courses_pd_db[$c] = array(
+                                                'semester' => $course['semid'],
+                                                'turn'     => $course['turno'],
+                                                'type'     => $course_pd['type'],
+                                                'credits'  => $course_pd['credits'] );
+
+                        if ($course['semid'] != $semester) {
+                            $turn = $course['turno'];
+                            $semester = $course['semid'];
+                            $credits_semester[$c_c_b_s] = array(
+                                                                    'semester'       => $semester,
+                                                                    'semester_roman' => $semesters_roman[$semester],
+                                                                    'turn'           => $turn,
+                                                                    'credits'        => 0 );
+                            $c_c_b_s++;
+                        } elseif ($course['turno'] != $turn) {
+                            $turn = $course['turno'];
+                            $credits_semester[$c_c_b_s] = array(
+                                                                    'semester'       => $semester,
+                                                                    'semester_roman' => $semesters_roman[$semester],
+                                                                    'turn'           => $turn,
+                                                                    'credits'        => 0 );
+                            $c_c_b_s++;
                         }
                     }
-                }
 
-                $current_register['credits_semester'] = $credits_semester;
+                    foreach ($credits_semester as $c => $semester_turn) {
+                        $elective = false;
+                        $credits_semester_sum = 0;
+                        foreach ($courses_pd_db as $c_s_t => $course) {
+                             if ($semester_turn['semester'] == $course['semester'] and 
+                                $semester_turn['turn'] == $course['turn']) {
+                                if ($course['type'] != 'E') {
+                                    $credits_semester_sum = $credits_semester_sum + (int)$course['credits'];
+                                } else if (!$elective) {
+                                    $credits_semester_sum = $credits_semester_sum + (int)$course['credits'];
+                                    $elective = true;
+                                }
+                             }
+                        }
+                        $credits_semester[$c]['credits'] = $credits_semester_sum;
+                    }
+
+                    $current_register['credits_semester'] = $credits_semester;
+                }
             }
 
             // condiciones del estudiante

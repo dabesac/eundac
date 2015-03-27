@@ -7,6 +7,12 @@ a:hover, a:link, a:visited, a:active, button:hover, button:link, button:visited,
 a[disabled]
 	pointer-events none
 
+.link
+	color plomoTexto
+	
+	&:hover
+		color azul
+
 .button
 	background-color white
 	border 1px plomoOscuro solid
@@ -57,6 +63,13 @@ a[disabled]
 	color white
 	&:hover, &:visited
 		color white
+
+
+.button--alter--blue
+	background-color azul
+
+	&:hover, &:active, &:focus
+		background-color azulHover
 		
 .button--alter--success
 	background-color verde
