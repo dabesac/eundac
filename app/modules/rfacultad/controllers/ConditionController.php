@@ -278,7 +278,6 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
             if ($this->getRequest()->isPost()){
                 $formData = $this->getRequest()->getPost(); 
                 
-
                 if($formData['curso']!= 'ns'){
                     $data = array(
                             'eid'       => $eid,
@@ -292,7 +291,8 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                             'courseid'  => base64_decode($formData['curso']),
                             'curid'     => $formData['curid'],
                             'createduid' => $uidreg,
-                            'doc_authorize' => $formData['resolution']);
+                            'doc_authorize' => $formData['resolution'],
+                            'comments' => $formData['comments']);
                     $savedata = $conditiondb->_save($data);
                 }
                 if($formData['dcurso']!= 'ns'){
@@ -308,7 +308,8 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                             'courseid'  => base64_decode($formData['dcurso']),
                             'curid'     => $formData['curid'],
                             'createduid' => $uidreg,
-                            'doc_authorize' => $formData['resolution']);
+                            'doc_authorize' => $formData['resolution'],
+                            'comments' => $formData['comments']);
                     $savedata = $conditiondb->_save($data);
                 }
                 if($formData['credit']!= '0'){
@@ -323,7 +324,8 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                             'type'      => 'CR',
                             'amount'  => $formData['credit'],
                             'createduid' => $uidreg,
-                            'doc_authorize' => $formData['resolution']);
+                            'doc_authorize' => $formData['resolution'],
+                            'comments' => $formData['comments']);
                     $savedata = $conditiondb->_save($data);
                 }
                 if($formData['nsem']!= '0'){
@@ -338,7 +340,8 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                             'type'      => 'SE',
                             'amount'  => $formData['nsem'],
                             'createduid' => $uidreg,
-                            'doc_authorize' => $formData['resolution']);
+                            'doc_authorize' => $formData['resolution'],
+                            'comments' => $formData['comments']);
                     $savedata = $conditiondb->_save($data);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
                 }
             $where_condition = array(
