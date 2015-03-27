@@ -87,8 +87,12 @@
                             foreach ($this->cursos as $cursos) {    
                                 
                                 if($cursos['courseid']!=$idcoursed && $mostrard=='si'){
-                                    $courseid_en=base64_encode($cursos['courseid']).';--;'.$cursos['veces'];?>
-                                    <option value="<?php echo $courseid_en?>"><?php echo $cursos['name']?></option>
+                                    if($cursos['veces']>=2){
+                                        $courseid_en=base64_encode($cursos['courseid']).';--;'.$cursos['veces'];?>
+                                        <option value="<?php echo $courseid_en?>"><?php echo $cursos['name']?></option>
+                                    <?php
+                                    }
+                                    ?>    
                                 <?php  
                                     $idcoursed=$cursos['courseid'];
                                 }else{
@@ -106,6 +110,17 @@
                 <!-- <span id="veces" class="label label-info"></span>   -->     
             </div>
         </div>
+
+    <div class="col-md-12">
+        <br>
+        <div class="col-md-offset-2 col-md-10"> 
+            <label>Detalles(Comentarios)</label> 
+        </div>
+        <div class="col-md-offset-2 col-md-10"> 
+            <textarea id="comments" rows="3" cols="80">     
+            </textarea>   
+        </div>        
+    </div>
 
     <div class="row">
         <div class="col-md-offset-4 col-md-3">
@@ -159,10 +174,11 @@ if ($this->conditionsStudent){ ?>
                             case 'SE':  $detail = "Para adicionar ".$conditions['amount']." semestres con resolución <strong>".$conditions['doc_authorize'].'</strong>';
                                         break;
                         }
+                        $commnets = ($conditions['comments']) ? $conditions['comments'] : "" ;
                         ?>
                         <tr>
                         <td><?php echo $c ?></td>
-                        <td><?php echo $detail ?></td>
+                        <td><?php echo $detail.'. '.ucwords($commnets) ?></td>
                         <td>
                         <a class="btn btn-danger eliminar"
                         uid = '<?php echo $conditions['uid']?>'
@@ -230,14 +246,15 @@ if ($this->conditionsStudent){ ?>
             'credit' : credit,
             'curso' : curso,
             'curid' : $(this).attr('curid'),
-            'resolution' : doc
+            'resolution' : doc,
+            'comments' : $('#comments').val()
         };
         $.ajax({
             type : "post",
             url : "/rfacultad/condition/guardar/",
             data : data_ajax,
             success : function(data){
-                /*$(".condition").html("<div class='alert alert-success conditions' role='alert'<h3>Se ha agregado la condicion</h3></div>");
+               /* $(".condition").html("<div class='alert alert-success conditions' role='alert'<h3>Se ha agregado la condicion</h3></div>");
                 setTimeout(function(){
                     $("#modal").modal('hide');
                 }, 1000);*/
@@ -252,7 +269,7 @@ if ($this->conditionsStudent){ ?>
 
 
             }
-        }); 
+        })
     });
     $(".eliminar").click(function(e){
         e.preventDefault();

@@ -33,10 +33,11 @@ if ($this->conditionsStudent){ ?>
                             case 'SE':  $detail = "Para adicionar ".$conditions['amount']." semestres con resolución <strong>".$conditions['doc_authorize'].'</strong>';
                                         break;
                         }
+                        $commnets = ($conditions['comments']) ? $conditions['comments'] : "" ;
                         ?>
                         <tr>
                         <td><?php echo $c ?></td>
-                        <td><?php echo $detail ?></td>
+                        <td><?php echo $detail.'. '.ucwords($commnets) ?></td>
                         <td>
                         <a class="btn btn-danger eliminar"
                         uid = '<?php echo $conditions['uid']?>'
