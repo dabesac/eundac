@@ -30,6 +30,26 @@ body.login
 		top 0
 		z-index 6
 
+@media screen and (min-width:700px)
+	body.login
+		&:after
+			border-bottom 160px transparent solid
+			border-left 160px azul solid
+
+		&:before
+			border-bottom 140px transparent solid
+			border-left 140px negro solid
+			
+@media screen and (min-width:1000px)
+	body.login
+		&:after
+			border-bottom 180px transparent solid
+			border-left 180px azul solid
+
+		&:before
+			border-bottom 160px transparent solid
+			border-left 160px negro solid
+
 section.login-side
 	align-items center
 	display flex
@@ -73,11 +93,11 @@ section.login-side
 		content ""
 		width 50%
 		height 2px
-		top 58%
+		top 50%
 		position absolute
 		right 0
 
-@media screen and (min-width:400px)
+@media screen and (min-width:350px)
 	.login-side__body__logo
 		&:before
 			background white
