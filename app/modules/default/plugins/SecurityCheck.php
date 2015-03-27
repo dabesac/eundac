@@ -20,7 +20,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
     public function preDispatch (Zend_Controller_Request_Abstract $request){
 
 
-       /* $this->_module= $this->getRequest()->getModuleName();
+        $this->_module= $this->getRequest()->getModuleName();
         $this->_controller = $this->getRequest()->getControllerName();
         $this->_action= $this->getRequest()->getActionName();
 
@@ -54,7 +54,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
                         ->setControllerName('index')
                         ->setActionName('index');                
             }
-        }*/
+        }
     }
 
     /**
@@ -64,7 +64,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
 
     public function _iniAcl(){
 
-        /*$this->_acl = new Zend_Acl();
+        $this->_acl = new Zend_Acl();
         $auth= Zend_Auth::getInstance();
 
         if ($auth->hasIdentity()) {
@@ -102,6 +102,6 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract{
                     }
                 }
             }
-        }*/
+        }
     }
 }
