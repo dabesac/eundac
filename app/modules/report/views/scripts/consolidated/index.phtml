@@ -1,67 +1,69 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-th-list"></span> REPORTE GENERAL');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
-<div class="row">
-    <div class="col-md-12 text-right">
-        <div class="col-md-1 col-md-offset-2"><b>Año: </b></div>
-        <div class="col-md-2">
-            <select id="anho" class="form-control">
-                <option value="">- Año -</option>
-                <?php
-                for ($i=$this->anio;$i>=1965;$i--) { ?>
-                    <option value="<?php echo $i;?>"><?php echo $i;?></option>
-                <?php }
-                ?>
-            </select>
-        </div>
-        <div class="col-md-1"><b>Periodo: </b></div>
-        <div class="col-md-2">
-            <select id="periodo_c" class="form-control">
-                <option value="">- Seleccione un Año -</option>
-            </select>
-        </div>
-    </div>
-</div><br>
-<div class="row">
-    <div class="col-md-12 text-right">
-        <div class="col-md-1"><b>Facultad: </b></div>
-        <div class="col-md-3">
-            <select id="facid" class="form-control">
-                <option>- Seleccione la Facultad -</option>
-                <?php
-                if ($this->facultades) {
-                    foreach ($this->facultades as $facultades) { 
-                        $str = ($this->facid==$facultades['facid'])?"selected ":""; ?>
-                        <option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
+<section class="container">
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <div class="col-md-1 col-md-offset-2"><b>Año: </b></div>
+            <div class="col-md-2">
+                <select id="anho" class="form-control">
+                    <option value="">- Año -</option>
                     <?php
-                    }
-                } ?>
-            </select>
+                    for ($i=$this->anio;$i>=1965;$i--) { ?>
+                        <option value="<?php echo $i;?>"><?php echo $i;?></option>
+                    <?php }
+                    ?>
+                </select>
+            </div>
+            <div class="col-md-1"><b>Periodo: </b></div>
+            <div class="col-md-2">
+                <select id="periodo_c" class="form-control">
+                    <option value="">- Seleccione un Año -</option>
+                </select>
+            </div>
         </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <div class="col-md-1"><b>Facultad: </b></div>
+            <div class="col-md-3">
+                <select id="facid" class="form-control">
+                    <option>- Seleccione la Facultad -</option>
+                    <?php
+                    if ($this->facultades) {
+                        foreach ($this->facultades as $facultades) { 
+                            $str = ($this->facid==$facultades['facid'])?"selected ":""; ?>
+                            <option <?php echo $str?>  value="<?php echo $facultades['facid']?>"><?php echo $facultades['name']?></option>
+                        <?php
+                        }
+                    } ?>
+                </select>
+            </div>
 
-        <div class="col-md-1"><b>Escuela: </b></div>
-        <div class="col-md-3">
-           <select id="escid" class="form-control" style="width:260px">
-                <option value="">- Seleccione la Escuela -</option>
-            </select>
-        </div>
+            <div class="col-md-1"><b>Escuela: </b></div>
+            <div class="col-md-3">
+               <select id="escid" class="form-control" style="width:260px">
+                    <option value="">- Seleccione la Escuela -</option>
+                </select>
+            </div>
 
-        <div class="col-md-1"><b>Especialidad: </b></div>
-        <div class="col-md-3">
-            <select id="especialidad" class="form-control" style="width:260px">
-                <option value="">- Seleccione la Especialidad -</option>
-            </select>
-        </div>        
-    </div>
-</div><br>
-<div class="row">
-    <div class="col-md-12">
-        <div class="col-md-1 col-md-offset-5">
-            <center><a id="generar" href="#" class="btn btn-success"><span class="glyphicon glyphicon-arrow-down"></span> Ver Reportes</a></center>
+            <div class="col-md-1"><b>Especialidad: </b></div>
+            <div class="col-md-3">
+                <select id="especialidad" class="form-control" style="width:260px">
+                    <option value="">- Seleccione la Especialidad -</option>
+                </select>
+            </div>        
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-1 col-md-offset-5">
+                <center><a id="generar" href="#" class="btn btn-success"><span class="glyphicon glyphicon-arrow-down"></span> Ver Reportes</a></center>
+            </div>
         </div>
     </div>
-</div>
-<hr>
-<div id="cargadatos"></div>
+    <hr>
+    <div id="cargadatos"></div>
+</section>
 
 <script type="text/javascript">
 var rid="<?php echo $this->rid ?>";

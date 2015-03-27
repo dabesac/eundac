@@ -1,20 +1,22 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-certificate"></span> CONVALIDACIÓN');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/rfacultad" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
-<h6 class='text-muted text-center'>Para BUSCAR presione <b>ENTER</b> o click en <span class='glyphicon glyphicon-search'></span> Buscar </h6>
-<div class="row">
-    <div class="col-md-12">
-        <div class="col-md-2 col-md-offset-2">
-            <b class='text-info'>Ingrese el Código del Alumno: </b>
-        </div>
-        <div class="col-md-2">
-            <input type="text" name="uid" id="uid" class="form-control" maxlength="10" onkeypress="return soloNumero(event)">
-        </div>
-        <div class="col-md-2 col-md-offset-1">
-            <button id='search' class='btn btn-success'><span class='glyphicon glyphicon-search'></span> Buscar</button>
+<section class="container">
+    <h6 class='text-muted text-center'>Para BUSCAR presione <b>ENTER</b> o click en <span class='glyphicon glyphicon-search'></span> Buscar </h6>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2 col-md-offset-2">
+                <b class='text-info'>Ingrese el Código del Alumno: </b>
+            </div>
+            <div class="col-md-2">
+                <input type="text" name="uid" id="uid" class="form-control" maxlength="10" onkeypress="return soloNumero(event)">
+            </div>
+            <div class="col-md-2 col-md-offset-1">
+                <button id='search' class='btn btn-success'><span class='glyphicon glyphicon-search'></span> Buscar</button>
+            </div>
         </div>
     </div>
-</div>
-<div id='loadData'></div>
+    <div id='loadData'></div>
+</section>
 <script>
     function soloNumero(e){
         key = e.keyCode || e.which;

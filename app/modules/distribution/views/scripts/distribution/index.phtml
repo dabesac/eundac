@@ -6,6 +6,8 @@
 <input id="yearComing" type="hidden" value="<?php echo $this->anio ?>">
 <input id="currentYear" type="hidden" value="<?php echo $this->yearActive ?>">
 
+<section class="container">
+	
 <div class="distribution_header">
 	<p class="distribution_headerObO distribution_headerParrafo"><span class="glyphicon glyphicon-info-sign"></span> Puede filtrar distribuciones de otros años:</p>
 	<div class="distribution_headerObO selectAnio">
@@ -21,6 +23,7 @@
 
 <div id="dataDistribution"></div>
 
+</section>
 <script>
 	$(function(){
 		var year = $('#yearComing').attr('value');

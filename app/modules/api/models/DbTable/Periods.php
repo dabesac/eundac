@@ -16,20 +16,24 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
 			print "Error: Read One Entity ".$e->getMessage();
 		}
 	}
-  public function _update($data,$str=''){
-      try{
-          if ($str=="") return false;
-        return $this->update($data,$str);
-      return false;
-        }catch (Exception $ex){
-      print "Error: Guardar periodo".$ex->getMessage();
-    }
-  }
 
-		public function _save($data)
+public function _update($data,$pk){
+	try {
+			if (!$pk['eid'] || !$pk['oid'] || !$pk['perid']) return false;
+			$where = "eid = '".$pk['eid'].
+					"' and oid='".$pk['oid'].
+					"' and perid='".$pk['perid']."'";
+			return $this->update($data, $where);
+			return false;
+	} catch (Exception $e) {
+		print "Error: Update Course".$e->getMessage();
+	}
+}
+
+	public function _save($data)
 	{
 		try{
-			// if ($data['eid']=='' ||  $data['oid']=='' || $data['perid']=='' || $data['name']=='' ) return false;
+			if (!$data['eid'] ||  !$data['oid'] || !$data['perid'] || !$data['name'] ) return false;
 			return $this->insert($data);
 			return false;
 		}catch (Exception $e){
@@ -195,7 +199,7 @@ class Api_Model_DbTable_Periods extends Zend_Db_Table_Abstract
 	public function _delete($data)
 	{
 		try{
-			// if ($data['eid']=='' ||  $data['oid']=='' || $data['perid']=='' return false;
+			if (!$data['eid'] ||  !$data['oid'] || !$data['perid']) return false;
 			$where = "eid = '".$data['eid']."' and oid='".$data['oid']."'  and perid='".$data['perid']."'";
 			return $this->delete($where);
 			return false;

@@ -1,69 +1,70 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-file"></span> INGRESO DE NOTAS DE ACTAS ANTERIORES');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
 
-<div>
-	<table class="table table-striped table-condensed">
-		<tr>
-			<th>Año</th>
-			<td class="col-lg-2">
-				<select id='anio' class="form-control">
-					<?php 
-					$anio=date('Y');
-					for ($i=$anio; $i>=1963; $i--) { ?>
-						<option value="<?php echo $i?>"><?php echo $i?></option>
-						<?php
-					} ?>
-				</select>
-			</td>
-			<th>Periodo:</th>
-			<td class="col-lg-4">
-				<select id="perid" class="form-control">
-					<option value="">- Seleccione Periodo -</option>
-				</select>
-			</td>
-			<th>Escuelas:</th>
-			<td class="col-lg-4">
-				<select id="escid" class="form-control">
-					<option value="">- Seleccione -</option>
-					<?php
-					if ($this->escuelas) {
-						foreach ($this->escuelas as $escuelas) { ?>
-							<option value="<?php echo $escuelas['escid']?>"><?php echo $escuelas['name']?></option>
+<section class="container">
+	<div>
+		<table class="table table-striped table-condensed">
+			<tr>
+				<th>Año</th>
+				<td class="col-lg-2">
+					<select id='anio' class="form-control">
+						<?php 
+						$anio=date('Y');
+						for ($i=$anio; $i>=1963; $i--) { ?>
+							<option value="<?php echo $i?>"><?php echo $i?></option>
 							<?php
-						}
-					}?>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<th>Semestre:</th>
-			<td>
-				<select id="semid" class="form-control">
-					<option value="">- Seleccione -</option>
-				</select>
-			</td>
-			<th>Currículas:</th>
-			<td>
-				<select id="curid" class="form-control">
-					<option value="">- Seleccione Currícula -</option>
-				</select>
-			</td>
-			<th>Cursos:</th>
-			<td>
-				<select id="courseid" class="form-control">
-					<option value="">- Seleccione -</option>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="6">
-				<center><a href="#" id="listar" class="btn btn-info"><span class='glyphicon glyphicon-list-alt'></span>Listar Alumnos</a></center>
-			</td>
-		</tr>
-	</table>
-</div>
-<div id="alumnos"></div>
-
+						} ?>
+					</select>
+				</td>
+				<th>Periodo:</th>
+				<td class="col-lg-4">
+					<select id="perid" class="form-control">
+						<option value="">- Seleccione Periodo -</option>
+					</select>
+				</td>
+				<th>Escuelas:</th>
+				<td class="col-lg-4">
+					<select id="escid" class="form-control">
+						<option value="">- Seleccione -</option>
+						<?php
+						if ($this->escuelas) {
+							foreach ($this->escuelas as $escuelas) { ?>
+								<option value="<?php echo $escuelas['escid']?>"><?php echo $escuelas['name']?></option>
+								<?php
+							}
+						}?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th>Semestre:</th>
+				<td>
+					<select id="semid" class="form-control">
+						<option value="">- Seleccione -</option>
+					</select>
+				</td>
+				<th>Currículas:</th>
+				<td>
+					<select id="curid" class="form-control">
+						<option value="">- Seleccione Currícula -</option>
+					</select>
+				</td>
+				<th>Cursos:</th>
+				<td>
+					<select id="courseid" class="form-control">
+						<option value="">- Seleccione -</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="6">
+					<center><a href="#" id="listar" class="btn btn-info"><span class='glyphicon glyphicon-list-alt'></span>Listar Alumnos</a></center>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="alumnos"></div>
+</section>
 <script type="text/javascript">
 var anio=$("#anio").val();
 $("#perid").load("/default/registernotesactas/lperiods/anio/"+anio);

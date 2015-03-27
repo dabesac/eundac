@@ -15,29 +15,45 @@
 		<?php echo $this->headScript()?>
 	</head>
 	<body>
-		<div id="loading_overlay" class="classLoading_Overlay">
+		<!-- <div id="loading_overlay" class="classLoading_Overlay">
 			<div class="loading_message round_bottom">Cargando....</div>
 			<div class="loading_allBlack"></div>
-		</div>
+		</div> -->
 		<?php echo $this->render('header.phtml')?>
-		<nav class="navigationLayout">
-		    <?php echo $this->placeholder('Textnav') ?>
-		    <?php echo $this->placeholder('Btnnav') ?>
-			<?php echo $this->render('_search.phtml') ?>
-			
+		<nav>
+			<div class="navigationLayout">
+			    <?php echo $this->placeholder('Btnnav') ?>
+			    <?php echo $this->placeholder('Textnav') ?>
+				<?php echo $this->render('_search.phtml') ?>
+			</div>
 		    <?php echo $this->placeholder('BtnSVCRight') ?>
 		    <?php echo $this->placeholder('BtnSVCLeft') ?>
 		</nav>
+		<?php //echo $this->placeholder('AuxiliarMobile') ?>
+		<div id="js_auxiliar" class="auxiliar">
+			<div class="container container--auxiliar">
+				<div class="auxiliar--content  js_auxiliar">
+
+				</div>
+			</div>
+		</div>
 		<main>
 			<?php echo $this->layout()->content ?>
 		</main>
 
 		<?php echo $this->render('footer.phtml') ?>
+		
+		
+		<?php $env = getenv('APPLICATION_ENV'); ?>
+		<?php if ($env === 'development'): ?>
+
+			<script src="/js/backbone/routers/base.js"></script>
+			<script src="/js/main.js"></script>
+		<?php endif ?>
 	</body>
 </html>
 <script>
-	$(function(){
-
+	/*$(function(){
 		function loadingOverlay(){
 			$("#loading_overlay .loading_message").delay(1000).fadeOut(function(){}); 
 			$("#loading_overlay").delay(500).fadeOut();
@@ -46,17 +62,5 @@
 		window.onload = function () {
 			loadingOverlay();   
 		};
-
-		$(window).scroll(function(){
-            if($(this).scrollTop() >= 120){
-               $('.navigationButtonsSVCLayoutRight').addClass('navigationButtonsSVCFixed');
-               $('.navigationButtonsSVCLayoutLeft').addClass('navigationButtonsSVCFixed');
-            }
-            else{
-               $('.navigationButtonsSVCLayoutRight').removeClass('navigationButtonsSVCFixed');
-               $('.navigationButtonsSVCLayoutLeft').removeClass('navigationButtonsSVCFixed');
-            }
-        });
-
-	});
+	});*/
 </script>

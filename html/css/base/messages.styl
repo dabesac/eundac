@@ -6,19 +6,53 @@
 	p
 		color white
 		margin-bottom .2em
-		
 .msg.show
 	animation r_s_fadeUp .3s
 	display block
 
 .msg.hide
 	animation r_h_fadeDown .3s
-			
-.msg.warning
+	
+.msg--appear
+	animation message_appear 10s
+	opacity 0
+	
+.msg--warning
 	border-left 4px solid amarilloTexto
 	background amarillo
 
-.msg.success
+.msg--success
 	border-left 4px solid verdeTexto
 	background verde
 	text-align center
+
+.msg--danger
+	border-left 4px solid rojoTexto
+	background rojo
+	text-align center
+
+.paragraph-msg
+	padding .5em
+	text-align center
+
+	p
+		margin-bottom 0
+		
+.paragraph-msg--danger
+	background-color rojo
+
+	p
+		margin-bottom 1em
+		color white
+		
+.paragraph-msg--buttons
+	a
+		display inline-block
+		margin 0 .5em
+		width 40%
+
+@media screen and (min-width:700px)
+	.paragraph-msg--large-right
+		width 50%
+		margin-top -30px
+		float right

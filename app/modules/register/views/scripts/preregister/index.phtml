@@ -1,0 +1,323 @@
+
+
+<?php $env = getenv('APPLICATION_ENV'); ?>
+<?php if ($env === 'development'): ?>
+	
+	<!-- Models -->	
+	<script src="/js/backbone/user/models/user_payment.js"></script>
+	<script src="/js/backbone/user/models/user_data.js"></script>
+	<script src="/js/backbone/course/models/preregister.js"></script>
+
+	<!-- Collections -->
+	<script src="/js/backbone/user/collections/user_payments.js"></script>
+	<script src="/js/backbone/course/collections/preregister_courses.js"></script>
+
+	<!-- Vistas -->
+	<script src="/js/backbone/views_global/view-type_error.js"></script>
+	<script src="/js/backbone/views_global/preregister/preregister_auxiliar.js"></script>
+	<script src="/js/backbone/views_global/preregister/preregister-delete.js"></script>
+	<script src="/js/backbone/views_global/preregister/preregister-paragraphs.js"></script>
+	<script src="/js/backbone/course/views/view-preregister-course.js"></script>
+
+<?php endif ?>
+
+
+
+<?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tint"></span> Prematricula 15A');?>
+
+
+<!-- Vista normal para cursos -->
+<section id="js_content-pick-course" class="container  container--interactive  active">
+	<img id="js_main_spinner" class="spinner--block  fadeUp" src="/img/spinner.gif" alt="Loading...">
+	
+	<div id="js_paragraph"></div>
+
+	<div id="js_main-data"></div>
+	
+	<section  class="content--buttons  button-large-right">
+		<a id="js_button_submit" href="##" class="button button--icon button--success  button--hidden">Prematricularme <span class="glyphicon glyphicon-ok-circle"></span></a>
+	</section>
+	<section id="js_paragraph-charge-conditional" class="content  content--interactive  content--white  content--msg-paragraph  content--msg-paragraph--danger">
+		<p>Tiene que llevar sus cursos condicionales...</p>	
+	</section>
+	<section id="js_paragraph-carry-less-one" class="content  content--interactive  content--white  content--msg-paragraph  content--msg-paragraph--warning">
+		<p>Elija al menos un curso :/</p>	
+	</section>
+</section>
+
+<section id="js_content-confirm-pick" class="container  container--interactive">
+	<div id="js_paragraph-confirm"></div>
+
+	<div id="js_main-data-confirm"></div>
+	
+	<section class="content content--buttons  content--buttons--two">
+		<a id="js_confirm--button-back" href="##" class="button button--icon  button--alter  button--alter--danger">Volver <span class="glyphicon glyphicon-remove-circle"></span></a>
+		<a id="js_confirm--button-confirm" href="##" class="button button--icon button--success">Confirmar <span class="glyphicon glyphicon-ok-circle"></span></a>
+	</section>
+	<section id="js_paragraph-charge" class="content  content--interactive  content--white  content--msg-paragraph">
+		<p>Guardando prematricula...</p>	
+	</section>
+</section>
+
+<section id="js_preregister-success" class="container  container--interactive">
+	<div id="js_success-paragraph"></div>
+	<div id="js_success-main-data"></div>
+
+	<section  class="content  content--buttons  button-large-right  margin-bottom-small">
+		<a id="js_button_delete_pre" href="##" class="button button--small button--danger">Eliminar Prematricula</a>
+	</section>
+
+	<div id="js_success-delete"></div>
+	
+</section>
+
+<section id="js_register-success" class="container  container--interactive">
+	<div id="js_reg_success-paragraph"></div>
+	<div id="js_reg_success-main-data"></div>
+</section>
+
+
+
+<!-- _________________________________________ T E M P L A T E S ______________________________________ -->
+
+<script type="text/template" id="template_preregister-delete">
+	<section  class="content">
+		<article class="paragraph-msg  paragraph-msg--buttons  paragraph-msg--danger  paragraph-msg--large-right">
+			{% if (attemps > 0) %}
+				<p>Recuerda que solo te queda {{ attemps }} intentos para eliminar tu prematricula, ¿seguro que deseas continuar?</p>
+				<a href="##" class="button  button--small button--danger  js_button_cancel_delete">No</a>
+				<a href="##" class="button  button--small button--alter  button--alter--danger  js_button_confirm_delete">Si, estoy seguro</a>
+			{% else %}
+				<p><span class="glyphicon glyphicon-exclamation-sign"></span> Ya no puede eliminar su prematricula excedio las 5 veces...</p>
+			{% endif %}
+		</article>
+	</section>
+</script>
+
+<!-- Template auxiliar -->
+<template id="template_auxiliar-one">
+	{%if (type === 'PA') %}
+		<div>
+			{% if (data_payments.current_payment.state == 'N') %}
+				{% set color_article = 'active' %}
+			{% elseif (data_payments.current_payment.state == 'EP' or data_payments.current_payment.state == 'OT') %}
+				{% set color_article = 'danger' %}
+			{% elseif (data_payments.current_payment.state == 'LP') %}
+				{% set color_article = 'warning' %}
+			{% endif %}
+			<article class="item-informative  item-informative--{{ color_article }}  item--informative--clicked  js_item-informative">
+				{% if (data_payments.current_payment.state != 'N') %}
+					<span><span class="glyphicon glyphicon-exclamation-sign"></span> Pago</span>
+				{% else %}
+					<span><span class="glyphicon glyphicon-ok"></span> Pago</span>
+				{% endif %}
+				<span>{{ data_payments.current_payment.total }}</span>
+
+				<section class="item-informative__detail">
+					{% if (data_payments.current_payment.state != 'EP') %}
+						<p class="text-muted text-center">Tasa <strong>{{ data_payments.current_payment.rate_name }}</strong></p>
+						{% if (data_payments.current_payment.increment) %}
+							<p class="text-muted text-center">Incremento <strong>{{ data_payments.current_payment.increment }}%</strong></p>
+						{% endif %}
+
+						{% if (data_payments.current_payments_normal) %}
+							{# Pagos normales #}
+							{% for payment in data_payments.current_payments_normal %}
+								<article class="item item--simple">
+									<p class="text-muted">Monto <strong>S/. {{ payment.amount }}</strong> </p>
+									<p class="text-muted">Operación <strong>{{ payment.operation }}</strong></p>
+									<p class="text-muted">Concépto <strong>{{ payment.concept }}</strong></p>
+								</article>
+							{% endfor %}
+
+							{# Aviso si falta pago #}
+							{% if (data_payments.current_payment.state == 'LP') %}
+								<article class="item item--simple  item--simple--warning">
+									<p class="text-center"><span class="glyphicon glyphicon-exclamation-sign"></span> Falta S/. {{ data_payments.current_payment.amount_left }}</p>
+								</article>
+								{# Aviso si el pago esta fuera de tiempo #}
+							{% elseif (data_payments.current_payment.state == 'OT') %}
+								<article class="item item--simple  item--simple--danger">
+									<p class="text-center"><span class="glyphicon glyphicon-exclamation-sign"></span> Pago fuera de tiempo...</p>
+								</article>
+							{% endif %}
+
+							{# Pagos condicionales #}
+							{% if (data_payments.current_payments_conditional) %}
+								<hr>
+								<p class="text-muted text-center">Pagos Condicionales</p>
+								{% for payment in data_payments.current_payments_conditional %}
+									<article class="item item--simple">
+										<p class="text-muted">Monto <strong>S/. {{ payment.amount }}</strong> </p>
+										<p class="text-muted">Operación <strong>{{ payment.operation }}</strong></p>
+										<p class="text-muted">Concépto <strong>{{ payment.concept }}</strong></p>
+									</article>
+								{% endfor %}
+							{% endif %}
+						{% else %}
+							<p class="empty  empty--danger"><span class="glyphicon glyphicon-exclamation-sign"></span> No realizo ningun pago...</p>
+						{% endif %}
+					{% else %}
+						<p class="empty empty--danger"><span class="glyphicon glyphicon-exclamation-sign"></span> Falta pago...</p>
+					{% endif %}
+				</section>
+			</article>
+		</div>
+		<div>
+			<article id="js_credits" class="item-informative  item-informative--warning  item-informative--comparative">
+				<span>Créditos</span>
+				<span id="js_credits_current" data-credits>0</span>
+				<span>
+					{% for semester_turn in data_credits.current_register.credits_semester %}
+						<span id="js_credit{{ semester_turn.semester + semester_turn.turn }}" class="js_credits"  
+						data-credits="{{ semester_turn.credits }}" 
+						data-st="{{ semester_turn.semester + semester_turn.turn }}" 
+						data-semester="{{ semester_turn.semester }}"
+						data-semester_roman="{{ semester_turn.semester_roman }}"
+						hidden></span>
+					{% endfor %}
+						<span id="js_conditional-credits" data-credits="11" hidden></span>
+
+						<span id="js_period-assign"></span>
+					</span>
+			</article>
+		</div>
+	{% else %}
+		<a href="/print/student/preregister" class="button  button--small  button--print">Imprimir <span class="glyphicon glyphicon-print"></span></a>
+	{% endif %}
+</template>
+
+
+<!-- Parrafos -->
+<script type="text/template" id="template_paragraphs">
+	{% if (type === 'N') %}
+		{# Normal #}
+		<p class="info info--main  margin-aux-desktop-medium"><span class="glyphicon glyphicon-info-sign"></span> Seleccione los cursos que llevara...</p>
+	{% elseif (type === 'C') %}
+		{# Condicion #}
+		<p class="info info--main  danger-icon  margin-aux-mobile  margin-aux-desktop-medium"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que llevaras 
+		{% if (conditional_amount == 1) %} un curso {% else %} cursos {% endif %} por tercera vez o mas, gestiona tus documentos para regularizar tu situación...</p>
+	{% elseif (type === 'E') %}
+		{# Equivalencia #}
+		<p class="info info--main  danger-icon  margin-aux-mobile  margin-aux-desktop-medium"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que la nueva curricula te alcanzo y todavia hay cursos que debes, haz las gestiones respectivas para que las completes...</p>
+	{% elseif (type === 'CO') %}
+		<p class="info info--main  margin-aux-mobile  margin-aux-desktop-medium"><span class="glyphicon glyphicon-ok-circle"></span> Ok, llevaras 
+		<strong>{{ many_courses }}
+		{% if (many_courses > 1) %}
+			 cursos
+		{% else %}
+			 curso
+		{% endif %}
+			</strong> 
+		este periodo y perteneceras al <strong>{{ semester_assign }} semestre</strong>, verificalo y confirma...</p>
+	{% elseif (type === 'PS') %}
+		<p class="info  info--main wmargin-aux-mobile  margin-aux-desktop-small"><span class="glyphicon glyphicon-info-sign"></span> Prematricula realizada, llevaras 
+		<strong>{{ many_courses }}
+		{% if (many_courses > 1) %}
+			 cursos
+		{% else %}
+			 curso
+		{% endif %}</strong> 
+		y perteneceras al <strong>{{ semester_assign }} Semestre</strong>, imprimelo y despues ve a validarlo en Registros de tu Facultad...</p>
+	{% elseif (type === 'RS') %}
+		<p class="info  info--main  margin-aux-mobile  margin-aux-desktop-small"><span class="glyphicon glyphicon-info-sign"></span> Matrícula validada, llevas 
+		<strong>{{ many_courses }}
+		{% if (many_courses > 1) %}
+			 cursos
+		{% else %}
+			 curso
+		{% endif %}</strong> 
+		y perteneces al <strong>{{ semester_assign }} Semestre</strong>, disfruta tu periódo...</p>
+	{% endif %}
+</script>
+
+
+<!-- Group Semester -->
+<template id="template_group_semester">
+	<section class="content content--blue   js_semester{{ semester }}  active">
+
+		<header class="content__header  js_course"><span class="glyphicon glyphicon-flag"></span> 
+		{{ semester_roman }} Semestre 
+		{% if (type === 'X') %}
+			<small class="text-muted">(Extraordinario)</small>
+		{% endif %}
+		</header>
+		
+		<section class="content__body  js_content-semester">
+			
+		</section>
+	</section>
+</template>
+
+<!-- Curso permitido -->
+<!-- <article class="item  item--blue"></article> -->
+<template id="template_course">
+	{# Etiqueta del curso #}
+	{% if (condition) %}
+		{# condicional #}
+		<span class="item__label  item__label--danger">{{ attempt }} Vez</span>
+	{% elseif (type === 'E') %}
+		<span class="item__label  item__label--normal">Electivo</span>
+	{% endif %}
+
+	{# Cuerpo e informacions #}
+	<section class="item__body">
+		<p class="icon vertical_center"><span class="glyphicon glyphicon-book"></span></p>
+		<p class="text_left whit_code">{{ name }} <small>{{ code }}</small></p>
+		<p class="text_left"><span class="glyphicon glyphicon-user"></span> {{ teacher }}</p>
+		<p class="inline">{{ credits }} Créditos</p>
+		<p class="inline"><strong>Turno {{ turn }}</strong></p>
+	</section>
+
+	{# Footer #}
+	<footer class="item__footer">
+	{% if (typeRender != 'I') %}
+		<div class="checkbox checkbox--success">
+			<input id="course{{ code }}" type="checkbox" class="" data-st="{{ semester + turn }}">
+			<label class="js_course_checkbox" 
+				data-st="{{ semester + turn }}"
+				data-semester="{{ semester }}"
+				data-semester_roman="{{ semester_roman }}"
+				data-semester_close="{{ semester_close }}"
+				data-turn="{{ turn }}"
+				data-credits="{{ credits }}"
+				data-code="{{ code }}"
+				data-type="{{ type }}">
+				Llevar <span class="glyphicon glyphicon-ok"></span></label>
+		</div>
+	{% else %}
+		{% if (!payment_did) %}
+		<div class="checkbox checkbox--success  checkbox--disabled-danger">
+			<p>:( El pago deberia ser <strong>S/. {{ payment }}</strong></p>
+		</div>
+		{% endif %}
+	{% endif %}
+	</footer>
+</template>
+
+<!-- Error: Pago -->
+<template id="template_error-payment">
+	{% if (current_payment.state === 'LP') %}
+		{% if ( current_payment.increment ) %}
+			<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago no esta completo, debes pagar con un incremento del {{ current_payment.increment }}%, entonces te faltaría reintegrar <strong>S/. {{ current_payment.amount_left}}</strong>, realízalo a la cuenta <strong>72</strong> de la Universidad...</p>
+		{% else %}
+			<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago no esta completo, o tal vez te corresponde otra tasa, si es asi presenta tu resolución de cambio a la oficina de informática, si no es asi te faltaria reintegrar <strong>S/. {{ current_payment.amount_left}}</strong>, realizalo a la cuenta <strong>72</strong> de la Universidad...</p>
+		{% endif %}
+	{% elseif (current_payment.state == 'OT') %}
+		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que tu pago esta fuera de tiempo, para mas información acercate a la oficina de informatica...</p>
+	{% elseif (current_payment.state == 'EP') %}
+		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> No existe algún pago registrado, si lo realizo hoy recuerde que le toma un tiempo de <strong>12 horas</strong> al banco para enviar los datos, si el problema persiste acérquese a la oficina de informática...</p>
+	{% elseif (type == 'ED') %}
+		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Parece que la distribución de cursos de su escuela aún no esta lista, acerquece a su dirección para saber mas detalles...</p>
+	{% elseif (type == 'EC') %}
+		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> No hay cursos para mostrar, <strong>tal vez no tengas asignado una currícula</strong> o los cursos que debes <strong>no estan en este periódo</strong>, en todo caso acercate a <strong>Registros Central</strong> o <strong>Informatica</strong> para que verifiques tu situación...</p>
+	{% else %}
+		<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Hubo un problema al mostrar los cursos, tal vez sea la conexion a internet, por favor intentalo mas tarde...</p>
+	{% endif %}
+</template>
+
+<!-- Error: Falta Distribución -->
+<template id="template_error-distribution">
+	<p class="empty  empty--danger  margin-medium  margin--desktop"><span class="glyphicon glyphicon-exclamation-sign"></span> Existe un problema con la distibución de cursos de parte de su director, acerquese a dirección de su escuela para mas información...</p>
+</template>

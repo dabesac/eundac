@@ -11,54 +11,57 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-bookmark"></span> Gestión de Currículas');?>
 
 <input type="hidden" id="rol" value="<?php echo $dataView['rid'] ?>">
-<div class="main_data">
-	<?php if ($dataView['rid'] == 'RC' or $dataView['rid'] == 'CU'): ?>
-		<header class="faculty_school">
-			<p><span class="glyphicon glyphicon-comment"></span> Seleccione una Facultad y Escuela</p>
-			<div>
-				<select class="form-control" name="faculty" id="selectFaculty">
-					<option value="">Facultad</option>
-					<?php if ($dataView['faculties']): ?>
-					<?php foreach ($dataView['faculties'] as $faculty): ?>
-						<option value="<?php echo $faculty['facid'] ?>"><?php echo $faculty['name'] ?></option>
-					<?php endforeach ?>
-					<?php endif ?>
-				</select>
-			</div>
-			<div>
-				<select class="form-control" name="school" id="selectSchool">
-					<option value="">Escuela</option>
-					<option value="">Primero seleccione una facultad ¬¬</option>
-				</select>
-			</div>
-		</header>
-	<?php elseif ($dataView['rid'] == 'RF'): ?>
-		<header class="school">
-			<p><span class="glyphicon glyphicon-comment"></span> Seleccione una Escuela</p>
-			<div>
-				<select class="form-control" name="school" id="selectSchool">
-					<option value="">Escuela</option>
-					<?php if ($dataView['schools_data']): ?>
-					<?php foreach ($dataView['schools_data'] as $school): ?>
-						<option value="<?php print $school['id'] ?>"><?php print $school['name'] ?></option>
-					<?php endforeach ?>
-					<?php else: ?>
-						<option value="">No hay escuelas para mostrar</option>
-					<?php endif ?>
-				</select>
-			</div>
-		</header>
-	<?php elseif ($dataView['rid'] == 'DR'): ?>
-		<input type="hidden" id="school" value="<?php echo $dataView['id_school'] ?>">
-		<header class="director">
-			<p><span class="glyphicon glyphicon-info-sign"></span> Todas las currículas de su escuela...</p>
-		</header>
-	<?php endif ?>
 
-	<div id="dataCurriculums" class="fill_main_data data_curriculums">
-		
+<section class="container">
+	<div class="main_data">
+		<?php if ($dataView['rid'] == 'RC' or $dataView['rid'] == 'CU'): ?>
+			<header class="faculty_school">
+				<p><span class="glyphicon glyphicon-comment"></span> Seleccione una Facultad y Escuela</p>
+				<div>
+					<select class="form-control" name="faculty" id="selectFaculty">
+						<option value="">Facultad</option>
+						<?php if ($dataView['faculties']): ?>
+						<?php foreach ($dataView['faculties'] as $faculty): ?>
+							<option value="<?php echo $faculty['facid'] ?>"><?php echo $faculty['name'] ?></option>
+						<?php endforeach ?>
+						<?php endif ?>
+					</select>
+				</div>
+				<div>
+					<select class="form-control" name="school" id="selectSchool">
+						<option value="">Escuela</option>
+						<option value="">Primero seleccione una facultad ¬¬</option>
+					</select>
+				</div>
+			</header>
+		<?php elseif ($dataView['rid'] == 'RF'): ?>
+			<header class="school">
+				<p><span class="glyphicon glyphicon-comment"></span> Seleccione una Escuela</p>
+				<div>
+					<select class="form-control" name="school" id="selectSchool">
+						<option value="">Escuela</option>
+						<?php if ($dataView['schools_data']): ?>
+						<?php foreach ($dataView['schools_data'] as $school): ?>
+							<option value="<?php print $school['id'] ?>"><?php print $school['name'] ?></option>
+						<?php endforeach ?>
+						<?php else: ?>
+							<option value="">No hay escuelas para mostrar</option>
+						<?php endif ?>
+					</select>
+				</div>
+			</header>
+		<?php elseif ($dataView['rid'] == 'DR'): ?>
+			<input type="hidden" id="school" value="<?php echo $dataView['id_school'] ?>">
+			<header class="director">
+				<p><span class="glyphicon glyphicon-info-sign"></span> Todas las currículas de su escuela...</p>
+			</header>
+		<?php endif ?>
+
+		<div id="dataCurriculums" class="fill_main_data data_curriculums">
+			
+		</div>
 	</div>
-</div>
+</section>
 
 <?php if ($env === 'production'): ?>
 	<script src="/js/min/adminCurriculum.min.js"></script>

@@ -1,0 +1,328 @@
+/*article*/.item
+	background white
+	box-shadow 0 0 1px rgba(black, .2)
+	margin-bottom 1em
+	position relative
+
+	.item__label
+		box-shadow 0 0 2px rgba(black, .5)
+		padding .7em
+		position absolute
+		right -.3em
+		top -.3em
+		z-index 5
+
+	.item__label--normal
+		 background celeste
+		 color white
+
+	.item__label--danger
+		background rojo
+		color white
+	
+	.item__body
+		position relative
+		text-align center
+		
+
+		p
+			border-bottom 1px solid plomoOscuro
+			margin-bottom 0
+			margin-left 15%
+			padding .5em 1em
+
+		p.inline
+			border-bottom 0
+			
+		.icon
+			background plomo
+			border-right 1px solid plomoOscuro
+			border-bottom 0
+			height 100%
+			left 0
+			margin-left 0
+			padding 0
+			position absolute
+			width 15%
+
+
+	.item__footer
+		text-align center
+
+		p
+			padding 1em
+			margin-bottom 0
+
+@media screen and (min-width:700px)
+	.item
+		display inline-block
+		width 49%
+		
+	.item:nth-child(even)
+		margin-left 1%
+		
+@media screen and (min-width:1000px)
+	.item
+		.item__body
+			.icon
+				width 10%
+			p
+				margin-left 10%
+.item--blue
+
+	.item__body
+		border-bottom 1px plomoOscuro solid
+		
+		.icon
+			color azul
+
+
+//Item informative
+.item-informative
+	display flex
+	flex-wrap wrap
+	width 100%
+	z-index 5
+
+	& > span
+		background white
+		padding .6em 0
+		text-align center
+
+	& > span:nth-of-type(1)
+		width 40%
+		
+	& > span:nth-of-type(2)
+		width 60%
+
+	& > span:last-of-type
+		border-radius 0 3px 3px 0
+
+	.item-informative__detail
+		padding-top .5em
+		padding-left .5em
+		padding-right .5em
+		background plomoOscuro
+		width 100%
+
+.item-informative--comparative
+	& > span:nth-of-type(1)
+		width 40%
+		
+	& > span:nth-of-type(2)
+		border-right 2px plomoOscuro solid
+		
+	& > span:nth-of-type(2)
+	& > span:nth-of-type(3)
+		width 30%
+		
+.item--informative--clicked
+	cursor pointer
+	position relative
+
+	.item-informative__detail
+		border-radius 0 0 3px 0
+		display none
+
+.item--informative--clicked.active
+	& > span:last-of-type
+		border-radius 0 3px 0 0
+
+	.item-informative__detail
+		animation .3s content_show ease
+		display block
+
+.item--informative--clicked.inactive
+	.item-informative__detail
+		animation .3s content_hide ease
+
+.item-informative--active
+	& > span:last-child
+		border-radius 0 5px 0 0
+
+	& > span:nth-of-type(1)
+		border-right 4px verde solid
+		color verde
+		
+	.item-informative__detail
+		border-top 1px verde solid
+
+.item-informative--warning
+	& > span:nth-of-type(1)
+		border-right 4px amarillo solid
+		color amarillo
+
+	.item-informative__detail
+		border-top 1px amarillo solid
+		
+.item-informative--danger
+	& > span:nth-of-type(1)
+		border-right 4px rojo solid
+		color rojo
+		
+	.item-informative__detail
+		border-top 1px rojo solid
+
+
+//item table
+.item-table
+	box-shadow 0 0 1px rgba(black, .2)
+	background white
+	margin-bottom 1em
+
+	.item-table__header
+		border-bottom 4px plomoOscuro solid
+		font-weight 700
+		padding .7em
+		text-align center
+
+		small
+			color plomoTexto
+
+	.item-table__body
+		position relative
+		padding-bottom 2em
+
+		&>p
+			margin-bottom 0
+			padding .7em
+			padding-left 2em
+	
+		.detail__buttons
+			position relative
+			text-align right
+
+			a
+				margin-top .7em
+				margin-right .5em
+
+			a[class*="danger"]
+				z-index 4
+
+			&:before
+				border-bottom 1px plomoOscuro solid
+				content ""
+				width 100% - 3em
+				top 60%
+				left 0
+				position absolute
+				z-index 0
+				
+	.item-table__body--interactive
+		display none
+
+	.item-table__body--interactive.active
+		animation .3s content_show ease
+		display block
+
+	.item-table__body--interactive.inactive
+		animation .3s content_hide ease
+
+	.item-table__footer
+		border-top 1px plomoOscuro solid
+		margin-top 1em
+		text-align center	
+
+	.footer--buttons
+		a
+			border 0
+			border-radius 0
+
+	.footer--buttons--two
+		overflow hidden
+		a
+			width 50%
+			float left
+
+@media screen and (min-width:700px)
+	.item-table
+		.item-table__body
+			text-align center
+			
+			&>p
+				text-align left
+				display inline-block
+				width 40%
+
+		.item-table__body--edit
+			text-align left
+
+@media screen and (min-width:1000px)
+	.item-table
+		display table
+		width 100%
+		
+		.item-table__header
+			border-bottom 0
+			border-right 2px plomoOscuro solid
+			display table-cell
+			vertical-align middle
+			width 25%
+			
+		.item-table__body
+			display table-cell
+			vertical-align middle
+			padding-top 1em
+
+			&>p
+				padding 0
+				margin-bottom 1em
+
+		.item-table__body--edit
+			display block
+
+		.item-table__body--interactive
+			display none
+
+		.item-table__footer
+			border-top 0
+			display table-cell
+			position relative
+			vertical-align middle
+			width 12%
+			
+		.footer--buttons
+			a
+				align-items center
+				box-shadow 0
+				display flex
+				height 100%
+				justify-content center
+				position absolute
+				top 0
+				max-height 83px
+				width 100%
+
+.item-table--interactive
+	display none
+
+.item-table--active
+	.item-table__header 
+		border-bottom 4px verdeClaro solid
+
+
+//Items simple
+.item--simple
+	margin-bottom .5em
+	p
+		margin-bottom 0
+		padding .2em 1em
+
+.item--simple--danger
+	background rojo
+	color white
+
+.item--simple--warning
+	background amarillo
+	color white
+
+@media screen and (min-width:700px)
+	.item--simple
+		width 100%
+
+	.item--simple:nth-child(even)
+		margin-left 0
+
+//animations
+.item-table.delete
+	animation .3s content_hide ease
