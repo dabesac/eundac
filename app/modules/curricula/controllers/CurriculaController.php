@@ -1049,7 +1049,7 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         //form para validar
         $form_course = new Curricula_Form_Course();
         if ($form_course->isValid($formData)) {
-            $ids = explode('_', base64_decode($formData['id']));
+            $ids = explode('|', base64_decode($formData['id']));
             $curid = $ids[0];
             $escid = $ids[1];
             $subid = $ids[2];

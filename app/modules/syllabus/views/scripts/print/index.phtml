@@ -24,9 +24,27 @@ td, th{
 
 $curso=$this->curso[0];
 $total=$curso['hours_theoretical']+$curso['hours_practical']; 
-$tmps = split("-",$this->silabo['created']);
-$mes =$tmps[1];
-$F[2]=substr($tmps[2], 0,2);
+if ($this->silabo['date_close']) {
+    $tmps = split("-",$this->silabo['date_close']);
+    $mes_close =$tmps[1];
+    switch ($mes_close) {
+        case 1: $strm_close = "Enero";break;
+        case 2: $strm_close = "Febrero";break;
+        case 3: $strm_close = "Marzo";break;
+        case 4: $strm_close = "Abril";break;
+        case 5: $strm_close = "Mayo";break;
+        case 6: $strm_close = "Junio";break;
+        case 7: $strm_close = "Julio";break;
+        case 8: $strm_close = "Agosto";break;
+        case 9: $strm_close = "Setiembre";break;
+        case 10: $strm_close = "Octubre";break;
+        case 11: $strm_close = "Noviembre";break;
+        case 12: $strm_close = "Diciembre";break;
+    } 
+    $fecha_close = $tmps[2]." de ".$strm_close." del ".$tmps[0];
+}
+
+$mes = date('m');
 switch ($mes) {
     case 1: $strm = "Enero";break;
     case 2: $strm = "Febrero";break;
@@ -41,6 +59,7 @@ switch ($mes) {
     case 11: $strm = "Noviembre";break;
     case 12: $strm = "Diciembre";break;
 } 
+$fecha_impresion = date('d')." de ".$strm." del ".date('Y');
 ?>
 <div>
     <h4 style="text-align: center; font-size: 15px;">SÍLABO</h4>
@@ -262,7 +281,7 @@ switch ($mes) {
             <h5 style="margin-bottom:5px">VII<?php echo $rom?>. FUENTES DE INFORMACIÓN</h5>
             <div class="detalle" style="margin-bottom:10px"><?php echo $silabo['sources']?></div>
         </div>
-        <div style="text-align: right; margin-top: 20px">Cerro de Pasco, <?php echo substr($tmps[2],0,2)." de ".$strm." del ".$tmps[0]?>.</div>
+        <div style="text-align: right; margin-top: 20px">Cerro de Pasco, <?php echo $fecha_impresion ?>.</div>
 <?php }?>
 </div>
 <br>
@@ -284,7 +303,13 @@ switch ($mes) {
 </table>
 <div style='text-align: center; margin-left: 30%; margin-top:100px'>
     <p style='width:200px ;border-top: solid 1px #000; font-weight: bold'>V° B° Comisión de Sílabo</p>
-</div>
+</div><br/><br/>
+<?php
+    if ($this->silabo['date_close']) {  ?>
+        <div style="text-align: right; margin-top: 20px; font-size:9px">Cierre del Sílabo <?php echo $fecha_close?>.</div>
+    <?php    
+    }
+?>
 <?php   
     
     $html = ob_get_contents();
