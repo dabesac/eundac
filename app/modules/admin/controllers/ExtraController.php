@@ -247,22 +247,33 @@ class Admin_ExtraController extends Zend_Controller_Action {
         $uidim=$this->sesion->pid;
         $pid=$uidim;
 
-        $data = array(
-            'eid'=>$eid,
-            'oid'=>$oid,
-            'uid'=>$uid,
-            'escid'=>$escid,
-            'subid'=>$subid,
-            'pid'=>$pid,
-            'type_impression'=>'avance_de_notas',
-            'date_impression'=>date('Y-m-d H:i:s'),
-            'pid_print'=>$uidim
-            );
-        $dbimpression->_save($data);            
-
         $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'avance_de_notas');
         $dataim = $dbimpression->_getFilter($wheri);
-        $co=count($dataim);
+
+        if ($dataim) {
+        	$pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
+            $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
+
+            $dbimpression->_update($data_u,$pk);
+            $co=$data_u['count_impression'];   
+        }
+        else{
+	        $data = array(
+	            'eid'=>$eid,
+	            'oid'=>$oid,
+	            'uid'=>$uid,
+	            'escid'=>$escid,
+	            'subid'=>$subid,
+	            'pid'=>$pid,
+	            'type_impression'=>'avance_de_notas',
+	            'date_impression'=>date('Y-m-d H:i:s'),
+	            'pid_print'=>$uidim,
+	            'count_impression'=>1
+	            );
+	        $dbimpression->_save($data);
+	        $co=1;
+        }
+
 
         $codigo=$co." - ".$uidim;
         $this->view->codigo=$codigo;
@@ -1024,27 +1035,36 @@ class Admin_ExtraController extends Zend_Controller_Action {
             $uid=$this->sesion->uid;
             $uidim=$this->sesion->pid;
             $pid=$uidim;
-            $data = array(
-                'eid'=>$eid,
-                'oid'=>$oid,
-                'uid'=>$uid,
-                'escid'=>$escid,
-                'subid'=>$subid,
-                'pid'=>$pid,
-                'type_impression'=>'control_actas',
-                'date_impression'=>date('Y-m-d H:i:s'),
-                'pid_print'=>$uidim
-                );
-            // print_r($data);exit();
-            $dbimpression->_save($data);            
-
+            
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'control_actas');
             $dataim = $dbimpression->_getFilter($wheri);
+			
+            if ($dataim) {
+				$pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
+                $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
+
+                $dbimpression->_update($data_u,$pk);
+                $co=$data_u['count_impression'];            	
+            }
+            else{
+            	$data = array(
+	                'eid'=>$eid,
+	                'oid'=>$oid,
+	                'uid'=>$uid,
+	                'escid'=>$escid,
+	                'subid'=>$subid,
+	                'pid'=>$pid,
+	                'type_impression'=>'control_actas',
+	                'date_impression'=>date('Y-m-d H:i:s'),
+	                'pid_print'=>$uidim,
+	                'count_impression'=>1
+	                );
+	            $dbimpression->_save($data);   
+	            $co=1;
+            }
             
-            $co=count($dataim);
             $codigo=$co." - ".$uidim;
 
-			// print_r($rows); exit();
 			$this->view->info_speciality = $info_speciality;
 			$this->view->info_couser=$rows;
 			$this->view->perid=$perid;

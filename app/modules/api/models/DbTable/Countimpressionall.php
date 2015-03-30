@@ -40,21 +40,33 @@ class Api_Model_DbTable_Countimpressionall extends Zend_Db_Table_Abstract
 
     public function _countMemo($data){
     	try {
-    		if ($data['eid']=='' || $data['oid']=='' || $data['escid']=='' || $data['subid']=='' || $data['type_impression']=='') return false;
+    		if ($data['eid']=='' || $data['oid']=='' || $data['escid']=='' || $data['subid']=='' || $data['type_impression']=='' || $data['perid']=='') return false;
     		$eid=$data['eid'];
     		$oid=$data['oid'];
     		$escid=$data['escid'];
     		$subid=$data['subid'];
-    		$type=$data['type_impression'];
+            $type=$data['type_impression'];
+    		$perid=$data['perid'];
     		$sql=$this->_db->query("
-    								select count(distinct uid) from base_count_impression
-									where eid='$eid' and oid='$oid' and escid='$escid' and
-									subid='$subid' and type_impression='$type'       			
+    								select count(*) from base_count_impression
+                                    where eid='$eid' and oid='$oid' and escid='$escid' and
+									subid='$subid' and type_impression='$type' and perid='$perid'     			
              					   ");          
             return $sql->fetchAll();
             return false;
     	} catch (Exception $e) {
     		print "Error: count memo".$e->getMessage();
     	}
+    }
+
+    public function _update($data,$pk){
+        try {
+                if ($pk['eid']=='' || $pk['oid']=='' || $pk['countid']=='' || $pk['escid']=='' || $pk['subid']=='') return false;
+                $where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and countid='".$pk['countid']."' and escid='".$pk['escid']."' and subid='".$pk['subid']."' ";
+                return $this->update($data, $where);
+                return false;
+        } catch (Exception $e) {
+            print "Error: Update Count impression".$e->getMessage();
+        }
     }
 }    

@@ -1,5 +1,6 @@
 <?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>  
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-file"></span> ABRIR ACTAS, ASISTENCIAS, SILABO');?>
+<section class="container">
 <div class="alert alert-info">
     <div class="row">
         <div class="col-md-12 text-right">
@@ -56,6 +57,7 @@
     </div> 
 </div>
 <div id='viewcourses'></div>
+</section>
 <script>
     var year_a="<?php echo date('Y');?>";
     $("#anio").change(function(){

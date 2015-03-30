@@ -422,24 +422,33 @@ class Report_CustomreportController extends Zend_Controller_Action{
             $pid=$uidim;
             $uid=$this->sesion->uid;
 
-            $data = array(
-                'eid'=>$eid,
-                'oid'=>$oid,
-                'uid'=>$uid,
-                'escid'=>$escid,
-                'subid'=>$subid,
-                'pid'=>$pid,
-                'type_impression'=>'rp2_desaprobados_50%_desde_'.$anio1.'_hasta_'.$anio,
-                'date_impression'=>date('Y-m-d H:i:s'),
-                'pid_print'=>$uidim
-                );
-
-            $dbimpression->_save($data);
-
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'rp2_desaprobados_50%_desde_'.$anio1.'_hasta_'.$anio);
             $dataim = $dbimpression->_getFilter($wheri);
 
-            $co=count($dataim);
+            if ($dataim) {
+            	$pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
+                $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
+
+                $dbimpression->_update($data_u,$pk);
+                $co=$data_u['count_impression'];
+            }
+            else{
+	            $data = array(
+	                'eid'=>$eid,
+	                'oid'=>$oid,
+	                'uid'=>$uid,
+	                'escid'=>$escid,
+	                'subid'=>$subid,
+	                'pid'=>$pid,
+	                'type_impression'=>'rp2_desaprobados_50%_desde_'.$anio1.'_hasta_'.$anio,
+	                'date_impression'=>date('Y-m-d H:i:s'),
+	                'pid_print'=>$uidim,
+	                'count_impression'=>1
+	            );
+	            $dbimpression->_save($data);
+	            $co=1;            	
+            }
+
             $codigo=$co." - ".$uidim;
 
             $header=$this->sesion->org['header_print'];
@@ -567,24 +576,33 @@ class Report_CustomreportController extends Zend_Controller_Action{
             $escid="TODOEC";
             $subid="1901";
 
-            $data = array(
-                'eid'=>$eid,
-                'oid'=>$oid,
-                'uid'=>$uid,
-                'escid'=>$escid,
-                'subid'=>$subid,
-                'pid'=>$pid,
-                'type_impression'=>'rp5_frecuencia_acceso_sistema',
-                'date_impression'=>date('Y-m-d H:i:s'),
-                'pid_print'=>$uidim
-                );
-
-            $dbimpression->_save($data);
-
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'rp5_frecuencia_acceso_sistema');
             $dataim = $dbimpression->_getFilter($wheri);
 
-            $co=count($dataim);
+            if ($dataim) {
+            	$pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
+                $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
+
+                $dbimpression->_update($data_u,$pk);
+                $co=$data_u['count_impression'];
+            }
+            else{
+	            $data = array(
+	                'eid'=>$eid,
+	                'oid'=>$oid,
+	                'uid'=>$uid,
+	                'escid'=>$escid,
+	                'subid'=>$subid,
+	                'pid'=>$pid,
+	                'type_impression'=>'rp5_frecuencia_acceso_sistema',
+	                'date_impression'=>date('Y-m-d H:i:s'),
+	                'pid_print'=>$uidim
+	                'count_impression'=>1
+	                );
+	            $dbimpression->_save($data);
+	            $co=1;            	
+            }
+
             $codigo=$co." - ".$uidim;
 
             $namef="TODAS LAS FACULTADES";
@@ -720,24 +738,34 @@ class Report_CustomreportController extends Zend_Controller_Action{
             $pid=$uidim;
             $uid=$this->sesion->uid;
 
-            $data = array(
-                'eid'=>$eid,
-                'oid'=>$oid,
-                'uid'=>$uid,
-                'escid'=>$escid,
-                'subid'=>$subid,
-                'pid'=>$pid,
-                'type_impression'=>'rp3_alumnos_cursos_pendientes_'.$curid.'_veces_'.$veces,
-                'date_impression'=>date('Y-m-d H:i:s'),
-                'pid_print'=>$uidim
-                );
-
-            $dbimpression->_save($data);
-
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'rp3_alumnos_cursos_pendientes_'.$curid.'_veces_'.$veces);
             $dataim = $dbimpression->_getFilter($wheri);
 
-            $co=count($dataim);
+            if ($dataim) {
+            	$pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
+                $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
+
+                $dbimpression->_update($data_u,$pk);
+                $co=$data_u['count_impression'];
+            }
+            else{
+	            $data = array(
+	                'eid'=>$eid,
+	                'oid'=>$oid,
+	                'uid'=>$uid,
+	                'escid'=>$escid,
+	                'subid'=>$subid,
+	                'pid'=>$pid,
+	                'type_impression'=>'rp3_alumnos_cursos_pendientes_'.$curid.'_veces_'.$veces,
+	                'date_impression'=>date('Y-m-d H:i:s'),
+	                'pid_print'=>$uidim,
+	                'count_impression'=>1
+	                );
+
+	            $dbimpression->_save($data);
+	            $co=1;            	
+            }
+
             $codigo=$co." - ".$uidim;
 
             $header=$this->sesion->org['header_print'];
@@ -856,24 +884,33 @@ class Report_CustomreportController extends Zend_Controller_Action{
             $pid=$uidim;
             $uid=$this->sesion->uid;
 
-            $data = array(
-                'eid'=>$eid,
-                'oid'=>$oid,
-                'uid'=>$uid,
-                'escid'=>$escid,
-                'subid'=>$subid,
-                'pid'=>$pid,
-                'type_impression'=>'rp4_alumnos_ninguna_matricula',
-                'date_impression'=>date('Y-m-d H:i:s'),
-                'pid_print'=>$uidim
-                );
-
-            $dbimpression->_save($data);
-
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'rp4_alumnos_ninguna_matricula');
             $dataim = $dbimpression->_getFilter($wheri);
 
-            $co=count($dataim);
+           	if ($dataim) {
+           	 	$pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
+                $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
+
+                $dbimpression->_update($data_u,$pk);
+                $co=$data_u['count_impression'];
+           	}
+           	else{
+	            $data = array(
+	                'eid'=>$eid,
+	                'oid'=>$oid,
+	                'uid'=>$uid,
+	                'escid'=>$escid,
+	                'subid'=>$subid,
+	                'pid'=>$pid,
+	                'type_impression'=>'rp4_alumnos_ninguna_matricula',
+	                'date_impression'=>date('Y-m-d H:i:s'),
+	                'pid_print'=>$uidim,
+	                'count_impression'=>1
+	                );
+	            $dbimpression->_save($data);
+           		$co=1;
+           	}
+
             $codigo=$co." - ".$uidim;
 
             $header=$this->sesion->org['header_print'];
