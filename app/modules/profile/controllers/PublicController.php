@@ -1477,23 +1477,34 @@ class Profile_PublicController extends Zend_Controller_Action {
             
             $uidim=$this->sesion->pid;
 
-            $data = array(
-                'eid'=>$eid,
-                'oid'=>$oid,
-                'uid'=>$uid,
-                'escid'=>$escid,
-                'subid'=>$subid,
-                'pid'=>$pid,
-                'type_impression'=>'matriculasxcurricula',
-                'date_impression'=>date('Y-m-d H:i:s'),
-                'pid_print'=>$uidim
-                );
-            $dbimpression->_save($data);            
-            
-            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'matriculasxcurricula');
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'matriculasxcurricula','perid'=>$perid);
             $dataim = $dbimpression->_getFilter($wheri);
+
+            if ($dataim) {
+                $pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
+                $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
+
+                $dbimpression->_update($data_u,$pk);
+                $co=$data_u['count_impression'];
+            }
+            else{
+                $data = array(
+                    'eid'=>$eid,
+                    'oid'=>$oid,
+                    'uid'=>$uid,
+                    'escid'=>$escid,
+                    'subid'=>$subid,
+                    'pid'=>$pid,
+                    'type_impression'=>'matriculasxcurricula',
+                    'date_impression'=>date('Y-m-d H:i:s'),
+                    'pid_print'=>$uidim,
+                    'perid'=>$perid,
+                    'count_impression'=>1
+                    );
+                $dbimpression->_save($data);
+                $co=1;
+            }
             
-            $co=count($dataim);
             $codigo=$co." - ".$uidim;
 
             $header = str_replace("?facultad",$namef,$header);
@@ -1595,24 +1606,33 @@ class Profile_PublicController extends Zend_Controller_Action {
             $dbimpression = new Api_Model_DbTable_Countimpressionall();    
             $uidim=$this->sesion->pid;
 
-            $data = array(
-                'eid'=>$eid,
-                'oid'=>$oid,
-                'uid'=>$uid,
-                'escid'=>$escid,
-                'subid'=>$subid,
-                'pid'=>$pid,
-                'type_impression'=>'impresion_ficha_estadistica',
-                'date_impression'=>date('Y-m-d H:i:s'),
-                'pid_print'=>$uidim
-                );
-            // print_r($data);exit();
-            $dbimpression->_save($data);            
-            
-            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_ficha_estadistica');
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_ficha_estadistica','perid'=>$perid);
             $dataim = $dbimpression->_getFilter($wheri);
+            if ($dataim) {
+                $pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
+                $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
+
+                $dbimpression->_update($data_u,$pk);
+                $co=$data_u['count_impression'];
+            }
+            else{
+                $data = array(
+                    'eid'=>$eid,
+                    'oid'=>$oid,
+                    'uid'=>$uid,
+                    'escid'=>$escid,
+                    'subid'=>$subid,
+                    'pid'=>$pid,
+                    'type_impression'=>'impresion_ficha_estadistica',
+                    'date_impression'=>date('Y-m-d H:i:s'),
+                    'pid_print'=>$uidim,
+                    'perid'=>$perid,
+                    'count_impression'=>1
+                    );
+                $dbimpression->_save($data);            
+                $co=1;                
+            }
             
-            $co=count($dataim);
             $codigo=$co." - ".$uidim;
 
             $header=$this->sesion->org['header_print'];
