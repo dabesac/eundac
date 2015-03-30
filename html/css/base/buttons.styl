@@ -178,6 +178,14 @@ a[disabled]
 		background-color plomoOscuro
 		color white
 
+.button-icon--print
+	color celeste
+	border 2px celeste solid
+
+	&:hover, &:active, &:focus
+		background-color celeste
+		color white
+
 .button--hidden
 	display none
 	
@@ -185,3 +193,39 @@ a[disabled]
 	animation r_s_fadeUp .3s
 	display block
 
+
+// botones con contenido
+.button-state
+	background-color plomo
+	padding 1em
+	border-left 4px plomoTexto solid
+	position relative
+	
+	a, p
+		text-align left
+		display inline-block
+		
+	p
+		color plomoTexto
+		position absolute
+		right 1em
+		top 1em
+		
+	p.active
+		span
+			color verde
+	
+	p.inactive
+		span
+			color rojo
+
+.button-state--blue
+	a
+		color azul
+		
+	a:hover
+		color celeste
+
+
+
+	
