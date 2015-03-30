@@ -204,7 +204,7 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
             $courses_pd = Zend_Json::decode($list);
 
             // Empaquetar cursos
-            if ($courses_pd and $courses_pd['curricula'] != 0) {
+            if ($courses_pd) {
                 $course_condition = 0;
                 $c_semesters = 0;
                 $current_semester = 0;
