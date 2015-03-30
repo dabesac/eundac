@@ -1,342 +1,287 @@
 <link rel="stylesheet" href="/css/homeDocente.css">
 
-<!--Slider de Noticias-->
-
-<div class="sideSlide">
-    <div id="newsSlider" class="slider">
-        <?php $slideActive = 0; ?>
-        <?php foreach ($this->news as $new): ?>
-            <?php if ($slideActive == 0){
-                $classSlide = 'slideActive';
-                $slideActive = 1;
-            } else {
-                $classSlide = '';
-            }?>
-        <div class="slide <?php echo $classSlide ?>">
-            <div class="title">
-                <?php if ($new['type'] == 'NE') {
-                    $icon = 'glyphicon glyphicon-info-sign';
-                }else if ($new['type'] == 'SY') {
-                    $icon = 'glyphicon glyphicon-envelope';
-                }?>
-                <h3 class="text-center"><span class="<?php echo $icon ?>"></span> <?php echo $new['title'] ?></h3>
-            </div>
-            <div class="content">
-                <p><?php echo substr($new['description'], 0, 125) ?>.........
-                    <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link showData">Seguir leyendo</a>
-                    <a newid="<?php echo $new['newid'] ?>" href="##" class="btn btn-link hideData hidden">Leer menos</a>
-                </p>
-            </div>
-        </div>
-        <?php endforeach ?>
-    </div>
-
-    <?php foreach ($this->news as $newData): ?>
-    <div id="data<?php echo $newData['newid'] ?>" class="data" hidden>
-        <div class="newImg">
-            <img src="/img/abstracto.jpg" alt="">
-        </div>
-        <script>
-            /*var newId = "<?php echo $newData['newid'] ?>";
-            var newImg = "<?php echo $newData['img'] ?>";
-            $('#newImg' + newId).css("background-image", "url('/imgsNews/" + newImg + "')");*/
-        </script>
-        <div class="allDescription">
-            <?php if ($newData['type'] == 'NE') {
-                $iconNew = 'info-sign';
-            }else {
-                $iconNew = 'envelope';
-            } ?>
-            <p class="dateDescription"><span class="glyphicon glyphicon-<?php echo $iconNew ?>"></span> Información <date class="text-muted"><?php echo date('d-m-Y', strtotime($newData['created'])) ?></date></p>
-
-            <p class="bodyDescription"><?php echo $newData['description'] ?></p>
-
-            <span class="footDescription text-muted"><span class="glyphicon glyphicon-leaf"></span> Oficina de Informática</span>
-        </div>
-    </div>
-    <?php endforeach ?>
-</div>
-
 <!--Grafica Docentes-->
-<div id="graficaSlide" class="grafica">
-    <div class="titleGrafica">
-        <div class="title">
-            <p>Visualice las Graficas por Curso de las Encuestas Realizadas el Periodo 14A</p>
-        </div>
-
-        <a id="openSlideGrafica" class="graficaBotons" href="##">
-            <span class="glyphicon glyphicon-stats"></span> Visualizar Gráfica
-        </a>
-        <!--<a id="closeSlideGrafica" class="graficaBotons hidden" href="##">
-            <span class="glyphicon glyphicon-stats"></span> Cerrar Gráfica
-        </a>-->
-    </div>
-
-    <div class="allDataGrafica" hidden>
-        <div class="botonsCourses">
-            <a class="classBackGrafica" id="backGrafica" href="##"><span class="glyphicon glyphicon-chevron-left"></span></a>
-            <p id="nameCourse"><?php echo $this->encuestaCoursesName[0] ?></p>
-            <a class="classNextGrafica" id="nextGrafica" href="##"><span class="glyphicon glyphicon-chevron-right"></span></a>
-        </div>
-        <div class="dataPreguntas">
-            <p class="text-muted"><strong>Leyenda de Preguntas de la Encuesta</strong></p>
-            <ol class="text-muted">
-                <?php foreach ($this->pollQuestions as $question): ?>
-                    <li><?php echo $question['question'] ?></li>
-                <?php endforeach ?>
-            </ol>
-        </div>
-        <!--Grafica Docentes-->
-        <script type="text/javascript" src="/js/graphic/docente.js"></script>
-        <script src="/external_library/highcharts/js/highcharts.js"></script>
-        <script src="/external_library/highcharts/modules/exporting.js"></script>
-        <div class="dataGraficas">
-            <?php
-            $active = 0;
-            $c = 0;
-            foreach ($this->coursesBefore as $course): ?>
-                <?php if ($active == 0) {
-                    $classActive = 'activeGrafica';
-                    $active = 1;
-                }else{
-                    $classActive = '';
-                } ?>
-                <span class="hidden" id="dataCourses<?php echo $course['courseid'] ?>"><?php print_r($this->dataEncuesta[$c]) ?></span>
-                <div class="graficaCourse <?php echo $classActive ?>" courseid="<?php echo $course['courseid'] ?>" nameCourse="<?php echo $this->encuestaCoursesName[$c] ?>" id="container_encuesta<?php echo $course['courseid'] ?>" ></div>
-            <?php
-            $c++;
-            endforeach ?>
-        </div>
-    </div>
-</div>
-
-<!--Panel de Avance de Cursos-->
-<div class="avanceCursos">
-    <div class="titleAvanceCursos">
-        <div class="title"><span>Avance de Cursos</span> Periodo <?php echo $this->perid ?></div>
-        <div class="iconAvance"><span class="glyphicon glyphicon-book"></span></div>
-    </div>
-
-    <div class="allCursos">
-    <?php if ($this->courses): ?>
-        <?php $c = 0; ?>
-        <?php foreach ($this->courses as $course): ?>
-            <div class="curso">
-                <p class="nameCurso"><span class="progressIcons" title="<?php echo $this->coursesSpecialityName[$c][0]['name'] ?>"><?php echo ucwords(strtolower($this->coursesName[$c][0]['name'])) ?></span> <small><?php echo $course['courseid'] ?></small></p>
-
-                <!--Silabo-->
-                <?php if ($this->porcentajeSyllabus[$c] == 0){
-                    $color = 'backDanger';
-                    $avisoSilabo = 'Empiece a rellenar su sílabo';
-                }elseif ($this->porcentajeSyllabus[$c] <= 25) {
-                    $color = 'backWarning';
-                    $avisoSilabo = 'Termine de rellenar su sílabo';
-                }elseif ($this->porcentajeSyllabus[$c] <= 99) {
-                    $color = 'backWarning';
-                    $avisoSilabo = 'Ya le falta poco, complete su sílabo';
-                }elseif ($this->porcentajeSyllabus[$c] == 100) {
-                    $color = 'backSuccess';
-                    $avisoSilabo = 'Sílabo completado';
-                }?>
-                <?php
-                $urlSyllabus = 'syllabus/syllabus/index'.   '/courseid/'.base64_encode($course['courseid']).
-                                                            '/curid/'.base64_encode($course['curid']).
-                                                            '/escid/'.base64_encode($course['escid']).
-                                                            '/subid/'.base64_encode($course['subid']).
-                                                            '/turno/'.base64_encode($course['turno']).
-                                                            '/perid/'.base64_encode($course['perid']) ; ?>
-                <a href="<?php echo $urlSyllabus ?>" class="<?php echo $color ?> progressIcons iconosAvance iconoSilabo" title="<?php echo $avisoSilabo ?>">
-                    <span class="glyphicon glyphicon-book"></span>
-                    <small class="<?php echo $color ?>">
-                        <?php echo $this->porcentajeSyllabus[$c] ?> %
-                    </small>
-                </a>
-
-                <!--Progreso de Sesiones-->
-                <?php if ($this->progressSessions[$c]['porcentaje']  == 'FS'){
-                    $classSessions = 'backDanger';
-                    $avisoSessions = 'Primero termine de rellenar su sílabo';
-                    $urlControlActivity = '##';
-                }else{
-                    $classSessions = 'backSuccess';
-                    $avisoSessions = $this->progressSessions[$c]['contents'].' de '.$this->progressSessions[$c]['totalContents'].' sesiones realizadas';
-
-                    $urlControlActivity = '/controlactivity/index/index'.   '/courseid/'.base64_encode($course['courseid']).
-                                                                            '/curid/'.base64_encode($course['curid']).
-                                                                            '/escid/'.base64_encode($course['escid']).
-                                                                            '/subid/'.base64_encode($course['subid']).
-                                                                            '/turno/'.base64_encode($course['turno']).
-                                                                            '/perid/'.base64_encode($course['perid']) ;
-                } ?>
-                <a href="<?php echo $urlControlActivity ?>" class="<?php echo $classSessions ?> progressIcons iconosAvance iconoSesiones" title="<?php echo $avisoSessions ?>">
-                    <span class="glyphicon glyphicon-dashboard"></span>
-                    <small class="<?php echo $classSessions ?>">
-                        <?php echo $this->progressSessions[$c]['porcentaje'] ?>
-                    </small>
-                </a>
-
-                <?php
-                $cualquiera = (isset($this->progressNotas[$c]['porcentaje'])?$this->progressNotas[$c]['porcentaje']:null);
-                if ($cualquiera < 0) {
-                    $faltaSilabo = 'Si';
-                    $avisoNotas = 'Primero rellene su silabo';
-                    $classNotas = 'backDanger';
-                    $progressNotas = "0%";
-                    $urlNotas = '##';
-                }elseif ($cualquiera == 0) {
-                    $faltaSilabo = 'No';
-                    $classNotas = 'backDanger';
-                    $progressNotas = "0%";
-                    $avisoNotas = 'No se lleno ninguna nota aun';
-                }elseif ($cualquiera >= 25 and $cualquiera <= 99) {
-                    $faltaSilabo = 'No';
-                    $classNotas = 'backWarning';
-                    $avisoNotas = 'Se llenaron las notas parcialmente';
-                }elseif ($cualquiera == 100) {
-                    $faltaSilabo = 'No';
-                    $classNotas = 'backSuccess';
-                    $avisoNotas = 'Se llenaron todas las notas';
-                }
-
-
-                if ($faltaSilabo == 'No') {
-                    $urlNotas = '/docente/fillnotes/target'.    '/'.base64_encode('escid').'/'.base64_encode($course['escid']).
-                                                                '/'.base64_encode('subid').'/'.base64_encode($course['subid']).
-                                                                '/'.base64_encode('courseid').'/'.base64_encode($course['courseid']).
-                                                                '/'.base64_encode('turno').'/'.base64_encode($course['turno']).
-                                                                '/'.base64_encode('perid').'/'.base64_encode($course['perid']).
-                                                                '/'.base64_encode('curid').'/'.base64_encode($course['curid']).
-                                                                '/'.base64_encode('state').'/'.base64_encode($this->coursesStateRecord[$c]);
-                }
-                ?>
-
-                <a href="<?php echo $urlNotas ?>" class="<?php echo $classNotas ?> progressIcons iconosAvance iconoNotas" title="<?php echo $avisoNotas ?>"><span class="glyphicon glyphicon-saved"></span>
-                    <small class="<?php echo $classNotas ?>">
-                        <?php echo $progressNotas ?>
-                    </small>
-                </a>
+<section class="container">
+    <div id="graficaSlide" class="grafica">
+        <div class="titleGrafica">
+            <div class="title">
+                <p>Visualice las Graficas por Curso de las Encuestas Realizadas el Periodo 14B</p>
             </div>
-            <?php $c++; ?>
-        <?php endforeach ?>
-        <?php else: ?>
-            <h4 class="text-muted text-center">No tiene cursos en <span class="text-info">este periodo</span></h4>
-        <?php endif ?>
+
+            <a id="openSlideGrafica" class="graficaBotons" href="##">
+                <span class="glyphicon glyphicon-stats"></span> Visualizar Gráfica
+            </a>
+            <!--<a id="closeSlideGrafica" class="graficaBotons hidden" href="##">
+                <span class="glyphicon glyphicon-stats"></span> Cerrar Gráfica
+            </a>-->
+        </div>
+
+        <div class="allDataGrafica" hidden>
+            <div class="botonsCourses">
+                <a class="classBackGrafica" id="backGrafica" href="##"><span class="glyphicon glyphicon-chevron-left"></span></a>
+                <p id="nameCourse"><?php echo $this->encuestaCoursesName[0] ?></p>
+                <a class="classNextGrafica" id="nextGrafica" href="##"><span class="glyphicon glyphicon-chevron-right"></span></a>
+            </div>
+            <div class="dataPreguntas">
+                <p class="text-muted"><strong>Leyenda de Preguntas de la Encuesta</strong></p>
+                <ol class="text-muted">
+                    <?php foreach ($this->pollQuestions as $question): ?>
+                        <li><?php echo $question['question'] ?></li>
+                    <?php endforeach ?>
+                </ol>
+            </div>
+            <!--Grafica Docentes-->
+            <script type="text/javascript" src="/js/graphic/docente.js"></script>
+            <script src="/external_library/highcharts/js/highcharts.js"></script>
+            <script src="/external_library/highcharts/modules/exporting.js"></script>
+            <div class="dataGraficas">
+                <?php
+                $active = 0;
+                $c = 0;
+                foreach ($this->coursesBefore as $course): ?>
+                    <?php if ($active == 0) {
+                        $classActive = 'activeGrafica';
+                        $active = 1;
+                    }else{
+                        $classActive = '';
+                    } ?>
+                    <span class="hidden" id="dataCourses<?php echo $course['courseid'] ?>"><?php print_r($this->dataEncuesta[$c]) ?></span>
+                    <div class="graficaCourse <?php echo $classActive ?>" courseid="<?php echo $course['courseid'] ?>" nameCourse="<?php echo $this->encuestaCoursesName[$c] ?>" id="container_encuesta<?php echo $course['courseid'] ?>" ></div>
+                <?php
+                $c++;
+                endforeach ?>
+            </div>
+        </div>
     </div>
-</div>
 
-<!-- Avance Academico Solo Para Directores-->
-<input id="rid" type="hidden" value="<?php echo $this->rid ?>">
-<div id="avanceDirectores" class="avanceCursos avanceInformeSilabo">
-    <div class="titleAvanceCursos">
-        <div class="title"><span>Avance Académico</span> Periodo <?php echo $this->perid ?></div>
-        <div class="iconAvance"><span class="glyphicon glyphicon-user"></span></div>
+    <!--Panel de Avance de Cursos-->
+    <div class="avanceCursos">
+        <div class="titleAvanceCursos">
+            <div class="title"><span>Avance de Cursos</span> Periodo <?php echo $this->perid ?></div>
+            <div class="iconAvance"><span class="glyphicon glyphicon-book"></span></div>
+        </div>
+
+        <div class="allCursos">
+        <?php if ($this->courses): ?>
+            <?php $c = 0; ?>
+            <?php foreach ($this->courses as $course): ?>
+                <div class="curso">
+                    <p class="nameCurso"><span class="progressIcons" title="<?php echo $this->coursesSpecialityName[$c][0]['name'] ?>"><?php echo ucwords(strtolower($this->coursesName[$c][0]['name'])) ?></span> <small><?php echo $course['courseid'] ?></small></p>
+
+                    <!--Silabo-->
+                    <?php if ($this->porcentajeSyllabus[$c] == 0){
+                        $color = 'backDanger';
+                        $avisoSilabo = 'Empiece a rellenar su sílabo';
+                    }elseif ($this->porcentajeSyllabus[$c] <= 25) {
+                        $color = 'backWarning';
+                        $avisoSilabo = 'Termine de rellenar su sílabo';
+                    }elseif ($this->porcentajeSyllabus[$c] <= 99) {
+                        $color = 'backWarning';
+                        $avisoSilabo = 'Ya le falta poco, complete su sílabo';
+                    }elseif ($this->porcentajeSyllabus[$c] == 100) {
+                        $color = 'backSuccess';
+                        $avisoSilabo = 'Sílabo completado';
+                    }?>
+                    <?php
+                    $urlSyllabus = 'syllabus/syllabus/index'.   '/courseid/'.base64_encode($course['courseid']).
+                                                                '/curid/'.base64_encode($course['curid']).
+                                                                '/escid/'.base64_encode($course['escid']).
+                                                                '/subid/'.base64_encode($course['subid']).
+                                                                '/turno/'.base64_encode($course['turno']).
+                                                                '/perid/'.base64_encode($course['perid']) ; ?>
+                    <a href="<?php echo $urlSyllabus ?>" class="<?php echo $color ?> progressIcons iconosAvance iconoSilabo" title="<?php echo $avisoSilabo ?>">
+                        <span class="glyphicon glyphicon-book"></span>
+                        <small class="<?php echo $color ?>">
+                            <?php echo $this->porcentajeSyllabus[$c] ?> %
+                        </small>
+                    </a>
+
+                    <!--Progreso de Sesiones-->
+                    <?php if ($this->progressSessions[$c]['porcentaje']  == 'FS'){
+                        $classSessions = 'backDanger';
+                        $avisoSessions = 'Primero termine de rellenar su sílabo';
+                        $urlControlActivity = '##';
+                    }else{
+                        $classSessions = 'backSuccess';
+                        $avisoSessions = $this->progressSessions[$c]['contents'].' de '.$this->progressSessions[$c]['totalContents'].' sesiones realizadas';
+
+                        $urlControlActivity = '/controlactivity/index/index'.   '/courseid/'.base64_encode($course['courseid']).
+                                                                                '/curid/'.base64_encode($course['curid']).
+                                                                                '/escid/'.base64_encode($course['escid']).
+                                                                                '/subid/'.base64_encode($course['subid']).
+                                                                                '/turno/'.base64_encode($course['turno']).
+                                                                                '/perid/'.base64_encode($course['perid']) ;
+                    } ?>
+                    <a href="<?php echo $urlControlActivity ?>" class="<?php echo $classSessions ?> progressIcons iconosAvance iconoSesiones" title="<?php echo $avisoSessions ?>">
+                        <span class="glyphicon glyphicon-dashboard"></span>
+                        <small class="<?php echo $classSessions ?>">
+                            <?php echo $this->progressSessions[$c]['porcentaje'] ?>
+                        </small>
+                    </a>
+
+                    <?php
+                    $cualquiera = (isset($this->progressNotas[$c]['porcentaje'])?$this->progressNotas[$c]['porcentaje']:null);
+                    if ($cualquiera < 0) {
+                        $faltaSilabo = 'Si';
+                        $avisoNotas = 'Primero rellene su silabo';
+                        $classNotas = 'backDanger';
+                        $progressNotas = "0%";
+                        $urlNotas = '##';
+                    }elseif ($cualquiera == 0) {
+                        $faltaSilabo = 'No';
+                        $classNotas = 'backDanger';
+                        $progressNotas = "0%";
+                        $avisoNotas = 'No se lleno ninguna nota aun';
+                    }elseif ($cualquiera >= 25 and $cualquiera <= 99) {
+                        $faltaSilabo = 'No';
+                        $classNotas = 'backWarning';
+                        $avisoNotas = 'Se llenaron las notas parcialmente';
+                    }elseif ($cualquiera == 100) {
+                        $faltaSilabo = 'No';
+                        $classNotas = 'backSuccess';
+                        $avisoNotas = 'Se llenaron todas las notas';
+                    }
+
+
+                    if ($faltaSilabo == 'No') {
+                        $urlNotas = '/docente/fillnotes/target'.    '/'.base64_encode('escid').'/'.base64_encode($course['escid']).
+                                                                    '/'.base64_encode('subid').'/'.base64_encode($course['subid']).
+                                                                    '/'.base64_encode('courseid').'/'.base64_encode($course['courseid']).
+                                                                    '/'.base64_encode('turno').'/'.base64_encode($course['turno']).
+                                                                    '/'.base64_encode('perid').'/'.base64_encode($course['perid']).
+                                                                    '/'.base64_encode('curid').'/'.base64_encode($course['curid']).
+                                                                    '/'.base64_encode('state').'/'.base64_encode($this->coursesStateRecord[$c]);
+                    }
+                    ?>
+
+                    <a href="<?php echo $urlNotas ?>" class="<?php echo $classNotas ?> progressIcons iconosAvance iconoNotas" title="<?php echo $avisoNotas ?>"><span class="glyphicon glyphicon-saved"></span>
+                        <small class="<?php echo $classNotas ?>">
+                            <?php echo $progressNotas ?>
+                        </small>
+                    </a>
+                </div>
+                <?php $c++; ?>
+            <?php endforeach ?>
+            <?php else: ?>
+                <h4 class="text-muted text-center">No tiene cursos en <span class="text-info">este periodo</span></h4>
+            <?php endif ?>
+        </div>
     </div>
 
-    <div class="allCursos">
-        <?php if ($this->totalTeachers != 0): ?>
-            <div class="informacionDirector">
-                <div class="infoPerData">
-                    <div class="infoPerData_header">
-                        <div id="showEmptySyllabus" class="progressIcons" title="<?php echo $this->emptySyllabus ?> Docentes aún Faltan Completar sus Sílabos">
-                            <?php if ($this->totalEmptySyllabus == $this->totalTeachers) {
-                                $classSilabo = 'backSuccess';
-                            }else {
-                                $classSilabo = 'backDanger';
-                            }?>
+    <!-- Avance Academico Solo Para Directores-->
+    <input id="rid" type="hidden" value="<?php echo $this->rid ?>">
+    <div id="avanceDirectores" class="avanceCursos avanceInformeSilabo">
+        <div class="titleAvanceCursos">
+            <div class="title"><span>Avance Académico</span> Periodo <?php echo $this->perid ?></div>
+            <div class="iconAvance"><span class="glyphicon glyphicon-user"></span></div>
+        </div>
 
-                            <p class="nameCurso">Sílabo</p>
+        <div class="allCursos">
+            <?php if ($this->totalTeachers != 0): ?>
+                <div class="informacionDirector">
+                    <div class="infoPerData">
+                        <div class="infoPerData_header">
+                            <div id="showEmptySyllabus" class="progressIcons" title="<?php echo $this->emptySyllabus ?> Docentes aún Faltan Completar sus Sílabos">
+                                <?php if ($this->totalEmptySyllabus == $this->totalTeachers) {
+                                    $classSilabo = 'backSuccess';
+                                }else {
+                                    $classSilabo = 'backDanger';
+                                }?>
 
-                            <strong class="cantDocentes iconoNotas <?php echo $classSilabo ?> " ><?php echo $this->totalEmptySyllabus.'/'.$this->totalTeachers ?></strong>
-                        </div>
-                    </div>
+                                <p class="nameCurso">Sílabo</p>
 
-                    <div id="listEmptySyllabus" class="dataSliderAvance">
-                        <?php if ($this->totalEmptySyllabus == $this->totalTeachers): ?>
-                            <p class="titleSuccess"><span class="glyphicon glyphicon-ok-circle"></span> Todos los docentes completaron su sílabo.</p>
-                        <?php else: ?>
-                            <p class="title"><span class="glyphicon glyphicon-exclamation-sign"></span> Falta Sílabo
-                                <?php if ($this->emptySyllabus >= 5): ?>
-                                    <span class=""> - Algunos de los docentes son:</span>
-                                <?php endif ?>
-                            </p>
-                        <?php endif ?>
-                        <?php
-                        $maxProfes = 0;
-                        foreach ($this->teachersEmptySyllabus as $teacher): ?>
-                            <div class="docente">
-                                <div class="docenteName">
-                                    <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
-                                </div>
-                                <div class="docenteCursos">
-                                    <?php $coursesEmpty = 0; ?>
-                                    <?php foreach ($this->coursesEmptySyllabus as $course): ?>
-                                        <?php $cualquieraDos = (isset($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty])?$this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]: null) ?>
-                                        <?php if ($cualquieraDos): ?>
-                                            <p>
-                                                <small><span class="glyphicon glyphicon-book text-muted"></span></small>
-                                                <?php echo ucwords(strtolower($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'])) ?>
-                                                <small class="text-muted">turno <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['turno'] ?></small>
-                                            </p>
-                                        <?php endif ?>
-                                        <?php $coursesEmpty++; ?>
-                                    <?php endforeach ?>
-                                </div>
+                                <strong class="cantDocentes iconoNotas <?php echo $classSilabo ?> " ><?php echo $this->totalEmptySyllabus.'/'.$this->totalTeachers ?></strong>
                             </div>
-                        <?php
-                            $maxProfes++;
-                            if ($maxProfes == 4) {
-                                break;
-                            }
-                        endforeach ?>
-                    </div>
-                </div>
-            </div>
+                        </div>
 
-            <div class="informacionDirector">
-                <div class="infoPerData">
-                    <div class="infoPerData_header">
-                        <div id="showEmptyReport" class="progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar su Informe Académico">
-                            <?php if ($this->totalEmptyReport == $this->totalTeachers){
-                                $classReport = 'backSuccess';
-                            }else{
-                                $classReport = 'backDanger';
-                            }?>
-                            <p class="nameCurso">Informe Académico</p>
-
-                            <strong class="cantDocentes iconoNotas <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong>
+                        <div id="listEmptySyllabus" class="dataSliderAvance">
+                            <?php if ($this->totalEmptySyllabus == $this->totalTeachers): ?>
+                                <p class="titleSuccess"><span class="glyphicon glyphicon-ok-circle"></span> Todos los docentes completaron su sílabo.</p>
+                            <?php else: ?>
+                                <p class="title"><span class="glyphicon glyphicon-exclamation-sign"></span> Falta Sílabo
+                                    <?php if ($this->emptySyllabus >= 5): ?>
+                                        <span class=""> - Algunos de los docentes son:</span>
+                                    <?php endif ?>
+                                </p>
+                            <?php endif ?>
+                            <?php
+                            $maxProfes = 0;
+                            foreach ($this->teachersEmptySyllabus as $teacher): ?>
+                                <div class="docente">
+                                    <div class="docenteName">
+                                        <p><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
+                                    </div>
+                                    <div class="docenteCursos">
+                                        <?php $coursesEmpty = 0; ?>
+                                        <?php foreach ($this->coursesEmptySyllabus as $course): ?>
+                                            <?php $cualquieraDos = (isset($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty])?$this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]: null) ?>
+                                            <?php if ($cualquieraDos): ?>
+                                                <p>
+                                                    <small><span class="glyphicon glyphicon-book text-muted"></span></small>
+                                                    <?php echo ucwords(strtolower($this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['name'])) ?>
+                                                    <small class="text-muted">turno <?php echo $this->coursesEmptySyllabus[$teacher['uid']][$coursesEmpty]['turno'] ?></small>
+                                                </p>
+                                            <?php endif ?>
+                                            <?php $coursesEmpty++; ?>
+                                        <?php endforeach ?>
+                                    </div>
+                                </div>
+                            <?php
+                                $maxProfes++;
+                                if ($maxProfes == 4) {
+                                    break;
+                                }
+                            endforeach ?>
                         </div>
                     </div>
+                </div>
 
-                    <div id="listEmptyReport" class="dataSliderAvance">
-                        <?php if ($this->totalEmptyReport == $this->totalTeachers): ?>
-                            <p class="titleSuccess"><span class="glyphicon glyphicon-ok-circle"></span> Todos los docentes completaron su informe.</p>
-                        <?php else: ?>
-                            <p class="title titleInforme"><span class="glyphicon glyphicon-exclamation-sign"></span> Falta Informe Académico
-                                <?php if ($this->emptyReport >= 10): ?>
-                                    <span class=""> - Algunos de los docentes son:</span>
-                                <?php endif ?>
-                            </p>
-                        <?php endif ?>
-                        <?php
-                        $maxProfes = 0;
-                        foreach ($this->teachersEmptyReport as $teacher): ?>
-                            <p class="docenteInforme"><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
-                        <?php
-                            $maxProfes++;
-                            if ($maxProfes == 10) {
-                                break;
-                            }
-                        endforeach ?>
+                <div class="informacionDirector">
+                    <div class="infoPerData">
+                        <div class="infoPerData_header">
+                            <div id="showEmptyReport" class="progressIcons" title="<?php echo $this->emptyReport ?> Docentes aún Faltan Completar su Informe Académico">
+                                <?php if ($this->totalEmptyReport == $this->totalTeachers){
+                                    $classReport = 'backSuccess';
+                                }else{
+                                    $classReport = 'backDanger';
+                                }?>
+                                <p class="nameCurso">Informe Académico</p>
+
+                                <strong class="cantDocentes iconoNotas <?php echo $classReport ?>"><?php echo $this->totalEmptyReport.'/'.$this->totalTeachers ?></strong>
+                            </div>
+                        </div>
+
+                        <div id="listEmptyReport" class="dataSliderAvance">
+                            <?php if ($this->totalEmptyReport == $this->totalTeachers): ?>
+                                <p class="titleSuccess"><span class="glyphicon glyphicon-ok-circle"></span> Todos los docentes completaron su informe.</p>
+                            <?php else: ?>
+                                <p class="title titleInforme"><span class="glyphicon glyphicon-exclamation-sign"></span> Falta Informe Académico
+                                    <?php if ($this->emptyReport >= 10): ?>
+                                        <span class=""> - Algunos de los docentes son:</span>
+                                    <?php endif ?>
+                                </p>
+                            <?php endif ?>
+                            <?php
+                            $maxProfes = 0;
+                            foreach ($this->teachersEmptyReport as $teacher): ?>
+                                <p class="docenteInforme"><small class="text-muted"><span class="glyphicon glyphicon-user"></span></small> <?php echo $teacher['name'] ?></p>
+                            <?php
+                                $maxProfes++;
+                                if ($maxProfes == 10) {
+                                    break;
+                                }
+                            endforeach ?>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        <?php else: ?>
-            <h4 class="text-muted text-center">No hay avance que mostrar para <span class="text-info">este periodo</span></h4>
-        <?php endif ?>
-        <br>
+            <?php else: ?>
+                <h4 class="text-muted text-center">No hay avance que mostrar para <span class="text-info">este periodo</span></h4>
+            <?php endif ?>
+            <br>
+        </div>
     </div>
-</div>
+</section>
 
 
 <script type="text/javascript">

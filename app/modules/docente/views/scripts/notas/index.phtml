@@ -2,6 +2,8 @@
 
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-book"></span> Asignaturas a Cargo');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/docente" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
+<section class="container">
+    
 <div class="miscursos_header">
     <p class="hObO miscursos_headerNamePeriod">Periodo <?php echo $this->perid ?></p>
     <p class="hObO miscursos_headerParrafo text-muted"><span class="glyphicon glyphicon-info-sign"></span> Puede filtrar cursos de otros periodos:</p>
@@ -19,6 +21,7 @@
 </div>
 
 <hr>
+
 
 
 <?php
@@ -296,10 +299,12 @@ if ($this->faculty){
         </div><!--/.modal-content-->
     </div><!--/.modal-dialog-->
 </div><!-- /.modal-->
+</section>
 
 <div class="modal fade" id="modal-persentage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
 </div><!--/.modal -->
+
 <script>
 
     $('.btnMyHorary').click(function(){

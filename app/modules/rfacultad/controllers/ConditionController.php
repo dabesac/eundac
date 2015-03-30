@@ -96,7 +96,7 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
             $where['uid']=$code;
 
 
-           $bdu = new Api_Model_DbTable_Condition();        
+           $bdu = new Api_Model_DbTable_Conditionstudent();        
             if ($cond=='C')
             {
                 $str = " and (p.last_name0 like '%$ap%' and p.last_name1 like '%$am%' and ca.uid like '$code%' and upper(p.first_name) like '%$name%' )";            
@@ -141,7 +141,68 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
             $this->view->uid=$uid; 
             $this->view->pid=$pid; 
 
-            if ($this->getRequest()->isPost())
+            $where_person = array('eid'=>$eid, 'pid' => $pid);
+            $persondb = new Api_Model_DbTable_Person();
+            $data_person = $persondb->_getOne($where_person);
+            $this->view->data_person=$data_person;
+
+            $where['eid']=$this->sesion->eid;
+            $where['oid']=$this->sesion->oid;
+            $where['uid']=$uid;
+            $where['perid']=$perid; 
+            $where['escid']=$escid; 
+            $where['pid']=$pid;
+            $where['subid']=$subid;
+            $dbcurricula=new Api_Model_DbTable_Studentxcurricula();
+            $datcur=$dbcurricula->_getOne($where);
+            $where['curid']=$datcur['curid'];
+            $this->view->curid=$where['curid'];
+
+            $request = array( 'uid'   => base64_encode($where['uid']), 
+                              'pid'   => base64_encode($where['pid']), 
+                              'escid' => base64_encode($where['escid']),
+                              'subid' => base64_encode($where['subid']),
+                              'eid'   => base64_encode($where['eid']),
+                              'oid'   => base64_encode($where['oid']),
+                              'perid' => base64_encode($where['perid']),
+                              'curid' => base64_encode($where['curid'] ) );
+
+            $server = new Eundac_Connect_Api('delete_course', $request);
+            $data = $server->connectAuth();
+            $this->view->cursos = $data;
+
+            $conditiondb = new Api_Model_DbTable_Conditionstudent();
+            $where_condition = array(
+                                    'eid' => $where['eid'],
+                                    'oid' => $where['oid'],
+                                    'uid' => $where['uid'],
+                                    'pid' => $where['pid'],
+                                    'escid' => $where['escid'],
+                                    'subid' => $where['subid'],
+                                    'perid' => $where['perid']);
+            $attrib = null;
+            $order = null;
+            $condition_student = $conditiondb->_getFilter($where_condition, $attrib, $order);
+            $cursodb = new Api_Model_DbTable_Course();
+            /*  $i=0;
+            foreach ($condition_student as $conditions) {
+                if($conditions['courseid']){
+                    $wherecurse = array(
+                                        'eid' => $where['eid'],
+                                        'oid' => $where['oid'],
+                                        'curid' => $where['curid'],
+                                        'escid' => $where['escid'],
+                                        'subid' => $where['subid'],
+                                        'courseid' => $conditions['courseid']);
+                    $datacourse[$i] =$cursodb->_getOne($wherecurse);
+
+                }
+                $i++;
+            }*/
+            $this->view->conditionsStudent = $condition_student;
+            //$this->view->datacourse =$datacourse;
+
+            /*if ($this->getRequest()->isPost())
             {
                 $formData = $this->getRequest()->getPost(); 
                 $condi = $formData['condi'];
@@ -167,7 +228,7 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                         $Data['cnid']=$dato['cnid'];
                         $Data['eid']=$eid;
                         $Data['oid']=$oid;
-                        $Data['escid']=$dato['escid'];
+                        $Data['escid']=$dato['escid'];  
                         $Data['subid']=$dato['subid'];
                         $Data['perid']=$dato['perid'];;
                         $Data['uid']=$dato['uid'];
@@ -199,7 +260,7 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                     $this->view->datos=$datos;
                 }
             }
-            $this->view->form=$form;
+            $this->view->form=$form;*/
         }
         catch(Exception $ex )
         {
@@ -207,6 +268,110 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
         } 
     }
 
+    public function guardarAction(){
+        try{
+            $this->_helper->getHelper('layout')->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $uidreg = $this->sesion->uid;
+            $conditiondb = new Api_Model_DbTable_Conditionstudent();
+            if ($this->getRequest()->isPost()){
+                $formData = $this->getRequest()->getPost(); 
+                
+                if($formData['curso']!= 'ns'){
+                    $data = array(
+                            'eid'       => $eid,
+                            'oid'       => $oid,
+                            'uid'       => $formData['uid'],
+                            'pid'       => $formData['pid'],
+                            'escid'     => $formData['escid'],
+                            'subid'     => $formData['subid'],
+                            'perid'     => $formData['perid'],
+                            'type'      => 'CO',
+                            'courseid'  => base64_decode($formData['curso']),
+                            'curid'     => $formData['curid'],
+                            'createduid' => $uidreg,
+                            'doc_authorize' => $formData['resolution'],
+                            'comments' => $formData['comments']);
+                    $savedata = $conditiondb->_save($data);
+                }
+                if($formData['dcurso']!= 'ns'){
+                    $data = array(
+                            'eid'       => $eid,
+                            'oid'       => $oid,
+                            'uid'       => $formData['uid'],
+                            'pid'       => $formData['pid'],
+                            'escid'     => $formData['escid'],
+                            'subid'     => $formData['subid'],
+                            'perid'     => $formData['perid'],
+                            'type'      => 'LE',
+                            'courseid'  => base64_decode($formData['dcurso']),
+                            'curid'     => $formData['curid'],
+                            'createduid' => $uidreg,
+                            'doc_authorize' => $formData['resolution'],
+                            'comments' => $formData['comments']);
+                    $savedata = $conditiondb->_save($data);
+                }
+                if($formData['credit']!= '0'){
+                    $data = array(
+                            'eid'       => $eid,
+                            'oid'       => $oid,
+                            'uid'       => $formData['uid'],
+                            'pid'       => $formData['pid'],
+                            'escid'     => $formData['escid'],
+                            'subid'     => $formData['subid'],
+                            'perid'     => $formData['perid'],
+                            'type'      => 'CR',
+                            'amount'  => $formData['credit'],
+                            'createduid' => $uidreg,
+                            'doc_authorize' => $formData['resolution'],
+                            'comments' => $formData['comments']);
+                    $savedata = $conditiondb->_save($data);
+                }
+                if($formData['nsem']!= '0'){
+                    $data = array(
+                            'eid'       => $eid,
+                            'oid'       => $oid,
+                            'uid'       => $formData['uid'],
+                            'pid'       => $formData['pid'],
+                            'escid'     => $formData['escid'],
+                            'subid'     => $formData['subid'],
+                            'perid'     => $formData['perid'],
+                            'type'      => 'SE',
+                            'amount'  => $formData['nsem'],
+                            'createduid' => $uidreg,
+                            'doc_authorize' => $formData['resolution'],
+                            'comments' => $formData['comments']);
+                    $savedata = $conditiondb->_save($data);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+                }
+            $where_condition = array(
+                                    'eid' => $eid,
+                                    'oid' => $oid,
+                                    'uid' => $formData['uid'],
+                                    'pid' => $formData['pid'],
+                                    'escid' => $formData['escid'],
+                                    'subid' => $formData['subid'],
+                                    'perid' => $formData['perid']);
+            $attrib = null;
+            $order = null;
+            $condition_student = $conditiondb->_getFilter($where_condition, $attrib, $order);
+            $cursodb = new Api_Model_DbTable_Course();
+            $i=0;
+            $datacurso=null;
+            foreach ($condition_student as $data) {
+                if($data['courseid']){
+                    $wherecourse=array('eid'=>$eid,'oid'=>$oid,'courseid'=>$data['courseid'],'curid'=>$formData['curid'],'escid'=>$formData['escid'],'subid'=>$formData['subid']);
+                    $datacurso[$i]= $cursodb->_getOne($wherecourse);
+                }
+                $i++;
+            }
+            $this->view->conditionsStudent = $condition_student;
+            $this->view->datacurso=$datacurso;
+            }
+        } catch(Exeption $e){
+            print("Error al Guardar datos: ").$e->getMessage();
+        }
+    }
 
    public function listcourseAction()
       {
@@ -253,24 +418,21 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
           public function deleteAction()
       {
         try{
-                        $this->_helper->getHelper('layout')->disableLayout();
-                        $where['eid']=$this->sesion->eid;
-                        $where['oid']=$this->sesion->oid;
-                        $where['uid']=$this->_getParam("uid");
-                        $where['perid']=$this->_getParam("perid");
-                        $where['escid']=$this->_getParam("escid");
-                        $where['cnid']=$this->_getParam("cnid");
-                        $where['pid']=$this->_getParam("pid");
-                        $where['subid']=$this->_getParam("subid");
-                        $condicion = new Api_Model_DbTable_Studentcondition();
-                        $condi= new Api_Model_DbTable_Condition();
-                        $condicion->_delete($where);
-                        $condi->_delete($where);
-                        if ($condi && $condicion) { ?>
-                               <script type="text/javascript">
-                            window.location.reload();
-                               </script>
-                         <?php }
+            $this->_helper->getHelper('layout')->disableLayout();
+            $where['eid']=$this->sesion->eid;
+            $where['oid']=$this->sesion->oid;
+            if ($this->getRequest()->isPost()){
+                $formData = $this->getRequest()->getPost();
+                $where['uid']=$formData["uid"];
+                $where['perid']=$formData["perid"];
+                $where['escid']=$formData["escid"];
+                $where['pid']=$formData["pid"];
+                $where['subid']=$formData["subid"];
+                $where['type']=$formData["type"];
+                $condiciondb = new Api_Model_DbTable_Conditionstudent();
+                $condiciondb->_delete($where);
+            }
+                    
           }   
                   
          catch (Exception $ex)

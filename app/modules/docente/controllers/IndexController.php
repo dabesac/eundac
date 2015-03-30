@@ -267,12 +267,13 @@ class Docente_IndexController extends Zend_Controller_Action {
                     if ($course['uid'] != $teacherUid) {
                         $teacherUid = $course['uid'];
 
-                        $where = array( 'eid' => $eid,
-                                        'oid' => $oid,
+                        $where = array( 
+                                        'eid'   => $eid,
+                                        'oid'   => $oid,
                                         'subid' => $course['subid'],
                                         'escid' => $course['escid'],
-                                        'uid' => $course['uid'],
-                                        'pid' => $course['pid'],
+                                        'uid'   => $course['uid'],
+                                        'pid'   => $course['pid'],
                                         'perid' => $perid );
 
                         $attrib = array('state');

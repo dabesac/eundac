@@ -51,7 +51,17 @@
             <div id="slideUpLayout<?php echo $cF ?>" class="desplegableLayout">
                 <ul>
                     <?php foreach ($value['link'] as $value_1) {?>
-                        <li><a href="/<?php echo $value_1['module']?>/<?php echo $value_1['controller']?>/<?php echo $value_1['action']?>" title=""><?php echo strtoupper($value_1['name'])?></a></li>
+                        <?php 
+                        $controller = '';
+                        if ($value_1['controller'] and $value_1['controller'] != 'index'):
+                            $controller = '/'.$value_1['controller'];
+                        endif ?>
+                         <?php 
+                        $action = '';
+                        if ($value_1['action'] and $value_1['action'] != 'index'):
+                            $action = '/'.$value_1['action'];
+                        endif ?>
+                        <li><a href="/<?php echo $value_1['module']?><?php echo $controller ?><?php echo $action?>" title=""><?php echo strtoupper($value_1['name'])?></a></li>
                     <?php }?>
                 </ul>
             </div>

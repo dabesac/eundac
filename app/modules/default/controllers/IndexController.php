@@ -38,6 +38,7 @@ class IndexController extends Zend_Controller_Action {
     			$authAdapter->setIdentity($cod)->setCredential($pass);
     			$auth = Zend_Auth::getInstance();
     			$result = $auth->authenticate($authAdapter);
+
     			if ($result->isValid()) {
     				$per = new Api_Model_DbTable_Periods();
     				$t = $per->_getPeriodsNext(array("eid"=> $eid, "oid"=>$oid));
@@ -103,7 +104,18 @@ class IndexController extends Zend_Controller_Action {
                             $data->speciality->name=$esc['name'];
                         }
                     }
-                    //Verificar Si Lleno su perfil
+
+                    //curricula de alumno y egresado
+                    if ($rid == 'AL' or $rid == 'EG') {
+                        $curriculumStudentDb = new Api_Model_DbTable_Studentxcurricula();
+                        $where = array(
+                                        'eid' => $eid,
+                                        'oid' => $oid,
+                                        'uid' => $uid );
+                        $curriculum_pd = $curriculumStudentDb->_getFilter($where);
+                        $data->curid = $curriculum_pd[0]['curid'];
+                    }
+                    /* //Verificar Si Lleno su perfil
                     $realtionshipDb = new Api_Model_DbTable_Relationship();
                     $academicDb     = new Api_Model_DbTable_Academicrecord();
                     $statisticDb    = new Api_Model_DbTable_Statistics();
@@ -156,9 +168,9 @@ class IndexController extends Zend_Controller_Action {
 
                     //Verificar si hay encuesta activa
                     $data->encuesta->existeEncuesta  = 'No';
-                    $data->encuesta->rellenoEncuesta = '-';
+                    $data->encuesta->rellenoEncuesta = '-';*/
 
-                    if ($rid == 'AL') {
+                    /*if ($rid == 'AL') {
                         $pollDb         = new Api_Model_DbTable_Poll();
                         $pollQuestionDb = new Api_Model_DbTable_PollQuestion();
                         $pollResultsDb  = new Api_Model_DbTable_PollResults();
@@ -209,10 +221,10 @@ class IndexController extends Zend_Controller_Action {
                                 }
                             }
                         }
-                    }
+                    }*/
 
                     //Insertar pago y Matricula Para Cachimbos
-                    $paymentDb = new Api_Model_DbTable_Payments();
+                    /*$paymentDb = new Api_Model_DbTable_Payments();
 
                     $cachimbo = substr($uid, 0, 2);
                     if ($cachimbo == '15') {
@@ -239,7 +251,7 @@ class IndexController extends Zend_Controller_Action {
                                                     'register' => $data->uid );
                             $paymentDb->_save($dataPayment);
                         }
-                    }
+                    }*/
 
                     // Set info User
                     $user = new Api_Model_DbTable_Users();

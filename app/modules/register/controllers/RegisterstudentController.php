@@ -102,7 +102,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $teachersDb       = new Api_Model_DbTable_Coursexteacher();
             $paymentDb        = new Api_Model_DbTable_Payments();
             $paymentsDetailDb = new Api_Model_DbTable_PaymentsDetail();
-            $conditionDb      = new Api_Model_DbTable_Condition();
+            $conditionDb      = new Api_Model_DbTable_Conditionstudent();
             $bankReceiptsDb   = new Api_Model_DbTable_Bankreceipts();
             $rateDb           = new Api_Model_DbTable_Rates();
             //________________________________________________________________

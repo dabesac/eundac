@@ -1,23 +1,26 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-th-list"></span> RECORD DE NOTAS');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/index" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
-<form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/report/recordnotas/getstudentuid/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
-    <!-- <table class="table span9 table-striped table-bordered table-condensed">
-        <tr>
-            <td colspan="2"><center><h3>Impresion de Record Notas </h3></center></td>
-        </tr>
-    </table> -->
-    <table class="table span9 table-striped table-bordered table-condensed">
-        <tr>
-            <td><center>Codigo del Alumno</center></td>
-            <td><center>Nombres y Apellidos</center></td>
-        </tr>
-        <tr>                    
-            <td><center><div style='width: 200px'><?php echo $this->fm->uid ?></center></td>
-            <td><center><div style='width: 400px'><?php echo $this->fm->last_name0 ?></center></td>
-        </tr>
-    </table>
-</form>
-<div  id="cargadatos_"></div> 
+<section class="container">
+    
+    <form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/report/recordnotas/getstudentuid/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
+        <!-- <table class="table span9 table-striped table-bordered table-condensed">
+            <tr>
+                <td colspan="2"><center><h3>Impresion de Record Notas </h3></center></td>
+            </tr>
+        </table> -->
+        <table class="table span9 table-striped table-bordered table-condensed">
+            <tr>
+                <td><center>Codigo del Alumno</center></td>
+                <td><center>Nombres y Apellidos</center></td>
+            </tr>
+            <tr>                    
+                <td><center><div style='width: 200px'><?php echo $this->fm->uid ?></center></td>
+                <td><center><div style='width: 400px'><?php echo $this->fm->last_name0 ?></center></td>
+            </tr>
+        </table>
+    </form>
+    <div  id="cargadatos_"></div> 
+</section>
 <script>
     $("#last_name0, #uid").keypress(function (e) {
         if(e == 13 || e.which==13 || e.which==0){

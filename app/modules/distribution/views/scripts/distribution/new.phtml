@@ -4,63 +4,64 @@
 	');
 
 ?>
+<section class="container">
+	<!--Mensajes -->
+	<div class="row">
+		<div class="col-md-2 col-md-offset-8">
+			<a href="##" id="save" class="btn btn-success form-control" style="border-radius:0;">Guardar</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<hr>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="col-md-8 col-md-offset-2">
+			<div id="exist" class="hide alert alert-danger ">
+				<button type="button" class="close">&times;</button>
+				<strong>Error!</strong> Ya existe una Distribucion para este Periodo....
+			</div>
+			<div id="missing" class="alert alert-warning hide">
+				<button type="button" class="close">&times;</button>
+				<strong>Falta Datos!</strong> Le falta rellenar algunos datos....
+			</div>
+		</div>
+	</div>
 
-<!--Mensajes -->
-<div class="row">
-	<div class="col-md-2 col-md-offset-8">
-		<a href="##" id="save" class="btn btn-success form-control" style="border-radius:0;">Guardar</a>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-8 col-md-offset-2">
-		<hr>
-	</div>
-</div>
-<div class="row-fluid">
-	<div class="col-md-8 col-md-offset-2">
-		<div id="exist" class="hide alert alert-danger ">
-			<button type="button" class="close">&times;</button>
-			<strong>Error!</strong> Ya existe una Distribucion para este Periodo....
-		</div>
-		<div id="missing" class="alert alert-warning hide">
-			<button type="button" class="close">&times;</button>
-			<strong>Falta Datos!</strong> Le falta rellenar algunos datos....
-		</div>
-	</div>
-</div>
+	<form action="" id="form">
 
-<form action="" id="form">
-
-<div class="row">
-	<div class="col-md-8 col-md-offset-2 panel panel-default">
-		<div class="col-md-5">
-			<!-- <h4><br></h4> -->
-			<h5 class="text-muted">Codigo</h5>
-			<?php echo $this->form->number ?>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2 panel panel-default">
+			<div class="col-md-5">
+				<!-- <h4><br></h4> -->
+				<h5 class="text-muted">Codigo</h5>
+				<?php echo $this->form->number ?>
+			</div>
+			<div class="col-md-7">
+				<h5 class="text-muted">Periodo</h5>
+				<?php echo $this->form->perid ?>
+				<!--<div class="row">
+					<div class="col-md-6">
+						<h5 class="text-muted">Fecha de Presentación</h5>
+						<?php echo $this->form->datepress ?>
+					</div>
+					<div class="col-md-6">
+						<h5 class="text-muted">Estado</h5>
+						<?php echo $this->form->state ?>
+					</div>
+				</div> -->
+				<br>
+			</div>
 		</div>
-		<div class="col-md-7">
-			<h5 class="text-muted">Periodo</h5>
-			<?php echo $this->form->perid ?>
-			<!--<div class="row">
-				<div class="col-md-6">
-					<h5 class="text-muted">Fecha de Presentación</h5>
-					<?php echo $this->form->datepress ?>
-				</div>
-				<div class="col-md-6">
-					<h5 class="text-muted">Estado</h5>
-					<?php echo $this->form->state ?>
-				</div>
-			</div> -->
-			<br>
-		</div>
-	</div>
-</div>	
-<input type="hidden" name="whySubmit" value="save">
-<input type="hidden" name="datepress" value="<?php echo date('Y-m-d')?>">
-<input type="hidden" name="state" value="B">
-	
-</form>
-<input id="time" type="hidden" value="<?php echo time() ?>">
+	</div>	
+	<input type="hidden" name="whySubmit" value="save">
+	<input type="hidden" name="datepress" value="<?php echo date('Y-m-d')?>">
+	<input type="hidden" name="state" value="B">
+		
+	</form>
+	<input id="time" type="hidden" value="<?php echo time() ?>">
+</section>
 <script>
 	$("#datepress").datepicker();
 	$('#perid').change(function(){

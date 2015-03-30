@@ -42,6 +42,8 @@ $dataVista = $this->dataVista;
 <input type="hidden" id="escid" value="<?php echo $dataVista['dataEscid'] ?>">
 <input type="hidden" id="periodCurrent" value="<?php echo ($dataVista['period']) ?>">
 
+<section class="container">
+	
 <div class="row">
 <div class="col-md-2">
 		<p class=""><span class="glyphicon glyphicon-info-sign"></span> Seleccione Año y periodo	:</p>
@@ -227,6 +229,7 @@ $dataVista = $this->dataVista;
 <div id="report">
 </div>
 <div id="reporte" class="row"></div>
+</section>
 <script>
 $(function(){
 	var rid       = $('#rol').val();

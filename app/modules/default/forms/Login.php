@@ -55,7 +55,7 @@ class Default_Form_Login extends Zend_Form
         $usuario->setRequired(true)->addErrorMessage('Este campo es requerido');
         $usuario->setAttrib("title","Código de Matricula o DNI ");
         $usuario->removeDecorator('Label');
-        $usuario->setAttrib("class","form-control");
+        $usuario->setAttrib("class","form-control  user-code");
         $usuario->setAttrib("maxlength","10");
         $usuario->removeDecorator('HtmlTag');        
 		$usuario->setAttrib("rel","tooltip");
@@ -73,7 +73,7 @@ class Default_Form_Login extends Zend_Form
         $clave->removeDecorator('Label')->addFilters(array('StringTrim', 'StripTags'));
         
         $submit = new Zend_Form_Element_Submit('enviar');
-        $submit->setAttrib('class', 'form-control sendForm')->setLabel("Ingresar");
+        $submit->setAttrib('class', 'button button--alter button--alter--blue')->setLabel("Ingresar");
 		$submit->setAttrib('id', 'enviarf');
         $submit->removeDecorator('HtmlTag');
 

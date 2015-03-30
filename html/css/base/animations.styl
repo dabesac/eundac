@@ -1,3 +1,20 @@
+@keyframes displayUl
+	from
+		top 115%
+		opacity 0
+	to
+		top 100%
+		opacity 1
+
+@keyframes hiddenUl
+	from
+		top 100%
+		opacity
+	to
+		top 115%
+		opacity 0
+
+
 @keyframes menuAnimation
 	from
 		opacity 0
@@ -20,4 +37,50 @@
 	to
 		opacity 0
 		top 20px
+
+@keyframes content_show
+	from
+		margin-top 20px
+		opacity 0
+	to
+		margin-top 0
+		opacity 1
+
+@keyframes content_hide
+	from
+		margin-top 0
+		opacity 1
+	to
+		margin-top 20px
+		opacity 0
+
+
+
+@keyframes fadeUp
+	from
+		opacity 0
+	to
+		opacity 1
+		
+@keyframes fadeOut
+	from
+		opacity 1
+	to
+		opacity 0
+
+
+@keyframes message_appear
+	0%
+		opacity 0
+		top 20px
+	3%
+		opacity 1
+		top 0
+	97%
+		opacity 1
+		top 0
+	100%
+		opacity 0
+		top 20px
+		
 		

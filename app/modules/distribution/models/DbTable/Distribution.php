@@ -58,6 +58,20 @@ class Distribution_Model_DbTable_Distribution extends Zend_Db_Table_Abstract
 			print "Error: Get Info Distribution ".$ex->getMessage();
 		}
 	}
+
+	public function _getOneDist($pk=null)
+	{
+		try{
+			if (!$pk['eid'] ||  !$pk['oid'] || !$pk['escid'] || !$pk['subid'] || !$pk['perid']) return false;
+			$where = "eid = '".$pk['eid']."' and oid='".$pk['oid']."' and escid='".$pk['escid']."'
+					 and subid='".$pk['subid']."' and perid='".$pk['perid']."'";
+			$row = $this->fetchRow($where);
+			if ($row) return $row->toArray();
+			return false;
+		}catch (Exception $ex){
+			print "Error: Get Info Distribution ".$ex->getMessage();
+		}
+	}
 	
 	public function _getAll($pk=null)
 	{

@@ -1,41 +1,44 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-picture"></span> Logo de la Escuela');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/docente/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
 
-<form action="/docente/logoheader/index" method="post" enctype="multipart/form-data">
-	<div class='row text-center col-md-4 col-md-offset-4 panel panel-primary'>
+<section class="container">
+	
+	<form action="/docente/logoheader/index" method="post" enctype="multipart/form-data">
+		<div class='row text-center col-md-4 col-md-offset-4 panel panel-primary'>
+			<br>
+			<?php
+			if ($this->header) {	?>
+				<img width="120px" src="/logo/<?php echo $this->header ?>" onerror="imgError(this);"> 
+			<?php
+			}
+			else{	?>
+				<div class='col-md-12'>
+					<h1 class='glyphicon glyphicon-picture'></h1>
+				</div>
+			<?php	
+			}
+			?>
+			<?php echo $this->form->photo?>
+			<?php echo $this->form->save?>
+			<br>
+		</div>
+	</form>
+	</br>
+	<div id='view' class='col-md-12 text-center panel panel-primary'>
 		<br>
-		<?php
-		if ($this->header) {	?>
-			<img width="120px" src="/logo/<?php echo $this->header ?>" onerror="imgError(this);"> 
-		<?php
-		}
-		else{	?>
-			<div class='col-md-12'>
-				<h1 class='glyphicon glyphicon-picture'></h1>
-			</div>
-		<?php	
-		}
-		?>
-		<?php echo $this->form->photo?>
-		<?php echo $this->form->save?>
+		<div class="text-center">
+			<div class='col-md-2'><img src="/img/undac.png" style="width:100px"></div>
+				<div class="col-md-8">
+					<h3 class="text-header-university"><b>UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRION</b></h3>
+					<h6 class="text-faculty">Facultad de <?php echo $this->facultad?></h6>
+					<h6 class="text-speciality">Escuela de Formación Profesional de <?php echo $this->speciality?></h6>
+				</div>
+			<div class='col-md-2'><img src="/logo/<?php echo $this->header ?>" style="width:100px" onerror="imgError(this);"></div>
+		</div>
 		<br>
 	</div>
-</form>
-</br>
-<div id='view' class='col-md-12 text-center panel panel-primary'>
-	<br>
-	<div class="text-center">
-		<div class='col-md-2'><img src="/img/undac.png" style="width:100px"></div>
-			<div class="col-md-8">
-				<h3 class="text-header-university"><b>UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRION</b></h3>
-				<h6 class="text-faculty">Facultad de <?php echo $this->facultad?></h6>
-				<h6 class="text-speciality">Escuela de Formación Profesional de <?php echo $this->speciality?></h6>
-			</div>
-		<div class='col-md-2'><img src="/logo/<?php echo $this->header ?>" style="width:100px" onerror="imgError(this);"></div>
-	</div>
-	<br>
-</div>
 
+</section>
 <script type="text/javascript">
 	function imgError(image) {
 		var imagen = 'blanco'; 

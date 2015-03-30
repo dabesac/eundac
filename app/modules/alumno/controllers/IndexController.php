@@ -72,7 +72,7 @@ class Alumno_IndexController extends Zend_Controller_Action {
             $data = Zend_Json::encode($courses_x_sem);
             $this->view->datos = $data;
 
-            $where['perid'] = '14A';//$this->sesion->period->perid;
+            $where['perid'] = '14B';//$this->sesion->period->perid;
             $tb_assistence = new Api_Model_DbTable_StudentAssistance();
             $dat_assist =$tb_assistence->_assistence($where);
 

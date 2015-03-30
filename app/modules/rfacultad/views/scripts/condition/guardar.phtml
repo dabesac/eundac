@@ -1,0 +1,83 @@
+<?php
+if ($this->conditionsStudent){ ?>
+<div class="panel panel-primary">
+        <div class="panel-heading">
+            <h5 class="panel-title"><span class='glyphicon glyphicon-th-list'></span><strong> DETALLE DE CONDICIÓN <span class="label label-default text-reght" ></span>
+            </strong></h5>
+        </div>
+        <div class="conditions">
+            
+                <table class="table">
+                    <tr class='tetx-center'>
+                        <th>#</th>
+                        <th>Detalle de Condicion</th>
+                        <th>Opcion</th>
+                    </tr>
+                    <?php
+                    $c=1;
+                    foreach ($this->conditionsStudent as $conditions){  
+                        if ($conditions['courseid']){
+                            foreach ($this->datacurso as $cursos) {
+                                if($cursos['courseid']==$conditions['courseid']) {
+                                    $coursename = $cursos['name'];
+                                }                   
+                            }
+                        }
+                        switch ($conditions['type']) {
+                            case 'CO':  $detail = "Matricula condicional del curso <strong>".$coursename.'</strong> con resolución <strong>'.$conditions['doc_authorize'].'</strong>';
+                                        break;
+                            case 'LE':  $detail = "Para dejar el curso <strong>".$coursename.'</strong> con resolución <strong>'.$conditions['doc_authorize'];
+                                        break;
+                            case 'CR':  $detail = "Para adicionar ".$conditions['amount']." creditos con resolución <strong>".$conditions['doc_authorize'].'</strong>';                      
+                                        break;
+                            case 'SE':  $detail = "Para adicionar ".$conditions['amount']." semestres con resolución <strong>".$conditions['doc_authorize'].'</strong>';
+                                        break;
+                        }
+                        $commnets = ($conditions['comments']) ? $conditions['comments'] : "" ;
+                        ?>
+                        <tr>
+                        <td><?php echo $c ?></td>
+                        <td><?php echo $detail.'. '.ucwords($commnets) ?></td>
+                        <td>
+                        <a class="btn btn-danger eliminar"
+                        uid = '<?php echo $conditions['uid']?>'
+                        pid = '<?php echo $conditions['pid']?>'
+                        escid = '<?php echo $conditions['escid']?>'
+                        subid = '<?php echo $conditions['subid']?>'
+                        perid = '<?php echo $conditions['perid']?>'
+                        type = '<?php echo $conditions['type']?>'
+                        clss="<?php echo $c.'tr' ?>"
+                        ><span class="glyphicon glyphicon-trash"></span>Eliminar</a>
+                        </td>
+                        </tr>
+                    <?php
+                    $coursename = "";
+                    $c++;
+                    } ?>         
+                </table>
+        </div>
+    </div>
+<?php 
+}?>
+<script>
+	$(".eliminar").click(function(e){
+        e.preventDefault();
+        cls=$(this).parent().parent();
+        var ajax_data = {
+            'uid' : $(this).attr('uid'),
+            'pid' : $(this).attr('pid'),
+            'escid' : $(this).attr('escid'),
+            'subid' : $(this).attr('subid'),
+            'perid' : $(this).attr('perid'),
+            'type' : $(this).attr('type'),
+        };
+        $.ajax({
+            type : "post",
+            url : "/rfacultad/condition/delete/",
+            data : ajax_data,
+            success : function(data){
+                cls.fadeOut("fast");
+            }
+        }); 
+    });
+</script>

@@ -13,6 +13,7 @@
  ?>
 <input type="hidden" id="currentDate" value="<?php echo $dataCourse['currentDate'] ?>">
 
+<section class="container">
 <div class="controlActivity_header">
 	<p class="controlActivity_p"><?php echo $dataCourse['name'] ?> <small>Turno <?php echo $dataCourse['turno'] ?></small></p>
 </div>
@@ -297,3 +298,5 @@
 <?php else: ?>
 	<p class="messageEmpty"><span class="glyphicon glyphicon-exclamation-sign"></span> Al parecer no completo <strong>su sílabo...</strong></p>
 <?php endif ?>
+
+</section>

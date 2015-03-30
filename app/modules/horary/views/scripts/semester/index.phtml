@@ -1,5 +1,7 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Listado de Horarios');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/docente" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
+
+<section class="container">
 <div class="row">
 	<div class="col-md-3 col-md-offset-2">
 		<h5 class="text-info">Año</span></h5>
@@ -12,6 +14,8 @@
 </div>
 <div id="loading"></div>
 <div id='changehorary'></div>
+
+</section>
 <script type="text/javascript">
 	$(function(){
 		var anio='<?php echo $this->anio?>';
