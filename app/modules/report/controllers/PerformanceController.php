@@ -79,8 +79,9 @@
              $p = substr($anio, 2, 3);
              $where['p1']=$p."A";
              $where['p2']=$p."B";
+             $where['p3']=$p."N";
              $periodos = new Api_Model_DbTable_Periods();
-             $lper = $periodos->_getPeriodsXAyB($where);
+             $lper = $periodos->_getPeriodsXAyByN($where);
              $this->view->lper=$lper;
              $this->view->escid=$where['escid']; 
         }  
