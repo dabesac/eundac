@@ -185,7 +185,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$pid   = base64_decode($this->_getParam('pid'));
 		$subid = base64_decode($this->_getParam('subid'));
 
-		//print_r($pid);
 		$eid   = $this->sesion->eid;
 		$oid   = $this->sesion->oid;
 		$perid = $this->sesion->period->perid;
@@ -249,7 +248,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 			$rate = $rateDb->_getFilter($where);
 			$this->view->rate = $rate;
         }
-
 
 		//$Comparar fechas y pagos
 		if ($rate) {
