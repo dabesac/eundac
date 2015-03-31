@@ -1007,24 +1007,35 @@ class Register_StudentController extends Zend_Controller_Action {
                 $dbimpression = new Api_Model_DbTable_Countimpressionall();
 
                 $uidim=$this->sesion->pid;
-
-                $data = array(
-                    'eid'=>$eid,
-                    'oid'=>$oid,
-                    'uid'=>$uid,
-                    'escid'=>$escid,
-                    'subid'=>$subid,
-                    'pid'=>$pid,
-                    'type_impression'=>'prematricula_'.$perid,
-                    'date_impression'=>date('Y-m-d h:m:s'),
-                    'pid_print'=>$uidim
-                    );
-                $dbimpression->_save($data);
-
-                $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'prematricula_'.$perid);
+                
+                $wheri = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'prematricula','perid'=>$perid);
                 $dataim = $dbimpression->_getFilter($wheri);
 
-                $co=count($dataim);
+                if ($dataim) {
+                    $pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
+                    $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
+
+                    $dbimpression->_update($data_u,$pk);
+                    $co=$data_u['count_impression'];
+                }
+                else{
+                    $data = array(
+                        'eid'=>$eid,
+                        'oid'=>$oid,
+                        'uid'=>$uid,
+                        'escid'=>$escid,
+                        'subid'=>$subid,
+                        'pid'=>$pid,
+                        'type_impression'=>'prematricula',
+                        'date_impression'=>date('Y-m-d h:m:s'),
+                        'pid_print'=>$uidim,
+                        'perid'=>$perid,
+                        'count_impression'=>1
+                        );
+                    $dbimpression->_save($data);
+                    $co=1;
+                }
+
                 $codigo=$co." - ".$uidim;
 
                 $header=$this->sesion->org['header_print'];

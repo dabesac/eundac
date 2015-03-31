@@ -276,25 +276,34 @@ public function listcurriculaAction()
             $uidim=$this->sesion->pid;
             $pid=$uidim;
 
-            $data = array(
-                'eid'=>$eid,
-                'oid'=>$oid,
-                'uid'=>$uid,
-                'escid'=>$escid,
-                'subid'=>$subid,
-                'pid'=>$pid,
-                'type_impression'=>'reporte_rendimiento',
-                'date_impression'=>date('Y-m-d H:i:s'),
-                'pid_print'=>$uidim
-                );
-            // print_r($data);exit();
-            $dbimpression->_save($data);            
-
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,
                 'subid'=>$subid,'type_impression'=>'reporte_rendimiento');
             $dataim = $dbimpression->_getFilter($wheri);
-            
-            $co=count($dataim);            
+
+            if ($dataim) {
+              $pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
+              $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
+
+              $dbimpression->_update($data_u,$pk);
+              $co=$data_u['count_impression'];
+            }
+            else{
+              $data = array(
+                  'eid'=>$eid,
+                  'oid'=>$oid,
+                  'uid'=>$uid,
+                  'escid'=>$escid,
+                  'subid'=>$subid,
+                  'pid'=>$pid,
+                  'type_impression'=>'reporte_rendimiento',
+                  'date_impression'=>date('Y-m-d H:i:s'),
+                  'pid_print'=>$uidim,
+                  'count_impression'=>1
+                  );
+              $dbimpression->_save($data);
+              $co=1;
+            }
+
             $codigo=$co." - ".$uidim;
 
             $header=$this->sesion->org['header_print'];
@@ -413,26 +422,34 @@ public function listcurriculaAction()
             $uid=$this->sesion->uid;
             $uidim=$this->sesion->pid;
             $pid=$uidim;
-
-            $data = array(
-                'eid'=>$eid,
-                'oid'=>$oid,
-                'uid'=>$uid,
-                'escid'=>$escid,
-                'subid'=>$subid,
-                'pid'=>$pid,
-                'type_impression'=>'reporte_primeros_puestos_'.$semid,
-                'date_impression'=>date('Y-m-d H:i:s'),
-                'pid_print'=>$uidim
-                );
-            // print_r($data);exit();
-            $dbimpression->_save($data);            
-
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,
                 'subid'=>$subid,'type_impression'=>'reporte_primeros_puestos_'.$semid);
             $dataim = $dbimpression->_getFilter($wheri);
+
+            if ($dataim) {
+              $pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
+              $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
+
+              $dbimpression->_update($data_u,$pk);
+              $co=$data_u['count_impression'];
+            }
+            else{
+              $data = array(
+                  'eid'=>$eid,
+                  'oid'=>$oid,
+                  'uid'=>$uid,
+                  'escid'=>$escid,
+                  'subid'=>$subid,
+                  'pid'=>$pid,
+                  'type_impression'=>'reporte_primeros_puestos_'.$semid,
+                  'date_impression'=>date('Y-m-d H:i:s'),
+                  'pid_print'=>$uidim,
+                  'count_impression'=>1
+                  );
+              $dbimpression->_save($data);            
+              $co=1;              
+            }
             
-            $co=count($dataim);            
             $codigo=$co." - ".$uidim;
 
             $header=$this->sesion->org['header_print'];
@@ -560,25 +577,34 @@ public function listcurriculaAction()
             $uidim=$this->sesion->pid;
             $pid=$uidim;
 
-            $data = array(
-                'eid'=>$eid,
-                'oid'=>$oid,
-                'uid'=>$uid,
-                'escid'=>$escid,
-                'subid'=>$subid,
-                'pid'=>$pid,
-                'type_impression'=>'reporte_'.$superior.'_superior',
-                'date_impression'=>date('Y-m-d H:i:s'),
-                'pid_print'=>$uidim
-                );
-            // print_r($data);exit();
-            $dbimpression->_save($data);            
-
             $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,
                 'subid'=>$subid,'type_impression'=>'reporte_'.$superior.'_superior');
             $dataim = $dbimpression->_getFilter($wheri);
-            
-            $co=count($dataim);            
+
+            if ($dataim) {
+              $pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
+              $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
+
+              $dbimpression->_update($data_u,$pk);
+              $co=$data_u['count_impression'];
+            }
+            else{
+              $data = array(
+                  'eid'=>$eid,
+                  'oid'=>$oid,
+                  'uid'=>$uid,
+                  'escid'=>$escid,
+                  'subid'=>$subid,
+                  'pid'=>$pid,
+                  'type_impression'=>'reporte_'.$superior.'_superior',
+                  'date_impression'=>date('Y-m-d H:i:s'),
+                  'pid_print'=>$uidim,
+                  'count_impression'=>1
+                  );
+              $dbimpression->_save($data);            
+              $co=1;
+            }
+              
             $codigo=$co." - ".$uidim;
 
             $header=$this->sesion->org['header_print'];
