@@ -131,6 +131,16 @@ public function _update($data,$pk){
         }  catch (Exception $ex){
             phpsage(); }
     }
+    public function _getPeriodsXAyByN($where){
+            try{
+            if ($where['eid']=="" || $where['oid']=="" || $where['p1']=="" || $where['p2']=="" || $where['p3']=="") return false;
+			$wherestr="eid='".$where['eid']."' and oid='".$where['oid']."' and (perid='".$where['p1']."' or perid='".$where['p2']."' or perid='".$where['p3']."')";
+             $r = $this->fetchAll($wherestr);
+                if ($r) return $r->toArray ();
+                return false;
+        }  catch (Exception $ex){
+            phpsage(); }
+    }
 
     public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
