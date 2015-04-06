@@ -104,10 +104,6 @@ class Docente_NotasController extends Zend_Controller_Action{
 	    // print_r($persetage);exit();
 
 		$this->view->data=$persetage;
-		
-		
-
-
 	}
 
 

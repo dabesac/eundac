@@ -115,14 +115,14 @@ public function lschoolAction(){
     $data['subid']=$formData['subid'];
     $data['rid']='AL';
     $data['uid']=$codigo;
-    $data['password']=$codigo;
+    $data['password']=md5($codigo);
     $data['register']=$this->sesion->uid;
     $data['state']='A';
     $data['comments']=$resolucion;
     // print_r($data);
     $persona = new Api_Model_DbTable_Users();
-    $datos=$persona->_save($data);
-    $this->_helper->_redirector("list","code","rcentral",array('pid' => $formData['pid'] ));   
+        $datos=$persona->_save($data);
+        $this->_helper->_redirector("list","code","rcentral",array('pid' => $formData['pid'] ));   
     }
 
     public function listAction() 

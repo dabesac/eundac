@@ -15,13 +15,13 @@
 <div id="loaddata"></div>
 
 <script type="text/javascript">
-$("#search").click(function(){
-	var uid = $("#uid").val();
-	if (!uid) {
-		alert("Ingrese el Código de Matricula.");
-		return false;
-	};
-	$("#loaddata").html("<img src='/img/spinner.gif'>Cargando...");
-	$("#loaddata").load("/rcentral/traslatestudent/search/uid/"+uid);
-});
+	$("#search").click(function(){
+		var uid = $("#uid").val();
+		if (!uid) {
+			alert("Ingrese el Código de Matricula.");
+			return false;
+		};
+		$("#loaddata").html("<img src='/img/spinner.gif'>Cargando...");
+		$("#loaddata").load("/rcentral/traslatestudent/search/uid/"+uid);
+	});
 </script>
