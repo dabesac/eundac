@@ -84,7 +84,7 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
                                                 'semester_assign'       => $semester_assign,
                                                 'semester_roman_assign' => $semester_roman_assign,
                                                 'attempt'               => 'No se',
-                                                'type'                  => 'No se',
+                                                'type'                  => $course_pd['type'],
                                                 'state'                 => 'I',
                                                 'payment_did'           => true,
                                                 'carry'                 => false );
@@ -233,6 +233,7 @@ class Rest_PreregisterController extends Zend_Rest_Controller {
                                                 'semester'       => $course['semid'],
                                                 'attempt'        => $attempts[$course['veces']],
                                                 'type'           => $course['type'],
+                                                'type_semester'  => $course['type'].$course['semid'],
                                                 'state'          => 'I',
                                                 'payment_did'    => true,
                                                 'carry'          => false );

@@ -61,8 +61,9 @@ eUndac.Views.Course = Backbone.View.extend({
 	},
 
 	updateCredits : function($check_box, data_course){
-		var credits_current = $('#js_credits_current').data().credits;
-		var type_course = data_course.type;
+		var credits_current      = $('#js_credits_current').data().credits;
+		var type_course          = data_course.type;
+		var type_semester_course = data_course.type_semester;
 
 		// Verify another turn
 		var code = data_course.code;
@@ -82,7 +83,7 @@ eUndac.Views.Course = Backbone.View.extend({
 
 		// elective
 		if (type_course === 'E') {
-			$('[data-type=' + type_course + ']').each(function(index){
+			$('[data-type_semester=' + type_semester_course + ']').each(function(index){
 				if ($(this).data().code !== code) {
 					if ($(this).siblings('input').prop('checked')) {
 						var credits_other = $(this).data().credits;
