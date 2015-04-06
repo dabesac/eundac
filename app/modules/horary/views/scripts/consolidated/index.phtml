@@ -693,7 +693,7 @@ if ($this->horarys) {
     <div class='titledescription' style='width:3%'><b>Sem.</b></div>
     <div class='titledescription' style='width:3%'><b>Turno</b></div>
     <div class='titledescription' style='width:4%'><b>Créditos</b></div>
-    <div class='titledescription' style='width:36%'><b>Docente</b></div>
+    <div class='titledescription' style='width:35%'><b>Docente</b></div>
     <br>
     <?php
     $n=0;
@@ -729,11 +729,11 @@ if ($this->horarys) {
                 <?php
                 $nomdoc=(isset($this->horarys[$i]['nombredoc']))?$this->horarys[$i]['nombredoc']:null;
                 if (!is_null($nomdoc)) {  ?>
-                    <div class="description" style="width:36%"><?php echo $nomdoc?></div>
+                    <div class="description" style="width:35%"><?php echo $nomdoc?></div>
                 <?php
                 }
                 else{   ?>
-                    <div class="description" style="width:36%">&nbsp;</div>
+                    <div class="description" style="width:35%">&nbsp;</div>
                 <?php
                 }
                 ?>
