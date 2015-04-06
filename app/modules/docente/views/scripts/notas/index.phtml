@@ -15,8 +15,12 @@
             <?php echo $this->periods ?>
         </ul>
     </div>
+    
 
-    <a href="##" class="hObO btnsMisCursos btnMyHorary">Mi Horario</a>
+    <a href="##" class="hObO btnsMisCursos btnMyHorary" data-toggle="modal" data-target="#ModalHorary"
+        perid="<?php print base64_encode($this->perid) ?>"
+        escid="<?php print base64_encode($this->escid) ?>"
+        subid="<?php print base64_encode($this->subid) ?>">Mi Horario</a>
     <a href="/docente/informacademic/index/data/<?php echo base64_encode($this->perid) ?>" class="hObO btnsMisCursos btnReportAcademic">Informe Academico</a>
 </div>
 
@@ -308,12 +312,11 @@ if ($this->faculty){
 <script>
 
     $('.btnMyHorary').click(function(){
-        // $("#ModalHorary").modal('show');
-        // var perid=$(this).attr('perid');
-        // var escid=$(this).attr('escid');
-        // var subid=$(this).attr('subid');
-        // var url=("/horary/seehorary/index/perid/"+perid+"/escid/"+escid+"/subid/"+subid);
-        // $('#horary').load(url);
+        var perid = $(this).attr('perid');
+        var escid = $(this).attr('escid');
+        var subid = $(this).attr('subid');
+        var url   = ("/horary/seehorary/index/perid/"+perid+"/escid/"+escid+"/subid/"+subid);
+        $('#horary').load(url);
     });
     $(".duplicate-syllabus").click(function(){
         if(confirm("Esta seguro de duplicar \nel silabo")){

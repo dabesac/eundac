@@ -103,12 +103,12 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
                 $this->view->horarios=$dathora;
 
                 $curso=new Api_Model_DbTable_Coursexteacher();
-                $where1['eid']=$eid;
-                $where1['oid']=$oid;
-                $where1['escid']=$escid;
-                $where1['perid']=$perid;
-                $where1['subid']=$subid;
-                $where1['pid']=$pid;
+                $where1['eid']   = $eid;
+                $where1['oid']   = $oid;
+                $where1['escid'] = $escid;
+                $where1['perid'] = $perid;
+                $where1['subid'] = $subid;
+                $where1['pid']   = $pid;
                 if ($where1['escid']=="2ES") {
                     $datcur=$curso->_getOneCoursexTeacherXPeriodXTodasEsc($where1);
                 }
