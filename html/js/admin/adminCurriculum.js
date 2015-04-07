@@ -1,6 +1,6 @@
 $(function(){
 	var dataGet    = '';
-	var curriculum = curriculum();
+	var curriculumFunc = curriculum();
 
 	//Rol
 	var rol = $('#rol').val();
@@ -8,16 +8,16 @@ $(function(){
 	if (rol == 'RC' || rol == 'RF' || rol == 'CU') {
 		$('#selectFaculty').on('change', function(){
 			dataGet = $(this).val();
-			curriculum.chargeSchools(dataGet);
+			curriculumFunc.chargeSchools(dataGet);
 		});
 
 		$('#selectSchool').on('change', function(){
 			dataGet = $(this).val();
-			curriculum.chargeCurriculums(dataGet);
+			curriculumFunc.chargeCurriculums(dataGet);
 		});
 	}else if (rol == 'DR') {
 		dataGet = $('#school').val();
-		curriculum.chargeCurriculums(dataGet);
+		curriculumFunc.chargeCurriculums(dataGet);
 	}
 
 	//Closure curriculum
@@ -56,7 +56,7 @@ $(function(){
 
 		function showCurBySpe(speciality){
 			$(".curriculums").each(function(){
-				currentLiText = $(this).text(),
+				currentLiText = $(this).text();
 		        showCurrentLi = currentLiText.indexOf(speciality) !== -1;
 		        $(this).toggle(showCurrentLi);
 		        if (showCurrentLi) {
@@ -817,13 +817,38 @@ $(function(){
 					}
 				});
 			});
-
+				
+			
 			//Agregar prerequisitos.....
 			var semester_x_pre;
 			var prerequisites_side = $('#id_select_pre').parent().siblings('.prerequisites');
 			var empty_p            = $(prerequisites_side).children('p');
 
 			prerequisite($('#semid'), $('#id_select_pre'), prerequisites_side);
+
+			var equivalence_side = $('#id_select_eq').parent().siblings('.equivalence_side');
+			equivalenceCourse($('#id_select_eq'), equivalence_side);
+
+			var tab_pre_eq = $('#js_p_tab_pre_eq');
+			changePreEq(tab_pre_eq);
+		}
+
+		function changePreEq(tab_pre_eq){
+			$(tab_pre_eq).children('.js_pre_eq').on('click', function(){
+				if (!$(this).hasClass('active')) {
+					$(this).addClass('active');
+					$(this).siblings('a').removeClass('active');
+
+					var $section = $(this).parent().siblings('.p-js_section_' + $(this).attr('go-to'));
+					if (!$section.hasClass('active')) {
+						$section.siblings('.p-js_section').addClass('inactive');
+						setTimeout(function() {
+							$section.siblings('.p-js_section').removeClass('active inactive');
+							$section.addClass('active');
+						}, 300);
+					}
+				}
+			});
 		}
 
 		function prerequisite(select_semester, select_requisite, prerequisites_side){
@@ -971,16 +996,28 @@ $(function(){
 					$(course_article)
 						.html('<img src="/img/spinner.gif" alt="Loading..." />')
 						.load('/curricula/curricula/editcourse/id/' + idget, function(){
-							var prerequisites_side = $(this).find('section.prerequisites');
+							var prerequisites_side = $(this).find('section.js_prerequistes_side');
 							prerequisite(	$(this).find('select[name=semid]'), 
-											$(this).find('section.select_pre select'),
+											$(this).find('section.js_select_pre select'),
 											prerequisites_side );
 
-							$(this).find('section.prerequisites').children('article').each(function(index){
+							var equivalence_side = $(this).find('section.js_equivalences_side');
+							equivalenceCourse(	$(this).find('section.js_select_eq select'),
+												equivalence_side);
+
+
+							$(this).find('section.js_prerequistes_side').children('article').each(function(index){
 								actionsPerRequisite(index, prerequisites_side);
 							});
 
+
+							$(this).find('section.js_equivalences_side').children('article').each(function(index){
+								actionsPerEquivalence(index, equivalence_side);
+							});
 							actionsEditCourse($(this).find('form'));
+
+							$(this).find('.js_tab-pre-eq');
+							changePreEq($(this).find('.js_tab-pre-eq'));
 						})
 						.addClass('active');
 
@@ -1006,6 +1043,79 @@ $(function(){
 						$(course_article).removeClass('active inactive');
 					}, 300);
 				}
+			});
+		}
+
+		function equivalenceCourse(select_eq, equivalence_side){
+			var course_eq_id;
+			var course_eq_name;
+
+			var count_eq = 0;
+			var empty_p  = $(equivalence_side).children('p');
+
+			select_eq.siblings('a').on('click', function(){
+				course_eq_id   = select_eq.val();
+
+				//Que los cursos no sean iguales
+				var same_course = false;
+				$(equivalence_side).children('article').each(function(){
+					if (course_eq_id == $(this).find('input').val()) {
+						same_course = true;
+					}
+				});
+
+				if (course_eq_id && !same_course) {
+					course_eq_name = select_eq.children('option:selected').html();
+
+					//var interruptor_fill = false;
+
+					var number_eq = 1;
+					$(equivalence_side).children('article').each(function(index, element){
+						number_eq++;
+						count_eq++;
+					});
+
+					if (number_eq <= 2) {
+						var equivalence_html = '<article id="equivalence'+count_eq+'">'+
+													'<p>'+course_eq_name+'</p>'+
+													'<input type="hidden" name="eq_'+number_eq+'" value="'+course_eq_id+'">'+
+													'<a href="##"><span class="glyphicon glyphicon-remove"></span></a>'+
+												'</article>';
+
+						$(empty_p).addClass('inactive');
+						$(equivalence_side).append(equivalence_html);
+						actionsPerEquivalence(count_eq, equivalence_side);
+
+						count_eq++;
+					}
+				}
+			});
+		}
+
+		function actionsPerEquivalence(equivalence_id, equivalence_side){
+			var self = $(equivalence_side).find('#equivalence' + equivalence_id);
+
+			$(self).addClass('active');
+
+			$(self).find('a').on('click', function(){
+				$(self).addClass('inactive');
+				setTimeout(function() {
+					var there_more = false;
+					$(self)
+						.removeClass('active inactive')	
+						.remove();
+
+					$(equivalence_side).children('article').each(function(index){
+						var number_eq = index + 1;
+						$(this).find('input').attr('name', 'eq_' + number_eq);
+
+						there_more = true;
+					});
+
+					if (!there_more) {
+						$(equivalence_side).children('p').removeClass('inactive');
+					}
+				}, 300);
 			});
 		}
 

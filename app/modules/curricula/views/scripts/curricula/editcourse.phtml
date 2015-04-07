@@ -2,11 +2,13 @@
 	$id               = $this->dataView['id'];
 	$role             = $this->dataView['role'];
 	if ($role == 'RC') {
-		$semester_current = $this->dataView['semester_current'];
-		$exist_periods    = $this->dataView['exist_periods'];
-		$form             = $this->dataView['course_form'];
-		$courses_pre_data = $this->dataView['courses_pre_data'];
-		$requisites_data  = $this->dataView['requisites_data'];
+		$semester_current  = $this->dataView['semester_current'];
+		$exist_periods     = $this->dataView['exist_periods'];
+		$form              = $this->dataView['course_form'];
+		$courses_pre_data  = $this->dataView['courses_pre_data'];
+		$requisites_data   = $this->dataView['requisites_data'];
+		$courses_eq_data   = $this->dataView['courses_eq_data'];
+		$equivalences_data = $this->dataView['equivalences_data'];
 	} else if ($role == 'DR'){
 		$sumilla = $this->dataView['sumilla'];
 	}
@@ -61,39 +63,73 @@
 			</div>		
 		</div>
 		<div class="side_two">
-			<header>
-				<p>Prerequisitos</p>
+			<header class="p-two_buttons  js_tab-pre-eq">
+				<a href="##" class="active  js_pre_eq" go-to="pre">Prerequisitos</a>
+				<a href="##" class="js_pre_eq" go-to="eq">Equivalencias</a>
 			</header>
-			<section class="select_pre">
-				<select class="form-control">
-					<?php if ($exist_periods): ?>
-						<option semester="0" value="">No hay prerequisitos para el primer semestre...</option>
-						<?php foreach ($courses_pre_data as $course): ?>
-							<option semester="<?php print $course['semid'] ?>" code-course="<?php print $course['code'] ?>" value="<?php print $course['id'] ?>" hidden><?php print $course['code'].' | '.$course['name'] ?></option>
+			<div class="p-section_pre-eq  p-js_section  p-js_section_pre  active">
+				<section class="select_pre  js_select_pre">
+					<select class="form-control">
+						<?php if ($exist_periods): ?>
+							<option semester="0" value="">No hay prerequisitos para el primer semestre...</option>
+							<?php foreach ($courses_pre_data as $course): ?>
+								<option semester="<?php print $course['semid'] ?>" code-course="<?php print $course['code'] ?>" value="<?php print $course['id'] ?>" hidden><?php print $course['code'].' | '.$course['name'] ?></option>
+							<?php endforeach ?>
+						<?php else: ?>
+							<option value="">Elija un semestre...</option>
+						<?php endif ?>
+					</select>
+					<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
+				</section>
+				<section class="prerequisites  js_prerequistes_side">
+					<input type="hidden" name="pre_1" value="">
+					<input type="hidden" name="pre_2" value="">
+					<input type="hidden" name="pre_3" value="">
+					<?php if ($requisites_data): ?>
+						<?php foreach ($requisites_data as $c => $requisite): ?>
+							<article id="prerequisite<?php print $c ?>" semester="<?php print $requisite['semid'] + 1 ?>">
+								<p><?php print $requisite['code'].' | '.$requisite['name'] ?></p>
+								<input type="hidden" name="pre_<?php print $c + 1 ?>" value="<?php print $requisite['id'] ?>">
+								<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
+							</article>
 						<?php endforeach ?>
+						<p class="inactive"><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue requisitos para este curso si desea...</p>
 					<?php else: ?>
-						<option value="">Elija un semestre...</option>
+						<p><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue requisitos para este curso si desea...</p>
 					<?php endif ?>
-				</select>
-				<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
-			</section>
-			<section class="prerequisites">
-				<input type="hidden" name="pre_1" value="">
-				<input type="hidden" name="pre_2" value="">
-				<input type="hidden" name="pre_3" value="">
-				<?php if ($requisites_data): ?>
-					<?php foreach ($requisites_data as $c => $requisite): ?>
-						<article id="prerequisite<?php print $c ?>" semester="<?php print $requisite['semid'] + 1 ?>">
-							<p><?php print $requisite['code'].' | '.$requisite['name'] ?></p>
-							<input type="hidden" name="pre_<?php print $c + 1 ?>" value="<?php print $requisite['id'] ?>">
-							<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
-						</article>
-					<?php endforeach ?>
-					<p class="inactive"><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue requisitos para este curso si desea...</p>
-				<?php else: ?>
-					<p><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue requisitos para este curso si desea...</p>
-				<?php endif ?>
-			</section>
+				</section>
+			</div>
+			<div class="p-section_pre-eq  p-js_section p-js_section_eq">
+				<section class="select_pre  js_select_eq">
+					<select class="form-control">
+						<?php if ($courses_eq_data): ?>
+							<option semester="0" value="">Elija un curso...</option>
+							<?php foreach ($courses_eq_data as $course): ?>
+								<option code-course="<?php print $course['code'] ?>" value="<?php print $course['id'] ?>"><?php print $course['code'].' | '.$course['name'] ?></option>
+							<?php endforeach ?>
+						<?php else: ?>
+							<option value="">No tiene una curricula para equivalencia...</option>
+						<?php endif ?>
+					</select>
+					<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
+				</section>
+				<section class="prerequisites js_equivalences_side">
+					<input type="hidden" name="eq_1" value="">
+					<input type="hidden" name="eq_2" value="">
+					<?php if ($equivalences_data): ?>
+						<?php foreach ($equivalences_data as $c => $equivalence): ?>
+							<article id="equivalence<?php print $c ?>">
+								<p><?php print $equivalence['code'].' | '.$equivalence['name'] ?></p>
+								<input type="hidden" name="eq_<?php print $c + 1 ?>" value="<?php print $equivalence['id'] ?>">
+								<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
+							</article>
+						<?php endforeach ?>
+						<p class="inactive"><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue cursos de equivalencia para este curso si desea...</p>
+					<?php else: ?>
+						<p><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue cursos de equivalencia para este curso si desea...</p>
+					<?php endif ?>
+				</section>
+			</div>
 		</div>
 	</div>
 	<div class="submit_side">
@@ -117,19 +153,19 @@
 	<a href="##" code="<?php print $id ?>">Si, quiero eliminarlo</a>
 	<a href="##">No</a>
 	<div class="msg_side">
-		<div class="msg warning">
+		<div class="msg warning  msg--warning">
 			<p><span class="glyphicon glyphicon-exclamation-sign"></span> No se puede eliminar el curso, quizas ya hay registros en el, como alumnos matriculados, etc...</p>
 		</div>
-		<div class="msg success">
+		<div class="msg success  msg--success">
 			<p><span class="glyphicon glyphicon-exclamation-ok"></span> Eliminado satisfactoriamente!</p>
 		</div>
 	</div>
 </div>
 <div class="msg_side">
-	<div class="msg success">
+	<div class="msg success   msg--success">
 		<p><span class="glyphicon glyphicon-ok"></span> Guardado satisfactoriamente!</p>
 	</div>
-	<div class="msg warning">
+	<div class="msg warning   msg--warning">
 		<!-- Errores por JavaScript -->
 	</div>
 </div>
