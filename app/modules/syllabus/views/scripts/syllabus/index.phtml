@@ -51,6 +51,23 @@
 				<td>Docente</td>
 				<td><strong><?php echo $this->persona['last_name0']." ".$this->persona['last_name1'].", ".$this->persona['first_name']?></strong></td>
 			</tr>
+			<?php 
+			$datajp=$this->datajp;
+			$datauid=$this->datauid;
+			if($datajp){ 
+				$i=0;
+				foreach ($datajp as $data) {
+					$retVal = ((substr($datauid[$i]['uid'],8,2))=='JP') ? 'Jefe de Práctica' : 'Docente de Apoyo' ;
+			 ?>	
+					<tr>
+						<td><?php echo $retVal ?></td>
+						<td><?php echo $data['last_name0']." ".$data['last_name1'].", ".$data['first_name']?></td>
+					</tr>					
+				<?php
+				$i++;
+				}	
+			}
+			?>
 		</table>
 	</div>
 	<div class="syllabusFill_ObO syllabusFill_secondData">

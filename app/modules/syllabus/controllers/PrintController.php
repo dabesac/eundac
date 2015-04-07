@@ -164,6 +164,35 @@ class Syllabus_PrintController extends Zend_Controller_Action {
             
             $this->view->header=$header;
             $this->view->footer=$footer;
+
+            /*Para ver si tiene Jp o Doc de apoyo*/
+            $doc= new Api_Model_DbTable_Coursexteacher();
+            $per= new Api_Model_DbTable_Person();
+            $wheredocjp = array(
+                                'eid'       => $eid,
+                                'oid'       => $oid,
+                                'escid'     => $escid,
+                                'subid'     => $subid,
+                                'courseid'  => $courseid,
+                                'curid'     => $curid,
+                                'perid'     => $perid,
+                                'turno'     => $turno,
+                                'is_main'   => 'N');
+            $data_jp = $doc->_getJp($wheredocjp);
+            $this->view->jp=$data_jp;
+            if ($data_jp) {
+                $i=0;         
+                foreach ($data_jp as $data) {
+                    $whereperjp = array(
+                                    'eid'   =>$data['eid'],
+                                    'pid'   =>$data['pid']);
+                    $datauid[$i]['uid']=$data['uid'];
+                    $datajp[$i] =$per->_getOne($whereperjp);
+                    $i++;
+                }
+                $this->view->datauid=$datauid;
+                $this->view->datajp=$datajp;
+            }
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
