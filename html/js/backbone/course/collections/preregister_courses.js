@@ -116,6 +116,8 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 			var course_turn = model.toJSON().turn;
 			var course_type = model.toJSON().type;
 
+			var course_type_semester = model.toJSON().type_semester;
+
 			// carry only a turn
 			var same_course = this.where({code : course_code});
 			same_course.forEach(function(course){
@@ -129,7 +131,7 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 
 			// carry only a elective
 			if (course_type === 'E') {
-				var same_course_elective = this.where({type : course_type});
+				var same_course_elective = this.where({type_semester : course_type_semester});
 				same_course_elective.forEach(function(course){
 					if (course.toJSON().code != course_code) {
 						if (course.toJSON().carry) {

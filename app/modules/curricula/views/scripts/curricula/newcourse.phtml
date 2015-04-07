@@ -1,7 +1,8 @@
 <?php 
-	$dataView     = $this->dataView;
-	$form         = $dataView['form_course'];
-	$data_courses = $dataView['data_courses'];
+	$dataView        = $this->dataView;
+	$form            = $dataView['form_course'];
+	$data_courses    = $dataView['data_courses'];
+	$data_courses_eq = $dataView['data_courses_eq'];
  ?>
 
 <header>
@@ -65,33 +66,63 @@
 				</div>		
 			</div>
 			<div class="side_two">
-				<header>
-					<p>Prerequisitos</p>
+				<header id="js_p_tab_pre_eq" class="p-two_buttons">
+					<a href="##" class="active  js_pre_eq" go-to="pre">Prerequisitos</a>
+					<a href="##" class="js_pre_eq" go-to="eq">Equivalencias</a>
 				</header>
-				<section class="select_pre">
-					<select id="id_select_pre" class="form-control">
-						<?php if ($dataView['periods']): ?>
-							<option semester="0" value="">No hay prerequisitos para el primer semestre...</option>
-							<?php foreach ($data_courses as $course): ?>
-								<option semester="<?php echo $course['semid'] ?>" code-course="<?php print $course['courseid'] ?>" value="<?php echo base64_encode($course['courseid']) ?>" hidden><?php echo $course['courseid'].' | '.$course['name'] ?></option>
-							<?php endforeach ?>
-						<?php else: ?>
-							<option value="">Elija un semestre...</option>
-						<?php endif ?>
-					</select>
-					<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
-				</section>
-				<section class="prerequisites">
-					<!-- <article>
-						<p>Curso 1</p>
+				<div class="p-section_pre-eq  p-js_section  p-js_section_pre  active">
+					<section class="select_pre">
+						<select id="id_select_pre" class="form-control">
+							<?php if ($dataView['periods']): ?>
+								<option semester="0" value="">No hay prerequisitos para el primer semestre...</option>
+								<?php foreach ($data_courses as $course): ?>
+									<option semester="<?php echo $course['semid'] ?>" code-course="<?php print $course['courseid'] ?>" value="<?php echo base64_encode($course['courseid']) ?>" hidden><?php echo $course['courseid'].' | '.$course['name'] ?></option>
+								<?php endforeach ?>
+							<?php else: ?>
+								<option value="">Elija un semestre...</option>
+							<?php endif ?>
+						</select>
+						<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
+					</section>
+					<section class="prerequisites">
+						<!-- <article>
+							<p>Curso 1</p>
+							<input type="hidden" name="pre_1" value="">
+							<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
+						</article> -->
+						<p><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue prerequisitos a este curso si desea...</p>
 						<input type="hidden" name="pre_1" value="">
-						<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
-					</article> -->
-					<p><span class="glyphicon glyphicon-exclamation-sign"></span> Agregue requisitos para este curso si desea...</p>
-					<input type="hidden" name="pre_1" value="">
-					<input type="hidden" name="pre_2" value="">
-					<input type="hidden" name="pre_3" value="">
-				</section>
+						<input type="hidden" name="pre_2" value="">
+						<input type="hidden" name="pre_3" value="">
+					</section>
+				</div>
+
+				<div class="p-section_pre-eq  p-js_section p-js_section_eq">
+					<section class="select_pre">
+						<select id="id_select_eq" class="form-control">
+							<?php if ($data_courses_eq): ?>
+								<option value="">Elija un curso...</option>
+								<?php foreach ($data_courses_eq as $c => $course): ?>
+									<option value="<?php print base64_encode($course['courseid']) ?>"><?php print $course['courseid'].' | '.$course['name'] ?></option>
+									
+								<?php endforeach ?>
+							<?php else: ?>
+								<option value="">No tiene curricula de equivalencia</option>
+							<?php endif ?>
+						</select>
+						<a href="##"><span class="glyphicon glyphicon-plus"></span></a>
+					</section>
+					<section class="prerequisites  equivalence_side">
+						<!-- <article>
+							<p>Curso 1</p>
+							<input type="hidden" name="pre_1" value="">
+							<a href="##"><span class="glyphicon glyphicon-remove"></span></a>
+						</article> -->
+						<p><span class="glyphicon glyphicon-exclamation-sign"></span> Los cursos en la lista son de la curricula que elijio como equivalencia...</p>
+						<input type="hidden" name="eq_1" value="">
+						<input type="hidden" name="eq_2" value="">
+					</section>
+				</div>
 			</div>
 		</div>
 
@@ -100,10 +131,10 @@
 		</div>
 	</form>
 	<div class="msg_side">
-		<div class="msg success">
+		<div class="msg success  msg--success">
 			<p><span class="glyphicon glyphicon-exclamation-sign"></span> Curso guardado satisfactoriamente!</p>
 		</div>
-		<div class="msg warning">
+		<div class="msg warning  msg--warning">
 			<!-- Errores aqui desde JavaScript -->
 		</div>
 	</div>

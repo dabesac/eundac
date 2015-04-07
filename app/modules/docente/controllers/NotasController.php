@@ -21,8 +21,9 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$base_period       = new Api_Model_DbTable_Periods();
 
 		$perid_encode = base64_encode($this->sesion->period->perid);
+		$escid = $this->sesion->escid;
+		$subid = $this->sesion->subid;
 		$perid = base64_decode($this->_getParam('perid',$perid_encode));
-
 
 		$where['eid']     = $this->sesion->eid;
 		$where['oid']     = $this->sesion->oid;
@@ -34,6 +35,8 @@ class Docente_NotasController extends Zend_Controller_Action{
 		$this->view->uid = $where['uid'];
 
 		$this->view->perid= $perid;
+		$this->view->escid= $escid;
+		$this->view->subid= $subid;
 		$data_courses = $tb_periods_course->_getCourseTeacher($where);
 
 		$faculty=array();
@@ -104,10 +107,6 @@ class Docente_NotasController extends Zend_Controller_Action{
 	    // print_r($persetage);exit();
 
 		$this->view->data=$persetage;
-		
-		
-
-
 	}
 
 

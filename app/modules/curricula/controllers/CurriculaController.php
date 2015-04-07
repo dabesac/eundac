@@ -917,6 +917,18 @@ class Curricula_CurriculaController extends Zend_Controller_Action
         $dataCourses = $courseDb->_getFilter($where, $attrib, $order);
         $dataView['data_courses'] = $dataCourses;
 
+        // all Courses From Equivalence Curriculum
+        $dataView['data_courses_eq'] = array();
+        if ($dataCurriculum['cur_per_ant']) {
+            $where = array( 'eid'   => $eid,
+                            'oid'   => $oid,
+                            'curid' => $dataCurriculum['cur_per_ant'],
+                            'escid' => $escid,
+                            'subid' => $subid );
+            $dataCourses = $courseDb->_getFilter($where, $attrib, $order);
+            $dataView['data_courses_eq'] = $dataCourses;
+        }
+
         $this->view->dataView = $dataView;
     }
 
@@ -978,7 +990,8 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                             'oid'   => $oid,
                             'escid' => $escid,
                             'subid' => $subid,
-                            'curid' => $curid );
+                            'curid' => $curid,
+                            'state' => 'A' );
             $attrib = array('courseid', 'semid', 'name');
             $order = array('semid ASC');
             $courses_pre_pd = $courseDb->_getFilter($where, $attrib, $order);
@@ -1021,9 +1034,51 @@ class Curricula_CurriculaController extends Zend_Controller_Action
             }
             ksort($requisites_data);
 
-            $dataView['requisites_data']  = $requisites_data;
-            $dataView['courses_pre_data'] = $courses_pre_data;
-            $dataView['course_form']      = $course_form;
+            // Equivalences
+            $curid_eq = $curriculum_data['cur_per_ant'];
+            $dataView['courses_eq_data'] = array();
+            if ($curid_eq) {
+                $where = array(
+                                'eid'   => $eid,
+                                'oid'   => $oid,
+                                'escid' => $escid,
+                                'subid' => $subid,
+                                'curid' => $curid_eq );
+                $courses_eq_pd = $courseDb->_getFilter($where, $attrib, $order);
+                $courses_eq_data   = array();
+                $equivalences_data = array();
+                if ($courses_eq_pd) {
+                    foreach ($courses_eq_pd as $c => $course) {
+                        $courses_eq_data[$c] = array(
+                                                        'id'    => base64_encode($course['courseid']),
+                                                        'code'  => $course['courseid'],
+                                                        'name'  => $course['name'],
+                                                        'semid' => $course['semid'] );
+
+                        if ($course_data['course_equivalence'] == $course['courseid']) {
+                            $equivalences_data[0] = array(   
+                                                        'id'    => base64_encode($course['courseid']),
+                                                        'code'  => $course['courseid'],
+                                                        'name'  => $course['name'],
+                                                        'semid' => $course['semid'] );
+                        }
+
+                        if ($course_data['course_equivalence_2'] == $course['courseid']) {
+                            $equivalences_data[1] = array(   
+                                                        'id'    => base64_encode($course['courseid']),
+                                                        'code'  => $course['courseid'],
+                                                        'name'  => $course['name'],
+                                                        'semid' => $course['semid'] );
+                        }
+                    }
+                }
+            }
+
+            $dataView['equivalences_data'] = $equivalences_data;
+            $dataView['requisites_data']   = $requisites_data;
+            $dataView['courses_pre_data']  = $courses_pre_data;
+            $dataView['courses_eq_data']   = $courses_eq_data;
+            $dataView['course_form']       = $course_form;
         } else if ($rid == 'DR') {
             $dataView['sumilla'] = $course_data['sumilla'];
         }
@@ -1094,6 +1149,14 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                 $type = 'Obligatorio';
             } else if ($formData['type'] == 'E') {
                 $type = 'Electivo';
+            }
+
+            // Equivalences
+            if ($formData['eq_1']) {
+                $dataSave['course_equivalence'] = base64_decode($formData['eq_1']);
+            }
+            if ($formData['eq_2']) {
+                $dataSave['course_equivalence_2'] = base64_decode($formData['eq_2']);
             }
 
             $idGet = base64_encode($formData['courseid'].'|'.
@@ -1194,6 +1257,16 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                     $type = 'Obligatorio';
                 } elseif ($formData['type'] == 'E') {
                     $type = 'Electivo';
+                }
+
+                // Equivalences
+                $course_data_update['course_equivalence']   = null;
+                $course_data_update['course_equivalence_2'] = null;
+                if ($formData['eq_1']) {
+                    $course_data_update['course_equivalence'] = base64_decode($formData['eq_1']);
+                }
+                if ($formData['eq_2']) {
+                    $course_data_update['course_equivalence_2'] = base64_decode($formData['eq_2']);
                 }
 
                 $change_semester = false;
