@@ -188,7 +188,7 @@ if ($this->horarios) {
     <div class="row" style="margin-top: -20px; margin-bottom: 10px;">
         <div class="col-md-12 text-center">
             <button class='closehorary btn btn-danger pull-right' type='button' data-dismiss="modal"><span class='glyphicon glyphicon-log-out'></span> Salir</button>
-            <a href="/horary/seehorary/print/perid/<?php echo $this->perid?>" class='btn btn-success pull-right'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
+            <a href="/horary/seehorary/print/perid/<?php echo base64_encode($this->perid) ?>/escid/<?php echo base64_encode($this->escid) ?>/subid/<?php echo base64_encode($this->subid) ?>" class='btn btn-success pull-right'><span class='glyphicon glyphicon-print'></span> Imprimir</a>
             <h4><b>MI HORARIO</b></h4>
         </div>
     </div>

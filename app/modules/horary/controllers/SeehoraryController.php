@@ -30,10 +30,10 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             if (substr($escid,0,3)=="2ES") {
                 $escid="2ES";
             }
-            // $escid=$this->sesion->escid;
-            // $subid=$this->sesion->subid;
             $pid=$this->sesion->pid;
             $uid=$this->sesion->uid;
+            $this->view->escid=$escid;
+            $this->view->subid=$subid;
 
             $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
             $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
@@ -130,51 +130,104 @@ class Horary_SeehoraryController extends Zend_Controller_Action {
             $this->_helper->layout()->disableLayout();
             $eid=$this->sesion->eid;
             $oid=$this->sesion->oid;
-            // $perid=$this->sesion->period->perid;
-            $perid=$this->_getParam('perid');
             $faculty=$this->sesion->faculty->name;
-            $this->view->faculty=$faculty;
-
-            $escid=$this->sesion->escid;
-            $subid=$this->sesion->subid;
+            // $perid=$this->sesion->period->perid;
+            $perid=base64_decode($this->_getParam('perid'));
+            $escid=base64_decode($this->_getParam('escid'));
+            $subid=base64_decode($this->_getParam('subid'));
+            
+            if (substr($escid,0,3)=="2ES") {
+                $escid="2ES";
+            }
+            // $escid=$this->sesion->escid;
+            // $subid=$this->sesion->subid;
             $pid=$this->sesion->pid;
-
             $uid=$this->sesion->uid;
-            $this->view->uid=$uid;
             $this->view->pid=$pid;
+            $this->view->uid=$uid;
 
             $wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
             $bd_hours= new Api_Model_DbTable_HoursBeginClasses();
             $datahours=$bd_hours->_getFilter($wheres);
-            $valhoras[0]=$datahours[0]['hours_begin'];
-            $hora=new Api_Model_DbTable_Horary();
-            for ($k=0; $k < 20; $k++) {
-                $dho=$hora->_getsumminutes($valhoras[$k],'50');
-                $valhoras[$k+1]=$dho[0]['hora'];
-            }
-            $this->view->valhoras=$valhoras;
+            if ($datahours) {
+                $hora=new Api_Model_DbTable_Horary();
+                if ($datahours[0]['hours_begin_afternoon']) {
+                    $valhorasm[0]=$datahours[0]['hours_begin'];
+                    $valhorast[0]=$datahours[0]['hours_begin_afternoon'];
+                    $k=0;
+                    while ($valhorasm[$k] < $datahours[0]['hours_begin_afternoon']) {
+                        $dho=$hora->_getsumminutes($valhorasm[$k],'50');
+                        $valhorasm[$k+1]=$dho[0]['hora'];
+                        $k++;
+                    }
+                    $len=count($valhorasm);
+                    $w=0;
+                    // print_r($len);exit();
+                    for ($g=0; $g < $len; $g++) {
+                        if ($valhorasm[$g]==$valhorast[0] && $w==0) {
+                            $valhoras[0]=$datahours[0]['hours_begin'];
+                            for ($k=0; $k < 20; $k++) {
+                                $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                                $valhoras[$k+1]=$dho[0]['hora'];
+                            }
+                            $this->view->valhoras=$valhoras;
+                            $w=1;
+                        }
+                    }
+                    if ($w==0) {
+                        unset($valhorasm[$k]);
+                        $this->view->valhorasm=$valhorasm;
+                        $j=0;
+                        while ( $j < 12) {
+                            $dho=$hora->_getsumminutes($valhorast[$j],'50');
+                            $valhorast[$j+1]=$dho[0]['hora'];
+                            $j++;
+                        }
+                        $endtarde=$valhorast[$j-1];
+                        $this->view->valhorast=$valhorast;
+                    }
+                }
+                else{
+                    $valhoras[0]=$datahours[0]['hours_begin'];
+                    for ($k=0; $k < 20; $k++) {
+                        $dho=$hora->_getsumminutes($valhoras[$k],'50');
+                        $valhoras[$k+1]=$dho[0]['hora'];
+                    }
+                    $this->view->valhoras=$valhoras;
+                }
+                $where['eid']=$eid;
+                $where['oid']=$oid;
+                $where['perid']=$perid;
+                $where['escid']=$escid;
+                $where['subid']=$subid;
+                $where['teach_uid']=$uid;
+                $where['teach_pid']=$pid;
+                $order=array('courseid');
+                if ($where['escid']=='2ES') {
+                    $dathora=$hora->_getHoraryxTeacherXPeriodXTodasEsc($where);
+                }
+                else{
+                    $dathora=$hora->_getFilter($where,$attrib=null,$order);
+                }
+                // print_r($dathora);exit();
+                $this->view->horarios=$dathora;
 
-            $where['eid']=$eid;
-            $where['oid']=$oid;
-            $where['perid']=$perid;
-            $where['subid']=$subid;
-            $where['teach_uid']=$uid;
-            $where['teach_pid']=$pid;
-            $order=array('courseid');
-            // print_r($where);
-            $dathora=$hora->_getFilter($where,'',$order);
-            // print_r($dathora);
-            $this->view->horarys=$dathora;
-            $curso=new Api_Model_DbTable_Coursexteacher();
-            $where1['eid']=$eid;
-            $where1['oid']=$oid;
-            $where1['escid']=$escid;
-            $where1['perid']=$perid;
-            $where1['subid']=$subid;
-            $where1['pid']=$pid;
-            $datcur=$curso->_getFilter($where1);
-            // print_r($datcur);
-            $this->view->cursos=$datcur;
+                $curso=new Api_Model_DbTable_Coursexteacher();
+                $where1['eid']   = $eid;
+                $where1['oid']   = $oid;
+                $where1['escid'] = $escid;
+                $where1['perid'] = $perid;
+                $where1['subid'] = $subid;
+                $where1['pid']   = $pid;
+                if ($where1['escid']=="2ES") {
+                    $datcur=$curso->_getOneCoursexTeacherXPeriodXTodasEsc($where1);
+                }
+                else{
+                    $datcur=$curso->_getFilter($where1);
+                }
+                $this->view->cursos=$datcur;
+                $this->view->perid=$perid;
+            }
 
             $spe=array();
             $where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
