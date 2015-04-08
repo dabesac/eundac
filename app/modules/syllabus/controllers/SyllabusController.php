@@ -127,6 +127,7 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
         $doc= new Api_Model_DbTable_Coursexteacher();
         $docente=$doc->_getOne($wheredoc);
         $this->view->docente=$docente;
+        $this->view->whe=$wheredoc;
 
         $whereper['eid']=$where['eid'];
         $whereper['pid']=$this->sesion->pid;
@@ -137,6 +138,33 @@ class Syllabus_SyllabusController extends Zend_Controller_Action {
         $percur= new Api_Model_DbTable_PeriodsCourses();
         $periodocurso= $percur->_getOne($wheredoc);
         $this->view->periodocurso=$periodocurso;
+
+        /*Si tiene JP*/
+        $wheredocjp = array(
+                            'eid'       => $where['eid'],
+                            'oid'       => $where['oid'],
+                            'escid'     => $where['escid'],
+                            'subid'     => $where['subid'],
+                            'courseid'  => $where['courseid'],
+                            'curid'     => $where['curid'],
+                            'perid'     => $where['perid'],
+                            'turno'     => $where['turno'],
+                            'is_main'   => 'N');
+        $data_jp = $doc->_getJp($wheredocjp);
+        $this->view->jp=$data_jp;
+        if ($data_jp) {
+            $i=0;         
+            foreach ($data_jp as $data) {
+                $whereperjp = array(
+                                'eid'   =>$data['eid'],
+                                'pid'   =>$data['pid']);
+                $datauid[$i]['uid']=$data['uid'];
+                $datajp[$i] =$per->_getOne($whereperjp);
+                $i++;
+            }
+            $this->view->datauid=$datauid;
+            $this->view->datajp=$datajp;
+        }
     }
 
     public function viewfrmAction(){

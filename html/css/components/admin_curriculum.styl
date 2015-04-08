@@ -1115,7 +1115,46 @@ section.semester
 .edit_curriculum, .admin_courses
 	display none
 
+.p-two_buttons
+	text-align center
+	
+	a
+		margin 0 2em 0 2em
+		color plomoTexto
+	
+	a:hover
+		color azul
 
+	a.active
+		color azul
+
+.p-section_pre-eq
+	display none
+	position relative
+	
+.p-section_pre-eq.active
+	animation showPreEq .3s
+	display block
+	
+.p-section_pre-eq.inactive
+	animation hidePreEq .3s
+
+@keyframes showPreEq
+	from
+		opacity 0
+		top 10px
+	to
+		opacity 1
+		top 0
+
+@keyframes hidePreEq
+	from
+		opacity 1
+		top 0
+	to
+		top 10px
+		opacity 0
+		
 @keyframes showDerive
 	from
 		opacity 0

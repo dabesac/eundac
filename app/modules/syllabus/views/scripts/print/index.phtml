@@ -116,6 +116,23 @@ $fecha_impresion = date('d')." de ".$strm." del ".date('Y');
             <td></td>
             <td><strong>e-mail:</strong> <?php echo $this->infouser['mail_person']?></td>
         </tr>
+        <?php 
+            $datajp=$this->datajp;
+            $datauid=$this->datauid;
+            if($datajp){ 
+                $i=0;
+                foreach ($datajp as $data) {
+                    $retVal = ((substr($datauid[$i]['uid'],8,2))=='JP') ? 'JEFE DE PRÁCTICA:' : 'DOCENTE DE APOYO:' ;
+             ?> 
+                    <tr>
+                        <td><b>1.<?php echo $num=$num+1 ?> <?php echo $retVal ?></b></td>
+                        <td><?php echo $data['last_name0']." ".$data['last_name1'].", ".$data['first_name']?></td>
+                    </tr>                   
+                <?php
+                $i++;
+                }   
+            }
+            ?>
     </table>
 </div>
 <div>

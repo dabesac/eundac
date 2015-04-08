@@ -74,6 +74,18 @@ class Api_Model_DbTable_Coursexteacher extends Zend_Db_Table_Abstract
 		}
 	}
 
+	public function _getJp($where=array()){
+		try{
+			if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["subid"] =='' || $where["courseid"]=='' || $where["curid"] =='' || $where["turno"] =='' || $where["perid"]=='' || $where["is_main"]=='') return false;
+			$wherestr="eid = '".$where['eid']."' and oid='".$where['oid']."' and escid='".$where['escid']."' and subid='".$where['subid']."' and courseid='".$where['courseid']."' and curid='".$where['curid']."' and turno='".$where['turno']."' and perid='".$where['perid']."' and is_main='".$where['is_main']."'";
+			$rows = $this->fetchAll($wherestr);
+			if($rows) return $rows->toArray();
+			return false;
+		}catch (Exception $e){
+			print "Error: Read One Course ".$e->getMessage();
+		}
+	}
+
 	public function _getAll($where=array()){
 		try{
 			if ($where["eid"]=='' || $where["oid"]=='' ||  $where["escid"]=='' ||  $where["subid"] =='' || 
