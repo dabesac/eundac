@@ -5,18 +5,19 @@ if ($this->nodata=="1") { ?>
     </div>
 <?php	
 }else{ ?>
-<table class="table table-striped table-condensed ">
-	<tr>
-		<th>#</th>
-		<th>Periodo</th>
-		<th><center>Num. Operación</center></th>
-		<th>Cod. Mat.</th>
-		<th>Nombre</th>
-		<th>Fecha Pago</th>
-		<th>Concepto</th>
-		<th>Monto</th>
-		<th>Procesado</th>
-		<th>Asignar</th>
+<table class="table table-hover ">
+	<tr class="active">
+		<th class="text-center">#</th>
+		<th class="text-center">Periodo</th>
+		<th class="text-center"><center>Num. Operación</center></th>
+		<th class="text-center">Cod. Mat.</th>
+		<th class="text-center">Nombre</th>
+		<th class="text-center">Fecha Pago</th>
+		<th class="text-center">Concepto</th>
+		<th class="text-center">Monto</th>
+		<th class="text-center">Asignado A:</th>
+		<th class="text-center">Procesado</th>
+		<th class="text-center">Asignar</th>
 	</tr>
 	<?php
 	if ($this->drecibo) {
@@ -30,23 +31,33 @@ if ($this->nodata=="1") { ?>
 			//$nombres=$datper[0]['last_name0'];
 			?>
 			<tr>
-				<td><?php echo $c ?></td>
-				<td><?php echo $recibos['perid'] ?></td>
-				<td><?php echo $recibos['operation'] ?></td>
-				<td><?php echo $recibos['code_student'] ?></td>
+				<td class="text-center"><?php echo $c ?></td>
+				<td class="text-center"><?php echo $recibos['perid'] ?></td>
+				<td class="text-center"><?php echo $recibos['operation'] ?></td>
+				<td class="text-center"><?php echo $recibos['code_student'] ?></td>
 				<td><?php echo $datper[0]['last_name0']; ?> <?php echo $datper[0]['last_name1']; ?> <?php echo $datper[0]['first_name']; ?></td>
-				<td><?php echo $recibos['payment_date'] ?></td>
-				<td><?php echo $recibos['concept'] ?></td>
-				<td><?php echo $recibos['amount'] ?></td>
-				<td><?php echo $recibos['processed'] ?></td>
-				
-				<td>
+				<td class="text-center"><?php echo $recibos['payment_date'] ?></td>
+				<td class="text-center"><?php echo $recibos['concept'] ?></td>
+				<td class="text-center"><?php echo $recibos['amount'] ?></td>
+				<td class="text-center">
 					<?php 
-					if ($recibos['processed']=="N") { ?>
-						<a href="/admin/bankpayments/assign/uid/<?php echo $recibos['code_student'] ?>/perid/<?php echo $recibos['perid'] ?>/num_operacion/<?php echo $recibos['operation'] ?>"><span class="glyphicon glyphicon-pencil"></span></a>
+					if (($recibos['code_student']==$recibos['code_rect']) || !$recibos['code_rect']) { ?>
+						SIN ASIGNAR
+					<?php
+					}else{ 
+						echo $recibos['code_rect']; 
+					}
+					?>
+				</td>
+				<td class="text-center"><?php echo $recibos['processed'] ?></td>
+				
+				<td class="text-center">
+					<?php 
+					if (($recibos['code_student']==$recibos['code_rect']) || !$recibos['code_rect']) { ?>
+						<a class="reassignar" href="##" uid="<?php echo base64_encode($recibos['code_student']) ?>" perid="<?php echo base64_encode($recibos['perid']) ?>" operacion="<?php echo base64_encode($recibos['operation']) ?>" fini='<?php echo base64_encode($this->fini)?>' ffin='<?php echo base64_encode($this->ffin)?>'><span class="glyphicon glyphicon-pencil"></span></a>
 					<?php
 					}else{ ?>
-						<a id="desasignar" href="/admin/bankpayments/remove/uid/<?php echo $recibos['code_student']?>/num_operacion/<?php echo $recibos['operation']?>" onclick="return confirm('Esta seguro de anular la asignación del pago.')"><span class="glyphicon glyphicon-remove"></a>
+						<a id="desasignar" href="#"><span class="glyphicon glyphicon-remove"></a>
 					<?php }
 					?>
 				</td>
@@ -57,4 +68,38 @@ if ($this->nodata=="1") { ?>
 	}
 	?>
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:60%">
+	    <div class="modal-content">
+		    <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title text-center" id="myModalLabel"><b>INFORMACIÓN DE PAGO</b></h4>
+		    </div>
+		    <div class="modal-body load_data"></div>
+		    <div class="modal-footer">
+		        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-log-out"></span> Cerrar</button>
+		        <button type="button" class="btn btn-primary reasignation"><span class="glyphicon glyphicon-repeat"> </span>Reasignar</button>
+		    </div>
+	    </div>
+	</div>
+</div>
 <?php } ?>
+
+<script>
+	$(function() {
+		$(".reassignar").on('click',function(){
+			$("#myModal").modal('show');
+
+			var perid = $(this).attr('perid');;
+			var uid = $(this).attr('uid');;
+			var operacion = $(this).attr('operacion');
+			var fini = $(this).attr('fini');
+			var ffin = $(this).attr('ffin');
+			var url = ("/admin/bankpayments/assign/perid/"+perid+"/uid/"+uid+"/operacion/"+operacion+"/fini/"+fini+"/ffin/"+ffin);
+
+			$(".load_data").load(url);
+		});
+	});
+</script>

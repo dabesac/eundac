@@ -1,24 +1,27 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-th-list"></span> RECIBOS DEL BANCO');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
-<table class="table table-condensed table-hover">
-    <tr>
-        <th>Fecha Inicio:</th>
-        <th><input type="text" id="f_inicio" class="form-control"></th>
-        <th>Fecha Fin:</th>
-        <th><input type="text" id="f_fin" class="form-control"></th>
-        <th>Usuario:</th>
-        <th><input type="text" id="usuario" class="form-control"></th>
-        <th><a id="buscar" class="btn btn-success" href="#"><span class="glyphicon glyphicon-search"></span> Buscar</a></th>
-    </tr>
-    <tr>
-        <td colspan="7">
-            <center>
-                <a href="/admin/bankpayments/loadreceipt/" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Nuevo Recibo</a>
-            </center>
-        </td>
-    </tr>
-</table>
-<div id="listadatos" style="margin-top: 10px"></div>
+<section class="container">
+    <table class="table table-condensed table-hover">
+        <tr class="active">
+            <th>Fecha Inicio:</th>
+            <th><input type="text" id="f_inicio" class="form-control"></th>
+            <th>Fecha Fin:</th>
+            <th><input type="text" id="f_fin" class="form-control"></th>
+            <th>Usuario:</th>
+            <th><input type="text" id="usuario" class="form-control"></th>
+            <th><a id="buscar" class="btn btn-success" href="#"><span class="glyphicon glyphicon-search"></span> Buscar</a></th>
+        </tr>
+        <tr>
+            <td colspan="7">
+                <center>
+                    <a href="/admin/bankpayments/loadreceipt/" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span> Nuevo Recibo</a>
+                </center>
+            </td>
+        </tr>
+    </table>
+    <div id="listadatos" style="margin-top: 10px"></div>    
+</section>
+
 
 <script type="text/javascript">
 $(function() {
@@ -71,7 +74,7 @@ $("#buscar").click(function(){
         }         
       
         if (validaFecha=="1"){
-            var url="/admin/bankpayments/list/fini/"+fini+"/ffin/"+ffin+"/usuario/"+cod;
+            var url="/admin/bankpayments/list/fini/"+$.base64.encode(fini)+"/ffin/"+$.base64.encode(ffin)+"/usuario/"+$.base64.encode(cod);
             // alert(url);
             $("#listadatos").html("<img src='/img/spinner.gif'> Cargando....");
             $("#listadatos").load(url);

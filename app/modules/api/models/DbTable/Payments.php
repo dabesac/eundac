@@ -87,9 +87,14 @@ class Api_Model_DbTable_Payments extends Zend_Db_Table_Abstract
 		}
 	}
 
-
-
-
-
-
+    public function _delete($pk){
+		try{
+			if ($pk['eid']=='' || $pk['oid']=='' || $pk['uid']==''|| $pk['pid']=='' || $pk['escid']=='' || $pk['subid']=='' || $pk['perid']=='') return false;
+			$where = "eid = '".$pk['eid']."'and oid = '".$pk['oid']."' and uid = '".$pk['uid']."' and pid = '".$pk['pid']."' and escid= '".$pk['escid']."' and subid = '".$pk['subid']."' and perid = '".$pk['perid']."'";
+			return $this->delete($where);
+			return false;
+		}catch (Exception $e){
+			print "Error: Delete Payments ".$e->getMessage();
+		}
+	}
 }
