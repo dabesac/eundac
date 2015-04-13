@@ -96,7 +96,7 @@ class Rcentral_TraslatestudentController extends Zend_Controller_Action
             $pk = array(
                 'eid' => $eid, 'oid' => $oid, 'uid' => $uid, 'pid' => $pid, 
                 'escid' => $datauser[0]['escid'], 'subid' => $datauser[0]['subid']);
-            // $user->_update($data = array('state' => 'I'),$pk);
+            $user->_update($data = array('state' => 'I'),$pk);
             
             $tmp = new Api_Model_DbTable_Tmpgeneratedcode();
             $escidtmp = $tmp->_getOne($where=array('escid' => $escid));
@@ -107,7 +107,7 @@ class Rcentral_TraslatestudentController extends Zend_Controller_Action
                 'pid' => $pid, 'escid' => $escid, 'subid' => $subid, 'rid' => $datauser[0]['rid'],
                 'password' => md5($codtmp.$escidtmp['code'].'7'.$codtmp2), 'state' => 'A',
                 'register' => $this->sesion->uid, 'created' => date('Y-m-d'));
-            // $user->_save($data);
+            $user->_save($data);
             
             $data = array(
                 'eid' => $eid, 'oid' => $oid, 'uid' => $uid, 'pid' => $pid, 
