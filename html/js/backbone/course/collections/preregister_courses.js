@@ -20,11 +20,20 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 			success : function(models, response){
 				if (response) {
 					if (!success_pre || success_pre === 'B') {
+
 						//verificar si existe curso con condicion...
 						var courses_with_condition = self.where({ condition : true });
+						var models_condition = [];
+						var semester_each = '-';
+						courses_with_condition.forEach(function(model){
+							var semester_each_self = model.toJSON().semester;
+							if (semester_each_self <= semester_render) {
+								models_condition.push(model);
+							}
+						});
 
 						// tipo de render segun condicional
-						var result = self.verifyCondition(courses_with_condition);
+						var result = self.verifyCondition(models_condition);
 
 						var type_render_course = 'A';
 						var type_render_paragraph = 'N';
@@ -42,7 +51,7 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 
 						//render de cursos
 						var semesters = [];
-						var semester_each = '-';
+						semester_each = '-';
 						var c_semesters = 0;
 						var exist;
 						models.every(function(model){
