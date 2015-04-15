@@ -92,7 +92,7 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 
 						//boton para validar
 						if (type_render_course === 'A') {
-							self.buttonPreregister(courses_with_condition);
+							self.buttonPreregister(models_condition);
 						}
 					} else if (success_pre === 'I') {
 						// Renderear cursos que llevara
