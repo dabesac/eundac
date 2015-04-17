@@ -32,6 +32,7 @@ class Rest_UserdataController extends Zend_Rest_Controller {
         $rid   = $this->sesion->rid;
         $escid = $this->sesion->escid;
         $subid = $this->sesion->subid;
+        $curid = $this->sesion->curid;
         $perid = $this->sesion->period->perid;
 
         $main_info = array(
@@ -119,7 +120,8 @@ class Rest_UserdataController extends Zend_Rest_Controller {
                                 'oid'   => $oid,
                                 'escid' => $escid,
                                 'subid' => $subid,
-                                'perid' => $perid );
+                                'perid' => $perid,
+                                'curid' => $curid );
                 $attribs = array('courseid', 'curid', 'semid', 'turno');
                 $order = array('semid ASC', 'turno ASC');
                 $courses_pd = $coursesPeriodDb->_getFilter($where, $attribs, $order);
