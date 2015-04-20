@@ -121,8 +121,17 @@ public function lschoolAction(){
     $data['comments']=$resolucion;
     // print_r($data);
     $persona = new Api_Model_DbTable_Users();
-        $datos=$persona->_save($data);
-        $this->_helper->_redirector("list","code","rcentral",array('pid' => $formData['pid'] ));   
+
+        $where_veri=array('eid'=>$this->sesion->eid,'oid'=>$this->sesion->oid,'uid'=>$codigo);
+        $data_veri=$persona->_getFilter($where_veri);
+        if (!$data_veri) {
+            $datos=$persona->_save($data);
+            $this->_helper->_redirector("list","code","rcentral",array('pid' => $formData['pid'] ));   
+        }
+        else{
+            $this->view->status=false;
+            $this->view->pid=$formData['pid'];
+        }
     }
 
     public function listAction() 

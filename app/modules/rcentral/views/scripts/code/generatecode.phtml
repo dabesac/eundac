@@ -1,0 +1,19 @@
+<script>
+	$(function(){
+		var status="<?php echo $this->status?>";
+		if (!status) {
+			alert("El código ya existe ");
+
+			setTimeout(function(){
+				// var pid="<?php echo $this->pid ?>";
+				// var url="/rcentral/code/listuser/pid/"+pid;
+				// console.log(url);
+				// return false;
+				// $("#cargadatos_").load(url);			
+				window.location.href = '/rcentral/code/index';
+			}, 500);
+
+
+		};
+	});
+</script>
