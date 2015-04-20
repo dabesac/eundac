@@ -1,10 +1,12 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-certificate"></span> Generar Codigo');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
-<!-- <script src="/js/bootstrap/bootstrap-modal.js"></script> -->
+<script src="/js/bootstrap/bootstrap-modal.js"></script>
+<section class="container">
     <form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/rcentral/code/listuser/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal" >
-    <center><p class='alert-success' style="font-size: 16px"><b>Buscar nro DNI para generar Código: </b><?php echo $this->fm->pid?></p></center >
-  </form>
-<div id="cargadatos_"> </div>  
+        <center><p class='alert-success' style="font-size: 16px"><b>Buscar nro DNI para generar Código: </b><?php echo $this->fm->pid?></p></center >
+    </form>
+    <div id="cargadatos_"> </div>  
+</section>
 
 <script>
 $(function(){

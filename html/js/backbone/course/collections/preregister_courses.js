@@ -20,11 +20,27 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 			success : function(models, response){
 				if (response) {
 					if (!success_pre || success_pre === 'B') {
+
 						//verificar si existe curso con condicion...
 						var courses_with_condition = self.where({ condition : true });
+						var models_condition = [];
+						var semester_each = '-';
+						var c_semesters = 0;
+						models.forEach(function(model){
+							var semester_each_self = model.toJSON().semester;
+							
+							if (semester_each_self !== semester_each) {
+								semester_each = semester_each_self;
+								c_semesters++;
+							}
+
+							// Renderear cursos en la cantidad de semestres establecidos
+							if (c_semesters <= semester_render && model.toJSON().condition === true)
+								models_condition.push(model);
+						});
 
 						// tipo de render segun condicional
-						var result = self.verifyCondition(courses_with_condition);
+						var result = self.verifyCondition(models_condition);
 
 						var type_render_course = 'A';
 						var type_render_paragraph = 'N';
@@ -42,8 +58,8 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 
 						//render de cursos
 						var semesters = [];
-						var semester_each = '-';
-						var c_semesters = 0;
+						semester_each = '-';
+						c_semesters = 0;
 						var exist;
 						models.every(function(model){
 							// cantidad de semestres
@@ -83,7 +99,7 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 
 						//boton para validar
 						if (type_render_course === 'A') {
-							self.buttonPreregister(courses_with_condition);
+							self.buttonPreregister(models_condition);
 						}
 					} else if (success_pre === 'I') {
 						// Renderear cursos que llevara
