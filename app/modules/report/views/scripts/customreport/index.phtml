@@ -2,115 +2,117 @@
   	$this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-tasks"></span> Reportes Personalizados');
   	$this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');
 ?>
-<div class="panel panel-primary col-md-12">
-	<br>
-	<div class='row text-center'>
-		<div class='col-md-12'>
-			<div class='col-md-2'><b>Seleccione una facultad: </b></div>
-			<div class='col-md-2'>
-				<select id='seletfac' class='form-control'>
-					<option value="nada">-- Seleccione Facultad --</option>
-						<?php
-							if ($this->data) {
-								foreach ($this->data as $key => $facultys) {
-									if ($facultys['facid']!='TODO' && $facultys['facid']!='NINGUN') {
-									?>
-										<option value='<?php echo $facultys['facid']?>'><?php echo $facultys['name']?></option>
-								<?php
+<section class="container">
+	<div class="panel panel-primary col-md-12">
+		<br>
+		<div class='row text-center'>
+			<div class='col-md-12'>
+				<div class='col-md-2'><b>Seleccione una facultad: </b></div>
+				<div class='col-md-2'>
+					<select id='seletfac' class='form-control'>
+						<option value="nada">-- Seleccione Facultad --</option>
+							<?php
+								if ($this->data) {
+									foreach ($this->data as $key => $facultys) {
+										if ($facultys['facid']!='TODO' && $facultys['facid']!='NINGUN') {
+										?>
+											<option value='<?php echo $facultys['facid']?>'><?php echo $facultys['name']?></option>
+									<?php
+										}
 									}
 								}
-							}
-						?>
-				</select>
+							?>
+					</select>
+				</div>
+				<div class='col-md-2'><b>Seleccione una Escuela: </b></div>
+				<div class='col-md-2'>
+					<select id='seletspec' class='form-control'>
+						<option value="nada">-- Seleccione una Facultad --</option>
+					</select>
+				</div>
+				<div class='col-md-2'><b>Seleccione una Especialidad: </b></div>
+				<div class='col-md-2'>
+					<select id='seletspecia' class='form-control'>
+						<option value="nada">-- Seleccione una Especialidad --</option>
+					</select>
+				</div>
 			</div>
-			<div class='col-md-2'><b>Seleccione una Escuela: </b></div>
-			<div class='col-md-2'>
-				<select id='seletspec' class='form-control'>
-					<option value="nada">-- Seleccione una Facultad --</option>
-				</select>
-			</div>
-			<div class='col-md-2'><b>Seleccione una Especialidad: </b></div>
-			<div class='col-md-2'>
-				<select id='seletspecia' class='form-control'>
-					<option value="nada">-- Seleccione una Especialidad --</option>
-				</select>
+		</div><br><br>
+		<div class='row hidden' id="contenido">
+			<div class="col-md-10 col-md-offset-2">
+				<div class="col-md-5">
+			    	<div class="thumbnail">
+			      		<div class="caption">
+			        		<h3><span class='text-primary'><b>Promedios de Estudiantes</b></span></h3>
+			        		<p><b>Promedios de los estudiantes en asignaturas llevadas por primera vez seleccionando cualquier periodo.</b></p>
+			        		<p class='text-right'><a id='report4' href="#" data-toggle="modal" data-target="#myModal4" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list'></span> Ver reporte</a></p>
+			      		</div>
+			    	</div>
+			  	</div>
+			  	<div class="col-md-5">
+			    	<div class="thumbnail">
+			      		<div class="caption">
+			        		<h3><span class='text-primary'><b>Promedios Generales Por Periodos</b></span></h3>
+			        		<p><b>Promedios de los estudiantes matriculados por periodos. Considerando los créditos</b></p>
+			        		<p class='text-right'><a id='report7' href="#" data-toggle="modal" data-target="#myModal7" class="btn btn-success" role="button"><span class='glyphicon glyphicon-tasks'></span> Ver reporte</a></p>
+			      		</div>
+			    	</div>
+			  	</div>
+			<!-- </div>
+			<div class="col-md-10 col-md-offset-2"> -->
+				<div class="col-md-5">
+			    	<div class="thumbnail">
+			      		<div class="caption">
+			        		<h3><span class='text-primary'><b>Cantidad de Matrículas</b></span></h3>
+			        		<p><b>Alumnos matriculados por 2º, 3º, 4º, 5º ..., a un curso en los ultimos 4 periodos.</b></p>
+			        		<p class='text-right'><a id='report1' href="#" data-toggle="modal" data-target="#myModal1" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
+			      		</div>
+			    	</div>
+			  	</div>
+				<div class="col-md-5">
+			    	<div class="thumbnail">
+			      		<div class="caption">
+			        		<h3><span class='text-primary'><b>Desaprobados mayor a 50%</b></span></h3>
+			        		<p><b>Curso cuyo grado de desaprobados es mayor al 50% en los ultimos 3 años.</b></p>
+			        		<p class='text-right'><a id="report2" href="#" data-toggle="modal" data-target="#myModal2" class="btn btn-success" role="button"><span class='glyphicon glyphicon-circle-arrow-up'></span> Ver reporte</a></p>
+			      		</div>
+			    	</div>
+			  	</div>
+			  	<div class="col-md-5">
+			    	<div class="thumbnail">
+			      		<div class="caption">
+			        		<h3><span class='text-primary'><b>Alumnos con cursos pendientes</b></span></h3>
+			        		<p><b>Se muestra a todos los alumnos que van a llevar algun curso por 3º, 4º, 5º ... vez.</b></p>
+			        		<p class='text-right'><a id='report5' href="#" data-toggle="modal" data-target="#myModal5" class="btn btn-success" role="button"><span class='glyphicon glyphicon-warning-sign'></span> Ver reporte</a></p>
+			      		</div>
+			    	</div>
+			  	</div>
+			  	<div class="col-md-5">
+			    	<div class="thumbnail">
+			      		<div class="caption">
+			        		<h3><span class='text-primary'><b>Alumnos sin ninguna matrícula</b></span></h3>
+			        		<p><b>Alumnos que nunca realizaron por lo menos una matrícula desde su ingreso.</b></p>
+			        		<p class='text-right'><a id="report6" href="#" data-toggle="modal" data-target="#myModal6" class="btn btn-success" role="button"><span class='glyphicon glyphicon-tower'></span> Ver reporte</a></p>
+			      		</div>
+			    	</div>
+			  	</div>
 			</div>
 		</div>
-	</div><br><br>
-	<div class='row hidden' id="contenido">
-		<div class="col-md-10 col-md-offset-2">
-			<div class="col-md-5">
-		    	<div class="thumbnail">
-		      		<div class="caption">
-		        		<h3><span class='text-primary'><b>Promedios de Estudiantes</b></span></h3>
-		        		<p><b>Promedios de los estudiantes en asignaturas llevadas por primera vez seleccionando cualquier periodo.</b></p>
-		        		<p class='text-right'><a id='report4' href="#" data-toggle="modal" data-target="#myModal4" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list'></span> Ver reporte</a></p>
-		      		</div>
-		    	</div>
-		  	</div>
-		  	<div class="col-md-5">
-		    	<div class="thumbnail">
-		      		<div class="caption">
-		        		<h3><span class='text-primary'><b>Promedios Generales Por Periodos</b></span></h3>
-		        		<p><b>Promedios de los estudiantes matriculados por periodos. Considerando los créditos</b></p>
-		        		<p class='text-right'><a id='report7' href="#" data-toggle="modal" data-target="#myModal7" class="btn btn-success" role="button"><span class='glyphicon glyphicon-tasks'></span> Ver reporte</a></p>
-		      		</div>
-		    	</div>
-		  	</div>
-		<!-- </div>
-		<div class="col-md-10 col-md-offset-2"> -->
-			<div class="col-md-5">
-		    	<div class="thumbnail">
-		      		<div class="caption">
-		        		<h3><span class='text-primary'><b>Cantidad de Matrículas</b></span></h3>
-		        		<p><b>Alumnos matriculados por 2º, 3º, 4º, 5º ..., a un curso en los ultimos 4 periodos.</b></p>
-		        		<p class='text-right'><a id='report1' href="#" data-toggle="modal" data-target="#myModal1" class="btn btn-success" role="button"><span class='glyphicon glyphicon-list-alt'></span> Ver reporte</a></p>
-		      		</div>
-		    	</div>
-		  	</div>
-			<div class="col-md-5">
-		    	<div class="thumbnail">
-		      		<div class="caption">
-		        		<h3><span class='text-primary'><b>Desaprobados mayor a 50%</b></span></h3>
-		        		<p><b>Curso cuyo grado de desaprobados es mayor al 50% en los ultimos 3 años.</b></p>
-		        		<p class='text-right'><a id="report2" href="#" data-toggle="modal" data-target="#myModal2" class="btn btn-success" role="button"><span class='glyphicon glyphicon-circle-arrow-up'></span> Ver reporte</a></p>
-		      		</div>
-		    	</div>
-		  	</div>
-		  	<div class="col-md-5">
-		    	<div class="thumbnail">
-		      		<div class="caption">
-		        		<h3><span class='text-primary'><b>Alumnos con cursos pendientes</b></span></h3>
-		        		<p><b>Se muestra a todos los alumnos que van a llevar algun curso por 3º, 4º, 5º ... vez.</b></p>
-		        		<p class='text-right'><a id='report5' href="#" data-toggle="modal" data-target="#myModal5" class="btn btn-success" role="button"><span class='glyphicon glyphicon-warning-sign'></span> Ver reporte</a></p>
-		      		</div>
-		    	</div>
-		  	</div>
-		  	<div class="col-md-5">
-		    	<div class="thumbnail">
-		      		<div class="caption">
-		        		<h3><span class='text-primary'><b>Alumnos sin ninguna matrícula</b></span></h3>
-		        		<p><b>Alumnos que nunca realizaron por lo menos una matrícula desde su ingreso.</b></p>
-		        		<p class='text-right'><a id="report6" href="#" data-toggle="modal" data-target="#myModal6" class="btn btn-success" role="button"><span class='glyphicon glyphicon-tower'></span> Ver reporte</a></p>
-		      		</div>
-		    	</div>
-		  	</div>
+		<div class='row'>
+			<div class="col-md-10 col-md-offset-2">
+			  	<div class="col-md-5">
+			    	<div class="thumbnail">
+			      		<div class="caption">
+			        		<h3><span class='text-primary'><b>Frecuencia de Ingreso</b></span></h3>
+			        		<p><b>Identificar frecuencia de ingreso al sistema por alumno/docente/administrativo.</b></p>
+			        		<p class='text-right'><a id="report3" href="#" data-toggle="modal" data-target="#myModal3" class="btn btn-success" role="button"><span class='glyphicon glyphicon-stats'></span> Ver reporte</a></p>
+			      		</div>
+			    	</div>
+			  	</div>
+			</div>
 		</div>
 	</div>
-	<div class='row'>
-		<div class="col-md-10 col-md-offset-2">
-		  	<div class="col-md-5">
-		    	<div class="thumbnail">
-		      		<div class="caption">
-		        		<h3><span class='text-primary'><b>Frecuencia de Ingreso</b></span></h3>
-		        		<p><b>Identificar frecuencia de ingreso al sistema por alumno/docente/administrativo.</b></p>
-		        		<p class='text-right'><a id="report3" href="#" data-toggle="modal" data-target="#myModal3" class="btn btn-success" role="button"><span class='glyphicon glyphicon-stats'></span> Ver reporte</a></p>
-		      		</div>
-		    	</div>
-		  	</div>
-		</div>
-	</div>
-</div>
+</section>
 
 <!-- Modal Reporte 1-->
 <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
