@@ -33,9 +33,11 @@
 				<script type="text/javascript">
 					$("#semester<?php echo $semester['semid']?>").click(function(){
 						var perid="<?php echo $this->perid?>";
+						var escid="<?php echo $this->escid?>";
+						var subid="<?php echo $this->subid?>";
 						$this=$(this);
 						semid=$this.attr('semid');
-						var url='/horary/semester/horarysemester/semid/'+semid+'/perid/'+perid;
+						var url='/horary/semester/horarysemester/escid/'+$.base64.encode(escid)+'/subid/'+$.base64.encode(subid)+'/semid/'+$.base64.encode(semid)+'/perid/'+$.base64.encode(perid);
 						$('#changehorary').html("<img src='/img/spinner.gif'>Cargando....");
 						$('#changehorary').load(url);
 					});
@@ -52,16 +54,20 @@
 	$(".semester").click(function(){
 		var semid=$(this).attr('semid');
 		var perid="<?php echo $this->perid?>";
-		var url='/horary/semester/horarysemester/semid/'+semid+'/perid/'+perid+'/turno/A';
+		var escid="<?php echo $this->escid?>";
+		var subid="<?php echo $this->subid?>";
+		var url='/horary/semester/horarysemester/escid/'+$.base64.encode(escid)+'/subid/'+$.base64.encode(subid)+'/semid/'+$.base64.encode(semid)+'/perid/'+$.base64.encode(perid)+'/turno/'+$.base64.encode('A');
 		$('#changehorary').html("<img src='/img/spinner.gif'>Cargando....");
 		$('#changehorary').load(url);
 	});
 
 	$(".turno").click(function(){
 		var perid="<?php echo $this->perid?>";
+		var escid="<?php echo $this->escid?>";
+		var subid="<?php echo $this->subid?>";
 		var semid=$(this).attr('semid');
 		var turno=$(this).attr('turno');
-		var url='/horary/semester/horarysemester/semid/'+semid+'/perid/'+perid+'/turno/'+turno;
+		var url='/horary/semester/horarysemester/escid/'+$.base64.encode(escid)+'/subid/'+$.base64.encode(subid)+'/semid/'+$.base64.encode(semid)+'/perid/'+$.base64.encode(perid)+'/turno/'+$.base64.encode(turno);
 		$('#changehorary').html("<img src='/img/spinner.gif'>Cargando....");
 		$('#changehorary').load(url);
 	});

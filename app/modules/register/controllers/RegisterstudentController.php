@@ -21,6 +21,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
             $where['perid'] = $this->sesion->period->perid;
             $where['facid'] = $this->sesion->faculty->facid;
             $where['escid'] = $this->sesion->escid;
+
             $this->view->subid=$where['subid'];
             $this->view->facid=$where['facid'];
             $this->view->perid=$where['perid'];
@@ -47,7 +48,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $lesc = $escuelas->_getspeciality($where);
                 }
             }
-//            print_r($escuelas);
+
             if ($lesc ) $this->view->escuelas=$lesc;
         }catch (Exception $ex){
             print "Error: Cargar ".$ex->getMessage();
@@ -812,108 +813,127 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
     public function printAction(){
         try{
             $this->_helper->layout()->disableLayout();
-            $where['uid'] = base64_decode($this->_getParam('uid'));
-            $where['pid'] = base64_decode($this->_getParam('pid'));
-            $where['escid'] = base64_decode($this->_getParam('escid'));
-            $where['subid'] = base64_decode($this->_getParam('subid'));
-            $where['perid'] = $this->_getParam('perid',$this->sesion->period->perid);
-            $where['eid'] = $this->sesion->eid;
-            $where['oid'] = $this->sesion->oid;
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $uid = base64_decode($this->_getParam('uid'));
+            $pid = base64_decode($this->_getParam('pid'));
+            $escid = base64_decode($this->_getParam('escid'));
+            $subid = base64_decode($this->_getParam('subid'));
+            $perid = $this->_getParam('perid',$this->sesion->period->perid);
 
-            // Obteniendo la facultad
+            // Obteniendo la Facultad
+            $where = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
             $escuela= new Api_Model_DbTable_Speciality();
             $dataescid=$escuela->_getFacspeciality($where);
-            // print_r($dataescid);
+
             if ($dataescid) {
-              $nomfac=strtoupper($dataescid[0]['nomfac']);
-              $this->view->facultad=$nomfac;
+                $nomfac=strtoupper($dataescid[0]['nomfac']);
+                $this->view->facultad=$nomfac;
             }
+
             //Obteniendo la escuela y especialidad(si lo tuviera)
-            if ($dataescid['parent']==""){
-               $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
+            if ($dataescid[0]['parent']==""){
+                $this->view->escuela=strtoupper($dataescid[0]['nomesc']);
             }else{
-                $dato['eid'] = $this->sesion->eid;
-                $dato['oid'] = $this->sesion->oid;
-                $dato['escid'] = $dataescid['parent'];
-                $dato['subid'] = $dataescid['sub'];
+                $dato = array('eid'=>$eid,'oid'=>$oid,'escid'=>$dataescid[0]['parent'],'subid'=>$subid);
                 $esc = $escuela->_getOne($dato);
                 $this->view->escuela=strtoupper($esc['name']);
                 $dataescid=$escuela->_getOne($where);
                 $this->view->especialidad= strtoupper($dataescid['name']);
             }
-            // //Obtenemos el valor de la matricula
+
+            //Obtenemos el valor de la matricula
+            $where_mat = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
             $matri = new Api_Model_DbTable_Registration();
-            $rmatri = $matri->_getRegister($where);
-            // print_r($rmatri);
+            $rmatri = $matri->_getRegister($where_mat);
+
             if(!$rmatri) return false;
-            $where['regid']=$rmatri['regid'];
+
+            $where_cur_mat['regid']=$rmatri['regid'];
             $perid= $rmatri['perid'];
             $semestre=$rmatri['semid'];
             $codigo_matri=$rmatri['uid'];
             $totalcreditos=$rmatri['credits'];
             $estadomatricula=$rmatri['state'];
+
+            $where_cur = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,'subid'=>$subid);
+            $db_cur_alu= new Api_Model_DbTable_Studentxcurricula();
+            $curicula_alumno = $db_cur_alu->_getOne($where_cur);
+
+            if(!$curicula_alumno) return false;
+            $curricula_alu = $curicula_alumno['curid'];
+
+
+            //Obteniendo los datos del alumno
+            $where_alum = array('eid'=>$eid,'pid'=>$pid);
+            $alum = new Api_Model_DbTable_Person();
+            $ralum= $alum->_getOne($where_alum);
+            if ($ralum) $this->view->alumno = $ralum['last_name0']." ".$ralum['last_name1'].", ".$ralum['first_name'];
+
+            //Obtenemos los cursos matriculados
+            $where_cur_mat = array('eid'=>$eid,'oid'=>$oid,'uid'=>$uid,'pid'=>$pid,'escid'=>$escid,
+                            'subid'=>$subid,'perid'=>$perid,'state'=>'M');
+            $lcursos = new Api_Model_DbTable_Registrationxcourse();
+            $order = array('courseid');
+            $listacurso =$lcursos->_getFilter($where_cur_mat,$attrib=null,$order);
+
+            if ($listacurso) {
+                $nuevoreg = new Api_Model_DbTable_Course();
+                $where_curso = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
+                foreach ($listacurso as $cursomas){
+                    //Agregar valores al registro de matricula curso para mandar a la vista
+                    $where_curso['courseid']=$cursomas['courseid'];
+                    $where_curso['curid']=$cursomas['curid'];
+                    $where_curso['turno']=$cursomas['turno'];
+
+                    $rcus = $nuevoreg->_getOne($where_curso);
+                    $cursomas['semid'] = $rcus['semid'];
+                    $cursomas['credits'] = $rcus['credits'];
+                    $cursomas['namecourse'] = $rcus['name'];
+
+                    // Obteniendo numero de veces matricula a un curso
+                    $listusuario = $nuevoreg ->_getCoursesXStudentXV($cursomas);
+                    $cursomas['veces'] = intval($listusuario[0]['veces'])+1;
+
+                    // $curmat =$lcursos->_register($where_cur_mat);
+                    // $i=1;
+                    // if ($curmat) {
+                    //     foreach ($curmat as $row2) {
+                    //         if($where_curso['courseid']==$row2['courseid']){
+                    //             $periodo=$row2['perid'];
+                    //             $p=substr($periodo,2,3);
+                    //             if($p=='A' or $p=='B' or $p=='N' or $p=='V'){
+                    //                 $i=$i+1;
+                    //             }
+                    //         }
+                    //     }
+                    // }
+                    // $cursomas['veces'] = intval($i);
+
+                    // $where_doc=array('eid'=>);
+
+                    //Sacamos los docentes por curso
+                    $where_doc = array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid,
+                                'courseid'=>$cursomas['courseid'],'curid'=>$cursomas['curid'],'turno'=>$cursomas['turno']);
+                    $bdprofesores = new Api_Model_DbTable_Coursexteacher();
+                    $datosss= $bdprofesores->_getinfoDoc($where_doc);
+                    if ($datosss) {
+                        $ndoc=$datosss[0]['nameteacher'];
+                        $cursomas['teacherp'] = $ndoc;
+                    }
+                    else{
+                        $cursomas['teacherp'] = " - ";
+                    }
+                    $listacurso1[]= $cursomas;
+                }
+            }
+            $this->view->listacurso = $listacurso1;
             $this->view->perid=$perid;
             $this->view->estadomatricula=$estadomatricula;
             $this->view->semestre = $semestre;
             $this->view->cod_matri = $codigo_matri;
             $this->view->total_creditos = $totalcreditos;
-
-            $db_cur_alu= new Api_Model_DbTable_Studentxcurricula();
-            $curicula_alumno = $db_cur_alu->_getOne($where);
-            if(!$curicula_alumno) return false;
-            $curricula_alu = $curicula_alumno['curid'];
             $this->view->curricula = $curricula_alu;
-
-            //Obteniendo los datos del alumno
-            $alum = new Api_Model_DbTable_Person();
-            $ralum= $alum->_getOne($where);
-            if ($ralum) $this->view->alumno = $ralum['last_name0']." ".$ralum['last_name1'].", ".$ralum['first_name'];
-
-            // //Obtenemos los cursos matriculados
-            $lcursos = new Api_Model_DbTable_Registrationxcourse();
-            $listacurso =$lcursos->_getFilter($where);
-            // print_r($listacurso);
-
-            foreach ($listacurso as $cursomas){
-                //Agregar valores al registro de matricula curso para mandar a la vista
-                $where['courseid']=$cursomas['courseid'];
-                $where['curid']=$cursomas['curid'];
-                $where['turno']=$cursomas['turno'];
-
-                $nuevoreg = new Api_Model_DbTable_Course();
-                $rcus = $nuevoreg->_getOne($where);
-                // print_r($rcus);
-                $cursomas['semid'] = $rcus['semid'];
-                $cursomas['credits'] = $rcus['credits'];
-                $cursomas['namecourse'] = $rcus['name'];
-
-                //Obteniendo numero de veces matrocula a un curso
-               // $veces = new Api_Model_DbTable_Course();
-                //$listusuario = $veces ->_getCoursesXStudentXV($cursomas);
-                //$cursomas['veces'] = intval($listusuario[0]['veces']);
-
-                $curmat =$lcursos->_register($where);
-                $i=0;
-                foreach ($curmat as $row2) {
-                    if($where['courseid']==$row2['courseid']){
-                        $periodo=$row2['perid'];
-                        $p=substr($periodo,2,3);
-                        if($p=='A' or $p=='B' or $p=='N' or $p=='V'){
-                         $i=$i+1;
-                         }
-                     }
-                 }
-                $cursomas['veces'] = intval($i);
-
-                //Sacamos los docentes por curso
-                $bdprofesores = new Api_Model_DbTable_Coursexteacher();
-                $datosss= $bdprofesores->_getinfoDoc($where);
-                $ndoc=$datosss[0]['nameteacher'];
-                $cursomas['teacherp'] = $ndoc;
-                // print_r($cursomas);
-                $listacurso1[]= $cursomas;
-            }
-             $this->view->listacurso = $listacurso1;
 
         }catch(Exception $ex ){
             print ("Error Controlador Mostrar Datos: ".$ex->getMessage());

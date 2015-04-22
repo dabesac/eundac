@@ -1,8 +1,10 @@
 <?php
 if ($this->especialidad<>""){
-          $esp =$this->especialidad;
-         }
+    $esp =$this->especialidad;
+}
+
 (trim($this->estadomatricula)<>"M")?"":$v="VALIDADO";
+
 $a=1;
 $cont='';
 if ($this->listacurso){
@@ -30,7 +32,7 @@ if ($this->listacurso){
 $html = '
 
 <br>
-<table  style="font-size:11px; margin-left: 125px; margin-bottom:85px" >     
+<table  style="font-size:11px; margin-left: 125px; margin-bottom:85px; font-family:Arial" >     
     <tr>
         <td >'. $this->facultad.'</td>         
     </tr>
@@ -44,7 +46,7 @@ $html = '
         <td></td>
     </tr>
 </table>
-<table  style="font-size:14px;margin-left: 100px; margin-bottom: 48px;" >
+<table  style="font-size:14px;margin-left: 100px; margin-bottom: 48px; font-family:Arial" >
     <tr>
         <td style="width: 100px" >'.$this->cod_matri.'</td>
         <td style="width:370px" >'.$this->alumno.'</td>
@@ -54,13 +56,13 @@ $html = '
 </table>
 
 <div id="datos">
-    <table  style="font-size:12px;margin-left:35px;">
+    <table  style="font-size:12px;margin-left:35px; font-family:Arial">
         <tr style="   height: 20px"><td></td>
         </tr>
 </table>
 
 <div id="datos">
-    <table  style="font-size:12px;margin-left:35px;">
+    <table  style="font-size:12px;margin-left:35px; font-family:Arial">
         <tr style="   height: 20px"><td></td>
         </tr>
        '.$cont.'
@@ -73,14 +75,14 @@ $html = '
         </tr>
     </table>
     <div style="clear:both"></div>  <br/>
-    <table width="700px" style="font-size:11px;margin-left: 147px;">
+    <table width="700px" style="font-size:11px;margin-left: 147px; font-family:Arial">
         <tr>
             <td>Semestre :'.$this->semestre.'</td>
             <td width="400px" style="float:right">'.$v.'</td>
         </tr>
     </table>
 </div>
- <h1  style="margin-left: 130px;"><b><center><span style="font-size: 12px">Usted imprimió la matricula el  '.date('d/m/Y') .' a las  '.date('H:m:s').'</span></b></center></h1> 
+ <h1  style="margin-left: 130px; font-family:Arial"><b><center><span style="font-size: 12px">Usted imprimió la matricula el  '.date('d/m/Y') .' a las  '.date('H:m:s').'</span></b></center></h1> 
 
 ';
 
@@ -92,12 +94,12 @@ $dir = APPLICATION_LIBRARY."/pdf/MPDF57/mpdf.php";
 include_once($dir);
 ob_start(); 
 
-$mpdf=new mPDF(); 
+// $mpdf=new mPDF(); 
 $mpdf=new mPDF('win-1252','A4','','','','',22);
 $mpdf->WriteHTML($html);
-//$mpdf->Output('Ficha-'.$this->perid.'.pdf','D');
+// $mpdf->Output('Ficha-'.$this->perid.'.pdf','D');
 $mpdf->Output();
-exit;
+// exit;
 
 //==============================================================
 //==============================================================

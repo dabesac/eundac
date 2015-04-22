@@ -1,10 +1,12 @@
-<option value=" ">Seleccione un Periodo</option>
+<option value="">Seleccione un Periodo</option>
 <?php
 if ($this->period) {
     foreach ($this->period as $periodos) {
-    	?>
-    	<option value="<?php echo $periodos['perid']?>"><?php echo $periodos['perid']." | ".$periodos['name']?></option>
-    <?php
+    	$perid_sub = substr($periodos['perid'],2,1);
+    	if ($perid_sub=='A' || $perid_sub=='B' || $perid_sub=='N') {    	?>
+    		<option value="<?php echo $periodos['perid']?>"><?php echo $periodos['perid']." | ".$periodos['name']?></option>
+    	<?php
+    	}
     }
 }
 else{	?>
@@ -14,11 +16,18 @@ else{	?>
 ?>
 <script>
 	$(function(){
-		var perid='<?php echo $this->perid?>';
+		var rid = '<?php echo $this->rid ?>';
+		var perid='<?php echo $this->perid ?>';
 		$("#perids option[value="+perid+"]").attr('selected','selected');
 		var perid=$("#perids").val();
-		var url=("/horary/semester/semesterlist/perid/"+perid);
-        $("#loading").html("<center><img src='/img/spinner.gif'/> Cargando...</center>");
-		$("#loading").load(url);
+
+		if (rid!='PD') {
+			$("#loading").empty();
+			$("#changehorary").empty();
+			
+			var url=("/horary/semester/semesterlist/perid/"+perid);
+        	$("#loading").html("<center><img src='/img/spinner.gif'/> Cargando...</center>");
+			$("#loading").load(url);			
+		}
 	});
 </script>

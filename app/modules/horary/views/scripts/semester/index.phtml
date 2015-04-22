@@ -1,41 +1,163 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-list"></span> Listado de Horarios');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/docente" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
 
 <section class="container">
-<div class="row">
-	<div class="col-md-3 col-md-offset-2">
-		<h5 class="text-info">Año</span></h5>
-		<?php echo $this->fm->anio ?><br>
+	<?php 
+	if ($this->rid=='PD') {	?>
+		<div class="row text-muted col-md-12 text-center">
+			<h5><span class="glyphicon glyphicon-info-sign"></span> <b>Recuerde:</b> Para vizualizar los horarios debe seleccionar una escuela</h5>
+		</div>
+		<div class="row">
+			<div class="col-md-3 col-md-offset-2">
+				<h5 class="text-info">Facultades</span></h5>
+				<?php echo $this->fm->faculty ?><br>
+			</div>
+			<div class="col-md-3 col-md-offset-1">
+				<h5 class="text-info">Escuelas</span></h5>
+				<?php echo $this->fm->school ?><br>
+			</div>
+		</div>
+	<?php	
+	}
+	?>
+	<div class="row">
+		<div class="col-md-3 col-md-offset-2">
+			<h5 class="text-info">Año</span></h5>
+			<?php echo $this->fm->anio ?><br>
+		</div>
+		<div class="col-md-3 col-md-offset-1">
+			<h5 class="text-info">Periodo</span></h5>
+			<?php echo $this->fm->perids ?><br>
+		</div>
 	</div>
-	<div class="col-md-3 col-md-offset-1">
-		<h5 class="text-info">Periodo</span></h5>
-		<?php echo $this->fm->perids ?><br>
-	</div>
-</div>
-<div id="loading"></div>
-<div id='changehorary'></div>
+	<div id="loading"></div>
+	<div id='changehorary'></div>
 
 </section>
 <script type="text/javascript">
 	$(function(){
+		var rid='<?php echo $this->rid?>';
 		var anio='<?php echo $this->anio?>';
 		$("#anio option[value="+anio+"]").attr('selected','selected');
-		var anio=$("#anio").val();
 		var url=("/horary/semester/periodlist/anio/"+anio);
 		$("#perids").html("<option value=''>Cargando...</option>");
 		$("#perids").load(url);
-	});
-	$("#anio").change(function(){
-		var anio=$(this).val();
-		var url=("/horary/semester/periodlist/anio/"+anio);
-		$("#perids").html("<option value=''>Cargando...</option>");
-		$("#perids").load(url);
-	});
 
-	$("#perids").change(function(){
-		var perid=$(this).val();
-		var url=("/horary/semester/semesterlist/perid/"+perid);
-		$("#loading").html("<center><img src='/img/spinner.gif'/> Cargando...</center>");
-		$("#loading").load(url);
+		$("#anio").change(function(){
+			$("#loading").empty();
+			$("#changehorary").empty();
+			
+			var anio=$(this).val();
+			var url=("/horary/semester/periodlist/anio/"+anio);
+			$("#perids").html("<option value=''>Cargando...</option>");
+			$("#perids").load(url);
+		});
+
+		if (rid=='PD') {
+			var facid = $("#faculty").val();
+			$("#school").load("/horary/semester/schoollist/facid/"+$.base64.encode(facid));
+
+			$("#faculty").change(function(){
+				$("#loading").empty();
+				$("#changehorary").empty();
+
+				facid = $(this).val();
+				$("#school").load("/horary/semester/schoollist/facid/"+$.base64.encode(facid));
+			});
+
+			$("#school").change(function(){
+				$("#loading").empty();
+				$("#changehorary").empty();
+
+				var facid   = $("#faculty").val();
+				var escid_1 = $(this).val();
+				var anio    = $("#anio").val();
+				var perid   = $("#perids").val();
+
+				if (!facid) {
+					alert("Seleccione una Facultad");
+					return false;
+				}
+				else if (!escid_1) {
+					alert("Seleccione una Escuela");
+					return false;	
+				}
+				else if (!anio) {
+					alert("Seleccione un Año");
+					return false;
+				}
+				else if (!perid) {
+					alert("Seleccione un Periodo");
+					return false;
+				}
+				else{
+					var tmp = escid_1.split("||");
+					var escid = tmp[0];
+					var subid = tmp[1];
+					var url=("/horary/semester/semesterlist/perid/"+perid+"/escid/"+escid+"/subid/"+subid);
+					$("#loading").html("<center><img src='/img/spinner.gif'/> Cargando...</center>");
+					$("#loading").load(url);
+				}
+			});
+
+			$("#perids").change(function(){
+				$("#loading").empty();
+				$("#changehorary").empty();
+
+				var facid   = $("#faculty").val();
+				var escid_1 = $("#school").val();
+				var anio    = $("#anio").val();
+				var perid   = $(this).val();
+
+				if (!facid) {
+					alert("Seleccione una Facultad");
+					return false;
+				}
+				else if (!escid_1) {
+					alert("Seleccione una Escuela");
+					return false;	
+				}
+				else if (!anio) {
+					alert("Seleccione un Año");
+					return false;
+				}
+				else if (!perid) {
+					alert("Seleccione un Periodo");
+					return false;
+				}
+				else{
+					var tmp = escid_1.split("||");
+					var escid = tmp[0];
+					var subid = tmp[1];
+					var url=("/horary/semester/semesterlist/perid/"+perid+"/escid/"+escid+"/subid/"+subid);
+					$("#loading").html("<center><img src='/img/spinner.gif'/> Cargando...</center>");
+					$("#loading").load(url);
+				}
+			});
+		}
+		else{
+			$("#perids").change(function(){
+				$("#loading").empty();
+				$("#changehorary").empty();
+				var anio  = $("#anio").val();
+				var perid  = $(this).val();
+
+				if (!anio) {
+					alert("Seleccione un Año");
+					return false;
+				}
+				else if (!perid) {
+					alert("Seleccione un Periodo");
+					return false;
+				}
+				else{
+					var url=("/horary/semester/semesterlist/perid/"+perid);
+					$("#loading").html("<center><img src='/img/spinner.gif'/> Cargando...</center>");
+					$("#loading").load(url);					
+				}
+			});
+		}		
+		
+
 	});
 </script>
