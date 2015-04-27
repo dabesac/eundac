@@ -295,7 +295,7 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                             'comments' => $formData['comments']);
                     $savedata = $conditiondb->_save($data);
                 }
-                if($formData['dcurso']!= 'ns'){
+                /*if($formData['dcurso']!= 'ns'){
                     $data = array(
                             'eid'       => $eid,
                             'oid'       => $oid,
@@ -311,7 +311,7 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                             'doc_authorize' => $formData['resolution'],
                             'comments' => $formData['comments']);
                     $savedata = $conditiondb->_save($data);
-                }
+                }*/
                 if($formData['credit']!= '0'){
                     $data = array(
                             'eid'       => $eid,
@@ -344,7 +344,7 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                             'comments' => $formData['comments']);
                     $savedata = $conditiondb->_save($data);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
                 }
-            $where_condition = array(
+            /*$where_condition = array(
                                     'eid' => $eid,
                                     'oid' => $oid,
                                     'uid' => $formData['uid'],
@@ -366,11 +366,83 @@ class Rfacultad_ConditionController extends Zend_Controller_Action {
                 $i++;
             }
             $this->view->conditionsStudent = $condition_student;
-            $this->view->datacurso=$datacurso;
+            $this->view->datacurso=$datacurso;*/
             }
         } catch(Exeption $e){
             print("Error al Guardar datos: ").$e->getMessage();
         }
+    }
+
+    public function dcourseAction(){
+        $this->_helper->getHelper('layout')->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $uidreg = $this->sesion->uid;
+            $conditiondb = new Api_Model_DbTable_Conditionstudent();
+            if ($this->getRequest()->isPost()){
+               $formData = $this->getRequest()->getPost();
+
+                $perid = $formData['perid'];
+                $escid = $formData['escid'];
+                $subid = $formData['subid'];
+                $curid = $formData['curid'];
+                $resolution = $formData['resolution'];
+                $comments = $formData['comments'];
+                $pid = $formData['pid'];
+                $uid = $formData['uid'];
+
+                if(isset($formData['lcursos'])){
+                    $lcursos = $formData['lcursos'];
+                    $this->view->lcurso=$lcursos;
+                    for($i=0;$i<count($lcursos);$i++) {
+                        $data = array(
+                                    'eid'       => $eid,
+                                    'oid'       => $oid,
+                                    'uid'       => $uid,
+                                    'pid'       => $pid,
+                                    'escid'     => $escid,
+                                    'subid'     => $subid,
+                                    'perid'     => $perid,
+                                    'type'      => 'LE',
+                                    'courseid'  => $lcursos[$i],
+                                    'curid'     => $curid,
+                                    'createduid' => $uidreg,
+                                    'doc_authorize' => $resolution,
+                                    'comments' => $comments);
+                        //$this->view->data=$data;
+                        $savedata = $conditiondb->_save($data);
+                    }
+                   
+                }
+                $where_condition = array(
+                                        'eid' => $eid,
+                                        'oid' => $oid,
+                                        'uid' => $uid,
+                                        'pid' => $pid,
+                                        'escid' => $escid,
+                                        'subid' => $subid,
+                                        'perid' => $perid);
+                $attrib = null;
+                $order = null;
+                $condition_student = $conditiondb->_getFilter($where_condition, $attrib, $order);
+                $this->view->data=$condition_student;
+                $cursodb = new Api_Model_DbTable_Course();
+                $j=0;
+                $datacurso=null;
+                if($condition_student){
+                    foreach ($condition_student as $datac) {
+                       if($datac['courseid']){
+                            $wherecourse=array('eid'=>$eid,'oid'=>$oid,'courseid'=>$datac['courseid'],'curid'=>$curid,'escid'=>$escid,'subid'=>$subid);
+                            $datacurso[$j]= $cursodb->_getOne($wherecourse);
+                        }
+                        $j++;
+                    }
+                    $this->view->conditionsStudent = $condition_student;
+                    $this->view->datacurso=$datacurso;
+                }
+                
+            }
+                
     }
 
    public function listcourseAction()
