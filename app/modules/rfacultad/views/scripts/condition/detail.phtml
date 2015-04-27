@@ -11,18 +11,14 @@
     </div>
     <br>
     <div class="col-md-12 sec">
-            <div class="col-md-offset-2 col-md-2"> 
-                <center><h4>Resolución:</h4></center>        
-             </div>
-            <div class="col-md-6">  
-                <input type="text" name="doc" id="doc" placeholder="Num de Resolución" value="" maxlength="40" size="40" class="form-control col-lg-1">    
-            </div>
-    </div>
-    <div class="col-md-12 sec">
         <div class="col-md-12 col21">
             <div class="text-center col-md-12">
                 <br>
-                <h4 class="text-info"><strong>CONDICION PARA AUMENTAR CREDITOS -- AUMENTAR SEMESTRES -- DEJARCURSO</strong></h4>
+                <h4 class="text-info"><strong></strong></h4>
+            </div>
+            <div class="col-md-6"> 
+                <label>Resolución: </label>
+                <input type="text" name="doc" id="doc" placeholder="Num de Resolución" value="" maxlength="40" size="40" class="form-control col-lg-1">      
             </div>
             <div class="col-md-3">
                 <label>Aumentar semestres</label>
@@ -31,31 +27,6 @@
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
-                </select>            
-            </div>
-            <div class="col-md-6"> 
-                <label>Dejar Curso </label>
-                <select id="dcurso" name="dcurso" class="form-control">
-                    <option value="ns">- Seleccione -</option>
-                        <?php
-                        $j=0;
-                        $mostrar='si';
-                        $idcourse='nada';
-                        if($this->cursos){
-                            foreach ($this->cursos as $cursos) {    
-                                
-                                if($cursos['courseid']!=$idcourse && $mostrar=='si'){
-                                    $courseid_en=base64_encode($cursos['courseid']);?>
-                                    <option value="<?php echo $courseid_en?>"><?php echo $cursos['name']?></option>
-                                <?php  
-                                    $idcourse=$cursos['courseid'];
-                                }else{
-                                    $$mostrar='si';
-                                } 
-                                                   
-                            }
-                        }
-                        ?>
                 </select>            
             </div>
             <div class="col-md-3">
@@ -71,7 +42,7 @@
             </div>
         </div>
     </div>
-        <div class="col-md-12 sec">
+    <div class="col-md-12 sec" id="condinveces">
             <div class="text-center col-md-12">
             <br>
                 <h4 class="text-info"><strong>CONDICIÓN PARA NUMERO DE VECES DE MATRICULA</strong></h4>
@@ -81,6 +52,7 @@
                 <select id="curso" name="curso" class="form-control">
                     <option value="ns">- Seleccione -</option>
                         <?php
+                        $m=0;
                         $mostrard='si';
                         $idcoursed='nada';
                         if($this->cursos){
@@ -88,6 +60,7 @@
                                 
                                 if($cursos['courseid']!=$idcoursed && $mostrard=='si'){
                                     if($cursos['veces']>=2){
+                                        $m++;
                                         $courseid_en=base64_encode($cursos['courseid']).';--;'.$cursos['veces'];?>
                                         <option value="<?php echo $courseid_en?>"><?php echo $cursos['name']?></option>
                                     <?php
@@ -110,7 +83,73 @@
                 <!-- <span id="veces" class="label label-info"></span>   -->     
             </div>
         </div>
-
+        <?php 
+        if($m==0){?>
+            <script>
+                $("#condinveces").fadeOut("fast");
+            </script>
+        <?php
+        } ?>
+    <div class="col-md-12 sec">
+        <div class="text-center col-md-12">
+        <br>
+            <div class="col-md-offset-4 col-md-3">
+            <a id="mdcourses" class="form-control btn btn-primary"><span class="glyphicon glyphicon-arrow-down"></span> DEJAR CURSO(S)</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 sec" id="dejarcursos">
+        <div class="text-center col-md-12">
+        <br>
+            <form id="frmdcourse" name="frmdcourse" action="">
+            <table class="table  table-bordered">
+                 <thead>
+                        <tr>   
+                            <th >CODIGO</th>
+                            <th >CURSO</th>
+                            <th >CREDITOS</th>
+                            <th >SEMESTRE</th>
+                            <th >OPERACION</th>
+                        </tr>
+                 </thead>
+                <?php
+                    $j=0;
+                    $mostrar='si';
+                    $idcourse='nada';
+                    if ($this->cursos) 
+                    {   $g=0;
+                       foreach ($this->cursos as $cursos)    
+                        {  
+                        if($cursos['courseid']!=$idcourse && $mostrar=='si'){
+                            $courseid_en=base64_encode($cursos['courseid']);?>
+                            <tr>
+                                <td><?php echo $cursos['courseid'];?></td>
+                                <td><?php echo $cursos['name'];?></td>
+                                <td><?php echo $cursos['credits'];?></td>
+                                <td><?php echo $cursos['semid']?></td>
+                                <td>Dejar <input type="checkbox" id="checkcur" name="lcursos[]" value="<?php echo $cursos['courseid'];?>" onClick="clickcur(checkcur)"></td>               
+                            </tr>
+                            <?php  
+                                $idcourse=$cursos['courseid'];
+                            }else{
+                                $$mostrar='si';
+                            }     
+                         }
+                    }
+                    ?>
+            </table>
+            <input type="hidden" value="<?php echo $this->uid;?>" name="uid">
+            <input type="hidden" value="<?php echo $this->pid;?>" name="pid">
+            <input type="hidden" value="<?php echo $this->perid;?>" name="perid">
+            <input type="hidden" value="<?php echo $this->escid;?>" name="escid">
+            <input type="hidden" value="<?php echo $this->subid;?>" name="subid">
+            <input type="hidden" value="<?php echo $this->curid;?>" name="curid">
+            <div id="campo"></div>
+            </form>
+            <button id='odcourses' type="button" class="btn btn-danger"><span class="glyphicon glyphicon-arrow-up"></span>Cancelar</button>
+            <div id="mostrar"></div>
+        </div>
+    </div>
     <div class="col-md-12">
         <br>
         <div class="col-md-offset-2 col-md-10"> 
@@ -121,7 +160,6 @@
             </textarea>   
         </div>        
     </div>
-
     <div class="row">
         <div class="col-md-offset-4 col-md-3">
             <br>
@@ -202,7 +240,18 @@ if ($this->conditionsStudent){ ?>
 }?>
 </div>
 <script>
-
+    var sel = 'ns';
+    $(function() {
+        $('#dejarcursos').fadeOut("fast");
+    });
+    function clickcur(elemento){
+        var s=elemento.checked;
+        if (s){
+        }
+        else{   
+            sel = 's';
+        }
+    }
     $('#curso').change(function(){
         var valcod = $(this).val();
         var xx1 = valcod.split(";--;");
@@ -215,17 +264,15 @@ if ($this->conditionsStudent){ ?>
     $('#guardar').click(function(){
         //cals=$(".condition2").parent();
         var nsem = $('#nsem').val();
-        var dcurso = $('#dcurso').val();
         var credit =$('#credit').val();
         var valcurso = $('#curso').val();
         var xx1 = valcurso.split(";--;");
         var curso = xx1[0];
         var nveces =$('#nveces').val();
         var doc = $('#doc').val();
-        var sel = 'ns';
+        var comments = $('#comments').val();
         if (nsem!='0') {sel='s'};
         if (credit!='0') {sel='s'};
-        if (dcurso!='ns') {sel='s'};
         if (curso!='ns') {sel='s'};
         if (sel=='ns') {
             alert('agregue una condicion');
@@ -242,12 +289,11 @@ if ($this->conditionsStudent){ ?>
             'subid' : $(this).attr('subid'),
             'perid' :  $(this).attr('perid'),
             'nsem' : nsem,
-            'dcurso' : dcurso,
             'credit' : credit,
             'curso' : curso,
             'curid' : $(this).attr('curid'),
             'resolution' : doc,
-            'comments' : $('#comments').val()
+            'comments' : comments
         };
         $.ajax({
             type : "post",
@@ -263,13 +309,25 @@ if ($this->conditionsStudent){ ?>
                 $("#doc").val("");
                 $("#nsem").val("0");
                 $("#credit").val("0");
-                $(".veces").html("")
+                $(".veces").html("");
+                $("#comments").val("");
                 $(".condition2").fadeOut("fast");
-                $("#condition").html(data);
-
-
+                //$("#condition").html(data);
             }
-        })
+        });
+        $('#campo').append('<input type="hidden" value="'+doc+'" name="resolution">')
+        $('#campo').append('<input type="hidden" value="'+comments+'" name="comments">')
+        var urls= "/rfacultad/condition/dcourse/";  
+        $.ajax({
+            url: urls,
+            type: 'POST',
+            data:$("#frmdcourse").serialize(),
+            success: function (data){
+                //$("#change").html(data); 
+                $('input[type=checkbox]').attr('checked', false);
+                $("#condition").html(data);
+            }
+        });
     });
     $(".eliminar").click(function(e){
         e.preventDefault();
@@ -290,5 +348,23 @@ if ($this->conditionsStudent){ ?>
                 cls.fadeOut("fast");
             }
         }); 
+    });
+   /* $("#guardarc").click(function(){
+        var url= "/rfacultad/condition/dcourse/";  
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data:$("#frmdcourse").serialize(),
+            success: function (data){
+                //$("#change").html(data); 
+                $('#mostrar').html(data);
+            }
+        });
+    });*/
+    $('#mdcourses').click(function(){
+        $('#dejarcursos').fadeIn("fast");
+    });
+    $('#odcourses').click(function(){
+        $('#dejarcursos').fadeOut("fast");
     });
 </script>
