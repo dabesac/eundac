@@ -641,7 +641,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 			}else{
 				echo "false";
 			}
-		}/*else if ($state != 'E'){
+		}else if ($state != 'E'){
 			$pk = array('eid'   => $eid,
 						'oid'   => $oid,
 						'regid' => $data['uid'].$data['perid'],
@@ -695,7 +695,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 	        }else{
 	            echo 'false';
 	        }
-		}*/
+		}
 		//If de Existencia de matricula
 
 

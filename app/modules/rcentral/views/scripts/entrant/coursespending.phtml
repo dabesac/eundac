@@ -235,16 +235,16 @@
 		var statePayment = $('#statePayment').val();
 
 		//Tiempo de Matricula
-		var tiempoMatricula = $('#tiempoMatricula').val();
+		/*var tiempoMatricula = $('#tiempoMatricula').val();
 		if (tiempoMatricula == 'no') {
 			$('.btnProcessRegister').attr('disabled', 'true');
-		};
+		};*/
 
 		//DataProfile
 		var dataProfile = $('#dataProfile').attr('value');
 		if (dataProfile == 'no') {
 			$('#validateBtn, #observedBtn, #reservedBtn').attr('disabled', 'true');
-		};
+		}
 
 		//Variables y esas cosas
 		var uid = $('#uid').val();
@@ -378,7 +378,7 @@
 										valorSign = $(this).text();
 										valorSign++;
 										$('#cantidad' + turno + course).text(valorSign);
-									};
+									}
 								});
 							});
 						}else if (whySendRegister == 'R'){
