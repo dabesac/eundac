@@ -13,10 +13,12 @@ class Horary_SemesterController extends Zend_Controller_Action{
 
 	public function indexAction(){
 		try {
+			$rid=$this->sesion->rid;
 			$fm=new Horary_Form_HoraryPeriods();
 			$this->view->fm=$fm;
 			$anio=date('Y');
             $this->view->anio=$anio;
+            $this->view->rid=$rid;
 		} catch (Exception $e) {
 			print "Error: get semester".$e->getMessage();
 		}
@@ -25,6 +27,7 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	public function periodlistAction(){
 		try {
 			$this->_helper->layout()->disableLayout();
+			$rid = $this->sesion->rid;
 			$perid=$this->sesion->period->perid;
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
@@ -35,6 +38,28 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	        $period = $periodsDb->_getPeriodsxYears($where);
 	        $this->view->period=$period;
 			$this->view->perid=$perid;
+			$this->view->rid=$rid;
+		} catch (Exception $e) {
+			print "Error: ".$e->getMessage();
+		}
+	}
+
+	public function schoollistAction(){
+		try {
+			$this->_helper->layout()->disableLayout();
+            $eid = $this->sesion->eid;
+            $oid = $this->sesion->oid;
+            $rid = $this->sesion->rid;
+            $this->view->rid=$rid;
+            $escid = $this->sesion->escid;
+            $subid = $this->sesion->subid;
+            $facid = base64_decode($this->_getParam('facid'));
+
+            $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid);
+            $es = new Api_Model_DbTable_Speciality();
+            $escu = $es->_getFilter($where);
+            $this->view->escuelas=$escu;
+
 		} catch (Exception $e) {
 			print "Error: ".$e->getMessage();
 		}
@@ -45,11 +70,14 @@ class Horary_SemesterController extends Zend_Controller_Action{
 			$this->_helper->layout()->disableLayout();
 			$eid=$this->sesion->eid;
 			$oid=$this->sesion->oid;
-			$escid=$this->sesion->escid;
-			$perid=$this->_getParam('anio');
+			$sesion_escid=base64_encode($this->sesion->escid);
+			$sesion_subid=base64_encode($this->sesion->subid);
+			$escid=base64_decode($this->_getParam('escid',$sesion_escid));
+			$subid=base64_decode($this->_getParam('subid',$sesion_subid));
 			$perid=$this->_getParam('perid');
 			$this->view->perid=$perid;
-			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'perid'=>$perid);
+
+			$where=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'perid'=>$perid);
 			$sem= new Api_Model_DbTable_Semester();
 			$dsem=$sem->_getSemesterXPeriodsXEscid($where);
 			$i=0;
@@ -62,7 +90,10 @@ class Horary_SemesterController extends Zend_Controller_Action{
 				}
 			}
 			// $len=count($turnosxsem);
+
 			$this->view->semester=$dsem;
+			$this->view->escid=$escid;
+			$this->view->subid=$subid;
 
 			// $eid=$this->sesion->eid;
 			// $oid=$this->sesion->oid;
@@ -80,17 +111,12 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		try {
 			$this->_helper->layout()->disableLayout();
 			$eid=$this->sesion->eid;
-			$this->view->eid=$eid;
 			$oid=$this->sesion->oid;
-			$this->view->oid=$oid;
-			$escid=$this->sesion->escid;
-			$semid=$this->_getParam('semid');
-			$perid=$this->_getParam('perid');
-			$turno=$this->_getParam('turno');
-			$subid=$this->sesion->subid;
-			// $perid=$this->sesion->period->perid;
-			$this->view->semid=$semid;
-			$this->view->perid=$perid;
+			$escid=base64_decode($this->_getParam('escid'));
+			$subid=base64_decode($this->_getParam('subid'));
+			$semid=base64_decode($this->_getParam('semid'));
+			$perid=base64_decode($this->_getParam('perid'));
+			$turno=base64_decode($this->_getParam('turno'));
 
 			$wheres=array('eid'=>$eid,'oid'=>$oid,'perid'=>$perid,'escid'=>$escid,'subid'=>$subid);
         	$bd_hours= new Api_Model_DbTable_HoursBeginClasses();
@@ -200,7 +226,12 @@ class Horary_SemesterController extends Zend_Controller_Action{
 	        	$this->view->datacourse=$datacourse;
 	        	$this->view->dcurso=$dcur;
 		    }
-
+		    $this->view->eid=$eid;
+			$this->view->oid=$oid;
+			$this->view->semid=$semid;
+			$this->view->perid=$perid;
+			$this->view->escid=$escid;
+			$this->view->subid=$subid;
 
 		} catch (Exception $e) {
 			print "Error: get horary semester".$e->getMessage();
@@ -214,6 +245,8 @@ class Horary_SemesterController extends Zend_Controller_Action{
 		$oid=$this->sesion->oid;
 		$escid=$this->sesion->escid;
 		$faculty=$this->sesion->faculty->name;
+		$escid=base64_decode($this->_getParam('escid'));
+		$subid=base64_decode($this->_getParam('subid'));
 		$semid=base64_decode($this->_getParam('semid'));
 		$perid=base64_decode($this->_getParam('perid'));
 		$turno=base64_decode($this->_getParam('turno'));

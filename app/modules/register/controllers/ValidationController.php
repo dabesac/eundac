@@ -209,7 +209,7 @@ class Register_ValidationController extends Zend_Controller_Action
         $wheress=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'uid'=>$uid,'pid'=>$pid,'perid'=>$perid);
         $convalidados = $dblistarconvalidacion->_getFilter($wheress);
         if ($convalidados) {
-            $read=array('eid'=>$eid,'oid'=>$oid,'curid'=>$info['curid'],'escid'=>$escid,'subid'=>$subid);
+            $read=array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid);
             foreach ($convalidados as $g => $info) {
                 $read['curid']=$info['curid'];
                 $read['courseid']=$info['courseid'];
@@ -286,7 +286,7 @@ class Register_ValidationController extends Zend_Controller_Action
             $uid = base64_decode($frmdata['uid']);
             $escid = base64_decode($frmdata['escid']);
             $subid = base64_decode($frmdata['subid']);
-            $perid = "14C";//base64_decode($frmdata['perid']);
+            $perid = base64_decode($frmdata['perid']);
             $nota = $frmdata['nota'];
             $resolution = $frmdata['resolution'];
 

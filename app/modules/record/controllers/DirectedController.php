@@ -161,11 +161,11 @@ class Record_DirectedController extends Zend_Controller_Action {
             $dbcurso = new Api_Model_DbTable_Course();
             $orders=array('semid','courseid');
             $curso=  $dbcurso->_getFilter($where,$attrib=null,$orders);
-
             $wheress=array('escid'=>$escid,'uid'=>$uid,'curid'=>$curid);
             foreach ($curso as $c => $data) {
                 $wheress['courseid']=$data['courseid'];
                 $data=$dbcurso->_getCourseLlevo($wheress);
+
                 if ($data[0]['apto']==1) {
                     unset($curso[$c]);
                 }

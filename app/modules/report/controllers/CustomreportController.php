@@ -596,7 +596,7 @@ class Report_CustomreportController extends Zend_Controller_Action{
 	                'pid'=>$pid,
 	                'type_impression'=>'rp5_frecuencia_acceso_sistema',
 	                'date_impression'=>date('Y-m-d H:i:s'),
-	                'pid_print'=>$uidim
+	                'pid_print'=>$uidim,
 	                'count_impression'=>1
 	                );
 	            $dbimpression->_save($data);

@@ -146,7 +146,7 @@
 									<div class="modify temporary_modify">
 										<a href="##" ide="<?php echo $curriculum['id'] ?>" idjs="<?php print $curriculum['idjs'] ?>" class="btnDetailCur" data-toggle="modal" data-target="#modalDetailCur" title="Mire los detalles de esta currícula...">Detalles</a>
 										<a href="##" class="btn_derive" ide="<?php echo $curriculum['id'] ?>" goto="<?php print $curriculum['idjs'] ?>">Derivar</a>
-										<a href="##">Imprimir</a>
+										<a href="/curricula/curricula/print/id/<?php echo $curriculum['id'] ?>">Imprimir</a>
 
 										<div class="derive_from_draft" fromto="<?php print $curriculum['idjs'] ?>">
 											<a href="##" type="active">Activar Curricula</a>

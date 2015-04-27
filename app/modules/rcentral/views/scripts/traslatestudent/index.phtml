@@ -1,18 +1,20 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-certificate"></span> TRASLADO ESTUDIANTIL');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
 
-<table class="table table-condensed">
-	<tr>
-		<th><center>Ingrese Código de Matricula:</center></th>
-		<td>
-			<input id="uid" type="text" maxlength="10" class="form-control" style="width: 200px" placeholder="Ingrese Código">
-		</td>
-		<td>
-			<a id="search" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</a>
-		</td>
-	</tr>
-</table>
-<div id="loaddata"></div>
+<section class="container">
+	<table class="table table-condensed">
+		<tr>
+			<th><center>Ingrese Código de Matricula:</center></th>
+			<td>
+				<input id="uid" type="text" maxlength="10" class="form-control" style="width: 200px" placeholder="Ingrese Código">
+			</td>
+			<td>
+				<a id="search" href="#" class="btn btn-success"><span class="glyphicon glyphicon-search"></span> Buscar</a>
+			</td>
+		</tr>
+	</table>
+	<div id="loaddata"></div>
+</section>
 
 <script type="text/javascript">
 	$("#search").click(function(){
