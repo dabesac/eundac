@@ -112,6 +112,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 						'left(escid, '.$caracteres.')' => $facid,
 						//'subid'                        => $subid,
 						'state'                        => 'A',
+						'rid'						   => 'AL',
 						'left(uid, 2)'                 => $perid['0'].$perid['1'] );
 
 		$attrib = array('uid', 'pid', 'escid', 'subid');
