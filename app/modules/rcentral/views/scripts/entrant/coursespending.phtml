@@ -1,3 +1,9 @@
+<style>
+	.turn_elective input{
+		height: 20px;
+		width: 20px;
+	}
+</style>
 <div class="row">
 	<div class="col-md-12">
 		<!--Cargando-->
@@ -111,6 +117,7 @@
 				endif ?>
 				<?php $c = 0;
 				$courses = 0;
+				$checked_e = 'checked';
 				foreach ($this->data as $course): ?>
 					<?php if ($course['courseid'] != $courses): 
 						$course['name']=(isset($course['name'])?$course['name']:null);
@@ -126,14 +133,21 @@
 							<td class="text-center"><?php echo $course['credits'] ?></td>
 
 						<!--Turnos-->
-							<td class="text-center turnoBlock tdIniciado">
+							<td class="text-center turnoBlock tdIniciado   turn_elective">
 								<select id="select<?php echo $c + 1 ?>" name="Course<?php echo $c + 1 ?>" id="turno" class="form-control input-sm selectTurnos">
 									<?php foreach ($this->data as $turno): ?>
 										<?php if ($course['courseid'] == $turno['courseid']): ?>
-											<option value="<?php echo $turno['turno'].'--'.$turno['courseid'] ?> "><?php echo $turno['turno'] ?></option>
+											<option value="<?php echo $turno['turno'].'|'.$turno['courseid'].'|'.$course['type'] ?> "><?php echo $turno['turno'] ?></option>
 										<?php endif ?>
 									<?php endforeach ?>
 								</select>
+								<?php if ($course['type'] == 'E'): ?>
+									<input type="radio" name="elective"
+											value="<?php print $course['courseid'] ?>" <?php print $checked_e ?>>
+
+								<?php 
+								$checked_e = '';
+								endif ?>
 							</td>
 
 							<!--Docentes-->

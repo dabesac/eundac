@@ -162,7 +162,6 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 		$this->view->studentEntrant    = $studentEntrant;
 		$this->view->studentState      = $studentState;
 		$this->view->studentSpeciality = $studentSpeciality;
-
 	}
 
 	public function detailregisterAction(){
@@ -473,10 +472,19 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 	        //Total de Creditos
 	        $totalCredits = 0;
 	        $courseid = 0;
+	        $elective = true;
 	        foreach ($data as $course) {
 	        	if ($course['courseid'] != $courseid) {
-	        		$totalCredits = $totalCredits + $course['credits'];
-	        		$courseid = $course['courseid'];
+	        		if ($course['type'] != 'E') {
+	        			$totalCredits = $totalCredits + $course['credits'];
+	        			$courseid = $course['courseid'];
+	        		} else {
+	        			if ($elective) {
+	        				$totalCredits = $totalCredits + $course['credits'];
+	        				$elective = false;
+	        				$courseid = $course['courseid'];
+	        			}
+	        		}
 	        	}
 	        }
 	        $this->view->totalCredits = $totalCredits;
@@ -567,34 +575,61 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 				$saveRegister = $registerDb->_save($dataSaveRegister);
 			}
 
-
 			if ($saveRegister) {
 				$sizeCourses = $data['CantidadCursos'];
 				$interruptor = 0;
 				for ($i=1; $i <= $sizeCourses; $i++) { 
-					$courseid = substr($data['Course'.$i], 3);
-					$turno    = substr($data['Course'.$i], 0 , 1);
-					$dataSaveCourse = array('eid'           => $eid,
-											'oid'           => $oid,
-											'perid'         => $data['perid'],
-											'courseid'      => trim($courseid),
-											'escid'         => $data['escid'],
-											'subid'         => $data['subid'],
-											'curid'         => $data['curid'],
-											'turno'         => $turno,
-											'regid'         => $data['uid'].$data['perid'],
-											'pid'           => $data['pid'],
-											'uid'           => $data['uid'],
-											'register'      => $uid,
-											'approved'      => $uid,
-											'approved_date' => date('Y-m-d h:m:s'),
-											'updated'       => date('Y-m-d h:m:s'),
-											'modified'      => $uid, 
-											'created'       => date('Y-m-d h:m:s'), 
-											'state'         => $state ); 
+					$ids = explode('|', $data['Course'.$i]);
+					$turno    = $ids[0];
+					$courseid = $ids[1];
+					$type     = trim($ids[2]);
+					if ($type != 'E') {
+						$dataSaveCourse = array('eid'           => $eid,
+												'oid'           => $oid,
+												'perid'         => $data['perid'],
+												'courseid'      => trim($courseid),
+												'escid'         => $data['escid'],
+												'subid'         => $data['subid'],
+												'curid'         => $data['curid'],
+												'turno'         => $turno,
+												'regid'         => $data['uid'].$data['perid'],
+												'pid'           => $data['pid'],
+												'uid'           => $data['uid'],
+												'register'      => $uid,
+												'approved'      => $uid,
+												'approved_date' => date('Y-m-d h:m:s'),
+												'updated'       => date('Y-m-d h:m:s'),
+												'modified'      => $uid, 
+												'created'       => date('Y-m-d h:m:s'), 
+												'state'         => $state ); 
 
-					if (!$registerxCourseDb->_save($dataSaveCourse)) {
-						$interruptor = 1;
+						if (!$registerxCourseDb->_save($dataSaveCourse)) {
+							$interruptor = 1;
+						}
+					} else {
+						if ($courseid == $data['elective']) {
+							$dataSaveCourse = array('eid'           => $eid,
+													'oid'           => $oid,
+													'perid'         => $data['perid'],
+													'courseid'      => trim($courseid),
+													'escid'         => $data['escid'],
+													'subid'         => $data['subid'],
+													'curid'         => $data['curid'],
+													'turno'         => $turno,
+													'regid'         => $data['uid'].$data['perid'],
+													'pid'           => $data['pid'],
+													'uid'           => $data['uid'],
+													'register'      => $uid,
+													'approved'      => $uid,
+													'approved_date' => date('Y-m-d h:m:s'),
+													'updated'       => date('Y-m-d h:m:s'),
+													'modified'      => $uid, 
+													'created'       => date('Y-m-d h:m:s'), 
+													'state'         => $state );
+							if (!$registerxCourseDb->_save($dataSaveCourse)) {
+								$interruptor = 1;
+							}
+						}
 					}
 				}
 				if ($interruptor == 0) {
@@ -605,7 +640,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 			}else{
 				echo "false";
 			}
-		}else if ($state != 'E'){
+		}/*else if ($state != 'E'){
 			$pk = array('eid'   => $eid,
 						'oid'   => $oid,
 						'regid' => $data['uid'].$data['perid'],
@@ -659,7 +694,7 @@ class Rcentral_EntrantController extends Zend_Controller_Action {
 	        }else{
 	            echo 'false';
 	        }
-		}
+		}*/
 		//If de Existencia de matricula
 
 
