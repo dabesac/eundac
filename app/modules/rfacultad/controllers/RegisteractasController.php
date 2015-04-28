@@ -18,6 +18,8 @@ class Rfacultad_RegisteractasController extends Zend_Controller_Action
 		try {
 			$eid= $this->sesion->eid;
 			$oid= $this->sesion->oid;
+            $escid= $this->sesion->escid;
+            $this->view->escid=$escid;
             $this->view->eid=$eid;
             $this->view->oid=$oid;
             $where['eid']=$eid;

@@ -1,0 +1,44 @@
+<?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-th-list"></span> REGISTRO DE PAGO');?>
+<?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
+<form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/report/registerpago/getpago/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+
+<div class="row">
+    <div class="container">
+      <div class="col-xs-3 col-sm-2"></div>
+    	<div class="col-xs-6 col-sm-4">
+    	  	<div class="form-group col-sm-15">
+    	      	<input class="form-control" name="nombre" id="inputNombre" placeholder="Ingrese Nombre de la Persona">
+    	      	<?php echo $this->fm->name ?>
+    		</div>
+    	</div>
+      	<div class="col-xs-6 col-sm-4">
+            <div class="col-md-8">
+                <select id="anho" class="form-control" name="anhio">
+                    <option value="">- Seleccione Año -</option>
+                    <?php
+                    for ($anho=2015;$anho>=1965;$anho--) { ?>
+                        <option value="<?php echo $anho;?>"><?php echo $anho;?></option>
+                    <?php }
+                    ?>
+                </select>
+    	    </div>
+    	</div>
+    	<button type="submit" class="btn btn-default btn-success">Buscar</button>
+    </div>
+</div>
+<br>
+<div  id="cargadatos_"></div> 
+<script>
+    $("#frmFiltroDoc").submit(function(){
+    	console.log($(this).serialize());
+      $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(data) {                        
+            $('#cargadatos_').html(data);                                 
+            }
+        }); 
+        return false;
+    });
+</script>

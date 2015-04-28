@@ -1,0 +1,44 @@
+<div class="panel panel-primary col-md-12 table-responsive ">	
+	<table class="table text-center">
+		<tr class="medium"> 
+		    <th colspan="9"><h4 class="text-primary"><center>EXPEDIENTES SIAF POR USUARIO AÑO</center></h4></th>
+		</tr>
+		<tr align="center" valign="middle"> 
+		    <td rowspan="2"><b><center>EXPEDIENTE</center></b></td>
+		    <td rowspan="2"><b><center>ESTADO</center></b></td>
+		    <td rowspan="2"><b><center>DETALLE</center></b></td>
+   		    <td colspan="5"><b><center>FASES</center></b></td>
+   		    <td rowspan="2"><b><center>MONTO</center></b></td>
+		</tr>
+		<tr align="center" valign="middle"> 
+		    <td><b>C</b></td>
+		    <td><b>D</b></td>
+		    <td><b>G</b></td>
+		    <td><b>P</b></td>
+		    <td><b>R</b></th>
+	  	</tr>
+		<?php
+		foreach($this->subjects as $subject) { ?>
+		<tr>
+		  	<td><option value="<?php echo $escuelas['escid']?>"><?php echo $subject['EXPEDIENTE']?></option></td>
+		  	<td><option value="<?php echo $escuelas['escid']?>"><?php echo $subject['ESTADO_ENV']?></option></td>
+		  	<td><option value="<?php echo $escuelas['escid']?>"><?php echo $subject['NOTAS']?></option></td>
+		  	<td><option value="<?php echo $escuelas['escid']?>"><?php echo $subject['FASE']?></option></td>
+			<td>s</td>
+			<td>s</td>
+			<td>n</td>
+			<td>n</td>
+		  	<td><option value="<?php echo $escuelas['escid']?>"><?php 
+		  	if ($subject['MONTO']==0) {
+		  		echo "-"
+		  	}
+		  	else
+		  	{
+	     		echo $subject['MONTO']?></option>	
+		  	}
+		  	</td>
+		  	}
+		</tr>
+		<?php } ?>
+	</table>
+</div>

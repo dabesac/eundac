@@ -27,15 +27,17 @@
             <th>Escuela:</th>
             <td class="col-lg-5">
                 <select id='escid' class="form-control">
+                                   <?php
+                    foreach ($this->lescuelas as $escuela){ 
+                        if (substr($this->escid,1)==substr($escuela['escid'],0,1)) {
+                            ?>
+                        <option value="<?php echo $escuela['escid']?>"><?php echo $escuela['name']?></option>
                     <?php
-                    if ($this->lescuelas) { ?>
-                        <option value="">- Seleccione -</option>
-                    <?php
-                        foreach ($this->lescuelas as $escuela){ ?>
-                            <option value="<?php echo $escuela['escid']?>"><?php echo $escuela['name']?></option>
-                        <?php
-                        }
-                    } ?>     
+                    }elseif ($this->escid==$escuela['escid']) {?>
+                                <option value="<?php echo $escuela['escid']?>"><?php echo $escuela['name']?></option>
+                                <?php
+                            }
+                    }?>  
                 </select>
             </td>
         </tr>    
