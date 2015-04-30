@@ -8,7 +8,7 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 			// semesters
 			var semester_render = 3;
 			if (options.more_semester) {
-				semester_render = semester_render + options.more_semester; 
+				semester_render = parseInt(semester_render) + parseInt(options.more_semester);
 			}
 			var more_credits = false;
 			if (options.more_credits) {
@@ -210,7 +210,7 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 		}
 
 		if (more_credits) {
-			credits_max = credits_max + more_credits;
+			credits_max = parseInt(credits_max) + parseInt(more_credits);
 		}
 
 		$('#js_period-assign')
