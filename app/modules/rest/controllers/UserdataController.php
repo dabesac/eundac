@@ -99,6 +99,38 @@ class Rest_UserdataController extends Zend_Rest_Controller {
                 $registerDb->_save($register_save);
             }
 
+            // condiciones del estudiante
+            $where = array(
+                            'eid'   => $eid,
+                            'oid'   => $oid,
+                            'uid'   => $uid,
+                            'pid'   => $pid,
+                            'escid' => $escid,
+                            'subid' => $subid,
+                            'perid' => $perid );
+            $conditions_pd = $conditionDb->_getAllStudent($where);
+
+            $more_credits = 0;
+
+            if ($conditions_pd) {
+                $c_conditions = 0;
+                foreach ($conditions_pd as $c => $condition) {
+                    if ($condition['type'] == 'CR') {
+                        $conditions[$c_conditions]['name']   = 'Creditos Adicionales';
+                        $conditions[$c_conditions]['code']   = 'CA';
+                        $conditions[$c_conditions]['amount'] = $condition['amount'];
+                        $c_conditions++;
+                        $more_credits = $condition['amount'];
+                    } else if ($condition['type'] == 'SE') {
+                        $conditions[$c_conditions]['name']   = 'Semestres Adicionales';
+                        $conditions[$c_conditions]['code']   = 'SA';
+                        $conditions[$c_conditions]['amount'] = $condition['amount'];
+                        $c_conditions++;
+                    }
+                }
+            }
+
+
             // distribution state
             $where = array(
                             'eid' => $eid,
@@ -180,38 +212,10 @@ class Rest_UserdataController extends Zend_Rest_Controller {
                                 }
                              }
                         }
-                        $credits_semester[$c]['credits'] = $credits_semester_sum;
+                        $credits_semester[$c]['credits'] = $credits_semester_sum + $more_credits;
                     }
 
                     $current_register['credits_semester'] = $credits_semester;
-                }
-            }
-
-            // condiciones del estudiante
-            $where = array(
-                            'eid'   => $eid,
-                            'oid'   => $oid,
-                            'uid'   => $uid,
-                            'pid'   => $pid,
-                            'escid' => $escid,
-                            'subid' => $subid,
-                            'perid' => $perid );
-            $conditions_pd = $conditionDb->_getAllStudent($where);
-
-            if ($conditions_pd) {
-                $c_conditions = 0;
-                foreach ($conditions_pd as $c => $condition) {
-                    if ($condition['type'] == 'CR') {
-                        $conditions[$c_conditions]['name']   = 'Creditos Adicionales';
-                        $conditions[$c_conditions]['code']   = 'CA';
-                        $conditions[$c_conditions]['amount'] = $condition['amount'];
-                        $c_conditions++;
-                    } else if ($condition['type'] == 'SE') {
-                        $conditions[$c_conditions]['name']   = 'Semestres Adicionales';
-                        $conditions[$c_conditions]['code']   = 'SA';
-                        $conditions[$c_conditions]['amount'] = $condition['amount'];
-                        $c_conditions++;
-                    }
                 }
             }
         }

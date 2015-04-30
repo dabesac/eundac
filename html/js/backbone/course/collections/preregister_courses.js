@@ -11,9 +11,9 @@ eUndac.Collections.PreregisterCourses = Backbone.Collection.extend({
 				semester_render = parseInt(semester_render) + parseInt(options.more_semester);
 			}
 			var more_credits = false;
-			if (options.more_credits) {
+			/*if (options.more_credits) {
 				more_credits = options.more_credits;
-			}
+			}*/
 		}
 
 		this.fetch({
