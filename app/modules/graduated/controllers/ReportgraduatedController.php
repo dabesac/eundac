@@ -55,7 +55,7 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                 $dataSchool[$c]['name']  = $school['name'];
             }
             $this->view->dataSchool = $dataSchool;
-        }elseif ($rid == 'RC'){
+        }elseif ($rid == 'RC' or $rid == 'ES'){
             $dataVista['dataEscid']  = '';
             $preDataFaculty = $facultyDb->_getAll();
             foreach ($preDataFaculty as $c => $faculty) {
@@ -142,22 +142,23 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $escid = $this->_getParam('escid');
             $espec = $this->_getParam('especialidad');
             $perid = $this->_getParam('perid');
+            $anho = $this->_getParam('anho');
+
             // base de datos
             $msj = "";
             if ($facid!='' and $escid!='' and $perid!='') {
-                $temp=substr($perid, 0, -1);//año
-                $temp1=substr($perid,-1);//peri
-                $left='';
+                $TEMP =substr($perid,2,1);
+                $perid = ($TEMP =='T') ? $TEMP : $perid ;
 
                 $user= new Api_Model_DbTable_Users();
-
-                if($temp1!='T'){
-                    if ($facid!="TODOFAC") {
-                        if ($escid=="TODOESC") {
+                $left=null;
+                if($perid!='T'){
+                    if ($facid!="TODO") {
+                        if ($escid=="TODOEC") {
                             $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid, 'perid' => $perid);
                         }else{
                             if ($espec <> "") {
-                                if ($espec=="TODOESP") $left='S';
+                                if ($espec=="TODOEP") $left='S';
                                 else $escid = $espec;
                             }
                             $where = array(
@@ -168,71 +169,31 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
 
                     $egre = $user->_getGraduatedXFacultyXSchoolXPeriod($where);
                 }else{
-                    if ($facid!="TODOFAC") {
-                        if ($escid=="TODOESC") {  
-                            $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid, 'anio' => $temp);
+                    $ano=substr($anho,2,4);
+                    if ($facid!="TODO") {
+                        if ($escid=="TODOEC") {  
+                            $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid, 'anio' => $ano);
                         }else{
                             if ($espec<>"") {
-                                if ($espec=="TODOESP") $left='S';
+                                if ($espec=="TODOEP") $left='S';
                                 else $escid = $espec;
                             }
                             $where = array(
                                 'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'facid' => $facid,
-                                'anio' => $temp, 'left' => $left);
+                                'anio' => $ano, 'left' => $left);
                         }
-                    }else $where = array('eid' => $eid, 'oid' => $oid, 'anio' => $temp, 'facid' => $facid);
+                    }else $where = array('eid' => $eid, 'oid' => $oid, 'anio' => $ano, 'facid' => $facid);
                     $egre = $user->_getGraduatedXFacultyXSchoolXAnio($where);
                 }
                 $this->view->egresados=$egre;
+                $this->view->facid=$facid;
+                $this->view->especialidad=$espec;
+                $this->view->escid=$escid;
+                $this->view->perid=$perid;
+                $this->view->anho=$anho;
             } else{
                 $msj = "Lo sentimos, tenemos un Error, Comunicarse a la oficina de INFORMATICA";
             }
-
-/*
-            $this->view->facid=$facid;
-            $this->view->especialidad=$espec;
-            $this->view->escid=$escid;
-            $this->view->perid=$perid;
-            $this->view->anho=$anho;
-
-            $left='';
-
-            $user= new Api_Model_DbTable_Users();
-
-            if($perid!='T'){
-                if ($facid!="TODO") {
-                    if ($escid=="TODOEC") {
-                        $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid, 'perid' => $perid);
-                    }else{
-                        if ($espec <> "") {
-                            if ($espec=="TODOEP") $left='S';
-                            else $escid = $espec;
-                        }
-                        $where = array(
-                            'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 'facid' => $facid,
-                            'perid' => $perid, 'left' => $left);
-                    }
-                }else $where = array('eid' => $eid, 'oid' => $oid, 'perid' => $perid);
-
-                $egre = $user->_getGraduatedXFacultyXSchoolXPeriod($where);
-            }else{
-                $ano=substr($anho,2,4);
-                if ($facid!="TODO") {
-                    if ($escid=="TODOEC") {  
-                        $where = array('eid' => $eid, 'oid' => $oid, 'facid' => $facid, 'anio' => $ano);
-                    }else{
-                        if ($espec<>"") {
-                            if ($espec=="TODOEP") $left='S';
-                            else $escid = $espec;
-                        }
-                        $where = array(
-                            'eid' => $eid, 'oid' => $oid, 'escid' => $escid, 
-                            'anio' => $ano, 'left' => $left);
-                    }
-                }else $where = array('eid' => $eid, 'oid' => $oid, 'anio' => $ano);
-                $egre = $user->_getGraduatedXFacultyXSchoolXAnio($where);
-            }
-            $this->view->egresados=$egre; */
         } catch (Exception $e) {
             print "Error: ".$e->getMessage();
         }
@@ -251,11 +212,6 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $this->view->pid=$pid;
             $this->view->oid=$oid;
             $this->view->eid=$eid;
-
-            // $where = array('eid' => $eid, 'pid' => $pid, 'escid' => $escid);
-            // $per = new Api_Model_DbTable_Academicrecord();
-            // $ficha = $per->_getFilter($where,$attrib=null,$orders=null);
-            // $this->view->ficha = $ficha;
 
             $user = new Api_Model_DbTable_Users();
             $datauser = $user->_getUserXUid($whereuser=array('eid' => $eid, 'oid' => $oid, 'uid' => $uid));
@@ -287,6 +243,10 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $espec = $this->_getParam('especialidad');
             $perid = $this->_getParam('perid');
             $anho = $this->_getParam('anho');
+            $TEMP =substr($perid,2,1);
+            $perid = ($TEMP =='T') ? $TEMP : $perid ;
+            //print_r($facid.'>'.$escid.'>'.$espec.'>'.$perid.'>'.$anho);exit();
+            //print_r("<br/>");
             $user = new Api_Model_DbTable_Users();
             if($perid!='T'){
                 if ($facid!="TODO") {
@@ -318,7 +278,9 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
                             'anio' => $ano, 'left' => $left);
                     }
                 }else $where = array('eid' => $eid, 'oid' => $oid, 'anio' => $ano);
+                //print_r($where);
                 $egre=$user->_getTotalGraduatedXFacultyXSchoolXAnho($where);
+                
             }
             $this->view->egresados=$egre;
         } catch (Exception $e) {
@@ -345,7 +307,6 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             // $fac = new Api_Model_DbTable_Faculty();
             // $data_fac = $fac->_getOne($where=array('eid' => $eid, 'oid' => $oid, 'facid' => $facid));
             // $this->view->faculty = $data_fac;
-            
             $user= new Api_Model_DbTable_Users();
             if($perid!='T'){
                 if ($facid!="TODO") {
@@ -427,34 +388,23 @@ class Graduated_ReportgraduatedController extends Zend_Controller_Action {
             $uidim=$this->sesion->pid;
             $pid=$uidim;
 
-            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_egresados','perid'=>$perid);
+            $data = array(
+                'eid'=>$eid,
+                'oid'=>$oid,
+                'uid'=>$uid,
+                'escid'=>$escid,
+                'subid'=>$subid,
+                'pid'=>$pid,
+                'type_impression'=>'impresion_egresados_'.$perid,
+                'date_impression'=>date('Y-m-d H:i:s'),
+                'pid_print'=>$uidim
+                );
+            $dbimpression->_save($data);            
+
+            $wheri = array('eid'=>$eid,'oid'=>$oid,'escid'=>$escid,'subid'=>$subid,'type_impression'=>'impresion_egresados_'.$perid);
             $dataim = $dbimpression->_getFilter($wheri);
-
-            if ($dataim) {
-                $pk = array('eid'=>$eid,'oid'=>$oid,'countid'=>$dataim[0]['countid'],'escid'=>$escid,'subid'=>$subid);
-                $data_u = array('count_impression'=>$dataim[0]['count_impression']+1);
-
-                $dbimpression->_update($data_u,$pk);
-                $co=$data_u['count_impression'];                
-            }
-            else{
-                $data = array(
-                    'eid'=>$eid,
-                    'oid'=>$oid,
-                    'uid'=>$uid,
-                    'escid'=>$escid,
-                    'subid'=>$subid,
-                    'pid'=>$pid,
-                    'type_impression'=>'impresion_egresados',
-                    'date_impression'=>date('Y-m-d H:i:s'),
-                    'pid_print'=>$uidim,
-                    'perid'=>$perid,
-                    'count_impression'=>1
-                    );
-                $dbimpression->_save($data);
-                $co=1;                
-            }
-                        
+            
+            $co=count($dataim);
             $codigo=$co." - ".$uidim;
 
             $header=$this->sesion->org['header_print'];
