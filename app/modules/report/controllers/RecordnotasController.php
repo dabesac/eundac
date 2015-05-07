@@ -117,6 +117,7 @@
             $whered['eid']=$eid;
             $whered['oid']=$oid;
             $whered['facid']= $speciality['facid'];
+            
             $dbfaculty = new Api_Model_DbTable_Faculty();
             $faculty = $dbfaculty ->_getOne($whered);
             $namef = strtoupper($faculty['name']);
@@ -158,8 +159,7 @@
                 $co=1;
             }
 
-            
-            $codigo=$co." - ".$uidim;
+            $codigo=$co." - ".strrev($uidim);
 
             $header=$this->sesion->org['header_print'];
             $footer=$this->sesion->org['footer_print'];

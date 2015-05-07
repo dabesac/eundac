@@ -1,9 +1,9 @@
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-th-list"></span> REGISTRO DE PAGO');?>
 <?php $this->placeholder('Btnnav')->append('<a href="/" ><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
 <form name="<?php echo $this->fm->getName(); ?>" id ="frmFiltroDoc" action="/report/registerpago/getpago/" method="POST" enctype="application/x-www-form-urlencoded" class="form-horizontal">
-
 <div class="row">
     <div class="container">
+    </td>
       <div class="col-xs-3 col-sm-2"></div>
     	<div class="col-xs-6 col-sm-4">
     	  	<div class="form-group col-sm-15">
@@ -28,6 +28,8 @@
 </div>
 <br>
 <div  id="cargadatos_"></div> 
+
+
 <script>
     $("#frmFiltroDoc").submit(function(){
     	console.log($(this).serialize());

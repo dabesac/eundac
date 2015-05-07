@@ -1,4 +1,5 @@
-<div class="panel panel-primary col-md-12 table-responsive ">	
+<center><a href="/report/registerpago/print"><span class='btn btn-primary'>IMPRIMIR</span></a></center>
+<div class="panel panel-primary col-md-12 table-responsive ">
 	<table class="table text-center">
 		<tr class="medium"> 
 		    <th colspan="9"><h4 class="text-primary"><center>EXPEDIENTES SIAF POR USUARIO AÑO</center></h4></th>
@@ -20,24 +21,25 @@
 		<?php
 		foreach($this->subjects as $subject) { ?>
 		<tr>
-		  	<td><option value="<?php echo $escuelas['escid']?>"><?php echo $subject['EXPEDIENTE']?></option></td>
-		  	<td><option value="<?php echo $escuelas['escid']?>"><?php echo $subject['ESTADO_ENV']?></option></td>
-		  	<td><option value="<?php echo $escuelas['escid']?>"><?php echo $subject['NOTAS']?></option></td>
-		  	<td><option value="<?php echo $escuelas['escid']?>"><?php echo $subject['FASE']?></option></td>
+		  	<td><option><?php echo $subject['EXPEDIENTE']?></option></td>
+		  	<td><option><?php echo $subject['ESTADO_ENV']?></option></td>
+		  	<td><option><?php echo $subject['NOTAS']?></option></td>
+		  	<td><option><?php echo $subject['FASE']?></option></td>
 			<td>s</td>
 			<td>s</td>
 			<td>n</td>
 			<td>n</td>
-		  	<td><option value="<?php echo $escuelas['escid']?>"><?php 
-		  	if ($subject['MONTO']==0) {
-		  		echo "-"
-		  	}
-		  	else
-		  	{
-	     		echo $subject['MONTO']?></option>	
-		  	}
+		  	<td>
+		  		<option>
+				  	<?php if(isset($subject['MONTO'])) {
+			     		echo $subject['MONTO'];
+				  	}
+				  	else{
+				  		echo "-";
+				  	}
+				  	?>
+	     		</option>	
 		  	</td>
-		  	}
 		</tr>
 		<?php } ?>
 	</table>
