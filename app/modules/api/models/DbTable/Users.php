@@ -514,7 +514,7 @@ class Api_Model_DbTable_Users extends Zend_Db_Table_Abstract
             else $facid = "";
             if ($where['escid']<>"") {
             	$escid = $where['escid'];
-	            if ($where['left']<>"") $escid = " and left(u.escid,3)='$escid'";
+	            if (isset($where['left'])) $escid = " and left(u.escid,3)='$escid'";
 	            else $escid = " and u.escid='$escid'";
             }
             else $escid = "";

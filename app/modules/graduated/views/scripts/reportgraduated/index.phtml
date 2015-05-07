@@ -42,8 +42,6 @@ $dataVista = $this->dataVista;
 <input type="hidden" id="escid" value="<?php echo $dataVista['dataEscid'] ?>">
 <input type="hidden" id="periodCurrent" value="<?php echo ($dataVista['period']) ?>">
 
-<section class="container">
-	
 <div class="row">
 <div class="col-md-2">
 		<p class=""><span class="glyphicon glyphicon-info-sign"></span> Seleccione Año y periodo	:</p>
@@ -63,14 +61,14 @@ $dataVista = $this->dataVista;
 	</div>
 </div>
 <hr>
-<?php if ($dataVista['rid'] === "RC") { ?>
+<?php if ($dataVista['rid'] === "RC" or $dataVista['rid'] === "ES" or $dataVista['rid'] === "AD") { ?>
 	<div class="row">
 		<div class="col-md-2">
 		<p class=""><span class="glyphicon glyphicon-info-sign"></span> Seleccione facultad y escuela:</p>
 		</div>
 		<div class="col-md-5 col1">
 			<select name="faculty" id="selectFaculty" class="form-control"> 
-				<option value="TODOFAC">TODAS LAS FACULTADES</option>
+				<option value="TODO">TODAS LAS FACULTADES</option>
 				<?php foreach ($this->dataFaculty as $c => $faculty): ?>
 					<option value="<?php echo ($faculty['facid']) ?>" cod="<?php echo $faculty['facid'] ?>"><?php echo $faculty['name'] ?></option>
 				<?php endforeach ?>
@@ -78,7 +76,7 @@ $dataVista = $this->dataVista;
 		</div>
 		<div class="col-md-5 col1">
 			<select name="school" id="selectSchool" class="form-control">
-				<option value="TODOESC">TODAS LAS ESCUELAS</option>
+				<option value="TODOEC">TODAS LAS ESCUELAS</option>
 			</select>
 		</div>
 		<div id="div-spec" style="display:none">
@@ -91,8 +89,8 @@ $dataVista = $this->dataVista;
 		$('#selectFaculty').on('change', function(){
 				facid = $(this).val();
 				reset();
-			if (facid=='TODOFAC') {
-				$('#selectSchool').html('<option value="TODOESC">TODAS LAS ESCUELAS</option>');
+			if (facid=='TODO') {
+				$('#selectSchool').html('<option value="TODOEC">TODAS LAS ESCUELAS</option>');
 			}else{
 				$('#selectSchool').html('<option value="">Cargando...</option').load('/graduated/reportgraduated/schools/facid/'+facid);
 			};
@@ -101,7 +99,7 @@ $dataVista = $this->dataVista;
 			$('#selectSchool').on('change', function(){
 				dataEscid = $(this).val();
  
-				if (dataEscid =='TODOESC') {
+				if (dataEscid =='TODOEC') {
 					$('#selectSpeciality').html('');
 				}else{
 					var ajax_data = {
@@ -136,7 +134,7 @@ $dataVista = $this->dataVista;
 		</div>
 		<div class="col-md-10 col2">
 			<select name="school" id="selectSchool" class="form-control">
-				<option value="TODOESC">**TODA LA FACULTAD**</option>
+				<option value="TODOEC">**TODA LA FACULTAD**</option>
 				<?php foreach ($this->dataSchool as $c => $school): ?>
 					<option value="<?php echo $school['escid'] ?>"><?php echo $school['name'] ?></option>
 				<?php endforeach ?>
@@ -228,8 +226,8 @@ $dataVista = $this->dataVista;
 <br/>
 <div id="report">
 </div>
+
 <div id="reporte" class="row"></div>
-</section>
 <script>
 $(function(){
 	var rid       = $('#rol').val();
@@ -254,18 +252,28 @@ $(function(){
   		var facidt   = document.getElementById("selectFaculty").value;
   		var escidf   = document.getElementById("selectSchool").value;
   		var espid    = document.getElementById("selectSpeciality").value;
-		var ajax_dat = {
-		 	"perid"		: perid,
-		 	"facid"			: facidt,
-		 	"escid"			: escidf,
-		 	"especialidad"	: espid
-		};
+  		if (facidt=="TODO") {
+  			$('#reporte').html('<div class="panel panel-danger">panelEsto podria tomar VARIOS minutos</div>');
+  		}else{
+  			if (escidf=="TODOEC") {
+  				$('#reporte').html('<div class="panel panel-danger">Esto podria tomar UNOS minutos</div>');
+  			};
+  		};
+  		var ajax_dat = {
+				"facid"			: facidt,
+				"escid"			: escidf,
+				"especialidad"	: espid,
+				"perid"			: perid,
+				"anho"			: document.getElementById("selectAnio").value
+			};
 		if (total==true) {
 			dir='/graduated/reportgraduated/totalgraduateds/';
 		}else{
 			dir='/graduated/reportgraduated/listgraduateds/';
 		};
-		$.ajax({	
+
+		console.log(ajax_dat);
+		$.ajax({
 			type : 'post',
 			url  : dir,
 			data : ajax_dat,

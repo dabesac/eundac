@@ -278,13 +278,13 @@
 			//Seleccionar Turno y Cambiar de Docente
 			$(".selectTurnos").change(function(){
 				var valor = $(this).val();
-				var valorSplit = valor.split('--');
+				var valorSplit = valor.split('|');
 				var turno = valorSplit[0];
 				var course = valorSplit[1];
-				$('#docentesTurno' + course + 'span').each(function(){
+				$('#docentesTurno' + course + ' span').each(function(){
 					$(this).addClass('hidden');
 				});
-				$('#howManySign' + course + 'span').each(function(){
+				$('#howManySign' + course + ' span').each(function(){
 					$(this).addClass('hidden');
 				});
 				$('#docente' + turno + course + ', #cantidad' + turno + course).removeClass('hidden');
@@ -302,20 +302,20 @@
 
 				$(".selectTurnos option:selected").each(function(){
 					valor = $(this).val();
-					valorSplit = valor.split('--');
+					valorSplit = valor.split('|');
 					turno = valorSplit[0];
 					course = valorSplit[1];
-					$('#howManySign' + course + 'span').each(function(){
+					$('#howManySign' + course + ' span').each(function(){
 						$(this).addClass('hidden');
 					});
-					$('#docentesTurno' + course + 'span').each(function(){
+					$('#docentesTurno' + course + ' span').each(function(){
 						$(this).addClass('hidden');
 					});
 					$('#docente' + turno + course + ', #cantidad' + turno + course).removeClass('hidden');
 				});
 			});
 
-		};
+		}
 
 		//Boton para Validar Matricula
 		$('#validateBtn').click(function(){
@@ -369,7 +369,7 @@
 							$('#alertSuccessValidate').removeClass('hidden');
 							$(".selectTurnos option:selected").each(function(){
 								valor = $(this).val();
-								valorSplit = valor.split('--');
+								valorSplit = valor.split('|');
 								turno = valorSplit[0];
 								course = valorSplit[1];
 								$('#howManySign' + course + 'span').each(function(){
@@ -416,7 +416,7 @@
 
 						$(".selectTurnos option:selected").each(function(){
 							valor = $(this).val();
-							turno = valor.split('--');
+							turno = valor.split('|');
 							$('.turnoBlock').html(turno[0]);
 						});
 
