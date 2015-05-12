@@ -1,37 +1,41 @@
 <link rel="stylesheet" href="/css/idiomasStudent.css">
 
+<?php $this->placeholder('Btnnav')->append('<a href="/alumno/index" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span></a>');?>
 <?php $this->placeholder('Textnav')->append('<span class="glyphicon glyphicon-bookmark"></span> Idiomas');?>
-<?php $this->placeholder('Btnnav')->append('<a href="/alumno/index" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Regresar</a>');?>
 
-<div class="idiomasIntegrity">
-	<div class="menuIdiomas">
-		<a href="##" id="showMatricula" show="idDivMatricula" class="btnInteractive btn btn-info form-control active">Matricula</a>
-		<a href="##" id="showMatriculaActual" show="idDivMatriculaActual" class="btnInteractive btn btn-success form-control">Matricula Actual</a>
-		<a href="##" id="showRecord" show="idDivRecord" class="btnInteractive btn btn-warning form-control">Record de Matriculas</a>
+<section class="container">
+	<div class="idiomasIntegrity">
+		<div class="menuIdiomas">
+			<a href="##" id="showMatricula" show="idDivMatricula" class="btnInteractive btn btn-info form-control active">Matricula</a>
+			<a href="##" id="showMatriculaActual" show="idDivMatriculaActual" class="btnInteractive btn btn-success form-control">Matricula Actual</a>
+			<a href="##" id="showRecord" show="idDivRecord" class="btnInteractive btn btn-warning form-control">Record de Matriculas</a>
+		</div>
+
+		<div class="matricula divInteractive" id="idDivMatricula">
+
+		</div>
+		<div class="matriculaActual divInteractive" id="idDivMatriculaActual" hidden>
+
+		</div>
+		<div class="recordMatriculas divInteractive" id="idDivRecord" hidden>
+
+		</div>
 	</div>
-
-	<div class="matricula divInteractive" id="idDivMatricula">
-
-	</div>
-	<div class="matriculaActual divInteractive" id="idDivMatriculaActual" hidden>
-
-	</div>
-	<div class="recordMatriculas divInteractive" id="idDivRecord" hidden>
-
-	</div>
-</div>
+</section>
 
 <script>
-	$('#idDivMatricula')
-		.html('<center><img src="/img/spinner.gif" alt="Loading..."></center>')
-		.load('/alumno/idiomas/matricula/');
-	$('#idDivMatriculaActual').load('/alumno/idiomas/matriculaactual/');
-	$('#idDivRecord').load('/alumno/idiomas/recordregisters/');
+	$(function(){
+		$('#idDivMatricula')
+			.html('<center><img src="/img/spinner.gif" alt="Loading..."></center>')
+			.load('/alumno/idiomas/matricula/');
+		$('#idDivMatriculaActual').load('/alumno/idiomas/matriculaactual/');
+		$('#idDivRecord').load('/alumno/idiomas/recordregisters/');
 
-	var whatDiv = '';
-	$('.btnInteractive').on('click', function(){
-		whatDiv = $(this).attr('show');
-		$('.divInteractive').slideUp('fast');
-		$('#' + whatDiv).slideDown('fast');
+		var whatDiv = '';
+		$('.btnInteractive').on('click', function(){
+			whatDiv = $(this).attr('show');
+			$('.divInteractive').slideUp('fast');
+			$('#' + whatDiv).slideDown('fast');
+		});
 	});
 </script>

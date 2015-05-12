@@ -1,11 +1,11 @@
 <?php
 class Api_Model_DbTable_LangRegister extends Zend_Db_Table_Abstract{
-  protected $_name = 'lang_register';
-  protected $_primary = array("eid", "perid", "pid");
+  protected $_name = 'lang_student_register';
+  protected $_primary = array( 'eid', 'oid', 'perid', 'subid', 'pid', 'uid');
   	
 	public function _save($data){
 		try {	
-				if ($data['eid']=='' || $data['perid']=='' || $data['pid']=='') return false;
+				if ($data['eid']=='' || $data['oid']=='' || $data['perid']=='' ||  $data['subid']=='' || $data['pid']=='' || $data['uid']=='') return false;
 				return $this->insert($data);
 				return false;			
 		} catch (Exception $e) {
@@ -16,7 +16,7 @@ class Api_Model_DbTable_LangRegister extends Zend_Db_Table_Abstract{
 
 	public function _update($data,$pk){
 	    try {
-	        if ($pk['eid']=='' || $pk['perid']=='' || $pk['pid']=='') return false;
+	        if ($pk['eid']=='' || $pk['oid']=='' || $pk['perid']=='' || $pk['subid']=='' || $pk['pid']=='' || $pk['uid']=='') return false;
 	        $where = "eid = '".$pk['eid']."' and perid='".$pk['perid']."' and pid='".$pk['pid']."'";
 	        return $this->update($data, $where);
 	        return false;
@@ -30,8 +30,8 @@ class Api_Model_DbTable_LangRegister extends Zend_Db_Table_Abstract{
     try{
           if($where['eid']=='') return false;
             $select = $this->_db->select();
-            if ($attrib=='') $select->from("lang_register");
-            else $select->from("lang_register",$attrib);
+            if ($attrib=='') $select->from("lang_student_register");
+            else $select->from("lang_student_register",$attrib);
             foreach ($where as $atri=>$value){
               $select->where("$atri = ?", $value);
             }
