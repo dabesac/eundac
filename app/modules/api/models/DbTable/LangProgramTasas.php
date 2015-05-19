@@ -1,14 +1,14 @@
 <?php
 class Api_Model_DbTable_LangProgramTasas extends Zend_Db_Table_Abstract{
-	protected $_name = 'lang_program_tasa';
-	protected $_primary =array('perid', 'cid', 'eid', 'tasaid');
+	protected $_name = 'lang_program_rate';
+	protected $_primary =array('perid', 'course_id', 'eid', 'oid', 'rate_id', 'subid', 'type');
 
 	public function _getFilter($where=null,$attrib=null,$orders=null){
 		try{
-	        if($where['eid']=='') return false;
+	        if($where['eid']=='' || $where['oid']=='') return false;
 	          $select = $this->_db->select();
-	          if ($attrib=='') $select->from("lang_program_tasa");
-	          else $select->from("lang_program_tasa",$attrib);
+	          if ($attrib=='') $select->from("lang_program_rate");
+	          else $select->from("lang_program_rate",$attrib);
 	          foreach ($where as $atri=>$value){
 	            $select->where("$atri = ?", $value);
 	          }
@@ -30,7 +30,7 @@ class Api_Model_DbTable_LangProgramTasas extends Zend_Db_Table_Abstract{
 
   	public function _save($data){
 		try {	
-				if ($data['eid']=='' || $data['cid'] == '' || $data['perid'] == '' || $data['tasaid'] == '') return false;
+				if ($data['eid']=='' || $data['oid']=='' || $data['course_id'] == '' || $data['perid'] == '' || $data['rate_id'] == '' || $data['subid'] == '' || $data['type'] == '') return false;
 				return $this->insert($data);
 				return false;			
 		} catch (Exception $e) {
@@ -40,8 +40,8 @@ class Api_Model_DbTable_LangProgramTasas extends Zend_Db_Table_Abstract{
 
 	/*public function _update($data,$pk){
 		try {
-				if ($pk['eid']=='' || $pk['cid']=='' || $pk['perid']=='' || $pk['turno']=='') return false;
-				$where = "eid = '".$pk['eid']."' and cid='".$pk['cid']."' and perid='".$pk['perid']."' and turno='".$pk['turno']."'";
+				if ($pk['eid']=='' || $pk['course_id']=='' || $pk['perid']=='' || $pk['turno']=='') return false;
+				$where = "eid = '".$pk['eid']."' and course_id='".$pk['course_id']."' and perid='".$pk['perid']."' and turno='".$pk['turno']."'";
 				return $this->update($data, $where);
 				return false;
 		} catch (Exception $e) {
@@ -51,8 +51,8 @@ class Api_Model_DbTable_LangProgramTasas extends Zend_Db_Table_Abstract{
 
 	public function _delete($pk){
 		try{
-			if ($pk['eid']=='' || $pk['cid']=='' || $pk['perid']=='' || $pk['tasaid']=='') return false;
-			$where = "eid = '".$pk['eid']."'and cid='".$pk['cid']."' and perid='".$pk['perid']."' and tasaid='".$pk['tasaid']."'";
+			if ($pk['eid']=='' || $pk['oid']=='' || $pk['course_id']=='' || $pk['perid']=='' || $pk['subid']=='' || $pk['rate_id']=='' || $pk['type']=='') return false;
+			$where = "eid = '".$pk['eid']."'and oid='".$pk['oid']."'and course_id='".$pk['course_id']."' and perid='".$pk['perid']."' and subid='".$pk['subid']."' and rate_id='".$pk['rate_id']."' and type='".$pk['type']."'";
 			return $this->delete($where);
 			return false;
 		}catch (Exception $e){
