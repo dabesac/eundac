@@ -73,13 +73,12 @@
         $where['eid']=$eid;
         $where['oid']=$oid;
         $dat=$per->_getUserXUid($where);
-
         $where2['eid']=$eid;
-        $where2['oid']=$oid;
-        $where2['subid']=$subid;
-        $where2['uid']=$uid;
-        $where2['escid']=$dat[0]['escid'];
         $where2['pid']=$dat[0]['pid'];
+        $where2['oid']=$oid;
+        $where2['escid']=$dat[0]['escid'];
+        $where2['uid']=$uid;
+        $where2['subid']=$dat[0]['subid'];
 
         $data['curid']=$curid;
         

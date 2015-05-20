@@ -1,5 +1,8 @@
 <center><a href="/report/registerpago/print"><span class='btn btn-primary'>IMPRIMIR</span></a></center>
 <div class="panel panel-primary col-md-12 table-responsive ">
+<?php 
+if ($this->subjects) {	
+?>
 	<table class="table text-center">
 		<tr class="medium"> 
 		    <th colspan="9"><h4 class="text-primary"><center>EXPEDIENTES SIAF POR USUARIO AÑO</center></h4></th>
@@ -19,28 +22,36 @@
 		    <td><b>R</b></th>
 	  	</tr>
 		<?php
-		foreach($this->subjects as $subject) { ?>
-		<tr>
-		  	<td><option><?php echo $subject['EXPEDIENTE']?></option></td>
-		  	<td><option><?php echo $subject['ESTADO_ENV']?></option></td>
-		  	<td><option><?php echo $subject['NOTAS']?></option></td>
-		  	<td><option><?php echo $subject['FASE']?></option></td>
-			<td>s</td>
-			<td>s</td>
-			<td>n</td>
-			<td>n</td>
-		  	<td>
-		  		<option>
-				  	<?php if(isset($subject['MONTO'])) {
-			     		echo $subject['MONTO'];
-				  	}
-				  	else{
-				  		echo "-";
-				  	}
-				  	?>
-	     		</option>	
-		  	</td>
-		</tr>
-		<?php } ?>
+			foreach($this->subjects as $subject) { ?>
+			<tr>
+			  	<td><option><?php echo $subject['EXPEDIENTE']?></option></td>
+			  	<td><option><?php echo $subject['ESTADO_ENV']?></option></td>
+			  	<td><option><?php echo $subject['NOTAS']?></option></td>
+			  	<td><option><?php echo $subject['FASE']?></option></td>
+				<td>s</td>
+				<td>s</td>
+				<td>n</td>
+				<td>n</td>
+			  	<td>
+			  		<option>
+					  	<?php if(isset($subject['MONTO'])) {
+				     		echo $subject['MONTO'];
+					  	}
+					  	else{
+					  		echo "-";
+					  	}
+					  	?>
+		     		</option>	
+			  	</td>
+			</tr>
+		<?php 
+		}
+?>
 	</table>
+<?php 
+		}
+		else{
+			echo "NO LLEGA NINCUN :-( DATO";
+		}
+		 ?>
 </div>

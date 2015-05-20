@@ -107,8 +107,6 @@ class Rcentral_TraslatestudentController extends Zend_Controller_Action
                 'pid' => $pid, 'escid' => $escid, 'subid' => $subid, 'rid' => $datauser[0]['rid'],
                 'password' => md5($codtmp.$escidtmp['code'].'7'.$codtmp2), 'state' => 'A',
                 'register' => $this->sesion->uid, 'created' => date('Y-m-d'));
-            echo "aqui en change";
-            print_r($data);
            $user->_save($data);
 
         $curri= new Api_Model_DbTable_Curricula();
