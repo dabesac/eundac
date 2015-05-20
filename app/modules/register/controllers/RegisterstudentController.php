@@ -278,7 +278,7 @@ class Register_RegisterstudentController extends Zend_Controller_Action {
                 $j = 0;
                 if ($veces) {
                     foreach ($veces as $vez) {
-                        if ($vez['perid']['2'] != 'D' and $vez['perid']['2'] != 'E' and $vez['notafinal'] != '-3' and $vez['perid'] != $perid) {
+                        if ($vez['perid']['2'] != 'D' and $vez['perid']['2'] != 'E' and $vez['perid']['2'] != 'C' and $vez['notafinal'] != '-3' and $vez['perid'] != $perid) {
                             $j++;
                         }
                     }
