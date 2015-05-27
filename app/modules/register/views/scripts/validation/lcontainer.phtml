@@ -144,6 +144,12 @@ $(function(){
             return false;
         };
 
+        if (valnota < 11) {
+            alert("Ingrese una Nota APROBATORIA");
+            $("#courseid").focus();
+            return false;
+        };
+
         $.ajax({
             type: 'POST',
             url : $("#frmsave").attr('action'),

@@ -107,9 +107,43 @@ class Rcentral_TraslatestudentController extends Zend_Controller_Action
                 'pid' => $pid, 'escid' => $escid, 'subid' => $subid, 'rid' => $datauser[0]['rid'],
                 'password' => md5($codtmp.$escidtmp['code'].'7'.$codtmp2), 'state' => 'A',
                 'register' => $this->sesion->uid, 'created' => date('Y-m-d'));
-            $user->_save($data);
-            
-            $data = array(
+           $user->_save($data);
+
+        $curri= new Api_Model_DbTable_Curricula();
+        $where3['escid']=$data['escid'];
+        $where3['eid']=$data['eid'];
+        $where3['oid']=$data['oid'];
+        //$where3['state']='A';
+        $todcur=$curri->_getFilter($where3);
+        $where4['eid']=$eid;
+        $where4['oid']=$oid;
+        $where4['escid']= $data['escid'];
+        $where4['subid']=$data['subid'];
+        $where4['uid']=$uid;
+        $where4['pid']=$pid;
+        $g=$todcur[0]['curid'];
+        $datacur['curid']=$g;
+        $al= new Api_Model_DbTable_Studentxcurricula ();
+        $existe=$al->_getsearch($where4);  
+        if($existe){
+            if ($al->_update($datacur,$where4)) {
+            echo "todo listo :-)";
+            }
+        }else{
+            $where5['eid']=$data['eid'];
+            $where5['oid']=$data['oid'];
+            $where5['escid']=$data['escid'];
+            $where5['subid']=$data['subid'];
+            $where5['uid']=$data['uid'];
+            $where5['pid']=$data['pid'];
+            $where5['curid']=$g;
+            $where5['state']='A';
+
+            if ($al->_save($where5)) {
+            echo "todo listo :-)";
+           }
+        }
+       $data = array(
                 'eid' => $eid, 'oid' => $oid, 'uid' => $uid, 'pid' => $pid, 
                 'escid' => $datauser[0]['escid'], 'subid' => $datauser[0]['subid'],
                 'd_escid' => $escid, 'd_subid' => $subid);

@@ -1,7 +1,7 @@
 <?php
 class Api_Model_DbTable_LangRegisterCourse extends Zend_Db_Table_Abstract{
-  protected $_name = 'lang_registrationcourse';
-  protected $_primary = array("turno","cid","eid","pid");
+  protected $_name = 'lang_student_register_course';
+  protected $_primary = array('eid', 'oid', 'perid', 'subid', 'pid', 'uid', 'course_id', 'type', 'turn_id');
   
 
   public function _getAll($eid){
@@ -18,10 +18,10 @@ class Api_Model_DbTable_LangRegisterCourse extends Zend_Db_Table_Abstract{
 
   public function _getFilter($where=null,$attrib=null,$orders=null){
     try{
-          if($where['eid']=='') return false;
+          if($where['eid']=='' || $where['oid']=='') return false;
             $select = $this->_db->select();
-            if ($attrib=='') $select->from("lang_registrationcourse");
-            else $select->from("lang_registrationcourse",$attrib);
+            if ($attrib=='') $select->from("lang_student_register_course");
+            else $select->from("lang_student_register_course",$attrib);
             foreach ($where as $atri=>$value){
               $select->where("$atri = ?", $value);
             }
@@ -43,7 +43,7 @@ class Api_Model_DbTable_LangRegisterCourse extends Zend_Db_Table_Abstract{
 
   public function _save($data){
     try { 
-        if ($data['eid']=='' || $data['pid']=='' || $data['perid']=='' || $data['cid']=='' || $data['turno']=='') return false;
+        if ($data['eid']=='' || $data['oid']=='' || $data['perid']=='' || $data['subid']=='' || $data['pid']=='' || $data['uid']=='' || $data['course_id']=='' || $data['type']=='' || $data['turn_id']=='') return false;
         return $this->insert($data);
         return false;     
     } catch (Exception $e) {
@@ -53,8 +53,16 @@ class Api_Model_DbTable_LangRegisterCourse extends Zend_Db_Table_Abstract{
 
   public function _update($data,$pk){
       try {
-          if ($pk['eid']=='' || $pk['perid']=='' || $pk['pid']=='' || $pk['turno']=='' || $pk['cid']=='') return false;
-          $where = "eid = '".$pk['eid']."' and perid='".$pk['perid']."' and pid='".$pk['pid']."' and turno='".$pk['turno']."' and cid='".$pk['cid']."'";
+          if ($pk['eid']=='' || $pk['oid']=='' || $pk['perid']=='' || $pk['subid']==''  || $pk['pid']==''  || $pk['uid']=='' || $pk['course_id']=='' || $pk['type']=='' || $pk['turn_id']=='') return false;
+          $where = "eid = '".$pk['eid'].
+                    "' and oid='".$pk['oid'].
+                    "' and perid='".$pk['perid'].
+                    "' and subid='".$pk['subid'].
+                    "' and pid='".$pk['pid'].
+                    "' and uid='".$pk['uid'].
+                    "' and course_id='".$pk['course_id'].
+                    "' and type='".$pk['type'].
+                    "' and turn_id='".$pk['turn_id']."'";
           return $this->update($data, $where);
           return false;
       } catch (Exception $e) {
@@ -64,7 +72,7 @@ class Api_Model_DbTable_LangRegisterCourse extends Zend_Db_Table_Abstract{
 
   public function _updateState($data,$pk){
       try {
-          if ($pk['eid']=='' || $pk['perid']=='' || $pk['pid']=='') return false;
+          if ($pk['eid']=='' || $pk['oid']=='' || $pk['perid']=='' || $pk['subid']=='' || $pk['pid']=='' || $pk['uid']=='') return false;
           $where = "eid = '".$pk['eid']."' and perid='".$pk['perid']."' and pid='".$pk['pid']."'";
           return $this->update($data, $where);
           return false;
@@ -75,9 +83,9 @@ class Api_Model_DbTable_LangRegisterCourse extends Zend_Db_Table_Abstract{
 
 
   //Retorna la lista de periodos
-  /*public function _getMatriculados($eid,$perid,$cid){
+  /*public function _getMatriculados($eid,$perid,$course_id){
       try{
-          $f=$this->fetchAll("eid='$eid' and perid='$perid' and cid='$cid'");
+          $f=$this->fetchAll("eid='$eid' and perid='$perid' and course_id='$course_id'");
           if($f) return $f->toArray(); 
           return false;
       }catch (Exception $e){
@@ -91,11 +99,11 @@ class Api_Model_DbTable_LangRegisterCourse extends Zend_Db_Table_Abstract{
         try
         {
             $sql=$this->_db->query("
-           select c.cid,c.nombre from idiomas_matricula_curso as m
+           select c.course_id,c.nombre from idiomas_matricula_curso as m
             inner join idiomas_cursos as c
-            on m.cid=c.cid
+            on m.course_id=c.course_id
             where perid='$perid'
-            group by c.cid,c.nombre
+            group by c.course_id,c.nombre
            ");
            
            $row=$sql->fetchAll();

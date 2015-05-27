@@ -35,10 +35,10 @@
                     <div class="col-md-3 col-md-offset-1">
                         <a href="#" class="btn btn-default" id="vermatriculadoscurso"><span class="glyphicon glyphicon-list-alt"></span> Matriculados en la Asignatura</a>
                     </div>
-                    <div class="col-md-2 col-md-offset-1">
+                    <div class="col-md-2 col-md-offset-2">
                         <a id='vermatriculastotales' href="#total_registered"  data-toggle="modal" class="btn btn-default"><span class="glyphicon glyphicon-book"></span> Matriculas Totales</a>
                     </div>
-                    <div class="col-md-1 col-md-offset-1">
+                    <div class="col-md-1 col-md-offset-2">
                         <a id='vercursospendientes' href="#" class="btn btn-default"><span class="glyphicon glyphicon-list"></span> Cursos Pendientes</a>
                     </div>
                 </div>
@@ -455,7 +455,7 @@ $(function() {
             url: '/record/directed/modifyregister/option/M',
             data: $("#frmmodifyregister").serialize(),
             success: function(data) {
-                console.log($("#frmmodifyregister"));
+                // console.log($("#frmmodifyregister"));
                 $('#header_alumnos').html(data);
             }
         });
@@ -577,7 +577,33 @@ $(function() {
 
         var tmp = f_acta.split("/");
         var f_acta = tmp[2]+"-"+tmp[0]+"-"+tmp[1];
-        var url = "/record/directed/modifyregister/courseid/"+courseid+"/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/curid/"+curid+"/turno/"+turno+"/uid/"+uid+"/pid/"+pid+"/f_acta/"+f_acta+"/option/C/notafinal/"+notafinal+"/receipt/"+recibomodify+"/resolution/"+resolucion1+"/regid/"+regid;
+        // var url = "/record/directed/modifyregister/courseid/"+courseid+"/perid/"+perid+"/escid/"+escid+"/subid/"+subid+"/curid/"+curid+"/turno/"+turno+"/uid/"+uid+"/pid/"+pid+"/f_acta/"+f_acta+"/option/C/notafinal/"+notafinal+"/receipt/"+recibomodify+"/resolution/"+resolucion1+"/regid/"+regid;
+
+        var data_close = ({ courseid:courseid,
+                            perid:perid,
+                            escid:escid,
+                            subid:subid,
+                            curid:curid,
+                            turno:turno,
+                            uid:uid,
+                            pid:pid,
+                            f_acta:f_acta,
+                            option:'C',
+                            notafinal:notafinal,
+                            receipt:recibomodify,
+                            resolution:resolucion1,
+                            regid:regid
+                          });
+        $.ajax({
+            type: 'POST',
+            url : '/record/directed/modifyregister/',
+            data: data_close,
+            success: function(data) {
+                $("#header_cursos").hide();
+                $("#lista").hide();
+                $('#header_alumnos').html(data);
+            }
+        });
         // alert(url);
         $("#header_cursos").hide();
         $("#lista").hide();
