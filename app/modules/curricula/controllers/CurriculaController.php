@@ -49,7 +49,6 @@ class Curricula_CurriculaController extends Zend_Controller_Action
                             'eid' => $eid,
                             'oid' => $oid,
                             'left(facid, '.$ml.')' => $facid,
-                            'subid'  => $subid,
                             'parent' => '' );
             $school_pd = $schoolDb->_getFilter($where);
             $schools_data = array();
