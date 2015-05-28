@@ -299,7 +299,7 @@ class Register_ValidationController extends Zend_Controller_Action
             if (!$dataperiodocurso) {
                 $wherepc['state_record']='C';
                 $wherepc['type_rate']=$type_rate;
-                $wherepc['receipt']='N';
+                $wherepc['receipt']='-';
                 $wherepc['resolution']='NULL';
                 $wherepc['semid']=$semid;
                 $wherepc['closure_date']=date('Y-m-d');
@@ -355,7 +355,7 @@ class Register_ValidationController extends Zend_Controller_Action
 
             if (!$dataregistrationxcourse) {
                 $wherergxc['notafinal']=$nota;
-                $wherergxc['receipt']='N';
+                $wherergxc['receipt']='-';
                 $wherergxc['register']=$uidreg;
                 $wherergxc['created']=date('Y-m-d');
                 $wherergxc['approved']=$uidreg;
@@ -545,13 +545,14 @@ class Register_ValidationController extends Zend_Controller_Action
             $json['status']=false;
 
             $frmdata = array('document_auth'=>$document_auth,'notafinal'=>$nota);
+
             $reg_= new Api_Model_DbTable_Registrationxcourse();
             
             if ($reg_->_updatenoteregister($frmdata,$pk)) {
-                $json=array('status'=>true);
+                $json=array('status'=>true,'sms'=>"Se actualizó correctamente",'doc'=>$document_auth,'nota'=>$nota);
             }
             else{
-                $json=array('status'=>false);
+                $json=array('status'=>false,'sms'=>"Hubo problemas al actualizar. Intente nuevamente");
             }
             $this->_response->setHeader('Content-Type', 'application/json');
             $this->view->data = $json;

@@ -24,27 +24,27 @@ if ($this->cursosconvalidados) {    ?>
                 <td class='text-center'><?php echo $a+1?></td>
                 <td class='text-center'><?php echo $datas['curid']?></td>
                 <td class='text-center'><?php echo $datas['courseid']?></td>
-                <td><?php echo $datas['namecourse']?></td>
+                <td ><?php echo $datas['namecourse']?></td>
                 <td class='text-center'><?php echo $datas['turno']?></td>
-                <td><?php echo $datas['document_auth']?></td>
-                <td class='text-center'><?php echo $datas['notafinal']?></td>
+                <td id="document_auth<?php echo $a ?>"><?php echo $datas['document_auth']?></td>
+                <td id="notafinal<?php echo $a ?>"class='text-center'><?php echo $datas['notafinal']?></td>
                 <td class="text-center"><a trupdate="<?php echo $a ?>" class='pushUpdated' href="#"><span class='glyphicon glyphicon-pencil'></span></a></td>
             </tr>
-            <tr id="rowsUpdate<?php echo $a ?>" class="hidden rowsUpdate">
-                    <td colspan="5"></td>
+            <tr id="rowsUpdate<?php echo $a ?>" class="rowsUpdate">
+                    <td colspan="5" id="result<?php echo $a ?>" class="text-center"></td>
                     <td colspan="3">
-                        <form id='frmupdate' name='frmupdate' method='POST' enctype="application/x-www-form-urlencoded" class="form-horizontal">
+                        <form id='frmupdate<?php echo $a ?>' name='frmupdate' method='POST' enctype="application/x-www-form-urlencoded" class="form-horizontal">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="col-md-7">
                                     Resolución:
-                                    <input id='document_auth' name="document_auth" type="text" class='form-control' placeholder="Nº 10283-2014-ETSR" value="<?php echo $datas['document_auth']?>">
+                                    <input id='document_auth' name="document_auth" type="text" class='document_auth form-control' placeholder="Nº 10283-2014-ETSR" value="<?php echo $datas['document_auth']?>">
                                 </div>
                                 <div class="col-md-2">
-                                    Nota: <input id='notafinal' name="notafinal" type="text" maxlength="2" class=' form-control' onkeypress="return soloNumero(event)">
+                                    Nota: <input id='notafinal' name="notafinal" type="text" maxlength="2" class='notafinal form-control' value="<?php echo $datas['notafinal']?>" onkeypress="return soloNumero(event)">
                                 </div>
                                 <div class="col-md-1">
-                                    <br><button id='' class="saveCorrection btn btn-success btn-xs"><span class='glyphicon glyphicon-save'></span> Guardar</button>
+                                    <br><button id="saveCorrection<?php echo $a ?>" class="btn btn-success btn-xs"><span class='glyphicon glyphicon-save'></span> Guardar</button>
                                 </div>
                                 <input type="text" class="hidden" name='escid' value="<?php echo base64_encode($datas['escid'])?>">
                                 <input type="text" class="hidden" name='subid' value="<?php echo base64_encode($datas['subid'])?>">
@@ -77,7 +77,7 @@ else{   ?>
 <script type="text/javascript" src="/js/notes/jquery.jstepper.js"></script>
 <script type="text/javascript">
 
-$("#notafinal").jStepper({minValue:-3, maxValue:20, minLength:2});
+$(".notafinal").jStepper({minValue:-3, maxValue:20, minLength:2});
 
 function soloNumero(e){
     key = e.keyCode || e.which;
@@ -112,7 +112,9 @@ $(function() {
         }
     );
 
-    $(".pushUpdated").on('click', function(){
+    $(".pushUpdated").on('click', function(e){
+        $("#result"+trId).empty();
+        e.preventDefault();
         var trId = $(this).attr('trupdate');
 
         $('#rowsUpdate' + trId).toggleClass('hidden');
@@ -120,23 +122,54 @@ $(function() {
         if (!$('#rowsUpdate' + trId).hasClass('hidden')) {
             $("#rowsData" + trId).addClass('info');
             $(".rowsUpdate").addClass('info');
-            $("#document_auth").focus();
+            $(".document_auth").focus();
         }
         else{
             $("#rowsData" + trId).removeClass('info');
         };
 
-        $("#saveCorrection").on('click', function(){
+        $("#saveCorrection" + trId).on('click', function(e){
+            e.preventDefault();
+            var data_form = $("#frmupdate"+trId).serializeArray();
+
+            if (!data_form[0]['value']) {
+                $("#result"+trId).html("<span class='text-primary'>Ingrese un resolución</span>");
+                return false;
+            };
+
+            if (!(data_form[1]['value'])) {
+                $("#result"+trId).html("<span class='text-primary'>Ingrese un Nota</span>");
+                return false;
+            };
+
+            if (data_form[1]['value']<11) {
+                $("#result"+trId).html("<span class='text-primary'>Ingrese un Nota Aprobatoria</span>");
+                return false;
+            };
+            
             $.ajax({
                 type: 'POST',
                 url : "/register/validation/update/",
-                data: $("#frmupdate").serialize(),
+                data: $("#frmupdate"+trId).serialize(),
                 success: function(data) {
                     if (data.status==true) {
-                        console.log("se actualizo el registro");                        
+                        $("#result"+trId).html("<span class='text-success'>"+data.sms+"</span>");
+
+                        setTimeout(function(){
+                            $("#rowsUpdate"+trId).addClass('hidden');
+                            $("#rowsUpdate"+trId).removeClass('info');
+                            $("#rowsData"+trId).removeClass('info');
+
+                            $("#document_auth"+trId).empty();                        
+                            $("#document_auth"+trId).html(data.doc);                        
+                            $("#notafinal"+trId).empty();                        
+                            $("#notafinal"+trId).html(data.nota);
+                            $("#result"+trId).empty(); 
+                        }, 1000);
+                                               
                     }
                     else{
-                        console.log("hubo un error");                        
+                        $("#result"+trId).html("<span class='text-danger'>"+data.sms+"</span>");
                     };
                 }
             });
@@ -144,9 +177,9 @@ $(function() {
         });
     });
 
-    $("#document_auth").keyup(function(){
+    $(".document_auth").keyup(function(){
         var r = $(this).val();
-        $("#document_auth").val(r.toUpperCase());
+        $(this).val(r.toUpperCase());
     });
 
 });
