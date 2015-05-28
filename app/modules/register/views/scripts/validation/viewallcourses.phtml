@@ -133,17 +133,17 @@ $(function() {
             var data_form = $("#frmupdate"+trId).serializeArray();
 
             if (!data_form[0]['value']) {
-                $("#result"+trId).html("<span class='text-primary'>Ingrese un resolución</span>");
+                $("#result"+trId).html("<span class='text-primary'>Ingrese una resolución</span>");
                 return false;
             };
 
             if (!(data_form[1]['value'])) {
-                $("#result"+trId).html("<span class='text-primary'>Ingrese un Nota</span>");
+                $("#result"+trId).html("<span class='text-primary'>Ingrese una Nota</span>");
                 return false;
             };
 
             if (data_form[1]['value']<11) {
-                $("#result"+trId).html("<span class='text-primary'>Ingrese un Nota Aprobatoria</span>");
+                $("#result"+trId).html("<span class='text-primary'>Ingrese una Nota Aprobatoria</span>");
                 return false;
             };
             
