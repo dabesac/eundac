@@ -112,38 +112,38 @@ $(function() {
         }
     );
 
-    // $(".pushUpdated").on('click', function(){
-    //     var trId = $(this).attr('trupdate');
+    $(".pushUpdated").on('click', function(){
+        var trId = $(this).attr('trupdate');
 
-    //     $('#rowsUpdate' + trId).toggleClass('hidden');
+        $('#rowsUpdate' + trId).toggleClass('hidden');
 
-    //     if (!$('#rowsUpdate' + trId).hasClass('hidden')) {
-    //         $("#rowsData" + trId).addClass('info');
-    //         $(".rowsUpdate").addClass('info');
-    //         $("#document_auth").focus();
-    //     }
-    //     else{
-    //         $("#rowsData" + trId).removeClass('info');
-    //     };
+        if (!$('#rowsUpdate' + trId).hasClass('hidden')) {
+            $("#rowsData" + trId).addClass('info');
+            $(".rowsUpdate").addClass('info');
+            $("#document_auth").focus();
+        }
+        else{
+            $("#rowsData" + trId).removeClass('info');
+        };
 
-    //     $("#saveCorrection").on('click', function(){
-    //         $.ajax({
-    //             type: 'POST',
-    //             url : "/register/validation/update/",
-    //             data: $("#frmupdate").serialize(),
-    //             success: function(data) {
-    //                 console.log(data);
-    //                 if (data.status==true) {
+        $("#saveCorrection").on('click', function(){
+            $.ajax({
+                type: 'POST',
+                url : "/register/validation/update/",
+                data: $("#frmupdate").serialize(),
+                success: function(data) {
+                    console.log(data);
+                    if (data.status==true) {
 
-    //                 }
-    //                 else{
+                    }
+                    else{
 
-    //                 };
-    //             }
-    //         });
-    //         return false;
-    //     });
-    // });
+                    };
+                }
+            });
+            return false;
+        });
+    });
 
     $("#document_auth").keyup(function(){
         var r = $(this).val();
