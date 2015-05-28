@@ -132,12 +132,11 @@ $(function() {
                 url : "/register/validation/update/",
                 data: $("#frmupdate").serialize(),
                 success: function(data) {
-                    console.log(data);
                     if (data.status==true) {
-
+                        console.log("se actualizo el registro");                        
                     }
                     else{
-
+                        console.log("hubo un error");                        
                     };
                 }
             });

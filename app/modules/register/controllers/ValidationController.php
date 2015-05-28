@@ -543,14 +543,18 @@ class Register_ValidationController extends Zend_Controller_Action
             $pk['pid']=$pid;
 
             $json['status']=false;
+
+            $frmdata = array('document_auth'=>$document_auth,'notafinal'=>$nota);
+            $reg_= new Api_Model_DbTable_Registrationxcourse();
+            
+            if ($reg_->_updatenoteregister($frmdata,$pk)) {
+                $json=array('status'=>true);
+            }
+            else{
+                $json=array('status'=>false);
+            }
             $this->_response->setHeader('Content-Type', 'application/json');
             $this->view->data = $json;
-
-            print_r($pk);
-            exit();
-
-            // $reg_= new Api_Model_DbTable_Registrationxcourse();
-            // $reg_->_updatenoteregister($frmdata,$d);
 
         }catch (Exception $e) {
             print "Error index Registration ".$e->$getMessage();
